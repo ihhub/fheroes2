@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects icn="road" >
+    <template section="passable_1x1" name="road 0" index="0" />
+    <template section="passable_1x1" name="road 1" index="1" />
+    <template section="passable_1x1" name="road 2" index="2" />
+    <template section="passable_1x1" name="road 3" index="3" />
+    <template section="passable_1x1" name="road 4" index="4" />
+    <template section="passable_1x1" name="road 5" index="5" />
+    <template section="passable_1x1" name="road 6" index="6" />
+    <template section="passable_1x1" name="road 7" index="7" />
+    <template section="passable_1x1" name="road 8" index="8" />
+    <template section="passable_1x1" name="road 9" index="9" />
+    <template section="passable_1x1" name="road 10" index="10" />
+    <template section="passable_1x1" name="road 11" index="11" />
+    <template section="passable_1x1" name="road 12" index="12" />
+    <template section="passable_1x1" name="road 13" index="13" />
+    <template section="passable_1x1" name="road 14" index="14" />
+    <template section="passable_1x1" name="road 15" index="15" />
+    <template section="passable_1x1" name="road 16" index="16" />
+    <template section="passable_1x1" name="road 17" index="17" />
+    <template section="passable_1x1" name="road 18" index="18" />
+    <template section="passable_1x1" name="road 19" index="19" />
+    <template section="passable_1x1" name="road 20" index="20" />
+    <template section="passable_1x1" name="road 21" index="21" />
+    <template section="passable_1x1" name="road 22" index="22" />
+    <template section="passable_1x1" name="road 23" index="23" />
+    <template section="passable_1x1" name="road 24" index="24" />
+    <template section="passable_1x1" name="road 25" index="25" />
+    <template section="passable_1x1" name="road 26" index="26" />
+    <template section="passable_1x1" name="road 27" index="27" />
+    <template section="passable_1x1" name="road 28" index="28" />
+    <template section="passable_1x1" name="road 29" index="29" />
+    <template section="passable_1x1" name="road 30" index="30" />
+    <template section="passable_1x1" name="road 31" index="31" />
+</objects>

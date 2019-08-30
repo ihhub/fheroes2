@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects icn="stream" >
+    <template section="passable_1x1" name="stream 0" index="0" />
+    <template section="passable_1x1" name="stream 1" index="1" />
+    <template section="passable_1x1" name="stream 2" index="2" />
+    <template section="passable_1x1" name="stream 3" index="3" />
+    <template section="passable_1x1" name="stream 4" index="4" />
+    <template section="passable_1x1" name="stream 5" index="5" />
+    <template section="passable_1x1" name="stream 6" index="6" />
+    <template section="passable_1x1" name="stream 7" index="7" />
+    <template section="passable_1x1" name="stream 8" index="8" />
+    <template section="passable_1x1" name="stream 9" index="9" />
+    <template section="passable_1x1" name="stream 10" index="10" />
+    <template section="passable_1x1" name="stream 11" index="11" />
+    <template section="passable_1x1" name="stream 12" index="12" />
+
+    <object name="Mounth 1" width="3" height="3" icn="objnmul2" >
+        <sprite px="1" py="0" index="0" level="bottom" passable="0x01FF" />
+        <sprite px="0" py="1" index="1" level="bottom" passable="0x01FF" />
+        <sprite px="1" py="1" index="2" level="bottom" passable="0x01FF" />
+        <sprite px="2" py="1" index="3" level="bottom" passable="0x01FF" />
+        <sprite px="0" py="2" index="4" level="bottom" passable="0x01FF" />
+        <sprite px="1" py="2" index="5" level="bottom" passable="0x01FF" />
+        <sprite px="2" py="2" index="6" level="bottom" passable="0x01FF" />
+    </object>
+
+    <object name="Mounth 2" width="3" height="3" icn="objnmul2" >
+        <sprite px="0" py="0" index="7" level="bottom" passable="0x01FF" />
+        <sprite px="1" py="0" index="8" level="bottom" passable="0x01FF" />
+        <sprite px="2" py="0" index="9" level="bottom" passable="0x01FF" />
+        <sprite px="0" py="1" index="10" level="bottom" passable="0x01FF" />
+        <sprite px="1" py="1" index="11" level="bottom" passable="0x01FF" />
+        <sprite px="2" py="1" index="12" level="bottom" passable="0x01FF" />
+        <sprite px="1" py="2" index="13" level="bottom" passable="0x01FF" />
+    </object>
+</objects>

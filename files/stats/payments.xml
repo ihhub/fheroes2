@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<payments>
+
+ <!-- <payment gold="0" wood="0" mercury="0" ore="0" sulfur="0" crystal="0" gems="0" /> -->
+
+ <buy_boat gold="1000" wood="10" />
+ <buy_spell_book gold="500" />
+ <buy_spell_book_from_shrine1 gold="1250" />
+ <buy_spell_book_from_shrine2 gold="1000" />
+ <buy_spell_book_from_shrine3 gold="750" />
+
+ <!-- recruit hero: main price -->
+ <recruit_hero gold="2500" />
+ <!-- recruit hero: level price -->
+ <recruit_level gold="500" />
+
+ <alchemist_payment gold="750" />
+
+</payments>

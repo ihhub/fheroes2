@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<animations>
+  <!--
+ <icn name="unknown.icn">
+  <animation state="idle" start="0" count="0"/>	 // idle frame
+  <animation state="move" start="0" count="0"/>  // move frame
+  <animation state="fly1" start="0" count="0"/>  // jump up frame
+  <animation state="fly2" start="0" count="0"/>  // fly frame
+  <animation state="fly3" start="0" count="0"/>  // jump down frame
+  <animation state="shot0" start="0" count="0"/> // prepare shot frame
+  <animation state="shot1" start="0" count="0"/> // shot up frame
+  <animation state="shot2" start="0" count="0"/> // shot frame
+  <animation state="shot3" start="0" count="0"/> // shot down frame
+  <animation state="attk0" start="0" count="0"/> // prepare attack frame
+  <animation state="attk1" start="0" count="0"/> // attack up frame
+  <animation state="attk2" start="0" count="0"/> // attack frame
+  <animation state="attk3" start="0" count="0"/> // attack down frame
+  <animation state="wcne" start="0" count="0"/>  // wcne frame
+  <animation state="kill" start="0" count="0"/>  // kill frame
+ </icn> -->
+
+ <icn name="peasant.icn">
+  <animation state="idle" start="1" count="4"/>
+  <animation state="move" start="5" count="8"/>
+  <animation state="attk1" start="16" count="6"/>
+  <animation state="attk2" start="22" count="6"/>
+  <animation state="attk3" start="28" count="6"/>
+  <animation state="wcne" start="13" count="3"/>
+  <animation state="kill" start="34" count="4"/>
+ </icn>
+
+ <icn name="archer.icn">
+  <animation state="idle" start="1" count="4"/>
+  <animation state="move" start="5" count="8"/>
+  <animation state="shot0" start="16" count="4"/>
+  <animation state="shot1" start="20" count="4"/>
+  <animation state="shot2" start="24" count="4"/>
+  <animation state="shot3" start="28" count="4"/>
+  <animation state="attk0" start="32" count="4"/>
+  <animation state="attk1" start="36" count="3"/>
+  <animation state="attk2" start="39" count="3"/>
+  <animation state="attk3" start="42" count="3"/>
+  <animation state="wcne" start="13" count="3"/>
+  <animation state="kill" start="45" count="6"/>
+ </icn>
+
+ <!-- more other -->
+
+</animations>

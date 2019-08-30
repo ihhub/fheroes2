@@ -1,0 +1,139 @@
+<?xml version="1.0" ?>
+<spells>
+
+ <!-- first: unknown spell, skip: skip read line, disable: spell not used in game (only for random spells), sp: spell point use, mp: move point use -->
+ <spell skip="0" sp="1" mp="0" disable="0" > <cost gold="0" wood="0" mercury="0" ore="0" sulfur="0" crystal="0" gems="0" /> </spell>
+
+ <!-- Fireball -->
+ <spell sp="9" extra="10" />
+ <!-- Fireblast -->
+ <spell sp="15" extra="10" />
+ <!-- Lightning Bolt -->
+ <spell sp="7" extra="25" />
+ <!-- Chain Lightning -->
+ <spell sp="15" extra="40" />
+ <!-- Teleport -->
+ <spell sp="9" />
+ <!-- Cure -->
+ <spell sp="6" extra="5" />
+ <!-- Mass Cure -->
+ <spell sp="15" extra="5" />
+ <!-- Resurrect -->
+ <spell sp="12" extra="50" />
+ <!-- Resurrect True -->
+ <spell sp="15" extra="50" />
+ <!-- Haste (if set: current + extra, or zero: default h2) -->
+ <spell sp="3" extra="0" />
+ <!-- Mass Haste (extra used from Haste) -->
+ <spell sp="10" />
+ <!-- Slow (if set: current - extra, or zero: default h2) -->
+ <spell sp="3" extra="0" />
+ <!-- Mass Slow (extra used from Slow) -->
+ <spell sp="15" />
+ <!-- Blind  -->
+ <spell sp="6" />
+ <!-- Bless -->
+ <spell sp="3" />
+ <!-- Mass Bless -->
+ <spell sp="12" />
+ <!-- Stoneskin -->
+ <spell sp="3" extra="3" />
+ <!-- Steelskin -->
+ <spell sp="6" extra="5" />
+ <!-- Curse -->
+ <spell sp="3" />
+ <!-- Mass Curse -->
+ <spell sp="12" />
+ <!-- Holy Word -->
+ <spell sp="9" extra="10" />
+ <!-- Holy Shout -->
+ <spell sp="12" extra="20" />
+ <!-- Anti-Magic -->
+ <spell sp="7" />
+ <!-- Dispel Magic -->
+ <spell sp="5" />
+ <!-- Mass Dispel -->
+ <spell sp="12" />
+ <!-- Magic Arrow -->
+ <spell sp="3" extra="10" />
+ <!-- Berserker -->
+ <spell sp="12" />
+ <!-- Armageddon -->
+ <spell sp="20" extra="50" />
+ <!-- Elemental Storm -->
+ <spell sp="15" extra="25" />
+ <!-- Meteor Shower -->
+ <spell sp="15" extra="25" />
+ <!-- Paralyze -->
+ <spell sp="9" />
+ <!-- Hypnotize -->
+ <spell sp="15" extra="25" />
+ <!-- Cold Ray -->
+ <spell sp="6" extra="20" />
+ <!-- Cold Ring -->
+ <spell sp="9" extra="10" />
+ <!-- Disrupting Ray -->
+ <spell sp="7" extra="3" />
+ <!-- Death Ripple -->
+ <spell sp="6" extra="5" />
+ <!-- Death Wave -->
+ <spell sp="10" extra="10" />
+ <!-- Dragon Slayer -->
+ <spell sp="6" extra="5" />
+ <!-- Blood Lust -->
+ <spell sp="3" extra="3" />
+ <!-- Animate Dead -->
+ <spell sp="10" extra="50" />
+ <!-- Mirror Image -->
+ <spell sp="25" />
+ <!-- Shield -->
+ <spell sp="3" extra="2" />
+ <!-- Mass Shield -->
+ <spell sp="7" />
+ <!-- Summon Earth Elemental -->
+ <spell sp="30" extra="3" />
+ <!-- Summon Air Elemental -->
+ <spell sp="30" extra="3" />
+ <!-- Summon Fire Elemental -->
+ <spell sp="30" extra="3" />
+ <!-- Summon Water Elemental -->
+ <spell sp="30" extra="3" />
+ <!-- Earthquake -->
+ <spell sp="15" />
+ <!-- View Mines -->
+ <spell sp="1" />
+ <!-- View Resources -->
+ <spell sp="1" />
+ <!-- View Artifacts -->
+ <spell sp="2" />
+ <!-- View Towns -->
+ <spell sp="2" />
+ <!-- View Heroes -->
+ <spell sp="2" />
+ <!-- View All -->
+ <spell sp="3" />
+ <!-- Identify Hero -->
+ <spell sp="3" />
+ <!-- Summon Boat -->
+ <spell sp="5" />
+ <!-- Dimension Door (distance settings, or distance="0" for defaults: 14) OR:
+   current_distance = conf_distance * (sp * conf_hp) / (conf_sp * current_hp)  -->
+ <spell sp="10" conf_distance="10" conf_sp="2" conf_hp="100" />
+ <!-- Town Gate -->
+ <spell sp="10" />
+ <!-- Town Portal -->
+ <spell sp="20" />
+ <!-- Visions -->
+ <spell sp="6" />
+ <!-- Haunt -->
+ <spell sp="8" extra="4" />
+ <!-- Set Earth Guardian -->
+ <spell sp="15" extra="4" />
+ <!-- Set Air Guardian -->
+ <spell sp="15" extra="4" />
+ <!-- Set Fire Guardian -->
+ <spell sp="15" extra="4" />
+ <!-- Set Water Guardian -->
+ <spell sp="15" extra="4" />
+
+</spells>

@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<icn name="sprite.icn" count="41">
+ <sprite index="1" name="000.png" ox="0" oy="0"/>
+ <sprite index="2" name="creature_01.png" ox="-59" oy="-98"/>
+ <sprite index="3" name="creature_41.png" ox="-59" oy="-98"/>
+ <sprite index="4" name="creature_42.png" ox="-59" oy="-98"/>
+ <sprite index="5" name="creature_43.png" ox="-59" oy="-98"/>
+ <sprite index="6" name="creature_45.png" ox="-59" oy="-98"/>
+ <sprite index="7" name="creature_47.png" ox="-59" oy="-98"/>
+ <sprite index="8" name="creature_48.png" ox="-59" oy="-98"/>
+ <sprite index="9" name="creature_49.png" ox="-59" oy="-98"/>
+ <sprite index="10" name="creature_19.png" ox="-59" oy="-98"/>
+ <sprite index="11" name="creature_20.png" ox="-59" oy="-98"/>
+ <sprite index="12" name="creature_21.png" ox="-59" oy="-98"/>
+ <sprite index="13" name="creature_25.png" ox="-59" oy="-98"/>
+ <sprite index="14" name="creature_27.png" ox="-59" oy="-98"/>
+ <sprite index="15" name="creature_28.png" ox="-59" oy="-98"/>
+ <sprite index="16" name="creature_30.png" ox="-59" oy="-98"/>
+ <sprite index="17" name="creature_51.png" ox="-59" oy="-98"/>
+ <sprite index="18" name="creature_52.png" ox="-59" oy="-98"/>
+ <sprite index="19" name="creature_53.png" ox="-59" oy="-98"/>
+ <sprite index="20" name="creature_54.png" ox="-59" oy="-98"/>
+ <sprite index="21" name="creature_55.png" ox="-59" oy="-98"/>
+ <sprite index="22" name="creature_56.png" ox="-59" oy="-98"/>
+ <sprite index="23" name="creature_51.png" ox="-59" oy="-98"/>
+ <sprite index="24" name="creature_51.png" ox="-59" oy="-98"/>
+ <sprite index="25" name="creature_51.png" ox="-59" oy="-98"/>
+ <sprite index="26" name="creature_02.png" ox="-59" oy="-98"/>
+ <sprite index="27" name="creature_03.png" ox="-59" oy="-98"/>
+ <sprite index="28" name="creature_04.png" ox="-59" oy="-98"/>
+ <sprite index="29" name="creature_04.png" ox="-59" oy="-98"/>
+ <sprite index="30" name="creature_05.png" ox="-59" oy="-98"/>
+ <sprite index="31" name="creature_06.png" ox="-59" oy="-98"/>
+ <sprite index="32" name="creature_07.png" ox="-59" oy="-98"/>
+ <sprite index="33" name="creature_08.png" ox="-59" oy="-98"/>
+ <sprite index="34" name="creature_09.png" ox="-59" oy="-98"/>
+ <sprite index="35" name="creature_10.png" ox="-59" oy="-98"/>
+ <sprite index="36" name="creature_12.png" ox="-59" oy="-98"/>
+ <sprite index="37" name="creature_13.png" ox="-59" oy="-98"/>
+ <sprite index="38" name="creature_14.png" ox="-59" oy="-98"/>
+ <sprite index="39" name="creature_15.png" ox="-59" oy="-98"/>
+ <sprite index="40" name="creature_16.png" ox="-59" oy="-98"/>
+ <sprite index="41" name="creature_17.png" ox="-59" oy="-98"/>
+</icn>

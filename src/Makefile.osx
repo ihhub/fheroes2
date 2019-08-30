@@ -1,0 +1,17 @@
+AR := ar
+CXX := g++
+LINK := libtool
+SIMPLE_LINK_FLAGS := -dynamic -undefined suppress -flat_namespace
+
+ifndef WITHOUT_UNICODE
+CFLAGS := $(CFLAGS) -DWITH_ICONV
+LIBS := $(LIBS) -liconv
+endif
+
+# the config scripts generate link flags like -Wl,-framework which screws up
+# libtool on OS X, so we remove the -Wl, prefix and everything works fine.
+
+search_pattern := -Wl
+comma_pattern := ,
+LINK_FLAGS := $(subst $(search_pattern),,$(LIBS))
+LINK_FLAGS := $(subst $(comma_pattern), ,$(LINK_FLAGS)) $(SIMPLE_LINK_FLAGS)

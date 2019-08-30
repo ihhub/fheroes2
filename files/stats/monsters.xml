@@ -1,0 +1,158 @@
+<?xml version="1.0" ?>
+<monsters>
+ <!--
+  speed:
+        crawling  = 1,
+        veryslow  = 2,
+        slow      = 3,
+        average   = 4,
+        fast      = 5,
+        veryfast  = 6,
+        ultrafast = 7,
+        blazing   = 8,
+        instant   = 9
+ -->
+
+ <!-- first: unknown monster -->
+ <monster skip="0" attack="1" defense="1" damage_min="1" damage_max="1" hp="1" speed="1" grown="0" shots="0" gold="0" wood="0" mercury="0" ore="0" sulfur="0" crystal="0" gems="0" />
+
+ <!-- peasant -->
+ <monster attack="1" defense="1" damage_min="1" damage_max="1" hp="1" speed="2" grown="12" gold="20" />
+ <!-- archer -->
+ <monster attack="5" defense="3" damage_min="2" damage_max="3" hp="10" speed="2" grown="8" shots="12" gold="150" />
+  <!-- ranger -->
+ <monster attack="5" defense="3" damage_min="2" damage_max="3" hp="10" speed="4" grown="8" shots="24" gold="200" />
+ <!-- pikeman -->
+ <monster attack="5" defense="9" damage_min="3" damage_max="4" hp="15" speed="4" grown="5" gold="200" />
+ <!-- veteran pikeman -->
+ <monster attack="5" defense="9" damage_min="3" damage_max="4" hp="20" speed="5" grown="5" gold="250" />
+ <!-- swordsman -->
+ <monster attack="7" defense="9" damage_min="4" damage_max="6" hp="25" speed="4" grown="4" gold="250" />
+ <!-- master swordsman -->
+ <monster attack="7" defense="9" damage_min="4" damage_max="6" hp="30" speed="5" grown="4" gold="300" />
+ <!-- cavalry -->
+ <monster attack="10" defense="9" damage_min="5" damage_max="10" hp="30" speed="6" grown="3" gold="300" />
+ <!-- champion -->
+ <monster attack="10" defense="9" damage_min="5" damage_max="10" hp="40" speed="7" grown="3" gold="375" />
+ <!-- paladin -->
+ <monster attack="11" defense="12" damage_min="10" damage_max="20" hp="50" speed="5" grown="2" gold="600" />
+ <!-- crusader -->
+ <monster attack="11" defense="12" damage_min="10" damage_max="20" hp="65" speed="6" grown="2" gold="1000" />
+
+ <!-- goblin -->
+ <monster attack="3" defense="1" damage_min="1" damage_max="2" hp="3" speed="4" grown="10" gold="40" />
+ <!-- orc -->
+ <monster attack="3" defense="4" damage_min="2" damage_max="3" hp="10" speed="2" grown="8" shots="8" gold="140" />
+ <!-- orc chief -->
+ <monster attack="3" defense="4" damage_min="3" damage_max="4" hp="15" speed="3" grown="8" shots="16" gold="175" />
+ <!-- wolf -->
+ <monster attack="6" defense="2" damage_min="3" damage_max="5" hp="20" speed="6" grown="5" gold="200" />
+ <!-- ogre -->
+ <monster attack="9" defense="5" damage_min="4" damage_max="6" hp="40" speed="2" grown="4" gold="300" />
+ <!-- ogre lord -->
+ <monster attack="9" defense="5" damage_min="5" damage_max="7" hp="60" speed="4" grown="4" gold="500" />
+ <!-- troll -->
+ <monster attack="10" defense="5" damage_min="5" damage_max="7" hp="40" speed="4" grown="3" shots="8" gold="600" />
+ <!-- war troll -->
+ <monster attack="10" defense="5" damage_min="7" damage_max="9" hp="40" speed="5" grown="3" shots="16" gold="700" />
+ <!-- cyclops -->
+ <monster attack="12" defense="9" damage_min="12" damage_max="24" hp="80" speed="5" grown="2" gold="750" crystal="1" />
+
+ <!-- sprite -->
+ <monster attack="4" defense="2" damage_min="1" damage_max="2" hp="2" speed="4" grown="8" gold="50" />
+ <!-- dwarf -->
+ <monster attack="6" defense="5" damage_min="2" damage_max="4" hp="20" speed="2" grown="6" gold="200" />
+ <!-- battle swarf -->
+ <monster attack="6" defense="6" damage_min="2" damage_max="4" hp="20" speed="4" grown="6" gold="250" />
+ <!-- elf -->
+ <monster attack="4" defense="3" damage_min="2" damage_max="3" hp="15" speed="4" grown="4" shots="24" gold="250" />
+ <!-- grand wlf -->
+ <monster attack="5" defense="5" damage_min="2" damage_max="3" hp="15" speed="6" grown="4" shots="24" gold="300" />
+ <!-- druid -->
+ <monster attack="7" defense="5" damage_min="5" damage_max="8" hp="25" speed="5" grown="3" shots="8" gold="350" />
+ <!-- greater druid -->
+ <monster attack="7" defense="7" damage_min="5" damage_max="8" hp="25" speed="6" grown="3" shots="16" gold="400" />
+ <!-- unicorn -->
+ <monster attack="10" defense="9" damage_min="7" damage_max="14" hp="40" speed="5" grown="2" gold="500" />
+ <!-- phoenix -->
+ <monster attack="12" defense="10" damage_min="20" damage_max="40" hp="100" speed="7" grown="1" gold="1500" mercury="1" />
+
+ <!-- centaur -->
+ <monster attack="3" defense="1" damage_min="1" damage_max="2" hp="5" speed="4" grown="8" shots="8" gold="60" />
+ <!-- gargoyle -->
+ <monster attack="4" defense="7" damage_min="2" damage_max="3" hp="15" speed="6" grown="6" gold="200" />
+ <!-- griffin -->
+ <monster attack="6" defense="6" damage_min="3" damage_max="5" hp="25" speed="4" grown="4" gold="300" />
+ <!-- minotaur -->
+ <monster attack="9" defense="8" damage_min="5" damage_max="10" hp="35" speed="4" grown="3" gold="400" />
+ <!-- minotaur king -->
+ <monster attack="9" defense="8" damage_min="5" damage_max="10" hp="45" speed="6" grown="3" gold="500" />
+ <!-- hydra -->
+ <monster attack="8" defense="9" damage_min="6" damage_max="12" hp="75" speed="2" grown="2" gold="800" />
+ <!-- green dragon -->
+ <monster attack="12" defense="12" damage_min="25" damage_max="50" hp="200" speed="4" grown="1" gold="3000" sulfur="1" />
+ <!-- red dragon -->
+ <monster attack="13" defense="13" damage_min="25" damage_max="50" hp="250" speed="5" grown="1" gold="3500" sulfur="1" />
+ <!-- black dragon -->
+ <monster attack="14" defense="14" damage_min="25" damage_max="50" hp="300" speed="6" grown="1" gold="4000" sulfur="2" />
+
+ <!-- halfling -->
+ <monster attack="2" defense="1" damage_min="1" damage_max="3" hp="3" speed="3" grown="8" shots="8" gold="50" />
+ <!-- boar -->
+ <monster attack="5" defense="4" damage_min="2" damage_max="3" hp="15" speed="6" grown="6" gold="150" />
+ <!-- iron golem -->
+ <monster attack="5" defense="10" damage_min="4" damage_max="5" hp="30" speed="2" grown="4" gold="300" />
+ <!-- steel golem -->
+ <monster attack="7" defense="10" damage_min="4" damage_max="5" hp="35" speed="3" grown="4" gold="350" />
+ <!-- roc -->
+ <monster attack="7" defense="7" damage_min="4" damage_max="8" hp="40" speed="4" grown="3" gold="400" />
+ <!-- magi -->
+ <monster attack="11" defense="7" damage_min="7" damage_max="9" hp="30" speed="5" grown="2" shots="12" gold="600" />
+ <!-- archmagi -->
+ <monster attack="12" defense="8" damage_min="7" damage_max="9" hp="35" speed="6" grown="2" shots="24" gold="700" />
+ <!-- giant -->
+ <monster attack="13" defense="10" damage_min="20" damage_max="30" hp="150" speed="4" grown="1" gold="2000" gems="1" />
+ <!-- titan -->
+ <monster attack="15" defense="15" damage_min="20" damage_max="30" hp="300" speed="6" grown="1" shots="24" gold="5000" gems="2" />
+
+ <!-- skeleton -->
+ <monster attack="4" defense="3" damage_min="2" damage_max="3" hp="4" speed="4" grown="8" gold="75" />
+ <!-- zombie -->
+ <monster attack="5" defense="2" damage_min="2" damage_max="3" hp="15" speed="2" grown="6" gold="150" />
+ <!-- mutant zombie -->
+ <monster attack="5" defense="2" damage_min="2" damage_max="3" hp="25" speed="4" grown="6" gold="200" />
+ <!-- mummy -->
+ <monster attack="6" defense="6" damage_min="3" damage_max="4" hp="25" speed="4" grown="4" gold="250" />
+ <!-- royal mummy -->
+ <monster attack="6" defense="6" damage_min="3" damage_max="4" hp="30" speed="5" grown="4" gold="300" />
+ <!-- vampire -->
+ <monster attack="8" defense="6" damage_min="5" damage_max="7" hp="30" speed="4" grown="3" gold="500" />
+ <!-- vampire lord -->
+ <monster attack="8" defense="6" damage_min="5" damage_max="7" hp="40" speed="5" grown="3" gold="650" />
+ <!-- lich -->
+ <monster attack="7" defense="12" damage_min="8" damage_max="10" hp="25" speed="5" grown="2" shots="12" gold="750" />
+ <!-- power lich -->
+ <monster attack="7" defense="13" damage_min="8" damage_max="10" hp="35" speed="6" grown="2" shots="24" gold="900" />
+ <!-- bone dragon -->
+ <monster attack="11" defense="9" damage_min="25" damage_max="45" hp="150" speed="4" grown="1" gold="1500" />
+
+ <!-- rogue -->
+ <monster attack="6" defense="1" damage_min="1" damage_max="2" hp="4" speed="5" grown="4" gold="50" />
+ <!-- nomad -->
+ <monster attack="7" defense="6" damage_min="2" damage_max="5" hp="20" speed="6" grown="4" gold="200" />
+ <!-- ghost -->
+ <monster attack="8" defense="7" damage_min="4" damage_max="6" hp="20" speed="5" grown="4" gold="1000" />
+ <!-- genie -->
+ <monster attack="10" defense="9" damage_min="20" damage_max="30" hp="50" speed="6" grown="4" gold="650" gems="1" />
+ <!-- medusa -->
+ <monster attack="8" defense="9" damage_min="6" damage_max="10" hp="35" speed="4" grown="4" gold="500" />
+ <!-- earth element -->
+ <monster attack="8" defense="8" damage_min="4" damage_max="5" hp="50" speed="3" grown="4" gold="500" />
+ <!-- air element -->
+ <monster attack="7" defense="7" damage_min="2" damage_max="8" hp="35" speed="6" grown="4" gold="500" />
+ <!-- fire element -->
+ <monster attack="8" defense="6" damage_min="4" damage_max="6" hp="40" speed="5" grown="4" gold="500" />
+ <!-- water element -->
+ <monster attack="6" defense="8" damage_min="3" damage_max="7" hp="45" speed="4" grown="4" gold="500" />
+
+</monsters>

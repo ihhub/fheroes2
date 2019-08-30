@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<globals>
+
+ <!-- starting resource (gold max: 65535, resource max: 255 ) -->
+ <starting_resource ai_always="easy">
+  <easy gold="10000" wood="30" mercury="10" ore="30" sulfur="10" crystal="10" gems="10" />
+  <normal gold="7500" wood="20" mercury="5" ore="20" sulfur="5" crystal="5" gems="5" />
+  <hard gold="5000" wood="10" mercury="2" ore="10" sulfur="2" crystal="2" gems="2" />
+  <expert gold="2500" wood="5" mercury="0" ore="5" sulfur="0" crystal="0" gems="0" />
+  <impossible gold="0" wood="0" mercury="0" ore="0" sulfur="0" crystal="0" gems="0" />
+ </starting_resource>
+
+ <!-- kingdom params -->
+ <kingdom max_heroes="8" />
+
+ <!-- clear fog distance -->
+ <view_distance town="4" castle="5" heroes="4" artifact_telescope="1" object_observation_tower="10" object_magi_eyes="9" />
+
+ <!-- additional growth, month_of in percent (0%, 255%) -->
+ <castle_extra_growth well="2" wel2="8" week_of="5" month_of="100" />
+
+ <!-- restore spell point: 0 - 10 -->
+ <heroes spell_points_per_day="1" />
+
+ <game_over lost_towns_days="7" />
+
+ <!-- whirlpool percent: 1 - 90 -->
+ <whirlpool percent="50" />
+
+ <!-- monster upgrade ratio -->
+ <monster_upgrade rate="1.0" />
+
+</globals>

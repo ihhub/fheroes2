@@ -1,0 +1,8 @@
+fixe : 1
+attaque : 2 à 6
+attaque haut : 7 à 12 (11 raté?)
+attaque bas: 13 à 18
+reçoit : 19 à 24
+meurt : 25 à 30
+movement esquise : 31 à 39
+vol : 40 à 50

@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<skills>
+
+ <!--
+   sec skill values: archery, ballistics, diplomacy, eagleeye, estates, leadership, logistics, luck, mysticism, navigation, necromancy, pathfinding, scouting, wisdom
+   level value: basic = 1, advanced = 2, expert = 2
+   spells: see spell.h
+ -->
+
+ <captain>
+  <knight      attack="2" defense="2" power="1" knowledge="1" />
+  <barbarian   attack="3" defense="1" power="1" knowledge="1" />
+  <sorceress   attack="0" defense="0" power="2" knowledge="3" />
+  <warlock     attack="0" defense="0" power="3" knowledge="2" />
+  <wizard      attack="0" defense="1" power="2" knowledge="2" />
+  <necromancer attack="1" defense="0" power="2" knowledge="2" />
+ </captain>
+
+ <initial>
+  <knight      attack="2" defense="2" power="1" knowledge="1" ballistics="1" leadership="1" />
+  <barbarian   attack="3" defense="1" power="1" knowledge="1" pathfinding="2" />
+  <sorceress   attack="0" defense="0" power="2" knowledge="3" book="1" spell="15" wisdom="1" navigation="2" />
+  <warlock     attack="0" defense="0" power="3" knowledge="2" book="1" spell="19" wisdom="1" scouting="2" />
+  <wizard      attack="0" defense="1" power="2" knowledge="2" book="1" spell="17" wisdom="2" />
+  <necromancer attack="1" defense="0" power="2" knowledge="2" book="1" spell="10" wisdom="1" necromancy="1" />
+ </initial>
+
+ <maturity>
+  <primary>
+   <under>
+   <!--          total sum: 100 -->
+    <knight      attack="35" defense="45" power="10" knowledge="10" />
+    <barbarian   attack="55" defense="35" power="5" knowledge="5" />
+    <sorceress   attack="10" defense="10" power="30" knowledge="50" />
+    <warlock     attack="10" defense="10" power="50" knowledge="30" />
+    <wizard      attack="10" defense="10" power="40" knowledge="40" />
+    <necromancer attack="15" defense="15" power="35" knowledge="35" />
+   </under>
+   <over>
+   <!--          total sum: 100 -->
+    <knight      level="10" attack="25" defense="25" power="25" knowledge="25" />
+    <barbarian   level="10" attack="30" defense="30" power="20" knowledge="20" />
+    <sorceress   level="10" attack="20" defense="20" power="30" knowledge="30" />
+    <warlock     level="10" attack="20" defense="20" power="30" knowledge="30" />
+    <wizard      level="10" attack="20" defense="20" power="30" knowledge="30" />
+    <necromancer level="10" attack="25" defense="25" power="25" knowledge="25" />
+   </over>
+  </primary>
+  <secondary>
+   <!--         total sum: 32, and disable: 0 -->
+   <knight      archery="2" ballistics="4" diplomacy="3" eagleeye="1" estates="3" leadership="5" logistics="3" luck="1" mysticism="1" navigation="2" necromancy="0" pathfinding="3" scouting="2" wisdom="2" />
+   <barbarian   archery="3" ballistics="3" diplomacy="2" eagleeye="1" estates="2" leadership="3" logistics="3" luck="2" mysticism="1" navigation="3" necromancy="0" pathfinding="4" scouting="4" wisdom="1" />
+   <sorceress   archery="3" ballistics="3" diplomacy="2" eagleeye="2" estates="2" leadership="1" logistics="2" luck="3" mysticism="3" navigation="4" necromancy="0" pathfinding="2" scouting="1" wisdom="4" />
+   <warlock     archery="1" ballistics="3" diplomacy="2" eagleeye="3" estates="2" leadership="1" logistics="2" luck="1" mysticism="3" navigation="2" necromancy="1" pathfinding="2" scouting="4" wisdom="5" />
+   <wizard      archery="1" ballistics="3" diplomacy="2" eagleeye="3" estates="2" leadership="2" logistics="2" luck="2" mysticism="4" navigation="2" necromancy="0" pathfinding="2" scouting="2" wisdom="5" />
+   <necromancer archery="1" ballistics="3" diplomacy="2" eagleeye="3" estates="2" leadership="0" logistics="2" luck="1" mysticism="3" navigation="2" necromancy="5" pathfinding="3" scouting="1" wisdom="4" />
+  </secondary>
+ </maturity>
+
+ <witch_huts archery="1" ballistics="1" diplomacy="1" eagleeye="1" estates="1" leadership="0" logistics="1" luck="1" mysticism="1" navigation="1" necromancy="0" pathfinding="1" scouting="1" wisdom="1" />
+
+ <secondary>
+<!--
+  <wisdom basic="3" advanced="4" expert="5" />
+-->
+  <mysticism basic="2" advanced="3" expert="4" />
+  <leadership basic="1" advanced="2" expert="3" />
+  <luck basic="1" advanced="2" expert="3" />
+  <scouting basic="1" advanced="2" expert="3" />
+  <ballistics basic="0" advanced="0" expert="0" />
+  <estates basic="100" advanced="250" expert="500" />
+  <!-- percents: max 100 -->
+  <logistics basic="10" advanced="20" expert="30" />
+  <navigation basic="33" advanced="66" expert="100" />
+  <archery basic="10" advanced="25" expert="50" />
+  <necromancy basic="10" advanced="20" expert="30" />
+  <eagleeye basic="20" advanced="30" expert="40" />
+  <diplomacy basic="25" advanced="50" expert="100" />
+  <pathfinding basic="25" advanced="50" expert="100" />
+
+ </secondary>
+
+</skills>

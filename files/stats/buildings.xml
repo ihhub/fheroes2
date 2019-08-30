@@ -1,0 +1,194 @@
+<?xml version="1.0" ?>
+<buildings>
+
+ <!-- <building gold="0" wood="0" mercury="0" ore="0" sulfur="0" crystal="0" gems="0" /> -->
+
+ <!-- thieves_guild -->
+ <building gold="750" wood="5" />
+ <!-- tavern -->
+ <building gold="500" wood="5" />
+ <!-- shipyard -->
+ <building gold="2000" wood="20" />
+ <!-- well -->
+ <building gold="500" />
+ <!-- statue -->
+ <building gold="1250" ore="5" />
+ <!-- left_turret -->
+ <building gold="1500" ore="5" />
+ <!-- right_turret -->
+ <building gold="1500" ore="5" />
+ <!-- marketplace -->
+ <building gold="500" wood="5" />
+ <!-- moat -->
+ <building gold="750" />
+ <!-- castle -->
+ <building gold="5000" wood="20" ore="20" />
+ <!-- captain -->
+ <building gold="500" />
+ <!-- mage_guild1 -->
+ <building gold="2000" wood="5" ore="5" />
+ <!-- mage_guild2 -->
+ <building gold="1000" wood="5" mercury="4" ore="5" sulfur="4" crystal="4" gems="4" />
+ <!-- mage_guild3 -->
+ <building gold="1000" wood="5" mercury="6" ore="5" sulfur="6" crystal="6" gems="6" />
+ <!-- mage_guild4 -->
+ <building gold="1000" wood="5" mercury="8" ore="5" sulfur="8" crystal="8" gems="8" />
+ <!-- mage_guild5 -->
+ <building gold="1000" wood="5" mercury="10" ore="5" sulfur="10" crystal="10" gems="10" />
+
+ <!-- farm -->
+ <building gold="1000" />
+ <!-- garbage_he -->
+ <building gold="1000" />
+ <!-- crystal_gar -->
+ <building gold="1000" />
+ <!-- waterfall -->
+ <building gold="1000" />
+ <!-- orchard -->
+ <building gold="1000" />
+ <!-- skull_pile -->
+ <building gold="1000" />
+
+ <!-- fortification -->
+ <building gold="1500" wood="5" ore="15" />
+ <!-- coliseum -->
+ <building gold="2000" wood="10" ore="10" />
+ <!-- rainbow -->
+ <building gold="1500" crystal="10" />
+ <!-- dungeon -->
+ <building gold="3000" wood="5" ore="10" />
+ <!-- library -->
+ <building gold="1500" wood="5" mercury="5" ore="5" sulfur="5" crystal="5" gems="5" />
+ <!-- storm -->
+ <building gold="1000" mercury="10" sulfur="10" />
+
+ <!-- shrine -->
+ <building gold="4000" wood="10" crystal="10" />
+
+ <!-- knight dwelling -->
+ <!-- thatched_hut -->
+ <building gold="200" />
+ <!-- archery_range -->
+ <building gold="1000" />
+ <!-- upg_archery_range -->
+ <building gold="1500" wood="5" />
+ <!-- blacksmith -->
+ <building gold="1000" ore="5" />
+ <!-- upg_blacksmith -->
+ <building gold="1500" ore="5" />
+ <!-- armory -->
+ <building gold="2000" wood="10" ore="10" />
+ <!-- upg_armory -->
+ <building gold="2000" wood="5" ore="5" />
+ <!-- jousting_arena -->
+ <building gold="3000" wood="20" />
+ <!-- upg_jousting_arena -->
+ <building gold="3000" wood="10" />
+ <!-- cathedral -->
+ <building gold="5000" wood="20" crystal="20" />
+ <!-- upg_cathedral -->
+ <building gold="5000" wood="10" crystal="10" />
+
+ <!-- barbarian dwelling -->
+ <!-- hut -->
+ <building gold="300" />
+ <!-- stick_hut -->
+ <building gold="800" wood="5" />
+ <!-- upg_stick_hut -->
+ <building gold="1200" wood="5" />
+ <!-- den -->
+ <building gold="1000" />
+ <!-- adobe -->
+ <building gold="2000" wood="10" ore="10" />
+ <!-- upg_adobe -->
+ <building gold="3000" wood="5" ore="5" />
+ <!-- bridge -->
+ <building gold="4000" ore="20" />
+ <!-- upg_bridge -->
+ <building gold="2000" ore="10" />
+ <!-- cyclop_pyramid -->
+ <building gold="6000" ore="20" crystal="20" />
+
+ <!-- sorceress dwelling -->
+ <!-- treehouse -->
+ <building gold="500" wood="5" />
+ <!-- cottage -->
+ <building gold="1000" wood="5" />
+ <!-- upg_cottage -->
+ <building gold="1500" wood="5" />
+ <!-- elves_arhery_range -->
+ <building gold="1500" />
+ <!-- upg_elves_archery_range -->
+ <building gold="1500" wood="5" />
+ <!-- stonehenge -->
+ <building gold="1500" ore="10" />
+ <!-- upd_stonehenge -->
+ <building gold="1500" mercury="5" />
+ <!-- fenced_meadow -->
+ <building gold="3000" wood="10" gems="10" />
+ <!-- phoenix_red_tower -->
+ <building gold="10000" mercury="20" ore="30" />
+
+ <!-- warlock dwelling -->
+ <!-- cave -->
+ <building gold="500" />
+ <!-- crypt -->
+ <building gold="1000" ore="10" />
+ <!-- nest -->
+ <building gold="2000" />
+ <!-- maze -->
+ <building gold="3000" gems="10" />
+ <!-- upg_maze -->
+ <building gold="2000" gems="5" />
+ <!-- swamp -->
+ <building gold="4000" sulfur="10" />
+ <!-- green_tower -->
+ <building gold="15000" ore="30" sulfur="20" />
+ <!-- red_tower -->
+ <building gold="5000" ore="5" sulfur="10" />
+ <!-- black_tower -->
+ <building gold="5000" ore="5" sulfur="10" />
+
+ <!-- wizard dwelling -->
+ <!-- habitat -->
+ <building gold="400" />
+ <!-- pen -->
+ <building gold="800" />
+ <!-- foundry -->
+ <building gold="1500" wood="5" ore="5" />
+ <!-- upg_foundry -->
+ <building gold="1500" mercury="5" />
+ <!-- cliff_nest -->
+ <building gold="3000" wood="5" />
+ <!-- ivory_tower -->
+ <building gold="3500" wood="5" mercury="5" ore="5" sulfur="5" crystal="5" gems="5" />
+ <!-- upg_ivory_tower -->
+ <building gold="4000" wood="5" ore="5" />
+ <!-- cloud_castle -->
+ <building gold="12500" wood="5" ore="5" gems="20" />
+ <!-- upg_cloud_castle -->
+ <building gold="12500" wood="5" ore="5" gems="20" />
+
+ <!-- necromancer dwelling -->
+ <!-- excavation -->
+ <building gold="400" />
+ <!-- graveyard -->
+ <building gold="1000" />
+ <!-- upg_graveyard -->
+ <building gold="1000" />
+ <!-- pyramid -->
+ <building gold="1500" ore="10" />
+ <!-- upg_pyramid -->
+ <building gold="1500" ore="5" />
+ <!-- mansion -->
+ <building gold="3000" wood="10" />
+ <!-- upg_mansion -->
+ <building gold="4000" wood="5" crystal="10" gems="10" />
+ <!-- mausoleum -->
+ <building gold="4000" wood="10" sulfur="10" />
+ <!-- upg_mausoleum -->
+ <building gold="3000" ore="5" crystal="5" />
+ <!-- laboratory -->
+ <building gold="10000" wood="10" mercury="5" ore="10" sulfur="5" crystal="5" gems="5" />
+
+</buildings>

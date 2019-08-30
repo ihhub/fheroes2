@@ -1,0 +1,5 @@
+extractor	- expand all files from agg.
+82m2wav		- convert 82m to wav file.
+til2img		- expand sprites from til file.
+icn2img		- expand sprites from icn file.
+xmi2mid		- xmi to midi convertor.

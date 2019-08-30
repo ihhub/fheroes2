@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<profits>
+
+ <!-- <profit gold="0" wood="0" mercury="0" ore="0" sulfur="0" crystal="0" gems="0" /> -->
+
+ <castle gold="1000" />
+ <town gold="250" />
+ <statue gold="250" />
+ <dungeon gold="500" />
+
+ <sawmill wood="2" />
+ <alchemylab mercury="1" />
+ <mine_ore ore="2" />
+ <mine_sulfur sulfur="1" />
+ <mine_crystal crystal="1" />
+ <mine_gems gems="1" />
+ <mine_gold gold="1000" />
+
+ <ultimate_golden_goose gold="10000" />
+ <endless_sack_gold gold="1000" />
+ <endless_bag_gold gold="750" />
+ <endless_purse_gold gold="500" />
+ <endless_cord_wood wood="1" />
+ <endless_vial_mercury mercury="1" />
+ <endless_cart_ore ore="1" />
+ <endless_pouch_sulfur sulfur="1" />
+ <endless_pouch_crystal crystal="1" />
+ <endless_pouch_gems gems="1" />
+
+</profits>
