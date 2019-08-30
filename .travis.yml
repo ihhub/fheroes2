@@ -8,7 +8,7 @@ matrix:
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libsdl-dev
-        - sudo apt-get install -y libsdl-ttf
+        - sudo apt-get install -y libsdl-ttf2.0-dev
     - os: osx
 
 script:
