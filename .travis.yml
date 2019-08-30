@@ -11,7 +11,6 @@ matrix:
         - sudo apt-get install -y libsdl-ttf2.0-dev
         - sudo apt-get install -y libsdl-mixer1.2-dev
         - sudo apt-get install -y libsdl-image1.2-dev
-    - os: osx
 
 script:
   - |
