@@ -14,13 +14,13 @@ matrix:
         - sudo apt-get install -y libsdl-image1.2-dev
     - os: linux
       name: "Linux with SDL 2.0"
+      env: WITH_SDL2=""
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libsdl2-dev
         - sudo apt-get install -y libsdl2-ttf-dev
         - sudo apt-get install -y libsdl2-mixer-dev
         - sudo apt-get install -y libsdl2-image-dev
-        - env: WITH_SDL2=""
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -32,6 +32,7 @@ matrix:
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
     - os: osx
       name: "OSX with SDL 2.0"
+      env: WITH_SDL2=""
       before_install:
         - brew install sdl2
         - brew install sdl2_ttf
@@ -39,7 +40,6 @@ matrix:
         - brew install sdl2_image
         - brew install gettext
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
-        - env: WITH_SDL2=""
 
 script:
   - |
