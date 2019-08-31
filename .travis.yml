@@ -13,7 +13,6 @@ matrix:
         - sudo apt-get install -y libsdl-image1.2-dev
     - os: osx
       before_install:
-        - brew update
         - brew install sdl
         - brew install sdl_ttf
         - brew install sdl_mixer
