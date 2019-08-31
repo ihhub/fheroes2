@@ -643,7 +643,7 @@ void StreamFile::skip(size_t pos)
 
 int StreamFile::get8(void)
 {
-    u8 ch;
+    u8 ch = '\0';
     if(rw) SDL_RWread(rw, & ch, 1, 1);
     return ch;
 }
