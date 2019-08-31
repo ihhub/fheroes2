@@ -11,6 +11,14 @@ matrix:
         - sudo apt-get install -y libsdl-ttf2.0-dev
         - sudo apt-get install -y libsdl-mixer1.2-dev
         - sudo apt-get install -y libsdl-image1.2-dev
+    - os: osx
+      before_install:
+        - brew install sdl
+        - brew install sdl_ttf
+        - brew install sdl_mixer
+        - brew install sdl_image
+        - brew install gettext
+        - export PATH="/usr/local/opt/gettext/bin:$PATH"
 
 script:
   - |

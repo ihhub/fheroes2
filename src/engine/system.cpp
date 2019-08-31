@@ -226,7 +226,7 @@ int System::SetEnvironment(const char* name, const char* value)
 
 void System::SetLocale(int category, const char* locale)
 {
-#if defined(ANDROID)
+#if defined(ANDROID) || defined(__APPLE__)
     setlocale(category, locale);
 #else
     std::setlocale(category, locale);
@@ -238,7 +238,7 @@ std::string System::GetMessageLocale(int length /* 1, 2, 3 */)
     std::string locname;
 #if defined(__MINGW32CE__) || defined(__MINGW32__)
     char* clocale = std::setlocale(LC_MONETARY, NULL);
-#elif defined(ANDROID)
+#elif defined(ANDROID) || defined(__APPLE__)
     char* clocale = setlocale(LC_MESSAGES, NULL);
 #else
     char* clocale = std::setlocale(LC_MESSAGES, NULL);
