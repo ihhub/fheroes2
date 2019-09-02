@@ -27,19 +27,19 @@
 #include <cstdlib>
 #include <locale>
 
-#if defined(ANDROID)
+#if defined(ANDROID) || defined(_MSC_VER)
 #include <clocale>
 #endif
 
 #include "SDL.h"
 #include "system.h"
 
-#if defined(__MINGW32CE__) || defined(__MINGW32__)
+#if defined(__MINGW32CE__) || defined(__MINGW32__) || defined(_MSC_VER)
 #include <windows.h>
 #include <shellapi.h>
 #endif
 
-#if ! defined(__MINGW32CE__)
+#if !defined(__MINGW32CE__) && !defined(_MSC_VER)
 #include <unistd.h>
 #endif
 
@@ -78,7 +78,9 @@ int System::MakeDirectory(const std::string & path)
 {
 #if defined(__SYMBIAN32__)
     return mkdir(path.c_str(), S_IRWXU);
-#elif defined(__WIN32__)
+#elif defined(__WIN32__) && defined(_MSC_VER)
+    return CreateDirectoryA(path.c_str(), NULL);
+#elif defined(__WIN32__) && !defined(_MSC_VER)
     return mkdir(path.c_str());
 #else
     return mkdir(path.c_str(), S_IRWXU);
@@ -215,7 +217,7 @@ const char* System::GetEnvironment(const char* name)
 
 int System::SetEnvironment(const char* name, const char* value)
 {
-#if defined(__MINGW32CE__) || defined(__MINGW32__)
+#if defined(__MINGW32CE__) || defined(__MINGW32__) || defined(_MSC_VER)
     std::string str(std::string(name) + "=" + std::string(value));
     // SDL 1.2.12 (char *)
     return SDL_putenv(const_cast<char *>(str.c_str()));
@@ -236,7 +238,7 @@ void System::SetLocale(int category, const char* locale)
 std::string System::GetMessageLocale(int length /* 1, 2, 3 */)
 {
     std::string locname;
-#if defined(__MINGW32CE__) || defined(__MINGW32__)
+#if defined(__MINGW32CE__) || defined(__MINGW32__) || defined(_MSC_VER)
     char* clocale = std::setlocale(LC_MONETARY, NULL);
 #elif defined(ANDROID) || defined(__APPLE__)
     char* clocale = setlocale(LC_MESSAGES, NULL);
@@ -262,7 +264,7 @@ std::string System::GetMessageLocale(int length /* 1, 2, 3 */)
 
 int System::GetCommandOptions(int argc, char* const argv[], const char* optstring)
 {
-#if defined(__MINGW32CE__)
+#if defined(__MINGW32CE__) || defined(_MSC_VER)
     return -1;
 #else
     return getopt(argc, argv, optstring);
@@ -271,7 +273,7 @@ int System::GetCommandOptions(int argc, char* const argv[], const char* optstrin
 
 char* System::GetOptionsArgument(void)
 {
-#if defined(__MINGW32CE__)
+#if defined(__MINGW32CE__) || defined(_MSC_VER)
     return NULL;
 #else
     return optarg;
@@ -324,7 +326,9 @@ std::string System::GetTime(void)
 
 bool System::IsFile(const std::string & name, bool writable)
 {
-#if defined(ANDROID)
+#if defined(_MSC_VER)
+    return writable ? ( 0 == access(name.c_str(), 06) ) : true;
+#elif defined(ANDROID)
     return writable ? 0 == access(name.c_str(), W_OK) : true;
 #else
     struct stat fs;
@@ -338,7 +342,9 @@ bool System::IsFile(const std::string & name, bool writable)
 
 bool System::IsDirectory(const std::string & name, bool writable)
 {
-#if defined (ANDROID)
+#if defined(_MSC_VER)
+    return writable ? ( 0 == access(name.c_str(), 06) ) : true;
+#elif defined(ANDROID)
     return writable ? 0 == access(name.c_str(), W_OK) : true;
 #else
     struct stat fs;
