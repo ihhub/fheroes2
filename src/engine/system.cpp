@@ -358,7 +358,11 @@ bool System::IsDirectory(const std::string & name, bool writable)
 
 int System::Unlink(const std::string & file)
 {
+#if defined(_MSC_VER)
+    return _unlink(file.c_str());
+#else
     return unlink(file.c_str());
+#endif
 }
 
 int System::CreateTrayIcon(bool fl)
