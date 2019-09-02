@@ -19,8 +19,11 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
+#if defined(_MSC_VER) || defined(__MINGW32CE__) || defined(__MINGW32__)
+#include <windows.h>
+#else
 #include <dirent.h>
+#endif
 
 #include "system.h"
 #include "tools.h"
@@ -34,6 +37,17 @@ void ListFiles::Append(const ListFiles & list)
 
 void ListFiles::ReadDir(const std::string &path, const std::string &filter, bool sensitive)
 {
+#if defined(_MSC_VER) || defined(__MINGW32CE__) || defined(__MINGW32__)
+    std::string pattern(path + "\\*" + filter);
+    WIN32_FIND_DATA data;
+    HANDLE hFind;
+    if ((hFind = FindFirstFile(pattern.c_str(), &data)) != INVALID_HANDLE_VALUE) {
+        do {
+            push_back(path + "\\" + data.cFileName);
+        } while (FindNextFile(hFind, &data) != 0);
+        FindClose(hFind);
+    }
+#else
     // read directory
     DIR *dp = opendir(path.c_str());
 
@@ -65,6 +79,7 @@ void ListFiles::ReadDir(const std::string &path, const std::string &filter, bool
 	}
 	closedir(dp);
     }
+#endif
 }
 
 void ListDirs::Append(const std::list<std::string> & dirs)
