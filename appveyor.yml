@@ -51,7 +51,7 @@ install:
   - 7z x zlib128-dll.zip > nul
   - copy include\* %ZLIB_INCLUDE% > nul
   - copy lib\* %ZLIB_LIB% > nul
-  - cd c:\projects\zlib\lib
+  - cd c:\projects\zlib\include
   - dir
 
 # clone directory
