@@ -88,6 +88,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>src/engine;src/fheroes2/gui;src/fheroes2/maps;src/fheroes2/kingdom;src/fheroes2/game;src/fheroes2/dialog;../sdl/include;src/fheroes2/system;src/fheroes2/spell;src/fheroes2/monster;src/fheroes2/castle;src/fheroes2/agg;src/fheroes2/heroes;src/fheroes2/resource;src/fheroes2/ai;src/fheroes2/army;src/fheroes2/battle;src/fheroes2/pocketpc;src/fheroes2/objects;src/fheroes2/test;src/fheroes2/image;../zlib/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WITH_ZLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -98,6 +99,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>src/engine;src/fheroes2/gui;src/fheroes2/maps;src/fheroes2/kingdom;src/fheroes2/game;src/fheroes2/dialog;../sdl/include;src/fheroes2/system;src/fheroes2/spell;src/fheroes2/monster;src/fheroes2/castle;src/fheroes2/agg;src/fheroes2/heroes;src/fheroes2/resource;src/fheroes2/ai;src/fheroes2/army;src/fheroes2/battle;src/fheroes2/pocketpc;src/fheroes2/objects;src/fheroes2/test;src/fheroes2/image;../zlib/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WITH_ZLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -112,6 +114,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>src/engine;src/fheroes2/gui;src/fheroes2/maps;src/fheroes2/kingdom;src/fheroes2/game;src/fheroes2/dialog;../sdl/include;src/fheroes2/system;src/fheroes2/spell;src/fheroes2/monster;src/fheroes2/castle;src/fheroes2/agg;src/fheroes2/heroes;src/fheroes2/resource;src/fheroes2/ai;src/fheroes2/army;src/fheroes2/battle;src/fheroes2/pocketpc;src/fheroes2/objects;src/fheroes2/test;src/fheroes2/image;../zlib/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WITH_ZLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
