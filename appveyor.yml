@@ -12,7 +12,7 @@ version: 1.0.{build}
 image: Visual Studio 2015
 
 environment:
-  SDL_IDIR: c:\SDL
+  SDL_IDIR: c:\projects\SDL
   matrix:
     - JOB: Release_x86
       configuration: Release
