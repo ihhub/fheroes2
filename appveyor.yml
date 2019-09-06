@@ -16,7 +16,6 @@ environment:
   SDL_LIB_X86: c:\projects\SDL\lib\x86
   SDL_LIB_X64: c:\projects\SDL\lib\x64
   ZLIB_INCLUDE: c:\projects\zlib\include
-  
   matrix:
     - JOB: Release_x86
       configuration: Release
@@ -38,7 +37,7 @@ install:
   - mkdir %ZLIB_INCLUDE%
   - mkdir %ZLIB_LIB%
   - cd %TEMP%
-  # Download SDL1
+  # Download SDL
   - appveyor DownloadFile https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip
   - appveyor DownloadFile https://www.libsdl.org/projects/SDL_image/release/SDL_image-devel-1.2.12-VC.zip
   - appveyor DownloadFile https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip
