@@ -14,6 +14,8 @@ image: Visual Studio 2015
 environment:
   SDL_INCLUDE: c:\projects\SDL\include
   SDL_LIB: c:\projects\SDL\lib
+  ZLIB_INCLUDE: c:\projects\zlib\include
+  ZLIB_LIB: c:\projects\zlib\lib
   matrix:
     - JOB: Release_x86
       configuration: Release
@@ -25,6 +27,8 @@ environment:
 install:
   - mkdir %SDL_INCLUDE%
   - mkdir %SDL_LIB%
+  - mkdir %ZLIB_INCLUDE%
+  - mkdir %ZLIB_LIB%
   - cd %TEMP%
   # Download SDL1
   - appveyor DownloadFile https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip
@@ -42,9 +46,12 @@ install:
   - copy SDL-1.2.15\lib\x86\* %SDL_LIB% > nul
   - copy SDL_image-1.2.12\lib\x86\* %SDL_LIB% > nul
   - copy SDL_mixer-1.2.12\lib\x86\* %SDL_LIB% > nul
-  - cd C:\projects\SDL
-  - dir
-  - cd include
+    # Download zlib
+  - appveyor DownloadFile http://zlib.net/zlib128-dll.zip
+  - 7z x zlib128-dll.zip > nul
+  - copy include\* %ZLIB_INCLUDE% > nul
+  - copy lib\* %ZLIB_LIB% > nul
+  - cd c:\projects\zlib\lib
   - dir
 
 # clone directory
