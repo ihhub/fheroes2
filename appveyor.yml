@@ -41,8 +41,7 @@ install:
   - copy SDL-1.2.15\lib\x86\* %SDL_IDIR%\lib > nul
   - copy SDL_image-1.2.12\lib\x86\* %SDL_IDIR%\lib > nul
   - copy SDL_mixer-1.2.12\lib\x86\* %SDL_IDIR%\lib > nul
-  - cd C:\projects\fheroes2
-  - cd ..
+  - cd C:\projects
   - dir
 
 # clone directory
