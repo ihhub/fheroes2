@@ -60,6 +60,10 @@ std::string GetCaption(void)
     return std::string("Free Heroes II, version: " + Settings::GetVersion());
 }
 
+#if defined (_MSC_VER)
+#undef main
+#endif
+
 int main(int argc, char **argv)
 {
 	Settings & conf = Settings::Get();
