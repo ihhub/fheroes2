@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#define SDL_MAIN_HANDLED
+
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -60,9 +62,9 @@ std::string GetCaption(void)
     return std::string("Free Heroes II, version: " + Settings::GetVersion());
 }
 
-#if defined (_MSC_VER)
-#undef main
-#endif
+//#if defined (_MSC_VER)
+//#undef main
+//#endif
 
 int main(int argc, char **argv)
 {
