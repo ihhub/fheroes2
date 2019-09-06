@@ -12,6 +12,7 @@ version: 1.0.{build}
 image: Visual Studio 2015
 
 environment:
+  SDL_IDIR: c:\SDL
   matrix:
     - JOB: Release_x86
       configuration: Release
@@ -19,6 +20,27 @@ environment:
     - JOB: Release_x64
       configuration: Release
       platform: x64
+
+install:
+  - choco install make
+  - mkdir %SDL_IDIR%
+  - cd %TEMP%
+  # Download SDL1
+  - appveyor DownloadFile https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip
+  - appveyor DownloadFile https://www.libsdl.org/projects/SDL_image/release/SDL_image-devel-1.2.12-VC.zip
+  - appveyor DownloadFile https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip
+  # Extract files
+  - 7z x SDL-devel-1.2.15-VC.zip > nul
+  - 7z x SDL_image-devel-1.2.12-VC.zip > nul
+  - 7z x SDL_mixer-devel-1.2.12-VC.zip > nul
+  # Set up includes
+  - copy SDL-1.2.15\include\* %SDL_IDIR%\include > nul
+  - copy SDL_image-1.2.12\include\* %SDL_IDIR%\include > nul
+  - copy SDL_mixer-1.2.12\include\* %SDL_IDIR%\include > nul
+  # Set up libs
+  - copy SDL-1.2.15\lib\x86\* %SDL_IDIR%\lib > nul
+  - copy SDL_image-1.2.12\lib\x86\* %SDL_IDIR%\lib > nul
+  - copy SDL_mixer-1.2.12\lib\x86\* %SDL_IDIR%\lib > nul
 
 # clone directory
 clone_folder: C:\projects\fheroes2
