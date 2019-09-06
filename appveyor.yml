@@ -43,15 +43,17 @@ install:
   - copy SDL_image-1.2.12\include\* %SDL_INCLUDE% > nul
   - copy SDL_mixer-1.2.12\include\* %SDL_INCLUDE% > nul
   # Set up libs
-  - copy SDL-1.2.15\lib\x86\* %SDL_LIB% > nul
-  - copy SDL_image-1.2.12\lib\x86\* %SDL_LIB% > nul
-  - copy SDL_mixer-1.2.12\lib\x86\* %SDL_LIB% > nul
+  - copy SDL-1.2.15\lib\* %SDL_LIB% > nul
+  - copy SDL_image-1.2.12\lib\* %SDL_LIB% > nul
+  - copy SDL_mixer-1.2.12\lib\* %SDL_LIB% > nul
     # Download zlib
   - appveyor DownloadFile http://zlib.net/zlib128-dll.zip
   - 7z x zlib128-dll.zip > nul
   - copy include\* %ZLIB_INCLUDE% > nul
   - copy lib\* %ZLIB_LIB% > nul
-  - cd c:\projects\zlib\include
+  - cd c:\projects\zlib\lib
+  - dir
+  - cd c:\projects\SDL\lib
   - dir
 
 # clone directory
