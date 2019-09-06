@@ -23,8 +23,8 @@ environment:
       platform: x64
 
 install:
-  - choco install make
-  - mkdir %SDL_IDIR%
+  - mkdir %SDL_INCLUDE%
+  - mkdir %SDL_LIB%
   - cd %TEMP%
   # Download SDL1
   - appveyor DownloadFile https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip
