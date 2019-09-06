@@ -23,7 +23,6 @@ environment:
 
 install:
   - mkdir %SDL_INCLUDE%
-  - mkdir %SDL_LIB_X86%
   - mkdir %SDL_LIB_X64%
   - mkdir %ZLIB_INCLUDE%
   - mkdir %ZLIB_LIB%
