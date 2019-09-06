@@ -58,7 +58,7 @@ int ArtifactsModifiersResult(int type, const u8* arts, u32 size, const HeroBase 
 			case Artifact::BATTLE_GARB:		if(type == MDF_MORALE || type == MDF_LUCK) mod = 10; break;
 			case Artifact::MASTHEAD:		if(type == MDF_MORALE || type == MDF_LUCK) mod = base.Modes(Heroes::SHIPMASTER) ? art.ExtraValue() : 0; break;
 			// morale
-			case Artifact::FIZBIN_MISFORTUNE:	if(type == MDF_MORALE) mod = -art.ExtraValue(); break;
+			case Artifact::FIZBIN_MISFORTUNE:	if(type == MDF_MORALE) mod = -static_cast<s32>( art.ExtraValue() ); break;
 			default: break;
 		    }
 
