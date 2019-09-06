@@ -43,7 +43,6 @@ install:
   - copy SDL_mixer-1.2.12\lib\x86\* %SDL_IDIR%\lib > nul
   - cd C:\projects\fheroes2
   - cd ..
-  - cd sdl\include
   - dir
 
 # clone directory
