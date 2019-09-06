@@ -12,7 +12,8 @@ version: 1.0.{build}
 image: Visual Studio 2015
 
 environment:
-  SDL_IDIR: c:\projects\SDL
+  SDL_INCLUDE: c:\projects\SDL\include
+  SDL_LIB: c:\projects\SDL\lib
   matrix:
     - JOB: Release_x86
       configuration: Release
@@ -34,13 +35,13 @@ install:
   - 7z x SDL_image-devel-1.2.12-VC.zip > nul
   - 7z x SDL_mixer-devel-1.2.12-VC.zip > nul
   # Set up includes
-  - copy SDL-1.2.15\include\* %SDL_IDIR%\include > nul
-  - copy SDL_image-1.2.12\include\* %SDL_IDIR%\include > nul
-  - copy SDL_mixer-1.2.12\include\* %SDL_IDIR%\include > nul
+  - copy SDL-1.2.15\include\* %SDL_INCLUDE% > nul
+  - copy SDL_image-1.2.12\include\* %SDL_INCLUDE% > nul
+  - copy SDL_mixer-1.2.12\include\* %SDL_INCLUDE% > nul
   # Set up libs
-  - copy SDL-1.2.15\lib\x86\* %SDL_IDIR%\lib > nul
-  - copy SDL_image-1.2.12\lib\x86\* %SDL_IDIR%\lib > nul
-  - copy SDL_mixer-1.2.12\lib\x86\* %SDL_IDIR%\lib > nul
+  - copy SDL-1.2.15\lib\x86\* %SDL_LIB% > nul
+  - copy SDL_image-1.2.12\lib\x86\* %SDL_LIB% > nul
+  - copy SDL_mixer-1.2.12\lib\x86\* %SDL_LIB% > nul
   - cd C:\projects\SDL
   - dir
   - cd include
