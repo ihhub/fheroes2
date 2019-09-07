@@ -1095,6 +1095,8 @@ bool AGG::LoadOrgICN(int icn, u32 index, bool reflect)
 	if(body.size())
 	{
 	    v.count = StreamBuf(body).getLE16();
+        if (v.count < 1)
+            return false;
 	    v.sprites = new Sprite [v.count];
 	    v.reflect = new Sprite [v.count];
 	}
@@ -1896,6 +1898,7 @@ bool AGG::Init(void)
         cols.r = kb_pal[index] << 2;
         cols.g = kb_pal[index + 1] << 2;
         cols.b = kb_pal[index + 2] << 2;
+        cols.unused = 0;
 
         pal_colors.push_back(cols);
     }
