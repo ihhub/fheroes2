@@ -175,10 +175,12 @@ namespace Interface
             buttonPgDn.Draw();
             splitter.RedrawCursor();
 
-            ItemsIterator curt = top;
-            ItemsIterator last = top + maxItems < content->end() ? top + maxItems : content->end();
-            for(; curt != last; ++curt)
-                RedrawItem(*curt, rtAreaItems.x, rtAreaItems.y + (curt - top) * rtAreaItems.h / maxItems, curt == cur);
+            if (content && !content->empty()) {
+                ItemsIterator curt = top;
+                ItemsIterator last = (top - content->begin()) + maxItems < content->size() ? top + maxItems : content->end();
+                for(; curt != last; ++curt)
+                    RedrawItem(*curt, rtAreaItems.x, rtAreaItems.y + (curt - top) * rtAreaItems.h / maxItems, curt == cur);
+            }
         }
 
 	Item & GetCurrent(void)
@@ -204,9 +206,8 @@ namespace Interface
 
 	void SetCurrentVisible(void)
 	{
-	    if(top > cur || top + maxItems <= cur)
-	    {
-		top = cur + maxItems > content->end() ? content->end() - maxItems : cur;
+        if (top > cur || cur - top >= maxItems) {
+		top = (cur - content->begin()) + maxItems > content->size() ? content->end() - maxItems : cur;
 		if(top < content->begin()) top = content->begin();
 		UpdateSplitterRange();
     		splitter.MoveIndex(top - content->begin());
@@ -320,10 +321,8 @@ namespace Interface
 		{
 		    cursor.Hide();
 
-		    ItemsIterator pos = top + static_cast<size_t>(offset);
-
-		    if(pos >= content->begin() && pos < content->end())
-		    {
+            if ( ((top - content->begin()) >= 0) && (((top - content->begin()) + static_cast<int>(offset)) < content->size()) ) {
+                ItemsIterator pos = top + static_cast<size_t>(offset);
 			const s32 posy = rtAreaItems.y + (pos - top) * rtAreaItems.h / maxItems;
 
 			if(ActionListCursor(*pos, le.GetMouseCursor(), rtAreaItems.x, posy))

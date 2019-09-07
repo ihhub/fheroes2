@@ -1095,6 +1095,8 @@ bool AGG::LoadOrgICN(int icn, u32 index, bool reflect)
 	if(body.size())
 	{
 	    v.count = StreamBuf(body).getLE16();
+        if (v.count < 1)
+            return false;
 	    v.sprites = new Sprite [v.count];
 	    v.reflect = new Sprite [v.count];
 	}

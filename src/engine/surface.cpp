@@ -596,14 +596,13 @@ RGBA Surface::GetRGB(u32 pixel) const
 /* load static palette (economize 1kb for each surface) only 8bit color! */
 void Surface::SetPalette(void)
 {
-    if(isValid() &&
-	pal_colors && pal_nums && surface->format->palette)
-    {
-	if(surface->format->palette->colors &&
-	    pal_colors != surface->format->palette->colors) SDL_free(surface->format->palette->colors);
+    if (isValid() && pal_colors && pal_nums > 0 && surface->format->palette) {
+        if (surface->format->palette->colors && pal_colors != surface->format->palette->colors && surface->format->palette->ncolors != pal_nums) {
+            SDL_free(surface->format->palette->colors);
+            surface->format->palette->ncolors = pal_nums;
+        }
 
         surface->format->palette->colors = pal_colors;
-        surface->format->palette->ncolors = pal_nums;
     }
 }
 
