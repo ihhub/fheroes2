@@ -39,7 +39,7 @@ class StreamBase
 protected:
     size_t		flags;
 
-    virtual int		get8(void) = 0;
+    virtual u8 get8() = 0;
     virtual void	put8(char) = 0;
 
     virtual size_t	sizeg(void) const = 0;
@@ -62,10 +62,10 @@ public:
 
     virtual void	skip(size_t) = 0;
 
-    virtual int		getBE16(void) = 0;
-    virtual int		getLE16(void) = 0;
-    virtual int		getBE32(void) = 0;
-    virtual int		getLE32(void) = 0;
+    virtual u16 getBE16() = 0;
+    virtual u16 getLE16() = 0;
+    virtual u32 getBE32() = 0;
+    virtual u32 getLE32() = 0;
 
     virtual void	putBE32(u32) = 0;
     virtual void	putLE32(u32) = 0;
@@ -76,8 +76,8 @@ public:
 			getRaw(size_t = 0 /* all data */) = 0;
     virtual void	putRaw(const char*, size_t) = 0;
 
-    int			get16(void);
-    int			get32(void);
+    u16 get16();
+    u32 get32();
 
     void		put16(u16);
     void		put32(u32);
@@ -212,10 +212,10 @@ public:
     void		seek(size_t);
     void		skip(size_t);
 
-    int			getBE16(void);
-    int			getLE16(void);
-    int			getBE32(void);
-    int			getLE32(void);
+    u16 getBE16();
+    u16 getLE16();
+    u32 getBE32();
+    u32 getLE32();
 
     void		putBE32(u32);
     void		putLE32(u32);
@@ -239,7 +239,7 @@ protected:
     void		realloc(size_t);
     void		setfail(void);
 
-    int			get8(void);
+    u8 get8();
     void		put8(char);
 
 #ifdef WITH_ZLIB
@@ -272,10 +272,10 @@ public:
     void		seek(size_t);
     void		skip(size_t);
 
-    int			getBE16(void);
-    int			getLE16(void);
-    int			getBE32(void);
-    int			getLE32(void);
+    u16 getBE16();
+    u16 getLE16();
+    u32 getBE32();
+    u32 getLE32();
 
     void		putBE32(u32);
     void		putLE32(u32);
@@ -295,7 +295,7 @@ protected:
     size_t		tellg(void) const;
     size_t		tellp(void) const;
 
-    int			get8(void);
+    u8 get8();
     void		put8(char);
 };
 
