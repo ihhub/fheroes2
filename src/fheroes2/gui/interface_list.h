@@ -175,7 +175,7 @@ namespace Interface
             buttonPgDn.Draw();
             splitter.RedrawCursor();
 
-            if (content != nullptr && !content->empty()) {
+            if (content && !content->empty()) {
                 ItemsIterator curt = top;
                 ItemsIterator last = (top - content->begin()) + maxItems < content->size() ? top + maxItems : content->end();
                 for(; curt != last; ++curt)
