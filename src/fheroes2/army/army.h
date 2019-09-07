@@ -40,6 +40,7 @@ class Troops : protected std::vector<Troop*>
 {
 public:
     Troops();
+    Troops(const Troops & troops);
     virtual ~Troops();
 
     void		Assign(const Troop*, const Troop*);

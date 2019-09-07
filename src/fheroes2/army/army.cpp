@@ -122,6 +122,13 @@ Troops::Troops()
 {
 }
 
+Troops::Troops(const Troops & troops)
+{
+    reserve(troops.size());
+    for (const_iterator it = troops.begin(); it != troops.end(); ++it)
+        push_back(new Troop(**it));
+}
+
 Troops::~Troops()
 {
     for(iterator it = begin(); it != end(); ++it) delete *it;
@@ -455,7 +462,7 @@ Troops Troops::GetOptimized(void) const
 
 void Troops::ArrangeForBattle(bool upgrade)
 {
-    Troops priority = GetOptimized();
+    const Troops & priority = GetOptimized();
 
     switch(priority.size())
     {
@@ -530,7 +537,7 @@ void Troops::JoinStrongest(Troops & troops2, bool save_last)
     Troops priority = GetOptimized();
     priority.reserve(ARMYMAXTROOPS * 2);
 
-    Troops priority2 = troops2.GetOptimized();
+    const Troops & priority2 = troops2.GetOptimized();
     priority.Insert(priority2);
 
     Clean();
@@ -571,7 +578,7 @@ void Troops::KeepOnlyWeakest(Troops & troops2, bool save_last)
     Troops priority = GetOptimized();
     priority.reserve(ARMYMAXTROOPS * 2);
 
-    Troops priority2 = troops2.GetOptimized();
+    const Troops & priority2 = troops2.GetOptimized();
     priority.Insert(priority2);
 
     Clean();
