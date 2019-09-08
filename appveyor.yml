@@ -39,22 +39,17 @@ install:
   - cd %TEMP%
   # Download SDL
   - appveyor DownloadFile https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip
-  - appveyor DownloadFile https://www.libsdl.org/projects/SDL_image/release/SDL_image-devel-1.2.12-VC.zip
   - appveyor DownloadFile https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip
   # Extract files
   - 7z x SDL-devel-1.2.15-VC.zip > nul
-  - 7z x SDL_image-devel-1.2.12-VC.zip > nul
   - 7z x SDL_mixer-devel-1.2.12-VC.zip > nul
   # Set up includes
   - copy SDL-1.2.15\include\* %SDL_INCLUDE% > nul
-  - copy SDL_image-1.2.12\include\* %SDL_INCLUDE% > nul
   - copy SDL_mixer-1.2.12\include\* %SDL_INCLUDE% > nul
   # Set up libs
   - copy SDL-1.2.15\lib\x86\* %SDL_LIB_X86% > nul
-  - copy SDL_image-1.2.12\lib\x86\* %SDL_LIB_X86% > nul
   - copy SDL_mixer-1.2.12\lib\x86\* %SDL_LIB_X86% > nul
   - copy SDL-1.2.15\lib\x64\* %SDL_LIB_X64% > nul
-  - copy SDL_image-1.2.12\lib\x64\* %SDL_LIB_X64% > nul
   - copy SDL_mixer-1.2.12\lib\x64\* %SDL_LIB_X64% > nul
     # Download zlib
 #  - appveyor DownloadFile http://zlib.net/zlib128-dll.zip
