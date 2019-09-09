@@ -40,7 +40,6 @@
 #include "profit.h"
 #include "cursor.h"
 #include "kingdom.h"
-#include "visit.h"
 #include "battle.h"
 #include "heroes.h"
 #include "game.h"

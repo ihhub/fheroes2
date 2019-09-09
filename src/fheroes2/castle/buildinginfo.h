@@ -27,7 +27,6 @@
 #include "castle.h"
 
 class StatusBar;
-class Castle;
 
 class BuildingInfo
 {

@@ -24,7 +24,6 @@
 #include <algorithm>
 
 #include "system.h"
-#include "gamedefs.h"
 #include "tinyconfig.h"
 #include "settings.h"
 #include "maps_tiles.h"

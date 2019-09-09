@@ -21,9 +21,6 @@
  ***************************************************************************/
 
 #include "engine.h"
-#include "error.h"
-#include "system.h"
-#include "font.h"
 #include "sdlnet.h"
 
 namespace Mixer

@@ -51,7 +51,6 @@
 #include "objcrck.h"
 #include "monster.h"
 #include "spell.h"
-#include "resource.h"
 #include "maps_tiles.h"
 
 u8 monster_animation_cicle[] = { 0, 1, 2, 1, 0, 3, 4, 5, 4, 3 };

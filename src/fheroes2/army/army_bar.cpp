@@ -29,7 +29,6 @@
 #include "world.h"
 #include "army.h"
 #include "text.h"
-#include "army_troop.h"
 #include "army_bar.h"
 
 void RedistributeArmy(ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */)

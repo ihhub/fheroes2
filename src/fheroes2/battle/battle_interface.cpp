@@ -29,7 +29,6 @@
 #include "kingdom.h"
 #include "world.h"
 #include "castle.h"
-#include "dialog.h"
 #include "game.h"
 #include "race.h"
 #include "ground.h"
