@@ -81,6 +81,10 @@
       <AdditionalDependencies>zlibstatic.lib;SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y "..\sdl\lib\x86\SDL.dll" $(Configuration)
+xcopy /Y "..\sdl\lib\x86\SDL_mixer.dll" $(Configuration)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -96,6 +100,10 @@
       <AdditionalDependencies>zlibstatic.lib;SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y "..\sdl\lib\x64\SDL.dll" $(PlatformShortName)\$(Configuration)
+xcopy /Y "..\sdl\lib\x64\SDL_mixer.dll" $(PlatformShortName)\$(Configuration)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -113,6 +121,10 @@
       <AdditionalLibraryDirectories>../sdl/lib/x86/;../zlib/lib/x86/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlibstatic.lib;SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y "..\sdl\lib\x86\SDL.dll" $(Configuration)
+xcopy /Y "..\sdl\lib\x86\SDL_mixer.dll" $(Configuration)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -130,6 +142,10 @@
       <AdditionalLibraryDirectories>../sdl/lib/x64/;../zlib/lib/x64/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlibstatic.lib;SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y "..\sdl\lib\x64\SDL.dll" $(PlatformShortName)\$(Configuration)
+xcopy /Y "..\sdl\lib\x64\SDL_mixer.dll" $(PlatformShortName)\$(Configuration)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\audio.cpp" />
