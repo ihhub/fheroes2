@@ -212,7 +212,7 @@ std::string Settings::GetVersion(void)
 }
 
 /* constructor */
-Settings::Settings() : debug(DEFAULT_DEBUG), video_mode(0, 0), game_difficulty(Difficulty::NORMAL),
+Settings::Settings() : debug(DEFAULT_DEBUG), video_mode(640, 480), game_difficulty(Difficulty::NORMAL),
     font_normal("dejavusans.ttf"), font_small("dejavusans.ttf"), size_normal(15), size_small(10),
     sound_volume(6), music_volume(6), heroes_speed(DEFAULT_SPEED_DELAY), ai_speed(DEFAULT_SPEED_DELAY), scroll_speed(SCROLL_NORMAL), battle_speed(DEFAULT_SPEED_DELAY),
     blit_speed(0), game_type(0), preferably_count_players(0), port(DEFAULT_PORT), memory_limit(0)
@@ -224,6 +224,7 @@ Settings::Settings() : debug(DEFAULT_DEBUG), video_mode(0, 0), game_difficulty(D
     opt_global.SetModes(GLOBAL_SHOWICONS);
     opt_global.SetModes(GLOBAL_SHOWBUTTONS);
     opt_global.SetModes(GLOBAL_SHOWSTATUS);
+    opt_global.SetModes(GLOBAL_MUSIC_MIDI);
     if(System::isEmbededDevice())
     {
 	opt_global.SetModes(GLOBAL_POCKETPC);
