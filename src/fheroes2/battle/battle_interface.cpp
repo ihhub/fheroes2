@@ -32,7 +32,6 @@
 #include "game.h"
 #include "race.h"
 #include "ground.h"
-#include "settings.h"
 #include "pocketpc.h"
 #include "interface_list.h"
 #include "battle_arena.h"

@@ -49,7 +49,6 @@
 #include "kingdom.h"
 #include "pocketpc.h"
 #include "battle_only.h"
-#include "ai.h"
 
 int Game::StartBattleOnly(void)
 {
