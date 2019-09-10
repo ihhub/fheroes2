@@ -41,7 +41,6 @@ bool Mixer::isValid(void)
 }
 
 #ifdef WITH_MIXER
-#include "SDL_mixer.h"
 
 void FreeChannel(int channel)
 {

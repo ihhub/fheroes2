@@ -31,7 +31,6 @@
 #include "speed.h"
 #include "heroes.h"
 #include "settings.h"
-#include "battle_arena.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"

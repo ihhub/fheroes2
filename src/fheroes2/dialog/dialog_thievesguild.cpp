@@ -27,7 +27,6 @@
 #include "button.h"
 #include "cursor.h"
 #include "settings.h"
-#include "text.h"
 #include "world.h"
 #include "kingdom.h"
 #include "castle.h"
