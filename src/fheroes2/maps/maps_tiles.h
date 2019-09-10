@@ -31,7 +31,6 @@
 #include "../army/army_troop.h"
 #include "../resource/resource.h"
 
-class Sprite;
 class Heroes;
 class Spell;
 class Monster;
