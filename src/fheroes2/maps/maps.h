@@ -28,7 +28,6 @@
 #define TILEWIDTH 32
 
 struct Point;
-class Castle;
 class IndexDistance;
 
 class MapsIndexes : public std::vector<s32>

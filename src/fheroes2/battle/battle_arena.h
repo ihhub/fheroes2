@@ -40,10 +40,14 @@ class HeroBase;
 
 namespace Battle
 {
+    class Bridge;
+    class Catapult;
     class Force;
     class Units;
     class Unit;
     class Command;
+    class Tower;
+    class Interface;
 
     class Actions : public std::list<Command>
     {

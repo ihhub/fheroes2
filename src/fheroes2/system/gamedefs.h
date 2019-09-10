@@ -28,7 +28,7 @@
 #define MINOR_VERSION 6
 
 #ifdef WITH_XML
-#include "xmlccwrap.h"
+#include "../../xmlccwrap/xmlccwrap.h"
 #endif
 
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)

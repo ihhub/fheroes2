@@ -47,8 +47,6 @@ enum level_t
     LEVEL_ALL     = 0xFF
 };
 
-namespace Maps { class Tiles; }
-
 namespace Interface
 {
     class Basic;

@@ -32,13 +32,7 @@
 
 namespace Battle
 {
-    class Arena;
-    class Cell;
     class Unit;
-    class Tower;
-    class Catapult;
-    class Bridge;
-    class Interface;
 
     enum { RESULT_LOSS = 0x01, RESULT_RETREAT = 0x02, RESULT_SURRENDER = 0x04, RESULT_WINS = 0x80 };
 

@@ -30,7 +30,6 @@
 
 void StringAppendModifiers(std::string &, int);
 
-class Spell;
 class Heroes;
 
 namespace Skill
