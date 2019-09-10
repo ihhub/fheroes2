@@ -20,11 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "button.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../system/settings.h"
+#include "../gui/cursor.h"
+#include "../gui/button.h"
 #include "dialog.h"
 
 int Dialog::Message(const std::string &header, const std::string &message, int ft, int buttons)

@@ -21,9 +21,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "speed.h"
-#include "settings.h"
-#include "heroes.h"
+#include "../kingdom/speed.h"
+#include "../system/settings.h"
+#include "../heroes/heroes.h"
 #include "battle_troop.h"
 #include "battle_army.h"
 

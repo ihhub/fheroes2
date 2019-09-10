@@ -20,13 +20,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "button.h"
-#include "artifact.h"
-#include "game.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../system/settings.h"
+#include "../gui/cursor.h"
+#include "../gui/button.h"
+#include "../resource/artifact.h"
+#include "../game/game.h"
 #include "dialog.h"
 
 int Dialog::ArtifactInfo(const std::string & hdr, const std::string & msg, const Artifact & art, int buttons)

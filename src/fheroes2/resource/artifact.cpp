@@ -23,16 +23,16 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "agg.h"
-#include "text.h"
-#include "cursor.h"
-#include "settings.h"
-#include "world.h"
-#include "game.h"
-#include "spell.h"
-#include "heroes.h"
-#include "dialog.h"
-#include "dialog_selectitems.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../gui/cursor.h"
+#include "../system/settings.h"
+#include "../kingdom/world.h"
+#include "../game/game.h"
+#include "../spell/spell.h"
+#include "../heroes/heroes.h"
+#include "../dialog/dialog.h"
+#include "../dialog/dialog_selectitems.h"
 #include "artifact.h"
 
 enum { ART_DISABLED = 0x01, ART_RNDUSED = 0x02 };

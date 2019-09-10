@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include <map>
-#include "maps.h"
-#include "ai.h"
-#include "world.h"
+#include "../maps/maps.h"
+#include "../ai/ai.h"
+#include "../kingdom/world.h"
 #include "direction.h"
-#include "settings.h"
+#include "../system/settings.h"
 #include "heroes.h"
-#include "ground.h"
+#include "../maps/ground.h"
 #include "route.h"
 
 struct cell_t

@@ -21,12 +21,12 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "color.h"
-#include "dialog.h"
-#include "settings.h"
+#include "../kingdom/color.h"
+#include "../dialog/dialog.h"
+#include "../system/settings.h"
 #include "mp2.h"
-#include "game.h"
-#include "army_troop.h"
+#include "../game/game.h"
+#include "../army/army_troop.h"
 #include "maps_objects.h"
 
 #define SIZEMESSAGE 400

@@ -25,16 +25,16 @@
 #endif
 #include <cstring>
 #include <algorithm>
-#include "difficulty.h"
-#include "color.h"
-#include "race.h"
-#include "world.h"
-#include "settings.h"
-#include "dir.h"
-#include "artifact.h"
-#include "game.h"
-#include "game_io.h"
-#include "game_over.h"
+#include "../game/difficulty.h"
+#include "../kingdom/color.h"
+#include "../kingdom/race.h"
+#include "../kingdom/world.h"
+#include "../system/settings.h"
+#include "../../engine//dir.h"
+#include "../resource/artifact.h"
+#include "../game/game.h"
+#include "../game/game_io.h"
+#include "../game/game_over.h"
 #include "maps_fileinfo.h"
 
 #define LENGTHNAME		16

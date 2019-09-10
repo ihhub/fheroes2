@@ -22,15 +22,15 @@
 
 #include <algorithm>
 
-#include "castle.h"
-#include "heroes.h"
+#include "../castle/castle.h"
+#include "../heroes/heroes.h"
 #include "cursor.h"
-#include "settings.h"
-#include "agg.h"
-#include "world.h"
-#include "kingdom.h"
-#include "game.h"
-#include "game_interface.h"
+#include "../system/settings.h"
+#include "../agg/agg.h"
+#include "../kingdom/world.h"
+#include "../kingdom/kingdom.h"
+#include "../game/game.h"
+#include "../game/game_interface.h"
 
 void Interface::Basic::SetFocus(Heroes* hero)
 {

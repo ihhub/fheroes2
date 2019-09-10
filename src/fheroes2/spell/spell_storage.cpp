@@ -22,9 +22,9 @@
 
 #include <algorithm>
 #include <sstream>
-#include "skill.h"
-#include "settings.h"
-#include "artifact.h"
+#include "../heroes/skill.h"
+#include "../system/settings.h"
+#include "../resource/artifact.h"
 #include "spell_storage.h"
 
 SpellStorage::SpellStorage()

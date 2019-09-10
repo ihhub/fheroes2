@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include <iostream>
-#include "agg.h"
-#include "world.h"
+#include "../agg/agg.h"
+#include "../kingdom/world.h"
 #include "heroes.h"
 #include "direction.h"
-#include "maps.h"
-#include "game.h"
-#include "settings.h"
+#include "../maps/maps.h"
+#include "../game/game.h"
+#include "../system/settings.h"
 #include "route.h"
 
 s32 Route::Step::GetIndex(void) const

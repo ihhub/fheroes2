@@ -20,14 +20,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "settings.h"
-#include "world.h"
-#include "maps.h"
-#include "ground.h"
-#include "game.h"
-#include "game_interface.h"
-#include "route.h"
+#include "../agg/agg.h"
+#include "../system/settings.h"
+#include "../kingdom/world.h"
+#include "../maps/maps.h"
+#include "../maps/ground.h"
+#include "../game/game.h"
+#include "../game/game_interface.h"
+#include "../heroes/route.h"
 #include "interface_gamearea.h"
 
 #define SCROLL_MIN	8

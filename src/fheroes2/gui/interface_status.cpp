@@ -21,17 +21,17 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "agg.h"
+#include "../agg/agg.h"
 #include "text.h"
 #include "cursor.h"
-#include "world.h"
-#include "settings.h"
-#include "kingdom.h"
-#include "castle.h"
-#include "heroes.h"
-#include "army.h"
-#include "resource.h"
-#include "game_interface.h"
+#include "../kingdom/world.h"
+#include "../system/settings.h"
+#include "../kingdom/kingdom.h"
+#include "../castle/castle.h"
+#include "../heroes/heroes.h"
+#include "../army/army.h"
+#include "../resource/resource.h"
+#include "../game/game_interface.h"
 #include "interface_status.h"
 
 #define AITURN_REDRAW_EXPIRE 20

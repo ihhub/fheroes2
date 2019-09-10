@@ -22,18 +22,18 @@
 
 #include <string>
 #include <algorithm>
-#include "agg.h"
-#include "button.h"
-#include "cursor.h"
-#include "settings.h"
-#include "text.h"
-#include "army.h"
+#include "../agg/agg.h"
+#include "../gui/button.h"
+#include "../gui/cursor.h"
+#include "../system/settings.h"
+#include "../gui/text.h"
+#include "../army/army.h"
 #include "heroes.h"
-#include "army_bar.h"
+#include "../army/army_bar.h"
 #include "heroes_indicator.h"
-#include "pocketpc.h"
-#include "game.h"
-#include "game_interface.h"
+#include "../pocketpc/pocketpc.h"
+#include "../game/game.h"
+#include "../game/game_interface.h"
 
 void RedrawPrimarySkillInfo(const Point &, PrimarySkillsBar*, PrimarySkillsBar*);
 

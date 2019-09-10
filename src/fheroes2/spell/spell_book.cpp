@@ -22,15 +22,15 @@
 
 #include <algorithm>
 #include <functional>
-#include "agg.h"
-#include "text.h"
-#include "game.h"
-#include "cursor.h"
-#include "dialog.h"
-#include "heroes_base.h"
-#include "skill.h"
-#include "dialog_selectitems.h"
-#include "settings.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../game/game.h"
+#include "../gui/cursor.h"
+#include "../dialog/dialog.h"
+#include "../heroes/heroes_base.h"
+#include "../heroes/skill.h"
+#include "../dialog/dialog_selectitems.h"
+#include "../system/settings.h"
 #include "spell_book.h"
 
 #define SPELL_PER_PAGE		6

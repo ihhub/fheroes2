@@ -26,11 +26,11 @@
 #include <map>
 #include "payment.h"
 #include "puzzle.h"
-#include "mp2.h"
-#include "pairs.h"
-#include "heroes.h"
-#include "castle.h"
-#include "heroes_recruits.h"
+#include "../maps/mp2.h"
+#include "../maps/pairs.h"
+#include "../heroes/heroes.h"
+#include "../castle/castle.h"
+#include "../heroes/heroes_recruits.h"
 
 class Player;
 class Castle;

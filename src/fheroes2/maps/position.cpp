@@ -21,9 +21,9 @@
  ***************************************************************************/
 
 #include "maps.h"
-#include "world.h"
-#include "game.h"
-#include "settings.h"
+#include "../kingdom/world.h"
+#include "../game/game.h"
+#include "../system/settings.h"
 #include "position.h"
 
 MapPosition::MapPosition(const Point & pt) : center(pt)

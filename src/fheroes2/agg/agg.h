@@ -26,7 +26,7 @@
 #include <vector>
 #include <utility>
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 #include "icn.h"
 #include "til.h"
 #include "m82.h"

@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include <sstream>
-#include "maps.h"
+#include "../maps/maps.h"
 #include "direction.h"
 
 std::string Direction::String(int direct)

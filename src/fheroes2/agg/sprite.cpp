@@ -20,11 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "settings.h"
+#include "../system/settings.h"
 #include "agg.h"
 #include "icn.h"
-#include "cursor.h"
-#include "display.h"
+#include "../gui/cursor.h"
+#include "../../engine/display.h"
 #include "sprite.h"
 
 bool SkipLocalAlpha(int icn)

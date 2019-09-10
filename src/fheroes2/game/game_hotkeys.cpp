@@ -24,11 +24,11 @@
 #include <ctime>
 #include <algorithm>
 
-#include "system.h"
-#include "gamedefs.h"
-#include "tinyconfig.h"
-#include "agg.h"
-#include "settings.h"
+#include "../../engine/system.h"
+#include "../system/gamedefs.h"
+#include "../../engine/tinyconfig.h"
+#include "../agg/agg.h"
+#include "../system/settings.h"
 #include "game.h"
 #include "game_interface.h"
 

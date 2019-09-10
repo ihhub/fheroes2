@@ -22,21 +22,21 @@
 
 #include <string>
 #include <vector>
-#include "agg.h"
-#include "world.h"
-#include "button.h"
-#include "cursor.h"
-#include "settings.h"
+#include "../agg/agg.h"
+#include "../kingdom/world.h"
+#include "../gui/button.h"
+#include "../gui/cursor.h"
+#include "../system/settings.h"
 #include "castle.h"
-#include "dialog.h"
-#include "heroes.h"
-#include "text.h"
-#include "race.h"
-#include "game.h"
-#include "statusbar.h"
-#include "payment.h"
+#include "../dialog/dialog.h"
+#include "../heroes/heroes.h"
+#include "../gui/text.h"
+#include "../kingdom/race.h"
+#include "../game/game.h"
+#include "../gui/statusbar.h"
+#include "../kingdom/payment.h"
 #include "buildinginfo.h"
-#include "kingdom.h"
+#include "../kingdom/kingdom.h"
 
 int Castle::DialogBuyHero(const Heroes* hero)
 {

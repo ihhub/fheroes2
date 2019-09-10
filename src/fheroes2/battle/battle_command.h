@@ -23,7 +23,7 @@
 #ifndef H2BATTLE_COMMAND_H
 #define H2BATTLE_COMMAND_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 #include "battle_board.h"
 
 namespace Battle

@@ -23,16 +23,16 @@
 #include <algorithm>
 #include <vector>
 #include <string>
-#include "agg.h"
-#include "button.h"
-#include "cursor.h"
+#include "../agg/agg.h"
+#include "../gui/button.h"
+#include "../gui/cursor.h"
 #include "castle.h"
-#include "dialog.h"
-#include "game.h"
-#include "race.h"
-#include "settings.h"
+#include "../dialog/dialog.h"
+#include "../game/game.h"
+#include "../kingdom/race.h"
+#include "../system/settings.h"
 #include "mageguild.h"
-#include "text.h"
+#include "../gui/text.h"
 
 RowSpells::RowSpells(const Point & pos, const Castle & castle, int lvl)
 {

@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "button.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../system/settings.h"
+#include "../gui/cursor.h"
+#include "../gui/button.h"
 #include "dialog.h"
-#include "interface_list.h"
+#include "../gui/interface_list.h"
 
 class SettingsListBox : public Interface::ListBox<u32>
 {

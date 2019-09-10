@@ -20,16 +20,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "gamedefs.h"
-#include "agg.h"
-#include "cursor.h"
-#include "game.h"
-#include "statusbar.h"
-#include "dialog.h"
-#include "monster.h"
-#include "button.h"
-#include "battle_troop.h"
-#include "army_troop.h"
+#include "../system/gamedefs.h"
+#include "../agg/agg.h"
+#include "../gui/cursor.h"
+#include "../game/game.h"
+#include "../gui/statusbar.h"
+#include "../dialog/dialog.h"
+#include "../monster/monster.h"
+#include "../gui/button.h"
+#include "../battle/battle_troop.h"
+#include "../army/army_troop.h"
 
 #ifndef BUILD_RELEASE
 

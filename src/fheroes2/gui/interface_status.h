@@ -23,7 +23,7 @@
 #ifndef H2INTERFACE_STATUS_H
 #define H2INTERFACE_STATUS_H
 
-#include "thread.h"
+#include "../../engine/thread.h"
 #include "interface_border.h"
 
 class Surface;

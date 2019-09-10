@@ -24,17 +24,17 @@
 #include <string>
 #include <cstdlib>
 
-#include "engine.h"
-#include "system.h"
-#include "gamedefs.h"
-#include "settings.h"
-#include "dir.h"
-#include "agg.h"
-#include "cursor.h"
+#include "../../engine/engine.h"
+#include "../../engine/system.h"
+#include "../system/gamedefs.h"
+#include "../system/settings.h"
+#include "../../engine//dir.h"
+#include "../agg/agg.h"
+#include "../gui/cursor.h"
 #include "game.h"
-#include "test.h"
-#include "images_pack.h"
-#include "zzlib.h"
+#include "../test/test.h"
+#include "../image/images_pack.h"
+#include "../../engine/zzlib.h"
 
 void LoadZLogo(void);
 void SetVideoDriver(const std::string &);

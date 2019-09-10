@@ -23,11 +23,11 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-#include "race.h"
-#include "ground.h"
+#include "../kingdom/race.h"
+#include "../maps/ground.h"
 #include "mus.h"
-#include "settings.h"
-#include "mp2.h"
+#include "../system/settings.h"
+#include "../maps/mp2.h"
 
 namespace MUS
 {

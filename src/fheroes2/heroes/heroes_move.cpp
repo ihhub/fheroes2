@@ -20,17 +20,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "world.h"
-#include "agg.h"
-#include "cursor.h"
-#include "settings.h"
-#include "race.h"
-#include "ground.h"
-#include "game.h"
-#include "game_interface.h"
-#include "kingdom.h"
-#include "maps_tiles.h"
-#include "castle.h"
+#include "../kingdom/world.h"
+#include "../agg/agg.h"
+#include "../gui/cursor.h"
+#include "../system/settings.h"
+#include "../kingdom/race.h"
+#include "../maps/ground.h"
+#include "../game/game.h"
+#include "../game/game_interface.h"
+#include "../kingdom/kingdom.h"
+#include "../maps/maps_tiles.h"
+#include "../castle/castle.h"
 #include "direction.h"
 #include "heroes.h"
 

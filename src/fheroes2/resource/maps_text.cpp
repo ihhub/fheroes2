@@ -7,7 +7,7 @@
  * http://sourceforge.net/projects/fheroes2
  */
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 #ifdef MAPS_MESSAGES
 

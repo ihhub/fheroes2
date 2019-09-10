@@ -21,11 +21,11 @@
  ***************************************************************************/
 
 #include <cmath>
-#include "agg.h"
-#include "luck.h"
-#include "dialog.h"
-#include "text.h"
-#include "morale.h"
+#include "../agg/agg.h"
+#include "../kingdom/luck.h"
+#include "../dialog/dialog.h"
+#include "../gui/text.h"
+#include "../kingdom/morale.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 

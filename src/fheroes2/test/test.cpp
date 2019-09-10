@@ -20,16 +20,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "settings.h"
-#include "gamedefs.h"
-#include "battle.h"
-#include "world.h"
-#include "army.h"
-#include "game.h"
-#include "castle.h"
-#include "kingdom.h"
-#include "heroes.h"
+#include "../agg/agg.h"
+#include "../system/settings.h"
+#include "../system/gamedefs.h"
+#include "../battle/battle.h"
+#include "../kingdom/world.h"
+#include "../army/army.h"
+#include "../game/game.h"
+#include "../castle/castle.h"
+#include "../kingdom/kingdom.h"
+#include "../heroes/heroes.h"
 #include "test.h"
 
 #ifndef BUILD_RELEASE

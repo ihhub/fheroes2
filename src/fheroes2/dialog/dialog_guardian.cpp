@@ -20,17 +20,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "heroes.h"
-#include "button.h"
-#include "army_bar.h"
-#include "heroes_indicator.h"
-#include "army_troop.h"
-#include "world.h"
-#include "game.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../system/settings.h"
+#include "../gui/cursor.h"
+#include "../heroes/heroes.h"
+#include "../gui/button.h"
+#include "../army/army_bar.h"
+#include "../heroes/heroes_indicator.h"
+#include "../army/army_troop.h"
+#include "../kingdom/world.h"
+#include "../game/game.h"
 #include "dialog.h"
 
 class ArmyCell : public Rect

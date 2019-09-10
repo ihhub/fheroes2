@@ -22,15 +22,15 @@
 
 #include <ctime>
 #include <sstream>
-#include "agg.h"
-#include "direction.h"
-#include "settings.h"
-#include "maps.h"
-#include "mp2.h"
-#include "world.h"
+#include "../agg/agg.h"
+#include "../heroes/direction.h"
+#include "../system/settings.h"
+#include "../maps/maps.h"
+#include "../maps/mp2.h"
+#include "../kingdom/world.h"
 #include "game.h"
-#include "dialog.h"
-#include "players.h"
+#include "../dialog/dialog.h"
+#include "../system/players.h"
 #include "game_interface.h"
 
 Interface::Basic::Basic() : gameArea(*this), radar(*this),

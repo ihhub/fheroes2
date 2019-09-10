@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "world.h"
-#include "settings.h"
+#include "../kingdom/world.h"
+#include "../system/settings.h"
 #include "maps.h"
-#include "race.h"
-#include "game.h"
-#include "kingdom.h"
-#include "difficulty.h"
+#include "../kingdom/race.h"
+#include "../game/game.h"
+#include "../kingdom/kingdom.h"
+#include "../game/difficulty.h"
 #include "maps_tiles.h"
 
 struct ComparsionDistance

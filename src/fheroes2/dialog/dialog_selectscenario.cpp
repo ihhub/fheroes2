@@ -21,16 +21,16 @@
  ***************************************************************************/
 
 #include "dialog.h"
-#include "agg.h"
-#include "text.h"
-#include "button.h"
-#include "cursor.h"
-#include "difficulty.h"
-#include "settings.h"
-#include "maps.h"
-#include "text.h"
-#include "tools.h"
-#include "game.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../gui/button.h"
+#include "../gui/cursor.h"
+#include "../game/difficulty.h"
+#include "../system/settings.h"
+#include "../maps/maps.h"
+#include "../gui/text.h"
+#include "../../engine/tools.h"
+#include "../game/game.h"
 #include "dialog_selectscenario.h"
 
 void LossConditionInfo(const Maps::FileInfo &);

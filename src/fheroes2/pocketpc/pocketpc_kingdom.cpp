@@ -20,12 +20,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "cursor.h"
-#include "text.h"
-#include "button.h"
-#include "heroes.h"
-#include "kingdom.h"
+#include "../agg/agg.h"
+#include "../gui/cursor.h"
+#include "../gui/text.h"
+#include "../gui/button.h"
+#include "../heroes/heroes.h"
+#include "../kingdom/kingdom.h"
 #include "pocketpc.h"
 
 void PocketPC::KingdomOverviewDialog(const Kingdom & myKingdom)

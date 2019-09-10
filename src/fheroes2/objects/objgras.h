@@ -23,7 +23,7 @@
 #ifndef H2OBJGRAS_H
 #define H2OBJGRAS_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 namespace ObjGras
 {

@@ -22,8 +22,8 @@
 #ifndef H2SPELL_H
 #define H2SPELL_H
 
-#include "payment.h"
-#include "gamedefs.h"
+#include "../kingdom/payment.h"
+#include "../system/gamedefs.h"
 
 class HeroBase;
 class StreamBase;

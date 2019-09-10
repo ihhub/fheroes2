@@ -25,15 +25,15 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "gamedefs.h"
-#include "maps.h"
-#include "maps_tiles.h"
+#include "../system/gamedefs.h"
+#include "../maps/maps.h"
+#include "../maps/maps_tiles.h"
 #include "week.h"
 #include "kingdom.h"
-#include "sprite.h"
-#include "castle_heroes.h"
-#include "maps_objects.h"
-#include "artifact_ultimate.h"
+#include "../agg/sprite.h"
+#include "../castle/castle_heroes.h"
+#include "../maps/maps_objects.h"
+#include "../resource/artifact_ultimate.h"
 
 class Heroes;
 class Castle;

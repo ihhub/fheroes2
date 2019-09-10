@@ -23,7 +23,7 @@
 #ifndef H2POSITION_H
 #define H2POSITION_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class MapPosition
 {

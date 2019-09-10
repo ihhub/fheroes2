@@ -21,18 +21,18 @@
  ***************************************************************************/
 
 #include <string>
-#include "agg.h"
-#include "button.h"
-#include "world.h"
-#include "cursor.h"
-#include "dialog.h"
-#include "settings.h"
-#include "resource.h"
+#include "../agg/agg.h"
+#include "../gui/button.h"
+#include "../kingdom/world.h"
+#include "../gui/cursor.h"
+#include "../dialog/dialog.h"
+#include "../system/settings.h"
+#include "../resource/resource.h"
 #include "castle.h"
-#include "heroes.h"
-#include "kingdom.h"
-#include "game.h"
-#include "text.h"
+#include "../heroes/heroes.h"
+#include "../kingdom/kingdom.h"
+#include "../game/game.h"
+#include "../gui/text.h"
 
 void Castle::OpenTavern(void)
 {

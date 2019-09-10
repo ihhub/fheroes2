@@ -20,18 +20,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "monster.h"
-#include "settings.h"
-#include "cursor.h"
-#include "button.h"
-#include "world.h"
-#include "game.h"
-#include "race.h"
-#include "dialog.h"
-#include "kingdom.h"
-#include "profit.h"
-#include "statusbar.h"
+#include "../agg/agg.h"
+#include "../monster/monster.h"
+#include "../system/settings.h"
+#include "../gui/cursor.h"
+#include "../gui/button.h"
+#include "../kingdom/world.h"
+#include "../game/game.h"
+#include "../kingdom/race.h"
+#include "../dialog/dialog.h"
+#include "../kingdom/kingdom.h"
+#include "../kingdom/profit.h"
+#include "../gui/statusbar.h"
 #include "buildinginfo.h"
 
 struct buildstats_t

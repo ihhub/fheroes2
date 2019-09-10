@@ -25,8 +25,8 @@
 
 #include <vector>
 #include <utility>
-#include "bitmodes.h"
-#include "sprite.h"
+#include "../system/bitmodes.h"
+#include "../agg/sprite.h"
 #include "battle.h"
 #include "battle_army.h"
 #include "battle_arena.h"

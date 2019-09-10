@@ -23,7 +23,7 @@
 #ifndef H2WEEK_H
 #define H2WEEK_H
 
-#include "monster.h"
+#include "../monster/monster.h"
 
 struct Week : std::pair<int, int>
 {

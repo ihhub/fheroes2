@@ -25,7 +25,7 @@
 
 #include <vector>
 #include "spell.h"
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class Artifact;
 class BagArtifacts;

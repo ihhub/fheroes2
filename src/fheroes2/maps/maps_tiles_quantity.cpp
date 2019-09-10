@@ -20,13 +20,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "artifact.h"
-#include "skill.h"
-#include "spell.h"
+#include "../resource/artifact.h"
+#include "../heroes/skill.h"
+#include "../spell/spell.h"
 #include "pairs.h"
-#include "settings.h"
-#include "difficulty.h"
-#include "world.h"
+#include "../system/settings.h"
+#include "../game/difficulty.h"
+#include "../kingdom/world.h"
 #include "maps_tiles.h"
 
 bool Maps::Tiles::QuantityIsValid(void) const

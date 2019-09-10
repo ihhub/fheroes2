@@ -23,18 +23,18 @@
 #include <cstring>
 #include <algorithm>
 #include <functional>
-#include "engine.h"
-#include "agg.h"
-#include "world.h"
-#include "luck.h"
-#include "morale.h"
-#include "speed.h"
-#include "heroes.h"
-#include "settings.h"
+#include "../../engine/engine.h"
+#include "../agg/agg.h"
+#include "../kingdom/world.h"
+#include "../kingdom/luck.h"
+#include "../kingdom/morale.h"
+#include "../kingdom/speed.h"
+#include "../heroes/heroes.h"
+#include "../system/settings.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
-#include "game_static.h"
+#include "../game/game_static.h"
 
 namespace Battle
 {

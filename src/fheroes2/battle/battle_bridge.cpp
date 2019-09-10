@@ -20,7 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "castle.h"
+#include "../castle/castle.h"
 #include "battle_cell.h"
 #include "battle_troop.h"
 #include "battle_interface.h"

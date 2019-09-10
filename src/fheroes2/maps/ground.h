@@ -23,7 +23,7 @@
 #define H2MAPSGROUND_H
 
 #include <string>
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 namespace Maps
 {

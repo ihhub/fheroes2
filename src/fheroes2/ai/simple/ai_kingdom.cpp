@@ -29,18 +29,18 @@
 
 #include <functional>
 #include <algorithm>
-#include "game.h"
-#include "cursor.h"
-#include "engine.h"
-#include "game_interface.h"
-#include "interface_gamearea.h"
-#include "heroes.h"
-#include "castle.h"
-#include "world.h"
-#include "settings.h"
-#include "kingdom.h"
-#include "agg.h"
-#include "ai.h"
+#include "../../game/game.h"
+#include "../../gui/cursor.h"
+#include "../../../engine/engine.h"
+#include "../../game/game_interface.h"
+#include "../../gui/interface_gamearea.h"
+#include "../../heroes/heroes.h"
+#include "../../castle/castle.h"
+#include "../../kingdom/world.h"
+#include "../../system/settings.h"
+#include "../../kingdom/kingdom.h"
+#include "../../agg/agg.h"
+#include "../ai.h"
 #include "ai_simple.h"
 
 void AICastleTurn(Castle*);

@@ -21,9 +21,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "mp2.h"
-#include "icn.h"
-#include "direction.h"
+#include "../maps/mp2.h"
+#include "../agg/icn.h"
+#include "../heroes/direction.h"
 #include "objwatr.h"
 
 int ObjWat2::GetPassable(u32 index)

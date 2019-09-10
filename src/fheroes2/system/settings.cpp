@@ -22,14 +22,14 @@
 
 #include <algorithm>
 
-#include "system.h"
-#include "text.h"
-#include "maps.h"
-#include "race.h"
-#include "game.h"
-#include "tinyconfig.h"
-#include "difficulty.h"
-#include "dialog.h"
+#include "../../engine/system.h"
+#include "../gui/text.h"
+#include "../maps/maps.h"
+#include "../kingdom/race.h"
+#include "../game/game.h"
+#include "../../engine/tinyconfig.h"
+#include "../game/difficulty.h"
+#include "../dialog/dialog.h"
 #include "settings.h"
 
 #define DEFAULT_PORT	5154
@@ -1425,7 +1425,7 @@ void Settings::BinarySave(void) const
     }
 }
 
-#include "dialog.h"
+#include "../dialog/dialog.h"
 
 void Settings::BinaryLoad(void)
 {

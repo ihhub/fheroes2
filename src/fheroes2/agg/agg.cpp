@@ -25,20 +25,20 @@
 #include <map>
 #include <vector>
 
-#include "system.h"
-#include "font.h"
-#include "settings.h"
-#include "text.h"
-#include "engine.h"
-#include "artifact.h"
-#include "dir.h"
-#include "game.h"
+#include "../../engine/system.h"
+#include "../../engine/font.h"
+#include "../system/settings.h"
+#include "../gui/text.h"
+#include "../../engine/engine.h"
+#include "../resource/artifact.h"
+#include "../../engine//dir.h"
+#include "../game/game.h"
 #include "palette_h2.h"
 #include "agg.h"
 
 #ifdef WITH_ZLIB
-#include "images_pack.h"
-#include "zzlib.h"
+#include "../image/images_pack.h"
+#include "../../engine/zzlib.h"
 #endif
 
 #define FATSIZENAME	15

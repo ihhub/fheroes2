@@ -24,8 +24,8 @@
 #define H2MONSTER_H
 
 #include <string>
-#include "payment.h"
-#include "gamedefs.h"
+#include "../kingdom/payment.h"
+#include "../system/gamedefs.h"
 
 class Spell;
 

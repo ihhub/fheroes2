@@ -20,9 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "settings.h"
-#include "direction.h"
-#include "icn.h"
+#include "../system/settings.h"
+#include "../heroes/direction.h"
+#include "../agg/icn.h"
 #include "mp2.h"
 
 /* return name icn object */

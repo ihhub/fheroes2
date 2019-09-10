@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include <cstring>
-#include "castle.h"
+#include "../castle/castle.h"
 #include "race.h"
-#include "buildinginfo.h"
-#include "settings.h"
+#include "../castle/buildinginfo.h"
+#include "../system/settings.h"
 #include "payment.h"
 
 struct paymentstats_t

@@ -27,12 +27,12 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           *
  *******************************************************************************/
 
-#include "world.h"
-#include "kingdom.h"
-#include "heroes.h"
-#include "castle.h"
-#include "race.h"
-#include "game.h"
+#include "../../kingdom/world.h"
+#include "../../kingdom/kingdom.h"
+#include "../../heroes/heroes.h"
+#include "../../castle/castle.h"
+#include "../../kingdom/race.h"
+#include "../../game/game.h"
 #include "ai_simple.h"
 
 void AICastleDefense(Castle & c)

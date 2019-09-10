@@ -21,11 +21,11 @@
  ***************************************************************************/
 
 #include "castle.h"
-#include "luck.h"
-#include "morale.h"
-#include "race.h"
-#include "agg.h"
-#include "settings.h"
+#include "../kingdom/luck.h"
+#include "../kingdom/morale.h"
+#include "../kingdom/race.h"
+#include "../agg/agg.h"
+#include "../system/settings.h"
 #include "captain.h"
 
 Captain::Captain(Castle & cstl) : HeroBase(HeroBase::CAPTAIN, cstl.GetRace()), home(cstl)

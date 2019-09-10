@@ -25,10 +25,10 @@
 
 #include <vector>
 #include <utility>
-#include "icn.h"
-#include "m82.h"
-#include "gamedefs.h"
-#include "army.h"
+#include "../agg/icn.h"
+#include "../agg/m82.h"
+#include "../system/gamedefs.h"
+#include "../army/army.h"
 
 namespace Battle
 {

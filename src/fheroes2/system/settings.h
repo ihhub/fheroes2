@@ -26,11 +26,11 @@
 #include <list>
 #include <iomanip>
 
-#include "system.h"
+#include "../../engine/system.h"
 #include "gamedefs.h"
 #include "players.h"
-#include "dir.h"
-#include "maps_fileinfo.h"
+#include "../../engine//dir.h"
+#include "../maps/maps_fileinfo.h"
 #include "bitmodes.h"
 
 #define FORMAT_VERSION_3269 3269

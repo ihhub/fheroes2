@@ -20,10 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "text.h"
-#include "army_troop.h"
-#include "interface_list.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../army/army_troop.h"
+#include "../gui/interface_list.h"
 #include "dialog_selectitems.h"
 
 class SelectEnum : public Interface::ListBox<int>

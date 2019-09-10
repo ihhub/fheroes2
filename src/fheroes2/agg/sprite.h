@@ -22,7 +22,7 @@
 #ifndef H2SPRITE_H
 #define H2SPRITE_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class Sprite : public SpritePos
 {

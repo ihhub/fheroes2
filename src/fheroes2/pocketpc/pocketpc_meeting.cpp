@@ -20,17 +20,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "cursor.h"
-#include "text.h"
-#include "button.h"
-#include "dialog.h"
-#include "heroes.h"
-#include "game.h"
-#include "heroes_indicator.h"
-#include "army_bar.h"
-#include "world.h"
-#include "kingdom.h"
+#include "../agg/agg.h"
+#include "../gui/cursor.h"
+#include "../gui/text.h"
+#include "../gui/button.h"
+#include "../dialog/dialog.h"
+#include "../heroes/heroes.h"
+#include "../game/game.h"
+#include "../heroes/heroes_indicator.h"
+#include "../army/army_bar.h"
+#include "../kingdom/world.h"
+#include "../kingdom/kingdom.h"
 #include "pocketpc.h"
 
 void PocketPC::HeroesMeeting(Heroes & hero1, Heroes & hero2)

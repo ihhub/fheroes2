@@ -23,7 +23,7 @@
 #ifndef H2OBJLAVA_H
 #define H2OBJLAVA_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 namespace ObjLav2
 {

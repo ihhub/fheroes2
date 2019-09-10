@@ -20,22 +20,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "text.h"
-#include "cursor.h"
-#include "button.h"
-#include "settings.h"
-#include "castle.h"
-#include "heroes.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../gui/cursor.h"
+#include "../gui/button.h"
+#include "../system/settings.h"
+#include "../castle/castle.h"
+#include "../heroes/heroes.h"
 #include "world.h"
 #include "kingdom.h"
-#include "skill.h"
-#include "game.h"
-#include "army.h"
-#include "army_bar.h"
-#include "buildinginfo.h"
-#include "interface_icons.h"
-#include "interface_list.h"
+#include "../heroes/skill.h"
+#include "../game/game.h"
+#include "../army/army.h"
+#include "../army/army_bar.h"
+#include "../castle/buildinginfo.h"
+#include "../gui/interface_icons.h"
+#include "../gui/interface_list.h"
 
 struct HeroRow
 {

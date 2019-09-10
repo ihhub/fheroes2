@@ -22,13 +22,13 @@
 
 #include <sstream>
 
-#include "speed.h"
-#include "settings.h"
-#include "game.h"
-#include "luck.h"
-#include "morale.h"
+#include "../kingdom/speed.h"
+#include "../system/settings.h"
+#include "../game/game.h"
+#include "../kingdom/luck.h"
+#include "../kingdom/morale.h"
 #include "army.h"
-#include "heroes_base.h"
+#include "../heroes/heroes_base.h"
 #include "army_troop.h"
 
 Troop::Troop() : Monster(Monster::UNKNOWN), count(0)

@@ -23,7 +23,7 @@
 #ifndef H2TIL_H
 #define H2TIL_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class Surface;
 

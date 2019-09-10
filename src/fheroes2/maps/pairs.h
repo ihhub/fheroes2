@@ -25,8 +25,8 @@
 
 #include <utility>
 #include "mp2.h"
-#include "color.h"
-#include "resource.h"
+#include "../kingdom/color.h"
+#include "../resource/resource.h"
 
 class IndexDistance : public std::pair<s32, u32>
 {

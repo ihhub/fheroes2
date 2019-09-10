@@ -20,14 +20,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "gamedefs.h"
-#include "agg.h"
+#include "../system/gamedefs.h"
+#include "../agg/agg.h"
 #include "game.h"
-#include "dialog.h"
-#include "world.h"
-#include "kingdom.h"
-#include "castle.h"
-#include "settings.h"
+#include "../dialog/dialog.h"
+#include "../kingdom/world.h"
+#include "../kingdom/kingdom.h"
+#include "../castle/castle.h"
+#include "../system/settings.h"
 #include "game_interface.h"
 #include "game_over.h"
 

@@ -25,9 +25,9 @@
 
 #include <list>
 
-#include "gamedefs.h"
-#include "ai.h"
-#include "spell_storage.h"
+#include "../system/gamedefs.h"
+#include "../ai/ai.h"
+#include "../spell/spell_storage.h"
 #include "battle_board.h"
 #include "battle_grave.h"
 

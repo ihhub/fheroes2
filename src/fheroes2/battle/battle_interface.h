@@ -24,12 +24,12 @@
 #define H2BATTLE_INTERFACE_H
 
 #include <string>
-#include "icn.h"
-#include "button.h"
-#include "dialog.h"
-#include "text.h"
-#include "statusbar.h"
-#include "gamedefs.h"
+#include "../agg/icn.h"
+#include "../gui/button.h"
+#include "../dialog/dialog.h"
+#include "../gui/text.h"
+#include "../gui/statusbar.h"
+#include "../system/gamedefs.h"
 #include "battle_board.h"
 
 namespace Battle

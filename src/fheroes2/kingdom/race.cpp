@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "engine.h"
-#include "gamedefs.h"
+#include "../../engine/engine.h"
+#include "../system/gamedefs.h"
 #include "race.h"
 
 const char* Race::String(int race)

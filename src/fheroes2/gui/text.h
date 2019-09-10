@@ -25,7 +25,7 @@
 
 #include <string>
 #include <vector>
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 namespace Font { enum { SMALL = 0x01, BIG = 0x02, YELLOW_BIG = 0x04, YELLOW_SMALL = 0x08 }; }
 enum { ALIGN_NONE, ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };

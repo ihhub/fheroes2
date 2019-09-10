@@ -22,7 +22,7 @@
 #ifndef H2RESOURCE_H
 #define H2RESOURCE_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 struct cost_t
 {

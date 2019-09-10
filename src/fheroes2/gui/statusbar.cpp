@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include "cursor.h"
-#include "display.h"
+#include "../../engine/display.h"
 #include "statusbar.h"
 
 StatusBar::StatusBar()

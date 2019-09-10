@@ -24,12 +24,12 @@
 
 #include <list>
 #include <functional>
-#include "gamedefs.h"
-#include "direction.h"
-#include "skill.h"
-#include "artifact.h"
-#include "army_troop.h"
-#include "resource.h"
+#include "../system/gamedefs.h"
+#include "../heroes/direction.h"
+#include "../heroes/skill.h"
+#include "../resource/artifact.h"
+#include "../army/army_troop.h"
+#include "../resource/resource.h"
 
 class Sprite;
 class Heroes;

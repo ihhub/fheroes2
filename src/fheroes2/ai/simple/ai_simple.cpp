@@ -28,8 +28,8 @@
  *******************************************************************************/
 
 #include <algorithm>
-#include "heroes.h"
-#include "castle.h"
+#include "../../heroes/heroes.h"
+#include "../../castle/castle.h"
 #include "ai_simple.h"
 
 const char* AI::Type(void)

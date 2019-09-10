@@ -22,14 +22,14 @@
 
 #include <vector>
 #include <algorithm>
-#include "cursor.h"
-#include "settings.h"
-#include "agg.h"
-#include "button.h"
-#include "game.h"
-#include "game_interface.h"
-#include "interface_gamearea.h"
-#include "interface_radar.h"
+#include "../gui/cursor.h"
+#include "../system/settings.h"
+#include "../agg/agg.h"
+#include "../gui/button.h"
+#include "../game/game.h"
+#include "../game/game_interface.h"
+#include "../gui/interface_gamearea.h"
+#include "../gui/interface_radar.h"
 #include "world.h"
 #include "puzzle.h"
 

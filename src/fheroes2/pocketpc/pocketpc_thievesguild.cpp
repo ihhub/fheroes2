@@ -22,16 +22,16 @@
 
 #include <string>
 #include <algorithm>
-#include "agg.h"
-#include "button.h"
-#include "cursor.h"
-#include "settings.h"
-#include "text.h"
-#include "world.h"
-#include "kingdom.h"
-#include "game.h"
-#include "dialog.h"
-#include "castle.h"
+#include "../agg/agg.h"
+#include "../gui/button.h"
+#include "../gui/cursor.h"
+#include "../system/settings.h"
+#include "../gui/text.h"
+#include "../kingdom/world.h"
+#include "../kingdom/kingdom.h"
+#include "../game/game.h"
+#include "../dialog/dialog.h"
+#include "../castle/castle.h"
 #include "pocketpc.h"
 
 // dialog_thievesguild.cpp

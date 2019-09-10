@@ -22,7 +22,7 @@
 #ifndef H2GAMEDEFS_H
 #define H2GAMEDEFS_H
 
-#include "engine.h"
+#include "../../engine/engine.h"
 
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 6
@@ -37,7 +37,7 @@
 #define GCC_REFERENCE_FAIL
 #endif
 
-#include "translations.h"
+#include "../../engine/translations.h"
 #define _(s)		Translation::gettext(s)
 #define _n(a,b,c)	Translation::ngettext(a,b,c)
 

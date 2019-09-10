@@ -23,8 +23,8 @@
 #ifndef H2INTERFACE_BORDER_H
 #define H2INTERFACE_BORDER_H
 
-#include "gamedefs.h"
-#include "dialog.h"
+#include "../system/gamedefs.h"
+#include "../dialog/dialog.h"
 
 namespace Interface
 {

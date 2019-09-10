@@ -22,9 +22,9 @@
 
 #include <algorithm>
 #include "castle.h"
-#include "heroes_base.h"
-#include "race.h"
-#include "settings.h"
+#include "../heroes/heroes_base.h"
+#include "../kingdom/race.h"
+#include "../system/settings.h"
 #include "mageguild.h"
 
 Spell GetUniqueCombatSpellCompatibility(const SpellStorage &, int race, int level);

@@ -21,9 +21,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "mp2.h"
-#include "icn.h"
-#include "direction.h"
+#include "../maps/mp2.h"
+#include "../agg/icn.h"
+#include "../heroes/direction.h"
 #include "objsnow.h"
 
 int ObjSnow::GetPassable(u32 index)

@@ -23,15 +23,15 @@
 #ifndef H2GAMEINTERFACE_H
 #define H2GAMEINTERFACE_H
 
-#include "gamedefs.h"
-#include "interface_border.h"
-#include "interface_radar.h"
-#include "interface_buttons.h"
-#include "interface_icons.h"
-#include "interface_status.h"
-#include "interface_gamearea.h"
-#include "interface_cpanel.h"
-#include "text.h"
+#include "../system/gamedefs.h"
+#include "../gui/interface_border.h"
+#include "../gui/interface_radar.h"
+#include "../gui/interface_buttons.h"
+#include "../gui/interface_icons.h"
+#include "../gui/interface_status.h"
+#include "../gui/interface_gamearea.h"
+#include "../gui/interface_cpanel.h"
+#include "../gui/text.h"
 
 enum redraw_t
 {

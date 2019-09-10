@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "settings.h"
-#include "spell.h"
+#include "../system/settings.h"
+#include "../spell/spell.h"
 #include "battle_arena.h"
 #include "battle_command.h"
 

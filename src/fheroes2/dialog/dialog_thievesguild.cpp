@@ -22,17 +22,17 @@
 
 #include <string>
 #include <algorithm>
-#include "agg.h"
-#include "text.h"
-#include "button.h"
-#include "cursor.h"
-#include "settings.h"
-#include "world.h"
-#include "kingdom.h"
-#include "castle.h"
-#include "pocketpc.h"
-#include "monster.h"
-#include "game.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../gui/button.h"
+#include "../gui/cursor.h"
+#include "../system/settings.h"
+#include "../kingdom/world.h"
+#include "../kingdom/kingdom.h"
+#include "../castle/castle.h"
+#include "../pocketpc/pocketpc.h"
+#include "../monster/monster.h"
+#include "../game/game.h"
 #include "dialog.h"
 
 struct ValueColors : std::pair<int, int>

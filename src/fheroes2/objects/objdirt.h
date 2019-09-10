@@ -23,7 +23,7 @@
 #ifndef H2OBJDIRT_H
 #define H2OBJDIRT_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 namespace ObjDirt
 {

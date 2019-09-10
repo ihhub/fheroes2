@@ -22,13 +22,13 @@
 
 #include <cmath>
 
-#include "agg.h"
-#include "settings.h"
-#include "game.h"
-#include "game_interface.h"
-#include "ground.h"
-#include "world.h"
-#include "castle.h"
+#include "../agg/agg.h"
+#include "../system/settings.h"
+#include "../game/game.h"
+#include "../game/game_interface.h"
+#include "../maps/ground.h"
+#include "../kingdom/world.h"
+#include "../castle/castle.h"
 #include "cursor.h"
 #include "interface_radar.h"
 

@@ -22,22 +22,22 @@
 
 #include <algorithm>
 
-#include "settings.h"
-#include "castle.h"
-#include "heroes.h"
-#include "difficulty.h"
+#include "../system/settings.h"
+#include "../castle/castle.h"
+#include "../heroes/heroes.h"
+#include "../game/difficulty.h"
 #include "color.h"
-#include "game.h"
+#include "../game/game.h"
 #include "profit.h"
 #include "world.h"
-#include "visit.h"
+#include "../maps/visit.h"
 #include "race.h"
-#include "battle.h"
+#include "../battle/battle.h"
 #include "kingdom.h"
-#include "players.h"
-#include "game_static.h"
-#include "game_interface.h"
-#include "ai.h"
+#include "../system/players.h"
+#include "../game/game_static.h"
+#include "../game/game_interface.h"
+#include "../ai/ai.h"
 
 bool HeroesStrongestArmy(const Heroes* h1, const Heroes* h2)
 {

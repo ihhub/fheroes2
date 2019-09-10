@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 #include <utility>
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 void StringAppendModifiers(std::string &, int);
 
@@ -170,7 +170,8 @@ namespace Skill
     StreamBase & operator>> (StreamBase &, Primary &);
 }
 
-#include "interface_itemsbar.h"
+#include "../gui/interface_itemsbar.h"
+
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
 public:

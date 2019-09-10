@@ -25,13 +25,13 @@
 
 #include <algorithm>
 
-#include "icn.h"
+#include "../agg/icn.h"
 #include "button.h"
 #include "splitter.h"
-#include "settings.h"
+#include "../system/settings.h"
 #include "cursor.h"
-#include "sprite.h"
-#include "gamedefs.h"
+#include "../agg/sprite.h"
+#include "../system/gamedefs.h"
 
 namespace Interface
 {

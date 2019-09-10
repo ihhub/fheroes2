@@ -20,17 +20,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "monster.h"
-#include "dialog.h"
-#include "world.h"
-#include "agg.h"
-#include "cursor.h"
-#include "kingdom.h"
-#include "castle.h"
-#include "spell.h"
-#include "settings.h"
-#include "game_interface.h"
-#include "interface_list.h"
+#include "../monster/monster.h"
+#include "../dialog/dialog.h"
+#include "../kingdom/world.h"
+#include "../agg/agg.h"
+#include "../gui/cursor.h"
+#include "../kingdom/kingdom.h"
+#include "../castle/castle.h"
+#include "../spell/spell.h"
+#include "../system/settings.h"
+#include "../game/game_interface.h"
+#include "../gui/interface_list.h"
 #include "heroes.h"
 
 void DialogSpellFailed(const Spell &);

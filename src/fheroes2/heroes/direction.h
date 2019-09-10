@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 typedef std::vector<int>	Directions;
 

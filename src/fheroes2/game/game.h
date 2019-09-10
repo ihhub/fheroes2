@@ -24,9 +24,9 @@
 #define H2GAME_H
 
 #include <string>
-#include "rect.h"
-#include "types.h"
-#include "gamedefs.h"
+#include "../../engine/rect.h"
+#include "../../engine/types.h"
+#include "../system/gamedefs.h"
 
 class Surface;
 class Kingdom;

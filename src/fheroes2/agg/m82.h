@@ -23,7 +23,7 @@
 #ifndef H2M82_H
 #define H2M82_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 #define LOOPXX_COUNT 28
 

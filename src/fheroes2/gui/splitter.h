@@ -22,7 +22,7 @@
 #ifndef H2SPLITTER_H
 #define H2SPLITTER_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class Splitter : protected SpriteMove
 {

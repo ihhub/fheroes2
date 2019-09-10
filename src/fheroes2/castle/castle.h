@@ -26,12 +26,12 @@
 #include <string>
 #include "mageguild.h"
 #include "captain.h"
-#include "army.h"
-#include "bitmodes.h"
-#include "heroes.h"
-#include "sprite.h"
+#include "../army/army.h"
+#include "../system/bitmodes.h"
+#include "../heroes/heroes.h"
+#include "../agg/sprite.h"
 #include "castle_heroes.h"
-#include "position.h"
+#include "../maps/position.h"
 
 class Heroes;
 namespace Maps { class Tiles; }

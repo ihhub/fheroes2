@@ -21,17 +21,17 @@
  ***************************************************************************/
 
 #include <string>
-#include "agg.h"
-#include "text.h"
-#include "world.h"
-#include "button.h"
-#include "cursor.h"
-#include "castle.h"
-#include "kingdom.h"
-#include "settings.h"
-#include "game.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../kingdom/world.h"
+#include "../gui/button.h"
+#include "../gui/cursor.h"
+#include "../castle/castle.h"
+#include "../kingdom/kingdom.h"
+#include "../system/settings.h"
+#include "../game/game.h"
 #include "dialog.h"
-#include "payment.h"
+#include "../kingdom/payment.h"
 
 int Dialog::BuyBoat(bool enable)
 {

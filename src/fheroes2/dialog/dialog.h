@@ -25,7 +25,7 @@
 #include <string>
 #include <list>
 #include <vector>
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 #define	SHADOWWIDTH	16
 #define BOXAREA_WIDTH   245

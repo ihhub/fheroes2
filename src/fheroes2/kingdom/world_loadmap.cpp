@@ -22,26 +22,26 @@
 
 #include <functional>
 #include <algorithm>
-#include "agg.h" 
-#include "artifact.h"
-#include "resource.h"
-#include "settings.h" 
-#include "kingdom.h" 
-#include "heroes.h" 
-#include "castle.h" 
-#include "game_static.h"
-#include "mp2.h"
-#include "text.h"
+#include "../agg/agg.h" 
+#include "../resource/artifact.h"
+#include "../resource/resource.h"
+#include "../system/settings.h" 
+#include "kingdom.h"
+#include "../heroes/heroes.h"
+#include "../castle/castle.h"
+#include "../game/game_static.h"
+#include "../maps/mp2.h"
+#include "../gui/text.h"
 #include "race.h"
-#include "pairs.h"
-#include "game_over.h"
-#include "difficulty.h"
-#include "maps_tiles.h"
-#include "maps_actions.h"
-#include "resource.h"
-#include "game.h"
+#include "../maps/pairs.h"
+#include "../game/game_over.h"
+#include "../game/difficulty.h"
+#include "../maps/maps_tiles.h"
+#include "../maps/maps_actions.h"
+#include "../resource/resource.h"
+#include "../game/game.h"
 #include "world.h"
-#include "ai.h"
+#include "../ai/ai.h"
 
 namespace GameStatic
 {
@@ -49,7 +49,8 @@ namespace GameStatic
 }
 
 #ifdef WITH_ZLIB
-#include "zzlib.h"
+#include "../../engine/zzlib.h"
+
 std::vector<u8> DecodeBase64AndUncomress(std::string base64)
 {
     std::vector<u8> zdata = decodeBase64(base64);

@@ -29,15 +29,15 @@
 
 #include <algorithm>
 #include <functional>
-#include "settings.h"
-#include "heroes.h"
-#include "castle.h"
-#include "speed.h"
-#include "battle_arena.h"
-#include "battle_cell.h"
-#include "battle_troop.h"
-#include "battle_interface.h"
-#include "battle_command.h"
+#include "../../system/settings.h"
+#include "../../heroes/heroes.h"
+#include "../../castle/castle.h"
+#include "../../kingdom/speed.h"
+#include "../../battle/battle_arena.h"
+#include "../../battle/battle_cell.h"
+#include "../../battle/battle_troop.h"
+#include "../../battle/battle_interface.h"
+#include "../../battle/battle_command.h"
 #include "ai_simple.h"
 
 namespace Battle

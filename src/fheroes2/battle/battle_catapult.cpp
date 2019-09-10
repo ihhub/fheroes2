@@ -20,10 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "artifact.h"
-#include "skill.h"
-#include "settings.h"
-#include "heroes_base.h"
+#include "../resource/artifact.h"
+#include "../heroes/skill.h"
+#include "../system/settings.h"
+#include "../heroes/heroes_base.h"
 #include "battle_command.h"
 #include "battle_catapult.h"
 

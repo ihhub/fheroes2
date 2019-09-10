@@ -23,7 +23,7 @@
 #ifndef H2ARTIFACT_ULTIMATE_H
 #define H2ARTIFACT_ULTIMATE_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 #include "artifact.h"
 
 class Artifact;

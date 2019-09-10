@@ -23,7 +23,7 @@
 #ifndef H2SKILL_STATIC_H
 #define H2SKILL_STATIC_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 namespace Skill
 {

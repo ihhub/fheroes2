@@ -23,7 +23,7 @@
 #ifndef H2GAMESTATIC_H
 #define H2GAMESTATIC_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 struct cost_t;
 namespace Skill { struct stats_t; struct values_t; struct secondary_t; }

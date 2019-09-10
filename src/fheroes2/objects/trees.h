@@ -23,7 +23,7 @@
 #ifndef H2TREES_H
 #define H2TREES_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 namespace ObjTree
 {

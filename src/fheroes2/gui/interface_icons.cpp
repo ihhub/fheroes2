@@ -22,16 +22,16 @@
 
 #include <algorithm>
 
-#include "agg.h"
-#include "castle.h"
-#include "heroes.h"
-#include "race.h"
+#include "../agg/agg.h"
+#include "../castle/castle.h"
+#include "../heroes/heroes.h"
+#include "../kingdom/race.h"
 #include "cursor.h"
-#include "world.h"
-#include "settings.h"
-#include "kingdom.h"
-#include "game.h"
-#include "game_interface.h"
+#include "../kingdom/world.h"
+#include "../system/settings.h"
+#include "../kingdom/kingdom.h"
+#include "../game/game.h"
+#include "../game/game_interface.h"
 #include "interface_icons.h"
 
 #define ICONS_WIDTH             46

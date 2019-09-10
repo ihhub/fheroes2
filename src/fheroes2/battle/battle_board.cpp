@@ -24,14 +24,14 @@
 #include <iterator>
 #include <functional>
 #include <algorithm>
-#include "world.h"
-#include "ground.h"
-#include "castle.h"
-#include "settings.h"
+#include "../kingdom/world.h"
+#include "../maps/ground.h"
+#include "../castle/castle.h"
+#include "../system/settings.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
-#include "game_static.h"
+#include "../game/game_static.h"
 
 namespace Battle
 {

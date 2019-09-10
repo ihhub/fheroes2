@@ -23,7 +23,7 @@
 #ifndef H2BATTLE_TOWER_H
 #define H2BATTLE_TOWER_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 #include "battle_command.h"
 #include "battle_troop.h"
 

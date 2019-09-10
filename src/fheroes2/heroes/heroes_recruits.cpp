@@ -20,9 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "world.h"
-#include "game.h"
-#include "settings.h"
+#include "../kingdom/world.h"
+#include "../game/game.h"
+#include "../system/settings.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
 

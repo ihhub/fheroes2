@@ -20,13 +20,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "button.h"
-#include "world.h"
-#include "game.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../system/settings.h"
+#include "../gui/cursor.h"
+#include "../gui/button.h"
+#include "../kingdom/world.h"
+#include "../game/game.h"
 #include "dialog.h"
 
 bool Dialog::SelectGoldOrExp(const std::string & header, const std::string & message, u32 gold, u32 expr, const  Heroes & hero)

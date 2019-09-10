@@ -23,14 +23,14 @@
 #include <algorithm>
 #include <utility>
 #include <sstream>
-#include "game.h"
-#include "race.h"
-#include "color.h"
-#include "army.h"
-#include "world.h"
-#include "kingdom.h"
-#include "castle.h"
-#include "settings.h"
+#include "../game/game.h"
+#include "../kingdom/race.h"
+#include "../kingdom/color.h"
+#include "../army/army.h"
+#include "../kingdom/world.h"
+#include "../kingdom/kingdom.h"
+#include "../castle/castle.h"
+#include "../system/settings.h"
 #include "heroes_base.h"
 
 int ArtifactsModifiersResult(int type, const u8* arts, u32 size, const HeroBase & base, std::string* strs)

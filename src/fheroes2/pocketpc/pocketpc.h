@@ -23,7 +23,7 @@
 #ifndef H2POCKETPC_H
 #define H2POCKETPC_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class Heroes;
 class Castle;

@@ -27,18 +27,18 @@
 #include <sstream>
 #include <string>
 
-#include "system.h"
-#include "dir.h"
-#include "agg.h"
-#include "text.h"
-#include "button.h"
-#include "cursor.h"
-#include "settings.h"
-#include "maps_fileinfo.h"
-#include "interface_list.h"
-#include "pocketpc.h"
-#include "world.h"
-#include "game.h"
+#include "../../engine/system.h"
+#include "../../engine//dir.h"
+#include "../agg/agg.h"
+#include "../gui/text.h"
+#include "../gui/button.h"
+#include "../gui/cursor.h"
+#include "../system/settings.h"
+#include "../maps/maps_fileinfo.h"
+#include "../gui/interface_list.h"
+#include "../pocketpc/pocketpc.h"
+#include "../kingdom/world.h"
+#include "../game/game.h"
 #include "dialog.h"
 
 std::string SelectFileListSimple(const std::string &, const std::string &, bool);

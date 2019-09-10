@@ -24,12 +24,12 @@
 
 #include <vector>
 #include <string>
-#include "resource.h"
-#include "monster.h"
-#include "artifact.h"
+#include "../resource/resource.h"
+#include "../monster/monster.h"
+#include "../resource/artifact.h"
 #include "position.h"
 #include "pairs.h"
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class MapObjectSimple : public MapPosition
 {

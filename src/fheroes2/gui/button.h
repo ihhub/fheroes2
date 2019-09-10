@@ -22,7 +22,7 @@
 #ifndef H2BUTTON_H
 #define H2BUTTON_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class Surface;
 

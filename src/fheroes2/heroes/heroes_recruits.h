@@ -24,7 +24,7 @@
 #define H2RECRUITS_H
 
 #include <utility>
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 class Heroes;
 

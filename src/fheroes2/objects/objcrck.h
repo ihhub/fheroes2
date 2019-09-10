@@ -23,7 +23,7 @@
 #ifndef H2OBJCRCK_H
 #define H2OBJCRCK_H
 
-#include "gamedefs.h"
+#include "../system/gamedefs.h"
 
 namespace ObjCrck
 {

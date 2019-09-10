@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 #include "maps_tiles.h"
-#include "direction.h"
-#include "world.h"
+#include "../heroes/direction.h"
+#include "../kingdom/world.h"
 #include "ground.h"
 
 const char* Maps::Ground::String(int ground)

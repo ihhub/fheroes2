@@ -23,20 +23,20 @@
 #include <vector>
 #include <algorithm>
 
-#include "agg.h"
+#include "../agg/agg.h"
 #include "button.h"
-#include "dialog.h"
-#include "world.h"
+#include "../dialog/dialog.h"
+#include "../kingdom/world.h"
 #include "cursor.h"
-#include "castle.h"
-#include "heroes.h"
-#include "game.h"
-#include "game_interface.h"
-#include "game_io.h"
-#include "game_over.h"
-#include "settings.h"
-#include "kingdom.h"
-#include "pocketpc.h"
+#include "../castle/castle.h"
+#include "../heroes/heroes.h"
+#include "../game/game.h"
+#include "../game/game_interface.h"
+#include "../game/game_io.h"
+#include "../game/game_over.h"
+#include "../system/settings.h"
+#include "../kingdom/kingdom.h"
+#include "../pocketpc/pocketpc.h"
 
 void Interface::Basic::ShowPathOrStartMoveHero(Heroes* hero, s32 dst_index)
 {

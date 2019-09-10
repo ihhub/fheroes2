@@ -23,7 +23,7 @@
 #include "gamedefs.h"
 #include "bitmodes.h"
 #include "players.h"
-#include "serialize.h"
+#include "../../engine/serialize.h"
 
 StreamBase & operator<< (StreamBase & msg, const BitModes & b)
 {

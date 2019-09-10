@@ -22,8 +22,8 @@
 
 #include <algorithm>
 #include <cctype>
-#include "agg.h"
-#include "settings.h"
+#include "../agg/agg.h"
+#include "../system/settings.h"
 #include "text.h"
 
 TextInterface::TextInterface(int ft) : font(ft)

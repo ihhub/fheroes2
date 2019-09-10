@@ -20,14 +20,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "world.h"
-#include "text.h"
-#include "players.h"
-#include "dialog.h"
-#include "heroes.h"
-#include "kingdom.h"
-#include "settings.h"
-#include "game.h"
+#include "../kingdom/world.h"
+#include "../gui/text.h"
+#include "../system/players.h"
+#include "../dialog/dialog.h"
+#include "../heroes/heroes.h"
+#include "../kingdom/kingdom.h"
+#include "../system/settings.h"
+#include "../game/game.h"
 #include "maps_actions.h"
 
 StreamBase & operator<< (StreamBase & sb, const ActionSimple & st)

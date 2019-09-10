@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include <sstream>
-#include "players.h"
-#include "settings.h"
+#include "../system/players.h"
+#include "../system/settings.h"
 #include "world.h"
-#include "game.h"
+#include "../game/game.h"
 #include "color.h"
 
 const char* Color::String(int color)

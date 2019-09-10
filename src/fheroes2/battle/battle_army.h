@@ -23,8 +23,8 @@
 #ifndef H2BATTLE_ARMY_H
 #define H2BATTLE_ARMY_H
 
-#include "army.h"
-#include "bitmodes.h"
+#include "../army/army.h"
+#include "../system/bitmodes.h"
 
 namespace Battle
 {

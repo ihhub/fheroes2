@@ -27,16 +27,16 @@
 #include <cstring>
 #include <ctime>
 
-#include "system.h"
-#include "gamedefs.h"
-#include "text.h"
-#include "agg.h"
-#include "cursor.h"
-#include "button.h"
-#include "dialog.h"
-#include "settings.h"
-#include "world.h"
-#include "zzlib.h"
+#include "../../engine/system.h"
+#include "../system/gamedefs.h"
+#include "../gui/text.h"
+#include "../agg/agg.h"
+#include "../gui/cursor.h"
+#include "../gui/button.h"
+#include "../dialog/dialog.h"
+#include "../system/settings.h"
+#include "../kingdom/world.h"
+#include "../../engine/zzlib.h"
 #include "game.h"
 #include "game_over.h"
 

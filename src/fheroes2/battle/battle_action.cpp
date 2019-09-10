@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "settings.h"
-#include "world.h"
-#include "kingdom.h"
-#include "spell.h"
+#include "../system/settings.h"
+#include "../kingdom/world.h"
+#include "../kingdom/kingdom.h"
+#include "../spell/spell.h"
 #include "battle_cell.h"
 #include "battle_troop.h"
 #include "battle_arena.h"
