@@ -179,8 +179,7 @@ void ArmyBar::RedrawItem(ArmyTroop & troop, const Rect & pos, bool selected, Sur
 	    spmonh.Blit(pos.x + spmonh.x(), pos.y + spmonh.y(), dstsf);
 	}
 
-	if(! use_mini_sprite)
-	{
+    if (use_mini_sprite) {
 	    Surface black(Size(text.w() + 4, text.h()), false);
 	    black.Fill(ColorBlack);
 	    const Point pt(pos.x + pos.w - black.w() - 1, pos.y + pos.h - black.h() - 1);
