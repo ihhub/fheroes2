@@ -23,7 +23,6 @@
 #include <sstream>
 #include <cstring>
 #include <algorithm>
-#include "../system/gamedefs.h"
 #include "../kingdom/race.h"
 #include "../gui/text.h"
 #include "../agg/agg.h"

@@ -29,7 +29,6 @@
 #include "../spell/spell.h"
 #include "../kingdom/race.h"
 #include "../kingdom/morale.h"
-#include "../kingdom/payment.h"
 #include "../game/game_static.h"
 #include "../agg/icn.h"
 #include "../game/game.h"

@@ -22,7 +22,6 @@
 
 #include <algorithm>
 
-#include "../../engine/system.h"
 #include "../gui/text.h"
 #include "../maps/maps.h"
 #include "../kingdom/race.h"
@@ -1424,8 +1423,6 @@ void Settings::BinarySave(void) const
 	    pos_radr << pos_bttn << pos_icon << pos_stat;
     }
 }
-
-#include "../dialog/dialog.h"
 
 void Settings::BinaryLoad(void)
 {

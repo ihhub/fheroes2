@@ -25,8 +25,6 @@
 
 #include "../system/gamedefs.h"
 
-class Surface;
-
 namespace TIL
 {
     enum

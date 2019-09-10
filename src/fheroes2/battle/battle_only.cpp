@@ -30,7 +30,6 @@
 #include "../kingdom/kingdom.h"
 #include "../heroes/heroes.h"
 #include "../heroes/heroes_indicator.h"
-#include "../heroes/heroes_recruits.h"
 #include "../dialog/dialog_selectitems.h"
 #include "../gui/button.h"
 #include "../kingdom/race.h"

@@ -24,7 +24,6 @@
 #include "../agg/agg.h"
 #include "../gui/text.h"
 #include "../game/game.h"
-#include "../kingdom/color.h"
 #include "../kingdom/race.h"
 #include "../dialog/dialog.h"
 #include "../kingdom/world.h"

@@ -26,8 +26,6 @@
 #include "../system/gamedefs.h"
 #include "artifact.h"
 
-class Artifact;
-
 class UltimateArtifact : public Artifact
 {
 public:

@@ -33,7 +33,6 @@
 #include "../army/army.h"
 #include "../kingdom/world.h"
 #include "../gui/interface_gamearea.h"
-#include "../system/settings.h"
 #include "../../engine/tools.h"
 #include "game.h"
 #include "game_over.h"

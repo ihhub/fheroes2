@@ -22,7 +22,6 @@
 
 #include "font.h"
 #include "engine.h"
-#include "surface.h"
 
 #ifdef WITH_TTF
 

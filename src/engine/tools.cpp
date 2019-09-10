@@ -29,7 +29,6 @@
 #include <climits>
 #include <cctype>
 
-#include "types.h"
 #include "error.h"
 #include "system.h"
 #include "tools.h"

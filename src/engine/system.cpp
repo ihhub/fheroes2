@@ -72,7 +72,6 @@ extern HWND SDL_Window;
 
 #include "serialize.h"
 #include "tools.h"
-#include "dir.h"
 
 int System::MakeDirectory(const std::string & path)
 {

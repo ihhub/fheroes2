@@ -24,7 +24,6 @@
 #include "../agg/agg.h"
 #include "../kingdom/world.h"
 #include "heroes.h"
-#include "direction.h"
 #include "../maps/maps.h"
 #include "../game/game.h"
 #include "../system/settings.h"

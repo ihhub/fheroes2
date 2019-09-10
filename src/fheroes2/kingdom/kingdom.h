@@ -33,12 +33,6 @@
 #include "../heroes/heroes_recruits.h"
 
 class Player;
-class Castle;
-class Heroes;
-struct AllHeroes;
-struct VecHeroes;
-struct AllCastles;
-struct VecCastles;
 struct CapturedObjects;
 
 struct LastLoseHero : std::pair<int, u32> /* Heroes, date */

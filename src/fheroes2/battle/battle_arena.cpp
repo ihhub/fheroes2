@@ -32,7 +32,6 @@
 #include "../maps/ground.h"
 #include "../kingdom/race.h"
 #include "../army/army_troop.h"
-#include "../spell/spell_storage.h"
 #include "battle_arena.h"
 #include "battle_cell.h"
 #include "battle_army.h"
