@@ -34,7 +34,6 @@
 StreamBase & operator<< (StreamBase & msg, const MapObjectSimple & obj)
 {
     return msg << obj.type << obj.uid << static_cast<const MapPosition &>(obj);
-
 }
 
 StreamBase & operator>> (StreamBase & msg, MapObjectSimple & obj)

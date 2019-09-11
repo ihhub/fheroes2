@@ -812,7 +812,6 @@ void AGG::SaveICN(int icn)
 
 	    for(u32 index = 0; index < v.count; ++index)
 	    {
-
 		const Sprite & sp = v.sprites[index];
 
 		if(sp.isValid())

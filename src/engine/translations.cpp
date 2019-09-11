@@ -187,7 +187,6 @@ struct mofile
 
         return true;
     }
-
 };
 
 namespace Translation

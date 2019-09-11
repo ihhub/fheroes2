@@ -1097,7 +1097,6 @@ void Army::JoinStrongestFromArmy(Army & army2)
 
 void Army::KeepOnlyWeakestTroops(Army & army2)
 {
-
     bool save_last = commander && commander->isHeroes();
     KeepOnlyWeakest(army2, save_last);
 }

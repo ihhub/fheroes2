@@ -535,7 +535,6 @@ namespace MP2
 	OBJ_AIRALTAR		= 0xFD,
 	OBJ_EARTHALTAR		= 0xFE,
 	OBJ_WATERALTAR		= 0xFF
-
     };
 
     int GetICNObject(int type);

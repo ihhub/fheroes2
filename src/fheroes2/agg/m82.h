@@ -342,7 +342,6 @@ namespace M82
 	ZOMBWNCE,
 	
 	UNKNOWN
-
     };
 
     const char* GetString(int);

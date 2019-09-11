@@ -81,7 +81,6 @@ int TextAscii::CharDescent(int f)
 
 int TextAscii::w(u32 s, u32 c) const
 {
-
     u32 res = 0;
     u32 size = message.size();
 

@@ -1244,7 +1244,6 @@ void ActionToWitchsHut(Heroes & hero, u32 obj, s32 dst_index)
 	    StringReplace(msg, "%{skill}", skill_name);
 	    Dialog::SecondarySkillInfo(MP2::StringObject(obj), msg, skill);
 	}
-
     }
 
     hero.SetVisited(dst_index, Visit::GLOBAL);

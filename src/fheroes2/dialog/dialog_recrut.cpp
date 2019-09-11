@@ -211,7 +211,6 @@ void RedrawStaticInfo(const Rect & pos, const Monster & monster, bool label)
     dst_pt.x = pos.x + 30;
     dst_pt.y = pos.y + 163;
     text.Blit(dst_pt);
-
 }
 
 const char* SwitchMaxMinButtons(Button & btnMax, Button & btnMin, bool max)

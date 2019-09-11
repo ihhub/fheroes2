@@ -1398,7 +1398,6 @@ int H2::isAnimationICN(int spriteClass, int spriteIndex, int ticket)
 		case 0xCA: case 0xCE: case 0xD2: case 0xD6: case 0xDA: case 0xDE:
 		    return spriteIndex + (ticket % 3) + 1;
 		default: break;
-
 	    }
 	    break;
 

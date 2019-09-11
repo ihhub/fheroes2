@@ -689,7 +689,6 @@ bool PrepareMapsFileInfoList(MapsFileInfoList & lists, bool multi)
     // set preferably count filter
     if(conf.PreferablyCountPlayers())
     {
-
 	MapsFileInfoList::iterator it = std::remove_if(lists.begin(), lists.end(),
 		std::not1(std::bind2nd(std::mem_fun_ref(&Maps::FileInfo::isAllowCountPlayers), conf.PreferablyCountPlayers())));
 	if(it != lists.begin()) lists.resize(std::distance(lists.begin(), it));

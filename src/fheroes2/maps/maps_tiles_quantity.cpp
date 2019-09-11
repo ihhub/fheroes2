@@ -192,7 +192,6 @@ Artifact Maps::Tiles::QuantityArtifact(void) const
     }
 
     return Artifact(Artifact::UNKNOWN);
-
 }
 
 void Maps::Tiles::QuantitySetArtifact(int art)

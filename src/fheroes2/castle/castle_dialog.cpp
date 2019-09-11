@@ -132,7 +132,6 @@ building_t GetCurrentFlash(const Castle & castle, CastleDialog::CacheBuildings &
 
     if(it != cache.end())
     {
-
 	flash = (*it).id;
 
 	if(! (*it).contour.isValid())
