@@ -302,7 +302,6 @@ void Interface::Radar::RedrawObjects(int color)
 
 		    default: continue;
 		}
-
 	    }
 
             const int dstx = area.x + offset.x + (xx * areaw) / world_w;

@@ -2079,7 +2079,6 @@ void MapData::removeObjectsAction(QAction* act)
 	update();
 	emit dataModified();
     }
-
 }
 
 void MapData::removeCurrentObject(void)

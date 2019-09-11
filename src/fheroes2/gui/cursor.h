@@ -27,7 +27,6 @@
 class Cursor : public SpriteMove
 {
 public:
-
     enum
     {
 	NONE               = 0x0000,

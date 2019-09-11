@@ -216,7 +216,6 @@ class TiXmlString
 	}
 
   private:
-
 	void init(size_type sz) { init(sz, sz); }
 	void set_size(size_type sz) { rep_->str[ rep_->size = sz ] = '\0'; }
 	char* start() const { return rep_->str; }
@@ -262,7 +261,6 @@ class TiXmlString
 
 	Rep * rep_;
 	static Rep nullrep_;
-
 } ;
 
 
@@ -312,8 +310,7 @@ public :
 		*this += in;
 		return *this;
 	}
-
-} ;
+};
 
 #endif	// TIXML_STRING_INCLUDED
 #endif	// TIXML_USE_STL

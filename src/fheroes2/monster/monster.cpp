@@ -1232,7 +1232,6 @@ u32 Monster::GetSpriteIndex(void) const
 
 int Monster::ICNMonh(void) const
 {
-
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }
 

@@ -346,7 +346,6 @@ Battle::OpponentSprite::OpponentSprite(const Rect & area, const HeroBase *b, boo
     }
     else
     {
-
 	if(reflect)
 	{
 	    pos.x = area.x + area.w - 60;
@@ -546,7 +545,6 @@ void Battle::Status::SetPosition(s32 cx, s32 cy)
 
 void Battle::Status::SetMessage(const std::string & str, bool top)
 {
-
     if(top)
     {
 	bar1.Set(str);
@@ -1136,7 +1134,6 @@ void Battle::Interface::RedrawCoverStatic(Surface & dst)
 	    it = board.begin(); it != board.end(); ++it)
 	    if((*it).GetObject() == 0) sf_hexagon.Blit((*it).GetPos(), dst);
     }
-
 }
 
 void Battle::Interface::RedrawCastle1(const Castle & castle, Surface & dst) const
@@ -1171,7 +1168,6 @@ void Battle::Interface::RedrawCastle1(const Castle & castle, Surface & dst) cons
     // top wall
     const Sprite & sprite2 = AGG::GetICN(icn_castbkg, fortification ? 4 : 3);
     sprite2.Blit(sprite2.x() + topleft.x, sprite2.y() + topleft.y, dst);
-
 }
 
 void Battle::Interface::RedrawCastle2(const Castle & castle, s32 cell_index) const

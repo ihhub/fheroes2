@@ -286,7 +286,6 @@ public:
 	};
 
 protected:
-
 	static const char* SkipWhiteSpace( const char*, TiXmlEncoding encoding );
 	inline static bool IsWhiteSpace( char c )		
 	{ 
@@ -408,7 +407,6 @@ private:
 	{
 		NUM_ENTITY = 5,
 		MAX_ENTITY_LENGTH = 6
-
 	};
 	static Entity entity[ NUM_ENTITY ];
 	static bool condenseWhiteSpace;
@@ -1129,7 +1127,6 @@ public:
 	virtual bool Accept( TiXmlVisitor* visitor ) const;
 
 protected:
-
 	void CopyTo( TiXmlElement* target ) const;
 	void ClearThis();	// like clear, but initializes 'this' object as well
 
@@ -1144,7 +1141,6 @@ protected:
 	const char* ReadValue( const char* in, TiXmlParsingData* prevData, TiXmlEncoding encoding );
 
 private:
-
 	TiXmlAttributeSet attributeSet;
 };
 
@@ -1190,9 +1186,6 @@ protected:
 	virtual void StreamIn( std::istream * in, TIXML_STRING * tag );
 	#endif
 //	virtual void StreamOut( TIXML_OSTREAM * out ) const;
-
-private:
-
 };
 
 
@@ -1329,7 +1322,6 @@ protected:
 	#endif
 
 private:
-
 	TIXML_STRING version;
 	TIXML_STRING encoding;
 	TIXML_STRING standalone;
@@ -1372,9 +1364,6 @@ protected:
 	#ifdef TIXML_USE_STL
 	virtual void StreamIn( std::istream * in, TIXML_STRING * tag );
 	#endif
-
-private:
-
 };
 
 

@@ -64,7 +64,6 @@ public:
     bool Unlock(void) const;
 
 private:
-
     SDL_mutex *mutex;
 };
 

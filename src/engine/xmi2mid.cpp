@@ -125,7 +125,6 @@ struct IFFChunkHeader
 
     IFFChunkHeader(u32 id, u32 sz) : ID(id), length(sz) {}
     IFFChunkHeader() : ID(0), length(0) {}
-
 };
 
 StreamBuf & operator>> (StreamBuf & sb, IFFChunkHeader & st)

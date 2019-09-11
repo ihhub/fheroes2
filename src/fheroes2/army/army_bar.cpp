@@ -341,7 +341,6 @@ bool ArmyBar::ActionBarSingleClick(const Point & cursor, ArmyTroop & troop, cons
     }
     else
     {
-	
         if(can_change) // add troop
 	{
 	    int cur = Monster::UNKNOWN;

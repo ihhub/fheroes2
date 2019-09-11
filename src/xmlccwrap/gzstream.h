@@ -54,6 +54,7 @@ private:
     int              mode;               // I/O mode
 
     int flush_buffer();
+
 public:
     gzstreambuf() : opened(0) {
         setp( buffer, buffer + (bufferSize-1));
