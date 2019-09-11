@@ -23,6 +23,7 @@
 #include "agg.h"
 #include "settings.h"
 #include "dialog.h"
+#include "heroes.h"
 #include "game.h"
 #include "game_interface.h"
 #include "interface_buttons.h"
@@ -55,6 +56,8 @@ void Interface::ButtonsArea::SetPos(s32 ox, s32 oy)
     buttonAdventure.SetSprite(icnbtn, 10, 11);
     buttonFile.SetSprite(icnbtn, 12, 13);
     buttonSystem.SetSprite(icnbtn, 14, 15);
+
+    SetButtonStatus();
 
     ox = GetArea().x;
     oy = GetArea().y;
@@ -91,6 +94,8 @@ void Interface::ButtonsArea::Redraw(void)
 	buttonAdventure.SetSprite(icnbtn, 10, 11);
 	buttonFile.SetSprite(icnbtn, 12, 13);
 	buttonSystem.SetSprite(icnbtn, 14, 15);
+
+    SetButtonStatus();
 
 	buttonNextHero.Draw();
 	buttonMovement.Draw();
@@ -197,4 +202,9 @@ int Interface::ButtonsArea::QueueEventProcessing(void)
     if(le.MousePressRight(buttonSystem)) Dialog::Message(_("System Options"), _("Bring up the system options menu, alloving you to customize your game."), Font::BIG);
 
     return res;
+}
+
+void Interface::ButtonsArea::SetButtonStatus()
+{
+    buttonMovement.SetDisable(GetFocusHeroes() == NULL);
 }

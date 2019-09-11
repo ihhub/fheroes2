@@ -53,6 +53,8 @@ namespace Interface
 	Button	buttonAdventure;
 	Button	buttonFile;
 	Button	buttonSystem;
+
+		void SetButtonStatus();
     };
 }
 

@@ -50,6 +50,8 @@ void Interface::Basic::SetFocus(Heroes* hero)
 	hero->ShowPath(true);
 	focus.Set(hero);
 
+	GetButtonsArea().Redraw();
+
 	iconsPanel.Select(*hero);
 	gameArea.SetCenter(hero->GetCenter());
 	statusWindow.SetState(STATUS_ARMY);
@@ -77,6 +79,8 @@ void Interface::Basic::SetFocus(Castle* castle)
 	}
 
 	focus.Set(castle);
+
+	GetButtonsArea().Redraw();
 
 	iconsPanel.Select(*castle);
 	gameArea.SetCenter(castle->GetCenter());
