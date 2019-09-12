@@ -30,5 +30,5 @@ if not sevenZipPath == "" (
     xcopy /Y /s "MAPS" "..\..\..\maps"
 	cd ..
 ) else (
-    @echo 7z.exe not found in path. Please unzip files manually.
+    echo 7z.exe is not found in path. Please unzip files manually.
 )
