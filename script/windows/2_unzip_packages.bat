@@ -8,3 +8,4 @@ cd ..\sdl
 7z x sdl.zip > nul
 cd ..\sdl_mixer
 7z x sdl_mixer.zip > nul
+cd ..
