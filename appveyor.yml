@@ -52,7 +52,6 @@ install:
   - copy SDL-1.2.15\lib\x64\* %SDL_LIB_X64% > nul
   - copy SDL_mixer-1.2.12\lib\x64\* %SDL_LIB_X64% > nul
     # Download zlib
-#  - appveyor DownloadFile http://zlib.net/zlib128-dll.zip
   - appveyor DownloadFile %ZLIB_DOWNLOAD_LINK%
   - 7z x %ZLIB_FILE% > nul
   - copy include\* %ZLIB_INCLUDE% > nul
@@ -62,5 +61,6 @@ install:
 clone_folder: C:\projects\fheroes2
 
 build_script:
+  - 7z
   - cmd: cd C:\projects\fheroes2
   - cmd: msbuild fheroes2.vcxproj /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
