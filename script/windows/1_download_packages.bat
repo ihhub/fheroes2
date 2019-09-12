@@ -16,4 +16,5 @@ echo downloading packages (4/4)
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '..\..\..\packages\sdl_mixer\sdl_mixer.zip')"
 echo completed
 
-xcopy /Y /s "2_setup_packages.bat" "..\..\..\packages"
+xcopy /Y /s "2_unzip_packages.bat" "..\..\..\packages"
+xcopy /Y /s "3_setup_packages.bat" "..\..\..\packages"

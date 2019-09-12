@@ -24,16 +24,8 @@ install:
   - cd C:\projects\fheroes2\script\windows
   - call 1_download_packages.bat
   - cd C:\projects\packages
-  - cd zlib_32bit
-  - 7z x zlib_32bit.zip > nul
-  - cd ..\zlib_64bit
-  - 7z x zlib_64bit.zip > nul
-  - cd ..\sdl
-  - 7z x sdl.zip > nul
-  - cd ..\sdl_mixer
-  - 7z x sdl_mixer.zip > nul
-  - cd ..
-  - call 2_setup_packages.bat
+  - call 2_unzip_packages.bat
+  - call 3_setup_packages.bat
 
 # clone directory
 clone_folder: C:\projects\fheroes2
