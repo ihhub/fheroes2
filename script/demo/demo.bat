@@ -11,27 +11,27 @@ set sevenZipPath=
 
 where 7z.exe >nul 2>nul
 if %errorlevel% == 0 (
-	set sevenZipPath=7z.exe
+    set sevenZipPath=7z.exe
 ) else (
     if exist "C:\Program Files\7-Zip\7z.exe" (
-		set sevenZipPath=C:\Program Files\7-Zip\7z.exe
-	)
+        set sevenZipPath=C:\Program Files\7-Zip\7z.exe
+    )
 )
 
 if not sevenZipPath == "" (
     cd demo
     "%sevenZipPath%" x demo.zip -aoa > nul
 
-	echo copying files [3/3]
-	
-	if not exist "..\..\..\data" mkdir "..\..\..\data"
-	if not exist "..\..\..\maps" mkdir "..\..\..\maps"
+    echo copying files [3/3]
+    
+    if not exist "..\..\..\data" mkdir "..\..\..\data"
+    if not exist "..\..\..\maps" mkdir "..\..\..\maps"
     xcopy /Y /s "DATA" "..\..\..\data"
     xcopy /Y /s "MAPS" "..\..\..\maps"
 
-	del demo.zip
+    del demo.zip
 
-	cd ..
+    cd ..
 ) else (
     echo 7z.exe is not found in path. Please unzip files manually.
 )

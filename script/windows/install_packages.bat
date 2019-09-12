@@ -22,11 +22,11 @@ set sevenZipPath=
 
 where 7z.exe >nul 2>nul
 if %errorlevel% == 0 (
-	set sevenZipPath=7z.exe
+    set sevenZipPath=7z.exe
 ) else (
     if exist "C:\Program Files\7-Zip\7z.exe" (
-		set sevenZipPath=C:\Program Files\7-Zip\7z.exe
-	)
+        set sevenZipPath=C:\Program Files\7-Zip\7z.exe
+    )
 )
 
 if not sevenZipPath == "" (
@@ -47,8 +47,8 @@ if not sevenZipPath == "" (
     "%sevenZipPath%" x sdl_mixer.zip -aoa > nul
 
     cd ..
-	call "setup_packages.bat"
-	echo "SUCCESS! Installation is completed"
+    call "setup_packages.bat"
+    echo "SUCCESS! Installation is completed"
 ) else (
     echo "Failed to unzip archives because 7-zip is not installed in system. Please unpack all archives in packages internal folders and manually run setup_packages.bat file after"
 )
