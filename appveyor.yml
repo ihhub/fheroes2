@@ -31,6 +31,9 @@ environment:
       ZLIB_FILE: libzlib-1.2.11-msvc2015-amd64-release.zip
 
 install:
+  - cd C:\projects\fheroes2\script\windows
+  - call 1_download_packages.bat
+  - cd C:\projects\packages
   - mkdir %SDL_INCLUDE%
   - mkdir %SDL_LIB_X86%
   - mkdir %SDL_LIB_X64%
