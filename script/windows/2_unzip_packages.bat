@@ -13,13 +13,13 @@ if %errorlevel% == 0 (
 
 if not sevenZipPath == "" (
     cd zlib_32bit
-    "%sevenZipPath%" 7z x zlib_32bit.zip -aoa > nul
+    "%sevenZipPath%" x zlib_32bit.zip -aoa > nul
     cd ..\zlib_64bit
-    "%sevenZipPath%" 7z x zlib_64bit.zip -aoa > nul
+    "%sevenZipPath%" x zlib_64bit.zip -aoa > nul
     cd ..\sdl
-    "%sevenZipPath%" 7z x sdl.zip -aoa > nul
+    "%sevenZipPath%" x sdl.zip -aoa > nul
     cd ..\sdl_mixer
-    "%sevenZipPath%" 7z x sdl_mixer.zip -aoa > nul
+    "%sevenZipPath%" x sdl_mixer.zip -aoa > nul
     cd ..  
 ) else (
     @echo 7z.exe not found in path. Please unzip files manually.
