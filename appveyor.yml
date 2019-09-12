@@ -12,35 +12,18 @@ version: 1.0.{build}
 image: Visual Studio 2015
 
 environment:
-  #SDL_INCLUDE: c:\projects\SDL\include
-  #SDL_LIB_X86: c:\projects\SDL\lib\x86
-  #SDL_LIB_X64: c:\projects\SDL\lib\x64
-  #ZLIB_INCLUDE: c:\projects\zlib\include
   matrix:
     - JOB: Release_x86
       configuration: Release
       platform: x86
-      #ZLIB_LIB: c:\projects\zlib\lib\x86
-      #ZLIB_DOWNLOAD_LINK: https://www.libs4win.com/libzlib/libzlib-1.2.11-msvc2015-x86-release.zip
-      #ZLIB_FILE: libzlib-1.2.11-msvc2015-x86-release.zip
     - JOB: Release_x64
       configuration: Release
       platform: x64
-      #ZLIB_LIB: c:\projects\zlib\lib\x64
-      #ZLIB_DOWNLOAD_LINK: https://www.libs4win.com/libzlib/libzlib-1.2.11-msvc2015-amd64-release.zip
-      #ZLIB_FILE: libzlib-1.2.11-msvc2015-amd64-release.zip
 
 install:
   - cd C:\projects\fheroes2\script\windows
   - call 1_download_packages.bat
-  - cd C:\projects
-  - ls
   - cd C:\projects\packages
-  - ls
-  - copy zlib_32bit.zip zlib_32bit
-  - copy zlib_64bit.zip zlib_64bit
-  - copy sdl.zip sdl
-  - copy sdl_mixer.zip sdl_mixer
   - cd zlib_32bit
   - 7z x zlib_32bit.zip > nul
   - cd ..\zlib_64bit
@@ -51,31 +34,6 @@ install:
   - 7z x sdl_mixer.zip > nul
   - cd ..
   - call 2_setup_packages.bat
-  #- mkdir %SDL_INCLUDE%
-  #- mkdir %SDL_LIB_X86%
-  #- mkdir %SDL_LIB_X64%
-  #- mkdir %ZLIB_INCLUDE%
-  #- mkdir %ZLIB_LIB%
-  #- cd %TEMP%
-  # Download SDL
-  #- appveyor DownloadFile https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip
-  #- appveyor DownloadFile https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip
-  # Extract files
-  #- 7z x SDL-devel-1.2.15-VC.zip > nul
-  #- 7z x SDL_mixer-devel-1.2.12-VC.zip > nul
-  # Set up includes
-  #- copy SDL-1.2.15\include\* %SDL_INCLUDE% > nul
-  #- copy SDL_mixer-1.2.12\include\* %SDL_INCLUDE% > nul
-  # Set up libs
-  #- copy SDL-1.2.15\lib\x86\* %SDL_LIB_X86% > nul
-  #- copy SDL_mixer-1.2.12\lib\x86\* %SDL_LIB_X86% > nul
-  #- copy SDL-1.2.15\lib\x64\* %SDL_LIB_X64% > nul
-  #- copy SDL_mixer-1.2.12\lib\x64\* %SDL_LIB_X64% > nul
-    # Download zlib
-  #- appveyor DownloadFile %ZLIB_DOWNLOAD_LINK%
-  #- 7z x %ZLIB_FILE% > nul
-  #- copy include\* %ZLIB_INCLUDE% > nul
-  #- copy lib\* %ZLIB_LIB% > nul
 
 # clone directory
 clone_folder: C:\projects\fheroes2
