@@ -36,10 +36,10 @@ install:
   - cd C:\projects
   - ls
   - cd C:\projects\packages
-  - 7z x zlib_32bit.zip > zlib_32bit
-  - 7z x zlib_64bit.zip > zlib_64bit
-  - 7z x sdl.zip > sdl
-  - 7z x sdl_mixer.zip > sdl_mixer
+  - 7z x zlib_32bit.zip > C:\projects\fheroes2\project\zlib_32bit
+  - 7z x zlib_64bit.zip > C:\projects\fheroes2\project\zlib_64bit
+  - 7z x sdl.zip > C:\projects\fheroes2\project\sdl
+  - 7z x sdl_mixer.zip > C:\projects\fheroes2\project\sdl_mixer
   - call 2_setup_packages.bat
   #- mkdir %SDL_INCLUDE%
   #- mkdir %SDL_LIB_X86%
