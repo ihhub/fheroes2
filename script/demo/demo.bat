@@ -2,18 +2,33 @@
 
 if not exist "demo" mkdir "demo"
 
-echo downloading demo version ...
+echo downloading demo version [1/3]
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip', 'demo\demo.zip')"
-echo done
+
+echo unpacking archive [2/3]
+
+set sevenZipPath=
 
 where 7z.exe >nul 2>nul
-IF NOT ERRORLEVEL 0 (
-    @echo 7z.exe not found in path. Please unzip files manually.
-    exit 1
+if %errorlevel% == 0 (
+	set sevenZipPath=7z.exe
+) else (
+    if exist "C:\Program Files\7-Zip\7z.exe" (
+		set sevenZipPath=C:\Program Files\7-Zip\7z.exe
+	)
 )
 
-cd demo
-7z x demo.zip > nul
+if not sevenZipPath == "" (
+    cd demo
+    "%sevenZipPath%" x demo.zip -aoa > nul
 
-xcopy /Y /s "DATA" "..\..\.."
-xcopy /Y /s "MAPS" "..\..\.."
+	echo copying files [3/3]
+	
+	if not exist "..\..\..\data" mkdir "..\..\..\data"
+	if not exist "..\..\..\maps" mkdir "..\..\..\maps"
+    xcopy /Y /s "DATA" "..\..\..\data"
+    xcopy /Y /s "MAPS" "..\..\..\maps"
+	cd ..
+) else (
+    @echo 7z.exe not found in path. Please unzip files manually.
+)
