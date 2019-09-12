@@ -33,6 +33,8 @@ environment:
 install:
   - cd C:\projects\fheroes2\script\windows
   - call 1_download_packages.bat
+  - cd C:\projects
+  - ls
   - cd C:\projects\packages
   - 7z x zlib_32bit.zip > zlib_32bit
   - 7z x zlib_64bit.zip > zlib_64bit
