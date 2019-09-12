@@ -1,5 +1,11 @@
 @echo off
 
+where 7z.exe >nul 2>nul
+IF NOT ERRORLEVEL 0 (
+    @echo 7z.exe not found in path. Please unzip files manually.
+    exit 1
+)
+
 cd zlib_32bit
 7z x zlib_32bit.zip > nul
 cd ..\zlib_64bit
