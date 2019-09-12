@@ -28,6 +28,9 @@ if not sevenZipPath == "" (
 	if not exist "..\..\..\maps" mkdir "..\..\..\maps"
     xcopy /Y /s "DATA" "..\..\..\data"
     xcopy /Y /s "MAPS" "..\..\..\maps"
+
+	del demo.zip
+
 	cd ..
 ) else (
     echo 7z.exe is not found in path. Please unzip files manually.
