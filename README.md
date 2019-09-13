@@ -11,6 +11,7 @@ All rights for original game and it's resources belong to formerly The 3DO Compa
 Compilation
 ---------------------------
 Please follow below instructions to be able to compile the project:
+
 **Windows**
 - open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
 - open `script/demo` directory and run **demo.bat** file. It downloads demo version of the game which is needed for minimum development.
