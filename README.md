@@ -8,6 +8,20 @@ Copyright
 ---------------------------
 All rights for original game and it's resources belong to formerly The 3DO Company. this right were transferred to Ubisoft. We do not encourage and support any form of illegal usage of original game. We do not provide any information about download of original game in any form.
 
+Compilation
+---------------------------
+Please follow below instructions to be able to compile the project:
+
+**Windows**
+- open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
+- open `script/demo` directory and run **demo.bat** file. It downloads demo version of the game which is needed for minimum development.
+- open **fheroes.vcxproj** by Visual Studio and compile the project.
+
+**MacOS and Linux**
+- open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For MacOS we recommend to run SDL 2 as latest versions of MacOS do not support SDL 1 fully.
+- open `script/demo` directory and run **demo.sh** file. It downloads demo version of the game which is needed for minimum development.
+- run `make` command in root directory of the project. For SDL 2 compilation please run `export WITH_SDL2="ON"` command before compiling the project.
+
 Requirements
 ---------------------------
 You are required to have at least demo version of Heroes of Might and Magic II game to be able to play it.
