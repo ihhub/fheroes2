@@ -83,7 +83,21 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "..\sdl\lib\x86\SDL.dll" $(Configuration)
-xcopy /Y "..\sdl\lib\x86\SDL_mixer.dll" $(Configuration)</Command>
+xcopy /Y "..\sdl\lib\x86\SDL_mixer.dll" $(Configuration)
+
+if exist "data" (
+    if not exist $(Configuration)\data (
+        mkdir $(Configuration)\data
+        xcopy /Y /s /Q "data" $(Configuration)\data
+    )
+)
+
+if exist "maps" (
+    if not exist $(Configuration)\maps (
+        mkdir $(Configuration)\maps
+        xcopy /Y /s /Q "maps" $(Configuration)\maps
+    )
+)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -102,7 +116,21 @@ xcopy /Y "..\sdl\lib\x86\SDL_mixer.dll" $(Configuration)</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "..\sdl\lib\x64\SDL.dll" $(PlatformShortName)\$(Configuration)
-xcopy /Y "..\sdl\lib\x64\SDL_mixer.dll" $(PlatformShortName)\$(Configuration)</Command>
+xcopy /Y "..\sdl\lib\x64\SDL_mixer.dll" $(PlatformShortName)\$(Configuration)
+
+if exist "data" (
+    if not exist $(PlatformShortName)\$(Configuration)\data (
+        mkdir $(PlatformShortName)\$(Configuration)\data
+        xcopy /Y /s /Q "data" $(PlatformShortName)\$(Configuration)\data
+    )
+)
+
+if exist "maps" (
+    if not exist $(PlatformShortName)\$(Configuration)\maps (
+        mkdir $(PlatformShortName)\$(Configuration)\maps
+        xcopy /Y /s /Q "maps" $(PlatformShortName)\$(Configuration)\maps
+    )
+)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -123,7 +151,21 @@ xcopy /Y "..\sdl\lib\x64\SDL_mixer.dll" $(PlatformShortName)\$(Configuration)</C
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "..\sdl\lib\x86\SDL.dll" $(Configuration)
-xcopy /Y "..\sdl\lib\x86\SDL_mixer.dll" $(Configuration)</Command>
+xcopy /Y "..\sdl\lib\x86\SDL_mixer.dll" $(Configuration)
+
+if exist "data" (
+    if not exist $(Configuration)\data (
+        mkdir $(Configuration)\data
+        xcopy /Y /s /Q "data" $(Configuration)\data
+    )
+)
+
+if exist "maps" (
+    if not exist $(Configuration)\maps (
+        mkdir $(Configuration)\maps
+        xcopy /Y /s /Q "maps" $(Configuration)\maps
+    )
+)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,7 +186,21 @@ xcopy /Y "..\sdl\lib\x86\SDL_mixer.dll" $(Configuration)</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "..\sdl\lib\x64\SDL.dll" $(PlatformShortName)\$(Configuration)
-xcopy /Y "..\sdl\lib\x64\SDL_mixer.dll" $(PlatformShortName)\$(Configuration)</Command>
+xcopy /Y "..\sdl\lib\x64\SDL_mixer.dll" $(PlatformShortName)\$(Configuration)
+
+if exist "data" (
+    if not exist $(PlatformShortName)\$(Configuration)\data (
+        mkdir $(PlatformShortName)\$(Configuration)\data
+        xcopy /Y /s /Q "data" $(PlatformShortName)\$(Configuration)\data
+    )
+)
+
+if exist "maps" (
+    if not exist $(PlatformShortName)\$(Configuration)\maps (
+        mkdir $(PlatformShortName)\$(Configuration)\maps
+        xcopy /Y /s /Q "maps" $(PlatformShortName)\$(Configuration)\maps
+    )
+)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
