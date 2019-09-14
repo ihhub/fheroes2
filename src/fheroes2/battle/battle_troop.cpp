@@ -243,12 +243,12 @@ bool Battle::ModeDuration::isMode(u32 mode) const
     return (first & mode);
 }
 
-bool Battle::ModeDuration::isZeroDuration(void) const
+bool Battle::ModeDuration::isZeroDuration() const
 {
     return 0 == second;
 }
 
-void Battle::ModeDuration::DecreaseDuration(void)
+void Battle::ModeDuration::DecreaseDuration()
 {
     if(second) --second;
 }
@@ -285,12 +285,12 @@ void Battle::ModesAffected::RemoveMode(u32 mode)
     }
 }
 
-void Battle::ModesAffected::DecreaseDuration(void)
+void Battle::ModesAffected::DecreaseDuration()
 {
     std::for_each(begin(), end(), std::mem_fun_ref(&ModeDuration::DecreaseDuration));
 }
 
-u32 Battle::ModesAffected::FindZeroDuration(void) const
+u32 Battle::ModesAffected::FindZeroDuration() const
 {
     const_iterator it = std::find_if(begin(), end(), std::mem_fun_ref(&ModeDuration::isZeroDuration));
     return it == end() ? 0 : (*it).first;
@@ -354,7 +354,7 @@ void Battle::Unit::SetReflection(bool r)
     reflect = r;
 }
 
-void Battle::Unit::UpdateDirection(void)
+void Battle::Unit::UpdateDirection()
 {
     // set auto reflect
     SetReflection(GetArena()->GetArmyColor1() != GetArmyColor());
@@ -372,7 +372,7 @@ bool Battle::Unit::UpdateDirection(const Rect & pos)
     return false;
 }
 
-bool Battle::Unit::isBattle(void) const
+bool Battle::Unit::isBattle() const
 {
     return true;
 }
@@ -382,7 +382,7 @@ bool Battle::Unit::isModes(u32 v) const
     return Modes(v);
 }
 
-std::string Battle::Unit::GetShotString(void) const
+std::string Battle::Unit::GetShotString() const
 {
     if(Troop::GetShots() == GetShots())
 	return GetString(Troop::GetShots());
@@ -392,7 +392,7 @@ std::string Battle::Unit::GetShotString(void) const
     return os.str();
 }
 
-std::string Battle::Unit::GetSpeedString(void) const
+std::string Battle::Unit::GetSpeedString() const
 {
     std::ostringstream os;
     os << Speed::String(GetSpeed()) << " (" << GetSpeed() << ")";
@@ -413,12 +413,12 @@ Surface Battle::Unit::GetContour(int val) const
     return Surface();
 }
 
-u32 Battle::Unit::GetDead(void) const
+u32 Battle::Unit::GetDead() const
 {
     return dead;
 }
 
-u32 Battle::Unit::GetHitPointsLeft(void) const
+u32 Battle::Unit::GetHitPointsLeft() const
 {
     return GetHitPoints() - (GetCount() - 1) * Monster::GetHitPoints();
 }
@@ -428,7 +428,7 @@ u32 Battle::Unit::GetAffectedDuration(u32 mod) const
     return affected.GetMode(mod);
 }
 
-u32 Battle::Unit::GetSpeed(void) const
+u32 Battle::Unit::GetSpeed() const
 {
     return GetSpeed(false);
 }
@@ -438,17 +438,17 @@ bool Battle::Unit::isUID(u32 v) const
     return uid == v;
 }
 
-u32 Battle::Unit::GetUID(void) const
+u32 Battle::Unit::GetUID() const
 {
     return uid;
 }
 
-const Battle::monstersprite_t & Battle::Unit::GetMonsterSprite(void) const
+const Battle::monstersprite_t & Battle::Unit::GetMonsterSprite() const
 {
     return monsters_info[GetID()];
 }
 
-void Battle::Unit::InitContours(void)
+void Battle::Unit::InitContours()
 {
     const  monstersprite_t & msi = GetMonsterSprite();
     const Sprite & sprite1 = AGG::GetICN(msi.icn_file, msi.frm_idle.start, false);
@@ -470,27 +470,27 @@ void Battle::Unit::SetMirror(Unit* ptr)
     mirror = ptr;
 }
 
-u32 Battle::Unit::GetShots(void) const
+u32 Battle::Unit::GetShots() const
 {
     return shots;
 }
 
-const Battle::Position & Battle::Unit::GetPosition(void) const
+const Battle::Position & Battle::Unit::GetPosition() const
 {
     return position;
 }
 
-s32 Battle::Unit::GetHeadIndex(void) const
+s32 Battle::Unit::GetHeadIndex() const
 {
     return position.GetHead() ? position.GetHead()->GetIndex() : -1;
 }
 
-s32 Battle::Unit::GetTailIndex(void) const
+s32 Battle::Unit::GetTailIndex() const
 {
     return position.GetTail() ? position.GetTail()->GetIndex() : -1;
 }
 
-void Battle::Unit::SetRandomMorale(void)
+void Battle::Unit::SetRandomMorale()
 {
     switch(GetMorale())
     {
@@ -504,7 +504,7 @@ void Battle::Unit::SetRandomMorale(void)
     }
 }
 
-void Battle::Unit::SetRandomLuck(void)
+void Battle::Unit::SetRandomLuck()
 {
     s32 f = GetLuck();
 
@@ -529,28 +529,28 @@ void Battle::Unit::SetRandomLuck(void)
 	ResetModes(LUCK_BAD);
 }
 
-bool Battle::Unit::isFly(void) const
+bool Battle::Unit::isFly() const
 {
     return ArmyTroop::isFly() && !Modes(SP_SLOW);
 }
 
-bool Battle::Unit::isValid(void) const
+bool Battle::Unit::isValid() const
 {
     return GetCount();
 }
 
-bool Battle::Unit::isReflect(void) const
+bool Battle::Unit::isReflect() const
 {
     return reflect;
 }
 
-bool Battle::Unit::OutOfWalls(void) const
+bool Battle::Unit::OutOfWalls() const
 {
     return Board::isOutOfWallsIndex(GetHeadIndex()) ||
 	(isWide() && Board::isOutOfWallsIndex(GetTailIndex()));
 }
 
-bool Battle::Unit::isHandFighting(void) const
+bool Battle::Unit::isHandFighting() const
 {
     if(GetCount() && !Modes(CAP_TOWER))
     {
@@ -576,7 +576,7 @@ bool Battle::Unit::isHandFighting(const Unit & a, const Unit & b)
 		(b.isWide() && Board::isNearIndexes(a.GetTailIndex(), b.GetTailIndex())))));
 }
 
-void Battle::Unit::NewTurn(void)
+void Battle::Unit::NewTurn()
 {
     if(isResurectLife()) hp = ArmyTroop::GetHitPoints();
 
@@ -777,7 +777,7 @@ u32 Battle::Unit::ApplyDamage(u32 dmg)
     return 0;
 }
 
-void Battle::Unit::PostKilledAction(void)
+void Battle::Unit::PostKilledAction()
 {
     // kill mirror image (master)
     if(Modes(CAP_MIRROROWNER))
@@ -1069,7 +1069,7 @@ StreamBase & Battle::operator>> (StreamBase & msg, Unit & b)
     return msg;
 }
 
-bool Battle::Unit::AllowResponse(void) const
+bool Battle::Unit::AllowResponse() const
 {
     if(isAlwayResponse())
 	return true;
@@ -1085,7 +1085,7 @@ bool Battle::Unit::AllowResponse(void) const
     return false;
 }
 
-void Battle::Unit::SetResponse(void)
+void Battle::Unit::SetResponse()
 {
     SetModes(TR_RESPONSED);
 }
@@ -1135,7 +1135,7 @@ void Battle::Unit::PostAttackAction(Unit & enemy)
     ResetModes(LUCK_BAD);
 }
 
-void Battle::Unit::ResetBlind(void)
+void Battle::Unit::ResetBlind()
 {
     // remove blind action
     if(Modes(SP_BLIND))
@@ -1146,7 +1146,7 @@ void Battle::Unit::ResetBlind(void)
     }
 }
 
-u32 Battle::Unit::GetAttack(void) const
+u32 Battle::Unit::GetAttack() const
 {
     u32 res = ArmyTroop::GetAttack();
 
@@ -1155,7 +1155,7 @@ u32 Battle::Unit::GetAttack(void) const
     return res;
 }
 
-u32 Battle::Unit::GetDefense(void) const
+u32 Battle::Unit::GetDefense() const
 {
     u32 res = ArmyTroop::GetDefense();
 
@@ -1244,17 +1244,17 @@ s32 Battle::Unit::GetScoreQuality(const Unit & defender) const
     return static_cast<s32>(res) > 1 ? static_cast<u32>(res) : 1;
 }
 
-u32 Battle::Unit::GetHitPoints(void) const
+u32 Battle::Unit::GetHitPoints() const
 {
     return hp;
 }
 
-int Battle::Unit::GetControl(void) const
+int Battle::Unit::GetControl() const
 {
     return Modes(SP_BERSERKER) || ! GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
 }
 
-bool Battle::Unit::isArchers(void) const
+bool Battle::Unit::isArchers() const
 {
     return ArmyTroop::isArchers() && shots;
 }
@@ -1605,7 +1605,7 @@ void Battle::Unit::SpellRestoreAction(const Spell & spell, u32 spoint, const Her
     }
 }
 
-bool Battle::Unit::isTwiceAttack(void) const
+bool Battle::Unit::isTwiceAttack() const
 {
     switch(GetID())
     {
@@ -1753,7 +1753,7 @@ u32 Battle::Unit::GetMagicResist(const Spell & spell, u32 spower) const
     return 0;
 }
 
-bool Battle::Unit::isMagicAttack(void) const
+bool Battle::Unit::isMagicAttack() const
 {
     return GetSpellMagic(true) != Spell::NONE;
 }
@@ -1801,17 +1801,17 @@ int Battle::Unit::GetSpellMagic(bool force) const
     return Spell::NONE;
 }
 
-bool Battle::Unit::isHaveDamage(void) const
+bool Battle::Unit::isHaveDamage() const
 {
     return hp < count0 * Monster::GetHitPoints();
 }
 
-int Battle::Unit::GetFrameStart(void) const
+int Battle::Unit::GetFrameStart() const
 {
     return animstep < 0 ? GetFrameState().start + GetFrameState().count - 1 : GetFrameState().start;
 }
 
-int Battle::Unit::GetFrame(void) const
+int Battle::Unit::GetFrame() const
 {
     return animframe;
 }
@@ -1826,12 +1826,12 @@ void Battle::Unit::SetFrameStep(int val)
     animstep = val;
 }
 
-int Battle::Unit::GetFrameOffset(void) const
+int Battle::Unit::GetFrameOffset() const
 {
     return animframe - GetFrameStart();
 }
 
-int Battle::Unit::GetFrameCount(void) const
+int Battle::Unit::GetFrameCount() const
 {
     return GetFrameState().count;
 }
@@ -1845,12 +1845,12 @@ void Battle::Unit::IncreaseAnimFrame(bool loop)
 	animframe = GetFrameStart();
 }
 
-bool Battle::Unit::isStartAnimFrame(void) const
+bool Battle::Unit::isStartAnimFrame() const
 {
     return GetFrameStart() == animframe;
 }
 
-bool Battle::Unit::isFinishAnimFrame(void) const
+bool Battle::Unit::isFinishAnimFrame() const
 {
     if(0 == GetFrameState().count)
 	return true;
@@ -1891,7 +1891,7 @@ const Battle::animframe_t & Battle::Unit::GetFrameState(int state) const
     return msi.frm_idle;
 }
 
-const Battle::animframe_t & Battle::Unit::GetFrameState(void) const
+const Battle::animframe_t & Battle::Unit::GetFrameState() const
 {
     return GetFrameState(animstate);
 }
@@ -1910,7 +1910,7 @@ void Battle::Unit::ResetAnimFrame(int rule)
     }
 }
 
-int Battle::Unit::M82Attk(void) const
+int Battle::Unit::M82Attk() const
 {
     if(isArchers() && !isHandFighting())
     {
@@ -1940,22 +1940,22 @@ int Battle::Unit::M82Attk(void) const
     return GetMonsterSprite().m82_attk;
 }
 
-int Battle::Unit::M82Kill(void) const
+int Battle::Unit::M82Kill() const
 {
     return GetMonsterSprite().m82_kill;
 }
 
-int Battle::Unit::M82Move(void) const
+int Battle::Unit::M82Move() const
 {
     return GetMonsterSprite().m82_move;
 }
 
-int Battle::Unit::M82Wnce(void) const
+int Battle::Unit::M82Wnce() const
 {
     return GetMonsterSprite().m82_wnce;
 }
 
-int Battle::Unit::M82Expl(void) const
+int Battle::Unit::M82Expl() const
 {
     switch(GetID())
     {
@@ -1970,12 +1970,12 @@ int Battle::Unit::M82Expl(void) const
     return M82::UNKNOWN;
 }
 
-int Battle::Unit::ICNFile(void) const
+int Battle::Unit::ICNFile() const
 {
     return GetMonsterSprite().icn_file;
 }
 
-int Battle::Unit::ICNMiss(void) const
+int Battle::Unit::ICNMiss() const
 {
     switch(GetID())
     {
@@ -2003,12 +2003,12 @@ int Battle::Unit::ICNMiss(void) const
     return ICN::UNKNOWN;
 }
 
-Rect Battle::Unit::GetRectPosition(void) const
+Rect Battle::Unit::GetRectPosition() const
 {
     return position.GetRect();
 }
 
-Point Battle::Unit::GetBackPoint(void) const
+Point Battle::Unit::GetBackPoint() const
 {
     const Rect & rt = position.GetRect();
     return reflect ? Point(rt.x + rt.w, rt.y + rt.h / 2) : Point(rt.x, rt.y + rt.h / 2);
@@ -2117,12 +2117,12 @@ int Battle::Unit::GetStartMissileOffset(int state) const
     return 0;
 }
 
-int Battle::Unit::GetArmyColor(void) const
+int Battle::Unit::GetArmyColor() const
 {
     return ArmyTroop::GetColor();
 }
 
-int Battle::Unit::GetColor(void) const
+int Battle::Unit::GetColor() const
 {
     if(Modes(SP_BERSERKER))
 	return 0;
@@ -2134,7 +2134,7 @@ int Battle::Unit::GetColor(void) const
     return GetArmyColor();
 }
 
-const HeroBase* Battle::Unit::GetCommander(void) const
+const HeroBase* Battle::Unit::GetCommander() const
 {
     return GetArmy() ? GetArmy()->GetCommander() : NULL;
 }

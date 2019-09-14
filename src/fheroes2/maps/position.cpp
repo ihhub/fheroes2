@@ -35,12 +35,12 @@ bool MapPosition::operator== (s32 index) const
     return index == GetIndex();
 }
 
-const Point & MapPosition::GetCenter(void) const
+const Point & MapPosition::GetCenter() const
 {
     return center;
 }
 
-s32 MapPosition::GetIndex(void) const
+s32 MapPosition::GetIndex() const
 {
     return center.x < 0 && center.y < 0 ? -1 : Maps::GetIndexFromAbsPoint(center);
 }

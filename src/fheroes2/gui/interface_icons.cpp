@@ -40,18 +40,18 @@
 #define ICONS_CURSOR_HEIGHT     32
 #define ICONS_CURSOR_COLOR      RGBA(0xA0,0xE0,0xE0)
 
-bool Interface::IconsBar::IsVisible(void)
+bool Interface::IconsBar::IsVisible()
 {
     const Settings & conf = Settings::Get();
     return !conf.ExtGameHideInterface() || conf.ShowIcons();
 }
 
-u32 Interface::IconsBar::GetItemWidth(void)
+u32 Interface::IconsBar::GetItemWidth()
 {
     return ICONS_WIDTH;
 }
 
-u32 Interface::IconsBar::GetItemHeight(void)
+u32 Interface::IconsBar::GetItemHeight()
 {
     return ICONS_HEIGHT;
 }
@@ -152,12 +152,12 @@ void Interface::CastleIcons::RedrawBackground(const Point & pos)
     IconsBar::RedrawBackground(pos);
 }
 
-void Interface::CastleIcons::ActionCurrentUp(void)
+void Interface::CastleIcons::ActionCurrentUp()
 {
     Interface::Basic::Get().SetFocus(GetCurrent());
 }
 
-void Interface::CastleIcons::ActionCurrentDn(void)
+void Interface::CastleIcons::ActionCurrentDn()
 {
     Interface::Basic::Get().SetFocus(GetCurrent());
 }
@@ -245,12 +245,12 @@ void Interface::HeroesIcons::RedrawBackground(const Point & pos)
     IconsBar::RedrawBackground(pos);
 }
 
-void Interface::HeroesIcons::ActionCurrentUp(void)
+void Interface::HeroesIcons::ActionCurrentUp()
 {
     Interface::Basic::Get().SetFocus(GetCurrent());
 }
 
-void Interface::HeroesIcons::ActionCurrentDn(void)
+void Interface::HeroesIcons::ActionCurrentDn()
 {
     Interface::Basic::Get().SetFocus(GetCurrent());
 }
@@ -335,12 +335,12 @@ Interface::IconsPanel::IconsPanel(Basic & basic) : BorderWindow(Rect(0, 0, 144, 
     sfMarker.DrawBorder(ICONS_CURSOR_COLOR);
 }
 
-u32 Interface::IconsPanel::CountIcons(void) const
+u32 Interface::IconsPanel::CountIcons() const
 {
     return castleIcons.CountIcons();
 }
 
-void Interface::IconsPanel::SavePosition(void)
+void Interface::IconsPanel::SavePosition()
 {
     Settings::Get().SetPosIcons(GetRect());
 }
@@ -361,7 +361,7 @@ void Interface::IconsPanel::SetRedraw(icons_t type) const
     }
 }
 
-void Interface::IconsPanel::SetRedraw(void) const
+void Interface::IconsPanel::SetRedraw() const
 {
     SetRedraw(ICON_ANY);
 }
@@ -391,7 +391,7 @@ void Interface::IconsPanel::SetPos(s32 ox, s32 oy)
     castleIcons.SetPos(area.x + 72, area.y);
 }
 
-void Interface::IconsPanel::Redraw(void)
+void Interface::IconsPanel::Redraw()
 {
     // is visible
     if(IconsBar::IsVisible())
@@ -405,7 +405,7 @@ void Interface::IconsPanel::Redraw(void)
     }
 }
 
-void Interface::IconsPanel::QueueEventProcessing(void)
+void Interface::IconsPanel::QueueEventProcessing()
 {
     if(Settings::Get().ShowIcons() &&
 	// move border window
@@ -476,7 +476,7 @@ void Interface::IconsPanel::ShowIcons(icons_t type)
     if(type & ICON_CASTLES) castleIcons.SetShow(true);
 }
 
-void Interface::IconsPanel::SetCurrentVisible(void)
+void Interface::IconsPanel::SetCurrentVisible()
 {
     if(heroesIcons.isSelected())
     {

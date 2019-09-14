@@ -50,7 +50,7 @@
 #include "pocketpc.h"
 #include "battle_only.h"
 
-int Game::StartBattleOnly(void)
+int Game::StartBattleOnly()
 {
     Battle::Only main;
 
@@ -60,7 +60,7 @@ int Game::StartBattleOnly(void)
     return Game::MAINMENU;
 }
 
-int Game::StartGame(void)
+int Game::StartGame()
 {
     SetFixVideoMode();
     ::AI::Init();
@@ -217,7 +217,7 @@ void Game::OpenHeroesDialog(Heroes & hero)
     Interface::Basic::Get().RedrawFocus();
 }
 
-void ShowNewWeekDialog(void)
+void ShowNewWeekDialog()
 {
     const Week & week = world.GetWeekType();
 
@@ -255,7 +255,7 @@ void ShowNewWeekDialog(void)
     Dialog::Message("", message, Font::BIG, Dialog::OK);
 }
 
-void ShowEventDayDialog(void)
+void ShowEventDayDialog()
 {
     Kingdom & myKingdom = world.GetKingdom(Settings::Get().CurrentColor());
     EventsDate events = world.GetEventsDate(myKingdom.GetColor());
@@ -272,7 +272,7 @@ void ShowEventDayDialog(void)
     }
 }
 
-int ShowWarningLostTownsDialog(void)
+int ShowWarningLostTownsDialog()
 {
     const Kingdom & myKingdom = world.GetKingdom(Settings::Get().CurrentColor());
 
@@ -525,7 +525,7 @@ int Interface::Basic::GetCursorTileIndex(s32 dst_index)
     return Cursor::POINTER;
 }
 
-int Interface::Basic::StartGame(void)
+int Interface::Basic::StartGame()
 {
     Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();

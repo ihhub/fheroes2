@@ -31,37 +31,37 @@ class Display : public Surface
 public:
     ~Display();
 
-    static Display &    Get(void);
+    static Display &    Get();
 
-    Size        GetSize(void) const;
+    Size        GetSize() const;
 
-    std::string	GetInfo(void) const;
+    std::string	GetInfo() const;
     Size	GetMaxMode(bool enable_rotate) const;
 
     void	SetVideoMode(int w, int h, bool);
     void	SetCaption(const char*);
     void	SetIcons(Surface &);
 
-    void	Flip(void);
-    void	Present(void);
-    void        Clear(void);
-    void        ToggleFullScreen(void);
+    void	Flip();
+    void	Present();
+    void        Clear();
+    void        ToggleFullScreen();
 
     void	Fade(int delay = 500);
     void	Fade(const Surface &, const Surface &, const Point &, int level, int delay);
     void	Rise(int delay = 500);
     void	Rise(const Surface &, const Surface &, const Point &, int level, int delay);
 
-    static void HideCursor(void);
-    static void ShowCursor(void);
+    static void HideCursor();
+    static void ShowCursor();
 
-    Surface	GetSurface(void) const;
+    Surface	GetSurface() const;
     Surface	GetSurface(const Rect & rt) const;
 
 protected:
     friend class Texture;
 
-    bool	isDisplay(void) const;
+    bool	isDisplay() const;
 
     Display();
 
@@ -90,7 +90,7 @@ public:
     ~Texture();
 
     Texture &	operator= (const Texture &);
-    Size	GetSize(void) const;
+    Size	GetSize() const;
 
     void	Blit(Display &) const;
     void        Blit(s32 dx, s32 dy, Display &) const;

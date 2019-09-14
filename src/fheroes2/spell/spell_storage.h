@@ -43,7 +43,7 @@ public:
 	void Append(const BagArtifacts &);
 	void Append(const Artifact &);
 	bool isPresentSpell(const Spell &) const;
-	std::string String(void) const;
+	std::string String() const;
 };
 
 #endif

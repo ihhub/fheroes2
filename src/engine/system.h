@@ -61,26 +61,26 @@ namespace System
     std::string GetDirname(const std::string &);
     std::string GetBasename(const std::string &);
 
-    std::string GetTime(void);
+    std::string GetTime();
 
     void	SetLocale(int, const char*);
     std::string	GetMessageLocale(int /* 3: en_us.utf-8, 2: en_us, 1: en */);
-    size_t	GetMemoryUsage(void);
+    size_t	GetMemoryUsage();
 
     int		GetCommandOptions(int argc, char* const argv[], const char* optstring);
-    char*	GetOptionsArgument(void);
+    char*	GetOptionsArgument();
 
     bool	IsFile(const std::string & name, bool writable = false);
     bool	IsDirectory(const std::string & name, bool writable = false);
     int		Unlink(const std::string &);
 
-    bool	isEmbededDevice(void);
-    bool	isRunning(void);
+    bool	isEmbededDevice();
+    bool	isRunning();
     int		CreateTrayIcon(bool);
     void	PowerManagerOff(bool);
 
     int		ShellCommand(const char*);
-    int         GetRenderFlags(void);
+    int         GetRenderFlags();
 }
 
 #endif

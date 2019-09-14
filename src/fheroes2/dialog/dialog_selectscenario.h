@@ -34,8 +34,8 @@ public:
     void RedrawItem(const Maps::FileInfo &, s32, s32, bool);
     void RedrawBackground(const Point &);
 
-    void ActionCurrentUp(void){};
-    void ActionCurrentDn(void){};
+    void ActionCurrentUp(){};
+    void ActionCurrentDn(){};
     void ActionListDoubleClick(Maps::FileInfo &);
     void ActionListSingleClick(Maps::FileInfo &){};
     void ActionListPressRight(Maps::FileInfo &){};

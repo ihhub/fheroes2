@@ -67,12 +67,12 @@ namespace Game
 	TESTING
     };
 
-    void Init(void);
+    void Init();
 
-    const std::string & GetLastSavename(void);
+    const std::string & GetLastSavename();
     void		SetLastSavename(const std::string &);
     void		SetLoadVersion(int);
-    int			GetLoadVersion(void);
+    int			GetLoadVersion();
 
     // type_t
     enum { TYPE_MENU = 0, TYPE_STANDARD = 0x01, TYPE_CAMPAIGN = 0x02, TYPE_HOTSEAT = 0x04, TYPE_NETWORK = 0x08, TYPE_BATTLEONLY = 0x10, TYPE_LOADFILE = 0x80, TYPE_MULTI = TYPE_HOTSEAT | TYPE_NETWORK };
@@ -187,61 +187,61 @@ namespace Game
 
     bool	AnimateInfrequentDelay(int);
     void	AnimateResetDelay(int);
-    void	UpdateHeroesMoveSpeed(void);
-    void	UpdateBattleSpeed(void);
-    int		MainMenu(void);
-    int		NewGame(void);
-    int		LoadGame(void);
+    void	UpdateHeroesMoveSpeed();
+    void	UpdateBattleSpeed();
+    int		MainMenu();
+    int		NewGame();
+    int		LoadGame();
     int		HighScores(bool);
-    int		Credits(void);
-    int		NewStandard(void);
-    int		NewCampain(void);
-    int		NewMulti(void);
-    int		NewHotSeat(void);
-    int		NewNetwork(void);
-    int		NewBattleOnly(void);
-    int		LoadStandard(void);
-    int		LoadCampain(void);
-    int		LoadMulti(void);
-    int		ScenarioInfo(void);
-    int		SelectScenario(void);
-    int		StartGame(void);
-    int		StartBattleOnly(void);
-    int		NetworkHost(void);
-    int		NetworkGuest(void);
+    int		Credits();
+    int		NewStandard();
+    int		NewCampain();
+    int		NewMulti();
+    int		NewHotSeat();
+    int		NewNetwork();
+    int		NewBattleOnly();
+    int		LoadStandard();
+    int		LoadCampain();
+    int		LoadMulti();
+    int		ScenarioInfo();
+    int		SelectScenario();
+    int		StartGame();
+    int		StartBattleOnly();
+    int		NetworkHost();
+    int		NetworkGuest();
     int		Testing(int);
 
-    void	DrawInterface(void);
-    void	SetFixVideoMode(void);
-    void	EnvironmentSoundMixer(void);
-    int		GetKingdomColors(void);
-    int		GetActualKingdomColors(void);
+    void	DrawInterface();
+    void	SetFixVideoMode();
+    void	EnvironmentSoundMixer();
+    int		GetKingdomColors();
+    int		GetActualKingdomColors();
     void	DialogPlayers(int color, std::string);
     void	SetCurrentMusic(int);
-    int		CurrentMusic(void);
-    u32 &	CastleAnimationFrame(void);
-    u32 &	MapsAnimationFrame(void);
-    u32		GetRating(void);
-    u32		GetGameOverScores(void);
-    u32		GetLostTownDays(void);
+    int		CurrentMusic();
+    u32 &	CastleAnimationFrame();
+    u32 &	MapsAnimationFrame();
+    u32		GetRating();
+    u32		GetGameOverScores();
+    u32		GetLostTownDays();
     u32		GetViewDistance(u32);
-    u32		GetWhirlpoolPercent(void);
-    u32		SelectCountPlayers(void);
-    void	ShowLoadMapsText(void);
-    void	PlayPickupSound(void);
+    u32		GetWhirlpoolPercent();
+    u32		SelectCountPlayers();
+    void	ShowLoadMapsText();
+    void	PlayPickupSound();
     void	DisableChangeMusic(bool);
-    bool	ChangeMusicDisabled(void);
+    bool	ChangeMusicDisabled();
     void	OpenHeroesDialog(Heroes &);
     void	OpenCastleDialog(Castle &);
     std::string GetEncodeString(const std::string &);
 
     namespace Editor
     {
-	int	MainMenu(void);
-	int	NewMaps(void);
-	int	LoadMaps(void);
-	int	StartGame(void);
-	int	StartGame(void);
+	int	MainMenu();
+	int	NewMaps();
+	int	LoadMaps();
+	int	StartGame();
+	int	StartGame();
     }
 
     u32		GetStep4Player(u32, u32, u32);

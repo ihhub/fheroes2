@@ -33,7 +33,7 @@ struct TimeDelay : std::pair<SDL::Time, int>
 	second = dl;
     }
 
-    int operator() (void) const
+    int operator() () const
     {
 	return second;
     }
@@ -44,12 +44,12 @@ struct TimeDelay : std::pair<SDL::Time, int>
 	return *this;
     }
 
-    void Reset(void)
+    void Reset()
     {
 	first.Start();
     }
 
-    bool Trigger(void)
+    bool Trigger()
     {
 	first.Stop();
 	if(first.Get() < static_cast<u32>(second)) return false;
@@ -61,7 +61,7 @@ struct TimeDelay : std::pair<SDL::Time, int>
 
 namespace Game
 {
-    void AnimateDelaysInitialize(void);
+    void AnimateDelaysInitialize();
 
     TimeDelay delays[] = {
 	20,	// SCROLL_DELAY
@@ -96,7 +96,7 @@ namespace Game
     };
 }
 
-void Game::AnimateDelaysInitialize(void)
+void Game::AnimateDelaysInitialize()
 {
     std::for_each(&delays[0], &delays[LAST_DELAY], std::mem_fun_ref(&TimeDelay::Reset));
     UpdateHeroesMoveSpeed();
@@ -115,7 +115,7 @@ bool Game::AnimateInfrequentDelay(int dl)
 	delays[dl].Trigger() : true;
 }
 
-void Game::UpdateHeroesMoveSpeed(void)
+void Game::UpdateHeroesMoveSpeed()
 {
     const Settings & conf = Settings::Get();
 
@@ -142,7 +142,7 @@ void Game::UpdateHeroesMoveSpeed(void)
 	td_ai   = td_etalon() - ai_value;
 }
 
-void Game::UpdateBattleSpeed(void)
+void Game::UpdateBattleSpeed()
 {
     const Settings & conf = Settings::Get();
     const int value = 5;

@@ -53,13 +53,13 @@ void StatusBar::ShowMessage(const std::string & msg)
     }
 }
 
-void StatusBar::Redraw(void)
+void StatusBar::Redraw()
 {
     Hide();
     Show();
 }
 
-const std::string & StatusBar::GetMessage(void) const
+const std::string & StatusBar::GetMessage() const
 {
     return prev;
 }

@@ -30,14 +30,14 @@ Cursor::Cursor() : theme(NONE), offset_x(0), offset_y(0)
 {
 }
 
-Cursor & Cursor::Get(void)
+Cursor & Cursor::Get()
 {
     static Cursor _cursor;
     return _cursor;
 }
 
 /* get theme cursor */
-int Cursor::Themes(void)
+int Cursor::Themes()
 {
     return SP_ARROW >= theme ? theme : NONE;
 }
@@ -247,7 +247,7 @@ void Cursor::SetOffset(int name)
     }
 }
 
-void Cursor::Show(void)
+void Cursor::Show()
 {
     if(! Settings::Get().ExtPocketHideCursor()) SpriteMove::Show();
 }

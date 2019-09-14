@@ -30,12 +30,12 @@
 
 namespace Mixer
 {
-    void        Init(void);
-    void        Quit(void);
+    void        Init();
+    void        Quit();
     bool valid = false;
 }
 
-bool Mixer::isValid(void)
+bool Mixer::isValid()
 {
     return valid;
 }
@@ -48,7 +48,7 @@ void FreeChannel(int channel)
     if(sample) Mix_FreeChunk(sample);
 }
 
-void Mixer::Init(void)
+void Mixer::Init()
 {
     if(SDL::SubSystem(SDL_INIT_AUDIO))
     {
@@ -82,7 +82,7 @@ void Mixer::Init(void)
     }
 }
 
-void Mixer::Quit(void)
+void Mixer::Quit()
 {
     if(SDL::SubSystem(SDL_INIT_AUDIO) && valid)
     {
@@ -157,7 +157,7 @@ int Mixer::Play(const u8* ptr, u32 size, int channel, bool loop)
     return -1;
 }
 
-u16 Mixer::MaxVolume(void)
+u16 Mixer::MaxVolume()
 {
     return MIX_MAX_VOLUME;
 }
@@ -183,7 +183,7 @@ void Mixer::Stop(int channel)
     Mix_HaltChannel(channel);
 }
 
-void Mixer::Reset(void)
+void Mixer::Reset()
 {
     Music::Reset();
 #ifdef WITH_AUDIOCD
@@ -202,11 +202,11 @@ u8 Mixer::isPaused(int channel)
     return Mix_Paused(channel);
 }
 
-void Mixer::Reduce(void)
+void Mixer::Reduce()
 {
 }
 
-void Mixer::Enhance(void)
+void Mixer::Enhance()
 {
 }
 
@@ -281,7 +281,7 @@ void Mixer::AudioCallBack(void *unused, u8 *stream, int length)
     }
 }
 
-void Mixer::Init(void)
+void Mixer::Init()
 {
     if(SDL::SubSystem(SDL_INIT_AUDIO))
     {
@@ -311,7 +311,7 @@ void Mixer::Init(void)
     }
 }
 
-void Mixer::Quit(void)
+void Mixer::Quit()
 {
     if(SDL::SubSystem(SDL_INIT_AUDIO) && valid)
     {
@@ -330,7 +330,7 @@ void Mixer::SetChannels(u8 num)
     reserved_channels = 1;
 }
 
-u16 Mixer::MaxVolume(void)
+u16 Mixer::MaxVolume()
 {
     return SDL_MIX_MAXVOLUME;
 }
@@ -472,7 +472,7 @@ void Mixer::Stop(int ch)
     Pause(ch);
 }
 
-void Mixer::Reset(void)
+void Mixer::Reset()
 {
     Music::Reset();
 #ifdef WITH_AUDIOCD
@@ -481,7 +481,7 @@ void Mixer::Reset(void)
     Pause(-1);
 }
 
-void Mixer::Reduce(void)
+void Mixer::Reduce()
 {
     if(valid)
     {
@@ -498,7 +498,7 @@ void Mixer::Reduce(void)
     }
 }
 
-void Mixer::Enhance(void)
+void Mixer::Enhance()
 {
     if(valid)
     {

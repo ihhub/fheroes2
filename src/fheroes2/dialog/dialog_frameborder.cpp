@@ -58,17 +58,17 @@ Dialog::FrameBorder::FrameBorder(s32 posx, s32 posy, u32 encw, u32 ench) : borde
     RenderRegular(GetRect());
 }
 
-int Dialog::FrameBorder::BorderWidth(void) const
+int Dialog::FrameBorder::BorderWidth() const
 {
     return border;
 }
 
-int Dialog::FrameBorder::BorderHeight(void) const
+int Dialog::FrameBorder::BorderHeight() const
 {
     return border;
 }
 
-bool Dialog::FrameBorder::isValid(void) const
+bool Dialog::FrameBorder::isValid() const
 {
     return background.isValid();
 }
@@ -105,17 +105,17 @@ void Dialog::FrameBorder::SetBorder(int v)
     border = v;
 }
 
-const Rect & Dialog::FrameBorder::GetTop(void) const
+const Rect & Dialog::FrameBorder::GetTop() const
 {
     return top;
 }
 
-const Rect & Dialog::FrameBorder::GetRect(void) const
+const Rect & Dialog::FrameBorder::GetRect() const
 {
     return rect;
 }
 
-const Rect & Dialog::FrameBorder::GetArea(void) const
+const Rect & Dialog::FrameBorder::GetArea() const
 {
     return area;
 }

@@ -46,13 +46,13 @@ class ActionSimple;
 struct ListActions : public std::list<ActionSimple*>
 {
     ~ListActions();
-    void clear(void);
+    void clear();
 };
 
 struct MapObjects : public std::map<u32, MapObjectSimple*>
 {
     ~MapObjects();
-    void		clear(void);
+    void		clear();
     void		add(MapObjectSimple*);
     std::list<MapObjectSimple*>
 			get(const Point &);
@@ -71,16 +71,16 @@ struct CapturedObject
 
     CapturedObject() : split(1) {}
 
-    int GetSplit(void) const { return split; }
-    int GetObject(void) const { return objcol.first; }
-    int GetColor(void) const { return objcol.second; }
-    Troop & GetTroop(void) { return guardians; }
+    int GetSplit() const { return split; }
+    int GetObject() const { return objcol.first; }
+    int GetColor() const { return objcol.second; }
+    Troop & GetTroop() { return guardians; }
 
     void Set(int obj, int col) { objcol = ObjectColor(obj, col); }
     void SetColor(int col) { objcol.second = col; }
     void SetSplit(int spl) { split = spl; }
 
-    bool GuardiansProtected(void) const { return guardians.isValid(); }
+    bool GuardiansProtected() const { return guardians.isValid(); }
 };
 
 struct CapturedObjects : std::map<s32, CapturedObject>
@@ -133,17 +133,17 @@ public:
 
     void NewMaps(u32, u32);
 
-    static World &	Get(void);
+    static World &	Get();
 
-    s32			w(void) const;
-    s32			h(void) const;
+    s32			w() const;
+    s32			h() const;
 
     const Maps::Tiles & GetTiles(u32, u32) const;
     Maps::Tiles &	GetTiles(u32, u32);
     const Maps::Tiles & GetTiles(s32) const;
     Maps::Tiles &	GetTiles(s32);
 
-    void		InitKingdoms(void);
+    void		InitKingdoms();
 
     Kingdom &		GetKingdom(int color);
     const Kingdom &	GetKingdom(int color) const;
@@ -160,31 +160,31 @@ public:
     Heroes*		FromJailHeroes(s32);
     Heroes*		GetFreemanHeroes(int race = 0) const;
 
-    const Heroes*	GetHeroesCondWins(void) const;
-    const Heroes*	GetHeroesCondLoss(void) const;
+    const Heroes*	GetHeroesCondWins() const;
+    const Heroes*	GetHeroesCondLoss() const;
 
     CastleHeroes	GetHeroes(const Castle &) const;
 
-    const UltimateArtifact &	GetUltimateArtifact(void) const;
+    const UltimateArtifact &	GetUltimateArtifact() const;
     bool			DiggingForUltimateArtifact(const Point &);
 
-    int			GetDay(void) const;
-    int			GetWeek(void) const;
-    int			GetMonth(void) const;
-    u32			CountDay(void) const;
-    u32			CountWeek(void) const;
-    bool		BeginWeek(void) const;
-    bool		BeginMonth(void) const;
-    bool		LastDay(void) const;
-    bool		LastWeek(void) const;
-    const Week &	GetWeekType(void) const;
-    std::string		DateString(void) const;
+    int			GetDay() const;
+    int			GetWeek() const;
+    int			GetMonth() const;
+    u32			CountDay() const;
+    u32			CountWeek() const;
+    bool		BeginWeek() const;
+    bool		BeginMonth() const;
+    bool		LastDay() const;
+    bool		LastWeek() const;
+    const Week &	GetWeekType() const;
+    std::string		DateString() const;
 
-    void		NewDay(void);
-    void		NewWeek(void);
-    void		NewMonth(void);
+    void		NewDay();
+    void		NewWeek();
+    void		NewMonth();
 
-    const std::string & GetRumors(void);
+    const std::string & GetRumors();
     
     s32			NextTeleport(s32) const;
     MapsIndexes		GetTeleportEndPoints(s32) const;
@@ -196,7 +196,7 @@ public:
     void		CaptureObject(s32, int col);
     u32			CountCapturedObject(int obj, int col) const;
     u32			CountCapturedMines(int type, int col) const;
-    u32			CountObeliskOnMaps(void);
+    u32			CountObeliskOnMaps();
     int			ColorCapturedObject(s32) const;
     void		ResetCapturedObjects(int);
     CapturedObject &	GetCapturedObject(s32);
@@ -220,16 +220,16 @@ public:
     MapObjectSimple*	GetMapObject(u32 uid);
     void		RemoveMapObject(const MapObjectSimple*);
 
-    static u32		GetUniq(void);
+    static u32		GetUniq();
 
-    void		PostFixLoad(void);
+    void		PostFixLoad();
 
 private:
     World() : Size(0, 0) {};
-    void		Defaults(void);
-    void		Reset(void);
+    void		Defaults();
+    void		Reset();
     void		MonthOfMonstersAction(const Monster &);
-    void		PostLoad(void);
+    void		PostLoad();
 
 private:
     friend class Radar;

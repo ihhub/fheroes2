@@ -36,11 +36,11 @@ namespace Interface
 	ButtonsArea(Basic &);
 
 	void		SetPos(s32, s32);
-	void		SavePosition(void);
-	void		SetRedraw(void) const;
+	void		SavePosition();
+	void		SetRedraw() const;
 
-	void		Redraw(void);
-	int		QueueEventProcessing(void);
+	void		Redraw();
+	int		QueueEventProcessing();
 
     private:
 	Basic & interface;

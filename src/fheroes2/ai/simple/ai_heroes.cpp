@@ -50,7 +50,7 @@
 
 #define HERO_MAX_SHEDULED_TASK 7
 
-AIHeroes & AIHeroes::Get(void)
+AIHeroes & AIHeroes::Get()
 {
     static AIHeroes ai_heroes;
     return ai_heroes;
@@ -61,20 +61,20 @@ AIHero & AIHeroes::Get(const Heroes & ht)
     return AIHeroes::Get().at(ht.GetID());
 }
 
-void AIHeroes::Reset(void)
+void AIHeroes::Reset()
 {
     AIHeroes & ai = AIHeroes::Get();
     std::for_each(ai.begin(), ai.end(), std::mem_fun_ref(&AIHero::Reset));
 }
 
-void AIHero::Reset(void)
+void AIHero::Reset()
 {
     primary_target = -1;
     sheduled_visit.clear();
     fix_loop = 0;
 }
 
-bool AI::HeroesSkipFog(void)
+bool AI::HeroesSkipFog()
 {
     return false;
 }

@@ -37,8 +37,8 @@ public:
     void RedrawItem(const u32 &, s32, s32, bool);
     void RedrawBackground(const Point &);
 
-    void ActionCurrentUp(void){};
-    void ActionCurrentDn(void){};
+    void ActionCurrentUp(){};
+    void ActionCurrentDn(){};
     void ActionListDoubleClick(u32 &);
     void ActionListSingleClick(u32 &);
     void ActionListPressRight(u32 &){};

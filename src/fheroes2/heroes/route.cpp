@@ -30,27 +30,27 @@
 #include "settings.h"
 #include "route.h"
 
-s32 Route::Step::GetIndex(void) const
+s32 Route::Step::GetIndex() const
 {
     return from < 0 ? -1 : Maps::GetDirectionIndex(from, direction);
 }
 
-s32 Route::Step::GetFrom(void) const
+s32 Route::Step::GetFrom() const
 {
     return from;
 }
 
-int Route::Step::GetDirection(void) const
+int Route::Step::GetDirection() const
 {
     return direction;
 }
 
-u32 Route::Step::GetPenalty(void) const
+u32 Route::Step::GetPenalty() const
 {
     return penalty;
 }
 
-bool Route::Step::isBad(void) const
+bool Route::Step::isBad() const
 {
     return from < 0 || (direction == Direction::UNKNOWN || direction == Direction::CENTER);
 }
@@ -76,24 +76,24 @@ Route::Path & Route::Path::operator= (const Path & p)
     return *this;
 }
 
-int Route::Path::GetFrontDirection(void) const
+int Route::Path::GetFrontDirection() const
 {
     return empty() ?
 	(dst != hero->GetIndex() ? Direction::Get(hero->GetIndex(), dst)
 					    : Direction::CENTER) : front().GetDirection();
 }
 
-u32 Route::Path::GetFrontPenalty(void) const
+u32 Route::Path::GetFrontPenalty() const
 {
     return empty() ? 0 : front().GetPenalty();
 }
 
-void Route::Path::PopFront(void)
+void Route::Path::PopFront()
 {
     if(!empty()) pop_front();
 }
 
-void Route::Path::PopBack(void)
+void Route::Path::PopBack()
 {
     if(!empty())
     {
@@ -102,17 +102,17 @@ void Route::Path::PopBack(void)
     }
 }
 
-s32 Route::Path::GetDestinationIndex(void) const
+s32 Route::Path::GetDestinationIndex() const
 {
     return empty() ? GetDestinedIndex() : GetLastIndex();
 }
 
-s32 Route::Path::GetLastIndex(void) const
+s32 Route::Path::GetLastIndex() const
 {
     return empty() ? -1 : back().GetIndex();
 }
 
-s32 Route::Path::GetDestinedIndex(void) const
+s32 Route::Path::GetDestinedIndex() const
 {
     return dst;
 }
@@ -133,7 +133,7 @@ bool Route::Path::Calculate(const s32 & dst_index, int limit /* -1 */)
     return !empty();
 }
 
-void Route::Path::Reset(void)
+void Route::Path::Reset()
 {
     dst = hero->GetIndex();
 
@@ -144,13 +144,13 @@ void Route::Path::Reset(void)
     }
 }
 
-bool Route::Path::isComplete(void) const
+bool Route::Path::isComplete() const
 {
     return dst == hero->GetIndex() ||
 	(empty() && Direction::UNKNOWN != Direction::Get(hero->GetIndex(), dst));
 }
 
-bool Route::Path::isValid(void) const
+bool Route::Path::isValid() const
 {
     return !empty();
 }
@@ -293,7 +293,7 @@ int Route::Path::GetIndexSprite(int from, int to, int mod)
 }
 
 /* total penalty cast */
-u32 Route::Path::GetTotalPenalty(void) const
+u32 Route::Path::GetTotalPenalty() const
 {
     u32 result = 0;
 
@@ -304,7 +304,7 @@ u32 Route::Path::GetTotalPenalty(void) const
     return result;
 }
 
-s32 Route::Path::GetAllowStep(void) const
+s32 Route::Path::GetAllowStep() const
 {
     s32 green = 0;
     u32 move_point = hero->GetMovePoints();
@@ -319,7 +319,7 @@ s32 Route::Path::GetAllowStep(void) const
     return green;
 }
 
-std::string Route::Path::String(void) const
+std::string Route::Path::String() const
 {
     std::ostringstream os;
 
@@ -356,13 +356,13 @@ bool StepIsPassable(const Route::Step & s, const Heroes* h)
     return world.GetTiles(s.GetFrom()).isPassable(h, s.GetDirection(), false);
 }
 
-bool Route::Path::hasObstacle(void) const
+bool Route::Path::hasObstacle() const
 {
     const_iterator it = std::find_if(begin(), end(), StepIsObstacle);
     return it != end() && (*it).GetIndex() != GetLastIndex();
 }
 
-void Route::Path::RescanObstacle(void)
+void Route::Path::RescanObstacle()
 {
     // scan obstacle
     iterator it = std::find_if(begin(), end(), StepIsObstacle);
@@ -377,7 +377,7 @@ void Route::Path::RescanObstacle(void)
     }
 }
 
-void Route::Path::RescanPassable(void)
+void Route::Path::RescanPassable()
 {
     // scan passable
     iterator it = begin();

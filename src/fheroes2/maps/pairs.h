@@ -71,7 +71,7 @@ class ResourceCount : public std::pair<int, u32>
     ResourceCount(int res, u32 count) : std::pair<int, u32>(res, count) {};
 
     bool isResource(int res) const { return res == first; };
-    bool isValid(void) const { return (first & Resource::ALL) && second; };
+    bool isValid() const { return (first & Resource::ALL) && second; };
 };
 
 StreamBase & operator>> (StreamBase &, ResourceCount &);

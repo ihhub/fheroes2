@@ -49,7 +49,7 @@ void AIHeroesEnd(Heroes*);
 void AIHeroesCaptureNearestTown(Heroes*);
 void AIHeroesSetHunterWithTarget(Heroes*, s32);
 
-AIKingdoms & AIKingdoms::Get(void)
+AIKingdoms & AIKingdoms::Get()
 {
     static AIKingdoms ai_kingdoms;
     return ai_kingdoms;
@@ -60,13 +60,13 @@ AIKingdom & AIKingdoms::Get(int color)
     return AIKingdoms::Get().at(Color::GetIndex(color));
 }
 
-void AIKingdoms::Reset(void)
+void AIKingdoms::Reset()
 {
     AIKingdoms & ai = AIKingdoms::Get();
     std::for_each(ai.begin(), ai.end(), std::mem_fun_ref(&AIKingdom::Reset));
 }
 
-void AIKingdom::Reset(void)
+void AIKingdom::Reset()
 {
     capital = NULL;
     scans.clear();

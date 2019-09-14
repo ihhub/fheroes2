@@ -28,7 +28,7 @@
 
 namespace Interface
 {
-    void GameBorderRedraw(void);
+    void GameBorderRedraw();
 
     class BorderWindow
     {
@@ -37,13 +37,13 @@ namespace Interface
 	virtual ~BorderWindow(){}
 
         virtual void	SetPos(s32, s32) = 0;
-	virtual void	SavePosition(void) = 0;
+	virtual void	SavePosition() = 0;
 
-        void		Redraw(void);
-        bool		QueueEventProcessing(void);
+        void		Redraw();
+        bool		QueueEventProcessing();
 
-        const Rect &	GetArea(void) const;
-	const Rect &	GetRect(void) const;
+        const Rect &	GetArea() const;
+	const Rect &	GetRect() const;
 
     protected:
         void		SetPosition(s32, s32, u32, u32);

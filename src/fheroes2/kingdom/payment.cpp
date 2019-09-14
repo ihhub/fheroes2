@@ -93,7 +93,7 @@ payment_t PaymentConditions::BuyBuilding(int race, u32 build)
     return BuildingInfo::GetCost(build, race);
 }
 
-payment_t PaymentConditions::BuyBoat(void)
+payment_t PaymentConditions::BuyBoat()
 {
     payment_t result;
     paymentstats_t* ptr = &_payments[0];

@@ -1067,7 +1067,7 @@ void Maps::Tiles::SetIndex(int index)
     maps_index	= index;
 }
 
-int Maps::Tiles::GetQuantity3(void) const
+int Maps::Tiles::GetQuantity3() const
 {
     return quantity3;
 }
@@ -1077,7 +1077,7 @@ void Maps::Tiles::SetQuantity3(int mod)
     quantity3 = mod;
 }
 
-Heroes* Maps::Tiles::GetHeroes(void) const
+Heroes* Maps::Tiles::GetHeroes() const
 {
     return MP2::OBJ_HEROES == mp2_object && GetQuantity3() ?
 	world.GetHeroes(GetQuantity3() - 1) : NULL;
@@ -1107,12 +1107,12 @@ void Maps::Tiles::SetHeroes(Heroes* hero)
     }
 }
 
-Point Maps::Tiles::GetCenter(void) const
+Point Maps::Tiles::GetCenter() const
 {
     return Maps::GetPoint(GetIndex());
 }
 
-s32 Maps::Tiles::GetIndex(void) const
+s32 Maps::Tiles::GetIndex() const
 {
     return maps_index;
 }
@@ -1138,17 +1138,17 @@ void Maps::Tiles::SetTile(u32 sprite_index, u32 shape)
     pack_sprite_index = PackTileSpriteIndex(sprite_index, shape);
 }
 
-u32 Maps::Tiles::TileSpriteIndex(void) const
+u32 Maps::Tiles::TileSpriteIndex() const
 {
     return pack_sprite_index & 0x3FFF;
 }
 
-u32  Maps::Tiles::TileSpriteShape(void) const
+u32  Maps::Tiles::TileSpriteShape() const
 {
     return pack_sprite_index >> 14;
 }
 
-Surface Maps::Tiles::GetTileSurface(void) const
+Surface Maps::Tiles::GetTileSurface() const
 {
     return AGG::GetTIL(TIL::GROUND32, TileSpriteIndex(), TileSpriteShape());
 }
@@ -1199,7 +1199,7 @@ bool Maps::Tiles::isLongObject(int direction)
     return false;
 }
 
-void Maps::Tiles::UpdatePassable(void)
+void Maps::Tiles::UpdatePassable()
 {
     tile_passable = DIRECTION_ALL;
 #ifdef WITH_DEBUG
@@ -1365,7 +1365,7 @@ u32 Maps::Tiles::GetObjectUID(int obj) const
     return addon ? addon->uniq : 0;
 }
 
-int Maps::Tiles::GetPassable(void) const
+int Maps::Tiles::GetPassable() const
 {
     return tile_passable;
 }
@@ -1410,13 +1410,13 @@ void Maps::Tiles::AddonsPushLevel2(const TilesAddon & ta)
 	addons_level2.push_back(ta);
 }
 
-void Maps::Tiles::AddonsSort(void)
+void Maps::Tiles::AddonsSort()
 {
     if(!addons_level1.empty()) addons_level1.sort(TilesAddon::PredicateSortRules1);
     if(!addons_level2.empty()) addons_level2.sort(TilesAddon::PredicateSortRules2);
 }
 
-int Maps::Tiles::GetGround(void) const
+int Maps::Tiles::GetGround() const
 {
     const u32 index = TileSpriteIndex();
 
@@ -1450,7 +1450,7 @@ int Maps::Tiles::GetGround(void) const
     return Maps::Ground::BEACH;
 }
 
-bool Maps::Tiles::isWater(void) const
+bool Maps::Tiles::isWater() const
 {
     return 30 > TileSpriteIndex();
 }
@@ -1811,7 +1811,7 @@ Maps::TilesAddon* Maps::Tiles::FindAddonLevel2(u32 uniq2)
 }
 
 
-std::string Maps::Tiles::String(void) const
+std::string Maps::Tiles::String() const
 {
     std::ostringstream os;
 
@@ -1929,7 +1929,7 @@ std::string Maps::Tiles::String(void) const
     return os.str();
 }
 
-void Maps::Tiles::FixObject(void)
+void Maps::Tiles::FixObject()
 {
     if(MP2::OBJ_ZERO == mp2_object)
     {
@@ -1941,7 +1941,7 @@ void Maps::Tiles::FixObject(void)
     }
 }
 
-bool Maps::Tiles::GoodForUltimateArtifact(void) const
+bool Maps::Tiles::GoodForUltimateArtifact() const
 {
     return ! isWater() && (addons_level1.empty() ||
 		addons_level1.size() == static_cast<size_t>(std::count_if(addons_level1.begin(), addons_level1.end(),
@@ -2030,7 +2030,7 @@ bool Maps::Tiles::isRoad(int direct) const
 				std::bind2nd(std::mem_fun_ref(&TilesAddon::isRoad), direct));
 }
 
-bool Maps::Tiles::isStream(void) const
+bool Maps::Tiles::isStream() const
 {
     return addons_level1.end() != std::find_if(addons_level1.begin(), addons_level1.end(),
 				TilesAddon::isStream);
@@ -2176,7 +2176,7 @@ const Maps::TilesAddon* Maps::Tiles::FindObjectConst(int objs) const
     return addons_level1.end() != it ? &(*it) : NULL;
 }
 
-Maps::TilesAddon* Maps::Tiles::FindFlags(void)
+Maps::TilesAddon* Maps::Tiles::FindFlags()
 {
     Addons::iterator it =
 	std::find_if(addons_level1.begin(), addons_level1.end(), TilesAddon::isFlag32);
@@ -2327,7 +2327,7 @@ void Maps::Tiles::FixedPreload(Tiles & tile)
 }
 
 /* true: if protection or has guardians */
-bool Maps::Tiles::CaptureObjectIsProtection(void) const
+bool Maps::Tiles::CaptureObjectIsProtection() const
 {
     const int object = GetObject(false);
 
@@ -2346,7 +2346,7 @@ bool Maps::Tiles::CaptureObjectIsProtection(void) const
     return false;
 }
 
-void Maps::Tiles::RemoveObjectSprite(void)
+void Maps::Tiles::RemoveObjectSprite()
 {
     Maps::TilesAddon *addon = NULL;
 
@@ -2378,7 +2378,7 @@ void Maps::Tiles::RemoveObjectSprite(void)
     }
 }
 
-void Maps::Tiles::RemoveBarrierSprite(void)
+void Maps::Tiles::RemoveBarrierSprite()
 {
     Maps::TilesAddon *addon = FindObject(MP2::OBJ_BARRIER);
 
@@ -2395,7 +2395,7 @@ void Maps::Tiles::RemoveBarrierSprite(void)
     }
 }
 
-void Maps::Tiles::RemoveJailSprite(void)
+void Maps::Tiles::RemoveJailSprite()
 {
     Maps::TilesAddon *addon = FindObject(MP2::OBJ_JAIL);
 

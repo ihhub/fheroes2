@@ -35,11 +35,11 @@ namespace Interface
 	ControlPanel(Basic &);
 
 	void		SetPos(s32, s32);
-	void		Redraw(void);
-	void		ResetTheme(void);
-	int		QueueEventProcessing(void);
+	void		Redraw();
+	void		ResetTheme();
+	int		QueueEventProcessing();
 
-	const Rect &	GetArea(void);
+	const Rect &	GetArea();
 
     private:
 	Basic & interface;

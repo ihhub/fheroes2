@@ -35,7 +35,7 @@
 
 namespace Battle
 {
-    int GetObstaclePosition(void)
+    int GetObstaclePosition()
     {
 	return Rand::Get(3, 6) + (11 * Rand::Get(1, 7));
     }
@@ -62,7 +62,7 @@ void Battle::Board::SetArea(const Rect & area)
 	(*it).SetArea(area);
 }
 
-Rect Battle::Board::GetArea(void) const
+Rect Battle::Board::GetArea() const
 {
     Rects rects;
     rects.reserve(size());
@@ -73,7 +73,7 @@ Rect Battle::Board::GetArea(void) const
     return rects.GetRect();
 }
 
-void Battle::Board::Reset(void)
+void Battle::Board::Reset()
 {
     std::for_each(begin(), end(), std::mem_fun_ref(&Cell::ResetQuality));
     std::for_each(begin(), end(), std::mem_fun_ref(&Cell::ResetDirection));
@@ -318,7 +318,7 @@ Battle::Indexes Battle::Board::GetAStarPath(const Unit & b, const Position & dst
     return result;
 }
 
-std::string Battle::Board::AllUnitsInfo(void) const
+std::string Battle::Board::AllUnitsInfo() const
 {
     std::ostringstream os;
 
@@ -963,7 +963,7 @@ bool Battle::Board::isValidMirrorImageIndex(s32 index, const Unit* b)
 	GetCell(index)->isPassable3(*b, true);
 }
 
-std::string Battle::Board::GetMoatInfo(void)
+std::string Battle::Board::GetMoatInfo()
 {
     std::string msg = _("The Moat reduces by -%{count} the defense skill of any unit and slows to half movement rate.");
     StringReplace(msg, "%{count}", GameStatic::GetBattleMoatReduceDefense());

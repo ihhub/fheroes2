@@ -37,8 +37,8 @@ public:
     MapObjectSimple(int v = 0) : uid(0), type(v) {}
     virtual ~MapObjectSimple() {}
 
-    int         GetType(void) const { return type; }
-    u32         GetUID(void) const { return uid; }
+    int         GetType() const { return type; }
+    u32         GetUID() const { return uid; }
     void        SetUID(u32 v) { uid = v; }
 
 protected:
@@ -81,7 +81,7 @@ struct MapSphinx : public MapObjectSimple
     void	LoadFromMP2(s32 index, StreamBuf);
 
     bool	AnswerCorrect(const std::string & answer);
-    void	SetQuiet(void);
+    void	SetQuiet();
 
     Funds		resources;
     Artifact		artifact;
@@ -124,8 +124,8 @@ struct MapArtifact : public MapObjectSimple
     int			condition;
     int			extended;
 
-    Funds		QuantityFunds(void) const;
-    ResourceCount	QuantityResourceCount(void) const;
+    Funds		QuantityFunds() const;
+    ResourceCount	QuantityResourceCount() const;
 };
 
 StreamBase & operator<< (StreamBase &, const MapArtifact &);
@@ -140,11 +140,11 @@ struct MapMonster : public MapObjectSimple
     int			condition;
     int			count;
 
-    Troop		QuantityTroop(void) const;
-    bool		JoinConditionSkip(void) const;
-    bool		JoinConditionMoney(void) const;
-    bool		JoinConditionFree(void) const;
-    bool		JoinConditionForce(void) const;
+    Troop		QuantityTroop() const;
+    bool		JoinConditionSkip() const;
+    bool		JoinConditionMoney() const;
+    bool		JoinConditionFree() const;
+    bool		JoinConditionForce() const;
 };
 
 StreamBase & operator<< (StreamBase &, const MapMonster &);

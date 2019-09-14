@@ -46,13 +46,13 @@ Interface::GameArea::GameArea(Basic & basic) : interface(basic), oldIndexPos(0),
 {
 }
 
-const Rect & Interface::GameArea::GetArea(void) const
+const Rect & Interface::GameArea::GetArea() const
 { return areaPosition; }
 
-const Point& Interface::GameArea::GetMapsPos(void) const
+const Point& Interface::GameArea::GetMapsPos() const
 { return rectMapsPosition; }
 
-const Rect & Interface::GameArea::GetRectMaps(void) const
+const Rect & Interface::GameArea::GetRectMaps() const
 { return rectMaps; }
 
 /* fixed src rect image */
@@ -63,7 +63,7 @@ Rect Interface::GameArea::RectFixed(Point & dst, int rw, int rh) const
     return res.first;
 }
 
-void Interface::GameArea::Build(void)
+void Interface::GameArea::Build()
 {
     if(Settings::Get().ExtGameHideInterface())
 	SetAreaPosition(0, 0,
@@ -247,7 +247,7 @@ void Interface::GameArea::Redraw(Surface & dst, int flag, const Rect & rt) const
 }
 
 /* scroll area */
-void Interface::GameArea::Scroll(void)
+void Interface::GameArea::Scroll()
 {
     if(scrollDirection & SCROLL_LEFT)
     {
@@ -303,7 +303,7 @@ void Interface::GameArea::Scroll(void)
     scrollDirection = 0;
 }
 
-void Interface::GameArea::SetRedraw(void) const
+void Interface::GameArea::SetRedraw() const
 {
      interface.SetRedraw(REDRAW_GAMEAREA);
 }
@@ -450,12 +450,12 @@ Surface Interface::GameArea::GenerateUltimateArtifactAreaSurface(s32 index)
     return sf;
 }
 
-bool Interface::GameArea::NeedScroll(void) const
+bool Interface::GameArea::NeedScroll() const
 {
     return scrollDirection;
 }
 
-int Interface::GameArea::GetScrollCursor(void) const
+int Interface::GameArea::GetScrollCursor() const
 {
     switch(scrollDirection)
     {
@@ -526,12 +526,12 @@ s32 Interface::GameArea::GetIndexFromMousePoint(const Point & pt) const
     return result > max || result < Maps::GetIndexFromAbsPoint(rectMaps.x, rectMaps.y) ? -1 : result;
 }
 
-void Interface::GameArea::SetUpdateCursor(void)
+void Interface::GameArea::SetUpdateCursor()
 {
     updateCursor = true;
 }
 
-void Interface::GameArea::QueueEventProcessing(void)
+void Interface::GameArea::QueueEventProcessing()
 {
     const Settings & conf = Settings::Get();
     Display & display = Display::Get();

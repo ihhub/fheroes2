@@ -31,7 +31,7 @@
 #include "world.h"
 #include "game.h"
 
-int Game::NewStandard(void)
+int Game::NewStandard()
 {
     Settings & conf = Settings::Get();
     conf.SetGameType(Game::TYPE_STANDARD);
@@ -39,7 +39,7 @@ int Game::NewStandard(void)
     return Game::SELECTSCENARIO;
 }
 
-int Game::NewBattleOnly(void)
+int Game::NewBattleOnly()
 {
     Settings & conf = Settings::Get();
     conf.SetGameType(Game::TYPE_BATTLEONLY);
@@ -47,7 +47,7 @@ int Game::NewBattleOnly(void)
     return Game::NEWMULTI;
 }
 
-int Game::NewHotSeat(void)
+int Game::NewHotSeat()
 {
     Settings & conf = Settings::Get();
     conf.SetGameType(conf.GameType() | Game::TYPE_HOTSEAT);
@@ -70,7 +70,7 @@ int Game::NewHotSeat(void)
     return Game::MAINMENU;
 }
 
-int Game::NewCampain(void)
+int Game::NewCampain()
 {
     Settings::Get().SetGameType(Game::TYPE_CAMPAIGN);
     VERBOSE("New Campain Game: under construction.");
@@ -78,7 +78,7 @@ int Game::NewCampain(void)
 }
 
 #ifdef NETWORK_ENABLE
-int Game::NewNetwork(void)
+int Game::NewNetwork()
 {
     Settings & conf = Settings::Get();
     conf.SetGameType(conf.GameType() | Game::TYPE_NETWORK);
@@ -133,7 +133,7 @@ int Game::NewNetwork(void)
 }
 #endif
 
-int Game::NewGame(void)
+int Game::NewGame()
 {
     Mixer::Pause();
     AGG::PlayMusic(MUS::MAINMENU);
@@ -221,7 +221,7 @@ int Game::NewGame(void)
     return QUITGAME;
 }
 
-int Game::NewMulti(void)
+int Game::NewMulti()
 {
     Settings & conf = Settings::Get();
 
@@ -284,7 +284,7 @@ int Game::NewMulti(void)
     return QUITGAME;
 }
 
-u32 Game::SelectCountPlayers(void)
+u32 Game::SelectCountPlayers()
 {
     // cursor
     Cursor & cursor = Cursor::Get();

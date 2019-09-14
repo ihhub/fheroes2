@@ -158,7 +158,7 @@ void Interface::Basic::ResetFocus(int priority)
     }
 }
 
-int Interface::GetFocusType(void)
+int Interface::GetFocusType()
 {
     Player* player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -174,7 +174,7 @@ int Interface::GetFocusType(void)
     return GameFocus::UNSEL;
 }
 
-Castle* Interface::GetFocusCastle(void)
+Castle* Interface::GetFocusCastle()
 {
     Player* player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -182,7 +182,7 @@ Castle* Interface::GetFocusCastle(void)
 	    player->GetFocus().GetCastle() : NULL;
 }
 
-Heroes* Interface::GetFocusHeroes(void)
+Heroes* Interface::GetFocusHeroes()
 {
     Player* player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -192,7 +192,7 @@ Heroes* Interface::GetFocusHeroes(void)
     return NULL;
 }
 
-Point Interface::GetFocusCenter(void)
+Point Interface::GetFocusCenter()
 {
     Player* player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -208,7 +208,7 @@ Point Interface::GetFocusCenter(void)
     return Point(world.w()/2, world.h()/2);
 }
 
-void Interface::Basic::RedrawFocus(void)
+void Interface::Basic::RedrawFocus()
 {
     int type = GetFocusType();
 

@@ -32,40 +32,40 @@ namespace GameStatic
 {
     struct Data
     {
-	static Data & Get(void);
+	static Data & Get();
 	// wrapper for stream
     };
 
     StreamBase & operator<< (StreamBase &, const Data &);
     StreamBase & operator>> (StreamBase &, Data &);
 
-    u32		GetLostOnWhirlpoolPercent(void);
-    u32		GetGameOverLostDays(void);
+    u32		GetLostOnWhirlpoolPercent();
+    u32		GetGameOverLostDays();
     u32		GetOverViewDistance(u32);
 
     cost_t &	GetKingdomStartingResource(int difficulty);
-    u32		GetKingdomMaxHeroes(void);
+    u32		GetKingdomMaxHeroes();
 
-    u32		GetCastleGrownWell(void);
-    u32		GetCastleGrownWel2(void);
-    u32		GetCastleGrownWeekOf(void);
-    u32		GetCastleGrownMonthOf(void);
+    u32		GetCastleGrownWell();
+    u32		GetCastleGrownWel2();
+    u32		GetCastleGrownWeekOf();
+    u32		GetCastleGrownMonthOf();
 
-    u32		GetHeroesRestoreSpellPointsPerDay(void);
+    u32		GetHeroesRestoreSpellPointsPerDay();
     u32		GetMageGuildRestoreSpellPointsPercentDay(int level);
 
-    float	GetMonsterUpgradeRatio(void);
+    float	GetMonsterUpgradeRatio();
     s32		ObjectVisitedModifiers(int obj);
 
-    int		GetBattleMoatReduceDefense(void);
+    int		GetBattleMoatReduceDefense();
 
     const Skill::stats_t*     GetSkillStats(int race);
     const Skill::values_t*    GetSkillValues(int skill);
-    const Skill::secondary_t* GetSkillForWitchsHut(void);
+    const Skill::secondary_t* GetSkillForWitchsHut();
 
-    u32		Spell_DD_Distance(void);
-    u32		Spell_DD_SP(void);
-    u32		Spell_DD_HP(void);
+    u32		Spell_DD_Distance();
+    u32		Spell_DD_SP();
+    u32		Spell_DD_HP();
 
     void	SetSpell_DD_Distance(int);
     void	SetSpell_DD_SP(int);

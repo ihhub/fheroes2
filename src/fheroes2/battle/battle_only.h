@@ -41,7 +41,7 @@ namespace Battle
 	ControlInfo(const Point & pt, int ctrl) : result(ctrl),
     	    rtLocal(pt.x, pt.y, 24, 24), rtAI(pt.x + 75, pt.y, 24, 24) {};
 
-	void Redraw(void);
+	void Redraw();
 
 	int result;
 
@@ -102,13 +102,13 @@ namespace Battle
 	Surface		sfb2;
 	Surface		sfc2;
 
-	bool		ChangeSettings(void);
+	bool		ChangeSettings();
 	void		RedrawBaseInfo(const Point &);
-	void		StartBattle(void);
+	void		StartBattle();
 	void		UpdateHero1(const Point &);
 	void		UpdateHero2(const Point &);
 
-	static Only &	Get(void);
+	static Only &	Get();
 	static Recruits GetHeroesFromStreamBuf(StreamBuf &);
 
 	Only();

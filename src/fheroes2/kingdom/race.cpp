@@ -46,7 +46,7 @@ const char* Race::String(int race)
     return str_race[8];
 }
 
-int Race::Rand(void)
+int Race::Rand()
 {
     switch(Rand::Get(1, 6))
     {

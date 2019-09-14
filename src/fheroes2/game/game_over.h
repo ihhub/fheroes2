@@ -55,12 +55,12 @@ namespace GameOver
     class Result
     {
     public:
-	static Result & Get(void);
+	static Result & Get();
 
-	void		Reset(void);
+	void		Reset();
 	void		SetResult(int);
-	int		GetResult(void) const;
-	int		LocalCheckGameOver(void);
+	int		GetResult() const;
+	int		LocalCheckGameOver();
 
     private:
 	friend StreamBase & operator<< (StreamBase &, const Result &);

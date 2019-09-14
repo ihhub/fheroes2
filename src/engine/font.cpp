@@ -35,17 +35,17 @@ FontTTF::~FontTTF()
     if(ptr) TTF_CloseFont(ptr);
 }
 
-void FontTTF::Init(void)
+void FontTTF::Init()
 {
     if(0 != TTF_Init()) ERROR(SDL_GetError());
 }
 
-void FontTTF::Quit(void)
+void FontTTF::Quit()
 {
     TTF_Quit();
 }
 
-bool FontTTF::isValid(void) const
+bool FontTTF::isValid() const
 {
     return ptr;
 }
@@ -63,22 +63,22 @@ void FontTTF::SetStyle(int style)
     TTF_SetFontStyle(ptr, style);
 }
 
-int FontTTF::Height(void) const
+int FontTTF::Height() const
 {
     return TTF_FontHeight(ptr);
 }
 
-int FontTTF::Ascent(void) const
+int FontTTF::Ascent() const
 {
     return TTF_FontAscent(ptr);
 }
 
-int FontTTF::Descent(void) const
+int FontTTF::Descent() const
 {
     return TTF_FontDescent(ptr);
 }
 
-int FontTTF::LineSkip(void) const
+int FontTTF::LineSkip() const
 {
     return TTF_FontLineSkip(ptr);
 }

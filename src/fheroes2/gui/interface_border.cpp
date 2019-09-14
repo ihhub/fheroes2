@@ -26,7 +26,7 @@
 #include "game_interface.h"
 #include "interface_border.h"
 
-void Interface::GameBorderRedraw(void)
+void Interface::GameBorderRedraw()
 {
     const Settings & conf = Settings::Get();
     if(conf.ExtGameHideInterface()) return;
@@ -170,18 +170,18 @@ Interface::BorderWindow::BorderWindow(const Rect & rt) : area(rt)
         border.SetBorder(6);
 }
 
-const Rect & Interface::BorderWindow::GetRect(void) const
+const Rect & Interface::BorderWindow::GetRect() const
 {
     return Settings::Get().ExtGameHideInterface() && border.isValid() ?
 	border.GetRect() : GetArea();
 }
 
-const Rect & Interface::BorderWindow::GetArea(void) const
+const Rect & Interface::BorderWindow::GetArea() const
 {
     return area;
 }
 
-void Interface::BorderWindow::Redraw(void)
+void Interface::BorderWindow::Redraw()
 {
     if(Settings::Get().QVGA())
     {
@@ -227,7 +227,7 @@ void Interface::BorderWindow::SetPosition(s32 px, s32 py)
     }
 }
 
-bool Interface::BorderWindow::QueueEventProcessing(void)
+bool Interface::BorderWindow::QueueEventProcessing()
 {
     Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();

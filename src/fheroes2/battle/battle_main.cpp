@@ -293,7 +293,7 @@ void Battle::NecromancySkillAction(HeroBase & hero, u32 killed, bool local)
     DEBUG(DBG_BATTLE, DBG_TRACE, "raise: " << count << mons.GetMultiName());
 }
 
-u32 Battle::Result::AttackerResult(void) const
+u32 Battle::Result::AttackerResult() const
 {
     if(RESULT_SURRENDER & army1) return RESULT_SURRENDER;
     else
@@ -306,7 +306,7 @@ u32 Battle::Result::AttackerResult(void) const
     return 0;
 }
 
-u32 Battle::Result::DefenderResult(void) const
+u32 Battle::Result::DefenderResult() const
 {
     if(RESULT_SURRENDER & army2) return RESULT_SURRENDER;
     else
@@ -319,22 +319,22 @@ u32 Battle::Result::DefenderResult(void) const
     return 0;
 }
 
-u32 Battle::Result::GetExperienceAttacker(void) const
+u32 Battle::Result::GetExperienceAttacker() const
 {
     return exp1;
 }
 
-u32 Battle::Result::GetExperienceDefender(void) const
+u32 Battle::Result::GetExperienceDefender() const
 {
     return exp2;
 }
 
-bool Battle::Result::AttackerWins(void) const
+bool Battle::Result::AttackerWins() const
 {
     return army1 & RESULT_WINS;
 }
 
-bool Battle::Result::DefenderWins(void) const
+bool Battle::Result::DefenderWins() const
 {
     return army2 & RESULT_WINS;
 }

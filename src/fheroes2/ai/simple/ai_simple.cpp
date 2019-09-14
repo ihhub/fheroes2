@@ -32,12 +32,12 @@
 #include "castle.h"
 #include "ai_simple.h"
 
-const char* AI::Type(void)
+const char* AI::Type()
 {
     return "simple";
 }
 
-const char* AI::License(void)
+const char* AI::License()
 {
     return "Non-Commercial";
 }
@@ -65,7 +65,7 @@ void AI::CastleRemove(const Castle & castle)
     }
 }
 
-void AI::Init(void)
+void AI::Init()
 {
     AIKingdoms::Reset();
     AIHeroes::Reset();

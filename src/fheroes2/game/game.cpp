@@ -52,12 +52,12 @@
 namespace Game
 {
     u32		GetMixerChannelFromObject(const Maps::Tiles &);
-    void	AnimateDelaysInitialize(void);
+    void	AnimateDelaysInitialize();
     void	KeyboardGlobalFilter(int, int);
     void	UpdateGlobalDefines(const std::string &);
     void	LoadExternalResource(const Settings &);
 
-    void	HotKeysDefaults(void);
+    void	HotKeysDefaults();
     void	HotKeysLoad(const std::string &);
 
     bool	disable_change_music = false;
@@ -75,12 +75,12 @@ void Game::SetLoadVersion(int ver)
     save_version = ver;
 }
 
-int Game::GetLoadVersion(void)
+int Game::GetLoadVersion()
 {
     return save_version;
 }
 
-const std::string & Game::GetLastSavename(void)
+const std::string & Game::GetLastSavename()
 {
     return last_name;
 }
@@ -100,7 +100,7 @@ int Game::Testing(int t)
 #endif
 }
 
-int Game::Credits(void)
+int Game::Credits()
 {
     const Settings & conf = Settings::Get();
 
@@ -131,7 +131,7 @@ int Game::Credits(void)
     return Game::MAINMENU;
 }
 
-bool Game::ChangeMusicDisabled(void)
+bool Game::ChangeMusicDisabled()
 {
     return disable_change_music;
 }
@@ -141,7 +141,7 @@ void Game::DisableChangeMusic(bool f)
     //disable_change_music = f;
 }
 
-void Game::Init(void)
+void Game::Init()
 {
     Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -167,7 +167,7 @@ void Game::Init(void)
     Game::HotKeysLoad(hotkeys);
 }
 
-int Game::CurrentMusic(void)
+int Game::CurrentMusic()
 {
     return current_music;
 }
@@ -177,17 +177,17 @@ void Game::SetCurrentMusic(int mus)
     current_music = mus;
 }
 
-u32 & Game::MapsAnimationFrame(void)
+u32 & Game::MapsAnimationFrame()
 {
     return maps_animation_frame;
 }
 
-u32 & Game::CastleAnimationFrame(void)
+u32 & Game::CastleAnimationFrame()
 {
     return castle_animation_frame;
 }
 
-void Game::SetFixVideoMode(void)
+void Game::SetFixVideoMode()
 {
     const Settings & conf = Settings::Get();
 
@@ -206,7 +206,7 @@ void Game::SetFixVideoMode(void)
 }
 
 /* play all sound from focus area game */
-void Game::EnvironmentSoundMixer(void)
+void Game::EnvironmentSoundMixer()
 {
     const Point abs_pt(Interface::GetFocusCenter());
     const Settings & conf = Settings::Get();
@@ -247,7 +247,7 @@ u32 Game::GetMixerChannelFromObject(const Maps::Tiles & tile)
     return M82::GetIndexLOOP00XXFromObject(tile.GetObject(false));
 }
 
-u32 Game::GetRating(void)
+u32 Game::GetRating()
 {
     Settings & conf = Settings::Get();
     u32 rating = 50;
@@ -273,7 +273,7 @@ u32 Game::GetRating(void)
     return rating;
 }
 
-u32 Game::GetGameOverScores(void)
+u32 Game::GetGameOverScores()
 {
     Settings & conf = Settings::Get();
 
@@ -306,7 +306,7 @@ u32 Game::GetGameOverScores(void)
     return GetRating() * (200 - nk) / 100;
 }
 
-void Game::ShowLoadMapsText(void)
+void Game::ShowLoadMapsText()
 {
     Display & display = Display::Get();
     const Rect pos(0, display.h() / 2, display.w(), display.h() / 2);
@@ -318,7 +318,7 @@ void Game::ShowLoadMapsText(void)
     display.Flip();
 }
 
-u32 Game::GetLostTownDays(void)
+u32 Game::GetLostTownDays()
 {
     return GameStatic::GetGameOverLostDays();
 }
@@ -360,7 +360,7 @@ void Game::UpdateGlobalDefines(const std::string & spec)
 #endif
 }
 
-u32 Game::GetWhirlpoolPercent(void)
+u32 Game::GetWhirlpoolPercent()
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
 }
@@ -442,12 +442,12 @@ std::string Game::GetEncodeString(const std::string & str1)
     return str1;
 }
 
-int Game::GetKingdomColors(void)
+int Game::GetKingdomColors()
 {
     return Settings::Get().GetPlayers().GetColors();
 }
 
-int Game::GetActualKingdomColors(void)
+int Game::GetActualKingdomColors()
 {
     return Settings::Get().GetPlayers().GetActualColors();
 }
@@ -502,7 +502,7 @@ std::string Game::CountScoute(u32 count, int scoute, bool shorts)
     return res;
 }
 
-void Game::PlayPickupSound(void)
+void Game::PlayPickupSound()
 {
     int wav = M82::UNKNOWN;
 

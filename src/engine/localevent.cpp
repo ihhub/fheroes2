@@ -44,32 +44,32 @@ LocalEvent::LocalEvent() : modes(0), key_value(KEY_NONE), mouse_state(0),
 #endif
 }
 
-const Point & LocalEvent::GetMousePressLeft(void) const
+const Point & LocalEvent::GetMousePressLeft() const
 {
     return mouse_pl;
 }
 
-const Point & LocalEvent::GetMousePressMiddle(void) const
+const Point & LocalEvent::GetMousePressMiddle() const
 {
     return mouse_pm;
 }
 
-const Point & LocalEvent::GetMousePressRight(void) const
+const Point & LocalEvent::GetMousePressRight() const
 {
     return mouse_pr;
 }
 
-const Point & LocalEvent::GetMouseReleaseLeft(void) const
+const Point & LocalEvent::GetMouseReleaseLeft() const
 {
     return mouse_rl;
 }
 
-const Point & LocalEvent::GetMouseReleaseMiddle(void) const
+const Point & LocalEvent::GetMouseReleaseMiddle() const
 {
     return mouse_rm;
 }
 
-const Point & LocalEvent::GetMouseReleaseRight(void) const
+const Point & LocalEvent::GetMouseReleaseRight() const
 {
     return mouse_rr;
 }
@@ -283,7 +283,7 @@ KeySym GetKeySym(int key)
     return KEY_NONE;
 }
 
-LocalEvent & LocalEvent::Get(void)
+LocalEvent & LocalEvent::Get()
 {
     static LocalEvent le;
 
@@ -396,7 +396,7 @@ bool LocalEvent::HandleEvents(bool delay)
     return true;
 }
 
-bool LocalEvent::MouseMotion(void) const
+bool LocalEvent::MouseMotion() const
 {
     return modes & MOUSE_MOTION;
 }
@@ -406,32 +406,32 @@ bool LocalEvent::MouseMotion(const Rect &rt) const
     return modes & MOUSE_MOTION ? rt & mouse_cu : false;
 }
 
-bool LocalEvent::MousePressLeft(void) const
+bool LocalEvent::MousePressLeft() const
 {
     return (modes & MOUSE_PRESSED) && SDL_BUTTON_LEFT == mouse_button;
 }
 
-bool LocalEvent::MouseReleaseLeft(void) const
+bool LocalEvent::MouseReleaseLeft() const
 {
     return !(modes & MOUSE_PRESSED) && SDL_BUTTON_LEFT == mouse_button;
 }
 
-bool LocalEvent::MousePressMiddle(void) const
+bool LocalEvent::MousePressMiddle() const
 {
     return (modes & MOUSE_PRESSED) && SDL_BUTTON_MIDDLE  == mouse_button;
 }
 
-bool LocalEvent::MouseReleaseMiddle(void) const
+bool LocalEvent::MouseReleaseMiddle() const
 {
     return !(modes & MOUSE_PRESSED) && SDL_BUTTON_MIDDLE  == mouse_button;
 }
 
-bool LocalEvent::MousePressRight(void) const
+bool LocalEvent::MousePressRight() const
 {
     return (modes & MOUSE_PRESSED) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
-bool LocalEvent::MouseReleaseRight(void) const
+bool LocalEvent::MouseReleaseRight() const
 {
     return !(modes & MOUSE_PRESSED) && SDL_BUTTON_RIGHT == mouse_button;
 }
@@ -537,7 +537,7 @@ void LocalEvent::HandleMouseButtonEvent(const SDL_MouseButtonEvent & button)
 	}
 }
 
-bool LocalEvent::MouseClickLeft(void)
+bool LocalEvent::MouseClickLeft()
 {
     if(MouseReleaseLeft() && (CLICK_LEFT & modes))
     {
@@ -560,7 +560,7 @@ bool LocalEvent::MouseClickLeft(const Rect &rt)
     return false;
 }
 
-bool LocalEvent::MouseClickMiddle(void)
+bool LocalEvent::MouseClickMiddle()
 {
     if(MouseReleaseMiddle() && (CLICK_MIDDLE & modes))
     {
@@ -582,7 +582,7 @@ bool LocalEvent::MouseClickMiddle(const Rect &rt)
     return false;
 }
 
-bool LocalEvent::MouseClickRight(void)
+bool LocalEvent::MouseClickRight()
 {
     if(MouseReleaseRight() && (CLICK_RIGHT & modes))
     {
@@ -604,7 +604,7 @@ bool LocalEvent::MouseClickRight(const Rect &rt)
     return false;
 }
 
-bool LocalEvent::MouseWheelUp(void) const
+bool LocalEvent::MouseWheelUp() const
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
     return (modes & MOUSE_PRESSED) && SDL_BUTTON_X1 == mouse_button;
@@ -613,7 +613,7 @@ bool LocalEvent::MouseWheelUp(void) const
 #endif
 }
 
-bool LocalEvent::MouseWheelDn(void) const
+bool LocalEvent::MouseWheelDn() const
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
     return (modes & MOUSE_PRESSED) && SDL_BUTTON_X2 == mouse_button;
@@ -657,37 +657,37 @@ bool LocalEvent::MouseReleaseRight(const Rect &rt) const
     return MouseReleaseRight() && (rt & mouse_rr);
 }
 
-void LocalEvent::ResetPressLeft(void)
+void LocalEvent::ResetPressLeft()
 {
     mouse_pl.x = -1;
     mouse_pl.y = -1;
 }
 
-void LocalEvent::ResetPressRight(void)
+void LocalEvent::ResetPressRight()
 {
     mouse_pr.x = -1;
     mouse_pr.y = -1;
 }
 
-void LocalEvent::ResetPressMiddle(void)
+void LocalEvent::ResetPressMiddle()
 {
     mouse_pm.x = -1;
     mouse_pm.y = -1;
 }
 
-void LocalEvent::ResetReleaseLeft(void)
+void LocalEvent::ResetReleaseLeft()
 {
     mouse_rl.x = -1;
     mouse_rl.y = -1;
 }
 
-void LocalEvent::ResetReleaseRight(void)
+void LocalEvent::ResetReleaseRight()
 {
     mouse_rr.x = -1;
     mouse_rr.y = -1;
 }
 
-void LocalEvent::ResetReleaseMiddle(void)
+void LocalEvent::ResetReleaseMiddle()
 {
     mouse_rm.x = -1;
     mouse_rm.y = -1;
@@ -708,7 +708,7 @@ bool LocalEvent::MouseCursor(const Rect &rt) const
     return rt & mouse_cu;
 }
 
-const Point & LocalEvent::GetMouseCursor(void)
+const Point & LocalEvent::GetMouseCursor()
 {
 #ifdef WITHOUT_MOUSE
     if(!emulate_mouse)
@@ -728,17 +728,17 @@ const Point & LocalEvent::GetMouseCursor(void)
     return mouse_cu;
 }
 
-int LocalEvent::KeyMod(void) const
+int LocalEvent::KeyMod() const
 {
     return SDL_GetModState();
 }
 
-KeySym LocalEvent::KeyValue(void) const
+KeySym LocalEvent::KeyValue() const
 {
     return key_value;
 }
 
-bool LocalEvent::KeyPress(void) const
+bool LocalEvent::KeyPress() const
 {
     return modes & KEY_PRESSED;
 }
@@ -801,7 +801,7 @@ int LocalEvent::GetState(u32 type)
     return SDL_EventState(type, SDL_QUERY);
 }
          
-void LocalEvent::SetStateDefaults(void)
+void LocalEvent::SetStateDefaults()
 {
     SetState(SDL_USEREVENT, true);
     SetState(SDL_KEYDOWN, true);
@@ -834,7 +834,7 @@ void LocalEvent::SetStateDefaults(void)
 }
 
 #ifdef WITHOUT_MOUSE
-void LocalEvent::ToggleEmulateMouse(void)
+void LocalEvent::ToggleEmulateMouse()
 {
     emulate_mouse = emulate_mouse ? false : true;
 }

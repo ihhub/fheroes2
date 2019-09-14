@@ -45,7 +45,7 @@ struct IndexObjectMap : public std::map<s32, int>
 struct AIKingdom
 {
     AIKingdom() : capital(NULL) {};
-    void Reset(void);
+    void Reset();
 
     Castle*         capital;
     IndexObjectMap  scans;
@@ -55,10 +55,10 @@ class AIKingdoms : public std::vector<AIKingdom>
 {
 public:
     static AIKingdom & Get(int color);
-    static void Reset(void);
+    static void Reset();
 
 private:
-    static AIKingdoms & Get(void);
+    static AIKingdoms & Get();
     AIKingdoms() : std::vector<AIKingdom>(KINGDOMMAX + 1) {};
 };
 
@@ -71,8 +71,8 @@ struct AIHero
 {
     AIHero() : primary_target(-1), fix_loop(0) {};
 
-    void ClearTasks(void) { sheduled_visit.clear(); }
-    void Reset(void);
+    void ClearTasks() { sheduled_visit.clear(); }
+    void Reset();
 
     Queue           sheduled_visit;
     s32             primary_target;
@@ -83,10 +83,10 @@ struct AIHeroes : public std::vector<AIHero>
 {
 public:
     static AIHero & Get(const Heroes &);
-    static void Reset(void);
+    static void Reset();
 
 private:
-    static AIHeroes & Get(void);
+    static AIHeroes & Get();
     AIHeroes() : std::vector<AIHero>(HEROESMAXCOUNT + 2) {};
 };
 

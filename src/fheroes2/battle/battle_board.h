@@ -44,16 +44,16 @@ namespace Battle
     public:
 	Board();
 
-	void		Reset(void);
+	void		Reset();
 
-	Rect		GetArea(void) const;
+	Rect		GetArea() const;
 	void		SetArea(const Rect &);
 
 	s32		GetIndexAbsPosition(const Point &) const;
 	Indexes		GetPassableQualityPositions(const Unit & b);
 	Indexes		GetNearestTroopIndexes(s32, const Indexes*) const;
 	Indexes		GetAStarPath(const Unit &, const Position &, bool debug = true);
-	std::string	AllUnitsInfo(void) const;
+	std::string	AllUnitsInfo() const;
 
 	void		SetEnemyQuality(const Unit &);
 	void		SetPositionQuality(const Unit &);
@@ -63,7 +63,7 @@ namespace Battle
 	void		SetCobjObject(int icn, s32);
 	void		SetCovrObjects(int icn);
 
-	static std::string	GetMoatInfo(void);
+	static std::string	GetMoatInfo();
 
 	static Cell*		GetCell(s32, int = CENTER);
 	static bool		isNearIndexes(s32, s32);

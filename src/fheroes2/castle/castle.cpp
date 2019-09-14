@@ -180,7 +180,7 @@ void Castle::LoadFromMP2(StreamBuf st)
     PostLoad();
 }
 
-void Castle::PostLoad(void)
+void Castle::PostLoad()
 {
     // dwelling pack
     if(building & DWELLING_MONSTER1) dwelling[0]  = Monster(race, DWELLING_MONSTER1).GetGrown();
@@ -239,27 +239,27 @@ void Castle::PostLoad(void)
     DEBUG(DBG_GAME , DBG_INFO, (building & BUILD_CASTLE ? "castle" : "town") << ": " << name << ", color: " << Color::String(GetColor()) << ", race: " << Race::String(race));
 }
 
-Captain & Castle::GetCaptain(void)
+Captain & Castle::GetCaptain()
 {
     return captain;
 }
 
-const Captain & Castle::GetCaptain(void) const
+const Captain & Castle::GetCaptain() const
 {
     return captain;
 }
 
-bool Castle::isCastle(void) const
+bool Castle::isCastle() const
 {
     return building & BUILD_CASTLE;
 }
 
-bool Castle::isCapital(void) const
+bool Castle::isCapital() const
 {
     return Modes(CAPITAL);
 }
 
-u32 Castle::CountBuildings(void) const
+u32 Castle::CountBuildings() const
 {
     const u32 tavern = (race == Race::NECR ? (Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : 0) : BUILD_TAVERN);
 
@@ -286,7 +286,7 @@ bool Castle::isPosition(const Point & pt) const
             ((pt.x == mp.x - 2 || pt.x == mp.x + 2) && pt.y == mp.y));
 }
 
-void Castle::EducateHeroes(void)
+void Castle::EducateHeroes()
 {
     // for learns new spells need 1 day
     if(GetLevelMageGuild())
@@ -307,7 +307,7 @@ void Castle::EducateHeroes(void)
     }
 }
 
-void Castle::ActionNewDay(void)
+void Castle::ActionNewDay()
 {
     EducateHeroes();
 
@@ -336,7 +336,7 @@ u32* Castle::GetDwelling(u32 dw)
     return NULL;
 }
 
-void Castle::ActionNewWeek(void)
+void Castle::ActionNewWeek()
 {
     ResetModes(DISABLEHIRES);
 
@@ -389,7 +389,7 @@ void Castle::ActionNewWeek(void)
     }
 }
 
-void Castle::ActionNewMonth(void)
+void Castle::ActionNewMonth()
 {
     // population halved
     if(world.GetWeekType().GetType() == Week::PLAGUE)
@@ -426,7 +426,7 @@ void Castle::ChangeColor(int cl)
 }
 
 // return mage guild level
-int Castle::GetLevelMageGuild(void) const
+int Castle::GetLevelMageGuild() const
 {
     if(building & BUILD_MAGEGUILD5) return 5;
     else
@@ -441,17 +441,17 @@ int Castle::GetLevelMageGuild(void) const
     return 0;
 }
 
-const MageGuild & Castle::GetMageGuild(void) const
+const MageGuild & Castle::GetMageGuild() const
 {
     return mageguild;
 }
 
-bool Castle::HaveLibraryCapability(void) const
+bool Castle::HaveLibraryCapability() const
 {
     return race == Race::WZRD;
 }
 
-bool Castle::isLibraryBuild(void) const
+bool Castle::isLibraryBuild() const
 {
     return race == Race::WZRD && isBuild(BUILD_SPEC);
 }
@@ -1586,12 +1586,12 @@ int Castle::GetICNBuilding(u32 build, int race)
     return ICN::UNKNOWN;
 }
 
-CastleHeroes Castle::GetHeroes(void) const
+CastleHeroes Castle::GetHeroes() const
 {
     return world.GetHeroes(*this);
 }
 
-bool Castle::HaveNearlySea(void) const
+bool Castle::HaveNearlySea() const
 {
     // check nearest ocean
     if(Maps::isValidAbsPoint(center.x, center.y + 2))
@@ -1612,7 +1612,7 @@ bool TilePresentBoat(const Maps::Tiles & tile)
 	(tile.GetObject() == MP2::OBJ_BOAT || tile.GetObject() == MP2::OBJ_HEROES);
 }
 
-bool Castle::PresentBoat(void) const
+bool Castle::PresentBoat() const
 {
     // 2 cell down
     if(Maps::isValidAbsPoint(center.x, center.y + 2))
@@ -1757,7 +1757,7 @@ bool Castle::PredicateIsBuildMarketplace(const Castle* castle)
     return castle && castle->isBuild(BUILD_MARKETPLACE);
 }
 
-std::string Castle::String(void) const
+std::string Castle::String() const
 {
     std::ostringstream os;
     const CastleHeroes heroes = GetHeroes();
@@ -1872,7 +1872,7 @@ int Castle::GetLuckModificator(std::string *strs) const
     return result;
 }
 
-void Castle::RecruitAllMonster(void)
+void Castle::RecruitAllMonster()
 {
     bool skip_recruit = false;
 
@@ -1887,39 +1887,39 @@ void Castle::RecruitAllMonster(void)
 	if(isBuild(dw)) RecruitMonsterFromDwelling(dw, GetDwellingLivedCount(dw));
 }
 
-const Army & Castle::GetArmy(void) const
+const Army & Castle::GetArmy() const
 {
     const CastleHeroes heroes = world.GetHeroes(*this);
     return heroes.Guard() ? heroes.Guard()->GetArmy() : army;
 }
 
-Army & Castle::GetArmy(void)
+Army & Castle::GetArmy()
 {
     CastleHeroes heroes = world.GetHeroes(*this);
     return heroes.Guard() ? heroes.Guard()->GetArmy() : army;
 }
 
-const Army & Castle::GetActualArmy(void) const
+const Army & Castle::GetActualArmy() const
 {
     CastleHeroes heroes = world.GetHeroes(*this);
     const Heroes* hero = heroes.GuardFirst();
     return hero ? hero->GetArmy() : army;
 }
 
-Army & Castle::GetActualArmy(void)
+Army & Castle::GetActualArmy()
 {
     CastleHeroes heroes = world.GetHeroes(*this);
     Heroes* hero = heroes.GuardFirst();
     return hero ? hero->GetArmy() : army;
 }
 
-bool Castle::AllowBuyBoat(void) const
+bool Castle::AllowBuyBoat() const
 {
     // check payment and present other boat
     return (HaveNearlySea() && GetKingdom().AllowPayment(PaymentConditions::BuyBoat()) && !PresentBoat());
 }
 
-bool Castle::BuyBoat(void)
+bool Castle::BuyBoat()
 {
     if(!AllowBuyBoat()) return false;
     if(isControlHuman()) AGG::PlaySound(M82::BUILDTWN);
@@ -1957,23 +1957,23 @@ bool Castle::BuyBoat(void)
     return true;
 }
 
-int Castle::GetRace(void) const
+int Castle::GetRace() const
 {
     return race;
 }
 
-const std::string & Castle::GetName(void) const
+const std::string & Castle::GetName() const
 {
     return name;
 }
 
-int Castle::GetControl(void) const
+int Castle::GetControl() const
 {
     /* gray towns: ai control */
     return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
-bool Castle::AllowBuild(void) const
+bool Castle::AllowBuild() const
 {
     return Modes(ALLOWBUILD);
 }
@@ -1983,17 +1983,17 @@ bool Castle::isBuild(u32 bd) const
     return building & bd;
 }
 
-bool Castle::isNecromancyShrineBuild(void) const
+bool Castle::isNecromancyShrineBuild() const
 {
     return race == Race::NECR && (BUILD_SHRINE & building);
 }
 
-u32 Castle::GetGrownWell(void)
+u32 Castle::GetGrownWell()
 {
     return GameStatic::GetCastleGrownWell();
 }
 
-u32 Castle::GetGrownWel2(void)
+u32 Castle::GetGrownWel2()
 {
     return GameStatic::GetCastleGrownWel2();
 }
@@ -2004,17 +2004,17 @@ u32 Castle::GetGrownWeekOf(const Monster & mons)
                 mons.GetGrown() : GameStatic::GetCastleGrownWeekOf();
 }
 
-u32 Castle::GetGrownMonthOf(void)
+u32 Castle::GetGrownMonthOf()
 {
     return GameStatic::GetCastleGrownMonthOf();
 }
 
-void Castle::Scoute(void) const
+void Castle::Scoute() const
 {
     Maps::ClearFog(GetIndex(), Game::GetViewDistance(isCastle() ? Game::VIEW_CASTLE : Game::VIEW_TOWN), GetColor());
 }
 
-void Castle::JoinRNDArmy(void)
+void Castle::JoinRNDArmy()
 {
     const Monster mon1(race, DWELLING_MONSTER1);
     const Monster mon2(race, DWELLING_MONSTER2);
@@ -2046,7 +2046,7 @@ void Castle::JoinRNDArmy(void)
     }
 }
 
-void Castle::ActionPreBattle(void)
+void Castle::ActionPreBattle()
 {
     if(isControlAI())
 	AI::CastlePreBattle(*this);
@@ -2087,7 +2087,7 @@ Castle* VecCastles::Get(const Point & position) const
     return end() != it ? *it : NULL;
 }
 
-Castle* VecCastles::GetFirstCastle(void) const
+Castle* VecCastles::GetFirstCastle() const
 {
     const_iterator it = std::find_if(begin(), end(),
 	    std::mem_fun(&Castle::isCastle));
@@ -2111,13 +2111,13 @@ AllCastles::~AllCastles()
     AllCastles::clear();
 }
 
-void AllCastles::Init(void)
+void AllCastles::Init()
 {
     if(size())
 	AllCastles::clear();
 }
 
-void AllCastles::clear(void)
+void AllCastles::clear()
 {
     for(iterator
         it = begin(); it != end(); ++it) delete *it;

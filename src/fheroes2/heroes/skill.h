@@ -73,29 +73,29 @@ namespace Skill
 	Secondary();
 	Secondary(int skill, int level);
 
-	void		Reset(void);
+	void		Reset();
 	void		Set(const Secondary &);
 	void		SetSkill(int);
 	void		SetLevel(int);
-	void		NextLevel(void);
+	void		NextLevel();
 
-	int		Level(void) const;
-	int		Skill(void) const;
+	int		Level() const;
+	int		Skill() const;
 
 	bool		isLevel(int) const;
 	bool		isSkill(int) const;
-	bool		isValid(void) const;
+	bool		isValid() const;
 
-	const char*	GetName(void) const;
-	std::string	GetDescription(void) const;
-	u32		GetValues(void) const;
+	const char*	GetName() const;
+	std::string	GetDescription() const;
+	u32		GetValues() const;
 
 	/* index sprite from SECSKILL */
-	int		GetIndexSprite1(void) const;
+	int		GetIndexSprite1() const;
 	/* index sprite from MINISS */
-	int		GetIndexSprite2(void) const;
+	int		GetIndexSprite2() const;
 
-	static int	RandForWitchsHut(void);
+	static int	RandForWitchsHut();
 	static const char*
 			String(int);
     };
@@ -114,10 +114,10 @@ namespace Skill
 	void		FindSkillsForLevelUp(int race, Secondary &, Secondary &) const;
 	void		FillMax(const Skill::Secondary &);
 	Secondary*	FindSkill(int);
-	std::string	String(void) const;
-	int		Count(void) const;
+	std::string	String() const;
+	int		Count() const;
 	std::vector<Secondary> &
-			ToVector(void);
+			ToVector();
 
     protected:
 	friend StreamBase & operator<< (StreamBase &, const SecSkills &);
@@ -135,16 +135,16 @@ namespace Skill
 
 	enum { UNKNOWN = 0, ATTACK = 1, DEFENSE = 2, POWER = 3, KNOWLEDGE = 4 };
 
-    	virtual int GetAttack(void) const = 0;
-	virtual int GetDefense(void) const = 0;
-        virtual int GetPower(void) const = 0;
-        virtual int GetKnowledge(void) const = 0;
-	virtual int GetMorale(void) const = 0;
-	virtual int GetLuck(void) const = 0;
-	virtual int GetRace(void) const = 0;
+    	virtual int GetAttack() const = 0;
+	virtual int GetDefense() const = 0;
+        virtual int GetPower() const = 0;
+        virtual int GetKnowledge() const = 0;
+	virtual int GetMorale() const = 0;
+	virtual int GetLuck() const = 0;
+	virtual int GetRace() const = 0;
 
-	virtual bool	isCaptain(void) const;
-	virtual bool	isHeroes(void) const;
+	virtual bool	isCaptain() const;
+	virtual bool	isHeroes() const;
 
 	int		LevelUp(int race, int level);
 

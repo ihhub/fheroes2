@@ -145,32 +145,32 @@ bool Battle::TargetInfo::operator==(const TargetInfo & ta) const
     return defender == ta.defender;
 }
 
-Battle::Arena* Battle::GetArena(void)
+Battle::Arena* Battle::GetArena()
 {
     return arena;
 }
 
-const Castle* Battle::Arena::GetCastle(void)
+const Castle* Battle::Arena::GetCastle()
 {
     return arena->castle;
 }
 
-Battle::Bridge* Battle::Arena::GetBridge(void)
+Battle::Bridge* Battle::Arena::GetBridge()
 {
     return arena->bridge;
 }
 
-Battle::Board* Battle::Arena::GetBoard(void)
+Battle::Board* Battle::Arena::GetBoard()
 {
     return &arena->board;
 }
 
-Battle::Graveyard* Battle::Arena::GetGraveyard(void)
+Battle::Graveyard* Battle::Arena::GetGraveyard()
 {
     return &arena->graveyard;
 }
 
-Battle::Interface* Battle::Arena::GetInterface(void)
+Battle::Interface* Battle::Arena::GetInterface()
 {
     return arena->interface;
 }
@@ -387,13 +387,13 @@ void Battle::Arena::TurnTroop(Unit* current_troop)
     }
 }
 
-bool Battle::Arena::BattleValid(void) const
+bool Battle::Arena::BattleValid() const
 {
     return army1->isValid() && army2->isValid() &&
 	0 == result_game.army1 && 0 == result_game.army2;
 }
 
-void Battle::Arena::Turns(void)
+void Battle::Arena::Turns()
 {
     const Settings & conf = Settings::Get();
 
@@ -515,7 +515,7 @@ void Battle::Arena::TowerAction(const Tower & twr)
     }
 }
 
-void Battle::Arena::CatapultAction(void)
+void Battle::Arena::CatapultAction()
 {
     if(catapult)
     {
@@ -573,27 +573,27 @@ const Battle::Unit* Battle::Arena::GetTroopBoard(s32 index) const
     return Board::isValidIndex(index) ? board[index].GetUnit() : NULL;
 }
 
-const HeroBase* Battle::Arena::GetCommander1(void) const
+const HeroBase* Battle::Arena::GetCommander1() const
 {
     return army1->GetCommander();
 }
 
-const HeroBase* Battle::Arena::GetCommander2(void) const
+const HeroBase* Battle::Arena::GetCommander2() const
 {
     return army2->GetCommander();
 }
 
-int Battle::Arena::GetArmyColor1(void) const
+int Battle::Arena::GetArmyColor1() const
 {
     return army1->GetColor();
 }
 
-int Battle::Arena::GetArmyColor2(void) const
+int Battle::Arena::GetArmyColor2() const
 {
     return army2->GetColor();
 }
 
-int Battle::Arena::GetCurrentColor(void) const
+int Battle::Arena::GetCurrentColor() const
 {
     return current_color;
 }
@@ -651,12 +651,12 @@ const Battle::Unit* Battle::Arena::GetEnemyMaxQuality(int my_color) const
     return res;
 }
 
-void Battle::Arena::FadeArena(void) const
+void Battle::Arena::FadeArena() const
 {
     if(interface) interface->FadeArena();
 }
 
-const SpellStorage & Battle::Arena::GetUsageSpells(void) const
+const SpellStorage & Battle::Arena::GetUsageSpells() const
 {
     return usage_spells;
 }
@@ -793,7 +793,7 @@ const Battle::Unit* Battle::Arena::GraveyardLastTroop(s32 index) const
     return GetTroopUID(graveyard.GetLastTroopUID(index));
 }
 
-Battle::Indexes Battle::Arena::GraveyardClosedCells(void) const
+Battle::Indexes Battle::Arena::GraveyardClosedCells() const
 {
     return graveyard.GetClosedCells();
 }
@@ -844,7 +844,7 @@ u32 Battle::Arena::GetCastleTargetValue(int target) const
     return 0;
 }
 
-std::vector<int> Battle::Arena::GetCastleTargets(void) const
+std::vector<int> Battle::Arena::GetCastleTargets() const
 {
     std::vector<int> targets;
     targets.reserve(8);
@@ -918,12 +918,12 @@ const HeroBase* Battle::Arena::GetCommander(int color, bool invert) const
     return commander;
 }
 
-const HeroBase* Battle::Arena::GetCurrentCommander(void) const
+const HeroBase* Battle::Arena::GetCurrentCommander() const
 {
     return GetCommander(current_color);
 }
 
-bool Battle::Arena::NetworkTurn(void)
+bool Battle::Arena::NetworkTurn()
 {
     return interface && interface->NetworkTurn(result_game);
 }
@@ -1114,12 +1114,12 @@ u32 Battle::Arena::GetObstaclesPenalty(const Unit & attacker, const Unit & defen
     return result;
 }
 
-Battle::Force & Battle::Arena::GetForce1(void)
+Battle::Force & Battle::Arena::GetForce1()
 {
     return *army1;
 }
 
-Battle::Force & Battle::Arena::GetForce2(void)
+Battle::Force & Battle::Arena::GetForce2()
 {
     return *army2;
 }
@@ -1132,33 +1132,33 @@ Battle::Force & Battle::Arena::GetForce(int color, bool invert)
     return invert ? *army1 : *army2;
 }
 
-Battle::Force & Battle::Arena::GetCurrentForce(void)
+Battle::Force & Battle::Arena::GetCurrentForce()
 {
     return GetForce(current_color, false);
 }
 
-int Battle::Arena::GetICNCovr(void) const
+int Battle::Arena::GetICNCovr() const
 {
     return icn_covr;
 }
 
-u32 Battle::Arena::GetCurrentTurn(void) const
+u32 Battle::Arena::GetCurrentTurn() const
 {
     return current_turn;
 }
 
-Battle::Result & Battle::Arena::GetResult(void)
+Battle::Result & Battle::Arena::GetResult()
 {
     return result_game;
 }
 
-bool Battle::Arena::CanBreakAutoBattle(void) const
+bool Battle::Arena::CanBreakAutoBattle() const
 {
     return (auto_battle & current_color) && GetCurrentCommander() &&
 	! GetCurrentCommander()->isControlAI();
 }
 
-void Battle::Arena::BreakAutoBattle(void)
+void Battle::Arena::BreakAutoBattle()
 {
     auto_battle &= ~current_color;
 }

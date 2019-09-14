@@ -38,17 +38,17 @@ void UltimateArtifact::Set(s32 pos, const Artifact & a)
     MakeSurface();
 }
 
-const Surface & UltimateArtifact::GetPuzzleMapSurface(void) const
+const Surface & UltimateArtifact::GetPuzzleMapSurface() const
 {
     return puzzlemap;
 }
 
-const Artifact & UltimateArtifact::GetArtifact(void) const
+const Artifact & UltimateArtifact::GetArtifact() const
 {
     return *this;
 }
 
-bool UltimateArtifact::isFound(void) const
+bool UltimateArtifact::isFound() const
 {
     return isfound;
 }
@@ -63,7 +63,7 @@ bool UltimateArtifact::isPosition(s32 pos) const
     return 0 <= index && pos == index;
 }
 
-void UltimateArtifact::Reset(void)
+void UltimateArtifact::Reset()
 {
     Artifact::Reset();
     puzzlemap.Reset();
@@ -71,7 +71,7 @@ void UltimateArtifact::Reset(void)
     isfound = false;
 }
 
-void UltimateArtifact::MakeSurface(void)
+void UltimateArtifact::MakeSurface()
 {
     if(Maps::isValidAbsIndex(index))
 	puzzlemap = Interface::GameArea::GenerateUltimateArtifactAreaSurface(index);

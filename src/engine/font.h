@@ -40,19 +40,19 @@ public:
     FontTTF();
     ~FontTTF();
 
-    TTF_Font* operator() (void) const { return ptr; }
+    TTF_Font* operator() () const { return ptr; }
 
-    static void Init(void);
-    static void Quit(void);
+    static void Init();
+    static void Quit();
 
     bool Open(const std::string &, int size);
-    bool isValid(void) const;
+    bool isValid() const;
     void SetStyle(int);
 
-    int Height(void) const;
-    int Ascent(void) const;
-    int Descent(void) const;
-    int LineSkip(void) const;
+    int Height() const;
+    int Ascent() const;
+    int Descent() const;
+    int LineSkip() const;
 
     Surface RenderText(const std::string &, const RGBA &, bool solid /* or blended */);
     Surface RenderChar(char, const RGBA &, bool solid /* or blended */);

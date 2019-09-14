@@ -45,7 +45,7 @@ namespace Battle
     struct TargetsInfo;
     struct Result;
 
-    void DialogBattleSettings(void);
+    void DialogBattleSettings();
     bool DialogBattleSurrender(const HeroBase &, u32);
 
     enum { OP_IDLE, OP_SRRW, OP_CAST };
@@ -55,14 +55,14 @@ namespace Battle
     public:
 	OpponentSprite(const Rect &, const HeroBase*, bool);
 
-        const Rect &	GetArea(void) const;
-        void		Redraw(void) const;
+        const Rect &	GetArea() const;
+        void		Redraw() const;
 	void		ResetAnimFrame(int);
 	void		IncreaseAnimFrame(bool loop = false);
-	bool		isFinishFrame(void) const;
-	bool		isStartFrame(void) const;
-	int		GetColor(void) const;
-        const HeroBase* GetHero(void) const;
+	bool		isFinishFrame() const;
+	bool		isStartFrame() const;
+	int		GetColor() const;
+        const HeroBase* GetHero() const;
 
     private:
         const HeroBase	*base;
@@ -82,9 +82,9 @@ namespace Battle
         void		SetPosition(s32, s32);
 	void		SetLogs(StatusListBox* logs) {listlog = logs; };
         void		SetMessage(const std::string &, bool = false);
-        void		Redraw(void);
+        void		Redraw();
 	const std::string &
-			GetMessage(void) const;
+			GetMessage() const;
 
     private:
 	Text		bar1;
@@ -122,7 +122,7 @@ namespace Battle
         PopupDamageInfo();
 
         void		SetInfo(const Cell*, const Unit*, const Unit*);
-        void		Reset(void);
+        void		Reset();
         void		Redraw(int, int);
 
     private:
@@ -138,15 +138,15 @@ namespace Battle
 	Interface(Arena &, s32);
 	~Interface();
 
-	void	Redraw(void);
+	void	Redraw();
 	void	HumanTurn(const Unit &, Actions &);
 	bool	NetworkTurn(Result &);
 
-	const Rect & GetArea(void) const;
+	const Rect & GetArea() const;
 
 	void	SetStatus(const std::string &, bool = false);
 	void	SetArmiesOrder(const Units*);
-	void	FadeArena(void);
+	void	FadeArena();
 
         void	RedrawActionAttackPart1(Unit &, Unit &, const TargetsInfo &);
         void	RedrawActionAttackPart2(Unit &, TargetsInfo &);
@@ -173,22 +173,22 @@ namespace Battle
 	void	HumanBattleTurn(const Unit &, Actions &, std::string &);
 	void	HumanCastSpellTurn(const Unit &, Actions &, std::string &);
 
-	void	RedrawBorder(void);
-	void	RedrawCover(void);
+	void	RedrawBorder();
+	void	RedrawCover();
 	void	RedrawCoverStatic(Surface &);
 	void	RedrawLowObjects(s32, Surface &) const;
 	void	RedrawHighObjects(s32) const;
 	void	RedrawCastle1(const Castle &, Surface &) const;
 	void	RedrawCastle2(const Castle &, s32) const;
 	void	RedrawCastle3(const Castle &) const;
-	void	RedrawKilled(void);
-	void	RedrawInterface(void);
-	void	RedrawOpponents(void) const;
-	void	RedrawOpponentsFlags(void) const;
-	void	RedrawArmies(void) const;
+	void	RedrawKilled();
+	void	RedrawInterface();
+	void	RedrawOpponents() const;
+	void	RedrawOpponentsFlags() const;
+	void	RedrawArmies() const;
 	void	RedrawTroopSprite(const Unit &) const;
 	void	RedrawTroopCount(const Unit &) const;
-	void	RedrawPocketControls(void) const;
+	void	RedrawPocketControls() const;
 
 	void	RedrawActionWincesKills(TargetsInfo &);
 	void	RedrawActionArrowSpell(const Unit &);
@@ -207,15 +207,15 @@ namespace Battle
 	void	RedrawTargetsWithFrameAnimation(s32, const TargetsInfo &, int, int);
 	void	RedrawTargetsWithFrameAnimation(const TargetsInfo &, int, int, bool);
 
-	bool	IdleTroopsAnimation(void);
+	bool	IdleTroopsAnimation();
 	void	CheckGlobalEvents(LocalEvent &);
 
 	void	ProcessingHeroDialogResult(int, Actions &);
 
 	void	EventAutoSwitch(const Unit &, Actions &);
-	void	EventShowOptions(void);
+	void	EventShowOptions();
 	void	ButtonAutoAction(const Unit &, Actions &);
-	void	ButtonSettingsAction(void);
+	void	ButtonSettingsAction();
 	void	ButtonSkipAction(Actions &);
 	void	ButtonWaitAction(Actions &);
 	void	MouseLeftClickBoardAction(u32, const Cell &, Actions &);

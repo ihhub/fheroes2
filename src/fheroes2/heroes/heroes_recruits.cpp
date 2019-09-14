@@ -30,38 +30,38 @@ Recruits::Recruits() : std::pair<int, int>(Heroes::UNKNOWN, Heroes::UNKNOWN)
 {
 }
 
-void Recruits::Reset(void)
+void Recruits::Reset()
 {
     first = Heroes::UNKNOWN;
     second = Heroes::UNKNOWN;
 }
 
-int Recruits::GetID1(void) const
+int Recruits::GetID1() const
 {
     return first;
 }
 
-int Recruits::GetID2(void) const
+int Recruits::GetID2() const
 {
     return second;
 }
 
-const Heroes* Recruits::GetHero1(void) const
+const Heroes* Recruits::GetHero1() const
 {
     return world.GetHeroes(first);
 }
 
-const Heroes* Recruits::GetHero2(void) const
+const Heroes* Recruits::GetHero2() const
 {
     return world.GetHeroes(second);
 }
 
-Heroes* Recruits::GetHero1(void)
+Heroes* Recruits::GetHero1()
 {
     return world.GetHeroes(first);
 }
 
-Heroes* Recruits::GetHero2(void)
+Heroes* Recruits::GetHero2()
 {
     return world.GetHeroes(second);
 }

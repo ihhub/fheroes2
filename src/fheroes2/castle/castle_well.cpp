@@ -66,7 +66,7 @@ u32 HowManyRecruitMonster(const Castle & castle, u32 dw, const Funds & add, Fund
     return count;
 }
 
-void Castle::OpenWell(void)
+void Castle::OpenWell()
 {
     const Settings & conf = Settings::Get();
     Display & display = Display::Get();

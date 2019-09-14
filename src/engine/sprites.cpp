@@ -31,12 +31,12 @@ SpritePos::SpritePos(const Surface & sf, const Point & pt) : Surface(sf), pos(pt
 {
 }
 
-const Point & SpritePos::GetPos(void) const
+const Point & SpritePos::GetPos() const
 {
     return pos;
 }
 
-Rect SpritePos::GetArea(void) const
+Rect SpritePos::GetArea() const
 {
     return Rect(GetPos(), GetSize());
 }
@@ -51,13 +51,13 @@ void SpritePos::SetPos(const Point & pt)
     pos = pt;
 }
 
-void SpritePos::Reset(void)
+void SpritePos::Reset()
 {
     pos = Point(0, 0);
     Surface::Reset();
 }
 
-u32 SpritePos::GetMemoryUsage(void) const
+u32 SpritePos::GetMemoryUsage() const
 {
     return Surface::GetMemoryUsage() + sizeof(pos);
 }
@@ -66,7 +66,7 @@ SpriteBack::SpriteBack()
 {
 }
 
-u32 SpriteBack::GetMemoryUsage(void) const
+u32 SpriteBack::GetMemoryUsage() const
 {
     return Surface::GetMemoryUsage() + sizeof(pos);
 }
@@ -82,7 +82,7 @@ void SpriteBack::SetPos(const Point & pt)
     pos.y = pt.y;
 }
 
-bool SpriteBack::isValid(void) const
+bool SpriteBack::isValid() const
 {
     return Surface::isValid();
 }
@@ -110,30 +110,30 @@ void SpriteBack::Save(const Point & pt)
     Save(Rect(pt, GetSize()));
 }
 
-void SpriteBack::Restore(void)
+void SpriteBack::Restore()
 {
     if(Surface::isValid())
 	Blit(GetPos(), Display::Get());
 }
 
-void SpriteBack::Destroy(void)
+void SpriteBack::Destroy()
 {
     Surface::FreeSurface(*this);
     pos.w = 0;
     pos.h = 0;
 }
 
-const Point & SpriteBack::GetPos(void) const
+const Point & SpriteBack::GetPos() const
 {
     return pos;
 }
 
-const Size & SpriteBack::GetSize(void) const
+const Size & SpriteBack::GetSize() const
 {
     return pos;
 }
 
-const Rect & SpriteBack::GetArea(void) const
+const Rect & SpriteBack::GetArea() const
 {
     return pos;
 }
@@ -162,7 +162,7 @@ void SpriteMove::Move(int ax, int ay)
     Move(Point(ax, ay));
 }
 
-void SpriteMove::Hide(void)
+void SpriteMove::Hide()
 {
     if(isVisible())
     {
@@ -181,33 +181,33 @@ void SpriteMove::Show(const Point & pos)
     }
 }
 
-void SpriteMove::Redraw(void)
+void SpriteMove::Redraw()
 {
     Hide();
     Show();
 }
 
-void SpriteMove::Show(void)
+void SpriteMove::Show()
 {
     Show(GetPos());
 }
 
-bool SpriteMove::isVisible(void) const
+bool SpriteMove::isVisible() const
 {
     return mode & _VISIBLE;
 }
 
-const Point & SpriteMove::GetPos(void) const
+const Point & SpriteMove::GetPos() const
 {
     return background.GetPos();
 }
 
-const Rect & SpriteMove::GetArea(void) const
+const Rect & SpriteMove::GetArea() const
 {
     return background.GetArea();
 }
 
-u32 SpriteMove::GetMemoryUsage(void) const
+u32 SpriteMove::GetMemoryUsage() const
 {
     return Surface::GetMemoryUsage() +
 	background.GetMemoryUsage() + sizeof(mode);

@@ -33,7 +33,7 @@
 
 #ifndef BUILD_RELEASE
 
-void TestMonsterSprite(void)
+void TestMonsterSprite()
 {
     // cursor
     Cursor & cursor = Cursor::Get();

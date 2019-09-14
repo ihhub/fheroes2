@@ -73,7 +73,7 @@ namespace Maps
     s32 GetIndexFromAbsPoint(const Point & mp);
     s32 GetIndexFromAbsPoint(s32 px, s32 py);
 
-    Indexes GetAllIndexes(void);
+    Indexes GetAllIndexes();
     Indexes GetAroundIndexes(s32);
     Indexes GetAroundIndexes(s32, int dist, bool sort = false); // sorting distance
     Indexes GetDistanceIndexes(s32 center, int dist);

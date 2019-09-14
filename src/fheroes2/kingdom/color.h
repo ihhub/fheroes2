@@ -58,7 +58,7 @@ class Colors : public std::vector<int>
 public:
     Colors(int = Color::ALL);
 
-    std::string String(void) const;
+    std::string String() const;
 };
 
 class Kingdom;
@@ -77,9 +77,9 @@ public:
     bool	isFriends(int) const;
     void	SetColor(int);
 
-    Kingdom &	GetKingdom(void) const;
+    Kingdom &	GetKingdom() const;
 
-    int GetColor(void) const { return color; }
+    int GetColor() const { return color; }
 };
 
 StreamBase & operator<< (StreamBase &, const ColorBase &);

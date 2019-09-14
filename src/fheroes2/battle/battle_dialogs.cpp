@@ -57,7 +57,7 @@ void Battle::SpeedRedraw(const Point & dst)
     text.Blit(dst.x + (sprite.w() - text.w()) / 2, dst.y + sprite.h() - 15);
 }
 
-void Battle::DialogBattleSettings(void)
+void Battle::DialogBattleSettings()
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();

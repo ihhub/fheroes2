@@ -190,17 +190,17 @@ HeroBase::HeroBase() : magic_point(0), move_point(0), spell_book()
 {
 }
 
-bool HeroBase::isCaptain(void) const
+bool HeroBase::isCaptain() const
 {
     return GetType() == CAPTAIN;
 }
 
-bool HeroBase::isHeroes(void) const
+bool HeroBase::isHeroes() const
 {
     return GetType() == HEROES;
 }
 
-u32 HeroBase::GetSpellPoints(void) const
+u32 HeroBase::GetSpellPoints() const
 {
     return magic_point;
 }
@@ -215,7 +215,7 @@ bool HeroBase::HaveSpellPoints(const Spell & spell) const
     return magic_point >= spell.SpellPoint(this);
 }
 
-void HeroBase::EditSpellBook(void)
+void HeroBase::EditSpellBook()
 {
     spell_book.Edit(*this);
 }
@@ -225,7 +225,7 @@ Spell HeroBase::OpenSpellBook(int filter, bool canselect) const
     return spell_book.Open(*this, filter, canselect);
 }
 
-bool HeroBase::HaveSpellBook(void) const
+bool HeroBase::HaveSpellBook() const
 {
     return HasArtifact(Artifact::MAGIC_BOOK);
 }
@@ -249,18 +249,18 @@ void HeroBase::AppendSpellsToBook(const SpellStorage & spells, bool without_wisd
 	AppendSpellToBook(*it, without_wisdom);
 }
 
-bool HeroBase::SpellBookActivate(void)
+bool HeroBase::SpellBookActivate()
 {
     return ! HaveSpellBook() &&
 	    bag_artifacts.PushArtifact(Artifact::MAGIC_BOOK);
 }
 
-const BagArtifacts & HeroBase::GetBagArtifacts(void) const
+const BagArtifacts & HeroBase::GetBagArtifacts() const
 {
     return bag_artifacts;
 }
 
-BagArtifacts & HeroBase::GetBagArtifacts(void)
+BagArtifacts & HeroBase::GetBagArtifacts()
 {
     return bag_artifacts;
 }

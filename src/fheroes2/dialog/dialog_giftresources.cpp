@@ -58,12 +58,12 @@ struct SelectRecipientsColors
 	}
     }
 
-    s32 GetIndexClick(void) const
+    s32 GetIndexClick() const
     {
 	return GetIndexClickRects(positions);
     }
 
-    void Redraw(void) const
+    void Redraw() const
     {
 	for(Colors::const_iterator
     	    it = colors.begin(); it != colors.end(); ++it)
@@ -76,7 +76,7 @@ struct SelectRecipientsColors
 	}
     }
 
-    bool QueueEventProcessing(void)
+    bool QueueEventProcessing()
     {
 	const s32 index = GetIndexClick();
 
@@ -139,7 +139,7 @@ struct ResourceBar
 	}
     }
 
-    s32 GetIndexClick(void) const
+    s32 GetIndexClick() const
     {
 	return GetIndexClickRects(positions);
     }
@@ -195,7 +195,7 @@ struct ResourceBar
     }
 };
 
-void Dialog::MakeGiftResource(void)
+void Dialog::MakeGiftResource()
 {
     Cursor & cursor = Cursor::Get();
     Display & display = Display::Get();

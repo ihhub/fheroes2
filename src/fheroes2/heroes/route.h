@@ -36,11 +36,11 @@ namespace Route
 	    Step() : from(-1), direction(Direction::CENTER), penalty(0) {}
 	    Step(s32 index, int dir, u32 cost) : from(index), direction(dir), penalty(cost) {}
 
-	    s32		GetIndex(void) const;
-	    u32		GetPenalty(void) const;
-	    s32 	GetFrom(void) const;
-	    int 	GetDirection(void) const;
-	    bool	isBad(void) const;
+	    s32		GetIndex() const;
+	    u32		GetPenalty() const;
+	    s32 	GetFrom() const;
+	    int 	GetDirection() const;
+	    bool	isBad() const;
 
 	protected:
     	    friend StreamBase & operator<< (StreamBase &, const Step &);
@@ -59,30 +59,30 @@ namespace Route
 
 	    Path &	operator= (const Path &);
 
-	    s32		GetDestinationIndex(void) const;
-	    s32		GetLastIndex(void) const;
-	    s32		GetDestinedIndex(void) const;
-	    int		GetFrontDirection(void) const;
-	    u32		GetFrontPenalty(void) const;
-	    u32		GetTotalPenalty(void) const;
+	    s32		GetDestinationIndex() const;
+	    s32		GetLastIndex() const;
+	    s32		GetDestinedIndex() const;
+	    int		GetFrontDirection() const;
+	    u32		GetFrontPenalty() const;
+	    u32		GetTotalPenalty() const;
 	    bool	Calculate(const s32 &, int limit = -1);
 
-	    void	Show(void){ hide = false; }
-	    void	Hide(void){ hide = true; }
-	    void	Reset(void);
-	    void	PopFront(void);
-	    void	PopBack(void);
-	    void	RescanObstacle(void);
-	    void	RescanPassable(void);
+	    void	Show(){ hide = false; }
+	    void	Hide(){ hide = true; }
+	    void	Reset();
+	    void	PopFront();
+	    void	PopBack();
+	    void	RescanObstacle();
+	    void	RescanPassable();
 
-	    bool	isComplete(void) const;
-	    bool	isValid(void) const;
-	    bool	isShow(void) const { return !hide; }
-	    bool	hasObstacle(void) const;
+	    bool	isComplete() const;
+	    bool	isValid() const;
+	    bool	isShow() const { return !hide; }
+	    bool	hasObstacle() const;
 
-	    std::string	String(void) const;
+	    std::string	String() const;
 
-	    s32		GetAllowStep(void) const;
+	    s32		GetAllowStep() const;
     	    static int	GetIndexSprite(int from, int to, int mod);
 
 	private:

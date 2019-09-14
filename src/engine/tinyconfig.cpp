@@ -93,7 +93,7 @@ bool TinyConfig::Save(const std::string & cfile) const
     return true;
 }
 
-void TinyConfig::Clear(void)
+void TinyConfig::Clear()
 {
     clear();
 }

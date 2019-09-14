@@ -33,7 +33,7 @@ enum { INCOME_CAPTURED = 0x01, INCOME_CASTLES = 0x02, INCOME_ARTIFACTS = 0x04, I
 namespace PaymentConditions
 {
     payment_t BuyBuilding(int race, u32 build);
-    payment_t BuyBoat(void);
+    payment_t BuyBoat();
     payment_t BuySpellBook(int shrine = 0);
     payment_t RecruitHero(int level);
     payment_t ForAlchemist(int arts);

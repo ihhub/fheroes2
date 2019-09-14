@@ -34,7 +34,7 @@ namespace Dialog
 }
 
 /* return 0x01 - change speed, 0x02 - change sound, 0x04 - change music, 0x08 - change interface, 0x10 - change scroll  */
-int Dialog::SystemOptions(void)
+int Dialog::SystemOptions()
 {
     Display & display = Display::Get();
     Settings & conf = Settings::Get();

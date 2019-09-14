@@ -62,8 +62,8 @@ namespace Battle
         Command(int cmd, int param1, int param2, const Indexes &);
         Command(int cmd, int param1, int param2 = -1, int param3 = -1, int param4 = -1);
 
-        int		GetType(void) const { return type; }
-	int		GetValue(void);
+        int		GetType() const { return type; }
+	int		GetValue();
         bool		isType(int msg) const { return type == msg; }
 
 	Command &	operator<< (const int &);

@@ -78,10 +78,10 @@ namespace Dialog
     };
 
     int		AdventureOptions(bool enabledig);
-    int		FileOptions(void);
-    int		SystemOptions(void);
-    std::string SelectFileLoad(void);
-    std::string SelectFileSave(void);
+    int		FileOptions();
+    int		SystemOptions();
+    std::string SelectFileLoad();
+    std::string SelectFileSave();
     // show info cell maps
     void	QuickInfo(const Maps::Tiles &);
     void	QuickInfo(const Castle &);
@@ -98,7 +98,7 @@ namespace Dialog
     int		SpriteInfo(const std::string &, const std::string &, const Surface &, int buttons = Dialog::OK);
     int		ArtifactInfo(const std::string &, const std::string &, const Artifact &, int buttons = Dialog::OK);
     int		ResourceInfo(const std::string &, const std::string &, const Funds &, int buttons = Dialog::OK);
-    int		SelectSkillFromArena(void);
+    int		SelectSkillFromArena();
     bool	SelectCount(const std::string &, u32 min, u32 max, u32 & res, int step = 1);
     bool	InputString(const std::string &, std::string &);
     Troop	RecruitMonster(const Monster &, u32 available, bool);
@@ -109,11 +109,11 @@ namespace Dialog
     int		ArmyJoinWithCost(const Troop &, u32 join, u32 gold, Heroes &);
     int		ArmySplitTroop(int free_slots, u32 max, u32 &, bool);
     void	Marketplace(bool fromTradingPost = false);
-    void	MakeGiftResource(void);
+    void	MakeGiftResource();
     int		BuyBoat(bool enable);
-    void	PuzzleMaps(void);
+    void	PuzzleMaps();
     void	ThievesGuild(bool oracle);
-    void	GameInfo(void);
+    void	GameInfo();
 
     class FrameBox
     {
@@ -121,7 +121,7 @@ namespace Dialog
 	FrameBox(int height, bool buttons = false);
 	~FrameBox();
 
-	const Rect &	GetArea(void){ return area; };
+	const Rect &	GetArea(){ return area; };
 
     protected:
 	SpriteBack	background;
@@ -138,14 +138,14 @@ namespace Dialog
 	~FrameBorder();
 
 	void	SetBorder(int);
-	int	BorderWidth(void) const;
-	int	BorderHeight(void) const;
-	bool	isValid(void) const;
+	int	BorderWidth() const;
+	int	BorderHeight() const;
+	bool	isValid() const;
 	void	SetPosition(s32, s32, u32 = 0, u32 = 0);
 
-	const Rect & GetRect(void) const;
-	const Rect & GetArea(void) const;
-	const Rect & GetTop(void) const;
+	const Rect & GetRect() const;
+	const Rect & GetArea() const;
+	const Rect & GetTop() const;
 
 	static void RenderRegular(const Rect &);
 	static void RenderOther(const Surface &, const Rect &);

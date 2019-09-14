@@ -67,7 +67,7 @@ void Kingdom::Init(int clr)
     }
 }
 
-void Kingdom::clear(void)
+void Kingdom::clear()
 {
     modes	= 0;
 
@@ -84,37 +84,37 @@ void Kingdom::clear(void)
     heroes_cond_loss.clear();
 }
 
-int Kingdom::GetControl(void) const
+int Kingdom::GetControl() const
 {
     return Players::GetPlayerControl(color);
 }
 
-int Kingdom::GetColor(void) const
+int Kingdom::GetColor() const
 {
     return color;
 }
 
-int Kingdom::GetRace(void) const
+int Kingdom::GetRace() const
 {
     return Players::GetPlayerRace(GetColor());
 }
 
-void Kingdom::UpdateStartingResource(void)
+void Kingdom::UpdateStartingResource()
 {
     resource = GameStatic::GetKingdomStartingResource(isControlAI() ? 5 : Settings::Get().GameDifficulty());
 }
 
-bool Kingdom::isLoss(void) const
+bool Kingdom::isLoss() const
 {
     return castles.empty() && heroes.empty();
 }
 
-bool Kingdom::isPlay(void) const
+bool Kingdom::isPlay() const
 {
     return Players::GetPlayerInGame(color);
 }
 
-void Kingdom::LossPostActions(void)
+void Kingdom::LossPostActions()
 {
     if(isPlay())
     {
@@ -135,13 +135,13 @@ void Kingdom::LossPostActions(void)
     }
 }
 
-void Kingdom::ActionBeforeTurn(void)
+void Kingdom::ActionBeforeTurn()
 {
     // rescan heroes path
     std::for_each(heroes.begin(), heroes.end(), std::mem_fun(&Heroes::RescanPath));
 }
 
-void Kingdom::ActionNewDay(void)
+void Kingdom::ActionNewDay()
 {
     if(isLoss() || 0 == lost_town_days)
     {
@@ -178,7 +178,7 @@ void Kingdom::ActionNewDay(void)
     visit_object.remove_if(Visit::isDayLife);
 }
 
-void Kingdom::ActionNewWeek(void)
+void Kingdom::ActionNewWeek()
 {
     ResetModes(DISABLEHIRES);
 
@@ -206,7 +206,7 @@ void Kingdom::ActionNewWeek(void)
     UpdateRecruits();
 }
 
-void Kingdom::ActionNewMonth(void)
+void Kingdom::ActionNewMonth()
 {
     // skip first day
     if(1 < world.CountDay())
@@ -243,7 +243,7 @@ void Kingdom::AddHeroStartCondLoss(Heroes* hero)
     heroes_cond_loss.push_back(hero);
 }
 
-const Heroes* Kingdom::GetFirstHeroStartCondLoss(void) const
+const Heroes* Kingdom::GetFirstHeroStartCondLoss() const
 {
     for(KingdomHeroes::const_iterator
         it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it)
@@ -252,7 +252,7 @@ const Heroes* Kingdom::GetFirstHeroStartCondLoss(void) const
     return NULL;
 }
 
-std::string Kingdom::GetNamesHeroStartCondLoss(void) const
+std::string Kingdom::GetNamesHeroStartCondLoss() const
 {
     std::string result;
     for(KingdomHeroes::const_iterator
@@ -307,22 +307,22 @@ void Kingdom::RemoveCastle(const Castle* castle)
     if(isLoss()) LossPostActions();
 }
 
-u32 Kingdom::GetCountCastle(void) const
+u32 Kingdom::GetCountCastle() const
 {
     return std::count_if(castles.begin(), castles.end(), Castle::PredicateIsCastle);
 }
 
-u32 Kingdom::GetCountTown(void) const
+u32 Kingdom::GetCountTown() const
 {
     return std::count_if(castles.begin(), castles.end(), Castle::PredicateIsTown);
 }
 
-u32 Kingdom::GetCountMarketplace(void) const
+u32 Kingdom::GetCountMarketplace() const
 {
     return std::count_if(castles.begin(), castles.end(), Castle::PredicateIsBuildMarketplace);
 }
 
-u32 Kingdom::GetCountNecromancyShrineBuild(void) const
+u32 Kingdom::GetCountNecromancyShrineBuild() const
 {
     return std::count_if(castles.begin(), castles.end(), std::mem_fun(&Castle::isNecromancyShrineBuild));
 }
@@ -373,12 +373,12 @@ void Kingdom::SetVisited(s32 index, int object)
     if(!isVisited(index, object) && object != MP2::OBJ_ZERO) visit_object.push_front(IndexObject(index, object));
 }
 
-bool Kingdom::HeroesMayStillMove(void) const
+bool Kingdom::HeroesMayStillMove() const
 {
     return heroes.end() != std::find_if(heroes.begin(), heroes.end(), std::mem_fun(&Heroes::MayStillMove));
 }
 
-u32 Kingdom::GetCountCapital(void) const
+u32 Kingdom::GetCountCapital() const
 {
     return std::count_if(castles.begin(), castles.end(), Castle::PredicateIsCapital);
 }
@@ -393,12 +393,12 @@ void Kingdom::OddFundsResource(const Funds & funds)
     resource = resource - funds;
 }
 
-u32 Kingdom::GetLostTownDays(void) const
+u32 Kingdom::GetLostTownDays() const
 {
     return lost_town_days;
 }
 
-Recruits & Kingdom::GetRecruits(void)
+Recruits & Kingdom::GetRecruits()
 {
     // update hero1
     if(Heroes::UNKNOWN == recruits.GetID1() || (recruits.GetHero1() && !recruits.GetHero1()->isFreeman()))
@@ -413,7 +413,7 @@ Recruits & Kingdom::GetRecruits(void)
     return recruits;
 }
 
-void Kingdom::UpdateRecruits(void)
+void Kingdom::UpdateRecruits()
 {
     recruits.SetHero1(world.GetFreemanHeroes(GetRace()));
     recruits.SetHero2(world.GetFreemanHeroes());
@@ -421,12 +421,12 @@ void Kingdom::UpdateRecruits(void)
     if(recruits.GetID1() == recruits.GetID2()) world.UpdateRecruits(recruits);
 }
 
-const Puzzle & Kingdom::PuzzleMaps(void) const
+const Puzzle & Kingdom::PuzzleMaps() const
 {
     return puzzle_maps;
 }
 
-Puzzle & Kingdom::PuzzleMaps(void)
+Puzzle & Kingdom::PuzzleMaps()
 {
     return puzzle_maps;
 }
@@ -446,7 +446,7 @@ bool Kingdom::AllowRecruitHero(bool check_payment, int level) const
     return (heroes.size() < GetMaxHeroes()) && (!check_payment || AllowPayment(PaymentConditions::RecruitHero(level)));
 }
 
-void Kingdom::ApplyPlayWithStartingHero(void)
+void Kingdom::ApplyPlayWithStartingHero()
 {
     if(isPlay() && castles.size())
     {
@@ -480,12 +480,12 @@ void Kingdom::ApplyPlayWithStartingHero(void)
     }
 }
 
-u32 Kingdom::GetMaxHeroes(void)
+u32 Kingdom::GetMaxHeroes()
 {
     return GameStatic::GetKingdomMaxHeroes();
 }
 
-void Kingdom::HeroesActionNewPosition(void)
+void Kingdom::HeroesActionNewPosition()
 {
     // Heroes::ActionNewPosition: can remove elements from heroes vector.
     KingdomHeroes heroes2(heroes);
@@ -560,12 +560,12 @@ Funds Kingdom::GetIncome(int type /* INCOME_ALL */) const
     return resource;
 }
 
-const Heroes* Kingdom::GetBestHero(void) const
+const Heroes* Kingdom::GetBestHero() const
 {
     return heroes.size() ? *std::max_element(heroes.begin(), heroes.end(), HeroesStrongestArmy) : NULL;
 }
 
-u32 Kingdom::GetArmiesStrength(void) const
+u32 Kingdom::GetArmiesStrength() const
 {
     u32 res = 0;
 
@@ -584,7 +584,7 @@ Kingdoms::Kingdoms()
 {
 }
 
-void Kingdoms::Init(void)
+void Kingdoms::Init()
 {
     const Colors colors(Settings::Get().GetPlayers().GetColors());
 
@@ -595,18 +595,18 @@ void Kingdoms::Init(void)
 	GetKingdom(*it).Init(*it);
 }
 
-u32 Kingdoms::size(void) const
+u32 Kingdoms::size() const
 {
     return KINGDOMMAX + 1;
 }
 
-void Kingdoms::clear(void)
+void Kingdoms::clear()
 {
     for(u32 ii = 0; ii < size(); ++ii)
 	kingdoms[ii].clear();
 }
 
-void Kingdoms::ApplyPlayWithStartingHero(void)
+void Kingdoms::ApplyPlayWithStartingHero()
 {
     for(u32 ii = 0; ii < size(); ++ii)
 	if(kingdoms[ii].isPlay()) kingdoms[ii].ApplyPlayWithStartingHero();
@@ -650,37 +650,37 @@ void Kingdom::SetLastLostHero(Heroes & hero)
     lost_hero.second = world.CountDay();
 }
 
-void Kingdom::ResetLastLostHero(void)
+void Kingdom::ResetLastLostHero()
 {
     lost_hero.first = Heroes::UNKNOWN;
     lost_hero.second = 0;
 }
 
-Heroes* Kingdom::GetLastLostHero(void) const
+Heroes* Kingdom::GetLastLostHero() const
 {
     return Heroes::UNKNOWN != lost_hero.first && world.CountDay() - lost_hero.second < DAYOFWEEK ?
 		world.GetHeroes(lost_hero.first) : NULL;
 }
 
-void Kingdoms::NewDay(void)
+void Kingdoms::NewDay()
 {
     for(u32 ii = 0; ii < size(); ++ii)
 	if(kingdoms[ii].isPlay()) kingdoms[ii].ActionNewDay();
 }
 
-void Kingdoms::NewWeek(void)
+void Kingdoms::NewWeek()
 {
     for(u32 ii = 0; ii < size(); ++ii)
 	if(kingdoms[ii].isPlay()) kingdoms[ii].ActionNewWeek();
 }
 
-void Kingdoms::NewMonth(void)
+void Kingdoms::NewMonth()
 {
     for(u32 ii = 0; ii < size(); ++ii)
 	if(kingdoms[ii].isPlay()) kingdoms[ii].ActionNewMonth();
 }
 
-int Kingdoms::GetNotLossColors(void) const
+int Kingdoms::GetNotLossColors() const
 {
     int result = 0;
     for(u32 ii = 0; ii < size(); ++ii)
@@ -689,7 +689,7 @@ int Kingdoms::GetNotLossColors(void) const
     return result;
 }
 
-int Kingdoms::GetLossColors(void) const
+int Kingdoms::GetLossColors() const
 {
     int result = 0;
     for(u32 ii = 0; ii < size(); ++ii)

@@ -40,12 +40,12 @@ void StreamBase::setconstbuf(bool f)
 	flags &= ~0x00001000;
 }
 
-bool StreamBase::isconstbuf(void) const
+bool StreamBase::isconstbuf() const
 {
     return flags & 0x00001000;
 }
 
-bool StreamBase::bigendian(void) const
+bool StreamBase::bigendian() const
 {
     return flags & 0x80000000;
 }
@@ -66,7 +66,7 @@ void StreamBase::setfail(bool f)
 	flags &= ~0x00000001;
 }
 
-bool StreamBase::fail(void) const
+bool StreamBase::fail() const
 {
     return flags & 0x00000001;
 }
@@ -315,43 +315,43 @@ StreamBuf & StreamBuf::operator= (const StreamBuf & st)
     return *this;
 }
 
-size_t StreamBuf::capacity(void) const
+size_t StreamBuf::capacity() const
 {
     return itend - itbeg;
 }
 
-const u8* StreamBuf::data(void) const
+const u8* StreamBuf::data() const
 {
     return itget;
 }
 
-size_t StreamBuf::size(void) const
+size_t StreamBuf::size() const
 {
     return sizeg();
 }
 
-void StreamBuf::reset(void)
+void StreamBuf::reset()
 {
     itput = itbeg;
     itget = itbeg;
 }
 
-size_t StreamBuf::tellg(void) const
+size_t StreamBuf::tellg() const
 {
     return itget - itbeg;
 }
 
-size_t StreamBuf::tellp(void) const
+size_t StreamBuf::tellp() const
 {
     return itput - itbeg;
 }
 
-size_t StreamBuf::sizeg(void) const
+size_t StreamBuf::sizeg() const
 {
     return itput - itget;
 }
 
-size_t StreamBuf::sizep(void) const
+size_t StreamBuf::sizep() const
 {
     return itend - itput;
 }
@@ -390,7 +390,7 @@ void StreamBuf::realloc(size_t sz)
     }
 }
 
-void StreamBuf::setfail(void)
+void StreamBuf::setfail()
 {
     flags |= 0x00000001;
 }
@@ -594,13 +594,13 @@ bool StreamFile::open(const std::string & fn, const char* mode)
     return rw;
 }
 
-void StreamFile::close(void)
+void StreamFile::close()
 {
     if(rw) SDL_RWclose(rw);
     rw = NULL;
 }
 
-size_t StreamFile::size(void) const
+size_t StreamFile::size() const
 {
     if(rw)
     {
@@ -613,7 +613,7 @@ size_t StreamFile::size(void) const
     return 0;
 }
 
-size_t StreamFile::tell(void) const
+size_t StreamFile::tell() const
 {
     return tellg();
 }
@@ -623,7 +623,7 @@ void StreamFile::seek(size_t pos)
     if(rw) SDL_RWseek(rw, pos, RW_SEEK_SET);
 }
 
-size_t StreamFile::sizeg(void) const
+size_t StreamFile::sizeg() const
 {
     if(rw)
     {
@@ -635,17 +635,17 @@ size_t StreamFile::sizeg(void) const
     return 0;
 }
 
-size_t StreamFile::tellg(void) const
+size_t StreamFile::tellg() const
 {
     return rw ? SDL_RWtell(rw) : 0;
 }
 
-size_t StreamFile::sizep(void) const
+size_t StreamFile::sizep() const
 {
     return sizeg();
 }
 
-size_t StreamFile::tellp(void) const
+size_t StreamFile::tellp() const
 {
     return tellg();
 }

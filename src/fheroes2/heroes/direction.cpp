@@ -189,7 +189,7 @@ int Direction::Reflect(int direct)
     return UNKNOWN;
 }
 
-Directions Direction::All(void)
+Directions Direction::All()
 {
     const int directs[] = { TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT };
     return Directions(directs, directs + 8);

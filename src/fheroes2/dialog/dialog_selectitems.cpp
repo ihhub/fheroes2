@@ -60,8 +60,8 @@ public:
     };
 
     void RedrawItem(const int &, s32, s32, bool){};
-    void ActionCurrentUp(void){};
-    void ActionCurrentDn(void){};
+    void ActionCurrentUp(){};
+    void ActionCurrentDn(){};
     void ActionListSingleClick(int &){};
     void ActionListPressRight(int &){};
 
@@ -194,7 +194,7 @@ public:
     };
 };
 
-Skill::Secondary Dialog::SelectSecondarySkill(void)
+Skill::Secondary Dialog::SelectSecondarySkill()
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();

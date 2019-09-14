@@ -35,7 +35,7 @@ public:
 
     bool	Load(const std::string &);
     bool	Save(const std::string &) const;
-    void	Clear(void);
+    void	Clear();
 
     void	AddEntry(const std::string &, const std::string &, bool uniq = true);
     void	AddEntry(const std::string &, int, bool uniq = true);

@@ -186,66 +186,66 @@ public:
 	SETTINGS_LAST
     };
 
-    static Settings & Get(void);
+    static Settings & Get();
 
     bool Read(const std::string &);
     bool Save(const std::string &) const;
 
-    std::string		String(void) const;
+    std::string		String() const;
     void		SetCurrentFileInfo(const Maps::FileInfo &);
     const Maps::FileInfo &
-			CurrentFileInfo(void) const;
+			CurrentFileInfo() const;
 
-    int			Debug(void) const;
-    int			HeroesMoveSpeed(void) const;
-    int			AIMoveSpeed(void) const;
-    int			BattleSpeed(void) const;
-    int			ScrollSpeed(void) const;
-    u32			MemoryLimit(void) const;
+    int			Debug() const;
+    int			HeroesMoveSpeed() const;
+    int			AIMoveSpeed() const;
+    int			BattleSpeed() const;
+    int			ScrollSpeed() const;
+    u32			MemoryLimit() const;
 
-    const std::string & PlayMusCommand(void) const;
-    const std::string & SelectVideoDriver(void) const;
+    const std::string & PlayMusCommand() const;
+    const std::string & SelectVideoDriver() const;
 
-    int			GameDifficulty(void) const;
+    int			GameDifficulty() const;
 
-    const std::string & MapsCharset(void) const;
-    const std::string & ForceLang(void) const;
-    const std::string & FontsNormal(void) const;
-    const std::string & FontsSmall(void) const;
-    int			FontsNormalSize(void) const;
-    int			FontsSmallSize(void) const;
-    bool		FontSmallRenderBlended(void) const;
-    bool		FontNormalRenderBlended(void) const;
+    const std::string & MapsCharset() const;
+    const std::string & ForceLang() const;
+    const std::string & FontsNormal() const;
+    const std::string & FontsSmall() const;
+    int			FontsNormalSize() const;
+    int			FontsSmallSize() const;
+    bool		FontSmallRenderBlended() const;
+    bool		FontNormalRenderBlended() const;
 
-    const Point &	PosRadar(void) const;
-    const Point &	PosButtons(void) const;
-    const Point &	PosIcons(void) const;
-    const Point &	PosStatus(void) const;
+    const Point &	PosRadar() const;
+    const Point &	PosButtons() const;
+    const Point &	PosIcons() const;
+    const Point &	PosStatus() const;
 
     void		SetPosRadar(const Point &);
     void		SetPosButtons(const Point &);
     void		SetPosIcons(const Point &);
     void		SetPosStatus(const Point &);
 
-    bool		FullScreen(void) const;
-    bool		QVGA(void) const;
-    bool		Sound(void) const;
-    bool		Music(void) const;
-    bool		ShowControlPanel(void) const;
-    bool		ShowRadar(void) const;
-    bool		ShowIcons(void) const;
-    bool		ShowButtons(void) const;
-    bool		ShowStatus(void) const;
-    bool		Unicode(void) const;
-    bool		PocketPC(void) const;
-    bool		UseAltResource(void) const;
-    bool		PriceLoyaltyVersion(void) const;
-    bool		LoadedGameVersion(void) const;
-    bool		MusicExt(void) const;
-    bool		MusicMIDI(void) const;
-    bool		MusicCD(void) const;
-    void		BinarySave(void) const;
-    void		BinaryLoad(void);
+    bool		FullScreen() const;
+    bool		QVGA() const;
+    bool		Sound() const;
+    bool		Music() const;
+    bool		ShowControlPanel() const;
+    bool		ShowRadar() const;
+    bool		ShowIcons() const;
+    bool		ShowButtons() const;
+    bool		ShowStatus() const;
+    bool		Unicode() const;
+    bool		PocketPC() const;
+    bool		UseAltResource() const;
+    bool		PriceLoyaltyVersion() const;
+    bool		LoadedGameVersion() const;
+    bool		MusicExt() const;
+    bool		MusicMIDI() const;
+    bool		MusicCD() const;
+    void		BinarySave() const;
+    void		BinaryLoad();
 
     bool		CanChangeInGame(u32) const;
     bool		ExtModes(u32) const;
@@ -253,84 +253,84 @@ public:
     void		ExtResetModes(u32);
     const char*		ExtName(u32) const;
 
-    bool ExtHeroLearnSpellsWithDay(void) const;
-    bool ExtHeroBuySpellBookFromShrine(void) const;
-    bool ExtHeroRecruitCostDependedFromLevel(void) const;
-    bool ExtHeroRememberPointsForRetreating(void) const;
-    bool ExtHeroSurrenderingGiveExp(void) const;
-    bool ExtHeroRecalculateMovement(void) const;
-    bool ExtHeroPatrolAllowPickup(void) const;
-    bool ExtHeroAllowTranscribingScroll(void) const;
-    bool ExtHeroAutoMove2BattleTarget(void) const;
-    bool ExtHeroAllowBannedSecSkillsUpgrade(void) const;
-    bool ExtHeroArenaCanChoiseAnySkills(void) const;
-    bool ExtUnionsAllowCastleVisiting(void) const;
-    bool ExtUnionsAllowHeroesMeetings(void) const;
-    bool ExtUnionsAllowViewMaps(void) const;
-    bool ExtWorldShowVisitedContent(void) const;
-    bool ExtWorldScouteExtended(void) const;
-    bool ExtWorldAbandonedMineRandom(void) const;
-    bool ExtWorldSaveMonsterBattle(void) const;
-    bool ExtWorldAllowSetGuardian(void) const;
-    bool ExtWorldNoRequirementsForArtifacts(void) const;
-    bool ExtWorldArtifactCrystalBall(void) const;
-    bool ExtWorldOnlyFirstMonsterAttack(void) const;
-    bool ExtWorldEyeEagleAsScholar(void) const;
-    bool ExtWorldBanMonthOfMonsters(void) const;
-    bool ExtWorldBanWeekOf(void) const;
-    bool ExtWorldNewVersionWeekOf(void) const;
-    bool ExtWorldBanPlagues(void) const;
-    bool ExtWorldArtesianSpringSeparatelyVisit(void) const;
-    bool ExtWorldStartHeroLossCond4Humans(void) const;
-    bool ExtWorldOneHeroHiredEveryWeek(void) const;
-    bool ExtWorldDwellingsAccumulateUnits(void) const;
-    bool ExtWorldUseUniqueArtifactsML(void) const;
-    bool ExtWorldUseUniqueArtifactsRS(void) const;
-    bool ExtWorldUseUniqueArtifactsPS(void) const;
-    bool ExtWorldUseUniqueArtifactsSS(void) const;
-    bool ExtWorldExtObjectsCaptured(void) const;
-    bool ExtWorldGuardianObjectsTwoDefense(void) const;
-    bool ExtWorldDisableBarrowMounds(void) const;
-    bool ExtCastleAllowBuyFromWell(void) const;
-    bool ExtCastleAllowGuardians(void) const;
-    bool ExtCastleAllowFlash(void) const;
-    bool ExtCastleGuildRestorePointsTurn(void) const;
-    bool ExtCastleAllowRecruitSpecialHeroes(void) const;
-    bool ExtCastleOneHeroHiredEveryWeek(void) const;
-    bool ExtBattleShowDamage(void) const;
-    bool ExtBattleSoftWait(void) const;
-    bool ExtBattleMagicTroopCanResist(void) const;
-    bool ExtBattleArchmageCanResistBadMagic(void) const;
-    bool ExtBattleObjectsArchersPenalty(void) const;
-    bool ExtBattleMergeArmies(void) const;
-    bool ExtBattleSkipIncreaseDefense(void) const;
-    bool ExtBattleReverseWaitOrder(void) const;
-    bool ExtBattleShowGrid(void) const;
-    bool ExtBattleShowMouseShadow(void) const;
-    bool ExtBattleShowMoveShadow(void) const;
-    bool ExtGameRememberLastFocus(void) const;
-    bool ExtGameContinueAfterVictory(void) const;
-    bool ExtGameRewriteConfirm(void) const;
-    bool ExtGameAutosaveConfirm(void) const;
-    bool ExtGameShowSystemInfo(void) const;
-    bool ExtGameAutosaveBeginOfDay(void) const;
-    bool ExtGameAutosaveOn(void) const;
-    bool ExtGameUseFade(void) const;
-    bool ExtGameShowSDL(void) const;
-    bool ExtGameEvilInterface(void) const;
-    bool ExtGameDynamicInterface(void) const;
-    bool ExtGameHideInterface(void) const;
-    bool ExtPocketHideCursor(void) const;
-    bool ExtPocketLowMemory(void) const;
-    bool ExtPocketTapMode(void) const;
-    bool ExtPocketDragDropScroll(void) const;
+    bool ExtHeroLearnSpellsWithDay() const;
+    bool ExtHeroBuySpellBookFromShrine() const;
+    bool ExtHeroRecruitCostDependedFromLevel() const;
+    bool ExtHeroRememberPointsForRetreating() const;
+    bool ExtHeroSurrenderingGiveExp() const;
+    bool ExtHeroRecalculateMovement() const;
+    bool ExtHeroPatrolAllowPickup() const;
+    bool ExtHeroAllowTranscribingScroll() const;
+    bool ExtHeroAutoMove2BattleTarget() const;
+    bool ExtHeroAllowBannedSecSkillsUpgrade() const;
+    bool ExtHeroArenaCanChoiseAnySkills() const;
+    bool ExtUnionsAllowCastleVisiting() const;
+    bool ExtUnionsAllowHeroesMeetings() const;
+    bool ExtUnionsAllowViewMaps() const;
+    bool ExtWorldShowVisitedContent() const;
+    bool ExtWorldScouteExtended() const;
+    bool ExtWorldAbandonedMineRandom() const;
+    bool ExtWorldSaveMonsterBattle() const;
+    bool ExtWorldAllowSetGuardian() const;
+    bool ExtWorldNoRequirementsForArtifacts() const;
+    bool ExtWorldArtifactCrystalBall() const;
+    bool ExtWorldOnlyFirstMonsterAttack() const;
+    bool ExtWorldEyeEagleAsScholar() const;
+    bool ExtWorldBanMonthOfMonsters() const;
+    bool ExtWorldBanWeekOf() const;
+    bool ExtWorldNewVersionWeekOf() const;
+    bool ExtWorldBanPlagues() const;
+    bool ExtWorldArtesianSpringSeparatelyVisit() const;
+    bool ExtWorldStartHeroLossCond4Humans() const;
+    bool ExtWorldOneHeroHiredEveryWeek() const;
+    bool ExtWorldDwellingsAccumulateUnits() const;
+    bool ExtWorldUseUniqueArtifactsML() const;
+    bool ExtWorldUseUniqueArtifactsRS() const;
+    bool ExtWorldUseUniqueArtifactsPS() const;
+    bool ExtWorldUseUniqueArtifactsSS() const;
+    bool ExtWorldExtObjectsCaptured() const;
+    bool ExtWorldGuardianObjectsTwoDefense() const;
+    bool ExtWorldDisableBarrowMounds() const;
+    bool ExtCastleAllowBuyFromWell() const;
+    bool ExtCastleAllowGuardians() const;
+    bool ExtCastleAllowFlash() const;
+    bool ExtCastleGuildRestorePointsTurn() const;
+    bool ExtCastleAllowRecruitSpecialHeroes() const;
+    bool ExtCastleOneHeroHiredEveryWeek() const;
+    bool ExtBattleShowDamage() const;
+    bool ExtBattleSoftWait() const;
+    bool ExtBattleMagicTroopCanResist() const;
+    bool ExtBattleArchmageCanResistBadMagic() const;
+    bool ExtBattleObjectsArchersPenalty() const;
+    bool ExtBattleMergeArmies() const;
+    bool ExtBattleSkipIncreaseDefense() const;
+    bool ExtBattleReverseWaitOrder() const;
+    bool ExtBattleShowGrid() const;
+    bool ExtBattleShowMouseShadow() const;
+    bool ExtBattleShowMoveShadow() const;
+    bool ExtGameRememberLastFocus() const;
+    bool ExtGameContinueAfterVictory() const;
+    bool ExtGameRewriteConfirm() const;
+    bool ExtGameAutosaveConfirm() const;
+    bool ExtGameShowSystemInfo() const;
+    bool ExtGameAutosaveBeginOfDay() const;
+    bool ExtGameAutosaveOn() const;
+    bool ExtGameUseFade() const;
+    bool ExtGameShowSDL() const;
+    bool ExtGameEvilInterface() const;
+    bool ExtGameDynamicInterface() const;
+    bool ExtGameHideInterface() const;
+    bool ExtPocketHideCursor() const;
+    bool ExtPocketLowMemory() const;
+    bool ExtPocketTapMode() const;
+    bool ExtPocketDragDropScroll() const;
 
-    const Size &	VideoMode(void) const;
-    void		SetAutoVideoMode(void);
+    const Size &	VideoMode() const;
+    void		SetAutoVideoMode();
 
     void		SetDebug(int);
     void		SetUnicode(bool);
-    void		SetPriceLoyaltyVersion(void);
+    void		SetPriceLoyaltyVersion();
     void		SetGameDifficulty(int);
     void		SetEvilInterface(bool);
     void		SetHideInterface(bool);
@@ -351,65 +351,65 @@ public:
 
     void		SetSoundVolume(int v);
     void		SetMusicVolume(int v);
-    void		ResetSound(void);
-    void		ResetMusic(void);
+    void		ResetSound();
+    void		ResetMusic();
 
-    int			SoundVolume(void) const;
-    int 		MusicVolume(void) const;
-    int			BlitSpeed(void) const;
+    int			SoundVolume() const;
+    int 		MusicVolume() const;
+    int			BlitSpeed() const;
 
     bool		GameType(int) const;
-    int			GameType(void) const;
+    int			GameType() const;
     void		SetGameType(int);
 
-    Players &		GetPlayers(void);
-    const Players &	GetPlayers(void) const;
+    Players &		GetPlayers();
+    const Players &	GetPlayers() const;
 
-    int			CurrentColor(void) const;
+    int			CurrentColor() const;
     void		SetCurrentColor(int);
-    int			PreferablyCountPlayers(void) const;
+    int			PreferablyCountPlayers() const;
     void		SetPreferablyCountPlayers(int);
 
-    int			GetPort(void) const;
+    int			GetPort() const;
 
     // from maps info
     bool		AllowChangeRace(int) const;
-    const std::string & MapsFile(void) const;
-    const std::string & MapsName(void) const;
-    const std::string & MapsDescription(void) const;
-    int			MapsDifficulty(void) const;
-    Size		MapsSize(void) const;
-    bool		GameStartWithHeroes(void) const;
-    int			ConditionWins(void) const;
-    int			ConditionLoss(void) const;
-    bool		WinsCompAlsoWins(void) const;
-    bool		WinsAllowNormalVictory(void) const;
-    int			WinsFindArtifactID(void) const;
-    bool		WinsFindUltimateArtifact(void) const;
-    u32			WinsAccumulateGold(void) const;
-    Point		WinsMapsPositionObject(void) const;
-    Point		LossMapsPositionObject(void) const;
-    u32			LossCountDays(void) const;
+    const std::string & MapsFile() const;
+    const std::string & MapsName() const;
+    const std::string & MapsDescription() const;
+    int			MapsDifficulty() const;
+    Size		MapsSize() const;
+    bool		GameStartWithHeroes() const;
+    int			ConditionWins() const;
+    int			ConditionLoss() const;
+    bool		WinsCompAlsoWins() const;
+    bool		WinsAllowNormalVictory() const;
+    int			WinsFindArtifactID() const;
+    bool		WinsFindUltimateArtifact() const;
+    u32			WinsAccumulateGold() const;
+    Point		WinsMapsPositionObject() const;
+    Point		LossMapsPositionObject() const;
+    u32			LossCountDays() const;
 
-    std::string		GetProgramPath(void) const { return path_program; }
+    std::string		GetProgramPath() const { return path_program; }
     void		SetProgramPath(const char*);
 
-    static std::string	GetVersion(void);
+    static std::string	GetVersion();
 
     static ListFiles	GetListFiles(const std::string & prefix, const std::string & filter);
-    static ListDirs	GetRootDirs(void);
+    static ListDirs	GetRootDirs();
     static std::string	GetLastFile(const std::string & prefix, const std::string & name);
     static std::string	GetWriteableDir(const char*);
-    static std::string	GetSaveDir(void);
-    static std::string	GetLangDir(void);
+    static std::string	GetSaveDir();
+    static std::string	GetLangDir();
 
     // deprecated
-    const std::string & GetDataParams(void) const { return data_params; }
-    const ListDirs	GetMapsParams(void) const { return maps_params; }
+    const std::string & GetDataParams() const { return data_params; }
+    const ListDirs	GetMapsParams() const { return maps_params; }
 
 protected:
     void Parse(const std::string & left, const std::string & right);
-    void PostLoad(void);
+    void PostLoad();
 
 private:
     friend StreamBase & operator<< (StreamBase &, const Settings &);

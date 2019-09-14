@@ -262,7 +262,7 @@ struct XMIData
 	    ERROR("parse error: " << "form xdir");
     }
 
-    bool isvalid(void) const
+    bool isvalid() const
     {
 	return !tracks.empty();
     }
@@ -275,7 +275,7 @@ struct MidEvent
     //char		status;
     //std::vector<u8>	data;
 
-    size_t size(void) const
+    size_t size() const
     {
 	return pack.size() + data[3] + 1;
     }
@@ -310,12 +310,12 @@ StreamBuf & operator<< (StreamBuf & sb, const MidEvent & st)
 
 struct MidEvents : std::list<MidEvent>
 {
-    size_t count(void) const
+    size_t count() const
     {
 	return std::list<MidEvent>::size();
     }
 
-    size_t size(void) const
+    size_t size() const
     {
 	size_t res = 0;
 	for(const_iterator it = begin(); it != end(); ++it)
@@ -460,7 +460,7 @@ struct MidTrack
     MidTrack() : mtrk(TAG_MTRK, 0) {}
     MidTrack(const XMITrack & t) : mtrk(TAG_MTRK, 0), events(t) { mtrk.length = events.size(); }
 
-    size_t size(void) const
+    size_t size() const
     {
 	return sizeof(mtrk) + events.size();
     }
@@ -475,12 +475,12 @@ StreamBuf & operator<< (StreamBuf & sb, const MidTrack & st)
 
 struct MidTracks : std::list<MidTrack>
 {
-    size_t count(void) const
+    size_t count() const
     {
 	return std::list<MidTrack>::size();
     }
 
-    size_t size(void) const
+    size_t size() const
     {
 	size_t res = 0;
 	for(const_iterator it = begin(); it != end(); ++it)

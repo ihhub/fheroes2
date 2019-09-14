@@ -63,7 +63,7 @@ void Network::Socket::Assign(const TCPsocket csd)
 }
 
 
-u32 Network::Socket::Host(void) const
+u32 Network::Socket::Host() const
 {
     IPaddress* remoteIP = sd ? SDLNet_TCP_GetPeerAddress(sd) : NULL;
     if(remoteIP) return SDLNet_Read32(&remoteIP->host);
@@ -71,7 +71,7 @@ u32 Network::Socket::Host(void) const
     return 0;
 }
 
-u16 Network::Socket::Port(void) const
+u16 Network::Socket::Port() const
 {
     IPaddress* remoteIP = sd ? SDLNet_TCP_GetPeerAddress(sd) : NULL;
     if(remoteIP) return SDLNet_Read16(&remoteIP->port);
@@ -79,7 +79,7 @@ u16 Network::Socket::Port(void) const
     return 0;
 }
 
-bool Network::Socket::Ready(void) const
+bool Network::Socket::Ready() const
 {
     return 0 < SDLNet_CheckSockets(sdset, 1) && 0 < SDLNet_SocketReady(sd);
 }
@@ -157,12 +157,12 @@ bool Network::Socket::Open(IPaddress & ip)
     return sd;
 }
 
-bool Network::Socket::isValid(void) const
+bool Network::Socket::isValid() const
 {
     return sd && 0 == status;
 }
 
-void Network::Socket::Close(void)
+void Network::Socket::Close()
 {
     if(sd)
     {
@@ -181,12 +181,12 @@ Network::Server::Server()
 {
 }
 
-TCPsocket Network::Server::Accept(void)
+TCPsocket Network::Server::Accept()
 {
     return SDLNet_TCP_Accept(sd);
 }
 
-bool Network::Init(void)
+bool Network::Init()
 {
     if(SDLNet_Init() < 0)
     {
@@ -196,7 +196,7 @@ bool Network::Init(void)
     return true;
 }
 
-void Network::Quit(void)
+void Network::Quit()
 {
     SDLNet_Quit();
 }
@@ -211,7 +211,7 @@ bool Network::ResolveHost(IPaddress & ip, const char* host, u16 port)
     return true;
 }
 
-const char* Network::GetError(void)
+const char* Network::GetError()
 {
     return SDLNet_GetError();
 }

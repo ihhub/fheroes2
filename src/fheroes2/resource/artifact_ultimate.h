@@ -34,21 +34,21 @@ public:
     UltimateArtifact();
 
     bool	isPosition(s32) const;
-    bool	isFound(void) const;
+    bool	isFound() const;
     void	SetFound(bool);
     void	Set(s32, const Artifact &);
-    void	Reset(void);
+    void	Reset();
 
     const Surface &
-		GetPuzzleMapSurface(void) const;
+		GetPuzzleMapSurface() const;
     const Artifact &
-		GetArtifact(void) const;
+		GetArtifact() const;
 
 private:
     friend StreamBase & operator<< (StreamBase &, const UltimateArtifact &);
     friend StreamBase & operator>> (StreamBase &, UltimateArtifact &);
 
-    void MakeSurface(void);
+    void MakeSurface();
 
     s32		index;
     Surface	puzzlemap;

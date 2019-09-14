@@ -46,7 +46,7 @@ public:
 	curs.DrawBorder(RGBA(0xc0, 0x2c, 0));
     }
 
-    void Redraw(void)
+    void Redraw()
     {
 	Display & display = Display::Get();
 

@@ -35,18 +35,18 @@ namespace Interface
 	Radar(Basic &);
 
 	void SetPos(s32, s32);
-	void SetRedraw(void) const;
-	void Build(void);
-	void Redraw(void);
+	void SetRedraw() const;
+	void Build();
+	void Redraw();
 	void SetHide(bool);
-	void ResetAreaSize(void);
-	void QueueEventProcessing(void);
+	void ResetAreaSize();
+	void QueueEventProcessing();
 
     private:
-	void SavePosition(void);
-	void Generate(void);
+	void SavePosition();
+	void Generate();
 	void RedrawObjects(int color = 0xFF);
-	void RedrawCursor(void);
+	void RedrawCursor();
 	void ChangeAreaSize(const Size &);
 
 	Basic & interface;

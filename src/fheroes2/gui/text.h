@@ -38,11 +38,11 @@ public:
 
     virtual void	SetText(const std::string &) = 0;
     virtual void	SetFont(int) = 0;
-    virtual void	Clear(void) = 0;
+    virtual void	Clear() = 0;
 
-    virtual int		w(void) const = 0;
-    virtual int		h(void) const = 0;
-    virtual size_t	Size(void) const = 0;
+    virtual int		w() const = 0;
+    virtual int		h() const = 0;
+    virtual size_t	Size() const = 0;
 
     virtual void	Blit(s32, s32, int maxw, Surface & sf = Display::Get()) = 0;
 
@@ -58,13 +58,13 @@ public:
 
     void	SetText(const std::string &);
     void	SetFont(int);
-    void	Clear(void);
+    void	Clear();
 
-    int		w(void) const;
+    int		w() const;
     int		w(u32, u32) const;
-    int		h(void) const;
+    int		h() const;
     int		h(int) const;
-    size_t	Size(void) const;
+    size_t	Size() const;
 
     void	Blit(s32, s32, int maxw, Surface & sf = Display::Get());
     static int	CharWidth(int, int ft);
@@ -86,13 +86,13 @@ public:
 
     void	SetText(const std::string &);
     void	SetFont(int);
-    void	Clear(void);
+    void	Clear();
 
-    int		w(void) const;
+    int		w() const;
     int		w(u32, u32) const;
-    int		h(void) const;
+    int		h() const;
     int		h(int) const;
-    size_t	Size(void) const;
+    size_t	Size() const;
 
     void	Blit(s32, s32, int maxw, Surface & sf = Display::Get());
 
@@ -124,11 +124,11 @@ public:
     void	Set(const std::string &);
     void	Set(int);
 
-    void	Clear(void);
-    size_t	Size(void) const;
+    void	Clear();
+    size_t	Size() const;
 
-    int		w(void) const{ return gw; }
-    int		h(void) const{ return gh; }
+    int		w() const{ return gw; }
+    int		h() const{ return gh; }
 
     void	Blit(s32, s32, Surface & sf = Display::Get()) const;
     void	Blit(s32, s32, int maxw, Surface & sf = Display::Get()) const;
@@ -156,17 +156,17 @@ public:
     void	SetText(const std::string &, int);
     void	SetFont(int);
 
-    void	Show(void);
-    void	Hide(void);
+    void	Show();
+    void	Hide();
 
-    bool	isHide(void) const;
-    bool	isShow(void) const;
+    bool	isHide() const;
+    bool	isShow() const;
 
-    int		w(void);
-    int		h(void);
+    int		w();
+    int		h();
 
     const Rect &
-		GetRect(void) const;
+		GetRect() const;
 private:
     SpriteBack	back;
     bool	hide;
@@ -182,12 +182,12 @@ public:
     void	Set(const std::string &, int, u32 width);
     void	SetAlign(int type);
 
-    const Rect & GetRect(void) const { return *this; }
-    s32		x(void) const { return Rect::x; }
-    s32		y(void) const { return Rect::y; }
-    int		w(void) const { return Rect::w; }
-    int		h(void) const { return Rect::h; }
-    u32		row(void) const { return messages.size(); }
+    const Rect & GetRect() const { return *this; }
+    s32		x() const { return Rect::x; }
+    s32		y() const { return Rect::y; }
+    int		w() const { return Rect::w; }
+    int		h() const { return Rect::h; }
+    u32		row() const { return messages.size(); }
 
     void	Blit(s32, s32, Surface & sf = Display::Get());
     void	Blit(const Point &, Surface & sf = Display::Get());

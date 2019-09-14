@@ -32,36 +32,36 @@ class Captain : public HeroBase
   public:
     Captain(Castle &);
 
-    bool	isValid(void) const;
-    int		GetAttack(void) const;
-    int		GetDefense(void) const;
-    int		GetPower(void) const;
-    int		GetKnowledge(void) const;
-    int		GetMorale(void) const;
-    int		GetLuck(void) const;
-    int		GetRace(void) const;
-    int		GetColor(void) const;
-    int		GetType(void) const;
-    int		GetControl(void) const;
-    s32		GetIndex(void) const;
+    bool	isValid() const;
+    int		GetAttack() const;
+    int		GetDefense() const;
+    int		GetPower() const;
+    int		GetKnowledge() const;
+    int		GetMorale() const;
+    int		GetLuck() const;
+    int		GetRace() const;
+    int		GetColor() const;
+    int		GetType() const;
+    int		GetControl() const;
+    s32		GetIndex() const;
 
     const std::string &
-		GetName(void) const;
+		GetName() const;
 
     const Castle*
-		inCastle(void) const;
+		inCastle() const;
 
     int		GetLevelSkill(int) const;
     u32		GetSecondaryValues(int) const;
 
     const Army &
-		GetArmy(void) const;
-    Army &	GetArmy(void);
+		GetArmy() const;
+    Army &	GetArmy();
 
-    u32		GetMaxSpellPoints(void) const;
+    u32		GetMaxSpellPoints() const;
 
-    void	ActionPreBattle(void);
-    void	ActionAfterBattle(void);
+    void	ActionPreBattle();
+    void	ActionAfterBattle();
 
     void	PortraitRedraw(s32, s32, int type, Surface &) const;
     Surface	GetPortrait(int type) const;

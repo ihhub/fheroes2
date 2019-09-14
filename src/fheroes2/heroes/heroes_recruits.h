@@ -33,15 +33,15 @@ class Recruits : public std::pair<int, int>
 public:
     Recruits();
 
-    void Reset(void);
+    void Reset();
 
-    int GetID1(void) const;
-    int GetID2(void) const;
+    int GetID1() const;
+    int GetID2() const;
 
-    const Heroes* GetHero1(void) const;
-    const Heroes* GetHero2(void) const;
-    Heroes* GetHero1(void);
-    Heroes* GetHero2(void);
+    const Heroes* GetHero1() const;
+    const Heroes* GetHero2() const;
+    Heroes* GetHero1();
+    Heroes* GetHero2();
 
     void SetHero1(const Heroes*);
     void SetHero2(const Heroes*);

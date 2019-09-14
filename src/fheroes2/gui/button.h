@@ -32,13 +32,13 @@ public:
     Button();
     Button(s32, s32, int, u32 index1, u32 index2);
 
-    bool	isEnable(void) const;
-    bool	isDisable(void) const;
-    bool	isPressed(void) const;
-    bool	isReleased(void) const;
+    bool	isEnable() const;
+    bool	isDisable() const;
+    bool	isPressed() const;
+    bool	isReleased() const;
 
-    void	Press(void);
-    void	Release(void);
+    void	Press();
+    void	Release();
 
     void	SetPos(s32, s32);
     void	SetPos(const Point &);
@@ -47,9 +47,9 @@ public:
     void	SetSprite(const Surface &, const Surface &);
     void	SetDisable(bool);
 
-    void	Draw(void);
-    void	PressDraw(void);
-    void	ReleaseDraw(void);
+    void	Draw();
+    void	PressDraw();
+    void	ReleaseDraw();
 
 protected:
     Surface	sf1;
@@ -73,8 +73,8 @@ public:
     ButtonGroups(const Rect &, u32);
     ~ButtonGroups();
     
-    void	Draw(void);
-    int		QueueEventProcessing(void);
+    void	Draw();
+    int		QueueEventProcessing();
 
     void	DisableButton1(bool);
     void	DisableButton2(bool);
