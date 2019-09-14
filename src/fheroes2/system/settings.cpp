@@ -1487,11 +1487,11 @@ StreamBase & operator>> (StreamBase & msg, Settings & conf)
 
     if(lang != "en" && lang != conf.force_lang && !conf.Unicode())
     {
-        std::string msg("This is an saved game is localized for lang = ");
-        msg.append(lang);
-        msg.append(", and most of the messages will be displayed incorrectly.\n \n");
-        msg.append("(tip: set unicode = on)");
-        Dialog::Message("Warning!", msg, Font::BIG, Dialog::OK);
+        std::string warningMessage("This is an saved game is localized for lang = ");
+        warningMessage.append(lang);
+        warningMessage.append(", and most of the messages will be displayed incorrectly.\n \n");
+        warningMessage.append("(tip: set unicode = on)");
+        Dialog::Message("Warning!", warningMessage, Font::BIG, Dialog::OK);
     }
 
     int debug;

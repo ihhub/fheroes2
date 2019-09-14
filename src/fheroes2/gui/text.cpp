@@ -466,19 +466,19 @@ void Text::Blit(s32 ax, s32 ay, int maxw, Surface & dst) const
 
 u32 Text::width(const std::string & str, int ft, u32 start, u32 count)
 {
+    if (!str.empty()) {
 #ifdef WITH_TTF
-    if(Settings::Get().Unicode())
-    {
-	TextUnicode text(str, ft);
-	return text.w(start, count);
-    }
-    else
+        if (Settings::Get().Unicode()) {
+            TextUnicode text(str, ft);
+            return text.w(start, count);
+        }
+        else
 #endif
-    {
-	TextAscii text(str, ft);
-	return text.w(start, count);
+        {
+            TextAscii text(str, ft);
+            return text.w(start, count);
+        }
     }
-
     return 0;
 }
 
