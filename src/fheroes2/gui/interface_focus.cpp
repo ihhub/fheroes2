@@ -186,10 +186,7 @@ Heroes* Interface::GetFocusHeroes(void)
 {
     Player* player = Settings::Get().GetPlayers().GetCurrent();
 
-    return player ?
-	    player->GetFocus().GetHeroes() : NULL;
-
-    return NULL;
+    return player ? player->GetFocus().GetHeroes() : NULL;
 }
 
 Point Interface::GetFocusCenter(void)

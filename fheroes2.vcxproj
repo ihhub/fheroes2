@@ -69,7 +69,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>src/engine;src/fheroes2/gui;src/fheroes2/maps;src/fheroes2/kingdom;src/fheroes2/game;src/fheroes2/dialog;../sdl/include;src/fheroes2/system;src/fheroes2/spell;src/fheroes2/monster;src/fheroes2/castle;src/fheroes2/agg;src/fheroes2/heroes;src/fheroes2/resource;src/fheroes2/ai;src/fheroes2/army;src/fheroes2/battle;src/fheroes2/pocketpc;src/fheroes2/objects;src/fheroes2/test;src/fheroes2/image;../zlib/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -102,7 +102,7 @@ if exist "maps" (
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>src/engine;src/fheroes2/gui;src/fheroes2/maps;src/fheroes2/kingdom;src/fheroes2/game;src/fheroes2/dialog;../sdl/include;src/fheroes2/system;src/fheroes2/spell;src/fheroes2/monster;src/fheroes2/castle;src/fheroes2/agg;src/fheroes2/heroes;src/fheroes2/resource;src/fheroes2/ai;src/fheroes2/army;src/fheroes2/battle;src/fheroes2/pocketpc;src/fheroes2/objects;src/fheroes2/test;src/fheroes2/image;../zlib/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -135,7 +135,7 @@ if exist "maps" (
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -170,7 +170,7 @@ if exist "maps" (
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

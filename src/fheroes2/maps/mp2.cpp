@@ -696,11 +696,6 @@ bool MP2::isWeekLife(int obj)
 bool MP2::isMonthLife(int obj)
 {
     // FIXME: list month object life
-    switch(obj)
-    {
-	default: break;
-    }
-
     return false;
 }
 

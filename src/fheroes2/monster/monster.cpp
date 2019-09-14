@@ -852,16 +852,16 @@ Monster Monster::Rand(level_t level)
 		break;
     }
 
-    std::vector<Monster> monsters;
-    monsters.reserve(30);
+    std::vector<Monster> monster;
+    monster.reserve(30);
 
-    for(u32 ii = PEASANT; ii <= WATER_ELEMENT; ++ii)
-    {
-	Monster mons(ii);
-	if(mons.GetLevel() == level) monsters.push_back(mons);
+    for(u32 ii = PEASANT; ii <= WATER_ELEMENT; ++ii) {
+        Monster mons(ii);
+        if(mons.GetLevel() == level)
+            monster.push_back(mons);
     }
 
-    return monsters.size() ? *Rand::Get(monsters) : UNKNOWN;
+    return monster.size() ? *Rand::Get(monster) : UNKNOWN;
 }
 
 u32 Monster::Rand4WeekOf(void)

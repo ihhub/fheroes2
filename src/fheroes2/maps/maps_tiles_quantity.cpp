@@ -350,8 +350,6 @@ int Maps::Tiles::QuantityColor(void) const
 	default:
 	    return world.ColorCapturedObject(GetIndex());
     }
-
-    return Color::NONE;
 }
 
 int Maps::Tiles::QuantityTeleportType(void) const
