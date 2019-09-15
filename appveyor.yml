@@ -52,4 +52,4 @@ deploy:
   draft: false
   prerelease: false
   on:
-    branch: appveoyr_deployment
+    branch: master
