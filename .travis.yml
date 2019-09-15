@@ -57,3 +57,10 @@ matrix:
 script:
   - |
     make
+
+deploy:
+  provider: releases
+  api_key: "$GITHUB_OAUTH_TOKEN"
+  file: "fheroes2"
+  skip_cleanup: true
+
