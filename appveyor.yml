@@ -20,6 +20,8 @@ environment:
       configuration: Release
       platform: x64
 
+skip_tags: true
+
 install:
   - cd C:\projects\fheroes2\script\windows
   - call install_packages.bat
