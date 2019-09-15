@@ -31,5 +31,5 @@ build_script:
   - cmd: cd C:\projects\fheroes2
   - cmd: msbuild fheroes2.vcxproj /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
- after_build:
+after_build:
   - dir
