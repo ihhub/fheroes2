@@ -6,6 +6,8 @@ language: cpp
 branches:
   except:
   - /^fheroes2-windows-.*$/
+  - /^fheroes2-linux-.*$/
+  - /^fheroes2-macos-.*$/
 
 matrix:
   include:
@@ -25,7 +27,7 @@ matrix:
         file: "fheroes2"
         skip_cleanup: true
         on:
-          branch: travis_deployment
+          branch: master
     - os: linux
       name: "Linux with SDL 2.0"
       before_install:
@@ -43,7 +45,7 @@ matrix:
         file: "fheroes2"
         skip_cleanup: true
         on:
-          branch: travis_deployment
+          branch: master
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -61,7 +63,7 @@ matrix:
         file: "fheroes2"
         skip_cleanup: true
         on:
-          branch: travis_deployment
+          branch: master
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
@@ -80,7 +82,7 @@ matrix:
         file: "fheroes2"
         skip_cleanup: true
         on:
-          branch: travis_deployment
+          branch: master
     - os: linux
       name: "Static analysis"
       script:
