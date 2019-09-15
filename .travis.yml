@@ -19,13 +19,6 @@ matrix:
         - sudo apt-get install -y libsdl-image1.2-dev
       before_deploy:
         - git tag fheroes2-linux-sdl1-$TRAVIS_BUILD_NUMBER
-      deploy:
-        provider: releases
-        api_key: "$GITHUB_OAUTH_TOKEN"
-        file: "fheroes2"
-        skip_cleanup: true
-        on:
-          branch: travis_deployment
     - os: linux
       name: "Linux with SDL 2.0"
       before_install:
@@ -35,6 +28,8 @@ matrix:
         - sudo apt-get install -y libsdl2-mixer-dev
         - sudo apt-get install -y libsdl2-image-dev
         - export WITH_SDL2="ON"
+      before_deploy:
+        - git tag fheroes2-linux-sdl2-$TRAVIS_BUILD_NUMBER
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -44,6 +39,8 @@ matrix:
         - brew install sdl_image
         - brew install gettext
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
+      before_deploy:
+        - git tag fheroes2-osx-sdl1-$TRAVIS_BUILD_NUMBER
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
@@ -54,8 +51,11 @@ matrix:
         - brew install gettext
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
         - export WITH_SDL2="ON"
+      before_deploy:
+        - git tag fheroes2-osx-sdl2-$TRAVIS_BUILD_NUMBER
     - os: linux
       name: "Static analysis"
+      env: STATIC_ANALYSIS=ON
       script:
         - export EXCLUDE_PATTERN_1=" not found in expected header ";
         - export EXCLUDE_PATTERN_2=" does not need to be \#included; use a forward declaration instead";
@@ -66,3 +66,12 @@ matrix:
 script:
   - |
     make
+
+deploy:
+  provider: releases
+  api_key: "$GITHUB_OAUTH_TOKEN"
+  file: "fheroes2"
+  skip_cleanup: true
+  on:
+    branch: travis_deployment
+    condition: NOT $STATIC_ANALYSIS = "ON"
