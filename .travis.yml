@@ -2,6 +2,11 @@ sudo: required
 
 language: cpp
 
+# blocklist
+branches:
+  except:
+  - /^fheroes2-windows-.*$/
+
 matrix:
   include:
     - os: linux
