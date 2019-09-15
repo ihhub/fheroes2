@@ -7,7 +7,7 @@ branches:
   except:
   - /^fheroes2-windows-.*$/
   - /^fheroes2-linux-.*$/
-  - /^fheroes2-macos-.*$/
+  - /^fheroes2-osx-.*$/
 
 matrix:
   include:
@@ -28,7 +28,7 @@ matrix:
         file: "fheroes2"
         skip_cleanup: true
         on:
-          branch: fix_travis_deploy
+          branch: master
     - os: linux
       name: "Linux with SDL 2.0"
       before_install:
@@ -47,7 +47,7 @@ matrix:
         file: "fheroes2"
         skip_cleanup: true
         on:
-          branch: fix_travis_deploy
+          branch: master
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -66,7 +66,7 @@ matrix:
         file: "fheroes2"
         skip_cleanup: true
         on:
-          branch: fix_travis_deploy
+          branch: master
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
@@ -86,7 +86,7 @@ matrix:
         file: "fheroes2"
         skip_cleanup: true
         on:
-          branch: fix_travis_deploy
+          branch: master
     - os: linux
       name: "Static analysis"
       script:
