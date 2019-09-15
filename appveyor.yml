@@ -35,6 +35,8 @@ after_build:
   - cmd: if "%platform%"=="x86" cd C:\projects\fheroes2\Release
   - cmd: if "%platform%"=="x64" cd C:\projects\fheroes2\x64\Release
   - cmd: 7z a fheroes2.zip fheroes2.exe SDL.dll SDL_mixer.dll
+  - cmd: if "%platform%"=="x86" xcopy /Y /s "fheroes2.zip" ".."
+  - cmd: if "%platform%"=="x64" xcopy /Y /s "fheroes2.zip" "..\.."
 
 artifacts:
   - path: fheroes2.zip
