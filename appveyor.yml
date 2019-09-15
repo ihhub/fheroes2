@@ -16,9 +16,31 @@ environment:
     - JOB: Release_x86
       configuration: Release
       platform: x86
+      deploy:
+        release: fheroes2_32bit_windows-v$(appveyor_build_version)
+        description: 'Windows 32bit release'
+        provider: GitHub
+        auth_token:
+          secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9
+        artifact: /.*\.zip/
+        draft: false
+        prerelease: false
+        on:
+          branch: appveoyr_deployment
     - JOB: Release_x64
       configuration: Release
       platform: x64
+      deploy:
+        release: fheroes2_64bit_windows-v$(appveyor_build_version)
+        description: 'Windows 64bit release'
+        provider: GitHub
+        auth_token:
+          secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9
+        artifact: /.*\.zip/
+        draft: false
+        prerelease: false
+        on:
+          branch: appveoyr_deployment
 
 install:
   - cd C:\projects\fheroes2\script\windows
@@ -41,15 +63,3 @@ after_build:
 artifacts:
   - path: fheroes2.zip
     name: fheroes2
-
-deploy:
-  release: fheroes2-v$(appveyor_build_version)
-  description: 'Release description'
-  provider: GitHub
-  auth_token:
-    secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9 # your encrypted token from GitHub
-  artifact: /.*\.zip/            # upload all NuGet packages to release assets
-  draft: false
-  prerelease: false
-  on:
-    branch: appveoyr_deployment
