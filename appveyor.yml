@@ -34,5 +34,20 @@ build_script:
 after_build:
   - cmd: if "%platform%"=="x86" cd C:\projects\fheroes2\Release
   - cmd: if "%platform%"=="x64" cd C:\projects\fheroes2\x64\Release
-  - cmd: dir
   - cmd: 7z a fheroes2.zip fheroes2.exe SDL.dll SDL_mixer.dll
+
+artifacts:
+  - path: fheroes2.zip
+    name: fheroes2
+
+deploy:
+  release: fheroes2-v$(appveyor_build_version)
+  description: 'Release description'
+  provider: GitHub
+  auth_token:
+    secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9 # your encrypted token from GitHub
+  artifact: /.*\.zip/            # upload all NuGet packages to release assets
+  draft: false
+  prerelease: false
+  on:
+    branch: appveoyr_deployment
