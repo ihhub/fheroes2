@@ -7,7 +7,7 @@ branches:
   except:
   - /^fheroes2-windows-.*$/
   - /^fheroes2-linux-.*$/
-  - /^fheroes2-macos-.*$/
+  - /^fheroes2-osx-.*$/
 
 matrix:
   include:
@@ -20,7 +20,8 @@ matrix:
         - sudo apt-get install -y libsdl-mixer1.2-dev
         - sudo apt-get install -y libsdl-image1.2-dev
       before_deploy:
-        - git tag fheroes2-linux-sdl1-$TRAVIS_BUILD_NUMBER
+        - export TRAVIS_TAG=fheroes2-linux-sdl1-$TRAVIS_BUILD_NUMBER
+        - git tag $TRAVIS_TAG
       deploy:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
@@ -38,7 +39,8 @@ matrix:
         - sudo apt-get install -y libsdl2-image-dev
         - export WITH_SDL2="ON"
       before_deploy:
-        - git tag fheroes2-linux-sdl2-$TRAVIS_BUILD_NUMBER
+        - export TRAVIS_TAG=fheroes2-linux-sdl2-$TRAVIS_BUILD_NUMBER
+        - git tag $TRAVIS_TAG
       deploy:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
@@ -56,7 +58,8 @@ matrix:
         - brew install gettext
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
       before_deploy:
-        - git tag fheroes2-osx-sdl1-$TRAVIS_BUILD_NUMBER
+        - export TRAVIS_TAG=fheroes2-osx-sdl1-$TRAVIS_BUILD_NUMBER
+        - git tag $TRAVIS_TAG
       deploy:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
@@ -75,7 +78,8 @@ matrix:
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
         - export WITH_SDL2="ON"
       before_deploy:
-        - git tag fheroes2-osx-sdl2-$TRAVIS_BUILD_NUMBER
+        - export TRAVIS_TAG=fheroes2-osx-sdl2-$TRAVIS_BUILD_NUMBER
+        - git tag $TRAVIS_TAG
       deploy:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
