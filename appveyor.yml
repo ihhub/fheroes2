@@ -32,4 +32,7 @@ build_script:
   - cmd: msbuild fheroes2.vcxproj /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
 after_build:
-  - dir
+  - cmd: if "%platform%"=="x86" cd C:\projects\fheroes2\Release
+  - cmd: if "%platform%"=="x64" cd C:\projects\fheroes2\x64\Release
+  - cmd: dir
+  - cmd: 7z a fheroes2.zip fheroes2.exe SDL.dll SDL_mixer.dll
