@@ -45,7 +45,7 @@ artifacts:
     name: fheroes2
 
 deploy:
-  release: fheroes2-windows-$(platform)-v$(appveyor_build_version)
+  release: fheroes2-windows-$(appveyor_build_version)-$(platform)
   description: 'Windows build'
   provider: GitHub
   auth_token:
