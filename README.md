@@ -1,12 +1,16 @@
 fheroes2
 ======
-[![Build status](https://travis-ci.org/ihhub/fheroes2.svg?branch=master)](https://travis-ci.org/ihhub/fheroes2) [![CodeFactor](https://www.codefactor.io/repository/github/ihhub/fheroes2/badge)](https://www.codefactor.io/repository/github/ihhub/fheroes2) [![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2)
+[![Build status](https://travis-ci.org/ihhub/fheroes2.svg?branch=master)](https://travis-ci.org/ihhub/fheroes2) [![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2) [![CodeFactor](https://www.codefactor.io/repository/github/ihhub/fheroes2/badge)](https://www.codefactor.io/repository/github/ihhub/fheroes2)
 
 Direct continuation of free implementation of Heroes of the Might and Magic II engine. Original project has been developed at [sourceforge](https://sourceforge.net/projects/fheroes2/).
 
 Copyright
 ---------------------------
 All rights for original game and it's resources belong to formerly The 3DO Company. this right were transferred to Ubisoft. We do not encourage and support any form of illegal usage of original game. We do not provide any information about download of original game in any form.
+
+Download
+---------------------------
+You can download compiled game for specific OS via [Github releases](https://github.com/ihhub/fheroes2/releases).
 
 Compilation
 ---------------------------
