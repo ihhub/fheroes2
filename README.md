@@ -10,7 +10,7 @@ All rights for original game and it's resources belong to formerly The 3DO Compa
 
 Download
 ---------------------------
-You can download compiled game for specific OS via [Github releases](https://github.com/ihhub/fheroes2/releases).
+You can download compiled game for specific OS via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
 
 Compilation
 ---------------------------
