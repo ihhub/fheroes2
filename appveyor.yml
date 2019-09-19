@@ -54,4 +54,4 @@ deploy:
   draft: false
   prerelease: false
   on:
-    branch: appveyor_deployment_message
+    branch: master
