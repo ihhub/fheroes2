@@ -1425,8 +1425,6 @@ void Settings::BinarySave(void) const
     }
 }
 
-#include "dialog.h"
-
 void Settings::BinaryLoad(void)
 {
     std::string fname = System::ConcatePath(GetSaveDir(), "fheroes2.bin");

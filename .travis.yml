@@ -97,8 +97,9 @@ matrix:
         - export EXCLUDE_PATTERN_1=" not found in expected header ";
         - export EXCLUDE_PATTERN_2=" does not need to be \#included; use a forward declaration instead";
         - export EXCLUDE_PATTERN_3=" not found in any directly \#included header";
+        - export EXCLUDE_PATTERN_4=" unable to find ";
         - git clone https://github.com/myint/cppclean;
-        - ./cppclean/cppclean src | grep -v "$EXCLUDE_PATTERN_1" | grep -v "$EXCLUDE_PATTERN_2" | grep -v "$EXCLUDE_PATTERN_3";
+        - ./cppclean/cppclean src | grep -v "$EXCLUDE_PATTERN_1" | grep -v "$EXCLUDE_PATTERN_2" | grep -v "$EXCLUDE_PATTERN_3" | grep -v "$EXCLUDE_PATTERN_4";
 
 script:
   - |

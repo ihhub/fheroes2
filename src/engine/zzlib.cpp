@@ -85,7 +85,6 @@ std::vector<u8> zlibCompress(const u8* src, size_t srcsz)
     return res;
 }
 
-#include "system.h"
 bool ZSurface::Load(int w, int h, int bpp, int pitch, u32 rmask, u32 gmask, u32 bmask, u32 amask, const u8* p, size_t s)
 {
     buf = zlibDecompress(p, s);

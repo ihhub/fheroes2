@@ -38,7 +38,6 @@
 #include "difficulty.h"
 #include "maps_tiles.h"
 #include "maps_actions.h"
-#include "resource.h"
 #include "game.h"
 #include "world.h"
 #include "ai.h"
