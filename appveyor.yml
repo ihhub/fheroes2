@@ -46,7 +46,7 @@ artifacts:
 
 deploy:
   release: fheroes2-windows-$(appveyor_build_version)-$(platform)
-  description: 'Windows build'
+  description: $(APPVEYOR_REPO_COMMIT_MESSAGE)
   provider: GitHub
   auth_token:
     secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9
@@ -54,4 +54,4 @@ deploy:
   draft: false
   prerelease: false
   on:
-    branch: master
+    branch: appveyor_deployment_message
