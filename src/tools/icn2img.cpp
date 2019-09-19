@@ -25,7 +25,6 @@
 #include <fstream>
 #include <sstream>
 #include <cstring>
-#include <iomanip>
 
 #include "engine.h"
 #include "system.h"

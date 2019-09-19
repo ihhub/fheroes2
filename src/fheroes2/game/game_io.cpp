@@ -33,7 +33,6 @@
 #include "army.h"
 #include "world.h"
 #include "interface_gamearea.h"
-#include "settings.h"
 #include "tools.h"
 #include "game.h"
 #include "game_over.h"

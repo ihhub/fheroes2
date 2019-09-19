@@ -37,7 +37,6 @@
 #include "pairs.h"
 #include "game.h"
 #include "game_over.h"
-#include "resource.h"
 #include "maps_actions.h"
 #include "ai.h"
 #include "world.h"

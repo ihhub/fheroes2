@@ -28,7 +28,6 @@
 #include "difficulty.h"
 #include "settings.h"
 #include "maps.h"
-#include "text.h"
 #include "tools.h"
 #include "game.h"
 #include "dialog_selectscenario.h"
