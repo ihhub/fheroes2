@@ -22,7 +22,6 @@ matrix:
       before_deploy:
         - export TRAVIS_TAG=fheroes2-linux-sdl1-$TRAVIS_BUILD_NUMBER
         - git tag $TRAVIS_TAG
-        - sudo chmod +x fheroes2
         - zip fheroes2_linux_sdl1.zip fheroes2
       deploy:
         provider: releases
@@ -30,7 +29,7 @@ matrix:
         file: "fheroes2_linux_sdl1.zip"
         skip_cleanup: true
         on:
-          branch: travis_zip_deploy
+          branch: master
     - os: linux
       name: "Linux with SDL 2.0"
       before_install:
@@ -43,7 +42,6 @@ matrix:
       before_deploy:
         - export TRAVIS_TAG=fheroes2-linux-sdl2-$TRAVIS_BUILD_NUMBER
         - git tag $TRAVIS_TAG
-        - sudo chmod +x fheroes2
         - zip fheroes2_linux_sdl2.zip fheroes2
       deploy:
         provider: releases
@@ -51,7 +49,7 @@ matrix:
         file: "fheroes2_linux_sdl2.zip"
         skip_cleanup: true
         on:
-          branch: travis_zip_deploy
+          branch: master
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -64,7 +62,6 @@ matrix:
       before_deploy:
         - export TRAVIS_TAG=fheroes2-osx-sdl1-$TRAVIS_BUILD_NUMBER
         - git tag $TRAVIS_TAG
-        - sudo chmod +x fheroes2
         - zip fheroes2_osx_sdl1.zip fheroes2
       deploy:
         provider: releases
@@ -72,7 +69,7 @@ matrix:
         file: "fheroes2_osx_sdl1.zip"
         skip_cleanup: true
         on:
-          branch: travis_zip_deploy
+          branch: master
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
@@ -86,7 +83,6 @@ matrix:
       before_deploy:
         - export TRAVIS_TAG=fheroes2-osx-sdl2-$TRAVIS_BUILD_NUMBER
         - git tag $TRAVIS_TAG
-        - sudo chmod +x fheroes2
         - zip fheroes2_osx_sdl2.zip fheroes2
       deploy:
         provider: releases
@@ -94,7 +90,7 @@ matrix:
         file: "fheroes2_osx_sdl2.zip"
         skip_cleanup: true
         on:
-          branch: travis_zip_deploy
+          branch: master
     - os: linux
       name: "Static analysis"
       script:
