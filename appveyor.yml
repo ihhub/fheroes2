@@ -56,4 +56,4 @@ deploy:
   draft: false
   prerelease: false
   on:
-    branch: windows_deployment
+    branch: master
