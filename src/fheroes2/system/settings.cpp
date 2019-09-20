@@ -22,7 +22,6 @@
 
 #include <algorithm>
 
-#include "system.h"
 #include "text.h"
 #include "maps.h"
 #include "race.h"

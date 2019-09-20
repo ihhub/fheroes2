@@ -24,7 +24,6 @@
 #include "agg.h"
 #include "text.h"
 #include "game.h"
-#include "color.h"
 #include "race.h"
 #include "dialog.h"
 #include "world.h"
