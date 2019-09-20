@@ -39,6 +39,8 @@ after_build:
   - cmd: 7z a fheroes2.zip fheroes2.exe SDL.dll SDL_mixer.dll
   - cmd: if "%platform%"=="x86" xcopy /Y /s "fheroes2.zip" ".."
   - cmd: if "%platform%"=="x64" xcopy /Y /s "fheroes2.zip" "..\.."
+  - cmd: cd C:\projects\fheroes2
+  - cmd: 7z a fheroes2.zip script\demo\demo.bat LICENSE
 
 artifacts:
   - path: fheroes2.zip
