@@ -22,7 +22,6 @@
 
 #include <sstream>
 
-
 #include "army.h"
 #include "army_troop.h"
 #include "game.h"
