@@ -124,7 +124,7 @@ int Game::Credits(void)
     str.append("Andrey Afletdinov, maintainer\n");
     str.append("email: fheroes2 at gmail.com\n");
 
-    Dialog::Message("Free Heroes II Engine", str, Font::SMALL, Dialog::OK);
+    Dialog::Message("Free Heroes of Might and Magic II Engine", str, Font::SMALL, Dialog::OK);
 
     //VERBOSE("Credits: under construction.");
 
