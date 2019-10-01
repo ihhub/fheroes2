@@ -24,7 +24,7 @@
 #include "direction.h"
 #include "icn.h"
 #include "mp2.h"
-#include "objlava.h"
+#include "objmult.h"
 
 int ObjMult::GetPassable(u32 index)
 {
