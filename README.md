@@ -27,6 +27,19 @@ Please follow below instructions to be able to compile the project:
 - run `make` command in root directory of the project. For SDL 2 compilation please run `export WITH_SDL2="ON"` command before compiling the project.
 
 Requirements
+Todos los derechos del juego original y sus recursos pertenecen anteriormente a The 3DO Company. Este derecho fue transferido a Ubisoft. No alentamos ni apoyamos ninguna forma de uso ilegal del juego original. No proporcionamos ninguna información sobre la descarga del juego original de ninguna forma.
+Descargar
+
+Puede descargar el juego compilado para un sistema operativo específico a través de las versiones de Github de este proyecto.
+Compilacion
+
+Siga las instrucciones a continuación para poder compilar el proyecto:
+
+Ventanas
+
+    abra el directorio script / windows y ejecute el archivo install_packages.bat. Instala los paquetes necesarios para la compilación de Visual Studio.
+    abra el directorio script / demo y ejecute el archivo demo.bat. Descarga la versión demo del juego que se necesita para un desarrollo mínimo.
+    Abra fheroes.vcxproj por Visual Studio y compile el proyecto.
 ---------------------------
 You are required to have at least demo version of Heroes of Might and Magic II game to be able to play it.
 
