@@ -23,8 +23,8 @@
 #ifndef H2ARMYTROOP_H
 #define H2ARMYTROOP_H
 
-#include "monster.h"
 #include <string>
+#include "monster.h"
 
 class Army;
 
