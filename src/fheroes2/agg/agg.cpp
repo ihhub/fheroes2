@@ -33,7 +33,7 @@
 #include "artifact.h"
 #include "dir.h"
 #include "game.h"
-#include "palette_h2.h"
+#include "../../tools/palette_h2.h"
 #include "agg.h"
 
 #ifdef WITH_ZLIB
