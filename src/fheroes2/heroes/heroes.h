@@ -115,6 +115,11 @@ public:
 
     int			GetID(void) const;
 
+    int			GetAttack(void) const;
+    int			GetDefense(void) const;
+    int			GetPower(void) const;
+    int			GetKnowledge(void) const;
+
     int			GetAttack(std::string*) const;
     int			GetDefense(std::string*) const;
     int			GetPower(std::string*) const;
