@@ -24,8 +24,9 @@
 #define H2ARMYBAR_H
 
 #include "army_troop.h"
-#include "interface_itemsbar.h"
 #include "gamedefs.h"
+#include "interface_itemsbar.h"
+
 
 class Army;
 
