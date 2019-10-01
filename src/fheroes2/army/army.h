@@ -23,12 +23,12 @@
 #ifndef H2ARMY_H
 #define H2ARMY_H
 
-#include <utility>
-#include <string>
-#include <vector>
+#include "army_troop.h"
 #include "bitmodes.h"
 #include "players.h"
-#include "army_troop.h"
+#include <string>
+#include <utility>
+#include <vector>
 
 class Castle;
 class HeroBase;
