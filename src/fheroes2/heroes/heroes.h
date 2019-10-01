@@ -115,10 +115,10 @@ public:
 
     int			GetID(void) const;
 
-    int			GetAttack(std::string*) const;
-    int			GetDefense(std::string*) const;
-    int			GetPower(std::string*) const;
-    int			GetKnowledge(std::string*) const;
+    int			GetAttack(std::string* = NULL) const;
+    int			GetDefense(std::string* = NULL) const;
+    int			GetPower(std::string* = NULL) const;
+    int			GetKnowledge(std::string* = NULL) const;
 
     void		IncreasePrimarySkill(int skill);
 
