@@ -97,7 +97,7 @@ namespace
 	{     9,   8,   5,  10,  45,  Speed::VERYFAST,   3,     0, _("Minotaur King")  , _("Minotaur Kings"), { 500, 0, 0, 0, 0, 0, 0} },
 	{     8,   9,   6,  12,  75,  Speed::VERYSLOW,   2,     0, _("Hydra")          , _("Hydras")        , { 800, 0, 0, 0, 0, 0, 0} },
 	{    12,  12,  25,  50, 200,   Speed::AVERAGE,   1,     0, _("Green Dragon")   , _("Green Dragons") , { 3000, 0, 0, 0, 1, 0, 0} },
-	{    13,  13,  25,  50, 250,      Speed::FAST,   1,     0, _("Red Dragon")     , _("Red Dragons")   , { 3500, 0, 0, 0, 1, 0, 0} }, 
+	{    13,  13,  25,  50, 250,      Speed::FAST,   1,     0, _("Red Dragon")     , _("Red Dragons")   , { 3500, 0, 0, 0, 1, 0, 0} },
 	{    14,  14,  25,  50, 300,  Speed::VERYFAST,   1,     0, _("Black Dragon")   , _("Black Dragons") , { 4000, 0, 0, 0, 2, 0, 0} },
 
 	// atck dfnc  min  max   hp             speed grwn  shots  name                  multiname            cost
@@ -120,7 +120,7 @@ namespace
 	{     8,   6,   5,   7,  30,   Speed::AVERAGE,   3,     0, _("Vampire")        , _("Vampires")      , { 500, 0, 0, 0, 0, 0, 0} },
 	{     8,   6,   5,   7,  40,      Speed::FAST,   3,     0, _("Vampire Lord")   , _("Vampire Lords") , { 650, 0, 0, 0, 0, 0, 0} },
 	{     7,  12,   8,  10,  25,      Speed::FAST,   2,    12, _("Lich")           , _("Liches")        , { 750, 0, 0, 0, 0, 0, 0} },
-	{     7,  13,   8,  10,  35,  Speed::VERYFAST,   2,    24, _("Power Lich")     , _("Power Liches")  , { 900, 0, 0, 0, 0, 0, 0} }, 
+	{     7,  13,   8,  10,  35,  Speed::VERYFAST,   2,    24, _("Power Lich")     , _("Power Liches")  , { 900, 0, 0, 0, 0, 0, 0} },
 	{    11,   9,  25,  45, 150,   Speed::AVERAGE,   1,     0, _("Bone Dragon")    , _("Bone Dragons")  , { 1500, 0, 0, 0, 0, 0, 0} },
 
         // atck dfnc  min  max   hp             speed grwn  shots  name                  multiname                cost
@@ -176,6 +176,84 @@ StreamBase & operator>> (StreamBase & msg, MonsterStaticData & obj)
 	msg >> monsters[ii];
     return msg;
 }
+
+std::map<Monster::monster_t, Monster::level_t> Monster::monsterLevel = {
+        {UNKNOWN, LEVEL0},
+
+        {PEASANT, LEVEL1},
+        {ARCHER, LEVEL1},
+        {GOBLIN, LEVEL1},
+        {ORC, LEVEL1},
+        {SPRITE, LEVEL1},
+        {CENTAUR, LEVEL1},
+        {HALFLING, LEVEL1},
+        {SKELETON, LEVEL1},
+        {ZOMBIE, LEVEL1},
+        {ROGUE, LEVEL1},
+        {MONSTER_RND1, LEVEL1},
+
+        {RANGER, LEVEL2},
+        {PIKEMAN, LEVEL2},
+        {VETERAN_PIKEMAN, LEVEL2},
+        {ORC_CHIEF, LEVEL2},
+        {WOLF, LEVEL2},
+        {DWARF, LEVEL2},
+        {BATTLE_DWARF, LEVEL2},
+        {ELF, LEVEL2},
+        {GRAND_ELF, LEVEL2},
+        {GARGOYLE, LEVEL2},
+        {BOAR, LEVEL2},
+        {IRON_GOLEM, LEVEL2},
+        {MUTANT_ZOMBIE, LEVEL2},
+        {MUMMY, LEVEL2},
+        {NOMAD, LEVEL2},
+        {MONSTER_RND2, LEVEL2},
+
+        {SWORDSMAN, LEVEL3},
+        {MASTER_SWORDSMAN, LEVEL3},
+        {CAVALRY, LEVEL3},
+        {CHAMPION, LEVEL3},
+        {OGRE, LEVEL3},
+        {OGRE_LORD, LEVEL3},
+        {TROLL, LEVEL3},
+        {WAR_TROLL, LEVEL3},
+        {DRUID, LEVEL3},
+        {GREATER_DRUID, LEVEL3},
+        {GRIFFIN, LEVEL3},
+        {MINOTAUR, LEVEL3},
+        {MINOTAUR_KING, LEVEL3},
+        {STEEL_GOLEM, LEVEL3},
+        {ROC, LEVEL3},
+        {MAGE, LEVEL3},
+        {ARCHMAGE, LEVEL3},
+        {ROYAL_MUMMY, LEVEL3},
+        {VAMPIRE, LEVEL3},
+        {VAMPIRE_LORD, LEVEL3},
+        {LICH, LEVEL3},
+        {GHOST, LEVEL3},
+        {MEDUSA, LEVEL3},
+        {EARTH_ELEMENT, LEVEL3},
+        {AIR_ELEMENT, LEVEL3},
+        {FIRE_ELEMENT, LEVEL3},
+        {WATER_ELEMENT, LEVEL3},
+        {MONSTER_RND3, LEVEL3},
+
+        {PALADIN, LEVEL4},
+        {CRUSADER, LEVEL4},
+        {CYCLOPS, LEVEL4},
+        {UNICORN, LEVEL4},
+        {PHOENIX, LEVEL4},
+        {HYDRA, LEVEL4},
+        {GREEN_DRAGON, LEVEL4},
+        {RED_DRAGON, LEVEL4},
+        {BLACK_DRAGON, LEVEL4},
+        {GIANT, LEVEL4},
+        {TITAN, LEVEL4},
+        {POWER_LICH, LEVEL4},
+        {BONE_DRAGON, LEVEL4},
+        {GENIE, LEVEL4},
+        {MONSTER_RND4, LEVEL4}
+};
 
 float Monster::GetUpgradeRatio(void)
 {
@@ -393,7 +471,7 @@ u32 Monster::GetRNDSize(bool skip_factor) const
     {
 	u32 factor = 100;
 
-	switch(Settings::Get().GameDifficulty()) 	 
+	switch(Settings::Get().GameDifficulty())
 	{
 	    case Difficulty::EASY:      factor = 80; break;
 	    case Difficulty::NORMAL:    factor = 100; break;
@@ -840,27 +918,24 @@ Monster Monster::FromDwelling(int race, u32 dwelling)
 
 Monster Monster::Rand(level_t level)
 {
-    switch(level)
+    if (LEVEL0 == level)
     {
-	default: return Monster(Rand::Get(PEASANT, WATER_ELEMENT));
-
-	case LEVEL1:
-	case LEVEL2:
-	case LEVEL3:
-	case LEVEL4:
-		break;
+        return Monster(Rand::Get(PEASANT, WATER_ELEMENT));
     }
+    else
+    {
+        std::vector<Monster> possibleMonsters;
 
-    std::vector<Monster> monster;
-    monster.reserve(30);
+        for(u32 ii(PEASANT); ii <= WATER_ELEMENT; ++ii)
+        {
+            if(GetLevel(static_cast<monster_t>(ii)) == level)
+            {
+                possibleMonsters.push_back(Monster(ii));
+            }
+        }
 
-    for(u32 ii = PEASANT; ii <= WATER_ELEMENT; ++ii) {
-        Monster mons(ii);
-        if(mons.GetLevel() == level)
-            monster.push_back(mons);
+        return possibleMonsters.size() ? *Rand::Get(possibleMonsters) : UNKNOWN;
     }
-
-    return monster.size() ? *Rand::Get(monster) : UNKNOWN;
 }
 
 u32 Monster::Rand4WeekOf(void)
@@ -958,98 +1033,20 @@ u32 Monster::Rand4MonthOf(void)
     return UNKNOWN;
 }
 
-int Monster::GetLevel(void) const
+Monster::level_t Monster::GetLevel(monster_t const id)
 {
-    switch(id)
+    if (id == MONSTER_RND)
     {
-	case PEASANT:
-	case ARCHER:
-	case GOBLIN:
-	case ORC:
-	case SPRITE:
-	case CENTAUR:
-	case HALFLING:
-	case SKELETON:
-	case ZOMBIE:
-	case ROGUE:
-	case MONSTER_RND1:	return LEVEL1;
-
-	case RANGER:
-	case PIKEMAN:
-	case VETERAN_PIKEMAN:
-	case ORC_CHIEF:
-	case WOLF:
-	case DWARF:
-	case BATTLE_DWARF:
-	case ELF:
-	case GRAND_ELF:
-	case GARGOYLE:
-	case BOAR:
-	case IRON_GOLEM:
-	case MUTANT_ZOMBIE:
-	case MUMMY:
-	case NOMAD:
-	case MONSTER_RND2:	return LEVEL2;
-
-	case SWORDSMAN:
-	case MASTER_SWORDSMAN:
-	case CAVALRY:
-	case CHAMPION:
-	case OGRE:
-	case OGRE_LORD:
-	case TROLL:
-	case WAR_TROLL:
-	case DRUID:
-	case GREATER_DRUID:
-	case GRIFFIN:
-	case MINOTAUR:
-	case MINOTAUR_KING:
-	case STEEL_GOLEM:
-	case ROC:
-	case MAGE:
-	case ARCHMAGE:
-	case ROYAL_MUMMY:
-	case VAMPIRE:
-	case VAMPIRE_LORD:
-	case LICH:
-	case GHOST:
-	case MEDUSA:
-	case EARTH_ELEMENT:
-	case AIR_ELEMENT:
-	case FIRE_ELEMENT:
-	case WATER_ELEMENT:
-	case MONSTER_RND3:	return LEVEL3;
-
-	case PALADIN:
-	case CRUSADER:
-	case CYCLOPS:
-	case UNICORN:
-	case PHOENIX:
-	case HYDRA:
-	case GREEN_DRAGON:
-	case RED_DRAGON:
-	case BLACK_DRAGON:
-	case GIANT:
-	case TITAN:
-	case POWER_LICH:
-	case BONE_DRAGON:
-        case GENIE:
-	case MONSTER_RND4:	return LEVEL4;
-    
-	case MONSTER_RND:
-    	    switch(Rand::Get(0, 3))
-    	    {
-		default:	return LEVEL1;
-		case 1:		return LEVEL2;
-		case 2:		return LEVEL3;
-		case 3:		return LEVEL4;
-    	    }
-	    break;
-
-	default: break;
+        switch(Rand::Get(0, 3))
+    	{
+            default:	return LEVEL1;
+            case 1:		return LEVEL2;
+            case 2:		return LEVEL3;
+            case 3:		return LEVEL4;
+        }
     }
 
-    return LEVEL0;
+    return monsterLevel[id];
 }
 
 u32 Monster::GetDwelling(void) const
@@ -1124,7 +1121,7 @@ u32 Monster::GetDwelling(void) const
 	case TITAN:		return DWELLING_UPGRADE6;
 
 	case BLACK_DRAGON:	return DWELLING_UPGRADE7;
-    
+
 	default: break;
     }
 

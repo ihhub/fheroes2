@@ -115,6 +115,8 @@ public:
 	MONSTER_RND
     };
 
+    static std::map<monster_t, level_t> monsterLevel;
+
     Monster(int = UNKNOWN);
     Monster(const Spell &);
     Monster(int race, u32 dw);
@@ -144,7 +146,6 @@ public:
     u32  GetHitPoints(void) const;
     u32  GetSpeed(void) const;
     u32  GetGrown(void) const;
-    int  GetLevel(void) const;
     u32 GetRNDSize(bool skip) const;
 
     const char* GetName(void) const;
@@ -183,6 +184,7 @@ public:
 
     static void UpdateStats(const std::string &);
     static float GetUpgradeRatio(void);
+    static level_t GetLevel(const monster_t);
 
 protected:
     static Monster FromDwelling(int race, u32 dw);
