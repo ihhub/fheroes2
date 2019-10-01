@@ -21,17 +21,17 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "heroes.h"
-#include "button.h"
 #include "army_bar.h"
-#include "heroes_indicator.h"
 #include "army_troop.h"
-#include "world.h"
-#include "game.h"
+#include "button.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "heroes.h"
+#include "heroes_indicator.h"
+#include "settings.h"
+#include "text.h"
+#include "world.h"
 
 class ArmyCell : public Rect
 {

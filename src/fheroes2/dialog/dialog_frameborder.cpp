@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "settings.h"
+#include "text.h"
 
 #define  ANGLEWIDTH 44
 

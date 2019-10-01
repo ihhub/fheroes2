@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
-#include "heroes.h"
-#include "game.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "heroes.h"
+#include "settings.h"
+#include "text.h"
 
 void DialogPrimaryOnly(const std::string & name, const std::string & primary)
 {

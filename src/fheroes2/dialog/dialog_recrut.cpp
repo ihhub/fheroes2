@@ -21,16 +21,16 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "payment.h"
-#include "world.h"
 #include "button.h"
+#include "cursor.h"
+#include "dialog.h"
+#include "game.h"
 #include "kingdom.h"
 #include "monster.h"
-#include "game.h"
-#include "dialog.h"
+#include "payment.h"
+#include "settings.h"
+#include "text.h"
+#include "world.h"
 
 void RedrawCurrentInfo(const Point & pos, u32 available, u32 result,
 	    const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds, const std::string & label)

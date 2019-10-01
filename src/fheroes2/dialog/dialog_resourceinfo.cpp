@@ -21,12 +21,12 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
-#include "resource.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "resource.h"
+#include "settings.h"
+#include "text.h"
 
 int Dialog::ResourceInfo(const std::string &header, const std::string &message, const Funds & rs, int buttons)
 {

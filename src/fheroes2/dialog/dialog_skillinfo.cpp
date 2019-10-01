@@ -21,14 +21,14 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "profit.h"
 #include "button.h"
-#include "skill.h"
-#include "game.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "profit.h"
+#include "skill.h"
+#include "settings.h"
+#include "text.h"
 
 void Dialog::SecondarySkillInfo(const Skill::Secondary & skill, const bool ok_button)
 {

@@ -21,16 +21,16 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "icn.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
-#include "maps.h"
+#include "cursor.h"
+#include "dialog.h"
+#include "difficulty.h"
 #include "game.h"
 #include "game_over.h"
-#include "difficulty.h"
-#include "dialog.h"
+#include "icn.h"
+#include "maps.h"
+#include "settings.h"
+#include "text.h"
 
 void Dialog::GameInfo(void)
 {

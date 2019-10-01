@@ -22,9 +22,10 @@
 #ifndef H2DIALOG_H
 #define H2DIALOG_H
 
-#include <string>
 #include <list>
+#include <string>
 #include <vector>
+
 #include "gamedefs.h"
 
 #define	SHADOWWIDTH	16

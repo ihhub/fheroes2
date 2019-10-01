@@ -21,10 +21,11 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
 #include "army_troop.h"
-#include "interface_list.h"
 #include "dialog_selectitems.h"
+#include "interface_list.h"
+#include "text.h"
+
 
 class SelectEnum : public Interface::ListBox<int>
 {

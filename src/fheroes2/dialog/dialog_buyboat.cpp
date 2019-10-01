@@ -22,16 +22,16 @@
 
 #include <string>
 #include "agg.h"
+#include "button.h"
+#include "castle.h"
+#include "cursor.h"
+#include "dialog.h"
+#include "game.h"
+#include "kingdom.h"
+#include "payment.h"
+#include "settings.h"
 #include "text.h"
 #include "world.h"
-#include "button.h"
-#include "cursor.h"
-#include "castle.h"
-#include "kingdom.h"
-#include "settings.h"
-#include "game.h"
-#include "dialog.h"
-#include "payment.h"
 
 int Dialog::BuyBoat(bool enable)
 {

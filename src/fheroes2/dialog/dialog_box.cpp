@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
 #include "cursor.h"
-#include "settings.h"
 #include "dialog.h"
+#include "settings.h"
+#include "text.h"
 
 #define BUTTON_HEIGHT   40
 #define BOX_WIDTH       306

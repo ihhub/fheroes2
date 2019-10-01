@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
-#include "skill.h"
-#include "game.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "settings.h"
+#include "skill.h"
+#include "text.h"
 
 void	InfoSkillClear(const Rect &, const Rect &, const Rect &, const Rect &);
 void	InfoSkillSelect(int, const Rect &, const Rect &, const Rect &, const Rect &);

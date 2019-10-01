@@ -22,12 +22,12 @@
 
 #include <algorithm>
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "interface_list.h"
+#include "settings.h"
+#include "text.h"
 
 class SettingsListBox : public Interface::ListBox<u32>
 {

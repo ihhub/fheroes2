@@ -20,20 +20,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
 #include <algorithm>
+#include <string>
+
 #include "agg.h"
-#include "text.h"
 #include "button.h"
-#include "cursor.h"
-#include "settings.h"
-#include "world.h"
-#include "kingdom.h"
 #include "castle.h"
-#include "pocketpc.h"
-#include "monster.h"
-#include "game.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "kingdom.h"
+#include "monster.h"
+#include "pocketpc.h"
+#include "settings.h"
+#include "text.h"
+#include "world.h"
 
 struct ValueColors : std::pair<int, int>
 {

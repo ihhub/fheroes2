@@ -21,12 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
 #include "button.h"
 #include "cursor.h"
-#include "settings.h"
-#include "game.h"
 #include "dialog.h"
+#include "game.h"
+#include "settings.h"
+#include "text.h"
+
 
 int Dialog::AdventureOptions(bool enabledig)
 {

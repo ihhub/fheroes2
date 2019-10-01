@@ -21,13 +21,14 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
-#include "pocketpc.h"
-#include "game.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "pocketpc.h"
+#include "settings.h"
+#include "text.h"
+
 
 class SelectValue : public Rect
 {

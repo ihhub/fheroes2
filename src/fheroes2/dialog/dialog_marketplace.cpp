@@ -23,17 +23,17 @@
 #include <string>
 #include <vector>
 #include "agg.h"
-#include "text.h"
 #include "button.h"
-#include "world.h"
 #include "cursor.h"
-#include "settings.h"
-#include "resource.h"
-#include "kingdom.h"
-#include "splitter.h"
-#include "game.h"
 #include "dialog.h"
+#include "game.h"
+#include "kingdom.h"
 #include "marketplace.h"
+#include "resource.h"
+#include "settings.h"
+#include "splitter.h"
+#include "text.h"
+#include "world.h"
 
 void RedrawFromResource(const Point &, const Funds &);
 void RedrawToResource(const Point &, bool showcost, bool tradingPost, int from_resource = 0);

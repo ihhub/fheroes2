@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "button.h"
 #include "artifact.h"
-#include "game.h"
+#include "button.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "settings.h"
+#include "text.h"
 
 int Dialog::ArtifactInfo(const std::string & hdr, const std::string & msg, const Artifact & art, int buttons)
 {

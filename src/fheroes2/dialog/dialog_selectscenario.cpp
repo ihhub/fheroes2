@@ -20,17 +20,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog.h"
+
 #include "agg.h"
-#include "text.h"
 #include "button.h"
 #include "cursor.h"
-#include "difficulty.h"
-#include "settings.h"
-#include "maps.h"
-#include "tools.h"
-#include "game.h"
+#include "dialog.h"
 #include "dialog_selectscenario.h"
+#include "difficulty.h"
+#include "game.h"
+#include "maps.h"
+#include "settings.h"
+#include "text.h"
+#include "tools.h"
 
 void LossConditionInfo(const Maps::FileInfo &);
 void VictoryConditionInfo(const Maps::FileInfo &);

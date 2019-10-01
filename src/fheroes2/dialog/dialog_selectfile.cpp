@@ -21,25 +21,25 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <iterator>
-#include <ctime>
 #include <cctype>
+#include <ctime>
+#include <iterator>
 #include <sstream>
 #include <string>
 
-#include "system.h"
-#include "dir.h"
 #include "agg.h"
-#include "text.h"
 #include "button.h"
 #include "cursor.h"
-#include "settings.h"
-#include "maps_fileinfo.h"
-#include "interface_list.h"
-#include "pocketpc.h"
-#include "world.h"
-#include "game.h"
 #include "dialog.h"
+#include "dir.h"
+#include "game.h"
+#include "interface_list.h"
+#include "maps_fileinfo.h"
+#include "pocketpc.h"
+#include "settings.h"
+#include "system.h"
+#include "text.h"
+#include "world.h"
 
 std::string SelectFileListSimple(const std::string &, const std::string &, bool);
 bool RedrawExtraInfo(const Point &, const std::string &, const std::string &, const Rect &);

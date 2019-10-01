@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
-#include "spell.h"
-#include "game.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "settings.h"
+#include "spell.h"
+#include "text.h"
 
 void Dialog::SpellInfo(const Spell & spell, bool ok_button)
 {
