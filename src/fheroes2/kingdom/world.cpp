@@ -26,7 +26,6 @@
 #include "artifact.h"
 #include "resource.h"
 #include "settings.h" 
-#include "kingdom.h" 
 #include "heroes.h" 
 #include "castle.h" 
 #include "game_static.h"
