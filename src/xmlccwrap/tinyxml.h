@@ -287,11 +287,11 @@ public:
 
 protected:
 	static const char* SkipWhiteSpace( const char*, TiXmlEncoding encoding );
-	inline static bool IsWhiteSpace( char c )		
+	static bool IsWhiteSpace( char c )		
 	{ 
 		return ( isspace( (unsigned char) c ) || c == '\n' || c == '\r' ); 
 	}
-	inline static bool IsWhiteSpace( int c )
+	static bool IsWhiteSpace( int c )
 	{
 		if ( c < 256 )
 			return IsWhiteSpace( (char) c );
@@ -324,7 +324,7 @@ protected:
 
 	// Get a character, while interpreting entities.
 	// The length can be from 0 to 4 bytes.
-	inline static const char* GetChar( const char* p, char* _value, int* length, TiXmlEncoding encoding )
+	static const char* GetChar( const char* p, char* _value, int* length, TiXmlEncoding encoding )
 	{
 		assert( p );
 		if ( encoding == TIXML_ENCODING_UTF8 )
@@ -379,7 +379,7 @@ protected:
 	// Good for approximation, not great for accuracy.
 	static int IsAlpha( unsigned char anyByte, TiXmlEncoding encoding );
 	static int IsAlphaNum( unsigned char anyByte, TiXmlEncoding encoding );
-	inline static int ToLower( int v, TiXmlEncoding encoding )
+	static int ToLower( int v, TiXmlEncoding encoding )
 	{
 		if ( encoding == TIXML_ENCODING_UTF8 )
 		{
