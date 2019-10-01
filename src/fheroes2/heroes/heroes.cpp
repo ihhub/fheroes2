@@ -470,25 +470,25 @@ int Heroes::GetManaIndexSprite(void) const
     return 25 >= r ? r : 25;
 }
 
-int Heroes::GetAttack(std::string* strs = NULL) const
+int Heroes::GetAttack(std::string* strs /* NULL */) const
 {
     int result = attack + GetAttackModificator(strs);
     return result < 0 ? 0 : (result > 255 ? 255 : result);
 }
 
-int Heroes::GetDefense(std::string* strs = NULL) const
+int Heroes::GetDefense(std::string* strs /* NULL */) const
 {
     int result = defense + GetDefenseModificator(strs);
     return result < 0 ? 0 : (result > 255 ? 255 : result);
 }
 
-int Heroes::GetPower(std::string* strs = NULL) const
+int Heroes::GetPower(std::string* strs /* NULL */) const
 {
     int result = power + GetPowerModificator(strs);
     return result < 0 ? 0 : (result > 255 ? 255 : result);
 }
 
-int Heroes::GetKnowledge(std::string* strs = NULL) const
+int Heroes::GetKnowledge(std::string* strs /* NULL */) const
 {
     int result = knowledge + GetKnowledgeModificator(strs);
     return result < 0 ? 0 : (result > 255 ? 255 : result);
