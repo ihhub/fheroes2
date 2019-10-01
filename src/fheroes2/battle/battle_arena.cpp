@@ -32,7 +32,6 @@
 #include "ground.h"
 #include "race.h"
 #include "army_troop.h"
-#include "spell_storage.h"
 #include "battle_arena.h"
 #include "battle_cell.h"
 #include "battle_army.h"

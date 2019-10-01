@@ -29,7 +29,6 @@
 #include "spell.h"
 #include "race.h"
 #include "morale.h"
-#include "payment.h"
 #include "game_static.h"
 #include "icn.h"
 #include "game.h"

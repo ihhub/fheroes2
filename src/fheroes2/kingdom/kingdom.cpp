@@ -23,8 +23,6 @@
 #include <algorithm>
 
 #include "settings.h"
-#include "castle.h"
-#include "heroes.h"
 #include "difficulty.h"
 #include "color.h"
 #include "game.h"
