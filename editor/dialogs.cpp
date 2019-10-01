@@ -1,7 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
+ *   Part of the Free Heroes of Might and Magic 2 Engine:                                      *
  *   http://sourceforge.net/projects/fheroes2                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
