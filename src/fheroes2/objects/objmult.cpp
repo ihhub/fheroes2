@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "mp2.h"
-#include "icn.h"
 #include "direction.h"
-#include "objmult.h"
+#include "icn.h"
+#include "mp2.h"
+#include "objlava.h"
 
 int ObjMult::GetPassable(u32 index)
 {
