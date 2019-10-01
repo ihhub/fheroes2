@@ -264,25 +264,25 @@ class TiXmlString
 } ;
 
 
-inline bool operator == (const TiXmlString & a, const TiXmlString & b)
+bool operator == (const TiXmlString & a, const TiXmlString & b)
 {
 	return    ( a.length() == b.length() )				// optimization on some platforms
 	       && ( strcmp(a.c_str(), b.c_str()) == 0 );	// actual compare
 }
-inline bool operator < (const TiXmlString & a, const TiXmlString & b)
+bool operator < (const TiXmlString & a, const TiXmlString & b)
 {
 	return strcmp(a.c_str(), b.c_str()) < 0;
 }
 
-inline bool operator != (const TiXmlString & a, const TiXmlString & b) { return !(a == b); }
-inline bool operator >  (const TiXmlString & a, const TiXmlString & b) { return b < a; }
-inline bool operator <= (const TiXmlString & a, const TiXmlString & b) { return !(b < a); }
-inline bool operator >= (const TiXmlString & a, const TiXmlString & b) { return !(a < b); }
+bool operator != (const TiXmlString & a, const TiXmlString & b) { return !(a == b); }
+bool operator >  (const TiXmlString & a, const TiXmlString & b) { return b < a; }
+bool operator <= (const TiXmlString & a, const TiXmlString & b) { return !(b < a); }
+bool operator >= (const TiXmlString & a, const TiXmlString & b) { return !(a < b); }
 
-inline bool operator == (const TiXmlString & a, const char* b) { return strcmp(a.c_str(), b) == 0; }
-inline bool operator == (const char* a, const TiXmlString & b) { return b == a; }
-inline bool operator != (const TiXmlString & a, const char* b) { return !(a == b); }
-inline bool operator != (const char* a, const TiXmlString & b) { return !(b == a); }
+bool operator == (const TiXmlString & a, const char* b) { return strcmp(a.c_str(), b) == 0; }
+bool operator == (const char* a, const TiXmlString & b) { return b == a; }
+bool operator != (const TiXmlString & a, const char* b) { return !(a == b); }
+bool operator != (const char* a, const TiXmlString & b) { return !(b == a); }
 
 TiXmlString operator + (const TiXmlString & a, const TiXmlString & b);
 TiXmlString operator + (const TiXmlString & a, const char* b);

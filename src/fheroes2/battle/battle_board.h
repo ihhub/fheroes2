@@ -34,8 +34,8 @@
 
 namespace Battle
 {
-    inline direction_t & operator++ (direction_t & d){ return d = ( CENTER == d ? TOP_LEFT : direction_t(d << 1)); }
-    inline direction_t & operator-- (direction_t & d){ return d = ( TOP_LEFT == d ? CENTER : direction_t(d >> 1)); }
+    direction_t & operator++ (direction_t & d){ return d = ( CENTER == d ? TOP_LEFT : direction_t(d << 1)); }
+    direction_t & operator-- (direction_t & d){ return d = ( TOP_LEFT == d ? CENTER : direction_t(d >> 1)); }
 
     typedef std::vector<s32> Indexes;
 
