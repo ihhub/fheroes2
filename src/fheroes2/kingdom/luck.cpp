@@ -23,9 +23,9 @@
 #include "gamedefs.h"
 #include "luck.h"
 
-const char* Luck::String(int luck)
+const std::string Luck::String(int luck)
 {
-    const char* str_luck[] = { "Unknown", _("luck|Cursed"), _("luck|Awful"), _("luck|Bad"), _("luck|Normal"), _("luck|Good"), _("luck|Great"), _("luck|Irish") };
+    static std::string str_luck[] = { "Unknown", _("luck|Cursed"), _("luck|Awful"), _("luck|Bad"), _("luck|Normal"), _("luck|Good"), _("luck|Great"), _("luck|Irish") };
 
     switch(luck)
     {
@@ -36,15 +36,14 @@ const char* Luck::String(int luck)
         case Luck::GOOD:	return str_luck[5];
         case Luck::GREAT:	return str_luck[6];
         case Luck::IRISH:	return str_luck[7];
-	default: break;
     }
 
     return str_luck[0];
 }
 
-const char* Luck::Description(int luck)
+const std::string Luck::Description(int luck)
 {
-    const char* str_desc_luck[] = { "Unknown",
+    static std::string str_desc_luck[] = { "Unknown",
 	_("Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage."),
 	_("Neutral luck means your armies will never get lucky or unlucky attacks on the enemy."),
 	_("Good luck sometimes lets your armies get lucky attacks (double strength) in combat.") };
@@ -58,7 +57,6 @@ const char* Luck::Description(int luck)
         case Luck::GOOD:
         case Luck::GREAT:
         case Luck::IRISH:	return str_desc_luck[3];
-	default: break;
     }
 
     return str_desc_luck[0];
