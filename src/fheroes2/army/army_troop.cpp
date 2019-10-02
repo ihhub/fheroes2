@@ -28,8 +28,8 @@
 #include "heroes_base.h"
 #include "luck.h"
 #include "morale.h"
-#include "speed.h"
 #include "settings.h"
+#include "speed.h"
 
 Troop::Troop() : Monster(Monster::UNKNOWN), count(0)
 {
