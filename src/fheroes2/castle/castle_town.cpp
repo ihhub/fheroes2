@@ -156,7 +156,7 @@ u32 Castle::OpenTown(void)
     AGG::GetICN(ICN::CASLWIND, 0).Blit(dst_pt);
 
     // hide captain options
-    if(! (building & BUILD_CAPTAIN))
+    if(!(building & BUILD_CAPTAIN))
     {
 	dst_pt.x = 530;
 	dst_pt.y = 163;
@@ -215,10 +215,17 @@ u32 Castle::OpenTown(void)
     buildingMageGuild.SetPos(cur_pt.x + 5, cur_pt.y + 157);
     buildingMageGuild.Redraw();
 
-    // tavern
-    BuildingInfo buildingTavern(*this, BUILD_TAVERN);
-    buildingTavern.SetPos(cur_pt.x + 149, cur_pt.y + 157);
-    buildingTavern.Redraw();
+	// tavern
+	BuildingInfo buildingTavern(*this, BUILD_TAVERN);
+    if (GetRace() != Race::NECR) {
+        buildingTavern.SetPos(cur_pt.x + 149, cur_pt.y + 157);
+        buildingTavern.Redraw();
+    } else {
+        dst_pt.x = cur_pt.x + 149;
+        dst_pt.y = cur_pt.y + 157;
+        const Rect buildingMask(dst_pt, 144, 75);
+        AGG::GetICN(ICN::STONEBAK, 0).Blit(buildingMask, dst_pt);
+    }
 
     // thieves guild
     BuildingInfo buildingThievesGuild(*this, BUILD_THIEVESGUILD);
@@ -424,7 +431,7 @@ u32 Castle::OpenTown(void)
 	else
         if(le.MouseCursor(buildingTavern.GetArea()) && buildingTavern.QueueEventProcessing()) return (Race::NECR == race  ? BUILD_SHRINE : BUILD_TAVERN);
 	else
-        if(le.MouseCursor(buildingThievesGuild.GetArea()) && buildingThievesGuild.QueueEventProcessing()) return BUILD_THIEVESGUILD;
+        if((GetRace() != Race::NECR) && le.MouseCursor(buildingThievesGuild.GetArea()) && buildingThievesGuild.QueueEventProcessing()) return BUILD_THIEVESGUILD;
 	else
         if(le.MouseCursor(buildingShipyard.GetArea()) && buildingShipyard.QueueEventProcessing()) return BUILD_SHIPYARD;
 	else
@@ -507,7 +514,7 @@ u32 Castle::OpenTown(void)
 	else
 	if(le.MouseCursor(buildingMageGuild.GetArea())) buildingMageGuild.SetStatusMessage(statusBar);
 	else
-	if(le.MouseCursor(buildingTavern.GetArea())) buildingTavern.SetStatusMessage(statusBar);
+	if((GetRace() != Race::NECR) && le.MouseCursor(buildingTavern.GetArea())) buildingTavern.SetStatusMessage(statusBar);
 	else
 	if(le.MouseCursor(buildingThievesGuild.GetArea())) buildingThievesGuild.SetStatusMessage(statusBar);
 	else
