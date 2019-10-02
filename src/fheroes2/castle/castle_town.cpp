@@ -142,6 +142,13 @@ int Castle::DialogBuyCastle(bool buttons) const
     return info.DialogBuyBuilding(buttons) ? Dialog::OK : Dialog::CANCEL;
 }
 
+static void MaskTavernTile(Point dst_pt, const Point& cur_pt) {
+	dst_pt.x = cur_pt.x + 149;
+	dst_pt.y = cur_pt.y + 157;
+	const Rect buildingMask(dst_pt, 144, 75);
+	AGG::GetICN(ICN::STONEBAK, 0).Blit(buildingMask, dst_pt);
+}
+
 u32 Castle::OpenTown(void)
 {
     Display & display = Display::Get();
@@ -221,10 +228,7 @@ u32 Castle::OpenTown(void)
         buildingTavern.SetPos(cur_pt.x + 149, cur_pt.y + 157);
         buildingTavern.Redraw();
     } else {
-        dst_pt.x = cur_pt.x + 149;
-        dst_pt.y = cur_pt.y + 157;
-        const Rect buildingMask(dst_pt, 144, 75);
-        AGG::GetICN(ICN::STONEBAK, 0).Blit(buildingMask, dst_pt);
+		MaskTavernTile(dst_pt, cur_pt);
     }
 
     // thieves guild
