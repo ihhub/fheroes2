@@ -31,8 +31,6 @@
 #include "settings.h"
 #include "speed.h"
 
-
-
 Troop::Troop() : Monster(Monster::UNKNOWN), count(0)
 {
 }
