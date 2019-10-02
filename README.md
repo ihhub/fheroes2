@@ -7,7 +7,7 @@ Direct continuation of free implementation of Heroes of the Might and Magic II e
 Screenshots
 ---------------------------
 
-![Screenshot 1](files/images/screenshots/screenshot_game1.png?raw=true)![Screenshot 2](files/images/screenshots/screenshot_game2.png?raw=true)
+<img src="files/images/screenshots/screenshot_game1.png?raw=true" width="400"> <img src="files/images/screenshots/screenshot_game2.png?raw=true" width="400">
 
 Copyright
 ---------------------------
