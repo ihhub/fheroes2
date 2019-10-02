@@ -21,15 +21,15 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "army.h"
+#include "army_bar.h"
 #include "cursor.h"
-#include "settings.h"
-#include "race.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "world.h"
-#include "army.h"
+#include "race.h"
+#include "settings.h"
 #include "text.h"
-#include "army_bar.h"
+#include "world.h"
 
 void RedistributeArmy(ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */)
 {
