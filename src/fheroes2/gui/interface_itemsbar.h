@@ -69,8 +69,8 @@ namespace Interface
 	virtual void	RedrawBackground(const Rect &, Surface &) {}
 	virtual void	RedrawItem(Item &, const Rect &, Surface &) {}
 
-        virtual bool	ActionBarSingleClick(const Point &, Item & item, const Rect &){ return false; }
-        virtual bool	ActionBarPressRight(const Point &, Item & item, const Rect &){ return false; }
+        virtual bool	ActionBarSingleClick(const Point &, Item &, const Rect &){ return false; }
+        virtual bool	ActionBarPressRight(const Point &, Item &, const Rect &){ return false; }
 
         virtual bool	ActionBarCursor(const Point &, Item &, const Rect &){ return false; }
 
@@ -334,9 +334,9 @@ namespace Interface
         virtual bool	ActionBarSingleClick(const Point &, Item &, const Rect &, Item &, const Rect &){ return false; }
         virtual bool	ActionBarPressRight(const Point &, Item &, const Rect &, Item &, const Rect &){ return false; }
 
-        virtual bool	ActionBarSingleClick(const Point &, Item & item, const Rect &){ return false; }
+        virtual bool	ActionBarSingleClick(const Point &, Item &, const Rect &){ return false; }
         virtual bool	ActionBarDoubleClick(const Point & cursor, Item & item, const Rect & pos){ return ActionBarSingleClick(cursor, item, pos); }
-        virtual bool	ActionBarPressRight(const Point &, Item & item, const Rect &){ return false; }
+        virtual bool	ActionBarPressRight(const Point &, Item &, const Rect &){ return false; }
 
         virtual bool	ActionBarCursor(const Point &, Item &, const Rect &){ return false; }
         virtual bool	ActionBarCursor(const Point &, Item &, const Rect &, Item &, const Rect &){ return false; }
