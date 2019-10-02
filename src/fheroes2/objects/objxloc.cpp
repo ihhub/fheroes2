@@ -21,11 +21,10 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "mp2.h"
-#include "icn.h"
 #include "direction.h"
+#include "icn.h"
+#include "mp2.h"
 #include "objxloc.h"
-
 int ObjXlc1::GetPassable(u32 index)
 {
     const u8 disabled[] = { 40, 49, 50 };

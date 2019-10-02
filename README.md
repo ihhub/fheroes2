@@ -4,6 +4,8 @@ fheroes2
 
 Direct continuation of free implementation of Heroes of the Might and Magic II engine. Original project has been developed at [sourceforge](https://sourceforge.net/projects/fheroes2/).
 
+<img src="files/images/screenshots/screenshot_game1.png?raw=true" width="400"> <img src="files/images/screenshots/screenshot_game2.png?raw=true" width="400">
+
 Copyright
 ---------------------------
 All rights for original game and it's resources belong to formerly The 3DO Company. this right were transferred to Ubisoft. We do not encourage and support any form of illegal usage of original game. We do not provide any information about download of original game in any form.

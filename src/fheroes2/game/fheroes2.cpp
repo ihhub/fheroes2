@@ -57,7 +57,7 @@ int PrintHelp(const char *basename)
 
 std::string GetCaption(void)
 {
-    return std::string("Free Heroes II, version: " + Settings::GetVersion());
+    return std::string("Free Heroes of Might and Magic II, version: " + Settings::GetVersion());
 }
 
 #if defined (_MSC_VER)
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	Settings & conf = Settings::Get();
 	int test = 0;
 
-	DEBUG(DBG_ALL, DBG_INFO, "Free Heroes II, " + conf.GetVersion());
+	DEBUG(DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion());
 
 	conf.SetProgramPath(argv[0]);
 
