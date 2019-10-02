@@ -31,9 +31,6 @@
 #include "text.h"
 #include "world.h"
 
-
-
-
 void RedistributeArmy(ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */)
 {
     const Army* army1 = troop1.GetArmy();
