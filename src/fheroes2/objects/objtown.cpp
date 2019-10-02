@@ -20,9 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "mp2.h"
-#include "icn.h"
 #include "direction.h"
+#include "icn.h"
+#include "mp2.h"
 #include "objtown.h"
 
 int ObjTown::GetPassable(u32 index0)
