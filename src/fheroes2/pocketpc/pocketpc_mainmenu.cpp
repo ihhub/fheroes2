@@ -68,8 +68,8 @@ int PocketPC::MainMenu(void)
     board.Blit(src_rt, dst_pt.x , dst_pt.y);
 
     Text text;
-    
-    text.Set("Free Heroes II", Font::YELLOW_BIG);
+
+    text.Set("Free Heroes of Might and Magic II", Font::YELLOW_BIG);
     text.Blit(dst_pt.x + (src_rt.w - text.w()) / 2, dst_pt.y + 12);
 
     text.Set(_("New Game"), Font::BIG);
@@ -144,8 +144,8 @@ int PocketPC::NewGame(void)
     board.Blit(src_rt, dst_pt.x , dst_pt.y);
 
     Text text;
-    
-    text.Set("Free Heroes II", Font::YELLOW_BIG);
+
+    text.Set("Free Heroes of Might and Magic II", Font::YELLOW_BIG);
     text.Blit(dst_pt.x + (src_rt.w - text.w()) / 2, dst_pt.y + 12);
 
     text.Set(conf.GetVersion(), Font::YELLOW_SMALL);
@@ -209,8 +209,8 @@ int PocketPC::NewMulti(void)
     board.Blit(src_rt, dst_pt.x , dst_pt.y);
 
     Text text;
-    
-    text.Set("Free Heroes II", Font::YELLOW_BIG);
+
+    text.Set("Free Heroes of Might and Magic II", Font::YELLOW_BIG);
     text.Blit(dst_pt.x + (src_rt.w - text.w()) / 2, dst_pt.y + 12);
 
     text.Set(conf.GetVersion(), Font::YELLOW_SMALL);
