@@ -470,48 +470,55 @@ int Heroes::GetManaIndexSprite(void) const
     return 25 >= r ? r : 25;
 }
 
-int Heroes::GetAttack(void) const
-{
-    return GetAttack(NULL);
-}
 
 int Heroes::GetAttack(std::string* strs) const
 {
+    if(strs==NULL)
+        return GetAttack(NULL);
+
+    else{    
     int result = attack + GetAttackModificator(strs);
     return result < 0 ? 0 : (result > 255 ? 255 : result);
+    }
 }
 
-int Heroes::GetDefense(void) const
-{
-    return GetDefense(NULL);
-}
+
 
 int Heroes::GetDefense(std::string* strs) const
 {
+    if(strs==NULL)
+        return GetDefense(NULL);
+    
+    else{    
     int result = defense + GetDefenseModificator(strs);
     return result < 0 ? 0 : (result > 255 ? 255 : result);
+    }
 }
 
-int Heroes::GetPower(void) const
-{
-    return GetPower(NULL);
-}
+
 
 int Heroes::GetPower(std::string* strs) const
 {
+    if(strs==NULL)
+        return GetPower(NULL);
+    
+    else{    
     int result = power + GetPowerModificator(strs);
     return result < 0 ? 0 : (result > 255 ? 255 : result);
+        }
 }
 
-int Heroes::GetKnowledge(void) const
-{
-    return GetKnowledge(NULL);
-}
+
 
 int Heroes::GetKnowledge(std::string* strs) const
 {
+    if(strs==NULL)
+        return GetKnowledge(NULL);
+    
+    else{    
     int result = knowledge + GetKnowledgeModificator(strs);
     return result < 0 ? 0 : (result > 255 ? 255 : result);
+       } 
 }
 
 void Heroes::IncreasePrimarySkill(int skill)
