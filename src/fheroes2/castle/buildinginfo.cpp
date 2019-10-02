@@ -334,7 +334,7 @@ bool BuildingInfo::IsDwelling(void) const
 void BuildingInfo::RedrawCaptain(void)
 {
     AGG::GetICN(ICN::Get4Captain(castle.GetRace()),
-				(building & BUILD_CAPTAIN ? 1 : 0)).Blit(area.x, area.y);
+				(bcond == ALREADY_BUILT ? 1 : 0)).Blit(area.x, area.y);
 
     const Sprite & sprite_allow = AGG::GetICN(ICN::TOWNWIND, 11);
     const Sprite & sprite_deny  = AGG::GetICN(ICN::TOWNWIND, 12);
