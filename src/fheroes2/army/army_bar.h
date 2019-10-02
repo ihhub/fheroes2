@@ -27,7 +27,6 @@
 #include "gamedefs.h"
 #include "interface_itemsbar.h"
 
-
 class Army;
 
 class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
