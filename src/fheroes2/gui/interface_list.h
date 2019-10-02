@@ -63,10 +63,11 @@ namespace Interface
 	virtual void ActionListSingleClick(Item &) = 0;
 	virtual void ActionListPressRight(Item &) = 0;
 
-	virtual void ActionListDoubleClick(Item & item, const Point & cursor, s32 ox, s32 oy){ ActionListDoubleClick(item); };
-	virtual void ActionListSingleClick(Item & item, const Point & cursor, s32 ox, s32 oy){ ActionListSingleClick(item); };
-	virtual void ActionListPressRight(Item & item, const Point & cursor, s32 ox, s32 oy){ ActionListPressRight(item); };
-	virtual bool ActionListCursor(Item & item, const Point & cursor, s32 ox, s32 oy){ return false; };
+    // Original code had Item & item, const Point & cursor, s32 ox, s32 oy
+    virtual void ActionListDoubleClick(Item & item, const Point &, s32, s32){ ActionListDoubleClick(item); };
+    virtual void ActionListSingleClick(Item & item, const Point &, s32, s32){ ActionListSingleClick(item); };
+    virtual void ActionListPressRight(Item & item, const Point &, s32, s32){ ActionListPressRight(item); };
+    virtual bool ActionListCursor(Item &, const Point &, s32, s32){ return false; };
 
 	/*
 	void SetTopLeft(const Point & top);
@@ -315,13 +316,12 @@ namespace Interface
 
 	    if(content->size())
 	    {
-		float offset = (le.GetMouseCursor().y - rtAreaItems.y) * maxItems / rtAreaItems.h;
-
+            const int offset = (le.GetMouseCursor().y - rtAreaItems.y) * maxItems / rtAreaItems.h;
 		if(offset >= 0)
 		{
 		    cursor.Hide();
 
-            if ( ((top - content->begin()) >= 0) && (((top - content->begin()) + static_cast<int>(offset)) < content->size()) ) {
+            if ( ((top - content->begin()) >= 0) && (((top - content->begin()) + offset) < content->size()) ) {
                 ItemsIterator pos = top + static_cast<size_t>(offset);
 			const s32 posy = rtAreaItems.y + (pos - top) * rtAreaItems.h / maxItems;
 
