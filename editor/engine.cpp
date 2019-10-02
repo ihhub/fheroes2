@@ -85,7 +85,7 @@ QString Resource::transcribe(int res)
     return "Unknown";
 }
 
-inline bool IS_EQUAL_VALS(int A, int B)
+bool IS_EQUAL_VALS(int A, int B)
 {
     return (A & B) == A;
 }

@@ -21,9 +21,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "mp2.h"
-#include "icn.h"
 #include "direction.h"
+#include "icn.h"
+#include "mp2.h"
 #include "objmult.h"
 
 int ObjMult::GetPassable(u32 index)
