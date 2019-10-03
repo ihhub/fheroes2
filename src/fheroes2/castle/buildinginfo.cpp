@@ -438,24 +438,13 @@ bool BuildingInfo::QueueEventProcessing(void)
 
     if(le.MouseClickLeft(area))
     {
-	if(bcond == ALREADY_BUILT)
-	    Dialog::Message(GetName(), GetDescription(), Font::BIG, Dialog::OK);
-	else
-	if(bcond == ALLOW_BUILD || bcond == REQUIRES_BUILD || bcond == LACK_RESOURCES)
-	    return DialogBuyBuilding(true);
-	else
-	    Dialog::Message("", GetConditionDescription(), Font::BIG, Dialog::OK);
+		if (bcond == ALLOW_BUILD)
+			return DialogBuyBuilding(true);
     }
     else
     if(le.MousePressRight(area))
     {
-	if(bcond == ALREADY_BUILT)
-	    Dialog::Message(GetName(), GetDescription(), Font::BIG);
-	else
-	if(bcond == ALLOW_BUILD || bcond == REQUIRES_BUILD || bcond == LACK_RESOURCES)
 	    DialogBuyBuilding(false);
-	else
-	    Dialog::Message("", GetConditionDescription(), Font::BIG);
     }
     return false;
 }
