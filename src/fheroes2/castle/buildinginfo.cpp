@@ -436,15 +436,12 @@ bool BuildingInfo::QueueEventProcessing(void)
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if(le.MouseClickLeft(area))
-    {
-		if (bcond == ALLOW_BUILD)
-			return DialogBuyBuilding(true);
+    if (le.MouseClickLeft(area)) {
+        if (bcond == ALLOW_BUILD)
+            return DialogBuyBuilding(true);
     }
-    else
-    if(le.MousePressRight(area))
-    {
-	    DialogBuyBuilding(false);
+    else if (le.MousePressRight(area)) {
+        DialogBuyBuilding(false);
     }
     return false;
 }
