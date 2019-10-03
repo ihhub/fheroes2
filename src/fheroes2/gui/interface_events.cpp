@@ -55,6 +55,8 @@ void Interface::Basic::ShowPathOrStartMoveHero(Heroes* hero, s32 dst_index)
         DEBUG(DBG_GAME, DBG_TRACE, hero->GetName() << ", route: " << path.String());
         gameArea.SetRedraw();
         cursor.SetThemes(GetCursorTileIndex(dst_index));
+        Interface::Basic & I = Interface::Basic::Get();
+        I.buttonsArea.Redraw();
     }
     // start move
     else
