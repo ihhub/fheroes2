@@ -39,15 +39,15 @@ namespace Interface
 	IconsBar(u32 count, const Surface & sf) : iconsCount(count), marker(sf), show(true) {}
 
 	void SetShow(bool f) { show = f; };
-	bool IsShow(void) const { return show; };
+	bool IsShow() const { return show; };
 	void RedrawBackground(const Point &);
 
-	u32  CountIcons(void) const { return iconsCount; }
+	u32  CountIcons() const { return iconsCount; }
 	void SetIconsCount(u32 c) {iconsCount = c; }
 
-	static u32 GetItemWidth(void);
-	static u32 GetItemHeight(void);
-	static bool IsVisible(void);
+	static u32 GetItemWidth();
+	static u32 GetItemHeight();
+	static bool IsVisible();
 
     protected:
 	u32		iconsCount;
@@ -67,8 +67,8 @@ namespace Interface
 	void SetShow(bool);
 
     protected:
-	void ActionCurrentUp(void);
-	void ActionCurrentDn(void);
+	void ActionCurrentUp();
+	void ActionCurrentDn();
 	void ActionListDoubleClick(HEROES &);
 	void ActionListSingleClick(HEROES &);
 	void ActionListPressRight(HEROES &);
@@ -85,8 +85,8 @@ namespace Interface
 	void SetShow(bool);
 
     protected:
-	void ActionCurrentUp(void);
-	void ActionCurrentDn(void);
+	void ActionCurrentUp();
+	void ActionCurrentDn();
 	void ActionListDoubleClick(CASTLE &);
 	void ActionListSingleClick(CASTLE &);
 	void ActionListPressRight(CASTLE &);
@@ -102,14 +102,14 @@ namespace Interface
 	IconsPanel(Basic &);
     
 	void SetPos(s32, s32);
-	void SavePosition(void);
-	void SetRedraw(void) const;
+	void SavePosition();
+	void SetRedraw() const;
 	void SetRedraw(icons_t) const;
 
-	void Redraw(void);
-	void QueueEventProcessing(void);
+	void Redraw();
+	void QueueEventProcessing();
 
-        u32  CountIcons(void) const;
+        u32  CountIcons() const;
 
 	void Select(const Heroes &);
 	void Select(const Castle &);
@@ -119,7 +119,7 @@ namespace Interface
 	void HideIcons(icons_t = ICON_ANY);
 	void ShowIcons(icons_t = ICON_ANY);
 	void RedrawIcons(icons_t = ICON_ANY);
-	void SetCurrentVisible(void);
+	void SetCurrentVisible();
 
     private:
 	Basic & interface;

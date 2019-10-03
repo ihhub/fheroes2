@@ -127,7 +127,7 @@ Size Size::operator- (const Size & sz) const
     return Size(w - sz.w, h - sz.h); 
 }
 
-bool Size::isEmpty(void) const
+bool Size::isEmpty() const
 {
     return 0 == w && 0 == h;
 }
@@ -218,7 +218,7 @@ bool Rect::operator& (const Rect & rt) const
     return ! (x > rt.x + rt.w || x + w < rt.x || y > rt.y + rt.h || y + h < rt.y);
 }
 
-Rect Points::GetRect(void) const
+Rect Points::GetRect() const
 {
     Rect res;
 
@@ -242,7 +242,7 @@ Rect Points::GetRect(void) const
     return res;
 }
 
-Rect Rects::GetRect(void) const
+Rect Rects::GetRect() const
 {
     Rect res;
 

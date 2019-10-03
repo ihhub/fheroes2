@@ -33,11 +33,11 @@ namespace Music
     void	SetFadeIn(int);
     void	SetFadeOut(int);
     void	SetExtCommand(const std::string &);
-    void	Pause(void);
-    void	Resume(void);
-    void	Reset(void);
-    bool	isPlaying(void);
-    bool	isPaused(void);
+    void	Pause();
+    void	Resume();
+    void	Reset();
+    bool	isPlaying();
+    bool	isPaused();
 
     std::vector<u8> Xmi2Mid(const std::vector<u8> &);
 }

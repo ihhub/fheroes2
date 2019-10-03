@@ -49,12 +49,12 @@ namespace Resource
     QStringList shares;
     QSettings   settings(QSettings::IniFormat, QSettings::UserScope, PROGRAM_NAME, "settings");
 
-    QSettings & localSettings(void)
+    QSettings & localSettings()
     {
         return settings;
     }
 
-    const QStringList & ShareDirs(void)
+    const QStringList & ShareDirs()
     {
 	return shares;
     }
@@ -89,7 +89,7 @@ namespace Resource
 	return res;
     }
 
-    void InitShares(void)
+    void InitShares()
     {
 	QStringList list;
 

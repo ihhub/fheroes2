@@ -97,7 +97,7 @@ u32 PocketPC::GetCursorAttackDialog(const Point & dst, int allow)
     return Cursor::WAR_INFO;
 }
 
-Surface CreateTouchButton(void)
+Surface CreateTouchButton()
 {
     Surface sf(Size(24, 24), false);
 

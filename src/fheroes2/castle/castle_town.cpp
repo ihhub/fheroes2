@@ -142,7 +142,7 @@ int Castle::DialogBuyCastle(bool buttons) const
     return info.DialogBuyBuilding(buttons) ? Dialog::OK : Dialog::CANCEL;
 }
 
-u32 Castle::OpenTown(void)
+u32 Castle::OpenTown()
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();

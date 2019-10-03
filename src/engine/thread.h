@@ -39,12 +39,12 @@ public:
     Thread & operator= (const Thread &);
 
     void	Create(int (*)(void *), void *param = NULL);
-    int		Wait(void);
-    void	Kill(void);
+    int		Wait();
+    void	Kill();
 
-    bool	IsRun(void) const;
+    bool	IsRun() const;
 
-    u32		GetID(void) const;
+    u32		GetID() const;
 
 private:
     SDL_Thread *thread;
@@ -59,9 +59,9 @@ public:
 
     Mutex & operator= (const Mutex &);
 
-    void Create(void);
-    bool Lock(void) const;
-    bool Unlock(void) const;
+    void Create();
+    bool Lock() const;
+    bool Unlock() const;
 
 private:
     SDL_mutex *mutex;
@@ -72,10 +72,10 @@ class Timer
 public:
     Timer();
 
-    bool IsValid(void) const;
+    bool IsValid() const;
 
     void Run(u32, u32 (*)(u32, void *), void *param = NULL);
-    void Remove(void);
+    void Remove();
 
 private:
     SDL_TimerID id;
@@ -86,9 +86,9 @@ class Time
 public:
     Time();
 
-    void Start(void);
-    void Stop(void);
-    u32 Get(void) const;
+    void Start();
+    void Stop();
+    u32 Get() const;
     void Print(const char* header = NULL) const;
 
 private:

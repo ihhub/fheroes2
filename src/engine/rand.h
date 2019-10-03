@@ -30,7 +30,7 @@
 
 namespace Rand
 {
-    void Init(void);
+    void Init();
     u32 Get(u32 min, u32 max = 0);
 
     template<typename T>
@@ -56,10 +56,10 @@ namespace Rand
     public:
 	Queue(u32 size = 0);
 
-	void Reset(void);
+	void Reset();
 	void Push(s32, u32);
-	size_t Size(void) const;
-	s32 Get(void);
+	size_t Size() const;
+	s32 Get();
     };
 }
    

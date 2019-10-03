@@ -30,17 +30,17 @@ Battle::Bridge::Bridge() : destroy(false), down(false)
 {
 }
 
-bool Battle::Bridge::isValid(void) const
+bool Battle::Bridge::isValid() const
 {
     return !isDestroy();
 }
 
-bool Battle::Bridge::isDestroy(void) const
+bool Battle::Bridge::isDestroy() const
 {
     return destroy;
 }
 
-bool Battle::Bridge::isDown(void) const
+bool Battle::Bridge::isDown() const
 {
     return down || isDestroy();
 }
@@ -50,7 +50,7 @@ void Battle::Bridge::SetDown(bool f)
     down = f;
 }
 
-bool Battle::Bridge::AllowUp(void) const
+bool Battle::Bridge::AllowUp() const
 {
     return NULL == Board::GetCell(49)->GetUnit() && NULL == Board::GetCell(50)->GetUnit();
 }
@@ -78,7 +78,7 @@ bool Battle::Bridge::isPassable(int color) const
     return color == Arena::GetCastle()->GetColor() || isDown();
 }
 
-void Battle::Bridge::SetDestroy(void)
+void Battle::Bridge::SetDestroy()
 {
     destroy = true;
     Board::GetCell(49)->SetObject(0);

@@ -27,7 +27,7 @@
 #include "game.h"
 #include "week.h"
 
-const char* Week::GetName(void) const
+const char* Week::GetName() const
 {
     const char* str_name[] = { "Unnamed", _("week|PLAGUE"),
 		_("week|Ant"), _("week|Grasshopper"), _("week|Dragonfly"), _("week|Spider"), _("week|Butterfly"), _("week|Bumblebee"),
@@ -68,13 +68,13 @@ const char* Week::GetName(void) const
     return str_name[0];
 }
 
-int Week::WeekRand(void)
+int Week::WeekRand()
 {
     return (0 == (world.CountWeek() + 1) % 3) && (! Settings::Get().ExtWorldBanWeekOf()) ?  MONSTERS :
 		Rand::Get(ANT, CONDOR);
 }
 
-int Week::MonthRand(void)
+int Week::MonthRand()
 {
     return (0 == (world.GetMonth() + 1) % 3) && (! Settings::Get().ExtWorldBanWeekOf()) ?  MONSTERS :
 		Rand::Get(Settings::Get().ExtWorldBanPlagues() ? ANT : PLAGUE, CONDOR);

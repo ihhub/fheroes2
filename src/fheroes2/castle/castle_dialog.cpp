@@ -208,7 +208,7 @@ void RedrawIcons(const Castle & castle, const CastleHeroes & heroes, const Point
     }
 }
 
-Surface GetMeetingSprite(void)
+Surface GetMeetingSprite()
 {
     const Sprite & sprite = AGG::GetICN(ICN::ADVMCO, 8);
     

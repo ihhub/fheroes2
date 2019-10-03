@@ -35,12 +35,12 @@ public:
     void SetSurface(const Surface &);
     void SetPos(const Point &);
 
-    void Reset(void);
+    void Reset();
 
-    const Point & GetPos(void) const;
-    Rect GetArea(void) const;
+    const Point & GetPos() const;
+    Rect GetArea() const;
 
-    u32  GetMemoryUsage(void) const;
+    u32  GetMemoryUsage() const;
 
 protected:
     Point pos;
@@ -52,19 +52,19 @@ public:
     SpriteBack();
     SpriteBack(const Rect &);
 
-    bool isValid(void) const;
+    bool isValid() const;
 
     void Save(const Point &);
     void Save(const Rect &);
-    void Restore(void);
-    void Destroy(void);
+    void Restore();
+    void Destroy();
     void SetPos(const Point &);
 
-    const Point & GetPos(void) const;
-    const Size & GetSize(void) const;
-    const Rect & GetArea(void) const;
+    const Point & GetPos() const;
+    const Size & GetSize() const;
+    const Rect & GetArea() const;
 
-    u32  GetMemoryUsage(void) const;
+    u32  GetMemoryUsage() const;
 
 protected:
     Rect pos;
@@ -80,16 +80,16 @@ public:
     void Move(const Point &);
     void Move(int, int);
 
-    void Hide(void);
-    void Show(void);
-    void Redraw(void);
+    void Hide();
+    void Show();
+    void Redraw();
 
-    bool isVisible(void) const;
+    bool isVisible() const;
 
-    const Point & GetPos(void) const;
-    const Rect & GetArea(void) const;
+    const Point & GetPos() const;
+    const Rect & GetArea() const;
 
-    u32  GetMemoryUsage(void) const;
+    u32  GetMemoryUsage() const;
 
 protected:
     void Show(const Point &);

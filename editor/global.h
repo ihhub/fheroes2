@@ -28,12 +28,12 @@ struct MonsterStat;
 
 namespace Default
 {
-    int &		resourceGoldMin(void);
-    int &		resourceGoldMax(void);
-    int &		resourceWoodOreMin(void);
-    int &		resourceWoodOreMax(void);
-    int &		resourceOtherMin(void);
-    int &		resourceOtherMax(void);
+    int &		resourceGoldMin();
+    int &		resourceGoldMax();
+    int &		resourceWoodOreMin();
+    int &		resourceWoodOreMax();
+    int &		resourceOtherMin();
+    int &		resourceOtherMax();
 
     MonsterStat &	monsterStat(int);
 }

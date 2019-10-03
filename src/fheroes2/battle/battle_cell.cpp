@@ -36,33 +36,33 @@ void Battle::Position::Set(s32 head, bool wide, bool reflect)
 	second = Board::GetCell(first->GetIndex(), reflect ? RIGHT : LEFT);
 }
 
-void Battle::Position::Swap(void)
+void Battle::Position::Swap()
 {
     if(first && second)
 	std::swap(first, second);
 }
 
-Battle::Cell* Battle::Position::GetHead(void)
+Battle::Cell* Battle::Position::GetHead()
 {
     return first;
 }
 
-Battle::Cell* Battle::Position::GetTail(void)
+Battle::Cell* Battle::Position::GetTail()
 {
     return second;
 }
 
-const Battle::Cell* Battle::Position::GetHead(void) const
+const Battle::Cell* Battle::Position::GetHead() const
 {
     return first;
 }
 
-const Battle::Cell* Battle::Position::GetTail(void) const
+const Battle::Cell* Battle::Position::GetTail() const
 {
     return second;
 }
 
-Rect Battle::Position::GetRect(void) const
+Rect Battle::Position::GetRect() const
 {
     if(first)
 	return second ? Rect::Get(first->GetPos(), second->GetPos(), false) : first->GetPos();
@@ -98,12 +98,12 @@ Battle::Position Battle::Position::GetCorrect(const Unit & b, s32 head)
     return result;
 }
 
-bool Battle::Position::isReflect(void) const
+bool Battle::Position::isReflect() const
 {
     return first && second && first->GetIndex() < second->GetIndex();
 }
 
-bool Battle::Position::isValid(void) const
+bool Battle::Position::isValid() const
 {
     return first && (!second ||
 	    ((LEFT | RIGHT) & Board::GetDirection(first->GetIndex(), second->GetIndex())));
@@ -180,12 +180,12 @@ bool Battle::Cell::isPositionIncludePoint(const Point & pt) const
     return UNKNOWN != GetTriangleDirection(pt);
 }
 
-s32 Battle::Cell::GetIndex(void) const
+s32 Battle::Cell::GetIndex() const
 {
     return index;
 }
 
-s32 Battle::Cell::GetQuality(void) const
+s32 Battle::Cell::GetQuality() const
 {
     return quality;
 }
@@ -205,27 +205,27 @@ void Battle::Cell::SetQuality(u32 val)
     quality = val;
 }
 
-int Battle::Cell::GetObject(void) const
+int Battle::Cell::GetObject() const
 {
     return object;
 }
 
-int Battle::Cell::GetDirection(void) const
+int Battle::Cell::GetDirection() const
 {
     return direction;
 }
 
-const Rect & Battle::Cell::GetPos(void) const
+const Rect & Battle::Cell::GetPos() const
 {
     return pos;
 }
 
-const Battle::Unit* Battle::Cell::GetUnit(void) const
+const Battle::Unit* Battle::Cell::GetUnit() const
 {
     return troop;
 }
 
-Battle::Unit* Battle::Cell::GetUnit(void)
+Battle::Unit* Battle::Cell::GetUnit()
 {
     return troop;
 }
@@ -295,12 +295,12 @@ bool Battle::Cell::isPassable1(bool check_troop) const
     return 0 == object && (!check_troop || NULL == troop);
 }
 
-void Battle::Cell::ResetQuality(void)
+void Battle::Cell::ResetQuality()
 {
     quality = 0;
 }
 
-void Battle::Cell::ResetDirection(void)
+void Battle::Cell::ResetDirection()
 {
     direction = UNKNOWN;
 }

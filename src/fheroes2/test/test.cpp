@@ -34,11 +34,11 @@
 
 #ifndef BUILD_RELEASE
 
-void RunTest1(void);
-void RunTest2(void);
-void RunTest3(void);
+void RunTest1();
+void RunTest2();
+void RunTest3();
 
-void TestMonsterSprite(void);
+void TestMonsterSprite();
 
 void Test::Run(int num)
 {
@@ -54,12 +54,12 @@ void Test::Run(int num)
     }
 }
 
-void RunTest1(void)
+void RunTest1()
 {
     VERBOSE("Run Test1");
 }
 
-void RunTest2(void)
+void RunTest2()
 {
     VERBOSE("Run Test2");
 
@@ -128,7 +128,7 @@ void RunTest2(void)
 
 ListFiles GetMapsFiles(const char*);
 
-void RunTest3(void)
+void RunTest3()
 {
     VERBOSE("Run Test3");
 

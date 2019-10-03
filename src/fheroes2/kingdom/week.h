@@ -60,12 +60,12 @@ struct Week : std::pair<int, int>
 
     Week(int type = UNNAMED, int mons = Monster::UNKNOWN) : std::pair<int, int>(type, mons){}
 
-    int GetType(void) const { return first; }
-    int GetMonster(void) const { return second; }
-    const char* GetName(void) const;
+    int GetType() const { return first; }
+    int GetMonster() const { return second; }
+    const char* GetName() const;
 
-    static int WeekRand(void);
-    static int MonthRand(void);
+    static int WeekRand();
+    static int MonthRand();
 };
 
 StreamBase & operator>> (StreamBase &, Week &);

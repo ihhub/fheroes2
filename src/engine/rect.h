@@ -56,7 +56,7 @@ struct Size
     Size(u16, u16);
     Size(const Point &);
 
-    bool isEmpty(void) const;
+    bool isEmpty() const;
 
     bool operator== (const Size &) const;
     bool operator!= (const Size &) const;
@@ -95,13 +95,13 @@ SDL_Rect SDLRect(const Rect &);
 
 struct Points : std::vector<Point>
 {
-    Rect GetRect(void) const;
+    Rect GetRect() const;
 };
 
 struct Rects : std::vector<Rect>
 {
     s32  GetIndex(const Point &) const;
-    Rect GetRect(void) const;
+    Rect GetRect() const;
 };
 
 #endif

@@ -133,7 +133,7 @@ Maps::FileInfo & Maps::FileInfo::operator= (const FileInfo & f)
     return *this;
 }
 
-void Maps::FileInfo::Reset(void)
+void Maps::FileInfo::Reset()
 {
     file.clear();
     name.clear();
@@ -450,7 +450,7 @@ bool Maps::FileInfo::ReadMP2(const std::string & filename)
     return true;
 }
 
-void Maps::FileInfo::FillUnions(void)
+void Maps::FileInfo::FillUnions()
 {
     int side1 = 0;
     int side2 = 0;
@@ -510,7 +510,7 @@ int Maps::FileInfo::KingdomRace(int color) const
     return 0;
 }
 
-int Maps::FileInfo::ConditionWins(void) const
+int Maps::FileInfo::ConditionWins() const
 {
     switch(conditions_wins)
     {
@@ -526,7 +526,7 @@ int Maps::FileInfo::ConditionWins(void) const
     return GameOver::COND_NONE;
 }
 
-int Maps::FileInfo::ConditionLoss(void) const
+int Maps::FileInfo::ConditionLoss() const
 {
     switch(conditions_loss)
     {
@@ -540,67 +540,67 @@ int Maps::FileInfo::ConditionLoss(void) const
     return GameOver::COND_NONE;
 }
 
-bool Maps::FileInfo::WinsCompAlsoWins(void) const
+bool Maps::FileInfo::WinsCompAlsoWins() const
 {
     return comp_also_wins && ((GameOver::WINS_TOWN | GameOver::WINS_GOLD) & ConditionWins());
 }
 
-bool Maps::FileInfo::WinsAllowNormalVictory(void) const
+bool Maps::FileInfo::WinsAllowNormalVictory() const
 {
     return allow_normal_victory && ((GameOver::WINS_TOWN | GameOver::WINS_ARTIFACT | GameOver::WINS_GOLD) & ConditionWins());
 }
 
-int Maps::FileInfo::WinsFindArtifactID(void) const
+int Maps::FileInfo::WinsFindArtifactID() const
 {
     return wins1 ? wins1 - 1 : Artifact::UNKNOWN;
 }
 
-bool Maps::FileInfo::WinsFindUltimateArtifact(void) const
+bool Maps::FileInfo::WinsFindUltimateArtifact() const
 {
     return 0 == wins1;
 }
 
-u32 Maps::FileInfo::WinsAccumulateGold(void) const
+u32 Maps::FileInfo::WinsAccumulateGold() const
 {
     return wins1 * 1000;
 }
 
-Point Maps::FileInfo::WinsMapsPositionObject(void) const
+Point Maps::FileInfo::WinsMapsPositionObject() const
 {
     return Point(wins1, wins2);
 }
 
-Point Maps::FileInfo::LossMapsPositionObject(void) const
+Point Maps::FileInfo::LossMapsPositionObject() const
 {
     return Point(loss1, loss2);
 }
 
-u32 Maps::FileInfo::LossCountDays(void) const
+u32 Maps::FileInfo::LossCountDays() const
 {
     return loss1;
 }
 
-int Maps::FileInfo::AllowCompHumanColors(void) const
+int Maps::FileInfo::AllowCompHumanColors() const
 {
     return allow_human_colors & allow_comp_colors;
 }
 
-int Maps::FileInfo::AllowHumanColors(void) const
+int Maps::FileInfo::AllowHumanColors() const
 {
     return allow_human_colors;
 }
 
-int Maps::FileInfo::AllowComputerColors(void) const
+int Maps::FileInfo::AllowComputerColors() const
 {
     return allow_comp_colors;
 }
 
-int Maps::FileInfo::HumanOnlyColors(void) const
+int Maps::FileInfo::HumanOnlyColors() const
 {
     return allow_human_colors & ~(allow_comp_colors);
 }
 
-int Maps::FileInfo::ComputerOnlyColors(void) const
+int Maps::FileInfo::ComputerOnlyColors() const
 {
     return allow_comp_colors & ~(allow_human_colors);
 }
@@ -613,12 +613,12 @@ bool Maps::FileInfo::isAllowCountPlayers(u32 colors) const
     return human_only <= colors && colors <= human_only + comp_human;
 }
 
-bool Maps::FileInfo::isMultiPlayerMap(void) const
+bool Maps::FileInfo::isMultiPlayerMap() const
 {
     return 1 < Color::Count(HumanOnlyColors());
 }
 
-std::string Maps::FileInfo::String(void) const
+std::string Maps::FileInfo::String() const
 {
     std::ostringstream os;
 

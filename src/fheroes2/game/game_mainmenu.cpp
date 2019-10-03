@@ -36,7 +36,7 @@
 #define CREDITS_DEFAULT 13
 #define QUIT_DEFAULT 17
 
-int Game::MainMenu(void)
+int Game::MainMenu()
 {
     Mixer::Pause();
     AGG::PlayMusic(MUS::MAINMENU);

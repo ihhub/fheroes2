@@ -220,7 +220,7 @@ struct mp2icn_t
     quint8	type;	/* animation: 0x01, */
     quint32	offsetData;
 
-    static int	sizeOf(void) { return 13; };
+    static int	sizeOf() { return 13; };
 };
 
 struct mp2lev_t
@@ -408,7 +408,7 @@ struct CompositeObject : public QVector<CompositeSprite>
     CompositeObject() : classId(MapObj::None) {}
     CompositeObject(const QDomElement &);
 
-    bool	isValid(void) const;
+    bool	isValid() const;
 };
 
 Q_DECLARE_METATYPE(CompositeObject);
@@ -422,7 +422,7 @@ struct AccessResult
     AccessResult() : allowPlayers(0), allowComputer(false), cancelAfterFirstVisit(false) {}
     AccessResult(int c, bool a, bool f) : allowPlayers(c), allowComputer(a), cancelAfterFirstVisit(f) {}
 
-    QString	transcribe(void) const;
+    QString	transcribe() const;
 };
 
 Q_DECLARE_METATYPE(AccessResult);
@@ -436,7 +436,7 @@ namespace Editor
     QPixmap pixmapBorder(const QSize &, const QColor &, const QColor &);
     QPixmap pixmapBorderPassable(int passable);
 
-    QStringList townNames(void);
+    QStringList townNames();
 
     class MyXML : public QDomElement
     {
@@ -459,13 +459,13 @@ namespace H2
 	File();
 	File(const QString &);
 
-	quint32	readByte(void);
+	quint32	readByte();
 	QString	readString(size_t);
 	QByteArray
 		readBlock(size_t, int = -1);
 
-	quint32	readLE16(void);
-	quint32	readLE32(void);
+	quint32	readLE16();
+	quint32	readLE32();
     };
 
     class ICNSprite : public QImage
@@ -487,8 +487,8 @@ namespace H2
 	TownPos() {}
 	TownPos(const mp2town_t & t, const QPoint & p) : QPair<mp2town_t, QPoint>(t, p) {}
 
-	const mp2town_t & town(void) const { return first; }
-	const QPoint & pos(void) const { return second; }
+	const mp2town_t & town() const { return first; }
+	const QPoint & pos() const { return second; }
     };
 
     struct HeroPos : QPair<mp2hero_t, QPoint>
@@ -496,8 +496,8 @@ namespace H2
 	HeroPos() {}
 	HeroPos(const mp2hero_t & t, const QPoint & p) : QPair<mp2hero_t, QPoint>(t, p) {}
 
-	const mp2hero_t & hero(void) const { return first; }
-	const QPoint & pos(void) const { return second; }
+	const mp2hero_t & hero() const { return first; }
+	const QPoint & pos() const { return second; }
     };
 
     struct SignPos : QPair<mp2sign_t, QPoint>
@@ -505,8 +505,8 @@ namespace H2
 	SignPos() {}
 	SignPos(const mp2sign_t & t, const QPoint & p) : QPair<mp2sign_t, QPoint>(t, p) {}
 
-	const mp2sign_t & sign(void) const { return first; }
-	const QPoint & pos(void) const { return second; }
+	const mp2sign_t & sign() const { return first; }
+	const QPoint & pos() const { return second; }
     };
 
     struct EventPos : QPair<mp2mapevent_t, QPoint>
@@ -514,8 +514,8 @@ namespace H2
 	EventPos() {}
 	EventPos(const mp2mapevent_t & t, const QPoint & p) : QPair<mp2mapevent_t, QPoint>(t, p) {}
 
-	const mp2mapevent_t & event(void) const { return first; }
-	const QPoint & pos(void) const { return second; }
+	const mp2mapevent_t & event() const { return first; }
+	const QPoint & pos() const { return second; }
     };
 
     struct SphinxPos : QPair<mp2sphinx_t, QPoint>
@@ -523,8 +523,8 @@ namespace H2
 	SphinxPos() {}
 	SphinxPos(const mp2sphinx_t & t, const QPoint & p) : QPair<mp2sphinx_t, QPoint>(t, p) {}
 
-	const mp2sphinx_t & sphinx(void) const { return first; }
-	const QPoint & pos(void) const { return second; }
+	const mp2sphinx_t & sphinx() const { return first; }
+	const QPoint & pos() const { return second; }
     };
 }
 
@@ -573,8 +573,8 @@ namespace AGG
 	QPair<QPixmap, QPoint>	getImageICN(const QString &, int);
 	QPixmap			getImage(const CompositeObject &, const QSize &);
 
-	bool			isHeroes2XMode(void) const;
-	QString			dirName(void) const;
+	bool			isHeroes2XMode() const;
+	QString			dirName() const;
     };
 }
 
@@ -588,10 +588,10 @@ public:
     AroundGrounds() : QVector<int>(9, Ground::Unknown){} /* ground: top left, top, top right, right, bottom right, bottom, bottom left, left, center */
     AroundGrounds(const MapTiles &, const QPoint &);
 
-    int operator() (void) const;
+    int operator() () const;
     int groundsDirects(int) const;
     int directionsAroundGround(int) const;
-    int preferablyGround(void) const;
+    int preferablyGround() const;
 };
 
 namespace EditorTheme
@@ -607,7 +607,7 @@ namespace EditorTheme
     int				getSpriteLevel(int, int);
     int				getSpritePassable(int, int);
 
-    const QSize &		tileSize(void);
+    const QSize &		tileSize();
 
     int				startFilledTile(int);
     int				startGroundTile(int);
@@ -637,7 +637,7 @@ struct Resources : public resources_t
 {
     Resources(){ wood = 0; mercury = 0; ore = 0; sulfur = 0; crystal = 0; gems = 0; gold = 0; }
 
-    QString	describe(void) const;
+    QString	describe() const;
 };
 
 struct MonsterStat
@@ -678,13 +678,13 @@ public:
     MapObject(const QPoint & pos, int uid, int type = MapObj::None) : QPoint(pos), objUid(uid), objType(type) {}
     virtual ~MapObject() {}
 
-    quint32 		uid(void) const { return objUid; }
-    int 		type(void) const { return objType; }
-    const QPoint &	pos(void) const { return *this; }
-    virtual QString	name(void) const { return MapObj::transcribe(objType); }
-    virtual QString	object(void) const { return "object"; }
-    virtual int		color(void) const { return Color::None; }
-    virtual MapObject*	copy(void) const = 0;
+    quint32 		uid() const { return objUid; }
+    int 		type() const { return objType; }
+    const QPoint &	pos() const { return *this; }
+    virtual QString	name() const { return MapObj::transcribe(objType); }
+    virtual QString	object() const { return "object"; }
+    virtual int		color() const { return Color::None; }
+    virtual MapObject*	copy() const = 0;
 
     void 		setUID(quint32 uid) { objUid = uid; }
     void 		setPos(const QPoint & pos) { setX(pos.x()); setY(pos.y()); }
@@ -695,13 +695,13 @@ struct Skill : public QPair<int, int>
     Skill() : QPair<int, int>(SkillType::None, SkillLevel::Unknown) {}
     Skill(int type, int level) : QPair<int, int>(type, level) {}
 
-    bool	isValid(void) const { return first && second; }
-    const int &	skill(void) const { return first; }
-    const int &	level(void) const { return second; }
+    bool	isValid() const { return first && second; }
+    const int &	skill() const { return first; }
+    const int &	level() const { return second; }
 
-    QString	name(void) const;
-    QString	description(void) const;
-    QPixmap	pixmap(void) const;
+    QString	name() const;
+    QString	description() const;
+    QPixmap	pixmap() const;
 };
 
 Q_DECLARE_METATYPE(Skill);
@@ -716,16 +716,16 @@ struct Troop : public QPair<int, int>
     Troop() : QPair<int, int>(0, 0) {}
     Troop(int type, int count) : QPair<int, int>(type, count) {}
 
-    bool	isValid(void) const { return first && second; }
-    const int &	type(void) const { return first; }
-    const int &	count(void) const { return second; }
+    bool	isValid() const { return first && second; }
+    const int &	type() const { return first; }
+    const int &	count() const { return second; }
 };
 
 struct Troops : public QVector<Troop>
 {
     Troops() : QVector<Troop>(5) { /* five slots */ }
 
-    int validCount(void) const;
+    int validCount() const;
 };
 
 struct MapTown : public MapObject
@@ -746,11 +746,11 @@ struct MapTown : public MapObject
     MapTown(const QPoint &, quint32, const mp2town_t &);
     MapTown(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1);
 
-    QString	name(void) const { return nameTown; }
-    QString	object(void) const { return "town"; }
+    QString	name() const { return nameTown; }
+    QString	object() const { return "town"; }
 
-    int		color(void) const { return col; }
-    MapObject*	copy(void) const { return new MapTown(*this); }
+    int		color() const { return col; }
+    MapObject*	copy() const { return new MapTown(*this); }
     void	updateInfo(int, bool);
 };
 
@@ -777,13 +777,13 @@ struct MapHero : public MapObject
     MapHero(const QPoint &, quint32, const mp2hero_t &, int, bool);
     MapHero(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1);
 
-    QString	name(void) const;
-    QString	object(void) const { return "hero"; }
+    QString	name() const;
+    QString	object() const { return "hero"; }
 
-    int		color(void) const { return col; }
-    MapObject*	copy(void) const { return new MapHero(*this); }
+    int		color() const { return col; }
+    MapObject*	copy() const { return new MapHero(*this); }
     void	updateInfo(int);
-    bool	haveMagicBook(void) const;
+    bool	haveMagicBook() const;
 };
 
 struct MapSign : public MapObject
@@ -793,9 +793,9 @@ struct MapSign : public MapObject
     MapSign(const QPoint &, quint32, const mp2sign_t &);
     MapSign(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1);
 
-    QString	object(void) const { return "sign"; }
+    QString	object() const { return "sign"; }
 
-    MapObject*	copy(void) const { return new MapSign(*this); }
+    MapObject*	copy() const { return new MapSign(*this); }
 };
 
 struct MapEvent : public MapObject
@@ -810,9 +810,9 @@ struct MapEvent : public MapObject
     MapEvent(const QPoint &, quint32, const mp2mapevent_t &);
     MapEvent(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1);
 
-    QString	object(void) const { return "event"; }
+    QString	object() const { return "event"; }
 
-    MapObject*	copy(void) const { return new MapEvent(*this); }
+    MapObject*	copy() const { return new MapEvent(*this); }
 };
 
 struct MapSphinx : public MapObject
@@ -825,8 +825,8 @@ struct MapSphinx : public MapObject
     MapSphinx(const QPoint &, quint32, const mp2sphinx_t &);
     MapSphinx(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1);
 
-    QString	object(void) const { return "sphinx"; }
-    MapObject*	copy(void) const { return new MapSphinx(*this); }
+    QString	object() const { return "sphinx"; }
+    MapObject*	copy() const { return new MapSphinx(*this); }
 };
 
 struct MapResource : public MapObject
@@ -837,8 +837,8 @@ struct MapResource : public MapObject
     MapResource(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1, int res = Resource::Unknown) :
 	MapObject(pos, uid, MapObj::Resource), type(res), count(0) {}
 
-    QString	object(void) const { return "resource"; }
-    MapObject*	copy(void) const { return new MapResource(*this); }
+    QString	object() const { return "resource"; }
+    MapObject*	copy() const { return new MapResource(*this); }
 };
 
 struct MapMonster : public MapObject
@@ -850,10 +850,10 @@ struct MapMonster : public MapObject
     MapMonster(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1, int mons = Monster::None) :
 	MapObject(pos, uid, MapObj::Monster), type(mons), count(0), condition(-1) {}
 
-    QString	object(void) const { return "monster"; }
-    MapObject*	copy(void) const { return new MapMonster(*this); }
+    QString	object() const { return "monster"; }
+    MapObject*	copy() const { return new MapMonster(*this); }
     void	updateInfo(const mp2til_t &);
-    int		monster(void) const { return type; }
+    int		monster() const { return type; }
 };
 
 struct MapArtifact : public MapObject
@@ -865,10 +865,10 @@ struct MapArtifact : public MapObject
     MapArtifact(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1, int art = Artifact::None) :
 	MapObject(pos, uid, MapObj::Artifact), type(art), spell(Spell::None), condition(-1) {}
 
-    QString	object(void) const { return "artifact"; }
-    MapObject*	copy(void) const { return new MapArtifact(*this); }
+    QString	object() const { return "artifact"; }
+    MapObject*	copy() const { return new MapArtifact(*this); }
     void	updateInfo(const mp2til_t &);
-    int		artifact(void) const { return type; }
+    int		artifact() const { return type; }
 };
 
 struct ActionSimple;
@@ -878,7 +878,7 @@ class SharedActionSimple : public QSharedPointer<ActionSimple>
 public:
     SharedActionSimple(ActionSimple* ptr) : QSharedPointer<ActionSimple>(ptr) {}
 
-    int	type(void) const;
+    int	type() const;
 };
 
 class MapActionList : public QList<SharedActionSimple>
@@ -891,9 +891,9 @@ struct MapActions : public MapObject
     static QString transcribe(int);
 
     MapActions(const QPoint & pos = QPoint(-1, -1), quint32 uid = -1);
-    QString	object(void) const { return "actions"; }
-    MapObject*	copy(void) const { return new MapActions(*this); }
-    bool	isDefault(void) const;
+    QString	object() const { return "actions"; }
+    MapObject*	copy() const { return new MapActions(*this); }
+    bool	isDefault() const;
 
     MapActionList list;
 };
@@ -973,7 +973,7 @@ struct DayEvent
     DayEvent() : allowComputer(false), dayFirstOccurent(0), daySubsequentOccurrences(0), colors(0) {}
     DayEvent(const mp2dayevent_t &);
 
-    QString	header(void) const;
+    QString	header() const;
 };
 
 Q_DECLARE_METATYPE(DayEvent);
@@ -1029,11 +1029,11 @@ struct CompositeObjectCursor : public CompositeObject
     CompositeObjectCursor(const CompositeObject &);
 
     void		move(const MapTile &);
-    void		reset(void);
-    bool		isValid(void) const;
+    void		reset();
+    bool		isValid() const;
     void		paint(QPainter &, const QPoint &, bool allow);
-    QRect		area(void) const;
-    QPoint		center(void) const;
+    QRect		area() const;
+    QPoint		center() const;
 };
 
 namespace Conditions
@@ -1048,18 +1048,18 @@ struct GameCondition : public QPair<int, QVariant>
     GameCondition(int cond, const QVariant & val = QVariant()) : QPair<int, QVariant>(cond, val) {}
 
     void		set(int cond, const QVariant & val = QVariant()) { first = cond; second = val; }
-    int			index(void) const { return 0x000000FF & first; }
-    const QVariant &	variant(void) const { return second; }
-    QString		variantString(void) const;
+    int			index() const { return 0x000000FF & first; }
+    const QVariant &	variant() const { return second; }
+    QString		variantString() const;
 };
 
 struct CondWins : public GameCondition
 {
     CondWins() : GameCondition(Conditions::Wins){}
 
-    bool		allowNormalVictory(void) const { return Conditions::AllowNormalVictory & first; }
-    bool		compAlsoWins(void) const { return Conditions::CompAlsoWins & first; }
-    int			condition(void) const { return Conditions::Wins | index(); }
+    bool		allowNormalVictory() const { return Conditions::AllowNormalVictory & first; }
+    bool		compAlsoWins() const { return Conditions::CompAlsoWins & first; }
+    int			condition() const { return Conditions::Wins | index(); }
 
     void		setAllowNormalVictory(bool f) { if(f) first |= Conditions::AllowNormalVictory; else first &= ~Conditions::AllowNormalVictory; }
     void		setCompAlsoWins(bool f) { if(f) first |= Conditions::CompAlsoWins; else first &= ~Conditions::CompAlsoWins; }
@@ -1069,7 +1069,7 @@ struct CondLoss : public GameCondition
 {
     CondLoss() : GameCondition(Conditions::Loss){}
 
-    int			condition(void) const { return Conditions::Loss | index(); }
+    int			condition() const { return Conditions::Loss | index(); }
 };
 
 struct ListStringPos : public QList< QPair<QString, QPoint> >

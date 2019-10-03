@@ -54,22 +54,22 @@ void PlayerFixRandomRace(Player* player)
     if(player && player->GetRace() == Race::RAND) player->SetRace(Race::Rand());
 }
 
-bool Control::isControlAI(void) const
+bool Control::isControlAI() const
 {
     return CONTROL_AI & GetControl();
 }
 
-bool Control::isControlHuman(void) const
+bool Control::isControlHuman() const
 {
     return CONTROL_HUMAN & GetControl();
 }
 
-bool Control::isControlLocal(void) const
+bool Control::isControlLocal() const
 {
     return ! isControlRemote();
 }
 
-bool Control::isControlRemote(void) const
+bool Control::isControlRemote() const
 {
     return CONTROL_REMOTE & GetControl();
 }
@@ -79,42 +79,42 @@ Player::Player(int col) : control(CONTROL_NONE), color(col), race(Race::NONE), f
     name  = Color::String(color);
 }
 
-const std::string & Player::GetName(void) const
+const std::string & Player::GetName() const
 {
     return name;
 }
 
-Focus & Player::GetFocus(void)
+Focus & Player::GetFocus()
 {
     return focus;
 }
 
-const Focus & Player::GetFocus(void) const
+const Focus & Player::GetFocus() const
 {
     return focus;
 }
 
-int Player::GetControl(void) const
+int Player::GetControl() const
 {
     return control;
 }
 
-int Player::GetColor(void) const
+int Player::GetColor() const
 {
     return color;
 }
 
-int Player::GetRace(void) const
+int Player::GetRace() const
 {
     return race;
 }
 
-int Player::GetFriends(void) const
+int Player::GetFriends() const
 {
     return friends;
 }
 
-int Player::GetID(void) const
+int Player::GetID() const
 {
     return id;
 }
@@ -134,7 +134,7 @@ bool Player::isName(const std::string & str) const
     return str == name;
 }
 
-bool Player::isPlay(void) const
+bool Player::isPlay() const
 {
     return Modes(ST_INGAME);
 }
@@ -238,7 +238,7 @@ Players::~Players()
     clear();
 }
 
-void Players::clear(void)
+void Players::clear()
 {
     for(iterator it = begin(); it != end(); ++it)
 	delete *it;
@@ -348,7 +348,7 @@ int Players::GetColors(int control, bool strong) const
     return res;
 }
 
-int Players::GetActualColors(void) const
+int Players::GetActualColors() const
 {
     int res = 0;
 
@@ -358,12 +358,12 @@ int Players::GetActualColors(void) const
     return res;
 }
 
-Player* Players::GetCurrent(void)
+Player* Players::GetCurrent()
 {
     return Get(current_color);
 }
 
-const Player* Players::GetCurrent(void) const
+const Player* Players::GetCurrent() const
 {
     return Get(current_color);
 }
@@ -398,7 +398,7 @@ void Players::SetPlayerInGame(int color, bool f)
     if(player) player->SetPlay(f);
 }
 
-void Players::SetStartGame(void)
+void Players::SetStartGame()
 {
     for_each(begin(), end(), std::bind2nd(std::mem_fun(&Player::SetPlay), true));
     for_each(begin(), end(), std::ptr_fun(&PlayerFocusReset));
@@ -411,14 +411,14 @@ void Players::SetStartGame(void)
     DEBUG(DBG_GAME, DBG_INFO, String());
 }
 
-int Players::HumanColors(void)
+int Players::HumanColors()
 {
     if(0 == human_colors)
 	human_colors = Settings::Get().GetPlayers().GetColors(CONTROL_HUMAN, true);
     return human_colors;
 }
 
-int Players::FriendColors(void)
+int Players::FriendColors()
 {
     int colors = 0;
     const Players & players = Settings::Get().GetPlayers();
@@ -435,7 +435,7 @@ int Players::FriendColors(void)
     return colors;
 }
 
-std::string Players::String(void) const
+std::string Players::String() const
 {
     std::ostringstream os;
     os << "Players: ";
@@ -677,7 +677,7 @@ void Interface::PlayersInfo::RedrawInfo(bool show_play_info) const /* show_play_
     }
 }
 
-bool Interface::PlayersInfo::QueueEventProcessing(void)
+bool Interface::PlayersInfo::QueueEventProcessing()
 {
     Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();

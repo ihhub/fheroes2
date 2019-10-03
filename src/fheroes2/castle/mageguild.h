@@ -53,8 +53,8 @@ class RowSpells
 {
 public:
     RowSpells(const Point &, const Castle &, int);
-    void		Redraw(void);
-    bool		QueueEventProcessing(void);
+    void		Redraw();
+    bool		QueueEventProcessing();
 
 private:
     Rects		coords;

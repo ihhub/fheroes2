@@ -45,8 +45,8 @@ namespace Battle
 
         void		SortSlowest(bool);
         void		SortFastest(bool);
-        void		SortStrongest(void);
-        void		SortWeakest(void);
+        void		SortStrongest();
+        void		SortWeakest();
     };
 
     enum { ARMY_GUARDIANS_OBJECT = 0x10000 };
@@ -57,22 +57,22 @@ namespace Battle
 	Force(Army &, bool);
 	~Force();
 
-    HeroBase*		GetCommander(void);
-    const HeroBase*	GetCommander(void) const;
+    HeroBase*		GetCommander();
+    const HeroBase*	GetCommander() const;
 
-    bool		isValid(void) const;
+    bool		isValid() const;
     bool		HasMonster(const Monster &) const;
-    u32			GetDeadHitPoints(void) const;
-    u32			GetDeadCounts(void) const;
-    int			GetColor(void) const;
-    int			GetControl(void) const;
-    u32                 GetSurrenderCost(void) const;
-    Troops		GetKilledTroops(void) const;
-    bool		SetIdleAnimation(void);
-    bool		NextIdleAnimation(void);
+    u32			GetDeadHitPoints() const;
+    u32			GetDeadCounts() const;
+    int			GetColor() const;
+    int			GetControl() const;
+    u32                 GetSurrenderCost() const;
+    Troops		GetKilledTroops() const;
+    bool		SetIdleAnimation();
+    bool		NextIdleAnimation();
 
-    void		NewTurn(void);
-    void		SyncArmyCount(void);
+    void		NewTurn();
+    void		SyncArmyCount();
 
     static Unit*	GetCurrentUnit(const Force &, const Force &, Unit* last, Units* all, bool part1);
     static Unit*	GetCurrentUnit(const Force &, const Force &, Unit* last, bool part1);

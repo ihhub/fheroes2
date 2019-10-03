@@ -157,7 +157,7 @@ bool MapSphinx::AnswerCorrect(const std::string & answer)
     return answers.end() != std::find(answers.begin(), answers.end(), StringLower(answer));
 }
 
-void MapSphinx::SetQuiet(void)
+void MapSphinx::SetQuiet()
 {
     valid = false;
     artifact = Artifact::UNKNOWN;
@@ -266,7 +266,7 @@ MapArtifact::MapArtifact() : MapObjectSimple(MP2::OBJ_ARTIFACT), condition(0), e
 {
 }
 
-Funds MapArtifact::QuantityFunds(void) const
+Funds MapArtifact::QuantityFunds() const
 {
     switch(condition)
     {
@@ -279,7 +279,7 @@ Funds MapArtifact::QuantityFunds(void) const
     return Funds();
 }
 
-ResourceCount MapArtifact::QuantityResourceCount(void) const
+ResourceCount MapArtifact::QuantityResourceCount() const
 {
     switch(condition)
     {
@@ -310,27 +310,27 @@ MapMonster::MapMonster() : MapObjectSimple(MP2::OBJ_MONSTER), condition(0), coun
 {
 }
 
-Troop MapMonster::QuantityTroop(void) const
+Troop MapMonster::QuantityTroop() const
 {
     return Troop(monster, count);
 }
 
-bool MapMonster::JoinConditionSkip(void) const
+bool MapMonster::JoinConditionSkip() const
 {
     return Monster::JOIN_CONDITION_SKIP == condition;
 }
 
-bool MapMonster::JoinConditionMoney(void) const
+bool MapMonster::JoinConditionMoney() const
 {
     return Monster::JOIN_CONDITION_MONEY == condition;
 }
 
-bool MapMonster::JoinConditionFree(void) const
+bool MapMonster::JoinConditionFree() const
 {
     return Monster::JOIN_CONDITION_FREE == condition;
 }
 
-bool MapMonster::JoinConditionForce(void) const
+bool MapMonster::JoinConditionForce() const
 {
     return Monster::JOIN_CONDITION_FORCE == condition;
 }

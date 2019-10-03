@@ -215,7 +215,7 @@ s32 Maps::GetIndexFromAbsPoint(s32 px, s32 py)
     return res;
 }
 
-Maps::Indexes Maps::GetAllIndexes(void)
+Maps::Indexes Maps::GetAllIndexes()
 {
     Indexes result;
     result.assign(world.w() * world.h(), 0);

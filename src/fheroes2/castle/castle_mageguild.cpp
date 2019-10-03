@@ -70,7 +70,7 @@ RowSpells::RowSpells(const Point & pos, const Castle & castle, int lvl)
     spells.resize(coords.size(), Spell::NONE);
 }
 
-void RowSpells::Redraw(void)
+void RowSpells::Redraw()
 {
     const Sprite & roll_show = AGG::GetICN(ICN::TOWNWIND, 0);
     const Sprite & roll_hide = AGG::GetICN(ICN::TOWNWIND, 1);
@@ -108,7 +108,7 @@ void RowSpells::Redraw(void)
     }
 }
 
-bool RowSpells::QueueEventProcessing(void)
+bool RowSpells::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     Display & display = Display::Get();
@@ -133,7 +133,7 @@ bool RowSpells::QueueEventProcessing(void)
     return 0 <= index;
 }
 
-void Castle::OpenMageGuild(void)
+void Castle::OpenMageGuild()
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();

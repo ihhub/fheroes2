@@ -270,7 +270,7 @@ int System::GetCommandOptions(int argc, char* const argv[], const char* optstrin
 #endif
 }
 
-char* System::GetOptionsArgument(void)
+char* System::GetOptionsArgument()
 {
 #if defined(__MINGW32CE__) || defined(_MSC_VER)
     return NULL;
@@ -279,7 +279,7 @@ char* System::GetOptionsArgument(void)
 #endif
 }
 
-size_t System::GetMemoryUsage(void)
+size_t System::GetMemoryUsage()
 {
 #if defined(__SYMBIAN32__)
     return 0;
@@ -309,7 +309,7 @@ size_t System::GetMemoryUsage(void)
 #endif
 }
 
-std::string System::GetTime(void)
+std::string System::GetTime()
 {
     time_t raw;
     struct tm* tmi;
@@ -458,7 +458,7 @@ void System::PowerManagerOff(bool fl)
 #endif
 }
 
-bool System::isRunning(void)
+bool System::isRunning()
 {
 #if defined(__MINGW32CE__)
     SetEnvironment("DEBUG_VIDEO", "1");
@@ -487,7 +487,7 @@ int System::ShellCommand(const char* cmd)
 #endif
 }
 
-bool System::isEmbededDevice(void)
+bool System::isEmbededDevice()
 {
 #if defined(__MINGW32CE__) || defined(ANDROID) || defined(__SYMBIAN32__)
     return true;
@@ -495,7 +495,7 @@ bool System::isEmbededDevice(void)
     return false;
 }
 
-int System::GetRenderFlags(void)
+int System::GetRenderFlags()
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
  #if defined(__MINGW32CE__) || defined(__SYMBIAN32__)

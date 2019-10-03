@@ -290,27 +290,27 @@ bool Artifact::operator!= (const Artifact & art) const
     return id != art.id;
 }
 
-int Artifact::operator() (void) const
+int Artifact::operator() () const
 {
     return id;
 }
 
-int Artifact::GetID(void) const
+int Artifact::GetID() const
 {
     return id;
 }
 
-const char* Artifact::GetName(void) const
+const char* Artifact::GetName() const
 {
     return _(artifacts[id].name);
 }
 
-int Artifact::Type(void) const
+int Artifact::Type() const
 {
     return artifacts[id].type;
 }
 
-std::string Artifact::GetDescription(void) const
+std::string Artifact::GetDescription() const
 {
     u32 count = ExtraValue();
     std::string str = GetPluralDescription(*this, count);
@@ -325,7 +325,7 @@ std::string Artifact::GetDescription(void) const
     return str;
 }
 
-u32 Artifact::ExtraValue(void) const
+u32 Artifact::ExtraValue() const
 {
     switch(id)
     {
@@ -344,7 +344,7 @@ u32 Artifact::ExtraValue(void) const
     return artifacts[id].extra;
 }
 
-bool Artifact::isAlchemistRemove(void) const
+bool Artifact::isAlchemistRemove() const
 {
     switch(id)
     {
@@ -362,7 +362,7 @@ bool Artifact::isAlchemistRemove(void) const
     return false;
 }
 
-bool Artifact::isUltimate(void) const
+bool Artifact::isUltimate() const
 {
     switch(id)
     {
@@ -380,12 +380,12 @@ bool Artifact::isUltimate(void) const
     return false;
 }
 
-bool Artifact::isValid(void) const
+bool Artifact::isValid() const
 {
     return id != UNKNOWN;
 }
 
-int Artifact::LoyaltyLevel(void) const
+int Artifact::LoyaltyLevel() const
 {
     switch(id)
     {
@@ -418,7 +418,7 @@ int Artifact::LoyaltyLevel(void) const
     return ART_NONE;
 }
 
-int Artifact::Level(void) const
+int Artifact::Level() const
 {
     switch(id)
     {
@@ -542,22 +542,22 @@ int Artifact::Level(void) const
 }
 
 /* return index sprite objnarti.icn */
-u32 Artifact::IndexSprite(void) const
+u32 Artifact::IndexSprite() const
 {
     return id < UNKNOWN ? id * 2 + 1 : 0;
 }
 
-u32 Artifact::IndexSprite32(void) const
+u32 Artifact::IndexSprite32() const
 {
     return id;
 }
 
-u32 Artifact::IndexSprite64(void) const
+u32 Artifact::IndexSprite64() const
 {
     return id + 1;
 }
 
-int Artifact::GetSpell(void) const
+int Artifact::GetSpell() const
 {
     return id == SPELL_SCROLL ? ext : Spell::NONE;
 }
@@ -578,7 +578,7 @@ void Artifact::SetSpell(int v)
     }
 }
 
-void Artifact::Reset(void)
+void Artifact::Reset()
 {
     id = UNKNOWN;
     ext = 0;
@@ -711,12 +711,12 @@ void BagArtifacts::RemoveArtifact(const Artifact & art)
     if(it != end()) (*it).Reset();
 }
 
-bool BagArtifacts::isFull(void) const
+bool BagArtifacts::isFull() const
 {
     return end() == std::find(begin(), end(), Artifact(Artifact::UNKNOWN));
 }
 
-bool BagArtifacts::MakeBattleGarb(void)
+bool BagArtifacts::MakeBattleGarb()
 {
     iterator it1, it2, it3;
     it1 = std::find(begin(), end(), Artifact(Artifact::BREASTPLATE_ANDURAN));
@@ -733,12 +733,12 @@ bool BagArtifacts::MakeBattleGarb(void)
     return true;
 }
 
-u32 BagArtifacts::CountArtifacts(void) const
+u32 BagArtifacts::CountArtifacts() const
 {
     return std::count_if(begin(), end(), std::mem_fun_ref(&Artifact::isValid));
 }
 
-bool BagArtifacts::ContainUltimateArtifact(void) const
+bool BagArtifacts::ContainUltimateArtifact() const
 {
     return end() != std::find_if(begin(), end(), std::mem_fun_ref(&Artifact::isUltimate));
 }
@@ -753,7 +753,7 @@ void BagArtifacts::RemoveScroll(const Artifact & art)
     }
 }
 
-std::string BagArtifacts::String(void) const
+std::string BagArtifacts::String() const
 {
     std::ostringstream os;
 
@@ -807,7 +807,7 @@ ArtifactsBar::ArtifactsBar(const Heroes* ptr, bool mini, bool ro, bool change /*
     }
 }
 
-void ArtifactsBar::ResetSelected(void)
+void ArtifactsBar::ResetSelected()
 {
     Cursor::Get().Hide();
     spcursor.Hide();

@@ -308,12 +308,12 @@ StreamBase & GameStatic::operator>> (StreamBase & msg, Data & obj)
     return msg;
 }
 
-float GameStatic::GetMonsterUpgradeRatio(void)
+float GameStatic::GetMonsterUpgradeRatio()
 {
     return monster_upgrade_ratio;
 }
 
-u32 GameStatic::GetLostOnWhirlpoolPercent(void)
+u32 GameStatic::GetLostOnWhirlpoolPercent()
 {
     return whirlpool_lost_percent;
 }
@@ -323,7 +323,7 @@ u32 GameStatic::GetOverViewDistance(u32 d)
     return d >= ARRAY_COUNT(overview_distance) ? 0 : overview_distance[d];
 }
 
-u32 GameStatic::GetGameOverLostDays(void)
+u32 GameStatic::GetGameOverLostDays()
 {
     return gameover_lost_days;
 }
@@ -343,7 +343,7 @@ cost_t & GameStatic::GetKingdomStartingResource(int df)
     return kingdom_starting_resource[5];
 }
 
-u32 GameStatic::GetHeroesRestoreSpellPointsPerDay(void)
+u32 GameStatic::GetHeroesRestoreSpellPointsPerDay()
 {
     return heroes_spell_points_day;
 }
@@ -353,27 +353,27 @@ u32 GameStatic::GetMageGuildRestoreSpellPointsPercentDay(int level)
     return level && level < 6 ? mageguild_restore_spell_points_day[level - 1] : 0;
 }
 
-u32 GameStatic::GetKingdomMaxHeroes(void)
+u32 GameStatic::GetKingdomMaxHeroes()
 {
     return kingdom_max_heroes;
 }
 
-u32 GameStatic::GetCastleGrownWell(void)
+u32 GameStatic::GetCastleGrownWell()
 {
     return castle_grown_well;
 }
 
-u32 GameStatic::GetCastleGrownWel2(void)
+u32 GameStatic::GetCastleGrownWel2()
 {
     return castle_grown_wel2;
 }
 
-u32 GameStatic::GetCastleGrownWeekOf(void)
+u32 GameStatic::GetCastleGrownWeekOf()
 {
     return castle_grown_week_of;
 }
 
-u32 GameStatic::GetCastleGrownMonthOf(void)
+u32 GameStatic::GetCastleGrownMonthOf()
 {
     return castle_grown_month_of;
 }
@@ -400,17 +400,17 @@ s32 GameStatic::ObjectVisitedModifiers(int obj)
     return 0;
 }
 
-u32 GameStatic::Spell_DD_Distance(void)
+u32 GameStatic::Spell_DD_Distance()
 {
     return spell_dd_distance;
 }
 
-u32 GameStatic::Spell_DD_SP(void)
+u32 GameStatic::Spell_DD_SP()
 {
     return spell_dd_sp;
 }
 
-u32 GameStatic::Spell_DD_HP(void)
+u32 GameStatic::Spell_DD_HP()
 {
     return spell_dd_hp;
 }
@@ -470,7 +470,7 @@ const Skill::values_t* GameStatic::GetSkillValues(int type)
     return NULL;
 }
 
-const Skill::secondary_t* GameStatic::GetSkillForWitchsHut(void)
+const Skill::secondary_t* GameStatic::GetSkillForWitchsHut()
 {
     return & Skill::_from_witchs_hut;
 }
@@ -681,13 +681,13 @@ void Skill::UpdateStats(const std::string & stats)
 }
 #endif
 
-GameStatic::Data & GameStatic::Data::Get(void)
+GameStatic::Data & GameStatic::Data::Get()
 {
     static Data gds;
     return gds;
 }
 
-int GameStatic::GetBattleMoatReduceDefense(void)
+int GameStatic::GetBattleMoatReduceDefense()
 {
     return 2;
 }

@@ -264,7 +264,7 @@ bool Funds::operator>= (const Funds & pm) const
                 gold >= pm.gold;
 }
 
-std::string Funds::String(void) const
+std::string Funds::String() const
 {
     std::ostringstream os;
     os << "ore: " << ore <<
@@ -369,7 +369,7 @@ int Resource::FromIndexSprite2(u32 index)
     return UNKNOWN;
 }
 
-int Funds::GetValidItems(void) const
+int Funds::GetValidItems() const
 {
     int rs = 0;
 
@@ -384,7 +384,7 @@ int Funds::GetValidItems(void) const
     return rs;
 }
 
-u32 Funds::GetValidItemsCount(void) const
+u32 Funds::GetValidItemsCount() const
 {
     u32 result = 0;
 
@@ -399,7 +399,7 @@ u32 Funds::GetValidItemsCount(void) const
     return result;
 }
 
-void Funds::Reset(void)
+void Funds::Reset()
 {
     wood = 0;
     ore = 0;
@@ -416,7 +416,7 @@ Resource::BoxSprite::BoxSprite(const Funds & f, u32 w) : Rect(0, 0, w, 0), rs(f)
     h = 4 > count ? 45 : (7 > count ? 90 : 135);
 }
 
-const Rect & Resource::BoxSprite::GetArea(void) const
+const Rect & Resource::BoxSprite::GetArea() const
 {
     return *this;
 }
@@ -443,7 +443,7 @@ void RedrawResourceSprite(const Surface & sf, const Point & pos,
     text.Blit(dst_pt.x - text.w() / 2, dst_pt.y + 2);
 }
 
-void Resource::BoxSprite::Redraw(void) const
+void Resource::BoxSprite::Redraw() const
 {
     const u32 valid_resource = rs.GetValidItemsCount();
     if(0 == valid_resource) return;

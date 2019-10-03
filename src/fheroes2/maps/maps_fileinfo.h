@@ -45,29 +45,29 @@ namespace Maps
     static bool	NameCompare(const FileInfo &, const FileInfo &);
 
     bool	isAllowCountPlayers(u32) const;
-    bool	isMultiPlayerMap(void) const;
-    int		AllowCompHumanColors(void) const;
-    int		AllowComputerColors(void) const;
-    int		AllowHumanColors(void) const;
-    int		HumanOnlyColors(void) const;
-    int		ComputerOnlyColors(void) const;
+    bool	isMultiPlayerMap() const;
+    int		AllowCompHumanColors() const;
+    int		AllowComputerColors() const;
+    int		AllowHumanColors() const;
+    int		HumanOnlyColors() const;
+    int		ComputerOnlyColors() const;
 
     int		KingdomRace(int color) const;
 
-    int		ConditionWins(void) const;
-    int		ConditionLoss(void) const;
-    bool	WinsCompAlsoWins(void) const;
-    bool	WinsAllowNormalVictory(void) const;
-    int		WinsFindArtifactID(void) const;
-    bool	WinsFindUltimateArtifact(void) const;
-    u32		WinsAccumulateGold(void) const;
-    Point	WinsMapsPositionObject(void) const;
-    Point	LossMapsPositionObject(void) const;
-    u32		LossCountDays(void) const;
+    int		ConditionWins() const;
+    int		ConditionLoss() const;
+    bool	WinsCompAlsoWins() const;
+    bool	WinsAllowNormalVictory() const;
+    int		WinsFindArtifactID() const;
+    bool	WinsFindUltimateArtifact() const;
+    u32		WinsAccumulateGold() const;
+    Point	WinsMapsPositionObject() const;
+    Point	LossMapsPositionObject() const;
+    u32		LossCountDays() const;
 
-    std::string String(void) const;
-    void	Reset(void);
-    void	FillUnions(void);
+    std::string String() const;
+    void	Reset();
+    void	FillUnions();
 
     std::string file;
     std::string name;

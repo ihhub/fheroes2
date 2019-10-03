@@ -83,7 +83,7 @@ void Display::SetVideoMode(int w, int h, bool fullscreen)
 #endif
 }
 
-Size Display::GetSize(void) const
+Size Display::GetSize() const
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
     if(window)
@@ -99,7 +99,7 @@ Size Display::GetSize(void) const
 #endif
 }
 
-void Display::Flip(void)
+void Display::Flip()
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
     SDL_Texture* tx = SDL_CreateTextureFromSurface(renderer, surface);
@@ -129,7 +129,7 @@ void Display::Flip(void)
 #endif
 }
 
-void Display::Present(void)
+void Display::Present()
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
     SDL_RenderPresent(renderer);
@@ -138,7 +138,7 @@ void Display::Present(void)
 #endif
 }
 
-void Display::ToggleFullScreen(void)
+void Display::ToggleFullScreen()
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
     if(window)
@@ -236,7 +236,7 @@ Size Display::GetMaxMode(bool rotate) const
 #endif
 }
 
-std::string Display::GetInfo(void) const
+std::string Display::GetInfo() const
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
     std::ostringstream os;
@@ -283,19 +283,19 @@ Surface Display::GetSurface(const Rect & rt) const
 #endif
 }
 
-void Display::Clear(void)
+void Display::Clear()
 {
     Fill(ColorBlack);
 }
 
 /* hide system cursor */
-void Display::HideCursor(void)
+void Display::HideCursor()
 {
     SDL_ShowCursor(SDL_DISABLE);
 }
 
 /* show system cursor */
-void Display::ShowCursor(void)
+void Display::ShowCursor()
 {
     SDL_ShowCursor(SDL_ENABLE);
 }
@@ -359,19 +359,19 @@ void Display::Rise(int delay)
 }
 
 /* get video display */
-Display & Display::Get(void)
+Display & Display::Get()
 {
     static Display inside;
     return inside;
 }
 
 
-bool Display::isDisplay(void) const
+bool Display::isDisplay() const
 {
     return true;
 }
 
-Surface Display::GetSurface(void) const
+Surface Display::GetSurface() const
 {
     return GetSurface(Rect(Point(0, 0), GetSize()));
 }
@@ -444,7 +444,7 @@ Texture & Texture::operator= (const Texture & tx)
     return *this;
 }
 
-Size Texture::GetSize(void) const
+Size Texture::GetSize() const
 {
     int tw, th;
     SDL_QueryTexture(texture, NULL, NULL, &tw, &th);

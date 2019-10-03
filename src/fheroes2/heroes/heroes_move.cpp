@@ -514,7 +514,7 @@ void Heroes::AngleStep(int to_direct)
     }
 }
 
-void Heroes::FadeOut(void) const
+void Heroes::FadeOut() const
 {
     const Point & mp = GetCenter();
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
@@ -573,7 +573,7 @@ void Heroes::FadeOut(void) const
     }
 }
 
-void Heroes::FadeIn(void) const
+void Heroes::FadeIn() const
 {
     const Point & mp = GetCenter();
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();

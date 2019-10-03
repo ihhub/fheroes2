@@ -87,7 +87,7 @@ void Puzzle::Update(u32 open_obelisk, u32 total_obelisk)
 	    ZoneOpenFirstTiles(*this, need_puzzle, zone4_order, ARRAY_COUNT_END(zone4_order));
 }
 
-void Puzzle::ShowMapsDialog(void) const
+void Puzzle::ShowMapsDialog() const
 {
     Cursor & cursor = Cursor::Get();
     Display & display = Display::Get();

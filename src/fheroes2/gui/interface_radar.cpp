@@ -98,7 +98,7 @@ Interface::Radar::Radar(Basic & basic) : BorderWindow(Rect(0, 0, RADARWIDTH, RAD
     }
 }
 
-void Interface::Radar::SavePosition(void)
+void Interface::Radar::SavePosition()
 {
     Settings::Get().SetPosRadar(GetRect());
 }
@@ -109,14 +109,14 @@ void Interface::Radar::SetPos(s32 ox, s32 oy)
 }
 
 /* construct gui */
-void Interface::Radar::Build(void)
+void Interface::Radar::Build()
 {
     Generate();
     RedrawCursor();
 }
 
 /* generate mini maps */
-void Interface::Radar::Generate(void)
+void Interface::Radar::Generate()
 {
     const Size & area = GetArea();
     const s32 world_w = world.w();
@@ -182,12 +182,12 @@ void Interface::Radar::SetHide(bool f)
     hide = f;
 }
 
-void Interface::Radar::SetRedraw(void) const
+void Interface::Radar::SetRedraw() const
 {
      interface.SetRedraw(REDRAW_RADAR);
 }
 
-void Interface::Radar::Redraw(void)
+void Interface::Radar::Redraw()
 {
     Display & display = Display::Get();
     const Settings & conf = Settings::Get();
@@ -320,7 +320,7 @@ void Interface::Radar::RedrawObjects(int color)
 }
 
 /* redraw radar cursor */
-void Interface::Radar::RedrawCursor(void)
+void Interface::Radar::RedrawCursor()
 {
     const Settings & conf = Settings::Get();
 
@@ -347,7 +347,7 @@ void Interface::Radar::RedrawCursor(void)
     }
 }
 
-void Interface::Radar::QueueEventProcessing(void)
+void Interface::Radar::QueueEventProcessing()
 {
     GameArea & gamearea = interface.GetGameArea();
     Settings & conf = Settings::Get();
@@ -409,7 +409,7 @@ void Interface::Radar::QueueEventProcessing(void)
     }
 }
 
-void Interface::Radar::ResetAreaSize(void)
+void Interface::Radar::ResetAreaSize()
 {
     ChangeAreaSize(Size(RADARWIDTH, RADARWIDTH));
 }

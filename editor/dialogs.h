@@ -70,9 +70,9 @@ namespace Form
 	Q_OBJECT
 
     public slots:
-	void			clickExpert(void);
-	void			clickOk(void);
-	void			generateWidgetVisible(void);
+	void			clickExpert();
+	void			clickOk();
+	void			generateWidgetVisible();
 
     public:
 	SelectMapSize();
@@ -108,7 +108,7 @@ namespace Form
 	Q_OBJECT
 
     public slots:
-	void			clickSelect(void);
+	void			clickSelect();
 
     public:
 	SelectDataFile(const QString &, const QStringList &);
@@ -155,10 +155,10 @@ namespace Form
 
     protected slots:
 	void			tabSwitched(int);
-	void			clickSelect(void);
+	void			clickSelect();
 	void			accept(QListWidgetItem*);
-	void			selectionChanged(void);
-	void			saveSettings(void);
+	void			selectionChanged();
+	void			saveSettings();
     };
 
     class SelectImageTab : public QDialog
@@ -171,7 +171,7 @@ namespace Form
 	QVBoxLayout*        	verticalLayout;
 	QListWidget*        	listWidget;
 
-	bool 			isSelected(void) const;
+	bool 			isSelected() const;
     };
 
     class MapOptions;
@@ -186,22 +186,22 @@ namespace Form
 	QAction*		delItemAct;
 
 	ItemsList(QWidget*);
-	QStringList		results(void) const;
+	QStringList		results() const;
 
-	virtual void		addItem(void) = 0;
+	virtual void		addItem() = 0;
 	virtual void		editItem(QListWidgetItem*) = 0;
-	virtual void		checkLimit(void) {}
+	virtual void		checkLimit() {}
 	void			setCurrentItem(int);
 
     signals:
-	void			mousePressed(void);
-	void			listChanged(void);
+	void			mousePressed();
+	void			listChanged();
 
     protected slots:
-	void			addNewItem(void);
-	void			editCurrentItem(void);
-	void			deleteCurrentItem(void);
-	void			slotCheckLimit(void);
+	void			addNewItem();
+	void			editCurrentItem();
+	void			deleteCurrentItem();
+	void			slotCheckLimit();
 
     protected:
 	void			mousePressEvent(QMouseEvent*);
@@ -215,9 +215,9 @@ namespace Form
     public:
 	RumorsList(QWidget*);
 
-	TavernRumors		results(void) const;
+	TavernRumors		results() const;
 
-	void			addItem(void);
+	void			addItem();
 	void			editItem(QListWidgetItem*);
     };
 
@@ -230,9 +230,9 @@ namespace Form
      public:
 	DayEventsList(int, QWidget*);
 
-	DayEvents		results(void) const;
+	DayEvents		results() const;
 
-	void			addItem(void);
+	void			addItem();
 	void			editItem(QListWidgetItem*);
     };
 
@@ -246,14 +246,14 @@ namespace Form
     public:
 	PlayerStatus(int, int, QWidget*);
 
-	int			color(void) const { return col; }
-	int			status(void) const { return stat % 4; }
+	int			color() const { return col; }
+	int			status() const { return stat % 4; }
 
     signals:
-        void                    mousePressed(void);
+        void                    mousePressed();
 
     protected:
-	void			updatePlayers(void);
+	void			updatePlayers();
 	void			mousePressEvent(QMouseEvent*);
     };
 
@@ -267,14 +267,14 @@ namespace Form
     public:
 	PlayerAllow(int, bool, QWidget*);
 
-	int			color(void) const { return col; }
-	bool			allow(void) const { return stat; }
+	int			color() const { return col; }
+	bool			allow() const { return stat; }
 
     signals:
-        void                    mousePressed(void);
+        void                    mousePressed();
 
     protected:
-	void			updatePlayers(void);
+	void			updatePlayers();
 	void			mousePressEvent(QMouseEvent*);
     };
 
@@ -296,15 +296,15 @@ namespace Form
 	void			setCancelAfterFirstVisit(bool);
 	void			setAllowComputer(bool);
 
-	int			colors(void) const;
-	bool			allowComputer(void) const;
-	bool			cancelAfterFirstVisit(void) const;
+	int			colors() const;
+	bool			allowComputer() const;
+	bool			cancelAfterFirstVisit() const;
 
     signals:
-        void                    formChanged(void);
+        void                    formChanged();
 
     protected slots:
-        void                    setFormChanged(void);
+        void                    setFormChanged();
     };
 
     class ArtifactGroup : public QGroupBox
@@ -318,17 +318,17 @@ namespace Form
         QComboBox*              comboBoxArtifact;
         QHBoxLayout*		horizontalLayout;
 
-        int                     result(void) const;
+        int                     result() const;
 
     signals:
-        void                    formChanged(void);
+        void                    formChanged();
 
     public slots:
 	void			setValue(int);
 
     protected slots:
         void                    changeLabelArtifact(int);
-        void                    setFormChanged(void);
+        void                    setFormChanged();
     };
 
     class SpellGroup : public QGroupBox
@@ -341,16 +341,16 @@ namespace Form
         QComboBox*              comboBoxSpell;
         QHBoxLayout*		horizontalLayout;
 
-        int                     result(void) const;
+        int                     result() const;
 
     signals:
-        void                    formChanged(void);
+        void                    formChanged();
 
     public slots:
 	void			setValue(int);
 
     protected slots:
-        void                    setFormChanged(void);
+        void                    setFormChanged();
     };
 
     class ResourcesGroup : public QGroupBox
@@ -385,13 +385,13 @@ namespace Form
         QSpacerItem*            horizontalSpacerGoldRight;
 	QVBoxLayout*		verticalLayoutBox;
 
-        Resources               result(void) const;
+        Resources               result() const;
 
     signals:
-        void                    formChanged(void);
+        void                    formChanged();
 
     protected slots:
-        void                    setFormChanged(void);
+        void                    setFormChanged();
     };
 
     class MapOptions : public QDialog
@@ -478,10 +478,10 @@ namespace Form
     protected slots:
 	void			winsConditionsSelected(int);
 	void			lossConditionsSelected(int);
-	void			setEnableSaveButton(void);
+	void			setEnableSaveButton();
 	void			setEnableSaveButton(const QString &);
 	void			setConditionsBoxesMapValues(const MapData &);
-	void			saveSettings(void);
+	void			saveSettings();
     };
 
     class MessageDialog : public QDialog
@@ -498,10 +498,10 @@ namespace Form
         QPushButton*		pushButtonCancel;
 	QPlainTextEdit*		plainText;
 
-	QString			message(void) const;
+	QString			message() const;
 
     protected slots:
-	void			enableButtonOK(void);
+	void			enableButtonOK();
     };
 
     class DayEventDialog : public QDialog
@@ -538,10 +538,10 @@ namespace Form
 	QSpacerItem*		horizontalSpacer;
 	QPushButton*		pushButtonCancel;
 
-	DayEvent		result(void) const;
+	DayEvent		result() const;
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
 	void			setEnableOKButton(const QString &);
     };
 
@@ -599,7 +599,7 @@ namespace Form
 	MapEvent		result(const QPoint &, quint32 uid) const;
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
     };
 
 
@@ -695,12 +695,12 @@ namespace Form
 	QSpacerItem*		horizontalSpacerButton;
 	QPushButton*		pushButtonCancel;
 
-	uint			buildings(void) const;
-	uint			dwellings(void) const;
-	Troops			troops(void) const;
+	uint			buildings() const;
+	uint			dwellings() const;
+	Troops			troops() const;
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
 	void			setDefaultTroops(bool);
 	void			setDefaultBuildings(bool);
 	void			setDefaultDwellings(bool);
@@ -721,7 +721,7 @@ namespace Form
 	QPushButton*		pushButtonCancel;
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
     };
 
     class ArtifactsList : public ItemsList
@@ -731,11 +731,11 @@ namespace Form
     public:
 	ArtifactsList(QWidget*);
 
-	bool			limit(void) const;
+	bool			limit() const;
 
-	void			addItem(void);
+	void			addItem();
 	void			editItem(QListWidgetItem*);
-	void			checkLimit(void);
+	void			checkLimit();
     };
 
     class SkillsList : public ItemsList
@@ -745,11 +745,11 @@ namespace Form
     public:
 	SkillsList(QWidget*);
 
-	bool			limit(void) const;
+	bool			limit() const;
 
-	void			addItem(void);
+	void			addItem();
 	void			editItem(QListWidgetItem*);
-	void			checkLimit(void);
+	void			checkLimit();
     };
 
     class SpellsList : public ItemsList
@@ -759,11 +759,11 @@ namespace Form
     public:
 	SpellsList(QWidget*);
 
-	bool			limit(void) const;
+	bool			limit() const;
 
-	void			addItem(void);
+	void			addItem();
 	void			editItem(QListWidgetItem*);
-	void			checkLimit(void);
+	void			checkLimit();
     };
 
     class MapHeroDialog : public QDialog
@@ -862,14 +862,14 @@ namespace Form
 	QSpacerItem* 		horizontalSpacerButtons;
 	QPushButton* 		pushButtonCancel;
 
-	Troops			troops(void) const;
-	QVector<int>		artifacts(void) const;
-	QVector<int>		spells(void) const;
-	Skills			skills(void) const;
-	bool			book(void) const;
+	Troops			troops() const;
+	QVector<int>		artifacts() const;
+	QVector<int>		spells() const;
+	Skills			skills() const;
+	bool			book() const;
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
 	void			setPortrait(int);
 	void			setDefaultTroops(bool);
 	void			widgetSkillsVisible(bool);
@@ -891,7 +891,7 @@ namespace Form
 	QPushButton*		pushButtonCancel;
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
     };
 
     class SelectArtifactDialog : public ListDialog
@@ -925,7 +925,7 @@ namespace Form
     public:
 	RiddlesList(QWidget*);
 
-	void			addItem(void);
+	void			addItem();
 	void			editItem(QListWidgetItem*);
     };
 
@@ -956,7 +956,7 @@ namespace Form
 	MapSphinx		result(const QPoint &, quint32 uid) const;
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
     };
 
     class ObjectEventsList : public ItemsList
@@ -966,11 +966,11 @@ namespace Form
     public:
 	ObjectEventsList(QWidget*);
 
-	bool			limit(void) const;
+	bool			limit() const;
 
-	void			addItem(void) {}
+	void			addItem() {}
 	void			editItem(QListWidgetItem*);
-	void			checkLimit(void);
+	void			checkLimit();
 	void			addItems(const MapActionList &);
 
     protected slots:
@@ -1002,13 +1002,13 @@ namespace Form
 	QSpacerItem*		horizontalSpacerButtons;
 	QPushButton*		pushButtonCancel;
 
-	MapActionList		results(void) const;
+	MapActionList		results() const;
 
     protected slots:
-	void			checkUpDownButtons(void);
-	void			setEnableOKButton(void);
-	void			moveCurrentItemUp(void);
-	void			moveCurrentItemDown(void);
+	void			checkUpDownButtons();
+	void			setEnableOKButton();
+	void			moveCurrentItemUp();
+	void			moveCurrentItemDown();
     };
 
     class EditPassableDialog : public QDialog
@@ -1018,7 +1018,7 @@ namespace Form
     public:
 	EditPassableDialog(const MapTile &);
 
-	int			result(void) const;
+	int			result() const;
 
 	QVBoxLayout*		verticalLayout;
         QHBoxLayout*		horizontalLayout5;
@@ -1132,14 +1132,14 @@ namespace Form
         QVBoxLayout*		verticalLayoutMessage;
 	QPlainTextEdit*		plainText;
 
-	QString			message(void) const;
-	ActionMessage		result(void) const;
+	QString			message() const;
+	ActionMessage		result() const;
 
 	void			fillItem(QListWidgetItem &) const;
 	static void		fillItem(QListWidgetItem &, const ActionMessage &);
 
     public slots:
-	void			enableButtonOK(void);
+	void			enableButtonOK();
     };
 
     class DefaultActionDialog : public MessageTabDialog
@@ -1153,7 +1153,7 @@ namespace Form
         QVBoxLayout*            verticalLayoutAction;
 	QComboBox*		comboBoxResult;
 
-        ActionDefault           result(void) const;
+        ActionDefault           result() const;
 
 	void			fillItem(QListWidgetItem &) const;
 	static void		fillItem(QListWidgetItem &, const ActionDefault &);
@@ -1170,7 +1170,7 @@ namespace Form
         QVBoxLayout*            verticalLayoutAccess;
         AccessGroup*		accessGroup;
 
-        ActionAccess           	result(void) const;
+        ActionAccess           	result() const;
 
 	void			fillItem(QListWidgetItem &) const;
 	static void		fillItem(QListWidgetItem &, const ActionAccess &);
@@ -1187,7 +1187,7 @@ namespace Form
         QVBoxLayout*            verticalLayoutResources;
         ResourcesGroup*		resourcesGroup;
 
-        ActionResources         result(void) const;
+        ActionResources         result() const;
 
 	void			fillItem(QListWidgetItem &) const;
 	static void		fillItem(QListWidgetItem &, const ActionResources &);
@@ -1205,13 +1205,13 @@ namespace Form
         ArtifactGroup*		artifactGroup;
         SpellGroup*		spellGroup;
 
-	ActionArtifact		result(void) const;
+	ActionArtifact		result() const;
 
 	void			fillItem(QListWidgetItem &) const;
 	static void		fillItem(QListWidgetItem &, const ActionArtifact &);
 
     protected slots:
-	void			artifactFormChanged(void);
+	void			artifactFormChanged();
     };
 
     class MapArtifactDialog : public QDialog
@@ -1233,10 +1233,10 @@ namespace Form
 	QSpacerItem*		horizontalSpacerButtons;
 	QPushButton*		pushButtonCancel;
 
-	QPair<int, int>		result(void) const; /* return pickup condition, spell */
+	QPair<int, int>		result() const; /* return pickup condition, spell */
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
 	void			setDefaultCondition(bool);
     };
 
@@ -1259,10 +1259,10 @@ namespace Form
 	QSpacerItem*		horizontalSpacerButtons;
 	QPushButton*		pushButtonCancel;
 
-	QPair<int, int>		result(void) const; /* return join condition, count */
+	QPair<int, int>		result() const; /* return join condition, count */
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
 	void			setDefaultCondition(bool);
     };
 
@@ -1282,10 +1282,10 @@ namespace Form
 	QSpacerItem*		horizontalSpacerButtons;
 	QPushButton*		pushButtonCancel;
 
-	int			result(void) const;
+	int			result() const;
 
     protected slots:
-	void			setEnableOKButton(void);
+	void			setEnableOKButton();
     };
 }
 

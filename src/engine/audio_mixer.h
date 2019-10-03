@@ -45,20 +45,20 @@ namespace Mixer
     int		Play(const u8*, u32, int = -1, bool = false);
 
     void	SetChannels(u8);
-    u16		MaxVolume(void);
+    u16		MaxVolume();
     u16		Volume(int ch, s16 = -1);
 
     void	Pause(int ch = -1);
     void	Resume(int ch = -1);
     void	Stop(int ch = -1);
-    void	Reset(void);
+    void	Reset();
 
     u8		isPlaying(int);
     u8		isPaused(int);
-    bool	isValid(void);
+    bool	isValid();
 
-    void	Reduce(void);
-    void	Enhance(void);
+    void	Reduce();
+    void	Enhance();
 }
 
 #endif

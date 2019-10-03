@@ -44,12 +44,12 @@ public:
 	pos.h = 30;
     }
 
-    u32 Min(void)
+    u32 Min()
     {
 	return vmin;
     }
 
-    u32 Max(void)
+    u32 Max()
     {
 	return vmax;
     }
@@ -67,12 +67,12 @@ public:
 	btnDn.SetPos(pt.x + 70, pt.y + 16);
     }
 
-    u32 operator() (void) const
+    u32 operator() () const
     {
 	return vcur;
     }
 
-    void Redraw(void)
+    void Redraw()
     {
 	const Sprite & sprite_edit = AGG::GetICN(ICN::TOWNWIND, 4);
 	sprite_edit.Blit(pos.x, pos.y + 4);
@@ -84,7 +84,7 @@ public:
 	btnDn.Draw();
     }
 
-    bool QueueEventProcessing(void)
+    bool QueueEventProcessing()
     {
 	LocalEvent & le = LocalEvent::Get();
 

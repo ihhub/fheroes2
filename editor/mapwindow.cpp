@@ -39,10 +39,10 @@ MapWindow::MapWindow(MainWindow* parent) : QGraphicsView(parent), mapData(this)
     isUntitled = true;
     isModified = false;
 
-    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateWindowPos(void)));
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateWindowPos(void)));
-    connect(horizontalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateWindowPos(void)));
-    connect(verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateWindowPos(void)));
+    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateWindowPos()));
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateWindowPos()));
+    connect(horizontalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateWindowPos()));
+    connect(verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateWindowPos()));
 }
 
 void MapWindow::newFile(const QSize & sz, int generate, int sequenceNumber)
@@ -94,18 +94,18 @@ bool MapWindow::loadFile(const QString & fileName)
     return true;
 }
 
-bool MapWindow::save(void)
+bool MapWindow::save()
 {
     return isUntitled ? saveAs() : saveFile(curFile, true);
 }
 
-bool MapWindow::saveAs(void)
+bool MapWindow::saveAs()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), curFile);
     return fileName.isEmpty() ? false : saveFile(fileName, true);
 }
 
-bool MapWindow::saveRaw(void)
+bool MapWindow::saveRaw()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save Raw As"), curFile);
     return fileName.isEmpty() ? false : saveFile(fileName, false);
@@ -124,12 +124,12 @@ bool MapWindow::saveFile(const QString & fileName, bool compress)
     return true;
 }
 
-QString MapWindow::userFriendlyCurrentFile(void)
+QString MapWindow::userFriendlyCurrentFile()
 {
     return mapData.name() + " (" + strippedName(curFile) + ")";
 }
 
-QString MapWindow::currentFile(void)
+QString MapWindow::currentFile()
 {
     return curFile;
 }
@@ -145,7 +145,7 @@ void MapWindow::closeEvent(QCloseEvent* event)
         event->ignore();
 }
 
-void MapWindow::mapWasModified(void)
+void MapWindow::mapWasModified()
 {
     isModified = true;
     setWindowTitle(userFriendlyCurrentFile() + "[*]");
@@ -154,7 +154,7 @@ void MapWindow::mapWasModified(void)
     emit windowModified(& mapData);
 }
 
-bool MapWindow::maybeSave(void)
+bool MapWindow::maybeSave()
 {
     if(isModified)
     {
@@ -210,7 +210,7 @@ void MapWindow::viewportSetPositionFromListWidget(QListWidgetItem* item)
     }
 }
 
-void MapWindow::updateWindowPos(void)
+void MapWindow::updateWindowPos()
 {
     emit windowPosChanged(QRect(QPoint(horizontalScrollBar()->value(), verticalScrollBar()->value()), size()));
 }

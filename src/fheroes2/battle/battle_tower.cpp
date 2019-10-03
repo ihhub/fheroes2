@@ -39,7 +39,7 @@ Battle::Tower::Tower(const Castle & castle, int twr) : Unit(Troop(Monster::ARCHE
     SetModes(CAP_TOWER);
 }
 
-const char* Battle::Tower::GetName(void) const
+const char* Battle::Tower::GetName() const
 {
     switch(type)
     {
@@ -52,32 +52,32 @@ const char* Battle::Tower::GetName(void) const
     return _("Ballista");
 }
 
-bool Battle::Tower::isValid(void) const
+bool Battle::Tower::isValid() const
 {
     return valid;
 }
 
-u32 Battle::Tower::GetType(void) const
+u32 Battle::Tower::GetType() const
 {
     return type;
 }
 
-u32 Battle::Tower::GetBonus(void) const
+u32 Battle::Tower::GetBonus() const
 {
     return bonus;
 }
 
-u32 Battle::Tower::GetAttack(void) const
+u32 Battle::Tower::GetAttack() const
 {
     return Unit::GetAttack() + bonus;
 }
 
-int Battle::Tower::GetColor(void) const
+int Battle::Tower::GetColor() const
 {
     return color;
 }
 
-Point Battle::Tower::GetPortPosition(void) const
+Point Battle::Tower::GetPortPosition() const
 {
     Point res;
 
@@ -98,7 +98,7 @@ Point Battle::Tower::GetPortPosition(void) const
     return res;
 }
 
-void Battle::Tower::SetDestroy(void)
+void Battle::Tower::SetDestroy()
 {
     switch(type)
     {

@@ -40,18 +40,18 @@ public:
     ICNSprite() {}
     ICNSprite(const Surface & sf1, const Surface & sf2) : std::pair<Surface, Surface>(sf1, sf2) {}
 
-    bool   isValid(void) const;
+    bool   isValid() const;
     Sprite CreateSprite(bool reflect, bool shadow) const;
-    Surface First(void) { return first; }
-    Surface Second(void) { return second; }
+    Surface First() { return first; }
+    Surface Second() { return second; }
 
     Point      offset;
 };
 
 namespace AGG
 {	
-    bool	Init(void);
-    void	Quit(void);
+    bool	Init();
+    void	Quit();
 
     int		PutICN(const Sprite &, bool init_reflect = false);
     Sprite	GetICN(int icn, u32 index, bool reflect = false);
@@ -65,7 +65,7 @@ namespace AGG
     void	LoadLOOPXXSounds(const std::vector<int> &);
     void	PlaySound(int m82);
     void	PlayMusic(int mus, bool loop = true);
-    void	ResetMixer(void);
+    void	ResetMixer();
 
     RGBA	GetPaletteColor(u32 index);
     ICNSprite   RenderICNSprite(int, u32);

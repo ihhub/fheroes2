@@ -293,7 +293,7 @@ BuildingInfo::BuildingInfo(const Castle & c, building_t b) : castle(c), building
     }
 }
 
-u32 BuildingInfo::operator() (void) const
+u32 BuildingInfo::operator() () const
 {
     return building;
 }
@@ -304,12 +304,12 @@ void BuildingInfo::SetPos(s32 x, s32 y)
     area.y = y;
 }
 
-const Rect & BuildingInfo::GetArea(void) const
+const Rect & BuildingInfo::GetArea() const
 {
     return area;
 }
 
-bool BuildingInfo::IsDwelling(void) const
+bool BuildingInfo::IsDwelling() const
 {
     switch(building)
     {
@@ -331,7 +331,7 @@ bool BuildingInfo::IsDwelling(void) const
     return false;
 }
 
-void BuildingInfo::RedrawCaptain(void)
+void BuildingInfo::RedrawCaptain()
 {
     AGG::GetICN(ICN::Get4Captain(castle.GetRace()),
 				(building & BUILD_CAPTAIN ? 1 : 0)).Blit(area.x, area.y);
@@ -356,7 +356,7 @@ void BuildingInfo::RedrawCaptain(void)
     }
 }
 
-void BuildingInfo::Redraw(void)
+void BuildingInfo::Redraw()
 {
     if(BUILD_CAPTAIN == building)
     {
@@ -422,17 +422,17 @@ void BuildingInfo::Redraw(void)
 }
 
 
-const char* BuildingInfo::GetName(void) const
+const char* BuildingInfo::GetName() const
 {
     return Castle::GetStringBuilding(building, castle.GetRace());
 }
 
-const std::string & BuildingInfo::GetDescription(void) const
+const std::string & BuildingInfo::GetDescription() const
 {
     return description;
 }
 
-bool BuildingInfo::QueueEventProcessing(void)
+bool BuildingInfo::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -605,7 +605,7 @@ const char* GetBuildConditionDescription(int bcond)
     return NULL;
 }
 
-std::string BuildingInfo::GetConditionDescription(void) const
+std::string BuildingInfo::GetConditionDescription() const
 {
     std::string res;
 

@@ -108,11 +108,11 @@ public:
     static bool		sortLevel1(const MapTileExt &, const MapTileExt &);
     static bool		sortLevel2(const MapTileExt &, const MapTileExt &);
 
-    int			level(void) const { return spriteLevelInt; }
-    quint32		uid(void) const { return spriteUID; }
-    int			icn(void) const { return spriteICN; }
-    int			ext(void) const { return spriteExt; }
-    int			index(void) const { return spriteIndex; }
+    int			level() const { return spriteLevelInt; }
+    quint32		uid() const { return spriteUID; }
+    int			icn() const { return spriteICN; }
+    int			ext() const { return spriteExt; }
+    int			index() const { return spriteIndex; }
 
     void		setUID(quint32 uid) { spriteUID = uid; }
 
@@ -150,12 +150,12 @@ public:
     MapTileExt*		find(bool (*pf)(const MapTileExt &));
     const MapTileExt*	findConst(bool (*pf)(const MapTileExt &)) const;
     void		paint(QPainter &, const QPoint &, const QPoint &) const;
-    QString		infoString(void) const;
-    int			topObjectID(void) const;
-    quint32		topSpriteUID(void) const;
+    QString		infoString() const;
+    int			topObjectID() const;
+    quint32		topSpriteUID() const;
     bool		removeSprite(quint32);
     void		changeUIDs(QMap<quint32, quint32> &);
-    QSet<quint32>	uids(void) const;
+    QSet<quint32>	uids() const;
 };
 
 QDomElement & operator<< (QDomElement &, const MapTileLevels &);
@@ -168,43 +168,43 @@ public:
     MapTile(const mp2til_t &, const QPoint &);
     MapTile(const MapTile &);
 
-    void		setGraphicsPixmapItemValues(void);
+    void		setGraphicsPixmapItemValues();
     MapTile &		operator=(const MapTile &);
 
-    QRectF		boundingRect(void) const;
+    QRectF		boundingRect() const;
 
     void		importTile(const MapTile &, QMap<quint32, quint32> &);
-    void		showInfo(void) const;
-    int			groundType(void) const;
+    void		showInfo() const;
+    int			groundType() const;
 
     static QString	indexString(int);
 
-    QSet<quint32>	uids(void) const;
-    const QPoint &	mapPos(void) const { return mpos; }
+    QSet<quint32>	uids() const;
+    const QPoint &	mapPos() const { return mpos; }
     void		setMapPos(const QPoint & pos) { mpos = pos; }
     void		setLocalPassable(int pass) { passableLocal = pass; }
 
-    int			basePassable(void) const { return passableBase; }
-    int			localPassable(void) const { return passableLocal; }
+    int			basePassable() const { return passableBase; }
+    int			localPassable() const { return passableLocal; }
     void		paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* = 0);
     void		loadSpriteLevels(const mp2ext_t &);
-    void		sortSpritesLevels(void);
+    void		sortSpritesLevels();
     void		setTileSprite(int, int);
     void		addSpriteSection(const CompositeSprite &, quint32);
     void		removeSpriteSection(quint32);
 
-    MapTileLevels &	levels1(void) { return spritesLevel1; }
-    MapTileLevels &	levels2(void) { return spritesLevel2; }
-    const MapTileLevels & levels1Const(void) const { return spritesLevel1; }
-    const MapTileLevels & levels2Const(void) const { return spritesLevel2; }
+    MapTileLevels &	levels1() { return spritesLevel1; }
+    MapTileLevels &	levels2() { return spritesLevel2; }
+    const MapTileLevels & levels1Const() const { return spritesLevel1; }
+    const MapTileLevels & levels2Const() const { return spritesLevel2; }
 
-    bool		isObjectAction(void) const;
-    bool		isObjectEdit(void) const;
-    int			object(void) const;
+    bool		isObjectAction() const;
+    bool		isObjectEdit() const;
+    int			object() const;
 
 protected:
-    void		updateObjectID(void);
-    void		updatePassable(void);
+    void		updateObjectID();
+    void		updatePassable();
 
     static void		loadSpriteLevel(MapTileLevels &, int, const mp2lev_t &);
 
@@ -243,7 +243,7 @@ public:
     void		generateMap(int);
 
     QRect		fixedRect(const QRect &, const QPoint &) const;
-    const QSize &	mapSize(void) const { return msize; }
+    const QSize &	mapSize() const { return msize; }
     int			indexPoint(const QPoint &) const;
     bool		isValidPoint(const QPoint &) const;
 
@@ -259,7 +259,7 @@ public:
     const MapTile*	tileFromDirectionConst(const QPoint &, int direct) const;
     MapTile*		tileFromDirection(const QPoint &, int direct);
 
-    QString		sizeDescription(void) const;
+    QString		sizeDescription() const;
 };
 
 QDomElement & operator<< (QDomElement &, const MapTiles &);
@@ -275,8 +275,8 @@ public:
     MapArea() : uniq(1) {}
     MapArea(const QSize & sz) : tiles(sz), uniq(1) { }
 
-    quint32		uid(void) { return uniq++; }
-    const QSize &	size(void) const { return tiles.mapSize(); }
+    quint32		uid() { return uniq++; }
+    const QSize &	size() const { return tiles.mapSize(); }
 
     void		importArea(const MapArea &, const QRect &, const QPoint &);
     void		importMP2Towns(const QVector<H2::TownPos> &);
@@ -308,7 +308,7 @@ public:
 
     MapHeader(const MapArea &);
 
-    void		resetPlayerRace(void);
+    void		resetPlayerRace();
     void		updatePlayerRace(int color, int race);
 };
 
@@ -322,67 +322,67 @@ class MapData : public QGraphicsScene
 public:
     MapData(MapWindow*);
 
-    const QString &	name(void) const;
-    const QString &	description(void) const;
-    const QString &	authors(void) const;
-    const QString &	license(void) const;
-    const QSize &	size(void) const;
-    int			difficulty(void) const;
-    int			kingdomColors(void) const;
-    int			computerColors(void) const;
-    int			humanColors(void) const;
-    bool		startWithHero(void) const;
-    const CondWins &	conditionWins(void) const;
-    const CondLoss &	conditionLoss(void) const;
+    const QString &	name() const;
+    const QString &	description() const;
+    const QString &	authors() const;
+    const QString &	license() const;
+    const QSize &	size() const;
+    int			difficulty() const;
+    int			kingdomColors() const;
+    int			computerColors() const;
+    int			humanColors() const;
+    bool		startWithHero() const;
+    const CondWins &	conditionWins() const;
+    const CondLoss &	conditionLoss() const;
     ListStringPos	conditionHeroList(int) const;
     ListStringPos	conditionTownList(int) const;
-    ListStringPos	conditionArtifactList(void) const;
-    QList<QString>	conditionSideList(void) const;
-    const QStringList & tavernRumorsList(void) const;
-    const DayEvents &	dayEvents(void) const;
+    ListStringPos	conditionArtifactList() const;
+    QList<QString>	conditionSideList() const;
+    const QStringList & tavernRumorsList() const;
+    const DayEvents &	dayEvents() const;
 
     static QPair<int, int>
-			versions(void);
+			versions();
 
     void		newMap(const QSize &, int, const QString &, int);
     bool		loadMap(const QString &);
 
     bool		saveMapXML(const QString &, bool) const;
-    bool		isValidBuffer(void) const;
-    bool		showPassableMode(void) const { return showPassable; }
+    bool		isValidBuffer() const;
+    bool		showPassableMode() const { return showPassable; }
 
     QPoint		mapToPoint(const QPoint &) const;
     QRect		mapToRect(const QRect &) const;
 
-    const MapTiles &	tiles(void) const { return mapTiles; }
-    const MapObjects &	objects(void) const { return mapObjects; }
+    const MapTiles &	tiles() const { return mapTiles; }
+    const MapObjects &	objects() const { return mapObjects; }
 
     void		editTownDialog(const QPoint &);
     void		editHeroDialog(const QPoint &);
     void		editOtherMapEventsDialog(const QPoint &);
 
-    const MapTile*	currentTile(void) const;
+    const MapTile*	currentTile() const;
 
 signals:
-    void		dataModified(void);
+    void		dataModified();
     void		currentTilePosChanged(const MapTile*);
 
 public slots:
-    void		showPassableTriggered(void);
-    void		showMapOptions(void);
+    void		showPassableTriggered();
+    void		showMapOptions();
 
 protected slots:
-    void		selectAllTiles(void);
-    void		editPassableDialog(void);
-    void		cellInfoDialog(void);
-    void		copyToBuffer(void);
-    void		pasteFromBuffer(void);
+    void		selectAllTiles();
+    void		editPassableDialog();
+    void		cellInfoDialog();
+    void		copyToBuffer();
+    void		pasteFromBuffer();
     void		fillGroundAction(QAction*);
     void		removeObjectsAction(QAction*);
-    void		selectObjectImage(void);
-    void		editObjectAttributes(void);
-    void		editObjectEvents(void);
-    void		removeCurrentObject(void);
+    void		selectObjectImage();
+    void		editObjectAttributes();
+    void		editObjectEvents();
+    void		removeCurrentObject();
 
 protected:
     void        	contextMenuEvent(QGraphicsSceneContextMenuEvent*);
@@ -394,7 +394,7 @@ protected:
     void		updateKingdomColors(int);
     void		updateTownRaceColor(const MapTile &, int, int);
     void		updateHeroRaceColor(const MapTile &, int, int);
-    void		updatePlayersRaces(void);
+    void		updatePlayersRaces();
 
     void		addMapObject(const QPoint &, const CompositeObject &, quint32);
     void		addHeroItem(const QPoint &, const MapTileExt &);

@@ -35,37 +35,37 @@ public:
     Troop(const Monster &, u32);
 
     bool		operator== (const Monster &) const;
-    Monster		operator() (void) const;
+    Monster		operator() () const;
 
     void		Set(const Troop &);
     void		Set(const Monster &, u32);
     void		SetMonster(const Monster &);
     void		SetCount(u32);
-    void		Reset(void);
+    void		Reset();
 
     bool		isMonster(int) const;
-    const char*		GetName(void) const;
-    virtual u32		GetCount(void) const;
-    u32			GetHitPoints(void) const;
-    Monster		GetMonster(void) const;
+    const char*		GetName() const;
+    virtual u32		GetCount() const;
+    u32			GetHitPoints() const;
+    Monster		GetMonster() const;
 
-    u32			GetDamageMin(void) const;
-    u32			GetDamageMax(void) const;
-    u32			GetStrength(void) const;
+    u32			GetDamageMin() const;
+    u32			GetDamageMax() const;
+    u32			GetStrength() const;
 
 
-    payment_t		GetCost(void) const;
-    payment_t		GetUpgradeCost(void) const;
+    payment_t		GetCost() const;
+    payment_t		GetUpgradeCost() const;
 
-    virtual bool	isValid(void) const;
-    virtual bool	isBattle(void) const;
+    virtual bool	isValid() const;
+    virtual bool	isBattle() const;
     virtual bool	isModes(u32) const;
-    virtual std::string	GetAttackString(void) const;
-    virtual std::string	GetDefenseString(void) const;
-    virtual std::string	GetShotString(void) const;
-    virtual std::string	GetSpeedString(void) const;
-    virtual u32		GetHitPointsLeft(void) const;
-    virtual u32		GetSpeed(void) const;
+    virtual std::string	GetAttackString() const;
+    virtual std::string	GetDefenseString() const;
+    virtual std::string	GetShotString() const;
+    virtual std::string	GetSpeedString() const;
+    virtual u32		GetHitPointsLeft() const;
+    virtual u32		GetSpeed() const;
     virtual u32		GetAffectedDuration(u32) const;
 
 protected:
@@ -86,17 +86,17 @@ public:
 
     ArmyTroop &		operator= (const Troop &);
 
-    u32			GetAttack(void) const;
-    u32			GetDefense(void) const;
-    int			GetColor(void) const;
-    int			GetMorale(void) const;
-    int			GetLuck(void) const;
+    u32			GetAttack() const;
+    u32			GetDefense() const;
+    int			GetColor() const;
+    int			GetMorale() const;
+    int			GetLuck() const;
 
     void		SetArmy(const Army &);
-    const Army*		GetArmy(void) const;
+    const Army*		GetArmy() const;
 
-    std::string		GetAttackString(void) const;
-    std::string		GetDefenseString(void) const;
+    std::string		GetAttackString() const;
+    std::string		GetDefenseString() const;
 
 protected:
     const Army*		army;

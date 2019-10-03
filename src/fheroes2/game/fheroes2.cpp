@@ -36,13 +36,13 @@
 #include "images_pack.h"
 #include "zzlib.h"
 
-void LoadZLogo(void);
+void LoadZLogo();
 void SetVideoDriver(const std::string &);
 void SetTimidityEnvPath(const Settings &);
 void SetLangEnvPath(const Settings &);
-void InitHomeDir(void);
-void ReadConfigs(void);
-int TestBlitSpeed(void);
+void InitHomeDir();
+void ReadConfigs();
+int TestBlitSpeed();
 
 int PrintHelp(const char *basename)
 {
@@ -55,7 +55,7 @@ int PrintHelp(const char *basename)
     return EXIT_SUCCESS;
 }
 
-std::string GetCaption(void)
+std::string GetCaption()
 {
     return std::string("Free Heroes of Might and Magic II, version: " + Settings::GetVersion());
 }
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 	return EXIT_SUCCESS;
 }
 
-int TestBlitSpeed(void)
+int TestBlitSpeed()
 {
     Display & display = Display::Get();
     Surface sf(display.GetSize(), true);
@@ -244,7 +244,7 @@ int TestBlitSpeed(void)
     return res;
 }
 
-void LoadZLogo(void)
+void LoadZLogo()
 {
 #ifdef BUILD_RELEASE
     std::string file = Settings::GetLastFile("image", "sdl_logo.png");
@@ -272,7 +272,7 @@ void LoadZLogo(void)
 #endif
 }
 
-void ReadConfigs(void)
+void ReadConfigs()
 {
     Settings & conf = Settings::Get();
     ListFiles files = conf.GetListFiles("", "fheroes2.cfg");
@@ -282,7 +282,7 @@ void ReadConfigs(void)
     	if(System::IsFile(*it)) conf.Read(*it);
 }
 
-void InitHomeDir(void)
+void InitHomeDir()
 {
     const std::string home = System::GetHomeDirectory("fheroes2");
 

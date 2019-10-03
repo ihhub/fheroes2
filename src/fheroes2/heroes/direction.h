@@ -51,7 +51,7 @@ namespace Direction
     int			Reflect(int direct);
 
     bool		ShortDistanceClockWise(int direct1, int direct2);
-    Directions		All(void);
+    Directions		All();
 }
 
 #define DIRECTION_TOP_ROW	(Direction::TOP_LEFT | Direction::TOP | Direction::TOP_RIGHT)

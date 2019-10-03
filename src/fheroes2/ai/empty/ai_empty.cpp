@@ -33,17 +33,17 @@
 #include "agg.h"
 #include "game_interface.h"
 
-const char* AI::Type(void)
+const char* AI::Type()
 {
     return "empty";
 }
 
-const char* AI::License(void)
+const char* AI::License()
 {
     return "GPL";
 }
 
-void AI::Init(void)
+void AI::Init()
 {
 }
 
@@ -108,7 +108,7 @@ void AI::HeroesPostLoad(Heroes &)
 {
 }
 
-bool AI::HeroesSkipFog(void)
+bool AI::HeroesSkipFog()
 {
     return false;
 }

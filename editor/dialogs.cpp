@@ -179,14 +179,14 @@ Form::SelectMapSize::SelectMapSize()
     connect(checkBoxGenerateMap, SIGNAL(clicked()), this, SLOT(generateWidgetVisible()));
 }
 
-void Form::SelectMapSize::generateWidgetVisible(void)
+void Form::SelectMapSize::generateWidgetVisible()
 {
     labelArea->setVisible(checkBoxGenerateMap->isChecked());
     sliderAreaSize->setVisible(checkBoxGenerateMap->isChecked());
     resize(minimumSizeHint());
 }
 
-void Form::SelectMapSize::clickExpert(void)
+void Form::SelectMapSize::clickExpert()
 {
     // switch to expert
     if(comboBoxSize->isVisible())
@@ -215,7 +215,7 @@ void Form::SelectMapSize::clickExpert(void)
     }
 }
 
-void Form::SelectMapSize::clickOk(void)
+void Form::SelectMapSize::clickOk()
 {
     if(comboBoxSize->isVisible())
     {
@@ -286,7 +286,7 @@ Form::SelectDataFile::SelectDataFile(const QString & dataFile, const QStringList
     connect(pushButtonSelect, SIGNAL(clicked()), this, SLOT(clickSelect()));
 }
 
-void Form::SelectDataFile::clickSelect(void)
+void Form::SelectDataFile::clickSelect()
 {
     result = QFileDialog::getOpenFileName(this, tr("Open data file"), "", "heroes2.agg");
     pushButtonSave->setEnabled(true);
@@ -335,7 +335,7 @@ Form::SelectImageTab::SelectImageTab(const QDomElement & groupElem, const QStrin
     }
 }
 
-bool Form::SelectImageTab::isSelected(void) const
+bool Form::SelectImageTab::isSelected() const
 {
     return listWidget->selectedItems().size();
 }
@@ -433,7 +433,7 @@ Form::SelectImageObject::SelectImageObject()
     connect(this, SIGNAL(finished(int)), this, SLOT(saveSettings()));
 }
 
-void Form::SelectImageObject::saveSettings(void)
+void Form::SelectImageObject::saveSettings()
 {
     QSettings & settings = Resource::localSettings();
     settings.setValue("SelectImageDialog/size", size());
@@ -458,7 +458,7 @@ void Form::SelectImageObject::tabSwitched(int num)
     }
 }
 
-void Form::SelectImageObject::selectionChanged(void)
+void Form::SelectImageObject::selectionChanged()
 {
     SelectImageTab* tab = qobject_cast<SelectImageTab*>(tabWidget->currentWidget());
 
@@ -467,7 +467,7 @@ void Form::SelectImageObject::selectionChanged(void)
 }
 
 
-void Form::SelectImageObject::clickSelect(void)
+void Form::SelectImageObject::clickSelect()
 {
     SelectImageTab* tab = qobject_cast<SelectImageTab*>(tabWidget->currentWidget());
 
@@ -510,7 +510,7 @@ void Form::PlayerStatus::mousePressEvent(QMouseEvent* event)
     emit mousePressed();
 }
 
-void Form::PlayerStatus::updatePlayers(void)
+void Form::PlayerStatus::updatePlayers()
 {
     switch(col)
     {
@@ -882,7 +882,7 @@ Form::MapOptions::MapOptions(MapData & map)
     connect(this, SIGNAL(finished(int)), this, SLOT(saveSettings()));
 }
 
-void Form::MapOptions::saveSettings(void)
+void Form::MapOptions::saveSettings()
 {
     QSettings & settings = Resource::localSettings();
     settings.setValue("MapOptions/size", size());
@@ -1057,7 +1057,7 @@ void Form::MapOptions::lossConditionsSelected(int index)
     setEnableSaveButton();
 }
 
-void Form::MapOptions::setEnableSaveButton(void)
+void Form::MapOptions::setEnableSaveButton()
 {
     pushButtonSave->setEnabled(true);
 }
@@ -1088,24 +1088,24 @@ Form::ItemsList::ItemsList(QWidget* parent) : QListWidget(parent)
     connect(this, SIGNAL(listChanged()), this, SLOT(slotCheckLimit()));
 }
 
-void Form::ItemsList::slotCheckLimit(void)
+void Form::ItemsList::slotCheckLimit()
 {
     checkLimit();
 }
 
-void Form::ItemsList::addNewItem(void)
+void Form::ItemsList::addNewItem()
 {
     addItem();
     emit listChanged();
 }
 
-void Form::ItemsList::editCurrentItem(void)
+void Form::ItemsList::editCurrentItem()
 {
     editItem(currentItem());
     emit listChanged();
 }
 
-void Form::ItemsList::deleteCurrentItem(void)
+void Form::ItemsList::deleteCurrentItem()
 {
     takeItem(currentRow());
     emit listChanged();
@@ -1146,7 +1146,7 @@ void Form::ItemsList::createMenuItems(QMenu* menu)
     menu->addAction(delItemAct);
 }
 
-QStringList Form::ItemsList::results(void) const
+QStringList Form::ItemsList::results() const
 {
     QStringList res;
 
@@ -1163,7 +1163,7 @@ Form::RumorsList::RumorsList(QWidget* parent) : ItemsList(parent)
     delItemAct->setStatusTip(tr("Delete rumor"));
 }
 
-void Form::RumorsList::addItem(void)
+void Form::RumorsList::addItem()
 {
     MessageDialog dialog;
 
@@ -1182,7 +1182,7 @@ void Form::RumorsList::editItem(QListWidgetItem* item)
 	item->setText(dialog.message());
 }
 
-TavernRumors Form::RumorsList::results(void) const
+TavernRumors Form::RumorsList::results() const
 {
     TavernRumors res;
 
@@ -1199,7 +1199,7 @@ Form::DayEventsList::DayEventsList(int colors, QWidget* parent) : ItemsList(pare
     delItemAct->setStatusTip(tr("Delete event"));
 }
 
-void Form::DayEventsList::addItem(void)
+void Form::DayEventsList::addItem()
 {
     DayEventDialog dialog(DayEvent(), kingdomColors);
 
@@ -1226,7 +1226,7 @@ void Form::DayEventsList::editItem(QListWidgetItem* item)
     }
 }
 
-DayEvents Form::DayEventsList::results(void) const
+DayEvents Form::DayEventsList::results() const
 {
     DayEvents res;
 
@@ -1268,12 +1268,12 @@ Form::MessageDialog::MessageDialog(const QString & msg)
     connect(pushButtonOk, SIGNAL(clicked()), this, SLOT(accept()));
 }
 
-void Form::MessageDialog::enableButtonOK(void)
+void Form::MessageDialog::enableButtonOK()
 {
     pushButtonOk->setEnabled(! plainText->toPlainText().isEmpty());
 }
 
-QString Form::MessageDialog::message(void) const
+QString Form::MessageDialog::message() const
 {
     return plainText->toPlainText();
 }
@@ -1291,7 +1291,7 @@ void Form::PlayerAllow::mousePressEvent(QMouseEvent* event)
     emit mousePressed();
 }
 
-void Form::PlayerAllow::updatePlayers(void)
+void Form::PlayerAllow::updatePlayers()
 {
     QPixmap pix = Editor::pixmapBorder(QSize(26, 26), Color::convert(col), QColor(0, 0, 0));
 
@@ -1343,7 +1343,7 @@ Form::AccessGroup::AccessGroup(QWidget* parent, int kingdomColors, int checkedCo
         connect(*it, SIGNAL(mousePressed()), this, SLOT(setFormChanged()));
 }
 
-void Form::AccessGroup::setFormChanged(void)
+void Form::AccessGroup::setFormChanged()
 {
     emit formChanged();
 }
@@ -1358,7 +1358,7 @@ void Form::AccessGroup::setCancelAfterFirstVisit(bool f)
     checkBoxCancelAfterFirstVisit->setChecked(f);
 }
 
-int Form::AccessGroup::colors(void) const
+int Form::AccessGroup::colors() const
 {
     int res = 0;
 
@@ -1372,12 +1372,12 @@ int Form::AccessGroup::colors(void) const
     return res;
 }
 
-bool Form::AccessGroup::allowComputer(void) const
+bool Form::AccessGroup::allowComputer() const
 {
     return checkBoxAllowComp->isChecked();
 }
 
-bool Form::AccessGroup::cancelAfterFirstVisit(void) const
+bool Form::AccessGroup::cancelAfterFirstVisit() const
 {
     return checkBoxCancelAfterFirstVisit->isChecked();
 }
@@ -1402,7 +1402,7 @@ Form::ArtifactGroup::ArtifactGroup(QWidget* parent, int artifact) : QGroupBox(pa
     connect(comboBoxArtifact, SIGNAL(currentIndexChanged(int)), this, SLOT(changeLabelArtifact(int)));
 }
 
-void Form::ArtifactGroup::setFormChanged(void)
+void Form::ArtifactGroup::setFormChanged()
 {
     emit formChanged();
 }
@@ -1424,7 +1424,7 @@ void Form::ArtifactGroup::changeLabelArtifact(int index)
 #endif
 }
 
-int Form::ArtifactGroup::result(void) const
+int Form::ArtifactGroup::result() const
 {
     return comboBoxArtifact->currentIndex();
 }
@@ -1449,7 +1449,7 @@ Form::SpellGroup::SpellGroup(QWidget* parent, int spell) : QGroupBox(parent)
     connect(comboBoxSpell, SIGNAL(currentIndexChanged(int)), this, SLOT(setFormChanged()));
 }
 
-void Form::SpellGroup::setFormChanged(void)
+void Form::SpellGroup::setFormChanged()
 {
     emit formChanged();
 }
@@ -1460,7 +1460,7 @@ void Form::SpellGroup::setValue(int spell)
     emit formChanged();
 }
 
-int Form::SpellGroup::result(void) const
+int Form::SpellGroup::result() const
 {
     return comboBoxSpell->currentIndex();
 }
@@ -1602,12 +1602,12 @@ Form::ResourcesGroup::ResourcesGroup(QWidget* parent, const Resources & resource
     connect(spinBoxResGold, SIGNAL(valueChanged(int)), this, SLOT(setFormChanged()));
 }
 
-void Form::ResourcesGroup::setFormChanged(void)
+void Form::ResourcesGroup::setFormChanged()
 {
     emit formChanged();
 }
 
-Resources Form::ResourcesGroup::result(void) const
+Resources Form::ResourcesGroup::result() const
 {
     Resources res;
 
@@ -1761,7 +1761,7 @@ Form::DayEventDialog::DayEventDialog(const DayEvent & event, int kingdomColors)
     connect(pushButtonCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-void Form::DayEventDialog::setEnableOKButton(void)
+void Form::DayEventDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -1772,7 +1772,7 @@ void Form::DayEventDialog::setEnableOKButton(const QString & val)
     pushButtonOk->setEnabled(true);
 }
 
-DayEvent Form::DayEventDialog::result(void) const
+DayEvent Form::DayEventDialog::result() const
 {
     DayEvent res;
 
@@ -1996,7 +1996,7 @@ Form::MapEventDialog::MapEventDialog(const MapEvent & event, int kingdomColors)
     connect(pushButtonCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-void Form::MapEventDialog::setEnableOKButton(void)
+void Form::MapEventDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -2550,7 +2550,7 @@ Form::MapTownDialog::MapTownDialog(const MapTown & town)
     connect(checkBoxUpgrade6, SIGNAL(toggled(bool)), this, SLOT(setEnableOKButton()));
 }
 
-Troops Form::MapTownDialog::troops(void) const
+Troops Form::MapTownDialog::troops() const
 {
     Troops res;
 
@@ -2563,7 +2563,7 @@ Troops Form::MapTownDialog::troops(void) const
     return res;
 }
 
-uint Form::MapTownDialog::buildings(void) const
+uint Form::MapTownDialog::buildings() const
 {
     uint res = 0;
 
@@ -2594,7 +2594,7 @@ uint Form::MapTownDialog::buildings(void) const
     return res;
 }
 
-uint Form::MapTownDialog::dwellings(void) const
+uint Form::MapTownDialog::dwellings() const
 {
     uint res = 0;
 
@@ -2723,7 +2723,7 @@ void Form::MapTownDialog::setDefaultTroops(bool f)
     setEnableOKButton();
 }
 
-void Form::MapTownDialog::setEnableOKButton(void)
+void Form::MapTownDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -2763,7 +2763,7 @@ Form::SignDialog::SignDialog(const QString & msg)
     connect(plainTextEdit, SIGNAL(modificationChanged(bool)), this, SLOT(setEnableOKButton()));
 }
 
-void Form::SignDialog::setEnableOKButton(void)
+void Form::SignDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -3295,7 +3295,7 @@ void Form::MapHeroDialog::setPortrait(int val)
     setEnableOKButton();
 }
 
-void Form::MapHeroDialog::setEnableOKButton(void)
+void Form::MapHeroDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -3338,7 +3338,7 @@ void Form::MapHeroDialog::setDefaultTroops(bool f)
     setEnableOKButton();
 }
 
-Troops Form::MapHeroDialog::troops(void) const
+Troops Form::MapHeroDialog::troops() const
 {
     Troops res;
 
@@ -3351,7 +3351,7 @@ Troops Form::MapHeroDialog::troops(void) const
     return res;
 }
 
-QVector<int> Form::MapHeroDialog::artifacts(void) const
+QVector<int> Form::MapHeroDialog::artifacts() const
 {
     QVector<int> res;
 
@@ -3361,12 +3361,12 @@ QVector<int> Form::MapHeroDialog::artifacts(void) const
     return res;
 }
 
-bool Form::MapHeroDialog::book(void) const
+bool Form::MapHeroDialog::book() const
 {
     return checkBoxHaveMagicBook->isChecked();
 }
 
-QVector<int> Form::MapHeroDialog::spells(void) const
+QVector<int> Form::MapHeroDialog::spells() const
 {
     QVector<int> res;
 
@@ -3377,7 +3377,7 @@ QVector<int> Form::MapHeroDialog::spells(void) const
     return res;
 }
 
-Skills Form::MapHeroDialog::skills(void) const
+Skills Form::MapHeroDialog::skills() const
 {
     Skills res;
 
@@ -3394,7 +3394,7 @@ Form::ArtifactsList::ArtifactsList(QWidget* parent) : ItemsList(parent)
     delItemAct->setStatusTip(tr("Delete artifact"));
 }
 
-void Form::ArtifactsList::addItem(void)
+void Form::ArtifactsList::addItem()
 {
     SelectArtifactDialog dialog;
 
@@ -3405,7 +3405,7 @@ void Form::ArtifactsList::addItem(void)
     }
 }
 
-bool Form::ArtifactsList::limit(void) const
+bool Form::ArtifactsList::limit() const
 {
     return count() >= 14;
 }
@@ -3418,7 +3418,7 @@ void Form::ArtifactsList::editItem(QListWidgetItem* item)
 	*item = *dialog.listWidget->currentItem();
 }
 
-void Form::ArtifactsList::checkLimit(void)
+void Form::ArtifactsList::checkLimit()
 {
     addItemAct->setDisabled(limit());
 }
@@ -3430,7 +3430,7 @@ Form::SkillsList::SkillsList(QWidget* parent) : ItemsList(parent)
     delItemAct->setStatusTip(tr("Delete skill"));
 }
 
-void Form::SkillsList::addItem(void)
+void Form::SkillsList::addItem()
 {
     SelectSkillDialog dialog;
 
@@ -3441,7 +3441,7 @@ void Form::SkillsList::addItem(void)
     }
 }
 
-bool Form::SkillsList::limit(void) const
+bool Form::SkillsList::limit() const
 {
     return count() >= 8;
 }
@@ -3454,7 +3454,7 @@ void Form::SkillsList::editItem(QListWidgetItem* item)
 	*item = *dialog.listWidget->currentItem();
 }
 
-void Form::SkillsList::checkLimit(void)
+void Form::SkillsList::checkLimit()
 {
     addItemAct->setDisabled(limit());
 }
@@ -3466,7 +3466,7 @@ Form::SpellsList::SpellsList(QWidget* parent) : ItemsList(parent)
     delItemAct->setStatusTip(tr("Delete spell"));
 }
 
-void Form::SpellsList::addItem(void)
+void Form::SpellsList::addItem()
 {
     SelectSpellDialog dialog;
 
@@ -3477,7 +3477,7 @@ void Form::SpellsList::addItem(void)
     }
 }
 
-bool Form::SpellsList::limit(void) const
+bool Form::SpellsList::limit() const
 {
     return count() >= 20;
 }
@@ -3490,7 +3490,7 @@ void Form::SpellsList::editItem(QListWidgetItem* item)
 	*item = *dialog.listWidget->currentItem();
 }
 
-void Form::SpellsList::checkLimit(void)
+void Form::SpellsList::checkLimit()
 {
     addItemAct->setDisabled(limit());
 }
@@ -3528,7 +3528,7 @@ Form::ListDialog::ListDialog()
     connect(listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(accept()));
 }
 
-void Form::ListDialog::setEnableOKButton(void)
+void Form::ListDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -3605,7 +3605,7 @@ Form::RiddlesList::RiddlesList(QWidget* parent) : ItemsList(parent)
     delItemAct->setStatusTip(tr("Delete riddle"));
 }
 
-void Form::RiddlesList::addItem(void)
+void Form::RiddlesList::addItem()
 {
     MessageDialog dialog;
 
@@ -3701,7 +3701,7 @@ Form::MapSphinxDialog::MapSphinxDialog(const MapSphinx & sphinx)
     connect(pushButtonCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-void Form::MapSphinxDialog::setEnableOKButton(void)
+void Form::MapSphinxDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -3787,7 +3787,7 @@ Form::ObjectEventsDialog::ObjectEventsDialog(const MapActions* actions)
     connect(listWidgetEvents, SIGNAL(listChanged()), this, SLOT(setEnableOKButton()));
 }
 
-void Form::ObjectEventsDialog::checkUpDownButtons(void)
+void Form::ObjectEventsDialog::checkUpDownButtons()
 {
     int row = listWidgetEvents->currentRow();
 
@@ -3798,7 +3798,7 @@ void Form::ObjectEventsDialog::checkUpDownButtons(void)
     }
 }
 
-void Form::ObjectEventsDialog::moveCurrentItemUp(void)
+void Form::ObjectEventsDialog::moveCurrentItemUp()
 {
     int row = listWidgetEvents->currentRow();
 
@@ -3815,7 +3815,7 @@ void Form::ObjectEventsDialog::moveCurrentItemUp(void)
     }
 }
 
-void Form::ObjectEventsDialog::moveCurrentItemDown(void)
+void Form::ObjectEventsDialog::moveCurrentItemDown()
 {
     int row = listWidgetEvents->currentRow();
 
@@ -3832,7 +3832,7 @@ void Form::ObjectEventsDialog::moveCurrentItemDown(void)
     }
 }
 
-void Form::ObjectEventsDialog::setEnableOKButton(void)
+void Form::ObjectEventsDialog::setEnableOKButton()
 {
     checkUpDownButtons();
     pushButtonOk->setEnabled(true);
@@ -3875,12 +3875,12 @@ void Form::ObjectEventsList::createMenuItems(QMenu* menu)
         eventsSubMenu->addAction(*it);
 }
 
-bool Form::ObjectEventsList::limit(void) const
+bool Form::ObjectEventsList::limit() const
 {
     return count() >= 15;
 }
 
-void Form::ObjectEventsList::checkLimit(void)
+void Form::ObjectEventsList::checkLimit()
 {
     addItemAct->setDisabled(limit());
 }
@@ -3970,7 +3970,7 @@ Form::EditPassableDialog::EditPassableDialog(const MapTile & tile)
     connect(pushButtonCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-int Form::EditPassableDialog::result(void) const
+int Form::EditPassableDialog::result() const
 {
     return Direction::All;
 }
@@ -4110,7 +4110,7 @@ void Form::InfoForm::update(const MapTile* tile)
     }
 }
 
-MapActionList Form::ObjectEventsDialog::results(void) const
+MapActionList Form::ObjectEventsDialog::results() const
 {
     MapActionList res;
 
@@ -4383,17 +4383,17 @@ Form::MessageTabDialog::MessageTabDialog(const ActionMessage & act)
     connect(pushButtonOk, SIGNAL(clicked()), this, SLOT(accept()));
 }
 
-void Form::MessageTabDialog::enableButtonOK(void)
+void Form::MessageTabDialog::enableButtonOK()
 {
     pushButtonOk->setEnabled(true);
 }
 
-QString Form::MessageTabDialog::message(void) const
+QString Form::MessageTabDialog::message() const
 {
     return plainText->toPlainText();
 }
 
-ActionMessage Form::MessageTabDialog::result(void) const
+ActionMessage Form::MessageTabDialog::result() const
 {
     return ActionMessage(message());
 }
@@ -4435,7 +4435,7 @@ Form::DefaultActionDialog::DefaultActionDialog(const ActionDefault & act) : Mess
     connect(comboBoxResult, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonOK()));
 }
 
-ActionDefault Form::DefaultActionDialog::result(void) const
+ActionDefault Form::DefaultActionDialog::result() const
 {
     return ActionDefault(message(), comboBoxResult->currentIndex());
 }
@@ -4476,7 +4476,7 @@ Form::AccessDialog::AccessDialog(const ActionAccess & act) : MessageTabDialog(ac
     connect(accessGroup, SIGNAL(formChanged()), this, SLOT(enableButtonOK()));
 }
 
-ActionAccess Form::AccessDialog::result(void) const
+ActionAccess Form::AccessDialog::result() const
 {
     return ActionAccess(message(), AccessResult(accessGroup->colors(), accessGroup->allowComputer(), accessGroup->cancelAfterFirstVisit()));
 }
@@ -4514,7 +4514,7 @@ Form::ResourcesDialog::ResourcesDialog(const ActionResources & act) : MessageTab
     connect(resourcesGroup, SIGNAL(formChanged()), this, SLOT(enableButtonOK()));
 }
 
-ActionResources Form::ResourcesDialog::result(void) const
+ActionResources Form::ResourcesDialog::result() const
 {
     return ActionResources(message(), resourcesGroup->result());
 }
@@ -4566,7 +4566,7 @@ Form::ArtifactDialog::ArtifactDialog(const ActionArtifact & act) : MessageTabDia
     connect(spellGroup, SIGNAL(formChanged()), this, SLOT(enableButtonOK()));
 }
 
-ActionArtifact Form::ArtifactDialog::result(void) const
+ActionArtifact Form::ArtifactDialog::result() const
 {
     ActionArtifact res(message(), artifactGroup->result());
 
@@ -4590,7 +4590,7 @@ void Form::ArtifactDialog::fillItem(QListWidgetItem & item, const ActionArtifact
     item.setText(MapActions::transcribe(type).append(" - ").append(Artifact::transcribe(act.artifact)));
 }
 
-void Form::ArtifactDialog::artifactFormChanged(void)
+void Form::ArtifactDialog::artifactFormChanged()
 {
     enableButtonOK();
 
@@ -4691,7 +4691,7 @@ Form::MapArtifactDialog::MapArtifactDialog(const MapArtifact & obj)
 	connect(*it, SIGNAL(toggled(bool)), this, SLOT(setEnableOKButton()));
 }
 
-QPair<int, int> Form::MapArtifactDialog::result(void) const
+QPair<int, int> Form::MapArtifactDialog::result() const
 {
     QPair<int, int> res(-1, spellGroup->result());
 
@@ -4705,7 +4705,7 @@ QPair<int, int> Form::MapArtifactDialog::result(void) const
     return res;
 }
 
-void Form::MapArtifactDialog::setEnableOKButton(void)
+void Form::MapArtifactDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -4779,7 +4779,7 @@ Form::MapMonsterDialog::MapMonsterDialog(const MapMonster & obj)
 	connect(*it, SIGNAL(toggled(bool)), this, SLOT(setEnableOKButton()));
 }
 
-QPair<int, int> Form::MapMonsterDialog::result(void) const
+QPair<int, int> Form::MapMonsterDialog::result() const
 {
     QPair<int, int> res(-1, editCount->text().toInt());
 
@@ -4793,7 +4793,7 @@ QPair<int, int> Form::MapMonsterDialog::result(void) const
     return res;
 }
 
-void Form::MapMonsterDialog::setEnableOKButton(void)
+void Form::MapMonsterDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }
@@ -4842,12 +4842,12 @@ Form::MapResourceDialog::MapResourceDialog(const MapResource & obj)
     connect(editCount, SIGNAL(textChanged(QString)), this, SLOT(setEnableOKButton()));
 }
 
-int Form::MapResourceDialog::result(void) const
+int Form::MapResourceDialog::result() const
 {
     return editCount->text().toInt();
 }
 
-void Form::MapResourceDialog::setEnableOKButton(void)
+void Form::MapResourceDialog::setEnableOKButton()
 {
     pushButtonOk->setEnabled(true);
 }

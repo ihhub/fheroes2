@@ -36,8 +36,8 @@ public:
     ActionSimple(int v = 0) : uid(0), type(v) {}
     virtual ~ActionSimple() {}
 
-    int         GetType(void) const { return type; }
-    u32         GetUID(void) const { return uid; }
+    int         GetType() const { return type; }
+    u32         GetUID() const { return uid; }
     void        SetUID(u32 v) { uid = v; }
 
 protected:

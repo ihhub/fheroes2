@@ -177,7 +177,7 @@ StreamBase & operator>> (StreamBase & msg, MonsterStaticData & obj)
     return msg;
 }
 
-float Monster::GetUpgradeRatio(void)
+float Monster::GetUpgradeRatio()
 {
     return GameStatic::GetMonsterUpgradeRatio();
 }
@@ -275,7 +275,7 @@ Monster::Monster(int race, u32 dw) : id(UNKNOWN)
     id = FromDwelling(race, dw).id;
 }
 
-bool Monster::isValid(void) const
+bool Monster::isValid() const
 {
     return id != UNKNOWN;
 }
@@ -295,47 +295,47 @@ bool Monster::operator!= (const Monster & m) const
     return id != m.id;
 }
 
-int Monster::operator() (void) const
+int Monster::operator() () const
 {
     return id;
 }
 
-int Monster::GetID(void) const
+int Monster::GetID() const
 {
     return id;
 }
 
-void Monster::Upgrade(void)
+void Monster::Upgrade()
 {
     id = GetUpgrade().id;
 }
 
-u32 Monster::GetAttack(void) const
+u32 Monster::GetAttack() const
 {
     return monsters[id].attack;
 }
 
-u32 Monster::GetDefense(void) const
+u32 Monster::GetDefense() const
 {
     return monsters[id].defense;
 }
 
-int Monster::GetColor(void) const
+int Monster::GetColor() const
 {
     return Color::NONE;
 }
 
-int Monster::GetMorale(void) const
+int Monster::GetMorale() const
 {
     return Morale::NORMAL;
 }
 
-int Monster::GetLuck(void) const
+int Monster::GetLuck() const
 {
     return Luck::NORMAL;
 }
 
-int Monster::GetRace(void) const
+int Monster::GetRace() const
 {
     if(UNKNOWN == id)	return Race::NONE;
     else
@@ -354,32 +354,32 @@ int Monster::GetRace(void) const
     return Race::NONE;
 }
 
-u32 Monster::GetDamageMin(void) const
+u32 Monster::GetDamageMin() const
 {
     return monsters[id].damageMin;
 }
 
-u32 Monster::GetDamageMax(void) const
+u32 Monster::GetDamageMax() const
 {
     return monsters[id].damageMax;
 }
 
-u32 Monster::GetShots(void) const
+u32 Monster::GetShots() const
 {
     return monsters[id].shots;
 }
 
-u32 Monster::GetHitPoints(void) const
+u32 Monster::GetHitPoints() const
 {
     return monsters[id].hp;
 }
 
-u32 Monster::GetSpeed(void) const
+u32 Monster::GetSpeed() const
 {
     return monsters[id].speed;
 }
 
-u32 Monster::GetGrown(void) const
+u32 Monster::GetGrown() const
 {
     return monsters[id].grown;
 }
@@ -411,7 +411,7 @@ u32 Monster::GetRNDSize(bool skip_factor) const
     return isValid() ? GetCountFromHitPoints(id, res) : 0;
 }
 
-bool Monster::isUndead(void) const
+bool Monster::isUndead() const
 {
     switch(id)
     {
@@ -433,7 +433,7 @@ bool Monster::isUndead(void) const
     return false;
 }
 
-bool Monster::isElemental(void) const
+bool Monster::isElemental() const
 {
     switch(id)
     {
@@ -448,12 +448,12 @@ bool Monster::isElemental(void) const
     return false;
 }
 
-bool Monster::isAlive(void) const
+bool Monster::isAlive() const
 {
     return !isUndead() && !isElemental();
 }
 
-bool Monster::isDragons(void) const
+bool Monster::isDragons() const
 {
     switch(id)
     {
@@ -468,7 +468,7 @@ bool Monster::isDragons(void) const
     return false;
 }
 
-bool Monster::isFly(void) const
+bool Monster::isFly() const
 {
     switch(id)
     {
@@ -492,7 +492,7 @@ bool Monster::isFly(void) const
     return false;
 }
 
-bool Monster::isWide(void) const
+bool Monster::isWide() const
 {
     switch(id)
     {
@@ -519,17 +519,17 @@ bool Monster::isWide(void) const
     return false;
 }
 
-bool Monster::isArchers(void) const
+bool Monster::isArchers() const
 {
     return GetShots();
 }
 
-bool Monster::isAllowUpgrade(void) const
+bool Monster::isAllowUpgrade() const
 {
     return id != GetUpgrade().id;
 }
 
-bool Monster::isHideAttack(void) const
+bool Monster::isHideAttack() const
 {
     switch(id)
     {
@@ -545,7 +545,7 @@ bool Monster::isHideAttack(void) const
     return false;
 }
 
-bool Monster::isTwiceAttack(void) const
+bool Monster::isTwiceAttack() const
 {
     switch(id)
     {
@@ -562,7 +562,7 @@ bool Monster::isTwiceAttack(void) const
     return false;
 }
 
-bool Monster::isResurectLife(void) const
+bool Monster::isResurectLife() const
 {
     switch(id)
     {
@@ -576,7 +576,7 @@ bool Monster::isResurectLife(void) const
     return false;
 }
 
-bool Monster::isDoubleCellAttack(void) const
+bool Monster::isDoubleCellAttack() const
 {
     switch(id)
     {
@@ -593,22 +593,22 @@ bool Monster::isDoubleCellAttack(void) const
     return false;
 }
 
-bool Monster::isMultiCellAttack(void) const
+bool Monster::isMultiCellAttack() const
 {
     return id == HYDRA;
 }
 
-bool Monster::isAlwayResponse(void) const
+bool Monster::isAlwayResponse() const
 {
     return id == GRIFFIN;
 }
 
-bool Monster::isAffectedByMorale(void) const
+bool Monster::isAffectedByMorale() const
 {
     return !(isUndead() || isElemental());
 }
 
-Monster Monster::GetDowngrade(void) const
+Monster Monster::GetDowngrade() const
 {
     switch(id)
     {
@@ -640,7 +640,7 @@ Monster Monster::GetDowngrade(void) const
     return Monster(id);
 }
 
-Monster Monster::GetUpgrade(void) const
+Monster Monster::GetUpgrade() const
 {
     switch(id)
     {
@@ -863,7 +863,7 @@ Monster Monster::Rand(level_t level)
     return monster.size() ? *Rand::Get(monster) : UNKNOWN;
 }
 
-u32 Monster::Rand4WeekOf(void)
+u32 Monster::Rand4WeekOf()
 {
     switch(Rand::Get(1, 47))
     {
@@ -919,7 +919,7 @@ u32 Monster::Rand4WeekOf(void)
     return UNKNOWN;
 }
 
-u32 Monster::Rand4MonthOf(void)
+u32 Monster::Rand4MonthOf()
 {
     switch(Rand::Get(1, 30))
     {
@@ -958,7 +958,7 @@ u32 Monster::Rand4MonthOf(void)
     return UNKNOWN;
 }
 
-int Monster::GetLevel(void) const
+int Monster::GetLevel() const
 {
     switch(id)
     {
@@ -1052,7 +1052,7 @@ int Monster::GetLevel(void) const
     return LEVEL0;
 }
 
-u32 Monster::GetDwelling(void) const
+u32 Monster::GetDwelling() const
 {
     switch(id)
     {
@@ -1131,12 +1131,12 @@ u32 Monster::GetDwelling(void) const
     return 0;
 }
 
-const char* Monster::GetName(void) const
+const char* Monster::GetName() const
 {
     return _(monsters[id].name);
 }
 
-const char* Monster::GetMultiName(void) const
+const char* Monster::GetMultiName() const
 {
     return _(monsters[id].multiname);
 }
@@ -1224,22 +1224,22 @@ const char* Monster::GetPluralName(u32 count) const
     return 1 == count ? GetName() : GetMultiName();
 }
 
-u32 Monster::GetSpriteIndex(void) const
+u32 Monster::GetSpriteIndex() const
 {
     return UNKNOWN < id ? id - 1 : 0;
 }
 
-int Monster::ICNMonh(void) const
+int Monster::ICNMonh() const
 {
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }
 
-payment_t Monster::GetCost(void) const
+payment_t Monster::GetCost() const
 {
     return payment_t(monsters[id].cost);
 }
 
-payment_t Monster::GetUpgradeCost(void) const
+payment_t Monster::GetUpgradeCost() const
 {
     Monster upgr = GetUpgrade();
     payment_t pay = id != upgr.id ? upgr.GetCost() - GetCost() : GetCost();
@@ -1267,7 +1267,7 @@ u32 Monster::GetCountFromHitPoints(const Monster & mons, u32 hp)
     return 0;
 }
 
-MonsterStaticData & MonsterStaticData::Get(void)
+MonsterStaticData & MonsterStaticData::Get()
 {
     static MonsterStaticData mgds;
     return mgds;

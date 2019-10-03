@@ -54,7 +54,7 @@ namespace AGG
 	u32		offset;
 	u32		size;
 
-	std::string	Info(void) const;
+	std::string	Info() const;
     };
 
     class File
@@ -64,8 +64,8 @@ namespace AGG
 	~File();
 
 	bool			Open(const std::string &);
-	bool			isGood(void) const;
-	const std::string &	Name(void) const;
+	bool			isGood() const;
+	const std::string &	Name() const;
 	const FAT &		Fat(const std::string & key);
 
 	const std::vector<u8> &	Read(const std::string & key);
@@ -151,13 +151,13 @@ namespace AGG
     void			LoadTIL(int til);
     void			SaveTIL(int til);
 
-    void			LoadFNT(void);
-    void			ShowError(void);
+    void			LoadFNT();
+    void			ShowError();
 
-    bool			CheckMemoryLimit(void);
-    u32				ClearFreeObjects(void);
+    bool			CheckMemoryLimit();
+    u32				ClearFreeObjects();
 
-    bool			ReadDataDir(void);
+    bool			ReadDataDir();
     const std::vector<u8> &	ReadICNChunk(int icn, u32);
     const std::vector<u8> &	ReadChunk(const std::string &);
 }
@@ -173,13 +173,13 @@ Sprite ICNSprite::CreateSprite(bool reflect, bool shadow) const
     return Sprite(reflect ? res.RenderReflect(2) : res, offset.x, offset.y);
 }
 
-bool ICNSprite::isValid(void) const
+bool ICNSprite::isValid() const
 {
     return first.isValid();
 }
 
 /*AGG::File constructor */
-AGG::File::File(void) : count_items(0)
+AGG::File::File() : count_items(0)
 {
 }
 
@@ -217,13 +217,13 @@ AGG::File::~File()
 {
 }
 
-bool AGG::File::isGood(void) const
+bool AGG::File::isGood() const
 {
     return !stream.fail() && count_items;
 }
 
 /* get AGG file name */
-const std::string & AGG::File::Name(void) const
+const std::string & AGG::File::Name() const
 {
     return filename;
 }
@@ -235,7 +235,7 @@ const AGG::FAT & AGG::File::Fat(const std::string & key)
 }
 
 /* dump FAT */
-std::string AGG::FAT::Info(void) const
+std::string AGG::FAT::Info() const
 {
     std::ostringstream os;
 
@@ -274,7 +274,7 @@ const std::vector<u8> & AGG::File::Read(const std::string & str)
     return body;
 }
 
-u32 AGG::ClearFreeObjects(void)
+u32 AGG::ClearFreeObjects()
 {
     u32 total = 0;
 
@@ -365,7 +365,7 @@ u32 AGG::ClearFreeObjects(void)
     return total;
 }
 
-bool AGG::CheckMemoryLimit(void)
+bool AGG::CheckMemoryLimit()
 {
     Settings & conf = Settings::Get();
 
@@ -398,7 +398,7 @@ bool AGG::CheckMemoryLimit(void)
 }
 
 /* read data directory */
-bool AGG::ReadDataDir(void)
+bool AGG::ReadDataDir()
 {
     Settings & conf = Settings::Get();
 
@@ -1748,7 +1748,7 @@ void AGG::LoadTTFChar(u32 ch)
     DEBUG(DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch);
 }
 
-void AGG::LoadFNT(void)
+void AGG::LoadFNT()
 {
     const Settings & conf = Settings::Get();
 
@@ -1805,7 +1805,7 @@ Surface AGG::GetUnicodeLetter(u32 ch, u32 ft)
     return fnt_cache[ch].sfs[0];
 }
 #else
-void AGG::LoadFNT(void)
+void AGG::LoadFNT()
 {
     DEBUG(DBG_ENGINE, DBG_INFO, "use bitmap fonts");
 }
@@ -1828,14 +1828,14 @@ Surface AGG::GetLetter(u32 ch, u32 ft)
     return AGG::GetICN(ICN::SMALFONT, ch - 0x20);
 }
 
-void AGG::ResetMixer(void)
+void AGG::ResetMixer()
 {
     Mixer::Reset();
     loop_sounds.clear();
     loop_sounds.reserve(7);
 }
 
-void AGG::ShowError(void)
+void AGG::ShowError()
 {
 #ifdef WITH_ZLIB
     ZSurface zerr;
@@ -1854,7 +1854,7 @@ void AGG::ShowError(void)
 #endif
 }
 
-bool AGG::Init(void)
+bool AGG::Init()
 {
     // read data dir
     if(! ReadDataDir())
@@ -1908,7 +1908,7 @@ bool AGG::Init(void)
     return true;
 }
 
-void AGG::Quit(void)
+void AGG::Quit()
 {
     for(std::vector<icn_cache_t>::iterator
 	it = icn_cache.begin(); it != icn_cache.end(); ++it)

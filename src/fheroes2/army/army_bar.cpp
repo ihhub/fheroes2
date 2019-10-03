@@ -109,7 +109,7 @@ void ArmyBar::SetArmy(Army* ptr)
     SetContentItems();
 }
 
-bool ArmyBar::isValid(void) const
+bool ArmyBar::isValid() const
 {
     return army != NULL;
 }
@@ -194,7 +194,7 @@ void ArmyBar::RedrawItem(ArmyTroop & troop, const Rect & pos, bool selected, Sur
     }
 }
 
-void ArmyBar::ResetSelected(void)
+void ArmyBar::ResetSelected()
 {
     Cursor::Get().Hide();
     spcursor.Hide();

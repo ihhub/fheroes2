@@ -33,7 +33,7 @@ namespace Resource
 {
     QString 	FindFile(const QString & dir, const QString & file);
     QStringList	FindFiles(const QString & dir, const QString & file);
-    QSettings & localSettings(void);
+    QSettings & localSettings();
 }
 
 #endif

@@ -184,7 +184,7 @@ KeySym GetKeySym(int);
 class LocalEvent
 {
 public:
-    static LocalEvent & Get(void);
+    static LocalEvent & Get();
 
     void SetGlobalFilterMouseEvents(void (*pf)(s32, s32));
     void SetGlobalFilterKeysEvents(void (*pf)(int, int));
@@ -194,55 +194,55 @@ public:
     void SetMouseOffsetX(s16);
     void SetMouseOffsetY(s16);
 
-    static void SetStateDefaults(void);
+    static void SetStateDefaults();
     static void SetState(u32 type, bool enable);
     static int  GetState(u32 type);
 
     bool HandleEvents(bool delay = true);
 
-    bool MouseMotion(void) const;
+    bool MouseMotion() const;
     bool MouseMotion(const Rect &rt) const;
 
-    const Point & GetMouseCursor(void);
-    const Point & GetMousePressLeft(void) const;
-    const Point & GetMousePressMiddle(void) const;
-    const Point & GetMousePressRight(void) const;
-    const Point & GetMouseReleaseLeft(void) const;
-    const Point & GetMouseReleaseMiddle(void) const;
-    const Point & GetMouseReleaseRight(void) const;
+    const Point & GetMouseCursor();
+    const Point & GetMousePressLeft() const;
+    const Point & GetMousePressMiddle() const;
+    const Point & GetMousePressRight() const;
+    const Point & GetMouseReleaseLeft() const;
+    const Point & GetMouseReleaseMiddle() const;
+    const Point & GetMouseReleaseRight() const;
 
-    void ResetPressLeft(void);
-    void ResetPressRight(void);
-    void ResetPressMiddle(void);
+    void ResetPressLeft();
+    void ResetPressRight();
+    void ResetPressMiddle();
 
-    void ResetReleaseLeft(void);
-    void ResetReleaseRight(void);
-    void ResetReleaseMiddle(void);
+    void ResetReleaseLeft();
+    void ResetReleaseRight();
+    void ResetReleaseMiddle();
     
-    bool MouseClickLeft(void);
-    bool MouseClickMiddle(void);
-    bool MouseClickRight(void);
+    bool MouseClickLeft();
+    bool MouseClickMiddle();
+    bool MouseClickRight();
 
     bool MouseClickLeft(const Rect &rt);
     bool MouseClickMiddle(const Rect &rt);
     bool MouseClickRight(const Rect &rt);
 
-    bool MouseWheelUp(void) const;
-    bool MouseWheelDn(void) const;
+    bool MouseWheelUp() const;
+    bool MouseWheelDn() const;
 
-    bool MousePressLeft(void) const;
+    bool MousePressLeft() const;
     bool MousePressLeft(const Rect &rt) const;
     bool MousePressLeft(const Point &pt, u32 w, u32 h) const;
-    bool MousePressMiddle(void) const;
+    bool MousePressMiddle() const;
     bool MousePressMiddle(const Rect &rt) const;
-    bool MousePressRight(void) const;
+    bool MousePressRight() const;
     bool MousePressRight(const Rect &rt) const;
 
-    bool MouseReleaseLeft(void) const;
+    bool MouseReleaseLeft() const;
     bool MouseReleaseLeft(const Rect &rt) const;
-    bool MouseReleaseMiddle(void) const;
+    bool MouseReleaseMiddle() const;
     bool MouseReleaseMiddle(const Rect &rt) const;
-    bool MouseReleaseRight(void) const;
+    bool MouseReleaseRight() const;
     bool MouseReleaseRight(const Rect &rt) const;
 
     bool MouseWheelUp(const Rect &rt) const;
@@ -250,13 +250,13 @@ public:
 
     bool MouseCursor(const Rect &rt) const;
 
-    bool KeyPress(void) const;
+    bool KeyPress() const;
     bool KeyPress(KeySym key) const;
-    KeySym KeyValue(void) const;
-    int	   KeyMod(void) const;
+    KeySym KeyValue() const;
+    int	   KeyMod() const;
 
 #ifdef WITHOUT_MOUSE
-    void ToggleEmulateMouse(void);
+    void ToggleEmulateMouse();
     void SetEmulateMouse(bool);
     void SetEmulateMouseUpKey(KeySym);
     void SetEmulateMouseDownKey(KeySym);

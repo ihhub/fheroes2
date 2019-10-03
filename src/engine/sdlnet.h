@@ -32,10 +32,10 @@
 
 namespace Network
 {
-    bool		Init(void);
-    void		Quit(void);
+    bool		Init();
+    void		Quit();
     bool		ResolveHost(IPaddress &, const char*, u16);
-    const char*		GetError(void);
+    const char*		GetError();
 
     class Socket
     {
@@ -46,7 +46,7 @@ namespace Network
 
 	void		Assign(const TCPsocket);
 
-	bool		Ready(void) const;
+	bool		Ready() const;
 
         bool            Recv(char*, int);
         bool            Send(const char*, int);
@@ -57,12 +57,12 @@ namespace Network
         bool            Recv16(u16 &);
         bool            Send16(const u16 &);
 
-	u32		Host(void) const;
-	u16		Port(void) const;
+	u32		Host() const;
+	u16		Port() const;
 
 	bool		Open(IPaddress &);
-	bool		isValid(void) const;
-	void		Close(void);
+	bool		isValid() const;
+	void		Close();
 
     protected:
 	Socket(const Socket &);
@@ -78,7 +78,7 @@ namespace Network
     public:
 	Server();
 
-	TCPsocket	Accept(void);
+	TCPsocket	Accept();
     };
 }
 #endif

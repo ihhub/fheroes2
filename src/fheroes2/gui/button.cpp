@@ -43,22 +43,22 @@ Button::Button(s32 ox, s32 oy, int icn, u32 index1, u32 index2) : flags(0)
     SetSize(sf1.w(), sf1.h());
 }
 
-bool Button::isEnable(void) const
+bool Button::isEnable() const
 {
     return ! isDisable();
 }
 
-bool Button::isDisable(void) const
+bool Button::isDisable() const
 {
     return flags & BTN_DISABLE;
 }
 
-bool Button::isPressed(void) const
+bool Button::isPressed() const
 {
     return flags & BTN_PRESSED;
 }
 
-bool Button::isReleased(void) const
+bool Button::isReleased() const
 {
     return ! isPressed();
 }
@@ -104,19 +104,19 @@ void Button::SetDisable(bool f)
 	flags &= ~(BTN_DISABLE | BTN_PRESSED);
 }
 
-void Button::Press(void)
+void Button::Press()
 {
     if(isEnable() && isReleased())
 	flags |= BTN_PRESSED;
 }
 
-void Button::Release(void)
+void Button::Release()
 {
     if(isEnable() && isPressed())
 	flags &= ~BTN_PRESSED;
 }
 
-void Button::PressDraw(void)
+void Button::PressDraw()
 {
     if(isEnable() && isReleased())
     {
@@ -126,7 +126,7 @@ void Button::PressDraw(void)
     }
 }
 
-void Button::ReleaseDraw(void)
+void Button::ReleaseDraw()
 {
     if(isEnable() && isPressed())
     {
@@ -136,7 +136,7 @@ void Button::ReleaseDraw(void)
     }
 }
 
-void Button::Draw(void)
+void Button::Draw()
 {
     bool localcursor = false;
     Cursor & cursor = Cursor::Get();
@@ -209,13 +209,13 @@ ButtonGroups::~ButtonGroups()
     if(button2) delete button2;
 }
 
-void ButtonGroups::Draw(void)
+void ButtonGroups::Draw()
 {
     if(button1) (*button1).Draw();
     if(button2) (*button2).Draw();
 }
 
-int ButtonGroups::QueueEventProcessing(void)
+int ButtonGroups::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 

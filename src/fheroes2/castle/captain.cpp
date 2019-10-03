@@ -33,32 +33,32 @@ Captain::Captain(Castle & cstl) : HeroBase(HeroBase::CAPTAIN, cstl.GetRace()), h
     SetCenter(home.GetCenter());
 }
 
-bool Captain::isValid(void) const
+bool Captain::isValid() const
 {
     return home.isBuild(BUILD_CAPTAIN);
 }
 
-int Captain::GetAttack(void) const
+int Captain::GetAttack() const
 {
     return attack + GetAttackModificator(NULL);
 }
 
-int Captain::GetDefense(void) const
+int Captain::GetDefense() const
 {
     return defense + GetDefenseModificator(NULL);
 }
 
-int Captain::GetPower(void) const
+int Captain::GetPower() const
 {
    return power + GetPowerModificator(NULL);
 }
 
-int Captain::GetKnowledge(void) const
+int Captain::GetKnowledge() const
 {
     return knowledge + GetKnowledgeModificator(NULL);
 }
 
-int Captain::GetMorale(void) const
+int Captain::GetMorale() const
 {
     int result = Morale::NORMAL;
 
@@ -81,7 +81,7 @@ int Captain::GetMorale(void) const
     return Morale::BLOOD;
 }
 
-int Captain::GetLuck(void) const
+int Captain::GetLuck() const
 {
     int result = Luck::NORMAL;
 
@@ -104,22 +104,22 @@ int Captain::GetLuck(void) const
     return Luck::IRISH;
 }
 
-int Captain::GetRace(void) const
+int Captain::GetRace() const
 {
     return home.GetRace();
 }
 
-int Captain::GetColor(void) const
+int Captain::GetColor() const
 {
     return home.GetColor();
 }
 
-const std::string & Captain::GetName(void) const
+const std::string & Captain::GetName() const
 {
     return home.GetName();
 }
 
-int Captain::GetType(void) const
+int Captain::GetType() const
 {
     return HeroBase::CAPTAIN;
 }
@@ -134,42 +134,42 @@ u32 Captain::GetSecondaryValues(int) const
     return 0;
 }
 
-const Army & Captain::GetArmy(void) const
+const Army & Captain::GetArmy() const
 {
     return home.GetArmy();
 }
 
-Army & Captain::GetArmy(void)
+Army & Captain::GetArmy()
 {
     return home.GetArmy();
 }
 
-u32 Captain::GetMaxSpellPoints(void) const
+u32 Captain::GetMaxSpellPoints() const
 {
     return knowledge * 10;
 }
 
-int Captain::GetControl(void) const
+int Captain::GetControl() const
 {
     return home.GetControl();
 }
 
-s32 Captain::GetIndex(void) const
+s32 Captain::GetIndex() const
 {
     return home.GetIndex();
 }
 
-void Captain::ActionAfterBattle(void)
+void Captain::ActionAfterBattle()
 {
     SetSpellPoints(GetMaxSpellPoints());
 }
 
-void Captain::ActionPreBattle(void)
+void Captain::ActionPreBattle()
 {
     SetSpellPoints(GetMaxSpellPoints());
 }
 
-const Castle* Captain::inCastle(void) const
+const Castle* Captain::inCastle() const
 {
     return &home;
 }

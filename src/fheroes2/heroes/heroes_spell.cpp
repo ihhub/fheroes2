@@ -34,7 +34,7 @@
 #include "heroes.h"
 
 void DialogSpellFailed(const Spell &);
-void DialogNotAvailable(void);
+void DialogNotAvailable();
 
 bool ActionSpellViewMines(Heroes &);
 bool ActionSpellViewResources(Heroes &);
@@ -58,8 +58,8 @@ public:
     void RedrawItem(const s32 &, s32, s32, bool);
     void RedrawBackground(const Point &);
 
-    void ActionCurrentUp(void){};
-    void ActionCurrentDn(void){};
+    void ActionCurrentUp(){};
+    void ActionCurrentDn(){};
     void ActionListDoubleClick(s32 &){ result = Dialog::OK; };
     void ActionListSingleClick(s32 &){};
     void ActionListPressRight(s32 &){};
@@ -189,7 +189,7 @@ void DialogSpellFailed(const Spell & spell)
     Dialog::Message("", str, Font::BIG, Dialog::OK);
 }
 
-void DialogNotAvailable(void)
+void DialogNotAvailable()
 {
     Dialog::Message("", "Not available for current version", Font::BIG, Dialog::OK);
 }

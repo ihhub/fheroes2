@@ -29,7 +29,7 @@
 #include "world.h"
 #include "maps_tiles.h"
 
-bool Maps::Tiles::QuantityIsValid(void) const
+bool Maps::Tiles::QuantityIsValid() const
 {
     switch(GetObject(false))
     {
@@ -70,12 +70,12 @@ bool Maps::Tiles::QuantityIsValid(void) const
     return false;
 }
 
-int Maps::Tiles::QuantityVariant(void) const
+int Maps::Tiles::QuantityVariant() const
 {
     return quantity2 >> 4;
 }
 
-int Maps::Tiles::QuantityExt(void) const
+int Maps::Tiles::QuantityExt() const
 {
     return 0x0f & quantity2;
 }
@@ -92,7 +92,7 @@ void Maps::Tiles::QuantitySetExt(int ext)
     quantity2 |= (0x0f & ext);
 }
 
-Skill::Secondary Maps::Tiles::QuantitySkill(void) const
+Skill::Secondary Maps::Tiles::QuantitySkill() const
 {
     switch(GetObject(false))
     {
@@ -128,7 +128,7 @@ void Maps::Tiles::QuantitySetSkill(int skill)
     }
 }
 
-Spell Maps::Tiles::QuantitySpell(void) const
+Spell Maps::Tiles::QuantitySpell() const
 {
     switch(GetObject(false))
     {
@@ -163,7 +163,7 @@ void Maps::Tiles::QuantitySetSpell(int spell)
     }
 }
 
-Artifact Maps::Tiles::QuantityArtifact(void) const
+Artifact Maps::Tiles::QuantityArtifact() const
 {
     switch(GetObject(false))
     {
@@ -205,7 +205,7 @@ void Maps::Tiles::QuantitySetResource(int res, u32 count)
     quantity2 = res == Resource::GOLD ? count / 100 : count;
 }
 
-u32 Maps::Tiles::QuantityGold(void) const
+u32 Maps::Tiles::QuantityGold() const
 {
     switch(GetObject(false))
     {
@@ -261,7 +261,7 @@ u32 Maps::Tiles::QuantityGold(void) const
     return 0;
 }
 
-ResourceCount Maps::Tiles::QuantityResourceCount(void) const
+ResourceCount Maps::Tiles::QuantityResourceCount() const
 {
     switch(GetObject(false))
     {
@@ -288,7 +288,7 @@ ResourceCount Maps::Tiles::QuantityResourceCount(void) const
     return ResourceCount(quantity1, Resource::GOLD == quantity1 ? QuantityGold() : quantity2);
 }
 
-Funds Maps::Tiles::QuantityFunds(void) const
+Funds Maps::Tiles::QuantityFunds() const
 {
     const ResourceCount & rc = QuantityResourceCount();
 
@@ -339,7 +339,7 @@ void Maps::Tiles::QuantitySetColor(int col)
     }
 }
 
-int Maps::Tiles::QuantityColor(void) const
+int Maps::Tiles::QuantityColor() const
 {
     switch(GetObject(false))
     {
@@ -352,7 +352,7 @@ int Maps::Tiles::QuantityColor(void) const
     }
 }
 
-int Maps::Tiles::QuantityTeleportType(void) const
+int Maps::Tiles::QuantityTeleportType() const
 {
     return quantity1;
 }
@@ -362,7 +362,7 @@ void Maps::Tiles::QuantitySetTeleportType(int type)
     quantity1 = type;
 }
 
-Monster Maps::Tiles::QuantityMonster(void) const
+Monster Maps::Tiles::QuantityMonster() const
 {
     switch(GetObject(false))
     {
@@ -404,13 +404,13 @@ Monster Maps::Tiles::QuantityMonster(void) const
 	world.GetCapturedObject(GetIndex()).GetTroop() : Monster(Monster::UNKNOWN);
 }
 
-Troop Maps::Tiles::QuantityTroop(void) const
+Troop Maps::Tiles::QuantityTroop() const
 {
     return MP2::isCaptureObject(GetObject(false)) ?
 	world.GetCapturedObject(GetIndex()).GetTroop() : Troop(QuantityMonster(), MonsterCount());
 }
 
-void Maps::Tiles::QuantityReset(void)
+void Maps::Tiles::QuantityReset()
 {
     quantity1 = 0;
     quantity2 = 0;
@@ -436,7 +436,7 @@ void Maps::Tiles::QuantityReset(void)
         SetObject(MP2::OBJ_ZERO);
 }
 
-void Maps::Tiles::QuantityUpdate(void)
+void Maps::Tiles::QuantityUpdate()
 {
     switch(GetObject(false))
     {
@@ -899,7 +899,7 @@ void Maps::Tiles::QuantityUpdate(void)
     }
 }
 
-int Maps::Tiles::MonsterJoinCondition(void) const
+int Maps::Tiles::MonsterJoinCondition() const
 {
     const Maps::TilesAddon *addon = FindObjectConst(MP2::OBJ_MONSTER);
     return addon ? 0x03 & addon->tmp : 0;
@@ -915,39 +915,39 @@ void Maps::Tiles::MonsterSetJoinCondition(int cond)
     }
 }
 
-void Maps::Tiles::MonsterSetFixedCount(void)
+void Maps::Tiles::MonsterSetFixedCount()
 {
     Maps::TilesAddon *addon = FindObject(MP2::OBJ_MONSTER);
     if(addon) addon->tmp |= 0x80;
 }
 
-bool Maps::Tiles::MonsterFixedCount(void) const
+bool Maps::Tiles::MonsterFixedCount() const
 {
     const Maps::TilesAddon *addon = FindObjectConst(MP2::OBJ_MONSTER);
     return addon ? addon->tmp & 0x80 : 0;
 }
 
-bool Maps::Tiles::MonsterJoinConditionSkip(void) const
+bool Maps::Tiles::MonsterJoinConditionSkip() const
 {
     return Monster::JOIN_CONDITION_SKIP == MonsterJoinCondition();
 }
 
-bool Maps::Tiles::MonsterJoinConditionMoney(void) const
+bool Maps::Tiles::MonsterJoinConditionMoney() const
 {
     return Monster::JOIN_CONDITION_MONEY == MonsterJoinCondition();
 }
 
-bool Maps::Tiles::MonsterJoinConditionFree(void) const
+bool Maps::Tiles::MonsterJoinConditionFree() const
 {
     return Monster::JOIN_CONDITION_FREE == MonsterJoinCondition();
 }
 
-bool Maps::Tiles::MonsterJoinConditionForce(void) const
+bool Maps::Tiles::MonsterJoinConditionForce() const
 {
     return Monster::JOIN_CONDITION_FORCE == MonsterJoinCondition();
 }
 
-u32 Maps::Tiles::MonsterCount(void) const
+u32 Maps::Tiles::MonsterCount() const
 {
     return (static_cast<u32>(quantity1) << 8) | quantity2;
 }

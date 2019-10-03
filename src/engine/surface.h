@@ -36,16 +36,16 @@ public:
     RGBA();
     RGBA(int r, int g, int b, int a = 255);
 
-    SDL_Color operator() (void) const { return color; }
+    SDL_Color operator() () const { return color; }
     bool      operator== (const RGBA & col) const { return pack() == col.pack(); }
     bool      operator!= (const RGBA & col) const { return pack() != col.pack(); }
 
-    int         r(void) const;
-    int         g(void) const;
-    int         b(void) const;
-    int         a(void) const;
+    int         r() const;
+    int         g() const;
+    int         b() const;
+    int         a() const;
 
-    int		pack(void) const;
+    int		pack() const;
     static RGBA unpack(int);
 
 protected:
@@ -79,31 +79,31 @@ public:
 
     Surface & operator= (const Surface &);
     bool operator== (const Surface &) const;
-    SDL_Surface* operator() (void) const { return surface; }
+    SDL_Surface* operator() () const { return surface; }
 
     virtual ~Surface();
 
     void Set(u32 sw, u32 sh, const SurfaceFormat &);
     void Set(u32 sw, u32 sh, bool amask);
-    void Reset(void);
+    void Reset();
 
     bool Load(const std::string &);
     bool Save(const std::string &) const;
 
-    int w(void) const;
-    int h(void) const;
-    u32 depth(void) const;
-    u32 amask(void) const;
-    u32 alpha(void) const;
+    int w() const;
+    int h() const;
+    u32 depth() const;
+    u32 amask() const;
+    u32 alpha() const;
 
-    Size GetSize(void) const;
-    bool isRefCopy(void) const;
-    SurfaceFormat GetFormat(void) const;
+    Size GetSize() const;
+    bool isRefCopy() const;
+    SurfaceFormat GetFormat() const;
 
-    bool isValid(void) const;
+    bool isValid() const;
 
     void SetColorKey(const RGBA &);
-    u32	 GetColorKey(void) const;
+    u32	 GetColorKey() const;
 
     void Blit(Surface &) const;
     void Blit(s32, s32, Surface &) const;
@@ -118,21 +118,21 @@ public:
     void DrawRect(const Rect &, const RGBA &);
     void DrawBorder(const RGBA &, bool solid = true);
 
-    virtual u32  GetMemoryUsage(void) const;
-    std::string  Info(void) const;
+    virtual u32  GetMemoryUsage() const;
+    std::string  Info() const;
 
     Surface RenderScale(const Size &) const;
     Surface RenderReflect(int shape /* 0: none, 1 : vert, 2: horz, 3: both */) const;
     Surface RenderRotate(int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */) const;
     Surface RenderStencil(const RGBA &) const;
     Surface RenderContour(const RGBA &) const;
-    Surface RenderGrayScale(void) const;
-    Surface RenderSepia(void) const;
+    Surface RenderGrayScale() const;
+    Surface RenderSepia() const;
     Surface RenderChangeColor(const RGBA &, const RGBA &) const;
     Surface RenderSurface(const Rect & srt, const Size &) const;
     Surface RenderSurface(const Size &) const;
 
-    virtual Surface GetSurface(void) const;
+    virtual Surface GetSurface() const;
     virtual Surface GetSurface(const Rect &) const;
 
     static void SetDefaultPalette(SDL_Color*, int);
@@ -145,10 +145,10 @@ public:
 protected:
     static void FreeSurface(Surface &);
 
-    virtual bool isDisplay(void) const;
+    virtual bool isDisplay() const;
 
-    void Lock(void) const;
-    void Unlock(void) const;
+    void Lock() const;
+    void Unlock() const;
 
     //void SetColorMod(const RGBA &);
     //void SetBlendMode(int);
@@ -159,7 +159,7 @@ protected:
     void Set(const Surface &, bool refcopy);
     void Set(u32 sw, u32 sh, u32 bpp /* bpp: 8, 16, 24, 32 */, bool amask);
     void Set(SDL_Surface*);
-    void SetPalette(void);
+    void SetPalette();
 
     void SetPixel4(s32 x, s32 y, u32 color);
     void SetPixel3(s32 x, s32 y, u32 color);

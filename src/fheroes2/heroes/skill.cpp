@@ -46,7 +46,7 @@ namespace Skill
 			Secondary::LUCK, Secondary::BALLISTICS, Secondary::EAGLEEYE, Secondary::NECROMANCY, Secondary::ESTATES };
 }
 
-u32 Skill::Secondary::GetValues(void) const
+u32 Skill::Secondary::GetValues() const
 {
     const values_t* val = GameStatic::GetSkillValues(Skill());
 
@@ -66,12 +66,12 @@ Skill::Primary::Primary() : attack(0), defense(0), power(0), knowledge(0)
 {
 }
 
-bool Skill::Primary::isCaptain(void) const
+bool Skill::Primary::isCaptain() const
 {
     return false;
 }
 
-bool Skill::Primary::isHeroes(void) const
+bool Skill::Primary::isHeroes() const
 {
     return false;
 }
@@ -233,7 +233,7 @@ Skill::Secondary::Secondary(int skill, int level) : std::pair<int, int>(UNKNOWN,
     SetLevel(level);
 }
 
-void Skill::Secondary::Reset(void)
+void Skill::Secondary::Reset()
 {
     first = UNKNOWN;
     second = Level::NONE;
@@ -255,7 +255,7 @@ void Skill::Secondary::SetLevel(int level)
     second = level <= Level::EXPERT ? level : Level::NONE;
 }
 
-void Skill::Secondary::NextLevel(void)
+void Skill::Secondary::NextLevel()
 {
     switch(second)
     {
@@ -266,12 +266,12 @@ void Skill::Secondary::NextLevel(void)
     }
 }
 
-int Skill::Secondary::Skill(void) const
+int Skill::Secondary::Skill() const
 {
     return first;
 }
 
-int Skill::Secondary::Level(void) const
+int Skill::Secondary::Level() const
 {
     return second;
 }
@@ -286,12 +286,12 @@ bool Skill::Secondary::isSkill(int skill) const
     return skill == first;
 }
 
-bool Skill::Secondary::isValid(void) const
+bool Skill::Secondary::isValid() const
 {
     return Skill() != UNKNOWN && Level() != Level::NONE;
 }
 
-int Skill::Secondary::RandForWitchsHut(void)
+int Skill::Secondary::RandForWitchsHut()
 {
     const Skill::secondary_t* sec = GameStatic::GetSkillForWitchsHut();
     std::vector<int> v;
@@ -320,13 +320,13 @@ int Skill::Secondary::RandForWitchsHut(void)
 }
 
 /* index sprite from SECSKILL */
-int Skill::Secondary::GetIndexSprite1(void) const
+int Skill::Secondary::GetIndexSprite1() const
 {
     return Skill() <= ESTATES ? Skill() : 0;
 }
 
 /* index sprite from MINISS */
-int Skill::Secondary::GetIndexSprite2(void) const
+int Skill::Secondary::GetIndexSprite2() const
 {
     return Skill() <= ESTATES ? Skill() - 1 : 0xFF;
 }
@@ -359,7 +359,7 @@ const char* Skill::Secondary::String(int skill)
     return str_skill[14];
 }
 
-const char* Skill::Secondary::GetName(void) const
+const char* Skill::Secondary::GetName() const
 {
     const char* name_skill[] =
     {
@@ -382,7 +382,7 @@ const char* Skill::Secondary::GetName(void) const
     return isValid() ? name_skill[(Level() - 1) + (Skill() - 1) * 3] : "unknown";
 }
 
-std::string Skill::Secondary::GetDescription(void) const
+std::string Skill::Secondary::GetDescription() const
 {
     u32 count = GetValues();
     std::string str = "unknown";
@@ -522,7 +522,7 @@ u32 Skill::SecSkills::GetValues(int skill) const
     return it == end() ? 0 : (*it).GetValues();
 }
 
-int Skill::SecSkills::Count(void) const
+int Skill::SecSkills::Count() const
 {
     return std::count_if(begin(), end(), std::mem_fun_ref(&Secondary::isValid));
 }
@@ -555,13 +555,13 @@ Skill::Secondary* Skill::SecSkills::FindSkill(int skill)
     return it != end() ? & (*it) : NULL;
 }
 
-std::vector<Skill::Secondary> & Skill::SecSkills::ToVector(void)
+std::vector<Skill::Secondary> & Skill::SecSkills::ToVector()
 {
     std::vector<Secondary> & v = *this;
     return v;
 }
 
-std::string Skill::SecSkills::String(void) const
+std::string Skill::SecSkills::String() const
 {
     std::ostringstream os;
 
@@ -616,7 +616,7 @@ int Skill::SecondaryGetWeightSkillFromRace(int race, int skill)
 }
 
 /*
-std::vector<int> Skill::SecondarySkills(void)
+std::vector<int> Skill::SecondarySkills()
 {
     const int vals[] = { Secondary::PATHFINDING, Secondary::ARCHERY, Secondary::LOGISTICS, Secondary::SCOUTING,
 			Secondary::DIPLOMACY, Secondary::NAVIGATION, Secondary::LEADERSHIP, Secondary::WISDOM, Secondary::MYSTICISM,
@@ -730,7 +730,7 @@ StreamBase & Skill::operator>> (StreamBase & msg, Primary & skill)
     return msg >> skill.attack >> skill.defense >> skill.knowledge >> skill.power;
 }
 
-Surface GetBarBackgroundSprite(void)
+Surface GetBarBackgroundSprite()
 {
     const Rect rt(26, 21, 32, 32);
     Surface res(Size(rt.w, rt.h) + Size(2, 2), true);

@@ -52,32 +52,32 @@ protected:
     void		closeEvent(QCloseEvent*);
 
 private slots:
-    void		newFile(void);
-    void		open(void);
-    void		save(void);
-    void		saveRaw(void);
-    void		saveAs(void);
-    void		about(void);
-    void		updateWindowMenu(void);
-    MapWindow*		createMapWindow(void);
+    void		newFile();
+    void		open();
+    void		save();
+    void		saveRaw();
+    void		saveAs();
+    void		about();
+    void		updateWindowMenu();
+    MapWindow*		createMapWindow();
     void		setActiveSubWindow(QWidget*);
     void		subWindowActivated(QMdiSubWindow*);
     void		setCoordInfo(const MapTile*);
     void		updateInfoForm(QListWidgetItem*);
 
 private:
-    void		createActions(void);
-    void		createMenus(void);
-    void		createToolBars(void);
-    void		createStatusBar(void);
-    void		readSettings(void);
-    void		writeSettings(void);
+    void		createActions();
+    void		createMenus();
+    void		createToolBars();
+    void		createStatusBar();
+    void		readSettings();
+    void		writeSettings();
 
-    void		updateMenus(void);
-    void		updateStatusBar(void);
-    void		updateDockWidgets(void);
+    void		updateMenus();
+    void		updateStatusBar();
+    void		updateDockWidgets();
 
-    MapWindow*		activeMapWindow(void);
+    MapWindow*		activeMapWindow();
     QMdiSubWindow*	findMapWindow(const QString &);
 
     QMdiArea*		mdiArea;

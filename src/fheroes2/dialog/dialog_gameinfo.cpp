@@ -32,7 +32,7 @@
 #include "difficulty.h"
 #include "dialog.h"
 
-void Dialog::GameInfo(void)
+void Dialog::GameInfo()
 {
     // FIXME: QVGA version
     if(Settings::Get().QVGA())

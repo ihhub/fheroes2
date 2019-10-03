@@ -42,7 +42,7 @@ Interface::StatusWindow::StatusWindow(Basic & basic) : BorderWindow(Rect(0, 0, 1
 {
 }
 
-void Interface::StatusWindow::Reset(void)
+void Interface::StatusWindow::Reset()
 {
     state = STATUS_DAY;
     oldState = STATUS_UNKNOWN;
@@ -51,7 +51,7 @@ void Interface::StatusWindow::Reset(void)
     ResetTimer();
 }
 
-int Interface::StatusWindow::GetState(void) const
+int Interface::StatusWindow::GetState() const
 {
     return state;
 }
@@ -74,12 +74,12 @@ u32 Interface::StatusWindow::ResetResourceStatus(u32 tick, void *ptr)
     return 0;
 }
 
-void Interface::StatusWindow::SavePosition(void)
+void Interface::StatusWindow::SavePosition()
 {
     Settings::Get().SetPosStatus(GetRect());
 }
 
-void Interface::StatusWindow::SetRedraw(void) const
+void Interface::StatusWindow::SetRedraw() const
 {
      interface.SetRedraw(REDRAW_STATUS);
 }
@@ -102,7 +102,7 @@ void Interface::StatusWindow::SetState(int info)
     if(STATUS_RESOURCE != state) state = info;
 }
 
-void Interface::StatusWindow::Redraw(void)
+void Interface::StatusWindow::Redraw()
 {
     const Settings & conf = Settings::Get();
 
@@ -149,7 +149,7 @@ void Interface::StatusWindow::Redraw(void)
     }
 }
 
-void Interface::StatusWindow::NextState(void)
+void Interface::StatusWindow::NextState()
 {
     if(STATUS_DAY == state) state = STATUS_FUNDS;
     else
@@ -239,7 +239,7 @@ void Interface::StatusWindow::SetResource(int res, u32 count)
     timerShowLastResource.Run(RESOURCE_WINDOW_EXPIRE, ResetResourceStatus, this);
 }
 
-void Interface::StatusWindow::ResetTimer(void)
+void Interface::StatusWindow::ResetTimer()
 {
     StatusWindow & window = Interface::Basic::Get().GetStatusWindow();
 
@@ -299,7 +299,7 @@ void Interface::StatusWindow::DrawArmyInfo(int oh) const
     }
 }
 
-void Interface::StatusWindow::DrawAITurns(void) const
+void Interface::StatusWindow::DrawAITurns() const
 {
     const Settings & conf = Settings::Get();
 
@@ -350,7 +350,7 @@ void Interface::StatusWindow::DrawAITurns(void) const
     }
 }
 
-void Interface::StatusWindow::DrawBackground(void) const
+void Interface::StatusWindow::DrawBackground() const
 {
     Display & display = Display::Get();
     const Sprite & icnston = AGG::GetICN(Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0);
@@ -382,7 +382,7 @@ void Interface::StatusWindow::DrawBackground(void) const
 	icnston.Blit(pos.x, pos.y);
 }
 
-void Interface::StatusWindow::QueueEventProcessing(void)
+void Interface::StatusWindow::QueueEventProcessing()
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();

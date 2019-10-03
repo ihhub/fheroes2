@@ -45,7 +45,7 @@ void Splitter::SetArea(const Rect & rt)
     area = rt;
 }
 
-bool Splitter::isVertical(void) const
+bool Splitter::isVertical() const
 {
     return area.w < area.h;
 }
@@ -73,7 +73,7 @@ void Splitter::SetRange(int smin, int smax)
     SpriteMove::background.SetPos(move);
 }
 
-Point Splitter::GetPositionCursor(void)
+Point Splitter::GetPositionCursor()
 {
     Point res;
 
@@ -91,22 +91,22 @@ Point Splitter::GetPositionCursor(void)
     return res;
 }
 
-void Splitter::RedrawCursor(void)
+void Splitter::RedrawCursor()
 {
     Redraw();
 }
 
-void Splitter::HideCursor(void)
+void Splitter::HideCursor()
 {
     Hide();
 }
 
-void Splitter::ShowCursor(void)
+void Splitter::ShowCursor()
 {
     Show();
 }
 
-void Splitter::MoveCenter(void)
+void Splitter::MoveCenter()
 {
     Move(area.x + (area.w - SpriteMove::w()) / 2,
 		    area.y + (area.h - SpriteMove::h()) / 2);
@@ -127,7 +127,7 @@ void Splitter::MoveIndex(int num)
 }
 
 /* forward spliter */
-void Splitter::Forward(void)
+void Splitter::Forward()
 {
     if(cur != max)
     {
@@ -137,7 +137,7 @@ void Splitter::Forward(void)
 }
 
 /* backward spliter */
-void Splitter::Backward(void)
+void Splitter::Backward()
 {
     if(cur)
     {

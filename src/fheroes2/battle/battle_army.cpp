@@ -168,12 +168,12 @@ void Battle::Units::SortFastest(bool f)
     std::sort(begin(), end(), CompareFunc);
 }
 
-void Battle::Units::SortStrongest(void)
+void Battle::Units::SortStrongest()
 {
     std::sort(begin(), end(), Army::StrongestTroop);
 }
 
-void Battle::Units::SortWeakest(void)
+void Battle::Units::SortWeakest()
 {
     std::sort(begin(), end(), Army::WeakestTroop);
 }
@@ -226,32 +226,32 @@ Battle::Force::~Force()
     for(iterator it = begin(); it != end(); ++it) delete *it;
 }
 
-const HeroBase* Battle::Force::GetCommander(void) const
+const HeroBase* Battle::Force::GetCommander() const
 {
     return army.GetCommander();
 }
 
-HeroBase* Battle::Force::GetCommander(void)
+HeroBase* Battle::Force::GetCommander()
 {
     return army.GetCommander();
 }
 
-int Battle::Force::GetColor(void) const
+int Battle::Force::GetColor() const
 {
     return army.GetColor();
 }
 
-int Battle::Force::GetControl(void) const
+int Battle::Force::GetControl() const
 {
     return army.GetControl();
 }
 
-bool Battle::Force::isValid(void) const
+bool Battle::Force::isValid() const
 {
     return end() != std::find_if(begin(), end(), std::mem_fun(&Unit::isValid));
 }
 
-u32 Battle::Force::GetSurrenderCost(void) const
+u32 Battle::Force::GetSurrenderCost() const
 {
     float res = 0;
 
@@ -291,7 +291,7 @@ u32 Battle::Force::GetSurrenderCost(void) const
     return static_cast<u32>(res);
 }
 
-void Battle::Force::NewTurn(void)
+void Battle::Force::NewTurn()
 {
     if(GetCommander())
         GetCommander()->ResetModes(Heroes::SPELLCASTED);
@@ -393,7 +393,7 @@ StreamBase & Battle::operator>> (StreamBase & msg, Force & f)
     return msg;
 }
 
-Troops Battle::Force::GetKilledTroops(void) const
+Troops Battle::Force::GetKilledTroops() const
 {
     Troops killed;
 
@@ -407,7 +407,7 @@ Troops Battle::Force::GetKilledTroops(void) const
     return killed;
 }
 
-bool Battle::Force::SetIdleAnimation(void)
+bool Battle::Force::SetIdleAnimation()
 {
     bool res = false;
 
@@ -431,7 +431,7 @@ bool Battle::Force::SetIdleAnimation(void)
     return res;
 }
 
-bool Battle::Force::NextIdleAnimation(void)
+bool Battle::Force::NextIdleAnimation()
 {
     bool res = false;
 
@@ -455,7 +455,7 @@ bool Battle::Force::HasMonster(const Monster & mons) const
 	std::bind2nd(std::mem_fun(&Troop::isMonster), mons()));
 }
 
-u32 Battle::Force::GetDeadCounts(void) const
+u32 Battle::Force::GetDeadCounts() const
 {
     u32 res = 0;
 
@@ -465,7 +465,7 @@ u32 Battle::Force::GetDeadCounts(void) const
     return res;
 }
 
-u32 Battle::Force::GetDeadHitPoints(void) const
+u32 Battle::Force::GetDeadHitPoints() const
 {
     u32 res = 0;
 
@@ -477,7 +477,7 @@ u32 Battle::Force::GetDeadHitPoints(void) const
     return res;
 }
 
-void Battle::Force::SyncArmyCount(void)
+void Battle::Force::SyncArmyCount()
 {
     for(u32 index = 0; index < army.Size(); ++index)
     {

@@ -35,7 +35,7 @@ public:
     Puzzle & operator= (const char*);
 
     void Update(u32 open, u32 total);
-    void ShowMapsDialog(void) const;
+    void ShowMapsDialog() const;
 
     u8 zone1_order[24];
     u8 zone2_order[16];

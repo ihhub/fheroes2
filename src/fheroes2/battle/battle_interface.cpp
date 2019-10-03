@@ -87,7 +87,7 @@ namespace Battle
 	    splitter.ShowCursor();
 	}
 
-	const Rect & GetArea(void) const
+	const Rect & GetArea() const
 	{
 	    return border.GetRect();
 	}
@@ -123,14 +123,14 @@ namespace Battle
 	    sp2.Blit(ax, buttonPgDn.y - sp2.h());
 	}
 
-	void ActionCurrentUp(void){}
-	void ActionCurrentDn(void){}
+	void ActionCurrentUp(){}
+	void ActionCurrentDn(){}
 	void ActionListDoubleClick(std::string &) {}
 	void ActionListSingleClick(std::string &) {}
 	void ActionListPressRight(std::string &) {}
 
 	void SetOpenLog(bool f) { openlog = f; }
-	bool isOpenLog(void) const { return openlog; }
+	bool isOpenLog() const { return openlog; }
 
     private:
 	Dialog::FrameBorder	 border;
@@ -199,7 +199,7 @@ Surface DrawHexagon(const RGBA & color)
     return sf;
 }
 
-Surface DrawHexagonShadow(void)
+Surface DrawHexagonShadow()
 {
     int l, w, h;
 
@@ -236,7 +236,7 @@ Surface DrawHexagonShadow(void)
     return sf;
 }
 
-bool Battle::TargetInfo::isFinishAnimFrame(void) const
+bool Battle::TargetInfo::isFinishAnimFrame() const
 {
     return defender && defender->isFinishAnimFrame();
 }
@@ -364,12 +364,12 @@ Battle::OpponentSprite::OpponentSprite(const Rect & area, const HeroBase *b, boo
     }
 }
 
-int Battle::OpponentSprite::GetColor(void) const
+int Battle::OpponentSprite::GetColor() const
 {
     return base ? base->GetColor() : 0;
 }
 
-const HeroBase* Battle::OpponentSprite::GetHero(void) const
+const HeroBase* Battle::OpponentSprite::GetHero() const
 {
     return base;
 }
@@ -508,22 +508,22 @@ void Battle::OpponentSprite::ResetAnimFrame(int rule)
     }
 }
 
-bool Battle::OpponentSprite::isFinishFrame(void) const
+bool Battle::OpponentSprite::isFinishFrame() const
 {
     return !animframe_count || animframe >= animframe_start + animframe_count - 1;
 }
 
-bool Battle::OpponentSprite::isStartFrame(void) const
+bool Battle::OpponentSprite::isStartFrame() const
 {
     return animframe_count && animframe == animframe_start;
 }
 
-const Rect & Battle::OpponentSprite::GetArea(void) const
+const Rect & Battle::OpponentSprite::GetArea() const
 {
     return pos;
 }
 
-void Battle::OpponentSprite::Redraw(void) const
+void Battle::OpponentSprite::Redraw() const
 {
     AGG::GetICN(icn, animframe, reflect).Blit(pos.x, pos.y);
 }
@@ -558,7 +558,7 @@ void Battle::Status::SetMessage(const std::string & str, bool top)
     }
 }
 
-void Battle::Status::Redraw(void)
+void Battle::Status::Redraw()
 {
     back1.Blit(x, y);
     back2.Blit(x, y + back1.h());
@@ -567,7 +567,7 @@ void Battle::Status::Redraw(void)
     if(bar2.Size()) bar2.Blit(x + (back2.w() - bar2.w()) / 2, y + back1.h() + (Settings::Get().QVGA() ? -3 : 0));
 }
 
-const std::string & Battle::Status::GetMessage(void) const
+const std::string & Battle::Status::GetMessage() const
 {
     return message;
 }
@@ -790,7 +790,7 @@ void Battle::Interface::SetArmiesOrder(const Units* units)
      armies_order.Set(border.GetArea(), units, arena.GetArmyColor2());
 }
 
-const Rect & Battle::Interface::GetArea(void) const
+const Rect & Battle::Interface::GetArea() const
 {
     return border.GetArea();
 }
@@ -809,7 +809,7 @@ void Battle::Interface::SetStatus(const std::string & msg, bool top)
     humanturn_redraw = true;
 }
 
-void Battle::Interface::Redraw(void)
+void Battle::Interface::Redraw()
 {
     const Castle* castle = Arena::GetCastle();
     RedrawBorder();
@@ -822,7 +822,7 @@ void Battle::Interface::Redraw(void)
     if(Settings::Get().QVGA()) RedrawPocketControls();
 }
 
-void Battle::Interface::RedrawInterface(void)
+void Battle::Interface::RedrawInterface()
 {
     const Settings & conf = Settings::Get();
 
@@ -841,7 +841,7 @@ void Battle::Interface::RedrawInterface(void)
 	listlog->Redraw();
 }
 
-void Battle::Interface::RedrawArmies(void) const
+void Battle::Interface::RedrawArmies() const
 {
     const Castle* castle = Arena::GetCastle();
 
@@ -879,7 +879,7 @@ void Battle::Interface::RedrawArmies(void) const
     }
 }
 
-void Battle::Interface::RedrawOpponents(void) const
+void Battle::Interface::RedrawOpponents() const
 {
     if(opponent1) opponent1->Redraw();
     if(opponent2) opponent2->Redraw();
@@ -887,7 +887,7 @@ void Battle::Interface::RedrawOpponents(void) const
     RedrawOpponentsFlags();
 }
 
-void Battle::Interface::RedrawOpponentsFlags(void) const
+void Battle::Interface::RedrawOpponentsFlags() const
 {
     if(!Settings::Get().QVGA() && opponent1)
     {
@@ -1051,7 +1051,7 @@ void Battle::Interface::RedrawTroopCount(const Unit & b) const
     text.Blit(sx + (bar.w() - text.w()) / 2, sy);
 }
 
-void Battle::Interface::RedrawCover(void)
+void Battle::Interface::RedrawCover()
 {
     const Settings & conf = Settings::Get();
     Display & display = Display::Get();
@@ -1344,7 +1344,7 @@ void Battle::Interface::RedrawHighObjects(s32 cell_index) const
     }
 }
 
-void Battle::Interface::RedrawKilled(void)
+void Battle::Interface::RedrawKilled()
 {
     // redraw killed troop
     const Indexes cells = arena.GraveyardClosedCells();
@@ -1361,7 +1361,7 @@ void Battle::Interface::RedrawKilled(void)
     }
 }
 
-void Battle::Interface::RedrawBorder(void)
+void Battle::Interface::RedrawBorder()
 {
     const Size displaySize = Display::Get().GetSize();
 
@@ -1369,7 +1369,7 @@ void Battle::Interface::RedrawBorder(void)
 	Dialog::FrameBorder::RenderRegular(border.GetRect());
 }
 
-void Battle::Interface::RedrawPocketControls(void) const
+void Battle::Interface::RedrawPocketControls() const
 {
     const HeroBase* hero = b_current ? b_current->GetCommander() : NULL;
     if(hero && hero->HaveSpellBook() && !hero->Modes(Heroes::SPELLCASTED))
@@ -1912,7 +1912,7 @@ void Battle::Interface::HumanCastSpellTurn(const Unit & b, Actions & a, std::str
     }
 }
 
-void Battle::Interface::FadeArena(void)
+void Battle::Interface::FadeArena()
 {
     Cursor & cursor = Cursor::Get();
     Display & display = Display::Get();
@@ -1948,7 +1948,7 @@ int Battle::GetIndexIndicator(const Unit & b)
     return 10;
 }
 
-void Battle::Interface::EventShowOptions(void)
+void Battle::Interface::EventShowOptions()
 {
     btn_settings.PressDraw();
     DialogBattleSettings();
@@ -1979,7 +1979,7 @@ void Battle::Interface::ButtonAutoAction(const Unit & b, Actions & a)
 	EventAutoSwitch(b, a);
 }
 
-void Battle::Interface::ButtonSettingsAction(void)
+void Battle::Interface::ButtonSettingsAction()
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -4028,7 +4028,7 @@ void Battle::Interface::RedrawBridgeAnimation(bool down)
     if(!down) AGG::PlaySound(M82::DRAWBRG);
 }
 
-bool Battle::Interface::IdleTroopsAnimation(void)
+bool Battle::Interface::IdleTroopsAnimation()
 {
     bool res = false;
 
@@ -4200,7 +4200,7 @@ void Battle::PopupDamageInfo::SetInfo(const Cell* c, const Unit* a, const Unit* 
     }
 }
 
-void Battle::PopupDamageInfo::Reset(void)
+void Battle::PopupDamageInfo::Reset()
 {
     if(redraw)
     {

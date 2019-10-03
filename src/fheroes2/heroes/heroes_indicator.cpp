@@ -78,12 +78,12 @@ HeroesIndicator::HeroesIndicator(const Heroes & h) : hero(h)
     descriptions.reserve(256);
 }
 
-const Rect & HeroesIndicator::GetArea(void) const
+const Rect & HeroesIndicator::GetArea() const
 {
     return area;
 }
 
-const std::string & HeroesIndicator::GetDescriptions(void) const
+const std::string & HeroesIndicator::GetDescriptions() const
 {
     return descriptions;
 }
@@ -101,7 +101,7 @@ LuckIndicator::LuckIndicator(const Heroes & h) : HeroesIndicator(h), luck(Luck::
     area.h = 26;
 }
 
-void LuckIndicator::Redraw(void)
+void LuckIndicator::Redraw()
 {
     std::string modificators;
     modificators.reserve(256);
@@ -147,7 +147,7 @@ MoraleIndicator::MoraleIndicator(const Heroes & h) : HeroesIndicator(h), morale(
     area.h = 26;
 }
 
-void MoraleIndicator::Redraw(void)
+void MoraleIndicator::Redraw()
 {
     std::string modificators;
     modificators.reserve(256);
@@ -197,7 +197,7 @@ ExperienceIndicator::ExperienceIndicator(const Heroes & h) : HeroesIndicator(h)
     StringReplace(descriptions, "%{exp2}", hero.GetExperienceFromLevel(hero.GetLevelFromExperience(hero.GetExperience())));
 }
 
-void ExperienceIndicator::Redraw(void)
+void ExperienceIndicator::Redraw()
 {
     const Sprite & sprite3 = AGG::GetICN(ICN::HSICONS, 1);
     sprite3.Blit(area.x, area.y);
@@ -206,7 +206,7 @@ void ExperienceIndicator::Redraw(void)
     text.Blit(area.x + 18 - text.w() / 2, area.y + 23);
 }
 
-void ExperienceIndicator::QueueEventProcessing(void)
+void ExperienceIndicator::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -229,7 +229,7 @@ SpellPointsIndicator::SpellPointsIndicator(const Heroes & h) : HeroesIndicator(h
     StringReplace(descriptions, "%{max}", hero.GetMaxSpellPoints());
 }
 
-void SpellPointsIndicator::Redraw(void)
+void SpellPointsIndicator::Redraw()
 {
     const Sprite & sprite3 = AGG::GetICN(ICN::HSICONS, 8);
     sprite3.Blit(area.x, area.y);
@@ -238,7 +238,7 @@ void SpellPointsIndicator::Redraw(void)
     text.Blit(area.x + 18 - text.w() / 2, area.y + 21);
 }
 
-void SpellPointsIndicator::QueueEventProcessing(void)
+void SpellPointsIndicator::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 

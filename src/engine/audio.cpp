@@ -72,7 +72,7 @@ bool Audio::CVT::Build(const Audio::Spec & src, const Audio::Spec & dst)
     return false;
 }
 
-bool Audio::CVT::Convert(void)
+bool Audio::CVT::Convert()
 {
     if(0 == SDL_ConvertAudio(this)) return true;
     
@@ -80,7 +80,7 @@ bool Audio::CVT::Convert(void)
     return false;
 }
 
-Audio::Spec & Audio::GetHardwareSpec(void)
+Audio::Spec & Audio::GetHardwareSpec()
 {
     return hardware;
 }

@@ -190,32 +190,32 @@ bool Spell::operator!= (const Spell & s) const
     return s.id != id;
 }
 
-bool Spell::isValid(void) const
+bool Spell::isValid() const
 {
     return id != Spell::NONE;
 }
 
-int Spell::operator() (void) const
+int Spell::operator() () const
 {
     return id;
 }
 
-int Spell::GetID(void) const
+int Spell::GetID() const
 {
     return id;
 }
 
-const char* Spell::GetName(void) const
+const char* Spell::GetName() const
 {
     return _(spells[id].name);
 }
 
-const char* Spell::GetDescription(void) const
+const char* Spell::GetDescription() const
 {
     return _(spells[id].description);
 }
 
-u32 Spell::MovePoint(void) const
+u32 Spell::MovePoint() const
 {
     return spells[id].mp;
 }
@@ -266,7 +266,7 @@ u32 Spell::SpellPoint(const HeroBase* hero) const
     return res ? res : 1;
 }
 
-payment_t Spell::GetCost(void) const
+payment_t Spell::GetCost() const
 {
     return payment_t(spells[id].cost);
 }
@@ -276,7 +276,7 @@ bool Spell::isLevel(int lvl) const
     return Level() == lvl;
 }
 
-int Spell::Level(void) const
+int Spell::Level() const
 {
     switch(id)
     {
@@ -366,7 +366,7 @@ int Spell::Level(void) const
     return 0;
 }
 
-bool Spell::isCombat(void) const
+bool Spell::isCombat() const
 {
     switch(id)
     {
@@ -393,17 +393,17 @@ bool Spell::isCombat(void) const
     return true;
 }
 
-bool Spell::isAdventure(void) const
+bool Spell::isAdventure() const
 {
     return !isCombat();
 }
 
-bool Spell::isDamage(void) const
+bool Spell::isDamage() const
 {
     return Damage();
 }
 
-u32 Spell::Damage(void) const
+u32 Spell::Damage() const
 {
     switch(id)
     {
@@ -429,7 +429,7 @@ u32 Spell::Damage(void) const
     return 0;
 }
 
-bool Spell::isMindInfluence(void) const
+bool Spell::isMindInfluence() const
 {
     switch(id)
     {
@@ -444,12 +444,12 @@ bool Spell::isMindInfluence(void) const
     return false;
 }
 
-u32 Spell::IndexSprite(void) const
+u32 Spell::IndexSprite() const
 {
     return spells[id].sprite;
 }
 
-u32 Spell::InlIndexSprite(void) const
+u32 Spell::InlIndexSprite() const
 {
     switch(id)
     {
@@ -479,7 +479,7 @@ u32 Spell::InlIndexSprite(void) const
     return 0;
 }
 
-u32 Spell::Restore(void) const
+u32 Spell::Restore() const
 {
     switch(id)
     {
@@ -493,7 +493,7 @@ u32 Spell::Restore(void) const
     return Resurrect();
 }
 
-u32 Spell::Resurrect(void) const
+u32 Spell::Resurrect() const
 {
     switch(id)
     {
@@ -508,18 +508,18 @@ u32 Spell::Resurrect(void) const
     return 0;
 }
 
-bool Spell::isRestore(void) const
+bool Spell::isRestore() const
 {
     return Restore();
 }
 
-bool Spell::isResurrect(void) const
+bool Spell::isResurrect() const
 {
     return Resurrect();
 }
 
 
-u32 Spell::ExtraValue(void) const
+u32 Spell::ExtraValue() const
 {
     return spells[id].extra;
 }
@@ -550,7 +550,7 @@ Spell Spell::RandAdventure(int lvl)
     return res.isValid() ? res : RandCombat(lvl);
 }
 
-bool Spell::isUndeadOnly(void) const
+bool Spell::isUndeadOnly() const
 {
     switch(id)
     {
@@ -565,7 +565,7 @@ bool Spell::isUndeadOnly(void) const
     return false;
 }
 
-bool Spell::isALiveOnly(void) const
+bool Spell::isALiveOnly() const
 {
     switch(id)
     {
@@ -585,7 +585,7 @@ bool Spell::isALiveOnly(void) const
     return false;
 }
 
-bool Spell::isApplyWithoutFocusObject(void) const
+bool Spell::isApplyWithoutFocusObject() const
 {
     if(isMassActions() || isSummon())
 	return true;
@@ -607,7 +607,7 @@ bool Spell::isApplyWithoutFocusObject(void) const
     return false;
 }
 
-bool Spell::isSummon(void) const
+bool Spell::isSummon() const
 {
     switch(id)
     {
@@ -623,7 +623,7 @@ bool Spell::isSummon(void) const
     return false;
 }
 
-bool Spell::isApplyToAnyTroops(void) const
+bool Spell::isApplyToAnyTroops() const
 {
     switch(id)
     {
@@ -637,7 +637,7 @@ bool Spell::isApplyToAnyTroops(void) const
     return false;
 }
 
-bool Spell::isApplyToFriends(void) const
+bool Spell::isApplyToFriends() const
 {
     switch(id)
     {
@@ -668,7 +668,7 @@ bool Spell::isApplyToFriends(void) const
     return false;
 }
 
-bool Spell::isMassActions(void) const
+bool Spell::isMassActions() const
 {
     switch(id)
     {
@@ -687,7 +687,7 @@ bool Spell::isMassActions(void) const
     return false;
 }
 
-bool Spell::isApplyToEnemies(void) const
+bool Spell::isApplyToEnemies() const
 {
     switch(id)
     {

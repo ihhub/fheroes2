@@ -28,7 +28,7 @@
 #include "game.h"
 #include "dialog.h"
 
-int Dialog::FileOptions(void)
+int Dialog::FileOptions()
 {
     Display & display = Display::Get();
     // preload

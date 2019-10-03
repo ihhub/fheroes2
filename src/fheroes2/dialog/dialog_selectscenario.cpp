@@ -35,7 +35,7 @@
 void LossConditionInfo(const Maps::FileInfo &);
 void VictoryConditionInfo(const Maps::FileInfo &);
 
-Surface GetNonStandardSizeIcon(void)
+Surface GetNonStandardSizeIcon()
 {
     Surface res(Size(17, 17), false);
     res.Fill(ColorBlack);

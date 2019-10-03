@@ -41,12 +41,12 @@ public:
 
     void	newFile(const QSize &, int, int);
     bool	loadFile(const QString &);
-    bool	save(void);
-    bool	saveAs(void);
-    bool	saveRaw(void);
+    bool	save();
+    bool	saveAs();
+    bool	saveRaw();
     bool	saveFile(const QString &, bool);
-    QString	userFriendlyCurrentFile(void);
-    QString	currentFile(void);
+    QString	userFriendlyCurrentFile();
+    QString	currentFile();
 
 signals:
     void	windowModified(MapData*);
@@ -56,15 +56,15 @@ protected:
     void	closeEvent(QCloseEvent*);
 
 public slots:
-    void	mapWasModified(void);
+    void	mapWasModified();
 
 private slots:
     void	viewportSetPositionFromMiniMap(const QPoint &);
     void	viewportSetPositionFromListWidget(QListWidgetItem*);
-    void	updateWindowPos(void);
+    void	updateWindowPos();
 
 private:
-    bool	maybeSave(void);
+    bool	maybeSave();
     void	setCurrentFile(const QString &);
     QString	strippedName(const QString &);
 

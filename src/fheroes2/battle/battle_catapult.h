@@ -39,7 +39,7 @@ namespace Battle
 
 	static Point	GetTargetPosition(int);
 
-	u32		GetShots(void) const { return cat_shots; }
+	u32		GetShots() const { return cat_shots; }
 	int		GetTarget(const std::vector<u32> &) const;
 	u32		GetDamage(int, u32) const;
 

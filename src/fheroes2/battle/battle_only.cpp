@@ -42,7 +42,7 @@
 
 void RedrawPrimarySkillInfo(const Point &, PrimarySkillsBar*, PrimarySkillsBar*); /* heroes_meeting.cpp */
 
-void Battle::ControlInfo::Redraw(void)
+void Battle::ControlInfo::Redraw()
 {
     const Sprite & cell = AGG::GetICN(ICN::CELLWIN, 1);
     const Sprite & mark = AGG::GetICN(ICN::CELLWIN, 2);
@@ -124,7 +124,7 @@ Recruits Battle::Only::GetHeroesFromStreamBuf(StreamBuf & msg)
     return heroes;
 }
 
-bool Battle::Only::ChangeSettings(void)
+bool Battle::Only::ChangeSettings()
 {
     Settings & conf = Settings::Get();
     Display & display = Display::Get();
@@ -679,7 +679,7 @@ void Battle::Only::RedrawBaseInfo(const Point & top)
     RedrawPrimarySkillInfo(top, primskill_bar1, primskill_bar2);
 }
 
-void Battle::Only::StartBattle(void)
+void Battle::Only::StartBattle()
 {
     Settings & conf = Settings::Get();
 

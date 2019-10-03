@@ -34,7 +34,7 @@
 #include "global.h"
 #include "engine.h"
 
-QStringList Editor::townNames(void)
+QStringList Editor::townNames()
 {
     const char* towns[] = { "Blackridge", "Pinehurst", "Woodhaven", "Hillstone", "Whiteshield", "Bloodreign", "Dragontooth", "Greywind", "Blackwind", "Portsmith", "Middle Gate", "Tundara", 
 	"Vulcania", "Sansobar", "Atlantium", "Baywatch", "Wildabar", "Fountainhead", "Vertigo", "Winterkill", "Nightshadow", "Sandcaster", "Lakeside", "Olympus", 
@@ -130,7 +130,7 @@ H2::File::File(const QString & fn) : QFile(fn)
 {
 }
 
-quint32 H2::File::readLE16(void)
+quint32 H2::File::readLE16()
 {
     quint16 res = 0;
     long long int ps = pos() + sizeof(res);
@@ -146,7 +146,7 @@ quint32 H2::File::readLE16(void)
     return res;
 }
 
-quint32 H2::File::readLE32(void)
+quint32 H2::File::readLE32()
 {
     quint32 res = 0;
     long long int ps = pos() + sizeof(res);
@@ -162,7 +162,7 @@ quint32 H2::File::readLE32(void)
     return res;
 }
 
-quint32 H2::File::readByte(void)
+quint32 H2::File::readByte()
 {
     quint8 res = 0;
     long long int ps = pos() + sizeof(res);
@@ -656,7 +656,7 @@ QPair<QPixmap, QPoint> AGG::File::getImageICN(const QString & id, int index, QVe
     return result;
 }
 
-QString AGG::Spool::dirName(void) const
+QString AGG::Spool::dirName() const
 {
     return first.isReadable() ?
 	QDir::toNativeSeparators(QFileInfo(first.fileName()).absolutePath()) : NULL;
@@ -701,7 +701,7 @@ bool AGG::Spool::setData(const QString & file)
     return false;
 }
 
-bool AGG::Spool::isHeroes2XMode(void) const
+bool AGG::Spool::isHeroes2XMode() const
 {
     return second.isReadable();
 }
@@ -1498,7 +1498,7 @@ namespace EditorTheme
 	return res;
     }
 
-    void			loadCacheSprites(void)
+    void			loadCacheSprites()
     {
 	mapSpriteInfoCache.clear();
 	QStringList files = resourceFiles("objects", "*.xml");
@@ -1605,7 +1605,7 @@ QPixmap EditorTheme::getImage(const CompositeObject & obj)
     return aggSpool.getImage(obj, themeTile);
 }
 
-const QSize & EditorTheme::tileSize(void)
+const QSize & EditorTheme::tileSize()
 {
     return themeTile;
 }
@@ -1750,7 +1750,7 @@ AroundGrounds::AroundGrounds(const MapTiles & tiles, const QPoint & center) : QV
     if(tile) v[8] = tile->groundType();
 }
 
-int AroundGrounds::operator() (void) const
+int AroundGrounds::operator() () const
 {
     int res = 0;
 
@@ -1803,7 +1803,7 @@ struct GroundCount : QPair<int, int>
     //bool operator== (int ground) const { return first == ground; }
 };
 
-int AroundGrounds::preferablyGround(void) const
+int AroundGrounds::preferablyGround() const
 {
     QVector<GroundCount> res;
     GroundCount pair;
@@ -2096,7 +2096,7 @@ QDomElement & operator>> (QDomElement & el, Skills & skills)
     return el;
 }
 
-int Troops::validCount(void) const
+int Troops::validCount() const
 {
     return std::count_if(begin(), end(), std::mem_fun_ref(&Troop::isValid));
 }
@@ -2318,7 +2318,7 @@ MapHero::MapHero(const QPoint & pos, quint32 id, const mp2hero_t & mp2, int spri
 	col = Color::None;
 }
 
-QString MapHero::name(void) const
+QString MapHero::name() const
 {
     if(jailMode)
 	return QString(nameHero).append(" (Jail)");
@@ -2326,7 +2326,7 @@ QString MapHero::name(void) const
     return nameHero;
 }
 
-bool MapHero::haveMagicBook(void) const
+bool MapHero::haveMagicBook() const
 {
     return magicBook;
 }
@@ -2667,7 +2667,7 @@ QString MapActions::transcribe(int v)
     return v < Unknown ? actionName[v] : actionName[Unknown];
 }
 
-bool MapActions::isDefault(void) const
+bool MapActions::isDefault() const
 {
     if(list.empty())
 	return true;
@@ -2701,7 +2701,7 @@ DayEvent::DayEvent(const mp2dayevent_t & mp2)
     if(mp2.colors[5]) colors |= Color::Purple;
 }
 
-QString DayEvent::header(void) const
+QString DayEvent::header() const
 {
     QString header;
     QTextStream ts(& header);
@@ -3008,7 +3008,7 @@ CompositeObject::CompositeObject(const QDomElement & elem)
 	name.clear();
 }
 
-bool CompositeObject::isValid(void) const
+bool CompositeObject::isValid() const
 {
     return ! name.isEmpty();
 }
@@ -3066,22 +3066,22 @@ void CompositeObjectCursor::paint(QPainter & painter, const QPoint & pos, bool a
     painter.drawPixmap(pos, passableMap);
 }
 
-QRect CompositeObjectCursor::area(void) const
+QRect CompositeObjectCursor::area() const
 {
     return QRect(scenePos, objectArea.size());
 }
 
-QPoint CompositeObjectCursor::center(void) const
+QPoint CompositeObjectCursor::center() const
 {
     return centerOffset;
 }
 
-void CompositeObjectCursor::reset(void)
+void CompositeObjectCursor::reset()
 {
     valid = false;
 }
 
-bool CompositeObjectCursor::isValid(void) const
+bool CompositeObjectCursor::isValid() const
 {
     return valid;
 }
@@ -3129,7 +3129,7 @@ void CompositeObjectCursor::move(const MapTile & tile)
     }
 }
 
-QString GameCondition::variantString(void) const
+QString GameCondition::variantString() const
 {
     QString res;
     if(QVariant::Point == variant().type())
@@ -3556,17 +3556,17 @@ QString SkillLevel::transcribe(int index)
     return index <= Expert ? names[index] : names[0];
 }
 
-QString Skill::name(void) const
+QString Skill::name() const
 {
     return SkillLevel::transcribe(level()) + " " + SkillType::transcribe(skill());
 }
 
-QString Skill::description(void) const
+QString Skill::description() const
 {
     return name();
 }
 
-QPixmap Skill::pixmap(void) const
+QPixmap Skill::pixmap() const
 {
     return isValid() ? EditorTheme::getImageICN("MINISS.ICN", skill() - 1).first : QPixmap();
 }
@@ -3620,7 +3620,7 @@ QDataStream & operator>> (QDataStream & ds, GameCondition & cond)
     return ds;
 }
 
-QString Resources::describe(void) const
+QString Resources::describe() const
 {
     QStringList list;
 
@@ -3635,7 +3635,7 @@ QString Resources::describe(void) const
     return list.join(",");
 }
 
-QString AccessResult::transcribe(void) const
+QString AccessResult::transcribe() const
 {
     return NULL;
 }
@@ -3820,7 +3820,7 @@ QDomElement & operator>> (QDomElement & el, ActionArtifact & aa)
     return el;
 }
 
-int SharedActionSimple::type(void) const
+int SharedActionSimple::type() const
 {
     return data() ? data()->type : MapActions::Unknown;
 }

@@ -45,7 +45,7 @@ Interface::ControlPanel::ControlPanel(Basic & basic) : interface(basic)
     ResetTheme();
 }
 
-void Interface::ControlPanel::ResetTheme(void)
+void Interface::ControlPanel::ResetTheme()
 {
     int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
@@ -64,7 +64,7 @@ void Interface::ControlPanel::ResetTheme(void)
     btn_quit.SetAlphaMod(alpha);
 }
 
-const Rect & Interface::ControlPanel::GetArea(void)
+const Rect & Interface::ControlPanel::GetArea()
 {
     return *this;
 }
@@ -86,7 +86,7 @@ void Interface::ControlPanel::SetPos(s32 ox, s32 oy)
     rt_quit.y = y;
 }
 
-void Interface::ControlPanel::Redraw(void)
+void Interface::ControlPanel::Redraw()
 {
     Display & display = Display::Get();
 
@@ -97,7 +97,7 @@ void Interface::ControlPanel::Redraw(void)
     btn_quit.Blit(x + 144, y, display);
 }
 
-int Interface::ControlPanel::QueueEventProcessing(void)
+int Interface::ControlPanel::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 

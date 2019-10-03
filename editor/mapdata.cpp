@@ -333,7 +333,7 @@ void MapTileLevels::paint(QPainter & painter, const QPoint & offset, const QPoin
     }
 }
 
-QString MapTileLevels::infoString(void) const
+QString MapTileLevels::infoString() const
 {
     QString str;
     QTextStream ss(& str);
@@ -363,7 +363,7 @@ MapTileExt* MapTileLevels::find(bool (*pf)(const MapTileExt &))
     return const_cast<MapTileExt*>(findConst(pf));
 }
 
-QSet<quint32> MapTileLevels::uids(void) const
+QSet<quint32> MapTileLevels::uids() const
 {
     QSet<quint32> res;
     for(const_iterator it = begin(); it != end(); ++it)
@@ -371,7 +371,7 @@ QSet<quint32> MapTileLevels::uids(void) const
     return res;
 }
 
-int MapTileLevels::topObjectID(void) const
+int MapTileLevels::topObjectID() const
 {
     int id = MapObj::None;
 
@@ -385,7 +385,7 @@ int MapTileLevels::topObjectID(void) const
     return id;
 }
 
-quint32 MapTileLevels::topSpriteUID(void) const
+quint32 MapTileLevels::topSpriteUID() const
 {
     return size() ? back().uid() : 0;
 }
@@ -536,7 +536,7 @@ void MapTile::importTile(const MapTile & other, QMap<quint32, quint32> & mapUIDs
 	updateObjectID();
 }
 
-void MapTile::setGraphicsPixmapItemValues(void)
+void MapTile::setGraphicsPixmapItemValues()
 {
     const QSize & tileSize = EditorTheme::tileSize();
     setOffset(mpos.x() * tileSize.width(), mpos.y() * tileSize.height());
@@ -561,12 +561,12 @@ void MapTile::setTileSprite(int index, int rotate)
     }
 }
 
-QRectF MapTile::boundingRect(void) const
+QRectF MapTile::boundingRect() const
 {
     return QRectF(offset(), pixmap().size());
 }
 
-int MapTile::groundType(void) const
+int MapTile::groundType() const
 {
     return EditorTheme::ground(tileSprite);
 }
@@ -610,7 +610,7 @@ void MapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, Q
     }
 }
 
-void MapTile::showInfo(void) const
+void MapTile::showInfo() const
 {
     QString msg;
     QTextStream ss2(& msg);
@@ -647,7 +647,7 @@ void MapTile::loadSpriteLevel(MapTileLevels & list, int level, const mp2lev_t & 
     }
 }
 
-bool MapTile::isObjectEdit(void) const
+bool MapTile::isObjectEdit() const
 {
     switch(object())
     {
@@ -682,7 +682,7 @@ bool MapTile::isObjectEdit(void) const
     return false;
 }
 
-bool MapTile::isObjectAction(void) const
+bool MapTile::isObjectAction() const
 {
     switch(object())
     {
@@ -695,7 +695,7 @@ bool MapTile::isObjectAction(void) const
     return objectID & MapObj::IsAction;
 }
 
-int MapTile::object(void) const
+int MapTile::object() const
 {
     return objectID & ~MapObj::IsAction;
 }
@@ -711,13 +711,13 @@ void MapTile::loadSpriteLevels(const mp2ext_t & mp2)
     updatePassable();
 }
 
-void MapTile::sortSpritesLevels(void)
+void MapTile::sortSpritesLevels()
 {
     qStableSort(spritesLevel1.begin(), spritesLevel1.end(), MapTileExt::sortLevel1);
     qStableSort(spritesLevel2.begin(), spritesLevel2.end(), MapTileExt::sortLevel2);
 }
 
-void MapTile::updateObjectID(void)
+void MapTile::updateObjectID()
 {
     // is action
     if(spritesLevel1.empty())
@@ -734,7 +734,7 @@ void MapTile::updateObjectID(void)
     }
 }
 
-void MapTile::updatePassable(void)
+void MapTile::updatePassable()
 {
     passableBase = Direction::All;
 
@@ -770,7 +770,7 @@ void MapTile::removeSpriteSection(quint32 uid)
     updatePassable();
 }
 
-QSet<quint32> MapTile::uids(void) const
+QSet<quint32> MapTile::uids() const
 {
     QSet<quint32> res;
     res += spritesLevel1.uids();
@@ -833,7 +833,7 @@ MapTiles::MapTiles(const QSize & sz) : msize(sz)
     }
 }
 
-QString MapTiles::sizeDescription(void) const
+QString MapTiles::sizeDescription() const
 {
     if(msize.width() == msize.height())
     {
@@ -863,7 +863,7 @@ QRect MapTiles::fixedRect(const QRect & srcrt, const QPoint & dstpt) const
     return res;
 }
 
-int randomGround(void)
+int randomGround()
 {
     switch(Editor::Rand(6))
     {
@@ -1310,7 +1310,7 @@ MapHeader::MapHeader(const MapArea & ma) : mapName("New Map"), mapAuthors("unkno
     resetPlayerRace();
 }
 
-void MapHeader::resetPlayerRace(void)
+void MapHeader::resetPlayerRace()
 {
     for(int it = 0; it < 6; ++it)
 	playersRace[it] = Race::Unknown;
@@ -1556,57 +1556,57 @@ MapData::MapData(MapWindow* parent) : QGraphicsScene(parent), tileOverMouse(NULL
     connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAllTiles()));
 }
 
-const QString & MapData::name(void) const
+const QString & MapData::name() const
 {
     return mapHeader.mapName;
 }
 
-const QString & MapData::description(void) const
+const QString & MapData::description() const
 {
     return mapHeader.mapDescription;
 }
 
-const QString & MapData::authors(void) const
+const QString & MapData::authors() const
 {
     return mapHeader.mapAuthors;
 }
 
-const QString & MapData::license(void) const
+const QString & MapData::license() const
 {
     return mapHeader.mapLicense;
 }
 
-int MapData::difficulty(void) const
+int MapData::difficulty() const
 {
     return mapHeader.mapDifficulty;
 }
 
-int MapData::kingdomColors(void) const
+int MapData::kingdomColors() const
 {
     return mapHeader.mapKingdomColors;
 }
 
-int MapData::humanColors(void) const
+int MapData::humanColors() const
 {
     return mapHeader.mapHumanColors;
 }
 
-int MapData::computerColors(void) const
+int MapData::computerColors() const
 {
     return mapHeader.mapCompColors;
 }
 
-bool MapData::startWithHero(void) const
+bool MapData::startWithHero() const
 {
     return mapHeader.mapStartWithHero;
 }
 
-const CondWins & MapData::conditionWins(void) const
+const CondWins & MapData::conditionWins() const
 {
     return mapHeader.mapConditionWins;
 }
 
-const CondLoss & MapData::conditionLoss(void) const
+const CondLoss & MapData::conditionLoss() const
 {
     return mapHeader.mapConditionLoss;
 }
@@ -1639,7 +1639,7 @@ ListStringPos MapData::conditionTownList(int cond) const
     return res;
 }
 
-ListStringPos MapData::conditionArtifactList(void) const
+ListStringPos MapData::conditionArtifactList() const
 {
     ListStringPos res;
 
@@ -1654,17 +1654,17 @@ ListStringPos MapData::conditionArtifactList(void) const
     return res;
 }
 
-QList<QString> MapData::conditionSideList(void) const
+QList<QString> MapData::conditionSideList() const
 {
     return QList<QString>() << "Left vs Right" << "Right vs Left";
 }
 
-const QSize & MapData::size(void) const
+const QSize & MapData::size() const
 {
     return mapTiles.mapSize();
 }
 
-const QStringList & MapData::tavernRumorsList(void) const
+const QStringList & MapData::tavernRumorsList() const
 {
     return tavernRumors;
 }
@@ -1857,7 +1857,7 @@ void MapData::selectArea(QPointF ptdn, QPointF ptup)
     }
 }
 
-void MapData::selectAllTiles(void)
+void MapData::selectAllTiles()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     const QSize & sz = EditorTheme::tileSize();
@@ -1896,7 +1896,7 @@ void MapData::drawForeground(QPainter* painter, const QRectF & rect)
     }
 }
 
-void MapData::editPassableDialog(void)
+void MapData::editPassableDialog()
 {
     if(tileOverMouse)
     {
@@ -1907,13 +1907,13 @@ void MapData::editPassableDialog(void)
     }
 }
 
-void MapData::cellInfoDialog(void)
+void MapData::cellInfoDialog()
 {
     if(tileOverMouse)
 	tileOverMouse->showInfo();
 }
 
-void MapData::copyToBuffer(void)
+void MapData::copyToBuffer()
 {
     if(selectedItems().size())
     {
@@ -1924,12 +1924,12 @@ void MapData::copyToBuffer(void)
     }
 }
 
-bool MapData::isValidBuffer(void) const
+bool MapData::isValidBuffer() const
 {
     return ! _selectedArea.isNull();
 }
 
-void MapData::pasteFromBuffer(void)
+void MapData::pasteFromBuffer()
 {
     if(tileOverMouse && isValidBuffer())
     {
@@ -2081,7 +2081,7 @@ void MapData::removeObjectsAction(QAction* act)
     }
 }
 
-void MapData::removeCurrentObject(void)
+void MapData::removeCurrentObject()
 {
     if(tileOverMouse)
     {
@@ -2787,7 +2787,7 @@ QDomElement & operator>> (QDomElement & emap, MapData & data)
     return emap;
 }
 
-void MapData::selectObjectImage(void)
+void MapData::selectObjectImage()
 {
     Form::SelectImageObject form;
 
@@ -2798,7 +2798,7 @@ void MapData::selectObjectImage(void)
     }
 }
 
-void MapData::showMapOptions(void)
+void MapData::showMapOptions()
 {
     Form::MapOptions form(*this);
 
@@ -2844,18 +2844,18 @@ void MapData::showMapOptions(void)
     }
 }
 
-const DayEvents & MapData::dayEvents(void) const
+const DayEvents & MapData::dayEvents() const
 {
     return mapDayEvents;
 }
 
-void MapData::editObjectEvents(void)
+void MapData::editObjectEvents()
 {
     if(tileOverMouse)
 	editOtherMapEventsDialog(*tileOverMouse);
 }
 
-void MapData::editObjectAttributes(void)
+void MapData::editObjectAttributes()
 {
     if(tileOverMouse)
 	switch(tileOverMouse->object())
@@ -3242,7 +3242,7 @@ void MapData::addMapObject(const QPoint & pos, const CompositeObject & obj, quin
     emit dataModified();
 }
 
-void MapData::updatePlayersRaces(void)
+void MapData::updatePlayersRaces()
 {
     // update player race
     mapHeader.resetPlayerRace();
@@ -3325,18 +3325,18 @@ void MapData::updateKingdomColors(int color)
     }
 }
 
-void MapData::showPassableTriggered(void)
+void MapData::showPassableTriggered()
 {
     showPassable = showPassable ? false : true;
     update();
 }
 
-QPair<int, int> MapData::versions(void)
+QPair<int, int> MapData::versions()
 {
     return qMakePair(_mapVersion, FH2ENGINE_CURRENT_VERSION);
 }
 
-const MapTile* MapData::currentTile(void) const
+const MapTile* MapData::currentTile() const
 {
     return tileOverMouse;
 }

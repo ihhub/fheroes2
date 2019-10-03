@@ -35,12 +35,12 @@ namespace Default
     int		_resourceOtherMin	= 3;
     int		_resourceOtherMax	= 6;
 
-    int & resourceGoldMin(void) { return _resourceGoldMin; }
-    int & resourceGoldMax(void) { return _resourceGoldMax; }
-    int & resourceWoodOreMin(void) { return _resourceWoodOreMin; }
-    int & resourceWoodOreMax(void) { return _resourceWoodOreMax; }
-    int & resourceOtherMin(void) { return _resourceOtherMin; }
-    int & resourceOtherMax(void) { return _resourceOtherMax; }
+    int & resourceGoldMin() { return _resourceGoldMin; }
+    int & resourceGoldMax() { return _resourceGoldMax; }
+    int & resourceWoodOreMin() { return _resourceWoodOreMin; }
+    int & resourceWoodOreMax() { return _resourceWoodOreMax; }
+    int & resourceOtherMin() { return _resourceOtherMin; }
+    int & resourceOtherMax() { return _resourceOtherMax; }
 
     MonsterStat	_monsters[] = {
 	{     0,   0,   0,   0,   0,  Speed::Standing,   0,     0, { 0, 0, 0, 0, 0, 0, 0} /* wood, mercury, ore, sulfur, crystal, gems, gold */},

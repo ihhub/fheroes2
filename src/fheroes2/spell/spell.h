@@ -117,44 +117,44 @@ public:
     bool operator== (const Spell &) const;
     bool operator!= (const Spell &) const;
 
-    int operator() (void) const;
-    int GetID(void) const;
+    int operator() () const;
+    int GetID() const;
 
-    const char* GetName(void) const;
-    const char* GetDescription(void) const;
+    const char* GetName() const;
+    const char* GetDescription() const;
 
     u32 SpellPoint(const HeroBase* hero = NULL) const;
-    u32 MovePoint(void) const;
-    int Level(void) const;
-    u32 Damage(void) const;
-    u32 Restore(void) const;
-    u32 Resurrect(void) const;
+    u32 MovePoint() const;
+    int Level() const;
+    u32 Damage() const;
+    u32 Restore() const;
+    u32 Resurrect() const;
 
-    u32 ExtraValue(void) const;
-    payment_t GetCost(void) const;
+    u32 ExtraValue() const;
+    payment_t GetCost() const;
     
-    bool isValid(void) const;
+    bool isValid() const;
     bool isLevel(int) const;
-    bool isCombat(void) const;
-    bool isAdventure(void) const;
-    bool isDamage(void) const;
-    bool isRestore(void) const;
-    bool isResurrect(void) const;
-    bool isMindInfluence(void) const;
-    bool isUndeadOnly(void) const;
-    bool isALiveOnly(void) const;
-    bool isSummon(void) const;
-    bool isApplyWithoutFocusObject(void) const;
-    bool isApplyToAnyTroops(void) const;
-    bool isApplyToFriends(void) const;
-    bool isApplyToEnemies(void) const;
-    bool isMassActions(void) const;
+    bool isCombat() const;
+    bool isAdventure() const;
+    bool isDamage() const;
+    bool isRestore() const;
+    bool isResurrect() const;
+    bool isMindInfluence() const;
+    bool isUndeadOnly() const;
+    bool isALiveOnly() const;
+    bool isSummon() const;
+    bool isApplyWithoutFocusObject() const;
+    bool isApplyToAnyTroops() const;
+    bool isApplyToFriends() const;
+    bool isApplyToEnemies() const;
+    bool isMassActions() const;
     bool isRaceCompatible(int race) const;
 
     /* return index sprite spells.icn */
-    u32 IndexSprite(void) const;
+    u32 IndexSprite() const;
     /* return index in spellinl.icn */
-    u32 InlIndexSprite(void) const;
+    u32 InlIndexSprite() const;
 
     static Spell RandCombat(int lvl);
     static Spell RandAdventure(int lvl);

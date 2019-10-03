@@ -25,15 +25,15 @@
 
 namespace Mixer
 {
-    void Init(void);
-    void Quit(void);
+    void Init();
+    void Quit();
 }
 
 #ifdef WITH_AUDIOCD
 namespace Cdrom
 {
-    void Open(void);
-    void Close(void);
+    void Open();
+    void Close();
 }
 #endif
 
@@ -70,7 +70,7 @@ bool SDL::Init(const u32 system)
     return true;
 }
 
-void SDL::Quit(void)
+void SDL::Quit()
 {
     System::CreateTrayIcon(false);
     System::PowerManagerOff(false);

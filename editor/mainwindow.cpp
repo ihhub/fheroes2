@@ -76,7 +76,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
-void MainWindow::newFile(void)
+void MainWindow::newFile()
 {
     Form::SelectMapSize form;
 
@@ -88,7 +88,7 @@ void MainWindow::newFile(void)
     }
 }
 
-void MainWindow::open(void)
+void MainWindow::open()
 {
     QString fileName = QFileDialog::getOpenFileName(this);
 
@@ -116,30 +116,30 @@ void MainWindow::open(void)
     }
 }
 
-void MainWindow::save(void)
+void MainWindow::save()
 {
     if(activeMapWindow() && activeMapWindow()->save())
         statusBar()->showMessage(tr("File saved"), 2000);
 }
 
-void MainWindow::saveAs(void)
+void MainWindow::saveAs()
 {
     if(activeMapWindow() && activeMapWindow()->saveAs())
         statusBar()->showMessage(tr("File saved"), 2000);
 }
 
-void MainWindow::saveRaw(void)
+void MainWindow::saveRaw()
 {
     if(activeMapWindow() && activeMapWindow()->saveRaw())
         statusBar()->showMessage(tr("File saved"), 2000);
 }
 
-void MainWindow::about(void)
+void MainWindow::about()
 {
    QMessageBox::about(this, tr("Map Editor"), tr("<b>version 20130825</b>"));
 }
 
-void MainWindow::updateDockWidgets(void)
+void MainWindow::updateDockWidgets()
 {
     MapWindow* activeWindow = activeMapWindow();
 
@@ -198,7 +198,7 @@ void MainWindow::updateDockWidgets(void)
     }
 }
 
-void MainWindow::updateStatusBar(void)
+void MainWindow::updateStatusBar()
 {
     MapWindow* mapWindow = activeMapWindow();
 
@@ -217,7 +217,7 @@ void MainWindow::setCoordInfo(const MapTile* tile)
     }
 }
 
-void MainWindow::updateMenus(void)
+void MainWindow::updateMenus()
 {
     bool hasMapWindow = (activeMapWindow() != NULL);
 
@@ -235,7 +235,7 @@ void MainWindow::updateMenus(void)
     showPassableAct->setEnabled(hasMapWindow);
 }
 
-void MainWindow::updateWindowMenu(void)
+void MainWindow::updateWindowMenu()
 {
     windowMenu->clear();
     windowMenu->addAction(closeAct);
@@ -273,7 +273,7 @@ void MainWindow::updateWindowMenu(void)
     }
 }
 
-MapWindow* MainWindow::createMapWindow(void)
+MapWindow* MainWindow::createMapWindow()
 {
     MapWindow* child = new MapWindow(this);
     mdiArea->addSubWindow(child);
@@ -281,7 +281,7 @@ MapWindow* MainWindow::createMapWindow(void)
     return child;
 }
 
-void MainWindow::createActions(void)
+void MainWindow::createActions()
 {
     fileNewAct = new QAction(QIcon(":/images/menu_new.png"), tr("&New"), this);
     fileNewAct->setShortcuts(QKeySequence::New);
@@ -354,7 +354,7 @@ void MainWindow::createActions(void)
     showPassableAct->setChecked(false);
 }
 
-void MainWindow::createMenus(void)
+void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(fileNewAct);
@@ -440,7 +440,7 @@ void MainWindow::updateInfoForm(QListWidgetItem* item)
         infoForm->update(mapData->tiles().tileConst(item->data(Qt::UserRole).toPoint()));
 }
 
-void MainWindow::createToolBars(void)
+void MainWindow::createToolBars()
 {
     fileToolBar = addToolBar(tr("File"));
     fileToolBar->addAction(fileNewAct);
@@ -448,7 +448,7 @@ void MainWindow::createToolBars(void)
     fileToolBar->addAction(fileSaveAct);
 }
 
-void MainWindow::createStatusBar(void)
+void MainWindow::createStatusBar()
 {
     labelTileX = new QLabel(this);
     labelTileY = new QLabel(this);
@@ -460,7 +460,7 @@ void MainWindow::createStatusBar(void)
     statusBar()->showMessage(tr("Ready"));
 }
 
-void MainWindow::readSettings(void)
+void MainWindow::readSettings()
 {
     QSettings & settings = Resource::localSettings();
 
@@ -472,7 +472,7 @@ void MainWindow::readSettings(void)
     resize(size);
 }
 
-void MainWindow::writeSettings(void)
+void MainWindow::writeSettings()
 {
     QSettings & settings = Resource::localSettings();
 
@@ -481,7 +481,7 @@ void MainWindow::writeSettings(void)
     settings.setValue("MainWindow/sequenceMapNumber", sequenceMapNumber);
 }
 
-MapWindow* MainWindow::activeMapWindow(void)
+MapWindow* MainWindow::activeMapWindow()
 {
     QMdiSubWindow* activeSubWindow = mdiArea->activeSubWindow();
     return activeSubWindow ? qobject_cast<MapWindow*>(activeSubWindow->widget()) : 0;

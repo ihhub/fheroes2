@@ -34,7 +34,7 @@
 #include "tools.h"
 #include "pocketpc.h"
 
-int PocketPC::SelectScenario(void)
+int PocketPC::SelectScenario()
 {
     Settings & conf = Settings::Get();
     Cursor & cursor = Cursor::Get();

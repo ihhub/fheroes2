@@ -42,28 +42,28 @@ namespace Interface
 	StatusWindow(Basic &);
 
 	void		SetPos(s32, s32);
-	void		SavePosition(void);
-	void		SetRedraw(void) const;
+	void		SavePosition();
+	void		SetRedraw() const;
 
-	void		Reset(void);
+	void		Reset();
 	    
-	void		Redraw(void);
-	void		NextState(void);
-	int		GetState(void) const;
+	void		Redraw();
+	void		NextState();
+	int		GetState() const;
 	void		SetState(int);
 	void		SetResource(int, u32);
 	void		RedrawTurnProgress(u32);
-	void		QueueEventProcessing(void);
+	void		QueueEventProcessing();
 
-	static void	ResetTimer(void);
+	static void	ResetTimer();
 
     private:
 	void		DrawKingdomInfo(int oh = 0) const;
 	void		DrawDayInfo(int oh = 0) const;
 	void		DrawArmyInfo(int oh = 0) const;
 	void		DrawResourceInfo(int oh = 0) const;
-	void		DrawBackground(void) const;
-	void		DrawAITurns(void) const;
+	void		DrawBackground() const;
+	void		DrawAITurns() const;
 	static u32	ResetResourceStatus(u32, void *);
 	static u32	RedrawAIStatus(u32, void *);
 

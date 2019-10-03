@@ -42,7 +42,7 @@ namespace Battle
     public:
 	Graveyard() {}
 
-	Indexes		GetClosedCells(void) const;
+	Indexes		GetClosedCells() const;
 	void		AddTroop(const Unit &);
 	void		RemoveTroop(const Unit &);
 	u32		GetLastTroopUID(s32) const;

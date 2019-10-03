@@ -54,7 +54,7 @@ namespace H2Palette
 {
     std::vector<SDL_Color> pal_colors;
 
-    void Init(void)
+    void Init()
     {
 	// load palette
 	u32 ncolors = ARRAY_COUNT(kb_pal) / 3;

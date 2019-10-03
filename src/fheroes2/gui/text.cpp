@@ -49,12 +49,12 @@ void TextAscii::SetFont(int ft)
     font = ft;
 }
 
-void TextAscii::Clear(void)
+void TextAscii::Clear()
 {
     message.clear();
 }
 
-size_t TextAscii::Size(void) const
+size_t TextAscii::Size() const
 {
     return message.size();
 }
@@ -96,12 +96,12 @@ int TextAscii::w(u32 s, u32 c) const
     return res;
 }
 
-int TextAscii::w(void) const
+int TextAscii::w() const
 {
     return w(0, message.size());
 }
 
-int TextAscii::h(void) const
+int TextAscii::h() const
 {
     return h(0);
 }
@@ -224,12 +224,12 @@ void TextUnicode::SetFont(int ft)
     font = ft;
 }
 
-void TextUnicode::Clear(void)
+void TextUnicode::Clear()
 {
     message.clear();
 }
 
-size_t TextUnicode::Size(void) const
+size_t TextUnicode::Size() const
 {
     return message.size();
 }
@@ -272,12 +272,12 @@ int TextUnicode::w(u32 s, u32 c) const
     return res;
 }
 
-int TextUnicode::w(void) const
+int TextUnicode::w() const
 {
     return w(0, message.size());
 }
 
-int TextUnicode::h(void) const
+int TextUnicode::h() const
 {
     return h(0);
 }
@@ -437,14 +437,14 @@ void Text::Set(int ft)
     gh = message->h();
 }
 
-void Text::Clear(void)
+void Text::Clear()
 {
     message->Clear();
     gw = 0;
     gh = 0;
 }
 
-size_t Text::Size(void) const
+size_t Text::Size() const
 {
     return message->Size();
 }
@@ -711,13 +711,13 @@ TextSprite::TextSprite(const std::string & msg, int ft, s32 ax, s32 ay) : Text(m
     back.Save(Rect(ax, ay, gw, gh + 5));
 }
 
-void TextSprite::Show(void)
+void TextSprite::Show()
 {
     Blit(back.GetPos());
     hide = false;
 }
 
-void TextSprite::Hide(void)
+void TextSprite::Hide()
 {
     if(!hide) back.Restore();
     hide = true;
@@ -749,27 +749,27 @@ void TextSprite::SetPos(s32 ax, s32 ay)
     back.Save(Rect(ax, ay, gw, gh + 5));
 }
 
-int TextSprite::w(void)
+int TextSprite::w()
 {
     return back.GetSize().w;
 }
 
-int TextSprite::h(void)
+int TextSprite::h()
 {
     return back.GetSize().h;
 }
 
-bool TextSprite::isHide(void) const
+bool TextSprite::isHide() const
 {
     return hide;
 }
 
-bool TextSprite::isShow(void) const
+bool TextSprite::isShow() const
 {
     return !hide;
 }
 
-const Rect & TextSprite::GetRect(void) const
+const Rect & TextSprite::GetRect() const
 {
     return back.GetArea();
 }

@@ -50,32 +50,32 @@ Interface::Basic::Basic() : gameArea(*this), radar(*this),
     system_info.Set(Font::YELLOW_SMALL);
 }
 
-Interface::GameArea & Interface::Basic::GetGameArea(void)
+Interface::GameArea & Interface::Basic::GetGameArea()
 {
     return gameArea;
 }
 
-Interface::Radar & Interface::Basic::GetRadar(void)
+Interface::Radar & Interface::Basic::GetRadar()
 {
     return radar;
 }
 
-Interface::IconsPanel & Interface::Basic::GetIconsPanel(void)
+Interface::IconsPanel & Interface::Basic::GetIconsPanel()
 {
     return iconsPanel;
 }
 
-Interface::ButtonsArea & Interface::Basic::GetButtonsArea(void)
+Interface::ButtonsArea & Interface::Basic::GetButtonsArea()
 {
     return buttonsArea;
 }
 
-Interface::StatusWindow & Interface::Basic::GetStatusWindow(void)
+Interface::StatusWindow & Interface::Basic::GetStatusWindow()
 {
     return statusWindow;
 }
 
-Interface::ControlPanel & Interface::Basic::GetControlPanel(void)
+Interface::ControlPanel & Interface::Basic::GetControlPanel()
 {
     return controlPanel;
 }
@@ -125,34 +125,34 @@ void Interface::Basic::SetHideInterface(bool f)
     gameArea.Build();
 }
 
-Interface::Basic & Interface::Basic::Get(void)
+Interface::Basic & Interface::Basic::Get()
 {
     static Basic basic;
     return basic;
 }
 
-const Rect & Interface::Basic::GetScrollLeft(void) const
+const Rect & Interface::Basic::GetScrollLeft() const
 {
     return scrollLeft;
 }
 
-const Rect & Interface::Basic::GetScrollRight(void) const
+const Rect & Interface::Basic::GetScrollRight() const
 {
     return scrollRight;
 }
 
-const Rect & Interface::Basic::GetScrollTop(void) const
+const Rect & Interface::Basic::GetScrollTop() const
 {
     return scrollTop;
 }
 
-const Rect & Interface::Basic::GetScrollBottom(void) const
+const Rect & Interface::Basic::GetScrollBottom() const
 {
     return scrollBottom;
 }
 
 
-bool Interface::Basic::NeedRedraw(void) const
+bool Interface::Basic::NeedRedraw() const
 {
     return redraw;
 }

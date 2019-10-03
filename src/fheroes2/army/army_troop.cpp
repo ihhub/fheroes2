@@ -49,12 +49,12 @@ bool Troop::isMonster(int mons) const
     return GetID() == mons;
 }
 
-Monster Troop::operator() (void) const
+Monster Troop::operator() () const
 {
     return *this;
 }
 
-Monster Troop::GetMonster(void) const
+Monster Troop::GetMonster() const
 {
     return *this;
 }
@@ -80,38 +80,38 @@ void Troop::SetCount(u32 c)
     count = c;
 }
 
-void Troop::Reset(void)
+void Troop::Reset()
 {
     id = Monster::UNKNOWN;
     count = 0;
 }
 
-const char* Troop::GetName(void) const
+const char* Troop::GetName() const
 {
     return Monster::GetPluralName(count);
 }
 
-u32 Troop::GetCount(void) const
+u32 Troop::GetCount() const
 {
     return count;
 }
 
-u32 Troop::GetHitPoints(void) const
+u32 Troop::GetHitPoints() const
 {
     return Monster::GetHitPoints() * count;
 }
 
-u32 Troop::GetDamageMin(void) const
+u32 Troop::GetDamageMin() const
 {
     return Monster::GetDamageMin() * count;
 }
 
-u32 Troop::GetDamageMax(void) const
+u32 Troop::GetDamageMax() const
 {
     return Monster::GetDamageMax() * count;
 }
 
-u32 Troop::GetStrength(void) const
+u32 Troop::GetStrength() const
 {
     float res = (GetDamageMin() + GetDamageMax()) >> 1;
 
@@ -134,22 +134,22 @@ u32 Troop::GetStrength(void) const
     return static_cast<u32>(res);
 }
 
-bool Troop::isValid(void) const
+bool Troop::isValid() const
 {
     return Monster::isValid() && count;
 }
 
-payment_t Troop::GetCost(void) const
+payment_t Troop::GetCost() const
 {
     return Monster::GetCost() * count;
 }
 
-payment_t Troop::GetUpgradeCost(void) const
+payment_t Troop::GetUpgradeCost() const
 {
     return Monster::GetUpgradeCost() * count;
 }
 
-bool Troop::isBattle(void) const
+bool Troop::isBattle() const
 {
     return false;
 }
@@ -159,32 +159,32 @@ bool Troop::isModes(u32) const
     return false;
 }
 
-std::string Troop::GetAttackString(void) const
+std::string Troop::GetAttackString() const
 {
     return GetString(GetAttack());
 }
 
-std::string Troop::GetDefenseString(void) const
+std::string Troop::GetDefenseString() const
 {
     return GetString(GetDefense());
 }
 
-std::string Troop::GetShotString(void) const
+std::string Troop::GetShotString() const
 {
     return GetString(GetShots());
 }
 
-std::string Troop::GetSpeedString(void) const
+std::string Troop::GetSpeedString() const
 {
     return Speed::String(GetSpeed());
 }
 
-u32 Troop::GetHitPointsLeft(void) const
+u32 Troop::GetHitPointsLeft() const
 {
     return 0;
 }
 
-u32 Troop::GetSpeed(void) const
+u32 Troop::GetSpeed() const
 {
     return Monster::GetSpeed();
 }
@@ -209,27 +209,27 @@ ArmyTroop & ArmyTroop::operator= (const Troop & t)
     return *this;
 }
 
-u32 ArmyTroop::GetAttack(void) const
+u32 ArmyTroop::GetAttack() const
 {
     return Troop::GetAttack() + (army && army->GetCommander() ? army->GetCommander()->GetAttack() : 0);
 }
 
-u32 ArmyTroop::GetDefense(void) const
+u32 ArmyTroop::GetDefense() const
 {
     return Troop::GetDefense() + (army && army->GetCommander() ? army->GetCommander()->GetDefense() : 0);
 }
 
-int ArmyTroop::GetColor(void) const
+int ArmyTroop::GetColor() const
 {
     return army ? army->GetColor() : Color::NONE;
 }
 
-int ArmyTroop::GetMorale(void) const
+int ArmyTroop::GetMorale() const
 {
     return army && isAffectedByMorale() ? army->GetMorale() : Troop::GetMorale();
 }
 
-int ArmyTroop::GetLuck(void) const
+int ArmyTroop::GetLuck() const
 {
     return army ? army->GetLuck() : Troop::GetLuck();
 }
@@ -239,12 +239,12 @@ void ArmyTroop::SetArmy(const Army & a)
     army = &a;
 }
 
-const Army* ArmyTroop::GetArmy(void) const
+const Army* ArmyTroop::GetArmy() const
 {
     return army;
 }
 
-std::string ArmyTroop::GetAttackString(void) const
+std::string ArmyTroop::GetAttackString() const
 {
     if(Troop::GetAttack() == GetAttack())
 	return GetString(Troop::GetAttack());
@@ -254,7 +254,7 @@ std::string ArmyTroop::GetAttackString(void) const
     return os.str();
 }
 
-std::string ArmyTroop::GetDefenseString(void) const
+std::string ArmyTroop::GetDefenseString() const
 {
     if(Troop::GetDefense() == GetDefense())
 	return GetString(Troop::GetDefense());

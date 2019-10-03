@@ -25,7 +25,7 @@
 #include "battle_board.h"
 #include "battle_grave.h"
 
-Battle::Indexes Battle::Graveyard::GetClosedCells(void) const
+Battle::Indexes Battle::Graveyard::GetClosedCells() const
 {
     Indexes res;
     res.reserve(size());

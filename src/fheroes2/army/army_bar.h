@@ -40,9 +40,9 @@ public:
     void	SetBackground(const Size &, const RGBA &);
     void	SetArmy(Army*);
 
-    bool	isValid(void) const;
+    bool	isValid() const;
 
-    void        ResetSelected(void);
+    void        ResetSelected();
     void        Redraw(Surface & dstsf = Display::Get());
 
     bool        ActionBarSingleClick(const Point &, ArmyTroop &, const Rect &);
