@@ -823,7 +823,7 @@ StreamBase & operator>> (StreamBase & sb, LastLoseHero & st)
     return sb >> st.heroes >> st.date;
 }
 
-StreamBase & operator << (StreamBase & sb, LastLoseHero & hero)
+StreamBase & operator << (StreamBase & sb, const LastLoseHero & hero)
 {
     return sb << hero.heroes << hero.date;
 }
