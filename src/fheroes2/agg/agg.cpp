@@ -1860,8 +1860,8 @@ bool AGG::Init(void)
     if(! ReadDataDir())
     {
         DEBUG(DBG_ENGINE, DBG_WARN, "data files not found");
-        //ShowError();
-        //return false;
+        ShowError();
+        return false;
     }
 
 #ifdef WITH_TTF
