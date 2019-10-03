@@ -140,6 +140,90 @@ namespace
 	{     0,   0,   0,   0,   0,  Speed::VERYSLOW,   0,     0, "Random Monster 3", "Random Monsters 3", { 0, 0, 0, 0, 0, 0, 0} },
 	{     0,   0,   0,   0,   0,  Speed::VERYSLOW,   0,     0, "Random Monster 4", "Random Monsters 4", { 0, 0, 0, 0, 0, 0, 0} },
     };
+
+    static std::map<Monster::monster_t, Monster::level_t> InitializeMonsterLevels() {
+		std::map<Monster::monster_t, Monster::level_t> theMap;
+
+		theMap[Monster::UNKNOWN] = Monster::LEVEL0;
+
+		theMap[Monster::PEASANT] = Monster::LEVEL1;
+		theMap[Monster::ARCHER] = Monster::LEVEL1;
+		theMap[Monster::GOBLIN] = Monster::LEVEL1;
+		theMap[Monster::ORC] = Monster::LEVEL1;
+		theMap[Monster::SPRITE] = Monster::LEVEL1;
+		theMap[Monster::CENTAUR] = Monster::LEVEL1;
+		theMap[Monster::HALFLING] = Monster::LEVEL1;
+		theMap[Monster::SKELETON] = Monster::LEVEL1;
+		theMap[Monster::ZOMBIE] = Monster::LEVEL1;
+		theMap[Monster::ROGUE] = Monster::LEVEL1;
+		theMap[Monster::MONSTER_RND1] = Monster::LEVEL1;
+
+		theMap[Monster::RANGER] = Monster::LEVEL2;
+		theMap[Monster::PIKEMAN] = Monster::LEVEL2;
+		theMap[Monster::VETERAN_PIKEMAN] = Monster::LEVEL2;
+		theMap[Monster::ORC_CHIEF] = Monster::LEVEL2;
+		theMap[Monster::WOLF] = Monster::LEVEL2;
+		theMap[Monster::DWARF] = Monster::LEVEL2;
+		theMap[Monster::BATTLE_DWARF] = Monster::LEVEL2;
+		theMap[Monster::ELF] = Monster::LEVEL2;
+		theMap[Monster::GRAND_ELF] = Monster::LEVEL2;
+		theMap[Monster::GARGOYLE] = Monster::LEVEL2;
+		theMap[Monster::BOAR] = Monster::LEVEL2;
+		theMap[Monster::IRON_GOLEM] = Monster::LEVEL2;
+		theMap[Monster::MUTANT_ZOMBIE] = Monster::LEVEL2;
+		theMap[Monster::MUMMY] = Monster::LEVEL2;
+		theMap[Monster::NOMAD] = Monster::LEVEL2;
+		theMap[Monster::MONSTER_RND2] = Monster::LEVEL2;
+
+		theMap[Monster::SWORDSMAN] = Monster::LEVEL3;
+		theMap[Monster::MASTER_SWORDSMAN] = Monster::LEVEL3;
+		theMap[Monster::CAVALRY] = Monster::LEVEL3;
+		theMap[Monster::CHAMPION] = Monster::LEVEL3;
+		theMap[Monster::OGRE] = Monster::LEVEL3;
+		theMap[Monster::OGRE_LORD] = Monster::LEVEL3;
+		theMap[Monster::TROLL] = Monster::LEVEL3;
+		theMap[Monster::WAR_TROLL] = Monster::LEVEL3;
+		theMap[Monster::DRUID] = Monster::LEVEL3;
+		theMap[Monster::GREATER_DRUID] = Monster::LEVEL3;
+		theMap[Monster::GRIFFIN] = Monster::LEVEL3;
+		theMap[Monster::MINOTAUR] = Monster::LEVEL3;
+		theMap[Monster::MINOTAUR_KING] = Monster::LEVEL3;
+		theMap[Monster::STEEL_GOLEM] = Monster::LEVEL3;
+		theMap[Monster::ROC] = Monster::LEVEL3;
+		theMap[Monster::MAGE] = Monster::LEVEL3;
+		theMap[Monster::ARCHMAGE] = Monster::LEVEL3;
+		theMap[Monster::ROYAL_MUMMY] = Monster::LEVEL3;
+		theMap[Monster::VAMPIRE] = Monster::LEVEL3;
+		theMap[Monster::VAMPIRE_LORD] = Monster::LEVEL3;
+		theMap[Monster::LICH] = Monster::LEVEL3;
+		theMap[Monster::GHOST] = Monster::LEVEL3;
+		theMap[Monster::MEDUSA] = Monster::LEVEL3;
+		theMap[Monster::EARTH_ELEMENT] = Monster::LEVEL3;
+		theMap[Monster::AIR_ELEMENT] = Monster::LEVEL3;
+		theMap[Monster::FIRE_ELEMENT] = Monster::LEVEL3;
+		theMap[Monster::WATER_ELEMENT] = Monster::LEVEL3;
+		theMap[Monster::MONSTER_RND3] = Monster::LEVEL3;
+
+		theMap[Monster::PALADIN] = Monster::LEVEL4;
+		theMap[Monster::CRUSADER] = Monster::LEVEL4;
+		theMap[Monster::CYCLOPS] = Monster::LEVEL4;
+		theMap[Monster::UNICORN] = Monster::LEVEL4;
+		theMap[Monster::PHOENIX] = Monster::LEVEL4;
+		theMap[Monster::HYDRA] = Monster::LEVEL4;
+		theMap[Monster::GREEN_DRAGON] = Monster::LEVEL4;
+		theMap[Monster::RED_DRAGON] = Monster::LEVEL4;
+		theMap[Monster::BLACK_DRAGON] = Monster::LEVEL4;
+		theMap[Monster::GIANT] = Monster::LEVEL4;
+		theMap[Monster::TITAN] = Monster::LEVEL4;
+		theMap[Monster::POWER_LICH] = Monster::LEVEL4;
+		theMap[Monster::BONE_DRAGON] = Monster::LEVEL4;
+		theMap[Monster::GENIE] = Monster::LEVEL4;
+		theMap[Monster::MONSTER_RND4] = Monster::LEVEL4;
+
+		return theMap;
+	}
+
+    const std::map<Monster::monster_t, Monster::level_t> monsterLevel = InitializeMonsterLevels();
 }
 
 StreamBase & operator<< (StreamBase & msg, const monstats_t & obj)
@@ -176,8 +260,6 @@ StreamBase & operator>> (StreamBase & msg, MonsterStaticData & obj)
 	msg >> monsters[ii];
     return msg;
 }
-
-std::map<Monster::monster_t, Monster::level_t> Monster::monsterLevel = InitializeMonsterLevels();
 
 float Monster::GetUpgradeRatio(void)
 {
@@ -970,7 +1052,7 @@ Monster::level_t Monster::GetLevel(monster_t const id)
         }
     }
 
-    return monsterLevel[id];
+    return monsterLevel.at(id);
 }
 
 u32 Monster::GetDwelling(void) const

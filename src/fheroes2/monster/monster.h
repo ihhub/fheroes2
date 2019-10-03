@@ -115,8 +115,6 @@ public:
 	MONSTER_RND
     };
 
-    static std::map<monster_t, level_t> monsterLevel;
-
     Monster(int = UNKNOWN);
     Monster(const Spell &);
     Monster(int race, u32 dw);
@@ -190,88 +188,6 @@ protected:
     static Monster FromDwelling(int race, u32 dw);
 
     int id;
-private:
-    static std::map<monster_t, level_t> InitializeMonsterLevels() {
-        std::map<monster_t, level_t> theMap;
-
-        theMap[UNKNOWN] = LEVEL0;
-
-        theMap[PEASANT] = LEVEL1;
-        theMap[ARCHER] = LEVEL1;
-        theMap[GOBLIN] = LEVEL1;
-        theMap[ORC] = LEVEL1;
-        theMap[SPRITE] = LEVEL1;
-        theMap[CENTAUR] = LEVEL1;
-        theMap[HALFLING] = LEVEL1;
-        theMap[SKELETON] = LEVEL1;
-        theMap[ZOMBIE] = LEVEL1;
-        theMap[ROGUE] = LEVEL1;
-        theMap[MONSTER_RND1] = LEVEL1;
-
-        theMap[RANGER] = LEVEL2;
-        theMap[PIKEMAN] = LEVEL2;
-        theMap[VETERAN_PIKEMAN] = LEVEL2;
-        theMap[ORC_CHIEF] = LEVEL2;
-        theMap[WOLF] = LEVEL2;
-        theMap[DWARF] = LEVEL2;
-        theMap[BATTLE_DWARF] = LEVEL2;
-        theMap[ELF] = LEVEL2;
-        theMap[GRAND_ELF] = LEVEL2;
-        theMap[GARGOYLE] = LEVEL2;
-        theMap[BOAR] = LEVEL2;
-        theMap[IRON_GOLEM] = LEVEL2;
-        theMap[MUTANT_ZOMBIE] = LEVEL2;
-        theMap[MUMMY] = LEVEL2;
-        theMap[NOMAD] = LEVEL2;
-        theMap[MONSTER_RND2] = LEVEL2;
-
-        theMap[SWORDSMAN] = LEVEL3;
-        theMap[MASTER_SWORDSMAN] = LEVEL3;
-        theMap[CAVALRY] = LEVEL3;
-        theMap[CHAMPION] = LEVEL3;
-        theMap[OGRE] = LEVEL3;
-        theMap[OGRE_LORD] = LEVEL3;
-        theMap[TROLL] = LEVEL3;
-        theMap[WAR_TROLL] = LEVEL3;
-        theMap[DRUID] = LEVEL3;
-        theMap[GREATER_DRUID] = LEVEL3;
-        theMap[GRIFFIN] = LEVEL3;
-        theMap[MINOTAUR] = LEVEL3;
-        theMap[MINOTAUR_KING] = LEVEL3;
-        theMap[STEEL_GOLEM] = LEVEL3;
-        theMap[ROC] = LEVEL3;
-        theMap[MAGE] = LEVEL3;
-        theMap[ARCHMAGE] = LEVEL3;
-        theMap[ROYAL_MUMMY] = LEVEL3;
-        theMap[VAMPIRE] = LEVEL3;
-        theMap[VAMPIRE_LORD] = LEVEL3;
-        theMap[LICH] = LEVEL3;
-        theMap[GHOST] = LEVEL3;
-        theMap[MEDUSA] = LEVEL3;
-        theMap[EARTH_ELEMENT] = LEVEL3;
-        theMap[AIR_ELEMENT] = LEVEL3;
-        theMap[FIRE_ELEMENT] = LEVEL3;
-        theMap[WATER_ELEMENT] = LEVEL3;
-        theMap[MONSTER_RND3] = LEVEL3;
-
-        theMap[PALADIN] = LEVEL4;
-        theMap[CRUSADER] = LEVEL4;
-        theMap[CYCLOPS] = LEVEL4;
-        theMap[UNICORN] = LEVEL4;
-        theMap[PHOENIX] = LEVEL4;
-        theMap[HYDRA] = LEVEL4;
-        theMap[GREEN_DRAGON] = LEVEL4;
-        theMap[RED_DRAGON] = LEVEL4;
-        theMap[BLACK_DRAGON] = LEVEL4;
-        theMap[GIANT] = LEVEL4;
-        theMap[TITAN] = LEVEL4;
-        theMap[POWER_LICH] = LEVEL4;
-        theMap[BONE_DRAGON] = LEVEL4;
-        theMap[GENIE] = LEVEL4;
-        theMap[MONSTER_RND4] = LEVEL4;
-
-        return theMap;
-    }
 };
 
 struct MonsterStaticData
