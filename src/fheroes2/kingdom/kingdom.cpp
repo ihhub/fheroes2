@@ -820,5 +820,5 @@ StreamBase & operator>> (StreamBase & msg, Kingdoms & obj)
 
 StreamBase & operator>> (StreamBase & sb, LastLoseHero & st)
 {
-    return sb >> st.first >> st.second;
+    return sb >> st.heroes >> st.date;
 }
