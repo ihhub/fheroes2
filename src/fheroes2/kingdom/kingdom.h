@@ -231,4 +231,7 @@ StreamBase & operator>> (StreamBase &, Kingdom &);
 StreamBase & operator<< (StreamBase &, const Kingdoms &);
 StreamBase & operator>> (StreamBase &, Kingdoms &);
 
+StreamBase & operator<< (StreamBase & sb, const LastLoseHero & hero);
+StreamBase & operator>> (StreamBase & sb, LastLoseHero & hero);
+
 #endif
