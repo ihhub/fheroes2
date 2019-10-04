@@ -47,13 +47,15 @@ artifacts:
     name: fheroes2
 
 deploy:
-  release: fheroes2-windows-$(appveyor_build_version)-$(platform)
+  tag: fheroes2-windows-$(platform)
+  release: Windows $(platform) build with SDL 1 support (latest commit)
   description: $(APPVEYOR_REPO_COMMIT_MESSAGE)
   provider: GitHub
   auth_token:
     secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9
   artifact: /.*\.zip/
   draft: false
-  prerelease: false
+  prerelease: true
+  force_update: true
   on:
     branch: master
