@@ -11,45 +11,45 @@ branches:
 
 matrix:
   include:
-    - os: linux
-      name: "Linux with SDL 1.2"
-      before_install:
-        - sudo apt-get update
-        - sudo apt-get install -y libsdl1.2-dev
-        - sudo apt-get install -y libsdl-ttf2.0-dev
-        - sudo apt-get install -y libsdl-mixer1.2-dev
-        - sudo apt-get install -y libsdl-image1.2-dev
-      before_deploy:
-        - export TRAVIS_TAG=fheroes2-linux-sdl1-$TRAVIS_BUILD_NUMBER
-        - git tag $TRAVIS_TAG
-        - zip fheroes2_linux_sdl1.zip fheroes2 LICENSE script/linux/install_sdl_1.sh script/linux/install_sdl_2.sh script/demo/demo_linux.sh
-      deploy:
-        provider: releases
-        api_key: "$GITHUB_OAUTH_TOKEN"
-        file: "fheroes2_linux_sdl1.zip"
-        skip_cleanup: true
-        on:
-          branch: master
-    - os: linux
-      name: "Linux with SDL 2.0"
-      before_install:
-        - sudo apt-get update
-        - sudo apt-get install -y libsdl2-dev
-        - sudo apt-get install -y libsdl2-ttf-dev
-        - sudo apt-get install -y libsdl2-mixer-dev
-        - sudo apt-get install -y libsdl2-image-dev
-        - export WITH_SDL2="ON"
-      before_deploy:
-        - export TRAVIS_TAG=fheroes2-linux-sdl2-$TRAVIS_BUILD_NUMBER
-        - git tag $TRAVIS_TAG
-        - zip fheroes2_linux_sdl2.zip fheroes2 LICENSE script/linux/install_sdl_1.sh script/linux/install_sdl_2.sh script/demo/demo_linux.sh
-      deploy:
-        provider: releases
-        api_key: "$GITHUB_OAUTH_TOKEN"
-        file: "fheroes2_linux_sdl2.zip"
-        skip_cleanup: true
-        on:
-          branch: master
+#    - os: linux
+#      name: "Linux with SDL 1.2"
+#      before_install:
+#        - sudo apt-get update
+#        - sudo apt-get install -y libsdl1.2-dev
+#        - sudo apt-get install -y libsdl-ttf2.0-dev
+#        - sudo apt-get install -y libsdl-mixer1.2-dev
+#        - sudo apt-get install -y libsdl-image1.2-dev
+#      before_deploy:
+#        - export TRAVIS_TAG=fheroes2-linux-sdl1-$TRAVIS_BUILD_NUMBER
+#        - git tag $TRAVIS_TAG
+#        - zip fheroes2_linux_sdl1.zip fheroes2 LICENSE script/linux/install_sdl_1.sh script/linux/install_sdl_2.sh script/demo/demo_linux.sh
+#      deploy:
+#        provider: releases
+#        api_key: "$GITHUB_OAUTH_TOKEN"
+#        file: "fheroes2_linux_sdl1.zip"
+#        skip_cleanup: true
+#        on:
+#          branch: master
+#    - os: linux
+#      name: "Linux with SDL 2.0"
+#      before_install:
+#        - sudo apt-get update
+#        - sudo apt-get install -y libsdl2-dev
+#        - sudo apt-get install -y libsdl2-ttf-dev
+#        - sudo apt-get install -y libsdl2-mixer-dev
+#        - sudo apt-get install -y libsdl2-image-dev
+#        - export WITH_SDL2="ON"
+#      before_deploy:
+#        - export TRAVIS_TAG=fheroes2-linux-sdl2-$TRAVIS_BUILD_NUMBER
+#        - git tag $TRAVIS_TAG
+#        - zip fheroes2_linux_sdl2.zip fheroes2 LICENSE script/linux/install_sdl_1.sh script/linux/install_sdl_2.sh script/demo/demo_linux.sh
+#      deploy:
+#        provider: releases
+#        api_key: "$GITHUB_OAUTH_TOKEN"
+#        file: "fheroes2_linux_sdl2.zip"
+#        skip_cleanup: true
+#        on:
+#          branch: master
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -71,36 +71,36 @@ matrix:
         skip_cleanup: true
         on:
           branch: master
-    - os: osx
-      name: "OSX with SDL 2.0"
-      before_install:
-        - brew install sdl2
-        - brew install sdl2_ttf
-        - brew install sdl2_mixer
-        - brew install sdl2_image
-        - brew install gettext
-        - export PATH="/usr/local/opt/gettext/bin:$PATH"
-        - export WITH_SDL2="ON"
-      before_deploy:
-        - export TRAVIS_TAG=fheroes2-osx-sdl2-$TRAVIS_BUILD_NUMBER
-        - git tag $TRAVIS_TAG
-        - zip fheroes2_osx_sdl2.zip fheroes2 LICENSE script/macos/install_sdl_1.sh script/macos/install_sdl_2.sh script/demo/demo_macos.sh
-      deploy:
-        provider: releases
-        api_key: "$GITHUB_OAUTH_TOKEN"
-        file: "fheroes2_osx_sdl2.zip"
-        skip_cleanup: true
-        on:
-          branch: master
-    - os: linux
-      name: "Static analysis"
-      script:
-        - export EXCLUDE_PATTERN_1=" not found in expected header ";
-        - export EXCLUDE_PATTERN_2=" does not need to be \#included; use a forward declaration instead";
-        - export EXCLUDE_PATTERN_3=" not found in any directly \#included header";
-        - export EXCLUDE_PATTERN_4=" unable to find ";
-        - git clone https://github.com/myint/cppclean;
-        - ./cppclean/cppclean src | grep -v "$EXCLUDE_PATTERN_1" | grep -v "$EXCLUDE_PATTERN_2" | grep -v "$EXCLUDE_PATTERN_3" | grep -v "$EXCLUDE_PATTERN_4";
+#    - os: osx
+#      name: "OSX with SDL 2.0"
+#      before_install:
+#        - brew install sdl2
+#        - brew install sdl2_ttf
+#        - brew install sdl2_mixer
+#        - brew install sdl2_image
+#        - brew install gettext
+#        - export PATH="/usr/local/opt/gettext/bin:$PATH"
+#        - export WITH_SDL2="ON"
+#      before_deploy:
+#        - export TRAVIS_TAG=fheroes2-osx-sdl2-$TRAVIS_BUILD_NUMBER
+#        - git tag $TRAVIS_TAG
+#        - zip fheroes2_osx_sdl2.zip fheroes2 LICENSE script/macos/install_sdl_1.sh script/macos/install_sdl_2.sh script/demo/demo_macos.sh
+#      deploy:
+#        provider: releases
+#        api_key: "$GITHUB_OAUTH_TOKEN"
+#        file: "fheroes2_osx_sdl2.zip"
+#        skip_cleanup: true
+#        on:
+#          branch: master
+#    - os: linux
+#      name: "Static analysis"
+#      script:
+#        - export EXCLUDE_PATTERN_1=" not found in expected header ";
+#        - export EXCLUDE_PATTERN_2=" does not need to be \#included; use a forward declaration instead";
+#        - export EXCLUDE_PATTERN_3=" not found in any directly \#included header";
+#        - export EXCLUDE_PATTERN_4=" unable to find ";
+#        - git clone https://github.com/myint/cppclean;
+#        - ./cppclean/cppclean src | grep -v "$EXCLUDE_PATTERN_1" | grep -v "$EXCLUDE_PATTERN_2" | grep -v "$EXCLUDE_PATTERN_3" | grep -v "$EXCLUDE_PATTERN_4";
 
 script:
   - |
