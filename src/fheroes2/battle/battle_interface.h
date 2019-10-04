@@ -29,6 +29,7 @@
 #include "dialog.h"
 #include "text.h"
 #include "statusbar.h"
+#include "settings.h"
 #include "gamedefs.h"
 #include "battle_board.h"
 
@@ -176,6 +177,7 @@ namespace Battle
 	void	RedrawBorder(void);
 	void	RedrawCover(void);
 	void	RedrawCoverStatic(Surface &);
+	void	RedrawCoverBoard(const Settings &, Display &, const Board &);
 	void	RedrawLowObjects(s32, Surface &) const;
 	void	RedrawHighObjects(s32) const;
 	void	RedrawCastle1(const Castle &, Surface &) const;

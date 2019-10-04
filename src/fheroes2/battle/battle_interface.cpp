@@ -25,7 +25,6 @@
 #include "engine.h"
 #include "cursor.h"
 #include "agg.h"
-#include "settings.h"
 #include "kingdom.h"
 #include "world.h"
 #include "castle.h"
@@ -1065,23 +1064,7 @@ void Battle::Interface::RedrawCover(void)
 
     sf_cover.Blit(display);
 
-    // grid
-    if(conf.ExtBattleShowGrid())
-    {
-	for(Board::const_iterator
-	    it = board.begin(); it != board.end(); ++it)
-	    if((*it).GetObject() == 0) sf_hexagon.Blit((*it).GetPos(), display);
-    }
-
-    // shadow
-    if(!b_move && conf.ExtBattleShowMoveShadow() && b_current &&
-	! b_current->isControlAI())
-    {
-	for(Board::const_iterator
-	    it = board.begin(); it != board.end(); ++it)
-	    if((*it).isPassable1(true) && UNKNOWN != (*it).GetDirection())
-	    sf_shadow.Blit((*it).GetPos().x, (*it).GetPos().y, display);
-    }
+    RedrawCoverBoard(conf, display, board);
 
     const Bridge* bridge = Arena::GetBridge();
     // bridge
@@ -1133,6 +1116,27 @@ void Battle::Interface::RedrawCoverStatic(Surface & dst)
 
     const Castle* castle = Arena::GetCastle();
     if(castle) RedrawCastle1(*castle, dst);
+}
+
+void Battle::Interface::RedrawCoverBoard(const Settings & conf, Display & display, const Board & board)
+{
+	// grid
+	if(conf.ExtBattleShowGrid())
+	{
+		for(Board::const_iterator
+		it = board.begin(); it != board.end(); ++it)
+		if((*it).GetObject() == 0) sf_hexagon.Blit((*it).GetPos(), display);
+	}
+
+	// shadow
+	if(!b_move && conf.ExtBattleShowMoveShadow() && b_current &&
+		! b_current->isControlAI())
+	{
+		for(Board::const_iterator
+		it = board.begin(); it != board.end(); ++it)
+		if((*it).isPassable1(true) && UNKNOWN != (*it).GetDirection())
+		sf_shadow.Blit((*it).GetPos().x, (*it).GetPos().y, display);
+	}
 }
 
 void Battle::Interface::RedrawCastle1(const Castle & castle, Surface & dst) const
