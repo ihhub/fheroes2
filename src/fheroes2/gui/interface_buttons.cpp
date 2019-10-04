@@ -212,5 +212,4 @@ void Interface::ButtonsArea::SetButtonStatus()
         buttonMovement.SetDisable(true);
     else
         buttonMovement.SetDisable(false);
-
 }
