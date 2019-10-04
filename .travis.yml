@@ -20,9 +20,7 @@ matrix:
         - sudo apt-get install -y libsdl-mixer1.2-dev
         - sudo apt-get install -y libsdl-image1.2-dev
       before_deploy:
-        #- export TRAVIS_TAG=fheroes2-linux-sdl1-$TRAVIS_BUILD_NUMBER
         - git tag -f fheroes2-linux-sdl1_dev
-        #- git tag $TRAVIS_TAG
         - zip fheroes2_linux_sdl1.zip fheroes2 LICENSE script/linux/install_sdl_1.sh script/linux/install_sdl_2.sh script/demo/demo_linux.sh
       deploy:
         provider: releases
@@ -108,4 +106,4 @@ matrix:
 
 script:
   - |
-    pwd #make
+    make
