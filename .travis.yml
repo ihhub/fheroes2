@@ -33,7 +33,7 @@ matrix:
         prerelease: true
         overwrite: true
         on:
-          branch: release_deletion
+          branch: master
     - os: linux
       name: "Linux with SDL 2.0"
       before_install:
@@ -57,7 +57,7 @@ matrix:
         prerelease: true
         overwrite: true
         on:
-          branch: release_deletion
+          branch: master
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -81,7 +81,7 @@ matrix:
         prerelease: true
         overwrite: true
         on:
-          branch: release_deletion
+          branch: master
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
@@ -106,7 +106,7 @@ matrix:
         prerelease: true
         overwrite: true
         on:
-          branch: release_deletion
+          branch: master
     - os: linux
       name: "Static analysis"
       script:
