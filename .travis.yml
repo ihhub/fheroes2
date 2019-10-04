@@ -53,12 +53,12 @@ matrix:
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
-        - brew install sdl
-        - brew install sdl_ttf
-        - brew install sdl_mixer
-        - brew install sdl_image
-        - brew install gettext
-        - export PATH="/usr/local/opt/gettext/bin:$PATH"
+        #- brew install sdl
+        #- brew install sdl_ttf
+        #- brew install sdl_mixer
+        #- brew install sdl_image
+        #- brew install gettext
+        #- export PATH="/usr/local/opt/gettext/bin:$PATH"
         - curl -i https://api.github.com/repos/ihhub/fheroes2/releases
       before_deploy:
         - export TRAVIS_TAG=fheroes2-osx-sdl1-$TRAVIS_BUILD_NUMBER
