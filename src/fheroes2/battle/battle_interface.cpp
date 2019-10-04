@@ -1055,6 +1055,7 @@ void Battle::Interface::RedrawCover(void)
 {
     const Settings & conf = Settings::Get();
     Display & display = Display::Get();
+    const Board & board = *Arena::GetBoard();
 
     if(!sf_cover.isValid())
     {
@@ -1064,11 +1065,18 @@ void Battle::Interface::RedrawCover(void)
 
     sf_cover.Blit(display);
 
+    // grid
+    if(conf.ExtBattleShowGrid())
+    {
+	for(Board::const_iterator
+	    it = board.begin(); it != board.end(); ++it)
+	    if((*it).GetObject() == 0) sf_hexagon.Blit((*it).GetPos(), display);
+    }
+
     // shadow
     if(!b_move && conf.ExtBattleShowMoveShadow() && b_current &&
 	! b_current->isControlAI())
     {
-	const Board & board = *Arena::GetBoard();
 	for(Board::const_iterator
 	    it = board.begin(); it != board.end(); ++it)
 	    if((*it).isPassable1(true) && UNKNOWN != (*it).GetDirection())
@@ -1098,7 +1106,6 @@ void Battle::Interface::RedrawCoverStatic(Surface & dst)
 {
     const Settings & conf = Settings::Get();
     const Point & topleft = border.GetArea();
-    const Board & board = *Arena::GetBoard();
 
     if(icn_cbkg != ICN::UNKNOWN)
     {
@@ -1126,14 +1133,6 @@ void Battle::Interface::RedrawCoverStatic(Surface & dst)
 
     const Castle* castle = Arena::GetCastle();
     if(castle) RedrawCastle1(*castle, dst);
-
-    // grid
-    if(conf.ExtBattleShowGrid())
-    {
-	for(Board::const_iterator
-	    it = board.begin(); it != board.end(); ++it)
-	    if((*it).GetObject() == 0) sf_hexagon.Blit((*it).GetPos(), dst);
-    }
 }
 
 void Battle::Interface::RedrawCastle1(const Castle & castle, Surface & dst) const
