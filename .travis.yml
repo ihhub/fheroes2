@@ -31,7 +31,7 @@ matrix:
         body: $TRAVIS_COMMIT_MESSAGE
         overwrite: true
         on:
-          branch: master
+          branch: release_deletion
     - os: linux
       name: "Linux with SDL 2.0"
       before_install:
@@ -53,7 +53,7 @@ matrix:
         body: $TRAVIS_COMMIT_MESSAGE
         overwrite: true
         on:
-          branch: master
+          branch: release_deletion
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -75,7 +75,7 @@ matrix:
         body: $TRAVIS_COMMIT_MESSAGE
         overwrite: true
         on:
-          branch: master
+          branch: release_deletion
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
@@ -98,7 +98,7 @@ matrix:
         body: $TRAVIS_COMMIT_MESSAGE
         overwrite: true
         on:
-          branch: master
+          branch: release_deletion
     - os: linux
       name: "Static analysis"
       script:
