@@ -27,11 +27,11 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_linux_sdl1.zip"
         skip_cleanup: true
-        name: Linux build with SDL 1 support
+        name: Linux build with SDL 1 support (latest commit)
         body: $TRAVIS_COMMIT_MESSAGE
         overwrite: true
         on:
-          branch: release_deletion
+          branch: master
     - os: linux
       name: "Linux with SDL 2.0"
       before_install:
@@ -49,11 +49,11 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_linux_sdl2.zip"
         skip_cleanup: true
-        name: Linux build with SDL 2 support
+        name: Linux build with SDL 2 support (latest commit)
         body: $TRAVIS_COMMIT_MESSAGE
         overwrite: true
         on:
-          branch: release_deletion
+          branch: master
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
@@ -71,11 +71,11 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_osx_sdl1.zip"
         skip_cleanup: true
-        name: MacOS build with SDL 1 support
+        name: MacOS build with SDL 1 support (latest commit)
         body: $TRAVIS_COMMIT_MESSAGE
         overwrite: true
         on:
-          branch: release_deletion
+          branch: master
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
@@ -94,11 +94,11 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_osx_sdl2.zip"
         skip_cleanup: true
-        name: MacOS build with SDL 2 support
+        name: MacOS build with SDL 2 support (latest commit)
         body: $TRAVIS_COMMIT_MESSAGE
         overwrite: true
         on:
-          branch: release_deletion
+          branch: master
     - os: linux
       name: "Static analysis"
       script:
