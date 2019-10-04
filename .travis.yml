@@ -29,6 +29,7 @@ matrix:
         skip_cleanup: true
         name: Linux build with SDL 1 support (latest commit)
         body: $TRAVIS_COMMIT_MESSAGE
+        prerelease: true
         overwrite: true
         on:
           branch: release_deletion
@@ -51,6 +52,7 @@ matrix:
         skip_cleanup: true
         name: Linux build with SDL 2 support (latest commit)
         body: $TRAVIS_COMMIT_MESSAGE
+        prerelease: true
         overwrite: true
         on:
           branch: release_deletion
@@ -73,6 +75,7 @@ matrix:
         skip_cleanup: true
         name: MacOS build with SDL 1 support (latest commit)
         body: $TRAVIS_COMMIT_MESSAGE
+        prerelease: true
         overwrite: true
         on:
           branch: release_deletion
@@ -96,6 +99,7 @@ matrix:
         skip_cleanup: true
         name: MacOS build with SDL 2 support (latest commit)
         body: $TRAVIS_COMMIT_MESSAGE
+        prerelease: true
         overwrite: true
         on:
           branch: release_deletion
