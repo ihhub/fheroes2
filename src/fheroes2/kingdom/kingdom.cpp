@@ -810,11 +810,14 @@ StreamBase & operator<< (StreamBase & msg, const Kingdoms & obj)
 StreamBase & operator>> (StreamBase & msg, Kingdoms & obj)
 {
     u32 kingdomscount;
-    msg >> kingdomscount; // FIXME: check kingdomscount
-
-    for(u32 ii = 0; ii < kingdomscount; ++ii)
+    msg >> kingdomscount; 
+	
+    if (kingdomscount <= KINGDOMMAX)
+    {
+        for(u32 ii = 0; ii < kingdomscount; ++ii)
 	msg >> obj.kingdoms[ii];
-
+    }
+       
     return msg;
 }
 
