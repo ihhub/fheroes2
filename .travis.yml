@@ -59,6 +59,7 @@ matrix:
         - brew install sdl_image
         - brew install gettext
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
+        - curl -i https://api.github.com/repos/ihhub/fheroes2/releases
       before_deploy:
         - export TRAVIS_TAG=fheroes2-osx-sdl1-$TRAVIS_BUILD_NUMBER
         - git tag $TRAVIS_TAG
@@ -103,4 +104,4 @@ matrix:
 
 script:
   - |
-    make
+    pwd #make
