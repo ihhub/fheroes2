@@ -29,7 +29,7 @@ matrix:
         file: "fheroes2_linux_sdl1.zip"
         skip_cleanup: true
         name: Linux build with SDL 1 support (latest commit)
-        body: $TRAVIS_COMMIT_MESSAGE
+        body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
         on:
@@ -53,7 +53,7 @@ matrix:
         file: "fheroes2_linux_sdl2.zip"
         skip_cleanup: true
         name: Linux build with SDL 2 support (latest commit)
-        body: $TRAVIS_COMMIT_MESSAGE
+        body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
         on:
@@ -77,7 +77,7 @@ matrix:
         file: "fheroes2_osx_sdl1.zip"
         skip_cleanup: true
         name: MacOS build with SDL 1 support (latest commit)
-        body: $TRAVIS_COMMIT_MESSAGE
+        body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
         on:
@@ -102,7 +102,7 @@ matrix:
         file: "fheroes2_osx_sdl2.zip"
         skip_cleanup: true
         name: MacOS build with SDL 2 support (latest commit)
-        body: $TRAVIS_COMMIT_MESSAGE
+        body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
         on:
