@@ -21,7 +21,8 @@ matrix:
         - sudo apt-get install -y libsdl-image1.2-dev
       before_deploy:
         - zip fheroes2_linux_sdl1.zip fheroes2 LICENSE script/linux/install_sdl_1.sh script/linux/install_sdl_2.sh script/demo/demo_linux.sh
-        - git tag -f fheroes2-linux-sdl1_dev
+        - export TRAVIS_TAG=fheroes2-linux-sdl1_dev
+        - git tag -f $TRAVIS_TAG
       deploy:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
@@ -44,7 +45,8 @@ matrix:
         - export WITH_SDL2="ON"
       before_deploy:
         - zip fheroes2_linux_sdl2.zip fheroes2 LICENSE script/linux/install_sdl_1.sh script/linux/install_sdl_2.sh script/demo/demo_linux.sh
-        - git tag -f fheroes2-linux-sdl2_dev
+        - export TRAVIS_TAG=fheroes2-linux-sdl2_dev
+        - git tag -f $TRAVIS_TAG
       deploy:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
@@ -67,7 +69,8 @@ matrix:
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
       before_deploy:
         - zip fheroes2_osx_sdl1.zip fheroes2 LICENSE script/macos/install_sdl_1.sh script/macos/install_sdl_2.sh script/demo/demo_macos.sh
-        - git tag -f fheroes2-osx-sdl1_dev
+        - export TRAVIS_TAG=ffheroes2-osx-sdl1_dev
+        - git tag -f $TRAVIS_TAG
       deploy:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
@@ -91,7 +94,8 @@ matrix:
         - export WITH_SDL2="ON"
       before_deploy:
         - zip fheroes2_osx_sdl2.zip fheroes2 LICENSE script/macos/install_sdl_1.sh script/macos/install_sdl_2.sh script/demo/demo_macos.sh
-        - git tag -f fheroes2-osx-sdl2_dev
+        - export TRAVIS_TAG=fheroes2-osx-sdl2_dev
+        - git tag -f $TRAVIS_TAG
       deploy:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
