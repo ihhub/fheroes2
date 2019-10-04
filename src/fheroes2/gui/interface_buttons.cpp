@@ -97,11 +97,6 @@ void Interface::ButtonsArea::Redraw(void)
 
     SetButtonStatus();
 
-	Heroes * currentHero = GetFocusHeroes();
-	if (currentHero != nullptr && !currentHero->GetPath().isValid()
-	   || currentHero != nullptr && 0 == currentHero->GetMobilityIndexSprite())
-		buttonMovement.SetDisable(true);
-
 	buttonNextHero.Draw();
 	buttonMovement.Draw();
 	buttonKingdom.Draw();
@@ -211,5 +206,11 @@ int Interface::ButtonsArea::QueueEventProcessing(void)
 
 void Interface::ButtonsArea::SetButtonStatus()
 {
-    buttonMovement.SetDisable(GetFocusHeroes() == NULL);
+    Heroes * currentHero = GetFocusHeroes();
+    if (currentHero != NULL && !currentHero->GetPath().isValid()
+       || currentHero != NULL && !currentHero->MayStillMove())
+        buttonMovement.SetDisable(true);
+    else
+        buttonMovement.SetDisable(false);
+
 }
