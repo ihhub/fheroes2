@@ -58,4 +58,4 @@ deploy:
   prerelease: true
   force_update: true
   on:
-    branch: appveyor_deployment_fix
+    branch: master
