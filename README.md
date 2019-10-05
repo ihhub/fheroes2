@@ -8,7 +8,7 @@ Direct continuation of free implementation of Heroes of the Might and Magic II e
 
 Copyright
 ---------------------------
-All rights for original game and it's resources belong to formerly The 3DO Company. this right were transferred to Ubisoft. We do not encourage and support any form of illegal usage of original game. We do not provide any information about download of original game in any form.
+All rights for original game and it's resources belong to formerly The 3DO Company. these rights were transferred to Ubisoft. We do not encourage and do not support any form of illegal usage of original game. We do not provide any information about download of original game in any form.
 
 Download
 ---------------------------
