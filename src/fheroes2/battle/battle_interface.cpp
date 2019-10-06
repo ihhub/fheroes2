@@ -1127,10 +1127,10 @@ void Battle::Interface::RedrawCoverBoard(const Settings & conf, Display & displa
                 sf_hexagon.Blit((*it).GetPos(), display);
     }
 
-    if (!b_move && conf.ExtBattleShowMoveShadow() && b_current && ! b_current->isControlAI()) { // shadow
+    if (!b_move && conf.ExtBattleShowMoveShadow() && b_current && !b_current->isControlAI()) { // shadow
         for (Board::const_iterator it = board.begin(); it != board.end(); ++it) {
             if ((*it).isPassable1(true) && UNKNOWN != (*it).GetDirection())
-                sf_shadow.Blit((*it).GetPos().x, (*it).GetPos().y, display);
+                sf_shadow.Blit((*it).GetPos(), display);
         }
     }
 }
