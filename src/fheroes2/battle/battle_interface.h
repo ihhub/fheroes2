@@ -29,9 +29,10 @@
 #include "dialog.h"
 #include "text.h"
 #include "statusbar.h"
-#include "settings.h"
 #include "gamedefs.h"
 #include "battle_board.h"
+
+class Settings;
 
 namespace Battle
 {
