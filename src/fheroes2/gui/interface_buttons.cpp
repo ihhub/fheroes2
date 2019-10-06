@@ -207,9 +207,6 @@ int Interface::ButtonsArea::QueueEventProcessing(void)
 void Interface::ButtonsArea::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
-    if (currentHero != NULL && !currentHero->GetPath().isValid()
-       || currentHero != NULL && !currentHero->MayStillMove())
-        buttonMovement.SetDisable(true);
-    else
-        buttonMovement.SetDisable(false);
+    const bool isMovementButtonDisabled = (currentHero == NULL) || !currentHero->GetPath().isValid() || !currentHero->MayStillMove();
+    buttonMovement.SetDisable(isMovementButtonDisabled);
 }
