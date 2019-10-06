@@ -473,7 +473,7 @@ bool BuildingInfo::DialogBuyBuilding(bool buttons) const
     // prepare requires build string
     std::string str;
     const u32 requires = castle.GetBuildingRequires(building);
-    const char* sep = "\n";
+    const std::string sep = "\n";
 
     for(u32 itr = 0x00000001; itr; itr <<= 1)
         if((requires & itr) && ! castle.isBuild(itr))
@@ -484,7 +484,7 @@ bool BuildingInfo::DialogBuyBuilding(bool buttons) const
 
     // replace end sep
     if(str.size())
-	str.replace(str.size() - strlen(sep), strlen(sep), "");
+	str.replace(str.size() - sep.size(), sep.size(), "");
 
     bool requires_true = str.size();
     Text requires_text(_("Requires:"), Font::BIG);
