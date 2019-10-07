@@ -41,9 +41,14 @@ struct AllCastles;
 struct VecCastles;
 struct CapturedObjects;
 
-struct LastLoseHero : std::pair<int, u32> /* Heroes, date */
+struct LastLoseHero
 {
-    LastLoseHero() : std::pair<int, u32>(Heroes::UNKNOWN, 0) {}
+    LastLoseHero()
+     : id(Heroes::UNKNOWN)
+     , date(0)
+    {}
+    int id;
+    u32 date;
 };
 
 StreamBase & operator>> (StreamBase &, LastLoseHero &);
@@ -225,5 +230,8 @@ StreamBase & operator>> (StreamBase &, Kingdom &);
 
 StreamBase & operator<< (StreamBase &, const Kingdoms &);
 StreamBase & operator>> (StreamBase &, Kingdoms &);
+
+StreamBase & operator<< (StreamBase & sb, const LastLoseHero & hero);
+StreamBase & operator>> (StreamBase & sb, LastLoseHero & hero);
 
 #endif
