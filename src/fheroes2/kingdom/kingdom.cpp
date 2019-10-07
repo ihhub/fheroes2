@@ -644,20 +644,20 @@ Kingdom & Kingdoms::GetKingdom(int color)
 
 void Kingdom::SetLastLostHero(Heroes & hero)
 {
-    lost_hero.heroes = hero.GetID();
+    lost_hero.id = hero.GetID();
     lost_hero.date = world.CountDay();
 }
 
 void Kingdom::ResetLastLostHero(void)
 {
-    lost_hero.heroes = Heroes::UNKNOWN;
+    lost_hero.id = Heroes::UNKNOWN;
     lost_hero.date = 0;
 }
 
 Heroes* Kingdom::GetLastLostHero(void) const
 {
-    return Heroes::UNKNOWN != lost_hero.heroes && world.CountDay() - lost_hero.date < DAYOFWEEK ?
-		world.GetHeroes(lost_hero.heroes) : NULL;
+    return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ?
+		world.GetHeroes(lost_hero.id) : NULL;
 }
 
 void Kingdoms::NewDay(void)
@@ -820,10 +820,10 @@ StreamBase & operator>> (StreamBase & msg, Kingdoms & obj)
 
 StreamBase & operator>> (StreamBase & sb, LastLoseHero & st)
 {
-    return sb >> st.heroes >> st.date;
+    return sb >> st.id >> st.date;
 }
 
 StreamBase & operator << (StreamBase & sb, const LastLoseHero & hero)
 {
-    return sb << hero.heroes << hero.date;
+    return sb << hero.id << hero.date;
 }
