@@ -44,10 +44,10 @@ struct CapturedObjects;
 struct LastLoseHero
 {
     LastLoseHero()
-     : heroes(Heroes::UNKNOWN)
+     : id(Heroes::UNKNOWN)
      , date(0)
     {}
-    int heroes;
+    int id;
     u32 date;
 };
 
