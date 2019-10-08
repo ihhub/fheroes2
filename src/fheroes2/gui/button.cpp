@@ -281,11 +281,11 @@ void ButtonGroups::DisableButton2(bool f)
     }
 }
 
-ButtonWithText::ButtonWithText() : MyParent() {
+ButtonWithText::ButtonWithText() : Button() {
 }
 
 ButtonWithText::ButtonWithText(s32 ox, s32 oy, int icn, u32 index1, u32 index2, const std::string& _topText) :
-  MyParent(ox, oy, icn, index1, index2) {
+  Button(ox, oy, icn, index1, index2) {
   ResetTopText(_topText);
 }
 
@@ -318,8 +318,4 @@ void ButtonWithText::ResetText(TextBox& button, SpriteBack& back, const std::str
   auto yOffSet = yIndent < 0 ? yIndent - button.h() : yIndent + button.h();
   back.Save(Rect(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet, button.w(), button.h()));
   button.Blit(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet);
-}
-
-void ButtonWithText::Draw(){
-  return MyParent::Draw();
 }

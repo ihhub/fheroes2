@@ -48,7 +48,7 @@ public:
     void	SetSprite(const Surface &, const Surface &);
     void	SetDisable(bool);
 
-    virtual void	Draw(void);
+    void	Draw(void);
     void	PressDraw(void);
     void	ReleaseDraw(void);
 
@@ -60,7 +60,6 @@ protected:
 };
 
 class ButtonWithText : public Button {
-  using MyParent = Button;
 
   public:
     ButtonWithText();
@@ -68,7 +67,6 @@ class ButtonWithText : public Button {
     void ResetTopText(const std::string& text);
     void ResetMidleText(const std::string& text);
     void ResetButtomText(const std::string& text);
-    void Draw() override;
 
   protected:
     TextBox topText;
