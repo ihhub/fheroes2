@@ -280,3 +280,46 @@ void ButtonGroups::DisableButton2(bool f)
 	}
     }
 }
+
+ButtonWithText::ButtonWithText() : MyParent() {
+}
+
+ButtonWithText::ButtonWithText(s32 ox, s32 oy, int icn, u32 index1, u32 index2, const std::string& _topText) :
+  MyParent(ox, oy, icn, index1, index2) {
+  ResetTopText(_topText);
+}
+
+void ButtonWithText::ResetTopText(const std::string& text) {
+  ResetText(topText, topBack, text, 0, -2);
+}
+void ButtonWithText::ResetMidleText(const std::string& text) {
+  ResetText(middleText, middleBack, text, 0, 0);
+}
+void ButtonWithText::ResetButtomText(const std::string& text) {
+  ResetText(buttomText, buttomBack, text, 0, sf1.h()-7);
+}
+
+void ButtonWithText::ResetText(Text& button, const std::string& text, const int xIndent, const int yIndent) {
+  button.Set(text, Font::SMALL);
+  button.Blit(x + (sf1.w() - button.w()) / 2 + xIndent, y + yIndent);
+}
+
+void ButtonWithText::ResetText(Text& button, SpriteBack& back, const std::string& text, const int xIndent, const int yIndent) {
+  back.Restore();
+  button.Set(text, Font::SMALL);
+  auto yOffSet = yIndent < 0 ? yIndent - button.h() : yIndent + button.h();
+  back.Save(Rect(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet, button.w(), button.h()));
+  button.Blit(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet);
+}
+
+void ButtonWithText::ResetText(TextBox& button, SpriteBack& back, const std::string& text, const int xIndent, const int yIndent) {
+  back.Restore();
+  button.Set(text, Font::SMALL, sf1.w());
+  auto yOffSet = yIndent < 0 ? yIndent - button.h() : yIndent + button.h();
+  back.Save(Rect(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet, button.w(), button.h()));
+  button.Blit(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet);
+}
+
+void ButtonWithText::Draw(){
+  return MyParent::Draw();
+}

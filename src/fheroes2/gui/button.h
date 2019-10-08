@@ -23,6 +23,7 @@
 #define H2BUTTON_H
 
 #include "gamedefs.h"
+#include "text.h"
 
 class Surface;
 
@@ -47,7 +48,7 @@ public:
     void	SetSprite(const Surface &, const Surface &);
     void	SetDisable(bool);
 
-    void	Draw(void);
+    virtual void	Draw(void);
     void	PressDraw(void);
     void	ReleaseDraw(void);
 
@@ -56,6 +57,32 @@ protected:
     Surface	sf2;
 
     u32		flags;
+};
+
+class ButtonWithText : public Button {
+  using MyParent = Button;
+
+  public:
+    ButtonWithText();
+    ButtonWithText(s32, s32, int, u32 index1, u32 index2, const std::string& topText = "");
+    void ResetTopText(const std::string& text);
+    void ResetMidleText(const std::string& text);
+    void ResetButtomText(const std::string& text);
+    virtual void Draw() override;
+
+  protected:
+    //Text topText;
+    TextBox topText;
+    Text middleText;
+    //Text buttomText;
+    TextBox buttomText;
+    SpriteBack topBack;
+    SpriteBack middleBack;
+    SpriteBack buttomBack;
+
+    void ResetText(Text& buttonText, const std::string& newText, const int xIndent, const int yIndent);
+    void ResetText(Text& buttonText, SpriteBack& back, const std::string& newText, const int xIndent, const int yIndent);
+    void ResetText(TextBox& buttonText, SpriteBack& back, const std::string& newText, const int xIndent, const int yIndent);
 };
 
 class ButtonSprite : public Button

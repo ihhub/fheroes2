@@ -521,6 +521,7 @@ TextBox::TextBox(const std::string & msg, int ft, const Rect & rt) : align(ALIGN
 void TextBox::Set(const std::string & msg, int ft, u32 width)
 {
     messages.clear();
+    Rect::h = 0;
     if(msg.empty()) return;
 
 #ifdef WITH_TTF

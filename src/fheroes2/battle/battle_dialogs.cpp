@@ -54,7 +54,10 @@ void Battle::SpeedRedraw(const Point & dst)
     const Sprite & sprite = AGG::GetICN(ICN::CSPANEL, (speed < 3 ? 0 : (speed < 7 ? 1 : 2)));
 
     sprite.Blit(dst);
-    text.Blit(dst.x + (sprite.w() - text.w()) / 2, dst.y + sprite.h() - 15);
+    text.Blit(dst.x + (sprite.w() - text.w()) / 2, dst.y + sprite.h() + 3);
+
+    Text speedTitle("Speed", Font::SMALL);
+    speedTitle.Blit(dst.x + (sprite.w() - speedTitle.w()) / 2, dst.y - 13);
 }
 
 void Battle::DialogBattleSettings(void)
@@ -81,17 +84,45 @@ void Battle::DialogBattleSettings(void)
 
     Button btn_ok(pos_rt.x + 113, pos_rt.y + 252, (conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN), 0, 1);
 
-    Rect   opt_speed(pos_rt.x + 36, pos_rt.y + 47, AGG::GetICN(ICN::CSPANEL, 0).w(), AGG::GetICN(ICN::CSPANEL, 0).h());
-    Button opt_grid(pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9);
-    Button opt_shadow_movement(pos_rt.x + 128, pos_rt.y + 157, ICN::CSPANEL, 10, 11);
-    Button opt_shadow_cursor(pos_rt.x + 220, pos_rt.y + 157, ICN::CSPANEL, 12, 13);
+    Rect   opt_speed(pos_rt.x + 36, pos_rt.y + 47, 
+                     AGG::GetICN(ICN::CSPANEL, 0).w(), 
+                     AGG::GetICN(ICN::CSPANEL, 0).h() + Text::height("speed", Font::SMALL));
+    ButtonWithText opt_grid(pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9, "Grid");
+    ButtonWithText opt_shadow_movement(pos_rt.x + 128, pos_rt.y + 157, ICN::CSPANEL, 10, 11, "Shadow Movement");
+    ButtonWithText opt_shadow_cursor(pos_rt.x + 220, pos_rt.y + 157, ICN::CSPANEL, 12, 13, "Shadow Cursor");
 
     btn_ok.Draw();
 
-    if(conf.ExtBattleShowGrid()) opt_grid.Press();
-    if(conf.ExtBattleShowMoveShadow()) opt_shadow_movement.Press();
-    if(conf.ExtBattleShowMouseShadow()) opt_shadow_cursor.Press();
+    if (conf.ExtBattleShowGrid()) {
+      opt_grid.Press();
+      opt_grid.ResetButtomText("On");
+    }
+    else {
+      opt_grid.ResetButtomText("Off");
+    }
 
+    if (conf.ExtBattleShowMoveShadow()) {
+      opt_shadow_movement.Press();
+      opt_shadow_movement.ResetButtomText("On");
+    }
+    else {
+      opt_shadow_movement.ResetButtomText("Off");
+    }
+
+    if (conf.ExtBattleShowMouseShadow()) {
+      opt_shadow_cursor.Press();
+      opt_shadow_cursor.ResetButtomText("On");
+    }
+    else {
+      opt_shadow_cursor.ResetButtomText("Off");
+    }
+    Rect opt_speed_buttom_text;
+    opt_speed_buttom_text.x = opt_speed.x;
+    opt_speed_buttom_text.y = opt_speed.y + 3;
+    opt_speed_buttom_text.w = AGG::GetICN(ICN::CSPANEL, 0).h();
+    opt_speed_buttom_text.h = Text::height("speed", Font::SMALL);
+
+    SpriteBack speedButtom(opt_speed_buttom_text);
     SpeedRedraw(opt_speed);
 
     opt_grid.Draw();
@@ -110,6 +141,7 @@ void Battle::DialogBattleSettings(void)
 	    conf.SetBattleSpeed((conf.BattleSpeed() + 1) % 11);
 	    Game::UpdateBattleSpeed();
 	    cursor.Hide();
+      speedButtom.Restore();
 	    SpeedRedraw(opt_speed);
 	    cursor.Show();
 	    display.Flip();
@@ -119,7 +151,14 @@ void Battle::DialogBattleSettings(void)
 	{
 	    conf.SetBattleGrid(!conf.ExtBattleShowGrid());
 	    cursor.Hide();
-	    opt_grid.isPressed() ? opt_grid.Release() : opt_grid.Press();
+      if (opt_grid.isPressed()) {
+        opt_grid.Release();
+        opt_grid.ResetButtomText("Off");
+      }
+      else {
+        opt_grid.Press();
+        opt_grid.ResetButtomText("On");
+      }
 	    opt_grid.Draw();
 	    cursor.Show();
 	    display.Flip();
@@ -129,7 +168,14 @@ void Battle::DialogBattleSettings(void)
 	{
 	    conf.SetBattleMovementShaded(!conf.ExtBattleShowMoveShadow());
 	    cursor.Hide();
-	    opt_shadow_movement.isPressed() ? opt_shadow_movement.Release() : opt_shadow_movement.Press();
+      if (opt_shadow_movement.isPressed()) {
+        opt_shadow_movement.Release();
+        opt_shadow_movement.ResetButtomText("Off");
+      }
+      else {
+        opt_shadow_movement.Press();
+        opt_shadow_movement.ResetButtomText("On");
+      }
 	    opt_shadow_movement.Draw();
 	    cursor.Show();
 	    display.Flip();
@@ -139,7 +185,14 @@ void Battle::DialogBattleSettings(void)
 	{
 	    conf.SetBattleMouseShaded(!conf.ExtBattleShowMouseShadow());
 	    cursor.Hide();
-	    opt_shadow_cursor.isPressed() ? opt_shadow_cursor.Release() : opt_shadow_cursor.Press();
+      if (opt_shadow_cursor.isPressed()) {
+        opt_shadow_cursor.Release();
+        opt_shadow_cursor.ResetButtomText("Off");
+      }
+      else {
+        opt_shadow_cursor.Press();
+        opt_shadow_cursor.ResetButtomText("On");
+      }
 	    opt_shadow_cursor.Draw();
 	    cursor.Show();
 	    display.Flip();
