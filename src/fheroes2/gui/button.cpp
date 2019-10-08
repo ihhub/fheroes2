@@ -299,19 +299,6 @@ void ButtonWithText::ResetButtomText(const std::string& text) {
   ResetText(buttomText, buttomBack, text, 0, sf1.h()-7);
 }
 
-void ButtonWithText::ResetText(Text& button, const std::string& text, const int xIndent, const int yIndent) {
-  button.Set(text, Font::SMALL);
-  button.Blit(x + (sf1.w() - button.w()) / 2 + xIndent, y + yIndent);
-}
-
-void ButtonWithText::ResetText(Text& button, SpriteBack& back, const std::string& text, const int xIndent, const int yIndent) {
-  back.Restore();
-  button.Set(text, Font::SMALL);
-  auto yOffSet = yIndent < 0 ? yIndent - button.h() : yIndent + button.h();
-  back.Save(Rect(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet, button.w(), button.h()));
-  button.Blit(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet);
-}
-
 void ButtonWithText::ResetText(TextBox& button, SpriteBack& back, const std::string& text, const int xIndent, const int yIndent) {
   back.Restore();
   button.Set(text, Font::SMALL, sf1.w());

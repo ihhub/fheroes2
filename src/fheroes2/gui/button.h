@@ -70,14 +70,12 @@ class ButtonWithText : public Button {
 
   protected:
     TextBox topText;
-    Text middleText;
+    TextBox middleText;
     TextBox buttomText;
     SpriteBack topBack;
     SpriteBack middleBack;
     SpriteBack buttomBack;
 
-    void ResetText(Text& buttonText, const std::string& newText, const int xIndent, const int yIndent);
-    void ResetText(Text& buttonText, SpriteBack& back, const std::string& newText, const int xIndent, const int yIndent);
     void ResetText(TextBox& buttonText, SpriteBack& back, const std::string& newText, const int xIndent, const int yIndent);
 };
 
