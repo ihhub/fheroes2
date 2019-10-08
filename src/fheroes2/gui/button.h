@@ -68,13 +68,11 @@ class ButtonWithText : public Button {
     void ResetTopText(const std::string& text);
     void ResetMidleText(const std::string& text);
     void ResetButtomText(const std::string& text);
-    virtual void Draw() override;
+    void Draw() override;
 
   protected:
-    //Text topText;
     TextBox topText;
     Text middleText;
-    //Text buttomText;
     TextBox buttomText;
     SpriteBack topBack;
     SpriteBack middleBack;
