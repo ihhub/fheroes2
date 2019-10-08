@@ -42,6 +42,8 @@ namespace Battle
 {
     void GetSummaryParams(int res1, int res2, const HeroBase &, u32 exp, int &, std::string &);
     void SpeedRedraw(const Point &);
+    void doOnButtonClicked(ButtonWithText& button, Display & display, Cursor& cursor);
+    void initButtonState(bool state, ButtonWithText& button);
 }
 
 void Battle::SpeedRedraw(const Point & dst)
@@ -60,37 +62,37 @@ void Battle::SpeedRedraw(const Point & dst)
     speedTitle.Blit(dst.x + (sprite.w() - speedTitle.w()) / 2, dst.y - 13);
 }
 
+void Battle::doOnButtonClicked(ButtonWithText& button, Display & display, Cursor& cursor) {
+  cursor.Hide();
+  if (button.isPressed()) {
+    button.Release();
+    button.ResetButtomText("Off");
+  }
+  else {
+    button.Press();
+    button.ResetButtomText("On");
+  }
+  button.Draw();
+  cursor.Show();
+  display.Flip();
+}
+
+void Battle::initButtonState(bool state, ButtonWithText& button) {
+  if (state) {
+    button.Press();
+    button.ResetButtomText("On");
+  }
+  else {
+    button.ResetButtomText("Off");
+  }
+}
+
 void Battle::DialogBattleSettings(void)
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
-
-    auto doOnButtonClicked = [&display, &cursor](ButtonWithText& button) {
-      cursor.Hide();
-      if (button.isPressed()) {
-        button.Release();
-        button.ResetButtomText("Off");
-      }
-      else {
-        button.Press();
-        button.ResetButtomText("On");
-      }
-      button.Draw();
-      cursor.Show();
-      display.Flip();
-    };
-
-    auto initButtonState = [](bool state, ButtonWithText& button) {
-      if (state) {
-        button.Press();
-        button.ResetButtomText("On");
-      }
-      else {
-        button.ResetButtomText("Off");
-      }
-    };
 
     cursor.Hide();
 
@@ -146,17 +148,17 @@ void Battle::DialogBattleSettings(void)
       else if (le.MouseClickLeft(opt_grid))
       {
         conf.SetBattleGrid(!conf.ExtBattleShowGrid());
-        doOnButtonClicked(opt_grid);
+        doOnButtonClicked(opt_grid, display, cursor);
       }
       else if (le.MouseClickLeft(opt_shadow_movement))
       {
         conf.SetBattleMovementShaded(!conf.ExtBattleShowMoveShadow());
-        doOnButtonClicked(opt_shadow_movement);
+        doOnButtonClicked(opt_shadow_movement, display, cursor);
       }
       else if (le.MouseClickLeft(opt_shadow_cursor))
       {
         conf.SetBattleMouseShaded(!conf.ExtBattleShowMouseShadow());
-        doOnButtonClicked(opt_shadow_cursor);
+        doOnButtonClicked(opt_shadow_cursor, display, cursor);
       }
       else if(Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT) || le.MouseClickLeft(btn_ok)) break;
     }
