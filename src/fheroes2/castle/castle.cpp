@@ -1599,7 +1599,7 @@ bool Castle::HaveNearlySea(void) const
 	const s32 index = Maps::GetIndexFromAbsPoint(center.x, center.y + 2);
 	const Maps::Tiles & left = world.GetTiles(index - 1);
 	const Maps::Tiles & right = world.GetTiles(index + 1);
-	const Maps::Tiles & center = world.GetTiles(index);
+	const Maps::Tiles & worldCenter = world.GetTiles(index);
 
 	return left.isWater() || right.isWater() || center.isWater();
     }
@@ -1624,7 +1624,7 @@ bool Castle::PresentBoat(void) const
 	{
 	    const Maps::Tiles & left = world.GetTiles(index - 1);
 	    const Maps::Tiles & right = world.GetTiles(index + 1);
-	    const Maps::Tiles & center = world.GetTiles(index);
+	    const Maps::Tiles & worldCenter = world.GetTiles(index);
 
 	    if(TilePresentBoat(left) || TilePresentBoat(right) || TilePresentBoat(center)) return true;
 	}
@@ -1930,7 +1930,7 @@ bool Castle::BuyBoat(void)
     const s32 index = Maps::GetIndexFromAbsPoint(center.x, center.y + 2);
     Maps::Tiles & left = world.GetTiles(index - 1);
     Maps::Tiles & right = world.GetTiles(index + 1);
-    Maps::Tiles & center = world.GetTiles(index);
+    Maps::Tiles & worldCenter = world.GetTiles(index);
     Kingdom & kingdom = GetKingdom();
 
     if(MP2::OBJ_ZERO == left.GetObject() && left.isWater())

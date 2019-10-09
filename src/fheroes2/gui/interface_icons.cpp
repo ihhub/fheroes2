@@ -382,13 +382,13 @@ void Interface::IconsPanel::SetPos(s32 ox, s32 oy)
 
     BorderWindow::SetPosition(ox, oy, 144, iconsCount * ICONS_CURSOR_HEIGHT);
 
-    const Rect & area = GetArea();
+    const Rect & windowArea = GetArea();
 
     heroesIcons.SetIconsCount(iconsCount);
     castleIcons.SetIconsCount(iconsCount);
 
-    heroesIcons.SetPos(area.x, area.y);
-    castleIcons.SetPos(area.x + 72, area.y);
+    heroesIcons.SetPos(windowArea.x, windowArea.y);
+    castleIcons.SetPos(windowArea.x + 72, windowArea.y);
 }
 
 void Interface::IconsPanel::Redraw(void)

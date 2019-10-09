@@ -118,7 +118,7 @@ void Interface::Radar::Build(void)
 /* generate mini maps */
 void Interface::Radar::Generate(void)
 {
-    const Size & area = GetArea();
+    const Size & radarArea = GetArea();
     const s32 world_w = world.w();
     const s32 world_h = world.h();
 
@@ -148,29 +148,29 @@ void Interface::Radar::Generate(void)
 	}
     }
 
-    if(spriteArea.GetSize() != area)
+    if(spriteArea.GetSize() != radarArea)
     {
         Size new_sz;
 
         if(world_w < world_h)
         {
-            new_sz.w = (world_w * area.h) / world_h;
-            new_sz.h = area.h;
-            offset.x = (area.w - new_sz.w) / 2;
+            new_sz.w = (world_w * radarArea.h) / world_h;
+            new_sz.h = radarArea.h;
+            offset.x = (radarArea.w - new_sz.w) / 2;
             offset.y = 0;
         }
         else
         if(world_w > world_h)
         {
-            new_sz.w = area.w;
-            new_sz.h = (world_h * area.w) / world_w;
+            new_sz.w = radarArea.w;
+            new_sz.h = (world_h * radarArea.w) / world_w;
             offset.x = 0;
-            offset.y = (area.h - new_sz.h) / 2;
+            offset.y = (radarArea.h - new_sz.h) / 2;
         }
         else
         {
-            new_sz.w = area.w;
-            new_sz.h = area.h;
+            new_sz.w = radarArea.w;
+            new_sz.h = radarArea.h;
         }
 
         spriteArea = spriteArea.RenderScale(new_sz);
@@ -191,7 +191,7 @@ void Interface::Radar::Redraw(void)
 {
     Display & display = Display::Get();
     const Settings & conf = Settings::Get();
-    const Rect & area = GetArea();
+    const Rect & radarArea = GetArea();
 
     if(conf.ExtGameHideInterface() && conf.ShowRadar())
     {
@@ -204,12 +204,12 @@ void Interface::Radar::Redraw(void)
     if(! conf.ExtGameHideInterface() || conf.ShowRadar())
     {
 	if(hide)
-	    AGG::GetICN((conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO), 0).Blit(area.x, area.y);
+	    AGG::GetICN((conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO), 0).Blit(radarArea.x, radarArea.y);
 	else
 	{
-	    if(world.w() != world.h()) display.FillRect(area, ColorBlack);
+	    if(world.w() != world.h()) display.FillRect(radarArea, ColorBlack);
 	    cursorArea.Hide();
-	    spriteArea.Blit(area.x + offset.x, area.y + offset.y, display);
+	    spriteArea.Blit(radarArea.x + offset.x, radarArea.y + offset.y, display);
 	    RedrawObjects(Players::FriendColors());
 	    RedrawCursor();
 	}
@@ -236,14 +236,14 @@ int GetChunkSize(float size1, float size2)
 void Interface::Radar::RedrawObjects(int color)
 {
     Display & display = Display::Get();
-    const Rect & area = GetArea();
+    const Rect & radarArea = GetArea();
     const s32 world_w = world.w();
     const s32 world_h = world.h();
-    const int areaw = (offset.x ? area.w - 2 * offset.x : area.w);
-    const int areah = (offset.y ? area.h - 2 * offset.y : area.h);
+    const int areaw = (offset.x ? radarArea.w - 2 * offset.x : radarArea.w);
+    const int areah = (offset.y ? radarArea.h - 2 * offset.y : radarArea.h);
 
-    int stepx = world_w / area.w;
-    int stepy = world_h / area.h;
+    int stepx = world_w / radarArea.w;
+    int stepy = world_h / radarArea.h;
 
     if(0 == stepx) stepx = 1;
     if(0 == stepy) stepy = 1;
@@ -304,8 +304,8 @@ void Interface::Radar::RedrawObjects(int color)
 		}
 	    }
 
-            const int dstx = area.x + offset.x + (xx * areaw) / world_w;
-            const int dsty = area.y + offset.y + (yy * areah) / world_h;
+            const int dstx = radarArea.x + offset.x + (xx * areaw) / world_w;
+            const int dsty = radarArea.y + offset.y + (yy * areah) / world_h;
 
             if(sw > 1)
             {
@@ -326,11 +326,11 @@ void Interface::Radar::RedrawCursor(void)
 
     if(! conf.ExtGameHideInterface() || conf.ShowRadar())
     {
-	const Rect & area = GetArea();
+	const Rect & radarArea = GetArea();
 	const Rect & rectMaps = interface.GetGameArea().GetRectMaps();
 
-	s32 areaw = (offset.x ? area.w - 2 * offset.x : area.w);
-	s32 areah = (offset.y ? area.h - 2 * offset.y : area.h);
+	s32 areaw = (offset.x ? radarArea.w - 2 * offset.x : radarArea.w);
+	s32 areah = (offset.y ? radarArea.h - 2 * offset.y : radarArea.h);
 
         const Size sz((rectMaps.w * areaw) / world.w(),
                         (rectMaps.h * areah) / world.h());
@@ -342,8 +342,8 @@ void Interface::Radar::RedrawCursor(void)
             cursorArea.DrawBorder(AGG::GetPaletteColor(RADARCOLOR), false);
 	}
 
-        cursorArea.Move(area.x + offset.x + (rectMaps.x * areaw) / world.w(),
-            		    area.y + offset.y + (rectMaps.y * areah) / world.h());
+        cursorArea.Move(radarArea.x + offset.x + (rectMaps.x * radarAreaw) / world.w(),
+            		    radarArea.y + offset.y + (rectMaps.y * areah) / world.h());
     }
 }
 
@@ -352,7 +352,7 @@ void Interface::Radar::QueueEventProcessing(void)
     GameArea & gamearea = interface.GetGameArea();
     Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
-    const Rect & area = GetArea();
+    const Rect & radarArea = GetArea();
 
     // move border
     if(conf.ShowRadar() &&
@@ -362,16 +362,16 @@ void Interface::Radar::QueueEventProcessing(void)
     }
     else
     // move cursor
-    if(le.MouseCursor(area))
+    if(le.MouseCursor(radarArea))
     {
 	if(le.MouseClickLeft() || le.MousePressLeft())
 	{
     	    const Point prev(gamearea.GetRectMaps());
     	    const Point & pt = le.GetMouseCursor();
 
-	    if(area & pt)
+	    if(radarArea & pt)
 	    {
-		gamearea.SetCenter((pt.x - area.x) * world.w() / area.w, (pt.y - area.y) * world.h() / area.h);
+		gamearea.SetCenter((pt.x - radarArea.x) * world.w() / area.w, (pt.y - area.y) * world.h() / area.h);
 
     		if(prev != gamearea.GetRectMaps())
     		{
@@ -387,20 +387,20 @@ void Interface::Radar::QueueEventProcessing(void)
 	else
 	if(! conf.QVGA())
 	{
-	    const Rect & area = GetArea();
-	    Size newSize(area.w, area.h);
+	    const Rect & radarArea = GetArea();
+	    Size newSize(radarArea.w, radarArea.h);
 
 	    if(le.MouseWheelUp())
 	    {
-		if(area.w != world.w() ||
-	    		    area.h != world.h())
+		if(radarArea.w != world.w() ||
+	    		    radarArea.h != world.h())
 		    newSize = Size(world.w(), world.h());
 	    }
 	    else
 	    if(le.MouseWheelDn())
 	    {
-		if(area.w != RADARWIDTH ||
-	    		    area.h != RADARWIDTH)
+		if(radarArea.w != RADARWIDTH ||
+	    		    radarArea.h != RADARWIDTH)
 		    newSize = Size(RADARWIDTH, RADARWIDTH);
 	    }
 

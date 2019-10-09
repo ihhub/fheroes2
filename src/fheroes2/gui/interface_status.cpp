@@ -387,7 +387,7 @@ void Interface::StatusWindow::QueueEventProcessing(void)
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    const Rect & area = GetArea();
+    const Rect & gameArea = GetArea();
 
     if(Settings::Get().ShowStatus() &&
 	// move border window
@@ -395,7 +395,7 @@ void Interface::StatusWindow::QueueEventProcessing(void)
     {
     }
     else
-    if(le.MouseClickLeft(area))
+    if(le.MouseClickLeft(gameArea))
     {
         cursor.Hide();
         NextState();
