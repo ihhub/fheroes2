@@ -60,7 +60,6 @@ protected:
 };
 
 class LabeledButton : public Button {
-
   public:
     LabeledButton();
     LabeledButton( s32, s32, int, u32 index1, u32 index2, const std::string& topText = "" );
