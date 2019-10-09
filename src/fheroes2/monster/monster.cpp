@@ -109,7 +109,7 @@ namespace
 	{    11,   7,   7,   9,  30,      Speed::FAST,   2,    12, _("Mage")           , _("Magi")          , { 600, 0, 0, 0, 0, 0, 0} },
 	{    12,   8,   7,   9,  35,  Speed::VERYFAST,   2,    24, _("Archmage")       , _("Archmagi")      , { 700, 0, 0, 0, 0, 0, 0} },
 	{    13,  10,  20,  30, 150,   Speed::AVERAGE,   1,     0, _("Giant")          , _("Giants")        , { 2000, 0, 0, 0, 0, 0, 1} },
-	{    15,  15,  20,  30, 300,  Speed::VERYFAST,   1,    24, _("Titan")          , _("Titans")        , { 5000, 0, 0, 0, 0, 0, 2} },
+	{    15,  15,  20,  30, 300,  Speed::VERYFAST,   3,    24, _("Titan")          , _("Titans")        , { 7500, 0, 0, 0, 0, 0, 0} },
 
 	// atck dfnc  min  max   hp             speed grwn  shots  name                  multiname            cost
 	{     4,   3,   2,   3,   4,   Speed::AVERAGE,   8,     0, _("Skeleton")       , _("Skeletons")     , { 75, 0, 0, 0, 0, 0, 0} },
