@@ -59,28 +59,28 @@ void Battle::SpeedRedraw(const Point & dst)
 }
 
 void Battle::DoOnButtonClicked(LabeledButton& button, Display & display, Cursor& cursor) {
-  cursor.Hide();
-  if (button.isPressed()) {
-    button.Release();
-    button.ResetButtomText("Off");
-  }
-  else {
-    button.Press();
-    button.ResetButtomText("On");
-  }
-  button.Draw();
-  cursor.Show();
-  display.Flip();
+    cursor.Hide();
+    if (button.isPressed()) {
+      button.Release();
+      button.ResetButtomText(_("Off"));
+    }
+    else {
+      button.Press();
+      button.ResetButtomText(_("On"));
+    }
+    button.Draw();
+    cursor.Show();
+    display.Flip();
 }
 
 void Battle::InitButtonState(LabeledButton& button, bool state) {
-  if (state) {
-    button.Press();
-    button.ResetButtomText("On");
-  }
-  else {
-    button.ResetButtomText("Off");
-  }
+    if (state) {
+      button.Press();
+      button.ResetButtomText(_("On"));
+    }
+    else {
+      button.ResetButtomText(_("Off"));
+    }
 }
 
 void Battle::DialogBattleSettings(void)
@@ -131,34 +131,33 @@ void Battle::DialogBattleSettings(void)
     cursor.Show();
     display.Flip();
 
-    while(le.HandleEvents())
-    {
-	    le.MousePressLeft(btn_ok) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
+    while(le.HandleEvents()) {
+	      le.MousePressLeft(btn_ok) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
-	    if(le.MouseClickLeft(opt_speed)) {
-	        conf.SetBattleSpeed((conf.BattleSpeed() + 1) % 11);
-	        Game::UpdateBattleSpeed();
-	        cursor.Hide();
-          speed_buttom_back.Restore();
-	        SpeedRedraw(opt_speed);
-	        cursor.Show();
-	        display.Flip();
-	    }
-      else if (le.MouseClickLeft(opt_grid)) {
-        conf.SetBattleGrid(!conf.ExtBattleShowGrid());
-        DoOnButtonClicked(opt_grid, display, cursor);
-      }
-      else if (le.MouseClickLeft(opt_shadow_movement)) {
-        conf.SetBattleMovementShaded(!conf.ExtBattleShowMoveShadow());
-        DoOnButtonClicked(opt_shadow_movement, display, cursor);
-      }
-      else if (le.MouseClickLeft(opt_shadow_cursor)) {
-        conf.SetBattleMouseShaded(!conf.ExtBattleShowMouseShadow());
-        DoOnButtonClicked(opt_shadow_cursor, display, cursor);
-      }
-      else if (Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT) || le.MouseClickLeft(btn_ok)) {
-        break;
-      }
+	      if(le.MouseClickLeft(opt_speed)) {
+	          conf.SetBattleSpeed((conf.BattleSpeed() + 1) % 11);
+	          Game::UpdateBattleSpeed();
+	          cursor.Hide();
+            speed_buttom_back.Restore();
+	          SpeedRedraw(opt_speed);
+	          cursor.Show();
+	          display.Flip();
+	      }
+        else if (le.MouseClickLeft(opt_grid)) {
+          conf.SetBattleGrid(!conf.ExtBattleShowGrid());
+          DoOnButtonClicked(opt_grid, display, cursor);
+        }
+        else if (le.MouseClickLeft(opt_shadow_movement)) {
+          conf.SetBattleMovementShaded(!conf.ExtBattleShowMoveShadow());
+          DoOnButtonClicked(opt_shadow_movement, display, cursor);
+        }
+        else if (le.MouseClickLeft(opt_shadow_cursor)) {
+          conf.SetBattleMouseShaded(!conf.ExtBattleShowMouseShadow());
+          DoOnButtonClicked(opt_shadow_cursor, display, cursor);
+        }
+        else if (Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT) || le.MouseClickLeft(btn_ok)) {
+          break;
+        }
     }
 
     // restore background
