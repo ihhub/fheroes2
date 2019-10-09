@@ -58,7 +58,8 @@ void Battle::SpeedRedraw(const Point & dst)
     text.Blit( dst.x + ( sprite.w() - text.w() ) / 2, dst.y + sprite.h() + 3 );
 }
 
-void Battle::DoOnButtonClicked( LabeledButton & button, Display & display, Cursor & cursor ) {
+void Battle::DoOnButtonClicked( LabeledButton & button, Display & display, Cursor & cursor )
+{
     cursor.Hide();
     if ( button.isPressed() ) {
         button.Release();
@@ -73,7 +74,8 @@ void Battle::DoOnButtonClicked( LabeledButton & button, Display & display, Curso
     display.Flip();
 }
 
-void Battle::InitButtonState( LabeledButton& button, bool state ) {
+void Battle::InitButtonState( LabeledButton& button, bool state )
+{
     if ( state ) {
         button.Press();
         button.ResetButtomText( _( "On" ) );
@@ -107,7 +109,7 @@ void Battle::DialogBattleSettings(void)
     Button btn_ok(pos_rt.x + 113, pos_rt.y + 252, (conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN), 0, 1);
     SpriteBack speed_buttom_back(
         Rect( pos_rt.x + 36, pos_rt.y + 47 + AGG::GetICN( ICN::CSPANEL, 0 ).h(), AGG::GetICN( ICN::CSPANEL, 0 ).h(), Text::height( "speed", Font::SMALL ) + 3 ) );
-    const Rect opt_speed(pos_rt.x + 36, pos_rt.y + 47, AGG::GetICN(ICN::CSPANEL, 0).w(), AGG::GetICN(ICN::CSPANEL, 0 ).h() + Text::height( "speed", Font::SMALL ) );
+    const Rect opt_speed( pos_rt.x + 36, pos_rt.y + 47, AGG::GetICN( ICN::CSPANEL, 0 ).w(), AGG::GetICN( ICN::CSPANEL, 0 ).h() + Text::height( "speed", Font::SMALL ) );
     LabeledButton opt_grid( pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9, "Grid" );
     LabeledButton opt_shadow_movement( pos_rt.x + 128, pos_rt.y + 157, ICN::CSPANEL, 10, 11, "Shadow Movement" );
     LabeledButton opt_shadow_cursor( pos_rt.x + 220, pos_rt.y + 157, ICN::CSPANEL, 12, 13, "Shadow Cursor" );
@@ -130,7 +132,7 @@ void Battle::DialogBattleSettings(void)
     display.Flip();
 
     while ( le.HandleEvents() ) {
-	    le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
+      le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
 	    if ( le.MouseClickLeft ( opt_speed ) ) {
 	      conf.SetBattleSpeed( ( conf.BattleSpeed() + 1 ) % 11 );

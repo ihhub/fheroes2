@@ -62,10 +62,10 @@ protected:
 class LabeledButton : public Button {
   public:
     LabeledButton();
-    LabeledButton( s32, s32, int, u32 index1, u32 index2, const std::string& topText = "" );
-    void ResetTopText( const std::string& text );
-    void ResetMidleText( const std::string& text );
-    void ResetButtomText( const std::string& text );
+    LabeledButton( s32, s32, int, u32 index1, u32 index2, const std::string & topText = "" );
+    void ResetTopText( const std::string & text );
+    void ResetMidleText( const std::string & text );
+    void ResetButtomText( const std::string & text );
 
   protected:
     TextBox topText;
@@ -75,7 +75,7 @@ class LabeledButton : public Button {
     SpriteBack middleBack;
     SpriteBack buttomBack;
 
-    void ResetText( TextBox& buttonText, SpriteBack& back, const std::string& newText, const int xIndent, const int yIndent );
+    void ResetText( TextBox & buttonText, SpriteBack & back, const std::string & newText, const int xIndent, const int yIndent );
 };
 
 class ButtonSprite : public Button
