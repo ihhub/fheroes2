@@ -107,7 +107,7 @@ void Battle::DialogBattleSettings(void)
     Button btn_ok(pos_rt.x + 113, pos_rt.y + 252, (conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN), 0, 1);
     SpriteBack speed_buttom_back(Rect(pos_rt.x + 36, pos_rt.y + 47 + AGG::GetICN(ICN::CSPANEL, 0).h(),
                           AGG::GetICN(ICN::CSPANEL, 0).h(), Text::height("speed", Font::SMALL) + 3));
-    Rect   opt_speed(pos_rt.x + 36, pos_rt.y + 47, 
+    const Rect opt_speed(pos_rt.x + 36, pos_rt.y + 47, 
                      AGG::GetICN(ICN::CSPANEL, 0).w(), 
                      AGG::GetICN(ICN::CSPANEL, 0).h() + Text::height("speed", Font::SMALL));
     LabeledButton opt_grid(pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9, "Grid");
