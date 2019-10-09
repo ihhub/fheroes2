@@ -156,7 +156,7 @@ void Battle::DialogBattleSettings(void)
             DoOnButtonClicked( opt_shadow_cursor, display, cursor );
         }
         else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok ) ) {
-          break;
+            break;
         }
     }
 
