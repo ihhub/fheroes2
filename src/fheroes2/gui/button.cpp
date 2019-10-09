@@ -281,30 +281,36 @@ void ButtonGroups::DisableButton2(bool f)
     }
 }
 
-LabeledButton::LabeledButton() : Button() {
+LabeledButton::LabeledButton()
+    : Button() {
 }
 
-LabeledButton::LabeledButton(s32 ox, s32 oy, int icn, u32 index1, u32 index2, const std::string& _topText) :
-  Button(ox, oy, icn, index1, index2) {
-  ResetTopText(_topText);
+LabeledButton::LabeledButton( s32 ox, s32 oy, int icn, u32 index1, u32 index2, const std::string& _topText )
+    : Button( ox, oy, icn, index1, index2 )
+{
+  ResetTopText( _topText );
 }
 
-void LabeledButton::ResetTopText(const std::string& text) {
-  ResetText(topText, topBack, text, 0, -2);
+void LabeledButton::ResetTopText( const std::string& text )
+{
+  ResetText( topText, topBack, text, 0, -2 );
 }
 
-void LabeledButton::ResetMidleText(const std::string& text) {
-  ResetText(middleText, middleBack, text, 0, 0);
+void LabeledButton::ResetMidleText( const std::string& text )
+{
+  ResetText(middleText, middleBack, text, 0, 0 );
 }
 
-void LabeledButton::ResetButtomText(const std::string& text) {
-  ResetText(buttomText, buttomBack, text, 0, sf1.h()-7);
+void LabeledButton::ResetButtomText( const std::string& text )
+{
+  ResetText( buttomText, buttomBack, text, 0, sf1.h() - 7 );
 }
 
-void LabeledButton::ResetText(TextBox& button, SpriteBack& back, const std::string& text, const int xIndent, const int yIndent) {
+void LabeledButton::ResetText( TextBox& button, SpriteBack& back, const std::string& text, const int xIndent, const int yIndent )
+{
   back.Restore();
-  button.Set(text, Font::SMALL, sf1.w());
+  button.Set( text, Font::SMALL, sf1.w() );
   int yOffSet = yIndent < 0 ? yIndent - button.h() : yIndent + button.h();
-  back.Save(Rect(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet, button.w(), button.h()));
-  button.Blit(x + (sf1.w() - button.w()) / 2 + xIndent, y + yOffSet);
+  back.Save( Rect( x + ( sf1.w() - button.w() ) / 2 + xIndent, y + yOffSet, button.w(), button.h() ) );
+  button.Blit( x + ( sf1.w() - button.w() ) / 2 + xIndent, y + yOffSet );
 }
