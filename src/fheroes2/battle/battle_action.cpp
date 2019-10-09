@@ -57,10 +57,7 @@ void Battle::Arena::BattleProcess(Unit & attacker, Unit & defender, s32 dst, int
     else
 	attacker.UpdateDirection(board[dst].GetPos());
 
-
-
-
-    TargetsInfo targets = GetTargetsForDamage(attacker, defender, dst);		
+    TargetsInfo targets = GetTargetsForDamage(attacker, defender, dst);
 
     if(Board::isReflectDirection(dir) != attacker.isReflect())
 	attacker.UpdateDirection(board[dst].GetPos());
