@@ -460,9 +460,7 @@ bool BuildingInfo::DialogBuyBuilding(bool buttons) const
     if(ALLOW_BUILD != bcond)
     {
 	const std::string & ext = GetConditionDescription();
-
-	if(!ext.empty() && ext != description)
-	{
+	if (!ext.empty() && ext != description) {
 	    box1str.append("\n \n");
 	    box1str.append(ext);
 	}
