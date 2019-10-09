@@ -59,11 +59,11 @@ protected:
     u32		flags;
 };
 
-class ButtonWithText : public Button {
+class LabeledButton : public Button {
 
   public:
-    ButtonWithText();
-    ButtonWithText(s32, s32, int, u32 index1, u32 index2, const std::string& topText = "");
+    LabeledButton();
+    LabeledButton(s32, s32, int, u32 index1, u32 index2, const std::string& topText = "");
     void ResetTopText(const std::string& text);
     void ResetMidleText(const std::string& text);
     void ResetButtomText(const std::string& text);

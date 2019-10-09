@@ -42,8 +42,8 @@ namespace Battle
 {
     void GetSummaryParams(int res1, int res2, const HeroBase &, u32 exp, int &, std::string &);
     void SpeedRedraw(const Point &);
-    void doOnButtonClicked(ButtonWithText& button, Display & display, Cursor& cursor);
-    void initButtonState(bool state, ButtonWithText& button);
+    void DoOnButtonClicked(LabeledButton& button, Display & display, Cursor& cursor);
+    void InitButtonState(LabeledButton& button, bool state);
 }
 
 void Battle::SpeedRedraw(const Point & dst)
@@ -52,17 +52,13 @@ void Battle::SpeedRedraw(const Point & dst)
     std::string str = _("speed: %{speed}");
 
     StringReplace(str, "%{speed}", speed);
-    Text text(str, Font::SMALL);
     const Sprite & sprite = AGG::GetICN(ICN::CSPANEL, (speed < 3 ? 0 : (speed < 7 ? 1 : 2)));
-
     sprite.Blit(dst);
+    const Text text(str, Font::SMALL);
     text.Blit(dst.x + (sprite.w() - text.w()) / 2, dst.y + sprite.h() + 3);
-
-    Text speedTitle("Speed", Font::SMALL);
-    speedTitle.Blit(dst.x + (sprite.w() - speedTitle.w()) / 2, dst.y - 13);
 }
 
-void Battle::doOnButtonClicked(ButtonWithText& button, Display & display, Cursor& cursor) {
+void Battle::DoOnButtonClicked(LabeledButton& button, Display & display, Cursor& cursor) {
   cursor.Hide();
   if (button.isPressed()) {
     button.Release();
@@ -77,7 +73,7 @@ void Battle::doOnButtonClicked(ButtonWithText& button, Display & display, Cursor
   display.Flip();
 }
 
-void Battle::initButtonState(bool state, ButtonWithText& button) {
+void Battle::InitButtonState(LabeledButton& button, bool state) {
   if (state) {
     button.Press();
     button.ResetButtomText("On");
@@ -109,20 +105,24 @@ void Battle::DialogBattleSettings(void)
     display.FillRect(back.GetArea(), ColorBlack);
     dialog.Blit(pos_rt.x, pos_rt.y);
     Button btn_ok(pos_rt.x + 113, pos_rt.y + 252, (conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN), 0, 1);
-    SpriteBack speedButtom(Rect(pos_rt.x + 36, pos_rt.y + 47 + AGG::GetICN(ICN::CSPANEL, 0).h(),
+    SpriteBack speed_buttom_back(Rect(pos_rt.x + 36, pos_rt.y + 47 + AGG::GetICN(ICN::CSPANEL, 0).h(),
                           AGG::GetICN(ICN::CSPANEL, 0).h(), Text::height("speed", Font::SMALL) + 3));
     Rect   opt_speed(pos_rt.x + 36, pos_rt.y + 47, 
                      AGG::GetICN(ICN::CSPANEL, 0).w(), 
                      AGG::GetICN(ICN::CSPANEL, 0).h() + Text::height("speed", Font::SMALL));
-    ButtonWithText opt_grid(pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9, "Grid");
-    ButtonWithText opt_shadow_movement(pos_rt.x + 128, pos_rt.y + 157, ICN::CSPANEL, 10, 11, "Shadow Movement");
-    ButtonWithText opt_shadow_cursor(pos_rt.x + 220, pos_rt.y + 157, ICN::CSPANEL, 12, 13, "Shadow Cursor");
+    LabeledButton opt_grid(pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9, "Grid");
+    LabeledButton opt_shadow_movement(pos_rt.x + 128, pos_rt.y + 157, ICN::CSPANEL, 10, 11, "Shadow Movement");
+    LabeledButton opt_shadow_cursor(pos_rt.x + 220, pos_rt.y + 157, ICN::CSPANEL, 12, 13, "Shadow Cursor");
 
-    initButtonState(conf.ExtBattleShowGrid(), opt_grid);
-    initButtonState(conf.ExtBattleShowMoveShadow(), opt_shadow_movement);
-    initButtonState(conf.ExtBattleShowMouseShadow(), opt_shadow_cursor);
+    InitButtonState(opt_grid, conf.ExtBattleShowGrid());
+    InitButtonState(opt_shadow_movement, conf.ExtBattleShowMoveShadow());
+    InitButtonState(opt_shadow_cursor, conf.ExtBattleShowMouseShadow());
 
     btn_ok.Draw();
+
+    const Text speedTitle("Speed", Font::SMALL);
+    speedTitle.Blit(opt_speed.x + (AGG::GetICN(ICN::CSPANEL, 0).w() - speedTitle.w()) / 2, opt_speed.y - 13);
+
     SpeedRedraw(opt_speed);
     opt_grid.Draw();
     opt_shadow_movement.Draw();
@@ -135,32 +135,30 @@ void Battle::DialogBattleSettings(void)
     {
 	    le.MousePressLeft(btn_ok) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
-	    if(le.MouseClickLeft(opt_speed))
-	    {
+	    if(le.MouseClickLeft(opt_speed)) {
 	        conf.SetBattleSpeed((conf.BattleSpeed() + 1) % 11);
 	        Game::UpdateBattleSpeed();
 	        cursor.Hide();
-          speedButtom.Restore();
+          speed_buttom_back.Restore();
 	        SpeedRedraw(opt_speed);
 	        cursor.Show();
 	        display.Flip();
 	    }
-      else if (le.MouseClickLeft(opt_grid))
-      {
+      else if (le.MouseClickLeft(opt_grid)) {
         conf.SetBattleGrid(!conf.ExtBattleShowGrid());
-        doOnButtonClicked(opt_grid, display, cursor);
+        DoOnButtonClicked(opt_grid, display, cursor);
       }
-      else if (le.MouseClickLeft(opt_shadow_movement))
-      {
+      else if (le.MouseClickLeft(opt_shadow_movement)) {
         conf.SetBattleMovementShaded(!conf.ExtBattleShowMoveShadow());
-        doOnButtonClicked(opt_shadow_movement, display, cursor);
+        DoOnButtonClicked(opt_shadow_movement, display, cursor);
       }
-      else if (le.MouseClickLeft(opt_shadow_cursor))
-      {
+      else if (le.MouseClickLeft(opt_shadow_cursor)) {
         conf.SetBattleMouseShaded(!conf.ExtBattleShowMouseShadow());
-        doOnButtonClicked(opt_shadow_cursor, display, cursor);
+        DoOnButtonClicked(opt_shadow_cursor, display, cursor);
       }
-      else if(Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT) || le.MouseClickLeft(btn_ok)) break;
+      else if (Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT) || le.MouseClickLeft(btn_ok)) {
+        break;
+      }
     }
 
     // restore background
