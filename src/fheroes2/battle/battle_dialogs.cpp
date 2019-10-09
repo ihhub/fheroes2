@@ -135,25 +135,25 @@ void Battle::DialogBattleSettings(void)
         le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
 	      if ( le.MouseClickLeft ( opt_speed ) ) {
-	        conf.SetBattleSpeed( ( conf.BattleSpeed() + 1 ) % 11 );
-	        Game::UpdateBattleSpeed();
-	        cursor.Hide();
-          speed_buttom_back.Restore();
-	        SpeedRedraw( opt_speed );
-	        cursor.Show();
-	        display.Flip();
+	          conf.SetBattleSpeed( ( conf.BattleSpeed() + 1 ) % 11 );
+	          Game::UpdateBattleSpeed();
+	          cursor.Hide();
+            speed_buttom_back.Restore();
+	          SpeedRedraw( opt_speed );
+	          cursor.Show();
+	          display.Flip();
 	      }
         else if ( le.MouseClickLeft ( opt_grid ) ) {
-          conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
-          DoOnButtonClicked( opt_grid, display, cursor );
+            conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
+            DoOnButtonClicked( opt_grid, display, cursor );
         }
         else if ( le.MouseClickLeft( opt_shadow_movement ) ) {
-          conf.SetBattleMovementShaded( !conf.ExtBattleShowMoveShadow() );
-          DoOnButtonClicked( opt_shadow_movement, display, cursor );
+            conf.SetBattleMovementShaded( !conf.ExtBattleShowMoveShadow() );
+            DoOnButtonClicked( opt_shadow_movement, display, cursor );
         }
         else if ( le.MouseClickLeft( opt_shadow_cursor ) ) {
-          conf.SetBattleMouseShaded( !conf.ExtBattleShowMouseShadow() );
-          DoOnButtonClicked( opt_shadow_cursor, display, cursor );
+            conf.SetBattleMouseShaded( !conf.ExtBattleShowMouseShadow() );
+            DoOnButtonClicked( opt_shadow_cursor, display, cursor );
         }
         else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok ) ) {
           break;
