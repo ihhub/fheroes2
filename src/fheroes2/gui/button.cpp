@@ -298,7 +298,7 @@ void LabeledButton::ResetTopText( const std::string & text )
 
 void LabeledButton::ResetMidleText( const std::string & text )
 {
-    ResetText(middleText, middleBack, text, 0, 0 );
+    ResetText( middleText, middleBack, text, 0, 0 );
 }
 
 void LabeledButton::ResetButtomText( const std::string & text )

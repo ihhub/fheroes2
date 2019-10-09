@@ -59,15 +59,16 @@ protected:
     u32		flags;
 };
 
-class LabeledButton : public Button {
-  public:
+class LabeledButton : public Button
+{
+public:
     LabeledButton();
     LabeledButton( s32, s32, int, u32 index1, u32 index2, const std::string & topText = "" );
     void ResetTopText( const std::string & text );
     void ResetMidleText( const std::string & text );
     void ResetButtomText( const std::string & text );
 
-  protected:
+protected:
     TextBox topText;
     TextBox middleText;
     TextBox buttomText;
