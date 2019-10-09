@@ -134,15 +134,15 @@ void Battle::DialogBattleSettings(void)
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
-	      if ( le.MouseClickLeft ( opt_speed ) ) {
-	          conf.SetBattleSpeed( ( conf.BattleSpeed() + 1 ) % 11 );
-	          Game::UpdateBattleSpeed();
-	          cursor.Hide();
+        if ( le.MouseClickLeft ( opt_speed ) ) {
+            conf.SetBattleSpeed( ( conf.BattleSpeed() + 1 ) % 11 );
+            Game::UpdateBattleSpeed();
+            cursor.Hide();
             speed_buttom_back.Restore();
-	          SpeedRedraw( opt_speed );
-	          cursor.Show();
-	          display.Flip();
-	      }
+            SpeedRedraw( opt_speed );
+            cursor.Show();
+            display.Flip();
+        }
         else if ( le.MouseClickLeft ( opt_grid ) ) {
             conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
             DoOnButtonClicked( opt_grid, display, cursor );
