@@ -134,8 +134,8 @@ void Battle::DialogBattleSettings(void)
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
-        if ( le.MouseClickLeft ( opt_speed ) ) {
-            conf.SetBattleSpeed ( ( conf.BattleSpeed() + 1 ) % 11 );
+        if ( le.MouseClickLeft( opt_speed ) ) {
+            conf.SetBattleSpeed( ( conf.BattleSpeed() + 1 ) % 11 );
             Game::UpdateBattleSpeed();
             cursor.Hide();
             speed_buttom_back.Restore();
@@ -143,15 +143,15 @@ void Battle::DialogBattleSettings(void)
             cursor.Show();
             display.Flip();
         }
-        else if ( le.MouseClickLeft ( opt_grid ) ) {
+        else if ( le.MouseClickLeft( opt_grid ) ) {
             conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
             DoOnButtonClicked( opt_grid, display, cursor );
         }
-        else if ( le.MouseClickLeft ( opt_shadow_movement ) ) {
+        else if ( le.MouseClickLeft( opt_shadow_movement ) ) {
             conf.SetBattleMovementShaded( !conf.ExtBattleShowMoveShadow() );
             DoOnButtonClicked( opt_shadow_movement, display, cursor );
         }
-        else if ( le.MouseClickLeft ( opt_shadow_cursor ) ) {
+        else if ( le.MouseClickLeft( opt_shadow_cursor ) ) {
             conf.SetBattleMouseShaded( !conf.ExtBattleShowMouseShadow() );
             DoOnButtonClicked( opt_shadow_cursor, display, cursor );
         }
