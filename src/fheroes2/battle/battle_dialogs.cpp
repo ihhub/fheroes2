@@ -134,7 +134,7 @@ void Battle::DialogBattleSettings(void)
     while(le.HandleEvents()) {
 	      le.MousePressLeft(btn_ok) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
-	      if(le.MouseClickLeft(opt_speed)) {
+	      if (le.MouseClickLeft(opt_speed)) {
 	          conf.SetBattleSpeed((conf.BattleSpeed() + 1) % 11);
 	          Game::UpdateBattleSpeed();
 	          cursor.Hide();
