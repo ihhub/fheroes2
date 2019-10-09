@@ -492,7 +492,7 @@ void Kingdom::HeroesActionNewPosition(void)
 
 Funds Kingdom::GetIncome(int type /* INCOME_ALL */) const
 {
-    Funds resource;
+    Funds kingdomResource;
 
     if(INCOME_CAPTURED & type)
     {
@@ -501,7 +501,7 @@ Funds Kingdom::GetIncome(int type /* INCOME_ALL */) const
                                     Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN };
 
 	for(u32 index = 0; resources[index] != Resource::UNKNOWN; ++index)
-    	    resource += ProfitConditions::FromMine(resources[index]) *
+    	    kingdomResource += ProfitConditions::FromMine(resources[index]) *
                             	    world.CountCapturedMines(resources[index], GetColor());
     }
 
@@ -514,15 +514,15 @@ Funds Kingdom::GetIncome(int type /* INCOME_ALL */) const
     	    const Castle & castle = **it;
 
     	    // castle or town profit
-    	    resource += ProfitConditions::FromBuilding((castle.isCastle() ? BUILD_CASTLE : BUILD_TENT), 0);
+    	    kingdomResource += ProfitConditions::FromBuilding((castle.isCastle() ? BUILD_CASTLE : BUILD_TENT), 0);
 
     	    // statue
     	    if(castle.isBuild(BUILD_STATUE))
-                resource += ProfitConditions::FromBuilding(BUILD_STATUE, 0);
+                kingdomResource += ProfitConditions::FromBuilding(BUILD_STATUE, 0);
 
     	    // dungeon for warlock
 	    if(castle.isBuild(BUILD_SPEC) && Race::WRLK == castle.GetRace())
-                resource += ProfitConditions::FromBuilding(BUILD_SPEC, Race::WRLK);
+                kingdomResource += ProfitConditions::FromBuilding(BUILD_SPEC, Race::WRLK);
 	}
     }
 
@@ -537,13 +537,13 @@ Funds Kingdom::GetIncome(int type /* INCOME_ALL */) const
 	for(u32 index = 0; artifacts[index] != Artifact::UNKNOWN; ++index)
 	    for(KingdomHeroes::const_iterator
 		ith = heroes.begin(); ith != heroes.end(); ++ith)
-    		resource += ProfitConditions::FromArtifact(artifacts[index]) * 
+    		kingdomResource += ProfitConditions::FromArtifact(artifacts[index]) * 
 		    (**ith).GetBagArtifacts().Count(Artifact(artifacts[index]));
 
 	// TAX_LIEN
 	for(KingdomHeroes::const_iterator
 	    ith = heroes.begin(); ith != heroes.end(); ++ith)
-    	    resource -= ProfitConditions::FromArtifact(Artifact::TAX_LIEN) * 
+    	    kingdomResource -= ProfitConditions::FromArtifact(Artifact::TAX_LIEN) * 
 		    (**ith).GetBagArtifacts().Count(Artifact(Artifact::TAX_LIEN));
     }
 
@@ -552,10 +552,10 @@ Funds Kingdom::GetIncome(int type /* INCOME_ALL */) const
 	// estates skill bonus
 	for(KingdomHeroes::const_iterator
 	    ith = heroes.begin(); ith != heroes.end(); ++ith)
-	    resource.gold += (**ith).GetSecondaryValues(Skill::Secondary::ESTATES);
+	    kingdomResource.gold += (**ith).GetSecondaryValues(Skill::Secondary::ESTATES);
     }
 
-    return resource;
+    return kingdomResource;
 }
 
 const Heroes* Kingdom::GetBestHero(void) const

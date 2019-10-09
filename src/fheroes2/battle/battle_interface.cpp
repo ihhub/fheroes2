@@ -1377,9 +1377,9 @@ void Battle::Interface::RedrawPocketControls(void) const
     }
 }
 
-int Battle::Interface::GetBattleCursor(std::string & status)
+int Battle::Interface::GetBattleCursor(std::string & statusL)
 {
-    status.clear();
+    statusL.clear();
 
     const Cell* cell = Board::GetCell(index_pos);
 
@@ -1391,19 +1391,19 @@ int Battle::Interface::GetBattleCursor(std::string & status)
 	{
 	    if(b_current->GetColor() == b_enemy->GetColor() && !b_enemy->Modes(SP_HYPNOTIZE))
 	    {
-		status = _("View %{monster} info.");
-		StringReplace(status, "%{monster}", b_enemy->GetMultiName());
+		statusL = _("View %{monster} info.");
+		StringReplace(statusL, "%{monster}", b_enemy->GetMultiName());
 		return Cursor::WAR_INFO;
 	    }
 	    else
 	    {
 		if(b_current->isArchers() && !b_current->isHandFighting())
 		{
-		    status = _("Shoot %{monster}");
-		    status.append(" ");
-		    status.append(_n("(one shot left)", "(%{count} shots left)", b_current->GetShots()));
-		    StringReplace(status, "%{monster}", b_enemy->GetMultiName());
- 		    StringReplace(status, "%{count}", b_current->GetShots());
+		    statusL = _("Shoot %{monster}");
+		    statusL.append(" ");
+		    statusL.append(_n("(one shot left)", "(%{count} shots left)", b_current->GetShots()));
+		    StringReplace(statusL, "%{monster}", b_enemy->GetMultiName());
+ 		    StringReplace(statusL, "%{count}", b_current->GetShots());
 
 		    return arena.GetObstaclesPenalty(*b_current, *b_enemy) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
 		}
@@ -1421,8 +1421,8 @@ int Battle::Interface::GetBattleCursor(std::string & status)
 			    from == b_current->GetHeadIndex() ||
 			    (b_current->isWide() && from == b_current->GetTailIndex()))
 			{
-			    status = _("Attack %{monster}");
-			    StringReplace(status, "%{monster}", b_enemy->GetName());
+			    statusL = _("Attack %{monster}");
+			    StringReplace(statusL, "%{monster}", b_enemy->GetName());
 
 			    return cursor;
 			}
@@ -1433,21 +1433,21 @@ int Battle::Interface::GetBattleCursor(std::string & status)
 	else
 	if(cell->isPassable3(*b_current, false) && UNKNOWN != cell->GetDirection())
 	{
-	    status = b_current->isFly() ? _("Fly %{monster} here.") : _("Move %{monster} here.");
-	    StringReplace(status, "%{monster}", b_current->GetName());
+	    statusL = b_current->isFly() ? _("Fly %{monster} here.") : _("Move %{monster} here.");
+	    StringReplace(statusL, "%{monster}", b_current->GetName());
 	    return b_current->isFly() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
 	}
     }
 
-    status = _("Turn %{turn}");
-    StringReplace(status, "%{turn}", arena.GetCurrentTurn());
+    statusL = _("Turn %{turn}");
+    StringReplace(statusL, "%{turn}", arena.GetCurrentTurn());
 
     return Cursor::WAR_NONE;
 }
 
-int Battle::Interface::GetBattleSpellCursor(std::string & status)
+int Battle::Interface::GetBattleSpellCursor(std::string & statusL)
 {
-    status.clear();
+    statusL.clear();
 
     const Cell* cell = Board::GetCell(index_pos);
     const Spell & spell = humanturn_spell;
@@ -1465,19 +1465,19 @@ int Battle::Interface::GetBattleSpellCursor(std::string & status)
 	{
 	    if(!b_stats && cell->isPassable3(*b_current, false))
 	    {
-		status = _("Teleport Here");
+		statusL = _("Teleport Here");
 		return Cursor::SP_TELEPORT;
 	    }
 
-	    status = _("Invalid Teleport Destination");
+	    statusL = _("Invalid Teleport Destination");
 	    return Cursor::WAR_NONE;
 	}
 	else
 	if(b_stats && b_stats->AllowApplySpell(spell, b_current->GetCommander()))
 	{
-	    status = _("Cast %{spell} on %{monster}");
-	    StringReplace(status, "%{spell}", spell.GetName());
-	    StringReplace(status, "%{monster}", b_stats->GetName());
+	    statusL = _("Cast %{spell} on %{monster}");
+	    StringReplace(statusL, "%{spell}", spell.GetName());
+	    StringReplace(statusL, "%{monster}", b_stats->GetName());
 	    return GetCursorFromSpell(spell());
     	}
 	else
@@ -1485,13 +1485,13 @@ int Battle::Interface::GetBattleSpellCursor(std::string & status)
 	   !spell.isApplyToEnemies() &&
 	   !spell.isApplyToAnyTroops())
 	{
-	    status = _("Cast %{spell}");
-	    StringReplace(status, "%{spell}", spell.GetName());
+	    statusL = _("Cast %{spell}");
+	    StringReplace(statusL, "%{spell}", spell.GetName());
 	    return GetCursorFromSpell(spell());
 	}
     }
 
-    status = _("Select Spell Target");
+    statusL = _("Select Spell Target");
 
     return Cursor::WAR_NONE;
 }
@@ -4248,27 +4248,27 @@ void Battle::PopupDamageInfo::Redraw(int maxw, int maxh)
 	int tw = 5 + (text1.w() > text2.w() ? text1.w() : text2.w());
 	int th = (text1.h() + text2.h());
 
-	const Rect & area = GetArea();
-	const Rect & rect = GetRect();
+	const Rect & areaL = GetArea();
+	const Rect & rectL = GetRect();
 	const Rect & pos = cell->GetPos();
 
-	int tx = rect.x;
-	int ty = rect.y;
+	int tx = rectL.x;
+	int ty = rectL.y;
 
-	if(rect.x + rect.w > maxw)
+	if(rectL.x + rectL.w > maxw)
 	{
-	    tx = maxw - rect.w - 5;
+	    tx = maxw - rectL.w - 5;
 	    ty = pos.y - pos.h;
 	}
 
-	if(rect.x != tx || rect.y != ty || area.w != tw || area.h != th)
+	if(rectL.x != tx || rectL.y != ty || areaL.w != tw || areaL.h != th)
 	    SetPosition(tx, ty, tw, th);
 
 	const Sprite & sf = AGG::GetICN(ICN::CELLWIN, 1);
 	Dialog::FrameBorder::RenderOther(sf, GetRect());
 
-	text1.Blit(area.x, area.y);
-	text2.Blit(area.x, area.y + area.h/2);
+	text1.Blit(areaL.x, areaL.y);
+	text2.Blit(areaL.x, areaL.y + areaL.h/2);
     }
 }
 
