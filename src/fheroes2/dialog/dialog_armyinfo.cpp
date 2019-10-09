@@ -125,8 +125,9 @@ int Dialog::ArmyInfo(const Troop & troop, int flags)
     }
     else buttonUpgrade.SetDisable(true);
 
-    if(BUTTONS & flags) {
-        if ( !troop.isBattle() && !( READONLY & flags ) ) buttonDismiss.Draw();
+    if ( BUTTONS & flags ) {
+        if ( !troop.isBattle() && !( READONLY & flags ) )
+            buttonDismiss.Draw();
         buttonExit.Draw();
     }
 
