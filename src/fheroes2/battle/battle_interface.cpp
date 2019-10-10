@@ -179,10 +179,10 @@ Surface DrawHexagon(const RGBA & color)
     }
     else
     {
-      r = 22;
-      l = 10;
-      w = CELLW;
-      h = CELLH;
+        r = 22;
+        l = 10;
+        w = CELLW;
+        h = CELLH;
     }
 
     Surface sf(Size(w, h), false);
