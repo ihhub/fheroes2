@@ -180,7 +180,7 @@ Surface DrawHexagon(const RGBA & color)
     else
     {
 	r = 22;
-	l = 13;
+	l = 10;
 	w = CELLW;
 	h = CELLH;
     }
