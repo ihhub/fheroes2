@@ -123,17 +123,17 @@ void Battle::Cell::SetArea(const Rect & area)
 {
     if(Settings::Get().QVGA())
     {
-    pos.x = area.x + 45 - ( ( ( index / ARENAW ) % 2 ) ? CELLW2 / 2 : 0 ) + ( CELLW2 - 1 ) * ( index % ARENAW );
-    pos.y = ( area.y + area.h - 188 ) + ( ( CELLH2 - ( CELLH2 - CELLH2_VER_SIDE ) / 2 - 1 ) * ( index / ARENAW ) );
-    pos.w = CELLW2;
-    pos.h = CELLH2;
+        pos.x = area.x + 45 - ( ( ( index / ARENAW ) % 2 ) ? CELLW2 / 2 : 0 ) + ( CELLW2 - 1 ) * ( index % ARENAW );
+        pos.y = ( area.y + area.h - 188 ) + ( ( CELLH2 - ( CELLH2 - CELLH2_VER_SIDE ) / 2 - 1 ) * ( index / ARENAW ) );
+        pos.w = CELLW2;
+        pos.h = CELLH2;
     }
     else
     {
-    pos.x = area.x + 88 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + ( CELLW ) * ( index % ARENAW );
-    pos.y = area.y + 85 + ( ( ( CELLH - ( CELLH - CELLH_VER_SIDE ) / 2 ) ) * ( index / ARENAW ) );
-    pos.w = CELLW;
-    pos.h = CELLH;
+        pos.x = area.x + 88 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + ( CELLW ) * ( index % ARENAW );
+        pos.y = area.y + 85 + ( ( ( CELLH - ( CELLH - CELLH_VER_SIDE ) / 2 ) ) * ( index / ARENAW ) );
+        pos.w = CELLW;
+        pos.h = CELLH;
     }
     const short vertical_side_size = Settings::Get().QVGA() ? CELLH2_VER_SIDE : CELLH_VER_SIDE;
     // center
