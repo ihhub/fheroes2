@@ -103,8 +103,7 @@ int Dialog::ArmyInfo(const Troop & troop, int flags)
     dst_pt.y = pos_rt.y + 225;
     Button buttonExit(dst_pt.x, dst_pt.y, viewarmy, 3, 4);
 
-    if(READONLY & flags)
-    {
+    if ( READONLY & flags ) {
         buttonDismiss.Press();
         buttonDismiss.SetDisable(true);
     }
@@ -126,9 +125,9 @@ int Dialog::ArmyInfo(const Troop & troop, int flags)
     }
     else buttonUpgrade.SetDisable(true);
 
-    if(BUTTONS & flags)
-    {
-        if(!troop.isBattle()) buttonDismiss.Draw();
+    if ( BUTTONS & flags ) {
+        if ( !troop.isBattle() && !( READONLY & flags ) )
+            buttonDismiss.Draw();
         buttonExit.Draw();
     }
 
