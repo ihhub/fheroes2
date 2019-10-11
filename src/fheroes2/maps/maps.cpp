@@ -313,17 +313,13 @@ void Maps::ClearFog(s32 index, int scoute, int color)
 	int colors = conf.ExtUnionsAllowViewMaps() ? Players::GetPlayerFriends(color) : color;
 
 	int revealRadiusSquared = scoute * scoute + 4; // Add constant factor for "backwards compatibility"
-	for ( s32 y = center.y - scoute; y <= center.y + scoute; ++y ) {
-        for ( s32 x = center.x - scoute; x <= center.x + scoute; ++x ) {
+	for(s32 y = center.y - scoute; y <= center.y + scoute; ++y)
+        for(s32 x = center.x - scoute; x <= center.x + scoute; ++x) {
             s32 dx = x - center.x;
             s32 dy = y - center.y;
-            bool shouldReveal = isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy;
-            if ( shouldReveal ) {
+            if (isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy)
                 world.GetTiles( GetIndexFromAbsPoint( x, y ) ).ClearFog( colors );
-            }
-        }
-	}
-         	    
+        }  
     }
 }
 
