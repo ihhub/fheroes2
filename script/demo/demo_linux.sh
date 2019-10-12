@@ -6,5 +6,5 @@ wget https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/
 unzip h2demo.zip
 rm h2demo.zip
 
-cp -r ./DATA ./../../../
-cp -r ./MAPS ./../../../
+cp -r ./DATA ./../../../data
+cp -r ./MAPS ./../../../maps
