@@ -74,7 +74,7 @@ int Dialog::ArmyInfo(const Troop & troop, int flags)
     }
 
     // name
-    text.Set(troop.GetName(), Font::BIG);
+    text.Set( troop.GetName(), Font::YELLOW_BIG );
     dst_pt.x = pos_rt.x + 140 - text.w() / 2;
     dst_pt.y = pos_rt.y + 40;
     text.Blit(dst_pt);
