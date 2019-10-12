@@ -207,6 +207,8 @@ int Interface::ButtonsArea::QueueEventProcessing(void)
 void Interface::ButtonsArea::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
-    const bool isMovementButtonDisabled = (currentHero == NULL) || !currentHero->GetPath().isValid() || !currentHero->MayStillMove();
-    buttonMovement.SetDisable(isMovementButtonDisabled);
+    const bool isMovementButtonDisabled = ( currentHero == NULL ) || !currentHero->GetPath().isValid() || !currentHero->MayStillMove();
+    buttonMovement.SetDisable( isMovementButtonDisabled );
+    const bool isSpellButtonDisabled = ( currentHero == NULL ) || !currentHero->HaveSpellBook();
+    buttonSpell.SetDisable( isSpellButtonDisabled );
 }
