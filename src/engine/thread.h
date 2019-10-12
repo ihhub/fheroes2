@@ -94,7 +94,6 @@ namespace SDL
         u32 tick1;
         u32 tick2;
     };
-
 }
 
 #endif

@@ -968,11 +968,12 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            art() == Artifact::MAGIC_BOOK ? Dialog::Message(
-                "",
-                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK )
-                                          : Dialog::Message( art.GetName(), _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
+            art() == Artifact::MAGIC_BOOK
+                ? Dialog::Message(
+                      "",
+                      _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                      Font::BIG, Dialog::OK )
+                : Dialog::Message( art.GetName(), _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
         }
         return false;
     }

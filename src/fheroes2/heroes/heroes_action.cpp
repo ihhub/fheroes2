@@ -1068,10 +1068,8 @@ void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index )
 
     case MP2::OBJ_MAGICGARDEN:
         msg = rc.isValid()
-                  ? _(
-                      "You catch a leprechaun foolishly sleeping amidst a cluster of magic mushrooms.\nIn exchange for his freedom, he guides you to a small pot filled with precious things." )
-                  : _(
-                      "You've found a magic garden, the kind of place that leprechauns and faeries like to cavort in, but there is no one here today.\nPerhaps you should try again next week." );
+                  ? _( "You catch a leprechaun foolishly sleeping amidst a cluster of magic mushrooms.\nIn exchange for his freedom, he guides you to a small pot filled with precious things." )
+                  : _( "You've found a magic garden, the kind of place that leprechauns and faeries like to cavort in, but there is no one here today.\nPerhaps you should try again next week." );
         break;
 
     default:
@@ -1325,16 +1323,15 @@ void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
         break;
 
     case MP2::OBJ_IDOL:
-        msg = visited ? _(
-                  "You've found an ancient and weathered stone idol.\nIt is supposed to grant luck to visitors, but since the stars are already smiling upon you, it does nothing." )
-                      : _( "You've found an ancient and weathered stone idol.\nKissing it is supposed to be lucky, so you do. The stone is very cold to the touch." );
+        msg = visited
+                  ? _( "You've found an ancient and weathered stone idol.\nIt is supposed to grant luck to visitors, but since the stars are already smiling upon you, it does nothing." )
+                  : _( "You've found an ancient and weathered stone idol.\nKissing it is supposed to be lucky, so you do. The stone is very cold to the touch." );
         break;
 
     case MP2::OBJ_MERMAID:
         msg = visited
                   ? _( "The mermaids silently entice you to return later and be blessed again." )
-                  : _(
-                      "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids charms bless you with increased luck for your next combat." );
+                  : _( "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids charms bless you with increased luck for your next combat." );
         break;
 
     default:
@@ -1484,24 +1481,23 @@ void ActionToPrimarySkillObject( Heroes & hero, u32 obj, s32 dst_index )
 
     case MP2::OBJ_MERCENARYCAMP:
         skill = Skill::Primary::ATTACK;
-        msg = visited ? _(
-                  "You've come upon a mercenary camp practicing their tactics. \"You're too advanced for us,\" the mercenary captain says. \"We can teach nothing more.\"" )
-                      : _( "You've come upon a mercenary camp practicing their tactics. The mercenaries welcome you and your troops and invite you to train with them." );
+        msg = visited
+                  ? _( "You've come upon a mercenary camp practicing their tactics. \"You're too advanced for us,\" the mercenary captain says. \"We can teach nothing more.\"" )
+                  : _( "You've come upon a mercenary camp practicing their tactics. The mercenaries welcome you and your troops and invite you to train with them." );
         break;
 
     case MP2::OBJ_DOCTORHUT:
         skill = Skill::Primary::KNOWLEDGE;
         msg = visited
                   ? _( "\"Go 'way!\", the witch doctor barks, \"you know all I know.\"" )
-                  : _(
-                      "An Orcish witch doctor living in the hut deepens your knowledge of magic by showing you how to cast stones, read portents, and decipher the intricacies of chicken entrails." );
+                  : _( "An Orcish witch doctor living in the hut deepens your knowledge of magic by showing you how to cast stones, read portents, and decipher the intricacies of chicken entrails." );
         break;
 
     case MP2::OBJ_STANDINGSTONES:
         skill = Skill::Primary::POWER;
-        msg = visited ? _(
-                  "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, the Druids turn you away, indicating they have nothing new to teach you." )
-                      : _( "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, they teach you new ways to cast spells." );
+        msg = visited
+                  ? _( "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, the Druids turn you away, indicating they have nothing new to teach you." )
+                  : _( "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, they teach you new ways to cast spells." );
         break;
 
     default:
@@ -2612,9 +2608,9 @@ void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index )
         if (
             Dialog::YES
             == Dialog::Message(
-                MP2::StringObject( obj ),
-                _( "A retired captain living on this refurbished fishing platform offers to sell you maps of the sea he made in his younger days for 1,000 gold. Do you wish to buy the maps?" ),
-                Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                   MP2::StringObject( obj ),
+                   _( "A retired captain living on this refurbished fishing platform offers to sell you maps of the sea he made in his younger days for 1,000 gold. Do you wish to buy the maps?" ),
+                   Font::BIG, Dialog::YES | Dialog::NO ) ) {
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
             hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -2772,9 +2768,9 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
             if (
                 Dialog::YES
                 == Dialog::Message(
-                    "",
-                    _( "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, \"you will fight and surely die. But I will give you a choice of deaths. You may fight me, or you may fight my servants. Do you prefer to fight my servants?\"" ),
-                    Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                       "",
+                       _( "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, \"you will fight and surely die. But I will give you a choice of deaths. You may fight me, or you may fight my servants. Do you prefer to fight my servants?\"" ),
+                       Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 // battle with earth elements
                 Army army( tile );
                 gold = 2500;
@@ -2826,9 +2822,9 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
                 Kingdom & kingdom = hero.GetKingdom();
                 bool allow = kingdom.AllowPayment( payment );
 
-                msg = allow ? _(
-                          "The Demon leaps upon you and has its claws at your throat before you can even draw your sword. \"Your life is mine,\" it says. \"I will sell it back to you for %{count} gold.\"" )
-                            : _( "Seeing that you do not have %{count} gold, the demon slashes you with its claws, and the last thing you see is a red haze." );
+                msg = allow
+                          ? _( "The Demon leaps upon you and has its claws at your throat before you can even draw your sword. \"Your life is mine,\" it says. \"I will sell it back to you for %{count} gold.\"" )
+                          : _( "Seeing that you do not have %{count} gold, the demon slashes you with its claws, and the last thing you see is a red haze." );
                 StringReplace( msg, "%{count}", gold );
 
                 if ( allow ) {
@@ -3028,9 +3024,9 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
         if (
             Dialog::YES
             == Dialog::Message(
-                "",
-                _( "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\"" ),
-                Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                   "",
+                   _( "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\"" ),
+                   Font::BIG, Dialog::YES | Dialog::NO ) ) {
             std::string header( _( "The Sphinx asks you the following riddle: %{riddle}. Your answer?" ) );
             StringReplace( header, "%{riddle}", riddle->message );
             std::string answer;
