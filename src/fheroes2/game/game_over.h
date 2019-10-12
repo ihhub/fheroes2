@@ -25,6 +25,7 @@
 
 #include <string>
 
+class StreamBase;
 namespace GameOver
 {
     enum conditions_t

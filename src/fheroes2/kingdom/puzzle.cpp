@@ -247,7 +247,7 @@ void PuzzlesDraw( const Puzzle & pzl, const Surface & sf, s32 dstx, s32 dsty )
 
 StreamBase & operator<<( StreamBase & msg, const Puzzle & pzl )
 {
-    msg << pzl.to_string<char, std::char_traits<char>, std::allocator<char>>();
+    msg << pzl.to_string<char, std::char_traits<char>, std::allocator<char> >();
 
     // orders
     msg << static_cast<u8>( ARRAY_COUNT( pzl.zone1_order ) );

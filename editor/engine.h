@@ -1986,7 +1986,7 @@ struct CondLoss : public GameCondition
     }
 };
 
-struct ListStringPos : public QList<QPair<QString, QPoint>>
+struct ListStringPos : public QList<QPair<QString, QPoint> >
 {
     ListStringPos() {}
 };

@@ -22,6 +22,7 @@
 #ifndef H2MAPS_OBJECTS_H
 #define H2MAPS_OBJECTS_H
 
+#include "army_troop.h"
 #include "artifact.h"
 #include "gamedefs.h"
 #include "monster.h"

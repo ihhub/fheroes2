@@ -134,8 +134,8 @@ namespace AGG
     std::vector<icn_cache_t> icn_cache;
     std::vector<til_cache_t> til_cache;
 
-    std::map<int, std::vector<u8>> wav_cache;
-    std::map<int, std::vector<u8>> mid_cache;
+    std::map<int, std::vector<u8> > wav_cache;
+    std::map<int, std::vector<u8> > mid_cache;
     std::vector<loop_sound_t> loop_sounds;
     std::map<u32, fnt_cache_t> fnt_cache;
 
@@ -287,7 +287,7 @@ u32 AGG::ClearFreeObjects( void )
     u32 total = 0;
 
     // wav cache
-    for ( std::map<int, std::vector<u8>>::iterator it = wav_cache.begin(); it != wav_cache.end(); ++it )
+    for ( std::map<int, std::vector<u8> >::iterator it = wav_cache.begin(); it != wav_cache.end(); ++it )
         total += ( *it ).second.size();
 
     DEBUG( DBG_ENGINE, DBG_INFO,
@@ -297,7 +297,7 @@ u32 AGG::ClearFreeObjects( void )
     total = 0;
 
     // mus cache
-    for ( std::map<int, std::vector<u8>>::iterator it = mid_cache.begin(); it != mid_cache.end(); ++it )
+    for ( std::map<int, std::vector<u8> >::iterator it = mid_cache.begin(); it != mid_cache.end(); ++it )
         total += ( *it ).second.size();
 
     DEBUG( DBG_ENGINE, DBG_INFO,

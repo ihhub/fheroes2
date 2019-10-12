@@ -22,6 +22,8 @@
 #ifndef __IMG_SAVETOPNG_H__
 #define __IMG_SAVETOPNG_H__
 
+#include <SDL.h>
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 // SDL2 also supported png, skipped...
 #else

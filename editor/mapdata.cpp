@@ -1052,7 +1052,7 @@ void MapTiles::generateMap( int step )
         step /= 2;
     }
 
-    QVector<QPair<QRect, int>> biome( 9 );
+    QVector<QPair<QRect, int> > biome( 9 );
     const int cw = width / 3;
     const int ch = height / 3;
 
@@ -1079,7 +1079,7 @@ void MapTiles::generateMap( int step )
                 else
                 // set ground from biome
                 {
-                    for ( QVector<QPair<QRect, int>>::const_iterator it = biome.begin(); it != biome.end(); ++it )
+                    for ( QVector<QPair<QRect, int> >::const_iterator it = biome.begin(); it != biome.end(); ++it )
                         if ( ( *it ).first.contains( xx, yy ) ) {
                             tile->setTileSprite( EditorTheme::startFilledTile( ( *it ).second ), 0 );
                             break;

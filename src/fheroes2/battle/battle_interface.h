@@ -23,14 +23,17 @@
 #ifndef H2BATTLE_INTERFACE_H
 #define H2BATTLE_INTERFACE_H
 
+#include <string>
+
 #include "battle_board.h"
 #include "button.h"
 #include "dialog.h"
 #include "gamedefs.h"
 #include "icn.h"
+#include "spell.h"
+#include "sprite.h"
 #include "statusbar.h"
 #include "text.h"
-#include <string>
 
 class Settings;
 

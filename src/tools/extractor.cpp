@@ -25,9 +25,9 @@
 #include <iostream>
 #include <vector>
 
-#include "SDL.h"
 #include "engine.h"
 #include "system.h"
+#include <SDL.h>
 
 #define FATSIZENAME 15
 

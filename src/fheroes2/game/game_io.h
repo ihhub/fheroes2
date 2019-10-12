@@ -23,6 +23,8 @@
 #ifndef H2GAMEIO_H
 #define H2GAMEIO_H
 
+#include <string>
+
 namespace Maps
 {
     class FileInfo;
