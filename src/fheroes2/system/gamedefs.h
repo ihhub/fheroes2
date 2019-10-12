@@ -31,44 +31,44 @@
 #include "xmlccwrap.h"
 #endif
 
-#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#define GCC_VERSION ( __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ )
 
 #if GCC_VERSION < 40300
 #define GCC_REFERENCE_FAIL
 #endif
 
 #include "translations.h"
-#define _(s)		Translation::gettext(s)
-#define _n(a,b,c)	Translation::ngettext(a,b,c)
+#define _( s ) Translation::gettext( s )
+#define _n( a, b, c ) Translation::ngettext( a, b, c )
 
 // hardcore defines: kingdom
-#define KINGDOMMAX			6
+#define KINGDOMMAX 6
 
 // hardcore defines: world
-#define MAXCASTLES			72
-#define DAYOFWEEK			7
-#define WEEKOFMONTH			4
+#define MAXCASTLES 72
+#define DAYOFWEEK 7
+#define WEEKOFMONTH 4
 
 // hardcore defines: castle
-#define CASTLEMAXMONSTER		6
+#define CASTLEMAXMONSTER 6
 
 // hardcore defines: heroes
-#define HEROESMAXARTIFACT		14
-#define HEROESMAXSKILL			8
-#define HEROESMAXCOUNT			71
+#define HEROESMAXARTIFACT 14
+#define HEROESMAXSKILL 8
+#define HEROESMAXCOUNT 71
 
 // hardcore defines: skill
-#define MAXPRIMARYSKILL			4
-#define MAXSECONDARYSKILL		14
+#define MAXPRIMARYSKILL 4
+#define MAXSECONDARYSKILL 14
 
 // hardcore defines: army
-#define ARMYMAXTROOPS			5
+#define ARMYMAXTROOPS 5
 
 // hardcore defines: interface
-#define RADARWIDTH			144
-#define BORDERWIDTH			16
+#define RADARWIDTH 144
+#define BORDERWIDTH 16
 
 // ai/hero speed
-#define DEFAULT_SPEED_DELAY		5
+#define DEFAULT_SPEED_DELAY 5
 
 #endif

@@ -28,14 +28,14 @@ namespace Difficulty
 {
     enum
     {
-	EASY,
+        EASY,
         NORMAL,
         HARD,
         EXPERT,
         IMPOSSIBLE
     };
 
-    const char* String(int);
+    const char * String( int );
 }
 
 #endif

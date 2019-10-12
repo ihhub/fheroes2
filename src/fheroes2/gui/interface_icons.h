@@ -23,75 +23,100 @@
 #ifndef H2INTERFACE_ICONS_H
 #define H2INTERFACE_ICONS_H
 
-#include "interface_list.h"
 #include "interface_border.h"
+#include "interface_list.h"
 
-enum icons_t { ICON_HEROES = 0x01, ICON_CASTLES = 0x02, ICON_ANY = ICON_HEROES|ICON_CASTLES };
+enum icons_t
+{
+    ICON_HEROES = 0x01,
+    ICON_CASTLES = 0x02,
+    ICON_ANY = ICON_HEROES | ICON_CASTLES
+};
 
 namespace Interface
 {
-    typedef Heroes* HEROES;
-    typedef Castle* CASTLE;
+    typedef Heroes * HEROES;
+    typedef Castle * CASTLE;
 
     class IconsBar
     {
     public:
-	IconsBar(u32 count, const Surface & sf) : iconsCount(count), marker(sf), show(true) {}
+        IconsBar( u32 count, const Surface & sf )
+            : iconsCount( count )
+            , marker( sf )
+            , show( true )
+        {}
 
-	void SetShow(bool f) { show = f; };
-	bool IsShow(void) const { return show; };
-	void RedrawBackground(const Point &);
+        void SetShow( bool f )
+        {
+            show = f;
+        };
+        bool IsShow( void ) const
+        {
+            return show;
+        };
+        void RedrawBackground( const Point & );
 
-	u32  CountIcons(void) const { return iconsCount; }
-	void SetIconsCount(u32 c) {iconsCount = c; }
+        u32 CountIcons( void ) const
+        {
+            return iconsCount;
+        }
+        void SetIconsCount( u32 c )
+        {
+            iconsCount = c;
+        }
 
-	static u32 GetItemWidth(void);
-	static u32 GetItemHeight(void);
-	static bool IsVisible(void);
+        static u32 GetItemWidth( void );
+        static u32 GetItemHeight( void );
+        static bool IsVisible( void );
 
     protected:
-	u32		iconsCount;
+        u32 iconsCount;
         const Surface & marker;
-	bool		show;
+        bool show;
     };
 
-    void RedrawHeroesIcon(const Heroes &, s32, s32);
-    void RedrawCastleIcon(const Castle &, s32, s32);
+    void RedrawHeroesIcon( const Heroes &, s32, s32 );
+    void RedrawCastleIcon( const Castle &, s32, s32 );
 
     class HeroesIcons : public Interface::ListBox<HEROES>, public IconsBar
     {
     public:
-	HeroesIcons(u32 count, const Surface & sf) : IconsBar(count, sf) {}
+        HeroesIcons( u32 count, const Surface & sf )
+            : IconsBar( count, sf )
+        {}
 
-	void SetPos(s32, s32);
-	void SetShow(bool);
+        void SetPos( s32, s32 );
+        void SetShow( bool );
 
     protected:
-	void ActionCurrentUp(void);
-	void ActionCurrentDn(void);
-	void ActionListDoubleClick(HEROES &);
-	void ActionListSingleClick(HEROES &);
-	void ActionListPressRight(HEROES &);
-	void RedrawItem(const HEROES &, s32 ox, s32 oy, bool current);
-	void RedrawBackground(const Point &);
+        void ActionCurrentUp( void );
+        void ActionCurrentDn( void );
+        void ActionListDoubleClick( HEROES & );
+        void ActionListSingleClick( HEROES & );
+        void ActionListPressRight( HEROES & );
+        void RedrawItem( const HEROES &, s32 ox, s32 oy, bool current );
+        void RedrawBackground( const Point & );
     };
 
     class CastleIcons : public Interface::ListBox<CASTLE>, public IconsBar
     {
     public:
-	CastleIcons(u32 count, const Surface & sf) : IconsBar(count, sf) {}
+        CastleIcons( u32 count, const Surface & sf )
+            : IconsBar( count, sf )
+        {}
 
-	void SetPos(s32, s32);
-	void SetShow(bool);
+        void SetPos( s32, s32 );
+        void SetShow( bool );
 
     protected:
-	void ActionCurrentUp(void);
-	void ActionCurrentDn(void);
-	void ActionListDoubleClick(CASTLE &);
-	void ActionListSingleClick(CASTLE &);
-	void ActionListPressRight(CASTLE &);
-	void RedrawItem(const CASTLE &, s32 ox, s32 oy, bool current);
-	void RedrawBackground(const Point &);
+        void ActionCurrentUp( void );
+        void ActionCurrentDn( void );
+        void ActionListDoubleClick( CASTLE & );
+        void ActionListSingleClick( CASTLE & );
+        void ActionListPressRight( CASTLE & );
+        void RedrawItem( const CASTLE &, s32 ox, s32 oy, bool current );
+        void RedrawBackground( const Point & );
     };
 
     class Basic;
@@ -99,35 +124,35 @@ namespace Interface
     class IconsPanel : public BorderWindow
     {
     public:
-	IconsPanel(Basic &);
-    
-	void SetPos(s32, s32);
-	void SavePosition(void);
-	void SetRedraw(void) const;
-	void SetRedraw(icons_t) const;
+        IconsPanel( Basic & );
 
-	void Redraw(void);
-	void QueueEventProcessing(void);
+        void SetPos( s32, s32 );
+        void SavePosition( void );
+        void SetRedraw( void ) const;
+        void SetRedraw( icons_t ) const;
 
-        u32  CountIcons(void) const;
+        void Redraw( void );
+        void QueueEventProcessing( void );
 
-	void Select(const Heroes &);
-	void Select(const Castle &);
+        u32 CountIcons( void ) const;
 
-	bool IsSelected(icons_t) const;
-	void ResetIcons(icons_t = ICON_ANY);
-	void HideIcons(icons_t = ICON_ANY);
-	void ShowIcons(icons_t = ICON_ANY);
-	void RedrawIcons(icons_t = ICON_ANY);
-	void SetCurrentVisible(void);
+        void Select( const Heroes & );
+        void Select( const Castle & );
+
+        bool IsSelected( icons_t ) const;
+        void ResetIcons( icons_t = ICON_ANY );
+        void HideIcons( icons_t = ICON_ANY );
+        void ShowIcons( icons_t = ICON_ANY );
+        void RedrawIcons( icons_t = ICON_ANY );
+        void SetCurrentVisible( void );
 
     private:
-	Basic & interface;
+        Basic & interface;
 
         Surface sfMarker;
 
-	CastleIcons castleIcons;
-	HeroesIcons heroesIcons;
+        CastleIcons castleIcons;
+        HeroesIcons heroesIcons;
     };
 }
 

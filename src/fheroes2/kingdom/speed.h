@@ -26,22 +26,22 @@ namespace Speed
 {
     enum
     {
-	STANDING	= 0,
-	CRAWLING	= 1,
-        VERYSLOW	= 2,
-        SLOW		= 3,
-        AVERAGE		= 4,
-        FAST		= 5,
-        VERYFAST	= 6,
-        ULTRAFAST	= 7,
-        BLAZING		= 8,
-        INSTANT		= 9
+        STANDING = 0,
+        CRAWLING = 1,
+        VERYSLOW = 2,
+        SLOW = 3,
+        AVERAGE = 4,
+        FAST = 5,
+        VERYFAST = 6,
+        ULTRAFAST = 7,
+        BLAZING = 8,
+        INSTANT = 9
     };
 
-    const char*	String(int);
-    int		GetOriginalSlow(int);
-    int		GetOriginalFast(int);
-    int		FromInt(int);
+    const char * String( int );
+    int GetOriginalSlow( int );
+    int GetOriginalFast( int );
+    int FromInt( int );
 }
 
 #endif

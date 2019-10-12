@@ -25,27 +25,27 @@
 
 #include "gamedefs.h"
 #include "interface_border.h"
-#include "interface_radar.h"
 #include "interface_buttons.h"
-#include "interface_icons.h"
-#include "interface_status.h"
-#include "interface_gamearea.h"
 #include "interface_cpanel.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "text.h"
 
 enum redraw_t
 {
-    REDRAW_RADAR     = 0x01,
-    REDRAW_HEROES    = 0x02,
-    REDRAW_CASTLES   = 0x04,
-    REDRAW_BUTTONS   = 0x08,
-    REDRAW_STATUS    = 0x10,
-    REDRAW_BORDER    = 0x20,
-    REDRAW_GAMEAREA  = 0x40,
-    REDRAW_CURSOR    = 0x80,
+    REDRAW_RADAR = 0x01,
+    REDRAW_HEROES = 0x02,
+    REDRAW_CASTLES = 0x04,
+    REDRAW_BUTTONS = 0x08,
+    REDRAW_STATUS = 0x10,
+    REDRAW_BORDER = 0x20,
+    REDRAW_GAMEAREA = 0x40,
+    REDRAW_CURSOR = 0x80,
 
-    REDRAW_ICONS     = REDRAW_HEROES | REDRAW_CASTLES,
-    REDRAW_ALL       = 0xFF
+    REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
+    REDRAW_ALL = 0xFF
 };
 
 class Castle;
@@ -58,106 +58,112 @@ namespace Maps
 
 namespace GameFocus
 {
-    enum { UNSEL = FOCUS_UNSEL, HEROES = FOCUS_HEROES, CASTLE = FOCUS_CASTLE, FIRSTHERO };
+    enum
+    {
+        UNSEL = FOCUS_UNSEL,
+        HEROES = FOCUS_HEROES,
+        CASTLE = FOCUS_CASTLE,
+        FIRSTHERO
+    };
 }
 
 namespace Interface
 {
-    Castle*	GetFocusCastle(void);
-    Heroes*	GetFocusHeroes(void);
-    int		GetFocusType(void);
-    Point	GetFocusCenter(void);
+    Castle * GetFocusCastle( void );
+    Heroes * GetFocusHeroes( void );
+    int GetFocusType( void );
+    Point GetFocusCenter( void );
 
     class Basic
     {
     public:
-    	static Basic & Get(void);
+        static Basic & Get( void );
 
-	bool    	NeedRedraw(void) const;
-	void    	SetRedraw(int);
-    	void		Redraw(int f = 0);
+        bool NeedRedraw( void ) const;
+        void SetRedraw( int );
+        void Redraw( int f = 0 );
 
-	const Rect &	GetScrollLeft(void) const;
-	const Rect &	GetScrollRight(void) const;
-	const Rect &	GetScrollTop(void) const;
-	const Rect &	GetScrollBottom(void) const;
+        const Rect & GetScrollLeft( void ) const;
+        const Rect & GetScrollRight( void ) const;
+        const Rect & GetScrollTop( void ) const;
+        const Rect & GetScrollBottom( void ) const;
 
-	s32		GetDimensionDoorDestination(s32, u32, bool) const;
+        s32 GetDimensionDoorDestination( s32, u32, bool ) const;
 
-	GameArea &	GetGameArea(void);
-	Radar &		GetRadar(void);
-	IconsPanel &	GetIconsPanel(void);
-	ButtonsArea &	GetButtonsArea(void);
-	StatusWindow &	GetStatusWindow(void);
-	ControlPanel &	GetControlPanel(void);
+        GameArea & GetGameArea( void );
+        Radar & GetRadar( void );
+        IconsPanel & GetIconsPanel( void );
+        ButtonsArea & GetButtonsArea( void );
+        StatusWindow & GetStatusWindow( void );
+        ControlPanel & GetControlPanel( void );
 
-	void		SetFocus(Heroes*);
-	void		SetFocus(Castle*);
-	void		ResetFocus(int);
-	void		RedrawFocus(void);
+        void SetFocus( Heroes * );
+        void SetFocus( Castle * );
+        void ResetFocus( int );
+        void RedrawFocus( void );
 
-	void		SetHideInterface(bool);
+        void SetHideInterface( bool );
 
-	void		EventSwitchHeroSleeping(void);
-	void		EventDefaultAction(void);
-	void		EventOpenFocus(void);
-	int		EventSaveGame(void);
-        void		EventPuzzleMaps(void);
-        void		EventGameInfo(void);
-	void		EventSystemDialog(void);
-        void		EventNextHero(void);
-	void		EventNextTown(void);
-	void		EventContinueMovement(void);
-	void		EventKingdomInfo(void);
-	void		EventCastSpell(void);
-        void		EventSwitchShowRadar(void);
-        void		EventSwitchShowStatus(void);
-        void		EventSwitchShowButtons(void);
-        void		EventSwitchShowIcons(void);
-        void		EventSwitchShowControlPanel(void);
-        void		EventDebug1(void);
-	void		EventDebug2(void);
+        void EventSwitchHeroSleeping( void );
+        void EventDefaultAction( void );
+        void EventOpenFocus( void );
+        int EventSaveGame( void );
+        void EventPuzzleMaps( void );
+        void EventGameInfo( void );
+        void EventSystemDialog( void );
+        void EventNextHero( void );
+        void EventNextTown( void );
+        void EventContinueMovement( void );
+        void EventKingdomInfo( void );
+        void EventCastSpell( void );
+        void EventSwitchShowRadar( void );
+        void EventSwitchShowStatus( void );
+        void EventSwitchShowButtons( void );
+        void EventSwitchShowIcons( void );
+        void EventSwitchShowControlPanel( void );
+        void EventDebug1( void );
+        void EventDebug2( void );
 
-	int		EventLoadGame(void);
-	int		EventAdventureDialog(void);
-	int		EventFileDialog(void);
-	int		EventEndTurn(void);
-	int		EventExit(void);
-	int		EventDigArtifact(void);
-	void		EventKeyArrowPress(int direct);
+        int EventLoadGame( void );
+        int EventAdventureDialog( void );
+        int EventFileDialog( void );
+        int EventEndTurn( void );
+        int EventExit( void );
+        int EventDigArtifact( void );
+        void EventKeyArrowPress( int direct );
 
-	int		StartGame(void);
+        int StartGame( void );
 
-	void 		MouseCursorAreaClickLeft(s32);
-	void 		MouseCursorAreaPressRight(s32);
+        void MouseCursorAreaClickLeft( s32 );
+        void MouseCursorAreaPressRight( s32 );
 
-        static int 	GetCursorTileIndex(s32);
-	static int 	GetCursorFocusCastle(const Castle &, const Maps::Tiles &);
-	static int 	GetCursorFocusHeroes(const Heroes &, const Maps::Tiles &);
-	static int 	GetCursorFocusShipmaster(const Heroes &, const Maps::Tiles &);
+        static int GetCursorTileIndex( s32 );
+        static int GetCursorFocusCastle( const Castle &, const Maps::Tiles & );
+        static int GetCursorFocusHeroes( const Heroes &, const Maps::Tiles & );
+        static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
 
     private:
-	Basic();
-	void		RedrawSystemInfo(s32, s32, u32);
-	void		ShowPathOrStartMoveHero(Heroes*, s32);
-	void		MoveHeroFromArrowKeys(Heroes & hero, int direct);
-	int		HumanTurn(bool);
+        Basic();
+        void RedrawSystemInfo( s32, s32, u32 );
+        void ShowPathOrStartMoveHero( Heroes *, s32 );
+        void MoveHeroFromArrowKeys( Heroes & hero, int direct );
+        int HumanTurn( bool );
 
-	GameArea	gameArea;
-	Radar		radar;
-	IconsPanel	iconsPanel;
-	ButtonsArea	buttonsArea;
-	StatusWindow	statusWindow;
-	ControlPanel	controlPanel;
+        GameArea gameArea;
+        Radar radar;
+        IconsPanel iconsPanel;
+        ButtonsArea buttonsArea;
+        StatusWindow statusWindow;
+        ControlPanel controlPanel;
 
-	int		redraw;
+        int redraw;
 
-	Rect		scrollLeft;
-	Rect		scrollRight;
-	Rect		scrollBottom;
-	Rect		scrollTop;
+        Rect scrollLeft;
+        Rect scrollRight;
+        Rect scrollBottom;
+        Rect scrollTop;
 
-	Text		system_info;
+        Text system_info;
     };
 }
 

@@ -20,194 +20,230 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "world.h"
-#include "text.h"
-#include "players.h"
+#include "maps_actions.h"
 #include "dialog.h"
+#include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "players.h"
 #include "settings.h"
-#include "game.h"
-#include "maps_actions.h"
+#include "text.h"
+#include "world.h"
 
-StreamBase & operator<< (StreamBase & sb, const ActionSimple & st)
+StreamBase & operator<<( StreamBase & sb, const ActionSimple & st )
 {
     return sb << st.type << st.uid;
 }
 
-StreamBase & operator>> (StreamBase & sb, ActionSimple & st)
+StreamBase & operator>>( StreamBase & sb, ActionSimple & st )
 {
     return sb >> st.type >> st.uid;
 }
 
-StreamBase & operator<< (StreamBase & sb, const ActionResources & st)
+StreamBase & operator<<( StreamBase & sb, const ActionResources & st )
 {
-    return sb << static_cast<const ActionSimple &>(st) << st.resources << st.message;
+    return sb << static_cast<const ActionSimple &>( st ) << st.resources << st.message;
 }
 
-StreamBase & operator>> (StreamBase & sb, ActionResources & st)
+StreamBase & operator>>( StreamBase & sb, ActionResources & st )
 {
-    return sb >> static_cast<ActionSimple &>(st) >> st.resources >> st.message;
+    return sb >> static_cast<ActionSimple &>( st ) >> st.resources >> st.message;
 }
 
-StreamBase & operator<< (StreamBase & sb, const ActionArtifact & st)
+StreamBase & operator<<( StreamBase & sb, const ActionArtifact & st )
 {
-    return sb << static_cast<const ActionSimple &>(st) << st.artifact << st.message;
+    return sb << static_cast<const ActionSimple &>( st ) << st.artifact << st.message;
 }
 
-StreamBase & operator>> (StreamBase & sb, ActionArtifact & st)
+StreamBase & operator>>( StreamBase & sb, ActionArtifact & st )
 {
-    return sb >> static_cast<ActionSimple &>(st) >> st.artifact >> st.message;
+    return sb >> static_cast<ActionSimple &>( st ) >> st.artifact >> st.message;
 }
 
-StreamBase & operator<< (StreamBase & sb, const ActionAccess & st)
+StreamBase & operator<<( StreamBase & sb, const ActionAccess & st )
 {
-    return sb << static_cast<const ActionSimple &>(st) << st.allowPlayers << st.allowComputer << st.cancelAfterFirstVisit << st.message;
+    return sb << static_cast<const ActionSimple &>( st ) << st.allowPlayers << st.allowComputer << st.cancelAfterFirstVisit << st.message;
 }
 
-StreamBase & operator>> (StreamBase & sb, ActionAccess & st)
+StreamBase & operator>>( StreamBase & sb, ActionAccess & st )
 {
-    return sb >> static_cast<ActionSimple &>(st) >> st.allowPlayers >> st.allowComputer >> st.cancelAfterFirstVisit >> st.message;
+    return sb >> static_cast<ActionSimple &>( st ) >> st.allowPlayers >> st.allowComputer >> st.cancelAfterFirstVisit >> st.message;
 }
 
-StreamBase & operator<< (StreamBase & sb, const ActionDefault & st)
+StreamBase & operator<<( StreamBase & sb, const ActionDefault & st )
 {
-    return sb << static_cast<const ActionSimple &>(st) << st.enabled << st.message;
+    return sb << static_cast<const ActionSimple &>( st ) << st.enabled << st.message;
 }
 
-StreamBase & operator>> (StreamBase & sb, ActionDefault & st)
+StreamBase & operator>>( StreamBase & sb, ActionDefault & st )
 {
-    return sb >> static_cast<ActionSimple &>(st) >> st.enabled >> st.message;
+    return sb >> static_cast<ActionSimple &>( st ) >> st.enabled >> st.message;
 }
 
-StreamBase & operator<< (StreamBase & sb, const ActionMessage & st)
+StreamBase & operator<<( StreamBase & sb, const ActionMessage & st )
 {
-    return sb << static_cast<const ActionSimple &>(st) << st.message;
+    return sb << static_cast<const ActionSimple &>( st ) << st.message;
 }
 
-StreamBase & operator>> (StreamBase & sb, ActionMessage & st)
+StreamBase & operator>>( StreamBase & sb, ActionMessage & st )
 {
-    return sb >> static_cast<ActionSimple &>(st) >> st.message;
+    return sb >> static_cast<ActionSimple &>( st ) >> st.message;
 }
 
-StreamBase & operator<< (StreamBase & sb, const ListActions & st)
+StreamBase & operator<<( StreamBase & sb, const ListActions & st )
 {
-    sb << static_cast<u32>(st.size());
-    for(ListActions::const_iterator it = st.begin(); it != st.end(); ++it)
-    {
-        sb << (*it)->GetType();
+    sb << static_cast<u32>( st.size() );
+    for ( ListActions::const_iterator it = st.begin(); it != st.end(); ++it ) {
+        sb << ( *it )->GetType();
 
-        switch((*it)->GetType())
-        {
-            case ACTION_DEFAULT:        { const ActionDefault* ptr = static_cast<const ActionDefault*>(*it); if(ptr) sb << *ptr; } break;
-            case ACTION_ACCESS:         { const ActionAccess* ptr = static_cast<const ActionAccess*>(*it); if(ptr) sb << *ptr; } break;
-            case ACTION_MESSAGE:        { const ActionMessage* ptr = static_cast<const ActionMessage*>(*it); if(ptr) sb << *ptr; } break;
-            case ACTION_RESOURCES:      { const ActionResources* ptr = static_cast<const ActionResources*>(*it); if(ptr) sb << *ptr; } break;
-            case ACTION_ARTIFACT:       { const ActionArtifact* ptr = static_cast<const ActionArtifact*>(*it); if(ptr) sb << *ptr; } break;
-            default: sb << **it; break;
+        switch ( ( *it )->GetType() ) {
+        case ACTION_DEFAULT: {
+            const ActionDefault * ptr = static_cast<const ActionDefault *>( *it );
+            if ( ptr )
+                sb << *ptr;
+        } break;
+        case ACTION_ACCESS: {
+            const ActionAccess * ptr = static_cast<const ActionAccess *>( *it );
+            if ( ptr )
+                sb << *ptr;
+        } break;
+        case ACTION_MESSAGE: {
+            const ActionMessage * ptr = static_cast<const ActionMessage *>( *it );
+            if ( ptr )
+                sb << *ptr;
+        } break;
+        case ACTION_RESOURCES: {
+            const ActionResources * ptr = static_cast<const ActionResources *>( *it );
+            if ( ptr )
+                sb << *ptr;
+        } break;
+        case ACTION_ARTIFACT: {
+            const ActionArtifact * ptr = static_cast<const ActionArtifact *>( *it );
+            if ( ptr )
+                sb << *ptr;
+        } break;
+        default:
+            sb << **it;
+            break;
         }
     }
 
     return sb;
 }
 
-StreamBase & operator>> (StreamBase & sb, ListActions & st)
+StreamBase & operator>>( StreamBase & sb, ListActions & st )
 {
     u32 size = 0;
     sb >> size;
 
     st.clear();
 
-    for(u32 ii = 0; ii < size; ++ii)
-    {
+    for ( u32 ii = 0; ii < size; ++ii ) {
         int type;
         sb >> type;
 
-        switch(type)
-        {
-            case ACTION_DEFAULT:        { ActionDefault* ptr = new ActionDefault(); sb >> *ptr; st.push_back(ptr); } break;
-            case ACTION_ACCESS:         { ActionAccess* ptr = new ActionAccess(); sb >> *ptr; st.push_back(ptr); } break;
-            case ACTION_MESSAGE:        { ActionMessage* ptr = new ActionMessage(); sb >> *ptr; st.push_back(ptr); } break;
-            case ACTION_RESOURCES:      { ActionResources* ptr = new ActionResources(); sb >> *ptr; st.push_back(ptr); } break;
-            case ACTION_ARTIFACT:       { ActionArtifact* ptr = new ActionArtifact(); sb >> *ptr; st.push_back(ptr); } break;
+        switch ( type ) {
+        case ACTION_DEFAULT: {
+            ActionDefault * ptr = new ActionDefault();
+            sb >> *ptr;
+            st.push_back( ptr );
+        } break;
+        case ACTION_ACCESS: {
+            ActionAccess * ptr = new ActionAccess();
+            sb >> *ptr;
+            st.push_back( ptr );
+        } break;
+        case ACTION_MESSAGE: {
+            ActionMessage * ptr = new ActionMessage();
+            sb >> *ptr;
+            st.push_back( ptr );
+        } break;
+        case ACTION_RESOURCES: {
+            ActionResources * ptr = new ActionResources();
+            sb >> *ptr;
+            st.push_back( ptr );
+        } break;
+        case ACTION_ARTIFACT: {
+            ActionArtifact * ptr = new ActionArtifact();
+            sb >> *ptr;
+            st.push_back( ptr );
+        } break;
 
-            default: { ActionSimple* ptr = new ActionSimple(); sb >> *ptr; st.push_back(ptr); } break;
+        default: {
+            ActionSimple * ptr = new ActionSimple();
+            sb >> *ptr;
+            st.push_back( ptr );
+        } break;
         }
     }
 
     return sb;
 }
 
-bool ActionAccess::Action(ActionAccess* act, s32 index, Heroes & hero)
+bool ActionAccess::Action( ActionAccess * act, s32 index, Heroes & hero )
 {
-    if(act)
-    {
-	if(act->cancelAfterFirstVisit &&
-	    hero.isVisited(world.GetTiles(index), Visit::GLOBAL))
-	    return false;
+    if ( act ) {
+        if ( act->cancelAfterFirstVisit && hero.isVisited( world.GetTiles( index ), Visit::GLOBAL ) )
+            return false;
 
-	if(! act->message.empty())
-	    Dialog::Message("", act->message, Font::BIG, Dialog::OK);
+        if ( !act->message.empty() )
+            Dialog::Message( "", act->message, Font::BIG, Dialog::OK );
 
-	if(hero.isControlAI() && ! act->allowComputer)
-	    return false;
+        if ( hero.isControlAI() && !act->allowComputer )
+            return false;
 
-	if(act->cancelAfterFirstVisit)
-	    hero.SetVisited(index, Visit::GLOBAL);
+        if ( act->cancelAfterFirstVisit )
+            hero.SetVisited( index, Visit::GLOBAL );
 
-	if(hero.GetColor() & act->allowPlayers)
-	    return true;
+        if ( hero.GetColor() & act->allowPlayers )
+            return true;
     }
 
     return false;
 }
 
-bool ActionDefault::Action(ActionDefault* act, s32 index, Heroes & hero)
+bool ActionDefault::Action( ActionDefault * act, s32 index, Heroes & hero )
 {
-    if(act)
-    {
-	if(! act->message.empty())
-	    Dialog::Message("", act->message, Font::BIG, Dialog::OK);
-	return act->enabled;
+    if ( act ) {
+        if ( !act->message.empty() )
+            Dialog::Message( "", act->message, Font::BIG, Dialog::OK );
+        return act->enabled;
     }
 
     return false;
 }
 
-bool ActionArtifact::Action(ActionArtifact* act, s32 index, Heroes & hero)
+bool ActionArtifact::Action( ActionArtifact * act, s32 index, Heroes & hero )
 {
-    if(act && act->artifact != Artifact::UNKNOWN)
-    {
-	if(! act->message.empty())
-    	    Dialog::ArtifactInfo("", act->message, act->artifact);
-	hero.PickupArtifact(act->artifact);
-	act->artifact = Artifact::UNKNOWN;
-	return true;
+    if ( act && act->artifact != Artifact::UNKNOWN ) {
+        if ( !act->message.empty() )
+            Dialog::ArtifactInfo( "", act->message, act->artifact );
+        hero.PickupArtifact( act->artifact );
+        act->artifact = Artifact::UNKNOWN;
+        return true;
     }
 
     return false;
 }
 
-bool ActionResources::Action(ActionResources* act, s32 index, Heroes & hero)
+bool ActionResources::Action( ActionResources * act, s32 index, Heroes & hero )
 {
-    if(act && 0 < act->resources.GetValidItems())
-    {
-        Dialog::ResourceInfo("", act->message, act->resources);
-	hero.GetKingdom().AddFundsResource(act->resources);
-	act->resources.Reset();
-	return true;
+    if ( act && 0 < act->resources.GetValidItems() ) {
+        Dialog::ResourceInfo( "", act->message, act->resources );
+        hero.GetKingdom().AddFundsResource( act->resources );
+        act->resources.Reset();
+        return true;
     }
 
     return false;
 }
 
-bool ActionMessage::Action(ActionMessage* act, s32 index, Heroes & hero)
+bool ActionMessage::Action( ActionMessage * act, s32 index, Heroes & hero )
 {
-    if(act)
-    {
-	if(! act->message.empty())
-	    Dialog::Message("", act->message, Font::BIG, Dialog::OK);
-	return true;
+    if ( act ) {
+        if ( !act->message.empty() )
+            Dialog::Message( "", act->message, Font::BIG, Dialog::OK );
+        return true;
     }
 
     return false;

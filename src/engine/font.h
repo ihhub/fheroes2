@@ -40,31 +40,37 @@ public:
     FontTTF();
     ~FontTTF();
 
-    TTF_Font* operator() (void) const { return ptr; }
+    TTF_Font * operator()( void ) const
+    {
+        return ptr;
+    }
 
-    static void Init(void);
-    static void Quit(void);
+    static void Init( void );
+    static void Quit( void );
 
-    bool Open(const std::string &, int size);
-    bool isValid(void) const;
-    void SetStyle(int);
+    bool Open( const std::string &, int size );
+    bool isValid( void ) const;
+    void SetStyle( int );
 
-    int Height(void) const;
-    int Ascent(void) const;
-    int Descent(void) const;
-    int LineSkip(void) const;
+    int Height( void ) const;
+    int Ascent( void ) const;
+    int Descent( void ) const;
+    int LineSkip( void ) const;
 
-    Surface RenderText(const std::string &, const RGBA &, bool solid /* or blended */);
-    Surface RenderChar(char, const RGBA &, bool solid /* or blended */);
-    Surface RenderUnicodeText(const std::vector<u16> &, const RGBA &, bool solid /* or blended */);
-    Surface RenderUnicodeChar(u16, const RGBA &, bool solid /* or blended */);
+    Surface RenderText( const std::string &, const RGBA &, bool solid /* or blended */ );
+    Surface RenderChar( char, const RGBA &, bool solid /* or blended */ );
+    Surface RenderUnicodeText( const std::vector<u16> &, const RGBA &, bool solid /* or blended */ );
+    Surface RenderUnicodeChar( u16, const RGBA &, bool solid /* or blended */ );
 
 protected:
-    TTF_Font *ptr;
+    TTF_Font * ptr;
 
 private:
-    FontTTF(const FontTTF &) {}
-    FontTTF & operator= (const FontTTF &) { return *this; }
+    FontTTF( const FontTTF & ) {}
+    FontTTF & operator=( const FontTTF & )
+    {
+        return *this;
+    }
 };
 
 #endif
@@ -72,9 +78,9 @@ private:
 class FontPSF
 {
 public:
-    FontPSF(const std::string &, const Size &);
+    FontPSF( const std::string &, const Size & );
 
-    Surface RenderText(const std::string &, const RGBA &) const;
+    Surface RenderText( const std::string &, const RGBA & ) const;
 
 private:
     std::vector<u8> buf;

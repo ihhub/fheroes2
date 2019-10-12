@@ -37,7 +37,14 @@ class QDockWidget;
 class QListWidgetItem;
 QT_END_NAMESPACE
 
-namespace Form { class MiniMap; class TownList; class HeroList; class CustomList; class InfoForm; }
+namespace Form
+{
+    class MiniMap;
+    class TownList;
+    class HeroList;
+    class CustomList;
+    class InfoForm;
+}
 class MapWindow;
 class MapTile;
 
@@ -49,80 +56,80 @@ public:
     MainWindow();
 
 protected:
-    void		closeEvent(QCloseEvent*);
+    void closeEvent( QCloseEvent * );
 
 private slots:
-    void		newFile(void);
-    void		open(void);
-    void		save(void);
-    void		saveRaw(void);
-    void		saveAs(void);
-    void		about(void);
-    void		updateWindowMenu(void);
-    MapWindow*		createMapWindow(void);
-    void		setActiveSubWindow(QWidget*);
-    void		subWindowActivated(QMdiSubWindow*);
-    void		setCoordInfo(const MapTile*);
-    void		updateInfoForm(QListWidgetItem*);
+    void newFile( void );
+    void open( void );
+    void save( void );
+    void saveRaw( void );
+    void saveAs( void );
+    void about( void );
+    void updateWindowMenu( void );
+    MapWindow * createMapWindow( void );
+    void setActiveSubWindow( QWidget * );
+    void subWindowActivated( QMdiSubWindow * );
+    void setCoordInfo( const MapTile * );
+    void updateInfoForm( QListWidgetItem * );
 
 private:
-    void		createActions(void);
-    void		createMenus(void);
-    void		createToolBars(void);
-    void		createStatusBar(void);
-    void		readSettings(void);
-    void		writeSettings(void);
+    void createActions( void );
+    void createMenus( void );
+    void createToolBars( void );
+    void createStatusBar( void );
+    void readSettings( void );
+    void writeSettings( void );
 
-    void		updateMenus(void);
-    void		updateStatusBar(void);
-    void		updateDockWidgets(void);
+    void updateMenus( void );
+    void updateStatusBar( void );
+    void updateDockWidgets( void );
 
-    MapWindow*		activeMapWindow(void);
-    QMdiSubWindow*	findMapWindow(const QString &);
+    MapWindow * activeMapWindow( void );
+    QMdiSubWindow * findMapWindow( const QString & );
 
-    QMdiArea*		mdiArea;
-    QSignalMapper*	windowMapper;
+    QMdiArea * mdiArea;
+    QSignalMapper * windowMapper;
 
-    QMenu*		fileMenu;
-    QMenu*		mapMenu;
-    QMenu*		windowMenu;
-    QToolBar*		fileToolBar;
-    QAction*		fileNewAct;
-    QAction*		fileOpenAct;
-    QAction*		fileSaveAct;
-    QAction*		fileSaveAsAct;
-    QAction*		fileSaveRawAct;
-    QAction*		fileExitAct;
-    QAction*		editCopyAct;
-    QAction*		editPasteAct;
-    QAction*		closeAct;
-    QAction*		closeAllAct;
-    QAction*		tileAct;
-    QAction*		cascadeAct;
-    QAction*		nextAct;
-    QAction*		previousAct;
-    QAction*		separatorAct;
-    QAction*		menuAboutAct;
+    QMenu * fileMenu;
+    QMenu * mapMenu;
+    QMenu * windowMenu;
+    QToolBar * fileToolBar;
+    QAction * fileNewAct;
+    QAction * fileOpenAct;
+    QAction * fileSaveAct;
+    QAction * fileSaveAsAct;
+    QAction * fileSaveRawAct;
+    QAction * fileExitAct;
+    QAction * editCopyAct;
+    QAction * editPasteAct;
+    QAction * closeAct;
+    QAction * closeAllAct;
+    QAction * tileAct;
+    QAction * cascadeAct;
+    QAction * nextAct;
+    QAction * previousAct;
+    QAction * separatorAct;
+    QAction * menuAboutAct;
 
-    QAction*		mapOptionsAct;
-    QAction*		showPassableAct;
+    QAction * mapOptionsAct;
+    QAction * showPassableAct;
 
-    QDockWidget*	dockMiniMap;
-    QDockWidget*	dockTownList;
-    QDockWidget*	dockHeroList;
-    QDockWidget*	dockObjectsList;
-    QDockWidget*	dockInfoWidget;
+    QDockWidget * dockMiniMap;
+    QDockWidget * dockTownList;
+    QDockWidget * dockHeroList;
+    QDockWidget * dockObjectsList;
+    QDockWidget * dockInfoWidget;
 
-    QLabel*		labelTileX;
-    QLabel*		labelTileY;
+    QLabel * labelTileX;
+    QLabel * labelTileY;
 
-    Form::MiniMap*      miniMap;
-    Form::TownList*     townList;
-    Form::HeroList*     heroList;
-    Form::CustomList*	objectsList;
-    Form::InfoForm*     infoForm;
+    Form::MiniMap * miniMap;
+    Form::TownList * townList;
+    Form::HeroList * heroList;
+    Form::CustomList * objectsList;
+    Form::InfoForm * infoForm;
 
-    int			sequenceMapNumber;
+    int sequenceMapNumber;
 };
 
 #endif
