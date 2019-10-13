@@ -35,8 +35,10 @@
 #include <SDL.h>
 
 #if defined( __MINGW32CE__ ) || defined( __MINGW32__ ) || defined( _MSC_VER )
-#include <shellapi.h>
+// see https://codereview.chromium.org/2669263003 for details
 #include <windows.h>
+// Must be after windows.h:
+#include <shellapi.h>
 #endif
 
 #if !defined( __MINGW32CE__ ) && !defined( _MSC_VER )
