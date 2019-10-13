@@ -80,7 +80,7 @@ int Dialog::ArmyInfo(const Troop & troop, int flags)
     text.Blit(dst_pt);
 
     // count
-    text.Set(GetString(troop.GetCount()));
+    text.Set( GetString(troop.GetCount()), Font::BIG );
     dst_pt.x = pos_rt.x + 140 - text.w() / 2;
     dst_pt.y = pos_rt.y + 225;
     text.Blit(dst_pt);
