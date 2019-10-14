@@ -257,6 +257,12 @@ Surface::Surface(const Size & sz, bool amask) : surface(NULL)
     Set(sz.w, sz.h, amask);
 }
 
+Surface::Surface( const Size & sz, u32 bpp, bool amask )
+    : surface( NULL )
+{
+    Set( sz.w, sz.h, bpp, amask );
+}
+
 Surface::Surface(const Size & sz, const SurfaceFormat & fm) : surface(NULL)
 {
     Set(sz.w, sz.h, fm);
