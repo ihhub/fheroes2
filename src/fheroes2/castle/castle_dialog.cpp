@@ -483,23 +483,26 @@ int Castle::OpenDialog(bool readonly, bool fade)
 	    Game::DisableChangeMusic(true);
         Game::OpenHeroesDialog( *heroes.Guard(), false );
 
-            if(selectArmy1.isSelected()) selectArmy1.ResetSelected();
-	    if(selectArmy2.isValid() && selectArmy2.isSelected()) selectArmy2.ResetSelected();
+        if ( selectArmy1.isSelected() )
+            selectArmy1.ResetSelected();
+        if ( selectArmy2.isValid() && selectArmy2.isSelected() )
+            selectArmy2.ResetSelected();
 
-	    need_redraw = true;
-	}
-	else
-	// view hero
-	if(!readonly && heroes.Guest() && le.MouseClickLeft(rectSign2))
-	{
-	    Game::DisableChangeMusic(true);
+        need_redraw = true;
+    }
+    else
+        // view hero
+        if ( !readonly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
+        Game::DisableChangeMusic( true );
         Game::OpenHeroesDialog( *heroes.Guest(), false );
 
-            if(selectArmy1.isSelected()) selectArmy1.ResetSelected();
-	    if(selectArmy2.isValid() && selectArmy2.isSelected()) selectArmy2.ResetSelected();
+        if ( selectArmy1.isSelected() )
+            selectArmy1.ResetSelected();
+        if ( selectArmy2.isValid() && selectArmy2.isSelected() )
+            selectArmy2.ResetSelected();
 
-	    need_redraw = true;
-	}
+        need_redraw = true;
+    }
 
         // prev castle
 	if(buttonPrevCastle.isEnable() && le.MouseClickLeft(buttonPrevCastle)){ result = Dialog::PREV; break; }

@@ -371,9 +371,9 @@ void StatsCastlesList::ActionListSingleClick(CstlRow & row, const Point & cursor
 	    if(hero)
 	    {
             Game::OpenHeroesDialog( *hero, false );
-		row.Init(row.castle);
-	    }
-	}
+            row.Init( row.castle );
+        }
+    }
     }
 }
 
