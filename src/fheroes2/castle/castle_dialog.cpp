@@ -481,7 +481,7 @@ int Castle::OpenDialog(bool readonly, bool fade)
 	if(!readonly && heroes.Guard() && le.MouseClickLeft(rectSign1))
 	{
 	    Game::DisableChangeMusic(true);
-	    Game::OpenHeroesDialog(*heroes.Guard());
+        Game::OpenHeroesDialog( *heroes.Guard(), false );
 
             if(selectArmy1.isSelected()) selectArmy1.ResetSelected();
 	    if(selectArmy2.isValid() && selectArmy2.isSelected()) selectArmy2.ResetSelected();
@@ -493,7 +493,7 @@ int Castle::OpenDialog(bool readonly, bool fade)
 	if(!readonly && heroes.Guest() && le.MouseClickLeft(rectSign2))
 	{
 	    Game::DisableChangeMusic(true);
-	    Game::OpenHeroesDialog(*heroes.Guest());
+        Game::OpenHeroesDialog( *heroes.Guest(), false );
 
             if(selectArmy1.isSelected()) selectArmy1.ResetSelected();
 	    if(selectArmy2.isValid() && selectArmy2.isSelected()) selectArmy2.ResetSelected();
