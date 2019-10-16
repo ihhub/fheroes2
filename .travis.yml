@@ -61,6 +61,7 @@ matrix:
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
+        - brew update
         - brew install sdl
         - brew install sdl_ttf
         - brew install sdl_mixer
@@ -85,6 +86,7 @@ matrix:
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
+        - brew update
         - brew install sdl2
         - brew install sdl2_ttf
         - brew install sdl2_mixer
