@@ -199,14 +199,7 @@ const settings_t settingsFHeroes2[] =
 std::string Settings::GetVersion(void)
 {
     std::ostringstream os;
-
-    os << static_cast<int>(MAJOR_VERSION) << "." << static_cast<int>(MINOR_VERSION) << "."
-#ifdef SVN_REVISION
-    SVN_REVISION;
-#else
-    "0000";
-#endif
-
+    os << static_cast<int>( MAJOR_VERSION ) << "." << static_cast<int>( MINOR_VERSION );
     return os.str();
 }
 
