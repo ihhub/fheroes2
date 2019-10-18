@@ -123,28 +123,28 @@ void Battle::Cell::SetArea(const Rect & area)
 {
     if(Settings::Get().QVGA())
     {
-	pos.x = area.x + 45 - (((index / ARENAW) % 2) ? CELLW2 / 2 : 0) + (CELLW2 - 1) * (index % ARENAW);
-	pos.y = (area.y + area.h - 188) + ((CELLH2 / 4) * 3) * (index / ARENAW);
-	pos.w = CELLW2;
-	pos.h = CELLH2;
+        pos.x = area.x + 45 - ( ( ( index / ARENAW ) % 2 ) ? CELLW2 / 2 : 0 ) + ( CELLW2 - 1 ) * ( index % ARENAW );
+        pos.y = ( area.y + area.h - 188 ) + ( ( CELLH2 - ( CELLH2 - CELLH2_VER_SIDE ) / 2 - 1 ) * ( index / ARENAW ) );
+        pos.w = CELLW2;
+        pos.h = CELLH2;
     }
     else
     {
-	pos.x = area.x + 88 - (((index / ARENAW) % 2) ? CELLW / 2 : 0) + (CELLW - 1) * (index % ARENAW);
-	pos.y = area.y + 85 + ((CELLH / 4) * 3 - 1) * (index / ARENAW);
-	pos.w = CELLW;
-	pos.h = CELLH;
+        pos.x = area.x + 88 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + ( CELLW ) * ( index % ARENAW );
+        pos.y = area.y + 62 + ( ( ( CELLH - ( CELLH - CELLH_VER_SIDE ) / 2 ) ) * ( index / ARENAW ) );
+        pos.w = CELLW;
+        pos.h = CELLH;
     }
-
+    const short vertical_side_size = Settings::Get().QVGA() ? CELLH2_VER_SIDE : CELLH_VER_SIDE;
     // center
-    coord[0] = Point(INFL * pos.x + INFL * pos.w / 2, INFL * pos.y + INFL * pos.h / 2);
+    coord[0] = Point( INFL * pos.x + INFL * pos.w / 2, INFL * pos.y + INFL * pos.h / 2 );
     // coordinates
-    coord[1] = Point(INFL * pos.x, INFL * pos.y + INFL * pos.h / 4);
-    coord[2] = Point(INFL * pos.x + INFL * pos.w / 2, INFL * pos.y);
-    coord[3] = Point(INFL * pos.x + INFL * pos.w, INFL * pos.y + INFL * pos.h / 4);
-    coord[4] = Point(INFL * pos.x + INFL * pos.w, INFL * pos.y + INFL * pos.h - INFL * pos.h / 4);
-    coord[5] = Point(INFL * pos.x + INFL * pos.w / 2, INFL * pos.y + INFL * pos.h);
-    coord[6] = Point(INFL * pos.x, INFL * pos.y + INFL * pos.h - INFL * pos.h / 4);
+    coord[1] = Point( INFL * pos.x, INFL * pos.y + INFL * ( pos.h - vertical_side_size ) / 2 );
+    coord[2] = Point( INFL * pos.x + INFL * pos.w / 2, INFL * pos.y );
+    coord[3] = Point( INFL * pos.x + INFL * pos.w, INFL * pos.y + INFL * ( pos.h - vertical_side_size ) / 2 );
+    coord[4] = Point( INFL * pos.x + INFL * pos.w, INFL * pos.y + INFL * pos.h - INFL * ( pos.h - vertical_side_size ) / 2 );
+    coord[5] = Point( INFL * pos.x + INFL * pos.w / 2, INFL * pos.y + INFL * pos.h );
+    coord[6] = Point( INFL * pos.x, INFL * pos.y + INFL * pos.h - INFL * ( pos.h - vertical_side_size ) / 2 );
 }
 
 Battle::direction_t Battle::Cell::GetTriangleDirection(const Point & dst) const
