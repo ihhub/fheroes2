@@ -42,7 +42,7 @@ namespace Battle
 {
     void GetSummaryParams(int res1, int res2, const HeroBase &, u32 exp, int &, std::string &);
     void SpeedRedraw(const Point &);
-    void DoOnButtonClicked( LabeledButton & button, Display & display, Cursor & cursor );
+    void SetButtonState( LabeledButton & button, Display & display, Cursor & cursor );
     void InitButtonState( LabeledButton & button, bool state );
 }
 
@@ -58,7 +58,7 @@ void Battle::SpeedRedraw(const Point & dst)
     text.Blit( dst.x + ( sprite.w() - text.w() ) / 2, dst.y + sprite.h() + 3 );
 }
 
-void Battle::DoOnButtonClicked( LabeledButton & button, Display & display, Cursor & cursor )
+void Battle::SetButtonState( LabeledButton & button, Display & display, Cursor & cursor )
 {
     cursor.Hide();
     if ( button.isPressed() ) {
@@ -148,15 +148,15 @@ void Battle::DialogBattleSettings(void)
         }
         else if ( le.MouseClickLeft( opt_grid ) ) {
             conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
-            DoOnButtonClicked( opt_grid, display, cursor );
+            SetButtonState( opt_grid, display, cursor );
         }
         else if ( le.MouseClickLeft( opt_shadow_movement ) ) {
             conf.SetBattleMovementShaded( !conf.ExtBattleShowMoveShadow() );
-            DoOnButtonClicked( opt_shadow_movement, display, cursor );
+            SetButtonState( opt_shadow_movement, display, cursor );
         }
         else if ( le.MouseClickLeft( opt_shadow_cursor ) ) {
             conf.SetBattleMouseShaded( !conf.ExtBattleShowMouseShadow() );
-            DoOnButtonClicked( opt_shadow_cursor, display, cursor );
+            SetButtonState( opt_shadow_cursor, display, cursor );
         }
         else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok ) ) {
             break;
