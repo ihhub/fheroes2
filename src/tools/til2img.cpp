@@ -20,67 +20,73 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fstream>
-#include <iomanip>
 #include <iostream>
+#include <fstream>
 #include <sstream>
+#include <iomanip>
 
+#include "SDL.h"
 #include "engine.h"
 #include "system.h"
-#include <SDL.h>
 
-int main( int argc, char ** argv )
+int main(int argc, char **argv)
 {
-    if ( argc != 3 ) {
-        std::cout << argv[0] << " [-d] infile.til extract_to_dir" << std::endl;
-        return EXIT_SUCCESS;
+    if(argc != 3)
+    {
+	std::cout << argv[0] << " [-d] infile.til extract_to_dir" << std::endl;
+	return EXIT_SUCCESS;
     }
 
     StreamFile sf;
 
-    if ( !sf.open( argv[1], "rb" ) ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
-        return EXIT_SUCCESS;
+    if(! sf.open(argv[1], "rb"))
+    {
+	std::cout << "error open file: " << argv[1] << std::endl;
+	return EXIT_SUCCESS;
     }
 
-    std::string prefix( argv[2] );
-    std::string shortname( argv[1] );
-
-    if ( shortname == "-d" ) {
+    std::string prefix(argv[2]);
+    std::string shortname(argv[1]);
+    
+    if(shortname == "-d")
+    {
     }
 
-    shortname.replace( shortname.find( "." ), 4, "" );
-    prefix = System::ConcatePath( prefix, shortname );
+    shortname.replace(shortname.find("."), 4, "");
+    prefix = System::ConcatePath(prefix, shortname);
 
-    if ( 0 != System::MakeDirectory( prefix ) ) {
-        std::cout << "error mkdir: " << prefix << std::endl;
-        return EXIT_SUCCESS;
+    if(0 != System::MakeDirectory(prefix))
+    {
+	std::cout << "error mkdir: " << prefix << std::endl;
+	return EXIT_SUCCESS;
     }
 
     int size = sf.size();
     int count = sf.getLE16();
     int width = sf.getLE16();
     int height = sf.getLE16();
-    std::vector<u8> buf = sf.getRaw( size );
+    std::vector<u8> buf = sf.getRaw(size);
 
     SDL::Init();
 
-    for ( int cur = 0; cur < count; ++cur ) {
-        u32 offset = width * height * cur;
-        if ( offset < buf.size() ) {
-            Surface sf( &buf[offset], width, height, 1, false );
+    for(int cur = 0; cur < count; ++cur)
+    {
+	u32 offset = width * height * cur;
+	if(offset < buf.size())
+	{
+	    Surface sf(& buf[offset], width, height, 1, false);
 
-            std::ostringstream stream;
-            stream << std::setw( 3 ) << std::setfill( '0' ) << cur;
-            std::string dstfile = System::ConcatePath( prefix, stream.str() );
+	    std::ostringstream stream;
+    	    stream << std::setw(3) << std::setfill('0') << cur;
+	    std::string dstfile = System::ConcatePath(prefix, stream.str());
 
 #ifndef WITH_IMAGE
-            dstfile += ".bmp";
+    	    dstfile += ".bmp";
 #else
-            dstfile += ".png";
+    	    dstfile += ".png";
 #endif
-            sf.Save( dstfile.c_str() );
-        }
+    	    sf.Save(dstfile.c_str());
+	}
     }
 
     sf.close();

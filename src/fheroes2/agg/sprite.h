@@ -28,23 +28,23 @@ class Sprite : public SpritePos
 {
 public:
     Sprite();
-    Sprite( const Surface &, s32, s32 );
+    Sprite(const Surface &, s32, s32);
 
-    int x( void ) const;
-    int y( void ) const;
+    int x(void) const;
+    int y(void) const;
 
     using Surface::Blit;
 
-    void Blit( void ) const;
-    void Blit( s32, s32 ) const;
-    void Blit( const Point & ) const;
-    void Blit( const Rect & srt, s32, s32 ) const;
-    void Blit( const Rect & srt, const Point & ) const;
+    void Blit(void) const;
+    void Blit(s32, s32) const;
+    void Blit(const Point &) const;
+    void Blit(const Rect & srt, s32, s32) const;
+    void Blit(const Rect & srt, const Point &) const;
 
-    void ChangeColorIndex( u32 index1, u32 index2 );
+    void ChangeColorIndex(u32 index1, u32 index2);
 
-    static Surface ScaleQVGASurface( const Surface & );
-    static Sprite ScaleQVGASprite( const Sprite & );
+    static Surface ScaleQVGASurface(const Surface &);
+    static Sprite ScaleQVGASprite(const Sprite &);
 };
 
 #endif

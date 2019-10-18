@@ -20,13 +20,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <stdexcept>
+#include <iostream>
 #include "error.h"
 #include "system.h"
-#include <iostream>
-#include <stdexcept>
 
 /* exception */
-void Error::Except( const char * func, const char * message )
+void Error::Except(const char* func, const char* message)
 {
 #ifndef ANDROID
     throw Exception();

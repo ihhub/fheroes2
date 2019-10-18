@@ -23,18 +23,13 @@
 #ifndef H2GAMEIO_H
 #define H2GAMEIO_H
 
-#include <string>
-
-namespace Maps
-{
-    class FileInfo;
-}
+namespace Maps { class FileInfo; }
 
 namespace Game
 {
-    bool Save( const std::string & );
-    bool Load( const std::string & );
-    bool LoadSAV2FileInfo( const std::string &, Maps::FileInfo & );
+    bool Save(const std::string &);
+    bool Load(const std::string &);
+    bool LoadSAV2FileInfo(const std::string &,  Maps::FileInfo &);
 }
 
 #endif

@@ -22,36 +22,36 @@
 #ifndef H2ENGINE_H
 #define H2ENGINE_H
 
-#include "display.h"
-#include "error.h"
-#include "font.h"
-#include "localevent.h"
-#include "rand.h"
-#include "rect.h"
-#include "serialize.h"
-#include "sprites.h"
-#include "surface.h"
-#include "system.h"
-#include "tools.h"
-#include "translations.h"
 #include "types.h"
+#include "sprites.h"
+#include "display.h"
+#include "localevent.h"
+#include "error.h"
+#include "rect.h"
+#include "surface.h"
+#include "rand.h"
+#include "font.h"
+#include "tools.h"
+#include "serialize.h"
+#include "translations.h"
+#include "system.h"
 
 #include "audio.h"
-#include "audio_cdrom.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
+#include "audio_cdrom.h"
 
-#define INIT_VIDEO SDL_INIT_VIDEO
-#define INIT_AUDIO SDL_INIT_AUDIO
-#define INIT_TIMER SDL_INIT_TIMER
-#define INIT_CDROM SDL_INIT_CDROM
+#define INIT_VIDEO	SDL_INIT_VIDEO
+#define INIT_AUDIO	SDL_INIT_AUDIO
+#define INIT_TIMER	SDL_INIT_TIMER
+#define INIT_CDROM	SDL_INIT_CDROM
 
 namespace SDL
 {
-    bool Init( const u32 system = INIT_VIDEO );
-    void Quit( void );
+    bool Init(const u32 system = INIT_VIDEO);
+    void Quit(void);
 
-    bool SubSystem( const u32 system );
+    bool SubSystem(const u32 system);
 }
 
 #endif

@@ -28,72 +28,74 @@
 
 namespace SDL
 {
-    class Thread
-    {
-    public:
-        Thread();
-        ~Thread();
-        Thread( const Thread & );
 
-        Thread & operator=( const Thread & );
+class Thread
+{
+public:
+    Thread();
+    ~Thread();
+    Thread(const Thread &);
 
-        void Create( int ( * )( void * ), void * param = NULL );
-        int Wait( void );
-        void Kill( void );
+    Thread & operator= (const Thread &);
 
-        bool IsRun( void ) const;
+    void	Create(int (*)(void *), void *param = NULL);
+    int		Wait(void);
+    void	Kill(void);
 
-        u32 GetID( void ) const;
+    bool	IsRun(void) const;
 
-    private:
-        SDL_Thread * thread;
-    };
+    u32		GetID(void) const;
 
-    class Mutex
-    {
-    public:
-        Mutex( bool init = false );
-        Mutex( const Mutex & );
-        ~Mutex();
+private:
+    SDL_Thread *thread;
+};
 
-        Mutex & operator=( const Mutex & );
+class Mutex
+{
+public:
+    Mutex(bool init = false);
+    Mutex(const Mutex &);
+    ~Mutex();
 
-        void Create( void );
-        bool Lock( void ) const;
-        bool Unlock( void ) const;
+    Mutex & operator= (const Mutex &);
 
-    private:
-        SDL_mutex * mutex;
-    };
+    void Create(void);
+    bool Lock(void) const;
+    bool Unlock(void) const;
 
-    class Timer
-    {
-    public:
-        Timer();
+private:
+    SDL_mutex *mutex;
+};
 
-        bool IsValid( void ) const;
+class Timer
+{
+public:
+    Timer();
 
-        void Run( u32, u32 ( * )( u32, void * ), void * param = NULL );
-        void Remove( void );
+    bool IsValid(void) const;
 
-    private:
-        SDL_TimerID id;
-    };
+    void Run(u32, u32 (*)(u32, void *), void *param = NULL);
+    void Remove(void);
 
-    class Time
-    {
-    public:
-        Time();
+private:
+    SDL_TimerID id;
+};
 
-        void Start( void );
-        void Stop( void );
-        u32 Get( void ) const;
-        void Print( const char * header = NULL ) const;
+class Time
+{
+public:
+    Time();
 
-    private:
-        u32 tick1;
-        u32 tick2;
-    };
+    void Start(void);
+    void Stop(void);
+    u32 Get(void) const;
+    void Print(const char* header = NULL) const;
+
+private:
+    u32 tick1;
+    u32 tick2;
+};
+
 }
 
 #endif

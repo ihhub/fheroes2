@@ -23,10 +23,9 @@
 #ifndef H2BATTLE_GRAVEYARD_H
 #define H2BATTLE_GRAVEYARD_H
 
-#include <map>
 #include <vector>
+#include <map>
 
-#include "battle_board.h"
 #include "gamedefs.h"
 
 namespace Battle
@@ -35,21 +34,18 @@ namespace Battle
 
     struct TroopUIDs : public std::vector<u32>
     {
-        TroopUIDs()
-        {
-            reserve( 4 );
-        }
+	TroopUIDs(){ reserve(4); }
     };
 
     class Graveyard : public std::map<s32, TroopUIDs>
     {
     public:
-        Graveyard() {}
+	Graveyard() {}
 
-        Indexes GetClosedCells( void ) const;
-        void AddTroop( const Unit & );
-        void RemoveTroop( const Unit & );
-        u32 GetLastTroopUID( s32 ) const;
+	Indexes		GetClosedCells(void) const;
+	void		AddTroop(const Unit &);
+	void		RemoveTroop(const Unit &);
+	u32		GetLastTroopUID(s32) const;
     };
 }
 

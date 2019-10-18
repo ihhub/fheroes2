@@ -27,13 +27,13 @@
 
 struct ListFiles : public std::list<std::string>
 {
-    void Append( const ListFiles & );
-    void ReadDir( const std::string & path, const std::string & filter = "", bool sensitive = true );
+    void Append(const ListFiles &);
+    void ReadDir(const std::string & path, const std::string & filter = "", bool sensitive = true);
 };
 
 struct ListDirs : public std::list<std::string>
 {
-    void Append( const std::list<std::string> & );
+    void Append(const std::list<std::string> &);
 };
 
 #endif
