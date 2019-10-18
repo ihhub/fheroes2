@@ -283,13 +283,11 @@ void ButtonGroups::DisableButton2(bool f)
 
 LabeledButton::LabeledButton()
     : Button()
-{
-}
+{}
 
 LabeledButton::LabeledButton( s32 ox, s32 oy, int icn, u32 index1, u32 index2 )
     : Button( ox, oy, icn, index1, index2 )
-{
-}
+{}
 
 void LabeledButton::SetTopText( const std::string & text )
 {
