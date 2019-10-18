@@ -741,7 +741,12 @@ void Settings::SetAIMoveSpeed(int speed) { ai_speed = (10 <= speed ? 10 : speed)
 void Settings::SetHeroesMoveSpeed(int speed){ heroes_speed = (10 <= speed ? 10 : speed); }
 
 /* set battle speed: 0 - 10 */
-void Settings::SetBattleSpeed(int speed) { battle_speed = (10 <= speed ? 10 : speed); }
+void Settings::SetBattleSpeed(int speed) { battle_speed = (10 <= speed ? 10 : speed); 
+					 	if (battle_speed <1)
+						{
+							battle_speed = 1;
+						}
+					 }
 
 void Settings::SetBlitSpeed(int speed) { blit_speed = speed; }
 
