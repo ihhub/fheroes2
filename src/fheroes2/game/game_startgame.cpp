@@ -159,7 +159,7 @@ void Game::OpenCastleDialog(Castle & castle)
 }
 
 /* open heroes wrapper */
-void Game::OpenHeroesDialog( Heroes & hero, bool update_focus )
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
 {
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
@@ -209,7 +209,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool update_focus )
 	}
     }
 
-    if ( update_focus ) {
+    if ( updateFocus ) {
         if ( it != myHeroes.end() ) {
             Interface::Basic::Get().SetFocus( *it );
         }
