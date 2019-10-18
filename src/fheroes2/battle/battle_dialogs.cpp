@@ -42,6 +42,8 @@ namespace Battle
 {
     void GetSummaryParams(int res1, int res2, const HeroBase &, u32 exp, int &, std::string &);
     void SpeedRedraw(const Point &);
+    void SetButtonState( LabeledButton & button, Display & display, Cursor & cursor );
+    void InitButtonState( LabeledButton & button, bool state );
 }
 
 void Battle::SpeedRedraw(const Point & dst)
@@ -50,11 +52,37 @@ void Battle::SpeedRedraw(const Point & dst)
     std::string str = _("speed: %{speed}");
 
     StringReplace(str, "%{speed}", speed);
-    Text text(str, Font::SMALL);
     const Sprite & sprite = AGG::GetICN(ICN::CSPANEL, (speed < 3 ? 0 : (speed < 7 ? 1 : 2)));
-
     sprite.Blit(dst);
-    text.Blit(dst.x + (sprite.w() - text.w()) / 2, dst.y + sprite.h() - 15);
+    const Text text( str, Font::SMALL );
+    text.Blit( dst.x + ( sprite.w() - text.w() ) / 2, dst.y + sprite.h() + 3 );
+}
+
+void Battle::SetButtonState( LabeledButton & button, Display & display, Cursor & cursor )
+{
+    cursor.Hide();
+    if ( button.isPressed() ) {
+        button.Release();
+        button.SetBottomText( _( "Off" ) );
+    }
+    else {
+        button.Press();
+        button.SetBottomText( _( "On" ) );
+    }
+    button.Draw();
+    cursor.Show();
+    display.Flip();
+}
+
+void Battle::InitButtonState( LabeledButton & button, bool state )
+{
+    if ( state ) {
+        button.Press();
+        button.SetBottomText( _( "On" ) );
+    }
+    else {
+        button.SetBottomText( _( "Off" ) );
+    }
 }
 
 void Battle::DialogBattleSettings(void)
@@ -78,22 +106,27 @@ void Battle::DialogBattleSettings(void)
 
     display.FillRect(back.GetArea(), ColorBlack);
     dialog.Blit(pos_rt.x, pos_rt.y);
-
     Button btn_ok(pos_rt.x + 113, pos_rt.y + 252, (conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN), 0, 1);
+    SpriteBack speed_buttom_back(
+        Rect( pos_rt.x + 36, pos_rt.y + 47 + AGG::GetICN( ICN::CSPANEL, 0 ).h(), AGG::GetICN( ICN::CSPANEL, 0 ).h(), Text::height( "speed", Font::SMALL ) + 3 ) );
+    const Rect opt_speed( pos_rt.x + 36, pos_rt.y + 47, AGG::GetICN( ICN::CSPANEL, 0 ).w(), AGG::GetICN( ICN::CSPANEL, 0 ).h() + Text::height( "speed", Font::SMALL ) );
+    LabeledButton opt_grid( pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9 );
+    opt_grid.SetBottomText( "Grid" );
+    LabeledButton opt_shadow_movement( pos_rt.x + 128, pos_rt.y + 157, ICN::CSPANEL, 10, 11 );
+    opt_shadow_movement.SetBottomText( "Shadow Movement" );
+    LabeledButton opt_shadow_cursor( pos_rt.x + 220, pos_rt.y + 157, ICN::CSPANEL, 12, 13 );
+    opt_shadow_cursor.SetBottomText( "Shadow Cursor" );
 
-    Rect   opt_speed(pos_rt.x + 36, pos_rt.y + 47, AGG::GetICN(ICN::CSPANEL, 0).w(), AGG::GetICN(ICN::CSPANEL, 0).h());
-    Button opt_grid(pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9);
-    Button opt_shadow_movement(pos_rt.x + 128, pos_rt.y + 157, ICN::CSPANEL, 10, 11);
-    Button opt_shadow_cursor(pos_rt.x + 220, pos_rt.y + 157, ICN::CSPANEL, 12, 13);
+    InitButtonState( opt_grid, conf.ExtBattleShowGrid() );
+    InitButtonState( opt_shadow_movement, conf.ExtBattleShowMoveShadow() );
+    InitButtonState( opt_shadow_cursor, conf.ExtBattleShowMouseShadow() );
 
     btn_ok.Draw();
 
-    if(conf.ExtBattleShowGrid()) opt_grid.Press();
-    if(conf.ExtBattleShowMoveShadow()) opt_shadow_movement.Press();
-    if(conf.ExtBattleShowMouseShadow()) opt_shadow_cursor.Press();
+    const Text speedTitle( "Speed", Font::SMALL );
+    speedTitle.Blit( opt_speed.x + ( AGG::GetICN( ICN::CSPANEL, 0 ).w() - speedTitle.w() ) / 2, opt_speed.y - 13 );
 
     SpeedRedraw(opt_speed);
-
     opt_grid.Draw();
     opt_shadow_movement.Draw();
     opt_shadow_cursor.Draw();
@@ -101,52 +134,33 @@ void Battle::DialogBattleSettings(void)
     cursor.Show();
     display.Flip();
 
-    while(le.HandleEvents())
-    {
-	le.MousePressLeft(btn_ok) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
-	if(le.MouseClickLeft(opt_speed))
-	{
-	    conf.SetBattleSpeed((conf.BattleSpeed() + 1) % 11);
-	    Game::UpdateBattleSpeed();
-	    cursor.Hide();
-	    SpeedRedraw(opt_speed);
-	    cursor.Show();
-	    display.Flip();
-	}
-
-	if(le.MouseClickLeft(opt_grid))
-	{
-	    conf.SetBattleGrid(!conf.ExtBattleShowGrid());
-	    cursor.Hide();
-	    opt_grid.isPressed() ? opt_grid.Release() : opt_grid.Press();
-	    opt_grid.Draw();
-	    cursor.Show();
-	    display.Flip();
-	}
-
-	if(le.MouseClickLeft(opt_shadow_movement))
-	{
-	    conf.SetBattleMovementShaded(!conf.ExtBattleShowMoveShadow());
-	    cursor.Hide();
-	    opt_shadow_movement.isPressed() ? opt_shadow_movement.Release() : opt_shadow_movement.Press();
-	    opt_shadow_movement.Draw();
-	    cursor.Show();
-	    display.Flip();
-	}
-
-	if(le.MouseClickLeft(opt_shadow_cursor))
-	{
-	    conf.SetBattleMouseShaded(!conf.ExtBattleShowMouseShadow());
-	    cursor.Hide();
-	    opt_shadow_cursor.isPressed() ? opt_shadow_cursor.Release() : opt_shadow_cursor.Press();
-	    opt_shadow_cursor.Draw();
-	    cursor.Show();
-	    display.Flip();
-	}
-
-        // exit
-	if(Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT) || le.MouseClickLeft(btn_ok)) break;
+        if ( le.MouseClickLeft( opt_speed ) ) {
+            conf.SetBattleSpeed( ( conf.BattleSpeed() + 1 ) % 11 );
+            Game::UpdateBattleSpeed();
+            cursor.Hide();
+            speed_buttom_back.Restore();
+            SpeedRedraw( opt_speed );
+            cursor.Show();
+            display.Flip();
+        }
+        else if ( le.MouseClickLeft( opt_grid ) ) {
+            conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
+            SetButtonState( opt_grid, display, cursor );
+        }
+        else if ( le.MouseClickLeft( opt_shadow_movement ) ) {
+            conf.SetBattleMovementShaded( !conf.ExtBattleShowMoveShadow() );
+            SetButtonState( opt_shadow_movement, display, cursor );
+        }
+        else if ( le.MouseClickLeft( opt_shadow_cursor ) ) {
+            conf.SetBattleMouseShaded( !conf.ExtBattleShowMouseShadow() );
+            SetButtonState( opt_shadow_cursor, display, cursor );
+        }
+        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok ) ) {
+            break;
+        }
     }
 
     // restore background

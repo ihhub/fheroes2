@@ -280,3 +280,35 @@ void ButtonGroups::DisableButton2(bool f)
 	}
     }
 }
+
+LabeledButton::LabeledButton()
+    : Button()
+{}
+
+LabeledButton::LabeledButton( s32 ox, s32 oy, int icn, u32 index1, u32 index2 )
+    : Button( ox, oy, icn, index1, index2 )
+{}
+
+void LabeledButton::SetTopText( const std::string & text )
+{
+    ResetText( topText, topBack, text, 0, -2 );
+}
+
+void LabeledButton::SetMidleText( const std::string & text )
+{
+    ResetText( middleText, middleBack, text, 0, 0 );
+}
+
+void LabeledButton::SetBottomText( const std::string & text )
+{
+    ResetText( buttomText, buttomBack, text, 0, sf1.h() - 7 );
+}
+
+void LabeledButton::ResetText( TextBox & button, SpriteBack & back, const std::string & text, int xIndent, int yIndent )
+{
+    back.Restore();
+    button.Set( text, Font::SMALL, sf1.w() );
+    const int yOffSet = yIndent < 0 ? yIndent - button.h() : yIndent + button.h();
+    back.Save( Rect( x + ( sf1.w() - button.w() ) / 2 + xIndent, y + yOffSet, button.w(), button.h() ) );
+    button.Blit( x + ( sf1.w() - button.w() ) / 2 + xIndent, y + yOffSet );
+}

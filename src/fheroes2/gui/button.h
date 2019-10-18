@@ -23,6 +23,7 @@
 #define H2BUTTON_H
 
 #include "gamedefs.h"
+#include "text.h"
 
 class Surface;
 
@@ -56,6 +57,26 @@ protected:
     Surface	sf2;
 
     u32		flags;
+};
+
+class LabeledButton : public Button
+{
+public:
+    LabeledButton();
+    LabeledButton( s32 ox, s32 oy, int icn, u32 index1, u32 index2 );
+    void SetTopText( const std::string & text );
+    void SetMidleText( const std::string & text );
+    void SetBottomText( const std::string & text );
+
+protected:
+    TextBox topText;
+    TextBox middleText;
+    TextBox buttomText;
+    SpriteBack topBack;
+    SpriteBack middleBack;
+    SpriteBack buttomBack;
+
+    void ResetText( TextBox & buttonText, SpriteBack & back, const std::string & newText, int xIndent, int yIndent );
 };
 
 class ButtonSprite : public Button
