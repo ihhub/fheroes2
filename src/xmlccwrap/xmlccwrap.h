@@ -23,7 +23,7 @@
 #ifndef XMLWRAP_H
 #define XMLWRAP_H
 
-#include "tinyxml.h"
 #include "gzstream.h"
+#include "tinyxml.h"
 
 #endif

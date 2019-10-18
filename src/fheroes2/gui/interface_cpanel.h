@@ -32,29 +32,29 @@ namespace Interface
     class ControlPanel : protected Rect
     {
     public:
-	ControlPanel(Basic &);
+        ControlPanel( Basic & );
 
-	void		SetPos(s32, s32);
-	void		Redraw(void);
-	void		ResetTheme(void);
-	int		QueueEventProcessing(void);
+        void SetPos( s32, s32 );
+        void Redraw( void );
+        void ResetTheme( void );
+        int QueueEventProcessing( void );
 
-	const Rect &	GetArea(void);
+        const Rect & GetArea( void );
 
     private:
-	Basic & interface;
+        Basic & interface;
 
-	Surface btn_radr;
-	Surface btn_icon;
-	Surface btn_bttn;
-	Surface btn_stat;
-	Surface btn_quit;
+        Surface btn_radr;
+        Surface btn_icon;
+        Surface btn_bttn;
+        Surface btn_stat;
+        Surface btn_quit;
 
-	Rect rt_radr;
-	Rect rt_icon;
-	Rect rt_bttn;
-	Rect rt_stat;
-	Rect rt_quit;
+        Rect rt_radr;
+        Rect rt_icon;
+        Rect rt_bttn;
+        Rect rt_stat;
+        Rect rt_quit;
     };
 }
 

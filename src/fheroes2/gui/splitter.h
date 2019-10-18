@@ -28,37 +28,52 @@ class Splitter : protected SpriteMove
 {
 public:
     Splitter();
-    Splitter(const Surface &, const Rect &);
+    Splitter( const Surface &, const Rect & );
 
-    void	Forward(void);
-    void	Backward(void);
-    void	MoveIndex(int);
-    void	MoveCenter(void);
+    void Forward( void );
+    void Backward( void );
+    void MoveIndex( int );
+    void MoveCenter( void );
 
-    void	RedrawCursor(void);
-    void	HideCursor(void);
-    void	ShowCursor(void);
+    void RedrawCursor( void );
+    void HideCursor( void );
+    void ShowCursor( void );
 
-    void	SetSprite(const Surface &);
-    void	SetArea(const Rect &);
-    void	SetRange(int smin, int smax);
+    void SetSprite( const Surface & );
+    void SetArea( const Rect & );
+    void SetRange( int smin, int smax );
 
-    bool	isVertical(void) const;
-    int		GetCurrent(void) const{ return cur; };
-    int		GetStep(void) const{ return step; };
-    int		Max(void) const{ return max; };
-    int		Min(void) const{ return min; };
+    bool isVertical( void ) const;
+    int GetCurrent( void ) const
+    {
+        return cur;
+    };
+    int GetStep( void ) const
+    {
+        return step;
+    };
+    int Max( void ) const
+    {
+        return max;
+    };
+    int Min( void ) const
+    {
+        return min;
+    };
 
-    const Rect & GetRect(void) const{ return area; };
+    const Rect & GetRect( void ) const
+    {
+        return area;
+    };
 
 private:
-    Point	GetPositionCursor(void);
+    Point GetPositionCursor( void );
 
-    Rect	area;
-    int		step;
-    int		min;
-    int		max;
-    int		cur;
+    Rect area;
+    int step;
+    int min;
+    int max;
+    int cur;
 };
 
 #endif

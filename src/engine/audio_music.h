@@ -23,23 +23,26 @@
 #ifndef H2AUDIO_MUSIC_H
 #define H2AUDIO_MUSIC_H
 
+#include <string>
+#include <vector>
+
 #include "types.h"
 
 namespace Music
 {
-    void	Play(const std::vector<u8> &, bool loop);
-    void	Play(const std::string &, bool loop);
-    u16		Volume(s16 vol);
-    void	SetFadeIn(int);
-    void	SetFadeOut(int);
-    void	SetExtCommand(const std::string &);
-    void	Pause(void);
-    void	Resume(void);
-    void	Reset(void);
-    bool	isPlaying(void);
-    bool	isPaused(void);
+    void Play( const std::vector<u8> &, bool loop );
+    void Play( const std::string &, bool loop );
+    u16 Volume( s16 vol );
+    void SetFadeIn( int );
+    void SetFadeOut( int );
+    void SetExtCommand( const std::string & );
+    void Pause( void );
+    void Resume( void );
+    void Reset( void );
+    bool isPlaying( void );
+    bool isPaused( void );
 
-    std::vector<u8> Xmi2Mid(const std::vector<u8> &);
+    std::vector<u8> Xmi2Mid( const std::vector<u8> & );
 }
 
 #endif

@@ -30,12 +30,17 @@ class HeroBase;
 
 struct SpellBook : public SpellStorage
 {
-    enum { ADVN = 0x01, CMBT = 0x02, ALL  = ADVN | CMBT };
+    enum
+    {
+        ADVN = 0x01,
+        CMBT = 0x02,
+        ALL = ADVN | CMBT
+    };
 
-    Spell Open(const HeroBase &, int filter, bool canselect) const;
-    void  Edit(const HeroBase &);
+    Spell Open( const HeroBase &, int filter, bool canselect ) const;
+    void Edit( const HeroBase & );
 
-    SpellStorage SetFilter(int, const HeroBase* = NULL) const;
+    SpellStorage SetFilter( int, const HeroBase * = NULL ) const;
 };
 
 #endif

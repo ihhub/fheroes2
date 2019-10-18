@@ -20,50 +20,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "maps.h"
-#include "interface_gamearea.h"
 #include "artifact_ultimate.h"
+#include "interface_gamearea.h"
+#include "maps.h"
 
-UltimateArtifact::UltimateArtifact() : index(-1), isfound(false)
-{
-}
+UltimateArtifact::UltimateArtifact()
+    : index( -1 )
+    , isfound( false )
+{}
 
-void UltimateArtifact::Set(s32 pos, const Artifact & a)
+void UltimateArtifact::Set( s32 pos, const Artifact & a )
 {
     Artifact & art = *this;
-    art = a.isValid() ? a : Artifact::Rand(Artifact::ART_ULTIMATE);
+    art = a.isValid() ? a : Artifact::Rand( Artifact::ART_ULTIMATE );
     index = pos;
     isfound = false;
 
     MakeSurface();
 }
 
-const Surface & UltimateArtifact::GetPuzzleMapSurface(void) const
+const Surface & UltimateArtifact::GetPuzzleMapSurface( void ) const
 {
     return puzzlemap;
 }
 
-const Artifact & UltimateArtifact::GetArtifact(void) const
+const Artifact & UltimateArtifact::GetArtifact( void ) const
 {
     return *this;
 }
 
-bool UltimateArtifact::isFound(void) const
+bool UltimateArtifact::isFound( void ) const
 {
     return isfound;
 }
 
-void UltimateArtifact::SetFound(bool f)
+void UltimateArtifact::SetFound( bool f )
 {
     isfound = f;
 }
 
-bool UltimateArtifact::isPosition(s32 pos) const
+bool UltimateArtifact::isPosition( s32 pos ) const
 {
     return 0 <= index && pos == index;
 }
 
-void UltimateArtifact::Reset(void)
+void UltimateArtifact::Reset( void )
 {
     Artifact::Reset();
     puzzlemap.Reset();
@@ -71,20 +72,20 @@ void UltimateArtifact::Reset(void)
     isfound = false;
 }
 
-void UltimateArtifact::MakeSurface(void)
+void UltimateArtifact::MakeSurface( void )
 {
-    if(Maps::isValidAbsIndex(index))
-	puzzlemap = Interface::GameArea::GenerateUltimateArtifactAreaSurface(index);
+    if ( Maps::isValidAbsIndex( index ) )
+        puzzlemap = Interface::GameArea::GenerateUltimateArtifactAreaSurface( index );
     else
-	puzzlemap.Reset();
+        puzzlemap.Reset();
 }
 
-StreamBase & operator<< (StreamBase & msg, const UltimateArtifact & ultimate)
+StreamBase & operator<<( StreamBase & msg, const UltimateArtifact & ultimate )
 {
-    return msg << static_cast<Artifact>(ultimate) << ultimate.index << ultimate.isfound;
+    return msg << static_cast<Artifact>( ultimate ) << ultimate.index << ultimate.isfound;
 }
 
-StreamBase & operator>> (StreamBase & msg, UltimateArtifact & ultimate)
+StreamBase & operator>>( StreamBase & msg, UltimateArtifact & ultimate )
 {
     Artifact & artifact = ultimate;
     msg >> artifact >> ultimate.index >> ultimate.isfound;
