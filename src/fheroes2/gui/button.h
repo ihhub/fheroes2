@@ -63,7 +63,7 @@ class LabeledButton : public Button
 {
 public:
     LabeledButton();
-    LabeledButton( s32, s32, int, u32 index1, u32 index2 );
+    LabeledButton( s32 ox, s32 oy, int icn, u32 index1, u32 index2 );
     void SetTopText( const std::string & text );
     void SetMidleText( const std::string & text );
     void SetBottomText( const std::string & text );
