@@ -159,7 +159,7 @@ void Game::OpenCastleDialog(Castle & castle)
 }
 
 /* open heroes wrapper */
-void Game::OpenHeroesDialog(Heroes & hero)
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
 {
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
@@ -209,12 +209,15 @@ void Game::OpenHeroesDialog(Heroes & hero)
 	}
     }
 
-    if(it != myHeroes.end())
-	Interface::Basic::Get().SetFocus(*it);
-    else
-        Interface::Basic::Get().ResetFocus(GameFocus::HEROES);
-
-    Interface::Basic::Get().RedrawFocus();
+    if ( updateFocus ) {
+        if ( it != myHeroes.end() ) {
+            Interface::Basic::Get().SetFocus( *it );
+        }
+        else {
+            Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
+        }
+        Interface::Basic::Get().RedrawFocus();
+    }
 }
 
 void ShowNewWeekDialog(void)

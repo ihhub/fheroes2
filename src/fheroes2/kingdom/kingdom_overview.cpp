@@ -143,7 +143,7 @@ void StatsHeroesList::ActionListDoubleClick(HeroRow & row, const Point & cursor,
 void StatsHeroesList::ActionListSingleClick(HeroRow & row, const Point & cursor, s32 ox, s32 oy)
 {
     if(row.hero && (Rect(ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight()) & cursor))
-	Game::OpenHeroesDialog(*row.hero);
+        Game::OpenHeroesDialog( *row.hero, false );
 }
 
 void StatsHeroesList::ActionListPressRight(HeroRow & row, const Point & cursor, s32 ox, s32 oy)
@@ -370,10 +370,10 @@ void StatsCastlesList::ActionListSingleClick(CstlRow & row, const Point & cursor
 	    Heroes* hero = row.castle->GetHeroes().GuardFirst();
 	    if(hero)
 	    {
-		Game::OpenHeroesDialog(*hero);
-		row.Init(row.castle);
-	    }
-	}
+            Game::OpenHeroesDialog( *hero, false );
+            row.Init( row.castle );
+        }
+    }
     }
 }
 

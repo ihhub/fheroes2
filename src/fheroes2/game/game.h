@@ -231,7 +231,7 @@ namespace Game
     void	PlayPickupSound(void);
     void	DisableChangeMusic(bool);
     bool	ChangeMusicDisabled(void);
-    void	OpenHeroesDialog(Heroes &);
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus = true );
     void	OpenCastleDialog(Castle &);
     std::string GetEncodeString(const std::string &);
 
