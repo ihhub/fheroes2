@@ -43,7 +43,7 @@ void RedrawCurrentInfo(const Point & pos, u32 available, u32 result,
     text.Blit(pos.x + 70 - text.w() / 2, pos.y + 130);
     text.Set(GetString(result), Font::BIG);
     text.Blit(pos.x + 167 - text.w() / 2, pos.y + 160);
-    const std::string sgold = GetString(paymentCosts.gold) + " " + "(" + GetString(funds.gold - paymentCosts.gold) + ")";
+    const std::string sgold = GetString(paymentCosts.gold);
     int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
 
     if(rsext)
@@ -51,7 +51,7 @@ void RedrawCurrentInfo(const Point & pos, u32 available, u32 result,
 	text.Set(sgold, Font::SMALL);
 	text.Blit(pos.x + 133 - text.w() / 2, pos.y + 228);
 
-	text.Set(GetString(paymentCosts.Get(rsext)) + " " + "(" + GetString(funds.Get(rsext) - paymentCosts.Get(rsext)) + ")", Font::SMALL);
+	text.Set(GetString(paymentCosts.Get(rsext)), Font::SMALL);
 	text.Blit(pos.x + 195 - text.w() / 2, pos.y + 228);
     }
     else
