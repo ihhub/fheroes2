@@ -362,12 +362,14 @@ bool Settings::Read(const std::string & filename)
     {
 	ai_speed = config.IntParams("ai speed");
 	if(10 < ai_speed) ai_speed = 10;
+    if(1>ai_speed) ai_speed=1;
     }
 
     if(config.Exists("heroes speed"))
     {
 	heroes_speed = config.IntParams("heroes speed");
 	if(10 < heroes_speed) heroes_speed = 10;
+    if(1> heroes_speed) heroes_speed=1;
     }
 
     // scroll speed
@@ -384,6 +386,7 @@ bool Settings::Read(const std::string & filename)
     {
 	battle_speed = config.IntParams("battle speed");
 	if(10 < battle_speed) battle_speed = 10;
+    if(1 > battle_speed) battle_speed =1;
     }
 
     // network port
@@ -734,14 +737,14 @@ int Settings::BattleSpeed(void) const { return battle_speed; }
 /* return scroll speed */
 int Settings::ScrollSpeed(void) const { return scroll_speed; }
 
-/* set ai speed: 0 - 10 */
-void Settings::SetAIMoveSpeed(int speed) { ai_speed = (10 <= speed ? 10 : speed); }
+/* set ai speed: 1 - 10 */
+void Settings::SetAIMoveSpeed(int speed) { if(speed<1) speed=1; ai_speed = (10 <= speed ? 10 : speed); }
 
-/* set hero speed: 0 - 10 */
-void Settings::SetHeroesMoveSpeed(int speed){ heroes_speed = (10 <= speed ? 10 : speed); }
+/* set hero speed: 1 - 10 */
+void Settings::SetHeroesMoveSpeed(int speed){ if(speed<1) speed=1; heroes_speed = (10 <= speed ? 10 : speed); }
 
-/* set battle speed: 0 - 10 */
-void Settings::SetBattleSpeed(int speed) { battle_speed = (10 <= speed ? 10 : speed); }
+/* set battle speed: 1 - 10 */
+void Settings::SetBattleSpeed(int speed) {if(speed<1) speed=1; battle_speed = (10 <= speed ? 10 : speed); }
 
 void Settings::SetBlitSpeed(int speed) { blit_speed = speed; }
 
