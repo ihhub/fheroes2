@@ -201,8 +201,9 @@ int Heroes::OpenDialog(bool readonly, bool fade)
 
     if(inCastle() || readonly || Modes(NOTDISMISS))
     {
-	buttonDismiss.Press();
-	buttonDismiss.SetDisable(true);
+      buttonDismiss.Press();
+      buttonDismiss.SetDisable(true);
+      buttonDismiss.SetVisible(false);
     }
 
     if(readonly || 2 > GetKingdom().GetHeroes().size())
@@ -283,7 +284,7 @@ int Heroes::OpenDialog(bool readonly, bool fade)
     	if(buttonNextHero.isEnable() && le.MouseClickLeft(buttonNextHero)){ return Dialog::NEXT; }
 
     	// dismiss
-    	if(buttonDismiss.isEnable() && le.MouseClickLeft(buttonDismiss) &&
+      if(buttonDismiss.isEnable() && buttonDismiss.isVisible() && le.MouseClickLeft(buttonDismiss) &&
     	      Dialog::YES == Dialog::Message(GetName(), _("Are you sure you want to dismiss this Hero?"), Font::BIG, Dialog::YES | Dialog::NO))
     	    { return Dialog::DISMISS; }
 
