@@ -47,3 +47,6 @@
 *.mp2
 *.hs
 *.smk
+
+# build directory
+build

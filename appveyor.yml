@@ -11,44 +11,41 @@ version: 1.0.{build}
 # Build worker image (VM template)
 image: Visual Studio 2015
 
-environment:
-  matrix:
-    - JOB: Release_x86
-      configuration: Release
-      platform: x86
-    - JOB: Release_x64
-      configuration: Release
-      platform: x64
+configuration:
+    # FIXME: uncomment this in case if buildability check for these configurations is required
+    # - Debug-SDL1
+    # - Debug-SDL2
+    - Release-SDL1
+    - Release-SDL2
+
+platform:
+    - x86
+    - x64
 
 skip_tags: true
+
+# clone directory
+clone_folder: C:\projects\fheroes2
 
 install:
   - cd C:\projects\fheroes2\script\windows
   - call install_packages.bat
 
-# clone directory
-clone_folder: C:\projects\fheroes2
-
-build_script:
-  - cmd: cd C:\projects\fheroes2
-  - cmd: msbuild fheroes2.vcxproj /p:Configuration=Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-
 after_build:
-  - cmd: if "%platform%"=="x86" cd C:\projects\fheroes2\Release
-  - cmd: if "%platform%"=="x64" cd C:\projects\fheroes2\x64\Release
-  - cmd: 7z a fheroes2.zip fheroes2.exe SDL.dll SDL_mixer.dll
-  - cmd: if "%platform%"=="x86" xcopy /Y /s "fheroes2.zip" ".."
-  - cmd: if "%platform%"=="x64" xcopy /Y /s "fheroes2.zip" "..\.."
+  - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%
+  - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip fheroes2.exe SDL*.dll
+  - cmd: cd C:\projects\fheroes2\script\demo
+  - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip demo.bat
   - cmd: cd C:\projects\fheroes2
-  - cmd: 7z a fheroes2.zip script\demo\demo.bat LICENSE
+  - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip LICENSE
 
 artifacts:
-  - path: fheroes2.zip
-    name: fheroes2
+  - path: build\$(platform)\$(configuration)\fheroes2-$(platform)-$(configuration).zip
+    name: fheroes2-%platform%-%configuration%
 
 deploy:
-  tag: fheroes2-windows-$(platform)
-  release: Windows $(platform) build with SDL 1 support (latest commit)
+  tag: fheroes2-windows-$(platform)-$(configuration)
+  release: Windows $(platform) $(configuration) build (latest commit)
   description: $(APPVEYOR_REPO_COMMIT_MESSAGE)
   provider: GitHub
   auth_token:
