@@ -241,13 +241,13 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     str = _("ai speed");
     text.Set( str );
     text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() );
-    
+
     if(conf.AIMoveSpeed())
         str = GetString( conf.AIMoveSpeed() );
     else
         str = _( "off" );
     text.Set(str);
-    text.Blit( rect5.x + (rect5.w - text.w()) / 2, rect5.y + rect5.h );
+    text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y + rect5.h );
 
     // scroll speed
     const u32 is6 = (conf.ScrollSpeed() < SCROLL_FAST2 ? (conf.ScrollSpeed() < SCROLL_FAST1 ? (conf.ScrollSpeed() < SCROLL_NORMAL ? 4 : 5) : 6) : 7);
@@ -295,7 +295,7 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     else
     {
         sprite8.Blit( rect8, display );
-        sprite81.Blit( Rect(13, 13, 38, 38), rect8.x + 13, rect8.y + 13 );
+        sprite81.Blit( Rect( 13, 13, 38, 38 ), rect8.x + 13, rect8.y + 13 );
         str = _( "Show" );
     }
     text.Set( str );
