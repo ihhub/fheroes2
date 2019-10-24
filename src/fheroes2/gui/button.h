@@ -35,7 +35,7 @@ public:
 
     bool	isEnable(void) const;
     bool	isDisable(void) const;
-    bool	isVisible(void) const;
+    bool isVisible( void ) const;
     bool	isPressed(void) const;
     bool	isReleased(void) const;
 
@@ -48,7 +48,7 @@ public:
     void	SetSprite(int icn, u32, u32);
     void	SetSprite(const Surface &, const Surface &);
     void	SetDisable(bool);
-    void	SetVisible(bool);
+    void SetVisible( bool );
 
     void	Draw(void);
     void	PressDraw(void);

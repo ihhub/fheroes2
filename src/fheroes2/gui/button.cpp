@@ -27,13 +27,20 @@
 #include "dialog.h"
 #include "button.h"
 
-enum { BTN_PRESSED = 0x0080, BTN_DISABLE = 0x0008, BTN_VISIBLE = 0x0800};
+enum
+{
+    BTN_PRESSED = 0x0080,
+    BTN_DISABLE = 0x0008,
+    BTN_VISIBLE = 0x0800
+};
 
-Button::Button() : flags(BTN_VISIBLE)
+Button::Button()
+    : flags( BTN_VISIBLE )
 {
 }
 
-Button::Button(s32 ox, s32 oy, int icn, u32 index1, u32 index2) : flags(BTN_VISIBLE)
+Button::Button( s32 ox, s32 oy, int icn, u32 index1, u32 index2 )
+    : flags( BTN_VISIBLE )
 {
     SetPos(ox, oy);
 
@@ -53,7 +60,7 @@ bool Button::isDisable(void) const
     return flags & BTN_DISABLE;
 }
 
-bool Button::isVisible(void) const
+bool Button::isVisible( void ) const
 {
     return flags & BTN_VISIBLE;
 }
@@ -109,9 +116,9 @@ void Button::SetDisable(bool f)
 	flags &= ~(BTN_DISABLE | BTN_PRESSED);
 }
 
-void Button::SetVisible(bool v)
+void Button::SetVisible( bool f )
 {
-    if (v)
+    if ( f )
         flags |= BTN_VISIBLE;
     else
         flags &= ~BTN_VISIBLE;
@@ -151,8 +158,8 @@ void Button::ReleaseDraw(void)
 
 void Button::Draw(void)
 {
-	if (!this->isVisible())
-		return;
+    if ( !this->isVisible() )
+        return;
     bool localcursor = false;
     Cursor & cursor = Cursor::Get();
 
