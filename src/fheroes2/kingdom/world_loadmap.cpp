@@ -1662,6 +1662,6 @@ void World::PostLoad(void)
     vec_rumors.push_back(_("A Black Dragon will take out a Titan any day of the week."));
     vec_rumors.push_back(_("He told her: Yada yada yada...  and then she said: Blah, blah, blah..."));
 
-    vec_rumors.push_back(_("You can load the newest version of game from a site:\n http://sf.net/projects/fheroes2"));
+    vec_rumors.push_back(_("You can load the newest version of game from a site:\n https://github.com/ihhub/fheroes2/releases"));
     vec_rumors.push_back(_("This game is now in beta development version. ;)"));
 }
