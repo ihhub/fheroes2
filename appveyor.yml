@@ -12,9 +12,6 @@ version: 1.0.{build}
 image: Visual Studio 2015
 
 configuration:
-    # FIXME: uncomment this in case if buildability check for these configurations is required
-    # - Debug-SDL1
-    # - Debug-SDL2
     - Release-SDL1
     - Release-SDL2
 
@@ -30,13 +27,13 @@ clone_folder: C:\projects\fheroes2
 install:
   - cd C:\projects\fheroes2\script\windows
   - call install_packages.bat
+  - cd C:\projects\fheroes2
 
 after_build:
   - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%
   - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip fheroes2.exe SDL*.dll
-  - cmd: cd C:\projects\fheroes2\script\demo
-  - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip demo.bat
   - cmd: cd C:\projects\fheroes2
+  - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip script\demo\demo.bat
   - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip LICENSE
 
 artifacts:

@@ -5,27 +5,27 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>../sdl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\sdl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>../sdl/lib/$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\sdl\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "..\sdl\lib\$(PlatformTarget)\SDL.dll" $(Configuration)
-xcopy /Y "..\sdl\lib\$(PlatformTarget)\SDL_mixer.dll" $(Configuration)
+      <Command>xcopy /Y "$(ProjectDir)..\sdl\lib\$(PlatformTarget)\SDL.dll" "$(OutDir)"
+xcopy /Y "$(ProjectDir)..\sdl\lib\$(PlatformTarget)\SDL_mixer.dll" "$(OutDir)"
 
-if exist "data" (
-    if not exist $(OutDir)\data (
-        mkdir $(OutDir)\data
-        xcopy /Y /s /Q "data" $(OutDir)\data
+if exist "$(ProjectDir)data" (
+    if not exist "$(OutDir)data" (
+        mkdir "$(OutDir)data"
+        xcopy /Y /s /Q "$(ProjectDir)data" "$(OutDir)data"
     )
 )
 
-if exist "maps" (
-    if not exist $(OutDir)\maps (
-        mkdir $(OutDir)\maps
-        xcopy /Y /s /Q "maps" $(OutDir)\maps
+if exist "$(ProjectDir)maps" (
+    if not exist "$(OutDir)maps" (
+        mkdir "$(OutDir)maps"
+        xcopy /Y /s /Q "$(ProjectDir)maps" "$(OutDir)maps"
     )
 )</Command>
     </PostBuildEvent>
