@@ -263,7 +263,8 @@ StreamBase & StreamBase::operator<< (const Size & v)
 
 StreamBuf::StreamBuf(size_t sz) : itbeg(NULL), itget(NULL), itput(NULL), itend(NULL)
 {
-    if(sz) reallocbuf(sz);
+    if ( sz )
+        reallocbuf( sz );
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     setbigendian(true); /* default: hardware endian */
 #else
@@ -356,7 +357,7 @@ size_t StreamBuf::sizep(void) const
     return itend - itput;
 }
 
-void StreamBuf::reallocbuf(size_t sz)
+void StreamBuf::reallocbuf( size_t sz )
 {
     setconstbuf(false);
 
@@ -398,7 +399,7 @@ void StreamBuf::setfail(void)
 void StreamBuf::copy(const StreamBuf & sb)
 {
     if(capacity() < sb.size())
-	reallocbuf(sb.size());
+        reallocbuf( sb.size() );
 
     std::copy(sb.itget, sb.itput, itbeg);
 
@@ -413,7 +414,7 @@ void StreamBuf::copy(const StreamBuf & sb)
 void StreamBuf::put8(char v)
 {
     if(0 == sizep())
-	reallocbuf(capacity() + capacity() / 2);
+        reallocbuf( capacity() + capacity() / 2 );
 
     if(sizep())
         *itput++ = v;
@@ -535,7 +536,7 @@ std::ostream & operator<< (std::ostream & os, StreamBuf & sb)
     sb.bigendian() ? StreamBase::putBE32(os, count) : StreamBase::putLE32(os, count);
 
     if(os.write((char*) sb.itget, count))
-	sb.itget += count;
+    sb.itget += count;
 
     return os;
 }
@@ -556,17 +557,17 @@ std::istream & operator>> (std::istream & is, StreamBuf & sb)
 
     if(count > available_count(is))
     {
-	sb.setfail();
-	return is;
+    sb.setfail();
+    return is;
     }
 
     if(sb.sizep() < count)
-	sb.reallocbuf(count);
+    sb.reallocbuf(count);
 
     if(is.read((char*) sb.itput, count))
-	sb.itput += count;
+    sb.itput += count;
     else
-	sb.setfail();
+    sb.setfail();
 
     return is;
 }

@@ -218,11 +218,11 @@ int System::SetEnvironment(const char* name, const char* value)
 {
 #if defined(__MINGW32CE__) || defined(__MINGW32__) || defined(_MSC_VER)
     std::string str(std::string(name) + "=" + std::string(value));
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-    return _putenv(str.c_str());
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    return _putenv( str.c_str() );
 #else
     // SDL 1.2.12 (char *)
-    return SDL_putenv(&str[0]);
+    return SDL_putenv( &str[0] );
 #endif
 #else
     return setenv(name, value, 1);

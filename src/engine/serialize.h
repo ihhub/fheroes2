@@ -236,7 +236,7 @@ protected:
     size_t		sizep(void) const;
 
     void		copy(const StreamBuf &);
-    void		reallocbuf(size_t);
+    void reallocbuf( size_t );
     void		setfail(void);
 
     u8 get8();
