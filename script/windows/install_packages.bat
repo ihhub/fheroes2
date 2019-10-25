@@ -52,3 +52,6 @@ if not sevenZipPath == "" (
 ) else (
     echo "Failed to unzip archives because 7-zip is not installed in system. Please unpack all archives in packages internal folders and manually run setup_packages.bat file after"
 )
+set
+echo Press any key to exit...
+pause >nul
