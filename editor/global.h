@@ -28,25 +28,24 @@ struct MonsterStat;
 
 namespace Default
 {
-    int &		resourceGoldMin(void);
-    int &		resourceGoldMax(void);
-    int &		resourceWoodOreMin(void);
-    int &		resourceWoodOreMax(void);
-    int &		resourceOtherMin(void);
-    int &		resourceOtherMax(void);
+    int & resourceGoldMin( void );
+    int & resourceGoldMax( void );
+    int & resourceWoodOreMin( void );
+    int & resourceWoodOreMax( void );
+    int & resourceOtherMin( void );
+    int & resourceOtherMax( void );
 
-    MonsterStat &	monsterStat(int);
+    MonsterStat & monsterStat( int );
 }
 
 struct DefaultValues
-{
-};
+{};
 
-QDomElement & operator<< (QDomElement &, const DefaultValues &);
-QDomElement & operator>> (QDomElement &, DefaultValues &);
+QDomElement & operator<<( QDomElement &, const DefaultValues & );
+QDomElement & operator>>( QDomElement &, DefaultValues & );
 
-#define FH2ENGINE_VERSION_3269		3269
-#define FH2ENGINE_CURRENT_VERSION	FH2ENGINE_VERSION_3269
-#define FH2ENGINE_LAST_VERSION		FH2ENGINE_VERSION_3269
+#define FH2ENGINE_VERSION_3269 3269
+#define FH2ENGINE_CURRENT_VERSION FH2ENGINE_VERSION_3269
+#define FH2ENGINE_LAST_VERSION FH2ENGINE_VERSION_3269
 
 #endif

@@ -23,51 +23,57 @@
 #ifndef H2BATTLE_COMMAND_H
 #define H2BATTLE_COMMAND_H
 
-#include "gamedefs.h"
 #include "battle_board.h"
+#include "gamedefs.h"
 
 namespace Battle
 {
     enum
     {
-	MSG_BATTLE_RAW,
+        MSG_BATTLE_RAW,
 
-	MSG_BATTLE_BOARD,
-	MSG_BATTLE_MOVE, 
-	MSG_BATTLE_ATTACK,
-	MSG_BATTLE_DEFENSE,
-	MSG_BATTLE_DAMAGE,
-	MSG_BATTLE_CAST,
-	MSG_BATTLE_MORALE,
-	MSG_BATTLE_LUCK,
-	MSG_BATTLE_CATAPULT,
-	MSG_BATTLE_TOWER,
-	MSG_BATTLE_RETREAT,
-	MSG_BATTLE_SURRENDER,
-	MSG_BATTLE_SKIP,
-	MSG_BATTLE_END_TURN,
-	MSG_BATTLE_TURN,
-	MSG_BATTLE_RESULT,
-	MSG_BATTLE_AUTO,
+        MSG_BATTLE_BOARD,
+        MSG_BATTLE_MOVE,
+        MSG_BATTLE_ATTACK,
+        MSG_BATTLE_DEFENSE,
+        MSG_BATTLE_DAMAGE,
+        MSG_BATTLE_CAST,
+        MSG_BATTLE_MORALE,
+        MSG_BATTLE_LUCK,
+        MSG_BATTLE_CATAPULT,
+        MSG_BATTLE_TOWER,
+        MSG_BATTLE_RETREAT,
+        MSG_BATTLE_SURRENDER,
+        MSG_BATTLE_SKIP,
+        MSG_BATTLE_END_TURN,
+        MSG_BATTLE_TURN,
+        MSG_BATTLE_RESULT,
+        MSG_BATTLE_AUTO,
 
-	MSG_UNKNOWN
+        MSG_UNKNOWN
     };
 
     class Command : public std::vector<int>
     {
-	int			type;
+        int type;
 
     public:
-        Command(int);
-        Command(int cmd, int param1, int param2, const Indexes &);
-        Command(int cmd, int param1, int param2 = -1, int param3 = -1, int param4 = -1);
+        Command( int );
+        Command( int cmd, int param1, int param2, const Indexes & );
+        Command( int cmd, int param1, int param2 = -1, int param3 = -1, int param4 = -1 );
 
-        int		GetType(void) const { return type; }
-	int		GetValue(void);
-        bool		isType(int msg) const { return type == msg; }
+        int GetType( void ) const
+        {
+            return type;
+        }
+        int GetValue( void );
+        bool isType( int msg ) const
+        {
+            return type == msg;
+        }
 
-	Command &	operator<< (const int &);
-	Command &	operator>> (int &);
+        Command & operator<<( const int & );
+        Command & operator>>( int & );
     };
 }
 

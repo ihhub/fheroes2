@@ -30,13 +30,13 @@ class StatusBar : public TextSprite
 public:
     StatusBar();
 
-    void SetCenter(const Point & pt);
-    void SetCenter(s32 cx, s32 cy);
+    void SetCenter( const Point & pt );
+    void SetCenter( s32 cx, s32 cy );
 
-    void ShowMessage(const std::string & msg);
-    void Redraw(void);
+    void ShowMessage( const std::string & msg );
+    void Redraw( void );
 
-    const std::string & GetMessage(void) const;
+    const std::string & GetMessage( void ) const;
 
 private:
     Point center;

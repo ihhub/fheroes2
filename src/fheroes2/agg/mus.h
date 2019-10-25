@@ -77,13 +77,13 @@ namespace MUS
         UNKNOWN
     };
 
-    const std::string GetString(int, bool shortname = false);
+    const std::string GetString( int, bool shortname = false );
 
-    int FromGround(int);
-    int FromRace(int);
-    int FromMapObject(int);
+    int FromGround( int );
+    int FromRace( int );
+    int FromMapObject( int );
 
-    int GetBattleRandom(void);
+    int GetBattleRandom( void );
 }
 
 #endif

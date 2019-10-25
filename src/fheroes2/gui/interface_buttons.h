@@ -33,28 +33,28 @@ namespace Interface
     class ButtonsArea : public BorderWindow
     {
     public:
-	ButtonsArea(Basic &);
+        ButtonsArea( Basic & );
 
-	void		SetPos(s32, s32);
-	void		SavePosition(void);
-	void		SetRedraw(void) const;
+        void SetPos( s32, s32 );
+        void SavePosition( void );
+        void SetRedraw( void ) const;
 
-	void		Redraw(void);
-	int		QueueEventProcessing(void);
+        void Redraw( void );
+        int QueueEventProcessing( void );
 
     private:
-	Basic & interface;
+        Basic & interface;
 
-	Button	buttonNextHero;
-	Button	buttonMovement;
-	Button	buttonKingdom;
-	Button	buttonSpell;
-	Button	buttonEndTur;
-	Button	buttonAdventure;
-	Button	buttonFile;
-	Button	buttonSystem;
+        Button buttonNextHero;
+        Button buttonMovement;
+        Button buttonKingdom;
+        Button buttonSpell;
+        Button buttonEndTur;
+        Button buttonAdventure;
+        Button buttonFile;
+        Button buttonSystem;
 
-		void SetButtonStatus();
+        void SetButtonStatus();
     };
 }
 

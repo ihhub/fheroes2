@@ -20,63 +20,63 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "world.h"
-#include "game.h"
-#include "settings.h"
-#include "heroes.h"
 #include "heroes_recruits.h"
+#include "game.h"
+#include "heroes.h"
+#include "settings.h"
+#include "world.h"
 
-Recruits::Recruits() : std::pair<int, int>(Heroes::UNKNOWN, Heroes::UNKNOWN)
-{
-}
+Recruits::Recruits()
+    : std::pair<int, int>( Heroes::UNKNOWN, Heroes::UNKNOWN )
+{}
 
-void Recruits::Reset(void)
+void Recruits::Reset( void )
 {
     first = Heroes::UNKNOWN;
     second = Heroes::UNKNOWN;
 }
 
-int Recruits::GetID1(void) const
+int Recruits::GetID1( void ) const
 {
     return first;
 }
 
-int Recruits::GetID2(void) const
+int Recruits::GetID2( void ) const
 {
     return second;
 }
 
-const Heroes* Recruits::GetHero1(void) const
+const Heroes * Recruits::GetHero1( void ) const
 {
-    return world.GetHeroes(first);
+    return world.GetHeroes( first );
 }
 
-const Heroes* Recruits::GetHero2(void) const
+const Heroes * Recruits::GetHero2( void ) const
 {
-    return world.GetHeroes(second);
+    return world.GetHeroes( second );
 }
 
-Heroes* Recruits::GetHero1(void)
+Heroes * Recruits::GetHero1( void )
 {
-    return world.GetHeroes(first);
+    return world.GetHeroes( first );
 }
 
-Heroes* Recruits::GetHero2(void)
+Heroes * Recruits::GetHero2( void )
 {
-    return world.GetHeroes(second);
+    return world.GetHeroes( second );
 }
 
-void Recruits::SetHero1(const Heroes* hero)
+void Recruits::SetHero1( const Heroes * hero )
 {
     first = hero ? hero->hid : Heroes::UNKNOWN;
 }
 
-void Recruits::SetHero2(const Heroes* hero)
+void Recruits::SetHero2( const Heroes * hero )
 {
     second = hero ? hero->hid : Heroes::UNKNOWN;
 }
 
-StreamBase & operator>> (StreamBase & sb, Recruits & rt)
+StreamBase & operator>>( StreamBase & sb, Recruits & rt )
 {
     return sb >> rt.first >> rt.second;
 }

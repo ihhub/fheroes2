@@ -20,101 +20,98 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "castle.h"
-#include "battle_cell.h"
-#include "battle_troop.h"
-#include "battle_interface.h"
 #include "battle_bridge.h"
+#include "battle_cell.h"
+#include "battle_interface.h"
+#include "battle_troop.h"
+#include "castle.h"
 
-Battle::Bridge::Bridge() : destroy(false), down(false)
-{
-}
+Battle::Bridge::Bridge()
+    : destroy( false )
+    , down( false )
+{}
 
-bool Battle::Bridge::isValid(void) const
+bool Battle::Bridge::isValid( void ) const
 {
     return !isDestroy();
 }
 
-bool Battle::Bridge::isDestroy(void) const
+bool Battle::Bridge::isDestroy( void ) const
 {
     return destroy;
 }
 
-bool Battle::Bridge::isDown(void) const
+bool Battle::Bridge::isDown( void ) const
 {
     return down || isDestroy();
 }
 
-void Battle::Bridge::SetDown(bool f)
+void Battle::Bridge::SetDown( bool f )
 {
     down = f;
 }
 
-bool Battle::Bridge::AllowUp(void) const
+bool Battle::Bridge::AllowUp( void ) const
 {
-    return NULL == Board::GetCell(49)->GetUnit() && NULL == Board::GetCell(50)->GetUnit();
+    return NULL == Board::GetCell( 49 )->GetUnit() && NULL == Board::GetCell( 50 )->GetUnit();
 }
 
-bool Battle::Bridge::NeedDown(const Unit & b, s32 pos2) const
+bool Battle::Bridge::NeedDown( const Unit & b, s32 pos2 ) const
 {
     const s32 pos1 = b.GetHeadIndex();
 
-    if(pos2 == 50)
-    {
-	if(pos1 == 51) return true;
-	if((pos1 == 61 || pos1 == 39) && b.GetColor() == Arena::GetCastle()->GetColor()) return true;
+    if ( pos2 == 50 ) {
+        if ( pos1 == 51 )
+            return true;
+        if ( ( pos1 == 61 || pos1 == 39 ) && b.GetColor() == Arena::GetCastle()->GetColor() )
+            return true;
     }
-    else
-    if(pos2 == 49)
-    {
-	if(pos1 != 50 && b.GetColor() == Arena::GetCastle()->GetColor()) return true;
+    else if ( pos2 == 49 ) {
+        if ( pos1 != 50 && b.GetColor() == Arena::GetCastle()->GetColor() )
+            return true;
     }
 
     return false;
 }
 
-bool Battle::Bridge::isPassable(int color) const
+bool Battle::Bridge::isPassable( int color ) const
 {
     return color == Arena::GetCastle()->GetColor() || isDown();
 }
 
-void Battle::Bridge::SetDestroy(void)
+void Battle::Bridge::SetDestroy( void )
 {
     destroy = true;
-    Board::GetCell(49)->SetObject(0);
-    Board::GetCell(50)->SetObject(0);
+    Board::GetCell( 49 )->SetObject( 0 );
+    Board::GetCell( 50 )->SetObject( 0 );
 }
 
-void Battle::Bridge::SetPassable(const Unit & b)
+void Battle::Bridge::SetPassable( const Unit & b )
 {
-    if(Board::isCastleIndex(b.GetHeadIndex()) || b.GetColor() == Arena::GetCastle()->GetColor())
-    {
-	Board::GetCell(49)->SetObject(0);
-	Board::GetCell(50)->SetObject(0);
+    if ( Board::isCastleIndex( b.GetHeadIndex() ) || b.GetColor() == Arena::GetCastle()->GetColor() ) {
+        Board::GetCell( 49 )->SetObject( 0 );
+        Board::GetCell( 50 )->SetObject( 0 );
     }
-    else
-    {
-	Board::GetCell(49)->SetObject(1);
-	Board::GetCell(50)->SetObject(1);
+    else {
+        Board::GetCell( 49 )->SetObject( 1 );
+        Board::GetCell( 50 )->SetObject( 1 );
     }
 }
 
-
-bool Battle::Bridge::NeedAction(const Unit & b, s32 dst) const
+bool Battle::Bridge::NeedAction( const Unit & b, s32 dst ) const
 {
-    return (!isDown() && NeedDown(b, dst)) ||
-	    (isValid() && isDown() && AllowUp());
+    return ( !isDown() && NeedDown( b, dst ) ) || ( isValid() && isDown() && AllowUp() );
 }
 
-void Battle::Bridge::Action(const Unit & b, s32 dst)
+void Battle::Bridge::Action( const Unit & b, s32 dst )
 {
     bool action_down = false;
 
-    if(!isDown() && NeedDown(b, dst))
-	action_down = true;
+    if ( !isDown() && NeedDown( b, dst ) )
+        action_down = true;
 
-    if(Arena::GetInterface())
-	Arena::GetInterface()->RedrawBridgeAnimation(action_down);
+    if ( Arena::GetInterface() )
+        Arena::GetInterface()->RedrawBridgeAnimation( action_down );
 
-    SetDown(action_down);
+    SetDown( action_down );
 }

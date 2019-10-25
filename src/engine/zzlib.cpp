@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
 #ifdef WITH_ZLIB
 #include <sstream>
 #include <zlib.h>
@@ -29,132 +28,124 @@
 #include "system.h"
 #include "zzlib.h"
 
-std::vector<u8> zlibDecompress(const u8* src, size_t srcsz, size_t realsz)
+std::vector<u8> zlibDecompress( const u8 * src, size_t srcsz, size_t realsz )
 {
     std::vector<u8> res;
 
-    if(src && srcsz)
-    {
-	if(realsz) res.reserve(realsz);
-	res.resize((realsz ? realsz : srcsz * 7), 0);
-	uLong dstsz = res.size();
-	int ret = Z_BUF_ERROR;
-
-	while(Z_BUF_ERROR ==
-		(ret = uncompress(reinterpret_cast<Bytef*>(& res[0]), &dstsz, reinterpret_cast<const Bytef*>(src), srcsz)))
-	{
-	    dstsz = res.size() * 2;
-	    res.resize(dstsz);
-	}
-
-	if(ret == Z_OK)
-	    res.resize(dstsz);
-	else
-	{
-	    res.clear();
-	    std::ostringstream os;
-	    os << "zlib error:" << ret;
-	    ERROR(os.str().c_str());
-	}
-    }
-
-    return res;
-}
-
-std::vector<u8> zlibCompress(const u8* src, size_t srcsz)
-{
-    std::vector<u8> res;
-
-    if(src && srcsz)
-    {
-	res.resize(compressBound(srcsz));
+    if ( src && srcsz ) {
+        if ( realsz )
+            res.reserve( realsz );
+        res.resize( ( realsz ? realsz : srcsz * 7 ), 0 );
         uLong dstsz = res.size();
-        int ret = compress(reinterpret_cast<Bytef*>(& res[0]), &dstsz, reinterpret_cast<const Bytef*>(src), srcsz);
+        int ret = Z_BUF_ERROR;
 
-	if(ret == Z_OK)
-	    res.resize(dstsz);
-	else
-	{
-	    res.clear();
-	    std::ostringstream os;
-	    os << "zlib error:" << ret;
-	    ERROR(os.str().c_str());
-	}
+        while ( Z_BUF_ERROR == ( ret = uncompress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), srcsz ) ) ) {
+            dstsz = res.size() * 2;
+            res.resize( dstsz );
+        }
+
+        if ( ret == Z_OK )
+            res.resize( dstsz );
+        else {
+            res.clear();
+            std::ostringstream os;
+            os << "zlib error:" << ret;
+            ERROR( os.str().c_str() );
+        }
     }
 
     return res;
 }
 
-bool ZSurface::Load(int w, int h, int bpp, int pitch, u32 rmask, u32 gmask, u32 bmask, u32 amask, const u8* p, size_t s)
+std::vector<u8> zlibCompress( const u8 * src, size_t srcsz )
 {
-    buf = zlibDecompress(p, s);
+    std::vector<u8> res;
 
-    if(! buf.empty())
-    {
-        SDL_Surface* sf = SDL_CreateRGBSurfaceFrom(&buf[0], w, h, bpp, pitch, rmask, gmask, bmask, amask);
+    if ( src && srcsz ) {
+        res.resize( compressBound( srcsz ) );
+        uLong dstsz = res.size();
+        int ret = compress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), srcsz );
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-	SDL_SetSurfaceBlendMode(sf, SDL_BLENDMODE_NONE);
+        if ( ret == Z_OK )
+            res.resize( dstsz );
+        else {
+            res.clear();
+            std::ostringstream os;
+            os << "zlib error:" << ret;
+            ERROR( os.str().c_str() );
+        }
+    }
+
+    return res;
+}
+
+bool ZSurface::Load( int w, int h, int bpp, int pitch, u32 rmask, u32 gmask, u32 bmask, u32 amask, const u8 * p, size_t s )
+{
+    buf = zlibDecompress( p, s );
+
+    if ( !buf.empty() ) {
+        SDL_Surface * sf = SDL_CreateRGBSurfaceFrom( &buf[0], w, h, bpp, pitch, rmask, gmask, bmask, amask );
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        SDL_SetSurfaceBlendMode( sf, SDL_BLENDMODE_NONE );
 #endif
-        if(!sf)
-            Error::Except(__FUNCTION__, SDL_GetError());
+        if ( !sf )
+            Error::Except( __FUNCTION__, SDL_GetError() );
 
-        Set(sf);
-	return true;
+        Set( sf );
+        return true;
     }
 
     return false;
 }
 
-bool ZStreamFile::read(const std::string & fn, size_t offset)
+bool ZStreamFile::read( const std::string & fn, size_t offset )
 {
     StreamFile sf;
-    sf.setbigendian(true);
+    sf.setbigendian( true );
 
-    if(sf.open(fn, "rb"))
-    {
-	if(offset) sf.seek(offset);
+    if ( sf.open( fn, "rb" ) ) {
+        if ( offset )
+            sf.seek( offset );
 #ifdef WITH_ZLIB
         const u32 size0 = sf.get32(); // raw size
         const u32 size1 = sf.get32(); // zip size
-        sf.skip(4); // old stream format
-	std::vector<u8> zip = sf.getRaw(size1);
-        std::vector<u8> raw = zlibDecompress(& zip[0], zip.size(), size0);
-	putRaw(reinterpret_cast<char*>(& raw[0]), raw.size());
-	seek(0);
+        sf.skip( 4 ); // old stream format
+        std::vector<u8> zip = sf.getRaw( size1 );
+        std::vector<u8> raw = zlibDecompress( &zip[0], zip.size(), size0 );
+        putRaw( reinterpret_cast<char *>( &raw[0] ), raw.size() );
+        seek( 0 );
 #else
         const u32 size0 = sf.get32(); // raw size
-	std::vector<u8> raw = sf.getRaw(size0);
-	putRaw(& raw[0], raw.size());
-	seek(0);
+        std::vector<u8> raw = sf.getRaw( size0 );
+        putRaw( &raw[0], raw.size() );
+        seek( 0 );
 #endif
-	return ! fail();
+        return !fail();
     }
     return false;
 }
 
-bool ZStreamFile::write(const std::string & fn, bool append) const
+bool ZStreamFile::write( const std::string & fn, bool append ) const
 {
     StreamFile sf;
-    sf.setbigendian(true);
+    sf.setbigendian( true );
 
-    if(sf.open(fn, append ? "ab" : "wb"))
-    {
+    if ( sf.open( fn, append ? "ab" : "wb" ) ) {
 #ifdef WITH_ZLIB
-	std::vector<u8> zip = zlibCompress(data(), size());
+        std::vector<u8> zip = zlibCompress( data(), size() );
 
-	if(! zip.empty())
-	{
-    	    sf.put32(size());
-    	    sf.put32(zip.size());
-    	    sf.put32(0);	// unused, old format support
-	    sf.putRaw(reinterpret_cast<char*>(& zip[0]), zip.size());
-	    return ! sf.fail();
-	}
+        if ( !zip.empty() ) {
+            sf.put32( size() );
+            sf.put32( zip.size() );
+            sf.put32( 0 ); // unused, old format support
+            sf.putRaw( reinterpret_cast<char *>( &zip[0] ), zip.size() );
+            return !sf.fail();
+        }
 #else
-    	sf.put32(size());
-	sf.putRaw(data(), size());
-	return ! sf.fail();
+        sf.put32( size() );
+        sf.putRaw( data(), size() );
+        return !sf.fail();
 #endif
     }
     return false;

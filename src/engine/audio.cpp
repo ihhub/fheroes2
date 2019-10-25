@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "system.h"
 #include "audio.h"
+#include "system.h"
 
 namespace Audio
 {
@@ -64,23 +64,25 @@ Audio::CVT::CVT()
     filter_index = 0;
 }
 
-bool Audio::CVT::Build(const Audio::Spec & src, const Audio::Spec & dst)
+bool Audio::CVT::Build( const Audio::Spec & src, const Audio::Spec & dst )
 {
-    if(1 == SDL_BuildAudioCVT(this, src.format, src.channels, src.freq, dst.format, dst.channels, dst.freq)) return true;
+    if ( 1 == SDL_BuildAudioCVT( this, src.format, src.channels, src.freq, dst.format, dst.channels, dst.freq ) )
+        return true;
 
-    ERROR(SDL_GetError());
+    ERROR( SDL_GetError() );
     return false;
 }
 
-bool Audio::CVT::Convert(void)
+bool Audio::CVT::Convert( void )
 {
-    if(0 == SDL_ConvertAudio(this)) return true;
-    
-    ERROR(SDL_GetError());
+    if ( 0 == SDL_ConvertAudio( this ) )
+        return true;
+
+    ERROR( SDL_GetError() );
     return false;
 }
 
-Audio::Spec & Audio::GetHardwareSpec(void)
+Audio::Spec & Audio::GetHardwareSpec( void )
 {
     return hardware;
 }

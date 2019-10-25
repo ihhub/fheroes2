@@ -26,18 +26,18 @@ namespace Morale
 {
     enum
     {
-	UNKNOWN  = -4,
-	TREASON  = -3,
-        AWFUL    = -2,
-        POOR     = -1,
-        NORMAL   = 0,
-        GOOD     = 1,
-        GREAT    = 2,
-        BLOOD    = 3
+        UNKNOWN = -4,
+        TREASON = -3,
+        AWFUL = -2,
+        POOR = -1,
+        NORMAL = 0,
+        GOOD = 1,
+        GREAT = 2,
+        BLOOD = 3
     };
 
-    const char* String(int);
-    const char* Description(int);
+    const char * String( int );
+    const char * Description( int );
 }
 
 #endif

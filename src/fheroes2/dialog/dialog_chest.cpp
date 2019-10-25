@@ -21,15 +21,15 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
-#include "world.h"
-#include "game.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "settings.h"
+#include "text.h"
+#include "world.h"
 
-bool Dialog::SelectGoldOrExp(const std::string & header, const std::string & message, u32 gold, u32 expr, const  Heroes & hero)
+bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & message, u32 gold, u32 expr, const Heroes & hero )
 {
     Display & display = Display::Get();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
@@ -38,50 +38,52 @@ bool Dialog::SelectGoldOrExp(const std::string & header, const std::string & mes
     Cursor & cursor = Cursor::Get();
 
     cursor.Hide();
-    cursor.SetThemes(cursor.POINTER);
+    cursor.SetThemes( cursor.POINTER );
 
-    const Sprite & sprite_gold = AGG::GetICN(ICN::RESOURCE, 6);
-    const Sprite & sprite_expr = AGG::GetICN(ICN::EXPMRL, 4);
+    const Sprite & sprite_gold = AGG::GetICN( ICN::RESOURCE, 6 );
+    const Sprite & sprite_expr = AGG::GetICN( ICN::EXPMRL, 4 );
 
     Point pt;
-    TextBox box1(header, Font::YELLOW_BIG, BOXAREA_WIDTH);
-    TextBox box2(message, Font::BIG, BOXAREA_WIDTH);
+    TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
+    TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
 
     Text text;
-    text.Set(GetString(gold) + " " + "(" + "total: " + GetString(world.GetKingdom(hero.GetColor()).GetFunds().Get(Resource::GOLD)) + ")", Font::SMALL);
+    text.Set( GetString( gold ) + " " + "(" + "total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")", Font::SMALL );
 
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
-    FrameBox box(box1.h() + spacer + box2.h() + spacer + sprite_expr.h() + 2 + text.h(), true);
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite_expr.h() + 2 + text.h(), true );
 
-    pt.x = box.GetArea().x + box.GetArea().w / 2 - AGG::GetICN(system, 9).w() - 20;
-    pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN(system, 5).h();
-    Button button_yes(pt.x, pt.y, system, 5, 6);
+    pt.x = box.GetArea().x + box.GetArea().w / 2 - AGG::GetICN( system, 9 ).w() - 20;
+    pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN( system, 5 ).h();
+    Button button_yes( pt.x, pt.y, system, 5, 6 );
 
     pt.x = box.GetArea().x + box.GetArea().w / 2 + 20;
-    pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN(system, 7).h();
-    Button button_no(pt.x, pt.y, system, 7, 8);
+    pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN( system, 7 ).h();
+    Button button_no( pt.x, pt.y, system, 7, 8 );
 
     Rect pos = box.GetArea();
 
-    if(header.size()) box1.Blit(pos);
+    if ( header.size() )
+        box1.Blit( pos );
     pos.y += box1.h() + spacer;
 
-    if(message.size()) box2.Blit(pos);
+    if ( message.size() )
+        box2.Blit( pos );
     pos.y += box2.h() + spacer;
 
     pos.y += sprite_expr.h();
     // sprite1
     pos.x = box.GetArea().x + box.GetArea().w / 2 - sprite_gold.w() - 30;
-    sprite_gold.Blit(pos.x, pos.y - sprite_gold.h());
+    sprite_gold.Blit( pos.x, pos.y - sprite_gold.h() );
     // text
-    text.Blit(pos.x + (sprite_gold.w() - text.w()) / 2, pos.y + 2);
+    text.Blit( pos.x + ( sprite_gold.w() - text.w() ) / 2, pos.y + 2 );
 
     // sprite2
     pos.x = box.GetArea().x + box.GetArea().w / 2 + 30;
-    sprite_expr.Blit(pos.x, pos.y - sprite_expr.h());
+    sprite_expr.Blit( pos.x, pos.y - sprite_expr.h() );
     // text
-    text.Set(GetString(expr) + " " + "(" + "need: " + GetString(Heroes::GetExperienceFromLevel(hero.GetLevel()) - hero.GetExperience()) + ")", Font::SMALL);
-    text.Blit(pos.x + (sprite_expr.w() - text.w()) / 2, pos.y + 2);
+    text.Set( GetString( expr ) + " " + "(" + "need: " + GetString( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")", Font::SMALL );
+    text.Blit( pos.x + ( sprite_expr.w() - text.w() ) / 2, pos.y + 2 );
 
     button_yes.Draw();
     button_no.Draw();
@@ -92,13 +94,18 @@ bool Dialog::SelectGoldOrExp(const std::string & header, const std::string & mes
     bool result = false;
 
     // message loop
-    while(le.HandleEvents())
-    {
-	le.MousePressLeft(button_yes) ? button_yes.PressDraw() : button_yes.ReleaseDraw();
-	le.MousePressLeft(button_no) ? button_no.PressDraw() : button_no.ReleaseDraw();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( button_yes ) ? button_yes.PressDraw() : button_yes.ReleaseDraw();
+        le.MousePressLeft( button_no ) ? button_no.PressDraw() : button_no.ReleaseDraw();
 
-        if(Game::HotKeyPressEvent(Game::EVENT_DEFAULT_READY) || le.MouseClickLeft(button_yes)){ result = true; break; }
-        if(Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT) || le.MouseClickLeft(button_no)){ result = false; break; }
+        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( button_yes ) ) {
+            result = true;
+            break;
+        }
+        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( button_no ) ) {
+            result = false;
+            break;
+        }
     }
 
     cursor.Hide();

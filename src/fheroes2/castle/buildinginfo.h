@@ -23,64 +23,64 @@
 #ifndef H2BUILDINGINFO_H
 #define H2BUILDINGINFO_H
 
-#include "payment.h"
 #include "castle.h"
+#include "payment.h"
 
 class StatusBar;
 
 class BuildingInfo
 {
 public:
-    BuildingInfo(const Castle &, building_t);
+    BuildingInfo( const Castle &, building_t );
 
-    u32			operator() (void) const;
-    void		SetPos(s32, s32);
-    const Rect &	GetArea(void) const;
-    const char*		GetName(void) const;
-    const std::string & GetDescription(void) const;
-    void		SetStatusMessage(StatusBar &) const;
-    bool		IsDwelling(void) const;
-    void		Redraw(void);
-    bool		QueueEventProcessing(void);
-    bool		DialogBuyBuilding(bool buttons) const;
+    u32 operator()( void ) const;
+    void SetPos( s32, s32 );
+    const Rect & GetArea( void ) const;
+    const char * GetName( void ) const;
+    const std::string & GetDescription( void ) const;
+    void SetStatusMessage( StatusBar & ) const;
+    bool IsDwelling( void ) const;
+    void Redraw( void );
+    bool QueueEventProcessing( void );
+    bool DialogBuyBuilding( bool buttons ) const;
 
-    static void		UpdateCosts(const std::string &);
-    static payment_t	GetCost(u32, int);
+    static void UpdateCosts( const std::string & );
+    static payment_t GetCost( u32, int );
 
 private:
-    void		RedrawCaptain(void);
-    std::string		GetConditionDescription(void) const;
+    void RedrawCaptain( void );
+    std::string GetConditionDescription( void ) const;
 
-    const Castle &	castle;
-    u32			building;
-    std::string		description;
-    Rect		area;
-    int			bcond;
+    const Castle & castle;
+    u32 building;
+    std::string description;
+    Rect area;
+    int bcond;
 };
 
 struct DwellingItem
 {
-    DwellingItem(Castle &, u32 dw);
+    DwellingItem( Castle &, u32 dw );
 
-    u32         type;
-    Monster     mons;
+    u32 type;
+    Monster mons;
 };
 
 class DwellingsBar : public Interface::ItemsBar<DwellingItem>
 {
 public:
-    DwellingsBar(Castle &, const Size &, const RGBA & fill);
+    DwellingsBar( Castle &, const Size &, const RGBA & fill );
 
-    void        RedrawBackground(const Rect &, Surface &);
-    void        RedrawItem(DwellingItem &, const Rect &, Surface &);
+    void RedrawBackground( const Rect &, Surface & );
+    void RedrawItem( DwellingItem &, const Rect &, Surface & );
 
-    bool        ActionBarSingleClick(const Point &, DwellingItem &, const Rect &);
-    bool        ActionBarPressRight(const Point &, DwellingItem &, const Rect &);
+    bool ActionBarSingleClick( const Point &, DwellingItem &, const Rect & );
+    bool ActionBarPressRight( const Point &, DwellingItem &, const Rect & );
 
 protected:
-    Castle &                    castle;
-    Surface                     backsf;
-    std::vector<DwellingItem>   content;
+    Castle & castle;
+    Surface backsf;
+    std::vector<DwellingItem> content;
 };
 
 #endif

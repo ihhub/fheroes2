@@ -22,198 +22,198 @@
 
 #include <iostream>
 
-#include "system.h"
-#include "tools.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
+#include "system.h"
+#include "tools.h"
 
 #ifdef WITH_MIXER
 #include "SDL_mixer.h"
 
 namespace Music
 {
-    void Play(Mix_Music* mix, u32 id, bool loop);
+    void Play( Mix_Music * mix, u32 id, bool loop );
 
-    Mix_Music* music = NULL;
-    int fadein  = 0;
+    Mix_Music * music = NULL;
+    int fadein = 0;
     int fadeout = 0;
 }
 
-void Music::Play(Mix_Music* mix, u32 id, bool loop)
+void Music::Play( Mix_Music * mix, u32 id, bool loop )
 {
     Reset();
-    
-    int res = fadein ?
-	Mix_FadeInMusic(mix, loop ? -1 : 0, fadein) : Mix_PlayMusic(mix, loop ? -1 : 0);
 
-    if(res < 0)
-    {
-    	ERROR(Mix_GetError());
+    int res = fadein ? Mix_FadeInMusic( mix, loop ? -1 : 0, fadein ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
+
+    if ( res < 0 ) {
+        ERROR( Mix_GetError() );
     }
     else
-	music = mix;
-/*
-    std::list<play_t>::iterator
-	it = std::find(musics.begin(), musics.end(), f);
+        music = mix;
+    /*
+        std::list<play_t>::iterator
+        it = std::find(musics.begin(), musics.end(), f);
 
-    // skip repeat
-    if(it != musics.end())
-    {
-	if((*it).isPaused())
-	{
-	    Pause();
-	    current = it;
-	    Resume();
-	    DELAY(100);
-	}
+        // skip repeat
+        if(it != musics.end())
+        {
+        if((*it).isPaused())
+        {
+            Pause();
+            current = it;
+            Resume();
+            DELAY(100);
+        }
 
-	if((*it).isPlay()) return;
-    }
+        if((*it).isPlay()) return;
+        }
 
-    // stop run
-    Pause();
+        // stop run
+        Pause();
 
-    info_t info;
-    info.file = f;
-    info.status = loop ? Music::LOOP : 0;
+        info_t info;
+        info.file = f;
+        info.status = loop ? Music::LOOP : 0;
 
-    it = std::find_if(musics.begin(), musics.end(), play_t::isFree);
+        it = std::find_if(musics.begin(), musics.end(), play_t::isFree);
 
-    if(it == musics.end())
-    {
-	musics.push_back(play_t());
-	it = --musics.end();
-    }
+        if(it == musics.end())
+        {
+        musics.push_back(play_t());
+        it = --musics.end();
+        }
 
-    (*it).Run(info);
-    current = it;
-*/
+        (*it).Run(info);
+        current = it;
+    */
 }
 
-void Music::Play(const std::vector<u8> & v, bool loop)
+void Music::Play( const std::vector<u8> & v, bool loop )
 {
-    if(Mixer::isValid() && v.size())
-    {
-	u32 id = CheckSum(v);
-    	SDL_RWops* rwops = SDL_RWFromConstMem(&v[0], v.size());
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-    	Mix_Music* mix = Mix_LoadMUS_RW(rwops, 0);
+    if ( Mixer::isValid() && v.size() ) {
+        u32 id = CheckSum( v );
+        SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], v.size() );
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        Mix_Music * mix = Mix_LoadMUS_RW( rwops, 0 );
 #else
-    	Mix_Music* mix = Mix_LoadMUS_RW(rwops);
+        Mix_Music * mix = Mix_LoadMUS_RW( rwops );
 #endif
-    	SDL_FreeRW(rwops);
-    	Music::Play(mix, id, loop);
+        SDL_FreeRW( rwops );
+        Music::Play( mix, id, loop );
     }
 }
 
-void Music::Play(const std::string & file, bool loop)
+void Music::Play( const std::string & file, bool loop )
 {
-    if(Mixer::isValid())
-    {
-	u32 id = CheckSum(file);
-	Mix_Music* mix = Mix_LoadMUS(file.c_str());
+    if ( Mixer::isValid() ) {
+        u32 id = CheckSum( file );
+        Mix_Music * mix = Mix_LoadMUS( file.c_str() );
 
-	if(! mix)
-	{
-    	    ERROR(Mix_GetError());
-	}
-	else
-	    Music::Play(mix, id, loop);
+        if ( !mix ) {
+            ERROR( Mix_GetError() );
+        }
+        else
+            Music::Play( mix, id, loop );
     }
 }
 
-void Music::SetFadeIn(int f)
+void Music::SetFadeIn( int f )
 {
     fadein = f;
 }
 
-void Music::SetFadeOut(int f)
+void Music::SetFadeOut( int f )
 {
     fadeout = f;
 }
 
-u16 Music::Volume(s16 vol)
+u16 Music::Volume( s16 vol )
 {
-    return Mixer::isValid() ? (Mix_VolumeMusic(vol > MIX_MAX_VOLUME ? MIX_MAX_VOLUME : vol)) : 0;
+    return Mixer::isValid() ? ( Mix_VolumeMusic( vol > MIX_MAX_VOLUME ? MIX_MAX_VOLUME : vol ) ) : 0;
 }
 
-void Music::Pause(void)
+void Music::Pause( void )
 {
-    if(music) Mix_PauseMusic();
+    if ( music )
+        Mix_PauseMusic();
 }
 
-void Music::Resume(void)
+void Music::Resume( void )
 {
-    if(music) Mix_ResumeMusic();
+    if ( music )
+        Mix_ResumeMusic();
 }
 
-void Music::Reset(void)
+void Music::Reset( void )
 {
-    if(music)
-    {
-        if(fadeout)
-    	    while(!Mix_FadeOutMusic(fadeout) && Mix_PlayingMusic()) SDL_Delay(50);
+    if ( music ) {
+        if ( fadeout )
+            while ( !Mix_FadeOutMusic( fadeout ) && Mix_PlayingMusic() )
+                SDL_Delay( 50 );
         else
-    	Mix_HaltMusic();
+            Mix_HaltMusic();
 
-        Mix_FreeMusic(music);
+        Mix_FreeMusic( music );
         music = NULL;
     }
 }
 
-bool Music::isPlaying(void)
+bool Music::isPlaying( void )
 {
     return music && Mix_PlayingMusic();
 }
 
-bool Music::isPaused(void)
+bool Music::isPaused( void )
 {
     return music && Mix_PausedMusic();
 }
 
-void Music::SetExtCommand(const std::string &)
-{
-}
+void Music::SetExtCommand( const std::string & ) {}
 
 #else
-#include <list>
-#include <algorithm>
 #include "thread.h"
+#include <algorithm>
+#include <list>
 
 namespace Music
 {
-    enum { UNUSED = 0, PLAY = 0x01, PAUSE = 0x02, LOOP = 0x04 };
+    enum
+    {
+        UNUSED = 0,
+        PLAY = 0x01,
+        PAUSE = 0x02,
+        LOOP = 0x04
+    };
     std::string command;
 }
 
 struct info_t
 {
-    info_t() : status(0) {}
+    info_t()
+        : status( 0 )
+    {}
 
     std::string file;
-    int		status;
+    int status;
 };
 
-int callbackPlayMusic(void* ptr)
+int callbackPlayMusic( void * ptr )
 {
-    if(ptr && System::ShellCommand(NULL))
-    {
-	info_t* info = reinterpret_cast<info_t*>(ptr);
-	std::ostringstream os;
-	os << Music::command << " " << info->file;
+    if ( ptr && System::ShellCommand( NULL ) ) {
+        info_t * info = reinterpret_cast<info_t *>( ptr );
+        std::ostringstream os;
+        os << Music::command << " " << info->file;
 
-	info->status |= Music::PLAY;
+        info->status |= Music::PLAY;
 
-	do
-	{
-	    System::ShellCommand(os.str().c_str());
-	    DELAY(100);
-	}
-	while(info->status & Music::LOOP);
+        do {
+            System::ShellCommand( os.str().c_str() );
+            DELAY( 100 );
+        } while ( info->status & Music::LOOP );
 
-	info->status &= ~Music::PLAY;
+        info->status &= ~Music::PLAY;
 
-	return 0;
+        return 0;
     }
 
     return -1;
@@ -223,28 +223,67 @@ struct play_t : std::pair<SDL::Thread, info_t>
 {
     play_t() {}
 
-    bool operator== (const std::string & f) const { return f == second.file; }
-
-    void Run(const info_t & info) { second = info; first.Create(callbackPlayMusic, & second); }
-    void Run(void) { first.Create(callbackPlayMusic, & second); }
-    void Stop(void) { if(System::GetEnvironment("MUSIC_WRAPPER")) RunMusicWrapper("stop"); first.Kill(); second.status = Music::UNUSED; }
-
-    void RunMusicWrapper(const char* action)
+    bool operator==( const std::string & f ) const
     {
-	std::ostringstream os;
-	os << System::GetEnvironment("MUSIC_WRAPPER") << " " << action << " " << second.file;
-	System::ShellCommand(os.str().c_str());
+        return f == second.file;
     }
 
-    void Pause(void) { 	RunMusicWrapper("pause"); second.status |= Music::PAUSE; }
-    void Continue(void) { RunMusicWrapper("continue"); second.status &= ~Music::PAUSE; }
+    void Run( const info_t & info )
+    {
+        second = info;
+        first.Create( callbackPlayMusic, &second );
+    }
+    void Run( void )
+    {
+        first.Create( callbackPlayMusic, &second );
+    }
+    void Stop( void )
+    {
+        if ( System::GetEnvironment( "MUSIC_WRAPPER" ) )
+            RunMusicWrapper( "stop" );
+        first.Kill();
+        second.status = Music::UNUSED;
+    }
 
-    bool isPlay(void) const { return second.status & Music::PLAY; }
-    bool isPaused(void) const { return second.status & Music::PAUSE; }
+    void RunMusicWrapper( const char * action )
+    {
+        std::ostringstream os;
+        os << System::GetEnvironment( "MUSIC_WRAPPER" ) << " " << action << " " << second.file;
+        System::ShellCommand( os.str().c_str() );
+    }
 
-    static bool isPlaying(const play_t & p) { return p.isPlay() && ! p.isPaused(); }
-    static bool isRunning(const play_t & p) { return p.first.IsRun(); }
-    static bool isFree(const play_t & p) { return p.second.status == Music::UNUSED; }
+    void Pause( void )
+    {
+        RunMusicWrapper( "pause" );
+        second.status |= Music::PAUSE;
+    }
+    void Continue( void )
+    {
+        RunMusicWrapper( "continue" );
+        second.status &= ~Music::PAUSE;
+    }
+
+    bool isPlay( void ) const
+    {
+        return second.status & Music::PLAY;
+    }
+    bool isPaused( void ) const
+    {
+        return second.status & Music::PAUSE;
+    }
+
+    static bool isPlaying( const play_t & p )
+    {
+        return p.isPlay() && !p.isPaused();
+    }
+    static bool isRunning( const play_t & p )
+    {
+        return p.first.IsRun();
+    }
+    static bool isFree( const play_t & p )
+    {
+        return p.second.status == Music::UNUSED;
+    }
 };
 
 namespace Music
@@ -253,32 +292,28 @@ namespace Music
     std::list<play_t>::iterator current = musics.end();
 }
 
-void Music::SetExtCommand(const std::string & cmd)
+void Music::SetExtCommand( const std::string & cmd )
 {
     command = cmd;
 }
 
-void Music::Play(const std::vector<u8> & v, bool loop)
-{
-}
+void Music::Play( const std::vector<u8> & v, bool loop ) {}
 
-void Music::Play(const std::string & f, bool loop)
+void Music::Play( const std::string & f, bool loop )
 {
-    std::list<play_t>::iterator
-	it = std::find(musics.begin(), musics.end(), f);
+    std::list<play_t>::iterator it = std::find( musics.begin(), musics.end(), f );
 
     // skip repeat
-    if(it != musics.end())
-    {
-	if((*it).isPaused())
-	{
-	    Pause();
-	    current = it;
-	    Resume();
-	    DELAY(100);
-	}
+    if ( it != musics.end() ) {
+        if ( ( *it ).isPaused() ) {
+            Pause();
+            current = it;
+            Resume();
+            DELAY( 100 );
+        }
 
-	if((*it).isPlay()) return;
+        if ( ( *it ).isPlay() )
+            return;
     }
 
     // stop run
@@ -288,71 +323,61 @@ void Music::Play(const std::string & f, bool loop)
     info.file = f;
     info.status = loop ? Music::LOOP : 0;
 
-    it = std::find_if(musics.begin(), musics.end(), play_t::isFree);
+    it = std::find_if( musics.begin(), musics.end(), play_t::isFree );
 
-    if(it == musics.end())
-    {
-	musics.push_back(play_t());
-	it = --musics.end();
+    if ( it == musics.end() ) {
+        musics.push_back( play_t() );
+        it = --musics.end();
     }
 
-    (*it).Run(info);
+    ( *it ).Run( info );
     current = it;
 }
 
-void Music::SetFadeIn(int f)
-{
-}
+void Music::SetFadeIn( int f ) {}
 
-void Music::SetFadeOut(int f)
-{
-}
+void Music::SetFadeOut( int f ) {}
 
-u16 Music::Volume(s16 vol)
+u16 Music::Volume( s16 vol )
 {
     return 0;
 }
 
-void Music::Pause(void)
+void Music::Pause( void )
 {
-    if(! System::GetEnvironment("MUSIC_WRAPPER"))
-	Reset();
-    else
-    if(current != musics.end() && (*current).isPlay() && ! (*current).isPaused())
-	(*current).Pause();
+    if ( !System::GetEnvironment( "MUSIC_WRAPPER" ) )
+        Reset();
+    else if ( current != musics.end() && ( *current ).isPlay() && !( *current ).isPaused() )
+        ( *current ).Pause();
 }
 
-void Music::Resume(void)
+void Music::Resume( void )
 {
-    if(current != musics.end())
-    {
-	if(! System::GetEnvironment("MUSIC_WRAPPER"))
-	    (*current).Run();
-	else
-	if((*current).isPlay() && (*current).isPaused())
-	    (*current).Continue();
+    if ( current != musics.end() ) {
+        if ( !System::GetEnvironment( "MUSIC_WRAPPER" ) )
+            ( *current ).Run();
+        else if ( ( *current ).isPlay() && ( *current ).isPaused() )
+            ( *current ).Continue();
     }
 }
 
-bool Music::isPlaying(void)
+bool Music::isPlaying( void )
 {
-    std::list<play_t>::iterator
-	it = std::find_if(musics.begin(), musics.end(), play_t::isPlaying);
+    std::list<play_t>::iterator it = std::find_if( musics.begin(), musics.end(), play_t::isPlaying );
     return it != musics.end();
 }
 
-bool Music::isPaused(void)
+bool Music::isPaused( void )
 {
     return false;
 }
 
-void Music::Reset(void)
+void Music::Reset( void )
 {
-    std::list<play_t>::iterator
-	it = std::find_if(musics.begin(), musics.end(), play_t::isRunning);
+    std::list<play_t>::iterator it = std::find_if( musics.begin(), musics.end(), play_t::isRunning );
 
-    if(it != musics.end())
-	(*it).Stop();
+    if ( it != musics.end() )
+        ( *it ).Stop();
 }
 
 #endif

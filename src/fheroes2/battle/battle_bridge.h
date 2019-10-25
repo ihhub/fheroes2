@@ -32,25 +32,25 @@ namespace Battle
     class Bridge
     {
     public:
-	Bridge();
+        Bridge();
 
-	bool NeedAction(const Unit &, s32) const;
-	void Action(const Unit &, s32);
+        bool NeedAction( const Unit &, s32 ) const;
+        void Action( const Unit &, s32 );
 
-	void SetDestroy(void);
-	void SetDown(bool);
-	void SetPassable(const Unit &);
+        void SetDestroy( void );
+        void SetDown( bool );
+        void SetPassable( const Unit & );
 
-	bool AllowUp(void) const;
-	bool NeedDown(const Unit &, s32) const;
-	bool isPassable(int) const;
-	bool isValid(void) const;
-	bool isDestroy(void) const;
-	bool isDown(void) const;
+        bool AllowUp( void ) const;
+        bool NeedDown( const Unit &, s32 ) const;
+        bool isPassable( int ) const;
+        bool isValid( void ) const;
+        bool isDestroy( void ) const;
+        bool isDown( void ) const;
 
     private:
-	bool	destroy;
-	bool	down;
+        bool destroy;
+        bool down;
     };
 }
 

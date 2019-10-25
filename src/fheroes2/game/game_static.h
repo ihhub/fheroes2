@@ -26,64 +26,69 @@
 #include "gamedefs.h"
 
 struct cost_t;
-namespace Skill { struct stats_t; struct values_t; struct secondary_t; }
+namespace Skill
+{
+    struct stats_t;
+    struct values_t;
+    struct secondary_t;
+}
 
 namespace GameStatic
 {
     struct Data
     {
-	static Data & Get(void);
-	// wrapper for stream
+        static Data & Get( void );
+        // wrapper for stream
     };
 
-    StreamBase & operator<< (StreamBase &, const Data &);
-    StreamBase & operator>> (StreamBase &, Data &);
+    StreamBase & operator<<( StreamBase &, const Data & );
+    StreamBase & operator>>( StreamBase &, Data & );
 
-    u32		GetLostOnWhirlpoolPercent(void);
-    u32		GetGameOverLostDays(void);
-    u32		GetOverViewDistance(u32);
+    u32 GetLostOnWhirlpoolPercent( void );
+    u32 GetGameOverLostDays( void );
+    u32 GetOverViewDistance( u32 );
 
-    cost_t &	GetKingdomStartingResource(int difficulty);
-    u32		GetKingdomMaxHeroes(void);
+    cost_t & GetKingdomStartingResource( int difficulty );
+    u32 GetKingdomMaxHeroes( void );
 
-    u32		GetCastleGrownWell(void);
-    u32		GetCastleGrownWel2(void);
-    u32		GetCastleGrownWeekOf(void);
-    u32		GetCastleGrownMonthOf(void);
+    u32 GetCastleGrownWell( void );
+    u32 GetCastleGrownWel2( void );
+    u32 GetCastleGrownWeekOf( void );
+    u32 GetCastleGrownMonthOf( void );
 
-    u32		GetHeroesRestoreSpellPointsPerDay(void);
-    u32		GetMageGuildRestoreSpellPointsPercentDay(int level);
+    u32 GetHeroesRestoreSpellPointsPerDay( void );
+    u32 GetMageGuildRestoreSpellPointsPercentDay( int level );
 
-    float	GetMonsterUpgradeRatio(void);
-    s32		ObjectVisitedModifiers(int obj);
+    float GetMonsterUpgradeRatio( void );
+    s32 ObjectVisitedModifiers( int obj );
 
-    int		GetBattleMoatReduceDefense(void);
+    int GetBattleMoatReduceDefense( void );
 
-    const Skill::stats_t*     GetSkillStats(int race);
-    const Skill::values_t*    GetSkillValues(int skill);
-    const Skill::secondary_t* GetSkillForWitchsHut(void);
+    const Skill::stats_t * GetSkillStats( int race );
+    const Skill::values_t * GetSkillValues( int skill );
+    const Skill::secondary_t * GetSkillForWitchsHut( void );
 
-    u32		Spell_DD_Distance(void);
-    u32		Spell_DD_SP(void);
-    u32		Spell_DD_HP(void);
+    u32 Spell_DD_Distance( void );
+    u32 Spell_DD_SP( void );
+    u32 Spell_DD_HP( void );
 
-    void	SetSpell_DD_Distance(int);
-    void	SetSpell_DD_SP(int);
-    void	SetSpell_DD_HP(int);
+    void SetSpell_DD_Distance( int );
+    void SetSpell_DD_SP( int );
+    void SetSpell_DD_HP( int );
 }
 
 #ifdef WITH_XML
 namespace Game
 {
-    void	CastleUpdateGrowth(const TiXmlElement*);
-    void	KingdomUpdateStartingResource(const TiXmlElement*);
-    void	HeroesUpdateStatic(const TiXmlElement*);
-    void	KingdomUpdateStatic(const TiXmlElement*);
-    void	GameOverUpdateStatic(const TiXmlElement*);
-    void	OverViewUpdateStatic(const TiXmlElement*);
-    void	WhirlpoolUpdateStatic(const TiXmlElement*);
-    void	MonsterUpdateStatic(const TiXmlElement*);
-    void	SkillUpdateStatic(const TiXmlElement*);
+    void CastleUpdateGrowth( const TiXmlElement * );
+    void KingdomUpdateStartingResource( const TiXmlElement * );
+    void HeroesUpdateStatic( const TiXmlElement * );
+    void KingdomUpdateStatic( const TiXmlElement * );
+    void GameOverUpdateStatic( const TiXmlElement * );
+    void OverViewUpdateStatic( const TiXmlElement * );
+    void WhirlpoolUpdateStatic( const TiXmlElement * );
+    void MonsterUpdateStatic( const TiXmlElement * );
+    void SkillUpdateStatic( const TiXmlElement * );
 }
 #endif
 

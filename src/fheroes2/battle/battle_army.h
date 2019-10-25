@@ -30,61 +30,64 @@ namespace Battle
 {
     class Unit;
 
-    class Units : public std::vector<Unit*>
+    class Units : public std::vector<Unit *>
     {
     public:
-	Units();
-	Units(const Units &, bool filter = false);
-	Units(const Units &, const Units &);
-	virtual ~Units();
+        Units();
+        Units( const Units &, bool filter = false );
+        Units( const Units &, const Units & );
+        virtual ~Units();
 
-	Units &		operator= (const Units &);
+        Units & operator=( const Units & );
 
-	Unit*		FindMode(u32);
-        Unit*		FindUID(u32);
+        Unit * FindMode( u32 );
+        Unit * FindUID( u32 );
 
-        void		SortSlowest(bool);
-        void		SortFastest(bool);
-        void		SortStrongest(void);
-        void		SortWeakest(void);
+        void SortSlowest( bool );
+        void SortFastest( bool );
+        void SortStrongest( void );
+        void SortWeakest( void );
     };
 
-    enum { ARMY_GUARDIANS_OBJECT = 0x10000 };
+    enum
+    {
+        ARMY_GUARDIANS_OBJECT = 0x10000
+    };
 
     class Force : public Units, public BitModes
     {
     public:
-	Force(Army &, bool);
-	~Force();
+        Force( Army &, bool );
+        ~Force();
 
-    HeroBase*		GetCommander(void);
-    const HeroBase*	GetCommander(void) const;
+        HeroBase * GetCommander( void );
+        const HeroBase * GetCommander( void ) const;
 
-    bool		isValid(void) const;
-    bool		HasMonster(const Monster &) const;
-    u32			GetDeadHitPoints(void) const;
-    u32			GetDeadCounts(void) const;
-    int			GetColor(void) const;
-    int			GetControl(void) const;
-    u32                 GetSurrenderCost(void) const;
-    Troops		GetKilledTroops(void) const;
-    bool		SetIdleAnimation(void);
-    bool		NextIdleAnimation(void);
+        bool isValid( void ) const;
+        bool HasMonster( const Monster & ) const;
+        u32 GetDeadHitPoints( void ) const;
+        u32 GetDeadCounts( void ) const;
+        int GetColor( void ) const;
+        int GetControl( void ) const;
+        u32 GetSurrenderCost( void ) const;
+        Troops GetKilledTroops( void ) const;
+        bool SetIdleAnimation( void );
+        bool NextIdleAnimation( void );
 
-    void		NewTurn(void);
-    void		SyncArmyCount(void);
+        void NewTurn( void );
+        void SyncArmyCount( void );
 
-    static Unit*	GetCurrentUnit(const Force &, const Force &, Unit* last, Units* all, bool part1);
-    static Unit*	GetCurrentUnit(const Force &, const Force &, Unit* last, bool part1);
-    static void		UpdateOrderUnits(const Force &, const Force &, Units &);
+        static Unit * GetCurrentUnit( const Force &, const Force &, Unit * last, Units * all, bool part1 );
+        static Unit * GetCurrentUnit( const Force &, const Force &, Unit * last, bool part1 );
+        static void UpdateOrderUnits( const Force &, const Force &, Units & );
 
     private:
-	Army &		army;
-	std::vector<u32>uids;
+        Army & army;
+        std::vector<u32> uids;
     };
 
-    StreamBase & operator<< (StreamBase &, const Force &);
-    StreamBase & operator>> (StreamBase &, Force &);
+    StreamBase & operator<<( StreamBase &, const Force & );
+    StreamBase & operator>>( StreamBase &, Force & );
 }
 
 #endif

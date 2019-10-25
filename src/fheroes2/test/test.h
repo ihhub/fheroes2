@@ -27,7 +27,7 @@
 
 namespace Test
 {
-    void Run(int);
+    void Run( int );
 }
 
 #endif

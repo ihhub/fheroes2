@@ -20,13 +20,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "interface_cpanel.h"
 #include "agg.h"
-#include "settings.h"
 #include "game.h"
 #include "game_interface.h"
-#include "interface_cpanel.h"
+#include "settings.h"
 
-Interface::ControlPanel::ControlPanel(Basic & basic) : interface(basic)
+Interface::ControlPanel::ControlPanel( Basic & basic )
+    : interface( basic )
 {
     w = 180;
     h = 36;
@@ -45,31 +46,31 @@ Interface::ControlPanel::ControlPanel(Basic & basic) : interface(basic)
     ResetTheme();
 }
 
-void Interface::ControlPanel::ResetTheme(void)
+void Interface::ControlPanel::ResetTheme( void )
 {
     int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
-    btn_radr = AGG::GetICN(icn, 4);
-    btn_icon = AGG::GetICN(icn, 0);
-    btn_bttn = AGG::GetICN(icn, 12);
-    btn_stat = AGG::GetICN(icn, 10);
-    btn_quit = AGG::GetICN(icn, 8);
+    btn_radr = AGG::GetICN( icn, 4 );
+    btn_icon = AGG::GetICN( icn, 0 );
+    btn_bttn = AGG::GetICN( icn, 12 );
+    btn_stat = AGG::GetICN( icn, 10 );
+    btn_quit = AGG::GetICN( icn, 8 );
 
     int alpha = 130;
 
-    btn_radr.SetAlphaMod(alpha);
-    btn_icon.SetAlphaMod(alpha);
-    btn_bttn.SetAlphaMod(alpha);
-    btn_stat.SetAlphaMod(alpha);
-    btn_quit.SetAlphaMod(alpha);
+    btn_radr.SetAlphaMod( alpha );
+    btn_icon.SetAlphaMod( alpha );
+    btn_bttn.SetAlphaMod( alpha );
+    btn_stat.SetAlphaMod( alpha );
+    btn_quit.SetAlphaMod( alpha );
 }
 
-const Rect & Interface::ControlPanel::GetArea(void)
+const Rect & Interface::ControlPanel::GetArea( void )
 {
     return *this;
 }
 
-void Interface::ControlPanel::SetPos(s32 ox, s32 oy)
+void Interface::ControlPanel::SetPos( s32 ox, s32 oy )
 {
     x = ox;
     y = oy;
@@ -86,30 +87,31 @@ void Interface::ControlPanel::SetPos(s32 ox, s32 oy)
     rt_quit.y = y;
 }
 
-void Interface::ControlPanel::Redraw(void)
+void Interface::ControlPanel::Redraw( void )
 {
     Display & display = Display::Get();
 
-    btn_radr.Blit(x, y, display);
-    btn_icon.Blit(x + 36, y, display);
-    btn_bttn.Blit(x + 72, y, display);
-    btn_stat.Blit(x + 108, y, display);
-    btn_quit.Blit(x + 144, y, display);
+    btn_radr.Blit( x, y, display );
+    btn_icon.Blit( x + 36, y, display );
+    btn_bttn.Blit( x + 72, y, display );
+    btn_stat.Blit( x + 108, y, display );
+    btn_quit.Blit( x + 144, y, display );
 }
 
-int Interface::ControlPanel::QueueEventProcessing(void)
+int Interface::ControlPanel::QueueEventProcessing( void )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if(le.MouseClickLeft(rt_radr))	interface.EventSwitchShowRadar();
-    else
-    if(le.MouseClickLeft(rt_icon))	interface.EventSwitchShowIcons();
-    else
-    if(le.MouseClickLeft(rt_bttn))	interface.EventSwitchShowButtons();
-    else
-    if(le.MouseClickLeft(rt_stat))	interface.EventSwitchShowStatus();
-    else
-    if(le.MouseClickLeft(rt_quit))	return interface.EventEndTurn();
+    if ( le.MouseClickLeft( rt_radr ) )
+        interface.EventSwitchShowRadar();
+    else if ( le.MouseClickLeft( rt_icon ) )
+        interface.EventSwitchShowIcons();
+    else if ( le.MouseClickLeft( rt_bttn ) )
+        interface.EventSwitchShowButtons();
+    else if ( le.MouseClickLeft( rt_stat ) )
+        interface.EventSwitchShowStatus();
+    else if ( le.MouseClickLeft( rt_quit ) )
+        return interface.EventEndTurn();
 
     return Game::CANCEL;
 }

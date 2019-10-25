@@ -25,15 +25,15 @@
 
 namespace Translation
 {
-    bool bindDomain(const char* domain, const char* file);
-    bool setDomain(const char* domain);
-    void setStripContext(char strip);
+    bool bindDomain( const char * domain, const char * file );
+    bool setDomain( const char * domain );
+    void setStripContext( char strip );
 
-    const char* gettext(const char* str);
-    const char* gettext(const std::string & str);
-    const char* dgettext(const char* domain, const char* str);
-    const char* ngettext(const char* str, const char* plural, size_t num);
-    const char* dngettext(const char* domain, const char* str, const char* plural, size_t num);
+    const char * gettext( const char * str );
+    const char * gettext( const std::string & str );
+    const char * dgettext( const char * domain, const char * str );
+    const char * ngettext( const char * str, const char * plural, size_t num );
+    const char * dngettext( const char * domain, const char * str, const char * plural, size_t num );
 }
 
 #endif

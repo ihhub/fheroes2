@@ -23,19 +23,19 @@
 #ifndef H2PUZZLE_H
 #define H2PUZZLE_H
 
-#include <bitset>
 #include "gamedefs.h"
+#include <bitset>
 
-#define PUZZLETILES	48
+#define PUZZLETILES 48
 
 class Puzzle : public std::bitset<PUZZLETILES>
 {
 public:
     Puzzle();
-    Puzzle & operator= (const char*);
+    Puzzle & operator=( const char * );
 
-    void Update(u32 open, u32 total);
-    void ShowMapsDialog(void) const;
+    void Update( u32 open, u32 total );
+    void ShowMapsDialog( void ) const;
 
     u8 zone1_order[24];
     u8 zone2_order[16];
@@ -43,7 +43,7 @@ public:
     u8 zone4_order[4];
 };
 
-StreamBase & operator<< (StreamBase &, const Puzzle &);
-StreamBase & operator>> (StreamBase &, Puzzle &);
+StreamBase & operator<<( StreamBase &, const Puzzle & );
+StreamBase & operator>>( StreamBase &, Puzzle & );
 
 #endif

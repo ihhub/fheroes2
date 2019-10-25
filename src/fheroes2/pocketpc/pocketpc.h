@@ -32,20 +32,20 @@ class Kingdom;
 
 namespace PocketPC
 {
-    int			MainMenu(void);
-    int			NewGame(void);
-    int			NewMulti(void);
-    int			SelectScenario(void);
-    int			ScenarioInfo(void);
-    int			LoadGame(void);
-    int			HeroesOpenDialog(Heroes &, bool);
-    int			CastleOpenDialog(Castle &, bool);
-    int			DialogArmyInfo(const Troop &, u32);
-    void		HeroesMeeting(Heroes &, Heroes &);
-    void		KeyboardDialog(std::string &);
-    u32			GetCursorAttackDialog(const Point &, int direction);
-    void		ThievesGuild(bool oracle);
-    void		KingdomOverviewDialog(const Kingdom &);
+    int MainMenu( void );
+    int NewGame( void );
+    int NewMulti( void );
+    int SelectScenario( void );
+    int ScenarioInfo( void );
+    int LoadGame( void );
+    int HeroesOpenDialog( Heroes &, bool );
+    int CastleOpenDialog( Castle &, bool );
+    int DialogArmyInfo( const Troop &, u32 );
+    void HeroesMeeting( Heroes &, Heroes & );
+    void KeyboardDialog( std::string & );
+    u32 GetCursorAttackDialog( const Point &, int direction );
+    void ThievesGuild( bool oracle );
+    void KingdomOverviewDialog( const Kingdom & );
 }
 
 #endif
