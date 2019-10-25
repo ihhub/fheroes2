@@ -35,5 +35,8 @@ if not sevenZipPath == "" (
 ) else (
     echo 7z.exe is not found in path. Please unzip files manually.
 )
-echo Press any key to exit...
-pause >nul
+set "isAppveyor=%APPVEYOR_REPO_PROVIDER%"
+if not "%isAppveyor%" == "gitHub" (
+	echo Press any key to exit...
+	pause >nul
+)

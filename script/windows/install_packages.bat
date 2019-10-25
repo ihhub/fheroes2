@@ -52,5 +52,8 @@ if not sevenZipPath == "" (
 ) else (
     echo "Failed to unzip archives because 7-zip is not installed in system. Please unpack all archives in packages internal folders and manually run setup_packages.bat file after"
 )
-echo Press any key to exit...
-pause >nul
+set "isAppveyor=%APPVEYOR_REPO_PROVIDER%"
+if not "%isAppveyor%" == "gitHub" (
+	echo Press any key to exit...
+	pause >nul
+)
