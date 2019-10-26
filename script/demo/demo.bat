@@ -36,7 +36,7 @@ if not sevenZipPath == "" (
     echo 7z.exe is not found in path. Please unzip files manually.
 )
 
-if not %APPVEYOR_REPO_PROVIDER% == "gitHub" (
+if not "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
     echo Press any key to exit...
     pause >nul
 )
