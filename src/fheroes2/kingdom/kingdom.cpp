@@ -812,7 +812,7 @@ StreamBase & operator>> (StreamBase & msg, Kingdoms & obj)
     u32 kingdomscount = 0;
     msg >> kingdomscount;
 
-    if (kingdomscount <= KINGDOMMAX) {
+    if (kingdomscount < KINGDOMMAX + 1) {
         for (u32 i = 0; i < kingdomscount; ++i)
             msg >> obj.kingdoms[i];
     }
