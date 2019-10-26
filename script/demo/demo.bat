@@ -37,6 +37,6 @@ if not sevenZipPath == "" (
 )
 set "isAppveyor=%APPVEYOR_REPO_PROVIDER%"
 if not "%isAppveyor%" == "gitHub" (
-	echo Press any key to exit...
-	pause >nul
+    echo Press any key to exit...
+    pause >nul
 )
