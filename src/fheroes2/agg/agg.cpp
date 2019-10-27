@@ -44,7 +44,7 @@
 #define FATSIZENAME	15
 
 namespace AGG
-{	
+{
     class FAT
     {
     public:
@@ -186,7 +186,7 @@ AGG::File::File(void) : count_items(0)
 bool AGG::File::Open(const std::string & fname)
 {
     filename = fname;
-    
+
     if(! stream.open(filename, "rb"))
     {
 	DEBUG(DBG_ENGINE, DBG_WARN, "error read file: " << filename << ", skipping...");
@@ -229,9 +229,9 @@ const std::string & AGG::File::Name(void) const
 }
 
 /* get FAT element */
-const AGG::FAT & AGG::File::Fat(const std::string & key)
+const AGG::FAT & AGG::File::Fat(const std::string & k)
 {
-    return fat[key];
+    return fat[k];
 }
 
 /* dump FAT */
@@ -801,7 +801,7 @@ void AGG::SaveICN(int icn)
 	    {
 		TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
 		doc.LinkEndChild(decl);
-    
+
 		icn_element = new TiXmlElement("icn");
 		icn_element->SetAttribute("name", icn_lower.c_str());
 		icn_element->SetAttribute("count", v.count);
@@ -1289,7 +1289,7 @@ void AGG::SaveTIL(int til)
 	    {
 		TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
 		doc.LinkEndChild(decl);
-    
+
 		til_element = new TiXmlElement("til");
 		til_element->SetAttribute("name", til_lower.c_str());
 		til_element->SetAttribute("count", v.count);
@@ -1733,7 +1733,7 @@ void AGG::LoadTTFChar(u32 ch)
     const Settings & conf = Settings::Get();
     const RGBA white(0xFF, 0xFF, 0xFF);
     const RGBA yellow(0xFF, 0xFF, 0x00);
-	    
+
     // small
     fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar(ch, white, ! conf.FontSmallRenderBlended());
     fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar(ch, yellow, ! conf.FontSmallRenderBlended());
@@ -1773,7 +1773,7 @@ void AGG::LoadFNT(void)
 	else
 	{
     	    DEBUG(DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal());
-    	    DEBUG(DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall());	
+    	    DEBUG(DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall());
 	    DEBUG(DBG_ENGINE, DBG_INFO, "preload english charsets");
 	}
     }

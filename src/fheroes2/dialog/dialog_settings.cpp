@@ -65,20 +65,20 @@ void SettingsListBox::RedrawItem(const u32 & item, s32 ox, s32 oy, bool current)
 	msg.Blit(ox + cell.w() + 5, oy + 4);
 }
 
-void SettingsListBox::RedrawBackground(const Point & top)
+  void SettingsListBox::RedrawBackground(const Point & origin)
 {
     const Settings & conf = Settings::Get();
 
     const int window_h = conf.QVGA() ? 224 : 400;
     const int ah = window_h - 54;
 
-    AGG::GetICN(ICN::STONEBAK, 0).Blit(Rect(15, 25, 280, ah), top.x + 15, top.y + 25);
+        AGG::GetICN(ICN::STONEBAK, 0).Blit(Rect(15, 25, 280, ah), origin.x + 15, origin.y + 25);
 
     for(int ii = 1; ii < (window_h / 25); ++ii)
-	AGG::GetICN(ICN::DROPLISL, 11).Blit(top.x + 295, top.y + 35 + (19 * ii));
+    	AGG::GetICN(ICN::DROPLISL, 11).Blit(origin.x + 295, origin.y + 35 + (19 * ii));
 
-    AGG::GetICN(ICN::DROPLISL, 10).Blit(top.x + 295, top.y + 46);
-    AGG::GetICN(ICN::DROPLISL, 12).Blit(top.x + 295, top.y + ah - 14);
+        AGG::GetICN(ICN::DROPLISL, 10).Blit(origin.x + 295, origin.y + 46);
+        AGG::GetICN(ICN::DROPLISL, 12).Blit(origin.x + 295, origin.y + ah - 14);
 }
 
 void SettingsListBox::ActionListDoubleClick(u32 & item)
