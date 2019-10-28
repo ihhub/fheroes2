@@ -75,7 +75,7 @@ void SettingsListBox::RedrawBackground(const Point & origin)
     AGG::GetICN(ICN::STONEBAK, 0).Blit(Rect(15, 25, 280, ah), origin.x + 15, origin.y + 25);
 
     for(int ii = 1; ii < (window_h / 25); ++ii)
-    	AGG::GetICN(ICN::DROPLISL, 11).Blit(origin.x + 295, origin.y + 35 + (19 * ii));
+        AGG::GetICN(ICN::DROPLISL, 11).Blit(origin.x + 295, origin.y + 35 + (19 * ii));
 
     AGG::GetICN(ICN::DROPLISL, 10).Blit(origin.x + 295, origin.y + 46);
     AGG::GetICN(ICN::DROPLISL, 12).Blit(origin.x + 295, origin.y + ah - 14);
