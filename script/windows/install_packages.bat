@@ -28,8 +28,8 @@ where 7z.exe >nul 2>nul
 if %errorlevel% == 0 (
     set sevenZipPath=7z.exe
 ) else (
-    if exist "C:\Program Files\7-Zip\7z.exe" (
-        set sevenZipPath=C:\Program Files\7-Zip\7z.exe
+    if exist "%ProgramFiles%\7-Zip\7z.exe" (
+        set sevenZipPath=%ProgramFiles%\7-Zip\7z.exe
     )
 )
 
