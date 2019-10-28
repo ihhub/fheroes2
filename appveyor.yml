@@ -12,12 +12,12 @@ version: 1.0.{build}
 image: Visual Studio 2015
 
 configuration:
-    - Release-SDL1
-    - Release-SDL2
+  - Release-SDL1
+  - Release-SDL2
 
 platform:
-    - x86
-    - x64
+  - x86
+  - x64
 
 skip_tags: true
 
