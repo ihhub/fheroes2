@@ -60,7 +60,7 @@ bool Button::isDisable(void) const
     return flags & BTN_DISABLE;
 }
 
-bool Button::isVisible( void ) const
+bool Button::isVisible() const
 {
     return flags & BTN_VISIBLE;
 }
@@ -116,9 +116,9 @@ void Button::SetDisable(bool f)
 	flags &= ~(BTN_DISABLE | BTN_PRESSED);
 }
 
-void Button::SetVisible( bool f )
+void Button::SetVisible( bool isVisible )
 {
-    if ( f )
+    if ( isVisible )
         flags |= BTN_VISIBLE;
     else
         flags &= ~BTN_VISIBLE;
