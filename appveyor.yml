@@ -31,13 +31,12 @@ install:
 
 after_build:
   - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%
-  - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip fheroes2.exe SDL*.dll
+  - cmd: 7z a fheroes2_%platform%_%configuration%.zip fheroes2.exe SDL*.dll
   - cmd: cd C:\projects\fheroes2
-  - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip script\demo\demo.bat
-  - cmd: 7z a C:\projects\fheroes2\build\%platform%\%configuration%\fheroes2-%platform%-%configuration%.zip LICENSE
+  - cmd: 7z a build\%platform%\%configuration%\fheroes2_%platform%_%configuration%.zip script\demo\demo.bat LICENSE
 
 artifacts:
-  - path: build\$(platform)\$(configuration)\fheroes2-$(platform)-$(configuration).zip
+  - path: build\$(platform)\$(configuration)\fheroes2_$(platform)_$(configuration).zip
     name: fheroes2-%platform%-%configuration%
 
 deploy:
