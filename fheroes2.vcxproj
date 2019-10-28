@@ -95,7 +95,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|Win32'">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="common.props" />
     <Import Project="Debug.props" />
@@ -107,7 +107,7 @@
     <Import Project="Debug.props" />
     <Import Project="SDL2.props" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|Win32'">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="common.props" />
     <Import Project="Release.props" />
@@ -119,7 +119,7 @@
     <Import Project="Release.props" />
     <Import Project="SDL2.props" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|x64'">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="common.props" />
     <Import Project="Debug.props" />
@@ -131,7 +131,7 @@
     <Import Project="Debug.props" />
     <Import Project="SDL2.props" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|x64'">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="common.props" />
     <Import Project="Release.props" />
