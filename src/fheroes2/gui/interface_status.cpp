@@ -263,7 +263,7 @@ void Interface::StatusWindow::DrawResourceInfo(int oh) const
     spr.Blit(pos.x + (pos.w - spr.w()) / 2, pos.y + 6 + oh + text.h());
 
     text.Set(GetString(countLastResource), Font::SMALL, pos.w);
-    text.Blit(pos.x + (pos.w - text.w()) / 2, pos.y + 6 + oh + text.h() * 2 + spr.h() + 2);
+    text.Blit(pos.x + (pos.w - text.w()) / 2, pos.y + oh + text.h() * 2 + spr.h() + 8);
 }
 
 void Interface::StatusWindow::DrawArmyInfo(int oh) const
