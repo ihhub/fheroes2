@@ -267,8 +267,7 @@ bool Artifact::operator== (const Spell & spell) const
 	    return ext == spell();
 
 	case Artifact::CRYSTAL_BALL:
-	    return spell == Spell::IDENTIFYHERO ||
-		    spell == Spell::VISIONS;
+            return spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS;
 
         case Artifact::BATTLE_GARB:
             return spell == Spell::TOWNPORTAL;
