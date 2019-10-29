@@ -1374,7 +1374,7 @@ void Battle::Interface::RedrawPocketControls(void) const
     }
 }
 
-int Battle::Interface::GetBattleCursor(std::string & statusMsg)
+int Battle::Interface::GetBattleCursor(std::string & statusMsg) const
 {
     statusMsg.clear();
 
@@ -1442,7 +1442,7 @@ int Battle::Interface::GetBattleCursor(std::string & statusMsg)
     return Cursor::WAR_NONE;
 }
 
-int Battle::Interface::GetBattleSpellCursor(std::string & statusMsg)
+int Battle::Interface::GetBattleSpellCursor(std::string & statusMsg) const
 {
     statusMsg.clear();
 
