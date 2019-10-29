@@ -18,7 +18,7 @@ if %errorlevel% == 0 (
     )
 )
 
-if not sevenZipPath == "" (
+if not "%sevenZipPath%" == "" (
     cd demo
     "%sevenZipPath%" x demo.zip -aoa > nul
 

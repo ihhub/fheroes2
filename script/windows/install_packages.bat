@@ -1,6 +1,4 @@
 @echo off
-echo Optional step: Install 7-zip archiver at your local system's folder as- 'C:\Program Files\7-Zip\7z.exe', as script now will try to unpack some archives. Alternatively, manually extract each downloaded package after script end.
-echo.
 
 if not exist "..\..\..\packages"            mkdir "..\..\..\packages"
 if not exist "..\..\..\packages\zlib_32bit" mkdir "..\..\..\packages\zlib_32bit"
@@ -31,7 +29,7 @@ if %errorlevel% == 0 (
     )
 )
 
-if not sevenZipPath == "" (
+if not "%sevenZipPath%" == "" (
     echo unpacking packages [1/4]
     cd zlib_32bit
     "%sevenZipPath%" x zlib_32bit.zip -aoa > nul
