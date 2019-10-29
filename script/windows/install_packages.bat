@@ -24,12 +24,12 @@ where 7z.exe >nul 2>nul
 if %errorlevel% == 0 (
     set sevenZipPath=7z.exe
 ) else (
-    if exist "C:\Program Files\7-Zip\7z.exe" (
-        set sevenZipPath=C:\Program Files\7-Zip\7z.exe
+    if exist "%ProgramFiles%\7-Zip\7z.exe" (
+        set sevenZipPath=%ProgramFiles%\7-Zip\7z.exe
     )
 )
 
-if not sevenZipPath == "" (
+if not "%sevenZipPath%" == "" (
     echo unpacking packages [1/4]
     cd zlib_32bit
     "%sevenZipPath%" x zlib_32bit.zip -aoa > nul
