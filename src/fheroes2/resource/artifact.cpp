@@ -903,23 +903,22 @@ bool ArtifactsBar::ActionBarDoubleClick(const Point & cursor, Artifact & art, co
             u32 answer = 0;
             std::string text = _("Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your spell book?\nThe Scroll will be consumed.\n Spell point: %{sp}");
 
-            StringReplace(text, "%{spell}", spell.GetName());
-            StringReplace(text, "%{sp}", spell.SpellPoint());
+            StringReplace( text, "%{spell}", spell.GetName() );
+            StringReplace( text, "%{sp}", spell.SpellPoint() );
 
-	    if(spell.MovePoint())
-            {
-        	text.append("\n");
-                text.append("Move point: %{mp}");
-                StringReplace(text, "%{mp}", spell.MovePoint());
+	    if ( spell.MovePoint() ) {
+                text.append( "\n" );
+                text.append( "Move point: %{mp}" );
+                StringReplace( text, "%{mp}", spell.MovePoint() );
             }
 
-            if(cost.GetValidItemsCount())
-        	answer = Dialog::ResourceInfo("", text, cost, Dialog::YES|Dialog::NO);
+            if ( cost.GetValidItemsCount() )
+                answer = Dialog::ResourceInfo( "", text, cost, Dialog::YES|Dialog::NO );
             else
-        	answer = Dialog::Message("", text, Font::BIG, Dialog::YES|Dialog::NO);
+                answer = Dialog::Message( "", text, Font::BIG, Dialog::YES|Dialog::NO );
 
-    	    if(answer == Dialog::YES)
-		const_cast<Heroes*>(hero)->TranscribeScroll(art);
+            if ( answer == Dialog::YES )
+                const_cast<Heroes*>(hero)->TranscribeScroll(art);
 	}
     }
     else
