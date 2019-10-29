@@ -224,8 +224,8 @@ namespace Battle
 	void	MouseLeftClickBoardAction(u32, const Cell &, Actions &);
 	void	MousePressRightBoardAction(u32, const Cell &, Actions &);
 
-	int	GetBattleCursor(std::string &);
-	int	GetBattleSpellCursor(std::string &);
+	int	GetBattleCursor(std::string &) const;
+	int	GetBattleSpellCursor(std::string &) const;
 	int	GetAllowSwordDirection(u32);
 
 	void	CreateDamageInfoPopup(s32, s32, const Unit &, const Unit &);
