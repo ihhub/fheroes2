@@ -1,8 +1,4 @@
 @echo off
-echo **Instructions and logs**-
-echo.
-echo Optional step: Install 7-zip archiver at your local system's folder as- 'C:\Program Files\7-Zip\7z.exe', as script now will try to unpack some archives. Or otherwise, manually extract each downloaded package after script end.
-echo.
 
 if not exist "demo" mkdir "demo"
 
@@ -37,5 +33,7 @@ if not sevenZipPath == "" (
 
     cd ..
 ) else (
-    echo 7z.exe is not found in path. Please unzip files manually.
+    echo 7z.exe is not found in path.
+	echo Please unzip demo.zip file manually and copy DATA and MAPS folders into folder with the game.
+	echo Alternatively, re-run script after installing 7-zip archiver at your local system's folder as- 'C:\Program Files\7-Zip\7z.exe
 )

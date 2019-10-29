@@ -1,7 +1,5 @@
 @echo off
-echo **Instructions and logs**-
-echo.
-echo Optional step: Install 7-zip archiver at your local system's folder as- 'C:\Program Files\7-Zip\7z.exe', as script now will try to unpack some archives. Or otherwise, manually extract each downloaded package after script end.
+echo Optional step: Install 7-zip archiver at your local system's folder as- 'C:\Program Files\7-Zip\7z.exe', as script now will try to unpack some archives. Alternatively, manually extract each downloaded package after script end.
 echo.
 
 if not exist "..\..\..\packages"            mkdir "..\..\..\packages"
