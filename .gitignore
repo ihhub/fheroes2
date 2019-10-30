@@ -10,6 +10,7 @@
 # Precompiled Headers
 *.gch
 *.pch
+*.ipch
 
 # Compiled Dynamic libraries
 *.so
@@ -49,6 +50,7 @@
 *.mp2
 *.hs
 *.smk
+x64/Debug/files/save/autosave.sav
 
 # Ignore some Miscellaneous files
 .vs/fheroes2/v16/Browse.VC.db
@@ -60,3 +62,4 @@ script/demo/demo/GAMES/TUTORIAL.GM1
 script/demo/demo/HELP/HEROES2.CNT
 script/demo/demo/HELP/HEROES2.HLP
 x64/Debug/files/save/fheroes2.bin
+.vs/fheroes2/v16/Browse.VC.opendb
