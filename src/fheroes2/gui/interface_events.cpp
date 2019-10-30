@@ -38,7 +38,7 @@
 #include "kingdom.h"
 #include "pocketpc.h"
 
-void Interface::Basic::ShowPathOrStartMoveHero(Heroes* hero, s32 dst_index)
+void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 dst_index, bool ShowForSavedDestination )
 {
     if(!hero || hero->Modes(Heroes::GUARDIAN)) return;
 
@@ -46,9 +46,10 @@ void Interface::Basic::ShowPathOrStartMoveHero(Heroes* hero, s32 dst_index)
     Cursor & cursor = Cursor::Get();
 
     // show path
-    if(path.GetDestinedIndex() != dst_index &&
-            path.GetDestinationIndex() != dst_index)
+    if ( ShowForSavedDestination || ( path.GetDestinedIndex() != dst_index && path.GetDestinationIndex() != dst_index ) )
     {
+        if ( ShowForSavedDestination )
+            dst_index = path.GetDestinedIndex();
         hero->ResetModes(Heroes::SLEEPER);
         hero->SetMove(false);
         path.Calculate(dst_index);

@@ -111,15 +111,15 @@ namespace Interface
 
         u32  CountIcons(void) const;
 
-	void Select(const Heroes &);
-	void Select(const Castle &);
+	void Select( Heroes & );
+	void Select( const Castle & );
 
-	bool IsSelected(icons_t) const;
-	void ResetIcons(icons_t = ICON_ANY);
-	void HideIcons(icons_t = ICON_ANY);
-	void ShowIcons(icons_t = ICON_ANY);
-	void RedrawIcons(icons_t = ICON_ANY);
-	void SetCurrentVisible(void);
+	bool IsSelected( icons_t ) const;
+	void ResetIcons( icons_t = ICON_ANY );
+	void HideIcons( icons_t = ICON_ANY );
+	void ShowIcons( icons_t = ICON_ANY );
+	void RedrawIcons( icons_t = ICON_ANY );
+	void SetCurrentVisible( void );
 
     private:
 	Basic & interface;
