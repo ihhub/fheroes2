@@ -35,7 +35,6 @@ if %errorlevel% == 0 (
 
 if not "%sevenZipPath%" == "" (
     echo unpacking packages [1/6]
-
     cd zlib_32bit
     "%sevenZipPath%" x zlib_32bit.zip -aoa > nul
 
