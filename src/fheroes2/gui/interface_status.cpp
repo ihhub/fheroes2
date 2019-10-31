@@ -158,7 +158,7 @@ void Interface::StatusWindow::NextState(void)
     if(STATUS_ARMY == state) state = STATUS_DAY;
     else
     if(STATUS_RESOURCE == state) state = STATUS_ARMY;
-    
+
     if(state == STATUS_ARMY)
     {
 	const Castle* castle = GetFocusCastle();
@@ -258,7 +258,7 @@ void Interface::StatusWindow::DrawResourceInfo(int oh) const
     StringReplace(message, "%{resource}", Resource::String(lastResource));
     TextBox text(message, Font::SMALL, pos.w);
     text.Blit(pos.x, pos.y + 4 + oh);
-    
+
     const Sprite &spr = AGG::GetICN(ICN::RESOURCE, Resource::GetIndexSprite2(lastResource));
     spr.Blit(pos.x + (pos.w - spr.w()) / 2, pos.y + 6 + oh + text.h());
 
@@ -342,7 +342,7 @@ void Interface::StatusWindow::DrawAITurns(void) const
 	dst_y += sand.y();
 
 	sand.Blit(dst_x, dst_y);
-    
+
 	// animation sand
 	//
 	// sprites ICN::HOURGLAS, 11, 30
@@ -387,7 +387,7 @@ void Interface::StatusWindow::QueueEventProcessing(void)
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    const Rect & area = GetArea();
+    const Rect & drawnArea = GetArea();
 
     if(Settings::Get().ShowStatus() &&
 	// move border window
@@ -395,7 +395,7 @@ void Interface::StatusWindow::QueueEventProcessing(void)
     {
     }
     else
-    if(le.MouseClickLeft(area))
+    if(le.MouseClickLeft(drawnArea))
     {
         cursor.Hide();
         NextState();
