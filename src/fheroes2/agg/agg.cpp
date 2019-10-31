@@ -229,9 +229,9 @@ const std::string & AGG::File::Name(void) const
 }
 
 /* get FAT element */
-const AGG::FAT & AGG::File::Fat(const std::string & k)
+const AGG::FAT & AGG::File::Fat( const std::string & key_ )
 {
-    return fat[k];
+    return fat[key_];
 }
 
 /* dump FAT */
