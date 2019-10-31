@@ -66,7 +66,7 @@ namespace AGG
 	bool			Open(const std::string &);
 	bool			isGood(void) const;
 	const std::string &	Name(void) const;
-	const FAT &		Fat(const std::string & key);
+        const FAT & Fat( const std::string & key_ ) const;
 
 	const std::vector<u8> &	Read(const std::string & key);
 
