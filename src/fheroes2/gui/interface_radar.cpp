@@ -391,15 +391,13 @@ void Interface::Radar::QueueEventProcessing(void)
 
 	    if(le.MouseWheelUp())
 	    {
-		if(rect.w != world.w() ||
-	    		    rect.h != world.h())
+                if ( rect.w != world.w() || rect.h != world.h() )
 		    newSize = Size(world.w(), world.h());
 	    }
 	    else
 	    if(le.MouseWheelDn())
 	    {
-		if(rect.w != RADARWIDTH ||
-	    		    rect.h != RADARWIDTH)
+                if ( rect.w != RADARWIDTH || rect.h != RADARWIDTH )
 		    newSize = Size(RADARWIDTH, RADARWIDTH);
 	    }
 
