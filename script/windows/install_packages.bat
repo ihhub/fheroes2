@@ -28,13 +28,14 @@ where 7z.exe >nul 2>nul
 if %errorlevel% == 0 (
     set sevenZipPath=7z.exe
 ) else (
-    if exist "C:\Program Files\7-Zip\7z.exe" (
-        set sevenZipPath=C:\Program Files\7-Zip\7z.exe
+    if exist "%ProgramFiles%\7-Zip\7z.exe" (
+        set sevenZipPath=%ProgramFiles%\7-Zip\7z.exe
     )
 )
 
-if not sevenZipPath == "" (
+if not "%sevenZipPath%" == "" (
     echo unpacking packages [1/6]
+
     cd zlib_32bit
     "%sevenZipPath%" x zlib_32bit.zip -aoa > nul
 
@@ -63,4 +64,9 @@ if not sevenZipPath == "" (
     echo "SUCCESS! Installation is completed"
 ) else (
     echo "Failed to unzip archives because 7-zip is not installed in system. Please unpack all archives in packages internal folders and manually run setup_packages.bat file after"
+)
+
+if not "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
+    echo Press any key to exit...
+    pause >nul
 )
