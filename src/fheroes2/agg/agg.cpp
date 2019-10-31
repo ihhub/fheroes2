@@ -66,7 +66,7 @@ namespace AGG
 	bool			Open(const std::string &);
 	bool			isGood(void) const;
 	const std::string &	Name(void) const;
-        const FAT & Fat( const std::string & key_ ) const;
+	const FAT &		Fat(const std::string & key);
 
 	const std::vector<u8> &	Read(const std::string & key);
 
@@ -229,7 +229,7 @@ const std::string & AGG::File::Name(void) const
 }
 
 /* get FAT element */
-const AGG::FAT & AGG::File::Fat( const std::string & key_ ) const
+const AGG::FAT & AGG::File::Fat( const std::string & key_ )
 {
     return fat[key_];
 }
