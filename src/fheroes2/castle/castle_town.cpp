@@ -38,6 +38,311 @@
 #include "text.h"
 #include "world.h"
 
+namespace
+{
+    void MaskTavernTile(Point dst_pt, const Point &cur_pt)
+    {
+        dst_pt.x = cur_pt.x + 149;
+        dst_pt.y = cur_pt.y + 157;
+        const Rect buildingMask(dst_pt, 144, 75);
+        AGG::GetICN(ICN::STONEBAK, 0).Blit(buildingMask, dst_pt);
+    }
+
+    BuildingInfo DrawDwelling1(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo dwelling1(ref, DWELLING_MONSTER1);
+        dwelling1.SetPos(cur_pt.x + 5, cur_pt.y + 2);
+        dwelling1.Redraw();
+        return dwelling1;
+    }
+
+    BuildingInfo DrawDwelling2(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo dwelling2(ref, DWELLING_MONSTER2);
+        dwelling2.SetPos(cur_pt.x + 149, cur_pt.y + 2);
+        dwelling2.Redraw();
+        return dwelling2;
+    }
+
+    BuildingInfo DrawDwelling3(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo dwelling3(ref, DWELLING_MONSTER3);
+        dwelling3.SetPos(cur_pt.x + 293, cur_pt.y + 2);
+        dwelling3.Redraw();
+        return dwelling3;
+    }
+
+    BuildingInfo DrawDwelling4(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo dwelling4(ref, DWELLING_MONSTER4);
+        dwelling4.SetPos(cur_pt.x + 5, cur_pt.y + 77);
+        dwelling4.Redraw();
+        return dwelling4;
+    }
+
+    BuildingInfo DrawDwelling5(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo dwelling5(ref, DWELLING_MONSTER5);
+        dwelling5.SetPos(cur_pt.x + 149, cur_pt.y + 77);
+        dwelling5.Redraw();
+        return dwelling5;
+    }
+
+    BuildingInfo DrawDwelling6(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo dwelling6(ref, DWELLING_MONSTER6);
+        dwelling6.SetPos(cur_pt.x + 293, cur_pt.y + 77);
+        dwelling6.Redraw();
+        return dwelling6;
+    }
+
+    BuildingInfo DrawMageGuild(const Castle &ref, const Point &cur_pt)
+    {
+        building_t level = BUILD_NOTHING;
+        switch (ref.GetLevelMageGuild()) {
+            case 0:
+                level = BUILD_MAGEGUILD1;
+                break;
+            case 1:
+                level = BUILD_MAGEGUILD2;
+                break;
+            case 2:
+                level = BUILD_MAGEGUILD3;
+                break;
+            case 3:
+                level = BUILD_MAGEGUILD4;
+                break;
+            default:
+                level = BUILD_MAGEGUILD5;
+        }
+        BuildingInfo buildingMageGuild(ref, level);
+        buildingMageGuild.SetPos(cur_pt.x + 5, cur_pt.y + 157);
+        buildingMageGuild.Redraw();
+        return buildingMageGuild;
+    }
+
+    BuildingInfo DrawTavern(const Castle &ref, const Point &cur_pt, const Point &dst_pt)
+    {
+        BuildingInfo buildingTavern(ref, BUILD_TAVERN);
+        if (ref.GetRace() != Race::NECR) {
+            buildingTavern.SetPos(cur_pt.x + 149, cur_pt.y + 157);
+            buildingTavern.Redraw();
+        } else {
+            MaskTavernTile(dst_pt, cur_pt);
+        }
+        return buildingTavern;
+    }
+
+    BuildingInfo DrawThievesGuild(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingThievesGuild(ref, BUILD_THIEVESGUILD);
+        buildingThievesGuild.SetPos(cur_pt.x + 293, cur_pt.y + 157);
+        buildingThievesGuild.Redraw();
+        return buildingThievesGuild;
+    }
+
+    BuildingInfo DrawShipyard(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingShipyard(ref, BUILD_SHIPYARD);
+        buildingShipyard.SetPos(cur_pt.x + 5, cur_pt.y + 232);
+        buildingShipyard.Redraw();
+        return buildingShipyard;
+    }
+
+    BuildingInfo DrawStatue(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingStatue(ref, BUILD_STATUE);
+        buildingStatue.SetPos(cur_pt.x + 149, cur_pt.y + 232);
+        buildingStatue.Redraw();
+        return buildingStatue;
+    }
+
+    BuildingInfo DrawMarketplace(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingMarketplace(ref, BUILD_MARKETPLACE);
+        buildingMarketplace.SetPos(cur_pt.x + 293, cur_pt.y + 232);
+        buildingMarketplace.Redraw();
+        return buildingMarketplace;
+    }
+
+    BuildingInfo DrawWell(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingWell(ref, BUILD_WELL);
+        buildingWell.SetPos(cur_pt.x + 5, cur_pt.y + 307);
+        buildingWell.Redraw();
+        return buildingWell;
+    }
+
+    BuildingInfo DrawWel2(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingWel2(ref, BUILD_WEL2);
+        buildingWel2.SetPos(cur_pt.x + 149, cur_pt.y + 307);
+        buildingWel2.Redraw();
+        return buildingWel2;
+    }
+
+    BuildingInfo DrawSpec(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingSpec(ref, BUILD_SPEC);
+        buildingSpec.SetPos(cur_pt.x + 293, cur_pt.y + 307);
+        buildingSpec.Redraw();
+        return buildingSpec;
+    }
+
+    BuildingInfo DrawLeftTurret(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingLTurret(ref, BUILD_LEFTTURRET);
+        buildingLTurret.SetPos(cur_pt.x + 5, cur_pt.y + 387);
+        buildingLTurret.Redraw();
+        return buildingLTurret;
+    }
+
+    BuildingInfo DrawRightTurret(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingRTurret(ref, BUILD_RIGHTTURRET);
+        buildingRTurret.SetPos(cur_pt.x + 149, cur_pt.y + 387);
+        buildingRTurret.Redraw();
+        return buildingRTurret;
+    }
+
+    BuildingInfo DrawMoat(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingMoat(ref, BUILD_MOAT);
+        buildingMoat.SetPos(cur_pt.x + 293, cur_pt.y + 387);
+        buildingMoat.Redraw();
+        return buildingMoat;
+    }
+
+    BuildingInfo DrawCaptain(const Castle &ref, const Point &cur_pt)
+    {
+        BuildingInfo buildingCaptain(ref, BUILD_CAPTAIN);
+        buildingCaptain.SetPos(cur_pt.x + 444, cur_pt.y + 165);
+        buildingCaptain.Redraw();
+        return buildingCaptain;
+    }
+
+    void DrawCombatInfo(const Castle &ref, const Point& cur_pt, Point dst_pt, Text text,
+                        const Sprite& spriteSpreadArmyFormat, const Sprite& spriteGroupedArmyFormat,
+			const Rect rectSpreadArmyFormat, const Rect rectGroupedArmyFormat,
+			const Point pointSpreadArmyFormat, const Point pointGroupedArmyFormat,
+			SpriteMove cursorFormat)
+    {
+        text.Set(_("Attack Skill")+ std::string(" "), Font::SMALL);
+        dst_pt.x = cur_pt.x + 535;
+        dst_pt.y = cur_pt.y + 168;
+        text.Blit(dst_pt);
+        text.Set(GetString(ref.GetCaptain().GetAttack()));
+        dst_pt.x += 90;
+        text.Blit(dst_pt);
+        text.Set(_("Defense Skill")+ std::string(" "));
+        dst_pt.x = cur_pt.x + 535;
+        dst_pt.y += 12;
+        text.Blit(dst_pt);
+        text.Set(GetString(ref.GetCaptain().GetDefense()));
+        dst_pt.x += 90;
+        text.Blit(dst_pt);
+        text.Set(_("Spell Power")+ std::string(" "));
+        dst_pt.x = cur_pt.x + 535;
+        dst_pt.y += 12;
+        text.Blit(dst_pt);
+        text.Set(GetString(ref.GetCaptain().GetPower()));
+        dst_pt.x += 90;
+        text.Blit(dst_pt);
+        text.Set(_("Knowledge")+ std::string(" "));
+        dst_pt.x = cur_pt.x + 535;
+        dst_pt.y += 12;
+        text.Blit(dst_pt);
+        text.Set(GetString(ref.GetCaptain().GetKnowledge()));
+        dst_pt.x += 90;
+        text.Blit(dst_pt);
+        spriteSpreadArmyFormat.Blit(rectSpreadArmyFormat.x, rectSpreadArmyFormat.y);
+        spriteGroupedArmyFormat.Blit(rectGroupedArmyFormat.x, rectGroupedArmyFormat.y);
+        cursorFormat.Move( ref.GetArmy().isSpreadFormat() ? pointSpreadArmyFormat : pointGroupedArmyFormat );
+    }
+
+    void ManageStatusInfo(const Castle &ref, const BuildingInfo& dwelling1,
+                          const BuildingInfo& dwelling2, const BuildingInfo& dwelling3,
+			  const BuildingInfo& dwelling4, const BuildingInfo& dwelling5,
+			  const BuildingInfo& dwelling6, const BuildingInfo& buildingMageGuild,
+			  const BuildingInfo& buildingTavern, const BuildingInfo& buildingThievesGuild,
+			  const BuildingInfo& buildingShipyard, const BuildingInfo& buildingStatue,
+			  const BuildingInfo& buildingMarketplace, const BuildingInfo& buildingWell,
+			  const BuildingInfo& buildingWel2, const BuildingInfo& buildingSpec,
+			  const BuildingInfo& buildingLTurret, const BuildingInfo& buildingRTurret,
+			  const BuildingInfo& buildingMoat, const BuildingInfo& buildingCaptain,
+			  const Rect& rectHero1, const bool allow_buy_hero1,
+			  const std::string& not_allow1_msg, const Rect& rectHero2, const bool allow_buy_hero2,
+			  const std::string& not_allow2_msg, const Rect& rectSpreadArmyFormat,
+			  const Rect& rectGroupedArmyFormat, LocalEvent& le, StatusBar& statusBar,
+			  Heroes* hero1, Heroes* hero2)
+    {
+        // status info
+        if (le.MouseCursor(dwelling1.GetArea()))
+            dwelling1.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(dwelling2.GetArea()))
+            dwelling2.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(dwelling3.GetArea()))
+            dwelling3.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(dwelling4.GetArea()))
+            dwelling4.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(dwelling5.GetArea()))
+            dwelling5.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(dwelling6.GetArea()))
+            dwelling6.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingMageGuild.GetArea()))
+            buildingMageGuild.SetStatusMessage(statusBar);
+        else if ((ref.GetRace() != Race::NECR) && le.MouseCursor(buildingTavern.GetArea()))
+            buildingTavern.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingThievesGuild.GetArea()))
+            buildingThievesGuild.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingShipyard.GetArea()))
+            buildingShipyard.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingStatue.GetArea()))
+            buildingStatue.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingMarketplace.GetArea()))
+            buildingMarketplace.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingWell.GetArea()))
+            buildingWell.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingWel2.GetArea()))
+            buildingWel2.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingSpec.GetArea()))
+            buildingSpec.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingLTurret.GetArea()))
+            buildingLTurret.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingRTurret.GetArea()))
+            buildingRTurret.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingMoat.GetArea()))
+            buildingMoat.SetStatusMessage(statusBar);
+        else if (le.MouseCursor(buildingCaptain.GetArea()))
+            buildingCaptain.SetStatusMessage(statusBar);
+        else if (hero1 && le.MouseCursor(rectHero1)) {
+            if (!allow_buy_hero1) {
+                statusBar.ShowMessage(not_allow1_msg);
+            } else {
+                std::string str = _("Recruit %{name} the %{race}");
+                StringReplace(str, "%{name}", hero1->GetName());
+                StringReplace(str, "%{race}", Race::String(hero1->GetRace()));
+                statusBar.ShowMessage(str);
+            }
+        } else if (hero2 && le.MouseCursor(rectHero2)) {
+            if (!allow_buy_hero2)
+                statusBar.ShowMessage(not_allow2_msg);
+            else {
+                std::string str = _("Recruit %{name} the %{race}");
+                StringReplace(str, "%{name}", hero2->GetName());
+                StringReplace(str, "%{race}", Race::String(hero2->GetRace()));
+                statusBar.ShowMessage(str);
+            }
+        } else if (le.MouseCursor(rectSpreadArmyFormat))
+            statusBar.ShowMessage(_("Set garrison combat formation to 'Spread'"));
+        else if (le.MouseCursor(rectGroupedArmyFormat))
+            statusBar.ShowMessage(_("Set garrison combat formation to 'Grouped'"));
+        else
+            // clear all
+            statusBar.ShowMessage(_("Castle Options"));
+    }
+}
+
 int Castle::DialogBuyHero(const Heroes* hero)
 {
     if(!hero) return Dialog::CANCEL;
@@ -140,300 +445,6 @@ int Castle::DialogBuyCastle(bool buttons) const
 {
     BuildingInfo info(*this, BUILD_CASTLE);
     return info.DialogBuyBuilding(buttons) ? Dialog::OK : Dialog::CANCEL;
-}
-
-static void MaskTavernTile(Point dst_pt, const Point &cur_pt) {
-	dst_pt.x = cur_pt.x + 149;
-	dst_pt.y = cur_pt.y + 157;
-	const Rect buildingMask(dst_pt, 144, 75);
-	AGG::GetICN(ICN::STONEBAK, 0).Blit(buildingMask, dst_pt);
-}
-
-static BuildingInfo DrawDwelling1(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo dwelling1(ref, DWELLING_MONSTER1);
-	dwelling1.SetPos(cur_pt.x + 5, cur_pt.y + 2);
-	dwelling1.Redraw();
-	return dwelling1;
-}
-
-static BuildingInfo DrawDwelling2(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo dwelling2(ref, DWELLING_MONSTER2);
-	dwelling2.SetPos(cur_pt.x + 149, cur_pt.y + 2);
-	dwelling2.Redraw();
-	return dwelling2;
-}
-
-static BuildingInfo DrawDwelling3(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo dwelling3(ref, DWELLING_MONSTER3);
-	dwelling3.SetPos(cur_pt.x + 293, cur_pt.y + 2);
-	dwelling3.Redraw();
-	return dwelling3;
-}
-
-static BuildingInfo DrawDwelling4(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo dwelling4(ref, DWELLING_MONSTER4);
-	dwelling4.SetPos(cur_pt.x + 5, cur_pt.y + 77);
-	dwelling4.Redraw();
-	return dwelling4;
-}
-
-static BuildingInfo DrawDwelling5(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo dwelling5(ref, DWELLING_MONSTER5);
-	dwelling5.SetPos(cur_pt.x + 149, cur_pt.y + 77);
-	dwelling5.Redraw();
-	return dwelling5;
-}
-
-static BuildingInfo DrawDwelling6(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo dwelling6(ref, DWELLING_MONSTER6);
-	dwelling6.SetPos(cur_pt.x + 293, cur_pt.y + 77);
-	dwelling6.Redraw();
-	return dwelling6;
-}
-
-static BuildingInfo DrawMageGuild(const Castle &ref, const Point &cur_pt) {
-	building_t level = BUILD_NOTHING;
-	switch (ref.GetLevelMageGuild()) {
-	case 0:
-		level = BUILD_MAGEGUILD1;
-		break;
-	case 1:
-		level = BUILD_MAGEGUILD2;
-		break;
-	case 2:
-		level = BUILD_MAGEGUILD3;
-		break;
-	case 3:
-		level = BUILD_MAGEGUILD4;
-		break;
-	default:
-		level = BUILD_MAGEGUILD5;
-		break;
-	}
-	BuildingInfo buildingMageGuild(ref, level);
-	buildingMageGuild.SetPos(cur_pt.x + 5, cur_pt.y + 157);
-	buildingMageGuild.Redraw();
-	return buildingMageGuild;
-}
-
-static BuildingInfo DrawTavern(const Castle &ref, const Point &cur_pt, const Point &dst_pt) {
-	BuildingInfo buildingTavern(ref, BUILD_TAVERN);
-	if (ref.GetRace() != Race::NECR) {
-		buildingTavern.SetPos(cur_pt.x + 149, cur_pt.y + 157);
-		buildingTavern.Redraw();
-	} else {
-		MaskTavernTile(dst_pt, cur_pt);
-	}
-	return buildingTavern;
-}
-
-static BuildingInfo DrawThievesGuild(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingThievesGuild(ref, BUILD_THIEVESGUILD);
-	buildingThievesGuild.SetPos(cur_pt.x + 293, cur_pt.y + 157);
-	buildingThievesGuild.Redraw();
-	return buildingThievesGuild;
-}
-
-static BuildingInfo DrawShipyard(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingShipyard(ref, BUILD_SHIPYARD);
-	buildingShipyard.SetPos(cur_pt.x + 5, cur_pt.y + 232);
-	buildingShipyard.Redraw();
-	return buildingShipyard;
-}
-
-static BuildingInfo DrawStatue(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingStatue(ref, BUILD_STATUE);
-	buildingStatue.SetPos(cur_pt.x + 149, cur_pt.y + 232);
-	buildingStatue.Redraw();
-	return buildingStatue;
-}
-
-static BuildingInfo DrawMarketplace(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingMarketplace(ref, BUILD_MARKETPLACE);
-	buildingMarketplace.SetPos(cur_pt.x + 293, cur_pt.y + 232);
-	buildingMarketplace.Redraw();
-	return buildingMarketplace;
-}
-
-static BuildingInfo DrawWell(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingWell(ref, BUILD_WELL);
-	buildingWell.SetPos(cur_pt.x + 5, cur_pt.y + 307);
-	buildingWell.Redraw();
-	return buildingWell;
-}
-
-static BuildingInfo DrawWel2(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingWel2(ref, BUILD_WEL2);
-	buildingWel2.SetPos(cur_pt.x + 149, cur_pt.y + 307);
-	buildingWel2.Redraw();
-	return buildingWel2;
-}
-
-static BuildingInfo DrawSpec(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingSpec(ref, BUILD_SPEC);
-	buildingSpec.SetPos(cur_pt.x + 293, cur_pt.y + 307);
-	buildingSpec.Redraw();
-	return buildingSpec;
-}
-
-static BuildingInfo DrawLeftTurret(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingLTurret(ref, BUILD_LEFTTURRET);
-	buildingLTurret.SetPos(cur_pt.x + 5, cur_pt.y + 387);
-	buildingLTurret.Redraw();
-	return buildingLTurret;
-}
-
-static BuildingInfo DrawRightTurret(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingRTurret(ref, BUILD_RIGHTTURRET);
-	buildingRTurret.SetPos(cur_pt.x + 149, cur_pt.y + 387);
-	buildingRTurret.Redraw();
-	return buildingRTurret;
-}
-
-static BuildingInfo DrawMoat(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingMoat(ref, BUILD_MOAT);
-	buildingMoat.SetPos(cur_pt.x + 293, cur_pt.y + 387);
-	buildingMoat.Redraw();
-	return buildingMoat;
-}
-
-static BuildingInfo DrawCaptain(const Castle &ref, const Point &cur_pt) {
-	BuildingInfo buildingCaptain(ref, BUILD_CAPTAIN);
-	buildingCaptain.SetPos(cur_pt.x + 444, cur_pt.y + 165);
-	buildingCaptain.Redraw();
-	return buildingCaptain;
-}
-
-static void DrawCombatInfo(const Castle &ref,
-                           const Point& cur_pt,
-						   Point dst_pt,
-						   Text text,
-						   const Sprite& spriteSpreadArmyFormat,
-						   const Sprite& spriteGroupedArmyFormat,
-						   const Rect rectSpreadArmyFormat,
-						   const Rect rectGroupedArmyFormat,
-						   const Point pointSpreadArmyFormat,
-						   const Point pointGroupedArmyFormat,
-						   SpriteMove cursorFormat) {
-	text.Set(_("Attack Skill")+ std::string(" "), Font::SMALL);
-	dst_pt.x = cur_pt.x + 535;
-	dst_pt.y = cur_pt.y + 168;
-	text.Blit(dst_pt);
-	text.Set(GetString(ref.GetCaptain().GetAttack()));
-	dst_pt.x += 90;
-	text.Blit(dst_pt);
-	text.Set(_("Defense Skill")+ std::string(" "));
-	dst_pt.x = cur_pt.x + 535;
-	dst_pt.y += 12;
-	text.Blit(dst_pt);
-	text.Set(GetString(ref.GetCaptain().GetDefense()));
-	dst_pt.x += 90;
-	text.Blit(dst_pt);
-	text.Set(_("Spell Power")+ std::string(" "));
-	dst_pt.x = cur_pt.x + 535;
-	dst_pt.y += 12;
-	text.Blit(dst_pt);
-	text.Set(GetString(ref.GetCaptain().GetPower()));
-	dst_pt.x += 90;
-	text.Blit(dst_pt);
-	text.Set(_("Knowledge")+ std::string(" "));
-	dst_pt.x = cur_pt.x + 535;
-	dst_pt.y += 12;
-	text.Blit(dst_pt);
-	text.Set(GetString(ref.GetCaptain().GetKnowledge()));
-	dst_pt.x += 90;
-	text.Blit(dst_pt);
-	spriteSpreadArmyFormat.Blit(rectSpreadArmyFormat.x, rectSpreadArmyFormat.y);
-	spriteGroupedArmyFormat.Blit(rectGroupedArmyFormat.x,
-			rectGroupedArmyFormat.y);
-	cursorFormat.Move(
-			ref.GetArmy().isSpreadFormat() ?
-					pointSpreadArmyFormat : pointGroupedArmyFormat);
-}
-
-static void ManageStatusInfo(const Castle &ref, const BuildingInfo& dwelling1,
-		const BuildingInfo& dwelling2, const BuildingInfo& dwelling3,
-		const BuildingInfo& dwelling4, const BuildingInfo& dwelling5,
-		const BuildingInfo& dwelling6, const BuildingInfo& buildingMageGuild,
-		const BuildingInfo& buildingTavern,
-		const BuildingInfo& buildingThievesGuild,
-		const BuildingInfo& buildingShipyard,
-		const BuildingInfo& buildingStatue,
-		const BuildingInfo& buildingMarketplace,
-		const BuildingInfo& buildingWell, const BuildingInfo& buildingWel2,
-		const BuildingInfo& buildingSpec, const BuildingInfo& buildingLTurret,
-		const BuildingInfo& buildingRTurret, const BuildingInfo& buildingMoat,
-		const BuildingInfo& buildingCaptain, const Rect& rectHero1,
-		const bool allow_buy_hero1, const std::string& not_allow1_msg,
-		const Rect& rectHero2, const bool allow_buy_hero2,
-		const std::string& not_allow2_msg, const Rect& rectSpreadArmyFormat,
-		const Rect& rectGroupedArmyFormat, LocalEvent& le, StatusBar& statusBar,
-		Heroes* hero1, Heroes* hero2) {
-	// status info
-	if (le.MouseCursor(dwelling1.GetArea()))
-		dwelling1.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(dwelling2.GetArea()))
-		dwelling2.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(dwelling3.GetArea()))
-		dwelling3.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(dwelling4.GetArea()))
-		dwelling4.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(dwelling5.GetArea()))
-		dwelling5.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(dwelling6.GetArea()))
-		dwelling6.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingMageGuild.GetArea()))
-		buildingMageGuild.SetStatusMessage(statusBar);
-	else if ((ref.GetRace() != Race::NECR)
-			&& le.MouseCursor(buildingTavern.GetArea()))
-		buildingTavern.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingThievesGuild.GetArea()))
-		buildingThievesGuild.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingShipyard.GetArea()))
-		buildingShipyard.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingStatue.GetArea()))
-		buildingStatue.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingMarketplace.GetArea()))
-		buildingMarketplace.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingWell.GetArea()))
-		buildingWell.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingWel2.GetArea()))
-		buildingWel2.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingSpec.GetArea()))
-		buildingSpec.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingLTurret.GetArea()))
-		buildingLTurret.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingRTurret.GetArea()))
-		buildingRTurret.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingMoat.GetArea()))
-		buildingMoat.SetStatusMessage(statusBar);
-	else if (le.MouseCursor(buildingCaptain.GetArea()))
-		buildingCaptain.SetStatusMessage(statusBar);
-	else if (hero1 && le.MouseCursor(rectHero1)) {
-		if (!allow_buy_hero1) {
-			statusBar.ShowMessage(not_allow1_msg);
-		} else {
-			std::string str = _("Recruit %{name} the %{race}");
-			StringReplace(str, "%{name}", hero1->GetName());
-			StringReplace(str, "%{race}", Race::String(hero1->GetRace()));
-			statusBar.ShowMessage(str);
-		}
-	} else if (hero2 && le.MouseCursor(rectHero2)) {
-		if (!allow_buy_hero2)
-			statusBar.ShowMessage(not_allow2_msg);
-		else {
-			std::string str = _("Recruit %{name} the %{race}");
-			StringReplace(str, "%{name}", hero2->GetName());
-			StringReplace(str, "%{race}", Race::String(hero2->GetRace()));
-			statusBar.ShowMessage(str);
-		}
-	} else if (le.MouseCursor(rectSpreadArmyFormat))
-		statusBar.ShowMessage(_("Set garrison combat formation to 'Spread'"));
-	else if (le.MouseCursor(rectGroupedArmyFormat))
-		statusBar.ShowMessage(_("Set garrison combat formation to 'Grouped'"));
-	else
-		// clear all
-		statusBar.ShowMessage(_("Castle Options"));
 }
 
 u32 Castle::OpenTown(void)
