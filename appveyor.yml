@@ -15,6 +15,20 @@ configuration:
   - Release-SDL1
   - Release-SDL2
 
+for:
+  -
+    matrix:
+      only:
+        - configuration: Release-SDL1
+    environment:
+      deploy_conf_name: SDL1
+  -
+    matrix:
+      only:
+        - configuration: Release-SDL2
+    environment:
+      deploy_conf_name: SDL2
+
 platform:
   - x86
   - x64
@@ -31,17 +45,17 @@ install:
 
 after_build:
   - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%
-  - cmd: 7z a fheroes2_%platform%_%configuration%.zip fheroes2.exe SDL*.dll
+  - cmd: 7z a fheroes2_%platform%_%deploy_conf_name%.zip fheroes2.exe SDL*.dll
   - cmd: cd C:\projects\fheroes2
-  - cmd: 7z a build\%platform%\%configuration%\fheroes2_%platform%_%configuration%.zip script\demo\demo.bat LICENSE
+  - cmd: 7z a build\%platform%\%configuration%\fheroes2_%platform%_%deploy_conf_name%.zip script\demo\demo.bat LICENSE
 
 artifacts:
-  - path: build\$(platform)\$(configuration)\fheroes2_$(platform)_$(configuration).zip
-    name: fheroes2-%platform%-%configuration%
+  - path: build\$(platform)\$(configuration)\fheroes2_$(platform)_$(deploy_conf_name).zip
+    name: fheroes2-%platform%-%deploy_conf_name%
 
 deploy:
-  tag: fheroes2-windows-$(platform)-$(configuration)
-  release: Windows $(platform) $(configuration) build (latest commit)
+  tag: fheroes2-windows-$(platform)-$(deploy_conf_name)
+  release: Windows $(platform) $(deploy_conf_name) build (latest commit)
   description: $(APPVEYOR_REPO_COMMIT_MESSAGE)
   provider: GitHub
   auth_token:

@@ -97,51 +97,51 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="common.props" />
-    <Import Project="Debug.props" />
-    <Import Project="SDL1.props" />
+    <Import Project="VisualStudio\common.props" />
+    <Import Project="VisualStudio\Debug.props" />
+    <Import Project="VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="common.props" />
-    <Import Project="Debug.props" />
-    <Import Project="SDL2.props" />
+    <Import Project="VisualStudio\common.props" />
+    <Import Project="VisualStudio\Debug.props" />
+    <Import Project="VisualStudio\SDL2.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="common.props" />
-    <Import Project="Release.props" />
-    <Import Project="SDL1.props" />
+    <Import Project="VisualStudio\common.props" />
+    <Import Project="VisualStudio\Release.props" />
+    <Import Project="VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL2|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="common.props" />
-    <Import Project="Release.props" />
-    <Import Project="SDL2.props" />
+    <Import Project="VisualStudio\common.props" />
+    <Import Project="VisualStudio\Release.props" />
+    <Import Project="VisualStudio\SDL2.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="common.props" />
-    <Import Project="Debug.props" />
-    <Import Project="SDL1.props" />
+    <Import Project="VisualStudio\common.props" />
+    <Import Project="VisualStudio\Debug.props" />
+    <Import Project="VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="common.props" />
-    <Import Project="Debug.props" />
-    <Import Project="SDL2.props" />
+    <Import Project="VisualStudio\common.props" />
+    <Import Project="VisualStudio\Debug.props" />
+    <Import Project="VisualStudio\SDL2.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="common.props" />
-    <Import Project="Release.props" />
-    <Import Project="SDL1.props" />
+    <Import Project="VisualStudio\common.props" />
+    <Import Project="VisualStudio\Release.props" />
+    <Import Project="VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL2|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="common.props" />
-    <Import Project="Release.props" />
-    <Import Project="SDL2.props" />
+    <Import Project="VisualStudio\common.props" />
+    <Import Project="VisualStudio\Release.props" />
+    <Import Project="VisualStudio\SDL2.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
