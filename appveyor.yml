@@ -55,7 +55,7 @@ artifacts:
 
 deploy:
   tag: fheroes2-windows-$(platform)-$(deploy_conf_name)
-  release: Windows $(platform) $(deploy_conf_name) build (latest commit)
+  release: Windows $(platform) build with $(deploy_conf_name) support (latest commit)
   description: $(APPVEYOR_REPO_COMMIT_MESSAGE)
   provider: GitHub
   auth_token:
