@@ -1,5 +1,13 @@
 @echo off
 
+if exist "..\..\..\sdl" (
+    if exist "..\..\..\sdl2" (
+        if exist "..\..\..\zlib" (
+            exit /b 0
+        )
+    )
+)
+
 if not exist "..\..\..\packages"            mkdir "..\..\..\packages"
 if not exist "..\..\..\packages\zlib_32bit" mkdir "..\..\..\packages\zlib_32bit"
 if not exist "..\..\..\packages\zlib_64bit" mkdir "..\..\..\packages\zlib_64bit"

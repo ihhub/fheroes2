@@ -51,3 +51,6 @@
 
 # build directory
 build
+
+# demo
+/script/demo/demo

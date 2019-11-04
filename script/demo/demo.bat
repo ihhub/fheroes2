@@ -1,5 +1,7 @@
 @echo off
 
+if exist "..\..\..\data" if exist "..\..\..\maps" exit /b 0
+
 if not exist "demo" mkdir "demo"
 
 echo downloading demo version [1/3]
@@ -23,7 +25,7 @@ if not "%sevenZipPath%" == "" (
     "%sevenZipPath%" x demo.zip -aoa > nul
 
     echo copying files [3/3]
-    
+
     if not exist "..\..\..\data" mkdir "..\..\..\data"
     if not exist "..\..\..\maps" mkdir "..\..\..\maps"
     xcopy /Y /s "DATA" "..\..\..\data"
