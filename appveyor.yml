@@ -3,7 +3,6 @@ skip_commits:
   - .travis.yml
   - '**/*.md'
   - .gitignore
-  - LICENSE
 
 # version format
 version: 1.0.{build}
