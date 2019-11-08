@@ -91,7 +91,7 @@ namespace Interface
 	StatusWindow &	GetStatusWindow(void);
 	ControlPanel &	GetControlPanel(void);
 
-	void		SetFocus(Heroes*);
+	void		SetFocus( Heroes *, bool ShowForSavedDestination = false );
 	void		SetFocus(Castle*);
 	void		ResetFocus(int);
 	void		RedrawFocus(void);
