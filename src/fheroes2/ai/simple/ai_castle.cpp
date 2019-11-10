@@ -1,4 +1,3 @@
-#include <vector>
 #include "ai_simple.h"
 #include "castle.h"
 #include "game.h"
@@ -16,15 +15,20 @@ namespace
         return false;
     }
 
-    bool BuildIfEnoughResources( Castle & castle, int building, int minimumMultiplicator )
+    bool BuildIfEnoughResources( Castle & castle, int building, u32 minimumMultiplicator )
     {
         if ( minimumMultiplicator < 1 || minimumMultiplicator > 99 ) // can't be that we need more than 100 times resources
             return false;
 
         const Kingdom & kingdom = castle.GetKingdom();
-        if ( kingdom.GetFunds() > PaymentConditions::BuyBuilding( castle.GetRace(), building ) * minimumMultiplicator )
+        if ( kingdom.GetFunds() >= PaymentConditions::BuyBuilding( castle.GetRace(), building ) * minimumMultiplicator )
             return BuildIfAvailable( castle, building );
         return false;
+    }
+
+    u32 GetResourceMultiplier( Castle & castle, u32 min, u32 max )
+    {
+        return castle.isCapital() ? 1 : Rand::Get( min, max );
     }
 
     void AICastleDefense( Castle & castle )
@@ -54,60 +58,58 @@ namespace
         const Kingdom & kingdom = castle.GetKingdom();
 
         if ( castle.isCastle() ) {
-            if ( castle.isCapital() || kingdom.GetFunds().Get( Resource::GOLD ) > 8000 ) { // build for capital or large golds
-                if ( world.LastDay() ) // 7th day of week
-                    BuildIfAvailable( castle, BUILD_WELL );
-                BuildIfAvailable( castle, BUILD_STATUE );
-                if ( Race::WRLK == castle.GetRace() )
-                    BuildIfAvailable( castle, BUILD_SPEC ); // Dungeon
-                BuildIfAvailable( castle, DWELLING_UPGRADE7 );
-                BuildIfAvailable( castle, DWELLING_UPGRADE6 );
-                BuildIfAvailable( castle, DWELLING_MONSTER6 );
-                BuildIfAvailable( castle, DWELLING_UPGRADE5 );
-                BuildIfAvailable( castle, DWELLING_MONSTER5 );
-                BuildIfAvailable( castle, DWELLING_UPGRADE4 );
-                BuildIfAvailable( castle, DWELLING_MONSTER4 );
-                BuildIfAvailable( castle, DWELLING_UPGRADE3 );
-                BuildIfAvailable( castle, DWELLING_MONSTER3 );
-                BuildIfAvailable( castle, DWELLING_UPGRADE2 );
-                BuildIfAvailable( castle, DWELLING_MONSTER2 );
-                BuildIfAvailable( castle, DWELLING_MONSTER1 );
-                if ( Race::KNGT == castle.GetRace() ) {
-                    BuildIfAvailable( castle, BUILD_TAVERN ); // needed for Armory
-                    BuildIfAvailable( castle, BUILD_WELL ); // needed for Blacksmith
-                }
-                else if ( Race::SORC == castle.GetRace() ) {
-                    BuildIfAvailable( castle, BUILD_MAGEGUILD1 ); // needed for Stonehenge
-                    BuildIfAvailable( castle, BUILD_WELL ); // needed Upg. Cottage
-                    BuildIfAvailable( castle, BUILD_TAVERN ); // needed for Cottage
-                }
-                else if ( Race::NECR == castle.GetRace() ) {
-                    BuildIfAvailable( castle, BUILD_MAGEGUILD2 ); // needed for Upg. Mausoleum
-                    BuildIfAvailable( castle, BUILD_MAGEGUILD1 ); // needed for Mausoleum
-                    BuildIfAvailable( castle, BUILD_THIEVESGUILD ); // needed for Mansion
-                }
-                else if ( Race::WZRD == castle.GetRace() ) {
-                    BuildIfAvailable( castle, BUILD_SPEC ); // Library needed for Upg. Ivory Tower
-                    BuildIfAvailable( castle, BUILD_MAGEGUILD1 ); // needed for Ivory Tower
-                    BuildIfAvailable( castle, BUILD_WELL ); // needed for Upg. Foundry
-                }
-                if ( world.LastDay() )
-                    BuildIfEnoughResources( castle, BUILD_WEL2, 5 );
-                BuildIfAvailable( castle, BUILD_MAGEGUILD1 );
-                BuildIfEnoughResources( castle, BUILD_LEFTTURRET, 5 );
-                BuildIfEnoughResources( castle, BUILD_RIGHTTURRET, 5 );
-                BuildIfEnoughResources( castle, BUILD_MOAT, 10 );
-                BuildIfEnoughResources( castle, BUILD_WELL, 5 );
-                BuildIfEnoughResources( castle, BUILD_MAGEGUILD2, 5 );
-                BuildIfEnoughResources( castle, BUILD_MAGEGUILD3, 5 );
-                BuildIfEnoughResources( castle, BUILD_MAGEGUILD4, 5 );
-                BuildIfEnoughResources( castle, BUILD_MAGEGUILD5, 5 );
-                BuildIfEnoughResources( castle, BUILD_SPEC, 10 );
+            if ( world.LastDay() ) // 7th day of week
+                BuildIfAvailable( castle, BUILD_WELL );
+            BuildIfAvailable( castle, BUILD_STATUE );
+            if ( Race::WRLK == castle.GetRace() )
+                BuildIfAvailable( castle, BUILD_SPEC ); // Dungeon
+            BuildIfAvailable( castle, DWELLING_UPGRADE7 );
+            BuildIfAvailable( castle, DWELLING_UPGRADE6 );
+            BuildIfAvailable( castle, DWELLING_MONSTER6 );
+            BuildIfAvailable( castle, DWELLING_UPGRADE5 );
+            BuildIfAvailable( castle, DWELLING_MONSTER5 );
+            BuildIfAvailable( castle, DWELLING_UPGRADE4 );
+            BuildIfAvailable( castle, DWELLING_MONSTER4 );
+            BuildIfEnoughResources( castle, DWELLING_UPGRADE3, GetResourceMultiplier( castle, 2, 3 ) );
+            BuildIfEnoughResources( castle, DWELLING_MONSTER3, GetResourceMultiplier( castle, 2, 3 ) );
+            BuildIfEnoughResources( castle, DWELLING_UPGRADE2, GetResourceMultiplier( castle, 3, 4 ) );
+            BuildIfEnoughResources( castle, DWELLING_MONSTER2, GetResourceMultiplier( castle, 3, 4 ) );
+            BuildIfEnoughResources( castle, DWELLING_MONSTER1, GetResourceMultiplier( castle, 4, 5 ) );
+            if ( Race::KNGT == castle.GetRace() ) {
+                BuildIfEnoughResources( castle, BUILD_TAVERN, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Armory
+                BuildIfEnoughResources( castle, BUILD_WELL, GetResourceMultiplier( castle, 3, 4 ) ); // needed for Blacksmith
             }
+            else if ( Race::SORC == castle.GetRace() ) {
+                BuildIfEnoughResources( castle, BUILD_MAGEGUILD1, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Stonehenge
+                BuildIfEnoughResources( castle, BUILD_WELL, GetResourceMultiplier( castle, 3, 4 ) ); // needed Upg. Cottage
+                BuildIfEnoughResources( castle, BUILD_TAVERN, GetResourceMultiplier( castle, 3, 4 ) ); // needed for Cottage
+            }
+            else if ( Race::NECR == castle.GetRace() ) {
+                BuildIfEnoughResources( castle, BUILD_MAGEGUILD2, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Upg. Mausoleum
+                BuildIfEnoughResources( castle, BUILD_MAGEGUILD1, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Mausoleum
+                BuildIfEnoughResources( castle, BUILD_THIEVESGUILD, GetResourceMultiplier( castle, 3, 4 ) ); // needed for Mansion
+            }
+            else if ( Race::WZRD == castle.GetRace() ) {
+                BuildIfEnoughResources( castle, BUILD_SPEC, GetResourceMultiplier( castle, 2, 3 ) ); // Library needed for Upg. Ivory Tower
+                BuildIfEnoughResources( castle, BUILD_MAGEGUILD1, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Ivory Tower
+                BuildIfEnoughResources( castle, BUILD_WELL, GetResourceMultiplier( castle, 3, 4 ) ); // needed for Upg. Foundry
+            }
+            if ( world.LastDay() )
+                BuildIfEnoughResources( castle, BUILD_WEL2, 5 );
+            BuildIfAvailable( castle, BUILD_MAGEGUILD1 );
+            BuildIfEnoughResources( castle, BUILD_LEFTTURRET, 5 );
+            BuildIfEnoughResources( castle, BUILD_RIGHTTURRET, 5 );
+            BuildIfEnoughResources( castle, BUILD_MOAT, 10 );
+            BuildIfEnoughResources( castle, BUILD_WELL, 5 );
+            BuildIfEnoughResources( castle, BUILD_MAGEGUILD2, 5 );
+            BuildIfEnoughResources( castle, BUILD_MAGEGUILD3, 5 );
+            BuildIfEnoughResources( castle, BUILD_MAGEGUILD4, 5 );
+            BuildIfEnoughResources( castle, BUILD_MAGEGUILD5, 5 );
+            BuildIfEnoughResources( castle, BUILD_SPEC, 10 );
         }
         else {
-            // Build castle only monday or tuesday or for capital or when we have in 10 times more resources than needed (fair point)
-            if ( castle.isCapital() || 3 > world.GetDay() || kingdom.GetFunds() > PaymentConditions::BuyBuilding( castle.GetRace(), BUILD_CASTLE ) * 10 )
+            // Build castle only monday or tuesday or for capital or when we have in 5-10 times more resources than needed (fair point)
+            if ( castle.isCapital() || 3 > world.GetDay() || kingdom.GetFunds() >= (PaymentConditions::BuyBuilding( castle.GetRace(), BUILD_CASTLE ) * Rand::Get( 5, 10 )) )
                 castle.BuyBuilding( BUILD_CASTLE );
         }
 
