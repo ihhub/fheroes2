@@ -1106,6 +1106,10 @@ u32 Castle::GetBuildingRequires(u32 build) const
 		    break;
 	    }
 	    break;
+    case DWELLING_UPGRADE7:
+        if ( race == Race::WRLK )
+            requires |= DWELLING_UPGRADE6;
+        break;
 
 	default: break;
     }
