@@ -187,7 +187,7 @@ void AI::CastleTurn( Castle & castle )
             hero = castle.RecruitHero( rec.GetHero2() );
 
         if ( hero )
-            hero->SetModes( AI::HEROES_HUNTER|AI::HEROES_SCOUTER );
+            hero->SetModes( AI::HEROES_HUNTER | AI::HEROES_SCOUTER );
     }
 }
 
