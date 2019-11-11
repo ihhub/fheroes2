@@ -131,17 +131,17 @@ void AI::CastleTurn( Castle & castle )
         return;
 
     s32 range = Game::GetViewDistance( castle.isCastle() ? Game::VIEW_CASTLE : Game::VIEW_TOWN );
-    const Heroes* enemy = NULL;
+    const Heroes * enemy = NULL;
 
     // find enemy hero
+    const Point & castleCenter = castle.GetCenter();
     for ( s32 y = -range; y <= range; ++y ) {
         for ( s32 x = -range; x <= range; ++x ) {
             if ( !y && !x )
                 continue;
-            const Point & center = castle.GetCenter();
 
-            if ( Maps::isValidAbsPoint( center.x + x, center.y + y ) ) {
-                const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( center.x + x, center.y + y ) );
+            if ( Maps::isValidAbsPoint( castleCenter.x + x, castleCenter.y + y ) ) {
+                const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( castleCenter.x + x, castleCenter.y + y ) );
 
                 if ( MP2::OBJ_HEROES == tile.GetObject() )
                     enemy = tile.GetHeroes();
@@ -158,7 +158,7 @@ void AI::CastleTurn( Castle & castle )
     enemy ? AICastleDefense( castle ) : AICastleDevelopment( castle );
 
     Kingdom & kingdom = castle.GetKingdom();
-    Heroes* hero = castle.GetHeroes().Guest();
+    Heroes * hero = castle.GetHeroes().Guest();
     const bool canRecruit = castle.isCastle() && !hero && kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
 
     // part II
