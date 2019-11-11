@@ -198,6 +198,6 @@ void AI::CastlePreBattle( Castle & castle )
         hero->GetArmy().JoinStrongestFromArmy( castle.GetArmy() );
 }
 
-void AI::CastleAfterBattle( Castle &, bool attacker_wins )
+void AI::CastleAfterBattle( Castle &, bool attackerWon )
 {
 }
