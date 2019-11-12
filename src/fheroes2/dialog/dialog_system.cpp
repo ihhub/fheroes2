@@ -50,15 +50,15 @@ int Dialog::SystemOptions(void)
 
     Rects rects;
     const s32 posx = (area.w - 256) / 2;
-    rects.push_back(Rect(area.x + posx,  area.y + 30,  64, 64));
-    rects.push_back(Rect(area.x + posx + 92, area.y + 30,  64, 64));
-    rects.push_back(Rect(area.x + posx + 184, area.y + 30,  64, 64));
-    rects.push_back(Rect(area.x + posx,  area.y + 140, 64, 64));
-    rects.push_back(Rect(area.x + posx + 92, area.y + 140, 64, 64));
-    rects.push_back(Rect(area.x + posx + 184, area.y + 140, 64, 64));
-    rects.push_back(Rect(area.x + posx,  area.y + 250, 64, 64));
-    rects.push_back(Rect(area.x + posx + 92, area.y + 250, 64, 64));
-    rects.push_back(Rect(area.x + posx + 184, area.y + 250, 64, 64));
+    rects.push_back( Rect( area.x + posx, area.y + 30, 64, 64 ) );
+    rects.push_back( Rect( area.x + posx + 92, area.y + 30, 64, 64 ) );
+    rects.push_back( Rect( area.x + posx + 184, area.y + 30, 64, 64 ) );
+    rects.push_back( Rect( area.x + posx, area.y + 140, 64, 64 ) );
+    rects.push_back( Rect( area.x + posx + 92, area.y + 140, 64, 64 ) );
+    rects.push_back( Rect( area.x + posx + 184, area.y + 140, 64, 64 ) );
+    rects.push_back( Rect( area.x + posx, area.y + 250, 64, 64 ) );
+    rects.push_back( Rect( area.x + posx + 92, area.y + 250, 64, 64 ) );
+    rects.push_back( Rect( area.x + posx + 184, area.y + 250, 64, 64 ) );
 
     const Rect & rect1 = rects[0];
     const Rect & rect2 = rects[1];
