@@ -32,7 +32,7 @@
 #include "game.h"
 #include "game_interface.h"
 
-void Interface::Basic::SetFocus( Heroes * hero, bool ShowForSavedDestination )
+void Interface::Basic::SetFocus(Heroes* hero)
 {
     Player* player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -52,7 +52,7 @@ void Interface::Basic::SetFocus( Heroes * hero, bool ShowForSavedDestination )
 
 	GetButtonsArea().Redraw();
 
-	iconsPanel.Select( *hero, ShowForSavedDestination );
+	iconsPanel.Select(*hero);
 	gameArea.SetCenter(hero->GetCenter());
 	statusWindow.SetState(STATUS_ARMY);
 

@@ -91,7 +91,7 @@ namespace Interface
 	StatusWindow &	GetStatusWindow(void);
 	ControlPanel &	GetControlPanel(void);
 
-	void		SetFocus( Heroes *, bool ShowForSavedDestination = false );
+	void		SetFocus(Heroes*);
 	void		SetFocus(Castle*);
 	void		ResetFocus(int);
 	void		RedrawFocus(void);
@@ -135,11 +135,11 @@ namespace Interface
 	static int 	GetCursorFocusCastle(const Castle &, const Maps::Tiles &);
 	static int 	GetCursorFocusHeroes(const Heroes &, const Maps::Tiles &);
 	static int 	GetCursorFocusShipmaster(const Heroes &, const Maps::Tiles &);
-    void ShowPathOrStartMoveHero( Heroes *, s32, bool ShowForSavedDestination = false );
 
-   private:
+    private:
 	Basic();
 	void		RedrawSystemInfo(s32, s32, u32);
+	void		ShowPathOrStartMoveHero(Heroes*, s32);
 	void		MoveHeroFromArrowKeys(Heroes & hero, int direct);
 	int		HumanTurn(bool);
 
