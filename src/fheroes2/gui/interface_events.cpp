@@ -38,34 +38,45 @@
 #include "kingdom.h"
 #include "pocketpc.h"
 
-void Interface::Basic::ShowPathOrStartMoveHero(Heroes* hero, s32 dst_index)
+void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 dst_index )
 {
-    if(!hero || hero->Modes(Heroes::GUARDIAN)) return;
+    if ( ( hero == NULL ) || hero->Modes( Heroes::GUARDIAN ) )
+        return;
+
+    hero->ResetModes( Heroes::SLEEPER );
+    hero->SetMove( false );
 
     Route::Path & path = hero->GetPath();
-    Cursor & cursor = Cursor::Get();
-
-    // show path
-    if(path.GetDestinedIndex() != dst_index &&
-            path.GetDestinationIndex() != dst_index)
+    if ( -1 == dst_index )
+        dst_index = path.GetDestinedIndex();
+    if ( -1 != dst_index ) // path.GetDestinedIndex() above returns -1 at the time of launching new game(because of no path history) leading to game crash.
     {
-        hero->ResetModes(Heroes::SLEEPER);
-        hero->SetMove(false);
-        path.Calculate(dst_index);
-        DEBUG(DBG_GAME, DBG_TRACE, hero->GetName() << ", route: " << path.String());
+        path.Calculate( dst_index );
+        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", route: " << path.String() );
         gameArea.SetRedraw();
-        cursor.SetThemes(GetCursorTileIndex(dst_index));
+        Cursor::Get().SetThemes( GetCursorTileIndex( dst_index ) );
         Interface::Basic::Get().buttonsArea.Redraw();
     }
+}
+
+void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 dst_index )
+{
+    if ( !hero || hero->Modes( Heroes::GUARDIAN ) )
+        return;
+
+    Route::Path & path = hero->GetPath();
+
+    // show path
+    if ( path.GetDestinedIndex() != dst_index && path.GetDestinationIndex() != dst_index ) {
+        CalculateHeroPath( hero, dst_index );
+    }
     // start move
-    else
-    if(path.isValid())
-    {
-        SetFocus(hero);
+    else if ( path.isValid() ) {
+        SetFocus( hero );
         RedrawFocus();
 
-        hero->SetMove(true);
-        cursor.SetThemes(Cursor::WAIT);
+        hero->SetMove( true );
+        Cursor::Get().SetThemes( Cursor::WAIT );
     }
 }
 

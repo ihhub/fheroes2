@@ -432,10 +432,11 @@ void Interface::IconsPanel::QueueEventProcessing(void)
     }
 }
 
-void Interface::IconsPanel::Select(const Heroes & hr)
+void Interface::IconsPanel::Select(Heroes & hr)
 {
     castleIcons.Unselect();
-    heroesIcons.SetCurrent((const HEROES) &hr);
+    heroesIcons.SetCurrent((HEROES) &hr);
+    Interface::Basic::Get().CalculateHeroPath( &hr, -1);
 }
 
 void Interface::IconsPanel::Select(const Castle & cs)
