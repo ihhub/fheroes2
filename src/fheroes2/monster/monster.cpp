@@ -141,87 +141,88 @@ namespace
 	{     0,   0,   0,   0,   0,  Speed::VERYSLOW,   0,     0, "Random Monster 4", "Random Monsters 4", { 0, 0, 0, 0, 0, 0, 0} },
     };
 
-    static std::map<Monster::monster_t, Monster::level_t> InitializeMonsterLevels() {
-		std::map<Monster::monster_t, Monster::level_t> theMap;
+    std::map<Monster::monster_t, Monster::level_t> InitializeMonsterLevels()
+    {
+        std::map<Monster::monster_t, Monster::level_t> monsterLevel;
 
-		theMap[Monster::UNKNOWN] = Monster::LEVEL0;
+        monsterLevel[Monster::UNKNOWN] = Monster::LEVEL0;
 
-		theMap[Monster::PEASANT] = Monster::LEVEL1;
-		theMap[Monster::ARCHER] = Monster::LEVEL1;
-		theMap[Monster::GOBLIN] = Monster::LEVEL1;
-		theMap[Monster::ORC] = Monster::LEVEL1;
-		theMap[Monster::SPRITE] = Monster::LEVEL1;
-		theMap[Monster::CENTAUR] = Monster::LEVEL1;
-		theMap[Monster::HALFLING] = Monster::LEVEL1;
-		theMap[Monster::SKELETON] = Monster::LEVEL1;
-		theMap[Monster::ZOMBIE] = Monster::LEVEL1;
-		theMap[Monster::ROGUE] = Monster::LEVEL1;
-		theMap[Monster::MONSTER_RND1] = Monster::LEVEL1;
+        monsterLevel[Monster::PEASANT] = Monster::LEVEL1;
+        monsterLevel[Monster::ARCHER] = Monster::LEVEL1;
+        monsterLevel[Monster::GOBLIN] = Monster::LEVEL1;
+        monsterLevel[Monster::ORC] = Monster::LEVEL1;
+        monsterLevel[Monster::SPRITE] = Monster::LEVEL1;
+        monsterLevel[Monster::CENTAUR] = Monster::LEVEL1;
+        monsterLevel[Monster::HALFLING] = Monster::LEVEL1;
+        monsterLevel[Monster::SKELETON] = Monster::LEVEL1;
+        monsterLevel[Monster::ZOMBIE] = Monster::LEVEL1;
+        monsterLevel[Monster::ROGUE] = Monster::LEVEL1;
+        monsterLevel[Monster::MONSTER_RND1] = Monster::LEVEL1;
 
-		theMap[Monster::RANGER] = Monster::LEVEL2;
-		theMap[Monster::PIKEMAN] = Monster::LEVEL2;
-		theMap[Monster::VETERAN_PIKEMAN] = Monster::LEVEL2;
-		theMap[Monster::ORC_CHIEF] = Monster::LEVEL2;
-		theMap[Monster::WOLF] = Monster::LEVEL2;
-		theMap[Monster::DWARF] = Monster::LEVEL2;
-		theMap[Monster::BATTLE_DWARF] = Monster::LEVEL2;
-		theMap[Monster::ELF] = Monster::LEVEL2;
-		theMap[Monster::GRAND_ELF] = Monster::LEVEL2;
-		theMap[Monster::GARGOYLE] = Monster::LEVEL2;
-		theMap[Monster::BOAR] = Monster::LEVEL2;
-		theMap[Monster::IRON_GOLEM] = Monster::LEVEL2;
-		theMap[Monster::MUTANT_ZOMBIE] = Monster::LEVEL2;
-		theMap[Monster::MUMMY] = Monster::LEVEL2;
-		theMap[Monster::NOMAD] = Monster::LEVEL2;
-		theMap[Monster::MONSTER_RND2] = Monster::LEVEL2;
+        monsterLevel[Monster::RANGER] = Monster::LEVEL2;
+        monsterLevel[Monster::PIKEMAN] = Monster::LEVEL2;
+        monsterLevel[Monster::VETERAN_PIKEMAN] = Monster::LEVEL2;
+        monsterLevel[Monster::ORC_CHIEF] = Monster::LEVEL2;
+        monsterLevel[Monster::WOLF] = Monster::LEVEL2;
+        monsterLevel[Monster::DWARF] = Monster::LEVEL2;
+        monsterLevel[Monster::BATTLE_DWARF] = Monster::LEVEL2;
+        monsterLevel[Monster::ELF] = Monster::LEVEL2;
+        monsterLevel[Monster::GRAND_ELF] = Monster::LEVEL2;
+        monsterLevel[Monster::GARGOYLE] = Monster::LEVEL2;
+        monsterLevel[Monster::BOAR] = Monster::LEVEL2;
+        monsterLevel[Monster::IRON_GOLEM] = Monster::LEVEL2;
+        monsterLevel[Monster::MUTANT_ZOMBIE] = Monster::LEVEL2;
+        monsterLevel[Monster::MUMMY] = Monster::LEVEL2;
+        monsterLevel[Monster::NOMAD] = Monster::LEVEL2;
+        monsterLevel[Monster::MONSTER_RND2] = Monster::LEVEL2;
 
-		theMap[Monster::SWORDSMAN] = Monster::LEVEL3;
-		theMap[Monster::MASTER_SWORDSMAN] = Monster::LEVEL3;
-		theMap[Monster::CAVALRY] = Monster::LEVEL3;
-		theMap[Monster::CHAMPION] = Monster::LEVEL3;
-		theMap[Monster::OGRE] = Monster::LEVEL3;
-		theMap[Monster::OGRE_LORD] = Monster::LEVEL3;
-		theMap[Monster::TROLL] = Monster::LEVEL3;
-		theMap[Monster::WAR_TROLL] = Monster::LEVEL3;
-		theMap[Monster::DRUID] = Monster::LEVEL3;
-		theMap[Monster::GREATER_DRUID] = Monster::LEVEL3;
-		theMap[Monster::GRIFFIN] = Monster::LEVEL3;
-		theMap[Monster::MINOTAUR] = Monster::LEVEL3;
-		theMap[Monster::MINOTAUR_KING] = Monster::LEVEL3;
-		theMap[Monster::STEEL_GOLEM] = Monster::LEVEL3;
-		theMap[Monster::ROC] = Monster::LEVEL3;
-		theMap[Monster::MAGE] = Monster::LEVEL3;
-		theMap[Monster::ARCHMAGE] = Monster::LEVEL3;
-		theMap[Monster::ROYAL_MUMMY] = Monster::LEVEL3;
-		theMap[Monster::VAMPIRE] = Monster::LEVEL3;
-		theMap[Monster::VAMPIRE_LORD] = Monster::LEVEL3;
-		theMap[Monster::LICH] = Monster::LEVEL3;
-		theMap[Monster::GHOST] = Monster::LEVEL3;
-		theMap[Monster::MEDUSA] = Monster::LEVEL3;
-		theMap[Monster::EARTH_ELEMENT] = Monster::LEVEL3;
-		theMap[Monster::AIR_ELEMENT] = Monster::LEVEL3;
-		theMap[Monster::FIRE_ELEMENT] = Monster::LEVEL3;
-		theMap[Monster::WATER_ELEMENT] = Monster::LEVEL3;
-		theMap[Monster::MONSTER_RND3] = Monster::LEVEL3;
+        monsterLevel[Monster::SWORDSMAN] = Monster::LEVEL3;
+        monsterLevel[Monster::MASTER_SWORDSMAN] = Monster::LEVEL3;
+        monsterLevel[Monster::CAVALRY] = Monster::LEVEL3;
+        monsterLevel[Monster::CHAMPION] = Monster::LEVEL3;
+        monsterLevel[Monster::OGRE] = Monster::LEVEL3;
+        monsterLevel[Monster::OGRE_LORD] = Monster::LEVEL3;
+        monsterLevel[Monster::TROLL] = Monster::LEVEL3;
+        monsterLevel[Monster::WAR_TROLL] = Monster::LEVEL3;
+        monsterLevel[Monster::DRUID] = Monster::LEVEL3;
+        monsterLevel[Monster::GREATER_DRUID] = Monster::LEVEL3;
+        monsterLevel[Monster::GRIFFIN] = Monster::LEVEL3;
+        monsterLevel[Monster::MINOTAUR] = Monster::LEVEL3;
+        monsterLevel[Monster::MINOTAUR_KING] = Monster::LEVEL3;
+        monsterLevel[Monster::STEEL_GOLEM] = Monster::LEVEL3;
+        monsterLevel[Monster::ROC] = Monster::LEVEL3;
+        monsterLevel[Monster::MAGE] = Monster::LEVEL3;
+        monsterLevel[Monster::ARCHMAGE] = Monster::LEVEL3;
+        monsterLevel[Monster::ROYAL_MUMMY] = Monster::LEVEL3;
+        monsterLevel[Monster::VAMPIRE] = Monster::LEVEL3;
+        monsterLevel[Monster::VAMPIRE_LORD] = Monster::LEVEL3;
+        monsterLevel[Monster::LICH] = Monster::LEVEL3;
+        monsterLevel[Monster::GHOST] = Monster::LEVEL3;
+        monsterLevel[Monster::MEDUSA] = Monster::LEVEL3;
+        monsterLevel[Monster::EARTH_ELEMENT] = Monster::LEVEL3;
+        monsterLevel[Monster::AIR_ELEMENT] = Monster::LEVEL3;
+        monsterLevel[Monster::FIRE_ELEMENT] = Monster::LEVEL3;
+        monsterLevel[Monster::WATER_ELEMENT] = Monster::LEVEL3;
+        monsterLevel[Monster::MONSTER_RND3] = Monster::LEVEL3;
 
-		theMap[Monster::PALADIN] = Monster::LEVEL4;
-		theMap[Monster::CRUSADER] = Monster::LEVEL4;
-		theMap[Monster::CYCLOPS] = Monster::LEVEL4;
-		theMap[Monster::UNICORN] = Monster::LEVEL4;
-		theMap[Monster::PHOENIX] = Monster::LEVEL4;
-		theMap[Monster::HYDRA] = Monster::LEVEL4;
-		theMap[Monster::GREEN_DRAGON] = Monster::LEVEL4;
-		theMap[Monster::RED_DRAGON] = Monster::LEVEL4;
-		theMap[Monster::BLACK_DRAGON] = Monster::LEVEL4;
-		theMap[Monster::GIANT] = Monster::LEVEL4;
-		theMap[Monster::TITAN] = Monster::LEVEL4;
-		theMap[Monster::POWER_LICH] = Monster::LEVEL4;
-		theMap[Monster::BONE_DRAGON] = Monster::LEVEL4;
-		theMap[Monster::GENIE] = Monster::LEVEL4;
-		theMap[Monster::MONSTER_RND4] = Monster::LEVEL4;
+        monsterLevel[Monster::PALADIN] = Monster::LEVEL4;
+        monsterLevel[Monster::CRUSADER] = Monster::LEVEL4;
+        monsterLevel[Monster::CYCLOPS] = Monster::LEVEL4;
+        monsterLevel[Monster::UNICORN] = Monster::LEVEL4;
+        monsterLevel[Monster::PHOENIX] = Monster::LEVEL4;
+        monsterLevel[Monster::HYDRA] = Monster::LEVEL4;
+        monsterLevel[Monster::GREEN_DRAGON] = Monster::LEVEL4;
+        monsterLevel[Monster::RED_DRAGON] = Monster::LEVEL4;
+        monsterLevel[Monster::BLACK_DRAGON] = Monster::LEVEL4;
+        monsterLevel[Monster::GIANT] = Monster::LEVEL4;
+        monsterLevel[Monster::TITAN] = Monster::LEVEL4;
+        monsterLevel[Monster::POWER_LICH] = Monster::LEVEL4;
+        monsterLevel[Monster::BONE_DRAGON] = Monster::LEVEL4;
+        monsterLevel[Monster::GENIE] = Monster::LEVEL4;
+        monsterLevel[Monster::MONSTER_RND4] = Monster::LEVEL4;
 
-		return theMap;
-	}
+        return monsterLevel;
+    }
 
     const std::map<Monster::monster_t, Monster::level_t> monsterLevel = InitializeMonsterLevels();
 }
