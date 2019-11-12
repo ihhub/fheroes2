@@ -178,20 +178,22 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     Surface black(Size(65, 65), false);
     black.Fill(ColorBlack);
 
+    const int textOffset = 2;
+
     // sound
     const Sprite & sprite1 = AGG::GetICN(ICN::SPANEL, conf.Sound() ? 1 : 0);
     const Rect & rect1 = rects[0];
     sprite1.Blit(rect1);
     str = _( "music" );
     text.Set( str, Font::SMALL );
-    text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y - text.h() );
+    text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
     if ( conf.Sound() && conf.SoundVolume() )
         str = GetString( conf.SoundVolume() );
     else
         str = _( "off" );
     text.Set( str, Font::SMALL );
-    text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.h + rect1.y );
+    text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.h + rect1.y + textOffset );
 
     // music
     const Sprite & sprite2 = AGG::GetICN(ICN::SPANEL, conf.Music() ? 3 : 2);
@@ -199,14 +201,14 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     sprite2.Blit(rect2);
     str = _( "effects" );
     text.Set( str, Font::SMALL );
-    text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y - text.h() );
+    text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y - text.h() - textOffset );
 
     if ( conf.Music() && conf.MusicVolume() )
         str = GetString( conf.MusicVolume() );
     else
         str = _( "off" );
     text.Set( str );
-    text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y + rect2.h );
+    text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y + rect2.h + textOffset );
 
     // unused
     //const Sprite & sprite3 = AGG::GetICN(ICN::SPANEL, 17);
@@ -214,7 +216,7 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     black.Blit( rect3, display );
     str = "unused";
     text.Set( str );
-    text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y + rect3.h );
+    text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y + rect3.h + textOffset );
 
     // hero move speed
     const u32 is4 = conf.HeroesMoveSpeed() ? (conf.HeroesMoveSpeed() < 9 ? (conf.HeroesMoveSpeed() < 7 ? (conf.HeroesMoveSpeed() < 4 ? 4 : 5) : 6) : 7) : 9;
@@ -223,14 +225,14 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     sprite4.Blit(rect4);
     str = _("hero speed");
     text.Set( str );
-    text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y - text.h() );
+    text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y - text.h() - textOffset );
 
     if(conf.HeroesMoveSpeed())
         str = GetString( conf.HeroesMoveSpeed() );
     else
         str = _( "off" );
     text.Set( str );
-    text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y + rect4.h );
+    text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y + rect4.h + textOffset );
 
     // ai move speed
     const u32 is5 = conf.AIMoveSpeed() ? (conf.AIMoveSpeed() < 9 ? (conf.AIMoveSpeed() < 7 ? (conf.AIMoveSpeed() < 4 ? 4 : 5) : 6) : 7) : 9;
@@ -239,14 +241,14 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     sprite5.Blit(rect5);
     str = _("ai speed");
     text.Set( str );
-    text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() );
+    text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
     if(conf.AIMoveSpeed())
         str = GetString( conf.AIMoveSpeed() );
     else
         str = _( "off" );
     text.Set(str);
-    text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y + rect5.h );
+    text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y + rect5.h + textOffset );
 
     // scroll speed
     const u32 is6 = (conf.ScrollSpeed() < SCROLL_FAST2 ? (conf.ScrollSpeed() < SCROLL_FAST1 ? (conf.ScrollSpeed() < SCROLL_NORMAL ? 4 : 5) : 6) : 7);
@@ -255,11 +257,11 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     sprite6.Blit(rect6);
     str = _("scroll speed");
     text.Set(str);
-    text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect5.y - text.h() );
+    text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
     str = GetString( conf.ScrollSpeed() );
     text.Set( str );
-    text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect6.y + rect6.h );
+    text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect6.y + rect6.h + textOffset );
 
     // interface themes
     const Sprite & sprite7 = AGG::GetICN(ICN::SPANEL, (conf.ExtGameEvilInterface() ? 17 : 16));
@@ -267,14 +269,14 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     sprite7.Blit(rect7);
     str = _("Interface");
     text.Set( str );
-    text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y - text.h() );
+    text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y - text.h() - textOffset );
 
     if(conf.ExtGameEvilInterface())
         str = _( "Evil" );
     else
         str = _( "Good" );
     text.Set( str );
-    text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y + rect7.h );
+    text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y + rect7.h + textOffset );
 
     // interface show/hide
     const Sprite & sprite8 = AGG::GetICN(ICN::SPANEL, 16);
@@ -282,7 +284,7 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     const Rect & rect8 = rects[7];
     str = _("Interface");
     text.Set( str );
-    text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y - text.h() );
+    text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y - text.h() - textOffset );
 
     if(conf.ExtGameHideInterface())
     {
@@ -296,7 +298,7 @@ void Dialog::DrawSystemInfo(const Rects & rects)
         str = _( "Show" );
     }
     text.Set( str );
-    text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y + rect8.h );
+    text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y + rect8.h + textOffset );
 
     // unused
     //const Sprite & sprite9 = AGG::GetICN(ICN::SPANEL, 17);
@@ -304,5 +306,5 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     black.Blit( rect9, display );
     str = "unused";
     text.Set( str );
-    text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y + rect9.h );
+    text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y + rect9.h + textOffset );
 }
