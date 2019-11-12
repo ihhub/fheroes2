@@ -47,7 +47,7 @@ namespace
                 BuildIfAvailable( castle, BUILD_SPEC ); // fortification
                 BuildIfAvailable( castle, BUILD_TAVERN );
             }
-            else if ( ((Race::SORC | Race::BARB | Race::NECR) & castle.GetRace()) == 0 ) {
+            else if ( ( ( Race::SORC | Race::BARB | Race::NECR ) & castle.GetRace() ) == 0 ) {
                 BuildIfAvailable( castle, BUILD_SPEC ); // Rainbow, Colliseum or Storm
             }
         }
@@ -109,7 +109,8 @@ namespace
         }
         else {
             // Build castle only monday or tuesday or for capital or when we have in 5-10 times more resources than needed (fair point)
-            if ( castle.isCapital() || 3 > world.GetDay() || kingdom.GetFunds() >= (PaymentConditions::BuyBuilding( castle.GetRace(), BUILD_CASTLE ) * Rand::Get( 5, 10 )) )
+            if ( castle.isCapital() || 3 > world.GetDay()
+                 || kingdom.GetFunds() >= ( PaymentConditions::BuyBuilding( castle.GetRace(), BUILD_CASTLE ) * Rand::Get( 5, 10 ) ) )
                 castle.BuyBuilding( BUILD_CASTLE );
         }
 
@@ -193,11 +194,9 @@ void AI::CastleTurn( Castle & castle )
 
 void AI::CastlePreBattle( Castle & castle )
 {
-    Heroes* hero = castle.GetHeroes().GuardFirst();
+    Heroes * hero = castle.GetHeroes().GuardFirst();
     if ( hero && castle.GetArmy().isValid() )
         hero->GetArmy().JoinStrongestFromArmy( castle.GetArmy() );
 }
 
-void AI::CastleAfterBattle( Castle &, bool attackerWon )
-{
-}
+void AI::CastleAfterBattle( Castle &, bool attackerWon ) {}

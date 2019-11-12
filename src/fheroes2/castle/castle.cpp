@@ -838,280 +838,269 @@ u32 Castle::GetBuildingRequires(u32 build) const
 {
     u32 requires = 0;
 
-    switch(build)
-    {
-	case BUILD_SPEC:
-	    switch(race)
-	    {
-		case Race::WZRD:
-		    requires |= BUILD_MAGEGUILD1;
-		    break;
+    switch ( build ) {
+    case BUILD_SPEC:
+        switch ( race ) {
+        case Race::WZRD:
+            requires |= BUILD_MAGEGUILD1;
+            break;
 
-		default:
-	        break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_MONSTER2:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		case Race::BARB:
-		case Race::WZRD:
-		case Race::WRLK:
-		case Race::NECR:
-		    requires |= DWELLING_MONSTER1;
-		    break;
+    case DWELLING_MONSTER2:
+        switch ( race ) {
+        case Race::KNGT:
+        case Race::BARB:
+        case Race::WZRD:
+        case Race::WRLK:
+        case Race::NECR:
+            requires |= DWELLING_MONSTER1;
+            break;
 
-		case Race::SORC:
-		    requires |= DWELLING_MONSTER1;
-		    requires |= BUILD_TAVERN;
-		    break;
+        case Race::SORC:
+            requires |= DWELLING_MONSTER1;
+            requires |= BUILD_TAVERN;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_MONSTER3:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		    requires |= DWELLING_MONSTER1;
-		    requires |= BUILD_WELL;
-		    break;
+    case DWELLING_MONSTER3:
+        switch ( race ) {
+        case Race::KNGT:
+            requires |= DWELLING_MONSTER1;
+            requires |= BUILD_WELL;
+            break;
 
-		case Race::BARB:
-		case Race::SORC:
-		case Race::WZRD:
-		case Race::WRLK:
-		case Race::NECR:
-		    requires |= DWELLING_MONSTER1;
-		    break;
+        case Race::BARB:
+        case Race::SORC:
+        case Race::WZRD:
+        case Race::WRLK:
+        case Race::NECR:
+            requires |= DWELLING_MONSTER1;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_MONSTER4:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		    requires |= DWELLING_MONSTER1;
-		    requires |= BUILD_TAVERN;
-		    break;
+    case DWELLING_MONSTER4:
+        switch ( race ) {
+        case Race::KNGT:
+            requires |= DWELLING_MONSTER1;
+            requires |= BUILD_TAVERN;
+            break;
 
-		case Race::BARB:
-		    requires |= DWELLING_MONSTER1;
-			break;
+        case Race::BARB:
+            requires |= DWELLING_MONSTER1;
+            break;
 
-		case Race::SORC:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= BUILD_MAGEGUILD1;
-		    break;
+        case Race::SORC:
+            requires |= DWELLING_MONSTER2;
+            requires |= BUILD_MAGEGUILD1;
+            break;
 
-		case Race::WZRD:
-		case Race::WRLK:
-		    requires |= DWELLING_MONSTER2;
-		    break;
+        case Race::WZRD:
+        case Race::WRLK:
+            requires |= DWELLING_MONSTER2;
+            break;
 
-		case Race::NECR:
-		    requires |= DWELLING_MONSTER3;
-		    requires |= BUILD_THIEVESGUILD;
-		    break;
+        case Race::NECR:
+            requires |= DWELLING_MONSTER3;
+            requires |= BUILD_THIEVESGUILD;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_MONSTER5:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		case Race::BARB:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= DWELLING_MONSTER3;
-		    requires |= DWELLING_MONSTER4;
-		    break;
+    case DWELLING_MONSTER5:
+        switch ( race ) {
+        case Race::KNGT:
+        case Race::BARB:
+            requires |= DWELLING_MONSTER2;
+            requires |= DWELLING_MONSTER3;
+            requires |= DWELLING_MONSTER4;
+            break;
 
-		case Race::SORC:
-		    requires |= DWELLING_MONSTER4;
-		    break;
+        case Race::SORC:
+            requires |= DWELLING_MONSTER4;
+            break;
 
-		case Race::WRLK:
-		    requires |= DWELLING_MONSTER3;
-		    break;
+        case Race::WRLK:
+            requires |= DWELLING_MONSTER3;
+            break;
 
-		case Race::WZRD:
-		    requires |= DWELLING_MONSTER3;
-		    requires |= BUILD_MAGEGUILD1;
-		    break;
+        case Race::WZRD:
+            requires |= DWELLING_MONSTER3;
+            requires |= BUILD_MAGEGUILD1;
+            break;
 
-		case Race::NECR:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= BUILD_MAGEGUILD1;
-		    break;
+        case Race::NECR:
+            requires |= DWELLING_MONSTER2;
+            requires |= BUILD_MAGEGUILD1;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_MONSTER6:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= DWELLING_MONSTER3;
-		    requires |= DWELLING_MONSTER4;
-		    break;
+    case DWELLING_MONSTER6:
+        switch ( race ) {
+        case Race::KNGT:
+            requires |= DWELLING_MONSTER2;
+            requires |= DWELLING_MONSTER3;
+            requires |= DWELLING_MONSTER4;
+            break;
 
-		case Race::BARB:
-		case Race::SORC:
-		case Race::NECR:
-		    requires |= DWELLING_MONSTER5;
-		    break;
+        case Race::BARB:
+        case Race::SORC:
+        case Race::NECR:
+            requires |= DWELLING_MONSTER5;
+            break;
 
-		case Race::WRLK:
-		case Race::WZRD:
-		    requires |= DWELLING_MONSTER4;
-		    requires |= DWELLING_MONSTER5;
-		    break;
+        case Race::WRLK:
+        case Race::WZRD:
+            requires |= DWELLING_MONSTER4;
+            requires |= DWELLING_MONSTER5;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_UPGRADE2:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		case Race::BARB:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= DWELLING_MONSTER3;
-		    requires |= DWELLING_MONSTER4;
-		    break;
+    case DWELLING_UPGRADE2:
+        switch ( race ) {
+        case Race::KNGT:
+        case Race::BARB:
+            requires |= DWELLING_MONSTER2;
+            requires |= DWELLING_MONSTER3;
+            requires |= DWELLING_MONSTER4;
+            break;
 
-		case Race::SORC:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= BUILD_WELL;
-		    break;
+        case Race::SORC:
+            requires |= DWELLING_MONSTER2;
+            requires |= BUILD_WELL;
+            break;
 
-		case Race::NECR:
-		    requires |= DWELLING_MONSTER2;
-		    break;
+        case Race::NECR:
+            requires |= DWELLING_MONSTER2;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_UPGRADE3:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= DWELLING_MONSTER3;
-		    requires |= DWELLING_MONSTER4;
-		    break;
+    case DWELLING_UPGRADE3:
+        switch ( race ) {
+        case Race::KNGT:
+            requires |= DWELLING_MONSTER2;
+            requires |= DWELLING_MONSTER3;
+            requires |= DWELLING_MONSTER4;
+            break;
 
-		case Race::SORC:
-		    requires |= DWELLING_MONSTER3;
-		    requires |= DWELLING_MONSTER4;
-		    break;
+        case Race::SORC:
+            requires |= DWELLING_MONSTER3;
+            requires |= DWELLING_MONSTER4;
+            break;
 
-		case Race::WZRD:
-		    requires |= DWELLING_MONSTER3;
-		    requires |= BUILD_WELL;
-		    break;
+        case Race::WZRD:
+            requires |= DWELLING_MONSTER3;
+            requires |= BUILD_WELL;
+            break;
 
-		case Race::NECR:
-		    requires |= DWELLING_MONSTER3;
-		    break;
+        case Race::NECR:
+            requires |= DWELLING_MONSTER3;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_UPGRADE4:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		case Race::BARB:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= DWELLING_MONSTER3;
-		    requires |= DWELLING_MONSTER4;
-		    break;
+    case DWELLING_UPGRADE4:
+        switch ( race ) {
+        case Race::KNGT:
+        case Race::BARB:
+            requires |= DWELLING_MONSTER2;
+            requires |= DWELLING_MONSTER3;
+            requires |= DWELLING_MONSTER4;
+            break;
 
-		case Race::SORC:
-		case Race::WRLK:
-		case Race::NECR:
-		    requires |= DWELLING_MONSTER4;
-		    break;
+        case Race::SORC:
+        case Race::WRLK:
+        case Race::NECR:
+            requires |= DWELLING_MONSTER4;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_UPGRADE5:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= DWELLING_MONSTER3;
-		    requires |= DWELLING_MONSTER4;
-		    requires |= DWELLING_MONSTER5;
-		    break;
+    case DWELLING_UPGRADE5:
+        switch ( race ) {
+        case Race::KNGT:
+            requires |= DWELLING_MONSTER2;
+            requires |= DWELLING_MONSTER3;
+            requires |= DWELLING_MONSTER4;
+            requires |= DWELLING_MONSTER5;
+            break;
 
-		case Race::BARB:
-		    requires |= DWELLING_MONSTER5;
-		    break;
+        case Race::BARB:
+            requires |= DWELLING_MONSTER5;
+            break;
 
-		case Race::WZRD:
-		    requires |= BUILD_SPEC;
-		    requires |= DWELLING_MONSTER5;
-		    break;
+        case Race::WZRD:
+            requires |= BUILD_SPEC;
+            requires |= DWELLING_MONSTER5;
+            break;
 
-		case Race::NECR:
-		    requires |= BUILD_MAGEGUILD2;
-		    requires |= DWELLING_MONSTER5;
-		    break;
+        case Race::NECR:
+            requires |= BUILD_MAGEGUILD2;
+            requires |= DWELLING_MONSTER5;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case DWELLING_UPGRADE6:
-	    switch(race)
-	    {
-		case Race::KNGT:
-		    requires |= DWELLING_MONSTER2;
-		    requires |= DWELLING_MONSTER3;
-		    requires |= DWELLING_MONSTER4;
-		    requires |= DWELLING_MONSTER6;
-		    break;
+    case DWELLING_UPGRADE6:
+        switch ( race ) {
+        case Race::KNGT:
+            requires |= DWELLING_MONSTER2;
+            requires |= DWELLING_MONSTER3;
+            requires |= DWELLING_MONSTER4;
+            requires |= DWELLING_MONSTER6;
+            break;
 
-		case Race::WRLK:
-		case Race::WZRD:
-		    requires |= DWELLING_MONSTER6;
-		    break;
+        case Race::WRLK:
+        case Race::WZRD:
+            requires |= DWELLING_MONSTER6;
+            break;
 
-		default:
-		    break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
     case DWELLING_UPGRADE7:
         if ( race == Race::WRLK )
             requires |= DWELLING_UPGRADE6;
         break;
 
-	default: break;
+    default:
+        break;
     }
 
     return requires;
