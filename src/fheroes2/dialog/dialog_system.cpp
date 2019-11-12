@@ -45,20 +45,20 @@ int Dialog::SystemOptions(void)
     cursor.Hide();
     cursor.SetThemes(cursor.POINTER);
 
-    Dialog::FrameBorder frameborder( ( display.w() - 300 - BORDERWIDTH * 2 ) / 2, ( display.h() - 320 - BORDERWIDTH * 2 ) / 2 - ( conf.QVGA() ? 25 : 0 ), 300, 315 );
+    Dialog::FrameBorder frameborder( ( display.w() - 250 - BORDERWIDTH * 2 ) / 2, ( display.h() - 382 - BORDERWIDTH * 2 ) / 2 - ( conf.QVGA() ? 25 : 0 ), 288, 382 );
     const Rect & area = frameborder.GetArea();
 
     Rects rects;
     const s32 posx = (area.w - 256) / 2;
-    rects.push_back(Rect(area.x + posx,  area.y + 17,  64, 64));
-    rects.push_back(Rect(area.x + posx + 92, area.y + 17,  64, 64));
-    rects.push_back(Rect(area.x + posx + 184, area.y + 17,  64, 64));
-    rects.push_back(Rect(area.x + posx,  area.y + 107, 64, 64));
-    rects.push_back(Rect(area.x + posx + 92, area.y + 107, 64, 64));
-    rects.push_back(Rect(area.x + posx + 184, area.y + 107, 64, 64));
-    rects.push_back(Rect(area.x + posx,  area.y + 197, 64, 64));
-    rects.push_back(Rect(area.x + posx + 92, area.y + 197, 64, 64));
-    rects.push_back(Rect(area.x + posx + 184, area.y + 197, 64, 64));
+    rects.push_back(Rect(area.x + posx,  area.y + 30,  64, 64));
+    rects.push_back(Rect(area.x + posx + 92, area.y + 30,  64, 64));
+    rects.push_back(Rect(area.x + posx + 184, area.y + 30,  64, 64));
+    rects.push_back(Rect(area.x + posx,  area.y + 140, 64, 64));
+    rects.push_back(Rect(area.x + posx + 92, area.y + 140, 64, 64));
+    rects.push_back(Rect(area.x + posx + 184, area.y + 140, 64, 64));
+    rects.push_back(Rect(area.x + posx,  area.y + 250, 64, 64));
+    rects.push_back(Rect(area.x + posx + 92, area.y + 250, 64, 64));
+    rects.push_back(Rect(area.x + posx + 184, area.y + 250, 64, 64));
 
     const Rect & rect1 = rects[0];
     const Rect & rect2 = rects[1];
