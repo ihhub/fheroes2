@@ -86,21 +86,18 @@ int Dialog::SystemOptions(void)
     bool redraw = false;
 
     // dialog menu loop
-    while(btnres == Dialog::ZERO && le.HandleEvents())
-    {
+    while ( btnres == Dialog::ZERO && le.HandleEvents() ) {
         btnres = btnGroups.QueueEventProcessing();
 
         // set music volume
-        if(conf.Music() && le.MouseClickLeft(rect1))
-        {
+        if ( conf.Music() && le.MouseClickLeft( rect1 ) ) {
             conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
             redraw = true;
             Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
         }
 
         // set sound volume
-        if(conf.Sound() && le.MouseClickLeft(rect2))
-        {
+        if ( conf.Sound() && le.MouseClickLeft( rect2 ) ) {
             conf.SetSoundVolume( 10 > conf.SoundVolume() ? conf.SoundVolume() + 1 : 0 );
             redraw = true;
             Game::EnvironmentSoundMixer();
@@ -109,8 +106,7 @@ int Dialog::SystemOptions(void)
         // set music type
 
         // set hero speed
-        if(le.MouseClickLeft(rect4))
-        {
+        if ( le.MouseClickLeft( rect4 ) ) {
             conf.SetHeroesMoveSpeed( 10 > conf.HeroesMoveSpeed() ? conf.HeroesMoveSpeed() + 1 : 0 );
             result |= 0x01;
             redraw = true;
@@ -183,9 +179,9 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     const int textOffset = 2;
 
     // music
-    const Sprite & sprite1 = AGG::GetICN(ICN::SPANEL, conf.Music() ? 1 : 0);
+    const Sprite & sprite1 = AGG::GetICN( ICN::SPANEL, conf.Music() ? 1 : 0 );
     const Rect & rect1 = rects[0];
-    sprite1.Blit(rect1);
+    sprite1.Blit( rect1 );
     str = _( "music" );
     text.Set( str, Font::SMALL );
     text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y - text.h() - textOffset );
@@ -198,9 +194,9 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y + rect1.h + textOffset );
 
     // sound
-    const Sprite & sprite2 = AGG::GetICN(ICN::SPANEL, conf.Sound() ? 3 : 2);
+    const Sprite & sprite2 = AGG::GetICN( ICN::SPANEL, conf.Sound() ? 3 : 2 );
     const Rect & rect2 = rects[1];
-    sprite2.Blit(rect2);
+    sprite2.Blit( rect2 );
     str = _( "effects" );
     text.Set( str, Font::SMALL );
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y - text.h() - textOffset );
@@ -213,7 +209,7 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.h + rect2.y + textOffset );
 
     // unused
-    //const Sprite & sprite3 = AGG::GetICN(ICN::SPANEL, 17);
+    // const Sprite & sprite3 = AGG::GetICN(ICN::SPANEL, 17);
     const Rect & rect3 = rects[2];
     black.Blit( rect3, display );
     str = "unused";
