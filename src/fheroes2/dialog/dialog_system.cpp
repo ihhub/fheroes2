@@ -62,13 +62,13 @@ int Dialog::SystemOptions(void)
 
     const Rect & rect1 = rects[0];
     const Rect & rect2 = rects[1];
-    // const Rect & rect3 = rects[2];
+//    const Rect & rect3 = rects[2];
     const Rect & rect4 = rects[3];
     const Rect & rect5 = rects[4];
     const Rect & rect6 = rects[5];
     const Rect & rect7 = rects[6];
     const Rect & rect8 = rects[7];
-    // const Rect & rect9 = rects[8];
+//    const Rect & rect9 = rects[8];
 
     Surface back2 = display.GetSurface(Rect(area.x, area.y, area.w, area.h - 30));
     DrawSystemInfo(rects);
@@ -212,7 +212,6 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     //const Sprite & sprite3 = AGG::GetICN(ICN::SPANEL, 17);
     const Rect & rect3 = rects[2];
     black.Blit( rect3, display );
-    str.clear();
     str = "unused";
     text.Set( str );
     text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y + rect3.h );
@@ -266,7 +265,6 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     const Sprite & sprite7 = AGG::GetICN(ICN::SPANEL, (conf.ExtGameEvilInterface() ? 17 : 16));
     const Rect & rect7 = rects[6];
     sprite7.Blit(rect7);
-    str.clear();
     str = _("Interface");
     text.Set( str );
     text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y - text.h() );
@@ -282,7 +280,6 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     const Sprite & sprite8 = AGG::GetICN(ICN::SPANEL, 16);
     const Sprite & sprite81 = AGG::GetICN(ICN::ESPANEL, 4);
     const Rect & rect8 = rects[7];
-    str.clear();
     str = _("Interface");
     text.Set( str );
     text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y - text.h() );
@@ -305,7 +302,6 @@ void Dialog::DrawSystemInfo(const Rects & rects)
     //const Sprite & sprite9 = AGG::GetICN(ICN::SPANEL, 17);
     const Rect & rect9 = rects[8];
     black.Blit( rect9, display );
-    str.clear();
     str = "unused";
     text.Set( str );
     text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y + rect9.h );
