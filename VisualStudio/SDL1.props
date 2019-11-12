@@ -14,20 +14,7 @@
     <PostBuildEvent>
       <Command>xcopy /Y "$(ProjectDir)..\sdl\lib\$(PlatformTarget)\SDL.dll" "$(OutDir)"
 xcopy /Y "$(ProjectDir)..\sdl\lib\$(PlatformTarget)\SDL_mixer.dll" "$(OutDir)"
-
-if exist "$(ProjectDir)data" (
-    if not exist "$(OutDir)data" (
-        mkdir "$(OutDir)data"
-        xcopy /Y /s /Q "$(ProjectDir)data" "$(OutDir)data"
-    )
-)
-
-if exist "$(ProjectDir)maps" (
-    if not exist "$(OutDir)maps" (
-        mkdir "$(OutDir)maps"
-        xcopy /Y /s /Q "$(ProjectDir)maps" "$(OutDir)maps"
-    )
-)</Command>
+%(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />
