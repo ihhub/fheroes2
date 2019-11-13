@@ -277,9 +277,16 @@ void ReadConfigs(void)
     Settings & conf = Settings::Get();
     ListFiles files = conf.GetListFiles("", "fheroes2.cfg");
 
-    for(ListFiles::const_iterator
-	it = files.begin(); it != files.end(); ++it)
-    	if(System::IsFile(*it)) conf.Read(*it);
+    bool isValidConfigurationFile = false;
+    for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
+        if( System::IsFile( *it ) ) {
+            conf.Read(*it);
+            isValidConfigurationFile = true;
+        }
+    }
+
+    if ( !isValidConfigurationFile )
+        conf.Save( "fheroes2.cfg" );
 }
 
 void InitHomeDir(void)
