@@ -923,25 +923,20 @@ Monster Monster::FromDwelling(int race, u32 dwelling)
     return Monster(UNKNOWN);
 }
 
-Monster Monster::Rand(level_t level)
+Monster Monster::Rand( level_t level )
 {
-    if (LEVEL0 == level)
-    {
-        return Monster(Rand::Get(PEASANT, WATER_ELEMENT));
+    if ( LEVEL0 == level ) {
+        return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
     }
-    else
-    {
-        std::vector<Monster> possibleMonsters;
-
-        for(u32 ii(PEASANT); ii <= WATER_ELEMENT; ++ii)
-        {
-            if(GetLevel(static_cast<monster_t>(ii)) == level)
-            {
-                possibleMonsters.push_back(Monster(ii));
+    else {
+        std::vector<monster_t> possibleMonsters;
+        for ( u32 monsterId = PEASANT; monsterId <= WATER_ELEMENT; ++monsterId ) {
+            if ( GetLevel( static_cast<monster_t>( monsterId ) ) == level ) {
+                possibleMonsters.push_back( monsterId );
             }
         }
 
-        return possibleMonsters.size() ? *Rand::Get(possibleMonsters) : UNKNOWN;
+        return possibleMonsters.empty() ? Monster( UNKNOWN ) : Monster( *Rand::Get( possibleMonsters ) );
     }
 }
 
