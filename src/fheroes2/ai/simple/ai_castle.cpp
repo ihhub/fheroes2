@@ -1,257 +1,202 @@
-/********************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>               *
- *   All rights reserved.                                                       *
- *                                                                              *
- *   Part of the Free Heroes2 Engine:                                           *
- *   http://sourceforge.net/projects/fheroes2                                   *
- *                                                                              *
- *   Redistribution and use in source and binary forms, with or without         *
- *   modification, are permitted provided that the following conditions         *
- *   are met:                                                                   *
- *   - Redistributions may not be sold, nor may they be used in a               *
- *     commercial product or activity.                                          *
- *   - Redistributions of source code and/or in binary form must reproduce      *
- *     the above copyright notice, this list of conditions and the              *
- *     following disclaimer in the documentation and/or other materials         *
- *     provided with the distribution.                                          *
- *                                                                              *
- * THIS SOFTWARE IS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,   *
- * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS    *
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT     *
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,        *
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, *
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;  *
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,     *
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE         *
- * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,            *
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           *
- *******************************************************************************/
-
-#include "world.h"
-#include "kingdom.h"
-#include "heroes.h"
-#include "castle.h"
-#include "race.h"
-#include "game.h"
 #include "ai_simple.h"
+#include "castle.h"
+#include "game.h"
+#include "heroes.h"
+#include "kingdom.h"
+#include "race.h"
+#include "world.h"
 
-void AICastleDefense(Castle & c)
+namespace
 {
-    if(c.isCastle())
+    bool BuildIfAvailable( Castle & castle, int building )
     {
-        if(!c.isBuild(BUILD_LEFTTURRET))
-		c.BuyBuilding(BUILD_LEFTTURRET);
-
-        if(!c.isBuild(BUILD_RIGHTTURRET))
-		c.BuyBuilding(BUILD_RIGHTTURRET);
-
-        if(!c.isBuild(BUILD_MOAT))
-    		c.BuyBuilding(BUILD_MOAT);
-
-        if(!c.isBuild(BUILD_CAPTAIN) && NULL == c.GetHeroes().Guest())
-		c.BuyBuilding(BUILD_CAPTAIN);
-
-        if(!c.isBuild(BUILD_TAVERN) && Race::KNGT == c.GetRace())
-		c.BuyBuilding(BUILD_TAVERN);
-
-        if(!c.isBuild(BUILD_SPEC))
-		c.BuyBuilding(BUILD_SPEC);
-    }
-    c.RecruitAllMonster();
-}
-
-void AICastleDevelopment(Castle & c)
-{
-    const Kingdom & kingdom = c.GetKingdom();
-
-    if(c.isCastle())
-    {
-	// build for capital or large golds
-	if(c.isCapital() || kingdom.GetFunds().Get(Resource::GOLD) > 8000)
-	{
-	    if(!c.isBuild(BUILD_STATUE))
-		c.BuyBuilding(BUILD_STATUE);
-
-	    if(!c.isBuild(BUILD_SPEC) && Race::WRLK == c.GetRace())
-		c.BuyBuilding(BUILD_SPEC);
-
-	    if(!c.isBuild(BUILD_TAVERN) && (Race::KNGT == c.GetRace() || Race::SORC == c.GetRace()))
-		c.BuyBuilding(BUILD_TAVERN);
-
-	    if(!c.isBuild(BUILD_MAGEGUILD1) && ((Race::SORC | Race::WZRD | Race::WRLK | Race::NECR) & c.GetRace()))
-		c.BuyBuilding(BUILD_MAGEGUILD1);
-
-	    if(!c.isBuild(BUILD_WELL))
-		c.BuyBuilding(BUILD_WELL);
-
-
-	    if(!c.isBuild(DWELLING_MONSTER1))
-		c.BuyBuilding(DWELLING_MONSTER1);
-
-	    if(!c.isBuild(DWELLING_MONSTER2))
-		c.BuyBuilding(DWELLING_MONSTER2);
-
-	    if(!c.isBuild(DWELLING_MONSTER3))
-		c.BuyBuilding(DWELLING_MONSTER3);
-
-	    if(!c.isBuild(DWELLING_MONSTER4))
-		c.BuyBuilding(DWELLING_MONSTER4);
-
-
-	    if(!c.isBuild(BUILD_THIEVESGUILD) && ((Race::NECR) & c.GetRace()))
-		c.BuyBuilding(BUILD_THIEVESGUILD);
-
-	    if(!c.isBuild(BUILD_MARKETPLACE))
-		c.BuyBuilding(BUILD_MARKETPLACE);
-
-	    if(!c.isBuild(BUILD_MAGEGUILD1))
-		c.BuyBuilding(BUILD_MAGEGUILD1);
-
-	    if(!c.isBuild(BUILD_MAGEGUILD2) && ((Race::SORC | Race::WZRD | Race::WRLK | Race::NECR) & c.GetRace()))
-		c.BuyBuilding(BUILD_MAGEGUILD2);
-
-	    if(!c.isBuild(DWELLING_UPGRADE2))
-		c.BuyBuilding(DWELLING_UPGRADE2);
-
-	    if(!c.isBuild(DWELLING_UPGRADE3))
-		c.BuyBuilding(DWELLING_UPGRADE3);
-
-	    if(!c.isBuild(DWELLING_UPGRADE4))
-		c.BuyBuilding(DWELLING_UPGRADE4);
-
-	    if(!c.isBuild(BUILD_LEFTTURRET))
-		c.BuyBuilding(BUILD_LEFTTURRET);
-
-	    if(!c.isBuild(BUILD_RIGHTTURRET))
-		c.BuyBuilding(BUILD_RIGHTTURRET);
-
-	    if(!c.isBuild(BUILD_MOAT))
-		c.BuyBuilding(BUILD_MOAT);
-
-	    if(!c.isBuild(BUILD_CAPTAIN))
-		c.BuyBuilding(BUILD_CAPTAIN);
-
-	    if(!c.isBuild(BUILD_TAVERN))
-		c.BuyBuilding(BUILD_TAVERN);
-
-	    if(!c.isBuild(BUILD_MAGEGUILD2))
-		c.BuyBuilding(BUILD_MAGEGUILD2);
-
-	    if(!c.isBuild(DWELLING_MONSTER5))
-		c.BuyBuilding(DWELLING_MONSTER5);
-
-	    if(!c.isBuild(DWELLING_MONSTER6))
-		c.BuyBuilding(DWELLING_MONSTER6);
-
-	    if(!c.isBuild(BUILD_MAGEGUILD3))
-		c.BuyBuilding(BUILD_MAGEGUILD3);
-
-	    if(!c.isBuild(DWELLING_UPGRADE5))
-		c.BuyBuilding(DWELLING_UPGRADE5);
-
-	    if(!c.isBuild(DWELLING_UPGRADE6))
-		c.BuyBuilding(DWELLING_UPGRADE6);
-	}
-    }
-    else
-    {
-	// build castle only monday or tuesday or for capital
-	if(c.isCapital() || 3 > world.GetDay()) c.BuyBuilding(BUILD_CASTLE);
+        if ( !castle.isBuild( building ) )
+            return castle.BuyBuilding( building );
+        return false;
     }
 
-    // last day and buy monster
-    if(world.LastDay()) c.RecruitAllMonster();
+    bool BuildIfEnoughResources( Castle & castle, int building, u32 minimumMultiplicator )
+    {
+        if ( minimumMultiplicator < 1 || minimumMultiplicator > 99 ) // can't be that we need more than 100 times resources
+            return false;
+
+        const Kingdom & kingdom = castle.GetKingdom();
+        if ( kingdom.GetFunds() >= PaymentConditions::BuyBuilding( castle.GetRace(), building ) * minimumMultiplicator )
+            return BuildIfAvailable( castle, building );
+        return false;
+    }
+
+    u32 GetResourceMultiplier( Castle & castle, u32 min, u32 max )
+    {
+        return castle.isCapital() ? 1 : Rand::Get( min, max );
+    }
+
+    void AICastleDefense( Castle & castle )
+    {
+        castle.RecruitAllMonster(); // buy monsters at first place
+        const bool doesArmyExist = castle.GetActualArmy().GetCount() > 0;
+
+        if ( castle.isCastle() && doesArmyExist ) {
+            BuildIfAvailable( castle, BUILD_LEFTTURRET );
+            BuildIfAvailable( castle, BUILD_RIGHTTURRET );
+            BuildIfAvailable( castle, BUILD_MOAT );
+            if ( NULL == castle.GetHeroes().Guest() )
+                BuildIfAvailable( castle, BUILD_CAPTAIN );
+
+            if ( castle.GetRace() == Race::KNGT ) {
+                BuildIfAvailable( castle, BUILD_SPEC ); // fortification
+                BuildIfAvailable( castle, BUILD_TAVERN );
+            }
+            else if ( ( ( Race::SORC | Race::BARB | Race::NECR ) & castle.GetRace() ) == 0 ) {
+                BuildIfAvailable( castle, BUILD_SPEC ); // Rainbow, Colliseum or Storm
+            }
+        }
+    }
+
+    void AICastleDevelopment( Castle & castle )
+    {
+        const Kingdom & kingdom = castle.GetKingdom();
+
+        if ( castle.isCastle() ) {
+            if ( world.LastDay() ) // 7th day of week
+                BuildIfAvailable( castle, BUILD_WELL );
+            BuildIfAvailable( castle, BUILD_STATUE );
+            if ( Race::WRLK == castle.GetRace() )
+                BuildIfAvailable( castle, BUILD_SPEC ); // Dungeon
+            BuildIfAvailable( castle, DWELLING_UPGRADE7 );
+            BuildIfAvailable( castle, DWELLING_UPGRADE6 );
+            BuildIfAvailable( castle, DWELLING_MONSTER6 );
+            BuildIfAvailable( castle, DWELLING_UPGRADE5 );
+            BuildIfAvailable( castle, DWELLING_MONSTER5 );
+            BuildIfAvailable( castle, DWELLING_UPGRADE4 );
+            BuildIfAvailable( castle, DWELLING_MONSTER4 );
+            BuildIfEnoughResources( castle, DWELLING_UPGRADE3, GetResourceMultiplier( castle, 2, 3 ) );
+            BuildIfEnoughResources( castle, DWELLING_MONSTER3, GetResourceMultiplier( castle, 2, 3 ) );
+            BuildIfEnoughResources( castle, DWELLING_UPGRADE2, GetResourceMultiplier( castle, 3, 4 ) );
+            BuildIfEnoughResources( castle, DWELLING_MONSTER2, GetResourceMultiplier( castle, 3, 4 ) );
+            BuildIfEnoughResources( castle, DWELLING_MONSTER1, GetResourceMultiplier( castle, 4, 5 ) );
+            if ( Race::KNGT == castle.GetRace() ) {
+                BuildIfEnoughResources( castle, BUILD_TAVERN, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Armory
+                BuildIfEnoughResources( castle, BUILD_WELL, GetResourceMultiplier( castle, 3, 4 ) ); // needed for Blacksmith
+            }
+            else if ( Race::SORC == castle.GetRace() ) {
+                BuildIfEnoughResources( castle, BUILD_MAGEGUILD1, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Stonehenge
+                BuildIfEnoughResources( castle, BUILD_WELL, GetResourceMultiplier( castle, 3, 4 ) ); // needed Upg. Cottage
+                BuildIfEnoughResources( castle, BUILD_TAVERN, GetResourceMultiplier( castle, 3, 4 ) ); // needed for Cottage
+            }
+            else if ( Race::NECR == castle.GetRace() ) {
+                BuildIfEnoughResources( castle, BUILD_MAGEGUILD2, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Upg. Mausoleum
+                BuildIfEnoughResources( castle, BUILD_MAGEGUILD1, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Mausoleum
+                BuildIfEnoughResources( castle, BUILD_THIEVESGUILD, GetResourceMultiplier( castle, 3, 4 ) ); // needed for Mansion
+            }
+            else if ( Race::WZRD == castle.GetRace() ) {
+                BuildIfEnoughResources( castle, BUILD_SPEC, GetResourceMultiplier( castle, 2, 3 ) ); // Library needed for Upg. Ivory Tower
+                BuildIfEnoughResources( castle, BUILD_MAGEGUILD1, GetResourceMultiplier( castle, 2, 3 ) ); // needed for Ivory Tower
+                BuildIfEnoughResources( castle, BUILD_WELL, GetResourceMultiplier( castle, 3, 4 ) ); // needed for Upg. Foundry
+            }
+            if ( world.LastDay() )
+                BuildIfEnoughResources( castle, BUILD_WEL2, 5 );
+            BuildIfAvailable( castle, BUILD_MAGEGUILD1 );
+            BuildIfEnoughResources( castle, BUILD_LEFTTURRET, 5 );
+            BuildIfEnoughResources( castle, BUILD_RIGHTTURRET, 5 );
+            BuildIfEnoughResources( castle, BUILD_MOAT, 10 );
+            BuildIfEnoughResources( castle, BUILD_WELL, 5 );
+            BuildIfEnoughResources( castle, BUILD_MAGEGUILD2, 5 );
+            BuildIfEnoughResources( castle, BUILD_MAGEGUILD3, 5 );
+            BuildIfEnoughResources( castle, BUILD_MAGEGUILD4, 5 );
+            BuildIfEnoughResources( castle, BUILD_MAGEGUILD5, 5 );
+            BuildIfEnoughResources( castle, BUILD_SPEC, 10 );
+        }
+        else {
+            // Build castle only monday or tuesday or for capital or when we have in 5-10 times more resources than needed (fair point)
+            if ( castle.isCapital() || 3 > world.GetDay()
+                 || kingdom.GetFunds() >= ( PaymentConditions::BuyBuilding( castle.GetRace(), BUILD_CASTLE ) * Rand::Get( 5, 10 ) ) )
+                castle.BuyBuilding( BUILD_CASTLE );
+        }
+
+        if ( world.LastDay() ) // last day so buy monster
+            castle.RecruitAllMonster();
+    }
 }
 
-void AICastleTurn(Castle* castle)
+void AICastleTurn( Castle * castle )
 {
-    if(castle) AI::CastleTurn(*castle);
+    if ( castle != NULL )
+        AI::CastleTurn( *castle );
 }
 
-void AI::CastleTurn(Castle & castle)
+void AI::CastleTurn( Castle & castle )
 {
     // skip neutral town
-    if(castle.GetColor() != Color::NONE)
-    {
-	s32 range = Game::GetViewDistance(castle.isCastle() ? Game::VIEW_CASTLE : Game::VIEW_TOWN);
-	const Heroes* enemy = NULL;
+    if ( castle.GetColor() == Color::NONE )
+        return;
 
-	// find enemy hero
-	for(s32 y = -range; y <= range; ++y)
-    	    for(s32 x = -range; x <= range; ++x)
-	{
-    	    if(!y && !x) continue;
-	    const Point & center = castle.GetCenter();
+    s32 range = Game::GetViewDistance( castle.isCastle() ? Game::VIEW_CASTLE : Game::VIEW_TOWN );
+    const Heroes * enemy = NULL;
 
-    	    if(Maps::isValidAbsPoint(center.x + x, center.y + y))
-    	    {
-        	const Maps::Tiles & tile = world.GetTiles(Maps::GetIndexFromAbsPoint(center.x + x, center.y + y));
+    // find enemy hero
+    const Point & castleCenter = castle.GetCenter();
+    for ( s32 y = -range; y <= range; ++y ) {
+        for ( s32 x = -range; x <= range; ++x ) {
+            if ( !y && !x )
+                continue;
 
-        	if(MP2::OBJ_HEROES == tile.GetObject())
-		    enemy = tile.GetHeroes();
+            if ( Maps::isValidAbsPoint( castleCenter.x + x, castleCenter.y + y ) ) {
+                const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( castleCenter.x + x, castleCenter.y + y ) );
 
-		if(enemy && castle.GetColor() == enemy->GetColor())
-		    enemy = NULL;
+                if ( MP2::OBJ_HEROES == tile.GetObject() )
+                    enemy = tile.GetHeroes();
 
-		if(enemy) break;
-	    }
-	}
+                if ( enemy && castle.GetColor() == enemy->GetColor() )
+                    enemy = NULL;
 
-	enemy ? AICastleDefense(castle) : AICastleDevelopment(castle);
+                if ( enemy )
+                    break;
+            }
+        }
+    }
 
-	Kingdom & kingdom = castle.GetKingdom();
-	Heroes* hero = castle.GetHeroes().Guest();
-	bool can_recruit = castle.isCastle() && !hero && kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
+    enemy ? AICastleDefense( castle ) : AICastleDevelopment( castle );
 
-	// part II
-	if(enemy &&
-	    castle.GetArmy().isValid() &&
-	    Army::TroopsStrongerEnemyTroops(castle.GetArmy(), enemy->GetArmy()))
-	{
-    	    if(can_recruit)
-    	    {
-        	Recruits & rec = kingdom.GetRecruits();
+    Kingdom & kingdom = castle.GetKingdom();
+    Heroes * hero = castle.GetHeroes().Guest();
+    const bool canRecruit = castle.isCastle() && !hero && kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
 
-        	if(rec.GetHero1())
-		    hero = castle.RecruitHero(rec.GetHero1());
-        	else
-        	if(rec.GetHero2())
-		    hero = castle.RecruitHero(rec.GetHero2());
-    	    }
+    // part II
+    if ( enemy && castle.GetArmy().isValid() && Army::TroopsStrongerEnemyTroops( castle.GetArmy(), enemy->GetArmy() ) ) {
+        if ( canRecruit ) {
+            Recruits & rec = kingdom.GetRecruits();
 
-    	    if(hero)
-		hero->SetModes(AI::HEROES_HUNTER);
-	}
+            if ( rec.GetHero1() )
+                hero = castle.RecruitHero( rec.GetHero1() );
+            else if ( rec.GetHero2() )
+                hero = castle.RecruitHero( rec.GetHero2() );
+        }
 
-	// part III
-	AIKingdom & ai = AIKingdoms::Get(castle.GetColor());
-	if(ai.capital != &castle &&
-	    castle.GetArmy().isValid() && ! hero &&
-	    2 < castle.GetArmy().GetCount() &&
-	    150 < castle.GetArmy().GetHitPoints() &&
-	    can_recruit)
-	{
-    	    Recruits & rec = kingdom.GetRecruits();
+        if ( hero )
+            hero->SetModes( AI::HEROES_HUNTER );
+    }
 
-    	    if(rec.GetHero1())
-		hero = castle.RecruitHero(rec.GetHero1());
-    	    else
-    	    if(rec.GetHero2())
-		hero = castle.RecruitHero(rec.GetHero2());
+    // part III
+    AIKingdom & ai = AIKingdoms::Get( castle.GetColor() );
+    if ( ai.capital != &castle && castle.GetArmy().isValid() && !hero && 2 < castle.GetArmy().GetCount() && 150 < castle.GetArmy().GetHitPoints() && canRecruit ) {
+        Recruits & rec = kingdom.GetRecruits();
 
-    	    if(hero)
-		hero->SetModes(AI::HEROES_HUNTER|AI::HEROES_SCOUTER);
-	}
+        if ( rec.GetHero1() )
+            hero = castle.RecruitHero( rec.GetHero1() );
+        else if ( rec.GetHero2() )
+            hero = castle.RecruitHero( rec.GetHero2() );
+
+        if ( hero )
+            hero->SetModes( AI::HEROES_HUNTER | AI::HEROES_SCOUTER );
     }
 }
 
-void AI::CastlePreBattle(Castle & castle)
+void AI::CastlePreBattle( Castle & castle )
 {
-    Heroes* hero = castle.GetHeroes().GuardFirst();
-    if(hero && castle.GetArmy().isValid())
-	hero->GetArmy().JoinStrongestFromArmy(castle.GetArmy());
+    Heroes * hero = castle.GetHeroes().GuardFirst();
+    if ( hero && castle.GetArmy().isValid() )
+        hero->GetArmy().JoinStrongestFromArmy( castle.GetArmy() );
 }
 
-void AI::CastleAfterBattle(Castle &, bool attacker_wins)
-{
-}
+void AI::CastleAfterBattle( Castle &, bool attackerWon ) {}
