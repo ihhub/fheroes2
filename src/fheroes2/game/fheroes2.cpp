@@ -280,7 +280,7 @@ void ReadConfigs(void)
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
         if ( System::IsFile( *it ) ) {
-            if ( conf.Read(*it) ) {
+            if ( conf.Read( *it ) ) {
                 isValidConfigurationFile = true;
                 break;
             }
