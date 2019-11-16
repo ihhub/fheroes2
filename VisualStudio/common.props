@@ -17,6 +17,26 @@
       <AdditionalLibraryDirectories>..\zlib\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>if exist "$(ProjectDir)data" (
+    if not exist "$(OutDir)data" (
+        mkdir "$(OutDir)data"
+        xcopy /Y /s /Q "$(ProjectDir)data" "$(OutDir)data"
+    )
+)
+
+if exist "$(ProjectDir)maps" (
+    if not exist "$(OutDir)maps" (
+        mkdir "$(OutDir)maps"
+        xcopy /Y /s /Q "$(ProjectDir)maps" "$(OutDir)maps"
+    )
+)
+
+xcopy /Y "$(ProjectDir)fheroes2.cfg" "$(OutDir)"
+xcopy /Y "$(ProjectDir)fheroes2.key" "$(OutDir)"
+
+%(Command)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
