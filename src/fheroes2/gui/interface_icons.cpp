@@ -279,7 +279,6 @@ void Interface::HeroesIcons::ActionListSingleClick(HEROES & item)
 	Interface::Basic & I = Interface::Basic::Get();
 
 	I.SetFocus(item);
-    I.CalculateHeroPath( item );
 	I.RedrawFocus();
 
 	// for QVGA: auto hide icons after click
@@ -437,6 +436,7 @@ void Interface::IconsPanel::Select(Heroes & hr)
 {
     castleIcons.Unselect();
     heroesIcons.SetCurrent((HEROES) &hr);
+    Interface::Basic::Get().CalculateHeroPath( &hr, -1);
 }
 
 void Interface::IconsPanel::Select(const Castle & cs)
