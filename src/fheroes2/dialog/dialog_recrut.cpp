@@ -366,11 +366,11 @@ Troop Dialog::RecruitMonster(const Monster & monster0, u32 available, bool ext)
 	    }
 	}
 
-    if (le.MousePressRight(rtChange)) {
-        const bool isUpgradedMonster = ext && ( monster != monster.GetDowngrade() ); 
-        Dialog::ArmyInfo( Troop( isUpgradedMonster ? monster : monster.GetDowngrade(), available ), Dialog::READONLY );
-        redraw = true;
-    }
+        if ( le.MousePressRight( rtChange ) ) {
+            const bool isUpgradedMonster = ext && ( monster != monster.GetDowngrade() ); 
+            Dialog::ArmyInfo( Troop( isUpgradedMonster ? monster : monster.GetDowngrade(), available ), Dialog::READONLY );
+            redraw = true;
+        }
 
 	if(PressIntKey(0, max, result))
 	{
