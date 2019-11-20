@@ -111,7 +111,7 @@ namespace Interface
 
         u32  CountIcons(void) const;
 
-	void Select(Heroes &);
+	void Select( Heroes & hero );
 	void Select(const Castle &);
 
 	bool IsSelected(icons_t) const;
