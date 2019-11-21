@@ -47,7 +47,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
     hero->SetMove( false );
 
     Route::Path & path = hero->GetPath();
-    if ( destinationIdx == -1  )
+    if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
         path.Calculate( destinationIdx );
