@@ -62,7 +62,8 @@ void Display::SetVideoMode(int w, int h, bool fullscreen)
     if(window)
         SDL_DestroyWindow(window);
 
-    window = SDL_CreateWindow("", 0, 0, w, h, flags);
+    const int windowOffset = 32;
+    window = SDL_CreateWindow( "", fullscreen ? 0 : windowOffset, fullscreen ? 0 : windowOffset, w, h, flags );
     renderer = SDL_CreateRenderer(window, -1, System::GetRenderFlags());
 
     if(! renderer)
