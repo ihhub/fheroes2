@@ -279,6 +279,7 @@ void Interface::HeroesIcons::ActionListSingleClick(HEROES & item)
 	Interface::Basic & I = Interface::Basic::Get();
 
 	I.SetFocus(item);
+        I.CalculateHeroPath( item, -1 );
 	I.RedrawFocus();
 
 	// for QVGA: auto hide icons after click
