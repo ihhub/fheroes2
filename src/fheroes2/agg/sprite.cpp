@@ -27,27 +27,6 @@
 #include "display.h"
 #include "sprite.h"
 
-bool SkipLocalAlpha(int icn)
-{
-    switch(icn)
-    {
-        case ICN::SYSTEM:
-        case ICN::SYSTEME:
-        case ICN::BUYBUILD:
-        case ICN::BUYBUILE:
-        case ICN::BOOK:
-        case ICN::CSPANBKE:
-        case ICN::CPANBKGE:
-        case ICN::CAMPBKGE:
-
-            return true;
-
-        default: break;
-    }
-
-    return false;
-}
-
 Sprite::Sprite()
 {
 }
