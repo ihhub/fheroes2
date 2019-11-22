@@ -164,7 +164,7 @@ namespace AGG
 
 Sprite ICNSprite::CreateSprite(bool reflect, bool shadow) const
 {
-    Surface res(first.GetSize(), true);
+    Surface res(first.GetSize(), shadow);
     first.Blit(res);
 
     if(shadow && second.isValid())
