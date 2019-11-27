@@ -120,7 +120,6 @@ namespace
 
     while( config_file.good())
     {
-        
         getline(config_file, line);
 
         if( line[0] == '/' || line.size() == 0 )
