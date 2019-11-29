@@ -358,16 +358,24 @@ bool Settings::Read(const std::string & filename)
     if(ival) Surface::SetDefaultDepth(ival);
 
     // move speed
-    if(config.Exists("ai speed"))
-    {
-	ai_speed = config.IntParams("ai speed");
-	if(10 < ai_speed) ai_speed = 10;
+    if ( config.Exists( "ai speed" ) ) {
+        ai_speed = config.IntParams( "ai speed" );
+        if ( ai_speed > 10 ) {
+            ai_speed = 10;
+        }
+        if ( ai_speed < 1 ) {
+            ai_speed = 1;
+        }
     }
 
-    if(config.Exists("heroes speed"))
-    {
-	heroes_speed = config.IntParams("heroes speed");
-	if(10 < heroes_speed) heroes_speed = 10;
+    if ( config.Exists( "heroes speed" ) ) {
+        heroes_speed = config.IntParams( "heroes speed" );
+        if ( heroes_speed > 10 ) {
+            heroes_speed = 10;
+        }
+        if ( heroes_speed < 1 ) {
+            heroes_speed = 1;
+        }
     }
 
     // scroll speed
@@ -380,10 +388,14 @@ bool Settings::Read(const std::string & filename)
 	default:	scroll_speed = SCROLL_NORMAL; break;
     }
 
-    if(config.Exists("battle speed"))
-    {
-	battle_speed = config.IntParams("battle speed");
-	if(10 < battle_speed) battle_speed = 10;
+    if ( config.Exists( "battle speed" ) ) {
+        battle_speed = config.IntParams("battle speed");
+        if ( battle_speed > 10 ) {
+            battle_speed = 10;
+        }
+        if ( battle_speed < 1 ) {
+            battle_speed = 1;
+        }
     }
 
     // network port
@@ -734,14 +746,41 @@ int Settings::BattleSpeed(void) const { return battle_speed; }
 /* return scroll speed */
 int Settings::ScrollSpeed(void) const { return scroll_speed; }
 
-/* set ai speed: 0 - 10 */
-void Settings::SetAIMoveSpeed(int speed) { ai_speed = (10 <= speed ? 10 : speed); }
+/* set ai speed: 1 - 10 */
+void Settings::SetAIMoveSpeed( int speed )
+{
+    if ( speed < 1 ) {
+        speed = 1;
+    }
+    if ( speed > 10 ) {
+        speed = 10;
+    }
+    ai_speed = speed;
+}
 
-/* set hero speed: 0 - 10 */
-void Settings::SetHeroesMoveSpeed(int speed){ heroes_speed = (10 <= speed ? 10 : speed); }
+/* set hero speed: 1 - 10 */
+void Settings::SetHeroesMoveSpeed( int speed )
+{
+    if ( speed < 1 ) {
+        speed = 1;
+    }
+    if ( speed > 10 ) {
+        speed = 10;
+    }
+    heroes_speed = speed;
+}
 
-/* set battle speed: 0 - 10 */
-void Settings::SetBattleSpeed(int speed) { battle_speed = (10 <= speed ? 10 : speed); }
+/* set battle speed: 1 - 10 */
+void Settings::SetBattleSpeed( int speed )
+{
+    if ( speed < 1 ) {
+        speed = 1;
+    }
+    if ( speed > 10 ) {
+        speed = 10;
+    }
+    battle_speed = speed;
+}
 
 void Settings::SetBlitSpeed(int speed) { blit_speed = speed; }
 
