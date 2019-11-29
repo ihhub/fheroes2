@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <assert.h>
+
 #include "castle.h"
 #include "difficulty.h"
 #include "mp2.h"
@@ -840,27 +842,33 @@ Monster Monster::FromDwelling(int race, u32 dwelling)
 
 Monster Monster::Rand(level_t level)
 {
-    switch(level)
-    {
-	default: return Monster(Rand::Get(PEASANT, WATER_ELEMENT));
-
-	case LEVEL1:
-	case LEVEL2:
-	case LEVEL3:
-	case LEVEL4:
-		break;
+    if ( level == LEVEL0 ) {
+        return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
     }
 
-    std::vector<Monster> monster;
-    monster.reserve(30);
-
-    for(u32 ii = PEASANT; ii <= WATER_ELEMENT; ++ii) {
-        Monster mons(ii);
-        if(mons.GetLevel() == level)
-            monster.push_back(mons);
+    static std::vector<std::vector<Monster> > cache;
+    if ( cache.empty() ) {
+        std::vector<size_t> sizes( LEVEL4 - LEVEL0 + 1 );
+        cache.reserve( sizes.size() );
+        for ( size_t i = PEASANT; i <= WATER_ELEMENT; ++i ) {
+            Monster monster(i);
+            assert( LEVEL0 <= monster.GetLevel() && monster.GetLevel() <= LEVEL4 );
+            ++sizes[monster.GetLevel() - LEVEL0];
+        }
+        for ( size_t i = 0; i < sizes.size(); ++i ) {
+            cache.resize( sizes[i] );
+        }
+        for ( size_t i = PEASANT; i <= WATER_ELEMENT; ++i ) {
+            Monster monster( i );
+            cache[monster.GetLevel() - LEVEL0].push_back( monster );
+        }
     }
 
-    return monster.size() ? *Rand::Get(monster) : UNKNOWN;
+    if ( level - LEVEL0 >= cache.size() ) {
+        return UNKNOWN;
+    }
+
+    return *Rand::Get( cache[level - LEVEL0] );
 }
 
 u32 Monster::Rand4WeekOf(void)
