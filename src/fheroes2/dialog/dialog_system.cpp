@@ -107,7 +107,7 @@ int Dialog::SystemOptions(void)
 
         // set hero speed
         if ( le.MouseClickLeft( rect4 ) ) {
-            conf.SetHeroesMoveSpeed( 10 > conf.HeroesMoveSpeed() ? conf.HeroesMoveSpeed() + 1 : 0 );
+            conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() % 10 + 1 );
             result |= 0x01;
             redraw = true;
             Game::UpdateHeroesMoveSpeed();
@@ -116,7 +116,7 @@ int Dialog::SystemOptions(void)
         // set ai speed
         if(le.MouseClickLeft(rect5))
         {
-            conf.SetAIMoveSpeed( 10 > conf.AIMoveSpeed() ? conf.AIMoveSpeed() + 1 : 0 );
+            conf.SetAIMoveSpeed( conf.AIMoveSpeed() % 10 + 1 );
             result |= 0x01;
             redraw = true;
             Game::UpdateHeroesMoveSpeed();
