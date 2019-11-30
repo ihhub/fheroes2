@@ -118,9 +118,9 @@ int Game::Credits(void)
     str.append(AI::License());
     str.append("\n \n");
     str.append("Site project:\n");
-    str.append("http://sf.net/projects/fheroes2");
+    str.append("https://github.com/ihhub/fheroes2");
     str.append("\n \n");
-    str.append("Authors:\n");
+    str.append("Author of original project on SourceForge:\n");
     str.append("Andrey Afletdinov, maintainer\n");
     str.append("email: fheroes2 at gmail.com\n");
 
