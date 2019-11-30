@@ -211,6 +211,7 @@ Settings::Settings() : debug(DEFAULT_DEBUG), video_mode(640, 480), game_difficul
 {
     ExtSetModes(GAME_SHOW_SDL_LOGO);
     ExtSetModes(GAME_AUTOSAVE_ON);
+    ExtSetModes(CASTLE_ALLOW_BUY_FROM_WELL);
 
     opt_global.SetModes(GLOBAL_SHOWRADAR);
     opt_global.SetModes(GLOBAL_SHOWICONS);
