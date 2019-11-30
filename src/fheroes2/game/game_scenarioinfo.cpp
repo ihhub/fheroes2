@@ -138,8 +138,6 @@ int Game::ScenarioInfo(void)
     Players & players = conf.GetPlayers();
     Interface::PlayersInfo playersInfo(true, !conf.QVGA(), !conf.QVGA());
 
-    // set first maps settings
-    if(reset_starting_settings)
 	conf.SetCurrentFileInfo(lists.front());
 
     playersInfo.UpdateInfo(players, pointOpponentInfo, pointClassInfo);
