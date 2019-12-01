@@ -19,6 +19,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include <fstream>
 
 #include "castle.h"
 #include "difficulty.h"
@@ -182,8 +183,58 @@ float Monster::GetUpgradeRatio(void)
     return GameStatic::GetMonsterUpgradeRatio();
 }
 
+void Monster::LoadMonstatsFromFile()
+{
+    std::string line;
+    std::vector<std::string> stats;
+    std::string stat;
+    int stat_counter = 0;
+    std::ifstream config_file( "monster.csv" );
+
+    if ( config_file )
+	{
+        while ( config_file.good() )
+		{
+            getline( config_file, line );
+
+			if ( line[0] == '/' )
+				continue;
+
+			else
+			{
+				std::stringstream cfg_line( line );
+
+				while ( getline( cfg_line, stat, ',' ) )
+					stats.push_back( stat );
+
+                stat_counter += 17;
+			}
+
+			stat_counter = 0;
+		}
+
+        for ( int i = 0; i < stats.size() / 17; i++ )
+		{
+            monstats_t monster{
+			(u8)stoi( stats[2 + stat_counter] ), (u8)stoi( stats[3 + stat_counter] ),
+			(u8)stoi( stats[4 + stat_counter] ), (u16)stoi( stats[5 + stat_counter] ),
+            (u8)stoi( stats[6 + stat_counter] ), (u8)stoi( stats[7 + stat_counter] ),
+            (u8)stoi( stats[8 + stat_counter] ), (u8)stoi( stats[9 + stat_counter] ),
+            monsters[8 + stat_counter].name, monsters[8 + stat_counter].multiname,
+            {(u16)stoi( stats[10 + stat_counter] ), (u8)stoi( stats[11 + stat_counter] ),
+			(u8)stoi( stats[12 + stat_counter] ), (u8)stoi( stats[13 + stat_counter] ),
+			(u8)stoi( stats[14 + stat_counter] ), (u8)stoi( stats[15 + stat_counter] ),
+            (u8)stoi( stats[16 + stat_counter] )}};
+
+            monsters[i] = monster;
+            stat_counter += 17;
+        }
+    }
+}
+
 void Monster::UpdateStats(const std::string & spec)
 {
+    bool xml_stats_loaded = true;
 #ifdef WITH_XML
     // parse monsters.xml
     TiXmlDocument doc;
@@ -222,10 +273,18 @@ void Monster::UpdateStats(const std::string & spec)
 
 	    ++ptr;
         }
+
+        xml_stats_loaded = true;
     }
     else
-    VERBOSE(spec << ": " << doc.ErrorDesc());
+	{
+		VERBOSE(spec << ": " << doc.ErrorDesc());
+        xml_stats_loaded = false;
+	}
 #endif
+
+	if ( xml_stats_loaded == false )
+        LoadMonstatsFromFile();
 }
 
 Monster::Monster(int m) : id(UNKNOWN)
