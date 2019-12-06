@@ -699,7 +699,7 @@ bool PrepareMapsFileInfoList(MapsFileInfoList & lists, bool multi)
 
 StreamBase & Maps::operator<< (StreamBase & msg, const FileInfo & fi)
 {
-    msg << System::GetBasename(fi.file) << fi.name << fi.description <<
+    msg << fi.file << fi.name << fi.description <<
 	fi.size_w << fi.size_h << fi.difficulty << static_cast<u8>(KINGDOMMAX);
 
     for(u32 ii = 0; ii < KINGDOMMAX; ++ii)
