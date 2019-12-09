@@ -181,7 +181,7 @@ public:
 
     static u32 GetCountFromHitPoints(const Monster &, u32);
 
-	static void LoadMonstatsFromFile();
+	void LoadMonsterStatsFromCSVFile();
 
     static void UpdateStats(const std::string &);
 

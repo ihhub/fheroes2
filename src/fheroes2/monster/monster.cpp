@@ -143,7 +143,7 @@ namespace
     };
 }
 
-void LoadMonsterStatsFromCSVFile()
+void Monster::LoadMonsterStatsFromCSVFile()
 {
     std::string line;
     std::vector<std::string> stats;
