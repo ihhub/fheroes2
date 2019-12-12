@@ -181,9 +181,9 @@ public:
 
     static u32 GetCountFromHitPoints(const Monster &, u32);
 
-    void LoadMonsterStatsFromCSVFile();
+    void LoadMonsterStatsFromCSVFile(const std::string & spec);
 
-    static void UpdateStats(const std::string &);
+    static void UpdateStats(const std::string & spec);
 
     static float GetUpgradeRatio(void);
 

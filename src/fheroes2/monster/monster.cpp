@@ -142,63 +142,63 @@ namespace
 	};
 }
 
-void Monster::LoadMonsterStatsFromCSVFile()
+void Monster::LoadMonsterStatsFromCSVFile(const std::string & spec)
 {
 	std::string line;
 	std::vector<std::string> stats;
 	std::vector<std::monstats_t> monsterVector;
 	std::string stat;
 	int statCounter = 0;
-	std::ifstream configFile( "monster.csv" );
+	std::ifstream configFile(spec);
     
-	if ( configFile )
+	if (configFile)
 	{
-		while ( configFile.good() )
+		while (configFile.good())
 		{
-			getline( configFile, line );
+			getline(configFile, line);
             
-			if ( line[0] == '/' )
+			if (line[0] == '/')
 				continue;
             
 			else
 			{
-				std::stringstream cfgLine( line );
+				std::stringstream cfgLine(line);
                 
-				while ( getline( cfgLine, stat, ',' ) )
+				while (getline(cfgLine, stat, ','))
 				{
-					stats.push_back( stat );
+					stats.push_back(stat);
 					statCounter++;
 				}
-				if( statCounter != 17 )
+				if( statCounter != 17)
 					return;
 			}
             
 			statCounter = 0;
 		}
         
-		for ( int i = 0; i < stats.size() / 17; i++ )
+		for (int i = 0; i < stats.size() / 17; i++)
 		{
 			monstats_t monster{
-			static_cast<u8>(atoi( stats[2 + statCounter] ) ), static_cast<u8>(atoi( stats[3 + statCounter] ),
-			static_cast<u8>(atoi( stats[4 + statCounter] ), static_cast<u16>(atoi( stats[5 + statCounter] ),
-			static_cast<u8>(atoi( stats[6 + statCounter] ), static_cast<u8>(atoi( stats[7 + statCounter] ),
-			static_cast<u8>(atoi( stats[8 + statCounter] ), static_cast<u8>(atoi( stats[9 + statCounter] ),
+			static_cast<u8>(atoi(stats[2 + statCounter])), static_cast<u8>(atoi(stats[3 + statCounter]),
+			static_cast<u8>(atoi(stats[4 + statCounter]), static_cast<u16>(atoi(stats[5 + statCounter]),
+			static_cast<u8>(atoi(stats[6 + statCounter]), static_cast<u8>(atoi(stats[7 + statCounter]),
+			static_cast<u8>(atoi(stats[8 + statCounter]), static_cast<u8>(atoi(stats[9 + statCounter]),
 			monsters[8 + statCounter].name, monsters[8 + statCounter].multiname,
-			{static_cast<u16>(atoi( stats[10 + statCounter] ) ), static_cast<u8>(atoi( stats[11 + statCounter] ),
-			static_cast<u8>(atoi( stats[12 + statCounter] ), static_cast<u8>(atoi( stats[13 + statCounter] ),
-			static_cast<u8>(atoi( stats[14 + statCounter] ), static_cast<u8>(atoi( stats[15 + statCounter] ),
-			static_cast<u8>(atoi( stats[16 + statCounter] )}};
+			{static_cast<u16>(atoi( stats[10 + statCounter])), static_cast<u8>(atoi(stats[11 + statCounter]),
+			static_cast<u8>(atoi(stats[12 + statCounter]), static_cast<u8>(atoi(stats[13 + statCounter]),
+			static_cast<u8>(atoi(stats[14 + statCounter]), static_cast<u8>(atoi(stats[15 + statCounter]),
+			static_cast<u8>(atoi(stats[16 + statCounter])}};
                                                                                                                                                                                                                                                                 
-			monsterVector.push_back( monster );
+			monsterVector.push_back(monster);
 			statCounter += 17;
 		}
 	}
     
-	if( monsterVector.size() != sizeof(monsters) )
+	if(monsterVector.size() != sizeof(monsters))
 		return;
 	else
 	{
-		for( int i = 0; i < monsterVector.size(); i++ )
+		for(int i = 0; i < monsterVector.size(); i++)
 			monsters[i] = monsterVector[i];
 	}
 }
@@ -245,8 +245,6 @@ float Monster::GetUpgradeRatio(void)
 
 void Monster::UpdateStats(const std::string & spec)
 {
-	bool isXMLFileLoaded = true;
-	
 	#ifdef WITH_XML
 	// parse monsters.xml
 	TiXmlDocument doc;
@@ -287,15 +285,10 @@ void Monster::UpdateStats(const std::string & spec)
 		}
 	}
 	else
- 	{
 		VERBOSE(spec << ": " << doc.ErrorDesc());
-		isXMLFileLoaded = false;
-	}
 	#endif
-	
-	if ( !isXMLFileLoaded )
-		LoadMonsterStatsFromCSVFile();
 }
+
 
 Monster::Monster(int m) : id(UNKNOWN)
 {
