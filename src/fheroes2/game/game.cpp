@@ -396,7 +396,7 @@ void Game::LoadExternalResource(const Settings & conf)
 
     else
     {   // monsters.csv
-        spec = Settings::GetLastFile(prefix_stats, "monsters.xml");
+        spec = Settings::GetLastFile(prefix_stats, "monsters.csv");
 
         if(System::IsFile(spec))
 		Monster::LoadMonsterStatsFromCSVFile(spec);
