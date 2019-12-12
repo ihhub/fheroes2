@@ -164,7 +164,8 @@ void Monster::LoadMonsterStatsFromCSVFile()
 			{
 				std::stringstream cfgLine( line );
                 
-				while ( getline( cfgLine, stat, ',' ) ){
+				while ( getline( cfgLine, stat, ',' ) )
+				{
 					stats.push_back( stat );
 					statCounter++;
 				}
@@ -195,7 +196,8 @@ void Monster::LoadMonsterStatsFromCSVFile()
     
 	if( monsterVector.size() != sizeof(monsters) )
 		return;
-	else{
+	else
+	{
 		for( int i = 0; i < monsterVector.size(); i++ )
 			monsters[i] = monsterVector[i];
 	}
