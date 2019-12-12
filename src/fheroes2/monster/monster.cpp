@@ -245,6 +245,8 @@ float Monster::GetUpgradeRatio(void)
 
 void Monster::UpdateStats(const std::string & spec)
 {
+	bool isXMLFileLoaded = true;
+	
 	#ifdef WITH_XML
 	// parse monsters.xml
 	TiXmlDocument doc;
@@ -285,8 +287,14 @@ void Monster::UpdateStats(const std::string & spec)
 		}
 	}
 	else
+ 	{
 		VERBOSE(spec << ": " << doc.ErrorDesc());
+		isXMLFileLoaded = false;
+	}
 	#endif
+	
+	if ( !isXMLFileLoaded )
+		LoadMonsterStatsFromCSVFile();
 }
 
 Monster::Monster(int m) : id(UNKNOWN)
