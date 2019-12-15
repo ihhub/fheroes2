@@ -526,7 +526,7 @@ bool Settings::Save(const std::string & filename) const
     if(filename.empty()) return false;
 
     std::fstream file;
-    file.open( filename, std::fstream::out | std::fstream::trunc );
+    file.open( filename.data(), std::fstream::out | std::fstream::trunc );
     if ( !file )
         return false;
 
