@@ -712,7 +712,7 @@ std::vector<u8> StreamFile::getRaw(size_t sz)
 {
     std::vector<u8> v(sz ? sz : sizeg(), 0);
     if ( rw && !v.empty() )
-        SDL_RWread( rw, & v[0], v.size(), 1 );
+        SDL_RWread( rw, &v[0], v.size(), 1 );
     return v;
 }
 
