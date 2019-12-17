@@ -542,11 +542,11 @@ std::vector<u8> LoadFileToMem(const std::string & file)
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
     if ( rw == NULL )
         ERROR( SDL_GetError() );
-    
+
     const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
     if ( length < 0 )
         ERROR( SDL_GetError() );
-    
+
     if ( length > 0 ) {
         data.resize( length );
         SDL_RWseek( rw, 0, RW_SEEK_SET );
