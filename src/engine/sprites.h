@@ -56,7 +56,7 @@ public:
 
     void Save(const Point &);
     void Save(const Rect &);
-    void Restore(void);
+    void Restore() const;
     void Destroy(void);
     void SetPos(const Point &);
 
