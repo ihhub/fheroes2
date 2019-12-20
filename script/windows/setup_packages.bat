@@ -28,6 +28,6 @@ xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\lib\x86\SDL2_mixer.lib" "..\sdl2\lib\
 xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\lib\x64\SDL2_mixer.dll" "..\sdl2\lib\x64"
 xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\lib\x64\SDL2_mixer.lib" "..\sdl2\lib\x64"
 
-xcopy /Y /s /Q "zlib_32bit\include" "..\zlib\include"
-xcopy /Y /s /Q "zlib_32bit\lib" "..\zlib\lib\x86"
-xcopy /Y /s /Q "zlib_64bit\lib" "..\zlib\lib\x64"
+xcopy /Y /s /Q "zlib\include" "..\zlib\include"
+xcopy /Y /s /Q "zlib\lib\x86" "..\zlib\lib\x86"
+xcopy /Y /s /Q "zlib\lib\x64" "..\zlib\lib\x64"
