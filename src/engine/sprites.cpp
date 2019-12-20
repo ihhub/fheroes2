@@ -109,7 +109,7 @@ void SpriteBack::Save(const Point & pt)
     Save(Rect(pt, GetSize()));
 }
 
-void SpriteBack::Restore(void)
+void SpriteBack::Restore(void) const
 {
     if(Surface::isValid())
 	Blit(GetPos(), Display::Get());

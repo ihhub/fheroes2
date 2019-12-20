@@ -496,7 +496,7 @@ void Dialog::DwellingInfo(const Monster & monster, u32 available)
     const payment_t paymentMonster = monster.GetCost();
     const Sprite & box = AGG::GetICN(ICN::RECR2BKG, 0);
 
-    SpriteBack back( Rect( ( display.w() - box.w() ) / 2, 16, box.w(), box.h() ) );
+    const SpriteBack back( Rect( ( display.w() - box.w() ) / 2, 16, box.w(), box.h() ) );
     const Rect & pos = back.GetArea();
 
     box.Blit(pos.x, pos.y);
