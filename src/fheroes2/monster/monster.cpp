@@ -851,15 +851,15 @@ Monster Monster::Rand(level_t level)
         std::vector<size_t> sizes( LEVEL4 - LEVEL0 + 1 );
         cache.reserve( sizes.size() );
         for ( size_t i = PEASANT; i <= WATER_ELEMENT; ++i ) {
-            Monster monster(i);
-            assert( LEVEL0 <= monster.GetLevel() && monster.GetLevel() <= LEVEL4 );
-            ++sizes[monster.GetLevel() - LEVEL0];
+            const int level = Monster(i).GetLevel();
+            assert( LEVEL0 <= level && level <= LEVEL4 );
+            ++sizes[level - LEVEL0];
         }
         for ( size_t i = 0; i < sizes.size(); ++i ) {
             cache.resize( sizes[i] );
         }
         for ( size_t i = PEASANT; i <= WATER_ELEMENT; ++i ) {
-            Monster monster( i );
+            const Monster monster( i );
             cache[monster.GetLevel() - LEVEL0].push_back( monster );
         }
     }
