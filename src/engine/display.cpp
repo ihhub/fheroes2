@@ -53,23 +53,29 @@ void Display::SetVideoMode(int w, int h, bool fullscreen)
 {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
     u32 flags = SDL_WINDOW_SHOWN;
-    if(fullscreen)
+    if ( fullscreen )
         flags |= SDL_WINDOW_FULLSCREEN;
-        
-    if(renderer)
-	SDL_DestroyRenderer(renderer);
-        
-    if(window)
-        SDL_DestroyWindow(window);
+
+    if ( renderer )
+        SDL_DestroyRenderer( renderer );
+
+    std::string previousWindowTitle;
+    if ( window ) {
+        previousWindowTitle = SDL_GetWindowTitle( window );
+        SDL_DestroyWindow( window );
+    }
 
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
-    renderer = SDL_CreateRenderer(window, -1, System::GetRenderFlags());
+    renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
 
-    if(! renderer)
-        Error::Except(__FUNCTION__, SDL_GetError());
+    if ( !renderer )
+        Error::Except( __FUNCTION__, SDL_GetError() );
 
-    Set(w, h, false);
-    Fill(RGBA(0, 0, 0));
+    if ( !previousWindowTitle.empty() )
+        SDL_SetWindowTitle( window, previousWindowTitle.data() );
+
+    Set( w, h, false );
+    Fill( RGBA( 0, 0, 0 ) );
 #else
     u32 flags = System::GetRenderFlags();
 
