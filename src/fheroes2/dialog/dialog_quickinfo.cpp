@@ -116,7 +116,14 @@ std::string ShowArtifactInfo(const Maps::Tiles & tile, bool show)
 
 std::string ShowResourceInfo(const Maps::Tiles & tile, bool show, int scoute)
 {
-    std::string str = MP2::StringObject(tile.GetObject());
+    std::string str;
+
+    if ( MP2::OBJ_RESOURCE == tile.GetObject() ) {
+        str = Resource::String( tile.GetQuantity1() );
+    }
+    else {
+        str = MP2::StringObject( tile.GetObject() );
+    }
 
     if(show)
     {
