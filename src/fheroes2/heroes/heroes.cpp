@@ -1206,33 +1206,35 @@ int Heroes::GetDirection(void) const
 /* return route range in days */
 int Heroes::GetRangeRouteDays(s32 dst) const
 {
-    const u32 max = GetMaxMovePoints();
-    const u32 limit = max * 5 / 100; // limit ~5 day
+    const u32 maxMovePoints = GetMaxMovePoints();
+    const u32 limit = maxMovePoints * 5 / 100; // limit ~5 day
 
     // approximate distance, this restriction calculation
-    if((4 * max / 100) < Maps::GetApproximateDistance(GetIndex(), dst))
-    {
-	DEBUG(DBG_GAME, DBG_INFO, "distance limit");
-	return 0;
+    if ( ( 4 * maxMovePoints / 100 ) < Maps::GetApproximateDistance( GetIndex(), dst ) ) {
+        DEBUG(DBG_GAME, DBG_INFO, "distance limit");
+        return 0;
     }
 
-    Route::Path test(*this);
+    Route::Path test( *this );
     // approximate limit, this restriction path finding algorithm
-    if(test.Calculate(dst, limit))
-    {
-	u32 total = test.GetTotalPenalty();
-	if(move_point >= total) return 1;
+    if ( test.Calculate( dst, limit ) ) {
+        u32 total = test.GetTotalPenalty();
+        if ( move_point >= total )
+            return 1;
 
-	total -= move_point;
-	if(max >= total) return 2;
+        total -= move_point;
+        if ( maxMovePoints >= total )
+            return 2;
 
-	total -= move_point;
-	if(max >= total) return 3;
+        total -= maxMovePoints;
+        if ( maxMovePoints >= total )
+            return 3;
 
-	return 4;
+        return 4;
     }
-    else
-    DEBUG(DBG_GAME, DBG_INFO, "iteration limit: " << limit);
+    else {
+        DEBUG(DBG_GAME, DBG_INFO, "iteration limit: " << limit);
+    }
 
     return 0;
 }
