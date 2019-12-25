@@ -1217,21 +1217,20 @@ int Heroes::GetRangeRouteDays(s32 dst) const
 
     Route::Path test( *this );
     // approximate limit, this restriction path finding algorithm
-    if(test.Calculate(dst, limit))
-    {
-    u32 total = test.GetTotalPenalty();
-    if ( move_point >= total )
-        return 1;
+    if ( test.Calculate( dst, limit ) ) {
+        u32 total = test.GetTotalPenalty();
+        if ( move_point >= total )
+            return 1;
 
-    total -= move_point;
-    if ( maxMovePoints >= total )
-        return 2;
+        total -= move_point;
+        if ( maxMovePoints >= total )
+            return 2;
 
-    total -= maxMovePoints;
-    if ( maxMovePoints >= total )
-        return 3;
+        total -= maxMovePoints;
+        if ( maxMovePoints >= total )
+            return 3;
 
-    return 4;
+        return 4;
     }
     else {
         DEBUG(DBG_GAME, DBG_INFO, "iteration limit: " << limit);
