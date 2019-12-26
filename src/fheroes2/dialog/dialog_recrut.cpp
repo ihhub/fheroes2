@@ -140,15 +140,12 @@ void RedrawStaticInfo(const Rect & pos, const Monster & monster, bool label)
     dst_pt.y = pos.y + 103;
     text.Blit(dst_pt);
 
-    // crystal
-    if(paymentMonster.crystal)
-    {
-        const Sprite & sres = AGG::GetICN(ICN::RESOURCE, 4);
-	RedrawResourceInfo(sres, pos, paymentMonster.crystal,
-				225, 75, 240, 103);
-	dst_pt.x = pos.x + 180;
-	dst_pt.y = pos.y + 200;
-	sres.Blit(dst_pt);
+    if ( paymentMonster.crystal ) {
+        const Sprite & sres = AGG::GetICN( ICN::RESOURCE, 4 );
+        RedrawResourceInfo( sres, pos, paymentMonster.crystal, 222, 69, 240, 103 );
+        dst_pt.x = pos.x + 177;
+        dst_pt.y = pos.y + 194;
+        sres.Blit( dst_pt );
     }
     else
     // mercury
