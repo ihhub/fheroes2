@@ -74,8 +74,52 @@ int Game::NewCampain(void)
 {
     Settings::Get().SetGameType(Game::TYPE_CAMPAIGN);
 
-    const std::string str( "We are working hard to ensure that the support of Campaign would arrive as soon as possible" );
-    Dialog::Message("Campain Game mode is under construction.", str, Font::SMALL, Dialog::OK);
+    Mixer::Pause();
+    AGG::PlayMusic( MUS::VICTORY );
+    Settings & conf = Settings::Get();
+
+    // cursor
+    Cursor & cursor = Cursor::Get();
+    cursor.Hide();
+    cursor.SetThemes( cursor.POINTER );
+
+    Display & display = Display::Get();
+    display.Fill( ColorBlack );
+
+    const Sprite &back = AGG::GetICN( ICN::CAMPBKGG, 0 );
+    const Point top( (display.w() - back.w()) / 2, (display.h() - back.h()) / 2 );
+    back.Blit( top );
+
+    Button buttonViewIntro( top.x + 30 , top.y + 430, ICN::CAMPXTRG, 0, 1  );
+    Button buttonOk       ( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
+	Button buttonCancel   ( top.x + 520, top.y + 430, ICN::NGEXTRA, 68, 69 );
+
+    buttonViewIntro.SetDisable(true);
+    buttonViewIntro.Draw();
+    buttonOk.SetDisable(true);
+    buttonOk.Draw();
+    buttonCancel.Draw();
+
+    Text textDaysSpent( "0", Font::BIG );
+    textDaysSpent.Blit( top.x + 570 + textDaysSpent.w() / 2, top.y + 31 );
+
+    TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 356 );
+    textCaption.Blit( top.x + 36, top.y + 140 );
+
+    TextBox textDescription( "Campain Game mode is under construction", Font::BIG, 530 );
+    textDescription.Blit( top.x + 36, top.y + 292 );
+
+    LocalEvent & le = LocalEvent::Get();
+
+    cursor.Show();
+    display.Flip();
+
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+
+        if ( le.MouseClickLeft( buttonCancel ) )
+            return Game::NEWGAME;
+    }
 
     return Game::NEWGAME;
 }
