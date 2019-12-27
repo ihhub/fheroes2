@@ -31,6 +31,18 @@
 #include "world.h"
 #include "game.h"
 
+namespace
+{
+    void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, Point offset )
+    {
+        const Sprite & campaignMapIcon = AGG::GetICN( ICN::CAMPXTRG, icnId );
+        campaignMapIcon.Blit( offset.x + 40 + 73 * offsetXMultipler, offset.y + 356 + campaignMapIcon.h() * ( offsetYMultipler - 0.5 ) );
+        Text campaignMapText( std::to_string( id ), Font::YELLOW_BIG );
+        campaignMapText.Blit( offset.x + 40 + 73 * offsetXMultipler + campaignMapIcon.w(),
+                              offset.y + 356 + campaignMapIcon.h() * ( offsetYMultipler + 0.5 ) - campaignMapText.h() );
+    }
+}
+
 int Game::NewStandard(void)
 {
     Settings & conf = Settings::Get();
@@ -86,9 +98,9 @@ int Game::NewCampain(void)
     Display & display = Display::Get();
     display.Fill( ColorBlack );
 
-    const Sprite &back = AGG::GetICN( ICN::CAMPBKGG, 0 );
-    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
-    back.Blit( top );
+    const Sprite & backgroundImage = AGG::GetICN( ICN::CAMPBKGG, 0 );
+    const Point top( ( display.w() - backgroundImage.w() ) / 2, ( display.h() - backgroundImage.h() ) / 2 );
+    backgroundImage.Blit( top );
 
     Button buttonViewIntro( top.x + 30 , top.y + 430, ICN::CAMPXTRG, 0, 1  );
     Button buttonOk       ( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
@@ -106,8 +118,19 @@ int Game::NewCampain(void)
     TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 356 );
     textCaption.Blit( top.x + 36, top.y + 140 );
 
-    TextBox textDescription( "Campain Game mode is under construction", Font::BIG, 530 );
-    textDescription.Blit( top.x + 36, top.y + 292 );
+    TextBox textDescription( "Campaign Game mode is under construction", Font::BIG, 356 );
+    textDescription.Blit( top.x + 36, top.y + 200 );
+
+    DrawCampaignScenarioIcon( 1,   0,  0, 14, top );
+    DrawCampaignScenarioIcon( 2,   1,  0, 15, top );
+    DrawCampaignScenarioIcon( 3, 1.5, -1, 15, top );
+    DrawCampaignScenarioIcon( 4,   2,  0, 15, top );
+    DrawCampaignScenarioIcon( 5,   3,  0, 15, top );
+    DrawCampaignScenarioIcon( 6,   4,  0, 15, top );
+    DrawCampaignScenarioIcon( 7,   5,  0, 15, top );
+    DrawCampaignScenarioIcon( 8,   6, -1, 15, top );
+    DrawCampaignScenarioIcon( 9,   6,  1, 15, top );
+    DrawCampaignScenarioIcon( 10,  7,  0, 15, top );
 
     LocalEvent & le = LocalEvent::Get();
 
