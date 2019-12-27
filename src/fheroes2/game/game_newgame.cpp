@@ -33,6 +33,10 @@
 
 namespace
 {
+    const std::string rolandCampaignDescription[] = {
+        _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother. They are not allied with each other, so they will spend most of their time fighting with on another. Victory is yours when you have defeated all of their castles and heroes." )
+    };
+
     void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, Point offset )
     {
         const Sprite & campaignMapIcon = AGG::GetICN( ICN::CAMPXTRG, icnId );
@@ -41,11 +45,50 @@ namespace
         campaignMapText.Blit( offset.x + 40 + 73 * offsetXMultipler + campaignMapIcon.w(),
                               offset.y + 356 + campaignMapIcon.h() * ( offsetYMultipler + 0.5 ) - campaignMapText.h() );
     }
+
+    bool hasEnding( std::string const & fullString, std::string const & ending )
+    {
+        if ( fullString.length() >= ending.length() )
+            return (0 == fullString.compare( fullString.length() - ending.length(), ending.length(), ending ));
+        else
+            return false;
+    }
+
+    std::vector<Maps::FileInfo> GetRolandCampaign()
+    {
+        const size_t rolandMapCount = 11;
+        static const std::string rolandMap[rolandMapCount] = { "CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C",  "CAMPG05.H2C", "CAMPG05B.H2C", "CAMPG06.H2C",
+                                                               "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C" };
+        const Settings & conf = Settings::Get();
+        const ListFiles files = conf.GetListFiles("maps", ".h2c");
+
+        std::vector<Maps::FileInfo> maps;
+
+        for ( size_t i = 0; i < rolandMapCount; ++i ) {
+            bool isPresent = false;
+            for ( ListFiles::const_iterator file = files.begin(); file != files.end(); ++file ) {
+                if ( hasEnding( *file, rolandMap[i] ) ) {
+                    Maps::FileInfo fi;
+                    if ( fi.ReadMP2( *file ) ) {
+                        maps.push_back(fi);
+                        isPresent = true;
+                        break;
+                    }
+                }
+            }
+            if ( !isPresent )
+                return std::vector<Maps::FileInfo>();
+        }
+
+        return maps;
+    }
 }
 
 int Game::NewStandard(void)
 {
     Settings & conf = Settings::Get();
+    if ( conf.GameType() == Game::TYPE_CAMPAIGN )
+        conf.SetCurrentFileInfo( Maps::FileInfo() );
     conf.SetGameType(Game::TYPE_STANDARD);
     conf.SetPreferablyCountPlayers(0);
     return Game::SELECTSCENARIO;
@@ -62,6 +105,9 @@ int Game::NewBattleOnly(void)
 int Game::NewHotSeat(void)
 {
     Settings & conf = Settings::Get();
+    if ( conf.GameType() == Game::TYPE_CAMPAIGN )
+        conf.SetCurrentFileInfo( Maps::FileInfo() );
+
     conf.SetGameType(conf.GameType() | Game::TYPE_HOTSEAT);
 
     if(conf.GameType(Game::TYPE_BATTLEONLY))
@@ -106,20 +152,34 @@ int Game::NewCampain(void)
     Button buttonOk       ( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
     Button buttonCancel   ( top.x + 520, top.y + 430, ICN::NGEXTRA, 68, 69 );
 
+    const std::vector<Maps::FileInfo> & campaignMap = GetRolandCampaign();
+
     buttonViewIntro.SetDisable( true );
     buttonViewIntro.Draw();
-    buttonOk.SetDisable( true );
+    buttonOk.SetDisable( campaignMap.empty() );
     buttonOk.Draw();
     buttonCancel.Draw();
 
     Text textDaysSpent( "0", Font::BIG );
     textDaysSpent.Blit( top.x + 570 + textDaysSpent.w() / 2, top.y + 31 );
 
-    TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 356 );
-    textCaption.Blit( top.x + 36, top.y + 140 );
+    if ( !campaignMap.empty() ) {
+        TextBox mapName( campaignMap[0].description, Font::BIG, 200 );
+        mapName.Blit( top.x + 200, top.y + 97 - mapName.h() / 2 );
 
-    TextBox textDescription( "Campaign Game mode is under construction", Font::BIG, 356 );
-    textDescription.Blit( top.x + 36, top.y + 200 );
+        Text campaignMapId( "1", Font::BIG );
+        campaignMapId.Blit( top.x + 175 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
+
+        TextBox mapDescription( rolandCampaignDescription[0], Font::BIG, 350 );
+        mapDescription.Blit( top.x + 40, top.y + 140 );
+    }
+    else {
+        TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 350 );
+        textCaption.Blit( top.x + 40, top.y + 140 );
+
+        TextBox textDescription( "Campaign Game mode is under construction", Font::BIG, 350 );
+        textDescription.Blit( top.x + 40, top.y + 200 );
+    }
 
     DrawCampaignScenarioIcon( 1,   0,  0, 14, top );
     DrawCampaignScenarioIcon( 2,   1,  0, 15, top );
@@ -138,10 +198,30 @@ int Game::NewCampain(void)
     display.Flip();
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+        if ( !buttonCancel.isDisable() )
+            le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+        if ( !buttonOk.isDisable() )
+            le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
 
         if ( le.MouseClickLeft( buttonCancel ) )
             return Game::NEWGAME;
+        else if ( le.MouseClickLeft( buttonOk ) ) {
+            conf.SetCurrentFileInfo( campaignMap[0] );
+            Players & players = conf.GetPlayers();
+            players.SetStartGame();
+            if ( conf.ExtGameUseFade() )
+                display.Fade();
+            Game::ShowLoadMapsText();
+            conf.SetGameType( Game::TYPE_CAMPAIGN );
+
+            if ( !world.LoadMapMP2( campaignMap[0].file ) ) {
+                Dialog::Message( "Campaign Game loading failure", "Please make sure that campaign files are correct and present", Font::SMALL, Dialog::OK );
+                conf.SetCurrentFileInfo( Maps::FileInfo() );
+                continue;
+            }
+
+            return Game::STARTGAME;
+        }
     }
 
     return Game::NEWGAME;
