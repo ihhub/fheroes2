@@ -108,10 +108,9 @@ void ScenarioListBox::RedrawBackground(const Point & dst)
     {
 	AGG::GetICN(ICN::REQSBKG, 0).Blit(dst);
 
-	if(content && cur != content->end())
-	{
+    if ( isSelected() ) {
 	    Text text;
-	    const Maps::FileInfo & info = *cur;
+	    const Maps::FileInfo & info = GetCurrent();
 	    int index = 19 + Color::Count(info.kingdom_colors);
 
 	    const Sprite & spriteCount = AGG::GetICN(ICN::REQUESTS, index);
