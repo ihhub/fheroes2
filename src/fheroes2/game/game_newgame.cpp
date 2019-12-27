@@ -87,16 +87,16 @@ int Game::NewCampain(void)
     display.Fill( ColorBlack );
 
     const Sprite &back = AGG::GetICN( ICN::CAMPBKGG, 0 );
-    const Point top( (display.w() - back.w()) / 2, (display.h() - back.h()) / 2 );
+    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
     back.Blit( top );
 
     Button buttonViewIntro( top.x + 30 , top.y + 430, ICN::CAMPXTRG, 0, 1  );
     Button buttonOk       ( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
-	Button buttonCancel   ( top.x + 520, top.y + 430, ICN::NGEXTRA, 68, 69 );
+    Button buttonCancel   ( top.x + 520, top.y + 430, ICN::NGEXTRA, 68, 69 );
 
-    buttonViewIntro.SetDisable(true);
+    buttonViewIntro.SetDisable( true );
     buttonViewIntro.Draw();
-    buttonOk.SetDisable(true);
+    buttonOk.SetDisable( true );
     buttonOk.Draw();
     buttonCancel.Draw();
 
