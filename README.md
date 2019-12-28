@@ -21,7 +21,7 @@ Please follow below instructions to be able to compile the project:
 **Windows**
 - **Optional step**: Install **7-zip** archiver at your local system's folder as- `C:\Program Files\7-Zip\7z.exe` or otherwise, you will need to manually extract each downloaded package (follow instructions shown by batch script files mentioned below).
 - open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
-- open `script/demo` directory and run **demo.bat** file. It downloads demo version of the game which is needed for minimum development.
+- open `script/demo` directory and run **demo_windows.bat** file. It downloads demo version of the game which is needed for minimum development.
 - open **fheroes.vcxproj** by Visual Studio and compile the project.
 
 **MacOS and Linux**
