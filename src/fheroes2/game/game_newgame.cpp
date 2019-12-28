@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sstream>
 #include "gamedefs.h"
 #include "agg.h"
 #include "dialog.h"
@@ -37,11 +38,18 @@ namespace
         _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother. They are not allied with each other, so they will spend most of their time fighting with on another. Victory is yours when you have defeated all of their castles and heroes." )
     };
 
+    std::string ConvertToString( int value )
+    {
+        std::ostringstream ostr;
+        ostr << value;
+        return ostr.str();
+    }
+
     void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, Point offset )
     {
         const Sprite & campaignMapIcon = AGG::GetICN( ICN::CAMPXTRG, icnId );
         campaignMapIcon.Blit( offset.x + 40 + 73 * offsetXMultipler, offset.y + 356 + campaignMapIcon.h() * ( offsetYMultipler - 0.5 ) );
-        Text campaignMapText( std::to_string( id ), Font::YELLOW_BIG );
+        Text campaignMapText( ConvertToString( id ), Font::YELLOW_BIG );
         campaignMapText.Blit( offset.x + 40 + 73 * offsetXMultipler + campaignMapIcon.w(),
                               offset.y + 356 + campaignMapIcon.h() * ( offsetYMultipler + 0.5 ) - campaignMapText.h() );
     }
