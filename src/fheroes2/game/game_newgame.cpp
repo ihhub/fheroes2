@@ -180,6 +180,16 @@ int Game::NewCampain(void)
 
         TextBox mapDescription( rolandCampaignDescription[0], Font::BIG, 350 );
         mapDescription.Blit( top.x + 40, top.y + 140 );
+
+        TextBox awards( _("None"), Font::BIG, 180 );
+        awards.Blit( top.x + 425, top.y + 100 );
+
+        Text choice1( _("2000 Gold"), Font::BIG );
+        choice1.Blit( top.x + 425, top.y + 209 - choice1.h() / 2 );
+        Text choice2( _("Thunder Mace"), Font::BIG );
+        choice2.Blit( top.x + 425, top.y + 209 + 23 - choice2.h() / 2 );
+        Text choice3( _("Gauntlets"), Font::BIG );
+        choice3.Blit( top.x + 425, top.y + 209 + 45 - choice3.h() / 2 );
     }
     else {
         TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 350 );
