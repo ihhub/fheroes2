@@ -40,7 +40,7 @@ public:
     void        ResetModes(u32 f) { modes &= ~f; }
     void        ToggleModes(u32 f) { modes ^= f; }
 
-    bool        Modes(u32 f) const { return (modes & f); }
+    bool        Modes(u32 f) const { return ( modes & f ) != 0; }
 
 protected:
     friend StreamBase & operator<< (StreamBase &, const BitModes &);
