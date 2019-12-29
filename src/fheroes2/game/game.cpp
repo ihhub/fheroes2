@@ -455,7 +455,7 @@ int Game::GetActualKingdomColors(void)
 #include <cmath>
 std::string Game::CountScoute(u32 count, int scoute, bool shorts)
 {
-    float infelicity = 0;
+    double infelicity = 0;
     std::string res;
 
     switch(scoute)

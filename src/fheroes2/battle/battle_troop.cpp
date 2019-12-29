@@ -1193,7 +1193,7 @@ s32 Battle::Unit::GetScoreQuality(const Unit & defender) const
     // initial value: (hitpoints)
     const u32 & damage = (attacker.GetDamageMin(defender) + attacker.GetDamageMax(defender)) / 2;
     const u32 & kills = defender.HowManyWillKilled(attacker.isTwiceAttack() ? damage * 2 : damage);
-    float res = kills * static_cast<Monster>(defender).GetHitPoints();
+    double res = kills * static_cast<Monster>(defender).GetHitPoints();
     bool noscale = false;
 
     // attacker
