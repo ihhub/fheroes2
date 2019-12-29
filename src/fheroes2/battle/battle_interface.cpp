@@ -3770,8 +3770,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell(const std::vector<int> & tar
 		pt2.x += area.x;
 		pt2.y += area.y;
 
-		const Sprite & sprite = AGG::GetICN(icn, frame);
-		sprite.Blit(pt2.x + sprite.x(), pt2.y + sprite.y());
+            const Sprite & spriteCloud = AGG::GetICN( icn, frame );
+            spriteCloud.Blit( pt2.x + spriteCloud.x(), pt2.y + spriteCloud.y() );
 	    }
 
 	    cursor.Show();
