@@ -223,7 +223,7 @@ int Game::NewCampain(void)
 
         if ( le.MouseClickLeft( buttonCancel ) )
             return Game::NEWGAME;
-        else if ( le.MouseClickLeft( buttonOk ) ) {
+        else if ( !buttonOk.isDisable() && le.MouseClickLeft( buttonOk ) ) {
             conf.SetCurrentFileInfo( campaignMap[0] );
             Players & players = conf.GetPlayers();
             players.SetStartGame();
