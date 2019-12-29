@@ -119,7 +119,7 @@ struct HeroHasArtifact : public std::binary_function <const HeroBase*, Artifact,
 {
     bool operator() (const HeroBase* hero, Artifact art) const
     {
-        return hero->HasArtifact(art);
+        return hero->HasArtifact(art) > 0;
     }
 };
 
