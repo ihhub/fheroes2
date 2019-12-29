@@ -705,7 +705,7 @@ u32 Battle::Unit::CalculateDamageUnit(const Unit & enemy, float dmg) const
     // approximate.. from faq
     int r = GetAttack() - enemy.GetDefense();
     if(enemy.isDragons() && Modes(SP_DRAGONSLAYER)) r+= Spell(Spell::DRAGONSLAYER).ExtraValue();
-    dmg *= 1 + (0 < r ? 0.1 * std::min(r,  20) : 0.05 * std::max(r, -15));
+    dmg *= 1 + (0 < r ? 0.1f * std::min(r,  20) : 0.05f * std::max(r, -15));
 
     return static_cast<u32>(dmg) < 1 ? 1 : static_cast<u32>(dmg);
 }
@@ -1193,7 +1193,7 @@ s32 Battle::Unit::GetScoreQuality(const Unit & defender) const
     // initial value: (hitpoints)
     const u32 & damage = (attacker.GetDamageMin(defender) + attacker.GetDamageMax(defender)) / 2;
     const u32 & kills = defender.HowManyWillKilled(attacker.isTwiceAttack() ? damage * 2 : damage);
-    float res = kills * static_cast<Monster>(defender).GetHitPoints();
+    double res = kills * static_cast<Monster>(defender).GetHitPoints();
     bool noscale = false;
 
     // attacker

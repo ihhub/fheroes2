@@ -59,7 +59,7 @@ class ObjectColor : public std::pair<int, int>
     ObjectColor(int object, int color) : std::pair<int, int>(object, color) {};
 
     bool isObject(int object) const { return object == first; };
-    bool isColor(int colors) const { return colors & second; };
+    bool isColor(int colors) const { return ( colors & second ) != 0; };
 };
 
 StreamBase & operator>> (StreamBase &, ObjectColor &);

@@ -1133,14 +1133,14 @@ bool Army::TroopsStrongerEnemyTroops(const Troops & troops1, const Troops & troo
     float r2 = 0;
 
     if(a1 > d2)
-        r1 = 1 + 0.1 * static_cast<float>(std::min(a1 - d2, 20));
+        r1 = 1 + 0.1f * static_cast<float>(std::min(a1 - d2, 20));
     else
-        r1 = 1 + 0.05 * static_cast<float>(std::min(d2 - a1, 14));
+        r1 = 1 + 0.05f * static_cast<float>(std::min(d2 - a1, 14));
 
     if(a2 > d1)
-        r2 = 1 + 0.1 * static_cast<float>(std::min(a2 - d1, 20));
+        r2 = 1 + 0.1f * static_cast<float>(std::min(a2 - d1, 20));
     else
-        r2 = 1 + 0.05 * static_cast<float>(std::min(d1 - a2, 14));
+        r2 = 1 + 0.05f * static_cast<float>(std::min(d1 - a2, 14));
 
     const u32 s1 = troops1.GetStrength();
     const u32 s2 = troops2.GetStrength();
