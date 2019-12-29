@@ -1677,16 +1677,15 @@ void Battle::Interface::HumanBattleTurn(const Unit & b, Actions & a, std::string
 
 	if(le.MouseClickLeft(main_tower) || le.MousePressRight(main_tower))
 	{
-	    const Castle* cstl = Arena::GetCastle();
-	    std::string msg = Tower::GetInfo(*cstl);
+        const Castle * cstl = Arena::GetCastle();
+        std::string ballistaMessage = Tower::GetInfo( *cstl );
 
-	    if(cstl->isBuild(BUILD_MOAT))
-	    {
-		msg.append("\n \n");
-		msg.append(Battle::Board::GetMoatInfo());
-	    }
+        if ( cstl->isBuild(BUILD_MOAT) ) {
+            ballistaMessage.append( "\n \n" );
+            ballistaMessage.append( Battle::Board::GetMoatInfo() );
+        }
 
-	    Dialog::Message(_("Ballista"), msg, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK);
+        Dialog::Message( _("Ballista"), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
 	}
     }
     else
@@ -2830,7 +2829,7 @@ void Battle::Interface::RedrawActionLuck(Unit & b)
 
 	cursor.SetThemes(Cursor::WAR_NONE);
 
-	if(M82::UNKNOWN != m82) AGG::PlaySound(m82);
+        AGG::PlaySound( m82 );
 
 	while(le.HandleEvents() && width < sunbow.w())
 	{
