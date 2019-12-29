@@ -267,55 +267,51 @@ void Interface::Radar::RedrawObjects(int color)
 #else
 	    const bool & show_tile = ! tile.isFog(color);
 #endif
-	    RGBA color(0, 0, 0);
+            RGBA fillColor( 0, 0, 0 );
 
-	    if(show_tile)
-	    {
-		switch(tile.GetObject())
-		{
-		    case MP2::OBJ_HEROES:
-		    {
-			const Heroes* hero = world.GetHeroes(tile.GetCenter());
-			if(hero) color = AGG::GetPaletteColor(GetPaletteIndexFromColor(hero->GetColor()));
-		    }
-		    break;
+            if ( show_tile ) {
+                switch ( tile.GetObject() ) {
+                    case MP2::OBJ_HEROES:
+                    {
+                        const Heroes * hero = world.GetHeroes( tile.GetCenter() );
+                        if ( hero )
+                            fillColor = AGG::GetPaletteColor( GetPaletteIndexFromColor( hero->GetColor() ) );
+                    }
+                    break;
 
-		    case MP2::OBJ_CASTLE:
-		    case MP2::OBJN_CASTLE:
-		    {
-			const Castle* castle = world.GetCastle(tile.GetCenter());
-			if(castle) color = AGG::GetPaletteColor(GetPaletteIndexFromColor(castle->GetColor()));
-		    }
-		    break;
+                    case MP2::OBJ_CASTLE:
+                    case MP2::OBJN_CASTLE:
+                    {
+                        const Castle * castle = world.GetCastle( tile.GetCenter() );
+                        if ( castle )
+                            fillColor = AGG::GetPaletteColor( GetPaletteIndexFromColor( castle->GetColor() ) );
+                    }
+                    break;
 
-		    case MP2::OBJ_DRAGONCITY:
-		    //case MP2::OBJN_DRAGONCITY:
-		    case MP2::OBJ_LIGHTHOUSE:
-		    //case MP2::OBJN_LIGHTHOUSE:
-		    case MP2::OBJ_ALCHEMYLAB:
-		    //case MP2::OBJN_ALCHEMYLAB:
-		    case MP2::OBJ_MINES:
-		    //case MP2::OBJN_MINES:
-		    case MP2::OBJ_SAWMILL:
-		    //case MP2::OBJN_SAWMILL:
-			color = AGG::GetPaletteColor(GetPaletteIndexFromColor(tile.QuantityColor())); break;
+                    case MP2::OBJ_DRAGONCITY:
+                    case MP2::OBJ_LIGHTHOUSE:
+                    case MP2::OBJ_ALCHEMYLAB:
+                    case MP2::OBJ_MINES:
+                    case MP2::OBJ_SAWMILL:
+                        fillColor = AGG::GetPaletteColor( GetPaletteIndexFromColor( tile.QuantityColor() ) );
+                        break;
 
-		    default: continue;
-		}
-	    }
-
-            const int dstx = rect.x + offset.x + (xx * areaw) / world_w;
-            const int dsty = rect.y + offset.y + (yy * areah) / world_h;
-
-            if(sw > 1)
-            {
-                sf.Fill(color);
-                sf.Blit(dstx, dsty, display);
+                    default: continue;
+                }
             }
-            else
-            if(dstx < display.w() && dsty < display.h())
-                display.DrawPoint(Point(dstx, dsty), color);
-	}
+
+            const int dstx = rect.x + offset.x + ( xx * areaw ) / world_w;
+            const int dsty = rect.y + offset.y + ( yy * areah ) / world_h;
+
+            if ( sw > 1 ) {
+                sf.Fill( fillColor );
+                sf.Blit( dstx, dsty, display );
+            }
+            else {
+                if ( dstx < display.w() && dsty < display.h() )
+                    display.DrawPoint( Point( dstx, dsty ), fillColor );
+            }
+        }
     }
 }
 
