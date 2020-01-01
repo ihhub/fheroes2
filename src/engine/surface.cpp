@@ -39,11 +39,7 @@
 
 namespace
 {
-#if SDL_VERSION_ATLEAST(2, 0, 0)
     u32 default_depth = 32;
-#else
-    u32 default_depth = 16;
-#endif
     RGBA default_color_key;
     SDL_Color* pal_colors = NULL;
     u32 pal_nums = 0;
