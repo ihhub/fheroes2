@@ -226,6 +226,7 @@ void MapSign::LoadFromMP2(s32 index, StreamBuf st)
     message = st.toString();
 
     SetIndex(index);
+    SetUID(index);
     message = Game::GetEncodeString(message);
     DEBUG(DBG_GAME , DBG_INFO, "sign" << ": " << message);
 }
