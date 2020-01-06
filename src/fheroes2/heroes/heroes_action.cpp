@@ -1377,7 +1377,7 @@ void ActionToPoorLuckObject(Heroes & hero, u32 obj, s32 dst_index)
 void ActionToSign(Heroes & hero, u32 obj, s32 dst_index)
 {
     PlaySoundWarning;
-    MapSign* sign = static_cast<MapSign*>(world.GetMapObject(dst_index));
+    MapSign * sign = static_cast<MapSign *>( world.GetMapObject( dst_index ) );
     Dialog::Message(_("Sign"), (sign ? sign->message : ""), Font::BIG, Dialog::OK);
     DEBUG(DBG_GAME, DBG_INFO, hero.GetName());
 }
