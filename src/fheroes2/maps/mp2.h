@@ -170,7 +170,7 @@ namespace MP2
 	u8	unknown4[15];	// 0
     };
 
-    // origin mp2 sign or buttle
+    // origin mp2 sign or bottle
     struct mp2info_t
     {
 	u8	id;		// 0x01
