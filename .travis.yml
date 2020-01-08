@@ -28,7 +28,7 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_linux_sdl1.zip"
         skip_cleanup: true
-        name: Linux build with SDL 1 support (latest commit)
+        name: Linux (Ubuntu) build with SDL 1 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
@@ -52,7 +52,7 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_linux_sdl2.zip"
         skip_cleanup: true
-        name: Linux build with SDL 2 support (latest commit)
+        name: Linux (Ubuntu) build with SDL 2 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
@@ -76,7 +76,7 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_linux_arm_sdl1.zip"
         skip_cleanup: true
-        name: Linux ARM build with SDL 1 support (latest commit)
+        name: Linux (Ubuntu) ARM build with SDL 1 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
@@ -101,7 +101,7 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_linux_arm_sdl2.zip"
         skip_cleanup: true
-        name: Linux ARM build with SDL 2 support (latest commit)
+        name: Linux (Ubuntu) ARM build with SDL 2 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
