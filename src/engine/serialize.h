@@ -83,7 +83,7 @@ public:
     void		put32(u32);
 
     int                 get(void) { return get8(); } // get char
-    void                put(int ch) { put8(ch); }
+    void                put(char ch) { put8(ch); }
 
     StreamBase &	operator>> (bool &);
     StreamBase &	operator>> (char &);
