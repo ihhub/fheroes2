@@ -12,7 +12,7 @@ branches:
 matrix:
   include:
     - os: linux
-      name: "Linux with SDL 1.2"
+      name: "Linux (Ubuntu) with SDL 1.2"
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libsdl1.2-dev
@@ -28,14 +28,14 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_linux_sdl1.zip"
         skip_cleanup: true
-        name: Linux build with SDL 1 support (latest commit)
+        name: Linux (Ubuntu) build with SDL 1 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
         on:
           branch: master
     - os: linux
-      name: "Linux with SDL 2.0"
+      name: "Linux (Ubuntu) with SDL 2.0"
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libsdl2-dev
@@ -52,7 +52,58 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_linux_sdl2.zip"
         skip_cleanup: true
-        name: Linux build with SDL 2 support (latest commit)
+        name: Linux (Ubuntu) build with SDL 2 support (latest commit)
+        body: Compiled version of $TRAVIS_COMMIT commit
+        prerelease: true
+        overwrite: true
+        on:
+          branch: master
+    - os: linux
+      arch: arm64
+      name: "Linux (Ubuntu) ARM with SDL 1.2"
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get install -y libsdl1.2-dev
+        - sudo apt-get install -y libsdl-ttf2.0-dev
+        - sudo apt-get install -y libsdl-mixer1.2-dev
+        - sudo apt-get install -y libsdl-image1.2-dev
+        - sudo apt-get install -y gettext
+      before_deploy:
+        - zip fheroes2_linux_arm_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh
+        - export TRAVIS_TAG=fheroes2-linux-arm-sdl1_dev
+        - git tag -f $TRAVIS_TAG
+      deploy:
+        provider: releases
+        api_key: "$GITHUB_OAUTH_TOKEN"
+        file: "fheroes2_linux_arm_sdl1.zip"
+        skip_cleanup: true
+        name: Linux (Ubuntu) ARM build with SDL 1 support (latest commit)
+        body: Compiled version of $TRAVIS_COMMIT commit
+        prerelease: true
+        overwrite: true
+        on:
+          branch: master
+    - os: linux
+      arch: arm64
+      name: "Linux (Ubuntu) ARM with SDL 2.0"
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get install -y libsdl2-dev
+        - sudo apt-get install -y libsdl2-ttf-dev
+        - sudo apt-get install -y libsdl2-mixer-dev
+        - sudo apt-get install -y libsdl2-image-dev
+        - sudo apt-get install -y gettext
+        - export WITH_SDL2="ON"
+      before_deploy:
+        - zip fheroes2_linux_arm_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh
+        - export TRAVIS_TAG=fheroes2-linux-arm-sdl2_dev
+        - git tag -f $TRAVIS_TAG
+      deploy:
+        provider: releases
+        api_key: "$GITHUB_OAUTH_TOKEN"
+        file: "fheroes2_linux_arm_sdl2.zip"
+        skip_cleanup: true
+        name: Linux (Ubuntu) ARM build with SDL 2 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
@@ -132,4 +183,4 @@ matrix:
 
 script:
   - |
-    make
+    make -j 2
