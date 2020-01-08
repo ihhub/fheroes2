@@ -12,7 +12,7 @@ branches:
 matrix:
   include:
     - os: linux
-      name: "Linux with SDL 1.2"
+      name: "Linux (Ubuntu) with SDL 1.2"
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libsdl1.2-dev
@@ -35,7 +35,7 @@ matrix:
         on:
           branch: master
     - os: linux
-      name: "Linux with SDL 2.0"
+      name: "Linux (Ubuntu) with SDL 2.0"
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libsdl2-dev
@@ -60,13 +60,14 @@ matrix:
           branch: master
     - os: linux
       arch: arm64
-      name: "Linux ARM with SDL 1.2"
+      name: "Linux (Ubuntu) ARM with SDL 1.2"
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libsdl1.2-dev
         - sudo apt-get install -y libsdl-ttf2.0-dev
         - sudo apt-get install -y libsdl-mixer1.2-dev
         - sudo apt-get install -y libsdl-image1.2-dev
+        - sudo apt-get install -y gettext
       before_deploy:
         - zip fheroes2_linux_arm_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh
         - export TRAVIS_TAG=fheroes2-linux-arm-sdl1_dev
@@ -84,13 +85,14 @@ matrix:
           branch: master
     - os: linux
       arch: arm64
-      name: "Linux ARM with SDL 2.0"
+      name: "Linux (Ubuntu) ARM with SDL 2.0"
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libsdl2-dev
         - sudo apt-get install -y libsdl2-ttf-dev
         - sudo apt-get install -y libsdl2-mixer-dev
         - sudo apt-get install -y libsdl2-image-dev
+        - sudo apt-get install -y gettext
         - export WITH_SDL2="ON"
       before_deploy:
         - zip fheroes2_linux_arm_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh
