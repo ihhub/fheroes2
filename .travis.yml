@@ -183,4 +183,4 @@ matrix:
 
 script:
   - |
-    make
+    make -j 2
