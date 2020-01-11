@@ -24,7 +24,6 @@
 #define H2BATTLE_CATAPULT_H
 
 #include "gamedefs.h"
-#include "battle_arena.h"
 
 class HeroBase;
 

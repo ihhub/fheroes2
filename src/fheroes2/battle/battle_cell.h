@@ -24,7 +24,6 @@
 #define H2BATTLE_CELL_H
 
 #include "gamedefs.h"
-#include "battle.h"
 
 #define CELLW 45
 #define CELLH 52
