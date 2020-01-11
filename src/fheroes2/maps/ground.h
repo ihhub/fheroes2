@@ -27,8 +27,6 @@
 
 namespace Maps
 {
-    class Tiles;
-
     namespace Ground
     {
         enum

@@ -23,7 +23,6 @@
 #ifndef H2EDITOR_DIALOGS_H
 #define H2EDITOR_DIALOGS_H
 
-#include "dialog.h"
 #include "monster.h"
 #include "heroes.h"
 #include "artifact.h"

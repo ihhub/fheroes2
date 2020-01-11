@@ -35,7 +35,6 @@
 
 class Recruits;
 class Surface;
-class MageGuild;
 namespace Battle { class Only; }
 
 class Heroes : public HeroBase, public ColorBase

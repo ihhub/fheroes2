@@ -24,7 +24,6 @@
 
 #include <vector>
 #include <map>
-#include "payment.h"
 #include "puzzle.h"
 #include "mp2.h"
 #include "pairs.h"
@@ -32,7 +31,6 @@
 #include "castle.h"
 #include "heroes_recruits.h"
 
-class Player;
 class Castle;
 class Heroes;
 struct AllHeroes;

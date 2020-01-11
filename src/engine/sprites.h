@@ -23,7 +23,6 @@
 #ifndef H2SPRITES_H
 #define H2SPRITES_H
 
-#include "display.h"
 #include "surface.h"
 
 class SpritePos : public Surface
