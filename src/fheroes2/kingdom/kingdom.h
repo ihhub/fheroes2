@@ -31,7 +31,6 @@
 #include "castle.h"
 #include "heroes_recruits.h"
 
-class Player;
 class Castle;
 class Heroes;
 struct AllHeroes;
