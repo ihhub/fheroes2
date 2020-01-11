@@ -26,6 +26,7 @@
 
 #include "audio_music.h"
 #include "engine.h"
+#include "error.h"
 #include "system.h"
 #include "gamedefs.h"
 #include "settings.h"

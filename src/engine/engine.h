@@ -25,7 +25,6 @@
 #include "types.h"
 #include "sprites.h"
 #include "display.h"
-#include "error.h"
 #include "rand.h"
 #include "font.h"
 #include "tools.h"
