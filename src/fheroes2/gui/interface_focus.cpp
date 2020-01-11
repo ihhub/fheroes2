@@ -31,6 +31,7 @@
 #include "kingdom.h"
 #include "game.h"
 #include "game_interface.h"
+#include "mus.h"
 
 void Interface::Basic::SetFocus(Heroes* hero)
 {

@@ -31,6 +31,7 @@
 #include "pocketpc.h"
 #include "world.h"
 #include "game.h"
+#include "mus.h"
 
 namespace
 {

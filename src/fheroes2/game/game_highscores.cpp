@@ -39,6 +39,7 @@
 #include "zzlib.h"
 #include "game.h"
 #include "game_over.h"
+#include "mus.h"
 
 #define HGS_ID	0xF1F3
 #define HGS_MAX	10

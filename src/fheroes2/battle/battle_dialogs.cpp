@@ -37,6 +37,7 @@
 #include "battle_army.h"
 #include "world.h"
 #include "battle.h"
+#include "mus.h"
 
 namespace Battle
 {

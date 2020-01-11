@@ -42,6 +42,7 @@
 #include "statusbar.h"
 #include "army_bar.h"
 #include "pocketpc.h"
+#include "mus.h"
 
 void CastleRedrawTownName(const Castle & castle, const Point & dst);
 
