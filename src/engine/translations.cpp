@@ -300,7 +300,8 @@ namespace Translation
 
     const char* gettext(const std::string & str)
     {
-	return gettext(str.c_str());
+        const char * data = str.data();
+        return stripContext( current ? current->ngettext( data, 0 ) : data );
     }
 
     const char* gettext(const char* str)
