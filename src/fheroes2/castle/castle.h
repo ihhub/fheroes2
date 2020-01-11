@@ -34,7 +34,6 @@
 #include "position.h"
 
 class Heroes;
-namespace Maps { class Tiles; }
 
 class MeetingButton : public ButtonSprite
 {

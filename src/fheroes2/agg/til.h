@@ -23,10 +23,6 @@
 #ifndef H2TIL_H
 #define H2TIL_H
 
-#include "gamedefs.h"
-
-class Surface;
-
 namespace TIL
 {
     enum

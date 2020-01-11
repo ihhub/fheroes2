@@ -34,7 +34,6 @@
 
 namespace Battle
 {
-    class Board;
     class Unit;
 
     enum direction_t
