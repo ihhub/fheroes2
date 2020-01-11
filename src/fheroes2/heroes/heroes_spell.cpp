@@ -32,6 +32,7 @@
 #include "game_interface.h"
 #include "interface_list.h"
 #include "heroes.h"
+#include "m82.h"
 
 void DialogSpellFailed(const Spell &);
 void DialogNotAvailable(void);

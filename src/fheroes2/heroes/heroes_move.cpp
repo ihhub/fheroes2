@@ -33,6 +33,7 @@
 #include "castle.h"
 #include "direction.h"
 #include "heroes.h"
+#include "m82.h"
 
 bool ReflectSprite(int from);
 void PlayWalkSound(int ground);

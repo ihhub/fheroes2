@@ -43,6 +43,7 @@
 #include "army_bar.h"
 #include "pocketpc.h"
 #include "mus.h"
+#include "m82.h"
 
 void CastleRedrawTownName(const Castle & castle, const Point & dst);
 

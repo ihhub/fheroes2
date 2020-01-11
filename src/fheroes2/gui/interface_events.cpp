@@ -37,6 +37,7 @@
 #include "settings.h"
 #include "kingdom.h"
 #include "pocketpc.h"
+#include "m82.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
 {

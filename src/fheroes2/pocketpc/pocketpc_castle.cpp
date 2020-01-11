@@ -39,6 +39,7 @@
 #include "profit.h"
 #include "pocketpc.h"
 #include "mus.h"
+#include "m82.h"
 
 void RedrawTownSprite(const Rect &, const Castle &);
 void RedrawBackground(const Rect &, const Castle &);

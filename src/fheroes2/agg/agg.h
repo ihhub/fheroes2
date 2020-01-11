@@ -29,7 +29,6 @@
 #include "gamedefs.h"
 #include "icn.h"
 #include "til.h"
-#include "m82.h"
 #include "xmi.h"
 #include "sprite.h"
 
