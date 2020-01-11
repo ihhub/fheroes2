@@ -22,7 +22,6 @@
 #ifndef H2MAPS_ACTIONS_H
 #define H2MAPS_ACTIONS_H
 
-#include "position.h"
 #include "artifact.h"
 #include "resource.h"
 #include "color.h"
