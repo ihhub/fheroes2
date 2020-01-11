@@ -23,6 +23,8 @@
 #ifndef H2AUDIO_MUSIC_H
 #define H2AUDIO_MUSIC_H
 
+#include <string>
+#include <vector>
 #include "types.h"
 
 namespace Music
