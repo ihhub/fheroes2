@@ -26,10 +26,6 @@
 #include "thread.h"
 #include "interface_border.h"
 
-class Surface;
-class Castle;
-class Heroes;
-
 enum { STATUS_UNKNOWN, STATUS_DAY, STATUS_FUNDS, STATUS_ARMY, STATUS_RESOURCE, STATUS_AITURN };
 
 namespace Interface
