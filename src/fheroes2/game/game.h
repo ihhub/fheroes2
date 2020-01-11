@@ -28,9 +28,6 @@
 #include "types.h"
 #include "gamedefs.h"
 
-class Surface;
-class Kingdom;
-class Player;
 class Heroes;
 class Castle;
 
