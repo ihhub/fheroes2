@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "dialog.h"
 #include "text.h"
 #include "army_troop.h"
 #include "interface_list.h"

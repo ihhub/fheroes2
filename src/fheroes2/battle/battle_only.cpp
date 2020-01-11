@@ -37,6 +37,7 @@
 #include "game.h"
 #include "army_bar.h"
 #include "battle_only.h"
+#include "dialog.h"
 
 #define PRIMARY_MAX_VALUE	20
 
