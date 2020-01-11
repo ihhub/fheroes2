@@ -22,6 +22,7 @@
 
 #include "engine.h"
 #include "sdlnet.h"
+#include "system.h"
 
 namespace Mixer
 {

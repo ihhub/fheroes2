@@ -27,6 +27,7 @@
 #include "audio_cdrom.h"
 #include "audio_music.h"
 #include "audio_mixer.h"
+#include "system.h"
 
 namespace Mixer
 {
