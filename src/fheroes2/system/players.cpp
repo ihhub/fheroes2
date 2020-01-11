@@ -541,9 +541,9 @@ void Interface::PlayersInfo::UpdateInfo(Players & players, const Point & pt1, co
 	{
 	    const Rect & rect1 = (*it).rect2;
 	    const Rect & rect2 = (*(it + 1)).rect2;
-	    const Sprite & sprite = AGG::GetICN(ICN::ADVMCO, 8);
+        const Sprite & iconSprite = AGG::GetICN( ICN::ADVMCO, 8 );
 
-	    (*it).rect3 = Rect(rect1.x + rect1.w + (rect2.x - (rect1.x + rect1.w)) / 2 - 5, rect1.y + rect1.h + 20, sprite.w(), sprite.h());
+        (*it).rect3 = Rect( rect1.x + rect1.w + ( rect2.x - ( rect1.x + rect1.w) ) / 2 - 5, rect1.y + rect1.h + 20, iconSprite.w(), iconSprite.h() );
 	}
     }
 }
