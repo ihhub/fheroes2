@@ -24,7 +24,6 @@
 
 #include <vector>
 #include <map>
-#include "payment.h"
 #include "puzzle.h"
 #include "mp2.h"
 #include "pairs.h"
