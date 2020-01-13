@@ -3069,8 +3069,7 @@ void ActionToSphinx(Heroes & hero, u32 obj, s32 dst_index)
 	    }
 	}
     }
-    else
-    {
+    else {
 	Dialog::Message(MP2::StringObject(obj), _("You come across a giant Sphinx. The Sphinx remains strangely quiet."), Font::BIG, Dialog::OK);
     }
 
