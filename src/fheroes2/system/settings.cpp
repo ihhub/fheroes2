@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <fstream>
 
 #include "audio_music.h"
 #include "text.h"
@@ -525,9 +526,13 @@ bool Settings::Save(const std::string & filename) const
 {
     if(filename.empty()) return false;
 
-    StreamFile fs;
-    if(! fs.open(filename, "wb")) return false;
-    fs << String();
+    std::fstream file;
+    file.open( filename.data(), std::fstream::out | std::fstream::trunc );
+    if ( !file )
+        return false;
+
+    const std::string & data = String();
+    file.write( data.data(), data.size() );
 
     return true;
 }

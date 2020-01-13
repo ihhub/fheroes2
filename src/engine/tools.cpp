@@ -539,19 +539,21 @@ bool SaveMemToFile(const std::vector<u8> & data, const std::string & file)
 std::vector<u8> LoadFileToMem(const std::string & file)
 {
     std::vector<u8> data;
-    SDL_RWops *rw = SDL_RWFromFile(file.c_str(),"rb");
+    SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
+    if ( rw == NULL )
+        ERROR( SDL_GetError() );
 
-    if(rw && SDL_RWseek(rw, 0, RW_SEEK_END) != -1)
-    {
-	data.resize(SDL_RWtell(rw));
-	SDL_RWseek(rw, 0, RW_SEEK_SET);
-	SDL_RWread(rw, & data[0], data.size(), 1);
-	SDL_RWclose(rw);
+    const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
+    if ( length < 0 )
+        ERROR( SDL_GetError() );
+
+    if ( length > 0 ) {
+        data.resize( length );
+        SDL_RWseek( rw, 0, RW_SEEK_SET );
+        SDL_RWread( rw, &data[0], data.size(), 1 );
     }
-    else
-    {
-	ERROR(SDL_GetError());
-    }
+
+    SDL_RWclose( rw );
 
     return data;
 }
