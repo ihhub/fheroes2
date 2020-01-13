@@ -25,20 +25,13 @@
 #include "types.h"
 #include "sprites.h"
 #include "display.h"
-#include "localevent.h"
-#include "error.h"
-#include "rect.h"
-#include "surface.h"
 #include "rand.h"
 #include "font.h"
 #include "tools.h"
 #include "serialize.h"
-#include "translations.h"
-#include "system.h"
 
 #include "audio.h"
 #include "audio_mixer.h"
-#include "audio_music.h"
 #include "audio_cdrom.h"
 
 #define INIT_VIDEO	SDL_INIT_VIDEO

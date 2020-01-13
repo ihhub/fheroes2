@@ -21,11 +21,13 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include "audio_music.h"
 #include "settings.h"
 #include "tools.h"
 #include "army.h"
 #include "cursor.h"
 #include "castle.h"
+#include "mus.h"
 #include "world.h"
 #include "agg.h"
 #include "speed.h"

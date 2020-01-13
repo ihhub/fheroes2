@@ -33,6 +33,7 @@
 #include "profit.h"
 #include "statusbar.h"
 #include "buildinginfo.h"
+#include "m82.h"
 
 struct buildstats_t
 {

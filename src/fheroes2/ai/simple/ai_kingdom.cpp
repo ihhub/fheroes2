@@ -36,6 +36,7 @@
 #include "interface_gamearea.h"
 #include "heroes.h"
 #include "castle.h"
+#include "mus.h"
 #include "world.h"
 #include "settings.h"
 #include "kingdom.h"

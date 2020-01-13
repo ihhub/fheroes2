@@ -31,7 +31,6 @@
 #include "battle_army.h"
 #include "battle_arena.h"
 
-class Sprite;
 class Spell;
 class HeroBase;
 

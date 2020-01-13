@@ -24,6 +24,7 @@
 #include <algorithm>
 #include "agg.h" 
 #include "artifact.h"
+#include "error.h"
 #include "resource.h"
 #include "settings.h" 
 #include "kingdom.h" 

@@ -23,8 +23,6 @@
 #ifndef H2M82_H
 #define H2M82_H
 
-#include "gamedefs.h"
-
 #define LOOPXX_COUNT 28
 
 namespace M82

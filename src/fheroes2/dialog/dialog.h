@@ -47,7 +47,6 @@ namespace Skill
 
 namespace Maps
 {
-    class FileInfo;
     class Tiles;
 }
 

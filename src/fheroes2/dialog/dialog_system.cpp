@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "audio_music.h"
 #include "text.h"
 #include "button.h"
 #include "cursor.h"

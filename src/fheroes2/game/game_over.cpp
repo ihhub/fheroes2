@@ -30,6 +30,7 @@
 #include "settings.h"
 #include "game_interface.h"
 #include "game_over.h"
+#include "mus.h"
 
 const char* GameOver::GetString(int cond)
 {

@@ -32,6 +32,7 @@
 #include "interface_radar.h"
 #include "world.h"
 #include "puzzle.h"
+#include "mus.h"
 
 const u8 zone1_index[] = { 0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47 };
 const u8 zone2_index[] = { 7, 8, 9, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 38, 39, 40 };

@@ -48,6 +48,7 @@
 #include "game_static.h"
 #include "ai.h"
 #include "game.h"
+#include "mus.h"
 
 namespace Game
 {

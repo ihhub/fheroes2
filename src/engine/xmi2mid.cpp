@@ -26,6 +26,7 @@
 #include <list>
 #include <vector>
 
+#include "audio_music.h"
 #include "engine.h"
 #include "system.h"
 

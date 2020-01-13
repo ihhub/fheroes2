@@ -25,6 +25,10 @@
 #include <map>
 #include <vector>
 
+#include "audio_music.h"
+#include "error.h"
+#include "m82.h"
+#include "mus.h"
 #include "system.h"
 #include "font.h"
 #include "settings.h"
