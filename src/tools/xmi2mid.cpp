@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include "engine.h"
+#include "audio_music.h"
 
 int main(int argc, char** argv)
 {
