@@ -70,12 +70,12 @@ bool ObjMnts2::isAction(u32 index)
     return MP2::OBJ_ZERO != GetActionObject(index);
 }
 
-int ObjMnts1::GetActionObject(u32 index)
+int ObjMnts1::GetActionObject(u32)
 {
     return MP2::OBJ_ZERO;
 }
 
-int ObjMnts2::GetActionObject(u32 index)
+int ObjMnts2::GetActionObject(u32)
 {
     return MP2::OBJ_ZERO;
 }

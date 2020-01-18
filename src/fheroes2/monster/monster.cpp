@@ -521,7 +521,7 @@ bool Monster::isWide(void) const
 
 bool Monster::isArchers(void) const
 {
-    return GetShots();
+    return GetShots() > 0;
 }
 
 bool Monster::isAllowUpgrade(void) const

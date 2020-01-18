@@ -693,7 +693,7 @@ bool MP2::isWeekLife(int obj)
     return false;
 }
 
-bool MP2::isMonthLife(int obj)
+bool MP2::isMonthLife(int)
 {
     // FIXME: list month object life
     return false;

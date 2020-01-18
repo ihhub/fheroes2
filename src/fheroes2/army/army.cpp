@@ -868,7 +868,7 @@ int Army::GetLuck(void) const
     return GetCommander() ? GetCommander()->GetLuck() : GetLuckModificator(NULL);
 }
 
-int Army::GetLuckModificator(std::string *strs) const
+int Army::GetLuckModificator(std::string *) const
 {
     return Luck::NORMAL;
 }

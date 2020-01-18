@@ -71,12 +71,12 @@ bool ObjTwba::isAction(u32 index)
     return MP2::OBJ_ZERO != GetActionObject(index);
 }
 
-bool ObjTown::isShadow(u32 index)
+bool ObjTown::isShadow(u32)
 {
     return false;
 }
 
-bool ObjTwba::isShadow(u32 index)
+bool ObjTwba::isShadow(u32)
 {
     return false;
 }
@@ -93,7 +93,7 @@ int ObjTown::GetActionObject(u32 index)
     return MP2::OBJ_ZERO;
 }
 
-int ObjTwba::GetActionObject(u32 index)
+int ObjTwba::GetActionObject(u32)
 {
     return MP2::OBJ_ZERO;
 }
