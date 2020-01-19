@@ -107,12 +107,12 @@ bool ObjLava::isShadow(u32 index)
     return ARRAY_COUNT_END(shadows) != std::find(shadows, ARRAY_COUNT_END(shadows), index);
 }
 
-int ObjLav2::GetActionObject(u32 index)
+int ObjLav2::GetActionObject(u32)
 {
     return MP2::OBJ_ZERO;
 }
 
-int ObjLav3::GetActionObject(u32 index)
+int ObjLav3::GetActionObject(u32)
 {
     return MP2::OBJ_ZERO;
 }

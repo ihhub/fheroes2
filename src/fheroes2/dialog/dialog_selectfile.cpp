@@ -158,11 +158,6 @@ MapsFileInfoList GetSortedMapsFileInfoList(void)
     return list2;
 }
 
-bool IsPunct(char c)
-{
-    return true;
-}
-
 std::string Dialog::SelectFileSave(void)
 {
     const Settings & conf = Settings::Get();

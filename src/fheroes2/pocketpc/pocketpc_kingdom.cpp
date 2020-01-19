@@ -28,6 +28,6 @@
 #include "kingdom.h"
 #include "pocketpc.h"
 
-void PocketPC::KingdomOverviewDialog(const Kingdom & myKingdom)
+void PocketPC::KingdomOverviewDialog(const Kingdom &)
 {
 }

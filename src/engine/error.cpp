@@ -26,7 +26,7 @@
 #include "system.h"
 
 /* exception */
-void Error::Except(const char* func, const char* message)
+void Error::Except(const char*, const char*)
 {
 #ifndef ANDROID
     throw Exception();
