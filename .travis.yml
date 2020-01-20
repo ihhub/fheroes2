@@ -167,6 +167,8 @@ matrix:
       before_install:
         - export PATH="$(brew --prefix qt5)/bin:$PATH"
         - brew link --force qt5;
+        - echo $QTDIR
+        - echo $PATH
       script:
         - cd editor
         - qmake
