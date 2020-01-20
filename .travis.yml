@@ -173,6 +173,8 @@ matrix:
         - echo $QMAKE_INCDIR
         - echo $LD_LIBRARY_PATH
         - echo $DYLD_LIBRARY_PATH
+        - cd /usr/local/Cellar/qt/5.13.2/lib
+        - ls
       script:
         - cd editor
         - qmake
