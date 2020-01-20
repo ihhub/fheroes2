@@ -166,6 +166,7 @@ matrix:
       name: "Editor on OSX"
       before_install:
         - export PATH="$(brew --prefix qt5)/bin:$PATH"
+        - brew link --force qt5;
       script:
         - cd editor
         - qmake
