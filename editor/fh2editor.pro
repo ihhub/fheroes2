@@ -29,6 +29,8 @@ linux-g++ {
 QMAKE_CXX = g++
 QMAKE_LINK = g++
 
+LIBS += usr/local/Cellar/qt/5.13.2/lib
+
 # Input
 HEADERS += mainwindow.h mapwindow.h mapdata.h dialogs.h
 SOURCES += program.cpp engine.cpp mainwindow.cpp mapwindow.cpp mapdata.cpp dialogs.cpp global.cpp
