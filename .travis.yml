@@ -166,7 +166,7 @@ matrix:
       name: "Editor on OSX"
       before_install:
         - export PATH="$(brew --prefix qt5)/bin:$PATH"
-        - brew link --force qt5;
+        - export QTDIR="$(brew --prefix qt5)/lib"
         - echo $QTDIR
         - echo $PATH
       script:
