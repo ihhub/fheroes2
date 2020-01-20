@@ -29,7 +29,7 @@ linux-g++ {
 QMAKE_CXX = g++
 QMAKE_LINK = g++
 
-LIBS += usr/local/Cellar/qt/5.13.2/lib
+LIBS = -L/usr/local/Cellar/qt/5.13.2/lib -F/usr/local/Cellar/qt/5.13.2/lib -framework QtWidgets -framework QtGui -framework QtXml -framework QtCore -framework DiskArbitration -framework IOKit -framework OpenGL -framework AGL
 
 # Input
 HEADERS += mainwindow.h mapwindow.h mapdata.h dialogs.h
