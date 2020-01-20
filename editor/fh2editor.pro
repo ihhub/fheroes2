@@ -27,7 +27,7 @@ linux-g++ {
 }
 
 QMAKE_CXX = g++
-QMAKE_LINK = q++
+QMAKE_LINK = g++
 
 # Input
 HEADERS += mainwindow.h mapwindow.h mapdata.h dialogs.h
