@@ -26,6 +26,9 @@ win32-g++-cross {
 linux-g++ {
 }
 
+QMAKE_CXX = g++
+QMAKE_LINK = q++
+
 # Input
 HEADERS += mainwindow.h mapwindow.h mapdata.h dialogs.h
 SOURCES += program.cpp engine.cpp mainwindow.cpp mapwindow.cpp mapdata.cpp dialogs.cpp global.cpp
