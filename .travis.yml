@@ -169,6 +169,8 @@ matrix:
         - export QTDIR="$(brew --prefix qt5)/lib"
         - echo $QTDIR
         - echo $PATH
+        - echo $QMAKE_LIBDIR
+        - echo $QMAKE_INCDIR
       script:
         - cd editor
         - qmake
