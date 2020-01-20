@@ -162,6 +162,12 @@ matrix:
         overwrite: true
         on:
           branch: master
+    - os: osx
+      name: "Editor on OSX"
+      script:
+        - cd editor
+        - qmake
+        - make
     - os: linux
       name: "Static analysis"
       before_install:
