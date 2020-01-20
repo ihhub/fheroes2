@@ -171,6 +171,8 @@ matrix:
         - echo $PATH
         - echo $QMAKE_LIBDIR
         - echo $QMAKE_INCDIR
+        - echo $LD_LIBRARY_PATH
+        - echo $DYLD_LIBRARY_PATH
       script:
         - cd editor
         - qmake
