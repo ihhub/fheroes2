@@ -166,6 +166,7 @@ matrix:
       name: "Editor on OSX"
       before_install:
         - cd `brew --prefix qt5`
+        - cd bin
         - ls
       script:
         - cd editor
