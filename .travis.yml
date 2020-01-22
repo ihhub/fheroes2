@@ -162,6 +162,17 @@ matrix:
         overwrite: true
         on:
           branch: master
+    - os: osx
+      name: "Editor on OSX"
+      before_install:
+        - brew link --force qt5;
+        - export CMAKE_PREFIX_PATH=$(brew --prefix qt5)/lib/cmake;
+      script:
+        - cd editor
+        - mkdir -p build
+        - cd build
+        - cmake ..
+        - make
     - os: linux
       name: "Static analysis"
       before_install:

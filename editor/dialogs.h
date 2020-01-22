@@ -59,7 +59,6 @@ QT_END_NAMESPACE
 
 class MapData;
 class MapTiles;
-class CompositeObject;
 
 QVariant comboBoxCurrentData(const QComboBox*);
 
