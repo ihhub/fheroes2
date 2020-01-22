@@ -22,6 +22,8 @@
 #ifndef H2LUCK_H
 #define H2LUCK_H
 
+#include <string>
+
 namespace Luck
 {
     enum

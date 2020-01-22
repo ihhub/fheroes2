@@ -22,6 +22,8 @@
 #ifndef H2MORALE_H
 #define H2MORALE_H
 
+#include <string>
+
 namespace Morale
 {
     enum

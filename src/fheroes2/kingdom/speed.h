@@ -22,6 +22,8 @@
 #ifndef H2SPEED_H
 #define H2SPEED_H
 
+#include <string>
+
 namespace Speed
 {
     enum
