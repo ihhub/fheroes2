@@ -38,7 +38,7 @@ namespace Speed
         INSTANT		= 9
     };
 
-    const char*	String(int);
+    const std::string & String(int);
     int		GetOriginalSlow(int);
     int		GetOriginalFast(int);
     int		FromInt(int);

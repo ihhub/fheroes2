@@ -38,7 +38,7 @@ namespace Race
 	ALL	= KNGT | BARB | SORC | WRLK | WZRD | NECR
     };
 
-    const char* String(int);
+    const std::string & String(int);
     int		Rand(void);
     int		FromInt(int);
 }

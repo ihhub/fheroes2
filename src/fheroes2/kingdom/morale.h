@@ -36,8 +36,8 @@ namespace Morale
         BLOOD    = 3
     };
 
-    const char* String(int);
-    const char* Description(int);
+    const std::string & String(int);
+    const std::string & Description(int);
 }
 
 #endif

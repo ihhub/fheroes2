@@ -23,9 +23,9 @@
 #include "gamedefs.h"
 #include "speed.h"
 
-const char* Speed::String(int speed)
+const std::string & Speed::String(int speed)
 {
-    const char* str_speed[] = { _("speed|Standing"), _("speed|Crawling"), _("speed|Very Slow"), _("speed|Slow"), _("speed|Average"), _("speed|Fast"),
+    static const std::string str_speed[] = { _("speed|Standing"), _("speed|Crawling"), _("speed|Very Slow"), _("speed|Slow"), _("speed|Average"), _("speed|Fast"),
 	_("speed|Very Fast"), _("speed|Ultra Fast"), _("speed|Blazing"), _("speed|Instant"), "Unknown" };
 
     switch(speed)

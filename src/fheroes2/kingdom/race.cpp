@@ -24,9 +24,9 @@
 #include "gamedefs.h"
 #include "race.h"
 
-const char* Race::String(int race)
+const std::string & Race::String(int race)
 {
-    const char* str_race[] = { _("Knight"), _("Barbarian"), _("Sorceress"),
+    static const std::string str_race[] = { _("Knight"), _("Barbarian"), _("Sorceress"),
 	_("Warlock"), _("Wizard"), _("Necromancer"), _("Multi"), "Random", "Neutral" };
 
     switch(race)

@@ -23,9 +23,9 @@
 #include "gamedefs.h"
 #include "morale.h"
 
-const char* Morale::String(int morale)
+const std::string & Morale::String(int morale)
 {
-    const char* str_morale[] = { "Unknown", _("morale|Treason"), _("morale|Awful"), _("morale|Poor"), _("morale|Normal"), _("morale|Good"), _("morale|Great"), _("morale|Blood!") };
+    static const std::string str_morale[] = { "Unknown", _("morale|Treason"), _("morale|Awful"), _("morale|Poor"), _("morale|Normal"), _("morale|Good"), _("morale|Great"), _("morale|Blood!") };
 
     switch(morale)
     {
@@ -42,9 +42,9 @@ const char* Morale::String(int morale)
     return str_morale[0];
 }
 
-const char* Morale::Description(int morale)
+const std::string & Morale::Description(int morale)
 {
-    const char* str_desc_morale[] = { "Unknown",
+    static const std::string str_desc_morale[] = { "Unknown",
 	_("Bad morale may cause your armies to freeze in combat."),
 	_("Neutral morale means your armies will never be blessed with extra attacks or freeze in combat."),
 	_("Good morale may give your armies extra attacks in combat.") };
