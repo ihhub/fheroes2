@@ -25,7 +25,7 @@
 #include <vector>
 #include <cctype>
 
-#include "SDL.h"
+#include <SDL.h>
 #include "engine.h"
 #include "system.h"
 

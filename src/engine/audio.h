@@ -23,7 +23,7 @@
 #ifndef H2AUDIO_H
 #define H2AUDIO_H
 
-#include "SDL.h"
+#include <SDL.h>
 
 namespace Audio
 {
