@@ -165,16 +165,13 @@ matrix:
     - os: osx
       name: "Editor on OSX"
       before_install:
-        - export PATH="/usr/local/Cellar/qt/5.13.2/bin:$PATH"
-        - echo $QTDIR
-        - echo $PATH
-        - echo $QMAKE_LIBDIR
-        - echo $QMAKE_INCDIR
-        - echo $LD_LIBRARY_PATH
-        - echo $DYLD_LIBRARY_PATH
+        - brew link --force qt5;
+        - export CMAKE_PREFIX_PATH=$(brew --prefix qt5)/lib/cmake;
       script:
         - cd editor
-        - qmake
+        - mkdir -p build
+        - cd build
+        - cmake ..
         - make
     - os: linux
       name: "Static analysis"
