@@ -36,8 +36,8 @@ namespace Luck
         IRISH      = 3
     };
 
-    const std::string String(int);
-    const std::string Description(int);
+    const std::string & String(int);
+    const std::string & Description(int);
 }
 
 #endif
