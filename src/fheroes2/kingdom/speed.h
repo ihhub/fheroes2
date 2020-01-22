@@ -22,6 +22,8 @@
 #ifndef H2SPEED_H
 #define H2SPEED_H
 
+#include <string>
+
 namespace Speed
 {
     enum
@@ -38,7 +40,7 @@ namespace Speed
         INSTANT		= 9
     };
 
-    const char*	String(int);
+    const std::string & String(int);
     int		GetOriginalSlow(int);
     int		GetOriginalFast(int);
     int		FromInt(int);

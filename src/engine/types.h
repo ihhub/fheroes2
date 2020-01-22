@@ -23,7 +23,7 @@
 #ifndef H2TYPES_H
 #define H2TYPES_H
 
-#include "SDL.h"
+#include <SDL.h>
 
 typedef Sint8		s8;
 typedef Uint8		u8;

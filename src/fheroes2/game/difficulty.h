@@ -35,7 +35,7 @@ namespace Difficulty
         IMPOSSIBLE
     };
 
-    const char* String(int);
+    const std::string & String(int);
 }
 
 #endif

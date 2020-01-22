@@ -30,7 +30,7 @@
  */
 #include <stdlib.h>
 #include <zlib.h>
-#include "SDL.h"
+#include <SDL.h>
 #include "IMG_savepng.h"
 
 #if SDL_VERSION_ATLEAST(2, 0, 0)

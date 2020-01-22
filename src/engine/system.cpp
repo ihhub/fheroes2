@@ -31,7 +31,7 @@
 #include <clocale>
 #endif
 
-#include "SDL.h"
+#include <SDL.h>
 #include "system.h"
 
 #if defined(__MINGW32CE__) || defined(__MINGW32__) || defined(_MSC_VER)

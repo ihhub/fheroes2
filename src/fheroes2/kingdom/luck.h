@@ -22,6 +22,8 @@
 #ifndef H2LUCK_H
 #define H2LUCK_H
 
+#include <string>
+
 namespace Luck
 {
     enum
@@ -36,8 +38,8 @@ namespace Luck
         IRISH      = 3
     };
 
-    const std::string String(int);
-    const std::string Description(int);
+    const std::string & String(int);
+    const std::string & Description(int);
 }
 
 #endif

@@ -27,9 +27,9 @@
 #include "game.h"
 #include "color.h"
 
-const char* Color::String(int color)
+const std::string & Color::String(int color)
 {
-    const char* str_color[] = { "None", _("Blue"), _("Green"), _("Red"), _("Yellow"), _("Orange"), _("Purple"), "uknown" };
+    static const std::string str_color[] = { "None", _("Blue"), _("Green"), _("Red"), _("Yellow"), _("Orange"), _("Purple"), "uknown" };
 
     switch(color)
     {

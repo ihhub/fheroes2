@@ -25,7 +25,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include "SDL.h"
+#include <SDL.h>
 #include "engine.h"
 #include "system.h"
 

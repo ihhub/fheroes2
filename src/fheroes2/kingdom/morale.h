@@ -22,6 +22,8 @@
 #ifndef H2MORALE_H
 #define H2MORALE_H
 
+#include <string>
+
 namespace Morale
 {
     enum
@@ -36,8 +38,8 @@ namespace Morale
         BLOOD    = 3
     };
 
-    const char* String(int);
-    const char* Description(int);
+    const std::string & String(int);
+    const std::string & Description(int);
 }
 
 #endif

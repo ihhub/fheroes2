@@ -23,7 +23,7 @@
 #include "gamedefs.h"
 #include "luck.h"
 
-const std::string Luck::String(int luck)
+const std::string & Luck::String(int luck)
 {
     static const std::string str_luck[] = { "Unknown", _("luck|Cursed"), _("luck|Awful"), _("luck|Bad"), _("luck|Normal"), _("luck|Good"), _("luck|Great"), _("luck|Irish") };
 
@@ -42,7 +42,7 @@ const std::string Luck::String(int luck)
     return str_luck[0];
 }
 
-const std::string Luck::Description(int luck)
+const std::string & Luck::Description(int luck)
 {
     static const std::string str_desc_luck[] = { "Unknown",
 	_("Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage."),
