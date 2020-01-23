@@ -955,7 +955,7 @@ bool World::LoadMapMP2(const std::string & filename)
     if(!fs.open(filename, "rb"))
     {
 	 DEBUG(DBG_GAME|DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str());
-	 Error::Except(__FUNCTION__, "load maps");
+        return false;
     }
 
     MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
