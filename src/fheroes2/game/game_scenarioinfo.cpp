@@ -140,8 +140,8 @@ int Game::ScenarioInfo(void)
 
     if ( !resetStartingSettings ) { // verify that current map really exists in map's list
         resetStartingSettings = true;
-        const std::string mapName = conf.CurrentFileInfo().name;
-        const std::string mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+        const std::string & mapName = conf.CurrentFileInfo().name;
+        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
                 if ( mapIter->file != conf.CurrentFileInfo().file )
