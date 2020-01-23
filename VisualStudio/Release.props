@@ -6,6 +6,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
