@@ -330,7 +330,7 @@ std::string System::GetTime(void)
 bool System::IsFile(const std::string & name, bool writable)
 {
 #if defined(_MSC_VER)
-    return writable ? ( 0 == _access(name.c_str(), 06) ) : true;
+    return writable ? ( 0 == _access(name.c_str(), 06) ) : ( 0 == _access(name.c_str(), 04) );
 #elif defined(ANDROID)
     return writable ? 0 == access(name.c_str(), W_OK) : true;
 #else
