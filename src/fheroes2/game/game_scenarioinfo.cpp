@@ -134,13 +134,28 @@ int Game::ScenarioInfo(void)
 	back.Blit(top);
     }
 
-    const bool reset_starting_settings = conf.MapsFile().empty() || ! System::IsFile(conf.MapsFile());
+    bool resetStartingSettings = conf.MapsFile().empty();
     Players & players = conf.GetPlayers();
     Interface::PlayersInfo playersInfo(true, !conf.QVGA(), !conf.QVGA());
 
-    // set first maps settings
-    if(reset_starting_settings)
-	conf.SetCurrentFileInfo(lists.front());
+    if ( !resetStartingSettings ) { // verify that current map really exists in map's list
+        resetStartingSettings = true;
+        const std::string mapName = conf.CurrentFileInfo().name;
+        const std::string mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
+            if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
+                if ( mapIter->file != conf.CurrentFileInfo().file )
+                    conf.SetCurrentFileInfo( *mapIter );
+
+                resetStartingSettings = false;
+                break;
+            }
+        }
+    }
+
+    // set first map's settings
+    if ( resetStartingSettings )
+        conf.SetCurrentFileInfo( lists.front() );
 
     playersInfo.UpdateInfo(players, pointOpponentInfo, pointClassInfo);
 
