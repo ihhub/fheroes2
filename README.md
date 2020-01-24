@@ -4,7 +4,7 @@ fheroes2
 
 Direct continuation of free implementation of Heroes of the Might and Magic II engine. Original project has been developed at [sourceforge](https://sourceforge.net/projects/fheroes2/).
 
-<img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="400"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="400">
+<img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="420"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="420">
 
 Copyright
 ---------------------------
