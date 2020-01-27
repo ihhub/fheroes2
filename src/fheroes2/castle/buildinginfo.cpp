@@ -377,11 +377,13 @@ void BuildingInfo::Redraw(void)
 	}
 
 	// build image
-        if(BUILD_DISABLE == bcond && BUILD_TAVERN == building)
-	    // skip tavern necr
-	    Display::Get().FillRect(Rect(area.x + 1, area.y + 1, 135, 57), ColorBlack);
-	else
-	    AGG::GetICN(ICN::Get4Building(castle.GetRace()), index).Blit(area.x + 1, area.y + 1);
+    if(BUILD_DISABLE == bcond && BUILD_TAVERN == building) { // skip necromancer's tavern
+        AGG::GetICN(ICN::CASLXTRA, 0).Blit(area.x, area.y);
+        return;
+    }
+    else {
+        AGG::GetICN(ICN::Get4Building(castle.GetRace()), index).Blit(area.x + 1, area.y + 1);
+    }
 
 	const Sprite & sprite_allow = AGG::GetICN(ICN::TOWNWIND, 11);
 	const Sprite & sprite_deny  = AGG::GetICN(ICN::TOWNWIND, 12);

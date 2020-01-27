@@ -216,6 +216,7 @@ u32 Castle::OpenTown(void)
     buildingMageGuild.Redraw();
 
     // tavern
+    const bool isSkipTavernInteraction = ( Race::NECR == race ) && !Settings::Get().PriceLoyaltyVersion();
     BuildingInfo buildingTavern(*this, BUILD_TAVERN);
     buildingTavern.SetPos(cur_pt.x + 149, cur_pt.y + 157);
     buildingTavern.Redraw();
@@ -422,7 +423,7 @@ u32 Castle::OpenTown(void)
 	else
         if(le.MouseCursor(buildingMageGuild.GetArea()) && buildingMageGuild.QueueEventProcessing()) return buildingMageGuild();
 	else
-        if(le.MouseCursor(buildingTavern.GetArea()) && buildingTavern.QueueEventProcessing()) return (Race::NECR == race  ? BUILD_SHRINE : BUILD_TAVERN);
+        if( !isSkipTavernInteraction && le.MouseCursor(buildingTavern.GetArea()) && buildingTavern.QueueEventProcessing()) return (Race::NECR == race  ? BUILD_SHRINE : BUILD_TAVERN);
 	else
         if(le.MouseCursor(buildingThievesGuild.GetArea()) && buildingThievesGuild.QueueEventProcessing()) return BUILD_THIEVESGUILD;
 	else
@@ -507,7 +508,7 @@ u32 Castle::OpenTown(void)
 	else
 	if(le.MouseCursor(buildingMageGuild.GetArea())) buildingMageGuild.SetStatusMessage(statusBar);
 	else
-	if(le.MouseCursor(buildingTavern.GetArea())) buildingTavern.SetStatusMessage(statusBar);
+	if( !isSkipTavernInteraction && le.MouseCursor(buildingTavern.GetArea())) buildingTavern.SetStatusMessage(statusBar);
 	else
 	if(le.MouseCursor(buildingThievesGuild.GetArea())) buildingThievesGuild.SetStatusMessage(statusBar);
 	else
