@@ -273,6 +273,8 @@ void Battle::NecromancySkillAction(HeroBase & hero, u32 killed, bool local)
 
     const Monster mons(Monster::SKELETON);
     const u32 count = Monster::GetCountFromHitPoints(Monster::SKELETON, mons.GetHitPoints() * killed * percent / 100);
+    if ( count == 0u )
+        return;
     army.JoinTroop(mons, count);
 
     if(local)
