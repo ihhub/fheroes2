@@ -1377,8 +1377,7 @@ void ActionToPoorLuckObject(Heroes & hero, u32 obj, s32 dst_index)
 void ActionToSign(Heroes & hero, u32 obj, s32 dst_index)
 {
     PlaySoundWarning;
-    Maps::Tiles & tile = world.GetTiles(dst_index);
-    MapSign* sign = static_cast<MapSign*>(world.GetMapObject(tile.GetObjectUID(obj)));
+    MapSign * sign = static_cast<MapSign *>( world.GetMapObject( dst_index ) );
     Dialog::Message(_("Sign"), (sign ? sign->message : ""), Font::BIG, Dialog::OK);
     DEBUG(DBG_GAME, DBG_INFO, hero.GetName());
 }
@@ -3023,9 +3022,7 @@ void ActionToEyeMagi(Heroes & hero, u32 obj, s32 dst_index)
 
 void ActionToSphinx(Heroes & hero, u32 obj, s32 dst_index)
 {
-    Maps::Tiles & tile = world.GetTiles(dst_index);
-    MapSphinx* riddle = static_cast<MapSphinx*>(world.GetMapObject(tile.GetObjectUID(obj)));
-
+    MapSphinx * riddle = static_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
     if(riddle && riddle->valid)
     {
 	if(Dialog::YES == Dialog::Message("", _("\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\""), Font::BIG, Dialog::YES|Dialog::NO))
@@ -3072,8 +3069,9 @@ void ActionToSphinx(Heroes & hero, u32 obj, s32 dst_index)
 	    }
 	}
     }
-    else
+    else {
 	Dialog::Message(MP2::StringObject(obj), _("You come across a giant Sphinx. The Sphinx remains strangely quiet."), Font::BIG, Dialog::OK);
+    }
 
     DEBUG(DBG_GAME, DBG_INFO, hero.GetName());
 }

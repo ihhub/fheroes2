@@ -51,6 +51,7 @@ void MapEvent::LoadFromMP2(s32 index, StreamBuf st)
     if(1 == st.get())
     {
 	SetIndex(index);
+	SetUID( index );
 
 	// resource
 	resources.wood = st.getLE32();
@@ -117,6 +118,7 @@ void MapSphinx::LoadFromMP2(s32 index, StreamBuf st)
     if(0 == st.get())
     {
 	SetIndex(index);
+	SetUID( index );
 
 	// resource
 	resources.wood = st.getLE32();
@@ -226,6 +228,7 @@ void MapSign::LoadFromMP2(s32 index, StreamBuf st)
     message = st.toString();
 
     SetIndex(index);
+    SetUID( index );
     message = Game::GetEncodeString(message);
     DEBUG(DBG_GAME , DBG_INFO, "sign" << ": " << message);
 }
