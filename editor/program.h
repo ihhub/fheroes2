@@ -31,9 +31,9 @@ QT_END_NAMESPACE
 
 namespace Resource
 {
-    QString 	FindFile(const QString & dir, const QString & file);
-    QStringList	FindFiles(const QString & dir, const QString & file);
-    QSettings & localSettings(void);
+    QString FindFile( const QString & dir, const QString & file );
+    QStringList FindFiles( const QString & dir, const QString & file );
+    QSettings & localSettings( void );
 }
 
 #endif
