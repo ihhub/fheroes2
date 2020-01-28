@@ -25,6 +25,7 @@
 
 #include <string>
 #include <vector>
+
 #include "bitmodes.h"
 #include "color.h"
 

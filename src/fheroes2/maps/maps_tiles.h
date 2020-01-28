@@ -24,6 +24,7 @@
 
 #include <list>
 #include <functional>
+
 #include "gamedefs.h"
 #include "direction.h"
 #include "skill.h"

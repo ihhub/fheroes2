@@ -24,6 +24,7 @@
 #define H2BATTLE_INTERFACE_H
 
 #include <string>
+
 #include "icn.h"
 #include "button.h"
 #include "dialog.h"

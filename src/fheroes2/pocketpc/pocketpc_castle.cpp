@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <vector>
+
 #include "agg.h"
 #include "cursor.h"
 #include "settings.h"

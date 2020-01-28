@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+
 #include "agg.h"
 #include "text.h"
 #include "cursor.h"

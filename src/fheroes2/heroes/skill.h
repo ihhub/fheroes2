@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+
 #include "gamedefs.h"
 
 void StringAppendModifiers(std::string &, int);

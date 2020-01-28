@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <utility>
 #include <sstream>
+
 #include "game.h"
 #include "race.h"
 #include "color.h"

@@ -24,6 +24,7 @@
 #define H2ARMYTROOP_H
 
 #include <string>
+
 #include "monster.h"
 
 class Army;

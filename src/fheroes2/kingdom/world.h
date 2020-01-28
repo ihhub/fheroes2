@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <map>
+
 #include <string>
 #include "gamedefs.h"
 #include "maps.h"

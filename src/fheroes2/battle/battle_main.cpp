@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "army.h"
 #include "color.h"
 #include "cursor.h"

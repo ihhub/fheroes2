@@ -24,6 +24,7 @@
 #define H2PAYMENT_H
 
 #include <string>
+
 #include "resource.h"
 
 typedef Funds payment_t;

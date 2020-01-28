@@ -22,6 +22,7 @@
 
 #include <functional>
 #include <algorithm>
+
 #include "agg.h" 
 #include "artifact.h"
 #include "error.h"

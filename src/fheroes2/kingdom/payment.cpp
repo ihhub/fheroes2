@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <cstring>
+
 #include "castle.h"
 #include "race.h"
 #include "buildinginfo.h"

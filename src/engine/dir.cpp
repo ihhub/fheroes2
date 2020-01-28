@@ -29,7 +29,6 @@
 #include "tools.h"
 #include "dir.h"
 
-
 void ListFiles::Append(const ListFiles & list)
 {
     insert(end(), list.begin(), list.end());

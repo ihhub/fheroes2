@@ -25,6 +25,7 @@
 
 #include <string>
 #include <iostream>
+
 #include "types.h"
 
 #ifdef WITH_NET

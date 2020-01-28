@@ -24,6 +24,7 @@
 #define H2GAME_H
 
 #include <string>
+
 #include "rect.h"
 #include "types.h"
 #include "gamedefs.h"

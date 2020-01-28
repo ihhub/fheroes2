@@ -24,6 +24,7 @@
 #define H2PAIRS_H_
 
 #include <utility>
+
 #include "mp2.h"
 #include "color.h"
 #include "resource.h"

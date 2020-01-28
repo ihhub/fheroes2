@@ -24,6 +24,7 @@
 #define H2AUDIO_MIXER_H
 
 #include <vector>
+
 #include "types.h"
 
 #ifdef WITH_MIXER

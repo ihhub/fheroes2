@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <cstring>
+
 #include "agg.h"
 #include "settings.h"
 #include "heroes.h"

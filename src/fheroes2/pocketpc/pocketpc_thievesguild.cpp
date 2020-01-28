@@ -22,6 +22,7 @@
 
 #include <string>
 #include <algorithm>
+
 #include "agg.h"
 #include "button.h"
 #include "cursor.h"

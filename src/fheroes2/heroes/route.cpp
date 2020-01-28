@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <iostream>
+
 #include "agg.h"
 #include "world.h"
 #include "heroes.h"

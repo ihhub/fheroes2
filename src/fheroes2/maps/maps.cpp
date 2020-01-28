@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "world.h"
 #include "settings.h"
 #include "maps.h"

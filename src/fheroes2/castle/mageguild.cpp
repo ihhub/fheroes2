@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "castle.h"
 #include "heroes_base.h"
 #include "race.h"

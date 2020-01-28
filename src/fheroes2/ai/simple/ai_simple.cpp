@@ -28,6 +28,7 @@
  *******************************************************************************/
 
 #include <algorithm>
+
 #include "heroes.h"
 #include "castle.h"
 #include "ai_simple.h"

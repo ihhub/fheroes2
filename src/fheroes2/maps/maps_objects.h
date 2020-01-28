@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <string>
+
 #include "resource.h"
 #include "monster.h"
 #include "artifact.h"

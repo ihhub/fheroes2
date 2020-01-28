@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+
 #include "agg.h"
 #include "gamedefs.h"
 #include "button.h"

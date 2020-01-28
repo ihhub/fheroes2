@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <sstream>
+
 #include "players.h"
 #include "settings.h"
 #include "world.h"

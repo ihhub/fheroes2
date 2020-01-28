@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <algorithm>
+
 #include "agg.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"

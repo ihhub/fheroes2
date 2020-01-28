@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <string>
+
 #include "agg.h"
 #include "button.h"
 #include "world.h"

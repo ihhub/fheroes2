@@ -25,6 +25,7 @@
 #endif
 #include <cstring>
 #include <algorithm>
+
 #include "difficulty.h"
 #include "color.h"
 #include "race.h"

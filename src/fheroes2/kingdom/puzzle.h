@@ -24,6 +24,7 @@
 #define H2PUZZLE_H
 
 #include <bitset>
+
 #include "gamedefs.h"
 
 #define PUZZLETILES	48

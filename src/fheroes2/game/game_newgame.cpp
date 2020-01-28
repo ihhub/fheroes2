@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <sstream>
+
 #include "gamedefs.h"
 #include "agg.h"
 #include "dialog.h"

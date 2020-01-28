@@ -23,6 +23,7 @@
 #include <sstream>
 #include <cstring>
 #include <algorithm>
+
 #include "race.h"
 #include "text.h"
 #include "agg.h"

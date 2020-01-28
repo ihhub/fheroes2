@@ -23,7 +23,9 @@
 #define H2DISPLAY_H
 
 #include <string>
+
 #include "surface.h"
+
 class Texture;
 
 class Display : public Surface

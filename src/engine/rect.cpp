@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <iterator>
 #include <sstream>
+
 #include "rect.h"
 
 Point::Point() : x(0), y(0)

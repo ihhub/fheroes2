@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "direction.h"
 #include "icn.h"
 #include "mounts.h"

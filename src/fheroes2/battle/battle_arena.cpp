@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "audio_music.h"
 #include "settings.h"
 #include "tools.h"

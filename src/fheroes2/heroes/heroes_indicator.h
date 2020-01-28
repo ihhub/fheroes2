@@ -24,6 +24,7 @@
 #define H2HEROESIND_H
 
 #include <string>
+
 #include "gamedefs.h"
 
 class Heroes;

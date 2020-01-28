@@ -25,6 +25,7 @@
 
 #include <utility>
 #include <algorithm>
+
 #include "gamedefs.h"
 #include "heroes.h"
 

@@ -23,6 +23,7 @@
 #define H2COLOR_H
 
 #include <vector>
+
 #include "gamedefs.h"
 
 namespace BarrierColor

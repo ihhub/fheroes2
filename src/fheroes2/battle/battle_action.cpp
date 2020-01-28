@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "settings.h"
 #include "world.h"
 #include "kingdom.h"

@@ -22,6 +22,7 @@
 
 #include <ctime>
 #include <sstream>
+
 #include "agg.h"
 #include "direction.h"
 #include "settings.h"

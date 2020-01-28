@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <cstring>
+
 #include "sdlnet.h"
 
 

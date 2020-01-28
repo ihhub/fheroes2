@@ -26,6 +26,7 @@
 #include <sstream>
 #include <cstring>
 #include <memory>
+
 #include "surface.h"
 #include "error.h"
 #include "system.h"

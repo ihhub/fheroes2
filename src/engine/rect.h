@@ -26,6 +26,7 @@
 #include <string>
 #include <utility>
 #include <functional>
+
 #include "types.h"
 
 struct Point

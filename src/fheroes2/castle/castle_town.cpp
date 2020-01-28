@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+
 #include "agg.h"
 #include "world.h"
 #include "button.h"

@@ -23,6 +23,7 @@
 #define H2SURFACE_H
 
 #include <string>
+
 #include "rect.h"
 #include "types.h"
 

@@ -25,6 +25,7 @@
 #include <string>
 #include <list>
 #include <vector>
+
 #include "gamedefs.h"
 
 #define	SHADOWWIDTH	16

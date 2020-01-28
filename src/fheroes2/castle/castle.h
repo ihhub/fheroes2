@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <string>
+
 #include "mageguild.h"
 #include "captain.h"
 #include "army.h"

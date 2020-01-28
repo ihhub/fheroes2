@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "speed.h"
 #include "settings.h"
 #include "heroes.h"

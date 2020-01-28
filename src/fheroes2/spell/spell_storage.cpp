@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <sstream>
+
 #include "skill.h"
 #include "settings.h"
 #include "artifact.h"

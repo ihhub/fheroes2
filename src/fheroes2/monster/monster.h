@@ -24,6 +24,7 @@
 #define H2MONSTER_H
 
 #include <string>
+
 #include "payment.h"
 #include "gamedefs.h"
 

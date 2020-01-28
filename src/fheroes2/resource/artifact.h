@@ -23,6 +23,7 @@
 #define H2ARTIFACT_H
 
 #include <vector>
+
 #include "gamedefs.h"
 
 class Spell;

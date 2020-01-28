@@ -29,7 +29,6 @@
 #include "font.h"
 #include "tools.h"
 #include "serialize.h"
-
 #include "audio.h"
 #include "audio_mixer.h"
 #include "audio_cdrom.h"

@@ -24,6 +24,7 @@
 #include <iterator>
 #include <functional>
 #include <algorithm>
+
 #include "world.h"
 #include "ground.h"
 #include "castle.h"

@@ -24,6 +24,7 @@
 #define H2SPELLSTORAGE_H
 
 #include <vector>
+
 #include "spell.h"
 #include "gamedefs.h"
 

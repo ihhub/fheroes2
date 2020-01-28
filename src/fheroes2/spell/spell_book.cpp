@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <functional>
+
 #include "agg.h"
 #include "text.h"
 #include "game.h"

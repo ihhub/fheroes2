@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "agg.h"
 #include "castle.h"
 #include "settings.h"

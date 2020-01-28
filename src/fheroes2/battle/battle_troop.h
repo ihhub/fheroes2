@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <utility>
+
 #include "bitmodes.h"
 #include "sprite.h"
 #include "battle.h"

@@ -20,11 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <list>
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-#include <functional>
+
 #include "agg.h"
 #include "world.h"
 #include "race.h"

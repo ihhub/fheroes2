@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <iostream>
+
 #include "settings.h"
 #include "cursor.h"
 #include "splitter.h"

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <cmath>
+
 #include "agg.h"
 #include "luck.h"
 #include "dialog.h"

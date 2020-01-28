@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <map>
+
 #include "puzzle.h"
 #include "mp2.h"
 #include "pairs.h"
