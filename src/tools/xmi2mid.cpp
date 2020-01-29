@@ -21,27 +21,26 @@
  ***************************************************************************/
 
 #include <iostream>
-#include "engine.h"
-#include "audio_music.h"
 
-int main(int argc, char** argv)
+#include "audio_music.h"
+#include "engine.h"
+
+int main( int argc, char ** argv )
 {
-    if(argc != 3)
-    {
-	std::cout << argv[0] << " infile.xmi outfile.mid" << std::endl;
-	return EXIT_SUCCESS;
+    if ( argc != 3 ) {
+        std::cout << argv[0] << " infile.xmi outfile.mid" << std::endl;
+        return EXIT_SUCCESS;
     }
 
-    std::vector<u8> buf = LoadFileToMem(argv[1]);
+    std::vector<u8> buf = LoadFileToMem( argv[1] );
 
-    if(buf.size())
-    {
-	buf = Music::Xmi2Mid(buf);
+    if ( buf.size() ) {
+        buf = Music::Xmi2Mid( buf );
 
-	if(buf.empty())
-    	    std::cerr << ", file: " << argv[1] << std::endl;
-	else
-    	    SaveMemToFile(buf, std::string(argv[2]));
+        if ( buf.empty() )
+            std::cerr << ", file: " << argv[1] << std::endl;
+        else
+            SaveMemToFile( buf, std::string( argv[2] ) );
     }
 
     return 0;
