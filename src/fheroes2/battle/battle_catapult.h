@@ -29,24 +29,38 @@ class HeroBase;
 
 namespace Battle
 {
-    enum { CAT_WALL1 = 1, CAT_WALL2 = 2, CAT_WALL3 = 3, CAT_WALL4 = 4, CAT_TOWER1 = 5, CAT_TOWER2 = 6, CAT_BRIDGE = 7, CAT_TOWER3 = 8, CAT_MISS = 9 };
+    enum
+    {
+        CAT_WALL1 = 1,
+        CAT_WALL2 = 2,
+        CAT_WALL3 = 3,
+        CAT_WALL4 = 4,
+        CAT_TOWER1 = 5,
+        CAT_TOWER2 = 6,
+        CAT_BRIDGE = 7,
+        CAT_TOWER3 = 8,
+        CAT_MISS = 9
+    };
 
     class Catapult
     {
     public:
-	Catapult(const HeroBase &, bool);
+        Catapult( const HeroBase &, bool );
 
-	static Point	GetTargetPosition(int);
+        static Point GetTargetPosition( int );
 
-	u32		GetShots(void) const { return cat_shots; }
-	int		GetTarget(const std::vector<u32> &) const;
-	u32		GetDamage(int, u32) const;
+        u32 GetShots( void ) const
+        {
+            return cat_shots;
+        }
+        int GetTarget( const std::vector<u32> & ) const;
+        u32 GetDamage( int, u32 ) const;
 
     private:
-	u32	cat_shots;
-	u32	cat_first;
-	bool	cat_miss;
-	//bool	cat_fort;
+        u32 cat_shots;
+        u32 cat_first;
+        bool cat_miss;
+        // bool	cat_fort;
     };
 }
 

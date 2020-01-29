@@ -28,14 +28,14 @@ namespace Difficulty
 {
     enum
     {
-	EASY,
+        EASY,
         NORMAL,
         HARD,
         EXPERT,
         IMPOSSIBLE
     };
 
-    const std::string & String(int);
+    const std::string & String( int );
 }
 
 #endif

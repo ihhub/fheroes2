@@ -29,50 +29,43 @@
 
 #include <algorithm>
 
-#include "heroes.h"
-#include "castle.h"
 #include "ai_simple.h"
+#include "castle.h"
+#include "heroes.h"
 
-const char* AI::Type(void)
+const char * AI::Type( void )
 {
     return "simple";
 }
 
-const char* AI::License(void)
+const char * AI::License( void )
 {
     return "Non-Commercial";
 }
 
-void AI::HeroesAdd(const Heroes &)
-{
-}
+void AI::HeroesAdd( const Heroes & ) {}
 
-void AI::HeroesRemove(const Heroes &)
-{
-}
+void AI::HeroesRemove( const Heroes & ) {}
 
-void AI::CastleAdd(const Castle &)
-{
-}
+void AI::CastleAdd( const Castle & ) {}
 
-void AI::CastleRemove(const Castle & castle)
+void AI::CastleRemove( const Castle & castle )
 {
-    AIKingdom & ai = AIKingdoms::Get(castle.GetColor());
+    AIKingdom & ai = AIKingdoms::Get( castle.GetColor() );
 
-    if(ai.capital == &castle)
-    {
-        ai.capital->ResetModes(Castle::CAPITAL);
+    if ( ai.capital == &castle ) {
+        ai.capital->ResetModes( Castle::CAPITAL );
         ai.capital = NULL;
     }
 }
 
-void AI::Init(void)
+void AI::Init( void )
 {
     AIKingdoms::Reset();
     AIHeroes::Reset();
 }
 
-bool Queue::isPresent(s32 index) const
+bool Queue::isPresent( s32 index ) const
 {
-    return end() != std::find(begin(), end(), index);
+    return end() != std::find( begin(), end(), index );
 }

@@ -20,97 +20,92 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "settings.h"
+#include "sprite.h"
 #include "agg.h"
-#include "icn.h"
 #include "cursor.h"
 #include "display.h"
-#include "sprite.h"
+#include "icn.h"
+#include "settings.h"
 
-Sprite::Sprite()
-{
-}
+Sprite::Sprite() {}
 
-Sprite::Sprite(const Surface & sf, s32 ox, s32 oy) : SpritePos(sf, Point(ox, oy))
-{
-}
+Sprite::Sprite( const Surface & sf, s32 ox, s32 oy )
+    : SpritePos( sf, Point( ox, oy ) )
+{}
 
-int Sprite::x(void) const
+int Sprite::x( void ) const
 {
     return pos.x;
 }
 
-int Sprite::y(void) const
+int Sprite::y( void ) const
 {
     return pos.y;
 }
 
-Surface Sprite::ScaleQVGASurface(const Surface & src)
+Surface Sprite::ScaleQVGASurface( const Surface & src )
 {
     s32 w = src.w() / 2;
     s32 h = src.h() / 2;
-    return src.RenderScale(Size((w ? w : 1), (h ? h : 1)));
+    return src.RenderScale( Size( ( w ? w : 1 ), ( h ? h : 1 ) ) );
 }
 
-Sprite Sprite::ScaleQVGASprite(const Sprite & sp)
+Sprite Sprite::ScaleQVGASprite( const Sprite & sp )
 {
     Cursor & cursor = Cursor::Get();
     Display & display = Display::Get();
     Sprite res;
 
-    if(sp.w() > 3 && sp.h() > 3)
-    {
-	int theme = 0;
-	if(cursor.isVisible() && Cursor::WAIT != cursor.Themes())
-	{
-	    theme = cursor.Themes();
-	    cursor.SetThemes(Cursor::WAIT);
-	    cursor.Show();
-	    display.Flip();
-	}
+    if ( sp.w() > 3 && sp.h() > 3 ) {
+        int theme = 0;
+        if ( cursor.isVisible() && Cursor::WAIT != cursor.Themes() ) {
+            theme = cursor.Themes();
+            cursor.SetThemes( Cursor::WAIT );
+            cursor.Show();
+            display.Flip();
+        }
 
-	res.SetSurface(ScaleQVGASurface(sp));
+        res.SetSurface( ScaleQVGASurface( sp ) );
 
-	if(theme)
-	{
-	    cursor.SetThemes(theme);
-	    cursor.Show();
-	    display.Flip();
-	}
+        if ( theme ) {
+            cursor.SetThemes( theme );
+            cursor.Show();
+            display.Flip();
+        }
     }
 
     const Point pt = sp.GetPos();
-    res.SetPos(Point(pt.x / 2, pt.y / 2));
+    res.SetPos( Point( pt.x / 2, pt.y / 2 ) );
 
     return res;
 }
 
-void Sprite::ChangeColorIndex(u32 fc, u32 tc)
+void Sprite::ChangeColorIndex( u32 fc, u32 tc )
 {
-    SetSurface(RenderChangeColor(AGG::GetPaletteColor(fc), AGG::GetPaletteColor(tc)));
+    SetSurface( RenderChangeColor( AGG::GetPaletteColor( fc ), AGG::GetPaletteColor( tc ) ) );
 }
 
-void Sprite::Blit(void) const
+void Sprite::Blit( void ) const
 {
-    Blit(Display::Get());
+    Blit( Display::Get() );
 }
 
-void Sprite::Blit(s32 dx, s32 dy) const
+void Sprite::Blit( s32 dx, s32 dy ) const
 {
-    Blit(Point(dx, dy), Display::Get());
+    Blit( Point( dx, dy ), Display::Get() );
 }
 
-void Sprite::Blit(const Point & dpt) const
+void Sprite::Blit( const Point & dpt ) const
 {
-    Blit(Rect(Point(0, 0), GetSize()), dpt, Display::Get());
+    Blit( Rect( Point( 0, 0 ), GetSize() ), dpt, Display::Get() );
 }
 
-void Sprite::Blit(const Rect & srt, s32 dx, s32 dy) const
+void Sprite::Blit( const Rect & srt, s32 dx, s32 dy ) const
 {
-    Blit(srt, Point(dx, dy), Display::Get());
+    Blit( srt, Point( dx, dy ), Display::Get() );
 }
 
-void Sprite::Blit(const Rect & srt, const Point & dpt) const
+void Sprite::Blit( const Rect & srt, const Point & dpt ) const
 {
-    Blit(srt, dpt, Display::Get());
+    Blit( srt, dpt, Display::Get() );
 }

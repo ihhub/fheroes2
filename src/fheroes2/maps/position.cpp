@@ -20,53 +20,52 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "maps.h"
-#include "world.h"
-#include "game.h"
-#include "settings.h"
 #include "position.h"
+#include "game.h"
+#include "maps.h"
+#include "settings.h"
+#include "world.h"
 
-MapPosition::MapPosition(const Point & pt) : center(pt)
-{
-}
+MapPosition::MapPosition( const Point & pt )
+    : center( pt )
+{}
 
-bool MapPosition::operator== (s32 index) const
+bool MapPosition::operator==( s32 index ) const
 {
     return index == GetIndex();
 }
 
-const Point & MapPosition::GetCenter(void) const
+const Point & MapPosition::GetCenter( void ) const
 {
     return center;
 }
 
-s32 MapPosition::GetIndex(void) const
+s32 MapPosition::GetIndex( void ) const
 {
-    return center.x < 0 && center.y < 0 ? -1 : Maps::GetIndexFromAbsPoint(center);
+    return center.x < 0 && center.y < 0 ? -1 : Maps::GetIndexFromAbsPoint( center );
 }
 
-void MapPosition::SetCenter(const Point & pt)
+void MapPosition::SetCenter( const Point & pt )
 {
     center = pt;
 }
 
-void MapPosition::SetIndex(s32 index)
+void MapPosition::SetIndex( s32 index )
 {
-    center = Maps::isValidAbsIndex(index) ?
-		Maps::GetPoint(index) : Point(-1, -1);
+    center = Maps::isValidAbsIndex( index ) ? Maps::GetPoint( index ) : Point( -1, -1 );
 }
 
-StreamBase & operator<< (StreamBase & sb, const MapPosition & st)
+StreamBase & operator<<( StreamBase & sb, const MapPosition & st )
 {
     return sb << st.center;
 }
 
-StreamBase & operator>> (StreamBase & sb, MapPosition & st)
+StreamBase & operator>>( StreamBase & sb, MapPosition & st )
 {
     return sb >> st.center;
 }
 
-bool MapPosition::isPosition(const Point & pt) const
+bool MapPosition::isPosition( const Point & pt ) const
 {
     return pt == center;
 }

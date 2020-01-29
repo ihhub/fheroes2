@@ -29,45 +29,53 @@ struct Week : std::pair<int, int>
 {
     enum
     {
-	UNNAMED,
-	PLAGUE,
-	ANT,
-	GRASSHOPPER,
-	DRAGONFLY,
-	SPIDER,
-	BUTTERFLY,
-	BUMBLEBEE,
-	LOCUST,
-	EARTHWORM,
-	HORNET,
-	BEETLE,
-	SQUIRREL,
-	RABBIT,
-	GOPHER,
-	BADGER,
-	EAGLE,
-	WEASEL,
-	RAVEN,
-	MONGOOSE,
-	AARDVARK,
-	LIZARD,
-	TORTOISE,
-	HEDGEHOG,
-	CONDOR,
-	
-	MONSTERS	// week of monsters game
+        UNNAMED,
+        PLAGUE,
+        ANT,
+        GRASSHOPPER,
+        DRAGONFLY,
+        SPIDER,
+        BUTTERFLY,
+        BUMBLEBEE,
+        LOCUST,
+        EARTHWORM,
+        HORNET,
+        BEETLE,
+        SQUIRREL,
+        RABBIT,
+        GOPHER,
+        BADGER,
+        EAGLE,
+        WEASEL,
+        RAVEN,
+        MONGOOSE,
+        AARDVARK,
+        LIZARD,
+        TORTOISE,
+        HEDGEHOG,
+        CONDOR,
+
+        MONSTERS // week of monsters game
     };
 
-    Week(int type = UNNAMED, int mons = Monster::UNKNOWN) : std::pair<int, int>(type, mons){}
+    Week( int type = UNNAMED, int mons = Monster::UNKNOWN )
+        : std::pair<int, int>( type, mons )
+    {}
 
-    int GetType(void) const { return first; }
-    int GetMonster(void) const { return second; }
-    const char* GetName(void) const;
+    int GetType( void ) const
+    {
+        return first;
+    }
+    int GetMonster( void ) const
+    {
+        return second;
+    }
+    const char * GetName( void ) const;
 
-    static int WeekRand(void);
-    static int MonthRand(void);
+    static int WeekRand( void );
+    static int MonthRand( void );
 };
 
-StreamBase & operator>> (StreamBase &, Week &);
+StreamBase & operator>>( StreamBase &, Week & );
 
 #endif

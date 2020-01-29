@@ -20,45 +20,55 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "gamedefs.h"
 #include "morale.h"
+#include "gamedefs.h"
 
-const std::string & Morale::String(int morale)
+const std::string & Morale::String( int morale )
 {
-    static const std::string str_morale[] = { "Unknown", _("morale|Treason"), _("morale|Awful"), _("morale|Poor"), _("morale|Normal"), _("morale|Good"), _("morale|Great"), _("morale|Blood!") };
+    static const std::string str_morale[] = {"Unknown",          _( "morale|Treason" ), _( "morale|Awful" ), _( "morale|Poor" ), _( "morale|Normal" ),
+                                             _( "morale|Good" ), _( "morale|Great" ),   _( "morale|Blood!" )};
 
-    switch(morale)
-    {
-        case Morale::TREASON:	return str_morale[1];
-        case Morale::AWFUL:	return str_morale[2];
-        case Morale::POOR:	return str_morale[3];
-        case Morale::NORMAL:	return str_morale[4];
-        case Morale::GOOD:	return str_morale[5];
-        case Morale::GREAT:	return str_morale[6];
-        case Morale::BLOOD:	return str_morale[7];
-	default: break;
+    switch ( morale ) {
+    case Morale::TREASON:
+        return str_morale[1];
+    case Morale::AWFUL:
+        return str_morale[2];
+    case Morale::POOR:
+        return str_morale[3];
+    case Morale::NORMAL:
+        return str_morale[4];
+    case Morale::GOOD:
+        return str_morale[5];
+    case Morale::GREAT:
+        return str_morale[6];
+    case Morale::BLOOD:
+        return str_morale[7];
+    default:
+        break;
     }
 
     return str_morale[0];
 }
 
-const std::string & Morale::Description(int morale)
+const std::string & Morale::Description( int morale )
 {
-    static const std::string str_desc_morale[] = { "Unknown",
-	_("Bad morale may cause your armies to freeze in combat."),
-	_("Neutral morale means your armies will never be blessed with extra attacks or freeze in combat."),
-	_("Good morale may give your armies extra attacks in combat.") };
+    static const std::string str_desc_morale[] = {"Unknown", _( "Bad morale may cause your armies to freeze in combat." ),
+                                                  _( "Neutral morale means your armies will never be blessed with extra attacks or freeze in combat." ),
+                                                  _( "Good morale may give your armies extra attacks in combat." )};
 
-    switch(morale)
-    {
-        case Morale::TREASON:
-        case Morale::AWFUL:
-        case Morale::POOR:	return str_desc_morale[1];
-        case Morale::NORMAL:	return str_desc_morale[2];
-        case Morale::GOOD:
-        case Morale::GREAT:
-        case Morale::BLOOD:	return str_desc_morale[3];
-	default: break;
+    switch ( morale ) {
+    case Morale::TREASON:
+    case Morale::AWFUL:
+    case Morale::POOR:
+        return str_desc_morale[1];
+    case Morale::NORMAL:
+        return str_desc_morale[2];
+    case Morale::GOOD:
+    case Morale::GREAT:
+    case Morale::BLOOD:
+        return str_desc_morale[3];
+    default:
+        break;
     }
 
     return str_desc_morale[0];

@@ -31,34 +31,34 @@ class Button : public Rect
 {
 public:
     Button();
-    Button(s32, s32, int, u32 index1, u32 index2);
+    Button( s32, s32, int, u32 index1, u32 index2 );
 
-    bool	isEnable(void) const;
-    bool	isDisable(void) const;
+    bool isEnable( void ) const;
+    bool isDisable( void ) const;
     bool isVisible() const;
-    bool	isPressed(void) const;
-    bool	isReleased(void) const;
+    bool isPressed( void ) const;
+    bool isReleased( void ) const;
 
-    void	Press(void);
-    void	Release(void);
+    void Press( void );
+    void Release( void );
 
-    void	SetPos(s32, s32);
-    void	SetPos(const Point &);
-    void	SetSize(u32, u32);
-    void	SetSprite(int icn, u32, u32);
-    void	SetSprite(const Surface &, const Surface &);
-    void	SetDisable(bool);
+    void SetPos( s32, s32 );
+    void SetPos( const Point & );
+    void SetSize( u32, u32 );
+    void SetSprite( int icn, u32, u32 );
+    void SetSprite( const Surface &, const Surface & );
+    void SetDisable( bool );
     void SetVisible( bool isVisible );
 
-    void	Draw(void);
-    void	PressDraw(void);
-    void	ReleaseDraw(void);
+    void Draw( void );
+    void PressDraw( void );
+    void ReleaseDraw( void );
 
 protected:
-    Surface	sf1;
-    Surface	sf2;
+    Surface sf1;
+    Surface sf2;
 
-    u32		flags;
+    u32 flags;
 };
 
 class LabeledButton : public Button
@@ -84,7 +84,7 @@ protected:
 class ButtonSprite : public Button
 {
 public:
-    ButtonSprite(){}
+    ButtonSprite() {}
 
 protected:
     Surface sf;
@@ -93,21 +93,21 @@ protected:
 class ButtonGroups
 {
 public:
-    ButtonGroups(const Rect &, u32);
+    ButtonGroups( const Rect &, u32 );
     ~ButtonGroups();
-    
-    void	Draw(void);
-    int		QueueEventProcessing(void);
 
-    void	DisableButton1(bool);
-    void	DisableButton2(bool);
+    void Draw( void );
+    int QueueEventProcessing( void );
+
+    void DisableButton1( bool );
+    void DisableButton2( bool );
 
 protected:
-    Button*	button1;
-    Button*	button2;
-    int		result1;
-    int		result2;
-    int		buttons;
+    Button * button1;
+    Button * button2;
+    int result1;
+    int result2;
+    int buttons;
 };
 
 #endif

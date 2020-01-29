@@ -25,12 +25,12 @@
 #include "players.h"
 #include "serialize.h"
 
-StreamBase & operator<< (StreamBase & msg, const BitModes & b)
+StreamBase & operator<<( StreamBase & msg, const BitModes & b )
 {
     return msg << b.modes;
 }
 
-StreamBase & operator>> (StreamBase & msg, BitModes & b)
+StreamBase & operator>>( StreamBase & msg, BitModes & b )
 {
     return msg >> b.modes;
 }

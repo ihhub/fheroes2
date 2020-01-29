@@ -21,32 +21,32 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
-#include "button.h"
 #include "artifact.h"
-#include "game.h"
+#include "button.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "game.h"
+#include "settings.h"
+#include "text.h"
 
-int Dialog::ArtifactInfo(const std::string & hdr, const std::string & msg, const Artifact & art, int buttons)
+int Dialog::ArtifactInfo( const std::string & hdr, const std::string & msg, const Artifact & art, int buttons )
 {
-    const Sprite & border = AGG::GetICN(ICN::RESOURCE, 7);
-    const Sprite & artifact = AGG::GetICN(ICN::ARTIFACT, art.IndexSprite64());
+    const Sprite & border = AGG::GetICN( ICN::RESOURCE, 7 );
+    const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
     Surface image = border.GetSurface();
-    border.Blit(image);
-    artifact.Blit(5, 5, image);
+    border.Blit( image );
+    artifact.Blit( 5, 5, image );
 
     std::string ext = msg;
-    ext.append("\n");
-    ext.append(" ");
-    ext.append("\n");
-    ext.append(art.GetDescription());
+    ext.append( "\n" );
+    ext.append( " " );
+    ext.append( "\n" );
+    ext.append( art.GetDescription() );
 
-    return Dialog::SpriteInfo(hdr, ext, image, buttons);
+    return Dialog::SpriteInfo( hdr, ext, image, buttons );
 }
 
-int Dialog::SpriteInfo(const std::string & header, const std::string & message, const Surface & sprite, int buttons)
+int Dialog::SpriteInfo( const std::string & header, const std::string & message, const Surface & sprite, int buttons )
 {
     Display & display = Display::Get();
 
@@ -54,28 +54,30 @@ int Dialog::SpriteInfo(const std::string & header, const std::string & message, 
     Cursor & cursor = Cursor::Get();
 
     cursor.Hide();
-    cursor.SetThemes(cursor.POINTER);
+    cursor.SetThemes( cursor.POINTER );
 
-    TextBox box1(header, Font::YELLOW_BIG, BOXAREA_WIDTH);
-    TextBox box2(message, Font::BIG, BOXAREA_WIDTH);
+    TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
+    TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
 
-    FrameBox box(box1.h() + spacer + box2.h() + spacer + sprite.h(), buttons);
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.h(), buttons );
     Rect pos = box.GetArea();
 
-    if(header.size()) box1.Blit(pos);
+    if ( header.size() )
+        box1.Blit( pos );
     pos.y += box1.h() + spacer;
 
-    if(message.size()) box2.Blit(pos);
+    if ( message.size() )
+        box2.Blit( pos );
     pos.y += box2.h() + spacer;
 
     // blit sprite
-    pos.x = box.GetArea().x + (pos.w - sprite.w()) / 2;
-    sprite.Blit(pos.x, pos.y, display);
+    pos.x = box.GetArea().x + ( pos.w - sprite.w() ) / 2;
+    sprite.Blit( pos.x, pos.y, display );
 
     LocalEvent & le = LocalEvent::Get();
 
-    ButtonGroups btnGroups(box.GetArea(), buttons);
+    ButtonGroups btnGroups( box.GetArea(), buttons );
     btnGroups.Draw();
 
     cursor.Show();
@@ -84,9 +86,9 @@ int Dialog::SpriteInfo(const std::string & header, const std::string & message, 
     // message loop
     int result = Dialog::ZERO;
 
-    while(result == Dialog::ZERO && le.HandleEvents())
-    {
-        if(!buttons && !le.MousePressRight()) break;
+    while ( result == Dialog::ZERO && le.HandleEvents() ) {
+        if ( !buttons && !le.MousePressRight() )
+            break;
         result = btnGroups.QueueEventProcessing();
     }
 
