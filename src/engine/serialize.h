@@ -23,8 +23,8 @@
 #ifndef H2SERIALIZE_H
 #define H2SERIALIZE_H
 
-#include <map>
 #include <list>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -37,155 +37,161 @@ struct Size;
 class StreamBase
 {
 protected:
-    size_t		flags;
+    size_t flags;
 
     virtual u8 get8() = 0;
-    virtual void	put8(char) = 0;
+    virtual void put8( char ) = 0;
 
-    virtual size_t	sizeg(void) const = 0;
-    virtual size_t	sizep(void) const = 0;
-    virtual size_t	tellg(void) const = 0;
-    virtual size_t	tellp(void) const = 0;
+    virtual size_t sizeg( void ) const = 0;
+    virtual size_t sizep( void ) const = 0;
+    virtual size_t tellg( void ) const = 0;
+    virtual size_t tellp( void ) const = 0;
 
-    void		setconstbuf(bool);
-    void		setfail(bool);
+    void setconstbuf( bool );
+    void setfail( bool );
 
 public:
-    StreamBase() : flags(0) {}
+    StreamBase()
+        : flags( 0 )
+    {}
     virtual ~StreamBase() {}
 
-    void		setbigendian(bool);
+    void setbigendian( bool );
 
-    bool		isconstbuf(void) const;
-    bool		fail(void) const;
-    bool		bigendian(void) const;
+    bool isconstbuf( void ) const;
+    bool fail( void ) const;
+    bool bigendian( void ) const;
 
-    virtual void	skip(size_t) = 0;
+    virtual void skip( size_t ) = 0;
 
     virtual u16 getBE16() = 0;
     virtual u16 getLE16() = 0;
     virtual u32 getBE32() = 0;
     virtual u32 getLE32() = 0;
 
-    virtual void	putBE32(u32) = 0;
-    virtual void	putLE32(u32) = 0;
-    virtual void	putBE16(u16) = 0;
-    virtual void	putLE16(u16) = 0;
+    virtual void putBE32( u32 ) = 0;
+    virtual void putLE32( u32 ) = 0;
+    virtual void putBE16( u16 ) = 0;
+    virtual void putLE16( u16 ) = 0;
 
-    virtual std::vector<u8>
-			getRaw(size_t = 0 /* all data */) = 0;
-    virtual void	putRaw(const char*, size_t) = 0;
+    virtual std::vector<u8> getRaw( size_t = 0 /* all data */ ) = 0;
+    virtual void putRaw( const char *, size_t ) = 0;
 
     u16 get16();
     u32 get32();
 
-    void		put16(u16);
-    void		put32(u32);
+    void put16( u16 );
+    void put32( u32 );
 
-    int                 get(void) { return get8(); } // get char
-    void                put(char ch) { put8(ch); }
-
-    StreamBase &	operator>> (bool &);
-    StreamBase &	operator>> (char &);
-    StreamBase &	operator>> (u8 &);
-    StreamBase &	operator>> (s8 &);
-    StreamBase &	operator>> (u16 &);
-    StreamBase &	operator>> (s16 &);
-    StreamBase &	operator>> (u32 &);
-    StreamBase &	operator>> (s32 &);
-    StreamBase &	operator>> (float &);
-    StreamBase &	operator>> (std::string &);
-
-    StreamBase &	operator>> (Rect &);
-    StreamBase &	operator>> (Point &);
-    StreamBase &	operator>> (Size &);
-
-    StreamBase &	operator<< (const bool &);
-    StreamBase &	operator<< (const char &);
-    StreamBase &	operator<< (const u8 &);
-    StreamBase &	operator<< (const s8 &);
-    StreamBase &	operator<< (const u16 &);
-    StreamBase &	operator<< (const s16 &);
-    StreamBase &	operator<< (const u32 &);
-    StreamBase &	operator<< (const s32 &);
-    StreamBase &	operator<< (const float &);
-    StreamBase &	operator<< (const std::string &);
-
-    StreamBase &	operator<< (const Rect &);
-    StreamBase &	operator<< (const Point &);
-    StreamBase &	operator<< (const Size &);
-
-    template<class Type1, class Type2>
-    StreamBase & operator>> (std::pair<Type1, Type2> & p)
+    int get( void )
     {
-	return *this >> p.first >> p.second;
+        return get8();
+    } // get char
+    void put( char ch )
+    {
+        put8( ch );
     }
 
-    template<class Type>
-    StreamBase & operator>> (std::vector<Type> & v)
+    StreamBase & operator>>( bool & );
+    StreamBase & operator>>( char & );
+    StreamBase & operator>>( u8 & );
+    StreamBase & operator>>( s8 & );
+    StreamBase & operator>>( u16 & );
+    StreamBase & operator>>( s16 & );
+    StreamBase & operator>>( u32 & );
+    StreamBase & operator>>( s32 & );
+    StreamBase & operator>>( float & );
+    StreamBase & operator>>( std::string & );
+
+    StreamBase & operator>>( Rect & );
+    StreamBase & operator>>( Point & );
+    StreamBase & operator>>( Size & );
+
+    StreamBase & operator<<( const bool & );
+    StreamBase & operator<<( const char & );
+    StreamBase & operator<<( const u8 & );
+    StreamBase & operator<<( const s8 & );
+    StreamBase & operator<<( const u16 & );
+    StreamBase & operator<<( const s16 & );
+    StreamBase & operator<<( const u32 & );
+    StreamBase & operator<<( const s32 & );
+    StreamBase & operator<<( const float & );
+    StreamBase & operator<<( const std::string & );
+
+    StreamBase & operator<<( const Rect & );
+    StreamBase & operator<<( const Point & );
+    StreamBase & operator<<( const Size & );
+
+    template <class Type1, class Type2>
+    StreamBase & operator>>( std::pair<Type1, Type2> & p )
     {
-	const u32 size = get32();
-	v.resize(size);
-	for(typename std::vector<Type>::iterator
-    	    it = v.begin(); it != v.end(); ++it) *this >> *it;
-	return *this;
+        return *this >> p.first >> p.second;
     }
 
-    template<class Type>
-    StreamBase & operator>> (std::list<Type> & v)
+    template <class Type>
+    StreamBase & operator>>( std::vector<Type> & v )
     {
-	const u32 size = get32();
-	v.resize(size);
-	for(typename std::list<Type>::iterator
-    	    it = v.begin(); it != v.end(); ++it) *this >> *it;
-	return *this;
+        const u32 size = get32();
+        v.resize( size );
+        for ( typename std::vector<Type>::iterator it = v.begin(); it != v.end(); ++it )
+            *this >> *it;
+        return *this;
     }
 
-    template<class Type1, class Type2>
-    StreamBase & operator>> (std::map<Type1, Type2> & v)
+    template <class Type>
+    StreamBase & operator>>( std::list<Type> & v )
     {
-	const u32 size = get32();
-	v.clear();
-	for(u32 ii = 0; ii < size; ++ii)
-	{
-	    std::pair<Type1, Type2> pr;
-	    *this >> pr;
-	    v.insert(pr);
-	}
-	return *this;
+        const u32 size = get32();
+        v.resize( size );
+        for ( typename std::list<Type>::iterator it = v.begin(); it != v.end(); ++it )
+            *this >> *it;
+        return *this;
     }
 
-    template<class Type1, class Type2>
-    StreamBase & operator<< (const std::pair<Type1, Type2> & p)
+    template <class Type1, class Type2>
+    StreamBase & operator>>( std::map<Type1, Type2> & v )
     {
-	return *this << p.first << p.second;
+        const u32 size = get32();
+        v.clear();
+        for ( u32 ii = 0; ii < size; ++ii ) {
+            std::pair<Type1, Type2> pr;
+            *this >> pr;
+            v.insert( pr );
+        }
+        return *this;
     }
 
-    template<class Type>
-    StreamBase & operator<< (const std::vector<Type> & v)
+    template <class Type1, class Type2>
+    StreamBase & operator<<( const std::pair<Type1, Type2> & p )
     {
-	put32(static_cast<u32>(v.size()));
-	for(typename std::vector<Type>::const_iterator
-	    it = v.begin(); it != v.end(); ++it) *this << *it;
-	return *this;
+        return *this << p.first << p.second;
     }
 
-    template<class Type>
-    StreamBase & operator<< (const std::list<Type> & v)
+    template <class Type>
+    StreamBase & operator<<( const std::vector<Type> & v )
     {
-	put32(static_cast<u32>(v.size()));
-	for(typename std::list<Type>::const_iterator
-	    it = v.begin(); it != v.end(); ++it) *this << *it;
-	return *this;
+        put32( static_cast<u32>( v.size() ) );
+        for ( typename std::vector<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
+            *this << *it;
+        return *this;
     }
 
-    template<class Type1, class Type2>
-    StreamBase & operator<< (const std::map<Type1, Type2> & v)
+    template <class Type>
+    StreamBase & operator<<( const std::list<Type> & v )
     {
-	put32(static_cast<u32>(v.size()));
-	for(typename std::map<Type1, Type2>::const_iterator
-	    it = v.begin(); it != v.end(); ++it) *this << *it;
-	return *this;
+        put32( static_cast<u32>( v.size() ) );
+        for ( typename std::list<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
+            *this << *it;
+        return *this;
+    }
+
+    template <class Type1, class Type2>
+    StreamBase & operator<<( const std::map<Type1, Type2> & v )
+    {
+        put32( static_cast<u32>( v.size() ) );
+        for ( typename std::map<Type1, Type2>::const_iterator it = v.begin(); it != v.end(); ++it )
+            *this << *it;
+        return *this;
     }
 };
 
@@ -196,107 +202,110 @@ class ZStreamBuf;
 class StreamBuf : public StreamBase
 {
 public:
-    StreamBuf(size_t = 0);
-    StreamBuf(const StreamBuf &);
-    StreamBuf(const std::vector<u8> &);
-    StreamBuf(const u8*, size_t);
+    StreamBuf( size_t = 0 );
+    StreamBuf( const StreamBuf & );
+    StreamBuf( const std::vector<u8> & );
+    StreamBuf( const u8 *, size_t );
 
     ~StreamBuf();
 
-    StreamBuf &		operator= (const StreamBuf &);
+    StreamBuf & operator=( const StreamBuf & );
 
-    const u8*		data(void) const;
-    size_t		size(void) const;
-    size_t		capacity(void) const;
+    const u8 * data( void ) const;
+    size_t size( void ) const;
+    size_t capacity( void ) const;
 
-    void		seek(size_t);
-    void		skip(size_t);
+    void seek( size_t );
+    void skip( size_t );
 
     u16 getBE16();
     u16 getLE16();
     u32 getBE32();
     u32 getLE32();
 
-    void		putBE32(u32);
-    void		putLE32(u32);
-    void		putBE16(u16);
-    void		putLE16(u16);
+    void putBE32( u32 );
+    void putLE32( u32 );
+    void putBE16( u16 );
+    void putLE16( u16 );
 
-    std::vector<u8>	getRaw(size_t = 0 /* all data */);
-    void		putRaw(const char*, size_t);
+    std::vector<u8> getRaw( size_t = 0 /* all data */ );
+    void putRaw( const char *, size_t );
 
-    std::string		toString(size_t = 0 /* all data */);
+    std::string toString( size_t = 0 /* all data */ );
 
 protected:
-    void		reset(void);
+    void reset( void );
 
-    size_t		tellg(void) const;
-    size_t		tellp(void) const;
-    size_t		sizeg(void) const;
-    size_t		sizep(void) const;
+    size_t tellg( void ) const;
+    size_t tellp( void ) const;
+    size_t sizeg( void ) const;
+    size_t sizep( void ) const;
 
-    void		copy(const StreamBuf &);
+    void copy( const StreamBuf & );
     void reallocbuf( size_t );
-    void		setfail(void);
+    void setfail( void );
 
     u8 get8();
-    void		put8(char);
+    void put8( char );
 
 #ifdef WITH_ZLIB
     friend class ZStreamBuf;
 #endif
 
-    u8*			itbeg;
-    u8*			itget;
-    u8*			itput;
-    u8*			itend;
+    u8 * itbeg;
+    u8 * itget;
+    u8 * itput;
+    u8 * itend;
 };
 
 class StreamFile : public StreamBase
 {
-    SDL_RWops*		rw;
+    SDL_RWops * rw;
 
 public:
     StreamFile() {}
-    StreamFile(const std::string &, const char* mode);
+    StreamFile( const std::string &, const char * mode );
     ~StreamFile();
 
-    size_t		size(void) const;
-    size_t		tell(void) const;
+    size_t size( void ) const;
+    size_t tell( void ) const;
 
-    bool		open(const std::string &, const char* mode);
-    void		close(void);
+    bool open( const std::string &, const char * mode );
+    void close( void );
 
-    StreamBuf		toStreamBuf(size_t = 0 /* all data */);
+    StreamBuf toStreamBuf( size_t = 0 /* all data */ );
 
-    void		seek(size_t);
-    void		skip(size_t);
+    void seek( size_t );
+    void skip( size_t );
 
     u16 getBE16();
     u16 getLE16();
     u32 getBE32();
     u32 getLE32();
 
-    void		putBE32(u32);
-    void		putLE32(u32);
-    void		putBE16(u16);
-    void		putLE16(u16);
+    void putBE32( u32 );
+    void putLE32( u32 );
+    void putBE16( u16 );
+    void putLE16( u16 );
 
-    std::vector<u8>	getRaw(size_t = 0 /* all data */);
-    void		putRaw(const char*, size_t);
+    std::vector<u8> getRaw( size_t = 0 /* all data */ );
+    void putRaw( const char *, size_t );
 
-    std::string		toString(size_t = 0 /* all data */);
+    std::string toString( size_t = 0 /* all data */ );
 
 protected:
-    StreamFile &	operator= (const StreamFile &) { return *this; }
+    StreamFile & operator=( const StreamFile & )
+    {
+        return *this;
+    }
 
-    size_t		sizeg(void) const;
-    size_t		sizep(void) const;
-    size_t		tellg(void) const;
-    size_t		tellp(void) const;
+    size_t sizeg( void ) const;
+    size_t sizep( void ) const;
+    size_t tellg( void ) const;
+    size_t tellp( void ) const;
 
     u8 get8();
-    void		put8(char);
+    void put8( char );
 };
 
 #endif

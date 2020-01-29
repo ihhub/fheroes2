@@ -21,13 +21,11 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "cursor.h"
-#include "text.h"
 #include "button.h"
+#include "cursor.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "pocketpc.h"
+#include "text.h"
 
-void PocketPC::KingdomOverviewDialog(const Kingdom &)
-{
-}
+void PocketPC::KingdomOverviewDialog( const Kingdom & ) {}

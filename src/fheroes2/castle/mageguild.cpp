@@ -21,100 +21,102 @@
  ***************************************************************************/
 
 #include <algorithm>
+
 #include "castle.h"
 #include "heroes_base.h"
+#include "mageguild.h"
 #include "race.h"
 #include "settings.h"
-#include "mageguild.h"
 
-Spell GetUniqueCombatSpellCompatibility(const SpellStorage &, int race, int level);
-Spell GetCombatSpellCompatibility(int race, int level);
+Spell GetUniqueCombatSpellCompatibility( const SpellStorage &, int race, int level );
+Spell GetCombatSpellCompatibility( int race, int level );
 
-void MageGuild::Builds(int race, bool libraryCap)
+void MageGuild::Builds( int race, bool libraryCap )
 {
     general.clear();
     library.clear();
 
     // level 5
-    general.Append(7 > Rand::Get(1, 10) ? Spell::RandCombat(5) : Spell::RandAdventure(5));
+    general.Append( 7 > Rand::Get( 1, 10 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 ) );
 
     // level 4
-    general.Append(GetCombatSpellCompatibility(race, 4));
-    general.Append(Spell::RandAdventure(4));
+    general.Append( GetCombatSpellCompatibility( race, 4 ) );
+    general.Append( Spell::RandAdventure( 4 ) );
 
     // level 3
-    general.Append(GetCombatSpellCompatibility(race, 3));
-    general.Append(Spell::RandAdventure(3));
+    general.Append( GetCombatSpellCompatibility( race, 3 ) );
+    general.Append( Spell::RandAdventure( 3 ) );
 
     // level 2
-    general.Append(GetCombatSpellCompatibility(race, 2));
-    general.Append(GetUniqueCombatSpellCompatibility(general, race, 2));
-    general.Append(Spell::RandAdventure(2));
+    general.Append( GetCombatSpellCompatibility( race, 2 ) );
+    general.Append( GetUniqueCombatSpellCompatibility( general, race, 2 ) );
+    general.Append( Spell::RandAdventure( 2 ) );
 
     // level 1
-    general.Append(GetCombatSpellCompatibility(race, 1));
-    general.Append(GetUniqueCombatSpellCompatibility(general, race, 1));
-    general.Append(Spell::RandAdventure(1));
+    general.Append( GetCombatSpellCompatibility( race, 1 ) );
+    general.Append( GetUniqueCombatSpellCompatibility( general, race, 1 ) );
+    general.Append( Spell::RandAdventure( 1 ) );
 
-    if(libraryCap)
-    {
-	library.Append(GetUniqueCombatSpellCompatibility(general, race, 1));
-	library.Append(GetUniqueCombatSpellCompatibility(general, race, 2));
-	library.Append(GetUniqueCombatSpellCompatibility(general, race, 3));
-	library.Append(GetUniqueCombatSpellCompatibility(general, race, 4));
-	library.Append(GetUniqueCombatSpellCompatibility(general, race, 5));
+    if ( libraryCap ) {
+        library.Append( GetUniqueCombatSpellCompatibility( general, race, 1 ) );
+        library.Append( GetUniqueCombatSpellCompatibility( general, race, 2 ) );
+        library.Append( GetUniqueCombatSpellCompatibility( general, race, 3 ) );
+        library.Append( GetUniqueCombatSpellCompatibility( general, race, 4 ) );
+        library.Append( GetUniqueCombatSpellCompatibility( general, race, 5 ) );
     }
 }
 
-SpellStorage MageGuild::GetSpells(int lvlmage, bool islibrary, int level) const
+SpellStorage MageGuild::GetSpells( int lvlmage, bool islibrary, int level ) const
 {
     SpellStorage result;
 
-    if(lvlmage >= level)
-    {
-	result = general.GetSpells(level);
-	if(islibrary) result.Append(library.GetSpells(level));
+    if ( lvlmage >= level ) {
+        result = general.GetSpells( level );
+        if ( islibrary )
+            result.Append( library.GetSpells( level ) );
     }
 
     return result;
 }
 
-void MageGuild::EducateHero(HeroBase & hero, int lvlmage, bool isLibraryBuild) const
+void MageGuild::EducateHero( HeroBase & hero, int lvlmage, bool isLibraryBuild ) const
 {
-    if(hero.HaveSpellBook() && lvlmage)
-    {
-	SpellStorage spells;
+    if ( hero.HaveSpellBook() && lvlmage ) {
+        SpellStorage spells;
 
-	for(s32 level = 1; level <= 5; ++level) if(level <= lvlmage)
-	{
-	    spells.Append(general.GetSpells(level));
-	    if(isLibraryBuild) spells.Append(library.GetSpells(level));
-	}
+        for ( s32 level = 1; level <= 5; ++level )
+            if ( level <= lvlmage ) {
+                spells.Append( general.GetSpells( level ) );
+                if ( isLibraryBuild )
+                    spells.Append( library.GetSpells( level ) );
+            }
 
-	hero.AppendSpellsToBook(spells);
+        hero.AppendSpellsToBook( spells );
     }
 }
 
-Spell GetUniqueCombatSpellCompatibility(const SpellStorage & spells, int race, int lvl)
+Spell GetUniqueCombatSpellCompatibility( const SpellStorage & spells, int race, int lvl )
 {
-    Spell spell = GetCombatSpellCompatibility(race, lvl);
-    while(spells.isPresentSpell(spell)) spell = GetCombatSpellCompatibility(race, lvl);
+    Spell spell = GetCombatSpellCompatibility( race, lvl );
+    while ( spells.isPresentSpell( spell ) )
+        spell = GetCombatSpellCompatibility( race, lvl );
     return spell;
 }
 
-Spell GetCombatSpellCompatibility(int race, int lvl)
+Spell GetCombatSpellCompatibility( int race, int lvl )
 {
-    Spell spell = Spell::RandCombat(lvl);
-    while(!spell.isRaceCompatible(race)) spell = Spell::RandCombat(lvl);
+    Spell spell = Spell::RandCombat( lvl );
+    while ( !spell.isRaceCompatible( race ) )
+        spell = Spell::RandCombat( lvl );
     return spell;
 }
 
-StreamBase & operator<< (StreamBase & msg, const MageGuild & guild)
+StreamBase & operator<<( StreamBase & msg, const MageGuild & guild )
 {
     return msg << guild.general << guild.library;
 }
 
-StreamBase & operator>> (StreamBase & msg, MageGuild & guild)
+StreamBase & operator>>( StreamBase & msg, MageGuild & guild )
 {
     return msg >> guild.general >> guild.library;
 }

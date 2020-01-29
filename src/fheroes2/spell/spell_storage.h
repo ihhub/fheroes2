@@ -24,8 +24,9 @@
 #define H2SPELLSTORAGE_H
 
 #include <vector>
-#include "spell.h"
+
 #include "gamedefs.h"
+#include "spell.h"
 
 class Artifact;
 class BagArtifacts;
@@ -33,17 +34,17 @@ class BagArtifacts;
 class SpellStorage : public std::vector<Spell>
 {
 public:
-	SpellStorage();
+    SpellStorage();
 
-	u32 Size(int lvl = 0) const;
+    u32 Size( int lvl = 0 ) const;
 
-	SpellStorage GetSpells(int) const;
-	void Append(const SpellStorage &);
-	void Append(const Spell &);
-	void Append(const BagArtifacts &);
-	void Append(const Artifact &);
-	bool isPresentSpell(const Spell &) const;
-	std::string String(void) const;
+    SpellStorage GetSpells( int ) const;
+    void Append( const SpellStorage & );
+    void Append( const Spell & );
+    void Append( const BagArtifacts & );
+    void Append( const Artifact & );
+    bool isPresentSpell( const Spell & ) const;
+    std::string String( void ) const;
 };
 
 #endif

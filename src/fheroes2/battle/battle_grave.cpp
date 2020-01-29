@@ -21,53 +21,55 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include "battle_troop.h"
+
 #include "battle_board.h"
 #include "battle_grave.h"
+#include "battle_troop.h"
 
-Battle::Indexes Battle::Graveyard::GetClosedCells(void) const
+Battle::Indexes Battle::Graveyard::GetClosedCells( void ) const
 {
     Indexes res;
-    res.reserve(size());
+    res.reserve( size() );
 
-    for(const_iterator it = begin(); it != end(); ++it)
-        res.push_back((*it).first);
+    for ( const_iterator it = begin(); it != end(); ++it )
+        res.push_back( ( *it ).first );
 
     return res;
 }
 
-void Battle::Graveyard::AddTroop(const Unit & b)
+void Battle::Graveyard::AddTroop( const Unit & b )
 {
     Graveyard & map = *this;
 
-    map[b.GetHeadIndex()].push_back(b.GetUID());
+    map[b.GetHeadIndex()].push_back( b.GetUID() );
 
-    if(b.isWide())
-        map[b.GetTailIndex()].push_back(b.GetUID());
+    if ( b.isWide() )
+        map[b.GetTailIndex()].push_back( b.GetUID() );
 }
 
-void Battle::Graveyard::RemoveTroop(const Unit & b)
+void Battle::Graveyard::RemoveTroop( const Unit & b )
 {
     Graveyard & map = *this;
     TroopUIDs & ids = map[b.GetHeadIndex()];
 
-    TroopUIDs::iterator it = std::find(ids.begin(), ids.end(), b.GetUID());
-    if(it != ids.end()) ids.erase(it);
+    TroopUIDs::iterator it = std::find( ids.begin(), ids.end(), b.GetUID() );
+    if ( it != ids.end() )
+        ids.erase( it );
 
-    if(b.isWide())
-    {
+    if ( b.isWide() ) {
         TroopUIDs & ids2 = map[b.GetTailIndex()];
 
-        it = std::find(ids2.begin(), ids2.end(), b.GetUID());
-        if(it != ids2.end()) ids2.erase(it);
+        it = std::find( ids2.begin(), ids2.end(), b.GetUID() );
+        if ( it != ids2.end() )
+            ids2.erase( it );
     }
 }
 
-u32 Battle::Graveyard::GetLastTroopUID(s32 index) const
+u32 Battle::Graveyard::GetLastTroopUID( s32 index ) const
 {
-    for(const_iterator it = begin(); it != end(); ++it)
-        if(index == (*it).first && (*it).second.size())
-        return (*it).second.back();
+    for ( const_iterator it = begin(); it != end(); ++it )
+        if ( index == ( *it ).first && ( *it ).second.size() )
+            return ( *it ).second.back();
 
     return 0;
 }

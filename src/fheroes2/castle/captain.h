@@ -29,45 +29,42 @@ class Castle;
 
 class Captain : public HeroBase
 {
-  public:
-    Captain(Castle &);
+public:
+    Captain( Castle & );
 
-    bool	isValid(void) const;
-    int		GetAttack(void) const;
-    int		GetDefense(void) const;
-    int		GetPower(void) const;
-    int		GetKnowledge(void) const;
-    int		GetMorale(void) const;
-    int		GetLuck(void) const;
-    int		GetRace(void) const;
-    int		GetColor(void) const;
-    int		GetType(void) const;
-    int		GetControl(void) const;
-    s32		GetIndex(void) const;
+    bool isValid( void ) const;
+    int GetAttack( void ) const;
+    int GetDefense( void ) const;
+    int GetPower( void ) const;
+    int GetKnowledge( void ) const;
+    int GetMorale( void ) const;
+    int GetLuck( void ) const;
+    int GetRace( void ) const;
+    int GetColor( void ) const;
+    int GetType( void ) const;
+    int GetControl( void ) const;
+    s32 GetIndex( void ) const;
 
-    const std::string &
-		GetName(void) const;
+    const std::string & GetName( void ) const;
 
-    const Castle*
-		inCastle(void) const;
+    const Castle * inCastle( void ) const;
 
-    int		GetLevelSkill(int) const;
-    u32		GetSecondaryValues(int) const;
+    int GetLevelSkill( int ) const;
+    u32 GetSecondaryValues( int ) const;
 
-    const Army &
-		GetArmy(void) const;
-    Army &	GetArmy(void);
+    const Army & GetArmy( void ) const;
+    Army & GetArmy( void );
 
-    u32		GetMaxSpellPoints(void) const;
+    u32 GetMaxSpellPoints( void ) const;
 
-    void	ActionPreBattle(void);
-    void	ActionAfterBattle(void);
+    void ActionPreBattle( void );
+    void ActionAfterBattle( void );
 
-    void	PortraitRedraw(s32, s32, int type, Surface &) const;
-    Surface	GetPortrait(int type) const;
+    void PortraitRedraw( s32, s32, int type, Surface & ) const;
+    Surface GetPortrait( int type ) const;
 
-  private:
-    Castle &	home;
+private:
+    Castle & home;
 };
 
 #endif

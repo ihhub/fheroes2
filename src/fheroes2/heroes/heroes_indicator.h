@@ -24,6 +24,7 @@
 #define H2HEROESIND_H
 
 #include <string>
+
 #include "gamedefs.h"
 
 class Heroes;
@@ -31,59 +32,59 @@ class Heroes;
 class HeroesIndicator
 {
 public:
-    HeroesIndicator(const Heroes &);
+    HeroesIndicator( const Heroes & );
 
-    const Rect &	GetArea(void) const;
-    const std::string &	GetDescriptions(void) const;
-    void		SetPos(const Point &, bool skip_back = false);
+    const Rect & GetArea( void ) const;
+    const std::string & GetDescriptions( void ) const;
+    void SetPos( const Point &, bool skip_back = false );
 
 protected:
-    const Heroes & 	hero;
-    Rect		area;
-    SpriteBack		back;
-    std::string		descriptions;
+    const Heroes & hero;
+    Rect area;
+    SpriteBack back;
+    std::string descriptions;
 };
 
 class LuckIndicator : public HeroesIndicator
 {
 public:
-    LuckIndicator(const Heroes &);
+    LuckIndicator( const Heroes & );
 
-    void	Redraw(void);
-    static void	QueueEventProcessing(LuckIndicator &);
+    void Redraw( void );
+    static void QueueEventProcessing( LuckIndicator & );
 
 private:
-    int		luck;
+    int luck;
 };
 
 class MoraleIndicator : public HeroesIndicator
 {
 public:
-    MoraleIndicator(const Heroes &);
+    MoraleIndicator( const Heroes & );
 
-    void	Redraw(void);
-    static void	QueueEventProcessing(MoraleIndicator &);
+    void Redraw( void );
+    static void QueueEventProcessing( MoraleIndicator & );
 
 private:
-    int		morale;
+    int morale;
 };
 
 class ExperienceIndicator : public HeroesIndicator
 {
 public:
-    ExperienceIndicator(const Heroes &);
+    ExperienceIndicator( const Heroes & );
 
-    void	Redraw(void);
-    void	QueueEventProcessing(void);
+    void Redraw( void );
+    void QueueEventProcessing( void );
 };
 
 class SpellPointsIndicator : public HeroesIndicator
 {
 public:
-    SpellPointsIndicator(const Heroes &);
+    SpellPointsIndicator( const Heroes & );
 
-    void	Redraw(void);
-    void	QueueEventProcessing(void);
+    void Redraw( void );
+    void QueueEventProcessing( void );
 };
 
 #endif

@@ -24,6 +24,7 @@
 #define H2RECRUITS_H
 
 #include <utility>
+
 #include "gamedefs.h"
 
 class Heroes;
@@ -33,20 +34,20 @@ class Recruits : public std::pair<int, int>
 public:
     Recruits();
 
-    void Reset(void);
+    void Reset( void );
 
-    int GetID1(void) const;
-    int GetID2(void) const;
+    int GetID1( void ) const;
+    int GetID2( void ) const;
 
-    const Heroes* GetHero1(void) const;
-    const Heroes* GetHero2(void) const;
-    Heroes* GetHero1(void);
-    Heroes* GetHero2(void);
+    const Heroes * GetHero1( void ) const;
+    const Heroes * GetHero2( void ) const;
+    Heroes * GetHero1( void );
+    Heroes * GetHero2( void );
 
-    void SetHero1(const Heroes*);
-    void SetHero2(const Heroes*);
+    void SetHero1( const Heroes * );
+    void SetHero2( const Heroes * );
 };
 
-StreamBase & operator>> (StreamBase &, Recruits &);
+StreamBase & operator>>( StreamBase &, Recruits & );
 
 #endif

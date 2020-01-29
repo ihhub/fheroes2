@@ -22,8 +22,8 @@
 #ifndef __IMG_SAVETOPNG_H__
 #define __IMG_SAVETOPNG_H__
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-    // SDL2 also supported png, skipped...
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+// SDL2 also supported png, skipped...
 #else
 /* #include <SDL/begin_code.h> */
 
@@ -40,20 +40,16 @@ extern "C" {
  * Takes a filename, a surface to save, and a compression level.  The
  * compression level can be 0(min) through 9(max), or -1(default).
  */
-DECLSPEC int SDLCALL    IMG_SavePNG(const char  *file,
-                                    SDL_Surface *surf,
-                                    int          compression);
+DECLSPEC int SDLCALL IMG_SavePNG( const char * file, SDL_Surface * surf, int compression );
 /**
  * Takes a SDL_RWops pointer, a surface to save, and a compression level.
  * compression can be 0(min) through 9(max), or -1(default).
  */
-DECLSPEC int SDLCALL IMG_SavePNG_RW(SDL_RWops   *src,
-                                    SDL_Surface *surf,
-                                    int          compression);
+DECLSPEC int SDLCALL IMG_SavePNG_RW( SDL_RWops * src, SDL_Surface * surf, int compression );
 #endif
 
 #ifdef __cplusplus
 }
 #endif
 #endif
-#endif/*__IMG_SAVETOPNG_H__*/
+#endif /*__IMG_SAVETOPNG_H__*/

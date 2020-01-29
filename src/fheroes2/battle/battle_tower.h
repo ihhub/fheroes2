@@ -23,38 +23,43 @@
 #ifndef H2BATTLE_TOWER_H
 #define H2BATTLE_TOWER_H
 
-#include "gamedefs.h"
 #include "battle_troop.h"
+#include "gamedefs.h"
 
 class Castle;
 
 namespace Battle
 {
-    enum { TWR_LEFT = 0x01, TWR_CENTER = 0x02, TWR_RIGHT = 0x04 };
+    enum
+    {
+        TWR_LEFT = 0x01,
+        TWR_CENTER = 0x02,
+        TWR_RIGHT = 0x04
+    };
 
     class Tower : public Unit
     {
     public:
-	Tower(const Castle &, int);
+        Tower( const Castle &, int );
 
-	bool	isValid(void) const;
-	int	GetColor(void) const;
-	u32	GetType(void) const;
-	u32	GetBonus(void) const;
-	u32	GetAttack(void) const;
+        bool isValid( void ) const;
+        int GetColor( void ) const;
+        u32 GetType( void ) const;
+        u32 GetBonus( void ) const;
+        u32 GetAttack( void ) const;
 
-	const char* GetName(void) const;
+        const char * GetName( void ) const;
 
-	void	SetDestroy(void);
-	Point	GetPortPosition(void) const;
+        void SetDestroy( void );
+        Point GetPortPosition( void ) const;
 
-	static std::string GetInfo(const Castle &);
+        static std::string GetInfo( const Castle & );
 
     private:
-	int	type;
-	int	color;
-	u32	bonus;
-	bool	valid;
+        int type;
+        int color;
+        u32 bonus;
+        bool valid;
     };
 }
 

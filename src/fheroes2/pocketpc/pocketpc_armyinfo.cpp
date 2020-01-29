@@ -21,92 +21,93 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "cursor.h"
-#include "settings.h"
-#include "text.h"
-#include "button.h"
-#include "game.h"
-#include "dialog.h"
 #include "army.h"
 #include "army_troop.h"
+#include "button.h"
+#include "cursor.h"
+#include "dialog.h"
+#include "game.h"
 #include "pocketpc.h"
+#include "settings.h"
+#include "text.h"
 
-void DrawMonsterStats(const Point &, const Troop &);
-void DrawBattleStats(const Point &, const Troop &);
+void DrawMonsterStats( const Point &, const Troop & );
+void DrawBattleStats( const Point &, const Troop & );
 
-int PocketPC::DialogArmyInfo(const Troop & troop, u32 flags)
+int PocketPC::DialogArmyInfo( const Troop & troop, u32 flags )
 {
     Cursor & cursor = Cursor::Get();
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
     cursor.Hide();
-    cursor.SetThemes(cursor.POINTER);
+    cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder frameborder(Size(320, 224));
+    Dialog::FrameBorder frameborder( Size( 320, 224 ) );
     const Rect & dst_rt = frameborder.GetArea();
 
     // name
     Text text;
-    text.Set(troop.GetName(), Font::BIG);
-    text.Blit(dst_rt.x + (dst_rt.w - text.w()) / 2, dst_rt.y + 10);
+    text.Set( troop.GetName(), Font::BIG );
+    text.Blit( dst_rt.x + ( dst_rt.w - text.w() ) / 2, dst_rt.y + 10 );
 
-    const Sprite & frame = AGG::GetICN(troop.ICNMonh(), 0);
-    frame.Blit(dst_rt.x + 50 - frame.w() / 2, dst_rt.y + 145 - frame.h());
+    const Sprite & frame = AGG::GetICN( troop.ICNMonh(), 0 );
+    frame.Blit( dst_rt.x + 50 - frame.w() / 2, dst_rt.y + 145 - frame.h() );
 
-    text.Set(GetString(troop.GetCount()));
-    text.Blit(dst_rt.x + 50 - text.w() / 2, dst_rt.y + 150);
+    text.Set( GetString( troop.GetCount() ) );
+    text.Blit( dst_rt.x + 50 - text.w() / 2, dst_rt.y + 150 );
 
     // stats
-    DrawMonsterStats(Point(dst_rt.x + 200, dst_rt.y + 40), troop);
+    DrawMonsterStats( Point( dst_rt.x + 200, dst_rt.y + 40 ), troop );
 
-    if(troop.isBattle())
-        DrawBattleStats(Point(dst_rt.x + 160, dst_rt.y + 160), troop);
+    if ( troop.isBattle() )
+        DrawBattleStats( Point( dst_rt.x + 160, dst_rt.y + 160 ), troop );
 
-    Button buttonDismiss(dst_rt.x + dst_rt.w / 2 - 160, dst_rt.y + dst_rt.h - 30, ICN::VIEWARMY, 1, 2);
-    Button buttonUpgrade(dst_rt.x + dst_rt.w / 2 - 60, dst_rt.y + dst_rt.h - 30, ICN::VIEWARMY, 5, 6);
-    Button buttonExit(dst_rt.x + dst_rt.w / 2 + 60, dst_rt.y + dst_rt.h - 30, ICN::VIEWARMY, 3, 4);
+    Button buttonDismiss( dst_rt.x + dst_rt.w / 2 - 160, dst_rt.y + dst_rt.h - 30, ICN::VIEWARMY, 1, 2 );
+    Button buttonUpgrade( dst_rt.x + dst_rt.w / 2 - 60, dst_rt.y + dst_rt.h - 30, ICN::VIEWARMY, 5, 6 );
+    Button buttonExit( dst_rt.x + dst_rt.w / 2 + 60, dst_rt.y + dst_rt.h - 30, ICN::VIEWARMY, 3, 4 );
 
-    if(Dialog::READONLY & flags)
-    {
+    if ( Dialog::READONLY & flags ) {
         buttonDismiss.Press();
-        buttonDismiss.SetDisable(true);
+        buttonDismiss.SetDisable( true );
     }
 
-    if(! troop.isBattle() && troop.isAllowUpgrade())
-    {
-	if(Dialog::UPGRADE & flags)
-        {
-	    if(Dialog::UPGRADE_DISABLE & flags)
-	    {
-        	buttonUpgrade.Press();
-        	buttonUpgrade.SetDisable(true);
-    	    }
-    	    else
-        	buttonUpgrade.SetDisable(false);
-    	    buttonUpgrade.Draw();
+    if ( !troop.isBattle() && troop.isAllowUpgrade() ) {
+        if ( Dialog::UPGRADE & flags ) {
+            if ( Dialog::UPGRADE_DISABLE & flags ) {
+                buttonUpgrade.Press();
+                buttonUpgrade.SetDisable( true );
+            }
+            else
+                buttonUpgrade.SetDisable( false );
+            buttonUpgrade.Draw();
         }
-        else buttonUpgrade.SetDisable(true);
+        else
+            buttonUpgrade.SetDisable( true );
     }
-    else buttonUpgrade.SetDisable(true);
+    else
+        buttonUpgrade.SetDisable( true );
 
-    if(! troop.isBattle()) buttonDismiss.Draw();
+    if ( !troop.isBattle() )
+        buttonDismiss.Draw();
     buttonExit.Draw();
 
     cursor.Show();
     display.Flip();
 
-    while(le.HandleEvents())
-    {
-        if(buttonUpgrade.isEnable()) le.MousePressLeft(buttonUpgrade) ? (buttonUpgrade).PressDraw() : (buttonUpgrade).ReleaseDraw();
-        if(buttonDismiss.isEnable()) le.MousePressLeft(buttonDismiss) ? (buttonDismiss).PressDraw() : (buttonDismiss).ReleaseDraw();
-        le.MousePressLeft(buttonExit) ? (buttonExit).PressDraw() : (buttonExit).ReleaseDraw();
+    while ( le.HandleEvents() ) {
+        if ( buttonUpgrade.isEnable() )
+            le.MousePressLeft( buttonUpgrade ) ? ( buttonUpgrade ).PressDraw() : ( buttonUpgrade ).ReleaseDraw();
+        if ( buttonDismiss.isEnable() )
+            le.MousePressLeft( buttonDismiss ) ? ( buttonDismiss ).PressDraw() : ( buttonDismiss ).ReleaseDraw();
+        le.MousePressLeft( buttonExit ) ? ( buttonExit ).PressDraw() : ( buttonExit ).ReleaseDraw();
 
-        if(buttonUpgrade.isEnable() && le.MouseClickLeft(buttonUpgrade)) return Dialog::UPGRADE;
-        else
-        if(buttonDismiss.isEnable() && le.MouseClickLeft(buttonDismiss)) return Dialog::DISMISS;
-        else
-        if(le.MouseClickLeft(buttonExit) || Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT)) return Dialog::CANCEL;
+        if ( buttonUpgrade.isEnable() && le.MouseClickLeft( buttonUpgrade ) )
+            return Dialog::UPGRADE;
+        else if ( buttonDismiss.isEnable() && le.MouseClickLeft( buttonDismiss ) )
+            return Dialog::DISMISS;
+        else if ( le.MouseClickLeft( buttonExit ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+            return Dialog::CANCEL;
     }
 
     return Dialog::ZERO;

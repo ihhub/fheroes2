@@ -23,8 +23,9 @@
 #define H2HEROPATH_H
 
 #include <list>
-#include "gamedefs.h"
+
 #include "direction.h"
+#include "gamedefs.h"
 
 class Heroes;
 
@@ -32,74 +33,91 @@ namespace Route
 {
     class Step
     {
-	public:
-	    Step() : from(-1), direction(Direction::CENTER), penalty(0) {}
-	    Step(s32 index, int dir, u32 cost) : from(index), direction(dir), penalty(cost) {}
+    public:
+        Step()
+            : from( -1 )
+            , direction( Direction::CENTER )
+            , penalty( 0 )
+        {}
+        Step( s32 index, int dir, u32 cost )
+            : from( index )
+            , direction( dir )
+            , penalty( cost )
+        {}
 
-	    s32		GetIndex(void) const;
-	    u32		GetPenalty(void) const;
-	    s32 	GetFrom(void) const;
-	    int 	GetDirection(void) const;
-	    bool	isBad(void) const;
+        s32 GetIndex( void ) const;
+        u32 GetPenalty( void ) const;
+        s32 GetFrom( void ) const;
+        int GetDirection( void ) const;
+        bool isBad( void ) const;
 
-	protected:
-    	    friend StreamBase & operator<< (StreamBase &, const Step &);
-    	    friend StreamBase & operator>> (StreamBase &, Step &);
+    protected:
+        friend StreamBase & operator<<( StreamBase &, const Step & );
+        friend StreamBase & operator>>( StreamBase &, Step & );
 
-	    s32		from;
-	    int		direction;
-	    u32		penalty;
+        s32 from;
+        int direction;
+        u32 penalty;
     };
 
     class Path : public std::list<Step>
     {
-	public:
-	    Path(const Heroes &);
-	    Path(const Path &);
+    public:
+        Path( const Heroes & );
+        Path( const Path & );
 
-	    Path &	operator= (const Path &);
+        Path & operator=( const Path & );
 
-	    s32		GetDestinationIndex(void) const;
-	    s32		GetLastIndex(void) const;
-	    s32		GetDestinedIndex(void) const;
-	    int		GetFrontDirection(void) const;
-	    u32		GetFrontPenalty(void) const;
-	    u32		GetTotalPenalty(void) const;
-	    bool	Calculate(const s32 &, int limit = -1);
+        s32 GetDestinationIndex( void ) const;
+        s32 GetLastIndex( void ) const;
+        s32 GetDestinedIndex( void ) const;
+        int GetFrontDirection( void ) const;
+        u32 GetFrontPenalty( void ) const;
+        u32 GetTotalPenalty( void ) const;
+        bool Calculate( const s32 &, int limit = -1 );
 
-	    void	Show(void){ hide = false; }
-	    void	Hide(void){ hide = true; }
-	    void	Reset(void);
-	    void	PopFront(void);
-	    void	PopBack(void);
-	    void	RescanObstacle(void);
-	    void	RescanPassable(void);
+        void Show( void )
+        {
+            hide = false;
+        }
+        void Hide( void )
+        {
+            hide = true;
+        }
+        void Reset( void );
+        void PopFront( void );
+        void PopBack( void );
+        void RescanObstacle( void );
+        void RescanPassable( void );
 
-	    bool	isComplete(void) const;
-	    bool	isValid(void) const;
-	    bool	isShow(void) const { return !hide; }
-	    bool	hasObstacle(void) const;
+        bool isComplete( void ) const;
+        bool isValid( void ) const;
+        bool isShow( void ) const
+        {
+            return !hide;
+        }
+        bool hasObstacle( void ) const;
 
-	    std::string	String(void) const;
+        std::string String( void ) const;
 
-	    s32		GetAllowStep(void) const;
-    	    static int	GetIndexSprite(int from, int to, int mod);
+        s32 GetAllowStep( void ) const;
+        static int GetIndexSprite( int from, int to, int mod );
 
-	private:
-	    bool	Find(s32, int limit = -1);
+    private:
+        bool Find( s32, int limit = -1 );
 
-	    friend StreamBase & operator<< (StreamBase &, const Path &);
-	    friend StreamBase & operator>> (StreamBase &, Path &);
+        friend StreamBase & operator<<( StreamBase &, const Path & );
+        friend StreamBase & operator>>( StreamBase &, Path & );
 
-	    const Heroes* hero;
-	    s32		dst;
-	    bool	hide;
+        const Heroes * hero;
+        s32 dst;
+        bool hide;
     };
 
-    StreamBase & operator<< (StreamBase &, const Step &);
-    StreamBase & operator<< (StreamBase &, const Path &);
-    StreamBase & operator>> (StreamBase &, Step &);
-    StreamBase & operator>> (StreamBase &, Path &);
+    StreamBase & operator<<( StreamBase &, const Step & );
+    StreamBase & operator<<( StreamBase &, const Path & );
+    StreamBase & operator>>( StreamBase &, Step & );
+    StreamBase & operator>>( StreamBase &, Path & );
 }
 
 #endif

@@ -21,176 +21,193 @@
  ***************************************************************************/
 
 #include <sstream>
-#include "maps.h"
-#include "direction.h"
 
-std::string Direction::String(int direct)
+#include "direction.h"
+#include "maps.h"
+
+std::string Direction::String( int direct )
 {
-    const char* str_direct[] = { "unknown", "center", "top", "top right", "right", "bottom right", "bottom", "bottom left", "left", "top left" };
+    const char * str_direct[] = {"unknown", "center", "top", "top right", "right", "bottom right", "bottom", "bottom left", "left", "top left"};
     std::ostringstream os;
 
-    if(direct & CENTER)
-	os << str_direct[1] << ",";
-    if(direct & TOP)
-	os << str_direct[2] << ",";
-    if(direct & TOP_RIGHT)
-	os << str_direct[3] << ",";
-    if(direct & RIGHT)
-	os << str_direct[4] << ",";
-    if(direct & BOTTOM_RIGHT)
-	os << str_direct[5] << ",";
-    if(direct & BOTTOM)
-	os << str_direct[6] << ",";
-    if(direct & BOTTOM_LEFT)
-	os << str_direct[7] << ",";
-    if(direct & LEFT)
-	os << str_direct[8] << ",";
-    if(direct & TOP_LEFT)
-	os << str_direct[9] << ",";
+    if ( direct & CENTER )
+        os << str_direct[1] << ",";
+    if ( direct & TOP )
+        os << str_direct[2] << ",";
+    if ( direct & TOP_RIGHT )
+        os << str_direct[3] << ",";
+    if ( direct & RIGHT )
+        os << str_direct[4] << ",";
+    if ( direct & BOTTOM_RIGHT )
+        os << str_direct[5] << ",";
+    if ( direct & BOTTOM )
+        os << str_direct[6] << ",";
+    if ( direct & BOTTOM_LEFT )
+        os << str_direct[7] << ",";
+    if ( direct & LEFT )
+        os << str_direct[8] << ",";
+    if ( direct & TOP_LEFT )
+        os << str_direct[9] << ",";
 
     const std::string & res = os.str();
 
     return res.empty() ? str_direct[0] : res;
 }
 
-int Direction::Get(s32 from, s32 to)
+int Direction::Get( s32 from, s32 to )
 {
     const Directions directions = Direction::All();
 
-    for(Directions::const_iterator
-            it = directions.begin(); it != directions.end(); ++it)
-	if(to == Maps::GetDirectionIndex(from, *it))
-	    return *it;
+    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
+        if ( to == Maps::GetDirectionIndex( from, *it ) )
+            return *it;
 
     return to == from ? CENTER : UNKNOWN;
 }
 
-bool Direction::ShortDistanceClockWise(int from , int to)
+bool Direction::ShortDistanceClockWise( int from, int to )
 {
-   switch(from)
-   {
-	case TOP:
-	    switch(to)
-	    {
-		case TOP_RIGHT:
-		case RIGHT:
-		case BOTTOM_RIGHT:
-		case BOTTOM:		return true;
+    switch ( from ) {
+    case TOP:
+        switch ( to ) {
+        case TOP_RIGHT:
+        case RIGHT:
+        case BOTTOM_RIGHT:
+        case BOTTOM:
+            return true;
 
-		default: break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case TOP_RIGHT:
-	    switch(to)
-	    {
-		case RIGHT:
-		case BOTTOM_RIGHT:
-		case BOTTOM:
-		case BOTTOM_LEFT:	return true;
+    case TOP_RIGHT:
+        switch ( to ) {
+        case RIGHT:
+        case BOTTOM_RIGHT:
+        case BOTTOM:
+        case BOTTOM_LEFT:
+            return true;
 
-		default: break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case RIGHT:
-	    switch(to)
-	    {
-		case BOTTOM_RIGHT:
-		case BOTTOM:
-		case BOTTOM_LEFT:
-		case LEFT:		return true;
+    case RIGHT:
+        switch ( to ) {
+        case BOTTOM_RIGHT:
+        case BOTTOM:
+        case BOTTOM_LEFT:
+        case LEFT:
+            return true;
 
-		default: break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case BOTTOM_RIGHT:
-	    switch(to)
-	    {
-		case BOTTOM:
-		case BOTTOM_LEFT:
-		case LEFT:
-		case TOP_LEFT:		return true;
+    case BOTTOM_RIGHT:
+        switch ( to ) {
+        case BOTTOM:
+        case BOTTOM_LEFT:
+        case LEFT:
+        case TOP_LEFT:
+            return true;
 
-		default: break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case BOTTOM:
-	    switch(to)
-	    {
-		case BOTTOM_LEFT:
-		case LEFT:
-		case TOP_LEFT:		return true;
+    case BOTTOM:
+        switch ( to ) {
+        case BOTTOM_LEFT:
+        case LEFT:
+        case TOP_LEFT:
+            return true;
 
-		default: break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case BOTTOM_LEFT:
-	    switch(to)
-	    {
-		case TOP:
-		case TOP_RIGHT:
-		case LEFT:
-		case TOP_LEFT:		return true;
+    case BOTTOM_LEFT:
+        switch ( to ) {
+        case TOP:
+        case TOP_RIGHT:
+        case LEFT:
+        case TOP_LEFT:
+            return true;
 
-		default: break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case LEFT:
-	    switch(to)
-	    {
-		case TOP:
-		case TOP_RIGHT:
-		case RIGHT:
-		case TOP_LEFT:		return true;
+    case LEFT:
+        switch ( to ) {
+        case TOP:
+        case TOP_RIGHT:
+        case RIGHT:
+        case TOP_LEFT:
+            return true;
 
-		default: break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	case TOP_LEFT:
-	    switch(to)
-	    {
-		case TOP:
-		case TOP_RIGHT:
-		case RIGHT:
-		case BOTTOM_RIGHT:	return true;
+    case TOP_LEFT:
+        switch ( to ) {
+        case TOP:
+        case TOP_RIGHT:
+        case RIGHT:
+        case BOTTOM_RIGHT:
+            return true;
 
-		default: break;
-	    }
-	    break;
+        default:
+            break;
+        }
+        break;
 
-	default: break;
-   }
+    default:
+        break;
+    }
 
     return false;
 }
 
-int Direction::Reflect(int direct)
+int Direction::Reflect( int direct )
 {
-    switch(direct)
-    {
-	case TOP_LEFT:		return BOTTOM_RIGHT;
-	case TOP:		return BOTTOM;
-	case TOP_RIGHT:		return BOTTOM_LEFT;
-	case RIGHT:		return LEFT;
-	case BOTTOM_RIGHT:	return TOP_LEFT;
-	case BOTTOM:		return TOP;
-	case BOTTOM_LEFT:	return TOP_RIGHT;
-	case LEFT:		return RIGHT;
-	case CENTER:		return CENTER;
-	default: break;
+    switch ( direct ) {
+    case TOP_LEFT:
+        return BOTTOM_RIGHT;
+    case TOP:
+        return BOTTOM;
+    case TOP_RIGHT:
+        return BOTTOM_LEFT;
+    case RIGHT:
+        return LEFT;
+    case BOTTOM_RIGHT:
+        return TOP_LEFT;
+    case BOTTOM:
+        return TOP;
+    case BOTTOM_LEFT:
+        return TOP_RIGHT;
+    case LEFT:
+        return RIGHT;
+    case CENTER:
+        return CENTER;
+    default:
+        break;
     }
 
     return UNKNOWN;
 }
 
-Directions Direction::All(void)
+Directions Direction::All( void )
 {
-    const int directs[] = { TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT };
-    return Directions(directs, directs + 8);
+    const int directs[] = {TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT};
+    return Directions( directs, directs + 8 );
 }

@@ -24,6 +24,7 @@
 #define H2AUDIO_MIXER_H
 
 #include <vector>
+
 #include "types.h"
 
 #ifdef WITH_MIXER
@@ -35,30 +36,30 @@ namespace Mixer
 #ifdef WITH_MIXER
     typedef Mix_Chunk chunk_t;
 
-    void	FreeChunk(chunk_t*);
-    chunk_t*	LoadWAV(const char*);
-    chunk_t*	LoadWAV(const u8*, u32);
+    void FreeChunk( chunk_t * );
+    chunk_t * LoadWAV( const char * );
+    chunk_t * LoadWAV( const u8 *, u32 );
 
-    int		Play(chunk_t*, int, bool);
-    int		Play(const char*, int = -1, bool = false);
+    int Play( chunk_t *, int, bool );
+    int Play( const char *, int = -1, bool = false );
 #endif
-    int		Play(const u8*, u32, int = -1, bool = false);
+    int Play( const u8 *, u32, int = -1, bool = false );
 
-    void	SetChannels(u8);
-    u16		MaxVolume(void);
-    u16		Volume(int ch, s16 = -1);
+    void SetChannels( u8 );
+    u16 MaxVolume( void );
+    u16 Volume( int ch, s16 = -1 );
 
-    void	Pause(int ch = -1);
-    void	Resume(int ch = -1);
-    void	Stop(int ch = -1);
-    void	Reset(void);
+    void Pause( int ch = -1 );
+    void Resume( int ch = -1 );
+    void Stop( int ch = -1 );
+    void Reset( void );
 
-    u8		isPlaying(int);
-    u8		isPaused(int);
-    bool	isValid(void);
+    u8 isPlaying( int );
+    u8 isPaused( int );
+    bool isValid( void );
 
-    void	Reduce(void);
-    void	Enhance(void);
+    void Reduce( void );
+    void Enhance( void );
 }
 
 #endif

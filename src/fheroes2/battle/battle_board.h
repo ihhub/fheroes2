@@ -34,68 +34,76 @@
 
 namespace Battle
 {
-    inline direction_t & operator++ (direction_t & d){ return d = ( CENTER == d ? TOP_LEFT : direction_t(d << 1)); }
-    inline direction_t & operator-- (direction_t & d){ return d = ( TOP_LEFT == d ? CENTER : direction_t(d >> 1)); }
+    inline direction_t & operator++( direction_t & d )
+    {
+        return d = ( CENTER == d ? TOP_LEFT : direction_t( d << 1 ) );
+    }
+    inline direction_t & operator--( direction_t & d )
+    {
+        return d = ( TOP_LEFT == d ? CENTER : direction_t( d >> 1 ) );
+    }
 
     typedef std::vector<s32> Indexes;
 
     class Board : public std::vector<Cell>
     {
     public:
-	Board();
+        Board();
 
-	void		Reset(void);
+        void Reset( void );
 
-	Rect		GetArea(void) const;
-	void		SetArea(const Rect &);
+        Rect GetArea( void ) const;
+        void SetArea( const Rect & );
 
-	s32		GetIndexAbsPosition(const Point &) const;
-	Indexes		GetPassableQualityPositions(const Unit & b);
-	Indexes		GetNearestTroopIndexes(s32, const Indexes*) const;
-	Indexes		GetAStarPath(const Unit &, const Position &, bool debug = true);
-	std::string	AllUnitsInfo(void) const;
+        s32 GetIndexAbsPosition( const Point & ) const;
+        Indexes GetPassableQualityPositions( const Unit & b );
+        Indexes GetNearestTroopIndexes( s32, const Indexes * ) const;
+        Indexes GetAStarPath( const Unit &, const Position &, bool debug = true );
+        std::string AllUnitsInfo( void ) const;
 
-	void		SetEnemyQuality(const Unit &);
-	void		SetPositionQuality(const Unit &);
-	void		SetScanPassability(const Unit &);
+        void SetEnemyQuality( const Unit & );
+        void SetPositionQuality( const Unit & );
+        void SetScanPassability( const Unit & );
 
-	void		SetCobjObjects(const Maps::Tiles &);
-	void		SetCobjObject(int icn, s32);
-	void		SetCovrObjects(int icn);
+        void SetCobjObjects( const Maps::Tiles & );
+        void SetCobjObject( int icn, s32 );
+        void SetCovrObjects( int icn );
 
-	static std::string	GetMoatInfo(void);
+        static std::string GetMoatInfo( void );
 
-	static Cell*		GetCell(s32, int = CENTER);
-	static bool		isNearIndexes(s32, s32);
-	static bool		isValidIndex(s32);
-	static bool		isCastleIndex(s32);
-	static bool		isMoatIndex(s32);
-	static bool		isBridgeIndex(s32);
-	static bool		isImpassableIndex(s32);
-	static bool		isOutOfWallsIndex(s32);
-	static bool		isReflectDirection(int);
-	static int		GetReflectDirection(int);
-	static int		GetDirection(s32, s32);
-	static s32		GetDistance(s32, s32);
-	static bool		isValidDirection(s32, int);
-	static s32		GetIndexDirection(s32, int);
-        static Indexes		GetDistanceIndexes(s32, u32);
-        static Indexes		GetAroundIndexes(s32);
-	static Indexes		GetAroundIndexes(const Unit &);
-	static Indexes		GetMoveWideIndexes(s32, bool reflect);
-	static bool		isValidMirrorImageIndex(s32, const Unit*);
+        static Cell * GetCell( s32, int = CENTER );
+        static bool isNearIndexes( s32, s32 );
+        static bool isValidIndex( s32 );
+        static bool isCastleIndex( s32 );
+        static bool isMoatIndex( s32 );
+        static bool isBridgeIndex( s32 );
+        static bool isImpassableIndex( s32 );
+        static bool isOutOfWallsIndex( s32 );
+        static bool isReflectDirection( int );
+        static int GetReflectDirection( int );
+        static int GetDirection( s32, s32 );
+        static s32 GetDistance( s32, s32 );
+        static bool isValidDirection( s32, int );
+        static s32 GetIndexDirection( s32, int );
+        static Indexes GetDistanceIndexes( s32, u32 );
+        static Indexes GetAroundIndexes( s32 );
+        static Indexes GetAroundIndexes( const Unit & );
+        static Indexes GetMoveWideIndexes( s32, bool reflect );
+        static bool isValidMirrorImageIndex( s32, const Unit * );
     };
 
-    struct ShortestDistance : public std::binary_function <s32, s32, bool>
+    struct ShortestDistance : public std::binary_function<s32, s32, bool>
     {
-	ShortestDistance(s32 index) : center(index) {}
+        ShortestDistance( s32 index )
+            : center( index )
+        {}
 
-	bool operator() (s32 index1, s32 index2) const
-	{
-	    return Board::GetDistance(center, index1) < Board::GetDistance(center, index2);
-	}
+        bool operator()( s32 index1, s32 index2 ) const
+        {
+            return Board::GetDistance( center, index1 ) < Board::GetDistance( center, index2 );
+        }
 
-	s32 center;
+        s32 center;
     };
 }
 

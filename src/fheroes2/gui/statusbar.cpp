@@ -20,46 +20,43 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "statusbar.h"
 #include "cursor.h"
 #include "display.h"
-#include "statusbar.h"
 
-StatusBar::StatusBar()
-{
-}
+StatusBar::StatusBar() {}
 
-void StatusBar::SetCenter(const Point & pt)
+void StatusBar::SetCenter( const Point & pt )
 {
     center = pt;
 }
 
-void StatusBar::SetCenter(s32 cx, s32 cy)
+void StatusBar::SetCenter( s32 cx, s32 cy )
 {
     center.x = cx;
     center.y = cy;
 }
 
-void StatusBar::ShowMessage(const std::string & msg)
+void StatusBar::ShowMessage( const std::string & msg )
 {
-    if(msg != prev)
-    {
+    if ( msg != prev ) {
         Cursor::Get().Hide();
-        SetText(msg);
-        SetPos(center.x - w() / 2, center.y - h() / 2);
+        SetText( msg );
+        SetPos( center.x - w() / 2, center.y - h() / 2 );
         Show();
         Cursor::Get().Show();
         Display::Get().Flip();
-	prev = msg;
+        prev = msg;
     }
 }
 
-void StatusBar::Redraw(void)
+void StatusBar::Redraw( void )
 {
     Hide();
     Show();
 }
 
-const std::string & StatusBar::GetMessage(void) const
+const std::string & StatusBar::GetMessage( void ) const
 {
     return prev;
 }

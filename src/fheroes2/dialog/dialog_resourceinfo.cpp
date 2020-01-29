@@ -21,14 +21,14 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "text.h"
-#include "settings.h"
-#include "cursor.h"
 #include "button.h"
-#include "resource.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "resource.h"
+#include "settings.h"
+#include "text.h"
 
-int Dialog::ResourceInfo(const std::string &header, const std::string &message, const Funds & rs, int buttons)
+int Dialog::ResourceInfo( const std::string & header, const std::string & message, const Funds & rs, int buttons )
 {
     Display & display = Display::Get();
 
@@ -36,29 +36,31 @@ int Dialog::ResourceInfo(const std::string &header, const std::string &message, 
     Cursor & cursor = Cursor::Get();
 
     cursor.Hide();
-    cursor.SetThemes(cursor.POINTER);
+    cursor.SetThemes( cursor.POINTER );
 
-    TextBox box1(header, Font::YELLOW_BIG, BOXAREA_WIDTH);
-    TextBox box2(message, Font::BIG, BOXAREA_WIDTH);
-    Resource::BoxSprite rbs(rs, BOXAREA_WIDTH);
+    TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
+    TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( rs, BOXAREA_WIDTH );
 
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
 
-    FrameBox box(box1.h() + spacer + box2.h() + spacer + rbs.GetArea().h, true);
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().h, true );
     Point pos = box.GetArea();
 
-    if(header.size()) box1.Blit(pos);
+    if ( header.size() )
+        box1.Blit( pos );
     pos.y += box1.h() + spacer;
 
-    if(message.size()) box2.Blit(pos);
+    if ( message.size() )
+        box2.Blit( pos );
     pos.y += box2.h() + spacer;
 
-    rbs.SetPos(pos.x, pos.y);
+    rbs.SetPos( pos.x, pos.y );
     rbs.Redraw();
 
     LocalEvent & le = LocalEvent::Get();
 
-    ButtonGroups btnGroups(box.GetArea(), buttons);
+    ButtonGroups btnGroups( box.GetArea(), buttons );
     btnGroups.Draw();
 
     cursor.Show();
@@ -66,9 +68,9 @@ int Dialog::ResourceInfo(const std::string &header, const std::string &message, 
 
     int result = Dialog::ZERO;
 
-    while(result == Dialog::ZERO && le.HandleEvents())
-    {
-        if(!buttons && !le.MousePressRight()) break;
+    while ( result == Dialog::ZERO && le.HandleEvents() ) {
+        if ( !buttons && !le.MousePressRight() )
+            break;
         result = btnGroups.QueueEventProcessing();
     }
 

@@ -22,14 +22,15 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
-#include <vector>
 #include <map>
-#include "puzzle.h"
+#include <vector>
+
+#include "castle.h"
+#include "heroes.h"
+#include "heroes_recruits.h"
 #include "mp2.h"
 #include "pairs.h"
-#include "heroes.h"
-#include "castle.h"
-#include "heroes_recruits.h"
+#include "puzzle.h"
 
 class Castle;
 class Heroes;
@@ -42,148 +43,152 @@ struct CapturedObjects;
 struct LastLoseHero
 {
     LastLoseHero()
-     : id(Heroes::UNKNOWN)
-     , date(0)
+        : id( Heroes::UNKNOWN )
+        , date( 0 )
     {}
     int id;
     u32 date;
 };
 
-StreamBase & operator>> (StreamBase &, LastLoseHero &);
+StreamBase & operator>>( StreamBase &, LastLoseHero & );
 
 struct KingdomCastles : public VecCastles
-{
-};
+{};
 
 struct KingdomHeroes : public VecHeroes
-{
-};
+{};
 
 class Kingdom : public BitModes, public Control
 {
 public:
     enum
     {
-	//UNDEF	     = 0x0001,
-	IDENTIFYHERO = 0x0002,
-	DISABLEHIRES = 0x0004,
-	OVERVIEWCSTL = 0x0008
+        // UNDEF	     = 0x0001,
+        IDENTIFYHERO = 0x0002,
+        DISABLEHIRES = 0x0004,
+        OVERVIEWCSTL = 0x0008
     };
 
     Kingdom();
     virtual ~Kingdom() {}
 
-    void	Init(int color);
-    void	clear(void);
+    void Init( int color );
+    void clear( void );
 
-    void	OverviewDialog(void);
+    void OverviewDialog( void );
 
-    void	UpdateStartingResource(void);
-    bool	isPlay(void) const;
-    bool	isLoss(void) const;
-    bool	AllowPayment(const Funds &) const;
-    bool	AllowRecruitHero(bool check_payment, int level) const;
+    void UpdateStartingResource( void );
+    bool isPlay( void ) const;
+    bool isLoss( void ) const;
+    bool AllowPayment( const Funds & ) const;
+    bool AllowRecruitHero( bool check_payment, int level ) const;
 
-    void	SetLastLostHero(Heroes &);
-    void	ResetLastLostHero(void);
-    void	AddHeroStartCondLoss(Heroes*);
-    std::string	GetNamesHeroStartCondLoss(void) const;
+    void SetLastLostHero( Heroes & );
+    void ResetLastLostHero( void );
+    void AddHeroStartCondLoss( Heroes * );
+    std::string GetNamesHeroStartCondLoss( void ) const;
 
-    Heroes*	GetLastLostHero(void) const;
+    Heroes * GetLastLostHero( void ) const;
 
-    const Heroes*
-		GetFirstHeroStartCondLoss(void) const;
-    const Heroes*
-		GetBestHero(void) const;
+    const Heroes * GetFirstHeroStartCondLoss( void ) const;
+    const Heroes * GetBestHero( void ) const;
 
-    int		GetControl(void) const;
-    int		GetColor(void) const;
-    int		GetRace(void) const;
+    int GetControl( void ) const;
+    int GetColor( void ) const;
+    int GetRace( void ) const;
 
-    const Funds &
-		GetFunds(void) const{ return resource; }
-    Funds	GetIncome(int = INCOME_ALL) const;
+    const Funds & GetFunds( void ) const
+    {
+        return resource;
+    }
+    Funds GetIncome( int = INCOME_ALL ) const;
 
-    u32		GetArmiesStrength(void) const;
+    u32 GetArmiesStrength( void ) const;
 
-    void	AddFundsResource(const Funds &);
-    void	OddFundsResource(const Funds &);
+    void AddFundsResource( const Funds & );
+    void OddFundsResource( const Funds & );
 
-    u32		GetCountCastle(void) const;
-    u32		GetCountTown(void) const;
-    u32		GetCountMarketplace(void) const;
-    u32		GetCountCapital(void) const;
-    u32		GetLostTownDays(void) const;
-    u32		GetCountNecromancyShrineBuild(void) const;
-    u32		GetCountBuilding(u32) const;
+    u32 GetCountCastle( void ) const;
+    u32 GetCountTown( void ) const;
+    u32 GetCountMarketplace( void ) const;
+    u32 GetCountCapital( void ) const;
+    u32 GetLostTownDays( void ) const;
+    u32 GetCountNecromancyShrineBuild( void ) const;
+    u32 GetCountBuilding( u32 ) const;
 
-    Recruits &	GetRecruits(void);
+    Recruits & GetRecruits( void );
 
-    const KingdomHeroes &
-		GetHeroes(void) const{ return heroes; }
-    const KingdomCastles &
-		GetCastles(void) const{ return castles; }
+    const KingdomHeroes & GetHeroes( void ) const
+    {
+        return heroes;
+    }
+    const KingdomCastles & GetCastles( void ) const
+    {
+        return castles;
+    }
 
-    KingdomHeroes &
-		GetHeroes(void) { return heroes; }
-    KingdomCastles &
-		GetCastles(void) { return castles; }
+    KingdomHeroes & GetHeroes( void )
+    {
+        return heroes;
+    }
+    KingdomCastles & GetCastles( void )
+    {
+        return castles;
+    }
 
-    void	AddHeroes(Heroes*);
-    void	RemoveHeroes(const Heroes*);
-    void	ApplyPlayWithStartingHero(void);
-    void	HeroesActionNewPosition(void);
+    void AddHeroes( Heroes * );
+    void RemoveHeroes( const Heroes * );
+    void ApplyPlayWithStartingHero( void );
+    void HeroesActionNewPosition( void );
 
-    void	AddCastle(const Castle*);
-    void	RemoveCastle(const Castle*);
-    
-    void	ActionBeforeTurn(void);
-    void	ActionNewDay(void);
-    void	ActionNewWeek(void);
-    void	ActionNewMonth(void);
+    void AddCastle( const Castle * );
+    void RemoveCastle( const Castle * );
 
-    void	SetVisited(s32 index, int object = MP2::OBJ_ZERO);
-    u32		CountVisitedObjects(int object) const;
-    bool	isVisited(int object) const;
-    bool	isVisited(const Maps::Tiles &) const;
-    bool	isVisited(s32, int obj) const;
+    void ActionBeforeTurn( void );
+    void ActionNewDay( void );
+    void ActionNewWeek( void );
+    void ActionNewMonth( void );
 
-    bool	HeroesMayStillMove(void) const;
+    void SetVisited( s32 index, int object = MP2::OBJ_ZERO );
+    u32 CountVisitedObjects( int object ) const;
+    bool isVisited( int object ) const;
+    bool isVisited( const Maps::Tiles & ) const;
+    bool isVisited( s32, int obj ) const;
 
-    const Puzzle &
-		PuzzleMaps(void) const;
-    Puzzle &	PuzzleMaps(void);
+    bool HeroesMayStillMove( void ) const;
 
-    void	SetVisitTravelersTent(int);
-    bool	IsVisitTravelersTent(int) const;
+    const Puzzle & PuzzleMaps( void ) const;
+    Puzzle & PuzzleMaps( void );
 
-    void	UpdateRecruits(void);
-    void	LossPostActions(void);
+    void SetVisitTravelersTent( int );
+    bool IsVisitTravelersTent( int ) const;
 
-    static u32	GetMaxHeroes(void);
+    void UpdateRecruits( void );
+    void LossPostActions( void );
+
+    static u32 GetMaxHeroes( void );
 
 private:
-    friend StreamBase & operator<< (StreamBase &, const Kingdom &);
-    friend StreamBase & operator>> (StreamBase &, Kingdom &);
+    friend StreamBase & operator<<( StreamBase &, const Kingdom & );
+    friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
-    int			color;
-    Funds		resource;
+    int color;
+    Funds resource;
 
-    u32			lost_town_days;
+    u32 lost_town_days;
 
-    KingdomCastles	castles;
-    KingdomHeroes	heroes;
+    KingdomCastles castles;
+    KingdomHeroes heroes;
 
-    Recruits		recruits;
-    LastLoseHero	lost_hero;
+    Recruits recruits;
+    LastLoseHero lost_hero;
 
-    std::list<IndexObject>
-			visit_object;
+    std::list<IndexObject> visit_object;
 
-    Puzzle		puzzle_maps;
-    u32			visited_tents_colors;
+    Puzzle puzzle_maps;
+    u32 visited_tents_colors;
 
-    KingdomHeroes	heroes_cond_loss;
+    KingdomHeroes heroes_cond_loss;
 };
 
 class Kingdoms
@@ -191,45 +196,44 @@ class Kingdoms
 public:
     Kingdoms();
 
-    void	Init(void);
-    void	clear(void);
+    void Init( void );
+    void clear( void );
 
-    void	ApplyPlayWithStartingHero(void);
+    void ApplyPlayWithStartingHero( void );
 
-    void	NewDay(void);
-    void	NewWeek(void);
-    void	NewMonth(void);
+    void NewDay( void );
+    void NewWeek( void );
+    void NewMonth( void );
 
-    Kingdom &	GetKingdom(int color);
-    const Kingdom &
-		GetKingdom(int color) const;
+    Kingdom & GetKingdom( int color );
+    const Kingdom & GetKingdom( int color ) const;
 
-    int		GetLossColors(void) const;
-    int		GetNotLossColors(void) const;
-    int		FindWins(int) const;
+    int GetLossColors( void ) const;
+    int GetNotLossColors( void ) const;
+    int FindWins( int ) const;
 
-    void	AddHeroes(const AllHeroes &);
-    void	AddCastles(const AllCastles &);
+    void AddHeroes( const AllHeroes & );
+    void AddCastles( const AllCastles & );
 
-    void	AddCondLossHeroes(const AllHeroes &);
-    void	AddTributeEvents(CapturedObjects &, u32 day, int obj);
+    void AddCondLossHeroes( const AllHeroes & );
+    void AddTributeEvents( CapturedObjects &, u32 day, int obj );
 
-    u32		size(void) const;
+    u32 size( void ) const;
 
 private:
-    friend StreamBase & operator<< (StreamBase &, const Kingdoms &);
-    friend StreamBase & operator>> (StreamBase &, Kingdoms &);
+    friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
+    friend StreamBase & operator>>( StreamBase &, Kingdoms & );
 
     Kingdom kingdoms[KINGDOMMAX + 1];
 };
 
-StreamBase & operator<< (StreamBase &, const Kingdom &);
-StreamBase & operator>> (StreamBase &, Kingdom &);
+StreamBase & operator<<( StreamBase &, const Kingdom & );
+StreamBase & operator>>( StreamBase &, Kingdom & );
 
-StreamBase & operator<< (StreamBase &, const Kingdoms &);
-StreamBase & operator>> (StreamBase &, Kingdoms &);
+StreamBase & operator<<( StreamBase &, const Kingdoms & );
+StreamBase & operator>>( StreamBase &, Kingdoms & );
 
-StreamBase & operator<< (StreamBase & sb, const LastLoseHero & hero);
-StreamBase & operator>> (StreamBase & sb, LastLoseHero & hero);
+StreamBase & operator<<( StreamBase & sb, const LastLoseHero & hero );
+StreamBase & operator>>( StreamBase & sb, LastLoseHero & hero );
 
 #endif

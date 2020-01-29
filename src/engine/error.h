@@ -24,8 +24,9 @@
 
 struct Error
 {
-    class Exception{};
-    static void Except(const char* func, const char* message);
+    class Exception
+    {};
+    static void Except( const char * func, const char * message );
 };
 
 #endif

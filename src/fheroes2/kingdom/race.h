@@ -28,21 +28,21 @@ namespace Race
 {
     enum
     {
-        NONE    = 0x00,
-        KNGT    = 0x01,
-        BARB    = 0x02,
-        SORC    = 0x04,
-        WRLK    = 0x08,
-        WZRD    = 0x10,
-        NECR    = 0x20,
-        MULT    = 0x40,
-        RAND    = 0x80,
-	ALL	= KNGT | BARB | SORC | WRLK | WZRD | NECR
+        NONE = 0x00,
+        KNGT = 0x01,
+        BARB = 0x02,
+        SORC = 0x04,
+        WRLK = 0x08,
+        WZRD = 0x10,
+        NECR = 0x20,
+        MULT = 0x40,
+        RAND = 0x80,
+        ALL = KNGT | BARB | SORC | WRLK | WZRD | NECR
     };
 
-    const std::string & String(int);
-    int		Rand(void);
-    int		FromInt(int);
+    const std::string & String( int );
+    int Rand( void );
+    int FromInt( int );
 }
 
 #endif

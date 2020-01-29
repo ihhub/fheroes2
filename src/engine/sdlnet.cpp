@@ -24,194 +24,194 @@
 
 #include <algorithm>
 #include <cstring>
+
 #include "sdlnet.h"
 
+Network::Socket::Socket()
+    : sd( NULL )
+    , sdset( NULL )
+    , status( 0 )
+{}
 
-Network::Socket::Socket() : sd(NULL), sdset(NULL), status(0)
+Network::Socket::Socket( const TCPsocket csd )
+    : sd( NULL )
+    , sdset( NULL )
+    , status( 0 )
 {
+    Assign( csd );
 }
 
-Network::Socket::Socket(const TCPsocket csd) : sd(NULL), sdset(NULL), status(0)
-{
-    Assign(csd);
-}
+Network::Socket::Socket( const Socket & )
+    : sd( NULL )
+    , sdset( NULL )
+    , status( 0 )
+{}
 
-Network::Socket::Socket(const Socket &) : sd(NULL), sdset(NULL), status(0)
-{
-}
-
-Network::Socket & Network::Socket::operator= (const Socket &)
+Network::Socket & Network::Socket::operator=( const Socket & )
 {
     return *this;
 }
 
 Network::Socket::~Socket()
 {
-    if(sd) Close();
+    if ( sd )
+        Close();
 }
 
-void Network::Socket::Assign(const TCPsocket csd)
+void Network::Socket::Assign( const TCPsocket csd )
 {
-    if(sd) Close();
+    if ( sd )
+        Close();
 
-    if(csd)
-    {
-	sd = csd;
-	sdset = SDLNet_AllocSocketSet(1);
-	if(sdset) SDLNet_TCP_AddSocket(sdset, sd);
+    if ( csd ) {
+        sd = csd;
+        sdset = SDLNet_AllocSocketSet( 1 );
+        if ( sdset )
+            SDLNet_TCP_AddSocket( sdset, sd );
     }
 }
 
-
-u32 Network::Socket::Host(void) const
+u32 Network::Socket::Host( void ) const
 {
-    IPaddress* remoteIP = sd ? SDLNet_TCP_GetPeerAddress(sd) : NULL;
-    if(remoteIP) return SDLNet_Read32(&remoteIP->host);
-    ERROR(SDLNet_GetError());
+    IPaddress * remoteIP = sd ? SDLNet_TCP_GetPeerAddress( sd ) : NULL;
+    if ( remoteIP )
+        return SDLNet_Read32( &remoteIP->host );
+    ERROR( SDLNet_GetError() );
     return 0;
 }
 
-u16 Network::Socket::Port(void) const
+u16 Network::Socket::Port( void ) const
 {
-    IPaddress* remoteIP = sd ? SDLNet_TCP_GetPeerAddress(sd) : NULL;
-    if(remoteIP) return SDLNet_Read16(&remoteIP->port);
-    ERROR(SDLNet_GetError());
+    IPaddress * remoteIP = sd ? SDLNet_TCP_GetPeerAddress( sd ) : NULL;
+    if ( remoteIP )
+        return SDLNet_Read16( &remoteIP->port );
+    ERROR( SDLNet_GetError() );
     return 0;
 }
 
-bool Network::Socket::Ready(void) const
+bool Network::Socket::Ready( void ) const
 {
-    return 0 < SDLNet_CheckSockets(sdset, 1) && 0 < SDLNet_SocketReady(sd);
+    return 0 < SDLNet_CheckSockets( sdset, 1 ) && 0 < SDLNet_SocketReady( sd );
 }
 
-bool Network::Socket::Recv(char *buf, int len)
+bool Network::Socket::Recv( char * buf, int len )
 {
-    if(sd && buf && len)
-    {
-	int rcv = 0;
+    if ( sd && buf && len ) {
+        int rcv = 0;
 
-	while((rcv = SDLNet_TCP_Recv(sd, buf, len)) > 0 && rcv < len)
-	{
-	    buf += rcv;
-	    len -= rcv;
-	}
+        while ( ( rcv = SDLNet_TCP_Recv( sd, buf, len ) ) > 0 && rcv < len ) {
+            buf += rcv;
+            len -= rcv;
+        }
 
-	if(rcv != len)
-	    status |= ERROR_RECV;
+        if ( rcv != len )
+            status |= ERROR_RECV;
     }
 
-    return ! (status & ERROR_RECV);
+    return !( status & ERROR_RECV );
 }
 
-bool Network::Socket::Send(const char* buf, int len)
+bool Network::Socket::Send( const char * buf, int len )
 {
-    if(sd && len != SDLNet_TCP_Send(sd, (void*) buf, len))
-	status |= ERROR_SEND;
+    if ( sd && len != SDLNet_TCP_Send( sd, (void *)buf, len ) )
+        status |= ERROR_SEND;
 
-    return ! (status & ERROR_SEND);
+    return !( status & ERROR_SEND );
 }
 
-bool Network::Socket::Recv32(u32 & v)
+bool Network::Socket::Recv32( u32 & v )
 {
-    if(Recv(reinterpret_cast<char*>(&v), sizeof(v)))
-    {
-        SwapBE32(v);
+    if ( Recv( reinterpret_cast<char *>( &v ), sizeof( v ) ) ) {
+        SwapBE32( v );
         return true;
     }
     return false;
 }
 
-bool Network::Socket::Recv16(u16 & v)
+bool Network::Socket::Recv16( u16 & v )
 {
-    if(Recv(reinterpret_cast<char*>(&v), sizeof(v)))
-    {
-        SwapBE16(v);
+    if ( Recv( reinterpret_cast<char *>( &v ), sizeof( v ) ) ) {
+        SwapBE16( v );
         return true;
     }
     return false;
 }
 
-bool Network::Socket::Send32(const u32 & v0)
+bool Network::Socket::Send32( const u32 & v0 )
 {
     u32 v = v0;
-    SwapBE32(v);
+    SwapBE32( v );
 
-    return Send(reinterpret_cast<char*>(&v), sizeof(v));
+    return Send( reinterpret_cast<char *>( &v ), sizeof( v ) );
 }
 
-bool Network::Socket::Send16(const u16 & v0)
+bool Network::Socket::Send16( const u16 & v0 )
 {
     u16 v = v0;
-    SwapBE16(v);
+    SwapBE16( v );
 
-    return Send(reinterpret_cast<char*>(&v), sizeof(v));
+    return Send( reinterpret_cast<char *>( &v ), sizeof( v ) );
 }
 
-bool Network::Socket::Open(IPaddress & ip)
+bool Network::Socket::Open( IPaddress & ip )
 {
-    Assign(SDLNet_TCP_Open(&ip));
+    Assign( SDLNet_TCP_Open( &ip ) );
 
-    if(! sd)
-	ERROR(SDLNet_GetError());
+    if ( !sd )
+        ERROR( SDLNet_GetError() );
 
     return sd;
 }
 
-bool Network::Socket::isValid(void) const
+bool Network::Socket::isValid( void ) const
 {
     return sd && 0 == status;
 }
 
-void Network::Socket::Close(void)
+void Network::Socket::Close( void )
 {
-    if(sd)
-    {
-	if(sdset)
-	{
-	    SDLNet_TCP_DelSocket(sdset, sd);
-	    SDLNet_FreeSocketSet(sdset);
-	    sdset = NULL;
-	}
-	SDLNet_TCP_Close(sd);
-	sd = NULL;
+    if ( sd ) {
+        if ( sdset ) {
+            SDLNet_TCP_DelSocket( sdset, sd );
+            SDLNet_FreeSocketSet( sdset );
+            sdset = NULL;
+        }
+        SDLNet_TCP_Close( sd );
+        sd = NULL;
     }
 }
 
-Network::Server::Server()
+Network::Server::Server() {}
+
+TCPsocket Network::Server::Accept( void )
 {
+    return SDLNet_TCP_Accept( sd );
 }
 
-TCPsocket Network::Server::Accept(void)
+bool Network::Init( void )
 {
-    return SDLNet_TCP_Accept(sd);
-}
-
-bool Network::Init(void)
-{
-    if(SDLNet_Init() < 0)
-    {
-	ERROR(SDLNet_GetError());
+    if ( SDLNet_Init() < 0 ) {
+        ERROR( SDLNet_GetError() );
         return false;
     }
     return true;
 }
 
-void Network::Quit(void)
+void Network::Quit( void )
 {
     SDLNet_Quit();
 }
 
-bool Network::ResolveHost(IPaddress & ip, const char* host, u16 port)
+bool Network::ResolveHost( IPaddress & ip, const char * host, u16 port )
 {
-    if(SDLNet_ResolveHost(&ip, host, port) < 0)
-    {
-	ERROR(SDLNet_GetError());
-	return false;
+    if ( SDLNet_ResolveHost( &ip, host, port ) < 0 ) {
+        ERROR( SDLNet_GetError() );
+        return false;
     }
     return true;
 }
 
-const char* Network::GetError(void)
+const char * Network::GetError( void )
 {
     return SDLNet_GetError();
 }

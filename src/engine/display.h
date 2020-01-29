@@ -23,7 +23,9 @@
 #define H2DISPLAY_H
 
 #include <string>
+
 #include "surface.h"
+
 class Texture;
 
 class Display : public Surface
@@ -31,82 +33,82 @@ class Display : public Surface
 public:
     ~Display();
 
-    static Display &    Get(void);
+    static Display & Get( void );
 
-    Size        GetSize(void) const;
+    Size GetSize( void ) const;
 
-    std::string	GetInfo(void) const;
-    Size	GetMaxMode(bool enable_rotate) const;
+    std::string GetInfo( void ) const;
+    Size GetMaxMode( bool enable_rotate ) const;
 
-    void	SetVideoMode(int w, int h, bool);
-    void	SetCaption(const char*);
-    void	SetIcons(Surface &);
+    void SetVideoMode( int w, int h, bool );
+    void SetCaption( const char * );
+    void SetIcons( Surface & );
 
-    void	Flip(void);
-    void	Present(void);
-    void        Clear(void);
-    void        ToggleFullScreen(void);
+    void Flip( void );
+    void Present( void );
+    void Clear( void );
+    void ToggleFullScreen( void );
 
-    void	Fade(int delay = 500);
-    void	Fade(const Surface &, const Surface &, const Point &, int level, int delay);
-    void	Rise(int delay = 500);
-    void	Rise(const Surface &, const Surface &, const Point &, int level, int delay);
+    void Fade( int delay = 500 );
+    void Fade( const Surface &, const Surface &, const Point &, int level, int delay );
+    void Rise( int delay = 500 );
+    void Rise( const Surface &, const Surface &, const Point &, int level, int delay );
 
-    static void HideCursor(void);
-    static void ShowCursor(void);
+    static void HideCursor( void );
+    static void ShowCursor( void );
 
-    Surface	GetSurface(void) const;
-    Surface	GetSurface(const Rect & rt) const;
+    Surface GetSurface( void ) const;
+    Surface GetSurface( const Rect & rt ) const;
 
 protected:
     friend class Texture;
 
-    bool	isDisplay(void) const;
+    bool isDisplay( void ) const;
 
     Display();
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-    SDL_Window*         window;
-    SDL_Renderer*	renderer;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    SDL_Window * window;
+    SDL_Renderer * renderer;
 #endif
 };
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 class TextureTarget
 {
 public:
     TextureTarget();
 
-    void Fill(const RGBA &);
-    void FillRect(const Rect &, const RGBA &);
+    void Fill( const RGBA & );
+    void FillRect( const Rect &, const RGBA & );
 };
 
 class Texture
 {
 public:
     Texture();
-    Texture(const Surface &);
-    Texture(const Texture &);
+    Texture( const Surface & );
+    Texture( const Texture & );
     ~Texture();
 
-    Texture &	operator= (const Texture &);
-    Size	GetSize(void) const;
+    Texture & operator=( const Texture & );
+    Size GetSize( void ) const;
 
-    void	Blit(Display &) const;
-    void        Blit(s32 dx, s32 dy, Display &) const;
-    void        Blit(const Point & dstpt, Display &) const;
-    void        Blit(const Rect & srcrt, s32 dx, s32 dy, Display &) const;
-    void        Blit(const Rect & srcrt, const Point & dstpt, Display &) const;
+    void Blit( Display & ) const;
+    void Blit( s32 dx, s32 dy, Display & ) const;
+    void Blit( const Point & dstpt, Display & ) const;
+    void Blit( const Rect & srcrt, s32 dx, s32 dy, Display & ) const;
+    void Blit( const Rect & srcrt, const Point & dstpt, Display & ) const;
 
 protected:
-    SDL_Texture*        texture;
-    int*		counter;
+    SDL_Texture * texture;
+    int * counter;
 };
 #else
 class Texture : public Surface
 {
 public:
-    Texture(const Surface &);
+    Texture( const Surface & );
 };
 #endif
 

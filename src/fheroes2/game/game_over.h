@@ -25,56 +25,58 @@
 
 #include <string>
 
+#include "serialize.h"
+
 namespace GameOver
 {
     enum conditions_t
     {
-	COND_NONE	= 0x0000,
+        COND_NONE = 0x0000,
 
-	WINS_ALL	= 0x0001,
-	WINS_TOWN	= 0x0002,
-	WINS_HERO	= 0x0004,
-	WINS_ARTIFACT	= 0x0008,
-	WINS_SIDE	= 0x0010,
-	WINS_GOLD	= 0x0020,
-	WINS            = WINS_ALL | WINS_TOWN | WINS_HERO | WINS_ARTIFACT | WINS_SIDE | WINS_GOLD,
+        WINS_ALL = 0x0001,
+        WINS_TOWN = 0x0002,
+        WINS_HERO = 0x0004,
+        WINS_ARTIFACT = 0x0008,
+        WINS_SIDE = 0x0010,
+        WINS_GOLD = 0x0020,
+        WINS = WINS_ALL | WINS_TOWN | WINS_HERO | WINS_ARTIFACT | WINS_SIDE | WINS_GOLD,
 
-	LOSS_ALL	= 0x0100,
-	LOSS_TOWN	= 0x0200,
-	LOSS_HERO	= 0x0400,
-	LOSS_TIME	= 0x0800,
-	LOSS_STARTHERO	= 0x1000,
-	LOSS            = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_STARTHERO
+        LOSS_ALL = 0x0100,
+        LOSS_TOWN = 0x0200,
+        LOSS_HERO = 0x0400,
+        LOSS_TIME = 0x0800,
+        LOSS_STARTHERO = 0x1000,
+        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_STARTHERO
     };
 
-    const char*		GetString(int);
-    std::string		GetActualDescription(int);
-    void		DialogWins(int);
-    void		DialogLoss(int);
+    const char * GetString( int );
+    std::string GetActualDescription( int );
+    void DialogWins( int );
+    void DialogLoss( int );
 
     class Result
     {
     public:
-	static Result & Get(void);
+        static Result & Get( void );
 
-	void		Reset(void);
-	void		SetResult(int);
-	int		GetResult(void) const;
-	int		LocalCheckGameOver(void);
+        void Reset( void );
+        void SetResult( int );
+        int GetResult( void ) const;
+        int LocalCheckGameOver( void );
 
     private:
-	friend StreamBase & operator<< (StreamBase &, const Result &);
-	friend StreamBase & operator>> (StreamBase &, Result &);
+        friend StreamBase & operator<<( StreamBase &, const Result & );
+        friend StreamBase & operator>>( StreamBase &, Result & );
 
-	Result();
+        Result();
 
-	int	colors;
-	int	result;
-	bool	continue_game;
+        int colors;
+        int result;
+        bool continue_game;
     };
 
-    StreamBase & operator<< (StreamBase &, const Result &);
-    StreamBase & operator>> (StreamBase &, Result &);
+    StreamBase & operator<<( StreamBase &, const Result & );
+    StreamBase & operator>>( StreamBase &, Result & );
 }
 
 #endif

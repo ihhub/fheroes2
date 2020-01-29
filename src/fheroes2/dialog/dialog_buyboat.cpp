@@ -21,19 +21,20 @@
  ***************************************************************************/
 
 #include <string>
+
 #include "agg.h"
+#include "button.h"
+#include "castle.h"
+#include "cursor.h"
+#include "dialog.h"
+#include "game.h"
+#include "kingdom.h"
+#include "payment.h"
+#include "settings.h"
 #include "text.h"
 #include "world.h"
-#include "button.h"
-#include "cursor.h"
-#include "castle.h"
-#include "kingdom.h"
-#include "settings.h"
-#include "game.h"
-#include "dialog.h"
-#include "payment.h"
 
-int Dialog::BuyBoat(bool enable)
+int Dialog::BuyBoat( bool enable )
 {
     Display & display = Display::Get();
 
@@ -42,45 +43,44 @@ int Dialog::BuyBoat(bool enable)
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    Resource::BoxSprite rbs(PaymentConditions::BuyBoat(), BOXAREA_WIDTH);
+    Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), BOXAREA_WIDTH );
 
-    const Sprite & sprite = AGG::GetICN(ICN::BOATWIND, 0);
-    Text text(_("Build a new ship:"), Font::BIG);
+    const Sprite & sprite = AGG::GetICN( ICN::BOATWIND, 0 );
+    Text text( _( "Build a new ship:" ), Font::BIG );
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
 
-    Dialog::FrameBox box(text.h() + spacer + sprite.h() + spacer + text.h() + spacer + rbs.GetArea().h - 20, true);
+    Dialog::FrameBox box( text.h() + spacer + sprite.h() + spacer + text.h() + spacer + rbs.GetArea().h - 20, true );
 
     const Rect & box_rt = box.GetArea();
     Point dst_pt;
-    dst_pt.x = box_rt.x + (box_rt.w - text.w()) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
     dst_pt.y = box_rt.y;
-    text.Blit(dst_pt);
+    text.Blit( dst_pt );
 
-    dst_pt.x = box_rt.x + (box_rt.w - sprite.w()) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.w - sprite.w() ) / 2;
     dst_pt.y = box_rt.y + text.h() + spacer;
-    sprite.Blit(dst_pt);
+    sprite.Blit( dst_pt );
 
-    text.Set(_("Resource cost:"), Font::BIG);
-    dst_pt.x = box_rt.x + (box_rt.w - text.w()) / 2;
+    text.Set( _( "Resource cost:" ), Font::BIG );
+    dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
     dst_pt.y = dst_pt.y + sprite.h() + spacer;
-    text.Blit(dst_pt);
+    text.Blit( dst_pt );
 
-    rbs.SetPos(box_rt.x, dst_pt.y + spacer);
+    rbs.SetPos( box_rt.x, dst_pt.y + spacer );
     rbs.Redraw();
 
     // buttons
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN(system, 1).h();
-    Button button1(dst_pt.x, dst_pt.y, system, 1, 2);
+    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
+    Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.w - AGG::GetICN(system, 3).w();
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN(system, 3).h();
-    Button button2(dst_pt.x, dst_pt.y, system, 3, 4);
+    dst_pt.x = box_rt.x + box_rt.w - AGG::GetICN( system, 3 ).w();
+    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 3 ).h();
+    Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
 
-    if(!enable)
-    {
-	button1.Press();
-	button1.SetDisable(true);
+    if ( !enable ) {
+        button1.Press();
+        button1.SetDisable( true );
     }
 
     button1.Draw();
@@ -92,16 +92,16 @@ int Dialog::BuyBoat(bool enable)
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
-    while(le.HandleEvents())
-    {
-        if(button1.isEnable()) le.MousePressLeft(button1) ? button1.PressDraw() : button1.ReleaseDraw();
-        le.MousePressLeft(button2) ? button2.PressDraw() : button2.ReleaseDraw();
+    while ( le.HandleEvents() ) {
+        if ( button1.isEnable() )
+            le.MousePressLeft( button1 ) ? button1.PressDraw() : button1.ReleaseDraw();
+        le.MousePressLeft( button2 ) ? button2.PressDraw() : button2.ReleaseDraw();
 
-        if(button1.isEnable() &&
-	    (Game::HotKeyPressEvent(Game::EVENT_DEFAULT_READY) ||le.MouseClickLeft(button1))) return Dialog::OK;
+        if ( button1.isEnable() && ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( button1 ) ) )
+            return Dialog::OK;
 
-        if(Game::HotKeyPressEvent(Game::EVENT_DEFAULT_EXIT) ||
-    	    le.MouseClickLeft(button2)) return Dialog::CANCEL;
+        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( button2 ) )
+            return Dialog::CANCEL;
     }
 
     return Dialog::ZERO;

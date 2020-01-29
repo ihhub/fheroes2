@@ -22,18 +22,24 @@
 
 #include "difficulty.h"
 
-const std::string & Difficulty::String(int difficulty)
+const std::string & Difficulty::String( int difficulty )
 {
-    static const std::string str_difficulty[] = { _("difficulty|Easy"), _("difficulty|Normal"), _("difficulty|Hard"), _("difficulty|Expert"), _("difficulty|Impossible"), "Unknown" };
+    static const std::string str_difficulty[]
+        = {_( "difficulty|Easy" ), _( "difficulty|Normal" ), _( "difficulty|Hard" ), _( "difficulty|Expert" ), _( "difficulty|Impossible" ), "Unknown"};
 
-    switch(difficulty)
-    {
-        case Difficulty::EASY:		return str_difficulty[0];
-        case Difficulty::NORMAL:	return str_difficulty[1];
-	case Difficulty::HARD: 		return str_difficulty[2];
-	case Difficulty::EXPERT: 	return str_difficulty[3];
-	case Difficulty::IMPOSSIBLE: 	return str_difficulty[4];
-	default: break;
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return str_difficulty[0];
+    case Difficulty::NORMAL:
+        return str_difficulty[1];
+    case Difficulty::HARD:
+        return str_difficulty[2];
+    case Difficulty::EXPERT:
+        return str_difficulty[3];
+    case Difficulty::IMPOSSIBLE:
+        return str_difficulty[4];
+    default:
+        break;
     }
 
     return str_difficulty[5];

@@ -20,44 +20,53 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "gamedefs.h"
 #include "luck.h"
+#include "gamedefs.h"
 
-const std::string & Luck::String(int luck)
+const std::string & Luck::String( int luck )
 {
-    static const std::string str_luck[] = { "Unknown", _("luck|Cursed"), _("luck|Awful"), _("luck|Bad"), _("luck|Normal"), _("luck|Good"), _("luck|Great"), _("luck|Irish") };
+    static const std::string str_luck[]
+        = {"Unknown", _( "luck|Cursed" ), _( "luck|Awful" ), _( "luck|Bad" ), _( "luck|Normal" ), _( "luck|Good" ), _( "luck|Great" ), _( "luck|Irish" )};
 
-    switch(luck)
-    {
-        case Luck::CURSED:	return str_luck[1];
-        case Luck::AWFUL:	return str_luck[2];
-        case Luck::BAD:		return str_luck[3];
-        case Luck::NORMAL:	return str_luck[4];
-        case Luck::GOOD:	return str_luck[5];
-        case Luck::GREAT:	return str_luck[6];
-        case Luck::IRISH:	return str_luck[7];
-	default: break;
+    switch ( luck ) {
+    case Luck::CURSED:
+        return str_luck[1];
+    case Luck::AWFUL:
+        return str_luck[2];
+    case Luck::BAD:
+        return str_luck[3];
+    case Luck::NORMAL:
+        return str_luck[4];
+    case Luck::GOOD:
+        return str_luck[5];
+    case Luck::GREAT:
+        return str_luck[6];
+    case Luck::IRISH:
+        return str_luck[7];
+    default:
+        break;
     }
 
     return str_luck[0];
 }
 
-const std::string & Luck::Description(int luck)
+const std::string & Luck::Description( int luck )
 {
-    static const std::string str_desc_luck[] = { "Unknown",
-	_("Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage."),
-	_("Neutral luck means your armies will never get lucky or unlucky attacks on the enemy."),
-	_("Good luck sometimes lets your armies get lucky attacks (double strength) in combat.") };
+    static const std::string str_desc_luck[] = {"Unknown", _( "Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage." ),
+                                                _( "Neutral luck means your armies will never get lucky or unlucky attacks on the enemy." ),
+                                                _( "Good luck sometimes lets your armies get lucky attacks (double strength) in combat." )};
 
-    switch(luck)
-    {
-        case Luck::CURSED:
-        case Luck::AWFUL:
-        case Luck::BAD:		return str_desc_luck[1];
-        case Luck::NORMAL:	return str_desc_luck[2];
-        case Luck::GOOD:
-        case Luck::GREAT:
-        case Luck::IRISH:	return str_desc_luck[3];
+    switch ( luck ) {
+    case Luck::CURSED:
+    case Luck::AWFUL:
+    case Luck::BAD:
+        return str_desc_luck[1];
+    case Luck::NORMAL:
+        return str_desc_luck[2];
+    case Luck::GOOD:
+    case Luck::GREAT:
+    case Luck::IRISH:
+        return str_desc_luck[3];
     }
 
     return str_desc_luck[0];
