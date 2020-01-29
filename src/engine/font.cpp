@@ -26,131 +26,127 @@
 
 #ifdef WITH_TTF
 
-FontTTF::FontTTF() : ptr(NULL)
-{
-}
+FontTTF::FontTTF()
+    : ptr( NULL )
+{}
 
 FontTTF::~FontTTF()
 {
-    if(ptr) TTF_CloseFont(ptr);
+    if ( ptr )
+        TTF_CloseFont( ptr );
 }
 
-void FontTTF::Init(void)
+void FontTTF::Init( void )
 {
-    if(0 != TTF_Init()) ERROR(SDL_GetError());
+    if ( 0 != TTF_Init() )
+        ERROR( SDL_GetError() );
 }
 
-void FontTTF::Quit(void)
+void FontTTF::Quit( void )
 {
     TTF_Quit();
 }
 
-bool FontTTF::isValid(void) const
+bool FontTTF::isValid( void ) const
 {
     return ptr;
 }
 
-bool FontTTF::Open(const std::string & filename, int size)
+bool FontTTF::Open( const std::string & filename, int size )
 {
-    if(ptr) TTF_CloseFont(ptr);
-    ptr = TTF_OpenFont(filename.c_str(), size);
-    if(!ptr) ERROR(SDL_GetError());
+    if ( ptr )
+        TTF_CloseFont( ptr );
+    ptr = TTF_OpenFont( filename.c_str(), size );
+    if ( !ptr )
+        ERROR( SDL_GetError() );
     return ptr;
 }
 
-void FontTTF::SetStyle(int style)
+void FontTTF::SetStyle( int style )
 {
-    TTF_SetFontStyle(ptr, style);
+    TTF_SetFontStyle( ptr, style );
 }
 
-int FontTTF::Height(void) const
+int FontTTF::Height( void ) const
 {
-    return TTF_FontHeight(ptr);
+    return TTF_FontHeight( ptr );
 }
 
-int FontTTF::Ascent(void) const
+int FontTTF::Ascent( void ) const
 {
-    return TTF_FontAscent(ptr);
+    return TTF_FontAscent( ptr );
 }
 
-int FontTTF::Descent(void) const
+int FontTTF::Descent( void ) const
 {
-    return TTF_FontDescent(ptr);
+    return TTF_FontDescent( ptr );
 }
 
-int FontTTF::LineSkip(void) const
+int FontTTF::LineSkip( void ) const
 {
-    return TTF_FontLineSkip(ptr);
+    return TTF_FontLineSkip( ptr );
 }
 
-Surface FontTTF::RenderText(const std::string & msg, const RGBA & clr, bool solid)
+Surface FontTTF::RenderText( const std::string & msg, const RGBA & clr, bool solid )
 {
-    return Surface(solid ? TTF_RenderUTF8_Solid(ptr, msg.c_str(), clr()) :
-                        TTF_RenderUTF8_Blended(ptr, msg.c_str(), clr()));
-}
-    
-Surface FontTTF::RenderChar(char ch, const RGBA & clr, bool solid)
-{
-    char buf[2] = { '\0', '\0' };
-         buf[0] = ch;
-            
-    return Surface(solid ? TTF_RenderUTF8_Solid(ptr, buf, clr()) :
-                        TTF_RenderUTF8_Blended(ptr, buf, clr()));
+    return Surface( solid ? TTF_RenderUTF8_Solid( ptr, msg.c_str(), clr() ) : TTF_RenderUTF8_Blended( ptr, msg.c_str(), clr() ) );
 }
 
-Surface FontTTF::RenderUnicodeText(const std::vector<u16> & msg, const RGBA & clr, bool solid)
+Surface FontTTF::RenderChar( char ch, const RGBA & clr, bool solid )
 {
-    return Surface(solid ? TTF_RenderUNICODE_Solid(ptr, &msg[0], clr()) :
-                        TTF_RenderUNICODE_Blended(ptr, &msg[0], clr()));
+    char buf[2] = {'\0', '\0'};
+    buf[0] = ch;
+
+    return Surface( solid ? TTF_RenderUTF8_Solid( ptr, buf, clr() ) : TTF_RenderUTF8_Blended( ptr, buf, clr() ) );
 }
 
-Surface FontTTF::RenderUnicodeChar(u16 ch, const RGBA & clr, bool solid)
+Surface FontTTF::RenderUnicodeText( const std::vector<u16> & msg, const RGBA & clr, bool solid )
 {
-    u16 buf[2] = { L'\0', L'\0' };
-        buf[0] = ch;
+    return Surface( solid ? TTF_RenderUNICODE_Solid( ptr, &msg[0], clr() ) : TTF_RenderUNICODE_Blended( ptr, &msg[0], clr() ) );
+}
 
-    return Surface(solid ? TTF_RenderUNICODE_Solid(ptr, buf, clr()) :
-                        TTF_RenderUNICODE_Blended(ptr, buf, clr()));
+Surface FontTTF::RenderUnicodeChar( u16 ch, const RGBA & clr, bool solid )
+{
+    u16 buf[2] = {L'\0', L'\0'};
+    buf[0] = ch;
+
+    return Surface( solid ? TTF_RenderUNICODE_Solid( ptr, buf, clr() ) : TTF_RenderUNICODE_Blended( ptr, buf, clr() ) );
 }
 
 #endif
 
-FontPSF::FontPSF(const std::string & fn, const Size & sz) : size(sz)
+FontPSF::FontPSF( const std::string & fn, const Size & sz )
+    : size( sz )
 {
-    buf = LoadFileToMem(fn);
-    if(buf.empty())
-	ERROR("empty buffer");
+    buf = LoadFileToMem( fn );
+    if ( buf.empty() )
+        ERROR( "empty buffer" );
 }
 
-Surface FontPSF::RenderText(const std::string & msg, const RGBA & color) const
+Surface FontPSF::RenderText( const std::string & msg, const RGBA & color ) const
 {
     Surface res;
 
-    res.Set(msg.size() * size.w, size.h, false);
+    res.Set( msg.size() * size.w, size.h, false );
     int posx = 0;
 
-    for(std::string::const_iterator
-	it = msg.begin(); it != msg.end(); ++it)
-    {
-	// render char
-	u32 offsetx = *it * size.w * size.h / 8; // bits -> byte
+    for ( std::string::const_iterator it = msg.begin(); it != msg.end(); ++it ) {
+        // render char
+        u32 offsetx = *it * size.w * size.h / 8; // bits -> byte
 
-	for(u32 yy = 0; yy < size.h; ++yy)
-	{
-	    u32 offsety = yy * size.w / 8; // bits -> byte
+        for ( u32 yy = 0; yy < size.h; ++yy ) {
+            u32 offsety = yy * size.w / 8; // bits -> byte
 
-	    if(offsetx + offsety < buf.size())
-	    {
-		int line = buf[offsetx + offsety];
-    		for(u32 xx = 0; xx < size.w; ++xx)
-    		{
-        	    if(0x80 & (line << xx))
-            		res.DrawPoint(Point(posx + xx, yy), color);
-    		}
-	    }
-	}
+            if ( offsetx + offsety < buf.size() ) {
+                int line = buf[offsetx + offsety];
+                for ( u32 xx = 0; xx < size.w; ++xx ) {
+                    if ( 0x80 & ( line << xx ) )
+                        res.DrawPoint( Point( posx + xx, yy ), color );
+                }
+            }
+        }
 
-	posx += size.w;
+        posx += size.w;
     }
 
     return res;

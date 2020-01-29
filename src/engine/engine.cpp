@@ -26,31 +26,33 @@
 
 namespace Mixer
 {
-    void Init(void);
-    void Quit(void);
+    void Init( void );
+    void Quit( void );
 }
 
 #ifdef WITH_AUDIOCD
 namespace Cdrom
 {
-    void Open(void);
-    void Close(void);
+    void Open( void );
+    void Close( void );
 }
 #endif
 
-bool SDL::Init(const u32 system)
+bool SDL::Init( const u32 system )
 {
-    if(System::isRunning()) return false;
+    if ( System::isRunning() )
+        return false;
 
-    if(0 > SDL_Init(system))
-    {
-	ERROR(SDL_GetError());
-	return false;
+    if ( 0 > SDL_Init( system ) ) {
+        ERROR( SDL_GetError() );
+        return false;
     }
 
-    if(SDL_INIT_AUDIO & system) Mixer::Init();
+    if ( SDL_INIT_AUDIO & system )
+        Mixer::Init();
 #ifdef WITH_AUDIOCD
-    if(SDL_INIT_CDROM & system) Cdrom::Open();
+    if ( SDL_INIT_CDROM & system )
+        Cdrom::Open();
 #endif
 #ifdef WITH_TTF
     FontTTF::Init();
@@ -59,22 +61,22 @@ bool SDL::Init(const u32 system)
     Network::Init();
 #endif
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+    SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
 #endif
 
-    System::CreateTrayIcon(true);
-    System::PowerManagerOff(true);
-    Surface::SetDefaultColorKey(0xFF, 0, 0xFF);
+    System::CreateTrayIcon( true );
+    System::PowerManagerOff( true );
+    Surface::SetDefaultColorKey( 0xFF, 0, 0xFF );
 
     return true;
 }
 
-void SDL::Quit(void)
+void SDL::Quit( void )
 {
-    System::CreateTrayIcon(false);
-    System::PowerManagerOff(false);
+    System::CreateTrayIcon( false );
+    System::PowerManagerOff( false );
 
 #ifdef WITH_NET
     Network::Quit();
@@ -83,14 +85,16 @@ void SDL::Quit(void)
     FontTTF::Quit();
 #endif
 #ifdef WITH_AUDIOCD
-    if(SubSystem(SDL_INIT_CDROM)) Cdrom::Close();
+    if ( SubSystem( SDL_INIT_CDROM ) )
+        Cdrom::Close();
 #endif
-    if(SubSystem(SDL_INIT_AUDIO)) Mixer::Quit();
+    if ( SubSystem( SDL_INIT_AUDIO ) )
+        Mixer::Quit();
 
     SDL_Quit();
 }
 
-bool SDL::SubSystem(const u32 system)
+bool SDL::SubSystem( const u32 system )
 {
-    return system & SDL_WasInit(system);
+    return system & SDL_WasInit( system );
 }

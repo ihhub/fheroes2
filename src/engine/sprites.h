@@ -29,17 +29,17 @@ class SpritePos : public Surface
 {
 public:
     SpritePos();
-    SpritePos(const Surface &, const Point &);
+    SpritePos( const Surface &, const Point & );
 
-    void SetSurface(const Surface &);
-    void SetPos(const Point &);
+    void SetSurface( const Surface & );
+    void SetPos( const Point & );
 
-    void Reset(void);
+    void Reset( void );
 
-    const Point & GetPos(void) const;
-    Rect GetArea(void) const;
+    const Point & GetPos( void ) const;
+    Rect GetArea( void ) const;
 
-    u32  GetMemoryUsage(void) const;
+    u32 GetMemoryUsage( void ) const;
 
 protected:
     Point pos;
@@ -49,49 +49,48 @@ class SpriteBack : protected Surface
 {
 public:
     SpriteBack();
-    SpriteBack(const Rect &);
+    SpriteBack( const Rect & );
 
-    bool isValid(void) const;
+    bool isValid( void ) const;
 
-    void Save(const Point &);
-    void Save(const Rect &);
+    void Save( const Point & );
+    void Save( const Rect & );
     void Restore() const;
-    void Destroy(void);
-    void SetPos(const Point &);
+    void Destroy( void );
+    void SetPos( const Point & );
 
-    const Point & GetPos(void) const;
-    const Size & GetSize(void) const;
-    const Rect & GetArea(void) const;
+    const Point & GetPos( void ) const;
+    const Size & GetSize( void ) const;
+    const Rect & GetArea( void ) const;
 
-    u32  GetMemoryUsage(void) const;
+    u32 GetMemoryUsage( void ) const;
 
 protected:
     Rect pos;
 };
 
-
 class SpriteMove : public Surface
 {
 public:
     SpriteMove();
-    SpriteMove(const Surface &);
+    SpriteMove( const Surface & );
 
-    void Move(const Point &);
-    void Move(int, int);
+    void Move( const Point & );
+    void Move( int, int );
 
-    void Hide(void);
-    void Show(void);
-    void Redraw(void);
+    void Hide( void );
+    void Show( void );
+    void Redraw( void );
 
-    bool isVisible(void) const;
+    bool isVisible( void ) const;
 
-    const Point & GetPos(void) const;
-    const Rect & GetArea(void) const;
+    const Point & GetPos( void ) const;
+    const Rect & GetArea( void ) const;
 
-    u32  GetMemoryUsage(void) const;
+    u32 GetMemoryUsage( void ) const;
 
 protected:
-    void Show(const Point &);
+    void Show( const Point & );
 
     SpriteBack background;
     u32 mode;
