@@ -117,7 +117,8 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
     le.MousePressLeft( buttonNextHero ) ? buttonNextHero.PressDraw() : buttonNextHero.ReleaseDraw();
     le.MousePressLeft( buttonMovement ) ? buttonMovement.PressDraw() : buttonMovement.ReleaseDraw();
     le.MousePressLeft( buttonKingdom ) ? buttonKingdom.PressDraw() : buttonKingdom.ReleaseDraw();
-    le.MousePressLeft( buttonSpell ) ? buttonSpell.PressDraw() : buttonSpell.ReleaseDraw();
+    if ( buttonSpell.isEnable() )
+        le.MousePressLeft( buttonSpell ) ? buttonSpell.PressDraw() : buttonSpell.ReleaseDraw();
     le.MousePressLeft( buttonEndTur ) ? buttonEndTur.PressDraw() : buttonEndTur.ReleaseDraw();
     le.MousePressLeft( buttonAdventure ) ? buttonAdventure.PressDraw() : buttonAdventure.ReleaseDraw();
     le.MousePressLeft( buttonFile ) ? buttonFile.PressDraw() : buttonFile.ReleaseDraw();
@@ -145,7 +146,7 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
             conf.SetShowButtons( false );
         interface.EventKingdomInfo();
     }
-    else if ( le.MouseClickLeft( buttonSpell ) ) {
+    else if ( buttonSpell.isEnable() && le.MouseClickLeft( buttonSpell ) ) {
         // for QVGA: auto hide buttons after click
         if ( conf.QVGA() )
             conf.SetShowButtons( false );
