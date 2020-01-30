@@ -42,6 +42,7 @@ public:
     void Blit( const Rect & srt, const Point & ) const;
 
     void ChangeColorIndex( u32 index1, u32 index2 );
+    void ChangeColor( u32 index, RGBA color );
 
     static Surface ScaleQVGASurface( const Surface & );
     static Sprite ScaleQVGASprite( const Sprite & );
