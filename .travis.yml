@@ -113,6 +113,9 @@ matrix:
           branch: master
     - os: osx
       name: "OSX with SDL 1.2"
+      cache:
+        directories:
+          - $(brew --cache)
       before_install:
         - brew update
         - brew install sdl
@@ -137,6 +140,9 @@ matrix:
           branch: master
     - os: osx
       name: "OSX with SDL 2.0"
+      cache:
+        directories:
+          - $(brew --cache)
       before_install:
         - brew update
         - brew install sdl2
