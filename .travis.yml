@@ -119,7 +119,6 @@ matrix:
         - brew install sdl_ttf
         - brew install sdl_mixer
         - brew install sdl_image
-        - brew install gettext
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
       before_deploy:
         - zip fheroes2_osx_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_macos.sh
@@ -144,7 +143,6 @@ matrix:
         - brew install sdl2_ttf
         - brew install sdl2_mixer
         - brew install sdl2_image
-        - brew install gettext
         - export PATH="/usr/local/opt/gettext/bin:$PATH"
         - export WITH_SDL2="ON"
       before_deploy:
