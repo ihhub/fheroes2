@@ -685,7 +685,7 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
             LoadOrgICN( sprite, ICN::ROUTE, ii, false );
             sprite.ChangeColor( 0x55, RGBA( 164, 88, 16 ) );
             sprite.ChangeColor( 0x5C, RGBA( 84, 0, 0 ) );
-            sprite.ChangeColor( 0x60,  RGBA( 72, 0, 0 ) );
+            sprite.ChangeColor( 0x60, RGBA( 72, 0, 0 ) );
             break;
 
         case ICN::YELLOW_FONT:
