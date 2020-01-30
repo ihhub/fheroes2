@@ -197,7 +197,6 @@ matrix:
             bash $TRAVIS_BUILD_DIR/script/tools/check_code_format.sh
           fi
 
-
 script:
   - |
     make -j 2
