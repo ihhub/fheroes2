@@ -372,7 +372,7 @@ void Interface::Radar::QueueEventProcessing( void )
         }
         else if ( !conf.ExtPocketTapMode() && le.MousePressRight( GetRect() ) )
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
-        else if ( !conf.QVGA() ) {
+        else if ( !conf.QVGA() && conf.ExtGameHideInterface() ) {
             Size newSize( rect.w, rect.h );
 
             if ( le.MouseWheelUp() ) {
