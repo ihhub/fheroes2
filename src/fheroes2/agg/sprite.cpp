@@ -85,6 +85,11 @@ void Sprite::ChangeColorIndex( u32 fc, u32 tc )
     SetSurface( RenderChangeColor( AGG::GetPaletteColor( fc ), AGG::GetPaletteColor( tc ) ) );
 }
 
+void Sprite::ChangeColor( u32 index, RGBA color )
+{
+    SetSurface( RenderChangeColor( AGG::GetPaletteColor( index ), color ) );
+}
+
 void Sprite::Blit( void ) const
 {
     Blit( Display::Get() );
