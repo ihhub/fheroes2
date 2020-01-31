@@ -285,7 +285,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt )
         dst_pt.y = pt.y + 103;
         text.Blit( dst_pt );
         // monster
-        const bool flipMonsterSprite = ( dw >= DWELLING_MONSTER3 );
+        const bool flipMonsterSprite = ( dw >= DWELLING_MONSTER4 );
         const Sprite & smonster = AGG::GetICN( monster.ICNMonh(), 0, flipMonsterSprite );
         dst_pt.x = pt.x + 193 - smonster.w() / 2;
         dst_pt.y = pt.y + 124 - smonster.h();
