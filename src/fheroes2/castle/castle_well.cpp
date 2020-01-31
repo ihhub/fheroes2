@@ -224,14 +224,14 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt )
         switch ( dw ) {
         case DWELLING_MONSTER1:
             pt.x = cur_pt.x;
-            pt.y = cur_pt.y;
+            pt.y = cur_pt.y + 1;
             present = DWELLING_MONSTER1 & building;
             icnindex = 19;
             available = dwelling[0];
             break;
         case DWELLING_MONSTER2:
             pt.x = cur_pt.x;
-            pt.y = cur_pt.y + 150;
+            pt.y = cur_pt.y + 151;
             present = DWELLING_MONSTER2 & building;
             dw_orig = GetActualDwelling( DWELLING_MONSTER2 );
             icnindex = DWELLING_UPGRADE2 & building ? 25 : 20;
@@ -239,7 +239,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt )
             break;
         case DWELLING_MONSTER3:
             pt.x = cur_pt.x;
-            pt.y = cur_pt.y + 300;
+            pt.y = cur_pt.y + 301;
             present = DWELLING_MONSTER3 & building;
             dw_orig = GetActualDwelling( DWELLING_MONSTER3 );
             icnindex = DWELLING_UPGRADE3 & building ? 26 : 21;
@@ -285,14 +285,15 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt )
         dst_pt.y = pt.y + 103;
         text.Blit( dst_pt );
         // monster
-        const Sprite & smonster = AGG::GetICN( monster.ICNMonh(), 0 );
+        const bool flipMonsterSprite = ( dw >= DWELLING_MONSTER4 );
+        const Sprite & smonster = AGG::GetICN( monster.ICNMonh(), 0, flipMonsterSprite );
         dst_pt.x = pt.x + 193 - smonster.w() / 2;
         dst_pt.y = pt.y + 124 - smonster.h();
         smonster.Blit( dst_pt );
         // name
         text.Set( monster.GetMultiName() );
         dst_pt.x = pt.x + 122 - text.w() / 2;
-        dst_pt.y = pt.y + 16;
+        dst_pt.y = pt.y + 17;
         text.Blit( dst_pt );
         // attack
         std::string str;
@@ -351,7 +352,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt )
             dst_pt.x = pt.x + 44;
             dst_pt.y = pt.y + 122;
             text.Blit( dst_pt );
-            text.Set( GetString( available ), Font::BIG );
+            text.Set( GetString( available ), Font::YELLOW_BIG );
             dst_pt.x = pt.x + 129 - text.w() / 2;
             dst_pt.y = pt.y + 119;
             text.Blit( dst_pt );
