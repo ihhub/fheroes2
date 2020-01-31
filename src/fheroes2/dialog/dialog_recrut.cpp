@@ -425,7 +425,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             redraw = false;
         }
 
-        if ( le.MouseClickLeft( buttonOk ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )
+        if ( buttonOk.isEnable() && ( le.MouseClickLeft( buttonOk ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
             break;
 
         if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
