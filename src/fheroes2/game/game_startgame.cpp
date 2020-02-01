@@ -657,6 +657,10 @@ int Interface::Basic::HumanTurn( bool isload )
     if ( autohide_status )
         Game::AnimateResetDelay( Game::AUTOHIDE_STATUS_DELAY );
 
+    int fastScrollRepeatCount = 0;
+    const int fastScrollThreshold = 10;
+    bool isOngoingFastScrollEvent = false;
+
     // startgame loop
     while ( Game::CANCEL == res ) {
         if ( !le.HandleEvents() ) {
@@ -668,6 +672,11 @@ int Interface::Basic::HumanTurn( bool isload )
             EventSwitchShowStatus();
             autohide_status = false;
         }
+
+        if ( !isOngoingFastScrollEvent )
+            fastScrollRepeatCount = 0;
+
+        isOngoingFastScrollEvent = false;
 
         // hot keys
         if ( le.KeyPress() ) {
@@ -807,21 +816,19 @@ int Interface::Basic::HumanTurn( bool isload )
                 le.SetTapMode( false );
         }
         else {
-            // scroll area maps left
-            if ( le.MouseCursor( GetScrollLeft() ) )
-                gameArea.SetScroll( SCROLL_LEFT );
-            else
-                // scroll area maps right
-                if ( le.MouseCursor( GetScrollRight() ) )
-                gameArea.SetScroll( SCROLL_RIGHT );
-            else
-                // scroll area maps top
+            if ( Display::Get().isMouseFocusActive() ) {
+                int scrollPosition = SCROLL_NONE;
+                if ( le.MouseCursor( GetScrollLeft() ) )
+                    scrollPosition |= SCROLL_LEFT;
+                else if ( le.MouseCursor( GetScrollRight() ) )
+                    scrollPosition |= SCROLL_RIGHT;
                 if ( le.MouseCursor( GetScrollTop() ) )
-                gameArea.SetScroll( SCROLL_TOP );
-            else
-                // scroll area maps bottom
-                if ( le.MouseCursor( GetScrollBottom() ) )
-                gameArea.SetScroll( SCROLL_BOTTOM );
+                    scrollPosition |= SCROLL_TOP;
+                else if ( le.MouseCursor( GetScrollBottom() ) )
+                    scrollPosition |= SCROLL_BOTTOM;
+                if ( scrollPosition != SCROLL_NONE )
+                    gameArea.SetScroll( scrollPosition );
+            }
         }
 
         // cursor over radar
@@ -865,17 +872,20 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         // fast scroll
+        if ( gameArea.NeedScroll() )
+            isOngoingFastScrollEvent = true;
+
         if ( gameArea.NeedScroll() && Game::AnimateInfrequentDelay( Game::SCROLL_DELAY ) ) {
+            ++fastScrollRepeatCount;
+            if ( fastScrollRepeatCount < fastScrollThreshold )
+                continue;
+
             cursor.Hide();
 
             if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() ) || le.MouseCursor( GetScrollBottom() ) )
                 cursor.SetThemes( gameArea.GetScrollCursor() );
 
             gameArea.Scroll();
-
-            // need stop hero
-            if ( GetFocusHeroes() && GetFocusHeroes()->isEnableMove() )
-                GetFocusHeroes()->SetMove( false );
 
             gameArea.SetRedraw();
             radar.SetRedraw();
@@ -897,9 +907,11 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( hero ) {
                 if ( hero->isEnableMove() ) {
                     if ( hero->Move( 0 == conf.HeroesMoveSpeed() ) ) {
-                        gameArea.SetCenter( hero->GetCenter() );
-                        ResetFocus( GameFocus::HEROES );
-                        RedrawFocus();
+                        if ( !isOngoingFastScrollEvent ) {
+                            gameArea.SetCenter( hero->GetCenter() );
+                            ResetFocus( GameFocus::HEROES );
+                            RedrawFocus();
+                        }
 
                         gameArea.SetUpdateCursor();
                     }
