@@ -459,7 +459,8 @@ void Interface::GameArea::SetScroll( int direct )
             scrollDirection |= direct;
             updateCursor = true;
         }
-    } else if ( ( direct & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
+    }
+    else if ( ( direct & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
         if ( world.w() - rectMaps.w > rectMaps.x || SCROLL_MAX * 2 > scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
@@ -471,7 +472,8 @@ void Interface::GameArea::SetScroll( int direct )
             scrollDirection |= direct;
             updateCursor = true;
         }
-    } else if ( ( direct & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
+    }
+    else if ( ( direct & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
         if ( world.h() - rectMaps.h > rectMaps.y || SCROLL_MAX * 2 > scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
