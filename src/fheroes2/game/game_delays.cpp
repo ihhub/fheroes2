@@ -65,17 +65,17 @@ namespace Game
     void AnimateDelaysInitialize( void );
 
     TimeDelay delays[] = {20, // SCROLL_DELAY
-                          400, // MAIN_MENU_DELAY
-                          700, // MAPS_DELAY
+                          250, // MAIN_MENU_DELAY
+                          250, // MAPS_DELAY
                           200, // CASTLE_TAVERN_DELAY
-                          400, // CASTLE_AROUND_DELAY
+                          150, // CASTLE_AROUND_DELAY
                           130, // CASTLE_BUYHERO_DELAY
                           130, // CASTLE_BUILD_DELAY
-                          60, // HEROES_MOVE_DELAY
+                          40, // HEROES_MOVE_DELAY
                           40, // HEROES_FADE_DELAY
                           40, // HEROES_PICKUP_DELAY
                           50, // PUZZLE_FADE_DELAY
-                          300, // BATTLE_DIALOG_DELAY
+                          100, // BATTLE_DIALOG_DELAY
                           80, // BATTLE_FRAME_DELAY
                           40, // BATTLE_MISSILE_DELAY
                           90, // BATTLE_SPELL_DELAY
