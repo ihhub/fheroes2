@@ -333,17 +333,15 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
         // animation
         if ( !conf.QVGA() && Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) ) {
-            if ( 0 == frame || 1 != ICN::AnimationFrame( icn_anim, 1, frame ) ) {
-                const Sprite & sprite1 = AGG::GetICN( icn_anim, 0 );
-                const Sprite & sprite2 = AGG::GetICN( icn_anim, ICN::AnimationFrame( icn_anim, 1, frame ) );
+            const Sprite & sprite1 = AGG::GetICN( icn_anim, 0 );
+            const Sprite & sprite2 = AGG::GetICN( icn_anim, ICN::AnimationFrame( icn_anim, 1, frame ) );
 
-                cursor.Hide();
-                sprite1.Blit( pos_rt.x + anime_ox + sprite1.x(), pos_rt.y + anime_oy + sprite1.y() );
-                sprite2.Blit( pos_rt.x + anime_ox + sprite2.x(), pos_rt.y + anime_oy + sprite2.y() );
-                cursor.Show();
-                display.Flip();
-                ++frame;
-            }
+            cursor.Hide();
+            sprite1.Blit( pos_rt.x + anime_ox + sprite1.x(), pos_rt.y + anime_oy + sprite1.y() );
+            sprite2.Blit( pos_rt.x + anime_ox + sprite2.x(), pos_rt.y + anime_oy + sprite2.y() );
+            cursor.Show();
+            display.Flip();
+            ++frame;
         }
     }
 
