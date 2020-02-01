@@ -164,22 +164,22 @@ void Castle::OpenWell( void )
                 }
             }
 
-            if ( ( building & DWELLING_MONSTER1 ) && dwelling[0] && le.MouseClickLeft( rectMonster1 )
+            if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 )
                  && RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) ) )
                 redraw = true;
-            else if ( ( building & DWELLING_MONSTER2 ) && dwelling[1] && le.MouseClickLeft( rectMonster2 )
+            else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 )
                       && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) ) )
                 redraw = true;
-            else if ( ( building & DWELLING_MONSTER3 ) && dwelling[2] && le.MouseClickLeft( rectMonster3 )
+            else if ( ( building & DWELLING_MONSTER3 ) && le.MouseClickLeft( rectMonster3 )
                       && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true ) ) )
                 redraw = true;
-            else if ( ( building & DWELLING_MONSTER4 ) && dwelling[3] && le.MouseClickLeft( rectMonster4 )
+            else if ( ( building & DWELLING_MONSTER4 ) && le.MouseClickLeft( rectMonster4 )
                       && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true ) ) )
                 redraw = true;
-            else if ( ( building & DWELLING_MONSTER5 ) && dwelling[4] && le.MouseClickLeft( rectMonster5 )
+            else if ( ( building & DWELLING_MONSTER5 ) && le.MouseClickLeft( rectMonster5 )
                       && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) ) )
                 redraw = true;
-            else if ( ( building & DWELLING_MONSTER6 ) && dwelling[5] && le.MouseClickLeft( rectMonster6 )
+            else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 )
                       && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) ) )
                 redraw = true;
 
