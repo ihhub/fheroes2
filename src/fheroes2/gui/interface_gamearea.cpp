@@ -429,14 +429,6 @@ bool Interface::GameArea::NeedScroll( void ) const
 int Interface::GameArea::GetScrollCursor( void ) const
 {
     switch ( scrollDirection ) {
-    case SCROLL_TOP:
-        return Cursor::SCROLL_TOP;
-    case SCROLL_BOTTOM:
-        return Cursor::SCROLL_BOTTOM;
-    case SCROLL_RIGHT:
-        return Cursor::SCROLL_RIGHT;
-    case SCROLL_LEFT:
-        return Cursor::SCROLL_LEFT;
     case SCROLL_LEFT | SCROLL_TOP:
         return Cursor::SCROLL_TOPLEFT;
     case SCROLL_LEFT | SCROLL_BOTTOM:
@@ -445,7 +437,14 @@ int Interface::GameArea::GetScrollCursor( void ) const
         return Cursor::SCROLL_TOPRIGHT;
     case SCROLL_RIGHT | SCROLL_BOTTOM:
         return Cursor::SCROLL_BOTTOMRIGHT;
-
+    case SCROLL_TOP:
+        return Cursor::SCROLL_TOP;
+    case SCROLL_BOTTOM:
+        return Cursor::SCROLL_BOTTOM;
+    case SCROLL_RIGHT:
+        return Cursor::SCROLL_RIGHT;
+    case SCROLL_LEFT:
+        return Cursor::SCROLL_LEFT;
     default:
         break;
     }
@@ -455,37 +454,28 @@ int Interface::GameArea::GetScrollCursor( void ) const
 
 void Interface::GameArea::SetScroll( int direct )
 {
-    switch ( direct ) {
-    case SCROLL_LEFT:
+    if ( ( direct & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( 0 < rectMaps.x || 0 < scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
-        break;
-
-    case SCROLL_RIGHT:
+    } else if ( ( direct & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
         if ( world.w() - rectMaps.w > rectMaps.x || SCROLL_MAX * 2 > scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
-        break;
+    }
 
-    case SCROLL_TOP:
+    if ( ( direct & SCROLL_TOP ) == SCROLL_TOP ) {
         if ( 0 < rectMaps.y || 0 < scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
-        break;
-
-    case SCROLL_BOTTOM:
+    } else if ( ( direct & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
         if ( world.h() - rectMaps.h > rectMaps.y || SCROLL_MAX * 2 > scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
-        break;
-
-    default:
-        break;
     }
 
     scrollTime.Start();

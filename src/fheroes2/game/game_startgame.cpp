@@ -817,14 +817,17 @@ int Interface::Basic::HumanTurn( bool isload )
         }
         else {
             if ( Display::Get().isMouseFocusActive() ) {
+                int scrollPosition = SCROLL_NONE;
                 if ( le.MouseCursor( GetScrollLeft() ) ) // scroll area maps left
-                    gameArea.SetScroll( SCROLL_LEFT );
+                    scrollPosition |= SCROLL_LEFT;
                 else if ( le.MouseCursor( GetScrollRight() ) ) // scroll area maps right
-                    gameArea.SetScroll( SCROLL_RIGHT );
-                else if ( le.MouseCursor( GetScrollTop() ) ) // scroll area maps top
-                    gameArea.SetScroll( SCROLL_TOP );
+                    scrollPosition |= SCROLL_RIGHT;
+                if ( le.MouseCursor( GetScrollTop() ) ) // scroll area maps top
+                    scrollPosition |= SCROLL_TOP;
                 else if ( le.MouseCursor( GetScrollBottom() ) )// scroll area maps bottom
-                    gameArea.SetScroll( SCROLL_BOTTOM );
+                    scrollPosition |= SCROLL_BOTTOM;
+                if ( scrollPosition != SCROLL_NONE )
+                    gameArea.SetScroll( scrollPosition );
             }
         }
 
