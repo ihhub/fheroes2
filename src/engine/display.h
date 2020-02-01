@@ -60,6 +60,8 @@ public:
     Surface GetSurface( void ) const;
     Surface GetSurface( const Rect & rt ) const;
 
+    bool isMouseFocusActive() const;
+
 protected:
     friend class Texture;
 
