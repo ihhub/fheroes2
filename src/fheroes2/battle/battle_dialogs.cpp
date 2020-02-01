@@ -333,7 +333,6 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
         // animation
         if ( !conf.QVGA() && Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) ) {
-            ICN::AnimationFrame( icn_anim, 1, frame );
             const Sprite & sprite1 = AGG::GetICN( icn_anim, 0 );
             const Sprite & sprite2 = AGG::GetICN( icn_anim, ICN::AnimationFrame( icn_anim, 1, frame ) );
 
