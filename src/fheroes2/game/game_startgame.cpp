@@ -818,13 +818,13 @@ int Interface::Basic::HumanTurn( bool isload )
         else {
             if ( Display::Get().isMouseFocusActive() ) {
                 int scrollPosition = SCROLL_NONE;
-                if ( le.MouseCursor( GetScrollLeft() ) ) // scroll area maps left
+                if ( le.MouseCursor( GetScrollLeft() ) )
                     scrollPosition |= SCROLL_LEFT;
-                else if ( le.MouseCursor( GetScrollRight() ) ) // scroll area maps right
+                else if ( le.MouseCursor( GetScrollRight() ) )
                     scrollPosition |= SCROLL_RIGHT;
-                if ( le.MouseCursor( GetScrollTop() ) ) // scroll area maps top
+                if ( le.MouseCursor( GetScrollTop() ) )
                     scrollPosition |= SCROLL_TOP;
-                else if ( le.MouseCursor( GetScrollBottom() ) )// scroll area maps bottom
+                else if ( le.MouseCursor( GetScrollBottom() ) )
                     scrollPosition |= SCROLL_BOTTOM;
                 if ( scrollPosition != SCROLL_NONE )
                     gameArea.SetScroll( scrollPosition );
