@@ -279,7 +279,6 @@ Surface Display::GetSurface( const Rect & rt ) const
 #endif
 }
 
-
 bool Display::isMouseFocusActive() const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -288,7 +287,6 @@ bool Display::isMouseFocusActive() const
     return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
 #endif
 }
-
 
 void Display::Clear( void )
 {
