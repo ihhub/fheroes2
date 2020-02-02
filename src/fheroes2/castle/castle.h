@@ -210,7 +210,6 @@ public:
     std::string String( void ) const;
 
     int DialogBuyHero( const Heroes * );
-    int DialogBuyCaptain( bool fixed = true ) const;
     int DialogBuyCastle( bool fixed = true ) const;
 
     void SwapCastleHeroes( CastleHeroes & );
@@ -221,10 +220,9 @@ private:
     Rect RedrawResourcePanel( const Point & );
     u32 OpenTown( void );
     void OpenTavern( void );
-    void OpenThievesGuild( void );
     void OpenWell( void );
     void OpenMageGuild( void );
-    void WellRedrawInfoArea( const Point & cur_pt );
+    void WellRedrawInfoArea( const Point & cur_pt, const std::vector<MonsterAnimation> & monsterAnimInfo );
     void JoinRNDArmy( void );
     void PostLoad( void );
 

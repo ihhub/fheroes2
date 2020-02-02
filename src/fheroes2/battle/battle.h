@@ -74,56 +74,6 @@ namespace Battle
     void UpdateMonsterSpriteAnimation( const std::string & );
     void UpdateMonsterAttributes( const std::string & );
 
-    enum
-    {
-        AS_NONE,
-        AS_IDLE,
-        AS_MOVE,
-        AS_FLY1,
-        AS_FLY2,
-        AS_FLY3,
-        AS_SHOT0,
-        AS_SHOT1,
-        AS_SHOT2,
-        AS_SHOT3,
-        AS_ATTK0,
-        AS_ATTK1,
-        AS_ATTK2,
-        AS_ATTK3,
-        AS_WNCE,
-        AS_KILL
-    };
-
-    struct animframe_t
-    {
-        int start;
-        int count;
-    };
-
-    struct monstersprite_t
-    {
-        int icn_file;
-        animframe_t frm_idle;
-        animframe_t frm_move;
-        animframe_t frm_fly1;
-        animframe_t frm_fly2;
-        animframe_t frm_fly3;
-        animframe_t frm_shot0;
-        animframe_t frm_shot1;
-        animframe_t frm_shot2;
-        animframe_t frm_shot3;
-        animframe_t frm_attk0;
-        animframe_t frm_attk1;
-        animframe_t frm_attk2;
-        animframe_t frm_attk3;
-        animframe_t frm_wnce;
-        animframe_t frm_kill;
-        int m82_attk;
-        int m82_kill;
-        int m82_move;
-        int m82_wnce;
-    };
-
     struct TargetInfo
     {
         Unit * defender;

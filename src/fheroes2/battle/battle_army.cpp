@@ -391,7 +391,7 @@ bool Battle::Force::SetIdleAnimation( void )
 
         if ( unit.isValid() ) {
             if ( unit.isFinishAnimFrame() )
-                unit.ResetAnimFrame( AS_IDLE );
+                unit.ResetAnimFrame( Monster::AS_IDLE );
             else if ( unit.isStartAnimFrame() && 3 > Rand::Get( 1, 10 ) ) {
                 unit.IncreaseAnimFrame();
                 res = true;
