@@ -261,7 +261,7 @@ protected:
 class MonsterAnimation
 {
 public:
-    explicit MonsterAnimation( const Monster & monster );
+    explicit MonsterAnimation( const Monster & monster = Monster() );
 
     void increment();
 
