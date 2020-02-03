@@ -182,18 +182,18 @@ void Castle::OpenWell( void )
                 RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) );
             else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 ) )
                 RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
+        }
 
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
-                cursor.Hide();
-                WellRedrawInfoArea( cur_pt, monsterAnimInfo );
+        if ( Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+            cursor.Hide();
+            WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
-                for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
-                    monsterAnimInfo[i].increment();
+            for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
+                monsterAnimInfo[i].increment();
 
-                buttonMax.Draw();
-                cursor.Show();
-                display.Flip();
-            }
+            buttonMax.Draw();
+            cursor.Show();
+            display.Flip();
         }
     }
 }
