@@ -928,7 +928,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 else {
                     hero->SetMove( false );
                     if ( Cursor::WAIT == cursor.Themes() )
-                        cursor.SetThemes( Cursor::POINTER );
+                        gameArea.SetUpdateCursor();
                 }
             }
         }
