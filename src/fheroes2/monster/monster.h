@@ -270,7 +270,7 @@ public:
     bool isMovement() const;
 
 private:
-    const Monster::monstersprite_t _sprite;
+    const Monster::monstersprite_t & _sprite;
     std::vector<int> _validMoves;
     std::list<int> _frameSet;
     int _frameId;
