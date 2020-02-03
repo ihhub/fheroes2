@@ -141,10 +141,8 @@ namespace Battle
         void SpellRestoreAction( const Spell &, u32, const HeroBase * );
         u32 Resurrect( u32, bool, bool );
 
-        const monstersprite_t & GetMonsterSprite( void ) const;
-
-        const animframe_t & GetFrameState( void ) const;
-        const animframe_t & GetFrameState( int ) const;
+        const Monster::animframe_t & GetFrameState( void ) const;
+        const Monster::animframe_t & GetFrameState( int ) const;
         void IncreaseAnimFrame( bool loop = false );
         bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;

@@ -101,7 +101,15 @@ void Castle::OpenWell( void )
 
     buttonExit.Draw();
 
-    WellRedrawInfoArea( cur_pt );
+    std::vector<MonsterAnimation> monsterAnimInfo;
+    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, DWELLING_MONSTER1 ) ) );
+    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) ) );
+    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ) ) );
+    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ) ) );
+    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ) ) );
+    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ) ) );
+
+    WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
     if ( !conf.ExtCastleAllowBuyFromWell() )
         buttonMax.SetDisable( true );
@@ -121,7 +129,6 @@ void Castle::OpenWell( void )
     cursor.Show();
     display.Flip();
 
-    bool redraw = false;
     LocalEvent & le = LocalEvent::Get();
 
     // loop
@@ -160,42 +167,38 @@ void Castle::OpenWell( void )
                         const dwelling_t & dw = *it;
                         RecruitMonsterFromDwelling( dw.first, dw.second );
                     }
-                    redraw = true;
                 }
             }
 
-            if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 )
-                 && RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) ) )
-                redraw = true;
-            else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 )
-                      && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) ) )
-                redraw = true;
-            else if ( ( building & DWELLING_MONSTER3 ) && le.MouseClickLeft( rectMonster3 )
-                      && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true ) ) )
-                redraw = true;
-            else if ( ( building & DWELLING_MONSTER4 ) && le.MouseClickLeft( rectMonster4 )
-                      && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true ) ) )
-                redraw = true;
-            else if ( ( building & DWELLING_MONSTER5 ) && le.MouseClickLeft( rectMonster5 )
-                      && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) ) )
-                redraw = true;
-            else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 )
-                      && RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) ) )
-                redraw = true;
+            if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 ) )
+                RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) );
+            else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 ) )
+                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) );
+            else if ( ( building & DWELLING_MONSTER3 ) && le.MouseClickLeft( rectMonster3 ) )
+                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true ) );
+            else if ( ( building & DWELLING_MONSTER4 ) && le.MouseClickLeft( rectMonster4 ) )
+                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true ) );
+            else if ( ( building & DWELLING_MONSTER5 ) && le.MouseClickLeft( rectMonster5 ) )
+                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) );
+            else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 ) )
+                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
+        }
 
-            if ( redraw ) {
-                cursor.Hide();
-                WellRedrawInfoArea( cur_pt );
-                buttonMax.Draw();
-                cursor.Show();
-                display.Flip();
-                redraw = false;
-            }
+        if ( Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+            cursor.Hide();
+            WellRedrawInfoArea( cur_pt, monsterAnimInfo );
+
+            for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
+                monsterAnimInfo[i].increment();
+
+            buttonMax.Draw();
+            cursor.Show();
+            display.Flip();
         }
     }
 }
 
-void Castle::WellRedrawInfoArea( const Point & cur_pt )
+void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<MonsterAnimation> & monsterAnimInfo )
 {
     AGG::GetICN( ICN::WELLBKG, 0 ).Blit( cur_pt );
 
@@ -214,6 +217,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt )
     text.Blit( dst_pt );
 
     u32 dw = DWELLING_MONSTER1;
+    size_t monsterId = 0u;
 
     while ( dw <= DWELLING_MONSTER6 ) {
         bool present = false;
@@ -284,12 +288,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt )
         dst_pt.x = pt.x + 86 - text.w() / 2;
         dst_pt.y = pt.y + 103;
         text.Blit( dst_pt );
-        // monster
-        const bool flipMonsterSprite = ( dw >= DWELLING_MONSTER4 );
-        const Sprite & smonster = AGG::GetICN( monster.ICNMonh(), 0, flipMonsterSprite );
-        dst_pt.x = pt.x + 193 - smonster.w() / 2;
-        dst_pt.y = pt.y + 124 - smonster.h();
-        smonster.Blit( dst_pt );
+
         // name
         text.Set( monster.GetMultiName() );
         dst_pt.x = pt.x + 122 - text.w() / 2;
@@ -358,6 +357,20 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt )
             text.Blit( dst_pt );
         }
 
+        // monster
+        const bool flipMonsterSprite = ( dw >= DWELLING_MONSTER4 );
+
+        const Sprite & smonster = AGG::GetICN( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId(), flipMonsterSprite );
+        if ( flipMonsterSprite )
+            dst_pt.x = pt.x + 193 - ( smonster.x() + smonster.w() ) + ( monster.isWide() ? 23 : 0 );
+        else
+            dst_pt.x = pt.x + 193 + smonster.x() - ( monster.isWide() ? 23 : 0 );
+
+        dst_pt.y = pt.y + 124 - smonster.h() + ( smonster.y() + smonster.h() );
+
+        smonster.Blit( dst_pt );
+
         dw <<= 1;
+        ++monsterId;
     }
 }

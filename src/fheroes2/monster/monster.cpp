@@ -23,10 +23,12 @@
 #include "monster.h"
 #include "castle.h"
 #include "difficulty.h"
+#include "error.h"
 #include "game.h"
 #include "game_static.h"
 #include "icn.h"
 #include "luck.h"
+#include "m82.h"
 #include "morale.h"
 #include "mp2.h"
 #include "race.h"
@@ -140,6 +142,186 @@ namespace
         {0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, "Random Monster 3", "Random Monsters 3", {0, 0, 0, 0, 0, 0, 0}},
         {0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, "Random Monster 4", "Random Monsters 4", {0, 0, 0, 0, 0, 0, 0}},
     };
+
+    Monster::monstersprite_t monsters_info[] = {
+        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
+         {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
+
+        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
+        // m82_kill       m82_move       m82_wnce
+        {ICN::PEASANT, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},       {16, 6}, {22, 6}, {28, 6}, {13, 3}, {34, 4}, M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE},
+        {ICN::ARCHER, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {16, 4},       {20, 4},       {24, 4},       {28, 4},
+         {32, 4},     {36, 3}, {39, 3}, {42, 3}, {13, 3}, {45, 6}, M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE},
+        {ICN::ARCHER2, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {16, 4},       {20, 4},       {24, 4},       {28, 4},
+         {32, 4},      {36, 3}, {39, 3}, {42, 3}, {13, 3}, {45, 6}, M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE},
+        {ICN::PIKEMAN, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},       {17, 3}, {20, 4}, {24, 6}, {13, 4}, {30, 6}, M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE},
+        {ICN::PIKEMAN2, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},        {17, 3}, {20, 4}, {24, 6}, {13, 4}, {30, 6}, M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE},
+        {ICN::SWORDSMN, {39, 6}, {2, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {12, 2},       {19, 5}, {14, 5}, {24, 5}, {36, 3}, {29, 7}, M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE},
+        {ICN::SWORDSM2, {39, 6}, {2, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {12, 2},       {19, 5}, {14, 5}, {24, 5}, {36, 3}, {29, 7}, M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE},
+        {ICN::CAVALRYR, {19, 4}, {1, 7}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {8, 1},        {12, 3}, {9, 3}, {15, 2}, {28, 2}, {23, 5}, M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE},
+        {ICN::CAVALRYB, {19, 4}, {1, 7}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {8, 1},        {12, 3}, {9, 3}, {15, 2}, {28, 2}, {23, 5}, M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE},
+        {ICN::PALADIN, {1, 11}, {12, 8}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {20, 2},      {22, 3}, {25, 3}, {28, 3}, {31, 2}, {34, 5}, M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE},
+        {ICN::PALADIN2, {1, 11}, {12, 8}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {20, 2},       {22, 3}, {25, 3}, {28, 3}, {31, 2}, {34, 5}, M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE},
+
+        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
+        // m82_kill       m82_move       m82_wnce
+        {ICN::GOBLIN, {33, 7}, {1, 9},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {10, 3},     {17, 4}, {13, 4}, {21, 4}, {25, 4}, {29, 4}, M82::GBLNATTK, M82::GBLNKILL, M82::GBLNMOVE, M82::GBLNWNCE},
+        {ICN::ORC, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {16, 13},      {0, 0},        {0, 0},        {0, 0},
+         {28, 2},  {30, 3}, {33, 4}, {37, 3}, {13, 3}, {40, 4}, M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE},
+        {ICN::ORC2, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {16, 13},      {0, 0},        {0, 0},        {0, 0},
+         {28, 2},   {30, 3}, {33, 4}, {37, 3}, {13, 3}, {40, 4}, M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE},
+        {ICN::WOLF, {20, 6}, {7, 6}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},    {13, 3}, {2, 5}, {16, 4}, {26, 3}, {28, 5}, M82::WOLFATTK, M82::WOLFKILL, M82::WOLFMOVE, M82::WOLFWNCE},
+        {ICN::OGRE, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},    {16, 6}, {22, 7}, {29, 8}, {13, 3}, {37, 4}, M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE},
+        {ICN::OGRE2, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {16, 6}, {22, 7}, {29, 8}, {13, 3}, {37, 4}, M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE},
+        {ICN::TROLL, {16, 7}, {1, 15}, {0, 0},  {0, 0},  {0, 0},  {23, 5},       {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {48, 6}, {23, 6}, {29, 5}, {54, 3}, {57, 9}, M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE},
+        {ICN::TROLL2, {16, 7}, {1, 15}, {0, 0},  {0, 0},  {0, 0},  {23, 5},       {0, 0},        {0, 0},        {0, 0},
+         {0, 0},      {48, 6}, {23, 6}, {29, 5}, {54, 3}, {57, 9}, M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE},
+        {ICN::CYCLOPS, {30, 9}, {1, 7}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {16, 2},       {11, 2},       {21, 2},
+         {0, 0},       {14, 3}, {8, 3}, {18, 3}, {23, 2}, {25, 5}, M82::CYCLATTK, M82::CYCLKILL, M82::CYCLMOVE, M82::CYCLWNCE},
+
+        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
+        // m82_kill       m82_move       m82_wnce
+        {ICN::SPRITE, {16, 9}, {0, 0},  {1, 3},  {4, 4}, {7, 2},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},      {30, 6}, {25, 5}, {36, 5}, {9, 2}, {11, 5}, M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE},
+        {ICN::DWARF, {44, 5}, {1, 9},   {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {20, 7}, {10, 10}, {27, 9}, {36, 8}, {49, 7}, M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE},
+        {ICN::DWARF2, {44, 5}, {1, 9},   {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},      {20, 7}, {10, 10}, {27, 9}, {36, 8}, {49, 7}, M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE},
+        {ICN::ELF, {42, 6}, {1, 12}, {0, 0},  {0, 0},  {0, 0},  {13, 10},      {0, 0},        {0, 0},        {0, 0},
+         {23, 3},  {26, 3}, {29, 3}, {32, 4}, {36, 2}, {38, 4}, M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE},
+        {ICN::ELF2, {42, 6}, {1, 12}, {0, 0},  {0, 0},  {0, 0},  {13, 10},      {0, 0},        {0, 0},        {0, 0},
+         {23, 3},   {26, 3}, {29, 3}, {32, 4}, {36, 2}, {38, 4}, M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE},
+        {ICN::DRUID, {46, 4}, {3, 11}, {0, 0},  {0, 0},  {0, 0},  {14, 8},       {35, 4},       {22, 4},       {39, 5},
+         {14, 8},    {35, 4}, {22, 4}, {39, 4}, {44, 2}, {26, 9}, M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE},
+        {ICN::DRUID2, {46, 4}, {3, 11}, {0, 0},  {0, 0},  {0, 0},  {14, 8},       {35, 4},       {22, 4},       {39, 5},
+         {14, 8},     {35, 4}, {22, 4}, {39, 4}, {44, 2}, {26, 9}, M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE},
+        {ICN::UNICORN, {1, 9},  {10, 8}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},       {18, 9}, {27, 7}, {34, 7}, {41, 4}, {45, 7}, M82::UNICATTK, M82::UNICKILL, M82::UNICMOVE, M82::UNICWNCE},
+        {ICN::PHOENIX, {30, 5}, {0, 0},  {1, 3},  {4, 6},  {0, 0},   {0, 0},        {25, 3},       {23, 2},       {28, 2},
+         {0, 0},       {13, 4}, {10, 4}, {17, 4}, {35, 2}, {37, 11}, M82::PHOEATTK, M82::PHOEKILL, M82::PHOEMOVE, M82::PHOEWNCE},
+
+        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
+        // m82_kill       m82_move       m82_wnce
+        {ICN::CENTAUR, {65, 6}, {2, 6},  {0, 0},  {0, 0},  {0, 0},  {18, 4},       {27, 3},       {22, 5},       {30, 3},
+         {33, 1},      {38, 4}, {34, 4}, {42, 4}, {46, 2}, {48, 7}, M82::CNTRATTK, M82::CNTRKILL, M82::CNTRMOVE, M82::CNTRWNCE},
+        {ICN::GARGOYLE, {1, 4},  {0, 0},  {5, 2},  {7, 4},  {11, 1}, {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {14, 1},       {15, 4}, {19, 4}, {23, 4}, {12, 2}, {27, 5}, M82::GARGATTK, M82::GARGKILL, M82::GARGMOVE, M82::GARGWNCE},
+        {ICN::GRIFFIN, {16, 9}, {0, 0},  {1, 3},  {3, 3}, {5, 2},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {7, 1},       {8, 2},  {14, 2}, {11, 3}, {9, 2}, {25, 9}, M82::GRIFATTK, M82::GRIFKILL, M82::GRIFMOVE, M82::GRIFWNCE},
+        {ICN::MINOTAUR, {1, 5},  {6, 7},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {13, 3},       {20, 3}, {16, 4}, {23, 4}, {27, 2}, {29, 6}, M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE},
+        {ICN::MINOTAU2, {1, 5},  {6, 7},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {13, 3},       {20, 3}, {16, 4}, {23, 4}, {27, 2}, {29, 6}, M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE},
+        {ICN::HYDRA, {28, 15}, {1, 8}, {0, 0}, {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {9, 8},   {9, 8}, {9, 8}, {17, 5}, {21, 7}, M82::HYDRATTK, M82::HYDRKILL, M82::HYDRMOVE, M82::HYDRWNCE},
+        {ICN::DRAGGREE, {41, 13}, {0, 0},  {1, 4},  {5, 3},  {8, 5},  {13, 1},       {17, 3},       {23, 3},       {30, 2},
+         {13, 1},       {14, 3},  {20, 3}, {26, 4}, {32, 3}, {35, 6}, M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE},
+        {ICN::DRAGRED, {41, 13}, {0, 0},  {1, 4},  {5, 3},  {8, 5},  {13, 1},       {17, 3},       {23, 3},       {30, 2},
+         {13, 1},      {14, 3},  {20, 3}, {26, 4}, {32, 3}, {35, 6}, M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE},
+        {ICN::DRAGBLAK, {41, 13}, {0, 0},  {1, 4},  {5, 3},  {8, 5},  {13, 1},       {17, 3},       {23, 3},       {30, 2},
+         {13, 1},       {14, 3},  {20, 3}, {26, 4}, {32, 3}, {35, 6}, M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE},
+
+        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
+        // m82_kill       m82_move       m82_wnce
+        {ICN::HALFLING, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {17, 5},       {22, 2},       {26, 1},       {27, 2},
+         {29, 1},       {30, 2}, {32, 3}, {35, 2}, {13, 4}, {37, 4}, M82::HALFATTK, M82::HALFKILL, M82::HALFMOVE, M82::HALFWNCE},
+        {ICN::BOAR, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {15, 1},   {16, 3}, {19, 3}, {22, 2}, {13, 2}, {24, 5}, M82::BOARATTK, M82::BOARKILL, M82::BOARMOVE, M82::BOARWNCE},
+        {ICN::GOLEM, {34, 6}, {1, 12}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {22, 4}, {13, 5}, {18, 4}, {32, 4}, {26, 6}, M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE},
+        {ICN::GOLEM2, {34, 6}, {1, 12}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},      {22, 4}, {13, 5}, {18, 4}, {32, 4}, {26, 6}, M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE},
+        {ICN::ROC, {18, 7}, {0, 0}, {1, 3},  {4, 3},  {7, 1},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},   {14, 3}, {8, 3}, {11, 3}, {25, 3}, {25, 9}, M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE},
+        {ICN::MAGE1, {1, 7},  {43, 8}, {0, 0},  {0, 0}, {0, 0},  {18, 1},       {21, 2},       {19, 2},       {23, 4},
+         {27, 1},    {34, 3}, {28, 6}, {37, 6}, {8, 3}, {11, 7}, M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE},
+        {ICN::MAGE2, {1, 7},  {43, 8}, {0, 0},  {0, 0}, {0, 0},  {18, 1},       {21, 2},       {19, 2},       {23, 4},
+         {27, 1},    {34, 3}, {28, 6}, {37, 6}, {8, 3}, {11, 7}, M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE},
+        {ICN::TITANBLU, {1, 6},  {7, 7},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},        {19, 5}, {14, 5}, {24, 5}, {29, 2}, {31, 7}, M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE},
+        {ICN::TITANBLA, {1, 6},  {7, 7},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {45, 5},       {38, 5},       {50, 5},
+         {0, 0},        {19, 5}, {14, 5}, {24, 5}, {29, 2}, {31, 7}, M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE},
+
+        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
+        // m82_kill       m82_move       m82_wnce
+        {ICN::SKELETON, {35, 4}, {3, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},        {20, 4}, {12, 4}, {16, 4}, {24, 3}, {27, 8}, M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE},
+        {ICN::ZOMBIE, {14, 12}, {1, 13}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},      {26, 5},  {31, 5}, {36, 5}, {40, 3}, {47, 7}, M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE},
+        {ICN::ZOMBIE2, {14, 12}, {1, 13}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},       {26, 5},  {31, 5}, {36, 5}, {40, 3}, {47, 7}, M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE},
+        {ICN::MUMMYW, {1, 4},  {5, 12}, {0, 0},  {0, 0},  {0, 0},   {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},      {21, 3}, {24, 3}, {27, 3}, {17, 4}, {30, 10}, M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE},
+        {ICN::MUMMY2, {1, 4},  {5, 12}, {0, 0},  {0, 0},  {0, 0},   {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},      {21, 3}, {24, 3}, {27, 3}, {17, 4}, {30, 10}, M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE},
+        {ICN::VAMPIRE, {1, 4},  {0, 0},  {5, 4},  {9, 4},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},       {15, 4}, {19, 4}, {23, 5}, {13, 3}, {28, 8}, M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE},
+        {ICN::VAMPIRE2, {1, 4},  {0, 0},  {5, 4},  {9, 4},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},        {15, 4}, {19, 4}, {23, 5}, {13, 3}, {28, 8}, M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE},
+        {ICN::LICH, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {13, 5},       {18, 5},       {23, 5},
+         {0, 0},    {13, 5}, {18, 5}, {23, 5}, {28, 3}, {31, 7}, M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE},
+        {ICN::LICH2, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {13, 5},       {18, 8},       {23, 5},
+         {0, 0},     {13, 5}, {18, 5}, {23, 5}, {28, 3}, {31, 7}, M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE},
+        {ICN::DRAGBONE, {22, 7}, {0, 0},  {1, 4},  {5, 3},  {8, 4},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},        {47, 5}, {12, 4}, {16, 4}, {20, 2}, {41, 6}, M82::BONEATTK, M82::BONEKILL, M82::BONEMOVE, M82::BONEWNCE},
+
+        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
+        // m82_kill       m82_move       m82_wnce
+        {ICN::ROGUE, {1, 4},  {5, 8},   {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {16, 8}, {24, 10}, {34, 9}, {13, 3}, {43, 7}, M82::ROGUATTK, M82::ROGUKILL, M82::ROGUMOVE, M82::ROGUWNCE},
+        {ICN::NOMAD, {1, 9},  {10, 8}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {18, 2},    {26, 5}, {20, 6}, {31, 4}, {35, 2}, {37, 5}, M82::NMADATTK, M82::NMADKILL, M82::NMADMOVE, M82::NMADWNCE},
+        {ICN::GHOST, {1, 3},  {0, 0},  {0, 0},  {4, 5},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {10, 3}, {13, 3}, {16, 4}, {20, 2}, {20, 8}, M82::GHSTATTK, M82::GHSTKILL, M82::GHSTMOVE, M82::GHSTWNCE},
+        {ICN::GENIE, {1, 9},  {0, 0},  {10, 1}, {11, 4}, {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {26, 5}, {16, 5}, {21, 5}, {31, 2}, {33, 7}, M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE},
+        {ICN::MEDUSA, {17, 7},  {1, 16},  {0, 0},   {0, 0},  {0, 0},   {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},      {65, 10}, {41, 13}, {54, 11}, {36, 2}, {24, 12}, M82::MEDSATTK, M82::MEDSKILL, M82::MEDSMOVE, M82::MEDSWNCE},
+        {ICN::EELEM, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},   {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {16, 4}, {20, 5}, {25, 6}, {13, 3}, {31, 11}, M82::EELMATTK, M82::EELMKILL, M82::EELMMOVE, M82::EELMWNCE},
+        {ICN::AELEM, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},   {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {16, 4}, {20, 5}, {25, 6}, {13, 3}, {31, 11}, M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE},
+        {ICN::FELEM, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},   {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {16, 4}, {20, 5}, {25, 6}, {13, 3}, {31, 11}, M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE},
+        {ICN::WELEM, {1, 4},  {5, 8},  {0, 0},  {0, 0},  {0, 0},   {0, 0},        {0, 0},        {0, 0},        {0, 0},
+         {0, 0},     {16, 4}, {20, 5}, {25, 6}, {13, 3}, {31, 11}, M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE},
+
+        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
+         {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
+        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
+         {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
+        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
+         {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
+        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
+         {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
+        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
+         {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
+    };
+
+    bool isValidAnimationFrame( const Monster::animframe_t & frameInfo )
+    {
+        return ( frameInfo.count > 0 ) && ( frameInfo.start > 0 );
+    }
+
+    void verifyValidAnimationFrame( const Monster::animframe_t & frameInfo )
+    {
+        if ( !isValidAnimationFrame( frameInfo ) )
+            Error::Except( __FUNCTION__, "animframe_t should not be empty" );
+    }
 }
 
 StreamBase & operator<<( StreamBase & msg, const monstats_t & obj )
@@ -174,6 +356,15 @@ StreamBase & operator>>( StreamBase & msg, MonsterStaticData & obj )
 float Monster::GetUpgradeRatio( void )
 {
     return GameStatic::GetMonsterUpgradeRatio();
+}
+
+Monster::monstersprite_t * Monster::GetMonsterSpireByICN( int icn )
+{
+    Monster::monstersprite_t * ptr = &monsters_info[1];
+    while ( ptr->icn_file != ICN::UNKNOWN && icn != ptr->icn_file )
+        ++ptr;
+
+    return ptr;
 }
 
 void Monster::UpdateStats( const std::string & spec )
@@ -1576,6 +1767,148 @@ u32 Monster::GetCountFromHitPoints( const Monster & mons, u32 hp )
     }
 
     return 0;
+}
+
+const Monster::monstersprite_t & Monster::GetMonsterSprite() const
+{
+    return monsters_info[GetID()];
+}
+
+MonsterAnimation::MonsterAnimation( const Monster & monster )
+    : _sprite( monster.GetMonsterSprite() )
+    , _frameId( _sprite.frm_idle.start )
+    , _isMovement( false )
+{
+    verifyValidAnimationFrame( _sprite.frm_idle );
+    // verifyValidAnimationFrame( _sprite.frm_wnce );
+    // verifyValidAnimationFrame( _sprite.frm_kill );
+
+    if ( isValidAnimationFrame( _sprite.frm_idle ) )
+        _validMoves.push_back( Monster::AS_IDLE );
+    // if ( isValidAnimationFrame( _sprite.frm_move ) )
+    //     _validMoves.push_back( Monster::AS_MOVE );
+    if ( isValidAnimationFrame( _sprite.frm_fly1 ) )
+        _validMoves.push_back( Monster::AS_FLY1 );
+    if ( isValidAnimationFrame( _sprite.frm_fly2 ) )
+        _validMoves.push_back( Monster::AS_FLY2 );
+    if ( isValidAnimationFrame( _sprite.frm_fly3 ) )
+        _validMoves.push_back( Monster::AS_FLY3 );
+    if ( isValidAnimationFrame( _sprite.frm_shot0 ) )
+        _validMoves.push_back( Monster::AS_SHOT0 );
+    if ( isValidAnimationFrame( _sprite.frm_shot1 ) )
+        _validMoves.push_back( Monster::AS_SHOT1 );
+    if ( isValidAnimationFrame( _sprite.frm_shot2 ) )
+        _validMoves.push_back( Monster::AS_SHOT2 );
+    if ( isValidAnimationFrame( _sprite.frm_shot3 ) )
+        _validMoves.push_back( Monster::AS_SHOT3 );
+    if ( isValidAnimationFrame( _sprite.frm_attk0 ) )
+        _validMoves.push_back( Monster::AS_ATTK0 );
+    if ( isValidAnimationFrame( _sprite.frm_attk1 ) )
+        _validMoves.push_back( Monster::AS_ATTK1 );
+    if ( isValidAnimationFrame( _sprite.frm_attk2 ) )
+        _validMoves.push_back( Monster::AS_ATTK2 );
+    if ( isValidAnimationFrame( _sprite.frm_attk3 ) )
+        _validMoves.push_back( Monster::AS_ATTK3 );
+    // if ( isValidAnimationFrame( _sprite.frm_wnce ) )
+    //    _validMoves.push_back( Monster::AS_WNCE );
+    // if ( isValidAnimationFrame( _sprite.frm_kill ) )
+    //    _validMoves.push_back( Monster::AS_KILL );
+
+    _validMoves.push_back( Monster::AS_NONE );
+    _validMoves.push_back( Monster::AS_NONE );
+
+    increment();
+}
+
+void MonsterAnimation::increment()
+{
+    if ( _frameSet.empty() ) {
+        _isMovement = false;
+
+        const int moveId = *Rand::Get( _validMoves );
+
+        if ( moveId == Monster::AS_NONE ) {
+            const u32 counter = Rand::Get( 10, 20 );
+            for ( u32 i = 0; i < counter; ++i )
+                _frameSet.push_back( _sprite.frm_idle.start );
+        }
+        else if ( moveId == Monster::AS_IDLE ) {
+            _pushFrames( _sprite.frm_idle );
+        }
+        else if ( moveId == Monster::AS_MOVE ) {
+            const u32 counter = Rand::Get( 3, 5 );
+            for ( u32 i = 0; i < counter; ++i )
+                _pushFrames( _sprite.frm_move );
+
+            _isMovement = true;
+        }
+        else if ( moveId == Monster::AS_FLY1 || moveId == Monster::AS_FLY2 || moveId == Monster::AS_FLY3 ) {
+            _pushFrames( _sprite.frm_fly1 );
+
+            const u32 counter = Rand::Get( 3, 5 );
+            for ( u32 j = 0; j < counter; ++j )
+                _pushFrames( _sprite.frm_fly2 );
+
+            _pushFrames( _sprite.frm_fly3 );
+        }
+        else if ( moveId == Monster::AS_SHOT0 ) {
+            _pushFrames( _sprite.frm_shot0 );
+        }
+        else if ( moveId == Monster::AS_SHOT1 ) {
+            _pushFrames( _sprite.frm_shot1 );
+        }
+        else if ( moveId == Monster::AS_SHOT2 ) {
+            _pushFrames( _sprite.frm_shot2 );
+        }
+        else if ( moveId == Monster::AS_SHOT3 ) {
+            _pushFrames( _sprite.frm_shot3 );
+        }
+        else if ( moveId == Monster::AS_ATTK0 ) {
+            _pushFrames( _sprite.frm_attk0 );
+        }
+        else if ( moveId == Monster::AS_ATTK1 ) {
+            _pushFrames( _sprite.frm_attk1 );
+        }
+        else if ( moveId == Monster::AS_ATTK2 ) {
+            _pushFrames( _sprite.frm_attk2 );
+        }
+        else if ( moveId == Monster::AS_ATTK3 ) {
+            _pushFrames( _sprite.frm_attk3 );
+        }
+        else if ( moveId == Monster::AS_WNCE ) {
+            _pushFrames( _sprite.frm_wnce );
+        }
+        else if ( moveId == Monster::AS_KILL ) {
+            _pushFrames( _sprite.frm_kill );
+            const u32 counter = Rand::Get( 1, 10 );
+            for ( u32 i = 0; i < counter; ++i )
+                _frameSet.push_back( _sprite.frm_kill.start + _sprite.frm_kill.count - 1 );
+        }
+    }
+
+    _frameId = _frameSet.front();
+    _frameSet.pop_front();
+}
+
+int MonsterAnimation::icnFile() const
+{
+    return _sprite.icn_file;
+}
+
+int MonsterAnimation::frameId() const
+{
+    return _frameId;
+}
+
+bool MonsterAnimation::isMovement() const
+{
+    return _isMovement;
+}
+
+void MonsterAnimation::_pushFrames( const Monster::animframe_t & info )
+{
+    for ( int i = 0; i < info.count; ++i )
+        _frameSet.push_back( info.start + i );
 }
 
 MonsterStaticData & MonsterStaticData::Get( void )
