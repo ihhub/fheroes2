@@ -658,7 +658,7 @@ int Interface::Basic::HumanTurn( bool isload )
         Game::AnimateResetDelay( Game::AUTOHIDE_STATUS_DELAY );
 
     int fastScrollRepeatCount = 0;
-    const int fastScrollThreshold = 10;
+    const int fastScrollThreshold = 2;
     bool isOngoingFastScrollEvent = false;
 
     // startgame loop
