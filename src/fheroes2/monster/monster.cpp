@@ -363,7 +363,7 @@ Monster::monstersprite_t * Monster::GetMonsterSpireByICN( int icn )
     Monster::monstersprite_t * ptr = &monsters_info[1];
     while ( ptr->icn_file != ICN::UNKNOWN && icn != ptr->icn_file )
         ++ptr;
-    
+
     return ptr;
 }
 
@@ -1780,8 +1780,8 @@ MonsterAnimation::MonsterAnimation( const Monster & monster )
     , _isMovement( false )
 {
     verifyValidAnimationFrame( _sprite.frm_idle );
-    //verifyValidAnimationFrame( _sprite.frm_wnce );
-    //verifyValidAnimationFrame( _sprite.frm_kill );
+    // verifyValidAnimationFrame( _sprite.frm_wnce );
+    // verifyValidAnimationFrame( _sprite.frm_kill );
 
     if ( isValidAnimationFrame( _sprite.frm_idle ) )
         _validMoves.push_back( Monster::AS_IDLE );
@@ -1809,9 +1809,9 @@ MonsterAnimation::MonsterAnimation( const Monster & monster )
         _validMoves.push_back( Monster::AS_ATTK2 );
     if ( isValidAnimationFrame( _sprite.frm_attk3 ) )
         _validMoves.push_back( Monster::AS_ATTK3 );
-    //if ( isValidAnimationFrame( _sprite.frm_wnce ) )
+    // if ( isValidAnimationFrame( _sprite.frm_wnce ) )
     //    _validMoves.push_back( Monster::AS_WNCE );
-    //if ( isValidAnimationFrame( _sprite.frm_kill ) )
+    // if ( isValidAnimationFrame( _sprite.frm_kill ) )
     //    _validMoves.push_back( Monster::AS_KILL );
 
     _validMoves.push_back( Monster::AS_NONE );
