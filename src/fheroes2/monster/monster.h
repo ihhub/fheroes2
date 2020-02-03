@@ -250,6 +250,8 @@ public:
     static void UpdateStats( const std::string & );
     static float GetUpgradeRatio( void );
 
+    static monstersprite_t * GetMonsterSpireByICN( int icn );
+
 protected:
     static Monster FromDwelling( int race, u32 dw );
 

@@ -358,6 +358,15 @@ float Monster::GetUpgradeRatio( void )
     return GameStatic::GetMonsterUpgradeRatio();
 }
 
+Monster::monstersprite_t * Monster::GetMonsterSpireByICN( int icn )
+{
+    Monster::monstersprite_t * ptr = &monsters_info[1];
+    while ( ptr->icn_file != ICN::UNKNOWN && icn != ptr->icn_file )
+        ++ptr;
+    
+    return ptr;
+}
+
 void Monster::UpdateStats( const std::string & spec )
 {
 #ifdef WITH_XML

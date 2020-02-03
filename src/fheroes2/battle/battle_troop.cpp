@@ -84,9 +84,7 @@ void Battle::UpdateMonsterSpriteAnimation( const std::string & spec )
                 continue;
 
             // find monster info position
-            monstersprite_t * ptr = &monsters_info[1];
-            while ( ptr->icn_file != ICN::UNKNOWN && icn != ptr->icn_file )
-                ++ptr;
+            Monster::monstersprite_t * ptr = Monster::GetMonsterSpireByICN( icn );
             if ( ptr->icn_file == ICN::UNKNOWN )
                 continue;
 
@@ -97,7 +95,7 @@ void Battle::UpdateMonsterSpriteAnimation( const std::string & spec )
                 const char * state = xml_anim->Attribute( "state" );
                 xml_anim->Attribute( "start", &start );
                 xml_anim->Attribute( "count", &count );
-                animframe_t frm;
+                Monster::animframe_t frm;
                 frm.start = start;
                 frm.count = count;
 
