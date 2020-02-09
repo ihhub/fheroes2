@@ -2496,7 +2496,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
 void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & targets )
 {
-    attacker.ResetAnimFrame( Monster::AS_IDLE );
+    attacker.ResetAnimFrame( Monster::AS_STATIC );
 
     // targets damage animation
     RedrawActionWincesKills( targets );
@@ -2548,14 +2548,14 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
                 target.defender->SetFrame( frm.start + frm.count - 1 );
             }
             else
-                target.defender->ResetAnimFrame( Monster::AS_IDLE );
+                target.defender->ResetAnimFrame( Monster::AS_STATIC );
         }
     if ( opponent1 )
         opponent1->ResetAnimFrame( OP_IDLE );
     if ( opponent2 )
         opponent2->ResetAnimFrame( OP_IDLE );
     b_move = NULL;
-    attacker.ResetAnimFrame( Monster::AS_IDLE );
+    attacker.ResetAnimFrame( Monster::AS_STATIC );
 }
 
 void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
@@ -2656,7 +2656,7 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
 
         if ( bridge && bridge->NeedAction( b, *dst ) ) {
             b_move = NULL;
-            b.ResetAnimFrame( Monster::AS_IDLE );
+            b.ResetAnimFrame( Monster::AS_STATIC );
             bridge->Action( b, *dst );
             b_move = &b;
         }
@@ -2686,7 +2686,7 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
     b_fly = NULL;
     b_move = NULL;
     b_current = NULL;
-    b.ResetAnimFrame( Monster::AS_IDLE );
+    b.ResetAnimFrame( Monster::AS_STATIC );
 
     StringReplace( msg, "%{dst}", b.GetHeadIndex() );
     status.SetMessage( msg, true );
@@ -2747,7 +2747,7 @@ void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
 
     // restore
     b_move = NULL;
-    b.ResetAnimFrame( Monster::AS_IDLE );
+    b.ResetAnimFrame( Monster::AS_STATIC );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
@@ -2979,7 +2979,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
                 target.defender->SetFrame( frm.start + frm.count - 1 );
             }
             else
-                target.defender->ResetAnimFrame( Monster::AS_IDLE );
+                target.defender->ResetAnimFrame( Monster::AS_STATIC );
         }
     if ( opponent1 )
         opponent1->ResetAnimFrame( OP_IDLE );
@@ -3157,7 +3157,7 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
         target.defender->SetFrame( frm.start + frm.count - 1 );
     }
     else
-        target.defender->ResetAnimFrame( Monster::AS_IDLE );
+        target.defender->ResetAnimFrame( Monster::AS_STATIC );
 
     if ( opponent1 )
         opponent1->ResetAnimFrame( OP_IDLE );
@@ -3711,7 +3711,7 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
-            ( *it ).defender->ResetAnimFrame( Monster::AS_IDLE );
+            ( *it ).defender->ResetAnimFrame( Monster::AS_STATIC );
             b_current = NULL;
         }
 }
@@ -3770,7 +3770,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
-            ( *it ).defender->ResetAnimFrame( Monster::AS_IDLE );
+            ( *it ).defender->ResetAnimFrame( Monster::AS_STATIC );
             b_current = NULL;
         }
 }
@@ -4000,7 +4000,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
-            ( *it ).defender->ResetAnimFrame( Monster::AS_IDLE );
+            ( *it ).defender->ResetAnimFrame( Monster::AS_STATIC );
             b_current = NULL;
         }
 }
@@ -4085,7 +4085,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     if ( wnce )
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
             if ( ( *it ).defender ) {
-                ( *it ).defender->ResetAnimFrame( Monster::AS_IDLE );
+                ( *it ).defender->ResetAnimFrame( Monster::AS_STATIC );
                 b_current = NULL;
             }
 }
@@ -4150,7 +4150,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     }
 
     if ( pain ) {
-        b.ResetAnimFrame( Monster::AS_IDLE );
+        b.ResetAnimFrame( Monster::AS_STATIC );
         b_current = NULL;
     }
 }

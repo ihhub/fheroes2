@@ -28,7 +28,38 @@
 #include <SDL.h>
 
 #include "engine.h"
+#include "palette_h2.h"
 #include "system.h"
+
+namespace H2Palette
+{
+    std::vector<SDL_Color> pal_colors;
+
+    void Init( void )
+    {
+        // load palette
+        u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
+        pal_colors.reserve( ncolors );
+
+        for ( u32 ii = 0; ii < ncolors; ++ii ) {
+            u32 index = ii * 3;
+            SDL_Color cols;
+
+            cols.r = kb_pal[index] << 2;
+            cols.g = kb_pal[index + 1] << 2;
+            cols.b = kb_pal[index + 2] << 2;
+
+            pal_colors.push_back( cols );
+        }
+
+        Surface::SetDefaultPalette( &pal_colors[0], pal_colors.size() );
+    }
+
+    RGBA GetColor( u32 index )
+    {
+        return index < pal_colors.size() ? RGBA( pal_colors[index].r, pal_colors[index].g, pal_colors[index].b ) : RGBA( 0, 0, 0 );
+    }
+}
 
 int main( int argc, char ** argv )
 {
@@ -65,6 +96,7 @@ int main( int argc, char ** argv )
     std::vector<u8> buf = sf.getRaw( size );
 
     SDL::Init();
+    H2Palette::Init();
 
     for ( int cur = 0; cur < count; ++cur ) {
         u32 offset = width * height * cur;
@@ -80,7 +112,8 @@ int main( int argc, char ** argv )
 #else
             dstfile += ".png";
 #endif
-            sf.Save( dstfile.c_str() );
+            if ( !sf.Save( dstfile.c_str() ) )
+                std::cout << "error" << std::endl;
         }
     }
 
