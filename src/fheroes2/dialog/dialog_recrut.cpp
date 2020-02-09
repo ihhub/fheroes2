@@ -416,7 +416,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
                 buttonOk.Draw();
             }
 
-            if ( buttonMax.isEnable() )
+            if ( buttonMax.isEnable() || max == 0 )
                 buttonMax.Draw();
             if ( buttonMin.isEnable() )
                 buttonMin.Draw();
