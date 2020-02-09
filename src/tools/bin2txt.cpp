@@ -33,7 +33,7 @@ int main( int argc, char ** argv )
 
     std::vector<char> data( correctLength, 0 );
 
-    file.read( data.data(), static_cast<std::streamsize>(correctLength) );
+    file.read( data.data(), static_cast<std::streamsize>( correctLength ) );
     file.close();
 
     file.open( fileName + ".txt", std::fstream::out );
