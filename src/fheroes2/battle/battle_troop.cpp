@@ -225,7 +225,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
         SetPosition( pos );
     }
 
-    ResetAnimFrame( AS_IDLE );
+    ResetAnimFrame( AS_STATIC );
 }
 
 Battle::Unit::~Unit()
@@ -529,6 +529,11 @@ bool Battle::Unit::isHandFighting( const Unit & a, const Unit & b )
                 || ( a.isWide()
                      && ( Board::isNearIndexes( a.GetTailIndex(), b.GetHeadIndex() )
                           || ( b.isWide() && Board::isNearIndexes( a.GetTailIndex(), b.GetTailIndex() ) ) ) ) );
+}
+
+int Battle::Unit::GetAnimationState() const
+{
+    return animstate;
 }
 
 void Battle::Unit::NewTurn( void )
@@ -1542,7 +1547,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
         // remove from graveyard
         if ( !isValid() ) {
             Arena::GetGraveyard()->RemoveTroop( *this );
-            ResetAnimFrame( AS_IDLE );
+            ResetAnimFrame( AS_STATIC );
         }
         // restore hp
         u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;
@@ -1833,6 +1838,8 @@ const Monster::animframe_t & Battle::Unit::GetFrameState( int state ) const
     const monstersprite_t & msi = GetMonsterSprite();
 
     switch ( state ) {
+    case AS_STATIC:
+        return msi.frm_static;
     case AS_IDLE:
         return msi.frm_idle;
     case AS_MOVE:

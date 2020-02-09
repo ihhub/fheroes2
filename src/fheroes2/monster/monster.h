@@ -132,6 +132,7 @@ public:
     enum
     {
         AS_NONE,
+        AS_STATIC,
         AS_IDLE,
         AS_MOVE,
         AS_FLY1,
@@ -158,6 +159,7 @@ public:
     struct monstersprite_t
     {
         int icn_file;
+        animframe_t frm_static;
         animframe_t frm_idle;
         animframe_t frm_move;
         animframe_t frm_fly1;

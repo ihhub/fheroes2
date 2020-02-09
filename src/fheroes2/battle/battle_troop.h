@@ -184,6 +184,8 @@ namespace Battle
 
         static bool isHandFighting( const Unit &, const Unit & );
 
+        int GetAnimationState() const;
+
     private:
         friend StreamBase & operator<<( StreamBase &, const Unit & );
         friend StreamBase & operator>>( StreamBase &, Unit & );
