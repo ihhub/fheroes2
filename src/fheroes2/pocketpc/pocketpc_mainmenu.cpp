@@ -50,7 +50,7 @@ int PocketPC::LoadGame( void )
     return Game::STARTGAME;
 }
 
-const Rect GetRectByText(const Text& text, const Point& dst_pt, const Rect& src_rt, u16 offset)
+const Rect GetRectByText( const Text& text, const Point& dst_pt, const Rect& src_rt, u16 offset )
 {
     const Rect rt( dst_pt.x + ( src_rt.w - text.w() ) / 2 - 5, dst_pt.y + offset, text.w() + 10, text.h() + 10 );
     text.Blit( rt );
