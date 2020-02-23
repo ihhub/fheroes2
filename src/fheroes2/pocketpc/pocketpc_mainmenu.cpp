@@ -113,7 +113,8 @@ int PocketPC::MainMenu( void )
                 return Game::LOADGAME;
             else
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
-        } else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( rectSettings ) ) {
+        }
+        else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( rectSettings ) ) {
             Dialog::ExtSettings( false );
             cursor.Show();
             display.Flip();
