@@ -115,7 +115,6 @@ int Game::MainMenu( void )
 
     ListFiles list1;
     list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
-    bool filesToLoad = list1.size() > 0;
 
     // mainmenu loop
     while ( le.HandleEvents() ) {
@@ -145,7 +144,7 @@ int Game::MainMenu( void )
         if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame ) )
             return NEWGAME;
         else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame ) ) {
-            if ( filesToLoad )
+            if ( list1.size() > 0 )
                 return LOADGAME;
             else
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );

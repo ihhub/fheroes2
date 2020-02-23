@@ -102,14 +102,13 @@ int PocketPC::MainMenu( void )
 
     ListFiles list1;
     list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
-    bool filesToLoad = list1.size() > 0;
 
     // mainmenu loop
     while ( le.HandleEvents() ) {
         if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( rectNewGame ) )
             return Game::NEWSTANDARD; // NEWGAME;
         else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( rectLoadGame ) ) {
-            if ( filesToLoad )
+            if ( list1.size() > 0 )
                 return Game::LOADGAME;
             else
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
