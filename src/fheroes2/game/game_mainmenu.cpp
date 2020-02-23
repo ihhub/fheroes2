@@ -113,6 +113,10 @@ int Game::MainMenu( void )
         cursor.Show();
     }
 
+    ListFiles list1;
+    list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
+    bool filesToLoad = list1.size() > 0;
+
     // mainmenu loop
     while ( le.HandleEvents() ) {
         for ( u32 i = 0; i < ARRAY_COUNT( buttons ); i++ ) {
@@ -140,9 +144,12 @@ int Game::MainMenu( void )
 
         if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame ) )
             return NEWGAME;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame ) )
-            return LOADGAME;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores ) )
+        else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame ) ) {
+            if ( filesToLoad )
+                return LOADGAME;
+            else
+                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+        } else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores ) )
             return HIGHSCORES;
         else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits ) )
             return CREDITS;
