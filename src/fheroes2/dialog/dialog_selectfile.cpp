@@ -50,7 +50,7 @@ public:
     FileInfoListBox( const Point & pt, bool & edit )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , edit_mode( edit )
-        , selectOk( false ){};
+        , _isDoubleClicked( false ){};
 
     void RedrawItem( const Maps::FileInfo &, s32, s32, bool );
     void RedrawBackground( const Point & );
@@ -62,7 +62,13 @@ public:
     void ActionListPressRight( Maps::FileInfo & ){};
 
     bool & edit_mode;
-    bool selectOk;
+    
+    bool isDoubleClicked() const
+    {
+        return _isDoubleClicked;
+    }
+private:
+    bool _isDoubleClicked;
 };
 
 void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
@@ -113,7 +119,7 @@ void FileInfoListBox::ActionCurrentDn( void )
 void FileInfoListBox::ActionListDoubleClick( Maps::FileInfo & )
 {
     edit_mode = false;
-    selectOk = true;
+    _isDoubleClicked = true;
 }
 
 void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & )
@@ -266,7 +272,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
         listbox.QueueEventProcessing();
 
-        if ( ( buttonOk.isEnable() && le.MouseClickLeft( buttonOk ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.selectOk ) {
+        if ( ( buttonOk.isEnable() && le.MouseClickLeft( buttonOk ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
             if ( filename.size() )
                 result = System::ConcatePath( Settings::GetSaveDir(), filename + ".sav" );
             else if ( listbox.isSelected() )
