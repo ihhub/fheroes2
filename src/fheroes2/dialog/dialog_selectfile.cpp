@@ -62,7 +62,7 @@ public:
     void ActionListPressRight( Maps::FileInfo & ){};
 
     bool & edit_mode;
-    
+
     bool isDoubleClicked() const
     {
         return _isDoubleClicked;
