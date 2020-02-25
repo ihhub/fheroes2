@@ -67,6 +67,7 @@ public:
     {
         return _isDoubleClicked;
     }
+
 private:
     bool _isDoubleClicked;
 };
