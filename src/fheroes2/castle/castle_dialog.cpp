@@ -374,7 +374,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     cursor.Show();
     display.Flip();
 
-    int result = Dialog::ZERO;
+    int result = Dialog::CANCEL;
     bool need_redraw = false;
 
     // dialog menu loop
