@@ -371,5 +371,5 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         }
     }
 
-    return Dialog::ZERO;
+    return Dialog::CANCEL;
 }
