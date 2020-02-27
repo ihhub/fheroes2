@@ -50,13 +50,6 @@ int PocketPC::LoadGame( void )
     return Game::STARTGAME;
 }
 
-const Rect GetRectByText( const Text & text, const Point & dst_pt, const Rect & src_rt, u16 offset )
-{
-    const Rect rt( dst_pt.x + ( src_rt.w - text.w() ) / 2 - 5, dst_pt.y + offset, text.w() + 10, text.h() + 10 );
-    text.Blit( rt );
-    return rt;
-}
-
 int PocketPC::MainMenu( void )
 {
     Cursor & cursor = Cursor::Get();
@@ -81,35 +74,40 @@ int PocketPC::MainMenu( void )
     text.Blit( dst_pt.x + ( src_rt.w - text.w() ) / 2, dst_pt.y + 12 );
 
     text.Set( _( "New Game" ), Font::BIG );
-    const Rect rectNewGame = GetRectByText( text, dst_pt, src_rt, 35 );
+    const Rect rectNewGame( dst_pt.x + ( src_rt.w - text.w() ) / 2 - 5, dst_pt.y + 35, text.w() + 10, text.h() + 10 );
+    text.Blit( rectNewGame );
 
     text.Set( _( "Load Game" ) );
-    const Rect rectLoadGame = GetRectByText( text, dst_pt, src_rt, 55 );
+    const Rect rectLoadGame( dst_pt.x + ( src_rt.w - text.w() ) / 2 - 5, dst_pt.y + 55, text.w() + 10, text.h() + 10 );
+    text.Blit( rectLoadGame );
 
     text.Set( _( "Settings" ) );
-    const Rect rectSettings = GetRectByText( text, dst_pt, src_rt, 75 );
+    const Rect rectSettings( dst_pt.x + ( src_rt.w - text.w() ) / 2 - 5, dst_pt.y + 75, text.w() + 10, text.h() + 10 );
+    text.Blit( rectSettings );
 
     text.Set( _( "High Scores" ) );
-    const Rect rectHighScores = GetRectByText( text, dst_pt, src_rt, 95 );
+    const Rect rectHighScores( dst_pt.x + ( src_rt.w - text.w() ) / 2 - 5, dst_pt.y + 95, text.w() + 10, text.h() + 10 );
+    text.Blit( rectHighScores );
 
     text.Set( _( "Credits" ) );
-    const Rect rectCredits = GetRectByText( text, dst_pt, src_rt, 115 );
+    const Rect rectCredits( dst_pt.x + ( src_rt.w - text.w() ) / 2 - 5, dst_pt.y + 115, text.w() + 10, text.h() + 10 );
+    text.Blit( rectCredits );
 
     text.Set( _( "Quit" ) );
-    const Rect rectQuitGame = GetRectByText( text, dst_pt, src_rt, 135 );
+    const Rect rectQuitGame( dst_pt.x + ( src_rt.w - text.w() ) / 2 - 5, dst_pt.y + 135, text.w() + 10, text.h() + 10 );
+    text.Blit( rectQuitGame );
 
     cursor.Show();
     display.Flip();
-
-    ListFiles list1;
-    list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
 
     // mainmenu loop
     while ( le.HandleEvents() ) {
         if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( rectNewGame ) )
             return Game::NEWSTANDARD; // NEWGAME;
         else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( rectLoadGame ) ) {
-            if ( list1.size() > 0 )
+            ListFiles list1;
+            list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
+            if ( !list1.empty() )
                 return Game::LOADGAME;
             else
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
