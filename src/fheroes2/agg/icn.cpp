@@ -2169,6 +2169,8 @@ bool ICN::SkipLocalAlpha( int icn )
     case CSPANBKE:
     case CPANBKGE:
     case CAMPBKGE:
+    case ADVEBTNS:
+    case ADVBTNS:
         return true;
 
     default:
