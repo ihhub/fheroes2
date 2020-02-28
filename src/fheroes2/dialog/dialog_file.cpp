@@ -82,12 +82,13 @@ int Dialog::FileOptions( void )
         if ( le.MouseClickLeft( buttonLoad ) ) {
             ListFiles list1;
             list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
-            if ( !list1.empty() ) {
+            if ( list1.empty() ) {
+                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+            }
+            else {
                 result = Game::LOADGAME;
                 break;
-            }
-            else
-                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+            }  
         }
         if ( le.MouseClickLeft( buttonSave ) ) {
             result = Game::SAVEGAME;
