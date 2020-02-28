@@ -143,10 +143,10 @@ int Game::MainMenu( void )
         else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame ) ) {
             ListFiles list1;
             list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
-            if ( !list1.empty() )
-                return LOADGAME;
-            else
+            if ( list1.empty() )
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+            else
+                return LOADGAME;
         }
         else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores ) )
             return HIGHSCORES;
