@@ -107,10 +107,10 @@ int PocketPC::MainMenu( void )
         else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( rectLoadGame ) ) {
             ListFiles list1;
             list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
-            if ( !list1.empty() )
-                return Game::LOADGAME;
-            else
+            if ( list1.empty() )
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+            else
+                return Game::LOADGAME;
         }
         else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( rectSettings ) ) {
             Dialog::ExtSettings( false );
