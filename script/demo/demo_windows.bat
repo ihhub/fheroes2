@@ -2,10 +2,13 @@
 
 if not exist "demo" mkdir "demo"
 
-echo downloading demo version [1/3]
+echo [1/4] downloading demo version
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip', 'demo\demo.zip')"
 
-echo unpacking archive [2/3]
+echo [2/4] downloading Wing32.dll library
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://wikidll.com/download/25503/wing32.zip', 'demo\wing32.zip')"
+
+echo [3/4] unpacking archive
 
 set sevenZipPath=
 
@@ -21,8 +24,9 @@ if %errorlevel% == 0 (
 if not "%sevenZipPath%" == "" (
     cd demo
     "%sevenZipPath%" x demo.zip -aoa > nul
+    "%sevenZipPath%" x wing32.zip -aoa > nul
 
-    echo copying files [3/3]
+    echo [4/4] copying files
     
     if not exist "..\..\..\data" mkdir "..\..\..\data"
     if not exist "..\..\..\maps" mkdir "..\..\..\maps"
@@ -30,6 +34,7 @@ if not "%sevenZipPath%" == "" (
     xcopy /Y /s "MAPS" "..\..\..\maps"
 
     del demo.zip
+    del wing32.zip
 
     cd ..
 ) else (
