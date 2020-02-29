@@ -80,8 +80,13 @@ int Dialog::FileOptions( void )
             break;
         }
         if ( le.MouseClickLeft( buttonLoad ) ) {
-            result = Game::LOADGAME;
-            break;
+            if ( ListFiles::IsEmpty( Settings::GetSaveDir(), ".sav", false ) ) {
+                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+            }
+            else {
+                result = Game::LOADGAME;
+                break;
+            }
         }
         if ( le.MouseClickLeft( buttonSave ) ) {
             result = Game::SAVEGAME;

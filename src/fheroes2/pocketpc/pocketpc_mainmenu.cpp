@@ -104,8 +104,12 @@ int PocketPC::MainMenu( void )
     while ( le.HandleEvents() ) {
         if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( rectNewGame ) )
             return Game::NEWSTANDARD; // NEWGAME;
-        else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( rectLoadGame ) )
-            return Game::LOADGAME;
+        else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( rectLoadGame ) ) {
+            if ( ListFiles::IsEmpty( Settings::GetSaveDir(), ".sav", false ) )
+                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+            else
+                return Game::LOADGAME;
+        }
         else if ( Game::HotKeyPressEvent( Game::EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( rectSettings ) ) {
             Dialog::ExtSettings( false );
             cursor.Show();
