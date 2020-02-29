@@ -141,9 +141,7 @@ int Game::MainMenu( void )
         if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame ) )
             return NEWGAME;
         else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame ) ) {
-            ListFiles saveFileList;
-            saveFileList.ReadDir( Settings::GetSaveDir(), ".sav", false );
-            if ( saveFileList.empty() )
+            if ( ListFiles::IsEmpty( Settings::GetSaveDir(), ".sav", false ) )
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             else
                 return LOADGAME;
