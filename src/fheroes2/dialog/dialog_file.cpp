@@ -88,7 +88,7 @@ int Dialog::FileOptions( void )
             else {
                 result = Game::LOADGAME;
                 break;
-            }  
+            }
         }
         if ( le.MouseClickLeft( buttonSave ) ) {
             result = Game::SAVEGAME;
