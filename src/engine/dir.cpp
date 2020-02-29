@@ -79,7 +79,7 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
 #endif
 }
 
-bool ListFiles::IsEmpty( const std::string& path, const std::string& filter, bool sensitive )
+bool ListFiles::IsEmpty( const std::string & path, const std::string& filter, bool sensitive )
 {
     ListFiles list;
     list.ReadDir( path, filter, sensitive );
