@@ -293,55 +293,7 @@ void AnimationRemoveObject( Maps::Tiles & tile )
     if ( NULL == addon )
         return;
 
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Point & area = gamearea.GetMapsPos();
-    const Rect & rect = gamearea.GetRectMaps();
-    const Point pos = Maps::GetPoint( tile.GetIndex() ) - rect;
-
-    const s32 dstx = area.x + TILEWIDTH * pos.x;
-    const s32 dsty = area.y + TILEWIDTH * pos.y;
-
-    Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
-
-    const MapsIndexes & heroes = Maps::ScanAroundObject( tile.GetIndex(), MP2::OBJ_HEROES );
-    const Surface & stile = tile.GetTileSurface();
-    Surface sobj( stile.GetSize(), true );
-
-    const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( addon->object ), addon->index );
-    sprite.Blit( sprite.x(), sprite.y(), sobj );
-
-    // if animation sprite
-    u32 index;
-    if ( 0 != ( index = ICN::AnimationFrame( MP2::GetICNObject( addon->object ), addon->index, 0 ) ) ) {
-        const Sprite & anim1 = AGG::GetICN( MP2::GetICNObject( addon->object ), index );
-        anim1.Blit( anim1.x(), anim1.y(), sobj );
-    }
-
-    LocalEvent & le = LocalEvent::Get();
-    u32 alpha = 250;
-
-    while ( le.HandleEvents() && alpha > 10 ) {
-        if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            cursor.Hide();
-            stile.Blit( dstx, dsty, display );
-            sobj.SetAlphaMod( alpha );
-            sobj.Blit( dstx, dsty, display );
-
-            if ( heroes.size() ) {
-                for ( MapsIndexes::const_iterator it = heroes.begin(); it != heroes.end(); ++it ) {
-                    Heroes * hero = world.GetTiles( *it ).GetHeroes();
-                    if ( hero )
-                        hero->Redraw( display, false );
-                }
-            }
-            else
-                tile.RedrawTop( display );
-            cursor.Show();
-            display.Flip();
-            alpha -= 20;
-        }
-    }
+    Game::Remove::StartAnimation( addon->object, addon->index, tile.GetIndex() );
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )

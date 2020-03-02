@@ -61,6 +61,14 @@ namespace Game
     void HotKeysDefaults( void );
     void HotKeysLoad( const std::string & );
 
+    namespace Remove
+    {
+        u8 object = MP2::OBJ_ZERO;
+        u8 object_index = 0;
+        s32 tile_index = 0;
+        u32 alpha = 0;
+    }
+
     bool disable_change_music = false;
     int current_music = MUS::UNKNOWN;
     u32 castle_animation_frame = 0;
@@ -176,6 +184,34 @@ int Game::CurrentMusic( void )
 void Game::SetCurrentMusic( int mus )
 {
     current_music = mus;
+}
+
+void Game::Remove::StartAnimation( u8 obj, u8 index, s32 tile )
+{
+    object = obj;
+    object_index = index;
+    tile_index = tile;
+    alpha = 255;
+}
+
+u8 & Game::Remove::GetObject( void )
+{
+    return object;
+}
+
+u8 Game::Remove::GetIndex( void )
+{
+    return object_index;
+}
+
+s32 Game::Remove::GetTileIndex( void )
+{
+    return tile_index;
+}
+
+u32 & Game::Remove::GetAlpha( void )
+{
+    return alpha;
 }
 
 u32 & Game::MapsAnimationFrame( void )

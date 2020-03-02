@@ -252,6 +252,15 @@ namespace Game
     void OpenCastleDialog( Castle & );
     std::string GetEncodeString( const std::string & );
 
+    namespace Remove
+    {
+        void StartAnimation( u8 obj, u8 index, s32 tile );
+        u8 & GetObject( void );
+        u8 GetIndex( void );
+        s32 GetTileIndex( void );
+        u32 & GetAlpha( void );
+    }
+
     namespace Editor
     {
         int MainMenu( void );
