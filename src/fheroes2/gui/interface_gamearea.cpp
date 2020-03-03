@@ -163,7 +163,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
         surface.SetAlphaMod( Game::Remove::GetAlpha() );
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         const Point mp = Maps::GetPoint( Game::Remove::GetTileIndex() );
-        area.BlitOnTile( dst, Sprite( surface, 0, 0 ), mp );
+        area.BlitOnTile( dst, surface, 0, 0, mp );
     }
 
     // ext object
