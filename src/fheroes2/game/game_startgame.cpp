@@ -506,11 +506,18 @@ int Interface::Basic::StartGame( void )
     int res = Game::ENDTURN;
     const Players & players = conf.GetPlayers();
 
+    std::vector<Player *> rotate( players.size() );
+    Players::const_iterator it = players.begin();
+    while ( it != players.end() && !( *it )->isControlHuman() )
+        ++it;
+
+    std::rotate_copy( players.begin(), it, players.end(), rotate.begin() );
+
     while ( res == Game::ENDTURN ) {
         if ( !skip_turns )
             world.NewDay();
 
-        for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
+        for ( std::vector<Player *>::const_iterator it = rotate.begin(); it != rotate.end(); ++it )
             if ( *it ) {
                 const Player & player = ( **it );
                 Kingdom & kingdom = world.GetKingdom( player.GetColor() );
