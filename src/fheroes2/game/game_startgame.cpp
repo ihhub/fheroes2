@@ -512,7 +512,7 @@ int Interface::Basic::StartGame( void )
     bool skip_turns = conf.LoadedGameVersion();
     GameOver::Result & gameResult = GameOver::Result::Get();
     int res = Game::ENDTURN;
-    
+
     std::vector<Player *> sortedPlayers = conf.GetPlayers();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
