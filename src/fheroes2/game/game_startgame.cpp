@@ -512,7 +512,7 @@ int Interface::Basic::StartGame( void )
     bool skip_turns = conf.LoadedGameVersion();
     GameOver::Result & gameResult = GameOver::Result::Get();
     int res = Game::ENDTURN;
-    Players & players = conf.GetPlayers();
+    const Players & players = conf.GetPlayers();
 
     std::vector<Player *> rotate( players.size() );
     std::partial_sort_copy( players.begin(), players.end(), rotate.begin(), rotate.end(), SortPlayers );
