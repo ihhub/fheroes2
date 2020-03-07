@@ -52,6 +52,14 @@
 #include "system.h"
 #include "world.h"
 
+namespace
+{
+    bool SortPlayers( const Player * player1, const Player * )
+    {
+        return player1->isControlHuman();
+    }
+}
+
 int Game::StartBattleOnly( void )
 {
     Battle::Only main;
@@ -504,13 +512,15 @@ int Interface::Basic::StartGame( void )
     bool skip_turns = conf.LoadedGameVersion();
     GameOver::Result & gameResult = GameOver::Result::Get();
     int res = Game::ENDTURN;
-    const Players & players = conf.GetPlayers();
+
+    std::vector<Player *> sortedPlayers = conf.GetPlayers();
+    std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
     while ( res == Game::ENDTURN ) {
         if ( !skip_turns )
             world.NewDay();
 
-        for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
+        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it )
             if ( *it ) {
                 const Player & player = ( **it );
                 Kingdom & kingdom = world.GetKingdom( player.GetColor() );
