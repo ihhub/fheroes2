@@ -504,20 +504,14 @@ int Interface::Basic::StartGame( void )
     bool skip_turns = conf.LoadedGameVersion();
     GameOver::Result & gameResult = GameOver::Result::Get();
     int res = Game::ENDTURN;
-    const Players & players = conf.GetPlayers();
-
-    std::vector<Player *> rotate( players.size() );
-    Players::const_iterator it = players.begin();
-    while ( it != players.end() && !( *it )->isControlHuman() )
-        ++it;
-
-    std::rotate_copy( players.begin(), it, players.end(), rotate.begin() );
+    Players & players = conf.GetPlayers();
+    std::sort( players.begin(), players.end(), []( Player* player1, Player*) { return player1->isControlHuman(); } )
 
     while ( res == Game::ENDTURN ) {
         if ( !skip_turns )
             world.NewDay();
 
-        for ( std::vector<Player *>::const_iterator it = rotate.begin(); it != rotate.end(); ++it )
+        for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
             if ( *it ) {
                 const Player & player = ( **it );
                 Kingdom & kingdom = world.GetKingdom( player.GetColor() );
