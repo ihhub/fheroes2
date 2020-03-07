@@ -57,7 +57,7 @@ namespace
     bool SortPlayers( const Player * player1, const Player * )
     {
         return player1->isControlHuman();
-    };
+    }
 }
 
 int Game::StartBattleOnly( void )
@@ -512,16 +512,14 @@ int Interface::Basic::StartGame( void )
     bool skip_turns = conf.LoadedGameVersion();
     GameOver::Result & gameResult = GameOver::Result::Get();
     int res = Game::ENDTURN;
-    const Players & players = conf.GetPlayers();
-
-    std::vector<Player *> rotate( players.size() );
-    std::partial_sort_copy( players.begin(), players.end(), rotate.begin(), rotate.end(), SortPlayers );
+    Players sortedPlayers = conf.GetPlayers();
+    std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
     while ( res == Game::ENDTURN ) {
         if ( !skip_turns )
             world.NewDay();
 
-        for ( std::vector<Player *>::const_iterator it = rotate.begin(); it != rotate.end(); ++it )
+        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it )
             if ( *it ) {
                 const Player & player = ( **it );
                 Kingdom & kingdom = world.GetKingdom( player.GetColor() );
