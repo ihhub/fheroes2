@@ -150,6 +150,22 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
             for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox )
                 world.GetTiles( rectMaps.x + ox, rectMaps.y + oy ).RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
 
+    // remove animation
+    const u8 & object = Game::RemoveAnimation::GetObject();
+    if ( object != MP2::OBJ_ZERO ) {
+        Surface surface( world.GetTiles( Game::RemoveAnimation::GetTileIndex() ).GetTileSurface().GetSize(), true );
+        u32 index;
+        if ( 0 == ( index = ICN::AnimationFrame( MP2::GetICNObject( Game::RemoveAnimation::GetObject() ), Game::RemoveAnimation::GetIndex(), 0 ) ) ) {
+            index = Game::RemoveAnimation::GetIndex();
+        }
+        const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( Game::RemoveAnimation::GetObject() ), index );
+        sprite.Blit( sprite.x(), sprite.y(), surface );
+        surface.SetAlphaMod( Game::RemoveAnimation::GetAlpha() );
+        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+        const Point mp = Maps::GetPoint( Game::RemoveAnimation::GetTileIndex() );
+        area.BlitOnTile( dst, surface, 0, 0, mp );
+    }
+
     // ext object
     if ( flag & LEVEL_OBJECTS )
         for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )

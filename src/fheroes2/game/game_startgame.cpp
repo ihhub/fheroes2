@@ -940,6 +940,20 @@ int Interface::Basic::HumanTurn( bool isload )
             gameArea.SetRedraw();
         }
 
+        if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
+            u8 & object = Game::RemoveAnimation::GetObject();
+            if ( object != MP2::OBJ_ZERO ) {
+                u32 & alpha = Game::RemoveAnimation::GetAlpha();
+                if ( alpha < 20 ) {
+                    object = MP2::OBJ_ZERO;
+                }
+                else {
+                    alpha -= 20;
+                }
+                gameArea.SetRedraw();
+            }
+        }
+
         if ( NeedRedraw() ) {
             cursor.Hide();
             Redraw();
