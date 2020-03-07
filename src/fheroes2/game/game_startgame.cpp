@@ -52,6 +52,14 @@
 #include "system.h"
 #include "world.h"
 
+namespace
+{
+    bool SortPlayers( const Player* player1, const Player* )
+    {
+        return player1->isControlHuman();
+    };
+}
+
 int Game::StartBattleOnly( void )
 {
     Battle::Only main;
@@ -505,7 +513,7 @@ int Interface::Basic::StartGame( void )
     GameOver::Result & gameResult = GameOver::Result::Get();
     int res = Game::ENDTURN;
     Players & players = conf.GetPlayers();
-    std::sort( players.begin(), players.end(), []( Player* player1, Player*) { return player1->isControlHuman(); } );
+    std::sort( players.begin(), players.end(), SortPlayers );
 
     while ( res == Game::ENDTURN ) {
         if ( !skip_turns )
