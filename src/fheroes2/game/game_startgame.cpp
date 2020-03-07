@@ -513,14 +513,14 @@ int Interface::Basic::StartGame( void )
     GameOver::Result & gameResult = GameOver::Result::Get();
     int res = Game::ENDTURN;
     
-    std::vector<Player *> players = conf.GetPlayers();
-    std::sort( players.begin(), players.end(), SortPlayers );
+    std::vector<Player *> sortedPlayers = conf.GetPlayers();
+    std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
     while ( res == Game::ENDTURN ) {
         if ( !skip_turns )
             world.NewDay();
 
-        for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
+        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it )
             if ( *it ) {
                 const Player & player = ( **it );
                 Kingdom & kingdom = world.GetKingdom( player.GetColor() );
