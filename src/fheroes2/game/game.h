@@ -254,11 +254,19 @@ namespace Game
 
     namespace RemoveAnimation
     {
-        void Start( u8 obj, u8 index, s32 tile );
-        u8 & GetObject( void );
-        u8 GetIndex( void );
-        s32 GetTileIndex( void );
-        u32 & GetAlpha( void );
+        struct Info
+        {
+            Info();
+            Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u );
+
+            u8 object;
+            u8 index;
+            s32 tile;
+            u32 alpha;
+        };
+
+        void Set( const Info & info );
+        Info & Get();
     }
 
     namespace Editor
