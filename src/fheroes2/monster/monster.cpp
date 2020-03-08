@@ -1181,27 +1181,17 @@ Monster Monster::FromDwelling( int race, u32 dwelling )
 
 Monster Monster::Rand( level_t level )
 {
-    switch ( level ) {
-    default:
+    static std::vector<Monster> monsters[level_t::LAST - level_t::FIRST];
+    if ( level == level_t::FIRST )
         return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
-
-    case LEVEL1:
-    case LEVEL2:
-    case LEVEL3:
-    case LEVEL4:
-        break;
+    if ( monsters[0].empty() ) {
+        for ( u32 i = PEASANT; i <= WATER_ELEMENT; ++i ) {
+            const Monster monster( i );
+            if ( monster.GetLevel() > level_t::FIRST )
+                monsters[monster.GetLevel() - level_t::FIRST - 1].push_back( monster );
+        }
     }
-
-    std::vector<Monster> monster;
-    monster.reserve( 30 );
-
-    for ( u32 ii = PEASANT; ii <= WATER_ELEMENT; ++ii ) {
-        Monster mons( ii );
-        if ( mons.GetLevel() == level )
-            monster.push_back( mons );
-    }
-
-    return monster.size() ? *Rand::Get( monster ) : UNKNOWN;
+    return *Rand::Get( monsters[level - level_t::FIRST - 1] );
 }
 
 u32 Monster::Rand4WeekOf( void )

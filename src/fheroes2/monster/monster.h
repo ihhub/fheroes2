@@ -47,7 +47,9 @@ public:
         LEVEL1,
         LEVEL2,
         LEVEL3,
-        LEVEL4
+        LEVEL4,
+        FIRST = LEVEL0,
+        LAST = LEVEL4
     };
 
     enum monster_t
