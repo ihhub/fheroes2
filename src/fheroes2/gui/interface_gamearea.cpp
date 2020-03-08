@@ -150,6 +150,18 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
             for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox )
                 world.GetTiles( rectMaps.x + ox, rectMaps.y + oy ).RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
 
+    // remove animation
+    Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
+    if ( removalInfo.object != MP2::OBJ_ZERO ) {
+        Surface surface( removalInfo.surfaceSize, true );
+        const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( removalInfo.object ), removalInfo.index );
+        sprite.Blit( sprite.x(), sprite.y(), surface );
+        surface.SetAlphaMod( removalInfo.alpha );
+        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+        const Point mp = Maps::GetPoint( removalInfo.tile );
+        area.BlitOnTile( dst, surface, 0, 0, mp );
+    }
+
     // ext object
     if ( flag & LEVEL_OBJECTS )
         for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )

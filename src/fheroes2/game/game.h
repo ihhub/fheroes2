@@ -252,6 +252,24 @@ namespace Game
     void OpenCastleDialog( Castle & );
     std::string GetEncodeString( const std::string & );
 
+    namespace RemoveAnimation
+    {
+        struct Info
+        {
+            Info();
+            Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u );
+
+            u8 object;
+            u8 index;
+            s32 tile;
+            u32 alpha;
+            Size surfaceSize;
+        };
+
+        void Set( const Info & info );
+        Info & Get();
+    }
+
     namespace Editor
     {
         int MainMenu( void );

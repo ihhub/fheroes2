@@ -68,6 +68,30 @@ namespace Game
     std::string last_name;
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
+
+    namespace RemoveAnimation
+    {
+        Info::Info()
+            : object( MP2::OBJ_ZERO )
+            , index( 0 )
+            , tile( 0 )
+            , alpha( 255 )
+        {}
+
+        Info::Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ )
+            : object( object_ )
+            , tile( tile_ )
+            , alpha( alpha_ )
+            , surfaceSize( world.GetTiles( tile_ ).GetTileSurface().GetSize() )
+        {
+            index = ICN::AnimationFrame( MP2::GetICNObject( object ), index_, 0 );
+            if ( 0 == index ) {
+                index = index_;
+            }
+        }
+
+        Info removeInfo;
+    }
 }
 
 void Game::SetLoadVersion( int ver )
@@ -176,6 +200,16 @@ int Game::CurrentMusic( void )
 void Game::SetCurrentMusic( int mus )
 {
     current_music = mus;
+}
+
+void Game::RemoveAnimation::Set( const Info & info )
+{
+    removeInfo = info;
+}
+
+Game::RemoveAnimation::Info & Game::RemoveAnimation::Get()
+{
+    return removeInfo;
 }
 
 u32 & Game::MapsAnimationFrame( void )
