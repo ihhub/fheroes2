@@ -151,18 +151,18 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
                 world.GetTiles( rectMaps.x + ox, rectMaps.y + oy ).RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
 
     // remove animation
-    const u8 & object = Game::RemoveAnimation::GetObject();
-    if ( object != MP2::OBJ_ZERO ) {
-        Surface surface( world.GetTiles( Game::RemoveAnimation::GetTileIndex() ).GetTileSurface().GetSize(), true );
-        u32 index;
-        if ( 0 == ( index = ICN::AnimationFrame( MP2::GetICNObject( Game::RemoveAnimation::GetObject() ), Game::RemoveAnimation::GetIndex(), 0 ) ) ) {
-            index = Game::RemoveAnimation::GetIndex();
+    Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
+    if ( removalInfo.object != MP2::OBJ_ZERO ) {
+        Surface surface( world.GetTiles( removalInfo.index ).GetTileSurface().GetSize(), true );
+        u32 index = ICN::AnimationFrame( MP2::GetICNObject( removalInfo.object ), removalInfo.index, 0 );
+        if ( 0 == index ) {
+            index = removalInfo.index;
         }
-        const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( Game::RemoveAnimation::GetObject() ), index );
+        const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( removalInfo.object ), index );
         sprite.Blit( sprite.x(), sprite.y(), surface );
-        surface.SetAlphaMod( Game::RemoveAnimation::GetAlpha() );
+        surface.SetAlphaMod( removalInfo.alpha );
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-        const Point mp = Maps::GetPoint( Game::RemoveAnimation::GetTileIndex() );
+        const Point mp = Maps::GetPoint( removalInfo.tile );
         area.BlitOnTile( dst, surface, 0, 0, mp );
     }
 
