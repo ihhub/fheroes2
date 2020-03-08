@@ -61,14 +61,6 @@ namespace Game
     void HotKeysDefaults( void );
     void HotKeysLoad( const std::string & );
 
-    namespace RemoveAnimation
-    {
-        u8 object = MP2::OBJ_ZERO;
-        u8 object_index = 0;
-        s32 tile_index = 0;
-        u32 alpha = 0;
-    }
-
     bool disable_change_music = false;
     int current_music = MUS::UNKNOWN;
     u32 castle_animation_frame = 0;
@@ -76,6 +68,25 @@ namespace Game
     std::string last_name;
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
+
+    namespace RemoveAnimation
+    {
+        Info::Info()
+            : object( MP2::OBJ_ZERO )
+            , index( 0 )
+            , tile( 0 )
+            , alpha( 255 )
+        {}
+
+        Info::Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ )
+            : object( object_ )
+            , index( index_ )
+            , tile( tile_ )
+            , alpha( alpha_ )
+        {}
+
+        Info removeInfo;
+    }
 }
 
 void Game::SetLoadVersion( int ver )
@@ -186,32 +197,14 @@ void Game::SetCurrentMusic( int mus )
     current_music = mus;
 }
 
-void Game::RemoveAnimation::Start( u8 obj, u8 index, s32 tile )
+void Game::RemoveAnimation::Set( const Info & info )
 {
-    object = obj;
-    object_index = index;
-    tile_index = tile;
-    alpha = 255;
+    removeInfo = info;
 }
 
-u8 & Game::RemoveAnimation::GetObject( void )
+Game::RemoveAnimation::Info & Game::RemoveAnimation::Get()
 {
-    return object;
-}
-
-u8 Game::RemoveAnimation::GetIndex( void )
-{
-    return object_index;
-}
-
-s32 Game::RemoveAnimation::GetTileIndex( void )
-{
-    return tile_index;
-}
-
-u32 & Game::RemoveAnimation::GetAlpha( void )
-{
-    return alpha;
+    return removeInfo;
 }
 
 u32 & Game::MapsAnimationFrame( void )
