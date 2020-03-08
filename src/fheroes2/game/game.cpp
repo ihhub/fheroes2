@@ -80,10 +80,15 @@ namespace Game
 
         Info::Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ )
             : object( object_ )
-            , index( index_ )
             , tile( tile_ )
             , alpha( alpha_ )
-        {}
+        {
+            surfaceSize = world.GetTiles( tile_ ).GetTileSurface().GetSize();
+            index = ICN::AnimationFrame( MP2::GetICNObject( object ), index_, 0 );
+            if ( 0 == index ) {
+                index = index_;
+            }        
+        }
 
         Info removeInfo;
     }

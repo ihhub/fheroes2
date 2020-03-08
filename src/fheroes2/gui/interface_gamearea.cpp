@@ -153,12 +153,8 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
     // remove animation
     Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
     if ( removalInfo.object != MP2::OBJ_ZERO ) {
-        Surface surface( world.GetTiles( removalInfo.index ).GetTileSurface().GetSize(), true );
-        u32 index = ICN::AnimationFrame( MP2::GetICNObject( removalInfo.object ), removalInfo.index, 0 );
-        if ( 0 == index ) {
-            index = removalInfo.index;
-        }
-        const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( removalInfo.object ), index );
+        Surface surface( removalInfo.surfaceSize, true );
+        const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( removalInfo.object ), removalInfo.index );
         sprite.Blit( sprite.x(), sprite.y(), surface );
         surface.SetAlphaMod( removalInfo.alpha );
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();

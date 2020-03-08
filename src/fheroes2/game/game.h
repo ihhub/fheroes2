@@ -263,6 +263,7 @@ namespace Game
             u8 index;
             s32 tile;
             u32 alpha;
+            Size surfaceSize;
         };
 
         void Set( const Info & info );
