@@ -1181,9 +1181,11 @@ Monster Monster::FromDwelling( int race, u32 dwelling )
 
 Monster Monster::Rand( level_t level )
 {
-    static std::vector<Monster> monsters[LEVEL4 - LEVEL0];
+    if ( level < LEVEL0 || level > LEVEL4 )
+        return Monster( UNKNOWN );
     if ( level == LEVEL0 )
         return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
+    static std::vector<Monster> monsters[LEVEL4 - LEVEL0];
     if ( monsters[0].empty() ) {
         for ( u32 i = PEASANT; i <= WATER_ELEMENT; ++i ) {
             const Monster monster( i );
