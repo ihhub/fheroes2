@@ -12,8 +12,7 @@
       <AdditionalDependencies>SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(ProjectDir)..\sdl\lib\$(PlatformTarget)\SDL.dll" "$(OutDir)"
-xcopy /Y "$(ProjectDir)..\sdl\lib\$(PlatformTarget)\SDL_mixer.dll" "$(OutDir)"
+      <Command>xcopy /Y "$(ProjectDir)..\sdl\lib\$(PlatformTarget)\*" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
