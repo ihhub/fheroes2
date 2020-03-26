@@ -275,7 +275,7 @@ namespace Interface
                 splitter.MoveIndex( top - content->begin() );
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn ) || ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) ) ) && ( top + maxItems < content->end() ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgDn ) || ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) ) ) && content->size() > maxItems && ( top + maxItems < content->end() ) ) {
                 cursor.Hide();
                 top += maxItems;
                 if ( top + maxItems > content->end() )
@@ -298,13 +298,13 @@ namespace Interface
                 ActionCurrentDn();
                 return true;
             }
-            else if ( ( le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && ( top > content->begin() ) ) {
+            else if ( ( le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && content->size() > maxItems && ( top > content->begin() ) ) {
                 cursor.Hide();
                 --top;
                 splitter.Backward();
                 return true;
             }
-            else if ( ( le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) ) && ( top < ( content->end() - maxItems ) ) ) {
+            else if ( ( le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) ) && content->size() > maxItems &&( top < ( content->end() - maxItems ) ) ) {
                 cursor.Hide();
                 ++top;
                 splitter.Forward();
