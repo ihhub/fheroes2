@@ -276,6 +276,7 @@ private:
     void HandleKeyboardEvent( SDL_KeyboardEvent & );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     static int GlobalFilterEvents( void *, SDL_Event * );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
@@ -292,7 +293,8 @@ private:
         CLICK_MIDDLE = 0x0040,
         TAP_MODE = 0x0080,
         MOUSE_OFFSET = 0x0100,
-        CLOCK_ON = 0x0200
+        CLOCK_ON = 0x0200,
+		MOUSE_WHEEL = 0x0400,
     };
 
     void SetModes( flag_t );
@@ -314,6 +316,8 @@ private:
     Point mouse_rr; // release right
 
     Point mouse_cu; // point cursor
+
+    Point mouse_wm;	// wheel movement
 
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );

@@ -492,6 +492,12 @@ bool LocalEvent::HandleEvents( bool delay )
             HandleMouseButtonEvent( event.button );
             break;
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        case SDL_MOUSEWHEEL:
+            HandleMouseWheelEvent( event.wheel );
+            break;
+#endif
+
         // exit
         case SDL_QUIT:
             // Error::Except(__FUNCTION__, "SDL_QUIT");
@@ -502,13 +508,12 @@ bool LocalEvent::HandleEvents( bool delay )
         }
 
         // need for wheel up/down delay
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        if ( SDL_MOUSEWHEEL == event.type )
-            break;
-#else
-        if ( SDL_BUTTON_WHEELDOWN == event.button.button || SDL_BUTTON_WHEELUP == event.button.button )
-            break;
-#endif
+        #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+		// Use HandleMouseWheel instead
+        #else
+                if ( SDL_BUTTON_WHEELDOWN == event.button.button || SDL_BUTTON_WHEELUP == event.button.button )
+                    break;
+        #endif
     }
 
     // emulate press right
@@ -605,16 +610,14 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     if ( modes & MOUSE_PRESSED )
         switch ( button.button ) {
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        case SDL_BUTTON_X1:
-        case SDL_BUTTON_X2:
 #else
         case SDL_BUTTON_WHEELDOWN:
         case SDL_BUTTON_WHEELUP:
-#endif
             mouse_pm = mouse_cu;
             break;
-
+#endif
         case SDL_BUTTON_LEFT:
             mouse_pl = mouse_cu;
             SetModes( CLICK_LEFT );
@@ -642,14 +645,12 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
     else
         switch ( button.button ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        case SDL_BUTTON_X1:
-        case SDL_BUTTON_X2:
-#else
-        case SDL_BUTTON_WHEELDOWN:
-        case SDL_BUTTON_WHEELUP:
-#endif
-            mouse_rm = mouse_cu;
+#else 
+		case SDL_BUTTON_WHEELDOWN : 
+		case SDL_BUTTON_WHEELUP : 
+					mouse_rm = mouse_cu;
             break;
+#endif
 
         case SDL_BUTTON_LEFT:
             mouse_rl = mouse_cu;
@@ -672,6 +673,15 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
             break;
         }
 }
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel ) {
+    SetModes( MOUSE_WHEEL );
+    mouse_rm = mouse_cu;
+    mouse_wm.x = wheel.x;
+    mouse_wm.y = wheel.y;
+}
+#endif
 
 bool LocalEvent::MouseClickLeft( void )
 {
@@ -737,7 +747,7 @@ bool LocalEvent::MouseClickRight( const Rect & rt )
 bool LocalEvent::MouseWheelUp( void ) const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_X1 == mouse_button;
+    return ( modes & MOUSE_WHEEL ) && mouse_wm.y > 0;
 #else
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_WHEELUP == mouse_button;
 #endif
@@ -746,7 +756,7 @@ bool LocalEvent::MouseWheelUp( void ) const
 bool LocalEvent::MouseWheelDn( void ) const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_X2 == mouse_button;
+    return ( modes & MOUSE_WHEEL ) && mouse_wm.y < 0;
 #else
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_WHEELDOWN == mouse_button;
 #endif
