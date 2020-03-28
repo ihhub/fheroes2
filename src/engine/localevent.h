@@ -294,7 +294,7 @@ private:
         TAP_MODE = 0x0080,
         MOUSE_OFFSET = 0x0100,
         CLOCK_ON = 0x0200,
-		MOUSE_WHEEL = 0x0400,
+        MOUSE_WHEEL = 0x0400,
     };
 
     void SetModes( flag_t );
