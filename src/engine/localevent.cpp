@@ -509,10 +509,10 @@ bool LocalEvent::HandleEvents( bool delay )
 
         // need for wheel up/down delay
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-		// Use HandleMouseWheel instead
+        // Use HandleMouseWheel instead
 #else
-                if ( SDL_BUTTON_WHEELDOWN == event.button.button || SDL_BUTTON_WHEELUP == event.button.button )
-                    break;
+        if ( SDL_BUTTON_WHEELDOWN == event.button.button || SDL_BUTTON_WHEELUP == event.button.button )
+            break;
 #endif
     }
 
