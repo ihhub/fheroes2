@@ -508,12 +508,12 @@ bool LocalEvent::HandleEvents( bool delay )
         }
 
         // need for wheel up/down delay
-        #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 		// Use HandleMouseWheel instead
-        #else
+#else
                 if ( SDL_BUTTON_WHEELDOWN == event.button.button || SDL_BUTTON_WHEELUP == event.button.button )
                     break;
-        #endif
+#endif
     }
 
     // emulate press right
