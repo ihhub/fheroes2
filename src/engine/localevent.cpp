@@ -646,8 +646,8 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         switch ( button.button ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else 
-        case SDL_BUTTON_WHEELDOWN : 
-        case SDL_BUTTON_WHEELUP : 
+        case SDL_BUTTON_WHEELDOWN: 
+        case SDL_BUTTON_WHEELUP: 
             mouse_rm = mouse_cu;
             break;
 #endif
