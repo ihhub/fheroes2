@@ -610,7 +610,6 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     if ( modes & MOUSE_PRESSED )
         switch ( button.button ) {
-
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
         case SDL_BUTTON_WHEELDOWN:
