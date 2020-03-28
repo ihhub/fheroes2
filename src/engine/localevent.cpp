@@ -675,7 +675,8 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel ) {
+void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
+{
     SetModes( MOUSE_WHEEL );
     mouse_rm = mouse_cu;
     mouse_wm.x = wheel.x;
