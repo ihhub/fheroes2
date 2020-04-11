@@ -213,22 +213,20 @@ Surface DrawHexagonShadow( void )
     int l, w, h;
 
     if ( Settings::Get().QVGA() ) {
-        // r = 11;
         l = 7;
-        w = 23;
-        h = 26;
+        w = CELLW2;
+        h = CELLH2;
     }
     else {
-        // r = 22;
         l = 13;
-        w = 45;
-        h = 52;
+        w = CELLW;
+        h = CELLH;
     }
 
     Surface sf( Size( w, h ), 32, true );
     RGBA shadow = RGBA( 0, 0, 0, 0x30 );
-    Rect rt( 0, l, w, 2 * l );
-    for ( int i = 1; i < w / 2; i += 2 ) {
+    Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
+    for ( int i = 0; i < w / 2; i += 2 ) {
         --rt.y;
         rt.h += 2;
         rt.x += 2;
