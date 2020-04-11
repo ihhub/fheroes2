@@ -124,6 +124,7 @@ namespace Interface
         void EventDebug1( void );
         void EventDebug2( void );
 
+        int EventNewGame( void );
         int EventLoadGame( void );
         int EventAdventureDialog( void );
         int EventFileDialog( void );
