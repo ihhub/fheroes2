@@ -849,7 +849,7 @@ Army::Army( const Maps::Tiles & t )
             }
         }
         else {
-            MapMonster * map_troop = static_cast<MapMonster *>( world.GetMapObject( t.GetObjectUID( MP2::OBJ_MONSTER ) ) );
+            MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( t.GetObjectUID( MP2::OBJ_MONSTER ) ) );
             Troop troop = map_troop ? map_troop->QuantityTroop() : t.QuantityTroop();
 
             at( 0 )->Set( troop );
@@ -1249,7 +1249,7 @@ void Army::DrawMons32LineShort( const Troops & troops, s32 cx, s32 cy, u32 width
 
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
-    MapMonster * map_troop = static_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( MP2::OBJ_MONSTER ) ) );
+    MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( MP2::OBJ_MONSTER ) ) );
     const u32 ratios = troop.isValid() ? hero.GetArmy().GetHitPoints() / troop.GetHitPoints() : 0;
     const bool check_free_stack = true; // (hero.GetArmy().GetCount() < hero.GetArmy().size() || hero.GetArmy().HasMonster(troop)); // set force, see
                                         // Dialog::ArmyJoinWithCost, http://sourceforge.net/tracker/?func=detail&aid=3567985&group_id=96859&atid=616183
