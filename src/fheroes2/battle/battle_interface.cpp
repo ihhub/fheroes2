@@ -194,16 +194,16 @@ Surface DrawHexagon( const RGBA & color )
         h = CELLH;
     }
 
-    Surface sf( Size( w, h ), false );
+    Surface sf( Size( w + 1, h + 1 ), false );
 
     sf.DrawLine( Point( r, 0 ), Point( 0, l ), color );
-    sf.DrawLine( Point( r, 0 ), Point( w - 1, l ), color );
+    sf.DrawLine( Point( r, 0 ), Point( w, l ), color );
 
-    sf.DrawLine( Point( 0, l + 1 ), Point( 0, h - l - 1 ), color );
-    sf.DrawLine( Point( w - 1, l + 1 ), Point( w - 1, h - l - 1 ), color );
+    sf.DrawLine( Point( 0, l + 1 ), Point( 0, h - l ), color );
+    sf.DrawLine( Point( w, l + 1 ), Point( w, h - l ), color );
 
-    sf.DrawLine( Point( r, h - 1 ), Point( 0, h - l - 1 ), color );
-    sf.DrawLine( Point( r, h - 1 ), Point( w - 1, h - l - 1 ), color );
+    sf.DrawLine( Point( r, h ), Point( 0, h - l ), color );
+    sf.DrawLine( Point( r, h ), Point( w, h - l ), color );
 
     return sf;
 }
@@ -213,22 +213,20 @@ Surface DrawHexagonShadow( void )
     int l, w, h;
 
     if ( Settings::Get().QVGA() ) {
-        // r = 11;
         l = 7;
-        w = 23;
-        h = 26;
+        w = CELLW2;
+        h = CELLH2;
     }
     else {
-        // r = 22;
         l = 13;
-        w = 45;
-        h = 52;
+        w = CELLW;
+        h = CELLH;
     }
 
     Surface sf( Size( w, h ), 32, true );
     RGBA shadow = RGBA( 0, 0, 0, 0x30 );
-    Rect rt( 0, l, w, 2 * l );
-    for ( int i = 1; i < w / 2; i += 2 ) {
+    Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
+    for ( int i = 0; i < w / 2; i += 2 ) {
         --rt.y;
         rt.h += 2;
         rt.x += 2;
