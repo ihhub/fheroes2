@@ -237,7 +237,6 @@ u32 Battle::Force::GetSurrenderCost( void ) const
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it )->isValid() ) {
-            // FIXME: orig: 3 titan = 7500
             payment_t payment = ( *it )->GetCost();
             res += payment.gold;
         }
