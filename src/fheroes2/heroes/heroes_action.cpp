@@ -653,7 +653,7 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 {
     bool destroy = false;
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapMonster * map_troop = static_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
     Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
     // const Settings & conf = Settings::Get();
 
@@ -950,14 +950,14 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapResource * map_resource = static_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapResource * map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
 
     Game::PlayPickupSound();
     AnimationRemoveObject( tile );
     tile.RemoveObjectSprite();
 
     if ( obj == MP2::OBJ_BOTTLE ) {
-        MapSign * sign = static_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
         Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
     }
     else {
@@ -1382,7 +1382,7 @@ void ActionToPoorLuckObject( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToSign( Heroes & hero, u32 obj, s32 dst_index )
 {
     PlaySoundWarning;
-    MapSign * sign = static_cast<MapSign *>( world.GetMapObject( dst_index ) );
+    MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
     Dialog::Message( _( "Sign" ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -1686,7 +1686,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapArtifact * map_artifact = static_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapArtifact * map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
 
     if ( hero.IsFullBagArtifacts() )
         Dialog::Message( "", _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
@@ -2973,7 +2973,7 @@ void ActionToEyeMagi( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
 {
-    MapSphinx * riddle = static_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
+    MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
     if ( riddle && riddle->valid ) {
         if (
             Dialog::YES
