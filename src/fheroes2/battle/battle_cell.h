@@ -25,7 +25,7 @@
 
 #include "gamedefs.h"
 
-#define CELLW 45
+#define CELLW 44
 #define CELLH 52
 #define CELLW2 23
 #define CELLH2 26

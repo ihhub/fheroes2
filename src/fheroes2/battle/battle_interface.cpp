@@ -194,16 +194,16 @@ Surface DrawHexagon( const RGBA & color )
         h = CELLH;
     }
 
-    Surface sf( Size( w, h ), false );
+    Surface sf( Size( w + 1, h + 1 ), false );
 
     sf.DrawLine( Point( r, 0 ), Point( 0, l ), color );
-    sf.DrawLine( Point( r, 0 ), Point( w - 1, l ), color );
+    sf.DrawLine( Point( r, 0 ), Point( w, l ), color );
 
-    sf.DrawLine( Point( 0, l + 1 ), Point( 0, h - l - 1 ), color );
-    sf.DrawLine( Point( w - 1, l + 1 ), Point( w - 1, h - l - 1 ), color );
+    sf.DrawLine( Point( 0, l + 1 ), Point( 0, h - l ), color );
+    sf.DrawLine( Point( w, l + 1 ), Point( w, h - l ), color );
 
-    sf.DrawLine( Point( r, h - 1 ), Point( 0, h - l - 1 ), color );
-    sf.DrawLine( Point( r, h - 1 ), Point( w - 1, h - l - 1 ), color );
+    sf.DrawLine( Point( r, h ), Point( 0, h - l ), color );
+    sf.DrawLine( Point( r, h ), Point( w, h - l ), color );
 
     return sf;
 }

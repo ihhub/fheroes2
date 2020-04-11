@@ -132,7 +132,7 @@ void Battle::Cell::SetArea( const Rect & area )
         pos.h = CELLH2;
     }
     else {
-        pos.x = area.x + 88 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + ( CELLW ) * ( index % ARENAW );
+        pos.x = area.x + 89 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + ( CELLW ) * ( index % ARENAW );
         pos.y = area.y + 62 + ( ( ( CELLH - ( CELLH - CELLH_VER_SIDE ) / 2 ) ) * ( index / ARENAW ) );
         pos.w = CELLW;
         pos.h = CELLH;
