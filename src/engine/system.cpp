@@ -478,19 +478,19 @@ int System::GetRenderFlags( void )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
     return SDL_RENDERER_SOFTWARE;
-#endif
-#if defined( __WIN32__ ) || defined( ANDROID )
+#elif defined( __WIN32__ ) || defined( ANDROID )
     return SDL_RENDERER_ACCELERATED;
-#endif
+#else
     return SDL_RENDERER_ACCELERATED;
     // return SDL_RENDERER_SOFTWARE;
+#endif
 #else
 #if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
     return SDL_SWSURFACE;
-#endif
-#if defined( __WIN32__ ) || defined( ANDROID )
+#elif defined( __WIN32__ ) || defined( ANDROID )
     return SDL_HWSURFACE;
-#endif
+#else
     return SDL_SWSURFACE;
+#endif
 #endif
 }
