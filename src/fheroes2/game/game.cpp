@@ -126,13 +126,11 @@ int Game::Testing( int t )
 
 int Game::Credits( void )
 {
-    const Settings & conf = Settings::Get();
-
     std::string str;
     str.reserve( 200 );
 
     str.append( "version: " );
-    str.append( conf.GetVersion() );
+    str.append( Settings::Get().GetVersion() );
     str.append( "\n \n" );
     str.append( "This program is distributed under the terms of the GPL v2." );
     str.append( "\n" );

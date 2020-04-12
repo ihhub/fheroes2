@@ -916,7 +916,7 @@ bool World::LoadMapMAP( const std::string & filename )
     return false;
 }
 #else
-bool World::LoadMapMAP( const std::string & filename )
+bool World::LoadMapMAP( const std::string & )
 {
     return false;
 }

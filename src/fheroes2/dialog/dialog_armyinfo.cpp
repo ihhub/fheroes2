@@ -418,9 +418,6 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
         if ( btnHeroes.isEnable() )
             le.MousePressLeft( btnHeroes ) ? btnHeroes.PressDraw() : btnHeroes.ReleaseDraw();
 
-        if ( !buttons && !le.MousePressRight() )
-            break;
-
         result = btnGroups.QueueEventProcessing();
 
         if ( btnHeroes.isEnable() && le.MouseClickLeft( btnHeroes ) ) {
@@ -546,9 +543,6 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         if ( btnHeroes.isEnable() )
             le.MousePressLeft( btnHeroes ) ? btnHeroes.PressDraw() : btnHeroes.ReleaseDraw();
-
-        if ( !buttons && !le.MousePressRight() )
-            break;
 
         result = btnGroups.QueueEventProcessing();
 
