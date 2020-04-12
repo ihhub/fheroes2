@@ -267,12 +267,7 @@ void Interface::Basic::EventSystemDialog( void )
 
 int Interface::Basic::EventExit( void )
 {
-    Heroes * hero = GetFocusHeroes();
-
-    // stop hero
-    if ( hero && hero->isEnableMove() )
-        hero->SetMove( false );
-    else if ( Dialog::YES & Dialog::Message( "", _( "Are you sure you want to quit?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
+    if ( Dialog::YES & Dialog::Message( "", _( "Are you sure you want to quit?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
         return Game::QUITGAME;
 
     return Game::CANCEL;

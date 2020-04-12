@@ -671,6 +671,9 @@ int Interface::Basic::HumanTurn( bool isload )
     const int fastScrollThreshold = 2;
     bool isOngoingFastScrollEvent = false;
 
+    bool isMovingHero = false;
+    bool stopHero = false;
+
     // startgame loop
     while ( Game::CANCEL == res ) {
         if ( !le.HandleEvents() ) {
@@ -691,8 +694,15 @@ int Interface::Basic::HumanTurn( bool isload )
         // hot keys
         if ( le.KeyPress() ) {
             // exit dialog
-            if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
-                res = EventExit();
+            if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+                if ( isMovingHero ) {
+                    stopHero = true;
+                    res = Game::CANCEL;
+                }
+                else {
+                    res = EventExit();
+                }
+            }
             else
                 // end turn
                 if ( HotKeyPressEvent( Game::EVENT_ENDTURN ) )
@@ -927,10 +937,17 @@ int Interface::Basic::HumanTurn( bool isload )
                             RedrawFocus();
                         }
 
+                        isMovingHero = false;
+                        if ( stopHero ) {
+                            hero->SetMove( false );
+                            stopHero = false;
+                        }
+
                         gameArea.SetUpdateCursor();
                     }
                     else {
                         gameArea.SetRedraw();
+                        isMovingHero = true;
                     }
 
                     if ( hero->isAction() ) {
@@ -940,9 +957,11 @@ int Interface::Basic::HumanTurn( bool isload )
                     }
                 }
                 else {
-                    hero->SetMove( false );
-                    if ( Cursor::WAIT == cursor.Themes() )
-                        gameArea.SetUpdateCursor();
+                    if ( !isMovingHero ) {
+                        hero->SetMove( false );
+                        if ( Cursor::WAIT == cursor.Themes() )
+                            gameArea.SetUpdateCursor();
+                    }
                 }
             }
         }
