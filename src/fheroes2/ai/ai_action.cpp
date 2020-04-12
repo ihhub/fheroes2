@@ -1128,7 +1128,7 @@ void AIToEvent( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
 }
 
-void AIToUpgradeArmyObject( Heroes & hero, u32 obj, s32 dst_index )
+void AIToUpgradeArmyObject( Heroes & hero, u32 obj, s32 /*dst_index*/ )
 {
     switch ( obj ) {
     case MP2::OBJ_HILLFORT:

@@ -130,7 +130,6 @@ int PocketPC::NewGame( void )
 {
     Cursor & cursor = Cursor::Get();
     Display & display = Display::Get();
-    Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     cursor.Hide();
@@ -150,7 +149,7 @@ int PocketPC::NewGame( void )
     text.Set( "Free Heroes of Might and Magic II", Font::YELLOW_BIG );
     text.Blit( dst_pt.x + ( src_rt.w - text.w() ) / 2, dst_pt.y + 12 );
 
-    text.Set( conf.GetVersion(), Font::YELLOW_SMALL );
+    text.Set( Settings::Get().GetVersion(), Font::YELLOW_SMALL );
     text.Blit( dst_pt.x + ( src_rt.w - text.w() ) / 2, dst_pt.y + 148 );
 
     text.Set( _( "Standard Game" ), Font::BIG );
@@ -191,7 +190,6 @@ int PocketPC::NewMulti( void )
 {
     Cursor & cursor = Cursor::Get();
     Display & display = Display::Get();
-    Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     cursor.Hide();
@@ -211,7 +209,7 @@ int PocketPC::NewMulti( void )
     text.Set( "Free Heroes of Might and Magic II", Font::YELLOW_BIG );
     text.Blit( dst_pt.x + ( src_rt.w - text.w() ) / 2, dst_pt.y + 12 );
 
-    text.Set( conf.GetVersion(), Font::YELLOW_SMALL );
+    text.Set( Settings::Get().GetVersion(), Font::YELLOW_SMALL );
     text.Blit( dst_pt.x + ( src_rt.w - text.w() ) / 2, dst_pt.y + 148 );
 
     text.Set( _( "Hot Seat" ), Font::BIG );

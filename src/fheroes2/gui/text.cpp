@@ -374,10 +374,10 @@ Text::Text()
 {
 #ifdef WITH_TTF
     if ( Settings::Get().Unicode() )
-        message = static_cast<TextInterface *>( new TextUnicode() );
+        message = new TextUnicode();
     else
 #endif
-        message = static_cast<TextInterface *>( new TextAscii() );
+        message = new TextAscii();
 }
 
 Text::Text( const std::string & msg, int ft )
@@ -387,10 +387,10 @@ Text::Text( const std::string & msg, int ft )
 {
 #ifdef WITH_TTF
     if ( Settings::Get().Unicode() )
-        message = static_cast<TextInterface *>( new TextUnicode( msg, ft ) );
+        message = new TextUnicode( msg, ft );
     else
 #endif
-        message = static_cast<TextInterface *>( new TextAscii( msg, ft ) );
+        message = new TextAscii( msg, ft );
 
     gw = message->w();
     gh = message->h();
@@ -403,7 +403,7 @@ Text::Text( const u16 * pt, size_t sz, int ft )
     , gh( 0 )
 {
     if ( Settings::Get().Unicode() && pt ) {
-        message = static_cast<TextInterface *>( new TextUnicode( pt, sz, ft ) );
+        message = new TextUnicode( pt, sz, ft );
 
         gw = message->w();
         gh = message->h();
@@ -420,10 +420,10 @@ Text::Text( const Text & t )
 {
 #ifdef WITH_TTF
     if ( Settings::Get().Unicode() )
-        message = static_cast<TextInterface *>( new TextUnicode( static_cast<TextUnicode &>( *t.message ) ) );
+        message = new TextUnicode( static_cast<TextUnicode &>( *t.message ) );
     else
 #endif
-        message = static_cast<TextInterface *>( new TextAscii( static_cast<TextAscii &>( *t.message ) ) );
+        message = new TextAscii( static_cast<TextAscii &>( *t.message ) );
 
     gw = t.gw;
     gh = t.gh;
@@ -434,10 +434,10 @@ Text & Text::operator=( const Text & t )
     delete message;
 #ifdef WITH_TTF
     if ( Settings::Get().Unicode() )
-        message = static_cast<TextInterface *>( new TextUnicode( static_cast<TextUnicode &>( *t.message ) ) );
+        message = new TextUnicode( static_cast<TextUnicode &>( *t.message ) );
     else
 #endif
-        message = static_cast<TextInterface *>( new TextAscii( static_cast<TextAscii &>( *t.message ) ) );
+        message = new TextAscii( static_cast<TextAscii &>( *t.message ) );
 
     gw = t.gw;
     gh = t.gh;

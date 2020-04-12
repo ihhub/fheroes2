@@ -1281,7 +1281,6 @@ void Battle::Interface::RedrawCover( void )
 
 void Battle::Interface::RedrawCoverStatic( Surface & dst )
 {
-    const Settings & conf = Settings::Get();
     const Point & topleft = border.GetArea();
 
     if ( icn_cbkg != ICN::UNKNOWN ) {

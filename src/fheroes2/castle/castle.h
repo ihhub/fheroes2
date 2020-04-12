@@ -254,8 +254,8 @@ namespace CastleDialog
 
         bool operator==( u32 b ) const
         {
-            return b == id;
-        };
+            return b == static_cast<uint32_t>( id );
+        }
 
         building_t id;
         Rect coord;

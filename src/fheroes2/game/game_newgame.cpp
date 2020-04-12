@@ -68,8 +68,7 @@ namespace
         const size_t rolandMapCount = 11;
         static const std::string rolandMap[rolandMapCount] = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
                                                               "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
-        const Settings & conf = Settings::Get();
-        const ListFiles files = conf.GetListFiles( "maps", ".h2c" );
+        const ListFiles files = Settings::Get().GetListFiles( "maps", ".h2c" );
 
         std::vector<Maps::FileInfo> maps;
 
