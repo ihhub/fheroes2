@@ -213,9 +213,7 @@ int Interface::Basic::EventFileDialog( void )
 {
     switch ( Dialog::FileOptions() ) {
     case Game::NEWGAME:
-        if ( Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost)" ), Font::BIG, Dialog::YES | Dialog::NO ) )
-            return Game::NEWGAME;
-        break;
+        return EventNewGame();
 
     case Game::QUITGAME:
         return Game::QUITGAME;
@@ -298,6 +296,13 @@ void Interface::Basic::EventNextTown( void )
 
         RedrawFocus();
     }
+}
+
+int Interface::Basic::EventNewGame( void )
+{
+    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost)" ), Font::BIG, Dialog::YES | Dialog::NO )
+               ? Game::NEWGAME
+               : Game::CANCEL;
 }
 
 int Interface::Basic::EventSaveGame( void )

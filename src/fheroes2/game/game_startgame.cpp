@@ -705,6 +705,10 @@ int Interface::Basic::HumanTurn( bool isload )
                 // next town
                 if ( HotKeyPressEvent( Game::EVENT_NEXTTOWN ) )
                 EventNextTown();
+           else
+                // new game
+                if ( HotKeyPressEvent( Game::EVENT_BUTTON_NEWGAME ) )
+                res = EventNewGame();
             else
                 // save game
                 if ( HotKeyPressEvent( Game::EVENT_SAVEGAME ) )
