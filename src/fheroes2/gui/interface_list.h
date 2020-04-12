@@ -76,40 +76,19 @@ namespace Interface
         virtual void ActionListDoubleClick( Item & item, const Point &, s32, s32 )
         {
             ActionListDoubleClick( item );
-        };
+        }
         virtual void ActionListSingleClick( Item & item, const Point &, s32, s32 )
         {
             ActionListSingleClick( item );
-        };
+        }
         virtual void ActionListPressRight( Item & item, const Point &, s32, s32 )
         {
             ActionListPressRight( item );
-        };
+        }
         virtual bool ActionListCursor( Item &, const Point &, s32, s32 )
         {
             return false;
-        };
-
-        /*
-        void SetTopLeft(const Point & top);
-        void SetScrollButtonUp(int, u32, u32, const Point &);
-        void SetScrollButtonDn(int, u32, u32, const Point &);
-        void SetScrollSplitter(const Sprite &, const Rect &);
-        void SetAreaMaxItems(u32);
-        void SetAreaItems(const Rect &);
-        void SetListContent(std::vector<Item> &);
-        void Redraw(void);
-        bool QueueEventProcessing(void);
-        Item & GetCurrent(void);
-        void SetCurrent(size_t);
-        void SetCurrent(const Item &);
-        void SetCurrentVisible(void);
-        void RemoveSelected(void);
-        void DisableHotkeys(bool);
-        bool isSelected(void) const;
-        void Unselect(void);
-        void Reset(void);
-        */
+        }
 
         void SetTopLeft( const Point & tl )
         {
@@ -268,20 +247,23 @@ namespace Interface
             if ( !content )
                 return false;
 
-            if ( ( le.MouseClickLeft( buttonPgUp ) || ( useHotkeys && le.KeyPress( KEY_PAGEUP ) ) ) && ( top > content->begin() ) ) {
+            if ( useHotkeys && le.KeyPress( KEY_PAGEUP ) && ( top > content->begin() ) ) {
                 cursor.Hide();
                 top = ( top - content->begin() > static_cast<int>( maxItems ) ? top - maxItems : content->begin() );
                 UpdateSplitterRange();
                 splitter.MoveIndex( top - content->begin() );
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn ) || ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) ) ) && ( top + maxItems < content->end() ) ) {
+            else if ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) && ( top + maxItems < content->end() ) ) {
                 cursor.Hide();
                 top += maxItems;
-                if ( top + maxItems > content->end() )
-                    top = content->end() - maxItems;
+                int position = top - content->begin();
+                if ( static_cast<size_t>( position ) + maxItems >= content->size() ) {
+                    position = content->size() - maxItems;
+                    top = content->begin() + position;
+                }
                 UpdateSplitterRange();
-                splitter.MoveIndex( top - content->begin() );
+                splitter.MoveIndex( position );
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_UP ) && ( cur > content->begin() ) ) {
@@ -298,13 +280,13 @@ namespace Interface
                 ActionCurrentDn();
                 return true;
             }
-            else if ( ( le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && ( top > content->begin() ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgUp ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && ( top > content->begin() ) ) {
                 cursor.Hide();
                 --top;
                 splitter.Backward();
                 return true;
             }
-            else if ( ( le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) ) && ( top < ( content->end() - maxItems ) ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgDn ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) ) && ( top < ( content->end() - maxItems ) ) ) {
                 cursor.Hide();
                 ++top;
                 splitter.Forward();

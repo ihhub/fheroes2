@@ -135,6 +135,7 @@ int Game::ScenarioInfo( void )
     }
 
     bool resetStartingSettings = conf.MapsFile().empty();
+    size_t mapId = 0;
     Players & players = conf.GetPlayers();
     Interface::PlayersInfo playersInfo( true, !conf.QVGA(), !conf.QVGA() );
 
@@ -142,11 +143,13 @@ int Game::ScenarioInfo( void )
         resetStartingSettings = true;
         const std::string & mapName = conf.CurrentFileInfo().name;
         const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
-        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
+        size_t tempId = 0;
+        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++tempId ) {
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
                 if ( mapIter->file != conf.CurrentFileInfo().file )
                     conf.SetCurrentFileInfo( *mapIter );
 
+                mapId = tempId;
                 resetStartingSettings = false;
                 break;
             }
@@ -209,7 +212,7 @@ int Game::ScenarioInfo( void )
         // click select
         if ( buttonSelectMaps && ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( *buttonSelectMaps ) ) ) {
             levelCursor.Hide();
-            const Maps::FileInfo * fi = Dialog::SelectScenario( lists );
+            const Maps::FileInfo * fi = Dialog::SelectScenario( lists, mapId );
             if ( fi ) {
                 conf.SetCurrentFileInfo( *fi );
                 playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );

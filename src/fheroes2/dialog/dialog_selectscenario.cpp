@@ -162,8 +162,14 @@ void ScenarioListBox::RedrawBackground( const Point & dst )
     }
 }
 
-const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
+const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, size_t selectedId )
 {
+    if ( all.empty() )
+        return NULL;
+
+    if ( selectedId >= all.size() )
+        selectedId = 0;
+
     Cursor & cursor = Cursor::Get();
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -244,6 +250,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
     listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
+    listbox.SetCurrent( selectedId );
     listbox.Redraw();
 
     buttonOk.Draw();
