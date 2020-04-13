@@ -693,98 +693,73 @@ int Interface::Basic::HumanTurn( bool isload )
 
         // hot keys
         if ( le.KeyPress() ) {
+            if ( isMovingHero )
+                stopHero = true;
             // exit dialog
-            if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-                if ( isMovingHero ) {
-                    stopHero = true;
-                    res = Game::CANCEL;
-                }
-                else {
-                    res = EventExit();
-                }
-            }
-            else
-                // end turn
-                if ( HotKeyPressEvent( Game::EVENT_ENDTURN ) )
+            else if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+                res = EventExit();
+            // end turn
+            else if ( HotKeyPressEvent( Game::EVENT_ENDTURN ) )
                 res = EventEndTurn();
-            else
-                // next hero
-                if ( HotKeyPressEvent( Game::EVENT_NEXTHERO ) )
+            // next hero
+            else if ( HotKeyPressEvent( Game::EVENT_NEXTHERO ) )
                 EventNextHero();
-            else
-                // next town
-                if ( HotKeyPressEvent( Game::EVENT_NEXTTOWN ) )
+            // next town
+            else if ( HotKeyPressEvent( Game::EVENT_NEXTTOWN ) )
                 EventNextTown();
-           else
-                // new game
-                if ( HotKeyPressEvent( Game::EVENT_BUTTON_NEWGAME ) )
+            // new game
+            else if ( HotKeyPressEvent( Game::EVENT_BUTTON_NEWGAME ) )
                 res = EventNewGame();
-            else
-                // save game
-                if ( HotKeyPressEvent( Game::EVENT_SAVEGAME ) )
+            // save game
+            else if ( HotKeyPressEvent( Game::EVENT_SAVEGAME ) )
                 EventSaveGame();
-            else
-                // load game
-                if ( HotKeyPressEvent( Game::EVENT_LOADGAME ) ) {
+            // load game
+            else if ( HotKeyPressEvent( Game::EVENT_LOADGAME ) ) {
                 res = EventLoadGame();
                 if ( Game::LOADGAME == res )
                     break;
             }
-            else
-                // file options
-                if ( HotKeyPressEvent( Game::EVENT_FILEOPTIONS ) )
+            // file options
+            else if ( HotKeyPressEvent( Game::EVENT_FILEOPTIONS ) )
                 res = EventFileDialog();
-            else
-                // system options
-                if ( HotKeyPressEvent( Game::EVENT_SYSTEMOPTIONS ) )
+            // system options
+            else if ( HotKeyPressEvent( Game::EVENT_SYSTEMOPTIONS ) )
                 EventSystemDialog();
-            else
-                // puzzle map
-                if ( HotKeyPressEvent( Game::EVENT_PUZZLEMAPS ) )
+            // puzzle map
+            else if ( HotKeyPressEvent( Game::EVENT_PUZZLEMAPS ) )
                 EventPuzzleMaps();
-            else
-                // info game
-                if ( HotKeyPressEvent( Game::EVENT_INFOGAME ) )
+            // info game
+            else if ( HotKeyPressEvent( Game::EVENT_INFOGAME ) )
                 EventGameInfo();
-            else
-                // cast spell
-                if ( HotKeyPressEvent( Game::EVENT_CASTSPELL ) )
+            // cast spell
+            else if ( HotKeyPressEvent( Game::EVENT_CASTSPELL ) )
                 EventCastSpell();
-            else
-                // show/hide control panel
-                if ( HotKeyPressEvent( Game::EVENT_CTRLPANEL ) )
+            // show/hide control panel
+            else if ( HotKeyPressEvent( Game::EVENT_CTRLPANEL ) )
                 EventSwitchShowControlPanel();
-            else
-                // hide/show radar
-                if ( HotKeyPressEvent( Game::EVENT_SHOWRADAR ) )
+            // hide/show radar
+            else if ( HotKeyPressEvent( Game::EVENT_SHOWRADAR ) )
                 EventSwitchShowRadar();
-            else
-                // hide/show buttons
-                if ( HotKeyPressEvent( Game::EVENT_SHOWBUTTONS ) )
+            // hide/show buttons
+            else if ( HotKeyPressEvent( Game::EVENT_SHOWBUTTONS ) )
                 EventSwitchShowButtons();
-            else
-                // hide/show status window
-                if ( HotKeyPressEvent( Game::EVENT_SHOWSTATUS ) )
+            // hide/show status window
+            else if ( HotKeyPressEvent( Game::EVENT_SHOWSTATUS ) )
                 EventSwitchShowStatus();
-            else
-                // hide/show hero/town icons
-                if ( HotKeyPressEvent( Game::EVENT_SHOWICONS ) )
+            // hide/show hero/town icons
+            else if ( HotKeyPressEvent( Game::EVENT_SHOWICONS ) )
                 EventSwitchShowIcons();
-            else
-                // hero movement
-                if ( HotKeyPressEvent( Game::EVENT_CONTINUE ) )
+            // hero movement
+            else if ( HotKeyPressEvent( Game::EVENT_CONTINUE ) )
                 EventContinueMovement();
-            else
-                // dig artifact
-                if ( HotKeyPressEvent( Game::EVENT_DIGARTIFACT ) )
+            // dig artifact
+            else if ( HotKeyPressEvent( Game::EVENT_DIGARTIFACT ) )
                 res = EventDigArtifact();
-            else
-                // sleep hero
-                if ( HotKeyPressEvent( Game::EVENT_SLEEPHERO ) )
+            // sleep hero
+            else if ( HotKeyPressEvent( Game::EVENT_SLEEPHERO ) )
                 EventSwitchHeroSleeping();
-            else
-                // move hero
-                if ( HotKeyPressEvent( Game::EVENT_MOVELEFT ) )
+            // move hero
+            else if ( HotKeyPressEvent( Game::EVENT_MOVELEFT ) )
                 EventKeyArrowPress( Direction::LEFT );
             else if ( HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
                 EventKeyArrowPress( Direction::RIGHT );
@@ -800,9 +775,8 @@ int Interface::Basic::HumanTurn( bool isload )
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
             else if ( HotKeyPressEvent( Game::EVENT_MOVEBOTTOMRIGHT ) )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
-            else
-                // scroll maps
-                if ( HotKeyPressEvent( Game::EVENT_SCROLLLEFT ) )
+            // scroll maps
+            else if ( HotKeyPressEvent( Game::EVENT_SCROLLLEFT ) )
                 gameArea.SetScroll( SCROLL_LEFT );
             else if ( HotKeyPressEvent( Game::EVENT_SCROLLRIGHT ) )
                 gameArea.SetScroll( SCROLL_RIGHT );
@@ -861,37 +835,32 @@ int Interface::Basic::HumanTurn( bool isload )
                 cursor.SetThemes( Cursor::POINTER );
             radar.QueueEventProcessing();
         }
-        else
-            // cursor over icons panel
-            if ( ( !conf.ExtGameHideInterface() || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
+        // cursor over icons panel
+        else if ( ( !conf.ExtGameHideInterface() || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             iconsPanel.QueueEventProcessing();
         }
-        else
-            // cursor over buttons area
-            if ( ( !conf.ExtGameHideInterface() || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
+        // cursor over buttons area
+        else if ( ( !conf.ExtGameHideInterface() || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = buttonsArea.QueueEventProcessing();
         }
-        else
-            // cursor over status area
-            if ( ( !conf.ExtGameHideInterface() || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
+        // cursor over status area
+        else if ( ( !conf.ExtGameHideInterface() || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             statusWindow.QueueEventProcessing();
         }
-        else
-            // cursor over control panel
-            if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
+        // cursor over control panel
+        else if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = controlPanel.QueueEventProcessing();
         }
-        else
-            // cursor over game area
-            if ( le.MouseCursor( gameArea.GetArea() ) && !gameArea.NeedScroll() ) {
+        // cursor over game area
+        else if ( le.MouseCursor( gameArea.GetArea() ) && !gameArea.NeedScroll() ) {
             gameArea.QueueEventProcessing();
         }
 
@@ -937,7 +906,6 @@ int Interface::Basic::HumanTurn( bool isload )
                             RedrawFocus();
                         }
 
-                        isMovingHero = false;
                         if ( stopHero ) {
                             hero->SetMove( false );
                             stopHero = false;
@@ -947,8 +915,9 @@ int Interface::Basic::HumanTurn( bool isload )
                     }
                     else {
                         gameArea.SetRedraw();
-                        isMovingHero = true;
                     }
+
+                    isMovingHero = true;
 
                     if ( hero->isAction() ) {
                         // check game over
@@ -957,11 +926,11 @@ int Interface::Basic::HumanTurn( bool isload )
                     }
                 }
                 else {
-                    if ( !isMovingHero ) {
-                        hero->SetMove( false );
-                        if ( Cursor::WAIT == cursor.Themes() )
-                            gameArea.SetUpdateCursor();
-                    }
+                    isMovingHero = false;
+                    stopHero = false;
+                    hero->SetMove( false );
+                    if ( Cursor::WAIT == cursor.Themes() )
+                        gameArea.SetUpdateCursor();
                 }
             }
         }
