@@ -330,7 +330,23 @@ void Interface::Radar::RedrawCursor( void )
         s32 areaw = ( offset.x ? rect.w - 2 * offset.x : rect.w );
         s32 areah = ( offset.y ? rect.h - 2 * offset.y : rect.h );
 
-        const Size sz( ( rectMaps.w * areaw ) / world.w(), ( rectMaps.h * areah ) / world.h() );
+        int32_t xStart = rectMaps.x;
+        int32_t xEnd = rectMaps.x + rectMaps.w;
+        int32_t yStart = rectMaps.y;
+        int32_t yEnd = rectMaps.y + rectMaps.h;
+        if ( xStart < 0 )
+            xStart = 0;
+        if ( yStart < 0 )
+            yStart = 0;
+        if ( xEnd >= world.w() )
+            xEnd = world.w();
+        if ( yEnd >= world.h() )
+            yEnd = world.h();
+
+        const uint16_t width = static_cast<uint16_t>( xEnd - xStart );
+        const uint16_t height = static_cast<uint16_t>( yEnd - yStart );
+
+        const Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
 
         // check change game area
         if ( cursorArea.GetSize() != sz ) {
@@ -338,7 +354,7 @@ void Interface::Radar::RedrawCursor( void )
             cursorArea.DrawBorder( AGG::GetPaletteColor( RADARCOLOR ), false );
         }
 
-        cursorArea.Move( rect.x + offset.x + ( rectMaps.x * areaw ) / world.w(), rect.y + offset.y + ( rectMaps.y * areah ) / world.h() );
+        cursorArea.Move( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );
     }
 }
 
