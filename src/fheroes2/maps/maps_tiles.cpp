@@ -1456,6 +1456,29 @@ void Maps::Tiles::RedrawTile( Surface & dst ) const
         area.BlitOnTile( dst, GetTileSurface(), 0, 0, mp );
 }
 
+void Maps::Tiles::RedrawEmptyTile( Surface & dst, const Point & mp )
+{
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+
+    if ( area.GetRectMaps() & mp ) {
+        if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
+            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), 0, 0, mp );
+        }
+        else if ( mp.x == world.w() && mp.y >= 0 && mp.y < world.h() ) { // right first row
+            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 24 + ( mp.y % 4 ), 0 ), 0, 0, mp );
+        }
+        else if ( mp.y == world.h() && mp.x >= 0 && mp.x < world.w() ) { // bottom first row
+            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 28 + ( mp.x % 4 ), 0 ), 0, 0, mp );
+        }
+        else if ( mp.x == -1 && mp.y >= 0 && mp.y < world.h() ) { // left first row
+            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 32 + ( mp.y % 4 ), 0 ), 0, 0, mp );
+        }
+        else {
+            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, ( abs( mp.y ) % 4 ) * 4 + abs( mp.x ) % 4, 0 ), 0, 0, mp );
+        }
+    }
+}
+
 void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();

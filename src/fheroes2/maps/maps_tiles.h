@@ -196,6 +196,7 @@ namespace Maps
         void CaptureFlags32( int obj, int col );
 
         void RedrawTile( Surface & ) const;
+        static void RedrawEmptyTile( Surface & dst, const Point & mp );
         void RedrawBottom( Surface &, bool skip_objs = false ) const;
         void RedrawBottom4Hero( Surface & ) const;
         void RedrawTop( Surface &, const TilesAddon * skip = NULL ) const;

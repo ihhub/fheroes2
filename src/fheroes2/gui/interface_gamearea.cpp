@@ -140,15 +140,32 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const
 {
     // tile
-    for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )
-        for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox )
-            world.GetTiles( rectMaps.x + ox, rectMaps.y + oy ).RedrawTile( dst );
+    for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
+        const s32 offsetY = rectMaps.y + oy;
+        bool isEmptyTile = offsetY < 0 || offsetY >= world.h();
+        for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox ) {
+            const s32 offsetX = rectMaps.x + ox;
+            if ( isEmptyTile || offsetX < 0 || offsetX >= world.w() )
+                Maps::Tiles::RedrawEmptyTile( dst, Point( offsetX, offsetY ) );
+            else
+                world.GetTiles( offsetX, offsetY ).RedrawTile( dst );
+        }
+    }
 
     // bottom
-    if ( flag & LEVEL_BOTTOM )
-        for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )
-            for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox )
-                world.GetTiles( rectMaps.x + ox, rectMaps.y + oy ).RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
+    if ( flag & LEVEL_BOTTOM ) {
+        for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
+            const s32 offsetY = rectMaps.y + oy;
+            if ( offsetY < 0 || offsetY >= world.h() )
+                continue;
+            for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox ) {
+                const s32 offsetX = rectMaps.x + ox;
+                if ( offsetX < 0 || offsetX >= world.w() )
+                    continue;
+                world.GetTiles( offsetX, offsetY ).RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
+            }
+        }
+    }
 
     // remove animation
     Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
@@ -163,21 +180,45 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
     }
 
     // ext object
-    if ( flag & LEVEL_OBJECTS )
-        for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )
-            for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox )
-                world.GetTiles( rectMaps.x + ox, rectMaps.y + oy ).RedrawObjects( dst );
+    if ( flag & LEVEL_OBJECTS ) {
+        for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
+            const s32 offsetY = rectMaps.y + oy;
+            if ( offsetY < 0 || offsetY >= world.h() )
+                continue;
+            for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox ) {
+                const s32 offsetX = rectMaps.x + ox;
+                if ( offsetX < 0 || offsetX >= world.w() )
+                    continue;
+                world.GetTiles( offsetX, offsetY ).RedrawObjects( dst );
+            }
+        }
+    }
 
     // top
-    if ( flag & LEVEL_TOP )
-        for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )
-            for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox )
-                world.GetTiles( rectMaps.x + ox, rectMaps.y + oy ).RedrawTop( dst );
+    if ( flag & LEVEL_TOP ) {
+        for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
+            const s32 offsetY = rectMaps.y + oy;
+            if ( offsetY < 0 || offsetY >= world.h() )
+                continue;
+            for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox ) {
+                const s32 offsetX = rectMaps.x + ox;
+                if ( offsetX < 0 || offsetX >= world.w() )
+                    continue;
+                world.GetTiles( offsetX, offsetY ).RedrawTop( dst );
+            }
+        }
+    }
 
     // heroes
-    for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )
+    for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
+        const s32 offsetY = rectMaps.y + oy;
+        if ( offsetY < 0 || offsetY >= world.h() )
+            continue;
         for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox ) {
-            const Maps::Tiles & tile = world.GetTiles( rectMaps.x + ox, rectMaps.y + oy );
+            const s32 offsetX = rectMaps.x + ox;
+            if ( offsetX < 0 || offsetX >= world.w() )
+                continue;
+            const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
 
             if ( tile.GetObject() == MP2::OBJ_HEROES && ( flag & LEVEL_HEROES ) ) {
                 const Heroes * hero = tile.GetHeroes();
@@ -185,6 +226,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
                     hero->Redraw( dst, rectMapsPosition.x + TILEWIDTH * ox, rectMapsPosition.y + TILEWIDTH * oy, true );
             }
         }
+    }
 
     // route
     const Heroes * hero = flag & LEVEL_HEROES ? GetFocusHeroes() : NULL;
@@ -228,14 +270,21 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
         if ( flag & LEVEL_ALL ) {
             const RGBA col = RGBA( 0x90, 0xA4, 0xE0 );
 
-            for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )
+            for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
+                const s32 offsetY = rectMaps.y + oy;
+                if ( offsetY < 0 || offsetY >= world.h() )
+                    continue;
                 for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox ) {
+                    const s32 offsetX = rectMaps.x + ox;
+                    if ( offsetX < 0 || offsetX >= world.w() )
+                        continue;
                     const Point dstpt( rectMapsPosition.x + TILEWIDTH * ox, rectMapsPosition.y + TILEWIDTH * oy );
                     if ( areaPosition & dstpt )
                         dst.DrawPoint( dstpt, col );
 
                     world.GetTiles( rectMaps.x + ox, rectMaps.y + oy ).RedrawPassable( dst );
                 }
+            }
         }
     }
     else
@@ -244,13 +293,21 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
         if ( flag & LEVEL_FOG ) {
         const int colors = Players::FriendColors();
 
-        for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy )
+        for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
+            const s32 offsetY = rectMaps.y + oy;
+            if ( offsetY < 0 || offsetY >= world.h() )
+                continue;
             for ( s32 ox = rt.x; ox < rt.x + rt.w; ++ox ) {
-                const Maps::Tiles & tile = world.GetTiles( rectMaps.x + ox, rectMaps.y + oy );
+                const s32 offsetX = rectMaps.x + ox;
+                if ( offsetX < 0 || offsetX >= world.w() )
+                    continue;
+
+                const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
 
                 if ( tile.isFog( colors ) )
                     tile.RedrawFogs( dst, colors );
             }
+        }
     }
 }
 
@@ -260,7 +317,7 @@ void Interface::GameArea::Scroll( void )
     if ( scrollDirection & SCROLL_LEFT ) {
         if ( 0 < scrollOffset.x )
             scrollOffset.x -= scrollStepX;
-        else if ( 0 < rectMaps.x ) {
+        else if ( -SCROLL_MIN < rectMaps.x ) {
             scrollOffset.x = SCROLL_MAX - scrollStepX;
             --rectMaps.x;
         }
@@ -268,7 +325,7 @@ void Interface::GameArea::Scroll( void )
     else if ( scrollDirection & SCROLL_RIGHT ) {
         if ( scrollOffset.x < SCROLL_MAX * 2 - tailX )
             scrollOffset.x += scrollStepX;
-        else if ( world.w() - rectMaps.w > rectMaps.x ) {
+        else if ( world.w() - rectMaps.w + SCROLL_MIN > rectMaps.x ) {
             scrollOffset.x = SCROLL_MAX + scrollStepX - tailX;
             ++rectMaps.x;
         }
@@ -277,7 +334,7 @@ void Interface::GameArea::Scroll( void )
     if ( scrollDirection & SCROLL_TOP ) {
         if ( 0 < scrollOffset.y )
             scrollOffset.y -= scrollStepY;
-        else if ( 0 < rectMaps.y ) {
+        else if ( -SCROLL_MIN < rectMaps.y ) {
             scrollOffset.y = SCROLL_MAX - scrollStepY;
             --rectMaps.y;
         }
@@ -285,7 +342,7 @@ void Interface::GameArea::Scroll( void )
     else if ( scrollDirection & SCROLL_BOTTOM ) {
         if ( scrollOffset.y < SCROLL_MAX * 2 - tailY )
             scrollOffset.y += scrollStepY;
-        else if ( world.h() - rectMaps.h > rectMaps.y ) {
+        else if ( world.h() - rectMaps.h + SCROLL_MIN > rectMaps.y ) {
             scrollOffset.y = SCROLL_MAX + scrollStepY - tailY;
             ++rectMaps.y;
         }
@@ -313,15 +370,15 @@ void Interface::GameArea::SetCenter( s32 px, s32 py )
     Point pos( px - rectMaps.w / 2, py - rectMaps.h / 2 );
 
     // our of range
-    if ( pos.x < 0 )
-        pos.x = 0;
-    else if ( pos.x > world.w() - rectMaps.w )
-        pos.x = world.w() - rectMaps.w;
+    if ( pos.x < -SCROLL_MIN )
+        pos.x = -SCROLL_MIN;
+    else if ( pos.x > world.w() - rectMaps.w + SCROLL_MIN )
+        pos.x = world.w() - rectMaps.w + SCROLL_MIN;
 
-    if ( pos.y < 0 )
-        pos.y = 0;
-    else if ( pos.y > world.h() - rectMaps.h )
-        pos.y = world.h() - rectMaps.h;
+    if ( pos.y < -SCROLL_MIN )
+        pos.y = -SCROLL_MIN;
+    else if ( pos.y > world.h() - rectMaps.h + SCROLL_MIN )
+        pos.y = world.h() - rectMaps.h + SCROLL_MIN;
 
     if ( pos.x == rectMaps.x && pos.y == rectMaps.y )
         return;
@@ -467,26 +524,26 @@ int Interface::GameArea::GetScrollCursor( void ) const
 void Interface::GameArea::SetScroll( int direct )
 {
     if ( ( direct & SCROLL_LEFT ) == SCROLL_LEFT ) {
-        if ( 0 < rectMaps.x || 0 < scrollOffset.x ) {
+        if ( -SCROLL_MIN < rectMaps.x || -SCROLL_MIN < scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
     else if ( ( direct & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
-        if ( world.w() - rectMaps.w > rectMaps.x || SCROLL_MAX * 2 > scrollOffset.x ) {
+        if ( world.w() - rectMaps.w + SCROLL_MIN > rectMaps.x || SCROLL_MAX * 2 > scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
 
     if ( ( direct & SCROLL_TOP ) == SCROLL_TOP ) {
-        if ( 0 < rectMaps.y || 0 < scrollOffset.y ) {
+        if ( -SCROLL_MIN < rectMaps.y || -SCROLL_MIN < scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
     else if ( ( direct & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
-        if ( world.h() - rectMaps.h > rectMaps.y || SCROLL_MAX * 2 > scrollOffset.y ) {
+        if ( world.h() - rectMaps.h + SCROLL_MIN > rectMaps.y || SCROLL_MAX * 2 > scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
