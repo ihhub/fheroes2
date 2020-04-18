@@ -25,7 +25,7 @@
 #include "engine.h"
 
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 6
+#define MINOR_VERSION 7
 
 #ifdef WITH_XML
 #include "xmlccwrap.h"
