@@ -4,7 +4,7 @@ fheroes2
 
 Direct continuation of free implementation of Heroes of the Might and Magic II engine. The original project had been developed at [sourceforge](https://sourceforge.net/projects/fheroes2/).
 
-<img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="425"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="425">
+<img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="430"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="430">
 
 Copyright
 ---------------------------
@@ -13,6 +13,8 @@ All rights for the original game and it's resources belong to former The 3DO Com
 Download
 ---------------------------
 You can download compiled game for specific OS via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
+
+Please note that for **Windows OS** you have to install [**Visual Studio 2015 Redistributable**](https://www.microsoft.com/en-sg/download/details.aspx?id=48145) if you face an error during application startup.
 
 Compilation
 ---------------------------
@@ -35,7 +37,7 @@ You are required to have at least a demo version of Heroes of Might and Magic II
 
 Contribution
 ---------------------------
-We welcome and appreciate any help, even if it's a tiny text or code change. Please read [contribution](https://github.com/ihhub/fheroes2/blob/master/CONTRIBUTING.md) page before starting work on a pull request. All contributors are listed in the project's wiki [page](https://github.com/ihhub/fheroes2/wiki/Contributors). 
+We welcome and appreciate any help, even if it is a tiny text or code change. Please read [contribution](https://github.com/ihhub/fheroes2/blob/master/CONTRIBUTING.md) page before starting work on a pull request. All contributors are listed in the project's wiki [page](https://github.com/ihhub/fheroes2/wiki/Contributors). 
 Not sure what to start with? Feel free to refer to <kbd>[good first issue](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)</kbd> or <kbd>[help wanted](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)</kbd> tags.
 
 License
