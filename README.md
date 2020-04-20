@@ -14,7 +14,7 @@ Download
 ---------------------------
 You can download compiled game for specific OS via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
 
-Please note that for **Windows OS** you have to install required [**Visual Studio 2015 Redistributable**](https://www.microsoft.com/en-sg/download/details.aspx?id=48145) if you face errors during application startup.
+Please note that for **Windows OS** you have to install [**Visual Studio 2015 Redistributable**](https://www.microsoft.com/en-sg/download/details.aspx?id=48145) if you face an error during application startup.
 
 Compilation
 ---------------------------
