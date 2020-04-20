@@ -4,7 +4,7 @@ fheroes2
 
 Direct continuation of free implementation of Heroes of the Might and Magic II engine. The original project had been developed at [sourceforge](https://sourceforge.net/projects/fheroes2/).
 
-<img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="425"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="425">
+<img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="430"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="430">
 
 Copyright
 ---------------------------
@@ -13,6 +13,8 @@ All rights for the original game and it's resources belong to former The 3DO Com
 Download
 ---------------------------
 You can download compiled game for specific OS via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
+
+Please note that for **Windows OS** you have to install required [**Visual Studio 2015 Redistributable**](https://www.microsoft.com/en-sg/download/details.aspx?id=48145) if you face errors during application startup.
 
 Compilation
 ---------------------------
