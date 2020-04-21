@@ -124,7 +124,6 @@ int main( int argc, char ** argv )
         try
 #endif
         {
-
             SetLangEnvPath( conf );
 
             if ( Mixer::isValid() ) {

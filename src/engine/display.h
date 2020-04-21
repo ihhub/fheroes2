@@ -31,7 +31,6 @@ class Texture;
 class Display : public Surface
 {
 public:
-    
     Display();
     ~Display();
 
