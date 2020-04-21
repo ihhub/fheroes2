@@ -29,6 +29,8 @@
 #include "tools.h"
 #include "types.h"
 
+Display *display = NULL;
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Display::Display()
     : window( NULL )
@@ -364,8 +366,7 @@ void Display::Rise( int delay )
 /* get video display */
 Display & Display::Get( void )
 {
-    static Display inside;
-    return inside;
+    return *display;
 }
 
 bool Display::isDisplay( void ) const

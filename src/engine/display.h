@@ -31,6 +31,8 @@ class Texture;
 class Display : public Surface
 {
 public:
+    
+    Display();
     ~Display();
 
     static Display & Get( void );
@@ -66,8 +68,6 @@ protected:
     friend class Texture;
 
     bool isDisplay( void ) const;
-
-    Display();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_Window * window;
@@ -106,6 +106,9 @@ protected:
     SDL_Texture * texture;
     int * counter;
 };
+
+extern Display *display;
+
 #else
 class Texture : public Surface
 {

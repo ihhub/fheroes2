@@ -68,6 +68,8 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
+    display = new Display;
+
     Settings & conf = Settings::Get();
     int test = 0;
 
@@ -122,7 +124,6 @@ int main( int argc, char ** argv )
         try
 #endif
         {
-            std::atexit( SDL::Quit );
 
             SetLangEnvPath( conf );
 
@@ -249,6 +250,9 @@ int main( int argc, char ** argv )
             VERBOSE( std::endl << conf.String() );
         }
 #endif
+    delete(display);
+    SDL::Quit();
+
     return EXIT_SUCCESS;
 }
 
