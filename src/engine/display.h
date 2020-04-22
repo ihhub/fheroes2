@@ -41,7 +41,7 @@ public:
     std::string GetInfo( void ) const;
     Size GetMaxMode( bool enable_rotate ) const;
 
-    void SetVideoMode( int w, int h, bool );
+    void SetVideoMode( int w, int h, bool, bool, bool, bool, bool );
     void SetCaption( const char * );
     void SetIcons( Surface & );
 

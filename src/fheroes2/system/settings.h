@@ -230,6 +230,10 @@ public:
     void SetPosStatus( const Point & );
 
     bool FullScreen( void ) const;
+    bool ChangeResolution( void ) const;
+    bool AspectRatio( void ) const;
+    bool BilinearFilter( void ) const;
+    bool WaitVsync( void ) const;
     bool QVGA( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;

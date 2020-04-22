@@ -54,13 +54,18 @@ Display::~Display()
 #endif
 }
 
-void Display::SetVideoMode( int w, int h, bool fullscreen )
+void Display::SetVideoMode( int w, int h, bool fullscreen, bool changeresolution, bool aspect,
+    bool bilinear, bool waitvsync )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    u32 flags = SDL_WINDOW_SHOWN;
-    if ( fullscreen )
-        flags |= SDL_WINDOW_FULLSCREEN;
-
+    u32 window_flags = SDL_WINDOW_SHOWN;
+    u32 renderer_flags = 0;
+    if ( fullscreen ) {
+        if ( changeresolution )
+            window_flags |= SDL_WINDOW_FULLSCREEN;
+        else
+            window_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    }
     if ( renderer )
         SDL_DestroyRenderer( renderer );
 
@@ -70,11 +75,26 @@ void Display::SetVideoMode( int w, int h, bool fullscreen )
         SDL_DestroyWindow( window );
     }
 
-    window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
-    renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
+    window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, window_flags );
 
+    if (bilinear)
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+    else
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+
+    renderer_flags = System::GetRenderFlags();
+    if (waitvsync)
+        renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
+    renderer = SDL_CreateRenderer( window, -1, renderer_flags );
+   
     if ( !renderer )
         Error::Except( __FUNCTION__, SDL_GetError() );
+
+    if (aspect)
+        SDL_RenderSetLogicalSize(renderer, 640, 480);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
     if ( !previousWindowTitle.empty() )
         SDL_SetWindowTitle( window, previousWindowTitle.data() );

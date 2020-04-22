@@ -77,10 +77,14 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000800,
     GLOBAL_SHOWSTATUS = 0x00001000,
 
-    GLOBAL_FONTRENDERBLENDED1 = 0x00020000,
-    GLOBAL_FONTRENDERBLENDED2 = 0x00040000,
-    GLOBAL_FULLSCREEN = 0x00400000,
-    GLOBAL_USESWSURFACE = 0x00800000,
+    GLOBAL_FONTRENDERBLENDED1 = 0x00002000,
+    GLOBAL_FONTRENDERBLENDED2 = 0x00004000,
+    GLOBAL_FULLSCREEN = 0x00008000,
+    GLOBAL_USESWSURFACE = 0x00010000,
+    GLOBAL_CHANGE_RESOLUTION = 0x00020000,
+    GLOBAL_ASPECT_RATIO = 0x00040000,
+    GLOBAL_BILINEAR_FILTER = 0x00080000,
+    GLOBAL_WAIT_VSYNC = 0x00100000,
 
     GLOBAL_SOUND = 0x01000000,
     GLOBAL_MUSIC_EXT = 0x02000000,
@@ -126,6 +130,22 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_FULLSCREEN,
         "full screen",
+    },
+    {
+        GLOBAL_CHANGE_RESOLUTION,
+        "change resolution",
+    },
+    {
+        GLOBAL_ASPECT_RATIO,
+        "aspect ratio",
+    },
+    {
+        GLOBAL_BILINEAR_FILTER,
+        "bilinear filter",
+    },
+    {
+        GLOBAL_WAIT_VSYNC,
+        "wait vsync",
     },
     {
         GLOBAL_USEUNICODE,
@@ -846,6 +866,10 @@ std::string Settings::String( void ) const
        << "sound volume = " << static_cast<int>( sound_volume ) << std::endl
        << "music volume = " << static_cast<int>( music_volume ) << std::endl
        << "fullscreen = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
+       << "change resolution = " << ( opt_global.Modes( GLOBAL_CHANGE_RESOLUTION ) ? "on" : "off" ) << std::endl
+       << "aspect ratio = " << ( opt_global.Modes( GLOBAL_ASPECT_RATIO ) ? "on" : "off" ) << std::endl
+       << "bilinear filter = " << ( opt_global.Modes( GLOBAL_BILINEAR_FILTER ) ? "on" : "off" ) << std::endl
+       << "wait vsync = " << ( opt_global.Modes( GLOBAL_WAIT_VSYNC ) ? "on" : "off" ) << std::endl
        << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl
        << "debug = " << ( debug ? "on" : "off" ) << std::endl;
 
@@ -1957,6 +1981,26 @@ u32 Settings::MemoryLimit( void ) const
 bool Settings::FullScreen( void ) const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+}
+
+bool Settings::ChangeResolution( void ) const
+{
+    return opt_global.Modes( GLOBAL_CHANGE_RESOLUTION );
+}
+
+bool Settings::AspectRatio( void ) const
+{
+    return opt_global.Modes( GLOBAL_ASPECT_RATIO );
+}
+
+bool Settings::BilinearFilter( void ) const
+{
+    return opt_global.Modes( GLOBAL_BILINEAR_FILTER );
+}
+
+bool Settings::WaitVsync( void ) const
+{
+    return opt_global.Modes( GLOBAL_WAIT_VSYNC );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
