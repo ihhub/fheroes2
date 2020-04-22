@@ -68,8 +68,6 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
-    display = new Display;
-
     Settings & conf = Settings::Get();
     int test = 0;
 
@@ -124,6 +122,10 @@ int main( int argc, char ** argv )
         try
 #endif
         {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+            display = new Display;
+#endif
+
             SetLangEnvPath( conf );
 
             if ( Mixer::isValid() ) {
@@ -250,7 +252,9 @@ int main( int argc, char ** argv )
             VERBOSE( std::endl << conf.String() );
         }
 #endif
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     delete(display);
+#endif
     SDL::Quit();
 
     return EXIT_SUCCESS;
