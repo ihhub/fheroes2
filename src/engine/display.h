@@ -40,7 +40,7 @@ public:
     std::string GetInfo( void ) const;
     Size GetMaxMode( bool enable_rotate ) const;
 
-    void SetVideoMode( int w, int h, bool );
+    void SetVideoMode( int w, int h, bool, bool );
     void SetCaption( const char * );
     void SetIcons( Surface & );
 
@@ -67,6 +67,7 @@ protected:
     friend class Texture;
 
     bool isDisplay( void ) const;
+    bool aspectRatio;
 
     Display();
 

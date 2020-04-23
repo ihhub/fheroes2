@@ -33,6 +33,7 @@
 Display::Display()
     : window( NULL )
     , renderer( NULL )
+    , aspectRatio( false )
 {}
 #else
 Display::Display() {}
@@ -60,12 +61,15 @@ void Display::Free()
 #endif
 }
 
-void Display::SetVideoMode( int w, int h, bool fullscreen )
+void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     u32 flags = SDL_WINDOW_SHOWN;
-    if ( fullscreen )
+    if ( fullscreen ) {
         flags |= SDL_WINDOW_FULLSCREEN;
+        if ( aspect )
+            aspectRatio = true;
+    }
 
     if ( renderer )
         SDL_DestroyRenderer( renderer );
@@ -125,7 +129,30 @@ void Display::Flip( void )
             ERROR( SDL_GetError() );
         }
         else {
-            if ( 0 != SDL_RenderCopy( renderer, tx, NULL, NULL ) ) {
+            // AR correction
+            SDL_Rect src, dst;
+            int ret = 0;
+            if (aspectRatio) {
+		SDL_DisplayMode current;
+		SDL_GetCurrentDisplayMode(0, &current);
+
+		float ratio = (float)surface->w / (float)surface->h;
+     
+		src.w = surface->w;
+		src.h = surface->h;
+		src.x = 0;
+		src.y = 0;
+
+		dst.w = (int)(current.h * ratio);
+		dst.h = current.h;
+		dst.x = (current.w - dst.w) / 2;
+		dst.y = 0;
+                ret = SDL_RenderCopy( renderer, tx, &src, &dst );
+            }
+            else
+                ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
+
+            if (0 != ret) {
                 ERROR( SDL_GetError() );
             }
             else
