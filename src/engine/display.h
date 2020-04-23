@@ -48,6 +48,7 @@ public:
     void Present( void );
     void Clear( void );
     void ToggleFullScreen( void );
+    void Free( void );
 
     void Fade( int delay = 500 );
     void Fade( const Surface &, const Surface &, const Point &, int level, int delay );

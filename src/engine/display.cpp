@@ -40,6 +40,9 @@ Display::Display() {}
 
 Display::~Display()
 {
+}
+
+void Display::Free( void ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( renderer )
         SDL_DestroyRenderer( renderer );
