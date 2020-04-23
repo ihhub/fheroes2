@@ -248,8 +248,7 @@ int main( int argc, char ** argv )
         }
 #endif
 
-    Display & display = Display::Get();
-    display.Free();
+    Display::Get().Free();
     SDL::Quit();
 
     return EXIT_SUCCESS;
