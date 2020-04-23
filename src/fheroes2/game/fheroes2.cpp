@@ -122,8 +122,6 @@ int main( int argc, char ** argv )
         try
 #endif
         {
-            std::atexit( SDL::Quit );
-
             SetLangEnvPath( conf );
 
             if ( Mixer::isValid() ) {
@@ -249,6 +247,10 @@ int main( int argc, char ** argv )
             VERBOSE( std::endl << conf.String() );
         }
 #endif
+
+    Display::Get().Free();
+    SDL::Quit();
+
     return EXIT_SUCCESS;
 }
 

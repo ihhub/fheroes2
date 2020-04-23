@@ -40,15 +40,23 @@ Display::Display() {}
 
 Display::~Display()
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( renderer )
-        SDL_DestroyRenderer( renderer );
+    Free();
+}
 
-    if ( window )
+void Display::Free()
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( renderer ) {
+        SDL_DestroyRenderer( renderer );
+        renderer = NULL;
+    }
+
+    if ( window ) {
         SDL_DestroyWindow( window );
+        window = NULL;
+    }
 
     FreeSurface( *this );
-#else
 #endif
 }
 
