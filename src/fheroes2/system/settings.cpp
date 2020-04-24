@@ -130,7 +130,7 @@ const settings_t settingsGeneral[] = {
     },
     {
         GLOBAL_AR_CORRECTION,
-        "aspect ratio",
+        "keep aspect ratio",
     },
     {
         GLOBAL_USEUNICODE,
@@ -852,7 +852,7 @@ std::string Settings::String( void ) const
        << "sound volume = " << static_cast<int>( sound_volume ) << std::endl
        << "music volume = " << static_cast<int>( music_volume ) << std::endl
        << "fullscreen = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
-       << "aspect ratio = " << ( opt_global.Modes( GLOBAL_AR_CORRECTION ) ? "on" : "off" ) << std::endl
+       << "keep aspect ratio = " << ( opt_global.Modes( GLOBAL_AR_CORRECTION ) ? "on" : "off" ) << std::endl
        << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl
        << "debug = " << ( debug ? "on" : "off" ) << std::endl;
 
