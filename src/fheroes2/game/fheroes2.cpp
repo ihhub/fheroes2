@@ -159,10 +159,11 @@ int main( int argc, char ** argv )
             DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
 
             // read data dir
-            if ( !AGG::Init() )
+            if ( !AGG::Init() ) {
+                display.Free();
+                SDL::Quit();
                 return EXIT_FAILURE;
-
-            atexit( &AGG::Quit );
+            }
 
             conf.SetBlitSpeed( TestBlitSpeed() );
 #ifdef WITH_ZLIB
@@ -248,6 +249,7 @@ int main( int argc, char ** argv )
         }
 #endif
 
+    AGG::Quit();
     Display::Get().Free();
     SDL::Quit();
 

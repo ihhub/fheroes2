@@ -66,9 +66,8 @@ public:
 protected:
     friend class Texture;
 
-    bool isDisplay( void ) const;
     bool aspectRatio;
-
+    
     Display();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

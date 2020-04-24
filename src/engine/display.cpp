@@ -34,9 +34,14 @@ Display::Display()
     : window( NULL )
     , renderer( NULL )
     , aspectRatio( false )
-{}
+{
+    _isDisplay = true;
+}
 #else
-Display::Display() {}
+Display::Display()
+{
+    _isDisplay = true;
+}
 #endif
 
 Display::~Display()
@@ -401,11 +406,6 @@ Display & Display::Get( void )
 {
     static Display inside;
     return inside;
-}
-
-bool Display::isDisplay( void ) const
-{
-    return true;
 }
 
 Surface Display::GetSurface( void ) const
