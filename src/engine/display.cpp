@@ -133,20 +133,20 @@ void Display::Flip( void )
             SDL_Rect src, dst;
             int ret = 0;
             if (aspectRatio) {
-		SDL_DisplayMode current;
-		SDL_GetCurrentDisplayMode(0, &current);
+                SDL_DisplayMode current;
+                SDL_GetCurrentDisplayMode(0, &current);
 
-		float ratio = (float)surface->w / (float)surface->h;
-     
-		src.w = surface->w;
-		src.h = surface->h;
-		src.x = 0;
-		src.y = 0;
+                float ratio = static_cast<float>(surface->w) / static_cast<float>(surface->h);
 
-		dst.w = (int)(current.h * ratio);
-		dst.h = current.h;
-		dst.x = (current.w - dst.w) / 2;
-		dst.y = 0;
+                src.w = surface->w;
+                src.h = surface->h;
+                src.x = 0;
+                src.y = 0;
+
+                dst.w = static_cast<int>(current.h * ratio);
+                dst.h = current.h;
+                dst.x = (current.w - dst.w) / 2;
+                dst.y = 0;
                 ret = SDL_RenderCopy( renderer, tx, &src, &dst );
             }
             else
