@@ -353,10 +353,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         else if ( le.MouseCursor( buttonExit ) )
             message = _( "Exit hero" );
         else if ( le.MouseCursor( buttonDismiss ) ) {
-            if ( Modes( NOTDISMISS ) )
-                message = "Dismiss disabled, see game info";
-            else
-                message = _( "Dismiss hero" );
+            if ( buttonDismiss.isVisible() ) {
+                if ( Modes( NOTDISMISS ) )
+                    message = "Dismiss disabled, see game info";
+                else
+                    message = _( "Dismiss hero" );
+            }
         }
         else if ( le.MouseCursor( buttonPrevHero ) )
             message = _( "Show prev heroes" );
