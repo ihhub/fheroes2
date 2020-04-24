@@ -165,7 +165,7 @@ public:
 protected:
     static void FreeSurface( Surface & );
 
-    virtual bool isDisplay( void ) const;
+    bool isDisplay( void ) const;
 
     void Lock( void ) const;
     void Unlock( void ) const;
@@ -194,6 +194,7 @@ protected:
     u32 GetPixel( int x, int y ) const;
 
     SDL_Surface * surface;
+    bool _isDisplay;
 };
 
 #endif

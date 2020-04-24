@@ -247,44 +247,52 @@ RGBA RGBA::unpack( int v )
 
 Surface::Surface()
     : surface( NULL )
+    , _isDisplay( false )
 {}
 
 Surface::Surface( const Size & sz, bool amask )
     : surface( NULL )
+    , _isDisplay( false )
 {
     Set( sz.w, sz.h, amask );
 }
 
 Surface::Surface( const Size & sz, u32 bpp, bool amask )
     : surface( NULL )
+    , _isDisplay( false )
 {
     Set( sz.w, sz.h, bpp, amask );
 }
 
 Surface::Surface( const Size & sz, const SurfaceFormat & fm )
     : surface( NULL )
+    , _isDisplay( false )
 {
     Set( sz.w, sz.h, fm );
 }
 
 Surface::Surface( const Surface & bs )
     : surface( NULL )
+    , _isDisplay( false )
 {
     Set( bs, true );
 }
 
 Surface::Surface( const std::string & file )
     : surface( NULL )
+    , _isDisplay( false )
 {
     Load( file );
 }
 
 Surface::Surface( SDL_Surface * sf )
     : surface( sf )
+    , _isDisplay( false )
 {}
 
 Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask )
     : surface( NULL )
+    , _isDisplay( false )
 {
     SurfaceFormat fm = GetRGBAMask( 8 * bytes_per_pixel );
 
@@ -895,7 +903,7 @@ void Surface::Swap( Surface & sf1, Surface & sf2 )
 
 bool Surface::isDisplay( void ) const
 {
-    return false;
+    return _isDisplay;
 }
 
 Surface Surface::RenderScale( const Size & size ) const
@@ -929,7 +937,7 @@ Surface Surface::RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both
         Blit( res );
         break;
 
-        // vertical reflect
+    // vertical reflect
     case 1:
         res.Lock();
         for ( int yy = 0; yy < h(); ++yy )
@@ -966,18 +974,25 @@ Surface Surface::RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180
         Surface res( Size( h(), w() ), GetFormat() ); /* height <-> width */
 
         res.Lock();
-        for ( int yy = 0; yy < h(); ++yy )
-            for ( int xx = 0; xx < w(); ++xx ) {
-                if ( parm == 1 )
-                    res.SetPixel( yy, w() - xx - 1, GetPixel( xx, yy ) );
-                else
-                    res.SetPixel( h() - yy - 1, xx, GetPixel( xx, yy ) );
-            }
+        const int height = h();
+        const int width = w();
+
+        if ( parm == 1 ) {
+            for ( int yy = 0; yy < height; ++yy )
+                for ( int xx = 0; xx < width; ++xx )
+                    res.SetPixel( yy, width - xx - 1, GetPixel( xx, yy ) );
+        }
+        else {
+            for ( int yy = 0; yy < height; ++yy )
+                for ( int xx = 0; xx < width; ++xx )
+                    res.SetPixel( height - yy - 1, xx, GetPixel( xx, yy ) );
+        }
         res.Unlock();
         return res;
     }
-    else if ( parm == 3 )
+    else if ( parm == 3 ) {
         return RenderReflect( 3 );
+    }
 
     return RenderReflect( 0 );
 }
@@ -1104,13 +1119,20 @@ Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
     if ( res.amask() )
         tc |= res.amask();
 
-    res.Lock();
-    if ( fc != tc )
-        for ( int y = 0; y < h(); ++y )
-            for ( int x = 0; x < w(); ++x )
-                if ( fc == GetPixel( x, y ) )
+    if ( fc != tc ) {
+        res.Lock();
+        const int height = h();
+        const int width = w();
+        for ( int y = 0; y < height; ++y ) {
+            for ( int x = 0; x < width; ++x ) {
+                if ( fc == GetPixel( x, y ) ) {
                     res.SetPixel( x, y, tc );
-    res.Unlock();
+                }
+            }
+        }
+        res.Unlock();
+    }
+
     return res;
 }
 
