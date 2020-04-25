@@ -135,9 +135,9 @@ void Display::Flip( void )
         }
         else {
             // AR correction
-            SDL_Rect src, dst;
             int ret = 0;
             if (aspectRatio) {
+                SDL_Rect src, dst;
                 SDL_DisplayMode current;
                 SDL_GetCurrentDisplayMode(0, &current);
 
