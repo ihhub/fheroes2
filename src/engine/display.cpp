@@ -148,7 +148,7 @@ void Display::Flip( void )
                 src.x = 0;
                 src.y = 0;
 
-                dst.w = static_cast<int>(current.h * ratio);
+                dst.w = static_cast<int>( current.h * ratio + 0.5f);
                 dst.h = current.h;
                 dst.x = (current.w - dst.w) / 2;
                 dst.y = 0;
