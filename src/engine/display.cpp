@@ -141,7 +141,7 @@ void Display::Flip( void )
                 SDL_DisplayMode current;
                 SDL_GetCurrentDisplayMode(0, &current);
 
-                float ratio = static_cast<float>(surface->w) / static_cast<float>(surface->h);
+                const float ratio = static_cast<float>(surface->w) / static_cast<float>(surface->h);
 
                 src.w = surface->w;
                 src.h = surface->h;
