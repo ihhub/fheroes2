@@ -66,7 +66,8 @@ public:
 protected:
     friend class Texture;
 
-    bool aspectRatio;
+    bool keepAspectRatio;
+    SDL_Rect srcRenderSurface, dstRenderSurface;
     
     Display();
 

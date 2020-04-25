@@ -33,7 +33,7 @@
 Display::Display()
     : window( NULL )
     , renderer( NULL )
-    , aspectRatio( false )
+    , keepAspectRatio( false )
 {
     _isDisplay = true;
 }
@@ -72,10 +72,10 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
     u32 flags = SDL_WINDOW_SHOWN;
     if ( fullscreen ) {
         flags |= SDL_WINDOW_FULLSCREEN;
-        aspectRatio = aspect;
+        keepAspectRatio = aspect;
     }
     else
-        aspectRatio = false;
+        keepAspectRatio = false;
 
     if ( renderer )
         SDL_DestroyRenderer( renderer );
@@ -87,6 +87,24 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
     }
 
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
+
+    if ( keepAspectRatio ) {
+            SDL_DisplayMode currentVideoMode;
+            SDL_GetCurrentDisplayMode(0, &currentVideoMode);
+
+            const float ratio = static_cast<float>( w ) / static_cast<float>( h );
+
+            srcRenderSurface.w = w;
+	    srcRenderSurface.h = h;
+	    srcRenderSurface.x = 0;
+	    srcRenderSurface.y = 0;
+
+            dstRenderSurface.w = static_cast<int>( currentVideoMode.h * ratio + 0.5f);
+            dstRenderSurface.h = currentVideoMode.h;
+            dstRenderSurface.x = (currentVideoMode.w - dstRenderSurface.w) / 2;
+            dstRenderSurface.y = 0;
+    }
+
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
 
     if ( !renderer )
@@ -137,23 +155,8 @@ void Display::Flip( void )
         else {
             // AR correction
             int ret = 0;
-            if (aspectRatio) {
-                SDL_Rect src, dst;
-                SDL_DisplayMode current;
-                SDL_GetCurrentDisplayMode(0, &current);
-
-                const float ratio = static_cast<float>(surface->w) / static_cast<float>(surface->h);
-
-                src.w = surface->w;
-                src.h = surface->h;
-                src.x = 0;
-                src.y = 0;
-
-                dst.w = static_cast<int>( current.h * ratio + 0.5f);
-                dst.h = current.h;
-                dst.x = (current.w - dst.w) / 2;
-                dst.y = 0;
-                ret = SDL_RenderCopy( renderer, tx, &src, &dst );
+            if (keepAspectRatio) {
+                ret = SDL_RenderCopy( renderer, tx, &srcRenderSurface, &dstRenderSurface );
             }
             else
                 ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
