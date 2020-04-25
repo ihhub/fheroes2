@@ -77,11 +77,11 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000800,
     GLOBAL_SHOWSTATUS = 0x00001000,
 
-    GLOBAL_FONTRENDERBLENDED1 = 0x00010000,
-    GLOBAL_FONTRENDERBLENDED2 = 0x00020000,
-    GLOBAL_FULLSCREEN = 0x00040000,
-    GLOBAL_USESWSURFACE = 0x00080000,
-    GLOBAL_AR_CORRECTION = 0x00100000,
+    GLOBAL_AR_CORRECTION = 0x00010000,
+    GLOBAL_FONTRENDERBLENDED1 = 0x00020000,
+    GLOBAL_FONTRENDERBLENDED2 = 0x00040000,
+    GLOBAL_FULLSCREEN = 0x00400000,
+    GLOBAL_USESWSURFACE = 0x00800000,
 
     GLOBAL_SOUND = 0x01000000,
     GLOBAL_MUSIC_EXT = 0x02000000,
@@ -129,10 +129,6 @@ const settings_t settingsGeneral[] = {
         "full screen",
     },
     {
-        GLOBAL_AR_CORRECTION,
-        "keep aspect ratio",
-    },
-    {
         GLOBAL_USEUNICODE,
         "unicode",
     },
@@ -151,6 +147,10 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_USESWSURFACE,
         "use swsurface only",
+    },
+    {
+        GLOBAL_AR_CORRECTION,
+        "keep aspect ratio",
     },
     {
         0,
