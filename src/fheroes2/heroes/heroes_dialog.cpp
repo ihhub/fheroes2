@@ -56,7 +56,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     if ( fade && Settings::Get().ExtGameUseFade() )
         display.Fade();
 
-    Dialog::FrameBorder background( Size( 640, 480 ) );
+    Dialog::FrameBorder background( Display::GetDefaultSize() );
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );
 

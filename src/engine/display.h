@@ -31,11 +31,18 @@ class Texture;
 class Display : public Surface
 {
 public:
+    enum
+    {
+        DEFAULT_WIDTH = 640,
+        DEFAULT_HEIGHT = 480,
+    };
+
     ~Display();
 
     static Display & Get( void );
 
     Size GetSize( void ) const;
+    static Size GetDefaultSize( void );
 
     std::string GetInfo( void ) const;
     Size GetMaxMode( bool enable_rotate ) const;
@@ -48,7 +55,6 @@ public:
     void Present( void );
     void Clear( void );
     void ToggleFullScreen( void );
-    void Free( void );
 
     void Fade( int delay = 500 );
     void Fade( const Surface &, const Surface &, const Point &, int level, int delay );

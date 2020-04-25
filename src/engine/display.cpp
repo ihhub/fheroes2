@@ -45,11 +45,6 @@ Display::Display()
 
 Display::~Display()
 {
-    Free();
-}
-
-void Display::Free()
-{
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( renderer ) {
         SDL_DestroyRenderer( renderer );
@@ -118,6 +113,11 @@ Size Display::GetSize( void ) const
 #else
     return Size( w(), h() );
 #endif
+}
+
+Size Display::GetDefaultSize( void )
+{
+    return Size( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 }
 
 void Display::Flip( void )

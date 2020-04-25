@@ -566,7 +566,7 @@ void Kingdom::OverviewDialog( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder background( Size( 640, 480 ) );
+    Dialog::FrameBorder background( Display::GetDefaultSize() );
 
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );

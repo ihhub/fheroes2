@@ -107,12 +107,12 @@ int Game::LoadStandard( void )
     cursor.SetThemes( cursor.POINTER );
 
     Display & display = Display::Get();
-    display.Fill( ColorBlack );
+
+    AGG::RegisterScalableICN( ICN::HEROES );
 
     // image background
     const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
-    back.Blit( top );
+    back.Blit( Point( 0, 0 ) );
 
     cursor.Show();
     display.Flip();

@@ -175,7 +175,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
 
-    if ( conf.VideoMode().w == 640 && conf.VideoMode().h == 480 )
+    if ( conf.VideoMode() == Display::GetDefaultSize() )
         states.push_back( Settings::GAME_USE_FADE );
 
 #ifdef BUILD_RELEASE

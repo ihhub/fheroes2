@@ -134,7 +134,7 @@ void Game::OpenCastleDialog( Castle & castle )
     Display & display = Display::Get();
     KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
     Interface::StatusWindow::ResetTimer();
-    bool need_fade = conf.ExtGameUseFade() && 640 == display.w() && 480 == display.h();
+    bool need_fade = conf.ExtGameUseFade() && display.GetSize() == Display::GetDefaultSize();
 
     if ( it != myCastles.end() ) {
         int result = Dialog::ZERO;
@@ -185,7 +185,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
     Interface::StatusWindow::ResetTimer();
     Interface::Basic & I = Interface::Basic::Get();
     Interface::GameArea & gameArea = I.GetGameArea();
-    bool need_fade = conf.ExtGameUseFade() && 640 == display.w() && 480 == display.h();
+    bool need_fade = conf.ExtGameUseFade() && display.GetSize() == Display::GetDefaultSize();
 
     if ( it != myHeroes.end() ) {
         int result = Dialog::ZERO;

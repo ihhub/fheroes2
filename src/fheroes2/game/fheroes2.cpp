@@ -122,6 +122,8 @@ int main( int argc, char ** argv )
         try
 #endif
         {
+            std::atexit( SDL::Quit );
+
             SetLangEnvPath( conf );
 
             if ( Mixer::isValid() ) {
@@ -159,11 +161,10 @@ int main( int argc, char ** argv )
             DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
 
             // read data dir
-            if ( !AGG::Init() ) {
-                display.Free();
-                SDL::Quit();
+            if ( !AGG::Init() )
                 return EXIT_FAILURE;
-            }
+
+            atexit( &AGG::Quit );
 
             conf.SetBlitSpeed( TestBlitSpeed() );
 #ifdef WITH_ZLIB
@@ -248,10 +249,6 @@ int main( int argc, char ** argv )
             VERBOSE( std::endl << conf.String() );
         }
 #endif
-
-    AGG::Quit();
-    Display::Get().Free();
-    SDL::Quit();
 
     return EXIT_SUCCESS;
 }

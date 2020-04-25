@@ -53,13 +53,16 @@ int Game::MainMenu( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
+    // We have to register scalable ICNs in order to recieved a scaled version of it
+    AGG::RegisterScalableICN( ICN::HEROES );
+    AGG::RegisterScalableICN( ICN::BTNSHNGL );
+    AGG::RegisterScalableICN( ICN::SHNGANIM );
+
     Display & display = Display::Get();
-    display.Fill( ColorBlack );
 
     // image background
     const Sprite & sprite = AGG::GetICN( ICN::HEROES, 0 );
-    const Point top( ( display.w() - sprite.w() ) / 2, ( display.h() - sprite.h() ) / 2 );
-    sprite.Blit( top );
+    sprite.Blit( Point( 0, 0 ) );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -69,19 +72,19 @@ int Game::MainMenu( void )
     const Sprite & s4 = AGG::GetICN( ICN::BTNSHNGL, CREDITS_DEFAULT );
     const Sprite & s5 = AGG::GetICN( ICN::BTNSHNGL, QUIT_DEFAULT );
 
-    Button buttonNewGame( top.x + s1.x(), top.y + s1.y(), ICN::BTNSHNGL, NEWGAME_DEFAULT, NEWGAME_DEFAULT + 2 );
-    Button buttonLoadGame( top.x + s2.x(), top.y + s2.y(), ICN::BTNSHNGL, LOADGAME_DEFAULT, LOADGAME_DEFAULT + 2 );
-    Button buttonHighScores( top.x + s3.x(), top.y + s3.y(), ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
-    Button buttonCredits( top.x + s4.x(), top.y + s4.y(), ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
-    Button buttonQuit( top.x + s5.x(), top.y + s5.y(), ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
+    Button buttonNewGame( s1.x(), s1.y(), ICN::BTNSHNGL, NEWGAME_DEFAULT, NEWGAME_DEFAULT + 2 );
+    Button buttonLoadGame( s2.x(), s2.y(), ICN::BTNSHNGL, LOADGAME_DEFAULT, LOADGAME_DEFAULT + 2 );
+    Button buttonHighScores( s3.x(), s3.y(), ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
+    Button buttonCredits( s4.x(), s4.y(), ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
+    Button buttonQuit( s5.x(), s5.y(), ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
     const Point lt_pt( 0, 0 );
 
     const Sprite & lantern10 = AGG::GetICN( ICN::SHNGANIM, 0 );
-    lantern10.Blit( top.x + lantern10.x(), top.y + lantern10.y() );
+    lantern10.Blit( lantern10.x(), lantern10.y() );
 
     const Sprite & lantern11 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
-    lantern11.Blit( top.x + lantern11.x(), top.y + lantern11.y() );
+    lantern11.Blit( lantern11.x(), lantern11.y() );
 
     buttonNewGame.Draw();
     buttonLoadGame.Draw();
@@ -109,7 +112,7 @@ int Game::MainMenu( void )
     for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); i++ ) {
         cursor.Hide();
         const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
-        sprite.Blit( top.x + sprite.x(), top.y + sprite.y() );
+        sprite.Blit( sprite.x(), sprite.y() );
         cursor.Show();
     }
 
@@ -133,7 +136,7 @@ int Game::MainMenu( void )
 
                 cursor.Hide();
                 const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, frame );
-                sprite.Blit( top.x + sprite.x(), top.y + sprite.y() );
+                sprite.Blit( sprite.x(), sprite.y() );
                 cursor.Show();
             }
         }
@@ -171,7 +174,7 @@ int Game::MainMenu( void )
         if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
             cursor.Hide();
             const Sprite & lantern12 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame++ ) );
-            lantern12.Blit( top.x + lantern12.x(), top.y + lantern12.y() );
+            lantern12.Blit( lantern12.x(), lantern12.y() );
             cursor.Show();
             display.Flip();
         }

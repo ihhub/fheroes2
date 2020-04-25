@@ -76,7 +76,7 @@ int Game::ScenarioInfo( void )
 
     Display & display = Display::Get();
 
-    Point top, pointDifficultyInfo, pointOpponentInfo, pointClassInfo;
+    Point pointDifficultyInfo, pointOpponentInfo, pointClassInfo;
     Rect rectPanel;
     Button * buttonSelectMaps = NULL;
     Button * buttonOk = NULL;
@@ -112,11 +112,12 @@ int Game::ScenarioInfo( void )
         text.Blit( rectPanel.x + ( rectPanel.w - text.w() ) / 2, rectPanel.y + 5 );
     }
     else {
+        AGG::RegisterScalableICN( ICN::HEROES );
+
         const Sprite & panel = AGG::GetICN( ICN::NGHSBKG, 0 );
         const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-        const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
 
-        rectPanel = Rect( top.x + 204, top.y + 32, panel.w(), panel.h() );
+        rectPanel = Rect( 204, 32, panel.w(), panel.h() );
         pointDifficultyInfo = Point( rectPanel.x + 24, rectPanel.y + 93 );
         pointOpponentInfo = Point( rectPanel.x + 24, rectPanel.y + 202 );
         pointClassInfo = Point( rectPanel.x + 24, rectPanel.y + 282 );
@@ -131,7 +132,7 @@ int Game::ScenarioInfo( void )
         buttonOk = new Button( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
         buttonCancel = new Button( rectPanel.x + 287, rectPanel.y + 380, ICN::NGEXTRA, 68, 69 );
 
-        back.Blit( top );
+        back.Blit( Point( 0, 0 ) );
     }
 
     bool resetStartingSettings = conf.MapsFile().empty();

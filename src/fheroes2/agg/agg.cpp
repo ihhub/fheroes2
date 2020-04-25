@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <set>
 #include <vector>
 
 #include "../../tools/palette_h2.h"
@@ -147,6 +148,10 @@ namespace AGG
 
     std::vector<SDL_Color> pal_colors;
 
+    std::set<int> scalableICNIds;
+    Size scaledResolution;
+    std::map<int, std::vector<Sprite> > scaledSprites;
+
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
@@ -181,6 +186,51 @@ namespace AGG
     bool ReadDataDir( void );
     const std::vector<u8> & ReadICNChunk( int icn, u32 );
     const std::vector<u8> & ReadChunk( const std::string & );
+
+    bool IsICNScalable( int icnId )
+    {
+        return scalableICNIds.find( icnId ) != scalableICNIds.end();
+    }
+
+    Sprite RescaleSpriteIfNeeded( int icnId, u32 index )
+    {
+        static const Size originalResolution( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
+        const Size resolution = Display::Get().GetSize();
+
+        if ( resolution == originalResolution || !IsICNScalable( icnId ) )
+            return icn_cache[icnId].sprites[index];
+
+        // resolution can be changed during application runtime
+        if ( scaledResolution != resolution ) {
+            scaledSprites.clear();
+            scaledResolution = resolution;
+        }
+
+        std::map<int, std::vector<Sprite> >::iterator iter = scaledSprites.find( icnId );
+        if ( iter == scaledSprites.end() ) {
+            scaledSprites[icnId] = std::vector<Sprite>();
+            iter = scaledSprites.find( icnId );
+            iter->second.resize( icn_cache[icnId].count );
+        }
+
+        if ( iter->second[index].isValid() )
+            return iter->second[index];
+
+        const icn_cache_t & cachedIcn = icn_cache[icnId];
+        if ( !cachedIcn.sprites[index].isValid() )
+            return Sprite();
+
+        const double scaleX = scaledResolution.w / static_cast<double>( Display::DEFAULT_WIDTH );
+        const double scaleY = scaledResolution.h / static_cast<double>( Display::DEFAULT_HEIGHT );
+
+        const Size originalSize = cachedIcn.sprites[index].GetSize();
+        iter->second[index] = Sprite( cachedIcn.sprites[index].RenderScale(
+                                          Size( static_cast<uint16_t>( originalSize.w * scaleX + 0.5 ), static_cast<uint16_t>( originalSize.h * scaleY + 0.5 ) ) ),
+                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().x * scaleX + 0.5 ),
+                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().y * scaleY + 0.5 ) );
+
+        return iter->second[index];
+    }
 }
 
 Sprite ICNSprite::CreateSprite( bool reflect, bool shadow ) const
@@ -1172,7 +1222,10 @@ Sprite AGG::GetICN( int icn, u32 index, bool reflect )
             LoadICN( icn, index, reflect );
         }
 
-        result = reflect ? v.reflect[index] : v.sprites[index];
+        if ( !reflect && IsICNScalable( icn ) )
+            result = RescaleSpriteIfNeeded( icn, index );
+        else
+            result = reflect ? v.reflect[index] : v.sprites[index];
 
         // invalid sprite?
         if ( !result.isValid() ) {
@@ -1916,6 +1969,8 @@ void AGG::Quit( void )
     fnt_cache.clear();
     pal_colors.clear();
 
+    scaledSprites.clear();
+
 #ifdef WITH_TTF
     delete[] fonts;
 #endif
@@ -1924,4 +1979,9 @@ void AGG::Quit( void )
 RGBA AGG::GetPaletteColor( u32 index )
 {
     return index < pal_colors.size() ? RGBA( pal_colors[index].r, pal_colors[index].g, pal_colors[index].b ) : RGBA( 0, 0, 0 );
+}
+
+void AGG::RegisterScalableICN( int icnId )
+{
+    scalableICNIds.insert( icnId );
 }
