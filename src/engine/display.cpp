@@ -89,20 +89,20 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
 
     if ( keepAspectRatio ) {
-            SDL_DisplayMode currentVideoMode;
-            SDL_GetCurrentDisplayMode(0, &currentVideoMode);
+        SDL_DisplayMode currentVideoMode;
+        SDL_GetCurrentDisplayMode(0, &currentVideoMode);
 
-            const float ratio = static_cast<float>( w ) / static_cast<float>( h );
+        const float ratio = static_cast<float>( w ) / static_cast<float>( h );
 
-            srcRenderSurface.w = w;
-	    srcRenderSurface.h = h;
-	    srcRenderSurface.x = 0;
-	    srcRenderSurface.y = 0;
+        srcRenderSurface.w = w;
+	srcRenderSurface.h = h;
+	srcRenderSurface.x = 0;
+	srcRenderSurface.y = 0;
 
-            dstRenderSurface.w = static_cast<int>( currentVideoMode.h * ratio + 0.5f);
-            dstRenderSurface.h = currentVideoMode.h;
-            dstRenderSurface.x = (currentVideoMode.w - dstRenderSurface.w) / 2;
-            dstRenderSurface.y = 0;
+        dstRenderSurface.w = static_cast<int>( currentVideoMode.h * ratio + 0.5f);
+        dstRenderSurface.h = currentVideoMode.h;
+        dstRenderSurface.x = (currentVideoMode.w - dstRenderSurface.w) / 2;
+        dstRenderSurface.y = 0;
     }
 
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
@@ -155,13 +155,13 @@ void Display::Flip( void )
         else {
             // AR correction
             int ret = 0;
-            if (keepAspectRatio) {
+            if ( keepAspectRatio ) {
                 ret = SDL_RenderCopy( renderer, tx, &srcRenderSurface, &dstRenderSurface );
             }
             else
                 ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
 
-            if (0 != ret) {
+            if ( 0 != ret ) {
                 ERROR( SDL_GetError() );
             }
             else
