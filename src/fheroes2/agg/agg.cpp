@@ -206,7 +206,7 @@ namespace AGG
             scaledResolution = resolution;
         }
 
-        std::map< int, std::vector<Sprite> >::iterator iter = scaledSprites.find( icnId );
+        std::map<int, std::vector<Sprite> >::iterator iter = scaledSprites.find( icnId );
         if ( iter == scaledSprites.end() ) {
             scaledSprites[icnId] = std::vector<Sprite>();
             iter = scaledSprites.find( icnId );
@@ -225,11 +225,9 @@ namespace AGG
 
         const Size originalSize = cachedIcn.sprites[index].GetSize();
         iter->second[index] = Sprite( cachedIcn.sprites[index].RenderScale(
-                                  Size( static_cast<uint16_t>( originalSize.w * scaleX + 0.5 ),
-                                        static_cast<uint16_t>( originalSize.h * scaleY + 0.5 ) )
-                                      ),
-                                  static_cast<int32_t>( cachedIcn.sprites[index].GetPos().x * scaleX + 0.5 ),
-                                  static_cast<int32_t>( cachedIcn.sprites[index].GetPos().y * scaleY + 0.5 ) );
+                                          Size( static_cast<uint16_t>( originalSize.w * scaleX + 0.5 ), static_cast<uint16_t>( originalSize.h * scaleY + 0.5 ) ) ),
+                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().x * scaleX + 0.5 ),
+                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().y * scaleY + 0.5 ) );
 
         return iter->second[index];
     }

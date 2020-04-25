@@ -337,7 +337,7 @@ int Game::NewGame( void )
 
     Button buttonStandartGame( back.w() - 185, 45, ICN::BTNNEWGM, 0, 1 );
     Button buttonCampainGame( back.w() - 185, 110, ICN::BTNNEWGM, 2, 3 );
-    Button buttonMultiGame(  back.w() - 185, 175, ICN::BTNNEWGM, 4, 5 );
+    Button buttonMultiGame( back.w() - 185, 175, ICN::BTNNEWGM, 4, 5 );
     Button buttonBattleGame( back.w() - 185, 240, ICN::BTNBATTLEONLY, 0, 1 );
     Button buttonSettings( back.w() - 185, 305, ICN::BTNDCCFG, 4, 5 );
     Button buttonCancelGame( back.w() - 185, 375, ICN::BTNNEWGM, 6, 7 );
@@ -414,7 +414,7 @@ int Game::NewMulti( void )
 
     // image background
     const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    back.Blit( Point(0, 0 ) );
+    back.Blit( Point( 0, 0 ) );
 
     const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
     panel.Blit( back.w() - 235, 5 );
