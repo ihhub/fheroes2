@@ -831,7 +831,6 @@ bool Settings::Save( const std::string & filename ) const
 std::string Settings::String( void ) const
 {
     std::ostringstream os;
-    const settings_t * ptr = settingsGeneral;
 
     os << "# fheroes2 config, version: " << GetVersion() << std::endl;
     os << "data = " << data_params << std::endl;
