@@ -99,7 +99,7 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
         srcRenderSurface.x = 0;
         srcRenderSurface.y = 0;
 
-        dstRenderSurface.w = static_cast<int>( currentVideoMode.h * ratio + 0.5f);
+        dstRenderSurface.w = static_cast<int>( currentVideoMode.h * ratio + 0.5f );
         dstRenderSurface.h = currentVideoMode.h;
         dstRenderSurface.x = ( currentVideoMode.w - dstRenderSurface.w ) / 2;
         dstRenderSurface.y = 0;
