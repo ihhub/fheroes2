@@ -76,6 +76,9 @@ namespace AGG
     RGBA GetPaletteColor( u32 index );
     ICNSprite RenderICNSprite( int, u32 );
     void RenderICNSprite( int icn, u32 index, const Rect & srt, const Point & dpt, Surface & dst );
+
+    // Some ICNs need to be rescaled. You have to register their IDs before calling GetICN() function
+    void RegisterScalableICN( int icnId );
 }
 
 #endif

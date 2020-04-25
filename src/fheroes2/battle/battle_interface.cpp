@@ -1635,7 +1635,7 @@ void Battle::Interface::RedrawBorder( void )
 {
     const Size displaySize = Display::Get().GetSize();
 
-    if ( displaySize != Size( 320, 240 ) && displaySize != Size( 640, 480 ) )
+    if ( displaySize != Size( 320, 240 ) && displaySize != Display::GetDefaultSize() )
         Dialog::FrameBorder::RenderRegular( border.GetRect() );
 }
 

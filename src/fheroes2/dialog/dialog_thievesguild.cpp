@@ -239,7 +239,7 @@ void Dialog::ThievesGuild( bool oracle )
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    Dialog::FrameBorder frameborder( Size( 640, 480 ) );
+    Dialog::FrameBorder frameborder( Display::GetDefaultSize() );
     const Point & cur_pt = frameborder.GetArea();
     Point dst_pt( cur_pt );
 

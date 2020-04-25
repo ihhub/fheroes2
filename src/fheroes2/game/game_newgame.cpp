@@ -256,19 +256,20 @@ int Game::NewNetwork( void )
     Display & display = Display::Get();
     // Settings & conf = Settings::Get();
 
+    AGG::RegisterScalableICN( ICN::HEROES );
+
     // image background
     const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
-    back.Blit( top );
+    back.Blit( Point( 0, 0 ) );
 
     const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
-    panel.Blit( top.x + 405, top.y + 5 );
+    panel.Blit( back.w() - 235, 5 );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonHost( top.x + 455, top.y + 45, ICN::BTNNET, 0, 1 );
-    Button buttonGuest( top.x + 455, top.y + 110, ICN::BTNNET, 2, 3 );
-    Button buttonCancelGame( top.x + 455, top.y + 375, ICN::BTNMP, 8, 9 );
+    Button buttonHost( back.w() - 185, 45, ICN::BTNNET, 0, 1 );
+    Button buttonGuest( back.w() - 185, 110, ICN::BTNNET, 2, 3 );
+    Button buttonCancelGame( back.w() - 185, 375, ICN::BTNMP, 8, 9 );
 
     buttonHost.Draw();
     buttonGuest.Draw();
@@ -321,27 +322,25 @@ int Game::NewGame( void )
     cursor.SetThemes( cursor.POINTER );
 
     Display & display = Display::Get();
-    display.Fill( ColorBlack );
 
     // load game settings
     conf.BinaryLoad();
 
     // image background
     const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
-    back.Blit( top );
+    back.Blit( Point( 0, 0 ) );
 
     const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
-    panel.Blit( top.x + 405, top.y + 5 );
+    panel.Blit( back.w() - 235, 5 );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonStandartGame( top.x + 455, top.y + 45, ICN::BTNNEWGM, 0, 1 );
-    Button buttonCampainGame( top.x + 455, top.y + 110, ICN::BTNNEWGM, 2, 3 );
-    Button buttonMultiGame( top.x + 455, top.y + 175, ICN::BTNNEWGM, 4, 5 );
-    Button buttonBattleGame( top.x + 455, top.y + 240, ICN::BTNBATTLEONLY, 0, 1 );
-    Button buttonSettings( top.x + 455, top.y + 305, ICN::BTNDCCFG, 4, 5 );
-    Button buttonCancelGame( top.x + 455, top.y + 375, ICN::BTNNEWGM, 6, 7 );
+    Button buttonStandartGame( back.w() - 185, 45, ICN::BTNNEWGM, 0, 1 );
+    Button buttonCampainGame( back.w() - 185, 110, ICN::BTNNEWGM, 2, 3 );
+    Button buttonMultiGame(  back.w() - 185, 175, ICN::BTNNEWGM, 4, 5 );
+    Button buttonBattleGame( back.w() - 185, 240, ICN::BTNBATTLEONLY, 0, 1 );
+    Button buttonSettings( back.w() - 185, 305, ICN::BTNDCCFG, 4, 5 );
+    Button buttonCancelGame( back.w() - 185, 375, ICN::BTNNEWGM, 6, 7 );
 
     buttonStandartGame.Draw();
     buttonCampainGame.Draw();
@@ -415,17 +414,16 @@ int Game::NewMulti( void )
 
     // image background
     const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
-    back.Blit( top );
+    back.Blit( Point(0, 0 ) );
 
     const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
-    panel.Blit( top.x + 405, top.y + 5 );
+    panel.Blit( back.w() - 235, 5 );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonHotSeat( top.x + 455, top.y + 45, ICN::BTNMP, 0, 1 );
-    Button buttonNetwork( top.x + 455, top.y + 110, ICN::BTNMP, 2, 3 );
-    Button buttonCancelGame( top.x + 455, top.y + 375, ICN::BTNMP, 8, 9 );
+    Button buttonHotSeat( back.w() - 185, 45, ICN::BTNMP, 0, 1 );
+    Button buttonNetwork( back.w() - 185, 110, ICN::BTNMP, 2, 3 );
+    Button buttonCancelGame( back.w() - 185, 375, ICN::BTNMP, 8, 9 );
 
     buttonHotSeat.Draw();
     buttonCancelGame.Draw();
@@ -478,20 +476,19 @@ u32 Game::SelectCountPlayers( void )
 
     // image background
     const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
-    back.Blit( top );
+    back.Blit( Point( 0, 0 ) );
 
     const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
-    panel.Blit( top.x + 405, top.y + 5 );
+    panel.Blit( back.w() - 235, 5 );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button button2Players( top.x + 455, top.y + 45, ICN::BTNHOTST, 0, 1 );
-    Button button3Players( top.x + 455, top.y + 110, ICN::BTNHOTST, 2, 3 );
-    Button button4Players( top.x + 455, top.y + 175, ICN::BTNHOTST, 4, 5 );
-    Button button5Players( top.x + 455, top.y + 240, ICN::BTNHOTST, 6, 7 );
-    Button button6Players( top.x + 455, top.y + 305, ICN::BTNHOTST, 8, 9 );
-    Button buttonCancel( top.x + 455, top.y + 375, ICN::BTNNEWGM, 6, 7 );
+    Button button2Players( back.w() - 185, 45, ICN::BTNHOTST, 0, 1 );
+    Button button3Players( back.w() - 185, 110, ICN::BTNHOTST, 2, 3 );
+    Button button4Players( back.w() - 185, 175, ICN::BTNHOTST, 4, 5 );
+    Button button5Players( back.w() - 185, 240, ICN::BTNHOTST, 6, 7 );
+    Button button6Players( back.w() - 185, 305, ICN::BTNHOTST, 8, 9 );
+    Button buttonCancel( back.w() - 185, 375, ICN::BTNNEWGM, 6, 7 );
 
     button2Players.Draw();
     button3Players.Draw();

@@ -151,7 +151,7 @@ bool Battle::Only::ChangeSettings( void )
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    Dialog::FrameBorder frameborder( Size( 640, 480 ) );
+    Dialog::FrameBorder frameborder( Display::GetDefaultSize() );
 
     const Point & cur_pt = frameborder.GetArea();
 

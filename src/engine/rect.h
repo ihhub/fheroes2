@@ -52,8 +52,7 @@ struct Size
 {
     u16 w, h;
 
-    Size();
-    Size( u16, u16 );
+    Size( u16 width = 0, u16 height = 0 );
     Size( const Point & );
 
     bool isEmpty( void ) const;

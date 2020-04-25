@@ -446,7 +446,7 @@ std::string Settings::GetVersion( void )
 /* constructor */
 Settings::Settings()
     : debug( DEFAULT_DEBUG )
-    , video_mode( 640, 480 )
+    , video_mode( Display::GetDefaultSize() )
     , game_difficulty( Difficulty::NORMAL )
     , font_normal( "dejavusans.ttf" )
     , font_small( "dejavusans.ttf" )
@@ -467,6 +467,7 @@ Settings::Settings()
     ExtSetModes( GAME_SHOW_SDL_LOGO );
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( CASTLE_ALLOW_BUY_FROM_WELL );
+    ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
 
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
@@ -723,8 +724,8 @@ bool Settings::Read( const std::string & filename )
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
         // default
-        video_mode.w = 640;
-        video_mode.h = 480;
+        video_mode.w = Display::DEFAULT_WIDTH;
+        video_mode.h = Display::DEFAULT_HEIGHT;
 
         std::string value = StringLower( sval );
         const size_t pos = value.find( 'x' );
@@ -1167,7 +1168,7 @@ void Settings::SetScrollSpeed( int speed )
 /* return full screen */
 bool Settings::QVGA( void ) const
 {
-    return video_mode.w && video_mode.h && ( video_mode.w < 640 || video_mode.h < 480 );
+    return video_mode.w && video_mode.h && ( video_mode.w < Display::DEFAULT_WIDTH || video_mode.h < Display::DEFAULT_HEIGHT );
 }
 
 bool Settings::UseAltResource( void ) const
@@ -1738,7 +1739,7 @@ bool Settings::ExtGameAutosaveOn( void ) const
 
 bool Settings::ExtGameUseFade( void ) const
 {
-    return video_mode.w == 640 && video_mode.h == 480 && ExtModes( GAME_USE_FADE );
+    return video_mode == Display::GetDefaultSize() && ExtModes( GAME_USE_FADE );
 }
 
 bool Settings::ExtGameShowSDL( void ) const
