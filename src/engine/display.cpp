@@ -72,8 +72,7 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
     u32 flags = SDL_WINDOW_SHOWN;
     if ( fullscreen ) {
         flags |= SDL_WINDOW_FULLSCREEN;
-        if ( aspect )
-            aspectRatio = true;
+        aspectRatio = aspect;
     }
 
     if ( renderer )
