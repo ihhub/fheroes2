@@ -67,7 +67,8 @@ protected:
     friend class Texture;
 
     bool keepAspectRatio;
-    SDL_Rect srcRenderSurface, dstRenderSurface;
+    SDL_Rect srcRenderSurface
+    SDL_Rect dstRenderSurface;
     Display();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
