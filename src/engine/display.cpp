@@ -74,8 +74,9 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
         flags |= SDL_WINDOW_FULLSCREEN;
         keepAspectRatio = aspect;
     }
-    else
+    else {
         keepAspectRatio = false;
+    }
 
     if ( renderer )
         SDL_DestroyRenderer( renderer );
@@ -155,15 +156,13 @@ void Display::Flip( void )
         else {
             // AR correction
             int ret = 0;
-            if ( keepAspectRatio ) {
+            if ( keepAspectRatio )
                 ret = SDL_RenderCopy( renderer, tx, &srcRenderSurface, &dstRenderSurface );
-            }
             else
                 ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
 
-            if ( 0 != ret ) {
+            if ( 0 != ret )
                 ERROR( SDL_GetError() );
-            }
             else
                 SDL_RenderPresent( renderer );
         }
