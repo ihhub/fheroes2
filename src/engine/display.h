@@ -40,7 +40,7 @@ public:
     std::string GetInfo( void ) const;
     Size GetMaxMode( bool enable_rotate ) const;
 
-    void SetVideoMode( int w, int h, bool fullscreen, bool aspect );
+    void SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo );
     void SetCaption( const char * );
     void SetIcons( Surface & );
 

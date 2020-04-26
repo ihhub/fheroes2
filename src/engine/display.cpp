@@ -66,12 +66,17 @@ void Display::Free()
 #endif
 }
 
-void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
+void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     u32 flags = SDL_WINDOW_SHOWN;
     if ( fullscreen ) {
-        flags |= SDL_WINDOW_FULLSCREEN;
+        if ( changeVideo ) {
+            flags |= SDL_WINDOW_FULLSCREEN;
+        }
+        else {
+            flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+        }
         keepAspectRatio = aspect;
     }
     else {
@@ -107,6 +112,8 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect )
     }
 
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
+    SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+    SDL_RenderClear( renderer );
 
     if ( !renderer )
         Error::Except( __FUNCTION__, SDL_GetError() );
