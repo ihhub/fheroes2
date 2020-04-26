@@ -161,10 +161,12 @@ void Display::Flip( void )
             else
                 ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
 
-            if ( 0 != ret )
+            if ( 0 != ret ) {
                 ERROR( SDL_GetError() );
-            else
+            }
+            else {
                 SDL_RenderPresent( renderer );
+            }
         }
 
         SDL_DestroyTexture( tx );
