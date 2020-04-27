@@ -28,6 +28,7 @@
 
 #include "gamedefs.h"
 #include "icn.h"
+#include "pal.h"
 #include "sprite.h"
 #include "til.h"
 #include "xmi.h"
@@ -73,9 +74,7 @@ namespace AGG
     void PlayMusic( int mus, bool loop = true );
     void ResetMixer( void );
 
-    RGBA GetPaletteColor( u32 index );
-    ICNSprite RenderICNSprite( int, u32 );
-    void RenderICNSprite( int icn, u32 index, const Rect & srt, const Point & dpt, Surface & dst );
+    ICNSprite RenderICNSprite( int, u32, int palette = PAL::STANDARD );
 
     // Some ICNs need to be rescaled. You have to register their IDs before calling GetICN() function
     void RegisterScalableICN( int icnId );

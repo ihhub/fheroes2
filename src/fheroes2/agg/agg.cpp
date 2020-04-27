@@ -146,8 +146,6 @@ namespace AGG
 
     bool memlimit_usage = true;
 
-    std::vector<SDL_Color> pal_colors;
-
     std::set<int> scalableICNIds;
     Size scaledResolution;
     std::map<int, std::vector<Sprite> > scaledSprites;
@@ -951,13 +949,7 @@ StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
     return st;
 }
 
-void AGG::RenderICNSprite( int icn, u32 index, const Rect & srt, const Point & dpt, Surface & sf )
-{
-    ICNSprite res = RenderICNSprite( icn, index );
-    res.first.Blit( srt, dpt, sf );
-}
-
-ICNSprite AGG::RenderICNSprite( int icn, u32 index )
+ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
 {
     ICNSprite res;
     const std::vector<u8> & body = ReadICNChunk( icn, index );
@@ -966,6 +958,9 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index )
         DEBUG( DBG_ENGINE, DBG_WARN, "error: " << ICN::GetString( icn ) );
         return res;
     }
+
+    if ( PAL::CurrentPalette() != palette )
+        PAL::SwapPalette( palette );
 
     // prepare icn data
     DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( icn ) << ", " << index );
@@ -1019,7 +1014,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index )
             c = *buf;
             ++buf;
             while ( c-- && buf < max ) {
-                sf1.DrawPoint( pt, GetPaletteColor( *buf ) );
+                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
                 ++buf;
             }
@@ -1063,7 +1058,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index )
             c = *buf;
             ++buf;
             while ( c-- ) {
-                sf1.DrawPoint( pt, GetPaletteColor( *buf ) );
+                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
             ++buf;
@@ -1072,7 +1067,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index )
             c = *buf - 0xC0;
             ++buf;
             while ( c-- ) {
-                sf1.DrawPoint( pt, GetPaletteColor( *buf ) );
+                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
             ++buf;
@@ -1921,20 +1916,7 @@ bool AGG::Init( void )
     til_cache.resize( TIL::LASTTIL );
 
     // load palette
-    u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
-    pal_colors.reserve( ncolors );
-
-    for ( u32 ii = 0; ii < ncolors; ++ii ) {
-        u32 index = ii * 3;
-        SDL_Color cols;
-
-        cols.r = kb_pal[index] << 2;
-        cols.g = kb_pal[index + 1] << 2;
-        cols.b = kb_pal[index + 2] << 2;
-
-        pal_colors.push_back( cols );
-    }
-    Surface::SetDefaultPalette( &pal_colors[0], pal_colors.size() );
+   PAL::InitAllPalettes();
 
     // load font
     LoadFNT();
@@ -1967,18 +1949,13 @@ void AGG::Quit( void )
     mid_cache.clear();
     loop_sounds.clear();
     fnt_cache.clear();
-    pal_colors.clear();
+    PAL::Clear();
 
     scaledSprites.clear();
 
 #ifdef WITH_TTF
     delete[] fonts;
 #endif
-}
-
-RGBA AGG::GetPaletteColor( u32 index )
-{
-    return index < pal_colors.size() ? RGBA( pal_colors[index].r, pal_colors[index].g, pal_colors[index].b ) : RGBA( 0, 0, 0 );
 }
 
 void AGG::RegisterScalableICN( int icnId )

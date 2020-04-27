@@ -147,14 +147,14 @@ void Interface::Radar::Generate( void )
             RGBA color( 0, 0, 0 );
 
             if ( tile.isRoad() )
-                color = AGG::GetPaletteColor( COLOR_ROAD );
+                color = PAL::GetPaletteColor( COLOR_ROAD );
             else {
                 u32 index = GetPaletteIndexFromGround( tile.GetGround() );
 
                 if ( tile.GetObject() == MP2::OBJ_MOUNTS )
                     index += 2;
 
-                color = AGG::GetPaletteColor( index );
+                color = PAL::GetPaletteColor( index );
             }
 
             if ( color.pack() )
@@ -280,14 +280,14 @@ void Interface::Radar::RedrawObjects( int color )
                 case MP2::OBJ_HEROES: {
                     const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                     if ( hero )
-                        fillColor = AGG::GetPaletteColor( GetPaletteIndexFromColor( hero->GetColor() ) );
+                        fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( hero->GetColor() ) );
                 } break;
 
                 case MP2::OBJ_CASTLE:
                 case MP2::OBJN_CASTLE: {
                     const Castle * castle = world.GetCastle( tile.GetCenter() );
                     if ( castle )
-                        fillColor = AGG::GetPaletteColor( GetPaletteIndexFromColor( castle->GetColor() ) );
+                        fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( castle->GetColor() ) );
                 } break;
 
                 case MP2::OBJ_DRAGONCITY:
@@ -295,7 +295,7 @@ void Interface::Radar::RedrawObjects( int color )
                 case MP2::OBJ_ALCHEMYLAB:
                 case MP2::OBJ_MINES:
                 case MP2::OBJ_SAWMILL:
-                    fillColor = AGG::GetPaletteColor( GetPaletteIndexFromColor( tile.QuantityColor() ) );
+                    fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( tile.QuantityColor() ) );
                     break;
 
                 default:
@@ -351,7 +351,7 @@ void Interface::Radar::RedrawCursor( void )
         // check change game area
         if ( cursorArea.GetSize() != sz ) {
             cursorArea.Set( sz.w, sz.h, true );
-            cursorArea.DrawBorder( AGG::GetPaletteColor( RADARCOLOR ), false );
+            cursorArea.DrawBorder( PAL::GetPaletteColor( RADARCOLOR ), false );
         }
 
         cursorArea.Move( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );
