@@ -866,8 +866,10 @@ std::string Settings::String( void ) const
        << std::endl
        << "sound volume = " << static_cast<int>( sound_volume ) << std::endl
        << "music volume = " << static_cast<int>( music_volume ) << std::endl
-       << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl
-       << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" ) << std::endl
+       << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" )
+       << std::endl
+       << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
+       << std::endl
        << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
        << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl
        << "debug = " << ( debug ? "on" : "off" ) << std::endl;
