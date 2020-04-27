@@ -77,8 +77,8 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000800,
     GLOBAL_SHOWSTATUS = 0x00001000,
 
-    GLOBAL_CHANGE_VIDEO = 0x00002000,
-    GLOBAL_AR_CORRECTION = 0x00010000,
+    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00002000,
+    GLOBAL_KEEP_ASPECT_RATIO = 0x00010000,
     GLOBAL_FONTRENDERBLENDED1 = 0x00020000,
     GLOBAL_FONTRENDERBLENDED2 = 0x00040000,
     GLOBAL_FULLSCREEN = 0x00400000,
@@ -150,12 +150,12 @@ const settings_t settingsGeneral[] = {
         "use swsurface only",
     },
     {
-        GLOBAL_AR_CORRECTION,
+        GLOBAL_KEEP_ASPECT_RATIO,
         "keep aspect ratio",
     },
     {
-        GLOBAL_CHANGE_VIDEO,
-        "change video mode",
+        GLOBAL_CHANGE_FULLSCREEN_RESOLUTION,
+        "change fullscreen resolution",
     },
     {
         0,
@@ -866,8 +866,8 @@ std::string Settings::String( void ) const
        << std::endl
        << "sound volume = " << static_cast<int>( sound_volume ) << std::endl
        << "music volume = " << static_cast<int>( music_volume ) << std::endl
-       << GetGeneralSettingDescription( GLOBAL_AR_CORRECTION ) << " = " << ( opt_global.Modes( GLOBAL_AR_CORRECTION ) ? "on" : "off" ) << std::endl
-       << GetGeneralSettingDescription( GLOBAL_CHANGE_VIDEO ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_VIDEO ) ? "on" : "off" ) << std::endl
+       << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl
+       << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" ) << std::endl
        << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
        << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl
        << "debug = " << ( debug ? "on" : "off" ) << std::endl;
@@ -1982,14 +1982,14 @@ bool Settings::FullScreen( void ) const
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
 }
 
-bool Settings::AspectRatio( void ) const
+bool Settings::KeepAspectRatio( void ) const
 {
-    return opt_global.Modes( GLOBAL_AR_CORRECTION );
+    return opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO );
 }
 
-bool Settings::ChangeVideo( void ) const
+bool Settings::ChangeFullscreenResolution( void ) const
 {
-    return opt_global.Modes( GLOBAL_CHANGE_VIDEO );
+    return opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
