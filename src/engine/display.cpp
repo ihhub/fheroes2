@@ -93,7 +93,6 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     }
 
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
-    
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
 
     if ( keepAspectRatio ) {
