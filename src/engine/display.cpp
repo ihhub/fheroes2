@@ -93,6 +93,8 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     }
 
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
+    
+    renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
 
     if ( keepAspectRatio ) {
         SDL_DisplayMode currentVideoMode;
@@ -109,11 +111,10 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
         dstRenderSurface.h = currentVideoMode.h;
         dstRenderSurface.x = ( currentVideoMode.w - dstRenderSurface.w ) / 2;
         dstRenderSurface.y = 0;
-    }
 
-    renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
-    SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
-    SDL_RenderClear( renderer );
+        SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+        SDL_RenderClear( renderer );
+    }
 
     if ( !renderer )
         Error::Except( __FUNCTION__, SDL_GetError() );
