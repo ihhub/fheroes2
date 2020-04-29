@@ -161,7 +161,6 @@ void Display::Flip( void )
             ERROR( SDL_GetError() );
         }
         else {
-            // AR correction
             int ret = 0;
             if ( keepAspectRatio )
                 ret = SDL_RenderCopy( renderer, tx, &srcRenderSurface, &dstRenderSurface );
