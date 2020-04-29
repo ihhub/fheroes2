@@ -1515,7 +1515,7 @@ Surface AGG::GetTIL( int til, u32 index, u32 shape )
     return result;
 }
 
-/* load XMI object */
+/* load BIN FRM object */
 bool AGG::LoadBINFRM( int bin_frm )
 {
     DEBUG( DBG_ENGINE, DBG_INFO, BIN::GetFilename( bin_frm ) );
@@ -1531,8 +1531,12 @@ bool AGG::LoadBINFRM( int bin_frm )
     return false;
 }
 
+const BIN::AnimationSequence & AGG::GetAnimationSet( Monster::monster_t monsterID ) 
+{
+    return BIN::AnimationSequence(LookupBINCache(monsterID), monsterID);
+}
 
-const std::map<int, std::vector<int> > & AGG::GetBINFrames( int bin_frm )
+const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
 {
     auto mapIterator = bin_frm_cache.find( bin_frm );
     if ( mapIterator == bin_frm_cache.end() ) {
@@ -1542,13 +1546,13 @@ const std::map<int, std::vector<int> > & AGG::GetBINFrames( int bin_frm )
         else {
             // fall back to unknown if missing data
             DEBUG( DBG_ENGINE, DBG_WARN, "missing animation frame: " << BIN::GetFilename( bin_frm ) << ", index: " << bin_frm );
-            mapIterator = bin_frm_cache.find( BIN::UNKNOWN );
+            mapIterator = bin_frm_cache.find( Monster::UNKNOWN );
         }
     }
     return mapIterator->second;
 }
 
-const std::map<int, std::map<int, std::vector<int>>> & AGG::GetBINFrames()
+const std::map<int, std::map<int, std::vector<int>>> & AGG::LookupBINCache()
 {
     return bin_frm_cache;
 }

@@ -6,80 +6,6 @@
 
 namespace BIN
 {
-    enum MonsterType
-    {
-        UNKNOWN,
-
-        ARCHER,
-        RANGER,
-        BOAR,        
-        CENTAUR,
-        CHAMPION,
-        CAVALRY,
-        CYCLOPS,
-        BONE_DRAGON,
-        BLACK_DRAGON,
-        GREEN_DRAGON,
-        RED_DRAGON,
-        DRUID,
-        GREATER_DRUID,
-        DWARF,
-        BATTLE_DWARF,
-        ELF,
-        GRAND_ELF,
-        FIRE_ELEMENT,
-        EARTH_ELEMENT,
-        AIR_ELEMENT,
-        WATER_ELEMENT,
-        GARGOYLE,
-        GENIE,
-        GHOST,
-        GOBLIN,
-        IRON_GOLEM,
-        STEEL_GOLEM,
-        GRIFFIN,
-        HALFLING,
-        HYDRA,
-        LICH,
-        POWER_LICH,
-        MAGE,
-        ARCHMAGE,
-        MEDUSA,
-        MINOTAUR,
-        MINOTAUR_KING,
-        MUMMY,
-        ROYAL_MUMMY,
-        NOMAD,
-        OGRE,
-        OGRE_LORD,
-        ORC,
-        ORC_CHIEF,
-        PALADIN,
-        CRUSADER,
-        PEASANT,
-        PHOENIX,
-        PIKEMAN,
-        VETERAN_PIKEMAN,
-        ROC,
-        ROGUE,
-        SKELETON,
-        SPRITE,
-        SWORDSMAN,
-        MASTER_SWORDSMAN,
-        TITAN,
-        GIANT,
-        TROLL,
-        WAR_TROLL,
-        UNICORN,
-        VAMPIRE,
-        VAMPIRE_LORD,
-        WOLF,
-        ZOMBIE,
-        MUTANT_ZOMBIE,
-
-        LAST_BIN_FRM
-        // INVALID
-    };
 
     enum H2_FRAME_SEQUENCE
     {
@@ -129,7 +55,7 @@ namespace BIN
         DIRECTION_END
     };
     
-    const size_t correctLength = 821;
+    const size_t CORRECT_FRM_LENGTH = 821;
 
     const char * GetFilename( int );
     std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & );
@@ -147,11 +73,13 @@ namespace BIN
     class AnimationSequence
     {
     public:
-        AnimationSequence( std::map<int, std::vector<int> > & animMap, MonsterType id );
+        AnimationSequence( const std::map<int, std::vector<int> > & animMap, Monster::monster_t id );
         ~AnimationSequence();
 
+        int getDeadFrame() const;
+        //static int getNextFrame(const std::vector<int>& sequence, bool loop = false);
     private:
-        MonsterType _type;
+        Monster::monster_t _type;
         int _staticFrame;
         std::vector<int> _quickMove;
         std::vector<int> _loopMove;
@@ -164,7 +92,7 @@ namespace BIN
 
         int _frameDelay[4]; // TODO: extract and find if it's useful later
 
-        bool appendFrames( std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical = false );
+        bool appendFrames( const std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical = false );
     };
 }
 

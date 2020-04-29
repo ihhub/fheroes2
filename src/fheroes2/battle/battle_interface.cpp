@@ -2420,14 +2420,6 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     const Point & bp1 = attacker.GetBackPoint();
     const Point & bp2 = defender.GetBackPoint();
 
-    for ( int unitID = BIN::MonsterType::UNKNOWN; unitID < BIN::MonsterType::LAST_BIN_FRM; unitID++ ) {
-        auto frames = AGG::GetBINFrames( unitID );
-        auto anfrm = BIN::AnimationSequence( frames, static_cast<BIN::MonsterType>(unitID) );
-    }
-    auto missing1 = BIN::analyzeGetUnitsWithoutAnim( AGG::GetBINFrames(), BIN::H2_FRAME_SEQUENCE::BREATH2, true );
-    auto missing2 = BIN::analyzeGetUnitsWithoutAnim( AGG::GetBINFrames(), BIN::H2_FRAME_SEQUENCE::MOVE_START, BIN::H2_FRAME_SEQUENCE::MOVE_END, true );
-    auto missing3 = BIN::analyzeGetUnitsWithoutAnim( AGG::GetBINFrames(), BIN::H2_FRAME_SEQUENCE::SHOOT2, BIN::H2_FRAME_SEQUENCE::BREATH2, true );
-
     if ( archer ) {
         const float dx = bp1.x - bp2.x;
         const float dy = bp1.y - bp2.y;

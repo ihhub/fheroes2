@@ -536,6 +536,12 @@ int Battle::Unit::GetAnimationState() const
     return animstate;
 }
 
+bool Battle::Unit::isIdling() const
+{
+    // TODO Check for any on 5 states
+    return GetAnimationState() == Monster::AS_IDLE;
+}
+
 void Battle::Unit::NewTurn( void )
 {
     if ( isResurectLife() )

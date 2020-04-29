@@ -403,14 +403,14 @@ bool Battle::Force::SetIdleAnimation( void )
     return res;
 }
 
-bool Battle::Force::NextIdleAnimation( void )
+bool Battle::Force::NextIdleAnimation( void ) // IDLE FRAME SWITCHER
 {
     bool res = false;
 
     for ( iterator it = begin(); it != end(); ++it ) {
         Unit & unit = **it;
 
-        if ( unit.isValid() && unit.GetAnimationState() == Monster::AS_IDLE ) {
+        if ( unit.isValid() && unit.isIdling() ) {
             if ( unit.isFinishAnimFrame() )
                 unit.ResetAnimFrame( Monster::AS_STATIC );
             else
