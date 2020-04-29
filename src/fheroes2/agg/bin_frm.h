@@ -83,14 +83,14 @@ namespace BIN
 
     enum H2_FRAME_SEQUENCE
     {
-        MOVE_START,
+        MOVE_START,  // START & END is only used by flyers BUT also Skeleton & Swordsman, however MOVE_ONE matches them perfectly
         UNKNOWN_SEQ1,
-        MOVE_MAIN,
-        EXTRA_MOVE, // Cavalry & wolf, ignore for now
-        MOVE_END,
-        MOVE_ONE,
+        MOVE_MAIN,   // All units have this
+        EXTRA_MOVE,  // Cavalry & wolf, ignore for now
+        MOVE_END,    
+        MOVE_ONE,    // LICH and POWER_LICH doesn't have this
         UNKNOWN_SEQ2,
-        STATIC,
+        STATIC,      // Frame 1
         IDLE1,
         IDLE2,
         IDLE3,
@@ -133,8 +133,9 @@ namespace BIN
 
     const char * GetFilename( int );
     std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & );
-    bool animationExists( std::map<int, std::vector<int> > & animMap, H2_FRAME_SEQUENCE id );
-    std::vector<int> analyzeGetUnitsWithoutAnim( std::map<int,std::map<int, std::vector<int>>> & allAnimMap, H2_FRAME_SEQUENCE id );
+    bool animationExists( const std::map<int, std::vector<int> > & animMap, H2_FRAME_SEQUENCE id );
+    std::vector<int> analyzeGetUnitsWithoutAnim( const std::map<int, std::map<int, std::vector<int> > > & allAnimMap, H2_FRAME_SEQUENCE id, bool inverse = false );
+    std::vector<int> analyzeGetUnitsWithoutAnim( const std::map<int, std::map<int, std::vector<int> > > & allAnimMap, H2_FRAME_SEQUENCE one, H2_FRAME_SEQUENCE two, bool inverse = false );
     // int FromString( const char * );
 
     struct startEndAnim_t
@@ -160,6 +161,8 @@ namespace BIN
         startEndAnim_t _melee[ATTACK_DIRECTION::DIRECTION_END];
         startEndAnim_t _ranged[ATTACK_DIRECTION::DIRECTION_END];
         std::vector<std::vector<int> > _idle;
+
+        int _frameDelay[4]; // TODO: extract and find if it's useful later
 
         bool appendFrames( std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical = false );
     };

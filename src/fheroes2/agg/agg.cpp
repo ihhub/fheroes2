@@ -1548,6 +1548,11 @@ const std::map<int, std::vector<int> > & AGG::GetBINFrames( int bin_frm )
     return mapIterator->second;
 }
 
+const std::map<int, std::map<int, std::vector<int>>> & AGG::GetBINFrames()
+{
+    return bin_frm_cache;
+}
+
 
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
