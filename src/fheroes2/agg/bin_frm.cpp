@@ -1,10 +1,11 @@
 #include "bin_frm.h"
 #include "settings.h"
+#include "monster.h"
+
 #include <algorithm>
 #include <iostream>
 #include <map>
 #include <vector>
-#include <algorithm>
 
 namespace BIN
 {
@@ -92,105 +93,5 @@ namespace BIN
             }
         }
         return unitIDs;
-    }
-
-
-    AnimationSequence::AnimationSequence( const std::map<int, std::vector<int> > & animMap, Monster::monster_t id )
-    {
-        _type = id;    
-
-        // Basic
-        auto it = animMap.find( H2_FRAME_SEQUENCE::STATIC );
-        if ( it != animMap.end() && it->second.size() > 0 ) {
-            _staticFrame = (*it->second.begin());
-        }
-        else {
-            _staticFrame = 1;
-        }
-
-        // Taking damage
-        appendFrames( animMap, _wince, H2_FRAME_SEQUENCE::WINCE_UP );
-        appendFrames( animMap, _wince, H2_FRAME_SEQUENCE::WINCE_END ); // play it back together for now
-        appendFrames( animMap, _death, H2_FRAME_SEQUENCE::DEATH, true );
-
-        // Idle animations
-        for ( int idx = H2_FRAME_SEQUENCE::IDLE1; idx <= H2_FRAME_SEQUENCE::IDLE5; ++idx ) {
-            std::vector<int> idleAnim;
-            if ( appendFrames( animMap, idleAnim, idx ) ) {
-                _idle.push_back( idleAnim );
-            }
-        }
-
-        // Movement sequences
-        // Every unit has MOVE_MAIN anim, use it as a base 
-        appendFrames( animMap, _loopMove, H2_FRAME_SEQUENCE::MOVE_MAIN, true );
-
-        if ( !animationExists( animMap, H2_FRAME_SEQUENCE::MOVE_ONE ) ) {
-            // this must be LICH or POWER_LICH
-            _quickMove = _loopMove;
-        }
-        else {
-            appendFrames( animMap, _quickMove, H2_FRAME_SEQUENCE::MOVE_ONE, true );
-        }
-
-        appendFrames( animMap, _moveModes.start, H2_FRAME_SEQUENCE::MOVE_START, true );
-        appendFrames( animMap, _moveModes.end, H2_FRAME_SEQUENCE::MOVE_END, true );
-    
-
-        // Attack sequences
-        appendFrames( animMap, _melee[TOP].start, H2_FRAME_SEQUENCE::ATTACK1, true );
-        appendFrames( animMap, _melee[TOP].end, H2_FRAME_SEQUENCE::ATTACK1_END );
-
-        appendFrames( animMap, _melee[FRONT].start, H2_FRAME_SEQUENCE::ATTACK2, true );
-        appendFrames( animMap, _melee[FRONT].end, H2_FRAME_SEQUENCE::ATTACK2_END );
-
-        appendFrames( animMap, _melee[BOTTOM].start, H2_FRAME_SEQUENCE::ATTACK3, true );
-        appendFrames( animMap, _melee[BOTTOM].end, H2_FRAME_SEQUENCE::ATTACK3_END );
-
-        // Use either shooting or breath attack animation as ranged
-        if ( animationExists( animMap, H2_FRAME_SEQUENCE::SHOOT2 ) ) {
-            appendFrames( animMap, _ranged[TOP].start, H2_FRAME_SEQUENCE::SHOOT1, true );
-            appendFrames( animMap, _ranged[TOP].end, H2_FRAME_SEQUENCE::SHOOT1_END );
-
-            appendFrames( animMap, _ranged[FRONT].start, H2_FRAME_SEQUENCE::SHOOT2, true );
-            appendFrames( animMap, _ranged[FRONT].end, H2_FRAME_SEQUENCE::SHOOT2_END );
-
-            appendFrames( animMap, _ranged[BOTTOM].start, H2_FRAME_SEQUENCE::SHOOT3, true );
-            appendFrames( animMap, _ranged[BOTTOM].end, H2_FRAME_SEQUENCE::SHOOT3_END );
-        }
-        else if ( animationExists( animMap, H2_FRAME_SEQUENCE::BREATH2 ) ) {
-            // Only 6 units should have this
-            appendFrames( animMap, _ranged[TOP].start, H2_FRAME_SEQUENCE::BREATH1, true );
-            appendFrames( animMap, _ranged[TOP].end, H2_FRAME_SEQUENCE::BREATH1_END );
-
-            appendFrames( animMap, _ranged[FRONT].start, H2_FRAME_SEQUENCE::BREATH2, true );
-            appendFrames( animMap, _ranged[FRONT].end, H2_FRAME_SEQUENCE::BREATH2_END );
-
-            appendFrames( animMap, _ranged[BOTTOM].start, H2_FRAME_SEQUENCE::BREATH3, true );
-            appendFrames( animMap, _ranged[BOTTOM].end, H2_FRAME_SEQUENCE::BREATH3_END );
-    
-        }
-    }
-
-    AnimationSequence::~AnimationSequence() {
-    }
-
-    bool AnimationSequence::appendFrames(const std::map<int, std::vector<int> >& animMap, std::vector<int>& target, int animID, bool critical)
-    {
-        auto it = animMap.find( animID );
-        if ( it != animMap.end() ) {
-            target.insert( target.end(), it->second.begin(), it->second.end() );
-            return true;
-        }
-        // check if we're missing a very important anim
-        if ( critical ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, "Monster type " << _type << ", missing frames for animation: " << animID );
-        }
-        return false;
-    }
-
-    int AnimationSequence::getDeadFrame() const
-    {
-        return (_death.empty()) ? _staticFrame : _death.back();
     }
 }
