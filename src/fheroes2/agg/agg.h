@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "gamedefs.h"
+#include "bin_frm.h"
 #include "icn.h"
 #include "sprite.h"
 #include "til.h"
@@ -64,6 +65,7 @@ namespace AGG
     u32 GetICNCount( int icn );
     Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
+    const std::map<int, std::vector<int>>& GetBINFrames( int bin_frm );
 #ifdef WITH_TTF
     Surface GetUnicodeLetter( u32 ch, u32 ft );
     u32 GetFontHeight( bool small );

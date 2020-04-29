@@ -61,6 +61,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
     if ( Board::isReflectDirection( dir ) != attacker.isReflect() )
         attacker.UpdateDirection( board[dst].GetPos() );
 
+    // ENTRY POINT
     if ( interface )
         interface->RedrawActionAttackPart1( attacker, defender, targets );
 

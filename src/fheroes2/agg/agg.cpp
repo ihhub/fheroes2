@@ -152,6 +152,8 @@ namespace AGG
     Size scaledResolution;
     std::map<int, std::vector<Sprite> > scaledSprites;
 
+    std::map<int, std::map<int, std::vector<int> > > bin_frm_cache;
+
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
@@ -176,6 +178,8 @@ namespace AGG
     bool LoadOrgTIL( int til, u32 max );
     void LoadTIL( int til );
     void SaveTIL( int til );
+
+    bool LoadBINFRM( int bin_frm );
 
     void LoadFNT( void );
     void ShowError( void );
@@ -1511,6 +1515,40 @@ Surface AGG::GetTIL( int til, u32 index, u32 shape )
     return result;
 }
 
+/* load XMI object */
+bool AGG::LoadBINFRM( int bin_frm )
+{
+    DEBUG( DBG_ENGINE, DBG_INFO, BIN::GetFilename( bin_frm ) );
+    const std::vector<u8> & body = ReadChunk( BIN::GetFilename( bin_frm ) );
+
+    if ( body.size() ) {
+        auto animMap = BIN::convertBinToMap( body );
+        if ( !animMap.empty() ) {
+            bin_frm_cache.emplace( bin_frm, animMap );
+            return true;
+        }
+    }
+    return false;
+}
+
+
+const std::map<int, std::vector<int> > & AGG::GetBINFrames( int bin_frm )
+{
+    auto mapIterator = bin_frm_cache.find( bin_frm );
+    if ( mapIterator == bin_frm_cache.end() ) {
+        if ( LoadBINFRM( bin_frm ) ) {
+            mapIterator = bin_frm_cache.find( bin_frm );
+        }
+        else {
+            // fall back to unknown if missing data
+            DEBUG( DBG_ENGINE, DBG_WARN, "missing animation frame: " << BIN::GetFilename( bin_frm ) << ", index: " << bin_frm );
+            mapIterator = bin_frm_cache.find( BIN::UNKNOWN );
+        }
+    }
+    return mapIterator->second;
+}
+
+
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
@@ -1920,6 +1958,9 @@ bool AGG::Init( void )
 
     til_cache.resize( TIL::LASTTIL );
 
+    std::map<int, std::vector<int> > binFrameDefault = {{BIN::FRAME_SEQUENCE::STATIC, {1}}};
+    bin_frm_cache.emplace( BIN::UNKNOWN, binFrameDefault );
+
     // load palette
     u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
     pal_colors.reserve( ncolors );
@@ -1961,7 +2002,15 @@ void AGG::Quit( void )
             delete[] tils.sprites;
     }
 
+    for ( auto it = bin_frm_cache.begin(); it != bin_frm_cache.end(); ++it ) {
+        for ( auto secIt = ( *it ).second.begin(); secIt != it->second.end(); ++secIt ) {
+            secIt->second.clear();
+        }
+        it->second.clear();
+    }
+
     icn_cache.clear();
+    bin_frm_cache.clear();
     til_cache.clear();
     wav_cache.clear();
     mid_cache.clear();

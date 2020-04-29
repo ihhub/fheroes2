@@ -139,14 +139,26 @@ public:
         AS_FLY2,
         AS_FLY3,
         AS_SHOT0,
-        AS_SHOT1,
-        AS_SHOT2,
-        AS_SHOT3,
         AS_ATTK0,
         AS_ATTK1,
         AS_ATTK2,
         AS_ATTK3,
-        AS_WNCE,
+        AS_MOVE_START,
+        AS_MOVE_END,
+        AS_MOVE_ONE,
+        AS_MELEE1,
+        AS_MELEE1_DOWN,
+        AS_MELEE2,
+        AS_MELEE2_DOWN,
+        AS_MELEE3,
+        AS_MELEE3_DOWN,
+        AS_SHOT1,
+        AS_SHOT1_DOWN,
+        AS_SHOT2,
+        AS_SHOT2_DOWN,
+        AS_SHOT3,
+        AS_SHOT3_DOWN,
+        AS_WNCE, // combine UP+DOWN anim for now
         AS_KILL
     };
 
@@ -154,6 +166,31 @@ public:
     {
         int start;
         int count;
+    };
+
+    struct framesequence_t
+    {
+        int icn_file;
+        int bin_frm_file;
+        std::vector<int> frm_static;
+        std::vector<int> frm_idle;
+        std::vector<int> frm_fly_start;
+        std::vector<int> frm_flying;
+        std::vector<int> frm_fly_land;
+        std::vector<int> frm_shot1;
+        std::vector<int> frm_shot1_down;
+        std::vector<int> frm_shot2;
+        std::vector<int> frm_shot2_down;
+        std::vector<int> frm_shot3;
+        std::vector<int> frm_shot3_down;
+        std::vector<int> frm_attk1;
+        std::vector<int> frm_attk1_down;
+        std::vector<int> frm_attk2;
+        std::vector<int> frm_attk2_down;
+        std::vector<int> frm_attk3;
+        std::vector<int> frm_attk3_down;
+        std::vector<int> frm_wnce;
+        std::vector<int> frm_kill;
     };
 
     struct monstersprite_t
