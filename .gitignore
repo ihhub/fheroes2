@@ -48,6 +48,13 @@
 *.mp2
 *.hs
 *.smk
+*.hxc
+*.h2c
+*.mx2
+
 
 # build directory
 build
+
+# visual studio directory
+.vs

@@ -147,8 +147,8 @@ namespace
         {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
          {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
 
-        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
-        // m82_kill       m82_move       m82_wnce
+        // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3
+        // attk0       attk1    attk2    attk3    wcne     kill     m82_attk       m82_kill       m82_move       m82_wnce
         {ICN::PEASANT, {1, 1}, {2, 3},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
          {0, 0},       {16, 6}, {22, 6}, {28, 6}, {13, 3}, {34, 4}, M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE},
         {ICN::ARCHER, {1, 1}, {2, 3},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {16, 4},       {20, 4},       {24, 4},       {28, 4},
@@ -172,8 +172,8 @@ namespace
         {ICN::PALADIN2, {1, 1}, {2, 10}, {12, 8}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
          {20, 2},       {22, 3}, {25, 3}, {28, 3}, {31, 2}, {34, 5}, M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE},
 
-        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
-        // m82_kill       m82_move       m82_wnce
+        // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3
+        // attk0       attk1    attk2    attk3    wcne     kill     m82_attk       m82_kill       m82_move       m82_wnce
         {ICN::GOBLIN, {1, 1}, {33, 7}, {2, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
          {10, 3},     {17, 4}, {13, 4}, {21, 4}, {25, 4}, {29, 4}, M82::GBLNATTK, M82::GBLNKILL, M82::GBLNMOVE, M82::GBLNWNCE},
         {ICN::ORC, {1, 1}, {2, 3},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {16, 13},      {0, 0},        {0, 0},        {0, 0},
@@ -186,15 +186,15 @@ namespace
          {0, 0},    {16, 6}, {22, 7}, {29, 8}, {13, 3}, {37, 4}, M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE},
         {ICN::OGRE2, {1, 1}, {2, 3},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
          {0, 0},     {16, 6}, {22, 7}, {29, 8}, {13, 3}, {37, 4}, M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE},
-        {ICN::TROLL, {1, 1}, {16, 7}, {2, 14}, {0, 0},  {0, 0},  {0, 0},  {23, 5},       {0, 0},        {0, 0},        {0, 0},
+        {ICN::TROLL, {1, 1},  {16, 7}, {2, 14}, {0, 0},  {0, 0},  {0, 0},        {23, 4},       {34, 14},      {34, 14},     {34, 14},
          {0, 0},     {48, 6}, {23, 6}, {29, 5}, {54, 3}, {57, 9}, M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE},
-        {ICN::TROLL2, {1, 1}, {16, 7}, {2, 14}, {0, 0},  {0, 0},  {0, 0},  {23, 5},       {0, 0},        {0, 0},        {0, 0},
+        {ICN::TROLL2, {1, 1},  {16, 7}, {2, 14}, {0, 0},  {0, 0},  {0, 0},        {23, 4},       {34, 14},      {34, 14},     {34, 14},
          {0, 0},      {48, 6}, {23, 6}, {29, 5}, {54, 3}, {57, 9}, M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE},
         {ICN::CYCLOPS, {1, 1}, {30, 9}, {2, 6}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {16, 2},       {11, 2},       {21, 2},
          {0, 0},       {14, 3}, {8, 3}, {18, 3}, {23, 2}, {25, 5}, M82::CYCLATTK, M82::CYCLKILL, M82::CYCLMOVE, M82::CYCLWNCE},
 
-        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
-        // m82_kill       m82_move       m82_wnce
+        // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3
+        // attk0       attk1    attk2    attk3    wcne     kill     m82_attk       m82_kill       m82_move       m82_wnce
         {ICN::SPRITE, {1, 1}, {16, 9}, {0, 0},  {2, 2},  {4, 4}, {7, 2},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
          {0, 0},      {30, 6}, {25, 5}, {36, 5}, {9, 2}, {11, 5}, M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE},
         {ICN::DWARF, {1, 1}, {44, 5}, {2, 8},   {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
@@ -214,8 +214,8 @@ namespace
         {ICN::PHOENIX, {1, 1}, {30, 5}, {0, 0},  {2, 2},  {4, 6},  {0, 0},   {0, 0},        {25, 3},       {23, 2},       {28, 2},
          {0, 0},       {13, 4}, {10, 4}, {17, 4}, {35, 2}, {37, 11}, M82::PHOEATTK, M82::PHOEKILL, M82::PHOEMOVE, M82::PHOEWNCE},
 
-        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
-        // m82_kill       m82_move       m82_wnce
+        // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3
+        // attk0       attk1    attk2    attk3    wcne     kill     m82_attk       m82_kill       m82_move       m82_wnce
         {ICN::CENTAUR, {1, 1}, {65, 6}, {2, 6},  {0, 0},  {0, 0},  {0, 0},  {18, 4},       {27, 3},       {22, 5},       {30, 3},
          {33, 1},      {38, 4}, {34, 4}, {42, 4}, {46, 2}, {48, 7}, M82::CNTRATTK, M82::CNTRKILL, M82::CNTRMOVE, M82::CNTRWNCE},
         {ICN::GARGOYLE, {1, 1}, {2, 3},  {0, 0},  {5, 2},  {7, 4},  {11, 1}, {0, 0},        {0, 0},        {0, 0},        {0, 0},
@@ -235,8 +235,8 @@ namespace
         {ICN::DRAGBLAK, {1, 1}, {41, 13}, {0, 0},  {2, 3},  {5, 3},  {8, 5},  {13, 1},       {17, 3},       {23, 3},       {30, 2},
          {13, 1},       {14, 3},  {20, 3}, {26, 4}, {32, 3}, {35, 6}, M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE},
 
-        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
-        // m82_kill       m82_move       m82_wnce
+        // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3
+        // attk0       attk1    attk2    attk3    wcne     kill     m82_attk       m82_kill       m82_move       m82_wnce
         {ICN::HALFLING, {1, 1}, {2, 3},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {17, 5},       {22, 2},       {26, 1},       {27, 2},
          {29, 1},       {30, 2}, {32, 3}, {35, 2}, {13, 4}, {37, 4}, M82::HALFATTK, M82::HALFKILL, M82::HALFMOVE, M82::HALFWNCE},
         {ICN::BOAR, {1, 1}, {2, 3},  {5, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
@@ -256,8 +256,8 @@ namespace
         {ICN::TITANBLA, {1, 1}, {2, 5},  {7, 7},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {45, 5},       {38, 5},       {50, 5},
          {0, 0},        {19, 5}, {14, 5}, {24, 5}, {29, 2}, {31, 7}, M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE},
 
-        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
-        // m82_kill       m82_move       m82_wnce
+        // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3
+        // attk0       attk1    attk2    attk3    wcne     kill     m82_attk       m82_kill       m82_move       m82_wnce
         {ICN::SKELETON, {1, 1}, {35, 4}, {3, 8},  {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
          {0, 0},        {20, 4}, {12, 4}, {16, 4}, {24, 3}, {27, 8}, M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE},
         {ICN::ZOMBIE, {1, 1}, {14, 12}, {2, 12}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
@@ -279,8 +279,8 @@ namespace
         {ICN::DRAGBONE, {1, 1}, {22, 7}, {0, 0},  {2, 3},  {5, 3},  {8, 4},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
          {0, 0},        {47, 5}, {12, 4}, {16, 4}, {20, 2}, {41, 6}, M82::BONEATTK, M82::BONEKILL, M82::BONEMOVE, M82::BONEWNCE},
 
-        // icn_file      idle     move     fly1     fly2     fly3     shot0    shot1    shot2    shot3    attk0    attk1    attk2    attk3    wcne     kill     m82_attk
-        // m82_kill       m82_move       m82_wnce
+        // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3
+        // attk0       attk1    attk2    attk3    wcne     kill     m82_attk       m82_kill       m82_move       m82_wnce
         {ICN::ROGUE, {1, 1}, {2, 3},  {5, 8},   {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},
          {0, 0},     {16, 8}, {24, 10}, {34, 9}, {13, 3}, {43, 7}, M82::ROGUATTK, M82::ROGUKILL, M82::ROGUMOVE, M82::ROGUWNCE},
         {ICN::NOMAD, {1, 1}, {2, 8},  {10, 8}, {0, 0},  {0, 0},  {0, 0},  {0, 0},        {0, 0},        {0, 0},        {0, 0},

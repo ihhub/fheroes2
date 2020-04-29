@@ -2379,7 +2379,7 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, TargetsInfo & targets )
 {
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -2441,12 +2441,6 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         RedrawTroopFrameAnimation( attacker );
     }
 
-    if ( attacker.GetFrameState( action1 ).count ) {
-        attacker.ResetAnimFrame( action1 );
-        RedrawTroopFrameAnimation( attacker );
-    }
-    DELAY( 200 );
-
     // draw missile animation
     if ( archer ) {
         const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), ICN::GetMissIndex( attacker.ICNMiss(), bp1.x - bp2.x, bp1.y - bp2.y ), bp1.x > bp2.x );
@@ -2472,6 +2466,14 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             }
         }
     }
+    // targets damage animation
+    RedrawActionWincesKills( targets );
+
+    // post attack animation
+    if ( attacker.GetFrameState( action1 ).count ) {
+        attacker.ResetAnimFrame( action1 );
+        RedrawTroopFrameAnimation( attacker );
+    }
 
     // post attack action
     switch ( attacker.GetID() ) {
@@ -2494,9 +2496,6 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & targets )
 {
     attacker.ResetAnimFrame( Monster::AS_STATIC );
-
-    // targets damage animation
-    RedrawActionWincesKills( targets );
 
     // draw status for first defender
     if ( targets.size() ) {
