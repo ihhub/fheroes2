@@ -6,7 +6,7 @@
 
 namespace BIN
 {
-    enum
+    enum MonsterType
     {
         UNKNOWN,
 
@@ -81,15 +81,15 @@ namespace BIN
         // INVALID
     };
 
-    enum FRAME_SEQUENCE
+    enum H2_FRAME_SEQUENCE
     {
         MOVE_START,
-        UNKNOWN1,
+        UNKNOWN_SEQ1,
         MOVE_MAIN,
-        EXTRA_MOVE,
+        EXTRA_MOVE, // Cavalry & wolf, ignore for now
         MOVE_END,
         MOVE_ONE,
-        UNKNOWN2,
+        UNKNOWN_SEQ2,
         STATIC,
         IDLE1,
         IDLE2,
@@ -121,11 +121,48 @@ namespace BIN
         BIN_FRAME_SEQUENCE_END
     };
 
+    enum ATTACK_DIRECTION
+    {
+        TOP,
+        FRONT,
+        BOTTOM,
+        DIRECTION_END
+    };
+    
     const size_t correctLength = 821;
 
     const char * GetFilename( int );
     std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & );
-    //int FromString( const char * );
+    bool animationExists( std::map<int, std::vector<int> > & animMap, H2_FRAME_SEQUENCE id );
+    std::vector<int> analyzeGetUnitsWithoutAnim( std::map<int,std::map<int, std::vector<int>>> & allAnimMap, H2_FRAME_SEQUENCE id );
+    // int FromString( const char * );
+
+    struct startEndAnim_t
+    {
+        std::vector<int> start;
+        std::vector<int> end;
+    };
+
+    class AnimationSequence
+    {
+    public:
+        AnimationSequence( std::map<int, std::vector<int> > & animMap, MonsterType id );
+        ~AnimationSequence();
+
+    private:
+        MonsterType _type;
+        int _staticFrame;
+        std::vector<int> _quickMove;
+        std::vector<int> _loopMove;
+        startEndAnim_t _moveModes;
+        std::vector<int> _wince;
+        std::vector<int> _death;
+        startEndAnim_t _melee[ATTACK_DIRECTION::DIRECTION_END];
+        startEndAnim_t _ranged[ATTACK_DIRECTION::DIRECTION_END];
+        std::vector<std::vector<int> > _idle;
+
+        bool appendFrames( std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical = false );
+    };
 }
 
 

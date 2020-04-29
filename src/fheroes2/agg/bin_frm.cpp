@@ -1,7 +1,10 @@
 #include "bin_frm.h"
+#include "settings.h"
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 namespace BIN
 {
@@ -22,23 +25,19 @@ namespace BIN
         {VAMPIRE_LORD, "VAMPIFRM.BIN"}, {WOLF, "WOLF_FRM.BIN"}, {ZOMBIE, "ZOMB_FRM.BIN"},     {MUTANT_ZOMBIE, "ZOMB_FRM.BIN"}
     };
 }
-/*
-ARCHER, BOAR, CENTAUR, CHAMPION, CAVALRY, CYCLOPS, BONE_DRAGON, BLACK_DRAGON, GREEN_DRAGON, RED_DRAGON, DRUID, DWARF, ELF, FIRE_ELEMENT, GARGOYLE, GENIE, GHOST, GOBLIN,
-    IRON_GOLEM, GRIFFIN, HALFLING, HYDRA, LICH, MAGE, MEDUSA, MINOTAUR, MUMMY, NOMAD, OGRE, ORC, PALADIN, PEASANT, PHOENIX, PIKEMAN, ROC, ROGUE, SKELETON, SPRITE,
-    SWORDSMAN, TITAN, GIANT, TROLL, UNICORN, VAMPIRE, WOLF, ZOMBIE,
-    */
 
 const char * BIN::GetFilename( int bin_frm )
 {
-    return UNKNOWN < bin_frm && LAST_BIN_FRM >= bin_frm ? bin_file_map[bin_frm].string : bin_file_map[UNKNOWN].string;
+    return BIN::MonsterType::UNKNOWN < bin_frm && LAST_BIN_FRM >= bin_frm ? bin_file_map[bin_frm].string : bin_file_map[BIN::MonsterType::UNKNOWN].string;
 }
 
-std::map<int, std::vector<int> > BIN::convertBinToMap( const std::vector<u8>& data ) {
+std::map<int, std::vector<int> > BIN::convertBinToMap( const std::vector<u8>& data ) 
+{
     std::map<int, std::vector<int> > animationMap;
     const char invalidFrameId = static_cast<char>( 0xFF );
 
     if ( data.size() != BIN::correctLength ) {
-        std::cout << "OH NO!!";
+        DEBUG( DBG_ENGINE, DBG_WARN, " wrong/corrupted BIN FRM FILE: " << data.size() << " length" );
     }
 
    for ( size_t setId = 0u; setId < BIN_FRAME_SEQUENCE_END; ++setId ) {
@@ -54,15 +53,99 @@ std::map<int, std::vector<int> > BIN::convertBinToMap( const std::vector<u8>& da
             ++frameCount;
         }
 
-        if ( frameCount != static_cast<int>( data[243 + setId] ) ) {
-            std::cout << "WARNING: In "
-                      << " file number of for animation frames for animation " << setId + 1 << " should be " << static_cast<int>( data[243 + setId] )
-                      << " while found number is " << frameCount << std::endl;
+        int expectedFrames = static_cast<int>( data[243 + setId] ); 
+        if ( frameCount != expectedFrames )
+        {
+            DEBUG( DBG_ENGINE, DBG_WARN, " BIN FRM wrong amount of frames for animation: " << setId + 1 << " should be " << expectedFrames << " got " << frameCount );
         }
-        else {
+        else if (frameCount > 0) {
             animationMap.emplace( setId, frameSequence );
         }
     }
 
     return animationMap;
+}
+
+bool BIN::animationExists( std::map<int, std::vector<int> > & animMap, H2_FRAME_SEQUENCE id )
+{
+    return animMap.find( id ) != animMap.end();
+}
+
+std::vector<int> BIN::analyzeGetUnitsWithoutAnim( std::map<int, std::map<int, std::vector<int>>> & allAnimMap, H2_FRAME_SEQUENCE id )
+{
+    std::vector<int> unitIDs;
+
+    for ( auto it = allAnimMap.begin(); it != allAnimMap.end(); ++it ) {
+        if (!animationExists(it->second, id)) {
+            unitIDs.push_back( it->first );
+        }
+    }
+    return unitIDs;
+}
+
+
+BIN::AnimationSequence::AnimationSequence( std::map<int, std::vector<int> > & animMap, MonsterType id ) {
+    _type = id;
+    
+
+    // Basic
+    auto it = animMap.find( BIN::H2_FRAME_SEQUENCE::STATIC );
+    if ( it != animMap.end() && it->second.size() > 0 ) {
+        _staticFrame = (*it->second.begin());
+    }
+    else {
+        _staticFrame = 1;
+    }
+
+    // Taking damage
+    appendFrames( animMap, _wince, H2_FRAME_SEQUENCE::WINCE_UP );
+    appendFrames( animMap, _wince, H2_FRAME_SEQUENCE::WINCE_END ); // play it back together for now
+    appendFrames( animMap, _death, H2_FRAME_SEQUENCE::DEATH, true );
+
+    // Idle animations
+    for ( int idx = BIN::H2_FRAME_SEQUENCE::IDLE1; idx <= BIN::H2_FRAME_SEQUENCE::IDLE5; ++idx ) {
+        std::vector<int> idleAnim;
+        if ( appendFrames( animMap, idleAnim, idx ) ) {
+            _idle.push_back( idleAnim );
+        }
+    }
+
+    // Movement sequences
+    appendFrames( animMap, _loopMove, H2_FRAME_SEQUENCE::MOVE_MAIN, true );
+    
+
+    // Attack sequences
+    appendFrames( animMap, _melee[TOP].start, H2_FRAME_SEQUENCE::ATTACK1, true );
+    appendFrames( animMap, _melee[TOP].end, H2_FRAME_SEQUENCE::ATTACK1_END );
+
+    appendFrames( animMap, _melee[FRONT].start, H2_FRAME_SEQUENCE::ATTACK2, true );
+    appendFrames( animMap, _melee[FRONT].end, H2_FRAME_SEQUENCE::ATTACK2_END );
+
+    appendFrames( animMap, _melee[BOTTOM].start, H2_FRAME_SEQUENCE::ATTACK3, true );
+    appendFrames( animMap, _melee[BOTTOM].end, H2_FRAME_SEQUENCE::ATTACK3_END );
+
+    if ( animationExists( animMap, H2_FRAME_SEQUENCE::SHOOT2 ) ) {
+        appendFrames( animMap, _ranged[TOP].start, H2_FRAME_SEQUENCE::SHOOT1, true );
+        appendFrames( animMap, _ranged[TOP].end, H2_FRAME_SEQUENCE::SHOOT1_END );
+    }
+    else if ( animationExists( animMap, H2_FRAME_SEQUENCE::BREATH2 ) ) {
+    
+    }
+}
+
+BIN::AnimationSequence::~AnimationSequence() {
+}
+
+bool BIN::AnimationSequence::appendFrames(std::map<int, std::vector<int> >& animMap, std::vector<int>& target, int animID, bool critical)
+{
+    auto it = animMap.find( animID );
+    if ( it != animMap.end() ) {
+        target.insert( target.end(), it->second.begin(), it->second.end() );
+        return true;
+    }
+    // check if we're missing a very important anim
+    if ( critical ) {
+        DEBUG( DBG_ENGINE, DBG_WARN, "Monster type " << _type << ", missing frames for animation: " << animID );
+    }
+    return false;
 }

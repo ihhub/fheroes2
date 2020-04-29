@@ -1958,8 +1958,8 @@ bool AGG::Init( void )
 
     til_cache.resize( TIL::LASTTIL );
 
-    std::map<int, std::vector<int> > binFrameDefault = {{BIN::FRAME_SEQUENCE::STATIC, {1}}};
-    bin_frm_cache.emplace( BIN::UNKNOWN, binFrameDefault );
+    std::map<int, std::vector<int> > binFrameDefault = {{BIN::H2_FRAME_SEQUENCE::STATIC, {1}}};
+    bin_frm_cache.emplace( BIN::MonsterType::UNKNOWN, binFrameDefault );
 
     // load palette
     u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;

@@ -2420,7 +2420,8 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     const Point & bp1 = attacker.GetBackPoint();
     const Point & bp2 = defender.GetBackPoint();
 
-    auto frames = AGG::GetBINFrames( BIN::ARCHER );
+    auto frames = AGG::GetBINFrames( BIN::ARCHMAGE );
+    auto anfrm = BIN::AnimationSequence( frames, BIN::MonsterType::ARCHMAGE );
 
     if ( archer ) {
         const float dx = bp1.x - bp2.x;
