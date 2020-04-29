@@ -1,6 +1,11 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
+#include "settings.h"
+
+#include <map>
+#include <vector>
+
 namespace BIN
 {
 

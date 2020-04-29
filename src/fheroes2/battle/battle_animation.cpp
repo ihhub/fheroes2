@@ -2,15 +2,14 @@
 #include "settings.h"
 #include "bin_frm.h"
 
-AnimationSequence::AnimationSequence( const std::map<int, std::vector<int> > & animMap, Monster::monster_t id )
-    : _currentSequence(_static)
+AnimationSequence::AnimationSequence( const std::map<int, std::vector<int> > & animMap, Monster::monster_t id ) : _currentSequence(_static)
 {
     _type = id;
 
-    // Basic
-    auto it = animMap.find( BIN::H2_FRAME_SEQUENCE::STATIC );
+    // STATIC is our default
+    // appendFrames inserts to vector so ref is still valid
     if ( !appendFrames( animMap, _static, BIN::H2_FRAME_SEQUENCE::STATIC ) ) {
-        // fall back to this, to avoid crashes since we are using static as default
+        // fall back to this, to avoid crashes
         _static.push_back( 1 );
     }
 
@@ -93,6 +92,156 @@ bool AnimationSequence::appendFrames( const std::map<int, std::vector<int> > & a
         DEBUG( DBG_ENGINE, DBG_WARN, "Monster type " << _type << ", missing frames for animation: " << animID );
     }
     return false;
+}
+
+const std::vector<int> & AnimationSequence::getAnimationSequence( int animstate )
+{
+    switch ( animstate ) {
+    case Monster::AS_STATIC:
+        return _static;
+        break;
+    case Monster::AS_IDLE:
+        return _idle.front();
+        break;
+    case Monster::AS_MOVE_START:
+        return _moveModes.start;
+        break;
+    case Monster::AS_MOVING:
+        return _loopMove;
+        break;
+    case Monster::AS_MOVE_END:
+        return _moveModes.end;
+        break;
+    case Monster::AS_MOVE_QUICK:
+        return _quickMove;
+        break;
+    case Monster::AS_MELEE_TOP:
+        return _melee[ATTACK_DIRECTION::TOP].start;
+        break;
+    case Monster::AS_MELEE_TOP_END:
+        return _melee[ATTACK_DIRECTION::TOP].end;
+        break;
+    case Monster::AS_MELEE_FRONT:
+        return _melee[ATTACK_DIRECTION::FRONT].start;
+        break;
+    case Monster::AS_MELEE_FRONT_END:
+        return _melee[ATTACK_DIRECTION::FRONT].end;
+        break;
+    case Monster::AS_MELEE_BOT:
+        return _melee[ATTACK_DIRECTION::BOTTOM].start;
+        break;
+    case Monster::AS_MELEE_BOT_END:
+        return _melee[ATTACK_DIRECTION::BOTTOM].end;
+        break;
+    case Monster::AS_RANG_TOP:
+        return _ranged[ATTACK_DIRECTION::TOP].start;
+        break;
+    case Monster::AS_RANG_TOP_END:
+        return _ranged[ATTACK_DIRECTION::TOP].end;
+        break;
+    case Monster::AS_RANG_FRONT:
+        return _ranged[ATTACK_DIRECTION::FRONT].start;
+        break;
+    case Monster::AS_RANG_FRONT_END:
+        return _ranged[ATTACK_DIRECTION::FRONT].end;
+        break;
+    case Monster::AS_RANG_BOT:
+        return _ranged[ATTACK_DIRECTION::BOTTOM].start;
+        break;
+    case Monster::AS_RANG_BOT_END:
+        return _ranged[ATTACK_DIRECTION::BOTTOM].end;
+        break;
+    case Monster::AS_WNCE:
+        return _wince;
+        break;
+    case Monster::AS_KILL:
+        return _death;
+        break;
+    case Monster::AS_MOVE:
+    case Monster::AS_FLY1:
+    case Monster::AS_FLY2:
+    case Monster::AS_FLY3:
+    case Monster::AS_SHOT0:
+    case Monster::AS_SHOT1:
+    case Monster::AS_SHOT2:
+    case Monster::AS_SHOT3:
+    case Monster::AS_ATTK0:
+    case Monster::AS_ATTK1:
+    case Monster::AS_ATTK2:
+    case Monster::AS_ATTK3:
+        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animstate);
+    case Monster::AS_NONE:
+    case Monster::AS_INVALID:
+    default:
+        break;
+    }
+    return _static;
+}
+
+int AnimationSequence::getNextFrame(const std::vector<int>& sequence, int current, bool loop)
+{
+    auto it = sequence.begin();
+    
+    // basically iterator advance operator with end checking
+    // don't support negatives/going back
+    while ( current > 0 && it != sequence.end() ) {
+        if ( std::next(it) == sequence.end() ) {
+            if ( loop ) {
+                it = sequence.begin();
+            }
+            else {
+                break;
+            }            
+        }
+        else {
+            it++;
+        }
+        current--;
+    }
+    return ( *it );
+}
+
+int AnimationSequence::switchAnimation( int animstate )
+{
+    _currentSequence = getAnimationSequence( animstate );    
+    return restartAnimation();
+}
+
+int AnimationSequence::playAnimation( bool loop )
+{
+    if ( isLastFrame() ) {
+        if (loop) restartAnimation();
+    }
+    else {
+        _currentFrame++;
+    }
+    return ( *_currentFrame );
+}
+
+int AnimationSequence::restartAnimation()
+{
+    _currentFrame = _currentSequence.begin();
+    return ( *_currentFrame );
+}
+
+int AnimationSequence::getFrame() const
+{
+    return (*_currentFrame);
+}
+
+bool AnimationSequence::isFirstFrame() const
+{
+    return _currentFrame == _currentSequence.begin();
+}
+
+bool AnimationSequence::isLastFrame() const
+{
+    return std::next(_currentFrame) == _currentSequence.end();
+}
+
+int AnimationSequence::getStaticFrame() const
+{
+    return _static.back();
 }
 
 int AnimationSequence::getDeadFrame() const

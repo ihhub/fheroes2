@@ -1,11 +1,8 @@
 #include "bin_frm.h"
-#include "settings.h"
 #include "monster.h"
 
 #include <algorithm>
 #include <iostream>
-#include <map>
-#include <vector>
 
 namespace BIN
 {
@@ -14,16 +11,23 @@ namespace BIN
         int type;
         const char * string;
     } bin_file_map[] = {
-        {UNKNOWN, "UNKNOWN"},     {ARCHER, "ARCHRFRM.BIN"},     {RANGER, "ARCHRFRM.BIN"},      {BOAR, "BOAR_FRM.BIN"},        {CENTAUR, "CENTRFRM.BIN"},    {CHAMPION, "CVLR2FRM.BIN"},  {CAVALRY, "CVLRYFRM.BIN"}, 
-        {CYCLOPS, "CYCLOFRM.BIN"},{BONE_DRAGON, "DRABNFRM.BIN"},{BLACK_DRAGON, "DRAGBFRM.BIN"},{GREEN_DRAGON, "DRAGGFRM.BIN"},{RED_DRAGON, "DRAGRFRM.BIN"}, {DRUID, "DRUIDFRM.BIN"},   {GREATER_DRUID, "DRUIDFRM.BIN"},
-        {DWARF, "DWARFFRM.BIN"},  {BATTLE_DWARF, "DWARFFRM.BIN"},{ELF, "ELF__FRM.BIN"},        {GRAND_ELF, "ELF__FRM.BIN"},   {FIRE_ELEMENT, "FELEMFRM.BIN"},{EARTH_ELEMENT, "FELEMFRM.BIN"}, {AIR_ELEMENT, "FELEMFRM.BIN"}, 
-        {WATER_ELEMENT, "FELEMFRM.BIN"},{GARGOYLE, "GARGLFRM.BIN"},{GENIE, "GENIEFRM.BIN"},    {GHOST, "GHOSTFRM.BIN"},       {GOBLIN, "GOBLNFRM.BIN"},     {IRON_GOLEM, "GOLEMFRM.BIN"}, {STEEL_GOLEM, "GOLEMFRM.BIN"},
-        {GRIFFIN, "GRIFFFRM.BIN"},   {HALFLING, "HALFLFRM.BIN"},{HYDRA, "HYDRAFRM.BIN"},       {LICH, "LICH_FRM.BIN"},        {POWER_LICH, "LICH_FRM.BIN"}, {MAGE, "MAGE1FRM.BIN"},    {ARCHMAGE, "MAGE1FRM.BIN"},
-        {MEDUSA, "MEDUSFRM.BIN"},    {MINOTAUR, "MINOTFRM.BIN"},{MINOTAUR_KING, "MINOTFRM.BIN"},{MUMMY, "MUMMYFRM.BIN"},      {ROYAL_MUMMY, "MUMMYFRM.BIN"},{NOMAD, "NOMADFRM.BIN"},   {OGRE, "OGRE_FRM.BIN"}, 
-        {OGRE_LORD, "OGRE_FRM.BIN"}, {ORC, "ORC__FRM.BIN"},     {ORC_CHIEF, "ORC__FRM.BIN"},   {PALADIN, "PALADFRM.BIN"},     {CRUSADER, "PALADFRM.BIN"},   {PEASANT, "PEAS_FRM.BIN"}, {PHOENIX, "PHOENFRM.BIN"}, 
-        {PIKEMAN, "PIKMNFRM.BIN"}, {VETERAN_PIKEMAN, "PIKMNFRM.BIN"},{ROC, "ROC__FRM.BIN"},    {ROGUE, "ROGUEFRM.BIN"},       {SKELETON, "SKEL_FRM.BIN"},   {SPRITE, "SPRITFRM.BIN"},  {SWORDSMAN, "SWRDSFRM.BIN"}, 
-        {MASTER_SWORDSMAN, "SWRDSFRM.BIN"},{TITAN, "TITA2FRM.BIN"},{GIANT, "TITANFRM.BIN"},    {TROLL, "TROLLFRM.BIN"},       {WAR_TROLL, "TROLLFRM.BIN"},  {UNICORN, "UNICOFRM.BIN"}, {VAMPIRE, "VAMPIFRM.BIN"}, 
-        {VAMPIRE_LORD, "VAMPIFRM.BIN"}, {WOLF, "WOLF_FRM.BIN"}, {ZOMBIE, "ZOMB_FRM.BIN"},     {MUTANT_ZOMBIE, "ZOMB_FRM.BIN"}
+        {Monster::UNKNOWN, "UNKNOWN"},         {Monster::ARCHER, "ARCHRFRM.BIN"},       {Monster::RANGER, "ARCHRFRM.BIN"},      {Monster::BOAR, "BOAR_FRM.BIN"},        
+        {Monster::CENTAUR, "CENTRFRM.BIN"},    {Monster::CHAMPION, "CVLR2FRM.BIN"},     {Monster::CAVALRY, "CVLRYFRM.BIN"},     {Monster::CYCLOPS, "CYCLOFRM.BIN"},
+        {Monster::BONE_DRAGON, "DRABNFRM.BIN"},{Monster::BLACK_DRAGON, "DRAGBFRM.BIN"}, {Monster::GREEN_DRAGON, "DRAGGFRM.BIN"},{Monster::RED_DRAGON, "DRAGRFRM.BIN"}, 
+        {Monster::DRUID, "DRUIDFRM.BIN"},      {Monster::GREATER_DRUID, "DRUIDFRM.BIN"},{Monster::DWARF, "DWARFFRM.BIN"},       {Monster::BATTLE_DWARF, "DWARFFRM.BIN"},
+        {Monster::ELF, "ELF__FRM.BIN"},        {Monster::GRAND_ELF, "ELF__FRM.BIN"},    {Monster::FIRE_ELEMENT, "FELEMFRM.BIN"},{Monster::EARTH_ELEMENT, "FELEMFRM.BIN"}, 
+        {Monster::AIR_ELEMENT, "FELEMFRM.BIN"},{Monster::WATER_ELEMENT, "FELEMFRM.BIN"},{Monster::GARGOYLE, "GARGLFRM.BIN"},    {Monster::GENIE, "GENIEFRM.BIN"},    
+        {Monster::GHOST, "GHOSTFRM.BIN"},      {Monster::GOBLIN, "GOBLNFRM.BIN"},       {Monster::IRON_GOLEM, "GOLEMFRM.BIN"},  {Monster::STEEL_GOLEM, "GOLEMFRM.BIN"},
+        {Monster::GRIFFIN, "GRIFFFRM.BIN"},    {Monster::HALFLING, "HALFLFRM.BIN"},     {Monster::HYDRA, "HYDRAFRM.BIN"},       {Monster::LICH, "LICH_FRM.BIN"},        
+        {Monster::POWER_LICH, "LICH_FRM.BIN"}, {Monster::MAGE, "MAGE1FRM.BIN"},         {Monster::ARCHMAGE, "MAGE1FRM.BIN"},    {Monster::MEDUSA, "MEDUSFRM.BIN"},    
+        {Monster::MINOTAUR, "MINOTFRM.BIN"},   {Monster::MINOTAUR_KING, "MINOTFRM.BIN"},{Monster::MUMMY, "MUMMYFRM.BIN"},       {Monster::ROYAL_MUMMY, "MUMMYFRM.BIN"},
+        {Monster::NOMAD, "NOMADFRM.BIN"},      {Monster::OGRE, "OGRE_FRM.BIN"},         {Monster::OGRE_LORD, "OGRE_FRM.BIN"},   {Monster::ORC, "ORC__FRM.BIN"},     
+        {Monster::ORC_CHIEF, "ORC__FRM.BIN"},  {Monster::PALADIN, "PALADFRM.BIN"},      {Monster::CRUSADER, "PALADFRM.BIN"},    {Monster::PEASANT, "PEAS_FRM.BIN"}, 
+        {Monster::PHOENIX, "PHOENFRM.BIN"},    {Monster::PIKEMAN, "PIKMNFRM.BIN"},      {Monster::VETERAN_PIKEMAN, "PIKMNFRM.BIN"},{Monster::ROC, "ROC__FRM.BIN"},    
+        {Monster::ROGUE, "ROGUEFRM.BIN"},      {Monster::SKELETON, "SKEL_FRM.BIN"},     {Monster::SPRITE, "SPRITFRM.BIN"},      {Monster::SWORDSMAN, "SWRDSFRM.BIN"}, 
+        {Monster::MASTER_SWORDSMAN, "SWRDSFRM.BIN"},{Monster::TITAN, "TITA2FRM.BIN"},   {Monster::GIANT, "TITANFRM.BIN"},       {Monster::TROLL, "TROLLFRM.BIN"},       
+        {Monster::WAR_TROLL, "TROLLFRM.BIN"},  {Monster::UNICORN, "UNICOFRM.BIN"},      {Monster::VAMPIRE, "VAMPIFRM.BIN"},     {Monster::VAMPIRE_LORD, "VAMPIFRM.BIN"}, 
+        {Monster::WOLF, "WOLF_FRM.BIN"},       {Monster::ZOMBIE, "ZOMB_FRM.BIN"},       {Monster::MUTANT_ZOMBIE, "ZOMB_FRM.BIN"}
     };
 
     const char * GetFilename( int bin_frm )

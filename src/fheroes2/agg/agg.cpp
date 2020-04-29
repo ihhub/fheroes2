@@ -1531,9 +1531,9 @@ bool AGG::LoadBINFRM( int bin_frm )
     return false;
 }
 
-const BIN::AnimationSequence & AGG::GetAnimationSet( Monster::monster_t monsterID ) 
+const AnimationSequence & AGG::GetAnimationSet( Monster::monster_t monsterID ) 
 {
-    return BIN::AnimationSequence(LookupBINCache(monsterID), monsterID);
+    return AnimationSequence(LookupBINCache(monsterID), monsterID);
 }
 
 const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
@@ -1968,7 +1968,7 @@ bool AGG::Init( void )
     til_cache.resize( TIL::LASTTIL );
 
     std::map<int, std::vector<int> > binFrameDefault = {{BIN::H2_FRAME_SEQUENCE::STATIC, {1}}};
-    bin_frm_cache.emplace( BIN::MonsterType::UNKNOWN, binFrameDefault );
+    bin_frm_cache.emplace( Monster::UNKNOWN, binFrameDefault );
 
     // load palette
     u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;

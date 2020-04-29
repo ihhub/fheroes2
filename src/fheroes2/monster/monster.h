@@ -131,7 +131,7 @@ public:
         MONSTER_RND
     };
 
-    enum
+    enum animationstate_t
     {
         AS_NONE,
         AS_STATIC,

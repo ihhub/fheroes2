@@ -32,6 +32,7 @@
 #include "sprite.h"
 #include "til.h"
 #include "xmi.h"
+#include "battle_animation.h"
 
 class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
 {
@@ -65,7 +66,7 @@ namespace AGG
     u32 GetICNCount( int icn );
     Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
-    const BIN::AnimationSequence& GetAnimationSet( Monster::monster_t monsterID );
+    const AnimationSequence& GetAnimationSet( Monster::monster_t monsterID );
     const std::map<int, std::vector<int>> & LookupBINCache(int bin_frm );
     const std::map<int, std::map<int, std::vector<int>>> & LookupBINCache( );
 #ifdef WITH_TTF
