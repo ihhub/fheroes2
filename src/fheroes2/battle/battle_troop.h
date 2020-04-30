@@ -144,11 +144,11 @@ namespace Battle
 
         const AnimationSequence& GetFrameState( void ) const;
         AnimationSequence GetFrameState( int ) const;
+        void SetDeathAnim();
         void IncreaseAnimFrame( bool loop = false );
         bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;
         void SetFrameStep( int );
-        void SetFrame( int );
         int GetFrame( void ) const;
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
@@ -171,8 +171,7 @@ namespace Battle
         u32 HowManyWillKilled( u32 ) const;
 
         void SetResponse( void );
-        void ResetAnimFrame( int );
-        bool SwitchAnimation( int );
+        bool SwitchAnimation( int rule, bool reverse = false );
         void UpdateDirection( void );
         bool UpdateDirection( const Rect & );
         void PostKilledAction( void );

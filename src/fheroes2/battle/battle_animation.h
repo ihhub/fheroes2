@@ -29,7 +29,7 @@ public:
     AnimationSequence & operator=( const AnimationSequence & );
 
     int playAnimation( bool loop = false );
-    int restartAnimation();
+    int restartAnimation( bool reverse = false );
 
     int getFrame() const;
     int firstFrame() const;
@@ -42,6 +42,7 @@ public:
 private:
     std::vector<int> _seq;
     std::vector<int>::iterator _currentFrame;
+    bool _reverse;
 
     AnimationSequence() = delete;
 };
@@ -88,7 +89,7 @@ public:
     AnimationState( const AnimationReference & animMap, int state );
     virtual ~AnimationState();
 
-    bool switchAnimation( int animstate );
+    bool switchAnimation( int animstate, bool reverse = false );
     int getCurrentState() const;
     const AnimationSequence & seq() const;
 

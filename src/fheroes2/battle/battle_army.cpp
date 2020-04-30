@@ -390,11 +390,11 @@ bool Battle::Force::SetIdleAnimation( void )
 
         if ( unit.isValid() ) {
             if ( unit.GetAnimationState() != Monster::AS_STATIC && unit.isFinishAnimFrame() ) {
-                unit.ResetAnimFrame( Monster::AS_STATIC );
+                unit.SwitchAnimation( Monster::AS_STATIC );
                 res = true;
             }
             else if ( unit.isStartAnimFrame() && 3 > Rand::Get( 1, 10 ) ) {
-                unit.ResetAnimFrame( Monster::AS_IDLE );
+                unit.SwitchAnimation( Monster::AS_IDLE );
                 res = true;
             }
         }
@@ -412,7 +412,7 @@ bool Battle::Force::NextIdleAnimation( void ) // IDLE FRAME SWITCHER
 
         if ( unit.isValid() && unit.isIdling() ) {
             if ( unit.isFinishAnimFrame() )
-                unit.ResetAnimFrame( Monster::AS_STATIC );
+                unit.SwitchAnimation( Monster::AS_STATIC );
             else
                 unit.IncreaseAnimFrame( false );
             res = true;

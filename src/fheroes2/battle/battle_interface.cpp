@@ -2459,8 +2459,6 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             }
         }
     }
-    // targets damage animation
-    RedrawActionWincesKills( targets );
 
     // post attack animation
     if ( attacker.SwitchAnimation( actionEnd ) ) {
@@ -2487,7 +2485,9 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
 void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & targets )
 {
-    attacker.ResetAnimFrame( Monster::AS_STATIC );
+    attacker.SwitchAnimation( Monster::AS_STATIC );
+    // targets damage animation
+    RedrawActionWincesKills( targets );
 
     // draw status for first defender
     if ( targets.size() ) {
@@ -2532,18 +2532,17 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
         if ( ( *it ).defender ) {
             TargetInfo & target = *it;
             if ( !target.defender->isValid() ) {
-                //const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
-                target.defender->SetFrame( 1 );
+                target.defender->SetDeathAnim();
             }
             else
-                target.defender->ResetAnimFrame( Monster::AS_STATIC );
+                target.defender->SwitchAnimation( Monster::AS_STATIC );
         }
     if ( opponent1 )
         opponent1->ResetAnimFrame( OP_IDLE );
     if ( opponent2 )
         opponent2->ResetAnimFrame( OP_IDLE );
     b_move = NULL;
-    attacker.ResetAnimFrame( Monster::AS_STATIC );
+    attacker.SwitchAnimation( Monster::AS_STATIC );
 }
 
 void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
@@ -2563,7 +2562,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
 
             // kill animation
             if ( !target.defender->isValid() ) {
-                target.defender->ResetAnimFrame( Monster::AS_KILL );
+                target.defender->SwitchAnimation( Monster::AS_KILL );
                 AGG::PlaySound( target.defender->M82Kill() );
                 ++finish;
 
@@ -2578,7 +2577,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
                 // wince animation
                 if ( target.damage ) {
                 // wnce animation
-                target.defender->ResetAnimFrame( Monster::AS_WNCE );
+                target.defender->SwitchAnimation( Monster::AS_WNCE );
                 AGG::PlaySound( target.defender->M82Wnce() );
                 ++finish;
             }
@@ -2619,7 +2618,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
         }
     }
 
-    DELAY( 200 );
 }
 
 void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
@@ -2644,7 +2642,7 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
 
         if ( bridge && bridge->NeedAction( b, *dst ) ) {
             b_move = NULL;
-            b.ResetAnimFrame( Monster::AS_STATIC );
+            b.SwitchAnimation( Monster::AS_STATIC );
             bridge->Action( b, *dst );
             b_move = &b;
         }
@@ -2662,7 +2660,7 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
 
         if ( show_anim ) {
             AGG::PlaySound( b.M82Move() );
-            b.ResetAnimFrame( Monster::AS_MOVE );
+            b.SwitchAnimation( Monster::AS_MOVING );
             RedrawTroopFrameAnimation( b );
             b.SetPosition( *dst );
         }
@@ -2674,7 +2672,7 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
     b_fly = NULL;
     b_move = NULL;
     b_current = NULL;
-    b.ResetAnimFrame( Monster::AS_STATIC );
+    b.SwitchAnimation( Monster::AS_STATIC );
 
     StringReplace( msg, "%{dst}", b.GetHeadIndex() );
     status.SetMessage( msg, true );
@@ -2704,7 +2702,7 @@ void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
     b_move = &b;
     p_fly = pt1;
 
-    b.ResetAnimFrame( Monster::AS_FLY1 );
+    b.SwitchAnimation( Monster::AS_MOVE_START );
     RedrawTroopFrameAnimation( b );
 
     b_move = NULL;
@@ -2717,7 +2715,7 @@ void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
         p_move = *pnt;
 
         AGG::PlaySound( b.M82Move() );
-        b.ResetAnimFrame( Monster::AS_FLY2 );
+        b.SwitchAnimation( Monster::AS_MOVING );
         RedrawTroopFrameAnimation( b );
 
         p_fly = p_move;
@@ -2730,12 +2728,12 @@ void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
     b_fly = NULL;
     b_move = &b;
     p_move = pt2;
-    b.ResetAnimFrame( Monster::AS_FLY3 );
+    b.SwitchAnimation( Monster::AS_MOVE_END );
     RedrawTroopFrameAnimation( b );
 
     // restore
     b_move = NULL;
-    b.ResetAnimFrame( Monster::AS_STATIC );
+    b.SwitchAnimation( Monster::AS_STATIC );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
@@ -2964,10 +2962,10 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
             TargetInfo & target = *it;
             if ( !target.defender->isValid() ) {
                 //const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
-                target.defender->SetFrame( 1 );
+                target.defender->SetDeathAnim();
             }
             else
-                target.defender->ResetAnimFrame( Monster::AS_STATIC );
+                target.defender->SwitchAnimation( Monster::AS_STATIC );
         }
     if ( opponent1 )
         opponent1->ResetAnimFrame( OP_IDLE );
@@ -3141,11 +3139,10 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
 
     // restore
     if ( !target.defender->isValid() ) {
-        //const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
-        target.defender->SetFrame( 1 );
+        target.defender->SetDeathAnim();
     }
     else
-        target.defender->ResetAnimFrame( Monster::AS_STATIC );
+        target.defender->SwitchAnimation( Monster::AS_STATIC );
 
     if ( opponent1 )
         opponent1->ResetAnimFrame( OP_IDLE );
@@ -3671,7 +3668,7 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
     b_current = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender && ( *it ).damage )
-            ( *it ).defender->ResetAnimFrame( Monster::AS_WNCE );
+            ( *it ).defender->SwitchAnimation( Monster::AS_WNCE );
 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
@@ -3699,7 +3696,7 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
-            ( *it ).defender->ResetAnimFrame( Monster::AS_STATIC );
+            ( *it ).defender->SwitchAnimation( Monster::AS_STATIC );
             b_current = NULL;
         }
 }
@@ -3723,7 +3720,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     b_current = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender && ( *it ).damage )
-            ( *it ).defender->ResetAnimFrame( Monster::AS_WNCE );
+            ( *it ).defender->SwitchAnimation( Monster::AS_WNCE );
 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
@@ -3758,7 +3755,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
-            ( *it ).defender->ResetAnimFrame( Monster::AS_STATIC );
+            ( *it ).defender->SwitchAnimation( Monster::AS_STATIC );
             b_current = NULL;
         }
 }
@@ -3962,7 +3959,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
     b_current = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender && ( *it ).damage )
-            ( *it ).defender->ResetAnimFrame( Monster::AS_WNCE );
+            ( *it ).defender->SwitchAnimation( Monster::AS_WNCE );
 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
@@ -3988,7 +3985,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
-            ( *it ).defender->ResetAnimFrame( Monster::AS_STATIC );
+            ( *it ).defender->SwitchAnimation( Monster::AS_STATIC );
             b_current = NULL;
         }
 }
@@ -4028,7 +4025,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     if ( wnce )
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
             if ( ( *it ).defender && ( *it ).damage )
-                ( *it ).defender->ResetAnimFrame( Monster::AS_WNCE );
+                ( *it ).defender->SwitchAnimation( Monster::AS_WNCE );
 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
@@ -4073,7 +4070,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     if ( wnce )
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
             if ( ( *it ).defender ) {
-                ( *it ).defender->ResetAnimFrame( Monster::AS_STATIC );
+                ( *it ).defender->SwitchAnimation( Monster::AS_STATIC );
                 b_current = NULL;
             }
 }
@@ -4107,7 +4104,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 
     if ( pain ) {
         b_current = NULL;
-        b.ResetAnimFrame( Monster::AS_WNCE );
+        b.SwitchAnimation( Monster::AS_WNCE );
     }
 
     if ( M82::UNKNOWN != m82 )
@@ -4138,7 +4135,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     }
 
     if ( pain ) {
-        b.ResetAnimFrame( Monster::AS_STATIC );
+        b.SwitchAnimation( Monster::AS_STATIC );
         b_current = NULL;
     }
 }

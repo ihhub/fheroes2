@@ -44,14 +44,20 @@ int AnimationSequence::playAnimation( bool loop )
             restartAnimation();
     }
     else {
-        _currentFrame++;
+        if ( _reverse ) {
+            _currentFrame--;
+        }
+        else {
+            _currentFrame++;
+        }
     }
     return ( *_currentFrame );
 }
 
-int AnimationSequence::restartAnimation()
+int AnimationSequence::restartAnimation(bool reverse)
 {
-    _currentFrame = _seq.begin();
+    _reverse = reverse;
+    _currentFrame = (_reverse) ? _seq.end() - 1 : _seq.begin();
     return getFrame();
 }
 
@@ -117,13 +123,13 @@ AnimationState::AnimationState( const AnimationReference & ref, int state )
 
 AnimationState::~AnimationState() {}
 
-bool AnimationState::switchAnimation( int animstate )
+bool AnimationState::switchAnimation( int animstate, bool reverse )
 {
     auto seq = getAnimationSequence( animstate );
     if ( seq.isValid() ) {
         _animState = animstate;
         _currentSequence = getAnimationSequence( animstate );
-        _currentSequence.restartAnimation();
+        _currentSequence.restartAnimation( reverse );
         return true;
     }
     else {

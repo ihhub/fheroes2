@@ -226,8 +226,6 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
             pos += ( reflect ? -1 : 1 );
         SetPosition( pos );
     }
-
-    ResetAnimFrame( AS_STATIC );
 }
 
 Battle::Unit::~Unit()
@@ -1554,8 +1552,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
         u32 restore = spell.Resurrect() * spoint;
         // remove from graveyard
         if ( !isValid() ) {
+            // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
-            ResetAnimFrame( AS_STATIC );
+            SwitchAnimation( AS_KILL, true );
         }
         // restore hp
         u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;
@@ -1798,9 +1797,13 @@ int Battle::Unit::GetFrame( void ) const
     return animation.seq().getFrame();
 }
 
-void Battle::Unit::SetFrame( int val )
+void Battle::Unit::SetDeathAnim( )
 {
-    animframe = val;
+    if ( animation.getCurrentState() != AS_KILL ) {
+        SwitchAnimation( AS_KILL );
+    }
+    while ( !animation.seq().isLastFrame() )
+        animation.playAnimation();
 }
 
 void Battle::Unit::SetFrameStep( int val )
@@ -1855,25 +1858,9 @@ const AnimationSequence & Battle::Unit::GetFrameState( void ) const
     return animation.seq();
 }
 
-void Battle::Unit::ResetAnimFrame( int rule )
+bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
 {
-    animation.switchAnimation( rule );
-
-    //animstep = 1;
-    //animstate = rule;
-    //animframe = GetFrameStart();
-
-    //// TODO: fix bullshit
-    //if ( AS_FLY3 == rule && 0 == GetFrameState().count ) {
-    //    animstep = -1;
-    //    animstate = AS_FLY1;
-    //    animframe = GetFrameStart();
-    //}
-}
-
-bool Battle::Unit::SwitchAnimation( int rule )
-{
-    animation.switchAnimation( rule );
+    animation.switchAnimation( rule, reverse );
     return animation.seq().isValid();
 }
 
