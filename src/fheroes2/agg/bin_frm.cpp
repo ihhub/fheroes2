@@ -32,7 +32,15 @@ namespace BIN
 
     const char * GetFilename( int bin_frm )
     {
-        return Monster::monster_t::UNKNOWN < bin_frm && Monster::monster_t::LAST_VALID_MONSTER >= bin_frm ? bin_file_map[bin_frm].string : bin_file_map[Monster::monster_t::UNKNOWN].string;
+        int index = Monster::UNKNOWN;
+
+        for ( int idx = Monster::UNKNOWN; idx < Monster::LAST_VALID_MONSTER; idx++ ) {
+            if ( bin_file_map[idx].type == bin_frm ) {
+                index = idx;
+                break;
+            }
+        }
+        return bin_file_map[index].string;
     }
 
     std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8>& data ) 

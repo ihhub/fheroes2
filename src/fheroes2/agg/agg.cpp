@@ -1551,7 +1551,7 @@ const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
         }
         else {
             // fall back to unknown if missing data
-            DEBUG( DBG_ENGINE, DBG_WARN, "missing animation frame: " << BIN::GetFilename( bin_frm ) << ", index: " << bin_frm );
+            DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << BIN::GetFilename( bin_frm ) << ", index: " << bin_frm );
             mapIterator = bin_frm_cache.find( 0 );
         }
     }
