@@ -1178,18 +1178,18 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
         // move offset
         if ( b_move == &b ) {
-            const Monster::animframe_t & frm = b_move->GetFrameState();
-            Sprite spmon0 = AGG::GetICN( msi.icn_file, frm.start, b.isReflect() );
+            auto animSequence = b_move->GetFrameState();
+            Sprite spmon0 = AGG::GetICN( msi.icn_file, animSequence.firstFrame(), b.isReflect() );
             const s32 ox = spmon1.x() - spmon0.x();
 
-            if ( frm.count ) {
+            if ( animSequence.animationLength() ) {
                 const s32 cx = p_move.x - rt.x;
                 const s32 cy = p_move.y - rt.y;
 
                 // cx/cy is sprite size
                 // Frame count: one tile of movement goes through all stages of animation
                 // sp is sprite drawing offset
-                sp.y += ( ( b_move->GetFrame() - frm.start ) * cy ) / frm.count;
+                sp.y += animSequence.movementProgress() * cy;
                 if ( 0 != Sign( cy ) )
                     sp.x -= Sign( cx ) * ox / 2;
             }
@@ -1200,9 +1200,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
             if ( b_fly->GetFrameCount() ) {
                 const s32 cx = p_fly.x - rt.x;
                 const s32 cy = p_fly.y - rt.y;
+                auto animSeq = b_fly->GetFrameState();
 
-                sp.x += cx + Sign( cx ) * b_fly->GetFrameOffset() * std::abs( ( p_fly.x - p_move.x ) / b_fly->GetFrameCount() );
-                sp.y += cy + Sign( cy ) * b_fly->GetFrameOffset() * std::abs( ( p_fly.y - p_move.y ) / b_fly->GetFrameCount() );
+                sp.x += cx + Sign( cx ) * animSeq.movementProgress() * std::abs( ( p_fly.x - p_move.x ) );
+                sp.y += cy + Sign( cy ) * animSeq.movementProgress() * std::abs( ( p_fly.y - p_move.y ) );
             }
         }
 
@@ -2439,7 +2440,8 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     AGG::PlaySound( attacker.M82Attk() );
 
     // redraw attack animation
-    if ( attacker.GetFrameState( action0 ).count ) {
+    // TODO: example to work on
+    if ( attacker.GetFrameState( action0 ).animationLength() ) {
         attacker.ResetAnimFrame( action0 );
         RedrawTroopFrameAnimation( attacker );
     }
@@ -2473,7 +2475,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     RedrawActionWincesKills( targets );
 
     // post attack animation
-    if ( attacker.GetFrameState( action1 ).count ) {
+    if ( attacker.GetFrameState( action1 ).animationLength() ) {
         attacker.ResetAnimFrame( action1 );
         RedrawTroopFrameAnimation( attacker );
     }
@@ -2543,8 +2545,8 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
         if ( ( *it ).defender ) {
             TargetInfo & target = *it;
             if ( !target.defender->isValid() ) {
-                const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
-                target.defender->SetFrame( frm.start + frm.count - 1 );
+                //const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
+                target.defender->SetFrame( 1 );
             }
             else
                 target.defender->ResetAnimFrame( Monster::AS_STATIC );
@@ -2974,8 +2976,8 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
         if ( ( *it ).defender ) {
             TargetInfo & target = *it;
             if ( !target.defender->isValid() ) {
-                const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
-                target.defender->SetFrame( frm.start + frm.count - 1 );
+                //const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
+                target.defender->SetFrame( 1 );
             }
             else
                 target.defender->ResetAnimFrame( Monster::AS_STATIC );
@@ -3152,8 +3154,8 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
 
     // restore
     if ( !target.defender->isValid() ) {
-        const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
-        target.defender->SetFrame( frm.start + frm.count - 1 );
+        //const Monster::animframe_t & frm = target.defender->GetFrameState( Monster::AS_KILL );
+        target.defender->SetFrame( 1 );
     }
     else
         target.defender->ResetAnimFrame( Monster::AS_STATIC );

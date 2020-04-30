@@ -32,14 +32,18 @@ public:
     int restartAnimation();
 
     int getFrame() const;
+    int firstFrame() const;
     int animationLength() const;
     double movementProgress() const;
     bool isFirstFrame() const;
     bool isLastFrame() const;
+    bool isValid() const;
 
 private:
     std::vector<int> _seq;
     std::vector<int>::iterator _currentFrame;
+
+    AnimationSequence() = delete;
 };
 
 
@@ -48,13 +52,14 @@ class AnimationReference
 public:
     AnimationReference();
     AnimationReference( const std::map<int, std::vector<int> > & animMap, int id );
+    AnimationReference & operator=(const AnimationReference & rhs );
     virtual ~AnimationReference();
 
     int getStaticFrame() const;
     int getDeadFrame() const;
 
     const std::vector<int> & getAnimationVector( int animstate ) const;
-    AnimationSequence getAnimationSequence( int animstate );
+    AnimationSequence getAnimationSequence( int animstate ) const;
     static int getNextFrame( const std::vector<int> & sequence, int current = -1, bool loop = false );
 
 protected:
@@ -85,6 +90,11 @@ public:
 
     int switchAnimation( int animstate );
     int getCurrentState() const;
+    const AnimationSequence & seq() const;
+
+    // pass-down methods
+    int playAnimation( bool loop = false );
+    int restartAnimation();
 
 private:
     int _animState;

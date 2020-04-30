@@ -435,7 +435,6 @@ Monster::Monster( int m )
 {
     if ( m <= WATER_ELEMENT ) {
         id = m;
-        animRef = getAnimationReference( (monster_t)m );
     }
     else if ( MONSTER_RND1 == m )
         id = Rand( LEVEL1 ).GetID();
@@ -479,14 +478,12 @@ Monster::Monster( const Spell & sp )
     default:
         break;
     }
-    animRef = getAnimationReference( (monster_t) id );
 }
 
 Monster::Monster( int race, u32 dw )
     : id( UNKNOWN )
 {
     id = FromDwelling( race, dw ).id;
-    animRef = getAnimationReference( (monster_t)id );
 }
 
 bool Monster::isValid( void ) const
@@ -1771,15 +1768,15 @@ const Monster::monstersprite_t & Monster::GetMonsterSprite() const
     return monsters_info[GetID()];
 }
 
-const AnimationReference& Monster::getAnimationReference() const
-{
-    return animRef;
-}
-
-AnimationReference& Monster::getAnimationReference(monster_t id)
-{
-    return AGG::GetAnimationSet( id );
-}
+//const AnimationReference& Monster::getAnimationReference() const
+//{
+//    return animRef;
+//}
+//
+//AnimationReference& Monster::getAnimationReference(monster_t id)
+//{
+//    return AGG::GetAnimationSet( id );
+//}
 
 
 MonsterAnimation::MonsterAnimation( const Monster & monster )

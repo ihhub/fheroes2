@@ -33,6 +33,7 @@
 #include "til.h"
 #include "xmi.h"
 #include "battle_animation.h"
+#include "monster.h"
 
 class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
 {

@@ -17,12 +17,15 @@ AnimationSequence::AnimationSequence( const std::vector<int> & seq ) : _seq( seq
 
 AnimationSequence::AnimationSequence( const AnimationSequence & rhs ) : _seq( rhs._seq )
 {
+    if (_seq.empty()) DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty C1! " << _seq.size() );
     _currentFrame = _seq.begin();
 }
 
 AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
 {
     _seq = rhs;
+    if ( _seq.empty() )
+    DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty O1! " << _seq.size() );
     _currentFrame = _seq.begin();
     return *this;
 }
@@ -30,6 +33,7 @@ AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
 AnimationSequence & AnimationSequence::operator=( const AnimationSequence & rhs )
 {
     _seq = rhs._seq;
+    DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty O2! " << _seq.size() );
     _currentFrame = _seq.begin();
     return *this;
 }
@@ -51,12 +55,12 @@ int AnimationSequence::playAnimation( bool loop )
 int AnimationSequence::restartAnimation()
 {
     _currentFrame = _seq.begin();
-    return ( *_currentFrame );
+    return getFrame();
 }
 
 int AnimationSequence::getFrame() const
 {
-    return ( *_currentFrame );
+    return (isValid()) ? ( *_currentFrame ) : 0;
 }
 
 int AnimationSequence::animationLength() const
@@ -64,19 +68,36 @@ int AnimationSequence::animationLength() const
     return _seq.size();
 }
 
+int AnimationSequence::firstFrame() const
+{
+    return (isValid()) ? _seq.front() : 0;
+}
+
 double AnimationSequence::movementProgress() const
 {
-    return ( _currentFrame - _seq.begin() ) / animationLength();
+    if ( isValid() ) {
+        return ( _currentFrame - _seq.begin() ) / animationLength();
+    }
+    return 1.0;
 }
 
 bool AnimationSequence::isFirstFrame() const
 {
-    return _currentFrame == _seq.begin();
+    return ( isValid() ) ? _currentFrame == _seq.begin() : false;
 }
 
 bool AnimationSequence::isLastFrame() const
 {
-    return std::next( _currentFrame ) == _seq.end();
+    return ( isValid() ) ? std::next( _currentFrame ) == _seq.end() : false;
+}
+
+bool AnimationSequence::isValid() const
+{
+    if ( _seq.size() == 0 ) {
+        DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty V! " << _seq.size());
+        return false;
+    }
+    return true;
 }
 
 
@@ -109,6 +130,21 @@ int AnimationState::switchAnimation( int animstate )
 int AnimationState::getCurrentState( ) const
 {
     return _animState;
+}
+
+const AnimationSequence& AnimationState::seq() const
+{
+    return _currentSequence;
+}
+
+int AnimationState::playAnimation(bool loop)
+{
+    return _currentSequence.playAnimation(loop);
+}
+
+int AnimationState::restartAnimation()
+{
+    return _currentSequence.restartAnimation();
 }
 
 
@@ -154,8 +190,8 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
         appendFrames( animMap, _quickMove, BIN::H2_FRAME_SEQUENCE::MOVE_ONE, true );
     }
 
-    appendFrames( animMap, _moveModes.start, BIN::H2_FRAME_SEQUENCE::MOVE_START, true );
-    appendFrames( animMap, _moveModes.end, BIN::H2_FRAME_SEQUENCE::MOVE_END, true );
+    appendFrames( animMap, _moveModes.start, BIN::H2_FRAME_SEQUENCE::MOVE_START );
+    appendFrames( animMap, _moveModes.end, BIN::H2_FRAME_SEQUENCE::MOVE_END );
 
     // Attack sequences
     appendFrames( animMap, _melee[TOP].start, BIN::H2_FRAME_SEQUENCE::ATTACK1, true );
@@ -189,6 +225,39 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
         appendFrames( animMap, _ranged[BOTTOM].start, BIN::H2_FRAME_SEQUENCE::BREATH3, true );
         appendFrames( animMap, _ranged[BOTTOM].end, BIN::H2_FRAME_SEQUENCE::BREATH3_END );
     }
+}
+
+AnimationReference & AnimationReference::operator=( const AnimationReference & rhs ) 
+{
+    //int _type;
+
+    //std::vector<int> _static;
+    //std::vector<int> _quickMove;
+    //std::vector<int> _loopMove;
+    //startEndAnim_t _moveModes;
+    //std::vector<int> _wince;
+    //std::vector<int> _death;
+    //startEndAnim_t _melee[ATTACK_DIRECTION::DIRECTION_END];
+    //startEndAnim_t _ranged[ATTACK_DIRECTION::DIRECTION_END];
+    //std::vector<std::vector<int> > _idle;
+
+    _type = rhs._type;
+    _static = rhs._static;
+    _loopMove = rhs._loopMove;
+    _wince = rhs._wince;
+    _death = rhs._death;
+    _idle = rhs._idle;
+
+    //_moveModes.start = rhs._moveModes.start;
+    //_moveModes.end = rhs._moveModes.end;
+
+    for ( int i = 0; i < 3; i++ ) {
+        //_melee[i].start = rhs._melee[i].start;
+        //_melee[i].end = rhs._melee[i].end;
+        //_ranged[i].start = rhs._ranged[i].start;
+        //_ranged[i].end = rhs._ranged[i].end;
+    }
+    return *this;
 }
 
 AnimationReference::~AnimationReference() {}
@@ -291,9 +360,8 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animstate )
     return _static;
 }
 
-AnimationSequence AnimationReference::getAnimationSequence( int animstate ) 
+AnimationSequence AnimationReference::getAnimationSequence( int animstate ) const
 {
-    AnimationReference t1;
     return AnimationSequence( getAnimationVector( animstate ) );
 }
 

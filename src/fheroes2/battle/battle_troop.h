@@ -29,6 +29,7 @@
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_animation.h"
 #include "bitmodes.h"
 #include "sprite.h"
 
@@ -141,15 +142,14 @@ namespace Battle
         void SpellRestoreAction( const Spell &, u32, const HeroBase * );
         u32 Resurrect( u32, bool, bool );
 
-        const Monster::animframe_t & GetFrameState( void ) const;
-        const Monster::animframe_t & GetFrameState( int ) const;
+        const AnimationSequence& GetFrameState( void ) const;
+        const AnimationSequence& GetFrameState( int ) const;
         void IncreaseAnimFrame( bool loop = false );
         bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;
         void SetFrameStep( int );
         void SetFrame( int );
         int GetFrame( void ) const;
-        int GetFrameOffset( void ) const;
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
 
@@ -203,7 +203,7 @@ namespace Battle
         s32 animframe;
         s32 animstep;
 
-        AnimationSequence animation;
+        AnimationState animation;
 
         Position position;
         ModesAffected affected;

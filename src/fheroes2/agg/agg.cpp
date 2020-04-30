@@ -153,6 +153,7 @@ namespace AGG
     std::map<int, std::vector<Sprite> > scaledSprites;
 
     std::map<int, std::map<int, std::vector<int> > > bin_frm_cache;
+    std::map<int, AnimationReference> animRefs;
 
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
@@ -180,6 +181,7 @@ namespace AGG
     void SaveTIL( int til );
 
     bool LoadBINFRM( int bin_frm );
+    void BuildAnimationReferences();
 
     void LoadFNT( void );
     void ShowError( void );
@@ -1533,7 +1535,11 @@ bool AGG::LoadBINFRM( int bin_frm )
 
 AnimationReference AGG::GetAnimationSet( int monsterID )
 {
-    return AnimationReference(LookupBINCache(monsterID), monsterID);
+    auto it = animRefs.find( monsterID );
+    if ( it != animRefs.end() )
+        return it->second;
+
+    return AnimationReference(LookupBINCache(Monster::UNKNOWN), Monster::UNKNOWN);
 }
 
 const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
@@ -1555,6 +1561,13 @@ const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
 const std::map<int, std::map<int, std::vector<int>>> & AGG::LookupBINCache()
 {
     return bin_frm_cache;
+}
+
+void AGG::BuildAnimationReferences()
+{
+    for ( int i = Monster::UNKNOWN; i < Monster::LAST_VALID_MONSTER; i++ ) {
+        animRefs.emplace( i, AnimationReference( LookupBINCache( i ), i ) );
+    }
 }
 
 
@@ -1967,9 +1980,6 @@ bool AGG::Init( void )
 
     til_cache.resize( TIL::LASTTIL );
 
-    std::map<int, std::vector<int> > binFrameDefault = {{BIN::H2_FRAME_SEQUENCE::STATIC, {1}}};
-    bin_frm_cache.emplace( 0, binFrameDefault );
-
     // load palette
     u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
     pal_colors.reserve( ncolors );
@@ -1988,6 +1998,10 @@ bool AGG::Init( void )
 
     // load font
     LoadFNT();
+
+    std::map<int, std::vector<int> > binFrameDefault = {{BIN::H2_FRAME_SEQUENCE::STATIC, {1}}};
+    bin_frm_cache.emplace( 0, binFrameDefault );
+    BuildAnimationReferences();
 
     return true;
 }

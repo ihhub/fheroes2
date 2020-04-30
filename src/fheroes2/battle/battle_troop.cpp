@@ -201,8 +201,6 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), std::mem_fun_ref( &ModeDuration::isZeroDuration ) );
     
-    //AnimationSequence* a = new AnimationSequence( AGG::LookupBINCache( 1 ), 1);
-    
     return it == end() ? 0 : ( *it ).first;
 }
 
@@ -220,7 +218,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , animstep( 1 )
     , mirror( NULL )
     , blindanswer( false )
-    , animation( t.animRef.getAnimationVector( Monster::AS_STATIC ) )
+    , animation( AGG::GetAnimationSet( id ), AS_STATIC )
 {    
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -1790,12 +1788,14 @@ bool Battle::Unit::isHaveDamage( void ) const
 
 int Battle::Unit::GetFrameStart( void ) const
 {
-    return animstep < 0 ? GetFrameState().start + GetFrameState().count - 1 : GetFrameState().start;
+    //return animstep < 0 ? GetFrameState().start + GetFrameState().count - 1 : GetFrameState().start;
+    return animation.seq().firstFrame();
 }
 
 int Battle::Unit::GetFrame( void ) const
 {
-    return animframe;
+    //return animframe;
+    return animation.seq().getFrame();
 }
 
 void Battle::Unit::SetFrame( int val )
@@ -1808,102 +1808,67 @@ void Battle::Unit::SetFrameStep( int val )
     animstep = val;
 }
 
-int Battle::Unit::GetFrameOffset( void ) const
-{
-    return animframe - GetFrameStart();
-}
-
 int Battle::Unit::GetFrameCount( void ) const
 {
-    return GetFrameState().count;
+    return animation.seq().animationLength();
 }
 
 void Battle::Unit::IncreaseAnimFrame( bool loop )
 {
-    if ( !isFinishAnimFrame() )
-        animframe += animstep;
-    else if ( loop )
-        animframe = GetFrameStart();
+    //if ( !isFinishAnimFrame() )
+    //    animframe += animstep;
+    //else if ( loop )
+    //    animframe = GetFrameStart();
+    animation.playAnimation( loop );
 }
 
 bool Battle::Unit::isStartAnimFrame( void ) const
 {
-    return GetFrameStart() == animframe;
+    //return GetFrameStart() == animframe;
+    return animation.seq().isFirstFrame();
 }
 
 bool Battle::Unit::isFinishAnimFrame( void ) const
 {
-    if ( 0 == GetFrameState().count )
-        return true;
-    else if ( animstep < 0 )
-        return animframe <= GetFrameState().start;
-    else if ( animstep > 0 )
-        return animframe >= GetFrameState().start + GetFrameState().count - 1;
+    return animation.seq().isLastFrame();
 
-    return true;
+    //if ( 0 == GetFrameState().count )
+    //    return true;
+    //else if ( animstep < 0 )
+    //    return animframe <= GetFrameState().start;
+    //else if ( animstep > 0 )
+    //    return animframe >= GetFrameState().start + GetFrameState().count - 1;
+
+    //return true;
 }
 
-const Monster::animframe_t & Battle::Unit::GetFrameState( int state ) const
+const AnimationSequence & Battle::Unit::GetFrameState( int state ) const
 {
-    // TODO: HERE
-    const monstersprite_t & msi = GetMonsterSprite();
+    //const monstersprite_t & msi = GetMonsterSprite();    
 
-    switch ( state ) {
-    case AS_STATIC:
-        return msi.frm_static;
-    case AS_IDLE:
-        return msi.frm_idle;
-    case AS_MOVE:
-        return msi.frm_move;
-    case AS_FLY1:
-        return msi.frm_fly1;
-    case AS_FLY2:
-        return msi.frm_fly2;
-    case AS_FLY3:
-        return msi.frm_fly3;
-    case AS_SHOT0:
-        return msi.frm_shot0;
-    case AS_SHOT1:
-        return msi.frm_shot1;
-    case AS_SHOT2:
-        return msi.frm_shot2;
-    case AS_SHOT3:
-        return msi.frm_shot3;
-    case AS_ATTK0:
-        return msi.frm_attk0;
-    case AS_ATTK1:
-        return msi.frm_attk1;
-    case AS_ATTK2:
-        return msi.frm_attk2;
-    case AS_ATTK3:
-        return msi.frm_attk3;
-    case AS_WNCE:
-        return msi.frm_wnce;
-    case AS_KILL:
-        return msi.frm_kill;
-    default:
-        break;
-    }
-
-    return msi.frm_idle;
+    return animation.getAnimationSequence( state );
 }
 
-const Monster::animframe_t & Battle::Unit::GetFrameState( void ) const
+const AnimationSequence & Battle::Unit::GetFrameState( void ) const
 {
     return GetFrameState( animstate );
 }
 
 void Battle::Unit::ResetAnimFrame( int rule )
 {
-    animstep = 1;
-    animstate = rule;
-    animframe = GetFrameStart();
+    // TODO: normal setter
+    // animation = GetFrameState(rule);
 
-    if ( AS_FLY3 == rule && 0 == GetFrameState().count ) {
-        animstep = -1;
-        animstate = AS_FLY1;
-        animframe = GetFrameStart();
-    }
+    //animstep = 1;
+    //animstate = rule;
+    //animframe = GetFrameStart();
+
+    //// TODO: fix bullshit
+    //if ( AS_FLY3 == rule && 0 == GetFrameState().count ) {
+    //    animstep = -1;
+    //    animstate = AS_FLY1;
+    //    animframe = GetFrameStart();
+    //}
 }
 
 int Battle::Unit::M82Attk( void ) const

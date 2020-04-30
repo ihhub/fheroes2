@@ -27,10 +27,8 @@
 
 #include "gamedefs.h"
 #include "payment.h"
-#include "battle_animation.h"
 
 class Spell;
-class AnimationReference;
 
 class Monster
 {
@@ -278,11 +276,6 @@ public:
     static float GetUpgradeRatio( void );
 
     static monstersprite_t * GetMonsterSpireByICN( int icn );
-
-    const AnimationReference & getAnimationReference() const;
-    static AnimationReference & getAnimationReference( monster_t id );
-    // WHERE TO HOLD THEM
-    AnimationReference animRef;
 
 protected:
     static Monster FromDwelling( int race, u32 dw );
