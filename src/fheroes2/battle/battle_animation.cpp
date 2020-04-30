@@ -1,8 +1,124 @@
 #include "battle_animation.h"
 #include "settings.h"
 #include "bin_frm.h"
+#include "monster.h"
 
-AnimationSequence::AnimationSequence( const std::map<int, std::vector<int> > & animMap, Monster::monster_t id ) : _currentSequence(_static)
+
+AnimationSequence::AnimationSequence( const std::vector<int> & seq ) : _seq( seq )
+{
+    // Do we need this?
+    if ( _seq.empty() ) {
+        _seq.push_back( 1 );
+    }
+
+    // Make sure this reference is on point !
+    _currentFrame =  _seq.begin();
+}
+
+AnimationSequence::AnimationSequence( const AnimationSequence & rhs ) : _seq( rhs._seq )
+{
+    _currentFrame = _seq.begin();
+}
+
+AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
+{
+    _seq = rhs;
+    _currentFrame = _seq.begin();
+    return *this;
+}
+
+AnimationSequence & AnimationSequence::operator=( const AnimationSequence & rhs )
+{
+    _seq = rhs._seq;
+    _currentFrame = _seq.begin();
+    return *this;
+}
+
+AnimationSequence::~AnimationSequence() {}
+
+int AnimationSequence::playAnimation( bool loop )
+{
+    if ( isLastFrame() ) {
+        if ( loop )
+            restartAnimation();
+    }
+    else {
+        _currentFrame++;
+    }
+    return ( *_currentFrame );
+}
+
+int AnimationSequence::restartAnimation()
+{
+    _currentFrame = _seq.begin();
+    return ( *_currentFrame );
+}
+
+int AnimationSequence::getFrame() const
+{
+    return ( *_currentFrame );
+}
+
+int AnimationSequence::animationLength() const
+{
+    return _seq.size();
+}
+
+double AnimationSequence::movementProgress() const
+{
+    return ( _currentFrame - _seq.begin() ) / animationLength();
+}
+
+bool AnimationSequence::isFirstFrame() const
+{
+    return _currentFrame == _seq.begin();
+}
+
+bool AnimationSequence::isLastFrame() const
+{
+    return std::next( _currentFrame ) == _seq.end();
+}
+
+
+
+
+AnimationState::AnimationState( const std::map<int, std::vector<int> > & animMap, int id, int state )
+    : AnimationReference( animMap, id )
+    , _currentSequence(_static)
+{
+    switchAnimation( state );
+}
+
+
+AnimationState::AnimationState( const AnimationReference & ref, int state )
+    : AnimationReference( ref )
+    , _currentSequence(_static)
+{
+    switchAnimation( state );
+}
+
+AnimationState::~AnimationState() {}
+
+int AnimationState::switchAnimation( int animstate )
+{
+    _animState = animstate;
+    _currentSequence = getAnimationSequence( animstate );    
+    return _currentSequence.restartAnimation();
+}
+
+int AnimationState::getCurrentState( ) const
+{
+    return _animState;
+}
+
+
+
+AnimationReference::AnimationReference()
+{
+    _type = Monster::UNKNOWN;
+}
+
+AnimationReference::AnimationReference( const std::map<int, std::vector<int> > & animMap, int id )
 {
     _type = id;
 
@@ -12,9 +128,6 @@ AnimationSequence::AnimationSequence( const std::map<int, std::vector<int> > & a
         // fall back to this, to avoid crashes
         _static.push_back( 1 );
     }
-
-    // Make sure this reference is on point !
-    _currentFrame = _currentSequence.begin();
 
     // Taking damage
     appendFrames( animMap, _wince, BIN::H2_FRAME_SEQUENCE::WINCE_UP );
@@ -78,9 +191,9 @@ AnimationSequence::AnimationSequence( const std::map<int, std::vector<int> > & a
     }
 }
 
-AnimationSequence::~AnimationSequence() {}
+AnimationReference::~AnimationReference() {}
 
-bool AnimationSequence::appendFrames( const std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical )
+bool AnimationReference::appendFrames( const std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical )
 {
     auto it = animMap.find( animID );
     if ( it != animMap.end() && it->second.size() > 0 ) {
@@ -94,7 +207,7 @@ bool AnimationSequence::appendFrames( const std::map<int, std::vector<int> > & a
     return false;
 }
 
-const std::vector<int> & AnimationSequence::getAnimationSequence( int animstate )
+const std::vector<int> & AnimationReference::getAnimationVector( int animstate ) const
 {
     switch ( animstate ) {
     case Monster::AS_STATIC:
@@ -169,7 +282,7 @@ const std::vector<int> & AnimationSequence::getAnimationSequence( int animstate 
     case Monster::AS_ATTK1:
     case Monster::AS_ATTK2:
     case Monster::AS_ATTK3:
-        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animstate);
+        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animstate );
     case Monster::AS_NONE:
     case Monster::AS_INVALID:
     default:
@@ -178,20 +291,26 @@ const std::vector<int> & AnimationSequence::getAnimationSequence( int animstate 
     return _static;
 }
 
-int AnimationSequence::getNextFrame(const std::vector<int>& sequence, int current, bool loop)
+AnimationSequence AnimationReference::getAnimationSequence( int animstate ) 
+{
+    AnimationReference t1;
+    return AnimationSequence( getAnimationVector( animstate ) );
+}
+
+int AnimationReference::getNextFrame( const std::vector<int> & sequence, int current, bool loop )
 {
     auto it = sequence.begin();
-    
+
     // basically iterator advance operator with end checking
     // don't support negatives/going back
     while ( current > 0 && it != sequence.end() ) {
-        if ( std::next(it) == sequence.end() ) {
+        if ( std::next( it ) == sequence.end() ) {
             if ( loop ) {
                 it = sequence.begin();
             }
             else {
                 break;
-            }            
+            }
         }
         else {
             it++;
@@ -201,50 +320,12 @@ int AnimationSequence::getNextFrame(const std::vector<int>& sequence, int curren
     return ( *it );
 }
 
-int AnimationSequence::switchAnimation( int animstate )
-{
-    _currentSequence = getAnimationSequence( animstate );    
-    return restartAnimation();
-}
-
-int AnimationSequence::playAnimation( bool loop )
-{
-    if ( isLastFrame() ) {
-        if (loop) restartAnimation();
-    }
-    else {
-        _currentFrame++;
-    }
-    return ( *_currentFrame );
-}
-
-int AnimationSequence::restartAnimation()
-{
-    _currentFrame = _currentSequence.begin();
-    return ( *_currentFrame );
-}
-
-int AnimationSequence::getFrame() const
-{
-    return (*_currentFrame);
-}
-
-bool AnimationSequence::isFirstFrame() const
-{
-    return _currentFrame == _currentSequence.begin();
-}
-
-bool AnimationSequence::isLastFrame() const
-{
-    return std::next(_currentFrame) == _currentSequence.end();
-}
-
-int AnimationSequence::getStaticFrame() const
+int AnimationReference::getStaticFrame() const
 {
     return _static.back();
 }
 
-int AnimationSequence::getDeadFrame() const
+int AnimationReference::getDeadFrame() const
 {
     return ( _death.empty() ) ? _static.back() : _death.back();
 }

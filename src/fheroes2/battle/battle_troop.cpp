@@ -200,6 +200,9 @@ void Battle::ModesAffected::DecreaseDuration( void )
 u32 Battle::ModesAffected::FindZeroDuration( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), std::mem_fun_ref( &ModeDuration::isZeroDuration ) );
+    
+    //AnimationSequence* a = new AnimationSequence( AGG::LookupBINCache( 1 ), 1);
+    
     return it == end() ? 0 : ( *it ).first;
 }
 
@@ -217,7 +220,8 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , animstep( 1 )
     , mirror( NULL )
     , blindanswer( false )
-{
+    , animation( t.animRef.getAnimationVector( Monster::AS_STATIC ) )
+{    
     // set position
     if ( Board::isValidIndex( pos ) ) {
         if ( t.isWide() )
@@ -538,7 +542,7 @@ int Battle::Unit::GetAnimationState() const
 
 bool Battle::Unit::isIdling() const
 {
-    // TODO Check for any on 5 states
+    // TODO Check for any of the 5 states
     return GetAnimationState() == Monster::AS_IDLE;
 }
 
@@ -1841,6 +1845,7 @@ bool Battle::Unit::isFinishAnimFrame( void ) const
 
 const Monster::animframe_t & Battle::Unit::GetFrameState( int state ) const
 {
+    // TODO: HERE
     const monstersprite_t & msi = GetMonsterSprite();
 
     switch ( state ) {

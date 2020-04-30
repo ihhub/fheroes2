@@ -1186,6 +1186,9 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 const s32 cx = p_move.x - rt.x;
                 const s32 cy = p_move.y - rt.y;
 
+                // cx/cy is sprite size
+                // Frame count: one tile of movement goes through all stages of animation
+                // sp is sprite drawing offset
                 sp.y += ( ( b_move->GetFrame() - frm.start ) * cy ) / frm.count;
                 if ( 0 != Sign( cy ) )
                     sp.x -= Sign( cx ) * ox / 2;

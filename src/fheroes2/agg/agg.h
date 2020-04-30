@@ -66,7 +66,7 @@ namespace AGG
     u32 GetICNCount( int icn );
     Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
-    const AnimationSequence& GetAnimationSet( Monster::monster_t monsterID );
+    AnimationReference GetAnimationSet( int monsterID );
     const std::map<int, std::vector<int>> & LookupBINCache(int bin_frm );
     const std::map<int, std::map<int, std::vector<int>>> & LookupBINCache( );
 #ifdef WITH_TTF

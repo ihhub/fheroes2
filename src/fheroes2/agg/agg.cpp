@@ -1531,9 +1531,9 @@ bool AGG::LoadBINFRM( int bin_frm )
     return false;
 }
 
-const AnimationSequence & AGG::GetAnimationSet( Monster::monster_t monsterID ) 
+AnimationReference AGG::GetAnimationSet( int monsterID )
 {
-    return AnimationSequence(LookupBINCache(monsterID), monsterID);
+    return AnimationReference(LookupBINCache(monsterID), monsterID);
 }
 
 const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
@@ -1546,7 +1546,7 @@ const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
         else {
             // fall back to unknown if missing data
             DEBUG( DBG_ENGINE, DBG_WARN, "missing animation frame: " << BIN::GetFilename( bin_frm ) << ", index: " << bin_frm );
-            mapIterator = bin_frm_cache.find( Monster::UNKNOWN );
+            mapIterator = bin_frm_cache.find( 0 );
         }
     }
     return mapIterator->second;
@@ -1968,7 +1968,7 @@ bool AGG::Init( void )
     til_cache.resize( TIL::LASTTIL );
 
     std::map<int, std::vector<int> > binFrameDefault = {{BIN::H2_FRAME_SEQUENCE::STATIC, {1}}};
-    bin_frm_cache.emplace( Monster::UNKNOWN, binFrameDefault );
+    bin_frm_cache.emplace( 0, binFrameDefault );
 
     // load palette
     u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;

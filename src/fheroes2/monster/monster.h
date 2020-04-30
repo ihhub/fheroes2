@@ -27,8 +27,10 @@
 
 #include "gamedefs.h"
 #include "payment.h"
+#include "battle_animation.h"
 
 class Spell;
+class AnimationReference;
 
 class Monster
 {
@@ -179,31 +181,6 @@ public:
         int count;
     };
 
-    struct framesequence_t
-    {
-        int icn_file;
-        int bin_frm_file;
-        std::vector<int> frm_static;
-        std::vector<int> frm_idle;
-        std::vector<int> frm_fly_start;
-        std::vector<int> frm_flying;
-        std::vector<int> frm_fly_land;
-        std::vector<int> frm_shot1;
-        std::vector<int> frm_shot1_down;
-        std::vector<int> frm_shot2;
-        std::vector<int> frm_shot2_down;
-        std::vector<int> frm_shot3;
-        std::vector<int> frm_shot3_down;
-        std::vector<int> frm_attk1;
-        std::vector<int> frm_attk1_down;
-        std::vector<int> frm_attk2;
-        std::vector<int> frm_attk2_down;
-        std::vector<int> frm_attk3;
-        std::vector<int> frm_attk3_down;
-        std::vector<int> frm_wnce;
-        std::vector<int> frm_kill;
-    };
-
     struct monstersprite_t
     {
         int icn_file;
@@ -301,6 +278,11 @@ public:
     static float GetUpgradeRatio( void );
 
     static monstersprite_t * GetMonsterSpireByICN( int icn );
+
+    const AnimationReference & getAnimationReference() const;
+    static AnimationReference & getAnimationReference( monster_t id );
+    // WHERE TO HOLD THEM
+    AnimationReference animRef;
 
 protected:
     static Monster FromDwelling( int race, u32 dw );

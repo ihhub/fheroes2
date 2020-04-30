@@ -203,6 +203,8 @@ namespace Battle
         s32 animframe;
         s32 animstep;
 
+        AnimationSequence animation;
+
         Position position;
         ModesAffected affected;
         Unit * mirror;

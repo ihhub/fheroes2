@@ -26,6 +26,7 @@
 #include "error.h"
 #include "game.h"
 #include "game_static.h"
+#include "agg.h"
 #include "icn.h"
 #include "luck.h"
 #include "m82.h"
@@ -432,8 +433,10 @@ void Monster::UpdateStats( const std::string & spec )
 Monster::Monster( int m )
     : id( UNKNOWN )
 {
-    if ( m <= WATER_ELEMENT )
+    if ( m <= WATER_ELEMENT ) {
         id = m;
+        animRef = getAnimationReference( (monster_t)m );
+    }
     else if ( MONSTER_RND1 == m )
         id = Rand( LEVEL1 ).GetID();
     else if ( MONSTER_RND2 == m )
@@ -476,12 +479,14 @@ Monster::Monster( const Spell & sp )
     default:
         break;
     }
+    animRef = getAnimationReference( (monster_t) id );
 }
 
 Monster::Monster( int race, u32 dw )
     : id( UNKNOWN )
 {
     id = FromDwelling( race, dw ).id;
+    animRef = getAnimationReference( (monster_t)id );
 }
 
 bool Monster::isValid( void ) const
@@ -1765,6 +1770,17 @@ const Monster::monstersprite_t & Monster::GetMonsterSprite() const
 {
     return monsters_info[GetID()];
 }
+
+const AnimationReference& Monster::getAnimationReference() const
+{
+    return animRef;
+}
+
+AnimationReference& Monster::getAnimationReference(monster_t id)
+{
+    return AGG::GetAnimationSet( id );
+}
+
 
 MonsterAnimation::MonsterAnimation( const Monster & monster )
     : _sprite( monster.GetMonsterSprite() )
