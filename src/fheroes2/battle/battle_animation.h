@@ -88,7 +88,7 @@ public:
     AnimationState( const AnimationReference & animMap, int state );
     virtual ~AnimationState();
 
-    int switchAnimation( int animstate );
+    bool switchAnimation( int animstate );
     int getCurrentState() const;
     const AnimationSequence & seq() const;
 

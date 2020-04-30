@@ -1842,22 +1842,22 @@ bool Battle::Unit::isFinishAnimFrame( void ) const
     //return true;
 }
 
-const AnimationSequence & Battle::Unit::GetFrameState( int state ) const
+// Can't return a reference here - it will be destroyed
+AnimationSequence Battle::Unit::GetFrameState( int state ) const
 {
-    //const monstersprite_t & msi = GetMonsterSprite();    
+    const monstersprite_t & msi = GetMonsterSprite();    
 
     return animation.getAnimationSequence( state );
 }
 
 const AnimationSequence & Battle::Unit::GetFrameState( void ) const
 {
-    return GetFrameState( animstate );
+    return animation.seq();
 }
 
 void Battle::Unit::ResetAnimFrame( int rule )
 {
-    // TODO: normal setter
-    // animation = GetFrameState(rule);
+    animation.switchAnimation( rule );
 
     //animstep = 1;
     //animstate = rule;
@@ -1869,6 +1869,12 @@ void Battle::Unit::ResetAnimFrame( int rule )
     //    animstate = AS_FLY1;
     //    animframe = GetFrameStart();
     //}
+}
+
+bool Battle::Unit::SwitchAnimation( int rule )
+{
+    animation.switchAnimation( rule );
+    return animation.seq().isValid();
 }
 
 int Battle::Unit::M82Attk( void ) const
@@ -2011,11 +2017,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::ARCHER:
     case Monster::RANGER:
         switch ( state ) {
-        case AS_SHOT1:
+        case AS_RANG_TOP:
             return -15;
-        case AS_SHOT2:
+        case AS_RANG_FRONT:
             return -3;
-        case AS_SHOT3:
+        case AS_RANG_BOT:
             return 10;
         default:
             break;
@@ -2033,11 +2039,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::LICH:
     case Monster::POWER_LICH:
         switch ( state ) {
-        case AS_SHOT1:
+        case AS_RANG_TOP:
             return -30;
-        case AS_SHOT2:
+        case AS_RANG_FRONT:
             return -20;
-        case AS_SHOT3:
+        case AS_RANG_BOT:
             return 0;
         default:
             break;
@@ -2047,11 +2053,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::ELF:
     case Monster::GRAND_ELF:
         switch ( state ) {
-        case AS_SHOT1:
+        case AS_RANG_TOP:
             return -5;
-        case AS_SHOT2:
+        case AS_RANG_FRONT:
             return 0;
-        case AS_SHOT3:
+        case AS_RANG_BOT:
             return 5;
         default:
             break;
@@ -2060,11 +2066,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::CENTAUR:
         switch ( state ) {
-        case AS_SHOT1:
+        case AS_RANG_TOP:
             return -20;
-        case AS_SHOT2:
+        case AS_RANG_FRONT:
             return -10;
-        case AS_SHOT3:
+        case AS_RANG_BOT:
             return 5;
         default:
             break;
@@ -2074,11 +2080,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::DRUID:
     case Monster::GREATER_DRUID:
         switch ( state ) {
-        case AS_SHOT1:
+        case AS_RANG_TOP:
             return -20;
-        case AS_SHOT2:
+        case AS_RANG_FRONT:
             return -5;
-        case AS_SHOT3:
+        case AS_RANG_BOT:
             return 15;
         default:
             break;
@@ -2087,11 +2093,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::HALFLING:
         switch ( state ) {
-        case AS_SHOT1:
+        case AS_RANG_TOP:
             return -20;
-        case AS_SHOT2:
+        case AS_RANG_FRONT:
             return 10;
-        case AS_SHOT3:
+        case AS_RANG_BOT:
             return 20;
         default:
             break;
@@ -2101,11 +2107,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::MAGE:
     case Monster::ARCHMAGE:
         switch ( state ) {
-        case AS_SHOT1:
+        case AS_RANG_TOP:
             return -40;
-        case AS_SHOT2:
+        case AS_RANG_FRONT:
             return -10;
-        case AS_SHOT3:
+        case AS_RANG_BOT:
             return 25;
         default:
             break;
@@ -2114,11 +2120,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::TITAN:
         switch ( state ) {
-        case AS_SHOT1:
+        case AS_RANG_TOP:
             return -80;
-        case AS_SHOT2:
+        case AS_RANG_FRONT:
             return -20;
-        case AS_SHOT3:
+        case AS_RANG_BOT:
             return 15;
         default:
             break;

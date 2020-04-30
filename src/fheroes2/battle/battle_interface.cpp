@@ -2395,43 +2395,33 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     b_move = &attacker;
     p_move = attacker.GetRectPosition();
 
-    int action0 = Monster::AS_ATTK0;
-    int action1 = 0;
-
     const Rect & pos1 = attacker.GetRectPosition();
     const Rect & pos2 = defender.GetRectPosition();
-
-    if ( pos2.y < pos1.y )
-        action1 = Monster::AS_ATTK1;
-    else if ( pos2.y > pos1.y )
-        action1 = Monster::AS_ATTK3;
-    else
-        action1 = Monster::AS_ATTK2;
-
-    // long distance attack animation
-    if ( attacker.isDoubleCellAttack() && 2 == targets.size() ) {
-        action0 = Monster::AS_SHOT0;
-        if ( action1 == Monster::AS_ATTK1 )
-            action1 = Monster::AS_SHOT1;
-        else if ( action1 == Monster::AS_ATTK3 )
-            action1 = Monster::AS_SHOT3;
-        else
-            action1 = Monster::AS_SHOT2;
-    }
 
     // check archers
     const bool archer = attacker.isArchers() && !attacker.isHandFighting();
     const Point & bp1 = attacker.GetBackPoint();
     const Point & bp2 = defender.GetBackPoint();
 
-    if ( archer ) {
+    int actionStart = Monster::AS_MELEE_FRONT;
+
+    // long distance attack animation
+    if ( archer || ( attacker.isDoubleCellAttack() && 2 == targets.size()) ) {
         const float dx = bp1.x - bp2.x;
         const float dy = bp1.y - bp2.y;
         const float tan = std::fabs( dy / dx );
 
-        action0 = Monster::AS_SHOT0;
-        action1 = ( 0.6 >= tan ? Monster::AS_SHOT2 : ( dy > 0 ? Monster::AS_SHOT1 : Monster::AS_SHOT3 ) );
+        actionStart = ( 0.6 >= tan ? Monster::AS_RANG_FRONT : ( dy > 0 ? Monster::AS_RANG_TOP : Monster::AS_RANG_BOT ) );
     }
+    else if ( pos2.y < pos1.y ) {
+        actionStart = Monster::AS_MELEE_TOP;
+    }
+    else if ( pos2.y > pos1.y ) {
+        actionStart = Monster::AS_MELEE_BOT;
+    }
+
+    // All attacks must have secondary animation next to it
+    int actionEnd = actionStart + 1;
 
     // redraw luck animation
     if ( attacker.Modes( LUCK_GOOD | LUCK_BAD ) )
@@ -2440,9 +2430,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     AGG::PlaySound( attacker.M82Attk() );
 
     // redraw attack animation
-    // TODO: example to work on
-    if ( attacker.GetFrameState( action0 ).animationLength() ) {
-        attacker.ResetAnimFrame( action0 );
+    if ( attacker.SwitchAnimation( actionStart ) ) {
         RedrawTroopFrameAnimation( attacker );
     }
 
@@ -2452,7 +2440,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         const u32 step = ( missile.w() < 16 ? 16 : missile.w() );
         const Point line_from = Point( pos1.x + ( attacker.isReflect() ? 0 : pos1.w ),
-                                       pos1.y + ( Settings::Get().QVGA() ? attacker.GetStartMissileOffset( action1 ) / 2 : attacker.GetStartMissileOffset( action1 ) ) );
+                     pos1.y + ( Settings::Get().QVGA() ? attacker.GetStartMissileOffset( actionStart ) / 2 : attacker.GetStartMissileOffset( actionStart ) ) );
         const Point line_to = Point( pos2.x + ( defender.isReflect() ? 0 : pos1.w ), pos2.y );
 
         const Points points = GetLinePoints( line_from, line_to, step );
@@ -2475,8 +2463,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     RedrawActionWincesKills( targets );
 
     // post attack animation
-    if ( attacker.GetFrameState( action1 ).animationLength() ) {
-        attacker.ResetAnimFrame( action1 );
+    if ( attacker.SwitchAnimation( actionEnd ) ) {
         RedrawTroopFrameAnimation( attacker );
     }
 

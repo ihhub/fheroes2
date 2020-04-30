@@ -24,8 +24,6 @@ AnimationSequence::AnimationSequence( const AnimationSequence & rhs ) : _seq( rh
 AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
 {
     _seq = rhs;
-    if ( _seq.empty() )
-    DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty O1! " << _seq.size() );
     _currentFrame = _seq.begin();
     return *this;
 }
@@ -33,7 +31,6 @@ AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
 AnimationSequence & AnimationSequence::operator=( const AnimationSequence & rhs )
 {
     _seq = rhs._seq;
-    DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty O2! " << _seq.size() );
     _currentFrame = _seq.begin();
     return *this;
 }
@@ -94,7 +91,7 @@ bool AnimationSequence::isLastFrame() const
 bool AnimationSequence::isValid() const
 {
     if ( _seq.size() == 0 ) {
-        DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty V! " << _seq.size());
+        //DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty V! " << _seq.size());
         return false;
     }
     return true;
@@ -120,11 +117,19 @@ AnimationState::AnimationState( const AnimationReference & ref, int state )
 
 AnimationState::~AnimationState() {}
 
-int AnimationState::switchAnimation( int animstate )
+bool AnimationState::switchAnimation( int animstate )
 {
-    _animState = animstate;
-    _currentSequence = getAnimationSequence( animstate );    
-    return _currentSequence.restartAnimation();
+    auto seq = getAnimationSequence( animstate );
+    if ( seq.isValid() ) {
+        _animState = animstate;
+        _currentSequence = getAnimationSequence( animstate );
+        _currentSequence.restartAnimation();
+        return true;
+    }
+    else {
+        DEBUG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim " << animstate << " length " << _currentSequence.animationLength() );
+    }
+    return false;
 }
 
 int AnimationState::getCurrentState( ) const
@@ -289,6 +294,7 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animstate )
         return _moveModes.start;
         break;
     case Monster::AS_MOVING:
+    case Monster::AS_MOVE:
         return _loopMove;
         break;
     case Monster::AS_MOVE_END:
@@ -339,7 +345,6 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animstate )
     case Monster::AS_KILL:
         return _death;
         break;
-    case Monster::AS_MOVE:
     case Monster::AS_FLY1:
     case Monster::AS_FLY2:
     case Monster::AS_FLY3:

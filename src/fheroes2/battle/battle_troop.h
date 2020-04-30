@@ -143,7 +143,7 @@ namespace Battle
         u32 Resurrect( u32, bool, bool );
 
         const AnimationSequence& GetFrameState( void ) const;
-        const AnimationSequence& GetFrameState( int ) const;
+        AnimationSequence GetFrameState( int ) const;
         void IncreaseAnimFrame( bool loop = false );
         bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;
@@ -172,6 +172,7 @@ namespace Battle
 
         void SetResponse( void );
         void ResetAnimFrame( int );
+        bool SwitchAnimation( int );
         void UpdateDirection( void );
         bool UpdateDirection( const Rect & );
         void PostKilledAction( void );
