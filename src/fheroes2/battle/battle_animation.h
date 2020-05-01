@@ -93,11 +93,20 @@ public:
     bool switchAnimation( int animstate, bool reverse = false );
     bool switchAnimation( const std::vector<int> & animationList, bool reverse = false );
     int getCurrentState() const;
-    const AnimationSequence & seq() const;
+    AnimationSequence & seq();
 
     // pass-down methods
     int playAnimation( bool loop = false );
     int restartAnimation( );
+
+    int getFrame() const;
+    int firstFrame() const;
+    int lastFrame() const;
+    int animationLength() const;
+    double movementProgress() const;
+    bool isFirstFrame() const;
+    bool isLastFrame() const;
+    bool isValid() const;
 
 private:
     int _animState;

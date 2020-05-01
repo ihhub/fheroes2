@@ -78,7 +78,7 @@ int AnimationSequence::lastFrame() const
 double AnimationSequence::movementProgress() const
 {
     if ( isValid() ) {
-        return ( _currentFrame - _seq.begin() ) / animationLength();
+        return (double)( _currentFrame - _seq.begin() ) / animationLength();
     }
     return 1.0;
 }
@@ -172,7 +172,7 @@ int AnimationState::getCurrentState( ) const
     return _animState;
 }
 
-const AnimationSequence& AnimationState::seq() const
+AnimationSequence& AnimationState::seq()
 {
     return _currentSequence;
 }
@@ -185,6 +185,46 @@ int AnimationState::playAnimation(bool loop)
 int AnimationState::restartAnimation()
 {
     return _currentSequence.restartAnimation();
+}
+
+int AnimationState::getFrame() const
+{
+    return _currentSequence.getFrame();
+}
+
+int AnimationState::animationLength() const
+{
+    return _currentSequence.animationLength();
+}
+
+int AnimationState::firstFrame() const
+{
+    return _currentSequence.firstFrame();
+}
+
+int AnimationState::lastFrame() const
+{
+    return _currentSequence.lastFrame();
+}
+
+double AnimationState::movementProgress() const
+{
+    return _currentSequence.movementProgress();
+}
+
+bool AnimationState::isFirstFrame() const
+{
+    return _currentSequence.isFirstFrame();
+}
+
+bool AnimationState::isLastFrame() const
+{
+    return _currentSequence.isLastFrame();
+}
+
+bool AnimationState::isValid() const
+{
+    return _currentSequence.isValid();
 }
 
 
@@ -380,21 +420,8 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animstate )
     case Monster::AS_KILL:
         return _death;
         break;
-    case Monster::AS_FLY1:
-    case Monster::AS_FLY2:
-    case Monster::AS_FLY3:
-    case Monster::AS_SHOT0:
-    case Monster::AS_SHOT1:
-    case Monster::AS_SHOT2:
-    case Monster::AS_SHOT3:
-    case Monster::AS_ATTK0:
-    case Monster::AS_ATTK1:
-    case Monster::AS_ATTK2:
-    case Monster::AS_ATTK3:
-        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animstate );
-    case Monster::AS_NONE:
-    case Monster::AS_INVALID:
     default:
+        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animstate );
         break;
     }
     return _static;

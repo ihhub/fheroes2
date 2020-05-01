@@ -144,7 +144,7 @@ namespace Battle
 
         bool SwitchAnimation( int rule, bool reverse = false );
         bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
-        const AnimationSequence& GetFrameState( void ) const;
+        const AnimationState & GetFrameState( void ) const;
         AnimationSequence GetFrameState( int ) const;
         void SetDeathAnim();
         void IncreaseAnimFrame( bool loop = false );

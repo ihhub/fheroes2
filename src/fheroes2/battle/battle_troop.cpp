@@ -1788,13 +1788,13 @@ bool Battle::Unit::isHaveDamage( void ) const
 int Battle::Unit::GetFrameStart( void ) const
 {
     //return animstep < 0 ? GetFrameState().start + GetFrameState().count - 1 : GetFrameState().start;
-    return animation.seq().firstFrame();
+    return animation.firstFrame();
 }
 
 int Battle::Unit::GetFrame( void ) const
 {
     //return animframe;
-    return animation.seq().getFrame();
+    return animation.getFrame();
 }
 
 void Battle::Unit::SetDeathAnim( )
@@ -1813,7 +1813,7 @@ void Battle::Unit::SetFrameStep( int val )
 
 int Battle::Unit::GetFrameCount( void ) const
 {
-    return animation.seq().animationLength();
+    return animation.animationLength();
 }
 
 void Battle::Unit::IncreaseAnimFrame( bool loop )
@@ -1828,12 +1828,12 @@ void Battle::Unit::IncreaseAnimFrame( bool loop )
 bool Battle::Unit::isStartAnimFrame( void ) const
 {
     //return GetFrameStart() == animframe;
-    return animation.seq().isFirstFrame();
+    return animation.isFirstFrame();
 }
 
 bool Battle::Unit::isFinishAnimFrame( void ) const
 {
-    return animation.seq().isLastFrame();
+    return animation.isLastFrame();
 
     //if ( 0 == GetFrameState().count )
     //    return true;
@@ -1853,21 +1853,21 @@ AnimationSequence Battle::Unit::GetFrameState( int state ) const
     return animation.getAnimationSequence( state );
 }
 
-const AnimationSequence & Battle::Unit::GetFrameState( void ) const
+const AnimationState & Battle::Unit::GetFrameState( void ) const
 {
-    return animation.seq();
+    return animation;
 }
 
 bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
 {
     animation.switchAnimation( rule, reverse );
-    return animation.seq().isValid();
+    return animation.isValid();
 }
 
 bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
 {
     animation.switchAnimation( animationList, reverse );
-    return animation.seq().isValid();
+    return animation.isValid();
 }
 
 int Battle::Unit::M82Attk( void ) const

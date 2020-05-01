@@ -1178,18 +1178,17 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
         // move offset
         if ( b_move == &b ) {
-            auto animSequence = b_move->GetFrameState();
-            Sprite spmon0 = AGG::GetICN( msi.icn_file, animSequence.firstFrame(), b.isReflect() );
+            Sprite spmon0 = AGG::GetICN( msi.icn_file, b_move->animation.firstFrame(), b.isReflect() );
             const s32 ox = spmon1.x() - spmon0.x();
 
-            if ( animSequence.animationLength() ) {
+            if ( b_move->animation.animationLength() ) {
                 const s32 cx = p_move.x - rt.x;
                 const s32 cy = p_move.y - rt.y;
 
                 // cx/cy is sprite size
                 // Frame count: one tile of movement goes through all stages of animation
                 // sp is sprite drawing offset
-                sp.y += animSequence.movementProgress() * cy;
+                sp.y += b_move->animation.movementProgress() * cy;
                 if ( 0 != Sign( cy ) )
                     sp.x -= Sign( cx ) * ox / 2;
             }
@@ -1200,10 +1199,9 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
             if ( b_fly->GetFrameCount() ) {
                 const s32 cx = p_fly.x - rt.x;
                 const s32 cy = p_fly.y - rt.y;
-                auto animSeq = b_fly->GetFrameState();
 
-                sp.x += cx + Sign( cx ) * animSeq.movementProgress() * std::abs( ( p_fly.x - p_move.x ) );
-                sp.y += cy + Sign( cy ) * animSeq.movementProgress() * std::abs( ( p_fly.y - p_move.y ) );
+                sp.x += cx + Sign( cx ) * b_fly->animation.movementProgress() * std::abs( ( p_fly.x - p_move.x ) );
+                sp.y += cy + Sign( cy ) * b_fly->animation.movementProgress() * std::abs( ( p_fly.y - p_move.y ) );
             }
         }
 
@@ -2446,6 +2444,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         const Points points = GetLinePoints( line_from, line_to, step );
         Points::const_iterator pnt = points.begin();
 
+        // convert the following code into a function/event service
         while ( le.HandleEvents( false ) && pnt != points.end() ) {
             CheckGlobalEvents( le );
 
@@ -2617,7 +2616,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
             py += ( conf.QVGA() ? 5 : 10 );
         }
     }
-
 }
 
 void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
@@ -2689,6 +2687,7 @@ void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
     Point pt2( pos2.x, pos2.y );
 
     cursor.SetThemes( Cursor::WAR_NONE );
+    // Check if 80 is a good value, flyers moving way too fast
     const u32 step = b.isWide() ? 80 : 40;
 
     const Points points = GetLinePoints( pt1, pt2, Settings::Get().QVGA() ? step / 2 : step );
