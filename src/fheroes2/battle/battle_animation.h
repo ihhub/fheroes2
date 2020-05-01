@@ -29,10 +29,11 @@ public:
     AnimationSequence & operator=( const AnimationSequence & );
 
     int playAnimation( bool loop = false );
-    int restartAnimation( bool reverse = false );
+    int restartAnimation();
 
     int getFrame() const;
     int firstFrame() const;
+    int lastFrame() const;
     int animationLength() const;
     double movementProgress() const;
     bool isFirstFrame() const;
@@ -90,12 +91,13 @@ public:
     virtual ~AnimationState();
 
     bool switchAnimation( int animstate, bool reverse = false );
+    bool switchAnimation( const std::vector<int> & animationList, bool reverse = false );
     int getCurrentState() const;
     const AnimationSequence & seq() const;
 
     // pass-down methods
     int playAnimation( bool loop = false );
-    int restartAnimation();
+    int restartAnimation( );
 
 private:
     int _animState;

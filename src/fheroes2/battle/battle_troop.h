@@ -142,6 +142,8 @@ namespace Battle
         void SpellRestoreAction( const Spell &, u32, const HeroBase * );
         u32 Resurrect( u32, bool, bool );
 
+        bool SwitchAnimation( int rule, bool reverse = false );
+        bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
         const AnimationSequence& GetFrameState( void ) const;
         AnimationSequence GetFrameState( int ) const;
         void SetDeathAnim();
@@ -171,7 +173,6 @@ namespace Battle
         u32 HowManyWillKilled( u32 ) const;
 
         void SetResponse( void );
-        bool SwitchAnimation( int rule, bool reverse = false );
         void UpdateDirection( void );
         bool UpdateDirection( const Rect & );
         void PostKilledAction( void );
@@ -186,6 +187,9 @@ namespace Battle
 
         int GetAnimationState() const;
         bool isIdling() const;
+
+        // Find a better way to expose it without a million getters/setters
+        AnimationState animation;
 
     private:
         friend StreamBase & operator<<( StreamBase &, const Unit & );
@@ -203,7 +207,6 @@ namespace Battle
         s32 animframe;
         s32 animstep;
 
-        AnimationState animation;
 
         Position position;
         ModesAffected affected;

@@ -44,26 +44,20 @@ int AnimationSequence::playAnimation( bool loop )
             restartAnimation();
     }
     else {
-        if ( _reverse ) {
-            _currentFrame--;
-        }
-        else {
-            _currentFrame++;
-        }
+        _currentFrame++;
     }
-    return ( *_currentFrame );
+    return *_currentFrame;
 }
 
-int AnimationSequence::restartAnimation(bool reverse)
+int AnimationSequence::restartAnimation()
 {
-    _reverse = reverse;
-    _currentFrame = (_reverse) ? _seq.end() - 1 : _seq.begin();
+    _currentFrame = _seq.begin();
     return getFrame();
 }
 
 int AnimationSequence::getFrame() const
 {
-    return (isValid()) ? ( *_currentFrame ) : 0;
+    return (isValid()) ? *_currentFrame : lastFrame();
 }
 
 int AnimationSequence::animationLength() const
@@ -74,6 +68,11 @@ int AnimationSequence::animationLength() const
 int AnimationSequence::firstFrame() const
 {
     return (isValid()) ? _seq.front() : 0;
+}
+
+int AnimationSequence::lastFrame() const
+{
+    return ( isValid() ) ? _seq.back() : 0;
 }
 
 double AnimationSequence::movementProgress() const
@@ -97,7 +96,10 @@ bool AnimationSequence::isLastFrame() const
 bool AnimationSequence::isValid() const
 {
     if ( _seq.size() == 0 ) {
-        //DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty V! " << _seq.size());
+        return false;
+    }
+    else if (_currentFrame == _seq.end()) {
+        DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence has " << _seq.size() << " frames but currentFrame is in invalid state" );
         return false;
     }
     return true;
@@ -125,15 +127,42 @@ AnimationState::~AnimationState() {}
 
 bool AnimationState::switchAnimation( int animstate, bool reverse )
 {
-    auto seq = getAnimationSequence( animstate );
-    if ( seq.isValid() ) {
+    auto seq = getAnimationVector( animstate );
+    if ( seq.size() > 0 ) {
         _animState = animstate;
-        _currentSequence = getAnimationSequence( animstate );
-        _currentSequence.restartAnimation( reverse );
+        if (reverse) std::reverse( seq.begin(), seq.end() );
+        _currentSequence = seq;
+        _currentSequence.restartAnimation();
         return true;
     }
     else {
         DEBUG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim " << animstate << " length " << _currentSequence.animationLength() );
+    }
+    return false;
+}
+
+bool AnimationState::switchAnimation( const std::vector<int>& animationList, bool reverse )
+{
+    std::vector<int> combinedAnimation;
+
+    for ( auto it = animationList.begin(); it != animationList.end(); ++it ) {
+        auto seq = getAnimationVector( *it );
+        if ( seq.size() > 0 ) {
+            _animState = *it;
+            combinedAnimation.insert( combinedAnimation.end(), seq.begin(), seq.end() );
+        }
+    }
+
+    if ( combinedAnimation.size() > 0 ) {
+        if ( reverse )
+            std::reverse( combinedAnimation.begin(), combinedAnimation.end() );
+
+        _currentSequence = combinedAnimation;
+        _currentSequence.restartAnimation();
+        return true;
+    }
+    else {
+        DEBUG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim list of length " << animationList.size() );
     }
     return false;
 }

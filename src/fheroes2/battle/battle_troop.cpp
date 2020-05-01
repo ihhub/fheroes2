@@ -1864,6 +1864,12 @@ bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
     return animation.seq().isValid();
 }
 
+bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
+{
+    animation.switchAnimation( animationList, reverse );
+    return animation.seq().isValid();
+}
+
 int Battle::Unit::M82Attk( void ) const
 {
     if ( isArchers() && !isHandFighting() ) {
