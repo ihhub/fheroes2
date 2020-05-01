@@ -274,36 +274,36 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
     appendFrames( animMap, _moveModes.end, BIN::H2_FRAME_SEQUENCE::MOVE_END );
 
     // Attack sequences
-    appendFrames( animMap, _melee[TOP].start, BIN::H2_FRAME_SEQUENCE::ATTACK1, true );
-    appendFrames( animMap, _melee[TOP].end, BIN::H2_FRAME_SEQUENCE::ATTACK1_END );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::TOP].start, BIN::H2_FRAME_SEQUENCE::ATTACK1, true );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::TOP].end, BIN::H2_FRAME_SEQUENCE::ATTACK1_END );
 
-    appendFrames( animMap, _melee[FRONT].start, BIN::H2_FRAME_SEQUENCE::ATTACK2, true );
-    appendFrames( animMap, _melee[FRONT].end, BIN::H2_FRAME_SEQUENCE::ATTACK2_END );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::FRONT].start, BIN::H2_FRAME_SEQUENCE::ATTACK2, true );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::FRONT].end, BIN::H2_FRAME_SEQUENCE::ATTACK2_END );
 
-    appendFrames( animMap, _melee[BOTTOM].start, BIN::H2_FRAME_SEQUENCE::ATTACK3, true );
-    appendFrames( animMap, _melee[BOTTOM].end, BIN::H2_FRAME_SEQUENCE::ATTACK3_END );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].start, BIN::H2_FRAME_SEQUENCE::ATTACK3, true );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].end, BIN::H2_FRAME_SEQUENCE::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
     if ( animationExists( animMap, BIN::H2_FRAME_SEQUENCE::SHOOT2 ) ) {
-        appendFrames( animMap, _ranged[TOP].start, BIN::H2_FRAME_SEQUENCE::SHOOT1, true );
-        appendFrames( animMap, _ranged[TOP].end, BIN::H2_FRAME_SEQUENCE::SHOOT1_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, BIN::H2_FRAME_SEQUENCE::SHOOT1, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, BIN::H2_FRAME_SEQUENCE::SHOOT1_END );
 
-        appendFrames( animMap, _ranged[FRONT].start, BIN::H2_FRAME_SEQUENCE::SHOOT2, true );
-        appendFrames( animMap, _ranged[FRONT].end, BIN::H2_FRAME_SEQUENCE::SHOOT2_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].start, BIN::H2_FRAME_SEQUENCE::SHOOT2, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].end, BIN::H2_FRAME_SEQUENCE::SHOOT2_END );
 
-        appendFrames( animMap, _ranged[BOTTOM].start, BIN::H2_FRAME_SEQUENCE::SHOOT3, true );
-        appendFrames( animMap, _ranged[BOTTOM].end, BIN::H2_FRAME_SEQUENCE::SHOOT3_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, BIN::H2_FRAME_SEQUENCE::SHOOT3, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, BIN::H2_FRAME_SEQUENCE::SHOOT3_END );
     }
     else if ( animationExists( animMap, BIN::H2_FRAME_SEQUENCE::BREATH2 ) ) {
         // Only 6 units should have this
-        appendFrames( animMap, _ranged[TOP].start, BIN::H2_FRAME_SEQUENCE::BREATH1, true );
-        appendFrames( animMap, _ranged[TOP].end, BIN::H2_FRAME_SEQUENCE::BREATH1_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, BIN::H2_FRAME_SEQUENCE::BREATH1, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, BIN::H2_FRAME_SEQUENCE::BREATH1_END );
 
-        appendFrames( animMap, _ranged[FRONT].start, BIN::H2_FRAME_SEQUENCE::BREATH2, true );
-        appendFrames( animMap, _ranged[FRONT].end, BIN::H2_FRAME_SEQUENCE::BREATH2_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].start, BIN::H2_FRAME_SEQUENCE::BREATH2, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].end, BIN::H2_FRAME_SEQUENCE::BREATH2_END );
 
-        appendFrames( animMap, _ranged[BOTTOM].start, BIN::H2_FRAME_SEQUENCE::BREATH3, true );
-        appendFrames( animMap, _ranged[BOTTOM].end, BIN::H2_FRAME_SEQUENCE::BREATH3_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, BIN::H2_FRAME_SEQUENCE::BREATH3, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, BIN::H2_FRAME_SEQUENCE::BREATH3_END );
     }
 }
 

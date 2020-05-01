@@ -26,14 +26,14 @@
 #include <utility>
 #include <vector>
 
-#include "gamedefs.h"
+#include "battle_animation.h"
 #include "bin_frm.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "monster.h"
 #include "sprite.h"
 #include "til.h"
 #include "xmi.h"
-#include "battle_animation.h"
-#include "monster.h"
 
 class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
 {
@@ -68,8 +68,8 @@ namespace AGG
     Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
     AnimationReference GetAnimationSet( int monsterID );
-    const std::map<int, std::vector<int>> & LookupBINCache(int bin_frm );
-    const std::map<int, std::map<int, std::vector<int>>> & LookupBINCache( );
+    const std::map<int, std::vector<int> > & LookupBINCache( int bin_frm );
+    const std::map<int, std::map<int, std::vector<int> > > & LookupBINCache();
 #ifdef WITH_TTF
     Surface GetUnicodeLetter( u32 ch, u32 ft );
     u32 GetFontHeight( bool small );

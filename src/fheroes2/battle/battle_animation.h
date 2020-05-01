@@ -3,12 +3,15 @@
 
 #include "gamedefs.h"
 
-enum ATTACK_DIRECTION
+namespace ATTACK_DIRECTION
 {
-    TOP,
-    FRONT,
-    BOTTOM,
-    DIRECTION_END
+    enum
+    {
+        TOP,
+        FRONT,
+        BOTTOM,
+        DIRECTION_END
+    };
 };
 
 struct startEndAnim_t
