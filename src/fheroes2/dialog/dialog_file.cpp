@@ -25,6 +25,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_interface.h"
 #include "settings.h"
 #include "text.h"
 
@@ -76,25 +77,31 @@ int Dialog::FileOptions( void )
         le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
 
         if ( le.MouseClickLeft( buttonNew ) ) {
-            result = Game::NEWGAME;
-            break;
+            if ( Interface::Basic::Get().EventNewGame() == Game::NEWGAME ) {
+                result = Game::NEWGAME;
+                break;
+            }
         }
         if ( le.MouseClickLeft( buttonLoad ) ) {
             if ( ListFiles::IsEmpty( Settings::GetSaveDir(), ".sav", false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
             else {
-                result = Game::LOADGAME;
-                break;
+                if ( Interface::Basic::Get().EventLoadGame() == Game::LOADGAME ) {
+                    result = Game::LOADGAME;
+                    break;
+                }
             }
         }
         if ( le.MouseClickLeft( buttonSave ) ) {
-            result = Game::SAVEGAME;
+            result = Interface::Basic::Get().EventSaveGame();
             break;
         }
         if ( le.MouseClickLeft( buttonQuit ) ) {
-            result = Game::QUITGAME;
-            break;
+            if ( Interface::Basic::Get().EventExit() == Game::QUITGAME ) {
+                result = Game::QUITGAME;
+                break;
+            }
         }
         if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
             result = Game::CANCEL;
