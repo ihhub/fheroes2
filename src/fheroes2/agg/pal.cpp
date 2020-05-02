@@ -179,15 +179,15 @@ namespace PAL
     };
 
     const palmap_t* current_palette;
-}
+    
+    void CreatePalette( std::vector<SDL_Color> & palette, const u8 * table )
+    {
+        palette.reserve( PALETTE_SIZE );
 
-void PAL::CreatePalette( std::vector<SDL_Color> & palette, const u8 table[PALETTE_SIZE] )
-{
-    palette.reserve( PALETTE_SIZE );
-
-    for ( u32 ii = 0; ii < PALETTE_SIZE; ++ii ) {
-        SDL_Color col = standard_palette[table[ii]];
-        palette.push_back( col );
+        for ( u32 ii = 0; ii < PALETTE_SIZE; ++ii ) {
+            SDL_Color col = standard_palette[table[ii]];
+            palette.push_back( col );
+        }
     }
 }
 
