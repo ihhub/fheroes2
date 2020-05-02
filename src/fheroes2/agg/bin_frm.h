@@ -8,7 +8,6 @@
 
 namespace BIN
 {
-
     enum H2_FRAME_SEQUENCE
     {
         MOVE_START,  // START & END is only used by flyers BUT also Skeleton & Swordsman, however MOVE_ONE matches them perfectly
@@ -51,13 +50,10 @@ namespace BIN
     
     const size_t CORRECT_FRM_LENGTH = 821;
 
-    const char * GetFilename( int );
-    std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & );
+    const char * GetFilename( int icnId );
+    std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & data );
     bool animationExists( const std::map<int, std::vector<int> > & animMap, H2_FRAME_SEQUENCE id );
     std::vector<int> analyzeGetUnitsWithoutAnim( const std::map<int, std::map<int, std::vector<int> > > & allAnimMap, H2_FRAME_SEQUENCE id, bool inverse = false );
     std::vector<int> analyzeGetUnitsWithoutAnim( const std::map<int, std::map<int, std::vector<int> > > & allAnimMap, H2_FRAME_SEQUENCE one, H2_FRAME_SEQUENCE two, bool inverse = false );
-    // int FromString( const char * );
 }
-
-
 #endif
