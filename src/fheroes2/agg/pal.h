@@ -23,7 +23,6 @@ namespace PAL
         MIRROR_IMAGE
     };
 
-    void CreatePalette( std::vector<SDL_Color> & palette, const u8 table[PALETTE_SIZE] );
     void CreateStandardPalette();
     void InitAllPalettes();
     void Clear();
