@@ -6,7 +6,7 @@
 #include <map>
 #include <vector>
 
-namespace BIN
+namespace Bin_Info
 {
     enum H2_FRAME_SEQUENCE
     {
@@ -43,12 +43,8 @@ namespace BIN
         SHOOT2,
         SHOOT2_END,
         SHOOT3,
-        SHOOT3_END,
-
-        BIN_FRAME_SEQUENCE_END
+        SHOOT3_END
     };
-    
-    const size_t CORRECT_FRM_LENGTH = 821;
 
     const char * GetFilename( int icnId );
     std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & data );

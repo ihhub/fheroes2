@@ -4,8 +4,10 @@
 #include <algorithm>
 #include <iostream>
 
-namespace BIN
+namespace Bin_Info
 {
+    const size_t CORRECT_FRM_LENGTH = 821;
+
     const struct
     {
         int type;
@@ -48,11 +50,11 @@ namespace BIN
         std::map<int, std::vector<int> > animationMap;
         const char invalidFrameId = static_cast<char>( 0xFF );
 
-        if ( data.size() != BIN::CORRECT_FRM_LENGTH ) {
+        if ( data.size() != Bin_Info::CORRECT_FRM_LENGTH ) {
             DEBUG( DBG_ENGINE, DBG_WARN, " wrong/corrupted BIN FRM FILE: " << data.size() << " length" );
         }
 
-       for ( size_t setId = 0u; setId < BIN_FRAME_SEQUENCE_END; ++setId ) {
+       for ( size_t setId = 0u; setId < SHOOT3_END + 1; ++setId ) {
             std::vector<int> frameSequence;
             int frameCount = 0;
 

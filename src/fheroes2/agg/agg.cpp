@@ -1520,11 +1520,11 @@ Surface AGG::GetTIL( int til, u32 index, u32 shape )
 /* load BIN FRM object */
 bool AGG::LoadBINFRM( int bin_frm )
 {
-    DEBUG( DBG_ENGINE, DBG_INFO, BIN::GetFilename( bin_frm ) );
-    const std::vector<u8> & body = ReadChunk( BIN::GetFilename( bin_frm ) );
+    DEBUG( DBG_ENGINE, DBG_INFO, Bin_Info::GetFilename( bin_frm ) );
+    const std::vector<u8> & body = ReadChunk( Bin_Info::GetFilename( bin_frm ) );
 
     if ( body.size() ) {
-        const std::map<int, std::vector<int> > animMap = BIN::convertBinToMap( body );
+        const std::map<int, std::vector<int> > animMap = Bin_Info::convertBinToMap( body );
         if ( !animMap.empty() ) {
             bin_frm_cache[bin_frm] = animMap;
             return true;
@@ -1551,7 +1551,7 @@ const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
         }
         else {
             // fall back to unknown if missing data
-            DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << BIN::GetFilename( bin_frm ) << ", index: " << bin_frm );
+            DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( bin_frm ) << ", index: " << bin_frm );
             mapIterator = bin_frm_cache.find( 0 );
         }
     }
@@ -1997,7 +1997,7 @@ bool AGG::Init( void )
     // load font
     LoadFNT();
 
-    std::map<int, std::vector<int> > binFrameDefault = {{BIN::H2_FRAME_SEQUENCE::STATIC, {1}}};
+    std::map<int, std::vector<int> > binFrameDefault = {{Bin_Info::H2_FRAME_SEQUENCE::STATIC, {1}}};
     bin_frm_cache.emplace( 0, binFrameDefault );
     BuildAnimationReferences();
 
@@ -2023,8 +2023,8 @@ void AGG::Quit( void )
             delete[] tils.sprites;
     }
 
-    for ( std::map<int, std::map<int, std::vector<int> > > it = bin_frm_cache.begin(); it != bin_frm_cache.end(); ++it ) {
-        for ( std::map<int, std::vector<int> > secIt = it->second.begin(); secIt != it->second.end(); ++secIt )
+    for ( std::map<int, std::map<int, std::vector<int> > >::iterator it = bin_frm_cache.begin(); it != bin_frm_cache.end(); ++it ) {
+        for ( std::map<int, std::vector<int> >::iterator secIt = it->second.begin(); secIt != it->second.end(); ++secIt )
             secIt->second.clear();
         it->second.clear();
     }
