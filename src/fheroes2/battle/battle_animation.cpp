@@ -13,13 +13,14 @@ AnimationSequence::AnimationSequence( const std::vector<int> & seq )
     }
 
     // Make sure this reference is on point !
-    _currentFrame =  _seq.begin();
+    _currentFrame = _seq.begin();
 }
 
 AnimationSequence::AnimationSequence( const AnimationSequence & rhs )
     : _seq( rhs._seq )
 {
-    if (_seq.empty()) DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty C1! " << _seq.size() );
+    if ( _seq.empty() )
+        DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty C1! " << _seq.size() );
     _currentFrame = _seq.begin();
 }
 
@@ -59,7 +60,7 @@ int AnimationSequence::restartAnimation()
 
 int AnimationSequence::getFrame() const
 {
-    return isValid() ? *_currentFrame : lastFrame();
+    return isValid() ? *_currentFrame : 0;
 }
 
 int AnimationSequence::animationLength() const
@@ -72,9 +73,10 @@ int AnimationSequence::firstFrame() const
     return isValid() ? _seq.front() : 0;
 }
 
-int AnimationSequence::lastFrame() const
+void AnimationSequence::setToLastFrame()
 {
-    return isValid() ? _seq.back() : 0;
+    if ( _seq.size > 0 )
+        _currentFrame = _seq.end() - 1;
 }
 
 double AnimationSequence::movementProgress() const
@@ -100,7 +102,7 @@ bool AnimationSequence::isValid() const
     if ( _seq.size() == 0 ) {
         return false;
     }
-    else if (_currentFrame == _seq.end()) {
+    else if ( _currentFrame == _seq.end() ) {
         DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence has " << _seq.size() << " frames but currentFrame is in invalid state" );
         return false;
     }
@@ -109,15 +111,14 @@ bool AnimationSequence::isValid() const
 
 AnimationState::AnimationState( const std::map<int, std::vector<int> > & animMap, int id, int state )
     : AnimationReference( animMap, id )
-    , _currentSequence(_static)
+    , _currentSequence( _static )
 {
     switchAnimation( state );
 }
 
-
 AnimationState::AnimationState( const AnimationReference & ref, int state )
     : AnimationReference( ref )
-    , _currentSequence(_static)
+    , _currentSequence( _static )
 {
     switchAnimation( state );
 }
@@ -167,7 +168,7 @@ bool AnimationState::switchAnimation( const std::vector<int> & animationList, bo
     return false;
 }
 
-int AnimationState::getCurrentState( ) const
+int AnimationState::getCurrentState() const
 {
     return _animState;
 }
@@ -232,15 +233,13 @@ AnimationReference::AnimationReference()
     _type = Monster::UNKNOWN;
 }
 
-
 AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id )
 {
     _type = id;
 
     // STATIC is our default
     // appendFrames inserts to vector so ref is still valid
-    if ( !appendFrames( info, _static, ANIM_TYPE::STATIC ) )
-    {
+    if ( !appendFrames( info, _static, ANIM_TYPE::STATIC ) ) {
         // fall back to this, to avoid crashes
         _static.push_back( 1 );
     }
@@ -308,7 +307,6 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
     }
 }
 
-
 AnimationReference::AnimationReference( const std::map<int, std::vector<int> > & animMap, int id )
 {
     _type = id;
@@ -337,7 +335,6 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
     // Every unit has MOVE_MAIN anim, use it as a base
     appendFrames( animMap, _loopMove, ANIM_TYPE::MOVE_MAIN, true );
 
-    
     if ( animMap.find( ANIM_TYPE::MOVE_ONE ) != animMap.end() ) {
         appendFrames( animMap, _quickMove, ANIM_TYPE::MOVE_ONE, true );
     }
@@ -360,7 +357,7 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
     appendFrames( animMap, _melee[Monster_State::BOTTOM].end, ANIM_TYPE::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
-    if ( animMap.find(ANIM_TYPE::SHOOT2) != animMap.end() ) {
+    if ( animMap.find( ANIM_TYPE::SHOOT2 ) != animMap.end() ) {
         appendFrames( animMap, _ranged[Monster_State::TOP].start, ANIM_TYPE::SHOOT1, true );
         appendFrames( animMap, _ranged[Monster_State::TOP].end, ANIM_TYPE::SHOOT1_END );
 
@@ -384,7 +381,6 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
 }
 
 AnimationReference::~AnimationReference() {}
-
 
 bool AnimationReference::appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID, bool critical )
 {

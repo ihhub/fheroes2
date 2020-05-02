@@ -26,10 +26,8 @@
 #include <utility>
 #include <vector>
 
-#include "battle_animation.h"
 #include "gamedefs.h"
 #include "icn.h"
-#include "monster.h"
 #include "sprite.h"
 #include "til.h"
 #include "xmi.h"

@@ -1797,7 +1797,7 @@ int Battle::Unit::GetFrame( void ) const
     return animation.getFrame();
 }
 
-void Battle::Unit::SetDeathAnim( )
+void Battle::Unit::SetDeathAnim()
 {
     if ( animation.getCurrentState() != Monster_State::KILL ) {
         SwitchAnimation( Monster_State::KILL );

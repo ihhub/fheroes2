@@ -23,10 +23,10 @@ public:
 
     int playAnimation( bool loop = false );
     int restartAnimation();
+    void setToLastFrame();
 
     int getFrame() const;
     int firstFrame() const;
-    int lastFrame() const;
     int animationLength() const;
     double movementProgress() const;
     bool isFirstFrame() const;
@@ -87,7 +87,7 @@ public:
 
     // pass-down methods
     int playAnimation( bool loop = false );
-    int restartAnimation( );
+    int restartAnimation();
 
     int getFrame() const;
     int firstFrame() const;

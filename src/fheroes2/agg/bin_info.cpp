@@ -35,6 +35,9 @@ namespace Bin_Info
     };
 #pragma pack( pop )
 
+    std::map<int, AnimationReference> animRefs;
+    MonsterAnimCache _info_cache;
+
     const struct
     {
         int type;
@@ -59,12 +62,11 @@ namespace Bin_Info
         {Monster::WOLF, "WOLF_FRM.BIN"},       {Monster::ZOMBIE, "ZOMB_FRM.BIN"},       {Monster::MUTANT_ZOMBIE, "ZOMB_FRM.BIN"}
     };
 
-
     const char * GetFilename( int bin_frm )
     {
         int index = Monster::UNKNOWN;
 
-        for ( int idx = Monster::UNKNOWN; idx < Monster::WATER_ELEMENT+1; idx++ ) {
+        for ( int idx = Monster::UNKNOWN; idx < Monster::WATER_ELEMENT + 1; idx++ ) {
             if ( bin_file_map[idx].type == bin_frm ) {
                 index = idx;
                 break;
@@ -73,82 +75,22 @@ namespace Bin_Info
         return bin_file_map[index].string;
     }
 
-    std::map<int, AnimationReference> animRefs;
-    MonsterAnimCache _info_cache;
-
-
-    bool InitBinInfo()
-    {
-        for ( int i = Monster::UNKNOWN; i < Monster::WATER_ELEMENT + 1; i++ )
-            animRefs[i] = _info_cache.createAnimReference( i );
-
-        return true;
-    }
-
-    AnimationReference GetAnimationSet( int monsterID )
-    {
-        std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
-        if ( it != animRefs.end() )
-            return it->second;
-
-        return _info_cache.createAnimReference( Monster::UNKNOWN );
-    }
-
-    MonsterAnimCache::MonsterAnimCache()
-    {
-        _animMap.emplace( Monster::UNKNOWN, MonsterAnimInfo() );
-    }
-
-    bool MonsterAnimCache::populate ( int monsterID )
-    {
-        std::vector<u8> body = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
-
-        if ( body.size() ) {
-            MonsterAnimInfo monsterInfo = buildMonsterAnimInfo( body );
-            if ( isMonsterInfoValid( monsterInfo ) ) {
-                _animMap.emplace( monsterID, monsterInfo );
-                return true;
-            }
-        }
-        return false;
-    }
-
-    bool MonsterAnimCache::isMonsterInfoValid( const MonsterAnimInfo & info, int animID )
-    {
-        return info.animations.size() == MonsterAnimInfo::SHOOT3_END + 1 && info.animations.at( animID ).size() > 0;
-    }
-
-    const MonsterAnimInfo & MonsterAnimCache::getAnimInfo( int monsterID )
-    {
-        std::map<int, MonsterAnimInfo>::iterator mapIterator = _animMap.find( monsterID );
-        if ( mapIterator == _animMap.end() ) {
-            if ( populate( monsterID ) ) {
-                mapIterator = _animMap.find( monsterID );
-            }
-            else {
-                // fall back to unknown if missing data
-                DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
-                mapIterator = _animMap.find( Monster::UNKNOWN );
-            }
-        }
-        return mapIterator->second;
-    }
-
     MonsterAnimInfo MonsterAnimCache::buildMonsterAnimInfo( const std::vector<u8> & bytes )
     {
         FRMFileStructure dataSet;
         MonsterAnimInfo monster_info;
 
         std::map<int, std::vector<int> > animationMap;
-        const char invalidFrameId = static_cast<char>( 0xFF );
 
         // sanity check
         if ( sizeof( FRMFileStructure ) != Bin_Info::CORRECT_FRM_LENGTH ) {
             DEBUG( DBG_ENGINE, DBG_WARN, "Size of MonsterAnimInfo does not match expected length: " << sizeof( MonsterAnimInfo ) );
+            return monster_info;
         }
 
         if ( bytes.size() != sizeof( FRMFileStructure ) ) {
             DEBUG( DBG_ENGINE, DBG_WARN, " wrong/corrupted BIN FRM FILE: " << bytes.size() << " length" );
+            return monster_info;
         }
 
         // populate struct via direct copy, when size aligns
@@ -169,7 +111,7 @@ namespace Bin_Info
             monster_info.projectileOffset[i] = Point( dataSet.projectileOffset[i][0], dataSet.projectileOffset[i][1] );
         }
         for ( int i = 0; i < dataSet.projectileCount; i++ ) {
-            monster_info.projectileAngles.push_back(dataSet.projectileAngles[i]);
+            monster_info.projectileAngles.push_back( dataSet.projectileAngles[i] );
         }
 
         // Frame X offsets for future use
@@ -198,6 +140,46 @@ namespace Bin_Info
         return monster_info;
     }
 
+    MonsterAnimCache::MonsterAnimCache()
+    {
+        _animMap.emplace( Monster::UNKNOWN, MonsterAnimInfo() );
+    }
+
+    bool MonsterAnimCache::populate( int monsterID )
+    {
+        std::vector<u8> body = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
+
+        if ( body.size() ) {
+            MonsterAnimInfo monsterInfo = buildMonsterAnimInfo( body );
+            if ( isMonsterInfoValid( monsterInfo ) ) {
+                _animMap.emplace( monsterID, monsterInfo );
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const MonsterAnimInfo & MonsterAnimCache::getAnimInfo( int monsterID )
+    {
+        std::map<int, MonsterAnimInfo>::iterator mapIterator = _animMap.find( monsterID );
+        if ( mapIterator == _animMap.end() ) {
+            if ( populate( monsterID ) ) {
+                mapIterator = _animMap.find( monsterID );
+            }
+            else {
+                // fall back to unknown if missing data
+                DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
+                mapIterator = _animMap.find( Monster::UNKNOWN );
+            }
+        }
+        return mapIterator->second;
+    }
+
+    bool MonsterAnimCache::isMonsterInfoValid( const MonsterAnimInfo & info, int animID )
+    {
+        return info.animations.size() == MonsterAnimInfo::SHOOT3_END + 1 && info.animations.at( animID ).size() > 0;
+    }
+
     AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )
     {
         return AnimationSequence( info.animations.at( animID ) );
@@ -206,5 +188,20 @@ namespace Bin_Info
     AnimationReference MonsterAnimCache::createAnimReference( int monsterID )
     {
         return AnimationReference( _info_cache.getAnimInfo( monsterID ), monsterID );
+    }
+
+    AnimationReference GetAnimationSet( int monsterID )
+    {
+        std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
+        if ( it != animRefs.end() )
+            return it->second;
+
+        return _info_cache.createAnimReference( Monster::UNKNOWN );
+    }
+
+    void InitBinInfo()
+    {
+        for ( int i = Monster::UNKNOWN; i < Monster::WATER_ELEMENT + 1; i++ )
+            animRefs[i] = _info_cache.createAnimReference( i );
     }
 }

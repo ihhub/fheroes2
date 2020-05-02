@@ -63,10 +63,8 @@ namespace Bin_Info
         u8 idleAnimationsCount;
         int idleDelay;
         float idlePriority[5];
-        std::vector<std::vector<int>> animations;
+        std::vector<std::vector<int> > animations;
     };
-
-
 
     class MonsterAnimCache
     {
@@ -86,8 +84,8 @@ namespace Bin_Info
         MonsterAnimInfo buildMonsterAnimInfo( const std::vector<u8> & bytes );
     };
 
+    void InitBinInfo();
     const char * GetFilename( int icnId );
-    bool InitBinInfo();
     AnimationReference GetAnimationSet( int monsterID );
 }
 #endif
