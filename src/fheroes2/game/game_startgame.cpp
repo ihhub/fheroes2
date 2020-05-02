@@ -56,7 +56,8 @@ namespace
 {
     bool SortPlayers( const Player * player1, const Player * player2 )
     {
-        return player1->isControlHuman() && !player2->isControlHuman() && player1->GetColor() < player2->GetColor();
+        return ( player1->isControlHuman() && !player2->isControlHuman() ) || ( ( player1->isControlHuman() == player2->isControlHuman() ) &&
+               ( player1->GetColor() < player2->GetColor() ) );
     }
 }
 
