@@ -11,6 +11,22 @@ namespace Bin_Info
     struct MonsterAnimInfo
     {
         u8 fileType;
+        s16 blindOffset[2];
+        u8 unusedMoveOffsets[7][16];
+        u8 idleAnimationsCount;
+        float idlePriority[5];
+        u32 unusedIdleDelays[5];
+        u32 idleAnimationDelay;
+        u32 moveSpeed;
+        u32 shootSpeed;
+        u32 flightSpeed;
+        s16 projectileOffset[3][2];
+        u8 projectileCount;
+        float projectileAngles[12];
+        s32 troopCountOffsetLeft;
+        s32 troopCountOffsetRight;
+        u8 animationLength[34];
+        u8 animationFrames[34][16];
     };
 
     enum ORIGINAL_ANIMATION
@@ -52,7 +68,7 @@ namespace Bin_Info
     };
 
     const char * GetFilename( int icnId );
-    std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & data );
+    std::map<int, std::vector<int> > buildMonsterAnimInfo( const std::vector<u8> & data );
     bool animationExists( const std::map<int, std::vector<int> > & animMap, ORIGINAL_ANIMATION id );
 }
 #endif

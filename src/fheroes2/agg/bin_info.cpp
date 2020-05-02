@@ -45,7 +45,7 @@ namespace Bin_Info
         return bin_file_map[index].string;
     }
 
-    std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & data ) 
+    std::map<int, std::vector<int> > buildMonsterAnimInfo( const std::vector<u8> & data ) 
     {
         std::map<int, std::vector<int> > animationMap;
         const char invalidFrameId = static_cast<char>( 0xFF );

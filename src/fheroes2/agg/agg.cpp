@@ -1524,7 +1524,7 @@ bool AGG::LoadBINFRM( int bin_frm )
     const std::vector<u8> & body = ReadChunk( Bin_Info::GetFilename( bin_frm ) );
 
     if ( body.size() ) {
-        const std::map<int, std::vector<int> > animMap = Bin_Info::convertBinToMap( body );
+        const std::map<int, std::vector<int> > animMap = Bin_Info::buildMonsterAnimInfo( body );
         if ( !animMap.empty() ) {
             bin_frm_cache[bin_frm] = animMap;
             return true;
