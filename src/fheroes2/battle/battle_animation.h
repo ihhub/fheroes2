@@ -1,9 +1,9 @@
 #ifndef H2BATTLE_ANIMATION_H
 #define H2BATTLE_ANIMATION_H
 
+#include "bin_info.h"
 #include "gamedefs.h"
 #include "monster_info.h"
-
 
 struct startEndAnim_t
 {
@@ -45,8 +45,8 @@ class AnimationReference
 {
 public:
     AnimationReference();
+    AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id );
     AnimationReference( const std::map<int, std::vector<int> > & animMap, int id );
-    AnimationReference & operator=(const AnimationReference & rhs );
     virtual ~AnimationReference();
 
     int getStaticFrame() const;
@@ -69,6 +69,7 @@ protected:
     startEndAnim_t _ranged[ATTACK_DIRECTION::DIRECTION_END];
     std::vector<std::vector<int> > _idle;
 
+    bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID, bool critical = false );
     bool appendFrames( const std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical = false );
 };
 

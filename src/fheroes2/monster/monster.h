@@ -123,8 +123,6 @@ public:
         FIRE_ELEMENT,
         WATER_ELEMENT,
 
-        LAST_VALID_MONSTER,
-
         MONSTER_RND1,
         MONSTER_RND2,
         MONSTER_RND3,

@@ -39,7 +39,7 @@ namespace Bin_Info
     {
         int index = Monster::UNKNOWN;
 
-        for ( int idx = Monster::UNKNOWN; idx < Monster::LAST_VALID_MONSTER; idx++ ) {
+        for ( int idx = Monster::UNKNOWN; idx < Monster::WATER_ELEMENT+1; idx++ ) {
             if ( bin_file_map[idx].type == bin_frm ) {
                 index = idx;
                 break;
@@ -48,17 +48,13 @@ namespace Bin_Info
         return bin_file_map[index].string;
     }
 
-    //std::map<int, std::map<int, std::vector<int> > > bin_frm_cache;
     std::map<int, AnimationReference> animRefs;
     MonsterAnimCache _info_cache;
 
 
     bool InitBinInfo()
     {
-        std::map<int, std::vector<int> > binFrameDefault = {{Bin_Info::ORIGINAL_ANIMATION::STATIC, {1}}};
-        //bin_frm_cache.emplace( 0, binFrameDefault );
-
-        for ( int i = Monster::UNKNOWN; i < Monster::LAST_VALID_MONSTER; i++ )
+        for ( int i = Monster::UNKNOWN; i < Monster::WATER_ELEMENT + 1; i++ )
             animRefs[i] = _info_cache.createAnimReference( i );
 
         return true;
@@ -71,6 +67,18 @@ namespace Bin_Info
             return it->second;
 
         return _info_cache.createAnimReference( Monster::UNKNOWN );
+    }
+
+    MonsterAnimCache::MonsterAnimCache()
+    {
+        MonsterAnimInfo unknown;
+        unknown.moveSpeed = 450;
+        unknown.animationFrames[Bin_Info::MOVE_MAIN][0] = 1;
+        unknown.animationLength[Bin_Info::MOVE_MAIN] = 1;
+        unknown.animationFrames[Bin_Info::STATIC][0] = 1;
+        unknown.animationLength[Bin_Info::STATIC] = 1;
+
+        _animMap.emplace( Monster::UNKNOWN, unknown );
     }
 
     bool MonsterAnimCache::populate ( int monsterID )
@@ -89,10 +97,22 @@ namespace Bin_Info
 
     bool MonsterAnimCache::isMonsterInfoValid( const MonsterAnimInfo & info ) const
     {
-        // Absolute minimal set up: moveSpeed + animations
-        // Main move, static, death, wince, 3 melee attacks: [2, 7, 13, 14, 16, 20, 24]
+        // Absolute minimal set up: Main move, static, death, wince, 3 melee attacks
+        const int requiredAnim[7] = {2, 7, 13, 14, 16, 20, 24};
+        const u8 MAX_FRAMES = 99;
 
-        return false;
+        
+        for ( int i = 0; i < 7; i++ ) {
+            for ( int fr = 0; fr < info.animationLength[requiredAnim[i]]; fr++ ) {
+                if ( info.animationFrames[requiredAnim[i]][fr] > MAX_FRAMES ) {
+                    DEBUG( DBG_ENGINE, DBG_WARN,
+                           "Invalid monster info: found frame " << info.animationFrames[requiredAnim[i]][fr] << " for anim " << requiredAnim[i] << ". Expected length "
+                                                                << info.animationLength[requiredAnim[i]] );
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     const MonsterAnimInfo & MonsterAnimCache::getAnimInfo( int monsterID )
@@ -105,7 +125,7 @@ namespace Bin_Info
             else {
                 // fall back to unknown if missing data
                 DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
-                mapIterator = _animMap.find( 0 );
+                mapIterator = _animMap.find( Monster::UNKNOWN );
             }
         }
         return mapIterator->second;
@@ -135,8 +155,6 @@ namespace Bin_Info
 
     AnimationReference MonsterAnimCache::createAnimReference(int monsterID)
     {
-        AnimationReference ref;
-
-        return ref;
+        return AnimationReference(_info_cache.getAnimInfo(monsterID), monsterID);
     }
 }

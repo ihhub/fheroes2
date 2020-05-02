@@ -16,8 +16,8 @@ namespace Bin_Info
     struct MonsterAnimInfo
     {
         u8 unusedFileType;           // Byte  0
-        s16 blindOffset[2];          // Bytes 1 - 4
-        u8 unusedMoveOffsets[7][16]; // Bytes 5 - 116
+        s16 eyePosition[2];          // Bytes 1 - 4
+        u8 frameXOffset[7][16];      // Bytes 5 - 116
         u8 idleAnimationsCount;      // Byte  117
         float idlePriority[5];       // Bytes 118 - 137
         u32 unusedIdleDelays[5];     // Bytes 138 - 157
@@ -31,14 +31,14 @@ namespace Bin_Info
         s32 troopCountOffsetLeft;    // Bytes 235 - 238
         s32 troopCountOffsetRight;   // Bytes 239 - 242
         u8 animationLength[34];      // Bytes 243 - 276
-        u8 animationFrames[34][16];  // Bytes 277 - 820
+        u8 animationFrames[34][16];  // Bytes 277 - 820 
     };
 #pragma pack(pop)
 
     enum ORIGINAL_ANIMATION
     {
         MOVE_START,     // Start of the moving sequence on 1st animation cycle: flyers will fly up
-        MOVE_TILE_START,// UNUSED. Supposed to be played 
+        MOVE_TILE_START,// Unused? Supposed to be played at the beginning of 2nd+ move.
         MOVE_MAIN,      // Core animation. Most units only have this one.
         MOVE_TILE_END,  // Cavalry & wolf. Played at the end of the cycle (2nd tile to 3rd), but not at the last one
         MOVE_STOP,      // End of the moving sequence when arrived: landing for example
@@ -76,6 +76,8 @@ namespace Bin_Info
     class MonsterAnimCache
     {
     public:
+        MonsterAnimCache();
+
         bool populate( int monsterID );
         bool isMonsterInfoValid( const MonsterAnimInfo & ) const;
         const MonsterAnimInfo & getAnimInfo( int monsterID );
