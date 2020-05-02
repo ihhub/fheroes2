@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include "sprite.h"
-#include "pal.h"
 #include "cursor.h"
 #include "display.h"
 #include "icn.h"
+#include "pal.h"
 #include "settings.h"
 
 Sprite::Sprite() {}
