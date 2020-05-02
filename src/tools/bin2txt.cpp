@@ -78,7 +78,7 @@ int main( int argc, char ** argv )
     }
     file << "\n";
 
-     file << "Idle animation delay (?) (ms): " << *( reinterpret_cast<uint32_t *>( data.data() + 138 ) ) << " "
+    file << "Idle animation delay (?) (ms): " << *( reinterpret_cast<uint32_t *>( data.data() + 138 ) ) << " "
          << *( reinterpret_cast<uint32_t *>( data.data() + 138 + 4 ) ) << " " << *( reinterpret_cast<uint32_t *>( data.data() + 138 + 8 ) ) << " "
          << *( reinterpret_cast<uint32_t *>( data.data() + 138 + 12 ) ) << " " << *( reinterpret_cast<uint32_t *>( data.data() + 138 + 16 ) ) << "\n\n";
 
