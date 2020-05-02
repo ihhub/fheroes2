@@ -20,7 +20,6 @@ struct startEndAnim_t
     std::vector<int> end;
 };
 
-
 class AnimationSequence
 {
 public:
@@ -50,7 +49,6 @@ private:
 
     AnimationSequence() = delete;
 };
-
 
 class AnimationReference
 {
@@ -84,7 +82,6 @@ protected:
 
     bool appendFrames( const std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical = false );
 };
-
 
 class AnimationState : public AnimationReference
 {
