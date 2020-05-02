@@ -69,8 +69,6 @@ protected:
     startEndAnim_t _ranged[ATTACK_DIRECTION::DIRECTION_END];
     std::vector<std::vector<int> > _idle;
 
-    int _frameDelay[4]; // TODO: extract and find if it's useful later
-
     bool appendFrames( const std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical = false );
 };
 

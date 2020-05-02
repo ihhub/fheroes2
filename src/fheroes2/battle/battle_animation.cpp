@@ -259,12 +259,13 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
     // Every unit has MOVE_MAIN anim, use it as a base
     appendFrames( animMap, _loopMove, Bin_Info::ORIGINAL_ANIMATION::MOVE_MAIN, true );
 
-    if ( !animationExists( animMap, Bin_Info::ORIGINAL_ANIMATION::MOVE_ONE ) ) {
-        // this must be LICH or POWER_LICH
-        _quickMove = _loopMove;
+    
+    if ( animMap.find( Bin_Info::ORIGINAL_ANIMATION::MOVE_ONE ) != animMap.end() ) {
+        appendFrames( animMap, _quickMove, Bin_Info::ORIGINAL_ANIMATION::MOVE_ONE, true );
     }
     else {
-        appendFrames( animMap, _quickMove, Bin_Info::ORIGINAL_ANIMATION::MOVE_ONE, true );
+        // this must be LICH or POWER_LICH
+        _quickMove = _loopMove;
     }
 
     appendFrames( animMap, _moveModes.start, Bin_Info::ORIGINAL_ANIMATION::MOVE_START );
@@ -281,7 +282,7 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
     appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].end, Bin_Info::ORIGINAL_ANIMATION::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
-    if ( animationExists( animMap, Bin_Info::ORIGINAL_ANIMATION::SHOOT2 ) ) {
+    if ( animMap.find(Bin_Info::ORIGINAL_ANIMATION::SHOOT2) != animMap.end() ) {
         appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, Bin_Info::ORIGINAL_ANIMATION::SHOOT1, true );
         appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, Bin_Info::ORIGINAL_ANIMATION::SHOOT1_END );
 
@@ -291,7 +292,7 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
         appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, Bin_Info::ORIGINAL_ANIMATION::SHOOT3, true );
         appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, Bin_Info::ORIGINAL_ANIMATION::SHOOT3_END );
     }
-    else if ( animationExists( animMap, Bin_Info::ORIGINAL_ANIMATION::BREATH2 ) ) {
+    else if ( animMap.find( Bin_Info::ORIGINAL_ANIMATION::BREATH2 ) != animMap.end() ) {
         // Only 6 units should have this
         appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, Bin_Info::ORIGINAL_ANIMATION::BREATH1, true );
         appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, Bin_Info::ORIGINAL_ANIMATION::BREATH1_END );

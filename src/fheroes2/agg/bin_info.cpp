@@ -1,4 +1,5 @@
 #include "agg.h"
+#include "battle_animation.h"
 #include "bin_info.h"
 #include "monster.h"
 
@@ -33,74 +34,6 @@ namespace Bin_Info
         {Monster::WOLF, "WOLF_FRM.BIN"},       {Monster::ZOMBIE, "ZOMB_FRM.BIN"},       {Monster::MUTANT_ZOMBIE, "ZOMB_FRM.BIN"}
     };
 
-    std::map<int, std::map<int, std::vector<int> > > bin_frm_cache;
-    std::map<int, AnimationReference> animRefs;
-
-
-    bool InitBinInfo()
-    {
-        std::map<int, std::vector<int> > binFrameDefault = {{Bin_Info::ORIGINAL_ANIMATION::STATIC, {1}}};
-        bin_frm_cache.emplace( 0, binFrameDefault );
-
-        for ( int i = Monster::UNKNOWN; i < Monster::LAST_VALID_MONSTER; i++ )
-            animRefs[i] = AnimationReference( LookupBINCache( i ), i );
-
-        return true;
-    }
-
-    void Cleanup()
-    {
-        for ( std::map<int, std::map<int, std::vector<int> > >::iterator it = bin_frm_cache.begin(); it != bin_frm_cache.end(); ++it ) {
-            for ( std::map<int, std::vector<int> >::iterator secIt = it->second.begin(); secIt != it->second.end(); ++secIt )
-                secIt->second.clear();
-            it->second.clear();
-        }
-    }
-
-    bool LoadBINFRM( int bin_frm )
-    {
-        std::vector<u8> body = AGG::LoadBINFRM( Bin_Info::GetFilename( bin_frm ) );
-
-        if ( body.size() ) {
-            const std::map<int, std::vector<int> > animMap = Bin_Info::buildMonsterAnimInfo( body );
-            if ( !animMap.empty() ) {
-                bin_frm_cache[bin_frm] = animMap;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    AnimationReference GetAnimationSet( int monsterID )
-    {
-        std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
-        if ( it != animRefs.end() )
-            return it->second;
-
-        return AnimationReference( LookupBINCache( Monster::UNKNOWN ), Monster::UNKNOWN );
-    }
-
-    const std::map<int, std::vector<int> > & LookupBINCache( int bin_frm )
-    {
-        std::map<int, std::map<int, std::vector<int> > >::iterator mapIterator = bin_frm_cache.find( bin_frm );
-        if ( mapIterator == bin_frm_cache.end() ) {
-            if ( LoadBINFRM( bin_frm ) ) {
-                mapIterator = bin_frm_cache.find( bin_frm );
-            }
-            else {
-                // fall back to unknown if missing data
-                DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( bin_frm ) << ", index: " << bin_frm );
-                mapIterator = bin_frm_cache.find( 0 );
-            }
-        }
-        return mapIterator->second;
-    }
-
-    const std::map<int, std::map<int, std::vector<int> > > & LookupBINCache()
-    {
-        return bin_frm_cache;
-    }
-
 
     const char * GetFilename( int bin_frm )
     {
@@ -115,7 +48,70 @@ namespace Bin_Info
         return bin_file_map[index].string;
     }
 
-    std::map<int, std::vector<int> > buildMonsterAnimInfo( const std::vector<u8> & data )
+    //std::map<int, std::map<int, std::vector<int> > > bin_frm_cache;
+    std::map<int, AnimationReference> animRefs;
+    MonsterAnimCache _info_cache;
+
+
+    bool InitBinInfo()
+    {
+        std::map<int, std::vector<int> > binFrameDefault = {{Bin_Info::ORIGINAL_ANIMATION::STATIC, {1}}};
+        //bin_frm_cache.emplace( 0, binFrameDefault );
+
+        for ( int i = Monster::UNKNOWN; i < Monster::LAST_VALID_MONSTER; i++ )
+            animRefs[i] = _info_cache.createAnimReference( i );
+
+        return true;
+    }
+
+    AnimationReference GetAnimationSet( int monsterID )
+    {
+        std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
+        if ( it != animRefs.end() )
+            return it->second;
+
+        return _info_cache.createAnimReference( Monster::UNKNOWN );
+    }
+
+    bool MonsterAnimCache::populate ( int monsterID )
+    {
+        std::vector<u8> body = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
+
+        if ( body.size() ) {
+            MonsterAnimInfo monsterInfo = buildMonsterAnimInfo( body );
+            if ( isMonsterInfoValid(monsterInfo) ) {
+                _animMap.emplace( monsterID, monsterInfo );
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool MonsterAnimCache::isMonsterInfoValid( const MonsterAnimInfo & info ) const
+    {
+        // Absolute minimal set up: moveSpeed + animations
+        // Main move, static, death, wince, 3 melee attacks: [2, 7, 13, 14, 16, 20, 24]
+
+        return false;
+    }
+
+    const MonsterAnimInfo & MonsterAnimCache::getAnimInfo( int monsterID )
+    {
+        std::map<int, MonsterAnimInfo>::iterator mapIterator = _animMap.find( monsterID );
+        if ( mapIterator == _animMap.end() ) {
+            if ( populate( monsterID ) ) {
+                mapIterator = _animMap.find( monsterID );
+            }
+            else {
+                // fall back to unknown if missing data
+                DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
+                mapIterator = _animMap.find( 0 );
+            }
+        }
+        return mapIterator->second;
+    }
+
+    MonsterAnimInfo MonsterAnimCache::buildMonsterAnimInfo( const std::vector<u8> & data )
     {
         MonsterAnimInfo monster_info;
 
@@ -131,15 +127,16 @@ namespace Bin_Info
             DEBUG( DBG_ENGINE, DBG_WARN, " wrong/corrupted BIN FRM FILE: " << data.size() << " length" );
         }
 
-        // populate fields via direct copy, make sure size aligns
+        // populate fields via direct copy, when size aligns
         std::memcpy( &monster_info, data.data(), sizeof( MonsterAnimInfo ) );
 
-        //return monster_info;
-        return std::map<int, std::vector<int> >();
+        return monster_info;
     }
 
-    bool animationExists( const std::map<int, std::vector<int> > & animMap, ORIGINAL_ANIMATION id )
+    AnimationReference MonsterAnimCache::createAnimReference(int monsterID)
     {
-        return animMap.find( id ) != animMap.end();
+        AnimationReference ref;
+
+        return ref;
     }
 }

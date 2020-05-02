@@ -1,11 +1,12 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
-#include "battle_animation.h"
 #include "settings.h"
 
 #include <map>
 #include <vector>
+
+class AnimationReference;
 
 namespace Bin_Info
 {
@@ -72,13 +73,23 @@ namespace Bin_Info
         SHOOT3_END
     };
 
+    class MonsterAnimCache
+    {
+    public:
+        bool populate( int monsterID );
+        bool isMonsterInfoValid( const MonsterAnimInfo & ) const;
+        const MonsterAnimInfo & getAnimInfo( int monsterID );
+        AnimationReference createAnimReference( int monsterID );
+
+    private:
+        std::map<int, MonsterAnimInfo> _animMap;
+        // what to do with ICN
+
+        MonsterAnimInfo buildMonsterAnimInfo( const std::vector<u8> & data );
+    };
+
     const char * GetFilename( int icnId );
-    std::map<int, std::vector<int> > buildMonsterAnimInfo( const std::vector<u8> & data );
-    bool animationExists( const std::map<int, std::vector<int> > & animMap, ORIGINAL_ANIMATION id );
-    AnimationReference GetAnimationSet( int monsterID );
     bool InitBinInfo();
-    void Cleanup();
-    const std::map<int, std::vector<int> > & LookupBINCache( int bin_frm );
-    const std::map<int, std::map<int, std::vector<int> > > & LookupBINCache();
+    AnimationReference GetAnimationSet( int monsterID );
 }
 #endif
