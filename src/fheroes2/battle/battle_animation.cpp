@@ -1,5 +1,5 @@
 #include "battle_animation.h"
-#include "bin_frm.h"
+#include "bin_info.h"
 #include "monster.h"
 #include "settings.h"
 
@@ -356,65 +356,65 @@ bool AnimationReference::appendFrames( const std::map<int, std::vector<int> > & 
 const std::vector<int> & AnimationReference::getAnimationVector( int animstate ) const
 {
     switch ( animstate ) {
-    case Monster::AS_STATIC:
+    case ANIMATION_TYPE::STATIC:
         return _static;
         break;
-    case Monster::AS_IDLE:
+    case ANIMATION_TYPE::IDLE:
         return _idle.front();
         break;
-    case Monster::AS_MOVE_START:
+    case ANIMATION_TYPE::MOVE_START:
         return _moveModes.start;
         break;
-    case Monster::AS_MOVING:
-    case Monster::AS_MOVE:
+    case ANIMATION_TYPE::MOVING:
+    case ANIMATION_TYPE::MOVE:
         return _loopMove;
         break;
-    case Monster::AS_MOVE_END:
+    case ANIMATION_TYPE::MOVE_END:
         return _moveModes.end;
         break;
-    case Monster::AS_MOVE_QUICK:
+    case ANIMATION_TYPE::MOVE_QUICK:
         return _quickMove;
         break;
-    case Monster::AS_MELEE_TOP:
+    case ANIMATION_TYPE::MELEE_TOP:
         return _melee[ATTACK_DIRECTION::TOP].start;
         break;
-    case Monster::AS_MELEE_TOP_END:
+    case ANIMATION_TYPE::MELEE_TOP_END:
         return _melee[ATTACK_DIRECTION::TOP].end;
         break;
-    case Monster::AS_MELEE_FRONT:
+    case ANIMATION_TYPE::MELEE_FRONT:
         return _melee[ATTACK_DIRECTION::FRONT].start;
         break;
-    case Monster::AS_MELEE_FRONT_END:
+    case ANIMATION_TYPE::MELEE_FRONT_END:
         return _melee[ATTACK_DIRECTION::FRONT].end;
         break;
-    case Monster::AS_MELEE_BOT:
+    case ANIMATION_TYPE::MELEE_BOT:
         return _melee[ATTACK_DIRECTION::BOTTOM].start;
         break;
-    case Monster::AS_MELEE_BOT_END:
+    case ANIMATION_TYPE::MELEE_BOT_END:
         return _melee[ATTACK_DIRECTION::BOTTOM].end;
         break;
-    case Monster::AS_RANG_TOP:
+    case ANIMATION_TYPE::RANG_TOP:
         return _ranged[ATTACK_DIRECTION::TOP].start;
         break;
-    case Monster::AS_RANG_TOP_END:
+    case ANIMATION_TYPE::RANG_TOP_END:
         return _ranged[ATTACK_DIRECTION::TOP].end;
         break;
-    case Monster::AS_RANG_FRONT:
+    case ANIMATION_TYPE::RANG_FRONT:
         return _ranged[ATTACK_DIRECTION::FRONT].start;
         break;
-    case Monster::AS_RANG_FRONT_END:
+    case ANIMATION_TYPE::RANG_FRONT_END:
         return _ranged[ATTACK_DIRECTION::FRONT].end;
         break;
-    case Monster::AS_RANG_BOT:
+    case ANIMATION_TYPE::RANG_BOT:
         return _ranged[ATTACK_DIRECTION::BOTTOM].start;
         break;
-    case Monster::AS_RANG_BOT_END:
+    case ANIMATION_TYPE::RANG_BOT_END:
         return _ranged[ATTACK_DIRECTION::BOTTOM].end;
         break;
-    case Monster::AS_WNCE:
+    case ANIMATION_TYPE::WNCE:
         return _wince;
         break;
-    case Monster::AS_KILL:
+    case ANIMATION_TYPE::KILL:
         return _death;
         break;
     default:

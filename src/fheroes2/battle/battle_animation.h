@@ -2,17 +2,8 @@
 #define H2BATTLE_ANIMATION_H
 
 #include "gamedefs.h"
+#include "monster_info.h"
 
-namespace ATTACK_DIRECTION
-{
-    enum
-    {
-        TOP,
-        FRONT,
-        BOTTOM,
-        DIRECTION_END
-    };
-};
 
 struct startEndAnim_t
 {

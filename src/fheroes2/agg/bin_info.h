@@ -8,6 +8,11 @@
 
 namespace Bin_Info
 {
+    struct MonsterAnimInfo
+    {
+        u8 fileType;
+    };
+
     enum ORIGINAL_ANIMATION
     {
         MOVE_START,     // Start of the moving sequence on 1st animation cycle: flyers will fly up

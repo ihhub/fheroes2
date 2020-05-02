@@ -1789,39 +1789,39 @@ MonsterAnimation::MonsterAnimation( const Monster & monster )
     // verifyValidAnimationFrame( _sprite.frm_wnce );
     // verifyValidAnimationFrame( _sprite.frm_kill );
 
-    _validMoves.push_back( Monster::AS_IDLE );
+    _validMoves.push_back( ANIMATION_TYPE::IDLE );
     // if ( isValidAnimationFrame( _sprite.frm_move ) )
-    //     _validMoves.push_back( Monster::AS_MOVE );
+    //     _validMoves.push_back( ANIMATION_TYPE::MOVE );
     if ( isValidAnimationFrame( _sprite.frm_fly1 ) )
-        _validMoves.push_back( Monster::AS_FLY1 );
+        _validMoves.push_back( ANIMATION_TYPE::FLY1 );
     if ( isValidAnimationFrame( _sprite.frm_fly2 ) )
-        _validMoves.push_back( Monster::AS_FLY2 );
+        _validMoves.push_back( ANIMATION_TYPE::FLY2 );
     if ( isValidAnimationFrame( _sprite.frm_fly3 ) )
-        _validMoves.push_back( Monster::AS_FLY3 );
+        _validMoves.push_back( ANIMATION_TYPE::FLY3 );
     if ( isValidAnimationFrame( _sprite.frm_shot0 ) )
-        _validMoves.push_back( Monster::AS_SHOT0 );
+        _validMoves.push_back( ANIMATION_TYPE::SHOT0 );
     if ( isValidAnimationFrame( _sprite.frm_shot1 ) )
-        _validMoves.push_back( Monster::AS_SHOT1 );
+        _validMoves.push_back( ANIMATION_TYPE::SHOT1 );
     if ( isValidAnimationFrame( _sprite.frm_shot2 ) )
-        _validMoves.push_back( Monster::AS_SHOT2 );
+        _validMoves.push_back( ANIMATION_TYPE::SHOT2 );
     if ( isValidAnimationFrame( _sprite.frm_shot3 ) )
-        _validMoves.push_back( Monster::AS_SHOT3 );
+        _validMoves.push_back( ANIMATION_TYPE::SHOT3 );
     if ( isValidAnimationFrame( _sprite.frm_attk0 ) )
-        _validMoves.push_back( Monster::AS_ATTK0 );
+        _validMoves.push_back( ANIMATION_TYPE::ATTK0 );
     if ( isValidAnimationFrame( _sprite.frm_attk1 ) )
-        _validMoves.push_back( Monster::AS_ATTK1 );
+        _validMoves.push_back( ANIMATION_TYPE::ATTK1 );
     if ( isValidAnimationFrame( _sprite.frm_attk2 ) )
-        _validMoves.push_back( Monster::AS_ATTK2 );
+        _validMoves.push_back( ANIMATION_TYPE::ATTK2 );
     if ( isValidAnimationFrame( _sprite.frm_attk3 ) )
-        _validMoves.push_back( Monster::AS_ATTK3 );
+        _validMoves.push_back( ANIMATION_TYPE::ATTK3 );
     // if ( isValidAnimationFrame( _sprite.frm_wnce ) )
-    //    _validMoves.push_back( Monster::AS_WNCE );
+    //    _validMoves.push_back( ANIMATION_TYPE::WNCE );
     // if ( isValidAnimationFrame( _sprite.frm_kill ) )
-    //    _validMoves.push_back( Monster::AS_KILL );
+    //    _validMoves.push_back( ANIMATION_TYPE::KILL );
 
-    _validMoves.push_back( Monster::AS_STATIC );
-    _validMoves.push_back( Monster::AS_STATIC );
-    _validMoves.push_back( Monster::AS_STATIC );
+    _validMoves.push_back( ANIMATION_TYPE::STATIC );
+    _validMoves.push_back( ANIMATION_TYPE::STATIC );
+    _validMoves.push_back( ANIMATION_TYPE::STATIC );
 
     increment();
 }
@@ -1833,22 +1833,22 @@ void MonsterAnimation::increment()
 
         const int moveId = *Rand::Get( _validMoves );
 
-        if ( moveId == Monster::AS_STATIC ) {
+        if ( moveId == ANIMATION_TYPE::STATIC ) {
             const u32 counter = Rand::Get( 10, 20 );
             for ( u32 i = 0; i < counter; ++i )
                 _frameSet.push_back( _sprite.frm_static.start );
         }
-        else if ( moveId == Monster::AS_IDLE ) {
+        else if ( moveId == ANIMATION_TYPE::IDLE ) {
             _pushFrames( _sprite.frm_idle );
         }
-        else if ( moveId == Monster::AS_MOVE ) {
+        else if ( moveId == ANIMATION_TYPE::MOVE ) {
             const u32 counter = Rand::Get( 3, 5 );
             for ( u32 i = 0; i < counter; ++i )
                 _pushFrames( _sprite.frm_move );
 
             _isMovement = true;
         }
-        else if ( moveId == Monster::AS_FLY1 || moveId == Monster::AS_FLY2 || moveId == Monster::AS_FLY3 ) {
+        else if ( moveId == ANIMATION_TYPE::FLY1 || moveId == ANIMATION_TYPE::FLY2 || moveId == ANIMATION_TYPE::FLY3 ) {
             _pushFrames( _sprite.frm_fly1 );
 
             const u32 counter = Rand::Get( 3, 5 );
@@ -1857,34 +1857,34 @@ void MonsterAnimation::increment()
 
             _pushFrames( _sprite.frm_fly3 );
         }
-        else if ( moveId == Monster::AS_SHOT0 ) {
+        else if ( moveId == ANIMATION_TYPE::SHOT0 ) {
             _pushFrames( _sprite.frm_shot0 );
         }
-        else if ( moveId == Monster::AS_SHOT1 ) {
+        else if ( moveId == ANIMATION_TYPE::SHOT1 ) {
             _pushFrames( _sprite.frm_shot1 );
         }
-        else if ( moveId == Monster::AS_SHOT2 ) {
+        else if ( moveId == ANIMATION_TYPE::SHOT2 ) {
             _pushFrames( _sprite.frm_shot2 );
         }
-        else if ( moveId == Monster::AS_SHOT3 ) {
+        else if ( moveId == ANIMATION_TYPE::SHOT3 ) {
             _pushFrames( _sprite.frm_shot3 );
         }
-        else if ( moveId == Monster::AS_ATTK0 ) {
+        else if ( moveId == ANIMATION_TYPE::ATTK0 ) {
             _pushFrames( _sprite.frm_attk0 );
         }
-        else if ( moveId == Monster::AS_ATTK1 ) {
+        else if ( moveId == ANIMATION_TYPE::ATTK1 ) {
             _pushFrames( _sprite.frm_attk1 );
         }
-        else if ( moveId == Monster::AS_ATTK2 ) {
+        else if ( moveId == ANIMATION_TYPE::ATTK2 ) {
             _pushFrames( _sprite.frm_attk2 );
         }
-        else if ( moveId == Monster::AS_ATTK3 ) {
+        else if ( moveId == ANIMATION_TYPE::ATTK3 ) {
             _pushFrames( _sprite.frm_attk3 );
         }
-        else if ( moveId == Monster::AS_WNCE ) {
+        else if ( moveId == ANIMATION_TYPE::WNCE ) {
             _pushFrames( _sprite.frm_wnce );
         }
-        else if ( moveId == Monster::AS_KILL ) {
+        else if ( moveId == ANIMATION_TYPE::KILL ) {
             _pushFrames( _sprite.frm_kill );
             const u32 counter = Rand::Get( 1, 10 );
             for ( u32 i = 0; i < counter; ++i )

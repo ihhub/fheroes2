@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "battle_animation.h"
-#include "bin_frm.h"
+#include "bin_info.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "monster.h"

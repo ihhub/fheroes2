@@ -1,4 +1,4 @@
-#include "bin_frm.h"
+#include "bin_info.h"
 #include "monster.h"
 
 #include <algorithm>

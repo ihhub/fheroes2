@@ -26,6 +26,7 @@
 #include <string>
 
 #include "gamedefs.h"
+#include "monster_info.h"
 #include "payment.h"
 
 class Spell;
@@ -129,48 +130,6 @@ public:
         MONSTER_RND3,
         MONSTER_RND4,
         MONSTER_RND
-    };
-
-    enum animationstate_t
-    {
-        AS_NONE,
-        AS_STATIC,
-        AS_IDLE,
-
-        AS_IDLE_ANY,
-        AS_MOVE_START,
-        AS_MOVING,
-        AS_MOVE_END,
-        AS_MOVE_QUICK,
-        AS_MELEE_TOP,
-        AS_MELEE_TOP_END,
-        AS_MELEE_FRONT,
-        AS_MELEE_FRONT_END,
-        AS_MELEE_BOT,
-        AS_MELEE_BOT_END,
-        AS_RANG_TOP,
-        AS_RANG_TOP_END,
-        AS_RANG_FRONT,
-        AS_RANG_FRONT_END,
-        AS_RANG_BOT,
-        AS_RANG_BOT_END,
-        AS_WNCE, // combine UP+DOWN anim for now
-        AS_KILL,
-        
-        AS_MOVE,
-        AS_FLY1,
-        AS_FLY2,
-        AS_FLY3,
-        AS_SHOT0,
-        AS_SHOT1,
-        AS_SHOT2,
-        AS_SHOT3,
-        AS_ATTK0,
-        AS_ATTK1,
-        AS_ATTK2,
-        AS_ATTK3,
-
-        AS_INVALID
     };
 
     struct animframe_t
