@@ -43,7 +43,7 @@ namespace BIN
         return bin_file_map[index].string;
     }
 
-    std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8>& data ) 
+    std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & data ) 
     {
         std::map<int, std::vector<int> > animationMap;
         const char invalidFrameId = static_cast<char>( 0xFF );
@@ -65,12 +65,12 @@ namespace BIN
                 ++frameCount;
             }
 
-            int expectedFrames = static_cast<int>( data[243 + setId] ); 
+            const int expectedFrames = static_cast<int>( data[243 + setId] ); 
             if ( frameCount != expectedFrames )
             {
                 DEBUG( DBG_ENGINE, DBG_WARN, " BIN FRM wrong amount of frames for animation: " << setId + 1 << " should be " << expectedFrames << " got " << frameCount );
             }
-            else if (frameCount > 0) {
+            else if ( frameCount > 0 ) {
                 animationMap.emplace( setId, frameSequence );
             }
         }
@@ -83,12 +83,12 @@ namespace BIN
         return animMap.find( id ) != animMap.end();
     }
 
-    std::vector<int> analyzeGetUnitsWithoutAnim( const std::map<int, std::map<int, std::vector<int>>> & allAnimMap, H2_FRAME_SEQUENCE id, bool inverse )
+    std::vector<int> analyzeGetUnitsWithoutAnim( const std::map<int, std::map<int, std::vector<int> > > & allAnimMap, H2_FRAME_SEQUENCE id, bool inverse )
     {
         std::vector<int> unitIDs;
 
-        for ( auto it = allAnimMap.begin(); it != allAnimMap.end(); ++it ) {
-            if (animationExists(it->second, id) == inverse) {
+        for ( std::map<int, std::map<int, std::vector<int> > >::const_iterator it = allAnimMap.begin(); it != allAnimMap.end(); ++it ) {
+            if ( animationExists( it->second, id ) == inverse ) {
                 unitIDs.push_back( it->first );
             }
         }
@@ -99,8 +99,8 @@ namespace BIN
     {
         std::vector<int> unitIDs;
 
-        for ( auto it = allAnimMap.begin(); it != allAnimMap.end(); ++it ) {
-            if ( (animationExists( it->second, one ) && animationExists( it->second, two )) == inverse ) {
+        for ( std::map<int, std::map<int, std::vector<int> > >::const_iterator it = allAnimMap.begin(); it != allAnimMap.end(); ++it ) {
+            if ( ( animationExists( it->second, one ) && animationExists( it->second, two ) ) == inverse ) {
                 unitIDs.push_back( it->first );
             }
         }
