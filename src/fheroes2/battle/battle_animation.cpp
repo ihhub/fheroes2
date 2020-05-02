@@ -275,36 +275,36 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
     appendFrames( info, _moveModes.end, ANIM_TYPE::MOVE_STOP );
 
     // Attack sequences
-    appendFrames( info, _melee[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::ATTACK1, true );
-    appendFrames( info, _melee[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::ATTACK1_END );
+    appendFrames( info, _melee[Monster_State::TOP].start, ANIM_TYPE::ATTACK1, true );
+    appendFrames( info, _melee[Monster_State::TOP].end, ANIM_TYPE::ATTACK1_END );
 
-    appendFrames( info, _melee[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::ATTACK2, true );
-    appendFrames( info, _melee[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::ATTACK2_END );
+    appendFrames( info, _melee[Monster_State::FRONT].start, ANIM_TYPE::ATTACK2, true );
+    appendFrames( info, _melee[Monster_State::FRONT].end, ANIM_TYPE::ATTACK2_END );
 
-    appendFrames( info, _melee[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::ATTACK3, true );
-    appendFrames( info, _melee[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::ATTACK3_END );
+    appendFrames( info, _melee[Monster_State::BOTTOM].start, ANIM_TYPE::ATTACK3, true );
+    appendFrames( info, _melee[Monster_State::BOTTOM].end, ANIM_TYPE::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
     if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, ANIM_TYPE::SHOOT2 ) ) {
-        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::SHOOT1, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::SHOOT1_END );
+        appendFrames( info, _ranged[Monster_State::TOP].start, ANIM_TYPE::SHOOT1, true );
+        appendFrames( info, _ranged[Monster_State::TOP].end, ANIM_TYPE::SHOOT1_END );
 
-        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::SHOOT2, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::SHOOT2_END );
+        appendFrames( info, _ranged[Monster_State::FRONT].start, ANIM_TYPE::SHOOT2, true );
+        appendFrames( info, _ranged[Monster_State::FRONT].end, ANIM_TYPE::SHOOT2_END );
 
-        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::SHOOT3, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::SHOOT3_END );
+        appendFrames( info, _ranged[Monster_State::BOTTOM].start, ANIM_TYPE::SHOOT3, true );
+        appendFrames( info, _ranged[Monster_State::BOTTOM].end, ANIM_TYPE::SHOOT3_END );
     }
     else if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, ANIM_TYPE::BREATH2 ) ) {
         // Only 6 units should have this
-        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::BREATH1, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::BREATH1_END );
+        appendFrames( info, _ranged[Monster_State::TOP].start, ANIM_TYPE::BREATH1, true );
+        appendFrames( info, _ranged[Monster_State::TOP].end, ANIM_TYPE::BREATH1_END );
 
-        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::BREATH2, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::BREATH2_END );
+        appendFrames( info, _ranged[Monster_State::FRONT].start, ANIM_TYPE::BREATH2, true );
+        appendFrames( info, _ranged[Monster_State::FRONT].end, ANIM_TYPE::BREATH2_END );
 
-        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::BREATH3, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::BREATH3_END );
+        appendFrames( info, _ranged[Monster_State::BOTTOM].start, ANIM_TYPE::BREATH3, true );
+        appendFrames( info, _ranged[Monster_State::BOTTOM].end, ANIM_TYPE::BREATH3_END );
     }
 }
 
@@ -350,36 +350,36 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
     appendFrames( animMap, _moveModes.end, ANIM_TYPE::MOVE_STOP );
 
     // Attack sequences
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::ATTACK1, true );
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::ATTACK1_END );
+    appendFrames( animMap, _melee[Monster_State::TOP].start, ANIM_TYPE::ATTACK1, true );
+    appendFrames( animMap, _melee[Monster_State::TOP].end, ANIM_TYPE::ATTACK1_END );
 
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::ATTACK2, true );
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::ATTACK2_END );
+    appendFrames( animMap, _melee[Monster_State::FRONT].start, ANIM_TYPE::ATTACK2, true );
+    appendFrames( animMap, _melee[Monster_State::FRONT].end, ANIM_TYPE::ATTACK2_END );
 
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::ATTACK3, true );
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::ATTACK3_END );
+    appendFrames( animMap, _melee[Monster_State::BOTTOM].start, ANIM_TYPE::ATTACK3, true );
+    appendFrames( animMap, _melee[Monster_State::BOTTOM].end, ANIM_TYPE::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
     if ( animMap.find(ANIM_TYPE::SHOOT2) != animMap.end() ) {
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::SHOOT1, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::SHOOT1_END );
+        appendFrames( animMap, _ranged[Monster_State::TOP].start, ANIM_TYPE::SHOOT1, true );
+        appendFrames( animMap, _ranged[Monster_State::TOP].end, ANIM_TYPE::SHOOT1_END );
 
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::SHOOT2, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::SHOOT2_END );
+        appendFrames( animMap, _ranged[Monster_State::FRONT].start, ANIM_TYPE::SHOOT2, true );
+        appendFrames( animMap, _ranged[Monster_State::FRONT].end, ANIM_TYPE::SHOOT2_END );
 
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::SHOOT3, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::SHOOT3_END );
+        appendFrames( animMap, _ranged[Monster_State::BOTTOM].start, ANIM_TYPE::SHOOT3, true );
+        appendFrames( animMap, _ranged[Monster_State::BOTTOM].end, ANIM_TYPE::SHOOT3_END );
     }
     else if ( animMap.find( ANIM_TYPE::BREATH2 ) != animMap.end() ) {
         // Only 6 units should have this
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::BREATH1, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::BREATH1_END );
+        appendFrames( animMap, _ranged[Monster_State::TOP].start, ANIM_TYPE::BREATH1, true );
+        appendFrames( animMap, _ranged[Monster_State::TOP].end, ANIM_TYPE::BREATH1_END );
 
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::BREATH2, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::BREATH2_END );
+        appendFrames( animMap, _ranged[Monster_State::FRONT].start, ANIM_TYPE::BREATH2, true );
+        appendFrames( animMap, _ranged[Monster_State::FRONT].end, ANIM_TYPE::BREATH2_END );
 
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::BREATH3, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::BREATH3_END );
+        appendFrames( animMap, _ranged[Monster_State::BOTTOM].start, ANIM_TYPE::BREATH3, true );
+        appendFrames( animMap, _ranged[Monster_State::BOTTOM].end, ANIM_TYPE::BREATH3_END );
     }
 }
 
@@ -416,65 +416,65 @@ bool AnimationReference::appendFrames( const std::map<int, std::vector<int> > & 
 const std::vector<int> & AnimationReference::getAnimationVector( int animstate ) const
 {
     switch ( animstate ) {
-    case ANIMATION_TYPE::STATIC:
+    case Monster_State::STATIC:
         return _static;
         break;
-    case ANIMATION_TYPE::IDLE:
+    case Monster_State::IDLE:
         return _idle.front();
         break;
-    case ANIMATION_TYPE::MOVE_START:
+    case Monster_State::MOVE_START:
         return _moveModes.start;
         break;
-    case ANIMATION_TYPE::MOVING:
-    case ANIMATION_TYPE::MOVE:
+    case Monster_State::MOVING:
+    case Monster_State::MOVE:
         return _loopMove;
         break;
-    case ANIMATION_TYPE::MOVE_END:
+    case Monster_State::MOVE_END:
         return _moveModes.end;
         break;
-    case ANIMATION_TYPE::MOVE_QUICK:
+    case Monster_State::MOVE_QUICK:
         return _quickMove;
         break;
-    case ANIMATION_TYPE::MELEE_TOP:
-        return _melee[ATTACK_DIRECTION::TOP].start;
+    case Monster_State::MELEE_TOP:
+        return _melee[Monster_State::TOP].start;
         break;
-    case ANIMATION_TYPE::MELEE_TOP_END:
-        return _melee[ATTACK_DIRECTION::TOP].end;
+    case Monster_State::MELEE_TOP_END:
+        return _melee[Monster_State::TOP].end;
         break;
-    case ANIMATION_TYPE::MELEE_FRONT:
-        return _melee[ATTACK_DIRECTION::FRONT].start;
+    case Monster_State::MELEE_FRONT:
+        return _melee[Monster_State::FRONT].start;
         break;
-    case ANIMATION_TYPE::MELEE_FRONT_END:
-        return _melee[ATTACK_DIRECTION::FRONT].end;
+    case Monster_State::MELEE_FRONT_END:
+        return _melee[Monster_State::FRONT].end;
         break;
-    case ANIMATION_TYPE::MELEE_BOT:
-        return _melee[ATTACK_DIRECTION::BOTTOM].start;
+    case Monster_State::MELEE_BOT:
+        return _melee[Monster_State::BOTTOM].start;
         break;
-    case ANIMATION_TYPE::MELEE_BOT_END:
-        return _melee[ATTACK_DIRECTION::BOTTOM].end;
+    case Monster_State::MELEE_BOT_END:
+        return _melee[Monster_State::BOTTOM].end;
         break;
-    case ANIMATION_TYPE::RANG_TOP:
-        return _ranged[ATTACK_DIRECTION::TOP].start;
+    case Monster_State::RANG_TOP:
+        return _ranged[Monster_State::TOP].start;
         break;
-    case ANIMATION_TYPE::RANG_TOP_END:
-        return _ranged[ATTACK_DIRECTION::TOP].end;
+    case Monster_State::RANG_TOP_END:
+        return _ranged[Monster_State::TOP].end;
         break;
-    case ANIMATION_TYPE::RANG_FRONT:
-        return _ranged[ATTACK_DIRECTION::FRONT].start;
+    case Monster_State::RANG_FRONT:
+        return _ranged[Monster_State::FRONT].start;
         break;
-    case ANIMATION_TYPE::RANG_FRONT_END:
-        return _ranged[ATTACK_DIRECTION::FRONT].end;
+    case Monster_State::RANG_FRONT_END:
+        return _ranged[Monster_State::FRONT].end;
         break;
-    case ANIMATION_TYPE::RANG_BOT:
-        return _ranged[ATTACK_DIRECTION::BOTTOM].start;
+    case Monster_State::RANG_BOT:
+        return _ranged[Monster_State::BOTTOM].start;
         break;
-    case ANIMATION_TYPE::RANG_BOT_END:
-        return _ranged[ATTACK_DIRECTION::BOTTOM].end;
+    case Monster_State::RANG_BOT_END:
+        return _ranged[Monster_State::BOTTOM].end;
         break;
-    case ANIMATION_TYPE::WNCE:
+    case Monster_State::WNCE:
         return _wince;
         break;
-    case ANIMATION_TYPE::KILL:
+    case Monster_State::KILL:
         return _death;
         break;
     default:

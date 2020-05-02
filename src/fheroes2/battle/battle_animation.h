@@ -65,8 +65,8 @@ protected:
     monsterReturnAnim _moveModes;
     std::vector<int> _wince;
     std::vector<int> _death;
-    monsterReturnAnim _melee[ATTACK_DIRECTION::DIRECTION_END];
-    monsterReturnAnim _ranged[ATTACK_DIRECTION::DIRECTION_END];
+    monsterReturnAnim _melee[3];
+    monsterReturnAnim _ranged[3];
     std::vector<std::vector<int> > _idle;
 
     bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID, bool critical = false );

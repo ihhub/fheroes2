@@ -218,7 +218,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , animstep( 1 )
     , mirror( NULL )
     , blindanswer( false )
-    , animation( Bin_Info::GetAnimationSet( id ), ANIMATION_TYPE::STATIC )
+    , animation( Bin_Info::GetAnimationSet( id ), Monster_State::STATIC )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -539,7 +539,7 @@ int Battle::Unit::GetAnimationState() const
 bool Battle::Unit::isIdling() const
 {
     // TODO Check for any of the 5 states
-    return GetAnimationState() == ANIMATION_TYPE::IDLE;
+    return GetAnimationState() == Monster_State::IDLE;
 }
 
 void Battle::Unit::NewTurn( void )
@@ -1554,7 +1554,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
         if ( !isValid() ) {
             // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
-            SwitchAnimation( ANIMATION_TYPE::KILL, true );
+            SwitchAnimation( Monster_State::KILL, true );
         }
         // restore hp
         u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;
@@ -1799,8 +1799,8 @@ int Battle::Unit::GetFrame( void ) const
 
 void Battle::Unit::SetDeathAnim( )
 {
-    if ( animation.getCurrentState() != ANIMATION_TYPE::KILL ) {
-        SwitchAnimation( ANIMATION_TYPE::KILL );
+    if ( animation.getCurrentState() != Monster_State::KILL ) {
+        SwitchAnimation( Monster_State::KILL );
     }
     while ( !animation.seq().isLastFrame() )
         animation.playAnimation();
@@ -2010,11 +2010,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::ARCHER:
     case Monster::RANGER:
         switch ( state ) {
-        case ANIMATION_TYPE::RANG_TOP:
+        case Monster_State::RANG_TOP:
             return -15;
-        case ANIMATION_TYPE::RANG_FRONT:
+        case Monster_State::RANG_FRONT:
             return -3;
-        case ANIMATION_TYPE::RANG_BOT:
+        case Monster_State::RANG_BOT:
             return 10;
         default:
             break;
@@ -2032,11 +2032,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::LICH:
     case Monster::POWER_LICH:
         switch ( state ) {
-        case ANIMATION_TYPE::RANG_TOP:
+        case Monster_State::RANG_TOP:
             return -30;
-        case ANIMATION_TYPE::RANG_FRONT:
+        case Monster_State::RANG_FRONT:
             return -20;
-        case ANIMATION_TYPE::RANG_BOT:
+        case Monster_State::RANG_BOT:
             return 0;
         default:
             break;
@@ -2046,11 +2046,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::ELF:
     case Monster::GRAND_ELF:
         switch ( state ) {
-        case ANIMATION_TYPE::RANG_TOP:
+        case Monster_State::RANG_TOP:
             return -5;
-        case ANIMATION_TYPE::RANG_FRONT:
+        case Monster_State::RANG_FRONT:
             return 0;
-        case ANIMATION_TYPE::RANG_BOT:
+        case Monster_State::RANG_BOT:
             return 5;
         default:
             break;
@@ -2059,11 +2059,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::CENTAUR:
         switch ( state ) {
-        case ANIMATION_TYPE::RANG_TOP:
+        case Monster_State::RANG_TOP:
             return -20;
-        case ANIMATION_TYPE::RANG_FRONT:
+        case Monster_State::RANG_FRONT:
             return -10;
-        case ANIMATION_TYPE::RANG_BOT:
+        case Monster_State::RANG_BOT:
             return 5;
         default:
             break;
@@ -2073,11 +2073,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::DRUID:
     case Monster::GREATER_DRUID:
         switch ( state ) {
-        case ANIMATION_TYPE::RANG_TOP:
+        case Monster_State::RANG_TOP:
             return -20;
-        case ANIMATION_TYPE::RANG_FRONT:
+        case Monster_State::RANG_FRONT:
             return -5;
-        case ANIMATION_TYPE::RANG_BOT:
+        case Monster_State::RANG_BOT:
             return 15;
         default:
             break;
@@ -2086,11 +2086,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::HALFLING:
         switch ( state ) {
-        case ANIMATION_TYPE::RANG_TOP:
+        case Monster_State::RANG_TOP:
             return -20;
-        case ANIMATION_TYPE::RANG_FRONT:
+        case Monster_State::RANG_FRONT:
             return 10;
-        case ANIMATION_TYPE::RANG_BOT:
+        case Monster_State::RANG_BOT:
             return 20;
         default:
             break;
@@ -2100,11 +2100,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::MAGE:
     case Monster::ARCHMAGE:
         switch ( state ) {
-        case ANIMATION_TYPE::RANG_TOP:
+        case Monster_State::RANG_TOP:
             return -40;
-        case ANIMATION_TYPE::RANG_FRONT:
+        case Monster_State::RANG_FRONT:
             return -10;
-        case ANIMATION_TYPE::RANG_BOT:
+        case Monster_State::RANG_BOT:
             return 25;
         default:
             break;
@@ -2113,11 +2113,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::TITAN:
         switch ( state ) {
-        case ANIMATION_TYPE::RANG_TOP:
+        case Monster_State::RANG_TOP:
             return -80;
-        case ANIMATION_TYPE::RANG_FRONT:
+        case Monster_State::RANG_FRONT:
             return -20;
-        case ANIMATION_TYPE::RANG_BOT:
+        case Monster_State::RANG_BOT:
             return 15;
         default:
             break;

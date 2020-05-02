@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 
+class AnimationSequence;
 class AnimationReference;
 
 namespace Bin_Info
@@ -74,6 +75,7 @@ namespace Bin_Info
 
         bool populate( int monsterID );
         const MonsterAnimInfo & getAnimInfo( int monsterID );
+        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
         AnimationReference createAnimReference( int monsterID );
         static bool isMonsterInfoValid( const MonsterAnimInfo & info, int animID = MonsterAnimInfo::STATIC );
 

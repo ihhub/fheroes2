@@ -198,8 +198,13 @@ namespace Bin_Info
         return monster_info;
     }
 
-    AnimationReference MonsterAnimCache::createAnimReference(int monsterID)
+    AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )
     {
-        return AnimationReference(_info_cache.getAnimInfo(monsterID), monsterID);
+        return AnimationSequence( info.animations.at( animID ) );
+    }
+
+    AnimationReference MonsterAnimCache::createAnimReference( int monsterID )
+    {
+        return AnimationReference( _info_cache.getAnimInfo( monsterID ), monsterID );
     }
 }
