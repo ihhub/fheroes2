@@ -1,10 +1,10 @@
 #include "battle_animation.h"
-#include "settings.h"
 #include "bin_frm.h"
 #include "monster.h"
+#include "settings.h"
 
-
-AnimationSequence::AnimationSequence( const std::vector<int> & seq ) : _seq( seq )
+AnimationSequence::AnimationSequence( const std::vector<int> & seq )
+    : _seq( seq )
 {
     // Do we need this?
     if ( _seq.empty() ) {
@@ -15,7 +15,8 @@ AnimationSequence::AnimationSequence( const std::vector<int> & seq ) : _seq( seq
     _currentFrame =  _seq.begin();
 }
 
-AnimationSequence::AnimationSequence( const AnimationSequence & rhs ) : _seq( rhs._seq )
+AnimationSequence::AnimationSequence( const AnimationSequence & rhs )
+    : _seq( rhs._seq )
 {
     if (_seq.empty()) DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty C1! " << _seq.size() );
     _currentFrame = _seq.begin();
@@ -57,7 +58,7 @@ int AnimationSequence::restartAnimation()
 
 int AnimationSequence::getFrame() const
 {
-    return (isValid()) ? *_currentFrame : lastFrame();
+    return isValid() ? *_currentFrame : lastFrame();
 }
 
 int AnimationSequence::animationLength() const
@@ -67,30 +68,30 @@ int AnimationSequence::animationLength() const
 
 int AnimationSequence::firstFrame() const
 {
-    return (isValid()) ? _seq.front() : 0;
+    return isValid() ? _seq.front() : 0;
 }
 
 int AnimationSequence::lastFrame() const
 {
-    return ( isValid() ) ? _seq.back() : 0;
+    return isValid() ? _seq.back() : 0;
 }
 
 double AnimationSequence::movementProgress() const
 {
-    if ( isValid() ) {
-        return (double)( _currentFrame - _seq.begin() ) / animationLength();
-    }
+    if ( isValid() )
+        return static_cast<double>( _currentFrame - _seq.begin() ) / animationLength();
+
     return 1.0;
 }
 
 bool AnimationSequence::isFirstFrame() const
 {
-    return ( isValid() ) ? _currentFrame == _seq.begin() : false;
+    return isValid() ? _currentFrame == _seq.begin() : false;
 }
 
 bool AnimationSequence::isLastFrame() const
 {
-    return ( isValid() ) ? std::next( _currentFrame ) == _seq.end() : false;
+    return isValid() ? std::next( _currentFrame ) == _seq.end() : false;
 }
 
 bool AnimationSequence::isValid() const
@@ -104,9 +105,6 @@ bool AnimationSequence::isValid() const
     }
     return true;
 }
-
-
-
 
 AnimationState::AnimationState( const std::map<int, std::vector<int> > & animMap, int id, int state )
     : AnimationReference( animMap, id )
@@ -130,7 +128,8 @@ bool AnimationState::switchAnimation( int animstate, bool reverse )
     auto seq = getAnimationVector( animstate );
     if ( seq.size() > 0 ) {
         _animState = animstate;
-        if (reverse) std::reverse( seq.begin(), seq.end() );
+        if ( reverse )
+            std::reverse( seq.begin(), seq.end() );
         _currentSequence = seq;
         _currentSequence.restartAnimation();
         return true;
@@ -141,11 +140,11 @@ bool AnimationState::switchAnimation( int animstate, bool reverse )
     return false;
 }
 
-bool AnimationState::switchAnimation( const std::vector<int>& animationList, bool reverse )
+bool AnimationState::switchAnimation( const std::vector<int> & animationList, bool reverse )
 {
     std::vector<int> combinedAnimation;
 
-    for ( auto it = animationList.begin(); it != animationList.end(); ++it ) {
+    for ( std::vector<int>::const_iterator it = animationList.begin(); it != animationList.end(); ++it ) {
         auto seq = getAnimationVector( *it );
         if ( seq.size() > 0 ) {
             _animState = *it;
@@ -172,14 +171,14 @@ int AnimationState::getCurrentState( ) const
     return _animState;
 }
 
-AnimationSequence& AnimationState::seq()
+AnimationSequence & AnimationState::seq()
 {
     return _currentSequence;
 }
 
-int AnimationState::playAnimation(bool loop)
+int AnimationState::playAnimation( bool loop )
 {
-    return _currentSequence.playAnimation(loop);
+    return _currentSequence.playAnimation( loop );
 }
 
 int AnimationState::restartAnimation()
@@ -226,8 +225,6 @@ bool AnimationState::isValid() const
 {
     return _currentSequence.isValid();
 }
-
-
 
 AnimationReference::AnimationReference()
 {
@@ -344,7 +341,7 @@ AnimationReference::~AnimationReference() {}
 
 bool AnimationReference::appendFrames( const std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical )
 {
-    auto it = animMap.find( animID );
+    std::map<int, std::vector<int> >::const_iterator it = animMap.find( animID );
     if ( it != animMap.end() && it->second.size() > 0 ) {
         target.insert( target.end(), it->second.begin(), it->second.end() );
         return true;
@@ -434,7 +431,7 @@ AnimationSequence AnimationReference::getAnimationSequence( int animstate ) cons
 
 int AnimationReference::getNextFrame( const std::vector<int> & sequence, int current, bool loop )
 {
-    auto it = sequence.begin();
+    std::vector<int>::const_iterator it = sequence.begin();
 
     // basically iterator advance operator with end checking
     // don't support negatives/going back
