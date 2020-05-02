@@ -6,7 +6,7 @@
 int main( int argc, char ** argv )
 {
     if ( argc < 2 ) {
-        std::cout << argv[0] << " monster_frm.bin" << std::endl;
+        std::cout << "Please specify input file: " << argv[0] << " <input_monster_frame.bin>" << std::endl;
         return EXIT_SUCCESS;
     }
 
@@ -36,11 +36,19 @@ int main( int argc, char ** argv )
     file.read( data.data(), static_cast<std::streamsize>( correctLength ) );
     file.close();
 
+    if ( data[0] != 0x01 ) {
+        std::cout << "This is not a BIN file for monster animation" << std::endl;
+        return EXIT_FAILURE;
+    }
+
     file.open( fileName + ".txt", std::fstream::out );
     if ( !file ) {
         std::cout << "Cannot create a new file" << std::endl;
         return EXIT_FAILURE;
     }
+
+    file << "Monster eye position: [" << *( reinterpret_cast<int16_t *>( data.data() + 1 ) ) << ", " <<
+                                         *( reinterpret_cast<int16_t *>( data.data() + 3 ) ) << "]\n\n";
 
     file << "Animation frame offsets:\n";
     for ( size_t setId = 0u; setId < 7; ++setId ) {
@@ -55,11 +63,54 @@ int main( int argc, char ** argv )
         file << "\n";
     }
 
-    file << "\nAnimation speed (ms): " <<
+    file << "\n";
+
+    const int idleAnimationCount = static_cast<int>( *( data.data() + 117 ) );
+    if ( idleAnimationCount > 5 ) {
+        std::cout << "Idle animation count cannot be more than 5" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    file << "Number of idle animations is " << idleAnimationCount << "\n\n";
+
+    file << "Probabilities of each idle animation:\n";
+    for ( int i = 0; i < idleAnimationCount; ++i ) {
+        file << i + 1 << ": " << *( reinterpret_cast<float*>( data.data() + 118 ) ) << "\n";
+    }
+    file << "\n";
+
+    file << "Idle animation delay (?) (ms): " <<
         *( reinterpret_cast<uint32_t*>( data.data() + 138 ) ) << " " <<
         *( reinterpret_cast<uint32_t*>( data.data() + 138 + 4 ) ) << " " <<
         *( reinterpret_cast<uint32_t*>( data.data() + 138 + 8 ) ) << " " <<
-        *( reinterpret_cast<uint32_t*>( data.data() + 138 + 12 ) ) << "\n\n";
+        *( reinterpret_cast<uint32_t*>( data.data() + 138 + 12 ) ) << " " <<
+        *( reinterpret_cast<uint32_t*>( data.data() + 138 + 16 ) ) <<"\n\n";
+
+    file << "Idle animation delay (?) (ms): " << *( reinterpret_cast<uint32_t*>( data.data() + 158 ) ) << "\n\n";
+
+    file << "Walking animation speed (ms): " << *( reinterpret_cast<uint32_t*>( data.data() + 162 ) ) << "\n\n";
+
+    file << "Shooting animation speed (ms): " << *( reinterpret_cast<uint32_t*>( data.data() + 166 ) ) << "\n\n";
+
+    file << "Flying animation speed (ms): " << *( reinterpret_cast<uint32_t*>( data.data() + 170 ) ) << "\n\n";
+
+    file << "Projectile start positions:\n";
+    file << "[" << *( reinterpret_cast<int16_t*>( data.data() + 174 ) ) << ", " <<
+                   *( reinterpret_cast<int16_t*>( data.data() + 176 ) ) << "]\n";
+    file << "[" << *( reinterpret_cast<int16_t*>( data.data() + 178 ) ) << ", " <<
+                   *( reinterpret_cast<int16_t*>( data.data() + 180 ) ) << "]\n";
+    file << "[" << *( reinterpret_cast<int16_t*>( data.data() + 182 ) ) << ", " <<
+                   *( reinterpret_cast<int16_t*>( data.data() + 184 ) ) << "]\n\n";
+
+    file << "Number of projectile frames is " << static_cast<int>( *( data.data() + 186 ) ) << "\n\n";
+
+    file << "Projectile angles:\n";
+    for ( size_t angleId = 0; angleId < 12; ++angleId )
+        file << *( reinterpret_cast<float*>( data.data() + 187 + angleId * 4 ) ) << "\n";
+    file << "\n";
+
+    file << "Troop count offset: [" << *( reinterpret_cast<int32_t*>( data.data() + 235 ) ) << ", " <<
+                                       *( reinterpret_cast<int32_t*>( data.data() + 239 ) ) << "]\n\n";
 
     file << "Animation sequence (frame IDs):\n";
     const char invalidFrameId = static_cast<char>( 0xFF );
