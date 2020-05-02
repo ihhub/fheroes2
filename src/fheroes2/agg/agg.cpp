@@ -1916,7 +1916,7 @@ bool AGG::Init( void )
     til_cache.resize( TIL::LASTTIL );
 
     // load palette
-   PAL::InitAllPalettes();
+    PAL::InitAllPalettes();
 
     // load font
     LoadFNT();
