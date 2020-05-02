@@ -2696,7 +2696,7 @@ void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
     const Rect & pos1 = b.GetRectPosition();
     const Rect & pos2 = Board::GetCell( dst )->GetPos();
 
-    Point pt1( pos1.x + ( b.isReflect() ? 0 : pos1.w ), pos1.y );
+    Point pt1( pos1.x, pos1.y );
     Point pt2( pos2.x, pos2.y );
 
     cursor.SetThemes( Cursor::WAR_NONE );
