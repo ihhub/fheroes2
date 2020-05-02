@@ -1,3 +1,4 @@
+#include "agg.h"
 #include "bin_info.h"
 #include "monster.h"
 
@@ -32,6 +33,75 @@ namespace Bin_Info
         {Monster::WOLF, "WOLF_FRM.BIN"},       {Monster::ZOMBIE, "ZOMB_FRM.BIN"},       {Monster::MUTANT_ZOMBIE, "ZOMB_FRM.BIN"}
     };
 
+    std::map<int, std::map<int, std::vector<int> > > bin_frm_cache;
+    std::map<int, AnimationReference> animRefs;
+
+
+    bool InitBinInfo()
+    {
+        std::map<int, std::vector<int> > binFrameDefault = {{Bin_Info::ORIGINAL_ANIMATION::STATIC, {1}}};
+        bin_frm_cache.emplace( 0, binFrameDefault );
+
+        for ( int i = Monster::UNKNOWN; i < Monster::LAST_VALID_MONSTER; i++ )
+            animRefs[i] = AnimationReference( LookupBINCache( i ), i );
+
+        return true;
+    }
+
+    void Cleanup()
+    {
+        for ( std::map<int, std::map<int, std::vector<int> > >::iterator it = bin_frm_cache.begin(); it != bin_frm_cache.end(); ++it ) {
+            for ( std::map<int, std::vector<int> >::iterator secIt = it->second.begin(); secIt != it->second.end(); ++secIt )
+                secIt->second.clear();
+            it->second.clear();
+        }
+    }
+
+    bool LoadBINFRM( int bin_frm )
+    {
+        std::vector<u8> body = AGG::LoadBINFRM( Bin_Info::GetFilename( bin_frm ) );
+
+        if ( body.size() ) {
+            const std::map<int, std::vector<int> > animMap = Bin_Info::buildMonsterAnimInfo( body );
+            if ( !animMap.empty() ) {
+                bin_frm_cache[bin_frm] = animMap;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    AnimationReference GetAnimationSet( int monsterID )
+    {
+        std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
+        if ( it != animRefs.end() )
+            return it->second;
+
+        return AnimationReference( LookupBINCache( Monster::UNKNOWN ), Monster::UNKNOWN );
+    }
+
+    const std::map<int, std::vector<int> > & LookupBINCache( int bin_frm )
+    {
+        std::map<int, std::map<int, std::vector<int> > >::iterator mapIterator = bin_frm_cache.find( bin_frm );
+        if ( mapIterator == bin_frm_cache.end() ) {
+            if ( LoadBINFRM( bin_frm ) ) {
+                mapIterator = bin_frm_cache.find( bin_frm );
+            }
+            else {
+                // fall back to unknown if missing data
+                DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( bin_frm ) << ", index: " << bin_frm );
+                mapIterator = bin_frm_cache.find( 0 );
+            }
+        }
+        return mapIterator->second;
+    }
+
+    const std::map<int, std::map<int, std::vector<int> > > & LookupBINCache()
+    {
+        return bin_frm_cache;
+    }
+
+
     const char * GetFilename( int bin_frm )
     {
         int index = Monster::UNKNOWN;
@@ -45,39 +115,27 @@ namespace Bin_Info
         return bin_file_map[index].string;
     }
 
-    std::map<int, std::vector<int> > buildMonsterAnimInfo( const std::vector<u8> & data ) 
+    std::map<int, std::vector<int> > buildMonsterAnimInfo( const std::vector<u8> & data )
     {
+        MonsterAnimInfo monster_info;
+
         std::map<int, std::vector<int> > animationMap;
         const char invalidFrameId = static_cast<char>( 0xFF );
 
-        if ( data.size() != Bin_Info::CORRECT_FRM_LENGTH ) {
+        // sanity check
+        if ( sizeof( MonsterAnimInfo ) != Bin_Info::CORRECT_FRM_LENGTH ) {
+            DEBUG( DBG_ENGINE, DBG_WARN, "Size of MonsterAnimInfo does not match expected length: " << sizeof( MonsterAnimInfo ) );
+        }
+
+        if ( data.size() != sizeof( MonsterAnimInfo ) ) {
             DEBUG( DBG_ENGINE, DBG_WARN, " wrong/corrupted BIN FRM FILE: " << data.size() << " length" );
         }
 
-       for ( size_t setId = 0u; setId < SHOOT3_END + 1; ++setId ) {
-            std::vector<int> frameSequence;
-            int frameCount = 0;
+        // populate fields via direct copy, make sure size aligns
+        std::memcpy( &monster_info, data.data(), sizeof( MonsterAnimInfo ) );
 
-            for ( size_t frameId = 0; frameId < 16; ++frameId ) {
-                const char frameValue = data[277 + setId * 16 + frameId];
-                if ( frameValue == invalidFrameId )
-                    break;
-
-                frameSequence.push_back( frameValue );
-                ++frameCount;
-            }
-
-            const int expectedFrames = static_cast<int>( data[243 + setId] ); 
-            if ( frameCount != expectedFrames )
-            {
-                DEBUG( DBG_ENGINE, DBG_WARN, " BIN FRM wrong amount of frames for animation: " << setId + 1 << " should be " << expectedFrames << " got " << frameCount );
-            }
-            else if ( frameCount > 0 ) {
-                animationMap.emplace( setId, frameSequence );
-            }
-        }
-
-        return animationMap;
+        //return monster_info;
+        return std::map<int, std::vector<int> >();
     }
 
     bool animationExists( const std::map<int, std::vector<int> > & animMap, ORIGINAL_ANIMATION id )

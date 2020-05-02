@@ -27,7 +27,6 @@
 #include <vector>
 
 #include "battle_animation.h"
-#include "bin_info.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "monster.h"
@@ -67,9 +66,7 @@ namespace AGG
     u32 GetICNCount( int icn );
     Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
-    AnimationReference GetAnimationSet( int monsterID );
-    const std::map<int, std::vector<int> > & LookupBINCache( int bin_frm );
-    const std::map<int, std::map<int, std::vector<int> > > & LookupBINCache();
+    std::vector<u8> LoadBINFRM( const char* frm_file );
 #ifdef WITH_TTF
     Surface GetUnicodeLetter( u32 ch, u32 ft );
     u32 GetFontHeight( bool small );

@@ -152,9 +152,6 @@ namespace AGG
     Size scaledResolution;
     std::map<int, std::vector<Sprite> > scaledSprites;
 
-    std::map<int, std::map<int, std::vector<int> > > bin_frm_cache;
-    std::map<int, AnimationReference> animRefs;
-
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
@@ -179,9 +176,6 @@ namespace AGG
     bool LoadOrgTIL( int til, u32 max );
     void LoadTIL( int til );
     void SaveTIL( int til );
-
-    bool LoadBINFRM( int bin_frm );
-    void BuildAnimationReferences();
 
     void LoadFNT( void );
     void ShowError( void );
@@ -1517,58 +1511,6 @@ Surface AGG::GetTIL( int til, u32 index, u32 shape )
     return result;
 }
 
-/* load BIN FRM object */
-bool AGG::LoadBINFRM( int bin_frm )
-{
-    DEBUG( DBG_ENGINE, DBG_INFO, Bin_Info::GetFilename( bin_frm ) );
-    const std::vector<u8> & body = ReadChunk( Bin_Info::GetFilename( bin_frm ) );
-
-    if ( body.size() ) {
-        const std::map<int, std::vector<int> > animMap = Bin_Info::buildMonsterAnimInfo( body );
-        if ( !animMap.empty() ) {
-            bin_frm_cache[bin_frm] = animMap;
-            return true;
-        }
-    }
-    return false;
-}
-
-AnimationReference AGG::GetAnimationSet( int monsterID )
-{
-    std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
-    if ( it != animRefs.end() )
-        return it->second;
-
-    return AnimationReference( LookupBINCache( Monster::UNKNOWN ), Monster::UNKNOWN );
-}
-
-const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
-{
-    std::map<int, std::map<int, std::vector<int> > >::iterator mapIterator = bin_frm_cache.find( bin_frm );
-    if ( mapIterator == bin_frm_cache.end() ) {
-        if ( LoadBINFRM( bin_frm ) ) {
-            mapIterator = bin_frm_cache.find( bin_frm );
-        }
-        else {
-            // fall back to unknown if missing data
-            DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( bin_frm ) << ", index: " << bin_frm );
-            mapIterator = bin_frm_cache.find( 0 );
-        }
-    }
-    return mapIterator->second;
-}
-
-const std::map<int, std::map<int, std::vector<int> > > & AGG::LookupBINCache()
-{
-    return bin_frm_cache;
-}
-
-void AGG::BuildAnimationReferences()
-{
-    for ( int i = Monster::UNKNOWN; i < Monster::LAST_VALID_MONSTER; i++ )
-        animRefs[i] = AnimationReference( LookupBINCache( i ), i );
-}
-
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
@@ -1901,6 +1843,12 @@ void AGG::LoadFNT( void )
 }
 #endif
 
+std::vector<u8> AGG::LoadBINFRM(const char* frm_file)
+{
+    DEBUG( DBG_ENGINE, DBG_INFO, frm_file );
+    return AGG::ReadChunk( frm_file );
+}
+
 Surface AGG::GetLetter( u32 ch, u32 ft )
 {
     if ( ch < 0x21 )
@@ -1997,10 +1945,6 @@ bool AGG::Init( void )
     // load font
     LoadFNT();
 
-    std::map<int, std::vector<int> > binFrameDefault = {{Bin_Info::ORIGINAL_ANIMATION::STATIC, {1}}};
-    bin_frm_cache.emplace( 0, binFrameDefault );
-    BuildAnimationReferences();
-
     return true;
 }
 
@@ -2023,14 +1967,7 @@ void AGG::Quit( void )
             delete[] tils.sprites;
     }
 
-    for ( std::map<int, std::map<int, std::vector<int> > >::iterator it = bin_frm_cache.begin(); it != bin_frm_cache.end(); ++it ) {
-        for ( std::map<int, std::vector<int> >::iterator secIt = it->second.begin(); secIt != it->second.end(); ++secIt )
-            secIt->second.clear();
-        it->second.clear();
-    }
-
     icn_cache.clear();
-    bin_frm_cache.clear();
     til_cache.clear();
     wav_cache.clear();
     mid_cache.clear();

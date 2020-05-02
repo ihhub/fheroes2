@@ -28,6 +28,7 @@
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
+#include "bin_info.h"
 #include "engine.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -217,7 +218,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , animstep( 1 )
     , mirror( NULL )
     , blindanswer( false )
-    , animation( AGG::GetAnimationSet( id ), ANIMATION_TYPE::STATIC )
+    , animation( Bin_Info::GetAnimationSet( id ), ANIMATION_TYPE::STATIC )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {

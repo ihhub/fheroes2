@@ -1,6 +1,7 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
+#include "battle_animation.h"
 #include "settings.h"
 
 #include <map>
@@ -8,26 +9,30 @@
 
 namespace Bin_Info
 {
+
+// this should be supported by VC, Clang and GCC compilers    
+#pragma pack(push, 1)
     struct MonsterAnimInfo
     {
-        u8 fileType;
-        s16 blindOffset[2];
-        u8 unusedMoveOffsets[7][16];
-        u8 idleAnimationsCount;
-        float idlePriority[5];
-        u32 unusedIdleDelays[5];
-        u32 idleAnimationDelay;
-        u32 moveSpeed;
-        u32 shootSpeed;
-        u32 flightSpeed;
-        s16 projectileOffset[3][2];
-        u8 projectileCount;
-        float projectileAngles[12];
-        s32 troopCountOffsetLeft;
-        s32 troopCountOffsetRight;
-        u8 animationLength[34];
-        u8 animationFrames[34][16];
+        u8 unusedFileType;           // Byte  0
+        s16 blindOffset[2];          // Bytes 1 - 4
+        u8 unusedMoveOffsets[7][16]; // Bytes 5 - 116
+        u8 idleAnimationsCount;      // Byte  117
+        float idlePriority[5];       // Bytes 118 - 137
+        u32 unusedIdleDelays[5];     // Bytes 138 - 157
+        u32 idleAnimationDelay;      // Bytes 158 - 161
+        u32 moveSpeed;               // Bytes 162 - 165
+        u32 shootSpeed;              // Bytes 166 - 169
+        u32 flightSpeed;             // Bytes 170 - 173
+        s16 projectileOffset[3][2];  // Bytes 174 - 185
+        u8 projectileCount;          // Byte  186
+        float projectileAngles[12];  // Bytes 187 - 234
+        s32 troopCountOffsetLeft;    // Bytes 235 - 238
+        s32 troopCountOffsetRight;   // Bytes 239 - 242
+        u8 animationLength[34];      // Bytes 243 - 276
+        u8 animationFrames[34][16];  // Bytes 277 - 820
     };
+#pragma pack(pop)
 
     enum ORIGINAL_ANIMATION
     {
@@ -70,5 +75,10 @@ namespace Bin_Info
     const char * GetFilename( int icnId );
     std::map<int, std::vector<int> > buildMonsterAnimInfo( const std::vector<u8> & data );
     bool animationExists( const std::map<int, std::vector<int> > & animMap, ORIGINAL_ANIMATION id );
+    AnimationReference GetAnimationSet( int monsterID );
+    bool InitBinInfo();
+    void Cleanup();
+    const std::map<int, std::vector<int> > & LookupBINCache( int bin_frm );
+    const std::map<int, std::map<int, std::vector<int> > > & LookupBINCache();
 }
 #endif

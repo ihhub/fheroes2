@@ -26,6 +26,7 @@
 
 #include "agg.h"
 #include "audio_music.h"
+#include "bin_info.h"
 #include "cursor.h"
 #include "dir.h"
 #include "engine.h"
@@ -170,6 +171,8 @@ int main( int argc, char ** argv )
 #ifdef WITH_ZLIB
             LoadZLogo();
 #endif
+            // load BIN data
+            Bin_Info::InitBinInfo();
 
             // init cursor
             Cursor::Get().SetThemes( Cursor::POINTER );
