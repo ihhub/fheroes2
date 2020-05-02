@@ -3,8 +3,7 @@
 
 namespace PAL
 {
-
-    const u8 yellow_text_table [PALETTE_SIZE]  =
+    const u8 yellow_text_table[PALETTE_SIZE]  =
     {
         0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 114 , 115 , 115 , 116 , 117 , 117 , 118 , 119 , 119 , 120 , 121 , 121 ,
         122, 123 , 123 , 124 , 125 , 125 , 126 , 127 , 127 , 128 , 129 , 129 , 130 , 130 , 130 , 0 , 0 , 0 , 0 , 0 , 0 ,
@@ -18,7 +17,7 @@ namespace PAL
         0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0
     };
 
-    const u8 white_text_table [PALETTE_SIZE] =
+    const u8 white_text_table[PALETTE_SIZE] =
     {
         0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 10 , 11 , 12 , 13 , 14 , 15 , 16 , 17 , 18 , 19 , 20 , 21 , 22 , 23 , 24 ,
         25 , 26 , 27 ,   28 , 29 , 30 , 31 , 32 , 33 , 34 , 35 , 36 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
@@ -32,7 +31,7 @@ namespace PAL
         0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0
     };
 
-    const u8 gray_text_table [PALETTE_SIZE] =
+    const u8 gray_text_table[PALETTE_SIZE] =
     {
         0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 15 , 16 , 17 , 18 , 19 , 20 , 21 , 22 , 23 , 24 , 25 , 26 , 27 , 28 , 29 ,
         30 , 31 , 32 , 33 , 34 , 35 , 36 , 36 , 36 , 36 , 36 , 36 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
@@ -46,7 +45,7 @@ namespace PAL
         0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0
     };
 
-    const u8 tan_table [PALETTE_SIZE] =
+    const u8 tan_table[PALETTE_SIZE] =
     {
         213 , 213 , 213 , 213 , 213 , 213 , 213 , 213 , 213 , 213 , 198 , 198 , 198 , 198 , 198 , 198 , 198 , 198 , 198 ,
         198 , 198 , 198 , 198 , 200 , 201 , 203 , 204 , 206 , 207 , 208 , 209 , 210 , 211 , 213 , 213 , 213 , 213 , 198 ,
@@ -64,7 +63,7 @@ namespace PAL
         213 , 213 , 213 , 213 , 213 , 213 , 213 , 213 , 213
     };
 
-    const u8 no_cycle_table [PALETTE_SIZE] =
+    const u8 no_cycle_table[PALETTE_SIZE] =
     {
         0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 , 11 , 12 , 13 , 14 , 15 , 16 , 17 , 18 , 19 , 20 , 21 , 22 , 23 , 24 ,
         25 , 26 , 27 , 28 , 29 , 30 , 31 , 32 , 33 , 34 , 35 , 36 , 37 , 38 , 39 , 40 , 41 , 42 , 43 , 44 , 45 , 46 , 47 ,
@@ -81,7 +80,7 @@ namespace PAL
         249 , 250 , 251 , 252 , 253 , 254 , 255
     };
 
-    const u8 gray_table [PALETTE_SIZE] =
+    const u8 gray_table[PALETTE_SIZE] =
     {
         36 , 36 , 36 , 36 , 36 , 36 , 36 , 36 , 36 , 36 , 10 , 11 , 12 , 13 , 14 , 15 , 16 , 17 , 18 , 19 , 20 , 21 , 22 ,
         23 , 24 , 25 , 26 , 27 , 28 , 29 , 30 , 31 , 32 , 33 , 34 , 35 , 36 , 10 , 11 , 12 , 12 , 13 , 14 , 15 , 16 , 17 ,
@@ -97,7 +96,7 @@ namespace PAL
         36 , 36 , 36
     };
 
-    const u8 red_table [PALETTE_SIZE] =
+    const u8 red_table[PALETTE_SIZE] =
     {
         197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 180 , 182 , 184 , 186 , 208 , 209 , 210 , 210 , 211 ,
         211 , 212 , 213 , 213 , 196 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 180 ,
@@ -115,7 +114,7 @@ namespace PAL
         197 , 197 , 197 , 197 , 197 , 197 , 197 , 197 , 197
     };
 
-    const u8 brown_table [PALETTE_SIZE] =
+    const u8 brown_table[PALETTE_SIZE] =
     {
         50 , 42 , 42 , 42 , 42 , 50 , 50 , 50 , 50 , 53 , 42 , 43 , 43 , 44 , 44 , 45 , 46 , 46 , 47 , 47 , 48 , 49 , 50 ,
         51 , 52 , 52 , 53 , 54 , 55 , 56 , 57 , 58 , 60 , 62 , 62 , 62 , 62 , 37 , 38 , 39 , 40 , 41 , 42 , 43 , 44 , 45 ,
@@ -131,7 +130,7 @@ namespace PAL
         50 , 50 , 42
     };
 
-    const u8 mirror_image_table [PALETTE_SIZE] =
+    const u8 mirror_image_table[PALETTE_SIZE] =
     {
         0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 , 10 , 10 , 10 , 10 , 11 , 12 , 13 , 14 , 15 , 16 , 17 , 18 , 19 , 20 ,
         21 , 22 , 23 , 24 , 25 , 26 , 27 , 28 , 29 , 30 , 31 , 32 , 37 , 37 , 37 , 37 , 37 , 38 , 39 , 40 , 41 , 42 , 43 ,
@@ -180,7 +179,6 @@ namespace PAL
     };
 
     const palmap_t* current_palette;
-
 }
 
 void PAL::CreatePalette( std::vector<SDL_Color> & palette, const u8 table[PALETTE_SIZE] )
@@ -191,12 +189,11 @@ void PAL::CreatePalette( std::vector<SDL_Color> & palette, const u8 table[PALETT
         SDL_Color col = standard_palette[table[ii]];
         palette.push_back( col );
     }
-
 }
 
 void PAL::CreateStandardPalette()
 {
-    u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
+    const u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
     standard_palette.reserve( ncolors );
 
     for ( u32 ii = 0; ii < ncolors; ++ii ) {
@@ -256,4 +253,3 @@ void PAL::Clear()
     mirror_image_palette.clear();
     standard_palette.clear();
 }
-
