@@ -75,7 +75,7 @@ int AnimationSequence::firstFrame() const
 
 void AnimationSequence::setToLastFrame()
 {
-    if ( _seq.size > 0 )
+    if ( _seq.size() > 0 )
         _currentFrame = _seq.end() - 1;
 }
 
@@ -203,9 +203,9 @@ int AnimationState::firstFrame() const
     return _currentSequence.firstFrame();
 }
 
-int AnimationState::lastFrame() const
+void AnimationState::setToLastFrame()
 {
-    return _currentSequence.lastFrame();
+    return _currentSequence.setToLastFrame();
 }
 
 double AnimationState::movementProgress() const

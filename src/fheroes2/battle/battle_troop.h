@@ -203,11 +203,6 @@ namespace Battle
         u32 disruptingray;
         bool reflect;
 
-        u32 animstate;
-        s32 animframe;
-        s32 animstep;
-
-
         Position position;
         ModesAffected affected;
         Unit * mirror;

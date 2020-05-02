@@ -213,9 +213,6 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , shots( t.GetShots() )
     , disruptingray( 0 )
     , reflect( ref )
-    , animstate( 0 )
-    , animframe( 0 )
-    , animstep( 1 )
     , mirror( NULL )
     , blindanswer( false )
     , animation( Bin_Info::GetAnimationSet( id ), Monster_State::STATIC )
@@ -533,7 +530,7 @@ bool Battle::Unit::isHandFighting( const Unit & a, const Unit & b )
 
 int Battle::Unit::GetAnimationState() const
 {
-    return animstate;
+    return animation.getCurrentState();
 }
 
 bool Battle::Unit::isIdling() const
@@ -752,8 +749,6 @@ void Battle::Unit::PostKilledAction( void )
         mirror->hp = 0;
         mirror->SetCount( 0 );
         mirror->mirror = NULL;
-        mirror->animstate = 0;
-        mirror->animframe = 0;
         mirror = NULL;
         ResetModes( CAP_MIRROROWNER );
     }
@@ -1787,13 +1782,11 @@ bool Battle::Unit::isHaveDamage( void ) const
 
 int Battle::Unit::GetFrameStart( void ) const
 {
-    //return animstep < 0 ? GetFrameState().start + GetFrameState().count - 1 : GetFrameState().start;
     return animation.firstFrame();
 }
 
 int Battle::Unit::GetFrame( void ) const
 {
-    //return animframe;
     return animation.getFrame();
 }
 
@@ -1802,13 +1795,7 @@ void Battle::Unit::SetDeathAnim()
     if ( animation.getCurrentState() != Monster_State::KILL ) {
         SwitchAnimation( Monster_State::KILL );
     }
-    while ( !animation.seq().isLastFrame() )
-        animation.playAnimation();
-}
-
-void Battle::Unit::SetFrameStep( int val )
-{
-    animstep = val;
+    animation.setToLastFrame();
 }
 
 int Battle::Unit::GetFrameCount( void ) const
@@ -1818,38 +1805,24 @@ int Battle::Unit::GetFrameCount( void ) const
 
 void Battle::Unit::IncreaseAnimFrame( bool loop )
 {
-    //if ( !isFinishAnimFrame() )
-    //    animframe += animstep;
-    //else if ( loop )
-    //    animframe = GetFrameStart();
     animation.playAnimation( loop );
 }
 
 bool Battle::Unit::isStartAnimFrame( void ) const
 {
-    //return GetFrameStart() == animframe;
     return animation.isFirstFrame();
 }
 
 bool Battle::Unit::isFinishAnimFrame( void ) const
 {
     return animation.isLastFrame();
-
-    //if ( 0 == GetFrameState().count )
-    //    return true;
-    //else if ( animstep < 0 )
-    //    return animframe <= GetFrameState().start;
-    //else if ( animstep > 0 )
-    //    return animframe >= GetFrameState().start + GetFrameState().count - 1;
-
-    //return true;
 }
 
-// Can't return a reference here - it will be destroyed
 AnimationSequence Battle::Unit::GetFrameState( int state ) const
 {
     const monstersprite_t & msi = GetMonsterSprite();    
-
+    
+    // Can't return a reference here - it will be destroyed
     return animation.getAnimationSequence( state );
 }
 

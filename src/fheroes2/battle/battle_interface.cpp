@@ -3550,8 +3550,6 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
     AGG::PlaySound( M82::FromSpell( spell() ) );
 
     if ( !target.isValid() ) {
-        target.SetFrameStep( -1 );
-
         while ( le.HandleEvents() && !target.isFinishAnimFrame() ) {
             CheckGlobalEvents( le );
 
@@ -3563,8 +3561,6 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
                 target.IncreaseAnimFrame();
             }
         }
-
-        target.SetFrameStep( 1 );
     }
 
     RedrawTroopWithFrameAnimation( target, ICN::YINYANG, M82::UNKNOWN, false );
