@@ -179,7 +179,8 @@ public:
 
         BATTLE_ARCHMAGE_RESIST_BAD_SPELL = 0x40001000,
         BATTLE_MAGIC_TROOP_RESIST = 0x40002000,
-        // UNUSED			= 0x40008000,
+        BATTLE_SHOW_ARMY_ORDER =  0x40004000,
+        // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
         BATTLE_MERGE_ARMIES = 0x40100000,
@@ -300,6 +301,7 @@ public:
     bool ExtCastleAllowRecruitSpecialHeroes( void ) const;
     bool ExtCastleOneHeroHiredEveryWeek( void ) const;
     bool ExtBattleShowDamage( void ) const;
+    bool ExtBattleShowBattleOrder( void ) const;
     bool ExtBattleSoftWait( void ) const;
     bool ExtBattleMagicTroopCanResist( void ) const;
     bool ExtBattleArchmageCanResistBadMagic( void ) const;
