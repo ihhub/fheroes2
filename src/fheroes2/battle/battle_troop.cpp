@@ -200,7 +200,6 @@ void Battle::ModesAffected::DecreaseDuration( void )
 u32 Battle::ModesAffected::FindZeroDuration( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), std::mem_fun_ref( &ModeDuration::isZeroDuration ) );
-    
     return it == end() ? 0 : ( *it ).first;
 }
 
@@ -219,7 +218,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , mirror( NULL )
     , blindanswer( false )
     , animation( AGG::GetAnimationSet( id ), AS_STATIC )
-{    
+{
     // set position
     if ( Board::isValidIndex( pos ) ) {
         if ( t.isWide() )
