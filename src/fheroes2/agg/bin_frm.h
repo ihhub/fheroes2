@@ -8,27 +8,27 @@
 
 namespace Bin_Info
 {
-    enum H2_FRAME_SEQUENCE
+    enum ORIGINAL_ANIMATION
     {
-        MOVE_START,  // START & END is only used by flyers BUT also Skeleton & Swordsman, however MOVE_ONE matches them perfectly
-        UNKNOWN_SEQ1,
-        MOVE_MAIN,   // All units have this
-        EXTRA_MOVE,  // Cavalry & wolf, ignore for now
-        MOVE_END,    
-        MOVE_ONE,    // LICH and POWER_LICH doesn't have this
-        UNKNOWN_SEQ2,
-        STATIC,      // Frame 1
+        MOVE_START,     // Start of the moving sequence on 1st animation cycle: flyers will fly up
+        MOVE_TILE_START,// UNUSED. Supposed to be played 
+        MOVE_MAIN,      // Core animation. Most units only have this one.
+        MOVE_TILE_END,  // Cavalry & wolf. Played at the end of the cycle (2nd tile to 3rd), but not at the last one
+        MOVE_STOP,      // End of the moving sequence when arrived: landing for example
+        MOVE_ONE,       // Used when moving 1 tile. LICH and POWER_LICH doesn't have this, use MOVE_MAIN
+        UNUSED_WALK,    // UNUSED, intended crawling speed?
+        STATIC,         // Frame 1
         IDLE1,
-        IDLE2,
+        IDLE2,          // Idle animations: picked at random with different probablities, rarely all 5 present
         IDLE3,
         IDLE4,
         IDLE5,
         DEATH,
         WINCE_UP,
         WINCE_END,
-        ATTACK1,
+        ATTACK1,        // Attacks, number represents the angle: 1 is TOP, 2 is CENTER, 3 is BOTTOM
         ATTACK1_END,
-        BREATH1,
+        BREATH1,        // Breath is 2-hex attack
         BREATH1_END,
         ATTACK2,
         ATTACK2_END,
@@ -48,8 +48,6 @@ namespace Bin_Info
 
     const char * GetFilename( int icnId );
     std::map<int, std::vector<int> > convertBinToMap( const std::vector<u8> & data );
-    bool animationExists( const std::map<int, std::vector<int> > & animMap, H2_FRAME_SEQUENCE id );
-    std::vector<int> analyzeGetUnitsWithoutAnim( const std::map<int, std::map<int, std::vector<int> > > & allAnimMap, H2_FRAME_SEQUENCE id, bool inverse = false );
-    std::vector<int> analyzeGetUnitsWithoutAnim( const std::map<int, std::map<int, std::vector<int> > > & allAnimMap, H2_FRAME_SEQUENCE one, H2_FRAME_SEQUENCE two, bool inverse = false );
+    bool animationExists( const std::map<int, std::vector<int> > & animMap, ORIGINAL_ANIMATION id );
 }
 #endif

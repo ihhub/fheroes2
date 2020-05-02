@@ -1997,7 +1997,7 @@ bool AGG::Init( void )
     // load font
     LoadFNT();
 
-    std::map<int, std::vector<int> > binFrameDefault = {{Bin_Info::H2_FRAME_SEQUENCE::STATIC, {1}}};
+    std::map<int, std::vector<int> > binFrameDefault = {{Bin_Info::ORIGINAL_ANIMATION::STATIC, {1}}};
     bin_frm_cache.emplace( 0, binFrameDefault );
     BuildAnimationReferences();
 
