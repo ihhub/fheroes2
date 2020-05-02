@@ -1524,9 +1524,9 @@ bool AGG::LoadBINFRM( int bin_frm )
     const std::vector<u8> & body = ReadChunk( BIN::GetFilename( bin_frm ) );
 
     if ( body.size() ) {
-        auto animMap = BIN::convertBinToMap( body );
+        const std::map<int, std::vector<int> > animMap = BIN::convertBinToMap( body );
         if ( !animMap.empty() ) {
-            bin_frm_cache.emplace( bin_frm, animMap );
+            bin_frm_cache[bin_frm] = animMap;
             return true;
         }
     }
@@ -1535,16 +1535,16 @@ bool AGG::LoadBINFRM( int bin_frm )
 
 AnimationReference AGG::GetAnimationSet( int monsterID )
 {
-    auto it = animRefs.find( monsterID );
+    std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
     if ( it != animRefs.end() )
         return it->second;
 
-    return AnimationReference(LookupBINCache(Monster::UNKNOWN), Monster::UNKNOWN);
+    return AnimationReference( LookupBINCache( Monster::UNKNOWN ), Monster::UNKNOWN );
 }
 
 const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
 {
-    auto mapIterator = bin_frm_cache.find( bin_frm );
+    std::map<int, std::map<int, std::vector<int> > >::iterator mapIterator = bin_frm_cache.find( bin_frm );
     if ( mapIterator == bin_frm_cache.end() ) {
         if ( LoadBINFRM( bin_frm ) ) {
             mapIterator = bin_frm_cache.find( bin_frm );
@@ -1558,18 +1558,16 @@ const std::map<int, std::vector<int> > & AGG::LookupBINCache( int bin_frm )
     return mapIterator->second;
 }
 
-const std::map<int, std::map<int, std::vector<int>>> & AGG::LookupBINCache()
+const std::map<int, std::map<int, std::vector<int> > > & AGG::LookupBINCache()
 {
     return bin_frm_cache;
 }
 
 void AGG::BuildAnimationReferences()
 {
-    for ( int i = Monster::UNKNOWN; i < Monster::LAST_VALID_MONSTER; i++ ) {
-        animRefs.emplace( i, AnimationReference( LookupBINCache( i ), i ) );
-    }
+    for ( int i = Monster::UNKNOWN; i < Monster::LAST_VALID_MONSTER; i++ )
+        animRefs[i] = AnimationReference( LookupBINCache( i ), i );
 }
-
 
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
@@ -2025,10 +2023,9 @@ void AGG::Quit( void )
             delete[] tils.sprites;
     }
 
-    for ( auto it = bin_frm_cache.begin(); it != bin_frm_cache.end(); ++it ) {
-        for ( auto secIt = ( *it ).second.begin(); secIt != it->second.end(); ++secIt ) {
+    for ( std::map<int, std::map<int, std::vector<int> > > it = bin_frm_cache.begin(); it != bin_frm_cache.end(); ++it ) {
+        for ( std::map<int, std::vector<int> > secIt = it->second.begin(); secIt != it->second.end(); ++secIt )
             secIt->second.clear();
-        }
         it->second.clear();
     }
 
