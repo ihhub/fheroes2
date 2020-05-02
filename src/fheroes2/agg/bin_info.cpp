@@ -10,6 +10,31 @@ namespace Bin_Info
 {
     const size_t CORRECT_FRM_LENGTH = 821;
 
+// this pragma should be supported by VC, Clang and GCC compilers
+#pragma pack( push, 1 )
+    // Byte-wise mapping of original BIN FRM tile for file reading purposes
+    struct FRMFileStructure
+    {
+        u8 unusedFileType;           // Byte  0
+        s16 eyePosition[2];          // Bytes 1 - 4
+        u8 frameXOffset[7][16];      // Bytes 5 - 116
+        u8 idleAnimationsCount;      // Byte  117
+        float idlePriority[5];       // Bytes 118 - 137
+        u32 unusedIdleDelays[5];     // Bytes 138 - 157
+        u32 idleAnimationDelay;      // Bytes 158 - 161
+        u32 moveSpeed;               // Bytes 162 - 165
+        u32 shootSpeed;              // Bytes 166 - 169
+        u32 flightSpeed;             // Bytes 170 - 173
+        s16 projectileOffset[3][2];  // Bytes 174 - 185
+        u8 projectileCount;          // Byte  186
+        float projectileAngles[12];  // Bytes 187 - 234
+        s32 troopCountOffsetLeft;    // Bytes 235 - 238
+        s32 troopCountOffsetRight;   // Bytes 239 - 242
+        u8 animationLength[34];      // Bytes 243 - 276
+        u8 animationFrames[34][16];  // Bytes 277 - 820 
+    };
+#pragma pack( pop )
+
     const struct
     {
         int type;
@@ -71,14 +96,7 @@ namespace Bin_Info
 
     MonsterAnimCache::MonsterAnimCache()
     {
-        MonsterAnimInfo unknown;
-        unknown.moveSpeed = 450;
-        unknown.animationFrames[Bin_Info::MOVE_MAIN][0] = 1;
-        unknown.animationLength[Bin_Info::MOVE_MAIN] = 1;
-        unknown.animationFrames[Bin_Info::STATIC][0] = 1;
-        unknown.animationLength[Bin_Info::STATIC] = 1;
-
-        _animMap.emplace( Monster::UNKNOWN, unknown );
+        _animMap.emplace( Monster::UNKNOWN, MonsterAnimInfo() );
     }
 
     bool MonsterAnimCache::populate ( int monsterID )
@@ -87,7 +105,7 @@ namespace Bin_Info
 
         if ( body.size() ) {
             MonsterAnimInfo monsterInfo = buildMonsterAnimInfo( body );
-            if ( isMonsterInfoValid(monsterInfo) ) {
+            if ( isMonsterInfoValid( monsterInfo ) ) {
                 _animMap.emplace( monsterID, monsterInfo );
                 return true;
             }
@@ -95,24 +113,9 @@ namespace Bin_Info
         return false;
     }
 
-    bool MonsterAnimCache::isMonsterInfoValid( const MonsterAnimInfo & info ) const
+    bool MonsterAnimCache::isMonsterInfoValid( const MonsterAnimInfo & info, int animID )
     {
-        // Absolute minimal set up: Main move, static, death, wince, 3 melee attacks
-        const int requiredAnim[7] = {2, 7, 13, 14, 16, 20, 24};
-        const u8 MAX_FRAMES = 99;
-
-        
-        for ( int i = 0; i < 7; i++ ) {
-            for ( int fr = 0; fr < info.animationLength[requiredAnim[i]]; fr++ ) {
-                if ( info.animationFrames[requiredAnim[i]][fr] > MAX_FRAMES ) {
-                    DEBUG( DBG_ENGINE, DBG_WARN,
-                           "Invalid monster info: found frame " << info.animationFrames[requiredAnim[i]][fr] << " for anim " << requiredAnim[i] << ". Expected length "
-                                                                << info.animationLength[requiredAnim[i]] );
-                    return false;
-                }
-            }
-        }
-        return true;
+        return info.animations.size() == MonsterAnimInfo::SHOOT3_END + 1 && info.animations.at( animID ).size() > 0;
     }
 
     const MonsterAnimInfo & MonsterAnimCache::getAnimInfo( int monsterID )
@@ -131,24 +134,66 @@ namespace Bin_Info
         return mapIterator->second;
     }
 
-    MonsterAnimInfo MonsterAnimCache::buildMonsterAnimInfo( const std::vector<u8> & data )
+    MonsterAnimInfo MonsterAnimCache::buildMonsterAnimInfo( const std::vector<u8> & bytes )
     {
+        FRMFileStructure dataSet;
         MonsterAnimInfo monster_info;
 
         std::map<int, std::vector<int> > animationMap;
         const char invalidFrameId = static_cast<char>( 0xFF );
 
         // sanity check
-        if ( sizeof( MonsterAnimInfo ) != Bin_Info::CORRECT_FRM_LENGTH ) {
+        if ( sizeof( FRMFileStructure ) != Bin_Info::CORRECT_FRM_LENGTH ) {
             DEBUG( DBG_ENGINE, DBG_WARN, "Size of MonsterAnimInfo does not match expected length: " << sizeof( MonsterAnimInfo ) );
         }
 
-        if ( data.size() != sizeof( MonsterAnimInfo ) ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, " wrong/corrupted BIN FRM FILE: " << data.size() << " length" );
+        if ( bytes.size() != sizeof( FRMFileStructure ) ) {
+            DEBUG( DBG_ENGINE, DBG_WARN, " wrong/corrupted BIN FRM FILE: " << bytes.size() << " length" );
         }
 
-        // populate fields via direct copy, when size aligns
-        std::memcpy( &monster_info, data.data(), sizeof( MonsterAnimInfo ) );
+        // populate struct via direct copy, when size aligns
+        std::memcpy( &dataSet, bytes.data(), sizeof( FRMFileStructure ) );
+
+        // POPULATE MONSTER INFO
+        // Monster speed data
+        monster_info.moveSpeed = dataSet.moveSpeed;
+        monster_info.shootSpeed = dataSet.shootSpeed;
+        monster_info.flightSpeed = dataSet.flightSpeed;
+
+        // Positional offsets for sprites & drawing
+        monster_info.eyePosition = Point( dataSet.eyePosition[0], dataSet.eyePosition[1] );
+        monster_info.troopCountOffsetLeft = dataSet.troopCountOffsetLeft;
+        monster_info.troopCountOffsetRight = dataSet.troopCountOffsetRight;
+
+        for ( int i = 0; i < 3; i++ ) {
+            monster_info.projectileOffset[i] = Point( dataSet.projectileOffset[i][0], dataSet.projectileOffset[i][1] );
+        }
+        for ( int i = 0; i < dataSet.projectileCount; i++ ) {
+            monster_info.projectileAngles.push_back(dataSet.projectileAngles[i]);
+        }
+
+        // Frame X offsets for future use
+        for ( int moveID = 0; moveID < 7; moveID++ ) {
+            for ( int frame = 0; frame < 16; frame++ ) {
+                monster_info.frameXOffset[moveID][frame] = dataSet.frameXOffset[moveID][frame];
+            }
+        }
+
+        // Idle animations data
+        monster_info.idleAnimationsCount = dataSet.idleAnimationsCount;
+        monster_info.idleDelay = dataSet.idleAnimationDelay;
+        for ( int i = 0; i < dataSet.idleAnimationsCount; i++ ) {
+            monster_info.idlePriority[i] = dataSet.idlePriority[i];
+        }
+
+        // Load animation sequences themselves
+        for ( int idx = 0; idx < MonsterAnimInfo::SHOOT3_END + 1; idx++ ) {
+            std::vector<int> anim;
+            for ( int frame = 0; frame < dataSet.animationLength[idx]; frame++ ) {
+                anim.push_back( dataSet.animationFrames[idx][frame] );
+            }
+            monster_info.animations.push_back( anim );
+        }
 
         return monster_info;
     }

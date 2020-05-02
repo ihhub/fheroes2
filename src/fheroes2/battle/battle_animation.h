@@ -5,7 +5,7 @@
 #include "gamedefs.h"
 #include "monster_info.h"
 
-struct startEndAnim_t
+struct monsterReturnAnim
 {
     std::vector<int> start;
     std::vector<int> end;
@@ -62,11 +62,11 @@ protected:
     std::vector<int> _static;
     std::vector<int> _quickMove;
     std::vector<int> _loopMove;
-    startEndAnim_t _moveModes;
+    monsterReturnAnim _moveModes;
     std::vector<int> _wince;
     std::vector<int> _death;
-    startEndAnim_t _melee[ATTACK_DIRECTION::DIRECTION_END];
-    startEndAnim_t _ranged[ATTACK_DIRECTION::DIRECTION_END];
+    monsterReturnAnim _melee[ATTACK_DIRECTION::DIRECTION_END];
+    monsterReturnAnim _ranged[ATTACK_DIRECTION::DIRECTION_END];
     std::vector<std::vector<int> > _idle;
 
     bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID, bool critical = false );

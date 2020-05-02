@@ -10,68 +10,62 @@ class AnimationReference;
 
 namespace Bin_Info
 {
-
-// this should be supported by VC, Clang and GCC compilers    
-#pragma pack(push, 1)
     struct MonsterAnimInfo
     {
-        u8 unusedFileType;           // Byte  0
-        s16 eyePosition[2];          // Bytes 1 - 4
-        u8 frameXOffset[7][16];      // Bytes 5 - 116
-        u8 idleAnimationsCount;      // Byte  117
-        float idlePriority[5];       // Bytes 118 - 137
-        u32 unusedIdleDelays[5];     // Bytes 138 - 157
-        u32 idleAnimationDelay;      // Bytes 158 - 161
-        u32 moveSpeed;               // Bytes 162 - 165
-        u32 shootSpeed;              // Bytes 166 - 169
-        u32 flightSpeed;             // Bytes 170 - 173
-        s16 projectileOffset[3][2];  // Bytes 174 - 185
-        u8 projectileCount;          // Byte  186
-        float projectileAngles[12];  // Bytes 187 - 234
-        s32 troopCountOffsetLeft;    // Bytes 235 - 238
-        s32 troopCountOffsetRight;   // Bytes 239 - 242
-        u8 animationLength[34];      // Bytes 243 - 276
-        u8 animationFrames[34][16];  // Bytes 277 - 820 
-    };
-#pragma pack(pop)
+        enum ANIM_TYPE
+        {
+            MOVE_START, // Start of the moving sequence on 1st animation cycle: flyers will fly up
+            MOVE_TILE_START, // Unused? Supposed to be played at the beginning of 2nd+ move.
+            MOVE_MAIN, // Core animation. Most units only have this one.
+            MOVE_TILE_END, // Cavalry & wolf. Played at the end of the cycle (2nd tile to 3rd), but not at the last one
+            MOVE_STOP, // End of the moving sequence when arrived: landing for example
+            MOVE_ONE, // Used when moving 1 tile. LICH and POWER_LICH doesn't have this, use MOVE_MAIN
+            UNUSED_WALK, // UNUSED, intended crawling speed?
+            STATIC, // Frame 1
+            IDLE1,
+            IDLE2, // Idle animations: picked at random with different probablities, rarely all 5 present
+            IDLE3,
+            IDLE4,
+            IDLE5,
+            DEATH,
+            WINCE_UP,
+            WINCE_END,
+            ATTACK1, // Attacks, number represents the angle: 1 is TOP, 2 is CENTER, 3 is BOTTOM
+            ATTACK1_END,
+            BREATH1, // Breath is 2-hex attack
+            BREATH1_END,
+            ATTACK2,
+            ATTACK2_END,
+            BREATH2,
+            BREATH2_END,
+            ATTACK3,
+            ATTACK3_END,
+            BREATH3,
+            BREATH3_END,
+            SHOOT1,
+            SHOOT1_END,
+            SHOOT2,
+            SHOOT2_END,
+            SHOOT3,
+            SHOOT3_END
+        };
 
-    enum ORIGINAL_ANIMATION
-    {
-        MOVE_START,     // Start of the moving sequence on 1st animation cycle: flyers will fly up
-        MOVE_TILE_START,// Unused? Supposed to be played at the beginning of 2nd+ move.
-        MOVE_MAIN,      // Core animation. Most units only have this one.
-        MOVE_TILE_END,  // Cavalry & wolf. Played at the end of the cycle (2nd tile to 3rd), but not at the last one
-        MOVE_STOP,      // End of the moving sequence when arrived: landing for example
-        MOVE_ONE,       // Used when moving 1 tile. LICH and POWER_LICH doesn't have this, use MOVE_MAIN
-        UNUSED_WALK,    // UNUSED, intended crawling speed?
-        STATIC,         // Frame 1
-        IDLE1,
-        IDLE2,          // Idle animations: picked at random with different probablities, rarely all 5 present
-        IDLE3,
-        IDLE4,
-        IDLE5,
-        DEATH,
-        WINCE_UP,
-        WINCE_END,
-        ATTACK1,        // Attacks, number represents the angle: 1 is TOP, 2 is CENTER, 3 is BOTTOM
-        ATTACK1_END,
-        BREATH1,        // Breath is 2-hex attack
-        BREATH1_END,
-        ATTACK2,
-        ATTACK2_END,
-        BREATH2,
-        BREATH2_END,
-        ATTACK3,
-        ATTACK3_END,
-        BREATH3,
-        BREATH3_END,
-        SHOOT1,
-        SHOOT1_END,
-        SHOOT2,
-        SHOOT2_END,
-        SHOOT3,
-        SHOOT3_END
+        int moveSpeed;
+        int shootSpeed;
+        int flightSpeed;
+        u8 frameXOffset[7][16];
+        Point eyePosition;
+        int troopCountOffsetLeft;
+        int troopCountOffsetRight;
+        Point projectileOffset[3];
+        std::vector<float> projectileAngles;
+        u8 idleAnimationsCount;
+        int idleDelay;
+        float idlePriority[5];
+        std::vector<std::vector<int>> animations;
     };
+
+
 
     class MonsterAnimCache
     {
@@ -79,15 +73,15 @@ namespace Bin_Info
         MonsterAnimCache();
 
         bool populate( int monsterID );
-        bool isMonsterInfoValid( const MonsterAnimInfo & ) const;
         const MonsterAnimInfo & getAnimInfo( int monsterID );
         AnimationReference createAnimReference( int monsterID );
+        static bool isMonsterInfoValid( const MonsterAnimInfo & info, int animID = MonsterAnimInfo::STATIC );
 
     private:
         std::map<int, MonsterAnimInfo> _animMap;
         // what to do with ICN
 
-        MonsterAnimInfo buildMonsterAnimInfo( const std::vector<u8> & data );
+        MonsterAnimInfo buildMonsterAnimInfo( const std::vector<u8> & bytes );
     };
 
     const char * GetFilename( int icnId );

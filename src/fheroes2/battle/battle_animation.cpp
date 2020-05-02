@@ -2,6 +2,8 @@
 #include "monster.h"
 #include "settings.h"
 
+typedef Bin_Info::MonsterAnimInfo::ANIM_TYPE ANIM_TYPE;
+
 AnimationSequence::AnimationSequence( const std::vector<int> & seq )
     : _seq( seq )
 {
@@ -230,25 +232,26 @@ AnimationReference::AnimationReference()
     _type = Monster::UNKNOWN;
 }
 
+
 AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id )
 {
     _type = id;
 
     // STATIC is our default
     // appendFrames inserts to vector so ref is still valid
-    if ( !appendFrames( info, _static, Bin_Info::STATIC ) )
+    if ( !appendFrames( info, _static, ANIM_TYPE::STATIC ) )
     {
         // fall back to this, to avoid crashes
         _static.push_back( 1 );
     }
 
     // Taking damage
-    appendFrames( info, _wince, Bin_Info::WINCE_UP );
-    appendFrames( info, _wince, Bin_Info::WINCE_END ); // play it back together for now
-    appendFrames( info, _death, Bin_Info::DEATH, true );
+    appendFrames( info, _wince, ANIM_TYPE::WINCE_UP );
+    appendFrames( info, _wince, ANIM_TYPE::WINCE_END ); // play it back together for now
+    appendFrames( info, _death, ANIM_TYPE::DEATH, true );
 
     // Idle animations
-    for ( int idx = Bin_Info::IDLE1; idx < info.idleAnimationsCount + Bin_Info::IDLE1; ++idx ) {
+    for ( int idx = ANIM_TYPE::IDLE1; idx < info.idleAnimationsCount + ANIM_TYPE::IDLE1; ++idx ) {
         std::vector<int> idleAnim;
 
         if ( appendFrames( info, idleAnim, idx ) ) {
@@ -258,50 +261,50 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
 
     // Movement sequences
     // Every unit has MOVE_MAIN anim, use it as a base
-    appendFrames( info, _loopMove, Bin_Info::MOVE_MAIN, true );
+    appendFrames( info, _loopMove, ANIM_TYPE::MOVE_MAIN, true );
 
-    if ( info.animationLength[Bin_Info::MOVE_ONE] > 0 ) {
-        appendFrames( info, _quickMove, Bin_Info::MOVE_ONE, true );
+    if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, ANIM_TYPE::MOVE_ONE ) ) {
+        appendFrames( info, _quickMove, ANIM_TYPE::MOVE_ONE, true );
     }
     else {
         // this must be LICH or POWER_LICH
         _quickMove = _loopMove;
     }
 
-    appendFrames( info, _moveModes.start, Bin_Info::MOVE_START );
-    appendFrames( info, _moveModes.end, Bin_Info::MOVE_STOP );
+    appendFrames( info, _moveModes.start, ANIM_TYPE::MOVE_START );
+    appendFrames( info, _moveModes.end, ANIM_TYPE::MOVE_STOP );
 
     // Attack sequences
-    appendFrames( info, _melee[ATTACK_DIRECTION::TOP].start, Bin_Info::ATTACK1, true );
-    appendFrames( info, _melee[ATTACK_DIRECTION::TOP].end, Bin_Info::ATTACK1_END );
+    appendFrames( info, _melee[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::ATTACK1, true );
+    appendFrames( info, _melee[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::ATTACK1_END );
 
-    appendFrames( info, _melee[ATTACK_DIRECTION::FRONT].start, Bin_Info::ATTACK2, true );
-    appendFrames( info, _melee[ATTACK_DIRECTION::FRONT].end, Bin_Info::ATTACK2_END );
+    appendFrames( info, _melee[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::ATTACK2, true );
+    appendFrames( info, _melee[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::ATTACK2_END );
 
-    appendFrames( info, _melee[ATTACK_DIRECTION::BOTTOM].start, Bin_Info::ATTACK3, true );
-    appendFrames( info, _melee[ATTACK_DIRECTION::BOTTOM].end, Bin_Info::ATTACK3_END );
+    appendFrames( info, _melee[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::ATTACK3, true );
+    appendFrames( info, _melee[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
-    if ( info.animationLength[Bin_Info::SHOOT2] > 0 ) {
-        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].start, Bin_Info::SHOOT1, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].end, Bin_Info::SHOOT1_END );
+    if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, ANIM_TYPE::SHOOT2 ) ) {
+        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::SHOOT1, true );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::SHOOT1_END );
 
-        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].start, Bin_Info::SHOOT2, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].end, Bin_Info::SHOOT2_END );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::SHOOT2, true );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::SHOOT2_END );
 
-        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].start, Bin_Info::SHOOT3, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].end, Bin_Info::SHOOT3_END );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::SHOOT3, true );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::SHOOT3_END );
     }
-    else if ( info.animationLength[Bin_Info::BREATH2] > 0 ) {
+    else if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, ANIM_TYPE::BREATH2 ) ) {
         // Only 6 units should have this
-        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].start, Bin_Info::BREATH1, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].end, Bin_Info::BREATH1_END );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::BREATH1, true );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::BREATH1_END );
 
-        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].start, Bin_Info::BREATH2, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].end, Bin_Info::BREATH2_END );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::BREATH2, true );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::BREATH2_END );
 
-        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].start, Bin_Info::BREATH3, true );
-        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].end, Bin_Info::BREATH3_END );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::BREATH3, true );
+        appendFrames( info, _ranged[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::BREATH3_END );
     }
 }
 
@@ -312,18 +315,18 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
 
     // STATIC is our default
     // appendFrames inserts to vector so ref is still valid
-    if ( !appendFrames( animMap, _static, Bin_Info::STATIC ) ) {
+    if ( !appendFrames( animMap, _static, ANIM_TYPE::STATIC ) ) {
         // fall back to this, to avoid crashes
         _static.push_back( 1 );
     }
 
     // Taking damage
-    appendFrames( animMap, _wince, Bin_Info::WINCE_UP );
-    appendFrames( animMap, _wince, Bin_Info::WINCE_END ); // play it back together for now
-    appendFrames( animMap, _death, Bin_Info::DEATH, true );
+    appendFrames( animMap, _wince, ANIM_TYPE::WINCE_UP );
+    appendFrames( animMap, _wince, ANIM_TYPE::WINCE_END ); // play it back together for now
+    appendFrames( animMap, _death, ANIM_TYPE::DEATH, true );
 
     // Idle animations
-    for ( int idx = Bin_Info::IDLE1; idx <= Bin_Info::IDLE5; ++idx ) {
+    for ( int idx = ANIM_TYPE::IDLE1; idx <= ANIM_TYPE::IDLE5; ++idx ) {
         std::vector<int> idleAnim;
         if ( appendFrames( animMap, idleAnim, idx ) ) {
             _idle.push_back( idleAnim );
@@ -332,51 +335,51 @@ AnimationReference::AnimationReference( const std::map<int, std::vector<int> > &
 
     // Movement sequences
     // Every unit has MOVE_MAIN anim, use it as a base
-    appendFrames( animMap, _loopMove, Bin_Info::MOVE_MAIN, true );
+    appendFrames( animMap, _loopMove, ANIM_TYPE::MOVE_MAIN, true );
 
     
-    if ( animMap.find( Bin_Info::MOVE_ONE ) != animMap.end() ) {
-        appendFrames( animMap, _quickMove, Bin_Info::MOVE_ONE, true );
+    if ( animMap.find( ANIM_TYPE::MOVE_ONE ) != animMap.end() ) {
+        appendFrames( animMap, _quickMove, ANIM_TYPE::MOVE_ONE, true );
     }
     else {
         // this must be LICH or POWER_LICH
         _quickMove = _loopMove;
     }
 
-    appendFrames( animMap, _moveModes.start, Bin_Info::MOVE_START );
-    appendFrames( animMap, _moveModes.end, Bin_Info::MOVE_STOP );
+    appendFrames( animMap, _moveModes.start, ANIM_TYPE::MOVE_START );
+    appendFrames( animMap, _moveModes.end, ANIM_TYPE::MOVE_STOP );
 
     // Attack sequences
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::TOP].start, Bin_Info::ATTACK1, true );
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::TOP].end, Bin_Info::ATTACK1_END );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::ATTACK1, true );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::ATTACK1_END );
 
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::FRONT].start, Bin_Info::ATTACK2, true );
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::FRONT].end, Bin_Info::ATTACK2_END );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::ATTACK2, true );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::ATTACK2_END );
 
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].start, Bin_Info::ATTACK3, true );
-    appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].end, Bin_Info::ATTACK3_END );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::ATTACK3, true );
+    appendFrames( animMap, _melee[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
-    if ( animMap.find(Bin_Info::SHOOT2) != animMap.end() ) {
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, Bin_Info::SHOOT1, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, Bin_Info::SHOOT1_END );
+    if ( animMap.find(ANIM_TYPE::SHOOT2) != animMap.end() ) {
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::SHOOT1, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::SHOOT1_END );
 
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].start, Bin_Info::SHOOT2, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].end, Bin_Info::SHOOT2_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::SHOOT2, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::SHOOT2_END );
 
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, Bin_Info::SHOOT3, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, Bin_Info::SHOOT3_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::SHOOT3, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::SHOOT3_END );
     }
-    else if ( animMap.find( Bin_Info::BREATH2 ) != animMap.end() ) {
+    else if ( animMap.find( ANIM_TYPE::BREATH2 ) != animMap.end() ) {
         // Only 6 units should have this
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, Bin_Info::BREATH1, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, Bin_Info::BREATH1_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].start, ANIM_TYPE::BREATH1, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::TOP].end, ANIM_TYPE::BREATH1_END );
 
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].start, Bin_Info::BREATH2, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].end, Bin_Info::BREATH2_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].start, ANIM_TYPE::BREATH2, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::FRONT].end, ANIM_TYPE::BREATH2_END );
 
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, Bin_Info::BREATH3, true );
-        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, Bin_Info::BREATH3_END );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].start, ANIM_TYPE::BREATH3, true );
+        appendFrames( animMap, _ranged[ATTACK_DIRECTION::BOTTOM].end, ANIM_TYPE::BREATH3_END );
     }
 }
 
@@ -385,15 +388,13 @@ AnimationReference::~AnimationReference() {}
 
 bool AnimationReference::appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID, bool critical )
 {
-    // Sanity check
-    if ( info.animationLength[animID] > 0 ) {
-        for ( int i = 0; i < info.animationLength[animID]; i++ ) {
-            target.push_back( info.animationFrames[animID][i] );
-        }
+    if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, animID ) ) {
+        target.insert( target.end(), info.animations.at( animID ).begin(), info.animations.at( animID ).end() );
         return true;
-    } 
-    else if ( critical ) {
-        DEBUG( DBG_ENGINE, DBG_WARN, "Monster type " << _type << ", " << info.animationLength[animID] << " frames when expected some" );
+    }
+    // check if we're missing a very important anim
+    if ( critical ) {
+        DEBUG( DBG_ENGINE, DBG_WARN, "Monster type " << _type << ", missing frames for animation: " << animID );
     }
     return false;
 }
