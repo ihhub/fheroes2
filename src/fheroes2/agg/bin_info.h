@@ -76,12 +76,13 @@ namespace Bin_Info
     class MonsterAnimCache
     {
     public:
-        const MonsterAnimInfo & getAnimInfo( int monsterID );
         AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
         AnimationReference createAnimReference( int monsterID );
 
     private:
         std::map<int, MonsterAnimInfo> _animMap;
+
+        MonsterAnimInfo getAnimInfo( int monsterID );
     };
 
     void InitBinInfo();

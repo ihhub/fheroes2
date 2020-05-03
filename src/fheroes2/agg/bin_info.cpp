@@ -111,10 +111,6 @@ namespace Bin_Info
 
     MonsterAnimInfo::MonsterAnimInfo( std::vector<u8> & bytes )
     {
-        if ( bytes.size() != Bin_Info::CORRECT_FRM_LENGTH ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, " corrupted BIN FRM data passed in, " << bytes.size() << " length" );
-        }
-
         // POPULATE MONSTER INFO
         uint8_t * data = bytes.data();
 
@@ -130,12 +126,12 @@ namespace Bin_Info
         }
 
         // Idle animations data
-        idleAnimationCount = *( reinterpret_cast<uint32_t *>( data + 117 ) );
+        idleAnimationCount = data[117];
         for ( uint8_t i = 0; i < idleAnimationCount; i++ ) {
             idlePriority.push_back( *( reinterpret_cast<float *>( data + 118 ) + i ) );
         }
         for ( uint8_t i = 0; i < idleAnimationCount; i++ ) {
-            unusedIdleDelays[i] = *( reinterpret_cast<uint32_t *>( data + 138 ) + i );
+            unusedIdleDelays.push_back( *( reinterpret_cast<uint32_t *>( data + 138 ) + i ) );
         }
         idleAnimationDelay = *( reinterpret_cast<uint32_t *>( data + 158 ) );
 
@@ -170,21 +166,23 @@ namespace Bin_Info
         }
     }
 
-    const MonsterAnimInfo & MonsterAnimCache::getAnimInfo( int monsterID )
+    MonsterAnimInfo MonsterAnimCache::getAnimInfo( int monsterID )
     {
         std::map<int, MonsterAnimInfo>::iterator mapIterator = _animMap.find( monsterID );
-        if ( mapIterator == _animMap.end() ) {
-            _animMap[monsterID] = MonsterAnimInfo( AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
-            if ( _animMap[monsterID].isValid() ) {
-                mapIterator = _animMap.find( monsterID );
+        if ( mapIterator != _animMap.end() ) {
+            return mapIterator->second;
+        }
+        else {
+            std::vector<u8> & data = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
+            if ( data.size() == Bin_Info::CORRECT_FRM_LENGTH ) {
+                _animMap[monsterID] = MonsterAnimInfo( data );
+                return _animMap[monsterID];
             }
             else {
-                // fall back to unknown if missing data
                 DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
-                mapIterator = _animMap.find( Monster::UNKNOWN );
             }
         }
-        return mapIterator->second;
+        return MonsterAnimInfo();
     }
 
     bool MonsterAnimInfo::isValid( int animID ) const
