@@ -1,6 +1,7 @@
 #include "battle_animation.h"
 #include "monster.h"
 #include "settings.h"
+#include <algorithm>
 
 typedef Bin_Info::MonsterAnimInfo::ANIM_TYPE ANIM_TYPE;
 
