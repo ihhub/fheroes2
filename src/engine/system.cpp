@@ -508,8 +508,8 @@ int System::GetRenderFlags( void )
 }
 
 #if !( defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ ) )
-// splitString - function for splitting strings by delimiter
-std::vector<std::string> splitString( std::string const & path, std::string const & delimiter )
+// splitUnixPath - function for splitting strings by delimiter
+std::vector<std::string> splitUnixPath( std::string const & path, std::string const & delimiter )
 {
     std::vector<std::string> result;
 
@@ -521,7 +521,9 @@ std::vector<std::string> splitString( std::string const & path, std::string cons
     while ( pos != std::string::npos ) { // while found delimiter
         const size_t nextPos = path.find( delimiter, pos + 1 );
         if ( nextPos != std::string::npos ) { // if found next delimiter
-            result.push_back( path.substr( pos + 1, nextPos - pos - 1 ) );
+            if ( pos + 1 < nextPos ) { // have what to append
+                result.push_back( path.substr( pos + 1, nextPos - pos - 1 ) );
+            }
         }
         else { // if no more delimiter present
             if ( pos + 1 < path.length() ) { // if not a postfix delimiter
@@ -560,7 +562,7 @@ bool System::GetCaseInsensitivePath( std::string const & path, std::string & cor
         d = opendir( &chCurDir );
     }
 
-    std::vector<std::string> splittedPath = splitString( path, &chDelimiter );
+    std::vector<std::string> splittedPath = splitUnixPath( path, &chDelimiter );
     for ( std::vector<std::string>::iterator subPathIter = splittedPath.begin(); subPathIter != splittedPath.end(); ++subPathIter ) {
         if ( !d ) {
             return false;
