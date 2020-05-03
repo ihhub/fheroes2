@@ -4,6 +4,7 @@
 #include "monster.h"
 
 #include <algorithm>
+#include <cstring>
 #include <iostream>
 
 namespace Bin_Info
