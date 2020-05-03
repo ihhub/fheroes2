@@ -1820,8 +1820,8 @@ bool Battle::Unit::isFinishAnimFrame( void ) const
 
 AnimationSequence Battle::Unit::GetFrameState( int state ) const
 {
-    const monstersprite_t & msi = GetMonsterSprite();    
-    
+    const monstersprite_t & msi = GetMonsterSprite();
+
     // Can't return a reference here - it will be destroyed
     return animation.getAnimationSequence( state );
 }

@@ -1844,7 +1844,7 @@ void AGG::LoadFNT( void )
 #endif
 
 // This exists to avoid exposing AGG::ReadChunk
-std::vector<u8> AGG::LoadBINFRM(const char* frm_file)
+std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
 {
     DEBUG( DBG_ENGINE, DBG_TRACE, frm_file );
     return AGG::ReadChunk( frm_file );

@@ -27,9 +27,9 @@
 #include <vector>
 
 #include "battle.h"
+#include "battle_animation.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "battle_animation.h"
 #include "bitmodes.h"
 #include "sprite.h"
 

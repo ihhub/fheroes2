@@ -2404,7 +2404,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     int actionStart = Monster_State::MELEE_FRONT;
 
     // long distance attack animation
-    if ( archer || ( attacker.isDoubleCellAttack() && 2 == targets.size()) ) {
+    if ( archer || ( attacker.isDoubleCellAttack() && 2 == targets.size() ) ) {
         const float dx = bp1.x - bp2.x;
         const float dy = bp1.y - bp2.y;
         const float tan = std::fabs( dy / dx );
@@ -2437,7 +2437,8 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), ICN::GetMissIndex( attacker.ICNMiss(), bp1.x - bp2.x, bp1.y - bp2.y ), bp1.x > bp2.x );
 
         const u32 step = ( missile.w() < 16 ? 16 : missile.w() );
-        const Point line_from = Point( pos1.x + ( attacker.isReflect() ? 0 : pos1.w ),
+        const Point line_from
+            = Point( pos1.x + ( attacker.isReflect() ? 0 : pos1.w ),
                      pos1.y + ( Settings::Get().QVGA() ? attacker.GetStartMissileOffset( actionStart ) / 2 : attacker.GetStartMissileOffset( actionStart ) ) );
         const Point line_to = Point( pos2.x + ( defender.isReflect() ? 0 : pos1.w ), pos2.y );
 
@@ -2960,7 +2961,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
         if ( ( *it ).defender ) {
             TargetInfo & target = *it;
             if ( !target.defender->isValid() ) {
-                //const Monster::animframe_t & frm = target.defender->GetFrameState( Monster_Info::KILL );
+                // const Monster::animframe_t & frm = target.defender->GetFrameState( Monster_Info::KILL );
                 target.defender->SetDeathAnim();
             }
             else

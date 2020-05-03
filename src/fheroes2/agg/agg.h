@@ -64,7 +64,7 @@ namespace AGG
     u32 GetICNCount( int icn );
     Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
-    std::vector<u8> LoadBINFRM( const char* frm_file );
+    std::vector<u8> LoadBINFRM( const char * frm_file );
 #ifdef WITH_TTF
     Surface GetUnicodeLetter( u32 ch, u32 ft );
     u32 GetFontHeight( bool small );
