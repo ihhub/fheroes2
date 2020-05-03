@@ -127,7 +127,7 @@ AnimationState::~AnimationState() {}
 
 bool AnimationState::switchAnimation( int animstate, bool reverse )
 {
-    auto seq = getAnimationVector( animstate );
+    const std::vector<int> & seq = getAnimationVector( animstate );
     if ( seq.size() > 0 ) {
         _animState = animstate;
         if ( reverse )
@@ -147,7 +147,7 @@ bool AnimationState::switchAnimation( const std::vector<int> & animationList, bo
     std::vector<int> combinedAnimation;
 
     for ( std::vector<int>::const_iterator it = animationList.begin(); it != animationList.end(); ++it ) {
-        auto seq = getAnimationVector( *it );
+        const std::vector<int> & seq = getAnimationVector( *it );
         if ( seq.size() > 0 ) {
             _animState = *it;
             combinedAnimation.insert( combinedAnimation.end(), seq.begin(), seq.end() );
