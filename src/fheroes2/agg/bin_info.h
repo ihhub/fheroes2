@@ -51,41 +51,41 @@ namespace Bin_Info
             SHOOT3_END
         };
 
-        int moveSpeed;
-        int shootSpeed;
-        int flightSpeed;
-        u8 frameXOffset[7][16];
+        uint32_t moveSpeed;
+        uint32_t shootSpeed;
+        uint32_t flightSpeed;
+        std::vector<std::vector<uint8_t> > frameXOffset;
         Point eyePosition;
-        int troopCountOffsetLeft;
-        int troopCountOffsetRight;
-        Point projectileOffset[3];
+        int32_t troopCountOffsetLeft;
+        int32_t troopCountOffsetRight;
+        std::vector<Point> projectileOffset;
         std::vector<float> projectileAngles;
-        u8 idleAnimationsCount;
-        int idleDelay;
-        float idlePriority[5];
-        std::vector<std::vector<int> > animations;
+        std::vector<float> idlePriority;
+        std::vector<uint32_t> unusedIdleDelays;
+        uint32_t idleAnimationDelay;
+        std::vector<std::vector<int> > animationFrames;
+
+        MonsterAnimInfo();
+        MonsterAnimInfo( std::vector<u8> & data );
+        bool isValid( int animID = MonsterAnimInfo::STATIC );
+
+    private:
     };
 
     class MonsterAnimCache
     {
     public:
-        MonsterAnimCache();
-
-        bool populate( int monsterID );
         const MonsterAnimInfo & getAnimInfo( int monsterID );
         AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
         AnimationReference createAnimReference( int monsterID );
-        static bool isMonsterInfoValid( const MonsterAnimInfo & info, int animID = MonsterAnimInfo::STATIC );
 
     private:
         std::map<int, MonsterAnimInfo> _animMap;
-        // what to do with ICN
-
-        MonsterAnimInfo buildMonsterAnimInfo( const std::vector<u8> & bytes );
     };
 
     void InitBinInfo();
-    const char * GetFilename( int icnId );
     AnimationReference GetAnimationSet( int monsterID );
 }
+
+const char * GetFilename( int icnId );
 #endif
