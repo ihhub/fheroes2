@@ -487,25 +487,18 @@ AnimationSequence AnimationReference::getAnimationSequence( int animstate ) cons
 
 int AnimationReference::getNextFrame( const std::vector<int> & sequence, int current, bool loop )
 {
-    std::vector<int>::const_iterator it = sequence.begin();
+    if ( current <= 0 )
+        return sequence.front();
 
-    // basically iterator advance operator with end checking
-    // don't support negatives/going back
-    while ( current > 0 && it != sequence.end() ) {
-        if ( std::next( it ) == sequence.end() ) {
-            if ( loop ) {
-                it = sequence.begin();
-            }
-            else {
-                break;
-            }
-        }
-        else {
-            it++;
-        }
-        current--;
+    if ( static_cast<size_t>( current ) < sequence.size() )
+        return sequence[current];
+
+    if ( loop ) {
+        const size_t position = static_cast<size_t>( current ) % sequence.size();
+        return sequence[position];
     }
-    return ( *it );
+
+    return sequence.back();
 }
 
 int AnimationReference::getStaticFrame() const
