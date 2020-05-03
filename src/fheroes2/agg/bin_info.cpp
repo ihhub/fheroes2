@@ -142,7 +142,7 @@ namespace Bin_Info
 
     MonsterAnimCache::MonsterAnimCache()
     {
-        _animMap.emplace( Monster::UNKNOWN, MonsterAnimInfo() );
+        _animMap[Monster::UNKNOWN] = MonsterAnimInfo();
     }
 
     bool MonsterAnimCache::populate( int monsterID )
@@ -152,7 +152,7 @@ namespace Bin_Info
         if ( body.size() ) {
             MonsterAnimInfo monsterInfo = buildMonsterAnimInfo( body );
             if ( isMonsterInfoValid( monsterInfo ) ) {
-                _animMap.emplace( monsterID, monsterInfo );
+                _animMap[monsterID] = monsterInfo;
                 return true;
             }
         }
