@@ -141,9 +141,9 @@ namespace Bin_Info
         flightSpeed = *( reinterpret_cast<uint32_t *>( data + 170 ) );
 
         // Projectile data
-        for ( int i = 0; i < 3; i++ ) {
-            projectileOffset.push_back(
-                Point( *( reinterpret_cast<int16_t *>( data + 174 ) + ( i * 2 ) ), *( reinterpret_cast<int16_t *>( data + 176 + i * 4 ) + ( i * 2 ) ) ) );
+        // Size_t to match x64 pointer and avoid the C26451 cast warning
+        for ( size_t i = 0; i < 3; i++ ) {
+            projectileOffset.push_back( Point( *( reinterpret_cast<int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
         }
 
         uint8_t projectileCount = data[186];
@@ -173,7 +173,7 @@ namespace Bin_Info
             return mapIterator->second;
         }
         else {
-            std::vector<u8> & data = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
+            std::vector<u8> data = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
             if ( data.size() == Bin_Info::CORRECT_FRM_LENGTH ) {
                 _animMap[monsterID] = MonsterAnimInfo( data );
                 return _animMap[monsterID];
