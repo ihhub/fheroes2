@@ -94,7 +94,9 @@ bool AnimationSequence::isFirstFrame() const
 
 bool AnimationSequence::isLastFrame() const
 {
-    return isValid() ? std::next( _currentFrame ) == _seq.end() : false;
+    std::vector<int>::iterator iter = _currentFrame;
+    ++iter;
+    return isValid() ? iter == _seq.end() : false;
 }
 
 bool AnimationSequence::isValid() const
