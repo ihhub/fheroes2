@@ -251,7 +251,7 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
     appendFrames( info, _death, Bin_Info::MonsterAnimInfo::DEATH, true );
 
     // Idle animations
-    for ( int idx = Bin_Info::MonsterAnimInfo::IDLE1; idx < info.idleAnimationsCount + Bin_Info::MonsterAnimInfo::IDLE1; ++idx ) {
+    for ( int idx = Bin_Info::MonsterAnimInfo::IDLE1; idx < info.idleAnimationCount + Bin_Info::MonsterAnimInfo::IDLE1; ++idx ) {
         std::vector<int> idleAnim;
 
         if ( appendFrames( info, idleAnim, idx ) ) {
@@ -263,7 +263,7 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
     // Every unit has MOVE_MAIN anim, use it as a base
     appendFrames( info, _loopMove, Bin_Info::MonsterAnimInfo::MOVE_MAIN, true );
 
-    if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, Bin_Info::MonsterAnimInfo::MOVE_ONE ) ) {
+    if ( info.isValid( Bin_Info::MonsterAnimInfo::MOVE_ONE ) ) {
         appendFrames( info, _quickMove, Bin_Info::MonsterAnimInfo::MOVE_ONE, true );
     }
     else {
@@ -285,7 +285,7 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
     appendFrames( info, _melee[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
-    if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, Bin_Info::MonsterAnimInfo::SHOOT2 ) ) {
+    if ( info.isValid( Bin_Info::MonsterAnimInfo::SHOOT2 ) ) {
         appendFrames( info, _ranged[Monster_State::TOP].start, Bin_Info::MonsterAnimInfo::SHOOT1, true );
         appendFrames( info, _ranged[Monster_State::TOP].end, Bin_Info::MonsterAnimInfo::SHOOT1_END );
 
@@ -295,7 +295,7 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
         appendFrames( info, _ranged[Monster_State::BOTTOM].start, Bin_Info::MonsterAnimInfo::SHOOT3, true );
         appendFrames( info, _ranged[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::SHOOT3_END );
     }
-    else if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, Bin_Info::MonsterAnimInfo::BREATH2 ) ) {
+    else if ( info.isValid( Bin_Info::MonsterAnimInfo::BREATH2 ) ) {
         // Only 6 units should have this
         appendFrames( info, _ranged[Monster_State::TOP].start, Bin_Info::MonsterAnimInfo::BREATH1, true );
         appendFrames( info, _ranged[Monster_State::TOP].end, Bin_Info::MonsterAnimInfo::BREATH1_END );
@@ -385,8 +385,8 @@ AnimationReference::~AnimationReference() {}
 
 bool AnimationReference::appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID, bool critical )
 {
-    if ( Bin_Info::MonsterAnimCache::isMonsterInfoValid( info, animID ) ) {
-        target.insert( target.end(), info.animations.at( animID ).begin(), info.animations.at( animID ).end() );
+    if ( info.isValid( animID ) ) {
+        target.insert( target.end(), info.animationFrames.at( animID ).begin(), info.animationFrames.at( animID ).end() );
         return true;
     }
     // check if we're missing a very important anim

@@ -38,7 +38,7 @@ private:
     std::vector<int>::iterator _currentFrame;
     bool _reverse;
 
-    AnimationSequence() = delete;
+    AnimationSequence();
 };
 
 class AnimationReference

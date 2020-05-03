@@ -61,13 +61,14 @@ namespace Bin_Info
         std::vector<Point> projectileOffset;
         std::vector<float> projectileAngles;
         std::vector<float> idlePriority;
+        uint32_t idleAnimationCount;
         std::vector<uint32_t> unusedIdleDelays;
         uint32_t idleAnimationDelay;
         std::vector<std::vector<int> > animationFrames;
 
         MonsterAnimInfo();
         MonsterAnimInfo( std::vector<u8> & data );
-        bool isValid( int animID = MonsterAnimInfo::STATIC );
+        bool isValid( int animID = MonsterAnimInfo::STATIC ) const;
 
     private:
     };
