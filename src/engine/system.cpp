@@ -342,16 +342,15 @@ bool System::IsDirectory( const std::string & name, bool writable )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #else
     std::string correctedPath;
-    if ( GetCaseInsensitivePath( name, correctedPath ) ) {
-        struct stat fs;
+    if ( !GetCaseInsensitivePath( name, correctedPath ) )
+        return false;
 
-        if ( stat( correctedPath.c_str(), &fs ) || !S_ISDIR( fs.st_mode ) )
-            return false;
+    struct stat fs;
 
-        return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
-    }
+    if ( stat( correctedPath.c_str(), &fs ) || !S_ISDIR( fs.st_mode ) )
+        return false;
 
-    return false;
+    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
 #endif
 }
 
