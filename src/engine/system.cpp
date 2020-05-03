@@ -550,18 +550,18 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 
     DIR * d;
     bool last = false;
-    const char chCurDir = '.';
-    const char chDelimiter = '/';
+    const char * curDir = ".";
+    const char * delimiter = "/";
 
-    if ( path[0] == chDelimiter ) {
-        d = opendir( &chDelimiter );
+    if ( path[0] == delimiter[0] ) {
+        d = opendir( delimiter );
     }
     else {
-        correctedPath = chCurDir;
-        d = opendir( &chCurDir );
+        correctedPath = curDir[0];
+        d = opendir( curDir );
     }
 
-    const std::vector<std::string> splittedPath = splitUnixPath( path, &chDelimiter );
+    const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
     for ( std::vector<std::string>::const_iterator subPathIter = splittedPath.begin(); subPathIter != splittedPath.end(); ++subPathIter ) {
         if ( !d ) {
             return false;
@@ -572,7 +572,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
             return false;
         }
 
-        correctedPath.append( &chDelimiter );
+        correctedPath.append( delimiter );
 
         struct dirent * e = readdir( d );
         while ( e ) {
