@@ -128,12 +128,12 @@ AnimationState::~AnimationState() {}
 
 bool AnimationState::switchAnimation( int animstate, bool reverse )
 {
-    const std::vector<int> & seq = getAnimationVector( animstate );
+    std::vector<int> seq = getAnimationVector( animstate );
     if ( seq.size() > 0 ) {
         _animState = animstate;
-        _currentSequence = seq;
         if ( reverse )
-            std::reverse( _currentSequence.begin(), _currentSequence.end() );
+            std::reverse( seq.begin(), seq.end() );
+        _currentSequence = seq;
         _currentSequence.restartAnimation();
         return true;
     }
