@@ -47,13 +47,17 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
         FindClose( hFind );
     }
 #else
+    std::string correctedPath;
+    if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
+        return;
+
     // read directory
-    DIR * dp = opendir( path.c_str() );
+    DIR * dp = opendir( correctedPath.c_str() );
 
     if ( dp ) {
         struct dirent * ep;
         while ( NULL != ( ep = readdir( dp ) ) ) {
-            const std::string fullname = System::ConcatePath( path, ep->d_name );
+            const std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
 
             // if not regular file
             if ( !System::IsFile( fullname ) )
