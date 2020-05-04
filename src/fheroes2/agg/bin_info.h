@@ -68,7 +68,8 @@ namespace Bin_Info
 
         MonsterAnimInfo();
         MonsterAnimInfo( std::vector<u8> & data );
-        bool isValid( int animID = MonsterAnimInfo::STATIC ) const;
+        bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
+        bool isValid() const;
 
     private:
     };

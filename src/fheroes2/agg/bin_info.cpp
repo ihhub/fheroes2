@@ -99,27 +99,39 @@ namespace Bin_Info
     }
 
     MonsterAnimInfo::MonsterAnimInfo()
+        : moveSpeed( 450 )
+        , shootSpeed( 0 )
+        , flightSpeed( 0 )
+        , troopCountOffsetLeft( 0 )
+        , troopCountOffsetRight( 0 )
+        , idleAnimationCount( 0 )
+        , idleAnimationDelay(0)
     {
-        moveSpeed = 450;
-        shootSpeed = 0;
-        flightSpeed = 0;
-        troopCountOffsetLeft = 0;
-        troopCountOffsetRight = 0;
-        idleAnimationCount = 0;
-        idleAnimationDelay = 0;
     }
 
     MonsterAnimInfo::MonsterAnimInfo( std::vector<u8> & bytes )
+        : moveSpeed( 450 )
+        , shootSpeed( 0 )
+        , flightSpeed( 0 )
+        , troopCountOffsetLeft( 0 )
+        , troopCountOffsetRight( 0 )
+        , idleAnimationCount( 0 )
+        , idleAnimationDelay( 0 )
     {
+        if ( bytes.size() != Bin_Info::CORRECT_FRM_LENGTH ) {
+            DEBUG( DBG_ENGINE, DBG_WARN, " corrupted BIN FRM data passed in, " << bytes.size() << " length" );
+            return;
+        }
+
         // POPULATE MONSTER INFO
         uint8_t * data = bytes.data();
 
         eyePosition = Point( *( reinterpret_cast<int16_t *>( data + 1 ) ), *( reinterpret_cast<int16_t *>( data + 3 ) ) );
 
         // Frame X offsets for future use
-        for ( int moveID = 0; moveID < 7; moveID++ ) {
+        for ( int moveID = 0; moveID < 7; ++moveID ) {
             std::vector<uint8_t> moveOffset;
-            for ( int frame = 0; frame < 16; frame++ ) {
+            for ( int frame = 0; frame < 16; ++frame ) {
                 moveOffset.push_back( data[5 + moveID * 16 + frame] );
             }
             frameXOffset.push_back( moveOffset );
@@ -127,10 +139,10 @@ namespace Bin_Info
 
         // Idle animations data
         idleAnimationCount = data[117];
-        for ( uint8_t i = 0; i < idleAnimationCount; i++ ) {
+        for ( uint8_t i = 0; i < idleAnimationCount; ++i ) {
             idlePriority.push_back( *( reinterpret_cast<float *>( data + 118 ) + i ) );
         }
-        for ( uint8_t i = 0; i < idleAnimationCount; i++ ) {
+        for ( uint8_t i = 0; i < idleAnimationCount; ++i ) {
             unusedIdleDelays.push_back( *( reinterpret_cast<uint32_t *>( data + 138 ) + i ) );
         }
         idleAnimationDelay = *( reinterpret_cast<uint32_t *>( data + 158 ) );
@@ -142,12 +154,12 @@ namespace Bin_Info
 
         // Projectile data
         // Size_t to match x64 pointer and avoid the C26451 cast warning
-        for ( size_t i = 0; i < 3; i++ ) {
+        for ( size_t i = 0; i < 3; ++i ) {
             projectileOffset.push_back( Point( *( reinterpret_cast<int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
         }
 
         uint8_t projectileCount = data[186];
-        for ( uint8_t i = 0; i < projectileCount; i++ ) {
+        for ( uint8_t i = 0; i < projectileCount; ++i ) {
             projectileAngles.push_back( *( reinterpret_cast<float *>( data + 187 ) + i ) );
         }
 
@@ -156,7 +168,7 @@ namespace Bin_Info
         troopCountOffsetRight = *( reinterpret_cast<int32_t *>( data + 239 ) );
 
         // Load animation sequences themselves
-        for ( int idx = 0; idx < MonsterAnimInfo::SHOOT3_END + 1; idx++ ) {
+        for ( int idx = 0; idx < MonsterAnimInfo::SHOOT3_END + 1; ++idx ) {
             std::vector<int> anim;
             uint8_t count = data[243 + idx];
             for ( uint8_t frame = 0; frame < count; frame++ ) {
@@ -173,10 +185,10 @@ namespace Bin_Info
             return mapIterator->second;
         }
         else {
-            std::vector<u8> data = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
-            if ( data.size() == Bin_Info::CORRECT_FRM_LENGTH ) {
-                _animMap[monsterID] = MonsterAnimInfo( data );
-                return _animMap[monsterID];
+            MonsterAnimInfo info = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
+            if ( info.isValid() ) {
+                _animMap[monsterID] = info;
+                return info;
             }
             else {
                 DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
@@ -185,7 +197,25 @@ namespace Bin_Info
         return MonsterAnimInfo();
     }
 
-    bool MonsterAnimInfo::isValid( int animID ) const
+    bool MonsterAnimInfo::isValid() const
+    {
+        // Absolute minimal set up: Main move, static, death, wince, 3 melee attacks
+        const size_t essentialAnimations[7] = {2, 7, 13, 14, 16, 20, 24};
+
+        if ( animationFrames.size() != MonsterAnimInfo::SHOOT3_END + 1 )
+            return false;
+        for ( int i = 0; i < 7; ++i ) {
+            if ( animationFrames.at( essentialAnimations[i] ).size() == 0 )
+                return false;
+        }
+
+        if ( idlePriority.size() != (size_t)idleAnimationCount )
+            return false;
+
+        return true;
+    }
+
+    bool MonsterAnimInfo::hasAnim( int animID ) const
     {
         return animationFrames.size() == MonsterAnimInfo::SHOOT3_END + 1 && animationFrames.at( animID ).size() > 0;
     }
