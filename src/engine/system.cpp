@@ -346,6 +346,7 @@ bool System::IsDirectory( const std::string & name, bool writable )
         return false;
 
     struct stat fs;
+
     if ( stat( correctedPath.c_str(), &fs ) || !S_ISDIR( fs.st_mode ) )
         return false;
 
