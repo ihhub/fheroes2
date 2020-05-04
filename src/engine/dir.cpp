@@ -47,12 +47,11 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
         FindClose( hFind );
     }
 #else
-    // read directory
-
     std::string correctedPath;
     if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
         return;
 
+    // read directory
     DIR * dp = opendir( correctedPath.c_str() );
 
     if ( dp ) {
