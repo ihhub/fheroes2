@@ -509,7 +509,7 @@ int System::GetRenderFlags( void )
 
 #if !( defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ ) )
 // splitUnixPath - function for splitting strings by delimiter
-const std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
+std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
 {
     std::vector<std::string> result;
 
