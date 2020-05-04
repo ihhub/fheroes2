@@ -98,18 +98,7 @@ namespace Bin_Info
         return bin_file_map[index].string;
     }
 
-    MonsterAnimInfo::MonsterAnimInfo()
-        : moveSpeed( 450 )
-        , shootSpeed( 0 )
-        , flightSpeed( 0 )
-        , troopCountOffsetLeft( 0 )
-        , troopCountOffsetRight( 0 )
-        , idleAnimationCount( 0 )
-        , idleAnimationDelay(0)
-    {
-    }
-
-    MonsterAnimInfo::MonsterAnimInfo( std::vector<u8> & bytes )
+    MonsterAnimInfo::MonsterAnimInfo( const std::vector<u8> & bytes )
         : moveSpeed( 450 )
         , shootSpeed( 0 )
         , flightSpeed( 0 )
@@ -119,14 +108,13 @@ namespace Bin_Info
         , idleAnimationDelay( 0 )
     {
         if ( bytes.size() != Bin_Info::CORRECT_FRM_LENGTH ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, " corrupted BIN FRM data passed in, " << bytes.size() << " length" );
             return;
         }
 
         // POPULATE MONSTER INFO
-        uint8_t * data = bytes.data();
+        const uint8_t * data = bytes.data();
 
-        eyePosition = Point( *( reinterpret_cast<int16_t *>( data + 1 ) ), *( reinterpret_cast<int16_t *>( data + 3 ) ) );
+        eyePosition = Point( *( reinterpret_cast<const int16_t *>( data + 1 ) ), *( reinterpret_cast<const int16_t *>( data + 3 ) ) );
 
         // Frame X offsets for future use
         for ( int moveID = 0; moveID < 7; ++moveID ) {
@@ -140,35 +128,36 @@ namespace Bin_Info
         // Idle animations data
         idleAnimationCount = data[117];
         for ( uint8_t i = 0; i < idleAnimationCount; ++i ) {
-            idlePriority.push_back( *( reinterpret_cast<float *>( data + 118 ) + i ) );
+            idlePriority.push_back( *( reinterpret_cast<const float *>( data + 118 ) + i ) );
         }
         for ( uint8_t i = 0; i < idleAnimationCount; ++i ) {
-            unusedIdleDelays.push_back( *( reinterpret_cast<uint32_t *>( data + 138 ) + i ) );
+            unusedIdleDelays.push_back( *( reinterpret_cast<const uint32_t *>( data + 138 ) + i ) );
         }
-        idleAnimationDelay = *( reinterpret_cast<uint32_t *>( data + 158 ) );
+        idleAnimationDelay = *( reinterpret_cast<const uint32_t *>( data + 158 ) );
 
         // Monster speed data
-        moveSpeed = *( reinterpret_cast<uint32_t *>( data + 162 ) );
-        shootSpeed = *( reinterpret_cast<uint32_t *>( data + 166 ) );
-        flightSpeed = *( reinterpret_cast<uint32_t *>( data + 170 ) );
+        moveSpeed = *( reinterpret_cast<const uint32_t *>( data + 162 ) );
+        shootSpeed = *( reinterpret_cast<const uint32_t *>( data + 166 ) );
+        flightSpeed = *( reinterpret_cast<const uint32_t *>( data + 170 ) );
 
         // Projectile data
         // Size_t to match x64 pointer and avoid the C26451 cast warning
         for ( size_t i = 0; i < 3; ++i ) {
-            projectileOffset.push_back( Point( *( reinterpret_cast<int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
+            projectileOffset.push_back(
+                Point( *( reinterpret_cast<const int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<const int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
         }
 
-        uint8_t projectileCount = data[186];
+        const uint8_t projectileCount = data[186];
         for ( uint8_t i = 0; i < projectileCount; ++i ) {
-            projectileAngles.push_back( *( reinterpret_cast<float *>( data + 187 ) + i ) );
+            projectileAngles.push_back( *( reinterpret_cast<const float *>( data + 187 ) + i ) );
         }
 
         // Positional offsets for sprites & drawing
-        troopCountOffsetLeft = *( reinterpret_cast<int32_t *>( data + 235 ) );
-        troopCountOffsetRight = *( reinterpret_cast<int32_t *>( data + 239 ) );
+        troopCountOffsetLeft = *( reinterpret_cast<const int32_t *>( data + 235 ) );
+        troopCountOffsetRight = *( reinterpret_cast<const int32_t *>( data + 239 ) );
 
         // Load animation sequences themselves
-        for ( int idx = 0; idx < MonsterAnimInfo::SHOOT3_END + 1; ++idx ) {
+        for ( int idx = MOVE_START; idx <= SHOOT3_END; ++idx ) {
             std::vector<int> anim;
             uint8_t count = data[243 + idx];
             for ( uint8_t frame = 0; frame < count; frame++ ) {

@@ -46,7 +46,6 @@ class AnimationReference
 public:
     AnimationReference();
     AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id );
-    AnimationReference( const std::map<int, std::vector<int> > & animMap, int id );
     virtual ~AnimationReference();
 
     int getStaticFrame() const;
@@ -70,13 +69,11 @@ protected:
     std::vector<std::vector<int> > _idle;
 
     bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID, bool critical = false );
-    bool appendFrames( const std::map<int, std::vector<int> > & animMap, std::vector<int> & target, int animID, bool critical = false );
 };
 
 class AnimationState : public AnimationReference
 {
 public:
-    AnimationState( const std::map<int, std::vector<int> > & animMap, int id, int state );
     AnimationState( const AnimationReference & animMap, int state );
     virtual ~AnimationState();
 

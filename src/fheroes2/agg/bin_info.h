@@ -66,12 +66,9 @@ namespace Bin_Info
         uint32_t idleAnimationDelay;
         std::vector<std::vector<int> > animationFrames;
 
-        MonsterAnimInfo();
-        MonsterAnimInfo( std::vector<u8> & data );
+        MonsterAnimInfo( const std::vector<u8> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
         bool isValid() const;
-
-    private:
     };
 
     class MonsterAnimCache
@@ -89,6 +86,4 @@ namespace Bin_Info
     void InitBinInfo();
     AnimationReference GetAnimationSet( int monsterID );
 }
-
-const char * GetFilename( int icnId );
 #endif
