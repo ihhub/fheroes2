@@ -70,6 +70,10 @@ extern HWND SDL_Window;
 #define SEPARATOR '/'
 #endif
 
+#if !( defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ ) )
+#include <dirent.h>
+#endif
+
 #include "serialize.h"
 #include "tools.h"
 
@@ -318,12 +322,16 @@ bool System::IsFile( const std::string & name, bool writable )
 #elif defined( ANDROID )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #else
-    struct stat fs;
-
-    if ( stat( name.c_str(), &fs ) || !S_ISREG( fs.st_mode ) )
+    std::string correctedPath;
+    if ( !GetCaseInsensitivePath( name, correctedPath ) )
         return false;
 
-    return writable ? 0 == access( name.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
+    struct stat fs;
+
+    if ( stat( correctedPath.c_str(), &fs ) || !S_ISREG( fs.st_mode ) )
+        return false;
+
+    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
 #endif
 }
 
@@ -334,12 +342,16 @@ bool System::IsDirectory( const std::string & name, bool writable )
 #elif defined( ANDROID )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #else
-    struct stat fs;
-
-    if ( stat( name.c_str(), &fs ) || !S_ISDIR( fs.st_mode ) )
+    std::string correctedPath;
+    if ( !GetCaseInsensitivePath( name, correctedPath ) )
         return false;
 
-    return writable ? 0 == access( name.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
+    struct stat fs;
+
+    if ( stat( correctedPath.c_str(), &fs ) || !S_ISDIR( fs.st_mode ) )
+        return false;
+
+    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
 #endif
 }
 
@@ -494,3 +506,105 @@ int System::GetRenderFlags( void )
 #endif
 #endif
 }
+
+#if !( defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ ) )
+// splitUnixPath - function for splitting strings by delimiter
+std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
+{
+    std::vector<std::string> result;
+
+    if ( path.empty() ) {
+        return result;
+    }
+
+    size_t pos = path.find( delimiter, 0 );
+    while ( pos != std::string::npos ) { // while found delimiter
+        const size_t nextPos = path.find( delimiter, pos + 1 );
+        if ( nextPos != std::string::npos ) { // if found next delimiter
+            if ( pos + 1 < nextPos ) { // have what to append
+                result.push_back( path.substr( pos + 1, nextPos - pos - 1 ) );
+            }
+        }
+        else { // if no more delimiter present
+            if ( pos + 1 < path.length() ) { // if not a postfix delimiter
+                result.push_back( path.substr( pos + 1 ) );
+            }
+            break;
+        }
+
+        pos = path.find( delimiter, pos + 1 );
+    }
+
+    if ( result.empty() ) { // if delimiter not present
+        result.push_back( path );
+    }
+
+    return result;
+}
+
+// based on: https://github.com/OneSadCookie/fcaseopen
+bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
+{
+    correctedPath.clear();
+
+    if ( path.empty() )
+        return false;
+
+    DIR * d;
+    bool last = false;
+    const char * curDir = ".";
+    const char * delimiter = "/";
+
+    if ( path[0] == delimiter[0] ) {
+        d = opendir( delimiter );
+    }
+    else {
+        correctedPath = curDir[0];
+        d = opendir( curDir );
+    }
+
+    const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
+    for ( std::vector<std::string>::const_iterator subPathIter = splittedPath.begin(); subPathIter != splittedPath.end(); ++subPathIter ) {
+        if ( !d ) {
+            return false;
+        }
+
+        if ( last ) {
+            closedir( d );
+            return false;
+        }
+
+        correctedPath.append( delimiter );
+
+        struct dirent * e = readdir( d );
+        while ( e ) {
+            if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
+                correctedPath += e->d_name;
+
+                closedir( d );
+                d = opendir( correctedPath.c_str() );
+
+                break;
+            }
+
+            e = readdir( d );
+        }
+
+        if ( !e ) {
+            correctedPath += *subPathIter;
+            last = true;
+        }
+    }
+
+    if ( d )
+        closedir( d );
+
+    return !last;
+}
+#else
+bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
+{
+    correctedPath = path;
+    return true;
+}
+#endif
