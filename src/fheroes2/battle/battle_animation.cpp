@@ -288,16 +288,16 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
         appendFrames( info, _ranged[Monster_State::BOTTOM].start, Bin_Info::MonsterAnimInfo::SHOOT3, true );
         appendFrames( info, _ranged[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::SHOOT3_END );
     }
-    else if ( info.hasAnim( Bin_Info::MonsterAnimInfo::BREATH2 ) ) {
+    else if ( info.hasAnim( Bin_Info::MonsterAnimInfo::DOUBLEHEX2 ) ) {
         // Only 6 units should have this
-        appendFrames( info, _ranged[Monster_State::TOP].start, Bin_Info::MonsterAnimInfo::BREATH1, true );
-        appendFrames( info, _ranged[Monster_State::TOP].end, Bin_Info::MonsterAnimInfo::BREATH1_END );
+        appendFrames( info, _ranged[Monster_State::TOP].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX1, true );
+        appendFrames( info, _ranged[Monster_State::TOP].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX1_END );
 
-        appendFrames( info, _ranged[Monster_State::FRONT].start, Bin_Info::MonsterAnimInfo::BREATH2, true );
-        appendFrames( info, _ranged[Monster_State::FRONT].end, Bin_Info::MonsterAnimInfo::BREATH2_END );
+        appendFrames( info, _ranged[Monster_State::FRONT].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX2, true );
+        appendFrames( info, _ranged[Monster_State::FRONT].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX2_END );
 
-        appendFrames( info, _ranged[Monster_State::BOTTOM].start, Bin_Info::MonsterAnimInfo::BREATH3, true );
-        appendFrames( info, _ranged[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::BREATH3_END );
+        appendFrames( info, _ranged[Monster_State::BOTTOM].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX3, true );
+        appendFrames( info, _ranged[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX3_END );
     }
 }
 
