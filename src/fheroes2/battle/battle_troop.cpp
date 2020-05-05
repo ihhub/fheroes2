@@ -612,8 +612,6 @@ u32 Battle::Unit::GetDamageMax( const Unit & enemy ) const
 
 u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
 {
-    Arena * arena = GetArena();
-
     if ( isArchers() ) {
         if ( isHandFighting() ) {
             switch ( GetID() ) {
@@ -635,7 +633,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
             }
 
             // check castle defense
-            if ( arena->GetObstaclesPenalty( *this, enemy ) )
+            if ( GetArena()->GetObstaclesPenalty( *this, enemy ) )
                 dmg /= 2;
 
             // check spell shield
