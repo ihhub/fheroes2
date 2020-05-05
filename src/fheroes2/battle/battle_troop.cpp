@@ -683,11 +683,6 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
     if ( enemy.isDragons() && Modes( SP_DRAGONSLAYER ) )
         r += Spell( Spell::DRAGONSLAYER ).ExtraValue();
 
-    // check if standing in the moat
-    if ( arena->GetCastle() && ( arena->GetBoard()->isBridgeIndex( enemy.GetHeadIndex() ) || arena->GetBoard()->isBridgeIndex( enemy.GetTailIndex() ) ) ) {
-        r += 3;
-    }
-
     // Attack bonus is 20% to 300%
     dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -16 ) );
 
@@ -1148,7 +1143,7 @@ u32 Battle::Unit::GetDefense( void ) const
     }
 
     // check moat
-    if ( Board::isMoatIndex( GetHeadIndex() ) )
+    if ( Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex(GetTailIndex()) )
         res -= GameStatic::GetBattleMoatReduceDefense();
 
     return res;
