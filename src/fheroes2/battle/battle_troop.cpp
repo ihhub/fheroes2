@@ -531,15 +531,6 @@ void Battle::Unit::NewTurn( void )
             mirror = NULL;
         }
     }
-
-    if ( !Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
-        // define morale
-        if ( isAffectedByMorale() )
-            SetRandomMorale();
-
-        // define luck
-        SetRandomLuck();
-    }
 }
 
 u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
