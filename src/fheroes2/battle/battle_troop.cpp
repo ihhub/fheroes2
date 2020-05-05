@@ -610,16 +610,32 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
         if ( enemy.isUndead() )
             dmg *= 2;
         break;
-
+    case Monster::FIRE_ELEMENT:
+        if ( enemy.GetID() == Monster::WATER_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::WATER_ELEMENT:
+        if ( enemy.GetID() == Monster::FIRE_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::AIR_ELEMENT:
+        if ( enemy.GetID() == Monster::EARTH_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::EARTH_ELEMENT:
+        if ( enemy.GetID() == Monster::AIR_ELEMENT )
+            dmg *= 2;
+        break;
     default:
         break;
     }
 
-    // approximate.. from faq
     int r = GetAttack() - enemy.GetDefense();
     if ( enemy.isDragons() && Modes( SP_DRAGONSLAYER ) )
         r += Spell( Spell::DRAGONSLAYER ).ExtraValue();
-    dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -15 ) );
+
+    // Attack bonus is 20% to 300%
+    dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -16 ) );
 
     return static_cast<u32>( dmg ) < 1 ? 1 : static_cast<u32>( dmg );
 }
@@ -1078,7 +1094,7 @@ u32 Battle::Unit::GetDefense( void ) const
     }
 
     // check moat
-    if ( Board::isMoatIndex( GetHeadIndex() ) )
+    if ( Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) )
         res -= GameStatic::GetBattleMoatReduceDefense();
 
     return res;
