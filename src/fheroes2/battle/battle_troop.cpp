@@ -659,6 +659,22 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
         if ( enemy.isUndead() )
             dmg *= 2;
         break;
+    case Monster::FIRE_ELEMENT:
+        if ( enemy.GetID() == Monster::WATER_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::WATER_ELEMENT:
+        if ( enemy.GetID() == Monster::FIRE_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::AIR_ELEMENT:
+        if ( enemy.GetID() == Monster::EARTH_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::EARTH_ELEMENT:
+        if ( enemy.GetID() == Monster::AIR_ELEMENT )
+            dmg *= 2;
+        break;
     default:
         break;
     }
