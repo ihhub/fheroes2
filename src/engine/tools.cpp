@@ -708,16 +708,14 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     return data;
 }
 
-bool PressIntKey( u32 min, u32 max, u32 & result )
+bool PressIntKey( u32 max, u32 & result )
 {
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.KeyPress( KEY_BACKSPACE ) ) {
-        if ( min < result ) {
-            result /= 10;
-            if ( result < min )
-                result = min;
-        }
+        result /= 10;
+        if ( result < 0 )
+            result = 0;
         return true;
     }
     else if ( le.KeyPress() && KEY_0 <= le.KeyValue() && KEY_9 >= le.KeyValue() ) {

@@ -610,8 +610,7 @@ void Battle::Only::RedrawBaseInfo( const Point & top )
     std::string message = "%{name1} vs %{name2}";
 
     StringReplace( message, "%{name1}", std::string( Race::String( hero1->GetRace() ) ) + " " + hero1->GetName() );
-    if ( hero2 )
-        StringReplace( message, "%{name2}", ( hero2 ? std::string( Race::String( hero2->GetRace() ) ) + " " + hero2->GetName() : "Monsters" ) );
+    StringReplace( message, "%{name2}", ( hero2 ? std::string( Race::String( hero2->GetRace() ) ) + " " + hero2->GetName() : "Monsters" ) );
 
     Text text( message, Font::BIG );
     text.Blit( top.x + 320 - text.w() / 2, top.y + 26 );
