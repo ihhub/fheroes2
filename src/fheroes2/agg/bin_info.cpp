@@ -131,12 +131,11 @@ namespace Bin_Info
             return;
         }
 
-        // POPULATE MONSTER INFO
         const uint8_t * data = bytes.data();
 
         eyePosition = Point( *( reinterpret_cast<const int16_t *>( data + 1 ) ), *( reinterpret_cast<const int16_t *>( data + 3 ) ) );
 
-        // Frame X offsets for future use
+        // Frame X offsets for the future use
         for ( int moveID = 0; moveID < 7; ++moveID ) {
             std::vector<uint8_t> moveOffset;
             for ( int frame = 0; frame < 16; ++frame ) {
@@ -147,12 +146,14 @@ namespace Bin_Info
 
         // Idle animations data
         idleAnimationCount = data[117];
-        for ( uint8_t i = 0; i < idleAnimationCount; ++i ) {
+        if ( idleAnimationCount > 5u )
+            idleAnimationCount = 5u; // here we need to reset our object
+        for ( uint8_t i = 0; i < idleAnimationCount; ++i )
             idlePriority.push_back( *( reinterpret_cast<const float *>( data + 118 ) + i ) );
-        }
-        for ( uint8_t i = 0; i < idleAnimationCount; ++i ) {
+
+        for ( uint8_t i = 0; i < idleAnimationCount; ++i )
             unusedIdleDelays.push_back( *( reinterpret_cast<const uint32_t *>( data + 138 ) + i ) );
-        }
+
         idleAnimationDelay = *( reinterpret_cast<const uint32_t *>( data + 158 ) );
 
         // Monster speed data
@@ -161,16 +162,16 @@ namespace Bin_Info
         flightSpeed = *( reinterpret_cast<const uint32_t *>( data + 170 ) );
 
         // Projectile data
-        // Size_t to match x64 pointer and avoid the C26451 cast warning
         for ( size_t i = 0; i < 3; ++i ) {
             projectileOffset.push_back(
                 Point( *( reinterpret_cast<const int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<const int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
         }
 
-        const uint8_t projectileCount = data[186];
-        for ( uint8_t i = 0; i < projectileCount; ++i ) {
+        uint8_t projectileCount = data[186];
+        if ( projectileCount > 12u )
+            projectileCount = 12u; // here we need to reset our object
+        for ( uint8_t i = 0; i < projectileCount; ++i )
             projectileAngles.push_back( *( reinterpret_cast<const float *>( data + 187 ) + i ) );
-        }
 
         // Positional offsets for sprites & drawing
         troopCountOffsetLeft = *( reinterpret_cast<const int32_t *>( data + 235 ) );
@@ -180,6 +181,8 @@ namespace Bin_Info
         for ( int idx = MOVE_START; idx <= SHOOT3_END; ++idx ) {
             std::vector<int> anim;
             uint8_t count = data[243 + idx];
+            if ( count > 16 )
+                count = 16; // here we need to reset our object
             for ( uint8_t frame = 0; frame < count; frame++ ) {
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
@@ -194,7 +197,7 @@ namespace Bin_Info
             return mapIterator->second;
         }
         else {
-            MonsterAnimInfo info = AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) );
+            const MonsterAnimInfo info( AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
             if ( info.isValid() ) {
                 _animMap[monsterID] = info;
                 return info;
@@ -208,17 +211,18 @@ namespace Bin_Info
 
     bool MonsterAnimInfo::isValid() const
     {
-        // Absolute minimal set up: Main move, static, death, wince, 3 melee attacks
-        const size_t essentialAnimations[7] = {2, 7, 13, 14, 16, 20, 24};
-
-        if ( animationFrames.size() != MonsterAnimInfo::SHOOT3_END + 1 )
+        if ( animationFrames.size() != SHOOT3_END + 1 )
             return false;
+
+        // Absolute minimal set up
+        const int essentialAnimations[7] = {MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3};
+
         for ( int i = 0; i < 7; ++i ) {
-            if ( animationFrames.at( essentialAnimations[i] ).size() == 0 )
+            if ( animationFrames.at( essentialAnimations[i] ).empty() )
                 return false;
         }
 
-        if ( idlePriority.size() != (size_t)idleAnimationCount )
+        if ( idlePriority.size() != static_cast<size_t>( idleAnimationCount ) )
             return false;
 
         return true;
@@ -226,7 +230,7 @@ namespace Bin_Info
 
     bool MonsterAnimInfo::hasAnim( int animID ) const
     {
-        return animationFrames.size() == MonsterAnimInfo::SHOOT3_END + 1 && animationFrames.at( animID ).size() > 0;
+        return animationFrames.size() == SHOOT3_END + 1 && !animationFrames.at( animID ).empty();
     }
 
     AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )
