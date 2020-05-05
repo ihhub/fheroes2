@@ -612,6 +612,8 @@ u32 Battle::Unit::GetDamageMax( const Unit & enemy ) const
 
 u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
 {
+    Arena * arena = GetArena();
+
     if ( isArchers() ) {
         if ( isHandFighting() ) {
             switch ( GetID() ) {
@@ -633,7 +635,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
             }
 
             // check castle defense
-            if ( GetArena()->GetObstaclesPenalty( *this, enemy ) )
+            if ( arena->GetObstaclesPenalty( *this, enemy ) )
                 dmg /= 2;
 
             // check spell shield
@@ -657,16 +659,21 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
         if ( enemy.isUndead() )
             dmg *= 2;
         break;
-
     default:
         break;
     }
 
-    // approximate.. from faq
     int r = GetAttack() - enemy.GetDefense();
     if ( enemy.isDragons() && Modes( SP_DRAGONSLAYER ) )
         r += Spell( Spell::DRAGONSLAYER ).ExtraValue();
-    dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -15 ) );
+
+    // check if standing in the moat
+    if ( arena->GetCastle() && ( arena->GetBoard()->isBridgeIndex( enemy.GetHeadIndex() ) || arena->GetBoard()->isBridgeIndex( enemy.GetTailIndex() ) ) ) {
+        r += 3;
+    }
+
+    // Attack bonus is 20% to 300%
+    dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -16 ) );
 
     return static_cast<u32>( dmg ) < 1 ? 1 : static_cast<u32>( dmg );
 }
