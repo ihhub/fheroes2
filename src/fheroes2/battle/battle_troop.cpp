@@ -424,10 +424,10 @@ void Battle::Unit::SetRandomMorale( void )
         SetModes( MORALE_GOOD );
     }
     else if ( morale < 0 && Rand::Get( 1, 12 ) <= -morale ) {
-        if ( GetColor() == Settings::Get().GetPlayers().GetCurrent()->GetColor() ) {
+        if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
         }
-        // AI is given a cheeky 25% chance to avoid it
+        // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
         else if ( Rand::Get( 1, 4 ) != 1 ) {
             SetModes( MORALE_BAD );
         }
