@@ -31,7 +31,7 @@ namespace Bin_Info
     const size_t CORRECT_FRM_LENGTH = 821;
 
     std::map<int, AnimationReference> animRefs;
-    MonsterAnimCache _info_cache;
+    MonsterAnimCache _infoCache;
 
     const struct
     {
@@ -105,12 +105,12 @@ namespace Bin_Info
                         {Monster::ZOMBIE, "ZOMB_FRM.BIN"},
                         {Monster::MUTANT_ZOMBIE, "ZOMB_FRM.BIN"}};
 
-    const char * GetFilename( int bin_frm )
+    const char * GetFilename( int monsterId )
     {
         int index = Monster::UNKNOWN;
 
-        for ( int idx = Monster::UNKNOWN; idx < Monster::WATER_ELEMENT + 1; idx++ ) {
-            if ( bin_file_map[idx].type == bin_frm ) {
+        for ( int idx = Monster::UNKNOWN; idx < Monster::WATER_ELEMENT + 1; ++idx ) {
+            if ( bin_file_map[idx].type == monsterId ) {
                 index = idx;
                 break;
             }
@@ -240,7 +240,7 @@ namespace Bin_Info
 
     AnimationReference MonsterAnimCache::createAnimReference( int monsterID )
     {
-        return AnimationReference( _info_cache.getAnimInfo( monsterID ), monsterID );
+        return AnimationReference( _infoCache.getAnimInfo( monsterID ), monsterID );
     }
 
     AnimationReference GetAnimationSet( int monsterID )
@@ -249,12 +249,12 @@ namespace Bin_Info
         if ( it != animRefs.end() )
             return it->second;
 
-        return _info_cache.createAnimReference( Monster::UNKNOWN );
+        return _infoCache.createAnimReference( Monster::UNKNOWN );
     }
 
     void InitBinInfo()
     {
-        for ( int i = Monster::UNKNOWN; i < Monster::WATER_ELEMENT + 1; i++ )
-            animRefs[i] = _info_cache.createAnimReference( i );
+        for ( int i = Monster::UNKNOWN; i < Monster::WATER_ELEMENT + 1; ++i )
+            animRefs[i] = _infoCache.createAnimReference( i );
     }
 }
