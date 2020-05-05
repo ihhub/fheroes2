@@ -337,6 +337,12 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
 
     DEBUG( DBG_BATTLE, DBG_TRACE, current_troop->String( true ) );
 
+    // morale check right before the turn
+    if ( !current_troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+        if ( current_troop->isAffectedByMorale() )
+            current_troop->SetRandomMorale();
+    }
+
     while ( !end_turn ) {
         // bad morale
         if ( current_troop->Modes( MORALE_BAD ) ) {
