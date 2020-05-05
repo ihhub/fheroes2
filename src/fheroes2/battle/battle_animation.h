@@ -83,7 +83,7 @@ protected:
     monsterReturnAnim _ranged[3];
     std::vector<std::vector<int> > _idle;
 
-    bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID, bool critical = false );
+    bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID );
 };
 
 class AnimationState : public AnimationReference

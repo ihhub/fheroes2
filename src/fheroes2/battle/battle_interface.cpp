@@ -2961,7 +2961,6 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
         if ( ( *it ).defender ) {
             TargetInfo & target = *it;
             if ( !target.defender->isValid() ) {
-                // const Monster::animframe_t & frm = target.defender->GetFrameState( Monster_Info::KILL );
                 target.defender->SetDeathAnim();
             }
             else
