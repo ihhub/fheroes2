@@ -1143,7 +1143,7 @@ u32 Battle::Unit::GetDefense( void ) const
     }
 
     // check moat
-    if ( Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex(GetTailIndex()) )
+    if ( Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) )
         res -= GameStatic::GetBattleMoatReduceDefense();
 
     return res;
