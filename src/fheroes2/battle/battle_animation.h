@@ -35,11 +35,8 @@ class AnimationSequence
 {
 public:
     AnimationSequence( const std::vector<int> & seq );
-    AnimationSequence( const AnimationSequence & );
-    virtual ~AnimationSequence();
 
-    AnimationSequence & operator=( const std::vector<int> & );
-    AnimationSequence & operator=( const AnimationSequence & );
+    AnimationSequence & operator=( const std::vector<int> & rhs );
 
     int playAnimation( bool loop = false );
     int restartAnimation();
@@ -55,8 +52,7 @@ public:
 
 private:
     std::vector<int> _seq;
-    std::vector<int>::iterator _currentFrame;
-    bool _reverse;
+    size_t _currentFrame;
 
     AnimationSequence();
 };
@@ -69,11 +65,10 @@ public:
     virtual ~AnimationReference();
 
     int getStaticFrame() const;
-    int getDeadFrame() const;
+    int getDeathFrame() const;
 
     const std::vector<int> & getAnimationVector( int animstate ) const;
     AnimationSequence getAnimationSequence( int animstate ) const;
-    static int getNextFrame( const std::vector<int> & sequence, int current = -1, bool loop = false );
 
 protected:
     int _type;
@@ -100,7 +95,6 @@ public:
     bool switchAnimation( int animstate, bool reverse = false );
     bool switchAnimation( const std::vector<int> & animationList, bool reverse = false );
     int getCurrentState() const;
-    AnimationSequence & seq();
 
     // pass-down methods
     int playAnimation( bool loop = false );

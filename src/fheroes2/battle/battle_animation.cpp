@@ -25,39 +25,15 @@
 
 AnimationSequence::AnimationSequence( const std::vector<int> & seq )
     : _seq( seq )
-{
-    // Do we need this?
-    if ( _seq.empty() ) {
-        _seq.push_back( 1 );
-    }
-
-    // Make sure this reference is on point !
-    _currentFrame = _seq.begin();
-}
-
-AnimationSequence::AnimationSequence( const AnimationSequence & rhs )
-    : _seq( rhs._seq )
-{
-    if ( _seq.empty() )
-        DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence is empty C1! " << _seq.size() );
-    _currentFrame = _seq.begin();
-}
+    , _currentFrame( 0 )
+{}
 
 AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
 {
     _seq = rhs;
-    _currentFrame = _seq.begin();
+    _currentFrame = 0;
     return *this;
 }
-
-AnimationSequence & AnimationSequence::operator=( const AnimationSequence & rhs )
-{
-    _seq = rhs._seq;
-    _currentFrame = _seq.begin();
-    return *this;
-}
-
-AnimationSequence::~AnimationSequence() {}
 
 int AnimationSequence::playAnimation( bool loop )
 {
@@ -65,21 +41,21 @@ int AnimationSequence::playAnimation( bool loop )
         if ( loop )
             restartAnimation();
     }
-    else {
+    else if ( isValid() ) {
         _currentFrame++;
     }
-    return *_currentFrame;
+    return getFrame();
 }
 
 int AnimationSequence::restartAnimation()
 {
-    _currentFrame = _seq.begin();
+    _currentFrame = 0;
     return getFrame();
 }
 
 int AnimationSequence::getFrame() const
 {
-    return isValid() ? *_currentFrame : 0;
+    return isValid() ? _seq[_currentFrame] : 0;
 }
 
 int AnimationSequence::animationLength() const
@@ -94,40 +70,31 @@ int AnimationSequence::firstFrame() const
 
 void AnimationSequence::setToLastFrame()
 {
-    if ( _seq.size() > 0 )
-        _currentFrame = _seq.end() - 1;
+    if ( isValid() )
+        _currentFrame = _seq.size() - 1;
 }
 
 double AnimationSequence::movementProgress() const
 {
     if ( isValid() )
-        return static_cast<double>( _currentFrame - _seq.begin() ) / animationLength();
+        return static_cast<double>( _currentFrame + 1 ) / animationLength();
 
     return 1.0;
 }
 
 bool AnimationSequence::isFirstFrame() const
 {
-    return isValid() ? _currentFrame == _seq.begin() : false;
+    return _currentFrame == 0;
 }
 
 bool AnimationSequence::isLastFrame() const
 {
-    std::vector<int>::iterator iter = _currentFrame;
-    ++iter;
-    return isValid() ? iter == _seq.end() : false;
+    return _currentFrame == _seq.size() - 1;
 }
 
 bool AnimationSequence::isValid() const
 {
-    if ( _seq.size() == 0 ) {
-        return false;
-    }
-    else if ( _currentFrame == _seq.end() ) {
-        DEBUG( DBG_GAME, DBG_WARN, " AnimationSequence has " << _seq.size() << " frames but currentFrame is in invalid state" );
-        return false;
-    }
-    return true;
+    return _seq.size() > 0 && _currentFrame < _seq.size();
 }
 
 AnimationState::AnimationState( const AnimationReference & ref, int state )
@@ -185,11 +152,6 @@ bool AnimationState::switchAnimation( const std::vector<int> & animationList, bo
 int AnimationState::getCurrentState() const
 {
     return _animState;
-}
-
-AnimationSequence & AnimationState::seq()
-{
-    return _currentSequence;
 }
 
 int AnimationState::playAnimation( bool loop )
@@ -412,28 +374,12 @@ AnimationSequence AnimationReference::getAnimationSequence( int animstate ) cons
     return AnimationSequence( getAnimationVector( animstate ) );
 }
 
-int AnimationReference::getNextFrame( const std::vector<int> & sequence, int current, bool loop )
-{
-    if ( current <= 0 )
-        return sequence.front();
-
-    if ( static_cast<size_t>( current ) < sequence.size() )
-        return sequence[current];
-
-    if ( loop ) {
-        const size_t position = static_cast<size_t>( current ) % sequence.size();
-        return sequence[position];
-    }
-
-    return sequence.back();
-}
-
 int AnimationReference::getStaticFrame() const
 {
     return _static.back();
 }
 
-int AnimationReference::getDeadFrame() const
+int AnimationReference::getDeathFrame() const
 {
     return ( _death.empty() ) ? _static.back() : _death.back();
 }
