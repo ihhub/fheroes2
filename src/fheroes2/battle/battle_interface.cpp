@@ -1002,7 +1002,7 @@ void Battle::Interface::Redraw( void )
         RedrawCastle3( *castle );
     RedrawArmies();
     RedrawInterface();
-    if ( !Settings::Get().QVGA() )
+    if ( Settings::Get().ExtBattleShowBattleOrder() && !Settings::Get().QVGA() )
         armies_order.Redraw( b_current );
     if ( Settings::Get().QVGA() )
         RedrawPocketControls();
@@ -1929,7 +1929,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( le.MouseCursor( armies_order ) ) {
+    else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armies_order ) ) {
         cursor.SetThemes( Cursor::POINTER );
         armies_order.QueueEventProcessing( msg );
     }
@@ -2684,7 +2684,7 @@ void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
     const Rect & pos1 = b.GetRectPosition();
     const Rect & pos2 = Board::GetCell( dst )->GetPos();
 
-    Point pt1( pos1.x + ( b.isReflect() ? 0 : pos1.w ), pos1.y );
+    Point pt1( pos1.x, pos1.y );
     Point pt2( pos2.x, pos2.y );
 
     cursor.SetThemes( Cursor::WAR_NONE );

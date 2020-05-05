@@ -229,6 +229,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::UNIONS_ALLOW_HERO_MEETINGS );
     states.push_back( Settings::UNIONS_ALLOW_CASTLE_VISITING );
 
+    states.push_back( Settings::BATTLE_SHOW_ARMY_ORDER );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_OBJECTS_ARCHERS_PENALTY );
     states.push_back( Settings::BATTLE_MERGE_ARMIES );

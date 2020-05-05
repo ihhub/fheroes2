@@ -95,6 +95,8 @@ namespace System
 
     int ShellCommand( const char * );
     int GetRenderFlags( void );
+
+    bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 }
 
 #endif

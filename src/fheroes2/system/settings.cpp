@@ -353,6 +353,10 @@ const settings_t settingsFHeroes2[] = {
         _( "unions: allow castle visiting" ),
     },
     {
+        Settings::BATTLE_SHOW_ARMY_ORDER,
+        _( "battle: show army order" ),
+    },
+    {
         Settings::BATTLE_SOFT_WAITING,
         _( "battle: soft wait troop" ),
     },
@@ -1665,6 +1669,11 @@ bool Settings::ExtHeroAllowTranscribingScroll( void ) const
 bool Settings::ExtHeroAutoMove2BattleTarget( void ) const
 {
     return ExtModes( HEROES_AUTO_MOVE_BATTLE_DST );
+}
+
+bool Settings::ExtBattleShowBattleOrder( void ) const
+{
+    return ExtModes( BATTLE_SHOW_ARMY_ORDER );
 }
 
 bool Settings::ExtBattleSoftWait( void ) const

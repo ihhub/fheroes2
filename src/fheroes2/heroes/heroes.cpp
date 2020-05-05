@@ -643,13 +643,13 @@ int Heroes::GetMorale( void ) const
 
 int Heroes::GetMoraleWithModificators( std::string * strs ) const
 {
+    if ( army.AllTroopsIsRace( Race::NECR ) )
+        return Morale::NORMAL;
+
     int result = Morale::NORMAL;
 
     // bonus artifact
     result += GetMoraleModificator( strs );
-
-    if ( army.AllTroopsIsRace( Race::NECR ) )
-        return Morale::NORMAL;
 
     // bonus leadership
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );

@@ -211,24 +211,7 @@ int Interface::Basic::EventAdventureDialog( void )
 
 int Interface::Basic::EventFileDialog( void )
 {
-    switch ( Dialog::FileOptions() ) {
-    case Game::NEWGAME:
-        return EventNewGame();
-
-    case Game::QUITGAME:
-        return Game::QUITGAME;
-
-    case Game::LOADGAME:
-        return EventLoadGame();
-
-    case Game::SAVEGAME:
-        return EventSaveGame();
-
-    default:
-        break;
-    }
-
-    return Game::CANCEL;
+    return Dialog::FileOptions();
 }
 
 void Interface::Basic::EventSystemDialog( void )

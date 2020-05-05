@@ -411,77 +411,39 @@ s32 Battle::Unit::GetTailIndex( void ) const
 
 void Battle::Unit::SetRandomMorale( void )
 {
-    switch ( GetMorale() ) {
-    case Morale::TREASON:
-        if ( 9 > Rand::Get( 1, 16 ) )
+    s32 morale = GetMorale();
+
+    // Bone dragon affects morale, not luck
+    if ( GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && morale > Morale::TREASON )
+        --morale;
+
+    if ( morale > 0 && Rand::Get( 1, 24 ) <= morale ) {
+        SetModes( MORALE_GOOD );
+    }
+    else if ( morale < 0 && Rand::Get( 1, 12 ) <= -morale ) {
+        if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
-        break; // 50%
-    case Morale::AWFUL:
-        if ( 6 > Rand::Get( 1, 15 ) )
+        }
+        // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
+        else if ( Rand::Get( 1, 4 ) != 1 ) {
             SetModes( MORALE_BAD );
-        break; // 30%
-    case Morale::POOR:
-        if ( 2 > Rand::Get( 1, 15 ) )
-            SetModes( MORALE_BAD );
-        break; // 15%
-    case Morale::GOOD:
-        if ( 2 > Rand::Get( 1, 15 ) )
-            SetModes( MORALE_GOOD );
-        break; // 15%
-    case Morale::GREAT:
-        if ( 6 > Rand::Get( 1, 15 ) )
-            SetModes( MORALE_GOOD );
-        break; // 30%
-    case Morale::BLOOD:
-        if ( 9 > Rand::Get( 1, 16 ) )
-            SetModes( MORALE_GOOD );
-        break; // 50%
-    default:
-        break;
+        }
     }
 }
 
 void Battle::Unit::SetRandomLuck( void )
 {
-    s32 f = GetLuck();
+    s32 luck = GetLuck();
+    u32 chance = Rand::Get( 1, 24 );
 
-    // check enemy: have bone dragon
-    if ( GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) )
-        --f;
-
-    switch ( f ) {
-    case Luck::CURSED:
-        if ( 9 > Rand::Get( 1, 16 ) )
-            SetModes( LUCK_BAD );
-        break; // 50%
-    case Luck::AWFUL:
-        if ( 6 > Rand::Get( 1, 15 ) )
-            SetModes( LUCK_BAD );
-        break; // 30%
-    case Luck::BAD:
-        if ( 2 > Rand::Get( 1, 15 ) )
-            SetModes( LUCK_BAD );
-        break; // 15%
-    case Luck::GOOD:
-        if ( 2 > Rand::Get( 1, 15 ) )
-            SetModes( LUCK_GOOD );
-        break; // 15%
-    case Luck::GREAT:
-        if ( 6 > Rand::Get( 1, 15 ) )
-            SetModes( LUCK_GOOD );
-        break; // 30%
-    case Luck::IRISH:
-        if ( 9 > Rand::Get( 1, 16 ) )
-            SetModes( LUCK_GOOD );
-        break; // 50%
-    default:
-        break;
+    if ( luck > 0 && chance <= luck ) {
+        SetModes( LUCK_GOOD );
+    }
+    else if ( luck < 0 && chance <= -luck ) {
+        SetModes( LUCK_BAD );
     }
 
-    if ( Modes( SP_BLESS ) && Modes( LUCK_GOOD ) )
-        ResetModes( LUCK_GOOD );
-    else if ( Modes( SP_CURSE ) && Modes( LUCK_BAD ) )
-        ResetModes( LUCK_BAD );
+    // Bless, Curse and Luck do stack
 }
 
 bool Battle::Unit::isFly( void ) const
@@ -572,15 +534,6 @@ void Battle::Unit::NewTurn( void )
             mirror = NULL;
         }
     }
-
-    if ( !Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
-        // define morale
-        if ( isAffectedByMorale() )
-            SetRandomMorale();
-
-        // define luck
-        SetRandomLuck();
-    }
 }
 
 u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
@@ -660,16 +613,32 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
         if ( enemy.isUndead() )
             dmg *= 2;
         break;
-
+    case Monster::FIRE_ELEMENT:
+        if ( enemy.GetID() == Monster::WATER_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::WATER_ELEMENT:
+        if ( enemy.GetID() == Monster::FIRE_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::AIR_ELEMENT:
+        if ( enemy.GetID() == Monster::EARTH_ELEMENT )
+            dmg *= 2;
+        break;
+    case Monster::EARTH_ELEMENT:
+        if ( enemy.GetID() == Monster::AIR_ELEMENT )
+            dmg *= 2;
+        break;
     default:
         break;
     }
 
-    // approximate.. from faq
     int r = GetAttack() - enemy.GetDefense();
     if ( enemy.isDragons() && Modes( SP_DRAGONSLAYER ) )
         r += Spell( Spell::DRAGONSLAYER ).ExtraValue();
-    dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -15 ) );
+
+    // Attack bonus is 20% to 300%
+    dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -16 ) );
 
     return static_cast<u32>( dmg ) < 1 ? 1 : static_cast<u32>( dmg );
 }
@@ -1126,7 +1095,7 @@ u32 Battle::Unit::GetDefense( void ) const
     }
 
     // check moat
-    if ( Board::isMoatIndex( GetHeadIndex() ) )
+    if ( Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) )
         res -= GameStatic::GetBattleMoatReduceDefense();
 
     return res;

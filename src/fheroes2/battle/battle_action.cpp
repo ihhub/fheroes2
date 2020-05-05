@@ -56,6 +56,9 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
     else
         attacker.UpdateDirection( board[dst].GetPos() );
 
+    // check luck right before the attack
+    attacker.SetRandomLuck();
+
     TargetsInfo targets = GetTargetsForDamage( attacker, defender, dst );
 
     if ( Board::isReflectDirection( dir ) != attacker.isReflect() )
