@@ -766,5 +766,5 @@ GameStatic::Data & GameStatic::Data::Get( void )
 
 int GameStatic::GetBattleMoatReduceDefense( void )
 {
-    return 2;
+    return 3;
 }
