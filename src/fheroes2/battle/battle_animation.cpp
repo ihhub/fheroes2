@@ -45,7 +45,7 @@ int AnimationSequence::playAnimation( bool loop )
             restartAnimation();
     }
     else {
-        _currentFrame++;
+        ++_currentFrame;
     }
     return _seq[_currentFrame];
 }
@@ -107,9 +107,9 @@ AnimationReference::AnimationReference()
 
 AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id )
 {
-    if ( id < Monster::PEASANT && id > Monster::WATER_ELEMENT ) {
+    if ( id < Monster::PEASANT && id > Monster::WATER_ELEMENT )
         return;
-    }
+
     _type = id;
 
     // STATIC is our default
@@ -121,7 +121,7 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
 
     // Taking damage
     appendFrames( info, _wince, Bin_Info::MonsterAnimInfo::WINCE_UP );
-    appendFrames( info, _wince, Bin_Info::MonsterAnimInfo::WINCE_END ); // play it back together for now
+    appendFrames( info, _wince, Bin_Info::MonsterAnimInfo::WINCE_END ); // TODO: play it back together for now
     appendFrames( info, _death, Bin_Info::MonsterAnimInfo::DEATH );
 
     // Idle animations
@@ -140,8 +140,7 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
     if ( info.hasAnim( Bin_Info::MonsterAnimInfo::MOVE_ONE ) ) {
         appendFrames( info, _quickMove, Bin_Info::MonsterAnimInfo::MOVE_ONE );
     }
-    else {
-        // this must be LICH or POWER_LICH
+    else { // TODO: this must be LICH or POWER_LICH. Check it!
         _quickMove = _loopMove;
     }
 
@@ -170,7 +169,7 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
         appendFrames( info, _ranged[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::SHOOT3_END );
     }
     else if ( info.hasAnim( Bin_Info::MonsterAnimInfo::DOUBLEHEX2 ) ) {
-        // Only 6 units should have this
+        // Only 6 units should have this (in the original game)
         appendFrames( info, _ranged[Monster_State::TOP].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX1 );
         appendFrames( info, _ranged[Monster_State::TOP].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX1_END );
 
@@ -193,14 +192,14 @@ bool AnimationReference::appendFrames( const Bin_Info::MonsterAnimInfo & info, s
     return false;
 }
 
-const std::vector<int> & AnimationReference::getAnimationVector( int animstate ) const
+const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const
 {
-    switch ( animstate ) {
+    switch ( animState ) {
     case Monster_State::STATIC:
         return _static;
         break;
     case Monster_State::IDLE:
-        return _idle.front();
+        return _idle.front(); // TODO: use all idle animations
         break;
     case Monster_State::MOVE_START:
         return _moveModes.start;
@@ -258,15 +257,15 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animstate )
         return _death;
         break;
     default:
-        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animstate );
+        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animState );
         break;
     }
     return _static;
 }
 
-AnimationSequence AnimationReference::getAnimationSequence( int animstate ) const
+AnimationSequence AnimationReference::getAnimationSequence( int animState ) const
 {
-    return AnimationSequence( getAnimationVector( animstate ) );
+    return AnimationSequence( getAnimationVector( animState ) );
 }
 
 int AnimationReference::getStaticFrame() const
@@ -288,11 +287,11 @@ AnimationState::AnimationState( const AnimationReference & ref, int state )
 
 AnimationState::~AnimationState() {}
 
-bool AnimationState::switchAnimation( int animstate, bool reverse )
+bool AnimationState::switchAnimation( int animState, bool reverse )
 {
-    std::vector<int> seq = getAnimationVector( animstate );
+    std::vector<int> seq = getAnimationVector( animState );
     if ( seq.size() > 0 ) {
-        _animState = animstate;
+        _animState = animState;
         if ( reverse )
             std::reverse( seq.begin(), seq.end() );
         _currentSequence = seq;
@@ -300,7 +299,7 @@ bool AnimationState::switchAnimation( int animstate, bool reverse )
         return true;
     }
     else {
-        DEBUG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim " << animstate << " length " << _currentSequence.animationLength() );
+        DEBUG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim " << animState << " length " << _currentSequence.animationLength() );
     }
     return false;
 }
