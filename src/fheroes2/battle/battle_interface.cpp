@@ -2381,7 +2381,7 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
 {
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
