@@ -509,9 +509,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( Unit & attacker, Unit & 
     }
     // around hydra
     else if ( attacker.GetID() == Monster::HYDRA ) {
-        std::vector<Unit *> v;
-        v.reserve( 8 );
-
         const Indexes around = Board::GetAroundIndexes( attacker );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
