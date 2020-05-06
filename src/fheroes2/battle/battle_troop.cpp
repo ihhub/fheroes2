@@ -38,9 +38,7 @@
 #include "world.h"
 
 namespace Battle
-{
-    u32 genie_enemy_half_percent = 10;
-}
+{}
 
 void Battle::UpdateMonsterAttributes( const std::string & spec )
 {
@@ -52,15 +50,6 @@ void Battle::UpdateMonsterAttributes( const std::string & spec )
     if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_battle = doc.FirstChildElement( "battle" ) ) ) {
         const TiXmlElement * xml_element;
         int value;
-
-        // genie
-        xml_element = xml_battle->FirstChildElement( "genie" );
-        if ( xml_element ) {
-            xml_element->Attribute( "enemy_half_percent", &value );
-            if ( value > 100 )
-                value = 100;
-            genie_enemy_half_percent = value;
-        }
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
@@ -774,24 +763,6 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
 {
     u32 killed = ApplyDamage( dmg );
     u32 resurrect;
-
-    switch ( enemy.GetID() ) {
-    case Monster::GENIE:
-        // 10% half
-        if ( 1 < GetCount() && killed < GetCount() && genie_enemy_half_percent >= Rand::Get( 1, 100 ) ) {
-            killed = ApplyDamage( hp / 2 );
-
-            if ( Arena::GetInterface() ) {
-                std::string str( _( "%{name} half the enemy troops!" ) );
-                StringReplace( str, "%{name}", enemy.GetName() );
-                Arena::GetInterface()->SetStatus( str, true );
-            }
-        }
-        break;
-
-    default:
-        break;
-    }
 
     if ( killed )
         switch ( enemy.GetID() ) {
