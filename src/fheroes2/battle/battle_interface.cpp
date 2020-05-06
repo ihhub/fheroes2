@@ -2419,9 +2419,6 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         actionStart = Monster_State::MELEE_BOT;
     }
 
-    // All attacks must have secondary animation next to it
-    int actionEnd = actionStart + 1;
-
     // redraw luck animation
     if ( attacker.Modes( LUCK_GOOD | LUCK_BAD ) )
         RedrawActionLuck( attacker );
@@ -2461,11 +2458,6 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         }
     }
 
-    // post attack animation
-    if ( attacker.SwitchAnimation( actionEnd ) ) {
-        RedrawTroopFrameAnimation( attacker );
-    }
-
     // post attack action
     switch ( attacker.GetID() ) {
     case Monster::VAMPIRE_LORD:
@@ -2486,9 +2478,15 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
 void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & targets )
 {
-    attacker.SwitchAnimation( Monster_State::STATIC );
     // targets damage animation
     RedrawActionWincesKills( targets );
+
+    // post attack animation
+    int attackStart = attacker.animation.getCurrentState();
+    if ( attackStart >= Monster_State::MELEE_TOP && attackStart <= Monster_State::RANG_BOT ) {
+        if ( attacker.SwitchAnimation( {attackStart + 1, Monster_State::STATIC} ) )
+            RedrawTroopFrameAnimation( attacker );
+    }
 
     // draw status for first defender
     if ( targets.size() ) {
