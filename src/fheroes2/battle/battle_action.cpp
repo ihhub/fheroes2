@@ -482,7 +482,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( Unit & attacker, Unit & 
     res.damage = attacker.GetDamage( defender );
 
     // Genie special attack (20%, genie likes number 2)
-    if ( attacker.GetID() == Monster::GENIE && Rand::Get( 1, 5 ) <= 4 ) {
+    if ( attacker.GetID() == Monster::GENIE && Rand::Get( 1, 5 ) == 2 ) {
         if ( defender.GetHitPoints() / 2 > res.damage ) {
             // Replaces the damage, not adding to it
             res.damage = defender.GetHitPoints() / 2;
