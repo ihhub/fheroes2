@@ -160,7 +160,7 @@ namespace Battle
         void SetArmiesOrder( const Units * );
         void FadeArena( void );
 
-        void RedrawActionAttackPart1( Unit &, Unit &, TargetsInfo & );
+        void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
         void RedrawActionAttackPart2( Unit &, TargetsInfo & );
         void RedrawActionSpellCastPart1( const Spell &, s32, const HeroBase *, const std::string &, const TargetsInfo & );
         void RedrawActionSpellCastPart2( const Spell &, TargetsInfo & );
