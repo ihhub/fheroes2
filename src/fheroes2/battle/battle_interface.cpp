@@ -1185,6 +1185,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 const s32 cx = p_move.x - rt.x;
                 const s32 cy = p_move.y - rt.y;
 
+                // TODO: use offset X from bin file for ground movement
                 // cx/cy is sprite size
                 // Frame count: one tile of movement goes through all stages of animation
                 // sp is sprite drawing offset
