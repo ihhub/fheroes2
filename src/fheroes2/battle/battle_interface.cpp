@@ -2688,7 +2688,7 @@ void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
     Point pt2( pos2.x, pos2.y );
 
     cursor.SetThemes( Cursor::WAR_NONE );
-    // Check if 80 is a good value, flyers moving way too fast
+    // TODO: Check if 80 is a good value, flyers moving way too fast
     const u32 step = b.isWide() ? 80 : 40;
 
     const Points points = GetLinePoints( pt1, pt2, Settings::Get().QVGA() ? step / 2 : step );
