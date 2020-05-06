@@ -37,9 +37,6 @@
 #include "speed.h"
 #include "world.h"
 
-namespace Battle
-{}
-
 void Battle::UpdateMonsterAttributes( const std::string & spec )
 {
 #ifdef WITH_XML
