@@ -67,8 +67,8 @@ public:
     int getStaticFrame() const;
     int getDeathFrame() const;
 
-    const std::vector<int> & getAnimationVector( int animstate ) const;
-    AnimationSequence getAnimationSequence( int animstate ) const;
+    const std::vector<int> & getAnimationVector( int animState ) const;
+    AnimationSequence getAnimationSequence( int animState ) const;
 
 protected:
     int _type;
