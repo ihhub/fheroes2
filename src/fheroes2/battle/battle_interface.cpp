@@ -2484,9 +2484,10 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
     if ( attackStart >= Monster_State::MELEE_TOP && attackStart <= Monster_State::RANG_BOT ) {
-        if ( attacker.SwitchAnimation( {attackStart + 1, Monster_State::STATIC} ) )
+        if ( attacker.SwitchAnimation( ++attackStart ) )
             RedrawTroopFrameAnimation( attacker );
     }
+    attacker.SwitchAnimation( Monster_State::STATIC );
 
     // draw status for first defender
     if ( targets.size() ) {
