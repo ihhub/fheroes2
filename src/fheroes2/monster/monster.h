@@ -25,7 +25,9 @@
 
 #include <string>
 
+#include "battle_animation.h"
 #include "gamedefs.h"
+#include "monster_info.h"
 #include "payment.h"
 
 class Spell;
@@ -127,27 +129,6 @@ public:
         MONSTER_RND3,
         MONSTER_RND4,
         MONSTER_RND
-    };
-
-    enum
-    {
-        AS_NONE,
-        AS_STATIC,
-        AS_IDLE,
-        AS_MOVE,
-        AS_FLY1,
-        AS_FLY2,
-        AS_FLY3,
-        AS_SHOT0,
-        AS_SHOT1,
-        AS_SHOT2,
-        AS_SHOT3,
-        AS_ATTK0,
-        AS_ATTK1,
-        AS_ATTK2,
-        AS_ATTK3,
-        AS_WNCE,
-        AS_KILL
     };
 
     struct animframe_t
@@ -269,16 +250,19 @@ public:
 
     int icnFile() const;
     int frameId() const;
-    bool isMovement() const;
+    int offset() const;
 
 private:
-    Monster::monstersprite_t _sprite;
+    AnimationReference _reference;
+    int _icnID;
     std::vector<int> _validMoves;
     std::list<int> _frameSet;
+    std::list<int> _offsetSet;
     int _frameId;
-    bool _isMovement;
+    int _frameOffset;
 
-    void _pushFrames( const Monster::animframe_t & info );
+    void _pushFrames( Monster_State::ANIMATION_TYPE type );
+    void _addValidMove( Monster_State::ANIMATION_TYPE type );
 };
 
 struct MonsterStaticData

@@ -362,9 +362,9 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<Monster
 
         const Sprite & smonster = AGG::GetICN( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId(), flipMonsterSprite );
         if ( flipMonsterSprite )
-            dst_pt.x = pt.x + 193 - ( smonster.x() + smonster.w() ) + ( monster.isWide() ? 23 : 0 );
+            dst_pt.x = pt.x + 193 - ( smonster.x() + smonster.w() ) + ( monster.isWide() ? 23 : 0 ) + monsterAnimInfo[monsterId].offset();
         else
-            dst_pt.x = pt.x + 193 + smonster.x() - ( monster.isWide() ? 23 : 0 );
+            dst_pt.x = pt.x + 193 + smonster.x() - ( monster.isWide() ? 23 : 0 ) - monsterAnimInfo[monsterId].offset();
 
         dst_pt.y = pt.y + 124 - smonster.h() + ( smonster.y() + smonster.h() );
 
