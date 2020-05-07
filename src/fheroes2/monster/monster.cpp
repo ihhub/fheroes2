@@ -22,6 +22,7 @@
 
 #include "monster.h"
 #include "agg.h"
+#include "bin_info.h"
 #include "castle.h"
 #include "difficulty.h"
 #include "error.h"
@@ -1769,48 +1770,22 @@ const Monster::monstersprite_t & Monster::GetMonsterSprite() const
 }
 
 MonsterAnimation::MonsterAnimation( const Monster & monster )
-    : _sprite( monster.GetMonsterSprite() )
-    , _frameId( _sprite.frm_idle.start )
-    , _isMovement( false )
+    : _reference( Bin_Info::GetAnimationSet( monster.GetID() ) )
+    , _icnID( monster.GetMonsterSprite().icn_file )
+    , _frameId( 0 )
+    , _frameOffset( 0 )
 {
-    verifyValidAnimationFrame( _sprite.frm_static );
-    verifyValidAnimationFrame( _sprite.frm_idle );
-    // verifyValidAnimationFrame( _sprite.frm_wnce );
-    // verifyValidAnimationFrame( _sprite.frm_kill );
-
-    _validMoves.push_back( Monster_State::IDLE );
-    // if ( isValidAnimationFrame( _sprite.frm_move ) )
-    //     _validMoves.push_back( Monster_Info::MOVE );
-    if ( isValidAnimationFrame( _sprite.frm_fly1 ) )
-        _validMoves.push_back( Monster_State::FLY1 );
-    if ( isValidAnimationFrame( _sprite.frm_fly2 ) )
-        _validMoves.push_back( Monster_State::FLY2 );
-    if ( isValidAnimationFrame( _sprite.frm_fly3 ) )
-        _validMoves.push_back( Monster_State::FLY3 );
-    if ( isValidAnimationFrame( _sprite.frm_shot0 ) )
-        _validMoves.push_back( Monster_State::SHOT0 );
-    if ( isValidAnimationFrame( _sprite.frm_shot1 ) )
-        _validMoves.push_back( Monster_State::SHOT1 );
-    if ( isValidAnimationFrame( _sprite.frm_shot2 ) )
-        _validMoves.push_back( Monster_State::SHOT2 );
-    if ( isValidAnimationFrame( _sprite.frm_shot3 ) )
-        _validMoves.push_back( Monster_State::SHOT3 );
-    if ( isValidAnimationFrame( _sprite.frm_attk0 ) )
-        _validMoves.push_back( Monster_State::ATTK0 );
-    if ( isValidAnimationFrame( _sprite.frm_attk1 ) )
-        _validMoves.push_back( Monster_State::ATTK1 );
-    if ( isValidAnimationFrame( _sprite.frm_attk2 ) )
-        _validMoves.push_back( Monster_State::ATTK2 );
-    if ( isValidAnimationFrame( _sprite.frm_attk3 ) )
-        _validMoves.push_back( Monster_State::ATTK3 );
-    // if ( isValidAnimationFrame( _sprite.frm_wnce ) )
-    //    _validMoves.push_back( Monster_Info::WNCE );
-    // if ( isValidAnimationFrame( _sprite.frm_kill ) )
-    //    _validMoves.push_back( Monster_Info::KILL );
-
-    _validMoves.push_back( Monster_State::STATIC );
-    _validMoves.push_back( Monster_State::STATIC );
-    _validMoves.push_back( Monster_State::STATIC );
+    _addValidMove( Monster_State::STATIC );
+    _addValidMove( Monster_State::STATIC );
+    _addValidMove( Monster_State::IDLE );
+    _addValidMove( Monster_State::MELEE_TOP );
+    _addValidMove( Monster_State::MELEE_FRONT );
+    _addValidMove( Monster_State::MELEE_BOT );
+    _addValidMove( Monster_State::RANG_TOP );
+    _addValidMove( Monster_State::RANG_FRONT );
+    _addValidMove( Monster_State::RANG_BOT );
+    _addValidMove( Monster_State::MOVING );
+    _addValidMove( Monster_State::MOVING );
 
     increment();
 }
@@ -1818,76 +1793,63 @@ MonsterAnimation::MonsterAnimation( const Monster & monster )
 void MonsterAnimation::increment()
 {
     if ( _frameSet.empty() ) {
-        _isMovement = false;
-
         const int moveId = *Rand::Get( _validMoves );
 
         if ( moveId == Monster_State::STATIC ) {
             const u32 counter = Rand::Get( 10, 20 );
             for ( u32 i = 0; i < counter; ++i )
-                _frameSet.push_back( _sprite.frm_static.start );
+                _pushFrames( Monster_State::STATIC );
         }
         else if ( moveId == Monster_State::IDLE ) {
-            _pushFrames( _sprite.frm_idle );
+            _pushFrames( Monster_State::IDLE );
         }
-        else if ( moveId == Monster_State::MOVE ) {
-            const u32 counter = Rand::Get( 3, 5 );
-            for ( u32 i = 0; i < counter; ++i )
-                _pushFrames( _sprite.frm_move );
-
-            _isMovement = true;
-        }
-        else if ( moveId == Monster_State::FLY1 || moveId == Monster_State::FLY2 || moveId == Monster_State::FLY3 ) {
-            _pushFrames( _sprite.frm_fly1 );
+        else if ( moveId == Monster_State::MOVING ) {
+            _pushFrames( Monster_State::MOVE_START );
 
             const u32 counter = Rand::Get( 3, 5 );
             for ( u32 j = 0; j < counter; ++j )
-                _pushFrames( _sprite.frm_fly2 );
+                _pushFrames( Monster_State::MOVING );
 
-            _pushFrames( _sprite.frm_fly3 );
+            _pushFrames( Monster_State::MOVE_END );
         }
-        else if ( moveId == Monster_State::SHOT0 ) {
-            _pushFrames( _sprite.frm_shot0 );
+        else if ( moveId == Monster_State::MELEE_TOP ) {
+            _pushFrames( Monster_State::MELEE_TOP );
+            _pushFrames( Monster_State::MELEE_TOP_END );
         }
-        else if ( moveId == Monster_State::SHOT1 ) {
-            _pushFrames( _sprite.frm_shot1 );
+        else if ( moveId == Monster_State::MELEE_FRONT ) {
+            _pushFrames( Monster_State::MELEE_FRONT );
+            _pushFrames( Monster_State::MELEE_FRONT_END );
         }
-        else if ( moveId == Monster_State::SHOT2 ) {
-            _pushFrames( _sprite.frm_shot2 );
+        else if ( moveId == Monster_State::MELEE_BOT ) {
+            _pushFrames( Monster_State::MELEE_BOT );
+            _pushFrames( Monster_State::MELEE_BOT_END );
         }
-        else if ( moveId == Monster_State::SHOT3 ) {
-            _pushFrames( _sprite.frm_shot3 );
+        else if ( moveId == Monster_State::RANG_TOP ) {
+            _pushFrames( Monster_State::RANG_TOP );
+            _pushFrames( Monster_State::RANG_TOP_END );
         }
-        else if ( moveId == Monster_State::ATTK0 ) {
-            _pushFrames( _sprite.frm_attk0 );
+        else if ( moveId == Monster_State::RANG_FRONT ) {
+            _pushFrames( Monster_State::RANG_FRONT );
+            _pushFrames( Monster_State::RANG_FRONT_END );
         }
-        else if ( moveId == Monster_State::ATTK1 ) {
-            _pushFrames( _sprite.frm_attk1 );
+        else if ( moveId == Monster_State::RANG_BOT ) {
+            _pushFrames( Monster_State::RANG_BOT );
+            _pushFrames( Monster_State::RANG_BOT_END );
         }
-        else if ( moveId == Monster_State::ATTK2 ) {
-            _pushFrames( _sprite.frm_attk2 );
-        }
-        else if ( moveId == Monster_State::ATTK3 ) {
-            _pushFrames( _sprite.frm_attk3 );
-        }
-        else if ( moveId == Monster_State::WNCE ) {
-            _pushFrames( _sprite.frm_wnce );
-        }
-        else if ( moveId == Monster_State::KILL ) {
-            _pushFrames( _sprite.frm_kill );
-            const u32 counter = Rand::Get( 1, 10 );
-            for ( u32 i = 0; i < counter; ++i )
-                _frameSet.push_back( _sprite.frm_kill.start + _sprite.frm_kill.count - 1 );
-        }
+
+        _pushFrames( Monster_State::STATIC );
     }
 
     _frameId = _frameSet.front();
     _frameSet.pop_front();
+
+    _frameOffset = _offsetSet.front();
+    _offsetSet.pop_front();
 }
 
 int MonsterAnimation::icnFile() const
 {
-    return _sprite.icn_file;
+    return _icnID;
 }
 
 int MonsterAnimation::frameId() const
@@ -1895,15 +1857,24 @@ int MonsterAnimation::frameId() const
     return _frameId;
 }
 
-bool MonsterAnimation::isMovement() const
+int MonsterAnimation::offset() const
 {
-    return _isMovement;
+    return _frameOffset;
 }
 
-void MonsterAnimation::_pushFrames( const Monster::animframe_t & info )
+void MonsterAnimation::_pushFrames( Monster_State::ANIMATION_TYPE type )
 {
-    for ( int i = 0; i < info.count; ++i )
-        _frameSet.push_back( info.start + i );
+    const std::vector<int> & sequence = _reference.getAnimationVector( type );
+    _frameSet.insert( _frameSet.end(), sequence.begin(), sequence.end() );
+
+    const std::vector<int> & offset = _reference.getAnimationOffset( type );
+    _offsetSet.insert( _offsetSet.end(), offset.begin(), offset.end() );
+}
+
+void MonsterAnimation::_addValidMove( Monster_State::ANIMATION_TYPE type )
+{
+    if ( !_reference.getAnimationVector( type ).empty() )
+        _validMoves.push_back( type );
 }
 
 MonsterStaticData & MonsterStaticData::Get( void )

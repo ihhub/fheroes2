@@ -21,14 +21,12 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
+#include "battle_animation.h"
 #include "monster.h"
 #include "settings.h"
 
 #include <map>
 #include <vector>
-
-class AnimationSequence;
-class AnimationReference;
 
 namespace Bin_Info
 {
@@ -75,7 +73,7 @@ namespace Bin_Info
         uint32_t moveSpeed;
         uint32_t shootSpeed;
         uint32_t flightSpeed;
-        std::vector<std::vector<uint8_t> > frameXOffset;
+        std::vector<std::vector<int> > frameXOffset;
         Point eyePosition;
         int32_t troopCountOffsetLeft;
         int32_t troopCountOffsetRight;
@@ -90,18 +88,6 @@ namespace Bin_Info
         MonsterAnimInfo( int monsterID = Monster::UNKNOWN, const std::vector<u8> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
         bool isValid() const;
-    };
-
-    class MonsterAnimCache
-    {
-    public:
-        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
-        AnimationReference createAnimReference( int monsterID );
-
-    private:
-        std::map<int, MonsterAnimInfo> _animMap;
-
-        MonsterAnimInfo getAnimInfo( int monsterID );
     };
 
     void InitBinInfo();

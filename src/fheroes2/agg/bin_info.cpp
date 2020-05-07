@@ -20,13 +20,24 @@
 
 #include "bin_info.h"
 #include "agg.h"
-#include "battle_animation.h"
 
 #include <algorithm>
 #include <iostream>
 
 namespace Bin_Info
 {
+    class MonsterAnimCache
+    {
+    public:
+        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
+        AnimationReference createAnimReference( int monsterID );
+
+    private:
+        std::map<int, MonsterAnimInfo> _animMap;
+
+        MonsterAnimInfo getAnimInfo( int monsterID );
+    };
+
     const size_t CORRECT_FRM_LENGTH = 821;
 
     std::map<int, AnimationReference> animRefs;
@@ -136,9 +147,9 @@ namespace Bin_Info
 
         // Frame X offsets for the future use
         for ( int moveID = 0; moveID < 7; ++moveID ) {
-            std::vector<uint8_t> moveOffset;
+            std::vector<int> moveOffset;
             for ( int frame = 0; frame < 16; ++frame ) {
-                moveOffset.push_back( data[5 + moveID * 16 + frame] );
+                moveOffset.push_back( static_cast<int>( *reinterpret_cast<const int8_t *>( data + 5 + moveID * 16 + frame ) ) );
             }
             frameXOffset.push_back( moveOffset );
         }
@@ -209,7 +220,7 @@ namespace Bin_Info
         case Monster::ROYAL_MUMMY:
         case Monster::VAMPIRE_LORD:
         case Monster::POWER_LICH:
-            speedDiff = Monster( monsterID ).GetSpeed() - Monster(monsterID-1).GetSpeed();
+            speedDiff = Monster( monsterID ).GetSpeed() - Monster( monsterID - 1 ).GetSpeed();
             break;
         case Monster::EARTH_ELEMENT:
         case Monster::AIR_ELEMENT:
@@ -221,13 +232,28 @@ namespace Bin_Info
         }
 
         if ( speedDiff ) {
-            moveSpeed = static_cast<uint32_t>((1 - 0.12 * speedDiff) * moveSpeed);
+            moveSpeed = static_cast<uint32_t>( ( 1 - 0.12 * speedDiff ) * moveSpeed );
             if ( monsterID == Monster::RANGER ) {
                 shootSpeed *= 0.78;
             }
             else {
                 shootSpeed = static_cast<uint32_t>( ( 1 - 0.08 * speedDiff ) * shootSpeed );
             }
+        }
+
+        if ( frameXOffset[MOVE_STOP][0] == 0 && frameXOffset[MOVE_TILE_END][0] != 0 )
+            frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
+
+        for ( int idx = MOVE_START; idx <= MOVE_ONE; ++idx )
+            frameXOffset[idx].resize( animationFrames[idx].size(), 0 );
+
+        if ( frameXOffset[MOVE_STOP].size() == 1 && frameXOffset[MOVE_STOP][0] == 0 ) {
+            if ( frameXOffset[MOVE_TILE_END].size() == 1 && frameXOffset[MOVE_TILE_END][0] != 0 )
+                frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
+            else if ( frameXOffset[MOVE_TILE_START].size() == 1 && frameXOffset[MOVE_TILE_START][0] != 0 )
+                frameXOffset[MOVE_STOP][0] = 44 + frameXOffset[MOVE_TILE_START][0];
+            else
+                frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_MAIN].back();
         }
     }
 

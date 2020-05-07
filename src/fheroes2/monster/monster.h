@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include "battle_animation.h"
 #include "gamedefs.h"
 #include "monster_info.h"
 #include "payment.h"
@@ -249,16 +250,19 @@ public:
 
     int icnFile() const;
     int frameId() const;
-    bool isMovement() const;
+    int offset() const;
 
 private:
-    Monster::monstersprite_t _sprite;
+    AnimationReference _reference;
+    int _icnID;
     std::vector<int> _validMoves;
     std::list<int> _frameSet;
+    std::list<int> _offsetSet;
     int _frameId;
-    bool _isMovement;
+    int _frameOffset;
 
-    void _pushFrames( const Monster::animframe_t & info );
+    void _pushFrames( Monster_State::ANIMATION_TYPE type );
+    void _addValidMove( Monster_State::ANIMATION_TYPE type );
 };
 
 struct MonsterStaticData
