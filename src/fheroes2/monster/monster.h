@@ -253,7 +253,7 @@ public:
     bool isMovement() const;
 
 private:
-    const AnimationReference _reference;
+    AnimationReference _reference;
     int _icnID;
     std::vector<int> _validMoves;
     std::list<int> _frameSet;
