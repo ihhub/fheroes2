@@ -481,17 +481,15 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( Unit & attacker, Unit & 
     res.defender = &defender;
     res.damage = attacker.GetDamage( defender );
 
-    // Genie special attack (20%, genie likes number 2)
-    if ( attacker.GetID() == Monster::GENIE && Rand::Get( 1, 5 ) == 2 ) {
-        if ( defender.GetHitPoints() / 2 > res.damage ) {
-            // Replaces the damage, not adding to it
-            res.damage = defender.GetHitPoints() / 2;
+    // Genie special attack
+    if ( attacker.GetID() == Monster::GENIE && Rand::Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
+        // Replaces the damage, not adding to it
+        res.damage = defender.GetHitPoints() / 2;
 
-            if ( Arena::GetInterface() ) {
-                std::string str( _( "%{name} half the enemy troops!" ) );
-                StringReplace( str, "%{name}", attacker.GetName() );
-                Arena::GetInterface()->SetStatus( str, true );
-            }
+        if ( Arena::GetInterface() ) {
+            std::string str( _( "%{name} half the enemy troops!" ) );
+            StringReplace( str, "%{name}", attacker.GetName() );
+            Arena::GetInterface()->SetStatus( str, true );
         }
     }
     targets.push_back( res );
