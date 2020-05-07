@@ -1773,7 +1773,7 @@ MonsterAnimation::MonsterAnimation( const Monster & monster )
     : _reference( Bin_Info::GetAnimationSet( monster.GetID() ) )
     , _icnID( monster.GetMonsterSprite().icn_file )
     , _frameId( 0 )
-    , _isMovement( false )
+    , _frameOffset( 0 )
 {
     _addValidMove( Monster_State::STATIC );
     _addValidMove( Monster_State::STATIC );
@@ -1784,10 +1784,8 @@ MonsterAnimation::MonsterAnimation( const Monster & monster )
     _addValidMove( Monster_State::RANG_TOP );
     _addValidMove( Monster_State::RANG_FRONT );
     _addValidMove( Monster_State::RANG_BOT );
-    if ( monster.isFly() ) {
-        _addValidMove( Monster_State::MOVE_START );
-        _addValidMove( Monster_State::MOVE_START );
-    }
+    _addValidMove( Monster_State::MOVING );
+    _addValidMove( Monster_State::MOVING );
 
     increment();
 }
@@ -1795,8 +1793,6 @@ MonsterAnimation::MonsterAnimation( const Monster & monster )
 void MonsterAnimation::increment()
 {
     if ( _frameSet.empty() ) {
-        _isMovement = false;
-
         const int moveId = *Rand::Get( _validMoves );
 
         if ( moveId == Monster_State::STATIC ) {
@@ -1807,7 +1803,7 @@ void MonsterAnimation::increment()
         else if ( moveId == Monster_State::IDLE ) {
             _pushFrames( Monster_State::IDLE );
         }
-        else if ( moveId == Monster_State::MOVE_START ) {
+        else if ( moveId == Monster_State::MOVING ) {
             _pushFrames( Monster_State::MOVE_START );
 
             const u32 counter = Rand::Get( 3, 5 );
@@ -1840,16 +1836,15 @@ void MonsterAnimation::increment()
             _pushFrames( Monster_State::RANG_BOT );
             _pushFrames( Monster_State::RANG_BOT_END );
         }
-        else if ( moveId == Monster_State::WNCE ) {
-            _pushFrames( Monster_State::WNCE );
-        }
-        else if ( moveId == Monster_State::KILL ) {
-            _pushFrames( Monster_State::KILL );
-        }
+
+        _pushFrames( Monster_State::STATIC );
     }
 
     _frameId = _frameSet.front();
     _frameSet.pop_front();
+
+    _frameOffset = _offsetSet.front();
+    _offsetSet.pop_front();
 }
 
 int MonsterAnimation::icnFile() const
@@ -1862,15 +1857,18 @@ int MonsterAnimation::frameId() const
     return _frameId;
 }
 
-bool MonsterAnimation::isMovement() const
+int MonsterAnimation::offset() const
 {
-    return _isMovement;
+    return _frameOffset;
 }
 
 void MonsterAnimation::_pushFrames( Monster_State::ANIMATION_TYPE type )
 {
     const std::vector<int> & sequence = _reference.getAnimationVector( type );
     _frameSet.insert( _frameSet.end(), sequence.begin(), sequence.end() );
+
+    const std::vector<int> & offset = _reference.getAnimationOffset( type );
+    _offsetSet.insert( _offsetSet.end(), offset.begin(), offset.end() );
 }
 
 void MonsterAnimation::_addValidMove( Monster_State::ANIMATION_TYPE type )

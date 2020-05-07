@@ -149,9 +149,9 @@ namespace Bin_Info
 
         // Frame X offsets for the future use
         for ( int moveID = 0; moveID < 7; ++moveID ) {
-            std::vector<uint8_t> moveOffset;
+            std::vector<int> moveOffset;
             for ( int frame = 0; frame < 16; ++frame ) {
-                moveOffset.push_back( data[5 + moveID * 16 + frame] );
+                moveOffset.push_back( static_cast<int>( *reinterpret_cast<const int8_t *>( data + 5 + moveID * 16 + frame ) ) );
             }
             frameXOffset.push_back( moveOffset );
         }
@@ -199,6 +199,21 @@ namespace Bin_Info
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
             animationFrames.push_back( anim );
+        }
+
+        if ( frameXOffset[MOVE_STOP][0] == 0 && frameXOffset[MOVE_TILE_END][0] != 0 )
+            frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
+
+        for ( int idx = MOVE_START; idx <= MOVE_ONE; ++idx )
+            frameXOffset[idx].resize( animationFrames[idx].size(), 0 );
+
+        if ( frameXOffset[MOVE_STOP].size() == 1 && frameXOffset[MOVE_STOP][0] == 0 ) {
+            if ( frameXOffset[MOVE_TILE_END].size() == 1 && frameXOffset[MOVE_TILE_END][0] != 0 )
+                frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
+            else if ( frameXOffset[MOVE_TILE_START].size() == 1 && frameXOffset[MOVE_TILE_START][0] != 0 )
+                frameXOffset[MOVE_STOP][0] = 44 + frameXOffset[MOVE_TILE_START][0];
+            else
+                frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_MAIN].back();
         }
     }
 
