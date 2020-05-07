@@ -151,7 +151,7 @@ namespace Bin_Info
         for ( int moveID = 0; moveID < 7; ++moveID ) {
             std::vector<int> moveOffset;
             for ( int frame = 0; frame < 16; ++frame ) {
-                moveOffset.push_back( static_cast<int>( *reinterpret_cast<const int8_t* >( data + 5 + moveID * 16 + frame ) ) );
+                moveOffset.push_back( static_cast<int>( *reinterpret_cast<const int8_t *>( data + 5 + moveID * 16 + frame ) ) );
             }
             frameXOffset.push_back( moveOffset );
         }
