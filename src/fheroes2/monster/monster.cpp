@@ -1807,13 +1807,6 @@ void MonsterAnimation::increment()
         else if ( moveId == Monster_State::IDLE ) {
             _pushFrames( Monster_State::IDLE );
         }
-        else if ( moveId == Monster_State::MOVE ) {
-            const u32 counter = Rand::Get( 3, 5 );
-            for ( u32 i = 0; i < counter; ++i )
-                _pushFrames( Monster_State::MOVE );
-
-            _isMovement = true;
-        }
         else if ( moveId == Monster_State::MOVE_START ) {
             _pushFrames( Monster_State::MOVE_START );
 
