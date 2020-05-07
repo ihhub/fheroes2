@@ -21,7 +21,6 @@
 #include "bin_info.h"
 #include "agg.h"
 #include "battle_animation.h"
-#include "monster.h"
 
 #include <algorithm>
 #include <iostream>
@@ -118,7 +117,7 @@ namespace Bin_Info
         return bin_file_map[index].string;
     }
 
-    MonsterAnimInfo::MonsterAnimInfo( const std::vector<u8> & bytes )
+    MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<u8> & bytes )
         : moveSpeed( 450 )
         , shootSpeed( 0 )
         , flightSpeed( 0 )
@@ -188,6 +187,48 @@ namespace Bin_Info
             }
             animationFrames.push_back( anim );
         }
+
+        // Modify AnimInfo for upgraded monsters without own FRM file
+        double speedDiff = 0;
+        switch ( monsterID ) {
+        case Monster::RANGER:
+        case Monster::VETERAN_PIKEMAN:
+        case Monster::MASTER_SWORDSMAN:
+        case Monster::CHAMPION:
+        case Monster::CRUSADER:
+        case Monster::ORC_CHIEF:
+        case Monster::OGRE_LORD:
+        case Monster::WAR_TROLL:
+        case Monster::BATTLE_DWARF:
+        case Monster::GRAND_ELF:
+        case Monster::GREATER_DRUID:
+        case Monster::MINOTAUR_KING:
+        case Monster::STEEL_GOLEM:
+        case Monster::ARCHMAGE:
+        case Monster::MUTANT_ZOMBIE:
+        case Monster::ROYAL_MUMMY:
+        case Monster::VAMPIRE_LORD:
+        case Monster::POWER_LICH:
+            speedDiff = Monster( monsterID ).GetSpeed() - Monster(monsterID-1).GetSpeed();
+            break;
+        case Monster::EARTH_ELEMENT:
+        case Monster::AIR_ELEMENT:
+        case Monster::WATER_ELEMENT:
+            speedDiff = Monster( monsterID ).GetSpeed() - Monster( Monster::FIRE_ELEMENT ).GetSpeed();
+            break;
+        default:
+            break;
+        }
+
+        if ( speedDiff ) {
+            moveSpeed = static_cast<uint32_t>((1 - 0.12 * speedDiff) * moveSpeed);
+            if ( monsterID == Monster::RANGER ) {
+                shootSpeed *= 0.78;
+            }
+            else {
+                shootSpeed = static_cast<uint32_t>( ( 1 - 0.08 * speedDiff ) * shootSpeed );
+            }
+        }
     }
 
     MonsterAnimInfo MonsterAnimCache::getAnimInfo( int monsterID )
@@ -197,7 +238,7 @@ namespace Bin_Info
             return mapIterator->second;
         }
         else {
-            const MonsterAnimInfo info( AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
+            const MonsterAnimInfo info( monsterID, AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
             if ( info.isValid() ) {
                 _animMap[monsterID] = info;
                 return info;
