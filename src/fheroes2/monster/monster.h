@@ -250,15 +250,16 @@ public:
 
     int icnFile() const;
     int frameId() const;
-    bool isMovement() const;
+    int offset() const;
 
 private:
     AnimationReference _reference;
     int _icnID;
     std::vector<int> _validMoves;
     std::list<int> _frameSet;
+    std::list<int> _offsetSet;
     int _frameId;
-    bool _isMovement;
+    int _frameOffset;
 
     void _pushFrames( Monster_State::ANIMATION_TYPE type );
     void _addValidMove( Monster_State::ANIMATION_TYPE type );

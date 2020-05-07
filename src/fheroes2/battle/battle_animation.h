@@ -72,6 +72,7 @@ public:
     int getDeathFrame() const;
 
     const std::vector<int> & getAnimationVector( int animState ) const;
+    std::vector<int> getAnimationOffset( int animState ) const;
     AnimationSequence getAnimationSequence( int animState ) const;
 
 protected:
@@ -86,6 +87,7 @@ protected:
     monsterReturnAnim _melee[3];
     monsterReturnAnim _ranged[3];
     std::vector<std::vector<int> > _idle;
+    std::vector<std::vector<int> > _offsetX;
 
     bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID );
 };

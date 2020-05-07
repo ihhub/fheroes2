@@ -75,7 +75,7 @@ namespace Bin_Info
         uint32_t moveSpeed;
         uint32_t shootSpeed;
         uint32_t flightSpeed;
-        std::vector<std::vector<uint8_t> > frameXOffset;
+        std::vector<std::vector<int> > frameXOffset;
         Point eyePosition;
         int32_t troopCountOffsetLeft;
         int32_t troopCountOffsetRight;

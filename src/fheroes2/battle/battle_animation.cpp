@@ -180,6 +180,8 @@ AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, 
         appendFrames( info, _ranged[Monster_State::BOTTOM].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX3 );
         appendFrames( info, _ranged[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX3_END );
     }
+
+    _offsetX = info.frameXOffset;
 }
 
 AnimationReference::~AnimationReference() {}
@@ -198,69 +200,119 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
     switch ( animState ) {
     case Monster_State::STATIC:
         return _static;
-        break;
     case Monster_State::IDLE:
         return _idle.front(); // TODO: use all idle animations
-        break;
     case Monster_State::MOVE_START:
         return _moveModes.start;
-        break;
     case Monster_State::MOVING:
         return _loopMove;
-        break;
     case Monster_State::MOVE_END:
         return _moveModes.end;
-        break;
     case Monster_State::MOVE_QUICK:
         return _quickMove;
-        break;
     case Monster_State::MELEE_TOP:
         return _melee[Monster_State::TOP].start;
-        break;
     case Monster_State::MELEE_TOP_END:
         return _melee[Monster_State::TOP].end;
-        break;
     case Monster_State::MELEE_FRONT:
         return _melee[Monster_State::FRONT].start;
-        break;
     case Monster_State::MELEE_FRONT_END:
         return _melee[Monster_State::FRONT].end;
-        break;
     case Monster_State::MELEE_BOT:
         return _melee[Monster_State::BOTTOM].start;
-        break;
     case Monster_State::MELEE_BOT_END:
         return _melee[Monster_State::BOTTOM].end;
-        break;
     case Monster_State::RANG_TOP:
         return _ranged[Monster_State::TOP].start;
-        break;
     case Monster_State::RANG_TOP_END:
         return _ranged[Monster_State::TOP].end;
-        break;
     case Monster_State::RANG_FRONT:
         return _ranged[Monster_State::FRONT].start;
-        break;
     case Monster_State::RANG_FRONT_END:
         return _ranged[Monster_State::FRONT].end;
-        break;
     case Monster_State::RANG_BOT:
         return _ranged[Monster_State::BOTTOM].start;
-        break;
     case Monster_State::RANG_BOT_END:
         return _ranged[Monster_State::BOTTOM].end;
-        break;
     case Monster_State::WNCE:
         return _wince;
-        break;
     case Monster_State::KILL:
         return _death;
-        break;
     default:
         DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animState );
         break;
     }
     return _static;
+}
+
+std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
+{
+    std::vector<int> offset;
+    switch ( animState ) {
+    case Monster_State::STATIC:
+        offset.resize( _static.size(), 0 );
+        break;
+    case Monster_State::IDLE:
+        offset.resize( _idle.front().size(), 0 ); // TODO: use all idle animations
+        break;
+    case Monster_State::MOVE_START:
+        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START];
+    case Monster_State::MOVING:
+        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN];
+        break;
+    case Monster_State::MOVE_END:
+        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP];
+        break;
+    case Monster_State::MOVE_QUICK:
+        offset.resize( _quickMove.size(), 0 );
+        break;
+    case Monster_State::MELEE_TOP:
+        offset.resize( _melee[Monster_State::TOP].start.size(), 0 );
+        break;
+    case Monster_State::MELEE_TOP_END:
+        offset.resize( _melee[Monster_State::TOP].end.size(), 0 );
+        break;
+    case Monster_State::MELEE_FRONT:
+        offset.resize( _melee[Monster_State::FRONT].start.size(), 0 );
+        break;
+    case Monster_State::MELEE_FRONT_END:
+        offset.resize( _melee[Monster_State::FRONT].end.size(), 0 );
+        break;
+    case Monster_State::MELEE_BOT:
+        offset.resize( _melee[Monster_State::BOTTOM].start.size(), 0 );
+        break;
+    case Monster_State::MELEE_BOT_END:
+        offset.resize( _melee[Monster_State::BOTTOM].end.size(), 0 );
+        break;
+    case Monster_State::RANG_TOP:
+        offset.resize( _ranged[Monster_State::TOP].start.size(), 0 );
+        break;
+    case Monster_State::RANG_TOP_END:
+        offset.resize( _ranged[Monster_State::TOP].end.size(), 0 );
+        break;
+    case Monster_State::RANG_FRONT:
+        offset.resize( _ranged[Monster_State::FRONT].start.size(), 0 );
+        break;
+    case Monster_State::RANG_FRONT_END:
+        offset.resize( _ranged[Monster_State::FRONT].end.size(), 0 );
+        break;
+    case Monster_State::RANG_BOT:
+        offset.resize( _ranged[Monster_State::BOTTOM].start.size(), 0 );
+        break;
+    case Monster_State::RANG_BOT_END:
+        offset.resize( _ranged[Monster_State::BOTTOM].end.size(), 0 );
+        break;
+    case Monster_State::WNCE:
+        offset.resize( _wince.size(), 0 );
+        break;
+    case Monster_State::KILL:
+        offset.resize( _death.size(), 0 );
+        break;
+    default:
+        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to use deprecated Animation " << animState );
+        break;
+    }
+    return offset;
 }
 
 AnimationSequence AnimationReference::getAnimationSequence( int animState ) const
