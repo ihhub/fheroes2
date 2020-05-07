@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "battle_animation.h"
+#include "bin_info.h"
 #include "monster.h"
 #include "settings.h"
 #include <algorithm>

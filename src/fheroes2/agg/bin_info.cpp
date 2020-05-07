@@ -28,6 +28,18 @@
 
 namespace Bin_Info
 {
+    class MonsterAnimCache
+    {
+    public:
+        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
+        AnimationReference createAnimReference( int monsterID );
+
+    private:
+        std::map<int, MonsterAnimInfo> _animMap;
+
+        MonsterAnimInfo getAnimInfo( int monsterID );
+    };
+
     const size_t CORRECT_FRM_LENGTH = 821;
 
     std::map<int, AnimationReference> animRefs;

@@ -21,9 +21,13 @@
 #ifndef H2BATTLE_ANIMATION_H
 #define H2BATTLE_ANIMATION_H
 
-#include "bin_info.h"
 #include "gamedefs.h"
 #include "monster_info.h"
+
+namespace Bin_Info
+{
+    struct MonsterAnimInfo;
+}
 
 struct monsterReturnAnim
 {
