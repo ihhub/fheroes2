@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "battle.h"
+#include "battle_animation.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "bitmodes.h"
@@ -141,15 +142,16 @@ namespace Battle
         void SpellRestoreAction( const Spell &, u32, const HeroBase * );
         u32 Resurrect( u32, bool, bool );
 
-        const Monster::animframe_t & GetFrameState( void ) const;
-        const Monster::animframe_t & GetFrameState( int ) const;
+        bool SwitchAnimation( int rule, bool reverse = false );
+        bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
+        const AnimationState & GetFrameState( void ) const;
+        AnimationSequence GetFrameState( int ) const;
+        void SetDeathAnim();
         void IncreaseAnimFrame( bool loop = false );
         bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;
         void SetFrameStep( int );
-        void SetFrame( int );
         int GetFrame( void ) const;
-        int GetFrameOffset( void ) const;
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
 
@@ -171,7 +173,6 @@ namespace Battle
         u32 HowManyWillKilled( u32 ) const;
 
         void SetResponse( void );
-        void ResetAnimFrame( int );
         void UpdateDirection( void );
         bool UpdateDirection( const Rect & );
         void PostKilledAction( void );
@@ -185,6 +186,10 @@ namespace Battle
         static bool isHandFighting( const Unit &, const Unit & );
 
         int GetAnimationState() const;
+        bool isIdling() const;
+
+        // Find a better way to expose it without a million getters/setters
+        AnimationState animation;
 
     private:
         friend StreamBase & operator<<( StreamBase &, const Unit & );
@@ -197,10 +202,6 @@ namespace Battle
         u32 shots;
         u32 disruptingray;
         bool reflect;
-
-        u32 animstate;
-        s32 animframe;
-        s32 animstep;
 
         Position position;
         ModesAffected affected;

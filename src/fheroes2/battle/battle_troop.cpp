@@ -28,6 +28,7 @@
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
+#include "bin_info.h"
 #include "engine.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -212,11 +213,9 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , shots( t.GetShots() )
     , disruptingray( 0 )
     , reflect( ref )
-    , animstate( 0 )
-    , animframe( 0 )
-    , animstep( 1 )
     , mirror( NULL )
     , blindanswer( false )
+    , animation( Bin_Info::GetAnimationSet( id ), Monster_State::STATIC )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -224,8 +223,6 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
             pos += ( reflect ? -1 : 1 );
         SetPosition( pos );
     }
-
-    ResetAnimFrame( AS_STATIC );
 }
 
 Battle::Unit::~Unit()
@@ -495,7 +492,13 @@ bool Battle::Unit::isHandFighting( const Unit & a, const Unit & b )
 
 int Battle::Unit::GetAnimationState() const
 {
-    return animstate;
+    return animation.getCurrentState();
+}
+
+bool Battle::Unit::isIdling() const
+{
+    // TODO Check for any of the 5 states
+    return GetAnimationState() == Monster_State::IDLE;
 }
 
 void Battle::Unit::NewTurn( void )
@@ -715,8 +718,6 @@ void Battle::Unit::PostKilledAction( void )
         mirror->hp = 0;
         mirror->SetCount( 0 );
         mirror->mirror = NULL;
-        mirror->animstate = 0;
-        mirror->animframe = 0;
         mirror = NULL;
         ResetModes( CAP_MIRROROWNER );
     }
@@ -1515,8 +1516,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
         u32 restore = spell.Resurrect() * spoint;
         // remove from graveyard
         if ( !isValid() ) {
+            // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
-            ResetAnimFrame( AS_STATIC );
+            SwitchAnimation( Monster_State::KILL, true );
         }
         // restore hp
         u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;
@@ -1749,119 +1751,65 @@ bool Battle::Unit::isHaveDamage( void ) const
 
 int Battle::Unit::GetFrameStart( void ) const
 {
-    return animstep < 0 ? GetFrameState().start + GetFrameState().count - 1 : GetFrameState().start;
+    return animation.firstFrame();
 }
 
 int Battle::Unit::GetFrame( void ) const
 {
-    return animframe;
+    return animation.getFrame();
 }
 
-void Battle::Unit::SetFrame( int val )
+void Battle::Unit::SetDeathAnim()
 {
-    animframe = val;
-}
-
-void Battle::Unit::SetFrameStep( int val )
-{
-    animstep = val;
-}
-
-int Battle::Unit::GetFrameOffset( void ) const
-{
-    return animframe - GetFrameStart();
+    if ( animation.getCurrentState() != Monster_State::KILL ) {
+        SwitchAnimation( Monster_State::KILL );
+    }
+    animation.setToLastFrame();
 }
 
 int Battle::Unit::GetFrameCount( void ) const
 {
-    return GetFrameState().count;
+    return animation.animationLength();
 }
 
 void Battle::Unit::IncreaseAnimFrame( bool loop )
 {
-    if ( !isFinishAnimFrame() )
-        animframe += animstep;
-    else if ( loop )
-        animframe = GetFrameStart();
+    animation.playAnimation( loop );
 }
 
 bool Battle::Unit::isStartAnimFrame( void ) const
 {
-    return GetFrameStart() == animframe;
+    return animation.isFirstFrame();
 }
 
 bool Battle::Unit::isFinishAnimFrame( void ) const
 {
-    if ( 0 == GetFrameState().count )
-        return true;
-    else if ( animstep < 0 )
-        return animframe <= GetFrameState().start;
-    else if ( animstep > 0 )
-        return animframe >= GetFrameState().start + GetFrameState().count - 1;
-
-    return true;
+    return animation.isLastFrame();
 }
 
-const Monster::animframe_t & Battle::Unit::GetFrameState( int state ) const
+AnimationSequence Battle::Unit::GetFrameState( int state ) const
 {
     const monstersprite_t & msi = GetMonsterSprite();
 
-    switch ( state ) {
-    case AS_STATIC:
-        return msi.frm_static;
-    case AS_IDLE:
-        return msi.frm_idle;
-    case AS_MOVE:
-        return msi.frm_move;
-    case AS_FLY1:
-        return msi.frm_fly1;
-    case AS_FLY2:
-        return msi.frm_fly2;
-    case AS_FLY3:
-        return msi.frm_fly3;
-    case AS_SHOT0:
-        return msi.frm_shot0;
-    case AS_SHOT1:
-        return msi.frm_shot1;
-    case AS_SHOT2:
-        return msi.frm_shot2;
-    case AS_SHOT3:
-        return msi.frm_shot3;
-    case AS_ATTK0:
-        return msi.frm_attk0;
-    case AS_ATTK1:
-        return msi.frm_attk1;
-    case AS_ATTK2:
-        return msi.frm_attk2;
-    case AS_ATTK3:
-        return msi.frm_attk3;
-    case AS_WNCE:
-        return msi.frm_wnce;
-    case AS_KILL:
-        return msi.frm_kill;
-    default:
-        break;
-    }
-
-    return msi.frm_idle;
+    // Can't return a reference here - it will be destroyed
+    return animation.getAnimationSequence( state );
 }
 
-const Monster::animframe_t & Battle::Unit::GetFrameState( void ) const
+const AnimationState & Battle::Unit::GetFrameState( void ) const
 {
-    return GetFrameState( animstate );
+    return animation;
 }
 
-void Battle::Unit::ResetAnimFrame( int rule )
+bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
 {
-    animstep = 1;
-    animstate = rule;
-    animframe = GetFrameStart();
+    animation.switchAnimation( rule, reverse );
+    return animation.isValid();
+}
 
-    if ( AS_FLY3 == rule && 0 == GetFrameState().count ) {
-        animstep = -1;
-        animstate = AS_FLY1;
-        animframe = GetFrameStart();
-    }
+bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
+{
+    animation.switchAnimation( animationList, reverse );
+    return animation.isValid();
 }
 
 int Battle::Unit::M82Attk( void ) const
@@ -2004,11 +1952,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::ARCHER:
     case Monster::RANGER:
         switch ( state ) {
-        case AS_SHOT1:
+        case Monster_State::RANG_TOP:
             return -15;
-        case AS_SHOT2:
+        case Monster_State::RANG_FRONT:
             return -3;
-        case AS_SHOT3:
+        case Monster_State::RANG_BOT:
             return 10;
         default:
             break;
@@ -2026,11 +1974,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::LICH:
     case Monster::POWER_LICH:
         switch ( state ) {
-        case AS_SHOT1:
+        case Monster_State::RANG_TOP:
             return -30;
-        case AS_SHOT2:
+        case Monster_State::RANG_FRONT:
             return -20;
-        case AS_SHOT3:
+        case Monster_State::RANG_BOT:
             return 0;
         default:
             break;
@@ -2040,11 +1988,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::ELF:
     case Monster::GRAND_ELF:
         switch ( state ) {
-        case AS_SHOT1:
+        case Monster_State::RANG_TOP:
             return -5;
-        case AS_SHOT2:
+        case Monster_State::RANG_FRONT:
             return 0;
-        case AS_SHOT3:
+        case Monster_State::RANG_BOT:
             return 5;
         default:
             break;
@@ -2053,11 +2001,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::CENTAUR:
         switch ( state ) {
-        case AS_SHOT1:
+        case Monster_State::RANG_TOP:
             return -20;
-        case AS_SHOT2:
+        case Monster_State::RANG_FRONT:
             return -10;
-        case AS_SHOT3:
+        case Monster_State::RANG_BOT:
             return 5;
         default:
             break;
@@ -2067,11 +2015,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::DRUID:
     case Monster::GREATER_DRUID:
         switch ( state ) {
-        case AS_SHOT1:
+        case Monster_State::RANG_TOP:
             return -20;
-        case AS_SHOT2:
+        case Monster_State::RANG_FRONT:
             return -5;
-        case AS_SHOT3:
+        case Monster_State::RANG_BOT:
             return 15;
         default:
             break;
@@ -2080,11 +2028,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::HALFLING:
         switch ( state ) {
-        case AS_SHOT1:
+        case Monster_State::RANG_TOP:
             return -20;
-        case AS_SHOT2:
+        case Monster_State::RANG_FRONT:
             return 10;
-        case AS_SHOT3:
+        case Monster_State::RANG_BOT:
             return 20;
         default:
             break;
@@ -2094,11 +2042,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
     case Monster::MAGE:
     case Monster::ARCHMAGE:
         switch ( state ) {
-        case AS_SHOT1:
+        case Monster_State::RANG_TOP:
             return -40;
-        case AS_SHOT2:
+        case Monster_State::RANG_FRONT:
             return -10;
-        case AS_SHOT3:
+        case Monster_State::RANG_BOT:
             return 25;
         default:
             break;
@@ -2107,11 +2055,11 @@ int Battle::Unit::GetStartMissileOffset( int state ) const
 
     case Monster::TITAN:
         switch ( state ) {
-        case AS_SHOT1:
+        case Monster_State::RANG_TOP:
             return -80;
-        case AS_SHOT2:
+        case Monster_State::RANG_FRONT:
             return -20;
-        case AS_SHOT3:
+        case Monster_State::RANG_BOT:
             return 15;
         default:
             break;

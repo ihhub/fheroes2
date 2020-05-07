@@ -26,6 +26,7 @@
 #include <string>
 
 #include "gamedefs.h"
+#include "monster_info.h"
 #include "payment.h"
 
 class Spell;
@@ -127,27 +128,6 @@ public:
         MONSTER_RND3,
         MONSTER_RND4,
         MONSTER_RND
-    };
-
-    enum
-    {
-        AS_NONE,
-        AS_STATIC,
-        AS_IDLE,
-        AS_MOVE,
-        AS_FLY1,
-        AS_FLY2,
-        AS_FLY3,
-        AS_SHOT0,
-        AS_SHOT1,
-        AS_SHOT2,
-        AS_SHOT3,
-        AS_ATTK0,
-        AS_ATTK1,
-        AS_ATTK2,
-        AS_ATTK3,
-        AS_WNCE,
-        AS_KILL
     };
 
     struct animframe_t
