@@ -21,6 +21,7 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
+#include "battle_animation.h"
 #include "settings.h"
 
 #include <map>
@@ -89,18 +90,6 @@ namespace Bin_Info
         MonsterAnimInfo( const std::vector<u8> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
         bool isValid() const;
-    };
-
-    class MonsterAnimCache
-    {
-    public:
-        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
-        AnimationReference createAnimReference( int monsterID );
-
-    private:
-        std::map<int, MonsterAnimInfo> _animMap;
-
-        MonsterAnimInfo getAnimInfo( int monsterID );
     };
 
     void InitBinInfo();

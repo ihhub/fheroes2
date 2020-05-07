@@ -55,21 +55,6 @@ namespace Monster_State
         RANG_BOT_END,
         WNCE, // combine UP+DOWN anim for now
         KILL,
-
-        // Old states to remove after refactor:
-        MOVE,
-        FLY1,
-        FLY2,
-        FLY3,
-        SHOT0,
-        SHOT1,
-        SHOT2,
-        SHOT3,
-        ATTK0,
-        ATTK1,
-        ATTK2,
-        ATTK3,
-
         INVALID
     };
 }

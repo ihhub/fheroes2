@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "battle_animation.h"
+#include "bin_info.h"
 #include "monster.h"
 #include "settings.h"
 #include <algorithm>
@@ -205,7 +206,6 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
         return _moveModes.start;
         break;
     case Monster_State::MOVING:
-    case Monster_State::MOVE:
         return _loopMove;
         break;
     case Monster_State::MOVE_END:
