@@ -2674,6 +2674,14 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
         ++dst;
     }
 
+    // check for possible bridge close action, after unit's end of turn
+    if ( bridge && bridge->NeedAction( b, *dst ) ) {
+        b_move = NULL;
+        b.ResetAnimFrame( Monster::AS_STATIC );
+        bridge->Action( b, *dst );
+        b_move = &b;
+    }
+
     // restore
     b_fly = NULL;
     b_move = NULL;
