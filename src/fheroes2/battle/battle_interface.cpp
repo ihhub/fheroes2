@@ -2639,7 +2639,7 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
         p_move = cell->GetPos();
         bool show_anim = false;
 
-        if ( bridge && bridge->NeedAction( b, *dst ) ) {
+        if ( bridge && bridge->NeedDown( b, *dst ) ) {
             b_move = NULL;
             b.SwitchAnimation( Monster_State::STATIC );
             bridge->Action( b, *dst );
@@ -2662,6 +2662,13 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
             b.SwitchAnimation( Monster_State::MOVING );
             RedrawTroopFrameAnimation( b );
             b.SetPosition( *dst );
+        }
+
+        if ( bridge && bridge->AllowUp() ) {
+            b_move = NULL;
+            b.SwitchAnimation( Monster_State::STATIC );
+            bridge->Action( b, *dst );
+            b_move = &b;
         }
 
         ++dst;

@@ -453,7 +453,7 @@ bool Battle::Unit::isFly( void ) const
 
 bool Battle::Unit::isValid( void ) const
 {
-    return GetCount();
+    return GetCount() != 0;
 }
 
 bool Battle::Unit::isReflect( void ) const

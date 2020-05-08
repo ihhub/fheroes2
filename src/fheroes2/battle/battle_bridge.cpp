@@ -53,20 +53,28 @@ void Battle::Bridge::SetDown( bool f )
 
 bool Battle::Bridge::AllowUp( void ) const
 {
-    return NULL == Board::GetCell( 49 )->GetUnit() && NULL == Board::GetCell( 50 )->GetUnit();
+    if ( !isValid() || !isDown() )
+        return false;
+
+    bool isNoUnitOn49 = NULL == Board::GetCell( 49 )->GetUnit();
+    bool isNoUnitOn50 = NULL == Board::GetCell( 50 )->GetUnit();
+    return isNoUnitOn49 && isNoUnitOn50;
 }
 
-bool Battle::Bridge::NeedDown( const Unit & b, s32 pos2 ) const
+bool Battle::Bridge::NeedDown( const Unit & b, s32 dst ) const
 {
+    if ( !isValid() || isDown() ) // destroyed or already in down state
+        return false;
+
     const s32 pos1 = b.GetHeadIndex();
 
-    if ( pos2 == 50 ) {
+    if ( dst == 50 ) {
         if ( pos1 == 51 )
             return true;
         if ( ( pos1 == 61 || pos1 == 39 ) && b.GetColor() == Arena::GetCastle()->GetColor() )
             return true;
     }
-    else if ( pos2 == 49 ) {
+    else if ( dst == 49 ) {
         if ( pos1 != 50 && b.GetColor() == Arena::GetCastle()->GetColor() )
             return true;
     }
@@ -100,14 +108,16 @@ void Battle::Bridge::SetPassable( const Unit & b )
 
 bool Battle::Bridge::NeedAction( const Unit & b, s32 dst ) const
 {
-    return ( !isDown() && NeedDown( b, dst ) ) || ( isValid() && isDown() && AllowUp() );
+    bool isNeedGoDown = NeedDown( b, dst );
+    bool isNeedGoUp = AllowUp();
+    return isNeedGoDown || isNeedGoUp;
 }
 
 void Battle::Bridge::Action( const Unit & b, s32 dst )
 {
     bool action_down = false;
 
-    if ( !isDown() && NeedDown( b, dst ) )
+    if ( NeedDown( b, dst ) )
         action_down = true;
 
     if ( Arena::GetInterface() )
