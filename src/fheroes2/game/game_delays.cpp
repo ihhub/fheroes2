@@ -26,19 +26,19 @@
 #include "gamedefs.h"
 #include "settings.h"
 
-struct TimeDelay : std::pair<SDL::Time, int>
+struct TimeDelay : std::pair<SDL::Time, uint32_t>
 {
-    TimeDelay( int dl )
+    TimeDelay( uint32_t dl )
     {
         second = dl;
     }
 
-    int operator()( void ) const
+    uint32_t operator()( void ) const
     {
         return second;
     }
 
-    TimeDelay & operator=( int dl )
+    TimeDelay & operator=( uint32_t dl )
     {
         second = dl;
         return *this;
@@ -49,10 +49,11 @@ struct TimeDelay : std::pair<SDL::Time, int>
         first.Start();
     }
 
-    bool Trigger( void )
+    bool Trigger( uint32_t customDelay = 0 )
     {
         first.Stop();
-        if ( first.Get() < static_cast<u32>( second ) )
+        uint32_t val = ( customDelay > 0 ) ? customDelay : second;
+        if ( first.Get() < val )
             return false;
 
         first.Start();
@@ -111,7 +112,7 @@ void Game::AnimateResetDelay( int dl )
 
 bool Game::AnimateCustomDelay( uint32_t delay )
 {
-    return delays[CUSTOM_DELAY].Trigger();
+    return delays[CUSTOM_DELAY].Trigger( delay );
 }
 
 bool Game::AnimateInfrequentDelay( int dl )

@@ -2350,11 +2350,12 @@ void Battle::Interface::RedrawTroopWithDelay( Unit & unit, uint32_t delay )
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
+    uint32_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
-        if ( Game::AnimateCustomDelay( delay ) ) {
+        if ( Game::AnimateCustomDelay( frameDelay ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
@@ -2728,14 +2729,13 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = NULL;
     _flyingUnit = &unit;
     _flyingPos = _movingPos;
-    if ( currentPoint != points.end() )
-        ++currentPoint;
 
+    unit.SwitchAnimation( Monster_Info::MOVING );
     while ( currentPoint != points.end() ) {
         _movingPos = *currentPoint;
 
         AGG::PlaySound( unit.M82Move() );
-        unit.SwitchAnimation( Monster_Info::MOVING );
+        unit.animation.restartAnimation();
         RedrawTroopWithDelay( unit, frameDelay );
 
         _flyingPos = _movingPos;
