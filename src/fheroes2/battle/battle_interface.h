@@ -51,7 +51,7 @@ namespace Battle
     struct Result;
 
     void DialogBattleSettings( void );
-    bool DialogBattleSurrender( const HeroBase &, u32 );
+    bool DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingdom & kingdom );
 
     enum
     {

@@ -506,8 +506,11 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     return result;
 }
 
-bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost )
+bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingdom & kingdom )
 {
+    if ( kingdom.GetColor() == hero.GetColor() ) // this is weird. You're surrending to yourself!
+        return false;
+
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -533,7 +536,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost )
     Button btnAccept( pos_rt.x + 90, pos_rt.y + 150, icn, 0, 1 );
     Button btnDecline( pos_rt.x + 295, pos_rt.y + 150, icn, 2, 3 );
     Button btnMarket( pos_rt.x + ( pos_rt.w - 16 ) / 2, pos_rt.y + 145, ( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 4, 5 );
-    const Kingdom & kingdom = world.GetKingdom( hero.GetColor() );
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
         btnAccept.Press();
