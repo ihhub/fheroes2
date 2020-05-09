@@ -667,7 +667,11 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
 
 void Battle::OpponentSprite::Redraw( void ) const
 {
-    AGG::GetICN( icn, animframe, reflect ).Blit( pos.x, pos.y );
+    const Sprite & hero = AGG::GetICN( icn, animframe, reflect );
+    if ( reflect )
+        hero.Blit( pos.x - hero.w() + 55, pos.y );
+    else
+        hero.Blit( pos.x, pos.y );
 }
 
 Battle::Status::Status()
