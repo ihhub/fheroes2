@@ -2677,64 +2677,63 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionFly( Unit & b, const Position & pos )
+void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
     Cursor & cursor = Cursor::Get();
-    const s32 dst = pos.GetHead()->GetIndex();
-    const Rect & pos1 = b.GetRectPosition();
-    const Rect & pos2 = Board::GetCell( dst )->GetPos();
+    const s32 destIndex = pos.GetHead()->GetIndex();
+    const Rect & pos1 = unit.GetRectPosition();
+    const Rect & pos2 = Board::GetCell( destIndex )->GetPos();
 
-    Point pt1( pos1.x, pos1.y );
-    Point pt2( pos2.x, pos2.y );
+    Point destPos( pos1.x, pos1.y );
+    Point targetPos( pos2.x, pos2.y );
 
     cursor.SetThemes( Cursor::WAR_NONE );
-    // TODO: Check if 80 is a good value, flyers moving way too fast
-    const u32 step = b.isWide() ? 80 : 40;
+    const u32 step = unit.isWide() ? 80 : 40;
 
-    const Points points = GetLinePoints( pt1, pt2, Settings::Get().QVGA() ? step / 2 : step );
-    Points::const_iterator pnt = points.begin();
+    const Points points = GetLinePoints( destPos, targetPos, Settings::Get().QVGA() ? step / 2 : step );
+    Points::const_iterator currentPoint = points.begin();
 
     // jump up
     _currentUnit = NULL;
     _movingUnit = NULL;
-    _movingPos = pnt != points.end() ? *pnt : pt1;
+    _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
     _flyingUnit = NULL;
-    _movingUnit = &b;
-    _flyingPos = pt1;
+    _movingUnit = &unit;
+    _flyingPos = destPos;
 
     
-    b.SwitchAnimation( Monster_Info::MOVE_START );
-    RedrawTroopFrameAnimation( b );
+    unit.SwitchAnimation( Monster_Info::MOVE_START );
+    RedrawTroopFrameAnimation( unit );
 
     _movingUnit = NULL;
-    _flyingUnit = &b;
+    _flyingUnit = &unit;
     _flyingPos = _movingPos;
-    if ( pnt != points.end() )
-        ++pnt;
+    if ( currentPoint != points.end() )
+        ++currentPoint;
 
-    while ( pnt != points.end() ) {
-        _movingPos = *pnt;
+    while ( currentPoint != points.end() ) {
+        _movingPos = *currentPoint;
 
-        AGG::PlaySound( b.M82Move() );
-        b.SwitchAnimation( Monster_Info::MOVING );
-        RedrawTroopFrameAnimation( b );
+        AGG::PlaySound( unit.M82Move() );
+        unit.SwitchAnimation( Monster_Info::MOVING );
+        RedrawTroopFrameAnimation( unit );
 
         _flyingPos = _movingPos;
-        ++pnt;
+        ++currentPoint;
     }
 
-    b.SetPosition( dst );
+    unit.SetPosition( destIndex );
 
     // jump down
     _flyingUnit = NULL;
-    _movingUnit = &b;
-    _movingPos = pt2;
-    b.SwitchAnimation( Monster_Info::MOVE_END );
-    RedrawTroopFrameAnimation( b );
+    _movingUnit = &unit;
+    _movingPos = targetPos;
+    unit.SwitchAnimation( Monster_Info::MOVE_END );
+    RedrawTroopFrameAnimation( unit );
 
     // restore
     _movingUnit = NULL;
-    b.SwitchAnimation( Monster_Info::STATIC );
+    unit.SwitchAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
