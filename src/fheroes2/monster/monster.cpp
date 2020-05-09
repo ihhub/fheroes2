@@ -1769,7 +1769,7 @@ const Monster::monstersprite_t & Monster::GetMonsterSprite() const
     return monsters_info[GetID()];
 }
 
-MonsterAnimation::MonsterAnimation( const Monster & monster )
+RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
     : _reference( Bin_Info::GetAnimationSet( monster.GetID() ) )
     , _icnID( monster.GetMonsterSprite().icn_file )
     , _frameId( 0 )
@@ -1786,11 +1786,13 @@ MonsterAnimation::MonsterAnimation( const Monster & monster )
     _addValidMove( Monster_State::RANG_BOT );
     _addValidMove( Monster_State::MOVING );
     _addValidMove( Monster_State::MOVING );
+    _addValidMove( Monster_State::WNCE );
+    _addValidMove( Monster_State::KILL );
 
     increment();
 }
 
-void MonsterAnimation::increment()
+void RandomMonsterAnimation::increment()
 {
     if ( _frameSet.empty() ) {
         const int moveId = *Rand::Get( _validMoves );
@@ -1836,6 +1838,12 @@ void MonsterAnimation::increment()
             _pushFrames( Monster_State::RANG_BOT );
             _pushFrames( Monster_State::RANG_BOT_END );
         }
+        else if ( moveId == Monster_State::WNCE ) {
+            _pushFrames( Monster_State::WNCE );
+        }
+        else if ( moveId == Monster_State::KILL ) {
+            _pushFrames( Monster_State::KILL );
+        }
 
         _pushFrames( Monster_State::STATIC );
     }
@@ -1847,22 +1855,22 @@ void MonsterAnimation::increment()
     _offsetSet.pop_front();
 }
 
-int MonsterAnimation::icnFile() const
+int RandomMonsterAnimation::icnFile() const
 {
     return _icnID;
 }
 
-int MonsterAnimation::frameId() const
+int RandomMonsterAnimation::frameId() const
 {
     return _frameId;
 }
 
-int MonsterAnimation::offset() const
+int RandomMonsterAnimation::offset() const
 {
     return _frameOffset;
 }
 
-void MonsterAnimation::_pushFrames( Monster_State::ANIMATION_TYPE type )
+void RandomMonsterAnimation::_pushFrames( Monster_State::ANIMATION_TYPE type )
 {
     const std::vector<int> & sequence = _reference.getAnimationVector( type );
     _frameSet.insert( _frameSet.end(), sequence.begin(), sequence.end() );
@@ -1871,7 +1879,7 @@ void MonsterAnimation::_pushFrames( Monster_State::ANIMATION_TYPE type )
     _offsetSet.insert( _offsetSet.end(), offset.begin(), offset.end() );
 }
 
-void MonsterAnimation::_addValidMove( Monster_State::ANIMATION_TYPE type )
+void RandomMonsterAnimation::_addValidMove( Monster_State::ANIMATION_TYPE type )
 {
     if ( !_reference.getAnimationVector( type ).empty() )
         _validMoves.push_back( type );
