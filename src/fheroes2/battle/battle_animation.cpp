@@ -100,13 +100,13 @@ bool AnimationSequence::isValid() const
     return _seq.size() > 0;
 }
 
-AnimTimedSequence::AnimTimedSequence( const std::vector<int> & seq, uint32_t duration )
+TimedSequence::TimedSequence( const std::vector<int> & seq, uint32_t duration )
     : AnimationSequence( seq )
     , _duration( duration )
     , _currentTime( 0 )
 {}
 
-int AnimTimedSequence::playAnimation( uint32_t delta, bool loop )
+int TimedSequence::playAnimation( uint32_t delta, bool loop )
 {
     _currentTime += delta;
     if ( _currentTime > _duration ) {
@@ -117,19 +117,19 @@ int AnimTimedSequence::playAnimation( uint32_t delta, bool loop )
     return getFrame();
 }
 
-int AnimTimedSequence::restartAnimation()
+int TimedSequence::restartAnimation()
 {
     _currentTime = 0;
     _currentFrame = 0;
     return getFrame();
 }
 
-int AnimTimedSequence::getFrameAt( uint32_t time ) const
+int TimedSequence::getFrameAt( uint32_t time ) const
 {
     return isValid() ? _seq[getFrameID( time )] : 0;
 }
 
-size_t AnimTimedSequence::getFrameID( uint32_t time ) const
+size_t TimedSequence::getFrameID( uint32_t time ) const
 {
     if ( isValid() && _duration > 0 ) {
         double frameTime = animationLength() / static_cast<double>( _duration );
@@ -138,17 +138,17 @@ size_t AnimTimedSequence::getFrameID( uint32_t time ) const
     return 0;
 }
 
-uint32_t AnimTimedSequence::getCurrentTime() const
+uint32_t TimedSequence::getCurrentTime() const
 {
     return _currentTime;
 }
 
-uint32_t AnimTimedSequence::getDuration() const
+uint32_t TimedSequence::getDuration() const
 {
     return _duration;
 }
 
-double AnimTimedSequence::movementProgress() const
+double TimedSequence::movementProgress() const
 {
     if ( isValid() && _duration > 0 )
         return static_cast<double>( _currentTime ) / static_cast<double>( _duration );
@@ -156,7 +156,7 @@ double AnimTimedSequence::movementProgress() const
     return 0;
 }
 
-bool AnimTimedSequence::isValid() const
+bool TimedSequence::isValid() const
 {
     return _seq.size() > 0 && _currentTime <= _duration && getFrameAt( _currentTime ) == _currentFrame;
 }
@@ -196,17 +196,26 @@ AnimationReference::AnimationReference( int monsterID )
 
     // Movement sequences
     // Every unit has MOVE_MAIN anim, use it as a base
-    appendFrames( _loopMove, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+    appendFrames( _moving, Bin_Info::MonsterAnimInfo::MOVE_TILE_START );
+    appendFrames( _moving, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+    appendFrames( _moving, Bin_Info::MonsterAnimInfo::MOVE_TILE_END );
 
     if ( _monsterInfo.hasAnim( Bin_Info::MonsterAnimInfo::MOVE_ONE ) ) {
-        appendFrames( _quickMove, Bin_Info::MonsterAnimInfo::MOVE_ONE );
+        appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_ONE );
     }
     else { // TODO: this must be LICH or POWER_LICH. Check it!
-        _quickMove = _loopMove;
+        _moveOneTile = _moving;
     }
 
-    appendFrames( _moveModes.start, Bin_Info::MonsterAnimInfo::MOVE_START );
-    appendFrames( _moveModes.end, Bin_Info::MonsterAnimInfo::MOVE_STOP );
+    // First tile move: 1 + 3 + 4
+    appendFrames( _moveFirstTile, Bin_Info::MonsterAnimInfo::MOVE_START );
+    appendFrames( _moveFirstTile, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+    appendFrames( _moveFirstTile, Bin_Info::MonsterAnimInfo::MOVE_TILE_END );
+
+    // Last tile move: 2 + 3 + 5
+    appendFrames( _moveLastTile, Bin_Info::MonsterAnimInfo::MOVE_TILE_START );
+    appendFrames( _moveLastTile, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+    appendFrames( _moveLastTile, Bin_Info::MonsterAnimInfo::MOVE_STOP );
 
     // Attack sequences
     appendFrames( _melee[Monster_Info::TOP].start, Bin_Info::MonsterAnimInfo::ATTACK1 );
@@ -263,13 +272,13 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
     case Monster_Info::IDLE:
         return _idle.front(); // TODO: use all idle animations
     case Monster_Info::MOVE_START:
-        return _moveModes.start;
+        return _moveFirstTile;
     case Monster_Info::MOVING:
-        return _loopMove;
+        return _moving;
     case Monster_Info::MOVE_END:
-        return _moveModes.end;
+        return _moveLastTile;
     case Monster_Info::MOVE_QUICK:
-        return _quickMove;
+        return _moveOneTile;
     case Monster_Info::MELEE_TOP:
         return _melee[Monster_Info::TOP].start;
     case Monster_Info::MELEE_TOP_END:
@@ -324,7 +333,7 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
         return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP];
         break;
     case Monster_Info::MOVE_QUICK:
-        offset.resize( _quickMove.size(), 0 );
+        offset.resize( _moveOneTile.size(), 0 );
         break;
     case Monster_Info::MELEE_TOP:
         offset.resize( _melee[Monster_Info::TOP].start.size(), 0 );

@@ -35,8 +35,6 @@ namespace Monster_Info
         NONE,
         STATIC,
         IDLE,
-
-        IDLE_ANY,
         MOVE_START,
         MOVING,
         MOVE_END,
@@ -53,7 +51,7 @@ namespace Monster_Info
         RANG_FRONT_END,
         RANG_BOT,
         RANG_BOT_END,
-        WNCE, // combine UP+DOWN anim for now
+        WNCE, // combined UP and RETURN anim
         KILL,
         INVALID
     };

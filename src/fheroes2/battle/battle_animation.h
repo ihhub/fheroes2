@@ -54,13 +54,14 @@ protected:
     std::vector<int> _seq;
     size_t _currentFrame;
 
+private:
     AnimationSequence();
 };
 
-class AnimTimedSequence : public AnimationSequence
+class TimedSequence : public AnimationSequence
 {
 public:
-    AnimTimedSequence( const std::vector<int> & seq, uint32_t duration );
+    TimedSequence( const std::vector<int> & seq, uint32_t duration );
 
     int playAnimation( uint32_t delta, bool loop = false );
     int restartAnimation();
@@ -98,9 +99,10 @@ protected:
     Bin_Info::MonsterAnimInfo _monsterInfo;
 
     std::vector<int> _static;
-    std::vector<int> _quickMove;
-    std::vector<int> _loopMove;
-    monsterReturnAnim _moveModes;
+    std::vector<int> _moveFirstTile;
+    std::vector<int> _moving;
+    std::vector<int> _moveLastTile;
+    std::vector<int> _moveOneTile;
     std::vector<int> _wince;
     std::vector<int> _death;
     monsterReturnAnim _melee[3];
