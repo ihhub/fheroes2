@@ -384,11 +384,11 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
     if ( Settings::Get().QVGA() ) {
         if ( reflect ) {
             pos.x = area.x + area.w - 40;
-            pos.y = area.y + 50;
+            pos.y = area.y + 75;
         }
         else {
             pos.x = area.x + 5;
-            pos.y = area.y + 50;
+            pos.y = area.y + 75;
         }
 
         const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
@@ -399,11 +399,11 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
     else {
         if ( reflect ) {
             pos.x = area.x + area.w - 60;
-            pos.y = area.y + 50;
+            pos.y = area.y + 75;
         }
         else {
             pos.x = area.x + 5;
-            pos.y = area.y + 50;
+            pos.y = area.y + 75;
         }
 
         const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
