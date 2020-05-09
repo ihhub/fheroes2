@@ -198,14 +198,18 @@ namespace Game
         //
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
+        CUSTOM_DELAY,
         //
         LAST_DELAY
     };
 
+    bool AnimateCustomDelay( uint32_t delay );
     bool AnimateInfrequentDelay( int );
     void AnimateResetDelay( int );
     void UpdateHeroesMoveSpeed( void );
     void UpdateBattleSpeed( void );
+    int ApplyBattleSpeed( int );
+    int GetBattleSpeed();
     int MainMenu( void );
     int NewGame( void );
     int LoadGame( void );

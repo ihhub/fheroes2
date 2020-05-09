@@ -151,7 +151,6 @@ namespace Battle
 
     bool AnimateInfrequentDelay( int dl )
     {
-        // return true;
         return Game::AnimateInfrequentDelay( dl );
     }
 }
@@ -2346,7 +2345,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
         }
 }
 
-void Battle::Interface::RedrawTroopFrameAnimation( Unit & unit, int delay )
+void Battle::Interface::RedrawTroopWithDelay( Unit & unit, uint32_t delay )
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
@@ -2355,7 +2354,28 @@ void Battle::Interface::RedrawTroopFrameAnimation( Unit & unit, int delay )
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( delay ) ) {
+        if ( Game::AnimateCustomDelay( delay ) ) {
+            cursor.Hide();
+            Redraw();
+            cursor.Show();
+            display.Flip();
+            if ( unit.isFinishAnimFrame() )
+                break;
+            unit.IncreaseAnimFrame();
+        }
+    }
+}
+
+void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
+{
+    Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( le.HandleEvents( false ) ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
@@ -2427,7 +2447,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     // redraw attack animation
     if ( attacker.SwitchAnimation( actionStart ) ) {
-        RedrawTroopFrameAnimation( attacker );
+        RedrawTroopDefaultDelay( attacker );
     }
 
     // draw missile animation
@@ -2485,7 +2505,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     int attackStart = attacker.animation.getCurrentState();
     if ( attackStart >= Monster_Info::MELEE_TOP && attackStart <= Monster_Info::RANG_BOT ) {
         if ( attacker.SwitchAnimation( ++attackStart ) )
-            RedrawTroopFrameAnimation( attacker );
+            RedrawTroopDefaultDelay( attacker );
     }
     attacker.SwitchAnimation( Monster_Info::STATIC );
 
@@ -2660,7 +2680,7 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
         if ( show_anim ) {
             AGG::PlaySound( b.M82Move() );
             b.SwitchAnimation( Monster_Info::MOVING );
-            RedrawTroopFrameAnimation( b );
+            RedrawTroopDefaultDelay( b );
             b.SetPosition( *dst );
         }
 
@@ -2689,7 +2709,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     cursor.SetThemes( Cursor::WAR_NONE );
     const uint32_t step = unit.animation.getFlightSpeed();
-    const uint32_t delay = unit.animation.getMoveSpeed();
+    const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
 
     const Points points = GetEuclideanLine( destPos, targetPos, Settings::Get().QVGA() ? step / 2 : step );
     Points::const_iterator currentPoint = points.begin();
@@ -2702,9 +2722,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _flyingPos = destPos;
 
-    
     unit.SwitchAnimation( Monster_Info::MOVE_START );
-    RedrawTroopFrameAnimation( unit );
+    RedrawTroopWithDelay( unit, frameDelay );
 
     _movingUnit = NULL;
     _flyingUnit = &unit;
@@ -2717,7 +2736,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
         AGG::PlaySound( unit.M82Move() );
         unit.SwitchAnimation( Monster_Info::MOVING );
-        RedrawTroopFrameAnimation( unit );
+        RedrawTroopWithDelay( unit, frameDelay );
 
         _flyingPos = _movingPos;
         ++currentPoint;
@@ -2730,7 +2749,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _movingPos = targetPos;
     unit.SwitchAnimation( Monster_Info::MOVE_END );
-    RedrawTroopFrameAnimation( unit );
+    RedrawTroopWithDelay( unit, frameDelay );
 
     // restore
     _movingUnit = NULL;

@@ -92,6 +92,7 @@ namespace Game
                           300, // AUTOHIDE_STATUS_DELAY
                           0, // CURRENT_HERO_DELAY
                           0, // CURRENT_AI_DELAY
+                          0, // CUSTOM_DELAY
                           0};
 }
 
@@ -106,6 +107,11 @@ void Game::AnimateResetDelay( int dl )
 {
     if ( dl < LAST_DELAY )
         delays[dl].Reset();
+}
+
+bool Game::AnimateCustomDelay( uint32_t delay )
+{
+    return delays[CUSTOM_DELAY].Trigger();
 }
 
 bool Game::AnimateInfrequentDelay( int dl )
@@ -168,4 +174,14 @@ void Game::UpdateBattleSpeed( void )
 
         DEBUG( DBG_GAME, DBG_INFO, "set battle delays: " << os.str() );
     }
+}
+
+int Game::ApplyBattleSpeed( int delay )
+{
+    return ( 10 - Settings::Get().BattleSpeed() ) * ( delay / 5 );
+}
+
+int Game::GetBattleSpeed()
+{
+    return Settings::Get().BattleSpeed();
 }
