@@ -399,6 +399,16 @@ int AnimationReference::getDeathFrame() const
     return ( _death.empty() ) ? _static.back() : _death.back();
 }
 
+uint32_t AnimationReference::getMoveSpeed() const
+{
+    return _monsterInfo.moveSpeed;
+}
+
+uint32_t AnimationReference::getFlightSpeed() const
+{
+    return _monsterInfo.flightSpeed;
+}
+
 AnimationState::AnimationState( int monsterID )
     : AnimationReference( monsterID )
     , _currentSequence( _static )

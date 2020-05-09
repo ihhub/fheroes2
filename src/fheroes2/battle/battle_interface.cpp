@@ -2346,7 +2346,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
         }
 }
 
-void Battle::Interface::RedrawTroopFrameAnimation( Unit & b )
+void Battle::Interface::RedrawTroopFrameAnimation( Unit & unit, int delay )
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
@@ -2355,14 +2355,14 @@ void Battle::Interface::RedrawTroopFrameAnimation( Unit & b )
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+        if ( Battle::AnimateInfrequentDelay( delay ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
             display.Flip();
-            if ( b.isFinishAnimFrame() )
+            if ( unit.isFinishAnimFrame() )
                 break;
-            b.IncreaseAnimFrame();
+            unit.IncreaseAnimFrame();
         }
     }
 }
@@ -2688,7 +2688,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     Point targetPos( pos2.x, pos2.y );
 
     cursor.SetThemes( Cursor::WAR_NONE );
-    const u32 step = unit.isWide() ? 80 : 40;
+    const uint32_t step = unit.animation.getFlightSpeed();
+    const uint32_t delay = unit.animation.getMoveSpeed();
 
     const Points points = GetEuclideanLine( destPos, targetPos, Settings::Get().QVGA() ? step / 2 : step );
     Points::const_iterator currentPoint = points.begin();
