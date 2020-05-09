@@ -63,7 +63,7 @@ std::string InsertString( const std::string &, size_t, const char * );
 size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
 KeySym KeySymFromChar( char );
 char CharFromKeySym( KeySym, u16 mod = 0 );
-bool PressIntKey( u32 min, u32 max, u32 & result );
+bool PressIntKey( u32 max, u32 & result );
 
 bool SaveMemToFile( const std::vector<u8> &, const std::string & );
 std::vector<u8> LoadFileToMem( const std::string & );
