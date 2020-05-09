@@ -330,6 +330,12 @@ int AnimationReference::getDeathFrame() const
     return ( _death.empty() ) ? _static.back() : _death.back();
 }
 
+AnimationState::AnimationState( const Bin_Info::MonsterAnimInfo & info, int monsterID )
+    : AnimationReference( info, monsterID )
+    , _currentSequence( _static )
+{
+}
+
 AnimationState::AnimationState( const AnimationReference & ref, int state )
     : AnimationReference( ref )
     , _currentSequence( _static )

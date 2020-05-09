@@ -31,11 +31,10 @@ namespace Bin_Info
     public:
         AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
         AnimationReference createAnimReference( int monsterID );
+        MonsterAnimInfo getAnimInfo( int monsterID );
 
     private:
         std::map<int, MonsterAnimInfo> _animMap;
-
-        MonsterAnimInfo getAnimInfo( int monsterID );
     };
 
     const size_t CORRECT_FRM_LENGTH = 821;
@@ -146,7 +145,7 @@ namespace Bin_Info
         eyePosition = Point( *( reinterpret_cast<const int16_t *>( data + 1 ) ), *( reinterpret_cast<const int16_t *>( data + 3 ) ) );
 
         // Frame X offsets for the future use
-        for ( int moveID = 0; moveID < 7; ++moveID ) {
+        for ( size_t moveID = 0; moveID < 7; ++moveID ) {
             std::vector<int> moveOffset;
             for ( int frame = 0; frame < 16; ++frame ) {
                 moveOffset.push_back( static_cast<int>( *reinterpret_cast<const int8_t *>( data + 5 + moveID * 16 + frame ) ) );
@@ -220,12 +219,12 @@ namespace Bin_Info
         case Monster::ROYAL_MUMMY:
         case Monster::VAMPIRE_LORD:
         case Monster::POWER_LICH:
-            speedDiff = Monster( monsterID ).GetSpeed() - Monster( monsterID - 1 ).GetSpeed();
+            speedDiff = static_cast<double>( Monster( monsterID ).GetSpeed() ) - Monster( monsterID - 1 ).GetSpeed();
             break;
         case Monster::EARTH_ELEMENT:
         case Monster::AIR_ELEMENT:
         case Monster::WATER_ELEMENT:
-            speedDiff = Monster( monsterID ).GetSpeed() - Monster( Monster::FIRE_ELEMENT ).GetSpeed();
+            speedDiff = static_cast<double>(Monster( monsterID ).GetSpeed()) - Monster( Monster::FIRE_ELEMENT ).GetSpeed();
             break;
         default:
             break;
@@ -317,6 +316,11 @@ namespace Bin_Info
             return it->second;
 
         return _infoCache.createAnimReference( Monster::UNKNOWN );
+    }
+
+    const MonsterAnimInfo & GetMonsterInfo( int monsterID )
+    {
+        return _infoCache.getAnimInfo( monsterID );
     }
 
     void InitBinInfo()

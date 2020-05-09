@@ -87,10 +87,11 @@ namespace Bin_Info
 
         MonsterAnimInfo( int monsterID = Monster::UNKNOWN, const std::vector<u8> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
-        bool isValid() const;
+        bool isValid() const; 
     };
 
     void InitBinInfo();
     AnimationReference GetAnimationSet( int monsterID );
+    const MonsterAnimInfo & GetMonsterInfo( int monsterID );
 }
 #endif

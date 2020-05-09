@@ -95,6 +95,7 @@ protected:
 class AnimationState : public AnimationReference
 {
 public:
+    AnimationState( const Bin_Info::MonsterAnimInfo & info, int monsterID );
     AnimationState( const AnimationReference & animMap, int state );
     virtual ~AnimationState();
 
