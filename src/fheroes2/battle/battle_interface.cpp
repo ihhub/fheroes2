@@ -2690,7 +2690,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     cursor.SetThemes( Cursor::WAR_NONE );
     const u32 step = unit.isWide() ? 80 : 40;
 
-    const Points points = GetLinePoints( destPos, targetPos, Settings::Get().QVGA() ? step / 2 : step );
+    const Points points = GetEuclideanLine( destPos, targetPos, Settings::Get().QVGA() ? step / 2 : step );
     Points::const_iterator currentPoint = points.begin();
 
     // jump up
