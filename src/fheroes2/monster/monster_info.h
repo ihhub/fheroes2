@@ -21,9 +21,9 @@
 #ifndef H2MONSTER_INFO_H
 #define H2MONSTER_INFO_H
 
-namespace Monster_State
+namespace Monster_Info
 {
-    enum ATTACK_DIRECTION
+    enum ATTACK_DIR
     {
         TOP,
         FRONT,

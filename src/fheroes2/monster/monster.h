@@ -261,8 +261,8 @@ private:
     int _frameId;
     int _frameOffset;
 
-    void _pushFrames( Monster_State::ANIMATION_TYPE type );
-    void _addValidMove( Monster_State::ANIMATION_TYPE type );
+    void _pushFrames( Monster_Info::ANIMATION_TYPE type );
+    void _addValidMove( Monster_Info::ANIMATION_TYPE type );
 };
 
 struct MonsterStaticData

@@ -20,6 +20,7 @@
 
 #include "bin_info.h"
 #include "agg.h"
+#include "monster.h"
 
 #include <algorithm>
 #include <iostream>
@@ -307,15 +308,6 @@ namespace Bin_Info
     AnimationReference MonsterAnimCache::createAnimReference( int monsterID )
     {
         return AnimationReference( monsterID );
-    }
-
-    AnimationReference GetAnimationSet( int monsterID )
-    {
-        std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
-        if ( it != animRefs.end() )
-            return it->second;
-
-        return _infoCache.createAnimReference( Monster::UNKNOWN );
     }
 
     MonsterAnimInfo GetMonsterInfo( int monsterID )
