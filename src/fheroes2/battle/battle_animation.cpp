@@ -106,12 +106,13 @@ AnimationReference::AnimationReference()
     _type = Monster::UNKNOWN;
 }
 
-AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id )
+AnimationReference::AnimationReference( int monsterID )
+    : _type( monsterID )
 {
-    if ( id < Monster::PEASANT && id > Monster::WATER_ELEMENT )
+    if ( monsterID < Monster::PEASANT && monsterID > Monster::WATER_ELEMENT )
         return;
 
-    _type = id;
+    Bin_Info::MonsterAnimInfo info = Bin_Info::GetMonsterInfo( monsterID );
 
     // STATIC is our default
     // appendFrames inserts to vector so ref is still valid
@@ -330,11 +331,11 @@ int AnimationReference::getDeathFrame() const
     return ( _death.empty() ) ? _static.back() : _death.back();
 }
 
-AnimationState::AnimationState( const Bin_Info::MonsterAnimInfo & info, int monsterID )
-    : AnimationReference( info, monsterID )
+AnimationState::AnimationState( int monsterID )
+    : AnimationReference( monsterID )
     , _currentSequence( _static )
-{
-}
+    , _animState( Monster_State::STATIC )
+{}
 
 AnimationState::AnimationState( const AnimationReference & ref, int state )
     : AnimationReference( ref )

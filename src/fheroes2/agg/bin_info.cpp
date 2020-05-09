@@ -306,7 +306,7 @@ namespace Bin_Info
 
     AnimationReference MonsterAnimCache::createAnimReference( int monsterID )
     {
-        return AnimationReference( _infoCache.getAnimInfo( monsterID ), monsterID );
+        return AnimationReference( monsterID );
     }
 
     AnimationReference GetAnimationSet( int monsterID )

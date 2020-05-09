@@ -215,7 +215,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , reflect( ref )
     , mirror( NULL )
     , blindanswer( false )
-    , animation( Bin_Info::GetAnimationSet( id ), Monster_State::STATIC )
+    , animation( id )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {

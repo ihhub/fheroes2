@@ -43,7 +43,7 @@ public:
     AnimationSequence & operator=( const std::vector<int> & rhs );
 
     int playAnimation( bool loop = false );
-    int restartAnimation();
+    virtual int restartAnimation();
     void setToLastFrame();
 
     int getFrame() const;
@@ -61,11 +61,27 @@ private:
     AnimationSequence();
 };
 
+class AnimTimedSequence : public AnimationSequence
+{
+public:
+    AnimTimedSequence( const std::vector<int> & seq, uint32_t duration );
+
+    int playAnimation( int delta, bool loop = false );
+    int restartAnimation();
+
+    int getCurrentTime() const;
+    uint32_t getDuration() const;
+
+private:
+    int currentTime;
+    uint32_t duration;
+};
+
 class AnimationReference
 {
 public:
     AnimationReference();
-    AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id );
+    AnimationReference( int id );
     virtual ~AnimationReference();
 
     int getStaticFrame() const;
@@ -95,7 +111,7 @@ protected:
 class AnimationState : public AnimationReference
 {
 public:
-    AnimationState( const Bin_Info::MonsterAnimInfo & info, int monsterID );
+    AnimationState( int monsterID );
     AnimationState( const AnimationReference & animMap, int state );
     virtual ~AnimationState();
 
