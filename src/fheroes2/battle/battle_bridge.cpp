@@ -66,8 +66,7 @@ bool Battle::Bridge::AllowUp( void ) const
 
 bool Battle::Bridge::isDeadBodyOnABridge( void ) const
 {
-    if ( Battle::GetArena()->GetGraveyard()->GetLastTroopUID( 49 ) ||
-        Battle::GetArena()->GetGraveyard()->GetLastTroopUID( 50 ) )
+    if ( GetArena()->GetGraveyard()->GetLastTroopUID( 49 ) || GetArena()->GetGraveyard()->GetLastTroopUID( 50 ) )
         return true;
 
     return false;
@@ -99,7 +98,7 @@ bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
 
 bool Battle::Bridge::isPassable( int color ) const
 {
-    if ( !isDown() && isDeadBodyOnABridge()) // if bridge not in a down state and dead body's exists on 49 and 50 tiles
+    if ( !isDown() && isDeadBodyOnABridge() ) // if bridge not in a down state and dead body's exists on 49 and 50 tiles
         return false;
 
     return color == Arena::GetCastle()->GetColor() || isDown();
