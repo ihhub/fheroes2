@@ -2723,7 +2723,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _flyingPos = destPos;
 
-    unit.SwitchAnimation( Monster_Info::MOVE_START );
+    unit.SwitchAnimation( Monster_Info::FLY_UP );
     RedrawTroopWithDelay( unit, frameDelay );
 
     _movingUnit = NULL;

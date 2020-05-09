@@ -105,6 +105,7 @@ protected:
     std::vector<int> _moving;
     std::vector<int> _moveLastTile;
     std::vector<int> _moveOneTile;
+    std::vector<int> _flyUp;
     std::vector<int> _wince;
     std::vector<int> _death;
     monsterReturnAnim _melee[3];
