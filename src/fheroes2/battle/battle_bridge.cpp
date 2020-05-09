@@ -56,26 +56,41 @@ bool Battle::Bridge::AllowUp( void ) const
     if ( !isValid() || !isDown() )
         return false;
 
+    if ( isDeadBodyOnABridge() )
+        return false;
+
     bool isNoUnitOn49 = NULL == Board::GetCell( 49 )->GetUnit();
     bool isNoUnitOn50 = NULL == Board::GetCell( 50 )->GetUnit();
     return isNoUnitOn49 && isNoUnitOn50;
 }
 
-bool Battle::Bridge::NeedDown( const Unit & b, s32 dst ) const
+bool Battle::Bridge::isDeadBodyOnABridge( void ) const
+{
+    if ( Battle::GetArena()->GetGraveyard()->GetLastTroopUID( 49 ) ||
+        Battle::GetArena()->GetGraveyard()->GetLastTroopUID( 50 ) )
+        return true;
+
+    return false;
+}
+
+bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
 {
     if ( !isValid() || isDown() ) // destroyed or already in down state
         return false;
 
-    const s32 pos1 = b.GetHeadIndex();
+    if ( isDeadBodyOnABridge() ) // under bridge
+        return false;
 
-    if ( dst == 50 ) {
-        if ( pos1 == 51 )
+    const s32 prevPos = b.GetHeadIndex();
+
+    if ( dstPos == 50 ) {
+        if ( prevPos == 51 )
             return true;
-        if ( ( pos1 == 61 || pos1 == 39 ) && b.GetColor() == Arena::GetCastle()->GetColor() )
+        if ( ( prevPos == 61 || prevPos == 39 ) && b.GetColor() == Arena::GetCastle()->GetColor() )
             return true;
     }
-    else if ( dst == 49 ) {
-        if ( pos1 != 50 && b.GetColor() == Arena::GetCastle()->GetColor() )
+    else if ( dstPos == 49 ) {
+        if ( prevPos != 50 && b.GetColor() == Arena::GetCastle()->GetColor() )
             return true;
     }
 
@@ -84,6 +99,9 @@ bool Battle::Bridge::NeedDown( const Unit & b, s32 dst ) const
 
 bool Battle::Bridge::isPassable( int color ) const
 {
+    if ( !isDown() && isDeadBodyOnABridge()) // if bridge not in a down state and dead body's exists on 49 and 50 tiles
+        return false;
+
     return color == Arena::GetCastle()->GetColor() || isDown();
 }
 
@@ -104,13 +122,6 @@ void Battle::Bridge::SetPassable( const Unit & b )
         Board::GetCell( 49 )->SetObject( 1 );
         Board::GetCell( 50 )->SetObject( 1 );
     }
-}
-
-bool Battle::Bridge::NeedAction( const Unit & b, s32 dst ) const
-{
-    bool isNeedGoDown = NeedDown( b, dst );
-    bool isNeedGoUp = AllowUp();
-    return isNeedGoDown || isNeedGoUp;
 }
 
 void Battle::Bridge::Action( const Unit & b, s32 dst )
