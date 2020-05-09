@@ -21,13 +21,9 @@
 #ifndef H2BATTLE_ANIMATION_H
 #define H2BATTLE_ANIMATION_H
 
+#include "bin_info.h"
 #include "gamedefs.h"
 #include "monster_info.h"
-
-namespace Bin_Info
-{
-    struct MonsterAnimInfo;
-}
 
 struct monsterReturnAnim
 {
@@ -92,7 +88,8 @@ public:
     AnimationSequence getAnimationSequence( int animState ) const;
 
 protected:
-    int _type;
+    int _monsterID;
+    Bin_Info::MonsterAnimInfo _monsterInfo;
 
     std::vector<int> _static;
     std::vector<int> _quickMove;
@@ -105,7 +102,7 @@ protected:
     std::vector<std::vector<int> > _idle;
     std::vector<std::vector<int> > _offsetX;
 
-    bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID );
+    bool appendFrames( std::vector<int> & target, int animID );
 };
 
 class AnimationState : public AnimationReference

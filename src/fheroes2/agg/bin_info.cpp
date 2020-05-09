@@ -318,7 +318,7 @@ namespace Bin_Info
         return _infoCache.createAnimReference( Monster::UNKNOWN );
     }
 
-    const MonsterAnimInfo & GetMonsterInfo( int monsterID )
+    MonsterAnimInfo GetMonsterInfo( int monsterID )
     {
         return _infoCache.getAnimInfo( monsterID );
     }

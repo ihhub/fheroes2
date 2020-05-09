@@ -92,6 +92,6 @@ namespace Bin_Info
 
     void InitBinInfo();
     AnimationReference GetAnimationSet( int monsterID );
-    const MonsterAnimInfo & GetMonsterInfo( int monsterID );
+    MonsterAnimInfo GetMonsterInfo( int monsterID );
 }
 #endif
