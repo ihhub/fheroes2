@@ -45,12 +45,12 @@ public:
     int getFrame() const;
     int firstFrame() const;
     int animationLength() const;
-    double movementProgress() const;
+    virtual double movementProgress() const;
     bool isFirstFrame() const;
     bool isLastFrame() const;
-    bool isValid() const;
+    virtual bool isValid() const;
 
-private:
+protected:
     std::vector<int> _seq;
     size_t _currentFrame;
 
@@ -62,15 +62,21 @@ class AnimTimedSequence : public AnimationSequence
 public:
     AnimTimedSequence( const std::vector<int> & seq, uint32_t duration );
 
-    int playAnimation( int delta, bool loop = false );
+    int playAnimation( uint32_t delta, bool loop = false );
     int restartAnimation();
 
-    int getCurrentTime() const;
+    int getFrameAt( uint32_t time ) const;
+    uint32_t getCurrentTime() const;
     uint32_t getDuration() const;
+    double movementProgress() const;
+    bool isValid() const;
 
 private:
-    int currentTime;
-    uint32_t duration;
+    uint32_t _currentTime;
+    uint32_t _duration;
+
+    // Private function: make sure object is valid before calling this
+    size_t getFrameID( uint32_t time ) const;
 };
 
 class AnimationReference

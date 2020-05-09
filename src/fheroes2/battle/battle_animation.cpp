@@ -100,10 +100,70 @@ bool AnimationSequence::isValid() const
     return _seq.size() > 0;
 }
 
+AnimTimedSequence::AnimTimedSequence( const std::vector<int> & seq, uint32_t duration )
+    : AnimationSequence( seq )
+    , _duration( duration )
+    , _currentTime( 0 )
+{}
+
+int AnimTimedSequence::playAnimation( uint32_t delta, bool loop )
+{
+    _currentTime += delta;
+    if ( _currentTime > _duration ) {
+        _currentTime = ( loop ) ? _currentTime % _duration : _duration;
+    }
+
+    _currentFrame = getFrameID( _currentTime );
+    return getFrame();
+}
+
+int AnimTimedSequence::restartAnimation()
+{
+    _currentTime = 0;
+    _currentFrame = 0;
+    return getFrame();
+}
+
+int AnimTimedSequence::getFrameAt( uint32_t time ) const
+{
+    return isValid() ? _seq[getFrameID( time )] : 0;
+}
+
+size_t AnimTimedSequence::getFrameID( uint32_t time ) const
+{
+    if ( isValid() && _duration > 0 ) {
+        double frameTime = animationLength() / static_cast<double>( _duration );
+        return static_cast<size_t>( time / frameTime );
+    }
+    return 0;
+}
+
+uint32_t AnimTimedSequence::getCurrentTime() const
+{
+    return _currentTime;
+}
+
+uint32_t AnimTimedSequence::getDuration() const
+{
+    return _duration;
+}
+
+double AnimTimedSequence::movementProgress() const
+{
+    if ( isValid() && _duration > 0 )
+        return static_cast<double>( _currentTime ) / static_cast<double>( _duration );
+
+    return 0;
+}
+
+bool AnimTimedSequence::isValid() const
+{
+    return _seq.size() > 0 && _currentTime <= _duration && getFrameAt( _currentTime ) == _currentFrame;
+}
+
 AnimationReference::AnimationReference()
     : _monsterID( Monster::UNKNOWN )
-{
-}
+{}
 
 AnimationReference::AnimationReference( int monsterID )
     : _monsterID( monsterID )
