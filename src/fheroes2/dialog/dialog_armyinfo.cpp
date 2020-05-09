@@ -170,8 +170,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
                 DrawMonsterInfo( pos_rt, troop );
 
                 const Sprite & smonster = AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId(), false );
-                const Point monsterPos( monsterOffset.x + smonster.x() - ( troop.isWide() ? 23 : 0 ) - monsterAnimation.offset(),
-                                        monsterOffset.y + smonster.y() );
+                const Point monsterPos( monsterOffset.x + smonster.x() - ( troop.isWide() ? 23 : 0 ) - monsterAnimation.offset(), monsterOffset.y + smonster.y() );
                 smonster.Blit( monsterPos );
 
                 monsterAnimation.increment();
@@ -188,7 +187,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
                 cursor.Show();
                 display.Flip();
             }
-
         }
         else {
             if ( !le.MousePressRight() )
