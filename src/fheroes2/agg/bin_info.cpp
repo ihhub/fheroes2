@@ -40,6 +40,12 @@ namespace Bin_Info
 
     const size_t CORRECT_FRM_LENGTH = 821;
 
+    // When base unit and its upgrade use the same FRM file (e.g. Archer and Ranger)
+    // We modify animation speed value to make them go faster
+    const double MOVE_SPEED_UPGRADE = 0.12;
+    const double SHOOT_SPEED_UPGRADE = 0.08;
+    const double RANGER_SHOOT_SPEED = 0.78;
+
     std::map<int, AnimationReference> animRefs;
     MonsterAnimCache _infoCache;
 
@@ -231,13 +237,14 @@ namespace Bin_Info
             break;
         }
 
-        if ( speedDiff ) {
-            moveSpeed = static_cast<uint32_t>( ( 1 - 0.12 * speedDiff ) * moveSpeed );
+        if ( std::abs(speedDiff) > 0 ) {
+            moveSpeed = static_cast<uint32_t>( ( 1 - MOVE_SPEED_UPGRADE * speedDiff ) * moveSpeed );
+            // Ranger is special since he gets double attack on upgrade
             if ( monsterID == Monster::RANGER ) {
-                shootSpeed *= 0.78;
+                shootSpeed *= RANGER_SHOOT_SPEED;
             }
             else {
-                shootSpeed = static_cast<uint32_t>( ( 1 - 0.08 * speedDiff ) * shootSpeed );
+                shootSpeed = static_cast<uint32_t>( ( 1 - SHOOT_SPEED_UPGRADE * speedDiff ) * shootSpeed );
             }
         }
 

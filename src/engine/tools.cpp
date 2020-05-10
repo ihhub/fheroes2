@@ -866,18 +866,19 @@ std::string EncodeString( const std::string & str, const char * charset )
 
 Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step )
 {
-    Points line;
-
-    const uint32_t dist = hypot( std::abs( pt2.x - pt1.x ), std::abs( pt2.y - pt1.y ) );
+    const int dx = pt2.x - pt1.x;
+    const int dy = pt2.y - pt1.y;
+    const uint32_t dist = hypot( std::abs( dx ), std::abs( dy ) );
     // round up the integer division
     const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 1;
-    const int moveX = ( pt2.x - pt1.x ) / (int)length;
-    const int moveY = ( pt2.y - pt1.y ) / (int)length;
+    const double moveX = dx / static_cast<double>( length );
+    const double moveY = dy / static_cast<double>( length );
 
+    Points line;
     line.reserve( length );
 
     for ( uint32_t i = 0; i <= length; ++i ) {
-        line.push_back( Point( pt1.x + i * moveX, pt1.y + i * moveY ) );
+        line.push_back( Point( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) ) );
     }
 
     return line;

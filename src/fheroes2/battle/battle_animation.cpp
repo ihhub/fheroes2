@@ -115,7 +115,7 @@ int TimedSequence::playAnimation( uint32_t delta, bool loop )
 {
     _currentTime += delta;
     if ( _currentTime > _duration ) {
-        _currentTime = ( loop ) ? _currentTime % _duration : _duration;
+        _currentTime = loop ? _currentTime % _duration : _duration;
     }
 
     _currentFrame = getFrameID( _currentTime );

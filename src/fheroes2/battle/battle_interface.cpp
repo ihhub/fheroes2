@@ -2351,7 +2351,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    uint32_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
+    const uint32_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
@@ -2725,6 +2725,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _flyingPos = destPos;
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
+    // Take off animation is 30% length on average (original value)
     AnimateUnitWithDelay( unit, frameDelay * 0.3 );
 
     _movingUnit = NULL;
@@ -2753,6 +2754,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _movingPos = targetPos;
     unit.SwitchAnimation( Monster_Info::FLY_LAND );
+    // Landing animation is 30% length on average (original value)
     AnimateUnitWithDelay( unit, frameDelay * 0.3 );
 
     // restore

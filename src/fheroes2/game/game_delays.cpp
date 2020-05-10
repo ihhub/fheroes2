@@ -52,8 +52,8 @@ struct TimeDelay : std::pair<SDL::Time, uint32_t>
     bool Trigger( uint32_t customDelay = 0 )
     {
         first.Stop();
-        uint32_t val = ( customDelay > 0 ) ? customDelay : second;
-        if ( first.Get() < val )
+        const uint32_t expected = ( customDelay > 0 ) ? customDelay : second;
+        if ( first.Get() < expected )
             return false;
 
         first.Start();
