@@ -206,7 +206,7 @@ namespace Bin_Info
         }
 
         // Modify AnimInfo for upgraded monsters without own FRM file
-        double speedDiff = 0;
+        int speedDiff = 0;
         switch ( monsterID ) {
         case Monster::RANGER:
         case Monster::VETERAN_PIKEMAN:
@@ -226,18 +226,18 @@ namespace Bin_Info
         case Monster::ROYAL_MUMMY:
         case Monster::VAMPIRE_LORD:
         case Monster::POWER_LICH:
-            speedDiff = static_cast<double>( Monster( monsterID ).GetSpeed() ) - Monster( monsterID - 1 ).GetSpeed();
+            speedDiff = static_cast<int>( Monster( monsterID ).GetSpeed() ) - Monster( monsterID - 1 ).GetSpeed();
             break;
         case Monster::EARTH_ELEMENT:
         case Monster::AIR_ELEMENT:
         case Monster::WATER_ELEMENT:
-            speedDiff = static_cast<double>( Monster( monsterID ).GetSpeed() ) - Monster( Monster::FIRE_ELEMENT ).GetSpeed();
+            speedDiff = static_cast<int>( Monster( monsterID ).GetSpeed() ) - Monster( Monster::FIRE_ELEMENT ).GetSpeed();
             break;
         default:
             break;
         }
 
-        if ( std::abs(speedDiff) > 0 ) {
+        if ( std::abs( speedDiff ) > 0 ) {
             moveSpeed = static_cast<uint32_t>( ( 1 - MOVE_SPEED_UPGRADE * speedDiff ) * moveSpeed );
             // Ranger is special since he gets double attack on upgrade
             if ( monsterID == Monster::RANGER ) {
