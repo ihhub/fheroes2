@@ -80,7 +80,7 @@ void AnimationSequence::setToLastFrame()
 double AnimationSequence::movementProgress() const
 {
     if ( _seq.size() > 1 )
-        return static_cast<double>( _currentFrame ) / ( static_cast<double>( animationLength() ) - 1 );
+        return static_cast<double>( _currentFrame ) / ( static_cast<double>( animationLength() ) );
 
     return 0;
 }

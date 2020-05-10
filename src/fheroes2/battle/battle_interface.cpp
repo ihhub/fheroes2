@@ -1193,16 +1193,13 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                     sp.x -= Sign( cx ) * ox / 2;
             }
         }
-        else
-            // fly offset
-            if ( _flyingUnit == &b ) {
-            if ( _flyingUnit->GetFrameCount() ) {
-                const s32 cx = _flyingPos.x - rt.x;
-                const s32 cy = _flyingPos.y - rt.y;
+        // fly offset
+        else if ( _flyingUnit == &b ) {
+            const s32 cx = _flyingPos.x - rt.x;
+            const s32 cy = _flyingPos.y - rt.y;
 
-                sp.x += cx + Sign( cx ) * _flyingUnit->animation.movementProgress() * std::abs( ( _flyingPos.x - _movingPos.x ) );
-                sp.y += cy + Sign( cy ) * _flyingUnit->animation.movementProgress() * std::abs( ( _flyingPos.y - _movingPos.y ) );
-            }
+            sp.x += cx + ( _movingPos.x - _flyingPos.x ) * _flyingUnit->animation.movementProgress();
+            sp.y += cy + ( _movingPos.y - _flyingPos.y ) * _flyingUnit->animation.movementProgress();
         }
 
         // sprite monster
@@ -2724,11 +2721,14 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _flyingPos = destPos;
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
-    RedrawTroopWithDelay( unit, frameDelay );
+    RedrawTroopWithDelay( unit, frameDelay * 0.3 );
 
     _movingUnit = NULL;
     _flyingUnit = &unit;
     _flyingPos = _movingPos;
+
+    if ( currentPoint != points.end() )
+        ++currentPoint;
 
     unit.SwitchAnimation( Monster_Info::MOVING );
     while ( currentPoint != points.end() ) {
@@ -2744,12 +2744,12 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SetPosition( destIndex );
 
-    // jump down
+    // landing
     _flyingUnit = NULL;
     _movingUnit = &unit;
     _movingPos = targetPos;
-    unit.SwitchAnimation( Monster_Info::MOVE_END );
-    RedrawTroopWithDelay( unit, frameDelay );
+    unit.SwitchAnimation( Monster_Info::FLY_UP, true );
+    RedrawTroopWithDelay( unit, frameDelay * 0.3 );
 
     // restore
     _movingUnit = NULL;
