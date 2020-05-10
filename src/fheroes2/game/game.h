@@ -208,8 +208,7 @@ namespace Game
     void AnimateResetDelay( int );
     void UpdateHeroesMoveSpeed( void );
     void UpdateBattleSpeed( void );
-    int ApplyBattleSpeed( int );
-    int GetBattleSpeed();
+    uint32_t ApplyBattleSpeed( uint32_t delay );
     int MainMenu( void );
     int NewGame( void );
     int LoadGame( void );

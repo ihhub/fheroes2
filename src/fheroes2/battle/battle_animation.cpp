@@ -136,8 +136,8 @@ int TimedSequence::getFrameAt( uint32_t time ) const
 
 size_t TimedSequence::getFrameID( uint32_t time ) const
 {
-    if ( isValid() && _duration > 0 ) {
-        double frameTime = animationLength() / static_cast<double>( _duration );
+    if ( isValid() ) {
+        const double frameTime = animationLength() / static_cast<double>( _duration );
         return static_cast<size_t>( time / frameTime );
     }
     return 0;
@@ -155,7 +155,7 @@ uint32_t TimedSequence::getDuration() const
 
 double TimedSequence::movementProgress() const
 {
-    if ( isValid() && _duration > 0 )
+    if ( isValid() )
         return static_cast<double>( _currentTime ) / static_cast<double>( _duration );
 
     return 0;
@@ -163,7 +163,7 @@ double TimedSequence::movementProgress() const
 
 bool TimedSequence::isValid() const
 {
-    return _seq.size() > 0 && _currentTime <= _duration && getFrameAt( _currentTime ) == _currentFrame;
+    return _seq.size() > 0 && _currentTime <= _duration && _duration > 0;
 }
 
 AnimationReference::AnimationReference()
@@ -279,7 +279,18 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
     case Monster_Info::STATIC:
         return _static;
     case Monster_Info::IDLE:
-        return _idle.front(); // TODO: use all idle animations
+        // Pick random animation
+        if ( _idle.size() > 0 && _idle.size() == _monsterInfo.idlePriority.size() ) {
+            Rand::Queue picker;
+
+            for ( size_t i = 0; i < _idle.size(); ++i ) {
+                picker.Push( i, static_cast<uint32_t>( _monsterInfo.idlePriority[i] ) );
+            }
+            // picker is expected to return at least 0
+            const size_t id = static_cast<size_t>( picker.Get() );
+            return _idle[id];
+        }
+        break;
     case Monster_Info::MOVE_START:
         return _moveFirstTile;
     case Monster_Info::MOVING:
@@ -321,7 +332,6 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
     case Monster_Info::KILL:
         return _death;
     default:
-        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animState );
         break;
     }
     return _static;

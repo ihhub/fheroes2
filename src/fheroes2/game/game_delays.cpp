@@ -177,12 +177,7 @@ void Game::UpdateBattleSpeed( void )
     }
 }
 
-int Game::ApplyBattleSpeed( int delay )
+uint32_t Game::ApplyBattleSpeed( uint32_t delay )
 {
-    return ( 10 - Settings::Get().BattleSpeed() ) * ( delay / 5 );
-}
-
-int Game::GetBattleSpeed()
-{
-    return Settings::Get().BattleSpeed();
+    return static_cast<uint32_t>( 10 - Settings::Get().BattleSpeed() ) * ( delay / DEFAULT_SPEED_DELAY );
 }
