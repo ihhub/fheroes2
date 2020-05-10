@@ -291,7 +291,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             if ( interface )
                 interface->RedrawActionMove( *b, path );
             else if ( bridge ) {
-                for ( Indexes::const_iterator dst = path.begin(); dst != path.end() ; ++dst ) {
+                for ( Indexes::const_iterator dst = path.begin(); dst != path.end(); ++dst ) {
                     bool doMovement = false;
 
                     if ( bridge && bridge->NeedDown( *b, *dst ) )

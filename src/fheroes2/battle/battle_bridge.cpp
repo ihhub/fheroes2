@@ -67,7 +67,7 @@ bool Battle::Bridge::AllowUp( void ) const
 bool Battle::Bridge::isDeadBodyOnABridge( void ) const
 {
     const Battle::Graveyard * graveyard = GetArena()->GetGraveyard();
-    return graveyard ->GetLastTroopUID( 49 ) || graveyard ->GetLastTroopUID( 50 );
+    return graveyard->GetLastTroopUID( 49 ) || graveyard->GetLastTroopUID( 50 );
 }
 
 bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
