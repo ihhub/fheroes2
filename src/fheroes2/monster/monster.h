@@ -241,10 +241,10 @@ protected:
     int id;
 };
 
-class MonsterAnimation
+class RandomMonsterAnimation
 {
 public:
-    explicit MonsterAnimation( const Monster & monster = Monster() );
+    explicit RandomMonsterAnimation( const Monster & monster = Monster() );
 
     void increment();
 
