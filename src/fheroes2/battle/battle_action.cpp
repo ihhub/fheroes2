@@ -291,8 +291,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             if ( interface )
                 interface->RedrawActionMove( *b, path );
             else if ( bridge ) {
-                Indexes::const_iterator dst = path.begin();
-                while ( dst != path.end() ) {
+                for ( Indexes::const_iterator dst = path.begin(); dst != path.end() ; ++dst ) {
                     bool doMovement = false;
 
                     if ( bridge && bridge->NeedDown( *b, *dst ) )
@@ -314,8 +313,6 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                     // check for possible bridge close action, after unit's end of movement
                     if ( bridge && bridge->AllowUp() )
                         bridge->Action( *b, *dst );
-
-                    ++dst;
                 }
             }
 

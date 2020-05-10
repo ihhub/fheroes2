@@ -59,17 +59,15 @@ bool Battle::Bridge::AllowUp( void ) const
     if ( isDeadBodyOnABridge() )
         return false;
 
-    bool isNoUnitOn49 = NULL == Board::GetCell( 49 )->GetUnit();
-    bool isNoUnitOn50 = NULL == Board::GetCell( 50 )->GetUnit();
+    const bool isNoUnitOn49 = NULL == Board::GetCell( 49 )->GetUnit();
+    const bool isNoUnitOn50 = NULL == Board::GetCell( 50 )->GetUnit();
     return isNoUnitOn49 && isNoUnitOn50;
 }
 
 bool Battle::Bridge::isDeadBodyOnABridge( void ) const
 {
-    if ( GetArena()->GetGraveyard()->GetLastTroopUID( 49 ) || GetArena()->GetGraveyard()->GetLastTroopUID( 50 ) )
-        return true;
-
-    return false;
+    const Battle::Graveyard * graveyard = GetArena()->GetGraveyard();
+    return graveyard ->GetLastTroopUID( 49 ) || graveyard ->GetLastTroopUID( 50 );
 }
 
 bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
