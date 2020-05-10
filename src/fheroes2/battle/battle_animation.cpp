@@ -218,7 +218,8 @@ AnimationReference::AnimationReference( int monsterID )
     appendFrames( _moveLastTile, Bin_Info::MonsterAnimInfo::MOVE_STOP );
 
     // Special for flyers
-    appendFrames( _flyUp, Bin_Info::MonsterAnimInfo::MOVE_START );
+    appendFrames( _flying.start, Bin_Info::MonsterAnimInfo::MOVE_START );
+    appendFrames( _flying.end, Bin_Info::MonsterAnimInfo::MOVE_STOP );
 
     // Attack sequences
     appendFrames( _melee[Monster_Info::TOP].start, Bin_Info::MonsterAnimInfo::ATTACK1 );
@@ -283,7 +284,9 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
     case Monster_Info::MOVE_QUICK:
         return _moveOneTile;
     case Monster_Info::FLY_UP:
-        return _flyUp;
+        return _flying.start;
+    case Monster_Info::FLY_LAND:
+        return _flying.end;
     case Monster_Info::MELEE_TOP:
         return _melee[Monster_Info::TOP].start;
     case Monster_Info::MELEE_TOP_END:

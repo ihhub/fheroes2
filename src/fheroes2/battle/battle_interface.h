@@ -215,7 +215,7 @@ namespace Battle
         void RedrawActionLightningBoltSpell( Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
 
-        void RedrawTroopWithDelay( Unit & unit, uint32_t delay );
+        void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit &, int, int, bool );
         void RedrawTargetsWithFrameAnimation( s32, const TargetsInfo &, int, int );

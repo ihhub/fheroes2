@@ -40,6 +40,7 @@ namespace Monster_Info
         MOVE_END,
         MOVE_QUICK,
         FLY_UP,
+        FLY_LAND,
         MELEE_TOP,
         MELEE_TOP_END,
         MELEE_FRONT,

@@ -2342,7 +2342,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
         }
 }
 
-void Battle::Interface::RedrawTroopWithDelay( Unit & unit, uint32_t delay )
+void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
@@ -2721,7 +2721,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _flyingPos = destPos;
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
-    RedrawTroopWithDelay( unit, frameDelay * 0.3 );
+    AnimateUnitWithDelay( unit, frameDelay * 0.3 );
 
     _movingUnit = NULL;
     _flyingUnit = &unit;
@@ -2736,7 +2736,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
         AGG::PlaySound( unit.M82Move() );
         unit.animation.restartAnimation();
-        RedrawTroopWithDelay( unit, frameDelay );
+        AnimateUnitWithDelay( unit, frameDelay );
 
         _flyingPos = _movingPos;
         ++currentPoint;
@@ -2748,8 +2748,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _flyingUnit = NULL;
     _movingUnit = &unit;
     _movingPos = targetPos;
-    unit.SwitchAnimation( Monster_Info::FLY_UP, true );
-    RedrawTroopWithDelay( unit, frameDelay * 0.3 );
+    unit.SwitchAnimation( Monster_Info::FLY_LAND );
+    AnimateUnitWithDelay( unit, frameDelay * 0.3 );
 
     // restore
     _movingUnit = NULL;
