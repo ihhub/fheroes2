@@ -35,6 +35,11 @@ AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
     return *this;
 }
 
+AnimationSequence::~AnimationSequence()
+{
+    _seq.clear();
+}
+
 int AnimationSequence::playAnimation( bool loop )
 {
     if ( !isValid() )

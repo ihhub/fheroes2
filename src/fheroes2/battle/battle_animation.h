@@ -37,6 +37,7 @@ public:
     AnimationSequence( const std::vector<int> & seq );
 
     AnimationSequence & operator=( const std::vector<int> & rhs );
+    virtual ~AnimationSequence();
 
     int playAnimation( bool loop = false );
     virtual int restartAnimation();

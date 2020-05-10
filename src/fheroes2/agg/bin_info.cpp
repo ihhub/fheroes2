@@ -225,7 +225,7 @@ namespace Bin_Info
         case Monster::EARTH_ELEMENT:
         case Monster::AIR_ELEMENT:
         case Monster::WATER_ELEMENT:
-            speedDiff = static_cast<double>(Monster( monsterID ).GetSpeed()) - Monster( Monster::FIRE_ELEMENT ).GetSpeed();
+            speedDiff = static_cast<double>( Monster( monsterID ).GetSpeed() ) - Monster( Monster::FIRE_ELEMENT ).GetSpeed();
             break;
         default:
             break;
