@@ -480,6 +480,18 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( Unit & attacker, Unit & 
     // first target
     res.defender = &defender;
     res.damage = attacker.GetDamage( defender );
+
+    // Genie special attack
+    if ( attacker.GetID() == Monster::GENIE && Rand::Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
+        // Replaces the damage, not adding to it
+        res.damage = defender.GetHitPoints() / 2;
+
+        if ( Arena::GetInterface() ) {
+            std::string str( _( "%{name} half the enemy troops!" ) );
+            StringReplace( str, "%{name}", attacker.GetName() );
+            Arena::GetInterface()->SetStatus( str, true );
+        }
+    }
     targets.push_back( res );
 
     // long distance attack
@@ -493,12 +505,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( Unit & attacker, Unit & 
             }
         }
     }
-    else
-        // around hydra
-        if ( attacker.GetID() == Monster::HYDRA ) {
-        std::vector<Unit *> v;
-        v.reserve( 8 );
-
+    // around hydra
+    else if ( attacker.GetID() == Monster::HYDRA ) {
         const Indexes around = Board::GetAroundIndexes( attacker );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
@@ -509,9 +517,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( Unit & attacker, Unit & 
             }
         }
     }
-    else
-        // lich cloud damages
-        if ( ( attacker.GetID() == Monster::LICH || attacker.GetID() == Monster::POWER_LICH ) && !attacker.isHandFighting() ) {
+    // lich cloud damages
+    else if ( ( attacker.GetID() == Monster::LICH || attacker.GetID() == Monster::POWER_LICH ) && !attacker.isHandFighting() ) {
         const Indexes around = Board::GetAroundIndexes( defender.GetHeadIndex() );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {

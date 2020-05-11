@@ -384,11 +384,11 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
     if ( Settings::Get().QVGA() ) {
         if ( reflect ) {
             pos.x = area.x + area.w - 40;
-            pos.y = area.y + 50;
+            pos.y = area.y + 75;
         }
         else {
             pos.x = area.x + 5;
-            pos.y = area.y + 50;
+            pos.y = area.y + 75;
         }
 
         const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
@@ -399,11 +399,11 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
     else {
         if ( reflect ) {
             pos.x = area.x + area.w - 60;
-            pos.y = area.y + 50;
+            pos.y = area.y + 75;
         }
         else {
             pos.x = area.x + 5;
-            pos.y = area.y + 50;
+            pos.y = area.y + 75;
         }
 
         const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
@@ -667,7 +667,11 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
 
 void Battle::OpponentSprite::Redraw( void ) const
 {
-    AGG::GetICN( icn, animframe, reflect ).Blit( pos.x, pos.y );
+    const Sprite & hero = AGG::GetICN( icn, animframe, reflect );
+    if ( reflect )
+        hero.Blit( pos.x - hero.w() + 55, pos.y );
+    else
+        hero.Blit( pos.x, pos.y );
 }
 
 Battle::Status::Status()
@@ -4296,10 +4300,11 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 
             if ( enemy ) {
                 const s32 cost = arena.GetCurrentForce().GetSurrenderCost();
+                const Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
 
-                if ( !world.GetKingdom( arena.GetCurrentColor() ).AllowPayment( Funds( Resource::GOLD, cost ) ) )
+                if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) )
                     Dialog::Message( "", _( "You don't have enough gold!" ), Font::BIG, Dialog::OK );
-                else if ( DialogBattleSurrender( *enemy, cost ) ) {
+                else if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
                     a.push_back( Command( MSG_BATTLE_SURRENDER ) );
                     a.push_back( Command( MSG_BATTLE_END_TURN, b_current->GetUID() ) );
                     humanturn_exit = true;

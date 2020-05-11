@@ -160,7 +160,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     // message loop
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        if ( PressIntKey( min, max, cur ) ) {
+        if ( PressIntKey( max, cur ) ) {
             sel.SetCur( cur );
             redraw_count = true;
         }
@@ -385,7 +385,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     // message loop
     int bres = Dialog::ZERO;
     while ( bres == Dialog::ZERO && le.HandleEvents() ) {
-        if ( PressIntKey( min, max, cur ) ) {
+        if ( PressIntKey( max, cur ) ) {
             sel.SetCur( cur );
             redraw_count = true;
         }

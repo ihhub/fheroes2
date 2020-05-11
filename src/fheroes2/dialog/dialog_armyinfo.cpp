@@ -38,8 +38,9 @@
 #include "text.h"
 #include "world.h"
 
-void DrawMonsterStats( const Point &, const Troop & );
+void DrawMonsterStats( const Point & dst, const Troop & troop );
 void DrawBattleStats( const Point &, const Troop & );
+void DrawMonsterInfo( const Point & dst, const Troop & troop );
 
 int Dialog::ArmyInfo( const Troop & troop, int flags )
 {
@@ -58,37 +59,22 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
     const Rect & pos_rt = back.GetArea();
     sprite_dialog.Blit( pos_rt.x, pos_rt.y, display );
 
-    Point dst_pt;
-    Text text;
+    const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 40 );
+    DrawMonsterStats( monsterStatOffset, troop );
 
-    dst_pt.x = pos_rt.x + 400;
-    dst_pt.y = pos_rt.y + 40;
+    const Point battleStatOffset( pos_rt.x + 400, pos_rt.y + 205 );
+    if ( troop.isBattle() )
+        DrawBattleStats( battleStatOffset, troop );
 
-    DrawMonsterStats( dst_pt, troop );
+    DrawMonsterInfo( pos_rt, troop );
 
-    if ( troop.isBattle() ) {
-        dst_pt.x = pos_rt.x + 400;
-        dst_pt.y = pos_rt.y + 205;
-
-        DrawBattleStats( dst_pt, troop );
-    }
-
-    // name
-    text.Set( troop.GetName(), Font::YELLOW_BIG );
-    dst_pt.x = pos_rt.x + 140 - text.w() / 2;
-    dst_pt.y = pos_rt.y + 40;
-    text.Blit( dst_pt );
-
-    // count
-    text.Set( GetString( troop.GetCount() ), Font::BIG );
-    dst_pt.x = pos_rt.x + 140 - text.w() / 2;
-    dst_pt.y = pos_rt.y + 225;
-    text.Blit( dst_pt );
-
+    RandomMonsterAnimation monsterAnimation( troop );
     const Sprite & frame = AGG::GetICN( troop.ICNMonh(), 0 );
-    frame.Blit( pos_rt.x + ( pos_rt.w / 2 - frame.w() ) / 2, pos_rt.y + 180 - frame.h() );
+    const Point monsterOffset( pos_rt.x + pos_rt.w / 4, pos_rt.y + 180 );
+    frame.Blit( monsterOffset - Point( frame.w() / 2, frame.h() ) );
 
     // button upgrade
+    Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
     dst_pt.x = pos_rt.x + 284;
     dst_pt.y = pos_rt.y + 190;
     Button buttonUpgrade( dst_pt.x, dst_pt.y, viewarmy, 5, 6 );
@@ -169,6 +155,37 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
                 if ( le.MouseClickLeft( buttonExit ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
                 result = Dialog::CANCEL;
                 break;
+            }
+
+            if ( Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+                cursor.Hide();
+
+                sprite_dialog.Blit( pos_rt.x, pos_rt.y, display );
+
+                DrawMonsterStats( monsterStatOffset, troop );
+
+                if ( troop.isBattle() )
+                    DrawBattleStats( battleStatOffset, troop );
+
+                DrawMonsterInfo( pos_rt, troop );
+
+                const Sprite & smonster = AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId(), false );
+                const Point monsterPos( monsterOffset.x + smonster.x() - ( troop.isWide() ? 23 : 0 ) - monsterAnimation.offset(), monsterOffset.y + smonster.y() );
+                smonster.Blit( monsterPos );
+
+                monsterAnimation.increment();
+
+                if ( buttonUpgrade.isEnable() )
+                    buttonUpgrade.Draw();
+
+                if ( buttonDismiss.isEnable() )
+                    buttonDismiss.Draw();
+
+                if ( buttonExit.isEnable() )
+                    buttonExit.Draw();
+
+                cursor.Show();
+                display.Flip();
             }
         }
         else {
@@ -367,6 +384,20 @@ void DrawBattleStats( const Point & dst, const Troop & b )
                 ow += sprite.w() + 4;
             }
         }
+}
+
+void DrawMonsterInfo( const Point & offset, const Troop & troop )
+{
+    // name
+    Text text( troop.GetName(), Font::YELLOW_BIG );
+    Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
+    text.Blit( pos );
+
+    // count
+    text.Set( GetString( troop.GetCount() ), Font::BIG );
+    pos.x = offset.x + 140 - text.w() / 2;
+    pos.y = offset.y + 225;
+    text.Blit( pos );
 }
 
 int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )

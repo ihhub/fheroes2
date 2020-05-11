@@ -260,7 +260,8 @@ void Dialog::ExtSettings( bool readonly )
 
     LocalEvent & le = LocalEvent::Get();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
+    const Rect buttonsArea( Point( area.x + 5, area.y ), Size( area.w - 10, area.h - 5 ) );
+    ButtonGroups btnGroups( buttonsArea, Dialog::OK | Dialog::CANCEL );
     btnGroups.Draw();
 
     cursor.Show();

@@ -348,7 +348,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             redraw = true;
         }
 
-        if ( PressIntKey( 0, max, result ) ) {
+        if ( PressIntKey( max, result ) ) {
             paymentCosts = paymentMonster * result;
             redraw = true;
             maxmin.clear();

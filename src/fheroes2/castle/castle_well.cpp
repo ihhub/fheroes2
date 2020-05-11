@@ -101,13 +101,13 @@ void Castle::OpenWell( void )
 
     buttonExit.Draw();
 
-    std::vector<MonsterAnimation> monsterAnimInfo;
-    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, DWELLING_MONSTER1 ) ) );
-    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) ) );
-    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ) ) );
-    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ) ) );
-    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ) ) );
-    monsterAnimInfo.push_back( MonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ) ) );
+    std::vector<RandomMonsterAnimation> monsterAnimInfo;
+    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, DWELLING_MONSTER1 ) ) );
+    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) ) );
+    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ) ) );
+    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ) ) );
+    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ) ) );
+    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ) ) );
 
     WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
@@ -198,7 +198,7 @@ void Castle::OpenWell( void )
     }
 }
 
-void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<MonsterAnimation> & monsterAnimInfo )
+void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo )
 {
     AGG::GetICN( ICN::WELLBKG, 0 ).Blit( cur_pt );
 
@@ -366,7 +366,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<Monster
         else
             dst_pt.x = pt.x + 193 + smonster.x() - ( monster.isWide() ? 23 : 0 ) - monsterAnimInfo[monsterId].offset();
 
-        dst_pt.y = pt.y + 124 - smonster.h() + ( smonster.y() + smonster.h() );
+        dst_pt.y = pt.y + 124 + smonster.y();
 
         smonster.Blit( dst_pt );
 
