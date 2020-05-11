@@ -39,6 +39,37 @@
 
 namespace AI
 {
+    struct Queue : public std::list<s32>
+    {
+        bool isPresent( s32 ) const;
+    };
+
+    struct IndexObjectMap : public std::map<s32, int>
+    {
+        void DumpObjects( const IndexDistance & id );
+    };
+
+    struct AIKingdom
+    {
+        AIKingdom()
+            : capital( NULL ){};
+        void Reset( void );
+
+        Castle * capital;
+        IndexObjectMap scans;
+    };
+
+    struct AIHero
+    {
+        AIHero();
+        void ClearTasks();
+        void Reset();
+
+        Queue sheduled_visit;
+        s32 primary_target;
+        u32 fix_loop;
+    };
+
     class Simple : public Base
     {
     public:
@@ -48,8 +79,6 @@ namespace AI
         void KingdomTurn( Kingdom & );
         void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
 
-        void HeroesAdd( const Heroes & );
-        void HeroesRemove( const Heroes & );
         void HeroesPreBattle( HeroBase & );
         void HeroesAfterBattle( HeroBase & );
         void HeroesPostLoad( Heroes & );
@@ -59,10 +88,8 @@ namespace AI
         bool HeroesSkipFog( void );
         std::string HeroesString( const Heroes & );
 
-        void CastleAdd( const Castle & );
         void CastleRemove( const Castle & );
         void CastlePreBattle( Castle & );
-        void CastleAfterBattle( Castle &, bool attacker_wins );
 
         const char * Type( void ) const;
         const char * License( void ) const;
@@ -91,42 +118,4 @@ namespace AI
         bool IsPriorityAndNotVisitAndNotPresent( const std::pair<s32, int> & indexObj, const Heroes * hero );
     };
 }
-
-struct AIKingdom
-{
-    AIKingdom()
-        : capital( NULL ){};
-    void Reset( void );
-
-    Castle * capital;
-    IndexObjectMap scans;
-};
-
-struct AIHero
-{
-    AIHero()
-        : primary_target( -1 )
-        , fix_loop( 0 ){};
-
-    void ClearTasks( void )
-    {
-        sheduled_visit.clear();
-    }
-    void Reset( void );
-
-    Queue sheduled_visit;
-    s32 primary_target;
-    u32 fix_loop;
-};
-
-struct Queue : public std::list<s32>
-{
-    bool isPresent( s32 ) const;
-};
-
-struct IndexObjectMap : public std::map<s32, int>
-{
-    void DumpObjects( const IndexDistance & id );
-};
-
 #endif

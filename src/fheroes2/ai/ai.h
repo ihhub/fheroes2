@@ -74,7 +74,7 @@ namespace AI
         virtual const char * License( void ) const;
     };
 
-    static Base & Get();
+    Base & Get();
 
     void HeroesAction( Heroes & hero, s32 dst_index );
     bool HeroesValidObject( const Heroes & hero, s32 index );

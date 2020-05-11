@@ -147,7 +147,7 @@ namespace AI
             castle.RecruitAllMonster();
     }
 
-    void AI::Simple::CastleTurn( Castle & castle )
+    void Simple::CastleTurn( Castle & castle )
     {
         // skip neutral town
         if ( castle.GetColor() == Color::NONE )
@@ -214,7 +214,7 @@ namespace AI
         }
     }
 
-    void AI::Simple::CastlePreBattle( Castle & castle )
+    void Simple::CastlePreBattle( Castle & castle )
     {
         Heroes * hero = castle.GetHeroes().GuardFirst();
         if ( hero && castle.GetArmy().isValid() )

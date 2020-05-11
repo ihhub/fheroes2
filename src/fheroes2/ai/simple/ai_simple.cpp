@@ -38,11 +38,9 @@ namespace AI
 {
     Simple::Simple()
         : Base()
-        , _kingdoms(KINGDOMMAX + 1)
+        , _kingdoms( KINGDOMMAX + 1 )
         , _heroes( HEROESMAXCOUNT + 2 )
-    {
-
-    }
+    {}
 
     AIKingdom & Simple::GetKingdom( int color )
     {
@@ -73,17 +71,39 @@ namespace AI
             it->Reset();
         }
     }
-}
 
-bool Queue::isPresent( s32 index ) const
-{
-    return end() != std::find( begin(), end(), index );
-}
+    AIHero::AIHero()
+        : primary_target( -1 )
+        , fix_loop( 0 ){};
 
-void IndexObjectMap::DumpObjects( const IndexDistance & id )
-{
-    IndexObjectMap::const_iterator it = find( id.first );
+    void AIHero::ClearTasks( void )
+    {
+        sheduled_visit.clear();
+    }
 
-    if ( it != end() )
-        DEBUG( DBG_AI, DBG_TRACE, MP2::StringObject( ( *it ).second ) << ", maps index: " << id.first << ", dist: " << id.second );
+    void AIHero::Reset( void )
+    {
+        primary_target = -1;
+        sheduled_visit.clear();
+        fix_loop = 0;
+    }
+
+    void AIKingdom::Reset( void )
+    {
+        capital = NULL;
+        scans.clear();
+    }
+
+    bool Queue::isPresent( s32 index ) const
+    {
+        return end() != std::find( begin(), end(), index );
+    }
+
+    void IndexObjectMap::DumpObjects( const IndexDistance & id )
+    {
+        IndexObjectMap::const_iterator it = find( id.first );
+
+        if ( it != end() )
+            DEBUG( DBG_AI, DBG_TRACE, MP2::StringObject( ( *it ).second ) << ", maps index: " << id.first << ", dist: " << id.second );
+    }
 }
