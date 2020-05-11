@@ -359,21 +359,21 @@ void Battle::Unit::InitContours( void )
 
     for ( int i = 0; i < msi.frm_idle.count; ++i ) {
         const Sprite s = AGG::GetICN( msi.icn_file, msi.frm_idle.start + i, false );
-        contoursMain[ msi.frm_idle.start + i ] = s.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWB[ msi.frm_idle.start + i ] =  s.RenderGrayScale();
+        contoursMain[msi.frm_idle.start + i] = s.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWB[msi.frm_idle.start + i] = s.RenderGrayScale();
         if ( i == 0 ) {
-            contoursMain[ Monster_State::STATIC ] = contoursMain[ msi.frm_idle.start + i ];
-            contoursWB[ Monster_State::STATIC ] = contoursWB[ msi.frm_idle.start + i ];
+            contoursMain[Monster_State::STATIC] = contoursMain[msi.frm_idle.start + i];
+            contoursWB[Monster_State::STATIC] = contoursWB[msi.frm_idle.start + i];
         }
     }
 
     for ( int i = 0; i < msi.frm_idle.count; ++i ) {
         const Sprite s = AGG::GetICN( msi.icn_file, msi.frm_idle.start + i, true );
-        contoursReflect[ msi.frm_idle.start + i ] = s.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWBReflect[ msi.frm_idle.start + i ] = s.RenderGrayScale();
+        contoursReflect[msi.frm_idle.start + i] = s.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWBReflect[msi.frm_idle.start + i] = s.RenderGrayScale();
         if ( i == 0 ) {
-            contoursReflect[ Monster_State::STATIC ] = contoursReflect[ msi.frm_idle.start + i ];
-            contoursWBReflect[ Monster_State::STATIC ] = contoursWBReflect[ msi.frm_idle.start + i ];
+            contoursReflect[Monster_State::STATIC] = contoursReflect[msi.frm_idle.start + i];
+            contoursWBReflect[Monster_State::STATIC] = contoursWBReflect[msi.frm_idle.start + i];
         }
     }
 }
