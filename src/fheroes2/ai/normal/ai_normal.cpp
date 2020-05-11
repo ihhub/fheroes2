@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,22 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
 #include "ai.h"
-#include "battle.h"
+#include "agg.h"
 #include "battle_arena.h"
 #include "battle_command.h"
 #include "battle_troop.h"
-#include "castle.h"
-#include "dialog.h"
 #include "game_interface.h"
+#include "mus.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "settings.h"
 
 const char * AI::Type( void )
 {
-    return "empty";
+    return "normal";
 }
 
 const char * AI::License( void )

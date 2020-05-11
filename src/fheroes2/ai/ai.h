@@ -47,38 +47,45 @@ namespace AI
         HEROES_STUPID = 0x80000000
     };
 
-    void Init( void );
+    class Base
+    {
+    public:
+        virtual void KingdomTurn( Kingdom & );
+        virtual void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
 
-    void KingdomTurn( Kingdom & );
-    void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
-    bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
+        virtual void HeroesAdd( const Heroes & );
+        virtual void HeroesRemove( const Heroes & );
+        virtual void HeroesPreBattle( HeroBase & );
+        virtual void HeroesAfterBattle( HeroBase & );
+        virtual void HeroesPostLoad( Heroes & );
+        virtual void HeroesActionComplete( Heroes &, s32 );
+        virtual void HeroesActionNewPosition( Heroes & );
+        virtual void HeroesLevelUp( Heroes & );
+        virtual bool HeroesSkipFog( void );
+        virtual std::string HeroesString( const Heroes & );
 
-    void HeroesAdd( const Heroes & );
-    void HeroesRemove( const Heroes & );
-    void HeroesTurn( Heroes & );
-    void HeroesMove( Heroes & );
-    bool HeroesGetTask( Heroes & );
-    void HeroesPreBattle( HeroBase & );
-    void HeroesAfterBattle( HeroBase & );
-    void HeroesPostLoad( Heroes & );
-    bool HeroesValidObject( const Heroes &, s32 );
-    bool HeroesCanMove( const Heroes & );
-    void HeroesAction( Heroes &, s32 );
-    void HeroesActionComplete( Heroes &, s32 );
-    void HeroesActionNewPosition( Heroes & );
-    void HeroesLevelUp( Heroes & );
-    void HeroesClearTask( const Heroes & );
-    bool HeroesSkipFog( void );
-    std::string HeroesString( const Heroes & );
+        virtual void CastleAdd( const Castle & );
+        virtual void CastleRemove( const Castle & );
+        virtual void CastlePreBattle( Castle & );
+        virtual void CastleAfterBattle( Castle &, bool attacker_wins );
 
-    void CastleAdd( const Castle & );
-    void CastleRemove( const Castle & );
-    void CastleTurn( Castle & );
-    void CastlePreBattle( Castle & );
-    void CastleAfterBattle( Castle &, bool attacker_wins );
+        virtual const char * Type( void );
+        virtual const char * License( void );
+    protected:
+        Base();
+        //bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
+        //bool HeroesGetTask( Heroes & );
+        //bool HeroesCanMove( const Heroes & );
+        //void HeroesTurn( Heroes & );
+        //void CastleTurn( Castle & );
+        //void HeroesClearTask( const Heroes & );
+    };
 
-    const char * Type( void );
-    const char * License( void );
+    Base & Get();
+
+    void HeroesAction( Heroes & hero, s32 dst_index );
+    bool HeroesValidObject( const Heroes & hero, s32 index );
+    void HeroesMove( Heroes & hero );
 }
 
 #endif
