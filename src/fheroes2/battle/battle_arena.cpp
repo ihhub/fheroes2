@@ -355,7 +355,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
                 RemoteTurn( *current_troop, actions );
             else {
                 if ( current_troop->isControlAI() || ( current_color & auto_battle ) ) {
-                    AI::BattleTurn( *this, *current_troop, actions );
+                    AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
                 else if ( current_troop->isControlHuman() )
                     HumanTurn( *current_troop, actions );
@@ -498,7 +498,7 @@ void Battle::Arena::Turns( void )
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
     DEBUG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
-    AI::BattleTurn( *this, b, a );
+    AI::Get().BattleTurn( *this, b, a );
 }
 
 void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
