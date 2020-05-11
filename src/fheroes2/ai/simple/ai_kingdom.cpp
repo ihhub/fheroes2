@@ -44,35 +44,10 @@
 #include "settings.h"
 #include "world.h"
 
-AIKingdoms & AIKingdoms::Get( void )
-{
-    static AIKingdoms ai_kingdoms;
-    return ai_kingdoms;
-}
-
-AIKingdom & AIKingdoms::Get( int color )
-{
-    return AIKingdoms::Get().at( Color::GetIndex( color ) );
-}
-
-void AIKingdoms::Reset( void )
-{
-    AIKingdoms & ai = AIKingdoms::Get();
-    std::for_each( ai.begin(), ai.end(), std::mem_fun_ref( &AIKingdom::Reset ) );
-}
-
 void AIKingdom::Reset( void )
 {
     capital = NULL;
     scans.clear();
-}
-
-void IndexObjectMap::DumpObjects( const IndexDistance & id )
-{
-    IndexObjectMap::const_iterator it = find( id.first );
-
-    if ( it != end() )
-        DEBUG( DBG_AI, DBG_TRACE, MP2::StringObject( ( *it ).second ) << ", maps index: " << id.first << ", dist: " << id.second );
 }
 
 void WorldStoreObjects( int color, IndexObjectMap & store )
@@ -133,7 +108,7 @@ void AI::Simple::KingdomTurn( Kingdom & kingdom )
         AGG::PlayMusic( MUS::COMPUTER );
 
     Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
-    AIKingdom & ai = AIKingdoms::Get( color );
+    AIKingdom & ai = GetKingdom( color );
 
     // turn indicator
     status.RedrawTurnProgress( 0 );

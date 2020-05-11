@@ -32,9 +32,28 @@
 #include "ai_simple.h"
 #include "castle.h"
 #include "heroes.h"
+#include "settings.h"
 
 namespace AI
 {
+    Simple::Simple()
+        : Base()
+        , _kingdoms(KINGDOMMAX + 1)
+        , _heroes( HEROESMAXCOUNT + 2 )
+    {
+
+    }
+
+    AIKingdom & Simple::GetKingdom( int color )
+    {
+        return _kingdoms.at( Color::GetIndex( color ) );
+    }
+
+    AIHero & Simple::GetHero( const Heroes & hero )
+    {
+        return _heroes.at( hero.GetID() );
+    }
+
     const char * Simple::Type( void ) const
     {
         return "simple";
@@ -45,30 +64,26 @@ namespace AI
         return "Non-Commercial";
     }
 
-    void Simple::HeroesAdd( const Heroes & ) {}
-
-    void Simple::HeroesRemove( const Heroes & ) {}
-
-    void Simple::CastleAdd( const Castle & ) {}
-
-    void Simple::CastleRemove( const Castle & castle )
-    {
-        AIKingdom & ai = AIKingdoms::Get( castle.GetColor() );
-
-        if ( ai.capital == &castle ) {
-            ai.capital->ResetModes( Castle::CAPITAL );
-            ai.capital = NULL;
-        }
-    }
-
     void Simple::Reset( void )
     {
-        AIKingdoms::Reset();
-        AIHeroes::Reset();
+        for ( std::vector<AIKingdom>::iterator it = _kingdoms.begin(); it != _kingdoms.end(); ++it ) {
+            it->Reset();
+        }
+        for ( std::vector<AIHero>::iterator it = _heroes.begin(); it != _heroes.end(); ++it ) {
+            it->Reset();
+        }
     }
 }
 
 bool Queue::isPresent( s32 index ) const
 {
     return end() != std::find( begin(), end(), index );
+}
+
+void IndexObjectMap::DumpObjects( const IndexDistance & id )
+{
+    IndexObjectMap::const_iterator it = find( id.first );
+
+    if ( it != end() )
+        DEBUG( DBG_AI, DBG_TRACE, MP2::StringObject( ( *it ).second ) << ", maps index: " << id.first << ", dist: " << id.second );
 }

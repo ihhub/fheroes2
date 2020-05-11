@@ -72,13 +72,6 @@ namespace AI
 
         virtual const char * Type( void ) const;
         virtual const char * License( void ) const;
-
-    protected:
-        // bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
-        // bool HeroesGetTask( Heroes & );
-        // bool HeroesCanMove( const Heroes & );
-        // void HeroesTurn( Heroes & );
-        // void CastleTurn( Castle & );
     };
 
     static Base & Get();

@@ -53,7 +53,6 @@ namespace AI
         void HeroesPreBattle( HeroBase & );
         void HeroesAfterBattle( HeroBase & );
         void HeroesPostLoad( Heroes & );
-        void HeroesActionComplete( Heroes &, s32 );
         void HeroesActionNewPosition( Heroes & );
         void HeroesClearTask( const Heroes & );
         void HeroesLevelUp( Heroes & );
@@ -67,32 +66,31 @@ namespace AI
 
         const char * Type( void ) const;
         const char * License( void ) const;
-        
-        // Additional methods
-        bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
-        bool HeroesGetTask( Heroes & );
-        bool HeroesCanMove( const Heroes & );
-        void HeroesTurn( Heroes & );
-        void CastleTurn( Castle & );
-
-        void HeroesTurnEnd( Heroes * hero );
-        void HeroesSetHunterWithTarget( Heroes * hero, s32 dst );
-        void HeroesCaptureNearestTown( Heroes * hero );
 
         void Reset();
-        AIKingdom & GetKingdom( void );
+        AIKingdom & GetKingdom( int color );
         AIHero & GetHero( const Heroes & );
 
     private:
         std::vector<AIKingdom> _kingdoms;
         std::vector<AIHero> _heroes;
+
+        // Additional methods called only internally
+        bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
+        void CastleTurn( Castle & );
+
+        bool HeroesGetTask( Heroes & );
+        void HeroesAddedRescueTask( Heroes & hero );
+        void HeroesAddedTask( Heroes & hero );
+        void HeroesTurn( Heroes & );
+        void HeroesTurnEnd( Heroes * hero );
+        void HeroesSetHunterWithTarget( Heroes * hero, s32 dst );
+        void HeroesCaptureNearestTown( Heroes * hero );
+        bool HeroesScheduledVisit( const Kingdom & kingdom, s32 index );
+
+        bool IsPriorityAndNotVisitAndNotPresent( const std::pair<s32, int> & indexObj, const Heroes * hero );
     };
 }
-
-struct IndexObjectMap : public std::map<s32, int>
-{
-    void DumpObjects( const IndexDistance & id );
-};
 
 struct AIKingdom
 {
@@ -102,23 +100,6 @@ struct AIKingdom
 
     Castle * capital;
     IndexObjectMap scans;
-};
-
-class AIKingdoms : public std::vector<AIKingdom>
-{
-public:
-    static AIKingdom & Get( int color );
-    static void Reset( void );
-
-private:
-    static AIKingdoms & Get( void );
-    AIKingdoms()
-        : std::vector<AIKingdom>( KINGDOMMAX + 1 ){};
-};
-
-struct Queue : public std::list<s32>
-{
-    bool isPresent( s32 ) const;
 };
 
 struct AIHero
@@ -138,16 +119,14 @@ struct AIHero
     u32 fix_loop;
 };
 
-struct AIHeroes : public std::vector<AIHero>
+struct Queue : public std::list<s32>
 {
-public:
-    static AIHero & Get( const Heroes & );
-    static void Reset( void );
+    bool isPresent( s32 ) const;
+};
 
-private:
-    static AIHeroes & Get( void );
-    AIHeroes()
-        : std::vector<AIHero>( HEROESMAXCOUNT + 2 ){};
+struct IndexObjectMap : public std::map<s32, int>
+{
+    void DumpObjects( const IndexDistance & id );
 };
 
 #endif

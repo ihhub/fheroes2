@@ -50,23 +50,6 @@
 
 #define HERO_MAX_SHEDULED_TASK 7
 
-AIHeroes & AIHeroes::Get( void )
-{
-    static AIHeroes ai_heroes;
-    return ai_heroes;
-}
-
-AIHero & AIHeroes::Get( const Heroes & ht )
-{
-    return AIHeroes::Get().at( ht.GetID() );
-}
-
-void AIHeroes::Reset( void )
-{
-    AIHeroes & ai = AIHeroes::Get();
-    std::for_each( ai.begin(), ai.end(), std::mem_fun_ref( &AIHero::Reset ) );
-}
-
 void AIHero::Reset( void )
 {
     primary_target = -1;
@@ -79,13 +62,11 @@ bool AI::Simple::HeroesSkipFog( void )
     return false;
 }
 
-//void AI::Simple::HeroesActionComplete( Heroes &, s32 ) {}
-
 std::string AI::Simple::HeroesString( const Heroes & hero )
 {
     std::ostringstream os;
 
-    AIHero & ai_hero = AIHeroes::Get( hero );
+    AIHero & ai_hero = GetHero( hero );
     Queue & task = ai_hero.sheduled_visit;
 
     os << "flags           : " << ( hero.Modes( AI::HEROES_SCOUTER ) ? "SCOUTER," : "" ) << ( hero.Modes( AI::HEROES_HUNTER ) ? "HUNTER," : "" )
@@ -124,7 +105,7 @@ void AI::Simple::HeroesAfterBattle( HeroBase & hero ) {}
 
 void AI::Simple::HeroesClearTask( const Heroes & hero )
 {
-    AIHeroes::Get( hero ).ClearTasks();
+    GetHero( hero ).ClearTasks();
 }
 
 bool AIHeroesValidObject2( const Heroes * hero, s32 index )
@@ -232,9 +213,9 @@ s32 GetRandomHeroesPosition( Heroes & hero, u32 scoute )
     return result;
 }
 
-void AIHeroesAddedRescueTask( Heroes & hero )
+void AI::Simple::HeroesAddedRescueTask( Heroes & hero )
 {
-    AIHero & ai_hero = AIHeroes::Get( hero );
+    AIHero & ai_hero = GetHero( hero );
     Queue & task = ai_hero.sheduled_visit;
 
     DEBUG( DBG_AI, DBG_TRACE, hero.GetName() );
@@ -277,10 +258,10 @@ void AIHeroesAddedRescueTask( Heroes & hero )
         task.push_back( index );
 }
 
-void AIHeroesAddedTask( Heroes & hero )
+void AI::Simple::HeroesAddedTask( Heroes & hero )
 {
-    AIHero & ai_hero = AIHeroes::Get( hero );
-    AIKingdom & ai_kingdom = AIKingdoms::Get( hero.GetColor() );
+    AIHero & ai_hero = GetHero( hero );
+    AIKingdom & ai_kingdom = GetKingdom( hero.GetColor() );
 
     Queue & task = ai_hero.sheduled_visit;
     IndexObjectMap & ai_objects = ai_kingdom.scans;
@@ -334,12 +315,12 @@ void AIHeroesAddedTask( Heroes & hero )
     }
 
     if ( task.empty() )
-        AIHeroesAddedRescueTask( hero );
+        HeroesAddedRescueTask( hero );
 }
 
 void AI::Simple::HeroesActionNewPosition( Heroes & hero )
 {
-    AIHero & ai_hero = AIHeroes::Get( hero );
+    AIHero & ai_hero = GetHero( hero );
     // AIKingdom & ai_kingdom = AIKingdoms::Get(hero.GetColor());
     Queue & task = ai_hero.sheduled_visit;
 
@@ -360,8 +341,8 @@ bool AI::Simple::HeroesGetTask( Heroes & hero )
     results.reserve( 5 );
 
     const Settings & conf = Settings::Get();
-    AIHero & ai_hero = AIHeroes::Get( hero );
-    AIKingdom & ai_kingdom = AIKingdoms::Get( hero.GetColor() );
+    AIHero & ai_hero = GetHero( hero );
+    AIKingdom & ai_kingdom = GetKingdom( hero.GetColor() );
 
     Queue & task = ai_hero.sheduled_visit;
     IndexObjectMap & ai_objects = ai_kingdom.scans;
@@ -535,7 +516,7 @@ bool AI::Simple::HeroesGetTask( Heroes & hero )
     if ( task.empty() ) {
         // get task from kingdom
         DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", empty task" );
-        AIHeroesAddedTask( hero );
+        HeroesAddedTask( hero );
     }
     else
         // remove invalid task
@@ -617,10 +598,10 @@ void AI::Simple::HeroesTurn( Heroes & hero )
     DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", end" );
 }
 
-bool AIHeroesScheduledVisit( const Kingdom & kingdom, s32 index )
+bool AI::Simple::HeroesScheduledVisit( const Kingdom & kingdom, s32 index )
 {
     for ( KingdomHeroes::const_iterator it = kingdom.GetHeroes().begin(); it != kingdom.GetHeroes().end(); ++it ) {
-        AIHero & ai_hero = AIHeroes::Get( **it );
+        AIHero & ai_hero = GetHero( **it );
         Queue & task = ai_hero.sheduled_visit;
         if ( task.isPresent( index ) )
             return true;
@@ -628,19 +609,19 @@ bool AIHeroesScheduledVisit( const Kingdom & kingdom, s32 index )
     return false;
 }
 
-bool IsPriorityAndNotVisitAndNotPresent( const std::pair<s32, int> & indexObj, const Heroes * hero )
+bool AI::Simple::IsPriorityAndNotVisitAndNotPresent( const std::pair<s32, int> & indexObj, const Heroes * hero )
 {
-    AIHero & ai_hero = AIHeroes::Get( *hero );
+    AIHero & ai_hero = GetHero( *hero );
     Queue & task = ai_hero.sheduled_visit;
 
-    return AIHeroesPriorityObject( *hero, indexObj.first ) && !AIHeroesScheduledVisit( hero->GetKingdom(), indexObj.first ) && !task.isPresent( indexObj.first );
+    return AIHeroesPriorityObject( *hero, indexObj.first ) && !HeroesScheduledVisit( hero->GetKingdom(), indexObj.first ) && !task.isPresent( indexObj.first );
 }
 
 void AI::Simple::HeroesTurnEnd( Heroes * hero )
 {
     if ( hero ) {
-        AIHero & ai_hero = AIHeroes::Get( *hero );
-        AIKingdom & ai_kingdom = AIKingdoms::Get( hero->GetColor() );
+        AIHero & ai_hero = GetHero( *hero );
+        AIKingdom & ai_kingdom = GetKingdom( hero->GetColor() );
         Queue & task = ai_hero.sheduled_visit;
         IndexObjectMap & ai_objects = ai_kingdom.scans;
 
@@ -669,7 +650,7 @@ void AI::Simple::HeroesTurnEnd( Heroes * hero )
 void AI::Simple::HeroesSetHunterWithTarget( Heroes * hero, s32 dst )
 {
     if ( hero ) {
-        AIHero & ai_hero = AIHeroes::Get( *hero );
+        AIHero & ai_hero = GetHero( *hero );
 
         hero->SetModes( AI::HEROES_HUNTER );
 
@@ -682,7 +663,7 @@ void AI::Simple::HeroesSetHunterWithTarget( Heroes * hero, s32 dst )
 void AI::Simple::HeroesCaptureNearestTown( Heroes * hero )
 {
     if ( hero ) {
-        AIHero & ai_hero = AIHeroes::Get( *hero );
+        AIHero & ai_hero = GetHero( *hero );
 
         if ( 0 > ai_hero.primary_target ) {
             const Maps::Indexes & castles = Maps::GetObjectPositions( hero->GetIndex(), MP2::OBJ_CASTLE, true );
