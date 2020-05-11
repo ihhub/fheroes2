@@ -309,13 +309,13 @@ Surface Battle::Unit::GetContour( int val ) const
 {
     switch ( val ) {
     case CONTOUR_MAIN:
-        return contours[0];
+        return contoursMain.at( GetFrame() );
     case CONTOUR_REFLECT:
-        return contours[1];
-    case CONTOUR_BLACK:
-        return contours[2];
-    case CONTOUR_BLACK | CONTOUR_REFLECT:
-        return contours[3];
+        return contoursReflect.at( GetFrame() );
+    case CONTOUR_BLACK: // TODO: really get contour for stunned unit?
+        return contoursWB.at( GetFrame() );
+    case CONTOUR_BLACK | CONTOUR_REFLECT: // TODO: really get contour for stunned unit?
+        return contoursWBReflect.at( GetFrame() );
     default:
         break;
     }
@@ -356,18 +356,26 @@ u32 Battle::Unit::GetUID( void ) const
 void Battle::Unit::InitContours( void )
 {
     const monstersprite_t & msi = GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, false );
-    const Sprite & sprite2 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, true );
 
-    // main sprite
-    contours[0] = sprite1.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+    for ( int i = 0; i < msi.frm_idle.count; ++i ) {
+        const Sprite s = AGG::GetICN( msi.icn_file, msi.frm_idle.start + i, false );
+        contoursMain[ msi.frm_idle.start + i ] = s.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWB[ msi.frm_idle.start + i ] =  s.RenderGrayScale();
+        if ( i == 0 ) {
+            contoursMain[ Monster_State::STATIC ] = contoursMain[ msi.frm_idle.start + i ];
+            contoursWB[ Monster_State::STATIC ] = contoursWB[ msi.frm_idle.start + i ];
+        }
+    }
 
-    // revert sprite
-    contours[1] = sprite2.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-
-    // create white black sprite
-    contours[2] = sprite1.RenderGrayScale();
-    contours[3] = sprite2.RenderGrayScale();
+    for ( int i = 0; i < msi.frm_idle.count; ++i ) {
+        const Sprite s = AGG::GetICN( msi.icn_file, msi.frm_idle.start + i, true );
+        contoursReflect[ msi.frm_idle.start + i ] = s.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWBReflect[ msi.frm_idle.start + i ] = s.RenderGrayScale();
+        if ( i == 0 ) {
+            contoursReflect[ Monster_State::STATIC ] = contoursReflect[ msi.frm_idle.start + i ];
+            contoursWBReflect[ Monster_State::STATIC ] = contoursWBReflect[ msi.frm_idle.start + i ];
+        }
+    }
 }
 
 void Battle::Unit::SetMirror( Unit * ptr )

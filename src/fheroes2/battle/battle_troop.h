@@ -206,7 +206,10 @@ namespace Battle
         Position position;
         ModesAffected affected;
         Unit * mirror;
-        Surface contours[4];
+        std::map<int, Surface> contoursMain;
+        std::map<int, Surface> contoursReflect;
+        std::map<int, Surface> contoursWB; // white black, really get contour for stunned unit?
+        std::map<int, Surface> contoursWBReflect; // white black reflect, really get contour for stunned unit?
 
         bool blindanswer;
     };

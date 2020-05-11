@@ -1766,7 +1766,8 @@ u32 Monster::GetCountFromHitPoints( const Monster & mons, u32 hp )
 
 const Monster::monstersprite_t & Monster::GetMonsterSprite() const
 {
-    return monsters_info[GetID()];
+    const int id = GetID();
+    return monsters_info[id];
 }
 
 RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
