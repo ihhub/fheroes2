@@ -200,6 +200,8 @@ AnimationReference::AnimationReference( int monsterID )
     }
 
     // Movement sequences
+    _offsetX = _monsterInfo.frameXOffset;
+
     // Every unit has MOVE_MAIN anim, use it as a base
     appendFrames( _moving, Bin_Info::MonsterAnimInfo::MOVE_TILE_START );
     appendFrames( _moving, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
@@ -258,8 +260,6 @@ AnimationReference::AnimationReference( int monsterID )
         appendFrames( _ranged[Monster_Info::BOTTOM].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX3 );
         appendFrames( _ranged[Monster_Info::BOTTOM].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX3_END );
     }
-
-    _offsetX = _monsterInfo.frameXOffset;
 }
 
 AnimationReference::~AnimationReference() {}
@@ -284,7 +284,7 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
             Rand::Queue picker;
 
             for ( size_t i = 0; i < _idle.size(); ++i ) {
-                picker.Push( i, static_cast<uint32_t>( _monsterInfo.idlePriority[i] ) );
+                picker.Push( i, static_cast<uint32_t>( _monsterInfo.idlePriority[i] * 100 ) );
             }
             // picker is expected to return at least 0
             const size_t id = static_cast<size_t>( picker.Get() );
@@ -345,18 +345,22 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
         offset.resize( _static.size(), 0 );
         break;
     case Monster_Info::IDLE:
-        offset.resize( _idle.front().size(), 0 ); // TODO: use all idle animations
+        offset.resize( _idle.front().size(), 0 );
         break;
     case Monster_Info::MOVE_START:
         return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START];
     case Monster_Info::MOVING:
         return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN];
-        break;
     case Monster_Info::MOVE_END:
         return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP];
-        break;
     case Monster_Info::MOVE_QUICK:
         offset.resize( _moveOneTile.size(), 0 );
+        break;
+    case Monster_Info::FLY_UP:
+        offset.resize( _flying.start.size(), 0 );
+        break;
+    case Monster_Info::FLY_LAND:
+        offset.resize( _flying.end.size(), 0 );
         break;
     case Monster_Info::MELEE_TOP:
         offset.resize( _melee[Monster_Info::TOP].start.size(), 0 );
@@ -401,7 +405,6 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
         offset.resize( _death.size(), 0 );
         break;
     default:
-        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to use deprecated Animation " << animState );
         break;
     }
     return offset;

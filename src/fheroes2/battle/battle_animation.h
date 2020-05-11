@@ -65,13 +65,13 @@ public:
     TimedSequence( const std::vector<int> & seq, uint32_t duration );
 
     int playAnimation( uint32_t delta, bool loop = false );
-    int restartAnimation();
+    virtual int restartAnimation();
 
     int getFrameAt( uint32_t time ) const;
     uint32_t getCurrentTime() const;
     uint32_t getDuration() const;
-    double movementProgress() const;
-    bool isValid() const;
+    virtual double movementProgress() const;
+    virtual bool isValid() const;
 
 private:
     uint32_t _currentTime;
