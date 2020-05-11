@@ -1796,6 +1796,9 @@ RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
 void RandomMonsterAnimation::increment()
 {
     if ( _frameSet.empty() ) {
+        // make sure both are empty to avoid leftovers in case of mismatch
+        _offsetSet.clear();
+
         const int moveId = *Rand::Get( _validMoves );
 
         if ( moveId == Monster_Info::STATIC ) {
@@ -1852,8 +1855,10 @@ void RandomMonsterAnimation::increment()
     _frameId = _frameSet.front();
     _frameSet.pop_front();
 
-    _frameOffset = _offsetSet.front();
-    _offsetSet.pop_front();
+    if ( !_offsetSet.empty() ) {
+        _frameOffset = _offsetSet.front();
+        _offsetSet.pop_front();
+    }
 }
 
 int RandomMonsterAnimation::icnFile() const
