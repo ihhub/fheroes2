@@ -65,6 +65,8 @@ namespace AI
 
     void Base::HeroesActionNewPosition( Heroes & ) {}
 
+    void Base::HeroesClearTask( const Heroes & ) {}
+
     std::string Base::HeroesString( const Heroes & )
     {
         return "";

@@ -417,7 +417,7 @@ void AI::HeroesAction( Heroes & hero, s32 dst_index )
     if ( MP2::isNeedStayFront( object ) )
         hero.GetPath().Reset();
 
-    HeroesActionComplete( hero, dst_index );
+    AI::Get().HeroesActionComplete( hero, dst_index );
 }
 
 void AIToHeroes( Heroes & hero, u32 obj, s32 dst_index )
@@ -1452,7 +1452,7 @@ void AIToBoat( Heroes & hero, u32 obj, s32 dst_index )
     hero.SetShipMaster( true );
     hero.GetPath().Reset();
 
-    AI::HeroesClearTask( hero );
+    AI::Get().HeroesClearTask( hero );
 
     DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
 }
@@ -1470,7 +1470,7 @@ void AIToCoast( Heroes & hero, u32 obj, s32 dst_index )
     hero.SetShipMaster( false );
     hero.GetPath().Reset();
 
-    AI::HeroesClearTask( hero );
+    AI::Get().HeroesClearTask( hero );
 
     DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
 }

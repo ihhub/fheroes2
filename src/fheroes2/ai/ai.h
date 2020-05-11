@@ -60,6 +60,7 @@ namespace AI
         virtual void HeroesPostLoad( Heroes & );
         virtual void HeroesActionComplete( Heroes &, s32 );
         virtual void HeroesActionNewPosition( Heroes & );
+        virtual void HeroesClearTask( const Heroes & );
         virtual void HeroesLevelUp( Heroes & );
         virtual bool HeroesSkipFog( void );
         virtual std::string HeroesString( const Heroes & );
@@ -72,13 +73,11 @@ namespace AI
         virtual const char * Type( void );
         virtual const char * License( void );
     protected:
-        Base();
         //bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
         //bool HeroesGetTask( Heroes & );
         //bool HeroesCanMove( const Heroes & );
         //void HeroesTurn( Heroes & );
         //void CastleTurn( Castle & );
-        //void HeroesClearTask( const Heroes & );
     };
 
     Base & Get();
