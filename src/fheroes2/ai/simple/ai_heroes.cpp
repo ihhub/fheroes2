@@ -74,14 +74,14 @@ void AIHero::Reset( void )
     fix_loop = 0;
 }
 
-bool AI::HeroesSkipFog( void )
+bool AI::Simple::HeroesSkipFog( void )
 {
     return false;
 }
 
-void AI::HeroesActionComplete( Heroes &, s32 ) {}
+//void AI::Simple::HeroesActionComplete( Heroes &, s32 ) {}
 
-std::string AI::HeroesString( const Heroes & hero )
+std::string AI::Simple::HeroesString( const Heroes & hero )
 {
     std::ostringstream os;
 
@@ -99,12 +99,12 @@ std::string AI::HeroesString( const Heroes & hero )
     return os.str();
 }
 
-void AI::HeroesPostLoad( Heroes & hero )
+void AI::Simple::HeroesPostLoad( Heroes & hero )
 {
     hero.SetModes( AI::HEROES_HUNTER );
 }
 
-void AI::HeroesLevelUp( Heroes & hero )
+void AI::Simple::HeroesLevelUp( Heroes & hero )
 {
     if ( 4 < hero.GetLevel() && !hero.Modes( AI::HEROES_HUNTER ) )
         hero.SetModes( AI::HEROES_HUNTER );
@@ -113,16 +113,16 @@ void AI::HeroesLevelUp( Heroes & hero )
         hero.ResetModes( AI::HEROES_SCOUTER );
 }
 
-void AI::HeroesPreBattle( HeroBase & hero )
+void AI::Simple::HeroesPreBattle( HeroBase & hero )
 {
     Castle * castle = world.GetCastle( hero.GetCenter() );
     if ( castle && hero.GetType() != HeroBase::CAPTAIN )
         hero.GetArmy().JoinTroops( castle->GetArmy() );
 }
 
-void AI::HeroesAfterBattle( HeroBase & hero ) {}
+void AI::Simple::HeroesAfterBattle( HeroBase & hero ) {}
 
-void AI::HeroesClearTask( const Heroes & hero )
+void AI::Simple::HeroesClearTask( const Heroes & hero )
 {
     AIHeroes::Get( hero ).ClearTasks();
 }
@@ -337,7 +337,7 @@ void AIHeroesAddedTask( Heroes & hero )
         AIHeroesAddedRescueTask( hero );
 }
 
-void AI::HeroesActionNewPosition( Heroes & hero )
+void AI::Simple::HeroesActionNewPosition( Heroes & hero )
 {
     AIHero & ai_hero = AIHeroes::Get( hero );
     // AIKingdom & ai_kingdom = AIKingdoms::Get(hero.GetColor());
@@ -354,7 +354,7 @@ void AI::HeroesActionNewPosition( Heroes & hero )
             task.push_front( *it );
 }
 
-bool AI::HeroesGetTask( Heroes & hero )
+bool AI::Simple::HeroesGetTask( Heroes & hero )
 {
     std::vector<s32> results;
     results.reserve( 5 );
@@ -588,13 +588,7 @@ bool AI::HeroesGetTask( Heroes & hero )
     return false;
 }
 
-void AIHeroesTurn( Heroes * hero )
-{
-    if ( hero )
-        AI::HeroesTurn( *hero );
-}
-
-void AI::HeroesTurn( Heroes & hero )
+void AI::Simple::HeroesTurn( Heroes & hero )
 {
     DEBUG( DBG_AI, DBG_TRACE,
            hero.GetName() << ", start: " << ( hero.Modes( Heroes::SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( hero.Modes( AI::HEROES_SCOUTER ) ? "SCOUTER," : "" )
@@ -608,13 +602,13 @@ void AI::HeroesTurn( Heroes & hero )
         status.RedrawTurnProgress( 3 );
 
         // get task for heroes
-        AI::HeroesGetTask( hero );
+        HeroesGetTask( hero );
 
         // turn indicator
         status.RedrawTurnProgress( 5 );
 
         // heroes AI turn
-        AI::HeroesMove( hero );
+        HeroesMove( hero );
 
         // turn indicator
         status.RedrawTurnProgress( 7 );
@@ -642,7 +636,7 @@ bool IsPriorityAndNotVisitAndNotPresent( const std::pair<s32, int> & indexObj, c
     return AIHeroesPriorityObject( *hero, indexObj.first ) && !AIHeroesScheduledVisit( hero->GetKingdom(), indexObj.first ) && !task.isPresent( indexObj.first );
 }
 
-void AIHeroesEnd( Heroes * hero )
+void AI::Simple::HeroesTurnEnd( Heroes * hero )
 {
     if ( hero ) {
         AIHero & ai_hero = AIHeroes::Get( *hero );
@@ -672,7 +666,7 @@ void AIHeroesEnd( Heroes * hero )
     }
 }
 
-void AIHeroesSetHunterWithTarget( Heroes * hero, s32 dst )
+void AI::Simple::HeroesSetHunterWithTarget( Heroes * hero, s32 dst )
 {
     if ( hero ) {
         AIHero & ai_hero = AIHeroes::Get( *hero );
@@ -685,7 +679,7 @@ void AIHeroesSetHunterWithTarget( Heroes * hero, s32 dst )
     }
 }
 
-void AIHeroesCaptureNearestTown( Heroes * hero )
+void AI::Simple::HeroesCaptureNearestTown( Heroes * hero )
 {
     if ( hero ) {
         AIHero & ai_hero = AIHeroes::Get( *hero );

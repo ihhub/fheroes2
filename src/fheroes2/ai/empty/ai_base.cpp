@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "ai.h"
 #include "ai_empty.h"
 #include "battle.h"
 #include "battle_arena.h"
@@ -35,12 +34,12 @@
 
 namespace AI
 {
-    const char * Base::Type()
+    const char * Base::Type() const
     {
         return "base";
     }
 
-    const char * Base::License()
+    const char * Base::License() const
     {
         return "GPL";
     }
@@ -49,7 +48,7 @@ namespace AI
 
     void Base::CastleAfterBattle( Castle &, bool attacker_wins ) {}
 
-    //void Base::CastleTurn( Castle & ) {}
+    // void Base::CastleTurn( Castle & ) {}
 
     void Base::CastleAdd( const Castle & ) {}
 
@@ -83,19 +82,19 @@ namespace AI
         return false;
     }
 
-    //bool Base::HeroesGetTask( Heroes & hero )
+    // bool Base::HeroesGetTask( Heroes & hero )
     //{
     //    // stop hero
     //    hero.GetPath().Reset();
     //    return false;
     //}
 
-    //bool Base::HeroesCanMove( const Heroes & hero )
+    // bool Base::HeroesCanMove( const Heroes & hero )
     //{
     //    return hero.MayStillMove() && !hero.Modes( HEROES_MOVED );
     //}
 
-    //void Base::HeroesTurn( Heroes & hero )
+    // void Base::HeroesTurn( Heroes & hero )
     //{
     //    Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
@@ -148,14 +147,14 @@ namespace AI
         status.RedrawTurnProgress( 1 );
 
         // castles AI turn
-        //for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
+        // for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
         //    if ( *it )
         //        CastleTurn( **it );
 
         status.RedrawTurnProgress( 3 );
 
         // heroes turns
-        //for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
+        // for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
         //    if ( *it )
         //        HeroesTurn( **it );
 
@@ -173,7 +172,7 @@ namespace AI
         a.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, b.GetUID() ) );
     }
 
-    Base& Get()
+    Base & Get()
     {
         static AI::Empty currentAI;
         return currentAI;

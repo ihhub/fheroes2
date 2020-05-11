@@ -37,6 +37,58 @@
 #include "ai.h"
 #include "pairs.h"
 
+namespace AI
+{
+    class Simple : public Base
+    {
+    public:
+        Simple();
+
+        // Overwrites for Base AI
+        void KingdomTurn( Kingdom & );
+        void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
+
+        void HeroesAdd( const Heroes & );
+        void HeroesRemove( const Heroes & );
+        void HeroesPreBattle( HeroBase & );
+        void HeroesAfterBattle( HeroBase & );
+        void HeroesPostLoad( Heroes & );
+        void HeroesActionComplete( Heroes &, s32 );
+        void HeroesActionNewPosition( Heroes & );
+        void HeroesClearTask( const Heroes & );
+        void HeroesLevelUp( Heroes & );
+        bool HeroesSkipFog( void );
+        std::string HeroesString( const Heroes & );
+
+        void CastleAdd( const Castle & );
+        void CastleRemove( const Castle & );
+        void CastlePreBattle( Castle & );
+        void CastleAfterBattle( Castle &, bool attacker_wins );
+
+        const char * Type( void ) const;
+        const char * License( void ) const;
+        
+        // Additional methods
+        bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
+        bool HeroesGetTask( Heroes & );
+        bool HeroesCanMove( const Heroes & );
+        void HeroesTurn( Heroes & );
+        void CastleTurn( Castle & );
+
+        void HeroesTurnEnd( Heroes * hero );
+        void HeroesSetHunterWithTarget( Heroes * hero, s32 dst );
+        void HeroesCaptureNearestTown( Heroes * hero );
+
+        void Reset();
+        AIKingdom & GetKingdom( void );
+        AIHero & GetHero( const Heroes & );
+
+    private:
+        std::vector<AIKingdom> _kingdoms;
+        std::vector<AIHero> _heroes;
+    };
+}
+
 struct IndexObjectMap : public std::map<s32, int>
 {
     void DumpObjects( const IndexDistance & id );

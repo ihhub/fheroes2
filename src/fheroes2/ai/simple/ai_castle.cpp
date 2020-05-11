@@ -148,13 +148,7 @@ namespace
     }
 }
 
-void AICastleTurn( Castle * castle )
-{
-    if ( castle != NULL )
-        AI::CastleTurn( *castle );
-}
-
-void AI::CastleTurn( Castle & castle )
+void AI::Simple::CastleTurn( Castle & castle )
 {
     // skip neutral town
     if ( castle.GetColor() == Color::NONE )
@@ -221,11 +215,11 @@ void AI::CastleTurn( Castle & castle )
     }
 }
 
-void AI::CastlePreBattle( Castle & castle )
+void AI::Simple::CastlePreBattle( Castle & castle )
 {
     Heroes * hero = castle.GetHeroes().GuardFirst();
     if ( hero && castle.GetArmy().isValid() )
         hero->GetArmy().JoinStrongestFromArmy( castle.GetArmy() );
 }
 
-void AI::CastleAfterBattle( Castle &, bool ) {}
+void AI::Simple::CastleAfterBattle( Castle &, bool ) {}

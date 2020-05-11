@@ -70,17 +70,18 @@ namespace AI
         virtual void CastlePreBattle( Castle & );
         virtual void CastleAfterBattle( Castle &, bool attacker_wins );
 
-        virtual const char * Type( void );
-        virtual const char * License( void );
+        virtual const char * Type( void ) const;
+        virtual const char * License( void ) const;
+
     protected:
-        //bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
-        //bool HeroesGetTask( Heroes & );
-        //bool HeroesCanMove( const Heroes & );
-        //void HeroesTurn( Heroes & );
-        //void CastleTurn( Castle & );
+        // bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
+        // bool HeroesGetTask( Heroes & );
+        // bool HeroesCanMove( const Heroes & );
+        // void HeroesTurn( Heroes & );
+        // void CastleTurn( Castle & );
     };
 
-    Base & Get();
+    static Base & Get();
 
     void HeroesAction( Heroes & hero, s32 dst_index );
     bool HeroesValidObject( const Heroes & hero, s32 index );

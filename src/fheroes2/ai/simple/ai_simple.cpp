@@ -33,36 +33,39 @@
 #include "castle.h"
 #include "heroes.h"
 
-const char * AI::Type( void )
+namespace AI
 {
-    return "simple";
-}
-
-const char * AI::License( void )
-{
-    return "Non-Commercial";
-}
-
-void AI::HeroesAdd( const Heroes & ) {}
-
-void AI::HeroesRemove( const Heroes & ) {}
-
-void AI::CastleAdd( const Castle & ) {}
-
-void AI::CastleRemove( const Castle & castle )
-{
-    AIKingdom & ai = AIKingdoms::Get( castle.GetColor() );
-
-    if ( ai.capital == &castle ) {
-        ai.capital->ResetModes( Castle::CAPITAL );
-        ai.capital = NULL;
+    const char * Simple::Type( void ) const
+    {
+        return "simple";
     }
-}
 
-void AI::Init( void )
-{
-    AIKingdoms::Reset();
-    AIHeroes::Reset();
+    const char * Simple::License( void ) const
+    {
+        return "Non-Commercial";
+    }
+
+    void Simple::HeroesAdd( const Heroes & ) {}
+
+    void Simple::HeroesRemove( const Heroes & ) {}
+
+    void Simple::CastleAdd( const Castle & ) {}
+
+    void Simple::CastleRemove( const Castle & castle )
+    {
+        AIKingdom & ai = AIKingdoms::Get( castle.GetColor() );
+
+        if ( ai.capital == &castle ) {
+            ai.capital->ResetModes( Castle::CAPITAL );
+            ai.capital = NULL;
+        }
+    }
+
+    void Simple::Reset( void )
+    {
+        AIKingdoms::Reset();
+        AIHeroes::Reset();
+    }
 }
 
 bool Queue::isPresent( s32 index ) const
