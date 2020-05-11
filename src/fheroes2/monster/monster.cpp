@@ -1774,6 +1774,7 @@ RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
     , _icnID( monster.GetMonsterSprite().icn_file )
     , _frameId( 0 )
     , _frameOffset( 0 )
+    , _isFlyer( monster.isFly() )
 {
     _addValidMove( Monster_Info::STATIC );
     _addValidMove( Monster_Info::STATIC );
@@ -1806,13 +1807,13 @@ void RandomMonsterAnimation::increment()
             _pushFrames( Monster_Info::IDLE );
         }
         else if ( moveId == Monster_Info::MOVING ) {
-            _pushFrames( Monster_Info::MOVE_START );
+            _pushFrames( ( _isFlyer ) ? Monster_Info::FLY_UP : Monster_Info::MOVE_START );
 
             const u32 counter = Rand::Get( 3, 5 );
             for ( u32 j = 0; j < counter; ++j )
                 _pushFrames( Monster_Info::MOVING );
 
-            _pushFrames( Monster_Info::MOVE_END );
+            _pushFrames( ( _isFlyer ) ? Monster_Info::FLY_LAND : Monster_Info::MOVE_END );
         }
         else if ( moveId == Monster_Info::MELEE_TOP ) {
             _pushFrames( Monster_Info::MELEE_TOP );

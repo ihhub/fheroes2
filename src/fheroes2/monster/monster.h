@@ -260,6 +260,7 @@ private:
     std::list<int> _offsetSet;
     int _frameId;
     int _frameOffset;
+    bool _isFlyer;
 
     void _pushFrames( Monster_Info::ANIMATION_TYPE type );
     void _addValidMove( Monster_Info::ANIMATION_TYPE type );

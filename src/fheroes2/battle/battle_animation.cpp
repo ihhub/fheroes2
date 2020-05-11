@@ -348,11 +348,20 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
         offset.resize( _idle.front().size(), 0 );
         break;
     case Monster_Info::MOVE_START:
-        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START];
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_END].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_END].end() );
+        break;
     case Monster_Info::MOVING:
-        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN];
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_START].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_START].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_END].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_END].end() );
+        break;
     case Monster_Info::MOVE_END:
-        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP];
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_START].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_START].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].end() );
+        break;
     case Monster_Info::MOVE_QUICK:
         offset.resize( _moveOneTile.size(), 0 );
         break;
