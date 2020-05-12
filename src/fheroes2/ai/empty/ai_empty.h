@@ -29,8 +29,6 @@ namespace AI
     {
     public:
         Empty(){};
-
-    protected:
     };
 }
 #endif

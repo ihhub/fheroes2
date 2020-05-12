@@ -59,7 +59,7 @@ namespace AI
 
     const char * Base::License() const
     {
-        return "GPL";
+        return "GPL-2.0";
     }
 
     void Base::Reset() {}
