@@ -38,6 +38,13 @@ namespace Battle
 
 namespace AI
 {
+    enum AI_TYPE
+    {
+        EMPTY,
+        SIMPLE,
+        NORMAL
+    };
+
     enum modes_t
     {
         HEROES_MOVED = 0x08000000,
@@ -74,7 +81,7 @@ namespace AI
         virtual const char * License( void ) const;
     };
 
-    Base & Get();
+    Base & Get( AI_TYPE type = SIMPLE );
 
     void HeroesAction( Heroes & hero, s32 dst_index );
     bool HeroesValidObject( const Heroes & hero, s32 index );

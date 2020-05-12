@@ -19,27 +19,37 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "empty/ai_empty.h"
-#include "simple/ai_simple.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_command.h"
 #include "battle_troop.h"
 #include "castle.h"
 #include "dialog.h"
+#include "empty/ai_empty.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "mus.h"
+#include "normal/ai_normal.h"
 #include "settings.h"
+#include "simple/ai_simple.h"
 
 namespace AI
 {
     // AI Selector here
-    Base & Get()
+    Base & Get( AI_TYPE type )
     {
-        static AI::Simple currentAI;
-        return currentAI;
+        static AI::Empty empty;
+        static AI::Simple simple;
+        static AI::Normal normal;
+
+        switch ( type ) {
+        case AI::SIMPLE:
+            return simple;
+        case AI::NORMAL:
+            return normal;
+        }
+        return empty;
     }
 
     const char * Base::Type() const

@@ -18,9 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ai_normal.h"
+#include "ai.h"
 
 namespace AI
 {
-    Normal::Normal() {}
+    class Normal : public Base
+    {
+    public:
+        Normal();
+    };
 }
