@@ -393,7 +393,7 @@ u32 Castle::OpenTown( void )
     RedrawResourcePanel( cur_pt );
 
     // button exit
-    dst_pt.x = cur_pt.x + 554;
+    dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
     Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
 

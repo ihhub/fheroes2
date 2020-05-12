@@ -2686,6 +2686,14 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
             b.SetPosition( *dst );
         }
 
+        // check for possible bridge close action, after unit's end of movement
+        if ( bridge && bridge->AllowUp() ) {
+            b_move = NULL;
+            b.SwitchAnimation( Monster_State::STATIC );
+            bridge->Action( b, *dst );
+            b_move = &b;
+        }
+
         ++dst;
     }
 
