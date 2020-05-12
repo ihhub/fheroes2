@@ -19,7 +19,8 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "ai_empty.h"
+#include "empty/ai_empty.h"
+#include "simple/ai_simple.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_command.h"
@@ -34,6 +35,13 @@
 
 namespace AI
 {
+    // AI Selector here
+    Base & Get()
+    {
+        static AI::Simple currentAI;
+        return currentAI;
+    }
+
     const char * Base::Type() const
     {
         return "base";
@@ -170,11 +178,5 @@ namespace AI
     {
         // end action
         a.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, b.GetUID() ) );
-    }
-
-    Base & Get()
-    {
-        static AI::Empty currentAI;
-        return currentAI;
     }
 }

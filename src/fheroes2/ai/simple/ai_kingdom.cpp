@@ -136,11 +136,20 @@ namespace AI
         status.RedrawTurnProgress( 1 );
 
         // castles AI turn
-        std::for_each( castles.begin(), castles.end(), CastleTurn );
+        for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
+            if ( *it ) {
+                // this call gets a reference
+                CastleTurn( **it );
+            }
+        }
 
         // need capture town?
-        if ( castles.empty() )
-            std::for_each( heroes.begin(), heroes.end(), HeroesCaptureNearestTown );
+        if ( castles.empty() ) {
+            for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
+                // this call validates pointer
+                HeroesCaptureNearestTown( *it );
+            }
+        }
 
         // buy hero in capital
         if ( ai.capital && ai.capital->isCastle() ) {
@@ -219,11 +228,31 @@ namespace AI
         // turn indicator
         status.RedrawTurnProgress( 2 );
 
-        // heroes turns
-        std::for_each( heroes.begin(), heroes.end(), HeroesTurn );
-        // std::for_each(heroes.begin(), heroes.end(), std::bind2nd(std::mem_fun(&Heroes::ResetModes), AI::HEROES_STUPID|AI::HEROES_WAITING));
-        std::for_each( heroes.begin(), heroes.end(), HeroesTurn );
-        std::for_each( heroes.begin(), heroes.end(), HeroesTurnEnd );
+        // heroes turns - hacky and ugly without lambas
+        // HeroesTurn might invalidate KingdomHeroes iterator (e.g. hero losing a battle), check after each one
+        size_t currentHero = 0;
+        while ( currentHero < heroes.size() ) {
+            size_t beforeTurn = heroes.size();
+
+            HeroesTurn( *heroes.at( currentHero ) );
+
+            // Check if heroes vector was modified
+            if ( beforeTurn == heroes.size() )
+                currentHero++;
+        }
+        currentHero = 0;
+        while ( currentHero < heroes.size() ) {
+            size_t beforeTurn = heroes.size();
+
+            HeroesTurn( *heroes.at( currentHero ) );
+
+            if ( beforeTurn == heroes.size() )
+                currentHero++;
+        }
+
+        for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
+            HeroesTurnEnd( *it );
+        }
 
         // turn indicator
         status.RedrawTurnProgress( 9 );
