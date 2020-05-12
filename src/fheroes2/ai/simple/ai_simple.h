@@ -77,11 +77,14 @@ namespace AI
 
         // Overwrites for Base AI
         void KingdomTurn( Kingdom & );
+        void CastleTurn( Castle & );
         void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
+        void HeroesTurn( Heroes & );
 
         void HeroesPreBattle( HeroBase & );
         void HeroesAfterBattle( HeroBase & );
         void HeroesPostLoad( Heroes & );
+        bool HeroesGetTask( Heroes & );
         void HeroesActionNewPosition( Heroes & );
         void HeroesClearTask( const Heroes & );
         void HeroesLevelUp( Heroes & );
@@ -104,12 +107,9 @@ namespace AI
 
         // Additional methods called only internally
         bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
-        void CastleTurn( Castle & );
 
-        bool HeroesGetTask( Heroes & );
         void HeroesAddedRescueTask( Heroes & hero );
         void HeroesAddedTask( Heroes & hero );
-        void HeroesTurn( Heroes & );
         void HeroesTurnEnd( Heroes * hero );
         void HeroesSetHunterWithTarget( Heroes * hero, s32 dst );
         void HeroesCaptureNearestTown( Heroes * hero );
