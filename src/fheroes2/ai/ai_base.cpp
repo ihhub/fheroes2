@@ -66,7 +66,7 @@ namespace AI
 
     void Base::CastleAfterBattle( Castle &, bool attacker_wins ) {}
 
-    // void Base::CastleTurn( Castle & ) {}
+    void Base::CastleTurn( Castle & ) {}
 
     void Base::CastleAdd( const Castle & ) {}
 
@@ -100,47 +100,47 @@ namespace AI
         return false;
     }
 
-    // bool Base::HeroesGetTask( Heroes & hero )
-    //{
-    //    // stop hero
-    //    hero.GetPath().Reset();
-    //    return false;
-    //}
+    bool Base::HeroesGetTask( Heroes & hero )
+    {
+        // stop hero
+        hero.GetPath().Reset();
+        return false;
+    }
 
-    // bool Base::HeroesCanMove( const Heroes & hero )
-    //{
-    //    return hero.MayStillMove() && !hero.Modes( HEROES_MOVED );
-    //}
+    bool Base::HeroesCanMove( const Heroes & hero )
+    {
+        return hero.MayStillMove() && !hero.Modes( HEROES_MOVED );
+    }
 
-    // void Base::HeroesTurn( Heroes & hero )
-    //{
-    //    Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
+    void Base::HeroesTurn( Heroes & hero )
+    {
+        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
-    //    hero.ResetModes( HEROES_MOVED );
+        hero.ResetModes( HEROES_MOVED );
 
-    //    while ( Base::HeroesCanMove( hero ) ) {
-    //        // turn indicator
-    //        status.RedrawTurnProgress( 3 );
-    //        status.RedrawTurnProgress( 4 );
+        while ( Base::HeroesCanMove( hero ) ) {
+            // turn indicator
+            status.RedrawTurnProgress( 3 );
+            status.RedrawTurnProgress( 4 );
 
-    //        // get task for heroes
-    //        Base::HeroesGetTask( hero );
+            // get task for heroes
+            Base::HeroesGetTask( hero );
 
-    //        // turn indicator
-    //        status.RedrawTurnProgress( 5 );
-    //        status.RedrawTurnProgress( 6 );
+            // turn indicator
+            status.RedrawTurnProgress( 5 );
+            status.RedrawTurnProgress( 6 );
 
-    //        // heroes AI turn
-    //        Base::HeroesMove( hero );
-    //        hero.SetModes( HEROES_MOVED );
+            // heroes AI turn
+            AI::HeroesMove( hero );
+            hero.SetModes( HEROES_MOVED );
 
-    //        // turn indicator
-    //        status.RedrawTurnProgress( 7 );
-    //        status.RedrawTurnProgress( 8 );
-    //    }
+            // turn indicator
+            status.RedrawTurnProgress( 7 );
+            status.RedrawTurnProgress( 8 );
+        }
 
-    //    DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", end" );
-    //}
+        DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", end" );
+    }
 
     void Base::KingdomTurn( Kingdom & kingdom )
     {
@@ -165,16 +165,16 @@ namespace AI
         status.RedrawTurnProgress( 1 );
 
         // castles AI turn
-        // for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
-        //    if ( *it )
-        //        CastleTurn( **it );
+        for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
+            if ( *it )
+                CastleTurn( **it );
 
         status.RedrawTurnProgress( 3 );
 
         // heroes turns
-        // for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
-        //    if ( *it )
-        //        HeroesTurn( **it );
+        for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
+            if ( *it )
+                HeroesTurn( **it );
 
         status.RedrawTurnProgress( 6 );
         status.RedrawTurnProgress( 7 );

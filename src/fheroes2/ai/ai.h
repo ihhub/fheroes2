@@ -58,13 +58,17 @@ namespace AI
     {
     public:
         virtual void KingdomTurn( Kingdom & );
+        virtual void CastleTurn( Castle & );
         virtual void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
+        virtual void HeroesTurn( Heroes & );
 
         virtual void HeroesAdd( const Heroes & );
         virtual void HeroesRemove( const Heroes & );
         virtual void HeroesPreBattle( HeroBase & );
         virtual void HeroesAfterBattle( HeroBase & );
         virtual void HeroesPostLoad( Heroes & );
+        virtual bool HeroesCanMove( const Heroes & hero );
+        virtual bool HeroesGetTask( Heroes & );
         virtual void HeroesActionComplete( Heroes &, s32 );
         virtual void HeroesActionNewPosition( Heroes & );
         virtual void HeroesClearTask( const Heroes & );
