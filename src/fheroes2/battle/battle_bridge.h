@@ -34,7 +34,6 @@ namespace Battle
     public:
         Bridge();
 
-        bool NeedAction( const Unit &, s32 ) const;
         void Action( const Unit &, s32 );
 
         void SetDestroy( void );
@@ -47,6 +46,7 @@ namespace Battle
         bool isValid( void ) const;
         bool isDestroy( void ) const;
         bool isDown( void ) const;
+        bool isDeadBodyOnABridge( void ) const;
 
     private:
         bool destroy;
