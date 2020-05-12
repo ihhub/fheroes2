@@ -357,24 +357,23 @@ void Battle::Unit::InitContours( void )
 {
     const monstersprite_t & msi = GetMonsterSprite();
 
-    for ( int i = 0; i < msi.frm_idle.count; ++i ) {
-        const Sprite s = AGG::GetICN( msi.icn_file, msi.frm_idle.start + i, false );
-        contoursMain[msi.frm_idle.start + i] = s.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWB[msi.frm_idle.start + i] = s.RenderGrayScale();
-        if ( i == 0 ) {
-            contoursMain[Monster_State::STATIC] = contoursMain[msi.frm_idle.start + i];
-            contoursWB[Monster_State::STATIC] = contoursWB[msi.frm_idle.start + i];
-        }
-    }
+    assignContours(msi.icn_file, Monster_State::STATIC);
+    assignContours(msi.icn_file, Monster_State::IDLE);
+}
 
-    for ( int i = 0; i < msi.frm_idle.count; ++i ) {
-        const Sprite s = AGG::GetICN( msi.icn_file, msi.frm_idle.start + i, true );
-        contoursReflect[msi.frm_idle.start + i] = s.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWBReflect[msi.frm_idle.start + i] = s.RenderGrayScale();
-        if ( i == 0 ) {
-            contoursReflect[Monster_State::STATIC] = contoursReflect[msi.frm_idle.start + i];
-            contoursWBReflect[Monster_State::STATIC] = contoursWBReflect[msi.frm_idle.start + i];
-        }
+void Battle::Unit::assignContours( const int icn_file, const int animState )
+{
+    const int start = animation.getAnimationSequence(animState).firstFrame();
+    const int length = animation.getAnimationSequence(animState).animationLength();
+
+    for ( int fIter = 0; fIter < length; ++fIter ) {
+        const Sprite sc = AGG::GetICN( icn_file, start + fIter, false );
+        const Sprite swb = AGG::GetICN( icn_file, start + fIter, true );
+
+        contoursMain[start + fIter] = sc.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWB[start + fIter] = sc.RenderGrayScale();
+        contoursReflect[start + fIter] = swb.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWBReflect[start + fIter] = swb.RenderGrayScale();
     }
 }
 
