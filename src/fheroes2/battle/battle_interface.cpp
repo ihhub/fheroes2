@@ -2661,7 +2661,7 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
         _movingPos = cell->GetPos();
         bool show_anim = false;
 
-        if ( bridge && bridge->NeedAction( b, *dst ) ) {
+        if ( bridge && bridge->NeedDown( b, *dst ) ) {
             _movingUnit = NULL;
             b.SwitchAnimation( Monster_Info::STATIC );
             bridge->Action( b, *dst );
@@ -2684,6 +2684,14 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
             b.SwitchAnimation( Monster_Info::MOVING );
             RedrawTroopDefaultDelay( b );
             b.SetPosition( *dst );
+        }
+
+        // check for possible bridge close action, after unit's end of movement
+        if ( bridge && bridge->AllowUp() ) {
+            _movingUnit = NULL;
+            b.SwitchAnimation( Monster_Info::STATIC );
+            bridge->Action( b, *dst );
+            _movingUnit = &b;
         }
 
         ++dst;

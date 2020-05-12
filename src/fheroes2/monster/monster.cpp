@@ -1635,7 +1635,7 @@ const char * Monster::GetPluralName( u32 count ) const
     case UNICORN:
         return _n( "Unicorn", "Unicorns", count );
     case PHOENIX:
-        return _n( "Phoenix", "Phoenix's", count );
+        return _n( "Phoenix", "Phoenixes", count );
 
     case CENTAUR:
         return _n( "Centaur", "Centaurs", count );
