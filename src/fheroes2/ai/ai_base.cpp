@@ -62,6 +62,8 @@ namespace AI
         return "GPL";
     }
 
+    void Base::Reset() {}
+
     void Base::CastlePreBattle( Castle & ) {}
 
     void Base::CastleAfterBattle( Castle &, bool attacker_wins ) {}

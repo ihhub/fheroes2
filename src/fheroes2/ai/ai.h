@@ -83,6 +83,7 @@ namespace AI
 
         virtual const char * Type( void ) const;
         virtual const char * License( void ) const;
+        virtual void Reset();
     };
 
     Base & Get( AI_TYPE type = SIMPLE );

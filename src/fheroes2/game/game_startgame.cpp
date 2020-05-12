@@ -74,7 +74,7 @@ int Game::StartBattleOnly( void )
 int Game::StartGame( void )
 {
     SetFixVideoMode();
-    //::AI::Init();
+    AI::Get().Reset();
 
     // cursor
     Cursor & cursor = Cursor::Get();
