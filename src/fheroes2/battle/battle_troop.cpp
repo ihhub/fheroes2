@@ -357,14 +357,14 @@ void Battle::Unit::InitContours( void )
 {
     const monstersprite_t & msi = GetMonsterSprite();
 
-    assignContours(msi.icn_file, Monster_State::STATIC);
-    assignContours(msi.icn_file, Monster_State::IDLE);
+    assignContours( msi.icn_file, Monster_State::STATIC );
+    assignContours( msi.icn_file, Monster_State::IDLE );
 }
 
 void Battle::Unit::assignContours( const int icn_file, const int animState )
 {
-    const int start = animation.getAnimationSequence(animState).firstFrame();
-    const int length = animation.getAnimationSequence(animState).animationLength();
+    const int start = animation.getAnimationSequence( animState ).firstFrame();
+    const int length = animation.getAnimationSequence( animState ).animationLength();
 
     for ( int fIter = 0; fIter < length; ++fIter ) {
         const Sprite sc = AGG::GetICN( icn_file, start + fIter, false );
