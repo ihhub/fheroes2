@@ -360,12 +360,12 @@ void Battle::Unit::InitContours( void )
     assignContours( msi.icn_file, animation.getAnimationVector( Monster_Info::STATIC ) );
 
     const std::vector<std::vector<int> > vIdle = animation.getFullIdleAnimationVector();
-    for (std::vector<std::vector<int> >::const_iterator vIdleIter1 = vIdle.begin(); vIdleIter1 != vIdle.end(); ++vIdleIter1) {
+    for ( std::vector<std::vector<int> >::const_iterator vIdleIter1 = vIdle.begin(); vIdleIter1 != vIdle.end(); ++vIdleIter1 ) {
         assignContours( msi.icn_file, *vIdleIter1 );
     }
 }
 
-void Battle::Unit::assignContours( const int icn_file, const std::vector<int> frames)
+void Battle::Unit::assignContours( const int icn_file, const std::vector<int> frames )
 {
     for ( std::vector<int>::const_iterator fIter = frames.begin(); fIter != frames.end(); ++fIter ) {
         const Sprite sc = AGG::GetICN( icn_file, *fIter, false );
