@@ -21,14 +21,10 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
-#include "battle_animation.h"
 #include "settings.h"
 
 #include <map>
 #include <vector>
-
-class AnimationSequence;
-class AnimationReference;
 
 namespace Bin_Info
 {
@@ -37,12 +33,12 @@ namespace Bin_Info
         enum ANIM_TYPE
         {
             MOVE_START, // Start of the moving sequence on 1st animation cycle: flyers will fly up
-            MOVE_TILE_START, // Unused? Supposed to be played at the beginning of 2nd+ move.
+            MOVE_TILE_START, // Supposed to be played at the beginning of 2nd+ move.
             MOVE_MAIN, // Core animation. Most units only have this one.
             MOVE_TILE_END, // Cavalry & wolf. Played at the end of the cycle (2nd tile to 3rd), but not at the last one
             MOVE_STOP, // End of the moving sequence when arrived: landing for example
             MOVE_ONE, // Used when moving 1 tile. LICH and POWER_LICH doesn't have this, use MOVE_MAIN
-            UNUSED_WALK, // UNUSED, intended crawling speed?
+            TEMPORARY, // This is an empty placeholder for combined animation built from previous parts
             STATIC, // Frame 1
             IDLE1,
             IDLE2, // Idle animations: picked at random with different probablities, rarely all 5 present
@@ -87,12 +83,12 @@ namespace Bin_Info
         uint32_t idleAnimationDelay;
         std::vector<std::vector<int> > animationFrames;
 
-        MonsterAnimInfo( const std::vector<u8> & bytes = std::vector<uint8_t>() );
+        MonsterAnimInfo( int monsterID = 0, const std::vector<u8> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
         bool isValid() const;
     };
 
     void InitBinInfo();
-    AnimationReference GetAnimationSet( int monsterID );
+    MonsterAnimInfo GetMonsterInfo( int monsterID );
 }
 #endif

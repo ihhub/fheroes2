@@ -21,13 +21,9 @@
 #ifndef H2BATTLE_ANIMATION_H
 #define H2BATTLE_ANIMATION_H
 
+#include "bin_info.h"
 #include "gamedefs.h"
 #include "monster_info.h"
-
-namespace Bin_Info
-{
-    struct MonsterAnimInfo;
-}
 
 struct monsterReturnAnim
 {
@@ -41,31 +37,55 @@ public:
     AnimationSequence( const std::vector<int> & seq );
 
     AnimationSequence & operator=( const std::vector<int> & rhs );
+    virtual ~AnimationSequence();
 
     int playAnimation( bool loop = false );
-    int restartAnimation();
+    virtual int restartAnimation();
     void setToLastFrame();
 
     int getFrame() const;
     int firstFrame() const;
-    int animationLength() const;
-    double movementProgress() const;
+    size_t animationLength() const;
+    virtual double movementProgress() const;
     bool isFirstFrame() const;
     bool isLastFrame() const;
-    bool isValid() const;
+    virtual bool isValid() const;
 
-private:
+protected:
     std::vector<int> _seq;
     size_t _currentFrame;
 
+private:
     AnimationSequence();
+};
+
+class TimedSequence : public AnimationSequence
+{
+public:
+    TimedSequence( const std::vector<int> & seq, uint32_t duration );
+
+    int playAnimation( uint32_t delta, bool loop = false );
+    virtual int restartAnimation();
+
+    int getFrameAt( uint32_t time ) const;
+    uint32_t getCurrentTime() const;
+    uint32_t getDuration() const;
+    virtual double movementProgress() const;
+    virtual bool isValid() const;
+
+private:
+    uint32_t _currentTime;
+    uint32_t _duration;
+
+    // Private function: make sure object is valid before calling this
+    size_t getFrameID( uint32_t time ) const;
 };
 
 class AnimationReference
 {
 public:
     AnimationReference();
-    AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id );
+    AnimationReference( int id );
     virtual ~AnimationReference();
 
     int getStaticFrame() const;
@@ -74,14 +94,19 @@ public:
     const std::vector<int> & getAnimationVector( int animState ) const;
     std::vector<int> getAnimationOffset( int animState ) const;
     AnimationSequence getAnimationSequence( int animState ) const;
+    uint32_t getMoveSpeed() const;
+    uint32_t getFlightSpeed() const;
 
 protected:
-    int _type;
+    int _monsterID;
+    Bin_Info::MonsterAnimInfo _monsterInfo;
 
     std::vector<int> _static;
-    std::vector<int> _quickMove;
-    std::vector<int> _loopMove;
-    monsterReturnAnim _moveModes;
+    std::vector<int> _moveFirstTile;
+    std::vector<int> _moving;
+    std::vector<int> _moveLastTile;
+    std::vector<int> _moveOneTile;
+    monsterReturnAnim _flying;
     std::vector<int> _wince;
     std::vector<int> _death;
     monsterReturnAnim _melee[3];
@@ -89,12 +114,13 @@ protected:
     std::vector<std::vector<int> > _idle;
     std::vector<std::vector<int> > _offsetX;
 
-    bool appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID );
+    bool appendFrames( std::vector<int> & target, int animID );
 };
 
 class AnimationState : public AnimationReference
 {
 public:
+    AnimationState( int monsterID );
     AnimationState( const AnimationReference & animMap, int state );
     virtual ~AnimationState();
 

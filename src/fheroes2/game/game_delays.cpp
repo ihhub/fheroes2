@@ -26,19 +26,19 @@
 #include "gamedefs.h"
 #include "settings.h"
 
-struct TimeDelay : std::pair<SDL::Time, int>
+struct TimeDelay : std::pair<SDL::Time, uint32_t>
 {
-    TimeDelay( int dl )
+    TimeDelay( uint32_t dl )
     {
         second = dl;
     }
 
-    int operator()( void ) const
+    uint32_t operator()( void ) const
     {
         return second;
     }
 
-    TimeDelay & operator=( int dl )
+    TimeDelay & operator=( uint32_t dl )
     {
         second = dl;
         return *this;
@@ -49,10 +49,11 @@ struct TimeDelay : std::pair<SDL::Time, int>
         first.Start();
     }
 
-    bool Trigger( void )
+    bool Trigger( uint32_t customDelay = 0 )
     {
         first.Stop();
-        if ( first.Get() < static_cast<u32>( second ) )
+        const uint32_t expected = ( customDelay > 0 ) ? customDelay : second;
+        if ( first.Get() < expected )
             return false;
 
         first.Start();
@@ -92,6 +93,7 @@ namespace Game
                           300, // AUTOHIDE_STATUS_DELAY
                           0, // CURRENT_HERO_DELAY
                           0, // CURRENT_AI_DELAY
+                          0, // CUSTOM_DELAY
                           0};
 }
 
@@ -106,6 +108,11 @@ void Game::AnimateResetDelay( int dl )
 {
     if ( dl < LAST_DELAY )
         delays[dl].Reset();
+}
+
+bool Game::AnimateCustomDelay( uint32_t delay )
+{
+    return delays[CUSTOM_DELAY].Trigger( delay );
 }
 
 bool Game::AnimateInfrequentDelay( int dl )
@@ -168,4 +175,9 @@ void Game::UpdateBattleSpeed( void )
 
         DEBUG( DBG_GAME, DBG_INFO, "set battle delays: " << os.str() );
     }
+}
+
+uint32_t Game::ApplyBattleSpeed( uint32_t delay )
+{
+    return static_cast<uint32_t>( 10 - Settings::Get().BattleSpeed() ) * ( delay / DEFAULT_SPEED_DELAY );
 }
