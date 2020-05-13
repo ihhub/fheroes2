@@ -53,21 +53,41 @@ void Battle::Bridge::SetDown( bool f )
 
 bool Battle::Bridge::AllowUp( void ) const
 {
-    return NULL == Board::GetCell( 49 )->GetUnit() && NULL == Board::GetCell( 50 )->GetUnit();
+    if ( !isValid() || !isDown() )
+        return false;
+
+    if ( isDeadBodyOnABridge() )
+        return false;
+
+    const bool isNoUnitOn49 = NULL == Board::GetCell( 49 )->GetUnit();
+    const bool isNoUnitOn50 = NULL == Board::GetCell( 50 )->GetUnit();
+    return isNoUnitOn49 && isNoUnitOn50;
 }
 
-bool Battle::Bridge::NeedDown( const Unit & b, s32 pos2 ) const
+bool Battle::Bridge::isDeadBodyOnABridge( void ) const
 {
-    const s32 pos1 = b.GetHeadIndex();
+    const Battle::Graveyard * graveyard = GetArena()->GetGraveyard();
+    return graveyard->GetLastTroopUID( 49 ) || graveyard->GetLastTroopUID( 50 );
+}
 
-    if ( pos2 == 50 ) {
-        if ( pos1 == 51 )
+bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
+{
+    if ( !isValid() || isDown() ) // destroyed or already in down state
+        return false;
+
+    if ( isDeadBodyOnABridge() ) // under bridge
+        return false;
+
+    const s32 prevPos = b.GetHeadIndex();
+
+    if ( dstPos == 50 ) {
+        if ( prevPos == 51 )
             return true;
-        if ( ( pos1 == 61 || pos1 == 39 ) && b.GetColor() == Arena::GetCastle()->GetColor() )
+        if ( ( prevPos == 61 || prevPos == 39 ) && b.GetColor() == Arena::GetCastle()->GetColor() )
             return true;
     }
-    else if ( pos2 == 49 ) {
-        if ( pos1 != 50 && b.GetColor() == Arena::GetCastle()->GetColor() )
+    else if ( dstPos == 49 ) {
+        if ( prevPos != 50 && b.GetColor() == Arena::GetCastle()->GetColor() )
             return true;
     }
 
@@ -76,6 +96,9 @@ bool Battle::Bridge::NeedDown( const Unit & b, s32 pos2 ) const
 
 bool Battle::Bridge::isPassable( int color ) const
 {
+    if ( !isDown() && isDeadBodyOnABridge() ) // if bridge not in a down state and dead body's exists on 49 and 50 tiles
+        return false;
+
     return color == Arena::GetCastle()->GetColor() || isDown();
 }
 
@@ -98,16 +121,11 @@ void Battle::Bridge::SetPassable( const Unit & b )
     }
 }
 
-bool Battle::Bridge::NeedAction( const Unit & b, s32 dst ) const
-{
-    return ( !isDown() && NeedDown( b, dst ) ) || ( isValid() && isDown() && AllowUp() );
-}
-
 void Battle::Bridge::Action( const Unit & b, s32 dst )
 {
     bool action_down = false;
 
-    if ( !isDown() && NeedDown( b, dst ) )
+    if ( NeedDown( b, dst ) )
         action_down = true;
 
     if ( Arena::GetInterface() )

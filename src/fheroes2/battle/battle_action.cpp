@@ -291,9 +291,29 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             if ( interface )
                 interface->RedrawActionMove( *b, path );
             else if ( bridge ) {
-                for ( Indexes::const_iterator it = path.begin(); it != path.end(); ++it )
-                    if ( bridge->NeedAction( *b, *it ) )
-                        bridge->Action( *b, *it );
+                for ( Indexes::const_iterator dst = path.begin(); dst != path.end(); ++dst ) {
+                    bool doMovement = false;
+
+                    if ( bridge && bridge->NeedDown( *b, *dst ) )
+                        bridge->Action( *b, *dst );
+
+                    if ( b->isWide() ) {
+                        if ( b->GetTailIndex() == *dst )
+                            b->SetReflection( !b->isReflect() );
+                        else
+                            doMovement = true;
+                    }
+                    else {
+                        doMovement = true;
+                    }
+
+                    if ( doMovement )
+                        b->SetPosition( *dst );
+
+                    // check for possible bridge close action, after unit's end of movement
+                    if ( bridge && bridge->AllowUp() )
+                        bridge->Action( *b, *dst );
+                }
             }
 
             if ( b->isWide() ) {
