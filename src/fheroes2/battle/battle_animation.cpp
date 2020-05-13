@@ -275,6 +275,11 @@ bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
     return false;
 }
 
+const std::vector<std::vector<int> > & AnimationReference::getFullIdleAnimationVector() const
+{
+    return _idle;
+}
+
 const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const
 {
     switch ( animState ) {

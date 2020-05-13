@@ -311,7 +311,6 @@ Surface Battle::Unit::GetContour( int val ) const
     case CONTOUR_MAIN:
         return contoursMain.at( GetFrame() );
     case CONTOUR_REFLECT:
-        std::cout << GetFrame() << std::endl;
         return contoursReflect.at( GetFrame() );
     case CONTOUR_BLACK: // TODO: really get contour for stunned unit?
         return contoursWB.at( GetFrame() );
@@ -358,23 +357,24 @@ void Battle::Unit::InitContours( void )
 {
     const monstersprite_t & msi = GetMonsterSprite();
 
-    assignContours( msi.icn_file, Monster_Info::STATIC );
-    assignContours( msi.icn_file, Monster_Info::IDLE );
+    assignContours( msi.icn_file, animation.getAnimationVector( Monster_Info::STATIC ) );
+
+    const std::vector<std::vector<int> > vIdle = animation.getFullIdleAnimationVector();
+    for (std::vector<std::vector<int> >::const_iterator vIdleIter1 = vIdle.begin(); vIdleIter1 != vIdle.end(); ++vIdleIter1) {
+        assignContours( msi.icn_file, *vIdleIter1 );
+    }
 }
 
-void Battle::Unit::assignContours( const int icn_file, const int animState )
+void Battle::Unit::assignContours( const int icn_file, const std::vector<int> frames)
 {
-    const int start = animation.getAnimationSequence( animState ).firstFrame();
-    const int length = animation.getAnimationSequence( animState ).animationLength();
+    for ( std::vector<int>::const_iterator fIter = frames.begin(); fIter != frames.end(); ++fIter ) {
+        const Sprite sc = AGG::GetICN( icn_file, *fIter, false );
+        const Sprite swb = AGG::GetICN( icn_file, *fIter, true );
 
-    for ( int fIter = 0; fIter < length; ++fIter ) {
-        const Sprite sc = AGG::GetICN( icn_file, start + fIter, false );
-        const Sprite swb = AGG::GetICN( icn_file, start + fIter, true );
-
-        contoursMain[start + fIter] = sc.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWB[start + fIter] = sc.RenderGrayScale();
-        contoursReflect[start + fIter] = swb.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWBReflect[start + fIter] = swb.RenderGrayScale();
+        contoursMain[*fIter] = sc.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWB[*fIter] = sc.RenderGrayScale();
+        contoursReflect[*fIter] = swb.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWBReflect[*fIter] = swb.RenderGrayScale();
     }
 }
 

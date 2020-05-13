@@ -91,6 +91,7 @@ public:
     int getStaticFrame() const;
     int getDeathFrame() const;
 
+    const std::vector<std::vector<int> > & getFullIdleAnimationVector() const;
     const std::vector<int> & getAnimationVector( int animState ) const;
     std::vector<int> getAnimationOffset( int animState ) const;
     AnimationSequence getAnimationSequence( int animState ) const;

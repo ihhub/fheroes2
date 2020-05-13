@@ -207,7 +207,7 @@ namespace Battle
         ModesAffected affected;
         Unit * mirror;
 
-        void assignContours( const int icn_file, const int animState );
+        void assignContours( const int icn_file, const std::vector<int> );
         std::map<int, Surface> contoursMain;
         std::map<int, Surface> contoursReflect;
         std::map<int, Surface> contoursWB; // white black, really get contour for stunned unit?
