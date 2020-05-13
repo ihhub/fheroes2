@@ -45,7 +45,7 @@ public:
 
     int getFrame() const;
     int firstFrame() const;
-    int animationLength() const;
+    size_t animationLength() const;
     virtual double movementProgress() const;
     bool isFirstFrame() const;
     bool isLastFrame() const;

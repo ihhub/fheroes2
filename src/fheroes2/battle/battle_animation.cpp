@@ -66,9 +66,9 @@ int AnimationSequence::getFrame() const
     return isValid() ? _seq[_currentFrame] : 0;
 }
 
-int AnimationSequence::animationLength() const
+size_t AnimationSequence::animationLength() const
 {
-    return static_cast<int>( _seq.size() );
+    return _seq.size();
 }
 
 int AnimationSequence::firstFrame() const
@@ -136,9 +136,11 @@ int TimedSequence::getFrameAt( uint32_t time ) const
 
 size_t TimedSequence::getFrameID( uint32_t time ) const
 {
+    // isValid makes sure duration and length is not 0
     if ( isValid() ) {
-        const double frameTime = animationLength() / static_cast<double>( _duration );
-        return static_cast<size_t>( time / frameTime );
+        const size_t frame = static_cast<size_t>( time / ( _duration / static_cast<double>( animationLength() ) ) );
+        // check if time >= duration
+        return ( frame < animationLength() ) ? frame : animationLength() - 1;
     }
     return 0;
 }
