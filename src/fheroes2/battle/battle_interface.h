@@ -215,7 +215,8 @@ namespace Battle
         void RedrawActionLightningBoltSpell( Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
 
-        void RedrawTroopFrameAnimation( Unit & );
+        void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
+        void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit &, int, int, bool );
         void RedrawTargetsWithFrameAnimation( s32, const TargetsInfo &, int, int );
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
@@ -266,13 +267,13 @@ namespace Battle
         u32 animation_flags_frame;
         int catapult_frame;
 
-        const Unit * b_current;
-        const Unit * b_move;
-        const Unit * b_fly;
+        const Unit * _currentUnit;
+        const Unit * _movingUnit;
+        const Unit * _flyingUnit;
         const Sprite * b_current_sprite;
         u32 b_current_alpha;
-        Point p_move;
-        Point p_fly;
+        Point _movingPos;
+        Point _flyingPos;
 
         s32 index_pos;
         s32 teleport_src;
