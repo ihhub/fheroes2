@@ -281,8 +281,8 @@ const std::set<int> AnimationReference::getIdleFrameIDs() const
     result.clear();
 
     for ( std::vector<std::vector<int> >::const_iterator sequencesIter = _idle.begin(); sequencesIter != _idle.end(); ++sequencesIter ) {
-        for ( std::vector<int>::const_iterator frameIter = (*sequencesIter).begin(); frameIter != (*sequencesIter).end(); ++frameIter ) {
-            result.insert(*frameIter);
+        for ( std::vector<int>::const_iterator frameIter = ( *sequencesIter ).begin(); frameIter != ( *sequencesIter ).end(); ++frameIter ) {
+            result.insert( *frameIter );
         }
     }
 
