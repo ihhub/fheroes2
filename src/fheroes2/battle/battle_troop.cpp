@@ -307,18 +307,26 @@ std::string Battle::Unit::GetSpeedString( void ) const
 
 Surface Battle::Unit::GetContour( int val ) const
 {
+    const int frame = GetFrame();
+
     switch ( val ) {
     case CONTOUR_MAIN:
-        return contoursMain.at( GetFrame() );
+        if ( contoursMain.find( frame ) != contoursMain.end() )
+            return contoursMain.at( frame );
     case CONTOUR_REFLECT:
-        return contoursReflect.at( GetFrame() );
+        if ( contoursReflect.find( frame ) != contoursReflect.end() )
+            return contoursReflect.at( frame );
     case CONTOUR_BLACK: // TODO: really get contour for stunned unit?
-        return contoursWB.at( GetFrame() );
+        if ( contoursWB.find( frame ) != contoursWB.end() )
+            return contoursWB.at( frame );
     case CONTOUR_BLACK | CONTOUR_REFLECT: // TODO: really get contour for stunned unit?
-        return contoursWBReflect.at( GetFrame() );
+        if ( contoursWBReflect.find( frame ) != contoursWBReflect.end() )
+            return contoursWBReflect.at( frame );
     default:
         break;
     }
+
+    DEBUG( DBG_BATTLE, DBG_WARN, String() << " requesting frame " << frame << " with contour flag " << val << " not properly prepared " );
 
     return Surface();
 }
@@ -359,22 +367,21 @@ void Battle::Unit::InitContours( void )
 
     assignContours( msi.icn_file, animation.getAnimationVector( Monster_Info::STATIC ) );
 
-    const std::vector<std::vector<int> > vIdle = animation.getFullIdleAnimationVector();
-    for ( std::vector<std::vector<int> >::const_iterator vIdleIter1 = vIdle.begin(); vIdleIter1 != vIdle.end(); ++vIdleIter1 ) {
-        assignContours( msi.icn_file, *vIdleIter1 );
-    }
+    const std::set<int> idleFramesSet = animation.getIdleFrameIDs();
+    const std::vector<int> idleFrameIDs( idleFramesSet.begin(), idleFramesSet.end() );
+    assignContours( msi.icn_file, idleFrameIDs );
 }
 
-void Battle::Unit::assignContours( const int icn_file, const std::vector<int> frames )
+void Battle::Unit::assignContours( const int icn_file, const std::vector<int> & frames )
 {
-    for ( std::vector<int>::const_iterator fIter = frames.begin(); fIter != frames.end(); ++fIter ) {
-        const Sprite sc = AGG::GetICN( icn_file, *fIter, false );
-        const Sprite swb = AGG::GetICN( icn_file, *fIter, true );
+    for ( std::vector<int>::const_iterator frameIter = frames.begin(); frameIter != frames.end(); ++frameIter ) {
+        const Sprite sc = AGG::GetICN( icn_file, *frameIter, false );
+        const Sprite swb = AGG::GetICN( icn_file, *frameIter, true );
 
-        contoursMain[*fIter] = sc.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWB[*fIter] = sc.RenderGrayScale();
-        contoursReflect[*fIter] = swb.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWBReflect[*fIter] = swb.RenderGrayScale();
+        contoursMain[*frameIter] = sc.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWB[*frameIter] = sc.RenderGrayScale();
+        contoursReflect[*frameIter] = swb.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+        contoursWBReflect[*frameIter] = swb.RenderGrayScale();
     }
 }
 

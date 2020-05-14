@@ -275,9 +275,18 @@ bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
     return false;
 }
 
-const std::vector<std::vector<int> > & AnimationReference::getFullIdleAnimationVector() const
+const std::set<int> AnimationReference::getIdleFrameIDs() const
 {
-    return _idle;
+    std::set<int> result;
+    result.clear();
+
+    for ( std::vector<std::vector<int> >::const_iterator sequencesIter = _idle.begin(); sequencesIter != _idle.end(); ++sequencesIter ) {
+        for ( std::vector<int>::const_iterator frameIter = (*sequencesIter).begin(); frameIter != (*sequencesIter).end(); ++frameIter ) {
+            result.insert(*frameIter);
+        }
+    }
+
+    return result;
 }
 
 const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const

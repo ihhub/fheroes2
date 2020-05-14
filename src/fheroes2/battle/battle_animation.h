@@ -24,6 +24,7 @@
 #include "bin_info.h"
 #include "gamedefs.h"
 #include "monster_info.h"
+#include <set>
 
 struct monsterReturnAnim
 {
@@ -91,7 +92,7 @@ public:
     int getStaticFrame() const;
     int getDeathFrame() const;
 
-    const std::vector<std::vector<int> > & getFullIdleAnimationVector() const;
+    const std::set<int> getIdleFrameIDs() const;
     const std::vector<int> & getAnimationVector( int animState ) const;
     std::vector<int> getAnimationOffset( int animState ) const;
     AnimationSequence getAnimationSequence( int animState ) const;
