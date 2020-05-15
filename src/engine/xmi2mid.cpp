@@ -404,8 +404,10 @@ struct MidEvents : std::list<MidEvent>
                     switch ( *ptr >> 4 ) {
                     // meta
                     case 0x0F: {
-                        pack_t pack = unpackValue( ptr + 2 );
-                        ptr += pack.first + pack.second + 1;
+                        ptr++; // skip 0xFF
+                        uint8_t metaType = *( ptr++ );
+                        uint8_t metaLength = *( ptr++ );
+                        ptr += metaLength;
                         delta = 0;
                     } break;
 
@@ -454,8 +456,19 @@ struct MidEvents : std::list<MidEvent>
 
 StreamBuf & operator<<( StreamBuf & sb, const MidEvents & st )
 {
-    for ( std::list<MidEvent>::const_iterator it = st.begin(); it != st.end(); ++it )
+    int spamCnt = 0;
+    for ( std::list<MidEvent>::const_iterator it = st.begin(); it != st.end(); ++it ) {
+        std::cout << std::hex;
+        if ( spamCnt < 100 ) {
+            std::cout << (uint32_t)it->pack.at( 0 ) << ": ";
+            std::cout << std::hex << (uint32_t)it->data[0] << " " << (uint32_t)it->data[1];
+            std::cout << " " << (uint32_t)it->data[2];
+            std::cout << std::dec << std::endl;
+            spamCnt++;
+        }
+
         sb << *it;
+    }
     return sb;
 }
 
@@ -553,7 +566,7 @@ std::vector<u8> Music::Xmi2Mid( const std::vector<u8> & buf )
     StreamBuf sb( 16 * 4096 );
 
     if ( xmi.isvalid() ) {
-        MidData mid( xmi.tracks, 64 );
+        MidData mid( xmi.tracks, 60 );
         sb << mid;
     }
 
