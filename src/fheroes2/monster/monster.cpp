@@ -1855,10 +1855,8 @@ void RandomMonsterAnimation::increment()
     _frameId = _frameSet.front();
     _frameSet.pop_front();
 
-    if ( !_offsetSet.empty() ) {
-        _frameOffset = _offsetSet.front();
-        _offsetSet.pop_front();
-    }
+    _frameOffset = _offsetSet.front();
+    _offsetSet.pop_front();
 }
 
 int RandomMonsterAnimation::icnFile() const
@@ -1881,8 +1879,16 @@ void RandomMonsterAnimation::_pushFrames( Monster_Info::ANIMATION_TYPE type )
     const std::vector<int> & sequence = _reference.getAnimationVector( type );
     _frameSet.insert( _frameSet.end(), sequence.begin(), sequence.end() );
 
-    const std::vector<int> & offset = _reference.getAnimationOffset( type );
-    _offsetSet.insert( _offsetSet.end(), offset.begin(), offset.end() );
+    if ( type == Monster_Info::IDLE ) { // a special case
+        _offsetSet.insert( _offsetSet.end(), sequence.size(), 0 );
+    }
+    else {
+        const std::vector<int> & offset = _reference.getAnimationOffset( type );
+        _offsetSet.insert( _offsetSet.end(), offset.begin(), offset.end() );
+    }
+
+    if ( _offsetSet.size() != _frameSet.size() )
+        _offsetSet.resize( _frameSet.size(), 0 );
 }
 
 void RandomMonsterAnimation::_addValidMove( Monster_Info::ANIMATION_TYPE type )
