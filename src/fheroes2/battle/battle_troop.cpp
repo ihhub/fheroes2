@@ -365,7 +365,7 @@ const Surface & Battle::Unit::getContour( int frameId, std::map<int, const Surfa
     const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
 
     if ( !sprite.isValid() ) {
-        return nullptr;
+        return NULL;
     }
 
     if ( isBlackWhite )
