@@ -210,7 +210,7 @@ namespace Battle
         std::map<int, const Surface &> contoursReflect;
         std::map<int, const Surface &> contoursWB; // white black, really get contour for stunned unit?
         std::map<int, const Surface &> contoursWBReflect; // white black reflect, really get contour for stunned unit?
-        const Surface & getContour( int frameId, std::map<int, const Surface &> contours, bool isReflected, bool isBlackWhite ) const;
+        const Surface & getContour( const int frameId, std::map<int, const Surface &> & contours, const bool isReflected, const bool isBlackWhite );
 
         bool blindanswer;
     };

@@ -355,7 +355,7 @@ u32 Battle::Unit::GetUID( void ) const
     return uid;
 }
 
-const Surface & Battle::Unit::getContour( int frameId, std::map<int, const Surface &> contours, bool isReflected, bool isBlackWhite ) const
+const Surface & Battle::Unit::getContour( const int frameId, std::map<int, const Surface &> & contours, const bool isReflected, const bool isBlackWhite )
 {
     std::map<int, const Surface &>::iterator iter = contours.find( frameId );
     if ( iter != contours.end() )
@@ -369,11 +369,11 @@ const Surface & Battle::Unit::getContour( int frameId, std::map<int, const Surfa
     }
 
     if ( isBlackWhite )
-        contours.insert( std::pair<int, const Surface &>( frameId, sprite.RenderGrayScale() ) );
+        iter = contours.insert( iter, std::pair<int, const Surface &>( frameId, sprite.RenderGrayScale() ) );
     else
-        contours.insert( std::pair<int, const Surface &>( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) );
+        iter = contours.insert( iter, std::pair<int, const Surface &>( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) );
 
-    return contours.at( frameId );
+    return iter->second;
 }
 
 void Battle::Unit::SetMirror( Unit * ptr )
