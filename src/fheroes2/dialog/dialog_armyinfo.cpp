@@ -23,6 +23,7 @@
 #include "agg.h"
 #include "army.h"
 #include "battle.h"
+#include "battle_cell.h"
 #include "button.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -170,7 +171,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
                 DrawMonsterInfo( pos_rt, troop );
 
                 const Sprite & smonster = AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId(), false );
-                const Point monsterPos( monsterOffset.x + smonster.x() - ( troop.isWide() ? 23 : 0 ) - monsterAnimation.offset(), monsterOffset.y + smonster.y() );
+                const Point monsterPos( monsterOffset.x + smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset(), monsterOffset.y + smonster.y() );
                 smonster.Blit( monsterPos );
 
                 monsterAnimation.increment();

@@ -20,6 +20,7 @@
 
 #include "bin_info.h"
 #include "agg.h"
+#include "battle_cell.h"
 #include "monster.h"
 
 #include <algorithm>
@@ -261,6 +262,28 @@ namespace Bin_Info
                 frameXOffset[MOVE_STOP][0] = 44 + frameXOffset[MOVE_TILE_START][0];
             else
                 frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_MAIN].back();
+        }
+
+        if ( monsterID == Monster::IRON_GOLEM || monsterID == Monster::STEEL_GOLEM ) {
+            if ( frameXOffset[MOVE_START].size() == 4 ) { // the original golem info
+                frameXOffset[MOVE_START][0] = 0;
+                frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+                frameXOffset[MOVE_START][2] = CELLW * 2 / 8;
+                frameXOffset[MOVE_START][3] = CELLW * 3 / 8;
+                for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id )
+                    frameXOffset[MOVE_MAIN][id] += CELLW / 2;
+            }
+        }
+
+        if ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) {
+            if ( frameXOffset[MOVE_START].size() == 2 && frameXOffset[MOVE_STOP].size() == 1 ) { // the original swordsman info
+                frameXOffset[MOVE_START][0] = 0;
+                frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+                for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id )
+                    frameXOffset[MOVE_MAIN][id] += CELLW / 4;
+
+                frameXOffset[MOVE_STOP][0] = CELLW;
+            }
         }
     }
 
