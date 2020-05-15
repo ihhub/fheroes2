@@ -305,28 +305,22 @@ std::string Battle::Unit::GetSpeedString( void ) const
     return os.str();
 }
 
-Surface Battle::Unit::GetContour( int val ) const
+const Surface & Battle::Unit::GetContour( int val ) const
 {
     const int frame = GetFrame();
 
     switch ( val ) {
     case CONTOUR_MAIN:
-        if ( contoursMain.find( frame ) != contoursMain.end() )
-            return contoursMain.at( frame );
+        return getContour( frame, contoursMain, false, false );
     case CONTOUR_REFLECT:
-        if ( contoursReflect.find( frame ) != contoursReflect.end() )
-            return contoursReflect.at( frame );
+        return getContour( frame, contoursReflect, true, false );
     case CONTOUR_BLACK: // TODO: really get contour for stunned unit?
-        if ( contoursWB.find( frame ) != contoursWB.end() )
-            return contoursWB.at( frame );
+        return getContour( frame, contoursWB, false, true );
     case CONTOUR_BLACK | CONTOUR_REFLECT: // TODO: really get contour for stunned unit?
-        if ( contoursWBReflect.find( frame ) != contoursWBReflect.end() )
-            return contoursWBReflect.at( frame );
+        return getContour( frame, contoursWBReflect, true, true );
     default:
         break;
     }
-
-    DEBUG( DBG_BATTLE, DBG_WARN, String() << " requesting frame " << frame << " with contour flag " << val << " not properly prepared " );
 
     return Surface();
 }
@@ -361,28 +355,29 @@ u32 Battle::Unit::GetUID( void ) const
     return uid;
 }
 
-void Battle::Unit::InitContours( void )
+const Surface & Battle::Unit::getContour( int frameId, std::map<int, const Surface &> contours, bool isReflected, bool isBlackWhite) const
 {
+    std::map<int, const Surface &>::iterator iter = contours.find( frameId );
+    if ( iter != contours.end() )
+        return iter->second;
+
     const monstersprite_t & msi = GetMonsterSprite();
+    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
 
-    assignContours( msi.icn_file, animation.getAnimationVector( Monster_Info::STATIC ) );
-
-    const std::set<int> idleFramesSet = animation.getIdleFrameIDs();
-    const std::vector<int> idleFrameIDs( idleFramesSet.begin(), idleFramesSet.end() );
-    assignContours( msi.icn_file, idleFrameIDs );
-}
-
-void Battle::Unit::assignContours( const int icn_file, const std::vector<int> & frames )
-{
-    for ( std::vector<int>::const_iterator frameIter = frames.begin(); frameIter != frames.end(); ++frameIter ) {
-        const Sprite sc = AGG::GetICN( icn_file, *frameIter, false );
-        const Sprite swb = AGG::GetICN( icn_file, *frameIter, true );
-
-        contoursMain[*frameIter] = sc.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWB[*frameIter] = sc.RenderGrayScale();
-        contoursReflect[*frameIter] = swb.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
-        contoursWBReflect[*frameIter] = swb.RenderGrayScale();
+    if ( !sprite.isValid() ) {
+        return nullptr;
     }
+
+    Surface variableSurface;
+
+    if ( isBlackWhite )
+        variableSurface = sprite.RenderGrayScale() ;
+    else
+        variableSurface = sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ;
+
+    iter = contours.insert( iter, std::pair<int, const Surface &>( frameId, variableSurface ) );
+
+    return iter->second;
 }
 
 void Battle::Unit::SetMirror( Unit * ptr )

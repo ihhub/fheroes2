@@ -84,9 +84,8 @@ namespace Battle
         u32 GetHitPointsLeft( void ) const;
         u32 GetAffectedDuration( u32 ) const;
         u32 GetSpeed( void ) const;
-        Surface GetContour( int ) const;
+        const Surface & GetContour( int ) const;
 
-        void InitContours( void );
         void SetMirror( Unit * );
         void SetRandomMorale( void );
         void SetRandomLuck( void );
@@ -207,11 +206,11 @@ namespace Battle
         ModesAffected affected;
         Unit * mirror;
 
-        void assignContours( const int icn_file, const std::vector<int> & frames );
-        std::map<int, Surface> contoursMain;
-        std::map<int, Surface> contoursReflect;
-        std::map<int, Surface> contoursWB; // white black, really get contour for stunned unit?
-        std::map<int, Surface> contoursWBReflect; // white black reflect, really get contour for stunned unit?
+        std::map<int, const Surface &> contoursMain;
+        std::map<int, const Surface &> contoursReflect;
+        std::map<int, const Surface &> contoursWB; // white black, really get contour for stunned unit?
+        std::map<int, const Surface &> contoursWBReflect; // white black reflect, really get contour for stunned unit?
+        const Surface & getContour( int frameId, std::map<int, const Surface &> contours, bool isReflected, bool isBlackWhite) const;
 
         bool blindanswer;
     };
