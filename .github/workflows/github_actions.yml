@@ -17,6 +17,8 @@ jobs:
       run: gcc -v
     - name: build
       run: make -j 2
+      env:
+        ADDRESS_SANITISER: "ON"
   linuxSDL2:
     runs-on: ubuntu-latest
     steps:
@@ -29,13 +31,4 @@ jobs:
       run: make -j 2
       env:
         WITH_SDL2: "ON"
-  windows64Test:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: check current path
-      run: ls
-    - name: install Windows SDK 8.1
-      run: sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
-    - name: check msbuild presence
-      run: cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin" && .\MSBuild.exe $Env:GITHUB_WORKSPACE\fheroes2.vcxproj -t:Build -property:Configuration=Release-SDL1;Platform:Win32
+        ADDRESS_SANITISER: "ON"
