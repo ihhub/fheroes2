@@ -305,7 +305,7 @@ std::string Battle::Unit::GetSpeedString( void ) const
     return os.str();
 }
 
-const Surface & Battle::Unit::GetContour( int val ) const
+Surface Battle::Unit::GetContour( int val ) const
 {
     const int frame = GetFrame();
 
@@ -355,9 +355,9 @@ u32 Battle::Unit::GetUID( void ) const
     return uid;
 }
 
-const Surface & Battle::Unit::getContour( const int frameId, std::map<int, const Surface &> & contours, const bool isReflected, const bool isBlackWhite )
+const Surface & Battle::Unit::getContour( const int frameId, std::map<int, Surface> & contours, const bool isReflected, const bool isBlackWhite ) const
 {
-    std::map<int, const Surface &>::iterator iter = contours.find( frameId );
+    std::map<int, Surface>::iterator iter = contours.find( frameId );
     if ( iter != contours.end() )
         return iter->second;
 
@@ -365,13 +365,14 @@ const Surface & Battle::Unit::getContour( const int frameId, std::map<int, const
     const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
 
     if ( !sprite.isValid() ) {
-        return NULL;
+        iter = contours.insert( std::make_pair( frameId, Surface() ) ).first;
+        return iter->second;
     }
 
     if ( isBlackWhite )
-        iter = contours.insert( iter, std::pair<int, const Surface &>( frameId, sprite.RenderGrayScale() ) );
+        iter = contours.insert( std::make_pair( frameId, sprite.RenderGrayScale() ) );
     else
-        iter = contours.insert( iter, std::pair<int, const Surface &>( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) );
+        iter = contours.insert( std::make_pair( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) );
 
     return iter->second;
 }
