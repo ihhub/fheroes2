@@ -1766,7 +1766,6 @@ u32 Monster::GetCountFromHitPoints( const Monster & mons, u32 hp )
 
 const Monster::monstersprite_t & Monster::GetMonsterSprite() const
 {
-    const int id = GetID();
     return monsters_info[id];
 }
 
