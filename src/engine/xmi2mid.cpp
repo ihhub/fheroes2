@@ -42,14 +42,37 @@
 #define TAG_MTHD 0x4D546864
 #define TAG_MTRK 0x4D54726B
 
-struct pack_t : public std::pair<u32, u32> /* delta offset */
+// Pair: time and length
+struct XMI_Time : public std::pair<u32, u32>
 {
-    pack_t()
+    XMI_Time()
         : std::pair<u32, u32>( 0, 0 )
     {}
 };
 
-std::vector<u8> packValue( u32 delta )
+XMI_Time readXMITime( const uint8_t * data )
+{
+    const u8 * p = data;
+    XMI_Time res;
+
+    while ( *p & 0x80 ) {
+        if ( 4 <= p - data ) {
+            ERROR( "Can't read XMI time: field bigger than 4 bytes" );
+            break;
+        }
+
+        res.first |= 0x0000007F & *p;
+        res.first <<= 7;
+        ++p;
+    }
+
+    res.first += *p;
+    res.second = p - data + 1;
+
+    return res;
+}
+
+std::vector<u8> packToMIDITime( u32 delta )
 {
     u8 c1 = delta & 0x0000007F;
     u8 c2 = ( delta & 0x00003F80 ) >> 7;
@@ -76,28 +99,6 @@ std::vector<u8> packValue( u32 delta )
     }
     else
         res.push_back( c1 );
-
-    return res;
-}
-
-pack_t unpackValue( const u8 * ptr )
-{
-    const u8 * p = ptr;
-    pack_t res;
-
-    while ( *p & 0x80 ) {
-        if ( 4 <= p - ptr ) {
-            ERROR( "unpack delta mistake" );
-            break;
-        }
-
-        res.first |= 0x0000007F & *p;
-        res.first <<= 7;
-        ++p;
-    }
-
-    res.first += *p;
-    res.second = p - ptr + 1;
 
     return res;
 }
@@ -272,7 +273,7 @@ struct MidiChunk
     {
         _time = time;
         _type = type;
-        _binaryTime = packValue( time );
+        _binaryTime = packToMIDITime( time );
         _data.push_back( data1 );
     }
 
@@ -280,7 +281,7 @@ struct MidiChunk
     {
         _time = time;
         _type = type;
-        _binaryTime = packValue( time );
+        _binaryTime = packToMIDITime( time );
         _data.push_back( data1 );
         _data.push_back( data2 );
     }
@@ -289,7 +290,7 @@ struct MidiChunk
     {
         _time = time;
         _type = meta;
-        _binaryTime = packValue( time );
+        _binaryTime = packToMIDITime( time );
         _data.push_back( subType );
         _data.push_back( metaLength );
         for ( uint8_t i = 0; i < metaLength; ++i ) {
@@ -388,7 +389,7 @@ struct MidiEvents : std::vector<MidiChunk>
                     // note on
                     case 0x09: {
                         push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
-                        pack_t duration = unpackValue( ptr + 3 );
+                        XMI_Time duration = readXMITime( ptr + 3 );
                         // note off
                         push_back( MidiChunk( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F ) );
                         ptr += 3 + duration.second;
@@ -417,7 +418,7 @@ struct MidiEvents : std::vector<MidiChunk>
         // update duration
         delta = 0;
         for ( iterator it = this->begin(); it != this->end(); ++it ) {
-            it->_binaryTime = packValue( it->_time - delta );
+            it->_binaryTime = packToMIDITime( it->_time - delta );
             delta = it->_time;
         }
     }
@@ -427,21 +428,6 @@ StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
 {
     int spamCnt = 0;
     for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
-        
-        if ( spamCnt < 200 ) {
-            std::cout << it->_time << ": ";
-            std::cout << std::hex;
-            for ( std::vector<uint8_t>::const_iterator time = it->_binaryTime.begin(); time != it->_binaryTime.end(); ++time ) {
-                std::cout << (uint32_t)*time << " ";
-            }
-            std::cout << (uint32_t)it->_type;
-            for ( std::vector<uint8_t>::const_iterator data = it->_data.begin(); data != it->_data.end(); ++data ) {
-                std::cout << " " << (uint32_t)*data;
-            }
-            std::cout << std::dec << std::endl;
-            spamCnt++;
-        }
-
         sb << *it;
     }
     return sb;
@@ -522,7 +508,12 @@ struct MidData
         , format( 0 )
         , ppqn( 60 )
         , tracks( t )
-    {}
+    {
+        // XMI files play MIDI at a fixed clock rate of 120 Hz
+        if ( tracks.size() > 0 && tracks.front().events.trackTempo > 0 ) {
+            ppqn = ( tracks.front().events.trackTempo * 3 / 25000 );
+        }
+    }
 };
 
 StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
@@ -542,7 +533,6 @@ std::vector<u8> Music::Xmi2Mid( const std::vector<u8> & buf )
 
     if ( xmi.isvalid() ) {
         MidData mid( xmi.tracks );
-        mid.ppqn = ( mid.tracks.front().events.trackTempo * 3 / 25000 );
         sb << mid;
     }
 
