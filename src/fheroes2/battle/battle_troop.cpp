@@ -370,9 +370,9 @@ const Surface & Battle::Unit::getContour( const int frameId, std::map<int, Surfa
     }
 
     if ( isBlackWhite )
-        iter = contours.insert( std::make_pair( frameId, sprite.RenderGrayScale() ) );
+        iter = contours.insert( std::make_pair( frameId, sprite.RenderGrayScale() ) ).first;
     else
-        iter = contours.insert( std::make_pair( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) );
+        iter = contours.insert( std::make_pair( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) ).first;
 
     return iter->second;
 }
