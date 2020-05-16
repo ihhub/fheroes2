@@ -1157,22 +1157,24 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
     const Monster::monstersprite_t & msi = b.GetMonsterSprite();
     Sprite spmon1, spmon2;
 
-    // redraw current
-    if ( _currentUnit == &b ) {
-        spmon1 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, b.isReflect() );
-        spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
-
-        if ( b_current_sprite ) {
-            spmon1 = *b_current_sprite;
-            spmon2.Reset();
-        }
-    }
-    else if ( b.Modes( SP_STONE ) ) {
-        // black wite sprite
+    // under medusa's stunning effect
+    if ( b.Modes( SP_STONE ) ) {
         spmon1 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT | CONTOUR_BLACK ) : b.GetContour( CONTOUR_BLACK ), 0, 0 );
     }
     else {
+        // regular
         spmon1 = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
+
+        // this unit's turn, must be covered with contour
+        if ( _currentUnit == &b ) {
+            if ( b_current_sprite ) {
+                spmon1 = *b_current_sprite;
+                spmon2.Reset();
+            }
+            else {
+                spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
+            }
+        }
     }
 
     if ( spmon1.isValid() ) {

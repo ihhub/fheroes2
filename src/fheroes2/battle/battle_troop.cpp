@@ -307,15 +307,17 @@ std::string Battle::Unit::GetSpeedString( void ) const
 
 Surface Battle::Unit::GetContour( int val ) const
 {
+    const int frame = GetFrame();
+
     switch ( val ) {
     case CONTOUR_MAIN:
-        return contours[0];
+        return getContour( frame, contoursMain, false, false );
     case CONTOUR_REFLECT:
-        return contours[1];
-    case CONTOUR_BLACK:
-        return contours[2];
-    case CONTOUR_BLACK | CONTOUR_REFLECT:
-        return contours[3];
+        return getContour( frame, contoursReflect, true, false );
+    case CONTOUR_BLACK: // TODO: really get contour for stunned unit?
+        return getContour( frame, contoursWB, false, true );
+    case CONTOUR_BLACK | CONTOUR_REFLECT: // TODO: really get contour for stunned unit?
+        return getContour( frame, contoursWBReflect, true, true );
     default:
         break;
     }
@@ -353,21 +355,26 @@ u32 Battle::Unit::GetUID( void ) const
     return uid;
 }
 
-void Battle::Unit::InitContours( void )
+const Surface & Battle::Unit::getContour( const int frameId, std::map<int, Surface> & contours, const bool isReflected, const bool isBlackWhite ) const
 {
+    std::map<int, Surface>::iterator iter = contours.find( frameId );
+    if ( iter != contours.end() )
+        return iter->second;
+
     const monstersprite_t & msi = GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, false );
-    const Sprite & sprite2 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, true );
+    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
 
-    // main sprite
-    contours[0] = sprite1.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+    if ( !sprite.isValid() ) {
+        iter = contours.insert( std::make_pair( frameId, Surface() ) ).first;
+        return iter->second;
+    }
 
-    // revert sprite
-    contours[1] = sprite2.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+    if ( isBlackWhite )
+        iter = contours.insert( std::make_pair( frameId, sprite.RenderGrayScale() ) ).first;
+    else
+        iter = contours.insert( std::make_pair( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) ).first;
 
-    // create white black sprite
-    contours[2] = sprite1.RenderGrayScale();
-    contours[3] = sprite2.RenderGrayScale();
+    return iter->second;
 }
 
 void Battle::Unit::SetMirror( Unit * ptr )
