@@ -185,7 +185,7 @@ namespace AGG
 
     bool ReadDataDir( void );
     const std::vector<u8> & ReadICNChunk( int icn, u32 );
-    const std::vector<u8> & ReadChunk( const std::string & );
+    const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
 
     bool IsICNScalable( int icnId )
     {
@@ -489,9 +489,9 @@ bool AGG::ReadDataDir( void )
     return heroes2_agg.isGood();
 }
 
-const std::vector<u8> & AGG::ReadChunk( const std::string & key )
+const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
 {
-    if ( heroes2x_agg.isGood() ) {
+    if ( heroes2x_agg.isGood() && !ignoreExpansion ) {
         const std::vector<u8> & buf = heroes2x_agg.Read( key );
         if ( buf.size() )
             return buf;
@@ -1598,7 +1598,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
 void AGG::LoadMID( int xmi, std::vector<u8> & v )
 {
     DEBUG( DBG_ENGINE, DBG_INFO, XMI::GetString( xmi ) );
-    const std::vector<u8> & body = ReadChunk( XMI::GetString( xmi ) );
+    const std::vector<u8> & body = ReadChunk( XMI::GetString( xmi ), xmi >= XMI::MIDI_ORIGINAL_KNIGHT );
 
     if ( body.size() )
         v = Music::Xmi2Mid( body );
@@ -1707,6 +1707,7 @@ void AGG::PlayMusic( int mus, bool loop )
 
     Game::SetCurrentMusic( mus );
     const std::string prefix_music = System::ConcatePath( "files", "music" );
+    const MusicSource type = conf.MusicType();
 
     if ( conf.MusicExt() ) {
         std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus ) );
@@ -1732,16 +1733,15 @@ void AGG::PlayMusic( int mus, bool loop )
 
         DEBUG( DBG_ENGINE, DBG_INFO, MUS::GetString( mus ) );
     }
-    else
 #ifdef WITH_AUDIOCD
-        if ( conf.MusicCD() && Cdrom::isValid() ) {
+    else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
         Cdrom::Play( mus, loop );
         DEBUG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
     }
-    else
 #endif
-        if ( conf.MusicMIDI() ) {
-        int xmi = XMI::FromMUS( mus );
+    else if ( type == MUSIC_MIDI_EXPANSION || type == MUSIC_MIDI_ORIGINAL ) {
+        // Check if music needs to be pulled from HEROES2X
+        int xmi = XMI::FromMUS( mus, type == MUSIC_MIDI_EXPANSION );
         if ( XMI::UNKNOWN != xmi ) {
 #ifdef WITH_MIXER
             const std::vector<u8> & v = GetMID( xmi );

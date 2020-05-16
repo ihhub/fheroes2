@@ -44,11 +44,17 @@ namespace XMI
         MIDI0017,
         MIDI0018,
         MIDI0042,
-        MIDI0043
+        MIDI0043,
+        MIDI_ORIGINAL_KNIGHT,
+        MIDI_ORIGINAL_BARBARIAN,
+        MIDI_ORIGINAL_SORCERESS,
+        MIDI_ORIGINAL_WARLOCK,
+        MIDI_ORIGINAL_WIZARD,
+        MIDI_ORIGINAL_NECROMANCER
     };
 
-    const char * GetString( int );
-    int FromMUS( int );
+    const char * GetString( int track );
+    int FromMUS( int track, bool expansion );
 }
 
 #endif

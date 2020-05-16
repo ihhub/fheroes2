@@ -603,16 +603,24 @@ bool Settings::Read( const std::string & filename )
     }
 
     // music
+    _musicType = MUSIC_MIDI_ORIGINAL;
     sval = config.StrParams( "music" );
 
     if ( !sval.empty() ) {
-        if ( sval == "midi" ) {
+        if ( sval == "original" ) {
+            opt_global.ResetModes( GLOBAL_MUSIC );
+            opt_global.SetModes( GLOBAL_MUSIC_CD );
+            _musicType = MUSIC_MIDI_ORIGINAL;
+        }
+        else if ( sval == "expansion" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+            _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "cd" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_CD );
+            _musicType = MUSIC_CDROM;
         }
         else if ( sval == "ext" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
@@ -1250,6 +1258,10 @@ int Settings::MusicVolume( void ) const
 {
     return music_volume;
 }
+MusicSource Settings::MusicType() const
+{
+    return _musicType;
+}
 
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
@@ -1261,6 +1273,12 @@ void Settings::SetSoundVolume( int v )
 void Settings::SetMusicVolume( int v )
 {
     music_volume = 10 <= v ? 10 : v;
+}
+
+/* music volume: 0 - 10 */
+void Settings::SetMusicType( int v )
+{
+    _musicType = MUSIC_CDROM <= v ? MUSIC_CDROM : static_cast<MusicSource>(v);
 }
 
 /* check game type */

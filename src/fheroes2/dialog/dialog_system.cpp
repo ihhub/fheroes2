@@ -34,7 +34,7 @@ namespace Dialog
     void DrawSystemInfo( const Rects & );
 }
 
-/* return 0x01 - change speed, 0x02 - change sound, 0x04 - change music, 0x08 - change interface, 0x10 - change scroll  */
+/* return 0x01 - change speed, 0x02 - change sound, 0x04 - hide interface, 0x08 - change interface, 0x10 - change scroll  */
 int Dialog::SystemOptions( void )
 {
     Display & display = Display::Get();
@@ -63,7 +63,7 @@ int Dialog::SystemOptions( void )
 
     const Rect & rect1 = rects[0];
     const Rect & rect2 = rects[1];
-    //    const Rect & rect3 = rects[2];
+    const Rect & rect3 = rects[2];
     const Rect & rect4 = rects[3];
     const Rect & rect5 = rects[4];
     const Rect & rect6 = rects[5];
@@ -105,6 +105,11 @@ int Dialog::SystemOptions( void )
         }
 
         // set music type
+        if ( le.MouseClickLeft( rect3 ) ) {
+            conf.SetMusicType( conf.MusicType() == MUSIC_CDROM ? 0 : conf.MusicType() + 1 );
+            result |= 0x02;
+            redraw = true;
+        }
 
         // set hero speed
         if ( le.MouseClickLeft( rect4 ) ) {
@@ -179,7 +184,7 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     const Sprite & sprite1 = AGG::GetICN( ICN::SPANEL, conf.Music() ? 1 : 0 );
     const Rect & rect1 = rects[0];
     sprite1.Blit( rect1 );
-    str = _( "music" );
+    str = _( "Music" );
     text.Set( str, Font::SMALL );
     text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
@@ -194,7 +199,7 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     const Sprite & sprite2 = AGG::GetICN( ICN::SPANEL, conf.Sound() ? 3 : 2 );
     const Rect & rect2 = rects[1];
     sprite2.Blit( rect2 );
-    str = _( "effects" );
+    str = _( "Effects" );
     text.Set( str, Font::SMALL );
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y - text.h() - textOffset );
 
@@ -205,20 +210,33 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Set( str, Font::SMALL );
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.h + rect2.y + textOffset );
 
-    // unused
-    // const Sprite & sprite3 = AGG::GetICN(ICN::SPANEL, 17);
+    // Music Type
+    const Sprite & sprite3 = AGG::GetICN(ICN::SPANEL, conf.MusicType() == MUSIC_CDROM ? 11 : 10);
     const Rect & rect3 = rects[2];
-    black.Blit( rect3, display );
-    str = "unused";
+    sprite3.Blit( rect3, display );
+    str = _( "Music Type" );
+    text.Set( str, Font::SMALL );
+    text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y - text.h() - textOffset );
+
+    if ( conf.MusicType() == MUSIC_MIDI_ORIGINAL ) {
+        str = _( "MIDI" );
+    }
+    else if ( conf.MusicType() == MUSIC_MIDI_EXPANSION ) {
+        str = _( "MIDI Expansion" );
+    }
+    else if ( conf.MusicType() == MUSIC_CDROM ) {
+        str = _( "CD Stereo" );
+    }
     text.Set( str );
     text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y + rect3.h + textOffset );
+
 
     // hero move speed
     const u32 is4 = conf.HeroesMoveSpeed() ? ( conf.HeroesMoveSpeed() < 9 ? ( conf.HeroesMoveSpeed() < 7 ? ( conf.HeroesMoveSpeed() < 4 ? 4 : 5 ) : 6 ) : 7 ) : 9;
     const Sprite & sprite4 = AGG::GetICN( ICN::SPANEL, is4 );
     const Rect & rect4 = rects[3];
     sprite4.Blit( rect4 );
-    str = _( "hero speed" );
+    str = _( "Hero Speed" );
     text.Set( str );
     text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y - text.h() - textOffset );
 
@@ -234,7 +252,7 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     const Sprite & sprite5 = AGG::GetICN( ICN::SPANEL, is5 );
     const Rect & rect5 = rects[4];
     sprite5.Blit( rect5 );
-    str = _( "ai speed" );
+    str = _( "Enemy Speed" );
     text.Set( str );
     text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
@@ -250,7 +268,7 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     const Sprite & sprite6 = AGG::GetICN( ICN::SPANEL, is6 );
     const Rect & rect6 = rects[5];
     sprite6.Blit( rect6 );
-    str = _( "scroll speed" );
+    str = _( "Scroll Speed" );
     text.Set( str );
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
