@@ -389,7 +389,7 @@ struct MidiEvents : std::vector<MidiChunk>
                     // note on
                     case 0x09: {
                         push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
-                        XMI_Time duration = readXMITime( ptr + 3 );
+                        const XMI_Time duration = readXMITime( ptr + 3 );
                         // note off
                         push_back( MidiChunk( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F ) );
                         ptr += 3 + duration.second;
