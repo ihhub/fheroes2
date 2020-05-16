@@ -30,7 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install
-      run: brew link --force qt5
+      run: brew install qt5
     - name: build
       run: cd editor && mkdir -p build && cd build && cmake .. && make
       env:
