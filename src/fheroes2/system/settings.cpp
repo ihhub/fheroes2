@@ -839,6 +839,19 @@ bool Settings::Save( const std::string & filename ) const
 std::string Settings::String( void ) const
 {
     std::ostringstream os;
+    std::string musicType;
+    if ( opt_global.Modes( GLOBAL_MUSIC_EXT ) ) {
+        musicType = "ext";
+    }
+    else if ( MusicType() == MUSIC_CDROM ) {
+        musicType = "cd";
+    }
+    else if ( MusicType() == MUSIC_MIDI_ORIGINAL ) {
+        musicType = "original";
+    }
+    else {
+        musicType = "expansion";
+    }
 
     os << "# fheroes2 config, version: " << GetVersion() << std::endl;
     os << "data = " << data_params << std::endl;
@@ -853,9 +866,7 @@ std::string Settings::String( void ) const
         os << "auto" << std::endl;
 
     os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl
-       << "music = "
-       << ( opt_global.Modes( GLOBAL_MUSIC_CD ) ? "cd" : ( opt_global.Modes( GLOBAL_MUSIC_MIDI ) ? "midi" : ( opt_global.Modes( GLOBAL_MUSIC_EXT ) ? "ext" : "off" ) ) )
-       << std::endl
+       << "music = " << musicType << std::endl
        << "sound volume = " << static_cast<int>( sound_volume ) << std::endl
        << "music volume = " << static_cast<int>( music_volume ) << std::endl
        << "fullscreen = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
@@ -1278,7 +1289,7 @@ void Settings::SetMusicVolume( int v )
 /* music volume: 0 - 10 */
 void Settings::SetMusicType( int v )
 {
-    _musicType = MUSIC_CDROM <= v ? MUSIC_CDROM : static_cast<MusicSource>(v);
+    _musicType = MUSIC_CDROM <= v ? MUSIC_CDROM : static_cast<MusicSource>( v );
 }
 
 /* check game type */
