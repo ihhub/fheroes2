@@ -25,13 +25,17 @@ jobs:
       run: make -j 2
       env:
         WITH_SDL2: "ON"
-  editor:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: install
-      run: brew install qt5 && brew link --force qt5
-    - name: build
-      run: cd editor && mkdir -p build && cd build && cmake .. && make
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
       env:
-        CMAKE_PREFIX_PATH: $(brew --prefix qt5)/lib/cmake
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Test GitHub Actions deployment
+          - First Change
+          - Second Change
+        draft: false
+        prerelease: true
