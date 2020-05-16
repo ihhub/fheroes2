@@ -1598,10 +1598,27 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
 void AGG::LoadMID( int xmi, std::vector<u8> & v )
 {
     DEBUG( DBG_ENGINE, DBG_INFO, XMI::GetString( xmi ) );
-    const std::vector<u8> & body = ReadChunk( XMI::GetString( xmi ) );
+    const std::vector<u8> & body = Music::Xmi2Mid( ReadChunk( XMI::GetString( xmi ) ) );
 
-    if ( body.size() )
-        v = Music::Xmi2Mid( body );
+    //StreamFile midi;
+    //midi.open( "data\\afile", "rb" );
+    //v = midi.getRaw();
+    //midi.close();
+    v = body;
+
+
+    StreamFile midiOut;
+    midiOut.open( "data\\bfile", "w" );
+    midiOut.putRaw( (const char *)&body[0], body.size() );
+    midiOut.close();
+
+    // if ( !stream.open( filename, "rb" ) ) {
+    //    DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << filename << ", skipping..." );
+    //    return false;
+    //}
+
+    // if ( body.size() )
+    //    v = Music::Xmi2Mid( body );
 }
 
 /* return CVT */

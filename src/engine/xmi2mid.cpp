@@ -101,33 +101,6 @@ pack_t unpackValue( const u8 * ptr )
     return res;
 }
 
-struct meta_t
-{
-    meta_t()
-        : command( 0 )
-        , quantity( 0 )
-        , duration( 0 )
-    {}
-    meta_t( u8 c, u8 q, u32 d )
-        : command( c )
-        , quantity( q )
-        , duration( d )
-    {}
-
-    bool operator<( const meta_t & m ) const
-    {
-        return duration < m.duration;
-    }
-    void decrease_duration( u32 delta )
-    {
-        duration -= delta;
-    }
-
-    u8 command;
-    u8 quantity;
-    u32 duration;
-};
-
 struct IFFChunkHeader
 {
     u32 ID; // 4 upper case ASCII chars, padded with 0x20 (space)
@@ -287,55 +260,64 @@ struct XMIData
     }
 };
 
-struct MidEvent
+struct MidiChunk
 {
-    std::vector<u8> pack;
-    u8 data[4]; // status, data1, data2, count
-    // char		status;
-    // std::vector<u8>	data;
+    std::vector<uint8_t> _time;
+    uint8_t _type;
+    std::vector<uint8_t> _data;
+
+    MidiChunk( uint32_t time, uint8_t type, uint8_t data1 )
+    {
+        _time = packValue( time );
+        _type = type;
+        _data.push_back( data1 );
+    }
+
+    MidiChunk( uint32_t time, uint8_t type, uint8_t data1, uint8_t data2 )
+    {
+        _time = packValue( time );
+        _type = type;
+        _data.push_back( data1 );
+        _data.push_back( data2 );
+    }
+
+    MidiChunk( uint32_t time, uint8_t meta, uint8_t subType, const uint8_t * ptr, uint8_t metaLength )
+    {
+        _time = packValue( time );
+        _type = meta;
+        _data.push_back( subType );
+        _data.push_back( metaLength );
+        for ( uint8_t i = 0; i < metaLength; ++i ) {
+            _data.push_back( *( ptr + i ) );
+        }
+    }
 
     size_t size( void ) const
     {
-        return pack.size() + data[3] + 1;
-    }
-
-    MidEvent() {}
-    MidEvent( u32 delta, u8 st, u8 d1, u8 d2 )
-    {
-        data[0] = st;
-        data[1] = d1;
-        data[2] = d2;
-        data[3] = 2;
-        pack = packValue( delta );
-    }
-
-    MidEvent( u32 delta, u8 st, u8 d1 )
-    {
-        data[0] = st;
-        data[1] = d1;
-        data[2] = 0;
-        data[3] = 1;
-        pack = packValue( delta );
+        return _time.size() + 1 + _data.size();
     }
 };
 
-StreamBuf & operator<<( StreamBuf & sb, const MidEvent & st )
+static bool operator<( const MidiChunk & left, const MidiChunk & right )
 {
-    for ( std::vector<u8>::const_iterator it = st.pack.begin(); it != st.pack.end(); ++it )
+    return left._time < right._time;
+}
+
+StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
+{
+    for ( std::vector<u8>::const_iterator it = event._time.begin(); it != event._time.end(); ++it )
         sb << *it;
-    sb << st.data[0];
-    if ( 2 == st.data[3] )
-        sb << st.data[1] << st.data[2];
-    else if ( 1 == st.data[3] )
-        sb << st.data[1];
+    sb << event._type;
+    for ( std::vector<u8>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
+        sb << *it;
     return sb;
 }
 
-struct MidEvents : std::list<MidEvent>
+struct MidiEvents : std::vector<MidiChunk>
 {
     size_t count( void ) const
     {
-        return std::list<MidEvent>::size();
+        return std::vector<MidiChunk>::size();
     }
 
     size_t size( void ) const
@@ -346,47 +328,15 @@ struct MidEvents : std::list<MidEvent>
         return res;
     }
 
-    MidEvents() {}
-    MidEvents( const XMITrack & t )
+    MidiEvents() {}
+    MidiEvents( const XMITrack & t )
     {
         const u8 * ptr = &t.evnt[0];
         const u8 * end = ptr + t.evnt.size();
 
         u32 delta = 0;
-        std::list<meta_t> notesoff;
 
         while ( ptr && ptr < end ) {
-            // insert event: note off
-            if ( delta ) {
-                // sort duration
-                notesoff.sort();
-
-                std::list<meta_t>::iterator it1 = notesoff.begin();
-                std::list<meta_t>::iterator it2 = notesoff.end();
-                u32 delta2 = 0;
-
-                // apply delta
-                for ( ; it1 != it2; ++it1 ) {
-                    if ( ( *it1 ).duration <= delta ) {
-                        // note off
-                        push_back( MidEvent( ( *it1 ).duration - delta2, ( *it1 ).command, ( *it1 ).quantity, 0x7F ) );
-                        delta2 += ( ( *it1 ).duration - delta2 );
-                    }
-                }
-
-                // remove end notes
-                while ( notesoff.size() && notesoff.front().duration <= delta )
-                    notesoff.pop_front();
-
-                // fixed delta
-                if ( delta2 )
-                    delta -= delta2;
-
-                // decrease duration
-                for ( std::list<meta_t>::iterator it = notesoff.begin(); it != notesoff.end(); it++ )
-                    it->decrease_duration( delta );
-            }
-
             // interval
             if ( *ptr < 128 ) {
                 delta += *ptr;
@@ -397,7 +347,7 @@ struct MidEvents : std::list<MidEvent>
             {
                 // end
                 if ( 0xFF == *ptr && 0x2F == *( ptr + 1 ) ) {
-                    push_back( MidEvent( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                    push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
                     break;
                 }
                 else
@@ -405,10 +355,10 @@ struct MidEvents : std::list<MidEvent>
                     // meta
                     case 0x0F: {
                         ptr++; // skip 0xFF
-                        uint8_t metaType = *( ptr++ );
-                        uint8_t metaLength = *( ptr++ );
+                        const uint8_t metaType = *( ptr++ );
+                        const uint8_t metaLength = *( ptr++ );
+                        push_back( MidiChunk( delta, 0xFF, metaType, ptr, metaLength ) );
                         ptr += metaLength;
-                        delta = 0;
                     } break;
 
                     // key pressure
@@ -417,34 +367,33 @@ struct MidEvents : std::list<MidEvent>
                     case 0x0B:
                     // pitch bend
                     case 0x0E: {
-                        push_back( MidEvent( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
                         ptr += 3;
                         delta = 0;
                     } break;
 
-                    // note off
-                    case 0x08:
-                        // note on
+                    // XMI events doesn't have note off events
+                    // note on
                     case 0x09: {
-                        push_back( MidEvent( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
                         pack_t pack = unpackValue( ptr + 3 );
-                        notesoff.push_back( meta_t( *ptr - 0x10, *( ptr + 1 ), pack.first ) );
+                        // note off
+                        push_back( MidiChunk( delta + pack.first, *ptr - 0x10, *( ptr + 1 ), *( ptr + 2 ) ) );
                         ptr += 3 + pack.second;
-                        delta = 0;
                     } break;
 
                     // program change
                     case 0x0C:
-                    // chanel pressure
+                    // chanel aftertouch
                     case 0x0D: {
-                        push_back( MidEvent( delta, *ptr, *( ptr + 1 ) ) );
+                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ) ) );
                         ptr += 2;
                         delta = 0;
                     } break;
 
                     // unused command
                     default:
-                        push_back( MidEvent( 0, 0xFF, 0x2F, 0 ) );
+                        push_back( MidiChunk( 0, 0xFF, 0x2F, 0 ) );
                         ERROR( "unknown st: 0x" << std::setw( 2 ) << std::setfill( '0' ) << std::hex << static_cast<int>( *ptr )
                                                 << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) );
                         break;
@@ -454,16 +403,20 @@ struct MidEvents : std::list<MidEvent>
     }
 };
 
-StreamBuf & operator<<( StreamBuf & sb, const MidEvents & st )
+StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
 {
     int spamCnt = 0;
-    for ( std::list<MidEvent>::const_iterator it = st.begin(); it != st.end(); ++it ) {
+    for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
         std::cout << std::hex;
         if ( spamCnt < 100 ) {
-            std::cout << (uint32_t)it->pack.at( 0 ) << ": ";
-            std::cout << std::hex << (uint32_t)it->data[0] << " " << (uint32_t)it->data[1];
-            std::cout << " " << (uint32_t)it->data[2];
-            std::cout << std::dec << std::endl;
+            for ( std::vector<uint8_t>::const_iterator time = it->_time.begin(); time != it->_time.end(); ++time ) {
+                std::cout << " " << (uint32_t) *time;
+            }
+            std::cout << ": " << (uint32_t)it->_type;
+            for ( std::vector<uint8_t>::const_iterator data = it->_data.begin(); data != it->_data.end(); ++data ) {
+                std::cout << " " << (uint32_t)*data;
+            }
+            std::cout << std::endl;
             spamCnt++;
         }
 
@@ -475,7 +428,7 @@ StreamBuf & operator<<( StreamBuf & sb, const MidEvents & st )
 struct MidTrack
 {
     IFFChunkHeader mtrk;
-    MidEvents events;
+    MidiEvents events;
 
     MidTrack()
         : mtrk( TAG_MTRK, 0 )
