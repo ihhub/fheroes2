@@ -25,3 +25,9 @@ jobs:
       run: make -j 2
       env:
         WITH_SDL2: "ON"
+  windows64Test:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: check msbuild presence
+      run: msbuild -version
