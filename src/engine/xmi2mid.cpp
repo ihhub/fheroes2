@@ -380,7 +380,6 @@ struct MidiEvents : std::vector<MidiChunk>
                     case 0x0E: {
                         push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
                         ptr += 3;
-                        delta = 0;
                     } break;
 
                     // XMI events doesn't have note off events
@@ -399,7 +398,6 @@ struct MidiEvents : std::vector<MidiChunk>
                     case 0x0D: {
                         push_back( MidiChunk( delta, *ptr, *( ptr + 1 ) ) );
                         ptr += 2;
-                        delta = 0;
                     } break;
 
                     // unused command
@@ -427,17 +425,18 @@ StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
 {
     int spamCnt = 0;
     for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
-        std::cout << std::hex;
+        
         if ( spamCnt < 200 ) {
-            // std::cout << it->trueTime;
+            std::cout << it->trueTime << ": ";
+            std::cout << std::hex;
             for ( std::vector<uint8_t>::const_iterator time = it->_time.begin(); time != it->_time.end(); ++time ) {
-                std::cout << " " << (uint32_t)*time;
+                std::cout << (uint32_t)*time << " ";
             }
-            std::cout << ": " << (uint32_t)it->_type;
+            std::cout << (uint32_t)it->_type;
             for ( std::vector<uint8_t>::const_iterator data = it->_data.begin(); data != it->_data.end(); ++data ) {
                 std::cout << " " << (uint32_t)*data;
             }
-            std::cout << std::endl;
+            std::cout << std::dec << std::endl;
             spamCnt++;
         }
 
