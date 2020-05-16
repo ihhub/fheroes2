@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "game_io.h"
 #include "gamedefs.h"
+#include "mus.h"
 #include "pocketpc.h"
 #include "settings.h"
 
@@ -101,6 +102,8 @@ int Game::LoadGame( void )
 
 int Game::LoadStandard( void )
 {
+    Mixer::Pause();
+    AGG::PlayMusic( MUS::MAINMENU );
     // cursor
     Cursor & cursor = Cursor::Get();
     cursor.Hide();

@@ -228,9 +228,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         interface = new Interface( *this, index );
         board.SetArea( interface->GetArea() );
 
-        std::for_each( army1->begin(), army1->end(), std::mem_fun( &Unit::InitContours ) );
-        std::for_each( army2->begin(), army2->end(), std::mem_fun( &Unit::InitContours ) );
-
         if ( conf.Sound() )
             AGG::PlaySound( M82::PREBATTL );
 
@@ -405,7 +402,7 @@ void Battle::Arena::Turns( void )
     DEBUG( DBG_BATTLE, DBG_TRACE, current_turn );
 
     if ( interface && conf.Music() && !Music::isPlaying() )
-        AGG::PlayMusic( MUS::GetBattleRandom(), false );
+        AGG::PlayMusic( MUS::GetBattleRandom() );
 
     army1->NewTurn();
     army2->NewTurn();
@@ -1010,8 +1007,6 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     if ( elem ) {
         elem->SetModes( CAP_SUMMONELEM );
         elem->SetArmy( hero->GetArmy() );
-        if ( interface )
-            elem->InitContours();
         army.push_back( elem );
     }
     else {
@@ -1030,8 +1025,6 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
         image->SetArmy( *b.GetArmy() );
         image->SetMirror( &b );
         image->SetModes( CAP_MIRRORIMAGE );
-        if ( interface )
-            image->InitContours();
         b.SetModes( CAP_MIRROROWNER );
 
         GetCurrentForce().push_back( image );

@@ -23,6 +23,7 @@
 #include <string>
 
 #include "agg.h"
+#include "battle_cell.h"
 #include "button.h"
 #include "castle.h"
 #include "cursor.h"
@@ -362,9 +363,9 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
 
         const Sprite & smonster = AGG::GetICN( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId(), flipMonsterSprite );
         if ( flipMonsterSprite )
-            dst_pt.x = pt.x + 193 - ( smonster.x() + smonster.w() ) + ( monster.isWide() ? 23 : 0 ) + monsterAnimInfo[monsterId].offset();
+            dst_pt.x = pt.x + 193 - ( smonster.x() + smonster.w() ) + ( monster.isWide() ? CELLW / 2 : 0 ) + monsterAnimInfo[monsterId].offset();
         else
-            dst_pt.x = pt.x + 193 + smonster.x() - ( monster.isWide() ? 23 : 0 ) - monsterAnimInfo[monsterId].offset();
+            dst_pt.x = pt.x + 193 + smonster.x() - ( monster.isWide() ? CELLW / 2 : 0 ) - monsterAnimInfo[monsterId].offset();
 
         dst_pt.y = pt.y + 124 + smonster.y();
 
