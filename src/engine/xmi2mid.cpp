@@ -263,33 +263,33 @@ struct XMIData
 
 struct MidiChunk
 {
-    std::vector<uint8_t> _time;
-    uint32_t trueTime;
+    uint32_t _time;
     uint8_t _type;
+    std::vector<uint8_t> _binaryTime;
     std::vector<uint8_t> _data;
 
     MidiChunk( uint32_t time, uint8_t type, uint8_t data1 )
     {
-        trueTime = time;
-        _time = packValue( time );
+        _time = time;
         _type = type;
+        _binaryTime = packValue( time );
         _data.push_back( data1 );
     }
 
     MidiChunk( uint32_t time, uint8_t type, uint8_t data1, uint8_t data2 )
     {
-        trueTime = time;
-        _time = packValue( time );
+        _time = time;
         _type = type;
+        _binaryTime = packValue( time );
         _data.push_back( data1 );
         _data.push_back( data2 );
     }
 
     MidiChunk( uint32_t time, uint8_t meta, uint8_t subType, const uint8_t * ptr, uint8_t metaLength )
     {
-        trueTime = time;
-        _time = packValue( time );
+        _time = time;
         _type = meta;
+        _binaryTime = packValue( time );
         _data.push_back( subType );
         _data.push_back( metaLength );
         for ( uint8_t i = 0; i < metaLength; ++i ) {
@@ -299,18 +299,18 @@ struct MidiChunk
 
     size_t size( void ) const
     {
-        return _time.size() + 1 + _data.size();
+        return _binaryTime.size() + 1 + _data.size();
     }
 };
 
 static bool operator<( const MidiChunk & left, const MidiChunk & right )
 {
-    return left.trueTime < right.trueTime;
+    return left._time < right._time;
 }
 
 StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
 {
-    for ( std::vector<u8>::const_iterator it = event._time.begin(); it != event._time.end(); ++it )
+    for ( std::vector<u8>::const_iterator it = event._binaryTime.begin(); it != event._binaryTime.end(); ++it )
         sb << *it;
     sb << event._type;
     for ( std::vector<u8>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
@@ -344,27 +344,29 @@ struct MidiEvents : std::vector<MidiChunk>
         u32 delta = 0;
 
         while ( ptr && ptr < end ) {
-            // interval
+            // XMI delay is 7 bit values summed together
             if ( *ptr < 128 ) {
                 delta += *ptr;
                 ++ptr;
             }
             else
-            // command
+            // MIDI commands start from 0x80
             {
-                // end
+                // track end
                 if ( 0xFF == *ptr && 0x2F == *( ptr + 1 ) ) {
                     push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                    // stop parsing
                     break;
                 }
                 else
                     switch ( *ptr >> 4 ) {
-                    // meta
+                    // metadata
                     case 0x0F: {
                         ptr++; // skip 0xFF
                         const uint8_t metaType = *( ptr++ );
                         const uint8_t metaLength = *( ptr++ );
                         push_back( MidiChunk( delta, 0xFF, metaType, ptr, metaLength ) );
+                        // Tempo switch
                         if ( metaType == 0x51 && metaLength == 3 ) {
                             // 24bit big endian
                             trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
@@ -386,15 +388,15 @@ struct MidiEvents : std::vector<MidiChunk>
                     // note on
                     case 0x09: {
                         push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
-                        pack_t pack = unpackValue( ptr + 3 );
+                        pack_t duration = unpackValue( ptr + 3 );
                         // note off
-                        push_back( MidiChunk( delta + pack.first, *ptr - 0x10, *( ptr + 1 ), *( ptr + 2 ) ) );
-                        ptr += 3 + pack.second;
+                        push_back( MidiChunk( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F ) );
+                        ptr += 3 + duration.second;
                     } break;
 
                     // program change
                     case 0x0C:
-                    // chanel aftertouch
+                    // channel aftertouch
                     case 0x0D: {
                         push_back( MidiChunk( delta, *ptr, *( ptr + 1 ) ) );
                         ptr += 2;
@@ -415,8 +417,8 @@ struct MidiEvents : std::vector<MidiChunk>
         // update duration
         delta = 0;
         for ( iterator it = this->begin(); it != this->end(); ++it ) {
-            it->_time = packValue( it->trueTime - delta );
-            delta = it->trueTime;
+            it->_binaryTime = packValue( it->_time - delta );
+            delta = it->_time;
         }
     }
 };
@@ -427,9 +429,9 @@ StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
     for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
         
         if ( spamCnt < 200 ) {
-            std::cout << it->trueTime << ": ";
+            std::cout << it->_time << ": ";
             std::cout << std::hex;
-            for ( std::vector<uint8_t>::const_iterator time = it->_time.begin(); time != it->_time.end(); ++time ) {
+            for ( std::vector<uint8_t>::const_iterator time = it->_binaryTime.begin(); time != it->_binaryTime.end(); ++time ) {
                 std::cout << (uint32_t)*time << " ";
             }
             std::cout << (uint32_t)it->_type;
