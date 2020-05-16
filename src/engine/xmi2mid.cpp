@@ -426,7 +426,6 @@ struct MidiEvents : std::vector<MidiChunk>
 
 StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
 {
-    int spamCnt = 0;
     for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
         sb << *it;
     }
