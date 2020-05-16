@@ -17,6 +17,10 @@ jobs:
       run: gcc -v
     - name: build
       run: make -j 2
+    - name: install demo
+      run: cd script/demo && ./demo_linux.sh
+    - name: test
+      run: ./fheroes2 -t 1
       env:
         ADDRESS_SANITISER: "ON"
         DEBUG: "ON"
@@ -30,6 +34,10 @@ jobs:
       run: gcc -v
     - name: build
       run: make -j 2
+    - name: install demo
+      run: cd script/demo && ./demo_linux.sh
+    - name: test
+      run: ./fheroes2 -t 1
       env:
         WITH_SDL2: "ON"
         ADDRESS_SANITISER: "ON"
