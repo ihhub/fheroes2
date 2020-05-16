@@ -29,5 +29,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
+    - name: check current path
+      run: ls
     - name: check msbuild presence
-      run: cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild" && ls
+      run: cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\" && ls
