@@ -3,6 +3,7 @@ skip_commits:
   - .travis.yml
   - '**/*.md'
   - .gitignore
+  - .github/workflows
 
 # version format
 version: 1.0.{build}
