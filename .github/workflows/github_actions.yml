@@ -30,4 +30,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: check msbuild presence
-      run: msbuild -version
+      run: msbuild
