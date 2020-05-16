@@ -19,6 +19,7 @@ jobs:
       run: make -j 2
       env:
         ADDRESS_SANITISER: "ON"
+        DEBUG: "ON"
   linuxSDL2:
     runs-on: ubuntu-latest
     steps:
@@ -32,3 +33,4 @@ jobs:
       env:
         WITH_SDL2: "ON"
         ADDRESS_SANITISER: "ON"
+        DEBUG: "ON"
