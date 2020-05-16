@@ -30,4 +30,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: check msbuild presence
-      run: cd "C:\Program Files (x86)\Microsoft Visual Studio" && dir \*.exe /s
+      run: cd "C:\Program Files (x86)\Microsoft Visual Studio" && ls
