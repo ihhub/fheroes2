@@ -211,7 +211,7 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.h + rect2.y + textOffset );
 
     // Music Type
-    const Sprite & sprite3 = AGG::GetICN(ICN::SPANEL, conf.MusicType() == MUSIC_CDROM ? 11 : 10);
+    const Sprite & sprite3 = AGG::GetICN( ICN::SPANEL, conf.MusicType() == MUSIC_CDROM ? 11 : 10 );
     const Rect & rect3 = rects[2];
     sprite3.Blit( rect3, display );
     str = _( "Music Type" );
@@ -229,7 +229,6 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     }
     text.Set( str );
     text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y + rect3.h + textOffset );
-
 
     // hero move speed
     const u32 is4 = conf.HeroesMoveSpeed() ? ( conf.HeroesMoveSpeed() < 9 ? ( conf.HeroesMoveSpeed() < 7 ? ( conf.HeroesMoveSpeed() < 4 ? 4 : 5 ) : 6 ) : 7 ) : 9;
