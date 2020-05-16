@@ -1167,11 +1167,12 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
         // this unit's turn, must be covered with contour
         if ( _currentUnit == &b ) {
-            spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
-
             if ( b_current_sprite ) {
                 spmon1 = *b_current_sprite;
                 spmon2.Reset();
+            }
+            else {
+                spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
             }
         }
     }
