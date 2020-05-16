@@ -20,15 +20,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "audio_music.h"
+#include "engine.h"
+#include "system.h"
+
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <list>
 #include <utility>
 #include <vector>
-
-#include "audio_music.h"
-#include "engine.h"
-#include "system.h"
 
 #define TAG_FORM 0x464F524D
 #define TAG_XDIR 0x58444952
@@ -263,11 +264,13 @@ struct XMIData
 struct MidiChunk
 {
     std::vector<uint8_t> _time;
+    uint32_t trueTime;
     uint8_t _type;
     std::vector<uint8_t> _data;
 
     MidiChunk( uint32_t time, uint8_t type, uint8_t data1 )
     {
+        trueTime = time;
         _time = packValue( time );
         _type = type;
         _data.push_back( data1 );
@@ -275,6 +278,7 @@ struct MidiChunk
 
     MidiChunk( uint32_t time, uint8_t type, uint8_t data1, uint8_t data2 )
     {
+        trueTime = time;
         _time = packValue( time );
         _type = type;
         _data.push_back( data1 );
@@ -283,6 +287,7 @@ struct MidiChunk
 
     MidiChunk( uint32_t time, uint8_t meta, uint8_t subType, const uint8_t * ptr, uint8_t metaLength )
     {
+        trueTime = time;
         _time = packValue( time );
         _type = meta;
         _data.push_back( subType );
@@ -300,7 +305,7 @@ struct MidiChunk
 
 static bool operator<( const MidiChunk & left, const MidiChunk & right )
 {
-    return left._time < right._time;
+    return left.trueTime < right.trueTime;
 }
 
 StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
@@ -315,6 +320,8 @@ StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
 
 struct MidiEvents : std::vector<MidiChunk>
 {
+    uint32_t trackTempo = 0;
+
     size_t count( void ) const
     {
         return std::vector<MidiChunk>::size();
@@ -358,6 +365,10 @@ struct MidiEvents : std::vector<MidiChunk>
                         const uint8_t metaType = *( ptr++ );
                         const uint8_t metaLength = *( ptr++ );
                         push_back( MidiChunk( delta, 0xFF, metaType, ptr, metaLength ) );
+                        if ( metaType == 0x51 && metaLength == 3 ) {
+                            // 24bit big endian
+                            trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
+                        }
                         ptr += metaLength;
                     } break;
 
@@ -400,6 +411,15 @@ struct MidiEvents : std::vector<MidiChunk>
                     }
             }
         }
+
+        std::sort( this->begin(), this->end() );
+
+        // update duration
+        delta = 0;
+        for ( iterator it = this->begin(); it != this->end(); ++it ) {
+            it->_time = packValue( it->trueTime - delta );
+            delta = it->trueTime;
+        }
     }
 };
 
@@ -408,9 +428,10 @@ StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
     int spamCnt = 0;
     for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
         std::cout << std::hex;
-        if ( spamCnt < 100 ) {
+        if ( spamCnt < 200 ) {
+            // std::cout << it->trueTime;
             for ( std::vector<uint8_t>::const_iterator time = it->_time.begin(); time != it->_time.end(); ++time ) {
-                std::cout << " " << (uint32_t) *time;
+                std::cout << " " << (uint32_t)*time;
             }
             std::cout << ": " << (uint32_t)it->_type;
             for ( std::vector<uint8_t>::const_iterator data = it->_data.begin(); data != it->_data.end(); ++data ) {
@@ -495,10 +516,10 @@ struct MidData
         , format( 0 )
         , ppqn( 0 )
     {}
-    MidData( const XMITracks & t, int p )
+    MidData( const XMITracks & t )
         : mthd( TAG_MTHD, 6 )
         , format( 0 )
-        , ppqn( p )
+        , ppqn( 60 )
         , tracks( t )
     {}
 };
@@ -519,7 +540,8 @@ std::vector<u8> Music::Xmi2Mid( const std::vector<u8> & buf )
     StreamBuf sb( 16 * 4096 );
 
     if ( xmi.isvalid() ) {
-        MidData mid( xmi.tracks, 60 );
+        MidData mid( xmi.tracks );
+        mid.ppqn = ( mid.tracks.front().events.trackTempo * 3 / 25000 );
         sb << mid;
     }
 
