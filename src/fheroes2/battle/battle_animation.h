@@ -24,7 +24,6 @@
 #include "bin_info.h"
 #include "gamedefs.h"
 #include "monster_info.h"
-#include <set>
 
 struct monsterReturnAnim
 {
