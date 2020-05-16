@@ -20,16 +20,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "audio_music.h"
-#include "engine.h"
-#include "system.h"
-
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <list>
 #include <utility>
 #include <vector>
+
+#include "audio_music.h"
+#include "engine.h"
+#include "system.h"
 
 #define TAG_FORM 0x464F524D
 #define TAG_XDIR 0x58444952
