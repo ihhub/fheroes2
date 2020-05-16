@@ -25,3 +25,13 @@ jobs:
       run: make -j 2
       env:
         WITH_SDL2: "ON"
+  editor:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install
+      run: brew link --force qt5
+    - name: build
+      run: cd editor && mkdir -p build && cd build && cmake .. && make
+      env:
+        CMAKE_PREFIX_PATH: $(brew --prefix qt5)/lib/cmake
