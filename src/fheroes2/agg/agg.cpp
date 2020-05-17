@@ -491,7 +491,7 @@ bool AGG::ReadDataDir( void )
 
 const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
 {
-    if ( heroes2x_agg.isGood() && !ignoreExpansion ) {
+    if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
         const std::vector<u8> & buf = heroes2x_agg.Read( key );
         if ( buf.size() )
             return buf;

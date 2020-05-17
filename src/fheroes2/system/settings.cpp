@@ -602,7 +602,7 @@ bool Settings::Read( const std::string & filename )
             opt_global.SetModes( GLOBAL_FONTRENDERBLENDED2 );
     }
 
-    // music
+    // music source
     _musicType = MUSIC_MIDI_ORIGINAL;
     sval = config.StrParams( "music" );
 
@@ -622,7 +622,7 @@ bool Settings::Read( const std::string & filename )
             opt_global.SetModes( GLOBAL_MUSIC_CD );
             _musicType = MUSIC_CDROM;
         }
-        else if ( sval == "ext" ) {
+        else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_EXT );
         }
@@ -841,7 +841,7 @@ std::string Settings::String( void ) const
     std::ostringstream os;
     std::string musicType;
     if ( opt_global.Modes( GLOBAL_MUSIC_EXT ) ) {
-        musicType = "ext";
+        musicType = "external";
     }
     else if ( MusicType() == MUSIC_CDROM ) {
         musicType = "cd";
@@ -1286,7 +1286,7 @@ void Settings::SetMusicVolume( int v )
     music_volume = 10 <= v ? 10 : v;
 }
 
-/* music volume: 0 - 10 */
+/* Set music type: check MusicSource enum */
 void Settings::SetMusicType( int v )
 {
     _musicType = MUSIC_CDROM <= v ? MUSIC_CDROM : static_cast<MusicSource>( v );

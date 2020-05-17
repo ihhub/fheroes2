@@ -48,12 +48,12 @@ namespace XMI
         {MIDI0018, "MIDI0018.XMI"},
         {MIDI0042, "MIDI0042.XMI"},
         {MIDI0043, "MIDI0043.XMI"},
-        {MIDI_ORIGINAL_KNIGHT, "MIDI0009.XMI"},
-        {MIDI_ORIGINAL_BARBARIAN, "MIDI0007.XMI"},
-        {MIDI_ORIGINAL_SORCERESS, "MIDI0005.XMI"}, // for consistency
-        {MIDI_ORIGINAL_WARLOCK, "MIDI0005.XMI"},
-        {MIDI_ORIGINAL_WIZARD, "MIDI0008.XMI"},
-        {MIDI_ORIGINAL_NECROMANCER, "MIDI0006.XMI"},
+        {MIDI_ORIGINAL_SORCERESS, "MIDI0005.XMI"}, // Sorceress doesn't have own track in OG release, Warlock theme was used
+        {MIDI_ORIGINAL_WARLOCK, "MIDI0005.XMI"}, // Warlock theme was set to Sorceress so we use MIDI0005
+        {MIDI_ORIGINAL_NECROMANCER, "MIDI0006.XMI"}, // Necromancer theme has trickled down to Warlock so we use MIDI0006
+        {MIDI_ORIGINAL_KNIGHT, "MIDI0009.XMI"}, // Knight theme was used by both Barbarian and Wizard castles, so we use either MIDI0009 or MIDI0010
+        {MIDI_ORIGINAL_BARBARIAN, "MIDI0007.XMI"}, // Barbarian intended theme is under MIDI0007
+        {MIDI_ORIGINAL_WIZARD, "MIDI0008.XMI"}, // Wizard's and Knight's tracks were switched around, so we use MIDI0008
     };
 }
 
@@ -62,6 +62,7 @@ const char * XMI::GetString( int track )
     return UNKNOWN < track && MIDI_ORIGINAL_NECROMANCER >= track ? xmimap[track].string : xmimap[UNKNOWN].string;
 }
 
+// Due to a bug in Succession Wars/demo release (HEROES2.AGG) we have to remap original MIDI tracks to intended castles
 int XMI::FromMUS( int track, bool expansion )
 {
     switch ( track ) {
