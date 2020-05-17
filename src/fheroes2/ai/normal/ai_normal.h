@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef H2AI_NORMAL_H
+#define H2AI_NORMAL_H
+
 #include "ai.h"
 
 namespace AI
@@ -28,3 +31,5 @@ namespace AI
         Normal();
     };
 }
+
+#endif
