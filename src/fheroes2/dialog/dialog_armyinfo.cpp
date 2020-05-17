@@ -60,10 +60,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
     const Rect & pos_rt = back.GetArea();
     sprite_dialog.Blit( pos_rt.x, pos_rt.y, display );
 
-    const Point monsterStatOffset( pos_rt.x + 402, pos_rt.y + 40 );
+    const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 40 );
     DrawMonsterStats( monsterStatOffset, troop );
 
-    const Point battleStatOffset( pos_rt.x + 402, pos_rt.y + 205 );
+    const Point battleStatOffset( pos_rt.x + 400, pos_rt.y + 205 );
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
