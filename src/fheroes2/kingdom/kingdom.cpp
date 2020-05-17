@@ -370,11 +370,13 @@ u32 Kingdom::GetCountCapital( void ) const
 void Kingdom::AddFundsResource( const Funds & funds )
 {
     resource = resource + funds;
+    resource.Trim();
 }
 
 void Kingdom::OddFundsResource( const Funds & funds )
 {
     resource = resource - funds;
+    resource.Trim();
 }
 
 u32 Kingdom::GetLostTownDays( void ) const
