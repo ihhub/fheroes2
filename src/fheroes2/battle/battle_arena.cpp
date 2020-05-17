@@ -325,6 +325,8 @@ Battle::Arena::~Arena()
         delete interface;
     if ( armies_order )
         delete armies_order;
+    if ( bridge )
+        delete bridge;
 }
 
 void Battle::Arena::TurnTroop( Unit * current_troop )
