@@ -60,10 +60,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
     const Rect & pos_rt = back.GetArea();
     sprite_dialog.Blit( pos_rt.x, pos_rt.y, display );
 
-    const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 40 );
+    const Point monsterStatOffset( pos_rt.x + 402, pos_rt.y + 40 );
     DrawMonsterStats( monsterStatOffset, troop );
 
-    const Point battleStatOffset( pos_rt.x + 400, pos_rt.y + 205 );
+    const Point battleStatOffset( pos_rt.x + 402, pos_rt.y + 205 );
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
@@ -213,10 +213,10 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     dst_pt.y = dst.y;
     text.Blit( dst_pt );
 
-    const int ox = 10;
+    const int offsetX = 6;
 
     text.Set( troop.GetAttackString() );
-    dst_pt.x = dst.x + ox;
+    dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt );
 
     // defense
@@ -226,7 +226,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     text.Set( troop.GetDefenseString() );
-    dst_pt.x = dst.x + ox;
+    dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt );
 
     // shot
@@ -239,7 +239,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
         text.Blit( dst_pt );
 
         text.Set( troop.GetShotString() );
-        dst_pt.x = dst.x + ox;
+        dst_pt.x = dst.x + offsetX;
         text.Blit( dst_pt );
     }
 
@@ -253,7 +253,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
         text.Set( GetString( troop().GetDamageMin() ) + " - " + GetString( troop().GetDamageMax() ) );
     else
         text.Set( GetString( troop().GetDamageMin() ) );
-    dst_pt.x = dst.x + ox;
+    dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt );
 
     // hp
@@ -263,7 +263,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     text.Set( GetString( troop().GetHitPoints() ) );
-    dst_pt.x = dst.x + ox;
+    dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt );
 
     if ( troop.isBattle() ) {
@@ -273,7 +273,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
         text.Blit( dst_pt );
 
         text.Set( GetString( troop.GetHitPointsLeft() ) );
-        dst_pt.x = dst.x + ox;
+        dst_pt.x = dst.x + offsetX;
         text.Blit( dst_pt );
     }
 
@@ -284,7 +284,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     text.Set( troop.GetSpeedString() );
-    dst_pt.x = dst.x + ox;
+    dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt );
 
     // morale
@@ -294,7 +294,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     text.Set( Morale::String( troop.GetMorale() ) );
-    dst_pt.x = dst.x + ox;
+    dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt );
 
     // luck
@@ -304,7 +304,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     text.Set( Luck::String( troop.GetLuck() ) );
-    dst_pt.x = dst.x + ox;
+    dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt );
 }
 
