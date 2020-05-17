@@ -37,65 +37,85 @@
 #include "ai.h"
 #include "pairs.h"
 
-struct IndexObjectMap : public std::map<s32, int>
+namespace AI
 {
-    void DumpObjects( const IndexDistance & id );
-};
-
-struct AIKingdom
-{
-    AIKingdom()
-        : capital( NULL ){};
-    void Reset( void );
-
-    Castle * capital;
-    IndexObjectMap scans;
-};
-
-class AIKingdoms : public std::vector<AIKingdom>
-{
-public:
-    static AIKingdom & Get( int color );
-    static void Reset( void );
-
-private:
-    static AIKingdoms & Get( void );
-    AIKingdoms()
-        : std::vector<AIKingdom>( KINGDOMMAX + 1 ){};
-};
-
-struct Queue : public std::list<s32>
-{
-    bool isPresent( s32 ) const;
-};
-
-struct AIHero
-{
-    AIHero()
-        : primary_target( -1 )
-        , fix_loop( 0 ){};
-
-    void ClearTasks( void )
+    struct Queue : public std::list<s32>
     {
-        sheduled_visit.clear();
-    }
-    void Reset( void );
+        bool isPresent( s32 ) const;
+    };
 
-    Queue sheduled_visit;
-    s32 primary_target;
-    u32 fix_loop;
-};
+    struct IndexObjectMap : public std::map<s32, int>
+    {
+        void DumpObjects( const IndexDistance & id );
+    };
 
-struct AIHeroes : public std::vector<AIHero>
-{
-public:
-    static AIHero & Get( const Heroes & );
-    static void Reset( void );
+    struct AIKingdom
+    {
+        AIKingdom()
+            : capital( NULL ){};
+        void Reset( void );
 
-private:
-    static AIHeroes & Get( void );
-    AIHeroes()
-        : std::vector<AIHero>( HEROESMAXCOUNT + 2 ){};
-};
+        Castle * capital;
+        IndexObjectMap scans;
+    };
 
+    struct AIHero
+    {
+        AIHero();
+        void ClearTasks();
+        void Reset();
+
+        Queue sheduled_visit;
+        s32 primary_target;
+        u32 fix_loop;
+    };
+
+    class Simple : public Base
+    {
+    public:
+        Simple();
+
+        // Overwrites for Base AI
+        void KingdomTurn( Kingdom & );
+        void CastleTurn( Castle & );
+        void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
+        void HeroesTurn( Heroes & );
+
+        void HeroesPreBattle( HeroBase & );
+        void HeroesAfterBattle( HeroBase & );
+        void HeroesPostLoad( Heroes & );
+        bool HeroesGetTask( Heroes & );
+        void HeroesActionNewPosition( Heroes & );
+        void HeroesClearTask( const Heroes & );
+        void HeroesLevelUp( Heroes & );
+        bool HeroesSkipFog( void );
+        std::string HeroesString( const Heroes & );
+
+        void CastleRemove( const Castle & );
+        void CastlePreBattle( Castle & );
+
+        const char * Type( void ) const;
+        const char * License( void ) const;
+
+        void Reset();
+        AIKingdom & GetKingdom( int color );
+        AIHero & GetHero( const Heroes & );
+
+    private:
+        std::vector<AIKingdom> _kingdoms;
+        std::vector<AIHero> _heroes;
+
+        // Additional methods called only internally
+        bool BattleMagicTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions &, const Battle::Unit * );
+
+        void HeroesAddedRescueTask( Heroes & hero );
+        void HeroesAddedTask( Heroes & hero );
+        void HeroesTurnEnd( Heroes * hero );
+        void HeroesSetHunterWithTarget( Heroes * hero, s32 dst );
+        void HeroesCaptureNearestTown( Heroes * hero );
+        bool HeroesScheduledVisit( const Kingdom & kingdom, s32 index );
+
+        bool IsPriorityAndNotVisitAndNotPresent( const std::pair<s32, int> & indexObj, const Heroes * hero );
+    };
+}
 #endif

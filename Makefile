@@ -12,7 +12,6 @@
 # WITHOUT_IMAGE: build without SDL_image library (disable cache image, icn2png)
 # WITHOUT_XML: skip build tinyxml, used for load alt. resources
 # WITH_TOOLS: build tools
-# WITH_AI: empty (default), simple (Non-commercial License)
 # 
 # -DCONFIGURE_FHEROES2_LOCALEDIR: system locale dir
 # -DCONFIGURE_FHEROES2_DATA: system fheroes2 game dir
@@ -22,7 +21,7 @@ TARGET	:= fheroes2
 MAKE	:= make
 
 all:
-	$(MAKE) -C src WITH_AI=simple
+	$(MAKE) -C src
 	@cp src/dist/$(TARGET) .
 
 clean:

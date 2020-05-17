@@ -135,9 +135,9 @@ int Game::Credits( void )
     str.append( "This program is distributed under the terms of the GPL v2." );
     str.append( "\n" );
     str.append( "AI engine: " );
-    str.append( AI::Type() );
+    str.append( AI::Get().Type() );
     str.append( ", license: " );
-    str.append( AI::License() );
+    str.append( AI::Get().License() );
     str.append( "\n \n" );
     str.append( "Site project:\n" );
     str.append( "https://github.com/ihhub/fheroes2" );

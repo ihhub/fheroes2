@@ -31,11 +31,9 @@ SOURCEDIR  := $(shell ls $(SOURCEROOT))
 POT        := $(TARGET).pot
 SRCDIRLIST := $(addprefix $(SOURCEROOT)/, $(SOURCEDIR))
 
-ifdef WITH_AI
-SRCDIRLIST := $(SRCDIRLIST) $(SOURCEROOT)/ai/$(WITH_AI)
-else
 SRCDIRLIST := $(SRCDIRLIST) $(SOURCEROOT)/ai/empty
-endif
+SRCDIRLIST := $(SRCDIRLIST) $(SOURCEROOT)/ai/simple
+SRCDIRLIST := $(SRCDIRLIST) $(SOURCEROOT)/ai/normal
 
 SEARCH     := $(addsuffix /*.cpp, $(SRCDIRLIST))
 
