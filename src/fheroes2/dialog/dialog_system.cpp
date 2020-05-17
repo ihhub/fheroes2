@@ -106,7 +106,12 @@ int Dialog::SystemOptions( void )
 
         // set music type
         if ( le.MouseClickLeft( rect3 ) ) {
-            conf.SetMusicType( conf.MusicType() == MUSIC_CDROM ? 0 : conf.MusicType() + 1 );
+            int type = conf.MusicType() + 1;
+            // If there's no expansion files we skip this option
+            if ( type == MUSIC_MIDI_EXPANSION && !conf.PriceLoyaltyVersion() )
+                type++;
+            
+            conf.SetMusicType( type > MUSIC_CDROM ? 0 : type );
             result |= 0x02;
             redraw = true;
         }

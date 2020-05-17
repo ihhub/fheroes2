@@ -846,11 +846,11 @@ std::string Settings::String( void ) const
     else if ( MusicType() == MUSIC_CDROM ) {
         musicType = "cd";
     }
-    else if ( MusicType() == MUSIC_MIDI_ORIGINAL ) {
-        musicType = "original";
+    else if ( MusicType() == MUSIC_MIDI_EXPANSION ) {
+        musicType = "expansion";
     }
     else {
-        musicType = "expansion";
+        musicType = "original";
     }
 
     os << "# fheroes2 config, version: " << GetVersion() << std::endl;
