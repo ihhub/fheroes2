@@ -33,6 +33,7 @@
 Display::Display()
     : window( NULL )
     , renderer( NULL )
+    , keepAspectRatio( false )
 {
     _isDisplay = true;
 }
@@ -60,12 +61,22 @@ Display::~Display()
 #endif
 }
 
-void Display::SetVideoMode( int w, int h, bool fullscreen )
+void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     u32 flags = SDL_WINDOW_SHOWN;
-    if ( fullscreen )
-        flags |= SDL_WINDOW_FULLSCREEN;
+    if ( fullscreen ) {
+        if ( changeVideo ) {
+            flags |= SDL_WINDOW_FULLSCREEN;
+        }
+        else {
+            flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+        }
+        keepAspectRatio = aspect;
+    }
+    else {
+        keepAspectRatio = false;
+    }
 
     if ( renderer )
         SDL_DestroyRenderer( renderer );
@@ -78,6 +89,26 @@ void Display::SetVideoMode( int w, int h, bool fullscreen )
 
     window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
+
+    if ( keepAspectRatio ) {
+        SDL_DisplayMode currentVideoMode;
+        SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
+
+        const float ratio = static_cast<float>( w ) / static_cast<float>( h );
+
+        srcRenderSurface.w = w;
+        srcRenderSurface.h = h;
+        srcRenderSurface.x = 0;
+        srcRenderSurface.y = 0;
+
+        dstRenderSurface.w = static_cast<int>( currentVideoMode.h * ratio + 0.5f );
+        dstRenderSurface.h = currentVideoMode.h;
+        dstRenderSurface.x = ( currentVideoMode.w - dstRenderSurface.w ) / 2;
+        dstRenderSurface.y = 0;
+
+        SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+        SDL_RenderClear( renderer );
+    }
 
     if ( !renderer )
         Error::Except( __FUNCTION__, SDL_GetError() );
@@ -130,11 +161,18 @@ void Display::Flip( void )
             ERROR( SDL_GetError() );
         }
         else {
-            if ( 0 != SDL_RenderCopy( renderer, tx, NULL, NULL ) ) {
+            int ret = 0;
+            if ( keepAspectRatio )
+                ret = SDL_RenderCopy( renderer, tx, &srcRenderSurface, &dstRenderSurface );
+            else
+                ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
+
+            if ( 0 != ret ) {
                 ERROR( SDL_GetError() );
             }
-            else
+            else {
                 SDL_RenderPresent( renderer );
+            }
         }
 
         SDL_DestroyTexture( tx );

@@ -47,7 +47,7 @@ public:
     std::string GetInfo( void ) const;
     Size GetMaxMode( bool enable_rotate ) const;
 
-    void SetVideoMode( int w, int h, bool );
+    void SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo );
     void SetCaption( const char * );
     void SetIcons( Surface & );
 
@@ -72,6 +72,9 @@ public:
 protected:
     friend class Texture;
 
+    bool keepAspectRatio;
+    SDL_Rect srcRenderSurface;
+    SDL_Rect dstRenderSurface;
     Display();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

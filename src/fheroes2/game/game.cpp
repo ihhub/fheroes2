@@ -235,7 +235,7 @@ void Game::SetFixVideoMode( void )
     if ( conf.VideoMode().h > max_y )
         fixsize.h = max_y;
 
-    Display::Get().SetVideoMode( fixsize.w, fixsize.h, conf.FullScreen() );
+    Display::Get().SetVideoMode( fixsize.w, fixsize.h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
 }
 
 /* play all sound from focus area game */
