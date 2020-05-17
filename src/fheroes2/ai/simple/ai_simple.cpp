@@ -74,7 +74,8 @@ namespace AI
 
     AIHero::AIHero()
         : primary_target( -1 )
-        , fix_loop( 0 ){};
+        , fix_loop( 0 )
+    {}
 
     void AIHero::ClearTasks( void )
     {
