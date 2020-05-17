@@ -110,7 +110,7 @@ void RedrawStaticInfo( const Rect & pos, const Monster & monster, bool label )
 
     // sprite monster
     const Sprite & smon = AGG::GetICN( monster.ICNMonh(), 0 );
-    dst_pt.x = pos.x + 70 - smon.w() / 2;
+    dst_pt.x = pos.x + 27 + smon.x();
     dst_pt.y = pos.y + 130 - smon.h();
     smon.Blit( dst_pt );
 
