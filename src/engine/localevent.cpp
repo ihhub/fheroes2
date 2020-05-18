@@ -34,7 +34,9 @@ LocalEvent::LocalEvent()
     , mouse_state( 0 )
     , mouse_button( 0 )
     , mouse_st( 0, 0 )
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     , redraw_cursor_func( NULL )
+#endif
     , keyboard_filter_func( NULL )
     , clock_delay( TAP_DELAY_EMULATE )
     , loop_delay( 1 )
@@ -897,6 +899,7 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 {
     LocalEvent & le = LocalEvent::Get();
 
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     // motion
     if ( ( le.modes & GLOBAL_FILTER ) && SDL_MOUSEMOTION == event->type ) {
         // redraw cursor
@@ -907,6 +910,7 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
                 ( *( le.redraw_cursor_func ) )( event->motion.x, event->motion.y );
         }
     }
+#endif
 
     // key
     if ( ( le.modes & GLOBAL_FILTER ) && SDL_KEYDOWN == event->type )
@@ -1064,13 +1068,14 @@ bool LocalEvent::EmulateMouseAction( KeySym key )
             mouse_button = SDL_BUTTON_RIGHT;
         }
 
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             if ( modes & MOUSE_OFFSET )
                 ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
             else
                 ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
         }
-
+#endif
         ResetModes( KEY_PRESSED );
 
         return true;

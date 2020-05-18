@@ -176,7 +176,9 @@ void Game::Init( void )
     le.SetStateDefaults();
 
     // set global events
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
+#endif
     le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
     le.SetGlobalFilter( true );
 

@@ -28,9 +28,22 @@
 /* constructor */
 Cursor::Cursor()
     : theme( NONE )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    , cursor( NULL )
+#else
     , offset_x( 0 )
     , offset_y( 0 )
+#endif
 {}
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+/* destructor */
+Cursor::~Cursor()
+{
+    if ( cursor != NULL )
+        SDL_FreeCursor( cursor );
+}
+#endif
 
 Cursor & Cursor::Get( void )
 {
@@ -44,12 +57,78 @@ int Cursor::Themes( void )
     return SP_ARROW >= theme ? theme : NONE;
 }
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+void Cursor::SetCursor( int icn, int name )
+{
+    if ( cursor != NULL )
+        SDL_FreeCursor( cursor );
+
+    const Sprite cursorSprite = AGG::GetICN( icn, 0xFF & name );
+    SDL_Surface * cursorSurface = cursorSprite();
+
+    cursor = SDL_CreateColorCursor( cursorSurface, 0, 0 );
+    if ( cursor == NULL ) {
+        DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, icn = " << icn << ", name = " << name << ", reason: " << SDL_GetError() );
+        return;
+    }
+
+    SDL_SetCursor( cursor );
+    if ( SDL_ShowCursor( SDL_ENABLE ) == SDL_QUERY )
+        DEBUG( DBG_ENGINE, DBG_WARN, "SDL_ShowCursor failure, icn = " << icn << ", name = " << name << ", reason: " << SDL_GetError() );
+}
+#endif
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+bool Cursor::isVisible() const
+{
+    // return SpriteMove::isVisible();
+    const bool state = SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE;
+    return state;
+}
+#endif
+
 /* set cursor theme */
 bool Cursor::SetThemes( int name, bool force )
 {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( force || theme != name ) {
         if ( isVisible() )
+            SDL_ShowCursor( SDL_DISABLE );
+
+        theme = name;
+
+        switch ( 0xF000 & name ) {
+        case 0x3000:
+            SetCursor( ICN::SPELCO, 0 );
+            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::SPELCO ) << ", " << ( name & 0xFF ) );
+            break;
+
+        case 0x2000:
+            SetCursor( ICN::CMSECO, name );
+            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::CMSECO ) << ", " << ( name & 0xFF ) );
+            break;
+
+        case 0x1000:
+            SetCursor( ICN::ADVMCO, name );
+            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::ADVMCO ) << ", " << ( name & 0xFF ) );
+            break;
+
+        default:
+            // default Cursor::POINTER
+            SetCursor( ICN::ADVMCO, 0 );
+            break;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+#else // SDL1 related code
+if ( force || theme != name ) {
+        if ( isVisible() )
             Hide();
+
         theme = name;
 
         switch ( 0xF000 & name ) {
@@ -74,7 +153,8 @@ bool Cursor::SetThemes( int name, bool force )
             break;
         }
 
-        SetOffset( name );
+        // SetOffset( name );
+
         return true;
     }
 
@@ -245,11 +325,16 @@ void Cursor::SetOffset( int name )
         break;
     }
 }
+#endif
 
 void Cursor::Show( void )
 {
     if ( !Settings::Get().ExtPocketHideCursor() )
+    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        SDL_ShowCursor( SDL_ENABLE );
+    #else
         SpriteMove::Show();
+    #endif
 }
 
 int Cursor::DistanceThemes( int theme, u32 dist )

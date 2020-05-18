@@ -133,7 +133,12 @@ public:
 
     static Cursor & Get( void );
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    bool isVisible() const;
+#else
     static void Redraw( s32, s32 );
+#endif
+
     static int DistanceThemes( int, u32 );
     static int WithoutDistanceThemes( int );
 
@@ -143,12 +148,21 @@ public:
 
 private:
     Cursor();
-    void SetOffset( int );
-    void Move( s32, s32 );
 
     int theme;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    ~Cursor();
+    void SetCursor( int icn, int name );
+
+    SDL_Cursor * cursor;
+#else
+    void Move( s32, s32 );
+    void SetOffset( int );
+
     s32 offset_x;
     s32 offset_y;
+#endif
 };
 
 #endif

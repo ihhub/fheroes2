@@ -315,7 +315,7 @@ private:
 
     Point mouse_cu; // point cursor
 
-    void ( *redraw_cursor_func )( s32, s32 );
+    void ( *redraw_cursor_func )( s32, s32 ); // don't use it for SDL2
     void ( *keyboard_filter_func )( int, int );
 
     SDL::Time clock;
