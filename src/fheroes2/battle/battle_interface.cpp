@@ -2418,10 +2418,9 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     _movingUnit = &attacker;
     _movingPos = attacker.GetRectPosition();
 
+    // Unit 'Position' is position of the tile he's standing at
     const Rect & pos1 = attacker.GetRectPosition();
     const Rect & pos2 = defender.GetRectPosition();
-    const Point & attkPos = pos1.getCenterPos();
-    const Point & defPos = pos2.getCenterPos();
 
     const bool archer = attacker.isArchers() && !attacker.isHandFighting();
     const bool isDoubleCell = attacker.isDoubleCellAttack() && 2 == targets.size();
@@ -2434,13 +2433,18 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     // long distance attack animation
     if ( archer ) {
-        const int dx = attkPos.x - defPos.x;
-        const int dy = attkPos.y - defPos.y;
-        const bool reverse = dx < 0;
-        const double angle = (dx != 0) ? std::atan( static_cast<double>(-dy) / static_cast<double>(dx) ) * 180.0 / M_PI : (dy < 0) ? 90 : -90 ;
+        // Turns out OG missile offset is not perfect, so using 3/4 height to compensate
+        const Point shooterPos( pos1.x + ( pos1.w / 3 ), pos1.y + ( pos1.h * 3 / 4 ) );
+        // Calculating the 'center' of the defender
+        const Point targetPos = Point( pos2.x + pos2.w / (defender.isReflect() ? -2 : 2), pos2.y );
 
-        std::cout << "dx: " << dx << ", dy: " << dy << ", angle: " << angle << std::endl;
+        const int dx = pos2.x - shooterPos.x;
+        const int dy = targetPos.y - shooterPos.y;
+        double angle = ( dx != 0 ) ? std::atan( static_cast<double>( -dy ) / static_cast<double>( dx ) ) * 180.0 / M_PI : ( dy < 0 ) ? 90 : -90;
+        if ( dx < 0 )
+            angle = -angle;
 
+        // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
         const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
 
         // redraw archer attack animation
@@ -2449,18 +2453,12 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         }
 
         // draw missile animation
-        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), dx > 0 );
+        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), dx < 0 );
 
-        const u32 step = ( missile.w() < 16 ? 16 : missile.w() );
         const Point offset = attacker.GetStartMissileOffset( direction );
+        const Point line_from = Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
 
-        const Point line_from = Point( attkPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), attkPos.y + ( Settings::Get().QVGA() ? offset.y / 2 : offset.y ) );
-        const Point line_to = Point( defPos.x + ( defender.isReflect() ? 0 : pos2.w ), defPos.y );
-        std::cout << "offset: " << offset.x << "," << offset.y << std::endl;
-        std::cout << "From: " << line_from.x << "," << line_from.y << "  ";
-        std::cout << "to: " << line_to.x << "," << line_to.y << std::endl;
-
-        const Points points = GetEuclideanLine( line_from, line_to, step );
+        const Points points = GetEuclideanLine( line_from, targetPos, ( missile.w() < 16 ? 16 : missile.w() ) );
         Points::const_iterator pnt = points.begin();
 
         // convert the following code into a function/event service
@@ -2472,8 +2470,6 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
                 Redraw();
                 missile.Blit( attacker.isReflect() ? ( *pnt ).x - missile.w() : ( *pnt ).x, ( *pnt ).y );
                 cursor.Show();
-                Display::Get().DrawLine( Point( pos1.x, pos1.y ), Point( pos1.x + 50, pos1.y ), RGBA( 0xff, 0xff, 0 ) );
-                Display::Get().DrawLine( Point( pos2.x, pos2.y ), Point( pos2.x - 50, pos2.y ), RGBA( 0xff, 0xff, 0 ) );
                 display.Flip();
                 ++pnt;
             }

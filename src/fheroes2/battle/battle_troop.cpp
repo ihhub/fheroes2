@@ -1889,7 +1889,8 @@ int Battle::Unit::ICNMiss( void ) const
     case Monster::GREATER_DRUID:
         return ICN::DRUIDMSL;
     case Monster::CENTAUR:
-        return ICN::ARCH_MSL;
+        // Doesn't have own missile file, game falls back to ELF__MSL
+        return ICN::ELF__MSL;
     case Monster::HALFLING:
         return ICN::HALFLMSL;
     case Monster::MAGE:

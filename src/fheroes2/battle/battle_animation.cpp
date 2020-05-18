@@ -462,7 +462,7 @@ size_t AnimationReference::getProjectileID( float angle ) const
             }
         }
         else {
-            return _monsterInfo.projectileAngles.back();
+            return _monsterInfo.projectileAngles.size() - 1;
         }
     }
     return 0;
