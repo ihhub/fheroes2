@@ -2643,57 +2643,59 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
     }
 }
 
-void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
+void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 {
     Cursor & cursor = Cursor::Get();
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
+    const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+
     cursor.SetThemes( Cursor::WAR_NONE );
 
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
-    StringReplace( msg, "%{monster}", b.GetName() );
-    StringReplace( msg, "%{src}", b.GetHeadIndex() );
+    StringReplace( msg, "%{monster}", unit.GetName() );
+    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
     _currentUnit = NULL;
-    _movingUnit = &b;
+    _movingUnit = &unit;
 
     while ( dst != path.end() ) {
         const Cell * cell = Board::GetCell( *dst );
         _movingPos = cell->GetPos();
         bool show_anim = false;
 
-        if ( bridge && bridge->NeedDown( b, *dst ) ) {
+        if ( bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = NULL;
-            b.SwitchAnimation( Monster_Info::STATIC );
-            bridge->Action( b, *dst );
-            _movingUnit = &b;
+            unit.SwitchAnimation( Monster_Info::STATIC );
+            bridge->Action( unit, *dst );
+            _movingUnit = &unit;
         }
 
-        if ( b.isWide() ) {
-            if ( b.GetTailIndex() == *dst )
-                b.SetReflection( !b.isReflect() );
+        if ( unit.isWide() ) {
+            if ( unit.GetTailIndex() == *dst )
+                unit.SetReflection( !unit.isReflect() );
             else
                 show_anim = true;
         }
         else {
-            b.UpdateDirection( cell->GetPos() );
+            unit.UpdateDirection( cell->GetPos() );
             show_anim = true;
         }
 
         if ( show_anim ) {
-            AGG::PlaySound( b.M82Move() );
-            b.SwitchAnimation( Monster_Info::MOVING );
-            RedrawTroopDefaultDelay( b );
-            b.SetPosition( *dst );
+            AGG::PlaySound( unit.M82Move() );
+            unit.SwitchAnimation( Monster_Info::MOVING );
+            AnimateUnitWithDelay( unit, frameDelay );
+            unit.SetPosition( *dst );
         }
 
         // check for possible bridge close action, after unit's end of movement
         if ( bridge && bridge->AllowUp() ) {
             _movingUnit = NULL;
-            b.SwitchAnimation( Monster_Info::STATIC );
-            bridge->Action( b, *dst );
-            _movingUnit = &b;
+            unit.SwitchAnimation( Monster_Info::STATIC );
+            bridge->Action( unit, *dst );
+            _movingUnit = &unit;
         }
 
         ++dst;
@@ -2703,9 +2705,9 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
     _flyingUnit = NULL;
     _movingUnit = NULL;
     _currentUnit = NULL;
-    b.SwitchAnimation( Monster_Info::STATIC );
+    unit.SwitchAnimation( Monster_Info::STATIC );
 
-    StringReplace( msg, "%{dst}", b.GetHeadIndex() );
+    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
     status.SetMessage( msg, true );
 }
 

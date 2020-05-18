@@ -77,7 +77,7 @@ namespace Game
                           40, // HEROES_PICKUP_DELAY
                           50, // PUZZLE_FADE_DELAY
                           100, // BATTLE_DIALOG_DELAY
-                          80, // BATTLE_FRAME_DELAY
+                          120, // BATTLE_FRAME_DELAY
                           40, // BATTLE_MISSILE_DELAY
                           90, // BATTLE_SPELL_DELAY
                           20, // BATTLE_DISRUPTING_DELAY
@@ -148,7 +148,7 @@ void Game::UpdateBattleSpeed( void )
     const Settings & conf = Settings::Get();
     const int value = 5;
 
-    delays[BATTLE_FRAME_DELAY] = 80 - ( conf.BattleSpeed() - value ) * 15;
+    delays[BATTLE_FRAME_DELAY] = 120 - ( conf.BattleSpeed() - value ) * 20;
     delays[BATTLE_MISSILE_DELAY] = 40 - ( conf.BattleSpeed() - value ) * 7;
     delays[BATTLE_SPELL_DELAY] = 90 - ( conf.BattleSpeed() - value ) * 17;
     delays[BATTLE_DISRUPTING_DELAY] = 20 - ( conf.BattleSpeed() - value ) * 3;
