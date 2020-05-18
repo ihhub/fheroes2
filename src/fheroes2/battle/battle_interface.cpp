@@ -2442,7 +2442,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         const int dx = targetPos.x - shooterPos.x;
         const int dy = targetPos.y - shooterPos.y;
         const bool reverse = dx < 0;
-        double angle = std::atan2( -dy, dx ) * 180.0 / M_PI;
+        double angle = atan2( -dy, dx ) * 180.0 / M_PI;
         // we only care about two quadrants, normalize
         if ( reverse ) {
             angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
