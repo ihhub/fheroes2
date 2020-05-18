@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include "agg.h"
@@ -2440,9 +2441,12 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         const int dx = targetPos.x - shooterPos.x;
         const int dy = targetPos.y - shooterPos.y;
-        double angle = ( dx != 0 ) ? std::atan( static_cast<double>( -dy ) / static_cast<double>( dx ) ) * 180.0 / M_PI : ( dy < 0 ) ? 90 : -90;
-        if ( dx < 0 )
-            angle = -angle;
+        const bool reverse = dx < 0;
+        double angle = std::atan2( -dy, dx ) * 180.0 / M_PI;
+        // we only care about two quadrants, normalize
+        if ( reverse ) {
+            angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
+        }
 
         // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
         const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
@@ -2453,13 +2457,13 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         }
 
         // draw missile animation
-        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), dx < 0 );
+        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), reverse );
 
         const Point offset = attacker.GetStartMissileOffset( direction );
         const Point line_from = Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
 
         // Lich/Power lich has projectile speed of 25
-        const Points points = GetEuclideanLine( line_from, targetPos, ( missile.w() < 25 ? 25 : missile.w() ) );
+        const Points points = GetEuclideanLine( line_from, targetPos, std::max( missile.w(), 25 ) );
         Points::const_iterator pnt = points.begin();
 
         // convert the following code into a function/event service
@@ -2477,7 +2481,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         }
     }
     else {
-        int attackAnim = ( isDoubleCell ) ? Monster_Info::RANG_FRONT : Monster_Info::MELEE_FRONT;
+        int attackAnim = isDoubleCell ? Monster_Info::RANG_FRONT : Monster_Info::MELEE_FRONT;
         if ( pos2.y < pos1.y ) {
             attackAnim -= 2;
         }
