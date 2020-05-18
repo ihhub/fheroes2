@@ -2436,7 +2436,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         // Turns out OG missile offset is not perfect, so using 3/4 height to compensate
         const Point shooterPos( pos1.x + ( pos1.w / 3 ), pos1.y + ( pos1.h * 3 / 4 ) );
         // Calculating the 'center' of the defender
-        const Point targetPos = Point( pos2.x + pos2.w / (defender.isReflect() ? -2 : 2), pos2.y );
+        const Point targetPos = Point( pos2.x + pos2.w / (defender.isReflect() ? -2 : 1), pos2.y );
 
         const int dx = pos2.x - shooterPos.x;
         const int dy = targetPos.y - shooterPos.y;
@@ -2465,7 +2465,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         while ( le.HandleEvents( false ) && pnt != points.end() ) {
             CheckGlobalEvents( le );
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 cursor.Hide();
                 Redraw();
                 missile.Blit( attacker.isReflect() ? ( *pnt ).x - missile.w() : ( *pnt ).x, ( *pnt ).y );
