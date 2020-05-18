@@ -483,6 +483,24 @@ u32 Funds::GetValidItemsCount( void ) const
     return result;
 }
 
+void Funds::Trim( void )
+{
+    if ( wood < 0 )
+        wood = 0;
+    if ( ore < 0 )
+        ore = 0;
+    if ( mercury < 0 )
+        mercury = 0;
+    if ( sulfur < 0 )
+        sulfur = 0;
+    if ( crystal < 0 )
+        crystal = 0;
+    if ( gems < 0 )
+        gems = 0;
+    if ( gold < 0 )
+        gold = 0;
+}
+
 void Funds::Reset( void )
 {
     wood = 0;

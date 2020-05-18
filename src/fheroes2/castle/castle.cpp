@@ -2476,7 +2476,7 @@ void Castle::JoinRNDArmy( void )
 void Castle::ActionPreBattle( void )
 {
     if ( isControlAI() )
-        AI::CastlePreBattle( *this );
+        AI::Get().CastlePreBattle( *this );
     else if ( Settings::Get().ExtBattleMergeArmies() ) {
         CastleHeroes heroes = world.GetHeroes( *this );
         Heroes * hero = heroes.GuardFirst();
@@ -2493,7 +2493,7 @@ void Castle::ActionAfterBattle( bool attacker_wins )
     }
 
     if ( isControlAI() )
-        AI::CastleAfterBattle( *this, attacker_wins );
+        AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
 struct CastleHavePoint : public std::binary_function<const Castle *, const Point *, bool>

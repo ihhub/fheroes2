@@ -201,7 +201,7 @@ s32 Battle::AIAttackPosition( Arena & arena, const Unit & b, const Indexes & pos
 
 using namespace Battle;
 
-void AI::BattleTurn( Arena & arena, const Unit & b, Actions & a )
+void AI::Simple::BattleTurn( Arena & arena, const Unit & b, Actions & a )
 {
     Board * board = Arena::GetBoard();
 
@@ -316,7 +316,7 @@ void AI::BattleTurn( Arena & arena, const Unit & b, Actions & a )
     a.push_back( Battle::Command( MSG_BATTLE_END_TURN, b.GetUID() ) );
 }
 
-bool AI::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, const Unit * enemy )
+bool AI::Simple::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, const Unit * enemy )
 {
     const HeroBase * hero = b.GetCommander();
 
