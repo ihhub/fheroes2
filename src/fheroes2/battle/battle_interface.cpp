@@ -2501,7 +2501,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     case Monster::LICH:
     case Monster::POWER_LICH:
         // lich clod animation
-        RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), true );
+        RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), false );
         break;
 
     default:
