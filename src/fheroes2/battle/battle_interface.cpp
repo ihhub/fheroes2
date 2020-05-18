@@ -2435,7 +2435,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     // long distance attack animation
     if ( archer ) {
         // Turns out OG missile offset is not perfect, so using 1/3 width and 3/4 height to compensate
-        const Point shooterPos( pos1.x + ( pos1.w / ( attacker.isReflect() ? 1.5 : 3 ) ), pos1.y + ( pos1.h * 3 / 4 ) );
+        const Point shooterPos( pos1.x + static_cast<uint32_t>( pos1.w / ( attacker.isReflect() ? 1.5 : 3 ) ), pos1.y + ( pos1.h * 3 / 4 ) );
         // Calculating the 'center' of the defender, either left or right side
         const Point targetPos = Point( pos2.x + ( pos1.x < pos2.x ? 0 : pos2.w ), pos2.y );
 

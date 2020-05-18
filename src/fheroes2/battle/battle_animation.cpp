@@ -453,17 +453,13 @@ uint32_t AnimationReference::getShootingSpeed() const
 
 size_t AnimationReference::getProjectileID( float angle ) const
 {
-    for ( std::vector<float>::const_iterator it = _monsterInfo.projectileAngles.begin(); it != _monsterInfo.projectileAngles.end(); ++it ) {
-        std::vector<float>::const_iterator next = it;
-        ++next;
-        if ( next != _monsterInfo.projectileAngles.end() ) {
-            if ( angle >= ( *it + *next ) / 2 ) {
-                return it - _monsterInfo.projectileAngles.begin();
-            }
-        }
-        else {
-            return _monsterInfo.projectileAngles.size() - 1;
-        }
+    const std::vector<float> & angles = _monsterInfo.projectileAngles;
+    if ( angles.empty() )
+        return 0;
+
+    for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
+        if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
+            return id;
     }
     return 0;
 }
