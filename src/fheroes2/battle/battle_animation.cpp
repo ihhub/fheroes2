@@ -446,6 +446,36 @@ uint32_t AnimationReference::getFlightSpeed() const
     return _monsterInfo.flightSpeed;
 }
 
+uint32_t AnimationReference::getShootingSpeed() const
+{
+    return _monsterInfo.shootSpeed;
+}
+
+size_t AnimationReference::getProjectileID( float angle ) const
+{
+    for ( std::vector<float>::const_iterator it = _monsterInfo.projectileAngles.begin(); it != _monsterInfo.projectileAngles.end(); ++it ) {
+        std::vector<float>::const_iterator next = it;
+        ++next;
+        if ( next != _monsterInfo.projectileAngles.end() ) {
+            if ( angle >= ( *it + *next ) / 2 ) {
+                return it - _monsterInfo.projectileAngles.begin();
+            }
+        }
+        else {
+            return _monsterInfo.projectileAngles.back();
+        }
+    }
+    return 0;
+}
+
+Point AnimationReference::getProjectileOffset( size_t direction ) const
+{
+    if ( _monsterInfo.projectileOffset.size() > direction ) {
+        return _monsterInfo.projectileOffset[direction];
+    }
+    return Point();
+}
+
 AnimationState::AnimationState( int monsterID )
     : AnimationReference( monsterID )
     , _currentSequence( _static )

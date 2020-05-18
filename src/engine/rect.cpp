@@ -167,6 +167,11 @@ Rect Rect::Get( const Point & pt1, const Point & pt2 )
     return res;
 }
 
+Point Rect::getCenterPos() const
+{
+    return Point( x + w / 2, y + h / 2 );
+}
+
 Rect Rect::Get( const Rect & rt1, const Rect & rt2, bool intersect )
 {
     Rect rt3;

@@ -2420,28 +2420,11 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     const Rect & pos1 = attacker.GetRectPosition();
     const Rect & pos2 = defender.GetRectPosition();
+    const Point & attkPos = pos1.getCenterPos();
+    const Point & defPos = pos2.getCenterPos();
 
-    // check archers
     const bool archer = attacker.isArchers() && !attacker.isHandFighting();
-    const Point & bp1 = attacker.GetBackPoint();
-    const Point & bp2 = defender.GetBackPoint();
-
-    int actionStart = Monster_Info::MELEE_FRONT;
-
-    // long distance attack animation
-    if ( archer || ( attacker.isDoubleCellAttack() && 2 == targets.size() ) ) {
-        const float dx = bp1.x - bp2.x;
-        const float dy = bp1.y - bp2.y;
-        const float tan = std::fabs( dy / dx );
-
-        actionStart = ( 0.6 >= tan ? Monster_Info::RANG_FRONT : ( dy > 0 ? Monster_Info::RANG_TOP : Monster_Info::RANG_BOT ) );
-    }
-    else if ( pos2.y < pos1.y ) {
-        actionStart = Monster_Info::MELEE_TOP;
-    }
-    else if ( pos2.y > pos1.y ) {
-        actionStart = Monster_Info::MELEE_BOT;
-    }
+    const bool isDoubleCell = attacker.isDoubleCellAttack() && 2 == targets.size();
 
     // redraw luck animation
     if ( attacker.Modes( LUCK_GOOD | LUCK_BAD ) )
@@ -2449,36 +2432,65 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     AGG::PlaySound( attacker.M82Attk() );
 
-    // redraw attack animation
-    if ( attacker.SwitchAnimation( actionStart ) ) {
-        RedrawTroopDefaultDelay( attacker );
-    }
-
-    // draw missile animation
+    // long distance attack animation
     if ( archer ) {
-        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), ICN::GetMissIndex( attacker.ICNMiss(), bp1.x - bp2.x, bp1.y - bp2.y ), bp1.x > bp2.x );
+        const int dx = attkPos.x - defPos.x;
+        const int dy = attkPos.y - defPos.y;
+        const bool reverse = dx < 0;
+        const double angle = (dx != 0) ? std::atan( static_cast<double>(-dy) / static_cast<double>(dx) ) * 180.0 / M_PI : (dy < 0) ? 90 : -90 ;
+
+        std::cout << "dx: " << dx << ", dy: " << dy << ", angle: " << angle << std::endl;
+
+        const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
+
+        // redraw archer attack animation
+        if ( attacker.SwitchAnimation( Monster_Info::RANG_TOP + direction * 2 ) ) {
+            AnimateUnitWithDelay( attacker, attacker.animation.getShootingSpeed() );
+        }
+
+        // draw missile animation
+        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), dx > 0 );
 
         const u32 step = ( missile.w() < 16 ? 16 : missile.w() );
-        const Point line_from
-            = Point( pos1.x + ( attacker.isReflect() ? 0 : pos1.w ),
-                     pos1.y + ( Settings::Get().QVGA() ? attacker.GetStartMissileOffset( actionStart ) / 2 : attacker.GetStartMissileOffset( actionStart ) ) );
-        const Point line_to = Point( pos2.x + ( defender.isReflect() ? 0 : pos1.w ), pos2.y );
+        const Point offset = attacker.GetStartMissileOffset( direction );
 
-        const Points points = GetLinePoints( line_from, line_to, step );
+        const Point line_from = Point( attkPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), attkPos.y + ( Settings::Get().QVGA() ? offset.y / 2 : offset.y ) );
+        const Point line_to = Point( defPos.x + ( defender.isReflect() ? 0 : pos2.w ), defPos.y );
+        std::cout << "offset: " << offset.x << "," << offset.y << std::endl;
+        std::cout << "From: " << line_from.x << "," << line_from.y << "  ";
+        std::cout << "to: " << line_to.x << "," << line_to.y << std::endl;
+
+        const Points points = GetEuclideanLine( line_from, line_to, step );
         Points::const_iterator pnt = points.begin();
 
         // convert the following code into a function/event service
         while ( le.HandleEvents( false ) && pnt != points.end() ) {
             CheckGlobalEvents( le );
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
                 cursor.Hide();
                 Redraw();
                 missile.Blit( attacker.isReflect() ? ( *pnt ).x - missile.w() : ( *pnt ).x, ( *pnt ).y );
                 cursor.Show();
+                Display::Get().DrawLine( Point( pos1.x, pos1.y ), Point( pos1.x + 50, pos1.y ), RGBA( 0xff, 0xff, 0 ) );
+                Display::Get().DrawLine( Point( pos2.x, pos2.y ), Point( pos2.x - 50, pos2.y ), RGBA( 0xff, 0xff, 0 ) );
                 display.Flip();
                 ++pnt;
             }
+        }
+    }
+    else {
+        int attackAnim = ( isDoubleCell ) ? Monster_Info::RANG_FRONT : Monster_Info::MELEE_FRONT;
+        if ( pos2.y < pos1.y ) {
+            attackAnim -= 2;
+        }
+        else if ( pos2.y > pos1.y ) {
+            attackAnim += 2;
+        }
+
+        // redraw melee attack animation
+        if ( attacker.SwitchAnimation( attackAnim ) ) {
+            RedrawTroopDefaultDelay( attacker );
         }
     }
 
