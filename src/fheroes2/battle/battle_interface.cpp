@@ -2433,12 +2433,12 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     // long distance attack animation
     if ( archer ) {
-        // Turns out OG missile offset is not perfect, so using 3/4 height to compensate
-        const Point shooterPos( pos1.x + ( pos1.w / 3 ), pos1.y + ( pos1.h * 3 / 4 ) );
-        // Calculating the 'center' of the defender
-        const Point targetPos = Point( pos2.x + pos2.w / (defender.isReflect() ? -2 : 1), pos2.y );
+        // Turns out OG missile offset is not perfect, so using 1/3 width and 3/4 height to compensate
+        const Point shooterPos( pos1.x + ( pos1.w / ( attacker.isReflect() ? 1.5 : 3 ) ), pos1.y + ( pos1.h * 3 / 4 ) );
+        // Calculating the 'center' of the defender, either left or right side
+        const Point targetPos = Point( pos2.x + ( pos1.x < pos2.x ? 0 : pos2.w ), pos2.y );
 
-        const int dx = pos2.x - shooterPos.x;
+        const int dx = targetPos.x - shooterPos.x;
         const int dy = targetPos.y - shooterPos.y;
         double angle = ( dx != 0 ) ? std::atan( static_cast<double>( -dy ) / static_cast<double>( dx ) ) * 180.0 / M_PI : ( dy < 0 ) ? 90 : -90;
         if ( dx < 0 )
@@ -2458,7 +2458,8 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         const Point offset = attacker.GetStartMissileOffset( direction );
         const Point line_from = Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
 
-        const Points points = GetEuclideanLine( line_from, targetPos, ( missile.w() < 16 ? 16 : missile.w() ) );
+        // Lich/Power lich has projectile speed of 25
+        const Points points = GetEuclideanLine( line_from, targetPos, ( missile.w() < 25 ? 25 : missile.w() ) );
         Points::const_iterator pnt = points.begin();
 
         // convert the following code into a function/event service
@@ -2773,13 +2774,15 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _flyingUnit = NULL;
     _movingUnit = &unit;
     _movingPos = targetPos;
-    unit.SwitchAnimation( Monster_Info::FLY_LAND );
-    // Landing animation is 30% length on average (original value)
-    AnimateUnitWithDelay( unit, frameDelay * 0.3 );
+
+    std::vector<int> landAnim;
+    landAnim.push_back( Monster_Info::FLY_LAND );
+    landAnim.push_back( Monster_Info::STATIC );
+    unit.SwitchAnimation( landAnim );
+    AnimateUnitWithDelay( unit, frameDelay );
 
     // restore
     _movingUnit = NULL;
-    unit.SwitchAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
