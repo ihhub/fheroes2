@@ -3043,59 +3043,46 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Unit & attacke
     }
 }
 
-void Battle::Interface::RedrawActionLuck( Unit & b )
+void Battle::Interface::RedrawActionLuck( Unit & unit )
 {
-    if ( b.Modes( LUCK_GOOD ) ) {
-        std::string msg = _( "Good luck shines on the  %{attacker}" );
-        StringReplace( msg, "%{attacker}", b.GetName() );
-        status.SetMessage( msg, true );
+    Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
 
-        Display & display = Display::Get();
-        Cursor & cursor = Cursor::Get();
-        LocalEvent & le = LocalEvent::Get();
+    const bool isGoodLuck = unit.Modes( LUCK_GOOD );
+    const Rect & pos = unit.GetRectPosition();
+    const int m82 = ( isGoodLuck ) ? M82::GOODLUCK : M82::BADLUCK;
+    const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, ( isGoodLuck ) ? 0 : 1 );
+    const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
 
-        const int m82 = M82::GOODLUCK;
-        const Sprite & sunbow = AGG::GetICN( ICN::EXPMRL, 0 );
+    int width = 2;
+    Rect src( 0, 0, width, luckSprite.h() );
+    src.x = ( luckSprite.w() - src.w ) / 2;
 
-        const Rect & pos = b.GetRectPosition();
+    cursor.SetThemes( Cursor::WAR_NONE );
+    AGG::PlaySound( m82 );
 
-        const Monster::monstersprite_t & msi = b.GetMonsterSprite();
-        const Sprite & troop = AGG::GetICN( msi.icn_file, msi.frm_idle.start, b.isReflect() );
+    std::string msg = ( isGoodLuck ) ? _( "Good luck shines on the %{attacker}" ) : _( "Bad luck descends on the %{attacker}" );
+    StringReplace( msg, "%{attacker}", unit.GetName() );
+    status.SetMessage( msg, true );
 
-        int width = 2;
+    while ( le.HandleEvents() && width < luckSprite.w() ) {
+        CheckGlobalEvents( le );
 
-        Rect src( 0, 0, width, sunbow.h() );
-        src.x = ( sunbow.w() - src.w ) / 2;
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            cursor.Hide();
+            Redraw();
 
-        cursor.SetThemes( Cursor::WAR_NONE );
+            luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h );
 
-        AGG::PlaySound( m82 );
+            cursor.Show();
+            display.Flip();
 
-        while ( le.HandleEvents() && width < sunbow.w() ) {
-            CheckGlobalEvents( le );
+            src.w = width;
+            src.x = ( luckSprite.w() - src.w ) / 2;
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
-
-                sunbow.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - troop.h() - src.h );
-
-                cursor.Show();
-                display.Flip();
-
-                src.w = width;
-                src.x = ( sunbow.w() - src.w ) / 2;
-
-                width += 3;
-            }
+            width += 3;
         }
-
-        DELAY( 400 );
-    }
-    else if ( b.Modes( LUCK_BAD ) ) {
-        std::string msg = _( "Bad luck descends on the %{attacker}" );
-        StringReplace( msg, "%{attacker}", b.GetName() );
-        status.SetMessage( msg, true );
     }
 }
 
