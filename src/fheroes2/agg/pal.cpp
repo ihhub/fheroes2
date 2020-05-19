@@ -175,8 +175,8 @@ int PAL::CurrentPalette()
 
 RGBA PAL::GetPaletteColor( u8 index )
 {
-    std::vector<SDL_Color> * colors = current_palette->colors;
-    return index < colors->size() ? RGBA( ( *colors )[index].r, ( *colors )[index].g, ( *colors )[index].b ) : RGBA( 0, 0, 0 );
+    const std::vector<SDL_Color> & colors = *current_palette->colors;
+    return index < colors.size() ? RGBA( colors[index].r, colors[index].g, colors[index].b ) : RGBA( 0, 0, 0 );
 }
 
 void PAL::SwapPalette( int type )
