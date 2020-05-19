@@ -26,7 +26,6 @@
 #include <set>
 #include <vector>
 
-#include "../../tools/palette_h2.h"
 #include "agg.h"
 #include "artifact.h"
 #include "audio_music.h"
