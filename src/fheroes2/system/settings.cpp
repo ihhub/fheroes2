@@ -499,6 +499,8 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
     opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+    // Set expansion version by default - turn off if heroes2x.agg not found
+    opt_global.SetModes( GLOBAL_PRICELOYALTY );
     if ( System::isEmbededDevice() ) {
         opt_global.SetModes( GLOBAL_POCKETPC );
         ExtSetModes( POCKETPC_HIDE_CURSOR );
@@ -1448,9 +1450,16 @@ void Settings::SetUnicode( bool f )
     f ? opt_global.SetModes( GLOBAL_USEUNICODE ) : opt_global.ResetModes( GLOBAL_USEUNICODE );
 }
 
-void Settings::SetPriceLoyaltyVersion( void )
+void Settings::SetPriceLoyaltyVersion( bool set )
 {
-    opt_global.SetModes( GLOBAL_PRICELOYALTY );
+    if ( set ) {
+        opt_global.SetModes( GLOBAL_PRICELOYALTY );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_PRICELOYALTY );
+        if ( _musicType = MUSIC_MIDI_EXPANSION )
+            _musicType = MUSIC_MIDI_ORIGINAL;
+    }
 }
 
 void Settings::SetEvilInterface( bool f )

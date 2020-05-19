@@ -483,8 +483,7 @@ bool AGG::ReadDataDir( void )
             heroes2x_agg.Open( *it );
     }
 
-    if ( heroes2x_agg.isGood() )
-        conf.SetPriceLoyaltyVersion();
+    conf.SetPriceLoyaltyVersion( heroes2x_agg.isGood() );
 
     return heroes2_agg.isGood();
 }

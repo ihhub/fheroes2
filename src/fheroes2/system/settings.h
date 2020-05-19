@@ -343,7 +343,7 @@ public:
 
     void SetDebug( int );
     void SetUnicode( bool );
-    void SetPriceLoyaltyVersion( void );
+    void SetPriceLoyaltyVersion( bool set = true );
     void SetGameDifficulty( int );
     void SetEvilInterface( bool );
     void SetHideInterface( bool );
