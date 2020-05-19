@@ -665,7 +665,7 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
                     const Sprite & monster = AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
-                    int offsetY = !( compact ) ? 30 - monster.h() : ( monster.h() < 35 ) ? 35 - monster.h() : 0;
+                    const int offsetY = !compact ? 30 - monster.h() : ( monster.h() < 35 ) ? 35 - monster.h() : 0;
 
                     monster.Blit( cx - monster.w() / 2, cy + offsetY );
                     text.Set( Game::CountScoute( ( *it )->GetCount(), scoute, compact ) );
