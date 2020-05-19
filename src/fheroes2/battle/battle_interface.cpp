@@ -3068,8 +3068,8 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
     const Rect & pos = unit.GetRectPosition();
-    const int m82 = ( isGoodLuck ) ? M82::GOODLUCK : M82::BADLUCK;
-    const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, ( isGoodLuck ) ? 0 : 1 );
+    const int m82 = isGoodLuck ? M82::GOODLUCK : M82::BADLUCK;
+    const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, isGoodLuck ? 0 : 1 );
     const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
 
     int width = 2;
@@ -3079,7 +3079,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
     cursor.SetThemes( Cursor::WAR_NONE );
     AGG::PlaySound( m82 );
 
-    std::string msg = ( isGoodLuck ) ? _( "Good luck shines on the %{attacker}" ) : _( "Bad luck descends on the %{attacker}" );
+    std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}" ) : _( "Bad luck descends on the %{attacker}" );
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
