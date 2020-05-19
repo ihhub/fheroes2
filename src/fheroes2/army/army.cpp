@@ -649,7 +649,7 @@ void Troops::KeepOnlyWeakest( Troops & troops2, bool save_last )
     }
 }
 
-void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute, bool shorts ) const
+void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute, bool compact ) const
 {
     if ( isValid() ) {
         if ( 0 == count )
@@ -665,10 +665,14 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
                     const Sprite & monster = AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
+                    int offsetY = !( compact ) ? 30 - monster.h() : ( monster.h() < 35 ) ? 35 - monster.h() : 0;
 
-                    monster.Blit( cx - monster.w() / 2, cy + 30 - monster.h() );
-                    text.Set( Game::CountScoute( ( *it )->GetCount(), scoute, shorts ) );
-                    text.Blit( cx - text.w() / 2, cy + 28 );
+                    monster.Blit( cx - monster.w() / 2, cy + offsetY );
+                    text.Set( Game::CountScoute( ( *it )->GetCount(), scoute, compact ) );
+                    if ( compact )
+                        text.Blit( cx + monster.w() / 2, cy + 23 );
+                    else
+                        text.Blit( cx - text.w() / 2, cy + 28 );
 
                     cx += chunk;
                     --count;
@@ -1245,6 +1249,26 @@ void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32
 void Army::DrawMons32LineShort( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
 {
     troops.DrawMons32LineWithScoute( cx, cy, width, first, count, Skill::Level::EXPERT, true );
+}
+
+void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 scout, bool compact )
+{
+    const uint32_t count = troops.GetCount();
+    const uint32_t unitWidth = compact ? 46 : 64;
+    const int offsetX = compact ? 23 : 35;
+    const int offsetY = compact ? 29 : 44;
+
+    if ( count < 4 ) {
+        troops.DrawMons32LineWithScoute( posX, posY + offsetY / 2, unitWidth * 3, 0, 0, scout, compact );
+    }
+    else if ( count == 4 ) {
+        troops.DrawMons32LineWithScoute( posX + offsetX, posY, unitWidth * 2, 0, 2, scout, compact );
+        troops.DrawMons32LineWithScoute( posX, posY + offsetY, unitWidth * 2, 2, 2, scout, compact );
+    }
+    else {
+        troops.DrawMons32LineWithScoute( posX + offsetX, posY, unitWidth * 2, 0, 2, scout, compact );
+        troops.DrawMons32LineWithScoute( posX, posY + offsetY, unitWidth * 3, 2, 3, scout, compact );
+    }
 }
 
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )

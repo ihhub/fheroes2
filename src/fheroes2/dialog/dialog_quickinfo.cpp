@@ -689,7 +689,7 @@ void Dialog::QuickInfo( const Castle & castle )
     }
     else if ( castle.isFriends( conf.CurrentColor() ) )
         // show all
-        Army::DrawMons32Line( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 100, 192 );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 70, Skill::Level::EXPERT, false );
     else
         // show limited
         Army::DrawMons32LineWithScoute( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 100, 192, 0, 0,
