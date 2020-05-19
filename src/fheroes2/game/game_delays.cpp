@@ -90,8 +90,8 @@ namespace Game
                           300, // BATTLE_FLAGS_DELAY
                           800, // BATTLE_POPUP_DELAY
                           300, // AUTOHIDE_STATUS_DELAY
-                          0, // CURRENT_HERO_DELAY
-                          0, // CURRENT_AI_DELAY
+                          40, // CURRENT_HERO_DELAY
+                          40, // CURRENT_AI_DELAY
                           0, // CUSTOM_DELAY
                           0};
 }
@@ -122,11 +122,11 @@ void Game::UpdateGameSpeed( void )
 {
     const Settings & conf = Settings::Get();
 
-    delays[CURRENT_HERO_DELAY] = 30 - ( conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY ) * 6;
-    delays[CURRENT_AI_DELAY] = 30 - ( conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY ) * 6;
+    delays[CURRENT_HERO_DELAY] = 40 - ( conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
+    delays[CURRENT_AI_DELAY] = 40 - ( conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
 
     const uint32_t battleSpeed = conf.BattleSpeed();
-    delays[BATTLE_FRAME_DELAY] = 120 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 15;
+    delays[BATTLE_FRAME_DELAY] = 120 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 20;
     delays[BATTLE_MISSILE_DELAY] = 40 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 7;
     delays[BATTLE_SPELL_DELAY] = 90 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 17;
     delays[BATTLE_DISRUPTING_DELAY] = 20 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 3;
@@ -135,14 +135,14 @@ void Game::UpdateGameSpeed( void )
     delays[BATTLE_CATAPULT3_DELAY] = 40 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 7;
     delays[BATTLE_BRIDGE_DELAY] = 90 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 17;
 
-    const float currentBlitSpeed = conf.BlitSpeed();
+    const float currentBlitTime = conf.BlitSpeed();
     const float expectedBlittingSpeed = 15.0;
-    if ( currentBlitSpeed < expectedBlittingSpeed ) {
-        const float adjustment = expectedBlittingSpeed / currentBlitSpeed;
+    if ( expectedBlittingSpeed < currentBlitTime ) {
+        const float adjustment = currentBlitTime / expectedBlittingSpeed;
         const int ids[] = {BATTLE_FRAME_DELAY,    BATTLE_MISSILE_DELAY,   BATTLE_SPELL_DELAY,     BATTLE_DISRUPTING_DELAY,
                            BATTLE_CATAPULT_DELAY, BATTLE_CATAPULT2_DELAY, BATTLE_CATAPULT3_DELAY, BATTLE_BRIDGE_DELAY};
 
-        DEBUG( DBG_GAME, DBG_WARN, "Slow render speed detected: " << currentBlitSpeed << ", adjusting battle delays for speed " << battleSpeed );
+        DEBUG( DBG_GAME, DBG_WARN, "Slow render time detected: " << currentBlitTime << ", adjusting battle delays for speed " << battleSpeed );
         std::ostringstream os;
 
         for ( u32 it = 0; it < ARRAY_COUNT( ids ); ++it ) {
@@ -158,5 +158,5 @@ void Game::UpdateGameSpeed( void )
 
 uint32_t Game::ApplyBattleSpeed( uint32_t delay )
 {
-    return static_cast<uint32_t>( 10 - Settings::Get().BattleSpeed() ) * ( delay / DEFAULT_SPEED_DELAY );
+    return static_cast<uint32_t>( 10 - Settings::Get().BattleSpeed() ) * ( delay / ( DEFAULT_SPEED_DELAY ) );
 }
