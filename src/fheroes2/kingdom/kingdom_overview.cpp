@@ -563,7 +563,9 @@ void Kingdom::OverviewDialog( void )
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     cursor.Hide();
+#endif
     cursor.SetThemes( cursor.POINTER );
 
     Dialog::FrameBorder background( Display::GetDefaultSize() );
@@ -628,7 +630,9 @@ void Kingdom::OverviewDialog( void )
 
         // switch view: heroes/castle
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes ) ) {
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
             cursor.Hide();
+#endif
             buttonHeroes.Press();
             buttonCastle.Release();
             buttonHeroes.Draw();
@@ -638,7 +642,9 @@ void Kingdom::OverviewDialog( void )
             redraw = true;
         }
         else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle ) ) {
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
             cursor.Hide();
+#endif
             buttonCastle.Press();
             buttonHeroes.Release();
             buttonHeroes.Draw();

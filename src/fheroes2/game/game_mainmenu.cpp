@@ -50,7 +50,9 @@ int Game::MainMenu( void )
 
     // cursor
     Cursor & cursor = Cursor::Get();
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     cursor.Hide();
+#endif
     cursor.SetThemes( cursor.POINTER );
 
     // We have to register scalable ICNs in order to recieved a scaled version of it
@@ -110,10 +112,14 @@ int Game::MainMenu( void )
                    {QUIT_DEFAULT, buttonQuit, false, false}};
 
     for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); i++ ) {
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
         cursor.Hide();
+#endif
         const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
         sprite.Blit( sprite.x(), sprite.y() );
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
         cursor.Show();
+#endif
     }
 
     // mainmenu loop
@@ -134,10 +140,14 @@ int Game::MainMenu( void )
                 if ( buttons[i].isOver && !buttons[i].wasOver )
                     frame++;
 
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
                 cursor.Hide();
+#endif
                 const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, frame );
                 sprite.Blit( sprite.x(), sprite.y() );
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
                 cursor.Show();
+#endif
             }
         }
 
@@ -172,10 +182,14 @@ int Game::MainMenu( void )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
 
         if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
             cursor.Hide();
+#endif
             const Sprite & lantern12 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame++ ) );
             lantern12.Blit( lantern12.x(), lantern12.y() );
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
             cursor.Show();
+#endif
             display.Flip();
         }
     }

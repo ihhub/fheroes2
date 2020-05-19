@@ -611,7 +611,9 @@ int Interface::Basic::HumanTurn( bool isload )
     int res = Game::CANCEL;
 
     LocalEvent & le = LocalEvent::Get();
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     cursor.Hide();
+#endif
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -874,7 +876,9 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( fastScrollRepeatCount < fastScrollThreshold )
                 continue;
 
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
             cursor.Hide();
+#endif
 
             if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() ) || le.MouseCursor( GetScrollBottom() ) )
                 cursor.SetThemes( gameArea.GetScrollCursor() );
@@ -884,7 +888,9 @@ int Interface::Basic::HumanTurn( bool isload )
             gameArea.SetRedraw();
             radar.SetRedraw();
             Redraw();
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
             cursor.Show();
+#endif
             display.Flip();
 
             // enable right click emulation
@@ -957,9 +963,13 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( NeedRedraw() ) {
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
             cursor.Hide();
+#endif
             Redraw();
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
             cursor.Show();
+#endif
             display.Flip();
         }
         else if ( !cursor.isVisible() ) {
