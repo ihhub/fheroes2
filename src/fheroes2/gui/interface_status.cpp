@@ -280,7 +280,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 
     if ( armies ) {
         const Rect & pos = GetArea();
-        Army::DrawMonsterLines( *armies, pos.x, pos.y + 3 + oh, 138 );
+        Army::DrawMonsterLines( *armies, pos.x, pos.y + 3 + oh, 138, Skill::Level::EXPERT );
     }
 }
 

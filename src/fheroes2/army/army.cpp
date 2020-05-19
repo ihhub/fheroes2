@@ -1246,11 +1246,6 @@ void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32
     troops.DrawMons32LineWithScoute( cx, cy, width, first, count, Skill::Level::EXPERT, false );
 }
 
-void Army::DrawMons32LineShort( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
-{
-    troops.DrawMons32LineWithScoute( cx, cy, width, first, count, Skill::Level::EXPERT, true );
-}
-
 void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 lineWidth, u32 scout, bool compact )
 {
     const uint32_t count = troops.GetCount();

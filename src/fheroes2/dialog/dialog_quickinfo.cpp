@@ -568,7 +568,7 @@ void Dialog::QuickInfo( const Castle & castle )
     SpriteBack back( cur_rt );
     box.Blit( cur_rt.x, cur_rt.y );
 
-    cur_rt = Rect( back.GetPos().x + 28, back.GetPos().y + 8, 178, 140 );
+    cur_rt = Rect( back.GetPos().x + 28, back.GetPos().y + 9, 178, 140 );
     Point dst_pt;
     Text text;
 
