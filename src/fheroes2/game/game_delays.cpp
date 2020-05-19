@@ -72,12 +72,11 @@ namespace Game
                           150, // CASTLE_AROUND_DELAY
                           130, // CASTLE_BUYHERO_DELAY
                           130, // CASTLE_BUILD_DELAY
-                          40, // HEROES_MOVE_DELAY
                           40, // HEROES_FADE_DELAY
                           40, // HEROES_PICKUP_DELAY
                           50, // PUZZLE_FADE_DELAY
                           100, // BATTLE_DIALOG_DELAY
-                          80, // BATTLE_FRAME_DELAY
+                          120, // BATTLE_FRAME_DELAY
                           40, // BATTLE_MISSILE_DELAY
                           90, // BATTLE_SPELL_DELAY
                           20, // BATTLE_DISRUPTING_DELAY
@@ -91,8 +90,8 @@ namespace Game
                           300, // BATTLE_FLAGS_DELAY
                           800, // BATTLE_POPUP_DELAY
                           300, // AUTOHIDE_STATUS_DELAY
-                          0, // CURRENT_HERO_DELAY
-                          0, // CURRENT_AI_DELAY
+                          40, // CURRENT_HERO_DELAY
+                          40, // CURRENT_AI_DELAY
                           0, // CUSTOM_DELAY
                           0};
 }
@@ -100,8 +99,7 @@ namespace Game
 void Game::AnimateDelaysInitialize( void )
 {
     std::for_each( &delays[0], &delays[LAST_DELAY], std::mem_fun_ref( &TimeDelay::Reset ) );
-    UpdateHeroesMoveSpeed();
-    UpdateBattleSpeed();
+    UpdateGameSpeed();
 }
 
 void Game::AnimateResetDelay( int dl )
@@ -120,61 +118,22 @@ bool Game::AnimateInfrequentDelay( int dl )
     return dl < LAST_DELAY && 0 < delays[dl]() ? delays[dl].Trigger() : true;
 }
 
-void Game::UpdateHeroesMoveSpeed( void )
+void Game::UpdateGameSpeed( void )
 {
     const Settings & conf = Settings::Get();
 
-    const TimeDelay & td_etalon = delays[HEROES_MOVE_DELAY];
-    TimeDelay & td_hero = delays[CURRENT_HERO_DELAY];
-    TimeDelay & td_ai = delays[CURRENT_AI_DELAY];
+    delays[CURRENT_HERO_DELAY] = 40 - ( conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
+    delays[CURRENT_AI_DELAY] = 40 - ( conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
 
-    const int hr_value = conf.HeroesMoveSpeed() ? ( ( conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY ) * td_etalon() ) / DEFAULT_SPEED_DELAY : td_etalon();
-
-    const int ai_value = conf.AIMoveSpeed() ? ( ( conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY ) * td_etalon() ) / DEFAULT_SPEED_DELAY : td_etalon();
-
-    if ( conf.HeroesMoveSpeed() == DEFAULT_SPEED_DELAY )
-        td_hero = td_etalon();
-    else
-        td_hero = td_etalon() - hr_value;
-
-    if ( conf.AIMoveSpeed() == DEFAULT_SPEED_DELAY )
-        td_ai = td_etalon();
-    else
-        td_ai = td_etalon() - ai_value;
-}
-
-void Game::UpdateBattleSpeed( void )
-{
-    const Settings & conf = Settings::Get();
-    const int value = 5;
-
-    delays[BATTLE_FRAME_DELAY] = 80 - ( conf.BattleSpeed() - value ) * 15;
-    delays[BATTLE_MISSILE_DELAY] = 40 - ( conf.BattleSpeed() - value ) * 7;
-    delays[BATTLE_SPELL_DELAY] = 90 - ( conf.BattleSpeed() - value ) * 17;
-    delays[BATTLE_DISRUPTING_DELAY] = 20 - ( conf.BattleSpeed() - value ) * 3;
-    delays[BATTLE_CATAPULT_DELAY] = 90 - ( conf.BattleSpeed() - value ) * 17;
-    delays[BATTLE_CATAPULT2_DELAY] = 40 - ( conf.BattleSpeed() - value ) * 7;
-    delays[BATTLE_CATAPULT3_DELAY] = 40 - ( conf.BattleSpeed() - value ) * 7;
-    delays[BATTLE_BRIDGE_DELAY] = 90 - ( conf.BattleSpeed() - value ) * 17;
-
-    if ( 0 < conf.BlitSpeed() ) {
-        const float etalon = 15.0;
-        const float div = conf.BlitSpeed() / etalon;
-        const int ids[] = {BATTLE_FRAME_DELAY,    BATTLE_MISSILE_DELAY,   BATTLE_SPELL_DELAY,     BATTLE_DISRUPTING_DELAY,
-                           BATTLE_CATAPULT_DELAY, BATTLE_CATAPULT2_DELAY, BATTLE_CATAPULT3_DELAY, BATTLE_BRIDGE_DELAY};
-
-        DEBUG( DBG_GAME, DBG_INFO, "set battle speed: " << conf.BattleSpeed() );
-        std::ostringstream os;
-
-        for ( u32 it = 0; it < ARRAY_COUNT( ids ); ++it ) {
-            float tmp = delays[ids[it]]();
-            tmp /= div;
-            delays[ids[it]] = static_cast<int>( tmp );
-            os << static_cast<int>( tmp ) << ", ";
-        }
-
-        DEBUG( DBG_GAME, DBG_INFO, "set battle delays: " << os.str() );
-    }
+    const int battleSpeed = conf.BattleSpeed() - DEFAULT_SPEED_DELAY;
+    delays[BATTLE_FRAME_DELAY] = 120 - battleSpeed * 20;
+    delays[BATTLE_MISSILE_DELAY] = 40 - battleSpeed * 7;
+    delays[BATTLE_SPELL_DELAY] = 90 - battleSpeed * 17;
+    delays[BATTLE_DISRUPTING_DELAY] = 20 - battleSpeed * 3;
+    delays[BATTLE_CATAPULT_DELAY] = 90 - battleSpeed * 17;
+    delays[BATTLE_CATAPULT2_DELAY] = 40 - battleSpeed * 7;
+    delays[BATTLE_CATAPULT3_DELAY] = 40 - battleSpeed * 7;
+    delays[BATTLE_BRIDGE_DELAY] = 90 - battleSpeed * 17;
 }
 
 uint32_t Game::ApplyBattleSpeed( uint32_t delay )
