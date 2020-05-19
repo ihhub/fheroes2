@@ -135,9 +135,9 @@ int Game::Credits( void )
     str.append( "This program is distributed under the terms of the GPL v2." );
     str.append( "\n" );
     str.append( "AI engine: " );
-    str.append( AI::Type() );
+    str.append( AI::Get().Type() );
     str.append( ", license: " );
-    str.append( AI::License() );
+    str.append( AI::Get().License() );
     str.append( "\n \n" );
     str.append( "Site project:\n" );
     str.append( "https://github.com/ihhub/fheroes2" );
@@ -235,7 +235,7 @@ void Game::SetFixVideoMode( void )
     if ( conf.VideoMode().h > max_y )
         fixsize.h = max_y;
 
-    Display::Get().SetVideoMode( fixsize.w, fixsize.h, conf.FullScreen() );
+    Display::Get().SetVideoMode( fixsize.w, fixsize.h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
 }
 
 /* play all sound from focus area game */

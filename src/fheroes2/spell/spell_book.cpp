@@ -51,7 +51,9 @@ void SpellBookRedrawMP( const Point &, u32 );
 
 bool SpellBookSortingSpell( const Spell & spell1, const Spell & spell2 )
 {
-    return ( ( spell1.isCombat() != spell2.isCombat() && spell1.isCombat() ) || ( std::string( spell1.GetName() ) < std::string( spell2.GetName() ) ) );
+    if ( spell1.isCombat() == spell2.isCombat() )
+        return std::string( spell1.GetName() ) < std::string( spell2.GetName() );
+    return spell1.isCombat();
 }
 
 Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const

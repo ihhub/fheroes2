@@ -81,11 +81,11 @@ bool PassableToTile( const Heroes & hero, const Maps::Tiles & toTile, int direct
             return Direction::Reflect( direct ) & toTile.GetPassable();
 
         if ( MP2::OBJ_HEROES == toTile.GetObject() )
-            return toTile.isPassable( NULL, Direction::Reflect( direct ), ( hero.isControlAI() ? AI::HeroesSkipFog() : false ) );
+            return toTile.isPassable( NULL, Direction::Reflect( direct ), ( hero.isControlAI() ? AI::Get().HeroesSkipFog() : false ) );
     }
 
     // check to tile direct
-    if ( !toTile.isPassable( &hero, Direction::Reflect( direct ), ( hero.isControlAI() ? AI::HeroesSkipFog() : false ) ) )
+    if ( !toTile.isPassable( &hero, Direction::Reflect( direct ), ( hero.isControlAI() ? AI::Get().HeroesSkipFog() : false ) ) )
         return false;
 
     if ( toTile.GetIndex() != dst ) {
@@ -124,7 +124,7 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
         }
         else {
             // check from tile direct
-            if ( !fromTile.isPassable( &hero, direct, ( hero.isControlAI() ? AI::HeroesSkipFog() : false ) ) )
+            if ( !fromTile.isPassable( &hero, direct, ( hero.isControlAI() ? AI::Get().HeroesSkipFog() : false ) ) )
                 return false;
         }
     }
@@ -136,7 +136,7 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
         }
         else {
             // check from tile direct
-            if ( !fromTile.isPassable( &hero, direct, ( hero.isControlAI() ? AI::HeroesSkipFog() : false ) ) )
+            if ( !fromTile.isPassable( &hero, direct, ( hero.isControlAI() ? AI::Get().HeroesSkipFog() : false ) ) )
                 return false;
         }
     }

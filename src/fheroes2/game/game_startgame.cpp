@@ -74,7 +74,7 @@ int Game::StartBattleOnly( void )
 int Game::StartGame( void )
 {
     SetFixVideoMode();
-    ::AI::Init();
+    AI::Get().Reset();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -576,7 +576,7 @@ int Interface::Basic::StartGame( void )
                         cursor.Show();
                         display.Flip();
 
-                        ::AI::KingdomTurn( kingdom );
+                        AI::Get().KingdomTurn( kingdom );
                     }
                     break;
                 }
