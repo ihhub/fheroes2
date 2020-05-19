@@ -2101,7 +2101,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & b, Actions & a, std::st
         }
     }
     else {
-        //cursor.SetThemes( Cursor::WAR_NONE );
+        cursor.SetThemes( Cursor::WAR_NONE );
     }
 }
 

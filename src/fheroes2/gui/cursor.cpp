@@ -125,7 +125,7 @@ bool Cursor::SetThemes( int name, bool force )
     return false;
 }
 #else // SDL1 related code
-if ( force || theme != name ) {
+    if ( force || theme != name ) {
         if ( isVisible() )
             Hide();
 
@@ -330,11 +330,11 @@ void Cursor::SetOffset( int name )
 void Cursor::Show( void )
 {
     if ( !Settings::Get().ExtPocketHideCursor() )
-    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         SDL_ShowCursor( SDL_ENABLE );
-    #else
+#else
         SpriteMove::Show();
-    #endif
+#endif
 }
 
 int Cursor::DistanceThemes( int theme, u32 dist )
