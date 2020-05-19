@@ -672,7 +672,7 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
                     if ( compact )
                         text.Blit( cx + monster.w() / 2, cy + 23 );
                     else
-                        text.Blit( cx - text.w() / 2, cy + 28 );
+                        text.Blit( cx - text.w() / 2, cy + 29 );
 
                     cx += chunk;
                     --count;
@@ -1254,8 +1254,8 @@ void Army::DrawMons32LineShort( const Troops & troops, s32 cx, s32 cy, u32 width
 void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 lineWidth, u32 scout, bool compact )
 {
     const uint32_t count = troops.GetCount();
-    const int offsetX = compact ? 23 : 35;
-    const int offsetY = compact ? 29 : 42;
+    const int offsetX = lineWidth / 6;
+    const int offsetY = compact ? 29 : 50;
 
     if ( count < 4 ) {
         troops.DrawMons32LineWithScoute( posX, posY + offsetY / 2, lineWidth, 0, 0, scout, compact );

@@ -568,14 +568,14 @@ void Dialog::QuickInfo( const Castle & castle )
     SpriteBack back( cur_rt );
     box.Blit( cur_rt.x, cur_rt.y );
 
-    cur_rt = Rect( back.GetPos().x + 28, back.GetPos().y + 12, 178, 140 );
+    cur_rt = Rect( back.GetPos().x + 28, back.GetPos().y + 8, 178, 140 );
     Point dst_pt;
     Text text;
 
     // castle name
     text.Set( castle.GetName(), Font::SMALL );
     dst_pt.x = cur_rt.x + ( cur_rt.w - text.w() ) / 2;
-    dst_pt.y = cur_rt.y + 5;
+    dst_pt.y = cur_rt.y;
     text.Blit( dst_pt );
 
     u32 index = 0;
@@ -608,7 +608,7 @@ void Dialog::QuickInfo( const Castle & castle )
     const Sprite & sprite = AGG::GetICN( ICN::LOCATORS, index );
 
     dst_pt.x = cur_rt.x + ( cur_rt.w - sprite.w() ) / 2;
-    dst_pt.y += 18;
+    dst_pt.y += 15;
     sprite.Blit( dst_pt );
 
     // color flags
@@ -689,10 +689,10 @@ void Dialog::QuickInfo( const Castle & castle )
     }
     else if ( castle.isFriends( conf.CurrentColor() ) )
         // show all
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 70, 192, Skill::Level::EXPERT, false );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, false );
     else
         // show limited
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 70, 192, Skill::Level::NONE, false );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::NONE, false );
 
     cursor.Show();
     display.Flip();
@@ -909,11 +909,11 @@ void Dialog::QuickInfo( const Heroes & hero )
         dst_pt.x += 75;
         text.Blit( dst_pt );
 
-        Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 5, cur_rt.y + 114, 160 );
+        Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 116, 160 );
     }
     else {
         // show limited
-        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 5, cur_rt.y + 70, 160, Skill::Level::NONE, false );
+        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false );
     }
 
     cursor.Show();
