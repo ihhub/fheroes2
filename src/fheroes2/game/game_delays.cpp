@@ -138,5 +138,5 @@ void Game::UpdateGameSpeed( void )
 
 uint32_t Game::ApplyBattleSpeed( uint32_t delay )
 {
-    return static_cast<uint32_t>( 10 - Settings::Get().BattleSpeed() ) * ( delay / ( DEFAULT_SPEED_DELAY ) );
+    return static_cast<uint32_t>( 10 - Settings::Get().BattleSpeed() ) * ( delay / DEFAULT_SPEED_DELAY );
 }
