@@ -140,7 +140,7 @@ void Battle::DialogBattleSettings( void )
 
         if ( le.MouseClickLeft( opt_speed ) ) {
             conf.SetBattleSpeed( conf.BattleSpeed() % 10 + 1 );
-            Game::UpdateBattleSpeed();
+            Game::UpdateGameSpeed();
             cursor.Hide();
             speed_buttom_back.Restore();
             SpeedRedraw( opt_speed );

@@ -111,7 +111,7 @@ int Dialog::SystemOptions( void )
             conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() % 10 + 1 );
             result |= 0x01;
             redraw = true;
-            Game::UpdateHeroesMoveSpeed();
+            Game::UpdateGameSpeed();
         }
 
         // set ai speed
@@ -119,7 +119,7 @@ int Dialog::SystemOptions( void )
             conf.SetAIMoveSpeed( conf.AIMoveSpeed() % 10 + 1 );
             result |= 0x01;
             redraw = true;
-            Game::UpdateHeroesMoveSpeed();
+            Game::UpdateGameSpeed();
         }
 
         // set scroll speed
