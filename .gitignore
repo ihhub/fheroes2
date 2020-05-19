@@ -54,7 +54,5 @@
 *.hs
 *.smk
 
-
 # build directory
 build
-
