@@ -134,26 +134,6 @@ void Game::UpdateGameSpeed( void )
     delays[BATTLE_CATAPULT2_DELAY] = 40 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 7;
     delays[BATTLE_CATAPULT3_DELAY] = 40 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 7;
     delays[BATTLE_BRIDGE_DELAY] = 90 - ( battleSpeed - DEFAULT_SPEED_DELAY ) * 17;
-
-    const float currentBlitTime = conf.BlitSpeed();
-    const float expectedBlittingSpeed = 15.0;
-    if ( expectedBlittingSpeed < currentBlitTime ) {
-        const float adjustment = currentBlitTime / expectedBlittingSpeed;
-        const int ids[] = {BATTLE_FRAME_DELAY,    BATTLE_MISSILE_DELAY,   BATTLE_SPELL_DELAY,     BATTLE_DISRUPTING_DELAY,
-                           BATTLE_CATAPULT_DELAY, BATTLE_CATAPULT2_DELAY, BATTLE_CATAPULT3_DELAY, BATTLE_BRIDGE_DELAY};
-
-        DEBUG( DBG_GAME, DBG_WARN, "Slow render time detected: " << currentBlitTime << ", adjusting battle delays for speed " << battleSpeed );
-        std::ostringstream os;
-
-        for ( u32 it = 0; it < ARRAY_COUNT( ids ); ++it ) {
-            float tmp = delays[ids[it]]();
-            tmp /= adjustment;
-            delays[ids[it]] = static_cast<int>( tmp );
-            os << static_cast<int>( tmp ) << ", ";
-        }
-
-        DEBUG( DBG_GAME, DBG_WARN, "set battle delays: " << os.str() );
-    }
 }
 
 uint32_t Game::ApplyBattleSpeed( uint32_t delay )
