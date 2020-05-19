@@ -109,10 +109,10 @@ int Dialog::SystemOptions( void )
             int type = conf.MusicType() + 1;
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.PriceLoyaltyVersion() )
-                type++;
+                ++type;
             // CD music is currently not implemented correctly even on SDL1; remove this when done
             if ( type == MUSIC_CDROM )
-                type++;
+                ++type;
 
             conf.SetMusicType( type > MUSIC_CDROM ? 0 : type );
             result |= 0x02;
