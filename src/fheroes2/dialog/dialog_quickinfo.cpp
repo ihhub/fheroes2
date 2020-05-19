@@ -109,28 +109,37 @@ std::string ShowArtifactInfo( const Maps::Tiles & tile, bool show )
     return str;
 }
 
-std::string ShowResourceInfo( const Maps::Tiles & tile, bool show, int scoute )
+std::string ShowResourceInfo( const Maps::Tiles & tile, int scoute )
 {
     std::string str;
 
     if ( MP2::OBJ_RESOURCE == tile.GetObject() ) {
         str = Resource::String( tile.GetQuantity1() );
-    }
-    else {
-        str = MP2::StringObject( tile.GetObject() );
-    }
-
-    if ( show ) {
-        const ResourceCount & rc = tile.QuantityResourceCount();
-
-        str.append( "\n(" );
-        str.append( Resource::String( rc.first ) );
-
         if ( scoute ) {
+            const ResourceCount & rc = tile.QuantityResourceCount();
             str.append( ": " );
             str.append( Game::CountScoute( rc.second, scoute ) );
         }
-        str.append( ")" );
+    }
+    else {
+        str = MP2::StringObject( tile.GetObject() );
+        if ( scoute ) {
+            const Funds & funds = tile.QuantityFunds();
+
+            str.append( "\n(" );
+            str.append( Resource::String( Resource::GOLD ) );
+
+            str.append( ": " );
+            str.append( Game::CountScoute( funds.gold, scoute ) );
+            str.append( "\n" );
+
+            const ResourceCount & rc = tile.QuantityResourceCount();
+            str.append( Resource::String( rc.first ) );
+
+            str.append( ": " );
+            str.append( Game::CountScoute( rc.second, scoute ) );
+            str.append( ")" );
+        }
     }
 
     return str;
@@ -400,15 +409,15 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_CAMPFIRE:
-            name_object = ShowResourceInfo( tile, scoute, scoute );
+            name_object = ShowResourceInfo( tile, scoute );
             break;
 
         case MP2::OBJ_RESOURCE:
-            name_object = ShowResourceInfo( tile, show || scoute, scoute );
+            name_object = ShowResourceInfo( tile, scoute );
             break;
 
         case MP2::OBJ_ARTIFACT:
-            name_object = ShowArtifactInfo( tile, show || scoute );
+            name_object = ShowArtifactInfo( tile, scoute );
             break;
 
         case MP2::OBJ_MINES:
