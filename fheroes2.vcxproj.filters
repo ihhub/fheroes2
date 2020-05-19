@@ -1,0 +1,1092 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\fheroes2\agg\agg.cpp">
+      <Filter>agg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\army\army.cpp">
+      <Filter>fheroes2\army</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\army\army_bar.cpp">
+      <Filter>fheroes2\army</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\army\army_troop.cpp">
+      <Filter>fheroes2\army</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\audio.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\audio_cdrom.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\audio_mixer.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\audio_music.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_action.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_animation.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_arena.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_army.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_board.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_bridge.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_catapult.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_cell.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_command.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_dialogs.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_grave.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_interface.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_main.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_only.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_tower.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\battle\battle_troop.cpp">
+      <Filter>fheroes2\battle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\button.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\monster\monster.cpp">
+      <Filter>fheroes2\monster</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_delays.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_highscores.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_hotkeys.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_interface.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_io.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_loadgame.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_mainmenu.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_newgame.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_over.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_scenarioinfo.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_startgame.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\game_static.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_border.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_buttons.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_cpanel.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_events.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_focus.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_gamearea.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_icons.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_radar.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\interface_status.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes_action.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes_base.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes_dialog.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes_indicator.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes_meeting.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes_move.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes_recruits.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes_spell.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\direction.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\route.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\route_pathfind.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\skill.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\castle_well.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\castle.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\castle_building.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\castle_dialog.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\castle_mageguild.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\castle_tavern.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\castle_town.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\buildinginfo.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\captain.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\castle\mageguild.cpp">
+      <Filter>fheroes2\castle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\color.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\kingdom.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\kingdom_overview.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\luck.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\morale.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\profit.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\puzzle.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\race.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\speed.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\week.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\world.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\world_loadmap.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\maps_actions.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\maps_fileinfo.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\maps_objects.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\maps_tiles.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\maps_tiles_quantity.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\mp2.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\position.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\visit.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\ground.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\dir.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\display.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\engine.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\error.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\font.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\IMG_savepng.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\localevent.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\rand.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\rect.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\serialize.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\sdlnet.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\sprites.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\surface.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\system.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\thread.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\tinyconfig.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\translations.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\xmi2mid.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\zzlib.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\tools.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\agg\bin_info.cpp">
+      <Filter>agg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\agg\icn.cpp">
+      <Filter>agg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\agg\m82.cpp">
+      <Filter>agg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\agg\mus.cpp">
+      <Filter>agg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\agg\sprite.cpp">
+      <Filter>agg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\agg\xmi.cpp">
+      <Filter>agg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\agg\til.cpp">
+      <Filter>agg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_armyinfo.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_castle.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_dialog.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_heroes.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_kingdom.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_mainmenu.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_meeting.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_selectscenario.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_thievesguild.cpp">
+      <Filter>pocketpc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\mounts.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objcrck.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objdirt.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objdsrt.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objgras.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objlava.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objmult.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objsnow.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objswmp.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objtown.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objwatr.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\objxloc.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\objects\trees.cpp">
+      <Filter>fheroes2\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\difficulty.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\game\fheroes2.cpp">
+      <Filter>fheroes2\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\heroes\heroes.cpp">
+      <Filter>fheroes2\heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\resource\artifact.cpp">
+      <Filter>fheroes2\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\resource\artifact_ultimate.cpp">
+      <Filter>fheroes2\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\resource\resource.cpp">
+      <Filter>fheroes2\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\maps\maps.cpp">
+      <Filter>fheroes2\maps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\resource\maps_text.cpp">
+      <Filter>fheroes2\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\system\settings.cpp">
+      <Filter>fheroes2\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\system\players.cpp">
+      <Filter>fheroes2\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\system\gamedefs.cpp">
+      <Filter>fheroes2\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\kingdom\payment.cpp">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\statusbar.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\splitter.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\cursor.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\gui\text.cpp">
+      <Filter>fheroes2\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\ai\normal\ai_normal.cpp">
+      <Filter>fheroes2\ai\normal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_battle.cpp">
+      <Filter>fheroes2\ai\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_castle.cpp">
+      <Filter>fheroes2\ai\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_heroes.cpp">
+      <Filter>fheroes2\ai\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_kingdom.cpp">
+      <Filter>fheroes2\ai\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\ai\ai_base.cpp">
+      <Filter>fheroes2\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple.cpp">
+      <Filter>fheroes2\ai\simple</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp">
+      <Filter>fheroes2\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\test\test.cpp">
+      <Filter>fheroes2\test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\test\test_monstersprite.cpp">
+      <Filter>fheroes2\test</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_adventure.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_arena.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_armyinfo.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_box.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_buyboat.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_chest.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_file.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_frameborder.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_gameinfo.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_giftresources.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_guardian.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_message.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_quickinfo.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_recrut.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_resourceinfo.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_selectcount.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_selectfile.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_selectitems.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_selectscenario.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_settings.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_skillinfo.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_spellinfo.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_spriteinfo.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_system.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\dialog\dialog_thievesguild.cpp">
+      <Filter>fheroes2\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\spell\spell.cpp">
+      <Filter>fheroes2\spell</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\spell\spell_book.cpp">
+      <Filter>fheroes2\spell</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\spell\spell_storage.cpp">
+      <Filter>fheroes2\spell</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\fheroes2\agg\agg.h">
+      <Filter>agg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\ai\ai.h">
+      <Filter>fheroes2\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\army\army.h">
+      <Filter>fheroes2\army</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\army\army_bar.h">
+      <Filter>fheroes2\army</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\army\army_troop.h">
+      <Filter>fheroes2\army</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\audio.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\audio_cdrom.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\audio_mixer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\audio_music.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_animation.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_arena.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_army.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_board.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_bridge.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_catapult.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_cell.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_command.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_grave.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_interface.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_only.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_tower.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\battle\battle_troop.h">
+      <Filter>fheroes2\battle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\button.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\monster\monster.h">
+      <Filter>fheroes2\monster</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\monster\monster_info.h">
+      <Filter>fheroes2\monster</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\game\game.h">
+      <Filter>fheroes2\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\game\game_interface.h">
+      <Filter>fheroes2\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\game\game_io.h">
+      <Filter>fheroes2\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\game\game_over.h">
+      <Filter>fheroes2\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\game\game_static.h">
+      <Filter>fheroes2\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_border.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_buttons.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_cpanel.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_gamearea.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_icons.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_itemsbar.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_list.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_radar.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\interface_status.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\heroes\heroes.h">
+      <Filter>fheroes2\heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\heroes\heroes_base.h">
+      <Filter>fheroes2\heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\heroes\heroes_indicator.h">
+      <Filter>fheroes2\heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\heroes\heroes_recruits.h">
+      <Filter>fheroes2\heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\heroes\direction.h">
+      <Filter>fheroes2\heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\heroes\route.h">
+      <Filter>fheroes2\heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\heroes\skill.h">
+      <Filter>fheroes2\heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\heroes\skill_static.h">
+      <Filter>fheroes2\heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\castle\castle.h">
+      <Filter>fheroes2\castle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\castle\castle_heroes.h">
+      <Filter>fheroes2\castle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\castle\buildinginfo.h">
+      <Filter>fheroes2\castle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\castle\captain.h">
+      <Filter>fheroes2\castle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\castle\mageguild.h">
+      <Filter>fheroes2\castle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\castle\marketplace.h">
+      <Filter>fheroes2\castle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\color.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\kingdom.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\luck.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\morale.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\profit.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\puzzle.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\race.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\speed.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\week.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\world.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\maps.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\maps_actions.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\maps_fileinfo.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\maps_objects.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\maps_tiles.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\mp2.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\pairs.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\position.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\visit.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\maps\ground.h">
+      <Filter>fheroes2\maps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\dir.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\display.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\engine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\error.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\font.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\IMG_savepng.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\localevent.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\rand.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\rect.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\serialize.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\sdlnet.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\sprites.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\surface.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\system.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\thread.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\tinyconfig.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\translations.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\types.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\zzlib.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\tools.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\agg\bin_info.h">
+      <Filter>agg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\agg\icn.h">
+      <Filter>agg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\agg\m82.h">
+      <Filter>agg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\agg\mus.h">
+      <Filter>agg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\agg\sprite.h">
+      <Filter>agg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\agg\xmi.h">
+      <Filter>agg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\agg\til.h">
+      <Filter>agg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\pocketpc\pocketpc.h">
+      <Filter>pocketpc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\mounts.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objcrck.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objdirt.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objdsrt.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objgras.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objlava.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objmult.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objsnow.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objswmp.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objtown.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objwatr.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\objxloc.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\objects\trees.h">
+      <Filter>fheroes2\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\game\difficulty.h">
+      <Filter>fheroes2\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\resource\artifact.h">
+      <Filter>fheroes2\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\resource\artifact_ultimate.h">
+      <Filter>fheroes2\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\resource\resource.h">
+      <Filter>fheroes2\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\system\bitmodes.h">
+      <Filter>fheroes2\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\system\settings.h">
+      <Filter>fheroes2\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\system\players.h">
+      <Filter>fheroes2\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\system\gamedefs.h">
+      <Filter>fheroes2\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\kingdom\payment.h">
+      <Filter>fheroes2\kingdom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\statusbar.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\splitter.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\cursor.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\gui\text.h">
+      <Filter>fheroes2\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\ai\normal\ai_normal.h">
+      <Filter>fheroes2\ai\normal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\ai\empty\ai_empty.h">
+      <Filter>fheroes2\ai\empty</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\ai\simple\ai_simple.h">
+      <Filter>fheroes2\ai\simple</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\test\test.h">
+      <Filter>fheroes2\test</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\image\images_pack.h">
+      <Filter>fheroes2\image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\palette_h2.h">
+      <Filter>tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\dialog\dialog.h">
+      <Filter>fheroes2\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h">
+      <Filter>fheroes2\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h">
+      <Filter>fheroes2\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\spell\spell.h">
+      <Filter>fheroes2\spell</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\spell\spell_book.h">
+      <Filter>fheroes2\spell</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fheroes2\spell\spell_storage.h">
+      <Filter>fheroes2\spell</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="agg">
+      <UniqueIdentifier>{f7ec23d5-f854-4cb1-bfb5-cf37c8a2e2c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{cffd00ec-d1cb-4463-8362-3e54ee2faeba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2">
+      <UniqueIdentifier>{038bb2f9-2454-4d8b-8123-22365cffce71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\ai">
+      <UniqueIdentifier>{75a5a536-9ebc-4c99-ac10-ee7dfe402773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\ai\empty">
+      <UniqueIdentifier>{609debfe-5931-491a-9b60-ea5e789da776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\ai\normal">
+      <UniqueIdentifier>{32c2cc03-bfe0-4521-8099-fff5485fd2eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\ai\simple">
+      <UniqueIdentifier>{507edfd3-59d0-47db-9f56-4a346530ae4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\army">
+      <UniqueIdentifier>{47ba03d0-88ce-401f-8889-8da9ad26c69f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\battle">
+      <UniqueIdentifier>{a3012a97-c78b-4b7e-8eb5-75e9ee7bbaca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\castle">
+      <UniqueIdentifier>{75a9b791-ae31-487a-85b5-9625ec17a6f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\dialog">
+      <UniqueIdentifier>{8b8a036d-8fdf-449d-a06f-f30dd4d31a90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\game">
+      <UniqueIdentifier>{d4b30c37-63d4-4b7e-9566-a1110e238655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\gui">
+      <UniqueIdentifier>{dc8a40ed-1d55-4bac-a645-e4dc63ab0a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\heroes">
+      <UniqueIdentifier>{700b746b-8e63-454e-910b-48f48c8f3b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\image">
+      <UniqueIdentifier>{efcc5cbd-ca42-40d7-8a44-910e1020597b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\kingdom">
+      <UniqueIdentifier>{62da0936-b169-4e45-ab4c-5810356a6b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\maps">
+      <UniqueIdentifier>{6250bed4-ebcc-4a22-ab5a-1c95c7e44c3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\monster">
+      <UniqueIdentifier>{d0636a13-371c-4fcf-a63e-185d3869b655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\objects">
+      <UniqueIdentifier>{6ca387aa-2fe9-4c83-9bcb-170e5cc94075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\resource">
+      <UniqueIdentifier>{154bff64-5ac0-402c-8c17-c93563e91163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\spell">
+      <UniqueIdentifier>{a788f832-9325-4629-b702-fa1ba942f65d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\system">
+      <UniqueIdentifier>{0dcad2ab-0460-4cbb-b21c-bc781b8c8b39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fheroes2\test">
+      <UniqueIdentifier>{a718608d-b367-402e-921d-e06e99637e5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pocketpc">
+      <UniqueIdentifier>{44063d87-0077-4730-9ad6-65cfb08f2ddf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{99135a29-016d-42f3-9ed6-55522a88aae5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
