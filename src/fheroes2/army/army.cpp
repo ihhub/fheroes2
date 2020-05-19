@@ -1251,23 +1251,22 @@ void Army::DrawMons32LineShort( const Troops & troops, s32 cx, s32 cy, u32 width
     troops.DrawMons32LineWithScoute( cx, cy, width, first, count, Skill::Level::EXPERT, true );
 }
 
-void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 scout, bool compact )
+void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 lineWidth, u32 scout, bool compact )
 {
     const uint32_t count = troops.GetCount();
-    const uint32_t unitWidth = compact ? 46 : 64;
     const int offsetX = compact ? 23 : 35;
-    const int offsetY = compact ? 29 : 44;
+    const int offsetY = compact ? 29 : 42;
 
     if ( count < 4 ) {
-        troops.DrawMons32LineWithScoute( posX, posY + offsetY / 2, unitWidth * 3, 0, 0, scout, compact );
+        troops.DrawMons32LineWithScoute( posX, posY + offsetY / 2, lineWidth, 0, 0, scout, compact );
     }
     else if ( count == 4 ) {
-        troops.DrawMons32LineWithScoute( posX + offsetX, posY, unitWidth * 2, 0, 2, scout, compact );
-        troops.DrawMons32LineWithScoute( posX, posY + offsetY, unitWidth * 2, 2, 2, scout, compact );
+        troops.DrawMons32LineWithScoute( posX + offsetX, posY, lineWidth * 2 / 3, 0, 2, scout, compact );
+        troops.DrawMons32LineWithScoute( posX, posY + offsetY, lineWidth * 2 / 3, 2, 2, scout, compact );
     }
     else {
-        troops.DrawMons32LineWithScoute( posX + offsetX, posY, unitWidth * 2, 0, 2, scout, compact );
-        troops.DrawMons32LineWithScoute( posX, posY + offsetY, unitWidth * 3, 2, 3, scout, compact );
+        troops.DrawMons32LineWithScoute( posX + offsetX, posY, lineWidth * 2 / 3, 0, 2, scout, compact );
+        troops.DrawMons32LineWithScoute( posX, posY + offsetY, lineWidth, 2, 3, scout, compact );
     }
 }
 
