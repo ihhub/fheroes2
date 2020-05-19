@@ -21,8 +21,10 @@
  ***************************************************************************/
 
 #include <algorithm>
+#ifndef M_PI
 #define _USE_MATH_DEFINES
 #include <math.h>
+#endif
 
 #include "agg.h"
 #include "battle_arena.h"
