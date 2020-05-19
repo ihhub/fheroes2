@@ -1035,8 +1035,14 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
     case Cursor::CHANGE:
     case Cursor::ACTION:
     case Cursor::REDBOAT:
-        if ( from_hero )
+        if ( from_hero == NULL )
+            break;
+
+        if ( from_hero->isEnableMove() )
+            from_hero->SetMove( false );
+        else
             ShowPathOrStartMoveHero( from_hero, index_maps );
+
         break;
 
     default:

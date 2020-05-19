@@ -648,7 +648,7 @@ void Interface::GameArea::QueueEventProcessing( void )
             return;
     }
 
-    if ( le.MouseClickLeft( tile_pos ) && Cursor::POINTER != cursor.Themes() )
+    if ( le.MouseClickLeft( tile_pos ) )
         interface.MouseCursorAreaClickLeft( index );
     else if ( le.MousePressRight( tile_pos ) )
         interface.MouseCursorAreaPressRight( index );
