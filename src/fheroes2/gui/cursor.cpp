@@ -330,8 +330,7 @@ void Cursor::SetOffset( int name )
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-void Cursor::Show( void )
-{}
+void Cursor::Show( void ) {}
 #else
 void Cursor::Show( void )
 {
@@ -341,8 +340,7 @@ void Cursor::Show( void )
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-void Cursor::Hide( void )
-{}
+void Cursor::Hide( void ) {}
 #endif
 
 int Cursor::DistanceThemes( int theme, u32 dist )
