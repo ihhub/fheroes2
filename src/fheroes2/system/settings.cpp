@@ -632,7 +632,7 @@ bool Settings::Read( const std::string & filename )
     if ( !sval.empty() ) {
         if ( sval == "original" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_CD );
+            opt_global.SetModes( GLOBAL_MUSIC_MIDI );
             _musicType = MUSIC_MIDI_ORIGINAL;
         }
         else if ( sval == "expansion" ) {
