@@ -84,8 +84,7 @@ namespace Game
                           40, // BATTLE_CATAPULT2_DELAY // boulder
                           40, // BATTLE_CATAPULT3_DELAY // cloud
                           90, // BATTLE_BRIDGE_DELAY
-                          3000, // BATTLE_IDLE_DELAY
-                          200, // BATTLE_IDLE2_DELAY
+                          150, // BATTLE_IDLE_DELAY
                           500, // BATTLE_OPPONENTS_DELAY
                           300, // BATTLE_FLAGS_DELAY
                           800, // BATTLE_POPUP_DELAY
@@ -129,6 +128,7 @@ void Game::UpdateGameSpeed( void )
     delays[BATTLE_FRAME_DELAY] = 120 - battleSpeed * 20;
     delays[BATTLE_MISSILE_DELAY] = 40 - battleSpeed * 7;
     delays[BATTLE_SPELL_DELAY] = 90 - battleSpeed * 17;
+    delays[BATTLE_IDLE_DELAY] = 150 - battleSpeed * 25;
     delays[BATTLE_DISRUPTING_DELAY] = 20 - battleSpeed * 3;
     delays[BATTLE_CATAPULT_DELAY] = 90 - battleSpeed * 17;
     delays[BATTLE_CATAPULT2_DELAY] = 40 - battleSpeed * 7;

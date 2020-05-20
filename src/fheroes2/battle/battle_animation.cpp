@@ -446,6 +446,11 @@ uint32_t AnimationReference::getFlightSpeed() const
     return _monsterInfo.flightSpeed;
 }
 
+uint32_t AnimationReference::getIdleDelay() const
+{
+    return _monsterInfo.idleAnimationDelay;
+}
+
 AnimationState::AnimationState( int monsterID )
     : AnimationReference( monsterID )
     , _currentSequence( _static )

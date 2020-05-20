@@ -4217,21 +4217,28 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 bool Battle::Interface::IdleTroopsAnimation( void )
 {
     bool res = false;
+    Force & force1 = arena.GetForce1();
+    Force & force2 = arena.GetForce2();
 
     // set animation
-    if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        if ( arena.GetForce1().SetIdleAnimation() )
-            res = true;
-        if ( arena.GetForce2().SetIdleAnimation() )
-            res = true;
-    }
-    else
-        // next animation
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE2_DELAY ) ) {
-        if ( arena.GetForce1().NextIdleAnimation() )
-            res = true;
-        if ( arena.GetForce2().NextIdleAnimation() )
-            res = true;
+    for ( Force::iterator it = force1.begin(); it != force1.end(); ++it ) {
+        Unit & unit = **it;
+        if ( unit.isValid() ) {
+            if ( unit.isIdling() && Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
+                if ( unit.isFinishAnimFrame() ) {
+                    unit.SwitchAnimation( Monster_Info::STATIC );
+                }
+                else {
+                    unit.IncreaseAnimFrame();
+                }
+            }
+            else if ( unit.GetAnimationState() == Monster_Info::STATIC ) {
+                uint32_t delay = unit.animation.getIdleDelay();
+                delay = ( delay > 50 ) ? Rand::Get( 50, delay ) : delay;
+                if ( Game::AnimateCustomDelay( delay ) )
+                    unit.SwitchAnimation( Monster_Info::IDLE );
+            }
+        }
     }
 
     return res;
@@ -4239,7 +4246,7 @@ bool Battle::Interface::IdleTroopsAnimation( void )
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
-    // animation opponents
+    // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
         if ( opponent1 ) {
             if ( !opponent1->isStartFrame() || 2 > Rand::Get( 1, 10 ) )
@@ -4253,7 +4260,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         humanturn_redraw = true;
     }
 
-    // animation flags
+    // flags animation
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FLAGS_DELAY ) ) {
         if ( opponent1 && opponent1->isFinishFrame() )
             opponent1->ResetAnimFrame( OP_IDLE );
