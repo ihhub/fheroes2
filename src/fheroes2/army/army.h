@@ -139,7 +139,7 @@ public:
 
     static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
     static void DrawMons32LineWithScoute( const Troops &, s32, s32, u32, u32, u32, u32 );
-    static void DrawMons32LineShort( const Troops &, s32, s32, u32, u32, u32 );
+    static void DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 lineWidth, u32 scout, bool compact = true );
 
     Army( HeroBase * s = NULL );
     Army( const Maps::Tiles & );
