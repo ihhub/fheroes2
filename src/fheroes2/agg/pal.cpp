@@ -182,7 +182,7 @@ RGBA PAL::GetPaletteColor( u8 index )
 void PAL::SwapPalette( int type )
 {
     current_palette = &palmap[type];
-    Surface::SetDefaultPalette( &( *current_palette->colors )[0], current_palette->colors->size() );
+    Surface::SetDefaultPalette( &( *current_palette->colors )[0], static_cast<int>( current_palette->colors->size() ) );
 }
 
 void PAL::InitAllPalettes()
