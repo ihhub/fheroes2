@@ -134,7 +134,8 @@ public:
     static Cursor & Get( void );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    bool isVisible() const;
+    void Hide( void );
+    bool isVisible( void ) const;
 #else
     static void Redraw( s32, s32 );
 #endif
@@ -148,11 +149,11 @@ public:
 
 private:
     Cursor();
+    ~Cursor();
 
     int theme;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    ~Cursor();
     void SetCursor( int icn, int name );
 
     SDL_Cursor * cursor;

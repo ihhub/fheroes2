@@ -318,9 +318,7 @@ int Game::NewGame( void )
 
     // cursor
     Cursor & cursor = Cursor::Get();
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     cursor.Hide();
-#endif
     cursor.SetThemes( cursor.POINTER );
 
     Display & display = Display::Get();
@@ -409,9 +407,7 @@ int Game::NewMulti( void )
 
     // cursor
     Cursor & cursor = Cursor::Get();
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     cursor.Hide();
-#endif
     cursor.SetThemes( cursor.POINTER );
 
     Display & display = Display::Get();
@@ -473,9 +469,7 @@ u32 Game::SelectCountPlayers( void )
 {
     // cursor
     Cursor & cursor = Cursor::Get();
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
     cursor.Hide();
-#endif
     cursor.SetThemes( cursor.POINTER );
 
     Display & display = Display::Get();

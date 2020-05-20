@@ -36,14 +36,14 @@ Cursor::Cursor()
 #endif
 {}
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 /* destructor */
 Cursor::~Cursor()
 {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( cursor != NULL )
         SDL_FreeCursor( cursor );
-}
 #endif
+}
 
 Cursor & Cursor::Get( void )
 {
@@ -118,6 +118,8 @@ bool Cursor::SetThemes( int name, bool force )
             SetCursor( ICN::ADVMCO, 0 );
             break;
         }
+
+        SDL_ShowCursor( SDL_ENABLE );
 
         return true;
     }
@@ -327,15 +329,21 @@ void Cursor::SetOffset( int name )
 }
 #endif
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+void Cursor::Show( void )
+{}
+#else
 void Cursor::Show( void )
 {
     if ( !Settings::Get().ExtPocketHideCursor() )
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        SDL_ShowCursor( SDL_ENABLE );
-#else
         SpriteMove::Show();
-#endif
 }
+#endif
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+void Cursor::Hide( void )
+{}
+#endif
 
 int Cursor::DistanceThemes( int theme, u32 dist )
 {

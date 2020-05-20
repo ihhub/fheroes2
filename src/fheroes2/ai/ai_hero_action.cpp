@@ -1907,14 +1907,10 @@ namespace AI
                 cursor.Hide();
 
                 if ( 0 != conf.AIMoveSpeed() && AIHeroesShowAnimation( hero ) ) {
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
                     cursor.Hide();
-#endif
                     I.GetGameArea().SetCenter( hero.GetCenter() );
                     I.Redraw( REDRAW_GAMEAREA );
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
                     cursor.Show();
-#endif
                     display.Flip();
                 }
 
@@ -1928,29 +1924,21 @@ namespace AI
                         hero.Move( true );
                     }
                     else if ( Game::AnimateInfrequentDelay( Game::CURRENT_AI_DELAY ) ) {
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
                         cursor.Hide();
-#endif
                         hero.Move();
 
                         I.GetGameArea().SetCenter( hero.GetCenter() );
                         I.Redraw( REDRAW_GAMEAREA );
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
                         cursor.Show();
-#endif
                         display.Flip();
                     }
 
                     if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
                         u32 & frame = Game::MapsAnimationFrame();
                         ++frame;
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
                         cursor.Hide();
-#endif
                         I.Redraw( REDRAW_GAMEAREA );
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
                         cursor.Show();
-#endif
                         display.Flip();
                     }
                 }
