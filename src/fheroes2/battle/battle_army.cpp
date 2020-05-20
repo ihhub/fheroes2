@@ -392,7 +392,7 @@ bool Battle::Force::animateIdleUnits()
         if ( unit.isValid() && !unit.Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
             if ( unit.isIdling() ) {
                 if ( unit.isFinishAnimFrame() ) {
-                    redrawNeeded = unit.SwitchAnimation( Monster_Info::STATIC );
+                    redrawNeeded = redrawNeeded || unit.SwitchAnimation( Monster_Info::STATIC );
                 }
                 else {
                     unit.IncreaseAnimFrame();
@@ -401,7 +401,7 @@ bool Battle::Force::animateIdleUnits()
             }
             // checkIdleDelay() sets and checks unit's internal timer if we're ready to switch to next one
             else if ( unit.GetAnimationState() == Monster_Info::STATIC && unit.checkIdleDelay() ) {
-                redrawNeeded = unit.SwitchAnimation( Monster_Info::IDLE );
+                redrawNeeded = redrawNeeded || unit.SwitchAnimation( Monster_Info::IDLE );
             }
         }
     }
