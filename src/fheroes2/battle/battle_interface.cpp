@@ -4216,35 +4216,13 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 
 bool Battle::Interface::IdleTroopsAnimation( void )
 {
-    bool res = false;
-    Force & force1 = arena.GetForce1();
-    Force & force2 = arena.GetForce2();
+    bool redrawNeeded = false;
 
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        // set animation
-        for ( Force::iterator it = force1.begin(); it != force1.end(); ++it ) {
-            Unit & unit = **it;
-            // check if under status effect
-            if ( unit.isValid() ) {
-                if ( unit.isIdling() ) {
-                    if ( unit.isFinishAnimFrame() ) {
-                        unit.SwitchAnimation( Monster_Info::STATIC );
-                        res = true;
-                    }
-                    else {
-                        unit.IncreaseAnimFrame();
-                        res = true;
-                    }
-                }
-                else if ( unit.GetAnimationState() == Monster_Info::STATIC && unit.checkIdleDelay() ) {
-                    unit.SwitchAnimation( Monster_Info::IDLE );
-                    res = true;
-                }
-            }
-        }    
+        redrawNeeded = arena.GetForce1().animateIdleUnits() || arena.GetForce2().animateIdleUnits();
     }
 
-    return res;
+    return redrawNeeded;
 }
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )

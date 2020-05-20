@@ -381,6 +381,31 @@ Troops Battle::Force::GetKilledTroops( void ) const
     return killed;
 }
 
+bool Battle::Force::animateIdleUnits()
+{
+    bool redrawNeeded = false;
+
+    for ( Force::iterator it = begin(); it != end(); ++it ) {
+        Unit & unit = **it;
+
+        if ( unit.isValid() ) {
+            if ( unit.isIdling() ) {
+                if ( unit.isFinishAnimFrame() ) {
+                    redrawNeeded = unit.SwitchAnimation( Monster_Info::STATIC );
+                }
+                else {
+                    unit.IncreaseAnimFrame();
+                    redrawNeeded = true;
+                }
+            }
+            else if ( unit.GetAnimationState() == Monster_Info::STATIC && unit.checkIdleDelay() ) {
+                redrawNeeded = unit.SwitchAnimation( Monster_Info::IDLE );
+            }
+        }
+    }
+    return redrawNeeded;
+}
+
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
     return end() != std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
