@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include "sprite.h"
-#include "agg.h"
 #include "cursor.h"
 #include "display.h"
 #include "icn.h"
+#include "pal.h"
 #include "settings.h"
 
 Sprite::Sprite() {}
@@ -82,12 +82,12 @@ Sprite Sprite::ScaleQVGASprite( const Sprite & sp )
 
 void Sprite::ChangeColorIndex( u32 fc, u32 tc )
 {
-    SetSurface( RenderChangeColor( AGG::GetPaletteColor( fc ), AGG::GetPaletteColor( tc ) ) );
+    SetSurface( RenderChangeColor( PAL::GetPaletteColor( fc ), PAL::GetPaletteColor( tc ) ) );
 }
 
 void Sprite::ChangeColor( u32 index, RGBA color )
 {
-    SetSurface( RenderChangeColor( AGG::GetPaletteColor( index ), color ) );
+    SetSurface( RenderChangeColor( PAL::GetPaletteColor( index ), color ) );
 }
 
 void Sprite::Blit( void ) const
