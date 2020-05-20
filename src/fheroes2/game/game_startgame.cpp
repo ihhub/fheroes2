@@ -1018,13 +1018,13 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
         index_maps = to_castle->GetIndex();
 
         Castle * from_castle = GetFocusCastle();
-
         if ( !from_castle || from_castle != to_castle ) {
             SetFocus( to_castle );
             RedrawFocus();
         }
-        else
+        else {
             Game::OpenCastleDialog( *to_castle );
+        }
     } break;
 
     case Cursor::FIGHT:
