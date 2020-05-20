@@ -22,10 +22,42 @@
 
 #include <algorithm>
 
-#include "game_delays.h"
 #include "game.h"
+#include "game_delays.h"
 #include "gamedefs.h"
 #include "settings.h"
+
+TimeDelay::TimeDelay( uint32_t dl )
+{
+    second = dl;
+}
+
+uint32_t TimeDelay::operator()( void ) const
+{
+    return second;
+}
+
+TimeDelay & TimeDelay::operator=( uint32_t dl )
+{
+    second = dl;
+    return *this;
+}
+
+void TimeDelay::Reset( void )
+{
+    first.Start();
+}
+
+bool TimeDelay::Trigger( uint32_t customDelay )
+{
+    first.Stop();
+    const uint32_t expected = ( customDelay > 0 ) ? customDelay : second;
+    if ( first.Get() < expected )
+        return false;
+
+    first.Start();
+    return true;
+}
 
 namespace Game
 {
@@ -94,7 +126,7 @@ void Game::UpdateGameSpeed( void )
     delays[BATTLE_FRAME_DELAY] = 120 - battleSpeed * 20;
     delays[BATTLE_MISSILE_DELAY] = 40 - battleSpeed * 7;
     delays[BATTLE_SPELL_DELAY] = 90 - battleSpeed * 17;
-    delays[BATTLE_IDLE_DELAY] = 150 - battleSpeed * 25;
+    delays[BATTLE_IDLE_DELAY] = 150 - battleSpeed * 20; // make sure idle delay doesn't get to 0 - units will go crazy
     delays[BATTLE_DISRUPTING_DELAY] = 20 - battleSpeed * 3;
     delays[BATTLE_CATAPULT_DELAY] = 90 - battleSpeed * 17;
     delays[BATTLE_CATAPULT2_DELAY] = 40 - battleSpeed * 7;

@@ -25,37 +25,10 @@
 
 struct TimeDelay : std::pair<SDL::Time, uint32_t>
 {
-    TimeDelay( uint32_t dl )
-    {
-        second = dl;
-    }
-
-    uint32_t operator()( void ) const
-    {
-        return second;
-    }
-
-    TimeDelay & operator=( uint32_t dl )
-    {
-        second = dl;
-        return *this;
-    }
-
-    void Reset( void )
-    {
-        first.Start();
-    }
-
-    bool Trigger( uint32_t customDelay = 0 )
-    {
-        first.Stop();
-        const uint32_t expected = ( customDelay > 0 ) ? customDelay : second;
-        if ( first.Get() < expected )
-            return false;
-
-        first.Start();
-        return true;
-    }
+    TimeDelay( uint32_t dl );
+    uint32_t operator()( void ) const;
+    TimeDelay & operator=( uint32_t dl );
+    void Reset( void );
+    bool Trigger( uint32_t customDelay = 0 );
 };
-
 #endif
