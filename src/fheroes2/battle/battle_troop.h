@@ -150,7 +150,6 @@ namespace Battle
         void IncreaseAnimFrame( bool loop = false );
         bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;
-        void SetFrameStep( int );
         int GetFrame( void ) const;
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
