@@ -119,14 +119,22 @@ void Game::UpdateGameSpeed( void )
 {
     const Settings & conf = Settings::Get();
 
+    const int heroSpeed = conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY;
+    const int aiSpeed = conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY;
+    const int battleSpeed = conf.BattleSpeed() - DEFAULT_SPEED_DELAY;
+
+    // assert to make sure we won't overflow
+    assert( heroSpeed <= DEFAULT_SPEED_DELAY );
+    assert( aiSpeed <= DEFAULT_SPEED_DELAY );
+    assert( battleSpeed <= DEFAULT_SPEED_DELAY );
+
     delays[CURRENT_HERO_DELAY] = 40 - ( conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
     delays[CURRENT_AI_DELAY] = 40 - ( conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
 
-    const int battleSpeed = conf.BattleSpeed() - DEFAULT_SPEED_DELAY;
     delays[BATTLE_FRAME_DELAY] = 120 - battleSpeed * 20;
     delays[BATTLE_MISSILE_DELAY] = 40 - battleSpeed * 7;
     delays[BATTLE_SPELL_DELAY] = 90 - battleSpeed * 17;
-    delays[BATTLE_IDLE_DELAY] = 150 - battleSpeed * 20; // make sure idle delay doesn't get to 0 - units will go crazy
+    delays[BATTLE_IDLE_DELAY] = 150 - battleSpeed * 20;
     delays[BATTLE_DISRUPTING_DELAY] = 20 - battleSpeed * 3;
     delays[BATTLE_CATAPULT_DELAY] = 90 - battleSpeed * 17;
     delays[BATTLE_CATAPULT2_DELAY] = 40 - battleSpeed * 7;

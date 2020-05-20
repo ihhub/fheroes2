@@ -4216,13 +4216,11 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 
 bool Battle::Interface::IdleTroopsAnimation( void )
 {
-    bool redrawNeeded = false;
-
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        redrawNeeded = arena.GetForce1().animateIdleUnits() || arena.GetForce2().animateIdleUnits();
+        return arena.GetForce1().animateIdleUnits() || arena.GetForce2().animateIdleUnits();
     }
 
-    return redrawNeeded;
+    return false;
 }
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )

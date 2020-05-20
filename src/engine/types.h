@@ -23,7 +23,11 @@
 #ifndef H2TYPES_H
 #define H2TYPES_H
 
+#ifdef BUILD_RELEASE
+#define NDEBUG
+#endif
 #include <SDL.h>
+#include <assert.h>
 
 typedef Sint8 s8;
 typedef Uint8 u8;

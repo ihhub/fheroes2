@@ -498,14 +498,12 @@ bool Battle::Unit::isIdling() const
 
 bool Battle::Unit::checkIdleDelay()
 {
-    bool res = false;
-
     if ( !idleTimerSet ) {
         const uint32_t halfDelay = animation.getIdleDelay() / 2;
         idleTimer.second = Rand::Get( 0, halfDelay / 2 ) + halfDelay * 3 / 2;
         idleTimerSet = true;
     }
-    res = idleTimer.Trigger();
+    const bool res = idleTimer.Trigger();
     if ( res )
         idleTimerSet = false;
     return res;
