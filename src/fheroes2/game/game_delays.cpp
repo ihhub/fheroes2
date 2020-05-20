@@ -22,44 +22,10 @@
 
 #include <algorithm>
 
+#include "game_delays.h"
 #include "game.h"
 #include "gamedefs.h"
 #include "settings.h"
-
-struct TimeDelay : std::pair<SDL::Time, uint32_t>
-{
-    TimeDelay( uint32_t dl )
-    {
-        second = dl;
-    }
-
-    uint32_t operator()( void ) const
-    {
-        return second;
-    }
-
-    TimeDelay & operator=( uint32_t dl )
-    {
-        second = dl;
-        return *this;
-    }
-
-    void Reset( void )
-    {
-        first.Start();
-    }
-
-    bool Trigger( uint32_t customDelay = 0 )
-    {
-        first.Stop();
-        const uint32_t expected = ( customDelay > 0 ) ? customDelay : second;
-        if ( first.Get() < expected )
-            return false;
-
-        first.Start();
-        return true;
-    }
-};
 
 namespace Game
 {

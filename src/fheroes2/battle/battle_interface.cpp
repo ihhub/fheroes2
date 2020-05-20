@@ -4220,25 +4220,28 @@ bool Battle::Interface::IdleTroopsAnimation( void )
     Force & force1 = arena.GetForce1();
     Force & force2 = arena.GetForce2();
 
-    // set animation
-    for ( Force::iterator it = force1.begin(); it != force1.end(); ++it ) {
-        Unit & unit = **it;
-        if ( unit.isValid() ) {
-            if ( unit.isIdling() && Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
-                if ( unit.isFinishAnimFrame() ) {
-                    unit.SwitchAnimation( Monster_Info::STATIC );
+    if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
+        // set animation
+        for ( Force::iterator it = force1.begin(); it != force1.end(); ++it ) {
+            Unit & unit = **it;
+            // check if under status effect
+            if ( unit.isValid() ) {
+                if ( unit.isIdling() ) {
+                    if ( unit.isFinishAnimFrame() ) {
+                        unit.SwitchAnimation( Monster_Info::STATIC );
+                        res = true;
+                    }
+                    else {
+                        unit.IncreaseAnimFrame();
+                        res = true;
+                    }
                 }
-                else {
-                    unit.IncreaseAnimFrame();
-                }
-            }
-            else if ( unit.GetAnimationState() == Monster_Info::STATIC ) {
-                uint32_t delay = unit.animation.getIdleDelay();
-                delay = ( delay > 50 ) ? Rand::Get( 50, delay ) : delay;
-                if ( Game::AnimateCustomDelay( delay ) )
+                else if ( unit.GetAnimationState() == Monster_Info::STATIC && unit.checkIdleDelay() ) {
                     unit.SwitchAnimation( Monster_Info::IDLE );
+                    res = true;
+                }
             }
-        }
+        }    
     }
 
     return res;
