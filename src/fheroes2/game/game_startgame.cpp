@@ -1008,7 +1008,8 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
 
     case Cursor::CASTLE: {
         // correct index for castle
-        if ( MP2::OBJN_CASTLE != tile.GetObject() && MP2::OBJ_CASTLE != tile.GetObject() )
+        const int tileObjId = tile.GetObject();
+        if ( MP2::OBJN_CASTLE != tileObjId && MP2::OBJ_CASTLE != tileObjId )
             break;
 
         Castle * to_castle = world.GetCastle( tile.GetCenter() );
