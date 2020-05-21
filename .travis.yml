@@ -192,6 +192,20 @@ matrix:
             echo "Checking clang-format between TRAVIS_BRANCH=$TRAVIS_BRANCH and TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH"
             bash $TRAVIS_BUILD_DIR/script/tools/check_code_format.sh
           fi
+    - os: linux
+      name: "SonarCloud"
+      addons:
+        sonarcloud:
+        organization: "ihhub"
+        token:
+        secure: "WakYTUElZuwaQ23sgdSraqnjU0/dgQ3uBBRCKdITu/amxIvB7empyS/wtckitHSwoY8jYH7Orlyhp0g474BmKYly/8Q6lsYOww5x5QRaohz8cq1mRcEZ1sLdJq9hRsSySVjwq+sKvawV5Ch9vUCHIOl7NKVtsn8vlimZw9QQWcmWAU7gj9dxk4agUirLL6PoGOJvjNDKOUIgViQdDthcgxGpmhZEO6ZNM255OIYaMi1OLu0ZNepv51TS5DfvoO/dtMM3GunInlRvDZiq5xfs3b2DqrpeDKeNnTAEVmEquqSa7oKb/zNBFJjfPrjxO81YwWz2LuBJSAybDkBoCo1XoWbaN/b8R4tfH80G2syxH7sPQynyMs9c3XaZ5RcDK6vwad/sBVDu5ZCMoR+ZXe8TXeWyxIp8/aEq4PM9sqIWsZe5TqTjMnukpGieW6cyHN+fPkNY1k8p8H42cXN5WwFFJ18WTYHRdnODv5YkyzeV9BmBtxj2YyYYBFCjRuK4xMZL4kadfT54d+z5aDUmARoVnCot0lgllAxwKZU4TB6t23oajwBZ14iuT8xOVE8VrSMjcS3qbkC1PvWljRj65vmD2Wou8+8FGaj11jm9PlnOYAI2gOhBzDzy+loUXydchMwaDqu9n2qQV1ozt/mIRnohIsqKrxFsoTKIsTVTCma9Igg="
+      script:
+        # Wraps the compilation with the Build Wrapper to generate configuration (used
+        # later by the SonarScanner) into the "bw-output" folder
+        - build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
+        # And finally run the SonarCloud analysis - read the "sonar-project.properties"
+        # file to see the specific configuration
+        - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
 
 script:
   - |
