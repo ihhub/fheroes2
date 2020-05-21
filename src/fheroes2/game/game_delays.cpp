@@ -22,6 +22,11 @@
 
 #include <algorithm>
 
+#ifdef BUILD_RELEASE
+#define NDEBUG
+#endif
+#include <assert.h>
+
 #include "game.h"
 #include "game_delays.h"
 #include "gamedefs.h"
