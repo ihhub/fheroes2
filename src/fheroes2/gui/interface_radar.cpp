@@ -33,15 +33,15 @@
 #include "world.h"
 
 #define RADARCOLOR 0x40 // index palette
-#define COLOR_DESERT 0x70
-#define COLOR_SNOW 0x0A
-#define COLOR_SWAMP 0xA0
-#define COLOR_WASTELAND 0xD6
-#define COLOR_BEACH 0xC6
-#define COLOR_LAVA 0x19
-#define COLOR_DIRT 0x30
-#define COLOR_GRASS 0x60
-#define COLOR_WATER 0xF0
+#define COLOR_DESERT 0x76
+#define COLOR_SNOW 0x0D
+#define COLOR_SWAMP 0x68
+#define COLOR_WASTELAND 0xCD
+#define COLOR_BEACH 0x29
+#define COLOR_LAVA 0x20
+#define COLOR_DIRT 0x36
+#define COLOR_GRASS 0x63
+#define COLOR_WATER 0x4D
 #define COLOR_ROAD 0x7A
 
 #define COLOR_BLUE 0x47
@@ -151,8 +151,8 @@ void Interface::Radar::Generate( void )
             else {
                 u32 index = GetPaletteIndexFromGround( tile.GetGround() );
 
-                if ( tile.GetObject() == MP2::OBJ_MOUNTS )
-                    index += 2;
+                if ( tile.GetObject() == MP2::OBJ_MOUNTS || tile.GetObject() == MP2::OBJ_TREES )
+                    index += 3;
 
                 color = PAL::GetPaletteColor( index );
             }
