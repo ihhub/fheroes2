@@ -18,12 +18,13 @@ jobs:
     - name: build
       run: make -j 2
       env:
-        ADDRESS_SANITISER: "ON"
         DEBUG: "ON"
     - name: install demo
       run: cd script/demo && ./demo_linux.sh
     - name: test
       run: ./fheroes2 -t 1
+    - name: valgrind check
+      run: valgrind
   linuxSDL2:
     runs-on: ubuntu-latest
     steps:
