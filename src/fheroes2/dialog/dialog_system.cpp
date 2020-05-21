@@ -239,7 +239,8 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y + rect3.h + textOffset );
 
     // hero move speed
-    const u32 is4 = conf.HeroesMoveSpeed() ? ( conf.HeroesMoveSpeed() < 9 ? ( conf.HeroesMoveSpeed() < 7 ? ( conf.HeroesMoveSpeed() < 4 ? 4 : 5 ) : 6 ) : 7 ) : 9;
+    const int heroSpeed = conf.HeroesMoveSpeed();
+    const u32 is4 = heroSpeed ? ( heroSpeed < 4 ? 4 : 3 + heroSpeed / 2 ) : 9;
     const Sprite & sprite4 = AGG::GetICN( ICN::SPANEL, is4 );
     const Rect & rect4 = rects[3];
     sprite4.Blit( rect4 );
@@ -247,15 +248,16 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Set( str );
     text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y - text.h() - textOffset );
 
-    if ( conf.HeroesMoveSpeed() )
-        str = GetString( conf.HeroesMoveSpeed() );
+    if ( heroSpeed )
+        str = GetString( heroSpeed );
     else
         str = _( "off" );
     text.Set( str );
     text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y + rect4.h + textOffset );
 
     // ai move speed
-    const u32 is5 = conf.AIMoveSpeed() ? ( conf.AIMoveSpeed() < 9 ? ( conf.AIMoveSpeed() < 7 ? ( conf.AIMoveSpeed() < 4 ? 4 : 5 ) : 6 ) : 7 ) : 9;
+    const int aiSpeed = conf.AIMoveSpeed();
+    const u32 is5 = aiSpeed ? ( aiSpeed < 4 ? 4 : 3 + aiSpeed / 2 ) : 9;
     const Sprite & sprite5 = AGG::GetICN( ICN::SPANEL, is5 );
     const Rect & rect5 = rects[4];
     sprite5.Blit( rect5 );
@@ -263,8 +265,8 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Set( str );
     text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
-    if ( conf.AIMoveSpeed() )
-        str = GetString( conf.AIMoveSpeed() );
+    if ( aiSpeed )
+        str = GetString( aiSpeed );
     else
         str = _( "off" );
     text.Set( str );

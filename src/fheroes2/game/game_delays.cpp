@@ -22,44 +22,47 @@
 
 #include <algorithm>
 
+#ifdef BUILD_RELEASE
+#define NDEBUG
+#endif
+#include <assert.h>
+
 #include "game.h"
+#include "game_delays.h"
 #include "gamedefs.h"
 #include "settings.h"
 
-struct TimeDelay : std::pair<SDL::Time, uint32_t>
+TimeDelay::TimeDelay( uint32_t dl )
 {
-    TimeDelay( uint32_t dl )
-    {
-        second = dl;
-    }
+    second = dl;
+}
 
-    uint32_t operator()( void ) const
-    {
-        return second;
-    }
+uint32_t TimeDelay::operator()( void ) const
+{
+    return second;
+}
 
-    TimeDelay & operator=( uint32_t dl )
-    {
-        second = dl;
-        return *this;
-    }
+TimeDelay & TimeDelay::operator=( uint32_t dl )
+{
+    second = dl;
+    return *this;
+}
 
-    void Reset( void )
-    {
-        first.Start();
-    }
+void TimeDelay::Reset( void )
+{
+    first.Start();
+}
 
-    bool Trigger( uint32_t customDelay = 0 )
-    {
-        first.Stop();
-        const uint32_t expected = ( customDelay > 0 ) ? customDelay : second;
-        if ( first.Get() < expected )
-            return false;
+bool TimeDelay::Trigger( uint32_t customDelay )
+{
+    first.Stop();
+    const uint32_t expected = ( customDelay > 0 ) ? customDelay : second;
+    if ( first.Get() < expected )
+        return false;
 
-        first.Start();
-        return true;
-    }
-};
+    first.Start();
+    return true;
+}
 
 namespace Game
 {
@@ -84,8 +87,7 @@ namespace Game
                           40, // BATTLE_CATAPULT2_DELAY // boulder
                           40, // BATTLE_CATAPULT3_DELAY // cloud
                           90, // BATTLE_BRIDGE_DELAY
-                          3000, // BATTLE_IDLE_DELAY
-                          200, // BATTLE_IDLE2_DELAY
+                          150, // BATTLE_IDLE_DELAY
                           500, // BATTLE_OPPONENTS_DELAY
                           300, // BATTLE_FLAGS_DELAY
                           800, // BATTLE_POPUP_DELAY
@@ -122,13 +124,22 @@ void Game::UpdateGameSpeed( void )
 {
     const Settings & conf = Settings::Get();
 
-    delays[CURRENT_HERO_DELAY] = 40 - ( conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
-    delays[CURRENT_AI_DELAY] = 40 - ( conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
-
+    const int heroSpeed = conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY;
+    const int aiSpeed = conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY;
     const int battleSpeed = conf.BattleSpeed() - DEFAULT_SPEED_DELAY;
+
+    // assert to make sure we won't overflow
+    assert( heroSpeed <= DEFAULT_SPEED_DELAY );
+    assert( aiSpeed <= DEFAULT_SPEED_DELAY );
+    assert( battleSpeed <= DEFAULT_SPEED_DELAY );
+
+    delays[CURRENT_HERO_DELAY] = 40 - heroSpeed * 8;
+    delays[CURRENT_AI_DELAY] = 40 - aiSpeed * 8;
+
     delays[BATTLE_FRAME_DELAY] = 120 - battleSpeed * 20;
     delays[BATTLE_MISSILE_DELAY] = 40 - battleSpeed * 7;
     delays[BATTLE_SPELL_DELAY] = 90 - battleSpeed * 17;
+    delays[BATTLE_IDLE_DELAY] = 150 - battleSpeed * 20;
     delays[BATTLE_DISRUPTING_DELAY] = 20 - battleSpeed * 3;
     delays[BATTLE_CATAPULT_DELAY] = 90 - battleSpeed * 17;
     delays[BATTLE_CATAPULT2_DELAY] = 40 - battleSpeed * 7;
