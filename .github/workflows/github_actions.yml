@@ -22,7 +22,9 @@ jobs:
     - name: install demo
       run: cd script/demo && ./demo_linux.sh
     - name: test
-      run: ./fheroes2 -t 1
+      run: ./fheroes2 -t 1 &> output.log
+    - name: show output
+      run: cat output.log
     - name: valgrind check
       run: valgrind
   linuxSDL2:
@@ -42,4 +44,6 @@ jobs:
     - name: install demo
       run: cd script/demo && ./demo_linux.sh
     - name: test
-      run: ./fheroes2 -t 1
+      run: ./fheroes2 -t 1 &> output.log
+    - name: show output
+      run: cat output.log
