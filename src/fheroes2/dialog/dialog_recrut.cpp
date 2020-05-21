@@ -32,8 +32,7 @@
 #include "text.h"
 #include "world.h"
 
-void RedrawCurrentInfo( const Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
-                        const std::string & label )
+void RedrawCurrentInfo( const Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds, const std::string & label )
 {
     Text text;
 
