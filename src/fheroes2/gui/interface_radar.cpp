@@ -151,7 +151,8 @@ void Interface::Radar::Generate( void )
             else {
                 u32 index = GetPaletteIndexFromGround( tile.GetGround() );
 
-                if ( tile.GetObject() == MP2::OBJ_MOUNTS || tile.GetObject() == MP2::OBJ_TREES )
+                const int mapObject = tile.GetObject();
+                if ( mapObject == MP2::OBJ_MOUNTS || mapObject == MP2::OBJ_TREES )
                     index += 3;
 
                 color = PAL::GetPaletteColor( index );
