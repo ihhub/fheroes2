@@ -128,8 +128,8 @@ void Game::UpdateGameSpeed( void )
     assert( aiSpeed <= DEFAULT_SPEED_DELAY );
     assert( battleSpeed <= DEFAULT_SPEED_DELAY );
 
-    delays[CURRENT_HERO_DELAY] = 40 - ( conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
-    delays[CURRENT_AI_DELAY] = 40 - ( conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY ) * 8;
+    delays[CURRENT_HERO_DELAY] = 40 - heroSpeed * 8;
+    delays[CURRENT_AI_DELAY] = 40 - aiSpeed * 8;
 
     delays[BATTLE_FRAME_DELAY] = 120 - battleSpeed * 20;
     delays[BATTLE_MISSILE_DELAY] = 40 - battleSpeed * 7;
