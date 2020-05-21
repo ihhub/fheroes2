@@ -263,7 +263,7 @@ int TextUnicode::CharWidth( int c, int f )
 
 int TextUnicode::CharHeight( int f )
 {
-    return Font::SMALL == f || Font::YELLOW_SMALL ? ( AGG::GetFontHeight( true ) + 2 ) : ( AGG::GetFontHeight( false ) + 8 );
+    return Font::SMALL == f || Font::YELLOW_SMALL == f ? ( AGG::GetFontHeight( true ) + 2 ) : ( AGG::GetFontHeight( false ) + 8 );
 }
 
 int TextUnicode::CharAscent( int f )
