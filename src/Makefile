@@ -22,11 +22,6 @@ else
 CFLAGS := -O3 $(CFLAGS)
 endif
 
-ifdef ADDRESS_SANITISER
-CFLAGS := $(CFLAGS) -fsanitize=address
-LDFLAGS := $(LDFLAGS) -fsanitize=address
-endif
-
 ifndef WITHOUT_MIXER
 CFLAGS := $(CFLAGS) -DWITH_MIXER
 ifdef WITH_SDL2
