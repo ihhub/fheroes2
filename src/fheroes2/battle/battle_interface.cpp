@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <math.h>
 
 #include "agg.h"
 #include "battle_arena.h"

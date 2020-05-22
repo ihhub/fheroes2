@@ -175,7 +175,7 @@ AnimationReference::AnimationReference()
 AnimationReference::AnimationReference( int monsterID )
     : _monsterID( monsterID )
 {
-    if ( monsterID < Monster::PEASANT && monsterID > Monster::WATER_ELEMENT )
+    if ( monsterID < Monster::PEASANT || monsterID > Monster::WATER_ELEMENT )
         return;
 
     _monsterInfo = Bin_Info::GetMonsterInfo( monsterID );
