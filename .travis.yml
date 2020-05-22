@@ -175,23 +175,12 @@ matrix:
         - make
     - os: linux
       name: "Static analysis"
-      before_install:
-        - |
-          if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
-            curl -L http://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/clang-format-diff.py -o $TRAVIS_BUILD_DIR/script/tools/clang-format-diff.py;
-          fi
       script:
         - export EXCLUDE_PATTERN_1=" not found in expected header ";
-        - export EXCLUDE_PATTERN_2=" does not need to be \#included; use a forward declaration instead";
-        - export EXCLUDE_PATTERN_3=" not found in any directly \#included header";
-        - export EXCLUDE_PATTERN_4=" unable to find ";
+        - export EXCLUDE_PATTERN_2=" not found in any directly \#included header";
+        - export EXCLUDE_PATTERN_3=" unable to find ";
         - git clone https://github.com/myint/cppclean;
-        - ./cppclean/cppclean src | grep -v "$EXCLUDE_PATTERN_1" | grep -v "$EXCLUDE_PATTERN_2" | grep -v "$EXCLUDE_PATTERN_3" | grep -v "$EXCLUDE_PATTERN_4";
-        - |
-          if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
-            echo "Checking clang-format between TRAVIS_BRANCH=$TRAVIS_BRANCH and TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH"
-            bash $TRAVIS_BUILD_DIR/script/tools/check_code_format.sh
-          fi
+        - ./cppclean/cppclean src | grep -v "$EXCLUDE_PATTERN_1" | grep -v "$EXCLUDE_PATTERN_2" | grep -v "$EXCLUDE_PATTERN_3";
 
 script:
   - |
