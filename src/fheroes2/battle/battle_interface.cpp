@@ -2117,12 +2117,12 @@ void Battle::Interface::FadeArena( void )
     cursor.Show();
     display.Flip();
 
-    if ( !conf.QVGA() && conf.ExtGameUseFade() ) {
+    if ( !conf.QVGA() ) {
         Rect srt( border.GetArea().x, border.GetArea().y, 640, 480 );
         Surface top = display.GetSurface( srt );
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
-        display.Fade( top, back, srt, 50, 300 );
+        display.Fade( top, back, srt, 100, 300 );
     }
 }
 
