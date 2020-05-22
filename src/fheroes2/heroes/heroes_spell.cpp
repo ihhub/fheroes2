@@ -450,9 +450,8 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         result = btnGroups.QueueEventProcessing();
-        listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
+        if ( listbox.QueueEventProcessing() ) {
             listbox.Redraw();
             cursor.Show();
             display.Flip();

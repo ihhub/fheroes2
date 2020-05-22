@@ -624,11 +624,12 @@ void Kingdom::OverviewDialog( void )
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
+        bool uiAction = false;
         le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
 
         // switch view: heroes/castle
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes ) ) {
-            cursor.Hide();
+            uiAction = true;
             buttonHeroes.Press();
             buttonCastle.Release();
             buttonHeroes.Draw();
@@ -638,7 +639,7 @@ void Kingdom::OverviewDialog( void )
             redraw = true;
         }
         else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle ) ) {
-            cursor.Hide();
+            uiAction = true;
             buttonCastle.Press();
             buttonHeroes.Release();
             buttonHeroes.Draw();
@@ -652,7 +653,8 @@ void Kingdom::OverviewDialog( void )
         if ( le.MouseClickLeft( buttonExit ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             break;
 
-        listStats->QueueEventProcessing();
+        if ( listStats->QueueEventProcessing() )
+            uiAction = true;
 
         if ( le.MouseClickLeft( rectIncome ) )
             Dialog::ResourceInfo( "", "income:", GetIncome( INCOME_ALL ), Dialog::OK );
@@ -660,7 +662,8 @@ void Kingdom::OverviewDialog( void )
             Dialog::ResourceInfo( "", "income:", GetIncome( INCOME_ALL ), 0 );
 
         // redraw
-        if ( !cursor.isVisible() || redraw ) {
+        if ( uiAction || redraw ) {
+            cursor.Hide();
             listStats->Redraw();
             RedrawFundsInfo( cur_pt, *this );
             cursor.Show();

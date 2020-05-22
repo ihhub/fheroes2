@@ -243,9 +243,9 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
 
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
         result = btnGroups.QueueEventProcessing();
-        listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
+        if ( listbox.QueueEventProcessing() ) {
+            cursor.Hide();
             listbox.Redraw();
             cursor.Show();
             display.Flip();
@@ -295,9 +295,9 @@ Spell Dialog::SelectSpell( int cur )
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
         result = btnGroups.QueueEventProcessing();
-        listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
+        if ( listbox.QueueEventProcessing() ) {
+            cursor.Hide();
             listbox.Redraw();
             cursor.Show();
             display.Flip();
@@ -340,9 +340,9 @@ Artifact Dialog::SelectArtifact( int cur )
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
         result = btnGroups.QueueEventProcessing();
-        listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
+        if ( listbox.QueueEventProcessing() ) {
+            cursor.Hide();
             listbox.Redraw();
             cursor.Show();
             display.Flip();
@@ -385,9 +385,9 @@ Monster Dialog::SelectMonster( int id )
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
         result = btnGroups.QueueEventProcessing();
-        listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
+        if ( listbox.QueueEventProcessing() ) {
+            cursor.Hide();
             listbox.Redraw();
             cursor.Show();
             display.Flip();
@@ -430,9 +430,9 @@ int Dialog::SelectHeroes( int cur )
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
         result = btnGroups.QueueEventProcessing();
-        listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
+        if ( listbox.QueueEventProcessing() ) {
+            cursor.Hide();
             listbox.Redraw();
             cursor.Show();
             display.Flip();

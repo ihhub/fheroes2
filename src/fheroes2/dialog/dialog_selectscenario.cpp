@@ -272,7 +272,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         le.MousePressLeft( buttonSelectXLarge ) && buttonSelectXLarge.isEnable() ? buttonSelectXLarge.PressDraw() : buttonSelectXLarge.ReleaseDraw();
         le.MousePressLeft( buttonSelectAll ) ? buttonSelectAll.PressDraw() : buttonSelectAll.ReleaseDraw();
 
-        listbox.QueueEventProcessing();
+        bool uiAction = listbox.QueueEventProcessing();
 
         if ( ( buttonOk.isEnable() && le.MouseClickLeft( buttonOk ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
@@ -285,23 +285,23 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         }
         else if ( ( le.MouseClickLeft( buttonSelectSmall ) || le.KeyPress( KEY_s ) ) && buttonSelectSmall.isEnable() && buttonSelectSmall.isEnable() ) {
             listbox.SetListContent( small );
-            cursor.Hide();
+            uiAction = true;
         }
         else if ( ( le.MouseClickLeft( buttonSelectMedium ) || le.KeyPress( KEY_m ) ) && buttonSelectMedium.isEnable() && buttonSelectMedium.isEnable() ) {
             listbox.SetListContent( medium );
-            cursor.Hide();
+            uiAction = true;
         }
         else if ( ( le.MouseClickLeft( buttonSelectLarge ) || le.KeyPress( KEY_l ) ) && buttonSelectLarge.isEnable() && buttonSelectLarge.isEnable() ) {
             listbox.SetListContent( large );
-            cursor.Hide();
+            uiAction = true;
         }
         else if ( ( le.MouseClickLeft( buttonSelectXLarge ) || le.KeyPress( KEY_x ) ) && buttonSelectXLarge.isEnable() && buttonSelectXLarge.isEnable() ) {
             listbox.SetListContent( xlarge );
-            cursor.Hide();
+            uiAction = true;
         }
         else if ( le.MouseClickLeft( buttonSelectAll ) || le.KeyPress( KEY_a ) ) {
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
-            cursor.Hide();
+            uiAction = true;
         }
 
         // right info
@@ -348,7 +348,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         else if ( le.MousePressRight( buttonOk ) )
             Dialog::Message( _( "OK" ), _( "Accept the choice made." ), Font::BIG );
 
-        if ( !cursor.isVisible() ) {
+        if ( uiAction ) {
+            cursor.Hide();
             listbox.Redraw();
             buttonOk.Draw();
             buttonSelectSmall.Draw();

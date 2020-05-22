@@ -272,9 +272,8 @@ void Dialog::ExtSettings( bool readonly )
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         result = btnGroups.QueueEventProcessing();
 
-        listbox.QueueEventProcessing();
-
-        if ( !cursor.isVisible() ) {
+        if ( listbox.QueueEventProcessing() ) {
+            cursor.Hide();
             listbox.Redraw();
             cursor.Show();
             display.Flip();

@@ -137,31 +137,32 @@ int PocketPC::SelectScenario( void )
         le.MousePressLeft( buttonSelectXLarge ) && buttonSelectXLarge.isEnable() ? buttonSelectXLarge.PressDraw() : buttonSelectXLarge.ReleaseDraw();
         le.MousePressLeft( buttonSelectAll ) ? buttonSelectAll.PressDraw() : buttonSelectAll.ReleaseDraw();
 
-        listbox.QueueEventProcessing();
+        bool uiAction = listbox.QueueEventProcessing();
         result = btnGroups.QueueEventProcessing();
 
         if ( ( le.MouseClickLeft( buttonSelectSmall ) || le.KeyPress( KEY_s ) ) && buttonSelectSmall.isEnable() && buttonSelectSmall.isEnable() ) {
             listbox.SetListContent( small );
-            cursor.Hide();
+            uiAction = true;
         }
         else if ( ( le.MouseClickLeft( buttonSelectMedium ) || le.KeyPress( KEY_m ) ) && buttonSelectMedium.isEnable() && buttonSelectMedium.isEnable() ) {
             listbox.SetListContent( medium );
-            cursor.Hide();
+            uiAction = true;
         }
         else if ( ( le.MouseClickLeft( buttonSelectLarge ) || le.KeyPress( KEY_l ) ) && buttonSelectLarge.isEnable() && buttonSelectLarge.isEnable() ) {
             listbox.SetListContent( large );
-            cursor.Hide();
+            uiAction = true;
         }
         else if ( ( le.MouseClickLeft( buttonSelectXLarge ) || le.KeyPress( KEY_x ) ) && buttonSelectXLarge.isEnable() && buttonSelectXLarge.isEnable() ) {
             listbox.SetListContent( xlarge );
-            cursor.Hide();
+            uiAction = true;
         }
         else if ( le.MouseClickLeft( buttonSelectAll ) || le.KeyPress( KEY_a ) ) {
             listbox.SetListContent( all );
-            cursor.Hide();
+            uiAction = true;
         }
 
-        if ( !cursor.isVisible() ) {
+        if ( uiAction ) {
+            cursor.Hide();
             listbox.Redraw();
             cursor.Show();
             display.Flip();

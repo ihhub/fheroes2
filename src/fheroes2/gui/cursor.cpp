@@ -99,7 +99,7 @@ bool Cursor::SetThemes( int name, bool force )
 
         switch ( 0xF000 & name ) {
         case 0x3000:
-            SetCursor( ICN::SPELCO, 0 );
+            SetCursor( ICN::SPELCO, name );
             DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::SPELCO ) << ", " << ( name & 0xFF ) );
             break;
 

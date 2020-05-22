@@ -1831,9 +1831,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
         if ( humanturn_redraw ) {
             cursor.Hide();
             Redraw();
-        }
-
-        if ( !cursor.isVisible() ) {
             cursor.Show();
             display.Flip();
             humanturn_redraw = false;
@@ -2008,7 +2005,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( listlog && listlog->isOpenLog() && le.MouseCursor( listlog->GetArea() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-        listlog->QueueEventProcessing();
+        if ( listlog->QueueEventProcessing() )
+            humanturn_redraw = true;
     }
     else if ( le.MouseCursor( rectBoard ) ) {
         const int themes = GetBattleCursor( msg );
