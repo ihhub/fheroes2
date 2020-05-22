@@ -223,11 +223,11 @@ s32 Maps::GetIndexFromAbsPoint( const Point & mp )
 
 s32 Maps::GetIndexFromAbsPoint( s32 px, s32 py )
 {
-    s32 res = py * world.w() + px;
+    const s32 res = py * world.w() + px;
 
     if ( px < 0 || py < 0 ) {
-        //VERBOSE( "Maps::GetIndexFromAbsPoint: error coods, "
-        //         << "x: " << px << ", y: " << py );
+        VERBOSE( "Maps::GetIndexFromAbsPoint: error coods, "
+                 << "x: " << px << ", y: " << py );
         return -1;
     }
 
