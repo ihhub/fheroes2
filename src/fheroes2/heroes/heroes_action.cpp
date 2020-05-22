@@ -936,7 +936,7 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
 
     hero.ResetMovePoints();
-    hero.Move2Dest( dst_index, /*skipAction*/true );
+    hero.Move2Dest( dst_index, /*skipAction*/ true );
     from.SetObject( MP2::OBJ_BOAT );
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
