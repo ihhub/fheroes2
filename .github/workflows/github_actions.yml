@@ -1,49 +1,13 @@
-name: compilation on GitHub actions
+name: GitHub Actions
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [pull_request]
 
 jobs:
-  linuxSDL1:
+  clang-format:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: install
-      run: sudo apt-get update && sudo apt-get install -y libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev gettext
-    - name: check gcc version
-      run: gcc -v
-    - name: build
-      run: make -j 2
-      env:
-        DEBUG: "ON"
-    - name: install demo
-      run: cd script/demo && ./demo_linux.sh
-    - name: test
-      run: ./fheroes2 -t 1 &> output.log
-    - name: show output
-      run: cat output.log
-    - name: valgrind check
-      run: valgrind
-  linuxSDL2:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: install
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext
-    - name: check gcc version
-      run: gcc -v
-    - name: build
-      run: make -j 2
-      env:
-        WITH_SDL2: "ON"
-        ADDRESS_SANITISER: "ON"
-        DEBUG: "ON"
-    - name: install demo
-      run: cd script/demo && ./demo_linux.sh
-    - name: test
-      run: ./fheroes2 -t 1 &> output.log
-    - name: show output
-      run: cat output.log
+    - name: download clang-format-diff
+      run: curl -L http://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/clang-format-diff.py -o script/tools/clang-format-diff.py;
+    - name: run clang-format-diff
+      run: ./script/tools/check_code_format.sh
