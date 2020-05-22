@@ -523,9 +523,8 @@ const char * MP2::StringObject( int object )
         return _( "Heroes" );
     case OBJ_SIGN:
         return _( "Sign" );
-    case OBJ_SHRUB2:
-        return _( "Shrub" );
     case OBJ_NOTHINGSPECIAL:
+    case OBJ_NOTHINGSPECIAL2:
         return _( "Nothing Special" );
     case OBJ_TARPIT:
         return _( "Tar Pit" );

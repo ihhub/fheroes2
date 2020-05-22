@@ -135,6 +135,14 @@ std::string Maps::TilesAddon::String( int lvl ) const
     return os.str();
 }
 
+Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
+    : uniq( ta.uniq )
+    , level( ta.level )
+    , object( ta.object )
+    , index( ta.index )
+    , tmp( 0 )
+{}
+
 Maps::TilesAddon & Maps::TilesAddon::operator=( const Maps::TilesAddon & ta )
 {
     level = ta.level;

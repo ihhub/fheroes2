@@ -30,6 +30,7 @@
 #include "battle_troop.h"
 #include "bin_info.h"
 #include "engine.h"
+#include "game.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "luck.h"
@@ -202,6 +203,8 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , mirror( NULL )
     , blindanswer( false )
     , animation( id )
+    , idleTimer( 0 )
+    , idleTimerSet( false )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -490,8 +493,20 @@ int Battle::Unit::GetAnimationState() const
 
 bool Battle::Unit::isIdling() const
 {
-    // TODO Check for any of the 5 states
     return GetAnimationState() == Monster_Info::IDLE;
+}
+
+bool Battle::Unit::checkIdleDelay()
+{
+    if ( !idleTimerSet ) {
+        const uint32_t halfDelay = animation.getIdleDelay() / 2;
+        idleTimer.second = Rand::Get( 0, halfDelay / 2 ) + halfDelay * 3 / 2;
+        idleTimerSet = true;
+    }
+    const bool res = idleTimer.Trigger();
+    if ( res )
+        idleTimerSet = false;
+    return res;
 }
 
 void Battle::Unit::NewTurn( void )

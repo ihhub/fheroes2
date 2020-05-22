@@ -56,7 +56,7 @@ namespace Maps
 
         TilesAddon();
         TilesAddon( int lv, u32 gid, int obj, u32 ii );
-
+        TilesAddon( const TilesAddon & ta );
         TilesAddon & operator=( const TilesAddon & ta );
 
         bool isUniq( u32 ) const;
