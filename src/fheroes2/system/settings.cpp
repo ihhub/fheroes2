@@ -493,6 +493,7 @@ Settings::Settings()
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( CASTLE_ALLOW_BUY_FROM_WELL );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
+    ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
