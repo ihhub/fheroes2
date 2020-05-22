@@ -130,7 +130,6 @@ bool Cursor::SetThemes( int name, bool force )
     if ( force || theme != name ) {
         if ( isVisible() )
             Hide();
-
         theme = name;
 
         switch ( 0xF000 & name ) {
