@@ -374,6 +374,25 @@ void Display::Fade( const Surface & top, const Surface & back, const Point & pt,
     }
 }
 
+void Display::InvertedFade( const Surface & top, const Surface & back, const Point & offset, const Surface & middle, const Point & middleOffset, int level, int delay )
+{
+    Surface shadow = top.GetSurface();
+    int alpha = 255;
+    const int step = 10;
+    const int min = step + 5;
+    const int delay2 = ( delay * step ) / ( alpha - min );
+
+    while ( alpha > min + level ) {
+        back.Blit( offset, *this );
+        shadow.Blit( offset, *this );
+        shadow.SetAlphaMod( alpha );
+        middle.Blit( middleOffset, *this );
+        Flip();
+        alpha -= step;
+        DELAY( delay2 );
+    }
+}
+
 void Display::Fade( int delay )
 {
     Surface top = GetSurface();
