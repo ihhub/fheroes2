@@ -60,10 +60,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
     const Rect & pos_rt = back.GetArea();
     sprite_dialog.Blit( pos_rt.x, pos_rt.y, display );
 
-    const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 40 );
+    const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
     DrawMonsterStats( monsterStatOffset, troop );
 
-    const Point battleStatOffset( pos_rt.x + 400, pos_rt.y + 205 );
+    const Point battleStatOffset( pos_rt.x + 400, pos_rt.y + ( ( ( BUTTONS & flags ) == BUTTONS ) ? 181 : 190 ) );
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
@@ -312,35 +312,35 @@ Sprite GetModesSprite( u32 mod )
 {
     switch ( mod ) {
     case Battle::SP_BLOODLUST:
-        return AGG::GetICN( ICN::SPELLINF, 9 );
+        return AGG::GetICN( ICN::SPELLINL, 9 );
     case Battle::SP_BLESS:
-        return AGG::GetICN( ICN::SPELLINF, 3 );
+        return AGG::GetICN( ICN::SPELLINL, 3 );
     case Battle::SP_HASTE:
-        return AGG::GetICN( ICN::SPELLINF, 0 );
+        return AGG::GetICN( ICN::SPELLINL, 0 );
     case Battle::SP_SHIELD:
-        return AGG::GetICN( ICN::SPELLINF, 10 );
+        return AGG::GetICN( ICN::SPELLINL, 10 );
     case Battle::SP_STONESKIN:
-        return AGG::GetICN( ICN::SPELLINF, 13 );
+        return AGG::GetICN( ICN::SPELLINL, 13 );
     case Battle::SP_DRAGONSLAYER:
-        return AGG::GetICN( ICN::SPELLINF, 8 );
+        return AGG::GetICN( ICN::SPELLINL, 8 );
     case Battle::SP_STEELSKIN:
-        return AGG::GetICN( ICN::SPELLINF, 14 );
+        return AGG::GetICN( ICN::SPELLINL, 14 );
     case Battle::SP_ANTIMAGIC:
-        return AGG::GetICN( ICN::SPELLINF, 12 );
+        return AGG::GetICN( ICN::SPELLINL, 12 );
     case Battle::SP_CURSE:
-        return AGG::GetICN( ICN::SPELLINF, 4 );
+        return AGG::GetICN( ICN::SPELLINL, 4 );
     case Battle::SP_SLOW:
-        return AGG::GetICN( ICN::SPELLINF, 1 );
+        return AGG::GetICN( ICN::SPELLINL, 1 );
     case Battle::SP_BERSERKER:
-        return AGG::GetICN( ICN::SPELLINF, 5 );
+        return AGG::GetICN( ICN::SPELLINL, 5 );
     case Battle::SP_HYPNOTIZE:
-        return AGG::GetICN( ICN::SPELLINF, 7 );
+        return AGG::GetICN( ICN::SPELLINL, 7 );
     case Battle::SP_BLIND:
-        return AGG::GetICN( ICN::SPELLINF, 2 );
+        return AGG::GetICN( ICN::SPELLINL, 2 );
     case Battle::SP_PARALYZE:
-        return AGG::GetICN( ICN::SPELLINF, 6 );
+        return AGG::GetICN( ICN::SPELLINL, 6 );
     case Battle::SP_STONE:
-        return AGG::GetICN( ICN::SPELLINF, 11 );
+        return AGG::GetICN( ICN::SPELLINL, 11 );
     default:
         break;
     }
