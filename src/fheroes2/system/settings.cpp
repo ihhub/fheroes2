@@ -1457,7 +1457,7 @@ void Settings::SetPriceLoyaltyVersion( bool set )
     }
     else {
         opt_global.ResetModes( GLOBAL_PRICELOYALTY );
-        if ( _musicType = MUSIC_MIDI_EXPANSION )
+        if ( _musicType == MUSIC_MIDI_EXPANSION )
             _musicType = MUSIC_MIDI_ORIGINAL;
     }
 }

@@ -148,9 +148,15 @@ Troops::Troops() {}
 
 Troops::Troops( const Troops & troops )
 {
-    reserve( troops.size() );
-    for ( const_iterator it = troops.begin(); it != troops.end(); ++it )
+    *this = troops;
+}
+
+Troops & Troops::operator=( const Troops & rhs )
+{
+    reserve( rhs.size() );
+    for ( const_iterator it = rhs.begin(); it != rhs.end(); ++it )
         push_back( new Troop( **it ) );
+    return *this;
 }
 
 Troops::~Troops()

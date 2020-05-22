@@ -165,10 +165,10 @@ namespace Bin_Info
         idleAnimationCount = data[117];
         if ( idleAnimationCount > 5u )
             idleAnimationCount = 5u; // here we need to reset our object
-        for ( uint8_t i = 0; i < idleAnimationCount; ++i )
+        for ( uint32_t i = 0; i < idleAnimationCount; ++i )
             idlePriority.push_back( *( reinterpret_cast<const float *>( data + 118 ) + i ) );
 
-        for ( uint8_t i = 0; i < idleAnimationCount; ++i )
+        for ( uint32_t i = 0; i < idleAnimationCount; ++i )
             unusedIdleDelays.push_back( *( reinterpret_cast<const uint32_t *>( data + 138 ) + i ) );
 
         idleAnimationDelay = *( reinterpret_cast<const uint32_t *>( data + 158 ) );
