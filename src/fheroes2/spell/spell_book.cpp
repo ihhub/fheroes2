@@ -72,7 +72,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
     const Sprite & r_list = AGG::GetICN( ICN::BOOK, 0 );
     const Sprite & l_list = AGG::GetICN( ICN::BOOK, 0, true );
 
-    int filter = filt;
+    int filter = ( filt == ALL ) ? ADVN : filt;
     SpellStorage spells2 = SetFilter( filter, &hero );
 
     if ( canselect && spells2.empty() ) {
