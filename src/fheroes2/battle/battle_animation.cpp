@@ -275,8 +275,12 @@ bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
     return false;
 }
 
-const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const
+const std::vector<int>& AnimationReference::getAnimationVector( int animState ) const
 {
+
+
+
+
     switch ( animState ) {
     case Monster_Info::STATIC:
         return _static;
