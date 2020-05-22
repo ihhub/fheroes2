@@ -53,7 +53,7 @@ void Battle::SpeedRedraw( const Point & dst )
     std::string str = _( "speed: %{speed}" );
 
     StringReplace( str, "%{speed}", speed );
-    const Sprite & sprite = AGG::GetICN( ICN::CSPANEL, ( speed < 3 ? 0 : ( speed < 7 ? 1 : 2 ) ) );
+    const Sprite & sprite = AGG::GetICN( ICN::CSPANEL, ( speed < 5 ? 0 : ( speed < 8 ? 1 : 2 ) ) );
     sprite.Blit( dst );
     const Text text( str, Font::SMALL );
     text.Blit( dst.x + ( sprite.w() - text.w() ) / 2, dst.y + sprite.h() + 3 );

@@ -26,7 +26,6 @@
 #include <set>
 #include <vector>
 
-#include "../../tools/palette_h2.h"
 #include "agg.h"
 #include "artifact.h"
 #include "audio_music.h"
@@ -146,8 +145,6 @@ namespace AGG
 
     bool memlimit_usage = true;
 
-    std::vector<SDL_Color> pal_colors;
-
     std::set<int> scalableICNIds;
     Size scaledResolution;
     std::map<int, std::vector<Sprite> > scaledSprites;
@@ -185,7 +182,7 @@ namespace AGG
 
     bool ReadDataDir( void );
     const std::vector<u8> & ReadICNChunk( int icn, u32 );
-    const std::vector<u8> & ReadChunk( const std::string & );
+    const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
 
     bool IsICNScalable( int icnId )
     {
@@ -483,15 +480,14 @@ bool AGG::ReadDataDir( void )
             heroes2x_agg.Open( *it );
     }
 
-    if ( heroes2x_agg.isGood() )
-        conf.SetPriceLoyaltyVersion();
+    conf.SetPriceLoyaltyVersion( heroes2x_agg.isGood() );
 
     return heroes2_agg.isGood();
 }
 
-const std::vector<u8> & AGG::ReadChunk( const std::string & key )
+const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
 {
-    if ( heroes2x_agg.isGood() ) {
+    if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
         const std::vector<u8> & buf = heroes2x_agg.Read( key );
         if ( buf.size() )
             return buf;
@@ -951,13 +947,7 @@ StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
     return st;
 }
 
-void AGG::RenderICNSprite( int icn, u32 index, const Rect & srt, const Point & dpt, Surface & sf )
-{
-    ICNSprite res = RenderICNSprite( icn, index );
-    res.first.Blit( srt, dpt, sf );
-}
-
-ICNSprite AGG::RenderICNSprite( int icn, u32 index )
+ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
 {
     ICNSprite res;
     const std::vector<u8> & body = ReadICNChunk( icn, index );
@@ -966,6 +956,9 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index )
         DEBUG( DBG_ENGINE, DBG_WARN, "error: " << ICN::GetString( icn ) );
         return res;
     }
+
+    if ( PAL::CurrentPalette() != palette )
+        PAL::SwapPalette( palette );
 
     // prepare icn data
     DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( icn ) << ", " << index );
@@ -1019,7 +1012,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index )
             c = *buf;
             ++buf;
             while ( c-- && buf < max ) {
-                sf1.DrawPoint( pt, GetPaletteColor( *buf ) );
+                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
                 ++buf;
             }
@@ -1063,7 +1056,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index )
             c = *buf;
             ++buf;
             while ( c-- ) {
-                sf1.DrawPoint( pt, GetPaletteColor( *buf ) );
+                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
             ++buf;
@@ -1072,7 +1065,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index )
             c = *buf - 0xC0;
             ++buf;
             while ( c-- ) {
-                sf1.DrawPoint( pt, GetPaletteColor( *buf ) );
+                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
             ++buf;
@@ -1598,7 +1591,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
 void AGG::LoadMID( int xmi, std::vector<u8> & v )
 {
     DEBUG( DBG_ENGINE, DBG_INFO, XMI::GetString( xmi ) );
-    const std::vector<u8> & body = ReadChunk( XMI::GetString( xmi ) );
+    const std::vector<u8> & body = ReadChunk( XMI::GetString( xmi ), xmi >= XMI::MIDI_ORIGINAL_KNIGHT );
 
     if ( body.size() )
         v = Music::Xmi2Mid( body );
@@ -1707,6 +1700,7 @@ void AGG::PlayMusic( int mus, bool loop )
 
     Game::SetCurrentMusic( mus );
     const std::string prefix_music = System::ConcatePath( "files", "music" );
+    const MusicSource type = conf.MusicType();
 
     if ( conf.MusicExt() ) {
         std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus ) );
@@ -1732,16 +1726,15 @@ void AGG::PlayMusic( int mus, bool loop )
 
         DEBUG( DBG_ENGINE, DBG_INFO, MUS::GetString( mus ) );
     }
-    else
 #ifdef WITH_AUDIOCD
-        if ( conf.MusicCD() && Cdrom::isValid() ) {
+    else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
         Cdrom::Play( mus, loop );
         DEBUG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
     }
-    else
 #endif
-        if ( conf.MusicMIDI() ) {
-        int xmi = XMI::FromMUS( mus );
+    else if ( type == MUSIC_MIDI_EXPANSION || type == MUSIC_MIDI_ORIGINAL ) {
+        // Check if music needs to be pulled from HEROES2X
+        const int xmi = XMI::FromMUS( mus, type == MUSIC_MIDI_EXPANSION && heroes2x_agg.isGood() );
         if ( XMI::UNKNOWN != xmi ) {
 #ifdef WITH_MIXER
             const std::vector<u8> & v = GetMID( xmi );
@@ -1928,20 +1921,7 @@ bool AGG::Init( void )
     til_cache.resize( TIL::LASTTIL );
 
     // load palette
-    u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
-    pal_colors.reserve( ncolors );
-
-    for ( u32 ii = 0; ii < ncolors; ++ii ) {
-        u32 index = ii * 3;
-        SDL_Color cols;
-
-        cols.r = kb_pal[index] << 2;
-        cols.g = kb_pal[index + 1] << 2;
-        cols.b = kb_pal[index + 2] << 2;
-
-        pal_colors.push_back( cols );
-    }
-    Surface::SetDefaultPalette( &pal_colors[0], pal_colors.size() );
+    PAL::InitAllPalettes();
 
     // load font
     LoadFNT();
@@ -1974,18 +1954,13 @@ void AGG::Quit( void )
     mid_cache.clear();
     loop_sounds.clear();
     fnt_cache.clear();
-    pal_colors.clear();
+    PAL::Clear();
 
     scaledSprites.clear();
 
 #ifdef WITH_TTF
     delete[] fonts;
 #endif
-}
-
-RGBA AGG::GetPaletteColor( u32 index )
-{
-    return index < pal_colors.size() ? RGBA( pal_colors[index].r, pal_colors[index].g, pal_colors[index].b ) : RGBA( 0, 0, 0 );
 }
 
 void AGG::RegisterScalableICN( int icnId )

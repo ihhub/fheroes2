@@ -99,6 +99,7 @@ public:
     uint32_t getShootingSpeed() const;
     size_t getProjectileID( float angle ) const;
     Point getProjectileOffset( size_t direction ) const;
+    uint32_t getIdleDelay() const;
 
 protected:
     int _monsterID;

@@ -4218,30 +4218,16 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 
 bool Battle::Interface::IdleTroopsAnimation( void )
 {
-    bool res = false;
-
-    // set animation
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        if ( arena.GetForce1().SetIdleAnimation() )
-            res = true;
-        if ( arena.GetForce2().SetIdleAnimation() )
-            res = true;
-    }
-    else
-        // next animation
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE2_DELAY ) ) {
-        if ( arena.GetForce1().NextIdleAnimation() )
-            res = true;
-        if ( arena.GetForce2().NextIdleAnimation() )
-            res = true;
+        return arena.GetForce1().animateIdleUnits() || arena.GetForce2().animateIdleUnits();
     }
 
-    return res;
+    return false;
 }
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
-    // animation opponents
+    // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
         if ( opponent1 ) {
             if ( !opponent1->isStartFrame() || 2 > Rand::Get( 1, 10 ) )
@@ -4255,7 +4241,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         humanturn_redraw = true;
     }
 
-    // animation flags
+    // flags animation
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FLAGS_DELAY ) ) {
         if ( opponent1 && opponent1->isFinishFrame() )
             opponent1->ResetAnimFrame( OP_IDLE );

@@ -472,6 +472,11 @@ Point AnimationReference::getProjectileOffset( size_t direction ) const
     return Point();
 }
 
+uint32_t AnimationReference::getIdleDelay() const
+{
+    return _monsterInfo.idleAnimationDelay;
+}
+
 AnimationState::AnimationState( int monsterID )
     : AnimationReference( monsterID )
     , _currentSequence( _static )
