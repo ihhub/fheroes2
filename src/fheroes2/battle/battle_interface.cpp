@@ -2118,7 +2118,7 @@ void Battle::Interface::FadeArena( void )
     display.Flip();
 
     if ( !conf.QVGA() ) {
-        Rect srt( border.GetArea().x, border.GetArea().y, 640, 480 );
+        Rect srt( border.GetArea().x, border.GetArea().y, display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
         Surface top = display.GetSurface( srt );
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
