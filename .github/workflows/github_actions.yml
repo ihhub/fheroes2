@@ -10,4 +10,4 @@ jobs:
     - name: download clang-format-diff
       run: curl -L http://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/clang-format-diff.py -o script/tools/clang-format-diff.py;
     - name: run clang-format-diff
-      run: ./script/tools/check_code_format.sh
+      run: bash ./script/tools/check_code_format.sh
