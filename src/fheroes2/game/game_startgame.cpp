@@ -1003,7 +1003,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
             if ( !from_hero || from_hero != to_hero ) {
                 SetFocus( to_hero );
                 RedrawFocus();
-             }
+            }
             else
                 Game::OpenHeroesDialog( *to_hero );
         }
