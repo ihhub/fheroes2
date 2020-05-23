@@ -1704,15 +1704,7 @@ void Heroes::PortraitRedraw( s32 px, s32 py, int type, Surface & dstsf ) const
         }
     }
 
-    // heroes marker
-    if ( Modes( Heroes::SHIPMASTER ) ) {
-        const Sprite & sprite = AGG::GetICN( ICN::BOAT12, 0 );
-        const Rect pos( px + mp.x, py + mp.y - 1, sprite.w(), sprite.h() );
-        dstsf.FillRect( pos, ColorBlack );
-        sprite.Blit( pos.x, pos.y, dstsf );
-        mp.y = sprite.h();
-    }
-    else if ( Modes( Heroes::GUARDIAN ) ) {
+    if ( Modes( Heroes::GUARDIAN ) ) {
         const Sprite & sprite = AGG::GetICN( ICN::MISC6, 11 );
         const Rect pos( px + mp.x + 3, py + mp.y, sprite.w(), sprite.h() );
         dstsf.FillRect( pos, ColorBlack );
