@@ -365,9 +365,9 @@ void Display::Fade( const Surface & top, const Surface & back, const Point & pt,
     const int delay2 = ( delay * step ) / ( alpha - min );
 
     while ( alpha > min + level ) {
-        back.Blit( *this );
+        back.Blit( pt, *this );
         shadow.SetAlphaMod( alpha );
-        shadow.Blit( *this );
+        shadow.Blit( pt, *this );
         Flip();
         alpha -= step;
         DELAY( delay2 );
