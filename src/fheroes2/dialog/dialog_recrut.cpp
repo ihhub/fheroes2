@@ -175,10 +175,14 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     text.Blit( pos.x + 70 - text.w() / 2, pos.y + 130 );
 }
 
-void RedrawStaticInfo( const Rect & pos, const Monster & monster, u32 available, bool label )
+void RedrawStaticInfo( const Rect & pos, const Monster & monster, u32 available, bool label, bool firstDraw = false )
 {
     const Sprite & box = AGG::GetICN( ICN::RECRBKG, 0 );
     box.Blit( pos.x, pos.y );
+    if ( firstDraw ) {
+        const Sprite & boxShadow = AGG::GetICN( ICN::RECRBKG, 1 );
+        boxShadow.Blit( pos.x - 16, pos.y + 16 );
+    }
 
     RedrawMonsterInfo( pos, monster, available, label, true );
 
@@ -243,7 +247,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     const Rect & pos = back.GetArea();
 
     const Rect rtChange( pos.x + 25, pos.y + 35, 85, 95 );
-    RedrawStaticInfo( pos, monster, available, ext && monster0.GetDowngrade() != monster0 );
+    RedrawStaticInfo( pos, monster, available, ext && monster0.GetDowngrade() != monster0, true );
 
     // buttons
     Point dst_pt;
@@ -450,11 +454,13 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
 
     const payment_t paymentMonster = monster.GetCost();
     const Sprite & box = AGG::GetICN( ICN::RECR2BKG, 0 );
+    const Sprite & boxShadow = AGG::GetICN( ICN::RECR2BKG, 1 );
 
     const SpriteBack back( Rect( ( display.w() - box.w() ) / 2, display.h() / 2 - Display::DEFAULT_HEIGHT / 2 + 16, box.w(), box.h() ) );
     const Rect & pos = back.GetArea();
 
     box.Blit( pos.x, pos.y );
+    boxShadow.Blit( pos.x - 16, pos.y + 16 );
 
     LocalEvent & le = LocalEvent::Get();
 
