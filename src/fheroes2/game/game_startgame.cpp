@@ -996,20 +996,18 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
     const Maps::Tiles & tile = world.GetTiles( index_maps );
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
-    case Cursor::HEROES:
-        {
-            Heroes * to_hero = tile.GetHeroes();
-            // focus change/open hero
-            if ( NULL != to_hero ) {
-                if ( !from_hero || from_hero != to_hero ) {
-                    SetFocus( to_hero );
-                    RedrawFocus();
-                }
-                else
-                    Game::OpenHeroesDialog( *to_hero );
-            }
+    case Cursor::HEROES: {
+        Heroes * to_hero = tile.GetHeroes();
+        // focus change/open hero
+        if ( NULL != to_hero ) {
+            if ( !from_hero || from_hero != to_hero ) {
+                SetFocus( to_hero );
+                RedrawFocus();
+             }
+            else
+                Game::OpenHeroesDialog( *to_hero );
         }
-        break;
+    } break;
 
     case Cursor::CASTLE: {
         // correct index for castle
@@ -1031,8 +1029,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
         else {
             Game::OpenCastleDialog( *to_castle );
         }
-    }
-        break;
+    } break;
     case Cursor::FIGHT:
     case Cursor::MOVE:
     case Cursor::BOAT:
