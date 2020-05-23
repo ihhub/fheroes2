@@ -759,10 +759,12 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg )
                 StringReplace( msg, "%{monster}", ( *it ).first->GetName() );
             }
 
+            const Unit & unit = *( *it ).first;
+
             if ( le.MouseClickLeft( ( *it ).second ) )
-                Dialog::ArmyInfo( *( *it ).first, Dialog::READONLY | Dialog::BUTTONS );
+                Dialog::ArmyInfo( unit, Dialog::READONLY | Dialog::BUTTONS, unit.isReflect() );
             else if ( le.MousePressRight( ( *it ).second ) )
-                Dialog::ArmyInfo( *( *it ).first, Dialog::READONLY );
+                Dialog::ArmyInfo( unit, Dialog::READONLY, unit.isReflect() );
         }
 }
 
@@ -2240,7 +2242,7 @@ void Battle::Interface::MousePressRightBoardAction( u32 themes, const Cell & cel
         const int allow = GetAllowSwordDirection( index );
 
         if ( arena.GetCurrentColor() == b->GetColor() || !conf.ExtPocketTapMode() || !allow )
-            Dialog::ArmyInfo( *b, Dialog::READONLY );
+            Dialog::ArmyInfo( *b, Dialog::READONLY, b->isReflect() );
         else {
             int res = PocketPC::GetCursorAttackDialog( cell.GetPos(), allow );
 
@@ -2255,7 +2257,7 @@ void Battle::Interface::MousePressRightBoardAction( u32 themes, const Cell & cel
                 break;
 
             default:
-                Dialog::ArmyInfo( *b, Dialog::READONLY | Dialog::BUTTONS );
+                Dialog::ArmyInfo( *b, Dialog::READONLY | Dialog::BUTTONS, b->isReflect() );
                 break;
             }
         }
@@ -2287,7 +2289,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
                 break;
 
             default:
-                Dialog::ArmyInfo( *b, Dialog::READONLY | Dialog::BUTTONS );
+                Dialog::ArmyInfo( *b, Dialog::READONLY | Dialog::BUTTONS, b->isReflect() );
                 break;
             }
         }
@@ -2337,7 +2339,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
 
         case Cursor::WAR_INFO: {
             if ( b ) {
-                Dialog::ArmyInfo( *b, Dialog::BUTTONS | Dialog::READONLY );
+                Dialog::ArmyInfo( *b, Dialog::BUTTONS | Dialog::READONLY, b->isReflect() );
                 humanturn_redraw = true;
             }
             break;
