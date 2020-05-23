@@ -248,7 +248,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
         const Point & mp = le.GetMouseCursor();
         dst = gameArea.GetIndexFromMousePoint( mp );
         if ( 0 > dst )
-            break;
+            continue;
 
         const Maps::Tiles & tile = world.GetTiles( dst );
 
