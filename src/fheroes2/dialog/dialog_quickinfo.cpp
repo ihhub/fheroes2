@@ -343,25 +343,23 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     const Point & mp = le.GetMouseCursor();
 
     Rect pos;
-    s32 mx = ( mp.x - BORDERWIDTH ) / TILEWIDTH;
-    mx *= TILEWIDTH;
-    s32 my = ( mp.y - BORDERWIDTH ) / TILEWIDTH;
-    my *= TILEWIDTH;
+    const s32 mx = mp.x;
+    const s32 my = mp.y;
 
     // top left
     if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        pos = Rect( mx + TILEWIDTH, my + TILEWIDTH, box.w(), box.h() );
+        pos = Rect( mx, my + TILEWIDTH / 2, box.w(), box.h() );
     else
         // top right
         if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        pos = Rect( mx - box.w(), my + TILEWIDTH, box.w(), box.h() );
+        pos = Rect( mx - box.w() - TILEWIDTH / 2, my + TILEWIDTH / 2, box.w(), box.h() );
     else
         // bottom left
         if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 )
-        pos = Rect( mx + TILEWIDTH, my - box.h(), box.w(), box.h() );
+        pos = Rect( mx, my - box.h(), box.w(), box.h() );
     else
         // bottom right
-        pos = Rect( mx - box.w(), my - box.h(), box.w(), box.h() );
+        pos = Rect( mx - box.w() - TILEWIDTH / 2, my - box.h(), box.w(), box.h() );
 
     SpriteBack back( pos );
     box.Blit( pos.x, pos.y );
