@@ -1044,7 +1044,6 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
             from_hero->SetMove( false );
         else
             ShowPathOrStartMoveHero( from_hero, index_maps );
-
         break;
     default:
         if ( from_hero )
