@@ -43,7 +43,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop );
 void DrawBattleStats( const Point &, const Troop & );
 void DrawMonsterInfo( const Point & dst, const Troop & troop );
 
-int Dialog::ArmyInfo( const Troop & troop, int flags )
+int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
     if ( Settings::Get().QVGA() )
         return PocketPC::DialogArmyInfo( troop, flags );
@@ -70,7 +70,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
     DrawMonsterInfo( pos_rt, troop );
 
     RandomMonsterAnimation monsterAnimation( troop );
-    const Sprite & frame = AGG::GetICN( troop.ICNMonh(), 0 );
+    const Sprite & frame = AGG::GetICN( troop.ICNMonh(), 0, isReflected );
     const Point monsterOffset( pos_rt.x + pos_rt.w / 4, pos_rt.y + 180 );
     frame.Blit( monsterOffset - Point( frame.w() / 2, frame.h() ) );
 
@@ -170,8 +170,14 @@ int Dialog::ArmyInfo( const Troop & troop, int flags )
 
                 DrawMonsterInfo( pos_rt, troop );
 
-                const Sprite & smonster = AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId(), false );
-                const Point monsterPos( monsterOffset.x + smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset(), monsterOffset.y + smonster.y() );
+                const Sprite & smonster = AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId(), isReflected );
+                Point monsterPos( monsterOffset.x, monsterOffset.y + smonster.y() );
+                if ( isReflected )
+                    monsterPos.x -= smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset() + smonster.w();
+                else
+                    monsterPos.x += smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset();
+
+                //const Point monsterPos( monsterOffset.x + smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset(), monsterOffset.y + smonster.y() );
                 smonster.Blit( monsterPos );
 
                 monsterAnimation.increment();
@@ -205,7 +211,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
 {
     Point dst_pt;
     Text text;
-    bool pda = Settings::Get().QVGA();
+    const bool pda = Settings::Get().QVGA();
 
     // attack
     text.Set( std::string( _( "Attack" ) ) + ":" );
@@ -214,6 +220,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     const int offsetX = 6;
+    const int offsetY = pda ? 14 : 16;
 
     text.Set( troop.GetAttackString() );
     dst_pt.x = dst.x + offsetX;
@@ -222,7 +229,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     // defense
     text.Set( std::string( _( "Defense" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
-    dst_pt.y += ( pda ? 14 : 18 );
+    dst_pt.y += offsetY;
     text.Blit( dst_pt );
 
     text.Set( troop.GetDefenseString() );
@@ -235,7 +242,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
         message.append( ":" );
         text.Set( message );
         dst_pt.x = dst.x - text.w();
-        dst_pt.y += ( pda ? 14 : 18 );
+        dst_pt.y += offsetY;
         text.Blit( dst_pt );
 
         text.Set( troop.GetShotString() );
@@ -246,7 +253,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     // damage
     text.Set( std::string( _( "Damage" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
-    dst_pt.y += ( pda ? 14 : 18 );
+    dst_pt.y += offsetY;
     text.Blit( dst_pt );
 
     if ( troop().GetDamageMin() != troop().GetDamageMax() )
@@ -259,7 +266,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     // hp
     text.Set( std::string( _( "Hit Points" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
-    dst_pt.y += ( pda ? 14 : 18 );
+    dst_pt.y += offsetY;
     text.Blit( dst_pt );
 
     text.Set( GetString( troop().GetHitPoints() ) );
@@ -269,7 +276,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     if ( troop.isBattle() ) {
         text.Set( std::string( _( "Hit Points Left" ) ) + ":" );
         dst_pt.x = dst.x - text.w();
-        dst_pt.y += ( pda ? 14 : 18 );
+        dst_pt.y += offsetY;
         text.Blit( dst_pt );
 
         text.Set( GetString( troop.GetHitPointsLeft() ) );
@@ -280,7 +287,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     // speed
     text.Set( std::string( _( "Speed" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
-    dst_pt.y += ( pda ? 14 : 18 );
+    dst_pt.y += offsetY;
     text.Blit( dst_pt );
 
     text.Set( troop.GetSpeedString() );
@@ -290,7 +297,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     // morale
     text.Set( std::string( _( "Morale" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
-    dst_pt.y += ( pda ? 14 : 18 );
+    dst_pt.y += offsetY;
     text.Blit( dst_pt );
 
     text.Set( Morale::String( troop.GetMorale() ) );
@@ -300,7 +307,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     // luck
     text.Set( std::string( _( "Luck" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
-    dst_pt.y += ( pda ? 14 : 18 );
+    dst_pt.y += offsetY;
     text.Blit( dst_pt );
 
     text.Set( Luck::String( troop.GetLuck() ) );
