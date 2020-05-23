@@ -1843,9 +1843,6 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
     std::string msg;
     u32 gold = tile.QuantityGold();
 
-    Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
-
     // dialog
     if ( tile.isWater() ) {
         if ( gold ) {
@@ -1907,6 +1904,9 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( gold )
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
+
+    Game::PlayPickupSound();
+    AnimationRemoveObject( tile );
 
     tile.RemoveObjectSprite();
     tile.QuantityReset();
