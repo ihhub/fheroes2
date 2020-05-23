@@ -177,7 +177,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 else
                     monsterPos.x += smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset();
 
-                //const Point monsterPos( monsterOffset.x + smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset(), monsterOffset.y + smonster.y() );
                 smonster.Blit( monsterPos );
 
                 monsterAnimation.increment();
