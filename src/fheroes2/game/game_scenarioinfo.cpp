@@ -356,7 +356,9 @@ void RedrawScenarioStaticInfo( const Rect & rt )
     else {
         // image panel
         const Sprite & panel = AGG::GetICN( ICN::NGHSBKG, 0 );
+        const Sprite & panelShadow = AGG::GetICN( ICN::NGHSBKG, 1 );
         panel.Blit( rt );
+        panelShadow.Blit( rt.x - 16, rt.y + 16 );
 
         // text scenario
         Text text( _( "Scenario:" ), Font::BIG );

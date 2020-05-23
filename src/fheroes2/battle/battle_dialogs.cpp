@@ -96,6 +96,7 @@ void Battle::DialogBattleSettings( void )
     cursor.Hide();
 
     const Sprite & dialog = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
+    const Sprite & dialogShadow = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
     Rect pos_rt;
     pos_rt.x = ( display.w() - dialog.w() ) / 2;
@@ -106,6 +107,7 @@ void Battle::DialogBattleSettings( void )
     SpriteBack back( pos_rt );
 
     display.FillRect( back.GetArea(), ColorBlack );
+    dialogShadow.Blit( pos_rt.x - 16, pos_rt.y + 16 );
     dialog.Blit( pos_rt.x, pos_rt.y );
     Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
     SpriteBack speed_buttom_back(
@@ -272,8 +274,12 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
         dialog.Blit( Rect( 0, 232, pos_rt.w, 224 ), pos_rt.x, pos_rt.y );
         dialog.Blit( Rect( 0, 0, pos_rt.w, 30 ), pos_rt.x, pos_rt.y );
     }
-    else
+    else {
         dialog.Blit( pos_rt.x, pos_rt.y );
+
+        const Sprite & dialogShadow = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
+        dialogShadow.Blit( pos_rt.x - 16, pos_rt.y + 16 );
+    }
 
     const int anime_ox = 47;
     const int anime_oy = 36;

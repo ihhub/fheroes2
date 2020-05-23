@@ -50,7 +50,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     Display & display = Display::Get();
 
     const int viewarmy = Settings::Get().ExtGameEvilInterface() ? ICN::VIEWARME : ICN::VIEWARMY;
-    const Surface & sprite_dialog = AGG::GetICN( viewarmy, 0 );
+    const Sprite & sprite_dialog = AGG::GetICN( viewarmy, 0 );
+    const Sprite & spriteDialogShadow = AGG::GetICN( viewarmy, 7 );
 
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
@@ -58,7 +59,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     SpriteBack back( Rect( ( display.w() - sprite_dialog.w() ) / 2, ( display.h() - sprite_dialog.h() ) / 2, sprite_dialog.w(), sprite_dialog.h() ) );
     const Rect & pos_rt = back.GetArea();
-    sprite_dialog.Blit( pos_rt.x, pos_rt.y, display );
+    sprite_dialog.Blit( pos_rt.x, pos_rt.y );
+    spriteDialogShadow.Blit( pos_rt.x - 16, pos_rt.y + 16 );
 
     const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
     DrawMonsterStats( monsterStatOffset, troop );
@@ -161,7 +163,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
                 cursor.Hide();
 
-                sprite_dialog.Blit( pos_rt.x, pos_rt.y, display );
+                sprite_dialog.Blit( pos_rt.x, pos_rt.y );
 
                 DrawMonsterStats( monsterStatOffset, troop );
 
