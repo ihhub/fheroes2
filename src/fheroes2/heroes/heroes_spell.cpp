@@ -205,8 +205,9 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         I.Redraw();
 
         AGG::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
         hero.FadeIn();
+        hero.GetPath().Reset();
+        hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
         // educate spells
         if ( !Settings::Get().ExtHeroLearnSpellsWithDay() )
