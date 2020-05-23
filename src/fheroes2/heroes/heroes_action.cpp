@@ -1945,10 +1945,13 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
         ActionToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
 
         // lose battle
-        if ( hero.isFreeman() )
+        if ( hero.isFreeman() ) {
             return;
-        else if ( !other_hero->isFreeman() )
+        }
+        else if ( !other_hero->isFreeman() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is busy..." );
+            return;
+        }
     }
 
     AGG::PlaySound( M82::KILLFADE );
