@@ -475,6 +475,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
 int Interface::Basic::GetCursorTileIndex( s32 dst_index )
 {
+    if ( dst_index < 0 || dst_index >= world.w() * world.h() )
+        return Cursor::POINTER;
+
     const Maps::Tiles & tile = world.GetTiles( dst_index );
     if ( tile.isFog( Settings::Get().CurrentColor() ) )
         return Cursor::POINTER;

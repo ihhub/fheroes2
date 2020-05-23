@@ -369,9 +369,10 @@ int Interface::Basic::EventDigArtifact( void )
             else
                 Dialog::Message( "", _( "Try searching on clear ground." ), Font::BIG, Dialog::OK );
         }
+        else {
+            Dialog::Message( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Font::BIG, Dialog::OK );
+        }
     }
-    else
-        Dialog::Message( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Font::BIG, Dialog::OK );
 
     return Game::CANCEL;
 }

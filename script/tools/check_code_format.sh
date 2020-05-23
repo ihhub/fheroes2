@@ -25,7 +25,7 @@ if [ -z "${FILES_TO_CHECK}" ]; then
   exit 0
 fi
 
-FORMAT_DIFF=$(git diff -U0 HEAD^ -- ${FILES_TO_CHECK} | python $TRAVIS_BUILD_DIR/script/tools/clang-format-diff.py -p1 -style=file)
+FORMAT_DIFF=$(git diff -U0 HEAD^ -- ${FILES_TO_CHECK} | python script/tools/clang-format-diff.py -p1 -style=file)
 
 if [ -z "${FORMAT_DIFF}" ]; then
   echo "All source code in PR properly formatted."

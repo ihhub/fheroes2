@@ -207,7 +207,7 @@ Surface DrawHexagon( const RGBA & color )
     return sf;
 }
 
-Surface DrawHexagonShadow( void )
+Surface DrawHexagonShadow( int alphaValue )
 {
     int l, w, h;
 
@@ -223,7 +223,7 @@ Surface DrawHexagonShadow( void )
     }
 
     Surface sf( Size( w, h ), 32, true );
-    RGBA shadow = RGBA( 0, 0, 0, 0x30 );
+    const RGBA shadow = RGBA( 0, 0, 0, alphaValue );
     Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
     for ( int i = 0; i < w / 2; i += 2 ) {
         --rt.y;
@@ -904,8 +904,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
 
     // hexagon
     sf_hexagon = DrawHexagon( ( light ? RGBA( 0x78, 0x94, 0 ) : RGBA( 0x38, 0x48, 0 ) ) );
-    sf_cursor = DrawHexagon( RGBA( 0xb0, 0x0c, 0 ) );
-    sf_shadow = DrawHexagonShadow();
+    sf_cursor = DrawHexagonShadow( 0x60 );
+    sf_shadow = DrawHexagonShadow( 0x30 );
 
     // buttons
     const Rect & area = border.GetArea();
@@ -2117,12 +2117,12 @@ void Battle::Interface::FadeArena( void )
     cursor.Show();
     display.Flip();
 
-    if ( !conf.QVGA() && conf.ExtGameUseFade() ) {
-        Rect srt( border.GetArea().x, border.GetArea().y, 640, 480 );
+    if ( !conf.QVGA() ) {
+        Rect srt( border.GetArea().x, border.GetArea().y, display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
         Surface top = display.GetSurface( srt );
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
-        display.Fade( top, back, srt, 50, 300 );
+        display.Fade( top, back, srt, 100, 300 );
     }
 }
 
@@ -4216,30 +4216,16 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 
 bool Battle::Interface::IdleTroopsAnimation( void )
 {
-    bool res = false;
-
-    // set animation
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        if ( arena.GetForce1().SetIdleAnimation() )
-            res = true;
-        if ( arena.GetForce2().SetIdleAnimation() )
-            res = true;
-    }
-    else
-        // next animation
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE2_DELAY ) ) {
-        if ( arena.GetForce1().NextIdleAnimation() )
-            res = true;
-        if ( arena.GetForce2().NextIdleAnimation() )
-            res = true;
+        return arena.GetForce1().animateIdleUnits() || arena.GetForce2().animateIdleUnits();
     }
 
-    return res;
+    return false;
 }
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
-    // animation opponents
+    // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
         if ( opponent1 ) {
             if ( !opponent1->isStartFrame() || 2 > Rand::Get( 1, 10 ) )
@@ -4253,7 +4239,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         humanturn_redraw = true;
     }
 
-    // animation flags
+    // flags animation
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FLAGS_DELAY ) ) {
         if ( opponent1 && opponent1->isFinishFrame() )
             opponent1->ResetAnimFrame( OP_IDLE );
