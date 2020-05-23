@@ -1161,7 +1161,8 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
     // under medusa's stunning effect
     if ( b.Modes( SP_STONE ) ) {
-        spmon1 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT | CONTOUR_BLACK ) : b.GetContour( CONTOUR_BLACK ), 0, 0 );
+        const Sprite & original = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
+        spmon1 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT | CONTOUR_BLACK ) : b.GetContour( CONTOUR_BLACK ), original.x(), original.y() );
     }
     else {
         // regular
