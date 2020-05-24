@@ -2406,13 +2406,6 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
     status.SetMessage( msg, true );
 }
 
-void DrawCross( Point pos, RGBA color )
-{
-    Display & display = Display::Get();
-    display.DrawLine( Point( pos.x - 3, pos.y ), Point( pos.x + 3, pos.y ), color );
-    display.DrawLine( Point( pos.x, pos.y - 3 ), Point( pos.x, pos.y + 3 ), color );
-}
-
 void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
 {
     Display & display = Display::Get();
@@ -2445,8 +2438,11 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         const Sprite & defenderSprite = AGG::GetICN( defender.GetMonsterSprite().icn_file, defender.GetFrame(), defender.isReflect() );
         const Point defenderPos = GetTroopPosition( defender, defenderSprite );
 
-        const Point shooterPos( attackerPos.x + CELLW / 2, attackerPos.y + attackerSprite.h() );
-        const Point targetPos = Point( defenderPos.x + defenderSprite.w() / 2, defenderPos.y + defenderSprite.h() / 2 );
+        // For shooter position we need bottom center position of rear tile
+        // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
+        const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.w * 3 / 4 : CELLW / 2;
+        const Point shooterPos( pos1.x + rearCenterX, attackerPos.y + attackerSprite.h() );
+        const Point targetPos = Point( pos2.x + pos2.w / 2, defenderPos.y + defenderSprite.h() / 2 );
 
         // Use the front one to calculate the angle, then overwrite
         Point offset = attacker.GetStartMissileOffset( Monster_Info::FRONT );
@@ -2463,7 +2459,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
         const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
 
-        if (direction != Monster_Info::FRONT)
+        if ( direction != Monster_Info::FRONT )
             offset = attacker.GetStartMissileOffset( direction );
 
         // redraw archer attack animation
@@ -2473,10 +2469,6 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         // draw missile animation
         const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), reverse );
-
-        Point shp1( shooterPos.x + ( attacker.isReflect() ? -1 : 1 ) * attacker.GetStartMissileOffset( 0 ).x, shooterPos.y + attacker.GetStartMissileOffset( 0 ).y );
-        Point shp2( shooterPos.x + ( attacker.isReflect() ? -1 : 1 ) * attacker.GetStartMissileOffset( 1 ).x, shooterPos.y + attacker.GetStartMissileOffset( 1 ).y );
-        Point shp3( shooterPos.x + ( attacker.isReflect() ? -1 : 1 ) * attacker.GetStartMissileOffset( 2 ).x, shooterPos.y + attacker.GetStartMissileOffset( 2 ).y );
 
         const Point missileStart = Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
 
@@ -2488,17 +2480,19 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         while ( le.HandleEvents( false ) && pnt != points.end() ) {
             CheckGlobalEvents( le );
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
+            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 cursor.Hide();
                 Redraw();
-                missile.Blit( attacker.isReflect() ? ( *pnt ).x - missile.w() : ( *pnt ).x, (angle > 0) ? ( *pnt ).y - missile.h() : pnt->y );
-                display.DrawLine( missileStart, targetPos, RGBA( 255, 255, 0 ) );
-                DrawCross( shooterPos, RGBA( 255, 0, 255 ) );
-                DrawCross( shp1, RGBA( 255, 0, 0 ) );
-                DrawCross( shp2, RGBA( 255, 0, 0 ) );
-                DrawCross( shp3, RGBA( 255, 0, 0 ) );
-                DrawCross( missileStart, RGBA( 255, 255, 0 ) );
-                //DrawCross( Point(pnt->x - missile.w(), pnt->y), RGBA( 255, 0, 0 ) );
+                if ( attacker.GetID() == Monster::MAGE || attacker.GetID() == Monster::ARCHMAGE ) {
+                    display.DrawLine( Point( missileStart.x, missileStart.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
+                    display.DrawLine( Point( missileStart.x, missileStart.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                    display.DrawLine( Point( missileStart.x, missileStart.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
+                    display.DrawLine( Point( missileStart.x, missileStart.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                    display.DrawLine( Point( missileStart.x, missileStart.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
+                }
+                else {
+                    missile.Blit( attacker.isReflect() ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
+                }
                 cursor.Show();
                 display.Flip();
                 ++pnt;
