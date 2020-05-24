@@ -2441,8 +2441,8 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         // For shooter position we need bottom center position of rear tile
         // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
         const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.w * 3 / 4 : CELLW / 2;
-        const Point shooterPos( pos1.x + rearCenterX, attackerPos.y + attackerSprite.h() );
-        const Point targetPos = Point( pos2.x + pos2.w / 2, defenderPos.y + defenderSprite.h() / 2 );
+        const Point shooterPos( pos1.x + rearCenterX, attackerPos.y - attackerSprite.y() );
+        const Point targetPos = Point( pos2.x + pos2.w / 2, defenderPos.y - defenderSprite.y() / 2 );
 
         // Use the front one to calculate the angle, then overwrite
         Point offset = attacker.GetStartMissileOffset( Monster_Info::FRONT );
