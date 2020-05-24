@@ -2409,12 +2409,37 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawMissileAnimation( Point startPos, Point target, double angle, uint32_t icn, uint32_t missileIndex )
 {
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
 
+    const bool reverse = startPos.x > target.x;
+    const Sprite & missile = AGG::GetICN( icn, missileIndex, reverse );
+
+    // Lich/Power lich has projectile speed of 25
+    const Points points = GetEuclideanLine( startPos, target, std::max( missile.w(), 25 ) );
+    Points::const_iterator pnt = points.begin();
+
+    // convert the following code into a function/event service
+    while ( le.HandleEvents( false ) && pnt != points.end() ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            cursor.Hide();
+            Redraw();
+            missile.Blit( reverse ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
+            cursor.Show();
+            display.Flip();
+            ++pnt;
+        }
+    }
+}
+
+void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+{
+    Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = NULL;
@@ -2438,6 +2463,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     if ( archer ) {
         const Sprite & attackerSprite = AGG::GetICN( attacker.GetMonsterSprite().icn_file, attacker.GetFrame(), attacker.isReflect() );
         const Point attackerPos = GetTroopPosition( attacker, attackerSprite );
+
         const Sprite & defenderSprite = AGG::GetICN( defender.GetMonsterSprite().icn_file, defender.GetFrame(), defender.isReflect() );
         const Point defenderPos = GetTroopPosition( defender, defenderSprite );
 
@@ -2470,36 +2496,38 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             AnimateUnitWithDelay( attacker, Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) );
         }
 
-        // draw missile animation
-        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), reverse );
-
         const Point missileStart = Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
 
-        // Lich/Power lich has projectile speed of 25
-        const Points points = GetEuclideanLine( missileStart, targetPos, std::max( missile.w(), 25 ) );
-        Points::const_iterator pnt = points.begin();
+        if ( attacker.GetID() == Monster::MAGE || attacker.GetID() == Monster::ARCHMAGE ) {
+            Display & display = Display::Get();
+            LocalEvent & le = LocalEvent::Get();
 
-        // convert the following code into a function/event service
-        while ( le.HandleEvents( false ) && pnt != points.end() ) {
-            CheckGlobalEvents( le );
+            const Points points = GetEuclideanLine( missileStart, targetPos, 50 );
+            Points::const_iterator pnt = points.begin();
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
-                if ( attacker.GetID() == Monster::MAGE || attacker.GetID() == Monster::ARCHMAGE ) {
+            // Mage is chanelling the bolt
+            DELAY( Game::ApplyBattleSpeed( 115 ) );
+
+            while ( le.HandleEvents( false ) && pnt != points.end() ) {
+                CheckGlobalEvents( le );
+
+                if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+                    cursor.Hide();
+                    Redraw();
                     display.DrawLine( Point( missileStart.x, missileStart.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
                     display.DrawLine( Point( missileStart.x, missileStart.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
                     display.DrawLine( Point( missileStart.x, missileStart.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
                     display.DrawLine( Point( missileStart.x, missileStart.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
                     display.DrawLine( Point( missileStart.x, missileStart.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
+                    cursor.Show();
+                    display.Flip();
+                    ++pnt;
                 }
-                else {
-                    missile.Blit( attacker.isReflect() ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
-                }
-                cursor.Show();
-                display.Flip();
-                ++pnt;
             }
+        }
+        else {
+            // draw missile animation
+            RedrawMissileAnimation( missileStart, targetPos, angle, attacker.ICNMiss(), attacker.animation.getProjectileID( angle ) );
         }
     }
     else {
@@ -3152,30 +3180,26 @@ void Battle::Interface::RedrawActionTowerPart1( Tower & tower, Unit & defender )
     cursor.SetThemes( Cursor::WAR_NONE );
     _currentUnit = NULL;
 
-    const Point pos1 = tower.GetPortPosition() + border.GetArea();
     const Rect & pos2 = defender.GetRectPosition();
+    const Sprite & defenderSprite = AGG::GetICN( defender.GetMonsterSprite().icn_file, defender.GetFrame(), defender.isReflect() );
+    const Point defenderPos = GetTroopPosition( defender, defenderSprite );
+
+    const Point missileStart = tower.GetPortPosition() + border.GetArea();
+    const Point targetPos = Point( pos2.x + pos2.w / 2, defenderPos.y - defenderSprite.y() / 2 );
+
+    const int dx = targetPos.x - missileStart.x;
+    const int dy = targetPos.y - missileStart.y;
+    const bool reverse = dx < 0;
+    double angle = atan2( -dy, dx ) * 180.0 / M_PI;
+    // we only care about two quadrants, normalize
+    if ( reverse ) {
+        angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
+    }
 
     AGG::PlaySound( M82::KEEPSHOT );
 
-    // draw missile animation
-    const Sprite & missile = AGG::GetICN( ICN::KEEP, ICN::GetMissIndex( ICN::KEEP, pos1.x - pos2.x, pos1.y - pos2.y ), pos1.x > pos2.x );
-
-    const Points points = GetLinePoints( pos1, Point( pos2.x + pos2.w, pos2.y ), missile.w() );
-    Points::const_iterator pnt = points.begin();
-
-    while ( le.HandleEvents( false ) && pnt != points.end() ) {
-        CheckGlobalEvents( le );
-
-        // fast draw
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
-            missile.Blit( ( *pnt ).x - missile.w(), ( *pnt ).y );
-            cursor.Show();
-            display.Flip();
-            ++pnt;
-        }
-    }
+    // Keep missile == Orc missile
+    RedrawMissileAnimation( missileStart, targetPos, angle, ICN::KEEP, Bin_Info::GetMonsterInfo( Monster::ORC ).getProjectileID( angle ) );
 }
 
 void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & target )
@@ -3317,38 +3341,30 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
         if ( from_left ) {
             const Rect & pos1 = opponent1->GetArea();
             pt_from = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-
-            const Rect & pos2 = target.GetRectPosition();
-            pt_to = Point( pos2.x, pos2.y );
         }
         else {
             const Rect & pos = opponent2->GetArea();
             pt_from = Point( pos.x, pos.y + pos.h / 2 );
-
-            const Rect & pos2 = target.GetRectPosition();
-            pt_to = Point( pos2.x + pos2.w, pos2.y );
         }
 
-        const Sprite & missile = AGG::GetICN( ICN::ARCH_MSL, ICN::GetMissIndex( ICN::ARCH_MSL, pt_from.x - pt_to.x, pt_from.y - pt_to.y ), pt_from.x > pt_to.x );
+        const Rect & pos2 = target.GetRectPosition();
+        const Sprite & defenderSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
+        const Point defenderPos = GetTroopPosition( target, defenderSprite );
+        const Point targetPos = Point( pos2.x + pos2.w / 2, defenderPos.y - defenderSprite.y() / 2 );
 
-        const Points points = GetLinePoints( pt_from, pt_to, missile.w() );
-        Points::const_iterator pnt = points.begin();
+        const int dx = targetPos.x - pt_from.x;
+        const int dy = targetPos.y - pt_from.y;
+        double angle = atan2( -dy, dx ) * 180.0 / M_PI;
+        // we only care about two quadrants, normalize
+        if ( from_left ) {
+            angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
+        }
 
         cursor.SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::MAGCAROW );
 
-        while ( le.HandleEvents( false ) && pnt != points.end() ) {
-            CheckGlobalEvents( le );
-
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
-                missile.Blit( ( *pnt ).x - ( from_left ? 0 : missile.w() ), ( *pnt ).y );
-                cursor.Show();
-                display.Flip();
-                ++pnt;
-            }
-        }
+        // Magic arrow == Archer missile
+        RedrawMissileAnimation( pt_from, targetPos, angle, ICN::ARCH_MSL, Bin_Info::GetMonsterInfo( Monster::ARCHER ).getProjectileID( angle ) );
     }
 }
 

@@ -360,13 +360,11 @@ float Monster::GetUpgradeRatio( void )
     return GameStatic::GetMonsterUpgradeRatio();
 }
 
-Monster::monstersprite_t * Monster::GetMonsterSpireByICN( int icn )
+uint32_t Monster::GetICNByMonsterID( uint32_t id )
 {
-    Monster::monstersprite_t * ptr = &monsters_info[1];
-    while ( ptr->icn_file != ICN::UNKNOWN && icn != ptr->icn_file )
-        ++ptr;
-
-    return ptr;
+    if ( id <= Monster::WATER_ELEMENT )
+        return monsters_info[id].icn_file;
+    return ICN::UNKNOWN;
 }
 
 void Monster::UpdateStats( const std::string & spec )

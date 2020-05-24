@@ -180,6 +180,7 @@ namespace Battle
         void RedrawActionSkipStatus( const Unit & );
         void RedrawActionRemoveMirrorImage( const Unit & );
         void RedrawBridgeAnimation( bool down );
+        void RedrawMissileAnimation( Point startPos, Point target, double angle, uint32_t icn, uint32_t missileIndex );
 
     private:
         void HumanBattleTurn( const Unit &, Actions &, std::string & );
