@@ -206,7 +206,8 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
         buttonDismiss.Press();
         buttonDismiss.SetDisable( true );
-        buttonDismiss.SetVisible( false );
+        if ( readonly )
+            buttonDismiss.SetVisible( false );
     }
 
     if ( readonly || 2 > GetKingdom().GetHeroes().size() ) {
