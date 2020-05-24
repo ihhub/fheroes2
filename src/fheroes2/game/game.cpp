@@ -429,10 +429,7 @@ void Game::LoadExternalResource( const Settings & conf )
         Game::UpdateGlobalDefines( spec );
 
     // animations.xml
-    spec = Settings::GetLastFile( prefix_stats, "animations.xml" );
-
-    if ( System::IsFile( spec ) )
-        Battle::UpdateMonsterSpriteAnimation( spec );
+    // spec = Settings::GetLastFile( prefix_stats, "animations.xml" );
 
     // battle.xml
     spec = Settings::GetLastFile( prefix_stats, "battle.xml" );
