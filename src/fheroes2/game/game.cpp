@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cmath>
 #include <map>
 
 #include "agg.h"
@@ -504,7 +505,6 @@ int Game::GetActualKingdomColors( void )
     return Settings::Get().GetPlayers().GetActualColors();
 }
 
-#include <cmath>
 std::string Game::CountScoute( u32 count, int scoute, bool shorts )
 {
     double infelicity = 0;

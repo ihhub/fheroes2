@@ -61,8 +61,14 @@ int Game::MainMenu( void )
     Display & display = Display::Get();
 
     // image background
-    const Sprite & sprite = AGG::GetICN( ICN::HEROES, 0 );
-    sprite.Blit( Point( 0, 0 ) );
+    const Sprite & bgImage = AGG::GetICN( ICN::HEROES, 0 );
+
+    // animation
+    u32 lantern_frame = 0;
+    std::vector<Sprite> animSprites;
+    for ( u32 fIter = 0; fIter < 40; fIter++ ) {
+        animSprites.push_back( AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, fIter ) ) );
+    }
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -78,13 +84,8 @@ int Game::MainMenu( void )
     Button buttonCredits( s4.x(), s4.y(), ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
     Button buttonQuit( s5.x(), s5.y(), ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
-    const Point lt_pt( 0, 0 );
-
-    const Sprite & lantern10 = AGG::GetICN( ICN::SHNGANIM, 0 );
-    lantern10.Blit( lantern10.x(), lantern10.y() );
-
-    const Sprite & lantern11 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
-    lantern11.Blit( lantern11.x(), lantern11.y() );
+    bgImage.Blit( Point( 0, 0 ) );
+    animSprites[lantern_frame].Blit( animSprites[lantern_frame].x(), animSprites[lantern_frame].y() );
 
     buttonNewGame.Draw();
     buttonLoadGame.Draw();
@@ -94,8 +95,6 @@ int Game::MainMenu( void )
 
     cursor.Show();
     display.Flip();
-
-    u32 lantern_frame = 0;
 
     struct ButtonInfo
     {
@@ -173,8 +172,21 @@ int Game::MainMenu( void )
 
         if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
             cursor.Hide();
-            const Sprite & lantern12 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame++ ) );
-            lantern12.Blit( lantern12.x(), lantern12.y() );
+            const u32 frameID = ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame );
+            animSprites[frameID].Blit( animSprites[frameID].x(), animSprites[frameID].y() );
+            lantern_frame++;
+            cursor.Show();
+            display.Flip();
+        }
+
+        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) {
+            cursor.Hide();
+            bgImage.Blit( Point( 0, 0 ) );
+            buttonNewGame.Draw();
+            buttonLoadGame.Draw();
+            buttonHighScores.Draw();
+            buttonCredits.Draw();
+            buttonQuit.Draw();
             cursor.Show();
             display.Flip();
         }

@@ -203,13 +203,15 @@ void Display::ToggleFullScreen( void )
         u32 flags = SDL_GetWindowFlags( window );
 
         // toggle FullScreen
-        if ( flags & SDL_WINDOW_FULLSCREEN )
-            flags &= ~SDL_WINDOW_FULLSCREEN;
+        if ( flags & SDL_WINDOW_FULLSCREEN || flags & SDL_WINDOW_FULLSCREEN_DESKTOP)
+            flags = 0;
+        else
+            flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
 
         SDL_SetWindowFullscreen( window, flags );
     }
 #else
-    SDL_WM_ToggleFullScreen( surface );
+    surface = SDL_SetVideoMode(0, 0, 0, surface->flags ^ SDL_FULLSCREEN);
 #endif
 }
 
