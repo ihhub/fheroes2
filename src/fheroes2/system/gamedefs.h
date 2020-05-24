@@ -64,5 +64,6 @@
 
 // ai/hero speed
 #define DEFAULT_SPEED_DELAY 5
+#define DEFAULT_BATTLE_SPEED 4
 
 #endif

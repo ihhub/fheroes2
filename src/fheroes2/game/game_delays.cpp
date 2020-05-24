@@ -22,11 +22,6 @@
 
 #include <algorithm>
 
-#ifdef BUILD_RELEASE
-#define NDEBUG
-#endif
-#include <assert.h>
-
 #include "game.h"
 #include "game_delays.h"
 #include "gamedefs.h"
@@ -67,6 +62,8 @@ bool TimeDelay::Trigger( uint32_t customDelay )
 namespace Game
 {
     void AnimateDelaysInitialize( void );
+
+    static const double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
 
     TimeDelay delays[] = {20, // SCROLL_DELAY
                           250, // MAIN_MENU_DELAY
@@ -126,28 +123,23 @@ void Game::UpdateGameSpeed( void )
 
     const int heroSpeed = conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY;
     const int aiSpeed = conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY;
-    const int battleSpeed = conf.BattleSpeed() - DEFAULT_SPEED_DELAY;
-
-    // assert to make sure we won't overflow
-    assert( heroSpeed <= DEFAULT_SPEED_DELAY );
-    assert( aiSpeed <= DEFAULT_SPEED_DELAY );
-    assert( battleSpeed <= DEFAULT_SPEED_DELAY );
 
     delays[CURRENT_HERO_DELAY] = 40 - heroSpeed * 8;
     delays[CURRENT_AI_DELAY] = 40 - aiSpeed * 8;
 
-    delays[BATTLE_FRAME_DELAY] = 120 - battleSpeed * 20;
-    delays[BATTLE_MISSILE_DELAY] = 40 - battleSpeed * 7;
-    delays[BATTLE_SPELL_DELAY] = 90 - battleSpeed * 17;
-    delays[BATTLE_IDLE_DELAY] = 150 - battleSpeed * 20;
-    delays[BATTLE_DISRUPTING_DELAY] = 20 - battleSpeed * 3;
-    delays[BATTLE_CATAPULT_DELAY] = 90 - battleSpeed * 17;
-    delays[BATTLE_CATAPULT2_DELAY] = 40 - battleSpeed * 7;
-    delays[BATTLE_CATAPULT3_DELAY] = 40 - battleSpeed * 7;
-    delays[BATTLE_BRIDGE_DELAY] = 90 - battleSpeed * 17;
+    const int battleSpeed = 10 - conf.BattleSpeed();
+    delays[BATTLE_FRAME_DELAY] = 120 * battleSpeed * battleSpeedAdjustment;
+    delays[BATTLE_MISSILE_DELAY] = 40 * battleSpeed * battleSpeedAdjustment;
+    delays[BATTLE_SPELL_DELAY] = 90 * battleSpeed * battleSpeedAdjustment;
+    delays[BATTLE_IDLE_DELAY] = 150 * battleSpeed * battleSpeedAdjustment;
+    delays[BATTLE_DISRUPTING_DELAY] = 25 * battleSpeed * battleSpeedAdjustment;
+    delays[BATTLE_CATAPULT_DELAY] = 90 * battleSpeed * battleSpeedAdjustment;
+    delays[BATTLE_CATAPULT2_DELAY] = 40 * battleSpeed * battleSpeedAdjustment;
+    delays[BATTLE_CATAPULT3_DELAY] = 40 * battleSpeed * battleSpeedAdjustment;
+    delays[BATTLE_BRIDGE_DELAY] = 90 * battleSpeed * battleSpeedAdjustment;
 }
 
 uint32_t Game::ApplyBattleSpeed( uint32_t delay )
 {
-    return static_cast<uint32_t>( 10 - Settings::Get().BattleSpeed() ) * ( delay / DEFAULT_SPEED_DELAY );
+    return static_cast<uint32_t>( battleSpeedAdjustment * ( 10 - Settings::Get().BattleSpeed() ) * delay );
 }
