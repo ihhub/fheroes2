@@ -785,8 +785,10 @@ void Surface::Blit( const Point & dpt, Surface & dst ) const
 void Surface::SetAlphaMod( int level )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( isValid() )
+    if ( isValid() ) {
         SDL_SetSurfaceAlphaMod( surface, level );
+        SDL_SetSurfaceBlendMode( surface, SDL_BLENDMODE_BLEND );
+    }
 #else
     if ( isValid() ) {
         if ( amask() ) {
