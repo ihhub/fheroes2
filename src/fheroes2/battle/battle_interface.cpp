@@ -4243,7 +4243,8 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 bool Battle::Interface::IdleTroopsAnimation( void )
 {
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        return arena.GetForce1().animateIdleUnits() || arena.GetForce2().animateIdleUnits();
+        const bool redrawNeeded = arena.GetForce1().animateIdleUnits();
+        return arena.GetForce2().animateIdleUnits() || redrawNeeded;
     }
 
     return false;
