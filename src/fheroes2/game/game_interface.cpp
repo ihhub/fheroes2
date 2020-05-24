@@ -229,24 +229,42 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     LocalEvent & le = LocalEvent::Get();
     s32 dst = -1;
 
+    const Rect & visibleArea = gameArea.GetArea();
+    const bool isFadingEnabled = display.w() >= TILEWIDTH * ( distance + 1 ) && display.h() >= TILEWIDTH * ( distance + 1 );
+    const Surface & top = display.GetSurface( visibleArea );
+    if ( isFadingEnabled ) {
+        Surface back( top.GetSize(), false );
+        back.Fill( ColorBlack );
+        const Point offset( visibleArea.x + visibleArea.w / 2 - TILEWIDTH * ( distance / 2 ) - TILEWIDTH / 2,
+                            visibleArea.y + visibleArea.h / 2 - TILEWIDTH * ( distance / 2 ) - TILEWIDTH / 2 );
+        const Surface middle = display.GetSurface( Rect( offset.x, offset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) ) );
+
+        display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, offset, 105, 300 );
+    }
+
+    s32 returnValue = -1;
+
     while ( le.HandleEvents() ) {
         const Point & mp = le.GetMouseCursor();
         dst = gameArea.GetIndexFromMousePoint( mp );
         if ( 0 > dst )
-            break;
+            continue;
 
         const Maps::Tiles & tile = world.GetTiles( dst );
 
-        const bool valid = ( ( gameArea.GetArea() & mp ) && dst >= 0 && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
-                             && water == world.GetTiles( dst ).isWater() && distance >= Maps::GetApproximateDistance( from, dst ) );
+        const bool valid = ( ( gameArea.GetArea() & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
+                             && water == world.GetTiles( dst ).isWater() && ( distance / 2 ) >= Maps::GetApproximateDistance( from, dst ) );
 
         cursor.SetThemes( valid ? ( water ? Cursor::BOAT : Cursor::MOVE ) : Cursor::WAR_NONE );
 
         // exit
-        if ( le.MousePressRight() )
+        if ( le.MousePressRight() ) {
             break;
-        else if ( le.MouseClickLeft() && valid )
-            return dst;
+        }
+        else if ( le.MouseClickLeft() && valid ) {
+            returnValue = dst;
+            break;
+        }
 
         // redraw cursor
         if ( !cursor.isVisible() ) {
@@ -255,5 +273,8 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
         }
     }
 
-    return -1;
+    if ( isFadingEnabled )
+        top.Blit( Point( visibleArea.x, visibleArea.y ), display );
+
+    return returnValue;
 }

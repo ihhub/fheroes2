@@ -96,6 +96,10 @@ public:
     AnimationSequence getAnimationSequence( int animState ) const;
     uint32_t getMoveSpeed() const;
     uint32_t getFlightSpeed() const;
+    uint32_t getShootingSpeed() const;
+    size_t getProjectileID( float angle ) const;
+    Point getProjectileOffset( size_t direction ) const;
+    uint32_t getIdleDelay() const;
 
 protected:
     int _monsterID;

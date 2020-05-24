@@ -1,0 +1,15 @@
+name: GitHub Actions
+
+on: [pull_request]
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: download clang-format-diff
+      run: curl -L http://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/clang-format-diff.py -o script/tools/clang-format-diff.py;
+    - name: run clang-format-diff
+      run: bash ./script/tools/check_code_format.sh

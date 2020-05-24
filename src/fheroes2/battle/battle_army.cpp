@@ -381,45 +381,31 @@ Troops Battle::Force::GetKilledTroops( void ) const
     return killed;
 }
 
-bool Battle::Force::SetIdleAnimation( void )
+bool Battle::Force::animateIdleUnits()
 {
-    bool res = false;
+    bool redrawNeeded = false;
 
-    for ( iterator it = begin(); it != end(); ++it ) {
+    for ( Force::iterator it = begin(); it != end(); ++it ) {
         Unit & unit = **it;
 
-        if ( unit.isValid() ) {
-            if ( unit.GetAnimationState() != Monster_Info::STATIC && unit.isFinishAnimFrame() ) {
-                unit.SwitchAnimation( Monster_Info::STATIC );
-                res = true;
+        // check if alive and not paralyzed
+        if ( unit.isValid() && !unit.Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+            if ( unit.isIdling() ) {
+                if ( unit.isFinishAnimFrame() ) {
+                    redrawNeeded = redrawNeeded || unit.SwitchAnimation( Monster_Info::STATIC );
+                }
+                else {
+                    unit.IncreaseAnimFrame();
+                    redrawNeeded = true;
+                }
             }
-            else if ( unit.isStartAnimFrame() && 3 > Rand::Get( 1, 10 ) ) {
-                unit.SwitchAnimation( Monster_Info::IDLE );
-                res = true;
+            // checkIdleDelay() sets and checks unit's internal timer if we're ready to switch to next one
+            else if ( unit.GetAnimationState() == Monster_Info::STATIC && unit.checkIdleDelay() ) {
+                redrawNeeded = redrawNeeded || unit.SwitchAnimation( Monster_Info::IDLE );
             }
         }
     }
-
-    return res;
-}
-
-bool Battle::Force::NextIdleAnimation( void ) // IDLE FRAME SWITCHER
-{
-    bool res = false;
-
-    for ( iterator it = begin(); it != end(); ++it ) {
-        Unit & unit = **it;
-
-        if ( unit.isValid() && unit.isIdling() ) {
-            if ( unit.isFinishAnimFrame() )
-                unit.SwitchAnimation( Monster_Info::STATIC );
-            else
-                unit.IncreaseAnimFrame( false );
-            res = true;
-        }
-    }
-
-    return res;
+    return redrawNeeded;
 }
 
 bool Battle::Force::HasMonster( const Monster & mons ) const

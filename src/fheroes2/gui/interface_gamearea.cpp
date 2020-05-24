@@ -555,10 +555,13 @@ void Interface::GameArea::SetScroll( int direct )
 /* convert area point to index maps */
 s32 Interface::GameArea::GetIndexFromMousePoint( const Point & pt ) const
 {
-    s32 result = ( rectMaps.y + ( pt.y - rectMapsPosition.y ) / TILEWIDTH ) * world.w() + rectMaps.x + ( pt.x - rectMapsPosition.x ) / TILEWIDTH;
-    const s32 & max = world.w() * world.h() - 1;
+    const s32 xPos = rectMaps.x + ( pt.x - rectMapsPosition.x ) / TILEWIDTH;
+    const s32 yPos = rectMaps.y + ( pt.y - rectMapsPosition.y ) / TILEWIDTH;
 
-    return result > max || result < Maps::GetIndexFromAbsPoint( rectMaps.x, rectMaps.y ) ? -1 : result;
+    if ( xPos < 0 || yPos < 0 || xPos >= world.w() || yPos >= world.h() )
+        return -1;
+
+    return yPos * world.w() + xPos;
 }
 
 void Interface::GameArea::SetUpdateCursor( void )
@@ -576,19 +579,16 @@ void Interface::GameArea::QueueEventProcessing( void )
 
     s32 index = GetIndexFromMousePoint( mp );
 
-    // out of range
-    if ( index < 0 )
-        return;
-
-    const Rect tile_pos( rectMapsPosition.x + ( ( mp.x - rectMapsPosition.x ) / TILEWIDTH ) * TILEWIDTH,
-                         rectMapsPosition.y + ( ( mp.y - rectMapsPosition.y ) / TILEWIDTH ) * TILEWIDTH, TILEWIDTH, TILEWIDTH );
-
     // change cusor if need
     if ( updateCursor || index != oldIndexPos ) {
         cursor.SetThemes( interface.GetCursorTileIndex( index ) );
         oldIndexPos = index;
         updateCursor = false;
     }
+
+    // out of range
+    if ( index < 0 )
+        return;
 
     // fixed pocket pc tap mode
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
@@ -648,7 +648,10 @@ void Interface::GameArea::QueueEventProcessing( void )
             return;
     }
 
-    if ( le.MouseClickLeft( tile_pos ) && Cursor::POINTER != cursor.Themes() )
+    const Rect tile_pos( rectMapsPosition.x + ( ( mp.x - rectMapsPosition.x ) / TILEWIDTH ) * TILEWIDTH,
+                         rectMapsPosition.y + ( ( mp.y - rectMapsPosition.y ) / TILEWIDTH ) * TILEWIDTH, TILEWIDTH, TILEWIDTH );
+
+    if ( le.MouseClickLeft( tile_pos ) )
         interface.MouseCursorAreaClickLeft( index );
     else if ( le.MousePressRight( tile_pos ) )
         interface.MouseCursorAreaPressRight( index );

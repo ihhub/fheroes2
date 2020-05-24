@@ -100,7 +100,6 @@ void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
         break;
 
     // red marker
-    case NEED_CASTLE:
     case REQUIRES_BUILD:
         AGG::GetICN( ICN::CSLMARKER, 1 ).Blit( sx + 39, sy + 1 );
         break;

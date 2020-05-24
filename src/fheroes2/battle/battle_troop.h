@@ -31,6 +31,7 @@
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "bitmodes.h"
+#include "game_delays.h"
 #include "sprite.h"
 
 class Spell;
@@ -149,12 +150,11 @@ namespace Battle
         void IncreaseAnimFrame( bool loop = false );
         bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;
-        void SetFrameStep( int );
         int GetFrame( void ) const;
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
 
-        int GetStartMissileOffset( int ) const;
+        Point GetStartMissileOffset( size_t ) const;
 
         int M82Attk( void ) const;
         int M82Kill( void ) const;
@@ -186,6 +186,7 @@ namespace Battle
 
         int GetAnimationState() const;
         bool isIdling() const;
+        bool checkIdleDelay();
 
         // Find a better way to expose it without a million getters/setters
         AnimationState animation;
@@ -205,6 +206,8 @@ namespace Battle
         Position position;
         ModesAffected affected;
         Unit * mirror;
+        TimeDelay idleTimer;
+        bool idleTimerSet;
 
         // These variables are mutable due to population of them of the fly as we don't want to calculate everything
         mutable std::map<int, Surface> contoursMain;

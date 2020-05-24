@@ -475,6 +475,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
 int Interface::Basic::GetCursorTileIndex( s32 dst_index )
 {
+    if ( dst_index < 0 || dst_index >= world.w() * world.h() )
+        return Cursor::POINTER;
+
     const Maps::Tiles & tile = world.GetTiles( dst_index );
     if ( tile.isFog( Settings::Get().CurrentColor() ) )
         return Cursor::POINTER;
@@ -989,22 +992,14 @@ int Interface::Basic::HumanTurn( bool isload )
 
 void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
 {
-    Castle * to_castle = NULL;
-    Heroes * to_hero = NULL;
     Heroes * from_hero = GetFocusHeroes();
     const Maps::Tiles & tile = world.GetTiles( index_maps );
 
-    // correct index for castle
-    if ( MP2::OBJN_CASTLE == tile.GetObject() || MP2::OBJ_CASTLE == tile.GetObject() ) {
-        to_castle = world.GetCastle( tile.GetCenter() );
-        if ( to_castle )
-            index_maps = to_castle->GetIndex();
-    }
-
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
-    case Cursor::HEROES:
+    case Cursor::HEROES: {
+        Heroes * to_hero = tile.GetHeroes();
         // focus change/open hero
-        if ( NULL != ( to_hero = tile.GetHeroes() ) ) {
+        if ( NULL != to_hero ) {
             if ( !from_hero || from_hero != to_hero ) {
                 SetFocus( to_hero );
                 RedrawFocus();
@@ -1012,22 +1007,29 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
             else
                 Game::OpenHeroesDialog( *to_hero );
         }
-        break;
+    } break;
 
-    case Cursor::CASTLE:
-        // focus change/open castle
-        if ( to_castle ) {
-            Castle * from_castle = GetFocusCastle();
+    case Cursor::CASTLE: {
+        // correct index for castle
+        const int tileObjId = tile.GetObject();
+        if ( MP2::OBJN_CASTLE != tileObjId && MP2::OBJ_CASTLE != tileObjId )
+            break;
 
-            if ( !from_castle || from_castle != to_castle ) {
-                SetFocus( to_castle );
-                RedrawFocus();
-            }
-            else
-                Game::OpenCastleDialog( *to_castle );
+        Castle * to_castle = world.GetCastle( tile.GetCenter() );
+        if ( to_castle == NULL )
+            break;
+
+        index_maps = to_castle->GetIndex();
+
+        Castle * from_castle = GetFocusCastle();
+        if ( !from_castle || from_castle != to_castle ) {
+            SetFocus( to_castle );
+            RedrawFocus();
         }
-        break;
-
+        else {
+            Game::OpenCastleDialog( *to_castle );
+        }
+    } break;
     case Cursor::FIGHT:
     case Cursor::MOVE:
     case Cursor::BOAT:
@@ -1035,7 +1037,12 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
     case Cursor::CHANGE:
     case Cursor::ACTION:
     case Cursor::REDBOAT:
-        if ( from_hero )
+        if ( from_hero == NULL )
+            break;
+
+        if ( from_hero->isEnableMove() )
+            from_hero->SetMove( false );
+        else
             ShowPathOrStartMoveHero( from_hero, index_maps );
         break;
 

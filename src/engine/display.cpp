@@ -82,12 +82,15 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
         SDL_DestroyRenderer( renderer );
 
     std::string previousWindowTitle;
+    int prevX = SDL_WINDOWPOS_CENTERED;
+    int prevY = SDL_WINDOWPOS_CENTERED;
     if ( window ) {
         previousWindowTitle = SDL_GetWindowTitle( window );
+        SDL_GetWindowPosition( window, &prevX, &prevY );
         SDL_DestroyWindow( window );
     }
 
-    window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
+    window = SDL_CreateWindow( "", prevX, prevY, w, h, flags );
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
 
     if ( keepAspectRatio ) {
@@ -365,9 +368,28 @@ void Display::Fade( const Surface & top, const Surface & back, const Point & pt,
     const int delay2 = ( delay * step ) / ( alpha - min );
 
     while ( alpha > min + level ) {
-        back.Blit( *this );
+        back.Blit( pt, *this );
         shadow.SetAlphaMod( alpha );
-        shadow.Blit( *this );
+        shadow.Blit( pt, *this );
+        Flip();
+        alpha -= step;
+        DELAY( delay2 );
+    }
+}
+
+void Display::InvertedFade( const Surface & top, const Surface & back, const Point & offset, const Surface & middle, const Point & middleOffset, int level, int delay )
+{
+    Surface shadow = top.GetSurface();
+    int alpha = 255;
+    const int step = 10;
+    const int min = step + 5;
+    const int delay2 = ( delay * step ) / ( alpha - min );
+
+    while ( alpha > min + level ) {
+        back.Blit( offset, *this );
+        shadow.Blit( offset, *this );
+        shadow.SetAlphaMod( alpha );
+        middle.Blit( middleOffset, *this );
         Flip();
         alpha -= step;
         DELAY( delay2 );

@@ -58,7 +58,7 @@ spellstats_t spells[] = {
      _( "Causes a bolt of electrical energy to strike a selected creature, then strike the nearest creature with half damage, then strike the NEXT nearest creature with half again damage, and so on, until it becomes too weak to be harmful.  Warning:  This spell can hit your own creatures!" )},
     {_( "Teleport" ), 9, 0, 10, 0, 0, COST_NONE, _( "Teleports the creature you select to any open position on the battlefield." )},
     {_( "Cure" ), 6, 0, 6, 5, 0, COST_NONE, _( "Removes all negative spells cast upon one of your units, and restores up to %{count} HP per level of spell power." )},
-    {_( "Mass Cure" ), 15, 0, 2, 5, 0, COST_NONE,
+    {_( "Mass Cure" ), 15, 0, 6, 5, 0, COST_NONE,
      _( "Removes all negative spells cast upon your forces, and restores up to %{count} HP per level of spell power, per creature." )},
     {_( "Resurrect" ), 12, 0, 13, 50, 0, COST_NONE, _( "Resurrects creatures from a damaged or dead unit until end of combat." )},
     {_( "Resurrect True" ), 15, 0, 12, 50, 0, COST_NONE, _( "Resurrects creatures from a damaged or dead unit permanently." )},

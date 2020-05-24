@@ -493,6 +493,7 @@ Settings::Settings()
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( CASTLE_ALLOW_BUY_FROM_WELL );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
+    ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
@@ -1457,7 +1458,7 @@ void Settings::SetPriceLoyaltyVersion( bool set )
     }
     else {
         opt_global.ResetModes( GLOBAL_PRICELOYALTY );
-        if ( _musicType = MUSIC_MIDI_EXPANSION )
+        if ( _musicType == MUSIC_MIDI_EXPANSION )
             _musicType = MUSIC_MIDI_ORIGINAL;
     }
 }
