@@ -104,9 +104,7 @@ void FileInfoListBox::RedrawBackground( const Point & dst )
         panel.Blit( Rect( 0, panel.h() - 120, panel.w(), 120 ), dst.x, dst.y + 224 - 120 );
     }
     else {
-        const Sprite & panelShadow = AGG::GetICN( ICN::REQBKG, 1 );
         panel.Blit( dst );
-        panelShadow.Blit( dst.x - 16, dst.y + 16 );
     }
 }
 
