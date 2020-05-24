@@ -127,16 +127,16 @@ void Game::UpdateGameSpeed( void )
     delays[CURRENT_HERO_DELAY] = 40 - heroSpeed * 8;
     delays[CURRENT_AI_DELAY] = 40 - aiSpeed * 8;
 
-    const int battleSpeed = 10 - conf.BattleSpeed();
-    delays[BATTLE_FRAME_DELAY] = 120 * battleSpeed * battleSpeedAdjustment;
-    delays[BATTLE_MISSILE_DELAY] = 40 * battleSpeed * battleSpeedAdjustment;
-    delays[BATTLE_SPELL_DELAY] = 90 * battleSpeed * battleSpeedAdjustment;
-    delays[BATTLE_IDLE_DELAY] = 150 * battleSpeed * battleSpeedAdjustment;
-    delays[BATTLE_DISRUPTING_DELAY] = 25 * battleSpeed * battleSpeedAdjustment;
-    delays[BATTLE_CATAPULT_DELAY] = 90 * battleSpeed * battleSpeedAdjustment;
-    delays[BATTLE_CATAPULT2_DELAY] = 40 * battleSpeed * battleSpeedAdjustment;
-    delays[BATTLE_CATAPULT3_DELAY] = 40 * battleSpeed * battleSpeedAdjustment;
-    delays[BATTLE_BRIDGE_DELAY] = 90 * battleSpeed * battleSpeedAdjustment;
+    const double adjustedBattleSpeed = ( 10 - conf.BattleSpeed() ) * battleSpeedAdjustment;
+    delays[BATTLE_FRAME_DELAY] = 120 * adjustedBattleSpeed;
+    delays[BATTLE_MISSILE_DELAY] = 40 * adjustedBattleSpeed;
+    delays[BATTLE_SPELL_DELAY] = 90 * adjustedBattleSpeed;
+    delays[BATTLE_IDLE_DELAY] = 150 * adjustedBattleSpeed;
+    delays[BATTLE_DISRUPTING_DELAY] = 25 * adjustedBattleSpeed;
+    delays[BATTLE_CATAPULT_DELAY] = 90 * adjustedBattleSpeed;
+    delays[BATTLE_CATAPULT2_DELAY] = 40 * adjustedBattleSpeed;
+    delays[BATTLE_CATAPULT3_DELAY] = 40 * adjustedBattleSpeed;
+    delays[BATTLE_BRIDGE_DELAY] = 90 * adjustedBattleSpeed;
 }
 
 uint32_t Game::ApplyBattleSpeed( uint32_t delay )
