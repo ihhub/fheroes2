@@ -269,6 +269,11 @@ bool ActionSpellViewAll( Heroes & hero )
 
 bool ActionSpellIdentifyHero( Heroes & hero )
 {
+    if ( hero.GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
+        Message( "", _( "This spell is already in use." ), Font::BIG, Dialog::OK );
+        return false;
+    }
+
     hero.GetKingdom().SetModes( Kingdom::IDENTIFYHERO );
     Message( "", _( "Enemy heroes are now fully identifiable." ), Font::BIG, Dialog::OK );
 

@@ -1082,7 +1082,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
                 if ( heroes )
-                    Dialog::QuickInfo( *heroes );
+                    Dialog::QuickInfo( *heroes, *hero );
             } break;
 
             default:

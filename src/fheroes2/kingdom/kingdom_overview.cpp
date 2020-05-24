@@ -155,7 +155,7 @@ void StatsHeroesList::ActionListSingleClick( HeroRow & row, const Point & cursor
 void StatsHeroesList::ActionListPressRight( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
 {
     if ( row.hero && ( Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
-        Dialog::QuickInfo( *row.hero );
+        Dialog::QuickInfo( *row.hero, *row.hero );
 }
 
 bool StatsHeroesList::ActionListCursor( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
@@ -380,7 +380,7 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const Point & cursor
         else if ( Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Heroes * hero = row.castle->GetHeroes().GuardFirst();
             if ( hero )
-                Dialog::QuickInfo( *hero );
+                Dialog::QuickInfo( *hero, *hero );
         }
     }
 }
