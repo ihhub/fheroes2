@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cmath>
+#include <math.h>
 
 #include "agg.h"
 #include "battle_arena.h"
@@ -2421,30 +2421,12 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     _movingUnit = &attacker;
     _movingPos = attacker.GetRectPosition();
 
+    // Unit 'Position' is position of the tile he's standing at
     const Rect & pos1 = attacker.GetRectPosition();
     const Rect & pos2 = defender.GetRectPosition();
 
-    // check archers
     const bool archer = attacker.isArchers() && !attacker.isHandFighting();
-    const Point & bp1 = attacker.GetBackPoint();
-    const Point & bp2 = defender.GetBackPoint();
-
-    int actionStart = Monster_Info::MELEE_FRONT;
-
-    // long distance attack animation
-    if ( archer || ( attacker.isDoubleCellAttack() && 2 == targets.size() ) ) {
-        const float dx = bp1.x - bp2.x;
-        const float dy = bp1.y - bp2.y;
-        const float tan = std::fabs( dy / dx );
-
-        actionStart = ( 0.6 >= tan ? Monster_Info::RANG_FRONT : ( dy > 0 ? Monster_Info::RANG_TOP : Monster_Info::RANG_BOT ) );
-    }
-    else if ( pos2.y < pos1.y ) {
-        actionStart = Monster_Info::MELEE_TOP;
-    }
-    else if ( pos2.y > pos1.y ) {
-        actionStart = Monster_Info::MELEE_BOT;
-    }
+    const bool isDoubleCell = attacker.isDoubleCellAttack() && 2 == targets.size();
 
     // redraw luck animation
     if ( attacker.Modes( LUCK_GOOD | LUCK_BAD ) )
@@ -2452,22 +2434,49 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     AGG::PlaySound( attacker.M82Attk() );
 
-    // redraw attack animation
-    if ( attacker.SwitchAnimation( actionStart ) ) {
-        RedrawTroopDefaultDelay( attacker );
-    }
-
-    // draw missile animation
+    // long distance attack animation
     if ( archer ) {
-        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), ICN::GetMissIndex( attacker.ICNMiss(), bp1.x - bp2.x, bp1.y - bp2.y ), bp1.x > bp2.x );
+        const Sprite & attackerSprite = AGG::GetICN( attacker.GetMonsterSprite().icn_file, attacker.GetFrame(), attacker.isReflect() );
+        const Point attackerPos = GetTroopPosition( attacker, attackerSprite );
+        const Sprite & defenderSprite = AGG::GetICN( defender.GetMonsterSprite().icn_file, defender.GetFrame(), defender.isReflect() );
+        const Point defenderPos = GetTroopPosition( defender, defenderSprite );
 
-        const u32 step = ( missile.w() < 16 ? 16 : missile.w() );
-        const Point line_from
-            = Point( pos1.x + ( attacker.isReflect() ? 0 : pos1.w ),
-                     pos1.y + ( Settings::Get().QVGA() ? attacker.GetStartMissileOffset( actionStart ) / 2 : attacker.GetStartMissileOffset( actionStart ) ) );
-        const Point line_to = Point( pos2.x + ( defender.isReflect() ? 0 : pos1.w ), pos2.y );
+        // For shooter position we need bottom center position of rear tile
+        // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
+        const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.w * 3 / 4 : CELLW / 2;
+        const Point shooterPos( pos1.x + rearCenterX, attackerPos.y - attackerSprite.y() );
+        const Point targetPos = Point( pos2.x + pos2.w / 2, defenderPos.y - defenderSprite.y() / 2 );
 
-        const Points points = GetLinePoints( line_from, line_to, step );
+        // Use the front one to calculate the angle, then overwrite
+        Point offset = attacker.GetStartMissileOffset( Monster_Info::FRONT );
+
+        const int dx = targetPos.x - shooterPos.x - offset.x;
+        const int dy = targetPos.y - shooterPos.y - offset.y;
+        const bool reverse = dx < 0;
+        double angle = atan2( -dy, dx ) * 180.0 / M_PI;
+        // we only care about two quadrants, normalize
+        if ( reverse ) {
+            angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
+        }
+
+        // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
+        const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
+
+        if ( direction != Monster_Info::FRONT )
+            offset = attacker.GetStartMissileOffset( direction );
+
+        // redraw archer attack animation
+        if ( attacker.SwitchAnimation( Monster_Info::RANG_TOP + direction * 2 ) ) {
+            AnimateUnitWithDelay( attacker, Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) );
+        }
+
+        // draw missile animation
+        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), reverse );
+
+        const Point missileStart = Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
+
+        // Lich/Power lich has projectile speed of 25
+        const Points points = GetEuclideanLine( missileStart, targetPos, std::max( missile.w(), 25 ) );
         Points::const_iterator pnt = points.begin();
 
         // convert the following code into a function/event service
@@ -2477,11 +2486,34 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 cursor.Hide();
                 Redraw();
-                missile.Blit( attacker.isReflect() ? ( *pnt ).x - missile.w() : ( *pnt ).x, ( *pnt ).y );
+                if ( attacker.GetID() == Monster::MAGE || attacker.GetID() == Monster::ARCHMAGE ) {
+                    display.DrawLine( Point( missileStart.x, missileStart.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
+                    display.DrawLine( Point( missileStart.x, missileStart.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                    display.DrawLine( Point( missileStart.x, missileStart.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
+                    display.DrawLine( Point( missileStart.x, missileStart.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                    display.DrawLine( Point( missileStart.x, missileStart.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
+                }
+                else {
+                    missile.Blit( attacker.isReflect() ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
+                }
                 cursor.Show();
                 display.Flip();
                 ++pnt;
             }
+        }
+    }
+    else {
+        int attackAnim = isDoubleCell ? Monster_Info::RANG_FRONT : Monster_Info::MELEE_FRONT;
+        if ( pos2.y < pos1.y ) {
+            attackAnim -= 2;
+        }
+        else if ( pos2.y > pos1.y ) {
+            attackAnim += 2;
+        }
+
+        // redraw melee attack animation
+        if ( attacker.SwitchAnimation( attackAnim ) ) {
+            RedrawTroopDefaultDelay( attacker );
         }
     }
 
@@ -2495,7 +2527,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     case Monster::LICH:
     case Monster::POWER_LICH:
         // lich clod animation
-        RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), true );
+        RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), false );
         break;
 
     default:
@@ -2646,57 +2678,59 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
     }
 }
 
-void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
+void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 {
     Cursor & cursor = Cursor::Get();
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
+    const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+
     cursor.SetThemes( Cursor::WAR_NONE );
 
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
-    StringReplace( msg, "%{monster}", b.GetName() );
-    StringReplace( msg, "%{src}", b.GetHeadIndex() );
+    StringReplace( msg, "%{monster}", unit.GetName() );
+    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
     _currentUnit = NULL;
-    _movingUnit = &b;
+    _movingUnit = &unit;
 
     while ( dst != path.end() ) {
         const Cell * cell = Board::GetCell( *dst );
         _movingPos = cell->GetPos();
         bool show_anim = false;
 
-        if ( bridge && bridge->NeedDown( b, *dst ) ) {
+        if ( bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = NULL;
-            b.SwitchAnimation( Monster_Info::STATIC );
-            bridge->Action( b, *dst );
-            _movingUnit = &b;
+            unit.SwitchAnimation( Monster_Info::STATIC );
+            bridge->Action( unit, *dst );
+            _movingUnit = &unit;
         }
 
-        if ( b.isWide() ) {
-            if ( b.GetTailIndex() == *dst )
-                b.SetReflection( !b.isReflect() );
+        if ( unit.isWide() ) {
+            if ( unit.GetTailIndex() == *dst )
+                unit.SetReflection( !unit.isReflect() );
             else
                 show_anim = true;
         }
         else {
-            b.UpdateDirection( cell->GetPos() );
+            unit.UpdateDirection( cell->GetPos() );
             show_anim = true;
         }
 
         if ( show_anim ) {
-            AGG::PlaySound( b.M82Move() );
-            b.SwitchAnimation( Monster_Info::MOVING );
-            RedrawTroopDefaultDelay( b );
-            b.SetPosition( *dst );
+            AGG::PlaySound( unit.M82Move() );
+            unit.SwitchAnimation( Monster_Info::MOVING );
+            AnimateUnitWithDelay( unit, frameDelay );
+            unit.SetPosition( *dst );
         }
 
         // check for possible bridge close action, after unit's end of movement
         if ( bridge && bridge->AllowUp() ) {
             _movingUnit = NULL;
-            b.SwitchAnimation( Monster_Info::STATIC );
-            bridge->Action( b, *dst );
-            _movingUnit = &b;
+            unit.SwitchAnimation( Monster_Info::STATIC );
+            bridge->Action( unit, *dst );
+            _movingUnit = &unit;
         }
 
         ++dst;
@@ -2706,9 +2740,9 @@ void Battle::Interface::RedrawActionMove( Unit & b, const Indexes & path )
     _flyingUnit = NULL;
     _movingUnit = NULL;
     _currentUnit = NULL;
-    b.SwitchAnimation( Monster_Info::STATIC );
+    unit.SwitchAnimation( Monster_Info::STATIC );
 
-    StringReplace( msg, "%{dst}", b.GetHeadIndex() );
+    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
     status.SetMessage( msg, true );
 }
 
@@ -2766,13 +2800,15 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _flyingUnit = NULL;
     _movingUnit = &unit;
     _movingPos = targetPos;
-    unit.SwitchAnimation( Monster_Info::FLY_LAND );
-    // Landing animation is 30% length on average (original value)
-    AnimateUnitWithDelay( unit, frameDelay * 0.3 );
+
+    std::vector<int> landAnim;
+    landAnim.push_back( Monster_Info::FLY_LAND );
+    landAnim.push_back( Monster_Info::STATIC );
+    unit.SwitchAnimation( landAnim );
+    AnimateUnitWithDelay( unit, frameDelay );
 
     // restore
     _movingUnit = NULL;
-    unit.SwitchAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
@@ -3046,59 +3082,46 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Unit & attacke
     }
 }
 
-void Battle::Interface::RedrawActionLuck( Unit & b )
+void Battle::Interface::RedrawActionLuck( Unit & unit )
 {
-    if ( b.Modes( LUCK_GOOD ) ) {
-        std::string msg = _( "Good luck shines on the  %{attacker}" );
-        StringReplace( msg, "%{attacker}", b.GetName() );
-        status.SetMessage( msg, true );
+    Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
 
-        Display & display = Display::Get();
-        Cursor & cursor = Cursor::Get();
-        LocalEvent & le = LocalEvent::Get();
+    const bool isGoodLuck = unit.Modes( LUCK_GOOD );
+    const Rect & pos = unit.GetRectPosition();
+    const int m82 = isGoodLuck ? M82::GOODLUCK : M82::BADLUCK;
+    const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, isGoodLuck ? 0 : 1 );
+    const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
 
-        const int m82 = M82::GOODLUCK;
-        const Sprite & sunbow = AGG::GetICN( ICN::EXPMRL, 0 );
+    int width = 2;
+    Rect src( 0, 0, width, luckSprite.h() );
+    src.x = ( luckSprite.w() - src.w ) / 2;
 
-        const Rect & pos = b.GetRectPosition();
+    cursor.SetThemes( Cursor::WAR_NONE );
+    AGG::PlaySound( m82 );
 
-        const Monster::monstersprite_t & msi = b.GetMonsterSprite();
-        const Sprite & troop = AGG::GetICN( msi.icn_file, msi.frm_idle.start, b.isReflect() );
+    std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}" ) : _( "Bad luck descends on the %{attacker}" );
+    StringReplace( msg, "%{attacker}", unit.GetName() );
+    status.SetMessage( msg, true );
 
-        int width = 2;
+    while ( le.HandleEvents() && width < luckSprite.w() ) {
+        CheckGlobalEvents( le );
 
-        Rect src( 0, 0, width, sunbow.h() );
-        src.x = ( sunbow.w() - src.w ) / 2;
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            cursor.Hide();
+            Redraw();
 
-        cursor.SetThemes( Cursor::WAR_NONE );
+            luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h );
 
-        AGG::PlaySound( m82 );
+            cursor.Show();
+            display.Flip();
 
-        while ( le.HandleEvents() && width < sunbow.w() ) {
-            CheckGlobalEvents( le );
+            src.w = width;
+            src.x = ( luckSprite.w() - src.w ) / 2;
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
-
-                sunbow.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - troop.h() - src.h );
-
-                cursor.Show();
-                display.Flip();
-
-                src.w = width;
-                src.x = ( sunbow.w() - src.w ) / 2;
-
-                width += 3;
-            }
+            width += 3;
         }
-
-        DELAY( 400 );
-    }
-    else if ( b.Modes( LUCK_BAD ) ) {
-        std::string msg = _( "Bad luck descends on the %{attacker}" );
-        StringReplace( msg, "%{attacker}", b.GetName() );
-        status.SetMessage( msg, true );
     }
 }
 

@@ -1855,8 +1855,10 @@ void RandomMonsterAnimation::increment()
     _frameId = _frameSet.front();
     _frameSet.pop_front();
 
-    _frameOffset = _offsetSet.front();
-    _offsetSet.pop_front();
+    if ( !_offsetSet.empty() ) {
+        _frameOffset = _offsetSet.front();
+        _offsetSet.pop_front();
+    }
 }
 
 int RandomMonsterAnimation::icnFile() const
