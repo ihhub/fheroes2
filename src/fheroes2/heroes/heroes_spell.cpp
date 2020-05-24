@@ -486,7 +486,7 @@ bool ActionSpellVisions( Heroes & hero )
             std::string hdr, msg;
 
             hdr = std::string( "%{count} " ) + StringLower( troop.GetPluralName( join.second ) );
-            StringReplace( hdr, "%{count}", join.second );
+            StringReplace( hdr, "%{count}", troop.GetCount() );
 
             switch ( join.first ) {
             default:
