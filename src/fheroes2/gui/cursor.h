@@ -156,19 +156,20 @@ private:
     Cursor();
     ~Cursor();
     void SetOffset( int );
+    Sprite LoadSprite( int id );
 
     int theme;
     s32 offset_x;
     s32 offset_y;
 
 #ifdef USE_SDL_CURSOR
-    void SetCursor( int icn, int name );
-    mutable std::map<int, SDL_Surface *> cacheSurfaces;
-    SDL_Cursor * cursor;
+    mutable std::map<int, SDL_Cursor *> cacheCursors;
 #else
     void Move( s32, s32 );
     mutable std::map<int, const Sprite> cacheSprites;
 #endif
+
+    std::map<int, std::pair<s32, s32> > cursorOffsetTable;
 };
 
 #endif
