@@ -548,7 +548,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell, int mons )
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );
-            tile.SetObject( MP2::OBJ_ABANDONEDMINE );
+            hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
         }
 
         world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );
