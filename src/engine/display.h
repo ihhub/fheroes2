@@ -58,6 +58,10 @@ public:
 
     void Fade( int delay = 500 );
     void Fade( const Surface &, const Surface &, const Point &, int level, int delay );
+
+    // Fade everything except middle
+    void InvertedFade( const Surface & top, const Surface & back, const Point & offset, const Surface & middle, const Point & middleOffset, int level, int delay );
+
     void Rise( int delay = 500 );
     void Rise( const Surface &, const Surface &, const Point &, int level, int delay );
 

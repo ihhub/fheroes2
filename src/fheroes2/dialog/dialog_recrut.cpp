@@ -238,9 +238,15 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     payment_t paymentCosts( paymentMonster * result );
 
     const Sprite & box = AGG::GetICN( ICN::RECRBKG, 0 );
+    const Sprite & boxShadow = AGG::GetICN( ICN::RECRBKG, 1 );
 
-    SpriteBack back( Rect( ( display.w() - box.w() ) / 2, ( display.h() - box.h() ) / 2 - ( Settings::Get().QVGA() ? 15 : 65 ), box.w(), box.h() ) );
-    const Rect & pos = back.GetArea();
+    const Point dialogOffset( ( display.w() - box.w() ) / 2, ( display.h() - box.h() ) / 2 - ( Settings::Get().QVGA() ? 15 : 65 ) );
+    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+
+    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, box.w() + BORDERWIDTH, box.h() + BORDERWIDTH ) );
+    const Rect pos( dialogOffset.x, dialogOffset.y, box.w(), box.h() );
+
+    boxShadow.Blit( pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
 
     const Rect rtChange( pos.x + 25, pos.y + 35, 85, 95 );
     RedrawStaticInfo( pos, monster, available, ext && monster0.GetDowngrade() != monster0 );
@@ -450,10 +456,15 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
 
     const payment_t paymentMonster = monster.GetCost();
     const Sprite & box = AGG::GetICN( ICN::RECR2BKG, 0 );
+    const Sprite & boxShadow = AGG::GetICN( ICN::RECR2BKG, 1 );
 
-    const SpriteBack back( Rect( ( display.w() - box.w() ) / 2, display.h() / 2 - Display::DEFAULT_HEIGHT / 2 + 16, box.w(), box.h() ) );
-    const Rect & pos = back.GetArea();
+    const Point dialogOffset( ( display.w() - box.w() ) / 2, display.h() / 2 - Display::DEFAULT_HEIGHT / 2 + BORDERWIDTH );
+    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
+    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, box.w() + BORDERWIDTH, box.h() + BORDERWIDTH ) );
+    const Rect pos( dialogOffset.x, dialogOffset.y, box.w(), box.h() );
+
+    boxShadow.Blit( pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
     box.Blit( pos.x, pos.y );
 
     LocalEvent & le = LocalEvent::Get();

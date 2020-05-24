@@ -1843,9 +1843,6 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
     std::string msg;
     u32 gold = tile.QuantityGold();
 
-    Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
-
     // dialog
     if ( tile.isWater() ) {
         if ( gold ) {
@@ -1908,6 +1905,9 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
     if ( gold )
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
 
+    Game::PlayPickupSound();
+    AnimationRemoveObject( tile );
+
     tile.RemoveObjectSprite();
     tile.QuantityReset();
 
@@ -1945,10 +1945,13 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
         ActionToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
 
         // lose battle
-        if ( hero.isFreeman() )
+        if ( hero.isFreeman() ) {
             return;
-        else if ( !other_hero->isFreeman() )
+        }
+        else if ( !other_hero->isFreeman() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is busy..." );
+            return;
+        }
     }
 
     AGG::PlaySound( M82::KILLFADE );

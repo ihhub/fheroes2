@@ -103,8 +103,9 @@ void FileInfoListBox::RedrawBackground( const Point & dst )
         panel.Blit( Rect( 0, 0, panel.w(), 120 ), dst.x, dst.y );
         panel.Blit( Rect( 0, panel.h() - 120, panel.w(), 120 ), dst.x, dst.y + 224 - 120 );
     }
-    else
+    else {
         panel.Blit( dst );
+    }
 }
 
 void FileInfoListBox::ActionCurrentUp( void )
@@ -203,14 +204,21 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     cursor.SetThemes( cursor.POINTER );
 
     const Sprite & sprite = AGG::GetICN( ICN::REQBKG, 0 );
+    const Sprite & spriteShadow = AGG::GetICN( ICN::REQBKG, 1 );
     Size panel( sprite.w(), sprite.h() );
+
     bool pocket = Settings::Get().QVGA();
     if ( pocket )
         panel = Size( sprite.w(), 224 );
 
-    SpriteBack back( Rect( ( display.w() - panel.w ) / 2, ( display.h() - panel.h ) / 2, panel.w, panel.h ) );
+    const Point dialogOffset( ( display.w() - sprite.w() ) / 2, ( display.h() - sprite.h() ) / 2 );
+    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    const Rect & rt = back.GetArea();
+    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, sprite.w() + BORDERWIDTH, sprite.h() + BORDERWIDTH ) );
+    const Rect rt( dialogOffset.x, dialogOffset.y, sprite.w(), sprite.h() );
+
+    spriteShadow.Blit( rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
+
     const Rect enter_field( rt.x + 42, rt.y + ( pocket ? 148 : 286 ), 260, 16 );
 
     Button buttonOk( rt.x + 34, rt.y + ( pocket ? 176 : 315 ), ICN::REQUEST, 1, 2 );

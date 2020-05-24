@@ -651,7 +651,7 @@ void Interface::GameArea::QueueEventProcessing( void )
     const Rect tile_pos( rectMapsPosition.x + ( ( mp.x - rectMapsPosition.x ) / TILEWIDTH ) * TILEWIDTH,
                          rectMapsPosition.y + ( ( mp.y - rectMapsPosition.y ) / TILEWIDTH ) * TILEWIDTH, TILEWIDTH, TILEWIDTH );
 
-    if ( le.MouseClickLeft( tile_pos ) && Cursor::POINTER != cursor.Themes() )
+    if ( le.MouseClickLeft( tile_pos ) )
         interface.MouseCursorAreaClickLeft( index );
     else if ( le.MousePressRight( tile_pos ) )
         interface.MouseCursorAreaPressRight( index );

@@ -96,16 +96,16 @@ void Battle::DialogBattleSettings( void )
     cursor.Hide();
 
     const Sprite & dialog = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
+    const Sprite & dialogShadow = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
-    Rect pos_rt;
-    pos_rt.x = ( display.w() - dialog.w() ) / 2;
-    pos_rt.y = ( display.h() - dialog.h() ) / 2;
-    pos_rt.w = dialog.w();
-    pos_rt.h = dialog.h();
+    const Point dialogOffset( ( display.w() - dialog.w() ) / 2, ( display.h() - dialog.h() ) / 2 );
+    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    SpriteBack back( pos_rt );
+    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, dialog.w() + BORDERWIDTH, dialog.h() + BORDERWIDTH ) );
+    const Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.w(), dialog.h() );
 
-    display.FillRect( back.GetArea(), ColorBlack );
+    display.FillRect( pos_rt, ColorBlack );
+    dialogShadow.Blit( pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
     dialog.Blit( pos_rt.x, pos_rt.y );
     Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
     SpriteBack speed_buttom_back(
@@ -259,21 +259,22 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     }
 
     const Sprite & dialog = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
+    const Sprite & dialogShadow = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
 
-    Rect pos_rt;
-    pos_rt.x = ( display.w() - dialog.w() ) / 2;
-    pos_rt.y = ( display.h() - ( conf.QVGA() ? 224 : dialog.h() ) ) / 2;
-    pos_rt.w = dialog.w();
-    pos_rt.h = conf.QVGA() ? 224 : dialog.h();
+    const Point dialogOffset( ( display.w() - dialog.w() ) / 2, ( display.h() - dialog.h() ) / 2 );
+    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    SpriteBack back( pos_rt );
+    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, dialog.w() + BORDERWIDTH, dialog.h() + BORDERWIDTH ) );
+    const Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.w(), conf.QVGA() ? 224 : dialog.h() );
 
     if ( conf.QVGA() ) {
         dialog.Blit( Rect( 0, 232, pos_rt.w, 224 ), pos_rt.x, pos_rt.y );
         dialog.Blit( Rect( 0, 0, pos_rt.w, 30 ), pos_rt.x, pos_rt.y );
     }
-    else
+    else {
+        dialogShadow.Blit( pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
         dialog.Blit( pos_rt.x, pos_rt.y );
+    }
 
     const int anime_ox = 47;
     const int anime_oy = 36;

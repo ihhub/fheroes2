@@ -205,8 +205,9 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         I.Redraw();
 
         AGG::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
         hero.FadeIn();
+        hero.GetPath().Reset();
+        hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
         // educate spells
         if ( !Settings::Get().ExtHeroLearnSpellsWithDay() )
@@ -345,7 +346,6 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
     if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
         AGG::PlaySound( M82::KILLFADE );
-        hero.GetPath().Reset();
         hero.FadeOut();
 
         hero.SpellCasted( Spell::DIMENSIONDOOR );
@@ -359,6 +359,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
         AGG::PlaySound( M82::KILLFADE );
         hero.FadeIn();
+        hero.GetPath().Reset();
+        hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
         hero.ActionNewPosition();
 
@@ -545,7 +547,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell, int mons )
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );
-            tile.SetObject( MP2::OBJ_ABANDONEDMINE );
+            hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
         }
 
         world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );
