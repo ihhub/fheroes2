@@ -57,10 +57,13 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    SpriteBack back( Rect( ( display.w() - sprite_dialog.w() ) / 2, ( display.h() - sprite_dialog.h() ) / 2, sprite_dialog.w(), sprite_dialog.h() ) );
-    const Rect & pos_rt = back.GetArea();
+    const Point dialogOffset( ( display.w() - sprite_dialog.w() ) / 2, ( display.h() - sprite_dialog.h() ) / 2 );
+    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+
+    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, sprite_dialog.w() + BORDERWIDTH, sprite_dialog.h() + BORDERWIDTH ) );
+    const Rect pos_rt( dialogOffset.x, dialogOffset.y, sprite_dialog.w(), sprite_dialog.h() );
+    spriteDialogShadow.Blit( pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
     sprite_dialog.Blit( pos_rt.x, pos_rt.y );
-    spriteDialogShadow.Blit( pos_rt.x - 16, pos_rt.y + 16 );
 
     const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
     DrawMonsterStats( monsterStatOffset, troop );
