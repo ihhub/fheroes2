@@ -161,24 +161,24 @@ Sprite Cursor::LoadSprite( int id ) {
     Sprite result;
 
     switch ( 0xF000 & id ) {
-        case 0x3000: {
-            result = AGG::GetICN( ICN::SPELCO, 0xFF & id );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::SPELCO ) << ", " << ( id & 0xFF ) );
-        } break;
+    case 0x3000: {
+        result = AGG::GetICN( ICN::SPELCO, 0xFF & id );
+        DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::SPELCO ) << ", " << ( id & 0xFF ) );
+    } break;
 
-        case 0x2000: {
-            result = AGG::GetICN( ICN::CMSECO, 0xFF & id );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::CMSECO ) << ", " << ( id & 0xFF ) );
-        } break;
+    case 0x2000: {
+        result = AGG::GetICN( ICN::CMSECO, 0xFF & id );
+        DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::CMSECO ) << ", " << ( id & 0xFF ) );
+    } break;
 
-        case 0x1000: {
-            result = AGG::GetICN( ICN::ADVMCO, 0xFF & id );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::ADVMCO ) << ", " << ( id & 0xFF ) );
-        } break;
+    case 0x1000: {
+        result = AGG::GetICN( ICN::ADVMCO, 0xFF & id );
+        DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::ADVMCO ) << ", " << ( id & 0xFF ) );
+    } break;
 
-        default:
-            result = AGG::GetICN( ICN::ADVMCO, 0 );
-            break;
+    default:
+        result = AGG::GetICN( ICN::ADVMCO, 0 );
+        break;
     }
 
     return result;
