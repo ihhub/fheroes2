@@ -166,6 +166,7 @@ namespace Battle
         int ICNMiss( void ) const;
 
         Point GetBackPoint( void ) const;
+        Point GetCenterPoint() const;
         Rect GetRectPosition( void ) const;
 
         u32 HowManyCanKill( const Unit & ) const;

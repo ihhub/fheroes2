@@ -360,10 +360,52 @@ float Monster::GetUpgradeRatio( void )
     return GameStatic::GetMonsterUpgradeRatio();
 }
 
-uint32_t Monster::GetICNByMonsterID( uint32_t id )
+uint32_t Monster::GetICNByMonsterID( uint32_t monsterID )
 {
-    if ( id <= Monster::WATER_ELEMENT )
-        return monsters_info[id].icn_file;
+    if ( monsterID <= Monster::WATER_ELEMENT )
+        return monsters_info[monsterID].icn_file;
+    return ICN::UNKNOWN;
+}
+
+uint32_t Monster::GetMissileICN( uint32_t monsterID )
+{
+    switch ( monsterID ) {
+    case Monster::ARCHER:
+        return ICN::ARCH_MSL;
+    case Monster::RANGER:
+        return ICN::ARCH_MSL;
+    case Monster::ORC:
+        return ICN::ORC__MSL;
+    case Monster::ORC_CHIEF:
+        return ICN::ORC__MSL;
+    case Monster::TROLL:
+        return ICN::TROLLMSL;
+    case Monster::WAR_TROLL:
+        return ICN::TROLLMSL;
+    case Monster::ELF:
+        return ICN::ELF__MSL;
+    case Monster::GRAND_ELF:
+        return ICN::ELF__MSL;
+    case Monster::DRUID:
+        return ICN::DRUIDMSL;
+    case Monster::GREATER_DRUID:
+        return ICN::DRUIDMSL;
+    case Monster::CENTAUR:
+        // Doesn't have own missile file, game falls back to ELF__MSL
+        return ICN::ELF__MSL;
+    case Monster::HALFLING:
+        return ICN::HALFLMSL;
+    case Monster::TITAN:
+        return ICN::TITANMSL;
+    case Monster::LICH:
+        return ICN::LICH_MSL;
+    case Monster::POWER_LICH:
+        return ICN::LICH_MSL;
+
+    default:
+        break;
+    }
+
     return ICN::UNKNOWN;
 }
 

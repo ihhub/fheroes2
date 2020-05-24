@@ -28,6 +28,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <math.h>
 #include <sstream>
 
 #include "error.h"
@@ -863,6 +864,18 @@ std::string EncodeString( const std::string & str, const char * charset )
     return str;
 }
 #endif
+
+double GetShootingAngle( const Point & start, const Point & target )
+{
+    const int dx = target.x - start.x;
+    const int dy = target.y - start.y;
+    double angle = atan2( -dy, dx ) * 180.0 / M_PI;
+    // we only care about two quadrants, normalize
+    if ( dx < 0 ) {
+        angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
+    }
+    return angle;
+}
 
 Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step )
 {
