@@ -34,7 +34,7 @@ LocalEvent::LocalEvent()
     , mouse_state( 0 )
     , mouse_button( 0 )
     , mouse_st( 0, 0 )
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if !USE_SDL_CURSOR
     , redraw_cursor_func( NULL )
 #endif
     , keyboard_filter_func( NULL )
@@ -899,7 +899,7 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 {
     LocalEvent & le = LocalEvent::Get();
 
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if !USE_SDL_CURSOR
     // motion
     if ( ( le.modes & GLOBAL_FILTER ) && SDL_MOUSEMOTION == event->type ) {
         // redraw cursor
@@ -1068,7 +1068,7 @@ bool LocalEvent::EmulateMouseAction( KeySym key )
             mouse_button = SDL_BUTTON_RIGHT;
         }
 
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if !USE_SDL_CURSOR
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             if ( modes & MOUSE_OFFSET )
                 ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );

@@ -28,7 +28,7 @@
 /* constructor */
 Cursor::Cursor()
     : theme( NONE )
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
     , cursor( NULL )
 #else
     , offset_x( 0 )
@@ -39,7 +39,7 @@ Cursor::Cursor()
 /* destructor */
 Cursor::~Cursor()
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
     if ( cursor != NULL )
         SDL_FreeCursor( cursor );
 #endif
@@ -57,7 +57,7 @@ int Cursor::Themes( void )
     return SP_ARROW >= theme ? theme : NONE;
 }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
 void Cursor::SetCursor( int icn, int name )
 {
     if ( cursor != NULL )
@@ -78,7 +78,7 @@ void Cursor::SetCursor( int icn, int name )
 }
 #endif
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
 bool Cursor::isVisible() const
 {
     // return SpriteMove::isVisible();
@@ -90,7 +90,7 @@ bool Cursor::isVisible() const
 /* set cursor theme */
 bool Cursor::SetThemes( int name, bool force )
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
     if ( force || theme != name ) {
         if ( isVisible() )
             SDL_ShowCursor( SDL_DISABLE );
@@ -328,7 +328,7 @@ void Cursor::SetOffset( int name )
 }
 #endif
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
 void Cursor::Show( void ) {}
 #else
 void Cursor::Show( void )
@@ -338,7 +338,7 @@ void Cursor::Show( void )
 }
 #endif
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
 void Cursor::Hide( void ) {}
 #endif
 

@@ -24,6 +24,10 @@
 
 #include "gamedefs.h"
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#define USE_SDL_CURSOR
+#endif
+
 class Cursor : public SpriteMove
 {
 public:
@@ -133,7 +137,7 @@ public:
 
     static Cursor & Get( void );
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
     void Hide( void );
     bool isVisible( void ) const;
 #else
@@ -153,7 +157,7 @@ private:
 
     int theme;
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#ifdef USE_SDL_CURSOR
     void SetCursor( int icn, int name );
 
     SDL_Cursor * cursor;
