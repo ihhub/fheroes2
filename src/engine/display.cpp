@@ -82,12 +82,15 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
         SDL_DestroyRenderer( renderer );
 
     std::string previousWindowTitle;
+    int prevX = SDL_WINDOWPOS_CENTERED;
+    int prevY = SDL_WINDOWPOS_CENTERED;
     if ( window ) {
         previousWindowTitle = SDL_GetWindowTitle( window );
+        SDL_GetWindowPosition( window, &prevX, &prevY );
         SDL_DestroyWindow( window );
     }
 
-    window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
+    window = SDL_CreateWindow( "", prevX, prevY, w, h, flags );
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
 
     if ( keepAspectRatio ) {
