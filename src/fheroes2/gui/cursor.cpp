@@ -23,18 +23,22 @@
 #include "cursor.h"
 #include "agg.h"
 #include "settings.h"
-#include "sprite.h"
 
 /* constructor */
 Cursor::Cursor()
     : theme( NONE )
 #ifdef USE_SDL_CURSOR
     , cursor( NULL )
-#else
+#endif
     , offset_x( 0 )
     , offset_y( 0 )
-#endif
-{}
+{
+    #ifdef USE_SDL_CURSOR
+    cacheSurfaces.clear();
+    #else
+    cacheSprites.clear();
+    #endif
+}
 
 /* destructor */
 Cursor::~Cursor()
@@ -60,13 +64,18 @@ int Cursor::Themes( void )
 #ifdef USE_SDL_CURSOR
 void Cursor::SetCursor( int icn, int name )
 {
+    std::map<int, SDL_Surface *>::iterator iter = cacheSurfaces.find( name );
+
+    if ( iter == cacheSurfaces.end() ) {
+        const Sprite sprite = AGG::GetICN( icn, 0xFF & name );
+        SDL_Surface * cursorSurface = sprite();
+        iter = cacheSurfaces.insert( std::make_pair( name, cursorSurface ) ).first;
+    }
+
     if ( cursor != NULL )
         SDL_FreeCursor( cursor );
 
-    const Sprite cursorSprite = AGG::GetICN( icn, 0xFF & name );
-    SDL_Surface * cursorSurface = cursorSprite();
-
-    cursor = SDL_CreateColorCursor( cursorSurface, 0, 0 );
+    cursor = SDL_CreateColorCursor( iter->second, offset_x, offset_y );
     if ( cursor == NULL ) {
         DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, icn = " << icn << ", name = " << name << ", reason: " << SDL_GetError() );
         return;
@@ -96,6 +105,8 @@ bool Cursor::SetThemes( int name, bool force )
             SDL_ShowCursor( SDL_DISABLE );
 
         theme = name;
+
+        // SetOffset( name );
 
         switch ( 0xF000 & name ) {
         case 0x3000:
@@ -132,29 +143,43 @@ bool Cursor::SetThemes( int name, bool force )
             Hide();
         theme = name;
 
-        switch ( 0xF000 & name ) {
-        case 0x3000:
-            Set( AGG::GetICN( ICN::SPELCO, 0xFF & name ), true );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::SPELCO ) << ", " << ( name & 0xFF ) );
-            break;
+        std::map<int, Sprite>::iterator iter = cacheSprites.find( name );
 
-        case 0x2000:
-            Set( AGG::GetICN( ICN::CMSECO, 0xFF & name ), true );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::CMSECO ) << ", " << ( name & 0xFF ) );
-            break;
+        if ( iter == cacheSprites.end() ) {
+            switch ( 0xF000 & name ) {
+            case 0x3000: {
+                const Sprite sprite = AGG::GetICN( ICN::SPELCO, 0xFF & name );
+                iter = cacheSprites.insert( std::make_pair( name, sprite ) ).first;
+                Set( sprite, true );
+                DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::SPELCO ) << ", " << ( name & 0xFF ) );
+            } break;
 
-        case 0x1000:
-            Set( AGG::GetICN( ICN::ADVMCO, 0xFF & name ), true );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::ADVMCO ) << ", " << ( name & 0xFF ) );
-            break;
+            case 0x2000: {
+                const Sprite sprite = AGG::GetICN( ICN::CMSECO, 0xFF & name );
+                iter = cacheSprites.insert( std::make_pair( name, sprite ) ).first;
+                Set( sprite, true );
+                DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::CMSECO ) << ", " << ( name & 0xFF ) );
+            } break;
 
-        default:
-            // default Cursor::POINTER
-            Set( AGG::GetICN( ICN::ADVMCO, 0 ), true );
-            break;
+            case 0x1000: {
+                const Sprite sprite = AGG::GetICN( ICN::ADVMCO, 0xFF & name );
+                iter = cacheSprites.insert( std::make_pair( name, sprite ) ).first;
+                Set( sprite, true );
+                DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::ADVMCO ) << ", " << ( name & 0xFF ) );
+            } break;
+
+            default:
+                // default Cursor::POINTER
+                const Sprite sprite = AGG::GetICN( ICN::ADVMCO, 0 );
+                iter = cacheSprites.insert( std::make_pair( name, sprite ) ).first;
+                Set( sprite, true );
+                break;
+            }
         }
 
-        // SetOffset( name );
+        Set( iter->second, true );
+
+        SetOffset( name );
 
         return true;
     }
@@ -180,6 +205,7 @@ void Cursor::Move( s32 x, s32 y )
     if ( isVisible() )
         SpriteMove::Move( x + offset_x, y + offset_y );
 }
+#endif
 
 /* set offset big cursor */
 void Cursor::SetOffset( int name )
@@ -326,7 +352,6 @@ void Cursor::SetOffset( int name )
         break;
     }
 }
-#endif
 
 #ifdef USE_SDL_CURSOR
 void Cursor::Show( void ) {}

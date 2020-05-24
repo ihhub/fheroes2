@@ -23,6 +23,7 @@
 #define H2CURSOR_H
 
 #include "gamedefs.h"
+#include "sprite.h"
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #define USE_SDL_CURSOR
@@ -154,19 +155,19 @@ public:
 private:
     Cursor();
     ~Cursor();
+    void SetOffset( int );
 
     int theme;
+    s32 offset_x;
+    s32 offset_y;
 
 #ifdef USE_SDL_CURSOR
     void SetCursor( int icn, int name );
-
+    mutable std::map<int, SDL_Surface *> cacheSurfaces;
     SDL_Cursor * cursor;
 #else
     void Move( s32, s32 );
-    void SetOffset( int );
-
-    s32 offset_x;
-    s32 offset_y;
+    mutable std::map<int, const Sprite> cacheSprites;
 #endif
 };
 
