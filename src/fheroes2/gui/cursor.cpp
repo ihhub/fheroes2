@@ -33,11 +33,11 @@ Cursor::Cursor()
     , offset_x( 0 )
     , offset_y( 0 )
 {
-    #ifdef USE_SDL_CURSOR
+#ifdef USE_SDL_CURSOR
     cacheSurfaces.clear();
-    #else
+#else
     cacheSprites.clear();
-    #endif
+#endif
 }
 
 /* destructor */
