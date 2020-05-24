@@ -143,28 +143,25 @@ bool Cursor::SetThemes( int name, bool force )
             Hide();
         theme = name;
 
-        std::map<int, Sprite>::iterator iter = cacheSprites.find( name );
+        std::map<int, const Sprite>::iterator iter = cacheSprites.find( name );
 
         if ( iter == cacheSprites.end() ) {
             switch ( 0xF000 & name ) {
             case 0x3000: {
                 const Sprite sprite = AGG::GetICN( ICN::SPELCO, 0xFF & name );
                 iter = cacheSprites.insert( std::make_pair( name, sprite ) ).first;
-                Set( sprite, true );
                 DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::SPELCO ) << ", " << ( name & 0xFF ) );
             } break;
 
             case 0x2000: {
                 const Sprite sprite = AGG::GetICN( ICN::CMSECO, 0xFF & name );
                 iter = cacheSprites.insert( std::make_pair( name, sprite ) ).first;
-                Set( sprite, true );
                 DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::CMSECO ) << ", " << ( name & 0xFF ) );
             } break;
 
             case 0x1000: {
                 const Sprite sprite = AGG::GetICN( ICN::ADVMCO, 0xFF & name );
                 iter = cacheSprites.insert( std::make_pair( name, sprite ) ).first;
-                Set( sprite, true );
                 DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::ADVMCO ) << ", " << ( name & 0xFF ) );
             } break;
 
@@ -172,7 +169,6 @@ bool Cursor::SetThemes( int name, bool force )
                 // default Cursor::POINTER
                 const Sprite sprite = AGG::GetICN( ICN::ADVMCO, 0 );
                 iter = cacheSprites.insert( std::make_pair( name, sprite ) ).first;
-                Set( sprite, true );
                 break;
             }
         }
