@@ -24,7 +24,6 @@
 #include "agg.h"
 #include "settings.h"
 
-/* constructor */
 Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
@@ -134,7 +133,8 @@ Cursor & Cursor::Get( void )
     return _cursor;
 }
 
-Sprite Cursor::LoadSprite( int id ) {
+Sprite Cursor::LoadSprite( int id )
+{
     Sprite result;
 
     switch ( 0xF000 & id ) {
@@ -268,15 +268,13 @@ void Cursor::SetOffset( int name )
     }
 }
 
-#ifdef USE_SDL_CURSOR
-void Cursor::Show( void ) {}
-#else
 void Cursor::Show( void )
 {
+#ifndef USE_SDL_CURSOR // not defined
     if ( !Settings::Get().ExtPocketHideCursor() )
         SpriteMove::Show();
-}
 #endif
+}
 
 #ifdef USE_SDL_CURSOR
 void Cursor::Hide( void ) {}
