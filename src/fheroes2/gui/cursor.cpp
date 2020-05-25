@@ -122,7 +122,7 @@ Cursor::Cursor()
 Cursor::~Cursor()
 {
 #ifdef USE_SDL_CURSOR
-    for( std::map<int, SDL_Cursor *>::iterator iter = cacheCursors.begin(); iter != cacheCursors.end(); ++iter )
+    for ( std::map<int, SDL_Cursor *>::iterator iter = cacheCursors.begin(); iter != cacheCursors.end(); ++iter )
         SDL_FreeCursor( iter->second );
 #endif
 }
