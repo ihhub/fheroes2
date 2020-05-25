@@ -330,7 +330,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
         // right info
         if ( !readonly && le.MousePressRight( portPos ) )
-            Dialog::QuickInfo( *this );
+            Dialog::QuickInfo( *this, *this );
         else if ( le.MousePressRight( rectSpreadArmyFormat ) )
             Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
         else if ( le.MousePressRight( rectGroupedArmyFormat ) )
