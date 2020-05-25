@@ -1112,8 +1112,9 @@ Surface Surface::RenderSepia( void ) const
 Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
 {
     Surface res = GetSurface();
-    u32 fc = MapRGB( col1 );
-    u32 tc = res.MapRGB( col2 );
+
+    uint32_t fc = MapRGB( col1 );
+    uint32_t tc = res.MapRGB( col2 );
 
     if ( amask() )
         fc |= amask();
@@ -1121,10 +1122,30 @@ Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
     if ( res.amask() )
         tc |= res.amask();
 
-    if ( fc != tc ) {
-        res.Lock();
-        const int height = h();
-        const int width = w();
+    if ( fc == tc ) // nothing we need to change
+        return res;
+
+    res.Lock();
+
+    const int height = h();
+    const int width = w();
+    const int imageDepth = depth();
+
+    if ( imageDepth == 32 ) { // RGBA image
+        const uint16_t pitch = res.surface->pitch >> 2;
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+                if ( *x == fc )
+                    *x = tc;
+            }
+        }
+    }
+    else {
         for ( int y = 0; y < height; ++y ) {
             for ( int x = 0; x < width; ++x ) {
                 if ( fc == GetPixel( x, y ) ) {
@@ -1132,8 +1153,9 @@ Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
                 }
             }
         }
-        res.Unlock();
     }
+
+    res.Unlock();
 
     return res;
 }
