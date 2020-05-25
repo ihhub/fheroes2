@@ -2418,13 +2418,11 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
     const bool reverse = startPos.x > endPos.x;
     const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
 
-    // Mage is channeling the bolt
-    if ( isMage ) {
+    // Mage is channeling the bolt; doesn't have missile sprite
+    if ( isMage )
         DELAY( Game::ApplyBattleSpeed( 115 ) );
-    }
-    else {
+    else
         missile = AGG::GetICN( Monster::GetMissileICN( monsterID ), Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ), reverse );
-    }
 
     // Lich/Power lich has projectile speed of 25
     const Points points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.w(), 25 ) );

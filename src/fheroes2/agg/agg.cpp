@@ -166,7 +166,7 @@ namespace AGG
     bool LoadAltICN( int icn, u32, bool );
     bool LoadOrgICN( Sprite &, int icn, u32, bool );
     bool LoadOrgICN( int icn, u32, bool );
-    void LoadICN( int icn, u32, bool reflect = false );
+    bool LoadICN( int icn, u32, bool reflect = false );
     void SaveICN( int icn );
 
     bool LoadAltTIL( int til, u32 max );
@@ -1162,7 +1162,7 @@ bool AGG::LoadOrgICN( int icn, u32 index, bool reflect )
 }
 
 /* load ICN object */
-void AGG::LoadICN( int icn, u32 index, bool reflect )
+bool AGG::LoadICN( int icn, u32 index, bool reflect )
 {
     icn_cache_t & v = icn_cache[icn];
 
@@ -1176,8 +1176,10 @@ void AGG::LoadICN( int icn, u32 index, bool reflect )
             // load modify sprite
             if ( !LoadExtICN( icn, index, reflect ) ) {
                 // load origin sprite
-                if ( !LoadOrgICN( icn, index, reflect ) )
-                    Error::Except( __FUNCTION__, "load icn" );
+                if ( !LoadOrgICN( icn, index, reflect ) ) {
+                    ERROR( "ICN load error: asking for file " << icn << ", sprite index " << index );
+                    return false;
+                }
             }
 #ifdef DEBUG
             if ( Settings::Get().UseAltResource() )
@@ -1191,6 +1193,7 @@ void AGG::LoadICN( int icn, u32 index, bool reflect )
             sp = Sprite::ScaleQVGASprite( sp );
         }
     }
+    return true;
 }
 
 /* return ICN sprite */
@@ -1212,7 +1215,9 @@ Sprite AGG::GetICN( int icn, u32 index, bool reflect )
         // need load?
         if ( 0 == v.count || ( ( reflect && ( !v.reflect || !v.reflect[index].isValid() ) ) || ( !v.sprites || !v.sprites[index].isValid() ) ) ) {
             CheckMemoryLimit();
-            LoadICN( icn, index, reflect );
+            if ( !LoadICN( icn, index, reflect ) ) {
+                return result;
+            }
         }
 
         if ( !reflect && IsICNScalable( icn ) )
