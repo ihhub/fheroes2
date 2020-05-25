@@ -82,8 +82,15 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
             if ( interface )
                 interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), NULL, name, targets );
 
-            // magic attack not depends from hero
-            TargetsApplySpell( NULL, spell, targets );
+            if ( attacker == Monster::ARCHMAGE ) {
+                if ( defender.Modes( IS_GOOD_MAGIC ) )
+                    defender.ResetModes( IS_GOOD_MAGIC );
+            }
+            else {
+                // magic attack not depends from hero
+                TargetsApplySpell( NULL, spell, targets );
+            }
+
             if ( interface )
                 interface->RedrawActionSpellCastPart2( spell, targets );
             if ( interface )
