@@ -929,17 +929,6 @@ void Battle::Unit::SetResponse( void )
 
 void Battle::Unit::PostAttackAction( Unit & enemy )
 {
-    switch ( GetID() ) {
-    case Monster::ARCHMAGE:
-        // 20% clean magic state
-        if ( enemy.isValid() && enemy.Modes( IS_GOOD_MAGIC ) && 3 > Rand::Get( 1, 10 ) )
-            enemy.ResetModes( IS_GOOD_MAGIC );
-        break;
-
-    default:
-        break;
-    }
-
     // decrease shots
     if ( isArchers() ) {
         // check ammo cart artifact
@@ -1644,12 +1633,11 @@ int Battle::Unit::GetSpellMagic( bool force ) const
             return Spell::CURSE;
         break;
 
-        /* skip: see Unit::PostAttackAction
     case Monster::ARCHMAGE:
-            // 20% dispel
-            if(!force && 3 > Rand::Get(1, 10)) return Spell::DISPEL;
-            break;
-    */
+        // 20% dispel
+        if ( force || 3 > Rand::Get( 1, 10 ) )
+            return Spell::DISPEL;
+        break;
 
     case Monster::MEDUSA:
         // 20% stone
