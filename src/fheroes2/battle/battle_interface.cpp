@@ -3335,7 +3335,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
     cursor.SetThemes( Cursor::WAR_NONE );
     cursor.Hide();
@@ -3393,7 +3393,7 @@ void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
     cursor.SetThemes( Cursor::WAR_NONE );
     cursor.Hide();
@@ -3429,7 +3429,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
     const Rect & rt1 = target.GetRectPosition();
     const Rect & rt2 = pos.GetRect();
 
@@ -3483,7 +3483,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
     Sprite sprite2( Surface( sprite1.GetSize(), false ), sprite1.x(), sprite1.y() );
     sprite1.Blit( sprite2 );
@@ -3611,7 +3611,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
     Sprite sprite2( target.GetContour( target.isReflect() ? CONTOUR_REFLECT | CONTOUR_BLACK : CONTOUR_BLACK ), sprite1.x(), sprite1.y() );
 
     const int icn = ICN::DISRRAY;
