@@ -282,6 +282,23 @@ bool ActionSpellIdentifyHero( Heroes & hero )
 
 bool ActionSpellSummonBoat( Heroes & hero )
 {
+    const s32 center = hero.GetIndex();
+
+    // find water
+    s32 dst_water = -1;
+    const MapsIndexes & v = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
+    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
+        if ( world.GetTiles( *it ).isWater() ) {
+            dst_water = *it;
+            break;
+        }
+    }
+
+    if ( !Maps::isValidAbsIndex( dst_water ) ) {
+        Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
+        return false;
+    }
+
     u32 chance = 0;
 
     switch ( hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
@@ -299,36 +316,20 @@ bool ActionSpellSummonBoat( Heroes & hero )
         break;
     }
 
-    const s32 center = hero.GetIndex();
-
-    // find water
-    s32 dst_water = -1;
-    const MapsIndexes & v = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-        if ( world.GetTiles( *it ).isWater() ) {
-            dst_water = *it;
+    const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
+    for ( size_t i = 0; i < boats.size(); ++i ) {
+        const s32 boat = boats[i];
+        if ( Maps::isValidAbsIndex( boat ) ) {
+            if ( Rand::Get( 1, 100 ) <= chance ) {
+                world.GetTiles( boat ).SetObject( MP2::OBJ_ZERO );
+                world.GetTiles( dst_water ).SetObject( MP2::OBJ_BOAT );
+                return true;
+            }
             break;
         }
     }
 
-    const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-
-    if ( boats.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN,
-               "free boat: "
-                   << "not found" );
-    }
-    else {
-        const s32 & src = boats.front();
-
-        if ( Rand::Get( 1, 100 ) <= chance && Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst_water ) ) {
-            world.GetTiles( src ).SetObject( MP2::OBJ_ZERO );
-            world.GetTiles( dst_water ).SetObject( MP2::OBJ_BOAT );
-        }
-        else
-            DialogSpellFailed( Spell::SUMMONBOAT );
-    }
-
+    DialogSpellFailed( Spell::SUMMONBOAT );
     return true;
 }
 
