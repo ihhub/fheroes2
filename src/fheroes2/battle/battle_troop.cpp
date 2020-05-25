@@ -1904,7 +1904,8 @@ int Battle::Unit::ICNMiss( void ) const
     case Monster::GREATER_DRUID:
         return ICN::DRUIDMSL;
     case Monster::CENTAUR:
-        return ICN::ARCH_MSL;
+        // Doesn't have own missile file, game falls back to ELF__MSL
+        return ICN::ELF__MSL;
     case Monster::HALFLING:
         return ICN::HALFLMSL;
     case Monster::MAGE:
@@ -1936,131 +1937,9 @@ Point Battle::Unit::GetBackPoint( void ) const
     return reflect ? Point( rt.x + rt.w, rt.y + rt.h / 2 ) : Point( rt.x, rt.y + rt.h / 2 );
 }
 
-int Battle::Unit::GetStartMissileOffset( int state ) const
+Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
 {
-    switch ( GetID() ) {
-    case Monster::ARCHER:
-    case Monster::RANGER:
-        switch ( state ) {
-        case Monster_Info::RANG_TOP:
-            return -15;
-        case Monster_Info::RANG_FRONT:
-            return -3;
-        case Monster_Info::RANG_BOT:
-            return 10;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::ORC:
-    case Monster::ORC_CHIEF:
-        return 5;
-
-    case Monster::TROLL:
-    case Monster::WAR_TROLL:
-        return -20;
-
-    case Monster::LICH:
-    case Monster::POWER_LICH:
-        switch ( state ) {
-        case Monster_Info::RANG_TOP:
-            return -30;
-        case Monster_Info::RANG_FRONT:
-            return -20;
-        case Monster_Info::RANG_BOT:
-            return 0;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::ELF:
-    case Monster::GRAND_ELF:
-        switch ( state ) {
-        case Monster_Info::RANG_TOP:
-            return -5;
-        case Monster_Info::RANG_FRONT:
-            return 0;
-        case Monster_Info::RANG_BOT:
-            return 5;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::CENTAUR:
-        switch ( state ) {
-        case Monster_Info::RANG_TOP:
-            return -20;
-        case Monster_Info::RANG_FRONT:
-            return -10;
-        case Monster_Info::RANG_BOT:
-            return 5;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::DRUID:
-    case Monster::GREATER_DRUID:
-        switch ( state ) {
-        case Monster_Info::RANG_TOP:
-            return -20;
-        case Monster_Info::RANG_FRONT:
-            return -5;
-        case Monster_Info::RANG_BOT:
-            return 15;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::HALFLING:
-        switch ( state ) {
-        case Monster_Info::RANG_TOP:
-            return -20;
-        case Monster_Info::RANG_FRONT:
-            return 10;
-        case Monster_Info::RANG_BOT:
-            return 20;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::MAGE:
-    case Monster::ARCHMAGE:
-        switch ( state ) {
-        case Monster_Info::RANG_TOP:
-            return -40;
-        case Monster_Info::RANG_FRONT:
-            return -10;
-        case Monster_Info::RANG_BOT:
-            return 25;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::TITAN:
-        switch ( state ) {
-        case Monster_Info::RANG_TOP:
-            return -80;
-        case Monster_Info::RANG_FRONT:
-            return -20;
-        case Monster_Info::RANG_BOT:
-            return 15;
-        default:
-            break;
-        }
-        break;
-
-    default:
-        break;
-    }
-
-    return 0;
+    return animation.getProjectileOffset( direction );
 }
 
 int Battle::Unit::GetArmyColor( void ) const

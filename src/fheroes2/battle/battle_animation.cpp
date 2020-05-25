@@ -175,7 +175,7 @@ AnimationReference::AnimationReference()
 AnimationReference::AnimationReference( int monsterID )
     : _monsterID( monsterID )
 {
-    if ( monsterID < Monster::PEASANT && monsterID > Monster::WATER_ELEMENT )
+    if ( monsterID < Monster::PEASANT || monsterID > Monster::WATER_ELEMENT )
         return;
 
     _monsterInfo = Bin_Info::GetMonsterInfo( monsterID );
@@ -444,6 +444,32 @@ uint32_t AnimationReference::getMoveSpeed() const
 uint32_t AnimationReference::getFlightSpeed() const
 {
     return _monsterInfo.flightSpeed;
+}
+
+uint32_t AnimationReference::getShootingSpeed() const
+{
+    return _monsterInfo.shootSpeed;
+}
+
+size_t AnimationReference::getProjectileID( float angle ) const
+{
+    const std::vector<float> & angles = _monsterInfo.projectileAngles;
+    if ( angles.empty() )
+        return 0;
+
+    for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
+        if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
+            return id;
+    }
+    return 0;
+}
+
+Point AnimationReference::getProjectileOffset( size_t direction ) const
+{
+    if ( _monsterInfo.projectileOffset.size() > direction ) {
+        return _monsterInfo.projectileOffset[direction];
+    }
+    return Point();
 }
 
 uint32_t AnimationReference::getIdleDelay() const

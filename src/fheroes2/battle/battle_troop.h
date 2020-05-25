@@ -154,7 +154,7 @@ namespace Battle
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
 
-        int GetStartMissileOffset( int ) const;
+        Point GetStartMissileOffset( size_t ) const;
 
         int M82Attk( void ) const;
         int M82Kill( void ) const;
