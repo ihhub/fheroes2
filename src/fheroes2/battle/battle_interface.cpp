@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <math.h>
 
 #include "agg.h"
 #include "battle_arena.h"
@@ -2409,13 +2408,53 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID )
 {
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
+    Sprite missile;
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    const bool reverse = startPos.x > endPos.x;
+    const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
+
+    // Mage is channeling the bolt; doesn't have missile sprite
+    if ( isMage )
+        DELAY( Game::ApplyBattleSpeed( 115 ) );
+    else
+        missile = AGG::GetICN( Monster::GetMissileICN( monsterID ), Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ), reverse );
+
+    // Lich/Power lich has projectile speed of 25
+    const Points points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.w(), 25 ) );
+    Points::const_iterator pnt = points.begin();
+
+    // convert the following code into a function/event service
+    while ( le.HandleEvents( false ) && pnt != points.end() ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            cursor.Hide();
+            Redraw();
+            if ( isMage ) {
+                display.DrawLine( Point( startPos.x, startPos.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
+                display.DrawLine( Point( startPos.x, startPos.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                display.DrawLine( Point( startPos.x, startPos.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
+                display.DrawLine( Point( startPos.x, startPos.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                display.DrawLine( Point( startPos.x, startPos.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
+            }
+            else {
+                missile.Blit( reverse ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
+            }
+            cursor.Show();
+            display.Flip();
+            ++pnt;
+        }
+    }
+}
+
+void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+{
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = NULL;
     _movingUnit = &attacker;
@@ -2438,26 +2477,18 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     if ( archer ) {
         const Sprite & attackerSprite = AGG::GetICN( attacker.GetMonsterSprite().icn_file, attacker.GetFrame(), attacker.isReflect() );
         const Point attackerPos = GetTroopPosition( attacker, attackerSprite );
-        const Sprite & defenderSprite = AGG::GetICN( defender.GetMonsterSprite().icn_file, defender.GetFrame(), defender.isReflect() );
-        const Point defenderPos = GetTroopPosition( defender, defenderSprite );
 
         // For shooter position we need bottom center position of rear tile
         // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
         const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.w * 3 / 4 : CELLW / 2;
         const Point shooterPos( pos1.x + rearCenterX, attackerPos.y - attackerSprite.y() );
-        const Point targetPos = Point( pos2.x + pos2.w / 2, defenderPos.y - defenderSprite.y() / 2 );
 
         // Use the front one to calculate the angle, then overwrite
         Point offset = attacker.GetStartMissileOffset( Monster_Info::FRONT );
 
-        const int dx = targetPos.x - shooterPos.x - offset.x;
-        const int dy = targetPos.y - shooterPos.y - offset.y;
-        const bool reverse = dx < 0;
-        double angle = atan2( -dy, dx ) * 180.0 / M_PI;
-        // we only care about two quadrants, normalize
-        if ( reverse ) {
-            angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
-        }
+        const Point targetPos = defender.GetCenterPoint();
+
+        const double angle = GetAngle( Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
 
         // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
         const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
@@ -2470,37 +2501,10 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             AnimateUnitWithDelay( attacker, Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) );
         }
 
-        // draw missile animation
-        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), reverse );
-
         const Point missileStart = Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
 
-        // Lich/Power lich has projectile speed of 25
-        const Points points = GetEuclideanLine( missileStart, targetPos, std::max( missile.w(), 25 ) );
-        Points::const_iterator pnt = points.begin();
-
-        // convert the following code into a function/event service
-        while ( le.HandleEvents( false ) && pnt != points.end() ) {
-            CheckGlobalEvents( le );
-
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
-                if ( attacker.GetID() == Monster::MAGE || attacker.GetID() == Monster::ARCHMAGE ) {
-                    display.DrawLine( Point( missileStart.x, missileStart.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
-                    display.DrawLine( Point( missileStart.x, missileStart.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
-                    display.DrawLine( Point( missileStart.x, missileStart.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
-                    display.DrawLine( Point( missileStart.x, missileStart.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
-                    display.DrawLine( Point( missileStart.x, missileStart.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
-                }
-                else {
-                    missile.Blit( attacker.isReflect() ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
-                }
-                cursor.Show();
-                display.Flip();
-                ++pnt;
-            }
-        }
+        // draw missile animation
+        RedrawMissileAnimation( missileStart, targetPos, angle, attacker.GetID() );
     }
     else {
         int attackAnim = isDoubleCell ? Monster_Info::RANG_FRONT : Monster_Info::MELEE_FRONT;
@@ -2601,7 +2605,6 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     if ( opponent2 )
         opponent2->ResetAnimFrame( OP_IDLE );
     _movingUnit = NULL;
-    attacker.SwitchAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
@@ -3145,37 +3148,17 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 
 void Battle::Interface::RedrawActionTowerPart1( Tower & tower, Unit & defender )
 {
-    Display & display = Display::Get();
-    LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
     _currentUnit = NULL;
 
-    const Point pos1 = tower.GetPortPosition() + border.GetArea();
-    const Rect & pos2 = defender.GetRectPosition();
+    const Point missileStart = tower.GetPortPosition() + border.GetArea();
+    const Point targetPos = defender.GetCenterPoint();
+    const double angle = GetAngle( missileStart, targetPos );
 
     AGG::PlaySound( M82::KEEPSHOT );
 
-    // draw missile animation
-    const Sprite & missile = AGG::GetICN( ICN::KEEP, ICN::GetMissIndex( ICN::KEEP, pos1.x - pos2.x, pos1.y - pos2.y ), pos1.x > pos2.x );
-
-    const Points points = GetLinePoints( pos1, Point( pos2.x + pos2.w, pos2.y ), missile.w() );
-    Points::const_iterator pnt = points.begin();
-
-    while ( le.HandleEvents( false ) && pnt != points.end() ) {
-        CheckGlobalEvents( le );
-
-        // fast draw
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
-            missile.Blit( ( *pnt ).x - missile.w(), ( *pnt ).y );
-            cursor.Show();
-            display.Flip();
-            ++pnt;
-        }
-    }
+    // Keep missile == Orc missile
+    RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ORC );
 }
 
 void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & target )
@@ -3304,51 +3287,30 @@ void Battle::Interface::RedrawActionCatapult( int target )
 
 void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
 {
-    Display & display = Display::Get();
-    LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
     const HeroBase * current_commander = arena.GetCurrentCommander();
 
     if ( current_commander ) {
-        Point pt_from, pt_to;
+        Point missileStart;
         const bool from_left = current_commander == opponent1->GetHero();
 
         // is left position
         if ( from_left ) {
             const Rect & pos1 = opponent1->GetArea();
-            pt_from = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-
-            const Rect & pos2 = target.GetRectPosition();
-            pt_to = Point( pos2.x, pos2.y );
+            missileStart = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
         }
         else {
             const Rect & pos = opponent2->GetArea();
-            pt_from = Point( pos.x, pos.y + pos.h / 2 );
-
-            const Rect & pos2 = target.GetRectPosition();
-            pt_to = Point( pos2.x + pos2.w, pos2.y );
+            missileStart = Point( pos.x, pos.y + pos.h / 2 );
         }
 
-        const Sprite & missile = AGG::GetICN( ICN::ARCH_MSL, ICN::GetMissIndex( ICN::ARCH_MSL, pt_from.x - pt_to.x, pt_from.y - pt_to.y ), pt_from.x > pt_to.x );
+        const Point targetPos = target.GetCenterPoint();
+        const double angle = GetAngle( missileStart, targetPos );
 
-        const Points points = GetLinePoints( pt_from, pt_to, missile.w() );
-        Points::const_iterator pnt = points.begin();
-
-        cursor.SetThemes( Cursor::WAR_NONE );
+        Cursor::Get().SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::MAGCAROW );
 
-        while ( le.HandleEvents( false ) && pnt != points.end() ) {
-            CheckGlobalEvents( le );
-
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
-                missile.Blit( ( *pnt ).x - ( from_left ? 0 : missile.w() ), ( *pnt ).y );
-                cursor.Show();
-                display.Flip();
-                ++pnt;
-            }
-        }
+        // Magic arrow == Archer missile
+        RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ARCHER );
     }
 }
 
