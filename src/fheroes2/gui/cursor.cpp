@@ -29,100 +29,100 @@ Cursor::Cursor()
     , offset_x( 0 )
     , offset_y( 0 )
 {
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::MOVE,  std::pair<s32, s32>( -12, -8 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::MOVE, std::pair<s32, s32>( -12, -8 ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::MOVE2, std::pair<s32, s32>( cursorOffsetTable[Cursor::MOVE].first, cursorOffsetTable[Cursor::MOVE].second ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::MOVE3, std::pair<s32, s32>( cursorOffsetTable[Cursor::MOVE].first, cursorOffsetTable[Cursor::MOVE].second ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::MOVE4, std::pair<s32, s32>( cursorOffsetTable[Cursor::MOVE].first, cursorOffsetTable[Cursor::MOVE].second ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::ACTION,  std::pair<s32, s32>( -14, -10 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::ACTION, std::pair<s32, s32>( -14, -10 ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::ACTION2, std::pair<s32, s32>( cursorOffsetTable[Cursor::ACTION].first, cursorOffsetTable[Cursor::ACTION].second ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::ACTION3, std::pair<s32, s32>( cursorOffsetTable[Cursor::ACTION].first, cursorOffsetTable[Cursor::ACTION].second ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::ACTION4, std::pair<s32, s32>( cursorOffsetTable[Cursor::ACTION].first, cursorOffsetTable[Cursor::ACTION].second ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::BOAT,     std::pair<s32, s32>( -12, -12 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::BOAT2,    std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::BOAT3,    std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::BOAT4,    std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::REDBOAT,  std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::BOAT, std::pair<s32, s32>( -12, -12 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::BOAT2, std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::BOAT3, std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::BOAT4, std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::REDBOAT, std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::REDBOAT2, std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::REDBOAT3, std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::REDBOAT4, std::pair<s32, s32>( cursorOffsetTable[Cursor::BOAT].first, cursorOffsetTable[Cursor::BOAT].second ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::CASTLE,  std::pair<s32, s32>( -6, -4 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::CASTLE, std::pair<s32, s32>( -6, -4 ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_TOPRIGHT,    std::pair<s32, s32>( -15, 0 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_RIGHT,       std::pair<s32, s32>( cursorOffsetTable[Cursor::SCROLL_TOPRIGHT].first, cursorOffsetTable[Cursor::SCROLL_TOPRIGHT].first ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_TOPRIGHT, std::pair<s32, s32>( -15, 0 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_RIGHT, std::pair<s32, s32>( cursorOffsetTable[Cursor::SCROLL_TOPRIGHT].first, cursorOffsetTable[Cursor::SCROLL_TOPRIGHT].first ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_BOTTOM,      std::pair<s32, s32>( 0, -15 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_BOTTOMLEFT,  std::pair<s32, s32>( cursorOffsetTable[Cursor::SCROLL_BOTTOM].first, cursorOffsetTable[Cursor::SCROLL_BOTTOM].first ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_BOTTOM, std::pair<s32, s32>( 0, -15 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_BOTTOMLEFT, std::pair<s32, s32>( cursorOffsetTable[Cursor::SCROLL_BOTTOM].first, cursorOffsetTable[Cursor::SCROLL_BOTTOM].first ) ) );
 
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SCROLL_BOTTOMRIGHT, std::pair<s32, s32>( -20, -20 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_BOTTOMRIGHT,  std::pair<s32, s32>( cursorOffsetTable[Cursor::SCROLL_BOTTOMRIGHT].first, cursorOffsetTable[Cursor::SCROLL_BOTTOMRIGHT].first ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_BOTTOMRIGHT, std::pair<s32, s32>( cursorOffsetTable[Cursor::SCROLL_BOTTOMRIGHT].first, cursorOffsetTable[Cursor::SCROLL_BOTTOMRIGHT].first ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_BOTTOMLEFT,   std::pair<s32, s32>( -5, -20 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_BOTTOMLEFT, std::pair<s32, s32>( -5, -20 ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_TOPLEFT,      std::pair<s32, s32>( -5, -5 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_TOPLEFT, std::pair<s32, s32>( -5, -5 ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_TOPRIGHT,     std::pair<s32, s32>( -20, -5 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_TOPRIGHT, std::pair<s32, s32>( -20, -5 ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_LEFT,         std::pair<s32, s32>( -5, -7 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_LEFT, std::pair<s32, s32>( -5, -7 ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_RIGHT,        std::pair<s32, s32>( -25, -7 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SWORD_RIGHT, std::pair<s32, s32>( -25, -7 ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_MOVE,           std::pair<s32, s32>( -7, -14 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_FLY,            std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_MOVE].first, cursorOffsetTable[Cursor::WAR_MOVE].first ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_MOVE, std::pair<s32, s32>( -7, -14 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_FLY, std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_MOVE].first, cursorOffsetTable[Cursor::WAR_MOVE].first ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_NONE,           std::pair<s32, s32>( -7, -7 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_HERO,           std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_ARROW,          std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_INFO,           std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_BROKENARROW,    std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_NONE, std::pair<s32, s32>( -7, -7 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_HERO, std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_ARROW, std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_INFO, std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_BROKENARROW, std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
 
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_SLOW,            std::pair<s32, s32>( -14, -16 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_UNKNOWN,         std::pair<s32, s32>( -12, -20 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_CURSE,           std::pair<s32, s32>( -18, -20 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_LIGHTNINGBOLT,   std::pair<s32, s32>( -12, -14 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_CHAINLIGHTNING,  std::pair<s32, s32>( -26, -14 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_CURE,            std::pair<s32, s32>( -12, -19 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_BLESS,           std::pair<s32, s32>( -14, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_FIREBALL,        std::pair<s32, s32>( -22, -14 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_FIREBLAST,       std::pair<s32, s32>( -26, -20 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_TELEPORT,        std::pair<s32, s32>( -16, -21 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ELEMENTALSTORM,  std::pair<s32, s32>( -17, -15 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_RESURRECT,       std::pair<s32, s32>( -16, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_RESURRECTTRUE,   std::pair<s32, s32>( -16, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_HASTE,           std::pair<s32, s32>( -21, -16 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_SHIELD,          std::pair<s32, s32>( -17, -19 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ARMAGEDDON,      std::pair<s32, s32>( -18, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ANTIMAGIC,       std::pair<s32, s32>( -13, -15 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DISPEL,          std::pair<s32, s32>( -14, -13 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_BERSERKER,       std::pair<s32, s32>( -16, -11 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_PARALYZE,        std::pair<s32, s32>( -11, -18 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_BLIND,           std::pair<s32, s32>( -15, -18 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_HOLYWORD,        std::pair<s32, s32>( -10, -16 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_HOLYSHOUT,       std::pair<s32, s32>( -13, -19 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_METEORSHOWER,    std::pair<s32, s32>( -14, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ANIMATEDEAD,     std::pair<s32, s32>( -18, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_MIRRORIMAGE,     std::pair<s32, s32>( -33, -20 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_BLOODLUST,       std::pair<s32, s32>( -19, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DEATHRIPPLE,     std::pair<s32, s32>( -29, -20 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DEATHWAVE,       std::pair<s32, s32>( -27, -19 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_STEELSKIN,       std::pair<s32, s32>( -17, -21 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_STONESKIN,       std::pair<s32, s32>( -15, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DRAGONSLAYER,    std::pair<s32, s32>( -22, -20 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_EARTHQUAKE,      std::pair<s32, s32>( -19, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DISRUPTINGRAY,   std::pair<s32, s32>( -14, -21 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_COLDRING,        std::pair<s32, s32>( -12, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_COLDRAY,         std::pair<s32, s32>( -19, -17 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_HYPNOTIZE,       std::pair<s32, s32>( -23, -18 ) ) );
-    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ARROW,           std::pair<s32, s32>( -25, -6 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_SLOW, std::pair<s32, s32>( -14, -16 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_UNKNOWN, std::pair<s32, s32>( -12, -20 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_CURSE, std::pair<s32, s32>( -18, -20 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_LIGHTNINGBOLT, std::pair<s32, s32>( -12, -14 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_CHAINLIGHTNING, std::pair<s32, s32>( -26, -14 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_CURE, std::pair<s32, s32>( -12, -19 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_BLESS, std::pair<s32, s32>( -14, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_FIREBALL, std::pair<s32, s32>( -22, -14 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_FIREBLAST, std::pair<s32, s32>( -26, -20 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_TELEPORT, std::pair<s32, s32>( -16, -21 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ELEMENTALSTORM, std::pair<s32, s32>( -17, -15 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_RESURRECT, std::pair<s32, s32>( -16, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_RESURRECTTRUE, std::pair<s32, s32>( -16, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_HASTE, std::pair<s32, s32>( -21, -16 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_SHIELD, std::pair<s32, s32>( -17, -19 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ARMAGEDDON, std::pair<s32, s32>( -18, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ANTIMAGIC, std::pair<s32, s32>( -13, -15 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DISPEL, std::pair<s32, s32>( -14, -13 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_BERSERKER, std::pair<s32, s32>( -16, -11 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_PARALYZE, std::pair<s32, s32>( -11, -18 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_BLIND, std::pair<s32, s32>( -15, -18 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_HOLYWORD, std::pair<s32, s32>( -10, -16 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_HOLYSHOUT, std::pair<s32, s32>( -13, -19 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_METEORSHOWER, std::pair<s32, s32>( -14, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ANIMATEDEAD, std::pair<s32, s32>( -18, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_MIRRORIMAGE, std::pair<s32, s32>( -33, -20 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_BLOODLUST, std::pair<s32, s32>( -19, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DEATHRIPPLE, std::pair<s32, s32>( -29, -20 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DEATHWAVE, std::pair<s32, s32>( -27, -19 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_STEELSKIN, std::pair<s32, s32>( -17, -21 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_STONESKIN, std::pair<s32, s32>( -15, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DRAGONSLAYER, std::pair<s32, s32>( -22, -20 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_EARTHQUAKE, std::pair<s32, s32>( -19, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_DISRUPTINGRAY, std::pair<s32, s32>( -14, -21 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_COLDRING, std::pair<s32, s32>( -12, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_COLDRAY, std::pair<s32, s32>( -19, -17 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_HYPNOTIZE, std::pair<s32, s32>( -23, -18 ) ) );
+    cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::SP_ARROW, std::pair<s32, s32>( -25, -6 ) ) );
 }
 
 /* destructor */
 Cursor::~Cursor()
 {
 #ifdef USE_SDL_CURSOR
-    for( std::map<int, SDL_Cursor *>::iterator iter = cacheCursors.begin(); iter != cacheCursors.end(); ++iter)
+    for( std::map<int, SDL_Cursor *>::iterator iter = cacheCursors.begin(); iter != cacheCursors.end(); ++iter )
         SDL_FreeCursor( iter->second );
 #endif
 }
