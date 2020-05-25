@@ -279,7 +279,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         le.MousePressLeft( buttonOk ) && buttonOk.isEnable() ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
         le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
 
-        bool uiAction = listbox.QueueEventProcessing();
+        bool redrawRequired = listbox.QueueEventProcessing();
 
         if ( ( buttonOk.isEnable() && le.MouseClickLeft( buttonOk ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
             if ( filename.size() )
@@ -296,12 +296,12 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             if ( Settings::Get().PocketPC() )
                 PocketPC::KeyboardDialog( filename );
             buttonOk.SetDisable( filename.empty() );
-            uiAction = true;
+            redrawRequired = true;
         }
         else if ( edit_mode && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() ) ) {
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
             buttonOk.SetDisable( filename.empty() );
-            uiAction = true;
+            redrawRequired = true;
         }
         if ( ( le.KeyPress( KEY_DELETE ) || ( pocket && le.MousePressRight() ) ) && listbox.isSelected() ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
@@ -314,10 +314,10 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                     buttonOk.SetDisable( true );
                 listbox.SetListContent( lists );
             }
-            uiAction = true;
+            redrawRequired = true;
         }
 
-        if ( uiAction ) {
+        if ( redrawRequired ) {
             cursor.Hide();
             listbox.Redraw();
 
