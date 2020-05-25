@@ -1635,7 +1635,7 @@ int Battle::Unit::GetSpellMagic( bool force ) const
 
     case Monster::ARCHMAGE:
         // 20% dispel
-        if ( force || 3 > Rand::Get(1, 10) )
+        if ( force || 3 > Rand::Get( 1, 10 ) )
             return Spell::DISPEL;
         break;
 
