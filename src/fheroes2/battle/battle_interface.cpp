@@ -1240,12 +1240,24 @@ void Battle::Interface::RedrawTroopCount( const Unit & b ) const
         sx = rt.x + ( rt.w - bar.w() ) / 2;
     }
     else {
-        sy = rt.y + rt.h - bar.h() - 5;
+        const bool isReflected = b.isReflect();
+        const bool isWide = b.isWide();
+        sy = rt.y + rt.h - bar.h() - ( isReflected ? 21 : 9 );
 
-        if ( b.isReflect() )
-            sx = rt.x + 3;
-        else
-            sx = rt.x + rt.w - bar.w() - 3;
+        if ( isReflected ) {
+            if ( isWide )
+                sx = rt.x;
+            else
+                sx = rt.x - bar.w() + 3;
+        }
+        else {
+            if ( isWide ) {
+                sx = rt.x + rt.w - bar.w();
+            }
+            else {
+                sx = rt.x + rt.w - 3;
+            }
+        }
     }
 
     bar.Blit( sx, sy );
