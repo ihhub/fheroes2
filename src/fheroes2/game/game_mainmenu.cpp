@@ -66,7 +66,7 @@ int Game::MainMenu( void )
     // animation
     u32 lantern_frame = 0;
     std::vector<Sprite> animSprites;
-    for ( uint32_t fIter = 0; fIter < 40; fIter++ ) {
+    for ( uint32_t fIter = 0; fIter < 40; ++fIter ) {
         animSprites.push_back( AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, fIter ) ) );
     }
 
