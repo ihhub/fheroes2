@@ -2454,8 +2454,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
 
 void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
 {
-    Cursor & cursor = Cursor::Get();
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = NULL;
     _movingUnit = &attacker;
