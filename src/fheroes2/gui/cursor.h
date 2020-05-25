@@ -138,7 +138,7 @@ public:
 
     static Cursor & Get( void );
 
-#ifdef USE_SDL_CURSOR
+#if defined( USE_SDL_CURSOR )
     void Hide( void );
     bool isVisible( void ) const;
 #else
@@ -162,7 +162,7 @@ private:
     s32 offset_x;
     s32 offset_y;
 
-#ifdef USE_SDL_CURSOR
+#if defined( USE_SDL_CURSOR )
     mutable std::map<int, SDL_Cursor *> cacheCursors;
 #else
     void Move( s32, s32 );
