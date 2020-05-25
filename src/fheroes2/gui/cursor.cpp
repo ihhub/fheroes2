@@ -155,7 +155,8 @@ Cursor & Cursor::Get( void )
     return _cursor;
 }
 
-Sprite Cursor::LoadSprite( int id ) {
+Sprite Cursor::LoadSprite( int id )
+{
     Sprite result;
 
     switch ( 0xF000 & id ) {
