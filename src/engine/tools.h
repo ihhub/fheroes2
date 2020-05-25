@@ -68,7 +68,7 @@ bool PressIntKey( u32 max, u32 & result );
 bool SaveMemToFile( const std::vector<u8> &, const std::string & );
 std::vector<u8> LoadFileToMem( const std::string & );
 
-double GetShootingAngle( const Point & start, const Point & target );
+double GetAngle( const Point & start, const Point & target );
 Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step );
 Points GetLinePoints( const Point & pt1, const Point & pt2, u16 step );
 Points GetArcPoints( const Point & from, const Point & to, const Point & max, u16 step );

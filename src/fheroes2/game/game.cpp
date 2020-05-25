@@ -428,9 +428,6 @@ void Game::LoadExternalResource( const Settings & conf )
     if ( System::IsFile( spec ) )
         Game::UpdateGlobalDefines( spec );
 
-    // animations.xml
-    // spec = Settings::GetLastFile( prefix_stats, "animations.xml" );
-
     // battle.xml
     spec = Settings::GetLastFile( prefix_stats, "battle.xml" );
 

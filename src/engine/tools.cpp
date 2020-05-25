@@ -865,7 +865,7 @@ std::string EncodeString( const std::string & str, const char * charset )
 }
 #endif
 
-double GetShootingAngle( const Point & start, const Point & target )
+double GetAngle( const Point & start, const Point & target )
 {
     const int dx = target.x - start.x;
     const int dy = target.y - start.y;
