@@ -546,14 +546,19 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( Unit & attacker, Unit & 
     }
     // lich cloud damages
     else if ( ( attacker.GetID() == Monster::LICH || attacker.GetID() == Monster::POWER_LICH ) && !attacker.isHandFighting() ) {
-        const Indexes around = Board::GetAroundIndexes( defender.GetHeadIndex() );
+        if ( defender.GetHeadIndex() == dst || defender.GetTailIndex() == dst ) {
+            const Indexes around = Board::GetAroundIndexes( dst );
 
-        for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            if ( NULL != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender ) {
-                res.defender = enemy;
-                res.damage = attacker.GetDamage( *enemy );
-                targets.push_back( res );
+            for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
+                if ( NULL != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender ) {
+                    res.defender = enemy;
+                    res.damage = attacker.GetDamage( *enemy );
+                    targets.push_back( res );
+                }
             }
+        }
+        else {
+            DEBUG( DBG_BATTLE, DBG_TRACE, "Lich shot at a cell where no mosnter exists: " << dst );
         }
     }
 
