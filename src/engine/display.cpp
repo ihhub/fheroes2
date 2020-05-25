@@ -203,7 +203,7 @@ void Display::ToggleFullScreen( void )
         u32 flags = SDL_GetWindowFlags( window );
 
         // toggle FullScreen
-        if ( flags & SDL_WINDOW_FULLSCREEN || flags & SDL_WINDOW_FULLSCREEN_DESKTOP )
+        if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP )
             flags = 0;
         else
             flags = SDL_WINDOW_FULLSCREEN_DESKTOP;

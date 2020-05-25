@@ -66,7 +66,7 @@ int Game::MainMenu( void )
     // animation
     u32 lantern_frame = 0;
     std::vector<Sprite> animSprites;
-    for ( u32 fIter = 0; fIter < 40; fIter++ ) {
+    for ( uint32_t fIter = 0; fIter < 40; fIter++ ) {
         animSprites.push_back( AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, fIter ) ) );
     }
 
@@ -179,7 +179,7 @@ int Game::MainMenu( void )
             display.Flip();
         }
 
-        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) {
+        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) { // TODO: here we need catch EVENT_SYSTEM_FULLSCREEN after it was processed. How to do that?
             cursor.Hide();
             bgImage.Blit( Point( 0, 0 ) );
             buttonNewGame.Draw();
