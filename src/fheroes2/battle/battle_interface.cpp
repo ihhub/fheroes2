@@ -2427,7 +2427,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
     }
 
     // Lich/Power lich has projectile speed of 25
-    const Points points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.w() , 25 ) );
+    const Points points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.w(), 25 ) );
     Points::const_iterator pnt = points.begin();
 
     // convert the following code into a function/event service
