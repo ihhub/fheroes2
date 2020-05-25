@@ -24,7 +24,6 @@
 #include "agg.h"
 #include "settings.h"
 
-/* constructor */
 Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
@@ -80,7 +79,6 @@ Cursor::Cursor()
     cursorOffsetTable.insert( std::pair<int, std::pair<s32, s32> >( Cursor::WAR_BROKENARROW,    std::pair<s32, s32>( cursorOffsetTable[Cursor::WAR_NONE].first, cursorOffsetTable[Cursor::WAR_NONE].first ) ) );
 
     std::vector<s32> cursorIds;
-    cursorIds.clear();
     cursorIds.push_back( Cursor::SP_SLOW );
     cursorIds.push_back( Cursor::SP_UNKNOWN );
     cursorIds.push_back( Cursor::SP_CURSE );
@@ -291,15 +289,13 @@ void Cursor::SetOffset( int name )
     }
 }
 
-#ifdef USE_SDL_CURSOR
-void Cursor::Show( void ) {}
-#else
 void Cursor::Show( void )
 {
+#ifndef USE_SDL_CURSOR // not defined
     if ( !Settings::Get().ExtPocketHideCursor() )
         SpriteMove::Show();
-}
 #endif
+}
 
 #ifdef USE_SDL_CURSOR
 void Cursor::Hide( void ) {}
