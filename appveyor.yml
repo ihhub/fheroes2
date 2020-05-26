@@ -4,6 +4,7 @@ skip_commits:
   - '**/*.md'
   - .gitignore
   - .github/workflows/*
+  - sonar-project.properties
 
 # version format
 version: 1.0.{build}
