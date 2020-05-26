@@ -1,0 +1,19 @@
+name: Static Analysis
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: clone cppclean
+      run: git clone https://github.com/myint/cppclean;
+    - name: run cppclean
+      run: ./cppclean/cppclean src | grep -v " not found in expected header " | grep -v " not found in any directly \#included header" | grep -v " unable to find ";
