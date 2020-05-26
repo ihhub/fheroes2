@@ -1,5 +1,8 @@
 sudo: required
 
+git:
+  depth: false
+
 language: cpp
 
 # blocklist
