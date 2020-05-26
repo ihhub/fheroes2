@@ -1,4 +1,4 @@
-name: GitHub Actions
+name: Clang-format
 
 on: [pull_request]
 
