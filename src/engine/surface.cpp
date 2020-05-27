@@ -1029,10 +1029,14 @@ Surface Surface::RenderContour( const RGBA & color ) const
     const u32 fake2 = trf.MapRGB( fake );
 
     res.Lock();
-    for ( int y = 0; y < trf.h(); ++y )
-        for ( int x = 0; x < trf.w(); ++x )
+
+    const int width = trf.w();
+    const int height = trf.h();
+
+    for ( int y = 0; y < height; ++y )
+        for ( int x = 0; x < width; ++x )
             if ( fake2 == trf.GetPixel( x, y ) ) {
-                if ( 0 == x || 0 == y || trf.w() - 1 == x || trf.h() - 1 == y )
+                if ( 0 == x || 0 == y || width - 1 == x || height - 1 == y )
                     res.SetPixel( x, y, pixel );
                 else {
                     if ( 0 < x ) {
@@ -1040,7 +1044,7 @@ Surface Surface::RenderContour( const RGBA & color ) const
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x - 1, y, pixel );
                     }
-                    if ( trf.w() - 1 > x ) {
+                    if ( width - 1 > x ) {
                         RGBA col = trf.GetRGB( trf.GetPixel( x + 1, y ) );
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x + 1, y, pixel );
@@ -1051,7 +1055,7 @@ Surface Surface::RenderContour( const RGBA & color ) const
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x, y - 1, pixel );
                     }
-                    if ( trf.h() - 1 > y ) {
+                    if ( height - 1 > y ) {
                         RGBA col = trf.GetRGB( trf.GetPixel( x, y + 1 ) );
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x, y + 1, pixel );
