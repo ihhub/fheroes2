@@ -74,6 +74,13 @@ namespace Battle
         int GetColor( void ) const;
         const HeroBase * GetHero( void ) const;
 
+        enum
+        {
+            HERO_X_OFFSET = 32,
+            LEFT_HERO_Y_OFFSET = 183,
+            RIGHT_HERO_Y_OFFSET = 148
+        };
+
     private:
         const HeroBase * base;
         int icn;
