@@ -1200,25 +1200,18 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
             uint32_t * x = y;
             const uint32_t * xEnd = x + width;
             for ( ; x != xEnd; ++x ) {
-                for ( std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.begin(); value != correctedColors.end(); ++value ) {
-                    if ( *x == value->first ) {
-                        *x = value->second;
-                        break;
-                    }
-                }
+                std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.find( *x );
+                if ( value != correctedColors.end() )
+                    *x = value->second;
             }
         }
     }
     else {
         for ( int y = 0; y < height; ++y ) {
             for ( int x = 0; x < width; ++x ) {
-                const uint32_t v = GetPixel( x, y );
-                for ( std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.begin(); value != correctedColors.end(); ++value ) {
-                    if ( v == value->first ) {
-                        res.SetPixel( x, y, value->second );
-                        break;
-                    }
-                }
+                std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.find( GetPixel( x, y ) );
+                if ( value != correctedColors.end() )
+                    res.SetPixel( x, y, value->second );
             }
         }
     }
