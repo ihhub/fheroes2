@@ -1160,6 +1160,74 @@ Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
     return res;
 }
 
+Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const
+{
+    Surface res = GetSurface();
+
+    if ( colorPairs.empty() )
+        return res;
+
+    std::map<uint32_t, uint32_t> correctedColors;
+    for ( std::map<RGBA, RGBA>::const_iterator value = colorPairs.begin(); value != colorPairs.end(); ++value ) {
+        uint32_t in = MapRGB( value->first );
+        uint32_t out = res.MapRGB( value->second );
+
+        if ( amask() )
+            in |= amask();
+
+        if ( res.amask() )
+            out |= res.amask();
+
+        if ( in != out )
+            correctedColors[in] = out;
+    }
+
+    if ( correctedColors.empty() )
+        return res;
+
+    res.Lock();
+
+    const int height = h();
+    const int width = w();
+    const int imageDepth = depth();
+
+    if ( imageDepth == 32 ) { // RGBA image
+        const uint16_t pitch = res.surface->pitch >> 2;
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+                for ( std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.begin(); value != correctedColors.end(); ++value ) {
+                    if ( *x == value->first ) {
+                        *x = value->second;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    else {
+        for ( int y = 0; y < height; ++y ) {
+            for ( int x = 0; x < width; ++x ) {
+                const uint32_t v = GetPixel( x, y );
+                for ( std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.begin(); value != correctedColors.end(); ++value ) {
+                    if ( v == value->first ) {
+                        res.SetPixel( x, y, value->second );
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
 Surface Surface::GetSurface( void ) const
 {
     return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
