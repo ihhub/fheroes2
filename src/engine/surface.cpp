@@ -1345,30 +1345,28 @@ void Surface::DrawBorder( const RGBA & color, bool solid )
         DrawRect( Rect( Point( 0, 0 ), GetSize() ), color );
     else {
         const u32 pixel = MapRGB( color );
+        const int width = w();
+        const int height = h();
 
-        for ( int i = 0; i < w(); ++i ) {
+        for ( int i = 0; i < width; i += 4 ) {
             SetPixel( i, 0, pixel );
-            if ( i + 1 < w() )
+            if ( i + 1 < width )
                 SetPixel( i + 1, 0, pixel );
-            i += 3;
         }
-        for ( int i = 0; i < w(); ++i ) {
-            SetPixel( i, h() - 1, pixel );
-            if ( i + 1 < w() )
-                SetPixel( i + 1, h() - 1, pixel );
-            i += 3;
+        for ( int i = 0; i < width; i += 4 ) {
+            SetPixel( i, height - 1, pixel );
+            if ( i + 1 < width )
+                SetPixel( i + 1, height - 1, pixel );
         }
-        for ( int i = 0; i < h(); ++i ) {
+        for ( int i = 0; i < height; i += 4 ) {
             SetPixel( 0, i, pixel );
-            if ( i + 1 < h() )
+            if ( i + 1 < height )
                 SetPixel( 0, i + 1, pixel );
-            i += 3;
         }
-        for ( int i = 0; i < h(); ++i ) {
-            SetPixel( w() - 1, i, pixel );
-            if ( i + 1 < h() )
-                SetPixel( w() - 1, i + 1, pixel );
-            i += 3;
+        for ( int i = 0; i < height; i += 4 ) {
+            SetPixel( width - 1, i, pixel );
+            if ( i + 1 < height )
+                SetPixel( width - 1, i + 1, pixel );
         }
     }
 }
