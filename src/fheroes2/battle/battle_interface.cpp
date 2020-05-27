@@ -2065,8 +2065,10 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & b, Actions & a, std::st
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() )
+    if ( le.MousePressRight() ) {
         humanturn_spell = Spell::NONE;
+        teleport_src = -1;
+    }
     else if ( le.MouseCursor( rectBoard ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
 
