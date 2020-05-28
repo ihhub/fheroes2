@@ -609,7 +609,7 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
             // max
             LoadOrgICN( sprite, ICN::RECRUIT, index + 4, false );
             // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 33, 15 ), 30, 4, sprite );
+            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 31, 15 ), 30, 4, sprite );
             // add: IN
             GetICN( ICN::APANEL, 4 + index ).Blit( Rect( 23, 20, 25, 15 ), 30, 4, sprite );
             break;

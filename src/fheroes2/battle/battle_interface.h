@@ -73,12 +73,15 @@ namespace Battle
         bool isStartFrame( void ) const;
         int GetColor( void ) const;
         const HeroBase * GetHero( void ) const;
+        Point Offset() const;
 
         enum
         {
             HERO_X_OFFSET = 32,
             LEFT_HERO_Y_OFFSET = 183,
-            RIGHT_HERO_Y_OFFSET = 148
+            RIGHT_HERO_Y_OFFSET = 148,
+            CAPTAIN_X_OFFSET = 6,
+            CAPTAIN_Y_OFFSET = -13
         };
 
     private:
@@ -89,6 +92,7 @@ namespace Battle
         int animframe_count;
         bool reflect;
         Rect pos;
+        Point _offset;
     };
 
     class Status : public Rect

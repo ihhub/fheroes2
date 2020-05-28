@@ -376,6 +376,7 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
     , animframe_start( 0 )
     , animframe_count( 0 )
     , reflect( r )
+    , _offset( area.x, area.y )
 {
     ResetAnimFrame( OP_IDLE );
 
@@ -398,12 +399,20 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
         const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
 
         if ( reflect ) {
-            pos.x = Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
-            pos.y = RIGHT_HERO_Y_OFFSET + sprite.y();
+            pos.x = _offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
+            pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
         }
         else {
-            pos.x = HERO_X_OFFSET + sprite.x();
-            pos.y = LEFT_HERO_Y_OFFSET + sprite.y();
+            pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
+            pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
+        }
+
+        if ( b->isCaptain() ) {
+            if ( reflect )
+                pos.x += CAPTAIN_X_OFFSET;
+            else
+                pos.x -= CAPTAIN_X_OFFSET;
+            pos.y += CAPTAIN_Y_OFFSET;
         }
 
         pos.w = sprite.w();
@@ -419,6 +428,11 @@ int Battle::OpponentSprite::GetColor( void ) const
 const HeroBase * Battle::OpponentSprite::GetHero( void ) const
 {
     return base;
+}
+
+Point Battle::OpponentSprite::Offset() const
+{
+    return _offset;
 }
 
 void Battle::OpponentSprite::IncreaseAnimFrame( bool loop )
@@ -666,10 +680,20 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
 void Battle::OpponentSprite::Redraw( void ) const
 {
     const Sprite & hero = AGG::GetICN( icn, animframe, reflect );
+
+    Point offset( _offset );
+    if ( base->isCaptain() ) {
+        if ( reflect )
+            offset.x += CAPTAIN_X_OFFSET;
+        else
+            offset.x -= CAPTAIN_X_OFFSET;
+        offset.y += CAPTAIN_Y_OFFSET;
+    }
+
     if ( reflect )
-        hero.Blit( Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), RIGHT_HERO_Y_OFFSET + hero.y() );
+        hero.Blit( offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y() );
     else
-        hero.Blit( HERO_X_OFFSET + hero.x(), LEFT_HERO_Y_OFFSET + hero.y() );
+        hero.Blit( offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
 }
 
 Battle::Status::Status()
@@ -1106,7 +1130,7 @@ void Battle::Interface::RedrawOpponentsFlags( void ) const
         }
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), false );
-        flag.Blit( OpponentSprite::HERO_X_OFFSET + flag.x(), OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
+        flag.Blit( opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(), opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
     if ( !Settings::Get().QVGA() && opponent2 ) {
@@ -1137,8 +1161,9 @@ void Battle::Interface::RedrawOpponentsFlags( void ) const
         }
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), true );
-        const u32 ox = opponent2->GetHero()->isHeroes() ? 38 : 26;
-        flag.Blit( Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.w() ), OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y() );
+        const Point offset = opponent2->Offset();
+        flag.Blit( offset.x + Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.w() ),
+                   offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y() );
     }
 }
 
