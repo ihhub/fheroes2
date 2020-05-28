@@ -33,7 +33,7 @@ namespace
 {
     void SwitchMaxMinButtons( Button & minButton, Button & maxButton, uint32_t currentValue, uint32_t maximumValue )
     {
-        const bool isMaxValue = ( currentValue == maximumValue );
+        const bool isMaxValue = ( currentValue >= maximumValue );
 
         maxButton.SetDisable( isMaxValue );
         minButton.SetDisable( !isMaxValue );
