@@ -29,6 +29,19 @@
 #include "settings.h"
 #include "text.h"
 
+namespace
+{
+    void SwitchMaxMinButtons( Button & minButton, Button & maxButton, uint32_t currentValue, uint32_t maximumValue )
+    {
+        const bool isMaxValue = ( currentValue == maximumValue );
+
+        maxButton.SetDisable( isMaxValue );
+        minButton.SetDisable( !isMaxValue );
+        maxButton.SetVisible( !isMaxValue );
+        minButton.SetVisible( isMaxValue );
+    }
+}
+
 class SelectValue : public Rect
 {
 public:
@@ -365,35 +378,47 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     ButtonGroups btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.Draw();
 
-    if ( savelast )
-        text.Set( std::string( "MAX" ) + " " + "(" + GetString( max ) + ")", Font::SMALL );
-    else
-        text.Set( std::string( "MAX" ) + " " + "(" + GetString( max ) + ")" + " " + "-" + " " + "1", Font::SMALL );
-    const Rect rectMax( pos.x + 163, pos.y + 30, text.w(), text.h() );
-    text.Blit( rectMax.x, rectMax.y );
+    const uint32_t maximumAcceptedValue = savelast ? max : max - 1;
 
-    text.Set( std::string( "MIN" ) + " " + "(" + GetString( min ) + ")", Font::SMALL );
-    const Rect rectMin( pos.x + 163, pos.y + 45, text.w(), text.h() );
-    text.Blit( rectMin.x, rectMin.y );
+    const Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
+    Button buttonMax;
+    Button buttonMin;
+    buttonMax.SetPos( minMaxButtonOffset );
+    buttonMin.SetPos( minMaxButtonOffset );
+
+    const Rect buttonArea( 5, 0, 61, 25 );
+    buttonMax.SetSprite( AGG::GetICN( ICN::RECRUIT, 4 ).GetSurface( buttonArea ), AGG::GetICN( ICN::RECRUIT, 5 ).GetSurface( buttonArea ) );
+    buttonMin.SetSprite( AGG::GetICN( ICN::BTNMIN, 0 ).GetSurface( buttonArea ), AGG::GetICN( ICN::BTNMIN, 1 ).GetSurface( buttonArea ) );
+
+    SwitchMaxMinButtons( buttonMin, buttonMax, cur, maximumAcceptedValue );
 
     LocalEvent & le = LocalEvent::Get();
 
-    bool redraw_count = false;
+    bool redraw_count = true;
     cursor.Show();
     display.Flip();
 
     // message loop
     int bres = Dialog::ZERO;
     while ( bres == Dialog::ZERO && le.HandleEvents() ) {
+        if ( buttonMax.isVisible() )
+            le.MousePressLeft( buttonMax ) ? buttonMax.PressDraw() : buttonMax.ReleaseDraw();
+        if ( buttonMin.isVisible() )
+            le.MousePressLeft( buttonMin ) ? buttonMin.PressDraw() : buttonMin.ReleaseDraw();
+
         if ( PressIntKey( max, cur ) ) {
             sel.SetCur( cur );
             redraw_count = true;
         }
-        else if ( le.MouseClickLeft( rectMax ) ) {
-            sel.SetCur( savelast ? max : max - 1 );
+        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax ) ) {
+            le.MousePressLeft( buttonMax ) ? buttonMax.PressDraw() : buttonMax.ReleaseDraw();
+            cur = maximumAcceptedValue;
+            sel.SetCur( maximumAcceptedValue );
             redraw_count = true;
         }
-        else if ( le.MouseClickLeft( rectMin ) ) {
+        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin ) ) {
+            le.MousePressLeft( buttonMin ) ? buttonMin.PressDraw() : buttonMin.ReleaseDraw();
+            cur = min;
             sel.SetCur( min );
             redraw_count = true;
         }
@@ -411,10 +436,17 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
             }
 
         if ( redraw_count ) {
+            SwitchMaxMinButtons( buttonMin, buttonMax, cur, maximumAcceptedValue );
             cursor.Hide();
             if ( ssp.isValid() )
                 ssp.Hide();
             sel.Redraw();
+
+            if ( buttonMax.isVisible() )
+                buttonMax.Draw();
+            if ( buttonMin.isVisible() )
+                buttonMin.Draw();
+
             cursor.Show();
             display.Flip();
 
