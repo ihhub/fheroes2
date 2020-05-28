@@ -395,16 +395,16 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
         pos.h = sprite.h();
     }
     else {
+        const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
+
         if ( reflect ) {
-            pos.x = area.x + area.w - 60;
-            pos.y = area.y + 40;
+            pos.x = Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
+            pos.y = RIGHT_HERO_Y_OFFSET + sprite.y();
         }
         else {
-            pos.x = area.x + 5;
-            pos.y = area.y + 72;
+            pos.x = HERO_X_OFFSET + sprite.x();
+            pos.y = LEFT_HERO_Y_OFFSET + sprite.y();
         }
-
-        const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
 
         pos.w = sprite.w();
         pos.h = sprite.h();
@@ -667,9 +667,9 @@ void Battle::OpponentSprite::Redraw( void ) const
 {
     const Sprite & hero = AGG::GetICN( icn, animframe, reflect );
     if ( reflect )
-        hero.Blit( pos.x - hero.w() + 55, pos.y );
+        hero.Blit( Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), RIGHT_HERO_Y_OFFSET + hero.y() );
     else
-        hero.Blit( pos.x, pos.y );
+        hero.Blit( HERO_X_OFFSET + hero.x(), LEFT_HERO_Y_OFFSET + hero.y() );
 }
 
 Battle::Status::Status()
@@ -1106,7 +1106,7 @@ void Battle::Interface::RedrawOpponentsFlags( void ) const
         }
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), false );
-        flag.Blit( opponent1->GetArea().x + 38 - flag.w(), opponent1->GetArea().y + 5 );
+        flag.Blit( OpponentSprite::HERO_X_OFFSET + flag.x(), OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
     if ( !Settings::Get().QVGA() && opponent2 ) {
@@ -1138,7 +1138,7 @@ void Battle::Interface::RedrawOpponentsFlags( void ) const
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), true );
         const u32 ox = opponent2->GetHero()->isHeroes() ? 38 : 26;
-        flag.Blit( opponent2->GetArea().x + ox - flag.w(), opponent2->GetArea().y + 5 );
+        flag.Blit( Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.w() ), OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y() );
     }
 }
 
