@@ -65,7 +65,7 @@ public:
         splitter.HideCursor();
 
         const TextBox text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ), Font::BIG,
-                 Rect( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 ) );
+                            Rect( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 ) );
 
         textSell.SetFont( Font::SMALL );
         textBuy.SetFont( Font::SMALL );
@@ -103,7 +103,7 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
         back.Restore();
         Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 );
         const TextBox displayMesssage( _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" ),
-                            Font::BIG, dst_rt );
+                                       Font::BIG, dst_rt );
         buttonGift.SetDisable( false );
         buttonTrade.SetDisable( true );
         buttonLeft.SetDisable( true );
