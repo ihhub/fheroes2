@@ -283,19 +283,19 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             result = NULL;
             break;
         }
-        else if ( ( le.MouseClickLeft( buttonSelectSmall ) || le.KeyPress( KEY_s ) ) && buttonSelectSmall.isEnable() && buttonSelectSmall.isEnable() ) {
+        else if ( ( le.MouseClickLeft( buttonSelectSmall ) || le.KeyPress( KEY_s ) ) && buttonSelectSmall.isEnable() ) {
             listbox.SetListContent( small );
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectMedium ) || le.KeyPress( KEY_m ) ) && buttonSelectMedium.isEnable() && buttonSelectMedium.isEnable() ) {
+        else if ( ( le.MouseClickLeft( buttonSelectMedium ) || le.KeyPress( KEY_m ) ) && buttonSelectMedium.isEnable() ) {
             listbox.SetListContent( medium );
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectLarge ) || le.KeyPress( KEY_l ) ) && buttonSelectLarge.isEnable() && buttonSelectLarge.isEnable() ) {
+        else if ( ( le.MouseClickLeft( buttonSelectLarge ) || le.KeyPress( KEY_l ) ) && buttonSelectLarge.isEnable() ) {
             listbox.SetListContent( large );
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectXLarge ) || le.KeyPress( KEY_x ) ) && buttonSelectXLarge.isEnable() && buttonSelectXLarge.isEnable() ) {
+        else if ( ( le.MouseClickLeft( buttonSelectXLarge ) || le.KeyPress( KEY_x ) ) && buttonSelectXLarge.isEnable() ) {
             listbox.SetListContent( xlarge );
             cursor.Hide();
         }

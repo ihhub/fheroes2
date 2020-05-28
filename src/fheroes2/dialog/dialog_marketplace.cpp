@@ -64,7 +64,7 @@ public:
         splitter.SetArea( Rect( pos_rt.x + ( pos_rt.w - AGG::GetICN( tradpost, 1 ).w() ) / 2 + 21, pos_rt.y + 131, 189, 11 ) );
         splitter.HideCursor();
 
-        TextBox( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ), Font::BIG,
+        const TextBox text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ), Font::BIG,
                  Rect( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 ) );
 
         textSell.SetFont( Font::SMALL );
@@ -102,7 +102,8 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
         splitter.HideCursor();
         back.Restore();
         Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 );
-        TextBox( _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" ), Font::BIG, dst_rt );
+        const TextBox displayMesssage( _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" ),
+                            Font::BIG, dst_rt );
         buttonGift.SetDisable( false );
         buttonTrade.SetDisable( true );
         buttonLeft.SetDisable( true );
@@ -136,7 +137,7 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
             StringReplace( message, "%{resfrom}", Resource::String( resourceFrom ) );
             StringReplace( message, "%{count}", exchange_rate );
         }
-        TextBox( message, Font::BIG, Rect( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 ) );
+        const TextBox displayMessage( message, Font::BIG, Rect( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 ) );
         const Sprite & sprite_from = AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( resourceFrom ) );
         dst_pt.x = pos_rt.x + ( pos_rt.w - sprite_from.w() ) / 2 - 70;
         dst_pt.y = pos_rt.y + 115 - sprite_from.h();
