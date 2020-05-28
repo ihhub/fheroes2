@@ -22,6 +22,7 @@
 #ifndef H2SURFACE_H
 #define H2SURFACE_H
 
+#include <map>
 #include <string>
 
 #include "rect.h"
@@ -48,6 +49,11 @@ public:
     bool operator!=( const RGBA & col ) const
     {
         return pack() != col.pack();
+    }
+
+    bool operator<( const RGBA & col ) const
+    {
+        return pack() < col.pack();
     }
 
     int r( void ) const;
@@ -149,6 +155,7 @@ public:
     Surface RenderGrayScale( void ) const;
     Surface RenderSepia( void ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
+    Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
     Surface RenderSurface( const Rect & srt, const Size & ) const;
     Surface RenderSurface( const Size & ) const;
 

@@ -1029,10 +1029,14 @@ Surface Surface::RenderContour( const RGBA & color ) const
     const u32 fake2 = trf.MapRGB( fake );
 
     res.Lock();
-    for ( int y = 0; y < trf.h(); ++y )
-        for ( int x = 0; x < trf.w(); ++x )
+
+    const int width = trf.w();
+    const int height = trf.h();
+
+    for ( int y = 0; y < height; ++y )
+        for ( int x = 0; x < width; ++x )
             if ( fake2 == trf.GetPixel( x, y ) ) {
-                if ( 0 == x || 0 == y || trf.w() - 1 == x || trf.h() - 1 == y )
+                if ( 0 == x || 0 == y || width - 1 == x || height - 1 == y )
                     res.SetPixel( x, y, pixel );
                 else {
                     if ( 0 < x ) {
@@ -1040,7 +1044,7 @@ Surface Surface::RenderContour( const RGBA & color ) const
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x - 1, y, pixel );
                     }
-                    if ( trf.w() - 1 > x ) {
+                    if ( width - 1 > x ) {
                         RGBA col = trf.GetRGB( trf.GetPixel( x + 1, y ) );
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x + 1, y, pixel );
@@ -1051,7 +1055,7 @@ Surface Surface::RenderContour( const RGBA & color ) const
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x, y - 1, pixel );
                     }
-                    if ( trf.h() - 1 > y ) {
+                    if ( height - 1 > y ) {
                         RGBA col = trf.GetRGB( trf.GetPixel( x, y + 1 ) );
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x, y + 1, pixel );
@@ -1112,8 +1116,9 @@ Surface Surface::RenderSepia( void ) const
 Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
 {
     Surface res = GetSurface();
-    u32 fc = MapRGB( col1 );
-    u32 tc = res.MapRGB( col2 );
+
+    uint32_t fc = MapRGB( col1 );
+    uint32_t tc = res.MapRGB( col2 );
 
     if ( amask() )
         fc |= amask();
@@ -1121,10 +1126,30 @@ Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
     if ( res.amask() )
         tc |= res.amask();
 
-    if ( fc != tc ) {
-        res.Lock();
-        const int height = h();
-        const int width = w();
+    if ( fc == tc ) // nothing we need to change
+        return res;
+
+    res.Lock();
+
+    const int height = h();
+    const int width = w();
+    const int imageDepth = depth();
+
+    if ( imageDepth == 32 ) { // RGBA image
+        const uint16_t pitch = res.surface->pitch >> 2;
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+                if ( *x == fc )
+                    *x = tc;
+            }
+        }
+    }
+    else {
         for ( int y = 0; y < height; ++y ) {
             for ( int x = 0; x < width; ++x ) {
                 if ( fc == GetPixel( x, y ) ) {
@@ -1132,8 +1157,70 @@ Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
                 }
             }
         }
-        res.Unlock();
     }
+
+    res.Unlock();
+
+    return res;
+}
+
+Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const
+{
+    Surface res = GetSurface();
+
+    if ( colorPairs.empty() )
+        return res;
+
+    std::map<uint32_t, uint32_t> correctedColors;
+    for ( std::map<RGBA, RGBA>::const_iterator value = colorPairs.begin(); value != colorPairs.end(); ++value ) {
+        uint32_t in = MapRGB( value->first );
+        uint32_t out = res.MapRGB( value->second );
+
+        if ( amask() )
+            in |= amask();
+
+        if ( res.amask() )
+            out |= res.amask();
+
+        if ( in != out )
+            correctedColors[in] = out;
+    }
+
+    if ( correctedColors.empty() )
+        return res;
+
+    res.Lock();
+
+    const int height = h();
+    const int width = w();
+    const int imageDepth = depth();
+
+    if ( imageDepth == 32 ) { // RGBA image
+        const uint16_t pitch = res.surface->pitch >> 2;
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+                std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.find( *x );
+                if ( value != correctedColors.end() )
+                    *x = value->second;
+            }
+        }
+    }
+    else {
+        for ( int y = 0; y < height; ++y ) {
+            for ( int x = 0; x < width; ++x ) {
+                std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.find( GetPixel( x, y ) );
+                if ( value != correctedColors.end() )
+                    res.SetPixel( x, y, value->second );
+            }
+        }
+    }
+
+    res.Unlock();
 
     return res;
 }
@@ -1258,30 +1345,28 @@ void Surface::DrawBorder( const RGBA & color, bool solid )
         DrawRect( Rect( Point( 0, 0 ), GetSize() ), color );
     else {
         const u32 pixel = MapRGB( color );
+        const int width = w();
+        const int height = h();
 
-        for ( int i = 0; i < w(); ++i ) {
+        for ( int i = 0; i < width; i += 4 ) {
             SetPixel( i, 0, pixel );
-            if ( i + 1 < w() )
+            if ( i + 1 < width )
                 SetPixel( i + 1, 0, pixel );
-            i += 3;
         }
-        for ( int i = 0; i < w(); ++i ) {
-            SetPixel( i, h() - 1, pixel );
-            if ( i + 1 < w() )
-                SetPixel( i + 1, h() - 1, pixel );
-            i += 3;
+        for ( int i = 0; i < width; i += 4 ) {
+            SetPixel( i, height - 1, pixel );
+            if ( i + 1 < width )
+                SetPixel( i + 1, height - 1, pixel );
         }
-        for ( int i = 0; i < h(); ++i ) {
+        for ( int i = 0; i < height; i += 4 ) {
             SetPixel( 0, i, pixel );
-            if ( i + 1 < h() )
+            if ( i + 1 < height )
                 SetPixel( 0, i + 1, pixel );
-            i += 3;
         }
-        for ( int i = 0; i < h(); ++i ) {
-            SetPixel( w() - 1, i, pixel );
-            if ( i + 1 < h() )
-                SetPixel( w() - 1, i + 1, pixel );
-            i += 3;
+        for ( int i = 0; i < height; i += 4 ) {
+            SetPixel( width - 1, i, pixel );
+            if ( i + 1 < height )
+                SetPixel( width - 1, i + 1, pixel );
         }
     }
 }

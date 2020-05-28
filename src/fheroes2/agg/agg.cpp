@@ -691,6 +691,7 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     // change color
     for ( u32 ii = 0; ii < count; ++ii ) {
         Sprite & sprite = reflect ? v.reflect[ii] : v.sprites[ii];
+        std::map<RGBA, RGBA> colorPairs;
 
         switch ( icn ) {
         case ICN::TELEPORT1:
@@ -710,58 +711,49 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
 
         case ICN::FOUNTAIN:
             LoadOrgICN( sprite, ICN::OBJNMUL2, 15, false );
-            sprite.ChangeColorIndex( 0xE8, 0xE8 - ii );
-            sprite.ChangeColorIndex( 0xE9, 0xE9 - ii );
-            sprite.ChangeColorIndex( 0xEA, 0xEA - ii );
-            sprite.ChangeColorIndex( 0xEB, 0xEB - ii );
-            sprite.ChangeColorIndex( 0xEC, 0xEC - ii );
-            sprite.ChangeColorIndex( 0xED, 0xED - ii );
-            sprite.ChangeColorIndex( 0xEE, 0xEE - ii );
-            sprite.ChangeColorIndex( 0xEF, 0xEF - ii );
+            colorPairs[PAL::GetPaletteColor( 0xE8 )] = PAL::GetPaletteColor( 0xE8 - ii );
+            colorPairs[PAL::GetPaletteColor( 0xE9 )] = PAL::GetPaletteColor( 0xE9 - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEA )] = PAL::GetPaletteColor( 0xEA - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEB )] = PAL::GetPaletteColor( 0xEB - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEC )] = PAL::GetPaletteColor( 0xEC - ii );
+            colorPairs[PAL::GetPaletteColor( 0xED )] = PAL::GetPaletteColor( 0xED - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEE )] = PAL::GetPaletteColor( 0xEE - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEF )] = PAL::GetPaletteColor( 0xEF - ii );
+            sprite.ChangeColor( colorPairs );
             break;
 
         case ICN::TREASURE:
             LoadOrgICN( sprite, ICN::OBJNRSRC, 19, false );
-            sprite.ChangeColorIndex( 0x0A, ii ? 0x00 : 0x0A );
-            sprite.ChangeColorIndex( 0xC2, ii ? 0xD6 : 0xC2 );
-            sprite.ChangeColorIndex( 0x64, ii ? 0xDA : 0x64 );
+            colorPairs[PAL::GetPaletteColor( 0x0A )] = PAL::GetPaletteColor( ii ? 0x00 : 0x0A );
+            colorPairs[PAL::GetPaletteColor( 0xC2 )] = PAL::GetPaletteColor( ii ? 0xD6 : 0xC2 );
+            colorPairs[PAL::GetPaletteColor( 0x64 )] = PAL::GetPaletteColor( ii ? 0xDA : 0x64 );
+            sprite.ChangeColor( colorPairs );
+
             break;
 
         case ICN::ROUTERED:
             LoadOrgICN( sprite, ICN::ROUTE, ii, false );
-            sprite.ChangeColor( 0x55, RGBA( 164, 88, 16 ) );
-            sprite.ChangeColor( 0x5C, RGBA( 84, 0, 0 ) );
-            sprite.ChangeColor( 0x60, RGBA( 72, 0, 0 ) );
+            colorPairs[PAL::GetPaletteColor( 0x55 )] = RGBA( 164, 88, 16 );
+            colorPairs[PAL::GetPaletteColor( 0x5C )] = RGBA( 84, 0, 0 );
+            colorPairs[PAL::GetPaletteColor( 0x60 )] = RGBA( 72, 0, 0 );
+            sprite.ChangeColor( colorPairs );
             break;
 
         case ICN::YELLOW_FONT:
-            LoadOrgICN( sprite, ICN::FONT, ii, false );
-            sprite.ChangeColorIndex( 0x0A, 0xDA );
-            sprite.ChangeColorIndex( 0x0B, 0xDA );
-            sprite.ChangeColorIndex( 0x0C, 0xDA );
-            sprite.ChangeColorIndex( 0x0D, 0xDA );
-            sprite.ChangeColorIndex( 0x0E, 0xDB );
-            sprite.ChangeColorIndex( 0x0F, 0xDB );
-            sprite.ChangeColorIndex( 0x10, 0xDB );
-            sprite.ChangeColorIndex( 0x11, 0xDB );
-            sprite.ChangeColorIndex( 0x12, 0xDB );
-            sprite.ChangeColorIndex( 0x13, 0xDB );
-            sprite.ChangeColorIndex( 0x14, 0xDB );
-            break;
-
         case ICN::YELLOW_SMALFONT:
-            LoadOrgICN( sprite, ICN::SMALFONT, ii, false );
-            sprite.ChangeColorIndex( 0x0A, 0xDA );
-            sprite.ChangeColorIndex( 0x0B, 0xDA );
-            sprite.ChangeColorIndex( 0x0C, 0xDA );
-            sprite.ChangeColorIndex( 0x0D, 0xDA );
-            sprite.ChangeColorIndex( 0x0E, 0xDB );
-            sprite.ChangeColorIndex( 0x0F, 0xDB );
-            sprite.ChangeColorIndex( 0x10, 0xDB );
-            sprite.ChangeColorIndex( 0x11, 0xDB );
-            sprite.ChangeColorIndex( 0x12, 0xDB );
-            sprite.ChangeColorIndex( 0x13, 0xDB );
-            sprite.ChangeColorIndex( 0x14, 0xDB );
+            LoadOrgICN( sprite, ICN::FONT, ii, false );
+            colorPairs[PAL::GetPaletteColor( 0x0A )] = PAL::GetPaletteColor( 0xDA );
+            colorPairs[PAL::GetPaletteColor( 0x0B )] = PAL::GetPaletteColor( 0xDA );
+            colorPairs[PAL::GetPaletteColor( 0x0C )] = PAL::GetPaletteColor( 0xDA );
+            colorPairs[PAL::GetPaletteColor( 0x0D )] = PAL::GetPaletteColor( 0xDA );
+            colorPairs[PAL::GetPaletteColor( 0x0E )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x0F )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x10 )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x11 )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x12 )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x13 )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x14 )] = PAL::GetPaletteColor( 0xDB );
+            sprite.ChangeColor( colorPairs );
             break;
 
         default:
