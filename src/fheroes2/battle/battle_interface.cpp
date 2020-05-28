@@ -1507,28 +1507,30 @@ void Battle::Interface::RedrawCastle3( const Castle & castle ) const
 void Battle::Interface::RedrawLowObjects( s32 cell_index, Surface & dst ) const
 {
     const Cell * cell = Board::GetCell( cell_index );
+    if ( cell == NULL )
+        return;
+
     Sprite sprite;
 
-    if ( cell )
-        switch ( cell->GetObject() ) {
-        case 0x84:
-            sprite = AGG::GetICN( ICN::COBJ0004, 0 );
-            break;
-        case 0x87:
-            sprite = AGG::GetICN( ICN::COBJ0007, 0 );
-            break;
-        case 0x90:
-            sprite = AGG::GetICN( ICN::COBJ0016, 0 );
-            break;
-        case 0x9E:
-            sprite = AGG::GetICN( ICN::COBJ0030, 0 );
-            break;
-        case 0x9F:
-            sprite = AGG::GetICN( ICN::COBJ0031, 0 );
-            break;
-        default:
-            break;
-        }
+    switch ( cell->GetObject() ) {
+    case 0x84:
+        sprite = AGG::GetICN( ICN::COBJ0004, 0 );
+        break;
+    case 0x87:
+        sprite = AGG::GetICN( ICN::COBJ0007, 0 );
+        break;
+    case 0x90:
+        sprite = AGG::GetICN( ICN::COBJ0016, 0 );
+        break;
+    case 0x9E:
+        sprite = AGG::GetICN( ICN::COBJ0030, 0 );
+        break;
+    case 0x9F:
+        sprite = AGG::GetICN( ICN::COBJ0031, 0 );
+        break;
+    default:
+        break;
+    }
 
     if ( sprite.isValid() ) {
         // const Point & topleft = border.GetArea();
@@ -1540,94 +1542,96 @@ void Battle::Interface::RedrawLowObjects( s32 cell_index, Surface & dst ) const
 void Battle::Interface::RedrawHighObjects( s32 cell_index ) const
 {
     const Cell * cell = Board::GetCell( cell_index );
+    if ( cell == NULL )
+        return;
+
     Sprite sprite;
 
-    if ( cell )
-        switch ( cell->GetObject() ) {
-        case 0x80:
-            sprite = AGG::GetICN( ICN::COBJ0000, 0 );
-            break;
-        case 0x81:
-            sprite = AGG::GetICN( ICN::COBJ0001, 0 );
-            break;
-        case 0x82:
-            sprite = AGG::GetICN( ICN::COBJ0002, 0 );
-            break;
-        case 0x83:
-            sprite = AGG::GetICN( ICN::COBJ0003, 0 );
-            break;
-        case 0x85:
-            sprite = AGG::GetICN( ICN::COBJ0005, 0 );
-            break;
-        case 0x86:
-            sprite = AGG::GetICN( ICN::COBJ0006, 0 );
-            break;
-        case 0x88:
-            sprite = AGG::GetICN( ICN::COBJ0008, 0 );
-            break;
-        case 0x89:
-            sprite = AGG::GetICN( ICN::COBJ0009, 0 );
-            break;
-        case 0x8A:
-            sprite = AGG::GetICN( ICN::COBJ0010, 0 );
-            break;
-        case 0x8B:
-            sprite = AGG::GetICN( ICN::COBJ0011, 0 );
-            break;
-        case 0x8C:
-            sprite = AGG::GetICN( ICN::COBJ0012, 0 );
-            break;
-        case 0x8D:
-            sprite = AGG::GetICN( ICN::COBJ0013, 0 );
-            break;
-        case 0x8E:
-            sprite = AGG::GetICN( ICN::COBJ0014, 0 );
-            break;
-        case 0x8F:
-            sprite = AGG::GetICN( ICN::COBJ0015, 0 );
-            break;
-        case 0x91:
-            sprite = AGG::GetICN( ICN::COBJ0017, 0 );
-            break;
-        case 0x92:
-            sprite = AGG::GetICN( ICN::COBJ0018, 0 );
-            break;
-        case 0x93:
-            sprite = AGG::GetICN( ICN::COBJ0019, 0 );
-            break;
-        case 0x94:
-            sprite = AGG::GetICN( ICN::COBJ0020, 0 );
-            break;
-        case 0x95:
-            sprite = AGG::GetICN( ICN::COBJ0021, 0 );
-            break;
-        case 0x96:
-            sprite = AGG::GetICN( ICN::COBJ0022, 0 );
-            break;
-        case 0x97:
-            sprite = AGG::GetICN( ICN::COBJ0023, 0 );
-            break;
-        case 0x98:
-            sprite = AGG::GetICN( ICN::COBJ0024, 0 );
-            break;
-        case 0x99:
-            sprite = AGG::GetICN( ICN::COBJ0025, 0 );
-            break;
-        case 0x9A:
-            sprite = AGG::GetICN( ICN::COBJ0026, 0 );
-            break;
-        case 0x9B:
-            sprite = AGG::GetICN( ICN::COBJ0027, 0 );
-            break;
-        case 0x9C:
-            sprite = AGG::GetICN( ICN::COBJ0028, 0 );
-            break;
-        case 0x9D:
-            sprite = AGG::GetICN( ICN::COBJ0029, 0 );
-            break;
-        default:
-            break;
-        }
+    switch ( cell->GetObject() ) {
+    case 0x80:
+        sprite = AGG::GetICN( ICN::COBJ0000, 0 );
+        break;
+    case 0x81:
+        sprite = AGG::GetICN( ICN::COBJ0001, 0 );
+        break;
+    case 0x82:
+        sprite = AGG::GetICN( ICN::COBJ0002, 0 );
+        break;
+    case 0x83:
+        sprite = AGG::GetICN( ICN::COBJ0003, 0 );
+        break;
+    case 0x85:
+        sprite = AGG::GetICN( ICN::COBJ0005, 0 );
+        break;
+    case 0x86:
+        sprite = AGG::GetICN( ICN::COBJ0006, 0 );
+        break;
+    case 0x88:
+        sprite = AGG::GetICN( ICN::COBJ0008, 0 );
+        break;
+    case 0x89:
+        sprite = AGG::GetICN( ICN::COBJ0009, 0 );
+        break;
+    case 0x8A:
+        sprite = AGG::GetICN( ICN::COBJ0010, 0 );
+        break;
+    case 0x8B:
+        sprite = AGG::GetICN( ICN::COBJ0011, 0 );
+        break;
+    case 0x8C:
+        sprite = AGG::GetICN( ICN::COBJ0012, 0 );
+        break;
+    case 0x8D:
+        sprite = AGG::GetICN( ICN::COBJ0013, 0 );
+        break;
+    case 0x8E:
+        sprite = AGG::GetICN( ICN::COBJ0014, 0 );
+        break;
+    case 0x8F:
+        sprite = AGG::GetICN( ICN::COBJ0015, 0 );
+        break;
+    case 0x91:
+        sprite = AGG::GetICN( ICN::COBJ0017, 0 );
+        break;
+    case 0x92:
+        sprite = AGG::GetICN( ICN::COBJ0018, 0 );
+        break;
+    case 0x93:
+        sprite = AGG::GetICN( ICN::COBJ0019, 0 );
+        break;
+    case 0x94:
+        sprite = AGG::GetICN( ICN::COBJ0020, 0 );
+        break;
+    case 0x95:
+        sprite = AGG::GetICN( ICN::COBJ0021, 0 );
+        break;
+    case 0x96:
+        sprite = AGG::GetICN( ICN::COBJ0022, 0 );
+        break;
+    case 0x97:
+        sprite = AGG::GetICN( ICN::COBJ0023, 0 );
+        break;
+    case 0x98:
+        sprite = AGG::GetICN( ICN::COBJ0024, 0 );
+        break;
+    case 0x99:
+        sprite = AGG::GetICN( ICN::COBJ0025, 0 );
+        break;
+    case 0x9A:
+        sprite = AGG::GetICN( ICN::COBJ0026, 0 );
+        break;
+    case 0x9B:
+        sprite = AGG::GetICN( ICN::COBJ0027, 0 );
+        break;
+    case 0x9C:
+        sprite = AGG::GetICN( ICN::COBJ0028, 0 );
+        break;
+    case 0x9D:
+        sprite = AGG::GetICN( ICN::COBJ0029, 0 );
+        break;
+    default:
+        break;
+    }
 
     if ( sprite.isValid() ) {
         // const Point & topleft = border.GetArea();
