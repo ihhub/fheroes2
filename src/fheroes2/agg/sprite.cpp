@@ -90,6 +90,11 @@ void Sprite::ChangeColor( u32 index, RGBA color )
     SetSurface( RenderChangeColor( PAL::GetPaletteColor( index ), color ) );
 }
 
+void Sprite::ChangeColor( const std::map<RGBA, RGBA> & colorPairs )
+{
+    SetSurface( RenderChangeColor( colorPairs ) );
+}
+
 void Sprite::Blit( void ) const
 {
     Blit( Display::Get() );

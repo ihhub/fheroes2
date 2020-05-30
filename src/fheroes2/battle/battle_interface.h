@@ -73,6 +73,16 @@ namespace Battle
         bool isStartFrame( void ) const;
         int GetColor( void ) const;
         const HeroBase * GetHero( void ) const;
+        Point Offset() const;
+
+        enum
+        {
+            HERO_X_OFFSET = 32,
+            LEFT_HERO_Y_OFFSET = 183,
+            RIGHT_HERO_Y_OFFSET = 148,
+            CAPTAIN_X_OFFSET = 6,
+            CAPTAIN_Y_OFFSET = -13
+        };
 
     private:
         const HeroBase * base;
@@ -82,6 +92,7 @@ namespace Battle
         int animframe_count;
         bool reflect;
         Rect pos;
+        Point _offset;
     };
 
     class Status : public Rect
@@ -180,6 +191,7 @@ namespace Battle
         void RedrawActionSkipStatus( const Unit & );
         void RedrawActionRemoveMirrorImage( const Unit & );
         void RedrawBridgeAnimation( bool down );
+        void RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID );
 
     private:
         void HumanBattleTurn( const Unit &, Actions &, std::string & );

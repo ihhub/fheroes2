@@ -551,7 +551,6 @@ int Interface::Basic::StartGame( void )
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
                         Redraw();
                         display.Flip();
-                        Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn" ) );
                     }
                     iconsPanel.SetRedraw();
                     iconsPanel.ShowIcons();
@@ -640,6 +639,10 @@ int Interface::Basic::HumanTurn( bool isload )
 
     cursor.Show();
     display.Flip();
+
+    if ( conf.GameType( Game::TYPE_HOTSEAT ) ) {
+        Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player's turn" ) );
+    }
 
     if ( !isload ) {
         // new week dialog
@@ -1081,7 +1084,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
                 if ( heroes )
-                    Dialog::QuickInfo( *heroes );
+                    Dialog::QuickInfo( *heroes, *hero );
             } break;
 
             default:

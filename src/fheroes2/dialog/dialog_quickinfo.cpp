@@ -706,7 +706,7 @@ void Dialog::QuickInfo( const Castle & castle )
     display.Flip();
 }
 
-void Dialog::QuickInfo( const Heroes & hero )
+void Dialog::QuickInfo( const Heroes & hero, const Heroes & viewer )
 {
     Display & display = Display::Get();
     const Settings & conf = Settings::Get();
@@ -757,8 +757,12 @@ void Dialog::QuickInfo( const Heroes & hero )
     Text text;
     std::string message;
 
+    const bool isFriend = hero.isFriends( viewer.GetColor() );
+    const bool isUnderIdentifyHeroSpell = viewer.GetKingdom().Modes( Kingdom::IDENTIFYHERO );
+    const bool showFullInfo = isFriend || isUnderIdentifyHeroSpell;
+
     // heroes name
-    if ( hero.isFriends( conf.CurrentColor() ) ) {
+    if ( showFullInfo ) {
         message = _( "%{name} ( Level %{level} )" );
         StringReplace( message, "%{name}", hero.GetName() );
         StringReplace( message, "%{level}", hero.GetLevel() );
@@ -779,7 +783,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     }
 
     // luck
-    if ( hero.isFriends( conf.CurrentColor() ) ) {
+    if ( showFullInfo ) {
         const s32 luck = hero.GetLuckWithModificators( NULL );
         const Sprite & sprite = AGG::GetICN( ICN::MINILKMR, ( 0 > luck ? 0 : ( 0 < luck ? 1 : 2 ) ) );
         u32 count = ( 0 == luck ? 1 : std::abs( luck ) );
@@ -793,7 +797,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     }
 
     // morale
-    if ( hero.isFriends( conf.CurrentColor() ) ) {
+    if ( showFullInfo ) {
         const s32 morale = hero.GetMoraleWithModificators( NULL );
         const Sprite & sprite = AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
         u32 count = ( 0 == morale ? 1 : std::abs( morale ) );
@@ -845,8 +849,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     dst_pt.x = cur_rt.x + ( cur_rt.w + 40 ) / 2;
     r_flag.Blit( dst_pt );
 
-    // TODO: check if under effect of View heroes spell; then show enemies too
-    if ( hero.isFriends( conf.CurrentColor() ) ) {
+    if ( showFullInfo ) {
         // attack
         text.Set( std::string( _( "Attack" ) ) + ":" );
         dst_pt.x = cur_rt.x + 10;

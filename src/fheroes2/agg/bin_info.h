@@ -86,9 +86,10 @@ namespace Bin_Info
         MonsterAnimInfo( int monsterID = 0, const std::vector<u8> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
         bool isValid() const;
+        size_t getProjectileID( float angle ) const;
     };
 
     void InitBinInfo();
-    MonsterAnimInfo GetMonsterInfo( int monsterID );
+    MonsterAnimInfo GetMonsterInfo( uint32_t monsterID );
 }
 #endif

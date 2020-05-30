@@ -55,76 +55,6 @@ void Battle::UpdateMonsterAttributes( const std::string & spec )
 #endif
 }
 
-void Battle::UpdateMonsterSpriteAnimation( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse battle.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_animation = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_animation = doc.FirstChildElement( "animations" ) ) ) {
-        const TiXmlElement * xml_icn = xml_animation->FirstChildElement( "icn" );
-        for ( ; xml_icn; xml_icn = xml_icn->NextSiblingElement( "icn" ) ) {
-            std::string icn_name = StringUpper( xml_icn->Attribute( "name" ) );
-            // find icn name
-            int icn = ICN::FromString( icn_name.c_str() );
-            if ( icn == ICN::UNKNOWN )
-                continue;
-
-            // find monster info position
-            Monster::monstersprite_t * ptr = Monster::GetMonsterSpireByICN( icn );
-            if ( ptr->icn_file == ICN::UNKNOWN )
-                continue;
-
-            const TiXmlElement * xml_anim = xml_icn->FirstChildElement( "animation" );
-            int start, count;
-
-            for ( ; xml_anim; xml_anim = xml_anim->NextSiblingElement( "animation" ) ) {
-                const char * state = xml_anim->Attribute( "state" );
-                xml_anim->Attribute( "start", &start );
-                xml_anim->Attribute( "count", &count );
-                Monster::animframe_t frm;
-                frm.start = start;
-                frm.count = count;
-
-                if ( 0 == std::strcmp( "idle", state ) )
-                    ptr->frm_idle = frm;
-                else if ( 0 == std::strcmp( "move", state ) )
-                    ptr->frm_move = frm;
-                else if ( 0 == std::strcmp( "fly1", state ) )
-                    ptr->frm_fly1 = frm;
-                else if ( 0 == std::strcmp( "fly2", state ) )
-                    ptr->frm_fly2 = frm;
-                else if ( 0 == std::strcmp( "fly3", state ) )
-                    ptr->frm_fly3 = frm;
-                else if ( 0 == std::strcmp( "shot0", state ) )
-                    ptr->frm_shot0 = frm;
-                else if ( 0 == std::strcmp( "shot1", state ) )
-                    ptr->frm_shot1 = frm;
-                else if ( 0 == std::strcmp( "shot2", state ) )
-                    ptr->frm_shot2 = frm;
-                else if ( 0 == std::strcmp( "shot3", state ) )
-                    ptr->frm_shot3 = frm;
-                else if ( 0 == std::strcmp( "attk0", state ) )
-                    ptr->frm_attk0 = frm;
-                else if ( 0 == std::strcmp( "attk1", state ) )
-                    ptr->frm_attk1 = frm;
-                else if ( 0 == std::strcmp( "attk2", state ) )
-                    ptr->frm_attk2 = frm;
-                else if ( 0 == std::strcmp( "attk3", state ) )
-                    ptr->frm_attk3 = frm;
-                else if ( 0 == std::strcmp( "wnce", state ) )
-                    ptr->frm_wnce = frm;
-                else if ( 0 == std::strcmp( "kill", state ) )
-                    ptr->frm_kill = frm;
-            }
-        }
-    }
-    else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
-#endif
-}
-
 Battle::ModeDuration::ModeDuration()
     : std::pair<u32, u32>( 0, 0 )
 {}
@@ -999,17 +929,6 @@ void Battle::Unit::SetResponse( void )
 
 void Battle::Unit::PostAttackAction( Unit & enemy )
 {
-    switch ( GetID() ) {
-    case Monster::ARCHMAGE:
-        // 20% clean magic state
-        if ( enemy.isValid() && enemy.Modes( IS_GOOD_MAGIC ) && 3 > Rand::Get( 1, 10 ) )
-            enemy.ResetModes( IS_GOOD_MAGIC );
-        break;
-
-    default:
-        break;
-    }
-
     // decrease shots
     if ( isArchers() ) {
         // check ammo cart artifact
@@ -1714,12 +1633,11 @@ int Battle::Unit::GetSpellMagic( bool force ) const
             return Spell::CURSE;
         break;
 
-        /* skip: see Unit::PostAttackAction
     case Monster::ARCHMAGE:
-            // 20% dispel
-            if(!force && 3 > Rand::Get(1, 10)) return Spell::DISPEL;
-            break;
-    */
+        // 20% dispel
+        if ( force || 3 > Rand::Get( 1, 10 ) )
+            return Spell::DISPEL;
+        break;
 
     case Monster::MEDUSA:
         // 20% stone
@@ -1882,48 +1800,7 @@ int Battle::Unit::ICNFile( void ) const
 
 int Battle::Unit::ICNMiss( void ) const
 {
-    switch ( GetID() ) {
-    case Monster::ARCHER:
-        return ICN::ARCH_MSL;
-    case Monster::RANGER:
-        return ICN::ARCH_MSL;
-    case Monster::ORC:
-        return ICN::ORC__MSL;
-    case Monster::ORC_CHIEF:
-        return ICN::ORC__MSL;
-    case Monster::TROLL:
-        return ICN::TROLLMSL;
-    case Monster::WAR_TROLL:
-        return ICN::TROLLMSL;
-    case Monster::ELF:
-        return ICN::ELF__MSL;
-    case Monster::GRAND_ELF:
-        return ICN::ELF__MSL;
-    case Monster::DRUID:
-        return ICN::DRUIDMSL;
-    case Monster::GREATER_DRUID:
-        return ICN::DRUIDMSL;
-    case Monster::CENTAUR:
-        // Doesn't have own missile file, game falls back to ELF__MSL
-        return ICN::ELF__MSL;
-    case Monster::HALFLING:
-        return ICN::HALFLMSL;
-    case Monster::MAGE:
-        return ICN::DRUIDMSL;
-    case Monster::ARCHMAGE:
-        return ICN::DRUIDMSL;
-    case Monster::TITAN:
-        return ICN::TITANMSL;
-    case Monster::LICH:
-        return ICN::LICH_MSL;
-    case Monster::POWER_LICH:
-        return ICN::LICH_MSL;
-
-    default:
-        break;
-    }
-
-    return ICN::UNKNOWN;
+    return Monster::GetMissileICN( GetID() );
 }
 
 Rect Battle::Unit::GetRectPosition( void ) const
@@ -1935,6 +1812,16 @@ Point Battle::Unit::GetBackPoint( void ) const
 {
     const Rect & rt = position.GetRect();
     return reflect ? Point( rt.x + rt.w, rt.y + rt.h / 2 ) : Point( rt.x, rt.y + rt.h / 2 );
+}
+
+Point Battle::Unit::GetCenterPoint() const
+{
+    const Sprite & sprite = AGG::GetICN( GetMonsterSprite().icn_file, GetFrame(), isReflect() );
+
+    const Rect & pos = position.GetRect();
+    const s32 centerY = pos.y + pos.h + sprite.y() / 2 - 10;
+
+    return Point( pos.x + pos.w / 2, centerY );
 }
 
 Point Battle::Unit::GetStartMissileOffset( size_t direction ) const

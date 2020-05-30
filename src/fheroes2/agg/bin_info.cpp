@@ -330,6 +330,19 @@ namespace Bin_Info
         return animationFrames.size() == SHOOT3_END + 1 && !animationFrames.at( animID ).empty();
     }
 
+    size_t MonsterAnimInfo::getProjectileID( float angle ) const
+    {
+        const std::vector<float> & angles = projectileAngles;
+        if ( angles.empty() )
+            return 0;
+
+        for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
+            if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
+                return id;
+        }
+        return 0;
+    }
+
     AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )
     {
         return AnimationSequence( info.animationFrames.at( animID ) );
@@ -340,7 +353,7 @@ namespace Bin_Info
         return AnimationReference( monsterID );
     }
 
-    MonsterAnimInfo GetMonsterInfo( int monsterID )
+    MonsterAnimInfo GetMonsterInfo( uint32_t monsterID )
     {
         return _infoCache.getAnimInfo( monsterID );
     }
