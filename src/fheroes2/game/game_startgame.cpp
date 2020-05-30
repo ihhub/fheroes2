@@ -684,7 +684,6 @@ int Interface::Basic::HumanTurn( bool isload )
     // startgame loop
     while ( Game::CANCEL == res ) {
         if ( !le.HandleEvents( true, true ) ) {
-            while ( le.HandleEvents() ) {}
             if ( EventExit() == Game::QUITGAME ) {
                 res = Game::QUITGAME;
                 break;
