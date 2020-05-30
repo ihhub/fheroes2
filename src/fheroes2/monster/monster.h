@@ -215,6 +215,7 @@ public:
     bool isAffectedByMorale( void ) const;
     bool isAlive( void ) const;
 
+    double getStrength() const;
     int ICNMonh( void ) const;
 
     u32 GetSpriteIndex( void ) const;

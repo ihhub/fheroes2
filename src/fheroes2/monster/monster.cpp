@@ -118,7 +118,7 @@ namespace
         // atck dfnc  min  max   hp             speed grwn  shots  name                  multiname            cost
         {4, 3, 2, 3, 4, Speed::AVERAGE, 8, 0, _( "Skeleton" ), _( "Skeletons" ), {75, 0, 0, 0, 0, 0, 0}},
         {5, 2, 2, 3, 15, Speed::VERYSLOW, 6, 0, _( "Zombie" ), _( "Zombies" ), {150, 0, 0, 0, 0, 0, 0}},
-        {5, 2, 2, 3, 25, Speed::AVERAGE, 6, 0, _( "Mutant Zombie" ), _( "Mutant Zombies" ), {200, 0, 0, 0, 0, 0, 0}},
+        {5, 2, 2, 3, 20, Speed::AVERAGE, 6, 0, _( "Mutant Zombie" ), _( "Mutant Zombies" ), {200, 0, 0, 0, 0, 0, 0}},
         {6, 6, 3, 4, 25, Speed::AVERAGE, 4, 0, _( "Mummy" ), _( "Mummies" ), {250, 0, 0, 0, 0, 0, 0}},
         {6, 6, 3, 4, 30, Speed::FAST, 4, 0, _( "Royal Mummy" ), _( "Royal Mummies" ), {300, 0, 0, 0, 0, 0, 0}},
         {8, 6, 5, 7, 30, Speed::AVERAGE, 3, 0, _( "Vampire" ), _( "Vampires" ), {500, 0, 0, 0, 0, 0, 0}},
@@ -635,6 +635,39 @@ u32 Monster::GetSpeed( void ) const
 u32 Monster::GetGrown( void ) const
 {
     return monsters[id].grown;
+}
+
+// Get approximate combat value of abstract Monster
+double Monster::getStrength() const
+{
+    // Average damage of 1000 units: to scale them closer to HEROES2W.EXE constants/readable values
+    double damagePotential = ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) * 500;
+
+    if ( isTwiceAttack() ) {
+        // Melee attacker will lose potential on second attack after retaliation
+        damagePotential *= isArchers() ? 2 : 1.75;
+    }
+
+    const double effectiveHP = GetHitPoints() * ( isHideAttack() ? 1.5 : 1 );
+    const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;
+
+    double monsterSpecial = 1.0;
+
+    if ( isArchers ) {
+        monsterSpecial += 0.5;
+    }
+
+    if ( isFly )
+        monsterSpecial += 0.3;
+
+    // Higher speed gives initiative advantage/first attack
+    // Remap speed value to -0.4...+0.5, AVERAGE is 0
+    monsterSpecial += ( GetSpeed() - 4 ) * 0.1;
+
+    if ( monsterSpecial <= 0 )
+        monsterSpecial = 0.1;
+
+    return sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
 }
 
 u32 Monster::GetRNDSize( bool skip_factor ) const
