@@ -359,6 +359,11 @@ Sprite GetModesSprite( u32 mod )
     return Sprite();
 }
 
+bool SortSpells( const std::pair<uint32_t, uint32_t> & first, const std::pair<uint32_t, uint32_t> & second )
+{
+    return first.second > 0 && first.second < second.second;
+}
+
 void DrawBattleStats( const Point & dst, const Troop & b )
 {
     const u32 modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
@@ -381,9 +386,7 @@ void DrawBattleStats( const Point & dst, const Troop & b )
     ow -= 4;
     ow = dst.x - ow / 2;
 
-    std::sort( spellVsDuration.begin(), spellVsDuration.end(), []( const std::pair<uint32_t, uint32_t> & first, const std::pair<uint32_t, uint32_t> & second ) {
-        return first.second > 0 && first.second < second.second;
-    } );
+    std::sort( spellVsDuration.begin(), spellVsDuration.end(), SortSpells );
 
     Text text;
 
