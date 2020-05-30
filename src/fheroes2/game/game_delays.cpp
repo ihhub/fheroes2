@@ -75,7 +75,7 @@ namespace Game
                           40, // HEROES_FADE_DELAY
                           40, // HEROES_PICKUP_DELAY
                           50, // PUZZLE_FADE_DELAY
-                          100, // BATTLE_DIALOG_DELAY
+                          75, // BATTLE_DIALOG_DELAY
                           120, // BATTLE_FRAME_DELAY
                           40, // BATTLE_MISSILE_DELAY
                           90, // BATTLE_SPELL_DELAY
