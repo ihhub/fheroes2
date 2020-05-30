@@ -396,7 +396,7 @@ void DrawBattleStats( const Point & dst, const Troop & b )
         sprite.Blit( ow, dst.y );
 
         const uint32_t duration = spellVsDuration[i].second;
-        if ( spellVsDuration[i].second ) {
+        if ( duration > 0 ) {
             text.Set( GetString( duration ), Font::SMALL );
             text.Blit( ow + ( sprite.w() - text.w() ) / 2, dst.y + sprite.h() + 1 );
         }
