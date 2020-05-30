@@ -120,10 +120,11 @@ int Game::MainMenu( void )
     // mainmenu loop
     while ( 1 ) {
         if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::Basic::EventExit() == QUITGAME )
+            if ( Interface::Basic::EventExit() == QUITGAME ) {
                 if ( conf.ExtGameUseFade() )
                     display.Fade();
                 return QUITGAME;
+            }
         }
 
         for ( u32 i = 0; i < ARRAY_COUNT( buttons ); i++ ) {
