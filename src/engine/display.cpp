@@ -211,7 +211,10 @@ void Display::ToggleFullScreen( void )
         SDL_SetWindowFullscreen( window, flags );
     }
 #else
+    const uint32_t flags = surface->flags;
     surface = SDL_SetVideoMode( 0, 0, 0, surface->flags ^ SDL_FULLSCREEN );
+    if ( surface == NULL )
+        surface = SDL_SetVideoMode(0, 0, 0, flags);
 #endif
 }
 
