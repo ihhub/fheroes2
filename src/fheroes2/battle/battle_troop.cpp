@@ -1008,8 +1008,8 @@ u32 Battle::Unit::GetDefense( void ) const
     if ( castle && castle->isBuild( BUILD_MOAT ) && Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) )
         res -= GameStatic::GetBattleMoatReduceDefense();
 
-    if ( res < 0 ) // cannot be negative!
-        res = 0;
+    if ( res < 1 ) // cannot be less than 1
+        res = 1;
 
     return res;
 }
