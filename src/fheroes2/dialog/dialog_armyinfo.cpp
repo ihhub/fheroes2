@@ -367,7 +367,7 @@ void DrawBattleStats( const Point & dst, const Troop & b )
 
     // accumulate width
     u32 ow = 0;
-    std::vector<std::pair<uint32_t, uint32_t>> spellVsDuration;
+    std::vector<std::pair<uint32_t, uint32_t> > spellVsDuration;
 
     for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii )
         if ( b.isModes( modes[ii] ) ) {
@@ -381,8 +381,9 @@ void DrawBattleStats( const Point & dst, const Troop & b )
     ow -= 4;
     ow = dst.x - ow / 2;
 
-    std::sort( spellVsDuration.begin(), spellVsDuration.end(), []( const std::pair<uint32_t, uint32_t> & first, const std::pair<uint32_t, uint32_t> & second )
-               { return first.second > 0 && first.second < second.second; } );
+    std::sort( spellVsDuration.begin(), spellVsDuration.end(), []( const std::pair<uint32_t, uint32_t> & first, const std::pair<uint32_t, uint32_t> & second ) {
+        return first.second > 0 && first.second < second.second;
+    } );
 
     Text text;
 
