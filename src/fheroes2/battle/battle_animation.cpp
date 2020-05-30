@@ -453,15 +453,7 @@ uint32_t AnimationReference::getShootingSpeed() const
 
 size_t AnimationReference::getProjectileID( float angle ) const
 {
-    const std::vector<float> & angles = _monsterInfo.projectileAngles;
-    if ( angles.empty() )
-        return 0;
-
-    for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
-        if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
-            return id;
-    }
-    return 0;
+    return _monsterInfo.getProjectileID( angle );
 }
 
 Point AnimationReference::getProjectileOffset( size_t direction ) const

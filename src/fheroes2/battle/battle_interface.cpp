@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <math.h>
 
 #include "agg.h"
 #include "battle_arena.h"
@@ -377,6 +376,7 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
     , animframe_start( 0 )
     , animframe_count( 0 )
     , reflect( r )
+    , _offset( area.x, area.y )
 {
     ResetAnimFrame( OP_IDLE );
 
@@ -396,16 +396,24 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
         pos.h = sprite.h();
     }
     else {
+        const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
+
         if ( reflect ) {
-            pos.x = area.x + area.w - 60;
-            pos.y = area.y + 75;
+            pos.x = _offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
+            pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
         }
         else {
-            pos.x = area.x + 5;
-            pos.y = area.y + 75;
+            pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
+            pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
         }
 
-        const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
+        if ( b->isCaptain() ) {
+            if ( reflect )
+                pos.x += CAPTAIN_X_OFFSET;
+            else
+                pos.x -= CAPTAIN_X_OFFSET;
+            pos.y += CAPTAIN_Y_OFFSET;
+        }
 
         pos.w = sprite.w();
         pos.h = sprite.h();
@@ -420,6 +428,11 @@ int Battle::OpponentSprite::GetColor( void ) const
 const HeroBase * Battle::OpponentSprite::GetHero( void ) const
 {
     return base;
+}
+
+Point Battle::OpponentSprite::Offset() const
+{
+    return _offset;
 }
 
 void Battle::OpponentSprite::IncreaseAnimFrame( bool loop )
@@ -667,10 +680,20 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
 void Battle::OpponentSprite::Redraw( void ) const
 {
     const Sprite & hero = AGG::GetICN( icn, animframe, reflect );
+
+    Point offset( _offset );
+    if ( base->isCaptain() ) {
+        if ( reflect )
+            offset.x += CAPTAIN_X_OFFSET;
+        else
+            offset.x -= CAPTAIN_X_OFFSET;
+        offset.y += CAPTAIN_Y_OFFSET;
+    }
+
     if ( reflect )
-        hero.Blit( pos.x - hero.w() + 55, pos.y );
+        hero.Blit( offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y() );
     else
-        hero.Blit( pos.x, pos.y );
+        hero.Blit( offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
 }
 
 Battle::Status::Status()
@@ -1107,7 +1130,7 @@ void Battle::Interface::RedrawOpponentsFlags( void ) const
         }
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), false );
-        flag.Blit( opponent1->GetArea().x + 38 - flag.w(), opponent1->GetArea().y + 5 );
+        flag.Blit( opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(), opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
     if ( !Settings::Get().QVGA() && opponent2 ) {
@@ -1138,8 +1161,9 @@ void Battle::Interface::RedrawOpponentsFlags( void ) const
         }
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), true );
-        const u32 ox = opponent2->GetHero()->isHeroes() ? 38 : 26;
-        flag.Blit( opponent2->GetArea().x + ox - flag.w(), opponent2->GetArea().y + 5 );
+        const Point offset = opponent2->Offset();
+        flag.Blit( offset.x + Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.w() ),
+                   offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y() );
     }
 }
 
@@ -1241,12 +1265,24 @@ void Battle::Interface::RedrawTroopCount( const Unit & b ) const
         sx = rt.x + ( rt.w - bar.w() ) / 2;
     }
     else {
-        sy = rt.y + rt.h - bar.h() - 5;
+        const bool isReflected = b.isReflect();
+        const bool isWide = b.isWide();
+        sy = rt.y + rt.h - bar.h() - ( isReflected ? 21 : 9 );
 
-        if ( b.isReflect() )
-            sx = rt.x + 3;
-        else
-            sx = rt.x + rt.w - bar.w() - 3;
+        if ( isReflected ) {
+            if ( isWide )
+                sx = rt.x;
+            else
+                sx = rt.x - bar.w() + 3;
+        }
+        else {
+            if ( isWide ) {
+                sx = rt.x + rt.w - bar.w();
+            }
+            else {
+                sx = rt.x + rt.w - 3;
+            }
+        }
     }
 
     bar.Blit( sx, sy );
@@ -1496,28 +1532,30 @@ void Battle::Interface::RedrawCastle3( const Castle & castle ) const
 void Battle::Interface::RedrawLowObjects( s32 cell_index, Surface & dst ) const
 {
     const Cell * cell = Board::GetCell( cell_index );
+    if ( cell == NULL )
+        return;
+
     Sprite sprite;
 
-    if ( cell )
-        switch ( cell->GetObject() ) {
-        case 0x84:
-            sprite = AGG::GetICN( ICN::COBJ0004, 0 );
-            break;
-        case 0x87:
-            sprite = AGG::GetICN( ICN::COBJ0007, 0 );
-            break;
-        case 0x90:
-            sprite = AGG::GetICN( ICN::COBJ0016, 0 );
-            break;
-        case 0x9E:
-            sprite = AGG::GetICN( ICN::COBJ0030, 0 );
-            break;
-        case 0x9F:
-            sprite = AGG::GetICN( ICN::COBJ0031, 0 );
-            break;
-        default:
-            break;
-        }
+    switch ( cell->GetObject() ) {
+    case 0x84:
+        sprite = AGG::GetICN( ICN::COBJ0004, 0 );
+        break;
+    case 0x87:
+        sprite = AGG::GetICN( ICN::COBJ0007, 0 );
+        break;
+    case 0x90:
+        sprite = AGG::GetICN( ICN::COBJ0016, 0 );
+        break;
+    case 0x9E:
+        sprite = AGG::GetICN( ICN::COBJ0030, 0 );
+        break;
+    case 0x9F:
+        sprite = AGG::GetICN( ICN::COBJ0031, 0 );
+        break;
+    default:
+        break;
+    }
 
     if ( sprite.isValid() ) {
         // const Point & topleft = border.GetArea();
@@ -1529,94 +1567,96 @@ void Battle::Interface::RedrawLowObjects( s32 cell_index, Surface & dst ) const
 void Battle::Interface::RedrawHighObjects( s32 cell_index ) const
 {
     const Cell * cell = Board::GetCell( cell_index );
+    if ( cell == NULL )
+        return;
+
     Sprite sprite;
 
-    if ( cell )
-        switch ( cell->GetObject() ) {
-        case 0x80:
-            sprite = AGG::GetICN( ICN::COBJ0000, 0 );
-            break;
-        case 0x81:
-            sprite = AGG::GetICN( ICN::COBJ0001, 0 );
-            break;
-        case 0x82:
-            sprite = AGG::GetICN( ICN::COBJ0002, 0 );
-            break;
-        case 0x83:
-            sprite = AGG::GetICN( ICN::COBJ0003, 0 );
-            break;
-        case 0x85:
-            sprite = AGG::GetICN( ICN::COBJ0005, 0 );
-            break;
-        case 0x86:
-            sprite = AGG::GetICN( ICN::COBJ0006, 0 );
-            break;
-        case 0x88:
-            sprite = AGG::GetICN( ICN::COBJ0008, 0 );
-            break;
-        case 0x89:
-            sprite = AGG::GetICN( ICN::COBJ0009, 0 );
-            break;
-        case 0x8A:
-            sprite = AGG::GetICN( ICN::COBJ0010, 0 );
-            break;
-        case 0x8B:
-            sprite = AGG::GetICN( ICN::COBJ0011, 0 );
-            break;
-        case 0x8C:
-            sprite = AGG::GetICN( ICN::COBJ0012, 0 );
-            break;
-        case 0x8D:
-            sprite = AGG::GetICN( ICN::COBJ0013, 0 );
-            break;
-        case 0x8E:
-            sprite = AGG::GetICN( ICN::COBJ0014, 0 );
-            break;
-        case 0x8F:
-            sprite = AGG::GetICN( ICN::COBJ0015, 0 );
-            break;
-        case 0x91:
-            sprite = AGG::GetICN( ICN::COBJ0017, 0 );
-            break;
-        case 0x92:
-            sprite = AGG::GetICN( ICN::COBJ0018, 0 );
-            break;
-        case 0x93:
-            sprite = AGG::GetICN( ICN::COBJ0019, 0 );
-            break;
-        case 0x94:
-            sprite = AGG::GetICN( ICN::COBJ0020, 0 );
-            break;
-        case 0x95:
-            sprite = AGG::GetICN( ICN::COBJ0021, 0 );
-            break;
-        case 0x96:
-            sprite = AGG::GetICN( ICN::COBJ0022, 0 );
-            break;
-        case 0x97:
-            sprite = AGG::GetICN( ICN::COBJ0023, 0 );
-            break;
-        case 0x98:
-            sprite = AGG::GetICN( ICN::COBJ0024, 0 );
-            break;
-        case 0x99:
-            sprite = AGG::GetICN( ICN::COBJ0025, 0 );
-            break;
-        case 0x9A:
-            sprite = AGG::GetICN( ICN::COBJ0026, 0 );
-            break;
-        case 0x9B:
-            sprite = AGG::GetICN( ICN::COBJ0027, 0 );
-            break;
-        case 0x9C:
-            sprite = AGG::GetICN( ICN::COBJ0028, 0 );
-            break;
-        case 0x9D:
-            sprite = AGG::GetICN( ICN::COBJ0029, 0 );
-            break;
-        default:
-            break;
-        }
+    switch ( cell->GetObject() ) {
+    case 0x80:
+        sprite = AGG::GetICN( ICN::COBJ0000, 0 );
+        break;
+    case 0x81:
+        sprite = AGG::GetICN( ICN::COBJ0001, 0 );
+        break;
+    case 0x82:
+        sprite = AGG::GetICN( ICN::COBJ0002, 0 );
+        break;
+    case 0x83:
+        sprite = AGG::GetICN( ICN::COBJ0003, 0 );
+        break;
+    case 0x85:
+        sprite = AGG::GetICN( ICN::COBJ0005, 0 );
+        break;
+    case 0x86:
+        sprite = AGG::GetICN( ICN::COBJ0006, 0 );
+        break;
+    case 0x88:
+        sprite = AGG::GetICN( ICN::COBJ0008, 0 );
+        break;
+    case 0x89:
+        sprite = AGG::GetICN( ICN::COBJ0009, 0 );
+        break;
+    case 0x8A:
+        sprite = AGG::GetICN( ICN::COBJ0010, 0 );
+        break;
+    case 0x8B:
+        sprite = AGG::GetICN( ICN::COBJ0011, 0 );
+        break;
+    case 0x8C:
+        sprite = AGG::GetICN( ICN::COBJ0012, 0 );
+        break;
+    case 0x8D:
+        sprite = AGG::GetICN( ICN::COBJ0013, 0 );
+        break;
+    case 0x8E:
+        sprite = AGG::GetICN( ICN::COBJ0014, 0 );
+        break;
+    case 0x8F:
+        sprite = AGG::GetICN( ICN::COBJ0015, 0 );
+        break;
+    case 0x91:
+        sprite = AGG::GetICN( ICN::COBJ0017, 0 );
+        break;
+    case 0x92:
+        sprite = AGG::GetICN( ICN::COBJ0018, 0 );
+        break;
+    case 0x93:
+        sprite = AGG::GetICN( ICN::COBJ0019, 0 );
+        break;
+    case 0x94:
+        sprite = AGG::GetICN( ICN::COBJ0020, 0 );
+        break;
+    case 0x95:
+        sprite = AGG::GetICN( ICN::COBJ0021, 0 );
+        break;
+    case 0x96:
+        sprite = AGG::GetICN( ICN::COBJ0022, 0 );
+        break;
+    case 0x97:
+        sprite = AGG::GetICN( ICN::COBJ0023, 0 );
+        break;
+    case 0x98:
+        sprite = AGG::GetICN( ICN::COBJ0024, 0 );
+        break;
+    case 0x99:
+        sprite = AGG::GetICN( ICN::COBJ0025, 0 );
+        break;
+    case 0x9A:
+        sprite = AGG::GetICN( ICN::COBJ0026, 0 );
+        break;
+    case 0x9B:
+        sprite = AGG::GetICN( ICN::COBJ0027, 0 );
+        break;
+    case 0x9C:
+        sprite = AGG::GetICN( ICN::COBJ0028, 0 );
+        break;
+    case 0x9D:
+        sprite = AGG::GetICN( ICN::COBJ0029, 0 );
+        break;
+    default:
+        break;
+    }
 
     if ( sprite.isValid() ) {
         // const Point & topleft = border.GetArea();
@@ -2052,8 +2092,10 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & b, Actions & a, std::st
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() )
+    if ( le.MousePressRight() ) {
         humanturn_spell = Spell::NONE;
+        teleport_src = -1;
+    }
     else if ( le.MouseCursor( rectBoard ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
 
@@ -2407,13 +2449,53 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID )
 {
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
+    Sprite missile;
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    const bool reverse = startPos.x > endPos.x;
+    const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
+
+    // Mage is channeling the bolt; doesn't have missile sprite
+    if ( isMage )
+        DELAY( Game::ApplyBattleSpeed( 115 ) );
+    else
+        missile = AGG::GetICN( Monster::GetMissileICN( monsterID ), Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ), reverse );
+
+    // Lich/Power lich has projectile speed of 25
+    const Points points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.w(), 25 ) );
+    Points::const_iterator pnt = points.begin();
+
+    // convert the following code into a function/event service
+    while ( le.HandleEvents( false ) && pnt != points.end() ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            cursor.Hide();
+            Redraw();
+            if ( isMage ) {
+                display.DrawLine( Point( startPos.x, startPos.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
+                display.DrawLine( Point( startPos.x, startPos.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                display.DrawLine( Point( startPos.x, startPos.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
+                display.DrawLine( Point( startPos.x, startPos.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                display.DrawLine( Point( startPos.x, startPos.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
+            }
+            else {
+                missile.Blit( reverse ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
+            }
+            cursor.Show();
+            display.Flip();
+            ++pnt;
+        }
+    }
+}
+
+void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+{
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = NULL;
     _movingUnit = &attacker;
@@ -2436,26 +2518,18 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     if ( archer ) {
         const Sprite & attackerSprite = AGG::GetICN( attacker.GetMonsterSprite().icn_file, attacker.GetFrame(), attacker.isReflect() );
         const Point attackerPos = GetTroopPosition( attacker, attackerSprite );
-        const Sprite & defenderSprite = AGG::GetICN( defender.GetMonsterSprite().icn_file, defender.GetFrame(), defender.isReflect() );
-        const Point defenderPos = GetTroopPosition( defender, defenderSprite );
 
         // For shooter position we need bottom center position of rear tile
         // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
         const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.w * 3 / 4 : CELLW / 2;
         const Point shooterPos( pos1.x + rearCenterX, attackerPos.y - attackerSprite.y() );
-        const Point targetPos = Point( pos2.x + pos2.w / 2, defenderPos.y - defenderSprite.y() / 2 );
 
         // Use the front one to calculate the angle, then overwrite
         Point offset = attacker.GetStartMissileOffset( Monster_Info::FRONT );
 
-        const int dx = targetPos.x - shooterPos.x - offset.x;
-        const int dy = targetPos.y - shooterPos.y - offset.y;
-        const bool reverse = dx < 0;
-        double angle = atan2( -dy, dx ) * 180.0 / M_PI;
-        // we only care about two quadrants, normalize
-        if ( reverse ) {
-            angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
-        }
+        const Point targetPos = defender.GetCenterPoint();
+
+        const double angle = GetAngle( Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
 
         // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
         const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
@@ -2468,37 +2542,10 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             AnimateUnitWithDelay( attacker, Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) );
         }
 
-        // draw missile animation
-        const Sprite & missile = AGG::GetICN( attacker.ICNMiss(), attacker.animation.getProjectileID( angle ), reverse );
-
         const Point missileStart = Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
 
-        // Lich/Power lich has projectile speed of 25
-        const Points points = GetEuclideanLine( missileStart, targetPos, std::max( missile.w(), 25 ) );
-        Points::const_iterator pnt = points.begin();
-
-        // convert the following code into a function/event service
-        while ( le.HandleEvents( false ) && pnt != points.end() ) {
-            CheckGlobalEvents( le );
-
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
-                if ( attacker.GetID() == Monster::MAGE || attacker.GetID() == Monster::ARCHMAGE ) {
-                    display.DrawLine( Point( missileStart.x, missileStart.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
-                    display.DrawLine( Point( missileStart.x, missileStart.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
-                    display.DrawLine( Point( missileStart.x, missileStart.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
-                    display.DrawLine( Point( missileStart.x, missileStart.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
-                    display.DrawLine( Point( missileStart.x, missileStart.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
-                }
-                else {
-                    missile.Blit( attacker.isReflect() ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
-                }
-                cursor.Show();
-                display.Flip();
-                ++pnt;
-            }
-        }
+        // draw missile animation
+        RedrawMissileAnimation( missileStart, targetPos, angle, attacker.GetID() );
     }
     else {
         int attackAnim = isDoubleCell ? Monster_Info::RANG_FRONT : Monster_Info::MELEE_FRONT;
@@ -2525,7 +2572,9 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     case Monster::LICH:
     case Monster::POWER_LICH:
         // lich clod animation
-        RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), false );
+        if ( archer ) {
+            RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), false );
+        }
         break;
 
     default:
@@ -2599,7 +2648,6 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     if ( opponent2 )
         opponent2->ResetAnimFrame( OP_IDLE );
     _movingUnit = NULL;
-    attacker.SwitchAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
@@ -3143,37 +3191,17 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 
 void Battle::Interface::RedrawActionTowerPart1( Tower & tower, Unit & defender )
 {
-    Display & display = Display::Get();
-    LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
     _currentUnit = NULL;
 
-    const Point pos1 = tower.GetPortPosition() + border.GetArea();
-    const Rect & pos2 = defender.GetRectPosition();
+    const Point missileStart = tower.GetPortPosition() + border.GetArea();
+    const Point targetPos = defender.GetCenterPoint();
+    const double angle = GetAngle( missileStart, targetPos );
 
     AGG::PlaySound( M82::KEEPSHOT );
 
-    // draw missile animation
-    const Sprite & missile = AGG::GetICN( ICN::KEEP, ICN::GetMissIndex( ICN::KEEP, pos1.x - pos2.x, pos1.y - pos2.y ), pos1.x > pos2.x );
-
-    const Points points = GetLinePoints( pos1, Point( pos2.x + pos2.w, pos2.y ), missile.w() );
-    Points::const_iterator pnt = points.begin();
-
-    while ( le.HandleEvents( false ) && pnt != points.end() ) {
-        CheckGlobalEvents( le );
-
-        // fast draw
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
-            missile.Blit( ( *pnt ).x - missile.w(), ( *pnt ).y );
-            cursor.Show();
-            display.Flip();
-            ++pnt;
-        }
-    }
+    // Keep missile == Orc missile
+    RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ORC );
 }
 
 void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & target )
@@ -3302,51 +3330,30 @@ void Battle::Interface::RedrawActionCatapult( int target )
 
 void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
 {
-    Display & display = Display::Get();
-    LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
     const HeroBase * current_commander = arena.GetCurrentCommander();
 
     if ( current_commander ) {
-        Point pt_from, pt_to;
+        Point missileStart;
         const bool from_left = current_commander == opponent1->GetHero();
 
         // is left position
         if ( from_left ) {
             const Rect & pos1 = opponent1->GetArea();
-            pt_from = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-
-            const Rect & pos2 = target.GetRectPosition();
-            pt_to = Point( pos2.x, pos2.y );
+            missileStart = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
         }
         else {
             const Rect & pos = opponent2->GetArea();
-            pt_from = Point( pos.x, pos.y + pos.h / 2 );
-
-            const Rect & pos2 = target.GetRectPosition();
-            pt_to = Point( pos2.x + pos2.w, pos2.y );
+            missileStart = Point( pos.x, pos.y + pos.h / 2 );
         }
 
-        const Sprite & missile = AGG::GetICN( ICN::ARCH_MSL, ICN::GetMissIndex( ICN::ARCH_MSL, pt_from.x - pt_to.x, pt_from.y - pt_to.y ), pt_from.x > pt_to.x );
+        const Point targetPos = target.GetCenterPoint();
+        const double angle = GetAngle( missileStart, targetPos );
 
-        const Points points = GetLinePoints( pt_from, pt_to, missile.w() );
-        Points::const_iterator pnt = points.begin();
-
-        cursor.SetThemes( Cursor::WAR_NONE );
+        Cursor::Get().SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::MAGCAROW );
 
-        while ( le.HandleEvents( false ) && pnt != points.end() ) {
-            CheckGlobalEvents( le );
-
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
-                missile.Blit( ( *pnt ).x - ( from_left ? 0 : missile.w() ), ( *pnt ).y );
-                cursor.Show();
-                display.Flip();
-                ++pnt;
-            }
-        }
+        // Magic arrow == Archer missile
+        RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ARCHER );
     }
 }
 
@@ -3357,7 +3364,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
     cursor.SetThemes( Cursor::WAR_NONE );
     cursor.Hide();
@@ -3415,7 +3422,7 @@ void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
     cursor.SetThemes( Cursor::WAR_NONE );
     cursor.Hide();
@@ -3451,7 +3458,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
     const Rect & rt1 = target.GetRectPosition();
     const Rect & rt2 = pos.GetRect();
 
@@ -3505,7 +3512,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
     Sprite sprite2( Surface( sprite1.GetSize(), false ), sprite1.x(), sprite1.y() );
     sprite1.Blit( sprite2 );
@@ -3633,7 +3640,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, target.isReflect() );
+    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
     Sprite sprite2( target.GetContour( target.isReflect() ? CONTOUR_REFLECT | CONTOUR_BLACK : CONTOUR_BLACK ), sprite1.x(), sprite1.y() );
 
     const int icn = ICN::DISRRAY;

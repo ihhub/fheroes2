@@ -338,6 +338,8 @@ private:
     int patrol_square;
 
     std::list<IndexObject> visit_object;
+
+    mutable int _alphaValue;
 };
 
 struct VecHeroes : public std::vector<Heroes *>

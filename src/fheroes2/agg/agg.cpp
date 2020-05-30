@@ -166,7 +166,7 @@ namespace AGG
     bool LoadAltICN( int icn, u32, bool );
     bool LoadOrgICN( Sprite &, int icn, u32, bool );
     bool LoadOrgICN( int icn, u32, bool );
-    void LoadICN( int icn, u32, bool reflect = false );
+    bool LoadICN( int icn, u32, bool reflect = false );
     void SaveICN( int icn );
 
     bool LoadAltTIL( int til, u32 max );
@@ -609,7 +609,7 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
             // max
             LoadOrgICN( sprite, ICN::RECRUIT, index + 4, false );
             // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 33, 15 ), 30, 4, sprite );
+            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 31, 15 ), 30, 4, sprite );
             // add: IN
             GetICN( ICN::APANEL, 4 + index ).Blit( Rect( 23, 20, 25, 15 ), 30, 4, sprite );
             break;
@@ -691,6 +691,7 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     // change color
     for ( u32 ii = 0; ii < count; ++ii ) {
         Sprite & sprite = reflect ? v.reflect[ii] : v.sprites[ii];
+        std::map<RGBA, RGBA> colorPairs;
 
         switch ( icn ) {
         case ICN::TELEPORT1:
@@ -710,58 +711,49 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
 
         case ICN::FOUNTAIN:
             LoadOrgICN( sprite, ICN::OBJNMUL2, 15, false );
-            sprite.ChangeColorIndex( 0xE8, 0xE8 - ii );
-            sprite.ChangeColorIndex( 0xE9, 0xE9 - ii );
-            sprite.ChangeColorIndex( 0xEA, 0xEA - ii );
-            sprite.ChangeColorIndex( 0xEB, 0xEB - ii );
-            sprite.ChangeColorIndex( 0xEC, 0xEC - ii );
-            sprite.ChangeColorIndex( 0xED, 0xED - ii );
-            sprite.ChangeColorIndex( 0xEE, 0xEE - ii );
-            sprite.ChangeColorIndex( 0xEF, 0xEF - ii );
+            colorPairs[PAL::GetPaletteColor( 0xE8 )] = PAL::GetPaletteColor( 0xE8 - ii );
+            colorPairs[PAL::GetPaletteColor( 0xE9 )] = PAL::GetPaletteColor( 0xE9 - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEA )] = PAL::GetPaletteColor( 0xEA - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEB )] = PAL::GetPaletteColor( 0xEB - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEC )] = PAL::GetPaletteColor( 0xEC - ii );
+            colorPairs[PAL::GetPaletteColor( 0xED )] = PAL::GetPaletteColor( 0xED - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEE )] = PAL::GetPaletteColor( 0xEE - ii );
+            colorPairs[PAL::GetPaletteColor( 0xEF )] = PAL::GetPaletteColor( 0xEF - ii );
+            sprite.ChangeColor( colorPairs );
             break;
 
         case ICN::TREASURE:
             LoadOrgICN( sprite, ICN::OBJNRSRC, 19, false );
-            sprite.ChangeColorIndex( 0x0A, ii ? 0x00 : 0x0A );
-            sprite.ChangeColorIndex( 0xC2, ii ? 0xD6 : 0xC2 );
-            sprite.ChangeColorIndex( 0x64, ii ? 0xDA : 0x64 );
+            colorPairs[PAL::GetPaletteColor( 0x0A )] = PAL::GetPaletteColor( ii ? 0x00 : 0x0A );
+            colorPairs[PAL::GetPaletteColor( 0xC2 )] = PAL::GetPaletteColor( ii ? 0xD6 : 0xC2 );
+            colorPairs[PAL::GetPaletteColor( 0x64 )] = PAL::GetPaletteColor( ii ? 0xDA : 0x64 );
+            sprite.ChangeColor( colorPairs );
+
             break;
 
         case ICN::ROUTERED:
             LoadOrgICN( sprite, ICN::ROUTE, ii, false );
-            sprite.ChangeColor( 0x55, RGBA( 164, 88, 16 ) );
-            sprite.ChangeColor( 0x5C, RGBA( 84, 0, 0 ) );
-            sprite.ChangeColor( 0x60, RGBA( 72, 0, 0 ) );
+            colorPairs[PAL::GetPaletteColor( 0x55 )] = RGBA( 164, 88, 16 );
+            colorPairs[PAL::GetPaletteColor( 0x5C )] = RGBA( 84, 0, 0 );
+            colorPairs[PAL::GetPaletteColor( 0x60 )] = RGBA( 72, 0, 0 );
+            sprite.ChangeColor( colorPairs );
             break;
 
         case ICN::YELLOW_FONT:
-            LoadOrgICN( sprite, ICN::FONT, ii, false );
-            sprite.ChangeColorIndex( 0x0A, 0xDA );
-            sprite.ChangeColorIndex( 0x0B, 0xDA );
-            sprite.ChangeColorIndex( 0x0C, 0xDA );
-            sprite.ChangeColorIndex( 0x0D, 0xDA );
-            sprite.ChangeColorIndex( 0x0E, 0xDB );
-            sprite.ChangeColorIndex( 0x0F, 0xDB );
-            sprite.ChangeColorIndex( 0x10, 0xDB );
-            sprite.ChangeColorIndex( 0x11, 0xDB );
-            sprite.ChangeColorIndex( 0x12, 0xDB );
-            sprite.ChangeColorIndex( 0x13, 0xDB );
-            sprite.ChangeColorIndex( 0x14, 0xDB );
-            break;
-
         case ICN::YELLOW_SMALFONT:
-            LoadOrgICN( sprite, ICN::SMALFONT, ii, false );
-            sprite.ChangeColorIndex( 0x0A, 0xDA );
-            sprite.ChangeColorIndex( 0x0B, 0xDA );
-            sprite.ChangeColorIndex( 0x0C, 0xDA );
-            sprite.ChangeColorIndex( 0x0D, 0xDA );
-            sprite.ChangeColorIndex( 0x0E, 0xDB );
-            sprite.ChangeColorIndex( 0x0F, 0xDB );
-            sprite.ChangeColorIndex( 0x10, 0xDB );
-            sprite.ChangeColorIndex( 0x11, 0xDB );
-            sprite.ChangeColorIndex( 0x12, 0xDB );
-            sprite.ChangeColorIndex( 0x13, 0xDB );
-            sprite.ChangeColorIndex( 0x14, 0xDB );
+            LoadOrgICN( sprite, ICN::FONT, ii, false );
+            colorPairs[PAL::GetPaletteColor( 0x0A )] = PAL::GetPaletteColor( 0xDA );
+            colorPairs[PAL::GetPaletteColor( 0x0B )] = PAL::GetPaletteColor( 0xDA );
+            colorPairs[PAL::GetPaletteColor( 0x0C )] = PAL::GetPaletteColor( 0xDA );
+            colorPairs[PAL::GetPaletteColor( 0x0D )] = PAL::GetPaletteColor( 0xDA );
+            colorPairs[PAL::GetPaletteColor( 0x0E )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x0F )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x10 )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x11 )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x12 )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x13 )] = PAL::GetPaletteColor( 0xDB );
+            colorPairs[PAL::GetPaletteColor( 0x14 )] = PAL::GetPaletteColor( 0xDB );
+            sprite.ChangeColor( colorPairs );
             break;
 
         default:
@@ -1076,6 +1068,10 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         }
     }
 
+    if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
+        res.second.SetAlphaMod( 0 );
+    }
+
     // fix air elem sprite
     if ( icn == ICN::AELEM && res.first.w() > 3 && res.first.h() > 3 ) {
         res.first.RenderContour( RGBA( 0, 0x84, 0xe0 ) ).Blit( -1, -1, res.first );
@@ -1162,7 +1158,7 @@ bool AGG::LoadOrgICN( int icn, u32 index, bool reflect )
 }
 
 /* load ICN object */
-void AGG::LoadICN( int icn, u32 index, bool reflect )
+bool AGG::LoadICN( int icn, u32 index, bool reflect )
 {
     icn_cache_t & v = icn_cache[icn];
 
@@ -1176,8 +1172,10 @@ void AGG::LoadICN( int icn, u32 index, bool reflect )
             // load modify sprite
             if ( !LoadExtICN( icn, index, reflect ) ) {
                 // load origin sprite
-                if ( !LoadOrgICN( icn, index, reflect ) )
-                    Error::Except( __FUNCTION__, "load icn" );
+                if ( !LoadOrgICN( icn, index, reflect ) ) {
+                    ERROR( "ICN load error: asking for file " << icn << ", sprite index " << index );
+                    return false;
+                }
             }
 #ifdef DEBUG
             if ( Settings::Get().UseAltResource() )
@@ -1191,6 +1189,7 @@ void AGG::LoadICN( int icn, u32 index, bool reflect )
             sp = Sprite::ScaleQVGASprite( sp );
         }
     }
+    return true;
 }
 
 /* return ICN sprite */
@@ -1212,7 +1211,9 @@ Sprite AGG::GetICN( int icn, u32 index, bool reflect )
         // need load?
         if ( 0 == v.count || ( ( reflect && ( !v.reflect || !v.reflect[index].isValid() ) ) || ( !v.sprites || !v.sprites[index].isValid() ) ) ) {
             CheckMemoryLimit();
-            LoadICN( icn, index, reflect );
+            if ( !LoadICN( icn, index, reflect ) ) {
+                return result;
+            }
         }
 
         if ( !reflect && IsICNScalable( icn ) )

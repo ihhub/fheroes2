@@ -953,10 +953,6 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & tile = world.GetTiles( dst_index );
     MapResource * map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
 
-    Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
-    tile.RemoveObjectSprite();
-
     if ( obj == MP2::OBJ_BOTTLE ) {
         MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
         Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
@@ -965,10 +961,6 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
         Funds funds = map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds();
 
         if ( obj == MP2::OBJ_CAMPFIRE ) {
-            // force reset sound
-            tile.SetObject( MP2::OBJ_ZERO );
-            Game::EnvironmentSoundMixer();
-
             Dialog::ResourceInfo( MP2::StringObject( obj ), _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ), funds );
         }
         else {
@@ -983,6 +975,10 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
 
         hero.GetKingdom().AddFundsResource( funds );
     }
+
+    Game::PlayPickupSound();
+    AnimationRemoveObject( tile );
+    tile.RemoveObjectSprite();
 
     tile.QuantityReset();
     if ( map_resource )

@@ -920,7 +920,7 @@ bool ArtifactsBar::ActionBarSingleClick( const Point & cursor, Artifact & art, c
         }
     }
     else {
-        if ( !read_only )
+        if ( can_change )
             art = Dialog::SelectArtifact();
 
         return false;
