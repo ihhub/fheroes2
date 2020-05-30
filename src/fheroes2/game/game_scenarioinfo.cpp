@@ -206,10 +206,11 @@ int Game::ScenarioInfo( void )
 
     while ( 1 ) {
         if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::Basic::EventExit() == QUITGAME )
+            if ( Interface::Basic::EventExit() == QUITGAME ) {
                 if ( conf.ExtGameUseFade() )
                     display.Fade();
                 return QUITGAME;
+            }
         }
 
         // press button
