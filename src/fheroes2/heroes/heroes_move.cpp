@@ -341,10 +341,16 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     bool reflect = ReflectSprite( direction );
 
-    const Sprite & sprite1 = SpriteHero( *this, sprite_index, reflect, false );
-    const Sprite & sprite2 = SpriteFlag( *this, sprite_index, reflect, false );
-    const Sprite & sprite3 = SpriteShad( *this, sprite_index );
-    const Sprite & sprite4 = SpriteFroth( *this, sprite_index, reflect );
+    Sprite sprite1 = SpriteHero( *this, sprite_index, reflect, false );
+    Sprite sprite2 = SpriteFlag( *this, sprite_index, reflect, false );
+    Sprite sprite3 = SpriteShad( *this, sprite_index );
+    Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
+
+    if ( _alphaValue < 255 ) { // TODO: sprite3 is a shadow but alpha makes it darker
+        sprite1.SetAlphaMod( _alphaValue );
+        sprite2.SetAlphaMod( _alphaValue );
+        sprite4.SetAlphaMod( _alphaValue );
+    }
 
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
     Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() : sprite2.x() ), dy + sprite2.y() + TILEWIDTH );
@@ -688,51 +694,22 @@ void Heroes::FadeOut( void ) const
         return;
 
     Display & display = Display::Get();
-
-    bool reflect = ReflectSprite( direction );
-
-    s32 dx = gamearea.GetMapsPos().x + TILEWIDTH * ( mp.x - gamearea.GetRectMaps().x );
-    s32 dy = gamearea.GetMapsPos().y + TILEWIDTH * ( mp.y - gamearea.GetRectMaps().y );
-
-    Sprite sphero = SpriteHero( *this, sprite_index, reflect, false );
-    Sprite sprite1 = Sprite( sphero.GetSurface(), sphero.x(), sphero.y() );
-
-    Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    const Rect src_rt = gamearea.RectFixed( dst_pt1, sprite1.w(), sprite1.h() );
-
     LocalEvent & le = LocalEvent::Get();
-    int alpha = 250;
+    _alphaValue = 250;
 
-    while ( le.HandleEvents() && alpha > 0 ) {
+    while ( le.HandleEvents() && _alphaValue > 0 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
             Cursor::Get().Hide();
 
-            for ( s32 y = mp.y - 1; y <= mp.y + 1; ++y )
-                for ( s32 x = mp.x - 1; x <= mp.x + 1; ++x )
-                    if ( Maps::isValidAbsPoint( x, y ) ) {
-                        const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( x, y ) );
-
-                        tile.RedrawTile( display );
-                        tile.RedrawBottom( display );
-                        tile.RedrawObjects( display );
-                    }
-
-            sprite1.SetAlphaMod( alpha );
-            sprite1.Blit( src_rt, dst_pt1, display );
-
-            for ( s32 y = mp.y - 1; y <= mp.y + 1; ++y )
-                for ( s32 x = mp.x - 1; x <= mp.x + 1; ++x )
-                    if ( Maps::isValidAbsPoint( x, y ) ) {
-                        const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( x, y ) );
-
-                        tile.RedrawTop( display );
-                    }
+            gamearea.Redraw( display, LEVEL_ALL );
 
             Cursor::Get().Show();
             display.Flip();
-            alpha -= 10;
+            _alphaValue -= 10;
         }
     }
+
+    _alphaValue = 255;
 }
 
 void Heroes::FadeIn( void ) const
@@ -744,51 +721,22 @@ void Heroes::FadeIn( void ) const
         return;
 
     Display & display = Display::Get();
-
-    bool reflect = ReflectSprite( direction );
-
-    s32 dx = gamearea.GetMapsPos().x + TILEWIDTH * ( mp.x - gamearea.GetRectMaps().x );
-    s32 dy = gamearea.GetMapsPos().y + TILEWIDTH * ( mp.y - gamearea.GetRectMaps().y );
-
-    Sprite sphero = SpriteHero( *this, sprite_index, reflect, false );
-    Sprite sprite1 = Sprite( sphero.GetSurface(), sphero.x(), sphero.y() );
-
-    Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    const Rect src_rt = gamearea.RectFixed( dst_pt1, sprite1.w(), sprite1.h() );
-
     LocalEvent & le = LocalEvent::Get();
-    int alpha = 0;
+    _alphaValue = 0;
 
-    while ( le.HandleEvents() && alpha < 250 ) {
+    while ( le.HandleEvents() && _alphaValue < 250 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
             Cursor::Get().Hide();
 
-            for ( s32 y = mp.y - 1; y <= mp.y + 1; ++y )
-                for ( s32 x = mp.x - 1; x <= mp.x + 1; ++x )
-                    if ( Maps::isValidAbsPoint( x, y ) ) {
-                        const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( x, y ) );
-
-                        tile.RedrawTile( display );
-                        tile.RedrawBottom( display );
-                        tile.RedrawObjects( display );
-                    }
-
-            sprite1.SetAlphaMod( alpha );
-            sprite1.Blit( src_rt, dst_pt1, display );
-
-            for ( s32 y = mp.y - 1; y <= mp.y + 1; ++y )
-                for ( s32 x = mp.x - 1; x <= mp.x + 1; ++x )
-                    if ( Maps::isValidAbsPoint( x, y ) ) {
-                        const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( x, y ) );
-
-                        tile.RedrawTop( display );
-                    }
+            gamearea.Redraw( display, LEVEL_ALL );
 
             Cursor::Get().Show();
             display.Flip();
-            alpha += 10;
+            _alphaValue += 10;
         }
     }
+
+    _alphaValue = 255;
 }
 
 bool Heroes::Move( bool fast )
