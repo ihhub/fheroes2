@@ -680,9 +680,11 @@ int Interface::Basic::HumanTurn( bool isload )
 
     // startgame loop
     while ( Game::CANCEL == res ) {
-        if ( !le.HandleEvents() ) {
-            res = Game::QUITGAME;
-            break;
+        if ( !le.HandleEvents( true, true ) ) {
+            if ( EventExit() == Game::QUITGAME ) {
+                res = Game::QUITGAME;
+                break;
+            }
         }
         // for pocketpc: auto hide status if start turn
         if ( autohide_status && Game::AnimateInfrequentDelay( Game::AUTOHIDE_STATUS_DELAY ) ) {
