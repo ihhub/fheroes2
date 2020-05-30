@@ -31,6 +31,7 @@
 #include "dialog_selectscenario.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_interface.h"
 #include "gamedefs.h"
 #include "kingdom.h"
 #include "maps_fileinfo.h"
@@ -203,7 +204,14 @@ int Game::ScenarioInfo( void )
     cursor.Show();
     display.Flip();
 
-    while ( le.HandleEvents() ) {
+    while ( 1 ) {
+        if ( !le.HandleEvents( true, true ) ) {
+            if ( Interface::Basic::EventExit() == QUITGAME )
+                if ( conf.ExtGameUseFade() )
+                    display.Fade();
+                return QUITGAME;
+        }
+
         // press button
         if ( buttonSelectMaps )
             le.MousePressLeft( *buttonSelectMaps ) ? buttonSelectMaps->PressDraw() : buttonSelectMaps->ReleaseDraw();

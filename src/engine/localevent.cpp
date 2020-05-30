@@ -432,7 +432,7 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
-bool LocalEvent::HandleEvents( bool delay )
+bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 {
     SDL_Event event;
 
@@ -493,9 +493,14 @@ bool LocalEvent::HandleEvents( bool delay )
             break;
 
         // exit
-        //case SDL_QUIT:
+        case SDL_QUIT:
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        case SDL_WINDOWEVENT_CLOSE:
+#endif
             // Error::Except(__FUNCTION__, "SDL_QUIT");
-        //    return false; // try to perform clear exit to catch all memory leaks, for example
+            if ( allowExit )
+                return false; // try to perform clear exit to catch all memory leaks, for example
+            break;
 
         default:
             break;
