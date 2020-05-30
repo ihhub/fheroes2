@@ -493,9 +493,9 @@ bool LocalEvent::HandleEvents( bool delay )
             break;
 
         // exit
-        case SDL_QUIT:
+        //case SDL_QUIT:
             // Error::Except(__FUNCTION__, "SDL_QUIT");
-            return false; // try to perform clear exit to catch all memory leaks, for example
+        //    return false; // try to perform clear exit to catch all memory leaks, for example
 
         default:
             break;
