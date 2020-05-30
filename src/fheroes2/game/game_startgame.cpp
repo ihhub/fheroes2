@@ -641,7 +641,9 @@ int Interface::Basic::HumanTurn( bool isload )
     cursor.Show();
     display.Flip();
 
-    Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player's turn" ) );
+    if ( conf.GameType( Game::TYPE_HOTSEAT ) ) {
+        Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player's turn" ) );
+    }
 
     if ( !isload ) {
         // new week dialog
