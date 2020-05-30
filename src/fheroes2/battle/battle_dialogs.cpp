@@ -53,7 +53,7 @@ namespace
             , _finished( false )
             , _loop( loop )
         {
-             _frameId = ICN::AnimationFrame( _icnId, 1, _counter );
+            _frameId = ICN::AnimationFrame( _icnId, 1, _counter );
         }
 
         uint32_t frameId()
@@ -91,6 +91,7 @@ namespace
         {
             return _icnId;
         }
+
     private:
         int _icnId;
         uint32_t _frameId;
