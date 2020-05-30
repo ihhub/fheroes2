@@ -139,7 +139,7 @@ public:
     static Cursor & Get( void );
 
 #if defined( USE_SDL_CURSOR )
-    void Hide( void );
+    virtual void Hide( void );
     bool isVisible( void ) const;
 #else
     static void Redraw( s32, s32 );

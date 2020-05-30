@@ -78,7 +78,7 @@ public:
     void Move( const Point & );
     void Move( int, int );
 
-    void Hide( void );
+    virtual void Hide( void );
     void Show( void );
     void Redraw( void );
 
