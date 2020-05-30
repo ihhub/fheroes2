@@ -104,6 +104,7 @@ Heroes::Heroes()
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
     , patrol_square( 0 )
+    , _alphaValue( 255 )
 {}
 
 Heroes::Heroes( int heroid, int rc )
@@ -121,6 +122,7 @@ Heroes::Heroes( int heroid, int rc )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
     , patrol_square( 0 )
+    , _alphaValue( 255 )
 {
     name = _( Heroes::GetName( heroid ) );
 
