@@ -65,10 +65,6 @@ int Game::MainMenu( void )
 
     // animation
     u32 lantern_frame = 0;
-    std::vector<Sprite> animSprites;
-    for ( uint32_t fIter = 0; fIter < 40; ++fIter ) {
-        animSprites.push_back( AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, fIter ) ) );
-    }
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -85,7 +81,6 @@ int Game::MainMenu( void )
     Button buttonQuit( s5.x(), s5.y(), ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
     bgImage.Blit( Point( 0, 0 ) );
-    animSprites[lantern_frame].Blit( animSprites[lantern_frame].x(), animSprites[lantern_frame].y() );
 
     buttonNewGame.Draw();
     buttonLoadGame.Draw();
@@ -172,9 +167,8 @@ int Game::MainMenu( void )
 
         if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
             cursor.Hide();
-            const u32 frameID = ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame );
-            animSprites[frameID].Blit( animSprites[frameID].x(), animSprites[frameID].y() );
-            lantern_frame++;
+            const Sprite & lantern12 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame++ ) );
+            lantern12.Blit( lantern12.x(), lantern12.y() );
             cursor.Show();
             display.Flip();
         }
