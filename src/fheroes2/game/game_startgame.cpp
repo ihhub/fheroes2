@@ -552,6 +552,7 @@ int Interface::Basic::StartGame( void )
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
                         Redraw();
                         display.Flip();
+                        Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn" ) );
                     }
                     iconsPanel.SetRedraw();
                     iconsPanel.ShowIcons();
@@ -640,10 +641,6 @@ int Interface::Basic::HumanTurn( bool isload )
 
     cursor.Show();
     display.Flip();
-
-    if ( conf.GameType( Game::TYPE_HOTSEAT ) ) {
-        Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player's turn" ) );
-    }
 
     if ( !isload ) {
         // new week dialog
