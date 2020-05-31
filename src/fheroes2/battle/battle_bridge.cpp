@@ -59,15 +59,15 @@ bool Battle::Bridge::AllowUp( void ) const
     if ( isDeadBodyOnABridge() )
         return false;
 
-    const bool isNoUnitOn49 = NULL == Board::GetCell( 49 )->GetUnit();
-    const bool isNoUnitOn50 = NULL == Board::GetCell( 50 )->GetUnit();
-    return isNoUnitOn49 && isNoUnitOn50;
+    const bool isNoUnitOnMoat = NULL == Board::GetCell( MOAT_CELL )->GetUnit();
+    const bool isNoUnitOnGates = NULL == Board::GetCell( GATES_CELL )->GetUnit();
+    return isNoUnitOnMoat && isNoUnitOnGates;
 }
 
 bool Battle::Bridge::isDeadBodyOnABridge( void ) const
 {
     const Battle::Graveyard * graveyard = GetArena()->GetGraveyard();
-    return graveyard->GetLastTroopUID( 49 ) || graveyard->GetLastTroopUID( 50 );
+    return graveyard->GetLastTroopUID( MOAT_CELL ) || graveyard->GetLastTroopUID( GATES_CELL );
 }
 
 bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
@@ -80,14 +80,14 @@ bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
 
     const s32 prevPos = b.GetHeadIndex();
 
-    if ( dstPos == 50 ) {
-        if ( prevPos == 51 )
+    if ( dstPos == GATES_CELL ) {
+        if ( prevPos == CELL_AFTER_GATES )
             return true;
-        if ( ( prevPos == 61 || prevPos == 39 ) && b.GetColor() == Arena::GetCastle()->GetColor() )
+        if ( ( prevPos == BELOW_BRIDGE_CELL || prevPos == ABOVE_BRIDGE_CELL ) && b.GetColor() == Arena::GetCastle()->GetColor() )
             return true;
     }
-    else if ( dstPos == 49 ) {
-        if ( prevPos != 50 && b.GetColor() == Arena::GetCastle()->GetColor() )
+    else if ( dstPos == MOAT_CELL ) {
+        if ( prevPos != GATES_CELL && b.GetColor() == Arena::GetCastle()->GetColor() )
             return true;
     }
 
@@ -96,7 +96,7 @@ bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
 
 bool Battle::Bridge::isPassable( int color ) const
 {
-    if ( !isDown() && isDeadBodyOnABridge() ) // if bridge not in a down state and dead body's exists on 49 and 50 tiles
+    if ( !isDown() && isDeadBodyOnABridge() ) // if bridge not in a down state and dead body's exists on MOAT_CELL and GATES_CELL tiles
         return false;
 
     return color == Arena::GetCastle()->GetColor() || isDown();
@@ -105,19 +105,19 @@ bool Battle::Bridge::isPassable( int color ) const
 void Battle::Bridge::SetDestroy( void )
 {
     destroy = true;
-    Board::GetCell( 49 )->SetObject( 0 );
-    Board::GetCell( 50 )->SetObject( 0 );
+    Board::GetCell( MOAT_CELL )->SetObject( 0 );
+    Board::GetCell( GATES_CELL )->SetObject( 0 );
 }
 
 void Battle::Bridge::SetPassable( const Unit & b )
 {
     if ( Board::isCastleIndex( b.GetHeadIndex() ) || b.GetColor() == Arena::GetCastle()->GetColor() ) {
-        Board::GetCell( 49 )->SetObject( 0 );
-        Board::GetCell( 50 )->SetObject( 0 );
+        Board::GetCell( MOAT_CELL )->SetObject( 0 );
+        Board::GetCell( GATES_CELL )->SetObject( 0 );
     }
     else {
-        Board::GetCell( 49 )->SetObject( 1 );
-        Board::GetCell( 50 )->SetObject( 1 );
+        Board::GetCell( MOAT_CELL )->SetObject( 1 );
+        Board::GetCell( GATES_CELL )->SetObject( 1 );
     }
 }
 
@@ -132,4 +132,9 @@ void Battle::Bridge::Action( const Unit & b, s32 dst )
         Arena::GetInterface()->RedrawBridgeAnimation( action_down );
 
     SetDown( action_down );
+}
+
+bool Battle::Bridge::isMoatCell( int cellId ) const
+{
+    return cellId == MOAT_CELL;
 }

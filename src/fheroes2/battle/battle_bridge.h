@@ -47,10 +47,20 @@ namespace Battle
         bool isDestroy( void ) const;
         bool isDown( void ) const;
         bool isDeadBodyOnABridge( void ) const;
+        bool isMoatCell( int cellId ) const;
 
     private:
         bool destroy;
         bool down;
+
+        enum
+        {
+            ABOVE_BRIDGE_CELL = 39,
+            MOAT_CELL = 49,
+            GATES_CELL = 50,
+            CELL_AFTER_GATES = 51,
+            BELOW_BRIDGE_CELL = 61
+        };
     };
 }
 
