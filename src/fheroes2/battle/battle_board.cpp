@@ -99,24 +99,24 @@ void Battle::Board::SetPositionQuality( const Unit & b )
     }
 }
 
-void Battle::Board::SetEnemyQuality( const Unit & b )
+void Battle::Board::SetEnemyQuality( const Unit & unit )
 {
     Arena * arena = GetArena();
-    Units enemies( arena->GetForce( b.GetColor(), true ), true );
+    Units enemies( arena->GetForce( unit.GetColor(), true ), true );
 
     for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-        Unit * unit = *it;
+        Unit * enemy = *it;
 
-        if ( unit && unit->isValid() ) {
-            const s32 & score = b.GetScoreQuality( *unit );
-            Cell * cell = GetCell( unit->GetHeadIndex() );
+        if ( enemy && enemy->isValid() ) {
+            const s32 score = enemy->GetScoreQuality( unit );
+            Cell * cell = GetCell( enemy->GetHeadIndex() );
 
             cell->SetQuality( score );
 
-            if ( unit->isWide() )
-                GetCell( unit->GetTailIndex() )->SetQuality( score );
+            if ( enemy->isWide() )
+                GetCell( enemy->GetTailIndex() )->SetQuality( score );
 
-            DEBUG( DBG_BATTLE, DBG_TRACE, score << " for " << unit->String() );
+            DEBUG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() );
         }
     }
 }

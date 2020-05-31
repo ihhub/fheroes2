@@ -400,7 +400,7 @@ bool Battle::Unit::canReach( const Unit & unit ) const
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
     const int target = ( unit.isWide() && isIndirectAttack ) ? unit.GetTailIndex() : unit.GetHeadIndex();
-    return Board::GetDistance( from, target ) <= GetSpeed();
+    return Board::GetDistance( from, target ) - 1 <= GetSpeed( true );
 }
 
 bool Battle::Unit::isHandFighting( void ) const
@@ -1019,17 +1019,18 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 {
     double score = 0;
     const Unit & attacker = *this;
+    const ArmyTroop & defenderBase = static_cast<const ArmyTroop &>( defender );
 
-    const double defendersDamage = ( defender.GetDamageMin( attacker ) + defender.GetDamageMax( attacker ) ) / 2;
+    const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defenderBase.GetDamageMin() ) + defenderBase.GetDamageMax() ) / 2.0 );
     const uint32_t attackerUnitsLost = ( defender.Modes( CAP_MIRRORIMAGE ) ) ? GetCount() : HowManyWillKilled( defendersDamage );
     const double attackerPowerLost = static_cast<double>( GetCount() ) / attackerUnitsLost;
 
-    double attackerThreat = ( attacker.GetDamageMin( defender ) + attacker.GetDamageMax( defender ) ) / 2;
+    double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( ArmyTroop::GetDamageMin() ) + ArmyTroop::GetDamageMax() ) / 2.0 );
 
     if ( canReach( defender ) ) {
         if ( isTwiceAttack() ) {
-            if ( isArchers() && !isHandFighting()  ) {
-                attackerThreat *= 2;
+            if ( isArchers() ) {
+                attackerThreat *= isHandFighting() ? 1 : 2;
             }
             else if ( ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
                 attackerThreat *= 2;
