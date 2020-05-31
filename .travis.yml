@@ -21,7 +21,7 @@ addons:
 matrix:
   include:
     - os: linux
-      name: "Sonar Cloud analysis"
+      name: "SonarCloud analysis"
       dist: trusty
       before_install:
         - sudo apt-get update
