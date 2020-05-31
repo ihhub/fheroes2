@@ -1095,10 +1095,27 @@ u32 Army::GetDefense( void ) const
 double Army::GetStrength( void ) const
 {
     double res = 0;
+    const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            res += ( *it )->GetStrength();
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        const Troop * troop = *it;
+        if ( troop->isValid() ) {
+            double strength = troop->GetStrength();
+
+            if ( troop->isArchers() && archery > 0 ) {
+                strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
+            }
+
+            const int morale = troop->GetMorale();
+            strength *= 1 + (morale < 0) ? morale / 12.0 : morale / 24.0;            
+            strength *= 1 + troop->GetLuck() / 24.0;
+
+            res += strength;
+        }
+    }
+
+    // hero spell STR
+    // composition
 
     return res;
 }
@@ -1204,7 +1221,7 @@ u32 Army::ActionToSirens( void )
     return res;
 }
 
-bool Army::isStrongerThan(const Army& target) const
+bool Army::isStrongerThan( const Army & target ) const
 {
     if ( !target.isValid() )
         return true;
