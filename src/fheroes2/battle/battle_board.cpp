@@ -139,7 +139,7 @@ void Battle::Board::SetScanPassability( const Unit & b )
 
     at( b.GetHeadIndex() ).SetDirection( CENTER );
 
-    if ( b.isFly() ) {
+    if ( b.isFlying() ) {
         for ( iterator it = begin(); it != end(); ++it )
             if ( ( *it ).isPassable3( b, false ) )
                 ( *it ).SetDirection( CENTER );

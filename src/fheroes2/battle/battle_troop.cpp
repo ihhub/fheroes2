@@ -372,9 +372,9 @@ void Battle::Unit::SetRandomLuck( void )
     // Bless, Curse and Luck do stack
 }
 
-bool Battle::Unit::isFly( void ) const
+bool Battle::Unit::isFlying( void ) const
 {
-    return ArmyTroop::isFly() && !Modes( SP_SLOW );
+    return ArmyTroop::isFlying() && !Modes( SP_SLOW );
 }
 
 bool Battle::Unit::isValid( void ) const
@@ -441,7 +441,7 @@ bool Battle::Unit::checkIdleDelay()
 
 void Battle::Unit::NewTurn( void )
 {
-    if ( isResurectLife() )
+    if ( isRegenerating() )
         hp = ArmyTroop::GetHitPoints();
 
     ResetModes( TR_RESPONSED );
@@ -507,20 +507,7 @@ u32 Battle::Unit::GetDamageMax( const Unit & enemy ) const
 u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
 {
     if ( isArchers() ) {
-        if ( isHandFighting() ) {
-            switch ( GetID() ) {
-            // skip
-            case Monster::MAGE:
-            case Monster::ARCHMAGE:
-            case Monster::TITAN:
-                break;
-
-            default:
-                dmg /= 2;
-                break;
-            }
-        }
-        else {
+        if ( !isHandFighting() ) {
             // check skill archery +%10, +%25, +%50
             if ( GetCommander() ) {
                 dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
@@ -533,6 +520,9 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
             // check spell shield
             if ( enemy.Modes( SP_SHIELD ) )
                 dmg /= Spell( Spell::SHIELD ).ExtraValue();
+        }
+        else if ( hasMeleePenalty() ) {
+            dmg /= 2;
         }
     }
 
@@ -909,7 +899,7 @@ StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    if ( isAlwayResponse() )
+    if ( isAlwaysRetaliating() )
         return true;
 
     if ( !Modes( TR_RESPONSED ) ) {
@@ -1047,17 +1037,17 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     if ( !noscale ) {
         if ( defender.isArchers() )
             res += res * 0.7;
-        if ( defender.isFly() )
+        if ( defender.isFlying() )
             res += res * 0.6;
-        if ( defender.isHideAttack() )
+        if ( defender.ignoreRetaliation() )
             res += res * 0.5;
         if ( defender.isTwiceAttack() )
             res += res * 0.4;
-        if ( defender.isResurectLife() )
+        if ( defender.isRegenerating() )
             res += res * 0.3;
         if ( defender.isDoubleCellAttack() )
             res += res * 0.3;
-        if ( defender.isAlwayResponse() )
+        if ( defender.isAlwaysRetaliating() )
             res -= res * 0.5;
     }
 

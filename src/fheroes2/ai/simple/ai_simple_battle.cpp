@@ -250,7 +250,7 @@ void AI::Simple::BattleTurn( Arena & arena, const Unit & b, Actions & a )
         }
 
         if ( Board::isValidIndex( move ) ) {
-            if ( b.isFly() ) {
+            if ( b.isFlying() ) {
                 enemy = AIGetEnemyAbroadMaxQuality( move, b.GetColor() );
                 if ( BattleMagicTurn( arena, b, a, enemy ) )
                     return; /* repeat turn: correct spell ability */

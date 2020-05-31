@@ -582,7 +582,8 @@ namespace AI
         // free join
         if ( JOIN_FREE == join.first ) {
             // join if ranged or flying monsters present
-            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFly() ) {
+            // TODO: join logic !!
+            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
                 DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
                 hero.GetArmy().JoinTroop( troop );
                 destroy = true;
@@ -594,7 +595,7 @@ namespace AI
             // join with cost
             if ( JOIN_COST == join.first ) {
             // join if archers or fly or present
-            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFly() ) {
+            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
                 u32 gold = troop.GetCost().gold;
                 DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
                 hero.GetArmy().JoinTroop( troop(), join.second );
@@ -1709,7 +1710,7 @@ namespace AI
         case MP2::OBJ_PEASANTHUT:
         case MP2::OBJ_THATCHEDHUT: {
             const Troop & troop = tile.QuantityTroop();
-            if ( troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFly() ) ) ) )
+            if ( troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFlying() ) ) ) )
                 return true;
             break;
         }
@@ -1728,7 +1729,7 @@ namespace AI
             const payment_t paymentCosts = troop.GetCost();
 
             if ( troop.isValid() && kingdom.AllowPayment( paymentCosts )
-                 && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFly() ) ) ) )
+                 && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFlying() ) ) ) )
                 return true;
             break;
         }

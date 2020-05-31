@@ -638,8 +638,11 @@ u32 Monster::GetGrown( void ) const
 }
 
 // Get approximate combat value of abstract Monster
-double Monster::getStrength() const
+double Monster::getMonsterStrength() const
 {
+    const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.5 : 1 );
+    const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;
+
     // Average damage of 1000 units: to scale them closer to HEROES2W.EXE constants/readable values
     double damagePotential = ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) * 500;
 
@@ -648,16 +651,13 @@ double Monster::getStrength() const
         damagePotential *= isArchers() ? 2 : 1.75;
     }
 
-    const double effectiveHP = GetHitPoints() * ( isHideAttack() ? 1.5 : 1 );
-    const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;
-
     double monsterSpecial = 1.0;
 
-    if ( isArchers ) {
-        monsterSpecial += 0.5;
+    if ( isArchers() ) {
+        monsterSpecial += hasMeleePenalty() ? 0.4 : 0.5;
     }
 
-    if ( isFly )
+    if ( isFlying() )
         monsterSpecial += 0.3;
 
     // Higher speed gives initiative advantage/first attack
@@ -705,6 +705,24 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     }
 
     return isValid() ? GetCountFromHitPoints( id, res ) : 0;
+}
+
+bool Monster::hasMeleePenalty() const
+{
+    if ( !isArchers() )
+        return false;
+
+    switch ( id ) {
+    case Monster::MAGE:
+    case Monster::ARCHMAGE:
+    case Monster::TITAN:
+        return false;
+
+    default:
+        break;
+    }
+
+    return true;
 }
 
 bool Monster::isUndead( void ) const
@@ -767,7 +785,7 @@ bool Monster::isDragons( void ) const
     return false;
 }
 
-bool Monster::isFly( void ) const
+bool Monster::isFlying( void ) const
 {
     switch ( id ) {
     case SPRITE:
@@ -830,7 +848,7 @@ bool Monster::isAllowUpgrade( void ) const
     return id != GetUpgrade().id;
 }
 
-bool Monster::isHideAttack( void ) const
+bool Monster::ignoreRetaliation( void ) const
 {
     switch ( id ) {
     case Monster::ROGUE:
@@ -865,7 +883,7 @@ bool Monster::isTwiceAttack( void ) const
     return false;
 }
 
-bool Monster::isResurectLife( void ) const
+bool Monster::isRegenerating( void ) const
 {
     switch ( id ) {
     case TROLL:
@@ -901,7 +919,7 @@ bool Monster::isMultiCellAttack( void ) const
     return id == HYDRA;
 }
 
-bool Monster::isAlwayResponse( void ) const
+bool Monster::isAlwaysRetaliating( void ) const
 {
     return id == GRIFFIN;
 }
@@ -1847,7 +1865,7 @@ RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
     , _icnID( monster.GetMonsterSprite().icn_file )
     , _frameId( 0 )
     , _frameOffset( 0 )
-    , _isFlyer( monster.isFly() )
+    , _isFlyer( monster.isFlying() )
 {
     _addValidMove( Monster_Info::STATIC );
     _addValidMove( Monster_Info::STATIC );

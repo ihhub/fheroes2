@@ -1740,9 +1740,9 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             }
         }
         else if ( cell->isPassable3( *_currentUnit, false ) && UNKNOWN != cell->GetDirection() ) {
-            statusMsg = _currentUnit->isFly() ? _( "Fly %{monster} here." ) : _( "Move %{monster} here." );
+            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here." ) : _( "Move %{monster} here." );
             StringReplace( statusMsg, "%{monster}", _currentUnit->GetName() );
-            return _currentUnit->isFly() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
+            return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
         }
     }
 

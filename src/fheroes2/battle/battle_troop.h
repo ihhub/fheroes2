@@ -94,7 +94,7 @@ namespace Battle
 
         bool isValid( void ) const;
         bool isArchers( void ) const;
-        bool isFly( void ) const;
+        bool isFlying( void ) const;
         bool isTwiceAttack( void ) const;
 
         bool AllowResponse( void ) const;
