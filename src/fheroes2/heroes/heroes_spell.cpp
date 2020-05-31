@@ -209,6 +209,8 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
+        I.SetFocus( &hero );
+
         // educate spells
         if ( !Settings::Get().ExtHeroLearnSpellsWithDay() )
             castle->MageGuildEducateHero( hero );
@@ -367,6 +369,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.FadeIn();
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
+
+        I.SetFocus( &hero );
 
         hero.ActionNewPosition();
 
