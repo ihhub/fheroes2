@@ -1538,7 +1538,7 @@ namespace AI
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     Army enemy( tile );
-                    return army.isStrongerThan(enemy);
+                    return army.isStrongerThan( enemy );
                 }
                 else
                     return true;

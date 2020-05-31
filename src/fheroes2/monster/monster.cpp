@@ -20,7 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "monster.h"
+#include <math.h>
+
 #include "agg.h"
 #include "bin_info.h"
 #include "castle.h"
@@ -31,6 +32,7 @@
 #include "icn.h"
 #include "luck.h"
 #include "m82.h"
+#include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "race.h"
@@ -666,7 +668,7 @@ double Monster::GetMonsterStrength() const
     if ( isFlying() )
         monsterSpecial += 0.3;
 
-    switch (id) {
+    switch ( id ) {
     case Monster::UNICORN:
     case Monster::CYCLOPS:
     case Monster::MEDUSA:
@@ -689,7 +691,7 @@ double Monster::GetMonsterStrength() const
     // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0
     // Punish slow speeds more as unit won't participate in first rounds and slows down strategic army
     const int speedDiff = GetSpeed() - 4;
-    monsterSpecial += (speedDiff < 0) ? speedDiff * 0.1 : speedDiff * 0.05;
+    monsterSpecial += ( speedDiff < 0 ) ? speedDiff * 0.1 : speedDiff * 0.05;
 
     // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
     return sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
