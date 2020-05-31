@@ -24,7 +24,6 @@ matrix:
       name: "SonarCloud analysis"
       dist: trusty
       before_install:
-        - sudo apt-get update
         - sudo apt-get install -y libsdl1.2-dev
         - sudo apt-get install -y libsdl-ttf2.0-dev
         - sudo apt-get install -y libsdl-mixer1.2-dev
@@ -41,7 +40,6 @@ matrix:
     - os: linux
       name: "Linux (Ubuntu) with SDL 1.2"
       before_install:
-        - sudo apt-get update
         - sudo apt-get install -y libsdl1.2-dev
         - sudo apt-get install -y libsdl-ttf2.0-dev
         - sudo apt-get install -y libsdl-mixer1.2-dev
@@ -64,7 +62,6 @@ matrix:
     - os: linux
       name: "Linux (Ubuntu) with SDL 2.0"
       before_install:
-        - sudo apt-get update
         - sudo apt-get install -y libsdl2-dev
         - sudo apt-get install -y libsdl2-ttf-dev
         - sudo apt-get install -y libsdl2-mixer-dev
@@ -89,7 +86,6 @@ matrix:
       arch: arm64
       name: "Linux (Ubuntu) ARM with SDL 1.2"
       before_install:
-        - sudo apt-get update
         - sudo apt-get install -y libsdl1.2-dev
         - sudo apt-get install -y libsdl-ttf2.0-dev
         - sudo apt-get install -y libsdl-mixer1.2-dev
@@ -115,7 +111,6 @@ matrix:
       arch: arm64
       name: "Linux (Ubuntu) ARM with SDL 2.0"
       before_install:
-        - sudo apt-get update
         - sudo apt-get install -y libsdl2-dev
         - sudo apt-get install -y libsdl2-ttf-dev
         - sudo apt-get install -y libsdl2-mixer-dev
