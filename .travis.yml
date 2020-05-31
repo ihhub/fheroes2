@@ -32,6 +32,7 @@ matrix:
         - sudo apt-get install -y gettext
         - sudo apt-get install -y zip
       script:
+        - curl -L https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip /home/travis/.sonar/cache//build-wrapper-linux-x86.zip
         # Wraps the compilation with the Build Wrapper to generate configuration (used
         # later by the SonarScanner) into the "bw-output" folder
         - build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
