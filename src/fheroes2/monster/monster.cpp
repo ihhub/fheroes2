@@ -641,6 +641,7 @@ u32 Monster::GetGrown( void ) const
 // Doesn't account for situational special bonuses such as spell immunity
 double Monster::getMonsterStrength() const
 {
+    // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
     const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;
     const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.4 : 1 );
 
@@ -660,10 +661,8 @@ double Monster::getMonsterStrength() const
         damagePotential *= 1.3;
 
     double monsterSpecial = 1.0;
-    if ( isArchers() ) {
-        monsterSpecial += hasMeleePenalty() ? 0.3 : 0.4;
-    }
-
+    if ( isArchers() )
+        monsterSpecial += hasMeleePenalty() ? 0.4 : 0.5;
     if ( isFlying() )
         monsterSpecial += 0.3;
 
@@ -672,7 +671,7 @@ double Monster::getMonsterStrength() const
     case Monster::CYCLOPS:
     case Monster::MEDUSA:
         // 20% to Blind, Paralyze and Petrify
-        monsterSpecial += 0.3;
+        monsterSpecial += 0.2;
         break;
     case Monster::VAMPIRE_LORD:
         // Lifesteal

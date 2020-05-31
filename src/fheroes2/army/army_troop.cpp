@@ -113,35 +113,9 @@ u32 Troop::GetDamageMax( void ) const
     return Monster::GetDamageMax() * count;
 }
 
-u32 Troop::GetStrength( void ) const
+double Troop::GetStrength() const
 {
-    double res = ( GetDamageMin() + GetDamageMax() ) >> 1;
-    // TODO
-
-    // increase strength
-    if ( isFlying() )
-        res += res * 0.5;
-    if ( isArchers() )
-        res += res * 0.5;
-    if ( isTwiceAttack() )
-        res += res * 0.5;
-    if ( ignoreRetaliation() )
-        res += res * 0.5;
-
-    // slowly: decrease strength
-    if ( ( !isFlying() && !isArchers() ) && Speed::AVERAGE > GetSpeed() )
-        res -= res * 0.5;
-
-    switch ( GetID() ) {
-    case Monster::GHOST:
-        res *= 2;
-        break;
-
-    default:
-        break;
-    }
-
-    return static_cast<u32>( res );
+    return Monster::getMonsterStrength() * count;
 }
 
 bool Troop::isValid( void ) const

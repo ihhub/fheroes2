@@ -414,9 +414,9 @@ u32 Troops::GetDamageMax( void ) const
     return count ? res / count : 0;
 }
 
-u32 Troops::GetStrength( void ) const
+double Troops::GetStrength( void ) const
 {
-    u32 res = 0;
+    double res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it )->isValid() )
@@ -1209,36 +1209,12 @@ bool Army::TroopsStrongerEnemyTroops( const Troops & troops1, const Troops & tro
     if ( !troops2.isValid() )
         return true;
 
-    const int a1 = troops1.GetAttack();
-    const int d1 = troops1.GetDefense();
-    float r1 = 0;
+    const double str1 = troops1.GetStrength();
+    const double str2 = troops2.GetStrength();
 
-    const int a2 = troops2.GetAttack();
-    const int d2 = troops2.GetDefense();
-    float r2 = 0;
+    DEBUG( DBG_AI, DBG_AI_INFO, "Comparing troops: " << str1 << " versus " << str2 );
 
-    if ( a1 > d2 )
-        r1 = 1 + 0.1f * static_cast<float>( std::min( a1 - d2, 20 ) );
-    else
-        r1 = 1 + 0.05f * static_cast<float>( std::min( d2 - a1, 14 ) );
-
-    if ( a2 > d1 )
-        r2 = 1 + 0.1f * static_cast<float>( std::min( a2 - d1, 20 ) );
-    else
-        r2 = 1 + 0.05f * static_cast<float>( std::min( d1 - a2, 14 ) );
-
-    const u32 s1 = troops1.GetStrength();
-    const u32 s2 = troops2.GetStrength();
-
-    const float h1 = troops1.GetHitPoints();
-    const float h2 = troops2.GetHitPoints();
-
-    DEBUG( DBG_AI, DBG_TRACE, "r1: " << r1 << ", s1: " << s1 << ", h1: " << h1 << ", r2: " << r2 << ", s2: " << s2 << ", h2: " << h2 );
-
-    r1 *= s1 / h2;
-    r2 *= s2 / h1;
-
-    return static_cast<s32>( r1 ) > static_cast<s32>( r2 );
+    return str1 > str2;
 }
 
 void Army::DrawMons32LineWithScoute( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute )

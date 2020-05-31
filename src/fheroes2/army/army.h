@@ -84,7 +84,7 @@ public:
     u32 GetHitPoints( void ) const;
     u32 GetDamageMin( void ) const;
     u32 GetDamageMax( void ) const;
-    u32 GetStrength( void ) const;
+    double GetStrength( void ) const;
 
     void Clean( void );
     void UpgradeTroops( const Castle & );

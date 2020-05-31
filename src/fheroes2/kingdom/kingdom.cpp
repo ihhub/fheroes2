@@ -545,9 +545,9 @@ const Heroes * Kingdom::GetBestHero( void ) const
     return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : NULL;
 }
 
-u32 Kingdom::GetArmiesStrength( void ) const
+double Kingdom::GetArmiesStrength( void ) const
 {
-    u32 res = 0;
+    double res = 0;
 
     for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
         res += ( **ith ).GetArmy().GetStrength();
