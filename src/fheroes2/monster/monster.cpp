@@ -637,36 +637,62 @@ u32 Monster::GetGrown( void ) const
     return monsters[id].grown;
 }
 
-// Get approximate combat value of abstract Monster
+// Get universal heuristic of Monster type regardless of context; both combat and strategic value
+// Doesn't account for situational special bonuses such as spell immunity
 double Monster::getMonsterStrength() const
 {
-    const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.5 : 1 );
     const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;
+    const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.4 : 1 );
 
-    // Average damage of 1000 units: to scale them closer to HEROES2W.EXE constants/readable values
-    double damagePotential = ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) * 500;
+    double damagePotential = ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2;
 
     if ( isTwiceAttack() ) {
         // Melee attacker will lose potential on second attack after retaliation
-        damagePotential *= isArchers() ? 2 : 1.75;
+        damagePotential *= isArchers() || ignoreRetaliation() ? 2 : 1.75;
     }
+    if ( id == Monster::CRUSADER )
+        damagePotential *= 1.15; // 15% of all Monsters are Undead, Crusader deals double dmg
+    if ( isDoubleCellAttack() )
+        damagePotential *= 1.2;
+    if ( isAlwaysRetaliating() )
+        damagePotential *= 1.25;
+    if ( isMultiCellAttack() || id == Monster::LICH || id == Monster::POWER_LICH )
+        damagePotential *= 1.3;
 
     double monsterSpecial = 1.0;
-
     if ( isArchers() ) {
-        monsterSpecial += hasMeleePenalty() ? 0.4 : 0.5;
+        monsterSpecial += hasMeleePenalty() ? 0.3 : 0.4;
     }
 
     if ( isFlying() )
         monsterSpecial += 0.3;
 
-    // Higher speed gives initiative advantage/first attack
-    // Remap speed value to -0.4...+0.5, AVERAGE is 0
-    monsterSpecial += ( GetSpeed() - 4 ) * 0.1;
+    switch (id) {
+    case Monster::UNICORN:
+    case Monster::CYCLOPS:
+    case Monster::MEDUSA:
+        // 20% to Blind, Paralyze and Petrify
+        monsterSpecial += 0.3;
+        break;
+    case Monster::VAMPIRE_LORD:
+        // Lifesteal
+        monsterSpecial += 0.3;
+    case Monster::GENIE:
+        // Genie's ability to half enemy troops
+        monsterSpecial += 1;
+        break;
+    case Monster::GHOST:
+        // Ghost's ability to increase the numbers
+        monsterSpecial += 2;
+        break;
+    }
 
-    if ( monsterSpecial <= 0 )
-        monsterSpecial = 0.1;
+    // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0
+    // Punish slow speeds more as unit won't participate in first rounds and slows down strategic army
+    const int speedDiff = GetSpeed() - 4;
+    monsterSpecial += (speedDiff < 0) ? speedDiff * 0.1 : speedDiff * 0.05;
 
+    // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
     return sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
 }
 
