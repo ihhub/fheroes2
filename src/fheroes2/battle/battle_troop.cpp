@@ -1029,15 +1029,11 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 
     if ( canReach( defender ) ) {
         if ( isTwiceAttack() ) {
-            if ( isArchers() ) {
-                attackerThreat *= isHandFighting() ? 1 : 2;
-            }
-            else if ( ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
+            if ( isArchers() || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
                 attackerThreat *= 2;
             }
             else {
                 // check how much we will lose to retaliation
-                // TODO: get damage functions without count
                 attackerThreat += attackerThreat * ( 1.0 - attackerPowerLost );
             }
         }

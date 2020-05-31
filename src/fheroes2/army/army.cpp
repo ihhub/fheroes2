@@ -1103,7 +1103,7 @@ double Army::GetStrength( void ) const
         if ( troop->isValid() ) {
             double strength = troop->GetStrength();
 
-            if ( troop->isArchers() && archery > 0 ) {
+            if ( archery > 0 && troop->isArchers() ) {
                 strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
             }
 
