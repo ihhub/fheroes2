@@ -3377,7 +3377,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
     AGG::PlaySound( M82::TELPTOUT );
 
-    while ( le.HandleEvents() && b_current_alpha > 30 ) {
+    while ( le.HandleEvents() && b_current_alpha > 20 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -3393,13 +3393,11 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     b_current_alpha = 0;
     cursor.Hide();
     Redraw();
-    while ( Mixer::isValid() && Mixer::isPlaying( -1 ) )
-        DELAY( 10 );
 
     target.SetPosition( dst );
     AGG::PlaySound( M82::TELPTIN );
 
-    while ( le.HandleEvents() && b_current_alpha < 220 ) {
+    while ( le.HandleEvents() && b_current_alpha <= 235 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
