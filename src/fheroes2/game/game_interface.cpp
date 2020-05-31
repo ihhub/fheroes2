@@ -264,15 +264,17 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
             if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
                 break;
         }
-        else {
+        else if ( gameArea.GetArea() & mp ) {
             dst = gameArea.GetIndexFromMousePoint( mp );
-            if ( 0 > dst )
-                continue;
 
-            const Maps::Tiles & tile = world.GetTiles( dst );
+            bool valid = ( dst >= 0 );
 
-            const bool valid = ( ( gameArea.GetArea() & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
-                                 && water == world.GetTiles( dst ).isWater() && ( distance / 2 ) >= Maps::GetApproximateDistance( from, dst ) );
+            if ( valid ) {
+                const Maps::Tiles & tile = world.GetTiles( dst );
+
+                valid = ( ( gameArea.GetArea() & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
+                          && water == world.GetTiles( dst ).isWater() && ( distance / 2 ) >= Maps::GetApproximateDistance( from, dst ) );
+            }
 
             cursor.SetThemes( valid ? ( water ? Cursor::BOAT : Cursor::MOVE ) : Cursor::WAR_NONE );
 
@@ -284,6 +286,9 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
                 returnValue = dst;
                 break;
             }
+        }
+        else {
+            cursor.SetThemes( Cursor::POINTER );
         }
 
         // redraw cursor
