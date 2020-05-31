@@ -396,7 +396,7 @@ bool Battle::Unit::canReach( const Unit & unit ) const
 {
     if ( isFlying() || ( isArchers() && !isHandFighting() ) )
         return true;
-    
+
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
     const int target = ( unit.isWide() && isIndirectAttack ) ? unit.GetTailIndex() : unit.GetHeadIndex();
@@ -1020,9 +1020,11 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     double score = 0;
     const Unit & attacker = *this;
 
-    double attackerThreat = ( attacker.GetDamageMin( defender ) + attacker.GetDamageMax( defender ) ) / 2;
     const double defendersDamage = ( defender.GetDamageMin( attacker ) + defender.GetDamageMax( attacker ) ) / 2;
-    const uint32_t attackerUnitsLost = HowManyWillKilled( defendersDamage );
+    const uint32_t attackerUnitsLost = ( defender.Modes( CAP_MIRRORIMAGE ) ) ? GetCount() : HowManyWillKilled( defendersDamage );
+    const double attackerPowerLost = static_cast<double>( GetCount() ) / attackerUnitsLost;
+
+    double attackerThreat = ( attacker.GetDamageMin( defender ) + attacker.GetDamageMax( defender ) ) / 2;
 
     if ( canReach( defender ) ) {
         if ( isTwiceAttack() ) {
@@ -1032,7 +1034,7 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
             else {
                 // check how much we will lose to retaliation
                 // TODO: get damage functions without count
-                attackerThreat += attackerThreat * ( 1.0 - static_cast<double>( count ) / attackerUnitsLost );
+                attackerThreat += attackerThreat * (1.0 - attackerPowerLost);
             }
         }
     }
@@ -1063,12 +1065,7 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
         break;
     }
 
-    defender.Modes( CAP_MIRRORIMAGE );
-
-    // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
-    //score = sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
-
-    return static_cast<s32>( attackerThreat );
+    return static_cast<s32>( attackerThreat * attackerPowerLost );
 }
 
 u32 Battle::Unit::GetHitPoints( void ) const
