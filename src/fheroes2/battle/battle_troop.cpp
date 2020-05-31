@@ -1028,13 +1028,16 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 
     if ( canReach( defender ) ) {
         if ( isTwiceAttack() ) {
-            if ( isArchers() || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
+            if ( isArchers() && !isHandFighting()  ) {
+                attackerThreat *= 2;
+            }
+            else if ( ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
                 attackerThreat *= 2;
             }
             else {
                 // check how much we will lose to retaliation
                 // TODO: get damage functions without count
-                attackerThreat += attackerThreat * (1.0 - attackerPowerLost);
+                attackerThreat += attackerThreat * ( 1.0 - attackerPowerLost );
             }
         }
     }
@@ -1064,6 +1067,13 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
         attackerThreat *= 3;
         break;
     }
+
+    // Ignore disabled units
+    if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) )
+        attackerThreat = 0;
+    // Negative value of units that changed the side
+    if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) )
+        attackerThreat *= -1;
 
     return static_cast<s32>( attackerThreat * attackerPowerLost );
 }
@@ -1103,7 +1113,6 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
         }
         SetModes( SP_BLESS );
         affected.AddMode( SP_BLESS, duration );
-        ResetModes( LUCK_GOOD );
         break;
 
     case Spell::BLOODLUST:
@@ -1119,7 +1128,6 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
         }
         SetModes( SP_CURSE );
         affected.AddMode( SP_CURSE, duration );
-        ResetModes( LUCK_BAD );
         break;
 
     case Spell::HASTE:

@@ -651,7 +651,7 @@ double Monster::GetMonsterStrength() const
 
     if ( isTwiceAttack() ) {
         // Melee attacker will lose potential on second attack after retaliation
-        damagePotential *= isArchers() || ignoreRetaliation() ? 2 : 1.75;
+        damagePotential *= ( isArchers() || ignoreRetaliation() ) ? 2 : 1.75;
     }
     if ( id == Monster::CRUSADER )
         damagePotential *= 1.15; // 15% of all Monsters are Undead, Crusader deals double dmg
