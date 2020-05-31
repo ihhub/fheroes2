@@ -16,4 +16,4 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
     - name: compile
-      run: cd editor && mkdir -p build && cd build && cmake .. && make -j 2
+      run: cd editor && mkdir -p build && cd build && cmake .. && make -j 4
