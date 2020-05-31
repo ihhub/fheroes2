@@ -1106,6 +1106,7 @@ double Army::GetStrength( void ) const
                 strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
             }
 
+            // GetMorale checks if unit is affected by it
             const int morale = troop->GetMorale();
             strength *= 1 + (morale < 0) ? morale / 12.0 : morale / 24.0;            
             strength *= 1 + troop->GetLuck() / 24.0;

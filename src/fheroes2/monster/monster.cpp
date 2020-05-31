@@ -639,7 +639,7 @@ u32 Monster::GetGrown( void ) const
 
 // Get universal heuristic of Monster type regardless of context; both combat and strategic value
 // Doesn't account for situational special bonuses such as spell immunity
-double Monster::getMonsterStrength() const
+double Monster::GetMonsterStrength() const
 {
     // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
     const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;

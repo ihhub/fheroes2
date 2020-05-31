@@ -104,6 +104,7 @@ namespace Battle
         bool isMagicResist( const Spell &, u32 ) const;
         bool isMagicAttack( void ) const;
         bool OutOfWalls( void ) const;
+        bool canReach( const Unit & unit ) const;
 
         std::string String( bool more = false ) const;
 

@@ -115,7 +115,7 @@ u32 Troop::GetDamageMax( void ) const
 
 double Troop::GetStrength() const
 {
-    return Monster::getMonsterStrength() * count;
+    return Monster::GetMonsterStrength() * count;
 }
 
 bool Troop::isValid( void ) const

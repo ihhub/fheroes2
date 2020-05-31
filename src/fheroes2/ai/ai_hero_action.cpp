@@ -575,14 +575,12 @@ namespace AI
         Maps::Tiles & tile = world.GetTiles( dst_index );
         MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
         Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
-        // const Settings & conf = Settings::Get();
 
         JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
         // free join
         if ( JOIN_FREE == join.first ) {
             // join if ranged or flying monsters present
-            // TODO: join logic !!
             if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
                 DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
                 hero.GetArmy().JoinTroop( troop );
@@ -610,7 +608,7 @@ namespace AI
 
         // fight
         if ( JOIN_NONE == join.first ) {
-            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() );
+            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attacked monster " << troop.GetName() );
             Army army( tile );
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 

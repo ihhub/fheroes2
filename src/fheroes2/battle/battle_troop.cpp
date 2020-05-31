@@ -392,6 +392,17 @@ bool Battle::Unit::OutOfWalls( void ) const
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
 }
 
+bool Battle::Unit::canReach( const Unit & unit ) const
+{
+    if ( isFlying() || ( isArchers() && !isHandFighting() ) )
+        return true;
+    
+    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
+    const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
+    const int target = ( unit.isWide() && isIndirectAttack ) ? unit.GetTailIndex() : unit.GetHeadIndex();
+    return Board::GetDistance( from, target ) <= GetSpeed();
+}
+
 bool Battle::Unit::isHandFighting( void ) const
 {
     if ( GetCount() && !Modes( CAP_TOWER ) ) {
@@ -816,7 +827,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
 
     DEBUG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
 
-    u32 spoint = hero ? hero->GetPower() : 3;
+    u32 spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 
     if ( spell.isDamage() )
         SpellApplyDamage( spell, spoint, hero, target );
@@ -1006,66 +1017,58 @@ u32 Battle::Unit::GetDefense( void ) const
 
 s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 {
+    double score = 0;
     const Unit & attacker = *this;
 
-    // initial value: (hitpoints)
-    const u32 & damage = ( attacker.GetDamageMin( defender ) + attacker.GetDamageMax( defender ) ) / 2;
-    const u32 & kills = defender.HowManyWillKilled( attacker.isTwiceAttack() ? damage * 2 : damage );
-    double res = kills * static_cast<Monster>( defender ).GetHitPoints();
-    bool noscale = false;
+    double attackerThreat = ( attacker.GetDamageMin( defender ) + attacker.GetDamageMax( defender ) ) / 2;
+    const double defendersDamage = ( defender.GetDamageMin( attacker ) + defender.GetDamageMax( attacker ) ) / 2;
+    const uint32_t attackerUnitsLost = HowManyWillKilled( defendersDamage );
 
-    // attacker
-    switch ( attacker.GetID() ) {
-    case Monster::GHOST:
-        // priority: from killed only
-        noscale = true;
+    if ( canReach( defender ) ) {
+        if ( isTwiceAttack() ) {
+            if ( isArchers() || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
+                attackerThreat *= 2;
+            }
+            else {
+                // check how much we will lose to retaliation
+                // TODO: get damage functions without count
+                attackerThreat += attackerThreat * ( 1.0 - static_cast<double>( count ) / attackerUnitsLost );
+            }
+        }
+    }
+    else {
+        // Can't reach, so unit is not dangerous to defender at the moment
+        attackerThreat /= 2;
+    }
+
+    // Monster special abilities
+    switch ( id ) {
+    case Monster::UNICORN:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION ) ) / 100.0;
+    case Monster::CYCLOPS:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::PARALYZE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+    case Monster::MEDUSA:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::STONE, DEFAULT_SPELL_DURATION ) ) / 100.0;
         break;
-
     case Monster::VAMPIRE_LORD:
-        if ( attacker.isHaveDamage() ) {
-            // alive priority
-            if ( defender.isElemental() || defender.isUndead() )
-                res /= 2;
-        }
+        // Lifesteal
+        attackerThreat *= 1.3;
+    case Monster::GENIE:
+        // Genie's ability to half enemy troops
+        attackerThreat *= 2;
         break;
-
-    default:
+    case Monster::GHOST:
+        // Ghost's ability to increase the numbers
+        attackerThreat *= 3;
         break;
     }
 
-    // scale on ability
-    if ( !noscale ) {
-        if ( defender.isArchers() )
-            res += res * 0.7;
-        if ( defender.isFlying() )
-            res += res * 0.6;
-        if ( defender.ignoreRetaliation() )
-            res += res * 0.5;
-        if ( defender.isTwiceAttack() )
-            res += res * 0.4;
-        if ( defender.isRegenerating() )
-            res += res * 0.3;
-        if ( defender.isDoubleCellAttack() )
-            res += res * 0.3;
-        if ( defender.isAlwaysRetaliating() )
-            res -= res * 0.5;
-    }
+    defender.Modes( CAP_MIRRORIMAGE );
 
-    // extra
-    if ( defender.Modes( CAP_MIRRORIMAGE ) )
-        res += res * 0.7;
-    if ( !attacker.isArchers() ) {
-        if ( defender.Modes( TR_RESPONSED ) )
-            res += res * 0.3;
-        else {
-            if ( defender.Modes( LUCK_BAD ) )
-                res += res * 0.3;
-            else if ( defender.Modes( LUCK_GOOD ) )
-                res -= res * 0.3;
-        }
-    }
+    // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
+    //score = sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
 
-    return static_cast<s32>( res ) > 1 ? static_cast<u32>( res ) : 1;
+    return static_cast<s32>( attackerThreat );
 }
 
 u32 Battle::Unit::GetHitPoints( void ) const

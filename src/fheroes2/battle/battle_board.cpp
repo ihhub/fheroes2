@@ -419,6 +419,11 @@ bool Battle::Board::isReflectDirection( int d )
     return false;
 }
 
+bool Battle::Board::isNegativeDistance( s32 index1, s32 index2 )
+{
+    return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
+}
+
 bool Battle::Board::isValidDirection( s32 index, int dir )
 {
     if ( isValidIndex( index ) ) {
