@@ -124,11 +124,7 @@ bool Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
 {
     dst = dst_index;
 
-    if ( Find( dst, limit ) ) {
-        // check monster dst
-        if ( Maps::isValidAbsIndex( dst ) && MP2::OBJ_MONSTER == world.GetTiles( dst ).GetObject() )
-            pop_back();
-    }
+    Find( dst, limit );
 
     return !empty();
 }
