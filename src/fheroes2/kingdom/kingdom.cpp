@@ -39,7 +39,7 @@
 
 bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 {
-    return h1 && h2 && Army::TroopsStrongerEnemyTroops( h2->GetArmy(), h1->GetArmy() );
+    return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
 }
 
 Kingdom::Kingdom()

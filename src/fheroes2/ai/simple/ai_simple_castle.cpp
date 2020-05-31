@@ -185,7 +185,7 @@ namespace AI
         const bool canRecruit = castle.isCastle() && !hero && kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
 
         // part II
-        if ( enemy && castle.GetArmy().isValid() && Army::TroopsStrongerEnemyTroops( castle.GetArmy(), enemy->GetArmy() ) ) {
+        if ( enemy && castle.GetArmy().isValid() && castle.GetArmy().isStrongerThan( enemy->GetArmy() ) ) {
             if ( canRecruit ) {
                 Recruits & rec = kingdom.GetRecruits();
 

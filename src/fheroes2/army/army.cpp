@@ -414,17 +414,6 @@ u32 Troops::GetDamageMax( void ) const
     return count ? res / count : 0;
 }
 
-double Troops::GetStrength( void ) const
-{
-    double res = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            res += ( *it )->GetStrength();
-
-    return res;
-}
-
 void Troops::Clean( void )
 {
     std::for_each( begin(), end(), std::mem_fun( &Troop::Reset ) );
@@ -1103,6 +1092,17 @@ u32 Army::GetDefense( void ) const
     return count ? res / count : 0;
 }
 
+double Army::GetStrength( void ) const
+{
+    double res = 0;
+
+    for ( const_iterator it = begin(); it != end(); ++it )
+        if ( ( *it )->isValid() )
+            res += ( *it )->GetStrength();
+
+    return res;
+}
+
 void Army::Reset( bool soft )
 {
     Troops::Clean();
@@ -1204,17 +1204,22 @@ u32 Army::ActionToSirens( void )
     return res;
 }
 
-bool Army::TroopsStrongerEnemyTroops( const Troops & troops1, const Troops & troops2 )
+bool Army::isStrongerThan(const Army& target) const
 {
-    if ( !troops2.isValid() )
+    if ( !target.isValid() )
         return true;
 
-    const double str1 = troops1.GetStrength();
-    const double str2 = troops2.GetStrength();
+    const double str1 = GetStrength();
+    const double str2 = target.GetStrength();
 
-    DEBUG( DBG_AI, DBG_AI_INFO, "Comparing troops: " << str1 << " versus " << str2 );
+    DEBUG( DBG_AI, DBG_INFO, "Comparing troops: " << str1 << " versus " << str2 );
 
     return str1 > str2;
+}
+
+bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
+{
+    return army1.isStrongerThan( army2 );
 }
 
 void Army::DrawMons32LineWithScoute( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute )
@@ -1282,12 +1287,12 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
 
 bool Army::WeakestTroop( const Troop * t1, const Troop * t2 )
 {
-    return t1->GetDamageMax() < t2->GetDamageMax();
+    return t1->GetStrength() < t2->GetStrength();
 }
 
 bool Army::StrongestTroop( const Troop * t1, const Troop * t2 )
 {
-    return t1->GetDamageMin() > t2->GetDamageMin();
+    return t1->GetStrength() > t2->GetStrength();
 }
 
 bool Army::SlowestTroop( const Troop * t1, const Troop * t2 )

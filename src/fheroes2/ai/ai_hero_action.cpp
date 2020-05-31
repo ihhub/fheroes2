@@ -1540,7 +1540,7 @@ namespace AI
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     Army enemy( tile );
-                    return !enemy.isValid() || Army::TroopsStrongerEnemyTroops( army, enemy );
+                    return army.isStrongerThan(enemy);
                 }
                 else
                     return true;
@@ -1562,7 +1562,7 @@ namespace AI
                 if ( !hero.isFriends( tile.QuantityColor() ) ) {
                     if ( tile.CaptureObjectIsProtection() ) {
                         Army enemy( tile );
-                        return !enemy.isValid() || Army::TroopsStrongerEnemyTroops( army, enemy );
+                        return army.isStrongerThan( enemy );
                     }
                     else
                         return true;
@@ -1602,7 +1602,7 @@ namespace AI
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
                 if ( 5 < variants && 14 > variants ) {
                 Army enemy( tile );
-                return !enemy.isValid() || Army::TroopsStrongerEnemyTroops( army, enemy );
+                return army.isStrongerThan( enemy );
             }
             else
                 // other
@@ -1788,7 +1788,7 @@ namespace AI
         case MP2::OBJ_DERELICTSHIP:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
-                return enemy.isValid() && Army::TroopsStrongerEnemyTroops( army, enemy );
+                return enemy.isValid() && army.isStrongerThan( enemy );
             }
             break;
 
@@ -1801,7 +1801,7 @@ namespace AI
 
         case MP2::OBJ_MONSTER: {
             Army enemy( tile );
-            return !enemy.isValid() || Army::TroopsStrongerEnemyTroops( army, enemy );
+            return army.isStrongerThan( enemy );
         } break;
 
         // sign
@@ -1813,14 +1813,15 @@ namespace AI
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
             if ( castle ) {
-                if ( hero.GetColor() == castle->GetColor() )
+                if ( hero.GetColor() == castle->GetColor() ) {
                     return NULL == castle->GetHeroes().Guest() && !hero.isVisited( tile );
-                else
-                    // FIXME: AI skip visiting alliance
+                }
+                else {
                     if ( hero.isFriends( castle->GetColor() ) )
-                    return false;
-                else if ( Army::TroopsStrongerEnemyTroops( army, castle->GetActualArmy() ) )
-                    return true;
+                        return false;
+                    else
+                        return army.isStrongerThan( castle->GetActualArmy() );
+                }
             }
             break;
         }
@@ -1833,7 +1834,7 @@ namespace AI
                 // FIXME: AI skip visiting alliance
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
-                else if ( hero2->AllowBattle( false ) && Army::TroopsStrongerEnemyTroops( army, hero2->GetArmy() ) )
+                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy() ) )
                     return true;
             }
             break;
