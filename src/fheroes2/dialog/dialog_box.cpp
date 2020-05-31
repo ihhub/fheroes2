@@ -88,12 +88,9 @@ Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 
 Dialog::FrameBox::FrameBox( int height, bool buttons )
     : Dialog::NonFixedFrameBox( height, -1, buttons )
-{
-}
+{}
 
-Dialog::FrameBox::~FrameBox()
-{
-}
+Dialog::FrameBox::~FrameBox() {}
 
 void BoxRedraw( s32 posx, s32 posy, u32 count )
 {
