@@ -273,7 +273,7 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
                 Game::OpenCastleDialog( *castle );
         }
         else
-            Game::OpenHeroesDialog( *item );
+            Game::OpenHeroesDialog( *item, false );
 
         // for QVGA: auto hide icons after click
         if ( Settings::Get().QVGA() )
