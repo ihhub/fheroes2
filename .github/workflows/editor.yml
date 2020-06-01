@@ -1,0 +1,19 @@
+name: Editor
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  editor:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+    - name: compile
+      run: cd editor && mkdir -p build && cd build && cmake .. && make -j 4
