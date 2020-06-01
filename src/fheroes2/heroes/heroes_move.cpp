@@ -342,7 +342,7 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     bool reflect = ReflectSprite( direction );
 
     Sprite sprite1 = SpriteHero( *this, sprite_index, reflect, false );
-    Sprite sprite2 = SpriteFlag( *this, sprite_index, reflect, false );
+    Sprite sprite2 = SpriteFlag( *this, sprite_index + Game::MapsAnimationFrame() % 9, reflect, false );
     Sprite sprite3 = SpriteShad( *this, sprite_index );
     Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
 
