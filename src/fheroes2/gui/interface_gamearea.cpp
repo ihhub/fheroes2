@@ -49,7 +49,8 @@ Interface::GameArea::GameArea( Basic & basic )
     , tailX( 0 )
     , tailY( 0 )
     , updateCursor( false )
-    , borderSize( 8 )
+    , borderSizeX( 8 )
+    , borderSizeY( 8 )
 {}
 
 const Rect & Interface::GameArea::GetArea( void ) const
@@ -111,11 +112,23 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
         scrollStepY = SCROLL_MAX;
     }
 
-    borderSize = std::max( rectMaps.w, rectMaps.h ) / 2 + 1;
-    if ( borderSize < 8 )
-        borderSize = 8;
-    else if ( borderSize > SCROLL_MAX )
-        borderSize = SCROLL_MAX;
+    borderSizeX = rectMaps.w / 2;
+    if ( ( rectMaps.w % 2 ) == 1 )
+        ++borderSizeX;
+
+    if ( borderSizeX < MIN_BORDER_SIZE )
+        borderSizeX = MIN_BORDER_SIZE;
+    else if ( borderSizeX > SCROLL_MAX )
+        borderSizeX = SCROLL_MAX;
+
+    borderSizeY = rectMaps.h / 2;
+    if ( ( rectMaps.h % 2 ) == 1 )
+        ++borderSizeY;
+
+    if ( borderSizeY < MIN_BORDER_SIZE )
+        borderSizeY = MIN_BORDER_SIZE;
+    else if ( borderSizeY > SCROLL_MAX )
+        borderSizeY = SCROLL_MAX;
 
     tailX = areaPosition.w - TILEWIDTH * ( areaPosition.w / TILEWIDTH );
     tailY = areaPosition.h - TILEWIDTH * ( areaPosition.h / TILEWIDTH );
@@ -323,7 +336,7 @@ void Interface::GameArea::Scroll( void )
     if ( scrollDirection & SCROLL_LEFT ) {
         if ( 0 < scrollOffset.x )
             scrollOffset.x -= scrollStepX;
-        else if ( -borderSize < rectMaps.x ) {
+        else if ( -borderSizeX < rectMaps.x ) {
             scrollOffset.x = SCROLL_MAX - scrollStepX;
             --rectMaps.x;
         }
@@ -331,7 +344,7 @@ void Interface::GameArea::Scroll( void )
     else if ( scrollDirection & SCROLL_RIGHT ) {
         if ( scrollOffset.x < SCROLL_MAX * 2 - tailX )
             scrollOffset.x += scrollStepX;
-        else if ( world.w() - rectMaps.w + borderSize > rectMaps.x ) {
+        else if ( world.w() - rectMaps.w + borderSizeX > rectMaps.x ) {
             scrollOffset.x = SCROLL_MAX + scrollStepX - tailX;
             ++rectMaps.x;
         }
@@ -340,7 +353,7 @@ void Interface::GameArea::Scroll( void )
     if ( scrollDirection & SCROLL_TOP ) {
         if ( 0 < scrollOffset.y )
             scrollOffset.y -= scrollStepY;
-        else if ( -borderSize < rectMaps.y ) {
+        else if ( -borderSizeY < rectMaps.y ) {
             scrollOffset.y = SCROLL_MAX - scrollStepY;
             --rectMaps.y;
         }
@@ -348,7 +361,7 @@ void Interface::GameArea::Scroll( void )
     else if ( scrollDirection & SCROLL_BOTTOM ) {
         if ( scrollOffset.y < SCROLL_MAX * 2 - tailY )
             scrollOffset.y += scrollStepY;
-        else if ( world.h() - rectMaps.h + borderSize > rectMaps.y ) {
+        else if ( world.h() - rectMaps.h + borderSizeY > rectMaps.y ) {
             scrollOffset.y = SCROLL_MAX + scrollStepY - tailY;
             ++rectMaps.y;
         }
@@ -376,15 +389,15 @@ void Interface::GameArea::SetCenter( s32 px, s32 py )
     Point pos( px - rectMaps.w / 2, py - rectMaps.h / 2 );
 
     // our of range
-    if ( pos.x < -borderSize )
-        pos.x = -borderSize;
-    else if ( pos.x > world.w() - rectMaps.w + borderSize )
-        pos.x = world.w() - rectMaps.w + borderSize;
+    if ( pos.x < -borderSizeX )
+        pos.x = -borderSizeX;
+    else if ( pos.x > world.w() - rectMaps.w + borderSizeX )
+        pos.x = world.w() - rectMaps.w + borderSizeX;
 
-    if ( pos.y < -borderSize )
-        pos.y = -borderSize;
-    else if ( pos.y > world.h() - rectMaps.h + borderSize )
-        pos.y = world.h() - rectMaps.h + borderSize;
+    if ( pos.y < -borderSizeY )
+        pos.y = -borderSizeY;
+    else if ( pos.y > world.h() - rectMaps.h + borderSizeY )
+        pos.y = world.h() - rectMaps.h + borderSizeY;
 
     if ( pos.x == rectMaps.x && pos.y == rectMaps.y )
         return;
@@ -530,26 +543,26 @@ int Interface::GameArea::GetScrollCursor( void ) const
 void Interface::GameArea::SetScroll( int direct )
 {
     if ( ( direct & SCROLL_LEFT ) == SCROLL_LEFT ) {
-        if ( -borderSize < rectMaps.x || -borderSize < scrollOffset.x ) {
+        if ( -borderSizeX < rectMaps.x || -borderSizeX < scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
     else if ( ( direct & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
-        if ( world.w() - rectMaps.w + borderSize > rectMaps.x || SCROLL_MAX * 2 > scrollOffset.x ) {
+        if ( world.w() - rectMaps.w + borderSizeX > rectMaps.x || SCROLL_MAX * 2 > scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
 
     if ( ( direct & SCROLL_TOP ) == SCROLL_TOP ) {
-        if ( -borderSize < rectMaps.y || -borderSize < scrollOffset.y ) {
+        if ( -borderSizeY < rectMaps.y || -borderSizeY < scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
     else if ( ( direct & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
-        if ( world.h() - rectMaps.h + borderSize > rectMaps.y || SCROLL_MAX * 2 > scrollOffset.y ) {
+        if ( world.h() - rectMaps.h + borderSizeY > rectMaps.y || SCROLL_MAX * 2 > scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
