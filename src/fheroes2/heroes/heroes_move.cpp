@@ -374,7 +374,7 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         break;
     case Direction::LEFT:
     case Direction::RIGHT:
-        offsettable = (short * )flagVOffsetTableSideways;
+        offsettable = (short *)flagVOffsetTableSideways;
         break;
     case Direction::TOP_RIGHT:
     case Direction::TOP_LEFT:
