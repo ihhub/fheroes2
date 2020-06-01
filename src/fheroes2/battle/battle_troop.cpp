@@ -394,6 +394,9 @@ bool Battle::Unit::OutOfWalls( void ) const
 
 bool Battle::Unit::canReach( const Unit & unit ) const
 {
+    if ( unit.Modes( CAP_TOWER ) )
+        return false;
+
     if ( isFlying() || ( isArchers() && !isHandFighting() ) )
         return true;
 
@@ -1020,28 +1023,27 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     const Unit & attacker = *this;
 
     const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
-    const double attackerUnitsLost = ( defendersDamage >= hp ) ? GetCount() : defendersDamage / Monster::GetHitPoints();
-    double attackerPowerLost = attackerUnitsLost / GetCount();
+    const double attackerPowerLost = ( defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
+    const bool attackerIsArchers = isArchers();
 
     double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
 
-    if ( canReach( defender ) ) {
-        if ( isTwiceAttack() ) {
-            if ( isArchers() || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
-                attackerThreat *= 2;
-            }
-            else {
-                // check how much we will lose to retaliation
-                attackerThreat += attackerThreat * ( 1.0 - attackerPowerLost );
-            }
-        }
-    }
-    else {
+    if ( !canReach( defender ) && !( defender.Modes( CAP_TOWER ) && attackerIsArchers ) ) {
         // Can't reach, so unit is not dangerous to defender at the moment
         attackerThreat /= 2;
     }
 
     // Monster special abilities
+    if ( isTwiceAttack() ) {
+        if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
+            attackerThreat *= 2;
+        }
+        else {
+            // check how much we will lose to retaliation
+            attackerThreat += attackerThreat * ( 1.0 - attackerPowerLost );
+        }
+    }
+
     switch ( id ) {
     case Monster::UNICORN:
         attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION ) ) / 100.0;
@@ -1071,10 +1073,10 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
         attackerThreat *= -1;
 
     // Avoid effectiveness scaling if we're dealing with archers
-    if ( !isArchers() || defender.isArchers() )
+    if ( !attackerIsArchers || defender.isArchers() )
         attackerThreat *= attackerPowerLost;
 
-    int score = static_cast<int>( attackerThreat );
+    int score = static_cast<int>( attackerThreat * 10 );
     return ( score == 0 ) ? 1 : score;
 }
 
