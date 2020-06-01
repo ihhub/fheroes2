@@ -21,10 +21,10 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "game.h"
 #include "button.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "settings.h"
 #include "text.h"
 
