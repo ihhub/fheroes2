@@ -378,7 +378,8 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     hero.PortraitRedraw( pos_rt.x + 27, pos_rt.y + 42, PORT_BIG, display );
 
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
-    AGG::GetICN( ICN::VIEWGEN, col ).Blit( pos_rt.x + 148, pos_rt.y + 36 );
+    const Sprite bgImage = AGG::GetICN( ICN::VIEWGEN, col );
+    bgImage.Blit( pos_rt.x + 148, pos_rt.y + 36 );
 
     Point tp( pos_rt );
 
@@ -497,6 +498,61 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
         // exit
         if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose ) )
             break;
+
+        if ( HotKeyPressEvent( Game::EVENT_SYSTEM_FULLSCREEN ) ) {
+            cursor.Hide();
+            bgImage.Blit( pos_rt.x + 148, pos_rt.y + 36 );
+
+            str = _( "%{name} the %{race}" );
+            StringReplace( str, "%{name}", hero.GetName() );
+            StringReplace( str, "%{race}", Race::String( hero.GetRace() ) );
+            text.Set( str );
+            tp.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2;
+            tp.y += 10;
+            text.Blit( tp );
+            str = _( "Attack" ) + std::string( ": " ) + GetString( hero.GetAttack() );
+            text.Set( str );
+            tp.x = pos_rt.x + 205 - text.w() / 2;
+            tp.y = pos_rt.y + 40;
+            text.Blit( tp );
+            str = _( "Defense" ) + std::string( ": " ) + GetString( hero.GetDefense() );
+            text.Set( str );
+            tp.x = pos_rt.x + 205 - text.w() / 2;
+            tp.y = pos_rt.y + 51;
+            text.Blit( tp );
+            str = _( "Spell Power" ) + std::string( ": " ) + GetString( hero.GetPower() );
+            text.Set( str );
+            tp.x = pos_rt.x + 205 - text.w() / 2;
+            tp.y = pos_rt.y + 62;
+            text.Blit( tp );
+            str = _( "Knowledge" ) + std::string( ": " ) + GetString( hero.GetKnowledge() );
+            text.Set( str );
+            tp.x = pos_rt.x + 205 - text.w() / 2;
+            tp.y = pos_rt.y + 73;
+            text.Blit( tp );
+            str = _( "Morale" ) + std::string( ": " ) + Morale::String( hero.GetMorale() );
+            text.Set( str );
+            tp.x = pos_rt.x + 205 - text.w() / 2;
+            tp.y = pos_rt.y + 84;
+            text.Blit( tp );
+            str = _( "Luck" ) + std::string( ": " ) + Luck::String( hero.GetLuck() );
+            text.Set( str );
+            tp.x = pos_rt.x + 205 - text.w() / 2;
+            tp.y = pos_rt.y + 95;
+            text.Blit( tp );
+            str = _( "Spell Points" ) + std::string( ": " ) + GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() );
+            text.Set( str );
+            tp.x = pos_rt.x + 205 - text.w() / 2;
+            tp.y = pos_rt.y + 117;
+            text.Blit( tp );
+
+            btnCast.Draw();
+            btnRetreat.Draw();
+            btnSurrender.Draw();
+            btnClose.Draw();
+            cursor.Show();
+            display.Flip();
+        }
     }
 
     cursor.Hide();
@@ -600,6 +656,20 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
         // exit
         if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btnDecline ) )
             break;
+
+        if ( HotKeyPressEvent( Game::EVENT_SYSTEM_FULLSCREEN ) ) {
+            cursor.Hide();
+            dialog.Blit( pos_rt.x, pos_rt.y );
+            window.Blit( pos_rt.x + 54, pos_rt.y + 30 );
+            hero.PortraitRedraw( pos_rt.x + 58, pos_rt.y + 38, PORT_BIG, display );
+            text.Blit( pos_rt.x + 320 - text.w() / 2, pos_rt.y + 30 );
+            box.Blit( pos_rt.x + 175, pos_rt.y + 50 );
+            btnAccept.Draw();
+            btnDecline.Draw();
+            btnMarket.Draw();
+            cursor.Show();
+            display.Flip();
+        }
     }
 
     cursor.Hide();

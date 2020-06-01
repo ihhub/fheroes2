@@ -796,6 +796,8 @@ int Interface::Basic::HumanTurn( bool isload )
             // open focus
             else if ( HotKeyPressEvent( Game::EVENT_OPENFOCUS ) )
                 EventOpenFocus();
+            else if ( HotKeyPressEvent( Game::EVENT_SYSTEM_FULLSCREEN ) )
+                gameArea.SetRedraw();
         }
 
         if ( conf.ExtPocketTapMode() ) {

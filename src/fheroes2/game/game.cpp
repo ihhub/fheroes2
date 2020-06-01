@@ -221,24 +221,6 @@ u32 & Game::CastleAnimationFrame( void )
     return castle_animation_frame;
 }
 
-void Game::SetFixVideoMode( void )
-{
-    const Settings & conf = Settings::Get();
-
-    Size fixsize( conf.VideoMode() );
-    Size mapSize = conf.MapsSize();
-
-    u32 max_x = Settings::Get().ExtGameHideInterface() ? mapSize.w * TILEWIDTH : ( 6 + mapSize.w ) * TILEWIDTH; // RADARWIDTH + 3 * BORDERWIDTH
-    u32 max_y = Settings::Get().ExtGameHideInterface() ? mapSize.h * TILEWIDTH : ( 1 + mapSize.h ) * TILEWIDTH; // 2 * BORDERWIDTH
-
-    if ( conf.VideoMode().w > max_x )
-        fixsize.w = max_x;
-    if ( conf.VideoMode().h > max_y )
-        fixsize.h = max_y;
-
-    Display::Get().SetVideoMode( fixsize.w, fixsize.h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
-}
-
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {

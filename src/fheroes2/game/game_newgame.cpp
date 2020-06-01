@@ -149,9 +149,9 @@ int Game::NewCampain( void )
     Display & display = Display::Get();
     display.Fill( ColorBlack );
 
-    const Sprite & backgroundImage = AGG::GetICN( ICN::CAMPBKGG, 0 );
-    const Point top( ( display.w() - backgroundImage.w() ) / 2, ( display.h() - backgroundImage.h() ) / 2 );
-    backgroundImage.Blit( top );
+    const Sprite & bgImage = AGG::GetICN( ICN::CAMPBKGG, 0 );
+    const Point top( ( display.w() - bgImage.w() ) / 2, ( display.h() - bgImage.h() ) / 2 );
+    bgImage.Blit( top );
 
     Button buttonViewIntro( top.x + 30, top.y + 430, ICN::CAMPXTRG, 0, 1 );
     Button buttonOk( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
@@ -218,7 +218,7 @@ int Game::NewCampain( void )
         if ( !buttonOk.isDisable() )
             le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
 
-        if ( le.MouseClickLeft( buttonCancel ) )
+        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel ) )
             return Game::NEWGAME;
         else if ( !buttonOk.isDisable() && le.MouseClickLeft( buttonOk ) ) {
             conf.SetCurrentFileInfo( campaignMap[0] );
@@ -236,6 +236,58 @@ int Game::NewCampain( void )
             }
 
             return Game::STARTGAME;
+        }
+
+        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) {
+            cursor.Hide();
+            bgImage.Blit( top );
+
+            textDaysSpent.Blit( top.x + 570 + textDaysSpent.w() / 2, top.y + 31 );
+
+            if ( !campaignMap.empty() ) {
+                TextBox mapName( campaignMap[0].description, Font::BIG, 200 );
+                mapName.Blit( top.x + 200, top.y + 97 - mapName.h() / 2 );
+
+                Text campaignMapId( "1", Font::BIG );
+                campaignMapId.Blit( top.x + 175 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
+
+                TextBox mapDescription( rolandCampaignDescription[0], Font::BIG, 350 );
+                mapDescription.Blit( top.x + 40, top.y + 140 );
+
+                TextBox awards( _( "None" ), Font::BIG, 180 );
+                awards.Blit( top.x + 425, top.y + 100 );
+
+                Text choice1( _( "2000 Gold" ), Font::BIG );
+                choice1.Blit( top.x + 425, top.y + 209 - choice1.h() / 2 );
+                Text choice2( _( "Thunder Mace" ), Font::BIG );
+                choice2.Blit( top.x + 425, top.y + 209 + 23 - choice2.h() / 2 );
+                Text choice3( _( "Gauntlets" ), Font::BIG );
+                choice3.Blit( top.x + 425, top.y + 209 + 45 - choice3.h() / 2 );
+            }
+            else {
+                TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 350 );
+                textCaption.Blit( top.x + 40, top.y + 140 );
+
+                TextBox textDescription( "Campaign Game mode is under construction", Font::BIG, 350 );
+                textDescription.Blit( top.x + 40, top.y + 200 );
+            }
+
+            DrawCampaignScenarioIcon( 1, 0, 0, 14, top );
+            DrawCampaignScenarioIcon( 2, 1, 0, 15, top );
+            DrawCampaignScenarioIcon( 3, 1.5, -1, 15, top );
+            DrawCampaignScenarioIcon( 4, 2, 0, 15, top );
+            DrawCampaignScenarioIcon( 5, 3, 0, 15, top );
+            DrawCampaignScenarioIcon( 6, 4, 0, 15, top );
+            DrawCampaignScenarioIcon( 7, 5, 0, 15, top );
+            DrawCampaignScenarioIcon( 8, 6, -1, 15, top );
+            DrawCampaignScenarioIcon( 9, 6, 1, 15, top );
+            DrawCampaignScenarioIcon( 10, 7, 0, 15, top );
+
+            buttonOk.Draw();
+            buttonCancel.Draw();
+            buttonViewIntro.Draw();
+            cursor.Show();
+            display.Flip();
         }
     }
 
@@ -390,6 +442,20 @@ int Game::NewGame( void )
             Dialog::Message( _( "Settings" ), _( "FHeroes2 game settings." ), Font::BIG );
         if ( le.MousePressRight( buttonCancelGame ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+
+        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) {
+            cursor.Hide();
+            back.Blit( Point( 0, 0 ) );
+            panel.Blit( back.w() - 235, 5 );
+            buttonStandartGame.Draw();
+            buttonCampainGame.Draw();
+            buttonMultiGame.Draw();
+            buttonBattleGame.Draw();
+            buttonSettings.Draw();
+            buttonCancelGame.Draw();
+            cursor.Show();
+            display.Flip();
+        }
     }
 
     return QUITGAME;

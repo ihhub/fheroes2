@@ -173,7 +173,7 @@ int Game::MainMenu( void )
             display.Flip();
         }
 
-        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) { // TODO: here we need catch EVENT_SYSTEM_FULLSCREEN after it was processed. How to do that?
+        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) {
             cursor.Hide();
             bgImage.Blit( Point( 0, 0 ) );
             buttonNewGame.Draw();

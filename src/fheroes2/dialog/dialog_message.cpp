@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "game.h"
 #include "button.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -62,6 +63,18 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         if ( !buttons && !le.MousePressRight() )
             break;
+
+        if ( HotKeyPressEvent( Game::EVENT_SYSTEM_FULLSCREEN ) ) {
+            cursor.Hide();
+            if ( header.size() )
+                textbox1.Blit( pos.x, pos.y + 10 );
+            if ( message.size() )
+                textbox2.Blit( pos.x, pos.y + 10 + ( header.size() ? textbox1.h() : 0 ) + 10 );
+            btnGroups.Draw();
+            cursor.Show();
+            display.Flip();
+        }
+
         result = btnGroups.QueueEventProcessing();
     }
 
