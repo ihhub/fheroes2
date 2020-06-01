@@ -293,9 +293,9 @@ namespace ICN
         FRNG0013,
         FROTH,
         GARGOYLE,
-        G_BFLG32,  // green hero flag on a boat
+        G_BFLG32, // green hero flag on a boat
         GENIE,
-        G_FLAG32,  // green hero flag
+        G_FLAG32, // green hero flag
         GHOST,
         GOBLIN,
         GOLEM2,
@@ -486,7 +486,7 @@ namespace ICN
         OBJNWATR,
         OBJNXTRA,
         OBJPALET,
-        O_FLAG32,  // orange hero flag
+        O_FLAG32, // orange hero flag
         OGRE2,
         OGRE,
         ORC2,
