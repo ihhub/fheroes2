@@ -363,14 +363,14 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     switch ( direction ) {
     case Direction::TOP:
-        offsettable = (short *) flagVOffsetTableTop;
+        offsettable = (short *)flagVOffsetTableTop;
         break;
     case Direction::BOTTOM:
-        offsettable = (short *) flagVOffsetTableBottom;
+        offsettable = (short *)flagVOffsetTableBottom;
         break;
     case Direction::BOTTOM_LEFT:
     case Direction::BOTTOM_RIGHT:
-        offsettable = (short *) flagVOffsetTableBottomAndSideways;
+        offsettable = (short *)flagVOffsetTableBottomAndSideways;
         break;
     case Direction::LEFT:
     case Direction::RIGHT:
@@ -378,11 +378,11 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         break;
     case Direction::TOP_RIGHT:
     case Direction::TOP_LEFT:
-        offsettable = (short *) flagVOffsetTableTopAndSideways;
+        offsettable = (short *)flagVOffsetTableTopAndSideways;
         break;
     default:
         DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
-        offsettable = (short *) flagVOffsetTableBottom; // let it be like bottom
+        offsettable = (short *)flagVOffsetTableBottom; // let it be like bottom
         break;
     }
 
