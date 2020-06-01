@@ -93,6 +93,12 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
     return result;
 }
 
+const static short flagVOffsetTableBottom[9] = {0, 1, 2, 0, 1, 2, 3, 0, 1};
+const static short flagVOffsetTableTop[9] = {0, -2, -3, -2, 0, -1, -3, -2, -1};
+const static short flagVOffsetTableBottomAndSideways[9] = {0, 0, 1, 2, 2, 3, 2, 1, 0};
+const static short flagVOffsetTableTopAndSideways[9] = {0, 0, 0, 1, 1, 0, 0, 0, 0};
+const static short flagVOffsetTableSideways[9] = {0, -1, -1, -1, 0, 0, -1, -1, -1};
+
 Heroes::Heroes()
     : move_point_scale( -1 )
     , army( this )
@@ -105,6 +111,11 @@ Heroes::Heroes()
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
+    , flagVOffsetTableBottom ( {0, 1, 2, 0, 1, 2, 3, 0, 1} )
+    , flagVOffsetTableTop ( {0, -2, -3, -2, 0, -1, -3, -2, -1} )
+    , flagVOffsetTableBottomAndSideways ( {0, 0, 1, 2, 2, 3, 2, 1, 0} )
+    , flagVOffsetTableTopAndSideways( {0, 0, 0, 1, 1, 0, 0, 0, 0} )
+    , flagVOffsetTableSideways( {0, -1, -1, -1, 0, 0, -1, -1, -1} )
 {}
 
 Heroes::Heroes( int heroid, int rc )
@@ -123,6 +134,11 @@ Heroes::Heroes( int heroid, int rc )
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
+    , flagVOffsetTableBottom ( {0, 1, 2, 0, 1, 2, 3, 0, 1} )
+    , flagVOffsetTableTop ( {0, -2, -3, -2, 0, -1, -3, -2, -1} )
+    , flagVOffsetTableBottomAndSideways ( {0, 0, 1, 2, 2, 3, 2, 1, 0} )
+    , flagVOffsetTableTopAndSideways( {0, 0, 0, 1, 1, 0, 0, 0, 0} )
+    , flagVOffsetTableSideways( {0, -1, -1, -1, 0, 0, -1, -1, -1} )
 {
     name = _( Heroes::GetName( heroid ) );
 

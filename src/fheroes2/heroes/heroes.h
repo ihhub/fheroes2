@@ -338,6 +338,11 @@ private:
     int patrol_square;
 
     std::list<IndexObject> visit_object;
+    std::vector<short> flagVOffsetTableBottom;
+    std::vector<short> flagVOffsetTableTop;
+    std::vector<short> flagVOffsetTableBottomAndSideways;
+    std::vector<short> flagVOffsetTableTopAndSideways;
+    std::vector<short> flagVOffsetTableSideways;
 
     mutable int _alphaValue;
 };
