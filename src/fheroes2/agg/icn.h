@@ -604,7 +604,7 @@ namespace ICN
         REQUESTS,
         RESOURCE,
         RESSMALL,
-        R_FLAG32,  // red hero flag
+        R_FLAG32, // red hero flag
         ROAD,
         ROC,
         ROGUE,
