@@ -129,7 +129,7 @@ namespace Interface
         int EventAdventureDialog( void );
         int EventFileDialog( void );
         int EventEndTurn( void );
-        int EventExit( void );
+        static int EventExit( void );
         int EventDigArtifact( void );
         void EventKeyArrowPress( int direct );
 

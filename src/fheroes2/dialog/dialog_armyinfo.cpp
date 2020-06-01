@@ -359,6 +359,11 @@ Sprite GetModesSprite( u32 mod )
     return Sprite();
 }
 
+bool SortSpells( const std::pair<uint32_t, uint32_t> & first, const std::pair<uint32_t, uint32_t> & second )
+{
+    return first.second > 0 && first.second < second.second;
+}
+
 void DrawBattleStats( const Point & dst, const Troop & b )
 {
     const u32 modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
@@ -367,35 +372,37 @@ void DrawBattleStats( const Point & dst, const Troop & b )
 
     // accumulate width
     u32 ow = 0;
+    std::vector<std::pair<uint32_t, uint32_t> > spellVsDuration;
 
     for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii )
         if ( b.isModes( modes[ii] ) ) {
             const Sprite & sprite = GetModesSprite( modes[ii] );
-            if ( sprite.isValid() )
+            if ( sprite.isValid() ) {
                 ow += sprite.w() + 4;
+                spellVsDuration.push_back( std::make_pair( modes[ii], b.GetAffectedDuration( modes[ii] ) ) );
+            }
         }
 
     ow -= 4;
     ow = dst.x - ow / 2;
 
+    std::sort( spellVsDuration.begin(), spellVsDuration.end(), SortSpells );
+
     Text text;
 
     // blit centered
-    for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii )
-        if ( b.isModes( modes[ii] ) ) {
-            const Sprite & sprite = GetModesSprite( modes[ii] );
-            if ( sprite.isValid() ) {
-                sprite.Blit( ow, dst.y );
+    for ( size_t i = 0; i < spellVsDuration.size(); ++i ) {
+        const Sprite & sprite = GetModesSprite( spellVsDuration[i].first );
+        sprite.Blit( ow, dst.y );
 
-                const u32 duration = b.GetAffectedDuration( modes[ii] );
-                if ( duration ) {
-                    text.Set( GetString( duration ), Font::SMALL );
-                    text.Blit( ow + ( sprite.w() - text.w() ) / 2, dst.y + sprite.h() + 1 );
-                }
-
-                ow += sprite.w() + 4;
-            }
+        const uint32_t duration = spellVsDuration[i].second;
+        if ( duration > 0 ) {
+            text.Set( GetString( duration ), Font::SMALL );
+            text.Blit( ow + ( sprite.w() - text.w() ) / 2, dst.y + sprite.h() + 1 );
         }
+
+        ow += sprite.w() + 4;
+    }
 }
 
 void DrawMonsterInfo( const Point & offset, const Troop & troop )

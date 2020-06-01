@@ -100,6 +100,7 @@ namespace Interface
         int tailX;
         int tailY;
         bool updateCursor;
+        int borderSize;
 
         SDL::Time scrollTime;
     };

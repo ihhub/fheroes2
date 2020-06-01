@@ -271,11 +271,11 @@ Surface::Surface( const Size & sz, const SurfaceFormat & fm )
     Set( sz.w, sz.h, fm );
 }
 
-Surface::Surface( const Surface & bs )
+Surface::Surface( const Surface & bs, bool useReference )
     : surface( NULL )
     , _isDisplay( false )
 {
-    Set( bs, true );
+    Set( bs, useReference );
 }
 
 Surface::Surface( const std::string & file )
