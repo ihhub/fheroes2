@@ -400,7 +400,7 @@ bool Battle::Unit::canReach( const Unit & unit ) const
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
     const int target = ( unit.isWide() && isIndirectAttack ) ? unit.GetTailIndex() : unit.GetHeadIndex();
-    return Board::GetDistance( from, target ) - 1 <= GetSpeed( true );
+    return Board::GetDistance( from, target ) <= GetSpeed( true );
 }
 
 bool Battle::Unit::isHandFighting( void ) const
@@ -1017,11 +1017,10 @@ u32 Battle::Unit::GetDefense( void ) const
 
 s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 {
-    double score = 0;
     const Unit & attacker = *this;
 
     const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
-    const double attackerUnitsLost = ( defendersDamage >= hp ) ? GetCount() : defendersDamage / Monster::GetHitPoints(); 
+    const double attackerUnitsLost = ( defendersDamage >= hp ) ? GetCount() : defendersDamage / Monster::GetHitPoints();
     double attackerPowerLost = attackerUnitsLost / GetCount();
 
     double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
@@ -1071,11 +1070,12 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) )
         attackerThreat *= -1;
 
-    // Avoid effectiveness scaling if we're dealing with archers and not shooters either
-    if ( isArchers() && !defender.isArchers() )
-        attackerPowerLost = 1;
+    // Avoid effectiveness scaling if we're dealing with archers
+    if ( !isArchers() || defender.isArchers() )
+        attackerThreat *= attackerPowerLost;
 
-    return static_cast<s32>( attackerThreat * attackerPowerLost );
+    int score = static_cast<int>( attackerThreat );
+    return ( score == 0 ) ? 1 : score;
 }
 
 u32 Battle::Unit::GetHitPoints( void ) const
