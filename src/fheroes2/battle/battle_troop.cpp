@@ -505,12 +505,12 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     return speed;
 }
 
-u32 Battle::Unit::GetDamageMin( const Unit & enemy ) const
+u32 Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
 {
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMin() );
 }
 
-u32 Battle::Unit::GetDamageMax( const Unit & enemy ) const
+u32 Battle::Unit::CalculateMaxDamage( const Unit & enemy ) const
 {
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMax() );
 }
@@ -587,11 +587,11 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
     u32 res = 0;
 
     if ( Modes( SP_BLESS ) )
-        res = GetDamageMax( enemy );
+        res = CalculateMaxDamage( enemy );
     else if ( Modes( SP_CURSE ) )
-        res = GetDamageMin( enemy );
+        res = CalculateMinDamage( enemy );
     else
-        res = Rand::Get( GetDamageMin( enemy ), GetDamageMax( enemy ) );
+        res = Rand::Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
 
     if ( Modes( LUCK_GOOD ) )
         res <<= 1; // mul 2
@@ -603,7 +603,7 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
 
 u32 Battle::Unit::HowManyCanKill( const Unit & b ) const
 {
-    return b.HowManyWillKilled( ( GetDamageMin( b ) + GetDamageMax( b ) ) / 2 );
+    return b.HowManyWillKilled( ( CalculateMinDamage( b ) + CalculateMaxDamage( b ) ) / 2 );
 }
 
 u32 Battle::Unit::HowManyWillKilled( u32 dmg ) const
@@ -1019,13 +1019,12 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 {
     double score = 0;
     const Unit & attacker = *this;
-    const ArmyTroop & defenderBase = static_cast<const ArmyTroop &>( defender );
 
-    const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defenderBase.GetDamageMin() ) + defenderBase.GetDamageMax() ) / 2.0 );
+    const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
     const double attackerUnitsLost = ( defendersDamage >= hp ) ? GetCount() : defendersDamage / Monster::GetHitPoints(); 
     double attackerPowerLost = attackerUnitsLost / GetCount();
 
-    double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( ArmyTroop::GetDamageMin() ) + ArmyTroop::GetDamageMax() ) / 2.0 );
+    double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
 
     if ( canReach( defender ) ) {
         if ( isTwiceAttack() ) {

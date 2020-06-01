@@ -4415,8 +4415,8 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
         Text text1, text2;
         std::string str;
 
-        u32 tmp1 = attacker->GetDamageMin( *defender );
-        u32 tmp2 = attacker->GetDamageMax( *defender );
+        u32 tmp1 = attacker->CalculateMinDamage( *defender );
+        u32 tmp2 = attacker->CalculateMaxDamage( *defender );
 
         str = tmp1 == tmp2 ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 

@@ -131,8 +131,8 @@ namespace Battle
         u32 GetShots( void ) const;
         u32 ApplyDamage( Unit &, u32 );
         u32 ApplyDamage( u32 );
-        u32 GetDamageMin( const Unit & ) const;
-        u32 GetDamageMax( const Unit & ) const;
+        u32 CalculateMinDamage( const Unit & ) const;
+        u32 CalculateMaxDamage( const Unit & ) const;
         u32 CalculateDamageUnit( const Unit &, float ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL ) const;
