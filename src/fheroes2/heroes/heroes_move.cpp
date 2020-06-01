@@ -355,31 +355,35 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
     short * offsettable;
-    const static short flagVOffsetTableBottom[]  = {0, 1, 2, 0, 1, 2, 3, 0, 1};
+    const static short flagVOffsetTableBottom[] = {0, 1, 2, 0, 1, 2, 3, 0, 1};
     const static short flagVOffsetTableTop[] = {0, -2, -3, -2, 0, -1, -3, -2, -1};
     const static short flagVOffsetTableBottomAndSideways[] = {0, 0, 1, 2, 2, 3, 2, 1, 0};
     const static short flagVOffsetTableTopAndSideways[] = {0, 0, 0, 1, 1, 0, 0, 0, 0};
     const static short flagVOffsetTableSideways[] = {0, -1, -1, -1, 0, 0, -1, -1, -1};
 
     switch ( direction ) {
-        case Direction::TOP:
-            offsettable = ( short * ) flagVOffsetTableTop;
-            break;
-        case Direction::BOTTOM:
-            offsettable = ( short * ) flagVOffsetTableBottom;
-            break;
-        case Direction::BOTTOM_LEFT:
-        case Direction::BOTTOM_RIGHT:
-            offsettable = ( short * ) flagVOffsetTableBottomAndSideways;
-            break;
-        case Direction::LEFT:
-        case Direction::RIGHT:
-            offsettable = ( short * ) flagVOffsetTableSideways;
-            break;
-        case Direction::TOP_RIGHT:
-        case Direction::TOP_LEFT:
-            offsettable = ( short * ) flagVOffsetTableTopAndSideways;
-            break;
+    case Direction::TOP:
+        offsettable = (short *) flagVOffsetTableTop;
+        break;
+    case Direction::BOTTOM:
+        offsettable = (short *) flagVOffsetTableBottom;
+        break;
+    case Direction::BOTTOM_LEFT:
+    case Direction::BOTTOM_RIGHT:
+        offsettable = (short *) flagVOffsetTableBottomAndSideways;
+        break;
+    case Direction::LEFT:
+    case Direction::RIGHT:
+        offsettable = (short * ) flagVOffsetTableSideways;
+        break;
+    case Direction::TOP_RIGHT:
+    case Direction::TOP_LEFT:
+        offsettable = (short *) flagVOffsetTableTopAndSideways;
+        break;
+    default:
+        DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
+        offsettable = (short *) flagVOffsetTableBottom; // let it be like bottom
+        break;
     }
 
     Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() : sprite2.x() ), dy + sprite2.y() - offsettable[y_offset] + TILEWIDTH );
