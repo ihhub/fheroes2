@@ -1022,8 +1022,8 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     const ArmyTroop & defenderBase = static_cast<const ArmyTroop &>( defender );
 
     const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defenderBase.GetDamageMin() ) + defenderBase.GetDamageMax() ) / 2.0 );
-    const uint32_t attackerUnitsLost = ( defender.Modes( CAP_MIRRORIMAGE ) ) ? GetCount() : HowManyWillKilled( defendersDamage );
-    const double attackerPowerLost = static_cast<double>( GetCount() ) / attackerUnitsLost;
+    const double attackerUnitsLost = ( defendersDamage >= hp ) ? GetCount() : defendersDamage / Monster::GetHitPoints(); 
+    double attackerPowerLost = attackerUnitsLost / GetCount();
 
     double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( ArmyTroop::GetDamageMin() ) + ArmyTroop::GetDamageMax() ) / 2.0 );
 
@@ -1071,6 +1071,10 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     // Negative value of units that changed the side
     if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) )
         attackerThreat *= -1;
+
+    // Avoid effectiveness scaling if we're dealing with archers and not shooters either
+    if ( isArchers() && !defender.isArchers() )
+        attackerPowerLost = 1;
 
     return static_cast<s32>( attackerThreat * attackerPowerLost );
 }
