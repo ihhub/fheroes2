@@ -3662,7 +3662,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     RedrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
 
     // Part 2 - ripple effect
-    Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
+    const Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
     Sprite rippleSprite;
 
     const Unit * old_current = _currentUnit;
