@@ -3584,49 +3584,39 @@ void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    const int icn = ICN::COLDRAY;
-    u32 frame = 0;
-
-    Point pt_from, pt_to;
+    Point startingPos;
     const HeroBase * current_commander = arena.GetCurrentCommander();
 
     if ( current_commander == opponent1->GetHero() ) {
         const Rect & pos1 = opponent1->GetArea();
-        pt_from = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-
-        const Rect & pos2 = target.GetRectPosition();
-        pt_to = Point( pos2.x, pos2.y );
+        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
     }
     else {
         const Rect & pos = opponent2->GetArea();
-        pt_from = Point( pos.x, pos.y + pos.h / 2 );
-
-        const Rect & pos2 = target.GetRectPosition();
-        pt_to = Point( pos2.x + pos2.w, pos2.y );
+        startingPos = Point( pos.x, pos.y + pos.h / 2 );
     }
 
-    const u32 dx = std::abs( pt_from.x - pt_to.x );
-    const u32 dy = std::abs( pt_from.y - pt_to.y );
-    const u32 step = ( dx > dy ? dx / AGG::GetICNCount( icn ) : dy / AGG::GetICNCount( icn ) );
+    const Point targetPos = target.GetCenterPoint();
 
-    const Points points = GetLinePoints( pt_from, pt_to, step );
-    Points::const_iterator pnt = points.begin();
+    const Points path = GetEuclideanLine( startingPos, targetPos, 18 );
+    const uint32_t spriteCount = AGG::GetICNCount( ICN::COLDRAY );
 
     cursor.SetThemes( Cursor::WAR_NONE );
     AGG::PlaySound( M82::COLDRAY );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) && pnt != points.end() ) {
+    size_t i = 0;
+    while ( le.HandleEvents() && i < path.size() ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
-            const Sprite & sprite = AGG::GetICN( icn, frame );
-            sprite.Blit( ( *pnt ).x - sprite.w() / 2, ( *pnt ).y - sprite.h() / 2 );
+            const uint32_t frame = i * spriteCount / path.size();
+            const Sprite & sprite = AGG::GetICN( ICN::COLDRAY, frame );
+            sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2 );
             cursor.Show();
             display.Flip();
 
-            ++frame;
-            ++pnt;
+            ++i;
         }
     }
 
@@ -3664,68 +3654,58 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
-    Sprite sprite2( target.GetContour( target.isReflect() ? CONTOUR_REFLECT | CONTOUR_BLACK : CONTOUR_BLACK ), sprite1.x(), sprite1.y() );
-
-    const int icn = ICN::DISRRAY;
-    u32 frame = 0;
-    Point pt_from, pt_to;
+    Point startingPos;
     const HeroBase * current_commander = arena.GetCurrentCommander();
 
     if ( current_commander == opponent1->GetHero() ) {
         const Rect & pos1 = opponent1->GetArea();
-        pt_from = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-
-        const Rect & pos2 = target.GetRectPosition();
-        pt_to = Point( pos2.x, pos2.y );
+        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
     }
     else {
         const Rect & pos = opponent2->GetArea();
-        pt_from = Point( pos.x, pos.y + pos.h / 2 );
-
-        const Rect & pos2 = target.GetRectPosition();
-        pt_to = Point( pos2.x + pos2.w, pos2.y );
+        startingPos = Point( pos.x, pos.y + pos.h / 2 );
     }
 
-    const u32 dx = std::abs( pt_from.x - pt_to.x );
-    const u32 dy = std::abs( pt_from.y - pt_to.y );
-    const u32 step = ( dx > dy ? dx / AGG::GetICNCount( icn ) : dy / AGG::GetICNCount( icn ) );
+    const Point targetPos = target.GetCenterPoint();
 
-    const Points points = GetLinePoints( pt_from, pt_to, step );
-    Points::const_iterator pnt = points.begin();
+    const Points path = GetEuclideanLine( startingPos, targetPos, 24 );
+    const uint32_t spriteCount = AGG::GetICNCount( ICN::DISRRAY );
 
     cursor.SetThemes( Cursor::WAR_NONE );
     AGG::PlaySound( M82::DISRUPTR );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) && pnt != points.end() ) {
-        CheckGlobalEvents( le );
-
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            const Sprite & sprite = AGG::GetICN( icn, frame );
-            sprite.Blit( ( *pnt ).x - sprite.w() / 2, ( *pnt ).y - sprite.h() / 2 );
-            cursor.Show();
-            display.Flip();
-
-            ++frame;
-            ++pnt;
-        }
-    }
-
-    // part 2
-    frame = 0;
-    const Unit * old_current = _currentUnit;
-    _currentUnit = &target;
-    b_current_sprite = &sprite2;
-    _movingPos = Point( 0, 0 );
-
-    while ( le.HandleEvents() && frame < 20 ) {
+    size_t i = 0;
+    while ( le.HandleEvents() && i < path.size() ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
-            sprite2.SetPos( Point( sprite1.x() + ( ( frame % 2 ) ? -1 : 1 ), sprite1.y() ) );
+            const uint32_t frame = i * spriteCount / path.size();
+            const Sprite & sprite = AGG::GetICN( ICN::DISRRAY, frame );
+            sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2 );
+            cursor.Show();
+            display.Flip();
+
+            ++i;
+        }
+    }
+
+    // Part 2 - ripple effect
+    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
+    Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+
+    const Unit * old_current = _currentUnit;
+    _currentUnit = &target;
+    b_current_sprite = &sprite1;
+    _movingPos = Point( 0, 0 );
+
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && frame < 30 ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            cursor.Hide();
+            sprite1.SetPos( Point( sprite1.x() + ( ( frame % 2 ) ? -3 : 3 ), sprite1.y() ) );
             Redraw();
             cursor.Show();
             display.Flip();
