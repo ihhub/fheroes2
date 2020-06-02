@@ -334,7 +334,7 @@ void Heroes::Redraw( Surface & dst, bool with_shadow ) const
 void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 {
     const Point & mp = GetCenter();
-    const int flagFrameID = Game::MapsAnimationFrame() % 9;
+    const int flagFrameID = Game::MapsAnimationFrame() % amountOfFlagFrames;
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     if ( !( gamearea.GetRectMaps() & mp ) )
         return;
@@ -352,40 +352,64 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         sprite4.SetAlphaMod( _alphaValue );
     }
 
-    int16_t *offsettable;
-    static const int16_t flagVOffsetTableBottom[amountOfFlagFrames] = {0, 1, 2, 0, 1, 2, 3, 0, 1};
-    static const int16_t flagVOffsetTableTop[amountOfFlagFrames] = {0, -2, -3, -2, 0, -1, -3, -2, -1};
-    static const int16_t flagVOffsetTableBottomAndSideways[amountOfFlagFrames] = {0, 0, 1, 2, 2, 3, 2, 1, 0};
-    static const int16_t flagVOffsetTableTopAndSideways[amountOfFlagFrames] = {0, 0, 0, 1, 1, 0, 0, 0, 0};
-    static const int16_t flagVOffsetTableSideways[amountOfFlagFrames] = {0, -1, -1, -1, 0, 0, -1, -1, -1};
+    int16_t * offsettableX, * offsettableY;
+    static const int16_t flagYOffsetTableBottom[amountOfFlagFrames] = {0, 1, 2, 0, 1, 2, 3, 0, 1};
+    static const int16_t flagYOffsetTableTop[amountOfFlagFrames] = {0, -2, -3, -2, 0, -1, -3, -2, -1};
+    static const int16_t flagYOffsetTableBottomAndSideways[amountOfFlagFrames] = {0, 0, 1, 2, 2, 3, 2, 1, 0};
+    static const int16_t flagYOffsetTableTopAndSideways[amountOfFlagFrames] = {0, 0, 0, 1, 1, 0, 0, 0, 0};
+    static const int16_t flagYOffsetTableSideways[amountOfFlagFrames] = {0, 0, 0, 0, 1, 1, 0, 0, 0};
+
+    static const int16_t flagXOffsetTableBottom[amountOfFlagFrames] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    static const int16_t flagXOffsetTableTop[amountOfFlagFrames] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    static const int16_t flagXOffsetTableBottomAndRight[amountOfFlagFrames] = {0, 0, -1, -3, -1, 0, 0, 0, -2};
+    static const int16_t flagXOffsetTableBottomAndLeft[amountOfFlagFrames] = {0, -1, 0, 2, 0, -1, -1, -1, 1};
+    static const int16_t flagXOffsetTableTopAndRight[amountOfFlagFrames] = {0, 1, 0, 1, 2, 2, 1, 0, -1};
+    static const int16_t flagXOffsetTableTopAndLeft[amountOfFlagFrames] = {0, -1, 0, -1, -2, -2, -1, 0, 1};
+    static const int16_t flagXOffsetTableRight[amountOfFlagFrames] = {0, 1, 0, -1, -1, -2, -1, 0, -1};
+    static const int16_t flagXOffsetTableLeft[amountOfFlagFrames] = {0, -1, 0, 1, 1, 2, 1, 0, 1};
 
     switch ( direction ) {
     case Direction::TOP:
-        offsettable = const_cast<int16_t*>(flagVOffsetTableTop);
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableTop);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableTop);
         break;
     case Direction::BOTTOM:
-        offsettable = const_cast<int16_t*>(flagVOffsetTableBottom);
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableBottom);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableBottom);
         break;
     case Direction::BOTTOM_LEFT:
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableBottomAndLeft);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableBottomAndSideways);
+        break;
     case Direction::BOTTOM_RIGHT:
-        offsettable = const_cast<int16_t*>(flagVOffsetTableBottomAndSideways);
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableBottomAndRight);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableBottomAndSideways);
         break;
     case Direction::LEFT:
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableLeft);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableSideways);
+        break;
     case Direction::RIGHT:
-        offsettable = const_cast<int16_t*>(flagVOffsetTableSideways);
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableRight);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableSideways);
         break;
     case Direction::TOP_RIGHT:
-    case Direction::TOP_LEFT:
-        offsettable = const_cast<int16_t*>(flagVOffsetTableTopAndSideways);
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableTopAndRight);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableTopAndSideways);
         break;
-    default:
+    case Direction::TOP_LEFT:
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableTopAndLeft);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableTopAndSideways);
+        break;
+    default: // let default be like bottom
         DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
-        offsettable = const_cast<int16_t*>(flagVOffsetTableBottom); // let it be like bottom
+        offsettableX = const_cast<int16_t *>(flagXOffsetTableBottom);
+        offsettableY = const_cast<int16_t *>(flagYOffsetTableBottom);
         break;
     }
 
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() : sprite2.x() ), dy + sprite2.y() - offsettable[flagFrameID] + TILEWIDTH );
+    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() - offsettableX[flagFrameID] : sprite2.x() - offsettableX[flagFrameID] ), dy + sprite2.y() - offsettableY[flagFrameID] + TILEWIDTH );
     Point dst_pt3( dx + sprite3.x(), dy + sprite3.y() + TILEWIDTH );
     Point dst_pt4( dx + ( reflect ? TILEWIDTH - sprite4.x() - sprite4.w() : sprite4.x() ), dy + sprite4.y() + TILEWIDTH );
 
