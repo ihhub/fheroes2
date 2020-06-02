@@ -178,7 +178,7 @@ namespace Interface
                 int id = _topId;
                 const int end = ( _topId + maxItems ) > _size() ? _size() - _topId : _topId + maxItems;
                 for ( ; id < end; ++id )
-                    RedrawItem( (*content)[id], rtAreaItems.x, rtAreaItems.y + ( id - _topId ) * rtAreaItems.h / maxItems, id == _currentId );
+                    RedrawItem( ( *content )[id], rtAreaItems.x, rtAreaItems.y + ( id - _topId ) * rtAreaItems.h / maxItems, id == _currentId );
             }
         }
 
@@ -189,7 +189,7 @@ namespace Interface
 
         Item & GetCurrent( void ) // always call this function only after IsValid()!
         {
-            return (*content)[_currentId];
+            return ( *content )[_currentId];
         }
 
         Item * GetFromPosition( const Point & mp )
@@ -208,7 +208,7 @@ namespace Interface
             if ( _topId + id >= _size() ) // out of items
                 return NULL;
 
-            return &(*content)[id];
+            return &( *content )[id];
         }
 
         void SetCurrent( size_t posId )
@@ -325,7 +325,8 @@ namespace Interface
                 splitter.Backward();
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) ) && ( _topId + maxItems < _size() ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgDn ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) )
+                      && ( _topId + maxItems < _size() ) ) {
                 cursor.Hide();
                 ++_topId;
                 splitter.Forward();
@@ -354,16 +355,16 @@ namespace Interface
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
                         if ( id == _currentId ) {
-                            ActionListDoubleClick( (*content)[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                            ActionListDoubleClick( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         }
                         else {
                             _currentId = id;
-                            ActionListSingleClick( (*content)[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                            ActionListSingleClick( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         }
                         return true;
                     }
                     else if ( le.MousePressRight( rtAreaItems ) ) {
-                        ActionListPressRight( (*content)[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                        ActionListPressRight( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         return true;
                     }
                 }
@@ -399,7 +400,7 @@ namespace Interface
 
         void Verify()
         {
-            if ( content == NULL  || content->empty() ) {
+            if ( content == NULL || content->empty() ) {
                 _currentId = -1;
                 _topId = -1;
             }
