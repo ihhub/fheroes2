@@ -1121,11 +1121,10 @@ Surface Surface::RenderRippleEffect( int frame ) const
 
     const int height = h();
     const int width = w();
-    const int imageDepth = depth();
 
-    int quadWave = abs( 20 - (int)frame % 40 ) - 10;
-    int effectY = ( frame - 10 ) / 10 + 1;
-    const double xOffset = ( effectY * 0.05 + 0.3 ) * quadWave;
+    const int linearWave = abs( 20 - ( frame + 10 ) % 40 ) - 10;
+    const int progress = 7 - ( frame / 10 );
+    const double xOffset = ( progress * 0.05 + 0.3 ) * linearWave;
 
     for ( int y = 0; y < height; ++y ) {
         double sinYEffect = ( sin( ( y % 62 ) / 20.0 ) - 0.5 ) * 2.0;

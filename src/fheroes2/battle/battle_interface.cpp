@@ -3699,8 +3699,8 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     _currentUnit = &target;
     _movingPos = Point( 0, 0 );
 
-    uint32_t frame = 10;
-    while ( le.HandleEvents() && frame < 70 ) {
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && frame < 60 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
