@@ -27,12 +27,15 @@
 #include <string>
 #include <vector>
 
+#include "agg.h"
 #include "army.h"
 #include "gamedefs.h"
 #include "heroes_base.h"
 #include "pairs.h"
 #include "route.h"
 #include "visit.h"
+
+#define amountOfFlagFrames 9
 
 class Recruits;
 class Surface;
@@ -338,11 +341,6 @@ private:
     int patrol_square;
 
     std::list<IndexObject> visit_object;
-    std::vector<short> flagVOffsetTableBottom;
-    std::vector<short> flagVOffsetTableTop;
-    std::vector<short> flagVOffsetTableBottomAndSideways;
-    std::vector<short> flagVOffsetTableTopAndSideways;
-    std::vector<short> flagVOffsetTableSideways;
 
     mutable int _alphaValue;
 };

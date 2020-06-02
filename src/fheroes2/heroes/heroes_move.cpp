@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
 #include "castle.h"
 #include "cursor.h"
 #include "direction.h"
@@ -227,7 +226,7 @@ Sprite SpriteFlag( const Heroes & hero, int index, bool reflect, bool rotate )
             break;
         }
 
-    return AGG::GetICN( icn_flag, index_sprite + ( index % 9 ), reflect );
+    return AGG::GetICN( icn_flag, index_sprite + ( index % amountOfFlagFrames ), reflect );
 }
 
 Sprite SpriteShad( const Heroes & hero, int index )
@@ -353,35 +352,40 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         sprite4.SetAlphaMod( _alphaValue );
     }
 
-    const std::vector<short> * offsettable;
+    int16_t *offsettable;
+    static const int16_t flagVOffsetTableBottom[amountOfFlagFrames] = {0, 1, 2, 0, 1, 2, 3, 0, 1};
+    static const int16_t flagVOffsetTableTop[amountOfFlagFrames] = {0, -2, -3, -2, 0, -1, -3, -2, -1};
+    static const int16_t flagVOffsetTableBottomAndSideways[amountOfFlagFrames] = {0, 0, 1, 2, 2, 3, 2, 1, 0};
+    static const int16_t flagVOffsetTableTopAndSideways[amountOfFlagFrames] = {0, 0, 0, 1, 1, 0, 0, 0, 0};
+    static const int16_t flagVOffsetTableSideways[amountOfFlagFrames] = {0, -1, -1, -1, 0, 0, -1, -1, -1};
 
     switch ( direction ) {
     case Direction::TOP:
-        offsettable = &flagVOffsetTableTop;
+        offsettable = const_cast<int16_t*>(flagVOffsetTableTop);
         break;
     case Direction::BOTTOM:
-        offsettable = &flagVOffsetTableBottom;
+        offsettable = const_cast<int16_t*>(flagVOffsetTableBottom);
         break;
     case Direction::BOTTOM_LEFT:
     case Direction::BOTTOM_RIGHT:
-        offsettable = &flagVOffsetTableBottomAndSideways;
+        offsettable = const_cast<int16_t*>(flagVOffsetTableBottomAndSideways);
         break;
     case Direction::LEFT:
     case Direction::RIGHT:
-        offsettable = &flagVOffsetTableSideways;
+        offsettable = const_cast<int16_t*>(flagVOffsetTableSideways);
         break;
     case Direction::TOP_RIGHT:
     case Direction::TOP_LEFT:
-        offsettable = &flagVOffsetTableTopAndSideways;
+        offsettable = const_cast<int16_t*>(flagVOffsetTableTopAndSideways);
         break;
     default:
         DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
-        offsettable = &flagVOffsetTableBottom; // let it be like bottom
+        offsettable = const_cast<int16_t*>(flagVOffsetTableBottom); // let it be like bottom
         break;
     }
 
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() : sprite2.x() ), dy + sprite2.y() - ( *offsettable )[flagFrameID] + TILEWIDTH );
+    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() : sprite2.x() ), dy + sprite2.y() - offsettable[flagFrameID] + TILEWIDTH );
     Point dst_pt3( dx + sprite3.x(), dy + sprite3.y() + TILEWIDTH );
     Point dst_pt4( dx + ( reflect ? TILEWIDTH - sprite4.x() - sprite4.w() : sprite4.x() ), dy + sprite4.y() + TILEWIDTH );
 

@@ -105,11 +105,6 @@ Heroes::Heroes()
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
-    , flagVOffsetTableBottom( std::vector<short> {0, 1, 2, 0, 1, 2, 3, 0, 1} )
-    , flagVOffsetTableTop( std::vector<short> {0, -2, -3, -2, 0, -1, -3, -2, -1} )
-    , flagVOffsetTableBottomAndSideways( std::vector<short> {0, 0, 1, 2, 2, 3, 2, 1, 0} )
-    , flagVOffsetTableTopAndSideways( std::vector<short> {0, 0, 0, 1, 1, 0, 0, 0, 0} )
-    , flagVOffsetTableSideways( std::vector<short> {0, -1, -1, -1, 0, 0, -1, -1, -1} )
 {}
 
 Heroes::Heroes( int heroid, int rc )
@@ -128,11 +123,6 @@ Heroes::Heroes( int heroid, int rc )
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
-    , flagVOffsetTableBottom( std::vector<short> {0, 1, 2, 0, 1, 2, 3, 0, 1} )
-    , flagVOffsetTableTop( std::vector<short> {0, -2, -3, -2, 0, -1, -3, -2, -1} )
-    , flagVOffsetTableBottomAndSideways( std::vector<short> {0, 0, 1, 2, 2, 3, 2, 1, 0} )
-    , flagVOffsetTableTopAndSideways( std::vector<short> {0, 0, 0, 1, 1, 0, 0, 0, 0} )
-    , flagVOffsetTableSideways( std::vector<short> {0, -1, -1, -1, 0, 0, -1, -1, -1} )
 {
     name = _( Heroes::GetName( heroid ) );
 
