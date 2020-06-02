@@ -246,7 +246,7 @@ namespace Interface
 
         void SetCurrent( const Item & item )
         {
-            std::vector<Item>::iterator pos = std::find( content->begin(), content->end(), item );
+            typename std::vector<Item>::iterator pos = std::find( content->begin(), content->end(), item );
             if ( pos == content->end() )
                 Reset();
             else
