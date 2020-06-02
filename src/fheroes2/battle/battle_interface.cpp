@@ -3578,51 +3578,6 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     b_current_sprite = NULL;
 }
 
-void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
-{
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
-    LocalEvent & le = LocalEvent::Get();
-
-    Point startingPos;
-    const HeroBase * current_commander = arena.GetCurrentCommander();
-
-    if ( current_commander == opponent1->GetHero() ) {
-        const Rect & pos1 = opponent1->GetArea();
-        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-    }
-    else {
-        const Rect & pos = opponent2->GetArea();
-        startingPos = Point( pos.x, pos.y + pos.h / 2 );
-    }
-
-    const Point targetPos = target.GetCenterPoint();
-
-    const Points path = GetEuclideanLine( startingPos, targetPos, 18 );
-    const uint32_t spriteCount = AGG::GetICNCount( ICN::COLDRAY );
-
-    cursor.SetThemes( Cursor::WAR_NONE );
-    AGG::PlaySound( M82::COLDRAY );
-
-    size_t i = 0;
-    while ( le.HandleEvents() && i < path.size() ) {
-        CheckGlobalEvents( le );
-
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            cursor.Hide();
-            const uint32_t frame = i * spriteCount / path.size();
-            const Sprite & sprite = AGG::GetICN( ICN::COLDRAY, frame );
-            sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2 );
-            cursor.Show();
-            display.Flip();
-
-            ++i;
-        }
-    }
-
-    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, true );
-}
-
 void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell & spell )
 {
     Display & display = Display::Get();
@@ -3648,7 +3603,13 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
     RedrawTroopWithFrameAnimation( target, ICN::YINYANG, M82::UNKNOWN, false );
 }
 
-void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
+void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
+{
+    RedrawRaySpell( target, ICN::COLDRAY, M82::COLDRAY, 18 );
+    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, true );
+}
+
+void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
@@ -3669,11 +3630,11 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
 
     const Point targetPos = target.GetCenterPoint();
 
-    const Points path = GetEuclideanLine( startingPos, targetPos, 24 );
-    const uint32_t spriteCount = AGG::GetICNCount( ICN::DISRRAY );
+    const Points path = GetEuclideanLine( startingPos, targetPos, size );
+    const uint32_t spriteCount = AGG::GetICNCount( spellICN );
 
     cursor.SetThemes( Cursor::WAR_NONE );
-    AGG::PlaySound( M82::DISRUPTR );
+    AGG::PlaySound( spellSound );
 
     size_t i = 0;
     while ( le.HandleEvents() && i < path.size() ) {
@@ -3682,7 +3643,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
             const uint32_t frame = i * spriteCount / path.size();
-            const Sprite & sprite = AGG::GetICN( ICN::DISRRAY, frame );
+            const Sprite & sprite = AGG::GetICN( spellICN, frame );
             sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2 );
             cursor.Show();
             display.Flip();
@@ -3690,6 +3651,15 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
             ++i;
         }
     }
+}
+
+void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
+{
+    Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+
+    RedrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
 
     // Part 2 - ripple effect
     Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
