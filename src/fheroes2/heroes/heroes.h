@@ -35,8 +35,6 @@
 #include "route.h"
 #include "visit.h"
 
-#define amountOfFlagFrames 9
-
 class Recruits;
 class Surface;
 namespace Battle
@@ -131,6 +129,11 @@ public:
         // debugger
         SANDYSANDY,
         UNKNOWN
+    };
+
+    enum
+    {
+        FLAG_FRAME_COUNT = 9
     };
 
     static Surface GetPortrait( int heroid, int type );
@@ -317,6 +320,10 @@ private:
     void AngleStep( int );
     bool MoveStep( bool fast = false );
     static void MoveStep( Heroes &, s32 from, s32 to, bool newpos );
+    Sprite SpriteHero( int index, bool reflect, bool rotate ) const;
+    Sprite SpriteFlag( int index, bool reflect, bool rotate ) const;
+    Sprite SpriteShad( int index ) const;
+    Sprite SpriteFroth( int index, bool reflect ) const;
 
     std::string name;
     ColorBase killer_color;
