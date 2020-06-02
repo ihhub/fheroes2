@@ -3654,6 +3654,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
+    // Casting hero position
     Point startingPos;
     const HeroBase * current_commander = arena.GetCurrentCommander();
 
@@ -3691,26 +3692,26 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     }
 
     // Part 2 - ripple effect
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
+    Sprite rippleSprite;
 
     const Unit * old_current = _currentUnit;
     _currentUnit = &target;
-    b_current_sprite = &sprite1;
     _movingPos = Point( 0, 0 );
 
-    uint32_t frame = 0;
-    while ( le.HandleEvents() && frame < 30 ) {
+    uint32_t frame = 10;
+    while ( le.HandleEvents() && frame < 70 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
-            sprite1.SetPos( Point( sprite1.x() + ( ( frame % 2 ) ? -3 : 3 ), sprite1.y() ) );
+            rippleSprite = Sprite( unitSprite.RenderRippleEffect( frame ), unitSprite.GetPos().x, unitSprite.GetPos().y );
+            b_current_sprite = &rippleSprite;
             Redraw();
             cursor.Show();
             display.Flip();
 
-            ++frame;
+            frame += 2;
         }
     }
 

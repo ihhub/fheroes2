@@ -1113,6 +1113,35 @@ Surface Surface::RenderSepia( void ) const
     return res;
 }
 
+Surface Surface::RenderRippleEffect( int frame ) const
+{
+    Surface res = GetSurface();
+
+    res.Lock();
+
+    const int height = h();
+    const int width = w();
+    const int imageDepth = depth();
+
+    int quadWave = abs( 20 - (int)frame % 40 ) - 10;
+    int effectY = ( frame - 10 ) / 10 + 1;
+    const double xOffset = ( effectY * 0.05 + 0.3 ) * quadWave;
+
+    for ( int y = 0; y < height; ++y ) {
+        double sinYEffect = ( sin( ( y % 62 ) / 20.0 ) - 0.5 ) * 2.0;
+        for ( int x = 0; x < width; ++x ) {
+            const int newX = x + static_cast<int>( xOffset * sinYEffect );
+            if ( newX >= 0 && newX < width ) {
+                res.SetPixel( newX, y, GetPixel( x, y ) );
+            }
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
 Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
 {
     Surface res = GetSurface();

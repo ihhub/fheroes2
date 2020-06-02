@@ -154,6 +154,7 @@ public:
     Surface RenderContour( const RGBA & ) const;
     Surface RenderGrayScale( void ) const;
     Surface RenderSepia( void ) const;
+    Surface RenderRippleEffect( int frame ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
     Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
     Surface RenderSurface( const Rect & srt, const Size & ) const;
