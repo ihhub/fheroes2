@@ -24,6 +24,7 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <math.h>
 #include <memory>
 #include <sstream>
 
@@ -1113,6 +1114,7 @@ Surface Surface::RenderSepia( void ) const
     return res;
 }
 
+// Returns a warped Sprite. Animation is built with 60 frames in mind.
 Surface Surface::RenderRippleEffect( int frame ) const
 {
     Surface res = GetSurface();
