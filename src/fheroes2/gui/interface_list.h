@@ -350,7 +350,7 @@ namespace Interface
                 cursor.Hide();
 
                 if ( id < _size() ) {
-                    if ( ActionListCursor( (*content)[id], le.GetMouseCursor() ) )
+                    if ( ActionListCursor( ( *content )[id], le.GetMouseCursor() ) )
                         return true;
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
