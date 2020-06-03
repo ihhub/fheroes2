@@ -3154,10 +3154,10 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         cursor.SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::GOODLUCK );
 
-        while ( le.HandleEvents() && width < luckSprite.w() ) {
+        while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( width < luckSprite.w() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 cursor.Hide();
                 Redraw();
 
@@ -3179,10 +3179,10 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         cursor.SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::BADLUCK );
 
-        while ( le.HandleEvents() && frameId < 8 ) {
+        while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( frameId < 8 && Battle ::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 cursor.Hide();
                 Redraw();
 
@@ -3397,15 +3397,16 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     cursor.Hide();
 
     _currentUnit = &target;
+    _movingUnit = &target;
     b_current_sprite = &sprite;
-    b_current_alpha = 250;
+    b_current_alpha = 240;
 
     AGG::PlaySound( M82::TELPTOUT );
 
-    while ( le.HandleEvents() && b_current_alpha > 20 ) {
+    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( b_current_alpha > 0 && Battle ::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
@@ -3422,10 +3423,10 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     target.SetPosition( dst );
     AGG::PlaySound( M82::TELPTIN );
 
-    while ( le.HandleEvents() && b_current_alpha <= 235 ) {
+    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( b_current_alpha <= 235 && Battle ::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
@@ -3437,6 +3438,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
     b_current_alpha = 255;
     _currentUnit = NULL;
+    _movingUnit = NULL;
     b_current_sprite = NULL;
 }
 
