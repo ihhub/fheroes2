@@ -1024,13 +1024,13 @@ void Battle::Interface::SetStatus( const std::string & msg, bool top )
 void Battle::Interface::CycleColors()
 {
     ++_colorCycle;
-    if ( _colorCycle > 20 )
+    if ( _colorCycle > 20 ) // 5 * 4, two color ranges
         _colorCycle = 0;
 
     _colorCyclePairs.clear();
 
-    auto set = PAL::GetCyclingColors();
-    for ( auto it = set.begin(); it != set.end(); ++it ) {
+    const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
+    for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
         for ( int id = 0; id < it->length; ++id ) {
             const uint8_t newColorID = it->forward ? it->start + (id + _colorCycle) % it->length : it->start + it->length - 1 - (3 + _colorCycle - id) % it->length;
             _colorCyclePairs.emplace( PAL::GetPaletteColor( it->start + id ), PAL::GetPaletteColor( newColorID ) );
