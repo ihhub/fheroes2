@@ -152,7 +152,7 @@ namespace PAL
         }
     }
 
-    const std::vector<CyclingColorSet> & PAL::GetCyclingColors() 
+    const std::vector<CyclingColorSet> & PAL::GetCyclingColors()
     {
         return _cycleSet;
     }
