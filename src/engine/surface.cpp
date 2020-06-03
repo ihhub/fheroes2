@@ -1177,7 +1177,6 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
     std::vector<uint32_t> outValue;
 #endif
     std::map<uint32_t, uint32_t> correctedColors;
-
     for ( std::map<RGBA, RGBA>::const_iterator value = colorPairs.begin(); value != colorPairs.end(); ++value ) {
         uint32_t in = MapRGB( value->first );
         uint32_t out = res.MapRGB( value->second );
