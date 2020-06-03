@@ -291,7 +291,6 @@ namespace Battle
         Point _movingPos;
         Point _flyingPos;
 
-
         s32 index_pos;
         s32 teleport_src;
         Rect pocket_book;
