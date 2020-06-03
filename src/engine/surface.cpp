@@ -1115,26 +1115,28 @@ Surface Surface::RenderSepia( void ) const
 }
 
 // Returns a warped Sprite. Animation is built with 60 frames in mind.
-Surface Surface::RenderRippleEffect( int frame ) const
+Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFrequency ) const
 {
-    Surface res = GetSurface();
-
-    res.Lock();
-
     const int height = h();
     const int width = w();
 
-    const int linearWave = abs( 20 - ( frame + 10 ) % 40 ) - 10;
-    const int progress = 7 - ( frame / 10 );
-    const double xOffset = ( progress * 0.05 + 0.3 ) * linearWave;
+    // convert frames to -10...10 range with a period of 40
+    const int linearWave = std::abs( 20 - ( frame + 10 ) % 40 ) - 10;
+    const int progress = 7 - frame / 10;
+
+    const double rippleXModifier = ( progress * scaleX + 0.3 ) * linearWave;
+    const int offsetX = std::abs( rippleXModifier );
+    const uint32_t limitY = waveFrequency * M_PI;
+
+    Surface res = Surface( Size( width + offsetX * 2, height ), true );
+    res.Lock();
 
     for ( int y = 0; y < height; ++y ) {
-        double sinYEffect = ( sin( ( y % 62 ) / 20.0 ) - 0.5 ) * 2.0;
+        // Take top half the sin wave starting at 0 with period set by waveFrequency, result is -1...1
+        const double sinYEffect = std::sin( ( y % limitY ) / waveFrequency ) * 2.0 - 1;
         for ( int x = 0; x < width; ++x ) {
-            const int newX = x + static_cast<int>( xOffset * sinYEffect );
-            if ( newX >= 0 && newX < width ) {
-                res.SetPixel( newX, y, GetPixel( x, y ) );
-            }
+            const int newX = x + static_cast<int>( rippleXModifier * sinYEffect ) + offsetX;
+            res.SetPixel( newX, y, GetPixel( x, y ) );
         }
     }
 
