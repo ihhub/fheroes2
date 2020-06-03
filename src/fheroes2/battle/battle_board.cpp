@@ -932,14 +932,14 @@ Battle::Indexes Battle::Board::GetMoveWideIndexes( s32 center, bool reflect )
     return result;
 }
 
-Battle::Indexes Battle::Board::GetAroundIndexes( s32 center )
+Battle::Indexes Battle::Board::GetAroundIndexes( s32 center, s32 ignore )
 {
     Indexes result;
     result.reserve( 12 );
 
     if ( isValidIndex( center ) ) {
         for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir )
-            if ( isValidDirection( center, dir ) )
+            if ( isValidDirection( center, dir ) && GetIndexDirection( center, dir ) != ignore )
                 result.push_back( GetIndexDirection( center, dir ) );
     }
 
@@ -948,20 +948,22 @@ Battle::Indexes Battle::Board::GetAroundIndexes( s32 center )
 
 Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & b )
 {
+    const int headIdx = b.GetHeadIndex();
+
     if ( b.isWide() ) {
-        Indexes around = GetAroundIndexes( b.GetHeadIndex() );
-        const Indexes & tail = GetAroundIndexes( b.GetTailIndex() );
+        const int tailIdx = b.GetTailIndex();
+
+        Indexes around = GetAroundIndexes( headIdx, tailIdx );
+        const Indexes & tail = GetAroundIndexes( tailIdx, headIdx );
         around.insert( around.end(), tail.begin(), tail.end() );
 
-        Indexes::iterator it_end = around.end();
-        it_end = std::remove( around.begin(), it_end, b.GetHeadIndex() );
-        it_end = std::remove( around.begin(), it_end, b.GetTailIndex() );
-        around.resize( std::distance( around.begin(), it_end ) );
+        std::sort( around.begin(), around.end() );
+        around.erase( std::unique( around.begin(), around.end() ), around.end() );
 
         return around;
     }
 
-    return GetAroundIndexes( b.GetHeadIndex() );
+    return GetAroundIndexes( headIdx );
 }
 
 Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )

@@ -83,6 +83,7 @@ s32 Battle::AIMaxQualityPosition( const Indexes & positions )
 
     for ( Indexes::const_iterator it = positions.begin(); it != positions.end(); ++it )
         if ( Board::isValidIndex( *it ) ) {
+            DEBUG( DBG_BATTLE, DBG_TRACE, *it << " index is " << Board::GetCell( *it )->GetQuality() );
             if ( res < 0 )
                 res = *it;
             else if ( Board::GetCell( res )->GetQuality() < Board::GetCell( *it )->GetQuality() )
@@ -157,10 +158,7 @@ s32 Battle::AIAttackPosition( Arena & arena, const Unit & b, const Indexes & pos
 {
     s32 res = -1;
 
-    if ( b.isMultiCellAttack() ) {
-        res = AIMaxQualityPosition( positions );
-    }
-    else if ( b.isDoubleCellAttack() ) {
+    if ( b.isDoubleCellAttack() ) {
         Indexes results;
         results.reserve( 12 );
 
@@ -195,8 +193,11 @@ s32 Battle::AIAttackPosition( Arena & arena, const Unit & b, const Indexes & pos
             }
         }
     }
+    else {
+        res = AIMaxQualityPosition( positions );
+    }
 
-    return 0 > res ? AIShortDistance( b.GetHeadIndex(), positions ) : res;
+    return b.canReach( res ) ? res : AIShortDistance( b.GetHeadIndex(), positions );
 }
 
 using namespace Battle;

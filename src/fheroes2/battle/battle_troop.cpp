@@ -392,18 +392,27 @@ bool Battle::Unit::OutOfWalls( void ) const
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
 }
 
-bool Battle::Unit::canReach( const Unit & unit ) const
+bool Battle::Unit::canReach( int index ) const
 {
-    if ( unit.Modes( CAP_TOWER ) )
+    if ( !Board::isValidIndex( index ) )
         return false;
 
     if ( isFlying() || ( isArchers() && !isHandFighting() ) )
         return true;
 
-    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
+    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
+    return Board::GetDistance( from, index ) <= GetSpeed( true );
+}
+
+bool Battle::Unit::canReach( const Unit & unit ) const
+{
+    if ( unit.Modes( CAP_TOWER ) )
+        return false;
+
+    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
     const int target = ( unit.isWide() && isIndirectAttack ) ? unit.GetTailIndex() : unit.GetHeadIndex();
-    return Board::GetDistance( from, target ) <= GetSpeed( true );
+    return canReach( target );
 }
 
 bool Battle::Unit::isHandFighting( void ) const
