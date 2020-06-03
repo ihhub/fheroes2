@@ -1171,7 +1171,13 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
     if ( colorPairs.empty() )
         return res;
 
+    // If STL is compiled with all Debug options this function become pretty slow using std::map
+#ifdef WITH_DEBUG
+    std::vector<uint32_t> inValue;
+    std::vector<uint32_t> outValue;
+#endif
     std::map<uint32_t, uint32_t> correctedColors;
+
     for ( std::map<RGBA, RGBA>::const_iterator value = colorPairs.begin(); value != colorPairs.end(); ++value ) {
         uint32_t in = MapRGB( value->first );
         uint32_t out = res.MapRGB( value->second );
@@ -1182,8 +1188,13 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
         if ( res.amask() )
             out |= res.amask();
 
-        if ( in != out )
+        if ( in != out ) {
+#ifdef WITH_DEBUG
+            inValue.push_back( in );
+            outValue.push_back( out );
+#endif
             correctedColors[in] = out;
+        }
     }
 
     if ( correctedColors.empty() )
@@ -1191,12 +1202,24 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
 
     res.Lock();
 
-    const int height = h();
-    const int width = w();
+    int height = h();
+    int width = w();
     const int imageDepth = depth();
 
     if ( imageDepth == 32 ) { // RGBA image
-        const uint16_t pitch = res.surface->pitch >> 2;
+        uint16_t pitch = res.surface->pitch >> 2;
+
+#ifdef WITH_DEBUG
+        uint32_t * inStart = inValue.data();
+        const uint32_t * inEnd = inValue.data() + inValue.size();
+        uint32_t * outStart = outValue.data();
+#endif
+
+        if ( pitch == width ) {
+            width = width * height;
+            pitch = width;
+            height = 1;
+        }
 
         uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
         const uint32_t * yEnd = y + pitch * height;
@@ -1204,9 +1227,18 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
             uint32_t * x = y;
             const uint32_t * xEnd = x + width;
             for ( ; x != xEnd; ++x ) {
+#ifdef WITH_DEBUG
+                for ( uint32_t * in = inStart; in != inEnd; ++in ) {
+                    if ( *x == *in ) {
+                        *x = *( outStart + ( in - inStart ) );
+                        break;
+                    }
+                }
+#else
                 std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.find( *x );
                 if ( value != correctedColors.end() )
                     *x = value->second;
+#endif
             }
         }
     }
