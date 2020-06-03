@@ -1220,6 +1220,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
             }
         }
+
+        if ( b.hasColorCycling() ) {
+            spmon1.ChangeColor( _colorCyclePairs );
+        }
     }
 
     if ( spmon1.isValid() ) {
@@ -1252,8 +1256,6 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
             sp.x += cx + ( _movingPos.x - _flyingPos.x ) * _flyingUnit->animation.movementProgress();
             sp.y += cy + ( _movingPos.y - _flyingPos.y ) * _flyingUnit->animation.movementProgress();
         }
-
-        spmon1.ChangeColor( _colorCyclePairs );
 
         // sprite monster
         if ( b_current_sprite && spmon1 == *b_current_sprite ) {

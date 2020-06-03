@@ -214,6 +214,7 @@ public:
     bool isDragons( void ) const;
     bool isAffectedByMorale( void ) const;
     bool isAlive( void ) const;
+    bool hasColorCycling() const;
 
     int ICNMonh( void ) const;
 
