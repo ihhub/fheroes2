@@ -110,8 +110,6 @@ namespace PAL
            199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 216, 217, 218, 219, 220, 221, 222, 222, 223, 224, 225, 226, 227, 228, 229, 231,
            232, 233, 234, 235, 236, 237, 238, 238, 239, 240, 242, 242, 243, 244, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255};
 
-    const std::vector<CyclingColorSet> _cycleSet = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}, {0xF2, 4, false}};
-
     std::vector<SDL_Color> standard_palette;
     std::vector<SDL_Color> yellow_text_palette;
     std::vector<SDL_Color> white_text_palette;
@@ -154,7 +152,13 @@ namespace PAL
 
     const std::vector<CyclingColorSet> & PAL::GetCyclingColors()
     {
-        return _cycleSet;
+        static std::vector<CyclingColorSet> cycleSet;
+        if ( cycleSet.empty() ) {
+            const CyclingColorSet cycleData[] = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}, {0xF2, 4, false}};
+            cycleSet.insert( cycleSet.begin(), cycleData, cycleData + sizeof(cycleData) / sizeof(CyclingColorSet) );
+        }
+
+        return cycleSet;
     }
 }
 
