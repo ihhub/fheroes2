@@ -234,6 +234,7 @@ namespace Battle
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
         bool IdleTroopsAnimation( void );
+        void CycleColors();
         void CheckGlobalEvents( LocalEvent & );
 
         void ProcessingHeroDialogResult( int, Actions & );
@@ -279,6 +280,9 @@ namespace Battle
         u32 animation_flags_frame;
         int catapult_frame;
 
+        uint32_t _colorCycle;
+        std::map<RGBA, RGBA> _colorCyclePairs;
+
         const Unit * _currentUnit;
         const Unit * _movingUnit;
         const Unit * _flyingUnit;
@@ -286,6 +290,7 @@ namespace Battle
         u32 b_current_alpha;
         Point _movingPos;
         Point _flyingPos;
+
 
         s32 index_pos;
         s32 teleport_src;

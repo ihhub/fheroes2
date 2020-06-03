@@ -42,6 +42,14 @@ namespace PAL
         MIRROR_IMAGE
     };
 
+    struct CyclingColorSet
+    {
+        u8 start;
+        u8 length;
+        bool forward;
+    };
+
+    const std::vector<CyclingColorSet> & GetCyclingColors();
     void CreateStandardPalette();
     void InitAllPalettes();
     void Clear();
