@@ -99,7 +99,9 @@ namespace Game
 
 void Game::AnimateDelaysInitialize( void )
 {
-    std::for_each( &delays[0], &delays[LAST_DELAY], std::mem_fun_ref( &TimeDelay::Reset ) );
+    for ( size_t id = 0; id < LAST_DELAY; ++id ) {
+        delays[id].Reset();
+    }
     UpdateGameSpeed();
 }
 
