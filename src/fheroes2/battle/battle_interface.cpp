@@ -1032,7 +1032,7 @@ void Battle::Interface::CycleColors()
     const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
     for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
         for ( int id = 0; id < it->length; ++id ) {
-            const uint8_t newColorID = it->forward ? it->start + (id + _colorCycle) % it->length : it->start + it->length - 1 - (3 + _colorCycle - id) % it->length;
+            const uint8_t newColorID = it->forward ? it->start + ( id + _colorCycle ) % it->length : it->start + it->length - 1 - ( 3 + _colorCycle - id ) % it->length;
             _colorCyclePairs.emplace( PAL::GetPaletteColor( it->start + id ), PAL::GetPaletteColor( newColorID ) );
         }
     }
