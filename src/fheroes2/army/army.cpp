@@ -1100,7 +1100,7 @@ double Army::GetStrength( void ) const
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Troop * troop = *it;
-        if ( troop->isValid() ) {
+        if ( troop != NULL && troop->isValid() ) {
             double strength = troop->GetStrength();
 
             if ( archery > 0 && troop->isArchers() ) {

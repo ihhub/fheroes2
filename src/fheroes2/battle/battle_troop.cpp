@@ -1076,7 +1076,7 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     if ( !attackerIsArchers || defender.isArchers() )
         attackerThreat *= attackerPowerLost;
 
-    int score = static_cast<int>( attackerThreat * 10 );
+    const int score = static_cast<int>( attackerThreat * 10 );
     return ( score == 0 ) ? 1 : score;
 }
 
