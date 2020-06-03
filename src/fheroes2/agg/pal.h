@@ -44,8 +44,8 @@ namespace PAL
 
     struct CyclingColorSet
     {
-        u8 start;
-        u8 length;
+        uint8_t start;
+        uint8_t length;
         bool forward;
     };
 
