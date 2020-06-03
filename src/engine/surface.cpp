@@ -1171,8 +1171,8 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
     if ( colorPairs.empty() )
         return res;
 
-    // If STL is compiled with all Debug options this function become pretty slow using std::map
 #ifdef WITH_DEBUG
+    // If STL is compiled with all Debug options this function become pretty slow using std::map
     std::vector<uint32_t> inValue;
     std::vector<uint32_t> outValue;
 #endif
