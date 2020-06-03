@@ -130,7 +130,7 @@ void Game::UpdateGameSpeed( void )
     const double adjustedBattleSpeed = ( 10 - conf.BattleSpeed() ) * battleSpeedAdjustment;
     delays[BATTLE_FRAME_DELAY] = 120 * adjustedBattleSpeed;
     delays[BATTLE_MISSILE_DELAY] = 40 * adjustedBattleSpeed;
-    delays[BATTLE_SPELL_DELAY] = 90 * adjustedBattleSpeed;
+    delays[BATTLE_SPELL_DELAY] = 75 * adjustedBattleSpeed;
     delays[BATTLE_IDLE_DELAY] = 150 * adjustedBattleSpeed;
     delays[BATTLE_DISRUPTING_DELAY] = 25 * adjustedBattleSpeed;
     delays[BATTLE_CATAPULT_DELAY] = 90 * adjustedBattleSpeed;
