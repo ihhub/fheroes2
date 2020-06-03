@@ -830,7 +830,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
 
     DEBUG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
 
-    u32 spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
+    const u32 spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 
     if ( spell.isDamage() )
         SpellApplyDamage( spell, spoint, hero, target );

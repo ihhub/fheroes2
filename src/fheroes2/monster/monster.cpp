@@ -736,9 +736,6 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
 
 bool Monster::hasMeleePenalty() const
 {
-    if ( !isArchers() )
-        return false;
-
     switch ( id ) {
     case Monster::MAGE:
     case Monster::ARCHMAGE:
@@ -749,7 +746,7 @@ bool Monster::hasMeleePenalty() const
         break;
     }
 
-    return true;
+    return isArchers();
 }
 
 bool Monster::isUndead( void ) const
