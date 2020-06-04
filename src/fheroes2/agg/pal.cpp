@@ -124,19 +124,20 @@ namespace PAL
     struct palmap_t
     {
         int type;
-        std::vector<SDL_Color> * colors;
+        const u8 * indexes;
+        std::vector<SDL_Color> & colors;
     };
 
-    const palmap_t palmap[] = {{STANDARD, &standard_palette},
-                               {YELLOW_TEXT, &yellow_text_palette},
-                               {WHITE_TEXT, &white_text_palette},
-                               {GRAY_TEXT, &gray_text_palette},
-                               {RED, &red_palette},
-                               {GRAY, &gray_palette},
-                               {BROWN, &brown_palette},
-                               {TAN, &tan_palette},
-                               {NO_CYCLE, &no_cycle_palette},
-                               {MIRROR_IMAGE, &mirror_image_palette}};
+    const palmap_t palmap[] = {{STANDARD, no_cycle_table, standard_palette},
+                               {YELLOW_TEXT, yellow_text_table, yellow_text_palette},
+                               {WHITE_TEXT, white_text_table, white_text_palette},
+                               {GRAY_TEXT, gray_text_table, gray_text_palette},
+                               {RED, red_table, red_palette},
+                               {GRAY, gray_table, gray_palette},
+                               {BROWN, brown_table, brown_palette},
+                               {TAN, tan_table, tan_palette},
+                               {NO_CYCLE, no_cycle_table, no_cycle_palette},
+                               {MIRROR_IMAGE, mirror_image_table, mirror_image_palette}};
 
     const palmap_t * current_palette;
 
@@ -159,6 +160,21 @@ namespace PAL
         }
 
         return cycleSet;
+    }
+
+    std::map<RGBA, RGBA> GetPaletteSwapMap( int type )
+    {
+        std::map<RGBA, RGBA> swap;
+
+        if ( type >= STANDARD && type <= MIRROR_IMAGE ) {
+            for ( u32 ii = 0; ii < PALETTE_SIZE; ++ii ) {
+                if ( palmap[type].indexes[ii] != ii ) {
+                    swap[standard_palette[ii]] = palmap[type].colors[ii];
+                }
+            }
+
+        }
+        return swap;
     }
 }
 
@@ -186,14 +202,14 @@ int PAL::CurrentPalette()
 
 RGBA PAL::GetPaletteColor( u8 index )
 {
-    const std::vector<SDL_Color> & colors = *current_palette->colors;
+    const std::vector<SDL_Color> & colors = current_palette->colors;
     return index < colors.size() ? RGBA( colors[index].r, colors[index].g, colors[index].b ) : RGBA( 0, 0, 0 );
 }
 
 void PAL::SwapPalette( int type )
 {
     current_palette = &palmap[type];
-    Surface::SetDefaultPalette( &( *current_palette->colors )[0], static_cast<int>( current_palette->colors->size() ) );
+    Surface::SetDefaultPalette( &( current_palette->colors )[0], static_cast<int>( current_palette->colors.size() ) );
 }
 
 void PAL::InitAllPalettes()

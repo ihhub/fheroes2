@@ -3567,43 +3567,38 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
+    std::map<RGBA, RGBA> colorSwap = PAL::GetPaletteSwapMap( PAL::RED );
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
-    Sprite sprite2( Surface( sprite1.GetSize(), false ), sprite1.x(), sprite1.y() );
-    sprite1.Blit( sprite2 );
-
-    Surface sprite3 = sprite1.RenderStencil( RGBA( 0xB0, 0x0C, 0 ) );
+    Sprite unitSprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    Surface bloodlustEffect = unitSprite.RenderChangeColor( colorSwap );
+    Sprite mixSprite( Surface( unitSprite.GetSize(), true ), unitSprite.x(), unitSprite.y() );
 
     cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
 
     _currentUnit = &target;
-    b_current_sprite = &sprite2;
-    u32 alpha = 10;
+    b_current_sprite = &mixSprite;
 
-    AGG::PlaySound( M82::BLOODLUS );
+    AGG::PlaySound( M82::BLOODLUS ); // duration is 1900ms
 
-    while ( le.HandleEvents() && alpha < 150 ) {
+    uint32_t alpha = 0;
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( frame < 20 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
-            sprite1.Blit( sprite2 );
-            sprite3.SetAlphaMod( alpha );
-            sprite3.Blit( sprite2 );
+            unitSprite.Blit( mixSprite );
+            bloodlustEffect.SetAlphaMod( alpha );
+            bloodlustEffect.Blit( mixSprite );
             Redraw();
             cursor.Show();
             display.Flip();
 
-            alpha += 10;
+            alpha += ( frame < 10 ) ? 15 : -15;
+            frame++;
         }
     }
-
-    DELAY( 100 );
-
-    while ( Mixer::isValid() && Mixer::isPlaying( -1 ) )
-        DELAY( 10 );
 
     _currentUnit = NULL;
     b_current_sprite = NULL;

@@ -195,6 +195,18 @@ RGBA::RGBA()
 #endif
 }
 
+RGBA::RGBA( SDL_Color sdl )
+{
+    color.r = sdl.r;
+    color.g = sdl.g;
+    color.b = sdl.b;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    color.a = sdl.a;
+#else
+    color.unused = 255;
+#endif
+}
+
 RGBA::RGBA( int r, int g, int b, int a )
 {
     color.r = r;
