@@ -218,6 +218,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
                 ( *it )->FadeOut();
                 ( *it )->SetFreeman( 0 );
                 it = myHeroes.begin();
+                updateFocus = true;
                 result = Dialog::CANCEL;
                 break;
 

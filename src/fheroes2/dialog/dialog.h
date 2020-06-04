@@ -115,20 +115,27 @@ namespace Dialog
     void ThievesGuild( bool oracle );
     void GameInfo( void );
 
-    class FrameBox
+    class NonFixedFrameBox
     {
     public:
-        FrameBox( int height, bool buttons = false );
-        ~FrameBox();
+        explicit NonFixedFrameBox( int height = 0, int startYPos = -1, bool showButtons = false );
+        virtual ~NonFixedFrameBox();
 
         const Rect & GetArea( void )
         {
             return area;
-        };
+        }
 
     protected:
         SpriteBack background;
         Rect area;
+    };
+
+    class FrameBox : public NonFixedFrameBox
+    {
+    public:
+        FrameBox( int height, bool buttons = false );
+        virtual ~FrameBox();
     };
 
     class FrameBorder

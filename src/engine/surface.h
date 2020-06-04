@@ -97,7 +97,7 @@ public:
     Surface( const Size &, const SurfaceFormat & );
     Surface( const std::string & );
     Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask ); /* agg: create raw tile */
-    Surface( const Surface & );
+    Surface( const Surface & bs, bool useReference = true );
     Surface( SDL_Surface * );
 
     Surface & operator=( const Surface & );
@@ -154,6 +154,7 @@ public:
     Surface RenderContour( const RGBA & ) const;
     Surface RenderGrayScale( void ) const;
     Surface RenderSepia( void ) const;
+    Surface RenderRippleEffect( int frame, double scaleX = 0.05, double waveFrequency = 20.0 ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
     Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
     Surface RenderSurface( const Rect & srt, const Size & ) const;

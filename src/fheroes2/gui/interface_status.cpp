@@ -354,25 +354,28 @@ void Interface::StatusWindow::DrawBackground( void ) const
 
     if ( !Settings::Get().ExtGameHideInterface() && display.h() - BORDERWIDTH - icnston.h() > pos.y ) {
         // top
-        Rect srcrt( 0, 0, icnston.w(), 16 );
+        const uint32_t startY = 11;
+        const uint32_t copyHeight = 46;
+        Rect srcrt( 0, 0, icnston.w(), startY );
         Point dstpt( pos.x, pos.y );
         icnston.Blit( srcrt, dstpt );
 
-        //
-        srcrt = Rect( 0, 16, icnston.w(), 16 );
-        const u32 hh = 1 + ( pos.h - 32 ) / 16;
-        for ( u32 yy = 1; yy <= hh; ++yy ) {
-            dstpt = Point( pos.x, pos.y + 16 * yy );
+        // middle
+        srcrt = Rect( 0, startY, icnston.w(), copyHeight );
+        const uint32_t count = ( pos.h - ( icnston.h() - copyHeight ) ) / copyHeight;
+        for ( uint32_t i = 0; i < count; ++i ) {
+            dstpt = Point( pos.x, pos.y + copyHeight * i + startY );
             icnston.Blit( srcrt, dstpt );
         }
 
         // botom
-        srcrt = Rect( 0, icnston.h() - 16, icnston.w(), 16 );
-        dstpt = Point( pos.x, pos.y + pos.h - 16 );
+        srcrt = Rect( 0, startY, icnston.w(), icnston.h() - startY );
+        dstpt = Point( pos.x, pos.y + pos.h - ( icnston.h() - startY ) );
         icnston.Blit( srcrt, dstpt );
     }
-    else
+    else {
         icnston.Blit( pos.x, pos.y );
+    }
 }
 
 void Interface::StatusWindow::QueueEventProcessing( void )

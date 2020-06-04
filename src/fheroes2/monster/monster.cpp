@@ -953,6 +953,26 @@ bool Monster::isAffectedByMorale( void ) const
     return !( isUndead() || isElemental() );
 }
 
+bool Monster::hasColorCycling() const
+{
+    switch ( id ) {
+    case PHOENIX:
+    case MAGE:
+    case ARCHMAGE:
+    case GIANT:
+    case TITAN:
+    case GENIE:
+    case WATER_ELEMENT:
+    case FIRE_ELEMENT:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
 Monster Monster::GetDowngrade( void ) const
 {
     switch ( id ) {

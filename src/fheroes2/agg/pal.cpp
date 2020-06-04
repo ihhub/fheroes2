@@ -149,6 +149,17 @@ namespace PAL
             palette.push_back( col );
         }
     }
+
+    const std::vector<CyclingColorSet> & GetCyclingColors()
+    {
+        static std::vector<CyclingColorSet> cycleSet;
+        if ( cycleSet.empty() ) {
+            const CyclingColorSet cycleData[] = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}, {0xF2, 4, false}};
+            cycleSet.insert( cycleSet.begin(), cycleData, cycleData + sizeof( cycleData ) / sizeof( CyclingColorSet ) );
+        }
+
+        return cycleSet;
+    }
 }
 
 void PAL::CreateStandardPalette()

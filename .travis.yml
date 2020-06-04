@@ -21,7 +21,7 @@ addons:
 matrix:
   include:
     - os: linux
-      name: "Sonar Cloud analysis"
+      name: "SonarCloud analysis"
       dist: trusty
       before_install:
         - sudo apt-get update
@@ -189,17 +189,6 @@ matrix:
         overwrite: true
         on:
           branch: master
-    - os: osx
-      name: "Editor on OSX"
-      before_install:
-        - brew link --force qt5;
-        - export CMAKE_PREFIX_PATH=$(brew --prefix qt5)/lib/cmake;
-      script:
-        - cd editor
-        - mkdir -p build
-        - cd build
-        - cmake ..
-        - make
 
 script:
   - |

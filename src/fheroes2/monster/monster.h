@@ -215,6 +215,7 @@ public:
     bool isAffectedByMorale( void ) const;
     bool isAlive( void ) const;
     bool hasMeleePenalty() const;
+    bool hasColorCycling() const;
 
     double GetMonsterStrength() const;
     int ICNMonh( void ) const;
