@@ -1210,19 +1210,19 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         // regular
         spmon1 = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
 
-        // this unit's turn, must be covered with contour
-        if ( _currentUnit == &b ) {
-            if ( b_current_sprite ) {
-                spmon1 = *b_current_sprite;
-                spmon2.Reset();
-            }
-            else {
-                spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
-            }
-        }
-
         if ( b.hasColorCycling() ) {
             spmon1.ChangeColor( _colorCyclePairs );
+        }
+    }
+
+    // this unit's turn, must be covered with contour
+    if ( _currentUnit == &b ) {
+        if ( b_current_sprite ) {
+            spmon1 = *b_current_sprite;
+            spmon2.Reset();
+        }
+        else {
+            spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
         }
     }
 
@@ -3579,14 +3579,16 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
 
-    AGG::PlaySound( M82::BLOODLUS ); // duration is 1900ms
+    const uint32_t bloodlustDelay = 1800 / 20;
+    // duration is 1900ms
+    AGG::PlaySound( M82::BLOODLUS );
 
     uint32_t alpha = 0;
     uint32_t frame = 0;
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( frame < 20 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( frame < 20 && Game::AnimateCustomDelay( bloodlustDelay ) ) {
             cursor.Hide();
             unitSprite.Blit( mixSprite );
             bloodlustEffect.SetAlphaMod( alpha );
@@ -3595,7 +3597,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
             cursor.Show();
             display.Flip();
 
-            alpha += ( frame < 10 ) ? 15 : -15;
+            alpha += ( frame < 10 ) ? 20 : -20;
             frame++;
         }
     }
