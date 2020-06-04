@@ -588,6 +588,10 @@ std::istream & operator>> (std::istream & is, StreamBuf & sb)
 }
 */
 
+StreamFile::StreamFile()
+    : rw( NULL )
+{}
+
 StreamFile::StreamFile( const std::string & fn, const char * mode )
 {
     open( fn, mode );
