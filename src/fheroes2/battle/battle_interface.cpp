@@ -856,6 +856,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , teleport_src( -1 )
     , listlog( NULL )
     , turn( 0 )
+    , _colorCycle( 0 )
 {
     const Settings & conf = Settings::Get();
     bool pda = conf.QVGA();
@@ -1018,6 +1019,23 @@ void Battle::Interface::SetStatus( const std::string & msg, bool top )
         status.SetMessage( msg );
     }
     humanturn_redraw = true;
+}
+
+void Battle::Interface::CycleColors()
+{
+    ++_colorCycle;
+    if ( _colorCycle > 20 ) // 5 * 4, two color ranges
+        _colorCycle = 0;
+
+    _colorCyclePairs.clear();
+
+    const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
+    for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
+        for ( int id = 0; id < it->length; ++id ) {
+            const uint8_t newColorID = it->forward ? it->start + ( id + _colorCycle ) % it->length : it->start + it->length - 1 - ( 3 + _colorCycle - id ) % it->length;
+            _colorCyclePairs[PAL::GetPaletteColor( it->start + id )] = PAL::GetPaletteColor( newColorID );
+        }
+    }
 }
 
 void Battle::Interface::Redraw( void )
@@ -1201,6 +1219,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
             else {
                 spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
             }
+        }
+
+        if ( b.hasColorCycling() ) {
+            spmon1.ChangeColor( _colorCyclePairs );
         }
     }
 
@@ -4242,6 +4264,9 @@ bool Battle::Interface::IdleTroopsAnimation( void )
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
+    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_BATTLE_DELAY ) )
+        CycleColors();
+
     // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
         if ( opponent1 ) {

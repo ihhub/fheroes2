@@ -88,6 +88,8 @@ namespace Game
                           500, // BATTLE_OPPONENTS_DELAY
                           300, // BATTLE_FLAGS_DELAY
                           800, // BATTLE_POPUP_DELAY
+                          400, // COLOR_CYCLE_MAP_DELAY
+                          220, // COLOR_CYCLE_BATTLE_DELAY
                           300, // AUTOHIDE_STATUS_DELAY
                           40, // CURRENT_HERO_DELAY
                           40, // CURRENT_AI_DELAY
@@ -97,7 +99,9 @@ namespace Game
 
 void Game::AnimateDelaysInitialize( void )
 {
-    std::for_each( &delays[0], &delays[LAST_DELAY], std::mem_fun_ref( &TimeDelay::Reset ) );
+    for ( size_t id = 0; id < LAST_DELAY; ++id ) {
+        delays[id].Reset();
+    }
     UpdateGameSpeed();
 }
 
