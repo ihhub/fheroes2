@@ -221,12 +221,6 @@ void AI::Simple::BattleTurn( Arena & arena, const Unit & b, Actions & a )
             return; /* repeat turn: correct spell ability */
         attack = true;
     }
-    else if ( b.isHandFighting() ) {
-        enemy = AIGetEnemyAbroadMaxQuality( b );
-        if ( BattleMagicTurn( arena, b, a, enemy ) )
-            return; /* repeat turn: correct spell ability */
-        attack = true;
-    }
     else {
         s32 move = -1;
 
@@ -250,7 +244,7 @@ void AI::Simple::BattleTurn( Arena & arena, const Unit & b, Actions & a )
                 move = AIAttackPosition( arena, b, positions );
         }
 
-        if ( Board::isValidIndex( move ) ) {
+        if ( Board::isValidIndex( move ) && move != b.GetHeadIndex() ) {
             if ( b.isFlying() ) {
                 enemy = AIGetEnemyAbroadMaxQuality( move, b.GetColor() );
                 if ( BattleMagicTurn( arena, b, a, enemy ) )
