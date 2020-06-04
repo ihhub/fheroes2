@@ -2804,6 +2804,10 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     Point destPos( pos1.x, pos1.y );
     Point targetPos( pos2.x, pos2.y );
 
+    std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
+    StringReplace( msg, "%{monster}", unit.GetName() );
+    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
+
     cursor.SetThemes( Cursor::WAR_NONE );
     const uint32_t step = unit.animation.getFlightSpeed();
     const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
@@ -2857,6 +2861,9 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     // restore
     _movingUnit = NULL;
+
+    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
+    status.SetMessage( msg, true );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
