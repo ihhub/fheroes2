@@ -20,7 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "monster.h"
+#include <math.h>
+
 #include "agg.h"
 #include "bin_info.h"
 #include "castle.h"
@@ -31,6 +32,7 @@
 #include "icn.h"
 #include "luck.h"
 #include "m82.h"
+#include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "race.h"
@@ -118,7 +120,7 @@ namespace
         // atck dfnc  min  max   hp             speed grwn  shots  name                  multiname            cost
         {4, 3, 2, 3, 4, Speed::AVERAGE, 8, 0, _( "Skeleton" ), _( "Skeletons" ), {75, 0, 0, 0, 0, 0, 0}},
         {5, 2, 2, 3, 15, Speed::VERYSLOW, 6, 0, _( "Zombie" ), _( "Zombies" ), {150, 0, 0, 0, 0, 0, 0}},
-        {5, 2, 2, 3, 25, Speed::AVERAGE, 6, 0, _( "Mutant Zombie" ), _( "Mutant Zombies" ), {200, 0, 0, 0, 0, 0, 0}},
+        {5, 2, 2, 3, 20, Speed::AVERAGE, 6, 0, _( "Mutant Zombie" ), _( "Mutant Zombies" ), {200, 0, 0, 0, 0, 0, 0}},
         {6, 6, 3, 4, 25, Speed::AVERAGE, 4, 0, _( "Mummy" ), _( "Mummies" ), {250, 0, 0, 0, 0, 0, 0}},
         {6, 6, 3, 4, 30, Speed::FAST, 4, 0, _( "Royal Mummy" ), _( "Royal Mummies" ), {300, 0, 0, 0, 0, 0, 0}},
         {8, 6, 5, 7, 30, Speed::AVERAGE, 3, 0, _( "Vampire" ), _( "Vampires" ), {500, 0, 0, 0, 0, 0, 0}},
@@ -637,6 +639,64 @@ u32 Monster::GetGrown( void ) const
     return monsters[id].grown;
 }
 
+// Get universal heuristic of Monster type regardless of context; both combat and strategic value
+// Doesn't account for situational special bonuses such as spell immunity
+double Monster::GetMonsterStrength() const
+{
+    // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
+    const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;
+    const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.4 : 1 );
+
+    double damagePotential = ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2;
+
+    if ( isTwiceAttack() ) {
+        // Melee attacker will lose potential on second attack after retaliation
+        damagePotential *= ( isArchers() || ignoreRetaliation() ) ? 2 : 1.75;
+    }
+    if ( id == Monster::CRUSADER )
+        damagePotential *= 1.15; // 15% of all Monsters are Undead, Crusader deals double dmg
+    if ( isDoubleCellAttack() )
+        damagePotential *= 1.2;
+    if ( isAlwaysRetaliating() )
+        damagePotential *= 1.25;
+    if ( isMultiCellAttack() || id == Monster::LICH || id == Monster::POWER_LICH )
+        damagePotential *= 1.3;
+
+    double monsterSpecial = 1.0;
+    if ( isArchers() )
+        monsterSpecial += hasMeleePenalty() ? 0.4 : 0.5;
+    if ( isFlying() )
+        monsterSpecial += 0.3;
+
+    switch ( id ) {
+    case Monster::UNICORN:
+    case Monster::CYCLOPS:
+    case Monster::MEDUSA:
+        // 20% to Blind, Paralyze and Petrify
+        monsterSpecial += 0.2;
+        break;
+    case Monster::VAMPIRE_LORD:
+        // Lifesteal
+        monsterSpecial += 0.3;
+    case Monster::GENIE:
+        // Genie's ability to half enemy troops
+        monsterSpecial += 1;
+        break;
+    case Monster::GHOST:
+        // Ghost's ability to increase the numbers
+        monsterSpecial += 2;
+        break;
+    }
+
+    // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0
+    // Punish slow speeds more as unit won't participate in first rounds and slows down strategic army
+    const int speedDiff = GetSpeed() - 4;
+    monsterSpecial += ( speedDiff < 0 ) ? speedDiff * 0.1 : speedDiff * 0.05;
+
+    // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
+    return sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
+}
+
 u32 Monster::GetRNDSize( bool skip_factor ) const
 {
     const u32 hps = ( GetGrown() ? GetGrown() : 1 ) * GetHitPoints();
@@ -672,6 +732,21 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     }
 
     return isValid() ? GetCountFromHitPoints( id, res ) : 0;
+}
+
+bool Monster::hasMeleePenalty() const
+{
+    switch ( id ) {
+    case Monster::MAGE:
+    case Monster::ARCHMAGE:
+    case Monster::TITAN:
+        return false;
+
+    default:
+        break;
+    }
+
+    return isArchers();
 }
 
 bool Monster::isUndead( void ) const
@@ -734,7 +809,7 @@ bool Monster::isDragons( void ) const
     return false;
 }
 
-bool Monster::isFly( void ) const
+bool Monster::isFlying( void ) const
 {
     switch ( id ) {
     case SPRITE:
@@ -797,7 +872,7 @@ bool Monster::isAllowUpgrade( void ) const
     return id != GetUpgrade().id;
 }
 
-bool Monster::isHideAttack( void ) const
+bool Monster::ignoreRetaliation( void ) const
 {
     switch ( id ) {
     case Monster::ROGUE:
@@ -832,7 +907,7 @@ bool Monster::isTwiceAttack( void ) const
     return false;
 }
 
-bool Monster::isResurectLife( void ) const
+bool Monster::isRegenerating( void ) const
 {
     switch ( id ) {
     case TROLL:
@@ -868,7 +943,7 @@ bool Monster::isMultiCellAttack( void ) const
     return id == HYDRA;
 }
 
-bool Monster::isAlwayResponse( void ) const
+bool Monster::isAlwaysRetaliating( void ) const
 {
     return id == GRIFFIN;
 }
@@ -1834,7 +1909,7 @@ RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
     , _icnID( monster.GetMonsterSprite().icn_file )
     , _frameId( 0 )
     , _frameOffset( 0 )
-    , _isFlyer( monster.isFly() )
+    , _isFlyer( monster.isFlying() )
 {
     _addValidMove( Monster_Info::STATIC );
     _addValidMove( Monster_Info::STATIC );

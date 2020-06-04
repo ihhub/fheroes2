@@ -80,13 +80,14 @@ namespace Battle
         static bool isImpassableIndex( s32 );
         static bool isOutOfWallsIndex( s32 );
         static bool isReflectDirection( int );
+        static bool isNegativeDistance( s32 index1, s32 index2 );
         static int GetReflectDirection( int );
         static int GetDirection( s32, s32 );
         static s32 GetDistance( s32, s32 );
         static bool isValidDirection( s32, int );
         static s32 GetIndexDirection( s32, int );
         static Indexes GetDistanceIndexes( s32, u32 );
-        static Indexes GetAroundIndexes( s32 );
+        static Indexes GetAroundIndexes( s32 center, s32 ignore = -1 );
         static Indexes GetAroundIndexes( const Unit & );
         static Indexes GetMoveWideIndexes( s32, bool reflect );
         static bool isValidMirrorImageIndex( s32, const Unit * );
