@@ -678,6 +678,7 @@ double Monster::GetMonsterStrength() const
     case Monster::VAMPIRE_LORD:
         // Lifesteal
         monsterSpecial += 0.3;
+        break;
     case Monster::GENIE:
         // Genie's ability to half enemy troops
         monsterSpecial += 1;

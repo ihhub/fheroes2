@@ -1061,14 +1061,17 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     switch ( id ) {
     case Monster::UNICORN:
         attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
     case Monster::CYCLOPS:
         attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::PARALYZE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
     case Monster::MEDUSA:
         attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::STONE, DEFAULT_SPELL_DURATION ) ) / 100.0;
         break;
     case Monster::VAMPIRE_LORD:
         // Lifesteal
         attackerThreat *= 1.3;
+        break;
     case Monster::GENIE:
         // Genie's ability to half enemy troops
         attackerThreat *= 2;
