@@ -83,17 +83,26 @@ void Battle::Board::SetPositionQuality( const Unit & b )
     Arena * arena = GetArena();
     Units enemies( arena->GetForce( b.GetColor(), true ), true );
 
+    // Make sure archers are first here, so melee unit's score won't be double counted
+    enemies.SortArchers();
+
     for ( Units::const_iterator it1 = enemies.begin(); it1 != enemies.end(); ++it1 ) {
         const Unit * unit = *it1;
 
         if ( unit && unit->isValid() ) {
-            const Cell * cell1 = GetCell( unit->GetHeadIndex() );
+            const s32 unitStrength = GetCell( unit->GetHeadIndex() )->GetQuality();
             const Indexes around = GetAroundIndexes( *unit );
 
             for ( Indexes::const_iterator it2 = around.begin(); it2 != around.end(); ++it2 ) {
                 Cell * cell2 = GetCell( *it2 );
-                if ( cell2 && cell2->isPassable3( b, false ) )
-                    cell2->SetQuality( cell2->GetQuality() + cell1->GetQuality() );
+                if ( cell2 && cell2->isPassable3( b, false ) ) {
+                    const s32 quality = cell2->GetQuality();
+                    // Only sum up quality score if it's archers; otherwise just pick the strongest
+                    if ( unit->isArchers() )
+                        cell2->SetQuality( quality + unitStrength );
+                    else if ( unitStrength > quality )
+                        cell2->SetQuality( unitStrength );
+                }
             }
         }
     }
