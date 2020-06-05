@@ -168,7 +168,7 @@ namespace PAL
 
         if ( type < STANDARD && type > MIRROR_IMAGE ) {
             const palmap_t & paletteMap = palmap[type];
-            for ( u32 i = 0; i < PALETTE_SIZE; ++i ) {
+            for ( uint32_t i = 0; i < PALETTE_SIZE; ++i ) {
                 if ( paletteMap.indexes[i] != i ) {
                     swap[standard_palette[i]] = paletteMap.colors[i];
                 }
