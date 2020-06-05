@@ -45,11 +45,9 @@ void Battle::UpdateMonsterAttributes( const std::string & spec )
 #ifdef WITH_XML
     // parse battle.xml
     TiXmlDocument doc;
-    const TiXmlElement * xml_battle = NULL;
 
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_battle = doc.FirstChildElement( "battle" ) ) ) {
-        const TiXmlElement * xml_element;
-        int value;
+    if ( doc.LoadFile( spec.c_str() ) ) {
+        const TiXmlElement * xml_battle = doc.FirstChildElement( "battle" );
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );

@@ -738,13 +738,16 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
         }
         else
             // modify name
-            if ( show_name && NULL != ( player = GetFromOpponentNameClick( le.GetMouseCursor() ) ) ) {
-            std::string res;
-            std::string str = _( "%{color} player" );
-            StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
+            if ( show_name ) {
+            player = GetFromOpponentNameClick( le.GetMouseCursor() );
+            if ( player != NULL ) {
+                std::string res;
+                std::string str = _( "%{color} player" );
+                StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
 
-            if ( Dialog::InputString( str, res ) && !res.empty() )
-                player->SetName( res );
+                if ( Dialog::InputString( str, res ) && !res.empty() )
+                    player->SetName( res );
+            }
         }
         else
             // select class
@@ -779,20 +782,23 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
         }
         else
             // change players
-            if ( show_swap && !conf.QVGA() && NULL != ( player = GetFromOpponentChangeClick( le.GetMouseCursor() ) ) ) {
-            iterator it = std::find( begin(), end(), player );
-            if ( it != end() && ( it + 1 ) != end() ) {
-                Players & players = conf.GetPlayers();
-                Players::iterator it1 = std::find( players.begin(), players.end(), ( *it ).player );
-                Players::iterator it2 = std::find( players.begin(), players.end(), ( *( it + 1 ) ).player );
+            if ( show_swap && !conf.QVGA() ) {
+            player = GetFromOpponentChangeClick( le.GetMouseCursor() );
+            if ( player != NULL ) {
+                iterator it = std::find( begin(), end(), player );
+                if ( it != end() && ( it + 1 ) != end() ) {
+                    Players & players = conf.GetPlayers();
+                    Players::iterator it1 = std::find( players.begin(), players.end(), ( *it ).player );
+                    Players::iterator it2 = std::find( players.begin(), players.end(), ( *( it + 1 ) ).player );
 
-                if ( it1 != players.end() && it2 != players.end() ) {
-                    std::swap( ( *it ).player, ( *( it + 1 ) ).player );
-                    std::swap( *it1, *it2 );
+                    if ( it1 != players.end() && it2 != players.end() ) {
+                        std::swap( ( *it ).player, ( *( it + 1 ) ).player );
+                        std::swap( *it1, *it2 );
+                    }
                 }
+                else
+                    player = NULL;
             }
-            else
-                player = NULL;
         }
     }
 
