@@ -3568,6 +3568,10 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
 
     Sprite unitSprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    if ( target.Modes( SP_STONE ) ) {
+        unitSprite
+            = Sprite( target.isReflect() ? target.GetContour( CONTOUR_REFLECT | CONTOUR_BLACK ) : target.GetContour( CONTOUR_BLACK ), unitSprite.x(), unitSprite.y() );
+    }
     Surface bloodlustEffect = unitSprite.RenderChangeColor( colorSwap );
     Sprite mixSprite( Surface( unitSprite.GetSize(), true ), unitSprite.x(), unitSprite.y() );
 
