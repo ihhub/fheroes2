@@ -923,14 +923,11 @@ StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    if ( isAlwaysRetaliating() )
-        return true;
-
-    if ( !Modes( TR_RESPONSED ) ) {
+    if ( !Modes( IS_PARALYZE_MAGIC ) ) {
         if ( Modes( SP_BLIND ) )
             return blindanswer;
-        else
-            return !Modes( IS_PARALYZE_MAGIC );
+        else if ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) )
+            return true;
     }
 
     return false;
