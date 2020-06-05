@@ -3564,7 +3564,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::map<RGBA, RGBA> colorSwap = PAL::GetPaletteSwapMap( PAL::RED );
+    const std::map<RGBA, RGBA> colorSwap = PAL::GetPaletteSwapMap( PAL::RED );
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
 
     Sprite unitSprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
@@ -3599,7 +3599,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
             display.Flip();
 
             alpha += ( frame < 10 ) ? 20 : -20;
-            frame++;
+            ++frame;
         }
     }
 

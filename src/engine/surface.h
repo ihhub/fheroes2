@@ -36,7 +36,7 @@ class RGBA
 {
 public:
     RGBA();
-    RGBA( SDL_Color sdl );
+    RGBA( const SDL_Color & sdl );
     RGBA( int r, int g, int b, int a = 255 );
 
     SDL_Color operator()( void ) const

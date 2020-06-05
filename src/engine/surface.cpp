@@ -195,7 +195,7 @@ RGBA::RGBA()
 #endif
 }
 
-RGBA::RGBA( SDL_Color sdl )
+RGBA::RGBA( const SDL_Color & sdl )
 {
     color.r = sdl.r;
     color.g = sdl.g;

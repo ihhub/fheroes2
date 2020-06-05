@@ -166,10 +166,11 @@ namespace PAL
     {
         std::map<RGBA, RGBA> swap;
 
-        if ( type >= STANDARD && type <= MIRROR_IMAGE ) {
-            for ( u32 ii = 0; ii < PALETTE_SIZE; ++ii ) {
-                if ( palmap[type].indexes[ii] != ii ) {
-                    swap[standard_palette[ii]] = palmap[type].colors[ii];
+        if ( type < STANDARD && type > MIRROR_IMAGE ) {
+            const palmap_t & paletteMap = palmap[type];
+            for ( u32 i = 0; i < PALETTE_SIZE; ++i ) {
+                if ( paletteMap.indexes[i] != i ) {
+                    swap[standard_palette[i]] = paletteMap.colors[i];
                 }
             }
         }
