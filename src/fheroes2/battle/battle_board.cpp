@@ -571,13 +571,12 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
     if ( grave ) {
         objs.push_back( ICN::COBJ0000 );
         objs.push_back( ICN::COBJ0001 );
+        objs.push_back( ICN::COBJ0025 );
     }
     else
         switch ( ground ) {
         case Maps::Ground::DESERT:
             objs.push_back( ICN::COBJ0009 );
-            objs.push_back( ICN::COBJ0012 );
-            objs.push_back( ICN::COBJ0017 );
             objs.push_back( ICN::COBJ0024 );
             break;
 
@@ -587,34 +586,56 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
             break;
 
         case Maps::Ground::SWAMP:
+            objs.push_back( ICN::COBJ0005 );
             objs.push_back( ICN::COBJ0006 );
+            objs.push_back( ICN::COBJ0007 );
+            objs.push_back( ICN::COBJ0008 );
+            objs.push_back( ICN::COBJ0011 );
+            objs.push_back( ICN::COBJ0012 );
+            objs.push_back( ICN::COBJ0014 );
             objs.push_back( ICN::COBJ0015 );
             objs.push_back( ICN::COBJ0016 );
-            objs.push_back( ICN::COBJ0019 );
-            objs.push_back( ICN::COBJ0025 );
+            objs.push_back( ICN::COBJ0017 );
             objs.push_back( ICN::COBJ0027 );
             break;
 
         case Maps::Ground::BEACH:
+            objs.push_back( ICN::COBJ0005 );
+            objs.push_back( ICN::COBJ0011 );
             objs.push_back( ICN::COBJ0017 );
             break;
 
         case Maps::Ground::DIRT:
+            objs.push_back( ICN::COBJ0002 );
+            objs.push_back( ICN::COBJ0005 );
+            objs.push_back( ICN::COBJ0007 );
             objs.push_back( ICN::COBJ0011 );
+            objs.push_back( ICN::COBJ0014 );
+            objs.push_back( ICN::COBJ0019 );
+            objs.push_back( ICN::COBJ0027 );
+            break;
+
         case Maps::Ground::GRASS:
             objs.push_back( ICN::COBJ0002 );
             objs.push_back( ICN::COBJ0004 );
             objs.push_back( ICN::COBJ0005 );
             objs.push_back( ICN::COBJ0008 );
+            objs.push_back( ICN::COBJ0011 );
             objs.push_back( ICN::COBJ0012 );
+            objs.push_back( ICN::COBJ0014 );
+            objs.push_back( ICN::COBJ0015 );
+            objs.push_back( ICN::COBJ0019 );
+            objs.push_back( ICN::COBJ0027 );
             objs.push_back( ICN::COBJ0028 );
             break;
 
         case Maps::Ground::WASTELAND:
+            objs.push_back( ICN::COBJ0009 );
             objs.push_back( ICN::COBJ0013 );
             objs.push_back( ICN::COBJ0018 );
             objs.push_back( ICN::COBJ0020 );
             objs.push_back( ICN::COBJ0021 );
+            objs.push_back( ICN::COBJ0024 );
             break;
 
         case Maps::Ground::LAVA:
@@ -634,128 +655,21 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
             break;
         }
 
-    if ( objs.size() && 2 < Rand::Get( 1, 10 ) ) {
-        // 80% 1 obj
-        s32 dst = GetObstaclePosition();
-        SetCobjObject( *Rand::Get( objs ), dst );
+    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::Get( 0, 4 ) ) );
+    std::random_shuffle( objs.begin(), objs.end() );
 
-        // 50% 2 obj
-        while ( at( dst ).GetObject() )
-            dst = GetObstaclePosition();
-        if ( objs.size() > 1 && 5 < Rand::Get( 1, 10 ) )
-            SetCobjObject( *Rand::Get( objs ), dst );
+    for ( size_t i = 0; i < objectsToPlace; ++i ) {
+        s32 dest = GetObstaclePosition();
+        while ( at( dest ).GetObject() )
+            dest = GetObstaclePosition();
 
-        // 30% 3 obj
-        while ( at( dst ).GetObject() )
-            dst = GetObstaclePosition();
-        if ( objs.size() > 1 && 7 < Rand::Get( 1, 10 ) )
-            SetCobjObject( *Rand::Get( objs ), dst );
+        SetCobjObject( objs[i], dest );
     }
 }
 
 void Battle::Board::SetCobjObject( int icn, s32 dst )
 {
-    switch ( icn ) {
-    case ICN::COBJ0000:
-        at( dst ).SetObject( 0x80 );
-        break;
-    case ICN::COBJ0001:
-        at( dst ).SetObject( 0x81 );
-        break;
-    case ICN::COBJ0002:
-        at( dst ).SetObject( 0x82 );
-        break;
-    case ICN::COBJ0003:
-        at( dst ).SetObject( 0x83 );
-        break;
-    case ICN::COBJ0004:
-        at( dst ).SetObject( 0x84 );
-        break;
-    case ICN::COBJ0005:
-        at( dst ).SetObject( 0x85 );
-        break;
-    case ICN::COBJ0006:
-        at( dst ).SetObject( 0x86 );
-        break;
-    case ICN::COBJ0007:
-        at( dst ).SetObject( 0x87 );
-        break;
-    case ICN::COBJ0008:
-        at( dst ).SetObject( 0x88 );
-        break;
-    case ICN::COBJ0009:
-        at( dst ).SetObject( 0x89 );
-        break;
-    case ICN::COBJ0010:
-        at( dst ).SetObject( 0x8A );
-        break;
-    case ICN::COBJ0011:
-        at( dst ).SetObject( 0x8B );
-        break;
-    case ICN::COBJ0012:
-        at( dst ).SetObject( 0x8C );
-        break;
-    case ICN::COBJ0013:
-        at( dst ).SetObject( 0x8D );
-        break;
-    case ICN::COBJ0014:
-        at( dst ).SetObject( 0x8E );
-        break;
-    case ICN::COBJ0015:
-        at( dst ).SetObject( 0x8F );
-        break;
-    case ICN::COBJ0016:
-        at( dst ).SetObject( 0x90 );
-        break;
-    case ICN::COBJ0017:
-        at( dst ).SetObject( 0x91 );
-        break;
-    case ICN::COBJ0018:
-        at( dst ).SetObject( 0x92 );
-        break;
-    case ICN::COBJ0019:
-        at( dst ).SetObject( 0x93 );
-        break;
-    case ICN::COBJ0020:
-        at( dst ).SetObject( 0x94 );
-        break;
-    case ICN::COBJ0021:
-        at( dst ).SetObject( 0x95 );
-        break;
-    case ICN::COBJ0022:
-        at( dst ).SetObject( 0x96 );
-        break;
-    case ICN::COBJ0023:
-        at( dst ).SetObject( 0x97 );
-        break;
-    case ICN::COBJ0024:
-        at( dst ).SetObject( 0x98 );
-        break;
-    case ICN::COBJ0025:
-        at( dst ).SetObject( 0x99 );
-        break;
-    case ICN::COBJ0026:
-        at( dst ).SetObject( 0x9A );
-        break;
-    case ICN::COBJ0027:
-        at( dst ).SetObject( 0x9B );
-        break;
-    case ICN::COBJ0028:
-        at( dst ).SetObject( 0x9C );
-        break;
-    case ICN::COBJ0029:
-        at( dst ).SetObject( 0x9D );
-        break;
-    case ICN::COBJ0030:
-        at( dst ).SetObject( 0x9E );
-        break;
-    case ICN::COBJ0031:
-        at( dst ).SetObject( 0x9F );
-        break;
-
-    default:
-        break;
-    }
+    at( dst ).SetObject( 0x80 + ( icn - ICN::COBJ0000 ) );
 
     switch ( icn ) {
     case ICN::COBJ0004:
