@@ -262,7 +262,7 @@ class StreamFile : public StreamBase
 {
     SDL_RWops * rw;
 
-    StreamFile( const StreamFile & );
+    StreamFile( const StreamFile & ) {}
 
 public:
     StreamFile();
