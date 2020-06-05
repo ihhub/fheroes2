@@ -704,10 +704,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( interface )
                 interface->RedrawActionResistSpell( *( *it ).defender );
 
-            // erase(it)
-            if ( it + 1 != targets.end() )
-                std::swap( *it, targets.back() );
-            targets.pop_back();
+            it = targets.erase( it );
         }
         else
             ++it;
