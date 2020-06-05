@@ -1201,28 +1201,25 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
     const Monster::monstersprite_t & msi = b.GetMonsterSprite();
     Sprite spmon1, spmon2;
 
-    // under medusa's stunning effect
-    if ( b.Modes( SP_STONE ) ) {
-        const Sprite & original = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
-        spmon1 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT | CONTOUR_BLACK ) : b.GetContour( CONTOUR_BLACK ), original.x(), original.y() );
+    // regular
+    spmon1 = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
+    
+    // override
+    if ( b_current_sprite && _currentUnit == &b ) {
+        spmon1 = *b_current_sprite;
+        spmon2.Reset();
+    }
+    else if ( b.Modes( SP_STONE ) ) {
+        // under medusa's stunning effect
+        spmon1 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT | CONTOUR_BLACK ) : b.GetContour( CONTOUR_BLACK ), spmon1.x(), spmon1.y() );
     }
     else {
-        // regular
-        spmon1 = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
-
+        if ( _currentUnit == &b ) {
+            // this unit's turn, must be covered with contour
+            spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
+        }
         if ( b.hasColorCycling() ) {
             spmon1.ChangeColor( _colorCyclePairs );
-        }
-    }
-
-    // this unit's turn, must be covered with contour
-    if ( _currentUnit == &b ) {
-        if ( b_current_sprite ) {
-            spmon1 = *b_current_sprite;
-            spmon2.Reset();
-        }
-        else {
-            spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
         }
     }
 
