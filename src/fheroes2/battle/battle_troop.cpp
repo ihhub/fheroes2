@@ -45,11 +45,9 @@ void Battle::UpdateMonsterAttributes( const std::string & spec )
 #ifdef WITH_XML
     // parse battle.xml
     TiXmlDocument doc;
-    const TiXmlElement * xml_battle = NULL;
 
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_battle = doc.FirstChildElement( "battle" ) ) ) {
-        const TiXmlElement * xml_element;
-        int value;
+    if ( doc.LoadFile( spec.c_str() ) ) {
+        const TiXmlElement * xml_battle = doc.FirstChildElement( "battle" );
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
@@ -1058,14 +1056,17 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     switch ( id ) {
     case Monster::UNICORN:
         attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
     case Monster::CYCLOPS:
         attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::PARALYZE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
     case Monster::MEDUSA:
         attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::STONE, DEFAULT_SPELL_DURATION ) ) / 100.0;
         break;
     case Monster::VAMPIRE_LORD:
         // Lifesteal
         attackerThreat *= 1.3;
+        break;
     case Monster::GENIE:
         // Genie's ability to half enemy troops
         attackerThreat *= 2;
