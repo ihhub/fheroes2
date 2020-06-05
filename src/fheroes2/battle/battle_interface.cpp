@@ -1203,7 +1203,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
     // regular
     spmon1 = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
-    
+
     // override
     if ( b_current_sprite && _currentUnit == &b ) {
         spmon1 = *b_current_sprite;

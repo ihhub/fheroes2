@@ -172,7 +172,6 @@ namespace PAL
                     swap[standard_palette[ii]] = palmap[type].colors[ii];
                 }
             }
-
         }
         return swap;
     }
