@@ -706,7 +706,7 @@ void Dialog::QuickInfo( const Castle & castle )
     display.Flip();
 }
 
-void Dialog::QuickInfo( const Heroes & hero, const Heroes & viewer )
+void Dialog::QuickInfo( const Heroes & hero )
 {
     Display & display = Display::Get();
     const Settings & conf = Settings::Get();
@@ -757,8 +757,8 @@ void Dialog::QuickInfo( const Heroes & hero, const Heroes & viewer )
     Text text;
     std::string message;
 
-    const bool isFriend = hero.isFriends( viewer.GetColor() );
-    const bool isUnderIdentifyHeroSpell = viewer.GetKingdom().Modes( Kingdom::IDENTIFYHERO );
+    const bool isFriend = hero.isFriends( conf.CurrentColor() );
+    const bool isUnderIdentifyHeroSpell = world.GetKingdom( conf.CurrentColor() ).Modes( Kingdom::IDENTIFYHERO );
     const bool showFullInfo = isFriend || isUnderIdentifyHeroSpell;
 
     // heroes name
