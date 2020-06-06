@@ -169,14 +169,14 @@ namespace PAL
         if ( type < STANDARD || type > MIRROR_IMAGE ) {
             return swap;
         }
-        else {
-            const palmap_t & paletteMap = palmap[type];
-            for ( uint32_t i = 0; i < PALETTE_SIZE; ++i ) {
-                if ( paletteMap.indexes[i] != i ) {
-                    swap[standard_palette[i]] = paletteMap.colors[i];
-                }
+
+        const palmap_t & paletteMap = palmap[type];
+        for ( uint32_t i = 0; i < PALETTE_SIZE; ++i ) {
+            if ( paletteMap.indexes[i] != i ) {
+                swap[standard_palette[i]] = paletteMap.colors[i];
             }
         }
+
         return swap;
     }
 }
