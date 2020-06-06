@@ -172,7 +172,6 @@ Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
 {
     int icn_flag = ICN::UNKNOWN;
     int index_sprite = 0;
-    int16_t *offsettableX, *offsettableY;
 
     switch ( hero.GetColor() ) {
     case Color::BLUE:
