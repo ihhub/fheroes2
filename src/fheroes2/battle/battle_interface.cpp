@@ -3444,7 +3444,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
             cursor.Show();
             display.Flip();
 
-            b_current_alpha -= 20;
+            b_current_alpha -= 15;
         }
     }
 
@@ -3458,13 +3458,13 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( b_current_alpha <= 235 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( b_current_alpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
             display.Flip();
 
-            b_current_alpha += 20;
+            b_current_alpha += 15;
         }
     }
 
