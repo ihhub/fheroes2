@@ -1222,7 +1222,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         }
 
         if ( b.hasColorCycling() ) {
-            spmon1.ChangeColor( _colorCyclePairs );
+            const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
+            if ( !isUnderAlphaEffect ) {
+                spmon1.ChangeColor( _colorCyclePairs );
+            }
         }
     }
 
@@ -1258,10 +1261,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         }
 
         // sprite monster
-        if ( b_current_sprite && spmon1 == *b_current_sprite ) {
+        if ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit ) {
             if ( b_current_alpha < 255 ) {
                 spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
-                spmon1.SetAlphaMod( b_current_alpha );
+                spmon1.SetAlphaMod( b_current_alpha, false );
             }
             spmon1.Blit( sp.x, sp.y );
         }
@@ -3590,7 +3593,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             sprite1.Blit( sprite2 );
-            sprite3.SetAlphaMod( alpha );
+            sprite3.SetAlphaMod( alpha, false );
             sprite3.Blit( sprite2 );
             Redraw();
             cursor.Show();
@@ -3857,7 +3860,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
-            sprite2.SetAlphaMod( alpha );
+            sprite2.SetAlphaMod( alpha, false );
             sprite1.Blit( area.x, area.y, display );
             sprite2.Blit( area.x, area.y, display );
             RedrawInterface();

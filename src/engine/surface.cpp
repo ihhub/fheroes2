@@ -783,8 +783,11 @@ void Surface::Blit( const Point & dpt, Surface & dst ) const
     Blit( Rect( Point( 0, 0 ), GetSize() ), dpt, dst );
 }
 
-void Surface::SetAlphaMod( int level )
+void Surface::SetAlphaMod( int level, bool makeCopy )
 {
+    if ( makeCopy )
+        Set( GetSurface(), true );
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( isValid() ) {
         SDL_SetSurfaceAlphaMod( surface, level );

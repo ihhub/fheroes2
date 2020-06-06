@@ -347,9 +347,9 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
 
     if ( _alphaValue < 255 ) { // TODO: sprite3 is a shadow but alpha makes it darker
-        sprite1.SetAlphaMod( _alphaValue );
-        sprite2.SetAlphaMod( _alphaValue );
-        sprite4.SetAlphaMod( _alphaValue );
+        sprite1.SetAlphaMod( _alphaValue, true );
+        sprite2.SetAlphaMod( _alphaValue, true );
+        sprite4.SetAlphaMod( _alphaValue, true );
     }
 
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );

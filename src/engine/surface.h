@@ -168,7 +168,9 @@ public:
     static void SetDefaultColorKey( int, int, int );
     static void Swap( Surface &, Surface & );
 
-    void SetAlphaMod( int );
+    // Be aware that this affects all surfaces which have copy if this one
+    // Use makeCopy flag to create another surface within the call
+    void SetAlphaMod( int level, bool makeCopy );
 
 protected:
     static void FreeSurface( Surface & );
