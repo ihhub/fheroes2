@@ -53,7 +53,7 @@ u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
     cursor.SetThemes( Cursor::POINTER );
 
     // blit alpha
-    shadow.SetAlphaMod( 120 );
+    shadow.SetAlphaMod( 120, false );
     shadow.Blit( rt.x, rt.y, display );
 
     const Rect rt_info( rt.x + ( rt.w - sp_info.w() ) / 2, rt.y + ( rt.h - sp_info.h() ) / 2, sp_info.w(), sp_info.h() );
