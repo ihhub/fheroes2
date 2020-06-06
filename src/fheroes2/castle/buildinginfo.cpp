@@ -176,9 +176,13 @@ void BuildingInfo::UpdateCosts( const std::string & spec )
                 cost.gems = value;
             }
         }
+        else {
+            VERBOSE( spec << ": " << doc.ErrorDesc() );
+        }
     }
-    else
+    else {
         VERBOSE( spec << ": " << doc.ErrorDesc() );
+    }
 #endif
 }
 
