@@ -439,6 +439,8 @@ bool LocalEvent::HandleEvents( bool delay )
     ResetModes( MOUSE_MOTION );
     ResetModes( KEY_PRESSED );
 
+    mouse_wm = Point();
+
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
