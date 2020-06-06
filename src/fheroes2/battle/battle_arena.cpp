@@ -466,7 +466,7 @@ void Battle::Arena::Turns( void )
     current_troop = NULL;
 
     // can skip move ?
-    if ( Settings::Get().ExtBattleSoftWait() )
+    if ( Settings::Get().ExtBattleSoftWait() ) {
         while ( BattleValid() && NULL != ( current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, false ) ) ) {
             current_color = current_troop->GetArmyColor();
 
@@ -477,6 +477,7 @@ void Battle::Arena::Turns( void )
             // turn troop
             TurnTroop( current_troop );
         }
+    }
 
     // end turn: fix result
     if ( !army1->isValid() || ( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {

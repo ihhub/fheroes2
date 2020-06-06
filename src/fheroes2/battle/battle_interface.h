@@ -226,6 +226,7 @@ namespace Battle
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionLightningBoltSpell( Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
+        void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size );
 
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
         void RedrawTroopDefaultDelay( Unit & unit );
@@ -234,6 +235,7 @@ namespace Battle
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
         bool IdleTroopsAnimation( void );
+        void CycleColors();
         void CheckGlobalEvents( LocalEvent & );
 
         void ProcessingHeroDialogResult( int, Actions & );
@@ -278,6 +280,9 @@ namespace Battle
         bool humanturn_redraw;
         u32 animation_flags_frame;
         int catapult_frame;
+
+        uint32_t _colorCycle;
+        std::map<RGBA, RGBA> _colorCyclePairs;
 
         const Unit * _currentUnit;
         const Unit * _movingUnit;

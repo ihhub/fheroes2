@@ -656,7 +656,7 @@ namespace AI
                     if ( castle )
                         DEBUG( DBG_AI, DBG_TRACE, hero->GetName() << ", to castle: " << castle->GetName() );
 
-                    if ( castle && Army::TroopsStrongerEnemyTroops( hero->GetArmy(), castle->GetArmy() ) ) {
+                    if ( castle && hero->GetArmy().isStrongerThan( castle->GetArmy() ) ) {
                         ai_hero.primary_target = *it;
 
                         DEBUG( DBG_AI, DBG_INFO, Color::String( hero->GetColor() ) << ", Hero " << hero->GetName() << " set primary target: " << *it );

@@ -1968,6 +1968,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
     hero.FadeIn();
 
     hero.GetPath().Reset();
+    hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
     hero.ActionNewPosition();
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );

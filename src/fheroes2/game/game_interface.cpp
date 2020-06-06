@@ -278,9 +278,9 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
 
             cursor.SetThemes( valid ? ( water ? Cursor::BOAT : Cursor::MOVE ) : Cursor::WAR_NONE );
 
-            // exit
-            if ( le.MousePressRight() ) {
-                break;
+            if ( dst >= 0 && le.MousePressRight() ) {
+                const Maps::Tiles & tile = world.GetTiles( dst );
+                Dialog::QuickInfo( tile );
             }
             else if ( le.MouseClickLeft() && valid ) {
                 returnValue = dst;
@@ -298,10 +298,14 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
         }
     }
 
+    cursor.Hide();
+
     if ( isFadingEnabled )
         top.Blit( Point( visibleArea.x, visibleArea.y ), display );
 
     back.Restore();
+    cursor.Show();
+    display.Flip();
 
     return returnValue;
 }

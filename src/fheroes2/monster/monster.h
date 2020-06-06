@@ -201,20 +201,23 @@ public:
     bool isValid( void ) const;
     bool isElemental( void ) const;
     bool isUndead( void ) const;
-    bool isFly( void ) const;
+    bool isFlying( void ) const;
     bool isWide( void ) const;
     bool isArchers( void ) const;
     bool isAllowUpgrade( void ) const;
     bool isTwiceAttack( void ) const;
-    bool isResurectLife( void ) const;
+    bool isRegenerating( void ) const;
     bool isDoubleCellAttack( void ) const;
     bool isMultiCellAttack( void ) const;
-    bool isAlwayResponse( void ) const;
-    bool isHideAttack( void ) const;
+    bool isAlwaysRetaliating( void ) const;
+    bool ignoreRetaliation( void ) const;
     bool isDragons( void ) const;
     bool isAffectedByMorale( void ) const;
     bool isAlive( void ) const;
+    bool hasMeleePenalty() const;
+    bool hasColorCycling() const;
 
+    double GetMonsterStrength() const;
     int ICNMonh( void ) const;
 
     u32 GetSpriteIndex( void ) const;
