@@ -659,7 +659,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
     std::random_shuffle( objs.begin(), objs.end() );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
-        s32 dest = GetObstaclePosition();
+        const s32 dest = GetObstaclePosition();
         while ( at( dest ).GetObject() )
             dest = GetObstaclePosition();
 
