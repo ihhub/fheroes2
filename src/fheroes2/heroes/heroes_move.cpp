@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "agg.h"
 #include "castle.h"
 #include "cursor.h"
 #include "direction.h"
@@ -37,6 +38,11 @@
 bool ReflectSprite( int from );
 void PlayWalkSound( int ground );
 bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next );
+
+namespace
+{
+    const int heroFlagFrameCount = 9;
+}
 
 void PlayWalkSound( int ground )
 {
@@ -92,15 +98,15 @@ bool ReflectSprite( int from )
     return false;
 }
 
-Sprite Heroes::SpriteHero( int index, bool reflect, bool rotate ) const
+Sprite SpriteHero( const Heroes & hero, int index, bool reflect, bool rotate )
 {
     int icn_hero = ICN::UNKNOWN;
     int index_sprite = 0;
 
-    if ( isShipMaster() )
+    if ( hero.isShipMaster() )
         icn_hero = ICN::BOAT32;
     else
-        switch ( GetRace() ) {
+        switch ( hero.GetRace() ) {
         case Race::KNGT:
             icn_hero = ICN::KNGT32;
             break;
@@ -128,7 +134,7 @@ Sprite Heroes::SpriteHero( int index, bool reflect, bool rotate ) const
     if ( rotate )
         index_sprite = 45;
     else
-        switch ( GetDirection() ) {
+        switch ( hero.GetDirection() ) {
         case Direction::TOP:
             index_sprite = 0;
             break;
@@ -162,29 +168,30 @@ Sprite Heroes::SpriteHero( int index, bool reflect, bool rotate ) const
     return AGG::GetICN( icn_hero, index_sprite + ( index % 9 ), reflect );
 }
 
-Sprite Heroes::SpriteFlag( int index, bool reflect, bool rotate ) const
+Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
 {
     int icn_flag = ICN::UNKNOWN;
     int index_sprite = 0;
+    int16_t *offsettableX, *offsettableY;
 
-    switch ( GetColor() ) {
+    switch ( hero.GetColor() ) {
     case Color::BLUE:
-        icn_flag = isShipMaster() ? ICN::B_BFLG32 : ICN::B_FLAG32;
+        icn_flag = hero.isShipMaster() ? ICN::B_BFLG32 : ICN::B_FLAG32;
         break;
     case Color::GREEN:
-        icn_flag = isShipMaster() ? ICN::G_BFLG32 : ICN::G_FLAG32;
+        icn_flag = hero.isShipMaster() ? ICN::G_BFLG32 : ICN::G_FLAG32;
         break;
     case Color::RED:
-        icn_flag = isShipMaster() ? ICN::R_BFLG32 : ICN::R_FLAG32;
+        icn_flag = hero.isShipMaster() ? ICN::R_BFLG32 : ICN::R_FLAG32;
         break;
     case Color::YELLOW:
-        icn_flag = isShipMaster() ? ICN::Y_BFLG32 : ICN::Y_FLAG32;
+        icn_flag = hero.isShipMaster() ? ICN::Y_BFLG32 : ICN::Y_FLAG32;
         break;
     case Color::ORANGE:
-        icn_flag = isShipMaster() ? ICN::O_BFLG32 : ICN::O_FLAG32;
+        icn_flag = hero.isShipMaster() ? ICN::O_BFLG32 : ICN::O_FLAG32;
         break;
     case Color::PURPLE:
-        icn_flag = isShipMaster() ? ICN::P_BFLG32 : ICN::P_FLAG32;
+        icn_flag = hero.isShipMaster() ? ICN::P_BFLG32 : ICN::P_FLAG32;
         break;
 
     default:
@@ -195,7 +202,7 @@ Sprite Heroes::SpriteFlag( int index, bool reflect, bool rotate ) const
     if ( rotate )
         index_sprite = 45;
     else
-        switch ( GetDirection() ) {
+        switch ( hero.GetDirection() ) {
         case Direction::TOP:
             index_sprite = 0;
             break;
@@ -226,15 +233,45 @@ Sprite Heroes::SpriteFlag( int index, bool reflect, bool rotate ) const
             break;
         }
 
-    return AGG::GetICN( icn_flag, index_sprite + ( index % FLAG_FRAME_COUNT ), reflect );
+    static const Point offsetTop[heroFlagFrameCount] = {Point( 0, 0), Point( 0, 2), Point( 0, 3), Point( 0, 2), Point( 0, 0), Point( 0, 1), Point( 0, 3), Point( 0, 2), Point( 0, 1)};
+    static const Point offsetBottom[heroFlagFrameCount] = {Point( 0, 0), Point( 0, -1), Point( 0, -2), Point( 0, 0), Point( 0, -1), Point( 0, -2), Point( 0, -3), Point( 0, 0), Point( 0, -1)};
+    static const Point offsetSideways[heroFlagFrameCount] = {Point( 0, 0), Point( -1, 0), Point( 0, 0), Point( 1, 0), Point( 1, -1), Point( 2, -1), Point( 1, 0), Point( 0, 0), Point( 1, 0)};
+    static const Point offsetTopSideways[heroFlagFrameCount] = {Point( 0, 0), Point( -1, 0), Point( 0, 0), Point( -1, -1), Point( -2, -1), Point( -2, 0), Point( -1, 0), Point( 0, 0), Point( 1, 0)};
+    static const Point offsetBottomSideways[heroFlagFrameCount] = {Point( 0, 0), Point( -1, 0), Point( 0, -1), Point( 2, -2), Point( 0, -2), Point( -1, -3), Point( -1, -2), Point( -1, -1), Point( 1, 0)};
+
+    Point offset;
+    switch ( hero.GetDirection() ) {
+    case Direction::TOP:
+        offset = offsetTop[frameId];
+        break;
+    case Direction::BOTTOM:
+        offset = offsetBottom[frameId];
+        break;
+    case Direction::RIGHT:
+    case Direction::LEFT:
+        offset = offsetSideways[frameId];
+        break;
+    case Direction::TOP_RIGHT:
+    case Direction::TOP_LEFT:
+        offset = offsetTopSideways[frameId];
+        break;
+    case Direction::BOTTOM_RIGHT:
+    case Direction::BOTTOM_LEFT:
+        offset = offsetBottomSideways[frameId];
+        break;
+    }
+
+    Sprite flag = AGG::GetICN( icn_flag, index_sprite + frameId, reflect );
+    flag.SetPos( flag.GetPos() + offset );
+    return flag;
 }
 
-Sprite Heroes::SpriteShad( int index ) const
+Sprite SpriteShad( const Heroes & hero, int index )
 {
-    int icn_shad = isShipMaster() ? ICN::BOATSHAD : ICN::SHADOW32;
+    int icn_shad = hero.isShipMaster() ? ICN::BOATSHAD : ICN::SHADOW32;
     int index_sprite = 0;
 
-    switch ( GetDirection() ) {
+    switch ( hero.GetDirection() ) {
     case Direction::TOP:
         index_sprite = 0;
         break;
@@ -268,11 +305,11 @@ Sprite Heroes::SpriteShad( int index ) const
     return AGG::GetICN( icn_shad, index_sprite + ( index % 9 ) );
 }
 
-Sprite Heroes::SpriteFroth( int index, bool reflect ) const
+Sprite SpriteFroth( const Heroes & hero, int index, bool reflect )
 {
     int index_sprite = 0;
 
-    switch ( GetDirection() ) {
+    switch ( hero.GetDirection() ) {
     case Direction::TOP:
         index_sprite = 0;
         break;
@@ -334,32 +371,17 @@ void Heroes::Redraw( Surface & dst, bool with_shadow ) const
 void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 {
     const Point & mp = GetCenter();
-    const int flagFrameID = Game::MapsAnimationFrame() % FLAG_FRAME_COUNT;
+    const int flagFrameID = Game::MapsAnimationFrame() % heroFlagFrameCount;
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     if ( !( gamearea.GetRectMaps() & mp ) )
         return;
 
     bool reflect = ReflectSprite( direction );
 
-    int16_t *offsettableX, *offsettableY;
-    static const int16_t flagYOffsetTableBottom[FLAG_FRAME_COUNT] = {0, 1, 2, 0, 1, 2, 3, 0, 1};
-    static const int16_t flagYOffsetTableTop[FLAG_FRAME_COUNT] = {0, -2, -3, -2, 0, -1, -3, -2, -1};
-    static const int16_t flagYOffsetTableBottomAndSideways[FLAG_FRAME_COUNT] = {0, 0, 1, 2, 2, 3, 2, 1, 0};
-    static const int16_t flagYOffsetTableTopAndSideways[FLAG_FRAME_COUNT] = {0, 0, 0, 1, 1, 0, 0, 0, 0};
-    static const int16_t flagYOffsetTableSideways[FLAG_FRAME_COUNT] = {0, 0, 0, 0, 1, 1, 0, 0, 0};
-
-    static const int16_t flagXOffsetTableTopBottom[FLAG_FRAME_COUNT] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    static const int16_t flagXOffsetTableBottomAndRight[FLAG_FRAME_COUNT] = {0, 0, -1, -3, -1, 0, 0, 0, -2};
-    static const int16_t flagXOffsetTableBottomAndLeft[FLAG_FRAME_COUNT] = {0, -1, 0, 2, 0, -1, -1, -1, 1};
-    static const int16_t flagXOffsetTableTopAndRight[FLAG_FRAME_COUNT] = {0, 1, 0, 1, 2, 2, 1, 0, -1};
-    static const int16_t flagXOffsetTableTopAndLeft[FLAG_FRAME_COUNT] = {0, -1, 0, -1, -2, -2, -1, 0, 1};
-    static const int16_t flagXOffsetTableRight[FLAG_FRAME_COUNT] = {0, 1, 0, -1, -1, -2, -1, 0, -1};
-    static const int16_t flagXOffsetTableLeft[FLAG_FRAME_COUNT] = {0, -1, 0, 1, 1, 2, 1, 0, 1};
-
-    Sprite sprite1 = SpriteHero( sprite_index, reflect, false );
-    Sprite sprite2 = SpriteFlag( sprite_index + flagFrameID, reflect, false );
-    Sprite sprite3 = SpriteShad( sprite_index );
-    Sprite sprite4 = SpriteFroth( sprite_index, reflect );
+    Sprite sprite1 = SpriteHero( *this, sprite_index, reflect, false );
+    Sprite sprite2 = SpriteFlag( *this, flagFrameID, reflect, false );
+    Sprite sprite3 = SpriteShad( *this, sprite_index );
+    Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
 
     if ( _alphaValue < 255 ) { // TODO: sprite3 is a shadow but alpha makes it darker
         sprite1.SetAlphaMod( _alphaValue );
@@ -367,49 +389,8 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         sprite4.SetAlphaMod( _alphaValue );
     }
 
-    switch ( GetDirection() ) {
-    case Direction::TOP:
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableTopBottom );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableTop );
-        break;
-    case Direction::BOTTOM:
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableTopBottom );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableBottom );
-        break;
-    case Direction::BOTTOM_LEFT:
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableBottomAndLeft );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableBottomAndSideways );
-        break;
-    case Direction::BOTTOM_RIGHT:
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableBottomAndRight );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableBottomAndSideways );
-        break;
-    case Direction::LEFT:
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableLeft );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableSideways );
-        break;
-    case Direction::RIGHT:
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableRight );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableSideways );
-        break;
-    case Direction::TOP_RIGHT:
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableTopAndRight );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableTopAndSideways );
-        break;
-    case Direction::TOP_LEFT:
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableTopAndLeft );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableTopAndSideways );
-        break;
-    default: // let default be like bottom
-        DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
-        offsettableX = const_cast<int16_t *>( flagXOffsetTableTopBottom );
-        offsettableY = const_cast<int16_t *>( flagYOffsetTableBottom );
-        break;
-    }
-
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() - offsettableX[flagFrameID] : sprite2.x() - offsettableX[flagFrameID] ),
-                   dy + sprite2.y() - offsettableY[flagFrameID] + TILEWIDTH );
+    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() : sprite2.x() ), dy + sprite2.y() + TILEWIDTH );
     Point dst_pt3( dx + sprite3.x(), dy + sprite3.y() + TILEWIDTH );
     Point dst_pt4( dx + ( reflect ? TILEWIDTH - sprite4.x() - sprite4.w() : sprite4.x() ), dy + sprite4.y() + TILEWIDTH );
 
