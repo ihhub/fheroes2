@@ -175,6 +175,9 @@ public:
 protected:
     static void FreeSurface( Surface & );
 
+    // Only for 32-bit images with alpha channel and SDL 1 support
+    Surface ModifyAlphaChannel( uint32_t alpha ) const;
+
     bool isDisplay( void ) const;
 
     void Lock( void ) const;
