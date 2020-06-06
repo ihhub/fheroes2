@@ -540,9 +540,14 @@ int Interface::Basic::StartGame( void )
 
                 radar.SetHide( true );
                 radar.SetRedraw();
-                conf.SetCurrentColor( player.GetColor() );
-                world.ClearFog( player.GetColor() );
-                kingdom.ActionBeforeTurn();
+                if ( player.GetControl() == CONTROL_HUMAN ) {
+                    conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
+                }
+                else {
+                    conf.SetCurrentColor( player.GetColor() );
+                    world.ClearFog( player.GetColor() );
+                    kingdom.ActionBeforeTurn();
+                }
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -555,6 +560,9 @@ int Interface::Basic::StartGame( void )
                         display.Flip();
                         Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn" ) );
                     }
+                    conf.SetCurrentColor( player.GetColor() );
+                    world.ClearFog( player.GetColor() );
+                    kingdom.ActionBeforeTurn();
                     iconsPanel.SetRedraw();
                     iconsPanel.ShowIcons();
                     res = HumanTurn( skip_turns );
