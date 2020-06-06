@@ -233,11 +233,16 @@ Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
             break;
         }
 
-    static const Point offsetTop[heroFlagFrameCount] = {Point( 0, 0), Point( 0, 2), Point( 0, 3), Point( 0, 2), Point( 0, 0), Point( 0, 1), Point( 0, 3), Point( 0, 2), Point( 0, 1)};
-    static const Point offsetBottom[heroFlagFrameCount] = {Point( 0, 0), Point( 0, -1), Point( 0, -2), Point( 0, 0), Point( 0, -1), Point( 0, -2), Point( 0, -3), Point( 0, 0), Point( 0, -1)};
-    static const Point offsetSideways[heroFlagFrameCount] = {Point( 0, 0), Point( -1, 0), Point( 0, 0), Point( 1, 0), Point( 1, -1), Point( 2, -1), Point( 1, 0), Point( 0, 0), Point( 1, 0)};
-    static const Point offsetTopSideways[heroFlagFrameCount] = {Point( 0, 0), Point( -1, 0), Point( 0, 0), Point( -1, -1), Point( -2, -1), Point( -2, 0), Point( -1, 0), Point( 0, 0), Point( 1, 0)};
-    static const Point offsetBottomSideways[heroFlagFrameCount] = {Point( 0, 0), Point( -1, 0), Point( 0, -1), Point( 2, -2), Point( 0, -2), Point( -1, -3), Point( -1, -2), Point( -1, -1), Point( 1, 0)};
+    static const Point offsetTop[heroFlagFrameCount]
+        = {Point( 0, 0), Point( 0, 2), Point( 0, 3), Point( 0, 2), Point( 0, 0), Point( 0, 1), Point( 0, 3), Point( 0, 2), Point( 0, 1)};
+    static const Point offsetBottom[heroFlagFrameCount]
+        = {Point( 0, 0), Point( 0, -1), Point( 0, -2), Point( 0, 0), Point( 0, -1), Point( 0, -2), Point( 0, -3), Point( 0, 0), Point( 0, -1)};
+    static const Point offsetSideways[heroFlagFrameCount]
+        = {Point( 0, 0), Point( -1, 0), Point( 0, 0), Point( 1, 0), Point( 1, -1), Point( 2, -1), Point( 1, 0), Point( 0, 0), Point( 1, 0)};
+    static const Point offsetTopSideways[heroFlagFrameCount]
+        = {Point( 0, 0), Point( -1, 0), Point( 0, 0), Point( -1, -1), Point( -2, -1), Point( -2, 0), Point( -1, 0), Point( 0, 0), Point( 1, 0)};
+    static const Point offsetBottomSideways[heroFlagFrameCount]
+        = {Point( 0, 0), Point( -1, 0), Point( 0, -1), Point( 2, -2), Point( 0, -2), Point( -1, -3), Point( -1, -2), Point( -1, -1), Point( 1, 0)};
 
     Point offset;
     switch ( hero.GetDirection() ) {
