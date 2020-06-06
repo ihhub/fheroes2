@@ -317,7 +317,7 @@ private:
 
     Point mouse_cu; // point cursor
 
-    Point mouse_wm;	// wheel movement
+    Point mouse_wm; // wheel movement
 
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );
