@@ -111,6 +111,7 @@ public:
 
     void Set( u32 sw, u32 sh, const SurfaceFormat & );
     void Set( u32 sw, u32 sh, bool amask );
+    void Set( const Surface &, bool refcopy );
     void Reset( void );
 
     bool Load( const std::string & );
@@ -168,6 +169,8 @@ public:
     static void SetDefaultColorKey( int, int, int );
     static void Swap( Surface &, Surface & );
 
+    // Be aware that this affects all sprite drawings!!!
+    // Make a copy of Surface and apply alpha on it
     void SetAlphaMod( int );
 
 protected:
@@ -184,7 +187,6 @@ protected:
     u32 MapRGB( const RGBA & ) const;
     RGBA GetRGB( u32 pixel ) const;
 
-    void Set( const Surface &, bool refcopy );
     void Set( u32 sw, u32 sh, u32 bpp /* bpp: 8, 16, 24, 32 */, bool amask );
     void Set( SDL_Surface * );
     void SetPalette( void );
