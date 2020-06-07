@@ -2188,11 +2188,14 @@ void Battle::Interface::FadeArena( void )
     display.Flip();
 
     if ( !conf.QVGA() ) {
+        cursor.Hide();
         Rect srt( border.GetArea().x, border.GetArea().y, display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
         Surface top = display.GetSurface( srt );
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
         display.Fade( top, back, srt, 100, 300 );
+        cursor.Show();
+        display.Flip();
     }
 }
 
