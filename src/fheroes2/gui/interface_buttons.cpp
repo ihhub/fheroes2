@@ -60,9 +60,8 @@ void Interface::ButtonsArea::SetPos( s32 ox, s32 oy )
 
     SetButtonStatus();
 
-    const Rect area = GetArea();
-    ox = area.x;
-    oy = area.y;
+    ox = GetArea().x;
+    oy = GetArea().y;
 
     buttonNextHero.SetPos( ox, oy );
     buttonMovement.SetPos( buttonNextHero.x + buttonNextHero.w, oy );
