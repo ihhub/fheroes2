@@ -146,8 +146,8 @@ void HGSData::RedrawList( s32 ox, s32 oy )
     const Settings & conf = Settings::Get();
 
     // image background
-    const Sprite & bgImage = AGG::GetICN( ICN::HSBKG, 0 );
-    bgImage.Blit( ox, oy );
+    const Sprite & back = AGG::GetICN( ICN::HSBKG, 0 );
+    back.Blit( ox, oy );
 
     const Sprite & head = AGG::GetICN( ICN::HISCORE, 6 );
     if ( conf.QVGA() )
@@ -215,16 +215,17 @@ int Game::HighScores( bool fill )
     AGG::PlayMusic( MUS::MAINMENU );
     hgs.Load( stream.str().c_str() );
 
+    const Sprite & back = AGG::GetICN( ICN::HSBKG, 0 );
+
     cursor.Hide();
-    const Sprite & bgImage = AGG::GetICN( ICN::HSBKG, 0 );
-    const Point top( ( display.w() - bgImage.w() ) / 2, ( display.h() - bgImage.h() ) / 2 );
+    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
 
     hgs.RedrawList( top.x, top.y );
 
     LocalEvent & le = LocalEvent::Get();
 
     Button buttonCampain( top.x + ( conf.QVGA() ? 0 : 9 ), top.y + ( conf.QVGA() ? 100 : 315 ), ICN::HISCORE, 0, 1 );
-    Button buttonExit( top.x + bgImage.w() - ( conf.QVGA() ? 27 : 36 ), top.y + ( conf.QVGA() ? 100 : 315 ), ICN::HISCORE, 4, 5 );
+    Button buttonExit( top.x + back.w() - ( conf.QVGA() ? 27 : 36 ), top.y + ( conf.QVGA() ? 100 : 315 ), ICN::HISCORE, 4, 5 );
 
     buttonCampain.Draw();
     buttonExit.Draw();
