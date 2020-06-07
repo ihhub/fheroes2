@@ -369,7 +369,7 @@ void Display::Fade( const Surface & top, const Surface & back, const Point & pt,
 
     while ( alpha > min + level ) {
         back.Blit( pt, *this );
-        shadow.SetAlphaMod( alpha );
+        shadow.SetAlphaMod( alpha, false );
         shadow.Blit( pt, *this );
         Flip();
         alpha -= step;
@@ -388,7 +388,7 @@ void Display::InvertedFade( const Surface & top, const Surface & back, const Poi
     while ( alpha > min + level ) {
         back.Blit( offset, *this );
         shadow.Blit( offset, *this );
-        shadow.SetAlphaMod( alpha );
+        shadow.SetAlphaMod( alpha, false );
         middle.Blit( middleOffset, *this );
         Flip();
         alpha -= step;
@@ -416,7 +416,7 @@ void Display::Rise( const Surface & top, const Surface & back, const Point & pt,
 
     while ( alpha < max ) {
         back.Blit( *this );
-        shadow.SetAlphaMod( alpha );
+        shadow.SetAlphaMod( alpha, false );
         shadow.Blit( *this );
         Flip();
         alpha += step;

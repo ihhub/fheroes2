@@ -192,7 +192,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
         Surface surface( removalInfo.surfaceSize, true );
         const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( removalInfo.object ), removalInfo.index );
         sprite.Blit( sprite.x(), sprite.y(), surface );
-        surface.SetAlphaMod( removalInfo.alpha );
+        surface.SetAlphaMod( removalInfo.alpha, false );
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         const Point mp = Maps::GetPoint( removalInfo.tile );
         area.BlitOnTile( dst, surface, 0, 0, mp );

@@ -1605,7 +1605,7 @@ namespace AI
             else
                 // other
                 return true;
-        } break;
+        }
 
         // increase view
         case MP2::OBJ_OBSERVATIONTOWER:
@@ -1797,10 +1797,8 @@ namespace AI
                 return true;
             break;
 
-        case MP2::OBJ_MONSTER: {
-            Army enemy( tile );
-            return army.isStrongerThan( enemy );
-        } break;
+        case MP2::OBJ_MONSTER:
+            return army.isStrongerThan( Army( tile ) );
 
         // sign
         case MP2::OBJ_SIGN:

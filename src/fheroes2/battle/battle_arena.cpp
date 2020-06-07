@@ -424,13 +424,13 @@ void Battle::Arena::Turns( void )
     bool tower_moved = false;
     bool catapult_moved = false;
 
-    Unit * current_troop = Force::GetCurrentUnit( *army1, *army2, NULL, true );
+    Unit * current_troop = NULL;
 
     // rescan orders
     if ( armies_order )
         Force::UpdateOrderUnits( *army1, *army2, *armies_order );
 
-    while ( BattleValid() && current_troop != NULL ) {
+    while ( BattleValid() && NULL != ( current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, true ) ) ) {
         current_color = current_troop->GetArmyColor();
 
         // first turn: castle and catapult action
@@ -461,14 +461,13 @@ void Battle::Arena::Turns( void )
 
         // turn troop
         TurnTroop( current_troop );
-        current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, true );
     }
 
-    current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, false );
+    current_troop = NULL;
 
     // can skip move ?
     if ( Settings::Get().ExtBattleSoftWait() ) {
-        while ( BattleValid() && current_troop != NULL ) {
+        while ( BattleValid() && NULL != ( current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, false ) ) ) {
             current_color = current_troop->GetArmyColor();
 
             // set bridge passable
@@ -477,8 +476,6 @@ void Battle::Arena::Turns( void )
 
             // turn troop
             TurnTroop( current_troop );
-
-            current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, false );
         }
     }
 

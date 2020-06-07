@@ -1219,7 +1219,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
             spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
         }
         if ( b.hasColorCycling() ) {
-            spmon1.ChangeColor( _colorCyclePairs );
+            const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
+            if ( !isUnderAlphaEffect ) {
+                spmon1.ChangeColor( _colorCyclePairs );
+            }
         }
     }
 
@@ -1255,10 +1258,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         }
 
         // sprite monster
-        if ( b_current_sprite && spmon1 == *b_current_sprite ) {
+        if ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit ) {
             if ( b_current_alpha < 255 ) {
                 spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
-                spmon1.SetAlphaMod( b_current_alpha );
+                spmon1.SetAlphaMod( b_current_alpha, false );
             }
             spmon1.Blit( sp.x, sp.y );
         }
@@ -3438,7 +3441,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
             cursor.Show();
             display.Flip();
 
-            b_current_alpha -= 20;
+            b_current_alpha -= 15;
         }
     }
 
@@ -3452,13 +3455,13 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( b_current_alpha <= 235 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( b_current_alpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
             display.Flip();
 
-            b_current_alpha += 20;
+            b_current_alpha += 15;
         }
     }
 
@@ -3592,7 +3595,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
         if ( frame < 20 && Game::AnimateCustomDelay( bloodlustDelay ) ) {
             cursor.Hide();
             unitSprite.Blit( mixSprite );
-            bloodlustEffect.SetAlphaMod( alpha );
+            bloodlustEffect.SetAlphaMod( alpha, false );
             bloodlustEffect.Blit( mixSprite );
             Redraw();
             cursor.Show();
@@ -3855,7 +3858,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
-            sprite2.SetAlphaMod( alpha );
+            sprite2.SetAlphaMod( alpha, false );
             sprite1.Blit( area.x, area.y, display );
             sprite2.Blit( area.x, area.y, display );
             RedrawInterface();

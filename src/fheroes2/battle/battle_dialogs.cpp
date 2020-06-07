@@ -554,7 +554,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     if ( !conf.QVGA() ) {
         Surface shadow( btnCast, true );
         shadow.Fill( ColorBlack );
-        shadow.SetAlphaMod( 80 );
+        shadow.SetAlphaMod( 80, false );
         if ( btnCast.isDisable() )
             shadow.Blit( btnCast, display );
         if ( btnRetreat.isDisable() )

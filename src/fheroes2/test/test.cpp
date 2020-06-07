@@ -85,7 +85,7 @@ void RunTest2( void )
     pt.x += sp1.w() + 20;
 
     Surface sf1 = sp1.GetSurface();
-    sf1.SetAlphaMod( 50 );
+    sf1.SetAlphaMod( 50, false );
 
     sf1.Blit( pt, display );
     pt.x += sf1.w() + 20;
@@ -105,7 +105,7 @@ void RunTest2( void )
     VERBOSE( sp2.Info() );
     VERBOSE( sf2.Info() );
 
-    sf2.SetAlphaMod( 50 );
+    sf2.SetAlphaMod( 50, false );
     sf2.Blit( pt, display );
     pt.x += sf2.w() + 20;
 
