@@ -195,10 +195,6 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             }
         }
 
-        if ( HotKeyPressEvent( Game::EVENT_SYSTEM_FULLSCREEN ) ) {
-            redraw = true;
-        }
-
         if ( redraw ) {
             cursor.Hide();
             SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), filt, hero );
@@ -295,10 +291,6 @@ void SpellBook::Edit( const HeroBase & hero )
                     redraw = true;
                 }
             }
-        }
-
-        if ( HotKeyPressEvent( Game::EVENT_SYSTEM_FULLSCREEN ) ) {
-            redraw = true;
         }
 
         if ( redraw ) {

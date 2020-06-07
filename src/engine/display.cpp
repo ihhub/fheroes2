@@ -198,6 +198,9 @@ void Display::Present( void )
 
 void Display::ToggleFullScreen( void )
 {
+    Cursor::Get().Hide();
+    const Surface & temp = GetSurface();
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( window ) {
         u32 flags = SDL_GetWindowFlags( window );
@@ -215,17 +218,18 @@ void Display::ToggleFullScreen( void )
         SDL_SetWindowFullscreen( window, flags );
     }
 #else
-    const Surface & temp = GetSurface();
-
     const uint32_t flags = surface->flags;
     surface = SDL_SetVideoMode( 0, 0, 0, surface->flags ^ SDL_FULLSCREEN );
     if ( surface == NULL ) {
         surface = SDL_SetVideoMode( 0, 0, 0, flags );
         return;
     }
-    temp.Blit( *this );
-    Flip();
 #endif
+
+    temp.Blit( *this );
+
+    Cursor::Get().Show();
+    Flip();
 }
 
 void Display::SetCaption( const char * str )

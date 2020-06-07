@@ -183,18 +183,6 @@ int Game::MainMenu( void )
             cursor.Show();
             display.Flip();
         }
-
-        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) {
-            cursor.Hide();
-            bgImage.Blit( Point( 0, 0 ) );
-            buttonNewGame.Draw();
-            buttonLoadGame.Draw();
-            buttonHighScores.Draw();
-            buttonCredits.Draw();
-            buttonQuit.Draw();
-            cursor.Show();
-            display.Flip();
-        }
     }
 
     return QUITGAME;

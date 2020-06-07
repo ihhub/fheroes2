@@ -262,15 +262,6 @@ int Game::HighScores( bool fill )
 
         if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
             return MAINMENU;
-
-        if ( HotKeyPressEvent( EVENT_SYSTEM_FULLSCREEN ) ) {
-            cursor.Hide();
-            hgs.RedrawList( top.x, top.y );
-            buttonCampain.Draw();
-            buttonExit.Draw();
-            cursor.Show();
-            display.Flip();
-        }
     }
 
     return QUITGAME;

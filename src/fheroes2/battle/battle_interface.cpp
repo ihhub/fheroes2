@@ -1865,7 +1865,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
         }
 
         // animation troops
-        if ( IdleTroopsAnimation() || HotKeyPressEvent( Game::EVENT_SYSTEM_FULLSCREEN ) )
+        if ( IdleTroopsAnimation() )
             humanturn_redraw = true;
 
         CheckGlobalEvents( le );
