@@ -23,6 +23,7 @@
 #include <sstream>
 #include <string>
 
+#include "cursor.h"
 #include "display.h"
 #include "error.h"
 #include "system.h"
