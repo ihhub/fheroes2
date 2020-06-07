@@ -23,7 +23,6 @@
 #include <sstream>
 #include <string>
 
-#include "cursor.h"
 #include "display.h"
 #include "error.h"
 #include "system.h"
@@ -199,7 +198,6 @@ void Display::Present( void )
 
 void Display::ToggleFullScreen( void )
 {
-    Cursor::Get().Hide();
     const Surface & temp = GetSurface();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -228,9 +226,6 @@ void Display::ToggleFullScreen( void )
 #endif
 
     temp.Blit( *this );
-
-    Cursor::Get().Show();
-    Flip();
 }
 
 void Display::SetCaption( const char * str )

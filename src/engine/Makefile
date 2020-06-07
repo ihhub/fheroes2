@@ -3,7 +3,6 @@
 # libSDL C++ wrapper engine
 
 TARGET	:= libengine
-CFLAGS := $(CFLAGS) -I../fheroes2/gui -I../fheroes2/system -I. -I../xmlccwrap
 
 all: $(TARGET).a
 
