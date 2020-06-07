@@ -407,7 +407,6 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             return Direction::UNKNOWN != Direction::Get( from_hero.GetIndex(), tile.GetIndex() )
                        ? Cursor::FIGHT
                        : Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-        break;
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
