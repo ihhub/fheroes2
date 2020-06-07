@@ -3432,7 +3432,6 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     cursor.Hide();
 
     _currentUnit = &target;
-    _movingUnit = &target;
     b_current_sprite = &sprite;
     b_current_alpha = 240;
 
@@ -3473,7 +3472,6 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
     b_current_alpha = 255;
     _currentUnit = NULL;
-    _movingUnit = NULL;
     b_current_sprite = NULL;
 }
 
