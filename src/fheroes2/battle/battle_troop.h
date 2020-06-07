@@ -94,7 +94,7 @@ namespace Battle
 
         bool isValid( void ) const;
         bool isArchers( void ) const;
-        bool isFly( void ) const;
+        bool isFlying( void ) const;
         bool isTwiceAttack( void ) const;
 
         bool AllowResponse( void ) const;
@@ -104,6 +104,8 @@ namespace Battle
         bool isMagicResist( const Spell &, u32 ) const;
         bool isMagicAttack( void ) const;
         bool OutOfWalls( void ) const;
+        bool canReach( int index ) const;
+        bool canReach( const Unit & unit ) const;
 
         std::string String( bool more = false ) const;
 
@@ -130,8 +132,8 @@ namespace Battle
         u32 GetShots( void ) const;
         u32 ApplyDamage( Unit &, u32 );
         u32 ApplyDamage( u32 );
-        u32 GetDamageMin( const Unit & ) const;
-        u32 GetDamageMax( const Unit & ) const;
+        u32 CalculateMinDamage( const Unit & ) const;
+        u32 CalculateMaxDamage( const Unit & ) const;
         u32 CalculateDamageUnit( const Unit &, float ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL ) const;

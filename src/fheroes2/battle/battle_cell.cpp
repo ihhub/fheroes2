@@ -260,10 +260,10 @@ bool Battle::Cell::isPassable4( const Unit & b, const Cell & from ) const
 
 bool Battle::Cell::isPassable3( const Unit & b, bool check_reflect ) const
 {
-    if ( b.isWide() ) {
-        if ( index == b.GetTailIndex() || index == b.GetHeadIndex() )
-            return true;
+    if ( index == b.GetHeadIndex() || index == b.GetTailIndex() )
+        return true;
 
+    if ( b.isWide() ) {
         if ( check_reflect ) {
             const Cell * cell = Board::GetCell( index, b.isReflect() ? RIGHT : LEFT );
             return cell && ( cell->isPassable1( true ) || cell->index == b.GetTailIndex() || cell->index == b.GetHeadIndex() ) && isPassable1( true );

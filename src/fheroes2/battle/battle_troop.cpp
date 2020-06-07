@@ -45,11 +45,9 @@ void Battle::UpdateMonsterAttributes( const std::string & spec )
 #ifdef WITH_XML
     // parse battle.xml
     TiXmlDocument doc;
-    const TiXmlElement * xml_battle = NULL;
 
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_battle = doc.FirstChildElement( "battle" ) ) ) {
-        const TiXmlElement * xml_element;
-        int value;
+    if ( doc.LoadFile( spec.c_str() ) ) {
+        const TiXmlElement * xml_battle = doc.FirstChildElement( "battle" );
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
@@ -373,9 +371,9 @@ void Battle::Unit::SetRandomLuck( void )
     // Bless, Curse and Luck do stack
 }
 
-bool Battle::Unit::isFly( void ) const
+bool Battle::Unit::isFlying( void ) const
 {
-    return ArmyTroop::isFly() && !Modes( SP_SLOW );
+    return ArmyTroop::isFlying() && !Modes( SP_SLOW );
 }
 
 bool Battle::Unit::isValid( void ) const
@@ -391,6 +389,29 @@ bool Battle::Unit::isReflect( void ) const
 bool Battle::Unit::OutOfWalls( void ) const
 {
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
+}
+
+bool Battle::Unit::canReach( int index ) const
+{
+    if ( !Board::isValidIndex( index ) )
+        return false;
+
+    if ( isFlying() || ( isArchers() && !isHandFighting() ) )
+        return true;
+
+    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
+    const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
+    return Board::GetDistance( from, index ) <= GetSpeed( true );
+}
+
+bool Battle::Unit::canReach( const Unit & unit ) const
+{
+    if ( unit.Modes( CAP_TOWER ) )
+        return false;
+
+    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
+    const int target = ( unit.isWide() && isIndirectAttack ) ? unit.GetTailIndex() : unit.GetHeadIndex();
+    return canReach( target );
 }
 
 bool Battle::Unit::isHandFighting( void ) const
@@ -442,7 +463,7 @@ bool Battle::Unit::checkIdleDelay()
 
 void Battle::Unit::NewTurn( void )
 {
-    if ( isResurectLife() )
+    if ( isRegenerating() )
         hp = ArmyTroop::GetHitPoints();
 
     ResetModes( TR_RESPONSED );
@@ -495,12 +516,12 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     return speed;
 }
 
-u32 Battle::Unit::GetDamageMin( const Unit & enemy ) const
+u32 Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
 {
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMin() );
 }
 
-u32 Battle::Unit::GetDamageMax( const Unit & enemy ) const
+u32 Battle::Unit::CalculateMaxDamage( const Unit & enemy ) const
 {
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMax() );
 }
@@ -508,20 +529,7 @@ u32 Battle::Unit::GetDamageMax( const Unit & enemy ) const
 u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
 {
     if ( isArchers() ) {
-        if ( isHandFighting() ) {
-            switch ( GetID() ) {
-            // skip
-            case Monster::MAGE:
-            case Monster::ARCHMAGE:
-            case Monster::TITAN:
-                break;
-
-            default:
-                dmg /= 2;
-                break;
-            }
-        }
-        else {
+        if ( !isHandFighting() ) {
             // check skill archery +%10, +%25, +%50
             if ( GetCommander() ) {
                 dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
@@ -534,6 +542,9 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
             // check spell shield
             if ( enemy.Modes( SP_SHIELD ) )
                 dmg /= Spell( Spell::SHIELD ).ExtraValue();
+        }
+        else if ( hasMeleePenalty() ) {
+            dmg /= 2;
         }
     }
 
@@ -587,11 +598,11 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
     u32 res = 0;
 
     if ( Modes( SP_BLESS ) )
-        res = GetDamageMax( enemy );
+        res = CalculateMaxDamage( enemy );
     else if ( Modes( SP_CURSE ) )
-        res = GetDamageMin( enemy );
+        res = CalculateMinDamage( enemy );
     else
-        res = Rand::Get( GetDamageMin( enemy ), GetDamageMax( enemy ) );
+        res = Rand::Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
 
     if ( Modes( LUCK_GOOD ) )
         res <<= 1; // mul 2
@@ -603,7 +614,7 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
 
 u32 Battle::Unit::HowManyCanKill( const Unit & b ) const
 {
-    return b.HowManyWillKilled( ( GetDamageMin( b ) + GetDamageMax( b ) ) / 2 );
+    return b.HowManyWillKilled( ( CalculateMinDamage( b ) + CalculateMaxDamage( b ) ) / 2 );
 }
 
 u32 Battle::Unit::HowManyWillKilled( u32 dmg ) const
@@ -827,7 +838,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
 
     DEBUG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
 
-    u32 spoint = hero ? hero->GetPower() : 3;
+    const u32 spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 
     if ( spell.isDamage() )
         SpellApplyDamage( spell, spoint, hero, target );
@@ -910,14 +921,11 @@ StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    if ( isAlwayResponse() )
-        return true;
-
-    if ( !Modes( TR_RESPONSED ) ) {
+    if ( !Modes( IS_PARALYZE_MAGIC ) ) {
         if ( Modes( SP_BLIND ) )
             return blindanswer;
-        else
-            return !Modes( IS_PARALYZE_MAGIC );
+        else if ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) )
+            return true;
     }
 
     return false;
@@ -1023,64 +1031,65 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 {
     const Unit & attacker = *this;
 
-    // initial value: (hitpoints)
-    const u32 & damage = ( attacker.GetDamageMin( defender ) + attacker.GetDamageMax( defender ) ) / 2;
-    const u32 & kills = defender.HowManyWillKilled( attacker.isTwiceAttack() ? damage * 2 : damage );
-    double res = kills * static_cast<Monster>( defender ).GetHitPoints();
-    bool noscale = false;
+    const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
+    const double attackerPowerLost = ( defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
+    const bool attackerIsArchers = isArchers();
 
-    // attacker
-    switch ( attacker.GetID() ) {
-    case Monster::GHOST:
-        // priority: from killed only
-        noscale = true;
-        break;
+    double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
 
-    case Monster::VAMPIRE_LORD:
-        if ( attacker.isHaveDamage() ) {
-            // alive priority
-            if ( defender.isElemental() || defender.isUndead() )
-                res /= 2;
+    if ( !canReach( defender ) && !( defender.Modes( CAP_TOWER ) && attackerIsArchers ) ) {
+        // Can't reach, so unit is not dangerous to defender at the moment
+        attackerThreat /= 2;
+    }
+
+    // Monster special abilities
+    if ( isTwiceAttack() ) {
+        if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
+            attackerThreat *= 2;
         }
-        break;
-
-    default:
-        break;
-    }
-
-    // scale on ability
-    if ( !noscale ) {
-        if ( defender.isArchers() )
-            res += res * 0.7;
-        if ( defender.isFly() )
-            res += res * 0.6;
-        if ( defender.isHideAttack() )
-            res += res * 0.5;
-        if ( defender.isTwiceAttack() )
-            res += res * 0.4;
-        if ( defender.isResurectLife() )
-            res += res * 0.3;
-        if ( defender.isDoubleCellAttack() )
-            res += res * 0.3;
-        if ( defender.isAlwayResponse() )
-            res -= res * 0.5;
-    }
-
-    // extra
-    if ( defender.Modes( CAP_MIRRORIMAGE ) )
-        res += res * 0.7;
-    if ( !attacker.isArchers() ) {
-        if ( defender.Modes( TR_RESPONSED ) )
-            res += res * 0.3;
         else {
-            if ( defender.Modes( LUCK_BAD ) )
-                res += res * 0.3;
-            else if ( defender.Modes( LUCK_GOOD ) )
-                res -= res * 0.3;
+            // check how much we will lose to retaliation
+            attackerThreat += attackerThreat * ( 1.0 - attackerPowerLost );
         }
     }
 
-    return static_cast<s32>( res ) > 1 ? static_cast<u32>( res ) : 1;
+    switch ( id ) {
+    case Monster::UNICORN:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
+    case Monster::CYCLOPS:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::PARALYZE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
+    case Monster::MEDUSA:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::STONE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
+    case Monster::VAMPIRE_LORD:
+        // Lifesteal
+        attackerThreat *= 1.3;
+        break;
+    case Monster::GENIE:
+        // Genie's ability to half enemy troops
+        attackerThreat *= 2;
+        break;
+    case Monster::GHOST:
+        // Ghost's ability to increase the numbers
+        attackerThreat *= 3;
+        break;
+    }
+
+    // Ignore disabled units
+    if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) )
+        attackerThreat = 0;
+    // Negative value of units that changed the side
+    if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) )
+        attackerThreat *= -1;
+
+    // Avoid effectiveness scaling if we're dealing with archers
+    if ( !attackerIsArchers || defender.isArchers() )
+        attackerThreat *= attackerPowerLost;
+
+    const int score = static_cast<int>( attackerThreat * 10 );
+    return ( score == 0 ) ? 1 : score;
 }
 
 u32 Battle::Unit::GetHitPoints( void ) const
@@ -1118,7 +1127,6 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
         }
         SetModes( SP_BLESS );
         affected.AddMode( SP_BLESS, duration );
-        ResetModes( LUCK_GOOD );
         break;
 
     case Spell::BLOODLUST:
@@ -1134,7 +1142,6 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
         }
         SetModes( SP_CURSE );
         affected.AddMode( SP_CURSE, duration );
-        ResetModes( LUCK_BAD );
         break;
 
     case Spell::HASTE:
