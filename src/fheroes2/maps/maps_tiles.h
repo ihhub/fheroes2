@@ -118,9 +118,6 @@ namespace Maps
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
-        static void UpdateFountainSprite( TilesAddon & );
-        static void UpdateTreasureChestSprite( TilesAddon & );
-        static int UpdateStoneLightsSprite( TilesAddon & );
         static void UpdateAbandoneMineLeftSprite( TilesAddon &, int resource );
         static void UpdateAbandoneMineRightSprite( TilesAddon & );
 
@@ -288,9 +285,6 @@ namespace Maps
         static void UpdateMonsterPopulation( Tiles & );
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );
-        static void UpdateStoneLightsSprite( Tiles & );
-        static void UpdateFountainSprite( Tiles & );
-        static void UpdateTreasureChestSprite( Tiles & );
 
     private:
         friend StreamBase & operator<<( StreamBase &, const Tiles & );

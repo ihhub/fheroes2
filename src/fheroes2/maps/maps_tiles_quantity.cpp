@@ -850,14 +850,6 @@ void Maps::Tiles::QuantityUpdate( void )
             }
     } break;
 
-    case MP2::OBJ_STONELIGHTS:
-        UpdateStoneLightsSprite( *this );
-        break;
-
-    case MP2::OBJ_FOUNTAIN:
-        UpdateFountainSprite( *this );
-        break;
-
     case MP2::OBJ_EVENT: {
         TilesAddon * addon = FindObject( MP2::OBJ_EVENT );
         // remove event sprite

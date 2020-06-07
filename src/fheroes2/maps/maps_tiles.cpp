@@ -312,13 +312,6 @@ int Maps::TilesAddon::GetPassable( const Maps::TilesAddon & ta )
     case ICN::X_LOC3:
         return ObjXlc3::GetPassable( ta.index );
 
-    // MANUAL.ICN
-    case ICN::TELEPORT1:
-    case ICN::TELEPORT2:
-    case ICN::TELEPORT3:
-    case ICN::FOUNTAIN:
-        return 0;
-
     default:
         break;
     }
@@ -389,14 +382,6 @@ int Maps::TilesAddon::GetActionObject( const Maps::TilesAddon & ta )
         return ObjXlc2::GetActionObject( ta.index );
     case ICN::X_LOC3:
         return ObjXlc3::GetActionObject( ta.index );
-
-    // MANUAL.ICN
-    case ICN::TELEPORT1:
-    case ICN::TELEPORT2:
-    case ICN::TELEPORT3:
-        return MP2::OBJ_STONELIGHTS;
-    case ICN::FOUNTAIN:
-        return MP2::OBJ_FOUNTAIN;
 
     default:
         break;
@@ -495,9 +480,7 @@ bool Maps::TilesAddon::isStandingStone( const TilesAddon & ta )
 bool Maps::TilesAddon::isResource( const TilesAddon & ta )
 {
     // OBJNRSRC
-    return ( ( ICN::OBJNRSRC == MP2::GetICNObject( ta.object ) && ( ta.index % 2 ) ) ||
-             // TREASURE
-             ( ICN::TREASURE == MP2::GetICNObject( ta.object ) ) );
+    return ICN::OBJNRSRC == MP2::GetICNObject( ta.object ) && ( ta.index % 2 );
 }
 
 bool Maps::TilesAddon::isRandomResource( const TilesAddon & ta )
@@ -953,44 +936,6 @@ void Maps::TilesAddon::UpdateAbandoneMineRightSprite( TilesAddon & ta )
         ta.object = 128;
         ta.index = 83;
     }
-}
-
-void Maps::TilesAddon::UpdateFountainSprite( TilesAddon & ta )
-{
-    if ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && 15 == ta.index ) {
-        ta.object = 0x14;
-        ta.index = 0;
-    }
-}
-
-void Maps::TilesAddon::UpdateTreasureChestSprite( TilesAddon & ta )
-{
-    if ( ICN::OBJNRSRC == MP2::GetICNObject( ta.object ) && 19 == ta.index ) {
-        ta.object = 0x15;
-        ta.index = 0;
-    }
-}
-
-int Maps::TilesAddon::UpdateStoneLightsSprite( TilesAddon & ta )
-{
-    if ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) )
-        switch ( ta.index ) {
-        case 116:
-            ta.object = 0x11;
-            ta.index = 0;
-            return 1;
-        case 119:
-            ta.object = 0x12;
-            ta.index = 0;
-            return 2;
-        case 122:
-            ta.object = 0x13;
-            ta.index = 0;
-            return 3;
-        default:
-            break;
-        }
-    return 0;
 }
 
 std::pair<int, int> Maps::TilesAddon::ColorRaceFromHeroSprite( const TilesAddon & ta )
@@ -2503,24 +2448,6 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
                 shadow->index = addon->index - 1;
         }
     }
-}
-
-void Maps::Tiles::UpdateStoneLightsSprite( Tiles & tile )
-{
-    for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-        tile.QuantitySetTeleportType( TilesAddon::UpdateStoneLightsSprite( *it ) );
-}
-
-void Maps::Tiles::UpdateFountainSprite( Tiles & tile )
-{
-    for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-        TilesAddon::UpdateFountainSprite( *it );
-}
-
-void Maps::Tiles::UpdateTreasureChestSprite( Tiles & tile )
-{
-    for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-        TilesAddon::UpdateTreasureChestSprite( *it );
 }
 
 bool Maps::Tiles::isFog( int colors ) const

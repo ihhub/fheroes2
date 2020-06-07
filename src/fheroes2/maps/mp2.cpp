@@ -33,18 +33,6 @@ int MP2::GetICNObject( int type )
     case 0:
         return ICN::UNKNOWN;
 
-    // manual
-    case 0x11:
-        return ICN::TELEPORT1;
-    case 0x12:
-        return ICN::TELEPORT2;
-    case 0x13:
-        return ICN::TELEPORT3;
-    case 0x14:
-        return ICN::FOUNTAIN;
-    case 0x15:
-        return ICN::TREASURE;
-
     // artifact
     case 0x2C:
     case 0x2D:
