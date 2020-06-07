@@ -47,6 +47,7 @@ namespace Battle
         void SortFastest( bool );
         void SortStrongest( void );
         void SortWeakest( void );
+        void SortArchers();
     };
 
     enum

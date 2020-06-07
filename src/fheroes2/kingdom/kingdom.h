@@ -103,7 +103,7 @@ public:
     }
     Funds GetIncome( int = INCOME_ALL ) const;
 
-    u32 GetArmiesStrength( void ) const;
+    double GetArmiesStrength( void ) const;
 
     void AddFundsResource( const Funds & );
     void OddFundsResource( const Funds & );

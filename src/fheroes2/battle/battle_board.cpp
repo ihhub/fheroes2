@@ -83,40 +83,49 @@ void Battle::Board::SetPositionQuality( const Unit & b )
     Arena * arena = GetArena();
     Units enemies( arena->GetForce( b.GetColor(), true ), true );
 
+    // Make sure archers are first here, so melee unit's score won't be double counted
+    enemies.SortArchers();
+
     for ( Units::const_iterator it1 = enemies.begin(); it1 != enemies.end(); ++it1 ) {
         const Unit * unit = *it1;
 
         if ( unit && unit->isValid() ) {
-            const Cell * cell1 = GetCell( unit->GetHeadIndex() );
+            const s32 unitStrength = GetCell( unit->GetHeadIndex() )->GetQuality();
             const Indexes around = GetAroundIndexes( *unit );
 
             for ( Indexes::const_iterator it2 = around.begin(); it2 != around.end(); ++it2 ) {
                 Cell * cell2 = GetCell( *it2 );
-                if ( cell2 && cell2->isPassable3( b, false ) )
-                    cell2->SetQuality( cell2->GetQuality() + cell1->GetQuality() );
+                if ( cell2 && cell2->isPassable3( b, false ) ) {
+                    const s32 quality = cell2->GetQuality();
+                    // Only sum up quality score if it's archers; otherwise just pick the strongest
+                    if ( unit->isArchers() )
+                        cell2->SetQuality( quality + unitStrength );
+                    else if ( unitStrength > quality )
+                        cell2->SetQuality( unitStrength );
+                }
             }
         }
     }
 }
 
-void Battle::Board::SetEnemyQuality( const Unit & b )
+void Battle::Board::SetEnemyQuality( const Unit & unit )
 {
     Arena * arena = GetArena();
-    Units enemies( arena->GetForce( b.GetColor(), true ), true );
+    Units enemies( arena->GetForce( unit.GetColor(), true ), true );
 
     for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-        Unit * unit = *it;
+        Unit * enemy = *it;
 
-        if ( unit && unit->isValid() ) {
-            const s32 & score = b.GetScoreQuality( *unit );
-            Cell * cell = GetCell( unit->GetHeadIndex() );
+        if ( enemy && enemy->isValid() ) {
+            const s32 score = enemy->GetScoreQuality( unit );
+            Cell * cell = GetCell( enemy->GetHeadIndex() );
 
             cell->SetQuality( score );
 
-            if ( unit->isWide() )
-                GetCell( unit->GetTailIndex() )->SetQuality( score );
+            if ( enemy->isWide() )
+                GetCell( enemy->GetTailIndex() )->SetQuality( score );
 
-            DEBUG( DBG_BATTLE, DBG_TRACE, score << " for " << unit->String() );
+            DEBUG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() );
         }
     }
 }
@@ -124,10 +133,12 @@ void Battle::Board::SetEnemyQuality( const Unit & b )
 s32 Battle::Board::GetDistance( s32 index1, s32 index2 )
 {
     if ( isValidIndex( index1 ) && isValidIndex( index2 ) ) {
-        const s32 dx = ( index1 % ARENAW ) - ( index2 % ARENAW );
-        const s32 dy = ( index1 / ARENAW ) - ( index2 / ARENAW );
+        const int dx = std::abs( ( index1 % ARENAW ) - ( index2 % ARENAW ) );
+        const int dy = std::abs( ( index1 / ARENAW ) - ( index2 / ARENAW ) );
+        const int roundingUp = index1 / ARENAW % 2;
 
-        return Sign( dx ) == Sign( dy ) ? std::max( std::abs( dx ), std::abs( dy ) ) : std::abs( dx ) + std::abs( dy );
+        // hexagonal grid: you only move half as much on X axis when diagonal!
+        return dy + std::max( dx - ( dy + roundingUp ) / 2, 0 );
     }
 
     return 0;
@@ -139,7 +150,7 @@ void Battle::Board::SetScanPassability( const Unit & b )
 
     at( b.GetHeadIndex() ).SetDirection( CENTER );
 
-    if ( b.isFly() ) {
+    if ( b.isFlying() ) {
         for ( iterator it = begin(); it != end(); ++it )
             if ( ( *it ).isPassable3( b, false ) )
                 ( *it ).SetDirection( CENTER );
@@ -417,6 +428,11 @@ bool Battle::Board::isReflectDirection( int d )
     }
 
     return false;
+}
+
+bool Battle::Board::isNegativeDistance( s32 index1, s32 index2 )
+{
+    return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
 }
 
 bool Battle::Board::isValidDirection( s32 index, int dir )
@@ -925,14 +941,14 @@ Battle::Indexes Battle::Board::GetMoveWideIndexes( s32 center, bool reflect )
     return result;
 }
 
-Battle::Indexes Battle::Board::GetAroundIndexes( s32 center )
+Battle::Indexes Battle::Board::GetAroundIndexes( s32 center, s32 ignore )
 {
     Indexes result;
     result.reserve( 12 );
 
     if ( isValidIndex( center ) ) {
         for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir )
-            if ( isValidDirection( center, dir ) )
+            if ( isValidDirection( center, dir ) && GetIndexDirection( center, dir ) != ignore )
                 result.push_back( GetIndexDirection( center, dir ) );
     }
 
@@ -941,20 +957,22 @@ Battle::Indexes Battle::Board::GetAroundIndexes( s32 center )
 
 Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & b )
 {
+    const int headIdx = b.GetHeadIndex();
+
     if ( b.isWide() ) {
-        Indexes around = GetAroundIndexes( b.GetHeadIndex() );
-        const Indexes & tail = GetAroundIndexes( b.GetTailIndex() );
+        const int tailIdx = b.GetTailIndex();
+
+        Indexes around = GetAroundIndexes( headIdx, tailIdx );
+        const Indexes & tail = GetAroundIndexes( tailIdx, headIdx );
         around.insert( around.end(), tail.begin(), tail.end() );
 
-        Indexes::iterator it_end = around.end();
-        it_end = std::remove( around.begin(), it_end, b.GetHeadIndex() );
-        it_end = std::remove( around.begin(), it_end, b.GetTailIndex() );
-        around.resize( std::distance( around.begin(), it_end ) );
+        std::sort( around.begin(), around.end() );
+        around.erase( std::unique( around.begin(), around.end() ), around.end() );
 
         return around;
     }
 
-    return GetAroundIndexes( b.GetHeadIndex() );
+    return GetAroundIndexes( headIdx );
 }
 
 Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )

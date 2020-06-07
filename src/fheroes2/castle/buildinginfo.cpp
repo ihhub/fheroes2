@@ -149,30 +149,32 @@ void BuildingInfo::UpdateCosts( const std::string & spec )
 #ifdef WITH_XML
     // parse buildings.xml
     TiXmlDocument doc;
-    const TiXmlElement * xml_buildings = NULL;
 
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_buildings = doc.FirstChildElement( "buildings" ) ) ) {
-        size_t index = 0;
+    if ( doc.LoadFile( spec.c_str() ) ) {
+        const TiXmlElement * xml_buildings = doc.FirstChildElement( "buildings" );
+        if ( xml_buildings != NULL ) {
+            size_t index = 0;
 
-        for ( const TiXmlElement * xml_building = xml_buildings->FirstChildElement( "building" ); xml_building && BUILD_NOTHING != _builds[index].id2;
-              xml_building = xml_building->NextSiblingElement( "building" ), ++index ) {
-            cost_t & cost = _builds[index].cost;
-            int value;
+            for ( const TiXmlElement * xml_building = xml_buildings->FirstChildElement( "building" ); xml_building && BUILD_NOTHING != _builds[index].id2;
+                  xml_building = xml_building->NextSiblingElement( "building" ), ++index ) {
+                cost_t & cost = _builds[index].cost;
+                int value;
 
-            xml_building->Attribute( "gold", &value );
-            cost.gold = value;
-            xml_building->Attribute( "wood", &value );
-            cost.wood = value;
-            xml_building->Attribute( "mercury", &value );
-            cost.mercury = value;
-            xml_building->Attribute( "ore", &value );
-            cost.ore = value;
-            xml_building->Attribute( "sulfur", &value );
-            cost.sulfur = value;
-            xml_building->Attribute( "crystal", &value );
-            cost.crystal = value;
-            xml_building->Attribute( "gems", &value );
-            cost.gems = value;
+                xml_building->Attribute( "gold", &value );
+                cost.gold = value;
+                xml_building->Attribute( "wood", &value );
+                cost.wood = value;
+                xml_building->Attribute( "mercury", &value );
+                cost.mercury = value;
+                xml_building->Attribute( "ore", &value );
+                cost.ore = value;
+                xml_building->Attribute( "sulfur", &value );
+                cost.sulfur = value;
+                xml_building->Attribute( "crystal", &value );
+                cost.crystal = value;
+                xml_building->Attribute( "gems", &value );
+                cost.gems = value;
+            }
         }
     }
     else
@@ -488,13 +490,13 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     TextBox box1( box1str, Font::BIG, BOXAREA_WIDTH );
 
-    // prepare requires build string
+    // prepare requirement build string
     std::string str;
-    const u32 requires = castle.GetBuildingRequires( building );
+    const u32 requirement = castle.GetBuildingRequirement( building );
     const std::string sep = "\n";
 
     for ( u32 itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( requires & itr ) && !castle.isBuild( itr ) ) {
+        if ( ( requirement & itr ) && !castle.isBuild( itr ) ) {
             str.append( Castle::GetStringBuilding( itr, castle.GetRace() ) );
             str.append( sep );
         }
@@ -503,7 +505,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     if ( str.size() )
         str.replace( str.size() - sep.size(), sep.size(), "" );
 
-    bool requires_true = str.size();
+    const bool isRequired = str.size();
     Text requires_text( _( "Requires:" ), Font::BIG );
     TextBox box2( str, Font::BIG, BOXAREA_WIDTH );
 
@@ -511,7 +513,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     const Sprite & window_icons = AGG::GetICN( ICN::BLDGXTRA, 0 );
     const int space = Settings::Get().QVGA() ? 5 : 10;
-    Dialog::FrameBox box( space + window_icons.h() + space + box1.h() + space + ( requires_true ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h, buttons );
+    Dialog::FrameBox box( space + window_icons.h() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h, buttons );
     const Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
 
@@ -544,7 +546,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     box1.Blit( dst_pt );
 
     dst_pt.y += box1.h() + space;
-    if ( requires_true ) {
+    if ( isRequired ) {
         dst_pt.x = box_rt.x + ( box_rt.w - requires_text.w() ) / 2;
         requires_text.Blit( dst_pt );
 

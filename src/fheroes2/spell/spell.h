@@ -25,6 +25,8 @@
 #include "gamedefs.h"
 #include "payment.h"
 
+#define DEFAULT_SPELL_DURATION 3
+
 class HeroBase;
 class StreamBase;
 class StreamBase;

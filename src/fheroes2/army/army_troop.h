@@ -52,7 +52,6 @@ public:
 
     u32 GetDamageMin( void ) const;
     u32 GetDamageMax( void ) const;
-    u32 GetStrength( void ) const;
 
     payment_t GetCost( void ) const;
     payment_t GetUpgradeCost( void ) const;
@@ -67,6 +66,7 @@ public:
     virtual u32 GetHitPointsLeft( void ) const;
     virtual u32 GetSpeed( void ) const;
     virtual u32 GetAffectedDuration( u32 ) const;
+    virtual double GetStrength() const;
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Troop & );
