@@ -487,8 +487,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     hero.PortraitRedraw( pos_rt.x + 27, pos_rt.y + 42, PORT_BIG, display );
 
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
-    const Sprite bgImage = AGG::GetICN( ICN::VIEWGEN, col );
-    bgImage.Blit( pos_rt.x + 148, pos_rt.y + 36 );
+    AGG::GetICN( ICN::VIEWGEN, col ).Blit( pos_rt.x + 148, pos_rt.y + 36 );
 
     Point tp( pos_rt );
 
