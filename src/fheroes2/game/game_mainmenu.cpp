@@ -62,10 +62,8 @@ int Game::MainMenu( void )
     Display & display = Display::Get();
 
     // image background
-    const Sprite & bgImage = AGG::GetICN( ICN::HEROES, 0 );
-
-    // animation
-    u32 lantern_frame = 0;
+    const Sprite & sprite = AGG::GetICN( ICN::HEROES, 0 );
+    sprite.Blit( Point( 0, 0 ) );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -81,7 +79,13 @@ int Game::MainMenu( void )
     Button buttonCredits( s4.x(), s4.y(), ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
     Button buttonQuit( s5.x(), s5.y(), ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
-    bgImage.Blit( Point( 0, 0 ) );
+    const Point lt_pt( 0, 0 );
+
+    const Sprite & lantern10 = AGG::GetICN( ICN::SHNGANIM, 0 );
+    lantern10.Blit( lantern10.x(), lantern10.y() );
+
+    const Sprite & lantern11 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
+    lantern11.Blit( lantern11.x(), lantern11.y() );
 
     buttonNewGame.Draw();
     buttonLoadGame.Draw();
@@ -91,6 +95,8 @@ int Game::MainMenu( void )
 
     cursor.Show();
     display.Flip();
+
+    u32 lantern_frame = 0;
 
     struct ButtonInfo
     {
