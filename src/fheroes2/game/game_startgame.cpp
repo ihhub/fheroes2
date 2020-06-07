@@ -947,6 +947,7 @@ int Interface::Basic::HumanTurn( bool isload )
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();
+            gameArea._colorCycle++;
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {

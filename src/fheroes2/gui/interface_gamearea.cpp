@@ -153,7 +153,17 @@ void Interface::GameArea::BlitOnTile( Surface & dst, const Surface & src, s32 ox
 
 void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 {
-    return Redraw( dst, flag, Rect( 0, 0, rectMaps.w, rectMaps.h ) );
+    Redraw( dst, flag, Rect( 0, 0, rectMaps.w, rectMaps.h ) );
+
+    std::map<RGBA,RGBA> colorCyclePairs;
+    const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
+    for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
+        for ( int id = 0; id < it->length; ++id ) {
+            const uint8_t newColorID = it->forward ? it->start + ( id + _colorCycle ) % it->length : it->start + it->length - 1 - ( 3 + _colorCycle - id ) % it->length;
+            colorCyclePairs[PAL::GetPaletteColor( it->start + id )] = PAL::GetPaletteColor( newColorID );
+        }
+    }
+    dst = dst.RenderChangeColor( colorCyclePairs );
 }
 
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const

@@ -690,8 +690,6 @@ void Maps::Tiles::QuantityUpdate( void )
             QuantityUpdate();
         }
         else {
-            UpdateTreasureChestSprite( *this );
-
             Rand::Queue percents( 4 );
             // 31% - 2000 gold or 1500 exp
             percents.Push( 1, 31 );

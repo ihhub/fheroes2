@@ -84,6 +84,7 @@ namespace Interface
 
         static Surface GenerateUltimateArtifactAreaSurface( s32 );
 
+        uint32_t _colorCycle = 0;
     private:
         void SetAreaPosition( s32, s32, u32, u32 );
 
