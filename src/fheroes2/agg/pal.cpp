@@ -174,6 +174,10 @@ void PAL::CreateStandardPalette()
         col.r = kb_pal[index] << 2;
         col.g = kb_pal[index + 1] << 2;
         col.b = kb_pal[index + 2] << 2;
+        // create distinction between cycling color #220 and non-cycling #222
+        if ( ii == 0xEC ) {
+            col.b--;
+        }
 
         standard_palette.push_back( col );
     }
