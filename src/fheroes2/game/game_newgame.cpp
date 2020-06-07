@@ -149,9 +149,9 @@ int Game::NewCampain( void )
     Display & display = Display::Get();
     display.Fill( ColorBlack );
 
-    const Sprite & bgImage = AGG::GetICN( ICN::CAMPBKGG, 0 );
-    const Point top( ( display.w() - bgImage.w() ) / 2, ( display.h() - bgImage.h() ) / 2 );
-    bgImage.Blit( top );
+    const Sprite & backgroundImage = AGG::GetICN( ICN::CAMPBKGG, 0 );
+    const Point top( ( display.w() - backgroundImage.w() ) / 2, ( display.h() - backgroundImage.h() ) / 2 );
+    backgroundImage.Blit( top );
 
     Button buttonViewIntro( top.x + 30, top.y + 430, ICN::CAMPXTRG, 0, 1 );
     Button buttonOk( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
@@ -218,7 +218,7 @@ int Game::NewCampain( void )
         if ( !buttonOk.isDisable() )
             le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
 
-        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel ) )
+        if ( le.MouseClickLeft( buttonCancel ) )
             return Game::NEWGAME;
         else if ( !buttonOk.isDisable() && le.MouseClickLeft( buttonOk ) ) {
             conf.SetCurrentFileInfo( campaignMap[0] );
