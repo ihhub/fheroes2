@@ -14,7 +14,8 @@ branches:
 
 matrix:
   include:
-    - os: linux
+    - if: branch = master
+      os: linux
       addons:
         sonarcloud:
           organization: "ihhub"
