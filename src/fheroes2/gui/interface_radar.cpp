@@ -205,9 +205,6 @@ void Interface::Radar::Redraw( void )
 
     if ( conf.ExtGameHideInterface() && conf.ShowRadar() ) {
         BorderWindow::Redraw();
-        // const Rect & rect = GetRect();
-        // AGG::GetICN(ICN::CELLWIN, 4).Blit(rect.x + 2, rect.y + 2);
-        // AGG::GetICN(ICN::CELLWIN, 5).Blit(rect.x + 5, rect.y + 5);
     }
 
     if ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) {

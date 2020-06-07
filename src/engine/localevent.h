@@ -198,7 +198,7 @@ public:
     static void SetState( u32 type, bool enable );
     static int GetState( u32 type );
 
-    bool HandleEvents( bool delay = true );
+    bool HandleEvents( bool delay = true, bool allowExit = false );
 
     bool MouseMotion( void ) const;
     bool MouseMotion( const Rect & rt ) const;

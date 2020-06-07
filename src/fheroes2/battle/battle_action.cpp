@@ -78,7 +78,11 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
         const std::string name( attacker.GetName() );
         targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex() );
 
-        if ( targets.size() ) {
+        bool validSpell = true;
+        if ( attacker == Monster::ARCHMAGE && !defender.Modes( IS_GOOD_MAGIC ) )
+            validSpell = false;
+
+        if ( targets.size() && validSpell ) {
             if ( interface )
                 interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), NULL, name, targets );
 

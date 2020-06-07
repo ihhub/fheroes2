@@ -3138,37 +3138,62 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
     const Rect & pos = unit.GetRectPosition();
-    const int m82 = isGoodLuck ? M82::GOODLUCK : M82::BADLUCK;
-    const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, isGoodLuck ? 0 : 1 );
-    const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
-
-    int width = 2;
-    Rect src( 0, 0, width, luckSprite.h() );
-    src.x = ( luckSprite.w() - src.w ) / 2;
-
-    cursor.SetThemes( Cursor::WAR_NONE );
-    AGG::PlaySound( m82 );
 
     std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}" ) : _( "Bad luck descends on the %{attacker}" );
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
-    while ( le.HandleEvents() && width < luckSprite.w() ) {
-        CheckGlobalEvents( le );
+    if ( isGoodLuck ) {
+        const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, 0 );
+        const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+        int width = 2;
+        Rect src( 0, 0, width, luckSprite.h() );
+        src.x = ( luckSprite.w() - src.w ) / 2;
 
-            luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h );
+        cursor.SetThemes( Cursor::WAR_NONE );
+        AGG::PlaySound( M82::GOODLUCK );
 
-            cursor.Show();
-            display.Flip();
+        while ( le.HandleEvents() && width < luckSprite.w() ) {
+            CheckGlobalEvents( le );
 
-            src.w = width;
-            src.x = ( luckSprite.w() - src.w ) / 2;
+            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+                cursor.Hide();
+                Redraw();
 
-            width += 3;
+                luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h );
+
+                cursor.Show();
+                display.Flip();
+
+                src.w = width;
+                src.x = ( luckSprite.w() - src.w ) / 2;
+
+                width += 3;
+            }
+        }
+    }
+    else {
+        int frameId = 0;
+
+        cursor.SetThemes( Cursor::WAR_NONE );
+        AGG::PlaySound( M82::BADLUCK );
+
+        while ( le.HandleEvents() && frameId < 8 ) {
+            CheckGlobalEvents( le );
+
+            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+                cursor.Hide();
+                Redraw();
+
+                const Sprite & luckSprite = AGG::GetICN( ICN::CLOUDLUK, frameId );
+                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), pos.y + pos.h + luckSprite.y() - 10 );
+
+                cursor.Show();
+                display.Flip();
+
+                ++frameId;
+            }
         }
     }
 }
@@ -3377,7 +3402,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
     AGG::PlaySound( M82::TELPTOUT );
 
-    while ( le.HandleEvents() && b_current_alpha > 30 ) {
+    while ( le.HandleEvents() && b_current_alpha > 20 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -3393,13 +3418,11 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     b_current_alpha = 0;
     cursor.Hide();
     Redraw();
-    while ( Mixer::isValid() && Mixer::isPlaying( -1 ) )
-        DELAY( 10 );
 
     target.SetPosition( dst );
     AGG::PlaySound( M82::TELPTIN );
 
-    while ( le.HandleEvents() && b_current_alpha < 220 ) {
+    while ( le.HandleEvents() && b_current_alpha <= 235 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {

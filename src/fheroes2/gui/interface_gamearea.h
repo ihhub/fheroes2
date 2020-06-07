@@ -100,6 +100,13 @@ namespace Interface
         int tailX;
         int tailY;
         bool updateCursor;
+        int borderSizeX;
+        int borderSizeY;
+
+        enum
+        {
+            MIN_BORDER_SIZE = 8
+        };
 
         SDL::Time scrollTime;
     };
