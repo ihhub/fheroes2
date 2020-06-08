@@ -1021,7 +1021,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     }
 
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
-        res.second.SetAlphaMod( 0 );
+        res.second.SetAlphaMod( 0, false );
     }
 
     // fix air elem sprite

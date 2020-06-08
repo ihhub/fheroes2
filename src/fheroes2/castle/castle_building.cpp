@@ -266,8 +266,7 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
         Sprite sprite1 = AGG::GetICN( icn, index );
 
         if ( alpha ) {
-            sprite1.SetSurface( sprite1.GetSurface() );
-            sprite1.SetAlphaMod( alpha );
+            sprite1.SetAlphaMod( alpha, true );
             sprite1.Blit( dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y() );
         }
         else
@@ -278,8 +277,7 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
             Sprite sprite2 = AGG::GetICN( icn, index2 );
 
             if ( alpha ) {
-                sprite2.SetSurface( sprite2.GetSurface() );
-                sprite2.SetAlphaMod( alpha );
+                sprite2.SetAlphaMod( alpha, true );
                 sprite2.Blit( dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y() );
             }
             else

@@ -1214,7 +1214,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         }
 
         if ( b.hasColorCycling() ) {
-            spmon1.ChangeColor( _colorCyclePairs );
+            const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
+            if ( !isUnderAlphaEffect ) {
+                spmon1.ChangeColor( _colorCyclePairs );
+            }
         }
     }
 
@@ -1250,10 +1253,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         }
 
         // sprite monster
-        if ( b_current_sprite && spmon1 == *b_current_sprite ) {
+        if ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit ) {
             if ( b_current_alpha < 255 ) {
                 spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
-                spmon1.SetAlphaMod( b_current_alpha );
+                spmon1.SetAlphaMod( b_current_alpha, false );
             }
             spmon1.Blit( sp.x, sp.y );
         }
@@ -2177,11 +2180,14 @@ void Battle::Interface::FadeArena( void )
     display.Flip();
 
     if ( !conf.QVGA() ) {
+        cursor.Hide();
         Rect srt( border.GetArea().x, border.GetArea().y, display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
         Surface top = display.GetSurface( srt );
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
         display.Fade( top, back, srt, 100, 300 );
+        cursor.Show();
+        display.Flip();
     }
 }
 
@@ -3418,7 +3424,6 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     cursor.Hide();
 
     _currentUnit = &target;
-    _movingUnit = &target;
     b_current_sprite = &sprite;
     b_current_alpha = 240;
 
@@ -3433,7 +3438,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
             cursor.Show();
             display.Flip();
 
-            b_current_alpha -= 20;
+            b_current_alpha -= 15;
         }
     }
 
@@ -3447,19 +3452,18 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( b_current_alpha <= 235 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( b_current_alpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
             display.Flip();
 
-            b_current_alpha += 20;
+            b_current_alpha += 15;
         }
     }
 
     b_current_alpha = 255;
     _currentUnit = NULL;
-    _movingUnit = NULL;
     b_current_sprite = NULL;
 }
 
@@ -3582,7 +3586,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             sprite1.Blit( sprite2 );
-            sprite3.SetAlphaMod( alpha );
+            sprite3.SetAlphaMod( alpha, false );
             sprite3.Blit( sprite2 );
             Redraw();
             cursor.Show();
@@ -3849,7 +3853,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
-            sprite2.SetAlphaMod( alpha );
+            sprite2.SetAlphaMod( alpha, false );
             sprite1.Blit( area.x, area.y, display );
             sprite2.Blit( area.x, area.y, display );
             RedrawInterface();

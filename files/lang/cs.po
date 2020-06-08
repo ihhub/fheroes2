@@ -4242,7 +4242,7 @@ msgstr ""
 
 #: ../fheroes2/heroes/heroes_spell.cpp:362
 #: ../fheroes2/heroes/heroes_spell.cpp:386
-msgid "No avaialble town. Spell Failed!!!"
+msgid "No available towns. Spell Failed!!!"
 msgstr ""
 
 #: ../fheroes2/heroes/heroes_spell.cpp:459

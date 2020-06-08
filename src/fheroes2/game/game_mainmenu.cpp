@@ -123,7 +123,7 @@ int Game::MainMenu( void )
             if ( Interface::Basic::EventExit() == QUITGAME ) {
                 if ( conf.ExtGameUseFade() )
                     display.Fade();
-                return QUITGAME;
+                break;
             }
         }
 

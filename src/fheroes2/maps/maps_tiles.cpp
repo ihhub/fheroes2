@@ -421,24 +421,23 @@ bool Maps::TilesAddon::isRoad( int direct ) const
             return direct & ( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT );
         else if ( 20 == index )
             return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
-        else
-            break;
+
+        break;
 
     // castle and tower (gate)
     case ICN::OBJNTOWN:
         if ( 13 == index || 29 == index || 45 == index || 61 == index || 77 == index || 93 == index || 109 == index || 125 == index || 141 == index || 157 == index
              || 173 == index || 189 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM );
-        else
-            break;
 
         break;
+
         // castle lands (gate)
     case ICN::OBJNTWBA:
         if ( 7 == index || 17 == index || 27 == index || 37 == index || 47 == index || 57 == index || 67 == index || 77 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM );
-        else
-            break;
+
+        break;
 
     default:
         break;
