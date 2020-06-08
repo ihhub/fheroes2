@@ -160,6 +160,21 @@ namespace PAL
 
         return cycleSet;
     }
+
+    std::map<RGBA, RGBA> GetCyclingPairs( uint32_t frame )
+    {
+        static std::map<RGBA, RGBA> cyclePairs;
+
+        const std::vector<PAL::CyclingColorSet> & set = GetCyclingColors();
+        for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
+            for ( int id = 0; id < it->length; ++id ) {
+                const int lastColorID = it->length - 1;
+                const uint8_t newColorID = it->forward ? it->start + ( id + frame ) % it->length : it->start + lastColorID - ( lastColorID + frame - id ) % it->length;
+                cyclePairs[GetPaletteColor( it->start + id )] = GetPaletteColor( newColorID );
+            }
+        }
+        return cyclePairs;
+    }
 }
 
 void PAL::CreateStandardPalette()

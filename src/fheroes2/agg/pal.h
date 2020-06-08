@@ -50,6 +50,7 @@ namespace PAL
     };
 
     const std::vector<CyclingColorSet> & GetCyclingColors();
+    std::map<RGBA, RGBA> GetCyclingPairs( uint32_t frame );
     void CreateStandardPalette();
     void InitAllPalettes();
     void Clear();
