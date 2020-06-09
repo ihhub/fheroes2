@@ -110,7 +110,7 @@ Point Battle::Catapult::GetTargetPosition( int target )
     case CAT_TOWER2:
         res = Point( 430, 300 );
         break;
-    case CAT_TOWER3:
+    case CAT_CENTRAL_TOWER:
         res = Point( 580, 160 );
         break;
     case CAT_BRIDGE:
@@ -158,8 +158,8 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
 
     // check general tower
     if ( targets.empty() ) {
-        if ( values[CAT_TOWER3] )
-            targets.push_back( CAT_TOWER3 );
+        if ( values[CAT_CENTRAL_TOWER] )
+            targets.push_back( CAT_CENTRAL_TOWER );
     }
 
     if ( targets.size() ) {

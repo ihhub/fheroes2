@@ -38,7 +38,7 @@ namespace Battle
         CAT_TOWER1 = 5,
         CAT_TOWER2 = 6,
         CAT_BRIDGE = 7,
-        CAT_TOWER3 = 8,
+        CAT_CENTRAL_TOWER = 8,
         CAT_MISS = 9
     };
 
