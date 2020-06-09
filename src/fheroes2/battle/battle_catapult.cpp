@@ -54,9 +54,8 @@ Battle::Catapult::Catapult( const HeroBase & hero, bool fortification )
         break;
     }
 
-    u32 acount = hero.HasArtifact( Artifact::BALLISTA );
-    if ( acount )
-        catShots += acount * Artifact( Artifact::BALLISTA ).ExtraValue();
+    if ( hero.HasArtifact( Artifact::BALLISTA ) )
+        catShots += Artifact( Artifact::BALLISTA ).ExtraValue();
 }
 
 u32 Battle::Catapult::GetDamage( int target, u32 value ) const
