@@ -1274,17 +1274,15 @@ void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 line
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
     MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( MP2::OBJ_MONSTER ) ) );
-    const u32 ratios = troop.isValid() ? hero.GetArmy().GetHitPoints() / troop.GetHitPoints() : 0;
-    const bool check_free_stack = true; // (hero.GetArmy().GetCount() < hero.GetArmy().size() || hero.GetArmy().HasMonster(troop)); // set force, see
-                                        // Dialog::ArmyJoinWithCost, http://sourceforge.net/tracker/?func=detail&aid=3567985&group_id=96859&atid=616183
-    const bool check_extra_condition = ( !hero.HasArtifact( Artifact::HIDEOUS_MASK ) && Morale::NORMAL <= hero.GetMorale() );
+    const u32 ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
+    const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
 
     const bool join_skip = map_troop ? map_troop->JoinConditionSkip() : tile.MonsterJoinConditionSkip();
     const bool join_free = map_troop ? map_troop->JoinConditionFree() : tile.MonsterJoinConditionFree();
     // force join for campain and others...
     const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
 
-    if ( !join_skip && check_free_stack && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
+    if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
         if ( join_free || join_force )
             return JoinCount( JOIN_FREE, troop.GetCount() );
         else if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
@@ -1295,10 +1293,10 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
                 return JoinCount( JOIN_COST, to_join );
         }
     }
-    else if ( ratios >= 5 ) {
+
+    if ( ratios >= 5 && !hero.isControlAI() ) {
         // ... surely flee before us
-        if ( !hero.isControlAI() || Rand::Get( 0, 10 ) < 5 )
-            return JoinCount( JOIN_FLEE, 0 );
+        return JoinCount( JOIN_FLEE, 0 );
     }
 
     return JoinCount( JOIN_NONE, 0 );
