@@ -2985,7 +2985,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
 
     case Spell::HOLYWORD:
     case Spell::HOLYSHOUT:
-        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC03, M82::FromSpell( spell() ), true );
+        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::FromSpell( spell() ), true );
         break;
 
     case Spell::ELEMENTALSTORM:
