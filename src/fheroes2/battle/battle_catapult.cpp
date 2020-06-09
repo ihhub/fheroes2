@@ -58,32 +58,14 @@ Battle::Catapult::Catapult( const HeroBase & hero, bool fortification )
         catShots += Artifact( Artifact::BALLISTA ).ExtraValue();
 }
 
-u32 Battle::Catapult::GetDamage( int target, u32 value ) const
+u32 Battle::Catapult::GetDamage() const
 {
-    switch ( target ) {
-    case CAT_WALL1:
-    case CAT_WALL2:
-    case CAT_WALL3:
-    case CAT_WALL4:
-        if ( value ) {
-            if ( doubleDamageChance == 100 || doubleDamageChance >= Rand::Get( 1, 100 ) ) {
-                DEBUG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage from " << doubleDamageChance );
-                value = 2;
-            }
-            else
-                value = 1;
-        }
-        break;
-
-    case CAT_MISS:
-        DEBUG( DBG_BATTLE, DBG_TRACE, "miss!" );
-        break;
-
-    default:
-        break;
+    if ( doubleDamageChance == 100 || doubleDamageChance >= Rand::Get( 1, 100 ) ) {
+        DEBUG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" );
+        return 2;
     }
 
-    return value;
+    return 1;
 }
 
 Point Battle::Catapult::GetTargetPosition( int target )

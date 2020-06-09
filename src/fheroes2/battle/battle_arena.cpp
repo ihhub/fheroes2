@@ -550,7 +550,7 @@ void Battle::Arena::CatapultAction( void )
 
         while ( shots-- ) {
             int target = catapult->GetTarget( values );
-            u32 damage = catapult->GetDamage( target, GetCastleTargetValue( target ) );
+            u32 damage = std::min( catapult->GetDamage(), values[target] );
             cmd << damage << target;
             values[target] -= damage;
         }

@@ -54,7 +54,7 @@ namespace Battle
             return catShots;
         }
         int GetTarget( const std::vector<u32> & ) const;
-        u32 GetDamage( int, u32 ) const;
+        u32 GetDamage() const;
 
     private:
         u32 catShots;
