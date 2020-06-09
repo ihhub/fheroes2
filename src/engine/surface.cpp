@@ -783,8 +783,11 @@ void Surface::Blit( const Point & dpt, Surface & dst ) const
     Blit( Rect( Point( 0, 0 ), GetSize() ), dpt, dst );
 }
 
-void Surface::SetAlphaMod( int level )
+void Surface::SetAlphaMod( int level, bool makeCopy )
 {
+    if ( makeCopy )
+        Set( GetSurface(), true );
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( isValid() ) {
         SDL_SetSurfaceAlphaMod( surface, level );
@@ -793,11 +796,16 @@ void Surface::SetAlphaMod( int level )
 #else
     if ( isValid() ) {
         if ( amask() ) {
-            Surface res( GetSize(), false );
-            SDL_SetAlpha( surface, 0, 0 );
-            Blit( res );
-            SDL_SetAlpha( surface, SDL_SRCALPHA, 255 );
-            Set( res, true );
+            if ( depth() == 32 ) {
+                Set( ModifyAlphaChannel( level ), true );
+            }
+            else {
+                Surface res( GetSize(), false );
+                SDL_SetAlpha( surface, 0, 0 );
+                Blit( res );
+                SDL_SetAlpha( surface, SDL_SRCALPHA, 255 );
+                Set( res, true );
+            }
         }
 
         SDL_SetAlpha( surface, SDL_SRCALPHA, level );
@@ -1284,6 +1292,41 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
     }
 
     res.Unlock();
+
+    return res;
+}
+
+Surface Surface::ModifyAlphaChannel( uint32_t alpha ) const
+{
+    Surface res = GetSurface();
+
+    if ( amask() && depth() == 32 && alpha < 256 ) {
+        res.Lock();
+
+        int height = h();
+        int width = w();
+        uint16_t pitch = res.surface->pitch >> 2;
+
+        if ( pitch == width ) {
+            width = width * height;
+            pitch = width;
+            height = 1;
+        }
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+                const uint32_t rest = *x % ( 16777216 );
+
+                *x = ( ( *x / 16777216 ) * alpha / 255 ) * 16777216 + rest;
+            }
+        }
+
+        res.Unlock();
+    }
 
     return res;
 }

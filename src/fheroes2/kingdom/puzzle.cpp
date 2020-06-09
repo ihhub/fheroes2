@@ -232,7 +232,7 @@ void PuzzlesDraw( const Puzzle & pzl, const Surface & sf, s32 dstx, s32 dsty )
                 Sprite piece = Sprite( sprite.GetSurface(), sprite.x(), sprite.y() );
 
                 if ( pzl.test( ii ) )
-                    piece.SetAlphaMod( alpha );
+                    piece.SetAlphaMod( alpha, false );
 
                 if ( Settings::Get().QVGA() )
                     piece.Blit( dstx + 8 + piece.x() - BORDERWIDTH, dsty + 8 + piece.y() - BORDERWIDTH );
