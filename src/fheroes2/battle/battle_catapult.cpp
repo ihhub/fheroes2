@@ -28,26 +28,26 @@
 #include "skill.h"
 
 Battle::Catapult::Catapult( const HeroBase & hero, bool fortification )
-    : cat_shots( 1 )
-    , cat_first( 20 )
-    , cat_miss( true ) /*, cat_fort(fortification) */
+    : catShots( 1 )
+    , doubleDamageChance( 25 )
+    , canMiss( true )
 {
     switch ( hero.GetLevelSkill( Skill::Secondary::BALLISTICS ) ) {
     case Skill::Level::BASIC:
-        cat_first = 40;
-        cat_miss = false;
+        doubleDamageChance = 50;
+        canMiss = false;
         break;
 
     case Skill::Level::ADVANCED:
-        cat_first = 80;
-        cat_shots += 1;
-        cat_miss = false;
+        doubleDamageChance = 50;
+        catShots += 1;
+        canMiss = false;
         break;
 
     case Skill::Level::EXPERT:
-        cat_first = 100;
-        cat_shots += 1;
-        cat_miss = false;
+        doubleDamageChance = 100;
+        catShots += 1;
+        canMiss = false;
         break;
 
     default:
@@ -56,7 +56,7 @@ Battle::Catapult::Catapult( const HeroBase & hero, bool fortification )
 
     u32 acount = hero.HasArtifact( Artifact::BALLISTA );
     if ( acount )
-        cat_shots += acount * Artifact( Artifact::BALLISTA ).ExtraValue();
+        catShots += acount * Artifact( Artifact::BALLISTA ).ExtraValue();
 }
 
 u32 Battle::Catapult::GetDamage( int target, u32 value ) const
@@ -67,9 +67,9 @@ u32 Battle::Catapult::GetDamage( int target, u32 value ) const
     case CAT_WALL3:
     case CAT_WALL4:
         if ( value ) {
-            if ( cat_first == 100 || cat_first >= Rand::Get( 1, 100 ) ) {
-                // value = value;
-                DEBUG( DBG_BATTLE, DBG_TRACE, "from one blow capability" );
+            if ( doubleDamageChance == 100 || doubleDamageChance >= Rand::Get( 1, 100 ) ) {
+                DEBUG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage from " << doubleDamageChance );
+                value = 2;
             }
             else
                 value = 1;
@@ -163,8 +163,8 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
     }
 
     if ( targets.size() ) {
-        // miss for 30%
-        return cat_miss && 7 > Rand::Get( 1, 20 ) ? CAT_MISS : ( 1 < targets.size() ? *Rand::Get( targets ) : targets.front() );
+        // Miss chance is 25%
+        return canMiss && 6 > Rand::Get( 1, 20 ) ? CAT_MISS : ( 1 < targets.size() ? *Rand::Get( targets ) : targets.front() );
     }
 
     DEBUG( DBG_BATTLE, DBG_TRACE, "target not found.." );
