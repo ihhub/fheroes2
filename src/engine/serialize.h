@@ -262,8 +262,10 @@ class StreamFile : public StreamBase
 {
     SDL_RWops * rw;
 
+    StreamFile( const StreamFile & ) {}
+
 public:
-    StreamFile() {}
+    StreamFile();
     StreamFile( const std::string &, const char * mode );
     ~StreamFile();
 

@@ -24,6 +24,7 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <math.h>
 #include <memory>
 #include <sstream>
 
@@ -782,8 +783,11 @@ void Surface::Blit( const Point & dpt, Surface & dst ) const
     Blit( Rect( Point( 0, 0 ), GetSize() ), dpt, dst );
 }
 
-void Surface::SetAlphaMod( int level )
+void Surface::SetAlphaMod( int level, bool makeCopy )
 {
+    if ( makeCopy )
+        Set( GetSurface(), true );
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( isValid() ) {
         SDL_SetSurfaceAlphaMod( surface, level );
@@ -792,11 +796,16 @@ void Surface::SetAlphaMod( int level )
 #else
     if ( isValid() ) {
         if ( amask() ) {
-            Surface res( GetSize(), false );
-            SDL_SetAlpha( surface, 0, 0 );
-            Blit( res );
-            SDL_SetAlpha( surface, SDL_SRCALPHA, 255 );
-            Set( res, true );
+            if ( depth() == 32 ) {
+                Set( ModifyAlphaChannel( level ), true );
+            }
+            else {
+                Surface res( GetSize(), false );
+                SDL_SetAlpha( surface, 0, 0 );
+                Blit( res );
+                SDL_SetAlpha( surface, SDL_SRCALPHA, 255 );
+                Set( res, true );
+            }
         }
 
         SDL_SetAlpha( surface, SDL_SRCALPHA, level );
@@ -1113,6 +1122,37 @@ Surface Surface::RenderSepia( void ) const
     return res;
 }
 
+// Returns a warped Sprite. Animation is built with 60 frames in mind.
+Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFrequency ) const
+{
+    const int height = h();
+    const int width = w();
+
+    // convert frames to -10...10 range with a period of 40
+    const int linearWave = std::abs( 20 - ( frame + 10 ) % 40 ) - 10;
+    const int progress = 7 - frame / 10;
+
+    const double rippleXModifier = ( progress * scaleX + 0.3 ) * linearWave;
+    const int offsetX = abs( rippleXModifier );
+    const uint32_t limitY = waveFrequency * M_PI;
+
+    Surface res = Surface( Size( width + offsetX * 2, height ), true );
+    res.Lock();
+
+    for ( int y = 0; y < height; ++y ) {
+        // Take top half the sin wave starting at 0 with period set by waveFrequency, result is -1...1
+        const double sinYEffect = sin( ( y % limitY ) / waveFrequency ) * 2.0 - 1;
+        for ( int x = 0; x < width; ++x ) {
+            const int newX = x + static_cast<int>( rippleXModifier * sinYEffect ) + offsetX;
+            res.SetPixel( newX, y, GetPixel( x, y ) );
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
 Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
 {
     Surface res = GetSurface();
@@ -1171,6 +1211,11 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
     if ( colorPairs.empty() )
         return res;
 
+#ifdef WITH_DEBUG
+    // If STL is compiled with all Debug options this function become pretty slow using std::map
+    std::vector<uint32_t> inValue;
+    std::vector<uint32_t> outValue;
+#endif
     std::map<uint32_t, uint32_t> correctedColors;
     for ( std::map<RGBA, RGBA>::const_iterator value = colorPairs.begin(); value != colorPairs.end(); ++value ) {
         uint32_t in = MapRGB( value->first );
@@ -1182,8 +1227,13 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
         if ( res.amask() )
             out |= res.amask();
 
-        if ( in != out )
+        if ( in != out ) {
+#ifdef WITH_DEBUG
+            inValue.push_back( in );
+            outValue.push_back( out );
+#endif
             correctedColors[in] = out;
+        }
     }
 
     if ( correctedColors.empty() )
@@ -1191,12 +1241,24 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
 
     res.Lock();
 
-    const int height = h();
-    const int width = w();
+    int height = h();
+    int width = w();
     const int imageDepth = depth();
 
     if ( imageDepth == 32 ) { // RGBA image
-        const uint16_t pitch = res.surface->pitch >> 2;
+        uint16_t pitch = res.surface->pitch >> 2;
+
+#ifdef WITH_DEBUG
+        uint32_t * inStart = inValue.data();
+        const uint32_t * inEnd = inValue.data() + inValue.size();
+        uint32_t * outStart = outValue.data();
+#endif
+
+        if ( pitch == width ) {
+            width = width * height;
+            pitch = width;
+            height = 1;
+        }
 
         uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
         const uint32_t * yEnd = y + pitch * height;
@@ -1204,9 +1266,18 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
             uint32_t * x = y;
             const uint32_t * xEnd = x + width;
             for ( ; x != xEnd; ++x ) {
+#ifdef WITH_DEBUG
+                for ( uint32_t * in = inStart; in != inEnd; ++in ) {
+                    if ( *x == *in ) {
+                        *x = *( outStart + ( in - inStart ) );
+                        break;
+                    }
+                }
+#else
                 std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.find( *x );
                 if ( value != correctedColors.end() )
                     *x = value->second;
+#endif
             }
         }
     }
@@ -1221,6 +1292,41 @@ Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) co
     }
 
     res.Unlock();
+
+    return res;
+}
+
+Surface Surface::ModifyAlphaChannel( uint32_t alpha ) const
+{
+    Surface res = GetSurface();
+
+    if ( amask() && depth() == 32 && alpha < 256 ) {
+        res.Lock();
+
+        int height = h();
+        int width = w();
+        uint16_t pitch = res.surface->pitch >> 2;
+
+        if ( pitch == width ) {
+            width = width * height;
+            pitch = width;
+            height = 1;
+        }
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+                const uint32_t rest = *x % ( 16777216 );
+
+                *x = ( ( *x / 16777216 ) * alpha / 255 ) * 16777216 + rest;
+            }
+        }
+
+        res.Unlock();
+    }
 
     return res;
 }

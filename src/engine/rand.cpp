@@ -76,9 +76,11 @@ s32 Rand::Queue::Get( void )
         max += ( *it ).second;
 
     // set weight (from 100)
-    it = begin();
-    for ( ; it != end(); ++it )
-        ( *it ).second = 100 * ( *it ).second / max;
+    if ( max > 0 ) {
+        it = begin();
+        for ( ; it != end(); ++it )
+            ( *it ).second = 100 * ( *it ).second / max;
+    }
 
     // get max
     max = 0;

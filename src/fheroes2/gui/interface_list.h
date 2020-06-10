@@ -53,6 +53,8 @@ namespace Interface
             , maxItems( 0 )
             , useHotkeys( true )
             , content( NULL )
+            , _currentId( -1 )
+            , _topId( -1 )
         {}
         virtual ~ListBox() {}
 
@@ -79,7 +81,7 @@ namespace Interface
         {
             ActionListPressRight( item );
         }
-        virtual bool ActionListCursor( Item &, const Point &, s32, s32 )
+        virtual bool ActionListCursor( Item &, const Point & )
         {
             return false;
         }
@@ -112,9 +114,10 @@ namespace Interface
             return splitter;
         }
 
-        void SetAreaMaxItems( uint32_t maxValue )
+        void SetAreaMaxItems( int maxValue )
         {
             maxItems = maxValue;
+            Reset();
         }
 
         void SetAreaItems( const Rect & rt )
@@ -125,30 +128,32 @@ namespace Interface
         void SetListContent( std::vector<Item> & list )
         {
             content = &list;
-            cur = content->begin();
-            top = content->begin();
-            if ( maxItems < list.size() ) {
-                splitter.SetRange( 0, list.size() - maxItems );
-                splitter.MoveIndex( 0 );
-            }
-            else {
-                splitter.SetRange( 0, 0 );
-                splitter.MoveCenter();
-            }
+            Reset();
+
+            if ( IsValid() )
+                _currentId = 0;
         }
 
         void Reset( void )
         {
-            if ( content ) {
-                cur = content->end();
-                top = content->begin();
-                UpdateSplitterRange();
+            if ( content == NULL || content->empty() ) { // empty content. Must be non-initialized array
+                _currentId = -1;
+                _topId = -1;
+                splitter.SetRange( 0, 0 );
                 splitter.MoveCenter();
+            }
+            else {
+                _currentId = -1; // no selection
+                _topId = 0;
 
-                if ( maxItems < content->size() )
+                if ( maxItems < _size() ) {
                     splitter.MoveIndex( 0 );
-                else
+                    splitter.SetRange( 0, _size() - maxItems );
+                }
+                else {
                     splitter.MoveCenter();
+                    splitter.SetRange( 0, 0 );
+                }
             }
         }
 
@@ -167,66 +172,105 @@ namespace Interface
             buttonPgDn.Draw();
             splitter.RedrawCursor();
 
-            if ( content && !content->empty() ) {
-                ItemsIterator curt = top;
-                ItemsIterator last = ( top - content->begin() ) + maxItems < content->size() ? top + maxItems : content->end();
-                for ( ; curt != last; ++curt )
-                    RedrawItem( *curt, rtAreaItems.x, rtAreaItems.y + ( curt - top ) * rtAreaItems.h / maxItems, curt == cur );
+            Verify(); // reset values if they are wrong
+
+            if ( IsValid() ) { // we have something to display
+                int id = _topId;
+                const int end = ( _topId + maxItems ) > _size() ? _size() - _topId : _topId + maxItems;
+                for ( ; id < end; ++id )
+                    RedrawItem( ( *content )[id], rtAreaItems.x, rtAreaItems.y + ( id - _topId ) * rtAreaItems.h / maxItems, id == _currentId );
             }
         }
 
-        Item & GetCurrent( void )
+        bool IsValid() const
         {
-            return *cur;
+            return content != NULL && !content->empty() && _topId >= 0 && _topId < _size() && _currentId < _size() && maxItems > 0;
+        }
+
+        Item & GetCurrent( void ) // always call this function only after IsValid()!
+        {
+            return ( *content )[_currentId];
         }
 
         Item * GetFromPosition( const Point & mp )
         {
-            const float offset = ( mp.y - rtAreaItems.y ) * maxItems / rtAreaItems.h;
-            ItemsIterator click = top + static_cast<size_t>( offset );
-            return click < content->begin() || click >= content->end() ? NULL : &( *click );
+            Verify();
+            if ( !IsValid() )
+                return NULL;
+
+            if ( mp.y < rtAreaItems.y || mp.y >= rtAreaItems.y + rtAreaItems.h ) // out of boundaries
+                return NULL;
+
+            if ( mp.x < rtAreaItems.x || mp.x >= rtAreaItems.x + rtAreaItems.w ) // out of boundaries
+                return NULL;
+
+            const int id = ( mp.y - rtAreaItems.y ) * maxItems / rtAreaItems.h;
+            if ( _topId + id >= _size() ) // out of items
+                return NULL;
+
+            return &( *content )[id];
         }
 
-        void SetCurrent( size_t pos )
+        void SetCurrent( size_t posId )
         {
-            if ( pos < content->size() )
-                cur = content->begin() + pos;
+            if ( posId >= 0 && posId < content->size() )
+                _currentId = static_cast<int>( posId );
 
             SetCurrentVisible();
         }
 
         void SetCurrentVisible( void )
         {
-            if ( top > cur || cur - top >= maxItems ) {
-                top = static_cast<uint32_t>( cur - content->begin() ) + maxItems > content->size() ? content->end() - maxItems : cur;
-                if ( top < content->begin() )
-                    top = content->begin();
+            Verify();
+
+            if ( !IsValid() ) {
+                Reset();
+                return;
+            }
+
+            if ( _currentId >= 0 && ( _topId > _currentId || _topId + maxItems <= _currentId ) ) { // out of view
+                if ( _currentId + maxItems < _size() ) {
+                    _topId = ( _currentId / maxItems ) * maxItems + ( _currentId % maxItems ) / 2;
+                }
+                else if ( maxItems < _size() ) {
+                    _topId = _size() - maxItems;
+                }
+                else {
+                    _topId = 0;
+                }
+
                 UpdateSplitterRange();
-                splitter.MoveIndex( static_cast<int>( top - content->begin() ) );
+                splitter.MoveIndex( _topId );
             }
         }
 
         void SetCurrent( const Item & item )
         {
-            cur = std::find( content->begin(), content->end(), item );
+            typename std::vector<Item>::iterator pos = std::find( content->begin(), content->end(), item );
+            if ( pos == content->end() )
+                Reset();
+            else
+                _currentId = pos - content->begin();
+
             SetCurrentVisible();
         }
 
         void RemoveSelected( void )
         {
-            if ( content && cur != content->end() )
-                content->erase( cur );
+            if ( content != NULL && _currentId >= 0 && _currentId < _size() )
+                content->erase( content->begin() + _currentId );
         }
 
         bool isSelected( void ) const
         {
-            return content && cur != content->end();
+            return IsValid() && _currentId >= 0;
         }
 
         void Unselect( void )
         {
-            if ( content )
-                cur = content->end();
+            Verify();
+            if ( IsValid() )
+                _currentId = -1;
         }
 
         bool QueueEventProcessing( void )
@@ -237,90 +281,90 @@ namespace Interface
             le.MousePressLeft( buttonPgUp ) ? buttonPgUp.PressDraw() : buttonPgUp.ReleaseDraw();
             le.MousePressLeft( buttonPgDn ) ? buttonPgDn.PressDraw() : buttonPgDn.ReleaseDraw();
 
-            if ( !content || content->empty() )
+            if ( !IsValid() )
                 return false;
 
-            if ( useHotkeys && le.KeyPress( KEY_PAGEUP ) && ( top > content->begin() ) ) {
+            if ( useHotkeys && le.KeyPress( KEY_PAGEUP ) && ( _topId > 0 ) ) {
                 cursor.Hide();
-                top = ( top - content->begin() > static_cast<int>( maxItems ) ? top - maxItems : content->begin() );
+                if ( _topId > maxItems )
+                    _topId -= maxItems;
+                else
+                    _topId = 0;
+
                 UpdateSplitterRange();
-                splitter.MoveIndex( static_cast<int>( top - content->begin() ) );
+                splitter.MoveIndex( _topId );
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) && ( top + maxItems < content->end() ) ) {
+            else if ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) && ( _topId + maxItems < _size() ) ) {
                 cursor.Hide();
-                top += maxItems;
-                int position = static_cast<int>( top - content->begin() );
-                if ( static_cast<size_t>( position ) + maxItems >= content->size() ) {
-                    position = static_cast<int>( content->size() - maxItems );
-                    top = content->begin() + position;
-                }
+                _topId += maxItems;
+                if ( _topId + maxItems >= _size() )
+                    _topId = _size() - maxItems;
+
                 UpdateSplitterRange();
-                splitter.MoveIndex( position );
+                splitter.MoveIndex( _topId );
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( KEY_UP ) && ( cur > content->begin() ) ) {
+            else if ( useHotkeys && le.KeyPress( KEY_UP ) && ( _currentId > 0 ) ) {
                 cursor.Hide();
-                --cur;
+                --_currentId;
                 SetCurrentVisible();
                 ActionCurrentUp();
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( KEY_DOWN ) && ( cur < ( content->end() - 1 ) ) ) {
+            else if ( useHotkeys && le.KeyPress( KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
                 cursor.Hide();
-                ++cur;
+                ++_currentId;
                 SetCurrentVisible();
                 ActionCurrentDn();
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgUp ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && ( top > content->begin() ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgUp ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && ( _topId > 0 ) ) {
                 cursor.Hide();
-                --top;
+                --_topId;
                 splitter.Backward();
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) ) && ( top < ( content->end() - maxItems ) ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgDn ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) )
+                      && ( _topId + maxItems < _size() ) ) {
                 cursor.Hide();
-                ++top;
+                ++_topId;
                 splitter.Forward();
                 return true;
             }
-            else if ( le.MousePressLeft( splitter.GetRect() ) && ( content->size() > maxItems ) ) {
+            else if ( le.MousePressLeft( splitter.GetRect() ) && ( _size() > maxItems ) ) {
                 cursor.Hide();
                 UpdateSplitterRange();
-                s32 seek = ( le.GetMouseCursor().y - splitter.GetRect().y ) * 100 / splitter.GetStep();
-                if ( seek < splitter.Min() )
-                    seek = splitter.Min();
-                else if ( seek > splitter.Max() )
-                    seek = splitter.Max();
-                top = content->begin() + seek;
-                splitter.MoveIndex( static_cast<int>( seek ) );
+                _topId = ( le.GetMouseCursor().y - splitter.GetRect().y ) * 100 / splitter.GetStep();
+                if ( _topId < splitter.Min() )
+                    _topId = splitter.Min();
+                else if ( _topId > splitter.Max() )
+                    _topId = splitter.Max();
+                splitter.MoveIndex( _topId );
                 return true;
             }
 
-            const int offset = ( le.GetMouseCursor().y - rtAreaItems.y ) * maxItems / rtAreaItems.h;
-            if ( offset >= 0 ) {
+            const Point mousePos = le.GetMouseCursor();
+            if ( rtAreaItems & mousePos ) { // within our rectangle
+                const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.h + _topId;
                 cursor.Hide();
 
-                if ( ( ( top - content->begin() ) >= 0 ) && ( ( ( top - content->begin() ) + offset ) < content->size() ) ) {
-                    ItemsIterator pos = top + static_cast<size_t>( offset );
-                    const s32 posy = rtAreaItems.y + offset * rtAreaItems.h / maxItems;
-
-                    if ( ActionListCursor( *pos, le.GetMouseCursor(), rtAreaItems.x, posy ) )
+                if ( id < _size() ) {
+                    if ( ActionListCursor( ( *content )[id], le.GetMouseCursor() ) )
                         return true;
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
-                        if ( pos == cur ) {
-                            ActionListDoubleClick( *cur, le.GetMouseCursor(), rtAreaItems.x, posy );
+                        if ( id == _currentId ) {
+                            ActionListDoubleClick( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         }
                         else {
-                            cur = pos;
-                            ActionListSingleClick( *cur, le.GetMouseCursor(), rtAreaItems.x, posy );
+                            _currentId = id;
+                            ActionListSingleClick( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         }
                         return true;
                     }
                     else if ( le.MousePressRight( rtAreaItems ) ) {
-                        ActionListPressRight( *pos, le.GetMouseCursor(), rtAreaItems.x, posy );
+                        ActionListPressRight( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         return true;
                     }
                 }
@@ -339,21 +383,43 @@ namespace Interface
 
         Splitter splitter;
 
-        u32 maxItems;
+        int VisibleItemCount() const
+        {
+            return maxItems;
+        }
 
     private:
         std::vector<Item> * content;
-        ItemsIterator cur;
-        ItemsIterator top;
+        int _currentId;
+        int _topId;
+        int maxItems;
 
         Point ptRedraw;
 
         bool useHotkeys;
 
+        void Verify()
+        {
+            if ( content == NULL || content->empty() ) {
+                _currentId = -1;
+                _topId = -1;
+            }
+            else {
+                if ( _currentId >= _size() )
+                    _currentId = -1;
+                if ( _topId < 0 || _topId >= _size() )
+                    _topId = 0;
+            }
+        }
+
+        int _size() const
+        {
+            return content == NULL ? 0 : static_cast<int>( content->size() );
+        }
+
         void UpdateSplitterRange( void )
         {
-            const int maxValue = ( content != NULL && maxItems < content->size() ) ? static_cast<int>( content->size() - maxItems ) : 0;
-
+            const int maxValue = ( content != NULL && maxItems < _size() ) ? static_cast<int>( _size() - maxItems ) : 0;
             if ( splitter.Max() != maxValue )
                 splitter.SetRange( 0, maxValue );
         }

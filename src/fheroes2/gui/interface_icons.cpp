@@ -300,7 +300,7 @@ void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
         Cursor::Get().Hide();
-        Dialog::QuickInfo( *item, *item );
+        Dialog::QuickInfo( *item );
     }
 }
 

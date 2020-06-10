@@ -4761,7 +4761,7 @@ msgstr "Można już w pełni zidentyfikować wrogich bohaterów."
 
 #: ../fheroes2/heroes/heroes_spell.cpp:362
 #: ../fheroes2/heroes/heroes_spell.cpp:386
-msgid "No avaialble town. Spell Failed!!!"
+msgid "No available towns. Spell Failed!!!"
 msgstr "Brak dostępnego miasta. Zaklęcie się nie udało!!!"
 
 #: ../fheroes2/heroes/heroes_spell.cpp:459

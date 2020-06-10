@@ -166,6 +166,11 @@ void Battle::Units::SortWeakest( void )
     std::sort( begin(), end(), Army::WeakestTroop );
 }
 
+void Battle::Units::SortArchers( void )
+{
+    std::sort( begin(), end(), Army::ArchersFirst );
+}
+
 Battle::Unit * Battle::Units::FindUID( u32 pid )
 {
     iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Unit::isUID ), pid ) );

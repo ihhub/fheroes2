@@ -84,7 +84,6 @@ public:
     u32 GetHitPoints( void ) const;
     u32 GetDamageMin( void ) const;
     u32 GetDamageMax( void ) const;
-    u32 GetStrength( void ) const;
 
     void Clean( void );
     void UpgradeTroops( const Castle & );
@@ -131,12 +130,13 @@ public:
     static bool StrongestTroop( const Troop *, const Troop * );
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
+    static bool ArchersFirst( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
     static u32 UniqueCount( const Army & );
 
     // 0: fight, 1: free join, 2: join with gold, 3: flee
     static JoinCount GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
-    static bool TroopsStrongerEnemyTroops( const Troops &, const Troops & );
+    static bool ArmyStrongerThanEnemy( const Army &, const Army & );
 
     static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
     static void DrawMons32LineWithScoute( const Troops &, s32, s32, u32, u32, u32, u32 );
@@ -153,6 +153,8 @@ public:
     int GetControl( void ) const;
     u32 GetAttack( void ) const;
     u32 GetDefense( void ) const;
+    double GetStrength() const;
+    bool isStrongerThan( const Army & target ) const;
 
     void SetColor( int );
 

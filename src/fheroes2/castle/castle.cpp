@@ -1065,16 +1065,16 @@ u32 Castle::GetDwellingLivedCount( u32 dw ) const
     return 0;
 }
 
-/* return requires for building */
-u32 Castle::GetBuildingRequires( u32 build ) const
+/* return requirement for building */
+u32 Castle::GetBuildingRequirement( u32 build ) const
 {
-    u32 requires = 0;
+    u32 requirement = 0;
 
     switch ( build ) {
     case BUILD_SPEC:
         switch ( race ) {
         case Race::WZRD:
-            requires |= BUILD_MAGEGUILD1;
+            requirement |= BUILD_MAGEGUILD1;
             break;
 
         default:
@@ -1089,12 +1089,12 @@ u32 Castle::GetBuildingRequires( u32 build ) const
         case Race::WZRD:
         case Race::WRLK:
         case Race::NECR:
-            requires |= DWELLING_MONSTER1;
+            requirement |= DWELLING_MONSTER1;
             break;
 
         case Race::SORC:
-            requires |= DWELLING_MONSTER1;
-            requires |= BUILD_TAVERN;
+            requirement |= DWELLING_MONSTER1;
+            requirement |= BUILD_TAVERN;
             break;
 
         default:
@@ -1105,8 +1105,8 @@ u32 Castle::GetBuildingRequires( u32 build ) const
     case DWELLING_MONSTER3:
         switch ( race ) {
         case Race::KNGT:
-            requires |= DWELLING_MONSTER1;
-            requires |= BUILD_WELL;
+            requirement |= DWELLING_MONSTER1;
+            requirement |= BUILD_WELL;
             break;
 
         case Race::BARB:
@@ -1114,7 +1114,7 @@ u32 Castle::GetBuildingRequires( u32 build ) const
         case Race::WZRD:
         case Race::WRLK:
         case Race::NECR:
-            requires |= DWELLING_MONSTER1;
+            requirement |= DWELLING_MONSTER1;
             break;
 
         default:
@@ -1125,27 +1125,27 @@ u32 Castle::GetBuildingRequires( u32 build ) const
     case DWELLING_MONSTER4:
         switch ( race ) {
         case Race::KNGT:
-            requires |= DWELLING_MONSTER1;
-            requires |= BUILD_TAVERN;
+            requirement |= DWELLING_MONSTER1;
+            requirement |= BUILD_TAVERN;
             break;
 
         case Race::BARB:
-            requires |= DWELLING_MONSTER1;
+            requirement |= DWELLING_MONSTER1;
             break;
 
         case Race::SORC:
-            requires |= DWELLING_MONSTER2;
-            requires |= BUILD_MAGEGUILD1;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= BUILD_MAGEGUILD1;
             break;
 
         case Race::WZRD:
         case Race::WRLK:
-            requires |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER2;
             break;
 
         case Race::NECR:
-            requires |= DWELLING_MONSTER3;
-            requires |= BUILD_THIEVESGUILD;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= BUILD_THIEVESGUILD;
             break;
 
         default:
@@ -1157,27 +1157,27 @@ u32 Castle::GetBuildingRequires( u32 build ) const
         switch ( race ) {
         case Race::KNGT:
         case Race::BARB:
-            requires |= DWELLING_MONSTER2;
-            requires |= DWELLING_MONSTER3;
-            requires |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER4;
             break;
 
         case Race::SORC:
-            requires |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER4;
             break;
 
         case Race::WRLK:
-            requires |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER3;
             break;
 
         case Race::WZRD:
-            requires |= DWELLING_MONSTER3;
-            requires |= BUILD_MAGEGUILD1;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= BUILD_MAGEGUILD1;
             break;
 
         case Race::NECR:
-            requires |= DWELLING_MONSTER2;
-            requires |= BUILD_MAGEGUILD1;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= BUILD_MAGEGUILD1;
             break;
 
         default:
@@ -1188,21 +1188,21 @@ u32 Castle::GetBuildingRequires( u32 build ) const
     case DWELLING_MONSTER6:
         switch ( race ) {
         case Race::KNGT:
-            requires |= DWELLING_MONSTER2;
-            requires |= DWELLING_MONSTER3;
-            requires |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER4;
             break;
 
         case Race::BARB:
         case Race::SORC:
         case Race::NECR:
-            requires |= DWELLING_MONSTER5;
+            requirement |= DWELLING_MONSTER5;
             break;
 
         case Race::WRLK:
         case Race::WZRD:
-            requires |= DWELLING_MONSTER4;
-            requires |= DWELLING_MONSTER5;
+            requirement |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER5;
             break;
 
         default:
@@ -1214,18 +1214,18 @@ u32 Castle::GetBuildingRequires( u32 build ) const
         switch ( race ) {
         case Race::KNGT:
         case Race::BARB:
-            requires |= DWELLING_MONSTER2;
-            requires |= DWELLING_MONSTER3;
-            requires |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER4;
             break;
 
         case Race::SORC:
-            requires |= DWELLING_MONSTER2;
-            requires |= BUILD_WELL;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= BUILD_WELL;
             break;
 
         case Race::NECR:
-            requires |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER2;
             break;
 
         default:
@@ -1236,23 +1236,23 @@ u32 Castle::GetBuildingRequires( u32 build ) const
     case DWELLING_UPGRADE3:
         switch ( race ) {
         case Race::KNGT:
-            requires |= DWELLING_MONSTER2;
-            requires |= DWELLING_MONSTER3;
-            requires |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER4;
             break;
 
         case Race::SORC:
-            requires |= DWELLING_MONSTER3;
-            requires |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER4;
             break;
 
         case Race::WZRD:
-            requires |= DWELLING_MONSTER3;
-            requires |= BUILD_WELL;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= BUILD_WELL;
             break;
 
         case Race::NECR:
-            requires |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER3;
             break;
 
         default:
@@ -1264,15 +1264,15 @@ u32 Castle::GetBuildingRequires( u32 build ) const
         switch ( race ) {
         case Race::KNGT:
         case Race::BARB:
-            requires |= DWELLING_MONSTER2;
-            requires |= DWELLING_MONSTER3;
-            requires |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER4;
             break;
 
         case Race::SORC:
         case Race::WRLK:
         case Race::NECR:
-            requires |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER4;
             break;
 
         default:
@@ -1283,24 +1283,24 @@ u32 Castle::GetBuildingRequires( u32 build ) const
     case DWELLING_UPGRADE5:
         switch ( race ) {
         case Race::KNGT:
-            requires |= DWELLING_MONSTER2;
-            requires |= DWELLING_MONSTER3;
-            requires |= DWELLING_MONSTER4;
-            requires |= DWELLING_MONSTER5;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER5;
             break;
 
         case Race::BARB:
-            requires |= DWELLING_MONSTER5;
+            requirement |= DWELLING_MONSTER5;
             break;
 
         case Race::WZRD:
-            requires |= BUILD_SPEC;
-            requires |= DWELLING_MONSTER5;
+            requirement |= BUILD_SPEC;
+            requirement |= DWELLING_MONSTER5;
             break;
 
         case Race::NECR:
-            requires |= BUILD_MAGEGUILD2;
-            requires |= DWELLING_MONSTER5;
+            requirement |= BUILD_MAGEGUILD2;
+            requirement |= DWELLING_MONSTER5;
             break;
 
         default:
@@ -1311,15 +1311,15 @@ u32 Castle::GetBuildingRequires( u32 build ) const
     case DWELLING_UPGRADE6:
         switch ( race ) {
         case Race::KNGT:
-            requires |= DWELLING_MONSTER2;
-            requires |= DWELLING_MONSTER3;
-            requires |= DWELLING_MONSTER4;
-            requires |= DWELLING_MONSTER6;
+            requirement |= DWELLING_MONSTER2;
+            requirement |= DWELLING_MONSTER3;
+            requirement |= DWELLING_MONSTER4;
+            requirement |= DWELLING_MONSTER6;
             break;
 
         case Race::WRLK:
         case Race::WZRD:
-            requires |= DWELLING_MONSTER6;
+            requirement |= DWELLING_MONSTER6;
             break;
 
         default:
@@ -1328,14 +1328,14 @@ u32 Castle::GetBuildingRequires( u32 build ) const
         break;
     case DWELLING_UPGRADE7:
         if ( race == Race::WRLK )
-            requires |= DWELLING_UPGRADE6;
+            requirement |= DWELLING_UPGRADE6;
         break;
 
     default:
         break;
     }
 
-    return requires;
+    return requirement;
 }
 
 /* check allow buy building */
@@ -1412,10 +1412,10 @@ int Castle::CheckBuyBuilding( u32 build ) const
     }
 
     // check build requirements
-    const u32 requires( Castle::GetBuildingRequires( build ) );
+    const u32 requirement = Castle::GetBuildingRequirement( build );
 
     for ( u32 itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( requires & itr ) && !( building & itr ) )
+        if ( ( requirement & itr ) && !( building & itr ) )
             return REQUIRES_BUILD;
 
     // check valid payment

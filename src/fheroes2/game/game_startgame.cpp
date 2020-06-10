@@ -406,7 +406,6 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             return Direction::UNKNOWN != Direction::Get( from_hero.GetIndex(), tile.GetIndex() )
                        ? Cursor::FIGHT
                        : Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-        break;
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
@@ -539,9 +538,14 @@ int Interface::Basic::StartGame( void )
 
                 radar.SetHide( true );
                 radar.SetRedraw();
-                conf.SetCurrentColor( player.GetColor() );
-                world.ClearFog( player.GetColor() );
-                kingdom.ActionBeforeTurn();
+                if ( player.GetControl() == CONTROL_HUMAN ) {
+                    conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
+                }
+                else {
+                    conf.SetCurrentColor( player.GetColor() );
+                    world.ClearFog( player.GetColor() );
+                    kingdom.ActionBeforeTurn();
+                }
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -554,6 +558,9 @@ int Interface::Basic::StartGame( void )
                         display.Flip();
                         Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn" ) );
                     }
+                    conf.SetCurrentColor( player.GetColor() );
+                    world.ClearFog( player.GetColor() );
+                    kingdom.ActionBeforeTurn();
                     iconsPanel.SetRedraw();
                     iconsPanel.ShowIcons();
                     res = HumanTurn( skip_turns );
@@ -1084,7 +1091,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
                 if ( heroes )
-                    Dialog::QuickInfo( *heroes, *hero );
+                    Dialog::QuickInfo( *heroes );
             } break;
 
             default:

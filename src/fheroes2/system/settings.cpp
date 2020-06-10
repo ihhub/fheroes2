@@ -562,7 +562,7 @@ bool Settings::Read( const std::string & filename )
         debug = DBG_GAME_TRACE | DBG_AI_TRACE;
         break;
     case 8:
-        debug = DBG_ENGINE_TRACE | DBG_GAME_TRACE | DBG_AI_TRACE;
+        debug = DBG_BATTLE_TRACE | DBG_AI_TRACE;
         break;
     case 9:
         debug = DBG_ALL_TRACE;
