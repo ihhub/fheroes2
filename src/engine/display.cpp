@@ -198,19 +198,34 @@ void Display::Present( void )
 
 void Display::ToggleFullScreen( void )
 {
+    const Surface & temp = GetSurface();
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( window ) {
         u32 flags = SDL_GetWindowFlags( window );
 
         // toggle FullScreen
-        if ( flags & SDL_WINDOW_FULLSCREEN )
-            flags &= ~SDL_WINDOW_FULLSCREEN;
+        if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP )
+            flags = 0;
+        else
+#if defined( __WIN32__ )
+            flags = SDL_WINDOW_FULLSCREEN;
+#else
+            flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
 
         SDL_SetWindowFullscreen( window, flags );
     }
 #else
-    SDL_WM_ToggleFullScreen( surface );
+    const uint32_t flags = surface->flags;
+    surface = SDL_SetVideoMode( 0, 0, 0, surface->flags ^ SDL_FULLSCREEN );
+    if ( surface == NULL ) {
+        surface = SDL_SetVideoMode( 0, 0, 0, flags );
+        return;
+    }
 #endif
+
+    temp.Blit( *this );
 }
 
 void Display::SetCaption( const char * str )

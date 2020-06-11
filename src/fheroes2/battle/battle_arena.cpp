@@ -441,10 +441,10 @@ void Battle::Arena::Turns( void )
             }
 
             if ( !tower_moved && current_troop->GetColor() == army2->GetColor() ) {
-                if ( towers[0] && towers[0]->isValid() )
-                    TowerAction( *towers[0] );
                 if ( towers[1] && towers[1]->isValid() )
                     TowerAction( *towers[1] );
+                if ( towers[0] && towers[0]->isValid() )
+                    TowerAction( *towers[0] );
                 if ( towers[2] && towers[2]->isValid() )
                     TowerAction( *towers[2] );
                 tower_moved = true;
@@ -543,14 +543,14 @@ void Battle::Arena::CatapultAction( void )
         values[CAT_WALL4] = GetCastleTargetValue( CAT_WALL4 );
         values[CAT_TOWER1] = GetCastleTargetValue( CAT_TOWER1 );
         values[CAT_TOWER2] = GetCastleTargetValue( CAT_TOWER2 );
-        values[CAT_TOWER3] = GetCastleTargetValue( CAT_TOWER3 );
+        values[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
         values[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
 
         Command cmd( MSG_BATTLE_CATAPULT );
 
         while ( shots-- ) {
             int target = catapult->GetTarget( values );
-            u32 damage = catapult->GetDamage( target, GetCastleTargetValue( target ) );
+            u32 damage = std::min( catapult->GetDamage(), values[target] );
             cmd << damage << target;
             values[target] -= damage;
         }
@@ -829,7 +829,7 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
         if ( towers[2] && towers[2]->isValid() )
             towers[2]->SetDestroy();
         break;
-    case CAT_TOWER3:
+    case CAT_CENTRAL_TOWER:
         if ( towers[1] && towers[1]->isValid() )
             towers[1]->SetDestroy();
         break;
@@ -864,7 +864,7 @@ u32 Battle::Arena::GetCastleTargetValue( int target ) const
         return towers[0] && towers[0]->isValid();
     case CAT_TOWER2:
         return towers[2] && towers[2]->isValid();
-    case CAT_TOWER3:
+    case CAT_CENTRAL_TOWER:
         return towers[1] && towers[1]->isValid();
 
     case CAT_BRIDGE:

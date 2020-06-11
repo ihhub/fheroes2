@@ -872,7 +872,7 @@ double GetAngle( const Point & start, const Point & target )
     double angle = atan2( -dy, dx ) * 180.0 / M_PI;
     // we only care about two quadrants, normalize
     if ( dx < 0 ) {
-        angle = ( dy < 0 ) ? 180 - angle : -angle - 180;
+        angle = ( dy <= 0 ) ? 180 - angle : -angle - 180;
     }
     return angle;
 }

@@ -38,7 +38,7 @@ namespace Battle
         CAT_TOWER1 = 5,
         CAT_TOWER2 = 6,
         CAT_BRIDGE = 7,
-        CAT_TOWER3 = 8,
+        CAT_CENTRAL_TOWER = 8,
         CAT_MISS = 9
     };
 
@@ -51,16 +51,15 @@ namespace Battle
 
         u32 GetShots( void ) const
         {
-            return cat_shots;
+            return catShots;
         }
         int GetTarget( const std::vector<u32> & ) const;
-        u32 GetDamage( int, u32 ) const;
+        u32 GetDamage() const;
 
     private:
-        u32 cat_shots;
-        u32 cat_first;
-        bool cat_miss;
-        // bool	cat_fort;
+        u32 catShots;
+        u32 doubleDamageChance;
+        bool canMiss;
     };
 }
 
