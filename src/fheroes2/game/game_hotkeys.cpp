@@ -342,7 +342,7 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
     Display & display = Display::Get();
 
     // system hotkeys
-    if ( sym == key_events[EVENT_SYSTEM_FULLSCREEN] && !( mod & KMOD_ALT || mod & KMOD_CTRL ) ) {
+    if ( sym == key_events[EVENT_SYSTEM_FULLSCREEN] && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
         Cursor::Get().Hide();
         display.ToggleFullScreen();
         Cursor::Get().Show();
