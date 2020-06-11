@@ -50,19 +50,20 @@ void Interface::ControlPanel::ResetTheme( void )
 {
     int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
-    btn_radr = AGG::GetICN( icn, 4 );
-    btn_icon = AGG::GetICN( icn, 0 );
-    btn_bttn = AGG::GetICN( icn, 12 );
-    btn_stat = AGG::GetICN( icn, 10 );
-    btn_quit = AGG::GetICN( icn, 8 );
+    // Make a copy of Surface
+    btn_radr = Surface( AGG::GetICN( icn, 4 ).GetSurface(), false );
+    btn_icon = Surface( AGG::GetICN( icn, 0 ).GetSurface(), false );
+    btn_bttn = Surface( AGG::GetICN( icn, 12 ).GetSurface(), false );
+    btn_stat = Surface( AGG::GetICN( icn, 10 ).GetSurface(), false );
+    btn_quit = Surface( AGG::GetICN( icn, 8 ).GetSurface(), false );
 
-    int alpha = 130;
+    const int alpha = 128;
 
-    btn_radr.SetAlphaMod( alpha );
-    btn_icon.SetAlphaMod( alpha );
-    btn_bttn.SetAlphaMod( alpha );
-    btn_stat.SetAlphaMod( alpha );
-    btn_quit.SetAlphaMod( alpha );
+    btn_radr.SetAlphaMod( alpha, false );
+    btn_icon.SetAlphaMod( alpha, false );
+    btn_bttn.SetAlphaMod( alpha, false );
+    btn_stat.SetAlphaMod( alpha, false );
+    btn_quit.SetAlphaMod( alpha, false );
 }
 
 const Rect & Interface::ControlPanel::GetArea( void )

@@ -575,14 +575,13 @@ namespace AI
         Maps::Tiles & tile = world.GetTiles( dst_index );
         MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
         Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
-        // const Settings & conf = Settings::Get();
 
         JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
         // free join
         if ( JOIN_FREE == join.first ) {
             // join if ranged or flying monsters present
-            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFly() ) {
+            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
                 DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
                 hero.GetArmy().JoinTroop( troop );
                 destroy = true;
@@ -594,7 +593,7 @@ namespace AI
             // join with cost
             if ( JOIN_COST == join.first ) {
             // join if archers or fly or present
-            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFly() ) {
+            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
                 u32 gold = troop.GetCost().gold;
                 DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
                 hero.GetArmy().JoinTroop( troop(), join.second );
@@ -609,7 +608,7 @@ namespace AI
 
         // fight
         if ( JOIN_NONE == join.first ) {
-            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() );
+            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attacked monster " << troop.GetName() );
             Army army( tile );
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
@@ -1539,7 +1538,7 @@ namespace AI
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     Army enemy( tile );
-                    return !enemy.isValid() || Army::TroopsStrongerEnemyTroops( army, enemy );
+                    return army.isStrongerThan( enemy );
                 }
                 else
                     return true;
@@ -1561,7 +1560,7 @@ namespace AI
                 if ( !hero.isFriends( tile.QuantityColor() ) ) {
                     if ( tile.CaptureObjectIsProtection() ) {
                         Army enemy( tile );
-                        return !enemy.isValid() || Army::TroopsStrongerEnemyTroops( army, enemy );
+                        return army.isStrongerThan( enemy );
                     }
                     else
                         return true;
@@ -1601,12 +1600,12 @@ namespace AI
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
                 if ( 5 < variants && 14 > variants ) {
                 Army enemy( tile );
-                return !enemy.isValid() || Army::TroopsStrongerEnemyTroops( army, enemy );
+                return army.isStrongerThan( enemy );
             }
             else
                 // other
                 return true;
-        } break;
+        }
 
         // increase view
         case MP2::OBJ_OBSERVATIONTOWER:
@@ -1709,7 +1708,7 @@ namespace AI
         case MP2::OBJ_PEASANTHUT:
         case MP2::OBJ_THATCHEDHUT: {
             const Troop & troop = tile.QuantityTroop();
-            if ( troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFly() ) ) ) )
+            if ( troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFlying() ) ) ) )
                 return true;
             break;
         }
@@ -1728,7 +1727,7 @@ namespace AI
             const payment_t paymentCosts = troop.GetCost();
 
             if ( troop.isValid() && kingdom.AllowPayment( paymentCosts )
-                 && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFly() ) ) ) )
+                 && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFlying() ) ) ) )
                 return true;
             break;
         }
@@ -1787,7 +1786,7 @@ namespace AI
         case MP2::OBJ_DERELICTSHIP:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
-                return enemy.isValid() && Army::TroopsStrongerEnemyTroops( army, enemy );
+                return enemy.isValid() && army.isStrongerThan( enemy );
             }
             break;
 
@@ -1798,10 +1797,8 @@ namespace AI
                 return true;
             break;
 
-        case MP2::OBJ_MONSTER: {
-            Army enemy( tile );
-            return !enemy.isValid() || Army::TroopsStrongerEnemyTroops( army, enemy );
-        } break;
+        case MP2::OBJ_MONSTER:
+            return army.isStrongerThan( Army( tile ) );
 
         // sign
         case MP2::OBJ_SIGN:
@@ -1812,14 +1809,15 @@ namespace AI
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
             if ( castle ) {
-                if ( hero.GetColor() == castle->GetColor() )
+                if ( hero.GetColor() == castle->GetColor() ) {
                     return NULL == castle->GetHeroes().Guest() && !hero.isVisited( tile );
-                else
-                    // FIXME: AI skip visiting alliance
+                }
+                else {
                     if ( hero.isFriends( castle->GetColor() ) )
-                    return false;
-                else if ( Army::TroopsStrongerEnemyTroops( army, castle->GetActualArmy() ) )
-                    return true;
+                        return false;
+                    else
+                        return army.isStrongerThan( castle->GetActualArmy() );
+                }
             }
             break;
         }
@@ -1832,7 +1830,7 @@ namespace AI
                 // FIXME: AI skip visiting alliance
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
-                else if ( hero2->AllowBattle( false ) && Army::TroopsStrongerEnemyTroops( army, hero2->GetArmy() ) )
+                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy() ) )
                     return true;
             }
             break;

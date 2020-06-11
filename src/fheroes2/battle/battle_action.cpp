@@ -78,7 +78,11 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
         const std::string name( attacker.GetName() );
         targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex() );
 
-        if ( targets.size() ) {
+        bool validSpell = true;
+        if ( attacker == Monster::ARCHMAGE && !defender.Modes( IS_GOOD_MAGIC ) )
+            validSpell = false;
+
+        if ( targets.size() && validSpell ) {
             if ( interface )
                 interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), NULL, name, targets );
 
@@ -219,7 +223,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
 
             if ( b2->isValid() ) {
                 // defense answer
-                if ( handfighting && !b1->isHideAttack() && b2->AllowResponse() ) {
+                if ( handfighting && !b1->ignoreRetaliation() && b2->AllowResponse() ) {
                     BattleProcess( *b2, *b1 );
                     b2->SetResponse();
                 }
@@ -268,7 +272,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                b->String() << ", dst: " << dst << ", (head: " << pos1.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos1.GetTail()->GetIndex() : -1 ) << ")" );
 
         // force check fly
-        if ( static_cast<ArmyTroop *>( b )->isFly() ) {
+        if ( static_cast<ArmyTroop *>( b )->isFlying() ) {
             b->UpdateDirection( pos1.GetRect() );
             if ( b->isReflect() != pos1.isReflect() )
                 pos1.Swap();
@@ -700,10 +704,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             if ( interface )
                 interface->RedrawActionResistSpell( *( *it ).defender );
 
-            // erase(it)
-            if ( it + 1 != targets.end() )
-                std::swap( *it, targets.back() );
-            targets.pop_back();
+            it = targets.erase( it );
         }
         else
             ++it;

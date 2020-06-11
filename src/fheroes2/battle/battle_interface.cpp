@@ -856,6 +856,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , teleport_src( -1 )
     , listlog( NULL )
     , turn( 0 )
+    , _colorCycle( 0 )
 {
     const Settings & conf = Settings::Get();
     bool pda = conf.QVGA();
@@ -1018,6 +1019,23 @@ void Battle::Interface::SetStatus( const std::string & msg, bool top )
         status.SetMessage( msg );
     }
     humanturn_redraw = true;
+}
+
+void Battle::Interface::CycleColors()
+{
+    ++_colorCycle;
+    if ( _colorCycle > 20 ) // 5 * 4, two color ranges
+        _colorCycle = 0;
+
+    _colorCyclePairs.clear();
+
+    const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
+    for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
+        for ( int id = 0; id < it->length; ++id ) {
+            const uint8_t newColorID = it->forward ? it->start + ( id + _colorCycle ) % it->length : it->start + it->length - 1 - ( 3 + _colorCycle - id ) % it->length;
+            _colorCyclePairs[PAL::GetPaletteColor( it->start + id )] = PAL::GetPaletteColor( newColorID );
+        }
+    }
 }
 
 void Battle::Interface::Redraw( void )
@@ -1202,6 +1220,13 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
             }
         }
+
+        if ( b.hasColorCycling() ) {
+            const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
+            if ( !isUnderAlphaEffect ) {
+                spmon1.ChangeColor( _colorCyclePairs );
+            }
+        }
     }
 
     if ( spmon1.isValid() ) {
@@ -1236,10 +1261,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         }
 
         // sprite monster
-        if ( b_current_sprite && spmon1 == *b_current_sprite ) {
+        if ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit ) {
             if ( b_current_alpha < 255 ) {
                 spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
-                spmon1.SetAlphaMod( b_current_alpha );
+                spmon1.SetAlphaMod( b_current_alpha, false );
             }
             spmon1.Blit( sp.x, sp.y );
         }
@@ -1740,9 +1765,9 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             }
         }
         else if ( cell->isPassable3( *_currentUnit, false ) && UNKNOWN != cell->GetDirection() ) {
-            statusMsg = _currentUnit->isFly() ? _( "Fly %{monster} here." ) : _( "Move %{monster} here." );
+            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here." ) : _( "Move %{monster} here." );
             StringReplace( statusMsg, "%{monster}", _currentUnit->GetName() );
-            return _currentUnit->isFly() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
+            return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
         }
     }
 
@@ -2161,11 +2186,14 @@ void Battle::Interface::FadeArena( void )
     display.Flip();
 
     if ( !conf.QVGA() ) {
+        cursor.Hide();
         Rect srt( border.GetArea().x, border.GetArea().y, display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
         Surface top = display.GetSurface( srt );
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
         display.Fade( top, back, srt, 100, 300 );
+        cursor.Show();
+        display.Flip();
     }
 }
 
@@ -2802,6 +2830,10 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     Point destPos( pos1.x, pos1.y );
     Point targetPos( pos2.x, pos2.y );
 
+    std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
+    StringReplace( msg, "%{monster}", unit.GetName() );
+    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
+
     cursor.SetThemes( Cursor::WAR_NONE );
     const uint32_t step = unit.animation.getFlightSpeed();
     const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
@@ -2855,6 +2887,9 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     // restore
     _movingUnit = NULL;
+
+    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
+    status.SetMessage( msg, true );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
@@ -2948,7 +2983,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
 
     case Spell::HOLYWORD:
     case Spell::HOLYSHOUT:
-        RedrawTargetsWithFrameAnimation( targets, ICN::BLUEFIRE, M82::FromSpell( spell() ), true );
+        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::FromSpell( spell() ), true );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -3136,37 +3171,62 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
     const Rect & pos = unit.GetRectPosition();
-    const int m82 = isGoodLuck ? M82::GOODLUCK : M82::BADLUCK;
-    const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, isGoodLuck ? 0 : 1 );
-    const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
-
-    int width = 2;
-    Rect src( 0, 0, width, luckSprite.h() );
-    src.x = ( luckSprite.w() - src.w ) / 2;
-
-    cursor.SetThemes( Cursor::WAR_NONE );
-    AGG::PlaySound( m82 );
 
     std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}" ) : _( "Bad luck descends on the %{attacker}" );
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
-    while ( le.HandleEvents() && width < luckSprite.w() ) {
-        CheckGlobalEvents( le );
+    if ( isGoodLuck ) {
+        const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, 0 );
+        const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+        int width = 2;
+        Rect src( 0, 0, width, luckSprite.h() );
+        src.x = ( luckSprite.w() - src.w ) / 2;
 
-            luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h );
+        cursor.SetThemes( Cursor::WAR_NONE );
+        AGG::PlaySound( M82::GOODLUCK );
 
-            cursor.Show();
-            display.Flip();
+        while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+            CheckGlobalEvents( le );
 
-            src.w = width;
-            src.x = ( luckSprite.w() - src.w ) / 2;
+            if ( width < luckSprite.w() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+                cursor.Hide();
+                Redraw();
 
-            width += 3;
+                luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h );
+
+                cursor.Show();
+                display.Flip();
+
+                src.w = width;
+                src.x = ( luckSprite.w() - src.w ) / 2;
+
+                width += 3;
+            }
+        }
+    }
+    else {
+        int frameId = 0;
+
+        cursor.SetThemes( Cursor::WAR_NONE );
+        AGG::PlaySound( M82::BADLUCK );
+
+        while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+            CheckGlobalEvents( le );
+
+            if ( frameId < 8 && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+                cursor.Hide();
+                Redraw();
+
+                const Sprite & luckSprite = AGG::GetICN( ICN::CLOUDLUK, frameId );
+                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), pos.y + pos.h + luckSprite.y() - 10 );
+
+                cursor.Show();
+                display.Flip();
+
+                ++frameId;
+            }
         }
     }
 }
@@ -3371,42 +3431,40 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
     _currentUnit = &target;
     b_current_sprite = &sprite;
-    b_current_alpha = 250;
+    b_current_alpha = 240;
 
     AGG::PlaySound( M82::TELPTOUT );
 
-    while ( le.HandleEvents() && b_current_alpha > 30 ) {
+    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( b_current_alpha > 0 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
             display.Flip();
 
-            b_current_alpha -= 20;
+            b_current_alpha -= 15;
         }
     }
 
     b_current_alpha = 0;
     cursor.Hide();
     Redraw();
-    while ( Mixer::isValid() && Mixer::isPlaying( -1 ) )
-        DELAY( 10 );
 
     target.SetPosition( dst );
     AGG::PlaySound( M82::TELPTIN );
 
-    while ( le.HandleEvents() && b_current_alpha < 220 ) {
+    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( b_current_alpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
             cursor.Show();
             display.Flip();
 
-            b_current_alpha += 20;
+            b_current_alpha += 15;
         }
     }
 
@@ -3534,7 +3592,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             sprite1.Blit( sprite2 );
-            sprite3.SetAlphaMod( alpha );
+            sprite3.SetAlphaMod( alpha, false );
             sprite3.Blit( sprite2 );
             Redraw();
             cursor.Show();
@@ -3551,61 +3609,6 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
 
     _currentUnit = NULL;
     b_current_sprite = NULL;
-}
-
-void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
-{
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
-    LocalEvent & le = LocalEvent::Get();
-
-    const int icn = ICN::COLDRAY;
-    u32 frame = 0;
-
-    Point pt_from, pt_to;
-    const HeroBase * current_commander = arena.GetCurrentCommander();
-
-    if ( current_commander == opponent1->GetHero() ) {
-        const Rect & pos1 = opponent1->GetArea();
-        pt_from = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-
-        const Rect & pos2 = target.GetRectPosition();
-        pt_to = Point( pos2.x, pos2.y );
-    }
-    else {
-        const Rect & pos = opponent2->GetArea();
-        pt_from = Point( pos.x, pos.y + pos.h / 2 );
-
-        const Rect & pos2 = target.GetRectPosition();
-        pt_to = Point( pos2.x + pos2.w, pos2.y );
-    }
-
-    const u32 dx = std::abs( pt_from.x - pt_to.x );
-    const u32 dy = std::abs( pt_from.y - pt_to.y );
-    const u32 step = ( dx > dy ? dx / AGG::GetICNCount( icn ) : dy / AGG::GetICNCount( icn ) );
-
-    const Points points = GetLinePoints( pt_from, pt_to, step );
-    Points::const_iterator pnt = points.begin();
-
-    cursor.SetThemes( Cursor::WAR_NONE );
-    AGG::PlaySound( M82::COLDRAY );
-
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) && pnt != points.end() ) {
-        CheckGlobalEvents( le );
-
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            const Sprite & sprite = AGG::GetICN( icn, frame );
-            sprite.Blit( ( *pnt ).x - sprite.w() / 2, ( *pnt ).y - sprite.h() / 2 );
-            cursor.Show();
-            display.Flip();
-
-            ++frame;
-            ++pnt;
-        }
-    }
-
-    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, true );
 }
 
 void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell & spell )
@@ -3633,79 +3636,85 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
     RedrawTroopWithFrameAnimation( target, ICN::YINYANG, M82::UNKNOWN, false );
 }
 
+void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
+{
+    RedrawRaySpell( target, ICN::COLDRAY, M82::COLDRAY, 18 );
+    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, true );
+}
+
+void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
+{
+    Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+
+    // Casting hero position
+    Point startingPos;
+    const HeroBase * current_commander = arena.GetCurrentCommander();
+
+    if ( current_commander == opponent1->GetHero() ) {
+        const Rect & pos1 = opponent1->GetArea();
+        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
+    }
+    else {
+        const Rect & pos = opponent2->GetArea();
+        startingPos = Point( pos.x, pos.y + pos.h / 2 );
+    }
+
+    const Point targetPos = target.GetCenterPoint();
+
+    const Points path = GetEuclideanLine( startingPos, targetPos, size );
+    const uint32_t spriteCount = AGG::GetICNCount( spellICN );
+
+    cursor.SetThemes( Cursor::WAR_NONE );
+    AGG::PlaySound( spellSound );
+
+    size_t i = 0;
+    while ( le.HandleEvents() && i < path.size() ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            cursor.Hide();
+            const uint32_t frame = i * spriteCount / path.size();
+            const Sprite & sprite = AGG::GetICN( spellICN, frame );
+            sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2 );
+            cursor.Show();
+            display.Flip();
+
+            ++i;
+        }
+    }
+}
+
 void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
-    Sprite sprite2( target.GetContour( target.isReflect() ? CONTOUR_REFLECT | CONTOUR_BLACK : CONTOUR_BLACK ), sprite1.x(), sprite1.y() );
+    RedrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
 
-    const int icn = ICN::DISRRAY;
-    u32 frame = 0;
-    Point pt_from, pt_to;
-    const HeroBase * current_commander = arena.GetCurrentCommander();
+    // Part 2 - ripple effect
+    const Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
+    Sprite rippleSprite;
 
-    if ( current_commander == opponent1->GetHero() ) {
-        const Rect & pos1 = opponent1->GetArea();
-        pt_from = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-
-        const Rect & pos2 = target.GetRectPosition();
-        pt_to = Point( pos2.x, pos2.y );
-    }
-    else {
-        const Rect & pos = opponent2->GetArea();
-        pt_from = Point( pos.x, pos.y + pos.h / 2 );
-
-        const Rect & pos2 = target.GetRectPosition();
-        pt_to = Point( pos2.x + pos2.w, pos2.y );
-    }
-
-    const u32 dx = std::abs( pt_from.x - pt_to.x );
-    const u32 dy = std::abs( pt_from.y - pt_to.y );
-    const u32 step = ( dx > dy ? dx / AGG::GetICNCount( icn ) : dy / AGG::GetICNCount( icn ) );
-
-    const Points points = GetLinePoints( pt_from, pt_to, step );
-    Points::const_iterator pnt = points.begin();
-
-    cursor.SetThemes( Cursor::WAR_NONE );
-    AGG::PlaySound( M82::DISRUPTR );
-
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) && pnt != points.end() ) {
-        CheckGlobalEvents( le );
-
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            const Sprite & sprite = AGG::GetICN( icn, frame );
-            sprite.Blit( ( *pnt ).x - sprite.w() / 2, ( *pnt ).y - sprite.h() / 2 );
-            cursor.Show();
-            display.Flip();
-
-            ++frame;
-            ++pnt;
-        }
-    }
-
-    // part 2
-    frame = 0;
     const Unit * old_current = _currentUnit;
     _currentUnit = &target;
-    b_current_sprite = &sprite2;
     _movingPos = Point( 0, 0 );
 
-    while ( le.HandleEvents() && frame < 20 ) {
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && frame < 60 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
-            sprite2.SetPos( Point( sprite1.x() + ( ( frame % 2 ) ? -1 : 1 ), sprite1.y() ) );
+            rippleSprite = Sprite( unitSprite.RenderRippleEffect( frame ), unitSprite.GetPos().x, unitSprite.GetPos().y );
+            b_current_sprite = &rippleSprite;
             Redraw();
             cursor.Show();
             display.Flip();
 
-            ++frame;
+            frame += 2;
         }
     }
 
@@ -3850,7 +3859,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Redraw();
-            sprite2.SetAlphaMod( alpha );
+            sprite2.SetAlphaMod( alpha, false );
             sprite1.Blit( area.x, area.y, display );
             sprite2.Blit( area.x, area.y, display );
             RedrawInterface();
@@ -4257,6 +4266,9 @@ bool Battle::Interface::IdleTroopsAnimation( void )
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
+    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_BATTLE_DELAY ) )
+        CycleColors();
+
     // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
         if ( opponent1 ) {
@@ -4413,8 +4425,8 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
         Text text1, text2;
         std::string str;
 
-        u32 tmp1 = attacker->GetDamageMin( *defender );
-        u32 tmp2 = attacker->GetDamageMax( *defender );
+        u32 tmp1 = attacker->CalculateMinDamage( *defender );
+        u32 tmp2 = attacker->CalculateMaxDamage( *defender );
 
         str = tmp1 == tmp2 ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 

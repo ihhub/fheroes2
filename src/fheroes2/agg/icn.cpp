@@ -985,6 +985,7 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     case HEROFL03:
     case HEROFL04:
     case HEROFL05:
+    case HEROFL06:
         return ticket % 5;
 
     case TWNBDOCK:
@@ -1149,7 +1150,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNWAT2:
 
@@ -1162,7 +1162,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNCRCK:
 
@@ -1186,7 +1185,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNDIRT:
 
@@ -1207,7 +1205,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNDSRT:
 
@@ -1220,7 +1217,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNGRA2:
 
@@ -1256,7 +1252,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNLAV2:
 
@@ -1282,7 +1277,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNLAV3:
 
@@ -1311,7 +1305,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNLAVA:
 
@@ -1325,7 +1318,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNMUL2:
 
@@ -1358,7 +1350,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNMULT:
 
@@ -1389,7 +1380,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNSNOW:
 
@@ -1421,7 +1411,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     case OBJNSWMP:
 
@@ -1444,7 +1433,6 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
         default:
             return 0;
         }
-        break;
 
     // extra objects for loyalty version
     case X_LOC1:

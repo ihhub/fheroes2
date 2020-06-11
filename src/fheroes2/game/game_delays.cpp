@@ -75,7 +75,7 @@ namespace Game
                           40, // HEROES_FADE_DELAY
                           40, // HEROES_PICKUP_DELAY
                           50, // PUZZLE_FADE_DELAY
-                          100, // BATTLE_DIALOG_DELAY
+                          75, // BATTLE_DIALOG_DELAY
                           120, // BATTLE_FRAME_DELAY
                           40, // BATTLE_MISSILE_DELAY
                           90, // BATTLE_SPELL_DELAY
@@ -88,6 +88,8 @@ namespace Game
                           500, // BATTLE_OPPONENTS_DELAY
                           300, // BATTLE_FLAGS_DELAY
                           800, // BATTLE_POPUP_DELAY
+                          400, // COLOR_CYCLE_MAP_DELAY
+                          220, // COLOR_CYCLE_BATTLE_DELAY
                           300, // AUTOHIDE_STATUS_DELAY
                           40, // CURRENT_HERO_DELAY
                           40, // CURRENT_AI_DELAY
@@ -97,7 +99,9 @@ namespace Game
 
 void Game::AnimateDelaysInitialize( void )
 {
-    std::for_each( &delays[0], &delays[LAST_DELAY], std::mem_fun_ref( &TimeDelay::Reset ) );
+    for ( size_t id = 0; id < LAST_DELAY; ++id ) {
+        delays[id].Reset();
+    }
     UpdateGameSpeed();
 }
 
@@ -130,7 +134,7 @@ void Game::UpdateGameSpeed( void )
     const double adjustedBattleSpeed = ( 10 - conf.BattleSpeed() ) * battleSpeedAdjustment;
     delays[BATTLE_FRAME_DELAY] = 120 * adjustedBattleSpeed;
     delays[BATTLE_MISSILE_DELAY] = 40 * adjustedBattleSpeed;
-    delays[BATTLE_SPELL_DELAY] = 90 * adjustedBattleSpeed;
+    delays[BATTLE_SPELL_DELAY] = 75 * adjustedBattleSpeed;
     delays[BATTLE_IDLE_DELAY] = 150 * adjustedBattleSpeed;
     delays[BATTLE_DISRUPTING_DELAY] = 25 * adjustedBattleSpeed;
     delays[BATTLE_CATAPULT_DELAY] = 90 * adjustedBattleSpeed;

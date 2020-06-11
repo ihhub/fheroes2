@@ -73,7 +73,6 @@ int Game::StartBattleOnly( void )
 
 int Game::StartGame( void )
 {
-    SetFixVideoMode();
     AI::Get().Reset();
 
     // cursor
@@ -218,6 +217,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
                 ( *it )->FadeOut();
                 ( *it )->SetFreeman( 0 );
                 it = myHeroes.begin();
+                updateFocus = true;
                 result = Dialog::CANCEL;
                 break;
 
@@ -406,7 +406,6 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             return Direction::UNKNOWN != Direction::Get( from_hero.GetIndex(), tile.GetIndex() )
                        ? Cursor::FIGHT
                        : Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-        break;
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
@@ -539,9 +538,14 @@ int Interface::Basic::StartGame( void )
 
                 radar.SetHide( true );
                 radar.SetRedraw();
-                conf.SetCurrentColor( player.GetColor() );
-                world.ClearFog( player.GetColor() );
-                kingdom.ActionBeforeTurn();
+                if ( player.GetControl() == CONTROL_HUMAN ) {
+                    conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
+                }
+                else {
+                    conf.SetCurrentColor( player.GetColor() );
+                    world.ClearFog( player.GetColor() );
+                    kingdom.ActionBeforeTurn();
+                }
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -552,7 +556,11 @@ int Interface::Basic::StartGame( void )
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
                         Redraw();
                         display.Flip();
+                        Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn" ) );
                     }
+                    conf.SetCurrentColor( player.GetColor() );
+                    world.ClearFog( player.GetColor() );
+                    kingdom.ActionBeforeTurn();
                     iconsPanel.SetRedraw();
                     iconsPanel.ShowIcons();
                     res = HumanTurn( skip_turns );
@@ -641,10 +649,6 @@ int Interface::Basic::HumanTurn( bool isload )
     cursor.Show();
     display.Flip();
 
-    if ( conf.GameType( Game::TYPE_HOTSEAT ) ) {
-        Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player's turn" ) );
-    }
-
     if ( !isload ) {
         // new week dialog
         if ( 1 < world.CountWeek() && world.BeginWeek() )
@@ -683,9 +687,11 @@ int Interface::Basic::HumanTurn( bool isload )
 
     // startgame loop
     while ( Game::CANCEL == res ) {
-        if ( !le.HandleEvents() ) {
-            res = Game::QUITGAME;
-            break;
+        if ( !le.HandleEvents( true, true ) ) {
+            if ( EventExit() == Game::QUITGAME ) {
+                res = Game::QUITGAME;
+                break;
+            }
         }
         // for pocketpc: auto hide status if start turn
         if ( autohide_status && Game::AnimateInfrequentDelay( Game::AUTOHIDE_STATUS_DELAY ) ) {
@@ -1085,7 +1091,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
                 if ( heroes )
-                    Dialog::QuickInfo( *heroes, *hero );
+                    Dialog::QuickInfo( *heroes );
             } break;
 
             default:

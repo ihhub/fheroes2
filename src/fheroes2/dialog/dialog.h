@@ -85,7 +85,7 @@ namespace Dialog
     // show info cell maps
     void QuickInfo( const Maps::Tiles & );
     void QuickInfo( const Castle & );
-    void QuickInfo( const Heroes & hero, const Heroes & viewer );
+    void QuickInfo( const Heroes & hero );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
@@ -115,20 +115,27 @@ namespace Dialog
     void ThievesGuild( bool oracle );
     void GameInfo( void );
 
-    class FrameBox
+    class NonFixedFrameBox
     {
     public:
-        FrameBox( int height, bool buttons = false );
-        ~FrameBox();
+        explicit NonFixedFrameBox( int height = 0, int startYPos = -1, bool showButtons = false );
+        virtual ~NonFixedFrameBox();
 
         const Rect & GetArea( void )
         {
             return area;
-        };
+        }
 
     protected:
         SpriteBack background;
         Rect area;
+    };
+
+    class FrameBox : public NonFixedFrameBox
+    {
+    public:
+        FrameBox( int height, bool buttons = false );
+        virtual ~FrameBox();
     };
 
     class FrameBorder

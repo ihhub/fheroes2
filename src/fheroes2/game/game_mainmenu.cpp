@@ -25,6 +25,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_interface.h"
 #include "gamedefs.h"
 #include "mus.h"
 #include "pocketpc.h"
@@ -117,7 +118,15 @@ int Game::MainMenu( void )
     }
 
     // mainmenu loop
-    while ( le.HandleEvents() ) {
+    while ( 1 ) {
+        if ( !le.HandleEvents( true, true ) ) {
+            if ( Interface::Basic::EventExit() == QUITGAME ) {
+                if ( conf.ExtGameUseFade() )
+                    display.Fade();
+                break;
+            }
+        }
+
         for ( u32 i = 0; i < ARRAY_COUNT( buttons ); i++ ) {
             buttons[i].wasOver = buttons[i].isOver;
 
@@ -154,9 +163,11 @@ int Game::MainMenu( void )
         else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits ) )
             return CREDITS;
         else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit ) ) {
-            if ( conf.ExtGameUseFade() )
-                display.Fade();
-            return QUITGAME;
+            if ( Interface::Basic::EventExit() == QUITGAME ) {
+                if ( conf.ExtGameUseFade() )
+                    display.Fade();
+                return QUITGAME;
+            }
         }
 
         // right info

@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <queue>
+
 #include "agg.h"
 #include "army.h"
 #include "battle.h"
@@ -39,9 +41,110 @@
 #include "text.h"
 #include "world.h"
 
+namespace
+{
+    class LoopedAnimation
+    {
+    public:
+        explicit LoopedAnimation( int icnId = 0, bool loop = false )
+            : _icnId( icnId )
+            , _frameId( 0 )
+            , _counter( 0 )
+            , _finished( false )
+            , _loop( loop )
+        {
+            _frameId = ICN::AnimationFrame( _icnId, 1, _counter );
+        }
+
+        uint32_t frameId()
+        {
+            if ( _finished )
+                return _frameId;
+
+            ++_counter;
+            uint32_t nextId = ICN::AnimationFrame( _icnId, 1, _counter );
+            if ( nextId < _frameId ) {
+                if ( _loop ) {
+                    _counter = 0;
+                    nextId = ICN::AnimationFrame( _icnId, 1, _counter );
+                    std::swap( nextId, _frameId );
+                    return nextId;
+                }
+                else {
+                    _finished = true;
+                }
+            }
+            else {
+                std::swap( nextId, _frameId );
+                return nextId;
+            }
+
+            return _frameId;
+        }
+
+        bool isFinished() const
+        {
+            return _finished;
+        }
+
+        int id() const
+        {
+            return _icnId;
+        }
+
+    private:
+        int _icnId;
+        uint32_t _frameId;
+        uint32_t _counter;
+        bool _finished;
+        bool _loop;
+    };
+
+    class LoopedAnimationSequence
+    {
+    public:
+        void push( int icnId, bool loop )
+        {
+            _queue.push( LoopedAnimation( icnId, loop ) );
+        }
+
+        uint32_t frameId()
+        {
+            if ( isFinished() )
+                return 0;
+
+            return _queue.front().frameId();
+        }
+
+        bool nextFrame() // returns true only if there is some frames left
+        {
+            if ( !_queue.empty() && _queue.front().isFinished() )
+                _queue.pop();
+
+            return _queue.empty();
+        }
+
+        bool isFinished() const
+        {
+            return _queue.empty();
+        }
+
+        int id() const
+        {
+            if ( isFinished() )
+                return 0;
+
+            return _queue.front().id();
+        }
+
+    private:
+        std::queue<LoopedAnimation> _queue;
+    };
+}
+
 namespace Battle
 {
-    void GetSummaryParams( int res1, int res2, const HeroBase &, u32 exp, int &, std::string & );
+    void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg );
     void SpeedRedraw( const Point & );
     void SetButtonState( LabeledButton & button, Display & display, Cursor & cursor );
     void InitButtonState( LabeledButton & button, bool state );
@@ -171,10 +274,10 @@ void Battle::DialogBattleSettings( void )
     display.Flip();
 }
 
-void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, int & icn_anim, std::string & msg )
+void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg )
 {
     if ( res1 & RESULT_WINS ) {
-        icn_anim = ICN::WINCMBT;
+        sequence.push( ICN::WINCMBT, true );
         if ( res2 & RESULT_SURRENDER )
             msg.append( _( "The enemy has surrendered!" ) );
         else if ( res2 & RESULT_RETREAT )
@@ -190,17 +293,21 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
         }
     }
     else if ( res1 & RESULT_RETREAT ) {
-        icn_anim = ICN::CMBTFLE3;
+        sequence.push( ICN::CMBTFLE1, false );
+        sequence.push( ICN::CMBTFLE2, false );
+        sequence.push( ICN::CMBTFLE3, false );
         msg.append( _( "The cowardly %{name} flees from battle." ) );
         StringReplace( msg, "%{name}", hero.GetName() );
     }
     else if ( res1 & RESULT_SURRENDER ) {
-        icn_anim = ICN::CMBTSURR;
+        sequence.push( ICN::CMBTSURR, true );
         msg.append( _( "%{name} surrenders to the enemy, and departs in shame." ) );
         StringReplace( msg, "%{name}", hero.GetName() );
     }
     else {
-        icn_anim = ICN::CMBTLOS3;
+        sequence.push( ICN::CMBTLOS1, false );
+        sequence.push( ICN::CMBTLOS2, false );
+        sequence.push( ICN::CMBTLOS3, true );
         msg.append( _( "Your force suffer a bitter defeat, and %{name} abandons your cause." ) );
         StringReplace( msg, "%{name}", hero.GetName() );
     }
@@ -220,25 +327,25 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     cursor.SetThemes( Cursor::POINTER );
 
     std::string msg;
-    int icn_anim = ICN::UNKNOWN;
+    LoopedAnimationSequence sequence;
 
     if ( ( res.army1 & RESULT_WINS ) && army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, icn_anim, msg );
+        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( ( res.army2 & RESULT_WINS ) && army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, icn_anim, msg );
+        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, icn_anim, msg );
+        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else if ( army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, icn_anim, msg );
+        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
@@ -247,16 +354,21 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
         if ( army1->GetCommander() && army1->GetCommander()->isControlAI() ) {
         // AI wins
         if ( res.army1 & RESULT_WINS ) {
-            icn_anim = ICN::CMBTLOS3;
+            sequence.push( ICN::CMBTLOS1, false );
+            sequence.push( ICN::CMBTLOS2, false );
+            sequence.push( ICN::CMBTLOS3, false );
             msg.append( _( "Your force suffer a bitter defeat." ) );
         }
         else
             // Human wins
             if ( res.army2 & RESULT_WINS ) {
-            icn_anim = ICN::WINCMBT;
+            sequence.push( ICN::WINCMBT, true );
             msg.append( _( "A glorious victory!" ) );
         }
     }
+
+    if ( sequence.isFinished() ) // Cannot be!
+        sequence.push( ICN::UNKNOWN, false );
 
     const Sprite & dialog = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
     const Sprite & dialogShadow = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
@@ -280,8 +392,8 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     const int anime_oy = 36;
 
     if ( !conf.QVGA() ) {
-        const Sprite & sprite1 = AGG::GetICN( icn_anim, 0 );
-        const Sprite & sprite2 = AGG::GetICN( icn_anim, 1 );
+        const Sprite & sprite1 = AGG::GetICN( sequence.id(), 0 );
+        const Sprite & sprite2 = AGG::GetICN( sequence.id(), 1 );
 
         sprite1.Blit( pos_rt.x + anime_ox + sprite1.x(), pos_rt.y + anime_oy + sprite1.y() );
         sprite2.Blit( pos_rt.x + anime_ox + sprite2.x(), pos_rt.y + anime_oy + sprite2.y() );
@@ -323,8 +435,6 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     cursor.Show();
     display.Flip();
 
-    u32 frame = 0;
-
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
 
@@ -333,16 +443,15 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
             break;
 
         // animation
-        if ( !conf.QVGA() && Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) ) {
-            const Sprite & sprite1 = AGG::GetICN( icn_anim, 0 );
-            const Sprite & sprite2 = AGG::GetICN( icn_anim, ICN::AnimationFrame( icn_anim, 1, frame ) );
+        if ( !conf.QVGA() && Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+            const Sprite & sprite1 = AGG::GetICN( sequence.id(), 0 );
+            const Sprite & sprite2 = AGG::GetICN( sequence.id(), sequence.frameId() );
 
             cursor.Hide();
             sprite1.Blit( pos_rt.x + anime_ox + sprite1.x(), pos_rt.y + anime_oy + sprite1.y() );
             sprite2.Blit( pos_rt.x + anime_ox + sprite2.x(), pos_rt.y + anime_oy + sprite2.y() );
             cursor.Show();
             display.Flip();
-            ++frame;
         }
     }
 
@@ -445,7 +554,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     if ( !conf.QVGA() ) {
         Surface shadow( btnCast, true );
         shadow.Fill( ColorBlack );
-        shadow.SetAlphaMod( 80 );
+        shadow.SetAlphaMod( 80, false );
         if ( btnCast.isDisable() )
             shadow.Blit( btnCast, display );
         if ( btnRetreat.isDisable() )

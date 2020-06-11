@@ -209,6 +209,8 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
+        I.SetFocus( &hero );
+
         // educate spells
         if ( !Settings::Get().ExtHeroLearnSpellsWithDay() )
             castle->MageGuildEducateHero( hero );
@@ -368,6 +370,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
+        I.SetFocus( &hero );
+
         hero.ActionNewPosition();
 
         return false; /* SpellCasted apply */
@@ -406,7 +410,7 @@ bool ActionSpellTownGate( Heroes & hero )
     I.Redraw();
 
     if ( !castle ) {
-        Dialog::Message( "", _( "No avaialble town. Spell Failed!!!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "No available towns. Spell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
@@ -430,7 +434,7 @@ bool ActionSpellTownPortal( Heroes & hero )
             castles.push_back( ( **it ).GetIndex() );
 
     if ( castles.empty() ) {
-        Dialog::Message( "", _( "No avaialble town. Spell Failed!!!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "No available towns. Spell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
@@ -444,7 +448,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, Point( area.x + 256, area.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, Point( area.x + 256, area.y + 145 ) );
-    listbox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 261, area.y + 78, 14, 64 ) );
+    listbox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 260, area.y + 78, 14, 64 ) );
     listbox.SetAreaMaxItems( 5 );
     listbox.SetAreaItems( Rect( area.x + 10, area.y + 60, 250, 100 ) );
     listbox.SetListContent( castles );

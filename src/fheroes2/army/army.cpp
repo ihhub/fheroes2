@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <math.h>
 
 #include "agg.h"
 #include "army.h"
@@ -412,17 +413,6 @@ u32 Troops::GetDamageMax( void ) const
         }
 
     return count ? res / count : 0;
-}
-
-u32 Troops::GetStrength( void ) const
-{
-    u32 res = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            res += ( *it )->GetStrength();
-
-    return res;
 }
 
 void Troops::Clean( void )
@@ -1103,6 +1093,35 @@ u32 Army::GetDefense( void ) const
     return count ? res / count : 0;
 }
 
+double Army::GetStrength( void ) const
+{
+    double res = 0;
+    const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        const Troop * troop = *it;
+        if ( troop != NULL && troop->isValid() ) {
+            double strength = troop->GetStrength();
+
+            if ( archery > 0 && troop->isArchers() ) {
+                strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
+            }
+
+            // GetMorale checks if unit is affected by it
+            const int morale = troop->GetMorale();
+            strength *= 1 + ( ( morale < 0 ) ? morale / 12.0 : morale / 24.0 );
+            strength *= 1 + troop->GetLuck() / 24.0;
+
+            res += strength;
+        }
+    }
+
+    // hero spell STR
+    // composition
+
+    return res;
+}
+
 void Army::Reset( bool soft )
 {
     Troops::Clean();
@@ -1204,41 +1223,22 @@ u32 Army::ActionToSirens( void )
     return res;
 }
 
-bool Army::TroopsStrongerEnemyTroops( const Troops & troops1, const Troops & troops2 )
+bool Army::isStrongerThan( const Army & target ) const
 {
-    if ( !troops2.isValid() )
+    if ( !target.isValid() )
         return true;
 
-    const int a1 = troops1.GetAttack();
-    const int d1 = troops1.GetDefense();
-    float r1 = 0;
+    const double str1 = GetStrength();
+    const double str2 = target.GetStrength();
 
-    const int a2 = troops2.GetAttack();
-    const int d2 = troops2.GetDefense();
-    float r2 = 0;
+    DEBUG( DBG_AI, DBG_INFO, "Comparing troops: " << str1 << " versus " << str2 );
 
-    if ( a1 > d2 )
-        r1 = 1 + 0.1f * static_cast<float>( std::min( a1 - d2, 20 ) );
-    else
-        r1 = 1 + 0.05f * static_cast<float>( std::min( d2 - a1, 14 ) );
+    return str1 > str2;
+}
 
-    if ( a2 > d1 )
-        r2 = 1 + 0.1f * static_cast<float>( std::min( a2 - d1, 20 ) );
-    else
-        r2 = 1 + 0.05f * static_cast<float>( std::min( d1 - a2, 14 ) );
-
-    const u32 s1 = troops1.GetStrength();
-    const u32 s2 = troops2.GetStrength();
-
-    const float h1 = troops1.GetHitPoints();
-    const float h2 = troops2.GetHitPoints();
-
-    DEBUG( DBG_AI, DBG_TRACE, "r1: " << r1 << ", s1: " << s1 << ", h1: " << h1 << ", r2: " << r2 << ", s2: " << s2 << ", h2: " << h2 );
-
-    r1 *= s1 / h2;
-    r2 *= s2 / h1;
-
-    return static_cast<s32>( r1 ) > static_cast<s32>( r2 );
+bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
+{
+    return army1.isStrongerThan( army2 );
 }
 
 void Army::DrawMons32LineWithScoute( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute )
@@ -1274,17 +1274,15 @@ void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 line
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
     MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( MP2::OBJ_MONSTER ) ) );
-    const u32 ratios = troop.isValid() ? hero.GetArmy().GetHitPoints() / troop.GetHitPoints() : 0;
-    const bool check_free_stack = true; // (hero.GetArmy().GetCount() < hero.GetArmy().size() || hero.GetArmy().HasMonster(troop)); // set force, see
-                                        // Dialog::ArmyJoinWithCost, http://sourceforge.net/tracker/?func=detail&aid=3567985&group_id=96859&atid=616183
-    const bool check_extra_condition = ( !hero.HasArtifact( Artifact::HIDEOUS_MASK ) && Morale::NORMAL <= hero.GetMorale() );
+    const u32 ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
+    const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
 
     const bool join_skip = map_troop ? map_troop->JoinConditionSkip() : tile.MonsterJoinConditionSkip();
     const bool join_free = map_troop ? map_troop->JoinConditionFree() : tile.MonsterJoinConditionFree();
     // force join for campain and others...
     const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
 
-    if ( !join_skip && check_free_stack && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
+    if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
         if ( join_free || join_force )
             return JoinCount( JOIN_FREE, troop.GetCount() );
         else if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
@@ -1295,10 +1293,10 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
                 return JoinCount( JOIN_COST, to_join );
         }
     }
-    else if ( ratios >= 5 ) {
+
+    if ( ratios >= 5 && !hero.isControlAI() ) {
         // ... surely flee before us
-        if ( !hero.isControlAI() || Rand::Get( 0, 10 ) < 5 )
-            return JoinCount( JOIN_FLEE, 0 );
+        return JoinCount( JOIN_FLEE, 0 );
     }
 
     return JoinCount( JOIN_NONE, 0 );
@@ -1306,12 +1304,12 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
 
 bool Army::WeakestTroop( const Troop * t1, const Troop * t2 )
 {
-    return t1->GetDamageMax() < t2->GetDamageMax();
+    return t1->GetStrength() < t2->GetStrength();
 }
 
 bool Army::StrongestTroop( const Troop * t1, const Troop * t2 )
 {
-    return t1->GetDamageMin() > t2->GetDamageMin();
+    return t1->GetStrength() > t2->GetStrength();
 }
 
 bool Army::SlowestTroop( const Troop * t1, const Troop * t2 )
@@ -1322,6 +1320,11 @@ bool Army::SlowestTroop( const Troop * t1, const Troop * t2 )
 bool Army::FastestTroop( const Troop * t1, const Troop * t2 )
 {
     return t1->GetSpeed() > t2->GetSpeed();
+}
+
+bool Army::ArchersFirst( const Troop * t1, const Troop * t2 )
+{
+    return t1->isArchers() > t2->isArchers();
 }
 
 void Army::SwapTroops( Troop & t1, Troop & t2 )

@@ -653,7 +653,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 while ( le.HandleEvents() && alpha < 240 ) {
                                     if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
                                         cursor.Hide();
-                                        sf.SetAlphaMod( alpha );
+                                        sf.SetAlphaMod( alpha, false );
                                         sf.Blit( cur_pt.x, cur_pt.y + 356, display );
                                         cursor.Show();
                                         display.Flip();

@@ -192,6 +192,8 @@ namespace Game
         BATTLE_OPPONENTS_DELAY,
         BATTLE_FLAGS_DELAY,
         BATTLE_POPUP_DELAY,
+        COLOR_CYCLE_MAP_DELAY,
+        COLOR_CYCLE_BATTLE_DELAY,
         AUTOHIDE_STATUS_DELAY,
         //
         CURRENT_HERO_DELAY,
@@ -229,7 +231,6 @@ namespace Game
     int Testing( int );
 
     void DrawInterface( void );
-    void SetFixVideoMode( void );
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
