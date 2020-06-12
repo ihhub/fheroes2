@@ -741,7 +741,7 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
 
         case ICN::YELLOW_FONT:
         case ICN::YELLOW_SMALFONT:
-            LoadOrgICN( sprite, ICN::FONT, ii, false );
+            LoadOrgICN( sprite, icn == ICN::YELLOW_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
             colorPairs[PAL::GetPaletteColor( 0x0A )] = PAL::GetPaletteColor( 0xDA );
             colorPairs[PAL::GetPaletteColor( 0x0B )] = PAL::GetPaletteColor( 0xDA );
             colorPairs[PAL::GetPaletteColor( 0x0C )] = PAL::GetPaletteColor( 0xDA );
@@ -1069,7 +1069,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     }
 
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
-        res.second.SetAlphaMod( 0 );
+        res.second.SetAlphaMod( 0, false );
     }
 
     // fix air elem sprite

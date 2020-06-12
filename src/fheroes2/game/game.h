@@ -231,7 +231,6 @@ namespace Game
     int Testing( int );
 
     void DrawInterface( void );
-    void SetFixVideoMode( void );
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );

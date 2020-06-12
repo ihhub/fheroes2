@@ -198,19 +198,34 @@ void Display::Present( void )
 
 void Display::ToggleFullScreen( void )
 {
+    const Surface & temp = GetSurface();
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( window ) {
         u32 flags = SDL_GetWindowFlags( window );
 
         // toggle FullScreen
-        if ( flags & SDL_WINDOW_FULLSCREEN )
-            flags &= ~SDL_WINDOW_FULLSCREEN;
+        if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP )
+            flags = 0;
+        else
+#if defined( __WIN32__ )
+            flags = SDL_WINDOW_FULLSCREEN;
+#else
+            flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
 
         SDL_SetWindowFullscreen( window, flags );
     }
 #else
-    SDL_WM_ToggleFullScreen( surface );
+    const uint32_t flags = surface->flags;
+    surface = SDL_SetVideoMode( 0, 0, 0, surface->flags ^ SDL_FULLSCREEN );
+    if ( surface == NULL ) {
+        surface = SDL_SetVideoMode( 0, 0, 0, flags );
+        return;
+    }
 #endif
+
+    temp.Blit( *this );
 }
 
 void Display::SetCaption( const char * str )
@@ -369,7 +384,7 @@ void Display::Fade( const Surface & top, const Surface & back, const Point & pt,
 
     while ( alpha > min + level ) {
         back.Blit( pt, *this );
-        shadow.SetAlphaMod( alpha );
+        shadow.SetAlphaMod( alpha, false );
         shadow.Blit( pt, *this );
         Flip();
         alpha -= step;
@@ -388,7 +403,7 @@ void Display::InvertedFade( const Surface & top, const Surface & back, const Poi
     while ( alpha > min + level ) {
         back.Blit( offset, *this );
         shadow.Blit( offset, *this );
-        shadow.SetAlphaMod( alpha );
+        shadow.SetAlphaMod( alpha, false );
         middle.Blit( middleOffset, *this );
         Flip();
         alpha -= step;
@@ -416,7 +431,7 @@ void Display::Rise( const Surface & top, const Surface & back, const Point & pt,
 
     while ( alpha < max ) {
         back.Blit( *this );
-        shadow.SetAlphaMod( alpha );
+        shadow.SetAlphaMod( alpha, false );
         shadow.Blit( *this );
         Flip();
         alpha += step;
