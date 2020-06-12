@@ -811,7 +811,7 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
 
         case ICN::FONT:
         case ICN::SMALFONT:
-            LoadOrgICN( sprite, icn , ii, false );
+            LoadOrgICN( sprite, icn, ii, false );
             ReplaceColors( sprite, PAL::GetPalette( PAL::WHITE_TEXT ), icn, ii, false );
             break;
 
@@ -1146,7 +1146,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         }
     }
 
-    _icnIdVsData[std::make_pair(icn, index)] = originalData;
+    _icnIdVsData[std::make_pair( icn, index )] = originalData;
 
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
         res.second.SetAlphaMod( 0, false );

@@ -193,42 +193,42 @@ RGBA PAL::GetPaletteColor( u8 index )
 const std::vector<uint8_t> & PAL::GetPalette( int type )
 {
     switch( type ) {
-        case YELLOW_TEXT: {
-            static std::vector<uint8_t> palette( yellow_text_table, yellow_text_table + PALETTE_SIZE );
-            return palette;
-        }
-        case WHITE_TEXT: {
-            static std::vector<uint8_t> palette( white_text_table, white_text_table + PALETTE_SIZE );
-            return palette;
-        }
-        case GRAY_TEXT: {
-            static std::vector<uint8_t> palette( gray_text_table, gray_text_table + PALETTE_SIZE );
-            return palette;
-        }
-        case RED: {
-            static std::vector<uint8_t> palette( red_table, red_table + PALETTE_SIZE );
-            return palette;
-        }
-        case GRAY: {
-            static std::vector<uint8_t> palette( gray_table, gray_table + PALETTE_SIZE );
-            return palette;
-        }
-        case BROWN: {
-            static std::vector<uint8_t> palette( brown_table, brown_table + PALETTE_SIZE );
-            return palette;
-        }
-        case TAN: {
-            static std::vector<uint8_t> palette( tan_table, tan_table + PALETTE_SIZE );
-            return palette;
-        }
-        case NO_CYCLE: {
-            static std::vector<uint8_t> palette( no_cycle_table, no_cycle_table + PALETTE_SIZE );
-            return palette;
-        }
-        case MIRROR_IMAGE: {
-            static std::vector<uint8_t> palette( mirror_image_table, mirror_image_table + PALETTE_SIZE );
-            return palette;
-        }
+    case YELLOW_TEXT: {
+        static std::vector<uint8_t> palette( yellow_text_table, yellow_text_table + PALETTE_SIZE );
+        return palette;
+    }
+    case WHITE_TEXT: {
+        static std::vector<uint8_t> palette( white_text_table, white_text_table + PALETTE_SIZE );
+        return palette;
+    }
+    case GRAY_TEXT: {
+        static std::vector<uint8_t> palette( gray_text_table, gray_text_table + PALETTE_SIZE );
+        return palette;
+    }
+    case RED: {
+        static std::vector<uint8_t> palette( red_table, red_table + PALETTE_SIZE );
+        return palette;
+    }
+    case GRAY: {
+        static std::vector<uint8_t> palette( gray_table, gray_table + PALETTE_SIZE );
+        return palette;
+    }
+    case BROWN: {
+        static std::vector<uint8_t> palette( brown_table, brown_table + PALETTE_SIZE );
+        return palette;
+    }
+    case TAN: {
+        static std::vector<uint8_t> palette( tan_table, tan_table + PALETTE_SIZE );
+        return palette;
+    }
+    case NO_CYCLE: {
+        static std::vector<uint8_t> palette( no_cycle_table, no_cycle_table + PALETTE_SIZE );
+        return palette;
+    }
+    case MIRROR_IMAGE: {
+        static std::vector<uint8_t> palette( mirror_image_table, mirror_image_table + PALETTE_SIZE );
+        return palette;
+    }
     }
 
     static std::vector<uint8_t> empty;
