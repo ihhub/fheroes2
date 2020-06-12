@@ -1571,7 +1571,7 @@ bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector
                 const uint8_t * inX = inY + width - 1;
                 const uint32_t * outEndX = out + width;
                 for ( ; out != outEndX; ++out, --inX ) {
-                    *out = ( *out & 0xff000000 ) + colors[*inX];
+                    *out = colors[*inX];
                 }
             }
         }
