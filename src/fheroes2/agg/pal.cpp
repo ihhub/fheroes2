@@ -192,7 +192,7 @@ RGBA PAL::GetPaletteColor( u8 index )
 
 const std::vector<uint8_t> & PAL::GetPalette( int type )
 {
-    switch( type ) {
+    switch ( type ) {
     case YELLOW_TEXT: {
         static std::vector<uint8_t> palette( yellow_text_table, yellow_text_table + PALETTE_SIZE );
         return palette;
