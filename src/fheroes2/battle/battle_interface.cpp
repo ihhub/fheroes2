@@ -1201,10 +1201,14 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
     const Monster::monstersprite_t & msi = b.GetMonsterSprite();
     Sprite spmon1, spmon2;
 
-    // under medusa's stunning effect
-    if ( b.Modes( SP_STONE ) ) {
+    if ( b_current_sprite && _currentUnit == &b ) {
+        spmon1 = *b_current_sprite;
+        spmon2.Reset();
+    }
+    else if ( b.Modes( SP_STONE ) ) { // under medusa's stunning effect
         const Sprite & original = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
-        spmon1 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT | CONTOUR_BLACK ) : b.GetContour( CONTOUR_BLACK ), original.x(), original.y() );
+        spmon1 = Sprite( original.GetSurface(), original.x(), original.y() );
+        AGG::ReplaceColors( spmon1, PAL::GetPalette( PAL::GRAY ), msi.icn_file, b.GetFrame(), b.isReflect() );
     }
     else {
         // regular
@@ -1258,6 +1262,11 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
             sp.x += cx + ( _movingPos.x - _flyingPos.x ) * _flyingUnit->animation.movementProgress();
             sp.y += cy + ( _movingPos.y - _flyingPos.y ) * _flyingUnit->animation.movementProgress();
+        }
+
+        if ( b.Modes( CAP_MIRRORIMAGE ) ) {
+            spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
+            AGG::ReplaceColors( spmon1, PAL::GetPalette( PAL::MIRROR_IMAGE ), msi.icn_file, b.GetFrame(), b.isReflect() );
         }
 
         // sprite monster
@@ -3572,42 +3581,49 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    Sprite unitSprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    unitSprite = Sprite( unitSprite.GetSurface(), unitSprite.x(), unitSprite.y() );
 
-    Sprite sprite2( Surface( sprite1.GetSize(), false ), sprite1.x(), sprite1.y() );
-    sprite1.Blit( sprite2 );
+    std::vector<uint8_t> convert = PAL::GetPalette( PAL::RED );
+    if ( target.Modes( SP_STONE ) ) {
+        convert = PAL::CombinePalettes( PAL::GetPalette( PAL::GRAY ), convert );
+        AGG::ReplaceColors( unitSprite, PAL::GetPalette( PAL::GRAY ), msi.icn_file, target.GetFrame(), target.isReflect() );
+    }
 
-    Surface sprite3 = sprite1.RenderStencil( RGBA( 0xB0, 0x0C, 0 ) );
+    Sprite bloodlustEffect( unitSprite.GetSurface(), unitSprite.x(), unitSprite.y() );
+    AGG::ReplaceColors( bloodlustEffect, convert, msi.icn_file, target.GetFrame(), target.isReflect() );
+
+    Sprite mixSprite( Surface( unitSprite.GetSize(), true ), unitSprite.x(), unitSprite.y() );
 
     cursor.SetThemes( Cursor::WAR_NONE );
     cursor.Hide();
 
     _currentUnit = &target;
-    b_current_sprite = &sprite2;
-    u32 alpha = 10;
+    b_current_sprite = &mixSprite;
 
+    const uint32_t bloodlustDelay = 1800 / 20;
+    // duration is 1900ms
     AGG::PlaySound( M82::BLOODLUS );
 
-    while ( le.HandleEvents() && alpha < 150 ) {
+    uint32_t alpha = 0;
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( frame < 20 && Game::AnimateCustomDelay( bloodlustDelay ) ) {
             cursor.Hide();
-            sprite1.Blit( sprite2 );
-            sprite3.SetAlphaMod( alpha, false );
-            sprite3.Blit( sprite2 );
+            mixSprite = Sprite( unitSprite.GetSurface(), unitSprite.x(), unitSprite.y() );
+            Surface temp = bloodlustEffect.GetSurface();
+            temp.SetAlphaMod( alpha, false );
+            temp.Blit( mixSprite );
             Redraw();
             cursor.Show();
             display.Flip();
 
-            alpha += 10;
+            alpha += ( frame < 10 ) ? 20 : -20;
+            ++frame;
         }
     }
-
-    DELAY( 100 );
-
-    while ( Mixer::isValid() && Mixer::isPlaying( -1 ) )
-        DELAY( 10 );
 
     _currentUnit = NULL;
     b_current_sprite = NULL;

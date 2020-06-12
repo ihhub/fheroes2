@@ -27,6 +27,14 @@
 #include "settings.h"
 #include "text.h"
 
+namespace
+{
+    bool isSmallFont( int font )
+    {
+        return font == Font::SMALL || font == Font::YELLOW_SMALL || font == Font::GRAY_SMALL;
+    }
+}
+
 TextInterface::TextInterface( int ft )
     : font( ft )
 {
@@ -66,7 +74,7 @@ size_t TextAscii::Size( void ) const
 
 int TextAscii::CharWidth( int c, int f )
 {
-    return ( c < 0x21 ? ( Font::SMALL == f || Font::YELLOW_SMALL == f ? 4 : 6 ) : AGG::GetLetter( c, f ).w() );
+    return ( c < 0x21 ? ( isSmallFont( f ) ? 4 : 6 ) : AGG::GetLetter( c, f ).w() );
 }
 
 int TextAscii::CharHeight( int f )
@@ -76,12 +84,12 @@ int TextAscii::CharHeight( int f )
 
 int TextAscii::CharAscent( int f )
 {
-    return Font::SMALL == f || Font::YELLOW_SMALL == f ? 8 : 13;
+    return isSmallFont( f ) ? 8 : 13;
 }
 
 int TextAscii::CharDescent( int f )
 {
-    return Font::SMALL == f || Font::YELLOW_SMALL == f ? 2 : 3;
+    return isSmallFont( f ) ? 2 : 3;
 }
 
 int TextAscii::w( u32 s, u32 c ) const
@@ -258,12 +266,12 @@ size_t TextUnicode::Size( void ) const
 
 int TextUnicode::CharWidth( int c, int f )
 {
-    return ( c < 0x0021 ? ( Font::SMALL == f || Font::YELLOW_SMALL == f ? 4 : 6 ) : AGG::GetUnicodeLetter( c, f ).w() );
+    return ( c < 0x0021 ? ( isSmallFont( f ) ? 4 : 6 ) : AGG::GetUnicodeLetter( c, f ).w() );
 }
 
 int TextUnicode::CharHeight( int f )
 {
-    return Font::SMALL == f || Font::YELLOW_SMALL == f ? ( AGG::GetFontHeight( true ) + 2 ) : ( AGG::GetFontHeight( false ) + 8 );
+    return isSmallFont( f ) ? ( AGG::GetFontHeight( true ) + 2 ) : ( AGG::GetFontHeight( false ) + 8 );
 }
 
 int TextUnicode::CharAscent( int f )

@@ -1319,9 +1319,9 @@ Surface Surface::ModifyAlphaChannel( uint32_t alpha ) const
             uint32_t * x = y;
             const uint32_t * xEnd = x + width;
             for ( ; x != xEnd; ++x ) {
-                const uint32_t rest = *x % ( 16777216 );
+                const uint32_t rest = *x % 0x1000000;
 
-                *x = ( ( *x / 16777216 ) * alpha / 255 ) * 16777216 + rest;
+                *x = ( ( ( *x >> 24 ) * alpha / 255 ) << 24 ) + rest;
             }
         }
 
@@ -1533,4 +1533,66 @@ Surface Surface::RenderSurface( const Rect & srcrt, const Size & sz ) const
     srcsf.Blit( Rect( srcrt.x + srcrt.w - cw, srcrt.y + srcrt.h - ch, cw, ch ), dstrt.x + dstrt.w - cw, dstrt.y + dstrt.h - ch, dstsf );
 
     return dstsf;
+}
+
+bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect )
+{
+    if ( depth() != 32 )
+        return false;
+
+    Lock();
+
+    const int height = h();
+    const int width = w();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width || pitch * height != indexes.size() ) {
+        Unlock();
+        return false;
+    }
+
+    uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+
+    if ( reflect ) {
+        const uint8_t * inY = indexes.data();
+        const uint8_t * inYEnd = inY + width * height;
+
+        if ( alpha() ) {
+            for ( ; inY != inYEnd; inY += width ) {
+                const uint8_t * inX = inY + width - 1;
+                const uint32_t * outEndX = out + width;
+                for ( ; out != outEndX; ++out, --inX ) {
+                    *out = ( *out & 0xff000000 ) + colors[*inX];
+                }
+            }
+        }
+        else {
+            for ( ; inY != inYEnd; inY += width ) {
+                const uint8_t * inX = inY + width - 1;
+                const uint32_t * outEndX = out + width;
+                for ( ; out != outEndX; ++out, --inX ) {
+                    *out = ( *out & 0xff000000 ) + colors[*inX];
+                }
+            }
+        }
+    }
+    else {
+        const uint32_t * outEnd = out + indexes.size();
+        const uint8_t * in = indexes.data();
+
+        if ( alpha() ) {
+            for ( ; out != outEnd; ++out, ++in ) {
+                *out = ( *out & 0xff000000 ) + colors[*in];
+            }
+        }
+        else {
+            for ( ; out != outEnd; ++out, ++in ) {
+                *out = colors[*in];
+            }
+        }
+    }
+
+    Unlock();
+
+    return true;
 }

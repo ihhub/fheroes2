@@ -190,6 +190,65 @@ RGBA PAL::GetPaletteColor( u8 index )
     return index < colors.size() ? RGBA( colors[index].r, colors[index].g, colors[index].b ) : RGBA( 0, 0, 0 );
 }
 
+const std::vector<uint8_t> & PAL::GetPalette( int type )
+{
+    switch( type ) {
+        case YELLOW_TEXT: {
+            static std::vector<uint8_t> palette( yellow_text_table, yellow_text_table + PALETTE_SIZE );
+            return palette;
+        }
+        case WHITE_TEXT: {
+            static std::vector<uint8_t> palette( white_text_table, white_text_table + PALETTE_SIZE );
+            return palette;
+        }
+        case GRAY_TEXT: {
+            static std::vector<uint8_t> palette( gray_text_table, gray_text_table + PALETTE_SIZE );
+            return palette;
+        }
+        case RED: {
+            static std::vector<uint8_t> palette( red_table, red_table + PALETTE_SIZE );
+            return palette;
+        }
+        case GRAY: {
+            static std::vector<uint8_t> palette( gray_table, gray_table + PALETTE_SIZE );
+            return palette;
+        }
+        case BROWN: {
+            static std::vector<uint8_t> palette( brown_table, brown_table + PALETTE_SIZE );
+            return palette;
+        }
+        case TAN: {
+            static std::vector<uint8_t> palette( tan_table, tan_table + PALETTE_SIZE );
+            return palette;
+        }
+        case NO_CYCLE: {
+            static std::vector<uint8_t> palette( no_cycle_table, no_cycle_table + PALETTE_SIZE );
+            return palette;
+        }
+        case MIRROR_IMAGE: {
+            static std::vector<uint8_t> palette( mirror_image_table, mirror_image_table + PALETTE_SIZE );
+            return palette;
+        }
+    }
+
+    static std::vector<uint8_t> empty;
+    return empty;
+}
+
+std::vector<uint8_t> PAL::CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second )
+{
+    if ( first.size() != PALETTE_SIZE || second.size() != PALETTE_SIZE )
+        return std::vector<uint8_t>();
+
+    std::vector<uint8_t> combined( PALETTE_SIZE, 0 );
+
+    for ( size_t i = 0; i < first.size(); ++i ) {
+        combined[i] = second[first[i]];
+    }
+
+    return combined;
+}
+
 void PAL::SwapPalette( int type )
 {
     current_palette = &palmap[type];
