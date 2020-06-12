@@ -314,6 +314,8 @@ namespace AI
         for ( MapsIndexes::const_iterator it = pickups.begin(); it != pickups.end(); ++it )
             if ( *it != hero.GetPath().GetDestinationIndex() )
                 task.push_front( *it );
+
+        DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " stopped, new tasks added " << task.size() );
     }
 
     bool Simple::HeroesGetTask( Heroes & hero )
@@ -354,7 +356,7 @@ namespace AI
 
         // patrol task
         if ( hero.Modes( Heroes::PATROL ) ) {
-            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", is patrol mode" );
+            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", is in patrol mode" );
 
             // goto patrol center
             if ( hero.GetCenterPatrol() != hero.GetCenter() && hero.GetPath().Calculate( Maps::GetIndexFromAbsPoint( hero.GetCenterPatrol() ) ) )
@@ -368,7 +370,7 @@ namespace AI
                     const Heroes * enemy = world.GetTiles( *it ).GetHeroes();
                     if ( enemy && !enemy->isFriends( hero.GetColor() ) ) {
                         if ( hero.GetPath().Calculate( enemy->GetIndex() ) ) {
-                            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", find enemy" );
+                            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", enemy found: " << enemy->GetName() );
                             return true;
                         }
                     }
@@ -382,7 +384,7 @@ namespace AI
                     if ( AI::HeroesValidObject( hero, *it ) && hero.GetPath().Calculate( *it ) ) {
                         ai_objects.erase( *it );
 
-                        DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ": find object: " << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "(" << *it << ")" );
+                        DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ": object found: " << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "(" << *it << ")" );
                         return true;
                     }
             }
@@ -413,7 +415,7 @@ namespace AI
         }
 
         if ( ai_hero.fix_loop > 3 ) {
-            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ": loop" );
+            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ": break loop" );
             hero.SetModes( hero.Modes( AI::HEROES_WAITING ) ? AI::HEROES_STUPID : AI::HEROES_WAITING );
             return false;
         }
@@ -485,7 +487,7 @@ namespace AI
                 if ( AI::HeroesValidObject( hero, *it ) ) {
                     task.push_front( *it );
 
-                    DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", find object: " << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "(" << *it << ")" );
+                    DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", object found: " << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "(" << *it << ")" );
                 }
         }
 
@@ -517,11 +519,11 @@ namespace AI
         while ( task.size() ) {
             const s32 & index = task.front();
 
-            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", look for: " << MP2::StringObject( world.GetTiles( index ).GetObject() ) << "(" << index << ")" );
+            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", looking for: " << MP2::StringObject( world.GetTiles( index ).GetObject() ) << "(" << index << ")" );
             if ( hero.GetPath().Calculate( index ) )
                 break;
 
-            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " say: unable get object: " << index << ", remove task..." );
+            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " say: unable to get object: " << index << ", remove task..." );
             task.pop_front();
         }
 
@@ -538,7 +540,7 @@ namespace AI
         }
         else if ( hero.Modes( AI::HEROES_WAITING ) ) {
             hero.GetPath().Reset();
-            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " say: unknown task., help my please.." );
+            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " say: unknown task, help me please.." );
 
             hero.ResetModes( AI::HEROES_WAITING );
             hero.SetModes( AI::HEROES_STUPID );
