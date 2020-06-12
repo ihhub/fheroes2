@@ -803,10 +803,7 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
 
         case ICN::ROUTERED:
             LoadOrgICN( sprite, ICN::ROUTE, ii, false );
-            colorPairs[PAL::GetPaletteColor( 0x55 )] = RGBA( 164, 88, 16 );
-            colorPairs[PAL::GetPaletteColor( 0x5C )] = RGBA( 84, 0, 0 );
-            colorPairs[PAL::GetPaletteColor( 0x60 )] = RGBA( 72, 0, 0 );
-            sprite.ChangeColor( colorPairs );
+            ReplaceColors( sprite, PAL::GetPalette( PAL::RED ), ICN::ROUTE, ii, false );
             break;
 
         case ICN::FONT:
