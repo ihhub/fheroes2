@@ -120,13 +120,11 @@ s32 Route::Path::GetDestinedIndex( void ) const
 }
 
 /* return length path */
-bool Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
+uint32_t Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
 {
     dst = dst_index;
 
-    Find( dst, limit );
-
-    return !empty();
+    return Find( dst, limit );
 }
 
 void Route::Path::Reset( void )

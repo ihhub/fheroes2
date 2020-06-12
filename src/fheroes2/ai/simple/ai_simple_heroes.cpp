@@ -301,21 +301,19 @@ namespace AI
 
     void Simple::HeroesActionNewPosition( Heroes & hero )
     {
-        AIHero & ai_hero = GetHero( hero );
-        // AIKingdom & ai_kingdom = AIKingdoms::Get(hero.GetColor());
-        Queue & task = ai_hero.sheduled_visit;
+        //AIHero & ai_hero = GetHero( hero );
+        //// AIKingdom & ai_kingdom = AIKingdoms::Get(hero.GetColor());
+        //Queue & task = ai_hero.sheduled_visit;
 
-        const u8 objs[] = {MP2::OBJ_ARTIFACT, MP2::OBJ_RESOURCE, MP2::OBJ_CAMPFIRE, MP2::OBJ_TREASURECHEST, 0};
-        Maps::Indexes pickups = Maps::ScanAroundObjects( hero.GetIndex(), objs );
+        //const u8 objs[] = {MP2::OBJ_ARTIFACT, MP2::OBJ_RESOURCE, MP2::OBJ_CAMPFIRE, MP2::OBJ_TREASURECHEST, 0};
+        //Maps::Indexes pickups = Maps::ScanAroundObjects( hero.GetIndex(), objs );
 
-        if ( pickups.size() && hero.GetPath().isValid() && pickups.end() == std::find( pickups.begin(), pickups.end(), hero.GetPath().GetDestinationIndex() ) )
-            hero.GetPath().Reset();
+        //if ( pickups.size() && hero.GetPath().isValid() && pickups.end() == std::find( pickups.begin(), pickups.end(), hero.GetPath().GetDestinationIndex() ) )
+        //    hero.GetPath().Reset();
 
-        for ( MapsIndexes::const_iterator it = pickups.begin(); it != pickups.end(); ++it )
-            if ( *it != hero.GetPath().GetDestinationIndex() )
-                task.push_front( *it );
-
-        DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " stopped, new tasks added " << task.size() );
+        //for ( MapsIndexes::const_iterator it = pickups.begin(); it != pickups.end(); ++it )
+        //    if ( *it != hero.GetPath().GetDestinationIndex() )
+        //        task.push_front( *it );
     }
 
     bool Simple::HeroesGetTask( Heroes & hero )
