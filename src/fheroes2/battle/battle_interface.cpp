@@ -1202,14 +1202,15 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
     const Monster::monstersprite_t & msi = b.GetMonsterSprite();
     Sprite spmon1, spmon2;
 
+    std::vector<std::vector<uint8_t> > applyPalettes;
+
     if ( b_current_sprite && _currentUnit == &b ) {
         spmon1 = *b_current_sprite;
         spmon2.Reset();
     }
     else if ( b.Modes( SP_STONE ) ) { // under medusa's stunning effect
-        const Sprite & original = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
-        spmon1 = Sprite( original.GetSurface(), original.x(), original.y() );
-        AGG::ReplaceColors( spmon1, PAL::GetPalette( PAL::GRAY ), msi.icn_file, b.GetFrame(), b.isReflect() );
+        spmon1 = AGG::GetICN( msi.icn_file, b.GetFrame(), b.isReflect() );
+        applyPalettes.push_back( PAL::GetPalette( PAL::GRAY ) );
     }
     else {
         // regular
@@ -1229,8 +1230,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         if ( b.hasColorCycling() ) {
             const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
             if ( !isUnderAlphaEffect ) {
-                spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
-                AGG::ReplaceColors( spmon1, _creaturePalette, msi.icn_file, b.GetFrame(), b.isReflect() );
+                applyPalettes.push_back( _creaturePalette );
             }
         }
     }
@@ -1267,8 +1267,15 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         }
 
         if ( b.Modes( CAP_MIRRORIMAGE ) ) {
+            applyPalettes.push_back( PAL::GetPalette( PAL::MIRROR_IMAGE ) );
+        }
+
+        if ( !applyPalettes.empty() ) {
+            for ( size_t i = 1; i < applyPalettes.size(); ++i ) {
+                applyPalettes[0] = PAL::CombinePalettes( applyPalettes[0], applyPalettes[i] );
+            }
             spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
-            AGG::ReplaceColors( spmon1, PAL::GetPalette( PAL::MIRROR_IMAGE ), msi.icn_file, b.GetFrame(), b.isReflect() );
+            AGG::ReplaceColors( spmon1, applyPalettes[0], msi.icn_file, b.GetFrame(), b.isReflect() );
         }
 
         // sprite monster
@@ -3437,7 +3444,12 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    Sprite sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    sprite = Sprite( sprite.GetSurface(), sprite.x(), sprite.y() );
+
+    if ( target.Modes( SP_STONE ) ) {
+        AGG::ReplaceColors( sprite, PAL::GetPalette( PAL::GRAY ), msi.icn_file, target.GetFrame(), target.isReflect() );
+    }
 
     cursor.SetThemes( Cursor::WAR_NONE );
     cursor.Hide();
