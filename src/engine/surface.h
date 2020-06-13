@@ -174,6 +174,8 @@ public:
 
     bool SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect );
 
+    static Surface Blend( const Surface & first, const Surface & second, uint8_t ratio );
+
 protected:
     static void FreeSurface( Surface & );
 

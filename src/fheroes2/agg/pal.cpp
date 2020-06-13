@@ -231,8 +231,15 @@ const std::vector<uint8_t> & PAL::GetPalette( int type )
     }
     }
 
-    static std::vector<uint8_t> empty;
-    return empty;
+    static std::vector<uint8_t> standard;
+    if ( standard.empty() ) {
+        standard.resize( PALETTE_SIZE, 0 );
+        for ( int i = 0; i < PALETTE_SIZE; ++i ) {
+            standard[i] = static_cast<uint8_t>( i );
+        }
+    }
+
+    return standard;
 }
 
 std::vector<uint8_t> PAL::CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second )
