@@ -282,7 +282,7 @@ namespace Battle
         int catapult_frame;
 
         uint32_t _colorCycle;
-        std::map<RGBA, RGBA> _colorCyclePairs;
+        std::vector<uint8_t> _creaturePalette;
 
         const Unit * _currentUnit;
         const Unit * _movingUnit;

@@ -857,6 +857,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , listlog( NULL )
     , turn( 0 )
     , _colorCycle( 0 )
+    , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
 {
     const Settings & conf = Settings::Get();
     bool pda = conf.QVGA();
@@ -1027,13 +1028,13 @@ void Battle::Interface::CycleColors()
     if ( _colorCycle > 20 ) // 5 * 4, two color ranges
         _colorCycle = 0;
 
-    _colorCyclePairs.clear();
+    _creaturePalette = PAL::GetPalette( PAL::STANDARD );
 
     const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
     for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
         for ( int id = 0; id < it->length; ++id ) {
             const uint8_t newColorID = it->forward ? it->start + ( id + _colorCycle ) % it->length : it->start + it->length - 1 - ( 3 + _colorCycle - id ) % it->length;
-            _colorCyclePairs[PAL::GetPaletteColor( it->start + id )] = PAL::GetPaletteColor( newColorID );
+            _creaturePalette[it->start + id] = newColorID;
         }
     }
 }
@@ -1228,7 +1229,8 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
         if ( b.hasColorCycling() ) {
             const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
             if ( !isUnderAlphaEffect ) {
-                spmon1.ChangeColor( _colorCyclePairs );
+                spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
+                AGG::ReplaceColors( spmon1, _creaturePalette, msi.icn_file, b.GetFrame(), b.isReflect() );
             }
         }
     }
