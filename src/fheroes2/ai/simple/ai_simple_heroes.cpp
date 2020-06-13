@@ -69,7 +69,7 @@ namespace AI
 
         os << "ai primary target: " << ai_hero.primary_target << std::endl << "ai sheduled visit: ";
         for ( Queue::const_iterator it = task.begin(); it != task.end(); ++it )
-            os << *it << "(" << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "), ";
+            os << it->first << "(" << MP2::StringObject( world.GetTiles( it->first ).GetObject() ) << "), ";
         os << std::endl;
 
         return os.str();
@@ -236,7 +236,7 @@ namespace AI
         }
 
         if ( 0 <= index )
-            task.push_back( index );
+            task.push_back( {index, Maps::GetApproximateDistance( hero.GetIndex(), index )} );
     }
 
     void Simple::HeroesAddedTask( Heroes & hero )
@@ -284,7 +284,7 @@ namespace AI
                        Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", added tasks: " << MP2::StringObject( ai_objects[( *it ).first] )
                                                         << ", index: " << ( *it ).first << ", distance: " << ( *it ).second );
 
-                task.push_back( ( *it ).first );
+                task.push_back( *it );
                 ai_objects.erase( ( *it ).first );
             }
             else {
@@ -301,17 +301,17 @@ namespace AI
 
     void Simple::HeroesActionNewPosition( Heroes & hero )
     {
-        //AIHero & ai_hero = GetHero( hero );
+        // AIHero & ai_hero = GetHero( hero );
         //// AIKingdom & ai_kingdom = AIKingdoms::Get(hero.GetColor());
-        //Queue & task = ai_hero.sheduled_visit;
+        // Queue & task = ai_hero.sheduled_visit;
 
-        //const u8 objs[] = {MP2::OBJ_ARTIFACT, MP2::OBJ_RESOURCE, MP2::OBJ_CAMPFIRE, MP2::OBJ_TREASURECHEST, 0};
-        //Maps::Indexes pickups = Maps::ScanAroundObjects( hero.GetIndex(), objs );
+        // const u8 objs[] = {MP2::OBJ_ARTIFACT, MP2::OBJ_RESOURCE, MP2::OBJ_CAMPFIRE, MP2::OBJ_TREASURECHEST, 0};
+        // Maps::Indexes pickups = Maps::ScanAroundObjects( hero.GetIndex(), objs );
 
-        //if ( pickups.size() && hero.GetPath().isValid() && pickups.end() == std::find( pickups.begin(), pickups.end(), hero.GetPath().GetDestinationIndex() ) )
+        // if ( pickups.size() && hero.GetPath().isValid() && pickups.end() == std::find( pickups.begin(), pickups.end(), hero.GetPath().GetDestinationIndex() ) )
         //    hero.GetPath().Reset();
 
-        //for ( MapsIndexes::const_iterator it = pickups.begin(); it != pickups.end(); ++it )
+        // for ( MapsIndexes::const_iterator it = pickups.begin(); it != pickups.end(); ++it )
         //    if ( *it != hero.GetPath().GetDestinationIndex() )
         //        task.push_front( *it );
     }
@@ -327,6 +327,8 @@ namespace AI
 
         Queue & task = ai_hero.sheduled_visit;
         IndexObjectMap & ai_objects = ai_kingdom.scans;
+
+        const int heroIndex = hero.GetIndex();
 
         const u8 objs1[] = {MP2::OBJ_ARTIFACT, MP2::OBJ_RESOURCE, MP2::OBJ_CAMPFIRE, MP2::OBJ_TREASURECHEST, 0};
         const u8 objs2[] = {MP2::OBJ_SAWMILL, MP2::OBJ_MINES, MP2::OBJ_ALCHEMYLAB, 0};
@@ -377,7 +379,7 @@ namespace AI
 
             // can pickup objects
             if ( conf.ExtHeroPatrolAllowPickup() ) {
-                const Maps::Indexes & mapIndices = Maps::ScanAroundObjects( hero.GetIndex(), hero.GetSquarePatrol(), objs1 );
+                const Maps::Indexes & mapIndices = Maps::ScanAroundObjects( heroIndex, hero.GetSquarePatrol(), objs1 );
                 for ( MapsIndexes::const_iterator it = mapIndices.begin(); it != mapIndices.end(); ++it )
                     if ( AI::HeroesValidObject( hero, *it ) && hero.GetPath().Calculate( *it ) ) {
                         ai_objects.erase( *it );
@@ -420,7 +422,7 @@ namespace AI
 
         // primary target
         if ( Maps::isValidAbsIndex( ai_hero.primary_target ) ) {
-            if ( hero.GetIndex() == ai_hero.primary_target ) {
+            if ( heroIndex == ai_hero.primary_target ) {
                 ai_hero.primary_target = -1;
                 hero.GetPath().Reset();
                 DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", reset path" );
@@ -450,7 +452,7 @@ namespace AI
         }
 
         // scan heroes and castle
-        const Maps::Indexes & enemies = Maps::ScanAroundObjects( hero.GetIndex(), hero.GetScoute(), objs3 );
+        const Maps::Indexes & enemies = Maps::ScanAroundObjects( heroIndex, hero.GetScoute(), objs3 );
 
         for ( MapsIndexes::const_iterator it = enemies.begin(); it != enemies.end(); ++it )
             if ( AIHeroesPriorityObject( hero, *it ) && hero.GetPath().Calculate( *it ) ) {
@@ -472,9 +474,9 @@ namespace AI
         }
 
         // scan 2x2 pickup objects
-        Maps::Indexes pickups = Maps::ScanAroundObjects( hero.GetIndex(), 2, objs1 );
+        Maps::Indexes pickups = Maps::ScanAroundObjects( heroIndex, 2, objs1 );
         // scan 3x3 capture objects
-        const Maps::Indexes & captures = Maps::ScanAroundObjects( hero.GetIndex(), 3, objs2 );
+        const Maps::Indexes & captures = Maps::ScanAroundObjects( heroIndex, 3, objs2 );
         if ( captures.size() )
             pickups.insert( pickups.end(), captures.begin(), captures.end() );
 
@@ -483,13 +485,16 @@ namespace AI
 
             for ( MapsIndexes::const_iterator it = pickups.begin(); it != pickups.end(); ++it )
                 if ( AI::HeroesValidObject( hero, *it ) ) {
-                    task.push_front( *it );
+                    uint32_t dist = hero.GetPath().Calculate( *it );
 
-                    DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", object found: " << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "(" << *it << ")" );
+                    if ( dist != 0 ) {
+                        task.push_front( {*it, dist / 100} );
+                        DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", object found: " << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "(" << *it << ")" );
+                    }
                 }
         }
 
-        if ( hero.GetPath().isValid() ) {
+        if ( !pickups.size() && hero.GetPath().isValid() ) {
             DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", continue" );
             ai_hero.fix_loop++;
             return true;
@@ -500,34 +505,28 @@ namespace AI
             DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", empty task" );
             HeroesAddedTask( hero );
         }
-        else
-            // remove invalid task
-            task.remove_if( std::not1( std::bind1st( std::ptr_fun( &AIHeroesValidObject2 ), &hero ) ) );
 
-        // random shuffle
-        if ( 1 < task.size() && Rand::Get( 1 ) ) {
-            Queue::iterator it1, it2;
-            it2 = it1 = task.begin();
-            ++it2;
-
-            std::swap( *it1, *it2 );
-        }
+        task.sort( IndexDistance::Shortest );
 
         // find passable index
         while ( task.size() ) {
-            const s32 & index = task.front();
+            const int index = task.front().first;
+            const int object = world.GetTiles( index ).GetObject();
 
-            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", looking for: " << MP2::StringObject( world.GetTiles( index ).GetObject() ) << "(" << index << ")" );
-            if ( hero.GetPath().Calculate( index ) )
-                break;
+            if ( object != MP2::OBJ_ZERO ) {
+                DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", looking for: " << MP2::StringObject( world.GetTiles( index ).GetObject() ) << "(" << index << ")" );
+                if ( hero.GetPath().Calculate( index ) )
+                    break;
 
-            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " say: unable to get object: " << index << ", remove task..." );
+                DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " say: unable to get object: " << index << ", remove task..." );
+            }
+
             task.pop_front();
         }
 
         // success
         if ( task.size() ) {
-            const s32 & index = task.front();
+            const s32 & index = task.front().first;
             DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " go to: " << index );
 
             ai_objects.erase( index );
@@ -594,9 +593,8 @@ namespace AI
     bool Simple::IsPriorityAndNotVisitAndNotPresent( const std::pair<s32, int> & indexObj, const Heroes * hero )
     {
         AIHero & ai_hero = GetHero( *hero );
-        Queue & task = ai_hero.sheduled_visit;
 
-        return AIHeroesPriorityObject( *hero, indexObj.first ) && !HeroesScheduledVisit( hero->GetKingdom(), indexObj.first ) && !task.isPresent( indexObj.first );
+        return !HeroesScheduledVisit( hero->GetKingdom(), indexObj.first ) && AIHeroesPriorityObject( *hero, indexObj.first );
     }
 
     void Simple::HeroesTurnEnd( Heroes * hero )
@@ -612,19 +610,17 @@ namespace AI
                 hero->ResetModes( AI::HEROES_WAITING | AI::HEROES_STUPID );
             }
 
-            IndexObjectMap::iterator it;
+            std::vector<int> validObjects;
+            for ( IndexObjectMap::iterator it = ai_objects.begin(); it != ai_objects.end(); ++it ) {
+                if ( IsPriorityAndNotVisitAndNotPresent( *it, hero ) ) {
+                    validObjects.push_back( it->first );
+                    DEBUG( DBG_AI, DBG_TRACE, hero->GetName() << ", adding priority object: " << MP2::StringObject( ( *it ).second ) << ", index: " << ( *it ).first );
+                }
+            }
 
-            while ( true ) {
-                for ( it = ai_objects.begin(); it != ai_objects.end(); ++it )
-                    if ( IsPriorityAndNotVisitAndNotPresent( *it, hero ) )
-                        break;
-
-                if ( ai_objects.end() == it )
-                    break;
-
-                DEBUG( DBG_AI, DBG_TRACE, hero->GetName() << ", added priority object: " << MP2::StringObject( ( *it ).second ) << ", index: " << ( *it ).first );
-                task.push_front( ( *it ).first );
-                ai_objects.erase( ( *it ).first );
+            for ( std::vector<int>::iterator it = validObjects.begin(); it != validObjects.end(); ++it ) {
+                task.push_front( {*it, Maps::GetApproximateDistance( hero->GetIndex(), *it )} );
+                ai_objects.erase( *it );
             }
         }
     }
