@@ -1233,6 +1233,10 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 applyPalettes.push_back( _creaturePalette );
             }
         }
+
+        if ( b.Modes( CAP_MIRRORIMAGE ) ) {
+            applyPalettes.push_back( PAL::GetPalette( PAL::MIRROR_IMAGE ) );
+        }
     }
 
     if ( spmon1.isValid() ) {
@@ -1264,10 +1268,6 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
             sp.x += cx + ( _movingPos.x - _flyingPos.x ) * _flyingUnit->animation.movementProgress();
             sp.y += cy + ( _movingPos.y - _flyingPos.y ) * _flyingUnit->animation.movementProgress();
-        }
-
-        if ( b.Modes( CAP_MIRRORIMAGE ) ) {
-            applyPalettes.push_back( PAL::GetPalette( PAL::MIRROR_IMAGE ) );
         }
 
         if ( !applyPalettes.empty() ) {
@@ -3460,6 +3460,9 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     if ( target.Modes( SP_STONE ) ) {
         AGG::ReplaceColors( sprite, PAL::GetPalette( PAL::GRAY ), msi.icn_file, target.GetFrame(), target.isReflect() );
     }
+    else if ( target.Modes( CAP_MIRRORIMAGE ) ) {
+        AGG::ReplaceColors( sprite, PAL::GetPalette( PAL::MIRROR_IMAGE ), msi.icn_file, target.GetFrame(), target.isReflect() );
+    }
 
     cursor.SetThemes( Cursor::WAR_NONE );
     cursor.Hide();
@@ -3608,10 +3611,24 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     Sprite unitSprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
     unitSprite = Sprite( unitSprite.GetSurface(), unitSprite.x(), unitSprite.y() );
 
-    std::vector<uint8_t> convert = PAL::GetPalette( PAL::RED );
+    std::vector<std::vector<uint8_t> > originalPalette;
     if ( target.Modes( SP_STONE ) ) {
+        originalPalette.push_back( PAL::GetPalette( PAL::GRAY ) );
+    }
+    else if ( target.Modes( CAP_MIRRORIMAGE ) ) {
+        originalPalette.push_back( PAL::GetPalette( PAL::MIRROR_IMAGE ) );
+    }
+
+    if ( !originalPalette.empty() ) {
+        for ( size_t i = 1; i < originalPalette.size(); ++i ) {
+            originalPalette[0] = PAL::CombinePalettes( originalPalette[0], originalPalette[i] );
+        }
+        AGG::ReplaceColors( unitSprite, originalPalette[0], msi.icn_file, target.GetFrame(), target.isReflect() );
+    }
+
+    std::vector<uint8_t> convert = PAL::GetPalette( PAL::RED );
+    if ( !originalPalette.empty() ) {
         convert = PAL::CombinePalettes( PAL::GetPalette( PAL::GRAY ), convert );
-        AGG::ReplaceColors( unitSprite, PAL::GetPalette( PAL::GRAY ), msi.icn_file, target.GetFrame(), target.isReflect() );
     }
 
     Sprite bloodlustEffect( unitSprite.GetSurface(), unitSprite.x(), unitSprite.y() );
