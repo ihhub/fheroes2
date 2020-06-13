@@ -3082,6 +3082,9 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
             case Spell::BLOODLUST:
                 RedrawActionBloodLustSpell( *target );
                 break;
+            case Spell::STONE:
+                RedrawActionStoneSpell( *target );
+                break;
             default:
                 break;
             }
@@ -3620,6 +3623,50 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
             display.Flip();
 
             alpha += ( frame < 10 ) ? 20 : -20;
+            ++frame;
+        }
+    }
+
+    _currentUnit = NULL;
+    b_current_sprite = NULL;
+}
+
+void Battle::Interface::RedrawActionStoneSpell( Unit & target )
+{
+    Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+
+    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
+    Sprite unitSprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    unitSprite = Sprite( unitSprite.GetSurface(), unitSprite.x(), unitSprite.y() );
+
+    Sprite stoneEffect( unitSprite.GetSurface(), unitSprite.x(), unitSprite.y() );
+    AGG::ReplaceColors( stoneEffect, PAL::GetPalette( PAL::GRAY ), msi.icn_file, target.GetFrame(), target.isReflect() );
+
+    Sprite mixSprite( Surface( unitSprite.GetSize(), true ), unitSprite.x(), unitSprite.y() );
+
+    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.Hide();
+
+    _currentUnit = &target;
+    b_current_sprite = &mixSprite;
+
+    AGG::PlaySound( M82::PARALIZE );
+
+    uint32_t alpha = 0;
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+        CheckGlobalEvents( le );
+
+        if ( frame < 25 && Game::AnimateCustomDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            cursor.Hide();
+            mixSprite = Sprite( Surface::Blend( unitSprite, stoneEffect, ( 255 - alpha ) * 100 / 255 ), unitSprite.x(), unitSprite.y() );
+            Redraw();
+            cursor.Show();
+            display.Flip();
+
+            alpha += 10;
             ++frame;
         }
     }

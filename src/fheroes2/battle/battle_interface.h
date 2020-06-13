@@ -220,6 +220,7 @@ namespace Battle
         void RedrawActionColdRaySpell( Unit & );
         void RedrawActionDisruptingRaySpell( Unit & );
         void RedrawActionBloodLustSpell( Unit & );
+        void RedrawActionStoneSpell( Unit & target );
         void RedrawActionColdRingSpell( s32, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell( const TargetsInfo & );
