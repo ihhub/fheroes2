@@ -309,8 +309,6 @@ namespace Battle
 
         PopupDamageInfo popup;
         ArmiesOrder armies_order;
-
-        
     };
 }
 
