@@ -3864,7 +3864,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
     cursor.Hide();
 
     display.Blit( area, 0, 0, sprite1 );
-    sprite2.Fill( RGBA( 0xb0, 0x0c, 0 ) );
+    sprite2.Fill( RGBA( 0xFF, 0xFF, 0xFF ) );
 
     _currentUnit = NULL;
     AGG::PlaySound( M82::ARMGEDN );
@@ -3875,64 +3875,37 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
-            Redraw();
-            sprite2.SetAlphaMod( alpha, false );
-            sprite1.Blit( area.x, area.y, display );
-            sprite2.Blit( area.x, area.y, display );
-            RedrawInterface();
-            cursor.Show();
+            Surface::Blend( sprite1, sprite2, ( 255 - alpha ) * 100 / 255 ).Blit( area.x, area.y, display );
             display.Flip();
+            cursor.Show();
 
             alpha += 10;
         }
     }
 
+    sprite2.Fill( RGBA( 0xb0, 0x0c, 0 ) );
+    sprite1 = Surface::Blend( sprite1, sprite2, ( 255 - alpha ) * 100 / 255 );
+
     cursor.Hide();
 
-    alpha = 0;
-    const u32 offset = Settings::Get().QVGA() ? 5 : 10;
-    bool restore = false;
-
-    while ( le.HandleEvents() && alpha < 20 ) {
+    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
-            if ( restore ) {
-                sprite1.Blit( area.x, area.y, display );
-                restore = false;
-            }
-            else {
-                switch ( Rand::Get( 1, 4 ) ) {
-                case 1:
-                    sprite1.Blit( area.x + offset, area.y + offset, display );
-                    break;
-                case 2:
-                    sprite1.Blit( area.x - offset, area.y - offset, display );
-                    break;
-                case 3:
-                    sprite1.Blit( area.x - offset, area.y + offset, display );
-                    break;
-                case 4:
-                    sprite1.Blit( area.x + offset, area.y - offset, display );
-                    break;
-                default:
-                    break;
-                }
-                restore = true;
-            }
 
-            sprite2.Blit( area.x, area.y, display );
-            RedrawInterface();
-            RedrawBorder();
-            cursor.Show();
+            const int16_t offsetX = Rand::Get( -7, 7 );
+            const int16_t offsetY = Rand::Get( -7, 7 );
+            const Rect initialArea( area.x, area.y, area.w, area.h );
+            const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
+
+            const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            sprite1.Blit( shifted, original, display );
+
             display.Flip();
-            ++alpha;
+            cursor.Show();
         }
     }
-
-    while ( Mixer::isValid() && Mixer::isPlaying( -1 ) )
-        DELAY( 10 );
 }
 
 void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & targets )
@@ -3962,39 +3935,22 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
-            if ( restore ) {
-                sprite.Blit( area.x, area.y, display );
-                restore = false;
-            }
-            else {
-                switch ( Rand::Get( 1, 4 ) ) {
-                case 1:
-                    sprite.Blit( area.x + offset, area.y + offset, display );
-                    break;
-                case 2:
-                    sprite.Blit( area.x - offset, area.y - offset, display );
-                    break;
-                case 3:
-                    sprite.Blit( area.x - offset, area.y + offset, display );
-                    break;
-                case 4:
-                    sprite.Blit( area.x + offset, area.y - offset, display );
-                    break;
-                default:
-                    break;
-                }
-                restore = true;
-            }
 
-            RedrawInterface();
-            RedrawBorder();
-            cursor.Show();
+            const int16_t offsetX = Rand::Get( -7, 7 );
+            const int16_t offsetY = Rand::Get( -7, 7 );
+            const Rect initialArea( area.x, area.y, area.w, area.h );
+            const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
+
+            const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            sprite.Blit( shifted, original, display );
+
             display.Flip();
+            cursor.Show();
             ++frame;
         }
     }
 
-    // draw clod
+    // draw cloud
     frame = 0;
     int icn = ICN::LICHCLOD;
     AGG::PlaySound( M82::CATSND02 );

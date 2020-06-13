@@ -1599,11 +1599,11 @@ bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector
 
 Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t ratio )
 {
-    if ( !first.isValid() || !second.isValid() || first.w() != second.w() || first.h() != second.h() || first.alpha() != second.alpha() || ratio > 100
+    if ( !first.isValid() || !second.isValid() || first.w() != second.w() || first.h() != second.h() || first.amask() != second.amask() || ratio > 100
          || first.depth() != 32 || second.depth() != 32 )
         return Surface();
 
-    Surface surface( first.GetSize(), first.alpha() );
+    Surface surface( first.GetSize(), first.amask() );
 
     surface.Lock();
 
