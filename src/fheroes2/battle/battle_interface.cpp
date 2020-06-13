@@ -1799,8 +1799,15 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         const Unit * b_stats = cell->GetUnit();
 
         // over graveyard
-        if ( !b_stats && arena.GraveyardAllowResurrect( index_pos, spell ) )
+        if ( !b_stats && arena.GraveyardAllowResurrect( index_pos, spell ) ) {
             b_stats = arena.GraveyardLastTroop( index_pos );
+            if ( b_stats->isWide() ) { // we need to check tail and head positions
+                const Cell * tailCell = Board::GetCell( b_stats->GetTailIndex() );
+                const Cell * headCell = Board::GetCell( b_stats->GetHeadIndex() );
+                if ( !tailCell || tailCell->GetUnit() || !headCell || headCell->GetUnit() )
+                    b_stats = NULL;
+            }
+        }
 
         // teleport check first
         if ( Board::isValidIndex( teleport_src ) ) {
@@ -2614,7 +2621,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     case Monster::POWER_LICH:
         // lich clod animation
         if ( archer ) {
-            RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), false );
+            RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), NONE );
         }
         break;
 
@@ -3018,49 +3025,49 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
             switch ( spell() ) {
             // simple spell animation
             case Spell::BLESS:
-                RedrawTroopWithFrameAnimation( *target, ICN::BLESS, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::BLESS, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::BLIND:
-                RedrawTroopWithFrameAnimation( *target, ICN::BLIND, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::BLIND, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::CURE:
-                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC01, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC01, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::SLOW:
-                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC02, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC02, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::SHIELD:
-                RedrawTroopWithFrameAnimation( *target, ICN::SHIELD, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::SHIELD, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::HASTE:
-                RedrawTroopWithFrameAnimation( *target, ICN::HASTE, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::HASTE, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::CURSE:
-                RedrawTroopWithFrameAnimation( *target, ICN::CURSE, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::CURSE, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::ANTIMAGIC:
-                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC06, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC06, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::DISPEL:
-                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC07, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::MAGIC07, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::STONESKIN:
-                RedrawTroopWithFrameAnimation( *target, ICN::STONSKIN, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::STONSKIN, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::STEELSKIN:
-                RedrawTroopWithFrameAnimation( *target, ICN::STELSKIN, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::STELSKIN, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::PARALYZE:
-                RedrawTroopWithFrameAnimation( *target, ICN::PARALYZE, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::PARALYZE, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::HYPNOTIZE:
-                RedrawTroopWithFrameAnimation( *target, ICN::HYPNOTIZ, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::HYPNOTIZ, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::DRAGONSLAYER:
-                RedrawTroopWithFrameAnimation( *target, ICN::DRAGSLAY, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::DRAGSLAY, M82::FromSpell( spell() ), NONE );
                 break;
             case Spell::BERSERKER:
-                RedrawTroopWithFrameAnimation( *target, ICN::BERZERK, M82::FromSpell( spell() ), false );
+                RedrawTroopWithFrameAnimation( *target, ICN::BERZERK, M82::FromSpell( spell() ), NONE );
                 break;
 
             // uniq spell animation
@@ -3252,13 +3259,13 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
         msg = _( "High morale enables the %{monster} to attack again." );
         StringReplace( msg, "%{monster}", b.GetName() );
         status.SetMessage( msg, true );
-        RedrawTroopWithFrameAnimation( b, ICN::MORALEG, M82::GOODMRLE, false );
+        RedrawTroopWithFrameAnimation( b, ICN::MORALEG, M82::GOODMRLE, NONE );
     }
     else {
         msg = _( "Low morale causes the %{monster} to freeze in panic." );
         StringReplace( msg, "%{monster}", b.GetName() );
         status.SetMessage( msg, true );
-        RedrawTroopWithFrameAnimation( b, ICN::MORALEB, M82::BADMRLE, true );
+        RedrawTroopWithFrameAnimation( b, ICN::MORALEB, M82::BADMRLE, WINCE );
     }
 }
 
@@ -3564,7 +3571,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
 void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 {
     // FIX: LightningBolt draw
-    RedrawTroopWithFrameAnimation( target, ICN::SPARKS, M82::FromSpell( Spell::LIGHTNINGBOLT ), true );
+    RedrawTroopWithFrameAnimation( target, ICN::SPARKS, M82::FromSpell( Spell::LIGHTNINGBOLT ), WINCE );
 }
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
@@ -3573,7 +3580,7 @@ void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & tar
     // AGG::PlaySound(targets.size() > 1 ? M82::CHAINLTE : M82::LIGHTBLT);
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        RedrawTroopWithFrameAnimation( *( it->defender ), ICN::SPARKS, M82::FromSpell( Spell::LIGHTNINGBOLT ), true );
+        RedrawTroopWithFrameAnimation( *( it->defender ), ICN::SPARKS, M82::FromSpell( Spell::LIGHTNINGBOLT ), WINCE );
 }
 
 void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
@@ -3634,8 +3641,6 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    AGG::PlaySound( M82::FromSpell( spell() ) );
-
     if ( !target.isValid() ) {
         while ( le.HandleEvents() && !target.isFinishAnimFrame() ) {
             CheckGlobalEvents( le );
@@ -3650,13 +3655,15 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
         }
     }
 
-    RedrawTroopWithFrameAnimation( target, ICN::YINYANG, M82::UNKNOWN, false );
+    AGG::PlaySound( M82::FromSpell( spell() ) );
+
+    RedrawTroopWithFrameAnimation( target, ICN::YINYANG, M82::UNKNOWN, target.GetHitPoints() == 0 ? RESURRECT : NONE );
 }
 
 void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
 {
     RedrawRaySpell( target, ICN::COLDRAY, M82::COLDRAY, 18 );
-    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, true );
+    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, WINCE );
 }
 
 void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
@@ -4124,7 +4131,7 @@ void RedrawSparksEffects( const Point & src, const Point & dst )
     Display::Get().DrawLine( src, dst, RGBA( 0xff, 0xff, 0 ) );
 }
 
-void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, bool pain )
+void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
@@ -4146,9 +4153,13 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 
     cursor.SetThemes( Cursor::WAR_NONE );
 
-    if ( pain ) {
+    if ( animation == WINCE ) {
         _currentUnit = NULL;
         b.SwitchAnimation( Monster_Info::WNCE );
+    }
+    else if ( animation == RESURRECT ) {
+        _currentUnit = NULL;
+        b.SwitchAnimation( Monster_Info::KILL, true );
     }
 
     if ( M82::UNKNOWN != m82 )
@@ -4172,13 +4183,21 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
             cursor.Show();
             display.Flip();
 
-            if ( pain )
+            if ( animation != NONE ) {
+                if ( animation == RESURRECT ) {
+                    if ( b.isFinishAnimFrame() )
+                        b.SwitchAnimation( Monster_Info::STATIC );
+                }
                 b.IncreaseAnimFrame( false );
+            }
             ++frame;
         }
     }
 
-    if ( pain ) {
+    if ( animation != NONE ) {
+        if ( animation == RESURRECT ) {
+            b.SetPosition( b.GetPosition() );
+        }
         b.SwitchAnimation( Monster_Info::STATIC );
         _currentUnit = NULL;
     }

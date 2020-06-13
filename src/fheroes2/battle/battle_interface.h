@@ -194,6 +194,13 @@ namespace Battle
         void RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID );
 
     private:
+        enum CreatueSpellAnimation
+        {
+            NONE,
+            WINCE,
+            RESURRECT
+        };
+
         void HumanBattleTurn( const Unit &, Actions &, std::string & );
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
@@ -230,7 +237,7 @@ namespace Battle
 
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
         void RedrawTroopDefaultDelay( Unit & unit );
-        void RedrawTroopWithFrameAnimation( Unit &, int, int, bool );
+        void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
         void RedrawTargetsWithFrameAnimation( s32, const TargetsInfo &, int, int );
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
