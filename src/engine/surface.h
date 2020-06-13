@@ -172,6 +172,8 @@ public:
     // Use makeCopy flag to create another surface within the call
     void SetAlphaMod( int level, bool makeCopy );
 
+    bool SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect );
+
 protected:
     static void FreeSurface( Surface & );
 

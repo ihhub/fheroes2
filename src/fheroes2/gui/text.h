@@ -35,7 +35,9 @@ namespace Font
         SMALL = 0x01,
         BIG = 0x02,
         YELLOW_BIG = 0x04,
-        YELLOW_SMALL = 0x08
+        YELLOW_SMALL = 0x08,
+        GRAY_BIG = 0x10,
+        GRAY_SMALL = 0x20
     };
 }
 enum

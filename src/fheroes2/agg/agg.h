@@ -79,6 +79,9 @@ namespace AGG
 
     // Some ICNs need to be rescaled. You have to register their IDs before calling GetICN() function
     void RegisterScalableICN( int icnId );
+
+    // Returns true only when the operation was successful
+    bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMap, int icnId, int incIndex, bool reflect );
 }
 
 #endif

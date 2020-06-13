@@ -56,6 +56,8 @@ namespace PAL
     int CurrentPalette();
     void SwapPalette( int type );
     RGBA GetPaletteColor( u8 index );
+    const std::vector<uint8_t> & GetPalette( int type );
+    std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
 }
 
 #endif

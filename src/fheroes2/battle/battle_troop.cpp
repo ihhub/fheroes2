@@ -246,10 +246,6 @@ Surface Battle::Unit::GetContour( int val ) const
         return getContour( frame, contoursMain, false, false );
     case CONTOUR_REFLECT:
         return getContour( frame, contoursReflect, true, false );
-    case CONTOUR_BLACK: // TODO: really get contour for stunned unit?
-        return getContour( frame, contoursWB, false, true );
-    case CONTOUR_BLACK | CONTOUR_REFLECT: // TODO: really get contour for stunned unit?
-        return getContour( frame, contoursWBReflect, true, true );
     default:
         break;
     }
