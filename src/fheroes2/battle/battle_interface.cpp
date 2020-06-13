@@ -3614,10 +3614,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
 
         if ( frame < 20 && Game::AnimateCustomDelay( bloodlustDelay ) ) {
             cursor.Hide();
-            mixSprite = Sprite( unitSprite.GetSurface(), unitSprite.x(), unitSprite.y() );
-            Surface temp = bloodlustEffect.GetSurface();
-            temp.SetAlphaMod( alpha, false );
-            temp.Blit( mixSprite );
+            mixSprite = Sprite( Surface::Blend( unitSprite, bloodlustEffect, ( 255 - alpha ) * 100 / 255 ), unitSprite.x(), unitSprite.y() );
             Redraw();
             cursor.Show();
             display.Flip();

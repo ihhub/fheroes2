@@ -1596,3 +1596,36 @@ bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector
 
     return true;
 }
+
+Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t ratio )
+{
+    if ( !first.isValid() || !second.isValid() || first.w() != second.w() || first.h() != second.h() || first.alpha() != second.alpha() || ratio > 100 ||
+         first.depth() != 32 || second.depth() != 32)
+        return Surface();
+
+    Surface surface( first.GetSize(), first.alpha() );
+
+    surface.Lock();
+
+    const int height = surface.h();
+    const int width = surface.w();
+    const uint16_t pitch = surface.surface->pitch >> 2;
+
+    if ( pitch != width ) {
+        surface.Unlock();
+        return surface;
+    }
+
+    uint8_t * out = static_cast<uint8_t *>( surface.surface->pixels );
+    const uint8_t * outEnd = out + width * height * 4;
+    const uint8_t * in1 = static_cast<uint8_t *>( first.surface->pixels );
+    const uint8_t * in2 = static_cast<uint8_t *>( second.surface->pixels );
+
+    for ( ; out != outEnd; ++out, ++in1, ++in2 ) {
+        *out = static_cast<uint32_t>( *in1 ) * ratio / 100 + static_cast<uint32_t>( *in2 ) * ( 100 - ratio ) / 100;
+    }
+
+    surface.Unlock();
+
+    return surface;
+}
