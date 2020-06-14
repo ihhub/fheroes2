@@ -249,7 +249,7 @@ uint32_t Route::Path::Find( s32 to, int limit )
                             list[tmp].cost_g = costg;
                             list[tmp].parent = cur;
                             list[tmp].open = 1;
-                            list[tmp].cost_d = 50 * Maps::GetApproximateDistance( tmp, to );
+                            list[tmp].cost_d = 75 * Maps::GetApproximateDistance( tmp, to );
                             list[tmp].cost_t = list[cur].cost_t + costg;
                         }
                     }
