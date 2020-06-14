@@ -59,6 +59,7 @@ namespace Interface
 
         const Rect & GetArea( void ) const;
         const Point & GetMapsPos( void ) const;
+        void SetMapsPos( const Point & pos ); // do not call this method without caution
         const Rect & GetRectMaps( void ) const;
 
         int GetScrollCursor( void ) const;

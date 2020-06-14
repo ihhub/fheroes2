@@ -299,6 +299,9 @@ public:
 
     static void ScholarAction( Heroes &, Heroes & );
 
+    int GetMoveStep() const;
+    Point MovementDirection() const;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
@@ -340,6 +343,11 @@ private:
     std::list<IndexObject> visit_object;
 
     mutable int _alphaValue;
+
+    enum
+    {
+        HERO_MOVE_STEP = 4 // in pixels
+    };
 };
 
 struct VecHeroes : public std::vector<Heroes *>
