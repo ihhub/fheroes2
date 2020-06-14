@@ -937,7 +937,7 @@ bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
 
     const bool doubleHex = troop->isWide();
     if ( index == troop->GetHeadIndex() || ( doubleHex && index == troop->GetTailIndex() ) )
-         return false;
+        return false;
 
     if ( !cell->isPassable3( *troop, true ) )
         return false;
