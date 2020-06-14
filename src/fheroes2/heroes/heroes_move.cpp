@@ -274,6 +274,11 @@ Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
         break;
     }
 
+    if ( hero.isEnableMove() ) {
+        offset.x = 0;
+        offset.y = 0;
+    }
+
     Sprite flag = AGG::GetICN( icn_flag, index_sprite + frameId, reflect );
     flag.SetPos( flag.GetPos() + offset );
     return flag;
