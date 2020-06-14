@@ -267,6 +267,7 @@ namespace AI
                     continue;
             }
 
+            if ( AI::HeroesValidObject( hero, ( *it ).first ) )
             objs.push_back( IndexDistance( ( *it ).first, Maps::GetApproximateDistance( hero.GetIndex(), ( *it ).first ) ) );
         }
 
@@ -278,8 +279,7 @@ namespace AI
             if ( task.size() >= HERO_MAX_SHEDULED_TASK )
                 break;
             const int positionIndex = ( *it ).first;
-            const bool validobj = AI::HeroesValidObject( hero, positionIndex );
-            const uint32_t distance = validobj ? hero.GetPath().Calculate( ( *it ).first ) : 0;
+            const uint32_t distance = hero.GetPath().Calculate( ( *it ).first, 25 );
 
             if ( distance ) {
                 DEBUG( DBG_AI, DBG_INFO,
@@ -291,7 +291,7 @@ namespace AI
             }
             else {
                 DEBUG( DBG_AI, DBG_TRACE,
-                       Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ( !validobj ? ", invalid: " : ", impossible: " )
+                       Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", impossible: "
                                                         << MP2::StringObject( ai_objects[positionIndex] ) << ", index: " << positionIndex << ", distance: " << distance );
             }
         }
@@ -479,7 +479,7 @@ namespace AI
 
             if ( HeroesValidObject( hero, index ) ) {
                 DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", looking for: " << MP2::StringObject( world.GetTiles( index ).GetObject() ) << "(" << index << ")" );
-                if ( hero.GetPath().Calculate( index ) )
+                if ( hero.GetPath().Calculate( index, 25 ) )
                     break;
 
                 DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " say: unable to get object: " << index << ", remove task..." );
