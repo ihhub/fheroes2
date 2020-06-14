@@ -173,6 +173,9 @@ Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
     int icn_flag = ICN::UNKNOWN;
     int index_sprite = 0;
 
+    if ( hero.isShipMaster() && !hero.isEnableMove() )
+        frameId = 0;
+
     switch ( hero.GetColor() ) {
     case Color::BLUE:
         icn_flag = hero.isShipMaster() ? ICN::B_BFLG32 : ICN::B_FLAG32;
@@ -383,7 +386,7 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     bool reflect = ReflectSprite( direction );
 
     Sprite sprite1 = SpriteHero( *this, sprite_index, reflect, false );
-    Sprite sprite2 = SpriteFlag( *this, isShipMaster() ?  0 : flagFrameID, reflect, false );
+    Sprite sprite2 = SpriteFlag( *this, flagFrameID, reflect, false );
     Sprite sprite3 = SpriteShad( *this, sprite_index );
     Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
 
