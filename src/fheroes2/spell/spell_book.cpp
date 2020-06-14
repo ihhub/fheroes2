@@ -391,6 +391,8 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
     s32 ox = 0;
     s32 oy = 0;
 
+    const uint32_t heroSpellPoints = hero.GetSpellPoints();
+
     for ( u32 ii = 0; ii < ( small ? SPELL_PER_PAGE_SMALL : SPELL_PER_PAGE ); ++ii )
         if ( spells.size() > cur + ii ) {
             if ( small ) {
@@ -430,7 +432,10 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
                     break;
                 }
 
-            TextBox box( std::string( spell.GetName() ) + " [" + GetString( spell.SpellPoint( &hero ) ) + "]", Font::SMALL, ( small ? 94 : 80 ) );
+            const uint32_t spellCost = spell.SpellPoint( &hero );
+            const bool isAvailable = heroSpellPoints >= spellCost;
+
+            TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, ( small ? 94 : 80 ) );
             box.Blit( px + ox - ( small ? 47 : 40 ), py + oy + ( small ? 22 : 25 ) );
 
             oy += small ? 65 : 80;

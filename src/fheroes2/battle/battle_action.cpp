@@ -865,30 +865,23 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 {
-    s32 who = cmd.GetValue();
-    Unit * b = GetTroopBoard( who );
+    const s32 who = cmd.GetValue();
+    Unit * troop = GetTroopBoard( who );
 
-    if ( b ) {
-        Indexes distances = Board::GetDistanceIndexes( b->GetHeadIndex(), 4 );
+    if ( troop != NULL ) {
+        Indexes distances = Board::GetDistanceIndexes( troop->GetHeadIndex(), 4 );
 
-        ShortestDistance SortingDistance( b->GetHeadIndex() );
+        ShortestDistance SortingDistance( troop->GetHeadIndex() );
         std::sort( distances.begin(), distances.end(), SortingDistance );
 
-        Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), std::bind2nd( std::ptr_fun( &Board::isValidMirrorImageIndex ), b ) );
-
-        for ( Indexes::const_iterator it = distances.begin(); it != distances.end(); ++it ) {
-            const Cell * cell = Board::GetCell( *it );
-            if ( cell && cell->isPassable3( *b, true ) )
-                break;
-        }
-
+        Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), std::bind2nd( std::ptr_fun( &Board::isValidMirrorImageIndex ), troop ) );
         if ( it != distances.end() ) {
-            const Position pos = Position::GetCorrect( *b, *it );
+            const Position pos = Position::GetCorrect( *troop, *it );
             const s32 dst = pos.GetHead()->GetIndex();
             DEBUG( DBG_BATTLE, DBG_TRACE, "set position: " << dst );
             if ( interface )
-                interface->RedrawActionMirrorImageSpell( *b, pos );
-            Unit * mirror = CreateMirrorImage( *b, dst );
+                interface->RedrawActionMirrorImageSpell( *troop, pos );
+            Unit * mirror = CreateMirrorImage( *troop, dst );
             if ( mirror )
                 mirror->SetPosition( pos );
         }
