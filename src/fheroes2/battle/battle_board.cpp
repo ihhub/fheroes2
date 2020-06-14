@@ -926,9 +926,34 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )
     return result;
 }
 
-bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * b )
+bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
 {
-    return b && GetCell( index ) && index != b->GetHeadIndex() && ( !b->isWide() || index != b->GetTailIndex() ) && GetCell( index )->isPassable3( *b, true );
+    if ( troop == NULL )
+        return false;
+
+    const Cell * cell = GetCell( index );
+    if ( cell == NULL )
+        return false;
+
+    const bool doubleHex = troop->isWide();
+    if ( index == troop->GetHeadIndex() || ( doubleHex && index == troop->GetTailIndex() ) )
+         return false;
+
+    if ( !cell->isPassable3( *troop, true ) )
+        return false;
+
+    if ( doubleHex ) {
+        const bool isReflected = troop->GetHeadIndex() < troop->GetTailIndex();
+        const int32_t tailIndex = isReflected ? index + 1 : index - 1;
+        const Cell * tailCell = GetCell( tailIndex );
+        if ( tailCell == NULL || tailIndex == troop->GetHeadIndex() || tailIndex == troop->GetTailIndex() )
+            return false;
+
+        if ( !tailCell->isPassable3( *troop, true ) )
+            return false;
+    }
+
+    return true;
 }
 
 std::string Battle::Board::GetMoatInfo( void )

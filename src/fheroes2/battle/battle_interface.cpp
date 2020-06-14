@@ -3554,7 +3554,10 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    Sprite sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
+    sprite = Sprite( sprite.GetSurface(), sprite.x(), sprite.y() );
+    AGG::ReplaceColors( sprite, PAL::GetPalette( PAL::MIRROR_IMAGE ), msi.icn_file, target.GetFrame(), target.isReflect() );
+
     const Rect & rt1 = target.GetRectPosition();
     const Rect & rt2 = pos.GetRect();
 
