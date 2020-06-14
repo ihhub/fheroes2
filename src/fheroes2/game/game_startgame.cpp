@@ -963,6 +963,9 @@ int Interface::Basic::HumanTurn( bool isload )
                         gameArea.SetUpdateCursor();
                 }
             }
+            else {
+                isMovingHero = false;
+            }
         }
 
         // slow maps objects animation
