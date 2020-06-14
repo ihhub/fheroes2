@@ -111,14 +111,14 @@ namespace AI
 
     bool Base::HeroesCanMove( const Heroes & hero )
     {
-        return hero.MayStillMove() && !hero.Modes( HEROES_MOVED );
+        return hero.MayStillMove() && !hero.Modes( HERO_MOVED );
     }
 
     void Base::HeroesTurn( Heroes & hero )
     {
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
-        hero.ResetModes( HEROES_MOVED );
+        hero.ResetModes( HERO_MOVED );
 
         while ( Base::HeroesCanMove( hero ) ) {
             // turn indicator
@@ -134,7 +134,7 @@ namespace AI
 
             // heroes AI turn
             AI::HeroesMove( hero );
-            hero.SetModes( HEROES_MOVED );
+            hero.SetModes( HERO_MOVED );
 
             // turn indicator
             status.RedrawTurnProgress( 7 );

@@ -196,7 +196,7 @@ namespace AI
             }
 
             if ( hero )
-                hero->SetModes( AI::HEROES_HUNTER );
+                hero->SetModes( AI::HERO_HUNTER );
         }
 
         // part III
@@ -210,7 +210,7 @@ namespace AI
                 hero = castle.RecruitHero( rec.GetHero2() );
 
             if ( hero )
-                hero->SetModes( AI::HEROES_HUNTER | AI::HEROES_SCOUTER );
+                hero->SetModes( AI::HERO_HUNTER | AI::HERO_SCOUT );
         }
     }
 

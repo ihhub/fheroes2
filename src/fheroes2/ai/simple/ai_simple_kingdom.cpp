@@ -157,9 +157,9 @@ namespace AI
             const u32 maxhero = Maps::XLARGE > world.w() ? ( Maps::LARGE > world.w() ? 3 : 2 ) : 4;
 
             if ( heroes.empty() )
-                modes = AI::HEROES_HUNTER | AI::HEROES_SCOUTER;
-            else if ( heroes.size() < maxhero || 0 == std::count_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_SCOUTER ) ) )
-                modes = AI::HEROES_SCOUTER;
+                modes = AI::HERO_HUNTER | AI::HERO_SCOUT;
+            else if ( heroes.size() < maxhero || 0 == std::count_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HERO_SCOUT ) ) )
+                modes = AI::HERO_SCOUT;
 
             if ( modes && heroes.size() < Kingdom::GetMaxHeroes() ) {
                 Recruits & rec = kingdom.GetRecruits();
@@ -181,7 +181,7 @@ namespace AI
 
         // set hunters
         if ( ai.capital ) {
-            const size_t hunters = std::count_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_HUNTER ) );
+            const size_t hunters = std::count_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HERO_HUNTER ) );
 
             // every time
             if ( 0 == hunters && heroes.size() ) {
@@ -193,7 +193,7 @@ namespace AI
             else
                 // each month
                 if ( world.BeginMonth() && 1 < world.CountDay() ) {
-                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_HUNTER ) );
+                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HERO_HUNTER ) );
 
                 if ( it != heroes.end() && !ai.capital->GetHeroes().Guest() )
                     HeroesSetHunterWithTarget( *it, ai.capital->GetIndex() );
@@ -202,25 +202,25 @@ namespace AI
 
         // update roles
         {
-            std::for_each( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::ResetModes ), AI::HEROES_STUPID | AI::HEROES_WAITING ) );
+            std::for_each( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::ResetModes ), AI::HERO_SKIP_TURN | AI::HERO_WAITING ) );
 
             // init roles
             if ( heroes.end()
-                 != std::find_if( heroes.begin(), heroes.end(), std::not1( std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_SCOUTER | AI::HEROES_HUNTER ) ) ) ) {
+                 != std::find_if( heroes.begin(), heroes.end(), std::not1( std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HERO_SCOUT | AI::HERO_HUNTER ) ) ) ) {
                 KingdomHeroes::iterator ith, first = heroes.end();
 
                 while ( heroes.end()
                         != ( ith = std::find_if( heroes.begin(), heroes.end(),
                                                  std::not1( std::bind2nd( std::mem_fun( &Heroes::Modes ),
                                                                           // also skip patrol
-                                                                          AI::HEROES_HUNTER | AI::HEROES_SCOUTER | Heroes::PATROL ) ) ) ) ) {
+                                                                          AI::HERO_HUNTER | AI::HERO_SCOUT | Heroes::PATROL ) ) ) ) ) {
                     if ( first == heroes.end() ) {
                         first = ith;
                         if ( *ith )
-                            ( *ith )->SetModes( AI::HEROES_HUNTER | AI::HEROES_SCOUTER );
+                            ( *ith )->SetModes( AI::HERO_HUNTER | AI::HERO_SCOUT );
                     }
                     else if ( *ith )
-                        ( *ith )->SetModes( AI::HEROES_SCOUTER );
+                        ( *ith )->SetModes( AI::HERO_SCOUT );
                 }
             }
         }

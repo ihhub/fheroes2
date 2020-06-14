@@ -47,11 +47,14 @@ namespace AI
 
     enum modes_t
     {
-        HEROES_MOVED = 0x08000000,
-        HEROES_SCOUTER = 0x10000000,
-        HEROES_HUNTER = 0x20000000,
-        HEROES_WAITING = 0x40000000,
-        HEROES_STUPID = 0x80000000
+        HERO_PATROL = 0x01000000,
+        HERO_SKIP_TURN = 0x02000000,
+        HERO_WAITING = 0x04000000,
+        HERO_MOVED = 0x08000000,
+        HERO_SCOUT = 0x10000000,
+        HERO_HUNTER = 0x20000000,
+        HERO_COURIER = 0x40000000,
+        HERO_CHAMPION = 0x80000000
     };
 
     class Base
@@ -86,7 +89,7 @@ namespace AI
         virtual void Reset();
     };
 
-    Base & Get( AI_TYPE type = SIMPLE );
+    Base & Get( AI_TYPE type = NORMAL );
 
     void HeroesAction( Heroes & hero, s32 dst_index );
     bool HeroesValidObject( const Heroes & hero, s32 index );
