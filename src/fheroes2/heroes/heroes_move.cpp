@@ -395,7 +395,8 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     if ( isShipMaster() && !isEnableMove() ) {
         flagFrameID = 0;
         heroFrameID = 0;
-    } else if ( !isShipMaster() && !isEnableMove() ) {
+    }
+    else if ( !isShipMaster() && !isEnableMove() ) {
         heroFrameID = 0;
     }
 
