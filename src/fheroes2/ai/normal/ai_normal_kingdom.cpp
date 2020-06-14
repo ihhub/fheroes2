@@ -18,22 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AI_NORMAL_H
-#define H2AI_NORMAL_H
-
-#include "ai.h"
+#include "ai_normal.h"
 
 namespace AI
 {
-    class Normal : public Base
-    {
-    public:
-        Normal();
-        void KingdomTurn( Kingdom & kingdom );
-        void CastleTurn( Castle & castle );
-        void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-        void HeroesTurn( Heroes & hero );
-    };
+    void Normal::KingdomTurn( Kingdom & kingdom ) {}
 }
-
-#endif
