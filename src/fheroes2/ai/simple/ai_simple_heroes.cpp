@@ -268,7 +268,7 @@ namespace AI
             }
 
             if ( AI::HeroesValidObject( hero, ( *it ).first ) )
-            objs.push_back( IndexDistance( ( *it ).first, Maps::GetApproximateDistance( hero.GetIndex(), ( *it ).first ) ) );
+                objs.push_back( IndexDistance( ( *it ).first, Maps::GetApproximateDistance( hero.GetIndex(), ( *it ).first ) ) );
         }
 
         DEBUG( DBG_AI, DBG_INFO, Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", task prepare: " << objs.size() );
@@ -291,8 +291,8 @@ namespace AI
             }
             else {
                 DEBUG( DBG_AI, DBG_TRACE,
-                       Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", impossible: "
-                                                        << MP2::StringObject( ai_objects[positionIndex] ) << ", index: " << positionIndex << ", distance: " << distance );
+                       Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", impossible: " << MP2::StringObject( ai_objects[positionIndex] )
+                                                        << ", index: " << positionIndex << ", distance: " << distance );
             }
         }
 
