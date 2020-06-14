@@ -236,7 +236,7 @@ namespace AI
         }
 
         if ( 0 <= index )
-            task.push_back( {index, Maps::GetApproximateDistance( hero.GetIndex(), index )} );
+            task.push_back( {index, Maps::GetApproximateDistance( hero.GetIndex(), index ) * 100} );
     }
 
     void Simple::HeroesAddedTask( Heroes & hero )
@@ -277,21 +277,22 @@ namespace AI
         for ( std::vector<IndexDistance>::const_iterator it = objs.begin(); it != objs.end(); ++it ) {
             if ( task.size() >= HERO_MAX_SHEDULED_TASK )
                 break;
-            const bool validobj = AI::HeroesValidObject( hero, ( *it ).first );
+            const int positionIndex = ( *it ).first;
+            const bool validobj = AI::HeroesValidObject( hero, positionIndex );
+            const uint32_t distance = validobj ? hero.GetPath().Calculate( ( *it ).first ) : 0;
 
-            if ( validobj && hero.GetPath().Calculate( ( *it ).first ) ) {
+            if ( distance ) {
                 DEBUG( DBG_AI, DBG_INFO,
-                       Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", added tasks: " << MP2::StringObject( ai_objects[( *it ).first] )
-                                                        << ", index: " << ( *it ).first << ", distance: " << ( *it ).second );
+                       Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", added task: " << MP2::StringObject( ai_objects[positionIndex] )
+                                                        << ", index: " << positionIndex << ", distance: " << distance );
 
-                task.push_back( *it );
+                task.push_back( {positionIndex, distance} );
                 ai_objects.erase( ( *it ).first );
             }
             else {
                 DEBUG( DBG_AI, DBG_TRACE,
                        Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ( !validobj ? ", invalid: " : ", impossible: " )
-                                                        << MP2::StringObject( ai_objects[( *it ).first] ) << ", index: " << ( *it ).first
-                                                        << ", distance: " << ( *it ).second );
+                                                        << MP2::StringObject( ai_objects[positionIndex] ) << ", index: " << positionIndex << ", distance: " << distance );
             }
         }
 
@@ -299,22 +300,7 @@ namespace AI
             HeroesAddedRescueTask( hero );
     }
 
-    void Simple::HeroesActionNewPosition( Heroes & hero )
-    {
-        // AIHero & ai_hero = GetHero( hero );
-        //// AIKingdom & ai_kingdom = AIKingdoms::Get(hero.GetColor());
-        // Queue & task = ai_hero.sheduled_visit;
-
-        // const u8 objs[] = {MP2::OBJ_ARTIFACT, MP2::OBJ_RESOURCE, MP2::OBJ_CAMPFIRE, MP2::OBJ_TREASURECHEST, 0};
-        // Maps::Indexes pickups = Maps::ScanAroundObjects( hero.GetIndex(), objs );
-
-        // if ( pickups.size() && hero.GetPath().isValid() && pickups.end() == std::find( pickups.begin(), pickups.end(), hero.GetPath().GetDestinationIndex() ) )
-        //    hero.GetPath().Reset();
-
-        // for ( MapsIndexes::const_iterator it = pickups.begin(); it != pickups.end(); ++it )
-        //    if ( *it != hero.GetPath().GetDestinationIndex() )
-        //        task.push_front( *it );
-    }
+    void Simple::HeroesActionNewPosition( Heroes & hero ) {}
 
     bool Simple::HeroesGetTask( Heroes & hero )
     {
@@ -389,27 +375,6 @@ namespace AI
                     }
             }
 
-            // random move
-            /*
-            // disable move: https://sourceforge.net/tracker/?func=detail&aid=3157397&group_id=96859&atid=616180
-            {
-                Maps::ScanAroundObject(hero.GetIndex(), hero.GetSquarePatrol(), MP2::OBJ_ZERO);
-                if(results.size())
-                {
-                std::random_shuffle(results.begin(), results.end());
-                std::vector<s32>::const_iterator it = results.begin();
-                for(; it != results.end(); ++it)
-                    if(world.GetTiles(*it).isPassable(&hero, Direction::CENTER, true) &&
-                    hero.GetPath().Calculate(*it))
-                {
-                    DEBUG(DBG_AI, Color::String(hero.GetColor()) <<
-                    ", Patrol " << hero.GetName() << ": move: " << *it);
-                    return;
-                }
-                }
-            }
-            */
-
             hero.SetModes( AI::HEROES_STUPID );
             return false;
         }
@@ -467,7 +432,7 @@ namespace AI
             if ( !AI::HeroesValidObject( hero, hero.GetPath().GetDestinationIndex() ) )
                 hero.GetPath().Reset();
             else if ( hero.GetPath().size() < 5 ) {
-                DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", continue short" );
+                DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", continue on short path" );
                 ai_hero.fix_loop++;
                 return true;
             }
@@ -488,7 +453,7 @@ namespace AI
                     uint32_t dist = hero.GetPath().Calculate( *it );
 
                     if ( dist != 0 ) {
-                        task.push_front( {*it, dist / 100} );
+                        task.push_front( {*it, dist} );
                         DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", object found: " << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "(" << *it << ")" );
                     }
                 }
@@ -511,9 +476,8 @@ namespace AI
         // find passable index
         while ( task.size() ) {
             const int index = task.front().first;
-            const int object = world.GetTiles( index ).GetObject();
 
-            if ( object != MP2::OBJ_ZERO ) {
+            if ( HeroesValidObject( hero, index ) ) {
                 DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", looking for: " << MP2::StringObject( world.GetTiles( index ).GetObject() ) << "(" << index << ")" );
                 if ( hero.GetPath().Calculate( index ) )
                     break;
@@ -528,6 +492,9 @@ namespace AI
         if ( task.size() ) {
             const s32 & index = task.front().first;
             DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " go to: " << index );
+
+            if ( !hero.GetPath().isValid() )
+                hero.GetPath().Calculate( index );
 
             ai_objects.erase( index );
             task.pop_front();
@@ -619,7 +586,7 @@ namespace AI
             }
 
             for ( std::vector<int>::iterator it = validObjects.begin(); it != validObjects.end(); ++it ) {
-                task.push_front( {*it, Maps::GetApproximateDistance( hero->GetIndex(), *it )} );
+                task.push_front( {*it, Maps::GetApproximateDistance( hero->GetIndex(), *it ) * 100} );
                 ai_objects.erase( *it );
             }
         }
