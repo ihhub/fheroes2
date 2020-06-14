@@ -48,7 +48,6 @@
 #include "settings.h"
 #include "world.h"
 
-
 namespace AI
 {
     static const size_t HERO_MAX_SHEDULED_TASK = 7;
@@ -238,7 +237,7 @@ namespace AI
         }
 
         if ( 0 <= index )
-            task.push_back( {index, Maps::GetApproximateDistance( hero.GetIndex(), index ) * 100} );
+            task.push_back( IndexDistance( index, Maps::GetApproximateDistance( hero.GetIndex(), index ) * 100 ) );
     }
 
     void Simple::HeroesAddedTask( Heroes & hero )
@@ -289,7 +288,7 @@ namespace AI
                        Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", added task: " << MP2::StringObject( ai_objects[positionIndex] )
                                                         << ", index: " << positionIndex << ", distance: " << distance );
 
-                task.push_back( {positionIndex, distance} );
+                task.push_back( IndexDistance( positionIndex, distance ) );
                 ai_objects.erase( ( *it ).first );
             }
             else {
@@ -456,7 +455,7 @@ namespace AI
                     uint32_t dist = hero.GetPath().Calculate( *it );
 
                     if ( dist != 0 ) {
-                        task.push_front( {*it, dist} );
+                        task.push_front( IndexDistance( *it, dist ) );
                         DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", object found: " << MP2::StringObject( world.GetTiles( *it ).GetObject() ) << "(" << *it << ")" );
                     }
                 }
@@ -589,7 +588,7 @@ namespace AI
             }
 
             for ( std::vector<int>::iterator it = validObjects.begin(); it != validObjects.end(); ++it ) {
-                task.push_front( {*it, Maps::GetApproximateDistance( hero->GetIndex(), *it ) * 100} );
+                task.push_front( IndexDistance( *it, Maps::GetApproximateDistance( hero->GetIndex(), *it ) * 100 ) );
                 ai_objects.erase( *it );
             }
         }
