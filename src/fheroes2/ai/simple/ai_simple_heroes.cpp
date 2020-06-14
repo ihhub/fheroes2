@@ -551,7 +551,7 @@ namespace AI
         return false;
     }
 
-    void Simple::HeroesTurn( Heroes & hero )
+    void Simple::HeroTurn( Heroes & hero )
     {
         DEBUG( DBG_AI, DBG_TRACE,
                hero.GetName() << ", start: " << ( hero.Modes( Heroes::SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( hero.Modes( AI::HERO_SCOUT ) ? "SCOUTER," : "" )

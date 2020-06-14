@@ -229,12 +229,12 @@ namespace AI
         status.RedrawTurnProgress( 2 );
 
         // heroes turns - hacky and ugly without lambas
-        // HeroesTurn might invalidate KingdomHeroes iterator (e.g. hero losing a battle), check after each one
+        // HeroTurn might invalidate KingdomHeroes iterator (e.g. hero losing a battle), check after each one
         size_t currentHero = 0;
         while ( currentHero < heroes.size() ) {
             size_t beforeTurn = heroes.size();
 
-            HeroesTurn( *heroes.at( currentHero ) );
+            HeroTurn( *heroes.at( currentHero ) );
 
             // Check if heroes vector was modified
             if ( beforeTurn == heroes.size() )
@@ -244,7 +244,7 @@ namespace AI
         while ( currentHero < heroes.size() ) {
             size_t beforeTurn = heroes.size();
 
-            HeroesTurn( *heroes.at( currentHero ) );
+            HeroTurn( *heroes.at( currentHero ) );
 
             if ( beforeTurn == heroes.size() )
                 currentHero++;

@@ -63,7 +63,7 @@ namespace AI
         virtual void KingdomTurn( Kingdom & );
         virtual void CastleTurn( Castle & );
         virtual void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
-        virtual void HeroesTurn( Heroes & );
+        virtual void HeroTurn( Heroes & );
 
         virtual void HeroesAdd( const Heroes & );
         virtual void HeroesRemove( const Heroes & );

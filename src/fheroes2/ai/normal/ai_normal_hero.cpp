@@ -22,5 +22,5 @@
 
 namespace AI
 {
-    void Normal::HeroesTurn( Heroes & hero ) {}
+    void Normal::HeroTurn( Heroes & hero ) {}
 }

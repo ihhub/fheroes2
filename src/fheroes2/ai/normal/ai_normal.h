@@ -32,7 +32,7 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom );
         void CastleTurn( Castle & castle );
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-        void HeroesTurn( Heroes & hero );
+        void HeroTurn( Heroes & hero );
     };
 }
 

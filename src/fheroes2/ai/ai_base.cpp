@@ -114,7 +114,7 @@ namespace AI
         return hero.MayStillMove() && !hero.Modes( HERO_MOVED );
     }
 
-    void Base::HeroesTurn( Heroes & hero )
+    void Base::HeroTurn( Heroes & hero )
     {
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
@@ -176,7 +176,7 @@ namespace AI
         // heroes turns
         for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
             if ( *it )
-                HeroesTurn( **it );
+                HeroTurn( **it );
 
         status.RedrawTurnProgress( 6 );
         status.RedrawTurnProgress( 7 );
