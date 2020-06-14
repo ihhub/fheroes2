@@ -71,7 +71,7 @@ namespace AI
     void AIToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index );
     void AIToPoorLuckObject( Heroes & hero, u32 obj, s32 dst_index );
     void AIToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToObelisk( Heroes & hero, u32 obj, s32 dst_index );
+    void AIToObelisk( Heroes & hero, const Maps::Tiles & tile );
     void AIToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index );
     void AIToDaemonCave( Heroes & hero, u32 obj, s32 dst_index );
     void AIToCastle( Heroes & hero, u32 obj, s32 dst_index );
@@ -320,7 +320,7 @@ namespace AI
             break;
 
         case MP2::OBJ_OBELISK:
-            AIToObelisk( hero, object, dst_index );
+            AIToObelisk( hero, tile );
             break;
 
             // magic point
@@ -853,7 +853,7 @@ namespace AI
         const Funds payment( Resource::GOLD, 1000 );
         Kingdom & kingdom = hero.GetKingdom();
 
-        if ( !hero.isVisited( dst_index, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
+        if ( !hero.isObjectTypeVisited( dst_index, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
@@ -956,7 +956,7 @@ namespace AI
             break;
         }
 
-        if ( ( MP2::OBJ_ARENA == obj && !hero.isVisited( obj ) ) || !hero.isVisited( tile ) ) {
+        if ( ( MP2::OBJ_ARENA == obj && !hero.isObjectTypeVisited( obj ) ) || !hero.isVisited( tile ) ) {
             // increase skill
             hero.IncreasePrimarySkill( skill );
             hero.SetVisited( dst_index );
@@ -1024,7 +1024,7 @@ namespace AI
     void AIToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
     {
         // check already visited
-        if ( !hero.isVisited( obj ) )
+        if ( !hero.isObjectTypeVisited( obj ) )
             hero.SetVisited( dst_index );
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1045,7 +1045,7 @@ namespace AI
         }
 
         // check already visited
-        if ( !hero.isVisited( obj ) ) {
+        if ( !hero.isObjectTypeVisited( obj ) ) {
             // modify morale
             hero.SetVisited( dst_index );
             if ( move )
@@ -1064,7 +1064,7 @@ namespace AI
 
         if ( hero.GetSpellPoints() != max &&
              // check already visited
-             !hero.isVisited( MP2::OBJ_MAGICWELL ) ) {
+             !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
             hero.SetVisited( dst_index );
             hero.SetSpellPoints( max );
         }
@@ -1076,7 +1076,7 @@ namespace AI
     {
         const u32 max = hero.GetMaxSpellPoints();
 
-        if ( !hero.isVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
+        if ( !hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
             hero.SetSpellPoints( max * 2 );
 
             if ( Settings::Get().ExtWorldArtesianSpringSeparatelyVisit() )
@@ -1184,7 +1184,7 @@ namespace AI
 
         if ( complete )
             tile.QuantityReset();
-        else if ( 0 == gold && !hero.isVisited( obj ) ) {
+        else if ( 0 == gold && !hero.isObjectTypeVisited( obj ) ) {
             // modify morale
             hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1229,10 +1229,10 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToObelisk( Heroes & hero, u32 obj, s32 dst_index )
+    void AIToObelisk( Heroes & hero, const Maps::Tiles & tile )
     {
-        if ( !hero.isVisited( obj, Visit::GLOBAL ) ) {
-            hero.SetVisited( dst_index, Visit::GLOBAL );
+        if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+            hero.SetVisited( tile.GetIndex(), Visit::GLOBAL );
             Kingdom & kingdom = hero.GetKingdom();
             kingdom.PuzzleMaps().Update( kingdom.CountVisitedObjects( MP2::OBJ_OBELISK ), world.CountObeliskOnMaps() );
         }
@@ -1318,7 +1318,7 @@ namespace AI
     void AIToStables( Heroes & hero, u32 obj, s32 dst_index )
     {
         // check already visited
-        if ( !hero.isVisited( obj ) ) {
+        if ( !hero.isObjectTypeVisited( obj ) ) {
             hero.SetVisited( dst_index );
             hero.IncreaseMovePoints( 400 );
         }
@@ -1512,12 +1512,12 @@ namespace AI
             break;
 
         case MP2::OBJ_BUOY:
-            if ( !hero.isVisited( obj ) && Morale::BLOOD > hero.GetMorale() )
+            if ( !hero.isObjectTypeVisited( obj ) && Morale::BLOOD > hero.GetMorale() )
                 return true;
             break;
 
         case MP2::OBJ_MERMAID:
-            if ( !hero.isVisited( obj ) && Luck::IRISH > hero.GetLuck() )
+            if ( !hero.isObjectTypeVisited( obj ) && Luck::IRISH > hero.GetLuck() )
                 return true;
             break;
 
@@ -1663,7 +1663,7 @@ namespace AI
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_FAERIERING:
         case MP2::OBJ_IDOL:
-            if ( !hero.isVisited( obj ) && Luck::IRISH > hero.GetLuck() )
+            if ( !hero.isObjectTypeVisited( obj ) && Luck::IRISH > hero.GetLuck() )
                 return true;
             break;
 
@@ -1671,7 +1671,7 @@ namespace AI
         case MP2::OBJ_OASIS:
         case MP2::OBJ_TEMPLE:
         case MP2::OBJ_WATERINGHOLE:
-            if ( !hero.isVisited( obj ) && Morale::BLOOD > hero.GetMorale() )
+            if ( !hero.isObjectTypeVisited( obj ) && Morale::BLOOD > hero.GetMorale() )
                 return true;
             break;
 

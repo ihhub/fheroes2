@@ -158,8 +158,8 @@ namespace AI
 
             if ( heroes.empty() )
                 modes = AI::HEROES_HUNTER | AI::HEROES_SCOUTER;
-            else if ( heroes.size() < maxhero || 0 == std::count_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_SCOUTER ) ) )
-                modes = AI::HEROES_SCOUTER;
+            else if ( heroes.size() < maxhero )
+                modes = AI::HEROES_HUNTER;
 
             if ( modes && heroes.size() < Kingdom::GetMaxHeroes() ) {
                 Recruits & rec = kingdom.GetRecruits();
@@ -201,28 +201,9 @@ namespace AI
         }
 
         // update roles
-        {
-            std::for_each( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::ResetModes ), AI::HEROES_STUPID | AI::HEROES_WAITING ) );
-
-            // init roles
-            if ( heroes.end()
-                 != std::find_if( heroes.begin(), heroes.end(), std::not1( std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_SCOUTER | AI::HEROES_HUNTER ) ) ) ) {
-                KingdomHeroes::iterator ith, first = heroes.end();
-
-                while ( heroes.end()
-                        != ( ith = std::find_if( heroes.begin(), heroes.end(),
-                                                 std::not1( std::bind2nd( std::mem_fun( &Heroes::Modes ),
-                                                                          // also skip patrol
-                                                                          AI::HEROES_HUNTER | AI::HEROES_SCOUTER | Heroes::PATROL ) ) ) ) ) {
-                    if ( first == heroes.end() ) {
-                        first = ith;
-                        if ( *ith )
-                            ( *ith )->SetModes( AI::HEROES_HUNTER | AI::HEROES_SCOUTER );
-                    }
-                    else if ( *ith )
-                        ( *ith )->SetModes( AI::HEROES_SCOUTER );
-                }
-            }
+        for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
+            ( *it )->ResetModes( AI::HEROES_STUPID | AI::HEROES_WAITING );
+            ( *it )->SetModes( AI::HEROES_HUNTER );
         }
 
         // turn indicator

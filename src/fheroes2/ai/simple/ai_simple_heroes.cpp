@@ -250,7 +250,6 @@ namespace AI
 
         // load minimal distance tasks
         std::vector<IndexDistance> objs;
-        objs.reserve( ai_objects.size() );
 
         for ( std::map<s32, int>::const_iterator it = ai_objects.begin(); it != ai_objects.end(); ++it ) {
             const Maps::Tiles & tile = world.GetTiles( ( *it ).first );
@@ -269,8 +268,13 @@ namespace AI
             }
 
             const uint32_t heuristic = Maps::GetApproximateDistance( hero.GetIndex(), ( *it ).first );
-            if ( heuristic < PATHFINDING_LIMIT && AI::HeroesValidObject( hero, ( *it ).first ) )
+            if ( heuristic < PATHFINDING_LIMIT && AI::HeroesValidObject( hero, ( *it ).first ) ) {
+                if ( hero.GetID() == Heroes::BAROK && it->first == 845 ) {
+                    AI::HeroesValidObject( hero, ( *it ).first );
+                    DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " add object: " << ( *it ).second << " condition " << AI::HeroesValidObject( hero, ( *it ).first ) );
+                }
                 objs.push_back( IndexDistance( ( *it ).first, heuristic ) );
+            }
         }
 
         DEBUG( DBG_AI, DBG_INFO, Color::String( hero.GetColor() ) << ", hero: " << hero.GetName() << ", task prepare: " << objs.size() );
