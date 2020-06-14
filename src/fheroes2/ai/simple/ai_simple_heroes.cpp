@@ -279,7 +279,7 @@ namespace AI
             if ( task.size() >= HERO_MAX_SHEDULED_TASK )
                 break;
             const int positionIndex = ( *it ).first;
-            const uint32_t distance = hero.GetPath().Calculate( ( *it ).first, 25 );
+            const uint32_t distance = hero.GetPath().Calculate( ( *it ).first, 30 );
 
             if ( distance ) {
                 DEBUG( DBG_AI, DBG_INFO,
@@ -479,7 +479,7 @@ namespace AI
 
             if ( HeroesValidObject( hero, index ) ) {
                 DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", looking for: " << MP2::StringObject( world.GetTiles( index ).GetObject() ) << "(" << index << ")" );
-                if ( hero.GetPath().Calculate( index, 25 ) )
+                if ( hero.GetPath().Calculate( index, 30 ) )
                     break;
 
                 DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " say: unable to get object: " << index << ", remove task..." );
