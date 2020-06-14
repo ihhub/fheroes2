@@ -193,8 +193,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
     while ( cur != dst.GetHead()->GetIndex() ) {
         const Cell & center = at( cur );
         Indexes around
-            = isWide ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) )
-                                    : GetAroundIndexes( cur );
+            = isWide ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) ) : GetAroundIndexes( cur );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
             Cell & cell = at( *it );
@@ -239,7 +238,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
 
     // save path
     if ( cur == dst.GetHead()->GetIndex() ) {
-        while ( cur != b.GetHeadIndex() && isValidIndex( cur ) && ( !isWide || isValidDirection( cur, b.isReflect() ? RIGHT : LEFT ) ) ) {            
+        while ( cur != b.GetHeadIndex() && isValidIndex( cur ) && ( !isWide || isValidDirection( cur, b.isReflect() ? RIGHT : LEFT ) ) ) {
             result.push_back( cur );
             cur = list[cur].prnt;
         }
@@ -318,6 +317,12 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
 {
     Indexes result;
     result.reserve( 30 );
+
+    // make sure we check current position first to avoid unnecessary move
+    const int headIndex = b.GetHeadIndex();
+    if ( GetCell( headIndex )->GetQuality() ) {
+        result.push_back( headIndex );
+    }
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it ).isPassable3( b, false ) && ( *it ).GetQuality() )
