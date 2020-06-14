@@ -41,7 +41,7 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next );
 
 namespace
 {
-    const int heroFlagFrameCount = 9;
+    const int heroFrameCount = 9;
 }
 
 void PlayWalkSound( int ground )
@@ -98,7 +98,7 @@ bool ReflectSprite( int from )
     return false;
 }
 
-Sprite SpriteHero( const Heroes & hero, int index, bool reflect, bool rotate )
+Sprite SpriteHero( const Heroes & hero, int frameId, bool reflect, bool rotate )
 {
     int icn_hero = ICN::UNKNOWN;
     int index_sprite = 0;
@@ -165,16 +165,13 @@ Sprite SpriteHero( const Heroes & hero, int index, bool reflect, bool rotate )
             break;
         }
 
-    return AGG::GetICN( icn_hero, index_sprite + ( index % 9 ), reflect );
+    return AGG::GetICN( icn_hero, index_sprite + frameId, reflect );
 }
 
 Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
 {
     int icn_flag = ICN::UNKNOWN;
     int index_sprite = 0;
-
-    if ( hero.isShipMaster() && !hero.isEnableMove() )
-        frameId = 0;
 
     switch ( hero.GetColor() ) {
     case Color::BLUE:
@@ -235,36 +232,45 @@ Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
             break;
         }
 
-    static const Point offsetTop[heroFlagFrameCount]
+    static const Point offsetTop[heroFrameCount]
         = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
-    static const Point offsetBottom[heroFlagFrameCount]
+    static const Point offsetBottom[heroFrameCount]
         = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, -3 ), Point( 0, 0 ), Point( 0, -1 )};
-    static const Point offsetSideways[heroFlagFrameCount]
+    static const Point offsetSideways[heroFrameCount]
         = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 ), Point( 1, -1 ), Point( 2, -1 ), Point( 1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
-    static const Point offsetTopSideways[heroFlagFrameCount]
+    static const Point offsetTopSideways[heroFrameCount]
         = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( -1, -1 ), Point( -2, -1 ), Point( -2, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
-    static const Point offsetBottomSideways[heroFlagFrameCount]
+    static const Point offsetBottomSideways[heroFrameCount]
         = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, -1 ), Point( 2, -2 ), Point( 0, -2 ), Point( -1, -3 ), Point( -1, -2 ), Point( -1, -1 ), Point( 1, 0 )};
+
+    static const Point offsetShipTopBottom[heroFrameCount]
+        = {Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 )};
+    static const Point offsetShipSideways[heroFrameCount]
+        = {Point( 0, -2 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
+    static const Point offsetShipTopSideways[heroFrameCount]
+        = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
+    static const Point offsetShipBottomSideways[heroFrameCount]
+        = {Point( 0, -2 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 )};
 
     Point offset;
     switch ( hero.GetDirection() ) {
     case Direction::TOP:
-        offset = offsetTop[frameId];
+        offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
         break;
     case Direction::BOTTOM:
-        offset = offsetBottom[frameId];
+        offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetBottom[frameId];
         break;
     case Direction::RIGHT:
     case Direction::LEFT:
-        offset = offsetSideways[frameId];
+        offset = hero.isShipMaster() ? offsetShipSideways[frameId] : offsetSideways[frameId];
         break;
     case Direction::TOP_RIGHT:
     case Direction::TOP_LEFT:
-        offset = offsetTopSideways[frameId];
+        offset = hero.isShipMaster() ? offsetShipTopSideways[frameId] : offsetTopSideways[frameId];
         break;
     case Direction::BOTTOM_RIGHT:
     case Direction::BOTTOM_LEFT:
-        offset = offsetBottomSideways[frameId];
+        offset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
         break;
     }
 
@@ -378,14 +384,22 @@ void Heroes::Redraw( Surface & dst, bool with_shadow ) const
 void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 {
     const Point & mp = GetCenter();
-    const int flagFrameID = Game::MapsAnimationFrame() % heroFlagFrameCount;
+    int heroFrameID = Game::MapsAnimationFrame() % heroFrameCount;
+    int flagFrameID = heroFrameID;
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     if ( !( gamearea.GetRectMaps() & mp ) )
         return;
 
     bool reflect = ReflectSprite( direction );
 
-    Sprite sprite1 = SpriteHero( *this, sprite_index, reflect, false );
+    if ( isShipMaster() && !isEnableMove() ) {
+        flagFrameID = 0;
+        heroFrameID = 0;
+    } else if ( !isShipMaster() && !isEnableMove() ) {
+        heroFrameID = 0;
+    }
+
+    Sprite sprite1 = SpriteHero( *this, heroFrameID, reflect, false );
     Sprite sprite2 = SpriteFlag( *this, flagFrameID, reflect, false );
     Sprite sprite3 = SpriteShad( *this, sprite_index );
     Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
