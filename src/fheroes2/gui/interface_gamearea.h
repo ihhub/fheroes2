@@ -85,6 +85,9 @@ namespace Interface
 
         static Surface GenerateUltimateArtifactAreaSurface( s32 );
 
+        std::vector<SDL_Color> & GetCurrentSDLPalette();
+        bool IsPaletteUpdateRequired() const;
+
     private:
         void SetAreaPosition( s32, s32, u32, u32 );
 
@@ -110,6 +113,8 @@ namespace Interface
         };
 
         SDL::Time scrollTime;
+        mutable std::vector<SDL_Color> _sdlPalette;
+        mutable bool _updatePalette;
     };
 }
 

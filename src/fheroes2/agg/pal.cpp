@@ -162,6 +162,22 @@ namespace PAL
     }
 }
 
+std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )
+{
+    std::vector<uint8_t> palette = PAL::GetPalette( PAL::STANDARD );
+
+    const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
+    for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
+        for ( int id = 0; id < it->length; ++id ) {
+            const int lastColorID = it->length - 1;
+            const uint8_t newColorID = it->forward ? it->start + ( id + stepId ) % it->length : it->start + lastColorID - ( lastColorID + stepId - id ) % it->length;
+            palette[it->start + id] = newColorID;
+        }
+    }
+
+    return palette;
+}
+
 void PAL::CreateStandardPalette()
 {
     const u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
@@ -289,4 +305,17 @@ void PAL::Clear()
     no_cycle_palette.clear();
     mirror_image_palette.clear();
     standard_palette.clear();
+}
+
+std::vector<SDL_Color> PAL::GetCustomSDLPalette( const std::vector<uint8_t> & indexes )
+{
+    if ( indexes.size() != PALETTE_SIZE )
+        return std::vector<SDL_Color>();
+
+    std::vector<SDL_Color> sdlPalette( PALETTE_SIZE );
+    const std::vector<SDL_Color> & colors = *current_palette->colors;
+    for ( size_t i = 0; i < indexes.size(); ++i )
+        sdlPalette[i] = colors[indexes[i]];
+
+    return sdlPalette;
 }

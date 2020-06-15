@@ -51,7 +51,10 @@ Interface::GameArea::GameArea( Basic & basic )
     , updateCursor( false )
     , borderSizeX( 8 )
     , borderSizeY( 8 )
-{}
+    , _updatePalette( false )
+{
+    _sdlPalette.resize( PALETTE_SIZE );
+}
 
 const Rect & Interface::GameArea::GetArea( void ) const
 {
@@ -163,6 +166,14 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const
 {
+    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_BATTLE_DELAY ) ) {
+        const std::vector<SDL_Color> tempPalette = PAL::GetCustomSDLPalette( PAL::GetCyclingPalette( Game::MapsAnimationFrame() ) );
+        if ( tempPalette.size() == _sdlPalette.size() ) {
+            std::memcpy( _sdlPalette.data(), tempPalette.data(), sizeof( SDL_Color ) * PALETTE_SIZE );
+            _updatePalette = true;
+        }
+    }
+
     // tile
     for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
         const s32 offsetY = rectMaps.y + oy;
@@ -333,6 +344,8 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
             }
         }
     }
+
+    _updatePalette = false;
 }
 
 /* scroll area */
@@ -650,4 +663,14 @@ void Interface::GameArea::QueueEventProcessing( void )
         interface.MouseCursorAreaClickLeft( index );
     else if ( le.MousePressRight( tile_pos ) )
         interface.MouseCursorAreaPressRight( index );
+}
+
+std::vector<SDL_Color> & Interface::GameArea::GetCurrentSDLPalette()
+{
+    return _sdlPalette;
+}
+
+bool Interface::GameArea::IsPaletteUpdateRequired() const
+{
+    return _updatePalette;
 }

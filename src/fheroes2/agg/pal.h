@@ -49,7 +49,7 @@ namespace PAL
         bool forward;
     };
 
-    const std::vector<CyclingColorSet> & GetCyclingColors();
+    std::vector<uint8_t> GetCyclingPalette( int stepId );
     void CreateStandardPalette();
     void InitAllPalettes();
     void Clear();
@@ -58,6 +58,7 @@ namespace PAL
     RGBA GetPaletteColor( u8 index );
     const std::vector<uint8_t> & GetPalette( int type );
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
+    std::vector<SDL_Color> GetCustomSDLPalette( const std::vector<uint8_t> & indexes );
 }
 
 #endif

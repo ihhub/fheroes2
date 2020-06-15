@@ -608,6 +608,13 @@ void Surface::SetPalette( void )
     }
 }
 
+void Surface::SetPalette( std::vector<SDL_Color> & palette )
+{
+    if ( isValid() && !palette.empty() && surface->format->palette ) {
+        SDL_SetPalette( surface, SDL_LOGPAL, palette.data(), 0, palette.size() );
+    }
+}
+
 u32 Surface::GetColorKey( void ) const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
