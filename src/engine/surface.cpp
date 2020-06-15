@@ -611,7 +611,11 @@ void Surface::SetPalette( void )
 void Surface::SetPalette( std::vector<SDL_Color> & palette )
 {
     if ( isValid() && !palette.empty() && surface->format->palette ) {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        SDL_SetPaletteColors( surface->format->palette, palette.data(), 0, palette.size() );
+#else
         SDL_SetPalette( surface, SDL_LOGPAL, palette.data(), 0, palette.size() );
+#endif
     }
 }
 
