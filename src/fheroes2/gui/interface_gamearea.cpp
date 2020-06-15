@@ -30,6 +30,8 @@
 #include "settings.h"
 #include "world.h"
 
+#include <cstring>
+
 #define SCROLL_MAX TILEWIDTH
 
 namespace Game
