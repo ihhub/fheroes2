@@ -20,16 +20,80 @@
 
 #include "ai_normal.h"
 #include "castle.h"
+#include "heroes.h"
+#include "kingdom.h"
+#include "race.h"
+#include "world.h"
 
 namespace AI
 {
-    const std::vector<uint32_t> & getBuildOrder( int type ) {
-        static std::vector<uint32_t> buildOrder = {};
-        return buildOrder;
+    struct buildOrder
+    {
+        building_t building;
+        int priority;
+    };
+
+    const std::vector<buildOrder> & GetDefensiveStructures( int type )
+    {
+        static std::vector<buildOrder> defensive
+            = {{BUILD_LEFTTURRET, 1}, {BUILD_RIGHTTURRET, 1}, {BUILD_MOAT, 1}, {BUILD_CAPTAIN, 1}, {BUILD_SPEC, 2}, {BUILD_TAVERN, 1}};
+
+        return defensive;
+    }
+
+    const std::vector<buildOrder> & GetBuildOrder( int type )
+    {
+        static std::vector<buildOrder> genericBuildOrder
+            = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},      {DWELLING_UPGRADE7, 1}, {DWELLING_UPGRADE6, 1}, {DWELLING_MONSTER6, 1},  {DWELLING_UPGRADE5, 1},
+               {DWELLING_MONSTER5, 1}, {DWELLING_UPGRADE4, 1}, {DWELLING_MONSTER4, 1}, {DWELLING_UPGRADE3, 2}, {DWELLING_MONSTER3, 2},  {DWELLING_UPGRADE2, 2},
+               {DWELLING_MONSTER2, 3}, {DWELLING_MONSTER1, 4}, {BUILD_TAVERN, 2},      {BUILD_MAGEGUILD1, 2},  {BUILD_THIEVESGUILD, 3}, {BUILD_MAGEGUILD2, 3},
+               {BUILD_SPEC, 5},        {BUILD_WEL2, 10},       {BUILD_MAGEGUILD3, 4},  {BUILD_MAGEGUILD4, 5},  {BUILD_MAGEGUILD5, 5}};
+
+        // De-prioritizing dwelling 5, 1 and upgrades of 3 and 4
+        // Well, tavern and Archery upgrade are more important
+        static std::vector<buildOrder> knightBuildOrder
+            = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},      {DWELLING_UPGRADE6, 2}, {DWELLING_MONSTER6, 1},   {DWELLING_UPGRADE5, 2}, {DWELLING_MONSTER5, 2},
+               {DWELLING_UPGRADE4, 2}, {DWELLING_MONSTER4, 1}, {DWELLING_UPGRADE3, 2}, {DWELLING_MONSTER3, 1},   {DWELLING_UPGRADE2, 1}, {DWELLING_MONSTER2, 3},
+               {DWELLING_MONSTER1, 4}, {BUILD_WELL, 1},        {BUILD_TAVERN, 1},      {BUILD_MAGEGUILD1, 2},    {BUILD_MAGEGUILD2, 3},  {BUILD_MAGEGUILD3, 5},
+               {BUILD_MAGEGUILD4, 5},  {BUILD_MAGEGUILD5, 5},  {BUILD_SPEC, 5},        {BUILD_THIEVESGUILD, 10}, {BUILD_WEL2, 20}};
+
+        return ( type == Race::KNGT ) ? knightBuildOrder : genericBuildOrder;
+    }
+
+    bool Build( Castle & castle, const std::vector<buildOrder> & bList )
+    {
+        for ( std::vector<buildOrder>::const_iterator it = bList.begin(); it != bList.end(); ++it ) {
+            if ( it->priority == 1 ) {
+                if ( BuildIfAvailable( castle, it->building ) )
+                    return true;
+            }
+            else {
+                if ( BuildIfEnoughResources( castle, it->building, GetResourceMultiplier( castle, it->priority, it->priority + 1 ) ) )
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    bool CastleDevelopment( Castle & castle )
+    {
+        if ( !castle.isBuild( BUILD_WELL ) && world.LastDay() ) {
+            // return right away - if you can't buy Well you can't buy anything else
+            return BuildIfAvailable( castle, BUILD_WELL );
+        }
+
+        if ( Build( castle, GetBuildOrder( castle.GetRace() ) ) ) {
+            return true;
+        }
+
+        return Build( castle, GetDefensiveStructures( castle.GetRace() ) );
     }
 
     void Normal::CastleTurn( Castle & castle )
     {
-        castle.GetRace();
+        CastleDevelopment( castle );
+
+        if ( world.LastDay() )
+            castle.RecruitAllMonsters();
     }
 }

@@ -2305,7 +2305,7 @@ int Castle::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-void Castle::RecruitAllMonster( void )
+void Castle::RecruitAllMonsters( void )
 {
     bool skip_recruit = false;
 

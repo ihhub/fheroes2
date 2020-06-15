@@ -39,7 +39,7 @@ namespace AI
 {
     void AICastleDefense( Castle & castle )
     {
-        castle.RecruitAllMonster(); // buy monsters at first place
+        castle.RecruitAllMonsters(); // buy monsters at first place
         const bool doesArmyExist = castle.GetActualArmy().GetCount() > 0;
 
         if ( castle.isCastle() && doesArmyExist ) {
@@ -121,7 +121,7 @@ namespace AI
         }
 
         if ( world.LastDay() ) // last day so buy monster
-            castle.RecruitAllMonster();
+            castle.RecruitAllMonsters();
     }
 
     void Simple::CastleTurn( Castle & castle )

@@ -340,7 +340,7 @@ namespace AI
         if ( castle ) {
             DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", in castle" );
 
-            castle->RecruitAllMonster();
+            castle->RecruitAllMonsters();
             hero.GetArmy().UpgradeTroops( *castle );
 
             // recruit army

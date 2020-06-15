@@ -153,7 +153,7 @@ public:
 
     bool RecruitMonsterFromDwelling( u32 dw, u32 count );
     bool RecruitMonster( const Troop & );
-    void RecruitAllMonster( void );
+    void RecruitAllMonsters( void );
 
     void ChangeColor( int );
 
