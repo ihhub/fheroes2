@@ -50,6 +50,26 @@ namespace AI
         if ( _personality == EXPLORER )
             heroLimit++;
 
+        // Scan visible map
+
+        status.RedrawTurnProgress( 1 );
+
+        // Buy heroes, adjust roles
+
+        status.RedrawTurnProgress( 2 );
+
+        for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
+            if ( *it ) {
+                HeroTurn( **it );
+            }
+        }
+
         status.RedrawTurnProgress( 9 );
+
+        for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
+            if ( *it ) {
+                CastleTurn( **it );
+            }
+        }
     }
 }
