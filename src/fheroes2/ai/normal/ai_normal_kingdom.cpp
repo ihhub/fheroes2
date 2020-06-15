@@ -56,11 +56,18 @@ namespace AI
 
         // Buy heroes, adjust roles
 
+        VecHeroes sortedHeroList = heroes;
+        // Sort
+
         status.RedrawTurnProgress( 2 );
 
-        for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
+        size_t heroesMovedCount = 0;
+        for ( VecHeroes::iterator it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
             if ( *it ) {
                 HeroTurn( **it );
+
+                heroesMovedCount++;
+                status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
             }
         }
 

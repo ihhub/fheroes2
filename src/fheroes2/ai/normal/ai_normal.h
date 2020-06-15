@@ -34,6 +34,13 @@ namespace AI
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
         void HeroTurn( Heroes & hero );
     };
+
+    struct MapScanNode
+    {
+        MapScanNode * prev;
+        int index;
+        uint32_t distance;
+    };
 }
 
 #endif
