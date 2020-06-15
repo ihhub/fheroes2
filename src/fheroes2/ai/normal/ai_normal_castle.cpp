@@ -19,8 +19,17 @@
  ***************************************************************************/
 
 #include "ai_normal.h"
+#include "castle.h"
 
 namespace AI
 {
-    void Normal::CastleTurn( Castle & castle ) {}
+    const std::vector<uint32_t> & getBuildOrder( int type ) {
+        static std::vector<uint32_t> buildOrder = {};
+        return buildOrder;
+    }
+
+    void Normal::CastleTurn( Castle & castle )
+    {
+        castle.GetRace();
+    }
 }

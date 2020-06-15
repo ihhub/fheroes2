@@ -19,8 +19,22 @@
  ***************************************************************************/
 
 #include "ai_normal.h"
+#include "battle_arena.h"
+#include "battle_army.h"
+#include "battle_board.h"
+#include "battle_cell.h"
+#include "battle_command.h"
+#include "battle_troop.h"
+using namespace Battle;
 
 namespace AI
 {
-    void Normal::BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) {}
+    void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
+    {
+        Board * board = Arena::GetBoard();
+        //Hero * commander = currentUnit.GetArmy();
+
+        DEBUG( DBG_AI, DBG_TRACE, "AI: Skipping turn" );
+        actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+    }
 }

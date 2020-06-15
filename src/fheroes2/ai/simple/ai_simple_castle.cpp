@@ -37,29 +37,6 @@
 
 namespace AI
 {
-    bool BuildIfAvailable( Castle & castle, int building )
-    {
-        if ( !castle.isBuild( building ) )
-            return castle.BuyBuilding( building );
-        return false;
-    }
-
-    bool BuildIfEnoughResources( Castle & castle, int building, u32 minimumMultiplicator )
-    {
-        if ( minimumMultiplicator < 1 || minimumMultiplicator > 99 ) // can't be that we need more than 100 times resources
-            return false;
-
-        const Kingdom & kingdom = castle.GetKingdom();
-        if ( kingdom.GetFunds() >= PaymentConditions::BuyBuilding( castle.GetRace(), building ) * minimumMultiplicator )
-            return BuildIfAvailable( castle, building );
-        return false;
-    }
-
-    u32 GetResourceMultiplier( Castle & castle, u32 min, u32 max )
-    {
-        return castle.isCapital() ? 1 : Rand::Get( min, max );
-    }
-
     void AICastleDefense( Castle & castle )
     {
         castle.RecruitAllMonster(); // buy monsters at first place

@@ -34,7 +34,6 @@
 #include "battle_arena.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_interface.h"
 #include "battle_troop.h"
 #include "castle.h"
 #include "heroes.h"

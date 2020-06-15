@@ -44,6 +44,13 @@ namespace AI
         SIMPLE,
         NORMAL
     };
+    enum AI_PERSONALITY
+    {
+        NONE,
+        WARRIOR,
+        BUILDER,
+        EXPLORER
+    };
 
     enum modes_t
     {
@@ -86,14 +93,30 @@ namespace AI
 
         virtual const char * Type( void ) const;
         virtual const char * License( void ) const;
+        virtual int GetPersonality() const;
+        virtual std::string GetPersonalityString() const;
+
         virtual void Reset();
+
+    protected:
+        int _personality;
+
+        Base()
+            : _personality( NONE )
+        {}
     };
 
     Base & Get( AI_TYPE type = NORMAL );
 
+    // functionality in ai_hero_action.cpp
     void HeroesAction( Heroes & hero, s32 dst_index );
     bool HeroesValidObject( const Heroes & hero, s32 index );
     void HeroesMove( Heroes & hero );
+
+    // functionality in ai_common.cpp
+    bool BuildIfAvailable( Castle & castle, int building );
+    bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
+    uint32_t GetResourceMultiplier( Castle & castle, uint32_t min, uint32_t max );
 }
 
 #endif

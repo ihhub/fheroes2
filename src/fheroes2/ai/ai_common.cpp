@@ -18,38 +18,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "ai_normal.h"
-#include "game_interface.h"
+#include "ai.h"
+#include "castle.h"
 #include "kingdom.h"
-#include "mus.h"
-#include "world.h"
 
 namespace AI
 {
-    void Normal::KingdomTurn( Kingdom & kingdom )
+    bool BuildIfAvailable( Castle & castle, int building )
     {
-        const int color = kingdom.GetColor();
-        KingdomHeroes & heroes = kingdom.GetHeroes();
-        KingdomCastles & castles = kingdom.GetCastles();
+        if ( !castle.isBuild( building ) )
+            return castle.BuyBuilding( building );
+        return false;
+    }
 
-        if ( kingdom.isLoss() || color == Color::NONE ) {
-            kingdom.LossPostActions();
-            return;
-        }
+    bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator )
+    {
+        if ( minimumMultiplicator < 1 || minimumMultiplicator > 99 ) // can't be that we need more than 100 times resources
+            return false;
 
-        if ( !Settings::Get().MusicMIDI() )
-            AGG::PlayMusic( MUS::COMPUTER );
+        const Kingdom & kingdom = castle.GetKingdom();
+        if ( kingdom.GetFunds() >= PaymentConditions::BuyBuilding( castle.GetRace(), building ) * minimumMultiplicator )
+            return BuildIfAvailable( castle, building );
+        return false;
+    }
 
-        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
-
-        // indicator
-        status.RedrawTurnProgress( 0 );
-
-        size_t heroLimit = Maps::XLARGE > world.w() ? ( Maps::LARGE > world.w() ? 2 : 3 ) : 4;
-        if ( _personality == EXPLORER )
-            heroLimit++;
-
-        status.RedrawTurnProgress( 9 );
+    uint32_t GetResourceMultiplier( Castle & castle, uint32_t min, uint32_t max )
+    {
+        return castle.isCapital() ? 1 : Rand::Get( min, max );
     }
 }

@@ -62,6 +62,30 @@ namespace AI
         return "GPL-2.0";
     }
 
+    int Base::GetPersonality() const
+    {
+        return _personality;
+    }
+
+    std::string Base::GetPersonalityString() const
+    {
+        switch ( _personality ) {
+        case WARRIOR:
+            return "Warrior";
+            break;
+        case BUILDER:
+            return "Builder";
+            break;
+        case EXPLORER:
+            return "Explorer";
+            break;
+        default:
+            break;
+        }
+
+        return Type();
+    }
+
     void Base::Reset() {}
 
     void Base::CastlePreBattle( Castle & ) {}
@@ -186,9 +210,9 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, Color::String( color ) << " moved" );
     }
 
-    void Base::BattleTurn( Battle::Arena &, const Battle::Unit & b, Battle::Actions & a )
+    void Base::BattleTurn( Battle::Arena &, const Battle::Unit & currentUnit, Battle::Actions & actions )
     {
         // end action
-        a.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, b.GetUID() ) );
+        actions.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
     }
 }
