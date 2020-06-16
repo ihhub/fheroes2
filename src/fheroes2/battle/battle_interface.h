@@ -66,7 +66,7 @@ namespace Battle
         OpponentSprite( const Rect &, const HeroBase *, bool );
 
         const Rect & GetArea( void ) const;
-        void Redraw( void ) const;
+        void Redraw( Surface & dst ) const;
         void ResetAnimFrame( int );
         void IncreaseAnimFrame( bool loop = false );
         bool isFinishFrame( void ) const;
@@ -145,7 +145,7 @@ namespace Battle
         PopupDamageInfo();
 
         void SetInfo( const Cell *, const Unit *, const Unit * );
-        void Reset( void );
+        void Reset();
         void Redraw( int, int );
 
     private:

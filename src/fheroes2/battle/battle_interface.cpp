@@ -44,8 +44,6 @@
 #include "world.h"
 
 #define ARMYORDERW 40
-#define INTERFACE_SIZE_X 640
-#define INTERFACE_SIZE_Y 480
 
 namespace Battle
 {
@@ -679,7 +677,7 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
     return pos;
 }
 
-void Battle::OpponentSprite::Redraw( void ) const
+void Battle::OpponentSprite::Redraw( Surface & dst ) const
 {
     const Sprite & hero = AGG::GetICN( icn, animframe, reflect );
 
@@ -693,9 +691,9 @@ void Battle::OpponentSprite::Redraw( void ) const
     }
 
     if ( reflect )
-        hero.Blit( offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y() );
+        hero.Blit( offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y(), dst );
     else
-        hero.Blit( offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
+        hero.Blit( offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y(), dst );
 }
 
 Battle::Status::Status()
@@ -842,7 +840,7 @@ void Battle::ArmiesOrder::Redraw( const Unit * current )
 
 Battle::Interface::Interface( Arena & a, s32 center )
     : arena( a )
-    , _mainSurface( Size( INTERFACE_SIZE_X + BORDERWIDTH * 2, INTERFACE_SIZE_Y + BORDERWIDTH * 2 ), false )
+    , _mainSurface( Size( Display::DEFAULT_WIDTH + BORDERWIDTH * 2, Display::DEFAULT_HEIGHT + BORDERWIDTH * 2 ), true )
     , icn_cbkg( ICN::UNKNOWN )
     , icn_frng( ICN::UNKNOWN )
     , humanturn_spell( Spell::NONE )
@@ -869,10 +867,10 @@ Battle::Interface::Interface( Arena & a, s32 center )
     // border
     Display & display = Display::Get();
 
-    //_windowTopLeft.x = ( display.w() - INTERFACE_SIZE_X ) / 2 - BORDERWIDTH;
-    //_windowTopLeft.y = ( display.h() - INTERFACE_SIZE_Y ) / 2 - BORDERWIDTH;
+    //_windowTopLeft.x = ( display.w() - Display::DEFAULT_WIDTH ) / 2 - BORDERWIDTH;
+    //_windowTopLeft.y = ( display.h() - Display::DEFAULT_HEIGHT ) / 2 - BORDERWIDTH;
     _windowTopLeft = Point( 0, 0 );
-    border.SetPosition( 0, 0, INTERFACE_SIZE_X, INTERFACE_SIZE_Y );
+    border.SetPosition( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
 
     // cover
     bool trees = Maps::ScanAroundObject( center, MP2::OBJ_TREES ).size();
@@ -1024,19 +1022,23 @@ void Battle::Interface::CycleColors()
 void Battle::Interface::Redraw( void )
 {
     Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
     const Castle * castle = Arena::GetCastle();
 
+    cursor.Hide();
     RedrawBorder();
     RedrawCover();
     RedrawOpponents();
     if ( castle )
         RedrawCastle3( *castle );
     RedrawArmies();
+
+    _mainSurface.Blit( _windowTopLeft, display );
     RedrawInterface();
     if ( Settings::Get().ExtBattleShowBattleOrder() && !Settings::Get().QVGA() )
         armies_order.Redraw( _currentUnit );
 
-    _mainSurface.Blit( _windowTopLeft, display );
+    cursor.Show();
     display.Flip();
 }
 
@@ -1097,9 +1099,9 @@ void Battle::Interface::RedrawArmies( void )
 void Battle::Interface::RedrawOpponents( void )
 {
     if ( opponent1 )
-        opponent1->Redraw();
+        opponent1->Redraw( _mainSurface );
     if ( opponent2 )
-        opponent2->Redraw();
+        opponent2->Redraw( _mainSurface );
 
     RedrawOpponentsFlags();
 }
@@ -1134,7 +1136,8 @@ void Battle::Interface::RedrawOpponentsFlags( void )
         }
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), false );
-        flag.Blit( opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(), opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
+        flag.Blit( opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(), opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y(),
+                   _mainSurface );
     }
 
     if ( !Settings::Get().QVGA() && opponent2 ) {
@@ -1166,8 +1169,8 @@ void Battle::Interface::RedrawOpponentsFlags( void )
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), true );
         const Point offset = opponent2->Offset();
-        flag.Blit( offset.x + Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.w() ),
-                   offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y() );
+        flag.Blit( offset.x + Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.w() ), offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(),
+                   _mainSurface );
     }
 }
 
@@ -1269,14 +1272,14 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
                 spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
                 spmon1.SetAlphaMod( b_current_alpha, false );
             }
-            spmon1.Blit( sp.x, sp.y );
+            spmon1.Blit( sp.x, sp.y, _mainSurface );
         }
         else
-            spmon1.Blit( sp );
+            spmon1.Blit( sp, _mainSurface );
 
         // contour
         if ( spmon2.isValid() )
-            spmon2.Blit( sp.x - 1, sp.y - 1 );
+            spmon2.Blit( sp.x - 1, sp.y - 1, _mainSurface );
     }
 }
 
@@ -1833,14 +1836,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     board.SetScanPassability( b );
 
     rectBoard = board.GetArea();
-    const HeroBase * current_commander = arena.GetCurrentCommander();
-
-    if ( conf.QVGA() && current_commander && current_commander->HaveSpellBook() ) {
-        const Rect & area = border.GetArea();
-        const Sprite & book = AGG::GetICN( ICN::ARTFX, 81 );
-        const u32 ox = ( arena.GetArmyColor1() == current_commander->GetColor() ? 0 : 320 - book.w() );
-        pocket_book = Rect( area.x + ox, area.y + area.h - 19 - book.h(), book.w(), book.h() );
-    }
 
     if ( listlog && turn != arena.GetCurrentTurn() ) {
         turn = arena.GetCurrentTurn();
@@ -1854,10 +1849,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     // safe position coord
     CursorPosition cursorPosition;
 
-    cursor.Hide();
     Redraw();
-    cursor.Show();
-    display.Flip();
 
     std::string msg;
     animation_flags_frame = 0;
@@ -1892,14 +1884,12 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
         // redraw arena
         if ( humanturn_redraw ) {
-            cursor.Hide();
             Redraw();
+            humanturn_redraw = false;
         }
 
         if ( !cursor.isVisible() ) {
             cursor.Show();
-            display.Flip();
-            humanturn_redraw = false;
         }
     }
 
@@ -2176,15 +2166,12 @@ void Battle::Interface::FadeArena( void )
     Display & display = Display::Get();
     Settings & conf = Settings::Get();
 
-    cursor.Hide();
     cursor.SetThemes( cursor.WAR_POINTER );
     Redraw();
-    cursor.Show();
-    display.Flip();
 
     if ( !conf.QVGA() ) {
         cursor.Hide();
-        Rect srt( border.GetArea().x, border.GetArea().y, display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+        Rect srt = border.GetArea();
         Surface top = display.GetSurface( srt );
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
