@@ -82,9 +82,9 @@ struct Rect : Point, Size
     // move position by offset
     Rect operator+( const Point & offset ) const;
     // rect include point
-    bool operator&( const Point & ) const;
+    bool operator&(const Point &)const;
     // rect intersects rect
-    bool operator&( const Rect & ) const;
+    bool operator&(const Rect &)const;
 
     // calculate intersection rectangle
     Rect operator^( const Rect & other ) const;
