@@ -265,6 +265,9 @@ namespace Battle
 
         Arena & arena;
         Dialog::FrameBorder border;
+
+        Point _windowTopLeft;
+        Surface _mainSurface;
         Surface sf_hexagon;
         Surface sf_shadow;
         Surface sf_cursor;

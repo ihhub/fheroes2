@@ -44,6 +44,8 @@
 #include "world.h"
 
 #define ARMYORDERW 40
+#define INTERFACE_SIZE_X 640
+#define INTERFACE_SIZE_Y 480
 
 namespace Battle
 {
@@ -840,6 +842,7 @@ void Battle::ArmiesOrder::Redraw( const Unit * current )
 
 Battle::Interface::Interface( Arena & a, s32 center )
     : arena( a )
+    , _mainSurface( Size( INTERFACE_SIZE_X, INTERFACE_SIZE_Y ), false )
     , icn_cbkg( ICN::UNKNOWN )
     , icn_frng( ICN::UNKNOWN )
     , humanturn_spell( Spell::NONE )
@@ -860,15 +863,15 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
 {
     const Settings & conf = Settings::Get();
-    bool pda = conf.QVGA();
 
     Cursor::Get().Hide();
 
     // border
     Display & display = Display::Get();
-    const u32 arenaw = pda ? 320 : 640;
-    const u32 arenah = pda ? ( display.h() < 240 ? display.h() : 240 ) : 480;
-    border.SetPosition( ( display.w() - arenaw ) / 2 - BORDERWIDTH, ( display.h() - arenah ) / 2 - BORDERWIDTH, arenaw, arenah );
+
+    _windowTopLeft.x = ( display.w() - INTERFACE_SIZE_X ) / 2 - BORDERWIDTH;
+    _windowTopLeft.x = ( display.h() - INTERFACE_SIZE_Y ) / 2 - BORDERWIDTH;
+    border.SetPosition( 0, 0, INTERFACE_SIZE_X, INTERFACE_SIZE_Y );
 
     // cover
     bool trees = Maps::ScanAroundObject( center, MP2::OBJ_TREES ).size();
@@ -934,49 +937,29 @@ Battle::Interface::Interface( Arena & a, s32 center )
     sf_cursor = DrawHexagonShadow( 0x60 );
     sf_shadow = DrawHexagonShadow( 0x30 );
 
-    // buttons
+    btn_auto.SetSprite( ICN::TEXTBAR, 4, 5 );
+    btn_settings.SetSprite( ICN::TEXTBAR, 6, 7 );
+
     const Rect & area = border.GetArea();
 
-    if ( conf.PocketPC() ) {
-        btn_auto.SetSprite( ICN::BATTLEAUTO, 0, 1 );
-        btn_settings.SetSprite( ICN::BATTLESETS, 0, 1 );
-
-        btn_auto.SetPos( area.x, area.y );
-        btn_settings.SetPos( area.x, area.y + area.h - btn_settings.h );
-    }
-    else {
-        btn_auto.SetSprite( ICN::TEXTBAR, 4, 5 );
-        btn_settings.SetSprite( ICN::TEXTBAR, 6, 7 );
-
-        btn_auto.SetPos( area.x, area.y + area.h - btn_settings.h - btn_auto.h );
-        btn_settings.SetPos( area.x, area.y + area.h - btn_settings.h );
-    }
+    btn_auto.SetPos( area.x, area.y + area.h - btn_settings.h - btn_auto.h );
+    btn_settings.SetPos( area.x, area.y + area.h - btn_settings.h );
 
     if ( conf.ExtBattleSoftWait() ) {
-        if ( conf.PocketPC() ) {
-            btn_wait.SetSprite( ICN::BATTLEWAIT, 0, 1 );
-            btn_skip.SetSprite( ICN::BATTLESKIP, 0, 1 );
+        btn_wait.SetSprite( ICN::BATTLEWAIT, 0, 1 );
+        btn_skip.SetSprite( ICN::BATTLESKIP, 0, 1 );
 
-            btn_wait.SetPos( area.x + area.w - btn_wait.w, area.y );
-            btn_skip.SetPos( area.x + area.w - btn_skip.w, area.y + area.h - btn_skip.h );
-        }
-        else {
-            btn_wait.SetSprite( ICN::BATTLEWAIT, 0, 1 );
-            btn_skip.SetSprite( ICN::BATTLESKIP, 0, 1 );
-
-            btn_wait.SetPos( area.x + area.w - btn_wait.w, area.y + area.h - btn_skip.h - btn_wait.h );
-            btn_skip.SetPos( area.x + area.w - btn_skip.w, area.y + area.h - btn_skip.h );
-        }
+        btn_wait.SetPos( area.x + area.w - btn_wait.w, area.y + area.h - btn_skip.h - btn_wait.h );
+        btn_skip.SetPos( area.x + area.w - btn_skip.w, area.y + area.h - btn_skip.h );
     }
     else {
         btn_skip.SetSprite( ICN::TEXTBAR, 0, 1 );
         btn_skip.SetPos( area.x + area.w - btn_skip.w, area.y + area.h - btn_skip.h );
     }
 
-    status.SetPosition( area.x + btn_settings.w, ( conf.PocketPC() ? btn_settings.y : btn_auto.y ) );
+    status.SetPosition( area.x + btn_settings.w, btn_auto.y );
 
-    if ( !conf.QVGA() && !conf.ExtPocketLowMemory() )
-        listlog = new StatusListBox();
+    listlog = new StatusListBox();
 
     if ( listlog )
         listlog->SetPosition( area.x, area.y + area.h - 36 );
@@ -1027,8 +1010,6 @@ void Battle::Interface::CycleColors()
     ++_colorCycle;
     if ( _colorCycle > 20 ) // 5 * 4, two color ranges
         _colorCycle = 0;
-
-    _creaturePalette = PAL::GetPalette( PAL::STANDARD );
 
     const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
     for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
