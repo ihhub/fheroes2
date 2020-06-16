@@ -840,7 +840,7 @@ void Battle::ArmiesOrder::Redraw( const Unit * current )
 
 Battle::Interface::Interface( Arena & a, s32 center )
     : arena( a )
-    , _surfaceArea( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT )
+    , _surfaceInnerArea( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT )
     , _mainSurface( Size( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT ), true )
     , icn_cbkg( ICN::UNKNOWN )
     , icn_frng( ICN::UNKNOWN )
@@ -868,9 +868,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     // border
     Display & display = Display::Get();
 
-    _windowTopLeft.x = ( display.w() - Display::DEFAULT_WIDTH ) / 2;
-    _windowTopLeft.y = ( display.h() - Display::DEFAULT_HEIGHT ) / 2;
-    border.SetPosition( _windowTopLeft.x - BORDERWIDTH, _windowTopLeft.y - BORDERWIDTH, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
+    _interfacePosition = Rect( ( display.w() - Display::DEFAULT_WIDTH ) / 2, ( display.h() - Display::DEFAULT_HEIGHT ) / 2, _surfaceInnerArea.w, _surfaceInnerArea.h );
+    border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
 
     // cover
     bool trees = Maps::ScanAroundObject( center, MP2::OBJ_TREES ).size();
@@ -940,8 +939,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     btn_settings.SetSprite( ICN::TEXTBAR, 6, 7 );
 
     // opponents
-    opponent1 = arena.GetCommander1() ? new OpponentSprite( _surfaceArea, arena.GetCommander1(), false ) : NULL;
-    opponent2 = arena.GetCommander2() ? new OpponentSprite( _surfaceArea, arena.GetCommander2(), true ) : NULL;
+    opponent1 = arena.GetCommander1() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander1(), false ) : NULL;
+    opponent2 = arena.GetCommander2() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander2(), true ) : NULL;
 
     if ( Arena::GetCastle() )
         main_tower = Rect( 570, 145, 70, 70 );
@@ -989,7 +988,12 @@ void Battle::Interface::SetArmiesOrder( const Units * units )
 
 const Rect & Battle::Interface::GetArea( void ) const
 {
-    return _surfaceArea;
+    return _surfaceInnerArea;
+}
+
+Point Battle::Interface::GetMouseCursor() const
+{
+    return LocalEvent::Get().GetMouseCursor() - _interfacePosition;
 }
 
 void Battle::Interface::SetStatus( const std::string & msg, bool top )
@@ -1042,7 +1046,7 @@ void Battle::Interface::RedrawPartialFinish()
 {
     Display & display = Display::Get();
 
-    _mainSurface.Blit( _windowTopLeft, display );
+    _mainSurface.Blit( _interfacePosition, display );
     RedrawInterface();
     if ( Settings::Get().ExtBattleShowBattleOrder() && !Settings::Get().QVGA() )
         armies_order.Redraw( _currentUnit );
@@ -1065,7 +1069,7 @@ void Battle::Interface::RedrawInterface( void )
     btn_skip.Draw();
 
     if ( !conf.QVGA() && !conf.ExtPocketLowMemory() )
-        popup.Redraw( rectBoard.x + rectBoard.w + 60, rectBoard.y + rectBoard.h );
+        popup.Redraw( _interfacePosition.x + _interfacePosition.w + 60, _interfacePosition.y + _interfacePosition.h );
 
     if ( listlog && listlog->isOpenLog() )
         listlog->Redraw();
@@ -1740,7 +1744,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     return arena.GetObstaclesPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
-                    const int dir = cell->GetTriangleDirection( LocalEvent::Get().GetMouseCursor() );
+                    const int dir = cell->GetTriangleDirection( GetMouseCursor() );
                     const int cursor = GetSwordCursorDirection( dir );
 
                     if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
@@ -1832,12 +1836,12 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     humanturn_exit = false;
     catapult_frame = 0;
 
-    Board & board = *Arena::GetBoard();
+    // in case we moved the window
+    _interfacePosition = border.GetArea();
 
+    Board & board = *Arena::GetBoard();
     board.Reset();
     board.SetScanPassability( b );
-
-    rectBoard = board.GetArea();
 
     if ( listlog && turn != arena.GetCurrentTurn() ) {
         turn = arena.GetCurrentTurn();
@@ -1858,7 +1862,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
-        const s32 index_new = board.GetIndexAbsPosition( le.GetMouseCursor() );
+        const s32 index_new = board.GetIndexAbsPosition( GetMouseCursor() );
         if ( index_pos != index_new ) {
             index_pos = index_new;
             humanturn_redraw = true;
@@ -1962,6 +1966,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 #endif
     }
 
+    // Add offsets to inner objects
+    const Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
+    const Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
     if ( pocket_book.w && le.MouseCursor( pocket_book ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Spell cast" );
@@ -1971,11 +1978,11 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             humanturn_redraw = true;
         }
     }
-    else if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( main_tower ) ) {
+    else if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista Info" );
 
-        if ( le.MouseClickLeft( main_tower ) || le.MousePressRight( main_tower ) ) {
+        if ( le.MouseClickLeft( mainTowerRect ) || le.MousePressRight( mainTowerRect ) ) {
             const Castle * cstl = Arena::GetCastle();
             std::string ballistaMessage = Tower::GetInfo( *cstl );
 
@@ -1987,7 +1994,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armies_order ) ) {
+    else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armiesOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
         armies_order.QueueEventProcessing( msg );
     }
@@ -2011,12 +2018,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         msg = _( "Skip this unit" );
         ButtonSkipAction( a );
     }
-    else if ( opponent1 && le.MouseCursor( opponent1->GetArea() ) ) {
+    else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
+        const Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetArmyColor1() ) {
             msg = _( "Hero's Options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
-            if ( le.MouseClickLeft( opponent1->GetArea() ) ) {
+            if ( le.MouseClickLeft( opponent1Area ) ) {
                 ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent1->GetHero(), true ), a );
                 humanturn_redraw = true;
             }
@@ -2025,23 +2033,24 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             msg = _( "View Opposing Hero" );
             cursor.SetThemes( Cursor::WAR_INFO );
 
-            if ( le.MouseClickLeft( opponent1->GetArea() ) ) {
+            if ( le.MouseClickLeft( opponent1Area ) ) {
                 arena.DialogBattleHero( *opponent1->GetHero(), true );
                 humanturn_redraw = true;
             }
         }
 
-        if ( le.MousePressRight( opponent1->GetArea() ) ) {
+        if ( le.MousePressRight( opponent1Area ) ) {
             arena.DialogBattleHero( *opponent1->GetHero(), false );
             humanturn_redraw = true;
         }
     }
-    else if ( opponent2 && le.MouseCursor( opponent2->GetArea() ) ) {
+    else if ( opponent2 && le.MouseCursor( opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
+        const Rect opponent2Area = opponent2->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetForce2().GetColor() ) {
             msg = _( "Hero's Options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
-            if ( le.MouseClickLeft( opponent2->GetArea() ) ) {
+            if ( le.MouseClickLeft( opponent2Area ) ) {
                 ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent2->GetHero(), true ), a );
                 humanturn_redraw = true;
             }
@@ -2050,13 +2059,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             msg = _( "View Opposing Hero" );
             cursor.SetThemes( Cursor::WAR_INFO );
 
-            if ( le.MouseClickLeft( opponent2->GetArea() ) ) {
+            if ( le.MouseClickLeft( opponent2Area ) ) {
                 arena.DialogBattleHero( *opponent2->GetHero(), true );
                 humanturn_redraw = true;
             }
         }
 
-        if ( le.MousePressRight( opponent2->GetArea() ) ) {
+        if ( le.MousePressRight( opponent2Area ) ) {
             arena.DialogBattleHero( *opponent2->GetHero(), false );
             humanturn_redraw = true;
         }
@@ -2065,7 +2074,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         cursor.SetThemes( Cursor::WAR_POINTER );
         listlog->QueueEventProcessing();
     }
-    else if ( le.MouseCursor( rectBoard ) ) {
+    else if ( le.MouseCursor( _interfacePosition ) ) {
         const int themes = GetBattleCursor( msg );
 
         if ( cursor.Themes() != themes )
@@ -2110,7 +2119,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & b, Actions & a, std::st
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
-    else if ( le.MouseCursor( rectBoard ) && humanturn_spell.isValid() ) {
+    else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
 
         if ( cursor.Themes() != themes )
@@ -3644,7 +3653,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
             const uint32_t frame = i * spriteCount / path.size();
             const Sprite & sprite = AGG::GetICN( spellICN, frame );
             sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2, _mainSurface );
-            _mainSurface.Blit( _windowTopLeft, display );
+            _mainSurface.Blit( _interfacePosition, display );
             cursor.Show();
             display.Flip();
             ++i;
@@ -4082,7 +4091,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
             const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
 
             if ( icn == ICN::SPARKS )
-                _mainSurface.DrawLine( Point( _surfaceArea.w / 2, 0 ), sprite_pos, RGBA( 0xff, 0xff, 0 ) );
+                _mainSurface.DrawLine( Point( _surfaceInnerArea.w / 2, 0 ), sprite_pos, RGBA( 0xff, 0xff, 0 ) );
 
             sprite.Blit( sprite_pos, _mainSurface );
             RedrawPartialFinish();

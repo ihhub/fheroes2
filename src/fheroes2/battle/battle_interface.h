@@ -168,6 +168,7 @@ namespace Battle
         bool NetworkTurn( Result & );
 
         const Rect & GetArea( void ) const;
+        Point GetMouseCursor() const;
 
         void SetStatus( const std::string &, bool = false );
         void SetArmiesOrder( const Units * );
@@ -262,13 +263,11 @@ namespace Battle
         int GetBattleSpellCursor( std::string & ) const;
         int GetAllowSwordDirection( u32 );
 
-        void CreateDamageInfoPopup( s32, s32, const Unit &, const Unit & );
-
         Arena & arena;
         Dialog::FrameBorder border;
 
-        Point _windowTopLeft;
-        Rect _surfaceArea;
+        Rect _interfacePosition;
+        Rect _surfaceInnerArea;
         Surface _mainSurface;
         Surface sf_hexagon;
         Surface sf_shadow;
@@ -287,7 +286,6 @@ namespace Battle
         OpponentSprite * opponent1;
         OpponentSprite * opponent2;
 
-        Rect rectBoard;
         Spell humanturn_spell;
         bool humanturn_exit;
         bool humanturn_redraw;

@@ -209,6 +209,11 @@ bool Rect::operator!=( const Rect & rt ) const
     return !( *this == rt );
 }
 
+Rect Rect::operator+( const Point & offset ) const
+{
+    return Rect( x + offset.x, y + offset.y, w, h );
+}
+
 bool Rect::operator&( const Point & pt ) const
 {
     return !( pt.x < x || pt.y < y || pt.x >= ( x + w ) || pt.y >= ( y + h ) );
@@ -247,6 +252,11 @@ Rect Rect::operator^( const Rect & other ) const
     }
 
     return temp;
+}
+
+const Point& Rect::getPosition() const
+{
+    return *this;
 }
 
 Rect Points::GetRect( void ) const
