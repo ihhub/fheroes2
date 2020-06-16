@@ -268,6 +268,7 @@ namespace Battle
         Dialog::FrameBorder border;
 
         Point _windowTopLeft;
+        Rect _surfaceArea;
         Surface _mainSurface;
         Surface sf_hexagon;
         Surface sf_shadow;
