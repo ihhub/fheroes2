@@ -869,7 +869,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
 
     //_windowTopLeft.x = ( display.w() - Display::DEFAULT_WIDTH ) / 2 - BORDERWIDTH;
     //_windowTopLeft.y = ( display.h() - Display::DEFAULT_HEIGHT ) / 2 - BORDERWIDTH;
-    _windowTopLeft = Point( 0, 0 );
     border.SetPosition( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
 
     // cover
@@ -3464,7 +3463,6 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-
             const Point & sp = GetTroopPosition( target, sprite );
 
             RedrawPartialStart();
@@ -3565,7 +3563,6 @@ void Battle::Interface::RedrawActionStoneSpell( Unit & target )
     AGG::ReplaceColors( stoneEffect, PAL::GetPalette( PAL::GRAY ), msi.icn_file, target.GetFrame(), target.isReflect() );
 
     Sprite mixSprite( Surface( unitSprite.GetSize(), true ), unitSprite.x(), unitSprite.y() );
-
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
@@ -3821,8 +3818,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
             cursor.Hide();
             Surface::Blend( sprite1, sprite2, ( 255 - alpha ) * 100 / 255 ).Blit( area.x, area.y, _mainSurface );
             cursor.Show();
-            _mainSurface.Blit( _windowTopLeft, display );
-            display.Flip();
+            RedrawPartialFinish();
 
             alpha += 10;
         }
@@ -3847,9 +3843,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
             const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
             sprite1.Blit( shifted, original, _mainSurface );
 
-            _mainSurface.Blit( _windowTopLeft, display );
-            display.Flip();
-            cursor.Show();
+            RedrawPartialFinish();
         }
     }
 }
@@ -3889,9 +3883,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
             sprite.Blit( shifted, original, _mainSurface );
 
-            _mainSurface.Blit( _windowTopLeft, display );
-            display.Flip();
-            cursor.Show();
+            RedrawPartialFinish();
             ++frame;
         }
     }
