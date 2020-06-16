@@ -1021,24 +1021,33 @@ void Battle::Interface::CycleColors()
 
 void Battle::Interface::Redraw( void )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
+    RedrawPartialStart();
+    RedrawPartialFinish();
+}
+
+void Battle::Interface::RedrawPartialStart()
+{
     const Castle * castle = Arena::GetCastle();
 
-    cursor.Hide();
+    Cursor::Get().Hide();
     RedrawBorder();
     RedrawCover();
     RedrawOpponents();
     if ( castle )
         RedrawCastle3( *castle );
     RedrawArmies();
+}
+
+void Battle::Interface::RedrawPartialFinish()
+{
+    Display & display = Display::Get();
 
     _mainSurface.Blit( _windowTopLeft, display );
     RedrawInterface();
     if ( Settings::Get().ExtBattleShowBattleOrder() && !Settings::Get().QVGA() )
         armies_order.Redraw( _currentUnit );
 
-    cursor.Show();
+    Cursor::Get().Show();
     display.Flip();
 }
 
@@ -1820,7 +1829,6 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
 
@@ -2405,8 +2413,6 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
 
 void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const uint32_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
@@ -2414,10 +2420,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
         CheckGlobalEvents( le );
 
         if ( Game::AnimateCustomDelay( frameDelay ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
             if ( unit.isFinishAnimFrame() )
                 break;
             unit.IncreaseAnimFrame();
@@ -2427,18 +2430,13 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 
 void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
             if ( unit.isFinishAnimFrame() )
                 break;
             unit.IncreaseAnimFrame();
@@ -2463,9 +2461,7 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 
 void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID )
 {
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
     Sprite missile;
 
     const bool reverse = startPos.x > endPos.x;
@@ -2486,8 +2482,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
             if ( isMage ) {
                 _mainSurface.DrawLine( Point( startPos.x, startPos.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
                 _mainSurface.DrawLine( Point( startPos.x, startPos.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
@@ -2498,8 +2493,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
             else {
                 missile.Blit( reverse ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y, _mainSurface );
             }
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
             ++pnt;
         }
     }
@@ -2665,9 +2659,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
 {
     const Settings & conf = Settings::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
 
     // targets damage animation
     int py = ( conf.QVGA() ? 20 : 50 );
@@ -2717,7 +2709,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
                     TargetInfo & target = *it;
                     const Rect & pos = target.defender->GetRectPosition();
 
-                    cursor.Hide();
                     Redraw();
 
                     // extended damage info
@@ -2727,8 +2718,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
                         txt.Blit( pos.x + ( pos.w - txt.w() ) / 2, pos.y - py );
                     }
 
-                    cursor.Show();
-                    display.Flip();
                     target.defender->IncreaseAnimFrame();
                 }
             py += ( conf.QVGA() ? 5 : 10 );
@@ -2738,13 +2727,12 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
 
 void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 {
-    Cursor & cursor = Cursor::Get();
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
     const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
     StringReplace( msg, "%{monster}", unit.GetName() );
@@ -2806,7 +2794,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
-    Cursor & cursor = Cursor::Get();
     const s32 destIndex = pos.GetHead()->GetIndex();
     const Rect & pos1 = unit.GetRectPosition();
     const Rect & pos2 = Board::GetCell( destIndex )->GetPos();
@@ -2818,7 +2805,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
     const uint32_t step = unit.animation.getFlightSpeed();
     const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
 
@@ -2908,16 +2895,11 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
             opponent->ResetAnimFrame( OP_CAST );
-            Display & display = Display::Get();
             LocalEvent & le = LocalEvent::Get();
-            Cursor & cursor = Cursor::Get();
             do {
                 if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
                     opponent->IncreaseAnimFrame();
-                    cursor.Hide();
                     Redraw();
-                    cursor.Show();
-                    display.Flip();
                 }
             } while ( le.HandleEvents() && !opponent->isFinishFrame() );
         }
@@ -3152,8 +3134,6 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Unit & attacke
 
 void Battle::Interface::RedrawActionLuck( Unit & unit )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
@@ -3163,6 +3143,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
     if ( isGoodLuck ) {
         const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, 0 );
         const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
@@ -3171,20 +3152,17 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         Rect src( 0, 0, width, luckSprite.h() );
         src.x = ( luckSprite.w() - src.w ) / 2;
 
-        cursor.SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::GOODLUCK );
 
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
             if ( width < luckSprite.w() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
+                RedrawPartialStart();
 
                 luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h );
 
-                cursor.Show();
-                display.Flip();
+                RedrawPartialFinish();
 
                 src.w = width;
                 src.x = ( luckSprite.w() - src.w ) / 2;
@@ -3196,21 +3174,18 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
     else {
         int frameId = 0;
 
-        cursor.SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::BADLUCK );
 
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
             if ( frameId < 8 && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
+                RedrawPartialStart();
 
                 const Sprite & luckSprite = AGG::GetICN( ICN::CLOUDLUK, frameId );
                 luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), pos.y + pos.h + luckSprite.y() - 10 );
 
-                cursor.Show();
-                display.Flip();
+                RedrawPartialFinish();
 
                 ++frameId;
             }
@@ -3287,9 +3262,7 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
 
 void Battle::Interface::RedrawActionCatapult( int target )
 {
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
 
     const Sprite & missile = AGG::GetICN( ICN::BOULDER, 0 );
     const Rect & area = border.GetArea();
@@ -3301,10 +3274,7 @@ void Battle::Interface::RedrawActionCatapult( int target )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
             ++catapult_frame;
         }
     }
@@ -3340,11 +3310,9 @@ void Battle::Interface::RedrawActionCatapult( int target )
             if ( catapult_frame < 9 )
                 ++catapult_frame;
 
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
             missile.Blit( *pnt );
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
             ++pnt;
         }
     }
@@ -3361,12 +3329,10 @@ void Battle::Interface::RedrawActionCatapult( int target )
             if ( catapult_frame < 9 )
                 ++catapult_frame;
 
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
             const Sprite & sprite = AGG::GetICN( icn, frame );
             sprite.Blit( pt2.x + sprite.x(), pt2.y + sprite.y() );
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
 
             ++frame;
         }
@@ -3406,8 +3372,6 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
 
 void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
@@ -3421,8 +3385,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
         AGG::ReplaceColors( sprite, PAL::GetPalette( PAL::MIRROR_IMAGE ), msi.icn_file, target.GetFrame(), target.isReflect() );
     }
 
-    cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = &target;
     b_current_sprite = &sprite;
@@ -3434,17 +3397,12 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
         CheckGlobalEvents( le );
 
         if ( b_current_alpha > 0 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
-
             b_current_alpha -= 15;
         }
     }
 
     b_current_alpha = 0;
-    cursor.Hide();
     Redraw();
 
     target.SetPosition( dst );
@@ -3454,11 +3412,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
         CheckGlobalEvents( le );
 
         if ( b_current_alpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
-
             b_current_alpha += 15;
         }
     }
@@ -3470,15 +3424,12 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
 void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
     const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = &target;
     b_current_sprite = &sprite;
@@ -3490,11 +3441,7 @@ void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
-
             b_current_alpha += 20;
         }
     }
@@ -3506,8 +3453,6 @@ void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
 
 void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const Position & pos )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
@@ -3521,23 +3466,19 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     const Points points = GetLinePoints( rt1, rt2, 5 );
     Points::const_iterator pnt = points.begin();
 
-    cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
     AGG::PlaySound( M82::MIRRORIM );
 
     while ( le.HandleEvents() && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
 
             const Point & sp = GetTroopPosition( target, sprite );
 
-            Redraw();
+            RedrawPartialStart();
             sprite.Blit( sp.x - rt1.x + ( *pnt ).x, sp.y - rt1.y + ( *pnt ).y );
-
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
 
             ++pnt;
         }

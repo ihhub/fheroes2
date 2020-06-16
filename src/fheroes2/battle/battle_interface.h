@@ -161,7 +161,9 @@ namespace Battle
         Interface( Arena &, s32 );
         ~Interface();
 
-        void Redraw( void );
+        void Redraw();
+        void RedrawPartialStart();
+        void RedrawPartialFinish();
         void HumanTurn( const Unit &, Actions & );
         bool NetworkTurn( Result & );
 
