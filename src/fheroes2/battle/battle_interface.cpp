@@ -1433,12 +1433,12 @@ void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst )
     // moat
     if ( castle.isBuild( BUILD_MOAT ) ) {
         const Sprite & sprite = AGG::GetICN( ICN::MOATWHOL, 0 );
-        sprite.Blit( sprite.x(), sprite.y() , dst );
+        sprite.Blit( sprite.x(), sprite.y(), dst );
     }
 
     // top wall
     const Sprite & sprite2 = AGG::GetICN( icn_castbkg, fortification ? 4 : 3 );
-    sprite2.Blit( sprite2.x(), sprite2.y() , dst );
+    sprite2.Blit( sprite2.x(), sprite2.y(), dst );
 }
 
 void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
@@ -1536,16 +1536,16 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
         if ( castle.isBuild( BUILD_RIGHTTURRET ) && rtower )
             index = rtower->isValid() ? 18 : 19;
 
-        AGG::GetICN( icn_castle, index ).Blit( 415, 290 , _mainSurface );
+        AGG::GetICN( icn_castle, index ).Blit( 415, 290, _mainSurface );
     }
     else
         // castle towers
         if ( 40 == cell_index )
-        AGG::GetICN( icn_castle, 17 ).Blit( 375, 120 , _mainSurface );
+        AGG::GetICN( icn_castle, 17 ).Blit( 375, 120, _mainSurface );
     else
         // castle towers
         if ( 62 == cell_index )
-        AGG::GetICN( icn_castle, 17 ).Blit( 375, 205 , _mainSurface );
+        AGG::GetICN( icn_castle, 17 ).Blit( 375, 205, _mainSurface );
 }
 
 void Battle::Interface::RedrawCastle3( const Castle & castle )
