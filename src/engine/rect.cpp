@@ -254,7 +254,7 @@ Rect Rect::operator^( const Rect & other ) const
     return temp;
 }
 
-const Point& Rect::getPosition() const
+const Point & Rect::getPosition() const
 {
     return *this;
 }
