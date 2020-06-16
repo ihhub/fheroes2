@@ -3620,6 +3620,8 @@ void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
 
 void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
 {
+    Cursor & cursor = Cursor::Get();
+    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // Casting hero position
@@ -3640,7 +3642,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     const Points path = GetEuclideanLine( startingPos, targetPos, size );
     const uint32_t spriteCount = AGG::GetICNCount( spellICN );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_NONE );
     AGG::PlaySound( spellSound );
 
     size_t i = 0;
@@ -3648,12 +3650,13 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            RedrawPartialStart();
+            cursor.Hide();
             const uint32_t frame = i * spriteCount / path.size();
             const Sprite & sprite = AGG::GetICN( spellICN, frame );
             sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2, _mainSurface );
-            RedrawPartialFinish();
-
+            _mainSurface.Blit( _windowTopLeft, display );
+            cursor.Show();
+            display.Flip();
             ++i;
         }
     }
@@ -3793,6 +3796,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets )
 {
     Cursor & cursor = Cursor::Get();
+    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Rect area = border.GetArea();
 
@@ -3801,7 +3805,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
     Surface sprite1( area, false );
     Surface sprite2( area, false );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_NONE );
 
     _mainSurface.Blit( area, 0, 0, sprite1 );
     sprite2.Fill( RGBA( 0xFF, 0xFF, 0xFF ) );
@@ -3816,7 +3820,9 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
             Surface::Blend( sprite1, sprite2, ( 255 - alpha ) * 100 / 255 ).Blit( area.x, area.y, _mainSurface );
-            RedrawPartialFinish();
+            cursor.Show();
+            _mainSurface.Blit( _windowTopLeft, display );
+            display.Flip();
 
             alpha += 10;
         }
@@ -3840,7 +3846,10 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
 
             const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
             sprite1.Blit( shifted, original, _mainSurface );
-            RedrawPartialFinish();
+
+            _mainSurface.Blit( _windowTopLeft, display );
+            display.Flip();
+            cursor.Show();
         }
     }
 }
@@ -3855,7 +3864,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     u32 frame = 0;
     area.h -= Settings::Get().QVGA() ? 19 : 38;
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_NONE );
 
     Surface sprite = _mainSurface.GetSurface( area );
 
@@ -3880,7 +3889,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
             sprite.Blit( shifted, original, _mainSurface );
 
-            RedrawPartialFinish();
+            _mainSurface.Blit( _windowTopLeft, display );
+            display.Flip();
+            cursor.Show();
             ++frame;
         }
     }
@@ -3985,8 +3996,6 @@ Point RedrawTroopWithFrameAnimationOffset( int icn, const Rect & pos, const Spri
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & targets, int icn, int m82, bool wnce )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     u32 frame = 0;
@@ -4007,8 +4016,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender ) {
@@ -4029,8 +4037,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
                     sprite.Blit( sprite_pos );
                 }
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
 
             if ( wnce )
                 for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -4055,8 +4062,6 @@ void RedrawSparksEffects( const Point & src, const Point & dst )
 
 void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Rect & pos = b.GetRectPosition();
@@ -4091,8 +4096,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
             const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, b.isWide(), reflect, Settings::Get().QVGA() );
@@ -4102,8 +4106,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
                 RedrawSparksEffects( Point( rectArea.x + rectArea.w / 2, rectArea.y ), sprite_pos );
 
             sprite.Blit( sprite_pos );
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
 
             if ( animation != NONE ) {
                 if ( animation == RESURRECT ) {
@@ -4127,8 +4130,6 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 
 void Battle::Interface::RedrawBridgeAnimation( bool down )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Point & topleft = border.GetArea();
 
@@ -4150,12 +4151,10 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_BRIDGE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
             const Sprite & sprite = AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), frame );
             sprite.Blit( sprite.x() + topleft.x, sprite.y() + topleft.y );
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
 
             if ( down )
                 --frame;
