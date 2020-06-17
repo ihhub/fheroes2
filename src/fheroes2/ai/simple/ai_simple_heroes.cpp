@@ -269,10 +269,6 @@ namespace AI
 
             const uint32_t heuristic = Maps::GetApproximateDistance( hero.GetIndex(), ( *it ).first );
             if ( heuristic < PATHFINDING_LIMIT && AI::HeroesValidObject( hero, ( *it ).first ) ) {
-                if ( hero.GetID() == Heroes::BAROK && it->first == 845 ) {
-                    AI::HeroesValidObject( hero, ( *it ).first );
-                    DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " add object: " << ( *it ).second << " condition " << AI::HeroesValidObject( hero, ( *it ).first ) );
-                }
                 objs.push_back( IndexDistance( ( *it ).first, heuristic ) );
             }
         }
@@ -456,7 +452,7 @@ namespace AI
 
             for ( MapsIndexes::const_iterator it = pickups.begin(); it != pickups.end(); ++it )
                 if ( AI::HeroesValidObject( hero, *it ) ) {
-                    uint32_t dist = hero.GetPath().Calculate( *it );
+                    const uint32_t dist = hero.GetPath().Calculate( *it );
 
                     if ( dist != 0 ) {
                         task.push_front( IndexDistance( *it, dist ) );
@@ -465,7 +461,7 @@ namespace AI
                 }
         }
 
-        if ( !pickups.size() && hero.GetPath().isValid() ) {
+        if ( !pickups.empty() && hero.GetPath().isValid() ) {
             DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", continue" );
             ai_hero.fix_loop++;
             return true;

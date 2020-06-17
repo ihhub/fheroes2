@@ -154,7 +154,7 @@ namespace AI
         // buy hero in capital
         if ( ai.capital && ai.capital->isCastle() ) {
             u32 modes = 0;
-            const u32 maxhero = Maps::XLARGE > world.w() ? ( Maps::LARGE > world.w() ? 3 : 2 ) : 4;
+            const u32 maxhero = Maps::XLARGE > world.w() ? ( Maps::LARGE > world.w() ? 2 : 3 ) : 4;
 
             if ( heroes.empty() )
                 modes = AI::HEROES_HUNTER | AI::HEROES_SCOUTER;
