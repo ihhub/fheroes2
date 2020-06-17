@@ -20,6 +20,8 @@
 #include "pal.h"
 #include "../../tools/palette_h2.h"
 
+#include <cstring>
+
 namespace PAL
 {
     const u8 yellow_text_table[PALETTE_SIZE]
@@ -275,7 +277,8 @@ std::vector<uint8_t> PAL::CombinePalettes( const std::vector<uint8_t> & first, c
 void PAL::SwapPalette( int type )
 {
     const std::vector<SDL_Color> & source = *palmap[type].colors;
-    current_palette.resize( source.size() );
+    if ( current_palette.size() != source.size() )
+        current_palette.resize( source.size() );
     std::memcpy( current_palette.data(), source.data(), sizeof( SDL_Color ) * PALETTE_SIZE );
     current = type;
 }
