@@ -168,7 +168,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const
 {
-    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_BATTLE_DELAY ) ) {
+    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_MAP_DELAY ) ) {
         const std::vector<SDL_Color> tempPalette = PAL::GetCustomSDLPalette( PAL::GetCyclingPalette( Game::MapsAnimationFrame() ) );
         if ( tempPalette.size() == _sdlPalette.size() ) {
             std::memcpy( _sdlPalette.data(), tempPalette.data(), sizeof( SDL_Color ) * PALETTE_SIZE );

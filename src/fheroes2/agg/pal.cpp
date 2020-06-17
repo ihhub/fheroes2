@@ -120,6 +120,7 @@ namespace PAL
     std::vector<SDL_Color> tan_palette;
     std::vector<SDL_Color> no_cycle_palette;
     std::vector<SDL_Color> mirror_image_palette;
+    std::vector<SDL_Color> current_palette;
 
     struct palmap_t
     {
@@ -138,7 +139,7 @@ namespace PAL
                                {NO_CYCLE, &no_cycle_palette},
                                {MIRROR_IMAGE, &mirror_image_palette}};
 
-    const palmap_t * current_palette;
+    static int current = STANDARD;
 
     void CreatePalette( std::vector<SDL_Color> & palette, const u8 * table )
     {
@@ -197,13 +198,12 @@ void PAL::CreateStandardPalette()
 
 int PAL::CurrentPalette()
 {
-    return current_palette->type;
+    return current;
 }
 
 RGBA PAL::GetPaletteColor( u8 index )
 {
-    const std::vector<SDL_Color> & colors = *current_palette->colors;
-    return index < colors.size() ? RGBA( colors[index].r, colors[index].g, colors[index].b ) : RGBA( 0, 0, 0 );
+    return index < current_palette.size() ? RGBA( current_palette[index].r, current_palette[index].g, current_palette[index].b ) : RGBA( 0, 0, 0 );
 }
 
 const std::vector<uint8_t> & PAL::GetPalette( int type )
@@ -274,8 +274,10 @@ std::vector<uint8_t> PAL::CombinePalettes( const std::vector<uint8_t> & first, c
 
 void PAL::SwapPalette( int type )
 {
-    current_palette = &palmap[type];
-    Surface::SetDefaultPalette( &( *current_palette->colors )[0], static_cast<int>( current_palette->colors->size() ) );
+    const std::vector<SDL_Color> & source = *palmap[type].colors;
+    current_palette.resize( source.size() );
+    std::memcpy( current_palette.data(), source.data(), sizeof( SDL_Color ) * PALETTE_SIZE );
+    current = type;
 }
 
 void PAL::InitAllPalettes()
@@ -291,6 +293,7 @@ void PAL::InitAllPalettes()
     CreatePalette( no_cycle_palette, no_cycle_table );
     CreatePalette( mirror_image_palette, mirror_image_table );
     SwapPalette( PAL::STANDARD );
+    Surface::SetDefaultPalette( &( current_palette )[0], static_cast<int>( current_palette.size() ) );
 }
 
 void PAL::Clear()
@@ -305,6 +308,7 @@ void PAL::Clear()
     no_cycle_palette.clear();
     mirror_image_palette.clear();
     standard_palette.clear();
+    current_palette.clear();
 }
 
 std::vector<SDL_Color> PAL::GetCustomSDLPalette( const std::vector<uint8_t> & indexes )
@@ -313,9 +317,8 @@ std::vector<SDL_Color> PAL::GetCustomSDLPalette( const std::vector<uint8_t> & in
         return std::vector<SDL_Color>();
 
     std::vector<SDL_Color> sdlPalette( PALETTE_SIZE );
-    const std::vector<SDL_Color> & colors = *current_palette->colors;
     for ( size_t i = 0; i < indexes.size(); ++i )
-        sdlPalette[i] = colors[indexes[i]];
+        sdlPalette[i] = standard_palette[indexes[i]];
 
     return sdlPalette;
 }
