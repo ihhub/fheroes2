@@ -1185,15 +1185,9 @@ u32 Maps::Tiles::TileSpriteShape( void ) const
 
 Surface Maps::Tiles::GetTileSurface( void ) const
 {
-    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-    if ( gameArea.IsPaletteUpdateRequired() ) {
-        Surface tile = AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
-        tile.SetPalette( Interface::Basic::Get().GetGameArea().GetCurrentSDLPalette() );
-        return tile;
-    }
-    else {
-        return AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
-    }
+    Surface tile = AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
+    tile.ResetPalette();
+    return tile;
 }
 
 bool isMountsRocs( const Maps::TilesAddon & ta )

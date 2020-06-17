@@ -141,7 +141,7 @@ namespace PAL
                                {NO_CYCLE, &no_cycle_palette},
                                {MIRROR_IMAGE, &mirror_image_palette}};
 
-    static int current = STANDARD;
+    int currentPaletteId = STANDARD;
 
     void CreatePalette( std::vector<SDL_Color> & palette, const u8 * table )
     {
@@ -200,7 +200,7 @@ void PAL::CreateStandardPalette()
 
 int PAL::CurrentPalette()
 {
-    return current;
+    return currentPaletteId;
 }
 
 RGBA PAL::GetPaletteColor( u8 index )
@@ -280,7 +280,7 @@ void PAL::SwapPalette( int type )
     if ( current_palette.size() != source.size() )
         current_palette.resize( source.size() );
     std::memcpy( current_palette.data(), source.data(), sizeof( SDL_Color ) * PALETTE_SIZE );
-    current = type;
+    currentPaletteId = type;
 }
 
 void PAL::InitAllPalettes()
@@ -314,14 +314,17 @@ void PAL::Clear()
     current_palette.clear();
 }
 
-std::vector<SDL_Color> PAL::GetCustomSDLPalette( const std::vector<uint8_t> & indexes )
+void PAL::SetCustomSDLPalette( const std::vector<uint8_t> & indexes )
 {
     if ( indexes.size() != PALETTE_SIZE )
-        return std::vector<SDL_Color>();
+        return;
 
     std::vector<SDL_Color> sdlPalette( PALETTE_SIZE );
     for ( size_t i = 0; i < indexes.size(); ++i )
         sdlPalette[i] = standard_palette[indexes[i]];
 
-    return sdlPalette;
+    std::memcpy( current_palette.data(), sdlPalette.data(), sizeof( SDL_Color ) * PALETTE_SIZE );
+    currentPaletteId = CUSTOM;
+
+    Surface::SetDefaultPalette( &( current_palette )[0], static_cast<int>( current_palette.size() ) );
 }

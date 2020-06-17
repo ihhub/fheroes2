@@ -177,7 +177,7 @@ public:
     static Surface Blend( const Surface & first, const Surface & second, uint8_t ratio );
 
     // This is only for 8-bit images like TIL
-    void SetPalette( std::vector<SDL_Color> & palette );
+    void ResetPalette();
 
 protected:
     static void FreeSurface( Surface & );
