@@ -1947,6 +1947,8 @@ namespace AI
                 if ( !hero.isFreeman() && !hide_move )
                     DELAY( 200 );
             }
+
+            hero.SetMove( false );
         }
     }
 }
