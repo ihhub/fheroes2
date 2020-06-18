@@ -382,7 +382,7 @@ namespace AI
         }
 
         if ( ai_hero.fix_loop > 3 ) {
-            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ": break loop" );
+            DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ": hero can't find a task, break loop" );
             hero.SetModes( hero.Modes( AI::HEROES_WAITING ) ? AI::HEROES_STUPID : AI::HEROES_WAITING );
             return false;
         }
