@@ -274,13 +274,10 @@ Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
         break;
     }
 
-    if ( hero.isEnableMove() ) {
-        offset.x = 0;
-        offset.y = 0;
-    }
-
     Sprite flag = AGG::GetICN( icn_flag, index_sprite + frameId, reflect );
-    flag.SetPos( flag.GetPos() + offset );
+    if ( !hero.isEnableMove() ) {
+        flag.SetPos( flag.GetPos() + offset );
+    }
     return flag;
 }
 
@@ -397,12 +394,15 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     bool reflect = ReflectSprite( direction );
 
-    if ( isShipMaster() && !isEnableMove() ) {
+    if ( isShipMaster() && !isEnableMove() ) { // stand still in the boat
         flagFrameID = 0;
         heroFrameID = 0;
     }
-    else if ( !isShipMaster() && !isEnableMove() ) {
+    else if ( !isShipMaster() && !isEnableMove() ) { // stand still on a horse
         heroFrameID = 0;
+    }
+    else if ( !isShipMaster() && isEnableMove() ) { // move on a horse
+        flagFrameID = heroFrameID = sprite_index % heroFrameCount;
     }
 
     Sprite sprite1 = SpriteHero( *this, heroFrameID, reflect, false );
