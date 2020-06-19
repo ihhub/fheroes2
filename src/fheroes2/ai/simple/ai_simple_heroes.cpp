@@ -281,7 +281,7 @@ namespace AI
             if ( task.size() >= HERO_MAX_SHEDULED_TASK )
                 break;
             const int positionIndex = ( *it ).first;
-            const uint32_t distance = hero.GetPath().Calculate( ( *it ).first, PATHFINDING_LIMIT );
+            const uint32_t distance = hero.GetPath().Calculate( positionIndex, PATHFINDING_LIMIT );
 
             if ( distance ) {
                 DEBUG( DBG_AI, DBG_INFO,
