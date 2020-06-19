@@ -194,6 +194,13 @@ namespace Battle
         void RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID );
 
     private:
+        enum CreatueSpellAnimation
+        {
+            NONE,
+            WINCE,
+            RESURRECT
+        };
+
         void HumanBattleTurn( const Unit &, Actions &, std::string & );
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
@@ -220,6 +227,7 @@ namespace Battle
         void RedrawActionColdRaySpell( Unit & );
         void RedrawActionDisruptingRaySpell( Unit & );
         void RedrawActionBloodLustSpell( Unit & );
+        void RedrawActionStoneSpell( Unit & target );
         void RedrawActionColdRingSpell( s32, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell( const TargetsInfo & );
@@ -230,7 +238,7 @@ namespace Battle
 
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
         void RedrawTroopDefaultDelay( Unit & unit );
-        void RedrawTroopWithFrameAnimation( Unit &, int, int, bool );
+        void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
         void RedrawTargetsWithFrameAnimation( s32, const TargetsInfo &, int, int );
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
@@ -282,7 +290,7 @@ namespace Battle
         int catapult_frame;
 
         uint32_t _colorCycle;
-        std::map<RGBA, RGBA> _colorCyclePairs;
+        std::vector<uint8_t> _creaturePalette;
 
         const Unit * _currentUnit;
         const Unit * _movingUnit;

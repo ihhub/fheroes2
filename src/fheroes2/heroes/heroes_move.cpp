@@ -426,36 +426,36 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     if ( sprite_index < 45 ) {
         s32 ox = 0;
         s32 oy = 0;
-        int frame = ( sprite_index % 9 );
+        const int frame = ( sprite_index % 9 );
 
         switch ( direction ) {
         case Direction::TOP:
-            oy = -4 * frame;
+            oy = -HERO_MOVE_STEP * frame;
             break;
         case Direction::TOP_RIGHT:
-            ox = 4 * frame;
-            oy = -4 * frame;
+            ox = HERO_MOVE_STEP * frame;
+            oy = -HERO_MOVE_STEP * frame;
             break;
         case Direction::TOP_LEFT:
-            ox = -4 * frame;
-            oy = -4 * frame;
+            ox = -HERO_MOVE_STEP * frame;
+            oy = -HERO_MOVE_STEP * frame;
             break;
         case Direction::BOTTOM_RIGHT:
-            ox = 4 * frame;
-            oy = 4 * frame;
+            ox = HERO_MOVE_STEP * frame;
+            oy = HERO_MOVE_STEP * frame;
             break;
         case Direction::BOTTOM:
-            oy = 4 * frame;
+            oy = HERO_MOVE_STEP * frame;
             break;
         case Direction::BOTTOM_LEFT:
-            ox = -4 * frame;
-            oy = 4 * frame;
+            ox = -HERO_MOVE_STEP * frame;
+            oy = HERO_MOVE_STEP * frame;
             break;
         case Direction::RIGHT:
-            ox = 4 * frame;
+            ox = HERO_MOVE_STEP * frame;
             break;
         case Direction::LEFT:
-            ox = -4 * frame;
+            ox = -HERO_MOVE_STEP * frame;
             break;
         default:
             break;
@@ -838,4 +838,45 @@ bool Heroes::Move( bool fast )
     }
 
     return false;
+}
+
+int Heroes::GetMoveStep() const
+{
+    return HERO_MOVE_STEP;
+}
+
+Point Heroes::MovementDirection() const
+{
+    const int32_t from = GetIndex();
+    const int32_t to = Maps::GetDirectionIndex( from, path.GetFrontDirection() );
+    if ( from == -1 || to == -1 )
+        return Point();
+
+    if ( direction == Direction::TOP ) {
+        if ( sprite_index > 0 && sprite_index < 9 - 1 ) {
+            return Point( 0, -1 );
+        }
+    }
+    else if ( direction == Direction::TOP_RIGHT || direction == Direction::TOP_LEFT ) {
+        if ( sprite_index > 9 && sprite_index < 18 - 1 ) {
+            return Point( direction == Direction::TOP_RIGHT ? 1 : -1, -1 );
+        }
+    }
+    else if ( direction == Direction::RIGHT || direction == Direction::LEFT ) {
+        if ( sprite_index > 18 && sprite_index < 27 - 1 ) {
+            return Point( direction == Direction::RIGHT ? 1 : -1, 0 );
+        }
+    }
+    else if ( direction == Direction::BOTTOM_RIGHT || direction == Direction::BOTTOM_LEFT ) {
+        if ( sprite_index > 27 && sprite_index < 36 - 1 ) {
+            return Point( direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 );
+        }
+    }
+    else if ( direction == Direction::BOTTOM ) {
+        if ( sprite_index > 36 && sprite_index < 45 - 1 ) {
+            return Point( 0, 1 );
+        }
+    }
+
+    return Point();
 }

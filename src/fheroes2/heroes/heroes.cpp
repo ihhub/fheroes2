@@ -79,7 +79,7 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
     int result = 0;
 
     for ( u32 ii = 0; ii < size; ++ii ) {
-        if ( hero.isVisited( objs[ii] ) ) {
+        if ( hero.isObjectTypeVisited( objs[ii] ) ) {
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
@@ -581,7 +581,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
             point += acount * 1000;
 
         // visited object
-        if ( isVisited( MP2::OBJ_LIGHTHOUSE ) )
+        if ( isObjectTypeVisited( MP2::OBJ_LIGHTHOUSE ) )
             point += 500;
     }
     else {
@@ -627,7 +627,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
             point += acount * 300;
 
         // visited object
-        if ( isVisited( MP2::OBJ_STABLES ) )
+        if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 500;
     }
 
@@ -766,7 +766,7 @@ void Heroes::ActionNewDay( void )
     MovePointsScaleFixed();
 
     // stables visited?
-    if ( isVisited( MP2::OBJ_STABLES ) )
+    if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
         move_point += 400;
 
     // recovery spell points
@@ -885,7 +885,7 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 }
 
 /* return true if object visited */
-bool Heroes::isVisited( int object, Visit::type_t type ) const
+bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
 {
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( object );
@@ -1301,8 +1301,8 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
 
     Route::Path test( *this );
     // approximate limit, this restriction path finding algorithm
-    if ( test.Calculate( dst, limit ) ) {
-        u32 total = test.GetTotalPenalty();
+    uint32_t total = test.Calculate( dst, limit );
+    if ( total > 0 ) {
         if ( move_point >= total )
             return 1;
 

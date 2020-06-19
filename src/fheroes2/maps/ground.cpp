@@ -73,8 +73,7 @@ u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level )
     //    Road    0.75   0.75   0.75   0.75
 
     if ( tile.isRoad( direct ) )
-        // road priority: need small value
-        return 59;
+        return 75;
 
     u32 result = 100;
 

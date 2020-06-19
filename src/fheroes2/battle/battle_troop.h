@@ -67,8 +67,7 @@ namespace Battle
     enum
     {
         CONTOUR_MAIN = 0,
-        CONTOUR_BLACK = 0x01,
-        CONTOUR_REFLECT = 0x02
+        CONTOUR_REFLECT = 0x01
     };
 
     // battle troop stats
@@ -215,8 +214,6 @@ namespace Battle
         // These variables are mutable due to population of them of the fly as we don't want to calculate everything
         mutable std::map<int, Surface> contoursMain;
         mutable std::map<int, Surface> contoursReflect;
-        mutable std::map<int, Surface> contoursWB; // white black, really get contour for stunned unit?
-        mutable std::map<int, Surface> contoursWBReflect; // white black reflect, really get contour for stunned unit?
         const Surface & getContour( const int frameId, std::map<int, Surface> & contours, const bool isReflected, const bool isBlackWhite ) const;
 
         bool blindanswer;

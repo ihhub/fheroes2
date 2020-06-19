@@ -20,6 +20,8 @@
 #include "pal.h"
 #include "../../tools/palette_h2.h"
 
+#include <cstring>
+
 namespace PAL
 {
     const u8 yellow_text_table[PALETTE_SIZE]
@@ -120,6 +122,7 @@ namespace PAL
     std::vector<SDL_Color> tan_palette;
     std::vector<SDL_Color> no_cycle_palette;
     std::vector<SDL_Color> mirror_image_palette;
+    std::vector<SDL_Color> current_palette;
 
     struct palmap_t
     {
@@ -138,7 +141,7 @@ namespace PAL
                                {NO_CYCLE, &no_cycle_palette},
                                {MIRROR_IMAGE, &mirror_image_palette}};
 
-    const palmap_t * current_palette;
+    int currentPaletteId = STANDARD;
 
     void CreatePalette( std::vector<SDL_Color> & palette, const u8 * table )
     {
@@ -162,6 +165,22 @@ namespace PAL
     }
 }
 
+std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )
+{
+    std::vector<uint8_t> palette = PAL::GetPalette( PAL::STANDARD );
+
+    const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
+    for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
+        for ( int id = 0; id < it->length; ++id ) {
+            const int lastColorID = it->length - 1;
+            const uint8_t newColorID = it->forward ? it->start + ( id + stepId ) % it->length : it->start + lastColorID - ( lastColorID + stepId - id ) % it->length;
+            palette[it->start + id] = newColorID;
+        }
+    }
+
+    return palette;
+}
+
 void PAL::CreateStandardPalette()
 {
     const u32 ncolors = ARRAY_COUNT( kb_pal ) / 3;
@@ -181,19 +200,87 @@ void PAL::CreateStandardPalette()
 
 int PAL::CurrentPalette()
 {
-    return current_palette->type;
+    return currentPaletteId;
 }
 
 RGBA PAL::GetPaletteColor( u8 index )
 {
-    const std::vector<SDL_Color> & colors = *current_palette->colors;
-    return index < colors.size() ? RGBA( colors[index].r, colors[index].g, colors[index].b ) : RGBA( 0, 0, 0 );
+    return index < current_palette.size() ? RGBA( current_palette[index].r, current_palette[index].g, current_palette[index].b ) : RGBA( 0, 0, 0 );
+}
+
+const std::vector<uint8_t> & PAL::GetPalette( int type )
+{
+    switch ( type ) {
+    case YELLOW_TEXT: {
+        static std::vector<uint8_t> palette( yellow_text_table, yellow_text_table + PALETTE_SIZE );
+        return palette;
+    }
+    case WHITE_TEXT: {
+        static std::vector<uint8_t> palette( white_text_table, white_text_table + PALETTE_SIZE );
+        return palette;
+    }
+    case GRAY_TEXT: {
+        static std::vector<uint8_t> palette( gray_text_table, gray_text_table + PALETTE_SIZE );
+        return palette;
+    }
+    case RED: {
+        static std::vector<uint8_t> palette( red_table, red_table + PALETTE_SIZE );
+        return palette;
+    }
+    case GRAY: {
+        static std::vector<uint8_t> palette( gray_table, gray_table + PALETTE_SIZE );
+        return palette;
+    }
+    case BROWN: {
+        static std::vector<uint8_t> palette( brown_table, brown_table + PALETTE_SIZE );
+        return palette;
+    }
+    case TAN: {
+        static std::vector<uint8_t> palette( tan_table, tan_table + PALETTE_SIZE );
+        return palette;
+    }
+    case NO_CYCLE: {
+        static std::vector<uint8_t> palette( no_cycle_table, no_cycle_table + PALETTE_SIZE );
+        return palette;
+    }
+    case MIRROR_IMAGE: {
+        static std::vector<uint8_t> palette( mirror_image_table, mirror_image_table + PALETTE_SIZE );
+        return palette;
+    }
+    }
+
+    static std::vector<uint8_t> standard;
+    if ( standard.empty() ) {
+        standard.resize( PALETTE_SIZE, 0 );
+        for ( int i = 0; i < PALETTE_SIZE; ++i ) {
+            standard[i] = static_cast<uint8_t>( i );
+        }
+    }
+
+    return standard;
+}
+
+std::vector<uint8_t> PAL::CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second )
+{
+    if ( first.size() != PALETTE_SIZE || second.size() != PALETTE_SIZE )
+        return std::vector<uint8_t>();
+
+    std::vector<uint8_t> combined( PALETTE_SIZE, 0 );
+
+    for ( size_t i = 0; i < first.size(); ++i ) {
+        combined[i] = second[first[i]];
+    }
+
+    return combined;
 }
 
 void PAL::SwapPalette( int type )
 {
-    current_palette = &palmap[type];
-    Surface::SetDefaultPalette( &( *current_palette->colors )[0], static_cast<int>( current_palette->colors->size() ) );
+    const std::vector<SDL_Color> & source = *palmap[type].colors;
+    if ( current_palette.size() != source.size() )
+        current_palette.resize( source.size() );
+    std::memcpy( current_palette.data(), source.data(), sizeof( SDL_Color ) * PALETTE_SIZE );
+    currentPaletteId = type;
 }
 
 void PAL::InitAllPalettes()
@@ -209,6 +296,7 @@ void PAL::InitAllPalettes()
     CreatePalette( no_cycle_palette, no_cycle_table );
     CreatePalette( mirror_image_palette, mirror_image_table );
     SwapPalette( PAL::STANDARD );
+    Surface::SetDefaultPalette( &( current_palette )[0], static_cast<int>( current_palette.size() ) );
 }
 
 void PAL::Clear()
@@ -223,4 +311,20 @@ void PAL::Clear()
     no_cycle_palette.clear();
     mirror_image_palette.clear();
     standard_palette.clear();
+    current_palette.clear();
+}
+
+void PAL::SetCustomSDLPalette( const std::vector<uint8_t> & indexes )
+{
+    if ( indexes.size() != PALETTE_SIZE )
+        return;
+
+    std::vector<SDL_Color> sdlPalette( PALETTE_SIZE );
+    for ( size_t i = 0; i < indexes.size(); ++i )
+        sdlPalette[i] = standard_palette[indexes[i]];
+
+    std::memcpy( current_palette.data(), sdlPalette.data(), sizeof( SDL_Color ) * PALETTE_SIZE );
+    currentPaletteId = CUSTOM;
+
+    Surface::SetDefaultPalette( &( current_palette )[0], static_cast<int>( current_palette.size() ) );
 }

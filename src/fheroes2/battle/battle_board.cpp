@@ -182,6 +182,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
 {
     const Castle * castle = Arena::GetCastle();
     const Bridge * bridge = Arena::GetBridge();
+    const bool isWide = b.isWide();
     std::map<s32, bcell_t> list;
     s32 cur = b.GetHeadIndex();
 
@@ -191,8 +192,8 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
 
     while ( cur != dst.GetHead()->GetIndex() ) {
         const Cell & center = at( cur );
-        Indexes around = b.isWide() ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) )
-                                    : GetAroundIndexes( cur );
+        Indexes around
+            = isWide ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) ) : GetAroundIndexes( cur );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
             Cell & cell = at( *it );
@@ -201,7 +202,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
                  // check bridge
                  ( !bridge || !Board::isBridgeIndex( *it ) || bridge->isPassable( b.GetColor() ) ) ) {
                 const s32 cost = 100 * Board::GetDistance( *it, dst.GetHead()->GetIndex() )
-                                 + ( b.isWide() && WideDifficultDirection( center.GetDirection(), GetDirection( *it, cur ) ) ? 100 : 0 )
+                                 + ( isWide && WideDifficultDirection( center.GetDirection(), GetDirection( *it, cur ) ) ? 100 : 0 )
                                  + ( castle && castle->isBuild( BUILD_MOAT ) && Board::isMoatIndex( *it ) ? 100 : 0 );
 
                 // new cell
@@ -237,7 +238,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
 
     // save path
     if ( cur == dst.GetHead()->GetIndex() ) {
-        while ( cur != b.GetHeadIndex() && isValidIndex( cur ) ) {
+        while ( cur != b.GetHeadIndex() && isValidIndex( cur ) && ( !isWide || isValidDirection( cur, b.isReflect() ? RIGHT : LEFT ) ) ) {
             result.push_back( cur );
             cur = list[cur].prnt;
         }
@@ -245,7 +246,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
         std::reverse( result.begin(), result.end() );
 
         // correct wide position
-        if ( b.isWide() && result.size() ) {
+        if ( isWide && result.size() ) {
             const s32 head = dst.GetHead()->GetIndex();
             const s32 tail = dst.GetTail()->GetIndex();
             const s32 prev = 1 < result.size() ? result[result.size() - 2] : b.GetHeadIndex();
@@ -279,7 +280,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
             Cell * cell = GetCell( *it );
             cell->SetDirection( cell->GetDirection() | GetDirection( *it, it == result.begin() ? b.GetHeadIndex() : *( it - 1 ) ) );
 
-            if ( b.isWide() ) {
+            if ( isWide ) {
                 const s32 head = *it;
                 const s32 prev = it != result.begin() ? *( it - 1 ) : b.GetHeadIndex();
                 Cell * tail = GetCell( head, LEFT_SIDE & GetDirection( head, prev ) ? LEFT : RIGHT );
@@ -316,6 +317,12 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
 {
     Indexes result;
     result.reserve( 30 );
+
+    // make sure we check current position first to avoid unnecessary move
+    const int headIndex = b.GetHeadIndex();
+    if ( GetCell( headIndex )->GetQuality() ) {
+        result.push_back( headIndex );
+    }
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it ).isPassable3( b, false ) && ( *it ).GetQuality() )
@@ -926,9 +933,34 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )
     return result;
 }
 
-bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * b )
+bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
 {
-    return b && GetCell( index ) && index != b->GetHeadIndex() && ( !b->isWide() || index != b->GetTailIndex() ) && GetCell( index )->isPassable3( *b, true );
+    if ( troop == NULL )
+        return false;
+
+    const Cell * cell = GetCell( index );
+    if ( cell == NULL )
+        return false;
+
+    const bool doubleHex = troop->isWide();
+    if ( index == troop->GetHeadIndex() || ( doubleHex && index == troop->GetTailIndex() ) )
+        return false;
+
+    if ( !cell->isPassable3( *troop, true ) )
+        return false;
+
+    if ( doubleHex ) {
+        const bool isReflected = troop->GetHeadIndex() < troop->GetTailIndex();
+        const int32_t tailIndex = isReflected ? index + 1 : index - 1;
+        const Cell * tailCell = GetCell( tailIndex );
+        if ( tailCell == NULL || tailIndex == troop->GetHeadIndex() || tailIndex == troop->GetTailIndex() )
+            return false;
+
+        if ( !tailCell->isPassable3( *troop, true ) )
+            return false;
+    }
+
+    return true;
 }
 
 std::string Battle::Board::GetMoatInfo( void )
