@@ -1014,13 +1014,7 @@ void Battle::Interface::CycleColors()
     if ( _colorCycle > 20 ) // 5 * 4, two color ranges
         _colorCycle = 0;
 
-    const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
-    for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
-        for ( int id = 0; id < it->length; ++id ) {
-            const uint8_t newColorID = it->forward ? it->start + ( id + _colorCycle ) % it->length : it->start + it->length - 1 - ( 3 + _colorCycle - id ) % it->length;
-            _creaturePalette[it->start + id] = newColorID;
-        }
-    }
+    _creaturePalette = PAL::GetCyclingPalette( _colorCycle );
 }
 
 void Battle::Interface::Redraw( void )

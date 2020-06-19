@@ -163,6 +163,10 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const
 {
+    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_MAP_DELAY ) ) {
+        PAL::SetCustomSDLPalette( PAL::GetCyclingPalette( Game::MapsAnimationFrame() ) );
+    }
+
     // tile
     for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
         const s32 offsetY = rectMaps.y + oy;
