@@ -26,6 +26,7 @@
 #include <iostream>
 #include <math.h>
 #include <memory>
+#include <set>
 #include <sstream>
 
 #include "display.h"
@@ -45,6 +46,9 @@ namespace
     RGBA default_color_key;
     SDL_Color * pal_colors = NULL;
     u32 pal_nums = 0;
+
+    std::set<const SDL_Surface *> paletteBasedSurface;
+    std::set<const SDL_Surface *> surfaceToUpdate;
 }
 
 SurfaceFormat GetRGBAMask( u32 bpp )
@@ -440,6 +444,8 @@ void Surface::SetDefaultPalette( SDL_Color * ptr, int num )
 {
     pal_colors = ptr;
     pal_nums = num;
+
+    surfaceToUpdate = paletteBasedSurface;
 }
 
 void Surface::SetDefaultColorKey( int r, int g, int b )
@@ -604,7 +610,23 @@ void Surface::SetPalette( void )
             surface->format->palette->ncolors = pal_nums;
         }
 
+        paletteBasedSurface.insert( surface );
         surface->format->palette->colors = pal_colors;
+    }
+}
+
+void Surface::ResetPalette()
+{
+    if ( isValid() && pal_colors != NULL && pal_nums > 0 && surface->format->palette ) {
+        std::set<const SDL_Surface *>::iterator item = surfaceToUpdate.find( surface );
+        if ( item != surfaceToUpdate.end() ) {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+            SDL_SetPaletteColors( surface->format->palette, pal_colors, 0, pal_nums );
+#else
+            SDL_SetPalette( surface, SDL_LOGPAL, pal_colors, 0, pal_nums );
+#endif
+            surfaceToUpdate.erase( item );
+        }
     }
 }
 
@@ -844,6 +866,8 @@ void Surface::FreeSurface( Surface & sf )
                 sf.surface->format->palette->colors = NULL;
                 sf.surface->format->palette->ncolors = 0;
             }
+
+            paletteBasedSurface.erase( sf.surface );
 
             SDL_FreeSurface( sf.surface );
             sf.surface = NULL;
@@ -1537,13 +1561,13 @@ Surface Surface::RenderSurface( const Rect & srcrt, const Size & sz ) const
 
 bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect )
 {
-    if ( depth() != 32 )
+    if ( depth() != 32 || colors.empty() )
         return false;
 
     Lock();
 
-    const int height = h();
     const int width = w();
+    const int height = h();
     const uint16_t pitch = surface->pitch >> 2;
 
     if ( pitch != width || pitch * height != indexes.size() ) {
@@ -1607,8 +1631,8 @@ Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t r
 
     surface.Lock();
 
-    const int height = surface.h();
     const int width = surface.w();
+    const int height = surface.h();
     const uint16_t pitch = surface.surface->pitch >> 2;
 
     if ( pitch != width ) {

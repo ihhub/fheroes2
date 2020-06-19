@@ -257,7 +257,7 @@ public:
 
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
-    bool isVisited( int object, Visit::type_t = Visit::LOCAL ) const;
+    bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
 
     bool Move( bool fast = false );
