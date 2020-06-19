@@ -240,7 +240,7 @@ std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * h
     std::string str = MP2::StringObject( tile.GetObject() );
     if ( hero ) {
         str.append( "\n" );
-        str.append( hero->isVisited( tile.GetObject() ) ? _( "(already visited)" ) : _( "(not visited)" ) );
+        str.append( hero->isObjectTypeVisited( tile.GetObject() ) ? _( "(already visited)" ) : _( "(not visited)" ) );
     }
 
     return str;

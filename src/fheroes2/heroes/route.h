@@ -74,7 +74,7 @@ namespace Route
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
         u32 GetTotalPenalty( void ) const;
-        bool Calculate( const s32 &, int limit = -1 );
+        uint32_t Calculate( const s32 &, int limit = -1 );
 
         void Show( void )
         {
@@ -104,7 +104,7 @@ namespace Route
         static int GetIndexSprite( int from, int to, int mod );
 
     private:
-        bool Find( s32, int limit = -1 );
+        uint32_t Find( s32, int limit = -1 );
 
         friend StreamBase & operator<<( StreamBase &, const Path & );
         friend StreamBase & operator>>( StreamBase &, Path & );

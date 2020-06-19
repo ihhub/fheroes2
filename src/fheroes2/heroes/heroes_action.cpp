@@ -1262,7 +1262,7 @@ void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
 {
-    bool visited = hero.isVisited( obj );
+    bool visited = hero.isObjectTypeVisited( obj );
     std::string msg;
 
     switch ( obj ) {
@@ -1395,7 +1395,7 @@ void ActionToMagicWell( Heroes & hero, u32 obj, s32 dst_index )
     }
     else
         // check already visited
-        if ( hero.isVisited( MP2::OBJ_MAGICWELL ) ) {
+        if ( hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
         PlaySoundVisited;
         Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
     }
@@ -1540,7 +1540,7 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
 
         if ( complete )
             tile.QuantityReset();
-        else if ( 0 == gold && !hero.isVisited( obj ) ) {
+        else if ( 0 == gold && !hero.isObjectTypeVisited( obj ) ) {
             // modify morale
             hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1556,7 +1556,7 @@ void ActionToGoodMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
 {
     std::string msg;
     u32 move = 0;
-    bool visited = hero.isVisited( obj );
+    bool visited = hero.isObjectTypeVisited( obj );
 
     switch ( obj ) {
     case MP2::OBJ_BUOY:
@@ -2362,7 +2362,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.isVisited( MP2::OBJ_ARTESIANSPRING ) ) {
+    if ( hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) ) {
         PlaySoundVisited;
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
@@ -2557,7 +2557,7 @@ void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index )
     const Funds payment( Resource::GOLD, 1000 );
     Kingdom & kingdom = hero.GetKingdom();
 
-    if ( hero.isVisited( obj, Visit::GLOBAL ) ) {
+    if ( hero.isObjectTypeVisited( obj, Visit::GLOBAL ) ) {
         Dialog::Message( MP2::StringObject( obj ), "empty", Font::BIG, Dialog::OK );
     }
     else if ( kingdom.AllowPayment( payment ) ) {
@@ -2846,7 +2846,7 @@ void ActionToAlchemistsTower( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
 {
     const bool cavalry = hero.GetArmy().HasMonster( Monster::CAVALRY );
-    const bool visited = hero.isVisited( obj );
+    const bool visited = hero.isObjectTypeVisited( obj );
     std::string body;
 
     if ( !cavalry && visited )
@@ -2882,7 +2882,7 @@ void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
 {
-    if ( hero.isVisited( obj ) ) {
+    if ( hero.isObjectTypeVisited( obj ) ) {
         PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ), _( "The Arena guards turn you away." ), Font::BIG, Dialog::OK );
     }
@@ -2897,7 +2897,7 @@ void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index )
 {
-    if ( hero.isVisited( obj ) ) {
+    if ( hero.isObjectTypeVisited( obj ) ) {
         PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ),
                          _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ), Font::BIG,
@@ -2957,7 +2957,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
                      _( "You enter a rickety hut and talk to the magician who lives there. He tells you of places near and far which may aid you in your journeys." ),
                      Font::BIG, Dialog::OK );
 
-    if ( !hero.isVisited( obj, Visit::GLOBAL ) ) {
+    if ( !hero.isObjectTypeVisited( obj, Visit::GLOBAL ) ) {
         hero.SetVisited( dst_index, Visit::GLOBAL );
         world.ActionToEyeMagi( hero.GetColor() );
     }
