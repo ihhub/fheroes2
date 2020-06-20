@@ -2913,6 +2913,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
 {
+    AGG::PlaySound( M82::RSBRYFZL );
     std::string str( _( "The %{name} resist the spell!" ) );
     StringReplace( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );
