@@ -402,9 +402,6 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         heroFrameID = 0;
         flagFrameID = Game::MapsAnimationFrame() % heroFrameCount;
     }
-    else if ( !isShipMaster() && isEnableMove() ) { // move on a horse
-        flagFrameID = heroFrameID = sprite_index % heroFrameCount;
-    }
 
     Sprite sprite1 = SpriteHero( *this, heroFrameID, reflect, false );
     Sprite sprite2 = SpriteFlag( *this, flagFrameID, reflect, false );
