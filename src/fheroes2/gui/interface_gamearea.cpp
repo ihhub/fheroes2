@@ -159,10 +159,6 @@ void Interface::GameArea::BlitOnTile( Surface & dst, const Surface & src, s32 ox
 void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 {
     Redraw( dst, flag, Rect( 0, 0, rectMaps.w, rectMaps.h ) );
-
-    std::map<RGBA, RGBA> colorCyclePairs = PAL::GetCyclingPairs( Game::MapsAnimationFrame() );
-    Surface update = dst.RenderChangeColor( colorCyclePairs );
-    update.Blit( dst );
 }
 
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const
