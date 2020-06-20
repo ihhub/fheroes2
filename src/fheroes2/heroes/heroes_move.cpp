@@ -386,7 +386,7 @@ void Heroes::Redraw( Surface & dst, bool with_shadow ) const
 void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 {
     const Point & mp = GetCenter();
-    int heroFrameID = Game::MapsAnimationFrame() % heroFrameCount;
+    int heroFrameID = sprite_index % heroFrameCount; // // move in the boat
     int flagFrameID = heroFrameID;
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     if ( !( gamearea.GetRectMaps() & mp ) )
@@ -400,6 +400,7 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     }
     else if ( !isShipMaster() && !isEnableMove() ) { // stand still on a horse
         heroFrameID = 0;
+        flagFrameID = Game::MapsAnimationFrame() % heroFrameCount;
     }
     else if ( !isShipMaster() && isEnableMove() ) { // move on a horse
         flagFrameID = heroFrameID = sprite_index % heroFrameCount;
