@@ -750,7 +750,6 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     // change color
     for ( u32 ii = 0; ii < count; ++ii ) {
         Sprite & sprite = reflect ? v.reflect[ii] : v.sprites[ii];
-        std::map<RGBA, RGBA> colorPairs;
 
         switch ( icn ) {
         case ICN::ROUTERED:
