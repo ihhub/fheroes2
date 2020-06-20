@@ -73,7 +73,6 @@ int Game::StartBattleOnly( void )
 
 int Game::StartGame( void )
 {
-    SetFixVideoMode();
     AI::Get().Reset();
 
     // cursor
@@ -843,8 +842,13 @@ int Interface::Basic::HumanTurn( bool isload )
             }
         }
 
+        const Rect displayArea( 0, 0, display.GetSize().w, display.GetSize().h );
+        // Stop moving hero first
+        if ( isMovingHero && ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) ) {
+            stopHero = true;
+        }
         // cursor over radar
-        if ( ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+        else if ( ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             radar.QueueEventProcessing();
@@ -928,6 +932,18 @@ int Interface::Basic::HumanTurn( bool isload )
                         gameArea.SetUpdateCursor();
                     }
                     else {
+                        if ( !isOngoingFastScrollEvent ) {
+                            Point movement( hero->MovementDirection() );
+                            if ( movement != Point() ) { // don't waste resources for no movement
+                                const int moveStep = hero->GetMoveStep();
+                                movement.x *= -moveStep;
+                                movement.y *= -moveStep;
+                                gameArea.SetMapsPos( gameArea.GetMapsPos() + movement );
+                                gameArea.SetCenter( hero->GetCenter() );
+                                ResetFocus( GameFocus::HEROES );
+                                RedrawFocus();
+                            }
+                        }
                         gameArea.SetRedraw();
                     }
 
@@ -946,6 +962,9 @@ int Interface::Basic::HumanTurn( bool isload )
                     if ( Cursor::WAIT == cursor.Themes() )
                         gameArea.SetUpdateCursor();
                 }
+            }
+            else {
+                isMovingHero = false;
             }
         }
 

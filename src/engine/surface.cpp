@@ -26,6 +26,7 @@
 #include <iostream>
 #include <math.h>
 #include <memory>
+#include <set>
 #include <sstream>
 
 #include "display.h"
@@ -45,6 +46,9 @@ namespace
     RGBA default_color_key;
     SDL_Color * pal_colors = NULL;
     u32 pal_nums = 0;
+
+    std::set<const SDL_Surface *> paletteBasedSurface;
+    std::set<const SDL_Surface *> surfaceToUpdate;
 }
 
 SurfaceFormat GetRGBAMask( u32 bpp )
@@ -440,6 +444,8 @@ void Surface::SetDefaultPalette( SDL_Color * ptr, int num )
 {
     pal_colors = ptr;
     pal_nums = num;
+
+    surfaceToUpdate = paletteBasedSurface;
 }
 
 void Surface::SetDefaultColorKey( int r, int g, int b )
@@ -604,7 +610,23 @@ void Surface::SetPalette( void )
             surface->format->palette->ncolors = pal_nums;
         }
 
+        paletteBasedSurface.insert( surface );
         surface->format->palette->colors = pal_colors;
+    }
+}
+
+void Surface::ResetPalette()
+{
+    if ( isValid() && pal_colors != NULL && pal_nums > 0 && surface->format->palette ) {
+        std::set<const SDL_Surface *>::iterator item = surfaceToUpdate.find( surface );
+        if ( item != surfaceToUpdate.end() ) {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+            SDL_SetPaletteColors( surface->format->palette, pal_colors, 0, pal_nums );
+#else
+            SDL_SetPalette( surface, SDL_LOGPAL, pal_colors, 0, pal_nums );
+#endif
+            surfaceToUpdate.erase( item );
+        }
     }
 }
 
@@ -844,6 +866,8 @@ void Surface::FreeSurface( Surface & sf )
                 sf.surface->format->palette->colors = NULL;
                 sf.surface->format->palette->ncolors = 0;
             }
+
+            paletteBasedSurface.erase( sf.surface );
 
             SDL_FreeSurface( sf.surface );
             sf.surface = NULL;
@@ -1319,9 +1343,9 @@ Surface Surface::ModifyAlphaChannel( uint32_t alpha ) const
             uint32_t * x = y;
             const uint32_t * xEnd = x + width;
             for ( ; x != xEnd; ++x ) {
-                const uint32_t rest = *x % ( 16777216 );
+                const uint32_t rest = *x % 0x1000000;
 
-                *x = ( ( *x / 16777216 ) * alpha / 255 ) * 16777216 + rest;
+                *x = ( ( ( *x >> 24 ) * alpha / 255 ) << 24 ) + rest;
             }
         }
 
@@ -1533,4 +1557,99 @@ Surface Surface::RenderSurface( const Rect & srcrt, const Size & sz ) const
     srcsf.Blit( Rect( srcrt.x + srcrt.w - cw, srcrt.y + srcrt.h - ch, cw, ch ), dstrt.x + dstrt.w - cw, dstrt.y + dstrt.h - ch, dstsf );
 
     return dstsf;
+}
+
+bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect )
+{
+    if ( depth() != 32 || colors.empty() )
+        return false;
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width || pitch * height != indexes.size() ) {
+        Unlock();
+        return false;
+    }
+
+    uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+
+    if ( reflect ) {
+        const uint8_t * inY = indexes.data();
+        const uint8_t * inYEnd = inY + width * height;
+
+        if ( alpha() ) {
+            for ( ; inY != inYEnd; inY += width ) {
+                const uint8_t * inX = inY + width - 1;
+                const uint32_t * outEndX = out + width;
+                for ( ; out != outEndX; ++out, --inX ) {
+                    *out = ( *out & 0xff000000 ) + colors[*inX];
+                }
+            }
+        }
+        else {
+            for ( ; inY != inYEnd; inY += width ) {
+                const uint8_t * inX = inY + width - 1;
+                const uint32_t * outEndX = out + width;
+                for ( ; out != outEndX; ++out, --inX ) {
+                    *out = colors[*inX];
+                }
+            }
+        }
+    }
+    else {
+        const uint32_t * outEnd = out + indexes.size();
+        const uint8_t * in = indexes.data();
+
+        if ( alpha() ) {
+            for ( ; out != outEnd; ++out, ++in ) {
+                *out = ( *out & 0xff000000 ) + colors[*in];
+            }
+        }
+        else {
+            for ( ; out != outEnd; ++out, ++in ) {
+                *out = colors[*in];
+            }
+        }
+    }
+
+    Unlock();
+
+    return true;
+}
+
+Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t ratio )
+{
+    if ( !first.isValid() || !second.isValid() || first.w() != second.w() || first.h() != second.h() || first.amask() != second.amask() || ratio > 100
+         || first.depth() != 32 || second.depth() != 32 )
+        return Surface();
+
+    Surface surface( first.GetSize(), first.amask() );
+
+    surface.Lock();
+
+    const int width = surface.w();
+    const int height = surface.h();
+    const uint16_t pitch = surface.surface->pitch >> 2;
+
+    if ( pitch != width ) {
+        surface.Unlock();
+        return surface;
+    }
+
+    uint8_t * out = static_cast<uint8_t *>( surface.surface->pixels );
+    const uint8_t * outEnd = out + width * height * 4;
+    const uint8_t * in1 = static_cast<uint8_t *>( first.surface->pixels );
+    const uint8_t * in2 = static_cast<uint8_t *>( second.surface->pixels );
+
+    for ( ; out != outEnd; ++out, ++in1, ++in2 ) {
+        *out = static_cast<uint32_t>( *in1 ) * ratio / 100 + static_cast<uint32_t>( *in2 ) * ( 100 - ratio ) / 100;
+    }
+
+    surface.Unlock();
+
+    return surface;
 }

@@ -287,8 +287,7 @@ void AI::Simple::BattleTurn( Arena & arena, const Unit & b, Actions & a )
 
                     a.push_back( Battle::Command( MSG_BATTLE_MOVE, b.GetUID(), path.back() ) );
 
-                    // archers move and short attack only
-                    attack = b.isArchers() ? false : true;
+                    attack = true;
                 }
             }
         }

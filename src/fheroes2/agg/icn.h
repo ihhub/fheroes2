@@ -909,6 +909,9 @@ namespace ICN
         BTNMIN,
         CSLMARKER,
 
+        GRAY_FONT,
+        GRAY_SMALL_FONT,
+
         LASTICN
     };
 

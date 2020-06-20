@@ -84,6 +84,9 @@ struct Rect : Point, Size
     // rect intersects rect
     bool operator&(const Rect &)const;
 
+    // calculate intersection rectangle
+    Rect operator^( const Rect & other ) const;
+
     static Rect Get( const Point &, const Point & );
     static Rect Get( const Rect &, const Rect &, bool intersect );
     static std::pair<Rect, Point> Fixed4Blit( const Rect &, const Rect & );

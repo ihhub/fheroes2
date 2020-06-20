@@ -228,6 +228,72 @@ namespace AGG
 
         return iter->second[index];
     }
+
+    // This class is a holder of the original 8-bit image after decompression
+    class ICNData
+    {
+    public:
+        explicit ICNData( uint32_t width_ = 0, uint32_t height_ = 0 )
+            : _width( 0 )
+            , _height( 0 )
+        {
+            resize( width_, height_ );
+        }
+
+        void resize( uint32_t width_ = 0, uint32_t height_ = 0 )
+        {
+            if ( width_ == _width && height_ == _height )
+                return;
+
+            _width = width_;
+            _height = height_;
+
+            _data.clear();
+            _data.resize( static_cast<size_t>( _width ) * _height, 0u );
+        }
+
+        const std::vector<uint8_t> & get() const
+        {
+            return _data;
+        }
+
+        std::vector<uint8_t> & get()
+        {
+            return _data;
+        }
+
+        uint32_t width() const
+        {
+            return _width;
+        }
+
+        uint32_t height() const
+        {
+            return _height;
+        }
+
+    private:
+        std::vector<uint8_t> _data;
+        uint32_t _width;
+        uint32_t _height;
+    };
+
+    std::map<std::pair<int, int>, ICNData> _icnIdVsData;
+
+    const std::vector<uint32_t> GetRGBColors()
+    {
+        static std::vector<uint32_t> colors;
+        if ( !colors.empty() )
+            return colors;
+
+        colors.resize( PALETTE_SIZE );
+        for ( size_t i = 0u; i < PALETTE_SIZE; ++i ) {
+            const RGBA & rgba = PAL::GetPaletteColor( static_cast<uint8_t>( i ) );
+            colors[i] = rgba.r() + ( rgba.g() << 8 ) + ( rgba.b() << 16 );
+        }
+
+        return colors;
+    }
 }
 
 Sprite ICNSprite::CreateSprite( bool reflect, bool shadow ) const
@@ -521,8 +587,12 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     case ICN::CSLMARKER:
         count = 3;
         break;
+    case ICN::FONT:
+    case ICN::SMALFONT:
     case ICN::YELLOW_FONT:
     case ICN::YELLOW_SMALFONT:
+    case ICN::GRAY_FONT:
+    case ICN::GRAY_SMALL_FONT:
         count = 96;
         break;
     case ICN::ROUTERED:
@@ -685,27 +755,25 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
         switch ( icn ) {
         case ICN::ROUTERED:
             LoadOrgICN( sprite, ICN::ROUTE, ii, false );
-            colorPairs[PAL::GetPaletteColor( 0x55 )] = RGBA( 164, 88, 16 );
-            colorPairs[PAL::GetPaletteColor( 0x5C )] = RGBA( 84, 0, 0 );
-            colorPairs[PAL::GetPaletteColor( 0x60 )] = RGBA( 72, 0, 0 );
-            sprite.ChangeColor( colorPairs );
+            ReplaceColors( sprite, PAL::GetPalette( PAL::RED ), ICN::ROUTE, ii, false );
+            break;
+
+        case ICN::FONT:
+        case ICN::SMALFONT:
+            LoadOrgICN( sprite, icn, ii, false );
+            ReplaceColors( sprite, PAL::GetPalette( PAL::WHITE_TEXT ), icn, ii, false );
             break;
 
         case ICN::YELLOW_FONT:
         case ICN::YELLOW_SMALFONT:
-            LoadOrgICN( sprite, ICN::FONT, ii, false );
-            colorPairs[PAL::GetPaletteColor( 0x0A )] = PAL::GetPaletteColor( 0xDA );
-            colorPairs[PAL::GetPaletteColor( 0x0B )] = PAL::GetPaletteColor( 0xDA );
-            colorPairs[PAL::GetPaletteColor( 0x0C )] = PAL::GetPaletteColor( 0xDA );
-            colorPairs[PAL::GetPaletteColor( 0x0D )] = PAL::GetPaletteColor( 0xDA );
-            colorPairs[PAL::GetPaletteColor( 0x0E )] = PAL::GetPaletteColor( 0xDB );
-            colorPairs[PAL::GetPaletteColor( 0x0F )] = PAL::GetPaletteColor( 0xDB );
-            colorPairs[PAL::GetPaletteColor( 0x10 )] = PAL::GetPaletteColor( 0xDB );
-            colorPairs[PAL::GetPaletteColor( 0x11 )] = PAL::GetPaletteColor( 0xDB );
-            colorPairs[PAL::GetPaletteColor( 0x12 )] = PAL::GetPaletteColor( 0xDB );
-            colorPairs[PAL::GetPaletteColor( 0x13 )] = PAL::GetPaletteColor( 0xDB );
-            colorPairs[PAL::GetPaletteColor( 0x14 )] = PAL::GetPaletteColor( 0xDB );
-            sprite.ChangeColor( colorPairs );
+            LoadOrgICN( sprite, icn == ICN::YELLOW_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
+            ReplaceColors( sprite, PAL::GetPalette( PAL::YELLOW_TEXT ), icn == ICN::YELLOW_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
+            break;
+
+        case ICN::GRAY_FONT:
+        case ICN::GRAY_SMALL_FONT:
+            LoadOrgICN( sprite, icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
+            ReplaceColors( sprite, PAL::GetPalette( PAL::GRAY_TEXT ), icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
             break;
 
         default:
@@ -943,6 +1011,9 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     u32 c = 0;
     Point pt( 0, 0 );
 
+    ICNData originalData( sz.w, sz.h );
+    uint8_t * icnData = originalData.get().data();
+
     while ( 1 ) {
         // 0x00 - end line
         if ( 0 == *buf ) {
@@ -956,6 +1027,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- && buf < max ) {
+                icnData[pt.y * sz.w + pt.x] = *buf;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
                 ++buf;
@@ -987,6 +1059,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
                 if ( !sf2.isValid() )
                     sf2.Set( sz.w, sz.h, true );
                 while ( c-- ) {
+                    icnData[pt.y * sz.w + pt.x] = 0;
                     sf2.DrawPoint( pt, shadow );
                     ++pt.x;
                 }
@@ -1000,6 +1073,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- ) {
+                icnData[pt.y * sz.w + pt.x] = *buf;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
@@ -1009,6 +1083,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf - 0xC0;
             ++buf;
             while ( c-- ) {
+                icnData[pt.y * sz.w + pt.x] = *buf;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
@@ -1019,6 +1094,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             break;
         }
     }
+
+    _icnIdVsData[std::make_pair( icn, index )] = originalData;
 
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
         res.second.SetAlphaMod( 0, false );
@@ -1802,6 +1879,10 @@ Surface AGG::GetLetter( u32 ch, u32 ft )
         DEBUG( DBG_ENGINE, DBG_WARN, "unknown letter" );
 
     switch ( ft ) {
+    case Font::GRAY_BIG:
+        return AGG::GetICN( ICN::GRAY_FONT, ch - 0x20 );
+    case Font::GRAY_SMALL:
+        return AGG::GetICN( ICN::GRAY_SMALL_FONT, ch - 0x20 );
     case Font::YELLOW_BIG:
         return AGG::GetICN( ICN::YELLOW_FONT, ch - 0x20 );
     case Font::YELLOW_SMALL:
@@ -1919,4 +2000,26 @@ void AGG::Quit( void )
 void AGG::RegisterScalableICN( int icnId )
 {
     scalableICNIds.insert( icnId );
+}
+
+bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMap, int icnId, int incIndex, bool reflect )
+{
+    if ( !surface.isValid() || surface.depth() != 32 || colorMap.size() != PALETTE_SIZE || icnId < 0 || incIndex < 0 )
+        return false;
+
+    std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, incIndex ) );
+    if ( iter == _icnIdVsData.end() )
+        return false;
+
+    const ICNData & data = iter->second;
+    if ( surface.w() != data.width() || surface.h() != data.height() )
+        return false;
+
+    const std::vector<uint32_t> & rgbColors = GetRGBColors();
+
+    std::vector<uint32_t> colors( colorMap.size(), 0 );
+    for ( size_t i = 0; i < colorMap.size(); ++i )
+        colors[i] = rgbColors[colorMap[i]];
+
+    return surface.SetColors( data.get(), colors, reflect );
 }

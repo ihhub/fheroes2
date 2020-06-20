@@ -39,7 +39,8 @@ namespace PAL
         BROWN,
         TAN, // puzzle
         NO_CYCLE,
-        MIRROR_IMAGE
+        MIRROR_IMAGE,
+        CUSTOM
     };
 
     struct CyclingColorSet
@@ -49,14 +50,16 @@ namespace PAL
         bool forward;
     };
 
-    const std::vector<CyclingColorSet> & GetCyclingColors();
-    std::map<RGBA, RGBA> GetCyclingPairs( uint32_t frame );
+    std::vector<uint8_t> GetCyclingPalette( int stepId );
     void CreateStandardPalette();
     void InitAllPalettes();
     void Clear();
     int CurrentPalette();
     void SwapPalette( int type );
     RGBA GetPaletteColor( u8 index );
+    const std::vector<uint8_t> & GetPalette( int type );
+    std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
+    void SetCustomSDLPalette( const std::vector<uint8_t> & indexes );
 }
 
 #endif

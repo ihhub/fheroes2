@@ -97,7 +97,11 @@ namespace AI
 
     bool Queue::isPresent( s32 index ) const
     {
-        return end() != std::find( begin(), end(), index );
+        for ( const_iterator it = begin(); it != end(); ++it ) {
+            if ( it->first == index )
+                return true;
+        }
+        return false;
     }
 
     void IndexObjectMap::DumpObjects( const IndexDistance & id )
