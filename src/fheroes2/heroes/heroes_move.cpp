@@ -386,7 +386,7 @@ void Heroes::Redraw( Surface & dst, bool with_shadow ) const
 void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 {
     const Point & mp = GetCenter();
-    int heroFrameID = sprite_index % heroFrameCount; // // move in the boat
+    int heroFrameID = sprite_index % heroFrameCount; // move on a horse or in the boat
     int flagFrameID = heroFrameID;
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     if ( !( gamearea.GetRectMaps() & mp ) )
