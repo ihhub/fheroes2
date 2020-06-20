@@ -66,8 +66,8 @@ bool Cursor::SetThemes( int name, bool force )
         Set( spr, true );
 
         // immediately apply new offset, force
-        auto pt = LocalEvent::Get().GetMouseCursor();
-        Move( pt.x, pt.y );
+        Point currentPos = LocalEvent::Get().GetMouseCursor();
+        Move( currentPos.x, currentPos.y );
         return true;
     }
 
