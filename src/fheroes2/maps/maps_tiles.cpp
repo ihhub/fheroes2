@@ -52,7 +52,7 @@
 #include "trees.h"
 #include "world.h"
 
-u8 monster_animation_cicle[] = {0, 1, 2, 1, 0, 3, 4, 5, 4, 3};
+u8 monster_animation_cicle[] = { 0, 1, 2, 1, 0, 3, 4, 5, 4, 3 };
 
 #ifdef WITH_DEBUG
 Surface PassableViewSurface( int passable )
@@ -443,6 +443,64 @@ bool Maps::TilesAddon::isRoad( int direct ) const
         break;
     }
 
+    return false;
+}
+
+bool Maps::TilesAddon::hasColorCycling( const TilesAddon & addon )
+{
+    switch ( MP2::GetICNObject( addon.object ) ) {
+    case ICN::OBJNDIRT:
+        // lakes and dirt oracle
+        if ( ( addon.index > 23 && addon.index < 59 ) || addon.index == 197 || addon.index == 198 )
+            return true;
+        break;
+    case ICN::OBJNGRAS:
+        // lake
+        if ( addon.index > 54 && addon.index < 76 )
+            return true;
+        break;
+    case ICN::OBJNGRA2:
+        // oracle
+        if ( addon.index == 125 || addon.index == 126 )
+            return true;
+        break;
+    case ICN::OBJNSWMP:
+        // swamp water
+        if ( addon.index > 86 && addon.index < 168 )
+            return true;
+        break;
+    case ICN::OBJNCRCK:
+        // wasteland lakes
+        if ( ( addon.index > 216 && addon.index < 221 ) || addon.index == 3 || addon.index == 4 )
+            return true;
+        break;
+    case ICN::OBJNLAVA:
+        // volcano, lava lakes
+        if ( addon.index > 17 && addon.index < 78 )
+            return true;
+        break;
+    case ICN::OBJNDSRT:
+        // oasis
+        if ( addon.index == 108 || addon.index == 109 )
+            return true;
+        break;
+    case ICN::OBJNMUL2:
+        // stream delta, fountain and teleporters
+        if ( addon.index == 116 || addon.index == 119 || addon.index == 122 || addon.index < 16 )
+            return true;
+        break;
+    case ICN::OBJNRSRC:
+        // treasure chest
+        if ( addon.index == 19 )
+            return true;
+        break;
+    case ICN::OBJNWATR:
+    case ICN::OBJNWAT2:
+    case ICN::STREAM:
+        return true;
+    default:
+        break;
+    }
     return false;
 }
 
@@ -1438,6 +1496,8 @@ void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
+    auto pal = PAL::GetCyclingPalette( Game::MapsAnimationFrame() );
+
     if ( ( area.GetRectMaps() & mp ) && !addons_level1.empty() ) {
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             // skip
@@ -1449,7 +1509,10 @@ void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
             const int icn = MP2::GetICNObject( object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                const Sprite & sprite = AGG::GetICN( icn, index );
+                Sprite sprite = AGG::GetICN( icn, index );
+                if ( TilesAddon::hasColorCycling( *it ) ) {
+                    AGG::ReplaceColors( sprite, pal, icn, index, false );
+                }
                 area.BlitOnTile( dst, sprite, mp );
 
                 // possible anime
