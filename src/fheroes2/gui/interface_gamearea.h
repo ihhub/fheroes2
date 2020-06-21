@@ -77,6 +77,9 @@ namespace Interface
         void BlitOnTile( Surface &, const Surface &, s32, s32, const Point & ) const;
         void BlitOnTile( Surface &, const Sprite &, const Point & ) const;
 
+        void UpdateCyclingPalette( int frame );
+        const std::vector<uint8_t> & GetCyclingPalette() const;
+
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
 
@@ -103,6 +106,8 @@ namespace Interface
         bool updateCursor;
         int borderSizeX;
         int borderSizeY;
+
+        std::vector<uint8_t> _customPalette;
 
         enum
         {

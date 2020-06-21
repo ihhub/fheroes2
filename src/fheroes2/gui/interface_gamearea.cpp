@@ -142,6 +142,17 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
     rectMapsPosition.y = areaPosition.y - scrollOffset.y;
 }
 
+void Interface::GameArea::UpdateCyclingPalette( int frame )
+{
+    _customPalette = PAL::GetCyclingPalette( frame );
+    PAL::SetCustomSDLPalette( _customPalette );
+}
+
+const std::vector<uint8_t> & Interface::GameArea::GetCyclingPalette() const
+{
+    return _customPalette;
+}
+
 void Interface::GameArea::BlitOnTile( Surface & dst, const Sprite & src, const Point & mp ) const
 {
     BlitOnTile( dst, src, src.x(), src.y(), mp );
@@ -163,10 +174,6 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const
 {
-    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_MAP_DELAY ) ) {
-        PAL::SetCustomSDLPalette( PAL::GetCyclingPalette( Game::MapsAnimationFrame() ) );
-    }
-
     // tile
     for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
         const s32 offsetY = rectMaps.y + oy;

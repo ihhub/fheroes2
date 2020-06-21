@@ -494,9 +494,11 @@ bool Maps::TilesAddon::hasColorCycling( const TilesAddon & addon )
         if ( addon.index == 19 )
             return true;
         break;
-    case ICN::OBJNWATR:
-    case ICN::OBJNWAT2:
-    case ICN::STREAM:
+    case ICN::OBJNWATR: // Water objects
+    case ICN::OBJNWAT2: // Water objects
+    case ICN::X_LOC1: // Price of Royalty objects
+    case ICN::X_LOC2: // Price of Royalty water objects
+    case ICN::STREAM: // Rivers
         return true;
     default:
         break;
@@ -1496,8 +1498,6 @@ void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    auto pal = PAL::GetCyclingPalette( Game::MapsAnimationFrame() );
-
     if ( ( area.GetRectMaps() & mp ) && !addons_level1.empty() ) {
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             // skip
@@ -1511,7 +1511,7 @@ void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
                 Sprite sprite = AGG::GetICN( icn, index );
                 if ( TilesAddon::hasColorCycling( *it ) ) {
-                    AGG::ReplaceColors( sprite, pal, icn, index, false );
+                    AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
                 }
                 area.BlitOnTile( dst, sprite, mp );
 
