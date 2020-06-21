@@ -46,7 +46,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     if ( header.size() )
         textbox1.Blit( pos.x, pos.y + 10 );
     if ( message.size() )
-        textbox2.Blit( pos.x, pos.y + 10 + ( header.size() ? textbox1.h() : 0 ) + 10 );
+        textbox2.Blit( pos.x, pos.y + 10 + ( header.size() ? textbox1.h() + 10 : 0 ) );
 
     LocalEvent & le = LocalEvent::Get();
 
