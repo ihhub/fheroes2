@@ -34,7 +34,7 @@ void StatusBar::SetCenter( const Point & pt )
 void StatusBar::SetCenter( s32 cx, s32 cy )
 {
     center.x = cx;
-    center.y = cy;
+    center.y = cy + 1;
 }
 
 void StatusBar::ShowMessage( const std::string & msg )
