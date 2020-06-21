@@ -39,11 +39,6 @@ bool ReflectSprite( int from );
 void PlayWalkSound( int ground );
 bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next );
 
-namespace
-{
-    const int heroFrameCount = 9;
-}
-
 void PlayWalkSound( int ground )
 {
     int wav = M82::UNKNOWN;
@@ -98,7 +93,7 @@ bool ReflectSprite( int from )
     return false;
 }
 
-Sprite SpriteHero( const Heroes & hero, int frameId, bool reflect, bool rotate )
+Sprite SpriteHero( const Heroes & hero, int index, bool reflect, bool rotate )
 {
     int icn_hero = ICN::UNKNOWN;
     int index_sprite = 0;
@@ -165,10 +160,10 @@ Sprite SpriteHero( const Heroes & hero, int frameId, bool reflect, bool rotate )
             break;
         }
 
-    return AGG::GetICN( icn_hero, index_sprite + frameId, reflect );
+    return AGG::GetICN( icn_hero, index_sprite + ( index % 9 ), reflect );
 }
 
-Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
+Sprite SpriteFlag( const Heroes & hero, int index, bool reflect, bool rotate )
 {
     int icn_flag = ICN::UNKNOWN;
     int index_sprite = 0;
@@ -232,7 +227,7 @@ Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
             break;
         }
 
-    Sprite flag = AGG::GetICN( icn_flag, index_sprite + frameId, reflect );
+    Sprite flag = AGG::GetICN( icn_flag, index_sprite + ( index % 9 ), reflect );
     if ( !hero.isEnableMove() ) {
         static const Point offsetTop[heroFrameCount]
             = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
@@ -392,10 +387,10 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     bool reflect = ReflectSprite( direction );
 
-    const int heroFrameID = sprite_index % heroFrameCount; // move on a horse or in the boat
+    const int heroFrameID = sprite_index; // move on a horse or in the boat
     int flagFrameID = heroFrameID;
     if ( !isEnableMove() ) {
-        flagFrameID = isShipMaster() ? 0 : ( Game::MapsAnimationFrame() % heroFrameCount );
+        flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
     }
 
     Sprite sprite1 = SpriteHero( *this, heroFrameID, reflect, false );
