@@ -1946,6 +1946,8 @@ namespace AI
             // 0.2 sec delay for show enemy hero position
             if ( !hero.isFreeman() && !hide_move )
                 DELAY( 200 );
+
+            hero.SetMove( false );
         }
     }
 }

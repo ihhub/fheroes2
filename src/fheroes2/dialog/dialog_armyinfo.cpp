@@ -42,6 +42,7 @@
 void DrawMonsterStats( const Point & dst, const Troop & troop );
 void DrawBattleStats( const Point &, const Troop & );
 void DrawMonsterInfo( const Point & dst, const Troop & troop );
+void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const Point & offset, bool isReflected, bool isAnimated );
 
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
@@ -74,10 +75,12 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     DrawMonsterInfo( pos_rt, troop );
 
+    const bool isAnimated = ( flags & BUTTONS ) != 0;
     RandomMonsterAnimation monsterAnimation( troop );
-    const Sprite & frame = AGG::GetICN( troop.ICNMonh(), 0, isReflected );
     const Point monsterOffset( pos_rt.x + pos_rt.w / 4, pos_rt.y + 180 );
-    frame.Blit( monsterOffset - Point( frame.w() / 2, frame.h() ) );
+    if ( !isAnimated )
+        monsterAnimation.reset();
+    DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated );
 
     // button upgrade
     Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
@@ -174,17 +177,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                     DrawBattleStats( battleStatOffset, troop );
 
                 DrawMonsterInfo( pos_rt, troop );
-
-                const Sprite & smonster = AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId(), isReflected );
-                Point monsterPos( monsterOffset.x, monsterOffset.y + smonster.y() );
-                if ( isReflected )
-                    monsterPos.x -= smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset() + smonster.w();
-                else
-                    monsterPos.x += smonster.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset();
-
-                smonster.Blit( monsterPos );
-
-                monsterAnimation.increment();
+                DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true );
 
                 if ( buttonUpgrade.isEnable() )
                     buttonUpgrade.Draw();
@@ -417,6 +410,21 @@ void DrawMonsterInfo( const Point & offset, const Troop & troop )
     pos.x = offset.x + 140 - text.w() / 2;
     pos.y = offset.y + 225;
     text.Blit( pos );
+}
+
+void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const Point & offset, bool isReflected, bool isAnimated )
+{
+    const Sprite & monsterSprite = AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId(), isReflected );
+    Point monsterPos( offset.x, offset.y + monsterSprite.y() );
+    if ( isReflected )
+        monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.w();
+    else
+        monsterPos.x += monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset();
+
+    monsterSprite.Blit( monsterPos );
+
+    if ( isAnimated )
+        monsterAnimation.increment();
 }
 
 int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )

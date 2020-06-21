@@ -35,6 +35,29 @@
 #include "statusbar.h"
 #include "world.h"
 
+namespace
+{
+    Point GetFlagOffset( int race )
+    {
+        switch ( race ) {
+        case Race::KNGT:
+            return Point( 36, 10 );
+        case Race::BARB:
+            return Point( 35, 9 );
+        case Race::SORC:
+            return Point( 36, 10 );
+        case Race::WRLK:
+            return Point( 34, 10 );
+        case Race::WZRD:
+            return Point( 35, 9 );
+        case Race::NECR:
+            return Point( 35, 10 );
+        default:
+            return Point();
+        }
+    }
+}
+
 struct buildstats_t
 {
     u32 id2;
@@ -370,7 +393,16 @@ bool BuildingInfo::IsDwelling( void ) const
 
 void BuildingInfo::RedrawCaptain( void )
 {
-    AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( bcond == ALREADY_BUILT ? 1 : 0 ) ).Blit( area.x, area.y );
+    if ( bcond == ALREADY_BUILT ) {
+        Sprite captainSprite = AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 1 );
+        captainSprite = Sprite( captainSprite.GetSurface(), captainSprite.x(), captainSprite.y() );
+        const Sprite & flag = AGG::GetICN( ICN::GetFlagIcnId( castle.GetColor() ), 0, false );
+        flag.Blit( GetFlagOffset( castle.GetRace() ), captainSprite );
+        captainSprite.Blit( area.x, area.y );
+    }
+    else {
+        AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 0 ).Blit( area.x, area.y );
+    }
 
     const Sprite & sprite_allow = AGG::GetICN( ICN::TOWNWIND, 11 );
     const Sprite & sprite_deny = AGG::GetICN( ICN::TOWNWIND, 12 );
@@ -400,7 +432,12 @@ void BuildingInfo::Redraw( void )
         int index = GetIndexBuildingSprite( building );
 
         if ( BUILD_DISABLE == bcond ) {
-            AGG::GetICN( ICN::BLDGXTRA, 0 ).RenderGrayScale().Blit( area.x, area.y, Display::Get() );
+            const Sprite infoSprite = AGG::GetICN( ICN::BLDGXTRA, 0 );
+            infoSprite.Blit( area.x, area.y, Display::Get() );
+
+            const Point offset( 6, 59 );
+            const Surface grayed = infoSprite.GetSurface( Rect( offset.x, offset.y, 125, 12 ) );
+            grayed.RenderGrayScale().Blit( area.x + offset.x, area.y + offset.y, Display::Get() );
         }
         else {
             AGG::GetICN( ICN::BLDGXTRA, 0 ).Blit( area.x, area.y );

@@ -2132,6 +2132,26 @@ int ICN::Get4Castle( int race )
     return UNKNOWN;
 }
 
+int ICN::GetFlagIcnId( int color )
+{
+    switch ( color ) {
+    case Color::BLUE:
+        return ICN::HEROFL00;
+    case Color::GREEN:
+        return ICN::HEROFL01;
+    case Color::RED:
+        return ICN::HEROFL02;
+    case Color::YELLOW:
+        return ICN::HEROFL03;
+    case Color::ORANGE:
+        return ICN::HEROFL04;
+    case Color::PURPLE:
+        return ICN::HEROFL05;
+    default:
+        return ICN::HEROFL06;
+    }
+}
+
 bool ICN::SkipLocalAlpha( int icn )
 {
     switch ( icn ) {

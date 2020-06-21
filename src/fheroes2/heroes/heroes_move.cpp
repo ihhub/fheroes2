@@ -35,6 +35,11 @@
 #include "settings.h"
 #include "world.h"
 
+namespace
+{
+    const int heroFrameCount = 9;
+}
+
 bool ReflectSprite( int from );
 void PlayWalkSound( int ground );
 bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next );
@@ -227,7 +232,54 @@ Sprite SpriteFlag( const Heroes & hero, int index, bool reflect, bool rotate )
             break;
         }
 
-    return AGG::GetICN( icn_flag, index_sprite + ( index % 9 ), reflect );
+    const int frameId = index % heroFrameCount;
+    Sprite flag = AGG::GetICN( icn_flag, index_sprite + frameId, reflect );
+    if ( !hero.isEnableMove() ) {
+        static const Point offsetTop[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
+        static const Point offsetBottom[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, -3 ), Point( 0, 0 ), Point( 0, -1 )};
+        static const Point offsetSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 ), Point( 1, -1 ), Point( 2, -1 ), Point( 1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
+        static const Point offsetTopSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( -1, -1 ), Point( -2, -1 ), Point( -2, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
+        static const Point offsetBottomSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, -1 ), Point( 2, -2 ), Point( 0, -2 ), Point( -1, -3 ), Point( -1, -2 ), Point( -1, -1 ), Point( 1, 0 )};
+
+        static const Point offsetShipTopBottom[heroFrameCount]
+            = {Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 )};
+        static const Point offsetShipSideways[heroFrameCount]
+            = {Point( 0, -2 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
+        static const Point offsetShipTopSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
+        static const Point offsetShipBottomSideways[heroFrameCount]
+            = {Point( 0, -2 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 )};
+
+        Point offset;
+        switch ( hero.GetDirection() ) {
+        case Direction::TOP:
+            offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
+            break;
+        case Direction::BOTTOM:
+            offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetBottom[frameId];
+            break;
+        case Direction::RIGHT:
+        case Direction::LEFT:
+            offset = hero.isShipMaster() ? offsetShipSideways[frameId] : offsetSideways[frameId];
+            break;
+        case Direction::TOP_RIGHT:
+        case Direction::TOP_LEFT:
+            offset = hero.isShipMaster() ? offsetShipTopSideways[frameId] : offsetTopSideways[frameId];
+            break;
+        case Direction::BOTTOM_RIGHT:
+        case Direction::BOTTOM_LEFT:
+            offset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
+            break;
+        }
+
+        flag.SetPos( flag.GetPos() + offset );
+    }
+    return flag;
 }
 
 Sprite SpriteShad( const Heroes & hero, int index )
@@ -341,8 +393,13 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     bool reflect = ReflectSprite( direction );
 
+    int flagFrameID = sprite_index;
+    if ( !isEnableMove() ) {
+        flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
+    }
+
     Sprite sprite1 = SpriteHero( *this, sprite_index, reflect, false );
-    Sprite sprite2 = SpriteFlag( *this, sprite_index, reflect, false );
+    Sprite sprite2 = SpriteFlag( *this, flagFrameID, reflect, false );
     Sprite sprite3 = SpriteShad( *this, sprite_index );
     Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
 

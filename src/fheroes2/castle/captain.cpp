@@ -28,6 +28,49 @@
 #include "race.h"
 #include "settings.h"
 
+namespace
+{
+    int GetPortraitIcnId( int race )
+    {
+        switch ( race ) {
+        case Race::KNGT:
+            return ICN::PORT0090;
+        case Race::BARB:
+            return ICN::PORT0091;
+        case Race::SORC:
+            return ICN::PORT0092;
+        case Race::WRLK:
+            return ICN::PORT0093;
+        case Race::WZRD:
+            return ICN::PORT0094;
+        case Race::NECR:
+            return ICN::PORT0095;
+        default:
+            return -1;
+        }
+    }
+
+    Point GetFlagOffset( int race )
+    {
+        switch ( race ) {
+        case Race::KNGT:
+            return Point( 43, 9 );
+        case Race::BARB:
+            return Point( 42, 8 );
+        case Race::SORC:
+            return Point( 43, 9 );
+        case Race::WRLK:
+            return Point( 41, 9 );
+        case Race::WZRD:
+            return Point( 42, 10 );
+        case Race::NECR:
+            return Point( 42, 9 );
+        default:
+            return Point();
+        }
+    }
+}
+
 Captain::Captain( Castle & cstl )
     : HeroBase( HeroBase::CAPTAIN, cstl.GetRace() )
     , home( cstl )
@@ -181,25 +224,16 @@ const Castle * Captain::inCastle( void ) const
 Surface Captain::GetPortrait( int type ) const
 {
     switch ( type ) {
-    case PORT_BIG:
-        switch ( GetRace() ) {
-        case Race::KNGT:
-            return AGG::GetICN( ICN::PORT0090, 0 );
-        case Race::BARB:
-            return AGG::GetICN( ICN::PORT0091, 0 );
-        case Race::SORC:
-            return AGG::GetICN( ICN::PORT0092, 0 );
-        case Race::WRLK:
-            return AGG::GetICN( ICN::PORT0093, 0 );
-        case Race::WZRD:
-            return AGG::GetICN( ICN::PORT0094, 0 );
-        case Race::NECR:
-            return AGG::GetICN( ICN::PORT0095, 0 );
-        default:
-            break;
-        }
-        break;
+    case PORT_BIG: {
+        const int portraitIcnId = GetPortraitIcnId( GetRace() );
+        if ( portraitIcnId < 0 )
+            return Surface();
 
+        Surface portait = AGG::GetICN( portraitIcnId, 0 ).GetSurface();
+        const Sprite & flag = AGG::GetICN( ICN::GetFlagIcnId( GetColor() ), 0, false );
+        flag.Blit( GetFlagOffset( GetRace() ), portait );
+        return portait;
+    }
     case PORT_MEDIUM:
     case PORT_SMALL:
         switch ( GetRace() ) {

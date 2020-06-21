@@ -1988,13 +1988,7 @@ void RandomMonsterAnimation::increment()
         _pushFrames( Monster_Info::STATIC );
     }
 
-    _frameId = _frameSet.front();
-    _frameSet.pop_front();
-
-    if ( !_offsetSet.empty() ) {
-        _frameOffset = _offsetSet.front();
-        _offsetSet.pop_front();
-    }
+    _updateFrameInfo();
 }
 
 int RandomMonsterAnimation::icnFile() const
@@ -2010,6 +2004,15 @@ int RandomMonsterAnimation::frameId() const
 int RandomMonsterAnimation::offset() const
 {
     return _frameOffset;
+}
+
+void RandomMonsterAnimation::reset()
+{
+    _frameSet.clear();
+    _offsetSet.clear();
+
+    _pushFrames( Monster_Info::STATIC );
+    _updateFrameInfo();
 }
 
 void RandomMonsterAnimation::_pushFrames( Monster_Info::ANIMATION_TYPE type )
@@ -2033,6 +2036,20 @@ void RandomMonsterAnimation::_addValidMove( Monster_Info::ANIMATION_TYPE type )
 {
     if ( !_reference.getAnimationVector( type ).empty() )
         _validMoves.push_back( type );
+}
+
+void RandomMonsterAnimation::_updateFrameInfo()
+{
+    if ( _frameSet.empty() )
+        return;
+
+    _frameId = _frameSet.front();
+    _frameSet.pop_front();
+
+    if ( !_offsetSet.empty() ) {
+        _frameOffset = _offsetSet.front();
+        _offsetSet.pop_front();
+    }
 }
 
 MonsterStaticData & MonsterStaticData::Get( void )

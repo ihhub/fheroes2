@@ -54,7 +54,10 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
         const uint32_t distance = path.Calculate( destinationIdx );
         DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << distance << ", route: " << path.String() );
         gameArea.SetRedraw();
-        Cursor::Get().SetThemes( GetCursorTileIndex( destinationIdx ) );
+
+        LocalEvent & le = LocalEvent::Get();
+        const int32_t cursorIndex = gameArea.GetIndexFromMousePoint( le.GetMouseCursor() );
+        Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
         Interface::Basic::Get().buttonsArea.Redraw();
     }
 }
