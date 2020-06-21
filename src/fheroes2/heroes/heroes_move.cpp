@@ -232,50 +232,50 @@ Sprite SpriteFlag( const Heroes & hero, int frameId, bool reflect, bool rotate )
             break;
         }
 
-    static const Point offsetTop[heroFrameCount]
-        = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
-    static const Point offsetBottom[heroFrameCount]
-        = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, -3 ), Point( 0, 0 ), Point( 0, -1 )};
-    static const Point offsetSideways[heroFrameCount]
-        = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 ), Point( 1, -1 ), Point( 2, -1 ), Point( 1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
-    static const Point offsetTopSideways[heroFrameCount]
-        = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( -1, -1 ), Point( -2, -1 ), Point( -2, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
-    static const Point offsetBottomSideways[heroFrameCount]
-        = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, -1 ), Point( 2, -2 ), Point( 0, -2 ), Point( -1, -3 ), Point( -1, -2 ), Point( -1, -1 ), Point( 1, 0 )};
-
-    static const Point offsetShipTopBottom[heroFrameCount]
-        = {Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 )};
-    static const Point offsetShipSideways[heroFrameCount]
-        = {Point( 0, -2 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
-    static const Point offsetShipTopSideways[heroFrameCount]
-        = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
-    static const Point offsetShipBottomSideways[heroFrameCount]
-        = {Point( 0, -2 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 )};
-
-    Point offset;
-    switch ( hero.GetDirection() ) {
-    case Direction::TOP:
-        offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
-        break;
-    case Direction::BOTTOM:
-        offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetBottom[frameId];
-        break;
-    case Direction::RIGHT:
-    case Direction::LEFT:
-        offset = hero.isShipMaster() ? offsetShipSideways[frameId] : offsetSideways[frameId];
-        break;
-    case Direction::TOP_RIGHT:
-    case Direction::TOP_LEFT:
-        offset = hero.isShipMaster() ? offsetShipTopSideways[frameId] : offsetTopSideways[frameId];
-        break;
-    case Direction::BOTTOM_RIGHT:
-    case Direction::BOTTOM_LEFT:
-        offset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
-        break;
-    }
-
     Sprite flag = AGG::GetICN( icn_flag, index_sprite + frameId, reflect );
     if ( !hero.isEnableMove() ) {
+        static const Point offsetTop[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
+        static const Point offsetBottom[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, -3 ), Point( 0, 0 ), Point( 0, -1 )};
+        static const Point offsetSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 ), Point( 1, -1 ), Point( 2, -1 ), Point( 1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
+        static const Point offsetTopSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( -1, -1 ), Point( -2, -1 ), Point( -2, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
+        static const Point offsetBottomSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, -1 ), Point( 2, -2 ), Point( 0, -2 ), Point( -1, -3 ), Point( -1, -2 ), Point( -1, -1 ), Point( 1, 0 )};
+
+        static const Point offsetShipTopBottom[heroFrameCount]
+            = {Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 )};
+        static const Point offsetShipSideways[heroFrameCount]
+            = {Point( 0, -2 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
+        static const Point offsetShipTopSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
+        static const Point offsetShipBottomSideways[heroFrameCount]
+            = {Point( 0, -2 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 )};
+
+        Point offset;
+        switch ( hero.GetDirection() ) {
+        case Direction::TOP:
+            offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
+            break;
+        case Direction::BOTTOM:
+            offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetBottom[frameId];
+            break;
+        case Direction::RIGHT:
+        case Direction::LEFT:
+            offset = hero.isShipMaster() ? offsetShipSideways[frameId] : offsetSideways[frameId];
+            break;
+        case Direction::TOP_RIGHT:
+        case Direction::TOP_LEFT:
+            offset = hero.isShipMaster() ? offsetShipTopSideways[frameId] : offsetTopSideways[frameId];
+            break;
+        case Direction::BOTTOM_RIGHT:
+        case Direction::BOTTOM_LEFT:
+            offset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
+            break;
+        }
+
         flag.SetPos( flag.GetPos() + offset );
     }
     return flag;
