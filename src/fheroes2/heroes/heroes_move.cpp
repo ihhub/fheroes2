@@ -387,13 +387,12 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     bool reflect = ReflectSprite( direction );
 
-    const int heroFrameID = sprite_index; // move on a horse or in the boat
-    int flagFrameID = heroFrameID;
+    int flagFrameID = sprite_index;
     if ( !isEnableMove() ) {
         flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
     }
 
-    Sprite sprite1 = SpriteHero( *this, heroFrameID, reflect, false );
+    Sprite sprite1 = SpriteHero( *this, sprite_index, reflect, false );
     Sprite sprite2 = SpriteFlag( *this, flagFrameID, reflect, false );
     Sprite sprite3 = SpriteShad( *this, sprite_index );
     Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
