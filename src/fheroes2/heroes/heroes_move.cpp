@@ -35,6 +35,11 @@
 #include "settings.h"
 #include "world.h"
 
+namespace
+{
+    const int heroFrameCount = 9;
+}
+
 bool ReflectSprite( int from );
 void PlayWalkSound( int ground );
 bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next );
