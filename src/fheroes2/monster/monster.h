@@ -256,6 +256,8 @@ public:
     int frameId() const;
     int offset() const;
 
+    void reset(); // reset to static animation
+
 private:
     AnimationReference _reference;
     int _icnID;
@@ -268,6 +270,7 @@ private:
 
     void _pushFrames( Monster_Info::ANIMATION_TYPE type );
     void _addValidMove( Monster_Info::ANIMATION_TYPE type );
+    void _updateFrameInfo();
 };
 
 struct MonsterStaticData
