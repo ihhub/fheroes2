@@ -232,7 +232,8 @@ Sprite SpriteFlag( const Heroes & hero, int index, bool reflect, bool rotate )
             break;
         }
 
-    Sprite flag = AGG::GetICN( icn_flag, index_sprite + ( index % 9 ), reflect );
+    const int frameId = index % 9;
+    Sprite flag = AGG::GetICN( icn_flag, index_sprite + frameId, reflect );
     if ( !hero.isEnableMove() ) {
         static const Point offsetTop[heroFrameCount]
             = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
