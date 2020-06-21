@@ -400,7 +400,12 @@ void BuildingInfo::Redraw( void )
         int index = GetIndexBuildingSprite( building );
 
         if ( BUILD_DISABLE == bcond ) {
-            AGG::GetICN( ICN::BLDGXTRA, 0 ).RenderGrayScale().Blit( area.x, area.y, Display::Get() );
+            const Sprite infoSprite = AGG::GetICN( ICN::BLDGXTRA, 0 );
+            infoSprite.Blit( area.x, area.y, Display::Get() );
+
+            const Point offset( 6, 59 );
+            const Surface grayed = infoSprite.GetSurface( Rect( offset.x, offset.y, 125, 12 ) );
+            grayed.RenderGrayScale().Blit( area.x + offset.x, area.y + offset.y, Display::Get() );
         }
         else {
             AGG::GetICN( ICN::BLDGXTRA, 0 ).Blit( area.x, area.y );
