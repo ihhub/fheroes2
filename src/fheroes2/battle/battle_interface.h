@@ -222,7 +222,7 @@ namespace Battle
         void RedrawTroopCount( const Unit & ) const;
         void RedrawPocketControls( void ) const;
 
-        void RedrawActionWincesKills( TargetsInfo & );
+        void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = NULL );
         void RedrawActionArrowSpell( const Unit & );
         void RedrawActionColdRaySpell( Unit & );
         void RedrawActionDisruptingRaySpell( Unit & );
