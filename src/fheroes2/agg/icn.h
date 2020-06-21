@@ -934,6 +934,8 @@ namespace ICN
     int Get4Captain( int race );
     int Get4Building( int race );
     int Get4Castle( int race );
+
+    int GetFlagIcnId( int color );
 }
 
 #endif
