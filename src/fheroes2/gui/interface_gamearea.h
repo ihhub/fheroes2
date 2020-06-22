@@ -23,7 +23,10 @@
 #ifndef H2INTERFACE_GAMEAREA_H
 #define H2INTERFACE_GAMEAREA_H
 
+#include <set>
+
 #include "gamedefs.h"
+#include "sprite.h"
 
 class Sprite;
 
@@ -45,6 +48,17 @@ enum level_t
     LEVEL_FOG = 0x20,
 
     LEVEL_ALL = 0xFF
+};
+
+struct MapObjectSprite
+{
+    uint8_t object;
+    uint8_t index;
+    Sprite sprite;
+    MapObjectSprite();
+    MapObjectSprite(uint8_t obj, uint8_t idx, const Sprite & spr);
+    uint32_t toID() const;
+    bool operator<(const MapObjectSprite & rhs) const;
 };
 
 namespace Interface
@@ -87,6 +101,8 @@ namespace Interface
         Rect RectFixed( Point & dst, int rw, int rh ) const;
 
         static Surface GenerateUltimateArtifactAreaSurface( s32 );
+
+        std::set<MapObjectSprite> spriteCache;
 
     private:
         void SetAreaPosition( s32, s32, u32, u32 );

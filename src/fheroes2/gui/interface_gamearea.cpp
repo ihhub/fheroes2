@@ -20,14 +20,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "interface_gamearea.h"
+#include <set>
+
 #include "agg.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
+#include "interface_gamearea.h"
 #include "maps.h"
 #include "route.h"
 #include "settings.h"
+#include "sprite.h"
 #include "world.h"
 
 #define SCROLL_MAX TILEWIDTH
@@ -38,6 +41,27 @@ namespace Game
     int GetCursor( s32 );
     void MouseCursorAreaClickLeft( s32 );
     void MouseCursorAreaPressRight( s32 );
+}
+
+MapObjectSprite::MapObjectSprite()
+    : object( 0 )
+    , index( 0 )
+{}
+
+MapObjectSprite::MapObjectSprite( uint8_t obj, uint8_t idx, const Sprite & spr )
+    : object( obj )
+    , index( idx )
+    , sprite( spr )
+{}
+
+uint32_t MapObjectSprite::toID() const
+{
+    return ( static_cast<uint32_t>( object ) << 8 ) + index;
+}
+
+bool MapObjectSprite::operator<( const MapObjectSprite & rhs ) const
+{
+    return toID() < rhs.toID();
 }
 
 Interface::GameArea::GameArea( Basic & basic )
@@ -146,6 +170,7 @@ void Interface::GameArea::UpdateCyclingPalette( int frame )
 {
     _customPalette = PAL::GetCyclingPalette( frame );
     PAL::SetCustomSDLPalette( _customPalette );
+    spriteCache.clear();
 }
 
 const std::vector<uint8_t> & Interface::GameArea::GetCyclingPalette() const
