@@ -2815,7 +2815,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> ta.tmp;
-    // Fix invalid objects set in old fheroes2 saves, remove this in 0.9
+    // FIXME: Fix invalid objects set in old fheroes2 saves, remove this in 0.9
     switch ( ta.object ) {
     case 0x11:
         ta.object = 0xA4;
