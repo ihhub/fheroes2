@@ -1283,7 +1283,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
         // contour
         if ( spmon2.isValid() )
-            spmon2.Blit( sp.x - 1, sp.y - 1 );
+            spmon2.Blit( sp.x, sp.y );
     }
 }
 
