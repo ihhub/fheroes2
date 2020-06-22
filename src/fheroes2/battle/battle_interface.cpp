@@ -1286,7 +1286,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
 
         // contour
         if ( spmon2.isValid() )
-            spmon2.Blit( sp.x - 1, sp.y - 1, _mainSurface );
+            spmon2.Blit( sp.x, sp.y, _mainSurface );
     }
 }
 
@@ -2410,6 +2410,9 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
 
 void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 {
+    if ( unit.isFinishAnimFrame() ) // nothing to animate
+        return;
+
     LocalEvent & le = LocalEvent::Get();
     const uint32_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
@@ -2427,6 +2430,9 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 
 void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 {
+    if ( unit.isFinishAnimFrame() ) // nothing to animate
+        return;
+
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents( false ) ) {
@@ -2587,15 +2593,16 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
 void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & targets )
 {
-    // targets damage animation
-    RedrawActionWincesKills( targets );
-
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
     if ( attackStart >= Monster_Info::MELEE_TOP && attackStart <= Monster_Info::RANG_BOT ) {
-        if ( attacker.SwitchAnimation( ++attackStart ) )
-            RedrawTroopDefaultDelay( attacker );
+        attacker.SwitchAnimation( ++attackStart );
     }
+
+    // targets damage animation
+    RedrawActionWincesKills( targets, &attacker );
+    RedrawTroopDefaultDelay( attacker );
+
     attacker.SwitchAnimation( Monster_Info::STATIC );
 
     // draw status for first defender
@@ -2653,7 +2660,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     _movingUnit = NULL;
 }
 
-void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
+void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker )
 {
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -2699,6 +2706,15 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            if ( attacker != NULL ) {
+                if ( attacker->isFinishAnimFrame() ) {
+                    attacker->SwitchAnimation( Monster_Info::STATIC );
+                }
+                else {
+                    attacker->IncreaseAnimFrame();
+                }
+            }
+
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender ) {
                     TargetInfo & target = *it;
@@ -2860,6 +2876,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target )
 {
+    AGG::PlaySound( M82::RSBRYFZL );
     std::string str( _( "The %{name} resist the spell!" ) );
     StringReplace( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );

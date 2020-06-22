@@ -143,7 +143,7 @@ public:
 
 private:
     Cursor();
-    void SetOffset( int );
+    void SetOffset( int name, const Point & defaultOffset );
     void Move( s32, s32 );
 
     int theme;

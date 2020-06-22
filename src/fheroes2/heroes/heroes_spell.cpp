@@ -370,9 +370,9 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
-        I.SetFocus( &hero );
-
         hero.ActionNewPosition();
+
+        I.SetFocus( &hero );
 
         return false; /* SpellCasted apply */
     }

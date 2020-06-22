@@ -158,7 +158,7 @@ int Skill::Primary::LevelUp( int race, int level )
 
 const char * Skill::Primary::String( int skill )
 {
-    const char * str_skill[] = {_( "Attack" ), _( "Defense" ), _( "Spell Power" ), _( "Knowledge" ), "Unknown"};
+    const char * str_skill[] = {_( "Attack Skill" ), _( "Defense Skill" ), _( "Spell Power" ), _( "Knowledge" ), "Unknown"};
 
     switch ( skill ) {
     case ATTACK:

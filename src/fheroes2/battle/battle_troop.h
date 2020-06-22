@@ -214,7 +214,7 @@ namespace Battle
         // These variables are mutable due to population of them of the fly as we don't want to calculate everything
         mutable std::map<int, Surface> contoursMain;
         mutable std::map<int, Surface> contoursReflect;
-        const Surface & getContour( const int frameId, std::map<int, Surface> & contours, const bool isReflected, const bool isBlackWhite ) const;
+        const Surface & getContour( int frameId, std::map<int, Surface> & contours, bool isReflected ) const;
 
         bool blindanswer;
     };
