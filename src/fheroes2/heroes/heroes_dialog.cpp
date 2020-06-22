@@ -179,7 +179,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     bar.Blit( dst_pt );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 11 );
+    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // button prev
     dst_pt.x = cur_pt.x + 1;

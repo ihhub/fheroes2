@@ -387,7 +387,7 @@ u32 Castle::OpenTown( void )
     bar.Blit( dst_pt );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 11 );
+    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // redraw resource panel
     RedrawResourcePanel( cur_pt );

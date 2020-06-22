@@ -287,7 +287,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
     StatusBar statusBar;
     statusBar.SetFont( Font::BIG );
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 11 );
+    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // button next castle
     dst_pt.x += bar.w();
