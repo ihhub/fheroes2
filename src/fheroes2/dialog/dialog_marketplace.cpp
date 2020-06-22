@@ -214,15 +214,14 @@ void Dialog::Marketplace( bool fromTradingPost )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBox box( 260, true );
+    Dialog::FrameBox box( 297, true );
 
     const Rect & pos_rt = box.GetArea();
     Point dst_pt( pos_rt.x, pos_rt.y );
-    // Rect dst_rt(pos_rt);
-    Text text;
 
     // header
-    text.Set( header, Font::BIG );
+    Text text;
+    text.Set( header, Font::YELLOW_BIG );
     dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2;
     dst_pt.y = pos_rt.y;
     text.Blit( dst_pt );
