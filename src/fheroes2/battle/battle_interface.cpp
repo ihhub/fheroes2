@@ -4129,20 +4129,22 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
         }
 }
 
-Point RedrawTroopWithFrameAnimationOffset( int icn, const Rect & pos, const Sprite & sp, bool wide, bool reflect, bool qvga )
+Point CalculateSpellPosition( int spellICN, const Battle::Unit & target, const Sprite & spellSprite )
 {
-    Point res( sp.x() + pos.x, pos.y + sp.y() );
+    const Rect & pos = target.GetRectPosition();
+    Point res( pos.x + spellSprite.x(), pos.y + spellSprite.y() );
 
-    switch ( icn ) {
+    switch ( spellICN ) {
     case ICN::SHIELD:
-        res.x += reflect ? -pos.w / ( wide ? 2 : 1 ) : pos.w / 2;
+        res.x += target.isReflect() ? -pos.w / ( target.isWide() ? 2 : 1 ) : pos.w;
         break;
-    case ICN::STONSKIN:
-    case ICN::STELSKIN:
-        res.y += pos.h / 2;
-        break;
+    case ICN::BLIND: {
+        const Point & offset = target.animation.getBlindOffset();
+        res.x += target.isReflect() ? -offset.x : offset.x;
+        res.y += offset.y - spellSprite.y();
+    } break;
     default:
-        res.y += ( qvga ? pos.h / 2 : 0 );
+        res.y += pos.h / 2;
         break;
     }
 
@@ -4178,22 +4180,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender ) {
-                    const Rect & pos = ( *it ).defender->GetRectPosition();
-                    bool reflect = false;
-
-                    switch ( icn ) {
-                    case ICN::SHIELD:
-                        reflect = ( *it ).defender->isReflect();
-                        break;
-                    default:
-                        break;
-                    }
-
+                    const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
                     const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
-                    const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, ( *it ).defender->isWide(), reflect, Settings::Get().QVGA() );
-                    const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
-
-                    sprite.Blit( sprite_pos );
+                    sprite.Blit( CalculateSpellPosition( icn, *it->defender, sprite ) );
                 }
             cursor.Show();
             display.Flip();
@@ -4225,19 +4214,10 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    const Rect & pos = b.GetRectPosition();
     const Rect & rectArea = border.GetArea();
 
     u32 frame = 0;
-    bool reflect = false;
-
-    switch ( icn ) {
-    case ICN::SHIELD:
-        reflect = b.isReflect();
-        break;
-    default:
-        break;
-    }
+    const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );
 
     cursor.SetThemes( Cursor::WAR_NONE );
 
@@ -4261,13 +4241,12 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
             Redraw();
 
             const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
-            const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, b.isWide(), reflect, Settings::Get().QVGA() );
-            const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
+            Point targetPosition = CalculateSpellPosition( icn, b, sprite );
 
             if ( icn == ICN::SPARKS )
-                RedrawSparksEffects( Point( rectArea.x + rectArea.w / 2, rectArea.y ), sprite_pos );
+                RedrawSparksEffects( Point( rectArea.x + rectArea.w / 2, rectArea.y ), targetPosition );
 
-            sprite.Blit( sprite_pos );
+            sprite.Blit( targetPosition );
             cursor.Show();
             display.Flip();
 
