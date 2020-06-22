@@ -488,13 +488,13 @@ bool Maps::TilesAddon::hasColorCycling( const TilesAddon & addon )
             return true;
         break;
     case ICN::OBJNDSRT:
-        // oasis
-        if ( addon.index == 108 || addon.index == 109 )
+        // pyramid and oasis
+        if ( ( addon.index > 77 && addon.index < 83 ) || addon.index == 108 || addon.index == 109 )
             return true;
         break;
     case ICN::OBJNMUL2:
         // stream delta, fountain and teleporters
-        if ( addon.index == 116 || addon.index == 119 || addon.index == 122 || addon.index < 16 )
+        if ( addon.index == 116 || addon.index == 119 || addon.index == 120 || addon.index == 122 || addon.index < 16 )
             return true;
         break;
     case ICN::OBJNRSRC:
@@ -1738,7 +1738,10 @@ void Maps::Tiles::RedrawTop( Surface & dst, const TilesAddon * skip ) const
             const int icn = MP2::GetICNObject( object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                const Sprite & sprite = AGG::GetICN( icn, index );
+                Sprite sprite = AGG::GetICN( icn, index );
+                if ( TilesAddon::hasColorCycling( *it ) ) {
+                    AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
+                }
                 area.BlitOnTile( dst, sprite, mp );
 
                 // possible anime
