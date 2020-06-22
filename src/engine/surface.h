@@ -174,6 +174,8 @@ public:
 
     bool SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect );
 
+    bool GenerateContour( const std::vector<uint8_t> & indexes, uint32_t value, bool reflect );
+
     static Surface Blend( const Surface & first, const Surface & second, uint8_t ratio );
 
     // This is only for 8-bit images like TIL

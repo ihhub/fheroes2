@@ -1621,6 +1621,57 @@ bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector
     return true;
 }
 
+bool Surface::GenerateContour( const std::vector<uint8_t> & indexes, uint32_t value, bool reflect )
+{
+    if ( depth() != 32 )
+        return false;
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width || pitch * height != indexes.size() ) {
+        Unlock();
+        return false;
+    }
+
+    uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+    const uint8_t * inY = indexes.data();
+
+    if ( reflect ) {
+        for ( int y = 0; y < height; ++y, inY += pitch, out += pitch ) {
+            const uint8_t * inX = inY;
+            for ( int x = 0; x < width; ++x, ++inX ) {
+                if ( *inX == 0 ) {
+                    if ( ( x > 0 && *( inX - 1 ) > 0 ) || ( x < width - 1 && *( inX + 1 ) > 0 ) || ( y > 0 && *( inX - pitch ) > 0 )
+                         || ( y < height - 1 && *( inX + pitch ) > 0 ) ) {
+                        out[width - 1 - x] = value;
+                    }
+                }
+            }
+        }
+    }
+    else {
+        for ( int y = 0; y < height; ++y, inY += pitch, out += pitch ) {
+            const uint8_t * inX = inY;
+            for ( int x = 0; x < width; ++x, ++inX ) {
+                if ( *inX == 0 ) {
+                    if ( ( x > 0 && *( inX - 1 ) > 0 ) || ( x < width - 1 && *( inX + 1 ) > 0 ) || ( y > 0 && *( inX - pitch ) > 0 )
+                         || ( y < height - 1 && *( inX + pitch ) > 0 ) ) {
+                        out[x] = value;
+                    }
+                }
+            }
+        }
+    }
+
+    Unlock();
+
+    return true;
+}
+
 Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t ratio )
 {
     if ( !first.isValid() || !second.isValid() || first.w() != second.w() || first.h() != second.h() || first.amask() != second.amask() || ratio > 100
