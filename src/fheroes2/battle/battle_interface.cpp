@@ -1884,6 +1884,8 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     std::string msg;
     animation_flags_frame = 0;
 
+    ResetIdleTroopAnimation();
+
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
         const s32 index_new = board.GetIndexAbsPosition( le.GetMouseCursor() );
@@ -4342,6 +4344,12 @@ bool Battle::Interface::IdleTroopsAnimation( void )
     }
 
     return false;
+}
+
+void Battle::Interface::ResetIdleTroopAnimation( void )
+{
+    arena.GetForce1().resetIdleAnimation();
+    arena.GetForce2().resetIdleAnimation();
 }
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )

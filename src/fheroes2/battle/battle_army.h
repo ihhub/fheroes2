@@ -73,6 +73,7 @@ namespace Battle
         u32 GetSurrenderCost( void ) const;
         Troops GetKilledTroops( void ) const;
         bool animateIdleUnits();
+        void resetIdleAnimation();
 
         void NewTurn( void );
         void SyncArmyCount( void );
