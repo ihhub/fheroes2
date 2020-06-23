@@ -584,19 +584,8 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     case ICN::BTNCONFIG:
         count = 2;
         break;
-    case ICN::FOUNTAIN:
-        count = 2;
-        break;
-    case ICN::TREASURE:
-        count = 2;
-        break;
     case ICN::CSLMARKER:
         count = 3;
-        break;
-    case ICN::TELEPORT1:
-    case ICN::TELEPORT2:
-    case ICN::TELEPORT3:
-        count = 8;
         break;
     case ICN::FONT:
     case ICN::SMALFONT:
@@ -761,46 +750,8 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     // change color
     for ( u32 ii = 0; ii < count; ++ii ) {
         Sprite & sprite = reflect ? v.reflect[ii] : v.sprites[ii];
-        std::map<RGBA, RGBA> colorPairs;
 
         switch ( icn ) {
-        case ICN::TELEPORT1:
-            LoadOrgICN( sprite, ICN::OBJNMUL2, 116, false );
-            sprite.ChangeColorIndex( 0xEE, 0xEE + ii / 2 );
-            break;
-
-        case ICN::TELEPORT2:
-            LoadOrgICN( sprite, ICN::OBJNMUL2, 119, false );
-            sprite.ChangeColorIndex( 0xEE, 0xEE + ii );
-            break;
-
-        case ICN::TELEPORT3:
-            LoadOrgICN( sprite, ICN::OBJNMUL2, 122, false );
-            sprite.ChangeColorIndex( 0xEE, 0xEE + ii );
-            break;
-
-        case ICN::FOUNTAIN:
-            LoadOrgICN( sprite, ICN::OBJNMUL2, 15, false );
-            colorPairs[PAL::GetPaletteColor( 0xE8 )] = PAL::GetPaletteColor( 0xE8 - ii );
-            colorPairs[PAL::GetPaletteColor( 0xE9 )] = PAL::GetPaletteColor( 0xE9 - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEA )] = PAL::GetPaletteColor( 0xEA - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEB )] = PAL::GetPaletteColor( 0xEB - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEC )] = PAL::GetPaletteColor( 0xEC - ii );
-            colorPairs[PAL::GetPaletteColor( 0xED )] = PAL::GetPaletteColor( 0xED - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEE )] = PAL::GetPaletteColor( 0xEE - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEF )] = PAL::GetPaletteColor( 0xEF - ii );
-            sprite.ChangeColor( colorPairs );
-            break;
-
-        case ICN::TREASURE:
-            LoadOrgICN( sprite, ICN::OBJNRSRC, 19, false );
-            colorPairs[PAL::GetPaletteColor( 0x0A )] = PAL::GetPaletteColor( ii ? 0x00 : 0x0A );
-            colorPairs[PAL::GetPaletteColor( 0xC2 )] = PAL::GetPaletteColor( ii ? 0xD6 : 0xC2 );
-            colorPairs[PAL::GetPaletteColor( 0x64 )] = PAL::GetPaletteColor( ii ? 0xDA : 0x64 );
-            sprite.ChangeColor( colorPairs );
-
-            break;
-
         case ICN::ROUTERED:
             LoadOrgICN( sprite, ICN::ROUTE, ii, false );
             ReplaceColors( sprite, PAL::GetPalette( PAL::RED ), ICN::ROUTE, ii, false );

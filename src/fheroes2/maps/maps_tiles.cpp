@@ -320,13 +320,6 @@ int Maps::TilesAddon::GetPassable( const Maps::TilesAddon & ta )
     case ICN::X_LOC3:
         return ObjXlc3::GetPassable( ta.index );
 
-    // MANUAL.ICN
-    case ICN::TELEPORT1:
-    case ICN::TELEPORT2:
-    case ICN::TELEPORT3:
-    case ICN::FOUNTAIN:
-        return 0;
-
     default:
         break;
     }
@@ -398,14 +391,6 @@ int Maps::TilesAddon::GetActionObject( const Maps::TilesAddon & ta )
     case ICN::X_LOC3:
         return ObjXlc3::GetActionObject( ta.index );
 
-    // MANUAL.ICN
-    case ICN::TELEPORT1:
-    case ICN::TELEPORT2:
-    case ICN::TELEPORT3:
-        return MP2::OBJ_STONELIGHTS;
-    case ICN::FOUNTAIN:
-        return MP2::OBJ_FOUNTAIN;
-
     default:
         break;
     }
@@ -469,6 +454,66 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     return false;
 }
 
+bool Maps::TilesAddon::hasColorCycling( const TilesAddon & addon )
+{
+    switch ( MP2::GetICNObject( addon.object ) ) {
+    case ICN::OBJNDIRT:
+        // lakes and dirt oracle
+        if ( ( addon.index > 23 && addon.index < 59 ) || addon.index == 197 || addon.index == 198 )
+            return true;
+        break;
+    case ICN::OBJNGRAS:
+        // lake
+        if ( addon.index > 54 && addon.index < 76 )
+            return true;
+        break;
+    case ICN::OBJNGRA2:
+        // oracle
+        if ( addon.index == 125 || addon.index == 126 )
+            return true;
+        break;
+    case ICN::OBJNSWMP:
+        // swamp water
+        if ( addon.index > 86 && addon.index < 168 )
+            return true;
+        break;
+    case ICN::OBJNCRCK:
+        // wasteland lakes
+        if ( ( addon.index > 216 && addon.index < 221 ) || addon.index == 3 || addon.index == 4 )
+            return true;
+        break;
+    case ICN::OBJNLAVA:
+        // volcano, lava lakes
+        if ( addon.index > 17 && addon.index < 78 )
+            return true;
+        break;
+    case ICN::OBJNDSRT:
+        // pyramid and oasis
+        if ( ( addon.index > 77 && addon.index < 83 ) || addon.index == 108 || addon.index == 109 )
+            return true;
+        break;
+    case ICN::OBJNMUL2:
+        // stream delta, fountain and teleporters
+        if ( addon.index == 116 || addon.index == 119 || addon.index == 120 || addon.index == 122 || addon.index < 16 )
+            return true;
+        break;
+    case ICN::OBJNRSRC:
+        // treasure chest
+        if ( addon.index == 19 )
+            return true;
+        break;
+    case ICN::OBJNWATR: // Water objects
+    case ICN::OBJNWAT2: // Water objects
+    case ICN::X_LOC1: // Price of Royalty objects
+    case ICN::X_LOC2: // Price of Royalty water objects
+    case ICN::STREAM: // Rivers
+        return true;
+    default:
+        break;
+    }
+    return false;
+}
+
 bool Maps::TilesAddon::isStream( const TilesAddon & ta )
 {
     return ICN::STREAM == MP2::GetICNObject( ta.object ) || ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && ( ta.index < 14 ) );
@@ -502,9 +547,7 @@ bool Maps::TilesAddon::isStandingStone( const TilesAddon & ta )
 bool Maps::TilesAddon::isResource( const TilesAddon & ta )
 {
     // OBJNRSRC
-    return ( ( ICN::OBJNRSRC == MP2::GetICNObject( ta.object ) && ( ta.index % 2 ) ) ||
-             // TREASURE
-             ( ICN::TREASURE == MP2::GetICNObject( ta.object ) ) );
+    return ICN::OBJNRSRC == MP2::GetICNObject( ta.object ) && ( ta.index % 2 );
 }
 
 bool Maps::TilesAddon::isRandomResource( const TilesAddon & ta )
@@ -960,44 +1003,6 @@ void Maps::TilesAddon::UpdateAbandoneMineRightSprite( TilesAddon & ta )
         ta.object = 128;
         ta.index = 83;
     }
-}
-
-void Maps::TilesAddon::UpdateFountainSprite( TilesAddon & ta )
-{
-    if ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && 15 == ta.index ) {
-        ta.object = 0x14;
-        ta.index = 0;
-    }
-}
-
-void Maps::TilesAddon::UpdateTreasureChestSprite( TilesAddon & ta )
-{
-    if ( ICN::OBJNRSRC == MP2::GetICNObject( ta.object ) && 19 == ta.index ) {
-        ta.object = 0x15;
-        ta.index = 0;
-    }
-}
-
-int Maps::TilesAddon::UpdateStoneLightsSprite( TilesAddon & ta )
-{
-    if ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) )
-        switch ( ta.index ) {
-        case 116:
-            ta.object = 0x11;
-            ta.index = 0;
-            return 1;
-        case 119:
-            ta.object = 0x12;
-            ta.index = 0;
-            return 2;
-        case 122:
-            ta.object = 0x13;
-            ta.index = 0;
-            return 3;
-        default:
-            break;
-        }
-    return 0;
 }
 
 std::pair<int, int> Maps::TilesAddon::ColorRaceFromHeroSprite( const TilesAddon & ta )
@@ -1496,15 +1501,15 @@ void Maps::Tiles::RedrawEmptyTile( Surface & dst, const Point & mp )
     }
 }
 
-void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
+void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( area.GetRectMaps() & mp ) && !addons_level1.empty() ) {
-        for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+    if ( ( area.GetRectMaps() & mp ) && !addon.empty() ) {
+        for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             // skip
-            if ( skip_objs && MP2::isRemoveObject( GetObject() ) && FindObjectConst( GetObject() ) == &( *it ) )
+            if ( skipObjs && MP2::isRemoveObject( GetObject() ) && FindObjectConst( GetObject() ) == &( *it ) )
                 continue;
 
             const u8 & object = ( *it ).object;
@@ -1512,7 +1517,23 @@ void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
             const int icn = MP2::GetICNObject( object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                const Sprite & sprite = AGG::GetICN( icn, index );
+                Sprite sprite;
+                if ( TilesAddon::hasColorCycling( *it ) ) {
+                    MapObjectSprite & spriteCache = area.GetSpriteCache();
+                    const std::pair<uint8_t, uint8_t> tileIndex( object, index );
+                    MapObjectSprite::iterator cachedSprite = spriteCache.find( tileIndex );
+                    if ( cachedSprite != spriteCache.end() ) {
+                        sprite = cachedSprite->second;
+                    }
+                    else {
+                        sprite = AGG::GetICN( icn, index );
+                        AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
+                        spriteCache[tileIndex] = sprite;
+                    }
+                }
+                else {
+                    sprite = AGG::GetICN( icn, index );
+                }
                 area.BlitOnTile( dst, sprite, mp );
 
                 // possible anime
@@ -1523,6 +1544,11 @@ void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
             }
         }
     }
+}
+
+void Maps::Tiles::RedrawBottom( Surface & dst, bool skipObjs ) const
+{
+    RedrawAddon( dst, addons_level1, skipObjs );
 }
 
 void Maps::Tiles::RedrawPassable( Surface & dst ) const
@@ -1696,7 +1722,7 @@ void Maps::Tiles::RedrawBottom4Hero( Surface & dst ) const
     }
 }
 
-void Maps::Tiles::RedrawTop( Surface & dst, const TilesAddon * skip ) const
+void Maps::Tiles::RedrawTop( Surface & dst, bool skipObjs ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1720,27 +1746,7 @@ void Maps::Tiles::RedrawTop( Surface & dst, const TilesAddon * skip ) const
         }
     }
 
-    if ( !addons_level2.empty() ) {
-        for ( Addons::const_iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
-            if ( skip && skip == &( *it ) )
-                continue;
-
-            const u8 & object = ( *it ).object;
-            const u8 & index = ( *it ).index;
-            const int icn = MP2::GetICNObject( object );
-
-            if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                const Sprite & sprite = AGG::GetICN( icn, index );
-                area.BlitOnTile( dst, sprite, mp );
-
-                // possible anime
-                if ( u32 anime_index = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame() ) ) {
-                    const Sprite & anime_sprite = AGG::GetICN( icn, anime_index );
-                    area.BlitOnTile( dst, anime_sprite, mp );
-                }
-            }
-        }
-    }
+    RedrawAddon( dst, addons_level2, skipObjs );
 }
 
 void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
@@ -2514,24 +2520,6 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
     }
 }
 
-void Maps::Tiles::UpdateStoneLightsSprite( Tiles & tile )
-{
-    for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-        tile.QuantitySetTeleportType( TilesAddon::UpdateStoneLightsSprite( *it ) );
-}
-
-void Maps::Tiles::UpdateFountainSprite( Tiles & tile )
-{
-    for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-        TilesAddon::UpdateFountainSprite( *it );
-}
-
-void Maps::Tiles::UpdateTreasureChestSprite( Tiles & tile )
-{
-    for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-        TilesAddon::UpdateTreasureChestSprite( *it );
-}
-
 bool Maps::Tiles::isFog( int colors ) const
 {
     // colors may be the union friends
@@ -2824,7 +2812,33 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
-    return msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> ta.tmp;
+    msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> ta.tmp;
+    // FIXME: Fix invalid objects set in old fheroes2 saves, remove this in 0.9
+    switch ( ta.object ) {
+    case 0x11:
+        ta.object = 0xA4;
+        ta.index = 116;
+        break;
+    case 0x12:
+        ta.object = 0xA4;
+        ta.index = 119;
+        break;
+    case 0x13:
+        ta.object = 0xA4;
+        ta.index = 122;
+        break;
+    case 0x14:
+        ta.object = 0xA4;
+        ta.index = 15;
+        break;
+    case 0x15:
+        ta.object = 0xB8;
+        ta.index = 19;
+        break;
+    default:
+        break;
+    }
+    return msg;
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
