@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #ifndef H2INTERFACE_GAMEAREA_H
-#define H2INTERFACE_GAMEAREA_H 
+#define H2INTERFACE_GAMEAREA_H
 
 #include "gamedefs.h"
 
