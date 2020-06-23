@@ -1520,13 +1520,13 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skip_ob
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
                 Sprite sprite = AGG::GetICN( icn, index );
                 if ( TilesAddon::hasColorCycling( *it ) ) {
-                    std::set<MapObjectSprite>::iterator cachedSprite = spriteCache.find( {object, index} );
+                    std::set<MapObjectSprite>::iterator cachedSprite = spriteCache.find( MapObjectSprite( object, index ) );
                     if ( cachedSprite != spriteCache.end() ) {
                         sprite = cachedSprite->sprite;
                     }
                     else {
                         AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
-                        spriteCache.insert( {object, index, sprite} );
+                        spriteCache.insert( MapObjectSprite( object, index, sprite ) );
                     }
                 }
                 area.BlitOnTile( dst, sprite, mp );
@@ -1719,7 +1719,7 @@ void Maps::Tiles::RedrawBottom4Hero( Surface & dst ) const
 
 void Maps::Tiles::RedrawTop( Surface & dst, bool skip_objs ) const
 {
-    Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( !( area.GetRectMaps() & mp ) )
