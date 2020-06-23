@@ -1520,13 +1520,13 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skip_ob
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
                 Sprite sprite = AGG::GetICN( icn, index );
                 if ( TilesAddon::hasColorCycling( *it ) ) {
-                    std::set<MapObjectSprite>::iterator cachedSprite = spriteCache.find( { object, index } );
+                    std::set<MapObjectSprite>::iterator cachedSprite = spriteCache.find( {object, index} );
                     if ( cachedSprite != spriteCache.end() ) {
                         sprite = cachedSprite->sprite;
                     }
                     else {
                         AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
-                        spriteCache.insert( { object, index, sprite } );
+                        spriteCache.insert( {object, index, sprite} );
                     }
                 }
                 area.BlitOnTile( dst, sprite, mp );
