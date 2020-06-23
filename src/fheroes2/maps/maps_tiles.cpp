@@ -1504,6 +1504,7 @@ void Maps::Tiles::RedrawEmptyTile( Surface & dst, const Point & mp )
 void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skip_objs ) const
 {
     Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    std::set<MapObjectSprite> & spriteCache = area.GetSpriteCache();
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( ( area.GetRectMaps() & mp ) && !addon.empty() ) {
@@ -1519,13 +1520,13 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skip_ob
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
                 Sprite sprite = AGG::GetICN( icn, index );
                 if ( TilesAddon::hasColorCycling( *it ) ) {
-                    auto cachedSprite = area.spriteCache.find( MapObjectSprite( object, index, sprite ) );
-                    if ( cachedSprite != area.spriteCache.end() ) {
+                    std::set<MapObjectSprite>::iterator cachedSprite = spriteCache.find( { object, index } );
+                    if ( cachedSprite != spriteCache.end() ) {
                         sprite = cachedSprite->sprite;
                     }
                     else {
                         AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
-                        area.spriteCache.insert( { object, index, sprite } );
+                        spriteCache.insert( { object, index, sprite } );
                     }
                 }
                 area.BlitOnTile( dst, sprite, mp );

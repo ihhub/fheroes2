@@ -28,8 +28,6 @@
 #include "gamedefs.h"
 #include "sprite.h"
 
-class Sprite;
-
 enum scroll_t
 {
     SCROLL_NONE = 0x00,
@@ -55,10 +53,10 @@ struct MapObjectSprite
     uint8_t object;
     uint8_t index;
     Sprite sprite;
-    MapObjectSprite();
-    MapObjectSprite(uint8_t obj, uint8_t idx, const Sprite & spr);
+    MapObjectSprite( uint8_t obj = 0, uint8_t idx = 0 );
+    MapObjectSprite( uint8_t obj, uint8_t idx, const Sprite & spr );
     uint32_t toID() const;
-    bool operator<(const MapObjectSprite & rhs) const;
+    bool operator<( const MapObjectSprite & rhs ) const;
 };
 
 namespace Interface
@@ -93,6 +91,7 @@ namespace Interface
 
         void UpdateCyclingPalette( int frame );
         const std::vector<uint8_t> & GetCyclingPalette() const;
+        std::set<MapObjectSprite> & GetSpriteCache();
 
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
@@ -102,7 +101,6 @@ namespace Interface
 
         static Surface GenerateUltimateArtifactAreaSurface( s32 );
 
-        std::set<MapObjectSprite> spriteCache;
 
     private:
         void SetAreaPosition( s32, s32, u32, u32 );
@@ -124,6 +122,7 @@ namespace Interface
         int borderSizeY;
 
         std::vector<uint8_t> _customPalette;
+        std::set<MapObjectSprite> _spriteCache;
 
         enum
         {

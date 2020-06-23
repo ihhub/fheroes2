@@ -43,9 +43,9 @@ namespace Game
     void MouseCursorAreaPressRight( s32 );
 }
 
-MapObjectSprite::MapObjectSprite()
-    : object( 0 )
-    , index( 0 )
+MapObjectSprite::MapObjectSprite( uint8_t obj, uint8_t idx )
+    : object( obj )
+    , index( idx )
 {}
 
 MapObjectSprite::MapObjectSprite( uint8_t obj, uint8_t idx, const Sprite & spr )
@@ -170,12 +170,18 @@ void Interface::GameArea::UpdateCyclingPalette( int frame )
 {
     _customPalette = PAL::GetCyclingPalette( frame );
     PAL::SetCustomSDLPalette( _customPalette );
-    spriteCache.clear();
+    // reset cache as we'll need to re-color tiles
+    _spriteCache.clear();
 }
 
 const std::vector<uint8_t> & Interface::GameArea::GetCyclingPalette() const
 {
     return _customPalette;
+}
+
+std::set<MapObjectSprite> & Interface::GameArea::GetSpriteCache()
+{
+    return _spriteCache;
 }
 
 void Interface::GameArea::BlitOnTile( Surface & dst, const Sprite & src, const Point & mp ) const
