@@ -21,12 +21,11 @@
  ***************************************************************************/
 
 #ifndef H2INTERFACE_GAMEAREA_H
-#define H2INTERFACE_GAMEAREA_H
-
-#include <set>
+#define H2INTERFACE_GAMEAREA_H 
 
 #include "gamedefs.h"
-#include "sprite.h"
+
+class Sprite;
 
 enum scroll_t
 {
@@ -48,16 +47,7 @@ enum level_t
     LEVEL_ALL = 0xFF
 };
 
-struct MapObjectSprite
-{
-    uint8_t object;
-    uint8_t index;
-    Sprite sprite;
-    MapObjectSprite( uint8_t obj = 0, uint8_t idx = 0 );
-    MapObjectSprite( uint8_t obj, uint8_t idx, const Sprite & spr );
-    uint32_t toID() const;
-    bool operator<( const MapObjectSprite & rhs ) const;
-};
+typedef std::map<std::pair<uint8_t, uint8_t>, Sprite> MapObjectSprite;
 
 namespace Interface
 {
@@ -91,7 +81,7 @@ namespace Interface
 
         void UpdateCyclingPalette( int frame );
         const std::vector<uint8_t> & GetCyclingPalette() const;
-        std::set<MapObjectSprite> & GetSpriteCache();
+        MapObjectSprite & GetSpriteCache();
 
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
@@ -121,7 +111,7 @@ namespace Interface
         int borderSizeY;
 
         std::vector<uint8_t> _customPalette;
-        std::set<MapObjectSprite> _spriteCache;
+        MapObjectSprite _spriteCache;
 
         enum
         {

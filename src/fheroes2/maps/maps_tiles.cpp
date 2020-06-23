@@ -1519,15 +1519,16 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
                 Sprite sprite;
                 if ( TilesAddon::hasColorCycling( *it ) ) {
-                    std::set<MapObjectSprite> & spriteCache = area.GetSpriteCache();
-                    std::set<MapObjectSprite>::iterator cachedSprite = spriteCache.find( MapObjectSprite( object, index ) );
+                    MapObjectSprite & spriteCache = area.GetSpriteCache();
+                    std::pair<uint8_t, uint8_t> tileIndex = {object, index};
+                    MapObjectSprite::iterator cachedSprite = spriteCache.find( tileIndex );
                     if ( cachedSprite != spriteCache.end() ) {
-                        sprite = cachedSprite->sprite;
+                        sprite = cachedSprite->second;
                     }
                     else {
                         sprite = AGG::GetICN( icn, index );
                         AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
-                        spriteCache.insert( MapObjectSprite( object, index, sprite ) );
+                        spriteCache[tileIndex] = sprite;
                     }
                 }
                 else {

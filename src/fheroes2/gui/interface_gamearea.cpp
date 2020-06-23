@@ -41,27 +41,6 @@ namespace Game
     void MouseCursorAreaPressRight( s32 );
 }
 
-MapObjectSprite::MapObjectSprite( uint8_t obj, uint8_t idx )
-    : object( obj )
-    , index( idx )
-{}
-
-MapObjectSprite::MapObjectSprite( uint8_t obj, uint8_t idx, const Sprite & spr )
-    : object( obj )
-    , index( idx )
-    , sprite( spr )
-{}
-
-uint32_t MapObjectSprite::toID() const
-{
-    return ( static_cast<uint32_t>( object ) << 8 ) + index;
-}
-
-bool MapObjectSprite::operator<( const MapObjectSprite & rhs ) const
-{
-    return toID() < rhs.toID();
-}
-
 Interface::GameArea::GameArea( Basic & basic )
     : interface( basic )
     , oldIndexPos( 0 )
@@ -177,7 +156,7 @@ const std::vector<uint8_t> & Interface::GameArea::GetCyclingPalette() const
     return _customPalette;
 }
 
-std::set<MapObjectSprite> & Interface::GameArea::GetSpriteCache()
+MapObjectSprite & Interface::GameArea::GetSpriteCache()
 {
     return _spriteCache;
 }
