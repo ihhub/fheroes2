@@ -1520,7 +1520,7 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
                 Sprite sprite;
                 if ( TilesAddon::hasColorCycling( *it ) ) {
                     MapObjectSprite & spriteCache = area.GetSpriteCache();
-                    std::pair<uint8_t, uint8_t> tileIndex = {object, index};
+                    const std::pair<uint8_t, uint8_t> tileIndex = {object, index};
                     MapObjectSprite::iterator cachedSprite = spriteCache.find( tileIndex );
                     if ( cachedSprite != spriteCache.end() ) {
                         sprite = cachedSprite->second;
