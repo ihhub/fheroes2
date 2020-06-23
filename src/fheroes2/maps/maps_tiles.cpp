@@ -1501,16 +1501,15 @@ void Maps::Tiles::RedrawEmptyTile( Surface & dst, const Point & mp )
     }
 }
 
-void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skip_objs ) const
+void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs ) const
 {
     Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-    std::set<MapObjectSprite> & spriteCache = area.GetSpriteCache();
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( ( area.GetRectMaps() & mp ) && !addon.empty() ) {
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             // skip
-            if ( skip_objs && MP2::isRemoveObject( GetObject() ) && FindObjectConst( GetObject() ) == &( *it ) )
+            if ( skipObjs && MP2::isRemoveObject( GetObject() ) && FindObjectConst( GetObject() ) == &( *it ) )
                 continue;
 
             const u8 & object = ( *it ).object;
@@ -1518,16 +1517,21 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skip_ob
             const int icn = MP2::GetICNObject( object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                Sprite sprite = AGG::GetICN( icn, index );
+                Sprite sprite;
                 if ( TilesAddon::hasColorCycling( *it ) ) {
+                    std::set<MapObjectSprite> & spriteCache = area.GetSpriteCache();
                     std::set<MapObjectSprite>::iterator cachedSprite = spriteCache.find( MapObjectSprite( object, index ) );
                     if ( cachedSprite != spriteCache.end() ) {
                         sprite = cachedSprite->sprite;
                     }
                     else {
+                        sprite = AGG::GetICN( icn, index );
                         AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
                         spriteCache.insert( MapObjectSprite( object, index, sprite ) );
                     }
+                }
+                else {
+                    sprite = AGG::GetICN( icn, index );
                 }
                 area.BlitOnTile( dst, sprite, mp );
 
@@ -1541,9 +1545,9 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skip_ob
     }
 }
 
-void Maps::Tiles::RedrawBottom( Surface & dst, bool skip_objs ) const
+void Maps::Tiles::RedrawBottom( Surface & dst, bool skipObjs ) const
 {
-    RedrawAddon( dst, addons_level1, skip_objs );
+    RedrawAddon( dst, addons_level1, skipObjs );
 }
 
 void Maps::Tiles::RedrawPassable( Surface & dst ) const
@@ -1717,7 +1721,7 @@ void Maps::Tiles::RedrawBottom4Hero( Surface & dst ) const
     }
 }
 
-void Maps::Tiles::RedrawTop( Surface & dst, bool skip_objs ) const
+void Maps::Tiles::RedrawTop( Surface & dst, bool skipObjs ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1741,7 +1745,7 @@ void Maps::Tiles::RedrawTop( Surface & dst, bool skip_objs ) const
         }
     }
 
-    RedrawAddon( dst, addons_level2, skip_objs );
+    RedrawAddon( dst, addons_level2, skipObjs );
 }
 
 void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const

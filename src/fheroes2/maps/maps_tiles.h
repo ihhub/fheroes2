@@ -195,13 +195,13 @@ namespace Maps
 
         void RedrawTile( Surface & ) const;
         static void RedrawEmptyTile( Surface & dst, const Point & mp );
-        void RedrawBottom( Surface & dst, bool skip_objs = false ) const;
+        void RedrawBottom( Surface & dst, bool skipObjs = false ) const;
         void RedrawBottom4Hero( Surface & ) const;
-        void RedrawTop( Surface & dst, bool skip_objs = false ) const;
+        void RedrawTop( Surface & dst, bool skipObjs = false ) const;
         void RedrawTop4Hero( Surface &, bool skip_ground ) const;
         void RedrawObjects( Surface & ) const;
         void RedrawFogs( Surface &, int ) const;
-        void RedrawAddon( Surface & dst, const Addons & addon, bool skip_objs = false ) const;
+        void RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs = false ) const;
         void RedrawPassable( Surface & ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
