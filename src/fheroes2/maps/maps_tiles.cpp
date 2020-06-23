@@ -483,8 +483,13 @@ bool Maps::TilesAddon::hasColorCycling( const TilesAddon & addon )
             return true;
         break;
     case ICN::OBJNLAVA:
-        // volcano, lava lakes
-        if ( addon.index > 17 && addon.index < 78 )
+        // volcano, lava lakes, dungeon
+        if ( ( addon.index > 1 && addon.index < 78 ) || addon.index == 111 || addon.index == 112 )
+            return true;
+        break;
+    case ICN::OBJNLAV2:
+        // volcano
+        if ( ( addon.index > 21 && addon.index < 28 ) || addon.index == 1 )
             return true;
         break;
     case ICN::OBJNDSRT:
@@ -502,6 +507,7 @@ bool Maps::TilesAddon::hasColorCycling( const TilesAddon & addon )
         if ( addon.index == 19 )
             return true;
         break;
+    case ICN::MTNLAVA: // Lava mountains, mines and additional volcanoes
     case ICN::OBJNWATR: // Water objects
     case ICN::OBJNWAT2: // Water objects
     case ICN::X_LOC1: // Price of Royalty objects
