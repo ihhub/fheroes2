@@ -47,6 +47,8 @@ enum level_t
     LEVEL_ALL = 0xFF
 };
 
+typedef std::map<std::pair<uint8_t, uint8_t>, Sprite> MapObjectSprite;
+
 namespace Interface
 {
     class Basic;
@@ -77,6 +79,10 @@ namespace Interface
         void BlitOnTile( Surface &, const Surface &, s32, s32, const Point & ) const;
         void BlitOnTile( Surface &, const Sprite &, const Point & ) const;
 
+        void UpdateCyclingPalette( int frame );
+        const std::vector<uint8_t> & GetCyclingPalette() const;
+        MapObjectSprite & GetSpriteCache();
+
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
 
@@ -103,6 +109,9 @@ namespace Interface
         bool updateCursor;
         int borderSizeX;
         int borderSizeY;
+
+        std::vector<uint8_t> _customPalette;
+        MapObjectSprite _spriteCache;
 
         enum
         {
