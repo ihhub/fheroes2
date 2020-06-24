@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <cmath>
 #include <iterator>
 #include <sstream>
 
