@@ -41,6 +41,10 @@ struct Point
 
     bool inABC( const Point &, const Point &, const Point & ) const;
 
+    double distance( const Point & point ) const;
+    Point rotate( double angle ) const;
+    double getAngle( const Point & point ) const;
+
     Point & operator+=( const Point & );
     Point & operator-=( const Point & );
 

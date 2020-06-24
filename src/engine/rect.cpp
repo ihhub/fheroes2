@@ -82,6 +82,27 @@ bool Point::inABC( const Point & pt1, const Point & pt2, const Point & pt3 ) con
     return ( ( a >= 0 && b >= 0 && c >= 0 ) || ( a < 0 && b < 0 && c < 0 ) );
 }
 
+double Point::distance( const Point & point ) const
+{
+    const double diffX = x - point.x;
+    const double diffY = y - point.y;
+
+    return std::sqrt( diffX * diffX + diffY * diffY );
+}
+
+Point Point::rotate( double angle ) const
+{
+    const double sinValue = sin( angle );
+    const double cosValue = cos( angle );
+
+    return Point( x * cosValue - y * sinValue, x * sinValue + y * cosValue );
+}
+
+double Point::getAngle( const Point & point ) const
+{
+    return std::atan2( point.y - y, point.x - x );
+}
+
 Size::Size( u16 width, u16 height )
     : w( width )
     , h( height )
