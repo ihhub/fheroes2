@@ -213,8 +213,8 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
     }
 
     text.Set( _( "Town Population Information and Statistics" ), Font::BIG );
-    dst_pt.x = cur_pt.x + 280 - text.w() / 2;
-    dst_pt.y = cur_pt.y + 462;
+    dst_pt.x = cur_pt.x + 315 - text.w() / 2;
+    dst_pt.y = cur_pt.y + 463;
     text.Blit( dst_pt );
 
     u32 dw = DWELLING_MONSTER1;

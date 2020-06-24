@@ -56,11 +56,11 @@ void TestMonsterSprite( void )
     StatusBar frame_bar;
     StatusBar info_bar;
 
-    start_bar.SetCenter( 100, display.h() - 15 );
-    count_bar.SetCenter( 200, display.h() - 15 );
-    speed_bar.SetCenter( 300, display.h() - 15 );
-    frame_bar.SetCenter( 400, display.h() - 15 );
-    info_bar.SetCenter( 550, display.h() - 15 );
+    start_bar.SetCenter( 100, display.h() - 16 );
+    count_bar.SetCenter( 200, display.h() - 16 );
+    speed_bar.SetCenter( 300, display.h() - 16 );
+    frame_bar.SetCenter( 400, display.h() - 16 );
+    info_bar.SetCenter( 550, display.h() - 16 );
 
     u32 ticket = 0;
 

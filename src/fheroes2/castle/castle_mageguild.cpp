@@ -145,7 +145,7 @@ void Castle::OpenMageGuild( void )
 
     // text bar
     text.Set( _( "The above spells have been added to your book." ), Font::BIG );
-    text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 461 );
+    text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 463 );
 
     const int level = GetLevelMageGuild();
     // sprite
