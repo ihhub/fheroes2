@@ -535,7 +535,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                             if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() && heroes.Guest()->BuySpellBook( this ) )
                                 need_redraw = true;
 
-                            OpenMageGuild();
+                            OpenMageGuild( heroes );
                         }
                         else if ( le.MousePressRight( ( *it ).coord ) )
                             Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
