@@ -464,12 +464,7 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         dst_pt4.y += oy;
     }
 
-    if ( isShipMaster() ) {
-        dst_pt1.y -= 15;
-        dst_pt2.y -= 15;
-        dst_pt3.y -= 15;
-        dst_pt4.y -= 15;
-
+    if ( isShipMaster() && isEnableMove() ) {
         sprite4.Blit( gamearea.RectFixed( dst_pt4, sprite4.w(), sprite4.h() ), dst_pt4, dst );
     }
 
