@@ -688,8 +688,6 @@ void Maps::Tiles::QuantityUpdate( void )
             QuantityUpdate();
         }
         else {
-            UpdateTreasureChestSprite( *this );
-
             Rand::Queue percents( 4 );
             // 31% - 2000 gold or 1500 exp
             percents.Push( 1, 31 );
@@ -849,14 +847,6 @@ void Maps::Tiles::QuantityUpdate( void )
                 break;
             }
     } break;
-
-    case MP2::OBJ_STONELIGHTS:
-        UpdateStoneLightsSprite( *this );
-        break;
-
-    case MP2::OBJ_FOUNTAIN:
-        UpdateFountainSprite( *this );
-        break;
 
     case MP2::OBJ_EVENT: {
         TilesAddon * addon = FindObject( MP2::OBJ_EVENT );

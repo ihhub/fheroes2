@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "interface_gamearea.h"
+
 #include "agg.h"
 #include "game.h"
 #include "game_interface.h"
@@ -142,6 +143,24 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
     rectMapsPosition.y = areaPosition.y - scrollOffset.y;
 }
 
+void Interface::GameArea::UpdateCyclingPalette( int frame )
+{
+    _customPalette = PAL::GetCyclingPalette( frame );
+    PAL::SetCustomSDLPalette( _customPalette );
+    // reset cache as we'll need to re-color tiles
+    _spriteCache.clear();
+}
+
+const std::vector<uint8_t> & Interface::GameArea::GetCyclingPalette() const
+{
+    return _customPalette;
+}
+
+MapObjectSprite & Interface::GameArea::GetSpriteCache()
+{
+    return _spriteCache;
+}
+
 void Interface::GameArea::BlitOnTile( Surface & dst, const Sprite & src, const Point & mp ) const
 {
     BlitOnTile( dst, src, src.x(), src.y(), mp );
@@ -158,15 +177,11 @@ void Interface::GameArea::BlitOnTile( Surface & dst, const Surface & src, s32 ox
 
 void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 {
-    return Redraw( dst, flag, Rect( 0, 0, rectMaps.w, rectMaps.h ) );
+    Redraw( dst, flag, Rect( 0, 0, rectMaps.w, rectMaps.h ) );
 }
 
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const
 {
-    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_MAP_DELAY ) ) {
-        PAL::SetCustomSDLPalette( PAL::GetCyclingPalette( Game::MapsAnimationFrame() ) );
-    }
-
     // tile
     for ( s32 oy = rt.y; oy < rt.y + rt.h; ++oy ) {
         const s32 offsetY = rectMaps.y + oy;

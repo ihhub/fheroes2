@@ -243,9 +243,9 @@ Surface Battle::Unit::GetContour( int val ) const
 
     switch ( val ) {
     case CONTOUR_MAIN:
-        return getContour( frame, contoursMain, false, false );
+        return getContour( frame, contoursMain, false );
     case CONTOUR_REFLECT:
-        return getContour( frame, contoursReflect, true, false );
+        return getContour( frame, contoursReflect, true );
     default:
         break;
     }
@@ -283,7 +283,7 @@ u32 Battle::Unit::GetUID( void ) const
     return uid;
 }
 
-const Surface & Battle::Unit::getContour( const int frameId, std::map<int, Surface> & contours, const bool isReflected, const bool isBlackWhite ) const
+const Surface & Battle::Unit::getContour( int frameId, std::map<int, Surface> & contours, bool isReflected ) const
 {
     std::map<int, Surface>::iterator iter = contours.find( frameId );
     if ( iter != contours.end() )
@@ -297,10 +297,14 @@ const Surface & Battle::Unit::getContour( const int frameId, std::map<int, Surfa
         return iter->second;
     }
 
-    if ( isBlackWhite )
-        iter = contours.insert( std::make_pair( frameId, sprite.RenderGrayScale() ) ).first;
-    else
-        iter = contours.insert( std::make_pair( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) ).first;
+    Surface contour( sprite.GetSize(), sprite.GetFormat() );
+    // TODO: replace this RGBA trick by palette color ID
+    if ( !AGG::DrawContour( contour, RGBA( 255, 0, 0xe0, 0xe0 ).pack(), msi.icn_file, frameId, isReflected ) ) {
+        iter = contours.insert( std::make_pair( frameId, Surface() ) ).first;
+        return iter->second;
+    }
+
+    iter = contours.insert( std::make_pair( frameId, contour ) ).first;
 
     return iter->second;
 }

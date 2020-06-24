@@ -82,6 +82,9 @@ namespace AGG
 
     // Returns true only when the operation was successful
     bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMap, int icnId, int incIndex, bool reflect );
+
+    // Returns true in an event of success. Only for 32-bit images
+    bool DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect );
 }
 
 #endif

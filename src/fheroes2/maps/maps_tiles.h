@@ -65,6 +65,7 @@ namespace Maps
 
         std::string String( int level ) const;
 
+        static bool hasColorCycling( const TilesAddon & addon );
         static bool isStream( const TilesAddon & );
         static bool isRoad( const TilesAddon & );
 
@@ -118,9 +119,6 @@ namespace Maps
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
-        static void UpdateFountainSprite( TilesAddon & );
-        static void UpdateTreasureChestSprite( TilesAddon & );
-        static int UpdateStoneLightsSprite( TilesAddon & );
         static void UpdateAbandoneMineLeftSprite( TilesAddon &, int resource );
         static void UpdateAbandoneMineRightSprite( TilesAddon & );
 
@@ -197,12 +195,13 @@ namespace Maps
 
         void RedrawTile( Surface & ) const;
         static void RedrawEmptyTile( Surface & dst, const Point & mp );
-        void RedrawBottom( Surface &, bool skip_objs = false ) const;
+        void RedrawBottom( Surface & dst, bool skipObjs = false ) const;
         void RedrawBottom4Hero( Surface & ) const;
-        void RedrawTop( Surface &, const TilesAddon * skip = NULL ) const;
+        void RedrawTop( Surface & dst, bool skipObjs = false ) const;
         void RedrawTop4Hero( Surface &, bool skip_ground ) const;
         void RedrawObjects( Surface & ) const;
         void RedrawFogs( Surface &, int ) const;
+        void RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs = false ) const;
         void RedrawPassable( Surface & ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
@@ -288,9 +287,6 @@ namespace Maps
         static void UpdateMonsterPopulation( Tiles & );
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );
-        static void UpdateStoneLightsSprite( Tiles & );
-        static void UpdateFountainSprite( Tiles & );
-        static void UpdateTreasureChestSprite( Tiles & );
 
     private:
         friend StreamBase & operator<<( StreamBase &, const Tiles & );

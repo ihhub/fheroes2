@@ -280,12 +280,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             le.MousePressLeft( buttonNextHero ) ? buttonNextHero.PressDraw() : buttonNextHero.ReleaseDraw();
 
         // prev hero
-        if ( buttonPrevHero.isEnable() && le.MouseClickLeft( buttonPrevHero ) ) {
+        if ( buttonPrevHero.isEnable() && ( le.MouseClickLeft( buttonPrevHero ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
             return Dialog::PREV;
         }
 
         // next hero
-        if ( buttonNextHero.isEnable() && le.MouseClickLeft( buttonNextHero ) ) {
+        if ( buttonNextHero.isEnable() && ( le.MouseClickLeft( buttonNextHero ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
             return Dialog::NEXT;
         }
 
@@ -362,9 +362,9 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             }
         }
         else if ( le.MouseCursor( buttonPrevHero ) )
-            message = _( "Show prev heroes" );
+            message = _( "Show previous hero" );
         else if ( le.MouseCursor( buttonNextHero ) )
-            message = _( "Show next heroes" );
+            message = _( "Show next hero" );
 
         if ( message.empty() )
             statusBar.ShowMessage( _( "Hero Screen" ) );
