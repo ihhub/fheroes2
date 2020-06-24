@@ -87,7 +87,7 @@ namespace
                 lines.push_back( std::make_pair( oldLines[i].first, middlePoint ) );
                 lines.push_back( std::make_pair( middlePoint, oldLines[i].second ) );
 
-                if ( Rand::Get( 1, 3) == 1 ) {
+                if ( Rand::Get( 1, 3 ) == 1 ) {
                     const int x = ( middle.x - oldLines[i].first.point.x ) * 0.7 + middle.x;
                     const int y = ( middle.y - oldLines[i].first.point.y ) * 0.7 + middle.y + ( static_cast<int>( Rand::Get( 1, 40 ) ) - 20 ) * maxOffset / 100;
                     lines.push_back( std::make_pair( middlePoint, LightningPoint( Point( x, y ), 1 ) ) );
