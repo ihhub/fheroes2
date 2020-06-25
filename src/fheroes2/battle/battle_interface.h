@@ -243,6 +243,7 @@ namespace Battle
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
         bool IdleTroopsAnimation( void );
+        void ResetIdleTroopAnimation( void );
         void CycleColors();
         void CheckGlobalEvents( LocalEvent & );
 

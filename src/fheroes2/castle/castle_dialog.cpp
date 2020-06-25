@@ -287,7 +287,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
     StatusBar statusBar;
     statusBar.SetFont( Font::BIG );
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 11 );
+    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // button next castle
     dst_pt.x += bar.w();
@@ -493,13 +493,13 @@ int Castle::OpenDialog( bool readonly, bool fade )
         }
 
         // prev castle
-        if ( buttonPrevCastle.isEnable() && le.MouseClickLeft( buttonPrevCastle ) ) {
+        if ( buttonPrevCastle.isEnable() && ( le.MouseClickLeft( buttonPrevCastle ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
             result = Dialog::PREV;
             break;
         }
         else
             // next castle
-            if ( buttonNextCastle.isEnable() && le.MouseClickLeft( buttonNextCastle ) ) {
+            if ( buttonNextCastle.isEnable() && ( le.MouseClickLeft( buttonNextCastle ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
             result = Dialog::NEXT;
             break;
         }
@@ -535,7 +535,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                             if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() && heroes.Guest()->BuySpellBook( this ) )
                                 need_redraw = true;
 
-                            OpenMageGuild();
+                            OpenMageGuild( heroes );
                         }
                         else if ( le.MousePressRight( ( *it ).coord ) )
                             Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );

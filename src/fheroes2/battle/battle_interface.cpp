@@ -45,6 +45,86 @@
 
 #define ARMYORDERW 40
 
+namespace
+{
+    struct LightningPoint
+    {
+        explicit LightningPoint( const Point & p = Point(), uint32_t thick = 1 )
+            : point( p )
+            , thickness( thick )
+        {}
+
+        Point point;
+        uint32_t thickness;
+    };
+
+    std::vector<std::pair<LightningPoint, LightningPoint> > GenerateLightning( const Point & src, const Point & dst, uint32_t iterationCount )
+    {
+        const int distance = static_cast<int>( src.distance( dst ) );
+        const double angle = src.getAngle( dst );
+
+        std::vector<std::pair<LightningPoint, LightningPoint> > lines;
+        lines.push_back( std::make_pair( LightningPoint( Point( 0, 0 ), iterationCount + 1 ), LightningPoint( Point( distance, 0 ), 1 ) ) );
+
+        int maxOffset = distance;
+
+        for ( int step = 0; step < iterationCount; ++step ) {
+            std::vector<std::pair<LightningPoint, LightningPoint> > oldLines;
+            std::swap( lines, oldLines );
+
+            for ( size_t i = 0; i < oldLines.size(); ++i ) {
+                const int diffX = ( oldLines[i].first.point.x - oldLines[i].second.point.x );
+                Point middle( oldLines[i].first.point + oldLines[i].second.point );
+                middle.x /= 2;
+                middle.y /= 2;
+
+                middle.y += ( static_cast<int>( Rand::Get( 1, 20 ) ) - 10 ) * maxOffset / 100;
+
+                const uint32_t middleThickness = ( oldLines[i].first.thickness + oldLines[i].second.thickness ) / 2;
+
+                const LightningPoint middlePoint( middle, middleThickness );
+
+                lines.push_back( std::make_pair( oldLines[i].first, middlePoint ) );
+                lines.push_back( std::make_pair( middlePoint, oldLines[i].second ) );
+
+                if ( Rand::Get( 1, 3 ) == 1 ) {
+                    const int x = ( middle.x - oldLines[i].first.point.x ) * 0.7 + middle.x;
+                    const int y = ( middle.y - oldLines[i].first.point.y ) * 0.7 + middle.y + ( static_cast<int>( Rand::Get( 1, 40 ) ) - 20 ) * maxOffset / 100;
+                    lines.push_back( std::make_pair( middlePoint, LightningPoint( Point( x, y ), 1 ) ) );
+                }
+            }
+
+            maxOffset /= 2;
+        }
+
+        for ( size_t i = 0; i < lines.size(); ++i ) {
+            lines[i].first.point = lines[i].first.point.rotate( angle ) + src;
+            lines[i].second.point = lines[i].second.point.rotate( angle ) + src;
+        }
+
+        return lines;
+    }
+
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color )
+    {
+        for ( size_t i = 0; i < lightning.size(); ++i ) {
+            const Point & first = lightning[i].first.point;
+            const Point second = lightning[i].second.point;
+
+            Display::Get().DrawLine( first, second, color );
+            for ( uint32_t thickness = 1; thickness < lightning[i].second.thickness; ++thickness ) {
+                Display::Get().DrawLine( Point( first.x, first.y + thickness ), Point( second.x, second.y + thickness ), color );
+                Display::Get().DrawLine( Point( first.x, first.y - thickness ), Point( second.x, second.y - thickness ), color );
+            }
+
+            for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
+                Display::Get().DrawLine( Point( first.x, first.y + thickness ), second, color );
+                Display::Get().DrawLine( Point( first.x, first.y - thickness ), second, color );
+            }
+        }
+    }
+}
+
 namespace Battle
 {
     int GetIndexIndicator( const Unit & );
@@ -1283,7 +1363,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
 
         // contour
         if ( spmon2.isValid() )
-            spmon2.Blit( sp.x - 1, sp.y - 1 );
+            spmon2.Blit( sp.x, sp.y );
     }
 }
 
@@ -1883,6 +1963,8 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     std::string msg;
     animation_flags_frame = 0;
+
+    ResetIdleTroopAnimation();
 
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
@@ -3600,8 +3682,58 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
 
 void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 {
-    // FIX: LightningBolt draw
-    RedrawTroopWithFrameAnimation( target, ICN::SPARKS, M82::FromSpell( Spell::LIGHTNINGBOLT ), WINCE );
+    Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+
+    const Rect & pos = target.GetRectPosition();
+    const Rect & rectArea = border.GetArea();
+
+    uint32_t frame = 0;
+
+    cursor.SetThemes( Cursor::WAR_NONE );
+
+    AGG::PlaySound( M82::FromSpell( Spell::LIGHTNINGBOLT ) );
+
+    Point startingPos;
+    const HeroBase * current_commander = arena.GetCurrentCommander();
+
+    if ( current_commander == opponent1->GetHero() ) {
+        const Rect & pos1 = opponent1->GetArea();
+        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
+    }
+    else {
+        const Rect & pos = opponent2->GetArea();
+        startingPos = Point( pos.x, pos.y + pos.h / 2 );
+    }
+
+    _currentUnit = NULL;
+    target.SwitchAnimation( Monster_Info::WNCE );
+
+    Sprite sprite = AGG::GetICN( ICN::SPARKS, 0, false );
+    const Point offset( sprite.x() + pos.x, sprite.y() + pos.y );
+    Point endPos( offset.x + pos.w / 2, offset.y );
+
+    while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            cursor.Hide();
+            Redraw();
+
+            sprite = AGG::GetICN( ICN::SPARKS, frame, false );
+            RedrawLightning( GenerateLightning( startingPos, endPos, 4 ), RGBA( 0xff, 0xff, 0 ) );
+
+            sprite.Blit( endPos );
+            cursor.Show();
+            display.Flip();
+
+            ++frame;
+        }
+    }
+
+    target.SwitchAnimation( Monster_Info::STATIC );
+    _currentUnit = NULL;
 }
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
@@ -3610,7 +3742,7 @@ void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & tar
     // AGG::PlaySound(targets.size() > 1 ? M82::CHAINLTE : M82::LIGHTBLT);
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        RedrawTroopWithFrameAnimation( *( it->defender ), ICN::SPARKS, M82::FromSpell( Spell::LIGHTNINGBOLT ), WINCE );
+        RedrawActionLightningBoltSpell( *( it->defender ) );
 }
 
 void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
@@ -4203,11 +4335,6 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             }
 }
 
-void RedrawSparksEffects( const Point & src, const Point & dst )
-{
-    Display::Get().DrawLine( src, dst, RGBA( 0xff, 0xff, 0 ) );
-}
-
 void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
 {
     Display & display = Display::Get();
@@ -4242,9 +4369,6 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 
             const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
             Point targetPosition = CalculateSpellPosition( icn, b, sprite );
-
-            if ( icn == ICN::SPARKS )
-                RedrawSparksEffects( Point( rectArea.x + rectArea.w / 2, rectArea.y ), targetPosition );
 
             sprite.Blit( targetPosition );
             cursor.Show();
@@ -4321,6 +4445,12 @@ bool Battle::Interface::IdleTroopsAnimation( void )
     }
 
     return false;
+}
+
+void Battle::Interface::ResetIdleTroopAnimation( void )
+{
+    arena.GetForce1().resetIdleAnimation();
+    arena.GetForce2().resetIdleAnimation();
 }
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )

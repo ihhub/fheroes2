@@ -895,11 +895,6 @@ namespace ICN
 
         // system
         ROUTERED,
-        TELEPORT1,
-        TELEPORT2,
-        TELEPORT3,
-        FOUNTAIN,
-        TREASURE,
         YELLOW_FONT,
         YELLOW_SMALFONT,
         BATTLESKIP,
