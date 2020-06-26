@@ -25,12 +25,30 @@
 #include "settings.h"
 #include "sprite.h"
 
-/* constructor */
 Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
     , offset_y( 0 )
+#if defined( USE_SDL_CURSOR )
+    , _cursorSDL( NULL )
+    , _isVisibleCursor( false )
+#endif
 {}
+
+Cursor::~Cursor()
+{
+    _free();
+}
+
+void Cursor::_free()
+{
+#if defined( USE_SDL_CURSOR )
+    if ( _cursorSDL != NULL ) {
+        SDL_FreeCursor( _cursorSDL );
+        _cursorSDL = NULL;
+    }
+#endif
+}
 
 Cursor & Cursor::Get( void )
 {
@@ -64,6 +82,15 @@ bool Cursor::SetThemes( int name, bool force )
         const Sprite spr = AGG::GetICN( icnID, 0xFF & name );
         SetOffset( name, Point( spr.w() / 2, spr.h() / 2 ) );
         Set( spr, true );
+#if defined( USE_SDL_CURSOR )
+        _free();
+        _cursorSDL = SDL_CreateColorCursor( surface, -offset_x, -offset_y );
+        if ( _cursorSDL == NULL ) {
+            DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, name = " << name << ", reason: " << SDL_GetError() );
+        }
+        SDL_SetCursor( _cursorSDL );
+        SDL_ShowCursor( 1 );
+#endif
 
         // immediately apply new offset, force
         const Point currentPos = LocalEvent::Get().GetMouseCursor();
@@ -77,6 +104,7 @@ bool Cursor::SetThemes( int name, bool force )
 /* redraw cursor wrapper for local event */
 void Cursor::Redraw( s32 x, s32 y )
 {
+#if !defined( USE_SDL_CURSOR )
     Cursor & cur = Cursor::Get();
 
     if ( cur.isVisible() ) {
@@ -84,13 +112,18 @@ void Cursor::Redraw( s32 x, s32 y )
 
         Display::Get().Flip();
     }
+#endif
 }
 
 /* move cursor */
 void Cursor::Move( s32 x, s32 y )
 {
+#if defined( USE_SDL_CURSOR )
+    background.SetPos( Point( x, y ) );
+#else
     if ( isVisible() )
         SpriteMove::Move( x + offset_x, y + offset_y );
+#endif
 }
 
 /* set offset big cursor */
@@ -159,8 +192,30 @@ void Cursor::SetOffset( int name, const Point & defaultOffset )
 
 void Cursor::Show( void )
 {
+#if defined( USE_SDL_CURSOR )
+    _isVisibleCursor = true;
+#else
     if ( !Settings::Get().ExtPocketHideCursor() )
         SpriteMove::Show();
+#endif
+}
+
+void Cursor::Hide( void )
+{
+#if defined( USE_SDL_CURSOR )
+    _isVisibleCursor = false;
+#else
+    SpriteMove::Hide();
+#endif
+}
+
+bool Cursor::isVisible( void ) const
+{
+#if defined( USE_SDL_CURSOR )
+    return ( SDL_ShowCursor( -1 ) == 1 ) && _isVisibleCursor;
+#else
+    return SpriteMove::isVisible();
+#endif
 }
 
 int Cursor::DistanceThemes( int theme, u32 dist )

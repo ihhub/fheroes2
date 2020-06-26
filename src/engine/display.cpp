@@ -29,6 +29,11 @@
 #include "tools.h"
 #include "types.h"
 
+namespace
+{
+    SDL::Time redrawTiming; // a special timer to highlight that it's time to redraw a screen (only for SDL 2 as of now)
+}
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Display::Display()
     : window( NULL )
@@ -157,6 +162,8 @@ Size Display::GetDefaultSize( void )
 void Display::Flip( void )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    redrawTiming.Start(); // TODO: for now it's only for SDL 2 but it should be for everything
+
     SDL_Texture * tx = SDL_CreateTextureFromSurface( renderer, surface );
 
     if ( tx ) {
@@ -459,6 +466,16 @@ Display & Display::Get( void )
 Surface Display::GetSurface( void ) const
 {
     return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
+}
+
+bool Display::isRedrawRequired()
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    redrawTiming.Stop();
+    return redrawTiming.Get() > 500; // 0.5 second
+#else
+    return false;
+#endif
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
