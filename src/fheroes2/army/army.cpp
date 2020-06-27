@@ -660,7 +660,11 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
         for ( const_iterator it = begin(); it != end(); ++it )
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
-                    const Sprite & monster = AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
+                    const uint32_t spriteIndex = ( *it )->GetSpriteIndex();
+                    Sprite monster = AGG::GetICN( ICN::MONS32, spriteIndex );
+                    if ( ( *it )->hasColorCycling() ) {
+                        AGG::ReplaceColors( monster, PAL::GetCyclingPalette( Game::MapsAnimationFrame() ), ICN::MONS32, spriteIndex, false );
+                    }
                     const int offsetY = !compact ? 30 - monster.h() : ( monster.h() < 35 ) ? 35 - monster.h() : 0;
 
                     monster.Blit( cx - monster.w() / 2, cy + offsetY );
