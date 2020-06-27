@@ -56,7 +56,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
         gameArea.SetRedraw();
 
         LocalEvent & le = LocalEvent::Get();
-        const int32_t cursorIndex = gameArea.GetIndexFromMousePoint( le.GetMouseCursor() );
+        const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
         Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
         Interface::Basic::Get().buttonsArea.Redraw();
     }

@@ -272,7 +272,6 @@ public:
     bool ApplyPenaltyMovement( void );
     bool ActionSpellCast( const Spell & );
 
-    void Redraw( Surface &, bool ) const;
     void Redraw( Surface &, s32, s32, bool ) const;
     void PortraitRedraw( s32, s32, int type, Surface & ) const;
     int GetSpriteIndex( void ) const;

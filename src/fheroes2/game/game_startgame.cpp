@@ -878,7 +878,7 @@ int Interface::Basic::HumanTurn( bool isload )
             res = controlPanel.QueueEventProcessing();
         }
         // cursor over game area
-        else if ( le.MouseCursor( gameArea.GetArea() ) && !gameArea.NeedScroll() ) {
+        else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
             gameArea.QueueEventProcessing();
         }
 
@@ -936,11 +936,9 @@ int Interface::Basic::HumanTurn( bool isload )
                             Point movement( hero->MovementDirection() );
                             if ( movement != Point() ) { // don't waste resources for no movement
                                 const int moveStep = hero->GetMoveStep();
-                                movement.x *= -moveStep;
-                                movement.y *= -moveStep;
-                                gameArea.SetMapsPos( gameArea.GetMapsPos() + movement );
-                                gameArea.SetCenter( hero->GetCenter() );
-                                ResetFocus( GameFocus::HEROES );
+                                movement.x *= moveStep;
+                                movement.y *= moveStep;
+                                gameArea.ShiftCenter( movement );
                                 RedrawFocus();
                             }
                         }
