@@ -250,7 +250,7 @@ u32 Troops::GetCountMonsters( const Monster & m ) const
 bool Troops::isValid( void ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid( ) )
+        if ( ( *it )->isValid() )
             return true;
     }
     return false;
@@ -269,7 +269,7 @@ u32 Troops::GetCount( void ) const
 bool Troops::HasMonster( const Monster & mons ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isMonster(mons()) )
+        if ( ( *it )->isMonster( mons() ) )
             return true;
     }
     return false;

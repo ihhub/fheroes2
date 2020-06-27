@@ -974,7 +974,7 @@ int Interface::Basic::HumanTurn( bool isload )
             ++frame;
             gameArea.UpdateCyclingPalette( frame );
             gameArea.SetRedraw();
-            
+
             Army * focusArmy = GetFocusArmy();
             if ( focusArmy && focusArmy->hasColorCycling() ) {
                 statusWindow.SetRedraw();
