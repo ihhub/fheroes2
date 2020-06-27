@@ -270,6 +270,7 @@ namespace Maps
 
         void RedrawBoat( Surface & ) const;
         void RedrawMonster( Surface & ) const;
+        void RedrawMapObject( Surface & dst, int icn, uint32_t index, const Point & mapPoint, bool cycle = false, int offsetX = 0, int offsetY = 0 ) const;
 
         void QuantitySetVariant( int );
         void QuantitySetExt( int );
