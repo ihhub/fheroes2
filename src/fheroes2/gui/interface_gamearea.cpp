@@ -546,7 +546,7 @@ void Interface::GameArea::QueueEventProcessing( void )
             return;
     }
 
-    const Point tileOffset = _topLeftTileOffset + mp - Point( _windowROI.x, _windowROI. y );
+    const Point tileOffset = _topLeftTileOffset + mp - Point( _windowROI.x, _windowROI.y );
     const Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
                          ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
 
@@ -595,7 +595,7 @@ void Interface::GameArea::_setCenter( const Point & point )
 
 int32_t Interface::GameArea::GetValidTileIdFromPoint( const Point & point ) const
 {
-    const Point offset = _topLeftTileOffset + point - Point( _windowROI.x, _windowROI. y );
+    const Point offset = _topLeftTileOffset + point - Point( _windowROI.x, _windowROI.y );
     if ( offset.x < 0 || offset.y < 0 )
         return -1;
 
@@ -615,5 +615,5 @@ Point Interface::GameArea::GetRelativeTilePosition( const Point & tileId ) const
 
 Point Interface::GameArea::_getRelativePosition( const Point & point ) const
 {
-    return point - _topLeftTileOffset + Point( _windowROI.x, _windowROI. y );
+    return point - _topLeftTileOffset + Point( _windowROI.x, _windowROI.y );
 }
