@@ -262,6 +262,15 @@ bool Troops::HasMonster( const Monster & mons ) const
     return end() != std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
 }
 
+bool Troops::hasColorCycling() const
+{
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->hasColorCycling() )
+            return true;
+    }
+    return false;
+}
+
 bool Troops::AllTroopsIsRace( int race ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )
