@@ -1986,23 +1986,23 @@ void AGG::RegisterScalableICN( int icnId )
     scalableICNIds.insert( icnId );
 }
 
-bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMap, int icnId, int icnIndex, bool reflect )
+bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int icnIndex, bool reflect )
 {
-    if ( colorMap.size() != PALETTE_SIZE )
+    if ( colorIndexes.size() != PALETTE_SIZE )
         return false;
 
     const std::vector<uint32_t> & rgbColors = PAL::GetRGBColors();
 
-    std::vector<uint32_t> colors( colorMap.size() );
-    for ( size_t i = 0; i < colorMap.size(); ++i )
-        colors[i] = rgbColors[colorMap[i]];
+    std::vector<uint32_t> colors( colorIndexes.size() );
+    for ( size_t i = 0; i < colorIndexes.size(); ++i )
+        colors[i] = rgbColors[colorIndexes[i]];
 
     return ReplaceColors( surface, colors, icnId, icnIndex, reflect );
 }
 
-bool AGG::ReplaceColors( Surface & surface, const std::vector<uint32_t> & colorMap, int icnId, int icnIndex, bool reflect )
+bool AGG::ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int icnIndex, bool reflect )
 {
-    if ( !surface.isValid() || surface.depth() != 32 || colorMap.size() != PALETTE_SIZE || icnId < 0 || icnIndex < 0 )
+    if ( !surface.isValid() || surface.depth() != 32 || rgbColors.size() != PALETTE_SIZE || icnId < 0 || icnIndex < 0 )
         return false;
 
     std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, icnIndex ) );
@@ -2013,7 +2013,7 @@ bool AGG::ReplaceColors( Surface & surface, const std::vector<uint32_t> & colorM
     if ( surface.w() != data.width() || surface.h() != data.height() )
         return false;
 
-    return surface.SetColors( data.get(), colorMap, reflect );
+    return surface.SetColors( data.get(), rgbColors, reflect );
 }
 
 bool AGG::DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect )

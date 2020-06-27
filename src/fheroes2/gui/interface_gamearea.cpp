@@ -145,24 +145,24 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
 
 void Interface::GameArea::UpdateCyclingPalette( int frame )
 {
-    const std::vector<uint8_t> & palette = PAL::GetCyclingPalette( frame );
+    const std::vector<uint8_t> & colorIndexes = PAL::GetCyclingPalette( frame );
     const std::vector<uint32_t> & rgbColors = PAL::GetRGBColors();
 
-    if ( palette.size() == rgbColors.size() ) {
-        PAL::SetCustomSDLPalette( palette );
+    if ( colorIndexes.size() == rgbColors.size() ) {
+        PAL::SetCustomSDLPalette( colorIndexes );
 
-        _customPalette.resize( palette.size() );
-        for ( size_t i = 0; i < palette.size(); ++i )
-            _customPalette[i] = rgbColors[palette[i]];
+        _cyclingRGBPalette.resize( colorIndexes.size() );
+        for ( size_t i = 0; i < colorIndexes.size(); ++i )
+            _cyclingRGBPalette[i] = rgbColors[colorIndexes[i]];
 
         // reset cache as we'll need to re-color tiles
         _spriteCache.clear();
     }
 }
 
-const std::vector<uint32_t> & Interface::GameArea::GetCyclingPalette() const
+const std::vector<uint32_t> & Interface::GameArea::GetCyclingRGBPalette() const
 {
-    return _customPalette;
+    return _cyclingRGBPalette;
 }
 
 MapObjectSprite & Interface::GameArea::GetSpriteCache()

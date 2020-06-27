@@ -80,7 +80,7 @@ namespace Interface
         void BlitOnTile( Surface &, const Sprite &, const Point & ) const;
 
         void UpdateCyclingPalette( int frame );
-        const std::vector<uint32_t> & GetCyclingPalette() const;
+        const std::vector<uint32_t> & GetCyclingRGBPalette() const;
         MapObjectSprite & GetSpriteCache();
 
         void SetUpdateCursor( void );
@@ -110,7 +110,7 @@ namespace Interface
         int borderSizeX;
         int borderSizeY;
 
-        std::vector<uint32_t> _customPalette;
+        std::vector<uint32_t> _cyclingRGBPalette;
         MapObjectSprite _spriteCache;
 
         enum

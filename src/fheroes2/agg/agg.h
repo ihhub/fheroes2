@@ -81,9 +81,9 @@ namespace AGG
     void RegisterScalableICN( int icnId );
 
     // Replace colors based on indexes provided. Returns true only when the operation was successful.
-    bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMap, int icnId, int incIndex, bool reflect );
-    // Replace colors with the ones provided. Map has to match the palette. Returns true only when the operation was successful.
-    bool ReplaceColors( Surface & surface, const std::vector<uint32_t> & colorReplacement, int icnId, int incIndex, bool reflect );
+    bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int incIndex, bool reflect );
+    // Replace colors with the ones provided. RGB map has to match the palette. Returns true only if successful.
+    bool ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int incIndex, bool reflect );
 
     // Returns true in an event of success. Only for 32-bit images
     bool DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect );

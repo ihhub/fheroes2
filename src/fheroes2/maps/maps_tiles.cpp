@@ -1533,7 +1533,7 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
                     }
                     else {
                         sprite = AGG::GetICN( icn, index );
-                        AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
+                        AGG::ReplaceColors( sprite, area.GetCyclingRGBPalette(), icn, index, false );
                         spriteCache[tileIndex] = sprite;
                     }
                 }
