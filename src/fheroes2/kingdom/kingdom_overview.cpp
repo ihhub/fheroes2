@@ -118,7 +118,7 @@ public:
     void ActionListSingleClick( HeroRow &, const Point &, s32, s32 );
     void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 );
     void ActionListPressRight( HeroRow &, const Point &, s32, s32 );
-    bool ActionListCursor( HeroRow &, const Point &, s32, s32 );
+    bool ActionListCursor( HeroRow &, const Point & );
 };
 
 StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
@@ -158,7 +158,7 @@ void StatsHeroesList::ActionListPressRight( HeroRow & row, const Point & cursor,
         Dialog::QuickInfo( *row.hero );
 }
 
-bool StatsHeroesList::ActionListCursor( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
+bool StatsHeroesList::ActionListCursor( HeroRow & row, const Point & cursor )
 {
     if ( ( row.armyBar->GetArea() & cursor ) && row.armyBar->QueueEventProcessing() ) {
         if ( row.artifactsBar->isSelected() )
@@ -244,7 +244,7 @@ void StatsHeroesList::RedrawBackground( const Point & dst )
     AGG::GetICN( ICN::OVERVIEW, 13 ).Blit( dst.x + 628, dst.y + 17 );
 
     // items background
-    for ( u32 ii = 0; ii < maxItems; ++ii ) {
+    for ( int ii = 0; ii < VisibleItemCount(); ++ii ) {
         const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 8 );
         back.Blit( dst.x + 30, dst.y + 17 + ii * ( back.h() + 4 ) );
     }
@@ -324,7 +324,7 @@ public:
     void ActionListSingleClick( CstlRow &, const Point &, s32, s32 );
     void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 );
     void ActionListPressRight( CstlRow &, const Point &, s32, s32 );
-    bool ActionListCursor( CstlRow &, const Point &, s32, s32 );
+    bool ActionListCursor( CstlRow &, const Point & );
 };
 
 StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
@@ -385,7 +385,7 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const Point & cursor
     }
 }
 
-bool StatsCastlesList::ActionListCursor( CstlRow & row, const Point & cursor, s32 ox, s32 oy )
+bool StatsCastlesList::ActionListCursor( CstlRow & row, const Point & cursor )
 {
     if ( row.armyBarGuard && ( row.armyBarGuard->GetArea() & cursor )
          && ( row.armyBarGuest ? row.armyBarGuard->QueueEventProcessing( *row.armyBarGuest ) : row.armyBarGuard->QueueEventProcessing() ) ) {
@@ -470,7 +470,7 @@ void StatsCastlesList::RedrawBackground( const Point & dst )
     AGG::GetICN( ICN::OVERVIEW, 13 ).Blit( dst.x + 628, dst.y + 17 );
 
     // items background
-    for ( u32 ii = 0; ii < maxItems; ++ii ) {
+    for ( int ii = 0; ii < VisibleItemCount(); ++ii ) {
         const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 8 );
         back.Blit( dst.x + 30, dst.y + 17 + ii * ( back.h() + 4 ) );
         // fix bar
@@ -655,9 +655,9 @@ void Kingdom::OverviewDialog( void )
         listStats->QueueEventProcessing();
 
         if ( le.MouseClickLeft( rectIncome ) )
-            Dialog::ResourceInfo( "", "income:", GetIncome( INCOME_ALL ), Dialog::OK );
+            Dialog::ResourceInfo( "", _( "Income:" ), GetIncome( INCOME_ALL ), Dialog::OK );
         else if ( le.MousePressRight( rectIncome ) )
-            Dialog::ResourceInfo( "", "income:", GetIncome( INCOME_ALL ), 0 );
+            Dialog::ResourceInfo( "", _( "Income:" ), GetIncome( INCOME_ALL ), 0 );
 
         // redraw
         if ( !cursor.isVisible() || redraw ) {

@@ -25,6 +25,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_interface.h"
 #include "gamedefs.h"
 #include "mus.h"
 #include "pocketpc.h"
@@ -117,7 +118,17 @@ int Game::MainMenu( void )
     }
 
     // mainmenu loop
-    while ( le.HandleEvents() ) {
+    while ( 1 ) {
+        if ( !le.HandleEvents( true, true ) ) {
+            if ( Interface::Basic::EventExit() == QUITGAME ) {
+                if ( conf.ExtGameUseFade() )
+                    display.Fade();
+                break;
+            }
+        }
+
+        bool redrawScreen = false;
+
         for ( u32 i = 0; i < ARRAY_COUNT( buttons ); i++ ) {
             buttons[i].wasOver = buttons[i].isOver;
 
@@ -128,17 +139,24 @@ int Game::MainMenu( void )
 
             buttons[i].isOver = le.MouseCursor( buttons[i].button );
 
-            if ( ( !buttons[i].isOver && buttons[i].wasOver ) || ( buttons[i].isOver && !buttons[i].wasOver ) ) {
+            if ( buttons[i].isOver != buttons[i].wasOver ) {
                 u32 frame = buttons[i].frame;
 
                 if ( buttons[i].isOver && !buttons[i].wasOver )
                     frame++;
 
-                cursor.Hide();
+                if ( !redrawScreen ) {
+                    cursor.Hide();
+                    redrawScreen = true;
+                }
                 const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, frame );
                 sprite.Blit( sprite.x(), sprite.y() );
-                cursor.Show();
             }
+        }
+
+        if ( redrawScreen ) {
+            cursor.Show();
+            display.Flip();
         }
 
         if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame ) )
@@ -154,9 +172,11 @@ int Game::MainMenu( void )
         else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits ) )
             return CREDITS;
         else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit ) ) {
-            if ( conf.ExtGameUseFade() )
-                display.Fade();
-            return QUITGAME;
+            if ( Interface::Basic::EventExit() == QUITGAME ) {
+                if ( conf.ExtGameUseFade() )
+                    display.Fade();
+                return QUITGAME;
+            }
         }
 
         // right info

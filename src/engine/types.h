@@ -40,6 +40,10 @@ typedef Uint32 u32;
 
 #define DELAY( X ) SDL_Delay( X )
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #if defined __SYMBIAN32__
 namespace std
 {

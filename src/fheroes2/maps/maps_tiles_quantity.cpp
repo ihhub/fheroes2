@@ -208,7 +208,7 @@ void Maps::Tiles::QuantitySetResource( int res, u32 count )
 u32 Maps::Tiles::QuantityGold( void ) const
 {
     switch ( GetObject( false ) ) {
-    case MP2::OBJ_ARTIFACT: {
+    case MP2::OBJ_ARTIFACT:
         switch ( QuantityVariant() ) {
         case 1:
             return 2000;
@@ -220,7 +220,6 @@ u32 Maps::Tiles::QuantityGold( void ) const
             break;
         }
         break;
-    } break;
 
     case MP2::OBJ_RESOURCE:
     case MP2::OBJ_MAGICGARDEN:
@@ -257,7 +256,6 @@ u32 Maps::Tiles::QuantityGold( void ) const
         default:
             return 2000;
         }
-        break;
 
     default:
         break;
@@ -690,8 +688,6 @@ void Maps::Tiles::QuantityUpdate( void )
             QuantityUpdate();
         }
         else {
-            UpdateTreasureChestSprite( *this );
-
             Rand::Queue percents( 4 );
             // 31% - 2000 gold or 1500 exp
             percents.Push( 1, 31 );
@@ -851,14 +847,6 @@ void Maps::Tiles::QuantityUpdate( void )
                 break;
             }
     } break;
-
-    case MP2::OBJ_STONELIGHTS:
-        UpdateStoneLightsSprite( *this );
-        break;
-
-    case MP2::OBJ_FOUNTAIN:
-        UpdateFountainSprite( *this );
-        break;
 
     case MP2::OBJ_EVENT: {
         TilesAddon * addon = FindObject( MP2::OBJ_EVENT );

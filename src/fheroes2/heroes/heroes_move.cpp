@@ -35,6 +35,11 @@
 #include "settings.h"
 #include "world.h"
 
+namespace
+{
+    const int heroFrameCount = 9;
+}
+
 bool ReflectSprite( int from );
 void PlayWalkSound( int ground );
 bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next );
@@ -227,7 +232,54 @@ Sprite SpriteFlag( const Heroes & hero, int index, bool reflect, bool rotate )
             break;
         }
 
-    return AGG::GetICN( icn_flag, index_sprite + ( index % 9 ), reflect );
+    const int frameId = index % heroFrameCount;
+    Sprite flag = AGG::GetICN( icn_flag, index_sprite + frameId, reflect );
+    if ( !hero.isEnableMove() ) {
+        static const Point offsetTop[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
+        static const Point offsetBottom[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, -3 ), Point( 0, 0 ), Point( 0, -1 )};
+        static const Point offsetSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 ), Point( 1, -1 ), Point( 2, -1 ), Point( 1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
+        static const Point offsetTopSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( -1, -1 ), Point( -2, -1 ), Point( -2, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
+        static const Point offsetBottomSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, -1 ), Point( 2, -2 ), Point( 0, -2 ), Point( -1, -3 ), Point( -1, -2 ), Point( -1, -1 ), Point( 1, 0 )};
+
+        static const Point offsetShipTopBottom[heroFrameCount]
+            = {Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 )};
+        static const Point offsetShipSideways[heroFrameCount]
+            = {Point( 0, -2 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
+        static const Point offsetShipTopSideways[heroFrameCount]
+            = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
+        static const Point offsetShipBottomSideways[heroFrameCount]
+            = {Point( 0, -2 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 )};
+
+        Point offset;
+        switch ( hero.GetDirection() ) {
+        case Direction::TOP:
+            offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
+            break;
+        case Direction::BOTTOM:
+            offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetBottom[frameId];
+            break;
+        case Direction::RIGHT:
+        case Direction::LEFT:
+            offset = hero.isShipMaster() ? offsetShipSideways[frameId] : offsetSideways[frameId];
+            break;
+        case Direction::TOP_RIGHT:
+        case Direction::TOP_LEFT:
+            offset = hero.isShipMaster() ? offsetShipTopSideways[frameId] : offsetTopSideways[frameId];
+            break;
+        case Direction::BOTTOM_RIGHT:
+        case Direction::BOTTOM_LEFT:
+            offset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
+            break;
+        }
+
+        flag.SetPos( flag.GetPos() + offset );
+    }
+    return flag;
 }
 
 Sprite SpriteShad( const Heroes & hero, int index )
@@ -341,10 +393,22 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     bool reflect = ReflectSprite( direction );
 
-    const Sprite & sprite1 = SpriteHero( *this, sprite_index, reflect, false );
-    const Sprite & sprite2 = SpriteFlag( *this, sprite_index, reflect, false );
-    const Sprite & sprite3 = SpriteShad( *this, sprite_index );
-    const Sprite & sprite4 = SpriteFroth( *this, sprite_index, reflect );
+    int flagFrameID = sprite_index;
+    if ( !isEnableMove() ) {
+        flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
+    }
+
+    Sprite sprite1 = SpriteHero( *this, sprite_index, reflect, false );
+    Sprite sprite2 = SpriteFlag( *this, flagFrameID, reflect, false );
+    Sprite sprite3 = SpriteShad( *this, sprite_index );
+    Sprite sprite4 = SpriteFroth( *this, sprite_index, reflect );
+
+    if ( _alphaValue < 255 ) {
+        sprite1.SetAlphaMod( _alphaValue, true );
+        sprite2.SetAlphaMod( _alphaValue, true );
+        sprite3.SetAlphaMod( _alphaValue, true );
+        sprite4.SetAlphaMod( _alphaValue, true );
+    }
 
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
     Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.w() : sprite2.x() ), dy + sprite2.y() + TILEWIDTH );
@@ -355,36 +419,36 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     if ( sprite_index < 45 ) {
         s32 ox = 0;
         s32 oy = 0;
-        int frame = ( sprite_index % 9 );
+        const int frame = ( sprite_index % 9 );
 
         switch ( direction ) {
         case Direction::TOP:
-            oy = -4 * frame;
+            oy = -HERO_MOVE_STEP * frame;
             break;
         case Direction::TOP_RIGHT:
-            ox = 4 * frame;
-            oy = -4 * frame;
+            ox = HERO_MOVE_STEP * frame;
+            oy = -HERO_MOVE_STEP * frame;
             break;
         case Direction::TOP_LEFT:
-            ox = -4 * frame;
-            oy = -4 * frame;
+            ox = -HERO_MOVE_STEP * frame;
+            oy = -HERO_MOVE_STEP * frame;
             break;
         case Direction::BOTTOM_RIGHT:
-            ox = 4 * frame;
-            oy = 4 * frame;
+            ox = HERO_MOVE_STEP * frame;
+            oy = HERO_MOVE_STEP * frame;
             break;
         case Direction::BOTTOM:
-            oy = 4 * frame;
+            oy = HERO_MOVE_STEP * frame;
             break;
         case Direction::BOTTOM_LEFT:
-            ox = -4 * frame;
-            oy = 4 * frame;
+            ox = -HERO_MOVE_STEP * frame;
+            oy = HERO_MOVE_STEP * frame;
             break;
         case Direction::RIGHT:
-            ox = 4 * frame;
+            ox = HERO_MOVE_STEP * frame;
             break;
         case Direction::LEFT:
-            ox = -4 * frame;
+            ox = -HERO_MOVE_STEP * frame;
             break;
         default:
             break;
@@ -400,12 +464,7 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         dst_pt4.y += oy;
     }
 
-    if ( isShipMaster() ) {
-        dst_pt1.y -= 15;
-        dst_pt2.y -= 15;
-        dst_pt3.y -= 15;
-        dst_pt4.y -= 15;
-
+    if ( isShipMaster() && isEnableMove() ) {
         sprite4.Blit( gamearea.RectFixed( dst_pt4, sprite4.w(), sprite4.h() ), dst_pt4, dst );
     }
 
@@ -688,51 +747,22 @@ void Heroes::FadeOut( void ) const
         return;
 
     Display & display = Display::Get();
-
-    bool reflect = ReflectSprite( direction );
-
-    s32 dx = gamearea.GetMapsPos().x + TILEWIDTH * ( mp.x - gamearea.GetRectMaps().x );
-    s32 dy = gamearea.GetMapsPos().y + TILEWIDTH * ( mp.y - gamearea.GetRectMaps().y );
-
-    Sprite sphero = SpriteHero( *this, sprite_index, reflect, false );
-    Sprite sprite1 = Sprite( sphero.GetSurface(), sphero.x(), sphero.y() );
-
-    Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    const Rect src_rt = gamearea.RectFixed( dst_pt1, sprite1.w(), sprite1.h() );
-
     LocalEvent & le = LocalEvent::Get();
-    int alpha = 250;
+    _alphaValue = 250;
 
-    while ( le.HandleEvents() && alpha > 0 ) {
+    while ( le.HandleEvents() && _alphaValue > 0 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
             Cursor::Get().Hide();
 
-            for ( s32 y = mp.y - 1; y <= mp.y + 1; ++y )
-                for ( s32 x = mp.x - 1; x <= mp.x + 1; ++x )
-                    if ( Maps::isValidAbsPoint( x, y ) ) {
-                        const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( x, y ) );
-
-                        tile.RedrawTile( display );
-                        tile.RedrawBottom( display );
-                        tile.RedrawObjects( display );
-                    }
-
-            sprite1.SetAlphaMod( alpha );
-            sprite1.Blit( src_rt, dst_pt1, display );
-
-            for ( s32 y = mp.y - 1; y <= mp.y + 1; ++y )
-                for ( s32 x = mp.x - 1; x <= mp.x + 1; ++x )
-                    if ( Maps::isValidAbsPoint( x, y ) ) {
-                        const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( x, y ) );
-
-                        tile.RedrawTop( display );
-                    }
+            gamearea.Redraw( display, LEVEL_ALL );
 
             Cursor::Get().Show();
             display.Flip();
-            alpha -= 10;
+            _alphaValue -= 10;
         }
     }
+
+    _alphaValue = 255;
 }
 
 void Heroes::FadeIn( void ) const
@@ -744,51 +774,22 @@ void Heroes::FadeIn( void ) const
         return;
 
     Display & display = Display::Get();
-
-    bool reflect = ReflectSprite( direction );
-
-    s32 dx = gamearea.GetMapsPos().x + TILEWIDTH * ( mp.x - gamearea.GetRectMaps().x );
-    s32 dy = gamearea.GetMapsPos().y + TILEWIDTH * ( mp.y - gamearea.GetRectMaps().y );
-
-    Sprite sphero = SpriteHero( *this, sprite_index, reflect, false );
-    Sprite sprite1 = Sprite( sphero.GetSurface(), sphero.x(), sphero.y() );
-
-    Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.w() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    const Rect src_rt = gamearea.RectFixed( dst_pt1, sprite1.w(), sprite1.h() );
-
     LocalEvent & le = LocalEvent::Get();
-    int alpha = 0;
+    _alphaValue = 0;
 
-    while ( le.HandleEvents() && alpha < 250 ) {
+    while ( le.HandleEvents() && _alphaValue < 250 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
             Cursor::Get().Hide();
 
-            for ( s32 y = mp.y - 1; y <= mp.y + 1; ++y )
-                for ( s32 x = mp.x - 1; x <= mp.x + 1; ++x )
-                    if ( Maps::isValidAbsPoint( x, y ) ) {
-                        const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( x, y ) );
-
-                        tile.RedrawTile( display );
-                        tile.RedrawBottom( display );
-                        tile.RedrawObjects( display );
-                    }
-
-            sprite1.SetAlphaMod( alpha );
-            sprite1.Blit( src_rt, dst_pt1, display );
-
-            for ( s32 y = mp.y - 1; y <= mp.y + 1; ++y )
-                for ( s32 x = mp.x - 1; x <= mp.x + 1; ++x )
-                    if ( Maps::isValidAbsPoint( x, y ) ) {
-                        const Maps::Tiles & tile = world.GetTiles( Maps::GetIndexFromAbsPoint( x, y ) );
-
-                        tile.RedrawTop( display );
-                    }
+            gamearea.Redraw( display, LEVEL_ALL );
 
             Cursor::Get().Show();
             display.Flip();
-            alpha += 10;
+            _alphaValue += 10;
         }
     }
+
+    _alphaValue = 255;
 }
 
 bool Heroes::Move( bool fast )
@@ -825,4 +826,45 @@ bool Heroes::Move( bool fast )
     }
 
     return false;
+}
+
+int Heroes::GetMoveStep() const
+{
+    return HERO_MOVE_STEP;
+}
+
+Point Heroes::MovementDirection() const
+{
+    const int32_t from = GetIndex();
+    const int32_t to = Maps::GetDirectionIndex( from, path.GetFrontDirection() );
+    if ( from == -1 || to == -1 )
+        return Point();
+
+    if ( direction == Direction::TOP ) {
+        if ( sprite_index > 0 && sprite_index < 9 - 1 ) {
+            return Point( 0, -1 );
+        }
+    }
+    else if ( direction == Direction::TOP_RIGHT || direction == Direction::TOP_LEFT ) {
+        if ( sprite_index > 9 && sprite_index < 18 - 1 ) {
+            return Point( direction == Direction::TOP_RIGHT ? 1 : -1, -1 );
+        }
+    }
+    else if ( direction == Direction::RIGHT || direction == Direction::LEFT ) {
+        if ( sprite_index > 18 && sprite_index < 27 - 1 ) {
+            return Point( direction == Direction::RIGHT ? 1 : -1, 0 );
+        }
+    }
+    else if ( direction == Direction::BOTTOM_RIGHT || direction == Direction::BOTTOM_LEFT ) {
+        if ( sprite_index > 27 && sprite_index < 36 - 1 ) {
+            return Point( direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 );
+        }
+    }
+    else if ( direction == Direction::BOTTOM ) {
+        if ( sprite_index > 36 && sprite_index < 45 - 1 ) {
+            return Point( 0, 1 );
+        }
+    }
+
+    return Point();
 }

@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "battle_animation.h"
-#include "bin_info.h"
 #include "monster.h"
 #include "settings.h"
 #include <algorithm>
@@ -34,6 +33,11 @@ AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
     _seq = rhs;
     _currentFrame = 0;
     return *this;
+}
+
+AnimationSequence::~AnimationSequence()
+{
+    _seq.clear();
 }
 
 int AnimationSequence::playAnimation( bool loop )
@@ -62,9 +66,9 @@ int AnimationSequence::getFrame() const
     return isValid() ? _seq[_currentFrame] : 0;
 }
 
-int AnimationSequence::animationLength() const
+size_t AnimationSequence::animationLength() const
 {
-    return static_cast<int>( _seq.size() );
+    return _seq.size();
 }
 
 int AnimationSequence::firstFrame() const
@@ -81,7 +85,7 @@ void AnimationSequence::setToLastFrame()
 double AnimationSequence::movementProgress() const
 {
     if ( _seq.size() > 1 )
-        return static_cast<double>( _currentFrame ) / ( static_cast<double>( animationLength() ) - 1 );
+        return static_cast<double>( _currentFrame ) / ( static_cast<double>( animationLength() ) );
 
     return 0;
 }
@@ -101,95 +105,171 @@ bool AnimationSequence::isValid() const
     return _seq.size() > 0;
 }
 
-AnimationReference::AnimationReference()
+TimedSequence::TimedSequence( const std::vector<int> & seq, uint32_t duration )
+    : AnimationSequence( seq )
+    , _duration( duration )
+    , _currentTime( 0 )
+{}
+
+int TimedSequence::playAnimation( uint32_t delta, bool loop )
 {
-    _type = Monster::UNKNOWN;
+    _currentTime += delta;
+    if ( _currentTime > _duration ) {
+        _currentTime = loop ? _currentTime % _duration : _duration;
+    }
+
+    _currentFrame = getFrameID( _currentTime );
+    return getFrame();
 }
 
-AnimationReference::AnimationReference( const Bin_Info::MonsterAnimInfo & info, int id )
+int TimedSequence::restartAnimation()
 {
-    if ( id < Monster::PEASANT && id > Monster::WATER_ELEMENT )
+    _currentTime = 0;
+    _currentFrame = 0;
+    return getFrame();
+}
+
+int TimedSequence::getFrameAt( uint32_t time ) const
+{
+    return isValid() ? _seq[getFrameID( time )] : 0;
+}
+
+size_t TimedSequence::getFrameID( uint32_t time ) const
+{
+    // isValid makes sure duration and length is not 0
+    if ( isValid() ) {
+        const size_t frame = static_cast<size_t>( time / ( _duration / static_cast<double>( animationLength() ) ) );
+        // check if time >= duration
+        return ( frame < animationLength() ) ? frame : animationLength() - 1;
+    }
+    return 0;
+}
+
+uint32_t TimedSequence::getCurrentTime() const
+{
+    return _currentTime;
+}
+
+uint32_t TimedSequence::getDuration() const
+{
+    return _duration;
+}
+
+double TimedSequence::movementProgress() const
+{
+    if ( isValid() )
+        return static_cast<double>( _currentTime ) / static_cast<double>( _duration );
+
+    return 0;
+}
+
+bool TimedSequence::isValid() const
+{
+    return _seq.size() > 0 && _currentTime <= _duration && _duration > 0;
+}
+
+AnimationReference::AnimationReference()
+    : _monsterID( Monster::UNKNOWN )
+{}
+
+AnimationReference::AnimationReference( int monsterID )
+    : _monsterID( monsterID )
+{
+    if ( monsterID < Monster::PEASANT || monsterID > Monster::WATER_ELEMENT )
         return;
 
-    _type = id;
+    _monsterInfo = Bin_Info::GetMonsterInfo( monsterID );
 
     // STATIC is our default
     // appendFrames inserts to vector so ref is still valid
-    if ( !appendFrames( info, _static, Bin_Info::MonsterAnimInfo::STATIC ) ) {
+    if ( !appendFrames( _static, Bin_Info::MonsterAnimInfo::STATIC ) ) {
         // fall back to this, to avoid crashes
         _static.push_back( 1 );
     }
 
     // Taking damage
-    appendFrames( info, _wince, Bin_Info::MonsterAnimInfo::WINCE_UP );
-    appendFrames( info, _wince, Bin_Info::MonsterAnimInfo::WINCE_END ); // TODO: play it back together for now
-    appendFrames( info, _death, Bin_Info::MonsterAnimInfo::DEATH );
+    appendFrames( _wince, Bin_Info::MonsterAnimInfo::WINCE_UP );
+    appendFrames( _wince, Bin_Info::MonsterAnimInfo::WINCE_END ); // TODO: play it back together for now
+    appendFrames( _death, Bin_Info::MonsterAnimInfo::DEATH );
 
     // Idle animations
-    for ( uint32_t idx = Bin_Info::MonsterAnimInfo::IDLE1; idx < info.idleAnimationCount + Bin_Info::MonsterAnimInfo::IDLE1; ++idx ) {
+    for ( uint32_t idx = Bin_Info::MonsterAnimInfo::IDLE1; idx < _monsterInfo.idleAnimationCount + Bin_Info::MonsterAnimInfo::IDLE1; ++idx ) {
         std::vector<int> idleAnim;
 
-        if ( appendFrames( info, idleAnim, idx ) ) {
+        if ( appendFrames( idleAnim, idx ) ) {
             _idle.push_back( idleAnim );
         }
     }
 
     // Movement sequences
-    // Every unit has MOVE_MAIN anim, use it as a base
-    appendFrames( info, _loopMove, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+    _offsetX = _monsterInfo.frameXOffset;
 
-    if ( info.hasAnim( Bin_Info::MonsterAnimInfo::MOVE_ONE ) ) {
-        appendFrames( info, _quickMove, Bin_Info::MonsterAnimInfo::MOVE_ONE );
+    // Every unit has MOVE_MAIN anim, use it as a base
+    appendFrames( _moving, Bin_Info::MonsterAnimInfo::MOVE_TILE_START );
+    appendFrames( _moving, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+    appendFrames( _moving, Bin_Info::MonsterAnimInfo::MOVE_TILE_END );
+
+    if ( _monsterInfo.hasAnim( Bin_Info::MonsterAnimInfo::MOVE_ONE ) ) {
+        appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_ONE );
     }
     else { // TODO: this must be LICH or POWER_LICH. Check it!
-        _quickMove = _loopMove;
+        _moveOneTile = _moving;
     }
 
-    appendFrames( info, _moveModes.start, Bin_Info::MonsterAnimInfo::MOVE_START );
-    appendFrames( info, _moveModes.end, Bin_Info::MonsterAnimInfo::MOVE_STOP );
+    // First tile move: 1 + 3 + 4
+    appendFrames( _moveFirstTile, Bin_Info::MonsterAnimInfo::MOVE_START );
+    appendFrames( _moveFirstTile, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+    appendFrames( _moveFirstTile, Bin_Info::MonsterAnimInfo::MOVE_TILE_END );
+
+    // Last tile move: 2 + 3 + 5
+    appendFrames( _moveLastTile, Bin_Info::MonsterAnimInfo::MOVE_TILE_START );
+    appendFrames( _moveLastTile, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+    appendFrames( _moveLastTile, Bin_Info::MonsterAnimInfo::MOVE_STOP );
+
+    // Special for flyers
+    appendFrames( _flying.start, Bin_Info::MonsterAnimInfo::MOVE_START );
+    appendFrames( _flying.end, Bin_Info::MonsterAnimInfo::MOVE_STOP );
 
     // Attack sequences
-    appendFrames( info, _melee[Monster_State::TOP].start, Bin_Info::MonsterAnimInfo::ATTACK1 );
-    appendFrames( info, _melee[Monster_State::TOP].end, Bin_Info::MonsterAnimInfo::ATTACK1_END );
+    appendFrames( _melee[Monster_Info::TOP].start, Bin_Info::MonsterAnimInfo::ATTACK1 );
+    appendFrames( _melee[Monster_Info::TOP].end, Bin_Info::MonsterAnimInfo::ATTACK1_END );
 
-    appendFrames( info, _melee[Monster_State::FRONT].start, Bin_Info::MonsterAnimInfo::ATTACK2 );
-    appendFrames( info, _melee[Monster_State::FRONT].end, Bin_Info::MonsterAnimInfo::ATTACK2_END );
+    appendFrames( _melee[Monster_Info::FRONT].start, Bin_Info::MonsterAnimInfo::ATTACK2 );
+    appendFrames( _melee[Monster_Info::FRONT].end, Bin_Info::MonsterAnimInfo::ATTACK2_END );
 
-    appendFrames( info, _melee[Monster_State::BOTTOM].start, Bin_Info::MonsterAnimInfo::ATTACK3 );
-    appendFrames( info, _melee[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::ATTACK3_END );
+    appendFrames( _melee[Monster_Info::BOTTOM].start, Bin_Info::MonsterAnimInfo::ATTACK3 );
+    appendFrames( _melee[Monster_Info::BOTTOM].end, Bin_Info::MonsterAnimInfo::ATTACK3_END );
 
     // Use either shooting or breath attack animation as ranged
-    if ( info.hasAnim( Bin_Info::MonsterAnimInfo::SHOOT2 ) ) {
-        appendFrames( info, _ranged[Monster_State::TOP].start, Bin_Info::MonsterAnimInfo::SHOOT1 );
-        appendFrames( info, _ranged[Monster_State::TOP].end, Bin_Info::MonsterAnimInfo::SHOOT1_END );
+    if ( _monsterInfo.hasAnim( Bin_Info::MonsterAnimInfo::SHOOT2 ) ) {
+        appendFrames( _ranged[Monster_Info::TOP].start, Bin_Info::MonsterAnimInfo::SHOOT1 );
+        appendFrames( _ranged[Monster_Info::TOP].end, Bin_Info::MonsterAnimInfo::SHOOT1_END );
 
-        appendFrames( info, _ranged[Monster_State::FRONT].start, Bin_Info::MonsterAnimInfo::SHOOT2 );
-        appendFrames( info, _ranged[Monster_State::FRONT].end, Bin_Info::MonsterAnimInfo::SHOOT2_END );
+        appendFrames( _ranged[Monster_Info::FRONT].start, Bin_Info::MonsterAnimInfo::SHOOT2 );
+        appendFrames( _ranged[Monster_Info::FRONT].end, Bin_Info::MonsterAnimInfo::SHOOT2_END );
 
-        appendFrames( info, _ranged[Monster_State::BOTTOM].start, Bin_Info::MonsterAnimInfo::SHOOT3 );
-        appendFrames( info, _ranged[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::SHOOT3_END );
+        appendFrames( _ranged[Monster_Info::BOTTOM].start, Bin_Info::MonsterAnimInfo::SHOOT3 );
+        appendFrames( _ranged[Monster_Info::BOTTOM].end, Bin_Info::MonsterAnimInfo::SHOOT3_END );
     }
-    else if ( info.hasAnim( Bin_Info::MonsterAnimInfo::DOUBLEHEX2 ) ) {
+    else if ( _monsterInfo.hasAnim( Bin_Info::MonsterAnimInfo::DOUBLEHEX2 ) ) {
         // Only 6 units should have this (in the original game)
-        appendFrames( info, _ranged[Monster_State::TOP].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX1 );
-        appendFrames( info, _ranged[Monster_State::TOP].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX1_END );
+        appendFrames( _ranged[Monster_Info::TOP].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX1 );
+        appendFrames( _ranged[Monster_Info::TOP].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX1_END );
 
-        appendFrames( info, _ranged[Monster_State::FRONT].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX2 );
-        appendFrames( info, _ranged[Monster_State::FRONT].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX2_END );
+        appendFrames( _ranged[Monster_Info::FRONT].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX2 );
+        appendFrames( _ranged[Monster_Info::FRONT].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX2_END );
 
-        appendFrames( info, _ranged[Monster_State::BOTTOM].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX3 );
-        appendFrames( info, _ranged[Monster_State::BOTTOM].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX3_END );
+        appendFrames( _ranged[Monster_Info::BOTTOM].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX3 );
+        appendFrames( _ranged[Monster_Info::BOTTOM].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX3_END );
     }
-
-    _offsetX = info.frameXOffset;
 }
 
 AnimationReference::~AnimationReference() {}
 
-bool AnimationReference::appendFrames( const Bin_Info::MonsterAnimInfo & info, std::vector<int> & target, int animID )
+bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
 {
-    if ( info.hasAnim( animID ) ) {
-        target.insert( target.end(), info.animationFrames.at( animID ).begin(), info.animationFrames.at( animID ).end() );
+    if ( _monsterInfo.hasAnim( animID ) ) {
+        target.insert( target.end(), _monsterInfo.animationFrames.at( animID ).begin(), _monsterInfo.animationFrames.at( animID ).end() );
         return true;
     }
     return false;
@@ -198,48 +278,62 @@ bool AnimationReference::appendFrames( const Bin_Info::MonsterAnimInfo & info, s
 const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const
 {
     switch ( animState ) {
-    case Monster_State::STATIC:
+    case Monster_Info::STATIC:
         return _static;
-    case Monster_State::IDLE:
-        return _idle.front(); // TODO: use all idle animations
-    case Monster_State::MOVE_START:
-        return _moveModes.start;
-    case Monster_State::MOVING:
-        return _loopMove;
-    case Monster_State::MOVE_END:
-        return _moveModes.end;
-    case Monster_State::MOVE_QUICK:
-        return _quickMove;
-    case Monster_State::MELEE_TOP:
-        return _melee[Monster_State::TOP].start;
-    case Monster_State::MELEE_TOP_END:
-        return _melee[Monster_State::TOP].end;
-    case Monster_State::MELEE_FRONT:
-        return _melee[Monster_State::FRONT].start;
-    case Monster_State::MELEE_FRONT_END:
-        return _melee[Monster_State::FRONT].end;
-    case Monster_State::MELEE_BOT:
-        return _melee[Monster_State::BOTTOM].start;
-    case Monster_State::MELEE_BOT_END:
-        return _melee[Monster_State::BOTTOM].end;
-    case Monster_State::RANG_TOP:
-        return _ranged[Monster_State::TOP].start;
-    case Monster_State::RANG_TOP_END:
-        return _ranged[Monster_State::TOP].end;
-    case Monster_State::RANG_FRONT:
-        return _ranged[Monster_State::FRONT].start;
-    case Monster_State::RANG_FRONT_END:
-        return _ranged[Monster_State::FRONT].end;
-    case Monster_State::RANG_BOT:
-        return _ranged[Monster_State::BOTTOM].start;
-    case Monster_State::RANG_BOT_END:
-        return _ranged[Monster_State::BOTTOM].end;
-    case Monster_State::WNCE:
+    case Monster_Info::IDLE:
+        // Pick random animation
+        if ( _idle.size() > 0 && _idle.size() == _monsterInfo.idlePriority.size() ) {
+            Rand::Queue picker;
+
+            for ( size_t i = 0; i < _idle.size(); ++i ) {
+                picker.Push( i, static_cast<uint32_t>( _monsterInfo.idlePriority[i] * 100 ) );
+            }
+            // picker is expected to return at least 0
+            const size_t id = static_cast<size_t>( picker.Get() );
+            return _idle[id];
+        }
+        break;
+    case Monster_Info::MOVE_START:
+        return _moveFirstTile;
+    case Monster_Info::MOVING:
+        return _moving;
+    case Monster_Info::MOVE_END:
+        return _moveLastTile;
+    case Monster_Info::MOVE_QUICK:
+        return _moveOneTile;
+    case Monster_Info::FLY_UP:
+        return _flying.start;
+    case Monster_Info::FLY_LAND:
+        return _flying.end;
+    case Monster_Info::MELEE_TOP:
+        return _melee[Monster_Info::TOP].start;
+    case Monster_Info::MELEE_TOP_END:
+        return _melee[Monster_Info::TOP].end;
+    case Monster_Info::MELEE_FRONT:
+        return _melee[Monster_Info::FRONT].start;
+    case Monster_Info::MELEE_FRONT_END:
+        return _melee[Monster_Info::FRONT].end;
+    case Monster_Info::MELEE_BOT:
+        return _melee[Monster_Info::BOTTOM].start;
+    case Monster_Info::MELEE_BOT_END:
+        return _melee[Monster_Info::BOTTOM].end;
+    case Monster_Info::RANG_TOP:
+        return _ranged[Monster_Info::TOP].start;
+    case Monster_Info::RANG_TOP_END:
+        return _ranged[Monster_Info::TOP].end;
+    case Monster_Info::RANG_FRONT:
+        return _ranged[Monster_Info::FRONT].start;
+    case Monster_Info::RANG_FRONT_END:
+        return _ranged[Monster_Info::FRONT].end;
+    case Monster_Info::RANG_BOT:
+        return _ranged[Monster_Info::BOTTOM].start;
+    case Monster_Info::RANG_BOT_END:
+        return _ranged[Monster_Info::BOTTOM].end;
+    case Monster_Info::WNCE:
         return _wince;
-    case Monster_State::KILL:
+    case Monster_Info::KILL:
         return _death;
     default:
-        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to display deprecated Animation " << animState );
         break;
     }
     return _static;
@@ -249,67 +343,79 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
 {
     std::vector<int> offset;
     switch ( animState ) {
-    case Monster_State::STATIC:
+    case Monster_Info::STATIC:
         offset.resize( _static.size(), 0 );
         break;
-    case Monster_State::IDLE:
-        offset.resize( _idle.front().size(), 0 ); // TODO: use all idle animations
+    case Monster_Info::IDLE:
+        offset.resize( _idle.front().size(), 0 );
         break;
-    case Monster_State::MOVE_START:
-        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START];
-    case Monster_State::MOVING:
-        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN];
+    case Monster_Info::MOVE_START:
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_END].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_END].end() );
         break;
-    case Monster_State::MOVE_END:
-        return _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP];
+    case Monster_Info::MOVING:
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_START].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_START].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_END].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_END].end() );
         break;
-    case Monster_State::MOVE_QUICK:
-        offset.resize( _quickMove.size(), 0 );
+    case Monster_Info::MOVE_END:
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_START].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_TILE_START].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].end() );
         break;
-    case Monster_State::MELEE_TOP:
-        offset.resize( _melee[Monster_State::TOP].start.size(), 0 );
+    case Monster_Info::MOVE_QUICK:
+        offset.resize( _moveOneTile.size(), 0 );
         break;
-    case Monster_State::MELEE_TOP_END:
-        offset.resize( _melee[Monster_State::TOP].end.size(), 0 );
+    case Monster_Info::FLY_UP:
+        offset.resize( _flying.start.size(), 0 );
         break;
-    case Monster_State::MELEE_FRONT:
-        offset.resize( _melee[Monster_State::FRONT].start.size(), 0 );
+    case Monster_Info::FLY_LAND:
+        offset.resize( _flying.end.size(), 0 );
         break;
-    case Monster_State::MELEE_FRONT_END:
-        offset.resize( _melee[Monster_State::FRONT].end.size(), 0 );
+    case Monster_Info::MELEE_TOP:
+        offset.resize( _melee[Monster_Info::TOP].start.size(), 0 );
         break;
-    case Monster_State::MELEE_BOT:
-        offset.resize( _melee[Monster_State::BOTTOM].start.size(), 0 );
+    case Monster_Info::MELEE_TOP_END:
+        offset.resize( _melee[Monster_Info::TOP].end.size(), 0 );
         break;
-    case Monster_State::MELEE_BOT_END:
-        offset.resize( _melee[Monster_State::BOTTOM].end.size(), 0 );
+    case Monster_Info::MELEE_FRONT:
+        offset.resize( _melee[Monster_Info::FRONT].start.size(), 0 );
         break;
-    case Monster_State::RANG_TOP:
-        offset.resize( _ranged[Monster_State::TOP].start.size(), 0 );
+    case Monster_Info::MELEE_FRONT_END:
+        offset.resize( _melee[Monster_Info::FRONT].end.size(), 0 );
         break;
-    case Monster_State::RANG_TOP_END:
-        offset.resize( _ranged[Monster_State::TOP].end.size(), 0 );
+    case Monster_Info::MELEE_BOT:
+        offset.resize( _melee[Monster_Info::BOTTOM].start.size(), 0 );
         break;
-    case Monster_State::RANG_FRONT:
-        offset.resize( _ranged[Monster_State::FRONT].start.size(), 0 );
+    case Monster_Info::MELEE_BOT_END:
+        offset.resize( _melee[Monster_Info::BOTTOM].end.size(), 0 );
         break;
-    case Monster_State::RANG_FRONT_END:
-        offset.resize( _ranged[Monster_State::FRONT].end.size(), 0 );
+    case Monster_Info::RANG_TOP:
+        offset.resize( _ranged[Monster_Info::TOP].start.size(), 0 );
         break;
-    case Monster_State::RANG_BOT:
-        offset.resize( _ranged[Monster_State::BOTTOM].start.size(), 0 );
+    case Monster_Info::RANG_TOP_END:
+        offset.resize( _ranged[Monster_Info::TOP].end.size(), 0 );
         break;
-    case Monster_State::RANG_BOT_END:
-        offset.resize( _ranged[Monster_State::BOTTOM].end.size(), 0 );
+    case Monster_Info::RANG_FRONT:
+        offset.resize( _ranged[Monster_Info::FRONT].start.size(), 0 );
         break;
-    case Monster_State::WNCE:
+    case Monster_Info::RANG_FRONT_END:
+        offset.resize( _ranged[Monster_Info::FRONT].end.size(), 0 );
+        break;
+    case Monster_Info::RANG_BOT:
+        offset.resize( _ranged[Monster_Info::BOTTOM].start.size(), 0 );
+        break;
+    case Monster_Info::RANG_BOT_END:
+        offset.resize( _ranged[Monster_Info::BOTTOM].end.size(), 0 );
+        break;
+    case Monster_Info::WNCE:
         offset.resize( _wince.size(), 0 );
         break;
-    case Monster_State::KILL:
+    case Monster_Info::KILL:
         offset.resize( _death.size(), 0 );
         break;
     default:
-        DEBUG( DBG_ENGINE, DBG_WARN, "Trying to use deprecated Animation " << animState );
         break;
     }
     return offset;
@@ -329,6 +435,45 @@ int AnimationReference::getDeathFrame() const
 {
     return ( _death.empty() ) ? _static.back() : _death.back();
 }
+
+uint32_t AnimationReference::getMoveSpeed() const
+{
+    return _monsterInfo.moveSpeed;
+}
+
+uint32_t AnimationReference::getFlightSpeed() const
+{
+    return _monsterInfo.flightSpeed;
+}
+
+uint32_t AnimationReference::getShootingSpeed() const
+{
+    return _monsterInfo.shootSpeed;
+}
+
+size_t AnimationReference::getProjectileID( float angle ) const
+{
+    return _monsterInfo.getProjectileID( angle );
+}
+
+Point AnimationReference::getProjectileOffset( size_t direction ) const
+{
+    if ( _monsterInfo.projectileOffset.size() > direction ) {
+        return _monsterInfo.projectileOffset[direction];
+    }
+    return Point();
+}
+
+uint32_t AnimationReference::getIdleDelay() const
+{
+    return _monsterInfo.idleAnimationDelay;
+}
+
+AnimationState::AnimationState( int monsterID )
+    : AnimationReference( monsterID )
+    , _currentSequence( _static )
+    , _animState( Monster_Info::STATIC )
+{}
 
 AnimationState::AnimationState( const AnimationReference & ref, int state )
     : AnimationReference( ref )

@@ -21,9 +21,9 @@
 #ifndef H2MONSTER_INFO_H
 #define H2MONSTER_INFO_H
 
-namespace Monster_State
+namespace Monster_Info
 {
-    enum ATTACK_DIRECTION
+    enum ATTACK_DIR
     {
         TOP,
         FRONT,
@@ -35,12 +35,12 @@ namespace Monster_State
         NONE,
         STATIC,
         IDLE,
-
-        IDLE_ANY,
         MOVE_START,
         MOVING,
         MOVE_END,
         MOVE_QUICK,
+        FLY_UP,
+        FLY_LAND,
         MELEE_TOP,
         MELEE_TOP_END,
         MELEE_FRONT,
@@ -53,7 +53,7 @@ namespace Monster_State
         RANG_FRONT_END,
         RANG_BOT,
         RANG_BOT_END,
-        WNCE, // combine UP+DOWN anim for now
+        WNCE, // combined UP and RETURN anim
         KILL,
         INVALID
     };

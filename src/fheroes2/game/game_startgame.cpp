@@ -73,8 +73,7 @@ int Game::StartBattleOnly( void )
 
 int Game::StartGame( void )
 {
-    SetFixVideoMode();
-    ::AI::Init();
+    AI::Get().Reset();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -218,6 +217,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
                 ( *it )->FadeOut();
                 ( *it )->SetFreeman( 0 );
                 it = myHeroes.begin();
+                updateFocus = true;
                 result = Dialog::CANCEL;
                 break;
 
@@ -406,7 +406,6 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             return Direction::UNKNOWN != Direction::Get( from_hero.GetIndex(), tile.GetIndex() )
                        ? Cursor::FIGHT
                        : Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-        break;
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
@@ -475,6 +474,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
 int Interface::Basic::GetCursorTileIndex( s32 dst_index )
 {
+    if ( dst_index < 0 || dst_index >= world.w() * world.h() )
+        return Cursor::POINTER;
+
     const Maps::Tiles & tile = world.GetTiles( dst_index );
     if ( tile.isFog( Settings::Get().CurrentColor() ) )
         return Cursor::POINTER;
@@ -536,9 +538,14 @@ int Interface::Basic::StartGame( void )
 
                 radar.SetHide( true );
                 radar.SetRedraw();
-                conf.SetCurrentColor( player.GetColor() );
-                world.ClearFog( player.GetColor() );
-                kingdom.ActionBeforeTurn();
+                if ( player.GetControl() == CONTROL_HUMAN ) {
+                    conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
+                }
+                else {
+                    conf.SetCurrentColor( player.GetColor() );
+                    world.ClearFog( player.GetColor() );
+                    kingdom.ActionBeforeTurn();
+                }
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -551,6 +558,9 @@ int Interface::Basic::StartGame( void )
                         display.Flip();
                         Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn" ) );
                     }
+                    conf.SetCurrentColor( player.GetColor() );
+                    world.ClearFog( player.GetColor() );
+                    kingdom.ActionBeforeTurn();
                     iconsPanel.SetRedraw();
                     iconsPanel.ShowIcons();
                     res = HumanTurn( skip_turns );
@@ -576,7 +586,7 @@ int Interface::Basic::StartGame( void )
                         cursor.Show();
                         display.Flip();
 
-                        ::AI::KingdomTurn( kingdom );
+                        AI::Get().KingdomTurn( kingdom );
                     }
                     break;
                 }
@@ -677,9 +687,11 @@ int Interface::Basic::HumanTurn( bool isload )
 
     // startgame loop
     while ( Game::CANCEL == res ) {
-        if ( !le.HandleEvents() ) {
-            res = Game::QUITGAME;
-            break;
+        if ( !le.HandleEvents( true, true ) ) {
+            if ( EventExit() == Game::QUITGAME ) {
+                res = Game::QUITGAME;
+                break;
+            }
         }
         // for pocketpc: auto hide status if start turn
         if ( autohide_status && Game::AnimateInfrequentDelay( Game::AUTOHIDE_STATUS_DELAY ) ) {
@@ -830,8 +842,13 @@ int Interface::Basic::HumanTurn( bool isload )
             }
         }
 
+        const Rect displayArea( 0, 0, display.GetSize().w, display.GetSize().h );
+        // Stop moving hero first
+        if ( isMovingHero && ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) ) {
+            stopHero = true;
+        }
         // cursor over radar
-        if ( ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+        else if ( ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             radar.QueueEventProcessing();
@@ -915,6 +932,18 @@ int Interface::Basic::HumanTurn( bool isload )
                         gameArea.SetUpdateCursor();
                     }
                     else {
+                        if ( !isOngoingFastScrollEvent ) {
+                            Point movement( hero->MovementDirection() );
+                            if ( movement != Point() ) { // don't waste resources for no movement
+                                const int moveStep = hero->GetMoveStep();
+                                movement.x *= -moveStep;
+                                movement.y *= -moveStep;
+                                gameArea.SetMapsPos( gameArea.GetMapsPos() + movement );
+                                gameArea.SetCenter( hero->GetCenter() );
+                                ResetFocus( GameFocus::HEROES );
+                                RedrawFocus();
+                            }
+                        }
                         gameArea.SetRedraw();
                     }
 
@@ -934,12 +963,16 @@ int Interface::Basic::HumanTurn( bool isload )
                         gameArea.SetUpdateCursor();
                 }
             }
+            else {
+                isMovingHero = false;
+            }
         }
 
         // slow maps objects animation
         if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
+            gameArea.UpdateCyclingPalette( frame );
             gameArea.SetRedraw();
         }
 
@@ -989,22 +1022,14 @@ int Interface::Basic::HumanTurn( bool isload )
 
 void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
 {
-    Castle * to_castle = NULL;
-    Heroes * to_hero = NULL;
     Heroes * from_hero = GetFocusHeroes();
     const Maps::Tiles & tile = world.GetTiles( index_maps );
 
-    // correct index for castle
-    if ( MP2::OBJN_CASTLE == tile.GetObject() || MP2::OBJ_CASTLE == tile.GetObject() ) {
-        to_castle = world.GetCastle( tile.GetCenter() );
-        if ( to_castle )
-            index_maps = to_castle->GetIndex();
-    }
-
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
-    case Cursor::HEROES:
+    case Cursor::HEROES: {
+        Heroes * to_hero = tile.GetHeroes();
         // focus change/open hero
-        if ( NULL != ( to_hero = tile.GetHeroes() ) ) {
+        if ( NULL != to_hero ) {
             if ( !from_hero || from_hero != to_hero ) {
                 SetFocus( to_hero );
                 RedrawFocus();
@@ -1012,22 +1037,29 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
             else
                 Game::OpenHeroesDialog( *to_hero );
         }
-        break;
+    } break;
 
-    case Cursor::CASTLE:
-        // focus change/open castle
-        if ( to_castle ) {
-            Castle * from_castle = GetFocusCastle();
+    case Cursor::CASTLE: {
+        // correct index for castle
+        const int tileObjId = tile.GetObject();
+        if ( MP2::OBJN_CASTLE != tileObjId && MP2::OBJ_CASTLE != tileObjId )
+            break;
 
-            if ( !from_castle || from_castle != to_castle ) {
-                SetFocus( to_castle );
-                RedrawFocus();
-            }
-            else
-                Game::OpenCastleDialog( *to_castle );
+        Castle * to_castle = world.GetCastle( tile.GetCenter() );
+        if ( to_castle == NULL )
+            break;
+
+        index_maps = to_castle->GetIndex();
+
+        Castle * from_castle = GetFocusCastle();
+        if ( !from_castle || from_castle != to_castle ) {
+            SetFocus( to_castle );
+            RedrawFocus();
         }
-        break;
-
+        else {
+            Game::OpenCastleDialog( *to_castle );
+        }
+    } break;
     case Cursor::FIGHT:
     case Cursor::MOVE:
     case Cursor::BOAT:
@@ -1035,7 +1067,12 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
     case Cursor::CHANGE:
     case Cursor::ACTION:
     case Cursor::REDBOAT:
-        if ( from_hero )
+        if ( from_hero == NULL )
+            break;
+
+        if ( from_hero->isEnableMove() )
+            from_hero->SetMove( false );
+        else
             ShowPathOrStartMoveHero( from_hero, index_maps );
         break;
 

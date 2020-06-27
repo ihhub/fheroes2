@@ -176,7 +176,6 @@ namespace Game
         CASTLE_AROUND_DELAY,
         CASTLE_BUYHERO_DELAY,
         CASTLE_BUILD_DELAY,
-        HEROES_MOVE_DELAY,
         HEROES_FADE_DELAY,
         HEROES_PICKUP_DELAY,
         PUZZLE_FADE_DELAY,
@@ -190,22 +189,25 @@ namespace Game
         BATTLE_CATAPULT3_DELAY,
         BATTLE_BRIDGE_DELAY,
         BATTLE_IDLE_DELAY,
-        BATTLE_IDLE2_DELAY,
         BATTLE_OPPONENTS_DELAY,
         BATTLE_FLAGS_DELAY,
         BATTLE_POPUP_DELAY,
+        COLOR_CYCLE_MAP_DELAY,
+        COLOR_CYCLE_BATTLE_DELAY,
         AUTOHIDE_STATUS_DELAY,
         //
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
+        CUSTOM_DELAY,
         //
         LAST_DELAY
     };
 
+    bool AnimateCustomDelay( uint32_t delay );
     bool AnimateInfrequentDelay( int );
     void AnimateResetDelay( int );
-    void UpdateHeroesMoveSpeed( void );
-    void UpdateBattleSpeed( void );
+    void UpdateGameSpeed( void );
+    uint32_t ApplyBattleSpeed( uint32_t delay );
     int MainMenu( void );
     int NewGame( void );
     int LoadGame( void );
@@ -229,7 +231,6 @@ namespace Game
     int Testing( int );
 
     void DrawInterface( void );
-    void SetFixVideoMode( void );
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );

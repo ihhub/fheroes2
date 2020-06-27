@@ -428,10 +428,10 @@ void StreamBuf::copy( const StreamBuf & sb )
 
 void StreamBuf::put8( char v )
 {
-    if ( 0 == sizep() )
+    if ( sizep() == 0 )
         reallocbuf( capacity() + capacity() / 2 );
 
-    if ( sizep() )
+    if ( sizep() > 0 )
         *itput++ = v;
 }
 
@@ -587,6 +587,10 @@ std::istream & operator>> (std::istream & is, StreamBuf & sb)
     return is;
 }
 */
+
+StreamFile::StreamFile()
+    : rw( NULL )
+{}
 
 StreamFile::StreamFile( const std::string & fn, const char * mode )
 {

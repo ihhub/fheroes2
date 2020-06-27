@@ -179,7 +179,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     bar.Blit( dst_pt );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 11 );
+    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // button prev
     dst_pt.x = cur_pt.x + 1;
@@ -206,7 +206,8 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
         buttonDismiss.Press();
         buttonDismiss.SetDisable( true );
-        buttonDismiss.SetVisible( false );
+        if ( readonly )
+            buttonDismiss.SetVisible( false );
     }
 
     if ( readonly || 2 > GetKingdom().GetHeroes().size() ) {
@@ -279,12 +280,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             le.MousePressLeft( buttonNextHero ) ? buttonNextHero.PressDraw() : buttonNextHero.ReleaseDraw();
 
         // prev hero
-        if ( buttonPrevHero.isEnable() && le.MouseClickLeft( buttonPrevHero ) ) {
+        if ( buttonPrevHero.isEnable() && ( le.MouseClickLeft( buttonPrevHero ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
             return Dialog::PREV;
         }
 
         // next hero
-        if ( buttonNextHero.isEnable() && le.MouseClickLeft( buttonNextHero ) ) {
+        if ( buttonNextHero.isEnable() && ( le.MouseClickLeft( buttonNextHero ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
             return Dialog::NEXT;
         }
 
@@ -328,7 +329,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         }
 
         // right info
-        if ( le.MousePressRight( portPos ) )
+        if ( !readonly && le.MousePressRight( portPos ) )
             Dialog::QuickInfo( *this );
         else if ( le.MousePressRight( rectSpreadArmyFormat ) )
             Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
@@ -361,9 +362,9 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             }
         }
         else if ( le.MouseCursor( buttonPrevHero ) )
-            message = _( "Show prev heroes" );
+            message = _( "Show previous hero" );
         else if ( le.MouseCursor( buttonNextHero ) )
-            message = _( "Show next heroes" );
+            message = _( "Show next hero" );
 
         if ( message.empty() )
             statusBar.ShowMessage( _( "Hero Screen" ) );

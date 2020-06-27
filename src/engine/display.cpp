@@ -29,10 +29,16 @@
 #include "tools.h"
 #include "types.h"
 
+namespace
+{
+    SDL::Time redrawTiming; // a special timer to highlight that it's time to redraw a screen (only for SDL 2 as of now)
+}
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Display::Display()
     : window( NULL )
     , renderer( NULL )
+    , keepAspectRatio( false )
 {
     _isDisplay = true;
 }
@@ -60,24 +66,57 @@ Display::~Display()
 #endif
 }
 
-void Display::SetVideoMode( int w, int h, bool fullscreen )
+void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     u32 flags = SDL_WINDOW_SHOWN;
-    if ( fullscreen )
-        flags |= SDL_WINDOW_FULLSCREEN;
+    if ( fullscreen ) {
+        if ( changeVideo ) {
+            flags |= SDL_WINDOW_FULLSCREEN;
+        }
+        else {
+            flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+        }
+        keepAspectRatio = aspect;
+    }
+    else {
+        keepAspectRatio = false;
+    }
 
     if ( renderer )
         SDL_DestroyRenderer( renderer );
 
     std::string previousWindowTitle;
+    int prevX = SDL_WINDOWPOS_CENTERED;
+    int prevY = SDL_WINDOWPOS_CENTERED;
     if ( window ) {
         previousWindowTitle = SDL_GetWindowTitle( window );
+        SDL_GetWindowPosition( window, &prevX, &prevY );
         SDL_DestroyWindow( window );
     }
 
-    window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags );
+    window = SDL_CreateWindow( "", prevX, prevY, w, h, flags );
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
+
+    if ( keepAspectRatio ) {
+        SDL_DisplayMode currentVideoMode;
+        SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
+
+        const float ratio = static_cast<float>( w ) / static_cast<float>( h );
+
+        srcRenderSurface.w = w;
+        srcRenderSurface.h = h;
+        srcRenderSurface.x = 0;
+        srcRenderSurface.y = 0;
+
+        dstRenderSurface.w = static_cast<int>( currentVideoMode.h * ratio + 0.5f );
+        dstRenderSurface.h = currentVideoMode.h;
+        dstRenderSurface.x = ( currentVideoMode.w - dstRenderSurface.w ) / 2;
+        dstRenderSurface.y = 0;
+
+        SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+        SDL_RenderClear( renderer );
+    }
 
     if ( !renderer )
         Error::Except( __FUNCTION__, SDL_GetError() );
@@ -123,6 +162,8 @@ Size Display::GetDefaultSize( void )
 void Display::Flip( void )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    redrawTiming.Start(); // TODO: for now it's only for SDL 2 but it should be for everything
+
     SDL_Texture * tx = SDL_CreateTextureFromSurface( renderer, surface );
 
     if ( tx ) {
@@ -130,11 +171,18 @@ void Display::Flip( void )
             ERROR( SDL_GetError() );
         }
         else {
-            if ( 0 != SDL_RenderCopy( renderer, tx, NULL, NULL ) ) {
+            int ret = 0;
+            if ( keepAspectRatio )
+                ret = SDL_RenderCopy( renderer, tx, &srcRenderSurface, &dstRenderSurface );
+            else
+                ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
+
+            if ( 0 != ret ) {
                 ERROR( SDL_GetError() );
             }
-            else
+            else {
                 SDL_RenderPresent( renderer );
+            }
         }
 
         SDL_DestroyTexture( tx );
@@ -157,19 +205,34 @@ void Display::Present( void )
 
 void Display::ToggleFullScreen( void )
 {
+    const Surface & temp = GetSurface();
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( window ) {
         u32 flags = SDL_GetWindowFlags( window );
 
         // toggle FullScreen
-        if ( flags & SDL_WINDOW_FULLSCREEN )
-            flags &= ~SDL_WINDOW_FULLSCREEN;
+        if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP )
+            flags = 0;
+        else
+#if defined( __WIN32__ )
+            flags = SDL_WINDOW_FULLSCREEN;
+#else
+            flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
 
         SDL_SetWindowFullscreen( window, flags );
     }
 #else
-    SDL_WM_ToggleFullScreen( surface );
+    const uint32_t flags = surface->flags;
+    surface = SDL_SetVideoMode( 0, 0, 0, surface->flags ^ SDL_FULLSCREEN );
+    if ( surface == NULL ) {
+        surface = SDL_SetVideoMode( 0, 0, 0, flags );
+        return;
+    }
 #endif
+
+    temp.Blit( *this );
 }
 
 void Display::SetCaption( const char * str )
@@ -327,9 +390,28 @@ void Display::Fade( const Surface & top, const Surface & back, const Point & pt,
     const int delay2 = ( delay * step ) / ( alpha - min );
 
     while ( alpha > min + level ) {
-        back.Blit( *this );
-        shadow.SetAlphaMod( alpha );
-        shadow.Blit( *this );
+        back.Blit( pt, *this );
+        shadow.SetAlphaMod( alpha, false );
+        shadow.Blit( pt, *this );
+        Flip();
+        alpha -= step;
+        DELAY( delay2 );
+    }
+}
+
+void Display::InvertedFade( const Surface & top, const Surface & back, const Point & offset, const Surface & middle, const Point & middleOffset, int level, int delay )
+{
+    Surface shadow = top.GetSurface();
+    int alpha = 255;
+    const int step = 10;
+    const int min = step + 5;
+    const int delay2 = ( delay * step ) / ( alpha - min );
+
+    while ( alpha > min + level ) {
+        back.Blit( offset, *this );
+        shadow.Blit( offset, *this );
+        shadow.SetAlphaMod( alpha, false );
+        middle.Blit( middleOffset, *this );
         Flip();
         alpha -= step;
         DELAY( delay2 );
@@ -356,7 +438,7 @@ void Display::Rise( const Surface & top, const Surface & back, const Point & pt,
 
     while ( alpha < max ) {
         back.Blit( *this );
-        shadow.SetAlphaMod( alpha );
+        shadow.SetAlphaMod( alpha, false );
         shadow.Blit( *this );
         Flip();
         alpha += step;
@@ -384,6 +466,16 @@ Display & Display::Get( void )
 Surface Display::GetSurface( void ) const
 {
     return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
+}
+
+bool Display::isRedrawRequired()
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    redrawTiming.Stop();
+    return redrawTiming.Get() > 500; // 0.5 second
+#else
+    return false;
+#endif
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

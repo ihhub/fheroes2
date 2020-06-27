@@ -257,7 +257,7 @@ public:
 
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
-    bool isVisited( int object, Visit::type_t = Visit::LOCAL ) const;
+    bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
 
     bool Move( bool fast = false );
@@ -299,6 +299,9 @@ public:
 
     static void ScholarAction( Heroes &, Heroes & );
 
+    int GetMoveStep() const;
+    Point MovementDirection() const;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
@@ -338,6 +341,13 @@ private:
     int patrol_square;
 
     std::list<IndexObject> visit_object;
+
+    mutable int _alphaValue;
+
+    enum
+    {
+        HERO_MOVE_STEP = 4 // in pixels
+    };
 };
 
 struct VecHeroes : public std::vector<Heroes *>

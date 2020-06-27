@@ -47,6 +47,7 @@ namespace Battle
         void SortFastest( bool );
         void SortStrongest( void );
         void SortWeakest( void );
+        void SortArchers();
     };
 
     enum
@@ -71,8 +72,8 @@ namespace Battle
         int GetControl( void ) const;
         u32 GetSurrenderCost( void ) const;
         Troops GetKilledTroops( void ) const;
-        bool SetIdleAnimation( void );
-        bool NextIdleAnimation( void );
+        bool animateIdleUnits();
+        void resetIdleAnimation();
 
         void NewTurn( void );
         void SyncArmyCount( void );

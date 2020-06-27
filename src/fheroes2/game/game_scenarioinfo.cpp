@@ -31,6 +31,7 @@
 #include "dialog_selectscenario.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_interface.h"
 #include "gamedefs.h"
 #include "kingdom.h"
 #include "maps_fileinfo.h"
@@ -43,7 +44,7 @@
 #include "text.h"
 #include "world.h"
 
-void RedrawScenarioStaticInfo( const Rect & );
+void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw = false );
 void RedrawRatingInfo( TextSprite & );
 void RedrawDifficultyInfo( const Point & dst, bool label = true );
 
@@ -163,7 +164,7 @@ int Game::ScenarioInfo( void )
 
     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
-    RedrawScenarioStaticInfo( rectPanel );
+    RedrawScenarioStaticInfo( rectPanel, true );
     RedrawDifficultyInfo( pointDifficultyInfo, !conf.QVGA() );
 
     playersInfo.RedrawInfo();
@@ -203,7 +204,15 @@ int Game::ScenarioInfo( void )
     cursor.Show();
     display.Flip();
 
-    while ( le.HandleEvents() ) {
+    while ( 1 ) {
+        if ( !le.HandleEvents( true, true ) ) {
+            if ( Interface::Basic::EventExit() == QUITGAME ) {
+                if ( conf.ExtGameUseFade() )
+                    display.Fade();
+                return QUITGAME;
+            }
+        }
+
         // press button
         if ( buttonSelectMaps )
             le.MousePressLeft( *buttonSelectMaps ) ? buttonSelectMaps->PressDraw() : buttonSelectMaps->ReleaseDraw();
@@ -341,7 +350,7 @@ u32 Game::GetStep4Player( u32 current, u32 width, u32 count )
     return current * width * KINGDOMMAX / count + ( width * ( KINGDOMMAX - count ) / ( 2 * count ) );
 }
 
-void RedrawScenarioStaticInfo( const Rect & rt )
+void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
 {
     Settings & conf = Settings::Get();
 
@@ -354,6 +363,11 @@ void RedrawScenarioStaticInfo( const Rect & rt )
         text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 5 );
     }
     else {
+        if ( firstDraw ) {
+            const Sprite & panelShadow = AGG::GetICN( ICN::NGHSBKG, 1 );
+            panelShadow.Blit( rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
+        }
+
         // image panel
         const Sprite & panel = AGG::GetICN( ICN::NGHSBKG, 0 );
         panel.Blit( rt );

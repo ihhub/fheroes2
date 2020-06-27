@@ -39,7 +39,7 @@
 
 bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 {
-    return h1 && h2 && Army::TroopsStrongerEnemyTroops( h2->GetArmy(), h1->GetArmy() );
+    return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
 }
 
 Kingdom::Kingdom()
@@ -222,7 +222,7 @@ void Kingdom::AddHeroes( Heroes * hero )
         if ( player && player->isColor( GetColor() ) )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
 
-        AI::HeroesAdd( *hero );
+        AI::Get().HeroesAdd( *hero );
     }
 }
 
@@ -257,7 +257,7 @@ void Kingdom::RemoveHeroes( const Heroes * hero )
         if ( heroes.size() )
             heroes.erase( std::find( heroes.begin(), heroes.end(), hero ) );
 
-        AI::HeroesRemove( *hero );
+        AI::Get().HeroesRemove( *hero );
     }
 
     if ( isLoss() )
@@ -274,7 +274,7 @@ void Kingdom::AddCastle( const Castle * castle )
         if ( player && player->isColor( GetColor() ) )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
 
-        AI::CastleAdd( *castle );
+        AI::Get().CastleAdd( *castle );
     }
 
     lost_town_days = Game::GetLostTownDays() + 1;
@@ -286,7 +286,7 @@ void Kingdom::RemoveCastle( const Castle * castle )
         if ( castles.size() )
             castles.erase( std::find( castles.begin(), castles.end(), castle ) );
 
-        AI::CastleRemove( *castle );
+        AI::Get().CastleRemove( *castle );
     }
 
     if ( isLoss() )
@@ -370,11 +370,13 @@ u32 Kingdom::GetCountCapital( void ) const
 void Kingdom::AddFundsResource( const Funds & funds )
 {
     resource = resource + funds;
+    resource.Trim();
 }
 
 void Kingdom::OddFundsResource( const Funds & funds )
 {
     resource = resource - funds;
+    resource.Trim();
 }
 
 u32 Kingdom::GetLostTownDays( void ) const
@@ -543,9 +545,9 @@ const Heroes * Kingdom::GetBestHero( void ) const
     return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : NULL;
 }
 
-u32 Kingdom::GetArmiesStrength( void ) const
+double Kingdom::GetArmiesStrength( void ) const
 {
-    u32 res = 0;
+    double res = 0;
 
     for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
         res += ( **ith ).GetArmy().GetStrength();

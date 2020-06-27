@@ -77,6 +77,8 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000800,
     GLOBAL_SHOWSTATUS = 0x00001000,
 
+    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00002000,
+    GLOBAL_KEEP_ASPECT_RATIO = 0x00010000,
     GLOBAL_FONTRENDERBLENDED1 = 0x00020000,
     GLOBAL_FONTRENDERBLENDED2 = 0x00040000,
     GLOBAL_FULLSCREEN = 0x00400000,
@@ -148,10 +150,29 @@ const settings_t settingsGeneral[] = {
         "use swsurface only",
     },
     {
+        GLOBAL_KEEP_ASPECT_RATIO,
+        "keep aspect ratio",
+    },
+    {
+        GLOBAL_CHANGE_FULLSCREEN_RESOLUTION,
+        "change fullscreen resolution",
+    },
+    {
         0,
         NULL,
     },
 };
+
+const char * GetGeneralSettingDescription( int settingId )
+{
+    const settings_t * ptr = settingsGeneral;
+    while ( ptr->id != 0 ) {
+        if ( ptr->id == settingId )
+            return ptr->str;
+        ++ptr;
+    }
+    return NULL;
+}
 
 // internal settings
 const settings_t settingsFHeroes2[] = {
@@ -472,12 +493,15 @@ Settings::Settings()
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( CASTLE_ALLOW_BUY_FROM_WELL );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
+    ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
     opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+    // Set expansion version by default - turn off if heroes2x.agg not found
+    opt_global.SetModes( GLOBAL_PRICELOYALTY );
     if ( System::isEmbededDevice() ) {
         opt_global.SetModes( GLOBAL_POCKETPC );
         ExtSetModes( POCKETPC_HIDE_CURSOR );
@@ -538,7 +562,7 @@ bool Settings::Read( const std::string & filename )
         debug = DBG_GAME_TRACE | DBG_AI_TRACE;
         break;
     case 8:
-        debug = DBG_ENGINE_TRACE | DBG_GAME_TRACE | DBG_AI_TRACE;
+        debug = DBG_BATTLE_TRACE | DBG_AI_TRACE;
         break;
     case 9:
         debug = DBG_ALL_TRACE;
@@ -602,19 +626,28 @@ bool Settings::Read( const std::string & filename )
             opt_global.SetModes( GLOBAL_FONTRENDERBLENDED2 );
     }
 
-    // music
+    // music source
+    _musicType = MUSIC_MIDI_ORIGINAL;
     sval = config.StrParams( "music" );
 
     if ( !sval.empty() ) {
-        if ( sval == "midi" ) {
+        if ( sval == "original" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+            _musicType = MUSIC_MIDI_ORIGINAL;
+        }
+        else if ( sval == "expansion" ) {
+            opt_global.ResetModes( GLOBAL_MUSIC );
+            opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+            if ( PriceLoyaltyVersion() )
+                _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "cd" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_CD );
+            _musicType = MUSIC_CDROM;
         }
-        else if ( sval == "ext" ) {
+        else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_EXT );
         }
@@ -831,6 +864,19 @@ bool Settings::Save( const std::string & filename ) const
 std::string Settings::String( void ) const
 {
     std::ostringstream os;
+    std::string musicType;
+    if ( opt_global.Modes( GLOBAL_MUSIC_EXT ) ) {
+        musicType = "external";
+    }
+    else if ( MusicType() == MUSIC_CDROM ) {
+        musicType = "cd";
+    }
+    else if ( MusicType() == MUSIC_MIDI_EXPANSION ) {
+        musicType = "expansion";
+    }
+    else {
+        musicType = "original";
+    }
 
     os << "# fheroes2 config, version: " << GetVersion() << std::endl;
     os << "data = " << data_params << std::endl;
@@ -845,12 +891,13 @@ std::string Settings::String( void ) const
         os << "auto" << std::endl;
 
     os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl
-       << "music = "
-       << ( opt_global.Modes( GLOBAL_MUSIC_CD ) ? "cd" : ( opt_global.Modes( GLOBAL_MUSIC_MIDI ) ? "midi" : ( opt_global.Modes( GLOBAL_MUSIC_EXT ) ? "ext" : "off" ) ) )
-       << std::endl
+       << "music = " << musicType << std::endl
        << "sound volume = " << static_cast<int>( sound_volume ) << std::endl
        << "music volume = " << static_cast<int>( music_volume ) << std::endl
-       << "fullscreen = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
+       << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl
+       << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
+       << std::endl
+       << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
        << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl
        << "debug = " << ( debug ? "on" : "off" ) << std::endl;
 
@@ -1250,6 +1297,10 @@ int Settings::MusicVolume( void ) const
 {
     return music_volume;
 }
+MusicSource Settings::MusicType() const
+{
+    return _musicType;
+}
 
 /* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
@@ -1261,6 +1312,12 @@ void Settings::SetSoundVolume( int v )
 void Settings::SetMusicVolume( int v )
 {
     music_volume = 10 <= v ? 10 : v;
+}
+
+/* Set music type: check MusicSource enum */
+void Settings::SetMusicType( int v )
+{
+    _musicType = MUSIC_CDROM <= v ? MUSIC_CDROM : static_cast<MusicSource>( v );
 }
 
 /* check game type */
@@ -1394,9 +1451,16 @@ void Settings::SetUnicode( bool f )
     f ? opt_global.SetModes( GLOBAL_USEUNICODE ) : opt_global.ResetModes( GLOBAL_USEUNICODE );
 }
 
-void Settings::SetPriceLoyaltyVersion( void )
+void Settings::SetPriceLoyaltyVersion( bool set )
 {
-    opt_global.SetModes( GLOBAL_PRICELOYALTY );
+    if ( set ) {
+        opt_global.SetModes( GLOBAL_PRICELOYALTY );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_PRICELOYALTY );
+        if ( _musicType == MUSIC_MIDI_EXPANSION )
+            _musicType = MUSIC_MIDI_ORIGINAL;
+    }
 }
 
 void Settings::SetEvilInterface( bool f )
@@ -1967,6 +2031,16 @@ u32 Settings::MemoryLimit( void ) const
 bool Settings::FullScreen( void ) const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+}
+
+bool Settings::KeepAspectRatio( void ) const
+{
+    return opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO );
+}
+
+bool Settings::ChangeFullscreenResolution( void ) const
+{
+    return opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )

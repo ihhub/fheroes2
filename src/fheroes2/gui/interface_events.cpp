@@ -51,10 +51,13 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
-        path.Calculate( destinationIdx );
-        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", route: " << path.String() );
+        const uint32_t distance = path.Calculate( destinationIdx );
+        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << distance << ", route: " << path.String() );
         gameArea.SetRedraw();
-        Cursor::Get().SetThemes( GetCursorTileIndex( destinationIdx ) );
+
+        LocalEvent & le = LocalEvent::Get();
+        const int32_t cursorIndex = gameArea.GetIndexFromMousePoint( le.GetMouseCursor() );
+        Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
         Interface::Basic::Get().buttonsArea.Redraw();
     }
 }
@@ -369,9 +372,10 @@ int Interface::Basic::EventDigArtifact( void )
             else
                 Dialog::Message( "", _( "Try searching on clear ground." ), Font::BIG, Dialog::OK );
         }
+        else {
+            Dialog::Message( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Font::BIG, Dialog::OK );
+        }
     }
-    else
-        Dialog::Message( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Font::BIG, Dialog::OK );
 
     return Game::CANCEL;
 }

@@ -25,11 +25,13 @@
 #include <functional>
 
 #include "agg.h"
+#include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
 #include "bin_info.h"
 #include "engine.h"
+#include "game.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "luck.h"
@@ -43,81 +45,9 @@ void Battle::UpdateMonsterAttributes( const std::string & spec )
 #ifdef WITH_XML
     // parse battle.xml
     TiXmlDocument doc;
-    const TiXmlElement * xml_battle = NULL;
 
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_battle = doc.FirstChildElement( "battle" ) ) ) {
-        const TiXmlElement * xml_element;
-        int value;
-    }
-    else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
-#endif
-}
-
-void Battle::UpdateMonsterSpriteAnimation( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse battle.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_animation = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_animation = doc.FirstChildElement( "animations" ) ) ) {
-        const TiXmlElement * xml_icn = xml_animation->FirstChildElement( "icn" );
-        for ( ; xml_icn; xml_icn = xml_icn->NextSiblingElement( "icn" ) ) {
-            std::string icn_name = StringUpper( xml_icn->Attribute( "name" ) );
-            // find icn name
-            int icn = ICN::FromString( icn_name.c_str() );
-            if ( icn == ICN::UNKNOWN )
-                continue;
-
-            // find monster info position
-            Monster::monstersprite_t * ptr = Monster::GetMonsterSpireByICN( icn );
-            if ( ptr->icn_file == ICN::UNKNOWN )
-                continue;
-
-            const TiXmlElement * xml_anim = xml_icn->FirstChildElement( "animation" );
-            int start, count;
-
-            for ( ; xml_anim; xml_anim = xml_anim->NextSiblingElement( "animation" ) ) {
-                const char * state = xml_anim->Attribute( "state" );
-                xml_anim->Attribute( "start", &start );
-                xml_anim->Attribute( "count", &count );
-                Monster::animframe_t frm;
-                frm.start = start;
-                frm.count = count;
-
-                if ( 0 == std::strcmp( "idle", state ) )
-                    ptr->frm_idle = frm;
-                else if ( 0 == std::strcmp( "move", state ) )
-                    ptr->frm_move = frm;
-                else if ( 0 == std::strcmp( "fly1", state ) )
-                    ptr->frm_fly1 = frm;
-                else if ( 0 == std::strcmp( "fly2", state ) )
-                    ptr->frm_fly2 = frm;
-                else if ( 0 == std::strcmp( "fly3", state ) )
-                    ptr->frm_fly3 = frm;
-                else if ( 0 == std::strcmp( "shot0", state ) )
-                    ptr->frm_shot0 = frm;
-                else if ( 0 == std::strcmp( "shot1", state ) )
-                    ptr->frm_shot1 = frm;
-                else if ( 0 == std::strcmp( "shot2", state ) )
-                    ptr->frm_shot2 = frm;
-                else if ( 0 == std::strcmp( "shot3", state ) )
-                    ptr->frm_shot3 = frm;
-                else if ( 0 == std::strcmp( "attk0", state ) )
-                    ptr->frm_attk0 = frm;
-                else if ( 0 == std::strcmp( "attk1", state ) )
-                    ptr->frm_attk1 = frm;
-                else if ( 0 == std::strcmp( "attk2", state ) )
-                    ptr->frm_attk2 = frm;
-                else if ( 0 == std::strcmp( "attk3", state ) )
-                    ptr->frm_attk3 = frm;
-                else if ( 0 == std::strcmp( "wnce", state ) )
-                    ptr->frm_wnce = frm;
-                else if ( 0 == std::strcmp( "kill", state ) )
-                    ptr->frm_kill = frm;
-            }
-        }
+    if ( doc.LoadFile( spec.c_str() ) ) {
+        const TiXmlElement * xml_battle = doc.FirstChildElement( "battle" );
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
@@ -201,7 +131,9 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , reflect( ref )
     , mirror( NULL )
     , blindanswer( false )
-    , animation( Bin_Info::GetAnimationSet( id ), Monster_State::STATIC )
+    , animation( id )
+    , idleTimer( 0 )
+    , idleTimerSet( false )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -307,15 +239,13 @@ std::string Battle::Unit::GetSpeedString( void ) const
 
 Surface Battle::Unit::GetContour( int val ) const
 {
+    const int frame = GetFrame();
+
     switch ( val ) {
     case CONTOUR_MAIN:
-        return contours[0];
+        return getContour( frame, contoursMain, false );
     case CONTOUR_REFLECT:
-        return contours[1];
-    case CONTOUR_BLACK:
-        return contours[2];
-    case CONTOUR_BLACK | CONTOUR_REFLECT:
-        return contours[3];
+        return getContour( frame, contoursReflect, true );
     default:
         break;
     }
@@ -353,21 +283,30 @@ u32 Battle::Unit::GetUID( void ) const
     return uid;
 }
 
-void Battle::Unit::InitContours( void )
+const Surface & Battle::Unit::getContour( int frameId, std::map<int, Surface> & contours, bool isReflected ) const
 {
+    std::map<int, Surface>::iterator iter = contours.find( frameId );
+    if ( iter != contours.end() )
+        return iter->second;
+
     const monstersprite_t & msi = GetMonsterSprite();
-    const Sprite & sprite1 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, false );
-    const Sprite & sprite2 = AGG::GetICN( msi.icn_file, msi.frm_idle.start, true );
+    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
 
-    // main sprite
-    contours[0] = sprite1.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+    if ( !sprite.isValid() ) {
+        iter = contours.insert( std::make_pair( frameId, Surface() ) ).first;
+        return iter->second;
+    }
 
-    // revert sprite
-    contours[1] = sprite2.RenderContour( RGBA( 0xe0, 0xe0, 0 ) );
+    Surface contour( sprite.GetSize(), sprite.GetFormat() );
+    // TODO: replace this RGBA trick by palette color ID
+    if ( !AGG::DrawContour( contour, RGBA( 255, 0, 0xe0, 0xe0 ).pack(), msi.icn_file, frameId, isReflected ) ) {
+        iter = contours.insert( std::make_pair( frameId, Surface() ) ).first;
+        return iter->second;
+    }
 
-    // create white black sprite
-    contours[2] = sprite1.RenderGrayScale();
-    contours[3] = sprite2.RenderGrayScale();
+    iter = contours.insert( std::make_pair( frameId, contour ) ).first;
+
+    return iter->second;
 }
 
 void Battle::Unit::SetMirror( Unit * ptr )
@@ -432,9 +371,9 @@ void Battle::Unit::SetRandomLuck( void )
     // Bless, Curse and Luck do stack
 }
 
-bool Battle::Unit::isFly( void ) const
+bool Battle::Unit::isFlying( void ) const
 {
-    return ArmyTroop::isFly() && !Modes( SP_SLOW );
+    return ArmyTroop::isFlying() && !Modes( SP_SLOW );
 }
 
 bool Battle::Unit::isValid( void ) const
@@ -450,6 +389,29 @@ bool Battle::Unit::isReflect( void ) const
 bool Battle::Unit::OutOfWalls( void ) const
 {
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
+}
+
+bool Battle::Unit::canReach( int index ) const
+{
+    if ( !Board::isValidIndex( index ) )
+        return false;
+
+    if ( isFlying() || ( isArchers() && !isHandFighting() ) )
+        return true;
+
+    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
+    const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
+    return Board::GetDistance( from, index ) <= GetSpeed( true );
+}
+
+bool Battle::Unit::canReach( const Unit & unit ) const
+{
+    if ( unit.Modes( CAP_TOWER ) )
+        return false;
+
+    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
+    const int target = ( unit.isWide() && isIndirectAttack ) ? unit.GetTailIndex() : unit.GetHeadIndex();
+    return canReach( target );
 }
 
 bool Battle::Unit::isHandFighting( void ) const
@@ -483,13 +445,25 @@ int Battle::Unit::GetAnimationState() const
 
 bool Battle::Unit::isIdling() const
 {
-    // TODO Check for any of the 5 states
-    return GetAnimationState() == Monster_State::IDLE;
+    return GetAnimationState() == Monster_Info::IDLE;
+}
+
+bool Battle::Unit::checkIdleDelay()
+{
+    if ( !idleTimerSet ) {
+        const uint32_t halfDelay = animation.getIdleDelay() / 2;
+        idleTimer.second = Rand::Get( 0, halfDelay / 2 ) + halfDelay * 3 / 2;
+        idleTimerSet = true;
+    }
+    const bool res = idleTimer.Trigger();
+    if ( res )
+        idleTimerSet = false;
+    return res;
 }
 
 void Battle::Unit::NewTurn( void )
 {
-    if ( isResurectLife() )
+    if ( isRegenerating() )
         hp = ArmyTroop::GetHitPoints();
 
     ResetModes( TR_RESPONSED );
@@ -542,12 +516,12 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     return speed;
 }
 
-u32 Battle::Unit::GetDamageMin( const Unit & enemy ) const
+u32 Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
 {
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMin() );
 }
 
-u32 Battle::Unit::GetDamageMax( const Unit & enemy ) const
+u32 Battle::Unit::CalculateMaxDamage( const Unit & enemy ) const
 {
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMax() );
 }
@@ -555,20 +529,7 @@ u32 Battle::Unit::GetDamageMax( const Unit & enemy ) const
 u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
 {
     if ( isArchers() ) {
-        if ( isHandFighting() ) {
-            switch ( GetID() ) {
-            // skip
-            case Monster::MAGE:
-            case Monster::ARCHMAGE:
-            case Monster::TITAN:
-                break;
-
-            default:
-                dmg /= 2;
-                break;
-            }
-        }
-        else {
+        if ( !isHandFighting() ) {
             // check skill archery +%10, +%25, +%50
             if ( GetCommander() ) {
                 dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
@@ -581,6 +542,9 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
             // check spell shield
             if ( enemy.Modes( SP_SHIELD ) )
                 dmg /= Spell( Spell::SHIELD ).ExtraValue();
+        }
+        else if ( hasMeleePenalty() ) {
+            dmg /= 2;
         }
     }
 
@@ -634,11 +598,11 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
     u32 res = 0;
 
     if ( Modes( SP_BLESS ) )
-        res = GetDamageMax( enemy );
+        res = CalculateMaxDamage( enemy );
     else if ( Modes( SP_CURSE ) )
-        res = GetDamageMin( enemy );
+        res = CalculateMinDamage( enemy );
     else
-        res = Rand::Get( GetDamageMin( enemy ), GetDamageMax( enemy ) );
+        res = Rand::Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
 
     if ( Modes( LUCK_GOOD ) )
         res <<= 1; // mul 2
@@ -650,7 +614,7 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
 
 u32 Battle::Unit::HowManyCanKill( const Unit & b ) const
 {
-    return b.HowManyWillKilled( ( GetDamageMin( b ) + GetDamageMax( b ) ) / 2 );
+    return b.HowManyWillKilled( ( CalculateMinDamage( b ) + CalculateMaxDamage( b ) ) / 2 );
 }
 
 u32 Battle::Unit::HowManyWillKilled( u32 dmg ) const
@@ -874,7 +838,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
 
     DEBUG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
 
-    u32 spoint = hero ? hero->GetPower() : 3;
+    const u32 spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 
     if ( spell.isDamage() )
         SpellApplyDamage( spell, spoint, hero, target );
@@ -957,14 +921,11 @@ StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    if ( isAlwayResponse() )
-        return true;
-
-    if ( !Modes( TR_RESPONSED ) ) {
+    if ( !Modes( IS_PARALYZE_MAGIC ) ) {
         if ( Modes( SP_BLIND ) )
             return blindanswer;
-        else
-            return !Modes( IS_PARALYZE_MAGIC );
+        else if ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) )
+            return true;
     }
 
     return false;
@@ -977,17 +938,6 @@ void Battle::Unit::SetResponse( void )
 
 void Battle::Unit::PostAttackAction( Unit & enemy )
 {
-    switch ( GetID() ) {
-    case Monster::ARCHMAGE:
-        // 20% clean magic state
-        if ( enemy.isValid() && enemy.Modes( IS_GOOD_MAGIC ) && 3 > Rand::Get( 1, 10 ) )
-            enemy.ResetModes( IS_GOOD_MAGIC );
-        break;
-
-    default:
-        break;
-    }
-
     // decrease shots
     if ( isArchers() ) {
         // check ammo cart artifact
@@ -1063,8 +1013,16 @@ u32 Battle::Unit::GetDefense( void ) const
     }
 
     // check moat
-    if ( Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) )
-        res -= GameStatic::GetBattleMoatReduceDefense();
+    const Castle * castle = Arena::GetCastle();
+    if ( castle && castle->isBuild( BUILD_MOAT ) ) {
+        const Bridge * bridge = Arena::GetBridge();
+        const bool isOnBridgeCell = bridge && !bridge->isDown() && ( bridge->isMoatCell( GetHeadIndex() ) || bridge->isMoatCell( GetTailIndex() ) );
+        if ( isOnBridgeCell || Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) )
+            res -= GameStatic::GetBattleMoatReduceDefense();
+    }
+
+    if ( res < 1 ) // cannot be less than 1
+        res = 1;
 
     return res;
 }
@@ -1073,64 +1031,65 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 {
     const Unit & attacker = *this;
 
-    // initial value: (hitpoints)
-    const u32 & damage = ( attacker.GetDamageMin( defender ) + attacker.GetDamageMax( defender ) ) / 2;
-    const u32 & kills = defender.HowManyWillKilled( attacker.isTwiceAttack() ? damage * 2 : damage );
-    double res = kills * static_cast<Monster>( defender ).GetHitPoints();
-    bool noscale = false;
+    const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
+    const double attackerPowerLost = ( defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
+    const bool attackerIsArchers = isArchers();
 
-    // attacker
-    switch ( attacker.GetID() ) {
-    case Monster::GHOST:
-        // priority: from killed only
-        noscale = true;
-        break;
+    double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
 
-    case Monster::VAMPIRE_LORD:
-        if ( attacker.isHaveDamage() ) {
-            // alive priority
-            if ( defender.isElemental() || defender.isUndead() )
-                res /= 2;
+    if ( !canReach( defender ) && !( defender.Modes( CAP_TOWER ) && attackerIsArchers ) ) {
+        // Can't reach, so unit is not dangerous to defender at the moment
+        attackerThreat /= 2;
+    }
+
+    // Monster special abilities
+    if ( isTwiceAttack() ) {
+        if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
+            attackerThreat *= 2;
         }
-        break;
-
-    default:
-        break;
-    }
-
-    // scale on ability
-    if ( !noscale ) {
-        if ( defender.isArchers() )
-            res += res * 0.7;
-        if ( defender.isFly() )
-            res += res * 0.6;
-        if ( defender.isHideAttack() )
-            res += res * 0.5;
-        if ( defender.isTwiceAttack() )
-            res += res * 0.4;
-        if ( defender.isResurectLife() )
-            res += res * 0.3;
-        if ( defender.isDoubleCellAttack() )
-            res += res * 0.3;
-        if ( defender.isAlwayResponse() )
-            res -= res * 0.5;
-    }
-
-    // extra
-    if ( defender.Modes( CAP_MIRRORIMAGE ) )
-        res += res * 0.7;
-    if ( !attacker.isArchers() ) {
-        if ( defender.Modes( TR_RESPONSED ) )
-            res += res * 0.3;
         else {
-            if ( defender.Modes( LUCK_BAD ) )
-                res += res * 0.3;
-            else if ( defender.Modes( LUCK_GOOD ) )
-                res -= res * 0.3;
+            // check how much we will lose to retaliation
+            attackerThreat += attackerThreat * ( 1.0 - attackerPowerLost );
         }
     }
 
-    return static_cast<s32>( res ) > 1 ? static_cast<u32>( res ) : 1;
+    switch ( id ) {
+    case Monster::UNICORN:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
+    case Monster::CYCLOPS:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::PARALYZE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
+    case Monster::MEDUSA:
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::STONE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        break;
+    case Monster::VAMPIRE_LORD:
+        // Lifesteal
+        attackerThreat *= 1.3;
+        break;
+    case Monster::GENIE:
+        // Genie's ability to half enemy troops
+        attackerThreat *= 2;
+        break;
+    case Monster::GHOST:
+        // Ghost's ability to increase the numbers
+        attackerThreat *= 3;
+        break;
+    }
+
+    // Ignore disabled units
+    if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) )
+        attackerThreat = 0;
+    // Negative value of units that changed the side
+    if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) )
+        attackerThreat *= -1;
+
+    // Avoid effectiveness scaling if we're dealing with archers
+    if ( !attackerIsArchers || defender.isArchers() )
+        attackerThreat *= attackerPowerLost;
+
+    const int score = static_cast<int>( attackerThreat * 10 );
+    return ( score == 0 ) ? 1 : score;
 }
 
 u32 Battle::Unit::GetHitPoints( void ) const
@@ -1168,7 +1127,6 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
         }
         SetModes( SP_BLESS );
         affected.AddMode( SP_BLESS, duration );
-        ResetModes( LUCK_GOOD );
         break;
 
     case Spell::BLOODLUST:
@@ -1184,7 +1142,6 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
         }
         SetModes( SP_CURSE );
         affected.AddMode( SP_CURSE, duration );
-        ResetModes( LUCK_BAD );
         break;
 
     case Spell::HASTE:
@@ -1486,7 +1443,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
         if ( !isValid() ) {
             // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
-            SwitchAnimation( Monster_State::KILL, true );
+            SwitchAnimation( Monster_Info::KILL, true );
         }
         // restore hp
         u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;
@@ -1692,12 +1649,11 @@ int Battle::Unit::GetSpellMagic( bool force ) const
             return Spell::CURSE;
         break;
 
-        /* skip: see Unit::PostAttackAction
     case Monster::ARCHMAGE:
-            // 20% dispel
-            if(!force && 3 > Rand::Get(1, 10)) return Spell::DISPEL;
-            break;
-    */
+        // 20% dispel
+        if ( force || 3 > Rand::Get( 1, 10 ) )
+            return Spell::DISPEL;
+        break;
 
     case Monster::MEDUSA:
         // 20% stone
@@ -1729,8 +1685,8 @@ int Battle::Unit::GetFrame( void ) const
 
 void Battle::Unit::SetDeathAnim()
 {
-    if ( animation.getCurrentState() != Monster_State::KILL ) {
-        SwitchAnimation( Monster_State::KILL );
+    if ( animation.getCurrentState() != Monster_Info::KILL ) {
+        SwitchAnimation( Monster_Info::KILL );
     }
     animation.setToLastFrame();
 }
@@ -1860,47 +1816,7 @@ int Battle::Unit::ICNFile( void ) const
 
 int Battle::Unit::ICNMiss( void ) const
 {
-    switch ( GetID() ) {
-    case Monster::ARCHER:
-        return ICN::ARCH_MSL;
-    case Monster::RANGER:
-        return ICN::ARCH_MSL;
-    case Monster::ORC:
-        return ICN::ORC__MSL;
-    case Monster::ORC_CHIEF:
-        return ICN::ORC__MSL;
-    case Monster::TROLL:
-        return ICN::TROLLMSL;
-    case Monster::WAR_TROLL:
-        return ICN::TROLLMSL;
-    case Monster::ELF:
-        return ICN::ELF__MSL;
-    case Monster::GRAND_ELF:
-        return ICN::ELF__MSL;
-    case Monster::DRUID:
-        return ICN::DRUIDMSL;
-    case Monster::GREATER_DRUID:
-        return ICN::DRUIDMSL;
-    case Monster::CENTAUR:
-        return ICN::ARCH_MSL;
-    case Monster::HALFLING:
-        return ICN::HALFLMSL;
-    case Monster::MAGE:
-        return ICN::DRUIDMSL;
-    case Monster::ARCHMAGE:
-        return ICN::DRUIDMSL;
-    case Monster::TITAN:
-        return ICN::TITANMSL;
-    case Monster::LICH:
-        return ICN::LICH_MSL;
-    case Monster::POWER_LICH:
-        return ICN::LICH_MSL;
-
-    default:
-        break;
-    }
-
-    return ICN::UNKNOWN;
+    return Monster::GetMissileICN( GetID() );
 }
 
 Rect Battle::Unit::GetRectPosition( void ) const
@@ -1914,131 +1830,19 @@ Point Battle::Unit::GetBackPoint( void ) const
     return reflect ? Point( rt.x + rt.w, rt.y + rt.h / 2 ) : Point( rt.x, rt.y + rt.h / 2 );
 }
 
-int Battle::Unit::GetStartMissileOffset( int state ) const
+Point Battle::Unit::GetCenterPoint() const
 {
-    switch ( GetID() ) {
-    case Monster::ARCHER:
-    case Monster::RANGER:
-        switch ( state ) {
-        case Monster_State::RANG_TOP:
-            return -15;
-        case Monster_State::RANG_FRONT:
-            return -3;
-        case Monster_State::RANG_BOT:
-            return 10;
-        default:
-            break;
-        }
-        break;
+    const Sprite & sprite = AGG::GetICN( GetMonsterSprite().icn_file, GetFrame(), isReflect() );
 
-    case Monster::ORC:
-    case Monster::ORC_CHIEF:
-        return 5;
+    const Rect & pos = position.GetRect();
+    const s32 centerY = pos.y + pos.h + sprite.y() / 2 - 10;
 
-    case Monster::TROLL:
-    case Monster::WAR_TROLL:
-        return -20;
+    return Point( pos.x + pos.w / 2, centerY );
+}
 
-    case Monster::LICH:
-    case Monster::POWER_LICH:
-        switch ( state ) {
-        case Monster_State::RANG_TOP:
-            return -30;
-        case Monster_State::RANG_FRONT:
-            return -20;
-        case Monster_State::RANG_BOT:
-            return 0;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::ELF:
-    case Monster::GRAND_ELF:
-        switch ( state ) {
-        case Monster_State::RANG_TOP:
-            return -5;
-        case Monster_State::RANG_FRONT:
-            return 0;
-        case Monster_State::RANG_BOT:
-            return 5;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::CENTAUR:
-        switch ( state ) {
-        case Monster_State::RANG_TOP:
-            return -20;
-        case Monster_State::RANG_FRONT:
-            return -10;
-        case Monster_State::RANG_BOT:
-            return 5;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::DRUID:
-    case Monster::GREATER_DRUID:
-        switch ( state ) {
-        case Monster_State::RANG_TOP:
-            return -20;
-        case Monster_State::RANG_FRONT:
-            return -5;
-        case Monster_State::RANG_BOT:
-            return 15;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::HALFLING:
-        switch ( state ) {
-        case Monster_State::RANG_TOP:
-            return -20;
-        case Monster_State::RANG_FRONT:
-            return 10;
-        case Monster_State::RANG_BOT:
-            return 20;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::MAGE:
-    case Monster::ARCHMAGE:
-        switch ( state ) {
-        case Monster_State::RANG_TOP:
-            return -40;
-        case Monster_State::RANG_FRONT:
-            return -10;
-        case Monster_State::RANG_BOT:
-            return 25;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::TITAN:
-        switch ( state ) {
-        case Monster_State::RANG_TOP:
-            return -80;
-        case Monster_State::RANG_FRONT:
-            return -20;
-        case Monster_State::RANG_BOT:
-            return 15;
-        default:
-            break;
-        }
-        break;
-
-    default:
-        break;
-    }
-
-    return 0;
+Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
+{
+    return animation.getProjectileOffset( direction );
 }
 
 int Battle::Unit::GetArmyColor( void ) const

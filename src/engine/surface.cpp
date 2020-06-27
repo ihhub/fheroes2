@@ -24,7 +24,9 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <math.h>
 #include <memory>
+#include <set>
 #include <sstream>
 
 #include "display.h"
@@ -44,6 +46,9 @@ namespace
     RGBA default_color_key;
     SDL_Color * pal_colors = NULL;
     u32 pal_nums = 0;
+
+    std::set<const SDL_Surface *> paletteBasedSurface;
+    std::set<const SDL_Surface *> surfaceToUpdate;
 }
 
 SurfaceFormat GetRGBAMask( u32 bpp )
@@ -271,11 +276,11 @@ Surface::Surface( const Size & sz, const SurfaceFormat & fm )
     Set( sz.w, sz.h, fm );
 }
 
-Surface::Surface( const Surface & bs )
+Surface::Surface( const Surface & bs, bool useReference )
     : surface( NULL )
     , _isDisplay( false )
 {
-    Set( bs, true );
+    Set( bs, useReference );
 }
 
 Surface::Surface( const std::string & file )
@@ -439,6 +444,8 @@ void Surface::SetDefaultPalette( SDL_Color * ptr, int num )
 {
     pal_colors = ptr;
     pal_nums = num;
+
+    surfaceToUpdate = paletteBasedSurface;
 }
 
 void Surface::SetDefaultColorKey( int r, int g, int b )
@@ -603,7 +610,23 @@ void Surface::SetPalette( void )
             surface->format->palette->ncolors = pal_nums;
         }
 
+        paletteBasedSurface.insert( surface );
         surface->format->palette->colors = pal_colors;
+    }
+}
+
+void Surface::ResetPalette()
+{
+    if ( isValid() && pal_colors != NULL && pal_nums > 0 && surface->format->palette ) {
+        std::set<const SDL_Surface *>::iterator item = surfaceToUpdate.find( surface );
+        if ( item != surfaceToUpdate.end() ) {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+            SDL_SetPaletteColors( surface->format->palette, pal_colors, 0, pal_nums );
+#else
+            SDL_SetPalette( surface, SDL_LOGPAL, pal_colors, 0, pal_nums );
+#endif
+            surfaceToUpdate.erase( item );
+        }
     }
 }
 
@@ -782,19 +805,29 @@ void Surface::Blit( const Point & dpt, Surface & dst ) const
     Blit( Rect( Point( 0, 0 ), GetSize() ), dpt, dst );
 }
 
-void Surface::SetAlphaMod( int level )
+void Surface::SetAlphaMod( int level, bool makeCopy )
 {
+    if ( makeCopy )
+        Set( GetSurface(), true );
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( isValid() )
+    if ( isValid() ) {
         SDL_SetSurfaceAlphaMod( surface, level );
+        SDL_SetSurfaceBlendMode( surface, SDL_BLENDMODE_BLEND );
+    }
 #else
     if ( isValid() ) {
         if ( amask() ) {
-            Surface res( GetSize(), false );
-            SDL_SetAlpha( surface, 0, 0 );
-            Blit( res );
-            SDL_SetAlpha( surface, SDL_SRCALPHA, 255 );
-            Set( res, true );
+            if ( depth() == 32 ) {
+                Set( ModifyAlphaChannel( level ), true );
+            }
+            else {
+                Surface res( GetSize(), false );
+                SDL_SetAlpha( surface, 0, 0 );
+                Blit( res );
+                SDL_SetAlpha( surface, SDL_SRCALPHA, 255 );
+                Set( res, true );
+            }
         }
 
         SDL_SetAlpha( surface, SDL_SRCALPHA, level );
@@ -833,6 +866,8 @@ void Surface::FreeSurface( Surface & sf )
                 sf.surface->format->palette->colors = NULL;
                 sf.surface->format->palette->ncolors = 0;
             }
+
+            paletteBasedSurface.erase( sf.surface );
 
             SDL_FreeSurface( sf.surface );
             sf.surface = NULL;
@@ -1027,10 +1062,14 @@ Surface Surface::RenderContour( const RGBA & color ) const
     const u32 fake2 = trf.MapRGB( fake );
 
     res.Lock();
-    for ( int y = 0; y < trf.h(); ++y )
-        for ( int x = 0; x < trf.w(); ++x )
+
+    const int width = trf.w();
+    const int height = trf.h();
+
+    for ( int y = 0; y < height; ++y )
+        for ( int x = 0; x < width; ++x )
             if ( fake2 == trf.GetPixel( x, y ) ) {
-                if ( 0 == x || 0 == y || trf.w() - 1 == x || trf.h() - 1 == y )
+                if ( 0 == x || 0 == y || width - 1 == x || height - 1 == y )
                     res.SetPixel( x, y, pixel );
                 else {
                     if ( 0 < x ) {
@@ -1038,7 +1077,7 @@ Surface Surface::RenderContour( const RGBA & color ) const
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x - 1, y, pixel );
                     }
-                    if ( trf.w() - 1 > x ) {
+                    if ( width - 1 > x ) {
                         RGBA col = trf.GetRGB( trf.GetPixel( x + 1, y ) );
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x + 1, y, pixel );
@@ -1049,7 +1088,7 @@ Surface Surface::RenderContour( const RGBA & color ) const
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x, y - 1, pixel );
                     }
-                    if ( trf.h() - 1 > y ) {
+                    if ( height - 1 > y ) {
                         RGBA col = trf.GetRGB( trf.GetPixel( x, y + 1 ) );
                         if ( ( clkey0 && col == clkey ) || col.a() < 200 )
                             res.SetPixel( x, y + 1, pixel );
@@ -1107,11 +1146,43 @@ Surface Surface::RenderSepia( void ) const
     return res;
 }
 
+// Returns a warped Sprite. Animation is built with 60 frames in mind.
+Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFrequency ) const
+{
+    const int height = h();
+    const int width = w();
+
+    // convert frames to -10...10 range with a period of 40
+    const int linearWave = std::abs( 20 - ( frame + 10 ) % 40 ) - 10;
+    const int progress = 7 - frame / 10;
+
+    const double rippleXModifier = ( progress * scaleX + 0.3 ) * linearWave;
+    const int offsetX = abs( rippleXModifier );
+    const uint32_t limitY = waveFrequency * M_PI;
+
+    Surface res = Surface( Size( width + offsetX * 2, height ), true );
+    res.Lock();
+
+    for ( int y = 0; y < height; ++y ) {
+        // Take top half the sin wave starting at 0 with period set by waveFrequency, result is -1...1
+        const double sinYEffect = sin( ( y % limitY ) / waveFrequency ) * 2.0 - 1;
+        for ( int x = 0; x < width; ++x ) {
+            const int newX = x + static_cast<int>( rippleXModifier * sinYEffect ) + offsetX;
+            res.SetPixel( newX, y, GetPixel( x, y ) );
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
 Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
 {
     Surface res = GetSurface();
-    u32 fc = MapRGB( col1 );
-    u32 tc = res.MapRGB( col2 );
+
+    uint32_t fc = MapRGB( col1 );
+    uint32_t tc = res.MapRGB( col2 );
 
     if ( amask() )
         fc |= amask();
@@ -1119,10 +1190,30 @@ Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
     if ( res.amask() )
         tc |= res.amask();
 
-    if ( fc != tc ) {
-        res.Lock();
-        const int height = h();
-        const int width = w();
+    if ( fc == tc ) // nothing we need to change
+        return res;
+
+    res.Lock();
+
+    const int height = h();
+    const int width = w();
+    const int imageDepth = depth();
+
+    if ( imageDepth == 32 ) { // RGBA image
+        const uint16_t pitch = res.surface->pitch >> 2;
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+                if ( *x == fc )
+                    *x = tc;
+            }
+        }
+    }
+    else {
         for ( int y = 0; y < height; ++y ) {
             for ( int x = 0; x < width; ++x ) {
                 if ( fc == GetPixel( x, y ) ) {
@@ -1130,6 +1221,134 @@ Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
                 }
             }
         }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
+Surface Surface::RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const
+{
+    Surface res = GetSurface();
+
+    if ( colorPairs.empty() )
+        return res;
+
+#ifdef WITH_DEBUG
+    // If STL is compiled with all Debug options this function become pretty slow using std::map
+    std::vector<uint32_t> inValue;
+    std::vector<uint32_t> outValue;
+#endif
+    std::map<uint32_t, uint32_t> correctedColors;
+    for ( std::map<RGBA, RGBA>::const_iterator value = colorPairs.begin(); value != colorPairs.end(); ++value ) {
+        uint32_t in = MapRGB( value->first );
+        uint32_t out = res.MapRGB( value->second );
+
+        if ( amask() )
+            in |= amask();
+
+        if ( res.amask() )
+            out |= res.amask();
+
+        if ( in != out ) {
+#ifdef WITH_DEBUG
+            inValue.push_back( in );
+            outValue.push_back( out );
+#endif
+            correctedColors[in] = out;
+        }
+    }
+
+    if ( correctedColors.empty() )
+        return res;
+
+    res.Lock();
+
+    int height = h();
+    int width = w();
+    const int imageDepth = depth();
+
+    if ( imageDepth == 32 ) { // RGBA image
+        uint16_t pitch = res.surface->pitch >> 2;
+
+#ifdef WITH_DEBUG
+        uint32_t * inStart = inValue.data();
+        const uint32_t * inEnd = inValue.data() + inValue.size();
+        uint32_t * outStart = outValue.data();
+#endif
+
+        if ( pitch == width ) {
+            width = width * height;
+            pitch = width;
+            height = 1;
+        }
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+#ifdef WITH_DEBUG
+                for ( uint32_t * in = inStart; in != inEnd; ++in ) {
+                    if ( *x == *in ) {
+                        *x = *( outStart + ( in - inStart ) );
+                        break;
+                    }
+                }
+#else
+                std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.find( *x );
+                if ( value != correctedColors.end() )
+                    *x = value->second;
+#endif
+            }
+        }
+    }
+    else {
+        for ( int y = 0; y < height; ++y ) {
+            for ( int x = 0; x < width; ++x ) {
+                std::map<uint32_t, uint32_t>::const_iterator value = correctedColors.find( GetPixel( x, y ) );
+                if ( value != correctedColors.end() )
+                    res.SetPixel( x, y, value->second );
+            }
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
+Surface Surface::ModifyAlphaChannel( uint32_t alpha ) const
+{
+    Surface res = GetSurface();
+
+    if ( amask() && depth() == 32 && alpha < 256 ) {
+        res.Lock();
+
+        int height = h();
+        int width = w();
+        uint16_t pitch = res.surface->pitch >> 2;
+
+        if ( pitch == width ) {
+            width = width * height;
+            pitch = width;
+            height = 1;
+        }
+
+        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
+        const uint32_t * yEnd = y + pitch * height;
+        for ( ; y != yEnd; y += pitch ) {
+            uint32_t * x = y;
+            const uint32_t * xEnd = x + width;
+            for ( ; x != xEnd; ++x ) {
+                const uint32_t rest = *x % 0x1000000;
+
+                *x = ( ( ( *x >> 24 ) * alpha / 255 ) << 24 ) + rest;
+            }
+        }
+
         res.Unlock();
     }
 
@@ -1256,30 +1475,28 @@ void Surface::DrawBorder( const RGBA & color, bool solid )
         DrawRect( Rect( Point( 0, 0 ), GetSize() ), color );
     else {
         const u32 pixel = MapRGB( color );
+        const int width = w();
+        const int height = h();
 
-        for ( int i = 0; i < w(); ++i ) {
+        for ( int i = 0; i < width; i += 4 ) {
             SetPixel( i, 0, pixel );
-            if ( i + 1 < w() )
+            if ( i + 1 < width )
                 SetPixel( i + 1, 0, pixel );
-            i += 3;
         }
-        for ( int i = 0; i < w(); ++i ) {
-            SetPixel( i, h() - 1, pixel );
-            if ( i + 1 < w() )
-                SetPixel( i + 1, h() - 1, pixel );
-            i += 3;
+        for ( int i = 0; i < width; i += 4 ) {
+            SetPixel( i, height - 1, pixel );
+            if ( i + 1 < width )
+                SetPixel( i + 1, height - 1, pixel );
         }
-        for ( int i = 0; i < h(); ++i ) {
+        for ( int i = 0; i < height; i += 4 ) {
             SetPixel( 0, i, pixel );
-            if ( i + 1 < h() )
+            if ( i + 1 < height )
                 SetPixel( 0, i + 1, pixel );
-            i += 3;
         }
-        for ( int i = 0; i < h(); ++i ) {
-            SetPixel( w() - 1, i, pixel );
-            if ( i + 1 < h() )
-                SetPixel( w() - 1, i + 1, pixel );
-            i += 3;
+        for ( int i = 0; i < height; i += 4 ) {
+            SetPixel( width - 1, i, pixel );
+            if ( i + 1 < height )
+                SetPixel( width - 1, i + 1, pixel );
         }
     }
 }
@@ -1340,4 +1557,150 @@ Surface Surface::RenderSurface( const Rect & srcrt, const Size & sz ) const
     srcsf.Blit( Rect( srcrt.x + srcrt.w - cw, srcrt.y + srcrt.h - ch, cw, ch ), dstrt.x + dstrt.w - cw, dstrt.y + dstrt.h - ch, dstsf );
 
     return dstsf;
+}
+
+bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect )
+{
+    if ( depth() != 32 || colors.empty() )
+        return false;
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width || pitch * height != indexes.size() ) {
+        Unlock();
+        return false;
+    }
+
+    uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+
+    if ( reflect ) {
+        const uint8_t * inY = indexes.data();
+        const uint8_t * inYEnd = inY + width * height;
+
+        if ( alpha() ) {
+            for ( ; inY != inYEnd; inY += width ) {
+                const uint8_t * inX = inY + width - 1;
+                const uint32_t * outEndX = out + width;
+                for ( ; out != outEndX; ++out, --inX ) {
+                    *out = ( *out & 0xff000000 ) + colors[*inX];
+                }
+            }
+        }
+        else {
+            for ( ; inY != inYEnd; inY += width ) {
+                const uint8_t * inX = inY + width - 1;
+                const uint32_t * outEndX = out + width;
+                for ( ; out != outEndX; ++out, --inX ) {
+                    *out = colors[*inX];
+                }
+            }
+        }
+    }
+    else {
+        const uint32_t * outEnd = out + indexes.size();
+        const uint8_t * in = indexes.data();
+
+        if ( alpha() ) {
+            for ( ; out != outEnd; ++out, ++in ) {
+                *out = ( *out & 0xff000000 ) + colors[*in];
+            }
+        }
+        else {
+            for ( ; out != outEnd; ++out, ++in ) {
+                *out = colors[*in];
+            }
+        }
+    }
+
+    Unlock();
+
+    return true;
+}
+
+bool Surface::GenerateContour( const std::vector<uint8_t> & indexes, uint32_t value, bool reflect )
+{
+    if ( depth() != 32 )
+        return false;
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width || pitch * height != indexes.size() ) {
+        Unlock();
+        return false;
+    }
+
+    uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+    const uint8_t * inY = indexes.data();
+
+    if ( reflect ) {
+        for ( int y = 0; y < height; ++y, inY += pitch, out += pitch ) {
+            const uint8_t * inX = inY;
+            for ( int x = 0; x < width; ++x, ++inX ) {
+                if ( *inX == 0 ) {
+                    if ( ( x > 0 && *( inX - 1 ) > 0 ) || ( x < width - 1 && *( inX + 1 ) > 0 ) || ( y > 0 && *( inX - pitch ) > 0 )
+                         || ( y < height - 1 && *( inX + pitch ) > 0 ) ) {
+                        out[width - 1 - x] = value;
+                    }
+                }
+            }
+        }
+    }
+    else {
+        for ( int y = 0; y < height; ++y, inY += pitch, out += pitch ) {
+            const uint8_t * inX = inY;
+            for ( int x = 0; x < width; ++x, ++inX ) {
+                if ( *inX == 0 ) {
+                    if ( ( x > 0 && *( inX - 1 ) > 0 ) || ( x < width - 1 && *( inX + 1 ) > 0 ) || ( y > 0 && *( inX - pitch ) > 0 )
+                         || ( y < height - 1 && *( inX + pitch ) > 0 ) ) {
+                        out[x] = value;
+                    }
+                }
+            }
+        }
+    }
+
+    Unlock();
+
+    return true;
+}
+
+Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t ratio )
+{
+    if ( !first.isValid() || !second.isValid() || first.w() != second.w() || first.h() != second.h() || first.amask() != second.amask() || ratio > 100
+         || first.depth() != 32 || second.depth() != 32 )
+        return Surface();
+
+    Surface surface( first.GetSize(), first.amask() );
+
+    surface.Lock();
+
+    const int width = surface.w();
+    const int height = surface.h();
+    const uint16_t pitch = surface.surface->pitch >> 2;
+
+    if ( pitch != width ) {
+        surface.Unlock();
+        return surface;
+    }
+
+    uint8_t * out = static_cast<uint8_t *>( surface.surface->pixels );
+    const uint8_t * outEnd = out + width * height * 4;
+    const uint8_t * in1 = static_cast<uint8_t *>( first.surface->pixels );
+    const uint8_t * in2 = static_cast<uint8_t *>( second.surface->pixels );
+
+    for ( ; out != outEnd; ++out, ++in1, ++in2 ) {
+        *out = static_cast<uint32_t>( *in1 ) * ratio / 100 + static_cast<uint32_t>( *in2 ) * ( 100 - ratio ) / 100;
+    }
+
+    surface.Unlock();
+
+    return surface;
 }

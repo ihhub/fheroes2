@@ -90,6 +90,13 @@ enum
     SCROLL_FAST2 = 32
 };
 
+enum MusicSource
+{
+    MUSIC_MIDI_ORIGINAL,
+    MUSIC_MIDI_EXPANSION,
+    MUSIC_CDROM
+};
+
 #ifdef WITH_DEBUG
 #define DEBUG( x, y, z )                                                                                                                                                 \
     if ( IS_DEBUG( x, y ) ) {                                                                                                                                            \
@@ -231,6 +238,8 @@ public:
     void SetPosStatus( const Point & );
 
     bool FullScreen( void ) const;
+    bool KeepAspectRatio( void ) const;
+    bool ChangeFullscreenResolution( void ) const;
     bool QVGA( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;
@@ -334,7 +343,7 @@ public:
 
     void SetDebug( int );
     void SetUnicode( bool );
-    void SetPriceLoyaltyVersion( void );
+    void SetPriceLoyaltyVersion( bool set = true );
     void SetGameDifficulty( int );
     void SetEvilInterface( bool );
     void SetHideInterface( bool );
@@ -355,11 +364,13 @@ public:
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
+    void SetMusicType( int v );
     void ResetSound( void );
     void ResetMusic( void );
 
     int SoundVolume( void ) const;
     int MusicVolume( void ) const;
+    MusicSource MusicType() const;
     int BlitSpeed( void ) const;
 
     bool GameType( int ) const;
@@ -456,6 +467,7 @@ private:
 
     int sound_volume;
     int music_volume;
+    MusicSource _musicType;
     int heroes_speed;
     int ai_speed;
     int scroll_speed;

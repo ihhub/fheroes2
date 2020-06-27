@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cmath>
 #include <map>
 
 #include "agg.h"
@@ -135,9 +136,9 @@ int Game::Credits( void )
     str.append( "This program is distributed under the terms of the GPL v2." );
     str.append( "\n" );
     str.append( "AI engine: " );
-    str.append( AI::Type() );
+    str.append( AI::Get().Type() );
     str.append( ", license: " );
-    str.append( AI::License() );
+    str.append( AI::Get().License() );
     str.append( "\n \n" );
     str.append( "Site project:\n" );
     str.append( "https://github.com/ihhub/fheroes2" );
@@ -218,24 +219,6 @@ u32 & Game::MapsAnimationFrame( void )
 u32 & Game::CastleAnimationFrame( void )
 {
     return castle_animation_frame;
-}
-
-void Game::SetFixVideoMode( void )
-{
-    const Settings & conf = Settings::Get();
-
-    Size fixsize( conf.VideoMode() );
-    Size mapSize = conf.MapsSize();
-
-    u32 max_x = Settings::Get().ExtGameHideInterface() ? mapSize.w * TILEWIDTH : ( 6 + mapSize.w ) * TILEWIDTH; // RADARWIDTH + 3 * BORDERWIDTH
-    u32 max_y = Settings::Get().ExtGameHideInterface() ? mapSize.h * TILEWIDTH : ( 1 + mapSize.h ) * TILEWIDTH; // 2 * BORDERWIDTH
-
-    if ( conf.VideoMode().w > max_x )
-        fixsize.w = max_x;
-    if ( conf.VideoMode().h > max_y )
-        fixsize.h = max_y;
-
-    Display::Get().SetVideoMode( fixsize.w, fixsize.h, conf.FullScreen() );
 }
 
 /* play all sound from focus area game */
@@ -428,12 +411,6 @@ void Game::LoadExternalResource( const Settings & conf )
     if ( System::IsFile( spec ) )
         Game::UpdateGlobalDefines( spec );
 
-    // animations.xml
-    spec = Settings::GetLastFile( prefix_stats, "animations.xml" );
-
-    if ( System::IsFile( spec ) )
-        Battle::UpdateMonsterSpriteAnimation( spec );
-
     // battle.xml
     spec = Settings::GetLastFile( prefix_stats, "battle.xml" );
 
@@ -504,7 +481,6 @@ int Game::GetActualKingdomColors( void )
     return Settings::Get().GetPlayers().GetActualColors();
 }
 
-#include <cmath>
 std::string Game::CountScoute( u32 count, int scoute, bool shorts )
 {
     double infelicity = 0;

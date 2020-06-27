@@ -79,7 +79,7 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
     int result = 0;
 
     for ( u32 ii = 0; ii < size; ++ii ) {
-        if ( hero.isVisited( objs[ii] ) ) {
+        if ( hero.isObjectTypeVisited( objs[ii] ) ) {
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
@@ -104,6 +104,7 @@ Heroes::Heroes()
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
     , patrol_square( 0 )
+    , _alphaValue( 255 )
 {}
 
 Heroes::Heroes( int heroid, int rc )
@@ -121,6 +122,7 @@ Heroes::Heroes( int heroid, int rc )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
     , patrol_square( 0 )
+    , _alphaValue( 255 )
 {
     name = _( Heroes::GetName( heroid ) );
 
@@ -422,7 +424,7 @@ void Heroes::PostLoad( void )
     move_point = GetMaxMovePoints();
 
     if ( isControlAI() ) {
-        AI::HeroesPostLoad( *this );
+        AI::Get().HeroesPostLoad( *this );
     }
 
     DEBUG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
@@ -579,7 +581,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
             point += acount * 1000;
 
         // visited object
-        if ( isVisited( MP2::OBJ_LIGHTHOUSE ) )
+        if ( isObjectTypeVisited( MP2::OBJ_LIGHTHOUSE ) )
             point += 500;
     }
     else {
@@ -625,7 +627,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
             point += acount * 300;
 
         // visited object
-        if ( isVisited( MP2::OBJ_STABLES ) )
+        if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 500;
     }
 
@@ -764,7 +766,7 @@ void Heroes::ActionNewDay( void )
     MovePointsScaleFixed();
 
     // stables visited?
-    if ( isVisited( MP2::OBJ_STABLES ) )
+    if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
         move_point += 400;
 
     // recovery spell points
@@ -883,7 +885,7 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 }
 
 /* return true if object visited */
-bool Heroes::isVisited( int object, Visit::type_t type ) const
+bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
 {
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( object );
@@ -1299,8 +1301,8 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
 
     Route::Path test( *this );
     // approximate limit, this restriction path finding algorithm
-    if ( test.Calculate( dst, limit ) ) {
-        u32 total = test.GetTotalPenalty();
+    uint32_t total = test.Calculate( dst, limit );
+    if ( total > 0 ) {
         if ( move_point >= total )
             return 1;
 
@@ -1328,7 +1330,7 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
     if ( !skipsecondary )
         LevelUpSecondarySkill( primary, ( autoselect || isControlAI() ) );
     if ( isControlAI() )
-        AI::HeroesLevelUp( *this );
+        AI::Get().HeroesLevelUp( *this );
 }
 
 int Heroes::LevelUpPrimarySkill( void )
@@ -1552,7 +1554,7 @@ void Heroes::ActionNewPosition( void )
     }
 
     if ( isControlAI() )
-        AI::HeroesActionNewPosition( *this );
+        AI::Get().HeroesActionNewPosition( *this );
 
     ResetModes( VISIONS );
 }
@@ -1704,15 +1706,7 @@ void Heroes::PortraitRedraw( s32 px, s32 py, int type, Surface & dstsf ) const
         }
     }
 
-    // heroes marker
-    if ( Modes( Heroes::SHIPMASTER ) ) {
-        const Sprite & sprite = AGG::GetICN( ICN::BOAT12, 0 );
-        const Rect pos( px + mp.x, py + mp.y - 1, sprite.w(), sprite.h() );
-        dstsf.FillRect( pos, ColorBlack );
-        sprite.Blit( pos.x, pos.y, dstsf );
-        mp.y = sprite.h();
-    }
-    else if ( Modes( Heroes::GUARDIAN ) ) {
+    if ( Modes( Heroes::GUARDIAN ) ) {
         const Sprite & sprite = AGG::GetICN( ICN::MISC6, 11 );
         const Rect pos( px + mp.x + 3, py + mp.y, sprite.w(), sprite.h() );
         dstsf.FillRect( pos, ColorBlack );
@@ -1766,7 +1760,7 @@ std::string Heroes::String( void ) const
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
            << "army dump       : " << army.String() << std::endl;
 
-        os << AI::HeroesString( *this );
+        os << AI::Get().HeroesString( *this );
     }
 
     return os.str();

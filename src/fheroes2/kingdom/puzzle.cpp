@@ -145,7 +145,7 @@ void ShowStandardDialog( const Puzzle & pzl, const Surface & sf )
 
     Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radar_pos = radar.GetArea();
-    bool evil_interface = Settings::Get().ExtGameEvilInterface();
+    const bool evil_interface = Settings::Get().ExtGameEvilInterface();
 
     SpriteBack back( Rect( BORDERWIDTH, BORDERWIDTH, sf.w(), sf.h() ) );
 
@@ -183,7 +183,7 @@ void ShowExtendedDialog( const Puzzle & pzl, const Surface & sf )
     const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetArea();
 
     Dialog::FrameBorder frameborder( gameArea.x + ( gameArea.w - sf.w() - BORDERWIDTH * 2 ) / 2, gameArea.y + ( gameArea.h - sf.h() - BORDERWIDTH * 2 ) / 2, sf.w(),
-                                     sf.h() + ( Settings::Get().QVGA() ? 25 : 32 ) );
+                                     sf.h() );
 
     if ( conf.ExtGameEvilInterface() )
         display.FillRect( frameborder.GetArea(), RGBA( 80, 80, 80 ) );
@@ -191,8 +191,14 @@ void ShowExtendedDialog( const Puzzle & pzl, const Surface & sf )
         display.FillRect( frameborder.GetArea(), RGBA( 128, 64, 32 ) );
     sf.Blit( frameborder.GetArea(), display );
 
-    Button buttonExit( frameborder.GetArea().x + sf.w() / 2 - 40, frameborder.GetArea().y + sf.h() + ( conf.QVGA() ? 0 : 5 ),
-                       ( conf.ExtGameEvilInterface() ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    const Rect & radarPos = radar.GetArea();
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+
+    AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ).Blit( radarPos );
+
+    Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.h - 37 );
+    Button buttonExit( dst_pt.x, dst_pt.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 
     buttonExit.Draw();
     PuzzlesDraw( pzl, sf, frameborder.GetArea().x, frameborder.GetArea().y );
@@ -206,9 +212,9 @@ void ShowExtendedDialog( const Puzzle & pzl, const Surface & sf )
         le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
         if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
             break;
-        if ( conf.QVGA() && le.MouseClickLeft( frameborder.GetArea() ) )
-            break;
     }
+
+    radar.SetRedraw();
 }
 
 void PuzzlesDraw( const Puzzle & pzl, const Surface & sf, s32 dstx, s32 dsty )
@@ -232,7 +238,7 @@ void PuzzlesDraw( const Puzzle & pzl, const Surface & sf, s32 dstx, s32 dsty )
                 Sprite piece = Sprite( sprite.GetSurface(), sprite.x(), sprite.y() );
 
                 if ( pzl.test( ii ) )
-                    piece.SetAlphaMod( alpha );
+                    piece.SetAlphaMod( alpha, false );
 
                 if ( Settings::Get().QVGA() )
                     piece.Blit( dstx + 8 + piece.x() - BORDERWIDTH, dsty + 8 + piece.y() - BORDERWIDTH );

@@ -73,6 +73,16 @@ namespace Battle
         bool isStartFrame( void ) const;
         int GetColor( void ) const;
         const HeroBase * GetHero( void ) const;
+        Point Offset() const;
+
+        enum
+        {
+            HERO_X_OFFSET = 32,
+            LEFT_HERO_Y_OFFSET = 183,
+            RIGHT_HERO_Y_OFFSET = 148,
+            CAPTAIN_X_OFFSET = 6,
+            CAPTAIN_Y_OFFSET = -13
+        };
 
     private:
         const HeroBase * base;
@@ -82,6 +92,7 @@ namespace Battle
         int animframe_count;
         bool reflect;
         Rect pos;
+        Point _offset;
     };
 
     class Status : public Rect
@@ -180,8 +191,16 @@ namespace Battle
         void RedrawActionSkipStatus( const Unit & );
         void RedrawActionRemoveMirrorImage( const Unit & );
         void RedrawBridgeAnimation( bool down );
+        void RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID );
 
     private:
+        enum CreatueSpellAnimation
+        {
+            NONE,
+            WINCE,
+            RESURRECT
+        };
+
         void HumanBattleTurn( const Unit &, Actions &, std::string & );
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
@@ -203,24 +222,29 @@ namespace Battle
         void RedrawTroopCount( const Unit & ) const;
         void RedrawPocketControls( void ) const;
 
-        void RedrawActionWincesKills( TargetsInfo & );
+        void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = NULL );
         void RedrawActionArrowSpell( const Unit & );
         void RedrawActionColdRaySpell( Unit & );
         void RedrawActionDisruptingRaySpell( Unit & );
         void RedrawActionBloodLustSpell( Unit & );
+        void RedrawActionStoneSpell( Unit & target );
         void RedrawActionColdRingSpell( s32, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell( const TargetsInfo & );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionLightningBoltSpell( Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
+        void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size );
 
-        void RedrawTroopFrameAnimation( Unit & );
-        void RedrawTroopWithFrameAnimation( Unit &, int, int, bool );
+        void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
+        void RedrawTroopDefaultDelay( Unit & unit );
+        void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
         void RedrawTargetsWithFrameAnimation( s32, const TargetsInfo &, int, int );
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
         bool IdleTroopsAnimation( void );
+        void ResetIdleTroopAnimation( void );
+        void CycleColors();
         void CheckGlobalEvents( LocalEvent & );
 
         void ProcessingHeroDialogResult( int, Actions & );
@@ -266,13 +290,16 @@ namespace Battle
         u32 animation_flags_frame;
         int catapult_frame;
 
-        const Unit * b_current;
-        const Unit * b_move;
-        const Unit * b_fly;
+        uint32_t _colorCycle;
+        std::vector<uint8_t> _creaturePalette;
+
+        const Unit * _currentUnit;
+        const Unit * _movingUnit;
+        const Unit * _flyingUnit;
         const Sprite * b_current_sprite;
         u32 b_current_alpha;
-        Point p_move;
-        Point p_fly;
+        Point _movingPos;
+        Point _flyingPos;
 
         s32 index_pos;
         s32 teleport_src;

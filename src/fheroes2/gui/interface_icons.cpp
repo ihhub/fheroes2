@@ -100,7 +100,6 @@ void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
         break;
 
     // red marker
-    case NEED_CASTLE:
     case REQUIRES_BUILD:
         AGG::GetICN( ICN::CSLMARKER, 1 ).Blit( sx + 39, sy + 1 );
         break;
@@ -274,7 +273,7 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
                 Game::OpenCastleDialog( *castle );
         }
         else
-            Game::OpenHeroesDialog( *item );
+            Game::OpenHeroesDialog( *item, false );
 
         // for QVGA: auto hide icons after click
         if ( Settings::Get().QVGA() )
@@ -386,7 +385,7 @@ void Interface::IconsPanel::SetPos( s32 ox, s32 oy )
         iconsCount = 2;
     }
     else {
-        const u32 count_h = ( Display::Get().h() - 480 ) / TILEWIDTH;
+        const u32 count_h = ( Display::Get().h() - Display::DEFAULT_HEIGHT ) / TILEWIDTH;
         iconsCount = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
     }
 

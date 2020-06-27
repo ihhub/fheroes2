@@ -91,6 +91,8 @@ public:
     int GetValidItems( void ) const;
     u32 GetValidItemsCount( void ) const;
 
+    void Trim( void ); // set all values to be >= 0
+
     void Reset( void );
     std::string String( void ) const;
 

@@ -32,40 +32,83 @@
 #include "ai_simple.h"
 #include "castle.h"
 #include "heroes.h"
+#include "settings.h"
 
-const char * AI::Type( void )
+namespace AI
 {
-    return "simple";
-}
+    Simple::Simple()
+        : Base()
+        , _kingdoms( KINGDOMMAX + 1 )
+        , _heroes( HEROESMAXCOUNT + 2 )
+    {}
 
-const char * AI::License( void )
-{
-    return "Non-Commercial";
-}
-
-void AI::HeroesAdd( const Heroes & ) {}
-
-void AI::HeroesRemove( const Heroes & ) {}
-
-void AI::CastleAdd( const Castle & ) {}
-
-void AI::CastleRemove( const Castle & castle )
-{
-    AIKingdom & ai = AIKingdoms::Get( castle.GetColor() );
-
-    if ( ai.capital == &castle ) {
-        ai.capital->ResetModes( Castle::CAPITAL );
-        ai.capital = NULL;
+    AIKingdom & Simple::GetKingdom( int color )
+    {
+        return _kingdoms.at( Color::GetIndex( color ) );
     }
-}
 
-void AI::Init( void )
-{
-    AIKingdoms::Reset();
-    AIHeroes::Reset();
-}
+    AIHero & Simple::GetHero( const Heroes & hero )
+    {
+        return _heroes.at( hero.GetID() );
+    }
 
-bool Queue::isPresent( s32 index ) const
-{
-    return end() != std::find( begin(), end(), index );
+    const char * Simple::Type( void ) const
+    {
+        return "simple";
+    }
+
+    const char * Simple::License( void ) const
+    {
+        return "Non-Commercial";
+    }
+
+    void Simple::Reset( void )
+    {
+        for ( std::vector<AIKingdom>::iterator it = _kingdoms.begin(); it != _kingdoms.end(); ++it ) {
+            it->Reset();
+        }
+        for ( std::vector<AIHero>::iterator it = _heroes.begin(); it != _heroes.end(); ++it ) {
+            it->Reset();
+        }
+    }
+
+    AIHero::AIHero()
+        : primary_target( -1 )
+        , fix_loop( 0 )
+    {}
+
+    void AIHero::ClearTasks( void )
+    {
+        sheduled_visit.clear();
+    }
+
+    void AIHero::Reset( void )
+    {
+        primary_target = -1;
+        sheduled_visit.clear();
+        fix_loop = 0;
+    }
+
+    void AIKingdom::Reset( void )
+    {
+        capital = NULL;
+        scans.clear();
+    }
+
+    bool Queue::isPresent( s32 index ) const
+    {
+        for ( const_iterator it = begin(); it != end(); ++it ) {
+            if ( it->first == index )
+                return true;
+        }
+        return false;
+    }
+
+    void IndexObjectMap::DumpObjects( const IndexDistance & id )
+    {
+        IndexObjectMap::const_iterator it = find( id.first );
+
+        if ( it != end() )
+            DEBUG( DBG_AI, DBG_TRACE, MP2::StringObject( ( *it ).second ) << ", maps index: " << id.first << ", dist: " << id.second );
+    }
 }

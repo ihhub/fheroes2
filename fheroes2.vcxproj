@@ -147,12 +147,28 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|Win32'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|Win32'" />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|x64'" />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|Win32'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL2|Win32'" />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|x64'" />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL2|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL2|x64'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\audio.cpp" />
     <ClCompile Include="src\engine\audio_cdrom.cpp" />
@@ -183,14 +199,17 @@
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
+    <ClCompile Include="src\fheroes2\agg\pal.cpp" />
     <ClCompile Include="src\fheroes2\agg\sprite.cpp" />
     <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
-    <ClCompile Include="src\fheroes2\ai\ai_action.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_battle.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_castle.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_heroes.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_kingdom.cpp" />
+    <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp" />
+    <ClCompile Include="src\fheroes2\ai\ai_base.cpp" />
+    <ClCompile Include="src\fheroes2\ai\normal\ai_normal.cpp" />
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_battle.cpp" />
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_castle.cpp" />
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_heroes.cpp" />
+    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_kingdom.cpp" />
     <ClCompile Include="src\fheroes2\ai\simple\ai_simple.cpp" />
     <ClCompile Include="src\fheroes2\army\army.cpp" />
     <ClCompile Include="src\fheroes2\army\army_bar.cpp" />
@@ -379,10 +398,13 @@
     <ClInclude Include="src\fheroes2\agg\icn.h" />
     <ClInclude Include="src\fheroes2\agg\m82.h" />
     <ClInclude Include="src\fheroes2\agg\mus.h" />
+    <ClInclude Include="src\fheroes2\agg\pal.h" />
     <ClInclude Include="src\fheroes2\agg\sprite.h" />
     <ClInclude Include="src\fheroes2\agg\til.h" />
     <ClInclude Include="src\fheroes2\agg\xmi.h" />
     <ClInclude Include="src\fheroes2\ai\ai.h" />
+    <ClInclude Include="src\fheroes2\ai\empty\ai_empty.h" />
+    <ClInclude Include="src\fheroes2\ai\normal\ai_normal.h" />
     <ClInclude Include="src\fheroes2\ai\simple\ai_simple.h" />
     <ClInclude Include="src\fheroes2\army\army.h" />
     <ClInclude Include="src\fheroes2\army\army_bar.h" />

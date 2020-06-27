@@ -205,8 +205,11 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         I.Redraw();
 
         AGG::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
         hero.FadeIn();
+        hero.GetPath().Reset();
+        hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
+
+        I.SetFocus( &hero );
 
         // educate spells
         if ( !Settings::Get().ExtHeroLearnSpellsWithDay() )
@@ -268,6 +271,11 @@ bool ActionSpellViewAll( Heroes & hero )
 
 bool ActionSpellIdentifyHero( Heroes & hero )
 {
+    if ( hero.GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
+        Message( "", _( "This spell is already in use." ), Font::BIG, Dialog::OK );
+        return false;
+    }
+
     hero.GetKingdom().SetModes( Kingdom::IDENTIFYHERO );
     Message( "", _( "Enemy heroes are now fully identifiable." ), Font::BIG, Dialog::OK );
 
@@ -276,6 +284,23 @@ bool ActionSpellIdentifyHero( Heroes & hero )
 
 bool ActionSpellSummonBoat( Heroes & hero )
 {
+    const s32 center = hero.GetIndex();
+
+    // find water
+    s32 dst_water = -1;
+    const MapsIndexes & v = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
+    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
+        if ( world.GetTiles( *it ).isWater() ) {
+            dst_water = *it;
+            break;
+        }
+    }
+
+    if ( !Maps::isValidAbsIndex( dst_water ) ) {
+        Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
+        return false;
+    }
+
     u32 chance = 0;
 
     switch ( hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
@@ -293,36 +318,20 @@ bool ActionSpellSummonBoat( Heroes & hero )
         break;
     }
 
-    const s32 center = hero.GetIndex();
-
-    // find water
-    s32 dst_water = -1;
-    const MapsIndexes & v = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-        if ( world.GetTiles( *it ).isWater() ) {
-            dst_water = *it;
+    const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
+    for ( size_t i = 0; i < boats.size(); ++i ) {
+        const s32 boat = boats[i];
+        if ( Maps::isValidAbsIndex( boat ) ) {
+            if ( Rand::Get( 1, 100 ) <= chance ) {
+                world.GetTiles( boat ).SetObject( MP2::OBJ_ZERO );
+                world.GetTiles( dst_water ).SetObject( MP2::OBJ_BOAT );
+                return true;
+            }
             break;
         }
     }
 
-    const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-
-    if ( boats.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN,
-               "free boat: "
-                   << "not found" );
-    }
-    else {
-        const s32 & src = boats.front();
-
-        if ( Rand::Get( 1, 100 ) <= chance && Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst_water ) ) {
-            world.GetTiles( src ).SetObject( MP2::OBJ_ZERO );
-            world.GetTiles( dst_water ).SetObject( MP2::OBJ_BOAT );
-        }
-        else
-            DialogSpellFailed( Spell::SUMMONBOAT );
-    }
-
+    DialogSpellFailed( Spell::SUMMONBOAT );
     return true;
 }
 
@@ -345,7 +354,6 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
     if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
         AGG::PlaySound( M82::KILLFADE );
-        hero.GetPath().Reset();
         hero.FadeOut();
 
         hero.SpellCasted( Spell::DIMENSIONDOOR );
@@ -359,8 +367,12 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
         AGG::PlaySound( M82::KILLFADE );
         hero.FadeIn();
+        hero.GetPath().Reset();
+        hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
         hero.ActionNewPosition();
+
+        I.SetFocus( &hero );
 
         return false; /* SpellCasted apply */
     }
@@ -398,7 +410,7 @@ bool ActionSpellTownGate( Heroes & hero )
     I.Redraw();
 
     if ( !castle ) {
-        Dialog::Message( "", _( "No avaialble town. Spell Failed!!!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "No available towns. Spell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
@@ -422,7 +434,7 @@ bool ActionSpellTownPortal( Heroes & hero )
             castles.push_back( ( **it ).GetIndex() );
 
     if ( castles.empty() ) {
-        Dialog::Message( "", _( "No avaialble town. Spell Failed!!!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "No available towns. Spell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
@@ -436,7 +448,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, Point( area.x + 256, area.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, Point( area.x + 256, area.y + 145 ) );
-    listbox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 261, area.y + 78, 14, 64 ) );
+    listbox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 260, area.y + 78, 14, 64 ) );
     listbox.SetAreaMaxItems( 5 );
     listbox.SetAreaItems( Rect( area.x + 10, area.y + 60, 250, 100 ) );
     listbox.SetListContent( castles );
@@ -484,7 +496,7 @@ bool ActionSpellVisions( Heroes & hero )
             std::string hdr, msg;
 
             hdr = std::string( "%{count} " ) + StringLower( troop.GetPluralName( join.second ) );
-            StringReplace( hdr, "%{count}", join.second );
+            StringReplace( hdr, "%{count}", troop.GetCount() );
 
             switch ( join.first ) {
             default:
@@ -546,7 +558,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell, int mons )
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );
-            tile.SetObject( MP2::OBJ_ABANDONEDMINE );
+            hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
         }
 
         world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );

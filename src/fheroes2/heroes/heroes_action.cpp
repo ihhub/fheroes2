@@ -936,13 +936,14 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
 
     hero.ResetMovePoints();
-    hero.Move2Dest( dst_index );
+    hero.Move2Dest( dst_index, /*skipAction*/ true );
     from.SetObject( MP2::OBJ_BOAT );
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeIn();
     hero.GetPath().Reset();
+    hero.ActionNewPosition();
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -952,10 +953,6 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & tile = world.GetTiles( dst_index );
     MapResource * map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
 
-    Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
-    tile.RemoveObjectSprite();
-
     if ( obj == MP2::OBJ_BOTTLE ) {
         MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
         Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
@@ -964,10 +961,6 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
         Funds funds = map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds();
 
         if ( obj == MP2::OBJ_CAMPFIRE ) {
-            // force reset sound
-            tile.SetObject( MP2::OBJ_ZERO );
-            Game::EnvironmentSoundMixer();
-
             Dialog::ResourceInfo( MP2::StringObject( obj ), _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ), funds );
         }
         else {
@@ -982,6 +975,10 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
 
         hero.GetKingdom().AddFundsResource( funds );
     }
+
+    Game::PlayPickupSound();
+    AnimationRemoveObject( tile );
+    tile.RemoveObjectSprite();
 
     tile.QuantityReset();
     if ( map_resource )
@@ -1265,7 +1262,7 @@ void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
 {
-    bool visited = hero.isVisited( obj );
+    bool visited = hero.isObjectTypeVisited( obj );
     std::string msg;
 
     switch ( obj ) {
@@ -1398,7 +1395,7 @@ void ActionToMagicWell( Heroes & hero, u32 obj, s32 dst_index )
     }
     else
         // check already visited
-        if ( hero.isVisited( MP2::OBJ_MAGICWELL ) ) {
+        if ( hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
         PlaySoundVisited;
         Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
     }
@@ -1543,7 +1540,7 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
 
         if ( complete )
             tile.QuantityReset();
-        else if ( 0 == gold && !hero.isVisited( obj ) ) {
+        else if ( 0 == gold && !hero.isObjectTypeVisited( obj ) ) {
             // modify morale
             hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1559,7 +1556,7 @@ void ActionToGoodMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
 {
     std::string msg;
     u32 move = 0;
-    bool visited = hero.isVisited( obj );
+    bool visited = hero.isObjectTypeVisited( obj );
 
     switch ( obj ) {
     case MP2::OBJ_BUOY:
@@ -1842,9 +1839,6 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
     std::string msg;
     u32 gold = tile.QuantityGold();
 
-    Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
-
     // dialog
     if ( tile.isWater() ) {
         if ( gold ) {
@@ -1907,6 +1901,9 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
     if ( gold )
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
 
+    Game::PlayPickupSound();
+    AnimationRemoveObject( tile );
+
     tile.RemoveObjectSprite();
     tile.QuantityReset();
 
@@ -1944,10 +1941,13 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
         ActionToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
 
         // lose battle
-        if ( hero.isFreeman() )
+        if ( hero.isFreeman() ) {
             return;
-        else if ( !other_hero->isFreeman() )
+        }
+        else if ( !other_hero->isFreeman() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is busy..." );
+            return;
+        }
     }
 
     AGG::PlaySound( M82::KILLFADE );
@@ -1968,6 +1968,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
     hero.FadeIn();
 
     hero.GetPath().Reset();
+    hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
     hero.ActionNewPosition();
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -2361,7 +2362,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.isVisited( MP2::OBJ_ARTESIANSPRING ) ) {
+    if ( hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) ) {
         PlaySoundVisited;
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
@@ -2556,7 +2557,7 @@ void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index )
     const Funds payment( Resource::GOLD, 1000 );
     Kingdom & kingdom = hero.GetKingdom();
 
-    if ( hero.isVisited( obj, Visit::GLOBAL ) ) {
+    if ( hero.isObjectTypeVisited( obj, Visit::GLOBAL ) ) {
         Dialog::Message( MP2::StringObject( obj ), "empty", Font::BIG, Dialog::OK );
     }
     else if ( kingdom.AllowPayment( payment ) ) {
@@ -2845,7 +2846,7 @@ void ActionToAlchemistsTower( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
 {
     const bool cavalry = hero.GetArmy().HasMonster( Monster::CAVALRY );
-    const bool visited = hero.isVisited( obj );
+    const bool visited = hero.isObjectTypeVisited( obj );
     std::string body;
 
     if ( !cavalry && visited )
@@ -2881,7 +2882,7 @@ void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
 {
-    if ( hero.isVisited( obj ) ) {
+    if ( hero.isObjectTypeVisited( obj ) ) {
         PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ), _( "The Arena guards turn you away." ), Font::BIG, Dialog::OK );
     }
@@ -2896,7 +2897,7 @@ void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index )
 {
-    if ( hero.isVisited( obj ) ) {
+    if ( hero.isObjectTypeVisited( obj ) ) {
         PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ),
                          _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ), Font::BIG,
@@ -2956,7 +2957,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
                      _( "You enter a rickety hut and talk to the magician who lives there. He tells you of places near and far which may aid you in your journeys." ),
                      Font::BIG, Dialog::OK );
 
-    if ( !hero.isVisited( obj, Visit::GLOBAL ) ) {
+    if ( !hero.isObjectTypeVisited( obj, Visit::GLOBAL ) ) {
         hero.SetVisited( dst_index, Visit::GLOBAL );
         world.ActionToEyeMagi( hero.GetColor() );
     }

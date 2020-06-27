@@ -20,7 +20,7 @@
 
 #include "bin_info.h"
 #include "agg.h"
-#include "battle_animation.h"
+#include "battle_cell.h"
 #include "monster.h"
 
 #include <algorithm>
@@ -33,14 +33,19 @@ namespace Bin_Info
     public:
         AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
         AnimationReference createAnimReference( int monsterID );
+        MonsterAnimInfo getAnimInfo( int monsterID );
 
     private:
         std::map<int, MonsterAnimInfo> _animMap;
-
-        MonsterAnimInfo getAnimInfo( int monsterID );
     };
 
     const size_t CORRECT_FRM_LENGTH = 821;
+
+    // When base unit and its upgrade use the same FRM file (e.g. Archer and Ranger)
+    // We modify animation speed value to make them go faster
+    const double MOVE_SPEED_UPGRADE = 0.12;
+    const double SHOOT_SPEED_UPGRADE = 0.08;
+    const double RANGER_SHOOT_SPEED = 0.78;
 
     std::map<int, AnimationReference> animRefs;
     MonsterAnimCache _infoCache;
@@ -130,7 +135,7 @@ namespace Bin_Info
         return bin_file_map[index].string;
     }
 
-    MonsterAnimInfo::MonsterAnimInfo( const std::vector<u8> & bytes )
+    MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<u8> & bytes )
         : moveSpeed( 450 )
         , shootSpeed( 0 )
         , flightSpeed( 0 )
@@ -148,7 +153,7 @@ namespace Bin_Info
         eyePosition = Point( *( reinterpret_cast<const int16_t *>( data + 1 ) ), *( reinterpret_cast<const int16_t *>( data + 3 ) ) );
 
         // Frame X offsets for the future use
-        for ( int moveID = 0; moveID < 7; ++moveID ) {
+        for ( size_t moveID = 0; moveID < 7; ++moveID ) {
             std::vector<int> moveOffset;
             for ( int frame = 0; frame < 16; ++frame ) {
                 moveOffset.push_back( static_cast<int>( *reinterpret_cast<const int8_t *>( data + 5 + moveID * 16 + frame ) ) );
@@ -160,10 +165,10 @@ namespace Bin_Info
         idleAnimationCount = data[117];
         if ( idleAnimationCount > 5u )
             idleAnimationCount = 5u; // here we need to reset our object
-        for ( uint8_t i = 0; i < idleAnimationCount; ++i )
+        for ( uint32_t i = 0; i < idleAnimationCount; ++i )
             idlePriority.push_back( *( reinterpret_cast<const float *>( data + 118 ) + i ) );
 
-        for ( uint8_t i = 0; i < idleAnimationCount; ++i )
+        for ( uint32_t i = 0; i < idleAnimationCount; ++i )
             unusedIdleDelays.push_back( *( reinterpret_cast<const uint32_t *>( data + 138 ) + i ) );
 
         idleAnimationDelay = *( reinterpret_cast<const uint32_t *>( data + 158 ) );
@@ -201,6 +206,49 @@ namespace Bin_Info
             animationFrames.push_back( anim );
         }
 
+        // Modify AnimInfo for upgraded monsters without own FRM file
+        int speedDiff = 0;
+        switch ( monsterID ) {
+        case Monster::RANGER:
+        case Monster::VETERAN_PIKEMAN:
+        case Monster::MASTER_SWORDSMAN:
+        case Monster::CHAMPION:
+        case Monster::CRUSADER:
+        case Monster::ORC_CHIEF:
+        case Monster::OGRE_LORD:
+        case Monster::WAR_TROLL:
+        case Monster::BATTLE_DWARF:
+        case Monster::GRAND_ELF:
+        case Monster::GREATER_DRUID:
+        case Monster::MINOTAUR_KING:
+        case Monster::STEEL_GOLEM:
+        case Monster::ARCHMAGE:
+        case Monster::MUTANT_ZOMBIE:
+        case Monster::ROYAL_MUMMY:
+        case Monster::VAMPIRE_LORD:
+        case Monster::POWER_LICH:
+            speedDiff = static_cast<int>( Monster( monsterID ).GetSpeed() ) - Monster( monsterID - 1 ).GetSpeed();
+            break;
+        case Monster::EARTH_ELEMENT:
+        case Monster::AIR_ELEMENT:
+        case Monster::WATER_ELEMENT:
+            speedDiff = static_cast<int>( Monster( monsterID ).GetSpeed() ) - Monster( Monster::FIRE_ELEMENT ).GetSpeed();
+            break;
+        default:
+            break;
+        }
+
+        if ( std::abs( speedDiff ) > 0 ) {
+            moveSpeed = static_cast<uint32_t>( ( 1 - MOVE_SPEED_UPGRADE * speedDiff ) * moveSpeed );
+            // Ranger is special since he gets double attack on upgrade
+            if ( monsterID == Monster::RANGER ) {
+                shootSpeed *= RANGER_SHOOT_SPEED;
+            }
+            else {
+                shootSpeed = static_cast<uint32_t>( ( 1 - SHOOT_SPEED_UPGRADE * speedDiff ) * shootSpeed );
+            }
+        }
+
         if ( frameXOffset[MOVE_STOP][0] == 0 && frameXOffset[MOVE_TILE_END][0] != 0 )
             frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_TILE_END][0];
 
@@ -215,6 +263,28 @@ namespace Bin_Info
             else
                 frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_MAIN].back();
         }
+
+        if ( monsterID == Monster::IRON_GOLEM || monsterID == Monster::STEEL_GOLEM ) {
+            if ( frameXOffset[MOVE_START].size() == 4 ) { // the original golem info
+                frameXOffset[MOVE_START][0] = 0;
+                frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+                frameXOffset[MOVE_START][2] = CELLW * 2 / 8;
+                frameXOffset[MOVE_START][3] = CELLW * 3 / 8;
+                for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id )
+                    frameXOffset[MOVE_MAIN][id] += CELLW / 2;
+            }
+        }
+
+        if ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) {
+            if ( frameXOffset[MOVE_START].size() == 2 && frameXOffset[MOVE_STOP].size() == 1 ) { // the original swordsman info
+                frameXOffset[MOVE_START][0] = 0;
+                frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+                for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id )
+                    frameXOffset[MOVE_MAIN][id] += CELLW / 4;
+
+                frameXOffset[MOVE_STOP][0] = CELLW;
+            }
+        }
     }
 
     MonsterAnimInfo MonsterAnimCache::getAnimInfo( int monsterID )
@@ -224,7 +294,7 @@ namespace Bin_Info
             return mapIterator->second;
         }
         else {
-            const MonsterAnimInfo info( AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
+            const MonsterAnimInfo info( monsterID, AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
             if ( info.isValid() ) {
                 _animMap[monsterID] = info;
                 return info;
@@ -260,6 +330,19 @@ namespace Bin_Info
         return animationFrames.size() == SHOOT3_END + 1 && !animationFrames.at( animID ).empty();
     }
 
+    size_t MonsterAnimInfo::getProjectileID( float angle ) const
+    {
+        const std::vector<float> & angles = projectileAngles;
+        if ( angles.empty() )
+            return 0;
+
+        for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
+            if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
+                return id;
+        }
+        return 0;
+    }
+
     AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )
     {
         return AnimationSequence( info.animationFrames.at( animID ) );
@@ -267,16 +350,12 @@ namespace Bin_Info
 
     AnimationReference MonsterAnimCache::createAnimReference( int monsterID )
     {
-        return AnimationReference( _infoCache.getAnimInfo( monsterID ), monsterID );
+        return AnimationReference( monsterID );
     }
 
-    AnimationReference GetAnimationSet( int monsterID )
+    MonsterAnimInfo GetMonsterInfo( uint32_t monsterID )
     {
-        std::map<int, AnimationReference>::const_iterator it = animRefs.find( monsterID );
-        if ( it != animRefs.end() )
-            return it->second;
-
-        return _infoCache.createAnimReference( Monster::UNKNOWN );
+        return _infoCache.getAnimInfo( monsterID );
     }
 
     void InitBinInfo()

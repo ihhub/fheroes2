@@ -47,7 +47,7 @@ public:
     std::string GetInfo( void ) const;
     Size GetMaxMode( bool enable_rotate ) const;
 
-    void SetVideoMode( int w, int h, bool );
+    void SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo );
     void SetCaption( const char * );
     void SetIcons( Surface & );
 
@@ -58,6 +58,10 @@ public:
 
     void Fade( int delay = 500 );
     void Fade( const Surface &, const Surface &, const Point &, int level, int delay );
+
+    // Fade everything except middle
+    void InvertedFade( const Surface & top, const Surface & back, const Point & offset, const Surface & middle, const Point & middleOffset, int level, int delay );
+
     void Rise( int delay = 500 );
     void Rise( const Surface &, const Surface &, const Point &, int level, int delay );
 
@@ -69,9 +73,14 @@ public:
 
     bool isMouseFocusActive() const;
 
+    static bool isRedrawRequired(); // in case of no explicit redrawing we must redraw at least once in a second
+
 protected:
     friend class Texture;
 
+    bool keepAspectRatio;
+    SDL_Rect srcRenderSurface;
+    SDL_Rect dstRenderSurface;
     Display();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

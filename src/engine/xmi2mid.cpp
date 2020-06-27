@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <list>
@@ -41,14 +42,37 @@
 #define TAG_MTHD 0x4D546864
 #define TAG_MTRK 0x4D54726B
 
-struct pack_t : public std::pair<u32, u32> /* delta offset */
+// Pair: time and length
+struct XMI_Time : public std::pair<u32, u32>
 {
-    pack_t()
+    XMI_Time()
         : std::pair<u32, u32>( 0, 0 )
     {}
 };
 
-std::vector<u8> packValue( u32 delta )
+XMI_Time readXMITime( const uint8_t * data )
+{
+    const u8 * p = data;
+    XMI_Time res;
+
+    while ( *p & 0x80 ) {
+        if ( 4 <= p - data ) {
+            ERROR( "Can't read XMI time: field bigger than 4 bytes" );
+            break;
+        }
+
+        res.first |= 0x0000007F & *p;
+        res.first <<= 7;
+        ++p;
+    }
+
+    res.first += *p;
+    res.second = p - data + 1;
+
+    return res;
+}
+
+std::vector<u8> packToMIDITime( u32 delta )
 {
     u8 c1 = delta & 0x0000007F;
     u8 c2 = ( delta & 0x00003F80 ) >> 7;
@@ -78,55 +102,6 @@ std::vector<u8> packValue( u32 delta )
 
     return res;
 }
-
-pack_t unpackValue( const u8 * ptr )
-{
-    const u8 * p = ptr;
-    pack_t res;
-
-    while ( *p & 0x80 ) {
-        if ( 4 <= p - ptr ) {
-            ERROR( "unpack delta mistake" );
-            break;
-        }
-
-        res.first |= 0x0000007F & *p;
-        res.first <<= 7;
-        ++p;
-    }
-
-    res.first += *p;
-    res.second = p - ptr + 1;
-
-    return res;
-}
-
-struct meta_t
-{
-    meta_t()
-        : command( 0 )
-        , quantity( 0 )
-        , duration( 0 )
-    {}
-    meta_t( u8 c, u8 q, u32 d )
-        : command( c )
-        , quantity( q )
-        , duration( d )
-    {}
-
-    bool operator<( const meta_t & m ) const
-    {
-        return duration < m.duration;
-    }
-    void decrease_duration( u32 delta )
-    {
-        duration -= delta;
-    }
-
-    u8 command;
-    u8 quantity;
-    u32 duration;
-};
 
 struct IFFChunkHeader
 {
@@ -287,55 +262,70 @@ struct XMIData
     }
 };
 
-struct MidEvent
+struct MidiChunk
 {
-    std::vector<u8> pack;
-    u8 data[4]; // status, data1, data2, count
-    // char		status;
-    // std::vector<u8>	data;
+    uint32_t _time;
+    uint8_t _type;
+    std::vector<uint8_t> _binaryTime;
+    std::vector<uint8_t> _data;
+
+    MidiChunk( uint32_t time, uint8_t type, uint8_t data1 )
+    {
+        _time = time;
+        _type = type;
+        _binaryTime = packToMIDITime( time );
+        _data.push_back( data1 );
+    }
+
+    MidiChunk( uint32_t time, uint8_t type, uint8_t data1, uint8_t data2 )
+    {
+        _time = time;
+        _type = type;
+        _binaryTime = packToMIDITime( time );
+        _data.push_back( data1 );
+        _data.push_back( data2 );
+    }
+
+    MidiChunk( uint32_t time, uint8_t meta, uint8_t subType, const uint8_t * ptr, uint8_t metaLength )
+    {
+        _time = time;
+        _type = meta;
+        _binaryTime = packToMIDITime( time );
+        _data.push_back( subType );
+        _data.push_back( metaLength );
+        for ( uint8_t i = 0; i < metaLength; ++i ) {
+            _data.push_back( *( ptr + i ) );
+        }
+    }
 
     size_t size( void ) const
     {
-        return pack.size() + data[3] + 1;
-    }
-
-    MidEvent() {}
-    MidEvent( u32 delta, u8 st, u8 d1, u8 d2 )
-    {
-        data[0] = st;
-        data[1] = d1;
-        data[2] = d2;
-        data[3] = 2;
-        pack = packValue( delta );
-    }
-
-    MidEvent( u32 delta, u8 st, u8 d1 )
-    {
-        data[0] = st;
-        data[1] = d1;
-        data[2] = 0;
-        data[3] = 1;
-        pack = packValue( delta );
+        return _binaryTime.size() + 1 + _data.size();
     }
 };
 
-StreamBuf & operator<<( StreamBuf & sb, const MidEvent & st )
+static bool operator<( const MidiChunk & left, const MidiChunk & right )
 {
-    for ( std::vector<u8>::const_iterator it = st.pack.begin(); it != st.pack.end(); ++it )
+    return left._time < right._time;
+}
+
+StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
+{
+    for ( std::vector<u8>::const_iterator it = event._binaryTime.begin(); it != event._binaryTime.end(); ++it )
         sb << *it;
-    sb << st.data[0];
-    if ( 2 == st.data[3] )
-        sb << st.data[1] << st.data[2];
-    else if ( 1 == st.data[3] )
-        sb << st.data[1];
+    sb << event._type;
+    for ( std::vector<u8>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
+        sb << *it;
     return sb;
 }
 
-struct MidEvents : std::list<MidEvent>
+struct MidiEvents : std::vector<MidiChunk>
 {
+    uint32_t trackTempo = 0;
+
     size_t count( void ) const
     {
-        return std::list<MidEvent>::size();
+        return std::vector<MidiChunk>::size();
     }
 
     size_t size( void ) const
@@ -346,67 +336,43 @@ struct MidEvents : std::list<MidEvent>
         return res;
     }
 
-    MidEvents() {}
-    MidEvents( const XMITrack & t )
+    MidiEvents() {}
+    MidiEvents( const XMITrack & t )
     {
         const u8 * ptr = &t.evnt[0];
         const u8 * end = ptr + t.evnt.size();
 
         u32 delta = 0;
-        std::list<meta_t> notesoff;
 
         while ( ptr && ptr < end ) {
-            // insert event: note off
-            if ( delta ) {
-                // sort duration
-                notesoff.sort();
-
-                std::list<meta_t>::iterator it1 = notesoff.begin();
-                std::list<meta_t>::iterator it2 = notesoff.end();
-                u32 delta2 = 0;
-
-                // apply delta
-                for ( ; it1 != it2; ++it1 ) {
-                    if ( ( *it1 ).duration <= delta ) {
-                        // note off
-                        push_back( MidEvent( ( *it1 ).duration - delta2, ( *it1 ).command, ( *it1 ).quantity, 0x7F ) );
-                        delta2 += ( ( *it1 ).duration - delta2 );
-                    }
-                }
-
-                // remove end notes
-                while ( notesoff.size() && notesoff.front().duration <= delta )
-                    notesoff.pop_front();
-
-                // fixed delta
-                if ( delta2 )
-                    delta -= delta2;
-
-                // decrease duration
-                for ( std::list<meta_t>::iterator it = notesoff.begin(); it != notesoff.end(); it++ )
-                    it->decrease_duration( delta );
-            }
-
-            // interval
+            // XMI delay is 7 bit values summed together
             if ( *ptr < 128 ) {
                 delta += *ptr;
                 ++ptr;
             }
             else
-            // command
+            // MIDI commands start from 0x80
             {
-                // end
+                // track end
                 if ( 0xFF == *ptr && 0x2F == *( ptr + 1 ) ) {
-                    push_back( MidEvent( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                    push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                    // stop parsing
                     break;
                 }
                 else
                     switch ( *ptr >> 4 ) {
-                    // meta
+                    // metadata
                     case 0x0F: {
-                        pack_t pack = unpackValue( ptr + 2 );
-                        ptr += pack.first + pack.second + 1;
-                        delta = 0;
+                        ptr++; // skip 0xFF
+                        const uint8_t metaType = *( ptr++ );
+                        const uint8_t metaLength = *( ptr++ );
+                        push_back( MidiChunk( delta, 0xFF, metaType, ptr, metaLength ) );
+                        // Tempo switch
+                        if ( metaType == 0x51 && metaLength == 3 ) {
+                            // 24bit big endian
+                            trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
+                        }
+                        ptr += metaLength;
                     } break;
 
                     // key pressure
@@ -415,54 +381,61 @@ struct MidEvents : std::list<MidEvent>
                     case 0x0B:
                     // pitch bend
                     case 0x0E: {
-                        push_back( MidEvent( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
                         ptr += 3;
-                        delta = 0;
                     } break;
 
-                    // note off
-                    case 0x08:
-                        // note on
+                    // XMI events doesn't have note off events
+                    // note on
                     case 0x09: {
-                        push_back( MidEvent( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
-                        pack_t pack = unpackValue( ptr + 3 );
-                        notesoff.push_back( meta_t( *ptr - 0x10, *( ptr + 1 ), pack.first ) );
-                        ptr += 3 + pack.second;
-                        delta = 0;
+                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                        const XMI_Time duration = readXMITime( ptr + 3 );
+                        // note off
+                        push_back( MidiChunk( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F ) );
+                        ptr += 3 + duration.second;
                     } break;
 
                     // program change
                     case 0x0C:
-                    // chanel pressure
+                    // channel aftertouch
                     case 0x0D: {
-                        push_back( MidEvent( delta, *ptr, *( ptr + 1 ) ) );
+                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ) ) );
                         ptr += 2;
-                        delta = 0;
                     } break;
 
                     // unused command
                     default:
-                        push_back( MidEvent( 0, 0xFF, 0x2F, 0 ) );
+                        push_back( MidiChunk( 0, 0xFF, 0x2F, 0 ) );
                         ERROR( "unknown st: 0x" << std::setw( 2 ) << std::setfill( '0' ) << std::hex << static_cast<int>( *ptr )
                                                 << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) );
                         break;
                     }
             }
         }
+
+        std::sort( this->begin(), this->end() );
+
+        // update duration
+        delta = 0;
+        for ( iterator it = this->begin(); it != this->end(); ++it ) {
+            it->_binaryTime = packToMIDITime( it->_time - delta );
+            delta = it->_time;
+        }
     }
 };
 
-StreamBuf & operator<<( StreamBuf & sb, const MidEvents & st )
+StreamBuf & operator<<( StreamBuf & sb, const MidiEvents & st )
 {
-    for ( std::list<MidEvent>::const_iterator it = st.begin(); it != st.end(); ++it )
+    for ( MidiEvents::const_iterator it = st.begin(); it != st.end(); ++it ) {
         sb << *it;
+    }
     return sb;
 }
 
 struct MidTrack
 {
     IFFChunkHeader mtrk;
-    MidEvents events;
+    MidiEvents events;
 
     MidTrack()
         : mtrk( TAG_MTRK, 0 )
@@ -529,12 +502,17 @@ struct MidData
         , format( 0 )
         , ppqn( 0 )
     {}
-    MidData( const XMITracks & t, int p )
+    MidData( const XMITracks & t )
         : mthd( TAG_MTHD, 6 )
         , format( 0 )
-        , ppqn( p )
+        , ppqn( 60 )
         , tracks( t )
-    {}
+    {
+        // XMI files play MIDI at a fixed clock rate of 120 Hz
+        if ( tracks.size() > 0 && tracks.front().events.trackTempo > 0 ) {
+            ppqn = ( tracks.front().events.trackTempo * 3 / 25000 );
+        }
+    }
 };
 
 StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
@@ -553,7 +531,7 @@ std::vector<u8> Music::Xmi2Mid( const std::vector<u8> & buf )
     StreamBuf sb( 16 * 4096 );
 
     if ( xmi.isvalid() ) {
-        MidData mid( xmi.tracks, 64 );
+        MidData mid( xmi.tracks );
         sb << mid;
     }
 

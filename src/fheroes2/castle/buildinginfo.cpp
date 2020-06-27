@@ -35,6 +35,29 @@
 #include "statusbar.h"
 #include "world.h"
 
+namespace
+{
+    Point GetFlagOffset( int race )
+    {
+        switch ( race ) {
+        case Race::KNGT:
+            return Point( 36, 10 );
+        case Race::BARB:
+            return Point( 35, 9 );
+        case Race::SORC:
+            return Point( 36, 10 );
+        case Race::WRLK:
+            return Point( 34, 10 );
+        case Race::WZRD:
+            return Point( 35, 9 );
+        case Race::NECR:
+            return Point( 35, 10 );
+        default:
+            return Point();
+        }
+    }
+}
+
 struct buildstats_t
 {
     u32 id2;
@@ -149,34 +172,40 @@ void BuildingInfo::UpdateCosts( const std::string & spec )
 #ifdef WITH_XML
     // parse buildings.xml
     TiXmlDocument doc;
-    const TiXmlElement * xml_buildings = NULL;
 
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_buildings = doc.FirstChildElement( "buildings" ) ) ) {
-        size_t index = 0;
+    if ( doc.LoadFile( spec.c_str() ) ) {
+        const TiXmlElement * xml_buildings = doc.FirstChildElement( "buildings" );
+        if ( xml_buildings != NULL ) {
+            size_t index = 0;
 
-        for ( const TiXmlElement * xml_building = xml_buildings->FirstChildElement( "building" ); xml_building && BUILD_NOTHING != _builds[index].id2;
-              xml_building = xml_building->NextSiblingElement( "building" ), ++index ) {
-            cost_t & cost = _builds[index].cost;
-            int value;
+            for ( const TiXmlElement * xml_building = xml_buildings->FirstChildElement( "building" ); xml_building && BUILD_NOTHING != _builds[index].id2;
+                  xml_building = xml_building->NextSiblingElement( "building" ), ++index ) {
+                cost_t & cost = _builds[index].cost;
+                int value;
 
-            xml_building->Attribute( "gold", &value );
-            cost.gold = value;
-            xml_building->Attribute( "wood", &value );
-            cost.wood = value;
-            xml_building->Attribute( "mercury", &value );
-            cost.mercury = value;
-            xml_building->Attribute( "ore", &value );
-            cost.ore = value;
-            xml_building->Attribute( "sulfur", &value );
-            cost.sulfur = value;
-            xml_building->Attribute( "crystal", &value );
-            cost.crystal = value;
-            xml_building->Attribute( "gems", &value );
-            cost.gems = value;
+                xml_building->Attribute( "gold", &value );
+                cost.gold = value;
+                xml_building->Attribute( "wood", &value );
+                cost.wood = value;
+                xml_building->Attribute( "mercury", &value );
+                cost.mercury = value;
+                xml_building->Attribute( "ore", &value );
+                cost.ore = value;
+                xml_building->Attribute( "sulfur", &value );
+                cost.sulfur = value;
+                xml_building->Attribute( "crystal", &value );
+                cost.crystal = value;
+                xml_building->Attribute( "gems", &value );
+                cost.gems = value;
+            }
+        }
+        else {
+            VERBOSE( spec << ": " << doc.ErrorDesc() );
         }
     }
-    else
+    else {
         VERBOSE( spec << ": " << doc.ErrorDesc() );
+    }
 #endif
 }
 
@@ -364,7 +393,16 @@ bool BuildingInfo::IsDwelling( void ) const
 
 void BuildingInfo::RedrawCaptain( void )
 {
-    AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( bcond == ALREADY_BUILT ? 1 : 0 ) ).Blit( area.x, area.y );
+    if ( bcond == ALREADY_BUILT ) {
+        Sprite captainSprite = AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 1 );
+        captainSprite = Sprite( captainSprite.GetSurface(), captainSprite.x(), captainSprite.y() );
+        const Sprite & flag = AGG::GetICN( ICN::GetFlagIcnId( castle.GetColor() ), 0, false );
+        flag.Blit( GetFlagOffset( castle.GetRace() ), captainSprite );
+        captainSprite.Blit( area.x, area.y );
+    }
+    else {
+        AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 0 ).Blit( area.x, area.y );
+    }
 
     const Sprite & sprite_allow = AGG::GetICN( ICN::TOWNWIND, 11 );
     const Sprite & sprite_deny = AGG::GetICN( ICN::TOWNWIND, 12 );
@@ -394,7 +432,12 @@ void BuildingInfo::Redraw( void )
         int index = GetIndexBuildingSprite( building );
 
         if ( BUILD_DISABLE == bcond ) {
-            AGG::GetICN( ICN::BLDGXTRA, 0 ).RenderGrayScale().Blit( area.x, area.y, Display::Get() );
+            const Sprite infoSprite = AGG::GetICN( ICN::BLDGXTRA, 0 );
+            infoSprite.Blit( area.x, area.y, Display::Get() );
+
+            const Point offset( 6, 59 );
+            const Surface grayed = infoSprite.GetSurface( Rect( offset.x, offset.y, 125, 12 ) );
+            grayed.RenderGrayScale().Blit( area.x + offset.x, area.y + offset.y, Display::Get() );
         }
         else {
             AGG::GetICN( ICN::BLDGXTRA, 0 ).Blit( area.x, area.y );
@@ -488,13 +531,13 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     TextBox box1( box1str, Font::BIG, BOXAREA_WIDTH );
 
-    // prepare requires build string
+    // prepare requirement build string
     std::string str;
-    const u32 requires = castle.GetBuildingRequires( building );
+    const u32 requirement = castle.GetBuildingRequirement( building );
     const std::string sep = "\n";
 
     for ( u32 itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( requires & itr ) && !castle.isBuild( itr ) ) {
+        if ( ( requirement & itr ) && !castle.isBuild( itr ) ) {
             str.append( Castle::GetStringBuilding( itr, castle.GetRace() ) );
             str.append( sep );
         }
@@ -503,7 +546,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     if ( str.size() )
         str.replace( str.size() - sep.size(), sep.size(), "" );
 
-    bool requires_true = str.size();
+    const bool isRequired = str.size();
     Text requires_text( _( "Requires:" ), Font::BIG );
     TextBox box2( str, Font::BIG, BOXAREA_WIDTH );
 
@@ -511,7 +554,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     const Sprite & window_icons = AGG::GetICN( ICN::BLDGXTRA, 0 );
     const int space = Settings::Get().QVGA() ? 5 : 10;
-    Dialog::FrameBox box( space + window_icons.h() + space + box1.h() + space + ( requires_true ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h, buttons );
+    Dialog::FrameBox box( space + window_icons.h() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h, buttons );
     const Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
 
@@ -544,7 +587,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     box1.Blit( dst_pt );
 
     dst_pt.y += box1.h() + space;
-    if ( requires_true ) {
+    if ( isRequired ) {
         dst_pt.x = box_rt.x + ( box_rt.w - requires_text.w() ) / 2;
         requires_text.Blit( dst_pt );
 
@@ -592,7 +635,6 @@ const char * GetBuildConditionDescription( int bcond )
     switch ( bcond ) {
     case NOT_TODAY:
         return _( "Cannot build. Already built here this turn." );
-        break;
 
     case NEED_CASTLE:
         return _( "For this action it is necessary first to build a castle." );

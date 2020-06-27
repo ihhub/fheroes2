@@ -909,7 +909,7 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
 bool ArtifactsBar::ActionBarSingleClick( const Point & cursor, Artifact & art, const Rect & pos )
 {
     if ( isSelected() ) {
-        if ( can_change )
+        if ( !read_only )
             std::swap( art, *GetSelectedItem() );
         return false;
     }
@@ -1015,7 +1015,7 @@ bool ArtifactsBar::ActionBarCursor( const Point & cursor, Artifact & art, const 
             }
         }
         else if ( !art.isValid() ) {
-            if ( can_change ) {
+            if ( !read_only ) {
                 msg = _( "Move %{name}" );
                 StringReplace( msg, "%{name}", art2->GetName() );
             }

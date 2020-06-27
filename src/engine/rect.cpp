@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <cmath>
 #include <iterator>
 #include <sstream>
 
@@ -80,6 +81,27 @@ bool Point::inABC( const Point & pt1, const Point & pt2, const Point & pt3 ) con
     s32 c = ( pt3.x - x ) * ( pt1.y - pt3.y ) - ( pt1.x - pt3.x ) * ( pt3.y - y );
 
     return ( ( a >= 0 && b >= 0 && c >= 0 ) || ( a < 0 && b < 0 && c < 0 ) );
+}
+
+double Point::distance( const Point & point ) const
+{
+    const double diffX = x - point.x;
+    const double diffY = y - point.y;
+
+    return std::sqrt( diffX * diffX + diffY * diffY );
+}
+
+Point Point::rotate( double angle ) const
+{
+    const double sinValue = sin( angle );
+    const double cosValue = cos( angle );
+
+    return Point( x * cosValue - y * sinValue, x * sinValue + y * cosValue );
+}
+
+double Point::getAngle( const Point & point ) const
+{
+    return std::atan2( point.y - y, point.x - x );
 }
 
 Size::Size( u16 width, u16 height )
@@ -217,6 +239,36 @@ bool Rect::operator&( const Point & pt ) const
 bool Rect::operator&( const Rect & rt ) const
 {
     return !( x > rt.x + rt.w || x + w < rt.x || y > rt.y + rt.h || y + h < rt.y );
+}
+
+Rect Rect::operator^( const Rect & other ) const
+{
+    Rect temp = other;
+    if ( temp.x < x ) {
+        const int16_t diff = x - temp.x;
+        temp.x = x;
+        temp.w -= diff;
+    }
+    if ( temp.y < y ) {
+        const int16_t diff = y - temp.y;
+        temp.y = y;
+        temp.h -= diff;
+    }
+
+    if ( temp.x > x + w || temp.y > y + h || temp.w < 0 || temp.h < 0 )
+        return Rect();
+
+    if ( temp.x + temp.w > x + w ) {
+        const int16_t diff = temp.x + temp.w - ( x + w );
+        temp.w -= diff;
+    }
+
+    if ( temp.y + temp.h > y + h ) {
+        const int16_t diff = temp.y + temp.h - ( y + h );
+        temp.h -= diff;
+    }
+
+    return temp;
 }
 
 Rect Points::GetRect( void ) const

@@ -51,7 +51,9 @@ void SpellBookRedrawMP( const Point &, u32 );
 
 bool SpellBookSortingSpell( const Spell & spell1, const Spell & spell2 )
 {
-    return ( ( spell1.isCombat() != spell2.isCombat() && spell1.isCombat() ) || ( std::string( spell1.GetName() ) < std::string( spell2.GetName() ) ) );
+    if ( spell1.isCombat() == spell2.isCombat() )
+        return std::string( spell1.GetName() ) < std::string( spell2.GetName() );
+    return spell1.isCombat();
 }
 
 Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
@@ -70,7 +72,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
     const Sprite & r_list = AGG::GetICN( ICN::BOOK, 0 );
     const Sprite & l_list = AGG::GetICN( ICN::BOOK, 0, true );
 
-    int filter = filt;
+    int filter = ( filt == ALL ) ? ADVN : filt;
     SpellStorage spells2 = SetFilter( filter, &hero );
 
     if ( canselect && spells2.empty() ) {
@@ -117,11 +119,12 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( le.MouseClickLeft( prev_list ) && current_index ) {
+        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) && current_index ) {
             current_index -= small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( next_list ) && spells2.size() > ( current_index + ( small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2 ) ) ) {
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
+                  && spells2.size() > ( current_index + ( small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2 ) ) ) {
             current_index += small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2;
             redraw = true;
         }
@@ -389,6 +392,8 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
     s32 ox = 0;
     s32 oy = 0;
 
+    const uint32_t heroSpellPoints = hero.GetSpellPoints();
+
     for ( u32 ii = 0; ii < ( small ? SPELL_PER_PAGE_SMALL : SPELL_PER_PAGE ); ++ii )
         if ( spells.size() > cur + ii ) {
             if ( small ) {
@@ -428,7 +433,10 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
                     break;
                 }
 
-            TextBox box( std::string( spell.GetName() ) + " [" + GetString( spell.SpellPoint( &hero ) ) + "]", Font::SMALL, ( small ? 94 : 80 ) );
+            const uint32_t spellCost = spell.SpellPoint( &hero );
+            const bool isAvailable = heroSpellPoints >= spellCost;
+
+            TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, ( small ? 94 : 80 ) );
             box.Blit( px + ox - ( small ? 47 : 40 ), py + oy + ( small ? 22 : 25 ) );
 
             oy += small ? 65 : 80;

@@ -41,6 +41,10 @@ struct Point
 
     bool inABC( const Point &, const Point &, const Point & ) const;
 
+    double distance( const Point & point ) const;
+    Point rotate( double angle ) const;
+    double getAngle( const Point & point ) const;
+
     Point & operator+=( const Point & );
     Point & operator-=( const Point & );
 
@@ -83,7 +87,10 @@ struct Rect : Point, Size
     bool operator&(const Point &)const;
     // rect intersects rect
     bool operator&(const Rect &)const;
-    //
+
+    // calculate intersection rectangle
+    Rect operator^( const Rect & other ) const;
+
     static Rect Get( const Point &, const Point & );
     static Rect Get( const Rect &, const Rect &, bool intersect );
     static std::pair<Rect, Point> Fixed4Blit( const Rect &, const Rect & );

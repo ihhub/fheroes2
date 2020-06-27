@@ -280,19 +280,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 
     if ( armies ) {
         const Rect & pos = GetArea();
-        u32 count = armies->GetCount();
-
-        if ( 4 > count ) {
-            Army::DrawMons32LineShort( *armies, pos.x, pos.y + 20 + oh, 144, 0, 0 );
-        }
-        else if ( 5 > count ) {
-            Army::DrawMons32LineShort( *armies, pos.x, pos.y + 15 + oh, 110, 0, 2 );
-            Army::DrawMons32LineShort( *armies, pos.x + 20, pos.y + 30 + oh, 120, 2, 2 );
-        }
-        else {
-            Army::DrawMons32LineShort( *armies, pos.x, pos.y + 15 + oh, 140, 0, 3 );
-            Army::DrawMons32LineShort( *armies, pos.x + 10, pos.y + 30 + oh, 120, 3, 2 );
-        }
+        Army::DrawMonsterLines( *armies, pos.x, pos.y + 3 + oh, 138, Skill::Level::EXPERT );
     }
 }
 
@@ -366,25 +354,28 @@ void Interface::StatusWindow::DrawBackground( void ) const
 
     if ( !Settings::Get().ExtGameHideInterface() && display.h() - BORDERWIDTH - icnston.h() > pos.y ) {
         // top
-        Rect srcrt( 0, 0, icnston.w(), 16 );
+        const uint32_t startY = 11;
+        const uint32_t copyHeight = 46;
+        Rect srcrt( 0, 0, icnston.w(), startY );
         Point dstpt( pos.x, pos.y );
         icnston.Blit( srcrt, dstpt );
 
-        //
-        srcrt = Rect( 0, 16, icnston.w(), 16 );
-        const u32 hh = 1 + ( pos.h - 32 ) / 16;
-        for ( u32 yy = 1; yy <= hh; ++yy ) {
-            dstpt = Point( pos.x, pos.y + 16 * yy );
+        // middle
+        srcrt = Rect( 0, startY, icnston.w(), copyHeight );
+        const uint32_t count = ( pos.h - ( icnston.h() - copyHeight ) ) / copyHeight;
+        for ( uint32_t i = 0; i < count; ++i ) {
+            dstpt = Point( pos.x, pos.y + copyHeight * i + startY );
             icnston.Blit( srcrt, dstpt );
         }
 
         // botom
-        srcrt = Rect( 0, icnston.h() - 16, icnston.w(), 16 );
-        dstpt = Point( pos.x, pos.y + pos.h - 16 );
+        srcrt = Rect( 0, startY, icnston.w(), icnston.h() - startY );
+        dstpt = Point( pos.x, pos.y + pos.h - ( icnston.h() - startY ) );
         icnston.Blit( srcrt, dstpt );
     }
-    else
+    else {
         icnston.Blit( pos.x, pos.y );
+    }
 }
 
 void Interface::StatusWindow::QueueEventProcessing( void )

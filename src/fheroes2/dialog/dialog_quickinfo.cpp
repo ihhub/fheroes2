@@ -109,28 +109,37 @@ std::string ShowArtifactInfo( const Maps::Tiles & tile, bool show )
     return str;
 }
 
-std::string ShowResourceInfo( const Maps::Tiles & tile, bool show, int scoute )
+std::string ShowResourceInfo( const Maps::Tiles & tile, int scoute )
 {
     std::string str;
 
     if ( MP2::OBJ_RESOURCE == tile.GetObject() ) {
         str = Resource::String( tile.GetQuantity1() );
-    }
-    else {
-        str = MP2::StringObject( tile.GetObject() );
-    }
-
-    if ( show ) {
-        const ResourceCount & rc = tile.QuantityResourceCount();
-
-        str.append( "\n(" );
-        str.append( Resource::String( rc.first ) );
-
         if ( scoute ) {
+            const ResourceCount & rc = tile.QuantityResourceCount();
             str.append( ": " );
             str.append( Game::CountScoute( rc.second, scoute ) );
         }
-        str.append( ")" );
+    }
+    else {
+        str = MP2::StringObject( tile.GetObject() );
+        if ( scoute ) {
+            const Funds & funds = tile.QuantityFunds();
+
+            str.append( "\n(" );
+            str.append( Resource::String( Resource::GOLD ) );
+
+            str.append( ": " );
+            str.append( Game::CountScoute( funds.gold, scoute ) );
+            str.append( "\n" );
+
+            const ResourceCount & rc = tile.QuantityResourceCount();
+            str.append( Resource::String( rc.first ) );
+
+            str.append( ": " );
+            str.append( Game::CountScoute( rc.second, scoute ) );
+            str.append( ")" );
+        }
     }
 
     return str;
@@ -231,7 +240,7 @@ std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * h
     std::string str = MP2::StringObject( tile.GetObject() );
     if ( hero ) {
         str.append( "\n" );
-        str.append( hero->isVisited( tile.GetObject() ) ? _( "(already visited)" ) : _( "(not visited)" ) );
+        str.append( hero->isObjectTypeVisited( tile.GetObject() ) ? _( "(already visited)" ) : _( "(not visited)" ) );
     }
 
     return str;
@@ -334,25 +343,23 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     const Point & mp = le.GetMouseCursor();
 
     Rect pos;
-    s32 mx = ( mp.x - BORDERWIDTH ) / TILEWIDTH;
-    mx *= TILEWIDTH;
-    s32 my = ( mp.y - BORDERWIDTH ) / TILEWIDTH;
-    my *= TILEWIDTH;
+    const s32 mx = mp.x;
+    const s32 my = mp.y;
 
     // top left
     if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        pos = Rect( mx + TILEWIDTH, my + TILEWIDTH, box.w(), box.h() );
+        pos = Rect( mx, my + TILEWIDTH / 2, box.w(), box.h() );
     else
         // top right
         if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        pos = Rect( mx - box.w(), my + TILEWIDTH, box.w(), box.h() );
+        pos = Rect( mx - box.w() - TILEWIDTH / 2, my + TILEWIDTH / 2, box.w(), box.h() );
     else
         // bottom left
         if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 )
-        pos = Rect( mx + TILEWIDTH, my - box.h(), box.w(), box.h() );
+        pos = Rect( mx, my - box.h(), box.w(), box.h() );
     else
         // bottom right
-        pos = Rect( mx - box.w(), my - box.h(), box.w(), box.h() );
+        pos = Rect( mx - box.w() - TILEWIDTH / 2, my - box.h(), box.w(), box.h() );
 
     SpriteBack back( pos );
     box.Blit( pos.x, pos.y );
@@ -400,15 +407,15 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_CAMPFIRE:
-            name_object = ShowResourceInfo( tile, scoute, scoute );
+            name_object = ShowResourceInfo( tile, scoute );
             break;
 
         case MP2::OBJ_RESOURCE:
-            name_object = ShowResourceInfo( tile, show || scoute, scoute );
+            name_object = ShowResourceInfo( tile, scoute );
             break;
 
         case MP2::OBJ_ARTIFACT:
-            name_object = ShowArtifactInfo( tile, show || scoute );
+            name_object = ShowArtifactInfo( tile, scoute );
             break;
 
         case MP2::OBJ_MINES:
@@ -559,14 +566,14 @@ void Dialog::QuickInfo( const Castle & castle )
     SpriteBack back( cur_rt );
     box.Blit( cur_rt.x, cur_rt.y );
 
-    cur_rt = Rect( back.GetPos().x + 28, back.GetPos().y + 12, 178, 140 );
+    cur_rt = Rect( back.GetPos().x + 28, back.GetPos().y + 9, 178, 140 );
     Point dst_pt;
     Text text;
 
     // castle name
     text.Set( castle.GetName(), Font::SMALL );
     dst_pt.x = cur_rt.x + ( cur_rt.w - text.w() ) / 2;
-    dst_pt.y = cur_rt.y + 5;
+    dst_pt.y = cur_rt.y;
     text.Blit( dst_pt );
 
     u32 index = 0;
@@ -599,7 +606,7 @@ void Dialog::QuickInfo( const Castle & castle )
     const Sprite & sprite = AGG::GetICN( ICN::LOCATORS, index );
 
     dst_pt.x = cur_rt.x + ( cur_rt.w - sprite.w() ) / 2;
-    dst_pt.y += 18;
+    dst_pt.y += 15;
     sprite.Blit( dst_pt );
 
     // color flags
@@ -680,12 +687,10 @@ void Dialog::QuickInfo( const Castle & castle )
     }
     else if ( castle.isFriends( conf.CurrentColor() ) )
         // show all
-        Army::DrawMons32Line( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 100, 192 );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, false );
     else
         // show limited
-        Army::DrawMons32LineWithScoute( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 100, 192, 0, 0,
-                                        ( from_hero && from_hero->CanScouteTile( castle.GetIndex() ) ? from_hero->GetSecondaryValues( Skill::Secondary::SCOUTING )
-                                                                                                     : Skill::Level::NONE ) );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::NONE, false );
 
     cursor.Show();
     display.Flip();
@@ -752,8 +757,12 @@ void Dialog::QuickInfo( const Heroes & hero )
     Text text;
     std::string message;
 
+    const bool isFriend = hero.isFriends( conf.CurrentColor() );
+    const bool isUnderIdentifyHeroSpell = world.GetKingdom( conf.CurrentColor() ).Modes( Kingdom::IDENTIFYHERO );
+    const bool showFullInfo = isFriend || isUnderIdentifyHeroSpell;
+
     // heroes name
-    if ( hero.isFriends( conf.CurrentColor() ) ) {
+    if ( showFullInfo ) {
         message = _( "%{name} ( Level %{level} )" );
         StringReplace( message, "%{name}", hero.GetName() );
         StringReplace( message, "%{level}", hero.GetLevel() );
@@ -774,7 +783,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     }
 
     // luck
-    if ( hero.isFriends( conf.CurrentColor() ) ) {
+    if ( showFullInfo ) {
         const s32 luck = hero.GetLuckWithModificators( NULL );
         const Sprite & sprite = AGG::GetICN( ICN::MINILKMR, ( 0 > luck ? 0 : ( 0 < luck ? 1 : 2 ) ) );
         u32 count = ( 0 == luck ? 1 : std::abs( luck ) );
@@ -788,7 +797,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     }
 
     // morale
-    if ( hero.isFriends( conf.CurrentColor() ) ) {
+    if ( showFullInfo ) {
         const s32 morale = hero.GetMoraleWithModificators( NULL );
         const Sprite & sprite = AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
         u32 count = ( 0 == morale ? 1 : std::abs( morale ) );
@@ -840,77 +849,73 @@ void Dialog::QuickInfo( const Heroes & hero )
     dst_pt.x = cur_rt.x + ( cur_rt.w + 40 ) / 2;
     r_flag.Blit( dst_pt );
 
-    // attack
-    text.Set( std::string( _( "Attack" ) ) + ":" );
-    dst_pt.x = cur_rt.x + 10;
-    dst_pt.y += port.h();
-    text.Blit( dst_pt );
+    if ( showFullInfo ) {
+        // attack
+        text.Set( std::string( _( "Attack" ) ) + ":" );
+        dst_pt.x = cur_rt.x + 10;
+        dst_pt.y += port.h();
+        text.Blit( dst_pt );
 
-    text.Set( GetString( hero.GetAttack() ) );
-    dst_pt.x += 75;
-    text.Blit( dst_pt );
+        text.Set( GetString( hero.GetAttack() ) );
+        dst_pt.x += 75;
+        text.Blit( dst_pt );
 
-    // defense
-    text.Set( std::string( _( "Defense" ) ) + ":" );
-    dst_pt.x = cur_rt.x + 10;
-    dst_pt.y += 12;
-    text.Blit( dst_pt );
+        // defense
+        text.Set( std::string( _( "Defense" ) ) + ":" );
+        dst_pt.x = cur_rt.x + 10;
+        dst_pt.y += 12;
+        text.Blit( dst_pt );
 
-    text.Set( GetString( hero.GetDefense() ) );
-    dst_pt.x += 75;
-    text.Blit( dst_pt );
+        text.Set( GetString( hero.GetDefense() ) );
+        dst_pt.x += 75;
+        text.Blit( dst_pt );
 
-    // power
-    text.Set( std::string( _( "Spell Power" ) ) + ":" );
-    dst_pt.x = cur_rt.x + 10;
-    dst_pt.y += 12;
-    text.Blit( dst_pt );
+        // power
+        text.Set( std::string( _( "Spell Power" ) ) + ":" );
+        dst_pt.x = cur_rt.x + 10;
+        dst_pt.y += 12;
+        text.Blit( dst_pt );
 
-    text.Set( GetString( hero.GetPower() ) );
-    dst_pt.x += 75;
-    text.Blit( dst_pt );
+        text.Set( GetString( hero.GetPower() ) );
+        dst_pt.x += 75;
+        text.Blit( dst_pt );
 
-    // knowledge
-    text.Set( std::string( _( "Knowledge" ) ) + ":" );
-    dst_pt.x = cur_rt.x + 10;
-    dst_pt.y += 12;
-    text.Blit( dst_pt );
+        // knowledge
+        text.Set( std::string( _( "Knowledge" ) ) + ":" );
+        dst_pt.x = cur_rt.x + 10;
+        dst_pt.y += 12;
+        text.Blit( dst_pt );
 
-    text.Set( GetString( hero.GetKnowledge() ) );
-    dst_pt.x += 75;
-    text.Blit( dst_pt );
+        text.Set( GetString( hero.GetKnowledge() ) );
+        dst_pt.x += 75;
+        text.Blit( dst_pt );
 
-    // spell point
-    text.Set( std::string( _( "Spell Points" ) ) + ":" );
-    dst_pt.x = cur_rt.x + 10;
-    dst_pt.y += 12;
-    text.Blit( dst_pt );
+        // spell point
+        text.Set( std::string( _( "Spell Points" ) ) + ":" );
+        dst_pt.x = cur_rt.x + 10;
+        dst_pt.y += 12;
+        text.Blit( dst_pt );
 
-    text.Set( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ) );
-    dst_pt.x += 75;
-    text.Blit( dst_pt );
+        text.Set( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ) );
+        dst_pt.x += 75;
+        text.Blit( dst_pt );
 
-    // move point
-    text.Set( std::string( _( "Move Points" ) ) + ":" );
-    dst_pt.x = cur_rt.x + 10;
-    dst_pt.y += 12;
-    text.Blit( dst_pt );
+        // move point
+        text.Set( std::string( _( "Move Points" ) ) + ":" );
+        dst_pt.x = cur_rt.x + 10;
+        dst_pt.y += 12;
+        text.Blit( dst_pt );
 
-    text.Set( GetString( hero.GetMobilityIndexSprite() ) + "/" + GetString( hero.GetMovePoints() ) + "/" + GetString( hero.GetMaxMovePoints() ) );
-    dst_pt.x += 75;
-    text.Blit( dst_pt );
+        text.Set( GetString( hero.GetMobilityIndexSprite() ) + "/" + GetString( hero.GetMovePoints() ) + "/" + GetString( hero.GetMaxMovePoints() ) );
+        dst_pt.x += 75;
+        text.Blit( dst_pt );
 
-    // draw monster sprite in one string
-    const Heroes * from_hero = Interface::GetFocusHeroes();
-
-    if ( hero.isFriends( conf.CurrentColor() ) )
-        // show all
-        Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 5, cur_rt.y + 114, 160 );
-    else
+        Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 116, 160 );
+    }
+    else {
         // show limited
-        Army::DrawMons32LineWithScoute( hero.GetArmy(), cur_rt.x - 5, cur_rt.y + 114, 160, 0, 0,
-                                        ( from_hero && from_hero->CanScouteTile( hero.GetIndex() ) ? from_hero->GetSecondaryValues( Skill::Secondary::SCOUTING )
-                                                                                                   : Skill::Level::NONE ) );
+        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false );
+    }
 
     cursor.Show();
     display.Flip();

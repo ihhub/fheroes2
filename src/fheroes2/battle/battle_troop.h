@@ -31,6 +31,7 @@
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "bitmodes.h"
+#include "game_delays.h"
 #include "sprite.h"
 
 class Spell;
@@ -66,8 +67,7 @@ namespace Battle
     enum
     {
         CONTOUR_MAIN = 0,
-        CONTOUR_BLACK = 0x01,
-        CONTOUR_REFLECT = 0x02
+        CONTOUR_REFLECT = 0x01
     };
 
     // battle troop stats
@@ -86,7 +86,6 @@ namespace Battle
         u32 GetSpeed( void ) const;
         Surface GetContour( int ) const;
 
-        void InitContours( void );
         void SetMirror( Unit * );
         void SetRandomMorale( void );
         void SetRandomLuck( void );
@@ -94,7 +93,7 @@ namespace Battle
 
         bool isValid( void ) const;
         bool isArchers( void ) const;
-        bool isFly( void ) const;
+        bool isFlying( void ) const;
         bool isTwiceAttack( void ) const;
 
         bool AllowResponse( void ) const;
@@ -104,6 +103,8 @@ namespace Battle
         bool isMagicResist( const Spell &, u32 ) const;
         bool isMagicAttack( void ) const;
         bool OutOfWalls( void ) const;
+        bool canReach( int index ) const;
+        bool canReach( const Unit & unit ) const;
 
         std::string String( bool more = false ) const;
 
@@ -130,8 +131,8 @@ namespace Battle
         u32 GetShots( void ) const;
         u32 ApplyDamage( Unit &, u32 );
         u32 ApplyDamage( u32 );
-        u32 GetDamageMin( const Unit & ) const;
-        u32 GetDamageMax( const Unit & ) const;
+        u32 CalculateMinDamage( const Unit & ) const;
+        u32 CalculateMaxDamage( const Unit & ) const;
         u32 CalculateDamageUnit( const Unit &, float ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL ) const;
@@ -150,12 +151,11 @@ namespace Battle
         void IncreaseAnimFrame( bool loop = false );
         bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;
-        void SetFrameStep( int );
         int GetFrame( void ) const;
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
 
-        int GetStartMissileOffset( int ) const;
+        Point GetStartMissileOffset( size_t ) const;
 
         int M82Attk( void ) const;
         int M82Kill( void ) const;
@@ -167,6 +167,7 @@ namespace Battle
         int ICNMiss( void ) const;
 
         Point GetBackPoint( void ) const;
+        Point GetCenterPoint() const;
         Rect GetRectPosition( void ) const;
 
         u32 HowManyCanKill( const Unit & ) const;
@@ -187,6 +188,7 @@ namespace Battle
 
         int GetAnimationState() const;
         bool isIdling() const;
+        bool checkIdleDelay();
 
         // Find a better way to expose it without a million getters/setters
         AnimationState animation;
@@ -206,7 +208,13 @@ namespace Battle
         Position position;
         ModesAffected affected;
         Unit * mirror;
-        Surface contours[4];
+        TimeDelay idleTimer;
+        bool idleTimerSet;
+
+        // These variables are mutable due to population of them of the fly as we don't want to calculate everything
+        mutable std::map<int, Surface> contoursMain;
+        mutable std::map<int, Surface> contoursReflect;
+        const Surface & getContour( int frameId, std::map<int, Surface> & contours, bool isReflected ) const;
 
         bool blindanswer;
     };

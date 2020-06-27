@@ -47,9 +47,9 @@ namespace ICN
         ARTFX,
         ARTIFACT,
         BARB32,
-        B_BFLG32,
+        B_BFLG32, // blue hero flag on a boat
         BERZERK,
-        B_FLAG32,
+        B_FLAG32, // blue hero flag
         BIGBAR,
         BLDGXTRA,
         BLESS,
@@ -293,9 +293,9 @@ namespace ICN
         FRNG0013,
         FROTH,
         GARGOYLE,
-        G_BFLG32,
+        G_BFLG32, // green hero flag on a boat
         GENIE,
-        G_FLAG32,
+        G_FLAG32, // green hero flag
         GHOST,
         GOBLIN,
         GOLEM2,
@@ -462,7 +462,7 @@ namespace ICN
         NGMPBKG,
         NGSPBKG,
         NOMAD,
-        O_BFLG32,
+        O_BFLG32, // orange hero flag on a boat
         OBJNARTI,
         OBJNCRCK,
         OBJNDIRT,
@@ -486,7 +486,7 @@ namespace ICN
         OBJNWATR,
         OBJNXTRA,
         OBJPALET,
-        O_FLAG32,
+        O_FLAG32, // orange hero flag
         OGRE2,
         OGRE,
         ORC2,
@@ -498,9 +498,9 @@ namespace ICN
         PALADIN2,
         PALADIN,
         PARALYZE,
-        P_BFLG32,
+        P_BFLG32, // purple hero flag on a boat
         PEASANT,
-        P_FLAG32,
+        P_FLAG32, // purple hero flag
         PHOENIX,
         PHYSICAL,
         PIKEMAN2,
@@ -591,7 +591,7 @@ namespace ICN
         QWIKINFO,
         QWIKTOWN,
         RADAR,
-        R_BFLG32,
+        R_BFLG32, // red hero flag on a boat
         RECR2BKG,
         RECRBKG,
         RECRUIT,
@@ -604,7 +604,7 @@ namespace ICN
         REQUESTS,
         RESOURCE,
         RESSMALL,
-        R_FLAG32,
+        R_FLAG32, // red hero flag
         ROAD,
         ROC,
         ROGUE,
@@ -887,19 +887,14 @@ namespace ICN
         X_LOC2,
         X_LOC3,
         XPRIMARY,
-        Y_BFLG32,
-        Y_FLAG32,
+        Y_BFLG32, // yellow hero flag on a boat
+        Y_FLAG32, // yellow hero flag
         YINYANG,
         ZOMBIE2,
         ZOMBIE,
 
         // system
         ROUTERED,
-        TELEPORT1,
-        TELEPORT2,
-        TELEPORT3,
-        FOUNTAIN,
-        TREASURE,
         YELLOW_FONT,
         YELLOW_SMALFONT,
         BATTLESKIP,
@@ -913,6 +908,9 @@ namespace ICN
         BTNGIFT,
         BTNMIN,
         CSLMARKER,
+
+        GRAY_FONT,
+        GRAY_SMALL_FONT,
 
         LASTICN
     };
@@ -931,6 +929,8 @@ namespace ICN
     int Get4Captain( int race );
     int Get4Building( int race );
     int Get4Castle( int race );
+
+    int GetFlagIcnId( int color );
 }
 
 #endif

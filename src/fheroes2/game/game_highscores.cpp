@@ -188,9 +188,14 @@ int Game::HighScores( bool fill )
     Display & display = Display::Get();
     const Settings & conf = Settings::Get();
 
+    // We have to register scalable ICNs in order to recieved a scaled version of it
+    AGG::RegisterScalableICN( ICN::HEROES );
+
     cursor.Hide();
-    if ( fill )
-        display.Fill( ColorBlack );
+    if ( fill && display.GetSize() != display.GetDefaultSize() ) { // draw only for bigger resolutions
+        const Sprite & sprite = AGG::GetICN( ICN::HEROES, 0 );
+        sprite.Blit( Point( 0, 0 ) );
+    }
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {

@@ -201,20 +201,23 @@ public:
     bool isValid( void ) const;
     bool isElemental( void ) const;
     bool isUndead( void ) const;
-    bool isFly( void ) const;
+    bool isFlying( void ) const;
     bool isWide( void ) const;
     bool isArchers( void ) const;
     bool isAllowUpgrade( void ) const;
     bool isTwiceAttack( void ) const;
-    bool isResurectLife( void ) const;
+    bool isRegenerating( void ) const;
     bool isDoubleCellAttack( void ) const;
     bool isMultiCellAttack( void ) const;
-    bool isAlwayResponse( void ) const;
-    bool isHideAttack( void ) const;
+    bool isAlwaysRetaliating( void ) const;
+    bool ignoreRetaliation( void ) const;
     bool isDragons( void ) const;
     bool isAffectedByMorale( void ) const;
     bool isAlive( void ) const;
+    bool hasMeleePenalty() const;
+    bool hasColorCycling() const;
 
+    double GetMonsterStrength() const;
     int ICNMonh( void ) const;
 
     u32 GetSpriteIndex( void ) const;
@@ -233,7 +236,8 @@ public:
     static void UpdateStats( const std::string & );
     static float GetUpgradeRatio( void );
 
-    static monstersprite_t * GetMonsterSpireByICN( int icn );
+    static uint32_t GetICNByMonsterID( uint32_t monsterID );
+    static uint32_t GetMissileICN( uint32_t monsterID );
 
 protected:
     static Monster FromDwelling( int race, u32 dw );
@@ -252,6 +256,8 @@ public:
     int frameId() const;
     int offset() const;
 
+    void reset(); // reset to static animation
+
 private:
     AnimationReference _reference;
     int _icnID;
@@ -260,9 +266,11 @@ private:
     std::list<int> _offsetSet;
     int _frameId;
     int _frameOffset;
+    bool _isFlyer;
 
-    void _pushFrames( Monster_State::ANIMATION_TYPE type );
-    void _addValidMove( Monster_State::ANIMATION_TYPE type );
+    void _pushFrames( Monster_Info::ANIMATION_TYPE type );
+    void _addValidMove( Monster_Info::ANIMATION_TYPE type );
+    void _updateFrameInfo();
 };
 
 struct MonsterStaticData

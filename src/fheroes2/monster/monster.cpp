@@ -20,7 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "monster.h"
+#include <math.h>
+
 #include "agg.h"
 #include "bin_info.h"
 #include "castle.h"
@@ -31,6 +32,7 @@
 #include "icn.h"
 #include "luck.h"
 #include "m82.h"
+#include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "race.h"
@@ -118,7 +120,7 @@ namespace
         // atck dfnc  min  max   hp             speed grwn  shots  name                  multiname            cost
         {4, 3, 2, 3, 4, Speed::AVERAGE, 8, 0, _( "Skeleton" ), _( "Skeletons" ), {75, 0, 0, 0, 0, 0, 0}},
         {5, 2, 2, 3, 15, Speed::VERYSLOW, 6, 0, _( "Zombie" ), _( "Zombies" ), {150, 0, 0, 0, 0, 0, 0}},
-        {5, 2, 2, 3, 25, Speed::AVERAGE, 6, 0, _( "Mutant Zombie" ), _( "Mutant Zombies" ), {200, 0, 0, 0, 0, 0, 0}},
+        {5, 2, 2, 3, 20, Speed::AVERAGE, 6, 0, _( "Mutant Zombie" ), _( "Mutant Zombies" ), {200, 0, 0, 0, 0, 0, 0}},
         {6, 6, 3, 4, 25, Speed::AVERAGE, 4, 0, _( "Mummy" ), _( "Mummies" ), {250, 0, 0, 0, 0, 0, 0}},
         {6, 6, 3, 4, 30, Speed::FAST, 4, 0, _( "Royal Mummy" ), _( "Royal Mummies" ), {300, 0, 0, 0, 0, 0, 0}},
         {8, 6, 5, 7, 30, Speed::AVERAGE, 3, 0, _( "Vampire" ), _( "Vampires" ), {500, 0, 0, 0, 0, 0, 0}},
@@ -360,13 +362,53 @@ float Monster::GetUpgradeRatio( void )
     return GameStatic::GetMonsterUpgradeRatio();
 }
 
-Monster::monstersprite_t * Monster::GetMonsterSpireByICN( int icn )
+uint32_t Monster::GetICNByMonsterID( uint32_t monsterID )
 {
-    Monster::monstersprite_t * ptr = &monsters_info[1];
-    while ( ptr->icn_file != ICN::UNKNOWN && icn != ptr->icn_file )
-        ++ptr;
+    if ( monsterID <= Monster::WATER_ELEMENT )
+        return monsters_info[monsterID].icn_file;
+    return ICN::UNKNOWN;
+}
 
-    return ptr;
+uint32_t Monster::GetMissileICN( uint32_t monsterID )
+{
+    switch ( monsterID ) {
+    case Monster::ARCHER:
+        return ICN::ARCH_MSL;
+    case Monster::RANGER:
+        return ICN::ARCH_MSL;
+    case Monster::ORC:
+        return ICN::ORC__MSL;
+    case Monster::ORC_CHIEF:
+        return ICN::ORC__MSL;
+    case Monster::TROLL:
+        return ICN::TROLLMSL;
+    case Monster::WAR_TROLL:
+        return ICN::TROLLMSL;
+    case Monster::ELF:
+        return ICN::ELF__MSL;
+    case Monster::GRAND_ELF:
+        return ICN::ELF__MSL;
+    case Monster::DRUID:
+        return ICN::DRUIDMSL;
+    case Monster::GREATER_DRUID:
+        return ICN::DRUIDMSL;
+    case Monster::CENTAUR:
+        // Doesn't have own missile file, game falls back to ELF__MSL
+        return ICN::ELF__MSL;
+    case Monster::HALFLING:
+        return ICN::HALFLMSL;
+    case Monster::TITAN:
+        return ICN::TITANMSL;
+    case Monster::LICH:
+        return ICN::LICH_MSL;
+    case Monster::POWER_LICH:
+        return ICN::LICH_MSL;
+
+    default:
+        break;
+    }
+
+    return ICN::UNKNOWN;
 }
 
 void Monster::UpdateStats( const std::string & spec )
@@ -597,6 +639,65 @@ u32 Monster::GetGrown( void ) const
     return monsters[id].grown;
 }
 
+// Get universal heuristic of Monster type regardless of context; both combat and strategic value
+// Doesn't account for situational special bonuses such as spell immunity
+double Monster::GetMonsterStrength() const
+{
+    // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
+    const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;
+    const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.4 : 1 );
+
+    double damagePotential = ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2;
+
+    if ( isTwiceAttack() ) {
+        // Melee attacker will lose potential on second attack after retaliation
+        damagePotential *= ( isArchers() || ignoreRetaliation() ) ? 2 : 1.75;
+    }
+    if ( id == Monster::CRUSADER )
+        damagePotential *= 1.15; // 15% of all Monsters are Undead, Crusader deals double dmg
+    if ( isDoubleCellAttack() )
+        damagePotential *= 1.2;
+    if ( isAlwaysRetaliating() )
+        damagePotential *= 1.25;
+    if ( isMultiCellAttack() || id == Monster::LICH || id == Monster::POWER_LICH )
+        damagePotential *= 1.3;
+
+    double monsterSpecial = 1.0;
+    if ( isArchers() )
+        monsterSpecial += hasMeleePenalty() ? 0.4 : 0.5;
+    if ( isFlying() )
+        monsterSpecial += 0.3;
+
+    switch ( id ) {
+    case Monster::UNICORN:
+    case Monster::CYCLOPS:
+    case Monster::MEDUSA:
+        // 20% to Blind, Paralyze and Petrify
+        monsterSpecial += 0.2;
+        break;
+    case Monster::VAMPIRE_LORD:
+        // Lifesteal
+        monsterSpecial += 0.3;
+        break;
+    case Monster::GENIE:
+        // Genie's ability to half enemy troops
+        monsterSpecial += 1;
+        break;
+    case Monster::GHOST:
+        // Ghost's ability to increase the numbers
+        monsterSpecial += 2;
+        break;
+    }
+
+    // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0
+    // Punish slow speeds more as unit won't participate in first rounds and slows down strategic army
+    const int speedDiff = GetSpeed() - 4;
+    monsterSpecial += ( speedDiff < 0 ) ? speedDiff * 0.1 : speedDiff * 0.05;
+
+    // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
+    return sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
+}
+
 u32 Monster::GetRNDSize( bool skip_factor ) const
 {
     const u32 hps = ( GetGrown() ? GetGrown() : 1 ) * GetHitPoints();
@@ -632,6 +733,21 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     }
 
     return isValid() ? GetCountFromHitPoints( id, res ) : 0;
+}
+
+bool Monster::hasMeleePenalty() const
+{
+    switch ( id ) {
+    case Monster::MAGE:
+    case Monster::ARCHMAGE:
+    case Monster::TITAN:
+        return false;
+
+    default:
+        break;
+    }
+
+    return isArchers();
 }
 
 bool Monster::isUndead( void ) const
@@ -694,7 +810,7 @@ bool Monster::isDragons( void ) const
     return false;
 }
 
-bool Monster::isFly( void ) const
+bool Monster::isFlying( void ) const
 {
     switch ( id ) {
     case SPRITE:
@@ -757,7 +873,7 @@ bool Monster::isAllowUpgrade( void ) const
     return id != GetUpgrade().id;
 }
 
-bool Monster::isHideAttack( void ) const
+bool Monster::ignoreRetaliation( void ) const
 {
     switch ( id ) {
     case Monster::ROGUE:
@@ -792,7 +908,7 @@ bool Monster::isTwiceAttack( void ) const
     return false;
 }
 
-bool Monster::isResurectLife( void ) const
+bool Monster::isRegenerating( void ) const
 {
     switch ( id ) {
     case TROLL:
@@ -828,7 +944,7 @@ bool Monster::isMultiCellAttack( void ) const
     return id == HYDRA;
 }
 
-bool Monster::isAlwayResponse( void ) const
+bool Monster::isAlwaysRetaliating( void ) const
 {
     return id == GRIFFIN;
 }
@@ -836,6 +952,26 @@ bool Monster::isAlwayResponse( void ) const
 bool Monster::isAffectedByMorale( void ) const
 {
     return !( isUndead() || isElemental() );
+}
+
+bool Monster::hasColorCycling() const
+{
+    switch ( id ) {
+    case PHOENIX:
+    case MAGE:
+    case ARCHMAGE:
+    case GIANT:
+    case TITAN:
+    case GENIE:
+    case WATER_ELEMENT:
+    case FIRE_ELEMENT:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
 }
 
 Monster Monster::GetDowngrade( void ) const
@@ -1766,28 +1902,29 @@ u32 Monster::GetCountFromHitPoints( const Monster & mons, u32 hp )
 
 const Monster::monstersprite_t & Monster::GetMonsterSprite() const
 {
-    return monsters_info[GetID()];
+    return monsters_info[id];
 }
 
 RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
-    : _reference( Bin_Info::GetAnimationSet( monster.GetID() ) )
+    : _reference( monster.GetID() )
     , _icnID( monster.GetMonsterSprite().icn_file )
     , _frameId( 0 )
     , _frameOffset( 0 )
+    , _isFlyer( monster.isFlying() )
 {
-    _addValidMove( Monster_State::STATIC );
-    _addValidMove( Monster_State::STATIC );
-    _addValidMove( Monster_State::IDLE );
-    _addValidMove( Monster_State::MELEE_TOP );
-    _addValidMove( Monster_State::MELEE_FRONT );
-    _addValidMove( Monster_State::MELEE_BOT );
-    _addValidMove( Monster_State::RANG_TOP );
-    _addValidMove( Monster_State::RANG_FRONT );
-    _addValidMove( Monster_State::RANG_BOT );
-    _addValidMove( Monster_State::MOVING );
-    _addValidMove( Monster_State::MOVING );
-    _addValidMove( Monster_State::WNCE );
-    _addValidMove( Monster_State::KILL );
+    _addValidMove( Monster_Info::STATIC );
+    _addValidMove( Monster_Info::STATIC );
+    _addValidMove( Monster_Info::IDLE );
+    _addValidMove( Monster_Info::MELEE_TOP );
+    _addValidMove( Monster_Info::MELEE_FRONT );
+    _addValidMove( Monster_Info::MELEE_BOT );
+    _addValidMove( Monster_Info::RANG_TOP );
+    _addValidMove( Monster_Info::RANG_FRONT );
+    _addValidMove( Monster_Info::RANG_BOT );
+    _addValidMove( Monster_Info::MOVING );
+    _addValidMove( Monster_Info::MOVING );
+    _addValidMove( Monster_Info::WNCE );
+    _addValidMove( Monster_Info::KILL );
 
     increment();
 }
@@ -1795,64 +1932,63 @@ RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
 void RandomMonsterAnimation::increment()
 {
     if ( _frameSet.empty() ) {
+        // make sure both are empty to avoid leftovers in case of mismatch
+        _offsetSet.clear();
+
         const int moveId = *Rand::Get( _validMoves );
 
-        if ( moveId == Monster_State::STATIC ) {
+        if ( moveId == Monster_Info::STATIC ) {
             const u32 counter = Rand::Get( 10, 20 );
             for ( u32 i = 0; i < counter; ++i )
-                _pushFrames( Monster_State::STATIC );
+                _pushFrames( Monster_Info::STATIC );
         }
-        else if ( moveId == Monster_State::IDLE ) {
-            _pushFrames( Monster_State::IDLE );
+        else if ( moveId == Monster_Info::IDLE ) {
+            _pushFrames( Monster_Info::IDLE );
         }
-        else if ( moveId == Monster_State::MOVING ) {
-            _pushFrames( Monster_State::MOVE_START );
+        else if ( moveId == Monster_Info::MOVING ) {
+            _pushFrames( ( _isFlyer ) ? Monster_Info::FLY_UP : Monster_Info::MOVE_START );
 
             const u32 counter = Rand::Get( 3, 5 );
             for ( u32 j = 0; j < counter; ++j )
-                _pushFrames( Monster_State::MOVING );
+                _pushFrames( Monster_Info::MOVING );
 
-            _pushFrames( Monster_State::MOVE_END );
+            _pushFrames( ( _isFlyer ) ? Monster_Info::FLY_LAND : Monster_Info::MOVE_END );
         }
-        else if ( moveId == Monster_State::MELEE_TOP ) {
-            _pushFrames( Monster_State::MELEE_TOP );
-            _pushFrames( Monster_State::MELEE_TOP_END );
+        else if ( moveId == Monster_Info::MELEE_TOP ) {
+            _pushFrames( Monster_Info::MELEE_TOP );
+            _pushFrames( Monster_Info::MELEE_TOP_END );
         }
-        else if ( moveId == Monster_State::MELEE_FRONT ) {
-            _pushFrames( Monster_State::MELEE_FRONT );
-            _pushFrames( Monster_State::MELEE_FRONT_END );
+        else if ( moveId == Monster_Info::MELEE_FRONT ) {
+            _pushFrames( Monster_Info::MELEE_FRONT );
+            _pushFrames( Monster_Info::MELEE_FRONT_END );
         }
-        else if ( moveId == Monster_State::MELEE_BOT ) {
-            _pushFrames( Monster_State::MELEE_BOT );
-            _pushFrames( Monster_State::MELEE_BOT_END );
+        else if ( moveId == Monster_Info::MELEE_BOT ) {
+            _pushFrames( Monster_Info::MELEE_BOT );
+            _pushFrames( Monster_Info::MELEE_BOT_END );
         }
-        else if ( moveId == Monster_State::RANG_TOP ) {
-            _pushFrames( Monster_State::RANG_TOP );
-            _pushFrames( Monster_State::RANG_TOP_END );
+        else if ( moveId == Monster_Info::RANG_TOP ) {
+            _pushFrames( Monster_Info::RANG_TOP );
+            _pushFrames( Monster_Info::RANG_TOP_END );
         }
-        else if ( moveId == Monster_State::RANG_FRONT ) {
-            _pushFrames( Monster_State::RANG_FRONT );
-            _pushFrames( Monster_State::RANG_FRONT_END );
+        else if ( moveId == Monster_Info::RANG_FRONT ) {
+            _pushFrames( Monster_Info::RANG_FRONT );
+            _pushFrames( Monster_Info::RANG_FRONT_END );
         }
-        else if ( moveId == Monster_State::RANG_BOT ) {
-            _pushFrames( Monster_State::RANG_BOT );
-            _pushFrames( Monster_State::RANG_BOT_END );
+        else if ( moveId == Monster_Info::RANG_BOT ) {
+            _pushFrames( Monster_Info::RANG_BOT );
+            _pushFrames( Monster_Info::RANG_BOT_END );
         }
-        else if ( moveId == Monster_State::WNCE ) {
-            _pushFrames( Monster_State::WNCE );
+        else if ( moveId == Monster_Info::WNCE ) {
+            _pushFrames( Monster_Info::WNCE );
         }
-        else if ( moveId == Monster_State::KILL ) {
-            _pushFrames( Monster_State::KILL );
+        else if ( moveId == Monster_Info::KILL ) {
+            _pushFrames( Monster_Info::KILL );
         }
 
-        _pushFrames( Monster_State::STATIC );
+        _pushFrames( Monster_Info::STATIC );
     }
 
-    _frameId = _frameSet.front();
-    _frameSet.pop_front();
-
-    _frameOffset = _offsetSet.front();
-    _offsetSet.pop_front();
+    _updateFrameInfo();
 }
 
 int RandomMonsterAnimation::icnFile() const
@@ -1870,19 +2006,50 @@ int RandomMonsterAnimation::offset() const
     return _frameOffset;
 }
 
-void RandomMonsterAnimation::_pushFrames( Monster_State::ANIMATION_TYPE type )
+void RandomMonsterAnimation::reset()
+{
+    _frameSet.clear();
+    _offsetSet.clear();
+
+    _pushFrames( Monster_Info::STATIC );
+    _updateFrameInfo();
+}
+
+void RandomMonsterAnimation::_pushFrames( Monster_Info::ANIMATION_TYPE type )
 {
     const std::vector<int> & sequence = _reference.getAnimationVector( type );
     _frameSet.insert( _frameSet.end(), sequence.begin(), sequence.end() );
 
-    const std::vector<int> & offset = _reference.getAnimationOffset( type );
-    _offsetSet.insert( _offsetSet.end(), offset.begin(), offset.end() );
+    if ( type == Monster_Info::IDLE ) { // a special case
+        _offsetSet.insert( _offsetSet.end(), sequence.size(), 0 );
+    }
+    else {
+        const std::vector<int> & offset = _reference.getAnimationOffset( type );
+        _offsetSet.insert( _offsetSet.end(), offset.begin(), offset.end() );
+    }
+
+    if ( _offsetSet.size() != _frameSet.size() )
+        _offsetSet.resize( _frameSet.size(), 0 );
 }
 
-void RandomMonsterAnimation::_addValidMove( Monster_State::ANIMATION_TYPE type )
+void RandomMonsterAnimation::_addValidMove( Monster_Info::ANIMATION_TYPE type )
 {
     if ( !_reference.getAnimationVector( type ).empty() )
         _validMoves.push_back( type );
+}
+
+void RandomMonsterAnimation::_updateFrameInfo()
+{
+    if ( _frameSet.empty() )
+        return;
+
+    _frameId = _frameSet.front();
+    _frameSet.pop_front();
+
+    if ( !_offsetSet.empty() ) {
+        _frameOffset = _offsetSet.front();
+        _offsetSet.pop_front();
+    }
 }
 
 MonsterStaticData & MonsterStaticData::Get( void )

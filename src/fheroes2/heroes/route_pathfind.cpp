@@ -81,11 +81,11 @@ bool PassableToTile( const Heroes & hero, const Maps::Tiles & toTile, int direct
             return Direction::Reflect( direct ) & toTile.GetPassable();
 
         if ( MP2::OBJ_HEROES == toTile.GetObject() )
-            return toTile.isPassable( NULL, Direction::Reflect( direct ), ( hero.isControlAI() ? AI::HeroesSkipFog() : false ) );
+            return toTile.isPassable( NULL, Direction::Reflect( direct ), ( hero.isControlAI() ? AI::Get().HeroesSkipFog() : false ) );
     }
 
     // check to tile direct
-    if ( !toTile.isPassable( &hero, Direction::Reflect( direct ), ( hero.isControlAI() ? AI::HeroesSkipFog() : false ) ) )
+    if ( !toTile.isPassable( &hero, Direction::Reflect( direct ), ( hero.isControlAI() ? AI::Get().HeroesSkipFog() : false ) ) )
         return false;
 
     if ( toTile.GetIndex() != dst ) {
@@ -124,7 +124,7 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
         }
         else {
             // check from tile direct
-            if ( !fromTile.isPassable( &hero, direct, ( hero.isControlAI() ? AI::HeroesSkipFog() : false ) ) )
+            if ( !fromTile.isPassable( &hero, direct, ( hero.isControlAI() ? AI::Get().HeroesSkipFog() : false ) ) )
                 return false;
         }
     }
@@ -136,7 +136,7 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
         }
         else {
             // check from tile direct
-            if ( !fromTile.isPassable( &hero, direct, ( hero.isControlAI() ? AI::HeroesSkipFog() : false ) ) )
+            if ( !fromTile.isPassable( &hero, direct, ( hero.isControlAI() ? AI::Get().HeroesSkipFog() : false ) ) )
                 return false;
         }
     }
@@ -210,10 +210,11 @@ u32 GetPenaltyFromTo( s32 from, s32 to, int direct, int pathfinding )
     return ( cost1 + cost2 ) >> 1;
 }
 
-bool Route::Path::Find( s32 to, int limit )
+uint32_t Route::Path::Find( s32 to, int limit )
 {
     const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
     const s32 from = hero->GetIndex();
+    uint32_t pathCost = 0;
 
     s32 cur = from;
     s32 alt = 0;
@@ -248,7 +249,7 @@ bool Route::Path::Find( s32 to, int limit )
                             list[tmp].cost_g = costg;
                             list[tmp].parent = cur;
                             list[tmp].open = 1;
-                            list[tmp].cost_d = 50 * Maps::GetApproximateDistance( tmp, to );
+                            list[tmp].cost_d = 75 * Maps::GetApproximateDistance( tmp, to );
                             list[tmp].cost_t = list[cur].cost_t + costg;
                         }
                     }
@@ -313,6 +314,7 @@ bool Route::Path::Find( s32 to, int limit )
     if ( cur == to ) {
         while ( cur != from ) {
             push_front( Route::Step( list[cur].parent, list[cur].direct, list[cur].cost_g ) );
+            pathCost += list[cur].cost_g;
             cur = list[cur].parent;
         }
     }
@@ -322,5 +324,5 @@ bool Route::Path::Find( s32 to, int limit )
                    << ", from:" << from << ", to: " << to );
     }
 
-    return !empty();
+    return pathCost;
 }

@@ -228,9 +228,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         interface = new Interface( *this, index );
         board.SetArea( interface->GetArea() );
 
-        std::for_each( army1->begin(), army1->end(), std::mem_fun( &Unit::InitContours ) );
-        std::for_each( army2->begin(), army2->end(), std::mem_fun( &Unit::InitContours ) );
-
         if ( conf.Sound() )
             AGG::PlaySound( M82::PREBATTL );
 
@@ -328,6 +325,8 @@ Battle::Arena::~Arena()
         delete interface;
     if ( armies_order )
         delete armies_order;
+    if ( bridge )
+        delete bridge;
 }
 
 void Battle::Arena::TurnTroop( Unit * current_troop )
@@ -354,8 +353,20 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
-                if ( current_troop->isControlAI() || ( current_color & auto_battle ) ) {
-                    AI::BattleTurn( *this, *current_troop, actions );
+                if ( current_troop->Modes( SP_HYPNOTIZE ) ) {
+                    bool humanControl = true;
+                    if ( army1->GetColor() == current_troop->GetColor() )
+                        humanControl = ( army1->GetControl() & CONTROL_AI ) == 0;
+                    else
+                        humanControl = ( army2->GetControl() & CONTROL_AI ) == 0;
+
+                    if ( humanControl )
+                        HumanTurn( *current_troop, actions );
+                    else
+                        AI::Get().BattleTurn( *this, *current_troop, actions );
+                }
+                else if ( current_troop->isControlAI() || ( current_color & auto_battle ) ) {
+                    AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
                 else if ( current_troop->isControlHuman() )
                     HumanTurn( *current_troop, actions );
@@ -405,7 +416,7 @@ void Battle::Arena::Turns( void )
     DEBUG( DBG_BATTLE, DBG_TRACE, current_turn );
 
     if ( interface && conf.Music() && !Music::isPlaying() )
-        AGG::PlayMusic( MUS::GetBattleRandom(), false );
+        AGG::PlayMusic( MUS::GetBattleRandom() );
 
     army1->NewTurn();
     army2->NewTurn();
@@ -430,10 +441,10 @@ void Battle::Arena::Turns( void )
             }
 
             if ( !tower_moved && current_troop->GetColor() == army2->GetColor() ) {
-                if ( towers[0] && towers[0]->isValid() )
-                    TowerAction( *towers[0] );
                 if ( towers[1] && towers[1]->isValid() )
                     TowerAction( *towers[1] );
+                if ( towers[0] && towers[0]->isValid() )
+                    TowerAction( *towers[0] );
                 if ( towers[2] && towers[2]->isValid() )
                     TowerAction( *towers[2] );
                 tower_moved = true;
@@ -455,7 +466,7 @@ void Battle::Arena::Turns( void )
     current_troop = NULL;
 
     // can skip move ?
-    if ( Settings::Get().ExtBattleSoftWait() )
+    if ( Settings::Get().ExtBattleSoftWait() ) {
         while ( BattleValid() && NULL != ( current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, false ) ) ) {
             current_color = current_troop->GetArmyColor();
 
@@ -466,6 +477,7 @@ void Battle::Arena::Turns( void )
             // turn troop
             TurnTroop( current_troop );
         }
+    }
 
     // end turn: fix result
     if ( !army1->isValid() || ( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
@@ -498,7 +510,7 @@ void Battle::Arena::Turns( void )
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
     DEBUG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
-    AI::BattleTurn( *this, b, a );
+    AI::Get().BattleTurn( *this, b, a );
 }
 
 void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
@@ -531,14 +543,14 @@ void Battle::Arena::CatapultAction( void )
         values[CAT_WALL4] = GetCastleTargetValue( CAT_WALL4 );
         values[CAT_TOWER1] = GetCastleTargetValue( CAT_TOWER1 );
         values[CAT_TOWER2] = GetCastleTargetValue( CAT_TOWER2 );
-        values[CAT_TOWER3] = GetCastleTargetValue( CAT_TOWER3 );
+        values[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
         values[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
 
         Command cmd( MSG_BATTLE_CATAPULT );
 
         while ( shots-- ) {
             int target = catapult->GetTarget( values );
-            u32 damage = catapult->GetDamage( target, GetCastleTargetValue( target ) );
+            u32 damage = std::min( catapult->GetDamage(), values[target] );
             cmd << damage << target;
             values[target] -= damage;
         }
@@ -817,7 +829,7 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
         if ( towers[2] && towers[2]->isValid() )
             towers[2]->SetDestroy();
         break;
-    case CAT_TOWER3:
+    case CAT_CENTRAL_TOWER:
         if ( towers[1] && towers[1]->isValid() )
             towers[1]->SetDestroy();
         break;
@@ -852,7 +864,7 @@ u32 Battle::Arena::GetCastleTargetValue( int target ) const
         return towers[0] && towers[0]->isValid();
     case CAT_TOWER2:
         return towers[2] && towers[2]->isValid();
-    case CAT_TOWER3:
+    case CAT_CENTRAL_TOWER:
         return towers[1] && towers[1]->isValid();
 
     case CAT_BRIDGE:
@@ -1010,8 +1022,6 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     if ( elem ) {
         elem->SetModes( CAP_SUMMONELEM );
         elem->SetArmy( hero->GetArmy() );
-        if ( interface )
-            elem->InitContours();
         army.push_back( elem );
     }
     else {
@@ -1030,8 +1040,6 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
         image->SetArmy( *b.GetArmy() );
         image->SetMirror( &b );
         image->SetModes( CAP_MIRRORIMAGE );
-        if ( interface )
-            image->InitContours();
         b.SetModes( CAP_MIRROROWNER );
 
         GetCurrentForce().push_back( image );

@@ -287,7 +287,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
     StatusBar statusBar;
     statusBar.SetFont( Font::BIG );
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 11 );
+    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // button next castle
     dst_pt.x += bar.w();
@@ -493,13 +493,13 @@ int Castle::OpenDialog( bool readonly, bool fade )
         }
 
         // prev castle
-        if ( buttonPrevCastle.isEnable() && le.MouseClickLeft( buttonPrevCastle ) ) {
+        if ( buttonPrevCastle.isEnable() && ( le.MouseClickLeft( buttonPrevCastle ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
             result = Dialog::PREV;
             break;
         }
         else
             // next castle
-            if ( buttonNextCastle.isEnable() && le.MouseClickLeft( buttonNextCastle ) ) {
+            if ( buttonNextCastle.isEnable() && ( le.MouseClickLeft( buttonNextCastle ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
             result = Dialog::NEXT;
             break;
         }
@@ -535,7 +535,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                             if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() && heroes.Guest()->BuySpellBook( this ) )
                                 need_redraw = true;
 
-                            OpenMageGuild();
+                            OpenMageGuild( heroes );
                         }
                         else if ( le.MousePressRight( ( *it ).coord ) )
                             Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
@@ -636,12 +636,12 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 AGG::PlaySound( M82::BUILDTWN );
 
                                 // animate fade in for hero army bar
-                                const Rect rt( 0, 98, 552, 107 );
+                                const Rect rt( 0, 100, 552, 107 );
                                 Surface sf( rt, false );
                                 AGG::GetICN( ICN::STRIP, 0 ).Blit( rt, 0, 0, sf );
                                 Surface port = heroes.Guest()->GetPortrait( PORT_BIG );
                                 if ( port.isValid() )
-                                    port.Blit( 6, 6, sf );
+                                    port.Blit( 5, 5, sf );
                                 const Point savept = selectArmy2.GetPos();
                                 selectArmy2.SetPos( 112, 5 );
                                 selectArmy2.Redraw( sf );
@@ -653,7 +653,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 while ( le.HandleEvents() && alpha < 240 ) {
                                     if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
                                         cursor.Hide();
-                                        sf.SetAlphaMod( alpha );
+                                        sf.SetAlphaMod( alpha, false );
                                         sf.Blit( cur_pt.x, cur_pt.y + 356, display );
                                         cursor.Show();
                                         display.Flip();

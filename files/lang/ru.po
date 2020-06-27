@@ -4721,7 +4721,7 @@ msgstr "Все вражеские Герои опознаны."
 
 #: ../fheroes2/heroes/heroes_spell.cpp:362
 #: ../fheroes2/heroes/heroes_spell.cpp:386
-msgid "No avaialble town. Spell Failed!!!"
+msgid "No available towns. Spell Failed!!!"
 msgstr "Нет доступных городов для этой магии!!!"
 
 #: ../fheroes2/heroes/heroes_spell.cpp:458

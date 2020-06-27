@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "interface_gamearea.h"
+
 #include "agg.h"
 #include "game.h"
 #include "game_interface.h"
@@ -30,7 +31,6 @@
 #include "settings.h"
 #include "world.h"
 
-#define SCROLL_MIN 8
 #define SCROLL_MAX TILEWIDTH
 
 namespace Game
@@ -50,6 +50,8 @@ Interface::GameArea::GameArea( Basic & basic )
     , tailX( 0 )
     , tailY( 0 )
     , updateCursor( false )
+    , borderSizeX( 8 )
+    , borderSizeY( 8 )
 {}
 
 const Rect & Interface::GameArea::GetArea( void ) const
@@ -60,6 +62,11 @@ const Rect & Interface::GameArea::GetArea( void ) const
 const Point & Interface::GameArea::GetMapsPos( void ) const
 {
     return rectMapsPosition;
+}
+
+void Interface::GameArea::SetMapsPos( const Point & pos )
+{
+    rectMapsPosition = pos;
 }
 
 const Rect & Interface::GameArea::GetRectMaps( void ) const
@@ -111,11 +118,47 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
         scrollStepY = SCROLL_MAX;
     }
 
+    borderSizeX = rectMaps.w / 2;
+    if ( ( rectMaps.w % 2 ) == 1 )
+        ++borderSizeX;
+
+    if ( borderSizeX < MIN_BORDER_SIZE )
+        borderSizeX = MIN_BORDER_SIZE;
+    else if ( borderSizeX > SCROLL_MAX )
+        borderSizeX = SCROLL_MAX;
+
+    borderSizeY = rectMaps.h / 2;
+    if ( ( rectMaps.h % 2 ) == 1 )
+        ++borderSizeY;
+
+    if ( borderSizeY < MIN_BORDER_SIZE )
+        borderSizeY = MIN_BORDER_SIZE;
+    else if ( borderSizeY > SCROLL_MAX )
+        borderSizeY = SCROLL_MAX;
+
     tailX = areaPosition.w - TILEWIDTH * ( areaPosition.w / TILEWIDTH );
     tailY = areaPosition.h - TILEWIDTH * ( areaPosition.h / TILEWIDTH );
 
     rectMapsPosition.x = areaPosition.x - scrollOffset.x;
     rectMapsPosition.y = areaPosition.y - scrollOffset.y;
+}
+
+void Interface::GameArea::UpdateCyclingPalette( int frame )
+{
+    _customPalette = PAL::GetCyclingPalette( frame );
+    PAL::SetCustomSDLPalette( _customPalette );
+    // reset cache as we'll need to re-color tiles
+    _spriteCache.clear();
+}
+
+const std::vector<uint8_t> & Interface::GameArea::GetCyclingPalette() const
+{
+    return _customPalette;
+}
+
+MapObjectSprite & Interface::GameArea::GetSpriteCache()
+{
+    return _spriteCache;
 }
 
 void Interface::GameArea::BlitOnTile( Surface & dst, const Sprite & src, const Point & mp ) const
@@ -134,7 +177,7 @@ void Interface::GameArea::BlitOnTile( Surface & dst, const Surface & src, s32 ox
 
 void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 {
-    return Redraw( dst, flag, Rect( 0, 0, rectMaps.w, rectMaps.h ) );
+    Redraw( dst, flag, Rect( 0, 0, rectMaps.w, rectMaps.h ) );
 }
 
 void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) const
@@ -173,7 +216,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag, const Rect & rt ) con
         Surface surface( removalInfo.surfaceSize, true );
         const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( removalInfo.object ), removalInfo.index );
         sprite.Blit( sprite.x(), sprite.y(), surface );
-        surface.SetAlphaMod( removalInfo.alpha );
+        surface.SetAlphaMod( removalInfo.alpha, false );
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         const Point mp = Maps::GetPoint( removalInfo.tile );
         area.BlitOnTile( dst, surface, 0, 0, mp );
@@ -317,7 +360,7 @@ void Interface::GameArea::Scroll( void )
     if ( scrollDirection & SCROLL_LEFT ) {
         if ( 0 < scrollOffset.x )
             scrollOffset.x -= scrollStepX;
-        else if ( -SCROLL_MIN < rectMaps.x ) {
+        else if ( -borderSizeX < rectMaps.x ) {
             scrollOffset.x = SCROLL_MAX - scrollStepX;
             --rectMaps.x;
         }
@@ -325,7 +368,7 @@ void Interface::GameArea::Scroll( void )
     else if ( scrollDirection & SCROLL_RIGHT ) {
         if ( scrollOffset.x < SCROLL_MAX * 2 - tailX )
             scrollOffset.x += scrollStepX;
-        else if ( world.w() - rectMaps.w + SCROLL_MIN > rectMaps.x ) {
+        else if ( world.w() - rectMaps.w + borderSizeX > rectMaps.x ) {
             scrollOffset.x = SCROLL_MAX + scrollStepX - tailX;
             ++rectMaps.x;
         }
@@ -334,7 +377,7 @@ void Interface::GameArea::Scroll( void )
     if ( scrollDirection & SCROLL_TOP ) {
         if ( 0 < scrollOffset.y )
             scrollOffset.y -= scrollStepY;
-        else if ( -SCROLL_MIN < rectMaps.y ) {
+        else if ( -borderSizeY < rectMaps.y ) {
             scrollOffset.y = SCROLL_MAX - scrollStepY;
             --rectMaps.y;
         }
@@ -342,7 +385,7 @@ void Interface::GameArea::Scroll( void )
     else if ( scrollDirection & SCROLL_BOTTOM ) {
         if ( scrollOffset.y < SCROLL_MAX * 2 - tailY )
             scrollOffset.y += scrollStepY;
-        else if ( world.h() - rectMaps.h + SCROLL_MIN > rectMaps.y ) {
+        else if ( world.h() - rectMaps.h + borderSizeY > rectMaps.y ) {
             scrollOffset.y = SCROLL_MAX + scrollStepY - tailY;
             ++rectMaps.y;
         }
@@ -370,78 +413,49 @@ void Interface::GameArea::SetCenter( s32 px, s32 py )
     Point pos( px - rectMaps.w / 2, py - rectMaps.h / 2 );
 
     // our of range
-    if ( pos.x < -SCROLL_MIN )
-        pos.x = -SCROLL_MIN;
-    else if ( pos.x > world.w() - rectMaps.w + SCROLL_MIN )
-        pos.x = world.w() - rectMaps.w + SCROLL_MIN;
+    if ( pos.x < -borderSizeX )
+        pos.x = -borderSizeX;
+    else if ( pos.x > world.w() - rectMaps.w + borderSizeX )
+        pos.x = world.w() - rectMaps.w + borderSizeX;
 
-    if ( pos.y < -SCROLL_MIN )
-        pos.y = -SCROLL_MIN;
-    else if ( pos.y > world.h() - rectMaps.h + SCROLL_MIN )
-        pos.y = world.h() - rectMaps.h + SCROLL_MIN;
+    if ( pos.y < -borderSizeY )
+        pos.y = -borderSizeY;
+    else if ( pos.y > world.h() - rectMaps.h + borderSizeY )
+        pos.y = world.h() - rectMaps.h + borderSizeY;
 
     if ( pos.x == rectMaps.x && pos.y == rectMaps.y )
         return;
 
-    // possible fast scroll
-    if ( pos.y == rectMaps.y && 1 == ( pos.x - rectMaps.x ) )
-        scrollDirection |= SCROLL_RIGHT;
-    else if ( pos.y == rectMaps.y && -1 == ( pos.x - rectMaps.x ) )
-        scrollDirection |= SCROLL_LEFT;
-    else if ( pos.x == rectMaps.x && 1 == ( pos.y - rectMaps.y ) )
-        scrollDirection |= SCROLL_BOTTOM;
-    else if ( pos.x == rectMaps.x && -1 == ( pos.y - rectMaps.y ) )
-        scrollDirection |= SCROLL_TOP;
-    else
-        // diagonal
-        if ( -1 == ( pos.y - rectMaps.y ) && 1 == ( pos.x - rectMaps.x ) ) {
-        scrollDirection |= SCROLL_TOP | SCROLL_RIGHT;
-    }
-    else if ( -1 == ( pos.y - rectMaps.y ) && -1 == ( pos.x - rectMaps.x ) ) {
-        scrollDirection |= SCROLL_TOP | SCROLL_LEFT;
-    }
-    else if ( 1 == ( pos.y - rectMaps.y ) && 1 == ( pos.x - rectMaps.x ) ) {
-        scrollDirection |= SCROLL_BOTTOM | SCROLL_RIGHT;
-    }
-    else if ( 1 == ( pos.y - rectMaps.y ) && -1 == ( pos.x - rectMaps.x ) ) {
-        scrollDirection |= SCROLL_BOTTOM | SCROLL_LEFT;
-    }
+    rectMaps.x = pos.x;
+    rectMaps.y = pos.y;
+    scrollDirection = 0;
 
+    if ( pos.x == 0 )
+        scrollOffset.x = 0;
+    else if ( pos.x == world.w() - rectMaps.w ) {
+        scrollOffset.x = SCROLL_MAX * 2 - tailX;
+    }
     else {
-        rectMaps.x = pos.x;
-        rectMaps.y = pos.y;
-        scrollDirection = 0;
-
-        if ( pos.x == 0 )
-            scrollOffset.x = 0;
-        else if ( pos.x == world.w() - rectMaps.w ) {
-            scrollOffset.x = SCROLL_MAX * 2 - tailX;
-        }
-        else {
-            scrollOffset.x = ( rectMaps.w % 2 == 0 ? SCROLL_MAX + TILEWIDTH / 2 : SCROLL_MAX ) - tailX;
-        }
-
-        if ( pos.y == 0 )
-            scrollOffset.y = 0;
-        else if ( pos.y == world.h() - rectMaps.h ) {
-            scrollOffset.y = SCROLL_MAX * 2 - tailY;
-        }
-        else {
-            scrollOffset.y = ( rectMaps.h % 2 == 0 ? SCROLL_MAX + TILEWIDTH / 2 : SCROLL_MAX ) - tailY;
-        }
-
-        rectMapsPosition.x = areaPosition.x - scrollOffset.x;
-        rectMapsPosition.y = areaPosition.y - scrollOffset.y;
-
-        if ( Display::Get().w() > areaPosition.w )
-            scrollStepX = Settings::Get().ScrollSpeed();
-
-        if ( Display::Get().h() > areaPosition.h )
-            scrollStepY = Settings::Get().ScrollSpeed();
+        scrollOffset.x = ( rectMaps.w % 2 == 0 ? SCROLL_MAX + TILEWIDTH / 2 : SCROLL_MAX ) - tailX;
     }
 
-    if ( scrollDirection )
-        Scroll();
+    if ( pos.y == 0 )
+        scrollOffset.y = 0;
+    else if ( pos.y == world.h() - rectMaps.h ) {
+        scrollOffset.y = SCROLL_MAX * 2 - tailY;
+    }
+    else {
+        scrollOffset.y = ( rectMaps.h % 2 == 0 ? SCROLL_MAX + TILEWIDTH / 2 : SCROLL_MAX ) - tailY;
+    }
+
+    rectMapsPosition.x = areaPosition.x - scrollOffset.x;
+    rectMapsPosition.y = areaPosition.y - scrollOffset.y;
+
+    if ( Display::Get().w() > areaPosition.w )
+        scrollStepX = Settings::Get().ScrollSpeed();
+
+    if ( Display::Get().h() > areaPosition.h )
+        scrollStepY = Settings::Get().ScrollSpeed();
 }
 
 Surface Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 index )
@@ -524,26 +538,26 @@ int Interface::GameArea::GetScrollCursor( void ) const
 void Interface::GameArea::SetScroll( int direct )
 {
     if ( ( direct & SCROLL_LEFT ) == SCROLL_LEFT ) {
-        if ( -SCROLL_MIN < rectMaps.x || -SCROLL_MIN < scrollOffset.x ) {
+        if ( -borderSizeX < rectMaps.x || -borderSizeX < scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
     else if ( ( direct & SCROLL_RIGHT ) == SCROLL_RIGHT ) {
-        if ( world.w() - rectMaps.w + SCROLL_MIN > rectMaps.x || SCROLL_MAX * 2 > scrollOffset.x ) {
+        if ( world.w() - rectMaps.w + borderSizeX > rectMaps.x || SCROLL_MAX * 2 > scrollOffset.x ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
 
     if ( ( direct & SCROLL_TOP ) == SCROLL_TOP ) {
-        if ( -SCROLL_MIN < rectMaps.y || -SCROLL_MIN < scrollOffset.y ) {
+        if ( -borderSizeY < rectMaps.y || -borderSizeY < scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
     }
     else if ( ( direct & SCROLL_BOTTOM ) == SCROLL_BOTTOM ) {
-        if ( world.h() - rectMaps.h + SCROLL_MIN > rectMaps.y || SCROLL_MAX * 2 > scrollOffset.y ) {
+        if ( world.h() - rectMaps.h + borderSizeY > rectMaps.y || SCROLL_MAX * 2 > scrollOffset.y ) {
             scrollDirection |= direct;
             updateCursor = true;
         }
@@ -555,10 +569,13 @@ void Interface::GameArea::SetScroll( int direct )
 /* convert area point to index maps */
 s32 Interface::GameArea::GetIndexFromMousePoint( const Point & pt ) const
 {
-    s32 result = ( rectMaps.y + ( pt.y - rectMapsPosition.y ) / TILEWIDTH ) * world.w() + rectMaps.x + ( pt.x - rectMapsPosition.x ) / TILEWIDTH;
-    const s32 & max = world.w() * world.h() - 1;
+    const s32 xPos = rectMaps.x + ( pt.x - rectMapsPosition.x ) / TILEWIDTH;
+    const s32 yPos = rectMaps.y + ( pt.y - rectMapsPosition.y ) / TILEWIDTH;
 
-    return result > max || result < Maps::GetIndexFromAbsPoint( rectMaps.x, rectMaps.y ) ? -1 : result;
+    if ( xPos < 0 || yPos < 0 || xPos >= world.w() || yPos >= world.h() )
+        return -1;
+
+    return yPos * world.w() + xPos;
 }
 
 void Interface::GameArea::SetUpdateCursor( void )
@@ -576,19 +593,16 @@ void Interface::GameArea::QueueEventProcessing( void )
 
     s32 index = GetIndexFromMousePoint( mp );
 
-    // out of range
-    if ( index < 0 )
-        return;
-
-    const Rect tile_pos( rectMapsPosition.x + ( ( mp.x - rectMapsPosition.x ) / TILEWIDTH ) * TILEWIDTH,
-                         rectMapsPosition.y + ( ( mp.y - rectMapsPosition.y ) / TILEWIDTH ) * TILEWIDTH, TILEWIDTH, TILEWIDTH );
-
     // change cusor if need
     if ( updateCursor || index != oldIndexPos ) {
         cursor.SetThemes( interface.GetCursorTileIndex( index ) );
         oldIndexPos = index;
         updateCursor = false;
     }
+
+    // out of range
+    if ( index < 0 )
+        return;
 
     // fixed pocket pc tap mode
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
@@ -648,7 +662,10 @@ void Interface::GameArea::QueueEventProcessing( void )
             return;
     }
 
-    if ( le.MouseClickLeft( tile_pos ) && Cursor::POINTER != cursor.Themes() )
+    const Rect tile_pos( rectMapsPosition.x + ( ( mp.x - rectMapsPosition.x ) / TILEWIDTH ) * TILEWIDTH,
+                         rectMapsPosition.y + ( ( mp.y - rectMapsPosition.y ) / TILEWIDTH ) * TILEWIDTH, TILEWIDTH, TILEWIDTH );
+
+    if ( le.MouseClickLeft( tile_pos ) )
         interface.MouseCursorAreaClickLeft( index );
     else if ( le.MousePressRight( tile_pos ) )
         interface.MouseCursorAreaPressRight( index );

@@ -144,7 +144,7 @@ int main( int argc, char ** argv )
                 conf.SetAutoVideoMode();
 
             Display & display = Display::Get();
-            display.SetVideoMode( conf.VideoMode().w, conf.VideoMode().h, conf.FullScreen() );
+            display.SetVideoMode( conf.VideoMode().w, conf.VideoMode().h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
             display.HideCursor();
             display.SetCaption( GetCaption().c_str() );
 
