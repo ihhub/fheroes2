@@ -54,7 +54,7 @@
 
 namespace
 {
-    const u8 monster_animation_cicle[] = {0, 1, 2, 1, 0, 3, 4, 5, 4, 3};
+    const u8 monsterAnimationSequence[] = {0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0};
 
     bool contains( int base, int value )
     {
@@ -1649,7 +1649,7 @@ void Maps::Tiles::RedrawMonster( Surface & dst ) const
         spriteIndex += ( revert ? 8 : 7 );
     }
     else {
-        secondSprite = spriteIndex + 1 + monster_animation_cicle[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monster_animation_cicle )];
+        secondSprite = spriteIndex + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monsterAnimationSequence )];
     }
 
     RedrawMapObject( dst, ICN::MINIMON, spriteIndex, mp, monster.hasColorCycling(), 16, TILEWIDTH );
