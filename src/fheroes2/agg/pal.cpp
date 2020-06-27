@@ -163,6 +163,21 @@ namespace PAL
 
         return cycleSet;
     }
+
+    const std::vector<uint32_t> GetRGBColors()
+    {
+        static std::vector<uint32_t> colors;
+        if ( !colors.empty() )
+            return colors;
+
+        colors.resize( PALETTE_SIZE );
+        for ( size_t i = 0u; i < PALETTE_SIZE; ++i ) {
+            const SDL_Color & rgba = standard_palette[i];
+            colors[i] = rgba.r + ( rgba.g << 8 ) + ( rgba.b << 16 );
+        }
+
+        return colors;
+    }
 }
 
 std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )

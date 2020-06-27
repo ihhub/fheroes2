@@ -80,8 +80,10 @@ namespace AGG
     // Some ICNs need to be rescaled. You have to register their IDs before calling GetICN() function
     void RegisterScalableICN( int icnId );
 
-    // Returns true only when the operation was successful
+    // Replace colors based on indexes provided. Returns true only when the operation was successful.
     bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMap, int icnId, int incIndex, bool reflect );
+    // Replace colors with the ones provided. Map has to match the palette. Returns true only when the operation was successful.
+    bool ReplaceColors( Surface & surface, const std::vector<uint32_t> & colorReplacement, int icnId, int incIndex, bool reflect );
 
     // Returns true in an event of success. Only for 32-bit images
     bool DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect );

@@ -145,13 +145,22 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
 
 void Interface::GameArea::UpdateCyclingPalette( int frame )
 {
-    _customPalette = PAL::GetCyclingPalette( frame );
-    PAL::SetCustomSDLPalette( _customPalette );
-    // reset cache as we'll need to re-color tiles
-    _spriteCache.clear();
+    const std::vector<uint8_t> & palette = PAL::GetCyclingPalette( frame );
+    const std::vector<uint32_t> & rgbColors = PAL::GetRGBColors();
+
+    if ( palette.size() == rgbColors.size() ) {
+        PAL::SetCustomSDLPalette( palette );
+
+        _customPalette.resize( palette.size() );
+        for ( size_t i = 0; i < palette.size(); ++i )
+            _customPalette[i] = rgbColors[palette[i]];
+
+        // reset cache as we'll need to re-color tiles
+        _spriteCache.clear();
+    }
 }
 
-const std::vector<uint8_t> & Interface::GameArea::GetCyclingPalette() const
+const std::vector<uint32_t> & Interface::GameArea::GetCyclingPalette() const
 {
     return _customPalette;
 }
