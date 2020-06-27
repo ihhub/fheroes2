@@ -249,17 +249,30 @@ u32 Troops::GetCountMonsters( const Monster & m ) const
 
 bool Troops::isValid( void ) const
 {
-    return end() != std::find_if( begin(), end(), std::mem_fun( &Troop::isValid ) );
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid( ) )
+            return true;
+    }
+    return false;
 }
 
 u32 Troops::GetCount( void ) const
 {
-    return std::count_if( begin(), end(), std::mem_fun( &Troop::isValid ) );
+    uint32_t total = 0;
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() )
+            ++total;
+    }
+    return total;
 }
 
 bool Troops::HasMonster( const Monster & mons ) const
 {
-    return end() != std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isMonster(mons()) )
+            return true;
+    }
+    return false;
 }
 
 bool Troops::hasColorCycling() const
