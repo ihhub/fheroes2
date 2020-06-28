@@ -187,8 +187,15 @@ void Display::Flip( void )
 
         SDL_DestroyTexture( tx );
     }
-    else
+    else {
         ERROR( SDL_GetError() );
+
+        // TODO: This might be a hacky way to do but it works totally fine
+        if ( renderer )
+            SDL_DestroyRenderer( renderer );
+
+        renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
+    }
 #else
     SDL_Flip( surface );
 #endif
