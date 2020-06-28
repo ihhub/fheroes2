@@ -46,8 +46,6 @@
     AGG::PlaySound( m82 )
 #define PlaySoundWarning PlayMusicReplacement( M82::EXPERNCE )
 #define PlaySoundSuccess PlayMusicReplacement( M82::TREASURE )
-#define PlaySoundFailure PlayMusicReplacement( M82::H2MINE )
-#define PlaySoundVisited PlayMusicReplacement( M82::RSBRYFZL )
 
 void ActionToCastle( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToHeroes( Heroes & hero, u32 obj, s32 dst_index );
@@ -1193,7 +1191,6 @@ void ActionToShrine( Heroes & hero, u32 obj, s32 dst_index )
     // check spell book
     if ( !hero.HaveSpellBook() ) {
         if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( NULL, spell_level ) ) {
-            PlaySoundFailure;
             body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
             Dialog::Message( head, body, Font::BIG, Dialog::OK );
         }
@@ -1202,14 +1199,12 @@ void ActionToShrine( Heroes & hero, u32 obj, s32 dst_index )
     if ( hero.HaveSpellBook() ) {
         // check valid level spell and wisdom skill
         if ( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
-            PlaySoundFailure;
             body += _( "\nUnfortunately, you do not have the wisdom to understand the spell, and you are unable to learn it." );
             Dialog::Message( head, body, Font::BIG, Dialog::OK );
         }
         else
             // already know (skip bag artifacts)
             if ( hero.HaveSpell( spell(), true ) ) {
-            PlaySoundFailure;
             body += _( "\nUnfortunately, you already have knowledge of this spell, so there is nothing more for them to teach you." );
             Dialog::Message( head, body, Font::BIG, Dialog::OK );
         }
@@ -1293,7 +1288,6 @@ void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
 
     // check already visited
     if ( visited ) {
-        PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ), msg, Font::BIG, Dialog::OK );
     }
     else {
@@ -1389,14 +1383,12 @@ void ActionToMagicWell( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
 
     if ( hero.GetSpellPoints() == max ) {
-        PlaySoundFailure;
         Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A drink at the well is supposed to restore your spell points, but you are already at maximum." ),
                          Font::BIG, Dialog::OK );
     }
     else
         // check already visited
         if ( hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
-        PlaySoundVisited;
         Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
     }
     else {
@@ -1459,7 +1451,6 @@ void ActionToPrimarySkillObject( Heroes & hero, u32 obj, s32 dst_index )
 
     // check already visited
     if ( visited ) {
-        PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ), msg, Font::BIG, Dialog::OK );
     }
     else {
@@ -1588,7 +1579,6 @@ void ActionToGoodMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
 
     // check already visited
     if ( visited ) {
-        PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ), msg, Font::BIG, Dialog::OK );
     }
     else {
@@ -1630,9 +1620,6 @@ void ActionToExperienceObject( Heroes & hero, u32 obj, s32 dst_index )
 
     // check already visited
     if ( visited ) {
-        if ( Settings::Get().MusicMIDI() ) {
-            PlaySoundVisited;
-        }
         Dialog::Message( MP2::StringObject( obj ), msg, Font::BIG, Dialog::OK );
     }
     else {
@@ -1726,7 +1713,6 @@ void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index )
                     hero.GetKingdom().OddFundsResource( payment );
                 }
                 else {
-                    PlaySoundFailure;
                     Dialog::Message( "", _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
                                      Font::BIG, Dialog::OK );
                 }
@@ -1747,8 +1733,6 @@ void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index )
                 result = true;
             }
             else {
-                PlaySoundFailure;
-
                 if ( skill.Skill() == Skill::Secondary::WISDOM )
                     msg = _(
                         "You've found the humble dwelling of a withered hermit. The hermit tells you that he is willing to give the %{art} to the first wise person he meets." );
@@ -1800,7 +1784,6 @@ void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index )
                 }
             }
             else {
-                PlaySoundFailure;
                 Dialog::Message( "", _( "Discretion is the better part of valor, and you decide to avoid this fight for today." ), Font::BIG, Dialog::OK );
             }
         }
@@ -2312,7 +2295,6 @@ void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
             str_scss = str_recr;
         }
         else {
-            PlaySoundVisited;
             Dialog::Message( MP2::StringObject( obj ), str_empty, Font::BIG, Dialog::OK );
         }
     }
@@ -2360,11 +2342,9 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
     if ( hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) ) {
-        PlaySoundVisited;
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else if ( hero.GetSpellPoints() == max * 2 ) {
-        PlaySoundFailure;
         Dialog::Message( name, _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ), Font::BIG,
                          Dialog::OK );
     }
@@ -2392,7 +2372,6 @@ void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index )
     const Maps::Tiles & tile = world.GetTiles( dst_index );
 
     if ( hero.isVisited( tile ) ) {
-        PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ),
                          _( "Recognizing you, the butler refuses to admit you. \"The master,\" he says, \"will not see the same student twice.\"" ), Font::BIG,
                          Dialog::OK );
@@ -2429,7 +2408,6 @@ void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index )
             hero.SetVisited( dst_index );
         }
         else {
-            PlaySoundFailure;
             Dialog::Message(
                 MP2::StringObject( obj ),
                 _( "The butler opens the door and looks you up and down. \"You are neither famous nor diplomatic enough to be admitted to see my master,\" he sniffs. \"Come back when you think yourself worthy.\"" ),
@@ -2542,7 +2520,6 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj, s32 dst_index )
             hero.RecalculateMovePoints();
     }
     else {
-        PlaySoundFailure;
         Dialog::Message( MP2::StringObject( obj ), msg2, Font::BIG, Dialog::OK );
     }
 
@@ -2574,7 +2551,6 @@ void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index )
         I.RedrawFocus();
     }
     else {
-        PlaySoundFailure;
         Dialog::Message( MP2::StringObject( obj ), _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ),
                          Font::BIG, Dialog::OK );
     }
@@ -2643,7 +2619,6 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
     const Maps::Tiles & tile = world.GetTiles( dst_index );
 
     if ( hero.isVisited( tile ) ) {
-        PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ),
                          _( "Upon your approach, the tree opens its eyes in delight. \"It is good to see you, my student. I hope my teachings have helped you.\"" ),
                          Font::BIG, Dialog::OK );
@@ -2859,11 +2834,8 @@ void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
         body = _(
             "As you approach the stables, the head groom appears, leading a fine looking war horse. \"This steed will help speed you in your travels. Alas, he will grow tired in a week. You must also let me give better horses to your mounted soldiers, their horses look shoddy and weak.\"" );
 
-    // check already visited
-    if ( visited ) {
-        PlaySoundVisited;
-    }
-    else {
+    // check if already visited
+    if ( !visited ) {
         hero.SetVisited( dst_index );
         PlaySoundSuccess;
         hero.IncreaseMovePoints( 400 );
@@ -2880,7 +2852,6 @@ void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
 {
     if ( hero.isObjectTypeVisited( obj ) ) {
-        PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ), _( "The Arena guards turn you away." ), Font::BIG, Dialog::OK );
     }
     else {
@@ -2895,7 +2866,6 @@ void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index )
 {
     if ( hero.isObjectTypeVisited( obj ) ) {
-        PlaySoundVisited;
         Dialog::Message( MP2::StringObject( obj ),
                          _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ), Font::BIG,
                          Dialog::OK );
@@ -2941,7 +2911,6 @@ void ActionToJail( Heroes & hero, u32 obj, s32 dst_index )
     else {
         std::string str = _( "You already have %{count} heroes, and regretfully must leave the prisoner in this jail to languish in agony for untold days." );
         StringReplace( str, "%{count}", Kingdom::GetMaxHeroes() );
-        PlaySoundFailure;
         Dialog::Message( MP2::StringObject( obj ), str, Font::BIG, Dialog::OK );
     }
 
