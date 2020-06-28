@@ -342,12 +342,7 @@ void Interface::GameArea::SetRedraw( void ) const
 /* scroll area to center point maps */
 void Interface::GameArea::SetCenter( const Point & pt )
 {
-    SetCenter( pt.x, pt.y );
-}
-
-void Interface::GameArea::SetCenter( s32 px, s32 py )
-{
-    _setCenterToTile( Point( px, py ) );
+    _setCenterToTile( pt );
 
     scrollDirection = 0;
 }

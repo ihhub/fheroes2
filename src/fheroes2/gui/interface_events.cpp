@@ -227,7 +227,7 @@ void Interface::Basic::EventSystemDialog( void )
     // change scroll
     if ( 0x10 & changes ) {
         // hardcore reset pos
-        gameArea.SetCenter( 0, 0 );
+        gameArea.SetCenter( Point( 0, 0 ) );
         if ( GetFocusType() != GameFocus::UNSEL )
             gameArea.SetCenter( GetFocusCenter() );
         gameArea.SetRedraw();
