@@ -621,3 +621,8 @@ Point Interface::GameArea::_getRelativePosition( const Point & point ) const
 {
     return point - _topLeftTileOffset + Point( _windowROI.x, _windowROI.y );
 }
+
+void Interface::GameArea::ResetCursorPosition()
+{
+    _prevIndexPos = -1;
+}

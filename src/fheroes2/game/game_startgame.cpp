@@ -879,6 +879,11 @@ int Interface::Basic::HumanTurn( bool isload )
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
             gameArea.QueueEventProcessing();
         }
+        else if ( !gameArea.NeedScroll() ) { // empty interface area so we set cursor to a normal pointer
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
+            gameArea.ResetCursorPosition();
+        }
 
         // fast scroll
         if ( gameArea.NeedScroll() )
