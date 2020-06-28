@@ -119,11 +119,12 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( le.MouseClickLeft( prev_list ) && current_index ) {
+        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) && current_index ) {
             current_index -= small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( next_list ) && spells2.size() > ( current_index + ( small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2 ) ) ) {
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
+                  && spells2.size() > ( current_index + ( small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2 ) ) ) {
             current_index += small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2;
             redraw = true;
         }

@@ -58,13 +58,19 @@ namespace
         uint32_t thickness;
     };
 
-    std::vector<std::pair<LightningPoint, LightningPoint> > GenerateLightning( const Point & src, const Point & dst, uint32_t iterationCount )
+    std::vector<std::pair<LightningPoint, LightningPoint> > GenerateLightning( const Point & src, const Point & dst )
     {
         const int distance = static_cast<int>( src.distance( dst ) );
         const double angle = src.getAngle( dst );
 
+        uint32_t iterationCount = ( distance + 50 ) / 100;
+        if ( iterationCount < 2 )
+            iterationCount = 2;
+        if ( iterationCount > 5 )
+            iterationCount = 5;
+
         std::vector<std::pair<LightningPoint, LightningPoint> > lines;
-        lines.push_back( std::make_pair( LightningPoint( Point( 0, 0 ), iterationCount + 1 ), LightningPoint( Point( distance, 0 ), 1 ) ) );
+        lines.push_back( std::make_pair( LightningPoint( Point( 0, 0 ), 5 ), LightningPoint( Point( distance, 0 ), 3 ) ) );
 
         int maxOffset = distance;
 
@@ -78,7 +84,12 @@ namespace
                 middle.x /= 2;
                 middle.y /= 2;
 
-                middle.y += ( static_cast<int>( Rand::Get( 1, 20 ) ) - 10 ) * maxOffset / 100;
+                const bool isPositive = ( Rand::Get( 1, 2 ) == 1 );
+                int offsetY = static_cast<int>( Rand::Get( 1, 10 ) ) * maxOffset / 100;
+                if ( offsetY < 1 )
+                    offsetY = 1;
+
+                middle.y += isPositive ? offsetY : -offsetY;
 
                 const uint32_t middleThickness = ( oldLines[i].first.thickness + oldLines[i].second.thickness ) / 2;
 
@@ -87,9 +98,10 @@ namespace
                 lines.push_back( std::make_pair( oldLines[i].first, middlePoint ) );
                 lines.push_back( std::make_pair( middlePoint, oldLines[i].second ) );
 
-                if ( Rand::Get( 1, 3 ) == 1 ) {
+                if ( Rand::Get( 1, 4 ) == 1 ) { // 25%
+                    offsetY = static_cast<int>( Rand::Get( 1, 10 ) ) * maxOffset / 100;
                     const int x = ( middle.x - oldLines[i].first.point.x ) * 0.7 + middle.x;
-                    const int y = ( middle.y - oldLines[i].first.point.y ) * 0.7 + middle.y + ( static_cast<int>( Rand::Get( 1, 40 ) ) - 20 ) * maxOffset / 100;
+                    const int y = ( middle.y - oldLines[i].first.point.y ) * 0.7 + middle.y + ( isPositive ? offsetY : -offsetY );
                     lines.push_back( std::make_pair( middlePoint, LightningPoint( Point( x, y ), 1 ) ) );
                 }
             }
@@ -105,21 +117,25 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color )
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color, Surface & surface )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
             const Point & first = lightning[i].first.point;
             const Point second = lightning[i].second.point;
 
-            Display::Get().DrawLine( first, second, color );
+            surface.DrawLine( first, second, color );
             for ( uint32_t thickness = 1; thickness < lightning[i].second.thickness; ++thickness ) {
-                Display::Get().DrawLine( Point( first.x, first.y + thickness ), Point( second.x, second.y + thickness ), color );
-                Display::Get().DrawLine( Point( first.x, first.y - thickness ), Point( second.x, second.y - thickness ), color );
+                const bool isUpper = ( ( thickness % 2 ) == 1 );
+                const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
+
+                surface.DrawLine( Point( first.x, first.y + offset ), Point( second.x, second.y + offset ), color );
             }
 
             for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
-                Display::Get().DrawLine( Point( first.x, first.y + thickness ), second, color );
-                Display::Get().DrawLine( Point( first.x, first.y - thickness ), second, color );
+                const bool isUpper = ( ( thickness % 2 ) == 1 );
+                const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
+
+                surface.DrawLine( Point( first.x, first.y + offset ), second, color );
             }
         }
     }
@@ -3613,9 +3629,10 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
             Redraw();
 
             sprite = AGG::GetICN( ICN::SPARKS, frame, false );
-            RedrawLightning( GenerateLightning( startingPos, endPos, 4 ), RGBA( 0xff, 0xff, 0 ) );
+            RedrawLightning( GenerateLightning( startingPos, endPos ), RGBA( 0xff, 0xff, 0 ), _mainSurface );
 
-            sprite.Blit( endPos );
+            sprite.Blit( endPos, _mainSurface );
+            _mainSurface.Blit( _interfacePosition, display );
             cursor.Show();
             display.Flip();
 

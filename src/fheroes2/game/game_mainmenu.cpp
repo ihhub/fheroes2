@@ -127,6 +127,8 @@ int Game::MainMenu( void )
             }
         }
 
+        bool redrawScreen = false;
+
         for ( u32 i = 0; i < ARRAY_COUNT( buttons ); i++ ) {
             buttons[i].wasOver = buttons[i].isOver;
 
@@ -137,17 +139,24 @@ int Game::MainMenu( void )
 
             buttons[i].isOver = le.MouseCursor( buttons[i].button );
 
-            if ( ( !buttons[i].isOver && buttons[i].wasOver ) || ( buttons[i].isOver && !buttons[i].wasOver ) ) {
+            if ( buttons[i].isOver != buttons[i].wasOver ) {
                 u32 frame = buttons[i].frame;
 
                 if ( buttons[i].isOver && !buttons[i].wasOver )
                     frame++;
 
-                cursor.Hide();
+                if ( !redrawScreen ) {
+                    cursor.Hide();
+                    redrawScreen = true;
+                }
                 const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, frame );
                 sprite.Blit( sprite.x(), sprite.y() );
-                cursor.Show();
             }
+        }
+
+        if ( redrawScreen ) {
+            cursor.Show();
+            display.Flip();
         }
 
         if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame ) )
