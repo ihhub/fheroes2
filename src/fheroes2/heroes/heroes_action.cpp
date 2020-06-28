@@ -2201,25 +2201,21 @@ void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index )
     case MP2::OBJ_RUINS:
         msg_void = _( "You search the ruins, but the Medusas that used to live here are gone. Perhaps there will be more next week." );
         msg_full = _( "You've found some Medusas living in the ruins. They are willing to join your army for a price. Do you want to recruit Medusas?" );
-        AGG::PlayMusic( MUS::DEATH, false );
         break;
 
     case MP2::OBJ_TREECITY:
         msg_void = _( "You've found a Sprite Tree City. Unfortunately, none of the Sprites living there wish to join an army. Maybe next week." );
         msg_full = _( "Some of the Sprites living in the tree city are willing to join your army for a price. Do you want to recruit Sprites?" );
-        AGG::PlayMusic( MUS::TREEHOUSE, false );
         break;
 
     case MP2::OBJ_WAGONCAMP:
         msg_void = _( "A colorful Rogues' wagon stands empty here. Perhaps more Rogues will be here later." );
         msg_full = _( "Distant sounds of music and laughter draw you to a colorful wagon housing Rogues. Do you wish to have any Rogues join your army?" );
-        AGG::PlayMusic( MUS::ARABIAN, false );
         break;
 
     case MP2::OBJ_DESERTTENT:
         msg_void = _( "A group of tattered tents, billowing in the sandy wind, beckons you. The tents are unoccupied. Perhaps more Nomads will be here later." );
         msg_full = _( "A group of tattered tents, billowing in the sandy wind, beckons you. Do you wish to have any Nomads join you during your travels?" );
-        AGG::PlayMusic( MUS::NOMADTENTS, false );
         break;
 
     case MP2::OBJ_EARTHALTAR:
@@ -2255,6 +2251,7 @@ void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index )
     default:
         return;
     }
+    AGG::PlayMusic( MUS::FromMapObject( obj ), false );
 
     const Troop & troop = tile.QuantityTroop();
 
