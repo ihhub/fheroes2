@@ -69,7 +69,7 @@ namespace AI
     void AIToEvent( Heroes & hero, u32 obj, s32 dst_index );
     void AIToUpgradeArmyObject( Heroes & hero, u32 obj, s32 dst_index );
     void AIToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToPoorLuckObject( Heroes & hero, u32 obj, s32 dst_index );
+    void AIToPyramid( Heroes & hero, u32 obj, s32 dst_index );
     void AIToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index );
     void AIToObelisk( Heroes & hero, const Maps::Tiles & tile );
     void AIToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index );
@@ -348,7 +348,7 @@ namespace AI
             break;
 
         case MP2::OBJ_PYRAMID:
-            AIToPoorLuckObject( hero, object, dst_index );
+            AIToPyramid( hero, object, dst_index );
             break;
         case MP2::OBJ_DAEMONCAVE:
             AIToDaemonCave( hero, object, dst_index );
@@ -1193,7 +1193,7 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToPoorLuckObject( Heroes & hero, u32 obj, s32 dst_index )
+    void AIToPyramid( Heroes & hero, u32 obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Spell & spell = tile.QuantitySpell();
