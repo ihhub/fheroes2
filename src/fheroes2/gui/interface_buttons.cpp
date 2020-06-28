@@ -130,7 +130,7 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
          // move border window
          BorderWindow::QueueEventProcessing() ) {
     }
-    else if (  buttonNextHero.isEnable() && le.MouseClickLeft( buttonNextHero ) ) {
+    else if ( buttonNextHero.isEnable() && le.MouseClickLeft( buttonNextHero ) ) {
         // for QVGA: auto hide buttons after click
         if ( conf.QVGA() )
             conf.SetShowButtons( false );
