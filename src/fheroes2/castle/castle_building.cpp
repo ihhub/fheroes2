@@ -89,7 +89,7 @@ void CastleRedrawTownName( const Castle & castle, const Point & dst )
 
 void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders, u32 build, u32 flash )
 {
-    u32 & frame = Game::CastleAnimationFrame();
+    const uint32_t frame = Game::CastleAnimationFrame();
 
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
@@ -187,6 +187,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     else if ( orders.end() != std::find( orders.begin(), orders.end(), build ) ) {
         LocalEvent & le = LocalEvent::Get();
         int alpha = 1;
+        uint32_t buildFrame = 0;
 
         while ( le.HandleEvents() && alpha < 255 ) {
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
@@ -196,11 +197,11 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                     const u32 & build2 = ( *it ).id;
 
                     if ( castle.isBuild( build2 ) ) {
-                        CastleRedrawBuilding( castle, dst_pt, build2, frame, 0 );
-                        CastleRedrawBuildingExtended( castle, dst_pt, build2, frame );
+                        CastleRedrawBuilding( castle, dst_pt, build2, buildFrame, 0 );
+                        CastleRedrawBuildingExtended( castle, dst_pt, build2, buildFrame );
                     }
                     else if ( build2 == build ) {
-                        CastleRedrawBuilding( castle, dst_pt, build2, frame, alpha );
+                        CastleRedrawBuilding( castle, dst_pt, build2, buildFrame, alpha );
                         alpha += 15;
                     }
                 }
@@ -210,13 +211,11 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                 cursor.Show();
                 display.Flip();
             }
-            ++frame;
+            ++buildFrame;
         }
 
         cursor.Hide();
     }
-
-    ++frame;
 }
 
 void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, int alpha )

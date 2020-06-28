@@ -731,6 +731,8 @@ int Castle::OpenDialog( bool readonly, bool fade )
             CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, ( conf.ExtCastleAllowFlash() ? GetCurrentFlash( *this, cacheBuildings ) : BUILD_NOTHING ) );
             cursor.Show();
             display.Flip();
+
+            ++Game::CastleAnimationFrame();
         }
     }
 
