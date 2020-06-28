@@ -105,21 +105,21 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color )
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color, Surface & surface )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
             const Point & first = lightning[i].first.point;
             const Point second = lightning[i].second.point;
 
-            Display::Get().DrawLine( first, second, color );
+            surface.DrawLine( first, second, color );
             for ( uint32_t thickness = 1; thickness < lightning[i].second.thickness; ++thickness ) {
-                Display::Get().DrawLine( Point( first.x, first.y + thickness ), Point( second.x, second.y + thickness ), color );
-                Display::Get().DrawLine( Point( first.x, first.y - thickness ), Point( second.x, second.y - thickness ), color );
+                surface.DrawLine( Point( first.x, first.y + thickness ), Point( second.x, second.y + thickness ), color );
+                surface.DrawLine( Point( first.x, first.y - thickness ), Point( second.x, second.y - thickness ), color );
             }
 
             for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
-                Display::Get().DrawLine( Point( first.x, first.y + thickness ), second, color );
-                Display::Get().DrawLine( Point( first.x, first.y - thickness ), second, color );
+                surface.DrawLine( Point( first.x, first.y + thickness ), second, color );
+                surface.DrawLine( Point( first.x, first.y - thickness ), second, color );
             }
         }
     }
@@ -3613,9 +3613,10 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
             Redraw();
 
             sprite = AGG::GetICN( ICN::SPARKS, frame, false );
-            RedrawLightning( GenerateLightning( startingPos, endPos, 4 ), RGBA( 0xff, 0xff, 0 ) );
+            RedrawLightning( GenerateLightning( startingPos, endPos, 4 ), RGBA( 0xff, 0xff, 0 ), _mainSurface );
 
-            sprite.Blit( endPos );
+            sprite.Blit( endPos, _mainSurface );
+            _mainSurface.Blit( _interfacePosition, display );
             cursor.Show();
             display.Flip();
 
