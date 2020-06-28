@@ -1480,7 +1480,7 @@ void Maps::Tiles::RedrawTile( Surface & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( area.GetRectMaps() & mp )
+    if ( area.GetVisibleTileROI() & mp )
         area.BlitOnTile( dst, GetTileSurface(), 0, 0, mp );
 }
 
@@ -1488,7 +1488,7 @@ void Maps::Tiles::RedrawEmptyTile( Surface & dst, const Point & mp )
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
-    if ( area.GetRectMaps() & mp ) {
+    if ( area.GetVisibleTileROI() & mp ) {
         if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
             area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), 0, 0, mp );
         }
@@ -1512,7 +1512,7 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
     Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( area.GetRectMaps() & mp ) && !addon.empty() ) {
+    if ( ( area.GetVisibleTileROI() & mp ) && !addon.empty() ) {
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             // skip
             if ( skipObjs && MP2::isRemoveObject( GetObject() ) && FindObjectConst( GetObject() ) == &( *it ) )
@@ -1563,7 +1563,7 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( area.GetRectMaps() & mp ) {
+    if ( area.GetVisibleTileROI() & mp ) {
         if ( 0 == tile_passable || DIRECTION_ALL != tile_passable ) {
             Surface sf = PassableViewSurface( tile_passable );
 
@@ -1602,7 +1602,7 @@ void Maps::Tiles::RedrawMonster( Surface & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     s32 dst_index = -1;
 
-    if ( !( area.GetRectMaps() & mp ) )
+    if ( !( area.GetVisibleTileROI() & mp ) )
         return;
 
     // scan hero around
@@ -1658,7 +1658,7 @@ void Maps::Tiles::RedrawBoat( Surface & dst ) const
     const Point mp = Maps::GetPoint( GetIndex() );
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
-    if ( area.GetRectMaps() & mp ) {
+    if ( area.GetVisibleTileROI() & mp ) {
         // FIXME: restore direction from Maps::Tiles
         const Sprite & sprite = AGG::GetICN( ICN::BOAT32, 18 );
         area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp );
@@ -1708,7 +1708,7 @@ void Maps::Tiles::RedrawBottom4Hero( Surface & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( area.GetRectMaps() & mp ) && !addons_level1.empty() ) {
+    if ( ( area.GetVisibleTileROI() & mp ) && !addons_level1.empty() ) {
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             if ( !SkipRedrawTileBottom4Hero( *it, tile_passable ) ) {
                 const u8 & object = ( *it ).object;
@@ -1733,7 +1733,7 @@ void Maps::Tiles::RedrawTop( Surface & dst, bool skipObjs ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( !( area.GetRectMaps() & mp ) )
+    if ( !( area.GetVisibleTileROI() & mp ) )
         return;
 
     // animate objects
@@ -1760,7 +1760,7 @@ void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( area.GetRectMaps() & mp ) && !addons_level2.empty() ) {
+    if ( ( area.GetVisibleTileROI() & mp ) && !addons_level2.empty() ) {
         for ( Addons::const_iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
             if ( skip_ground && MP2::isGroundObject( ( *it ).object ) )
                 continue;
