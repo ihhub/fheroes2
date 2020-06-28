@@ -78,7 +78,7 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
     const Size worldSize = Size( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
 
     if ( worldSize.w > w ) {
-        _minLeftOffset = -static_cast<int16_t>( w / 2 );
+        _minLeftOffset = -static_cast<int16_t>( w / 2 ) - TILEWIDTH / 2;
         _maxLeftOffset = worldSize.w - w / 2;
     }
     else {
@@ -87,7 +87,7 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
     }
 
     if ( worldSize.h > h ) {
-        _minTopOffset = -static_cast<int16_t>( h / 2 );
+        _minTopOffset = -static_cast<int16_t>( h / 2 ) - TILEWIDTH / 2;
         _maxTopOffset = worldSize.h - h / 2;
     }
     else {
