@@ -1416,11 +1416,17 @@ void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
     const int dy = std::abs( y2 - y1 );
 
     Lock();
+    const int minX = 0;
+    const int minY = 0;
+    const int maxX = w();
+    const int maxY = h();
     if ( dx > dy ) {
         int ns = std::div( dx, 2 ).quot;
 
         for ( int i = 0; i <= dx; ++i ) {
-            SetPixel( x1, y1, pixel );
+            if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                SetPixel( x1, y1, pixel );
+            }
             x1 < x2 ? ++x1 : --x1;
             ns -= dy;
             if ( ns < 0 ) {
@@ -1433,7 +1439,9 @@ void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
         int ns = std::div( dy, 2 ).quot;
 
         for ( int i = 0; i <= dy; ++i ) {
-            SetPixel( x1, y1, pixel );
+            if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                SetPixel( x1, y1, pixel );
+            }
             y1 < y2 ? ++y1 : --y1;
             ns -= dx;
             if ( ns < 0 ) {
