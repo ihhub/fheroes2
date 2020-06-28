@@ -164,7 +164,7 @@ namespace PAL
         return cycleSet;
     }
 
-    const std::vector<uint32_t> GetRGBColors()
+    const std::vector<uint32_t> & GetRGBColors()
     {
         static std::vector<uint32_t> colors;
         if ( !colors.empty() )

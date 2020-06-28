@@ -268,8 +268,9 @@ u32 Troops::GetCount( void ) const
 
 bool Troops::HasMonster( const Monster & mons ) const
 {
+    const int monsterID = mons();
     for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isMonster( mons() ) )
+        if ( ( *it )->isMonster( monsterID ) )
             return true;
     }
     return false;

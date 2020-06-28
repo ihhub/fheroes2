@@ -174,17 +174,19 @@ Heroes * Interface::GetFocusHeroes( void )
 
 Army * Interface::GetFocusArmy()
 {
-    Army * armyPtr = NULL;
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
-    if ( player && player->GetFocus().GetHeroes() ) {
-        armyPtr = &player->GetFocus().GetHeroes()->GetArmy();
+    if ( player == NULL )
+        return NULL;
+
+    if ( player->GetFocus().GetHeroes() ) {
+        return &player->GetFocus().GetHeroes()->GetArmy();
     }
-    else if ( player && player->GetFocus().GetCastle() ) {
-        armyPtr = &player->GetFocus().GetCastle()->GetArmy();
+    else if ( player->GetFocus().GetCastle() ) {
+        return &player->GetFocus().GetCastle()->GetArmy();
     }
 
-    return armyPtr;
+    return NULL;
 }
 
 Point Interface::GetFocusCenter( void )
