@@ -237,7 +237,8 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
         break;
     }
 
-    const int icn = Castle::GetICNBuilding( build, castle.GetRace() );
+    const int race = castle.GetRace();
+    const int icn = Castle::GetICNBuilding( build, race );
     u32 index = 0;
 
     // correct index (mage guild)
@@ -246,16 +247,16 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
         index = 0;
         break;
     case BUILD_MAGEGUILD2:
-        index = Race::NECR == castle.GetRace() ? 6 : 1;
+        index = Race::NECR == race ? 6 : 1;
         break;
     case BUILD_MAGEGUILD3:
-        index = Race::NECR == castle.GetRace() ? 12 : 2;
+        index = Race::NECR == race ? 12 : 2;
         break;
     case BUILD_MAGEGUILD4:
-        index = Race::NECR == castle.GetRace() ? 18 : 3;
+        index = Race::NECR == race ? 18 : 3;
         break;
     case BUILD_MAGEGUILD5:
-        index = Race::NECR == castle.GetRace() ? 24 : 4;
+        index = Race::NECR == race ? 24 : 4;
         break;
     default:
         break;
@@ -264,6 +265,9 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
     if ( icn != ICN::UNKNOWN ) {
         // simple first sprite
         Sprite sprite1 = AGG::GetICN( icn, index );
+        if ( Castle::isBuildingCycling( build, race ) ) {
+            AGG::ReplaceColors( sprite1, PAL::GetCyclingPalette( frame ), icn, index, false );
+        }
 
         if ( alpha ) {
             sprite1.SetAlphaMod( alpha, true );
