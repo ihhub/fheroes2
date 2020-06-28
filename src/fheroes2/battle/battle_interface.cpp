@@ -3625,16 +3625,14 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             sprite = AGG::GetICN( ICN::SPARKS, frame, false );
             RedrawLightning( GenerateLightning( startingPos, endPos ), RGBA( 0xff, 0xff, 0 ), _mainSurface );
 
             sprite.Blit( endPos, _mainSurface );
-            _mainSurface.Blit( _interfacePosition, display );
-            cursor.Show();
-            display.Flip();
+
+            RedrawPartialFinish();
 
             ++frame;
         }
