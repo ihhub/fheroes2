@@ -132,7 +132,7 @@ int main( int argc, char ** argv )
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
                 if ( conf.Music() ) {
-                    Music::SetFadeIn( 3000 );
+                    Music::SetFadeIn( 900 );
                 }
             }
             else if ( conf.Sound() || conf.Music() ) {
