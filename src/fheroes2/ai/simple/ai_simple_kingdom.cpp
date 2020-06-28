@@ -101,7 +101,7 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, Color::String( kingdom.GetColor() ) << " funds: " << kingdom.GetFunds().String() );
 
         if ( !Settings::Get().MusicMIDI() )
-            AGG::PlayMusic( MUS::COMPUTER );
+            AGG::PlayMusic( MUS::COMPUTER_TURN );
 
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         AIKingdom & ai = GetKingdom( color );

@@ -54,7 +54,7 @@
 
 namespace
 {
-    const u8 monster_animation_cicle[] = {0, 1, 2, 1, 0, 3, 4, 5, 4, 3};
+    const u8 monsterAnimationSequence[] = {0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0};
 
     bool contains( int base, int value )
     {
@@ -1507,6 +1507,31 @@ void Maps::Tiles::RedrawEmptyTile( Surface & dst, const Point & mp )
     }
 }
 
+// Private drawing function that will cycle colors if told to do so
+void Maps::Tiles::RedrawMapObject( Surface & dst, int icn, uint32_t index, const Point & mapPoint, bool cycle, int offsetX, int offsetY ) const
+{
+    Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    Sprite sprite;
+
+    if ( cycle ) {
+        MapObjectSprite & spriteCache = area.GetSpriteCache();
+        const std::pair<int, uint32_t> spriteIndex( icn, index );
+        MapObjectSprite::iterator cachedSprite = spriteCache.find( spriteIndex );
+        if ( cachedSprite != spriteCache.end() ) {
+            sprite = cachedSprite->second;
+        }
+        else {
+            sprite = AGG::GetICN( icn, index );
+            AGG::ReplaceColors( sprite, area.GetCyclingRGBPalette(), icn, index, false );
+            spriteCache[spriteIndex] = sprite;
+        }
+    }
+    else {
+        sprite = AGG::GetICN( icn, index );
+    }
+    area.BlitOnTile( dst, sprite, sprite.x() + offsetX, sprite.y() + offsetY, mapPoint );
+}
+
 void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs ) const
 {
     Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
@@ -1518,34 +1543,16 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
             if ( skipObjs && MP2::isRemoveObject( GetObject() ) && FindObjectConst( GetObject() ) == &( *it ) )
                 continue;
 
-            const u8 & object = ( *it ).object;
             const u8 & index = ( *it ).index;
-            const int icn = MP2::GetICNObject( object );
+            const int icn = MP2::GetICNObject( ( *it ).object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                Sprite sprite;
-                if ( TilesAddon::hasColorCycling( *it ) ) {
-                    MapObjectSprite & spriteCache = area.GetSpriteCache();
-                    const std::pair<uint8_t, uint8_t> tileIndex( object, index );
-                    MapObjectSprite::iterator cachedSprite = spriteCache.find( tileIndex );
-                    if ( cachedSprite != spriteCache.end() ) {
-                        sprite = cachedSprite->second;
-                    }
-                    else {
-                        sprite = AGG::GetICN( icn, index );
-                        AGG::ReplaceColors( sprite, area.GetCyclingPalette(), icn, index, false );
-                        spriteCache[tileIndex] = sprite;
-                    }
-                }
-                else {
-                    sprite = AGG::GetICN( icn, index );
-                }
-                area.BlitOnTile( dst, sprite, mp );
+                RedrawMapObject( dst, icn, index, mp, TilesAddon::hasColorCycling( *it ) );
 
-                // possible anime
-                if ( u32 anime_index = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ) {
-                    const Sprite & anime_sprite = AGG::GetICN( icn, anime_index );
-                    area.BlitOnTile( dst, anime_sprite, mp );
+                // possible animation
+                if ( u32 anim_index = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ) {
+                    const Sprite & animationSprite = AGG::GetICN( icn, anim_index );
+                    area.BlitOnTile( dst, animationSprite, mp );
                 }
             }
         }
@@ -1621,7 +1628,9 @@ void Maps::Tiles::RedrawMonster( Surface & dst ) const
             break;
     }
 
-    const u32 sprite_index = QuantityMonster().GetSpriteIndex();
+    const Monster & monster = QuantityMonster();
+    uint32_t spriteIndex = monster.GetSpriteIndex() * 9;
+    uint32_t secondSprite = MAXU32;
 
     // draw attack sprite
     if ( -1 != dst_index && !conf.ExtWorldOnlyFirstMonsterAttack() ) {
@@ -1637,19 +1646,15 @@ void Maps::Tiles::RedrawMonster( Surface & dst ) const
             break;
         }
 
-        const Sprite & sprite_first = AGG::GetICN( ICN::MINIMON, sprite_index * 9 + ( revert ? 8 : 7 ) );
-        area.BlitOnTile( dst, sprite_first, sprite_first.x() + 16, TILEWIDTH + sprite_first.y(), mp );
+        spriteIndex += ( revert ? 8 : 7 );
     }
     else {
-        // draw first sprite
-        const Sprite & sprite_first = AGG::GetICN( ICN::MINIMON, sprite_index * 9 );
-        area.BlitOnTile( dst, sprite_first, sprite_first.x() + 16, TILEWIDTH + sprite_first.y(), mp );
+        secondSprite = spriteIndex + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monsterAnimationSequence )];
+    }
 
-        // draw second sprite
-        const Sprite & sprite_next
-            = AGG::GetICN( ICN::MINIMON,
-                           sprite_index * 9 + 1 + monster_animation_cicle[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monster_animation_cicle )] );
-        area.BlitOnTile( dst, sprite_next, sprite_next.x() + 16, TILEWIDTH + sprite_next.y(), mp );
+    RedrawMapObject( dst, ICN::MINIMON, spriteIndex, mp, monster.hasColorCycling(), 16, TILEWIDTH );
+    if ( secondSprite != MAXU32 ) {
+        RedrawMapObject( dst, ICN::MINIMON, secondSprite, mp, monster.hasColorCycling(), 16, TILEWIDTH );
     }
 }
 
