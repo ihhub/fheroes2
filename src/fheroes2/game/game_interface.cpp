@@ -231,14 +231,15 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     SpriteBack back( Rect( radarArea.x, radarArea.y, radarArea.w, radarArea.h ) );
     viewDoor.Blit( radarArea );
 
-    const Rect & visibleArea = gameArea.GetArea();
+    const Rect & visibleArea = gameArea.GetROI();
     const bool isFadingEnabled = display.w() >= TILEWIDTH * ( distance + 1 ) && display.h() >= TILEWIDTH * ( distance + 1 );
     const Surface & top = display.GetSurface( visibleArea );
     if ( isFadingEnabled ) {
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
-        const Point offset( visibleArea.x + visibleArea.w / 2 - TILEWIDTH * ( distance / 2 ) - TILEWIDTH / 2,
-                            visibleArea.y + visibleArea.h / 2 - TILEWIDTH * ( distance / 2 ) - TILEWIDTH / 2 );
+
+        const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
+        const Point offset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
         const Surface middle = display.GetSurface( Rect( offset.x, offset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) ) );
 
         display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, offset, 105, 300 );
@@ -264,15 +265,15 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
             if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
                 break;
         }
-        else if ( gameArea.GetArea() & mp ) {
-            dst = gameArea.GetIndexFromMousePoint( mp );
+        else if ( visibleArea & mp ) {
+            dst = gameArea.GetValidTileIdFromPoint( mp );
 
             bool valid = ( dst >= 0 );
 
             if ( valid ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
 
-                valid = ( ( gameArea.GetArea() & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
+                valid = ( ( visibleArea & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
                           && water == world.GetTiles( dst ).isWater() && ( distance / 2 ) >= Maps::GetApproximateDistance( from, dst ) );
             }
 

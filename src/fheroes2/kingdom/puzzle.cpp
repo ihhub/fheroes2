@@ -180,7 +180,7 @@ void ShowExtendedDialog( const Puzzle & pzl, const Surface & sf )
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
-    const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetArea();
+    const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
     Dialog::FrameBorder frameborder( gameArea.x + ( gameArea.w - sf.w() - BORDERWIDTH * 2 ) / 2, gameArea.y + ( gameArea.h - sf.h() - BORDERWIDTH * 2 ) / 2, sf.w(),
                                      sf.h() );
