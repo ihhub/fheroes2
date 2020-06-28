@@ -47,7 +47,7 @@ enum level_t
     LEVEL_ALL = 0xFF
 };
 
-typedef std::map<std::pair<int, uint8_t>, Sprite> MapObjectSprite;
+typedef std::map<std::pair<int, uint32_t>, Sprite> MapObjectSprite;
 
 namespace Interface
 {

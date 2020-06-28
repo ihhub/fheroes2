@@ -1515,7 +1515,7 @@ void Maps::Tiles::RedrawMapObject( Surface & dst, int icn, uint32_t index, const
 
     if ( cycle ) {
         MapObjectSprite & spriteCache = area.GetSpriteCache();
-        const std::pair<int, uint8_t> spriteIndex( icn, index );
+        const std::pair<int, uint32_t> spriteIndex( icn, index );
         MapObjectSprite::iterator cachedSprite = spriteCache.find( spriteIndex );
         if ( cachedSprite != spriteCache.end() ) {
             sprite = cachedSprite->second;
