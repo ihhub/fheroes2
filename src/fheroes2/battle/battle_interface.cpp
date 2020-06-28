@@ -3796,9 +3796,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
             const uint32_t frame = i * spriteCount / path.size();
             const Sprite & sprite = AGG::GetICN( spellICN, frame );
             sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2, _mainSurface );
-            _mainSurface.Blit( _interfacePosition, display );
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
             ++i;
         }
     }
