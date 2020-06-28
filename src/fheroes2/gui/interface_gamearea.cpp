@@ -47,7 +47,7 @@ const Rect & Interface::GameArea::GetROI( void ) const
     return _windowROI;
 }
 
-const Rect Interface::GameArea::GetVisibleTileROI( void ) const
+Rect Interface::GameArea::GetVisibleTileROI( void ) const
 {
     return Rect( _getStartTileId(), _visibleTileCount );
 }

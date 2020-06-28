@@ -60,7 +60,7 @@ namespace Interface
         void Build( void );
 
         const Rect & GetROI( void ) const; // returns visible Game Area ROI in pixels
-        const Rect GetVisibleTileROI( void ) const;
+        Rect GetVisibleTileROI( void ) const;
         void ShiftCenter( const Point & offset ); // in pixels
 
         int GetScrollCursor( void ) const;
