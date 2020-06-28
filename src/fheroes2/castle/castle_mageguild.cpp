@@ -130,7 +130,7 @@ bool RowSpells::QueueEventProcessing( void )
     return 0 <= index;
 }
 
-void Castle::OpenMageGuild( void )
+void Castle::OpenMageGuild( const CastleHeroes & heroes )
 {
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
@@ -144,8 +144,11 @@ void Castle::OpenMageGuild( void )
     AGG::GetICN( ICN::WELLXTRA, 2 ).Blit( cur_pt.x, cur_pt.y + 461 );
 
     // text bar
-    text.Set( _( "The above spells have been added to your book." ), Font::BIG );
-    text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 461 );
+    if ( ( !heroes.Guard() || !heroes.Guard()->HaveSpellBook() ) && ( !heroes.Guest() || !heroes.Guest()->HaveSpellBook() ) )
+        text.Set( _( "The above spells are available here." ), Font::BIG );
+    else
+        text.Set( _( "The above spells have been added to your book." ), Font::BIG );
+    text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 463 );
 
     const int level = GetLevelMageGuild();
     // sprite

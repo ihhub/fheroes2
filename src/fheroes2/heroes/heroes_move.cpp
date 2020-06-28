@@ -374,21 +374,11 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     return MP2::isNeedStayFront( next.GetObject() );
 }
 
-void Heroes::Redraw( Surface & dst, bool with_shadow ) const
-{
-    const Point & mp = GetCenter();
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    s32 dx = gamearea.GetMapsPos().x + TILEWIDTH * ( mp.x - gamearea.GetRectMaps().x );
-    s32 dy = gamearea.GetMapsPos().y + TILEWIDTH * ( mp.y - gamearea.GetRectMaps().y );
-
-    Redraw( dst, dx, dy, with_shadow );
-}
-
 void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 {
     const Point & mp = GetCenter();
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    if ( !( gamearea.GetRectMaps() & mp ) )
+    if ( !( gamearea.GetVisibleTileROI() & mp ) )
         return;
 
     bool reflect = ReflectSprite( direction );
@@ -464,12 +454,7 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
         dst_pt4.y += oy;
     }
 
-    if ( isShipMaster() ) {
-        dst_pt1.y -= 15;
-        dst_pt2.y -= 15;
-        dst_pt3.y -= 15;
-        dst_pt4.y -= 15;
-
+    if ( isShipMaster() && isEnableMove() ) {
         sprite4.Blit( gamearea.RectFixed( dst_pt4, sprite4.w(), sprite4.h() ), dst_pt4, dst );
     }
 
@@ -748,7 +733,7 @@ void Heroes::FadeOut( void ) const
     const Point & mp = GetCenter();
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
-    if ( !( gamearea.GetRectMaps() & mp ) )
+    if ( !( gamearea.GetVisibleTileROI() & mp ) )
         return;
 
     Display & display = Display::Get();
@@ -775,7 +760,7 @@ void Heroes::FadeIn( void ) const
     const Point & mp = GetCenter();
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
-    if ( !( gamearea.GetRectMaps() & mp ) )
+    if ( !( gamearea.GetVisibleTileROI() & mp ) )
         return;
 
     Display & display = Display::Get();

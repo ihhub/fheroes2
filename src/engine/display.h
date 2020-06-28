@@ -73,6 +73,8 @@ public:
 
     bool isMouseFocusActive() const;
 
+    static bool isRedrawRequired(); // in case of no explicit redrawing we must redraw at least once in a second
+
 protected:
     friend class Texture;
 

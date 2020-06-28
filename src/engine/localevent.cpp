@@ -434,6 +434,10 @@ LocalEvent & LocalEvent::Get( void )
 
 bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 {
+    if ( Display::isRedrawRequired() ) {
+        Display::Get().Flip();
+    }
+
     SDL_Event event;
 
     ResetModes( MOUSE_MOTION );

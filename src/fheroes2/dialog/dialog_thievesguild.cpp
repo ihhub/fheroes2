@@ -291,8 +291,8 @@ void Dialog::ThievesGuild( bool oracle )
 
     // text bar
     text.Set( _( "Thieves' Guild: Player RanKings" ), Font::BIG );
-    dst_pt.x = cur_pt.x + 280 - text.w() / 2;
-    dst_pt.y = cur_pt.y + 461;
+    dst_pt.x = cur_pt.x + 290 - text.w() / 2;
+    dst_pt.y = cur_pt.y + 463;
     text.Blit( dst_pt );
 
     // button exit
