@@ -47,7 +47,7 @@ enum level_t
     LEVEL_ALL = 0xFF
 };
 
-typedef std::map<std::pair<uint8_t, uint8_t>, Sprite> MapObjectSprite;
+typedef std::map<std::pair<int, uint32_t>, Sprite> MapObjectSprite;
 
 namespace Interface
 {
@@ -77,7 +77,7 @@ namespace Interface
         void BlitOnTile( Surface &, const Sprite &, const Point & ) const;
 
         void UpdateCyclingPalette( int frame );
-        const std::vector<uint8_t> & GetCyclingPalette() const;
+        const std::vector<uint32_t> & GetCyclingRGBPalette() const;
         MapObjectSprite & GetSpriteCache();
 
         void SetUpdateCursor( void );
@@ -110,7 +110,7 @@ namespace Interface
         int scrollDirection;
         bool updateCursor;
 
-        std::vector<uint8_t> _customPalette;
+        std::vector<uint32_t> _cyclingRGBPalette;
         MapObjectSprite _spriteCache;
 
         SDL::Time scrollTime;
