@@ -99,6 +99,7 @@ namespace Interface
         Rect _windowROI; // visible to draw area of World Map in pixels
         Point _topLeftTileOffset; // offset of tiles to be drawn (from here we can find any tile ID)
 
+        // boundaries for World Map
         int16_t _minLeftOffset;
         int16_t _maxLeftOffset;
         int16_t _minTopOffset;
@@ -115,11 +116,11 @@ namespace Interface
 
         SDL::Time scrollTime;
 
-        Point _middlePoint() const;
+        Point _middlePoint() const; // returns middle point of window ROI
         Point _getStartTileId() const;
         void _setCenterToTile( const Point & tile ); // set center to the middle of tile (input is tile ID)
         void _setCenter( const Point & point ); // in pixels
-        Point _getRelativePosition( const Point & point ) const; // return relative to screen position
+        Point _getRelativePosition( const Point & point ) const; // returns relative to screen position
     };
 }
 
