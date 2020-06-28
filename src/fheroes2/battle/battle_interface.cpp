@@ -2963,6 +2963,10 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     Point destPos( pos1.x, pos1.y );
     Point targetPos( pos2.x, pos2.y );
 
+    if ( unit.isWide() && targetPos.x > destPos.x ) {
+        targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
+    }
+
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
     StringReplace( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
