@@ -2852,6 +2852,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            bool redrawBattleField = false;
+
             if ( attacker != NULL ) {
                 if ( attacker->isFinishAnimFrame() ) {
                     attacker->SwitchAnimation( Monster_Info::STATIC );
@@ -2859,15 +2861,22 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 else {
                     attacker->IncreaseAnimFrame();
                 }
+
+                redrawBattleField = true;
+                cursor.Hide();
+                Redraw();
             }
 
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
+            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
                     TargetInfo & target = *it;
                     const Rect & pos = target.defender->GetRectPosition();
 
-                    cursor.Hide();
-                    Redraw();
+                    if ( !redrawBattleField ) {
+                        redrawBattleField = true;
+                        cursor.Hide();
+                        Redraw();
+                    }
 
                     // extended damage info
                     if ( conf.ExtBattleShowDamage() && target.killed && ( pos.y - py ) > topleft.y ) {
@@ -2875,11 +2884,20 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                         Text txt( msg, Font::YELLOW_SMALL );
                         txt.Blit( pos.x + ( pos.w - txt.w() ) / 2, pos.y - py );
                     }
-
-                    cursor.Show();
-                    display.Flip();
-                    target.defender->IncreaseAnimFrame();
                 }
+            }
+
+            if ( redrawBattleField ) {
+                cursor.Show();
+                display.Flip();
+            }
+
+            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                if ( ( *it ).defender ) {
+                    it->defender->IncreaseAnimFrame();
+                }
+            }
+
             py += ( conf.QVGA() ? 5 : 10 );
         }
     }
