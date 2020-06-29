@@ -2012,7 +2012,6 @@ int Castle::GetICNBuilding( u32 build, int race )
     return ICN::UNKNOWN;
 }
 
-/* get building name ICN */
 bool Castle::isBuildingCycling( uint32_t building, int race )
 {
     switch ( building ) {
