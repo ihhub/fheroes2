@@ -732,7 +732,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
             cursor.Show();
             display.Flip();
 
-            ++Game::CastleAnimationFrame();
+            Game::CastleAnimationFrame() += 1; // this function returns variable by reference
         }
     }
 
