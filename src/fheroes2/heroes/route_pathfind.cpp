@@ -207,7 +207,7 @@ u32 GetPenaltyFromTo( s32 from, s32 to, int direct, int pathfinding )
 {
     const u32 cost1 = Maps::Ground::GetPenalty( from, direct, pathfinding ); // penalty: for [cur] out
     const u32 cost2 = Maps::Ground::GetPenalty( to, Direction::Reflect( direct ), pathfinding ); // penalty: for [tmp] in
-    return ( cost1 + cost2 ) >> 1;
+    return std::min(cost1, cost2);
 }
 
 uint32_t Route::Path::Find( s32 to, int limit )
