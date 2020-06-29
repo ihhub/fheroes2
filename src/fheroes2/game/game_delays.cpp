@@ -69,9 +69,10 @@ namespace Game
                           250, // MAIN_MENU_DELAY
                           250, // MAPS_DELAY
                           200, // CASTLE_TAVERN_DELAY
-                          150, // CASTLE_AROUND_DELAY
+                          200, // CASTLE_AROUND_DELAY
                           130, // CASTLE_BUYHERO_DELAY
                           130, // CASTLE_BUILD_DELAY
+                          150, // CASTLE_UNIT_DELAY
                           40, // HEROES_FADE_DELAY
                           40, // HEROES_PICKUP_DELAY
                           50, // PUZZLE_FADE_DELAY
@@ -88,7 +89,6 @@ namespace Game
                           500, // BATTLE_OPPONENTS_DELAY
                           300, // BATTLE_FLAGS_DELAY
                           800, // BATTLE_POPUP_DELAY
-                          250, // COLOR_CYCLE_MAP_DELAY
                           220, // COLOR_CYCLE_BATTLE_DELAY
                           300, // AUTOHIDE_STATUS_DELAY
                           40, // CURRENT_HERO_DELAY

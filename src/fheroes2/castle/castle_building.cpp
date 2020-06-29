@@ -89,7 +89,7 @@ void CastleRedrawTownName( const Castle & castle, const Point & dst )
 
 void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders, u32 build, u32 flash )
 {
-    u32 & frame = Game::CastleAnimationFrame();
+    const uint32_t frame = Game::CastleAnimationFrame();
 
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
@@ -187,6 +187,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     else if ( orders.end() != std::find( orders.begin(), orders.end(), build ) ) {
         LocalEvent & le = LocalEvent::Get();
         int alpha = 1;
+        uint32_t buildFrame = 0;
 
         while ( le.HandleEvents() && alpha < 255 ) {
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
@@ -200,7 +201,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                         CastleRedrawBuildingExtended( castle, dst_pt, build2, frame );
                     }
                     else if ( build2 == build ) {
-                        CastleRedrawBuilding( castle, dst_pt, build2, frame, alpha );
+                        CastleRedrawBuilding( castle, dst_pt, build2, buildFrame, alpha );
                         alpha += 15;
                     }
                 }
@@ -210,13 +211,11 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                 cursor.Show();
                 display.Flip();
             }
-            ++frame;
+            ++buildFrame;
         }
 
         cursor.Hide();
     }
-
-    ++frame;
 }
 
 void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, int alpha )
@@ -237,7 +236,8 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
         break;
     }
 
-    const int icn = Castle::GetICNBuilding( build, castle.GetRace() );
+    const int race = castle.GetRace();
+    const int icn = Castle::GetICNBuilding( build, race );
     u32 index = 0;
 
     // correct index (mage guild)
@@ -246,16 +246,16 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
         index = 0;
         break;
     case BUILD_MAGEGUILD2:
-        index = Race::NECR == castle.GetRace() ? 6 : 1;
+        index = Race::NECR == race ? 6 : 1;
         break;
     case BUILD_MAGEGUILD3:
-        index = Race::NECR == castle.GetRace() ? 12 : 2;
+        index = Race::NECR == race ? 12 : 2;
         break;
     case BUILD_MAGEGUILD4:
-        index = Race::NECR == castle.GetRace() ? 18 : 3;
+        index = Race::NECR == race ? 18 : 3;
         break;
     case BUILD_MAGEGUILD5:
-        index = Race::NECR == castle.GetRace() ? 24 : 4;
+        index = Race::NECR == race ? 24 : 4;
         break;
     default:
         break;
@@ -264,6 +264,9 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
     if ( icn != ICN::UNKNOWN ) {
         // simple first sprite
         Sprite sprite1 = AGG::GetICN( icn, index );
+        if ( Castle::isBuildingCycling( build, race ) ) {
+            AGG::ReplaceColors( sprite1, PAL::GetCyclingPalette( frame ), icn, index, false );
+        }
 
         if ( alpha ) {
             sprite1.SetAlphaMod( alpha, true );
