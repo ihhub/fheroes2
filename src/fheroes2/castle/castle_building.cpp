@@ -197,8 +197,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                     const u32 & build2 = ( *it ).id;
 
                     if ( castle.isBuild( build2 ) ) {
-                        CastleRedrawBuilding( castle, dst_pt, build2, buildFrame, 0 );
-                        CastleRedrawBuildingExtended( castle, dst_pt, build2, buildFrame );
+                        CastleRedrawBuilding( castle, dst_pt, build2, frame, 0 );
+                        CastleRedrawBuildingExtended( castle, dst_pt, build2, frame );
                     }
                     else if ( build2 == build ) {
                         CastleRedrawBuilding( castle, dst_pt, build2, buildFrame, alpha );
