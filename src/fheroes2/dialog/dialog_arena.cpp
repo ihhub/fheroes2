@@ -38,6 +38,7 @@ int Dialog::SelectSkillFromArena( void )
 {
     Display & display = Display::Get();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+    const bool allSkills = Settings::Get().ExtHeroArenaCanChoiseAnySkills();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -62,39 +63,34 @@ int Dialog::SelectSkillFromArena( void )
     int res = Skill::Primary::ATTACK;
     Rect rect1, rect2, rect3, rect4;
 
-    if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
-        rect1 = Rect( dst_pt.x + box_rt.w / 2 - 2 * sprite.w() - 30, dst_pt.y, sprite.w(), sprite.h() );
-        rect2 = Rect( dst_pt.x + box_rt.w / 2 - sprite.w() - 10, dst_pt.y, sprite.w(), sprite.h() );
-        rect3 = Rect( dst_pt.x + box_rt.w / 2 + 10, dst_pt.y, sprite.w(), sprite.h() );
-        rect4 = Rect( dst_pt.x + box_rt.w / 2 + sprite.w() + 30, dst_pt.y, sprite.w(), sprite.h() );
-    }
-    else {
-        rect1 = Rect( dst_pt.x + box_rt.w / 2 - 2 * sprite.w() - 10, dst_pt.y, sprite.w(), sprite.h() );
-        rect2 = Rect( dst_pt.x + box_rt.w / 2 - sprite.w() + 15, dst_pt.y, sprite.w(), sprite.h() );
-        rect3 = Rect( dst_pt.x + box_rt.w / 2 + 40, dst_pt.y, sprite.w(), sprite.h() );
-    }
+    const int spacingX = allSkills ? ( static_cast<int>( box_rt.w ) - sprite.w() * 4 ) / 5 : ( static_cast<int>( box_rt.w ) - sprite.w() * 3 ) / 4;
+
+    rect1 = Rect( dst_pt.x + spacingX, dst_pt.y, sprite.w(), sprite.h() );
+    rect2 = Rect( rect1.x + sprite.w() + spacingX, dst_pt.y, sprite.w(), sprite.h() );
+    rect3 = Rect( rect2.x + sprite.w() + spacingX, dst_pt.y, sprite.w(), sprite.h() );
+    rect4 = Rect( rect3.x + sprite.w() + spacingX, dst_pt.y, sprite.w(), sprite.h() );
 
     InfoSkillClear( rect1, rect2, rect3, rect4 );
     InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
 
     // info texts
-    Text text( Skill::Primary::String( Skill::Primary::ATTACK ), Font::SMALL );
+    TextBox text( Skill::Primary::String( Skill::Primary::ATTACK ), Font::SMALL, 60 );
     dst_pt.x = rect1.x + ( rect1.w - text.w() ) / 2;
     dst_pt.y = rect1.y + rect1.h + 5;
     text.Blit( dst_pt );
 
-    text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ) );
+    text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ), Font::SMALL, 60 );
     dst_pt.x = rect2.x + ( rect2.w - text.w() ) / 2;
     dst_pt.y = rect2.y + rect2.h + 5;
     text.Blit( dst_pt );
 
-    text.Set( Skill::Primary::String( Skill::Primary::POWER ) );
+    text.Set( Skill::Primary::String( Skill::Primary::POWER ), Font::SMALL, 60 );
     dst_pt.x = rect3.x + ( rect3.w - text.w() ) / 2;
     dst_pt.y = rect3.y + rect3.h + 5;
     text.Blit( dst_pt );
 
-    if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
-        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ) );
+    if ( allSkills ) {
+        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), Font::SMALL, 65 );
         dst_pt.x = rect4.x + ( rect4.w - text.w() ) / 2;
         dst_pt.y = rect4.y + rect4.h + 5;
         text.Blit( dst_pt );
@@ -136,7 +132,7 @@ int Dialog::SelectSkillFromArena( void )
             res = Skill::Primary::POWER;
             redraw = true;
         }
-        else if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() && le.MouseClickLeft( rect4 ) ) {
+        else if ( allSkills && le.MouseClickLeft( rect4 ) ) {
             res = Skill::Primary::KNOWLEDGE;
             redraw = true;
         }
