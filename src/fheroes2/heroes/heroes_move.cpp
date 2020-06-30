@@ -838,27 +838,27 @@ Point Heroes::MovementDirection() const
         return Point();
 
     if ( direction == Direction::TOP ) {
-        if ( sprite_index > 0 && sprite_index < 9 - 1 ) {
+        if ( sprite_index > 0 && sprite_index < 9 ) {
             return Point( 0, -1 );
         }
     }
     else if ( direction == Direction::TOP_RIGHT || direction == Direction::TOP_LEFT ) {
-        if ( sprite_index > 9 && sprite_index < 18 - 1 ) {
+        if ( sprite_index > 9 + 1 && sprite_index < 18 ) {
             return Point( direction == Direction::TOP_RIGHT ? 1 : -1, -1 );
         }
     }
     else if ( direction == Direction::RIGHT || direction == Direction::LEFT ) {
-        if ( sprite_index > 18 && sprite_index < 27 - 1 ) {
+        if ( sprite_index > 18 + 1 && sprite_index < 27 ) {
             return Point( direction == Direction::RIGHT ? 1 : -1, 0 );
         }
     }
     else if ( direction == Direction::BOTTOM_RIGHT || direction == Direction::BOTTOM_LEFT ) {
-        if ( sprite_index > 27 && sprite_index < 36 - 1 ) {
+        if ( sprite_index > 27 + 1 && sprite_index < 36 ) {
             return Point( direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 );
         }
     }
     else if ( direction == Direction::BOTTOM ) {
-        if ( sprite_index > 36 && sprite_index < 45 - 1 ) {
+        if ( sprite_index > 36 + 1 && sprite_index < 45 ) {
             return Point( 0, 1 );
         }
     }
