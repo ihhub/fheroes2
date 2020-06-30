@@ -401,16 +401,13 @@ void Interface::StatusWindow::QueueEventProcessing( void )
         const Rect & pos = GetArea();
         const bool isFullInfo = STATUS_UNKNOWN != state && pos.h >= ( ston.h() * 3 + 15 );
         if ( isFullInfo ) {
-            Dialog::
-                Message( _( "Status Window" ),
-                         _( "This window provides information on the status of your hero or kingdom, and shows the date." ),
-                         Font::BIG );
+            Dialog::Message( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ), Font::BIG );
         }
         else {
-            Dialog::
-                Message( _( "Status Window" ),
-                         _( "This window provides information on the status of your hero or kingdom, and shows the date. Left click here to cycle throungh these windows." ),
-                         Font::BIG );
+            Dialog::Message(
+                _( "Status Window" ),
+                _( "This window provides information on the status of your hero or kingdom, and shows the date. Left click here to cycle throungh these windows." ),
+                Font::BIG );
         }
     }
 }
