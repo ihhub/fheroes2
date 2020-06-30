@@ -204,15 +204,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     LocalEvent & le = LocalEvent::Get();
 
     if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
-        buttonDismiss.Press();
         buttonDismiss.SetDisable( true );
         if ( readonly )
             buttonDismiss.SetVisible( false );
     }
 
     if ( readonly || 2 > GetKingdom().GetHeroes().size() ) {
-        buttonNextHero.Press();
-        buttonPrevHero.Press();
         buttonNextHero.SetDisable( true );
         buttonPrevHero.SetDisable( true );
     }
@@ -361,9 +358,9 @@ int Heroes::OpenDialog( bool readonly, bool fade )
                     message = _( "Dismiss hero" );
             }
         }
-        else if ( le.MouseCursor( buttonPrevHero ) )
+        else if ( buttonPrevHero.isEnable() && le.MouseCursor( buttonPrevHero ) )
             message = _( "Show previous hero" );
-        else if ( le.MouseCursor( buttonNextHero ) )
+        else if ( buttonNextHero.isEnable() && le.MouseCursor( buttonNextHero ) )
             message = _( "Show next hero" );
 
         if ( message.empty() )
