@@ -563,6 +563,13 @@ bool Heroes::MoveStep( bool fast )
         sprite_index -= 8;
         MoveStep( *this, index_from, index_to, true );
 
+        // if we continue to move into the same direction we must skip first frame as it's for stand position only
+        if ( isEnableMove() && GetDirection() == path.GetFrontDirection() ) {
+            if ( GetKingdom().isControlHuman() )
+                PlayWalkSound( world.GetTiles( mp.x, mp.y ).GetGround() );
+            ++sprite_index;
+        }
+
         return true;
     }
 
