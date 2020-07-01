@@ -10,20 +10,20 @@ Direct continuation of free implementation of Heroes of the Might and Magic II e
 
 Copyright
 ---------------------------
-All rights for the original game and it's resources belong to former The 3DO Company. These rights were transferred to Ubisoft. We do not encourage and do not support any form of illegal usage of the original game. We do not provide any information about downloading of the original game in any form.
+All rights for the original game and its resources belong to former The 3DO Company. These rights were transferred to Ubisoft. We do not encourage and do not support any form of illegal usage of the original game. We strongly advise to purchase the original game on **GOG** or **Steam** platforms. Alternatively, you can download a free demo version of the game.
 
 Download
 ---------------------------
-You can download compiled game for specific OS via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
+You can download a compiled game for specific OS via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
 
-Please note that for **Windows OS** you have to install [**Visual Studio 2015 Redistributable**](https://www.microsoft.com/en-sg/download/details.aspx?id=48145) if you face an error during application startup.
+Please note that for **32-bit** version of the game on **Windows OS** you have to install [**Visual Studio 2015 Redistributable (vc_redist.x86.exe)**](https://www.microsoft.com/en-sg/download/details.aspx?id=48145) if you face an error during application startup.
 
 Compilation
 ---------------------------
 Please follow below instructions to be able to compile the project:
 
 **Windows**
-- **Optional step**: Install **7-zip** archiver at your local system's folder as- `C:\Program Files\7-Zip\7z.exe` or otherwise, you will need to manually extract each downloaded package (follow instructions shown by batch scripts mentioned below).
+- **Optional step**: Install **7-zip** archiver at its default location as `C:\Program Files\7-Zip\7z.exe` or otherwise, you will need to manually extract each downloaded package (follow instructions shown by batch scripts mentioned below).
 - open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
 - open `script/demo` directory and run **demo_windows.bat** file. It downloads a demo version of the game which is needed for minimum development.
 - open **fheroes.vcxproj** by Visual Studio and compile the project.
@@ -35,12 +35,12 @@ Please follow below instructions to be able to compile the project:
 
 Requirements
 ---------------------------
-You are required to have at least a demo version of Heroes of Might and Magic II game to be able to play it.
+You are required to have at least a demo version of Heroes of Might and Magic II game to be able to play it. Please use one of our scripts to download the demo version of the original game.
 
 Contribution
 ---------------------------
 We welcome and appreciate any help, even if it is a tiny text or code change. Please read [contribution](https://github.com/ihhub/fheroes2/blob/master/CONTRIBUTING.md) page before starting work on a pull request. All contributors are listed in the project's wiki [page](https://github.com/ihhub/fheroes2/wiki/Contributors). 
-Not sure what to start with? Feel free to refer to <kbd>[good first issue](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)</kbd> or <kbd>[help wanted](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)</kbd> tags.
+Not sure what to start with? Feel free to refer to [good first issue](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [help wanted](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) tags.
 
 License
 ---------------------------
