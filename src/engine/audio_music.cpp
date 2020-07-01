@@ -50,42 +50,6 @@ void Music::Play( Mix_Music * mix, u32 id, bool loop )
     }
     else
         music = mix;
-    /*
-        std::list<play_t>::iterator
-        it = std::find(musics.begin(), musics.end(), f);
-
-        // skip repeat
-        if(it != musics.end())
-        {
-        if((*it).isPaused())
-        {
-            Pause();
-            current = it;
-            Resume();
-            DELAY(100);
-        }
-
-        if((*it).isPlay()) return;
-        }
-
-        // stop run
-        Pause();
-
-        info_t info;
-        info.file = f;
-        info.status = loop ? Music::LOOP : 0;
-
-        it = std::find_if(musics.begin(), musics.end(), play_t::isFree);
-
-        if(it == musics.end())
-        {
-        musics.push_back(play_t());
-        it = --musics.end();
-        }
-
-        (*it).Run(info);
-        current = it;
-    */
 }
 
 void Music::Play( const std::vector<u8> & v, bool loop )

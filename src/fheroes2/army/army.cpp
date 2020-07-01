@@ -249,17 +249,40 @@ u32 Troops::GetCountMonsters( const Monster & m ) const
 
 bool Troops::isValid( void ) const
 {
-    return end() != std::find_if( begin(), end(), std::mem_fun( &Troop::isValid ) );
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() )
+            return true;
+    }
+    return false;
 }
 
 u32 Troops::GetCount( void ) const
 {
-    return std::count_if( begin(), end(), std::mem_fun( &Troop::isValid ) );
+    uint32_t total = 0;
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() )
+            ++total;
+    }
+    return total;
 }
 
 bool Troops::HasMonster( const Monster & mons ) const
 {
-    return end() != std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
+    const int monsterID = mons();
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isMonster( monsterID ) )
+            return true;
+    }
+    return false;
+}
+
+bool Troops::hasColorCycling() const
+{
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->hasColorCycling() )
+            return true;
+    }
+    return false;
 }
 
 bool Troops::AllTroopsIsRace( int race ) const
@@ -660,7 +683,11 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
         for ( const_iterator it = begin(); it != end(); ++it )
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
-                    const Sprite & monster = AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
+                    const uint32_t spriteIndex = ( *it )->GetSpriteIndex();
+                    Sprite monster = AGG::GetICN( ICN::MONS32, spriteIndex );
+                    if ( ( *it )->hasColorCycling() ) {
+                        AGG::ReplaceColors( monster, PAL::GetCyclingPalette( Game::MapsAnimationFrame() ), ICN::MONS32, spriteIndex, false );
+                    }
                     const int offsetY = !compact ? 30 - monster.h() : ( monster.h() < 35 ) ? 35 - monster.h() : 0;
 
                     monster.Blit( cx - monster.w() / 2, cy + offsetY );

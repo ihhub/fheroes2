@@ -172,6 +172,23 @@ Heroes * Interface::GetFocusHeroes( void )
     return player ? player->GetFocus().GetHeroes() : NULL;
 }
 
+Army * Interface::GetFocusArmy()
+{
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
+
+    if ( player == NULL )
+        return NULL;
+
+    if ( player->GetFocus().GetHeroes() ) {
+        return &player->GetFocus().GetHeroes()->GetArmy();
+    }
+    else if ( player->GetFocus().GetCastle() ) {
+        return &player->GetFocus().GetCastle()->GetArmy();
+    }
+
+    return NULL;
+}
+
 Point Interface::GetFocusCenter( void )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();

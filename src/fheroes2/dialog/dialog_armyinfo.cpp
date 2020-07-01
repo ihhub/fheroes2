@@ -166,7 +166,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
             }
 
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+            if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
                 cursor.Hide();
 
                 sprite_dialog.Blit( pos_rt.x, pos_rt.y );

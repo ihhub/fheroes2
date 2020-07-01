@@ -2804,6 +2804,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            bool redrawBattleField = false;
+
             if ( attacker != NULL ) {
                 if ( attacker->isFinishAnimFrame() ) {
                     attacker->SwitchAnimation( Monster_Info::STATIC );
@@ -2811,14 +2813,20 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 else {
                     attacker->IncreaseAnimFrame();
                 }
+
+                redrawBattleField = true;
+                RedrawPartialStart();
             }
 
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
+            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
                     TargetInfo & target = *it;
                     const Rect & pos = target.defender->GetRectPosition();
 
-                    Redraw();
+                    if ( !redrawBattleField ) {
+                        redrawBattleField = true;
+                        RedrawPartialStart();
+                    }
 
                     // extended damage info
                     if ( conf.ExtBattleShowDamage() && target.killed && ( pos.y - py ) > 0 ) {
@@ -2826,9 +2834,19 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                         Text txt( msg, Font::YELLOW_SMALL );
                         txt.Blit( pos.x + ( pos.w - txt.w() ) / 2, pos.y - py );
                     }
-
-                    target.defender->IncreaseAnimFrame();
                 }
+            }
+
+            if ( redrawBattleField ) {
+                RedrawPartialFinish();
+            }
+
+            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                if ( ( *it ).defender ) {
+                    it->defender->IncreaseAnimFrame();
+                }
+            }
+
             py += ( conf.QVGA() ? 5 : 10 );
         }
     }
@@ -2909,6 +2927,10 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     Point destPos( pos1.x, pos1.y );
     Point targetPos( pos2.x, pos2.y );
+
+    if ( unit.isWide() && targetPos.x > destPos.x ) {
+        targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
+    }
 
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
     StringReplace( msg, "%{monster}", unit.GetName() );
