@@ -31,4 +31,12 @@ struct TimeDelay : std::pair<SDL::Time, uint32_t>
     void Reset( void );
     bool Trigger( uint32_t customDelay = 0 );
 };
+
+struct IdleTimer : TimeDelay
+{
+    bool timerIsSet;
+
+    IdleTimer( uint32_t delay );
+    bool checkIdleDelay();
+};
 #endif

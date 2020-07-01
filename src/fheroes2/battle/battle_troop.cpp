@@ -132,8 +132,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , mirror( NULL )
     , blindanswer( false )
     , animation( id )
-    , idleTimer( 0 )
-    , idleTimerSet( false )
+    , idleTimer( animation.getIdleDelay() )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -450,15 +449,7 @@ bool Battle::Unit::isIdling() const
 
 bool Battle::Unit::checkIdleDelay()
 {
-    if ( !idleTimerSet ) {
-        const uint32_t halfDelay = animation.getIdleDelay() / 2;
-        idleTimer.second = Rand::Get( 0, halfDelay / 2 ) + halfDelay * 3 / 2;
-        idleTimerSet = true;
-    }
-    const bool res = idleTimer.Trigger();
-    if ( res )
-        idleTimerSet = false;
-    return res;
+    return idleTimer.checkIdleDelay();
 }
 
 void Battle::Unit::NewTurn( void )

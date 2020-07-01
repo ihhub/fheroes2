@@ -208,8 +208,7 @@ namespace Battle
         Position position;
         ModesAffected affected;
         Unit * mirror;
-        TimeDelay idleTimer;
-        bool idleTimerSet;
+        IdleTimer idleTimer;
 
         // These variables are mutable due to population of them of the fly as we don't want to calculate everything
         mutable std::map<int, Surface> contoursMain;

@@ -59,6 +59,25 @@ bool TimeDelay::Trigger( uint32_t customDelay )
     return true;
 }
 
+IdleTimer::IdleTimer( uint32_t delay )
+    : TimeDelay( delay )
+    , timerIsSet( false )
+{}
+
+bool IdleTimer::checkIdleDelay()
+{
+    if ( !timerIsSet ) {
+        const uint32_t halfDelay = second / 2;
+        second = Rand::Get( 0, halfDelay / 2 ) + halfDelay * 3 / 2;
+        timerIsSet = true;
+    }
+    const bool res = Trigger();
+    if ( res )
+        timerIsSet = false;
+    return res;
+
+}
+
 namespace Game
 {
     void AnimateDelaysInitialize( void );

@@ -28,6 +28,7 @@
 #include "battle_board.h"
 #include "button.h"
 #include "dialog.h"
+#include "game_delays.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "spell.h"
@@ -86,6 +87,7 @@ namespace Battle
 
         const Rect & GetArea( void ) const;
         void Redraw( void ) const;
+        void Update();
         void SetAnimation( int );
         void IncreaseAnimFrame( bool loop = false );
         bool isFinishFrame( void ) const;
@@ -106,6 +108,9 @@ namespace Battle
     private:
         const HeroBase * base;
         AnimationSequence _currentAnim;
+        int _animationType;
+        IdleTimer _idleTimer;
+
         int icn;
         bool reflect;
         Rect pos;

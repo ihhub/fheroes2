@@ -517,6 +517,8 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
     , reflect( r )
     , _offset( area.x, area.y )
     , _currentAnim( getHeroAnimation( b, OP_STATIC ) )
+    , _animationType( OP_STATIC )
+    , _idleTimer( 1500 )
 {
     const bool isCaptain = b->isCaptain();
     switch ( b->GetRace() ) {
@@ -587,6 +589,7 @@ void Battle::OpponentSprite::IncreaseAnimFrame( bool loop )
 
 void Battle::OpponentSprite::SetAnimation( int rule )
 {
+    _animationType = rule;
     _currentAnim = getHeroAnimation( base, rule );
 }
 
@@ -622,6 +625,21 @@ void Battle::OpponentSprite::Redraw( void ) const
         hero.Blit( offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y() );
     else
         hero.Blit( offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
+}
+
+void Battle::OpponentSprite::Update()
+{
+    if ( _currentAnim.isLastFrame() ) {
+        if ( _animationType != OP_STATIC ) {
+            SetAnimation( OP_STATIC );
+        }
+        else if ( _idleTimer.checkIdleDelay() ) {
+            SetAnimation( OP_IDLE );
+        }
+    }
+    else {
+        _currentAnim.playAnimation();
+    }
 }
 
 Battle::Status::Status()
@@ -2644,10 +2662,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
             else
                 target.defender->SwitchAnimation( Monster_Info::STATIC );
         }
-    if ( opponent1 )
-        opponent1->SetAnimation( OP_IDLE );
-    if ( opponent2 )
-        opponent2->SetAnimation( OP_IDLE );
+
     _movingUnit = NULL;
 }
 
@@ -3139,10 +3154,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
             else
                 target.defender->SwitchAnimation( Monster_Info::STATIC );
         }
-    if ( opponent1 )
-        opponent1->SetAnimation( OP_IDLE );
-    if ( opponent2 )
-        opponent2->SetAnimation( OP_IDLE );
+
     _movingUnit = NULL;
 }
 
@@ -4374,7 +4386,11 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
         if ( opponent1 ) {
-            opponent1->IncreaseAnimFrame();
+            if ( opponent1->isFinishFrame() ) {
+            }
+            else {
+                opponent1->IncreaseAnimFrame();
+            }
         }
 
         if ( opponent2 ) {
