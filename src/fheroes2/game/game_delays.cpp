@@ -76,7 +76,6 @@ bool IdleTimer::checkIdleDelay()
     if ( res )
         timerIsSet = false;
     return res;
-
 }
 
 namespace Game

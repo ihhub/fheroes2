@@ -2699,7 +2699,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 ++finish;
             }
             else
-            // have immunitet
+            // have immunity
             {
                 AGG::PlaySound( M82::RSBRYFZL );
             }
@@ -2708,18 +2708,16 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     const Point & topleft = border.GetArea();
 
     if ( death ) {
-        // 60% of victory animtion
-        if ( Rand::Get( 1, 5 ) < 4 ) {
-            OpponentSprite * attackingHero = attacker->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
-            if ( attackingHero )
-                attackingHero->SetAnimation( OP_JOY );
+        const bool attackersTurn = attacker->GetColor() == arena.GetArmyColor1();
+        OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
+        OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
+        // 60% of joyful animation
+        if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
+            attackingHero->SetAnimation( OP_JOY );
         }
-        // 80% of SORROW animation otherwise
-        else if ( Rand::Get( 1, 5 ) < 5 ) {
-            OpponentSprite * defendingHero = attacker->GetColor() == arena.GetArmyColor1() ? opponent2 : opponent1;
-            if ( defendingHero )
-                defendingHero->SetAnimation( OP_SORROW );
-        
+        // 80% of sorrow animation otherwise
+        else if ( defendingHero && Rand::Get( 1, 5 ) < 5 ) {
+            defendingHero->SetAnimation( OP_SORROW );
         }
     }
 
