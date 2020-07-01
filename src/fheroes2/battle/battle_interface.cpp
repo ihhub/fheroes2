@@ -518,7 +518,7 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
     , _offset( area.x, area.y )
     , _currentAnim( getHeroAnimation( b, OP_STATIC ) )
     , _animationType( OP_STATIC )
-    , _idleTimer( 1500 )
+    , _idleTimer( 8000 )
 {
     const bool isCaptain = b->isCaptain();
     switch ( b->GetRace() ) {
@@ -631,10 +631,11 @@ void Battle::OpponentSprite::Update()
 {
     if ( _currentAnim.isLastFrame() ) {
         if ( _animationType != OP_STATIC ) {
-            SetAnimation( OP_STATIC );
+            if ( _animationType != OP_CAST_MASS && _animationType != OP_CAST_UP && _animationType != OP_CAST_DOWN )
+                SetAnimation( OP_STATIC );
         }
         else if ( _idleTimer.checkIdleDelay() ) {
-            SetAnimation( OP_IDLE );
+            SetAnimation( ( Rand::Get( 1, 3 ) < 2 ) ? OP_IDLE2 : OP_IDLE );
         }
     }
     else {
@@ -2417,7 +2418,7 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
 
-    while ( le.HandleEvents() && target && target->isFinishFrame() ) {
+    while ( le.HandleEvents() && target && !target->isFinishFrame() ) {
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
             target->IncreaseAnimFrame();
             cursor.Hide();
@@ -4383,17 +4384,12 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 
     // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-        if ( opponent1 ) {
-            if ( opponent1->isFinishFrame() ) {
-            }
-            else {
-                opponent1->IncreaseAnimFrame();
-            }
-        }
+        if ( opponent1 )
+            opponent1->Update();
 
-        if ( opponent2 ) {
-            opponent2->IncreaseAnimFrame();
-        }
+        if ( opponent2 )
+            opponent2->Update();
+
         humanturn_redraw = true;
     }
 
