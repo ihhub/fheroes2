@@ -281,7 +281,7 @@ namespace Battle
         static std::vector<int> sorrowAnim = {2, 3, 4, 5, 4, 5, 4, 3, 2};
         if ( animation == OP_SORROW )
             return ( heroType == CAPTAIN ) ? staticAnim : sorrowAnim;
-        
+
         static std::vector<int> heroTypeAnim[7][9] = {
             //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
             {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
