@@ -53,11 +53,30 @@ namespace Battle
     void DialogBattleSettings( void );
     bool DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingdom & kingdom );
 
-    enum
+    enum HeroAnimation
     {
+        OP_JOY,
+        OP_CAST_UP,
+        OP_CAST_UP_RETURN,
+        OP_CAST,
+        OP_CAST_RETURN,
+        OP_CAST_DOWN,
+        OP_CAST_DOWN_RETURN,
         OP_IDLE,
-        OP_SRRW,
-        OP_CAST
+        OP_IDLE2,
+        OP_STATIC,
+        OP_SORROW
+    };
+
+    enum BattleHeroType
+    {
+        KNIGHT,
+        BARBARIAN,
+        SORCERESS,
+        WARLOCK,
+        WIZARD,
+        NECROMANCER,
+        CAPTAIN
     };
 
     class OpponentSprite
@@ -86,10 +105,8 @@ namespace Battle
 
     private:
         const HeroBase * base;
+        AnimationSequence _currentAnim;
         int icn;
-        int animframe;
-        int animframe_start;
-        int animframe_count;
         bool reflect;
         Rect pos;
         Point _offset;

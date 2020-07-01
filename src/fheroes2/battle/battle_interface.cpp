@@ -248,6 +248,52 @@ namespace Battle
     {
         return Game::AnimateInfrequentDelay( dl );
     }
+
+    int matchHeroType( const HeroBase * base )
+    {
+        if ( base->isCaptain() )
+            return CAPTAIN;
+
+        switch ( base->GetRace() ) {
+        case Race::BARB:
+            return BARBARIAN;
+        case Race::SORC:
+            return SORCERESS;
+        case Race::WRLK:
+            return WARLOCK;
+        case Race::WZRD:
+            return WIZARD;
+        case Race::NECR:
+            return NECROMANCER;
+        default:
+            break;
+        }
+        return KNIGHT;
+    }
+
+    const std::vector<int> & getHeroAnimation( const HeroBase * hero, int animation )
+    {
+        static std::vector<int> staticAnim = {1};
+        if ( !hero || animation == OP_STATIC )
+            return staticAnim;
+
+        const int heroType = matchHeroType( hero );
+        static std::vector<int> sorrowAnim = {2,3,4,5,4,5,4,3,2};
+        if ( animation == OP_SORROW )
+            return ( heroType == CAPTAIN ) ? staticAnim : sorrowAnim;
+        
+        static std::vector<int> heroTypeAnim[7][9] = {
+            // JOY                CAST_UP          CAST              CAST_DOWN    IDLE
+            { {6,7,8,9,8,9,8,7,6}, {10,11}, {10}, {6,12,13}, {12,6}, {2,14}, {2}, {15,16,17}, {18,19} }, // KNIGHT
+            { {6,7,8,9,9,8,7,6}, {6,10,11}, {10,6}, {6,12,13}, {12,6}, {6,14}, {6}, {15,16,17}, {18} }, // BARBARIAN
+            { {6,7,8,7,6}, {6,7,9}, {7,6}, {6,10,11}, {10,6}, {6,12}, {6}, {13,14,15}, {16} }, // SORCERESS
+            { {6,7,8,9,10,9,8,7,6}, {6,7,11,12}, {11,6}, {6,7,13}, {6}, {6,14}, {6}, {15,16}, {6} }, // WARLOCK
+            { {6,7,8,9,8,7,6}, {6,10,11,12,13}, {12,11,10,6}, {6,14}, {6}, {6,15}, {6}, {16,17}, {18} }, // WIZARD
+            { {6,7,6,7,6,7}, {7,8,9,10,11}, {10,9,7}, {7,12,13,14,15}, {7}, {7,12,13,14,16}, {7}, {17}, {18,19} }, // NECROMANCER
+            { {1}, {2,3,4}, {3,2}, {5,6}, {5}, {5,7}, {5}, {8,9}, {10} } // CAPTAIN
+        };
+        return heroTypeAnim[heroType][animation];
+    }
 }
 
 bool CursorAttack( u32 theme )
@@ -468,52 +514,55 @@ int Battle::GetDirectionFromCursorSword( u32 sword )
 Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, bool r )
     : base( b )
     , icn( ICN::UNKNOWN )
-    , animframe( 0 )
-    , animframe_start( 0 )
-    , animframe_count( 0 )
     , reflect( r )
     , _offset( area.x, area.y )
+    , _currentAnim( getHeroAnimation( b, OP_STATIC ) )
 {
-    ResetAnimFrame( OP_IDLE );
+    const bool isCaptain = b->isCaptain();
+    switch ( b->GetRace() ) {
+    case Race::KNGT:
+        icn = isCaptain ? ICN::CMBTCAPK : ICN::CMBTHROK;
+        break;
+    case Race::BARB:
+        icn = isCaptain ? ICN::CMBTCAPB : ICN::CMBTHROB;
+        break;
+    case Race::SORC:
+        icn = isCaptain ? ICN::CMBTCAPS : ICN::CMBTHROS;
+        break;
+    case Race::WRLK:
+        icn = isCaptain ? ICN::CMBTCAPW : ICN::CMBTHROW;
+        break;
+    case Race::WZRD:
+        icn = isCaptain ? ICN::CMBTCAPZ : ICN::CMBTHROZ;
+        break;
+    case Race::NECR:
+        icn = isCaptain ? ICN::CMBTCAPN : ICN::CMBTHRON;
+        break;
+    default:
+        break;
+    }
 
-    if ( Settings::Get().QVGA() ) {
-        if ( reflect ) {
-            pos.x = area.x + area.w - 40;
-            pos.y = area.y + 75;
-        }
-        else {
-            pos.x = area.x + 5;
-            pos.y = area.y + 75;
-        }
+    const Sprite & sprite = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
 
-        const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
-
-        pos.w = sprite.w();
-        pos.h = sprite.h();
+    if ( reflect ) {
+        pos.x = _offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
+        pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
     }
     else {
-        const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
-
-        if ( reflect ) {
-            pos.x = _offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
-            pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
-        }
-        else {
-            pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
-            pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
-        }
-
-        if ( b->isCaptain() ) {
-            if ( reflect )
-                pos.x += CAPTAIN_X_OFFSET;
-            else
-                pos.x -= CAPTAIN_X_OFFSET;
-            pos.y += CAPTAIN_Y_OFFSET;
-        }
-
-        pos.w = sprite.w();
-        pos.h = sprite.h();
+        pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
+        pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
     }
+
+    if ( isCaptain ) {
+        if ( reflect )
+            pos.x += CAPTAIN_X_OFFSET;
+        else
+            pos.x -= CAPTAIN_X_OFFSET;
+        pos.y += CAPTAIN_Y_OFFSET;
+    }
+
+    pos.w = sprite.w();
+    pos.h = sprite.h();
 }
 
 int Battle::OpponentSprite::GetColor( void ) const
@@ -533,239 +582,22 @@ Point Battle::OpponentSprite::Offset() const
 
 void Battle::OpponentSprite::IncreaseAnimFrame( bool loop )
 {
-    if ( animframe < animframe_start + animframe_count - 1 )
-        ++animframe;
-    else if ( loop )
-        animframe = animframe_start;
+    _currentAnim.playAnimation( loop );
 }
 
 void Battle::OpponentSprite::ResetAnimFrame( int rule )
 {
-    if ( Settings::Get().QVGA() ) {
-        switch ( base->GetColor() ) {
-        case Color::BLUE:
-            animframe = 0;
-            break;
-        case Color::GREEN:
-            animframe = 7;
-            break;
-        case Color::RED:
-            animframe = 14;
-            break;
-        case Color::YELLOW:
-            animframe = 21;
-            break;
-        case Color::ORANGE:
-            animframe = 28;
-            break;
-        case Color::PURPLE:
-            animframe = 35;
-            break;
-        default:
-            break;
-        }
-
-        switch ( base->GetRace() ) {
-        case Race::KNGT:
-            animframe += 0;
-            break;
-        case Race::BARB:
-            animframe += 1;
-            break;
-        case Race::SORC:
-            animframe += 2;
-            break;
-        case Race::WRLK:
-            animframe += 3;
-            break;
-        case Race::WZRD:
-            animframe += 4;
-            break;
-        case Race::NECR:
-            animframe += 5;
-            break;
-        default:
-            break;
-        }
-
-        icn = ICN::MINIHERO;
-    }
-    else {
-        if ( base->isHeroes() ) {
-            switch ( base->GetRace() ) {
-            case Race::BARB:
-                icn = ICN::CMBTHROB;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 15;
-                    animframe_count = 4;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 9;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::KNGT:
-                icn = ICN::CMBTHROK;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 15;
-                    animframe_count = 5;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 9;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::NECR:
-                icn = ICN::CMBTHRON;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 16;
-                    animframe_count = 2;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 9;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::SORC:
-                icn = ICN::CMBTHROS;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 13;
-                    animframe_count = 4;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 7;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::WRLK:
-                icn = ICN::CMBTHROW;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 14;
-                    animframe_count = 3;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 8;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::WZRD:
-                icn = ICN::CMBTHROZ;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 16;
-                    animframe_count = 3;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 12;
-                    animframe_count = 7;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            default:
-                break;
-            }
-            animframe = animframe_start;
-        }
-        else if ( base->isCaptain() ) {
-            icn = ICN::CMBTCAPB;
-            switch ( base->GetRace() ) {
-            case Race::BARB:
-                icn = ICN::CMBTCAPB;
-                break;
-            case Race::KNGT:
-                icn = ICN::CMBTCAPK;
-                break;
-            case Race::NECR:
-                icn = ICN::CMBTCAPN;
-                break;
-            case Race::SORC:
-                icn = ICN::CMBTCAPS;
-                break;
-            case Race::WRLK:
-                icn = ICN::CMBTCAPW;
-                break;
-            case Race::WZRD:
-                icn = ICN::CMBTCAPZ;
-                break;
-            default:
-                break;
-            }
-
-            switch ( rule ) {
-            case OP_IDLE:
-                animframe_start = 1;
-                animframe_count = 1;
-                break;
-            case OP_SRRW:
-                animframe_start = 1;
-                animframe_count = 1;
-                break;
-            case OP_CAST:
-                animframe_start = 3;
-                animframe_count = 6;
-                break;
-            default:
-                break;
-            }
-            animframe = animframe_start;
-        }
-    }
+    _currentAnim = getHeroAnimation( base, rule );
 }
 
 bool Battle::OpponentSprite::isFinishFrame( void ) const
 {
-    return !animframe_count || animframe >= animframe_start + animframe_count - 1;
+    return _currentAnim.isLastFrame();
 }
 
 bool Battle::OpponentSprite::isStartFrame( void ) const
 {
-    return animframe_count && animframe == animframe_start;
+    return _currentAnim.isFirstFrame();
 }
 
 const Rect & Battle::OpponentSprite::GetArea( void ) const
@@ -775,7 +607,7 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
 
 void Battle::OpponentSprite::Redraw( void ) const
 {
-    const Sprite & hero = AGG::GetICN( icn, animframe, reflect );
+    const Sprite & hero = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
 
     Point offset( _offset );
     if ( base->isCaptain() ) {
@@ -2823,11 +2655,11 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 AGG::PlaySound( target.defender->M82Kill() );
                 ++finish;
 
-                // set opponent OP_SRRW animation
+                // set opponent OP_SORROW animation
                 if ( target.defender->GetColor() != Color::NONE ) {
                     OpponentSprite * commander = target.defender->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
                     if ( commander )
-                        commander->ResetAnimFrame( OP_SRRW );
+                        commander->ResetAnimFrame( OP_SORROW );
                 }
             }
             else
@@ -3076,15 +2908,15 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     }
 
     // set spell cast animation
+    OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
     if ( caster ) {
-        OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->ResetAnimFrame( OP_CAST );
+            opponent->ResetAnimFrame( OP_CAST_UP );
             Display & display = Display::Get();
             LocalEvent & le = LocalEvent::Get();
             Cursor & cursor = Cursor::Get();
             do {
-                if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+                if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
                     opponent->IncreaseAnimFrame();
                     cursor.Hide();
                     Redraw();
@@ -3093,6 +2925,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
                 }
             } while ( le.HandleEvents() && !opponent->isFinishFrame() );
         }
+
     }
 
     // without object
@@ -3232,6 +3065,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
                 break;
             }
     }
+    opponent->ResetAnimFrame( OP_CAST_UP_RETURN );
 }
 
 void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
