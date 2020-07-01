@@ -56,10 +56,10 @@ namespace Battle
     enum HeroAnimation
     {
         OP_JOY,
+        OP_CAST_MASS,
+        OP_CAST_MASS_RETURN,
         OP_CAST_UP,
         OP_CAST_UP_RETURN,
-        OP_CAST,
-        OP_CAST_RETURN,
         OP_CAST_DOWN,
         OP_CAST_DOWN_RETURN,
         OP_IDLE,
@@ -86,7 +86,7 @@ namespace Battle
 
         const Rect & GetArea( void ) const;
         void Redraw( void ) const;
-        void ResetAnimFrame( int );
+        void SetAnimation( int );
         void IncreaseAnimFrame( bool loop = false );
         bool isFinishFrame( void ) const;
         bool isStartFrame( void ) const;
@@ -253,6 +253,7 @@ namespace Battle
         void RedrawActionChainLightningSpell( const TargetsInfo & );
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size );
 
+        void AnimateOpponents( OpponentSprite * target );
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );

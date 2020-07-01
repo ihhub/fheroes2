@@ -585,7 +585,7 @@ void Battle::OpponentSprite::IncreaseAnimFrame( bool loop )
     _currentAnim.playAnimation( loop );
 }
 
-void Battle::OpponentSprite::ResetAnimFrame( int rule )
+void Battle::OpponentSprite::SetAnimation( int rule )
 {
     _currentAnim = getHeroAnimation( base, rule );
 }
@@ -2393,6 +2393,23 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
     }
 }
 
+void Battle::Interface::AnimateOpponents( OpponentSprite * target )
+{
+    Display & display = Display::Get();
+    LocalEvent & le = LocalEvent::Get();
+    Cursor & cursor = Cursor::Get();
+
+    while ( le.HandleEvents() && target && target->isFinishFrame() ) {
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
+            target->IncreaseAnimFrame();
+            cursor.Hide();
+            Redraw();
+            cursor.Show();
+            display.Flip();
+        }
+    }
+}
+
 void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 {
     if ( unit.isFinishAnimFrame() ) // nothing to animate
@@ -2628,9 +2645,9 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
                 target.defender->SwitchAnimation( Monster_Info::STATIC );
         }
     if ( opponent1 )
-        opponent1->ResetAnimFrame( OP_IDLE );
+        opponent1->SetAnimation( OP_IDLE );
     if ( opponent2 )
-        opponent2->ResetAnimFrame( OP_IDLE );
+        opponent2->SetAnimation( OP_IDLE );
     _movingUnit = NULL;
 }
 
@@ -2644,6 +2661,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     // targets damage animation
     int py = ( conf.QVGA() ? 20 : 50 );
     int finish = 0;
+    bool death = false;
 
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
@@ -2655,12 +2673,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 AGG::PlaySound( target.defender->M82Kill() );
                 ++finish;
 
-                // set opponent OP_SORROW animation
-                if ( target.defender->GetColor() != Color::NONE ) {
-                    OpponentSprite * commander = target.defender->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
-                    if ( commander )
-                        commander->ResetAnimFrame( OP_SORROW );
-                }
+                death = true;
             }
             else
                 // wince animation
@@ -2678,6 +2691,22 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
         }
 
     const Point & topleft = border.GetArea();
+
+    if ( death ) {
+        // 60% of victory animtion
+        if ( Rand::Get( 1, 5 ) < 4 ) {
+            OpponentSprite * attackingHero = attacker->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
+            if ( attackingHero )
+                attackingHero->SetAnimation( OP_JOY );
+        }
+        // 80% of SORROW animation otherwise
+        else if ( Rand::Get( 1, 5 ) < 5 ) {
+            OpponentSprite * defendingHero = attacker->GetColor() == arena.GetArmyColor1() ? opponent2 : opponent1;
+            if ( defendingHero )
+                defendingHero->SetAnimation( OP_SORROW );
+        
+        }
+    }
 
     // targets damage animation loop
     while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), std::mem_fun_ref( &TargetInfo::isFinishAnimFrame ) ) ) {
@@ -2908,24 +2937,12 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     }
 
     // set spell cast animation
-    OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
     if ( caster ) {
+        OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->ResetAnimFrame( OP_CAST_UP );
-            Display & display = Display::Get();
-            LocalEvent & le = LocalEvent::Get();
-            Cursor & cursor = Cursor::Get();
-            do {
-                if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-                    opponent->IncreaseAnimFrame();
-                    cursor.Hide();
-                    Redraw();
-                    cursor.Show();
-                    display.Flip();
-                }
-            } while ( le.HandleEvents() && !opponent->isFinishFrame() );
+            opponent->SetAnimation( ( target ) ? OP_CAST_UP : OP_CAST_MASS );
+            AnimateOpponents( opponent );
         }
-
     }
 
     // without object
@@ -3065,7 +3082,14 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
                 break;
             }
     }
-    opponent->ResetAnimFrame( OP_CAST_UP_RETURN );
+
+    if ( caster ) {
+        OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
+        if ( opponent ) {
+            opponent->SetAnimation( ( target ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
+            AnimateOpponents( opponent );
+        }
+    }
 }
 
 void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
@@ -3116,9 +3140,9 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
                 target.defender->SwitchAnimation( Monster_Info::STATIC );
         }
     if ( opponent1 )
-        opponent1->ResetAnimFrame( OP_IDLE );
+        opponent1->SetAnimation( OP_IDLE );
     if ( opponent2 )
-        opponent2->ResetAnimFrame( OP_IDLE );
+        opponent2->SetAnimation( OP_IDLE );
     _movingUnit = NULL;
 }
 
@@ -3284,10 +3308,6 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
     else
         target.defender->SwitchAnimation( Monster_Info::STATIC );
 
-    if ( opponent1 )
-        opponent1->ResetAnimFrame( OP_IDLE );
-    if ( opponent2 )
-        opponent2->ResetAnimFrame( OP_IDLE );
     _movingUnit = NULL;
 }
 
@@ -4354,24 +4374,17 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
         if ( opponent1 ) {
-            if ( !opponent1->isStartFrame() || 2 > Rand::Get( 1, 10 ) )
-                opponent1->IncreaseAnimFrame();
+            opponent1->IncreaseAnimFrame();
         }
 
         if ( opponent2 ) {
-            if ( !opponent2->isStartFrame() || 2 > Rand::Get( 1, 10 ) )
-                opponent2->IncreaseAnimFrame();
+            opponent2->IncreaseAnimFrame();
         }
         humanturn_redraw = true;
     }
 
     // flags animation
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FLAGS_DELAY ) ) {
-        if ( opponent1 && opponent1->isFinishFrame() )
-            opponent1->ResetAnimFrame( OP_IDLE );
-        if ( opponent2 && opponent2->isFinishFrame() )
-            opponent2->ResetAnimFrame( OP_IDLE );
-
         ++animation_flags_frame;
         humanturn_redraw = true;
     }
