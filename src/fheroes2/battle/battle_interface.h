@@ -292,6 +292,7 @@ namespace Battle
 
         uint32_t _colorCycle;
         std::vector<uint8_t> _creaturePalette;
+        uint8_t _contourColor;
 
         const Unit * _currentUnit;
         const Unit * _movingUnit;

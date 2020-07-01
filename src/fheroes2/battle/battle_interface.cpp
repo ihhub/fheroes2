@@ -954,6 +954,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , turn( 0 )
     , _colorCycle( 0 )
     , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
+    , _contourColor( 128 )
 {
     const Settings & conf = Settings::Get();
     bool pda = conf.QVGA();
@@ -1311,7 +1312,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 spmon2.Reset();
             }
             else {
-                spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
+                spmon2 = Sprite( b.GetContour( _contourColor ), 0, 0 );
             }
         }
 
