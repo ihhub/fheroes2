@@ -34,6 +34,7 @@ struct TimeDelay : std::pair<SDL::Time, uint32_t>
 
 struct IdleTimer : TimeDelay
 {
+    uint32_t halfDelay;
     bool timerIsSet;
 
     IdleTimer( uint32_t delay );

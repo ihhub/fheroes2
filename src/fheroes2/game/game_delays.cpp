@@ -61,14 +61,15 @@ bool TimeDelay::Trigger( uint32_t customDelay )
 
 IdleTimer::IdleTimer( uint32_t delay )
     : TimeDelay( delay )
+    , halfDelay( delay / 2 )
     , timerIsSet( false )
 {}
 
 bool IdleTimer::checkIdleDelay()
 {
     if ( !timerIsSet ) {
-        const uint32_t halfDelay = second / 2;
-        second = Rand::Get( 0, halfDelay / 2 ) + halfDelay * 3 / 2;
+        // Randomize delay as 0.75 to 1.25 original value
+        second = Rand::Get( 0, halfDelay ) + halfDelay * 3 / 2;
         timerIsSet = true;
     }
     const bool res = Trigger();
