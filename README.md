@@ -14,7 +14,7 @@ All rights for the original game and its resources belong to former The 3DO Comp
 
 Download
 ---------------------------
-You can download a compiled game for specific OS via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
+You can download a compiled version of the game for your operating system via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
 
 Please note that for **32-bit** version of the game on **Windows OS** you have to install [**Visual Studio 2015 Redistributable (vc_redist.x86.exe)**](https://www.microsoft.com/en-sg/download/details.aspx?id=48145) if you face an error during application startup.
 
