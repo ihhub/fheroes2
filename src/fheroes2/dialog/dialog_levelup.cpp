@@ -33,7 +33,7 @@ void DialogPrimaryOnly( const std::string & name, const std::string & primary )
 {
     std::string message = _( "%{name} has gained a level." );
     message.append( "\n \n" );
-    message.append( _( "%{skill} Skill +1" ) );
+    message.append( _( "%{skill} +1" ) );
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{skill}", primary );
     Dialog::Message( "", message, Font::BIG, Dialog::OK );
@@ -43,7 +43,7 @@ int DialogOneSecondary( const std::string & name, const std::string & primary, c
 {
     std::string message = _( "%{name} has gained a level." );
     message.append( "\n \n" );
-    message.append( _( "%{skill} Skill +1" ) );
+    message.append( _( "%{skill} +1" ) );
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{skill}", primary );
 
@@ -72,7 +72,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
 {
     std::string header = _( "%{name} has gained a level." );
     header.append( "\n \n" );
-    header.append( _( "%{skill} Skill +1" ) );
+    header.append( _( "%{skill} +1" ) );
     StringReplace( header, "%{name}", name );
     StringReplace( header, "%{skill}", primary );
 

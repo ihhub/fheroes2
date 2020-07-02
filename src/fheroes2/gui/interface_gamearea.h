@@ -90,6 +90,8 @@ namespace Interface
         int32_t GetValidTileIdFromPoint( const Point & point ) const; // returns -1 in case of invalid index (out of World Map)
         Point GetRelativeTilePosition( const Point & tileId ) const; // in relation to screen
 
+        void ResetCursorPosition();
+
     private:
         void SetAreaPosition( s32, s32, u32, u32 );
 

@@ -237,20 +237,22 @@ std::string Battle::Unit::GetSpeedString( void ) const
     return os.str();
 }
 
-Surface Battle::Unit::GetContour( int val ) const
+Surface Battle::Unit::GetContour( uint8_t colorId ) const
 {
-    const int frame = GetFrame();
+    const int frameId = GetFrame();
+    const bool isReflected = isReflect();
 
-    switch ( val ) {
-    case CONTOUR_MAIN:
-        return getContour( frame, contoursMain, false );
-    case CONTOUR_REFLECT:
-        return getContour( frame, contoursReflect, true );
-    default:
-        break;
+    const monstersprite_t & msi = GetMonsterSprite();
+    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
+
+    if ( !sprite.isValid() ) {
+        return Surface();
     }
 
-    return Surface();
+    Surface contour( sprite.GetSize(), sprite.GetFormat() );
+    AGG::DrawContour( contour, PAL::GetPaletteColor( colorId ).pack(), msi.icn_file, frameId, isReflected );
+
+    return contour;
 }
 
 u32 Battle::Unit::GetDead( void ) const
@@ -281,32 +283,6 @@ bool Battle::Unit::isUID( u32 v ) const
 u32 Battle::Unit::GetUID( void ) const
 {
     return uid;
-}
-
-const Surface & Battle::Unit::getContour( int frameId, std::map<int, Surface> & contours, bool isReflected ) const
-{
-    std::map<int, Surface>::iterator iter = contours.find( frameId );
-    if ( iter != contours.end() )
-        return iter->second;
-
-    const monstersprite_t & msi = GetMonsterSprite();
-    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
-
-    if ( !sprite.isValid() ) {
-        iter = contours.insert( std::make_pair( frameId, Surface() ) ).first;
-        return iter->second;
-    }
-
-    Surface contour( sprite.GetSize(), sprite.GetFormat() );
-    // TODO: replace this RGBA trick by palette color ID
-    if ( !AGG::DrawContour( contour, RGBA( 255, 0, 0xe0, 0xe0 ).pack(), msi.icn_file, frameId, isReflected ) ) {
-        iter = contours.insert( std::make_pair( frameId, Surface() ) ).first;
-        return iter->second;
-    }
-
-    iter = contours.insert( std::make_pair( frameId, contour ) ).first;
-
-    return iter->second;
 }
 
 void Battle::Unit::SetMirror( Unit * ptr )

@@ -237,7 +237,7 @@ int RGBA::a( void ) const
 
 int RGBA::pack( void ) const
 {
-    return ( ( ( r() << 24 ) & 0xFF000000 ) | ( ( g() << 16 ) & 0x00FF0000 ) | ( ( b() << 8 ) & 0x0000FF00 ) | ( a() & 0x000000FF ) );
+    return ( ( ( a() << 24 ) & 0xFF000000 ) | ( ( b() << 16 ) & 0x00FF0000 ) | ( ( g() << 8 ) & 0x0000FF00 ) | ( r() & 0x000000FF ) );
 }
 
 RGBA RGBA::unpack( int v )

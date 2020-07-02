@@ -954,6 +954,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , turn( 0 )
     , _colorCycle( 0 )
     , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
+    , _contourColor( 110 )
+    , _brightLandType( false )
 {
     const Settings & conf = Settings::Get();
     bool pda = conf.QVGA();
@@ -972,7 +974,14 @@ Battle::Interface::Interface( Arena & a, s32 center )
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
     bool light = true;
 
-    switch ( tile.GetGround() ) {
+    const int groundType = tile.GetGround();
+    _brightLandType
+        = ( groundType == Maps::Ground::SNOW || groundType == Maps::Ground::DESERT || groundType == Maps::Ground::WASTELAND || groundType == Maps::Ground::BEACH );
+    if ( _brightLandType ) {
+        _contourColor = 108;
+    }
+
+    switch ( groundType ) {
     case Maps::Ground::DESERT:
         icn_cbkg = ICN::CBKGDSRT;
         light = false;
@@ -1125,6 +1134,17 @@ void Battle::Interface::CycleColors()
         _colorCycle = 0;
 
     _creaturePalette = PAL::GetCyclingPalette( _colorCycle );
+
+    ++_contourCycle;
+
+    if ( _brightLandType ) {
+        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
+        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
+    }
+    else {
+        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
+        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
+    }
 }
 
 void Battle::Interface::Redraw( void )
@@ -1311,7 +1331,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 spmon2.Reset();
             }
             else {
-                spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
+                spmon2 = Sprite( b.GetContour( _contourColor ), 0, 0 );
             }
         }
 
@@ -2852,6 +2872,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            bool redrawBattleField = false;
+
             if ( attacker != NULL ) {
                 if ( attacker->isFinishAnimFrame() ) {
                     attacker->SwitchAnimation( Monster_Info::STATIC );
@@ -2859,15 +2881,22 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 else {
                     attacker->IncreaseAnimFrame();
                 }
+
+                redrawBattleField = true;
+                cursor.Hide();
+                Redraw();
             }
 
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
+            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
                     TargetInfo & target = *it;
                     const Rect & pos = target.defender->GetRectPosition();
 
-                    cursor.Hide();
-                    Redraw();
+                    if ( !redrawBattleField ) {
+                        redrawBattleField = true;
+                        cursor.Hide();
+                        Redraw();
+                    }
 
                     // extended damage info
                     if ( conf.ExtBattleShowDamage() && target.killed && ( pos.y - py ) > topleft.y ) {
@@ -2875,11 +2904,20 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                         Text txt( msg, Font::YELLOW_SMALL );
                         txt.Blit( pos.x + ( pos.w - txt.w() ) / 2, pos.y - py );
                     }
-
-                    cursor.Show();
-                    display.Flip();
-                    target.defender->IncreaseAnimFrame();
                 }
+            }
+
+            if ( redrawBattleField ) {
+                cursor.Show();
+                display.Flip();
+            }
+
+            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                if ( ( *it ).defender ) {
+                    it->defender->IncreaseAnimFrame();
+                }
+            }
+
             py += ( conf.QVGA() ? 5 : 10 );
         }
     }
@@ -2962,6 +3000,10 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     Point destPos( pos1.x, pos1.y );
     Point targetPos( pos2.x, pos2.y );
+
+    if ( unit.isWide() && targetPos.x > destPos.x ) {
+        targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
+    }
 
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
     StringReplace( msg, "%{monster}", unit.GetName() );
