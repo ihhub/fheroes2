@@ -250,8 +250,7 @@ Surface Battle::Unit::GetContour( uint8_t colorId ) const
     }
 
     Surface contour( sprite.GetSize(), sprite.GetFormat() );
-    // TODO: replace this RGBA trick by palette color ID
-    AGG::DrawContour( contour, RGBA( 255, 0, 0xe0, 0xe0 ).pack(), msi.icn_file, frameId, isReflected );
+    AGG::DrawContour( contour, PAL::GetPaletteColor( colorId ).pack(), msi.icn_file, frameId, isReflected );
 
     return contour;
 }
