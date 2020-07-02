@@ -1925,8 +1925,13 @@ namespace AI
                     cursor.Hide();
                     hero.Move();
 
-                    I.GetGameArea().SetCenter( hero.GetCenter() );
+                    Point movement( hero.MovementDirection() );
+                    const int moveStep = hero.GetMoveStep();
+                    movement.x *= moveStep;
+                    movement.y *= moveStep;
+                    I.GetGameArea().ShiftCenter( movement );
                     I.Redraw( REDRAW_GAMEAREA );
+
                     cursor.Show();
                     display.Flip();
                 }
