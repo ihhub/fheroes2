@@ -954,6 +954,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , turn( 0 )
     , _colorCycle( 0 )
     , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
+    , _contourColor( 110 )
+    , _brightLandType( false )
 {
     const Settings & conf = Settings::Get();
     bool pda = conf.QVGA();
@@ -972,7 +974,14 @@ Battle::Interface::Interface( Arena & a, s32 center )
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
     bool light = true;
 
-    switch ( tile.GetGround() ) {
+    const int groundType = tile.GetGround();
+    _brightLandType
+        = ( groundType == Maps::Ground::SNOW || groundType == Maps::Ground::DESERT || groundType == Maps::Ground::WASTELAND || groundType == Maps::Ground::BEACH );
+    if ( _brightLandType ) {
+        _contourColor = 108;
+    }
+
+    switch ( groundType ) {
     case Maps::Ground::DESERT:
         icn_cbkg = ICN::CBKGDSRT;
         light = false;
@@ -1125,6 +1134,17 @@ void Battle::Interface::CycleColors()
         _colorCycle = 0;
 
     _creaturePalette = PAL::GetCyclingPalette( _colorCycle );
+
+    ++_contourCycle;
+
+    if ( _brightLandType ) {
+        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
+        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
+    }
+    else {
+        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
+        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
+    }
 }
 
 void Battle::Interface::Redraw( void )
@@ -1311,7 +1331,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 spmon2.Reset();
             }
             else {
-                spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
+                spmon2 = Sprite( b.GetContour( _contourColor ), 0, 0 );
             }
         }
 
