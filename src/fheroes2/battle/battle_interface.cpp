@@ -975,14 +975,13 @@ Battle::Interface::Interface( Arena & a, s32 center )
     bool light = true;
 
     const int groundType = tile.GetGround();
-    _brightLandType = ( groundType == Maps::Ground::SNOW || groundType == Maps::Ground::DESERT || groundType == Maps::Ground::WASTELAND
-                        || groundType == Maps::Ground::BEACH );
+    _brightLandType
+        = ( groundType == Maps::Ground::SNOW || groundType == Maps::Ground::DESERT || groundType == Maps::Ground::WASTELAND || groundType == Maps::Ground::BEACH );
     if ( _brightLandType ) {
         _contourColor = 108;
     }
 
-
-    switch ( tile.GetGround() ) {
+    switch ( groundType ) {
     case Maps::Ground::DESERT:
         icn_cbkg = ICN::CBKGDSRT;
         light = false;
@@ -1139,12 +1138,12 @@ void Battle::Interface::CycleColors()
     ++_contourCycle;
 
     if ( _brightLandType ) {
-        static const uint8_t contourColorTable[] = { 108, 115, 122, 129, 122, 115 };
-        _contourColor = contourColorTable[ ( _contourCycle / 4 ) % sizeof( contourColorTable )];
+        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
+        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
     }
     else {
-        static const uint8_t contourColorTable[] = { 110, 114, 118, 122, 126, 122, 118, 114 };
-        _contourColor = contourColorTable[ ( _contourCycle / 4 ) % sizeof( contourColorTable )];
+        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
+        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
     }
 }
 
