@@ -2414,11 +2414,14 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 
 void Battle::Interface::AnimateOpponents( OpponentSprite * target )
 {
+    if ( target == NULL ) // nothing to animate
+        return;
+    
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
 
-    while ( le.HandleEvents() && target && !target->isFinishFrame() ) {
+    while ( le.HandleEvents() && !target->isFinishFrame() ) {
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
             target->IncreaseAnimFrame();
             cursor.Hide();
