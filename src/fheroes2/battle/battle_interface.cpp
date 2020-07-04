@@ -2416,7 +2416,7 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
 {
     if ( target == NULL ) // nothing to animate
         return;
-    
+
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
