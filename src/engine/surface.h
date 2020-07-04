@@ -139,7 +139,7 @@ public:
 
     void Fill( const RGBA & );
     void FillRect( const Rect &, const RGBA & );
-    void DrawLine( const Point &, const Point &, const RGBA & );
+    void DrawLine( const Point & p1, const Point & p2, const RGBA & color, const Rect & roi = Rect() );
     void DrawPoint( const Point &, const RGBA & );
     void DrawRect( const Rect &, const RGBA & );
     void DrawBorder( const RGBA &, bool solid = true );

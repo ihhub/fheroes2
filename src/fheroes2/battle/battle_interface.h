@@ -236,6 +236,7 @@ namespace Battle
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionLightningBoltSpell( Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
+        void RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size );
 
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
@@ -295,6 +296,9 @@ namespace Battle
 
         uint32_t _colorCycle;
         std::vector<uint8_t> _creaturePalette;
+        uint8_t _contourColor;
+        bool _brightLandType; // used to determin current monster contour cycling colors
+        uint32_t _contourCycle;
 
         const Unit * _currentUnit;
         const Unit * _movingUnit;

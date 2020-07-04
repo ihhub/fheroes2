@@ -237,7 +237,7 @@ int RGBA::a( void ) const
 
 int RGBA::pack( void ) const
 {
-    return ( ( ( r() << 24 ) & 0xFF000000 ) | ( ( g() << 16 ) & 0x00FF0000 ) | ( ( b() << 8 ) & 0x0000FF00 ) | ( a() & 0x000000FF ) );
+    return ( ( ( a() << 24 ) & 0xFF000000 ) | ( ( b() << 16 ) & 0x00FF0000 ) | ( ( g() << 8 ) & 0x0000FF00 ) | ( r() & 0x000000FF ) );
 }
 
 RGBA RGBA::unpack( int v )
@@ -1404,7 +1404,7 @@ void Surface::FillRect( const Rect & rect, const RGBA & col )
     SDL_FillRect( surface, &dstrect, MapRGB( col ) );
 }
 
-void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
+void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color, const Rect & roi )
 {
     int x1 = p1.x;
     int y1 = p1.y;
@@ -1415,11 +1415,13 @@ void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
     const int dx = std::abs( x2 - x1 );
     const int dy = std::abs( y2 - y1 );
 
+    const bool isValidRoi = roi.w > 0 && roi.h > 0;
+
     Lock();
-    const int minX = 0;
-    const int minY = 0;
-    const int maxX = w();
-    const int maxY = h();
+    const int minX = isValidRoi ? roi.x : 0;
+    const int minY = isValidRoi ? roi.y : 0;
+    const int maxX = isValidRoi ? roi.x + roi.w : w();
+    const int maxY = isValidRoi ? roi.y + roi.h : h();
     if ( dx > dy ) {
         int ns = std::div( dx, 2 ).quot;
 

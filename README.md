@@ -10,7 +10,7 @@ Direct continuation of free implementation of Heroes of the Might and Magic II e
 
 Copyright
 ---------------------------
-All rights for the original game and its resources belong to former The 3DO Company. These rights were transferred to Ubisoft. We do not encourage and do not support any form of illegal usage of the original game. We strongly advise to purchase the original game on **GOG** or **Steam** platforms. Alternatively, you can download a free demo version of the game.
+All rights for the original game and its resources belong to former The 3DO Company. These rights were transferred to Ubisoft. We do not encourage and do not support any form of illegal usage of the original game. We strongly advise to purchase the original game on [**GOG**](https://www.gog.com) or [**Ubisoft Store**](https://store.ubi.com) platforms. Alternatively, you can download a free demo version of the game.
 
 Download
 ---------------------------
