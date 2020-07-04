@@ -3713,13 +3713,11 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
                         roi.h = drawRoi.h;
                 }
 
-                cursor.Hide();
-                Redraw();
+                RedrawPartialStart();
 
-                RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), display, Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+                RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), _mainSurface, Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
 
-                cursor.Show();
-                display.Flip();
+                RedrawPartialFinish();
             }
         }
     }
@@ -3762,33 +3760,27 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
     const Rect & pos = target.GetRectPosition();
     const Point endPos( pos.x + pos.w / 2, pos.y );
 
-    const Rect & rectArea = border.GetArea();
-    const Point roiOffset( rectArea.x, rectArea.y );
-
     std::vector<Point> points;
-    points.push_back( startingPos - roiOffset );
-    points.push_back( endPos - roiOffset );
+    points.push_back( startingPos );
+    points.push_back( endPos );
 
-    RedrawLightningOnTargets( points, rectArea );
+    RedrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
 {
-    const Rect & rectArea = border.GetArea();
-    const Point roiOffset( rectArea.x, rectArea.y );
-
     std::vector<Point> points;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
         const Rect & pos = it->defender->GetRectPosition();
 
         if ( points.empty() ) {
-            points.push_back( Point( pos.x + pos.w / 2 - roiOffset.x, 0 ) );
+            points.push_back( Point( pos.x + pos.w / 2, 0 ) );
         }
 
-        points.push_back( Point( pos.x + pos.w / 2, pos.y ) - roiOffset );
+        points.push_back( Point( pos.x + pos.w / 2, pos.y ) );
     }
 
-    RedrawLightningOnTargets( points, rectArea );
+    RedrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
 void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
