@@ -234,6 +234,7 @@ namespace Battle
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionLightningBoltSpell( Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
+        void RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size );
 
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );

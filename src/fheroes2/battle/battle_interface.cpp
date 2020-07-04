@@ -3743,21 +3743,117 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     status.SetMessage( _( "MirrorImage created" ), true );
 }
 
-void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
+
+void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi )
 {
+    if ( points.size() < 2 )
+        return;
+
+    const Point roiOffset( drawRoi.x, drawRoi.y );
+
     Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-
-    const Rect & pos = target.GetRectPosition();
-    const Rect & rectArea = border.GetArea();
-
-    uint32_t frame = 0;
-
+    Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::WAR_NONE );
 
-    AGG::PlaySound( M82::FromSpell( Spell::LIGHTNINGBOLT ) );
+    for ( size_t i = 1; i < points.size(); ++i ) {
+        const Point & startingPos = points[i - 1];
+        const Point & endPos = points[i];
 
+        const std::vector<std::pair<LightningPoint, LightningPoint> > & lightningBolt = GenerateLightning( startingPos + roiOffset, endPos + roiOffset );
+        Rect roi;
+        const bool isHorizontalBolt = std::abs( startingPos.x - endPos.x ) > std::abs( startingPos.y - endPos.y );
+        const bool isForwardDirection = isHorizontalBolt ? ( endPos.x > startingPos.x ) : ( endPos.y > startingPos.y );
+        const int animationStep = 100;
+
+        if ( isHorizontalBolt ) {
+            roi.h = drawRoi.h;
+            if ( isForwardDirection ) {
+                roi.x = 0;
+                roi.w = startingPos.x;
+            }
+            else {
+                roi.x = startingPos.x;
+                roi.w = drawRoi.w - startingPos.x;
+            }
+        }
+        else {
+            roi.w = drawRoi.w;
+            if ( isForwardDirection ) {
+                roi.y = 0;
+                roi.h = startingPos.y;
+            }
+            else {
+                roi.y = startingPos.y;
+                roi.h = drawRoi.h - startingPos.y;
+            }
+        }
+
+        while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.w < drawRoi.w ) || ( !isHorizontalBolt && roi.h < drawRoi.h ) ) ) {
+            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+                if ( isHorizontalBolt ) {
+                    if ( isForwardDirection ) {
+                        roi.w += animationStep;
+                    }
+                    else {
+                        roi.w += animationStep;
+                        roi.x -= animationStep;
+                    }
+
+                    if ( roi.x < 0 )
+                        roi.x = 0;
+                    if ( roi.w > drawRoi.w )
+                        roi.w = drawRoi.w;
+                }
+                else {
+                    if ( isForwardDirection ) {
+                        roi.h += animationStep;
+                    }
+                    else {
+                        roi.h += animationStep;
+                        roi.y -= animationStep;
+                    }
+
+                    if ( roi.y < 0 )
+                        roi.y = 0;
+                    if ( roi.h > drawRoi.h )
+                        roi.h = drawRoi.h;
+                }
+
+                cursor.Hide();
+                Redraw();
+
+                RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), display, Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+
+                cursor.Show();
+                display.Flip();
+            }
+        }
+    }
+
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
+        CheckGlobalEvents( le );
+
+        if ( ( frame == 0 ) || Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            cursor.Hide();
+            Redraw();
+
+            Sprite sprite = AGG::GetICN( ICN::SPARKS, frame, false );
+
+            for ( size_t i = 1; i < points.size(); ++i ) {
+                sprite.Blit( points[i] - Point( sprite.w() / 2, 0 ) + roiOffset );
+            }
+            cursor.Show();
+            display.Flip();
+
+            ++frame;
+        }
+    }
+}
+
+void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
+{
     Point startingPos;
     const HeroBase * current_commander = arena.GetCurrentCommander();
 
@@ -3772,101 +3868,40 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 
     _currentUnit = NULL;
 
-    Sprite sprite = AGG::GetICN( ICN::SPARKS, 0, false );
-    const Point offset( sprite.x() + pos.x, sprite.y() + pos.y );
-    Point endPos( offset.x + pos.w / 2, offset.y );
+    const Rect & pos = target.GetRectPosition();
+    const Point endPos( pos.x + pos.w / 2, pos.y );
 
-    const std::vector<std::pair<LightningPoint, LightningPoint> > & lightningBolt = GenerateLightning( startingPos, endPos );
-    Rect roi;
-    const bool isHorizontalBolt = std::abs( startingPos.x - endPos.x ) > std::abs( startingPos.y - endPos.y );
-    const bool isForwardDirection = isHorizontalBolt ? ( endPos.x > startingPos.x ) : ( endPos.y > startingPos.y );
-    const int animationStep = 100;
+    const Rect & rectArea = border.GetArea();
+    const Point roiOffset( rectArea.x, rectArea.y );
 
-    if ( isHorizontalBolt ) {
-        roi.h = display.h();
-        if ( isForwardDirection ) {
-            roi.x = 0;
-            roi.w = startingPos.x;
-        }
-        else {
-            roi.x = startingPos.x;
-            roi.w = display.w() - startingPos.x;
-        }
-    }
-    else {
-        roi.w = display.w();
-        roi.y = 0;
-    }
+    std::vector<Point> points;
+    points.push_back( startingPos - roiOffset );
+    points.push_back( endPos - roiOffset );
 
-    while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.w < display.w() ) || ( !isHorizontalBolt && roi.h < display.h() ) ) ) {
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            if ( isHorizontalBolt ) {
-                if ( isForwardDirection ) {
-                    roi.w += animationStep;
-                }
-                else {
-                    roi.w += animationStep;
-                    roi.x -= animationStep;
-                }
+    AGG::PlaySound( M82::FromSpell( Spell::LIGHTNINGBOLT ) );
 
-                if ( roi.x < 0 )
-                    roi.x = 0;
-                if ( roi.w > display.w() )
-                    roi.w = display.w();
-            }
-            else {
-                if ( isForwardDirection ) {
-                    roi.h += animationStep;
-                }
-                else {
-                    roi.h += animationStep;
-                    roi.y -= animationStep;
-                }
-
-                if ( roi.y < 0 )
-                    roi.y = 0;
-                if ( roi.h > display.h() )
-                    roi.h = display.h();
-            }
-
-            cursor.Hide();
-            Redraw();
-
-            RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), display, roi );
-
-            cursor.Show();
-            display.Flip();
-        }
-    }
-
-    bool firstFrame = true;
-
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
-        CheckGlobalEvents( le );
-
-        if ( firstFrame || Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
-
-            sprite = AGG::GetICN( ICN::SPARKS, frame, false );
-
-            sprite.Blit( endPos - Point( sprite.w() / 2, 0 ) );
-            cursor.Show();
-            display.Flip();
-
-            ++frame;
-            firstFrame = false;
-        }
-    }
+    RedrawLightningOnTargets( points, rectArea );
 }
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
 {
-    // FIX: ChainLightning draw
-    // AGG::PlaySound(targets.size() > 1 ? M82::CHAINLTE : M82::LIGHTBLT);
+    const Rect & rectArea = border.GetArea();
+    const Point roiOffset( rectArea.x, rectArea.y );
 
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        RedrawActionLightningBoltSpell( *( it->defender ) );
+    std::vector<Point> points;
+    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
+        const Rect & pos = it->defender->GetRectPosition();
+
+        if ( points.empty() ) {
+            points.push_back( Point( pos.x + pos.w / 2 - roiOffset.x, 0 ) );
+        }
+
+        points.push_back( Point( pos.x + pos.w / 2, pos.y ) - roiOffset );
+    }
+
+    AGG::PlaySound( targets.size() > 1 ? M82::CHAINLTE : M82::LIGHTBLT );
+
+    RedrawLightningOnTargets( points, rectArea );
 }
 
 void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
