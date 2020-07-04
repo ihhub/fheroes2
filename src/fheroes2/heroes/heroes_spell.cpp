@@ -284,6 +284,11 @@ bool ActionSpellIdentifyHero( Heroes & hero )
 
 bool ActionSpellSummonBoat( Heroes & hero )
 {
+    if ( hero.isShipMaster() ) {
+        DialogSpellFailed( Spell::SUMMONBOAT );
+        return true;
+    }
+
     const s32 center = hero.GetIndex();
 
     // find water
