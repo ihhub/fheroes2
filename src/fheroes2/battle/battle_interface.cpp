@@ -64,8 +64,8 @@ namespace
         const double angle = src.getAngle( dst );
 
         uint32_t iterationCount = ( distance + 50 ) / 100;
-        if ( iterationCount < 2 )
-            iterationCount = 2;
+        if ( iterationCount < 3 )
+            iterationCount = 3;
         if ( iterationCount > 5 )
             iterationCount = 5;
 
@@ -117,25 +117,30 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color, const Rect & roi = Rect() )
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color, Surface & surface, const Rect & roi = Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
             const Point & first = lightning[i].first.point;
-            const Point second = lightning[i].second.point;
+            const Point & second = lightning[i].second.point;
+            const bool isHorizontal = std::abs( first.x - second.x ) >= std::abs( first.y - second.y );
+            const int xOffset = isHorizontal ? 0 : 1;
+            const int yOffset = isHorizontal ? 1 : 0;
 
-            Display::Get().DrawLine( first, second, color, roi );
+            surface.DrawLine( first, second, color, roi );
             for ( uint32_t thickness = 1; thickness < lightning[i].second.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
+                const int x = xOffset * offset;
+                const int y = yOffset * offset;
 
-                Display::Get().DrawLine( Point( first.x, first.y + offset ), Point( second.x, second.y + offset ), color, roi );
+                surface.DrawLine( Point( first.x + x, first.y + y ), Point( second.x + x, second.y + y ), color, roi );
             }
 
             for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
 
-                Display::Get().DrawLine( Point( first.x, first.y + offset ), second, color, roi );
+                surface.DrawLine( Point( first.x + xOffset * offset, first.y + yOffset * offset ), second, color, roi );
             }
         }
     }
@@ -3756,7 +3761,7 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
     }
 
     while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.w < display.w() ) || ( !isHorizontalBolt && roi.h < display.h() ) ) ) {
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             if ( isHorizontalBolt ) {
                 if ( isForwardDirection ) {
                     roi.w += animationStep;
@@ -3789,20 +3794,19 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
             cursor.Hide();
             Redraw();
 
-            RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), roi );
+            RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), display, roi );
 
             cursor.Show();
             display.Flip();
         }
     }
 
-    target.SwitchAnimation( Monster_Info::WNCE );
     bool firstFrame = true;
 
     while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
         CheckGlobalEvents( le );
 
-        if ( firstFrame || Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( firstFrame || Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
             Redraw();
 
@@ -3816,9 +3820,6 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
             firstFrame = false;
         }
     }
-
-    target.SwitchAnimation( Monster_Info::STATIC );
-    _currentUnit = NULL;
 }
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
