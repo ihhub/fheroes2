@@ -64,8 +64,8 @@ namespace
         const double angle = src.getAngle( dst );
 
         uint32_t iterationCount = ( distance + 50 ) / 100;
-        if ( iterationCount < 2 )
-            iterationCount = 2;
+        if ( iterationCount < 3 )
+            iterationCount = 3;
         if ( iterationCount > 5 )
             iterationCount = 5;
 
@@ -117,25 +117,30 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color )
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color, Surface & surface, const Rect & roi = Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
             const Point & first = lightning[i].first.point;
-            const Point second = lightning[i].second.point;
+            const Point & second = lightning[i].second.point;
+            const bool isHorizontal = std::abs( first.x - second.x ) >= std::abs( first.y - second.y );
+            const int xOffset = isHorizontal ? 0 : 1;
+            const int yOffset = isHorizontal ? 1 : 0;
 
-            Display::Get().DrawLine( first, second, color );
+            surface.DrawLine( first, second, color, roi );
             for ( uint32_t thickness = 1; thickness < lightning[i].second.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
+                const int x = xOffset * offset;
+                const int y = yOffset * offset;
 
-                Display::Get().DrawLine( Point( first.x, first.y + offset ), Point( second.x, second.y + offset ), color );
+                surface.DrawLine( Point( first.x + x, first.y + y ), Point( second.x + x, second.y + y ), color, roi );
             }
 
             for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
 
-                Display::Get().DrawLine( Point( first.x, first.y + offset ), second, color );
+                surface.DrawLine( Point( first.x + xOffset * offset, first.y + yOffset * offset ), second, color, roi );
             }
         }
     }
@@ -3766,32 +3771,93 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
     }
 
     _currentUnit = NULL;
-    target.SwitchAnimation( Monster_Info::WNCE );
 
     Sprite sprite = AGG::GetICN( ICN::SPARKS, 0, false );
     const Point offset( sprite.x() + pos.x, sprite.y() + pos.y );
     Point endPos( offset.x + pos.w / 2, offset.y );
 
+    const std::vector<std::pair<LightningPoint, LightningPoint> > & lightningBolt = GenerateLightning( startingPos, endPos );
+    Rect roi;
+    const bool isHorizontalBolt = std::abs( startingPos.x - endPos.x ) > std::abs( startingPos.y - endPos.y );
+    const bool isForwardDirection = isHorizontalBolt ? ( endPos.x > startingPos.x ) : ( endPos.y > startingPos.y );
+    const int animationStep = 100;
+
+    if ( isHorizontalBolt ) {
+        roi.h = display.h();
+        if ( isForwardDirection ) {
+            roi.x = 0;
+            roi.w = startingPos.x;
+        }
+        else {
+            roi.x = startingPos.x;
+            roi.w = display.w() - startingPos.x;
+        }
+    }
+    else {
+        roi.w = display.w();
+        roi.y = 0;
+    }
+
+    while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.w < display.w() ) || ( !isHorizontalBolt && roi.h < display.h() ) ) ) {
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            if ( isHorizontalBolt ) {
+                if ( isForwardDirection ) {
+                    roi.w += animationStep;
+                }
+                else {
+                    roi.w += animationStep;
+                    roi.x -= animationStep;
+                }
+
+                if ( roi.x < 0 )
+                    roi.x = 0;
+                if ( roi.w > display.w() )
+                    roi.w = display.w();
+            }
+            else {
+                if ( isForwardDirection ) {
+                    roi.h += animationStep;
+                }
+                else {
+                    roi.h += animationStep;
+                    roi.y -= animationStep;
+                }
+
+                if ( roi.y < 0 )
+                    roi.y = 0;
+                if ( roi.h > display.h() )
+                    roi.h = display.h();
+            }
+
+            cursor.Hide();
+            Redraw();
+
+            RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), display, roi );
+
+            cursor.Show();
+            display.Flip();
+        }
+    }
+
+    bool firstFrame = true;
+
     while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( firstFrame || Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
             Redraw();
 
             sprite = AGG::GetICN( ICN::SPARKS, frame, false );
-            RedrawLightning( GenerateLightning( startingPos, endPos ), RGBA( 0xff, 0xff, 0 ) );
 
-            sprite.Blit( endPos );
+            sprite.Blit( endPos - Point( sprite.w() / 2, 0 ) );
             cursor.Show();
             display.Flip();
 
             ++frame;
+            firstFrame = false;
         }
     }
-
-    target.SwitchAnimation( Monster_Info::STATIC );
-    _currentUnit = NULL;
 }
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
