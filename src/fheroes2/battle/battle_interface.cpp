@@ -3743,7 +3743,6 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     status.SetMessage( _( "MirrorImage created" ), true );
 }
 
-
 void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi )
 {
     if ( points.size() < 2 )
@@ -3755,6 +3754,8 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::WAR_NONE );
+
+    AGG::PlaySound( points.size() > 2 ? M82::CHAINLTE : M82::LIGHTBLT );
 
     for ( size_t i = 1; i < points.size(); ++i ) {
         const Point & startingPos = points[i - 1];
@@ -3878,8 +3879,6 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
     points.push_back( startingPos - roiOffset );
     points.push_back( endPos - roiOffset );
 
-    AGG::PlaySound( M82::FromSpell( Spell::LIGHTNINGBOLT ) );
-
     RedrawLightningOnTargets( points, rectArea );
 }
 
@@ -3898,8 +3897,6 @@ void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & tar
 
         points.push_back( Point( pos.x + pos.w / 2, pos.y ) - roiOffset );
     }
-
-    AGG::PlaySound( targets.size() > 1 ? M82::CHAINLTE : M82::LIGHTBLT );
 
     RedrawLightningOnTargets( points, rectArea );
 }
