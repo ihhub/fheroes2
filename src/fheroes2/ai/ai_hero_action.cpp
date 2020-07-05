@@ -1850,7 +1850,7 @@ namespace AI
         return false;
     }
 
-    uint32_t AIGetAllianceColors(const Heroes& hero)
+    uint32_t AIGetAllianceColors( const Heroes & hero )
     {
         const Settings & conf = Settings::Get();
 
@@ -1875,7 +1875,7 @@ namespace AI
         return colors;
     }
 
-    bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors, bool checkFullPath = false )
+    bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors )
     {
         // get result
         const s32 index_from = hero.GetIndex();
@@ -1886,14 +1886,7 @@ namespace AI
                 return true;
             }
 
-            if ( checkFullPath ) {
-                for ( Route::Path::const_iterator it = path.begin(); it != path.end(); ++it ) {
-                    if ( !world.GetTiles( it->GetIndex() ).isFog( colors ) ) {
-                        return true;
-                    }
-                }
-            }
-            else if ( path.isValid() && !world.GetTiles( path.back().GetIndex() ).isFog( colors ) ) {
+            if ( path.isValid() && !world.GetTiles( path.front().GetIndex() ).isFog( colors ) ) {
                 return true;
             }
         }
@@ -1912,10 +1905,10 @@ namespace AI
             Interface::GameArea & gameArea = I.GetGameArea();
 
             const uint32_t colors = AIGetAllianceColors( hero );
-            const bool hiddenMovement = Settings::Get().AIMoveSpeed() == 0 || !AIHeroesShowAnimation( hero, colors, true );
             const int moveStep = hero.GetMoveStep();
 
-            if ( !hiddenMovement ) {
+            // center on hero if will be visible
+            if ( !AIHeroesShowAnimation( hero, colors ) ) {
                 gameArea.SetCenter( hero.GetCenter() );
             }
 
@@ -1948,10 +1941,6 @@ namespace AI
                     ++frame;
                 }
             }
-
-            // 0.2 sec delay for show enemy hero position
-            if ( !hero.isFreeman() && !hiddenMovement )
-                DELAY( 200 );
 
             hero.SetMove( false );
         }
