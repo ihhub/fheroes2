@@ -1722,10 +1722,9 @@ bool Surface::GammaCorrection( double a, double gamma )
 
     // We precalculate all values and store them in lookup table
     std::vector<uint8_t> value( 256, 255u );
-    
+
     for ( uint16_t i = 0; i < 256; ++i ) {
-        double data = a * pow( i / 255.0, gamma ) * 255 + 0.5;
-    
+        const double data = a * pow( i / 255.0, gamma ) * 255 + 0.5;
         if ( data < 256 )
             value[i] = static_cast<uint8_t>( data );
     }
