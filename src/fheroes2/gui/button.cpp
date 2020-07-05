@@ -110,9 +110,9 @@ void Button::SetSprite( const Surface & s1, const Surface & s2 )
 void Button::SetDisable( bool f )
 {
     if ( f )
-        flags |= ( BTN_DISABLE );
+        flags |= ( BTN_DISABLE | BTN_PRESSED );
     else
-        flags &= ~( BTN_DISABLE );
+        flags &= ~( BTN_DISABLE | BTN_PRESSED );
 }
 
 void Button::SetVisible( bool isVisible )
@@ -165,9 +165,7 @@ void Button::Draw( void )
         localcursor = true;
     }
 
-    if ( !isEnable() )
-        sf2.Blit( x + 1, y - 1, Display::Get() );
-    else if ( isPressed() )
+    if ( isPressed() )
         sf2.Blit( x, y, Display::Get() );
     else
         sf1.Blit( x, y, Display::Get() );
