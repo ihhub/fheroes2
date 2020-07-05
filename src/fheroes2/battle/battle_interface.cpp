@@ -1084,7 +1084,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
         listlog = new StatusListBox();
 
     if ( listlog )
-        listlog->SetPosition( area.x, area.y + area.h - 37 );
+        listlog->SetPosition( area.x, area.y + area.h - status.h );
     status.SetLogs( listlog );
 
     // opponents
