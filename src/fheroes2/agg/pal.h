@@ -40,6 +40,7 @@ namespace PAL
         TAN, // puzzle
         NO_CYCLE,
         MIRROR_IMAGE,
+        DARKENING, // for disabled buttons
         CUSTOM
     };
 

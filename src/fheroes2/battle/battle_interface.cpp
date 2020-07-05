@@ -64,8 +64,8 @@ namespace
         const double angle = src.getAngle( dst );
 
         uint32_t iterationCount = ( distance + 50 ) / 100;
-        if ( iterationCount < 2 )
-            iterationCount = 2;
+        if ( iterationCount < 3 )
+            iterationCount = 3;
         if ( iterationCount > 5 )
             iterationCount = 5;
 
@@ -117,25 +117,31 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color )
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, const RGBA & color, Surface & surface, const Rect & roi = Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
             const Point & first = lightning[i].first.point;
-            const Point second = lightning[i].second.point;
+            const Point & second = lightning[i].second.point;
+            const bool isHorizontal = std::abs( first.x - second.x ) >= std::abs( first.y - second.y );
+            const int xOffset = isHorizontal ? 0 : 1;
+            const int yOffset = isHorizontal ? 1 : 0;
 
-            Display::Get().DrawLine( first, second, color );
+            surface.DrawLine( first, second, color, roi );
+
             for ( uint32_t thickness = 1; thickness < lightning[i].second.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
+                const int x = xOffset * offset;
+                const int y = yOffset * offset;
 
-                Display::Get().DrawLine( Point( first.x, first.y + offset ), Point( second.x, second.y + offset ), color );
+                surface.DrawLine( Point( first.x + x, first.y + y ), Point( second.x + x, second.y + y ), color, roi );
             }
 
             for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
 
-                Display::Get().DrawLine( Point( first.x, first.y + offset ), second, color );
+                surface.DrawLine( Point( first.x + xOffset * offset, first.y + yOffset * offset ), second, color, roi );
             }
         }
     }
@@ -608,7 +614,7 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
     return pos;
 }
 
-void Battle::OpponentSprite::Redraw( void ) const
+void Battle::OpponentSprite::Redraw( Surface & dst ) const
 {
     const Sprite & hero = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
 
@@ -622,9 +628,9 @@ void Battle::OpponentSprite::Redraw( void ) const
     }
 
     if ( reflect )
-        hero.Blit( offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y() );
+        hero.Blit( offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y(), dst );
     else
-        hero.Blit( offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
+        hero.Blit( offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y(), dst );
 }
 
 void Battle::OpponentSprite::Update()
@@ -787,6 +793,8 @@ void Battle::ArmiesOrder::Redraw( const Unit * current )
 
 Battle::Interface::Interface( Arena & a, s32 center )
     : arena( a )
+    , _surfaceInnerArea( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT )
+    , _mainSurface( Size( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT ), false )
     , icn_cbkg( ICN::UNKNOWN )
     , icn_frng( ICN::UNKNOWN )
     , humanturn_spell( Spell::NONE )
@@ -805,17 +813,18 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , turn( 0 )
     , _colorCycle( 0 )
     , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
+    , _contourColor( 110 )
+    , _brightLandType( false )
 {
     const Settings & conf = Settings::Get();
-    bool pda = conf.QVGA();
 
     Cursor::Get().Hide();
 
     // border
     Display & display = Display::Get();
-    const u32 arenaw = pda ? 320 : 640;
-    const u32 arenah = pda ? ( display.h() < 240 ? display.h() : 240 ) : 480;
-    border.SetPosition( ( display.w() - arenaw ) / 2 - BORDERWIDTH, ( display.h() - arenah ) / 2 - BORDERWIDTH, arenaw, arenah );
+
+    _interfacePosition = Rect( ( display.w() - Display::DEFAULT_WIDTH ) / 2, ( display.h() - Display::DEFAULT_HEIGHT ) / 2, _surfaceInnerArea.w, _surfaceInnerArea.h );
+    border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
 
     // cover
     bool trees = Maps::ScanAroundObject( center, MP2::OBJ_TREES ).size();
@@ -823,7 +832,14 @@ Battle::Interface::Interface( Arena & a, s32 center )
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
     bool light = true;
 
-    switch ( tile.GetGround() ) {
+    const int groundType = tile.GetGround();
+    _brightLandType
+        = ( groundType == Maps::Ground::SNOW || groundType == Maps::Ground::DESERT || groundType == Maps::Ground::WASTELAND || groundType == Maps::Ground::BEACH );
+    if ( _brightLandType ) {
+        _contourColor = 108;
+    }
+
+    switch ( groundType ) {
     case Maps::Ground::DESERT:
         icn_cbkg = ICN::CBKGDSRT;
         light = false;
@@ -881,60 +897,40 @@ Battle::Interface::Interface( Arena & a, s32 center )
     sf_cursor = DrawHexagonShadow( 0x60 );
     sf_shadow = DrawHexagonShadow( 0x30 );
 
-    // buttons
+    btn_auto.SetSprite( ICN::TEXTBAR, 4, 5 );
+    btn_settings.SetSprite( ICN::TEXTBAR, 6, 7 );
+
+    // opponents
+    opponent1 = arena.GetCommander1() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander1(), false ) : NULL;
+    opponent2 = arena.GetCommander2() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander2(), true ) : NULL;
+
+    if ( Arena::GetCastle() )
+        main_tower = Rect( 570, 145, 70, 70 );
+
     const Rect & area = border.GetArea();
 
-    if ( conf.PocketPC() ) {
-        btn_auto.SetSprite( ICN::BATTLEAUTO, 0, 1 );
-        btn_settings.SetSprite( ICN::BATTLESETS, 0, 1 );
-
-        btn_auto.SetPos( area.x, area.y );
-        btn_settings.SetPos( area.x, area.y + area.h - btn_settings.h );
-    }
-    else {
-        btn_auto.SetSprite( ICN::TEXTBAR, 4, 5 );
-        btn_settings.SetSprite( ICN::TEXTBAR, 6, 7 );
-
-        btn_auto.SetPos( area.x, area.y + area.h - btn_settings.h - btn_auto.h );
-        btn_settings.SetPos( area.x, area.y + area.h - btn_settings.h );
-    }
+    btn_auto.SetPos( area.x, area.y + area.h - btn_settings.h - btn_auto.h );
+    btn_settings.SetPos( area.x, area.y + area.h - btn_settings.h );
 
     if ( conf.ExtBattleSoftWait() ) {
-        if ( conf.PocketPC() ) {
-            btn_wait.SetSprite( ICN::BATTLEWAIT, 0, 1 );
-            btn_skip.SetSprite( ICN::BATTLESKIP, 0, 1 );
+        btn_wait.SetSprite( ICN::BATTLEWAIT, 0, 1 );
+        btn_skip.SetSprite( ICN::BATTLESKIP, 0, 1 );
 
-            btn_wait.SetPos( area.x + area.w - btn_wait.w, area.y );
-            btn_skip.SetPos( area.x + area.w - btn_skip.w, area.y + area.h - btn_skip.h );
-        }
-        else {
-            btn_wait.SetSprite( ICN::BATTLEWAIT, 0, 1 );
-            btn_skip.SetSprite( ICN::BATTLESKIP, 0, 1 );
-
-            btn_wait.SetPos( area.x + area.w - btn_wait.w, area.y + area.h - btn_skip.h - btn_wait.h );
-            btn_skip.SetPos( area.x + area.w - btn_skip.w, area.y + area.h - btn_skip.h );
-        }
+        btn_wait.SetPos( area.x + area.w - btn_wait.w, area.y + area.h - btn_skip.h - btn_wait.h );
+        btn_skip.SetPos( area.x + area.w - btn_skip.w, area.y + area.h - btn_skip.h );
     }
     else {
         btn_skip.SetSprite( ICN::TEXTBAR, 0, 1 );
         btn_skip.SetPos( area.x + area.w - btn_skip.w, area.y + area.h - btn_skip.h );
     }
 
-    status.SetPosition( area.x + btn_settings.w, ( conf.PocketPC() ? btn_settings.y : btn_auto.y ) );
+    status.SetPosition( area.x + btn_settings.w, btn_auto.y );
 
-    if ( !conf.QVGA() && !conf.ExtPocketLowMemory() )
-        listlog = new StatusListBox();
+    listlog = new StatusListBox();
 
     if ( listlog )
-        listlog->SetPosition( area.x, area.y + area.h - 36 );
+        listlog->SetPosition( area.x, area.y + area.h - status.h );
     status.SetLogs( listlog );
-
-    // opponents
-    opponent1 = arena.GetCommander1() ? new OpponentSprite( area, arena.GetCommander1(), false ) : NULL;
-    opponent2 = arena.GetCommander2() ? new OpponentSprite( area, arena.GetCommander2(), true ) : NULL;
-
-    if ( Arena::GetCastle() )
-        main_tower = Rect( area.x + 570, area.y + 145, 70, 70 );
 }
 
 Battle::Interface::~Interface()
@@ -949,12 +945,17 @@ Battle::Interface::~Interface()
 
 void Battle::Interface::SetArmiesOrder( const Units * units )
 {
-    armies_order.Set( border.GetArea(), units, arena.GetArmyColor2() );
+    armies_order.Set( GetArea(), units, arena.GetArmyColor2() );
 }
 
 const Rect & Battle::Interface::GetArea( void ) const
 {
-    return border.GetArea();
+    return _surfaceInnerArea;
+}
+
+Point Battle::Interface::GetMouseCursor() const
+{
+    return LocalEvent::Get().GetMouseCursor() - _interfacePosition;
 }
 
 void Battle::Interface::SetStatus( const std::string & msg, bool top )
@@ -976,22 +977,49 @@ void Battle::Interface::CycleColors()
         _colorCycle = 0;
 
     _creaturePalette = PAL::GetCyclingPalette( _colorCycle );
+
+    ++_contourCycle;
+
+    if ( _brightLandType ) {
+        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
+        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
+    }
+    else {
+        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
+        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
+    }
 }
 
 void Battle::Interface::Redraw( void )
 {
+    RedrawPartialStart();
+    RedrawPartialFinish();
+}
+
+void Battle::Interface::RedrawPartialStart()
+{
     const Castle * castle = Arena::GetCastle();
+
+    Cursor::Get().Hide();
     RedrawBorder();
     RedrawCover();
     RedrawOpponents();
     if ( castle )
         RedrawCastle3( *castle );
     RedrawArmies();
+}
+
+void Battle::Interface::RedrawPartialFinish()
+{
+    Display & display = Display::Get();
+
+    _mainSurface.Blit( _interfacePosition, display );
     RedrawInterface();
     if ( Settings::Get().ExtBattleShowBattleOrder() && !Settings::Get().QVGA() )
         armies_order.Redraw( _currentUnit );
-    if ( Settings::Get().QVGA() )
-        RedrawPocketControls();
+
+    Cursor::Get().Show();
+    display.Flip();
 }
 
 void Battle::Interface::RedrawInterface( void )
@@ -1008,13 +1036,13 @@ void Battle::Interface::RedrawInterface( void )
     btn_skip.Draw();
 
     if ( !conf.QVGA() && !conf.ExtPocketLowMemory() )
-        popup.Redraw( rectBoard.x + rectBoard.w + 60, rectBoard.y + rectBoard.h );
+        popup.Redraw( _interfacePosition.x + _interfacePosition.w + 60, _interfacePosition.y + _interfacePosition.h );
 
     if ( listlog && listlog->isOpenLog() )
         listlog->Redraw();
 }
 
-void Battle::Interface::RedrawArmies( void ) const
+void Battle::Interface::RedrawArmies( void )
 {
     const Castle * castle = Arena::GetCastle();
 
@@ -1048,17 +1076,17 @@ void Battle::Interface::RedrawArmies( void ) const
     }
 }
 
-void Battle::Interface::RedrawOpponents( void ) const
+void Battle::Interface::RedrawOpponents( void )
 {
     if ( opponent1 )
-        opponent1->Redraw();
+        opponent1->Redraw( _mainSurface );
     if ( opponent2 )
-        opponent2->Redraw();
+        opponent2->Redraw( _mainSurface );
 
     RedrawOpponentsFlags();
 }
 
-void Battle::Interface::RedrawOpponentsFlags( void ) const
+void Battle::Interface::RedrawOpponentsFlags( void )
 {
     if ( !Settings::Get().QVGA() && opponent1 ) {
         int icn = ICN::UNKNOWN;
@@ -1088,7 +1116,8 @@ void Battle::Interface::RedrawOpponentsFlags( void ) const
         }
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), false );
-        flag.Blit( opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(), opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
+        flag.Blit( opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(), opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y(),
+                   _mainSurface );
     }
 
     if ( !Settings::Get().QVGA() && opponent2 ) {
@@ -1120,8 +1149,8 @@ void Battle::Interface::RedrawOpponentsFlags( void ) const
 
         const Sprite & flag = AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ), true );
         const Point offset = opponent2->Offset();
-        flag.Blit( offset.x + Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.w() ),
-                   offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y() );
+        flag.Blit( offset.x + Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.w() ), offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(),
+                   _mainSurface );
     }
 }
 
@@ -1136,7 +1165,7 @@ Point GetTroopPosition( const Battle::Unit & b, const Sprite & sprite )
     return Point( sx, sy );
 }
 
-void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
+void Battle::Interface::RedrawTroopSprite( const Unit & b )
 {
     const Monster::monstersprite_t & msi = b.GetMonsterSprite();
     Sprite spmon1, spmon2;
@@ -1162,7 +1191,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 spmon2.Reset();
             }
             else {
-                spmon2 = Sprite( b.isReflect() ? b.GetContour( CONTOUR_REFLECT ) : b.GetContour( CONTOUR_MAIN ), 0, 0 );
+                spmon2 = Sprite( b.GetContour( _contourColor ), 0, 0 );
             }
         }
 
@@ -1223,18 +1252,18 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b ) const
                 spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
                 spmon1.SetAlphaMod( b_current_alpha, false );
             }
-            spmon1.Blit( sp.x, sp.y );
+            spmon1.Blit( sp.x, sp.y, _mainSurface );
         }
         else
-            spmon1.Blit( sp );
+            spmon1.Blit( sp, _mainSurface );
 
         // contour
         if ( spmon2.isValid() )
-            spmon2.Blit( sp.x, sp.y );
+            spmon2.Blit( sp.x, sp.y, _mainSurface );
     }
 }
 
-void Battle::Interface::RedrawTroopCount( const Unit & b ) const
+void Battle::Interface::RedrawTroopCount( const Unit & b )
 {
     const Rect & rt = b.GetRectPosition();
     const Sprite & bar = AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( b ) );
@@ -1242,86 +1271,76 @@ void Battle::Interface::RedrawTroopCount( const Unit & b ) const
     s32 sx = 0;
     s32 sy = 0;
 
-    if ( Settings::Get().QVGA() ) {
-        sy = rt.y + rt.h - bar.h();
-        sx = rt.x + ( rt.w - bar.w() ) / 2;
+    const bool isReflected = b.isReflect();
+    const bool isWide = b.isWide();
+    sy = rt.y + rt.h - bar.h() - ( isReflected ? 21 : 9 );
+
+    if ( isReflected ) {
+        if ( isWide )
+            sx = rt.x;
+        else
+            sx = rt.x - bar.w() + 3;
     }
     else {
-        const bool isReflected = b.isReflect();
-        const bool isWide = b.isWide();
-        sy = rt.y + rt.h - bar.h() - ( isReflected ? 21 : 9 );
-
-        if ( isReflected ) {
-            if ( isWide )
-                sx = rt.x;
-            else
-                sx = rt.x - bar.w() + 3;
+        if ( isWide ) {
+            sx = rt.x + rt.w - bar.w();
         }
         else {
-            if ( isWide ) {
-                sx = rt.x + rt.w - bar.w();
-            }
-            else {
-                sx = rt.x + rt.w - 3;
-            }
+            sx = rt.x + rt.w - 3;
         }
     }
 
-    bar.Blit( sx, sy );
+    bar.Blit( sx, sy, _mainSurface );
 
     Text text( GetStringShort( b.GetCount() ), Font::SMALL );
-    text.Blit( sx + ( bar.w() - text.w() ) / 2, sy );
+    text.Blit( sx + ( bar.w() - text.w() ) / 2, sy, _mainSurface );
 }
 
 void Battle::Interface::RedrawCover( void )
 {
     const Settings & conf = Settings::Get();
-    Display & display = Display::Get();
 
     if ( !sf_cover.isValid() ) {
-        sf_cover.Set( display.w(), display.h(), false );
+        sf_cover.Set( _mainSurface.w(), _mainSurface.h(), false );
         RedrawCoverStatic( sf_cover );
     }
 
-    sf_cover.Blit( display );
+    sf_cover.Blit( _mainSurface );
 
     const Board & board = *Arena::GetBoard();
-    RedrawCoverBoard( conf, display, board );
+    RedrawCoverBoard( conf, board );
 
     const Bridge * bridge = Arena::GetBridge();
     // bridge
     if ( bridge && bridge->isDown() ) {
-        const Point & topleft = border.GetArea();
         const Sprite & sprite3 = AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), bridge->isDestroy() ? 24 : 21 );
-        sprite3.Blit( sprite3.x() + topleft.x, sprite3.y() + topleft.y, display );
+        sprite3.Blit( sprite3.x(), sprite3.y(), _mainSurface );
     }
 
     // cursor
     const Cell * cell = Board::GetCell( index_pos );
 
     if ( cell && _currentUnit && conf.ExtBattleShowMouseShadow() && Cursor::Get().Themes() != Cursor::WAR_NONE )
-        sf_cursor.Blit( cell->GetPos(), display );
+        sf_cursor.Blit( cell->GetPos(), _mainSurface );
 
     RedrawKilled();
 }
 
 void Battle::Interface::RedrawCoverStatic( Surface & dst )
 {
-    const Point & topleft = border.GetArea();
-
     if ( icn_cbkg != ICN::UNKNOWN ) {
         const Sprite & cbkg = AGG::GetICN( icn_cbkg, 0 );
-        cbkg.Blit( topleft, dst );
+        cbkg.Blit( dst );
     }
 
     if ( icn_frng != ICN::UNKNOWN ) {
         const Sprite & frng = AGG::GetICN( icn_frng, 0 );
-        frng.Blit( topleft.x + frng.x(), topleft.x + frng.y(), dst );
+        frng.Blit( frng.x(), frng.y(), dst );
     }
 
     if ( arena.GetICNCovr() != ICN::UNKNOWN ) {
         const Sprite & cover = AGG::GetICN( arena.GetICNCovr(), 0 );
-        cover.Blit( topleft.x + cover.x(), topleft.y + cover.y(), dst );
+        cover.Blit( cover.x(), cover.y(), dst );
     }
 
     // ground obstacles
@@ -1334,25 +1353,24 @@ void Battle::Interface::RedrawCoverStatic( Surface & dst )
         RedrawCastle1( *castle, dst );
 }
 
-void Battle::Interface::RedrawCoverBoard( const Settings & conf, Display & display, const Board & board )
+void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & board )
 {
     if ( conf.ExtBattleShowGrid() ) { // grid
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it )
             if ( ( *it ).GetObject() == 0 )
-                sf_hexagon.Blit( ( *it ).GetPos(), display );
+                sf_hexagon.Blit( ( *it ).GetPos(), _mainSurface );
     }
 
     if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !_currentUnit->isControlAI() ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
             if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
-                sf_shadow.Blit( ( *it ).GetPos(), display );
+                sf_shadow.Blit( ( *it ).GetPos(), _mainSurface );
         }
     }
 }
 
-void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst ) const
+void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst )
 {
-    const Point & topleft = border.GetArea();
     const bool fortification = ( Race::KNGT == castle.GetRace() ) && castle.isBuild( BUILD_SPEC );
 
     int icn_castbkg = ICN::UNKNOWN;
@@ -1381,36 +1399,35 @@ void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst ) co
 
     // castle cover
     const Sprite & sprite1 = AGG::GetICN( icn_castbkg, 1 );
-    sprite1.Blit( sprite1.x() + topleft.x, sprite1.y() + topleft.y, dst );
+    sprite1.Blit( sprite1.x(), sprite1.y(), dst );
 
     // moat
     if ( castle.isBuild( BUILD_MOAT ) ) {
         const Sprite & sprite = AGG::GetICN( ICN::MOATWHOL, 0 );
-        sprite.Blit( sprite.x() + topleft.x, sprite.y() + topleft.y, dst );
+        sprite.Blit( sprite.x(), sprite.y(), dst );
     }
 
     // top wall
     const Sprite & sprite2 = AGG::GetICN( icn_castbkg, fortification ? 4 : 3 );
-    sprite2.Blit( sprite2.x() + topleft.x, sprite2.y() + topleft.y, dst );
+    sprite2.Blit( sprite2.x(), sprite2.y(), dst );
 }
 
-void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index ) const
+void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
 {
     const Settings & conf = Settings::Get();
-    const Point & topleft = border.GetArea();
     const int icn_castle = ICN::Get4Castle( castle.GetRace() );
 
     // catapult
     if ( 77 == cell_index ) {
         const Sprite & sprite = AGG::GetICN( ICN::CATAPULT, catapult_frame );
         const Rect & pos = Board::GetCell( cell_index )->GetPos();
-        sprite.Blit( sprite.x() + pos.x - pos.w, sprite.y() + pos.y + pos.h - 10 );
+        sprite.Blit( sprite.x() + pos.x - pos.w, sprite.y() + pos.y + pos.h - 10, _mainSurface );
     }
     else
         // castle gate
         if ( 50 == cell_index ) {
         const Sprite & sprite = AGG::GetICN( icn_castle, 4 );
-        sprite.Blit( sprite.x() + topleft.x, sprite.y() + topleft.y );
+        sprite.Blit( sprite.x(), sprite.y(), _mainSurface );
     }
     else
         // castle wall
@@ -1470,7 +1487,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index ) c
         }
 
         const Sprite & sprite = AGG::GetICN( icn_castle, index );
-        sprite.Blit( sprite.x() + topleft.x, sprite.y() + topleft.y );
+        sprite.Blit( sprite.x(), sprite.y(), _mainSurface );
     }
     else
         // castle archer towers
@@ -1481,7 +1498,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index ) c
         if ( castle.isBuild( BUILD_LEFTTURRET ) && ltower )
             index = ltower->isValid() ? 18 : 19;
 
-        AGG::GetICN( icn_castle, index ).Blit( topleft.x + ( conf.QVGA() ? 207 : 415 ), topleft.y + ( conf.QVGA() ? 20 : 40 ) );
+        AGG::GetICN( icn_castle, index ).Blit( 415, 40, _mainSurface );
     }
     else if ( 85 == cell_index ) {
         const Tower * rtower = Arena::GetTower( TWR_RIGHT );
@@ -1490,28 +1507,27 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index ) c
         if ( castle.isBuild( BUILD_RIGHTTURRET ) && rtower )
             index = rtower->isValid() ? 18 : 19;
 
-        AGG::GetICN( icn_castle, index ).Blit( topleft.x + ( conf.QVGA() ? 207 : 415 ), topleft.y + ( conf.QVGA() ? 145 : 290 ) );
+        AGG::GetICN( icn_castle, index ).Blit( 415, 290, _mainSurface );
     }
     else
         // castle towers
         if ( 40 == cell_index )
-        AGG::GetICN( icn_castle, 17 ).Blit( topleft.x + ( conf.QVGA() ? 187 : 375 ), topleft.y + ( conf.QVGA() ? 60 : 120 ) );
+        AGG::GetICN( icn_castle, 17 ).Blit( 375, 120, _mainSurface );
     else
         // castle towers
         if ( 62 == cell_index )
-        AGG::GetICN( icn_castle, 17 ).Blit( topleft.x + ( conf.QVGA() ? 187 : 375 ), topleft.y + ( conf.QVGA() ? 102 : 205 ) );
+        AGG::GetICN( icn_castle, 17 ).Blit( 375, 205, _mainSurface );
 }
 
-void Battle::Interface::RedrawCastle3( const Castle & castle ) const
+void Battle::Interface::RedrawCastle3( const Castle & castle )
 {
     // const Settings & conf = Settings::Get();
-    const Point & topleft = border.GetArea();
     const Sprite & sprite = AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TWR_CENTER )->isValid() ? 20 : 26 ) );
 
-    sprite.Blit( topleft.x + sprite.x(), topleft.y + sprite.y() );
+    sprite.Blit( sprite.x(), sprite.y(), _mainSurface );
 }
 
-void Battle::Interface::RedrawLowObjects( s32 cell_index, Surface & dst ) const
+void Battle::Interface::RedrawLowObjects( s32 cell_index, Surface & dst )
 {
     const Cell * cell = Board::GetCell( cell_index );
     if ( cell == NULL )
@@ -1546,7 +1562,7 @@ void Battle::Interface::RedrawLowObjects( s32 cell_index, Surface & dst ) const
     }
 }
 
-void Battle::Interface::RedrawHighObjects( s32 cell_index ) const
+void Battle::Interface::RedrawHighObjects( s32 cell_index )
 {
     const Cell * cell = Board::GetCell( cell_index );
     if ( cell == NULL )
@@ -1643,7 +1659,7 @@ void Battle::Interface::RedrawHighObjects( s32 cell_index ) const
     if ( sprite.isValid() ) {
         // const Point & topleft = border.GetArea();
         const Rect & pt = cell->GetPos();
-        sprite.Blit( pt.x + pt.w / 2 + sprite.x(), pt.y + pt.h + sprite.y() - ( Settings::Get().QVGA() ? 5 : 10 ) );
+        sprite.Blit( pt.x + pt.w / 2 + sprite.x(), pt.y + pt.h + sprite.y() - 10, _mainSurface );
     }
 }
 
@@ -1665,16 +1681,8 @@ void Battle::Interface::RedrawBorder( void )
 {
     const Size displaySize = Display::Get().GetSize();
 
-    if ( displaySize != Size( 320, 240 ) && displaySize != Display::GetDefaultSize() )
+    if ( displaySize != Display::GetDefaultSize() )
         Dialog::FrameBorder::RenderRegular( border.GetRect() );
-}
-
-void Battle::Interface::RedrawPocketControls( void ) const
-{
-    const HeroBase * hero = _currentUnit ? _currentUnit->GetCommander() : NULL;
-    if ( hero && hero->HaveSpellBook() && !hero->Modes( Heroes::SPELLCASTED ) ) {
-        AGG::GetICN( ICN::ARTFX, 81 ).Blit( pocket_book );
-    }
 }
 
 int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
@@ -1703,7 +1711,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     return arena.GetObstaclesPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
-                    const int dir = cell->GetTriangleDirection( LocalEvent::Get().GetMouseCursor() );
+                    const int dir = cell->GetTriangleDirection( GetMouseCursor() );
                     const int cursor = GetSwordCursorDirection( dir );
 
                     if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
@@ -1786,7 +1794,6 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
 
@@ -1796,20 +1803,12 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     humanturn_exit = false;
     catapult_frame = 0;
 
-    Board & board = *Arena::GetBoard();
+    // in case we moved the window
+    _interfacePosition = border.GetArea();
 
+    Board & board = *Arena::GetBoard();
     board.Reset();
     board.SetScanPassability( b );
-
-    rectBoard = board.GetArea();
-    const HeroBase * current_commander = arena.GetCurrentCommander();
-
-    if ( conf.QVGA() && current_commander && current_commander->HaveSpellBook() ) {
-        const Rect & area = border.GetArea();
-        const Sprite & book = AGG::GetICN( ICN::ARTFX, 81 );
-        const u32 ox = ( arena.GetArmyColor1() == current_commander->GetColor() ? 0 : 320 - book.w() );
-        pocket_book = Rect( area.x + ox, area.y + area.h - 19 - book.h(), book.w(), book.h() );
-    }
 
     if ( listlog && turn != arena.GetCurrentTurn() ) {
         turn = arena.GetCurrentTurn();
@@ -1823,10 +1822,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     // safe position coord
     CursorPosition cursorPosition;
 
-    cursor.Hide();
     Redraw();
-    cursor.Show();
-    display.Flip();
 
     std::string msg;
     animation_flags_frame = 0;
@@ -1835,7 +1831,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
-        const s32 index_new = board.GetIndexAbsPosition( le.GetMouseCursor() );
+        const s32 index_new = board.GetIndexAbsPosition( GetMouseCursor() );
         if ( index_pos != index_new ) {
             index_pos = index_new;
             humanturn_redraw = true;
@@ -1863,14 +1859,12 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
         // redraw arena
         if ( humanturn_redraw ) {
-            cursor.Hide();
             Redraw();
+            humanturn_redraw = false;
         }
 
         if ( !cursor.isVisible() ) {
             cursor.Show();
-            display.Flip();
-            humanturn_redraw = false;
         }
     }
 
@@ -1941,6 +1935,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 #endif
     }
 
+    // Add offsets to inner objects
+    const Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
+    const Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
     if ( pocket_book.w && le.MouseCursor( pocket_book ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Spell cast" );
@@ -1950,11 +1947,11 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             humanturn_redraw = true;
         }
     }
-    else if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( main_tower ) ) {
+    else if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista Info" );
 
-        if ( le.MouseClickLeft( main_tower ) || le.MousePressRight( main_tower ) ) {
+        if ( le.MouseClickLeft( mainTowerRect ) || le.MousePressRight( mainTowerRect ) ) {
             const Castle * cstl = Arena::GetCastle();
             std::string ballistaMessage = Tower::GetInfo( *cstl );
 
@@ -1966,7 +1963,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armies_order ) ) {
+    else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armiesOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
         armies_order.QueueEventProcessing( msg );
     }
@@ -1990,12 +1987,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         msg = _( "Skip this unit" );
         ButtonSkipAction( a );
     }
-    else if ( opponent1 && le.MouseCursor( opponent1->GetArea() ) ) {
+    else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
+        const Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetArmyColor1() ) {
             msg = _( "Hero's Options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
-            if ( le.MouseClickLeft( opponent1->GetArea() ) ) {
+            if ( le.MouseClickLeft( opponent1Area ) ) {
                 ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent1->GetHero(), true ), a );
                 humanturn_redraw = true;
             }
@@ -2004,23 +2002,24 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             msg = _( "View Opposing Hero" );
             cursor.SetThemes( Cursor::WAR_INFO );
 
-            if ( le.MouseClickLeft( opponent1->GetArea() ) ) {
+            if ( le.MouseClickLeft( opponent1Area ) ) {
                 arena.DialogBattleHero( *opponent1->GetHero(), true );
                 humanturn_redraw = true;
             }
         }
 
-        if ( le.MousePressRight( opponent1->GetArea() ) ) {
+        if ( le.MousePressRight( opponent1Area ) ) {
             arena.DialogBattleHero( *opponent1->GetHero(), false );
             humanturn_redraw = true;
         }
     }
-    else if ( opponent2 && le.MouseCursor( opponent2->GetArea() ) ) {
+    else if ( opponent2 && le.MouseCursor( opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
+        const Rect opponent2Area = opponent2->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetForce2().GetColor() ) {
             msg = _( "Hero's Options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
-            if ( le.MouseClickLeft( opponent2->GetArea() ) ) {
+            if ( le.MouseClickLeft( opponent2Area ) ) {
                 ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent2->GetHero(), true ), a );
                 humanturn_redraw = true;
             }
@@ -2029,13 +2028,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             msg = _( "View Opposing Hero" );
             cursor.SetThemes( Cursor::WAR_INFO );
 
-            if ( le.MouseClickLeft( opponent2->GetArea() ) ) {
+            if ( le.MouseClickLeft( opponent2Area ) ) {
                 arena.DialogBattleHero( *opponent2->GetHero(), true );
                 humanturn_redraw = true;
             }
         }
 
-        if ( le.MousePressRight( opponent2->GetArea() ) ) {
+        if ( le.MousePressRight( opponent2Area ) ) {
             arena.DialogBattleHero( *opponent2->GetHero(), false );
             humanturn_redraw = true;
         }
@@ -2044,7 +2043,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         cursor.SetThemes( Cursor::WAR_POINTER );
         listlog->QueueEventProcessing();
     }
-    else if ( le.MouseCursor( rectBoard ) ) {
+    else if ( le.MouseCursor( _interfacePosition ) ) {
         const int themes = GetBattleCursor( msg );
 
         if ( cursor.Themes() != themes )
@@ -2089,7 +2088,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & b, Actions & a, std::st
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
-    else if ( le.MouseCursor( rectBoard ) && humanturn_spell.isValid() ) {
+    else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
 
         if ( cursor.Themes() != themes )
@@ -2147,15 +2146,12 @@ void Battle::Interface::FadeArena( void )
     Display & display = Display::Get();
     Settings & conf = Settings::Get();
 
-    cursor.Hide();
     cursor.SetThemes( cursor.WAR_POINTER );
     Redraw();
-    cursor.Show();
-    display.Flip();
 
     if ( !conf.QVGA() ) {
         cursor.Hide();
-        Rect srt( border.GetArea().x, border.GetArea().y, display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+        Rect srt = border.GetArea();
         Surface top = display.GetSurface( srt );
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
@@ -2392,8 +2388,6 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
     if ( unit.isFinishAnimFrame() ) // nothing to animate
         return;
 
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const uint32_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
@@ -2401,10 +2395,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
         CheckGlobalEvents( le );
 
         if ( Game::AnimateCustomDelay( frameDelay ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
             if ( unit.isFinishAnimFrame() )
                 break;
             unit.IncreaseAnimFrame();
@@ -2434,18 +2425,13 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
     if ( unit.isFinishAnimFrame() ) // nothing to animate
         return;
 
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
             if ( unit.isFinishAnimFrame() )
                 break;
             unit.IncreaseAnimFrame();
@@ -2470,9 +2456,7 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 
 void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID )
 {
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
     Sprite missile;
 
     const bool reverse = startPos.x > endPos.x;
@@ -2493,20 +2477,18 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
             if ( isMage ) {
-                display.DrawLine( Point( startPos.x, startPos.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
-                display.DrawLine( Point( startPos.x, startPos.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
-                display.DrawLine( Point( startPos.x, startPos.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
-                display.DrawLine( Point( startPos.x, startPos.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
-                display.DrawLine( Point( startPos.x, startPos.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
+                _mainSurface.DrawLine( Point( startPos.x, startPos.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
+                _mainSurface.DrawLine( Point( startPos.x, startPos.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                _mainSurface.DrawLine( Point( startPos.x, startPos.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
+                _mainSurface.DrawLine( Point( startPos.x, startPos.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
+                _mainSurface.DrawLine( Point( startPos.x, startPos.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
             }
             else {
-                missile.Blit( reverse ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y );
+                missile.Blit( reverse ? pnt->x - missile.w() : pnt->x, ( angle > 0 ) ? pnt->y - missile.h() : pnt->y, _mainSurface );
             }
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
             ++pnt;
         }
     }
@@ -2670,9 +2652,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker )
 {
     const Settings & conf = Settings::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
 
     // targets damage animation
     int py = ( conf.QVGA() ? 20 : 50 );
@@ -2738,8 +2718,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 }
 
                 redrawBattleField = true;
-                cursor.Hide();
-                Redraw();
+                RedrawPartialStart();
             }
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
@@ -2749,12 +2728,11 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
                     if ( !redrawBattleField ) {
                         redrawBattleField = true;
-                        cursor.Hide();
-                        Redraw();
+                        RedrawPartialStart();
                     }
 
                     // extended damage info
-                    if ( conf.ExtBattleShowDamage() && target.killed && ( pos.y - py ) > topleft.y ) {
+                    if ( conf.ExtBattleShowDamage() && target.killed && ( pos.y - py ) > 0 ) {
                         std::string msg = "-" + GetString( target.killed );
                         Text txt( msg, Font::YELLOW_SMALL );
                         txt.Blit( pos.x + ( pos.w - txt.w() ) / 2, pos.y - py );
@@ -2763,30 +2741,42 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
             }
 
             if ( redrawBattleField ) {
-                cursor.Show();
-                display.Flip();
+                RedrawPartialFinish();
             }
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
-                    it->defender->IncreaseAnimFrame();
+                    if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
+                        it->defender->SwitchAnimation( Monster_Info::STATIC );
+                    }
+                    else {
+                        it->defender->IncreaseAnimFrame();
+                    }
                 }
             }
 
             py += ( conf.QVGA() ? 5 : 10 );
         }
     }
+
+    // Set to static animation as attacker might still continue its animation
+    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+        if ( ( *it ).defender ) {
+            if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
+                it->defender->SwitchAnimation( Monster_Info::STATIC );
+            }
+        }
+    }
 }
 
 void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 {
-    Cursor & cursor = Cursor::Get();
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
     const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
     StringReplace( msg, "%{monster}", unit.GetName() );
@@ -2848,7 +2838,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
-    Cursor & cursor = Cursor::Get();
     const s32 destIndex = pos.GetHead()->GetIndex();
     const Rect & pos1 = unit.GetRectPosition();
     const Rect & pos2 = Board::GetCell( destIndex )->GetPos();
@@ -2864,7 +2853,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
     const uint32_t step = unit.animation.getFlightSpeed();
     const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
 
@@ -3193,8 +3182,6 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Unit & attacke
 
 void Battle::Interface::RedrawActionLuck( Unit & unit )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
@@ -3204,6 +3191,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
     if ( isGoodLuck ) {
         const Sprite & luckSprite = AGG::GetICN( ICN::EXPMRL, 0 );
         const Sprite & unitSprite = AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame(), unit.isReflect() );
@@ -3212,20 +3200,17 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         Rect src( 0, 0, width, luckSprite.h() );
         src.x = ( luckSprite.w() - src.w ) / 2;
 
-        cursor.SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::GOODLUCK );
 
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
             if ( width < luckSprite.w() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
+                RedrawPartialStart();
 
-                luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h );
+                luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h, _mainSurface );
 
-                cursor.Show();
-                display.Flip();
+                RedrawPartialFinish();
 
                 src.w = width;
                 src.x = ( luckSprite.w() - src.w ) / 2;
@@ -3237,21 +3222,18 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
     else {
         int frameId = 0;
 
-        cursor.SetThemes( Cursor::WAR_NONE );
         AGG::PlaySound( M82::BADLUCK );
 
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
             if ( frameId < 8 && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
-                cursor.Hide();
-                Redraw();
+                RedrawPartialStart();
 
                 const Sprite & luckSprite = AGG::GetICN( ICN::CLOUDLUK, frameId );
-                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), pos.y + pos.h + luckSprite.y() - 10 );
+                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), pos.y + pos.h + luckSprite.y() - 10, _mainSurface );
 
-                cursor.Show();
-                display.Flip();
+                RedrawPartialFinish();
 
                 ++frameId;
             }
@@ -3282,7 +3264,7 @@ void Battle::Interface::RedrawActionTowerPart1( Tower & tower, Unit & defender )
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
     _currentUnit = NULL;
 
-    const Point missileStart = tower.GetPortPosition() + border.GetArea();
+    const Point missileStart = tower.GetPortPosition();
     const Point targetPos = defender.GetCenterPoint();
     const double angle = GetAngle( missileStart, targetPos );
 
@@ -3324,12 +3306,10 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
 
 void Battle::Interface::RedrawActionCatapult( int target )
 {
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
 
     const Sprite & missile = AGG::GetICN( ICN::BOULDER, 0 );
-    const Rect & area = border.GetArea();
+    const Rect & area = GetArea();
 
     AGG::PlaySound( M82::CATSND00 );
 
@@ -3338,10 +3318,7 @@ void Battle::Interface::RedrawActionCatapult( int target )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
             ++catapult_frame;
         }
     }
@@ -3350,15 +3327,6 @@ void Battle::Interface::RedrawActionCatapult( int target )
     Point pt1( 90, 220 );
     Point pt2 = Catapult::GetTargetPosition( target );
     Point max( 300, 20 );
-
-    if ( Settings::Get().QVGA() ) {
-        pt1.x /= 2;
-        pt1.y /= 2;
-        pt2.x /= 2;
-        pt2.y /= 2;
-        max.x /= 2;
-        max.y /= 2;
-    }
 
     pt1.x += area.x;
     pt2.x += area.x;
@@ -3377,11 +3345,9 @@ void Battle::Interface::RedrawActionCatapult( int target )
             if ( catapult_frame < 9 )
                 ++catapult_frame;
 
-            cursor.Hide();
-            Redraw();
-            missile.Blit( *pnt );
-            cursor.Show();
-            display.Flip();
+            RedrawPartialStart();
+            missile.Blit( *pnt, _mainSurface );
+            RedrawPartialFinish();
             ++pnt;
         }
     }
@@ -3398,12 +3364,10 @@ void Battle::Interface::RedrawActionCatapult( int target )
             if ( catapult_frame < 9 )
                 ++catapult_frame;
 
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
             const Sprite & sprite = AGG::GetICN( icn, frame );
-            sprite.Blit( pt2.x + sprite.x(), pt2.y + sprite.y() );
-            cursor.Show();
-            display.Flip();
+            sprite.Blit( pt2.x + sprite.x(), pt2.y + sprite.y(), _mainSurface );
+            RedrawPartialFinish();
 
             ++frame;
         }
@@ -3443,8 +3407,6 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
 
 void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
@@ -3458,8 +3420,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
         AGG::ReplaceColors( sprite, PAL::GetPalette( PAL::MIRROR_IMAGE ), msi.icn_file, target.GetFrame(), target.isReflect() );
     }
 
-    cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = &target;
     b_current_sprite = &sprite;
@@ -3471,17 +3432,12 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
         CheckGlobalEvents( le );
 
         if ( b_current_alpha > 0 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
-
             b_current_alpha -= 15;
         }
     }
 
     b_current_alpha = 0;
-    cursor.Hide();
     Redraw();
 
     target.SetPosition( dst );
@@ -3491,11 +3447,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
         CheckGlobalEvents( le );
 
         if ( b_current_alpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
-
             b_current_alpha += 15;
         }
     }
@@ -3507,15 +3459,12 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
 void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
     const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = &target;
     b_current_sprite = &sprite;
@@ -3527,11 +3476,7 @@ void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
-
             b_current_alpha += 20;
         }
     }
@@ -3543,8 +3488,6 @@ void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
 
 void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const Position & pos )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
@@ -3558,23 +3501,18 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     const Points points = GetLinePoints( rt1, rt2, 5 );
     Points::const_iterator pnt = points.begin();
 
-    cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
     AGG::PlaySound( M82::MIRRORIM );
 
     while ( le.HandleEvents() && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-
             const Point & sp = GetTroopPosition( target, sprite );
 
-            Redraw();
-            sprite.Blit( sp.x - rt1.x + ( *pnt ).x, sp.y - rt1.y + ( *pnt ).y );
-
-            cursor.Show();
-            display.Flip();
+            RedrawPartialStart();
+            sprite.Blit( sp.x - rt1.x + ( *pnt ).x, sp.y - rt1.y + ( *pnt ).y, _mainSurface );
+            RedrawPartialFinish();
 
             ++pnt;
         }
@@ -3583,21 +3521,114 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     status.SetMessage( _( "MirrorImage created" ), true );
 }
 
-void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
+void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi )
 {
+    if ( points.size() < 2 )
+        return;
+
+    const Point roiOffset( drawRoi.x, drawRoi.y );
+
     Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-
-    const Rect & pos = target.GetRectPosition();
-    const Rect & rectArea = border.GetArea();
-
-    uint32_t frame = 0;
-
+    Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::WAR_NONE );
 
-    AGG::PlaySound( M82::FromSpell( Spell::LIGHTNINGBOLT ) );
+    AGG::PlaySound( points.size() > 2 ? M82::CHAINLTE : M82::LIGHTBLT );
 
+    for ( size_t i = 1; i < points.size(); ++i ) {
+        const Point & startingPos = points[i - 1];
+        const Point & endPos = points[i];
+
+        const std::vector<std::pair<LightningPoint, LightningPoint> > & lightningBolt = GenerateLightning( startingPos + roiOffset, endPos + roiOffset );
+        Rect roi;
+        const bool isHorizontalBolt = std::abs( startingPos.x - endPos.x ) > std::abs( startingPos.y - endPos.y );
+        const bool isForwardDirection = isHorizontalBolt ? ( endPos.x > startingPos.x ) : ( endPos.y > startingPos.y );
+        const int animationStep = 100;
+
+        if ( isHorizontalBolt ) {
+            roi.h = drawRoi.h;
+            if ( isForwardDirection ) {
+                roi.x = 0;
+                roi.w = startingPos.x;
+            }
+            else {
+                roi.x = startingPos.x;
+                roi.w = drawRoi.w - startingPos.x;
+            }
+        }
+        else {
+            roi.w = drawRoi.w;
+            if ( isForwardDirection ) {
+                roi.y = 0;
+                roi.h = startingPos.y;
+            }
+            else {
+                roi.y = startingPos.y;
+                roi.h = drawRoi.h - startingPos.y;
+            }
+        }
+
+        while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.w < drawRoi.w ) || ( !isHorizontalBolt && roi.h < drawRoi.h ) ) ) {
+            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+                if ( isHorizontalBolt ) {
+                    if ( isForwardDirection ) {
+                        roi.w += animationStep;
+                    }
+                    else {
+                        roi.w += animationStep;
+                        roi.x -= animationStep;
+                    }
+
+                    if ( roi.x < 0 )
+                        roi.x = 0;
+                    if ( roi.w > drawRoi.w )
+                        roi.w = drawRoi.w;
+                }
+                else {
+                    if ( isForwardDirection ) {
+                        roi.h += animationStep;
+                    }
+                    else {
+                        roi.h += animationStep;
+                        roi.y -= animationStep;
+                    }
+
+                    if ( roi.y < 0 )
+                        roi.y = 0;
+                    if ( roi.h > drawRoi.h )
+                        roi.h = drawRoi.h;
+                }
+
+                RedrawPartialStart();
+
+                RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), _mainSurface, Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+
+                RedrawPartialFinish();
+            }
+        }
+    }
+
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
+        CheckGlobalEvents( le );
+
+        if ( ( frame == 0 ) || Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            RedrawPartialStart();
+
+            Sprite sprite = AGG::GetICN( ICN::SPARKS, frame, false );
+
+            for ( size_t i = 1; i < points.size(); ++i ) {
+                sprite.Blit( points[i] - Point( sprite.w() / 2, 0 ) + roiOffset, _mainSurface );
+            }
+            RedrawPartialFinish();
+
+            ++frame;
+        }
+    }
+}
+
+void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
+{
     Point startingPos;
     const HeroBase * current_commander = arena.GetCurrentCommander();
 
@@ -3611,47 +3642,35 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
     }
 
     _currentUnit = NULL;
-    target.SwitchAnimation( Monster_Info::WNCE );
 
-    Sprite sprite = AGG::GetICN( ICN::SPARKS, 0, false );
-    const Point offset( sprite.x() + pos.x, sprite.y() + pos.y );
-    Point endPos( offset.x + pos.w / 2, offset.y );
+    const Rect & pos = target.GetRectPosition();
+    const Point endPos( pos.x + pos.w / 2, pos.y );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
-        CheckGlobalEvents( le );
+    std::vector<Point> points;
+    points.push_back( startingPos );
+    points.push_back( endPos );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
-
-            sprite = AGG::GetICN( ICN::SPARKS, frame, false );
-            RedrawLightning( GenerateLightning( startingPos, endPos ), RGBA( 0xff, 0xff, 0 ) );
-
-            sprite.Blit( endPos );
-            cursor.Show();
-            display.Flip();
-
-            ++frame;
-        }
-    }
-
-    target.SwitchAnimation( Monster_Info::STATIC );
-    _currentUnit = NULL;
+    RedrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
 {
-    // FIX: ChainLightning draw
-    // AGG::PlaySound(targets.size() > 1 ? M82::CHAINLTE : M82::LIGHTBLT);
+    std::vector<Point> points;
+    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
+        const Rect & pos = it->defender->GetRectPosition();
 
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-        RedrawActionLightningBoltSpell( *( it->defender ) );
+        if ( points.empty() ) {
+            points.push_back( Point( pos.x + pos.w / 2, 0 ) );
+        }
+
+        points.push_back( Point( pos.x + pos.w / 2, pos.y ) );
+    }
+
+    RedrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
 void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
@@ -3683,8 +3702,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
 
     Sprite mixSprite( Surface( unitSprite.GetSize(), true ), unitSprite.x(), unitSprite.y() );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
@@ -3699,11 +3717,8 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
         CheckGlobalEvents( le );
 
         if ( frame < 20 && Game::AnimateCustomDelay( bloodlustDelay ) ) {
-            cursor.Hide();
             mixSprite = Sprite( Surface::Blend( unitSprite, bloodlustEffect, ( 255 - alpha ) * 100 / 255 ), unitSprite.x(), unitSprite.y() );
             Redraw();
-            cursor.Show();
-            display.Flip();
 
             alpha += ( frame < 10 ) ? 20 : -20;
             ++frame;
@@ -3716,8 +3731,6 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
 
 void Battle::Interface::RedrawActionStoneSpell( Unit & target )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
@@ -3729,8 +3742,7 @@ void Battle::Interface::RedrawActionStoneSpell( Unit & target )
 
     Sprite mixSprite( Surface( unitSprite.GetSize(), true ), unitSprite.x(), unitSprite.y() );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
@@ -3743,11 +3755,8 @@ void Battle::Interface::RedrawActionStoneSpell( Unit & target )
         CheckGlobalEvents( le );
 
         if ( frame < 25 && Game::AnimateCustomDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
             mixSprite = Sprite( Surface::Blend( unitSprite, stoneEffect, ( 255 - alpha ) * 100 / 255 ), unitSprite.x(), unitSprite.y() );
             Redraw();
-            cursor.Show();
-            display.Flip();
 
             alpha += 10;
             ++frame;
@@ -3760,8 +3769,6 @@ void Battle::Interface::RedrawActionStoneSpell( Unit & target )
 
 void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell & spell )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     if ( !target.isValid() ) {
@@ -3769,10 +3776,7 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
             CheckGlobalEvents( le );
 
             if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-                cursor.Hide();
                 Redraw();
-                cursor.Show();
-                display.Flip();
                 target.IncreaseAnimFrame();
             }
         }
@@ -3791,8 +3795,8 @@ void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
 
 void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
 {
-    Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
+    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // Casting hero position
@@ -3824,10 +3828,8 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
             cursor.Hide();
             const uint32_t frame = i * spriteCount / path.size();
             const Sprite & sprite = AGG::GetICN( spellICN, frame );
-            sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2 );
-            cursor.Show();
-            display.Flip();
-
+            sprite.Blit( path[i].x - sprite.w() / 2, path[i].y - sprite.h() / 2, _mainSurface );
+            RedrawPartialFinish();
             ++i;
         }
     }
@@ -3835,8 +3837,6 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
 
 void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     RedrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
@@ -3854,12 +3854,9 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            cursor.Hide();
             rippleSprite = Sprite( unitSprite.RenderRippleEffect( frame ), unitSprite.GetPos().x, unitSprite.GetPos().y );
             b_current_sprite = &rippleSprite;
             Redraw();
-            cursor.Show();
-            display.Flip();
 
             frame += 2;
         }
@@ -3871,8 +3868,6 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
 
 void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & targets )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const int icn = ICN::COLDRING;
@@ -3880,7 +3875,7 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
     u32 frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     // set WNCE
     _currentUnit = NULL;
@@ -3895,15 +3890,13 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             const Sprite & sprite1 = AGG::GetICN( icn, frame );
-            sprite1.Blit( center.x + center.w / 2 + sprite1.x(), center.y + center.h / 2 + sprite1.y() );
+            sprite1.Blit( center.x + center.w / 2 + sprite1.x(), center.y + center.h / 2 + sprite1.y(), _mainSurface );
             const Sprite & sprite2 = AGG::GetICN( icn, frame, true );
-            sprite2.Blit( center.x + center.w / 2 - sprite2.w() - sprite2.x(), center.y + center.h / 2 + sprite2.y() );
-            cursor.Show();
-            display.Flip();
+            sprite2.Blit( center.x + center.w / 2 - sprite2.w() - sprite2.x(), center.y + center.h / 2 + sprite2.y(), _mainSurface );
+            RedrawPartialFinish();
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender && ( *it ).damage )
@@ -3921,19 +3914,17 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
 
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const int icn = ICN::STORM;
     const int m82 = M82::FromSpell( Spell::ELEMENTALSTORM );
-    const Rect & area = border.GetArea();
+    const Rect & area = GetArea();
 
     u32 frame = 0;
     u32 repeat = 4;
     Point center;
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -3947,17 +3938,14 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             const Sprite & sprite = AGG::GetICN( icn, frame );
             for ( center.y = area.y; center.y + sprite.h() < area.y + area.h - 20; center.y += sprite.h() )
                 for ( center.x = area.x; center.x + sprite.w() < area.x + area.w; center.x += sprite.w() )
-                    sprite.Blit( center );
+                    sprite.Blit( center, _mainSurface );
 
-            RedrawInterface();
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender && ( *it ).damage )
@@ -3980,10 +3968,10 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 
 void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets )
 {
-    Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
+    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
-    Rect area = border.GetArea();
+    Rect area = GetArea();
 
     area.h -= Settings::Get().QVGA() ? 18 : 36;
 
@@ -3991,9 +3979,8 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
     Surface sprite2( area, false );
 
     cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
 
-    display.Blit( area, 0, 0, sprite1 );
+    _mainSurface.Blit( area, 0, 0, sprite1 );
     sprite2.Fill( RGBA( 0xFF, 0xFF, 0xFF ) );
 
     _currentUnit = NULL;
@@ -4005,9 +3992,9 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
-            Surface::Blend( sprite1, sprite2, ( 255 - alpha ) * 100 / 255 ).Blit( area.x, area.y, display );
-            display.Flip();
+            Surface::Blend( sprite1, sprite2, ( 255 - alpha ) * 100 / 255 ).Blit( area.x, area.y, _mainSurface );
             cursor.Show();
+            RedrawPartialFinish();
 
             alpha += 10;
         }
@@ -4030,10 +4017,9 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
             const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
             const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
-            sprite1.Blit( shifted, original, display );
+            sprite1.Blit( shifted, original, _mainSurface );
 
-            display.Flip();
-            cursor.Show();
+            RedrawPartialFinish();
         }
     }
 }
@@ -4043,15 +4029,14 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Rect area = border.GetArea();
+    Rect area = GetArea();
 
     u32 frame = 0;
     area.h -= Settings::Get().QVGA() ? 19 : 38;
 
     cursor.SetThemes( Cursor::WAR_NONE );
-    cursor.Hide();
 
-    Surface sprite = display.GetSurface( area );
+    Surface sprite = _mainSurface.GetSurface( area );
 
     _currentUnit = NULL;
     AGG::PlaySound( M82::ERTHQUAK );
@@ -4072,10 +4057,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
             const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
-            sprite.Blit( shifted, original, display );
+            sprite.Blit( shifted, original, _mainSurface );
 
-            display.Flip();
-            cursor.Show();
+            RedrawPartialFinish();
             ++frame;
         }
     }
@@ -4089,8 +4073,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             for ( std::vector<int>::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                 Point pt2 = Catapult::GetTargetPosition( *it );
@@ -4103,11 +4086,10 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
                 pt2.y += area.y;
 
                 const Sprite & spriteCloud = AGG::GetICN( icn, frame );
-                spriteCloud.Blit( pt2.x + spriteCloud.x(), pt2.y + spriteCloud.y() );
+                spriteCloud.Blit( pt2.x + spriteCloud.x(), pt2.y + spriteCloud.y(), _mainSurface );
             }
 
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
 
             ++frame;
         }
@@ -4121,14 +4103,12 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const Unit & mirror )
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsInfo & targets, int icn, int m82 )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     u32 frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -4142,13 +4122,11 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             const Sprite & sprite = AGG::GetICN( icn, frame );
-            sprite.Blit( center.x + center.w / 2 + sprite.x(), center.y + center.h / 2 + sprite.y() );
-            cursor.Show();
-            display.Flip();
+            sprite.Blit( center.x + center.w / 2 + sprite.x(), center.y + center.h / 2 + sprite.y(), _mainSurface );
+            RedrawPartialFinish();
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender && ( *it ).damage )
@@ -4186,13 +4164,11 @@ Point RedrawTroopWithFrameAnimationOffset( int icn, const Rect & pos, const Spri
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & targets, int icn, int m82, bool wnce )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     u32 frame = 0;
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     _currentUnit = NULL;
 
@@ -4208,8 +4184,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender ) {
@@ -4228,10 +4203,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                     const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, ( *it ).defender->isWide(), reflect, Settings::Get().QVGA() );
                     const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
 
-                    sprite.Blit( sprite_pos );
+                    sprite.Blit( sprite_pos, _mainSurface );
                 }
-            cursor.Show();
-            display.Flip();
+            RedrawPartialFinish();
 
             if ( wnce )
                 for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -4251,12 +4225,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
 void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     const Rect & pos = b.GetRectPosition();
-    const Rect & rectArea = border.GetArea();
 
     u32 frame = 0;
     bool reflect = false;
@@ -4269,7 +4240,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         break;
     }
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     if ( animation == WINCE ) {
         _currentUnit = NULL;
@@ -4287,16 +4258,14 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
 
             const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
             const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, b.isWide(), reflect, Settings::Get().QVGA() );
             const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
 
-            sprite.Blit( sprite_pos );
-            cursor.Show();
-            display.Flip();
+            sprite.Blit( sprite_pos, _mainSurface );
+            RedrawPartialFinish();
 
             if ( animation != NONE ) {
                 if ( animation == RESURRECT ) {
@@ -4320,10 +4289,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 
 void Battle::Interface::RedrawBridgeAnimation( bool down )
 {
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    const Point & topleft = border.GetArea();
 
     u32 frame = down ? 23 : 21;
 
@@ -4343,12 +4309,10 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_BRIDGE_DELAY ) ) {
-            cursor.Hide();
-            Redraw();
+            RedrawPartialStart();
             const Sprite & sprite = AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), frame );
-            sprite.Blit( sprite.x() + topleft.x, sprite.y() + topleft.y );
-            cursor.Show();
-            display.Flip();
+            sprite.Blit( sprite.x(), sprite.y(), _mainSurface );
+            RedrawPartialFinish();
 
             if ( down )
                 --frame;

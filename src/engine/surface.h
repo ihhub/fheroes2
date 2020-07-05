@@ -139,7 +139,7 @@ public:
 
     void Fill( const RGBA & );
     void FillRect( const Rect &, const RGBA & );
-    void DrawLine( const Point &, const Point &, const RGBA & );
+    void DrawLine( const Point & p1, const Point & p2, const RGBA & color, const Rect & roi = Rect() );
     void DrawPoint( const Point &, const RGBA & );
     void DrawRect( const Rect &, const RGBA & );
     void DrawBorder( const RGBA &, bool solid = true );
@@ -177,6 +177,11 @@ public:
     bool GenerateContour( const std::vector<uint8_t> & indexes, uint32_t value, bool reflect );
 
     static Surface Blend( const Surface & first, const Surface & second, uint8_t ratio );
+
+    // Gamma correction works by formula:
+    // output = A * ((input / 255) ^ gamma) * 255, where A - multiplication, gamma - power base. Both values must be greater than 0
+    // Usually people set A as 1
+    bool GammaCorrection( double a, double gamma );
 
     // This is only for 8-bit images like TIL
     void ResetPalette();
