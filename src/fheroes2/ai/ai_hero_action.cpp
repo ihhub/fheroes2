@@ -1877,18 +1877,15 @@ namespace AI
 
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors )
     {
-        // get result
         const s32 index_from = hero.GetIndex();
-        const Route::Path & path = hero.GetPath();
 
         if ( colors && Maps::isValidAbsIndex( index_from ) ) {
             if ( !world.GetTiles( index_from ).isFog( colors ) ) {
                 return true;
             }
 
-            if ( path.isValid() && !world.GetTiles( path.front().GetIndex() ).isFog( colors ) ) {
-                return true;
-            }
+            const Route::Path & path = hero.GetPath();
+            return path.isValid() && !world.GetTiles( path.front().GetIndex() ).isFog( colors );
         }
 
         return false;
@@ -1899,7 +1896,6 @@ namespace AI
         if ( hero.GetPath().isValid() ) {
             hero.SetMove( true );
 
-            Display & display = Display::Get();
             Cursor & cursor = Cursor::Get();
             Interface::Basic & I = Interface::Basic::Get();
             Interface::GameArea & gameArea = I.GetGameArea();
@@ -1923,6 +1919,7 @@ namespace AI
                 else if ( Game::AnimateInfrequentDelay( Game::CURRENT_AI_DELAY ) ) {
                     cursor.Hide();
                     if ( hero.Move() ) {
+                        // re-center on every finished step in case hero appears from the fog
                         gameArea.SetCenter( hero.GetCenter() );
                     }
                     else {
@@ -1933,10 +1930,11 @@ namespace AI
                     }
                     I.Redraw( REDRAW_GAMEAREA );
                     cursor.Show();
-                    display.Flip();
+                    Display::Get().Flip();
                 }
 
                 if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+                    // will be animated in hero loop
                     u32 & frame = Game::MapsAnimationFrame();
                     ++frame;
                 }
