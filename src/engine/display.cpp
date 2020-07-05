@@ -187,7 +187,6 @@ void Display::Flip( void )
                 SDL_RenderPresent( renderer );
             }
         }
-
     }
     else {
         ERROR( SDL_GetError() );
