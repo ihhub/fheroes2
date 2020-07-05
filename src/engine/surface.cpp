@@ -1743,7 +1743,7 @@ bool Surface::GammaCorrection( double a, double gamma )
     uint8_t * out = static_cast<uint8_t *>( surface->pixels );
     const uint8_t * outEnd = out + pitch * height * 4;
 
-    for ( ; out != outEnd; out++ ) {
+    for ( ; out != outEnd; ++out ) {
         *out = value[*out];
         ++out;
         *out = value[*out];
