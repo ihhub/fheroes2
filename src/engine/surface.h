@@ -178,6 +178,11 @@ public:
 
     static Surface Blend( const Surface & first, const Surface & second, uint8_t ratio );
 
+    // Gamma correction works by formula:
+    // output = A * ((input / 255) ^ gamma) * 255, where A - multiplication, gamma - power base. Both values must be greater than 0
+    // Usually people set A as 1
+    bool GammaCorrection( double a, double gamma );
+
     // This is only for 8-bit images like TIL
     void ResetPalette();
 

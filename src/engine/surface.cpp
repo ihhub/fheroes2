@@ -1714,3 +1714,45 @@ Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t r
 
     return surface;
 }
+
+bool Surface::GammaCorrection( double a, double gamma )
+{
+    if ( !isValid() || depth() != 32 )
+        return false;
+
+    // We precalculate all values and store them in lookup table
+    std::vector<uint8_t> value( 256, 255u );
+
+    for ( uint16_t i = 0; i < 256; ++i ) {
+        const double data = a * pow( i / 255.0, gamma ) * 255 + 0.5;
+        if ( data < 256 )
+            value[i] = static_cast<uint8_t>( data );
+    }
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width ) {
+        Unlock();
+        return false;
+    }
+
+    uint8_t * out = static_cast<uint8_t *>( surface->pixels );
+    const uint8_t * outEnd = out + pitch * height * 4;
+
+    for ( ; out != outEnd; ++out ) {
+        *out = value[*out];
+        ++out;
+        *out = value[*out];
+        ++out;
+        *out = value[*out];
+        ++out;
+    }
+
+    Unlock();
+
+    return true;
+}
