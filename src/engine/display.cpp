@@ -38,6 +38,7 @@ namespace
 Display::Display()
     : window( NULL )
     , renderer( NULL )
+    , displayTexture( NULL )
     , keepAspectRatio( false )
 {
     _isDisplay = true;
@@ -52,6 +53,11 @@ Display::Display()
 Display::~Display()
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( displayTexture ) {
+        SDL_DestroyTexture( displayTexture );
+        displayTexture = NULL;
+    }
+
     if ( renderer ) {
         SDL_DestroyRenderer( renderer );
         renderer = NULL;
