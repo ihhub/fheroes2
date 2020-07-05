@@ -1850,7 +1850,7 @@ namespace AI
         return false;
     }
 
-    bool AIHeroesShowAnimation( const Heroes & hero )
+    uint32_t AIGetAllianceColors(const Heroes& hero)
     {
         const Settings & conf = Settings::Get();
 
@@ -1872,20 +1872,30 @@ namespace AI
                 colors = player->GetFriends();
         }
 
+        return colors;
+    }
+
+    bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors, bool checkFullPath = false )
+    {
         // get result
         const s32 index_from = hero.GetIndex();
+        const Route::Path & path = hero.GetPath();
 
         if ( colors && Maps::isValidAbsIndex( index_from ) ) {
-            const Maps::Tiles & tile_from = world.GetTiles( index_from );
-
-            if ( hero.GetPath().isValid() ) {
-                const s32 index_to = Maps::GetDirectionIndex( index_from, hero.GetPath().GetFrontDirection() );
-                const Maps::Tiles & tile_to = world.GetTiles( index_to );
-
-                return !tile_from.isFog( colors ) || !tile_to.isFog( colors );
+            if ( !world.GetTiles( index_from ).isFog( colors ) ) {
+                return true;
             }
 
-            return !tile_from.isFog( colors );
+            if ( checkFullPath ) {
+                for ( Route::Path::const_iterator it = path.begin(); it != path.end(); ++it ) {
+                    if ( !world.GetTiles( it->GetIndex() ).isFog( colors ) ) {
+                        return true;
+                    }
+                }
+            }
+            else if ( path.isValid() && !world.GetTiles( path.back().GetIndex() ).isFog( colors ) ) {
+                return true;
+            }
         }
 
         return false;
@@ -1896,20 +1906,17 @@ namespace AI
         if ( hero.GetPath().isValid() ) {
             hero.SetMove( true );
 
-            const Settings & conf = Settings::Get();
             Display & display = Display::Get();
             Cursor & cursor = Cursor::Get();
             Interface::Basic & I = Interface::Basic::Get();
+            Interface::GameArea & gameArea = I.GetGameArea();
 
-            cursor.Hide();
-
-            const bool hiddenMovement = conf.AIMoveSpeed() == 0 || !AIHeroesShowAnimation( hero );
+            const uint32_t colors = AIGetAllianceColors( hero );
+            const bool hiddenMovement = Settings::Get().AIMoveSpeed() == 0 || !AIHeroesShowAnimation( hero, colors, true );
+            const int moveStep = hero.GetMoveStep();
 
             if ( !hiddenMovement ) {
-                cursor.Hide();
-                I.GetGameArea().SetCenter( hero.GetCenter() );
-                I.Redraw( REDRAW_GAMEAREA );
-                cursor.Show();
+                gameArea.SetCenter( hero.GetCenter() );
             }
 
             while ( LocalEvent::Get().HandleEvents() ) {
@@ -1917,20 +1924,21 @@ namespace AI
                     break;
                 }
 
-                if ( hiddenMovement ) {
+                if ( !AIHeroesShowAnimation( hero, colors ) ) {
                     hero.Move( true );
                 }
                 else if ( Game::AnimateInfrequentDelay( Game::CURRENT_AI_DELAY ) ) {
                     cursor.Hide();
-                    hero.Move();
-
-                    Point movement( hero.MovementDirection() );
-                    const int moveStep = hero.GetMoveStep();
-                    movement.x *= moveStep;
-                    movement.y *= moveStep;
-                    I.GetGameArea().ShiftCenter( movement );
+                    if ( hero.Move() ) {
+                        gameArea.SetCenter( hero.GetCenter() );
+                    }
+                    else {
+                        Point movement( hero.MovementDirection() );
+                        movement.x *= moveStep;
+                        movement.y *= moveStep;
+                        gameArea.ShiftCenter( movement );
+                    }
                     I.Redraw( REDRAW_GAMEAREA );
-
                     cursor.Show();
                     display.Flip();
                 }
