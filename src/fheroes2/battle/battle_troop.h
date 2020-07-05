@@ -84,7 +84,7 @@ namespace Battle
         u32 GetHitPointsLeft( void ) const;
         u32 GetAffectedDuration( u32 ) const;
         u32 GetSpeed( void ) const;
-        Surface GetContour( int ) const;
+        Surface GetContour( uint8_t colorId ) const;
 
         void SetMirror( Unit * );
         void SetRandomMorale( void );
@@ -210,11 +210,6 @@ namespace Battle
         Unit * mirror;
         TimeDelay idleTimer;
         bool idleTimerSet;
-
-        // These variables are mutable due to population of them of the fly as we don't want to calculate everything
-        mutable std::map<int, Surface> contoursMain;
-        mutable std::map<int, Surface> contoursReflect;
-        const Surface & getContour( int frameId, std::map<int, Surface> & contours, bool isReflected ) const;
 
         bool blindanswer;
     };

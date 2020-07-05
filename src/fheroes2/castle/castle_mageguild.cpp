@@ -138,6 +138,9 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
 
     Dialog::FrameBorder frameborder( Display::GetDefaultSize() );
     const Point & cur_pt = frameborder.GetArea();
+
+    AGG::GetICN( ICN::STONEBAK, 0 ).Blit( cur_pt );
+
     Text text;
 
     // bar
