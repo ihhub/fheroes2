@@ -2869,11 +2869,25 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
-                    it->defender->IncreaseAnimFrame();
+                    if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
+                        it->defender->SwitchAnimation( Monster_Info::STATIC );
+                    }
+                    else {
+                        it->defender->IncreaseAnimFrame();
+                    }
                 }
             }
 
             py += ( conf.QVGA() ? 5 : 10 );
+        }
+    }
+
+    // Set to static animation as attacker might still continue its animation
+    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+        if ( ( *it ).defender ) {
+            if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
+                it->defender->SwitchAnimation( Monster_Info::STATIC );
+            }
         }
     }
 }
