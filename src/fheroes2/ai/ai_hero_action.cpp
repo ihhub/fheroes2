@@ -1882,7 +1882,7 @@ namespace AI
                 const s32 index_to = Maps::GetDirectionIndex( index_from, hero.GetPath().GetFrontDirection() );
                 const Maps::Tiles & tile_to = world.GetTiles( index_to );
 
-                return !tile_from.isFog( colors ) && !tile_to.isFog( colors );
+                return !tile_from.isFog( colors ) || !tile_to.isFog( colors );
             }
 
             return !tile_from.isFog( colors );
@@ -1903,12 +1903,13 @@ namespace AI
 
             cursor.Hide();
 
-            if ( 0 != conf.AIMoveSpeed() && AIHeroesShowAnimation( hero ) ) {
+            const bool hiddenMovement = conf.AIMoveSpeed() == 0 || !AIHeroesShowAnimation( hero );
+
+            if ( !hiddenMovement ) {
                 cursor.Hide();
                 I.GetGameArea().SetCenter( hero.GetCenter() );
                 I.Redraw( REDRAW_GAMEAREA );
                 cursor.Show();
-                display.Flip();
             }
 
             while ( LocalEvent::Get().HandleEvents() ) {
@@ -1916,9 +1917,7 @@ namespace AI
                     break;
                 }
 
-                bool hide_move = ( 0 == conf.AIMoveSpeed() ) || ( !IS_DEVEL() && !AIHeroesShowAnimation( hero ) );
-
-                if ( hide_move ) {
+                if ( hiddenMovement ) {
                     hero.Move( true );
                 }
                 else if ( Game::AnimateInfrequentDelay( Game::CURRENT_AI_DELAY ) ) {
@@ -1939,17 +1938,11 @@ namespace AI
                 if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
                     u32 & frame = Game::MapsAnimationFrame();
                     ++frame;
-                    cursor.Hide();
-                    I.Redraw( REDRAW_GAMEAREA );
-                    cursor.Show();
-                    display.Flip();
                 }
             }
 
-            bool hide_move = ( 0 == conf.AIMoveSpeed() ) || ( !IS_DEVEL() && !AIHeroesShowAnimation( hero ) );
-
             // 0.2 sec delay for show enemy hero position
-            if ( !hero.isFreeman() && !hide_move )
+            if ( !hero.isFreeman() && !hiddenMovement )
                 DELAY( 200 );
 
             hero.SetMove( false );
