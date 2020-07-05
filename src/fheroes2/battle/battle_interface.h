@@ -66,7 +66,7 @@ namespace Battle
         OpponentSprite( const Rect &, const HeroBase *, bool );
 
         const Rect & GetArea( void ) const;
-        void Redraw( void ) const;
+        void Redraw( Surface & dst ) const;
         void ResetAnimFrame( int );
         void IncreaseAnimFrame( bool loop = false );
         bool isFinishFrame( void ) const;
@@ -145,7 +145,7 @@ namespace Battle
         PopupDamageInfo();
 
         void SetInfo( const Cell *, const Unit *, const Unit * );
-        void Reset( void );
+        void Reset();
         void Redraw( int, int );
 
     private:
@@ -161,11 +161,14 @@ namespace Battle
         Interface( Arena &, s32 );
         ~Interface();
 
-        void Redraw( void );
+        void Redraw();
+        void RedrawPartialStart();
+        void RedrawPartialFinish();
         void HumanTurn( const Unit &, Actions & );
         bool NetworkTurn( Result & );
 
         const Rect & GetArea( void ) const;
+        Point GetMouseCursor() const;
 
         void SetStatus( const std::string &, bool = false );
         void SetArmiesOrder( const Units * );
@@ -207,20 +210,19 @@ namespace Battle
         void RedrawBorder( void );
         void RedrawCover( void );
         void RedrawCoverStatic( Surface & );
-        void RedrawCoverBoard( const Settings &, Display &, const Board & );
-        void RedrawLowObjects( s32, Surface & ) const;
-        void RedrawHighObjects( s32 ) const;
-        void RedrawCastle1( const Castle &, Surface & ) const;
-        void RedrawCastle2( const Castle &, s32 ) const;
-        void RedrawCastle3( const Castle & ) const;
+        void RedrawCoverBoard( const Settings &, const Board & );
+        void RedrawLowObjects( s32, Surface & );
+        void RedrawHighObjects( s32 );
+        void RedrawCastle1( const Castle &, Surface & );
+        void RedrawCastle2( const Castle &, s32 );
+        void RedrawCastle3( const Castle & );
         void RedrawKilled( void );
         void RedrawInterface( void );
-        void RedrawOpponents( void ) const;
-        void RedrawOpponentsFlags( void ) const;
-        void RedrawArmies( void ) const;
-        void RedrawTroopSprite( const Unit & ) const;
-        void RedrawTroopCount( const Unit & ) const;
-        void RedrawPocketControls( void ) const;
+        void RedrawOpponents( void );
+        void RedrawOpponentsFlags( void );
+        void RedrawArmies( void );
+        void RedrawTroopSprite( const Unit & );
+        void RedrawTroopCount( const Unit & );
 
         void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = NULL );
         void RedrawActionArrowSpell( const Unit & );
@@ -234,6 +236,7 @@ namespace Battle
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionLightningBoltSpell( Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
+        void RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size );
 
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
@@ -262,10 +265,12 @@ namespace Battle
         int GetBattleSpellCursor( std::string & ) const;
         int GetAllowSwordDirection( u32 );
 
-        void CreateDamageInfoPopup( s32, s32, const Unit &, const Unit & );
-
         Arena & arena;
         Dialog::FrameBorder border;
+
+        Rect _interfacePosition;
+        Rect _surfaceInnerArea;
+        Surface _mainSurface;
         Surface sf_hexagon;
         Surface sf_shadow;
         Surface sf_cursor;
@@ -283,7 +288,6 @@ namespace Battle
         OpponentSprite * opponent1;
         OpponentSprite * opponent2;
 
-        Rect rectBoard;
         Spell humanturn_spell;
         bool humanturn_exit;
         bool humanturn_redraw;

@@ -1404,7 +1404,7 @@ void Surface::FillRect( const Rect & rect, const RGBA & col )
     SDL_FillRect( surface, &dstrect, MapRGB( col ) );
 }
 
-void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
+void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color, const Rect & roi )
 {
     int x1 = p1.x;
     int y1 = p1.y;
@@ -1415,11 +1415,13 @@ void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
     const int dx = std::abs( x2 - x1 );
     const int dy = std::abs( y2 - y1 );
 
+    const bool isValidRoi = roi.w > 0 && roi.h > 0;
+
     Lock();
-    const int minX = 0;
-    const int minY = 0;
-    const int maxX = w();
-    const int maxY = h();
+    const int minX = isValidRoi ? roi.x : 0;
+    const int minY = isValidRoi ? roi.y : 0;
+    const int maxX = isValidRoi ? roi.x + roi.w : w();
+    const int maxY = isValidRoi ? roi.y + roi.h : h();
     if ( dx > dy ) {
         int ns = std::div( dx, 2 ).quot;
 
@@ -1711,4 +1713,46 @@ Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t r
     surface.Unlock();
 
     return surface;
+}
+
+bool Surface::GammaCorrection( double a, double gamma )
+{
+    if ( !isValid() || depth() != 32 )
+        return false;
+
+    // We precalculate all values and store them in lookup table
+    std::vector<uint8_t> value( 256, 255u );
+
+    for ( uint16_t i = 0; i < 256; ++i ) {
+        const double data = a * pow( i / 255.0, gamma ) * 255 + 0.5;
+        if ( data < 256 )
+            value[i] = static_cast<uint8_t>( data );
+    }
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width ) {
+        Unlock();
+        return false;
+    }
+
+    uint8_t * out = static_cast<uint8_t *>( surface->pixels );
+    const uint8_t * outEnd = out + pitch * height * 4;
+
+    for ( ; out != outEnd; ++out ) {
+        *out = value[*out];
+        ++out;
+        *out = value[*out];
+        ++out;
+        *out = value[*out];
+        ++out;
+    }
+
+    Unlock();
+
+    return true;
 }

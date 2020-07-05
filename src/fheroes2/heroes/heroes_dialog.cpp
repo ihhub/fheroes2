@@ -182,13 +182,13 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // button prev
-    dst_pt.x = cur_pt.x + 1;
-    dst_pt.y = cur_pt.y + 480 - 20;
+    dst_pt.x = cur_pt.x;
+    dst_pt.y = cur_pt.y + Display::DEFAULT_HEIGHT - 20;
     Button buttonPrevHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 4, 5 );
 
     // button next
-    dst_pt.x = cur_pt.x + 640 - 23;
-    dst_pt.y = cur_pt.y + 480 - 20;
+    dst_pt.x = cur_pt.x + Display::DEFAULT_WIDTH - 22;
+    dst_pt.y = cur_pt.y + Display::DEFAULT_HEIGHT - 20;
     Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
 
     // button dismiss

@@ -57,6 +57,7 @@ public:
 protected:
     Surface sf1;
     Surface sf2;
+    Surface _disabledSurface;
 
     u32 flags;
 };
