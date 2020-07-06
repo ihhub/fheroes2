@@ -38,6 +38,7 @@ namespace
 Display::Display()
     : window( NULL )
     , renderer( NULL )
+    , displayTexture( NULL )
     , keepAspectRatio( false )
 {
     _isDisplay = true;
@@ -52,6 +53,11 @@ Display::Display()
 Display::~Display()
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( displayTexture ) {
+        SDL_DestroyTexture( displayTexture );
+        displayTexture = NULL;
+    }
+
     if ( renderer ) {
         SDL_DestroyRenderer( renderer );
         renderer = NULL;
@@ -83,6 +89,8 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
         keepAspectRatio = false;
     }
 
+    if ( displayTexture )
+        SDL_DestroyTexture( displayTexture );
     if ( renderer )
         SDL_DestroyRenderer( renderer );
 
@@ -97,6 +105,7 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
 
     window = SDL_CreateWindow( "", prevX, prevY, w, h, flags );
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
+    displayTexture = SDL_CreateTexture( renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, w, h );
 
     if ( keepAspectRatio ) {
         SDL_DisplayMode currentVideoMode;
@@ -164,18 +173,18 @@ void Display::Flip( void )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     redrawTiming.Start(); // TODO: for now it's only for SDL 2 but it should be for everything
 
-    SDL_Texture * tx = SDL_CreateTextureFromSurface( renderer, surface );
+    if ( displayTexture ) {
+        SDL_UpdateTexture( displayTexture, NULL, surface->pixels, surface->pitch );
 
-    if ( tx ) {
         if ( 0 != SDL_SetRenderTarget( renderer, NULL ) ) {
             ERROR( SDL_GetError() );
         }
         else {
             int ret = 0;
             if ( keepAspectRatio )
-                ret = SDL_RenderCopy( renderer, tx, &srcRenderSurface, &dstRenderSurface );
+                ret = SDL_RenderCopy( renderer, displayTexture, &srcRenderSurface, &dstRenderSurface );
             else
-                ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
+                ret = SDL_RenderCopy( renderer, displayTexture, NULL, NULL );
 
             if ( 0 != ret ) {
                 ERROR( SDL_GetError() );
@@ -184,8 +193,6 @@ void Display::Flip( void )
                 SDL_RenderPresent( renderer );
             }
         }
-
-        SDL_DestroyTexture( tx );
     }
     else {
         ERROR( SDL_GetError() );
