@@ -4273,23 +4273,31 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
 Point CalculateSpellPosition( int spellICN, const Battle::Unit & target, const Sprite & spellSprite )
 {
     const Rect & pos = target.GetRectPosition();
-    Point res( pos.x + spellSprite.x(), pos.y + spellSprite.y() );
+    const Point targetPos = target.GetCenterPoint();
+
+    Point result( targetPos.x + spellSprite.x(), targetPos.y + spellSprite.y() );
 
     switch ( spellICN ) {
     case ICN::SHIELD:
-        res.x += target.isReflect() ? -pos.w / ( target.isWide() ? 2 : 1 ) : pos.w;
+        result.x += target.isReflect() ? -pos.w / ( target.isWide() ? 2 : 1 ) : pos.w;
         break;
     case ICN::BLIND: {
         const Point & offset = target.animation.getBlindOffset();
-        res.x += target.isReflect() ? -offset.x : offset.x;
-        res.y += offset.y - spellSprite.y();
+
+        // calculate OG Heroes2 unit position to apply offset to
+        const Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
+        const Point unitPos = GetTroopPosition( target, unitSprite );
+        const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.w * 3 / 4 : CELLW / 2;
+
+        // Overwrite result with custom blind value
+        result.x = pos.x + rearCenterX + spellSprite.x() + ( target.isReflect() ? -offset.x : offset.x );
+        result.y = unitPos.y - unitSprite.y() + spellSprite.y() + offset.y;
     } break;
     default:
-        res.y += pos.h / 2;
         break;
     }
 
-    return res;
+    return result;
 }
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & targets, int icn, int m82, bool wnce )
