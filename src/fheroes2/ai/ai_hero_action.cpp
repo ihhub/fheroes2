@@ -1904,7 +1904,7 @@ namespace AI
             const int moveStep = hero.GetMoveStep();
 
             // center on hero if will be visible
-            if ( !AIHeroesShowAnimation( hero, colors ) ) {
+            if ( AIHeroesShowAnimation( hero, colors ) ) {
                 gameArea.SetCenter( hero.GetCenter() );
             }
 
