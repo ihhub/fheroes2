@@ -40,7 +40,7 @@ namespace
     {
         // TODO: we still struggle with shadows so not all buttons look correct
         // That's why we do such magic trick for now
-        if ( icnId == ICN::HSBTNS || icnId == ICN::ADVBTNS || icnId == ICN::ADVEBTNS || icnId == ICN::SMALLBAR ) {
+        if ( icnId == ICN::HSBTNS || icnId == ICN::ADVBTNS || icnId == ICN::ADVEBTNS || icnId == ICN::SMALLBAR || icnId == ICN::VIEWGEN ) {
             Surface surface( AGG::GetICN( icnId, index ).GetSurface() );
             if ( AGG::ReplaceColors( surface, PAL::GetPalette( PAL::DARKENING ), icnId, index, false ) ) {
                 return surface;
