@@ -4337,8 +4337,8 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender ) {
                     const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
-                    const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
-                    sprite.Blit( CalculateSpellPosition( icn, *it->defender, sprite ), _mainSurface );
+                    const Sprite & spellSprite = AGG::GetICN( icn, frame, reflect );
+                    spellSprite.Blit( CalculateSpellPosition( icn, *it->defender, spellSprite ), _mainSurface );
                 }
             RedrawPartialFinish();
 
@@ -4387,10 +4387,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
-            Point targetPosition = CalculateSpellPosition( icn, b, sprite );
+            const Sprite & spellSprite = AGG::GetICN( icn, frame, reflect );
 
-            sprite.Blit( targetPosition, _mainSurface );
+            spellSprite.Blit( CalculateSpellPosition( icn, b, spellSprite ), _mainSurface );
             RedrawPartialFinish();
 
             if ( animation != NONE ) {
