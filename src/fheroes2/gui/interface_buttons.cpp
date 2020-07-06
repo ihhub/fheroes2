@@ -27,6 +27,7 @@
 #include "game_interface.h"
 #include "heroes.h"
 #include "settings.h"
+#include "world.h"
 
 Interface::ButtonsArea::ButtonsArea( Basic & basic )
     : BorderWindow( Rect( 0, 0, 144, 72 ) )
@@ -114,7 +115,8 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
     LocalEvent & le = LocalEvent::Get();
     int res = Game::CANCEL;
 
-    le.MousePressLeft( buttonNextHero ) ? buttonNextHero.PressDraw() : buttonNextHero.ReleaseDraw();
+    if ( buttonNextHero.isEnable() )
+        le.MousePressLeft( buttonNextHero ) ? buttonNextHero.PressDraw() : buttonNextHero.ReleaseDraw();
     le.MousePressLeft( buttonMovement ) ? buttonMovement.PressDraw() : buttonMovement.ReleaseDraw();
     le.MousePressLeft( buttonKingdom ) ? buttonKingdom.PressDraw() : buttonKingdom.ReleaseDraw();
     if ( buttonSpell.isEnable() )
@@ -128,7 +130,7 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
          // move border window
          BorderWindow::QueueEventProcessing() ) {
     }
-    else if ( le.MouseClickLeft( buttonNextHero ) ) {
+    else if ( buttonNextHero.isEnable() && le.MouseClickLeft( buttonNextHero ) ) {
         // for QVGA: auto hide buttons after click
         if ( conf.QVGA() )
             conf.SetShowButtons( false );
@@ -204,4 +206,7 @@ void Interface::ButtonsArea::SetButtonStatus()
     buttonMovement.SetDisable( isMovementButtonDisabled );
     const bool isSpellButtonDisabled = ( currentHero == NULL ) || !currentHero->HaveSpellBook();
     buttonSpell.SetDisable( isSpellButtonDisabled );
+
+    const bool isHeroPresent = !World::Get().GetKingdom( Settings::Get().CurrentColor() ).GetHeroes().empty();
+    buttonNextHero.SetDisable( !isHeroPresent );
 }

@@ -337,7 +337,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     // image box
     const Sprite & box = AGG::GetICN( qwikinfo, 0 );
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect ar( BORDERWIDTH, BORDERWIDTH, gamearea.GetArea().w, gamearea.GetArea().h );
+    const Rect ar( gamearea.GetROI() );
 
     LocalEvent & le = LocalEvent::Get();
     const Point & mp = le.GetMouseCursor();
@@ -533,7 +533,7 @@ void Dialog::QuickInfo( const Castle & castle )
     // image box
     const Sprite & box = AGG::GetICN( qwiktown, 0 );
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect ar( BORDERWIDTH, BORDERWIDTH, gamearea.GetArea().w, gamearea.GetArea().h );
+    const Rect ar( gamearea.GetROI() );
 
     LocalEvent & le = LocalEvent::Get();
     const Point & mp = le.GetMouseCursor();
@@ -719,7 +719,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     // image box
     const Sprite & box = AGG::GetICN( qwikhero, 0 );
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect ar( BORDERWIDTH, BORDERWIDTH, gamearea.GetArea().w, gamearea.GetArea().h );
+    const Rect ar( gamearea.GetROI() );
 
     LocalEvent & le = LocalEvent::Get();
     const Point & mp = le.GetMouseCursor();

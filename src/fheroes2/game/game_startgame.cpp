@@ -244,7 +244,7 @@ void ShowNewWeekDialog( void )
 
     // head
     std::string message = world.BeginMonth() ? _( "Astrologers proclaim Month of the %{name}." ) : _( "Astrologers proclaim Week of the %{name}." );
-    AGG::PlayMusic( world.BeginMonth() ? ( week.GetType() == Week::MONSTERS ? MUS::MONTH2 : MUS::WEEK2_MONTH1 ) : MUS::WEEK1, false );
+    AGG::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
@@ -279,7 +279,6 @@ void ShowEventDayDialog( void )
     EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
 
     for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it ) {
-        AGG::PlayMusic( MUS::NEWS, false );
         if ( ( *it ).resource.GetValidItemsCount() )
             Dialog::ResourceInfo( "", ( *it ).message, ( *it ).resource );
         else if ( ( *it ).message.size() )
@@ -292,7 +291,6 @@ int ShowWarningLostTownsDialog( void )
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     if ( 0 == myKingdom.GetLostTownDays() ) {
-        AGG::PlayMusic( MUS::DEATH, false );
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
         GameOver::Result::Get().SetResult( GameOver::LOSS_ALL );
         return Game::MAINMENU;
@@ -878,8 +876,13 @@ int Interface::Basic::HumanTurn( bool isload )
             res = controlPanel.QueueEventProcessing();
         }
         // cursor over game area
-        else if ( le.MouseCursor( gameArea.GetArea() ) && !gameArea.NeedScroll() ) {
+        else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
             gameArea.QueueEventProcessing();
+        }
+        else if ( !gameArea.NeedScroll() ) { // empty interface area so we set cursor to a normal pointer
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
+            gameArea.ResetCursorPosition();
         }
 
         // fast scroll
@@ -936,11 +939,9 @@ int Interface::Basic::HumanTurn( bool isload )
                             Point movement( hero->MovementDirection() );
                             if ( movement != Point() ) { // don't waste resources for no movement
                                 const int moveStep = hero->GetMoveStep();
-                                movement.x *= -moveStep;
-                                movement.y *= -moveStep;
-                                gameArea.SetMapsPos( gameArea.GetMapsPos() + movement );
-                                gameArea.SetCenter( hero->GetCenter() );
-                                ResetFocus( GameFocus::HEROES );
+                                movement.x *= moveStep;
+                                movement.y *= moveStep;
+                                gameArea.ShiftCenter( movement );
                                 RedrawFocus();
                             }
                         }
@@ -974,6 +975,11 @@ int Interface::Basic::HumanTurn( bool isload )
             ++frame;
             gameArea.UpdateCyclingPalette( frame );
             gameArea.SetRedraw();
+
+            Army * focusArmy = GetFocusArmy();
+            if ( focusArmy && focusArmy->hasColorCycling() ) {
+                statusWindow.SetRedraw();
+            }
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {

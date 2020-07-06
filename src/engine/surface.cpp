@@ -237,7 +237,7 @@ int RGBA::a( void ) const
 
 int RGBA::pack( void ) const
 {
-    return ( ( ( r() << 24 ) & 0xFF000000 ) | ( ( g() << 16 ) & 0x00FF0000 ) | ( ( b() << 8 ) & 0x0000FF00 ) | ( a() & 0x000000FF ) );
+    return ( ( ( a() << 24 ) & 0xFF000000 ) | ( ( b() << 16 ) & 0x00FF0000 ) | ( ( g() << 8 ) & 0x0000FF00 ) | ( r() & 0x000000FF ) );
 }
 
 RGBA RGBA::unpack( int v )
@@ -1404,7 +1404,7 @@ void Surface::FillRect( const Rect & rect, const RGBA & col )
     SDL_FillRect( surface, &dstrect, MapRGB( col ) );
 }
 
-void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
+void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color, const Rect & roi )
 {
     int x1 = p1.x;
     int y1 = p1.y;
@@ -1415,12 +1415,20 @@ void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
     const int dx = std::abs( x2 - x1 );
     const int dy = std::abs( y2 - y1 );
 
+    const bool isValidRoi = roi.w > 0 && roi.h > 0;
+
     Lock();
+    const int minX = isValidRoi ? roi.x : 0;
+    const int minY = isValidRoi ? roi.y : 0;
+    const int maxX = isValidRoi ? roi.x + roi.w : w();
+    const int maxY = isValidRoi ? roi.y + roi.h : h();
     if ( dx > dy ) {
         int ns = std::div( dx, 2 ).quot;
 
         for ( int i = 0; i <= dx; ++i ) {
-            SetPixel( x1, y1, pixel );
+            if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                SetPixel( x1, y1, pixel );
+            }
             x1 < x2 ? ++x1 : --x1;
             ns -= dy;
             if ( ns < 0 ) {
@@ -1433,7 +1441,9 @@ void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
         int ns = std::div( dy, 2 ).quot;
 
         for ( int i = 0; i <= dy; ++i ) {
-            SetPixel( x1, y1, pixel );
+            if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                SetPixel( x1, y1, pixel );
+            }
             y1 < y2 ? ++y1 : --y1;
             ns -= dx;
             if ( ns < 0 ) {
@@ -1703,4 +1713,46 @@ Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t r
     surface.Unlock();
 
     return surface;
+}
+
+bool Surface::GammaCorrection( double a, double gamma )
+{
+    if ( !isValid() || depth() != 32 )
+        return false;
+
+    // We precalculate all values and store them in lookup table
+    std::vector<uint8_t> value( 256, 255u );
+
+    for ( uint16_t i = 0; i < 256; ++i ) {
+        const double data = a * pow( i / 255.0, gamma ) * 255 + 0.5;
+        if ( data < 256 )
+            value[i] = static_cast<uint8_t>( data );
+    }
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width ) {
+        Unlock();
+        return false;
+    }
+
+    uint8_t * out = static_cast<uint8_t *>( surface->pixels );
+    const uint8_t * outEnd = out + pitch * height * 4;
+
+    for ( ; out != outEnd; ++out ) {
+        *out = value[*out];
+        ++out;
+        *out = value[*out];
+        ++out;
+        *out = value[*out];
+        ++out;
+    }
+
+    Unlock();
+
+    return true;
 }

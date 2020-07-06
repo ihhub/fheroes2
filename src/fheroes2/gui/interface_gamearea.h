@@ -47,7 +47,7 @@ enum level_t
     LEVEL_ALL = 0xFF
 };
 
-typedef std::map<std::pair<uint8_t, uint8_t>, Sprite> MapObjectSprite;
+typedef std::map<std::pair<int, uint32_t>, Sprite> MapObjectSprite;
 
 namespace Interface
 {
@@ -59,66 +59,69 @@ namespace Interface
         GameArea( Basic & );
         void Build( void );
 
-        const Rect & GetArea( void ) const;
-        const Point & GetMapsPos( void ) const;
-        void SetMapsPos( const Point & pos ); // do not call this method without caution
-        const Rect & GetRectMaps( void ) const;
+        const Rect & GetROI( void ) const; // returns visible Game Area ROI in pixels
+        Rect GetVisibleTileROI( void ) const;
+        void ShiftCenter( const Point & offset ); // in pixels
 
         int GetScrollCursor( void ) const;
         bool NeedScroll( void ) const;
         void Scroll( void );
         void SetScroll( int );
 
-        void SetCenter( s32, s32 );
         void SetCenter( const Point & );
         void SetRedraw( void ) const;
 
         void Redraw( Surface & dst, int ) const;
-        void Redraw( Surface & dst, int, const Rect & ) const;
 
         void BlitOnTile( Surface &, const Surface &, s32, s32, const Point & ) const;
         void BlitOnTile( Surface &, const Sprite &, const Point & ) const;
 
         void UpdateCyclingPalette( int frame );
-        const std::vector<uint8_t> & GetCyclingPalette() const;
+        const std::vector<uint32_t> & GetCyclingRGBPalette() const;
         MapObjectSprite & GetSpriteCache();
 
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
 
-        s32 GetIndexFromMousePoint( const Point & ) const;
         Rect RectFixed( Point & dst, int rw, int rh ) const;
 
         static Surface GenerateUltimateArtifactAreaSurface( s32 );
+
+        int32_t GetValidTileIdFromPoint( const Point & point ) const; // returns -1 in case of invalid index (out of World Map)
+        Point GetRelativeTilePosition( const Point & tileId ) const; // in relation to screen
+
+        void ResetCursorPosition();
 
     private:
         void SetAreaPosition( s32, s32, u32, u32 );
 
         Basic & interface;
 
-        Rect areaPosition;
-        Rect rectMaps;
-        Point rectMapsPosition;
-        Point scrollOffset;
-        s32 oldIndexPos;
-        int scrollDirection;
-        int scrollStepX;
-        int scrollStepY;
-        int tailX;
-        int tailY;
-        bool updateCursor;
-        int borderSizeX;
-        int borderSizeY;
+        Rect _windowROI; // visible to draw area of World Map in pixels
+        Point _topLeftTileOffset; // offset of tiles to be drawn (from here we can find any tile ID)
 
-        std::vector<uint8_t> _customPalette;
+        // boundaries for World Map
+        int16_t _minLeftOffset;
+        int16_t _maxLeftOffset;
+        int16_t _minTopOffset;
+        int16_t _maxTopOffset;
+
+        Size _visibleTileCount; // number of tiles to be drawn on screen
+
+        int32_t _prevIndexPos;
+        int scrollDirection;
+        bool updateCursor;
+
+        std::vector<uint32_t> _cyclingRGBPalette;
         MapObjectSprite _spriteCache;
 
-        enum
-        {
-            MIN_BORDER_SIZE = 8
-        };
-
         SDL::Time scrollTime;
+
+        Point _middlePoint() const; // returns middle point of window ROI
+        Point _getStartTileId() const;
+        void _setCenterToTile( const Point & tile ); // set center to the middle of tile (input is tile ID)
+        void _setCenter( const Point & point ); // in pixels
+        Point _getRelativePosition( const Point & point ) const; // returns relative to screen position
     };
 }
 

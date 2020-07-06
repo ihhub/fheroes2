@@ -50,6 +50,7 @@ enum redraw_t
 
 class Castle;
 class Heroes;
+class Army;
 
 namespace Maps
 {
@@ -71,6 +72,7 @@ namespace Interface
 {
     Castle * GetFocusCastle( void );
     Heroes * GetFocusHeroes( void );
+    Army * GetFocusArmy();
     int GetFocusType( void );
     Point GetFocusCenter( void );
 

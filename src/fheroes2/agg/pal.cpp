@@ -112,6 +112,17 @@ namespace PAL
            199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 216, 217, 218, 219, 220, 221, 222, 222, 223, 224, 225, 226, 227, 228, 229, 231,
            232, 233, 234, 235, 236, 237, 238, 238, 239, 240, 242, 242, 243, 244, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255};
 
+    const u8 darkeningTable[PALETTE_SIZE]
+        = {0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,
+           35,  36,  36,  36,  36,  36,  36,  36,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  62,
+           62,  62,  62,  62,  62,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  84,  84,  84,  84,  84,  84,  91,  92,
+           93,  94,  95,  96,  97,  98,  99,  100, 101, 102, 103, 104, 105, 106, 107, 108, 108, 108, 108, 108, 108, 108, 115, 116, 117, 118, 119, 120, 121,
+           122, 123, 124, 125, 126, 127, 128, 129, 130, 130, 130, 130, 130, 130, 130, 131, 132, 133, 134, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150,
+           151, 151, 151, 151, 151, 151, 151, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 174, 174, 174, 174, 174,
+           174, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 197, 197, 197, 197, 197, 197, 204, 205, 206, 207, 208,
+           209, 210, 211, 212, 213, 213, 213, 213, 213, 213, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 69,
+           69,  69,  69,  69,  69,  69,  69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255};
+
     std::vector<SDL_Color> standard_palette;
     std::vector<SDL_Color> yellow_text_palette;
     std::vector<SDL_Color> white_text_palette;
@@ -157,11 +168,26 @@ namespace PAL
     {
         static std::vector<CyclingColorSet> cycleSet;
         if ( cycleSet.empty() ) {
-            const CyclingColorSet cycleData[] = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}, {0xF2, 4, false}};
+            const CyclingColorSet cycleData[] = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}};
             cycleSet.insert( cycleSet.begin(), cycleData, cycleData + sizeof( cycleData ) / sizeof( CyclingColorSet ) );
         }
 
         return cycleSet;
+    }
+
+    const std::vector<uint32_t> & GetRGBColors()
+    {
+        static std::vector<uint32_t> colors;
+        if ( !colors.empty() )
+            return colors;
+
+        colors.resize( PALETTE_SIZE );
+        for ( size_t i = 0u; i < PALETTE_SIZE; ++i ) {
+            const SDL_Color & rgba = standard_palette[i];
+            colors[i] = rgba.r + ( rgba.g << 8 ) + ( rgba.b << 16 );
+        }
+
+        return colors;
     }
 }
 
@@ -245,6 +271,10 @@ const std::vector<uint8_t> & PAL::GetPalette( int type )
     }
     case MIRROR_IMAGE: {
         static std::vector<uint8_t> palette( mirror_image_table, mirror_image_table + PALETTE_SIZE );
+        return palette;
+    }
+    case DARKENING: {
+        static std::vector<uint8_t> palette( darkeningTable, darkeningTable + PALETTE_SIZE );
         return palette;
     }
     }
