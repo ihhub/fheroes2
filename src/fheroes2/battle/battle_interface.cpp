@@ -279,25 +279,45 @@ namespace Battle
 
     const std::vector<int> & getHeroAnimation( const HeroBase * hero, int animation )
     {
-        static std::vector<int> staticAnim{1};
+        static std::vector<int> staticAnim;
+        if ( staticAnim.empty() ) {
+            staticAnim.push_back( 1 );
+        }
+
         if ( !hero || animation == OP_STATIC )
             return staticAnim;
 
         const int heroType = matchHeroType( hero );
-        static std::vector<int> sorrowAnim{2, 3, 4, 5, 4, 5, 4, 3, 2};
+        static std::vector<int> sorrowAnim;
+        if ( sorrowAnim.empty() ) {
+            const int sorrowArray[9] = {2, 3, 4, 5, 4, 5, 4, 3, 2};
+            sorrowAnim.insert( sorrowAnim.begin(), sorrowArray, sorrowArray + 9 );
+        }
+
         if ( animation == OP_SORROW )
             return ( heroType == CAPTAIN ) ? staticAnim : sorrowAnim;
 
-        static std::vector<int> heroTypeAnim[7][9]{
-            //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
-            {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
-            {{6, 7, 8, 9, 9, 8, 7, 6}, {6, 10, 11}, {10, 6}, {6, 12, 13}, {12, 6}, {6, 14}, {6}, {15, 16, 17}, {18}}, // BARBARIAN
-            {{6, 7, 8, 7, 6}, {6, 7, 9}, {7, 6}, {6, 10, 11}, {10, 6}, {6, 12}, {6}, {13, 14, 15}, {16}}, // SORCERESS
-            {{6, 7, 8, 9, 10, 9, 8, 7, 6}, {6, 7, 11, 12}, {11, 6}, {6, 7, 13}, {6}, {6, 14}, {6}, {15, 16}, {6}}, // WARLOCK
-            {{6, 7, 8, 9, 8, 7, 6}, {6, 10, 11, 12, 13}, {12, 11, 10, 6}, {6, 14}, {6}, {6, 15}, {6}, {16, 17}, {18}}, // WIZARD
-            {{6, 7, 6, 7, 6, 7}, {7, 8, 9, 10, 11}, {10, 9, 7}, {7, 12, 13, 14, 15}, {7}, {7, 12, 13, 14, 16}, {7}, {17}, {18, 19}}, // NECROMANCER
-            {{1}, {2, 3, 4}, {3, 2}, {5, 6}, {5}, {5, 7}, {5}, {8, 9}, {10}} // CAPTAIN
-        };
+        static std::vector<int> heroTypeAnim[7][9];
+
+        if ( heroTypeAnim[heroType][animation].empty() ) {
+            static const int sourceArray[7][9][9] = {
+                //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
+                {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
+                {{6, 7, 8, 9, 9, 8, 7, 6}, {6, 10, 11}, {10, 6}, {6, 12, 13}, {12, 6}, {6, 14}, {6}, {15, 16, 17}, {18}}, // BARBARIAN
+                {{6, 7, 8, 7, 6}, {6, 7, 9}, {7, 6}, {6, 10, 11}, {10, 6}, {6, 12}, {6}, {13, 14, 15}, {16}}, // SORCERESS
+                {{6, 7, 8, 9, 10, 9, 8, 7, 6}, {6, 7, 11, 12}, {11, 6}, {6, 7, 13}, {6}, {6, 14}, {6}, {15, 16}, {6}}, // WARLOCK
+                {{6, 7, 8, 9, 8, 7, 6}, {6, 10, 11, 12, 13}, {12, 11, 10, 6}, {6, 14}, {6}, {6, 15}, {6}, {16, 17}, {18}}, // WIZARD
+                {{6, 7, 6, 7, 6, 7}, {7, 8, 9, 10, 11}, {10, 9, 7}, {7, 12, 13, 14, 15}, {7}, {7, 12, 13, 14, 16}, {7}, {17}, {18, 19}}, // NECROMANCER
+                {{1}, {2, 3, 4}, {3, 2}, {5, 6}, {5}, {5, 7}, {5}, {8, 9}, {10}} // CAPTAIN
+            };
+            
+            for ( int frame = 0; frame < 9; ++frame ) {
+                if ( sourceArray[heroType][animation][frame] != 0 ) {
+                    heroTypeAnim[heroType][animation].push_back( sourceArray[heroType][animation][frame] );
+                }
+            }
+        }
+
         return heroTypeAnim[heroType][animation];
     }
 }
