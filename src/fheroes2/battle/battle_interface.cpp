@@ -310,7 +310,7 @@ namespace Battle
                 {{6, 7, 6, 7, 6, 7}, {7, 8, 9, 10, 11}, {10, 9, 7}, {7, 12, 13, 14, 15}, {7}, {7, 12, 13, 14, 16}, {7}, {17}, {18, 19}}, // NECROMANCER
                 {{1}, {2, 3, 4}, {3, 2}, {5, 6}, {5}, {5, 7}, {5}, {8, 9}, {10}} // CAPTAIN
             };
-            
+
             for ( int frame = 0; frame < 9; ++frame ) {
                 if ( sourceArray[heroType][animation][frame] != 0 ) {
                     heroTypeAnim[heroType][animation].push_back( sourceArray[heroType][animation][frame] );
