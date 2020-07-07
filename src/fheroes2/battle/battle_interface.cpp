@@ -1130,11 +1130,11 @@ void Battle::Interface::UpdateContourColor()
     ++_contourCycle;
 
     if ( _brightLandType ) {
-        static const uint8_t contourColorTable[] = { 108, 115, 122, 129, 122, 115 };
+        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
     else {
-        static const uint8_t contourColorTable[] = { 110, 114, 118, 122, 126, 122, 118, 114 };
+        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
 }
