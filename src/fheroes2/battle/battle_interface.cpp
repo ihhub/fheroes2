@@ -4270,10 +4270,11 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
         }
 }
 
-Point CalculateSpellPosition( int spellICN, const Battle::Unit & target, const Sprite & spellSprite )
+Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const Sprite & spellSprite )
 {
     const Rect & pos = target.GetRectPosition();
     const Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
+    int maximumY = AGG::GetMaxICNOffset( spellICN );
 
     // Bottom-left corner (default) position with spell offset applied
     Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
@@ -4307,6 +4308,9 @@ Point CalculateSpellPosition( int spellICN, const Battle::Unit & target, const S
         break;
     }
 
+    if ( result.y < 0 )
+        result.y = maximumY + spellSprite.y();
+
     return result;
 }
 
@@ -4338,7 +4342,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                 if ( ( *it ).defender ) {
                     const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
                     const Sprite & spellSprite = AGG::GetICN( icn, frame, reflect );
-                    spellSprite.Blit( CalculateSpellPosition( icn, *it->defender, spellSprite ), _mainSurface );
+                    spellSprite.Blit( CalculateSpellPosition( *it->defender, icn, spellSprite ), _mainSurface );
                 }
             RedrawPartialFinish();
 
@@ -4389,7 +4393,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 
             const Sprite & spellSprite = AGG::GetICN( icn, frame, reflect );
 
-            spellSprite.Blit( CalculateSpellPosition( icn, b, spellSprite ), _mainSurface );
+            spellSprite.Blit( CalculateSpellPosition( b, icn, spellSprite ), _mainSurface );
             RedrawPartialFinish();
 
             if ( animation != NONE ) {

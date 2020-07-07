@@ -1251,6 +1251,22 @@ u32 AGG::GetICNCount( int icn )
     return icn_cache[icn].count;
 }
 
+int AGG::GetMaxICNOffset( int icn )
+{
+    int result = 0;
+
+    if ( icn < static_cast<int>( icn_cache.size() ) ) {
+        const size_t frameCount = icn_cache[icn].count;
+        for ( int i = 0; i < frameCount; ++i ) {
+            const int offset = -icn_cache[icn].sprites[i].y();
+            if ( offset > result ) {
+                result = offset;
+            }
+        }
+    }
+    return result;
+}
+
 int AGG::PutICN( const Sprite & sprite, bool init_reflect )
 {
     icn_cache_t v;
