@@ -634,6 +634,42 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
     return pos;
 }
 
+Point Battle::OpponentSprite::GetCastPosition( void ) const
+{
+    const bool isCaptain = base->isCaptain();
+    Point offset;
+    switch ( base->GetRace() ) {
+    case Race::KNGT:
+        offset.x = isCaptain ? 0 : 13;
+        offset.y = isCaptain ? 3 : -7;
+        break;
+    case Race::BARB:
+        offset.x = isCaptain ? 0 : 16;
+        offset.y = isCaptain ? 3 : -15;
+        break;
+    case Race::SORC:
+        offset.x = isCaptain ? 0 : 11;
+        offset.y = isCaptain ? 3 : -8;
+        break;
+    case Race::WRLK:
+        offset.x = isCaptain ? 2 : 9;
+        offset.y = isCaptain ? 5 : -11;
+        break;
+    case Race::WZRD:
+        offset.x = isCaptain ? 5 : 1;
+        offset.y = isCaptain ? 8 : -9;
+        break;
+    case Race::NECR:
+        offset.x = isCaptain ? 5 : 13;
+        offset.y = isCaptain ? 6 : -7;
+        break;
+    default:
+        break;
+    }
+
+    return Point( pos.x + ( reflect ? offset.x : pos.w - offset.x ), pos.y + pos.h / 2 + offset.y );
+}
+
 void Battle::OpponentSprite::Redraw( Surface & dst ) const
 {
     const Sprite & hero = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
@@ -2966,7 +3002,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( target ) ? OP_CAST_UP : OP_CAST_MASS );
+            opponent->SetAnimation( ( target == NULL || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
     }
@@ -3401,21 +3437,10 @@ void Battle::Interface::RedrawActionCatapult( int target )
 
 void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
 {
-    const HeroBase * current_commander = arena.GetCurrentCommander();
+    const HeroBase * caster = arena.GetCurrentCommander();
 
-    if ( current_commander ) {
-        Point missileStart;
-        const bool from_left = current_commander == opponent1->GetHero();
-
-        // is left position
-        if ( from_left ) {
-            const Rect & pos1 = opponent1->GetArea();
-            missileStart = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-        }
-        else {
-            const Rect & pos = opponent2->GetArea();
-            missileStart = Point( pos.x, pos.y + pos.h / 2 );
-        }
+    if ( caster ) {
+        Point missileStart = caster == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
 
         const Point targetPos = target.GetCenterPoint();
         const double angle = GetAngle( missileStart, targetPos );
@@ -3652,20 +3677,9 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
 void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 {
-    Point startingPos;
-    const HeroBase * current_commander = arena.GetCurrentCommander();
-
-    if ( current_commander == opponent1->GetHero() ) {
-        const Rect & pos1 = opponent1->GetArea();
-        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-    }
-    else {
-        const Rect & pos = opponent2->GetArea();
-        startingPos = Point( pos.x, pos.y + pos.h / 2 );
-    }
-
     _currentUnit = NULL;
 
+    Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
     const Rect & pos = target.GetRectPosition();
     const Point endPos( pos.x + pos.w / 2, pos.y );
 
@@ -3823,17 +3837,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     LocalEvent & le = LocalEvent::Get();
 
     // Casting hero position
-    Point startingPos;
-    const HeroBase * current_commander = arena.GetCurrentCommander();
-
-    if ( current_commander == opponent1->GetHero() ) {
-        const Rect & pos1 = opponent1->GetArea();
-        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-    }
-    else {
-        const Rect & pos = opponent2->GetArea();
-        startingPos = Point( pos.x, pos.y + pos.h / 2 );
-    }
+    Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
 
     const Point targetPos = target.GetCenterPoint();
 

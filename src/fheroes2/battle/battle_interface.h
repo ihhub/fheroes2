@@ -86,6 +86,7 @@ namespace Battle
         OpponentSprite( const Rect &, const HeroBase *, bool );
 
         const Rect & GetArea( void ) const;
+        Point GetCastPosition() const;
         void Redraw( Surface & dst ) const;
         void Update();
         void SetAnimation( int );
