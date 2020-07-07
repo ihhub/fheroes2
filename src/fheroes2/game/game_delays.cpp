@@ -89,7 +89,8 @@ namespace Game
                           500, // BATTLE_OPPONENTS_DELAY
                           250, // BATTLE_FLAGS_DELAY
                           800, // BATTLE_POPUP_DELAY
-                          220, // COLOR_CYCLE_BATTLE_DELAY
+                          220, // BATTLE_COLOR_CYCLE_DELAY
+                          160, // BATTLE_SELECTED_UNIT_DELAY
                           300, // AUTOHIDE_STATUS_DELAY
                           40, // CURRENT_HERO_DELAY
                           40, // CURRENT_AI_DELAY
