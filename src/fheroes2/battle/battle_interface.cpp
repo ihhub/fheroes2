@@ -3663,6 +3663,9 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
     AGG::PlaySound( points.size() > 2 ? M82::CHAINLTE : M82::LIGHTBLT );
 
+    Surface whiteSurface( _surfaceInnerArea, false );
+    whiteSurface.Fill( RGBA( 0xFF, 0xFF, 0xFF ) );
+
     for ( size_t i = 1; i < points.size(); ++i ) {
         const Point & startingPos = points[i - 1];
         const Point & endPos = points[i];
@@ -3730,11 +3733,15 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
                 RedrawPartialStart();
 
                 RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), _mainSurface, Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+                Surface::Blend( _mainSurface, whiteSurface, 80 ).Blit( _mainSurface );
 
                 RedrawPartialFinish();
             }
         }
     }
+
+    // small delay to display fully drawn lightning
+    DELAY( 100 );
 
     uint32_t frame = 0;
     while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
