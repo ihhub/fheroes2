@@ -942,7 +942,6 @@ int Interface::Basic::HumanTurn( bool isload )
                                 movement.x *= moveStep;
                                 movement.y *= moveStep;
                                 gameArea.ShiftCenter( movement );
-                                RedrawFocus();
                             }
                         }
                         gameArea.SetRedraw();
