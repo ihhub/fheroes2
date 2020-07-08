@@ -81,12 +81,30 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
             flags |= SDL_WINDOW_FULLSCREEN;
         }
         else {
+#if defined( __WIN32__ )
+            flags |= SDL_WINDOW_FULLSCREEN;
+#else
             flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
         }
         keepAspectRatio = aspect;
     }
     else {
         keepAspectRatio = false;
+    }
+
+    if ( !keepAspectRatio ) {
+        SDL_DisplayMode currentVideoMode;
+        SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
+    
+        currentVideoMode.w = w;
+        currentVideoMode.h = h;
+    
+        SDL_DisplayMode closestVideoMode;
+        SDL_GetClosestDisplayMode( 0, &currentVideoMode, &closestVideoMode );
+    
+        w = closestVideoMode.w;
+        h = closestVideoMode.h;
     }
 
     if ( displayTexture )
