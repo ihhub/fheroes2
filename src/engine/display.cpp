@@ -96,15 +96,15 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     if ( !keepAspectRatio ) {
         SDL_DisplayMode currentVideoMode;
         SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
-    
+
         currentVideoMode.w = w;
         currentVideoMode.h = h;
-    
+
         SDL_DisplayMode closestVideoMode;
-        SDL_GetClosestDisplayMode( 0, &currentVideoMode, &closestVideoMode );
-    
-        w = closestVideoMode.w;
-        h = closestVideoMode.h;
+        if ( SDL_GetClosestDisplayMode( 0, &currentVideoMode, &closestVideoMode ) != NULL ) {
+            w = closestVideoMode.w;
+            h = closestVideoMode.h;
+        }
     }
 
     if ( displayTexture )
