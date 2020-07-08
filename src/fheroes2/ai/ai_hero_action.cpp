@@ -1902,11 +1902,7 @@ namespace AI
 
             const uint32_t colors = AIGetAllianceColors( hero );
             const int moveStep = hero.GetMoveStep();
-
-            // center on hero if will be visible
-            if ( AIHeroesShowAnimation( hero, colors ) ) {
-                gameArea.SetCenter( hero.GetCenter() );
-            }
+            bool recenterNeeded = true;
 
             while ( LocalEvent::Get().HandleEvents() ) {
                 if ( hero.isFreeman() || !hero.isEnableMove() ) {
@@ -1915,14 +1911,17 @@ namespace AI
 
                 if ( !AIHeroesShowAnimation( hero, colors ) ) {
                     hero.Move( true );
+                    recenterNeeded = true;
                 }
                 else if ( Game::AnimateInfrequentDelay( Game::CURRENT_AI_DELAY ) ) {
                     cursor.Hide();
-                    if ( hero.Move() ) {
-                        // re-center on every finished step in case hero appears from the fog
+                    // re-center in case hero appears from the fog
+                    if ( recenterNeeded ) {
                         gameArea.SetCenter( hero.GetCenter() );
+                        recenterNeeded = false;
                     }
-                    else {
+
+                    if ( !hero.Move() ) {
                         Point movement( hero.MovementDirection() );
                         movement.x *= moveStep;
                         movement.y *= moveStep;
