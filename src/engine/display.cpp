@@ -93,7 +93,7 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
         keepAspectRatio = false;
     }
 
-    if ( !keepAspectRatio ) {
+    if ( !keepAspectRatio ) { // we don't allow random resolutions
         SDL_DisplayMode currentVideoMode;
         SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
 
