@@ -141,7 +141,6 @@ matrix:
     - os: osx
       name: "OSX with SDL 1.2"
       before_install:
-        - export HOMEBREW_NO_INSTALL_CLEANUP=1
         - brew update
         - brew install sdl
         - brew install sdl_ttf
@@ -166,7 +165,6 @@ matrix:
     - os: osx
       name: "OSX with SDL 2.0"
       before_install:
-        - export HOMEBREW_NO_INSTALL_CLEANUP=1
         - brew update
         - brew install sdl2
         - brew install sdl2_ttf
