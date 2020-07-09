@@ -317,6 +317,11 @@ private:
     bool MoveStep( bool fast = false );
     static void MoveStep( Heroes &, s32 from, s32 to, bool newpos );
 
+    // This function is useful only in situation when AI hero moves out of fog
+    // we don't update his direction during movement under fog so ther is a situation
+    // when initial hero's sprite is set incorrectly. This function fixes it
+    void SetValidDirectionSprite();
+
     std::string name;
     ColorBase killer_color;
     u32 experience;
