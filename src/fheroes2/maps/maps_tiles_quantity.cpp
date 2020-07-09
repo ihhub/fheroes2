@@ -254,7 +254,7 @@ u32 Maps::Tiles::QuantityGold( void ) const
         case 3:
             return 5000;
         default:
-            return 2000;
+            break;
         }
 
     default:

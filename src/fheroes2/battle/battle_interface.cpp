@@ -1122,20 +1122,20 @@ void Battle::Interface::SetStatus( const std::string & msg, bool top )
 void Battle::Interface::CycleColors()
 {
     ++_colorCycle;
-    if ( _colorCycle > 20 ) // 5 * 4, two color ranges
-        _colorCycle = 0;
-
     _creaturePalette = PAL::GetCyclingPalette( _colorCycle );
+}
 
+void Battle::Interface::UpdateContourColor()
+{
     ++_contourCycle;
 
     if ( _brightLandType ) {
         static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
-        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
+        _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
     else {
         static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
-        _contourColor = contourColorTable[( _contourCycle / 4 ) % sizeof( contourColorTable )];
+        _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
 }
 
@@ -3663,6 +3663,9 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
     AGG::PlaySound( points.size() > 2 ? M82::CHAINLTE : M82::LIGHTBLT );
 
+    Surface whiteSurface( _surfaceInnerArea, false );
+    whiteSurface.Fill( RGBA( 0xFF, 0xFF, 0xFF ) );
+
     for ( size_t i = 1; i < points.size(); ++i ) {
         const Point & startingPos = points[i - 1];
         const Point & endPos = points[i];
@@ -3730,11 +3733,15 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
                 RedrawPartialStart();
 
                 RedrawLightning( lightningBolt, RGBA( 0xff, 0xff, 0 ), _mainSurface, Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+                Surface::Blend( _mainSurface, whiteSurface, 80 ).Blit( _mainSurface );
 
                 RedrawPartialFinish();
             }
         }
     }
+
+    // small delay to display fully drawn lightning
+    DELAY( 100 );
 
     uint32_t frame = 0;
     while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
@@ -4471,8 +4478,11 @@ void Battle::Interface::ResetIdleTroopAnimation( void )
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
-    if ( Game::AnimateInfrequentDelay( Game::COLOR_CYCLE_BATTLE_DELAY ) )
+    if ( Game::AnimateInfrequentDelay( Game::BATTLE_COLOR_CYCLE_DELAY ) )
         CycleColors();
+
+    if ( Game::AnimateInfrequentDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) )
+        UpdateContourColor();
 
     // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {

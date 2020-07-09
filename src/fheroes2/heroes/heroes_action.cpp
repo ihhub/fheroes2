@@ -1511,8 +1511,11 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
             }
         }
 
-        if ( complete )
+        if ( complete ) {
             tile.QuantityReset();
+            hero.SetVisited( dst_index );
+            hero.SetVisited( dst_index, Visit::GLOBAL );
+        }
         else if ( 0 == gold && !hero.isObjectTypeVisited( obj ) ) {
             // modify morale
             hero.SetVisited( dst_index );

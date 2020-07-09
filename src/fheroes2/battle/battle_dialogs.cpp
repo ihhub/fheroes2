@@ -648,7 +648,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     Button btnMarket( pos_rt.x + ( pos_rt.w - 16 ) / 2, pos_rt.y + 145, ( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 4, 5 );
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
-        btnAccept.Press();
         btnAccept.SetDisable( true );
     }
 
