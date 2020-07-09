@@ -224,18 +224,6 @@ void Interface::Basic::EventSystemDialog( void )
     // Change and save system settings
     const int changes = Dialog::SystemOptions();
 
-    // change scroll
-    if ( 0x10 & changes ) {
-        // hardcore reset pos
-        gameArea.SetCenter( Point( 0, 0 ) );
-        if ( GetFocusType() != GameFocus::UNSEL )
-            gameArea.SetCenter( GetFocusCenter() );
-        gameArea.SetRedraw();
-
-        if ( conf.ExtGameHideInterface() )
-            controlPanel.ResetTheme();
-    }
-
     // interface themes
     if ( 0x08 & changes ) {
         SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
