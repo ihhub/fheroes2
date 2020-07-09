@@ -20,6 +20,8 @@ jobs:
         brew install sdl_image
     - name: compile
       run: make -j 2
+    - name: create package
+      run: zip fheroes2_osx_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_macos.sh
   sdl2:
     runs-on: macos-10.15
     steps:
@@ -37,3 +39,5 @@ jobs:
       run: make -j 2
       env:
         WITH_SDL2: "ON"
+    - name: create package
+      run: zip fheroes2_osx_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_2.sh script/demo/demo_macos.sh
