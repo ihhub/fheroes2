@@ -415,7 +415,7 @@ bool Maps::TilesAddon::isRoad( int direct ) const
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT );
         else if ( 4 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT );
-        else if ( 5 == index  )
+        else if ( 5 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_RIGHT );
         else if ( 6 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT );
