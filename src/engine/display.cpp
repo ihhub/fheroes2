@@ -51,7 +51,7 @@ namespace
 
         std::vector<double> similarity( resolutions.size(), 0 );
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            similarity[i] = std::fabs( resolutions[i].first - x) / x + std::fabs( resolutions[i].second - y ) / y;
+            similarity[i] = std::fabs( resolutions[i].first - x ) / x + std::fabs( resolutions[i].second - y ) / y;
         }
 
         const std::vector<double>::difference_type id = std::distance( similarity.begin(), std::min_element( similarity.begin(), similarity.end() ) );
@@ -141,8 +141,7 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
                 h = closestVideoMode.h;
             }
         }
-        else
-        {
+        else {
             const std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
             const std::pair<int, int> correctResolution = GetNearestResolution( w, h, resolutions );
             w = correctResolution.first;
