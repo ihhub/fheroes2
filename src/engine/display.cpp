@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <set>
 #include <sstream>
 #include <string>
 
@@ -32,6 +34,30 @@
 namespace
 {
     SDL::Time redrawTiming; // a special timer to highlight that it's time to redraw a screen (only for SDL 2 as of now)
+
+    // Returns nearest screen supported resolution
+    std::pair<int, int> GetNearestResolution( int width, int height, const std::vector<std::pair<int, int> > & resolutions )
+    {
+        if ( resolutions.empty() )
+            return std::make_pair( width, height );
+
+        if ( width < 1 )
+            width = 1;
+        if ( height < 1 )
+            height = 1;
+
+        const double x = width;
+        const double y = height;
+
+        std::vector<double> similarity( resolutions.size(), 0 );
+        for ( size_t i = 0; i < resolutions.size(); ++i ) {
+            similarity[i] = std::fabs( resolutions[i].first - x) / x + std::fabs( resolutions[i].second - y ) / y;
+        }
+
+        const std::vector<double>::difference_type id = std::distance( similarity.begin(), std::min_element( similarity.begin(), similarity.end() ) );
+
+        return resolutions[id];
+    }
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -94,16 +120,33 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     }
 
     if ( !keepAspectRatio ) { // we don't allow random resolutions
-        SDL_DisplayMode currentVideoMode;
-        SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
+        const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+        std::set<std::pair<int, int> > resolutionSet;
+        for ( int i = 0; i < displayModeCount; ++i ) {
+            SDL_DisplayMode videoMode;
+            SDL_GetDisplayMode( 0, i, &videoMode );
+            resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+        }
 
-        currentVideoMode.w = w;
-        currentVideoMode.h = h;
+        if ( resolutionSet.empty() ) {
+            SDL_DisplayMode currentVideoMode;
+            SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
 
-        SDL_DisplayMode closestVideoMode;
-        if ( SDL_GetClosestDisplayMode( 0, &currentVideoMode, &closestVideoMode ) != NULL ) {
-            w = closestVideoMode.w;
-            h = closestVideoMode.h;
+            currentVideoMode.w = w;
+            currentVideoMode.h = h;
+
+            SDL_DisplayMode closestVideoMode;
+            if ( SDL_GetClosestDisplayMode( 0, &currentVideoMode, &closestVideoMode ) != NULL ) {
+                w = closestVideoMode.w;
+                h = closestVideoMode.h;
+            }
+        }
+        else
+        {
+            const std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
+            const std::pair<int, int> correctResolution = GetNearestResolution( w, h, resolutions );
+            w = correctResolution.first;
+            h = correctResolution.second;
         }
     }
 
@@ -154,6 +197,20 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     Set( w, h, false );
     Fill( RGBA( 0, 0, 0 ) );
 #else
+    SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
+    if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
+        std::set<std::pair<int, int> > resolutionSet;
+        for ( int i = 0; modes[i]; ++i ) {
+            resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
+        }
+        if ( !resolutionSet.empty() ) {
+            const std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
+            const std::pair<int, int> correctResolution = GetNearestResolution( w, h, resolutions );
+            w = correctResolution.first;
+            h = correctResolution.second;
+        }
+    }
+
     u32 flags = System::GetRenderFlags();
 
     if ( fullscreen )
