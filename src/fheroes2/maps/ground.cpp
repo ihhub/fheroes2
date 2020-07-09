@@ -56,7 +56,7 @@ const char * Maps::Ground::String( int ground )
     return str_ground[8];
 }
 
-u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level )
+u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level, bool diagonalCost )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
 
@@ -121,7 +121,7 @@ u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level )
         }
     }
 
-    if ( direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
+    if ( diagonalCost && direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
         result *= 1.5;
 
     return result;

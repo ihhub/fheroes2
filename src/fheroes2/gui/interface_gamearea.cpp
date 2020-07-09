@@ -240,30 +240,34 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
     const Heroes * hero = flag & LEVEL_HEROES ? GetFocusHeroes() : NULL;
 
     if ( hero && hero->GetPath().isShow() ) {
-        s32 green = hero->GetPath().GetAllowStep();
+        const Route::Path & path = hero->GetPath();
+        s32 green = path.GetAllowStep();
 
+        const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
         const bool skipfirst = hero->isEnableMove() && 45 > hero->GetSpriteIndex() && 2 < ( hero->GetSpriteIndex() % 9 );
 
-        Route::Path::const_iterator it1 = hero->GetPath().begin();
-        Route::Path::const_iterator it2 = hero->GetPath().end();
-        Route::Path::const_iterator it3 = it1;
+        Route::Path::const_iterator pathEnd = path.end();
+        Route::Path::const_iterator currentStep = path.begin();
+        Route::Path::const_iterator nextStep = currentStep;
 
-        for ( ; it1 != it2; ++it1 ) {
-            const s32 & from = ( *it1 ).GetIndex();
+        for ( ; currentStep != pathEnd; ++currentStep ) {
+            const s32 & from = ( *currentStep ).GetIndex();
             const Point mp = Maps::GetPoint( from );
 
-            ++it3;
+            ++nextStep;
             --green;
 
             // is visible
             if ( ( tileROI & mp ) &&
                  // check skip first?
-                 !( it1 == hero->GetPath().begin() && skipfirst ) ) {
-                const u32 index
-                    = ( it3 == it2
-                            ? 0
-                            : Route::Path::GetIndexSprite( ( *it1 ).GetDirection(), ( *it3 ).GetDirection(),
-                                                           Maps::Ground::GetPenalty( from, Direction::CENTER, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) ) ) );
+                 !( currentStep == path.begin() && skipfirst ) ) {
+                uint32_t index = 0;
+                if ( pathEnd != nextStep ) {
+                    uint32_t penaltyTo = Maps::Ground::GetPenalty( currentStep->GetFrom(), currentStep->GetDirection(), pathfinding, false );
+                    uint32_t penaltyReverse = Maps::Ground::GetPenalty( currentStep->GetIndex(), Direction::Reflect( currentStep->GetDirection() ), pathfinding, false );
+
+                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), std::min( penaltyTo, penaltyReverse ) );
+                }
 
                 const Sprite & sprite = AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
                 BlitOnTile( dst, sprite, sprite.x() - 14, sprite.y(), mp );
