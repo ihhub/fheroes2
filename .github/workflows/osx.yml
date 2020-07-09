@@ -51,3 +51,13 @@ jobs:
         WITH_SDL2: "ON"
     - name: create package
       run: zip fheroes2_osx_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_2.sh script/demo/demo_macos.sh
+    - uses: ncipollo/release-action@v1
+      with:
+        artifact: fheroes2_osx_sdl2.zip
+        body: Compiled version of ${{ github.sha }} commit
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: MacOS build with SDL 2 support (latest commit)
+        tag: fheroes2-osx-sdl2_dev
+        allowUpdates: true
+        prerelease: true
+        replacesArtifacts: true
