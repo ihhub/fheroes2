@@ -22,6 +22,27 @@ jobs:
       run: make -j 2
     - name: create package
       run: zip fheroes2_osx_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_macos.sh
+    - name: create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: fheroes2-osx-sdl1_dev
+        release_name: MacOS build with SDL 1 support (latest commit)
+        body: Compiled version of ${{ github.sha }} commit
+        draft: false
+        prerelease: true
+    - name: upload package
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./fheroes2_osx_sdl1.zip
+        asset_name: fheroes2_osx_sdl1.zip
+        asset_content_type: application/zip
   sdl2:
     runs-on: macos-10.15
     steps:
