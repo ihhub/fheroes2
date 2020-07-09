@@ -263,8 +263,8 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
                  !( currentStep == path.begin() && skipfirst ) ) {
                 uint32_t index = 0;
                 if ( pathEnd != nextStep ) {
-                    uint32_t penaltyTo = Maps::Ground::GetPenalty( currentStep->GetFrom(), currentStep->GetDirection(), pathfinding, false );
-                    uint32_t penaltyReverse = Maps::Ground::GetPenalty( currentStep->GetIndex(), Direction::Reflect( currentStep->GetDirection() ), pathfinding, false );
+                    const uint32_t penaltyTo = Maps::Ground::GetPenalty( currentStep->GetFrom(), currentStep->GetDirection(), pathfinding, false );
+                    const uint32_t penaltyReverse = Maps::Ground::GetPenalty( currentStep->GetIndex(), Direction::Reflect( currentStep->GetDirection() ), pathfinding, false );
 
                     index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), std::min( penaltyTo, penaltyReverse ) );
                 }
