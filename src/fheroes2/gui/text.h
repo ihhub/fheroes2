@@ -144,11 +144,11 @@ public:
     void Clear( void );
     size_t Size( void ) const;
 
-    int w( void ) const
+    uint32_t w( void ) const
     {
         return gw;
     }
-    int h( void ) const
+    uint32_t h( void ) const
     {
         return gh;
     }
