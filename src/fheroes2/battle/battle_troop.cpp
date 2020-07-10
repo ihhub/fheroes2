@@ -425,7 +425,7 @@ bool Battle::Unit::isIdling() const
 
 bool Battle::Unit::checkIdleDelay()
 {
-    return idleTimer.checkIdleDelay();
+    return idleTimer.checkDelay();
 }
 
 void Battle::Unit::NewTurn( void )

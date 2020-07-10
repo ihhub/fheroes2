@@ -110,7 +110,7 @@ namespace Battle
         const HeroBase * base;
         AnimationSequence _currentAnim;
         int _animationType;
-        IdleTimer _idleTimer;
+        RandomizedDelay _idleTimer;
 
         int icn;
         bool reflect;

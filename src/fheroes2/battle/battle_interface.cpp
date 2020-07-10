@@ -696,7 +696,7 @@ void Battle::OpponentSprite::Update()
             if ( _animationType != OP_CAST_MASS && _animationType != OP_CAST_UP && _animationType != OP_CAST_DOWN )
                 SetAnimation( OP_STATIC );
         }
-        else if ( _idleTimer.checkIdleDelay() ) {
+        else if ( _idleTimer.checkDelay() ) {
             SetAnimation( ( Rand::Get( 1, 3 ) < 2 ) ? OP_IDLE2 : OP_IDLE );
         }
     }
