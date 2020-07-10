@@ -350,21 +350,23 @@ namespace Interface
                 cursor.Hide();
 
                 if ( id < _size() ) {
-                    if ( ActionListCursor( ( *content )[id], le.GetMouseCursor() ) )
+                    Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
+
+                    if ( ActionListCursor( item, le.GetMouseCursor() ) )
                         return true;
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
                         if ( id == _currentId ) {
-                            ActionListDoubleClick( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                            ActionListDoubleClick( item, le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         }
                         else {
                             _currentId = id;
-                            ActionListSingleClick( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                            ActionListSingleClick( item, le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         }
                         return true;
                     }
                     else if ( le.MousePressRight( rtAreaItems ) ) {
-                        ActionListPressRight( ( *content )[id], le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                        ActionListPressRight( item, le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
                         return true;
                     }
                 }
