@@ -4274,7 +4274,6 @@ Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const S
 {
     const Rect & pos = target.GetRectPosition();
     const Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
-    int maximumY = AGG::GetMaxICNOffset( spellICN );
 
     // Bottom-left corner (default) position with spell offset applied
     Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
@@ -4308,8 +4307,10 @@ Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const S
         break;
     }
 
-    if ( result.y < 0 )
+    if ( result.y < 0 ) {
+        const int maximumY = AGG::GetMaxICNOffset( spellICN );
         result.y = maximumY + spellSprite.y();
+    }
 
     return result;
 }
