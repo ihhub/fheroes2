@@ -1517,8 +1517,10 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
             if ( _currentUnit->isModes( SP_HYPNOTIZE ) ) {
                 if ( arena.GetForce1().GetColor() == _currentUnit->GetColor() )
                     isControlledByHuman = ( ( arena.GetForce1().GetControl() & CONTROL_AI ) == 0 );
-                else
+                else if ( arena.GetForce2().GetColor() == _currentUnit->GetColor() )
                     isControlledByHuman = ( ( arena.GetForce2().GetControl() & CONTROL_AI ) == 0 );
+                else
+                    isControlledByHuman = false;
             }
             else {
                 isControlledByHuman = false;
