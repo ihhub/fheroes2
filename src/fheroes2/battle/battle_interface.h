@@ -272,6 +272,7 @@ namespace Battle
         bool IdleTroopsAnimation( void );
         void ResetIdleTroopAnimation( void );
         void CycleColors();
+        void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
 
         void ProcessingHeroDialogResult( int, Actions & );

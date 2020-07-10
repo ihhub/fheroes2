@@ -34,7 +34,7 @@ public:
     enum
     {
         DEFAULT_WIDTH = 640,
-        DEFAULT_HEIGHT = 480,
+        DEFAULT_HEIGHT = 480
     };
 
     ~Display();
@@ -86,6 +86,7 @@ protected:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_Window * window;
     SDL_Renderer * renderer;
+    SDL_Texture * displayTexture;
 #endif
 };
 
