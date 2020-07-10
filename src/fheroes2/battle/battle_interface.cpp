@@ -4058,7 +4058,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 
     std::vector<Sprite> spriteCache;
     spriteCache.reserve( icnCount );
-    for ( size_t i = 0; i < icnCount; ++i ) {
+    for ( uint32_t i = 0; i < icnCount; ++i ) {
         spriteCache.push_back( AGG::GetICN( icn, i ) );
     }
 
