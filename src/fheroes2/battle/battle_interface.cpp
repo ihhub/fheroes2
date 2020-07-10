@@ -300,7 +300,7 @@ namespace Battle
         static std::vector<int> heroTypeAnim[7][9];
 
         if ( heroTypeAnim[heroType][animation].empty() ) {
-            static const int sourceArray[7][9][9] = {
+            const int sourceArray[7][9][9] = {
                 //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
                 {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
                 {{6, 7, 8, 9, 9, 8, 7, 6}, {6, 10, 11}, {10, 6}, {6, 12, 13}, {12, 6}, {6, 14}, {6}, {15, 16, 17}, {18}}, // BARBARIAN
@@ -2464,10 +2464,7 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
     if ( target == NULL ) // nothing to animate
         return;
 
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
-
     while ( le.HandleEvents() && !target->isFinishFrame() ) {
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
             target->IncreaseAnimFrame();
@@ -3437,7 +3434,7 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
     const HeroBase * caster = arena.GetCurrentCommander();
 
     if ( caster ) {
-        Point missileStart = caster == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
+        const Point missileStart = caster == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
 
         const Point targetPos = target.GetCenterPoint();
         const double angle = GetAngle( missileStart, targetPos );
@@ -3676,7 +3673,7 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 {
     _currentUnit = NULL;
 
-    Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
+    const Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
     const Rect & pos = target.GetRectPosition();
     const Point endPos( pos.x + pos.w / 2, pos.y );
 
@@ -3834,8 +3831,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     LocalEvent & le = LocalEvent::Get();
 
     // Casting hero position
-    Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
-
+    const Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
     const Point targetPos = target.GetCenterPoint();
 
     const Points path = GetEuclideanLine( startingPos, targetPos, size );
