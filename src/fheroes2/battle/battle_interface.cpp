@@ -4080,9 +4080,11 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
             RedrawPartialStart();
 
             for ( int x = 0; x * spriteSize < _surfaceInnerArea.w; ++x ) {
+                const int idX = frame + x * 3;
+                const int offsetX = x * spriteSize;
                 for ( int y = 0; y * spriteSize < _surfaceInnerArea.h; ++y ) {
-                    const Sprite & sprite = spriteCache[( frame + y + x * 3 ) % icnCount];
-                    sprite.Blit( Point( x * spriteSize + sprite.x(), y * spriteSize + sprite.y() ), _mainSurface );
+                    const Sprite & sprite = spriteCache[( idX + y ) % icnCount];
+                    sprite.Blit( Point( offsetX + sprite.x(), y * spriteSize + sprite.y() ), _mainSurface );
                 }
             }
 
