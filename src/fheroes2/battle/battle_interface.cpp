@@ -4053,11 +4053,13 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 
     const int icn = ICN::STORM;
     const int m82 = M82::FromSpell( Spell::ELEMENTALSTORM );
-    const Rect & area = GetArea();
+    const int spriteSize = 54;
+    const uint32_t icnCount = AGG::GetICNCount( icn );
 
-    u32 frame = 0;
-    u32 repeat = 4;
-    Point center;
+    std::vector<Sprite> spriteCache;
+    for ( size_t i = 0; i < icnCount; ++i ) {
+        spriteCache.push_back( AGG::GetICN( icn, i ) );
+    }
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
@@ -4069,16 +4071,19 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) ) {
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && frame < 60 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            const Sprite & sprite = AGG::GetICN( icn, frame );
-            for ( center.y = area.y; center.y + sprite.h() < area.y + area.h - 20; center.y += sprite.h() )
-                for ( center.x = area.x; center.x + sprite.w() < area.x + area.w; center.x += sprite.w() )
-                    sprite.Blit( center, _mainSurface );
+            for ( int x = 0; x * spriteSize < _surfaceInnerArea.w; ++x ) {
+                for ( int y = 0; y * spriteSize < _surfaceInnerArea.h; ++y ) {
+                    const Sprite & sprite = spriteCache[( frame + y + x * 3 ) % icnCount];
+                    sprite.Blit( Point( x * spriteSize + sprite.x(), y * spriteSize + sprite.y() ), _mainSurface );
+                }
+            }
 
             RedrawPartialFinish();
 
@@ -4086,11 +4091,6 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
                 if ( ( *it ).defender && ( *it ).damage )
                     ( *it ).defender->IncreaseAnimFrame( false );
             ++frame;
-
-            if ( frame == AGG::GetICNCount( icn ) && repeat ) {
-                --repeat;
-                frame = 0;
-            }
         }
     }
 
