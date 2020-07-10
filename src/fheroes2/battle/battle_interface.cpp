@@ -1510,7 +1510,23 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
                 sf_hexagon.Blit( ( *it ).GetPos(), _mainSurface );
     }
 
-    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !_currentUnit->isControlAI() ) { // shadow
+    // In case of hypnotized unit we need to check the status of opponent army
+    bool isControlledByHuman = ( _currentUnit != NULL );
+    if ( _currentUnit != NULL ) {
+        if ( _currentUnit->isControlAI() ) {
+            if ( _currentUnit->isModes( SP_HYPNOTIZE ) ) {
+                if ( arena.GetForce1().GetColor() == _currentUnit->GetColor() )
+                    isControlledByHuman = ( ( arena.GetForce1().GetControl() & CONTROL_AI ) == 0 );
+                else
+                    isControlledByHuman = ( ( arena.GetForce2().GetControl() & CONTROL_AI ) == 0 );
+            }
+            else {
+                isControlledByHuman = false;
+            }
+        }
+    }
+
+    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && isControlledByHuman ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
             if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
                 sf_shadow.Blit( ( *it ).GetPos(), _mainSurface );
