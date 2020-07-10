@@ -89,7 +89,7 @@ namespace Battle
         Point GetCastPosition() const;
         void Redraw( Surface & dst ) const;
         void Update();
-        void SetAnimation( int );
+        void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
         bool isFinishFrame( void ) const;
         bool isStartFrame( void ) const;
