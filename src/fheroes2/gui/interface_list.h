@@ -49,12 +49,12 @@ namespace Interface
         typedef typename std::vector<Item>::iterator ItemsIterator;
 
         ListBox( const Point & pt = Point() )
-            : ptRedraw( pt )
-            , maxItems( 0 )
-            , useHotkeys( true )
-            , content( NULL )
+            : content( NULL )
             , _currentId( -1 )
             , _topId( -1 )
+            , maxItems( 0 )
+            , ptRedraw( pt )
+            , useHotkeys( true )
         {}
         virtual ~ListBox() {}
 
