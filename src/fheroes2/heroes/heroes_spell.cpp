@@ -285,8 +285,8 @@ bool ActionSpellIdentifyHero( Heroes & hero )
 bool ActionSpellSummonBoat( Heroes & hero )
 {
     if ( hero.isShipMaster() ) {
-        DialogSpellFailed( Spell::SUMMONBOAT );
-        return true;
+        Dialog::Message( "", _( "This spell cannot be used on a boat." ), Font::BIG, Dialog::OK );
+        return false;
     }
 
     const s32 center = hero.GetIndex();
