@@ -144,13 +144,13 @@ public:
     void Clear( void );
     size_t Size( void ) const;
 
-    uint32_t w( void ) const
+    int w( void ) const
     {
-        return gw;
+        return static_cast<int>( gw );
     }
-    uint32_t h( void ) const
+    int h( void ) const
     {
-        return gh;
+        return static_cast<int>( gh );
     }
 
     void Blit( s32, s32, Surface & sf = Display::Get() ) const;
