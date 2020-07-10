@@ -258,9 +258,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
             --green;
 
             // is visible
-            if ( ( tileROI & mp ) &&
-                 // check skip first?
-                 !( currentStep == path.begin() && skipfirst ) ) {
+            if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
                 uint32_t index = 0;
                 if ( pathEnd != nextStep ) {
                     const uint32_t penaltyTo = Maps::Ground::GetPenalty( currentStep->GetFrom(), currentStep->GetDirection(), pathfinding, false );
