@@ -284,6 +284,11 @@ bool ActionSpellIdentifyHero( Heroes & hero )
 
 bool ActionSpellSummonBoat( Heroes & hero )
 {
+    if ( hero.isShipMaster() ) {
+        Dialog::Message( "", _( "This spell cannot be used on a boat." ), Font::BIG, Dialog::OK );
+        return false;
+    }
+
     const s32 center = hero.GetIndex();
 
     // find water
