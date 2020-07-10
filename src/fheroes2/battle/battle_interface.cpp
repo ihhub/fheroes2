@@ -2713,7 +2713,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     // targets damage animation
     int py = ( conf.QVGA() ? 20 : 50 );
     int finish = 0;
-    bool death = false;
+    int deathColor = Color::UNUSED;
 
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
@@ -2725,7 +2725,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 AGG::PlaySound( target.defender->M82Kill() );
                 ++finish;
 
-                death = true;
+                deathColor = target.defender->GetArmyColor();
             }
             else
                 // wince animation
@@ -2744,8 +2744,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
     const Point & topleft = border.GetArea();
 
-    if ( death ) {
-        const bool attackersTurn = attacker->GetColor() == arena.GetArmyColor1();
+    if ( deathColor != Color::UNUSED ) {
+        const bool attackersTurn = deathColor == arena.GetArmyColor2();
         OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
         OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
         // 60% of joyful animation
