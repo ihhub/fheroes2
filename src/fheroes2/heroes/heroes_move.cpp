@@ -808,13 +808,15 @@ bool Heroes::Move( bool fast )
             if ( GetDirection() != path.GetFrontDirection() ) {
                 AngleStep( path.GetFrontDirection() );
             }
-            else
-                // move
-                if ( MoveStep() ) {
-                if ( isFreeman() )
-                    return false;
+            else {
+                SetValidDirectionSprite(); // in case of AI hero
 
-                return true;
+                if ( MoveStep() ) { // move
+                    if ( isFreeman() )
+                        return false;
+
+                    return true;
+                }
             }
         }
     }
@@ -864,4 +866,38 @@ Point Heroes::MovementDirection() const
     }
 
     return Point();
+}
+
+void Heroes::SetValidDirectionSprite()
+{
+    const int32_t from = GetIndex();
+    const int32_t to = Maps::GetDirectionIndex( from, path.GetFrontDirection() );
+    if ( from == -1 || to == -1 )
+        return;
+
+    if ( direction == Direction::TOP ) {
+        if ( sprite_index < 0 || sprite_index >= 9 ) {
+            sprite_index = 0;
+        }
+    }
+    else if ( direction == Direction::TOP_RIGHT || direction == Direction::TOP_LEFT ) {
+        if ( sprite_index < 9 || sprite_index >= 18 ) {
+            sprite_index = 9;
+        }
+    }
+    else if ( direction == Direction::RIGHT || direction == Direction::LEFT ) {
+        if ( sprite_index < 18 || sprite_index >= 27 ) {
+            sprite_index = 18;
+        }
+    }
+    else if ( direction == Direction::BOTTOM_RIGHT || direction == Direction::BOTTOM_LEFT ) {
+        if ( sprite_index < 27 || sprite_index >= 36 ) {
+            sprite_index = 27;
+        }
+    }
+    else if ( direction == Direction::BOTTOM ) {
+        if ( sprite_index < 36 || sprite_index >= 45 ) {
+            sprite_index = 36;
+        }
+    }
 }
