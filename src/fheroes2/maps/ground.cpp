@@ -121,7 +121,7 @@ u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level, bool diagonalCos
         }
     }
 
-    if ( diagonalCost && direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
+    if ( diagonalCost && ( direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) )
         result *= 1.5;
 
     return result;
