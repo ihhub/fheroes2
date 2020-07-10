@@ -2471,10 +2471,7 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
     while ( le.HandleEvents() && !target->isFinishFrame() ) {
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
             target->IncreaseAnimFrame();
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.Flip();
         }
     }
 }
