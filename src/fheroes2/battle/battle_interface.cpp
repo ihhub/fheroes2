@@ -2192,6 +2192,14 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         cursor.SetThemes( Cursor::WAR_POINTER );
         listlog->QueueEventProcessing();
     }
+    else if ( le.MouseCursor( status ) ) {
+        if ( listlog ) {
+            msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
+            if ( le.MouseClickLeft( status ) )
+                listlog->SetOpenLog( !listlog->isOpenLog() );
+        }
+        cursor.SetThemes( Cursor::WAR_POINTER );
+    }
     else if ( le.MouseCursor( _interfacePosition ) ) {
         const int themes = GetBattleCursor( msg );
 
@@ -2213,14 +2221,6 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             else if ( le.MousePressRight() )
                 MousePressRightBoardAction( themes, *cell, a );
         }
-    }
-    else if ( le.MouseCursor( status ) ) {
-        if ( listlog ) {
-            msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
-            if ( le.MouseClickLeft( status ) )
-                listlog->SetOpenLog( !listlog->isOpenLog() );
-        }
-        cursor.SetThemes( Cursor::WAR_POINTER );
     }
     else {
         cursor.SetThemes( Cursor::WAR_NONE );
