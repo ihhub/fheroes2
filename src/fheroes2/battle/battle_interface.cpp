@@ -2200,7 +2200,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         }
         cursor.SetThemes( Cursor::WAR_POINTER );
     }
-    else if ( le.MouseCursor( Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.w, _interfacePosition.h - status.h) ) ) {
+    else if ( le.MouseCursor( Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.w, _interfacePosition.h - status.h ) ) ) {
         const int themes = GetBattleCursor( msg );
 
         if ( cursor.Themes() != themes )
