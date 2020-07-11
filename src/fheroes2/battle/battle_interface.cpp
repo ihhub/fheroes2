@@ -3044,8 +3044,10 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         break;
 
     case Spell::HOLYWORD:
+        RedrawActionHolyShoutSpell( targets, 2 );
+        break;
     case Spell::HOLYSHOUT:
-        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::FromSpell( spell() ), true );
+        RedrawActionHolyShoutSpell( targets, 4 );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -3937,6 +3939,35 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
             ( *it ).defender->SwitchAnimation( Monster_Info::STATIC );
             _currentUnit = NULL;
         }
+}
+
+void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength )
+{
+    Cursor & cursor = Cursor::Get();
+    Display & display = Display::Get();
+    LocalEvent & le = LocalEvent::Get();
+
+    cursor.SetThemes( Cursor::WAR_NONE );
+
+    Surface blurred = _mainSurface.RenderBoxBlur( 0, 2 );
+
+    _currentUnit = NULL;
+    AGG::PlaySound( M82::MASSCURS );
+    u32 alpha = 10;
+
+    while ( le.HandleEvents() && alpha < 250 ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            cursor.Hide();
+            Surface::Blend( _mainSurface, blurred, ( 255 - alpha ) * 100 / 255 ).Blit( _mainSurface );
+            cursor.Show();
+            RedrawPartialFinish();
+
+            alpha += 10;
+        }
+    }
+    RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
 }
 
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )

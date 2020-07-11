@@ -1177,6 +1177,94 @@ Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFreque
     return res;
 }
 
+Surface Surface::RenderBoxBlur( int colorChange, int blurRadius ) const
+{
+    const int height = h();
+    const int width = w();
+    const bool hasAlpha = amask();
+    const int imageDepth = depth();
+
+    // create identical surface but do not blit on it
+    Surface res( Rect( Point( 0, 0 ), GetSize() ), GetFormat() );
+    res.Lock();
+
+    if ( imageDepth == 32 ) {
+        const uint16_t pitch = res.surface->pitch >> 2;
+        //static_cast<u32 *>( surface->pixels ) + y * pitch + x;
+        //SDL_GetRGB( *x, surface->format, &currentColor.r, &currentColor.g, &currentColor.b );
+
+        uint32_t * inputPtr = static_cast<u32 *>( surface->pixels );
+        uint32_t * outputPtr = static_cast<u32 *>( res.surface->pixels );
+        SDL_Color currentColor;
+
+        for ( int y = 0; y < height; ++y ) {
+            for ( int x = 0; x < width; ++x ) {
+                uint32_t red = 0;
+                uint32_t green = 0;
+                uint32_t blue = 0;
+                uint32_t totalPixels = 0;
+
+                for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
+                    for ( int boxY = -blurRadius; boxY <= blurRadius; ++boxY ) {
+                        const int currentX = x + boxX;
+                        const int currentY = y + boxY;
+                        if ( currentX >= 0 && currentX < width && currentY >= 0 && currentY < height ) {
+                            SDL_GetRGB( inputPtr[currentY * pitch + currentX], surface->format, &currentColor.r, &currentColor.g, &currentColor.b );
+                            red += currentColor.r;
+                            green += currentColor.g;
+                            blue += currentColor.b;
+                            totalPixels++;
+                        }
+                    }
+                }
+
+                red /= totalPixels;
+                green /= totalPixels;
+                blue /= totalPixels;
+
+                outputPtr[y * pitch + x] = SDL_MapRGB( res.surface->format, red, green, blue );
+            }
+        }
+    }
+    else {
+        for ( int y = 0; y < height; ++y ) {
+            for ( int x = 0; x < width; ++x ) {
+                uint32_t red = 0;
+                uint32_t green = 0;
+                uint32_t blue = 0;
+                uint32_t alpha = 0;
+                uint32_t totalPixels = 0;
+
+                for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
+                    for ( int boxY = -blurRadius; boxY <= blurRadius; ++boxY ) {
+                        const int currentX = x + boxX;
+                        const int currentY = y + boxY;
+                        if ( currentX >= 0 && currentX < width && currentY >= 0 && currentY < height ) {
+                            RGBA currentColor = GetRGB( GetPixel( currentX, currentY ) );
+                            red += currentColor.r();
+                            green += currentColor.g();
+                            blue += currentColor.b();
+                            alpha += currentColor.a();
+                            totalPixels++;
+                        }
+                    }
+                }
+
+                red /= totalPixels;
+                green /= totalPixels;
+                blue /= totalPixels;
+                alpha /= totalPixels;
+
+                res.SetPixel( x, y, res.MapRGB( RGBA( red, green, blue, alpha ) ) );
+            }
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
 Surface Surface::RenderChangeColor( const RGBA & col1, const RGBA & col2 ) const
 {
     Surface res = GetSurface();
