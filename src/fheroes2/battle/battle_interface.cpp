@@ -4318,7 +4318,7 @@ Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const S
     }
 
     if ( result.y < 0 ) {
-        const int maximumY = AGG::GetMaxICNOffset( spellICN );
+        const int maximumY = AGG::GetAbsoluteICNHeight( spellICN );
         result.y = maximumY + spellSprite.y();
     }
 

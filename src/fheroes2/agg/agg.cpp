@@ -1286,7 +1286,8 @@ u32 AGG::GetICNCount( int icn )
     return icn_cache[icn].count;
 }
 
-int AGG::GetMaxICNOffset( int icn )
+// return height of the biggest frame in specific ICN
+int AGG::GetAbsoluteICNHeight( int icn )
 {
     int result = 0;
 
