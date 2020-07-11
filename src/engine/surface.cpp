@@ -34,6 +34,7 @@
 #include "localevent.h"
 #include "surface.h"
 #include "system.h"
+#include "tools.h"
 
 #ifdef WITH_IMAGE
 #include "IMG_savepng.h"
@@ -1132,14 +1133,11 @@ Surface Surface::RenderSepia( void ) const
             pixel = GetPixel( x, y );
             if ( colkey == 0 || pixel != colkey ) {
                 RGBA col = GetRGB( pixel );
-// Numbers derived from http://blogs.techrepublic.com.com/howdoi/?p=120
-#define CLAMP255( val ) std::min<u16>( ( val ), 255 )
-                int outR = CLAMP255( static_cast<u16>( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f ) );
-                int outG = CLAMP255( static_cast<u16>( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f ) );
-                int outB = CLAMP255( static_cast<u16>( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f ) );
+                int outR = ClampInteger( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f, 0, 255 );
+                int outG = ClampInteger( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f, 0, 255 );
+                int outB = ClampInteger( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f, 0, 255 );
                 pixel = res.MapRGB( RGBA( outR, outG, outB, col.a() ) );
                 res.SetPixel( x, y, pixel );
-#undef CLAMP255
             }
         }
     res.Unlock();
@@ -1177,21 +1175,20 @@ Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFreque
     return res;
 }
 
-Surface Surface::RenderBoxBlur( int colorChange, int blurRadius ) const
+Surface Surface::RenderBoxBlur( int blurRadius, int colorChange ) const
 {
     const int height = h();
     const int width = w();
-    const bool hasAlpha = amask();
-    const int imageDepth = depth();
+    const bool hasAlphaMask = amask();
+    const uint32_t imageDepth = depth();
 
     // create identical surface but do not blit on it
     Surface res( Rect( Point( 0, 0 ), GetSize() ), GetFormat() );
     res.Lock();
 
-    if ( imageDepth == 32 ) {
+    // optimized mode for the most used sprite format
+    if ( imageDepth == 32 && !hasAlphaMask ) {
         const uint16_t pitch = res.surface->pitch >> 2;
-        //static_cast<u32 *>( surface->pixels ) + y * pitch + x;
-        //SDL_GetRGB( *x, surface->format, &currentColor.r, &currentColor.g, &currentColor.b );
 
         uint32_t * inputPtr = static_cast<u32 *>( surface->pixels );
         uint32_t * outputPtr = static_cast<u32 *>( res.surface->pixels );
@@ -1199,9 +1196,9 @@ Surface Surface::RenderBoxBlur( int colorChange, int blurRadius ) const
 
         for ( int y = 0; y < height; ++y ) {
             for ( int x = 0; x < width; ++x ) {
-                uint32_t red = 0;
-                uint32_t green = 0;
-                uint32_t blue = 0;
+                int red = 0;
+                int green = 0;
+                int blue = 0;
                 uint32_t totalPixels = 0;
 
                 for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
@@ -1218,9 +1215,10 @@ Surface Surface::RenderBoxBlur( int colorChange, int blurRadius ) const
                     }
                 }
 
-                red /= totalPixels;
-                green /= totalPixels;
-                blue /= totalPixels;
+                // Clamp the int values to uint8_t range
+                red = ClampInteger( red / totalPixels + colorChange, 0, 255 );
+                green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
+                blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
 
                 outputPtr[y * pitch + x] = SDL_MapRGB( res.surface->format, red, green, blue );
             }
@@ -1229,10 +1227,10 @@ Surface Surface::RenderBoxBlur( int colorChange, int blurRadius ) const
     else {
         for ( int y = 0; y < height; ++y ) {
             for ( int x = 0; x < width; ++x ) {
-                uint32_t red = 0;
-                uint32_t green = 0;
-                uint32_t blue = 0;
-                uint32_t alpha = 0;
+                int red = 0;
+                int green = 0;
+                int blue = 0;
+                int alpha = 0;
                 uint32_t totalPixels = 0;
 
                 for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
@@ -1250,10 +1248,11 @@ Surface Surface::RenderBoxBlur( int colorChange, int blurRadius ) const
                     }
                 }
 
-                red /= totalPixels;
-                green /= totalPixels;
-                blue /= totalPixels;
-                alpha /= totalPixels;
+                // Clamp the int values to uint8_t range
+                red = ClampInteger( red / totalPixels + colorChange, 0, 255 );
+                green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
+                blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
+                alpha = ClampInteger( alpha / totalPixels, 0, 255 );
 
                 res.SetPixel( x, y, res.MapRGB( RGBA( red, green, blue, alpha ) ) );
             }

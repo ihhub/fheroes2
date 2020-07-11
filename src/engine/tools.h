@@ -49,6 +49,7 @@ std::list<std::string> StringSplit( const std::string &, const std::string & );
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
 
+int ClampInteger( int value, int min, int max );
 int CountBits( u32 );
 int CheckSum( const std::vector<u8> & );
 int CheckSum( const std::string & );
