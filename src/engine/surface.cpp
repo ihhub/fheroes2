@@ -1175,7 +1175,7 @@ Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFreque
     return res;
 }
 
-Surface Surface::RenderBoxBlur( int blurRadius, int colorChange ) const
+Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) const
 {
     const int height = h();
     const int width = w();
@@ -1216,7 +1216,7 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange ) const
                 }
 
                 // Clamp the int values to uint8_t range
-                red = ClampInteger( red / totalPixels + colorChange, 0, 255 );
+                red = ClampInteger( red / totalPixels + ( redTint ? 0 : colorChange ), 0, 255 );
                 green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
                 blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
 
@@ -1249,7 +1249,7 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange ) const
                 }
 
                 // Clamp the int values to uint8_t range
-                red = ClampInteger( red / totalPixels + colorChange, 0, 255 );
+                red = ClampInteger( red / totalPixels + ( redTint ? 0 : colorChange ), 0, 255 );
                 green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
                 blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
                 alpha = ClampInteger( alpha / totalPixels, 0, 255 );

@@ -3949,7 +3949,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
     cursor.SetThemes( Cursor::WAR_NONE );
 
     Surface original = _mainSurface.GetSurface();
-    Surface blurred = _mainSurface.RenderBoxBlur( 2, -strength );
+    Surface blurred = _mainSurface.RenderBoxBlur( 2, -strength, true );
 
     _currentUnit = NULL;
     AGG::PlaySound( M82::MASSCURS );
