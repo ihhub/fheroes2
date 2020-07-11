@@ -208,8 +208,7 @@ namespace Battle
         Position position;
         ModesAffected affected;
         Unit * mirror;
-        TimeDelay idleTimer;
-        bool idleTimerSet;
+        RandomizedDelay idleTimer;
 
         bool blindanswer;
     };

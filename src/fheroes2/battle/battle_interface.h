@@ -28,6 +28,7 @@
 #include "battle_board.h"
 #include "button.h"
 #include "dialog.h"
+#include "game_delays.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "spell.h"
@@ -53,11 +54,30 @@ namespace Battle
     void DialogBattleSettings( void );
     bool DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingdom & kingdom );
 
-    enum
+    enum HeroAnimation
     {
+        OP_JOY,
+        OP_CAST_MASS,
+        OP_CAST_MASS_RETURN,
+        OP_CAST_UP,
+        OP_CAST_UP_RETURN,
+        OP_CAST_DOWN,
+        OP_CAST_DOWN_RETURN,
         OP_IDLE,
-        OP_SRRW,
-        OP_CAST
+        OP_IDLE2,
+        OP_STATIC,
+        OP_SORROW
+    };
+
+    enum BattleHeroType
+    {
+        KNIGHT,
+        BARBARIAN,
+        SORCERESS,
+        WARLOCK,
+        WIZARD,
+        NECROMANCER,
+        CAPTAIN
     };
 
     class OpponentSprite
@@ -66,8 +86,10 @@ namespace Battle
         OpponentSprite( const Rect &, const HeroBase *, bool );
 
         const Rect & GetArea( void ) const;
+        Point GetCastPosition() const;
         void Redraw( Surface & dst ) const;
-        void ResetAnimFrame( int );
+        void Update();
+        void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
         bool isFinishFrame( void ) const;
         bool isStartFrame( void ) const;
@@ -86,10 +108,11 @@ namespace Battle
 
     private:
         const HeroBase * base;
+        AnimationSequence _currentAnim;
+        int _animationType;
+        RandomizedDelay _idleTimer;
+
         int icn;
-        int animframe;
-        int animframe_start;
-        int animframe_count;
         bool reflect;
         Rect pos;
         Point _offset;
@@ -239,6 +262,7 @@ namespace Battle
         void RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size );
 
+        void AnimateOpponents( OpponentSprite * target );
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
