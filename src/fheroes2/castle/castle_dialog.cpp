@@ -357,10 +357,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings );
 
     if ( 2 > world.GetKingdom( GetColor() ).GetCastles().size() || readonly ) {
-        buttonPrevCastle.Press();
         buttonPrevCastle.SetDisable( true );
-
-        buttonNextCastle.Press();
         buttonNextCastle.SetDisable( true );
     }
 
@@ -703,11 +700,11 @@ int Castle::OpenDialog( bool readonly, bool fade )
             msg_status = _( "Show income" );
         else
             // status message prev castle
-            if ( le.MouseCursor( buttonPrevCastle ) )
+            if ( buttonPrevCastle.isEnable() && le.MouseCursor( buttonPrevCastle ) )
             msg_status = _( "Show previous town" );
         else
             // status message next castle
-            if ( le.MouseCursor( buttonNextCastle ) )
+            if ( buttonNextCastle.isEnable() && le.MouseCursor( buttonNextCastle ) )
             msg_status = _( "Show next town" );
         else if ( heroes.Guest() && heroes.Guard() && le.MouseCursor( buttonSwap ) )
             msg_status = _( "Swap Heroes" );

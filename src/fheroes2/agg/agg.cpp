@@ -583,6 +583,8 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     case ICN::ROUTERED:
         count = 145;
         break;
+    case ICN::SPELLS:
+        count = 66;
 
     default:
         break;
@@ -759,6 +761,39 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
             LoadOrgICN( sprite, icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
             ReplaceColors( sprite, PAL::GetPalette( PAL::GRAY_TEXT ), icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
             break;
+
+        case ICN::SPELLS:
+            if ( ii < 60 ) {
+                LoadOrgICN( sprite, icn, ii, false );
+            }
+            else {
+                int originalIndex = 0;
+                if ( ii == 60 ) // Mass Cure
+                    originalIndex = 6;
+                else if ( ii == 61 ) // Mass Haste
+                    originalIndex = 14;
+                else if ( ii == 62 ) // Mass Slow
+                    originalIndex = 1;
+                else if ( ii == 63 ) // Mass Bless
+                    originalIndex = 7;
+                else if ( ii == 64 ) // Mass Curse
+                    originalIndex = 3;
+                else if ( ii == 65 ) // Mass Shield
+                    originalIndex = 15;
+
+                Sprite icon = AGG::GetICN( ICN::SPELLS, originalIndex );
+
+                sprite = Sprite( Surface( Size( icon.GetSize().w + 8, icon.GetSize().h + 8 ), icon.amask() ), icon.x() - 4, icon.y() - 4 );
+                Sprite icon1( icon.GetSurface(), icon.x(), icon.y() );
+                icon1.SetAlphaMod( 128, false );
+                icon1.Blit( 0, 0, sprite );
+
+                Sprite icon2( icon.GetSurface(), icon.x(), icon.y() );
+                icon2.SetAlphaMod( 192, false );
+                icon2.Blit( 4, 4, sprite );
+
+                icon.Blit( 8, 8, sprite );
+            }
 
         default:
             break;

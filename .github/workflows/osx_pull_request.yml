@@ -1,0 +1,39 @@
+name: OSX
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  sdl1:
+    runs-on: macos-10.15
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: install SDL 1
+      run: |
+        brew update
+        brew install sdl
+        brew install sdl_ttf
+        brew install sdl_mixer
+        brew install sdl_image
+    - name: compile
+      run: make -j 2
+  sdl2:
+    runs-on: macos-10.15
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: install SDL 2
+      run: |
+        brew update
+        brew install sdl2
+        brew install sdl2_ttf
+        brew install sdl2_mixer
+        brew install sdl2_image
+    - name: compile
+      run: make -j 2
+      env:
+        WITH_SDL2: "ON"

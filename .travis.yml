@@ -138,57 +138,6 @@ matrix:
         overwrite: true
         on:
           branch: master
-    - os: osx
-      name: "OSX with SDL 1.2"
-      before_install:
-        - export HOMEBREW_NO_INSTALL_CLEANUP=1
-        - brew update
-        - brew install sdl
-        - brew install sdl_ttf
-        - brew install sdl_mixer
-        - brew install sdl_image
-        - export PATH="/usr/local/opt/gettext/bin:$PATH"
-      before_deploy:
-        - zip fheroes2_osx_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_macos.sh
-        - export TRAVIS_TAG=fheroes2-osx-sdl1_dev
-        - git tag -f $TRAVIS_TAG
-      deploy:
-        provider: releases
-        api_key: "$GITHUB_OAUTH_TOKEN"
-        file: "fheroes2_osx_sdl1.zip"
-        skip_cleanup: true
-        name: MacOS build with SDL 1 support (latest commit)
-        body: Compiled version of $TRAVIS_COMMIT commit
-        prerelease: true
-        overwrite: true
-        on:
-          branch: master
-    - os: osx
-      name: "OSX with SDL 2.0"
-      before_install:
-        - export HOMEBREW_NO_INSTALL_CLEANUP=1
-        - brew update
-        - brew install sdl2
-        - brew install sdl2_ttf
-        - brew install sdl2_mixer
-        - brew install sdl2_image
-        - export PATH="/usr/local/opt/gettext/bin:$PATH"
-        - export WITH_SDL2="ON"
-      before_deploy:
-        - zip fheroes2_osx_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_2.sh script/demo/demo_macos.sh
-        - export TRAVIS_TAG=fheroes2-osx-sdl2_dev
-        - git tag -f $TRAVIS_TAG
-      deploy:
-        provider: releases
-        api_key: "$GITHUB_OAUTH_TOKEN"
-        file: "fheroes2_osx_sdl2.zip"
-        skip_cleanup: true
-        name: MacOS build with SDL 2 support (latest commit)
-        body: Compiled version of $TRAVIS_COMMIT commit
-        prerelease: true
-        overwrite: true
-        on:
-          branch: master
 
 script:
   - |

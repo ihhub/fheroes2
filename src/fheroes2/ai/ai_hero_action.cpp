@@ -1850,7 +1850,7 @@ namespace AI
         return false;
     }
 
-    bool AIHeroesShowAnimation( const Heroes & hero )
+    uint32_t AIGetAllianceColors( const Heroes & hero )
     {
         const Settings & conf = Settings::Get();
 
@@ -1872,20 +1872,20 @@ namespace AI
                 colors = player->GetFriends();
         }
 
-        // get result
-        const s32 index_from = hero.GetIndex();
+        return colors;
+    }
 
-        if ( colors && Maps::isValidAbsIndex( index_from ) ) {
-            const Maps::Tiles & tile_from = world.GetTiles( index_from );
+    bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors )
+    {
+        const s32 indexFrom = hero.GetIndex();
 
-            if ( hero.GetPath().isValid() ) {
-                const s32 index_to = Maps::GetDirectionIndex( index_from, hero.GetPath().GetFrontDirection() );
-                const Maps::Tiles & tile_to = world.GetTiles( index_to );
-
-                return !tile_from.isFog( colors ) && !tile_to.isFog( colors );
+        if ( colors && Maps::isValidAbsIndex( indexFrom ) ) {
+            if ( !world.GetTiles( indexFrom ).isFog( colors ) ) {
+                return true;
             }
 
-            return !tile_from.isFog( colors );
+            const Route::Path & path = hero.GetPath();
+            return path.isValid() && !world.GetTiles( path.front().GetIndex() ).isFog( colors );
         }
 
         return false;
@@ -1896,56 +1896,54 @@ namespace AI
         if ( hero.GetPath().isValid() ) {
             hero.SetMove( true );
 
-            const Settings & conf = Settings::Get();
-            Display & display = Display::Get();
             Cursor & cursor = Cursor::Get();
             Interface::Basic & I = Interface::Basic::Get();
+            Interface::GameArea & gameArea = I.GetGameArea();
 
-            cursor.Hide();
-
-            if ( 0 != conf.AIMoveSpeed() && AIHeroesShowAnimation( hero ) ) {
-                cursor.Hide();
-                I.GetGameArea().SetCenter( hero.GetCenter() );
-                I.Redraw( REDRAW_GAMEAREA );
-                cursor.Show();
-                display.Flip();
-            }
+            const uint32_t colors = AIGetAllianceColors( hero );
+            const int moveStep = hero.GetMoveStep();
+            bool recenterNeeded = true;
 
             while ( LocalEvent::Get().HandleEvents() ) {
                 if ( hero.isFreeman() || !hero.isEnableMove() ) {
                     break;
                 }
 
-                bool hide_move = ( 0 == conf.AIMoveSpeed() ) || ( !IS_DEVEL() && !AIHeroesShowAnimation( hero ) );
-
-                if ( hide_move ) {
+                if ( !AIHeroesShowAnimation( hero, colors ) ) {
                     hero.Move( true );
+                    recenterNeeded = true;
                 }
                 else if ( Game::AnimateInfrequentDelay( Game::CURRENT_AI_DELAY ) ) {
                     cursor.Hide();
-                    hero.Move();
+                    // re-center in case hero appears from the fog
+                    if ( recenterNeeded ) {
+                        gameArea.SetCenter( hero.GetCenter() );
+                        recenterNeeded = false;
+                    }
 
-                    I.GetGameArea().SetCenter( hero.GetCenter() );
+                    if ( !hero.Move() ) {
+                        Point movement( hero.MovementDirection() );
+                        if ( movement != Point() ) { // don't waste resources for no movement
+                            movement.x *= moveStep;
+                            movement.y *= moveStep;
+                            gameArea.ShiftCenter( movement );
+                        }
+                    }
+                    else {
+                        gameArea.SetCenter( hero.GetCenter() );
+                    }
+
                     I.Redraw( REDRAW_GAMEAREA );
                     cursor.Show();
-                    display.Flip();
+                    Display::Get().Flip();
                 }
 
                 if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+                    // will be animated in hero loop
                     u32 & frame = Game::MapsAnimationFrame();
                     ++frame;
-                    cursor.Hide();
-                    I.Redraw( REDRAW_GAMEAREA );
-                    cursor.Show();
-                    display.Flip();
                 }
             }
-
-            bool hide_move = ( 0 == conf.AIMoveSpeed() ) || ( !IS_DEVEL() && !AIHeroesShowAnimation( hero ) );
-
-            // 0.2 sec delay for show enemy hero position
-            if ( !hero.isFreeman() && !hide_move )
-                DELAY( 200 );
 
             hero.SetMove( false );
         }
