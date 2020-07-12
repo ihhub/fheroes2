@@ -220,6 +220,7 @@ protected:
     u32 GetPixel2( s32 x, s32 y ) const;
     u32 GetPixel1( s32 x, s32 y ) const;
     u32 GetPixel( int x, int y ) const;
+    uint32_t GetRawPixelValue( int position ) const;
 
     SDL_Surface * surface;
     bool _isDisplay;

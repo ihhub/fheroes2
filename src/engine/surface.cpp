@@ -723,7 +723,7 @@ u32 Surface::GetPixel4( s32 x, s32 y ) const
 
 u32 Surface::GetPixel3( s32 x, s32 y ) const
 {
-    u8 * bufp = static_cast<u8 *>( surface->pixels ) + y * surface->pitch + x * 3;
+    u8 * bufp = static_cast<u8 *>( surface->pixels ) + ( y * surface->pitch + x ) * 3;
     return GetPixel24( bufp );
 }
 
@@ -766,6 +766,28 @@ u32 Surface::GetPixel( int x, int y ) const
         Error::Except( __FUNCTION__, "out of range" );
 
     return pixel;
+}
+
+// Optimized version of GetPixel without error and boundries checking. Private call, validate before use
+uint32_t Surface::GetRawPixelValue( int position ) const
+{
+    switch ( surface->format->BitsPerPixel ) {
+    case 8:
+        return *( static_cast<uint8_t *>( surface->pixels ) + position );
+        break;
+    case 15:
+    case 16:
+        return *( static_cast<uint16_t *>( surface->pixels ) + position );
+        break;
+    case 24:
+        return GetPixel24( static_cast<uint8_t *>( surface->pixels ) + position * 3 );
+        break;
+    case 32:
+        return *( static_cast<uint32_t *>( surface->pixels ) + position );
+        break;
+    default:
+        break;
+    }
 }
 
 void Surface::Blit( const Rect & srt, const Point & dpt, Surface & dst ) const
@@ -1179,20 +1201,19 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
 {
     const int height = h();
     const int width = w();
-    const bool hasAlphaMask = amask();
     const uint32_t imageDepth = depth();
-
+    const uint32_t byteSize = imageDepth / 8 + ( imageDepth % 8 != 0 );
     // create identical surface but do not blit on it
     Surface res( Rect( Point( 0, 0 ), GetSize() ), GetFormat() );
     res.Lock();
 
     // optimized mode for the most used sprite format
-    if ( imageDepth == 32 && !hasAlphaMask ) {
-        const uint16_t pitch = res.surface->pitch >> 2;
-
+    if ( imageDepth == 32 ) {
+        const uint16_t lineWidth = surface->pitch >> 2;
         uint32_t * inputPtr = static_cast<u32 *>( surface->pixels );
         uint32_t * outputPtr = static_cast<u32 *>( res.surface->pixels );
         SDL_Color currentColor;
+        uint8_t alphaChannel;
 
         for ( int y = 0; y < height; ++y ) {
             for ( int x = 0; x < width; ++x ) {
@@ -1206,7 +1227,8 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
                         const int currentX = x + boxX;
                         const int currentY = y + boxY;
                         if ( currentX >= 0 && currentX < width && currentY >= 0 && currentY < height ) {
-                            SDL_GetRGB( inputPtr[currentY * pitch + currentX], surface->format, &currentColor.r, &currentColor.g, &currentColor.b );
+                            const int position = currentY * width + currentX;
+                            SDL_GetRGB( GetRawPixelValue( position ), surface->format, &currentColor.r, &currentColor.g, &currentColor.b );
                             red += currentColor.r;
                             green += currentColor.g;
                             blue += currentColor.b;
@@ -1220,7 +1242,7 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
                 green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
                 blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
 
-                outputPtr[y * pitch + x] = SDL_MapRGB( res.surface->format, red, green, blue );
+                outputPtr[y * width + x] = SDL_MapRGBA( res.surface->format, red, green, blue, 255 );
             }
         }
     }
