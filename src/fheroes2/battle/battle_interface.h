@@ -245,7 +245,7 @@ namespace Battle
         void RedrawOpponentsFlags( void );
         void RedrawArmies( void );
         void RedrawTroopSprite( const Unit & );
-        void RedrawTroopCount( const Unit & );
+        void RedrawTroopCount( const Unit & unit );
 
         void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = NULL );
         void RedrawActionArrowSpell( const Unit & );
