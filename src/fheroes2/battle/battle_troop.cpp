@@ -406,7 +406,7 @@ bool Battle::Unit::isHandFighting( void ) const
 
 bool Battle::Unit::isHandFighting( const Unit & a, const Unit & b )
 {
-    return a.isValid() && !a.Modes( CAP_TOWER ) && b.isValid() && b.GetColor() != a.GetColor()
+    return a.isValid() && !a.Modes( CAP_TOWER ) && b.isValid() && b.GetColor() != a.GetCurrentColor()
            && ( Board::isNearIndexes( a.GetHeadIndex(), b.GetHeadIndex() ) || ( b.isWide() && Board::isNearIndexes( a.GetHeadIndex(), b.GetTailIndex() ) )
                 || ( a.isWide()
                      && ( Board::isNearIndexes( a.GetTailIndex(), b.GetHeadIndex() )
@@ -1066,7 +1066,7 @@ u32 Battle::Unit::GetHitPoints( void ) const
 
 int Battle::Unit::GetControl( void ) const
 {
-    return Modes( SP_BERSERKER ) || !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
+    return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
 }
 
 bool Battle::Unit::isArchers( void ) const
@@ -1819,13 +1819,34 @@ int Battle::Unit::GetArmyColor( void ) const
 
 int Battle::Unit::GetColor( void ) const
 {
+    return GetArmyColor();
+}
+
+int Battle::Unit::GetCurrentColor() const
+{
     if ( Modes( SP_BERSERKER ) )
-        return 0;
+        return -1; // be aware of unknown color
     else if ( Modes( SP_HYPNOTIZE ) )
         return GetArena()->GetOppositeColor( GetArmyColor() );
 
     // default
-    return GetArmyColor();
+    return GetColor();
+}
+
+int Battle::Unit::GetCurrentControl() const
+{
+    if ( Modes( SP_BERSERKER ) )
+        return CONTROL_AI; // let's say that it belongs to AI which is not present in the battle
+
+    if ( Modes( SP_HYPNOTIZE ) ) {
+        const int color = GetCurrentColor();
+        if ( color == GetArena()->GetForce1().GetColor() )
+            return GetArena()->GetForce1().GetControl();
+        else
+            return GetArena()->GetForce2().GetControl();
+    }
+
+    return GetControl();
 }
 
 const HeroBase * Battle::Unit::GetCommander( void ) const

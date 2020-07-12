@@ -1417,7 +1417,7 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
                 sf_hexagon.Blit( ( *it ).GetPos(), _mainSurface );
     }
 
-    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !_currentUnit->isControlAI() ) { // shadow
+    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
             if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
                 sf_shadow.Blit( ( *it ).GetPos(), _mainSurface );
@@ -1751,7 +1751,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
         const Unit * b_enemy = cell->GetUnit();
 
         if ( b_enemy ) {
-            if ( _currentUnit->GetColor() == b_enemy->GetColor() && !b_enemy->Modes( SP_HYPNOTIZE ) ) {
+            if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
                 statusMsg = _( "View %{monster} info." );
                 StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                 return Cursor::WAR_INFO;
