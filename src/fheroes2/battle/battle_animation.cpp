@@ -475,6 +475,11 @@ size_t AnimationReference::getProjectileID( float angle ) const
     return _monsterInfo.getProjectileID( angle );
 }
 
+Point AnimationReference::getBlindOffset() const
+{
+    return _monsterInfo.eyePosition;
+}
+
 Point AnimationReference::getProjectileOffset( size_t direction ) const
 {
     if ( _monsterInfo.projectileOffset.size() > direction ) {

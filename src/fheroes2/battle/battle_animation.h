@@ -112,6 +112,7 @@ public:
     uint32_t getFlightSpeed() const;
     uint32_t getShootingSpeed() const;
     size_t getProjectileID( float angle ) const;
+    Point getBlindOffset() const;
     Point getProjectileOffset( size_t direction ) const;
     uint32_t getIdleDelay() const;
 
