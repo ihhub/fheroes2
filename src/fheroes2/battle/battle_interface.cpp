@@ -3040,7 +3040,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
 
     case Spell::DEATHRIPPLE:
     case Spell::DEATHWAVE:
-        RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::FromSpell( spell() ), true );
+        RedrawActionDeathWaveSpell( targets );
         break;
 
     case Spell::HOLYWORD:
@@ -3891,6 +3891,30 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
 
     _currentUnit = old_current;
     b_current_sprite = NULL;
+}
+
+void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets )
+{
+    LocalEvent & le = LocalEvent::Get();
+    _currentUnit = NULL;
+
+    AGG::PlaySound( M82::MNRDEATH );
+
+    Surface copy = _mainSurface.GetSurface();
+
+    int position = 0;
+    while ( le.HandleEvents() && position < _surfaceInnerArea.w ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::AnimateCustomDelay( 5 ) ) {
+            copy.RenderDeathWave( position, 40, 9 ).Blit( _mainSurface );
+            RedrawPartialFinish();
+
+            ++position;
+        }
+    }
+
+    RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
 }
 
 void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & targets )

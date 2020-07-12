@@ -1147,7 +1147,7 @@ Surface Surface::RenderSepia( void ) const
 }
 
 // Renders the death wave starting at X position
-Surface Surface::RenderDeathWave( int position, int waveHeight, int waveLength ) const
+Surface Surface::RenderDeathWave( int position, int waveLength, int waveHeight ) const
 {
     const int height = h();
     const int width = w();
