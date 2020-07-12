@@ -810,6 +810,7 @@ uint32_t Surface::GetRawPixelValue( int position ) const
     default:
         break;
     }
+    return 0;
 }
 
 void Surface::Blit( const Rect & srt, const Point & dpt, Surface & dst ) const
