@@ -1510,25 +1510,7 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
                 sf_hexagon.Blit( ( *it ).GetPos(), _mainSurface );
     }
 
-    // In case of hypnotized unit we need to check the status of opponent army
-    bool isControlledByHuman = ( _currentUnit != NULL );
-    if ( _currentUnit != NULL ) {
-        if ( _currentUnit->isControlAI() ) {
-            if ( _currentUnit->isModes( SP_HYPNOTIZE ) ) {
-                if ( arena.GetForce1().GetColor() == _currentUnit->GetColor() )
-                    isControlledByHuman = ( ( arena.GetForce1().GetControl() & CONTROL_AI ) == 0 );
-                else if ( arena.GetForce2().GetColor() == _currentUnit->GetColor() )
-                    isControlledByHuman = ( ( arena.GetForce2().GetControl() & CONTROL_AI ) == 0 );
-                else
-                    isControlledByHuman = false;
-            }
-            else {
-                isControlledByHuman = false;
-            }
-        }
-    }
-
-    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && isControlledByHuman ) { // shadow
+    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
             if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
                 sf_shadow.Blit( ( *it ).GetPos(), _mainSurface );
@@ -1862,7 +1844,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
         const Unit * b_enemy = cell->GetUnit();
 
         if ( b_enemy ) {
-            if ( _currentUnit->GetColor() == b_enemy->GetColor() && !b_enemy->Modes( SP_HYPNOTIZE ) ) {
+            if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
                 statusMsg = _( "View %{monster} info." );
                 StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                 return Cursor::WAR_INFO;

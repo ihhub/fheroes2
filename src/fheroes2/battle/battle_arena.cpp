@@ -353,23 +353,12 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
-                if ( current_troop->Modes( SP_HYPNOTIZE ) ) {
-                    bool humanControl = true;
-                    if ( army1->GetColor() == current_troop->GetColor() )
-                        humanControl = ( army1->GetControl() & CONTROL_AI ) == 0;
-                    else
-                        humanControl = ( army2->GetControl() & CONTROL_AI ) == 0;
-
-                    if ( humanControl )
-                        HumanTurn( *current_troop, actions );
-                    else
-                        AI::Get().BattleTurn( *this, *current_troop, actions );
-                }
-                else if ( current_troop->isControlAI() || ( current_color & auto_battle ) ) {
+                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_color & auto_battle ) ) {
                     AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
-                else if ( current_troop->isControlHuman() )
+                else {
                     HumanTurn( *current_troop, actions );
+                }
             }
         }
 
