@@ -3039,8 +3039,10 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         break;
 
     case Spell::DEATHRIPPLE:
+        RedrawActionDeathWaveSpell( targets, 10 );
+        break;
     case Spell::DEATHWAVE:
-        RedrawActionDeathWaveSpell( targets );
+        RedrawActionDeathWaveSpell( targets, 15 );
         break;
 
     case Spell::HOLYWORD:
@@ -3893,11 +3895,13 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     b_current_sprite = NULL;
 }
 
-void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets )
+void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength )
 {
+    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     _currentUnit = NULL;
 
+    cursor.SetThemes( Cursor::WAR_NONE );
     AGG::PlaySound( M82::MNRDEATH );
 
     Surface copy = _mainSurface.GetSurface();
@@ -3906,11 +3910,13 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets 
     while ( le.HandleEvents() && position < _surfaceInnerArea.w ) {
         CheckGlobalEvents( le );
 
-        if ( Game::AnimateCustomDelay( 5 ) ) {
-            copy.RenderDeathWave( position, 40, 9 ).Blit( _mainSurface );
+        if ( Game::AnimateCustomDelay( 10 ) ) {
+            cursor.Hide();
+            copy.RenderDeathWave( position, strength * 2 + 10, strength ).Blit( _mainSurface );
+            cursor.Show();
             RedrawPartialFinish();
 
-            ++position;
+            position += 2;
         }
     }
 

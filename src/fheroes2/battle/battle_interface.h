@@ -257,7 +257,7 @@ namespace Battle
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell( const TargetsInfo & );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
-        void RedrawActionDeathWaveSpell( const TargetsInfo & );
+        void RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength );
         void RedrawActionLightningBoltSpell( Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
         void RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi ); // helper function

@@ -1161,9 +1161,11 @@ Surface Surface::RenderDeathWave( int position, int waveLength, int waveHeight )
 
     for ( int x = startX; x < endX; ++x ) {
         const int xPosition = position + x;
-        const int sinEffect = sin( x / waveLimit ) * waveHeight;
-        for ( int y = height - 1; y > sinEffect; --y ) {
-            res.SetPixel( xPosition, y - sinEffect, GetPixel( xPosition, y ) );
+        // use tangent for the drop and sine for smooth wave rise
+        const int modifier = waveHeight * ( ( x < waveLimit ) ? tan( x / waveLimit ) / 2 : sin( x / waveLimit ) );
+
+        for ( int y = height - 1; y > modifier; --y ) {
+            res.SetPixel( xPosition, y - modifier, GetPixel( xPosition, y ) );
         }
     }
 
