@@ -2996,7 +2996,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( target == NULL || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
+            opponent->SetAnimation( ( spell.isApplyWithoutFocusObject() || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
     }
@@ -3906,16 +3906,17 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     area.h -= Settings::Get().QVGA() ? 18 : 36;
 
     Surface copy = _mainSurface.GetSurface( area );
+    const int waveLength = strength * 2 + 10;
 
     AGG::PlaySound( M82::MNRDEATH );
 
     int position = 10;
-    while ( le.HandleEvents() && position < area.w ) {
+    while ( le.HandleEvents() && position < area.w + waveLength ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
-            copy.RenderDeathWave( position, strength * 2 + 10, strength ).Blit( _mainSurface );
+            copy.RenderDeathWave( position, waveLength, strength ).Blit( _mainSurface );
             cursor.Show();
             RedrawPartialFinish();
 
