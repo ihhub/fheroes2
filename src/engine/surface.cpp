@@ -1160,7 +1160,7 @@ Surface Surface::RenderDeathWave( int position, int waveLength, int waveHeight )
     res.Lock();
 
     for ( int x = startX; x < endX; ++x ) {
-        const int xPosition = position + x;
+        const int xPosition = position + x - startX;
         // use tangent for the drop and sine for smooth wave rise
         const int modifier = waveHeight * ( ( x < waveLimit ) ? tan( x / waveLimit ) / 2 : sin( x / waveLimit ) );
 

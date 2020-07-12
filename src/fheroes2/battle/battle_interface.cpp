@@ -3900,23 +3900,26 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     _currentUnit = NULL;
-
     cursor.SetThemes( Cursor::WAR_NONE );
+
+    Rect area = GetArea();
+    area.h -= Settings::Get().QVGA() ? 18 : 36;
+
+    Surface copy = _mainSurface.GetSurface( area );
+
     AGG::PlaySound( M82::MNRDEATH );
 
-    Surface copy = _mainSurface.GetSurface();
-
-    int position = 0;
-    while ( le.HandleEvents() && position < _surfaceInnerArea.w ) {
+    int position = 10;
+    while ( le.HandleEvents() && position < area.w ) {
         CheckGlobalEvents( le );
 
-        if ( Game::AnimateCustomDelay( 10 ) ) {
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
             copy.RenderDeathWave( position, strength * 2 + 10, strength ).Blit( _mainSurface );
             cursor.Show();
             RedrawPartialFinish();
 
-            position += 2;
+            position += 3;
         }
     }
 
