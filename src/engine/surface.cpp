@@ -664,7 +664,7 @@ void Surface::SetPixel4( s32 x, s32 y, u32 color )
 /* draw u24 pixel */
 void Surface::SetPixel3( s32 x, s32 y, u32 color )
 {
-    u8 * bufp = static_cast<u8 *>( surface->pixels ) + y * surface->pitch + x * 3;
+    u8 * bufp = static_cast<u8 *>( surface->pixels ) + ( y * surface->pitch + x ) * 3;
     SetPixel24( bufp, color );
 }
 
@@ -768,7 +768,7 @@ u32 Surface::GetPixel( int x, int y ) const
     return pixel;
 }
 
-// Optimized version of GetPixel without error and boundries checking. Private call, validate before use
+// Optimized version of SetPixel without error and boundries checking. Validate before use
 void Surface::SetRawPixel( int position, uint32_t pixel )
 {
     switch ( surface->format->BitsPerPixel ) {
