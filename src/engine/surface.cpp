@@ -1146,6 +1146,32 @@ Surface Surface::RenderSepia( void ) const
     return res;
 }
 
+// Renders the death wave starting at X position
+Surface Surface::RenderDeathWave( int position, int waveHeight, int waveLength ) const
+{
+    const int height = h();
+    const int width = w();
+
+    const int startX = ( position < waveLength ) ? waveLength - position : 0;
+    const int endX = ( position + waveLength > width ) ? width - position : waveLength;
+    const double waveLimit = waveLength / M_PI;
+
+    Surface res = GetSurface();
+    res.Lock();
+
+    for ( int x = startX; x < endX; ++x ) {
+        const int xPosition = position + x;
+        const int sinEffect = sin( x / waveLimit ) * waveHeight;
+        for ( int y = height - 1; y > sinEffect; --y ) {
+            res.SetPixel( xPosition, y - sinEffect, GetPixel( xPosition, y ) );
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
 // Returns a warped Sprite. Animation is built with 60 frames in mind.
 Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFrequency ) const
 {
