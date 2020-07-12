@@ -664,7 +664,7 @@ void Surface::SetPixel4( s32 x, s32 y, u32 color )
 /* draw u24 pixel */
 void Surface::SetPixel3( s32 x, s32 y, u32 color )
 {
-    u8 * bufp = static_cast<u8 *>( surface->pixels ) + ( y * surface->pitch + x ) * 3;
+    u8 * bufp = static_cast<u8 *>( surface->pixels ) + y * surface->pitch + x * 3;
     SetPixel24( bufp, color );
 }
 
@@ -723,7 +723,7 @@ u32 Surface::GetPixel4( s32 x, s32 y ) const
 
 u32 Surface::GetPixel3( s32 x, s32 y ) const
 {
-    u8 * bufp = static_cast<u8 *>( surface->pixels ) + ( y * surface->pitch + x ) * 3;
+    u8 * bufp = static_cast<u8 *>( surface->pixels ) + y * surface->pitch + x * 3;
     return GetPixel24( bufp );
 }
 
@@ -1233,6 +1233,9 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
     if ( imageDepth == 32 ) {
         lineWidth >>= 2;
     }
+    else if ( imageDepth == 24 ) {
+        lineWidth /= 3;
+    }
     else if ( imageDepth == 16 ) {
         lineWidth >>= 1;
     }
@@ -1271,7 +1274,7 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
             blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
             alpha = ClampInteger( alpha / totalPixels, 0, 255 );
 
-            res.SetRawPixel( y * width + x, SDL_MapRGBA( res.surface->format, red, green, blue, alpha ) );
+            res.SetRawPixel( y * lineWidth + x, SDL_MapRGBA( res.surface->format, red, green, blue, alpha ) );
         }
     }
 
