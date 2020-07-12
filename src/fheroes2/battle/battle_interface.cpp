@@ -2996,7 +2996,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( target == NULL || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
+            opponent->SetAnimation( ( spell.isApplyWithoutFocusObject() || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
     }
@@ -3039,8 +3039,10 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         break;
 
     case Spell::DEATHRIPPLE:
+        RedrawActionDeathWaveSpell( targets, 10 );
+        break;
     case Spell::DEATHWAVE:
-        RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::FromSpell( spell() ), true );
+        RedrawActionDeathWaveSpell( targets, 15 );
         break;
 
     case Spell::HOLYWORD:
@@ -3891,6 +3893,38 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
 
     _currentUnit = old_current;
     b_current_sprite = NULL;
+}
+
+void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength )
+{
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+    _currentUnit = NULL;
+    cursor.SetThemes( Cursor::WAR_NONE );
+
+    Rect area = GetArea();
+    area.h -= Settings::Get().QVGA() ? 18 : 36;
+
+    Surface copy = _mainSurface.GetSurface( area );
+    const int waveLength = strength * 2 + 10;
+
+    AGG::PlaySound( M82::MNRDEATH );
+
+    int position = 10;
+    while ( le.HandleEvents() && position < area.w + waveLength ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            cursor.Hide();
+            copy.RenderDeathWave( position, waveLength, strength ).Blit( _mainSurface );
+            cursor.Show();
+            RedrawPartialFinish();
+
+            position += 3;
+        }
+    }
+
+    RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
 }
 
 void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & targets )

@@ -154,6 +154,7 @@ public:
     Surface RenderContour( const RGBA & ) const;
     Surface RenderGrayScale( void ) const;
     Surface RenderSepia( void ) const;
+    Surface RenderDeathWave( int position, int waveLength, int waveHeight ) const;
     Surface RenderRippleEffect( int frame, double scaleX = 0.05, double waveFrequency = 20.0 ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
     Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
