@@ -769,6 +769,28 @@ u32 Surface::GetPixel( int x, int y ) const
 }
 
 // Optimized version of GetPixel without error and boundries checking. Private call, validate before use
+void Surface::SetRawPixel( int position, uint32_t pixel )
+{
+    switch ( surface->format->BitsPerPixel ) {
+    case 8:
+        *( static_cast<uint8_t *>( surface->pixels ) + position ) = static_cast<uint8_t>( pixel );
+        break;
+    case 15:
+    case 16:
+        *( static_cast<uint16_t *>( surface->pixels ) + position ) = static_cast<uint16_t>( pixel );
+        break;
+    case 24:
+        SetPixel24( static_cast<uint8_t *>( surface->pixels ) + position * 3, pixel );
+        break;
+    case 32:
+        *( static_cast<uint32_t *>( surface->pixels ) + position ) = static_cast<uint32_t>( pixel );
+        break;
+    default:
+        break;
+    }
+}
+
+// Optimized version of GetPixel without error and boundries checking. Private call, validate before use
 uint32_t Surface::GetRawPixelValue( int position ) const
 {
     switch ( surface->format->BitsPerPixel ) {
@@ -1202,82 +1224,53 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
     const int height = h();
     const int width = w();
     const uint32_t imageDepth = depth();
-    const uint32_t byteSize = imageDepth / 8 + ( imageDepth % 8 != 0 );
+
+    SDL_Color currentColor;
+    uint8_t alphaChannel;
+
+    uint32_t lineWidth = surface->pitch;
+    if ( imageDepth == 32 ) {
+        lineWidth >>= 2;
+    }
+    else if ( imageDepth == 16 ) {
+        lineWidth >>= 1;
+    }
+
     // create identical surface but do not blit on it
     Surface res( Rect( Point( 0, 0 ), GetSize() ), GetFormat() );
     res.Lock();
 
-    // optimized mode for the most used sprite format
-    if ( imageDepth == 32 ) {
-        const uint16_t lineWidth = surface->pitch >> 2;
-        uint32_t * inputPtr = static_cast<u32 *>( surface->pixels );
-        uint32_t * outputPtr = static_cast<u32 *>( res.surface->pixels );
-        SDL_Color currentColor;
-        uint8_t alphaChannel;
+    for ( int y = 0; y < height; ++y ) {
+        for ( int x = 0; x < width; ++x ) {
+            int red = 0;
+            int green = 0;
+            int blue = 0;
+            int alpha = 0;
+            uint32_t totalPixels = 0;
 
-        for ( int y = 0; y < height; ++y ) {
-            for ( int x = 0; x < width; ++x ) {
-                int red = 0;
-                int green = 0;
-                int blue = 0;
-                uint32_t totalPixels = 0;
-
-                for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
-                    for ( int boxY = -blurRadius; boxY <= blurRadius; ++boxY ) {
-                        const int currentX = x + boxX;
-                        const int currentY = y + boxY;
-                        if ( currentX >= 0 && currentX < width && currentY >= 0 && currentY < height ) {
-                            const int position = currentY * width + currentX;
-                            SDL_GetRGB( GetRawPixelValue( position ), surface->format, &currentColor.r, &currentColor.g, &currentColor.b );
-                            red += currentColor.r;
-                            green += currentColor.g;
-                            blue += currentColor.b;
-                            totalPixels++;
-                        }
+            for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
+                for ( int boxY = -blurRadius; boxY <= blurRadius; ++boxY ) {
+                    const int currentX = x + boxX;
+                    const int currentY = y + boxY;
+                    if ( currentX >= 0 && currentX < width && currentY >= 0 && currentY < height ) {
+                        const int position = currentY * lineWidth + currentX;
+                        SDL_GetRGBA( GetRawPixelValue( position ), surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
+                        red += currentColor.r;
+                        green += currentColor.g;
+                        blue += currentColor.b;
+                        alpha += alphaChannel;
+                        totalPixels++;
                     }
                 }
-
-                // Clamp the int values to uint8_t range
-                red = ClampInteger( red / totalPixels + ( redTint ? 0 : colorChange ), 0, 255 );
-                green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
-                blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
-
-                outputPtr[y * width + x] = SDL_MapRGBA( res.surface->format, red, green, blue, 255 );
             }
-        }
-    }
-    else {
-        for ( int y = 0; y < height; ++y ) {
-            for ( int x = 0; x < width; ++x ) {
-                int red = 0;
-                int green = 0;
-                int blue = 0;
-                int alpha = 0;
-                uint32_t totalPixels = 0;
 
-                for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
-                    for ( int boxY = -blurRadius; boxY <= blurRadius; ++boxY ) {
-                        const int currentX = x + boxX;
-                        const int currentY = y + boxY;
-                        if ( currentX >= 0 && currentX < width && currentY >= 0 && currentY < height ) {
-                            RGBA currentColor = GetRGB( GetPixel( currentX, currentY ) );
-                            red += currentColor.r();
-                            green += currentColor.g();
-                            blue += currentColor.b();
-                            alpha += currentColor.a();
-                            totalPixels++;
-                        }
-                    }
-                }
+            // Clamp the int values to uint8_t range
+            red = ClampInteger( red / totalPixels + ( redTint ? 0 : colorChange ), 0, 255 );
+            green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
+            blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
+            alpha = ClampInteger( alpha / totalPixels, 0, 255 );
 
-                // Clamp the int values to uint8_t range
-                red = ClampInteger( red / totalPixels + ( redTint ? 0 : colorChange ), 0, 255 );
-                green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
-                blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
-                alpha = ClampInteger( alpha / totalPixels, 0, 255 );
-
-                res.SetPixel( x, y, res.MapRGB( RGBA( red, green, blue, alpha ) ) );
-            }
+            res.SetRawPixel( y * width + x, SDL_MapRGBA( res.surface->format, red, green, blue, alpha ) );
         }
     }
 
