@@ -796,19 +796,14 @@ uint32_t Surface::GetRawPixelValue( int position ) const
     switch ( surface->format->BitsPerPixel ) {
     case 8:
         return *( static_cast<uint8_t *>( surface->pixels ) + position );
-        break;
     case 15:
     case 16:
         return *( static_cast<uint16_t *>( surface->pixels ) + position );
-        break;
     case 24:
         return GetPixel24( static_cast<uint8_t *>( surface->pixels ) + position * 3 );
-        break;
     case 32:
         return *( static_cast<uint32_t *>( surface->pixels ) + position );
-        break;
     default:
-        break;
     }
     return 0;
 }
