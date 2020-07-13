@@ -2814,9 +2814,15 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
     // Set to static animation as attacker might still continue its animation
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-        if ( ( *it ).defender ) {
-            if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
-                it->defender->SwitchAnimation( Monster_Info::STATIC );
+        Unit * unit = ( *it ).defender;
+        if ( unit ) {
+            if ( unit->isFinishAnimFrame() && unit->GetAnimationState() == Monster_Info::WNCE ) {
+                unit->SwitchAnimation( Monster_Info::STATIC );
+            }
+
+            
+            if ( unit->Modes( CAP_MIRRORIMAGE ) || unit->Modes( CAP_SUMMONELEM ) ) {
+                arena.GetGraveyard()->RemoveTroop( *unit );
             }
         }
     }
