@@ -447,7 +447,8 @@ Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
 u32 Maps::GetApproximateDistance( s32 index1, s32 index2 )
 {
     const Size sz( GetPoint( index1 ) - GetPoint( index2 ) );
-    return std::max( sz.w, sz.h );
+    // diagonal move costs 1.5 as much
+    return std::max( sz.w, sz.h ) + std::min( sz.w, sz.h ) / 2;
 }
 
 void Maps::MinimizeAreaForCastle( const Point & center )
