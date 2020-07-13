@@ -1325,10 +1325,10 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     const Sprite & bar = AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
 
-    const int tileInFront = isReflected ? unit.GetHeadIndex() - 1 : unit.GetHeadIndex() + 1;
+    const int tileInFront = Board::GetIndexDirection( unit.GetHeadIndex(), isReflected ? Battle::LEFT : Battle::RIGHT );
 
     s32 sx = rt.x + ( isReflected ? -7 : rt.w - 13 );
-    s32 sy = rt.y + rt.h - bar.h() - ( isReflected ? 23 : 11 );
+    const s32 sy = rt.y + rt.h - bar.h() - ( isReflected ? 23 : 11 );
 
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
     // check if has unit standing in front
