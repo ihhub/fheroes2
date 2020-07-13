@@ -403,7 +403,7 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     switch ( MP2::GetICNObject( object ) ) {
     // from sprite road
     case ICN::ROAD:
-        if ( 0 == index || 4 == index || 5 == index || 13 == index || 26 == index )
+        if ( 0 == index || 26 == index || 31 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM );
         else if ( 2 == index || 21 == index || 28 == index )
             return direct & ( Direction::LEFT | Direction::RIGHT );
@@ -413,14 +413,20 @@ bool Maps::TilesAddon::isRoad( int direct ) const
             return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
         else if ( 3 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT );
+        else if ( 4 == index )
+            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT );
+        else if ( 5 == index )
+            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_RIGHT );
         else if ( 6 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT );
         else if ( 7 == index )
             return direct & ( Direction::TOP | Direction::RIGHT );
         else if ( 9 == index )
-            return direct & ( Direction::BOTTOM | Direction::RIGHT );
+            return direct & ( Direction::BOTTOM | Direction::TOP_RIGHT );
         else if ( 12 == index )
-            return direct & ( Direction::BOTTOM | Direction::LEFT );
+            return direct & ( Direction::BOTTOM | Direction::TOP_LEFT );
+        else if ( 13 == index )
+            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT );
         else if ( 14 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT );
         else if ( 16 == index )

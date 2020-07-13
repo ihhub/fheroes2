@@ -216,9 +216,20 @@ void AI::Simple::BattleTurn( Arena & arena, const Unit & b, Actions & a )
     bool attack = false;
 
     if ( b.isArchers() && !b.isHandFighting() ) {
-        enemy = arena.GetEnemyMaxQuality( b.GetColor() );
-        if ( BattleMagicTurn( arena, b, a, enemy ) )
-            return; /* repeat turn: correct spell ability */
+        if ( b.Modes( SP_BERSERKER ) ) {
+            const Indexes positions = board->GetNearestTroopIndexes( b.GetHeadIndex(), NULL );
+            if ( positions.size() ) {
+                const int pos = *Rand::Get( positions );
+                const Cell * cell = Board::GetCell( pos );
+                enemy = cell ? cell->GetUnit() : NULL;
+            }
+        }
+        else {
+            enemy = arena.GetEnemyMaxQuality( b.GetColor() );
+            if ( BattleMagicTurn( arena, b, a, enemy ) )
+                return; // repeat turn: correct spell ability
+        }
+
         attack = true;
     }
     else {
@@ -228,6 +239,7 @@ void AI::Simple::BattleTurn( Arena & arena, const Unit & b, Actions & a )
             const Indexes positions = board->GetNearestTroopIndexes( b.GetHeadIndex(), NULL );
             if ( positions.size() )
                 move = *Rand::Get( positions );
+            attack = true;
         }
         else {
             if ( BattleMagicTurn( arena, b, a, NULL ) )
@@ -283,7 +295,7 @@ void AI::Simple::BattleTurn( Arena & arena, const Unit & b, Actions & a )
                     }
 
                     if ( !enemy )
-                        enemy = AIGetEnemyAbroadMaxQuality( path.back(), b.GetColor() );
+                        enemy = AIGetEnemyAbroadMaxQuality( path.back(), b.GetCurrentColor() );
 
                     a.push_back( Battle::Command( MSG_BATTLE_MOVE, b.GetUID(), path.back() ) );
 

@@ -1417,7 +1417,7 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
                 sf_hexagon.Blit( ( *it ).GetPos(), _mainSurface );
     }
 
-    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !_currentUnit->isControlAI() ) { // shadow
+    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
             if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
                 sf_shadow.Blit( ( *it ).GetPos(), _mainSurface );
@@ -1751,7 +1751,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
         const Unit * b_enemy = cell->GetUnit();
 
         if ( b_enemy ) {
-            if ( _currentUnit->GetColor() == b_enemy->GetColor() && !b_enemy->Modes( SP_HYPNOTIZE ) ) {
+            if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
                 statusMsg = _( "View %{monster} info." );
                 StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                 return Cursor::WAR_INFO;
@@ -2996,7 +2996,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( target == NULL || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
+            opponent->SetAnimation( ( spell.isApplyWithoutFocusObject() || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
     }
@@ -3039,8 +3039,10 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         break;
 
     case Spell::DEATHRIPPLE:
+        RedrawActionDeathWaveSpell( targets, 10 );
+        break;
     case Spell::DEATHWAVE:
-        RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::FromSpell( spell() ), true );
+        RedrawActionDeathWaveSpell( targets, 15 );
         break;
 
     case Spell::HOLYWORD:
@@ -3895,6 +3897,38 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     b_current_sprite = NULL;
 }
 
+void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength )
+{
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+    _currentUnit = NULL;
+    cursor.SetThemes( Cursor::WAR_NONE );
+
+    Rect area = GetArea();
+    area.h -= Settings::Get().QVGA() ? 18 : 36;
+
+    Surface copy = _mainSurface.GetSurface( area );
+    const int waveLength = strength * 2 + 10;
+
+    AGG::PlaySound( M82::MNRDEATH );
+
+    int position = 10;
+    while ( le.HandleEvents() && position < area.w + waveLength ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            cursor.Hide();
+            copy.RenderDeathWave( position, waveLength, strength ).Blit( _mainSurface );
+            cursor.Show();
+            RedrawPartialFinish();
+
+            position += 3;
+        }
+    }
+
+    RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
+}
+
 void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & targets )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -4211,24 +4245,49 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
         }
 }
 
-Point RedrawTroopWithFrameAnimationOffset( int icn, const Rect & pos, const Sprite & sp, bool wide, bool reflect, bool qvga )
+Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const Sprite & spellSprite )
 {
-    Point res( sp.x() + pos.x, pos.y + sp.y() );
+    const Rect & pos = target.GetRectPosition();
+    const Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
 
-    switch ( icn ) {
+    // Bottom-left corner (default) position with spell offset applied
+    Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
+
+    switch ( spellICN ) {
     case ICN::SHIELD:
-        res.x += reflect ? -pos.w / ( wide ? 2 : 1 ) : pos.w / 2;
+        // in front of the unit
+        result.x += target.isReflect() ? -pos.w / ( target.isWide() ? 2 : 1 ) : pos.w;
+        result.y += unitSprite.y() / 2;
         break;
+    case ICN::BLIND: {
+        // unit's eyes
+        const Point & offset = target.animation.getBlindOffset();
+
+        // calculate OG Heroes2 unit position to apply offset to
+        const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.w * 3 / 4 : CELLW / 2;
+
+        // Overwrite result with custom blind value
+        result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
+        result.y += offset.y;
+    } break;
     case ICN::STONSKIN:
     case ICN::STELSKIN:
-        res.y += pos.h / 2;
+        // bottom center point
+        result.x += pos.w / 2;
         break;
     default:
-        res.y += ( qvga ? pos.h / 2 : 0 );
+        // center point of the unit
+        result.x += pos.w / 2;
+        result.y += unitSprite.y() / 2;
         break;
     }
 
-    return res;
+    if ( result.y < 0 ) {
+        const int maximumY = AGG::GetAbsoluteICNHeight( spellICN );
+        result.y = maximumY + spellSprite.y();
+    }
+
+    return result;
 }
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & targets, int icn, int m82, bool wnce )
@@ -4257,22 +4316,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender ) {
-                    const Rect & pos = ( *it ).defender->GetRectPosition();
-                    bool reflect = false;
-
-                    switch ( icn ) {
-                    case ICN::SHIELD:
-                        reflect = ( *it ).defender->isReflect();
-                        break;
-                    default:
-                        break;
-                    }
-
-                    const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
-                    const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, ( *it ).defender->isWide(), reflect, Settings::Get().QVGA() );
-                    const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
-
-                    sprite.Blit( sprite_pos, _mainSurface );
+                    const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
+                    const Sprite & spellSprite = AGG::GetICN( icn, frame, reflect );
+                    spellSprite.Blit( CalculateSpellPosition( *it->defender, icn, spellSprite ), _mainSurface );
                 }
             RedrawPartialFinish();
 
@@ -4299,15 +4345,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     const Rect & pos = b.GetRectPosition();
 
     u32 frame = 0;
-    bool reflect = false;
-
-    switch ( icn ) {
-    case ICN::SHIELD:
-        reflect = b.isReflect();
-        break;
-    default:
-        break;
-    }
+    const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
@@ -4329,11 +4367,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
-            const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, b.isWide(), reflect, Settings::Get().QVGA() );
-            const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
+            const Sprite & spellSprite = AGG::GetICN( icn, frame, reflect );
 
-            sprite.Blit( sprite_pos, _mainSurface );
+            spellSprite.Blit( CalculateSpellPosition( b, icn, spellSprite ), _mainSurface );
             RedrawPartialFinish();
 
             if ( animation != NONE ) {

@@ -170,12 +170,14 @@ int M82::FromSpell( int spell )
         return DISRUPTR;
     case Spell::DEATHRIPPLE:
         return MNRDEATH;
+    case Spell::DEATHWAVE:
+        return MNRDEATH;
     case Spell::DRAGONSLAYER:
         return DRGNSLAY;
     case Spell::BLOODLUST:
         return BLOODLUS;
     case Spell::ANIMATEDEAD:
-        return MNRDEATH;
+        return RESURECT;
     case Spell::MIRRORIMAGE:
         return MIRRORIM;
     case Spell::SHIELD:
