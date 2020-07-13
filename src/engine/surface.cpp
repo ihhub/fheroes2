@@ -1178,9 +1178,9 @@ Surface Surface::RenderSepia( void ) const
             pixel = GetPixel( x, y );
             if ( colkey == 0 || pixel != colkey ) {
                 RGBA col = GetRGB( pixel );
-                int outR = ClampInteger( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f, 0, 255 );
-                int outG = ClampInteger( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f, 0, 255 );
-                int outB = ClampInteger( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f, 0, 255 );
+                int outR = clamp<int>( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f, 0, 255 );
+                int outG = clamp<int>( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f, 0, 255 );
+                int outB = clamp<int>( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f, 0, 255 );
                 pixel = res.MapRGB( RGBA( outR, outG, outB, col.a() ) );
                 res.SetPixel( x, y, pixel );
             }
@@ -1257,6 +1257,7 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
     const int height = h();
     const int width = w();
     const uint32_t imageDepth = depth();
+    uint32_t * rawSource = NULL;
 
     SDL_Color currentColor;
     uint8_t alphaChannel;
@@ -1264,6 +1265,7 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
     uint32_t lineWidth = surface->pitch;
     if ( imageDepth == 32 ) {
         lineWidth >>= 2;
+        rawSource = static_cast<uint32_t *>( surface->pixels );
     }
     else if ( imageDepth == 24 ) {
         lineWidth /= 3;
@@ -1293,7 +1295,14 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
                     const int currentY = y + boxY;
                     if ( currentY >= 0 && currentY < height ) {
                         const int position = currentY * lineWidth + currentX;
-                        SDL_GetRGBA( GetRawPixelValue( position ), surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
+#ifdef WITH_DEBUG
+                        // Function call overhead slows this down on Debug build, optimize
+                        if ( rawSource )
+                            SDL_GetRGBA( rawSource[position], surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
+                        else
+#endif
+                            SDL_GetRGBA( GetRawPixelValue( position ), surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
+
                         red += currentColor.r;
                         green += currentColor.g;
                         blue += currentColor.b;
@@ -1307,12 +1316,13 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
             if ( redTint )
                 red = red / totalPixels;
             else
-                red = ClampInteger( red / totalPixels + colorChange, 0, 255 );
-            green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
-            blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
+                red = clamp<int>( red / totalPixels + colorChange, 0, 255 );
+            green = clamp<int>( green / totalPixels + colorChange, 0, 255 );
+            blue = clamp<int>( blue / totalPixels + colorChange, 0, 255 );
 
             alpha = alpha / totalPixels;
 
+            // outputPtr[y * lineWidth + x] = SDL_MapRGBA( res.surface->format, red, green, blue, alpha );
             res.SetRawPixel( y * lineWidth + x, SDL_MapRGBA( res.surface->format, red, green, blue, alpha ) );
         }
     }

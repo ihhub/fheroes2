@@ -143,12 +143,6 @@ std::string GetHexString( int value, int width )
     return stream.str();
 }
 
-// std::clamp replacement until we can use C++17
-int ClampInteger( int value, int min, int max )
-{
-    return ( value < min ) ? min : ( max < value ) ? max : value;
-}
-
 int CountBits( u32 val )
 {
     int res = 0;
