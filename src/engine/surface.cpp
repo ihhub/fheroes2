@@ -804,6 +804,7 @@ uint32_t Surface::GetRawPixelValue( int position ) const
     case 32:
         return *( static_cast<uint32_t *>( surface->pixels ) + position );
     default:
+        break;
     }
     return 0;
 }
