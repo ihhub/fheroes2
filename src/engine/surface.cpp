@@ -1285,26 +1285,33 @@ Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) 
             uint32_t totalPixels = 0;
 
             for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
+                const int currentX = x + boxX;
+                if ( currentX < 0 || currentX >= width )
+                    continue;
+
                 for ( int boxY = -blurRadius; boxY <= blurRadius; ++boxY ) {
-                    const int currentX = x + boxX;
                     const int currentY = y + boxY;
-                    if ( currentX >= 0 && currentX < width && currentY >= 0 && currentY < height ) {
+                    if ( currentY >= 0 && currentY < height ) {
                         const int position = currentY * lineWidth + currentX;
                         SDL_GetRGBA( GetRawPixelValue( position ), surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
                         red += currentColor.r;
                         green += currentColor.g;
                         blue += currentColor.b;
                         alpha += alphaChannel;
-                        totalPixels++;
+                        ++totalPixels;
                     }
                 }
             }
 
             // Clamp the int values to uint8_t range
-            red = ClampInteger( red / totalPixels + ( redTint ? 0 : colorChange ), 0, 255 );
+            if ( redTint )
+                red = red / totalPixels;
+            else
+                red = ClampInteger( red / totalPixels + colorChange, 0, 255 );
             green = ClampInteger( green / totalPixels + colorChange, 0, 255 );
             blue = ClampInteger( blue / totalPixels + colorChange, 0, 255 );
-            alpha = ClampInteger( alpha / totalPixels, 0, 255 );
+
+            alpha = alpha / totalPixels;
 
             res.SetRawPixel( y * lineWidth + x, SDL_MapRGBA( res.surface->format, red, green, blue, alpha ) );
         }
