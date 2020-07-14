@@ -40,6 +40,11 @@ xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\lib\x64\libogg-0.dll" "..\sdl2\lib\x6
 xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\lib\x64\libvorbis-0.dll" "..\sdl2\lib\x64"
 xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\lib\x64\libvorbisfile-3.dll" "..\sdl2\lib\x64"
 
+xcopy /Y /s /Q "sdl_net\SDL_net-1.2.8\include"  "..\sdl\include"
+xcopy /Y /s /Q "sdl_net\SDL_net-1.2.8\lib"      "..\sdl\lib"
+xcopy /Y /s /Q "sdl_net\SDL2_net-2.0.1\include" "..\sdl2\include"
+xcopy /Y /s /Q "sdl_net\SDL2_net-2.0.1\lib"     "..\sdl2\lib"
+
 xcopy /Y /s /Q "zlib\include" "..\zlib\include"
 xcopy /Y /s /Q "zlib\lib\x86" "..\zlib\lib\x86"
 xcopy /Y /s /Q "zlib\lib\x64" "..\zlib\lib\x64"
