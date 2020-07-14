@@ -176,8 +176,6 @@ namespace Maps
         bool GoodForUltimateArtifact( void ) const;
 
         TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );
-        TilesAddon * FindAddonICN1( int icn1, int index = -1 );
-        TilesAddon * FindAddonICN2( int icn2, int index = -1 );
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );

@@ -1494,7 +1494,7 @@ void World::PostLoad( void )
             break;
 
         case MP2::OBJ_HEROES: {
-            Maps::TilesAddon * addon = tile.FindAddonICN1( ICN::MINIHERO );
+            Maps::TilesAddon * addon = tile.FindAddonICN( ICN::MINIHERO, 1 );
             // remove event sprite
             if ( addon )
                 tile.Remove( addon->uniq );

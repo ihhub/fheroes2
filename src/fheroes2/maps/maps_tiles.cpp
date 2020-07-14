@@ -1311,7 +1311,7 @@ void Maps::Tiles::UpdatePassable( void )
         }
 
         // town twba
-        if ( tile_passable && FindAddonICN1( ICN::OBJNTWBA ) && ( mounts2 || trees2 ) ) {
+        if ( tile_passable && FindAddonICN( ICN::OBJNTWBA, 1 ) && ( mounts2 || trees2 ) ) {
             tile_passable = 0;
 #ifdef WITH_DEBUG
             passable_disable = 5;
@@ -1797,38 +1797,18 @@ void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
 
 Maps::TilesAddon * Maps::Tiles::FindAddonICN( int icn, int level, int index )
 {
-    if ( level == -1 || level == 1 ) {
+    if ( level == 1 || level == -1 ) {
         for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             if ( MP2::GetICNObject( it->object ) == icn && ( index == -1 || index == it->index ) ) {
                 return &( *it );
             }
         }
     }
-    if ( level == -1 || level == 2 ) {
+    if ( level == 2 || level == -1 ) {
         for ( Addons::iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
             if ( MP2::GetICNObject( it->object ) == icn && ( index == -1 || index == it->index ) ) {
                 return &( *it );
             }
-        }
-    }
-    return NULL;
-}
-
-Maps::TilesAddon * Maps::Tiles::FindAddonICN1( int icn1, int index )
-{
-    for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-        if ( MP2::GetICNObject( it->object ) == icn1 && (index == -1 || index == it->index) ) {
-            return &( *it );
-        }
-    }
-    return NULL;
-}
-
-Maps::TilesAddon * Maps::Tiles::FindAddonICN2( int icn2, int index )
-{
-    for ( Addons::iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
-        if ( MP2::GetICNObject( it->object ) == icn2 && ( index == -1 || index == it->index ) ) {
-            return &( *it );
         }
     }
     return NULL;
