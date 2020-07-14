@@ -548,7 +548,7 @@ void Maps::UpdateRNDSpriteForCastle( const Point & center, int race, bool castle
 
         const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
         if ( isValidAbsIndex( shadowTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN( ICN::OBJNTWRD, -1, castleIndex + 16 );
+            Maps::TilesAddon * addon = world.GetTiles( shadowTile ).FindAddonICN( ICN::OBJNTWRD, -1, castleIndex + 32 );
             if ( addon ) {
                 addon->object -= 4; // OBJNTWRD to OBJNTWSH
                 addon->index = addonIndex;
