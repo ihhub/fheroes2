@@ -201,7 +201,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Castle & town )
         u32 kingdom_race = Players::GetPlayerRace( town.GetColor() );
         race = Color::NONE != town.GetColor() && ( Race::ALL & kingdom_race ) ? kingdom_race : Race::Rand();
 
-        Maps::UpdateRNDSpriteForCastle( town.GetCenter(), race, town.isCastle() );
+        Maps::UpdateCastleSprite( town.GetCenter(), race, town.isCastle(), true );
     }
     town.race = race;
 
