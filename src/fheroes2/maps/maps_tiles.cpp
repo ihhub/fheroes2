@@ -683,7 +683,7 @@ bool Maps::TilesAddon::isCastle( const TilesAddon & ta )
 bool Maps::TilesAddon::isRandomCastle( const TilesAddon & ta )
 {
     // OBJNTWRD
-    return ( ICN::OBJNTWRD == MP2::GetICNObject( ta.object ) && 32 > ta.index );
+    return ( ICN::OBJNTWRD == MP2::GetICNObject( ta.object ) );
 }
 
 bool Maps::TilesAddon::isRandomMonster( const TilesAddon & ta )
@@ -2019,16 +2019,16 @@ bool Maps::Tiles::isStream( void ) const
     return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isStream );
 }
 
-Maps::TilesAddon * Maps::Tiles::FindObject( int objs )
+Maps::TilesAddon * Maps::Tiles::FindObject( int objectID, int index )
 {
-    return const_cast<Maps::TilesAddon *>( FindObjectConst( objs ) );
+    return const_cast<Maps::TilesAddon *>( FindObjectConst( objectID, index ) );
 }
 
-const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objs ) const
+const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objectID, int index ) const
 {
     Addons::const_iterator it = addons_level1.size() ? addons_level1.begin() : addons_level1.end();
 
-    switch ( objs ) {
+    switch ( objectID ) {
     case MP2::OBJ_CAMPFIRE:
         it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isCampFire );
         break;
@@ -2131,10 +2131,16 @@ const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objs ) const
         break;
 
     case MP2::OBJ_RNDCASTLE:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isRandomCastle );
-        if ( it == addons_level1.end() ) {
-            it = std::find_if( addons_level2.begin(), addons_level2.end(), TilesAddon::isRandomCastle );
-            return addons_level2.end() != it ? &( *it ) : NULL;
+        for ( ; it != addons_level1.end(); ++it ) {
+            if ( it->isRandomCastle( *it ) && it->index == index ) {
+                return &( *it );
+            }
+        }
+
+        for ( Addons::const_iterator lvl2 = addons_level2.begin(); lvl2 != addons_level2.end(); ++lvl2 ) {
+            if ( lvl2->isRandomCastle( *lvl2 ) && lvl2->index == index ) {
+                return &( *lvl2 );
+            }
         }
         break;
 
@@ -2152,7 +2158,7 @@ const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objs ) const
 
     default:
         if ( addons_level1.size() > 1 )
-            DEBUG( DBG_GAME, DBG_WARN, "FIXME for: " << MP2::StringObject( objs ) );
+            DEBUG( DBG_GAME, DBG_WARN, "FIXME for: " << MP2::StringObject( objectID ) );
         break;
     }
 
