@@ -1795,18 +1795,24 @@ void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
     }
 }
 
-Maps::TilesAddon * Maps::Tiles::FindAddonICN1( int icn1 )
+Maps::TilesAddon * Maps::Tiles::FindAddonICN1( int icn1, int index )
 {
-    Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isICN ), icn1 ) );
-
-    return it != addons_level1.end() ? &( *it ) : NULL;
+    for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        if ( MP2::GetICNObject( it->object ) == icn1 && (index == -1 || index == it->index) ) {
+            return &( *it );
+        }
+    }
+    return NULL;
 }
 
-Maps::TilesAddon * Maps::Tiles::FindAddonICN2( int icn2 )
+Maps::TilesAddon * Maps::Tiles::FindAddonICN2( int icn2, int index )
 {
-    Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isICN ), icn2 ) );
-
-    return it != addons_level2.end() ? &( *it ) : NULL;
+    for ( Addons::iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
+        if ( MP2::GetICNObject( it->object ) == icn2 && ( index == -1 || index == it->index ) ) {
+            return &( *it );
+        }
+    }
+    return NULL;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( u32 uniq1 )
@@ -2020,12 +2026,12 @@ bool Maps::Tiles::isStream( void ) const
     return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isStream );
 }
 
-Maps::TilesAddon * Maps::Tiles::FindObject( int objectID, int index )
+Maps::TilesAddon * Maps::Tiles::FindObject( int objectID )
 {
-    return const_cast<Maps::TilesAddon *>( FindObjectConst( objectID, index ) );
+    return const_cast<Maps::TilesAddon *>( FindObjectConst( objectID ) );
 }
 
-const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objectID, int index ) const
+const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objectID ) const
 {
     Addons::const_iterator it = addons_level1.size() ? addons_level1.begin() : addons_level1.end();
 
@@ -2133,13 +2139,13 @@ const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objectID, int index )
 
     case MP2::OBJ_RNDCASTLE:
         for ( ; it != addons_level1.end(); ++it ) {
-            if ( it->isRandomCastle( *it ) && it->index == index ) {
+            if ( it->isRandomCastle( *it ) ) {
                 return &( *it );
             }
         }
 
         for ( Addons::const_iterator lvl2 = addons_level2.begin(); lvl2 != addons_level2.end(); ++lvl2 ) {
-            if ( lvl2->isRandomCastle( *lvl2 ) && lvl2->index == index ) {
+            if ( lvl2->isRandomCastle( *lvl2 ) ) {
                 return &( *lvl2 );
             }
         }

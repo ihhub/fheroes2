@@ -175,14 +175,14 @@ namespace Maps
         bool isStream( void ) const;
         bool GoodForUltimateArtifact( void ) const;
 
-        TilesAddon * FindAddonICN1( int icn1 );
-        TilesAddon * FindAddonICN2( int icn2 );
+        TilesAddon * FindAddonICN1( int icn1, int index = -1 );
+        TilesAddon * FindAddonICN2( int icn2, int index = -1 );
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
-        TilesAddon * FindObject( int objectID, int index = -1 );
-        const TilesAddon * FindObjectConst( int objectID, int index = -1 ) const;
+        TilesAddon * FindObject( int objectID );
+        const TilesAddon * FindObjectConst( int objectID ) const;
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
         void SetObject( int object );

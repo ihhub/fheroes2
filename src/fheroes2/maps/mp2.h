@@ -58,7 +58,7 @@ namespace MP2
     struct mp2addon_t
     {
         u16 indexAddon; // zero or next addons_t
-        u8 objectNameN1; // level 1.N. Last bit indicates if object is animated.
+        u8 objectNameN1; // level 1.N. Last bit indicates if object is animated. Second-last controls overlay
         u8 indexNameN1; // level 1.N or 0xFF
         u8 quantityN; // Bitfield containing metadata
         u8 objectNameN2; // level 2.N
@@ -260,12 +260,12 @@ namespace MP2
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-
+    // First bit indicates if you can interact with object
     enum
     {
         OBJ_ZERO = 0x00,
-        OBJ_UNKNW_02 = 0x02,
         OBJN_ALCHEMYLAB = 0x01,
+        OBJ_UNKNW_02 = 0x02,
         OBJ_UNKNW_03 = 0x03,
         OBJN_SKELETON = 0x04,
         OBJN_DAEMONCAVE = 0x05,

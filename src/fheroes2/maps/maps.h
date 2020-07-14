@@ -93,8 +93,8 @@ namespace Maps
     void ClearFog( s32, int scoute, int color );
     u32 GetApproximateDistance( s32, s32 );
 
-    void UpdateRNDSpriteForCastle( const Point &, int race, bool castle );
-    void UpdateSpritesFromTownToCastle( const Point & );
+    void UpdateRNDSpriteForCastle( const Point & center, int race, bool castle );
+    void UpdateSpritesFromTownToCastle( const Point & center, int race );
     void MinimizeAreaForCastle( const Point & );
 }
 
