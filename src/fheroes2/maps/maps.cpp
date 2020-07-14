@@ -539,7 +539,7 @@ void Maps::UpdateRNDSpriteForCastle( const Point & center, int race, bool castle
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindObject( MP2::OBJ_RNDCASTLE, castleIndex );
+            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN( ICN::OBJNTWRD, -1, castleIndex );
             if ( addon ) {
                 addon->object -= 12; // OBJNTWRD to OBJNTOWN
                 addon->index = addonIndex;
@@ -548,7 +548,7 @@ void Maps::UpdateRNDSpriteForCastle( const Point & center, int race, bool castle
 
         const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
         if ( isValidAbsIndex( shadowTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( shadowTile ).FindObject( MP2::OBJ_RNDCASTLE, castleIndex + 16 );
+            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN( ICN::OBJNTWRD, -1, castleIndex + 16 );
             if ( addon ) {
                 addon->object -= 4; // OBJNTWRD to OBJNTWSH
                 addon->index = addonIndex;
@@ -590,18 +590,22 @@ void Maps::UpdateSpritesFromTownToCastle( const Point & center, int race )
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
             Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN1( ICN::OBJNTOWN, townIndex );
-            
-            //Maps::TilesAddon * addon = .FindObject( MP2::OBJ_CASTLE, index + 16 );
-            //if ( addon ) {
-            //    addon->index = index;
-            //}
+            if ( addon == NULL )
+                addon = world.GetTiles( castleTile ).FindAddonICN2( ICN::OBJNTOWN, townIndex );
+
+            if ( addon ) {
+                addon->index -= 16;
+            }
         }
 
         const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
         if ( isValidAbsIndex( shadowTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( shadowTile ).FindObject( MP2::OBJ_CASTLE, index + 16 );
+            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN1( ICN::OBJNTWSH, townIndex );
+            if ( addon == NULL )
+                addon = world.GetTiles( castleTile ).FindAddonICN2( ICN::OBJNTWSH, townIndex );
+
             if ( addon ) {
-                addon->index = index;
+                addon->index -= 16;
             }
         }
     }

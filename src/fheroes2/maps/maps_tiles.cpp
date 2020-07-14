@@ -1795,6 +1795,25 @@ void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
     }
 }
 
+Maps::TilesAddon * Maps::Tiles::FindAddonICN( int icn, int level, int index )
+{
+    if ( level == -1 || level == 1 ) {
+        for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+            if ( MP2::GetICNObject( it->object ) == icn && ( index == -1 || index == it->index ) ) {
+                return &( *it );
+            }
+        }
+    }
+    if ( level == -1 || level == 2 ) {
+        for ( Addons::iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
+            if ( MP2::GetICNObject( it->object ) == icn && ( index == -1 || index == it->index ) ) {
+                return &( *it );
+            }
+        }
+    }
+    return NULL;
+}
+
 Maps::TilesAddon * Maps::Tiles::FindAddonICN1( int icn1, int index )
 {
     for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
