@@ -114,6 +114,7 @@ public:
     size_t getProjectileID( float angle ) const;
     Point getBlindOffset() const;
     Point getProjectileOffset( size_t direction ) const;
+    int getTroopCountOffset( bool isReflect ) const;
     uint32_t getIdleDelay() const;
 
 protected:

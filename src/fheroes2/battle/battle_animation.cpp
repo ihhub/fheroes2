@@ -480,6 +480,11 @@ Point AnimationReference::getBlindOffset() const
     return _monsterInfo.eyePosition;
 }
 
+int AnimationReference::getTroopCountOffset( bool isReflect ) const
+{
+    return isReflect ? _monsterInfo.troopCountOffsetRight : _monsterInfo.troopCountOffsetLeft;
+}
+
 Point AnimationReference::getProjectileOffset( size_t direction ) const
 {
     if ( _monsterInfo.projectileOffset.size() > direction ) {

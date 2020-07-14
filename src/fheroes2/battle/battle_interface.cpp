@@ -1319,36 +1319,27 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
     }
 }
 
-void Battle::Interface::RedrawTroopCount( const Unit & b )
+void Battle::Interface::RedrawTroopCount( const Unit & unit )
 {
-    const Rect & rt = b.GetRectPosition();
-    const Sprite & bar = AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( b ) );
+    const Rect & rt = unit.GetRectPosition();
+    const Sprite & bar = AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
+    const bool isReflected = unit.isReflect();
 
-    s32 sx = 0;
-    s32 sy = 0;
+    const int tileInFront = Board::GetIndexDirection( unit.GetHeadIndex(), isReflected ? Battle::LEFT : Battle::RIGHT );
 
-    const bool isReflected = b.isReflect();
-    const bool isWide = b.isWide();
-    sy = rt.y + rt.h - bar.h() - ( isReflected ? 21 : 9 );
+    s32 sx = rt.x + ( isReflected ? -7 : rt.w - 13 );
+    const s32 sy = rt.y + rt.h - bar.h() - ( isReflected ? 23 : 11 );
 
-    if ( isReflected ) {
-        if ( isWide )
-            sx = rt.x;
-        else
-            sx = rt.x - bar.w() + 3;
-    }
-    else {
-        if ( isWide ) {
-            sx = rt.x + rt.w - bar.w();
-        }
-        else {
-            sx = rt.x + rt.w - 3;
-        }
-    }
+    int xOffset = unit.animation.getTroopCountOffset( isReflected );
+    // check if has unit standing in front
+    if ( xOffset > 0 && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
+        xOffset = 0;
+
+    sx += isReflected ? -xOffset : xOffset;
 
     bar.Blit( sx, sy, _mainSurface );
 
-    Text text( GetStringShort( b.GetCount() ), Font::SMALL );
+    Text text( GetStringShort( unit.GetCount() ), Font::SMALL );
     text.Blit( sx + ( bar.w() - text.w() ) / 2, sy, _mainSurface );
 }
 
