@@ -1690,6 +1690,7 @@ bool SkipRedrawTileBottom4Hero( const Maps::TilesAddon & ta, int passable )
         case ICN::OBJNWATR:
             return ta.index >= 202 && ta.index <= 225; /* whirlpool */
 
+        case ICN::OBJNTWSH:
         case ICN::OBJNTWBA:
         case ICN::ROAD:
         case ICN::STREAM:
