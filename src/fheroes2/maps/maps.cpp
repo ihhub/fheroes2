@@ -483,7 +483,7 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
 {
     /*
     Castle/Town object image consists of 42 tile sprites:
-    10 base tilea (OBJNTWBA) with 16 shadow tiles on left side (OBJNTWSH) overlayed by 16 town tiles (OBJNTOWN)
+    10 base tiles (OBJNTWBA) with 16 shadow tiles on left side (OBJNTWSH) overlayed by 16 town tiles (OBJNTOWN)
 
     Shadows (OBJNTWSH)  Castle (OBJNTOWN)
                               0
