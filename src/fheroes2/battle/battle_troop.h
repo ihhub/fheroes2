@@ -122,6 +122,8 @@ namespace Battle
         u32 GetDefense( void ) const;
         int GetArmyColor( void ) const;
         int GetColor( void ) const;
+        int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
+        int GetCurrentControl() const;
         u32 GetSpeed( bool skip_standing_check ) const;
         int GetControl( void ) const;
         u32 GetDamage( const Unit & ) const;
@@ -208,8 +210,7 @@ namespace Battle
         Position position;
         ModesAffected affected;
         Unit * mirror;
-        TimeDelay idleTimer;
-        bool idleTimerSet;
+        RandomizedDelay idleTimer;
 
         bool blindanswer;
     };

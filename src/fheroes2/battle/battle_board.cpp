@@ -112,6 +112,10 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
 {
     Arena * arena = GetArena();
     Units enemies( arena->GetForce( unit.GetColor(), true ), true );
+    if ( unit.Modes( SP_BERSERKER ) ) {
+        Units allies( arena->GetForce( unit.GetColor(), false ), true );
+        enemies.insert( enemies.end(), allies.begin(), allies.end() );
+    }
 
     for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
         Unit * enemy = *it;

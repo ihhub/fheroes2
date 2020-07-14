@@ -128,7 +128,7 @@ int main( int argc, char ** argv )
             SetLangEnvPath( conf );
 
             if ( Mixer::isValid() ) {
-                Mixer::SetChannels( 8 );
+                Mixer::SetChannels( 16 );
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
                 if ( conf.Music() ) {

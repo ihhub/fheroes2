@@ -1877,10 +1877,10 @@ namespace AI
 
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors )
     {
-        const s32 index_from = hero.GetIndex();
+        const s32 indexFrom = hero.GetIndex();
 
-        if ( colors && Maps::isValidAbsIndex( index_from ) ) {
-            if ( !world.GetTiles( index_from ).isFog( colors ) ) {
+        if ( colors && Maps::isValidAbsIndex( indexFrom ) ) {
+            if ( !world.GetTiles( indexFrom ).isFog( colors ) ) {
                 return true;
             }
 
@@ -1923,10 +1923,16 @@ namespace AI
 
                     if ( !hero.Move() ) {
                         Point movement( hero.MovementDirection() );
-                        movement.x *= moveStep;
-                        movement.y *= moveStep;
-                        gameArea.ShiftCenter( movement );
+                        if ( movement != Point() ) { // don't waste resources for no movement
+                            movement.x *= moveStep;
+                            movement.y *= moveStep;
+                            gameArea.ShiftCenter( movement );
+                        }
                     }
+                    else {
+                        gameArea.SetCenter( hero.GetCenter() );
+                    }
+
                     I.Redraw( REDRAW_GAMEAREA );
                     cursor.Show();
                     Display::Get().Flip();

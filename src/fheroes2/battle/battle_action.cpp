@@ -208,7 +208,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
     Battle::Unit * b1 = GetTroopUID( uid1 );
     Battle::Unit * b2 = GetTroopUID( uid2 );
 
-    if ( b1 && b1->isValid() && b2 && b2->isValid() && ( b1->GetColor() != b2->GetColor() || b2->Modes( SP_HYPNOTIZE ) ) ) {
+    if ( b1 && b1->isValid() && b2 && b2->isValid() && ( b1->GetCurrentColor() != b2->GetColor() ) ) {
         DEBUG( DBG_BATTLE, DBG_TRACE, b1->String() << " to " << b2->String() );
 
         // reset blind

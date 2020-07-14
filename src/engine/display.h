@@ -34,7 +34,7 @@ public:
     enum
     {
         DEFAULT_WIDTH = 640,
-        DEFAULT_HEIGHT = 480,
+        DEFAULT_HEIGHT = 480
     };
 
     ~Display();

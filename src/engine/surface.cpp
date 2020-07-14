@@ -34,6 +34,7 @@
 #include "localevent.h"
 #include "surface.h"
 #include "system.h"
+#include "tools.h"
 
 #ifdef WITH_IMAGE
 #include "IMG_savepng.h"
@@ -767,6 +768,47 @@ u32 Surface::GetPixel( int x, int y ) const
     return pixel;
 }
 
+// Optimized version of SetPixel without error and boundries checking. Validate before use
+void Surface::SetRawPixel( int position, uint32_t pixel )
+{
+    switch ( surface->format->BitsPerPixel ) {
+    case 8:
+        *( static_cast<uint8_t *>( surface->pixels ) + position ) = static_cast<uint8_t>( pixel );
+        break;
+    case 15:
+    case 16:
+        *( static_cast<uint16_t *>( surface->pixels ) + position ) = static_cast<uint16_t>( pixel );
+        break;
+    case 24:
+        SetPixel24( static_cast<uint8_t *>( surface->pixels ) + position * 3, pixel );
+        break;
+    case 32:
+        *( static_cast<uint32_t *>( surface->pixels ) + position ) = static_cast<uint32_t>( pixel );
+        break;
+    default:
+        break;
+    }
+}
+
+// Optimized version of GetPixel without error and boundries checking. Private call, validate before use
+uint32_t Surface::GetRawPixelValue( int position ) const
+{
+    switch ( surface->format->BitsPerPixel ) {
+    case 8:
+        return *( static_cast<uint8_t *>( surface->pixels ) + position );
+    case 15:
+    case 16:
+        return *( static_cast<uint16_t *>( surface->pixels ) + position );
+    case 24:
+        return GetPixel24( static_cast<uint8_t *>( surface->pixels ) + position * 3 );
+    case 32:
+        return *( static_cast<uint32_t *>( surface->pixels ) + position );
+    default:
+        break;
+    }
+    return 0;
+}
+
 void Surface::Blit( const Rect & srt, const Point & dpt, Surface & dst ) const
 {
     SDL_Rect dstrect = SDLRect( dpt.x, dpt.y, srt.w, srt.h );
@@ -1132,17 +1174,46 @@ Surface Surface::RenderSepia( void ) const
             pixel = GetPixel( x, y );
             if ( colkey == 0 || pixel != colkey ) {
                 RGBA col = GetRGB( pixel );
-// Numbers derived from http://blogs.techrepublic.com.com/howdoi/?p=120
-#define CLAMP255( val ) std::min<u16>( ( val ), 255 )
-                int outR = CLAMP255( static_cast<u16>( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f ) );
-                int outG = CLAMP255( static_cast<u16>( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f ) );
-                int outB = CLAMP255( static_cast<u16>( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f ) );
+                int outR = clamp<int>( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f, 0, 255 );
+                int outG = clamp<int>( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f, 0, 255 );
+                int outB = clamp<int>( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f, 0, 255 );
                 pixel = res.MapRGB( RGBA( outR, outG, outB, col.a() ) );
                 res.SetPixel( x, y, pixel );
-#undef CLAMP255
             }
         }
     res.Unlock();
+    return res;
+}
+
+// Renders the death wave starting at X position
+Surface Surface::RenderDeathWave( int position, int waveLength, int waveHeight ) const
+{
+    const int width = w();
+    const int height = h();
+
+    Surface res = GetSurface();
+
+    if ( position < width + waveLength ) {
+        const int offset = ( position < waveLength ) ? 0 : position - waveLength;
+        const int startX = ( position < waveLength ) ? waveLength - position : 0;
+        const int endX = ( position > width ) ? width - offset : waveLength;
+        const double waveLimit = waveLength / M_PI;
+
+        res.Lock();
+
+        for ( int x = startX; x < endX; ++x ) {
+            const int drawX = offset + x - startX;
+            // use tangent for the drop and sine for smooth wave rise
+            const int modifier = waveHeight * ( ( x < waveLimit ) ? tan( x / waveLimit ) / 2 : sin( x / waveLimit ) );
+
+            for ( int y = height - 1; y > modifier; --y ) {
+                res.SetPixel( drawX, y - modifier, GetPixel( drawX, y ) );
+            }
+        }
+
+        res.Unlock();
+    }
+
     return res;
 }
 
@@ -1169,6 +1240,86 @@ Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFreque
         for ( int x = 0; x < width; ++x ) {
             const int newX = x + static_cast<int>( rippleXModifier * sinYEffect ) + offsetX;
             res.SetPixel( newX, y, GetPixel( x, y ) );
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
+Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) const
+{
+    const int height = h();
+    const int width = w();
+    const uint32_t imageDepth = depth();
+    uint32_t * rawSource = NULL;
+
+    SDL_Color currentColor;
+    uint8_t alphaChannel;
+
+    uint32_t lineWidth = surface->pitch;
+    if ( imageDepth == 32 ) {
+        lineWidth >>= 2;
+        rawSource = static_cast<uint32_t *>( surface->pixels );
+    }
+    else if ( imageDepth == 24 ) {
+        lineWidth /= 3;
+    }
+    else if ( imageDepth == 16 ) {
+        lineWidth >>= 1;
+    }
+
+    // create identical surface but do not blit on it
+    Surface res( Rect( Point( 0, 0 ), GetSize() ), GetFormat() );
+    res.Lock();
+
+    for ( int y = 0; y < height; ++y ) {
+        for ( int x = 0; x < width; ++x ) {
+            int red = 0;
+            int green = 0;
+            int blue = 0;
+            int alpha = 0;
+            uint32_t totalPixels = 0;
+
+            for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
+                const int currentX = x + boxX;
+                if ( currentX < 0 || currentX >= width )
+                    continue;
+
+                for ( int boxY = -blurRadius; boxY <= blurRadius; ++boxY ) {
+                    const int currentY = y + boxY;
+                    if ( currentY >= 0 && currentY < height ) {
+                        const int position = currentY * lineWidth + currentX;
+#ifdef WITH_DEBUG
+                        // Function call overhead slows this down on Debug build, optimize
+                        if ( rawSource )
+                            SDL_GetRGBA( rawSource[position], surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
+                        else
+#endif
+                            SDL_GetRGBA( GetRawPixelValue( position ), surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
+
+                        red += currentColor.r;
+                        green += currentColor.g;
+                        blue += currentColor.b;
+                        alpha += alphaChannel;
+                        ++totalPixels;
+                    }
+                }
+            }
+
+            // Clamp the int values to uint8_t range
+            if ( redTint )
+                red = red / totalPixels;
+            else
+                red = clamp<int>( red / totalPixels + colorChange, 0, 255 );
+            green = clamp<int>( green / totalPixels + colorChange, 0, 255 );
+            blue = clamp<int>( blue / totalPixels + colorChange, 0, 255 );
+
+            alpha = alpha / totalPixels;
+
+            // outputPtr[y * lineWidth + x] = SDL_MapRGBA( res.surface->format, red, green, blue, alpha );
+            res.SetRawPixel( y * lineWidth + x, SDL_MapRGBA( res.surface->format, red, green, blue, alpha ) );
         }
     }
 

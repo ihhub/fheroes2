@@ -254,6 +254,72 @@ namespace Battle
     {
         return Game::AnimateInfrequentDelay( dl );
     }
+
+    int matchHeroType( const HeroBase * base )
+    {
+        if ( base->isCaptain() )
+            return CAPTAIN;
+
+        switch ( base->GetRace() ) {
+        case Race::BARB:
+            return BARBARIAN;
+        case Race::SORC:
+            return SORCERESS;
+        case Race::WRLK:
+            return WARLOCK;
+        case Race::WZRD:
+            return WIZARD;
+        case Race::NECR:
+            return NECROMANCER;
+        default:
+            break;
+        }
+        return KNIGHT;
+    }
+
+    const std::vector<int> & getHeroAnimation( const HeroBase * hero, int animation )
+    {
+        static std::vector<int> staticAnim;
+        if ( staticAnim.empty() ) {
+            staticAnim.push_back( 1 );
+        }
+
+        if ( !hero || animation == OP_STATIC )
+            return staticAnim;
+
+        const int heroType = matchHeroType( hero );
+        static std::vector<int> sorrowAnim;
+        if ( sorrowAnim.empty() ) {
+            const int sorrowArray[9] = {2, 3, 4, 5, 4, 5, 4, 3, 2};
+            sorrowAnim.insert( sorrowAnim.begin(), sorrowArray, sorrowArray + 9 );
+        }
+
+        if ( animation == OP_SORROW )
+            return ( heroType == CAPTAIN ) ? staticAnim : sorrowAnim;
+
+        static std::vector<int> heroTypeAnim[7][9];
+
+        if ( heroTypeAnim[heroType][animation].empty() ) {
+            const int sourceArray[7][9][9] = {
+                //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
+                {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
+                {{6, 7, 8, 9, 9, 8, 7, 6}, {6, 10, 11}, {10, 6}, {6, 12, 13}, {12, 6}, {6, 14}, {6}, {15, 16, 17}, {18}}, // BARBARIAN
+                {{6, 7, 8, 7, 6}, {6, 7, 9}, {7, 6}, {6, 10, 11}, {10, 6}, {6, 12}, {6}, {13, 14, 15}, {16}}, // SORCERESS
+                {{6, 7, 8, 9, 10, 9, 8, 7, 6}, {6, 7, 11, 12}, {11, 6}, {6, 7, 13}, {6}, {6, 14}, {6}, {15, 16}, {6}}, // WARLOCK
+                {{6, 7, 8, 9, 8, 7, 6}, {6, 10, 11, 12, 13}, {12, 11, 10, 6}, {6, 14}, {6}, {6, 15}, {6}, {16, 17}, {18}}, // WIZARD
+                {{6, 7, 6, 7, 6, 7}, {7, 8, 9, 10, 11}, {10, 9, 7}, {7, 12, 13, 14, 15}, {7}, {7, 12, 13, 14, 16}, {7}, {17}, {18, 19}}, // NECROMANCER
+                {{1}, {2, 3, 4}, {3, 2}, {5, 6}, {5}, {5, 7}, {5}, {8, 9}, {10}} // CAPTAIN
+            };
+
+            for ( int frame = 0; frame < 9; ++frame ) {
+                if ( sourceArray[heroType][animation][frame] != 0 ) {
+                    heroTypeAnim[heroType][animation].push_back( sourceArray[heroType][animation][frame] );
+                }
+            }
+        }
+
+        return heroTypeAnim[heroType][animation];
+    }
 }
 
 bool CursorAttack( u32 theme )
@@ -474,52 +540,57 @@ int Battle::GetDirectionFromCursorSword( u32 sword )
 Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, bool r )
     : base( b )
     , icn( ICN::UNKNOWN )
-    , animframe( 0 )
-    , animframe_start( 0 )
-    , animframe_count( 0 )
     , reflect( r )
     , _offset( area.x, area.y )
+    , _currentAnim( getHeroAnimation( b, OP_STATIC ) )
+    , _animationType( OP_STATIC )
+    , _idleTimer( 8000 )
 {
-    ResetAnimFrame( OP_IDLE );
+    const bool isCaptain = b->isCaptain();
+    switch ( b->GetRace() ) {
+    case Race::KNGT:
+        icn = isCaptain ? ICN::CMBTCAPK : ICN::CMBTHROK;
+        break;
+    case Race::BARB:
+        icn = isCaptain ? ICN::CMBTCAPB : ICN::CMBTHROB;
+        break;
+    case Race::SORC:
+        icn = isCaptain ? ICN::CMBTCAPS : ICN::CMBTHROS;
+        break;
+    case Race::WRLK:
+        icn = isCaptain ? ICN::CMBTCAPW : ICN::CMBTHROW;
+        break;
+    case Race::WZRD:
+        icn = isCaptain ? ICN::CMBTCAPZ : ICN::CMBTHROZ;
+        break;
+    case Race::NECR:
+        icn = isCaptain ? ICN::CMBTCAPN : ICN::CMBTHRON;
+        break;
+    default:
+        break;
+    }
 
-    if ( Settings::Get().QVGA() ) {
-        if ( reflect ) {
-            pos.x = area.x + area.w - 40;
-            pos.y = area.y + 75;
-        }
-        else {
-            pos.x = area.x + 5;
-            pos.y = area.y + 75;
-        }
+    const Sprite & sprite = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
 
-        const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
-
-        pos.w = sprite.w();
-        pos.h = sprite.h();
+    if ( reflect ) {
+        pos.x = _offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
+        pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
     }
     else {
-        const Sprite & sprite = AGG::GetICN( icn, animframe, reflect );
-
-        if ( reflect ) {
-            pos.x = _offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
-            pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
-        }
-        else {
-            pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
-            pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
-        }
-
-        if ( b->isCaptain() ) {
-            if ( reflect )
-                pos.x += CAPTAIN_X_OFFSET;
-            else
-                pos.x -= CAPTAIN_X_OFFSET;
-            pos.y += CAPTAIN_Y_OFFSET;
-        }
-
-        pos.w = sprite.w();
-        pos.h = sprite.h();
+        pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
+        pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
     }
+
+    if ( isCaptain ) {
+        if ( reflect )
+            pos.x += CAPTAIN_X_OFFSET;
+        else
+            pos.x -= CAPTAIN_X_OFFSET;
+        pos.y += CAPTAIN_Y_OFFSET;
+    }
+
+    pos.w = sprite.w();
+    pos.h = sprite.h();
 }
 
 int Battle::OpponentSprite::GetColor( void ) const
@@ -539,239 +610,23 @@ Point Battle::OpponentSprite::Offset() const
 
 void Battle::OpponentSprite::IncreaseAnimFrame( bool loop )
 {
-    if ( animframe < animframe_start + animframe_count - 1 )
-        ++animframe;
-    else if ( loop )
-        animframe = animframe_start;
+    _currentAnim.playAnimation( loop );
 }
 
-void Battle::OpponentSprite::ResetAnimFrame( int rule )
+void Battle::OpponentSprite::SetAnimation( int rule )
 {
-    if ( Settings::Get().QVGA() ) {
-        switch ( base->GetColor() ) {
-        case Color::BLUE:
-            animframe = 0;
-            break;
-        case Color::GREEN:
-            animframe = 7;
-            break;
-        case Color::RED:
-            animframe = 14;
-            break;
-        case Color::YELLOW:
-            animframe = 21;
-            break;
-        case Color::ORANGE:
-            animframe = 28;
-            break;
-        case Color::PURPLE:
-            animframe = 35;
-            break;
-        default:
-            break;
-        }
-
-        switch ( base->GetRace() ) {
-        case Race::KNGT:
-            animframe += 0;
-            break;
-        case Race::BARB:
-            animframe += 1;
-            break;
-        case Race::SORC:
-            animframe += 2;
-            break;
-        case Race::WRLK:
-            animframe += 3;
-            break;
-        case Race::WZRD:
-            animframe += 4;
-            break;
-        case Race::NECR:
-            animframe += 5;
-            break;
-        default:
-            break;
-        }
-
-        icn = ICN::MINIHERO;
-    }
-    else {
-        if ( base->isHeroes() ) {
-            switch ( base->GetRace() ) {
-            case Race::BARB:
-                icn = ICN::CMBTHROB;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 15;
-                    animframe_count = 4;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 9;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::KNGT:
-                icn = ICN::CMBTHROK;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 15;
-                    animframe_count = 5;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 9;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::NECR:
-                icn = ICN::CMBTHRON;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 16;
-                    animframe_count = 2;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 9;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::SORC:
-                icn = ICN::CMBTHROS;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 13;
-                    animframe_count = 4;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 7;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::WRLK:
-                icn = ICN::CMBTHROW;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 14;
-                    animframe_count = 3;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 6;
-                    animframe_count = 8;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case Race::WZRD:
-                icn = ICN::CMBTHROZ;
-                switch ( rule ) {
-                case OP_IDLE:
-                    animframe_start = 16;
-                    animframe_count = 3;
-                    break;
-                case OP_SRRW:
-                    animframe_start = 1;
-                    animframe_count = 5;
-                    break;
-                case OP_CAST:
-                    animframe_start = 12;
-                    animframe_count = 7;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            default:
-                break;
-            }
-            animframe = animframe_start;
-        }
-        else if ( base->isCaptain() ) {
-            icn = ICN::CMBTCAPB;
-            switch ( base->GetRace() ) {
-            case Race::BARB:
-                icn = ICN::CMBTCAPB;
-                break;
-            case Race::KNGT:
-                icn = ICN::CMBTCAPK;
-                break;
-            case Race::NECR:
-                icn = ICN::CMBTCAPN;
-                break;
-            case Race::SORC:
-                icn = ICN::CMBTCAPS;
-                break;
-            case Race::WRLK:
-                icn = ICN::CMBTCAPW;
-                break;
-            case Race::WZRD:
-                icn = ICN::CMBTCAPZ;
-                break;
-            default:
-                break;
-            }
-
-            switch ( rule ) {
-            case OP_IDLE:
-                animframe_start = 1;
-                animframe_count = 1;
-                break;
-            case OP_SRRW:
-                animframe_start = 1;
-                animframe_count = 1;
-                break;
-            case OP_CAST:
-                animframe_start = 3;
-                animframe_count = 6;
-                break;
-            default:
-                break;
-            }
-            animframe = animframe_start;
-        }
-    }
+    _animationType = rule;
+    _currentAnim = getHeroAnimation( base, rule );
 }
 
 bool Battle::OpponentSprite::isFinishFrame( void ) const
 {
-    return !animframe_count || animframe >= animframe_start + animframe_count - 1;
+    return _currentAnim.isLastFrame();
 }
 
 bool Battle::OpponentSprite::isStartFrame( void ) const
 {
-    return animframe_count && animframe == animframe_start;
+    return _currentAnim.isFirstFrame();
 }
 
 const Rect & Battle::OpponentSprite::GetArea( void ) const
@@ -779,9 +634,45 @@ const Rect & Battle::OpponentSprite::GetArea( void ) const
     return pos;
 }
 
+Point Battle::OpponentSprite::GetCastPosition( void ) const
+{
+    const bool isCaptain = base->isCaptain();
+    Point offset;
+    switch ( base->GetRace() ) {
+    case Race::KNGT:
+        offset.x = isCaptain ? 0 : 13;
+        offset.y = isCaptain ? 3 : -7;
+        break;
+    case Race::BARB:
+        offset.x = isCaptain ? 0 : 16;
+        offset.y = isCaptain ? 3 : -15;
+        break;
+    case Race::SORC:
+        offset.x = isCaptain ? 0 : 11;
+        offset.y = isCaptain ? 3 : -8;
+        break;
+    case Race::WRLK:
+        offset.x = isCaptain ? 2 : 9;
+        offset.y = isCaptain ? 5 : -11;
+        break;
+    case Race::WZRD:
+        offset.x = isCaptain ? 5 : 1;
+        offset.y = isCaptain ? 8 : -9;
+        break;
+    case Race::NECR:
+        offset.x = isCaptain ? 5 : 13;
+        offset.y = isCaptain ? 6 : -7;
+        break;
+    default:
+        break;
+    }
+
+    return Point( pos.x + ( reflect ? offset.x : pos.w - offset.x ), pos.y + pos.h / 2 + offset.y );
+}
+
 void Battle::OpponentSprite::Redraw( Surface & dst ) const
 {
-    const Sprite & hero = AGG::GetICN( icn, animframe, reflect );
+    const Sprite & hero = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
 
     Point offset( _offset );
     if ( base->isCaptain() ) {
@@ -796,6 +687,22 @@ void Battle::OpponentSprite::Redraw( Surface & dst ) const
         hero.Blit( offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.w() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y(), dst );
     else
         hero.Blit( offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y(), dst );
+}
+
+void Battle::OpponentSprite::Update()
+{
+    if ( _currentAnim.isLastFrame() ) {
+        if ( _animationType != OP_STATIC ) {
+            if ( _animationType != OP_CAST_MASS && _animationType != OP_CAST_UP && _animationType != OP_CAST_DOWN )
+                SetAnimation( OP_STATIC );
+        }
+        else if ( _idleTimer.checkDelay() ) {
+            SetAnimation( ( Rand::Get( 1, 3 ) < 2 ) ? OP_IDLE2 : OP_IDLE );
+        }
+    }
+    else {
+        _currentAnim.playAnimation();
+    }
 }
 
 Battle::Status::Status()
@@ -1412,36 +1319,27 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
     }
 }
 
-void Battle::Interface::RedrawTroopCount( const Unit & b )
+void Battle::Interface::RedrawTroopCount( const Unit & unit )
 {
-    const Rect & rt = b.GetRectPosition();
-    const Sprite & bar = AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( b ) );
+    const Rect & rt = unit.GetRectPosition();
+    const Sprite & bar = AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
+    const bool isReflected = unit.isReflect();
 
-    s32 sx = 0;
-    s32 sy = 0;
+    const int tileInFront = Board::GetIndexDirection( unit.GetHeadIndex(), isReflected ? Battle::LEFT : Battle::RIGHT );
 
-    const bool isReflected = b.isReflect();
-    const bool isWide = b.isWide();
-    sy = rt.y + rt.h - bar.h() - ( isReflected ? 21 : 9 );
+    s32 sx = rt.x + ( isReflected ? -7 : rt.w - 13 );
+    const s32 sy = rt.y + rt.h - bar.h() - ( isReflected ? 23 : 11 );
 
-    if ( isReflected ) {
-        if ( isWide )
-            sx = rt.x;
-        else
-            sx = rt.x - bar.w() + 3;
-    }
-    else {
-        if ( isWide ) {
-            sx = rt.x + rt.w - bar.w();
-        }
-        else {
-            sx = rt.x + rt.w - 3;
-        }
-    }
+    int xOffset = unit.animation.getTroopCountOffset( isReflected );
+    // check if has unit standing in front
+    if ( xOffset > 0 && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
+        xOffset = 0;
+
+    sx += isReflected ? -xOffset : xOffset;
 
     bar.Blit( sx, sy, _mainSurface );
 
-    Text text( GetStringShort( b.GetCount() ), Font::SMALL );
+    Text text( GetStringShort( unit.GetCount() ), Font::SMALL );
     text.Blit( sx + ( bar.w() - text.w() ) / 2, sy, _mainSurface );
 }
 
@@ -1510,7 +1408,7 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
                 sf_hexagon.Blit( ( *it ).GetPos(), _mainSurface );
     }
 
-    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !_currentUnit->isControlAI() ) { // shadow
+    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
             if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
                 sf_shadow.Blit( ( *it ).GetPos(), _mainSurface );
@@ -1844,7 +1742,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
         const Unit * b_enemy = cell->GetUnit();
 
         if ( b_enemy ) {
-            if ( _currentUnit->GetColor() == b_enemy->GetColor() && !b_enemy->Modes( SP_HYPNOTIZE ) ) {
+            if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
                 statusMsg = _( "View %{monster} info." );
                 StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                 return Cursor::WAR_INFO;
@@ -2192,7 +2090,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         cursor.SetThemes( Cursor::WAR_POINTER );
         listlog->QueueEventProcessing();
     }
-    else if ( le.MouseCursor( _interfacePosition ) ) {
+    else if ( le.MouseCursor( Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.w, _interfacePosition.h - status.h ) ) ) {
         const int themes = GetBattleCursor( msg );
 
         if ( cursor.Themes() != themes )
@@ -2552,6 +2450,20 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
     }
 }
 
+void Battle::Interface::AnimateOpponents( OpponentSprite * target )
+{
+    if ( target == NULL ) // nothing to animate
+        return;
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() && !target->isFinishFrame() ) {
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
+            target->IncreaseAnimFrame();
+            Redraw();
+        }
+    }
+}
+
 void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 {
     if ( unit.isFinishAnimFrame() ) // nothing to animate
@@ -2777,10 +2689,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
             else
                 target.defender->SwitchAnimation( Monster_Info::STATIC );
         }
-    if ( opponent1 )
-        opponent1->ResetAnimFrame( OP_IDLE );
-    if ( opponent2 )
-        opponent2->ResetAnimFrame( OP_IDLE );
+
     _movingUnit = NULL;
 }
 
@@ -2792,6 +2701,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     // targets damage animation
     int py = ( conf.QVGA() ? 20 : 50 );
     int finish = 0;
+    int deathColor = Color::UNUSED;
 
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
         if ( ( *it ).defender ) {
@@ -2803,12 +2713,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 AGG::PlaySound( target.defender->M82Kill() );
                 ++finish;
 
-                // set opponent OP_SRRW animation
-                if ( target.defender->GetColor() != Color::NONE ) {
-                    OpponentSprite * commander = target.defender->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
-                    if ( commander )
-                        commander->ResetAnimFrame( OP_SRRW );
-                }
+                deathColor = target.defender->GetArmyColor();
             }
             else
                 // wince animation
@@ -2819,11 +2724,27 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 ++finish;
             }
             else
-            // have immunitet
+            // have immunity
             {
                 AGG::PlaySound( M82::RSBRYFZL );
             }
         }
+
+    const Point & topleft = border.GetArea();
+
+    if ( deathColor != Color::UNUSED ) {
+        const bool attackersTurn = deathColor == arena.GetArmyColor2();
+        OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
+        OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
+        // 60% of joyful animation
+        if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
+            attackingHero->SetAnimation( OP_JOY );
+        }
+        // 80% of sorrow animation otherwise
+        else if ( defendingHero && Rand::Get( 1, 5 ) < 5 ) {
+            defendingHero->SetAnimation( OP_SORROW );
+        }
+    }
 
     // targets damage animation loop
     while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), std::mem_fun_ref( &TargetInfo::isFinishAnimFrame ) ) ) {
@@ -3066,14 +2987,8 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->ResetAnimFrame( OP_CAST );
-            LocalEvent & le = LocalEvent::Get();
-            do {
-                if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-                    opponent->IncreaseAnimFrame();
-                    Redraw();
-                }
-            } while ( le.HandleEvents() && !opponent->isFinishFrame() );
+            opponent->SetAnimation( ( spell.isApplyWithoutFocusObject() || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
+            AnimateOpponents( opponent );
         }
     }
 
@@ -3115,13 +3030,17 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         break;
 
     case Spell::DEATHRIPPLE:
+        RedrawActionDeathWaveSpell( targets, 10 );
+        break;
     case Spell::DEATHWAVE:
-        RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::FromSpell( spell() ), true );
+        RedrawActionDeathWaveSpell( targets, 15 );
         break;
 
     case Spell::HOLYWORD:
+        RedrawActionHolyShoutSpell( targets, 8 );
+        break;
     case Spell::HOLYSHOUT:
-        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::FromSpell( spell() ), true );
+        RedrawActionHolyShoutSpell( targets, 16 );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -3214,6 +3133,14 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
                 break;
             }
     }
+
+    if ( caster ) {
+        OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
+        if ( opponent ) {
+            opponent->SetAnimation( ( target ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
+            AnimateOpponents( opponent );
+        }
+    }
 }
 
 void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
@@ -3263,10 +3190,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
             else
                 target.defender->SwitchAnimation( Monster_Info::STATIC );
         }
-    if ( opponent1 )
-        opponent1->ResetAnimFrame( OP_IDLE );
-    if ( opponent2 )
-        opponent2->ResetAnimFrame( OP_IDLE );
+
     _movingUnit = NULL;
 }
 
@@ -3425,10 +3349,6 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
     else
         target.defender->SwitchAnimation( Monster_Info::STATIC );
 
-    if ( opponent1 )
-        opponent1->ResetAnimFrame( OP_IDLE );
-    if ( opponent2 )
-        opponent2->ResetAnimFrame( OP_IDLE );
     _movingUnit = NULL;
 }
 
@@ -3506,21 +3426,10 @@ void Battle::Interface::RedrawActionCatapult( int target )
 
 void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
 {
-    const HeroBase * current_commander = arena.GetCurrentCommander();
+    const HeroBase * caster = arena.GetCurrentCommander();
 
-    if ( current_commander ) {
-        Point missileStart;
-        const bool from_left = current_commander == opponent1->GetHero();
-
-        // is left position
-        if ( from_left ) {
-            const Rect & pos1 = opponent1->GetArea();
-            missileStart = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-        }
-        else {
-            const Rect & pos = opponent2->GetArea();
-            missileStart = Point( pos.x, pos.y + pos.h / 2 );
-        }
+    if ( caster ) {
+        const Point missileStart = caster == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
 
         const Point targetPos = target.GetCenterPoint();
         const double angle = GetAngle( missileStart, targetPos );
@@ -3764,20 +3673,9 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
 void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 {
-    Point startingPos;
-    const HeroBase * current_commander = arena.GetCurrentCommander();
-
-    if ( current_commander == opponent1->GetHero() ) {
-        const Rect & pos1 = opponent1->GetArea();
-        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-    }
-    else {
-        const Rect & pos = opponent2->GetArea();
-        startingPos = Point( pos.x, pos.y + pos.h / 2 );
-    }
-
     _currentUnit = NULL;
 
+    const Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
     const Rect & pos = target.GetRectPosition();
     const Point endPos( pos.x + pos.w / 2, pos.y );
 
@@ -3935,18 +3833,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     LocalEvent & le = LocalEvent::Get();
 
     // Casting hero position
-    Point startingPos;
-    const HeroBase * current_commander = arena.GetCurrentCommander();
-
-    if ( current_commander == opponent1->GetHero() ) {
-        const Rect & pos1 = opponent1->GetArea();
-        startingPos = Point( pos1.x + pos1.w, pos1.y + pos1.h / 2 );
-    }
-    else {
-        const Rect & pos = opponent2->GetArea();
-        startingPos = Point( pos.x, pos.y + pos.h / 2 );
-    }
-
+    const Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
     const Point targetPos = target.GetCenterPoint();
 
     const Points path = GetEuclideanLine( startingPos, targetPos, size );
@@ -4001,6 +3888,38 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     b_current_sprite = NULL;
 }
 
+void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength )
+{
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+    _currentUnit = NULL;
+    cursor.SetThemes( Cursor::WAR_NONE );
+
+    Rect area = GetArea();
+    area.h -= Settings::Get().QVGA() ? 18 : 36;
+
+    Surface copy = _mainSurface.GetSurface( area );
+    const int waveLength = strength * 2 + 10;
+
+    AGG::PlaySound( M82::MNRDEATH );
+
+    int position = 10;
+    while ( le.HandleEvents() && position < area.w + waveLength ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            cursor.Hide();
+            copy.RenderDeathWave( position, waveLength, strength ).Blit( _mainSurface );
+            cursor.Show();
+            RedrawPartialFinish();
+
+            position += 3;
+        }
+    }
+
+    RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
+}
+
 void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & targets )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -4047,17 +3966,57 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
         }
 }
 
+void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength )
+{
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+
+    cursor.SetThemes( Cursor::WAR_NONE );
+
+    Surface original = _mainSurface.GetSurface();
+    Surface blurred = _mainSurface.RenderBoxBlur( 2, -strength, true );
+
+    _currentUnit = NULL;
+    AGG::PlaySound( M82::MASSCURS );
+
+    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 2000 ) / 20;
+    uint32_t frame = 0;
+    uint8_t alpha = 15;
+
+    while ( le.HandleEvents() && frame < 20 ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::AnimateCustomDelay( spellcastDelay ) ) {
+            // stay at maximum blur for 7 frames
+            if ( frame < 8 || frame > 14 ) {
+                cursor.Hide();
+                Surface::Blend( original, blurred, ( 255 - alpha ) * 100 / 255 ).Blit( _mainSurface );
+                cursor.Show();
+                RedrawPartialFinish();
+
+                alpha += ( frame < 10 ) ? 30 : -50;
+            }
+            ++frame;
+        }
+    }
+
+    RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
+}
+
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
 {
     LocalEvent & le = LocalEvent::Get();
 
     const int icn = ICN::STORM;
     const int m82 = M82::FromSpell( Spell::ELEMENTALSTORM );
-    const Rect & area = GetArea();
+    const int spriteSize = 54;
+    const uint32_t icnCount = AGG::GetICNCount( icn );
 
-    u32 frame = 0;
-    u32 repeat = 4;
-    Point center;
+    std::vector<Sprite> spriteCache;
+    spriteCache.reserve( icnCount );
+    for ( uint32_t i = 0; i < icnCount; ++i ) {
+        spriteCache.push_back( AGG::GetICN( icn, i ) );
+    }
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
@@ -4069,16 +4028,21 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) ) {
+    uint32_t frame = 0;
+    while ( le.HandleEvents() && frame < 60 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            const Sprite & sprite = AGG::GetICN( icn, frame );
-            for ( center.y = area.y; center.y + sprite.h() < area.y + area.h - 20; center.y += sprite.h() )
-                for ( center.x = area.x; center.x + sprite.w() < area.x + area.w; center.x += sprite.w() )
-                    sprite.Blit( center, _mainSurface );
+            for ( int x = 0; x * spriteSize < _surfaceInnerArea.w; ++x ) {
+                const int idX = frame + x * 3;
+                const int offsetX = x * spriteSize;
+                for ( int y = 0; y * spriteSize < _surfaceInnerArea.h; ++y ) {
+                    const Sprite & sprite = spriteCache[( idX + y ) % icnCount];
+                    sprite.Blit( Point( offsetX + sprite.x(), y * spriteSize + sprite.y() ), _mainSurface );
+                }
+            }
 
             RedrawPartialFinish();
 
@@ -4086,11 +4050,6 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
                 if ( ( *it ).defender && ( *it ).damage )
                     ( *it ).defender->IncreaseAnimFrame( false );
             ++frame;
-
-            if ( frame == AGG::GetICNCount( icn ) && repeat ) {
-                --repeat;
-                frame = 0;
-            }
         }
     }
 
@@ -4277,24 +4236,49 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
         }
 }
 
-Point RedrawTroopWithFrameAnimationOffset( int icn, const Rect & pos, const Sprite & sp, bool wide, bool reflect, bool qvga )
+Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const Sprite & spellSprite )
 {
-    Point res( sp.x() + pos.x, pos.y + sp.y() );
+    const Rect & pos = target.GetRectPosition();
+    const Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
 
-    switch ( icn ) {
+    // Bottom-left corner (default) position with spell offset applied
+    Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
+
+    switch ( spellICN ) {
     case ICN::SHIELD:
-        res.x += reflect ? -pos.w / ( wide ? 2 : 1 ) : pos.w / 2;
+        // in front of the unit
+        result.x += target.isReflect() ? -pos.w / ( target.isWide() ? 2 : 1 ) : pos.w;
+        result.y += unitSprite.y() / 2;
         break;
+    case ICN::BLIND: {
+        // unit's eyes
+        const Point & offset = target.animation.getBlindOffset();
+
+        // calculate OG Heroes2 unit position to apply offset to
+        const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.w * 3 / 4 : CELLW / 2;
+
+        // Overwrite result with custom blind value
+        result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
+        result.y += offset.y;
+    } break;
     case ICN::STONSKIN:
     case ICN::STELSKIN:
-        res.y += pos.h / 2;
+        // bottom center point
+        result.x += pos.w / 2;
         break;
     default:
-        res.y += ( qvga ? pos.h / 2 : 0 );
+        // center point of the unit
+        result.x += pos.w / 2;
+        result.y += unitSprite.y() / 2;
         break;
     }
 
-    return res;
+    if ( result.y < 0 ) {
+        const int maximumY = AGG::GetAbsoluteICNHeight( spellICN );
+        result.y = maximumY + spellSprite.y();
+    }
+
+    return result;
 }
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & targets, int icn, int m82, bool wnce )
@@ -4323,22 +4307,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
                 if ( ( *it ).defender ) {
-                    const Rect & pos = ( *it ).defender->GetRectPosition();
-                    bool reflect = false;
-
-                    switch ( icn ) {
-                    case ICN::SHIELD:
-                        reflect = ( *it ).defender->isReflect();
-                        break;
-                    default:
-                        break;
-                    }
-
-                    const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
-                    const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, ( *it ).defender->isWide(), reflect, Settings::Get().QVGA() );
-                    const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
-
-                    sprite.Blit( sprite_pos, _mainSurface );
+                    const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
+                    const Sprite & spellSprite = AGG::GetICN( icn, frame, reflect );
+                    spellSprite.Blit( CalculateSpellPosition( *it->defender, icn, spellSprite ), _mainSurface );
                 }
             RedrawPartialFinish();
 
@@ -4365,15 +4336,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     const Rect & pos = b.GetRectPosition();
 
     u32 frame = 0;
-    bool reflect = false;
-
-    switch ( icn ) {
-    case ICN::SHIELD:
-        reflect = b.isReflect();
-        break;
-    default:
-        break;
-    }
+    const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
@@ -4395,11 +4358,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            const Sprite & sprite = AGG::GetICN( icn, frame, reflect );
-            const Point offset = RedrawTroopWithFrameAnimationOffset( icn, pos, sprite, b.isWide(), reflect, Settings::Get().QVGA() );
-            const Point sprite_pos( offset.x + ( reflect ? 0 : pos.w / 2 ), offset.y );
+            const Sprite & spellSprite = AGG::GetICN( icn, frame, reflect );
 
-            sprite.Blit( sprite_pos, _mainSurface );
+            spellSprite.Blit( CalculateSpellPosition( b, icn, spellSprite ), _mainSurface );
             RedrawPartialFinish();
 
             if ( animation != NONE ) {
@@ -4486,25 +4447,17 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 
     // animate heroes
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-        if ( opponent1 ) {
-            if ( !opponent1->isStartFrame() || 2 > Rand::Get( 1, 10 ) )
-                opponent1->IncreaseAnimFrame();
-        }
+        if ( opponent1 )
+            opponent1->Update();
 
-        if ( opponent2 ) {
-            if ( !opponent2->isStartFrame() || 2 > Rand::Get( 1, 10 ) )
-                opponent2->IncreaseAnimFrame();
-        }
+        if ( opponent2 )
+            opponent2->Update();
+
         humanturn_redraw = true;
     }
 
     // flags animation
     if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FLAGS_DELAY ) ) {
-        if ( opponent1 && opponent1->isFinishFrame() )
-            opponent1->ResetAnimFrame( OP_IDLE );
-        if ( opponent2 && opponent2->isFinishFrame() )
-            opponent2->ResetAnimFrame( OP_IDLE );
-
         ++animation_flags_frame;
         humanturn_redraw = true;
     }

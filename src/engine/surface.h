@@ -154,6 +154,8 @@ public:
     Surface RenderContour( const RGBA & ) const;
     Surface RenderGrayScale( void ) const;
     Surface RenderSepia( void ) const;
+    Surface RenderBoxBlur( int blurRadius, int colorChange = 0, bool redTint = false ) const;
+    Surface RenderDeathWave( int position, int waveLength, int waveHeight ) const;
     Surface RenderRippleEffect( int frame, double scaleX = 0.05, double waveFrequency = 20.0 ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
     Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
@@ -213,12 +215,14 @@ protected:
     void SetPixel2( s32 x, s32 y, u32 color );
     void SetPixel1( s32 x, s32 y, u32 color );
     void SetPixel( int x, int y, u32 );
+    void SetRawPixel( int position, uint32_t pixel );
 
     u32 GetPixel4( s32 x, s32 y ) const;
     u32 GetPixel3( s32 x, s32 y ) const;
     u32 GetPixel2( s32 x, s32 y ) const;
     u32 GetPixel1( s32 x, s32 y ) const;
     u32 GetPixel( int x, int y ) const;
+    uint32_t GetRawPixelValue( int position ) const;
 
     SDL_Surface * surface;
     bool _isDisplay;

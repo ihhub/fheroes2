@@ -1468,7 +1468,7 @@ bool Castle::BuyBuilding( u32 build )
     switch ( build ) {
     case BUILD_CASTLE:
         building &= ~BUILD_TENT;
-        Maps::UpdateSpritesFromTownToCastle( GetCenter() );
+        Maps::UpdateCastleSprite( GetCenter(), race );
         Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
         break;
 

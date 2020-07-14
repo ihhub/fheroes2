@@ -954,7 +954,7 @@ struct ICNHeader
         , offsetY( 0 )
         , width( 0 )
         , height( 0 )
-        , type( 0 )
+        , animationFrames( 0 )
         , offsetData( 0 )
     {}
 
@@ -962,7 +962,7 @@ struct ICNHeader
     u16 offsetY;
     u16 width;
     u16 height;
-    u8 type;
+    u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
     u32 offsetData;
 };
 
@@ -972,7 +972,7 @@ StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
     icn.offsetY = st.getLE16();
     icn.width = st.getLE16();
     icn.height = st.getLE16();
-    icn.type = st.get();
+    icn.animationFrames = st.get();
     icn.offsetData = st.getLE32();
 
     return st;
@@ -1284,6 +1284,23 @@ u32 AGG::GetICNCount( int icn )
     if ( icn_cache[icn].count == 0 )
         AGG::GetICN( icn, 0 );
     return icn_cache[icn].count;
+}
+
+// return height of the biggest frame in specific ICN
+int AGG::GetAbsoluteICNHeight( int icn )
+{
+    int result = 0;
+
+    if ( icn < static_cast<int>( icn_cache.size() ) ) {
+        const size_t frameCount = icn_cache[icn].count;
+        for ( int i = 0; i < frameCount; ++i ) {
+            const int offset = -icn_cache[icn].sprites[i].y();
+            if ( offset > result ) {
+                result = offset;
+            }
+        }
+    }
+    return result;
 }
 
 int AGG::PutICN( const Sprite & sprite, bool init_reflect )
