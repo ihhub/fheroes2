@@ -24,6 +24,7 @@
 
 #include "difficulty.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -478,134 +479,92 @@ void Maps::MinimizeAreaForCastle( const Point & center )
     world.GetTiles( center.x, center.y ).SetObject( MP2::OBJ_CASTLE );
 }
 
-/* correct sprites for RND castles */
-void Maps::UpdateRNDSpriteForCastle( const Point & center, int race, bool castle )
+void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bool isRandom )
 {
     /*
-    castle size: T and B - sprite, S - shadow, XX - center
+    Castle/Town object image consists of 42 tile sprites:
+    10 base tiles (OBJNTWBA) with 16 shadow tiles on left side (OBJNTWSH) overlayed by 16 town tiles (OBJNTOWN)
 
-                  T0
-          S1S1T1T1T1T1T1
-        S2S2S2T2T2T2T2T2
-          S3S3B1B1XXB1B1
-            S4B2B2  B2B2
+    Shadows (OBJNTWSH)  Castle (OBJNTOWN)
+                              0
+       32 33 34 35      1  2  3  4  5
+    36 37 38 39 40      6  7  8  9 10
+       41 42 43 44     11 12 13 14 15
+          45 46 47
     */
-    Indexes coords;
-    coords.reserve( 21 );
-
-    // T0
-    if ( castle )
-        coords.push_back( GetIndexFromAbsPoint( center.x, center.y - 3 ) );
-    // T1
-    coords.push_back( GetIndexFromAbsPoint( center.x - 2, center.y - 2 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x - 1, center.y - 2 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x, center.y - 2 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 1, center.y - 2 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 2, center.y - 2 ) );
-    // T2
-    coords.push_back( GetIndexFromAbsPoint( center.x - 2, center.y - 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x - 1, center.y - 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x, center.y - 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 1, center.y - 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 2, center.y - 1 ) );
-    // B1
-    coords.push_back( GetIndexFromAbsPoint( center.x - 2, center.y ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x - 1, center.y ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x, center.y ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 1, center.y ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 2, center.y ) );
-    // B2
-    coords.push_back( GetIndexFromAbsPoint( center.x - 2, center.y + 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x - 1, center.y + 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x, center.y + 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 1, center.y + 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 2, center.y + 1 ) );
-
-    Maps::Tiles & tile_center = world.GetTiles( center.x, center.y );
 
     // correct only RND town and castle
-    switch ( tile_center.GetObject() ) {
-    case MP2::OBJ_RNDTOWN:
-    case MP2::OBJ_RNDCASTLE:
-        break;
+    const int entranceObject = world.GetTiles( center.x, center.y ).GetObject();
 
-    default:
+    if ( isRandom && ( entranceObject != MP2::OBJ_RNDCASTLE && entranceObject != MP2::OBJ_RNDTOWN ) ) {
         DEBUG( DBG_GAME, DBG_WARN,
                "incorrect object"
                    << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) );
         return;
     }
 
-    // modify all rnd sprites
-    for ( Indexes::const_iterator it = coords.begin(); it != coords.end(); ++it )
-        if ( isValidAbsIndex( *it ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( *it ).FindObject( MP2::OBJ_RNDCASTLE );
-            if ( addon ) {
-                addon->object -= 12;
+    const int castleICN = isRandom ? ICN::OBJNTWRD : ICN::OBJNTOWN;
+    const int shadowICN = isRandom ? ICN::OBJNTWRD : ICN::OBJNTWSH;
 
-                switch ( race ) {
-                case Race::KNGT:
-                    break;
-                case Race::BARB:
-                    addon->index += 32;
-                    break;
-                case Race::SORC:
-                    addon->index += 64;
-                    break;
-                case Race::WRLK:
-                    addon->index += 96;
-                    break;
-                case Race::WZRD:
-                    addon->index += 128;
-                    break;
-                case Race::NECR:
-                    addon->index += 160;
-                    break;
-                default:
-                    break;
+    int raceIndex = 0;
+    switch ( race ) {
+    case Race::BARB:
+        raceIndex = 1;
+        break;
+    case Race::SORC:
+        raceIndex = 2;
+        break;
+    case Race::WRLK:
+        raceIndex = 3;
+        break;
+    case Race::WZRD:
+        raceIndex = 4;
+        break;
+    case Race::NECR:
+        raceIndex = 5;
+        break;
+    default:
+        break;
+    }
+
+    for ( int index = 0; index < 16; ++index ) {
+        const int fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
+        const int lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
+
+        static const int castleCoordinates[16][2]
+            = {{0, -3}, {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2}, {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1}, {-2, 0}, {-1, 0}, {0, 0}, {1, 0}, {2, 0}};
+        static const int shadowCoordinates[16][2] = {{-4, -2}, {-3, -2}, {-2, -2}, {-1, -2}, {-5, -1}, {-4, -1}, {-3, -1}, {-2, -1},
+                                                     {-1, -1}, {-4, 0},  {-3, 0},  {-2, 0},  {-1, 0},  {-3, -1}, {-2, -1}, {-1, -1}};
+
+        const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
+        if ( isValidAbsIndex( castleTile ) ) {
+            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN( castleICN, -1, lookupID );
+
+            if ( addon ) {
+                if ( isRandom ) {
+                    addon->object -= 12; // OBJNTWRD to OBJNTOWN
+                    addon->index = fullTownIndex;
+                }
+                else {
+                    addon->index -= 16;
                 }
             }
         }
-}
 
-void Maps::UpdateSpritesFromTownToCastle( const Point & center )
-{
-    // correct area maps sprites
-    Indexes coords;
-    coords.reserve( 15 );
+        const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
+        if ( isValidAbsIndex( shadowTile ) ) {
+            Maps::TilesAddon * addon = world.GetTiles( shadowTile ).FindAddonICN( shadowICN, -1, isRandom ? lookupID + 32 : lookupID );
 
-    // T1
-    coords.push_back( GetIndexFromAbsPoint( center.x - 2, center.y - 2 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x - 1, center.y - 2 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x, center.y - 2 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 1, center.y - 2 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 2, center.y - 2 ) );
-    // T2
-    coords.push_back( GetIndexFromAbsPoint( center.x - 2, center.y - 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x - 1, center.y - 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x, center.y - 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 1, center.y - 1 ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 2, center.y - 1 ) );
-    // B1
-    coords.push_back( GetIndexFromAbsPoint( center.x - 2, center.y ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x - 1, center.y ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x, center.y ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 1, center.y ) );
-    coords.push_back( GetIndexFromAbsPoint( center.x + 2, center.y ) );
-
-    // modify all town sprites
-    for ( Indexes::const_iterator it = coords.begin(); it != coords.end(); ++it )
-        if ( isValidAbsIndex( *it ) ) {
-            TilesAddon * addon = world.GetTiles( *it ).FindObject( MP2::OBJ_CASTLE );
-            if ( addon )
-                addon->index -= 16;
+            if ( addon ) {
+                if ( isRandom ) {
+                    addon->object -= 4; // OBJNTWRD to OBJNTWSH
+                    addon->index = fullTownIndex;
+                }
+                else {
+                    addon->index -= 16;
+                }
+            }
         }
-
-    // T0
-    if ( isValidAbsIndex( GetIndexFromAbsPoint( center.x, center.y - 3 ) && isValidAbsIndex( GetIndexFromAbsPoint( center.x, center.y - 2 ) ) ) ) {
-        TilesAddon * addon = world.GetTiles( GetIndexFromAbsPoint( center.x, center.y - 2 ) ).FindObject( MP2::OBJ_CASTLE );
-        if ( addon )
-            world.GetTiles( GetIndexFromAbsPoint( center.x, center.y - 3 ) ).AddonsPushLevel2( TilesAddon( addon->level, addon->uniq, addon->object, addon->index - 3 ) );
     }
 }
 
