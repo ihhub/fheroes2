@@ -954,7 +954,7 @@ struct ICNHeader
         , offsetY( 0 )
         , width( 0 )
         , height( 0 )
-        , type( 0 )
+        , animationFrames( 0 )
         , offsetData( 0 )
     {}
 
@@ -962,7 +962,7 @@ struct ICNHeader
     u16 offsetY;
     u16 width;
     u16 height;
-    u8 type;
+    u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
     u32 offsetData;
 };
 
@@ -972,7 +972,7 @@ StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
     icn.offsetY = st.getLE16();
     icn.width = st.getLE16();
     icn.height = st.getLE16();
-    icn.type = st.get();
+    icn.animationFrames = st.get();
     icn.offsetData = st.getLE32();
 
     return st;
