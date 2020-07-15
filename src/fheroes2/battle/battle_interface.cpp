@@ -2688,17 +2688,6 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
         status.SetMessage( "", false );
     }
 
-    // restore
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            TargetInfo & target = *it;
-            if ( !target.defender->isValid() ) {
-                target.defender->SetDeathAnim();
-            }
-            else
-                target.defender->SwitchAnimation( Monster_Info::STATIC );
-        }
-
     _movingUnit = NULL;
 }
 
@@ -3164,6 +3153,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
         u32 damage = 0;
 
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
+            // here  Arena::GetInterface()->RedrawActionRemoveMirrorImage( *this );
             killed += ( *it ).killed;
             damage += ( *it ).damage;
         }
@@ -3190,18 +3180,6 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
     }
 
     status.SetMessage( " ", false );
-
-    // restore
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            TargetInfo & target = *it;
-            if ( !target.defender->isValid() ) {
-                target.defender->SetDeathAnim();
-            }
-            else
-                target.defender->SwitchAnimation( Monster_Info::STATIC );
-        }
-
     _movingUnit = NULL;
 }
 
@@ -3352,13 +3330,6 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
     }
     status.SetMessage( msg, true );
     status.SetMessage( "", false );
-
-    // restore
-    if ( !target.defender->isValid() ) {
-        target.defender->SetDeathAnim();
-    }
-    else
-        target.defender->SwitchAnimation( Monster_Info::STATIC );
 
     _movingUnit = NULL;
 }
