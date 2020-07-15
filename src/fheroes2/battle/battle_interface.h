@@ -212,7 +212,7 @@ namespace Battle
         void RedrawActionCatapult( int );
         void RedrawActionTeleportSpell( Unit &, s32 );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
-        void RedrawActionSummonElementalSpell( const Unit & );
+        void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit &, const Position & );
         void RedrawActionSkipStatus( const Unit & );
         void RedrawActionRemoveMirrorImage( std::vector<Unit *> mirrorImages );
@@ -330,7 +330,6 @@ namespace Battle
         const Unit * _movingUnit;
         const Unit * _flyingUnit;
         const Sprite * b_current_sprite;
-        u32 b_current_alpha;
         Point _movingPos;
         Point _flyingPos;
 

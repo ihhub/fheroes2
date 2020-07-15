@@ -133,6 +133,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , blindanswer( false )
     , animation( id )
     , idleTimer( animation.getIdleDelay() )
+    , customAlphaMask( 255 )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {

@@ -862,7 +862,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , _movingUnit( NULL )
     , _flyingUnit( NULL )
     , b_current_sprite( NULL )
-    , b_current_alpha( 255 )
     , index_pos( -1 )
     , teleport_src( -1 )
     , listlog( NULL )
@@ -1303,15 +1302,11 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
         }
 
         // sprite monster
-        if ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit ) {
-            if ( b_current_alpha < 255 ) {
-                spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
-                spmon1.SetAlphaMod( b_current_alpha, false );
-            }
-            spmon1.Blit( sp.x, sp.y, _mainSurface );
+        if ( b.GetCustomAlpha() < 255 ) {
+            spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
+            spmon1.SetAlphaMod( b.GetCustomAlpha(), false );
         }
-        else
-            spmon1.Blit( sp, _mainSurface );
+        spmon1.Blit( sp, _mainSurface );
 
         // contour
         if ( spmon2.isValid() )
@@ -2809,7 +2804,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     // Fade away animation for destroyed mirror images
-    RedrawActionRemoveMirrorImage( mirrorImages );
+    if ( mirrorImages.size() )
+        RedrawActionRemoveMirrorImage( mirrorImages );
 
     // Set to static animation as attacker might still continue its animation
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
@@ -3451,22 +3447,21 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
-    _currentUnit = &target;
-    b_current_sprite = &sprite;
-    b_current_alpha = 240;
+    uint32_t currentAlpha = target.GetCustomAlpha();
 
     AGG::PlaySound( M82::TELPTOUT );
 
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( b_current_alpha > 0 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( currentAlpha > 0 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha -= 15;
+            target.SetCustomAlpha( currentAlpha );
             Redraw();
-            b_current_alpha -= 15;
         }
     }
 
-    b_current_alpha = 0;
+    currentAlpha = 0;
     Redraw();
 
     target.SetPosition( dst );
@@ -3475,18 +3470,17 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( b_current_alpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( currentAlpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha += 15;
+            target.SetCustomAlpha( currentAlpha );
             Redraw();
-            b_current_alpha += 15;
         }
     }
 
-    b_current_alpha = 255;
-    _currentUnit = NULL;
-    b_current_sprite = NULL;
+    target.SetCustomAlpha( 255 );
 }
 
-void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
+void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -3495,24 +3489,21 @@ void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
-    _currentUnit = &target;
-    b_current_sprite = &sprite;
-    b_current_alpha = 0;
+    uint32_t currentAlpha = 0;
 
     AGG::PlaySound( M82::SUMNELM );
 
-    while ( le.HandleEvents() && b_current_alpha < 220 ) {
+    while ( le.HandleEvents() && currentAlpha < 220 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha += 20;
+            target.SetCustomAlpha( currentAlpha );
             Redraw();
-            b_current_alpha += 20;
         }
     }
 
-    b_current_alpha = 255;
-    _currentUnit = NULL;
-    b_current_sprite = NULL;
+    target.SetCustomAlpha( 255 );
 }
 
 void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const Position & pos )
@@ -4150,7 +4141,7 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( std::vector<Unit *> mirro
     LocalEvent & le = LocalEvent::Get();
 
     int frame = 10;
-    while ( le.HandleEvents() && mirrorImages.size() && frame > 0 ) {
+    while ( le.HandleEvents() && frame > 0 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
