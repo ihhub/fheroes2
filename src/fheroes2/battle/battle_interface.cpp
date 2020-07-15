@@ -3156,7 +3156,6 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
         u32 damage = 0;
 
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-            // here  Arena::GetInterface()->RedrawActionRemoveMirrorImage( *this );
             killed += ( *it ).killed;
             damage += ( *it ).damage;
         }
@@ -3323,7 +3322,7 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
     RedrawActionWincesKills( targets );
 
     // draw status for first defender
-    std::string msg = _( "Tower do %{damage} damage." );
+    std::string msg = _( "Tower does %{damage} damage." );
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
         msg.append( " " );
@@ -4141,7 +4140,7 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( std::vector<Unit *> mirro
     while ( le.HandleEvents() && frame > 0 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
             const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
             for ( std::vector<Unit *>::iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
                 if ( *it )
@@ -4153,7 +4152,7 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( std::vector<Unit *> mirro
             --frame;
         }
     }
-    status.SetMessage( _( "Mirror Image ended" ), true );
+    status.SetMessage( _( "The mirror image is destroyed!" ), true );
 }
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsInfo & targets, int icn, int m82 )
