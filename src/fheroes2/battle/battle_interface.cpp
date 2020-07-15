@@ -2820,10 +2820,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 unit->SwitchAnimation( Monster_Info::STATIC );
             }
 
-            
-            if ( unit->Modes( CAP_MIRRORIMAGE ) || unit->Modes( CAP_SUMMONELEM ) ) {
-                arena.GetGraveyard()->RemoveTroop( *unit );
-            }
+            if ( !unit->isValid() )
+                unit->PostKilledAction();
         }
     }
 }

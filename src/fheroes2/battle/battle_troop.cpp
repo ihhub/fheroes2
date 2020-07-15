@@ -612,9 +612,6 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
         }
         hp -= ( dmg >= hp ? hp : dmg );
 
-        if ( !isValid() )
-            PostKilledAction();
-
         return killed;
     }
 
@@ -633,8 +630,10 @@ void Battle::Unit::PostKilledAction( void )
 
     SetModes( TR_MOVED );
 
-    // save troop to graveyard
-    Arena::GetGraveyard()->AddTroop( *this );
+    // save troop to graveyard            
+    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
+        Arena::GetGraveyard()->AddTroop( *this );
+    }
 
     Cell * head = Board::GetCell( GetHeadIndex() );
     Cell * tail = Board::GetCell( GetTailIndex() );
