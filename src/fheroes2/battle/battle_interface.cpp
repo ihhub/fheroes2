@@ -2642,8 +2642,9 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
     attacker.SwitchAnimation( Monster_Info::STATIC );
 
+    bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
-    if ( targets.size() ) {
+    if ( !isMirror && targets.size() ) {
         std::string msg = _( "%{attacker} do %{damage} damage." );
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
@@ -2652,8 +2653,10 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
             u32 damage = 0;
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                killed += ( *it ).killed;
-                damage += ( *it ).damage;
+                if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
+                    killed += ( *it ).killed;
+                    damage += ( *it ).damage;
+                }
             }
 
             StringReplace( msg, "%{damage}", damage );
@@ -3149,16 +3152,18 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
 void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
 {
     if ( spell.isDamage() ) {
-        // targets damage animation
-        RedrawActionWincesKills( targets );
-
         u32 killed = 0;
         u32 damage = 0;
 
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-            killed += ( *it ).killed;
-            damage += ( *it ).damage;
+            if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
+                killed += ( *it ).killed;
+                damage += ( *it ).damage;
+            }
         }
+
+        // targets damage animation
+        RedrawActionWincesKills( targets );
 
         if ( damage ) {
             std::string msg;
@@ -3317,6 +3322,7 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
 {
     TargetsInfo targets;
     targets.push_back( target );
+    const bool isMirror = target.defender->isModes( CAP_MIRRORIMAGE );
 
     // targets damage animation
     RedrawActionWincesKills( targets );
@@ -3330,8 +3336,11 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
         StringReplace( msg, "%{count}", target.killed );
         StringReplace( msg, "%{defender}", target.defender->GetName() );
     }
-    status.SetMessage( msg, true );
-    status.SetMessage( "", false );
+
+    if ( !isMirror ) {
+        status.SetMessage( msg, true );
+        status.SetMessage( "", false );
+    }
 
     _movingUnit = NULL;
 }
