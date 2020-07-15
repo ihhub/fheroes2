@@ -594,7 +594,7 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
     if ( dmg && GetCount() ) {
         u32 killed = HowManyWillKilled( dmg );
 
-        // kill mirror image (slave)
+        // mirror image dies if recieves any damage
         if ( Modes( CAP_MIRRORIMAGE ) ) {
             dmg = hp;
             killed = GetCount();
@@ -620,6 +620,25 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
 
 void Battle::Unit::PostKilledAction( void )
 {
+    // kill mirror image (master)
+    if ( Modes( CAP_MIRROROWNER ) ) {
+        if ( Arena::GetInterface() )
+            Arena::GetInterface()->RedrawActionRemoveMirrorImage( *mirror );
+        modes = 0;
+        mirror->hp = 0;
+        mirror->SetCount( 0 );
+        mirror->mirror = NULL;
+        mirror = NULL;
+        ResetModes( CAP_MIRROROWNER );
+    }
+    // kill mirror image (slave)
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        if ( Arena::GetInterface() )
+            Arena::GetInterface()->RedrawActionRemoveMirrorImage( *this );
+        mirror->ResetModes( CAP_MIRROROWNER );
+        mirror = NULL;
+    }
+
     ResetModes( IS_MAGIC );
     ResetModes( TR_RESPONSED );
     ResetModes( TR_SKIPMOVE );
@@ -630,10 +649,10 @@ void Battle::Unit::PostKilledAction( void )
 
     SetModes( TR_MOVED );
 
-    // save troop to graveyard            
-    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
+    // save troop to graveyard
+    // skip mirror and summon
+    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) )
         Arena::GetGraveyard()->AddTroop( *this );
-    }
 
     Cell * head = Board::GetCell( GetHeadIndex() );
     Cell * tail = Board::GetCell( GetTailIndex() );
