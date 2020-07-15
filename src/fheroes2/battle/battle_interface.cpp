@@ -1115,7 +1115,7 @@ void Battle::Interface::RedrawArmies( void )
         if ( b && _flyingUnit != b && ii != b->GetTailIndex() ) {
             RedrawTroopSprite( *b );
 
-            if ( _movingUnit != b )
+            if ( _movingUnit != b && b->isValid() )
                 RedrawTroopCount( *b );
         }
     }
