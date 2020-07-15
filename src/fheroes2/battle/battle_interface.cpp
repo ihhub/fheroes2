@@ -2701,24 +2701,32 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     int finish = 0;
     int deathColor = Color::UNUSED;
 
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            TargetInfo & target = *it;
+    std::vector<Unit *> mirrorImages;
+
+    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+        Unit * defender = it->defender;
+        if ( defender ) {
+            if ( defender->isModes( CAP_MIRRORIMAGE ) )
+                mirrorImages.push_back( defender );
 
             // kill animation
-            if ( !target.defender->isValid() ) {
-                target.defender->SwitchAnimation( Monster_Info::KILL );
-                AGG::PlaySound( target.defender->M82Kill() );
+            if ( !defender->isValid() ) {
+                // destroy linked mirror
+                if ( defender->isModes( CAP_MIRROROWNER ) )
+                    mirrorImages.push_back( defender->GetMirror() );
+
+                defender->SwitchAnimation( Monster_Info::KILL );
+                AGG::PlaySound( defender->M82Kill() );
                 ++finish;
 
-                deathColor = target.defender->GetArmyColor();
+                deathColor = defender->GetArmyColor();
             }
             else
                 // wince animation
-                if ( target.damage ) {
+                if ( it->damage ) {
                 // wnce animation
-                target.defender->SwitchAnimation( Monster_Info::WNCE );
-                AGG::PlaySound( target.defender->M82Wnce() );
+                defender->SwitchAnimation( Monster_Info::WNCE );
+                AGG::PlaySound( defender->M82Wnce() );
                 ++finish;
             }
             else
@@ -2727,8 +2735,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 AGG::PlaySound( M82::RSBRYFZL );
             }
         }
-
-    const Point & topleft = border.GetArea();
+    }
 
     if ( deathColor != Color::UNUSED ) {
         const bool attackersTurn = deathColor == arena.GetArmyColor2();
@@ -2800,6 +2807,9 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
             py += ( conf.QVGA() ? 5 : 10 );
         }
     }
+
+    // Fade away animation for destroyed mirror images
+    RedrawActionRemoveMirrorImage( mirrorImages );
 
     // Set to static animation as attacker might still continue its animation
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
@@ -4135,9 +4145,27 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     }
 }
 
-void Battle::Interface::RedrawActionRemoveMirrorImage( const Unit & mirror )
+void Battle::Interface::RedrawActionRemoveMirrorImage( std::vector<Unit *> mirrorImages )
 {
-    status.SetMessage( _( "MirrorImage ended" ), true );
+    LocalEvent & le = LocalEvent::Get();
+
+    int frame = 10;
+    while ( le.HandleEvents() && mirrorImages.size() && frame > 0 ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
+            for ( std::vector<Unit *>::iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
+                if ( *it )
+                    ( *it )->SetCustomAlpha( alpha );
+            }
+
+            Redraw();
+
+            --frame;
+        }
+    }
+    status.SetMessage( _( "Mirror Image ended" ), true );
 }
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsInfo & targets, int icn, int m82 )

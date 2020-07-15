@@ -284,6 +284,11 @@ u32 Battle::Unit::GetUID( void ) const
     return uid;
 }
 
+Battle::Unit * Battle::Unit::GetMirror()
+{
+    return mirror;
+}
+
 void Battle::Unit::SetMirror( Unit * ptr )
 {
     mirror = ptr;
@@ -454,8 +459,11 @@ void Battle::Unit::NewTurn( void )
 
         // cancel mirror image
         if ( mode == CAP_MIRROROWNER && mirror ) {
-            if ( Arena::GetInterface() )
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( *mirror );
+            if ( Arena::GetInterface() ) {
+                std::vector<Unit *> images;
+                images.push_back( mirror );
+                Arena::GetInterface()->RedrawActionRemoveMirrorImage( images );
+            }
 
             mirror->SetCount( 0 );
             mirror = NULL;
@@ -622,8 +630,6 @@ void Battle::Unit::PostKilledAction( void )
 {
     // kill mirror image (master)
     if ( Modes( CAP_MIRROROWNER ) ) {
-        if ( Arena::GetInterface() )
-            Arena::GetInterface()->RedrawActionRemoveMirrorImage( *mirror );
         modes = 0;
         mirror->hp = 0;
         mirror->SetCount( 0 );
@@ -633,8 +639,6 @@ void Battle::Unit::PostKilledAction( void )
     }
     // kill mirror image (slave)
     if ( Modes( CAP_MIRRORIMAGE ) ) {
-        if ( Arena::GetInterface() )
-            Arena::GetInterface()->RedrawActionRemoveMirrorImage( *this );
         mirror->ResetModes( CAP_MIRROROWNER );
         mirror = NULL;
     }
@@ -1656,6 +1660,16 @@ void Battle::Unit::SetDeathAnim()
         SwitchAnimation( Monster_Info::KILL );
     }
     animation.setToLastFrame();
+}
+
+void Battle::Unit::SetCustomAlpha( uint32_t alpha )
+{
+    customAlphaMask = alpha;
+}
+
+uint32_t Battle::Unit::GetCustomAlpha() const
+{
+    return customAlphaMask;
 }
 
 int Battle::Unit::GetFrameCount( void ) const
