@@ -403,9 +403,9 @@ Surface DrawHexagonShadow( int alphaValue )
     return sf;
 }
 
-bool Battle::TargetInfo::isFinishAnimFrame( void ) const
+bool Battle::TargetInfo::isFinishAnimFrame( const TargetInfo & info )
 {
-    return defender && defender->isFinishAnimFrame();
+    return info.defender && info.defender->isFinishAnimFrame();
 }
 
 int Battle::GetCursorFromSpell( int spell )
@@ -2745,7 +2745,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     // targets damage animation loop
-    while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), std::mem_fun_ref( &TargetInfo::isFinishAnimFrame ) ) ) {
+    while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
