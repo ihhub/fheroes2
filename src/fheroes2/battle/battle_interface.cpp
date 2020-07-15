@@ -1250,11 +1250,8 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
             }
         }
 
-        if ( b.hasColorCycling() ) {
-            const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
-            if ( !isUnderAlphaEffect ) {
-                applyPalettes.push_back( _creaturePalette );
-            }
+        if ( b.hasColorCycling() && b.GetCustomAlpha() == 255 ) {
+            applyPalettes.push_back( _creaturePalette );
         }
 
         if ( b.Modes( CAP_MIRRORIMAGE ) ) {
