@@ -868,7 +868,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , listlog( NULL )
     , turn( 0 )
     , _colorCycle( 0 )
-    , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
+    , _customPalette( PAL::GetPalette( PAL::STANDARD ) )
     , _contourColor( 110 )
     , _brightLandType( false )
     , _cycleBattlefield( false )
@@ -1032,7 +1032,7 @@ void Battle::Interface::SetStatus( const std::string & msg, bool top )
 void Battle::Interface::CycleColors()
 {
     ++_colorCycle;
-    _creaturePalette = PAL::GetCyclingPalette( _colorCycle );
+    _customPalette = PAL::GetCyclingPalette( _colorCycle );
     _cycleBattlefield = true;
 }
 
@@ -1258,7 +1258,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
         if ( b.hasColorCycling() ) {
             const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
             if ( !isUnderAlphaEffect ) {
-                applyPalettes.push_back( _creaturePalette );
+                applyPalettes.push_back( _customPalette );
             }
         }
 
@@ -1379,7 +1379,7 @@ void Battle::Interface::RedrawCoverStatic( Surface & dst )
     if ( icn_cbkg != ICN::UNKNOWN ) {
         Sprite cbkg = AGG::GetICN( icn_cbkg, 0 );
         if ( _cycleBattlefield && ( icn_cbkg == ICN::CBKGLAVA || icn_cbkg == ICN::CBKGWATR ) )
-            AGG::ReplaceColors( cbkg, _creaturePalette, icn_cbkg, 0, false );
+            AGG::ReplaceColors( cbkg, _customPalette, icn_cbkg, 0, false );
         cbkg.Blit( dst );
     }
 
@@ -1455,7 +1455,7 @@ void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst )
     if ( castle.isBuild( BUILD_MOAT ) ) {
         Sprite sprite = AGG::GetICN( ICN::MOATWHOL, 0 );
         if ( _cycleBattlefield )
-            AGG::ReplaceColors( sprite, _creaturePalette, ICN::MOATWHOL, 0, false );
+            AGG::ReplaceColors( sprite, _customPalette, ICN::MOATWHOL, 0, false );
         sprite.Blit( sprite.x(), sprite.y(), dst );
     }
 
