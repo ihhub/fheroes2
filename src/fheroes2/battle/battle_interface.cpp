@@ -3979,22 +3979,23 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
     _currentUnit = NULL;
     AGG::PlaySound( M82::MASSCURS );
 
-    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 2000 ) / 20;
+    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / 20;
     uint32_t frame = 0;
-    uint8_t alpha = 15;
+    uint8_t alpha = 30;
 
     while ( le.HandleEvents() && frame < 20 ) {
         CheckGlobalEvents( le );
 
         if ( Game::AnimateCustomDelay( spellcastDelay ) ) {
-            // stay at maximum blur for 7 frames
-            if ( frame < 8 || frame > 14 ) {
+            // stay at maximum blur for 2 frames
+            if ( frame < 9 || frame > 10 ) {
                 cursor.Hide();
                 Surface::Blend( original, blurred, ( 255 - alpha ) * 100 / 255 ).Blit( _mainSurface );
+                std::cout << (int)alpha << std::endl;
                 cursor.Show();
                 RedrawPartialFinish();
 
-                alpha += ( frame < 10 ) ? 30 : -50;
+                alpha += ( frame < 10 ) ? 25 : -25;
             }
             ++frame;
         }
