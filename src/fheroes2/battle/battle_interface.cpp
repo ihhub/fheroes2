@@ -3991,7 +3991,6 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
             if ( frame < 9 || frame > 10 ) {
                 cursor.Hide();
                 Surface::Blend( original, blurred, ( 255 - alpha ) * 100 / 255 ).Blit( _mainSurface );
-                std::cout << (int)alpha << std::endl;
                 cursor.Show();
                 RedrawPartialFinish();
 
