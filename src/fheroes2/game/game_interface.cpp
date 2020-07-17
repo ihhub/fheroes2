@@ -232,17 +232,20 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     viewDoor.Blit( radarArea );
 
     const Rect & visibleArea = gameArea.GetROI();
-    const bool isFadingEnabled = display.w() >= TILEWIDTH * ( distance + 1 ) && display.h() >= TILEWIDTH * ( distance + 1 );
+    const bool isFadingEnabled = ( gameArea.GetROI().w > TILEWIDTH * distance ) || ( gameArea.GetROI().h > TILEWIDTH * distance );
     const Surface & top = display.GetSurface( visibleArea );
+
+    // We need to add an extra one cell as a hero stands exactly in the middle of a cell
+    const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
+    const Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 + 1 ), heroPos.y - TILEWIDTH * ( distance / 2 + 1 ) );
+    const Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
+
     if ( isFadingEnabled ) {
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
 
-        const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
-        const Point offset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
-        const Surface middle = display.GetSurface( Rect( offset.x, offset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) ) );
-
-        display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, offset, 105, 300 );
+        const Surface middle = display.GetSurface( spellROI );
+        display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 105, 300 );
     }
 
     Cursor & cursor = Cursor::Get();
@@ -273,8 +276,8 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
             if ( valid ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
 
-                valid = ( ( visibleArea & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
-                          && water == world.GetTiles( dst ).isWater() && ( distance / 2 ) >= Maps::GetApproximateDistance( from, dst ) );
+                valid = ( ( spellROI & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
+                          && water == world.GetTiles( dst ).isWater() );
             }
 
             cursor.SetThemes( valid ? ( water ? Cursor::BOAT : Cursor::MOVE ) : Cursor::WAR_NONE );
