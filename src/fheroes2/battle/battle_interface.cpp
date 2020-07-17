@@ -2642,7 +2642,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
     attacker.SwitchAnimation( Monster_Info::STATIC );
 
-    bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
+    const bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
     if ( !isMirror && targets.size() ) {
         std::string msg = _( "%{attacker} do %{damage} damage." );
