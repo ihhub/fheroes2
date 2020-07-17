@@ -1,24 +1,43 @@
+If you have installed GOG version of the game you can copy .ogg files from MUSIC subfolder to this folder.
+
 List of required track names for full music support (ogg or mp3 support):
 
-02.ogg - Random for Battle
-03.ogg - Random for Battle
-04.ogg - Random for Battle
-05.ogg - Barbarian Castle
-06.ogg - Sorceress Castle
-07.ogg - Warlock Castle
-08.ogg - Wizard Castle
-09.ogg - Necromancer Castle
-10.ogg - Knight Castle
-11.ogg - Lava Theme
-12.ogg - Wasteland Theme
-13.ogg - Desert Theme
-14.ogg - Snow Theme
-15.ogg - Swamp Theme
-16.ogg - Beach Theme
-17.ogg - Dirt Theme
-18.ogg - Grass Theme
-23.ogg - Map Puzzle
-28.ogg - AI Turns
-29.ogg - Battle Wins
-30.ogg - Battle Loss
-42.ogg - Main Menu
+homm2_01.ogg - Random for Battle
+homm2_02.ogg - Random for Battle
+homm2_03.ogg - Random for Battle
+homm2_04.ogg - Barbarian Castle
+homm2_05.ogg - Sorceress Castle
+homm2_06.ogg - Warlock Castle
+homm2_07.ogg - Wizard Castle
+homm2_08.ogg - Necromancer Castle
+homm2_09.ogg - Knight Castle
+homm2_10.ogg - Lava Theme
+homm2_11.ogg - Wasteland Theme
+homm2_12.ogg - Desert Theme
+homm2_13.ogg - Snow Theme
+homm2_14.ogg - Swamp Theme
+homm2_15.ogg - Beach Theme
+homm2_16.ogg - Dirt Theme
+homm2_17.ogg - Grass Theme
+homm2_18.ogg - Lost Game
+homm2_19.ogg - New Week
+homm2_20.ogg - New Month
+homm2_21.ogg - Archibald Campaign
+homm2_22.ogg - Map Puzzle
+homm2_23.ogg - Roland Campaign
+homm2_27.ogg - AI Turn
+homm2_28.ogg - Battle Won
+homm2_29.ogg - Battle Loss
+homm2_30.ogg - Dungeon
+homm2_31.ogg - Waterspring
+homm2_32.ogg - Arabian
+homm2_33.ogg - Hillfort
+homm2_34.ogg - Treehouse
+homm2_35.ogg - Demoncave
+homm2_36.ogg - Experience
+homm2_37.ogg - Skill
+homm2_38.ogg - Watchtower
+homm2_39.ogg - Xanadu
+homm2_40.ogg - Ultimate Artifact
+homm2_41.ogg - Main Menu
+homm2_42.ogg - Scenario Victory
