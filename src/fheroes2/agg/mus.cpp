@@ -85,7 +85,7 @@ namespace MUS
     const std::string GetString( int mus, bool shortname )
     {
         std::stringstream sstream;
-        sstream << std::setw( 2 ) << std::setfill( '0' ) << mus;
+        sstream << "homm2_" << std::setw( 2 ) << std::setfill( '0' ) << mus - 1;
         if ( shortname )
             sstream << ".ogg";
         else
