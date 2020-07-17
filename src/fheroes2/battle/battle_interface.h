@@ -215,7 +215,7 @@ namespace Battle
         void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit &, const Position & );
         void RedrawActionSkipStatus( const Unit & );
-        void RedrawActionRemoveMirrorImage( std::vector<Unit *> mirrorImages );
+        void RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages );
         void RedrawBridgeAnimation( bool down );
         void RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID );
 
