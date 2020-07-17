@@ -867,9 +867,10 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , listlog( NULL )
     , turn( 0 )
     , _colorCycle( 0 )
-    , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
+    , _customPalette( PAL::GetPalette( PAL::STANDARD ) )
     , _contourColor( 110 )
     , _brightLandType( false )
+    , _cycleBattlefield( false )
 {
     const Settings & conf = Settings::Get();
 
@@ -946,6 +947,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     }
     if ( conf.QVGA() || conf.ExtPocketLowMemory() )
         icn_frng = ICN::UNKNOWN;
+
+    sf_cover.Set( _mainSurface.w(), _mainSurface.h(), false );
 
     // hexagon
     sf_hexagon = DrawHexagon( ( light ? RGBA( 0x78, 0x94, 0 ) : RGBA( 0x38, 0x48, 0 ) ) );
@@ -1028,7 +1031,8 @@ void Battle::Interface::SetStatus( const std::string & msg, bool top )
 void Battle::Interface::CycleColors()
 {
     ++_colorCycle;
-    _creaturePalette = PAL::GetCyclingPalette( _colorCycle );
+    _customPalette = PAL::GetCyclingPalette( _colorCycle );
+    _cycleBattlefield = true;
 }
 
 void Battle::Interface::UpdateContourColor()
@@ -1251,7 +1255,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
         }
 
         if ( b.hasColorCycling() && b.GetCustomAlpha() == 255 ) {
-            applyPalettes.push_back( _creaturePalette );
+            applyPalettes.push_back( _customPalette );
         }
 
         if ( b.Modes( CAP_MIRRORIMAGE ) ) {
@@ -1339,12 +1343,7 @@ void Battle::Interface::RedrawCover( void )
 {
     const Settings & conf = Settings::Get();
 
-    if ( !sf_cover.isValid() ) {
-        sf_cover.Set( _mainSurface.w(), _mainSurface.h(), false );
-        RedrawCoverStatic( sf_cover );
-    }
-
-    sf_cover.Blit( _mainSurface );
+    RedrawCoverStatic( _mainSurface );
 
     const Board & board = *Arena::GetBoard();
     RedrawCoverBoard( conf, board );
@@ -1363,12 +1362,16 @@ void Battle::Interface::RedrawCover( void )
         sf_cursor.Blit( cell->GetPos(), _mainSurface );
 
     RedrawKilled();
+
+    _cycleBattlefield = false;
 }
 
 void Battle::Interface::RedrawCoverStatic( Surface & dst )
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
-        const Sprite & cbkg = AGG::GetICN( icn_cbkg, 0 );
+        Sprite cbkg = AGG::GetICN( icn_cbkg, 0 );
+        if ( _cycleBattlefield && ( icn_cbkg == ICN::CBKGLAVA || icn_cbkg == ICN::CBKGWATR ) )
+            AGG::ReplaceColors( cbkg, _customPalette, icn_cbkg, 0, false );
         cbkg.Blit( dst );
     }
 
@@ -1442,7 +1445,9 @@ void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst )
 
     // moat
     if ( castle.isBuild( BUILD_MOAT ) ) {
-        const Sprite & sprite = AGG::GetICN( ICN::MOATWHOL, 0 );
+        Sprite sprite = AGG::GetICN( ICN::MOATWHOL, 0 );
+        if ( _cycleBattlefield )
+            AGG::ReplaceColors( sprite, _customPalette, ICN::MOATWHOL, 0, false );
         sprite.Blit( sprite.x(), sprite.y(), dst );
     }
 
