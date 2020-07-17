@@ -86,6 +86,7 @@ namespace Battle
         u32 GetSpeed( void ) const;
         Surface GetContour( uint8_t colorId ) const;
 
+        Unit * GetMirror();
         void SetMirror( Unit * );
         void SetRandomMorale( void );
         void SetRandomLuck( void );
@@ -156,6 +157,8 @@ namespace Battle
         int GetFrame( void ) const;
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
+        uint32_t GetCustomAlpha() const;
+        void SetCustomAlpha( uint32_t alpha );
 
         Point GetStartMissileOffset( size_t ) const;
 
@@ -213,6 +216,7 @@ namespace Battle
         RandomizedDelay idleTimer;
 
         bool blindanswer;
+        uint32_t customAlphaMask;
     };
 
     StreamBase & operator<<( StreamBase &, const Unit & );
