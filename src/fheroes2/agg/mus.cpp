@@ -38,9 +38,9 @@ namespace MUS
         const char * string;
     } musmap[] = {{UNUSED, ""},
                   {DATATRACK, ""},
-                  {BATTLE1, "Battle (1)"},
-                  {BATTLE2, "Battle (2)"},
-                  {BATTLE3, "Battle (3)"},
+                  {BATTLE1, "Battle 1"},
+                  {BATTLE2, "Battle 2"},
+                  {BATTLE3, "Battle 3"},
                   {SORCERESS, "Sorceress Castle"},
                   {WARLOCK, "Warlock Castle"},
                   {NECROMANCER, "Necromancer Castle"},
@@ -56,40 +56,44 @@ namespace MUS
                   {DIRT, "Dirt Theme"},
                   {GRASS, "Grass Theme"},
                   {LOSTGAME, "Lost Game"},
-                  {NEW_WEEK, "Week (1)"},
-                  {NEW_MONTH, "Week (2) Month (1)"},
-                  {ARCHIBALD, "Month (2)"},
+                  {NEW_WEEK, "New Week"},
+                  {NEW_MONTH, "New Month"},
+                  {ARCHIBALD, "Archibald Campaign"},
                   {PUZZLE, "Map Puzzle"},
-                  {ROLAND, "Roland's Campaign"},
+                  {ROLAND, "Roland Campaign"},
                   {CARAVANS, "25"},
                   {CARAVANS_2, "26"},
                   {CARAVANS_3, "27"},
-                  {COMPUTER_TURN, "28"},
-                  {BATTLEWIN, "29"},
-                  {BATTLELOSE, "30"},
-                  {DUNGEON, "31"},
-                  {WATERSPRING, "32"},
-                  {ARABIAN, "33"},
-                  {HILLFORT, "34"},
-                  {TREEHOUSE, "35"},
-                  {DEMONCAVE, "36"},
-                  {EXPERIENCE, "37"},
-                  {SKILL, "38"},
-                  {WATCHTOWER, "39"},
-                  {XANADU, "40"},
-                  {ULTIMATE_ARTIFACT, "41"},
+                  {COMPUTER_TURN, "AI Turn"},
+                  {BATTLEWIN, "Battle Won"},
+                  {BATTLELOSE, "Battle Lost"},
+                  {DUNGEON, "Dungeon"},
+                  {WATERSPRING, "Waterspring"},
+                  {ARABIAN, "Arabian"},
+                  {HILLFORT, "Hillfort"},
+                  {TREEHOUSE, "Treehouse"},
+                  {DEMONCAVE, "Demoncave"},
+                  {EXPERIENCE, "Experience"},
+                  {SKILL, "Skill"},
+                  {WATCHTOWER, "Watchtower"},
+                  {XANADU, "Xanadu"},
+                  {ULTIMATE_ARTIFACT, "Ultimate Artifact"},
                   {MAINMENU, "Main Menu"},
                   {VICTORY, "Scenario Victory"},
                   {UNKNOWN, "UNKNOWN"}};
 
-    const std::string GetString( int mus, bool shortname )
+    const std::string GetString( int mus, bool longName )
     {
         std::stringstream sstream;
-        sstream << "homm2_" << std::setw( 2 ) << std::setfill( '0' ) << mus - 1;
-        if ( shortname )
-            sstream << ".ogg";
-        else
+        if ( longName ) {
+            sstream << std::setw( 2 ) << std::setfill( '0' ) << mus;
             sstream << " " << ( UNUSED <= mus && UNKNOWN > mus ? musmap[mus].string : musmap[UNKNOWN].string ) << ".ogg";
+        }
+        else {
+            // GOG version format, data track was ignored there so 02 becomes 01
+            sstream << "homm2_" << std::setw( 2 ) << std::setfill( '0' ) << mus - 1 << ".ogg";
+        }
+
         return sstream.str();
     }
 }
