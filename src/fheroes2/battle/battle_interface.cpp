@@ -4145,7 +4145,7 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
 {
     if ( mirrorImages.empty() ) // nothing to animate
         return;
-    
+
     LocalEvent & le = LocalEvent::Get();
 
     int frame = 10;
