@@ -322,7 +322,8 @@ namespace Battle
         int catapult_frame;
 
         uint32_t _colorCycle;
-        std::vector<uint8_t> _creaturePalette;
+        std::vector<uint8_t> _customPalette;
+        bool _cycleBattlefield; // determines if new color cycle happened and we have to update cover
         uint8_t _contourColor;
         bool _brightLandType; // used to determin current monster contour cycling colors
         uint32_t _contourCycle;
