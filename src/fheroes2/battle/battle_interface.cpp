@@ -4141,8 +4141,11 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     }
 }
 
-void Battle::Interface::RedrawActionRemoveMirrorImage( std::vector<Unit *> mirrorImages )
+void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages )
 {
+    if ( mirrorImages.empty() ) // nothing to animate
+        return;
+    
     LocalEvent & le = LocalEvent::Get();
 
     int frame = 10;
