@@ -88,7 +88,7 @@ namespace Battle
         {}
 
         bool operator==( const TargetInfo & ) const;
-        static bool isFinishAnimFrame( const TargetInfo & );
+        static bool isFinishAnimFrame( const TargetInfo & info );
     };
 
     StreamBase & operator<<( StreamBase &, const TargetInfo & );
