@@ -4154,7 +4154,7 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
             const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
-            for ( std::vector<Unit *>::iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
+            for ( std::vector<Unit *>::const_iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
                 if ( *it )
                     ( *it )->SetCustomAlpha( alpha );
             }
