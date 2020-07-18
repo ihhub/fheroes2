@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-#include "Surface.h"
+#include "surface.h"
 
 class SMKVideoSequence
 {
