@@ -580,7 +580,7 @@ Point Interface::GameArea::_getStartTileId() const
 
 void Interface::GameArea::_setCenterToTile( const Point & tile )
 {
-    _setCenter( Point( tile.x * TILEWIDTH - TILEWIDTH / 2, tile.y * TILEWIDTH - TILEWIDTH / 2 ) );
+    _setCenter( Point( tile.x * TILEWIDTH + TILEWIDTH / 2, tile.y * TILEWIDTH + TILEWIDTH / 2 ) );
 }
 
 void Interface::GameArea::_setCenter( const Point & point )

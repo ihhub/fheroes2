@@ -237,7 +237,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
 
     // We need to add an extra one cell as a hero stands exactly in the middle of a cell
     const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
-    const Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 + 1 ), heroPos.y - TILEWIDTH * ( distance / 2 + 1 ) );
+    const Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
     const Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
 
     if ( isFadingEnabled ) {
