@@ -2991,7 +2991,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( spell.isApplyWithoutFocusObject() || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
+            opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
     }
@@ -3674,14 +3674,12 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
 {
+    const Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
     std::vector<Point> points;
+    points.push_back( startingPos );
+
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
         const Rect & pos = it->defender->GetRectPosition();
-
-        if ( points.empty() ) {
-            points.push_back( Point( pos.x + pos.w / 2, 0 ) );
-        }
-
         points.push_back( Point( pos.x + pos.w / 2, pos.y ) );
     }
 
