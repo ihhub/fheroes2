@@ -200,6 +200,7 @@ namespace Game
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
         CUSTOM_DELAY,
+        VIDEO_PLAYBACK,
         //
         LAST_DELAY
     };
