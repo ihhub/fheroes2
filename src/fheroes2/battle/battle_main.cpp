@@ -68,13 +68,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             army2.GetCommander()->ActionPreBattle();
     }
 
-    AGG::ResetMixer();
     bool local = army1.isControlHuman() || army2.isControlHuman();
 
 #ifdef WITH_DEBUG
     if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) )
         local = true;
 #endif
+
+    if ( local )
+        AGG::ResetMixer();
 
     Arena arena( army1, army2, mapsindex, local );
 
@@ -85,13 +87,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena.Turns();
 
     const Result & result = arena.GetResult();
-    AGG::ResetMixer();
 
     HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? army1.GetCommander() : ( result.army2 & RESULT_WINS ? army2.GetCommander() : NULL ) );
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
     const u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
     if ( local ) {
+        AGG::ResetMixer();
+
         // fade arena
         arena.FadeArena();
 
