@@ -7,8 +7,8 @@ PREFIX := /usr/local
 endif
 
 TARGET := fheroes2
-LIBENGINE := ../engine/libengine.a ../thirdparty/libsmacker/liblibsmacker.a
-CFLAGS := $(CFLAGS) -I../engine -I../thirdparty/libsmacker
+LIBENGINE := ../engine/libengine.a
+CFLAGS := $(CFLAGS) -I../engine
 
 ifndef WITHOUT_XML
 LIBENGINE := $(LIBENGINE) ../xmlccwrap/libxmlccwrap.a
