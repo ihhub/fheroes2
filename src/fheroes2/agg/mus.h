@@ -77,7 +77,7 @@ namespace MUS
         UNKNOWN
     };
 
-    const std::string GetString( int, bool shortname = false );
+    const std::string GetString( int, bool longName = false );
 
     int FromGround( int );
     int FromRace( int );

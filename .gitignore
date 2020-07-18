@@ -54,6 +54,7 @@
 *.hxc
 *.hs
 *.smk
+*.ogg
 
 # build directory
 build

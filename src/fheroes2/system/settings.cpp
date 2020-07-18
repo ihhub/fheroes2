@@ -650,6 +650,7 @@ bool Settings::Read( const std::string & filename )
         else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_EXT );
+            _musicType = MUSIC_CDROM;
         }
     }
 
