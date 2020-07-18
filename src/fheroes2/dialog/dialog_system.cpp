@@ -105,7 +105,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set music type
-        if ( le.MouseClickLeft( rect3 ) ) {
+        if ( !conf.MusicExt() && le.MouseClickLeft( rect3 ) ) {
             int type = conf.MusicType() + 1;
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.PriceLoyaltyVersion() )
