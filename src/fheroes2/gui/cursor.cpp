@@ -132,6 +132,7 @@ void Cursor::SetOffset( int name, const Point & defaultOffset )
     switch ( name ) {
     case Cursor::POINTER:
     case Cursor::POINTER2:
+    case Cursor::WAR_POINTER:
     case Cursor::FIGHT:
     case Cursor::FIGHT2:
     case Cursor::FIGHT3:
