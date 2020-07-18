@@ -8,7 +8,7 @@ endif
 
 TARGET := fheroes2
 LIBENGINE := ../engine/libengine.a
-CFLAGS := $(CFLAGS) -I../engine -I../thirdparty/libsmacker
+CFLAGS := $(CFLAGS) -I../engine
 
 ifndef WITHOUT_XML
 LIBENGINE := $(LIBENGINE) ../xmlccwrap/libxmlccwrap.a
