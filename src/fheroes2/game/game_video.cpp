@@ -46,7 +46,7 @@ namespace Video
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
         for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
             if ( it->size() )
-                int ch = Mixer::Play( &( *it )[0], it->size(), -1, false );
+                Mixer::Play( &( *it )[0], it->size(), -1, false );
         }
 
         LocalEvent & le = LocalEvent::Get();

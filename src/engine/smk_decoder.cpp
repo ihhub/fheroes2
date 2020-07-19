@@ -67,7 +67,7 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     unsigned long currentFrame = 0;
     smk_info_all( videoFile, &currentFrame, NULL, NULL );
 
-    for ( int i = 0; i < 7; ++i ) {
+    for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
         if ( trackMask & ( 1 << i ) ) {
             const unsigned long length = smk_get_audio_size( videoFile, i );
             const uint8_t * data = smk_get_audio( videoFile, i );
@@ -83,7 +83,7 @@ bool SMKVideoSequence::_load( const std::string & filePath )
 
         _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
 
-        for ( int i = 0; i < 7; ++i ) {
+        for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
             if ( trackMask & ( 1 << i ) ) {
                 const unsigned long length = smk_get_audio_size( videoFile, i );
                 const uint8_t * data = smk_get_audio( videoFile, i );
@@ -92,11 +92,20 @@ bool SMKVideoSequence::_load( const std::string & filePath )
             }
         }
     }
+    
+    size_t channelCount = 0;
+    for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
+        if ( !soundBuffer[i].empty() ) {
+            ++channelCount;
+        }
+    }
+    _audioChannel.resize( channelCount );
 
+    channelCount = 0;
     // compose sound track
-    for ( int i = 0; i < 7; ++i ) {
-        if ( trackMask & ( 1 << i ) ) {
-            std::vector<uint8_t> wavData;
+    for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
+        if ( !soundBuffer[i].empty() ) {
+            std::vector<uint8_t> & wavData = _audioChannel[channelCount++];
 
             // set up WAV header
             StreamBuf wavHeader( 44 );
@@ -114,10 +123,9 @@ bool SMKVideoSequence::_load( const std::string & filePath )
             wavHeader.putLE32( 0x61746164 ); // DATA
             wavHeader.putLE32( soundBuffer[i].size() ); // size
 
-            wavData.reserve( soundBuffer[i].size() + 44 );
+            wavData.resize( soundBuffer[i].size() + 44 );
             wavData.assign( wavHeader.data(), wavHeader.data() + 44 );
             wavData.insert( wavData.begin() + 44, soundBuffer[i].begin(), soundBuffer[i].end() );
-            _audioChannel.push_back( wavData );
         }
     }
 
