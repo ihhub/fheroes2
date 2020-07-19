@@ -19,9 +19,8 @@
  ***************************************************************************/
 
 #include "smk_decoder.h"
-#include "smacker.h"
-
 #include "serialize.h"
+#include "smacker.h"
 
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
