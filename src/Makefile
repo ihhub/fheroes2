@@ -110,6 +110,7 @@ ifndef WITHOUT_XML
 endif
 	$(MAKE) -C engine
 	$(MAKE) -C dist
+	$(MAKE) -C thirdparty/libsmacker
 ifdef WITH_TOOLS
 	$(MAKE) -C tools
 endif
@@ -122,3 +123,4 @@ clean:
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean
 	$(MAKE) -C engine clean
+	$(MAKE) -C thirdparty/libsmacker clean
