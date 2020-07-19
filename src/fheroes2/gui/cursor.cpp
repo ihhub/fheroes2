@@ -83,13 +83,14 @@ bool Cursor::SetThemes( int name, bool force )
         SetOffset( name, Point( spr.w() / 2, spr.h() / 2 ) );
         Set( spr, true );
 #if defined( USE_SDL_CURSOR )
-        _free();
-        _cursorSDL = SDL_CreateColorCursor( surface, -offset_x, -offset_y );
-        if ( _cursorSDL == NULL ) {
+        SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, -offset_x, -offset_y );
+        if ( tempCursor == NULL ) {
             DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, name = " << name << ", reason: " << SDL_GetError() );
         }
-        SDL_SetCursor( _cursorSDL );
+        SDL_SetCursor( tempCursor );
         SDL_ShowCursor( 1 );
+        _free();
+        std::swap( tempCursor, _cursorSDL );
 #endif
 
         // immediately apply new offset, force
