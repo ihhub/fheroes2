@@ -41,9 +41,9 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     double usf = 0;
 
     uint8_t trackMask = 0;
-    uint8_t channel[7] ={ 0 };
-    uint8_t audioBitDepth[7] ={ 0 };
-    unsigned long audioRate[7] ={ 0 };
+    uint8_t channel[7] = {0};
+    uint8_t audioBitDepth[7] = {0};
+    unsigned long audioRate[7] = {0};
 
     smk_info_all( videoFile, NULL, &frameCount, &usf );
     smk_info_video( videoFile, &_width, &_height, NULL );
