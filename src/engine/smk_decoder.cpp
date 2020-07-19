@@ -90,7 +90,7 @@ bool SMKVideoSequence::_load( const std::string & filePath )
             }
         }
     }
-    
+
     size_t channelCount = 0;
     for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
         if ( !soundBuffer[i].empty() ) {

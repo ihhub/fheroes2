@@ -21,6 +21,7 @@
 #include "game_video.h"
 #include "cursor.h"
 #include "game.h"
+#include "settings.h"
 #include "smk_decoder.h"
 
 namespace Video
@@ -43,10 +44,13 @@ namespace Video
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 
+        const bool hasSound = Settings::Get().Sound();
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
-        for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-            if ( it->size() )
-                Mixer::Play( &( *it )[0], it->size(), -1, false );
+        if ( hasSound ) {
+            for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
+                if ( it->size() )
+                    Mixer::Play( &( *it )[0], it->size(), -1, false );
+            }
         }
 
         LocalEvent & le = LocalEvent::Get();
@@ -62,11 +66,19 @@ namespace Video
 
                 if ( isLooped && currentFrame >= video.getFrames().size() ) {
                     currentFrame = 0;
+
+                    if ( hasSound ) {
+                        for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
+                            if ( it->size() )
+                                Mixer::Play( &( *it )[0], it->size(), -1, false );
+                        }
+                    }
                 }
             }
         }
 
         cursor.Show();
+        Mixer::Reset();
 
         return;
     }
