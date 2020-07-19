@@ -44,8 +44,7 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     uint8_t channel[7] = {0};
     uint8_t audioBitDepth[7] = {0};
     unsigned long audioRate[7] = {0};
-    std::vector<std::vector<uint8_t> > soundBuffer;
-    soundBuffer.resize( 7 );
+    std::vector<std::vector<uint8_t> > soundBuffer( 7 );
 
     smk_info_all( videoFile, NULL, &frameCount, &usf );
     smk_info_video( videoFile, &_width, &_height, NULL );
@@ -94,8 +93,8 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     }
 
     // compose sound track
-    for ( int i = 0; i < 7; ++i ) {
-        if ( trackMask & ( 1 << i ) ) {
+    for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
+        if ( !soundBuffer[i].empty() ) {
             std::vector<uint8_t> wavData;
 
             // set up WAV header
