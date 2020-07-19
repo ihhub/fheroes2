@@ -43,6 +43,12 @@ namespace Video
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 
+        const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
+        for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
+            if ( it->size() )
+                int ch = Mixer::Play( &( *it )[0], it->size(), -1, false );
+        }
+
         LocalEvent & le = LocalEvent::Get();
         while ( ( isLooped || currentFrame < video.getFrames().size() ) && le.HandleEvents() ) {
             if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
