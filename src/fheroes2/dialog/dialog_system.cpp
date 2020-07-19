@@ -90,7 +90,7 @@ int Dialog::SystemOptions( void )
     while ( btnres == Dialog::ZERO && le.HandleEvents() ) {
         le.MousePressLeft( buttonOkay ) ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
         if ( le.MouseClickLeft( buttonOkay ) ) {
-            btnres == Dialog::OK;
+            btnres = Dialog::OK;
             break;
         }
 
