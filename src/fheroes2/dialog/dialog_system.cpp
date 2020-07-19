@@ -76,8 +76,8 @@ int Dialog::SystemOptions( void )
 
     LocalEvent & le = LocalEvent::Get();
 
-    ButtonGroups btnGroups( area, Dialog::OK );
-    btnGroups.Draw();
+    Button buttonOkay( area.x + 96, area.y + 350, ICN::SPANBTN, 0, 1 );
+    buttonOkay.Draw();
 
     cursor.Show();
     display.Flip();
@@ -88,7 +88,11 @@ int Dialog::SystemOptions( void )
 
     // dialog menu loop
     while ( btnres == Dialog::ZERO && le.HandleEvents() ) {
-        btnres = btnGroups.QueueEventProcessing();
+        le.MousePressLeft( buttonOkay ) ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
+        if ( le.MouseClickLeft( buttonOkay ) ) {
+            btnres == Dialog::OK;
+            break;
+        }
 
         // set music volume
         if ( conf.Music() && le.MouseClickLeft( rect1 ) ) {
@@ -160,6 +164,7 @@ int Dialog::SystemOptions( void )
             cursor.Hide();
             back2.Blit( area, display );
             DrawSystemInfo( rects );
+            buttonOkay.Draw();
             cursor.Show();
             display.Flip();
             redraw = false;
