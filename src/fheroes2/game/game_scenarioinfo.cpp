@@ -50,8 +50,6 @@ void RedrawDifficultyInfo( const Point & dst, bool label = true );
 
 int Game::SelectScenario( void )
 {
-    if ( Settings::Get().QVGA() )
-        return PocketPC::SelectScenario();
     return SCENARIOINFO;
 }
 

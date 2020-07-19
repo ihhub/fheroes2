@@ -32,12 +32,6 @@ class Kingdom;
 
 namespace PocketPC
 {
-    int MainMenu( void );
-    int NewGame( void );
-    int NewMulti( void );
-    int SelectScenario( void );
-    int ScenarioInfo( void );
-    int LoadGame( void );
     int HeroesOpenDialog( Heroes &, bool );
     int CastleOpenDialog( Castle &, bool );
     int DialogArmyInfo( const Troop &, u32 );
