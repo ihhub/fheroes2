@@ -54,16 +54,20 @@ int DialogOneSecondary( const std::string & name, const std::string & primary, c
     const Sprite & sprite_frame = AGG::GetICN( ICN::SECSKILL, 15 );
     Surface sf = sprite_frame.GetSurface();
 
+    // Create a surface with no alpha mode to fix SDL 1
+    Surface drawSurface( sf.GetSize(), false );
+    sf.Blit( 0, 0, drawSurface );
+
     // sprite
     const Sprite & sprite_skill = AGG::GetICN( ICN::SECSKILL, sec.GetIndexSprite1() );
-    sprite_skill.Blit( 3, 3, sf );
+    sprite_skill.Blit( 3, 3, drawSurface );
     // text
     Text text_skill( Skill::Secondary::String( sec.Skill() ), Font::SMALL );
-    text_skill.Blit( 3 + ( sprite_skill.w() - text_skill.w() ) / 2, 6, sf );
+    text_skill.Blit( 3 + ( sprite_skill.w() - text_skill.w() ) / 2, 6, drawSurface );
     Text text_level( Skill::Level::String( sec.Level() ), Font::SMALL );
-    text_level.Blit( 3 + ( sprite_skill.w() - text_level.w() ) / 2, sprite_skill.h() - 12, sf );
+    text_level.Blit( 3 + ( sprite_skill.w() - text_level.w() ) / 2, sprite_skill.h() - 12, drawSurface );
 
-    Dialog::SpriteInfo( "", message, sf );
+    Dialog::SpriteInfo( "", message, drawSurface );
 
     return sec.Skill();
 }
