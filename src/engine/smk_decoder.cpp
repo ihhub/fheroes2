@@ -38,9 +38,7 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     double frameRate = 0;
 
     smk_info_all( videoFile, NULL, &frameCount, &frameRate );
-
     smk_info_video( videoFile, &_width, &_height, NULL );
-
     smk_enable_video( videoFile, 1 );
 
     smk_first( videoFile );
@@ -49,8 +47,7 @@ bool SMKVideoSequence::_load( const std::string & filePath )
 
     _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
 
-    for ( currentFrame = 1; currentFrame < frameCount; ++currentFrame )
-    {
+    for ( currentFrame = 1; currentFrame < frameCount; ++currentFrame ) {
         smk_next( videoFile );
 
         _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
@@ -77,7 +74,7 @@ void SMKVideoSequence::_addNewFrame( const uint8_t * data, const uint8_t * palet
 
     Surface surface( data, _width, _height, 1, false, false );
 
-    std::vector<SDL_Color> colors(256);
+    std::vector<SDL_Color> colors( 256 );
     for ( size_t i = 0; i < colors.size(); ++i ) {
         colors[i].r = *palette++;
         colors[i].g = *palette++;

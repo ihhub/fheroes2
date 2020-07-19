@@ -184,7 +184,7 @@ int main( int argc, char ** argv )
             // goto main menu
             int rs = ( test ? Game::TESTING : Game::MAINMENU );
 
-            //Video::ShowVideo( "data/nwclogo.smk", false );
+            // Video::ShowVideo( "data/nwclogo.smk", false );
 
             while ( rs != Game::QUITGAME ) {
                 switch ( rs ) {
