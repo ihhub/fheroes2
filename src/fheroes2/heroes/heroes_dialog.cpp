@@ -44,9 +44,6 @@
 /* readonly: false, fade: false */
 int Heroes::OpenDialog( bool readonly, bool fade )
 {
-    if ( Settings::Get().QVGA() )
-        return PocketPC::HeroesOpenDialog( *this, readonly );
-
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();

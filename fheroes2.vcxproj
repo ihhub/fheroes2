@@ -351,9 +351,6 @@
     <ClCompile Include="src\fheroes2\pocketpc\pocketpc_armyinfo.cpp" />
     <ClCompile Include="src\fheroes2\pocketpc\pocketpc_castle.cpp" />
     <ClCompile Include="src\fheroes2\pocketpc\pocketpc_dialog.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_heroes.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_kingdom.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_meeting.cpp" />
     <ClCompile Include="src\fheroes2\pocketpc\pocketpc_thievesguild.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact_ultimate.cpp" />
