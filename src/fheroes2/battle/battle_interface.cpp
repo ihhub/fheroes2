@@ -3277,13 +3277,13 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
                 RedrawPartialStart();
 
                 const Sprite & luckSprite = AGG::GetICN( ICN::CLOUDLUK, frameId );
+                int y = pos.y + pos.h - 10;
 
-                int y = pos.y + pos.h + luckSprite.y() - 10;
-                if ( y < 0 ) {
-                    y = maxHeight + luckSprite.y();
-                }
+                // move drawing position if it will clip outside of the battle window
+                if ( y - maxHeight < 0 )
+                    y = maxHeight;
 
-                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), y, _mainSurface );
+                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), y + luckSprite.y(), _mainSurface );
 
                 RedrawPartialFinish();
 
