@@ -149,11 +149,7 @@ void Interface::Basic::EventContinueMovement( void )
 void Interface::Basic::EventKingdomInfo( void )
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-
-    if ( Settings::Get().QVGA() )
-        PocketPC::KingdomOverviewDialog( myKingdom );
-    else
-        myKingdom.OverviewDialog();
+    myKingdom.OverviewDialog();
 
     iconsPanel.SetRedraw();
 }

@@ -44,9 +44,6 @@
 /* readonly: false, fade: false */
 int Heroes::OpenDialog( bool readonly, bool fade )
 {
-    if ( Settings::Get().QVGA() )
-        return PocketPC::HeroesOpenDialog( *this, readonly );
-
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
@@ -201,7 +198,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     dst_pt.y = cur_pt.y + 318;
     Button buttonExit( dst_pt.x, dst_pt.y, ICN::HSBTNS, 2, 3 );
 
-    LocalEvent & le = LocalEvent::Get();
+    LocalEvent & le = LocalEvent::GetClean();
 
     if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
         buttonDismiss.SetDisable( true );

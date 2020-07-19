@@ -243,9 +243,6 @@ int Castle::OpenDialog( bool readonly, bool fade )
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.QVGA() )
-        return PocketPC::CastleOpenDialog( *this, readonly );
-
     const bool interface = conf.ExtGameEvilInterface();
     if ( conf.ExtGameDynamicInterface() )
         conf.SetEvilInterface( GetRace() & ( Race::BARB | Race::WRLK | Race::NECR ) );

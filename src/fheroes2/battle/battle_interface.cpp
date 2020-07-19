@@ -2108,6 +2108,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             else if ( le.MousePressRight() )
                 MousePressRightBoardAction( themes, *cell, a );
         }
+        else {
+            le.MouseClickLeft();
+            le.MousePressRight();
+        }
     }
     else if ( le.MouseCursor( status ) ) {
         if ( listlog ) {
@@ -2119,6 +2123,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else {
         cursor.SetThemes( Cursor::WAR_NONE );
+        le.MouseClickLeft();
+        le.MousePressRight();
     }
 }
 
@@ -2991,7 +2997,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( spell.isApplyWithoutFocusObject() || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
+            opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
     }
@@ -3241,6 +3247,9 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         int width = 2;
         Rect src( 0, 0, width, luckSprite.h() );
         src.x = ( luckSprite.w() - src.w ) / 2;
+        int y = pos.y + pos.h - unitSprite.h() - src.h;
+        if ( y < 0 )
+            y = 0;
 
         AGG::PlaySound( M82::GOODLUCK );
 
@@ -3250,7 +3259,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
             if ( width < luckSprite.w() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
-                luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h, _mainSurface );
+                luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, y, _mainSurface );
 
                 RedrawPartialFinish();
 
@@ -3262,10 +3271,16 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         }
     }
     else {
-        int frameId = 0;
+        const int maxHeight = AGG::GetAbsoluteICNHeight( ICN::CLOUDLUK );
+        int y = pos.y + pos.h - 10;
+
+        // move drawing position if it will clip outside of the battle window
+        if ( y - maxHeight < 0 )
+            y = maxHeight;
 
         AGG::PlaySound( M82::BADLUCK );
 
+        int frameId = 0;
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
@@ -3273,7 +3288,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
                 RedrawPartialStart();
 
                 const Sprite & luckSprite = AGG::GetICN( ICN::CLOUDLUK, frameId );
-                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), pos.y + pos.h + luckSprite.y() - 10, _mainSurface );
+                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), y + luckSprite.y(), _mainSurface );
 
                 RedrawPartialFinish();
 
@@ -3674,14 +3689,12 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
 {
+    const Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
     std::vector<Point> points;
+    points.push_back( startingPos );
+
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
         const Rect & pos = it->defender->GetRectPosition();
-
-        if ( points.empty() ) {
-            points.push_back( Point( pos.x + pos.w / 2, 0 ) );
-        }
-
         points.push_back( Point( pos.x + pos.w / 2, pos.y ) );
     }
 

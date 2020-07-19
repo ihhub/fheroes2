@@ -313,9 +313,6 @@ int Game::NewGame( void )
     // reset last save name
     Game::SetLastSavename( "" );
 
-    if ( conf.QVGA() )
-        return PocketPC::NewGame();
-
     // cursor
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
@@ -401,9 +398,6 @@ int Game::NewMulti( void )
 
     if ( !( conf.GameType( Game::TYPE_BATTLEONLY ) ) )
         conf.SetGameType( Game::TYPE_STANDARD );
-
-    if ( conf.QVGA() )
-        return PocketPC::NewMulti();
 
     // cursor
     Cursor & cursor = Cursor::Get();

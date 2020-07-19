@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,12 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
-#include "button.h"
-#include "cursor.h"
-#include "heroes.h"
-#include "kingdom.h"
-#include "pocketpc.h"
-#include "text.h"
+#pragma once
 
-void PocketPC::KingdomOverviewDialog( const Kingdom & ) {}
+#include <string>
+#include <vector>
+
+#include "surface.h"
+
+class SMKVideoSequence
+{
+public:
+    explicit SMKVideoSequence( const std::string & filePath );
+
+    const std::vector<Surface> & getFrames() const;
+    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
+
+    unsigned long width() const;
+    unsigned long height() const;
+    double fps() const;
+
+private:
+    bool _load( const std::string & filePath );
+
+    void _addNewFrame( const uint8_t * data, const uint8_t * palette );
+
+    std::vector<Surface> _frames;
+    std::vector<std::vector<uint8_t> > _audioChannel;
+    unsigned long _width;
+    unsigned long _height;
+    double _fps;
+};

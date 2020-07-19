@@ -46,8 +46,6 @@ void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop
 
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
-    if ( Settings::Get().QVGA() )
-        return PocketPC::DialogArmyInfo( troop, flags );
     Display & display = Display::Get();
 
     const int viewarmy = Settings::Get().ExtGameEvilInterface() ? ICN::VIEWARME : ICN::VIEWARMY;
