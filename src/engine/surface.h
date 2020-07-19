@@ -96,7 +96,7 @@ public:
     Surface( const Size & sz, u32 bpp, bool amask );
     Surface( const Size &, const SurfaceFormat & );
     Surface( const std::string & );
-    Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask ); /* agg: create raw tile */
+    Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask, bool useDefaultPalette = true ); /* agg: create raw tile */
     Surface( const Surface & bs, bool useReference = true );
     Surface( SDL_Surface * );
 
@@ -187,6 +187,8 @@ public:
 
     // This is only for 8-bit images like TIL
     void ResetPalette();
+
+    void SetPalette( const std::vector<SDL_Color> & colors );
 
 protected:
     static void FreeSurface( Surface & );

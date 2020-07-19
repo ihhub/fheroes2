@@ -296,7 +296,7 @@ Surface::Surface( SDL_Surface * sf )
     , _isDisplay( false )
 {}
 
-Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask )
+Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask, bool useDefaultPalette )
     : surface( NULL )
     , _isDisplay( false )
 {
@@ -321,7 +321,9 @@ Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixe
         Error::Except( __FUNCTION__, SDL_GetError() );
 
     if ( 8 == fm.depth ) {
-        SetPalette();
+        if ( useDefaultPalette ) {
+            SetPalette();
+        }
         Lock();
         std::memcpy( surface->pixels, pixels, width * height );
         Unlock();
@@ -628,6 +630,17 @@ void Surface::ResetPalette()
 #endif
             surfaceToUpdate.erase( item );
         }
+    }
+}
+
+void Surface::SetPalette( const std::vector<SDL_Color> & colors )
+{
+    if ( isValid() && !colors.empty() && surface->format->palette ) {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        SDL_SetPaletteColors( surface->format->palette, colors.data(), 0, colors.size() );
+#else
+        SDL_SetPalette( surface, SDL_LOGPAL, const_cast<SDL_Color *>( colors.data() ), 0, colors.size() );
+#endif
     }
 }
 
