@@ -2108,6 +2108,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             else if ( le.MousePressRight() )
                 MousePressRightBoardAction( themes, *cell, a );
         }
+        else {
+            le.MouseClickLeft();
+            le.MousePressRight();
+        }
     }
     else if ( le.MouseCursor( status ) ) {
         if ( listlog ) {
@@ -2119,6 +2123,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else {
         cursor.SetThemes( Cursor::WAR_NONE );
+        le.MouseClickLeft();
+        le.MousePressRight();
     }
 }
 
