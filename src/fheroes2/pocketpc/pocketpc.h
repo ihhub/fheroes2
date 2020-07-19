@@ -34,7 +34,6 @@ namespace PocketPC
 {
     void KeyboardDialog( std::string & );
     u32 GetCursorAttackDialog( const Point &, int direction );
-    void ThievesGuild( bool oracle );
 }
 
 #endif
