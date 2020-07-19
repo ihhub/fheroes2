@@ -185,6 +185,7 @@ class LocalEvent
 {
 public:
     static LocalEvent & Get( void );
+    static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
     void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );

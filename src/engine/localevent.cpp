@@ -432,6 +432,19 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
+LocalEvent & LocalEvent::GetClean()
+{
+    LocalEvent & le = Get();
+    le.ResetModes( KEY_PRESSED );
+    le.ResetModes( MOUSE_MOTION );
+    le.ResetModes( MOUSE_PRESSED );
+    le.ResetModes( CLICK_LEFT );
+    le.ResetModes( CLICK_RIGHT );
+    le.ResetModes( CLICK_MIDDLE );
+    le.ResetModes( CLICK_MIDDLE );
+    return le;
+}
+
 bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 {
     if ( Display::isRedrawRequired() ) {
