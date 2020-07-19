@@ -3266,6 +3266,11 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
     }
     else {
         const int maxHeight = AGG::GetAbsoluteICNHeight( ICN::CLOUDLUK );
+        int y = pos.y + pos.h - 10;
+
+        // move drawing position if it will clip outside of the battle window
+        if ( y - maxHeight < 0 )
+            y = maxHeight;
 
         AGG::PlaySound( M82::BADLUCK );
 
@@ -3277,12 +3282,6 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
                 RedrawPartialStart();
 
                 const Sprite & luckSprite = AGG::GetICN( ICN::CLOUDLUK, frameId );
-                int y = pos.y + pos.h - 10;
-
-                // move drawing position if it will clip outside of the battle window
-                if ( y - maxHeight < 0 )
-                    y = maxHeight;
-
                 luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), y + luckSprite.y(), _mainSurface );
 
                 RedrawPartialFinish();
