@@ -82,15 +82,13 @@ int Dialog::SystemOptions( void )
     cursor.Show();
     display.Flip();
 
-    int btnres = Dialog::ZERO;
     int result = 0;
     bool redraw = false;
 
     // dialog menu loop
-    while ( btnres == Dialog::ZERO && le.HandleEvents() ) {
+    while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOkay ) ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
         if ( le.MouseClickLeft( buttonOkay ) ) {
-            btnres = Dialog::OK;
             break;
         }
 
