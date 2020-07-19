@@ -50,8 +50,6 @@ int Game::LoadGame( void )
         Mixer::Pause();
         AGG::PlayMusic(MUS::MAINMENU);
 
-        if(Settings::Get().QVGA()) return PocketPC::LoadGame();
-
         // cursor
         Cursor & cursor = Cursor::Get();
         cursor.Hide();

@@ -40,9 +40,6 @@ void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar
 
 void Heroes::MeetingDialog( Heroes & heroes2 )
 {
-    if ( Settings::Get().QVGA() )
-        return PocketPC::HeroesMeeting( *this, heroes2 );
-
     Display & display = Display::Get();
 
     // cursor
