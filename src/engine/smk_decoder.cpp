@@ -19,9 +19,8 @@
  ***************************************************************************/
 
 #include "smk_decoder.h"
-#include "smacker.h"
-
 #include "serialize.h"
+#include "smacker.h"
 
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
@@ -44,8 +43,7 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     uint8_t channel[7] = {0};
     uint8_t audioBitDepth[7] = {0};
     unsigned long audioRate[7] = {0};
-    std::vector<std::vector<uint8_t> > soundBuffer;
-    soundBuffer.resize( 7 );
+    std::vector<std::vector<uint8_t> > soundBuffer( 7 );
 
     smk_info_all( videoFile, NULL, &frameCount, &usf );
     smk_info_video( videoFile, &_width, &_height, NULL );
