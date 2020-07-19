@@ -32,8 +32,6 @@ class Kingdom;
 
 namespace PocketPC
 {
-    int CastleOpenDialog( Castle &, bool );
-    int DialogArmyInfo( const Troop &, u32 );
     void KeyboardDialog( std::string & );
     u32 GetCursorAttackDialog( const Point &, int direction );
     void ThievesGuild( bool oracle );

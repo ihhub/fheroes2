@@ -348,8 +348,6 @@
     <ClCompile Include="src\fheroes2\objects\objwatr.cpp" />
     <ClCompile Include="src\fheroes2\objects\objxloc.cpp" />
     <ClCompile Include="src\fheroes2\objects\trees.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_armyinfo.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_castle.cpp" />
     <ClCompile Include="src\fheroes2\pocketpc\pocketpc_dialog.cpp" />
     <ClCompile Include="src\fheroes2\pocketpc\pocketpc_thievesguild.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact.cpp" />
