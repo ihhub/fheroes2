@@ -41,12 +41,14 @@ namespace Video
         const Point offset( ( display.GetSize().w - video.width() ) / 2, ( display.GetSize().h - video.height() ) / 2 );
         bool isFirstFrame = true;
 
+        const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
+
         LocalEvent & le = LocalEvent::Get();
         while ( ( isLooped || currentFrame < video.getFrames().size() ) && le.HandleEvents() ) {
             if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
                 break;
 
-            if ( isFirstFrame || Game::AnimateInfrequentDelay( Game::VIDEO_PLAYBACK ) ) {
+            if ( isFirstFrame || Game::AnimateCustomDelay( delay ) ) {
                 isFirstFrame = false;
 
                 video.getFrames()[currentFrame++].Blit( offset, display );

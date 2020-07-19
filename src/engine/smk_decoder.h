@@ -35,6 +35,7 @@ public:
 
     unsigned long width() const;
     unsigned long height() const;
+    double fps() const;
 
 private:
     bool _load( const std::string & filePath );
@@ -45,4 +46,5 @@ private:
     std::vector<std::vector<uint8_t> > _audioChannel;
     unsigned long _width;
     unsigned long _height;
+    double _fps;
 };

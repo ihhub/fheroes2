@@ -24,6 +24,7 @@
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
     , _height( 0 )
+    , _fps( 0 )
 {
     _audioChannel.resize( 7 );
 
@@ -37,17 +38,22 @@ bool SMKVideoSequence::_load( const std::string & filePath )
         return false;
 
     unsigned long frameCount = 0;
-    double frameRate = 0;
+    double usf = 0;
 
     uint8_t trackMask = 0;
     uint8_t channel[7] ={ 0 };
     uint8_t audioBitDepth[7] ={ 0 };
     unsigned long audioRate[7] ={ 0 };
 
-    smk_info_all( videoFile, NULL, &frameCount, &frameRate );
+    smk_info_all( videoFile, NULL, &frameCount, &usf );
     smk_info_video( videoFile, &_width, &_height, NULL );
     smk_info_audio( videoFile, &trackMask, channel, audioBitDepth, audioRate );
     smk_enable_video( videoFile, 1 );
+
+    if ( usf > 0 )
+        _fps = 1000000.0 / usf;
+    else
+        _fps = 15; // let's use as a default
 
     for ( int i = 0; i < 7; ++i ) {
         if ( trackMask & ( 1 << i ) ) {
@@ -97,6 +103,11 @@ unsigned long SMKVideoSequence::width() const
 unsigned long SMKVideoSequence::height() const
 {
     return _height;
+}
+
+double SMKVideoSequence::fps() const
+{
+    return _fps;
 }
 
 void SMKVideoSequence::_addNewFrame( const uint8_t * data, const uint8_t * palette )
