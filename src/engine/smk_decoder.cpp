@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "smk_decoder.h"
+#include "serialize.h"
 #include "smacker.h"
 
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
@@ -26,8 +27,6 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     , _height( 0 )
     , _fps( 0 )
 {
-    _audioChannel.resize( 7 );
-
     _load( filePath );
 }
 
@@ -44,6 +43,7 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     uint8_t channel[7] = {0};
     uint8_t audioBitDepth[7] = {0};
     unsigned long audioRate[7] = {0};
+    std::vector<std::vector<uint8_t> > soundBuffer( 7 );
 
     smk_info_all( videoFile, NULL, &frameCount, &usf );
     smk_info_video( videoFile, &_width, &_height, NULL );
@@ -65,12 +65,12 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     unsigned long currentFrame = 0;
     smk_info_all( videoFile, &currentFrame, NULL, NULL );
 
-    for ( int i = 0; i < 7; ++i ) {
+    for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
         if ( trackMask & ( 1 << i ) ) {
             const unsigned long length = smk_get_audio_size( videoFile, i );
             const uint8_t * data = smk_get_audio( videoFile, i );
-            _audioChannel[i].reserve( _audioChannel[i].size() + length );
-            _audioChannel[i].insert( _audioChannel[i].end(), data, data + length );
+            soundBuffer[i].reserve( soundBuffer[i].size() + length );
+            soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
         }
     }
 
@@ -81,13 +81,49 @@ bool SMKVideoSequence::_load( const std::string & filePath )
 
         _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
 
-        for ( int i = 0; i < 7; ++i ) {
+        for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
             if ( trackMask & ( 1 << i ) ) {
                 const unsigned long length = smk_get_audio_size( videoFile, i );
                 const uint8_t * data = smk_get_audio( videoFile, i );
-                _audioChannel[i].reserve( _audioChannel[i].size() + length );
-                _audioChannel[i].insert( _audioChannel[i].end(), data, data + length );
+                soundBuffer[i].reserve( soundBuffer[i].size() + length );
+                soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
             }
+        }
+    }
+
+    size_t channelCount = 0;
+    for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
+        if ( !soundBuffer[i].empty() ) {
+            ++channelCount;
+        }
+    }
+    _audioChannel.resize( channelCount );
+
+    channelCount = 0;
+    // compose sound track
+    for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
+        if ( !soundBuffer[i].empty() ) {
+            std::vector<uint8_t> & wavData = _audioChannel[channelCount++];
+
+            // set up WAV header
+            StreamBuf wavHeader( 44 );
+            wavHeader.putLE32( 0x46464952 ); // RIFF
+            wavHeader.putLE32( soundBuffer[i].size() + 0x24 ); // size
+            wavHeader.putLE32( 0x45564157 ); // WAVE
+            wavHeader.putLE32( 0x20746D66 ); // FMT
+            wavHeader.putLE32( 0x10 ); // 16 == PCM
+            wavHeader.putLE16( 0x01 ); // format
+            wavHeader.putLE16( 0x01 ); // channels
+            wavHeader.putLE32( audioRate[i] ); // samples
+            wavHeader.putLE32( audioRate[i] * audioBitDepth[i] / 8 ); // byteper
+            wavHeader.putLE16( 0x01 ); // align
+            wavHeader.putLE16( audioBitDepth[i] ); // bitsper
+            wavHeader.putLE32( 0x61746164 ); // DATA
+            wavHeader.putLE32( soundBuffer[i].size() ); // size
+
+            wavData.resize( soundBuffer[i].size() + 44 );
+            wavData.assign( wavHeader.data(), wavHeader.data() + 44 );
+            wavData.insert( wavData.begin() + 44, soundBuffer[i].begin(), soundBuffer[i].end() );
         }
     }
 
