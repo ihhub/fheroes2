@@ -27,8 +27,8 @@ namespace Video
 {
     void ShowVideo( const std::string & videoPath, bool isLooped )
     {
-        SMKVideoSequence video( videoPath );
-        if ( video.get().empty() ) // nothing to show
+        const SMKVideoSequence video( videoPath );
+        if ( video.getFrames().empty() ) // nothing to show
             return;
 
         Cursor & cursor = Cursor::Get();
@@ -42,17 +42,17 @@ namespace Video
         bool isFirstFrame = true;
 
         LocalEvent & le = LocalEvent::Get();
-        while ( ( isLooped || currentFrame < video.get().size() ) && le.HandleEvents() ) {
+        while ( ( isLooped || currentFrame < video.getFrames().size() ) && le.HandleEvents() ) {
             if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
                 break;
 
             if ( isFirstFrame || Game::AnimateInfrequentDelay( Game::VIDEO_PLAYBACK ) ) {
                 isFirstFrame = false;
 
-                video.get()[currentFrame++].Blit( offset, display );
+                video.getFrames()[currentFrame++].Blit( offset, display );
                 display.Flip();
 
-                if ( isLooped && currentFrame >= video.get().size() ) {
+                if ( isLooped && currentFrame >= video.getFrames().size() ) {
                     currentFrame = 0;
                 }
             }

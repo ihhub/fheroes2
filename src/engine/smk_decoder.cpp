@@ -25,6 +25,8 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
     , _height( 0 )
 {
+    _audioChannel.resize( 7 );
+
     _load( filePath );
 }
 
@@ -37,13 +39,34 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     unsigned long frameCount = 0;
     double frameRate = 0;
 
+    uint8_t trackMask = 0;
+    uint8_t channel[7] ={ 0 };
+    uint8_t audioBitDepth[7] ={ 0 };
+    unsigned long audioRate[7] ={ 0 };
+
     smk_info_all( videoFile, NULL, &frameCount, &frameRate );
     smk_info_video( videoFile, &_width, &_height, NULL );
+    smk_info_audio( videoFile, &trackMask, channel, audioBitDepth, audioRate );
     smk_enable_video( videoFile, 1 );
+
+    for ( int i = 0; i < 7; ++i ) {
+        if ( trackMask & ( 1 << i ) ) {
+            smk_enable_audio( videoFile, i, 1 );
+        }
+    }
 
     smk_first( videoFile );
     unsigned long currentFrame = 0;
     smk_info_all( videoFile, &currentFrame, NULL, NULL );
+
+    for ( int i = 0; i < 7; ++i ) {
+        if ( trackMask & ( 1 << i ) ) {
+            const unsigned long length = smk_get_audio_size( videoFile, i );
+            const uint8_t * data = smk_get_audio( videoFile, i );
+            _audioChannel[i].reserve( _audioChannel[i].size() + length );
+            _audioChannel[i].insert( _audioChannel[i].end(), data, data + length );
+        }
+    }
 
     _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
 
@@ -51,6 +74,15 @@ bool SMKVideoSequence::_load( const std::string & filePath )
         smk_next( videoFile );
 
         _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
+
+        for ( int i = 0; i < 7; ++i ) {
+            if ( trackMask & ( 1 << i ) ) {
+                const unsigned long length = smk_get_audio_size( videoFile, i );
+                const uint8_t * data = smk_get_audio( videoFile, i );
+                _audioChannel[i].reserve( _audioChannel[i].size() + length );
+                _audioChannel[i].insert( _audioChannel[i].end(), data, data + length );
+            }
+        }
     }
 
     smk_close( videoFile );
@@ -86,7 +118,12 @@ void SMKVideoSequence::_addNewFrame( const uint8_t * data, const uint8_t * palet
     _frames.push_back( surface );
 }
 
-const std::vector<Surface> & SMKVideoSequence::get() const
+const std::vector<Surface> & SMKVideoSequence::getFrames() const
 {
     return _frames;
+}
+
+const std::vector<std::vector<uint8_t> > & SMKVideoSequence::getAudioChannels() const
+{
+    return _audioChannel;
 }

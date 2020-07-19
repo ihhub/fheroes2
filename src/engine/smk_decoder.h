@@ -30,7 +30,8 @@ class SMKVideoSequence
 public:
     explicit SMKVideoSequence( const std::string & filePath );
 
-    const std::vector<Surface> & get() const;
+    const std::vector<Surface> & getFrames() const;
+    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
 
     unsigned long width() const;
     unsigned long height() const;
@@ -41,6 +42,7 @@ private:
     void _addNewFrame( const uint8_t * data, const uint8_t * palette );
 
     std::vector<Surface> _frames;
+    std::vector<std::vector<uint8_t> > _audioChannel;
     unsigned long _width;
     unsigned long _height;
 };
