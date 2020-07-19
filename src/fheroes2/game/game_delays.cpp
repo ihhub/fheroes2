@@ -95,7 +95,6 @@ namespace Game
                           40, // CURRENT_HERO_DELAY
                           40, // CURRENT_AI_DELAY
                           0, // CUSTOM_DELAY
-                          80, // VIDEO_PLAYBACK
                           0};
 }
 
