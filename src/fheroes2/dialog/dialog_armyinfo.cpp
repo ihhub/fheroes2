@@ -32,7 +32,6 @@
 #include "monster.h"
 #include "morale.h"
 #include "payment.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "skill.h"
 #include "speed.h"

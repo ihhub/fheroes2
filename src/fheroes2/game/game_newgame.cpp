@@ -29,7 +29,6 @@
 #include "game.h"
 #include "gamedefs.h"
 #include "mus.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"

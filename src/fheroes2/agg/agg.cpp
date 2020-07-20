@@ -39,6 +39,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "xmi.h"
 
 #ifdef WITH_ZLIB
 #include "images_pack.h"

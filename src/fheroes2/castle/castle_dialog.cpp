@@ -36,7 +36,6 @@
 #include "m82.h"
 #include "mus.h"
 #include "payment.h"
-#include "pocketpc.h"
 #include "profit.h"
 #include "race.h"
 #include "resource.h"

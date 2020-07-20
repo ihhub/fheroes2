@@ -35,7 +35,6 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "m82.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "world.h"
 
