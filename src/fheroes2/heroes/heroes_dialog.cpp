@@ -33,7 +33,6 @@
 #include "heroes_indicator.h"
 #include "kingdom.h"
 #include "payment.h"
-#include "pocketpc.h"
 #include "race.h"
 #include "settings.h"
 #include "skill.h"

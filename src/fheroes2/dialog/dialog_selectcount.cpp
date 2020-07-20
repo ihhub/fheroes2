@@ -213,7 +213,6 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     int oldcursor = cursor.Themes();
     cursor.SetThemes( cursor.POINTER );
 
-    // const bool pda = Settings::Get().PocketPC();
     if ( res.size() )
         res.clear();
     res.reserve( 48 );

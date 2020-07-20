@@ -45,7 +45,6 @@
 #include "m82.h"
 #include "maps_tiles.h"
 #include "mus.h"
-#include "pocketpc.h"
 #include "route.h"
 #include "settings.h"
 #include "splitter.h"
