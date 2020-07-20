@@ -344,7 +344,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
+    Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
 
     // fill cache buildings
     CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
@@ -833,7 +833,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt )
     // sprite button exit
     dst_pt.x = src_rt.x + 1;
     dst_pt.y = src_rt.y + 166;
-    const Sprite & exit = AGG::GetICN( ICN::SWAPBTN, 0 );
+    const Sprite & exit = AGG::GetICN( ICN::TREASURY, 1 );
     exit.Blit( dst_pt );
 
     return src_rt;
