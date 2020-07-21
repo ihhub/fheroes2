@@ -2509,7 +2509,7 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
     }
 }
 
-std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices(const Tiles& tile, uint32_t monsterIndex)
+std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
 {
     std::pair<int, int> spriteIndices( -1, -1 );
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();

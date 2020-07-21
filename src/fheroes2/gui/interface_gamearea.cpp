@@ -177,7 +177,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
     // remove animation
     Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
     if ( removalInfo.object != MP2::OBJ_ZERO ) {
-        const Point mp = Maps::GetPoint( removalInfo.tile ); 
+        const Point mp = Maps::GetPoint( removalInfo.tile );
         const int icn = MP2::GetICNObject( removalInfo.object );
 
         if ( icn == ICN::MONS32 ) {
