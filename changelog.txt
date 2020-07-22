@@ -165,7 +165,7 @@ version 0.8 (31 July 2020)
 - use shadowing for end movement cell during battle
 - fix inability to move artifacts
 - show a message if not enough points for digging
-- fix monster attack an the start of a new game
+- fix monster attack at the start of a new game
 - add fading animation after battle
 - limit Dimension Door spell range
 - fix invisible hero's path after Dimension Door spell
