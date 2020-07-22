@@ -884,7 +884,8 @@ namespace AI
                 if ( hero.isFreeman() ) {
                     DEBUG( DBG_GAME, DBG_TRACE, hero.String() + " hero dismissed, teleport action cancelled" );
                     return;
-                } else if ( !other_hero->isFreeman() ) {
+                }
+                else if ( !other_hero->isFreeman() ) {
                     DEBUG( DBG_GAME, DBG_WARN, other_hero->String() + " hero is blocking teleporter exit" );
                     return;
                 }
