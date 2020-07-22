@@ -177,12 +177,30 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
     // remove animation
     Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
     if ( removalInfo.object != MP2::OBJ_ZERO ) {
-        Surface surface( removalInfo.surfaceSize, true );
-        const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( removalInfo.object ), removalInfo.index );
-        sprite.Blit( sprite.x(), sprite.y(), surface );
-        surface.SetAlphaMod( removalInfo.alpha, false );
         const Point mp = Maps::GetPoint( removalInfo.tile );
-        BlitOnTile( dst, surface, 0, 0, mp );
+        const int icn = MP2::GetICNObject( removalInfo.object );
+
+        if ( icn == ICN::MONS32 ) {
+            const std::pair<int, int> monsterIndicies = Maps::Tiles::GetMonsterSpriteIndices( world.GetTiles( removalInfo.tile ), removalInfo.index );
+
+            // base monster sprite
+            if ( monsterIndicies.first >= 0 ) {
+                Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
+                sprite.SetAlphaMod( removalInfo.alpha, false );
+                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
+            }
+            // animated monster part
+            if ( monsterIndicies.second >= 0 ) {
+                Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
+                sprite.SetAlphaMod( removalInfo.alpha, false );
+                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
+            }
+        }
+        else {
+            Sprite sprite = AGG::GetICN( icn, removalInfo.index );
+            sprite.SetAlphaMod( removalInfo.alpha, false );
+            BlitOnTile( dst, sprite, 0, 0, mp );
+        }
     }
 
     // ext object

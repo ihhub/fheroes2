@@ -1610,57 +1610,17 @@ void Maps::Tiles::RedrawObjects( Surface & dst ) const
 
 void Maps::Tiles::RedrawMonster( Surface & dst ) const
 {
-    const Settings & conf = Settings::Get();
     const Point mp = Maps::GetPoint( GetIndex() );
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-    s32 dst_index = -1;
 
-    if ( !( area.GetVisibleTileROI() & mp ) )
+    if ( !( Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & mp ) )
         return;
 
-    // scan hero around
-    const MapsIndexes & v = ScanAroundObject( GetIndex(), MP2::OBJ_HEROES );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-        const Tiles & tile = world.GetTiles( *it );
-        dst_index = *it;
-
-        if ( MP2::OBJ_HEROES != mp2_object ||
-             // skip bottom, bottom_right, bottom_left with ground objects
-             ( ( DIRECTION_BOTTOM_ROW & Direction::Get( GetIndex(), *it ) ) && MP2::isGroundObject( tile.GetObject( false ) ) ) ||
-             // skip ground check
-             ( tile.isWater() != isWater() ) )
-            dst_index = -1;
-        else
-            break;
-    }
-
     const Monster & monster = QuantityMonster();
-    uint32_t spriteIndex = monster.GetSpriteIndex() * 9;
-    uint32_t secondSprite = MAXU32;
+    const std::pair<int, int> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
-    // draw attack sprite
-    if ( -1 != dst_index && !conf.ExtWorldOnlyFirstMonsterAttack() ) {
-        bool revert = false;
-
-        switch ( Direction::Get( GetIndex(), dst_index ) ) {
-        case Direction::TOP_LEFT:
-        case Direction::LEFT:
-        case Direction::BOTTOM_LEFT:
-            revert = true;
-            break;
-        default:
-            break;
-        }
-
-        spriteIndex += ( revert ? 8 : 7 );
-    }
-    else {
-        secondSprite = spriteIndex + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monsterAnimationSequence )];
-    }
-
-    RedrawMapObject( dst, ICN::MINIMON, spriteIndex, mp, monster.hasColorCycling(), 16, TILEWIDTH );
-    if ( secondSprite != MAXU32 ) {
-        RedrawMapObject( dst, ICN::MINIMON, secondSprite, mp, monster.hasColorCycling(), 16, TILEWIDTH );
+    RedrawMapObject( dst, ICN::MINIMON, spriteIndicies.first, mp, monster.hasColorCycling(), 16, TILEWIDTH );
+    if ( spriteIndicies.second != -1 ) {
+        RedrawMapObject( dst, ICN::MINIMON, spriteIndicies.second, mp, monster.hasColorCycling(), 16, TILEWIDTH );
     }
 }
 
@@ -2547,6 +2507,45 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
                 shadow->index = addon->index - 1;
         }
     }
+}
+
+std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
+{
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    const int tileIndex = tile.GetIndex();
+    int attackerIndex = -1;
+
+    // scan hero around
+    const MapsIndexes & v = ScanAroundObject( tileIndex, MP2::OBJ_HEROES );
+    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
+        const Tiles & heroTile = world.GetTiles( *it );
+        if ( tile.isWater() != heroTile.isWater() ) {
+            attackerIndex = *it;
+            break;
+        }
+    }
+
+    std::pair<int, int> spriteIndices( monsterIndex * 9, -1 );
+
+    // draw attack sprite
+    if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
+        spriteIndices.first += 7;
+
+        switch ( Direction::Get( tileIndex, attackerIndex ) ) {
+        case Direction::TOP_LEFT:
+        case Direction::LEFT:
+        case Direction::BOTTOM_LEFT:
+            spriteIndices.first += 1;
+            break;
+        default:
+            break;
+        }
+    }
+    else {
+        const Point mp = Maps::GetPoint( tileIndex );
+        spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monsterAnimationSequence )];
+    }
+    return spriteIndices;
 }
 
 bool Maps::Tiles::isFog( int colors ) const
