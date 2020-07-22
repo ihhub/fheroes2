@@ -2511,24 +2511,21 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 
 std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
 {
-    std::pair<int, int> spriteIndices( -1, -1 );
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-    int tileIndex = tile.GetIndex();
+    const int tileIndex = tile.GetIndex();
     int attackerIndex = -1;
 
     // scan hero around
     const MapsIndexes & v = ScanAroundObject( tileIndex, MP2::OBJ_HEROES );
     for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
         const Tiles & heroTile = world.GetTiles( *it );
-        attackerIndex = *it;
-
-        if ( tile.isWater() != heroTile.isWater() )
-            attackerIndex = -1;
-        else
+        if ( tile.isWater() != heroTile.isWater() ) {
+            attackerIndex = *it;
             break;
+        }
     }
 
-    spriteIndices.first = monsterIndex * 9;
+    std::pair<int, int> spriteIndices( monsterIndex * 9, -1 );
 
     // draw attack sprite
     if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
