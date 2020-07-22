@@ -184,13 +184,13 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
             const std::pair<int, int> monsterIndicies = Maps::Tiles::GetMonsterSpriteIndices( world.GetTiles( removalInfo.tile ), removalInfo.index );
 
             // base monster sprite
-            if ( monsterIndicies.first ) {
+            if ( monsterIndicies.first != -1 ) {
                 Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
                 sprite.SetAlphaMod( removalInfo.alpha, false );
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
             }
             // animated monster part
-            if ( monsterIndicies.second ) {
+            if ( monsterIndicies.second != -1 ) {
                 Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
                 sprite.SetAlphaMod( removalInfo.alpha, false );
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
