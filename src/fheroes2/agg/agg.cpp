@@ -39,6 +39,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "xmi.h"
 
 #ifdef WITH_ZLIB
 #include "images_pack.h"
@@ -954,7 +955,7 @@ struct ICNHeader
         , offsetY( 0 )
         , width( 0 )
         , height( 0 )
-        , type( 0 )
+        , animationFrames( 0 )
         , offsetData( 0 )
     {}
 
@@ -962,7 +963,7 @@ struct ICNHeader
     u16 offsetY;
     u16 width;
     u16 height;
-    u8 type;
+    u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
     u32 offsetData;
 };
 
@@ -972,7 +973,7 @@ StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
     icn.offsetY = st.getLE16();
     icn.width = st.getLE16();
     icn.height = st.getLE16();
-    icn.type = st.get();
+    icn.animationFrames = st.get();
     icn.offsetData = st.getLE32();
 
     return st;
@@ -1118,6 +1119,10 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
 
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
         res.second.SetAlphaMod( 0, false );
+    }
+
+    if ( icn == ICN::WOLF && index == 16 ) { // incorrect ICN offset for Wolf's animation
+        res.offset.x = -16;
     }
 
     // TODO: fix air elemental sprite

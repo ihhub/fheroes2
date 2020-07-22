@@ -403,9 +403,9 @@ Surface DrawHexagonShadow( int alphaValue )
     return sf;
 }
 
-bool Battle::TargetInfo::isFinishAnimFrame( void ) const
+bool Battle::TargetInfo::isFinishAnimFrame( const TargetInfo & info )
 {
-    return defender && defender->isFinishAnimFrame();
+    return info.defender && info.defender->isFinishAnimFrame();
 }
 
 int Battle::GetCursorFromSpell( int spell )
@@ -862,15 +862,15 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , _movingUnit( NULL )
     , _flyingUnit( NULL )
     , b_current_sprite( NULL )
-    , b_current_alpha( 255 )
     , index_pos( -1 )
     , teleport_src( -1 )
     , listlog( NULL )
     , turn( 0 )
     , _colorCycle( 0 )
-    , _creaturePalette( PAL::GetPalette( PAL::STANDARD ) )
+    , _customPalette( PAL::GetPalette( PAL::STANDARD ) )
     , _contourColor( 110 )
     , _brightLandType( false )
+    , _cycleBattlefield( false )
 {
     const Settings & conf = Settings::Get();
 
@@ -947,6 +947,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     }
     if ( conf.QVGA() || conf.ExtPocketLowMemory() )
         icn_frng = ICN::UNKNOWN;
+
+    sf_cover.Set( _mainSurface.w(), _mainSurface.h(), false );
 
     // hexagon
     sf_hexagon = DrawHexagon( ( light ? RGBA( 0x78, 0x94, 0 ) : RGBA( 0x38, 0x48, 0 ) ) );
@@ -1029,7 +1031,8 @@ void Battle::Interface::SetStatus( const std::string & msg, bool top )
 void Battle::Interface::CycleColors()
 {
     ++_colorCycle;
-    _creaturePalette = PAL::GetCyclingPalette( _colorCycle );
+    _customPalette = PAL::GetCyclingPalette( _colorCycle );
+    _cycleBattlefield = true;
 }
 
 void Battle::Interface::UpdateContourColor()
@@ -1115,7 +1118,7 @@ void Battle::Interface::RedrawArmies( void )
         if ( b && _flyingUnit != b && ii != b->GetTailIndex() ) {
             RedrawTroopSprite( *b );
 
-            if ( _movingUnit != b )
+            if ( _movingUnit != b && b->isValid() )
                 RedrawTroopCount( *b );
         }
     }
@@ -1251,11 +1254,8 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
             }
         }
 
-        if ( b.hasColorCycling() ) {
-            const bool isUnderAlphaEffect = ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit );
-            if ( !isUnderAlphaEffect ) {
-                applyPalettes.push_back( _creaturePalette );
-            }
+        if ( b.hasColorCycling() && b.GetCustomAlpha() == 255 ) {
+            applyPalettes.push_back( _customPalette );
         }
 
         if ( b.Modes( CAP_MIRRORIMAGE ) ) {
@@ -1303,15 +1303,11 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
         }
 
         // sprite monster
-        if ( b_current_sprite && spmon1 == *b_current_sprite && _currentUnit && &b == _currentUnit ) {
-            if ( b_current_alpha < 255 ) {
-                spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
-                spmon1.SetAlphaMod( b_current_alpha, false );
-            }
-            spmon1.Blit( sp.x, sp.y, _mainSurface );
+        if ( b.GetCustomAlpha() < 255 ) {
+            spmon1 = Sprite( spmon1.GetSurface(), spmon1.x(), spmon1.y() );
+            spmon1.SetAlphaMod( b.GetCustomAlpha(), false );
         }
-        else
-            spmon1.Blit( sp, _mainSurface );
+        spmon1.Blit( sp, _mainSurface );
 
         // contour
         if ( spmon2.isValid() )
@@ -1319,36 +1315,27 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
     }
 }
 
-void Battle::Interface::RedrawTroopCount( const Unit & b )
+void Battle::Interface::RedrawTroopCount( const Unit & unit )
 {
-    const Rect & rt = b.GetRectPosition();
-    const Sprite & bar = AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( b ) );
+    const Rect & rt = unit.GetRectPosition();
+    const Sprite & bar = AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
+    const bool isReflected = unit.isReflect();
 
-    s32 sx = 0;
-    s32 sy = 0;
+    const int tileInFront = Board::GetIndexDirection( unit.GetHeadIndex(), isReflected ? Battle::LEFT : Battle::RIGHT );
 
-    const bool isReflected = b.isReflect();
-    const bool isWide = b.isWide();
-    sy = rt.y + rt.h - bar.h() - ( isReflected ? 21 : 9 );
+    s32 sx = rt.x + ( isReflected ? -7 : rt.w - 13 );
+    const s32 sy = rt.y + rt.h - bar.h() - ( isReflected ? 23 : 11 );
 
-    if ( isReflected ) {
-        if ( isWide )
-            sx = rt.x;
-        else
-            sx = rt.x - bar.w() + 3;
-    }
-    else {
-        if ( isWide ) {
-            sx = rt.x + rt.w - bar.w();
-        }
-        else {
-            sx = rt.x + rt.w - 3;
-        }
-    }
+    int xOffset = unit.animation.getTroopCountOffset( isReflected );
+    // check if has unit standing in front
+    if ( xOffset > 0 && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
+        xOffset = 0;
+
+    sx += isReflected ? -xOffset : xOffset;
 
     bar.Blit( sx, sy, _mainSurface );
 
-    Text text( GetStringShort( b.GetCount() ), Font::SMALL );
+    Text text( GetStringShort( unit.GetCount() ), Font::SMALL );
     text.Blit( sx + ( bar.w() - text.w() ) / 2, sy, _mainSurface );
 }
 
@@ -1356,12 +1343,7 @@ void Battle::Interface::RedrawCover( void )
 {
     const Settings & conf = Settings::Get();
 
-    if ( !sf_cover.isValid() ) {
-        sf_cover.Set( _mainSurface.w(), _mainSurface.h(), false );
-        RedrawCoverStatic( sf_cover );
-    }
-
-    sf_cover.Blit( _mainSurface );
+    RedrawCoverStatic( _mainSurface );
 
     const Board & board = *Arena::GetBoard();
     RedrawCoverBoard( conf, board );
@@ -1380,12 +1362,16 @@ void Battle::Interface::RedrawCover( void )
         sf_cursor.Blit( cell->GetPos(), _mainSurface );
 
     RedrawKilled();
+
+    _cycleBattlefield = false;
 }
 
 void Battle::Interface::RedrawCoverStatic( Surface & dst )
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
-        const Sprite & cbkg = AGG::GetICN( icn_cbkg, 0 );
+        Sprite cbkg = AGG::GetICN( icn_cbkg, 0 );
+        if ( _cycleBattlefield && ( icn_cbkg == ICN::CBKGLAVA || icn_cbkg == ICN::CBKGWATR ) )
+            AGG::ReplaceColors( cbkg, _customPalette, icn_cbkg, 0, false );
         cbkg.Blit( dst );
     }
 
@@ -1459,7 +1445,9 @@ void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst )
 
     // moat
     if ( castle.isBuild( BUILD_MOAT ) ) {
-        const Sprite & sprite = AGG::GetICN( ICN::MOATWHOL, 0 );
+        Sprite sprite = AGG::GetICN( ICN::MOATWHOL, 0 );
+        if ( _cycleBattlefield )
+            AGG::ReplaceColors( sprite, _customPalette, ICN::MOATWHOL, 0, false );
         sprite.Blit( sprite.x(), sprite.y(), dst );
     }
 
@@ -1470,7 +1458,6 @@ void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst )
 
 void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
 {
-    const Settings & conf = Settings::Get();
     const int icn_castle = ICN::Get4Castle( castle.GetRace() );
 
     // catapult
@@ -1577,7 +1564,6 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
 
 void Battle::Interface::RedrawCastle3( const Castle & castle )
 {
-    // const Settings & conf = Settings::Get();
     const Sprite & sprite = AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TWR_CENTER )->isValid() ? 20 : 26 ) );
 
     sprite.Blit( sprite.x(), sprite.y(), _mainSurface );
@@ -1851,7 +1837,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
 
     cursor.SetThemes( Cursor::WAR_NONE );
     _currentUnit = &b;
@@ -2120,6 +2105,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             else if ( le.MousePressRight() )
                 MousePressRightBoardAction( themes, *cell, a );
         }
+        else {
+            le.MouseClickLeft();
+            le.MousePressRight();
+        }
     }
     else if ( le.MouseCursor( status ) ) {
         if ( listlog ) {
@@ -2131,6 +2120,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else {
         cursor.SetThemes( Cursor::WAR_NONE );
+        le.MouseClickLeft();
+        le.MousePressRight();
     }
 }
 
@@ -2650,8 +2641,9 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
     attacker.SwitchAnimation( Monster_Info::STATIC );
 
+    const bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
-    if ( targets.size() ) {
+    if ( !isMirror && targets.size() ) {
         std::string msg = _( "%{attacker} do %{damage} damage." );
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
@@ -2660,8 +2652,10 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
             u32 damage = 0;
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                killed += ( *it ).killed;
-                damage += ( *it ).damage;
+                if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
+                    killed += ( *it ).killed;
+                    damage += ( *it ).damage;
+                }
             }
 
             StringReplace( msg, "%{damage}", damage );
@@ -2688,17 +2682,6 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
         status.SetMessage( "", false );
     }
 
-    // restore
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            TargetInfo & target = *it;
-            if ( !target.defender->isValid() ) {
-                target.defender->SetDeathAnim();
-            }
-            else
-                target.defender->SwitchAnimation( Monster_Info::STATIC );
-        }
-
     _movingUnit = NULL;
 }
 
@@ -2712,24 +2695,32 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     int finish = 0;
     int deathColor = Color::UNUSED;
 
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            TargetInfo & target = *it;
+    std::vector<Unit *> mirrorImages;
+
+    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+        Unit * defender = it->defender;
+        if ( defender ) {
+            if ( defender->isModes( CAP_MIRRORIMAGE ) )
+                mirrorImages.push_back( defender );
 
             // kill animation
-            if ( !target.defender->isValid() ) {
-                target.defender->SwitchAnimation( Monster_Info::KILL );
-                AGG::PlaySound( target.defender->M82Kill() );
+            if ( !defender->isValid() ) {
+                // destroy linked mirror
+                if ( defender->isModes( CAP_MIRROROWNER ) )
+                    mirrorImages.push_back( defender->GetMirror() );
+
+                defender->SwitchAnimation( Monster_Info::KILL );
+                AGG::PlaySound( defender->M82Kill() );
                 ++finish;
 
-                deathColor = target.defender->GetArmyColor();
+                deathColor = defender->GetArmyColor();
             }
             else
                 // wince animation
-                if ( target.damage ) {
+                if ( it->damage ) {
                 // wnce animation
-                target.defender->SwitchAnimation( Monster_Info::WNCE );
-                AGG::PlaySound( target.defender->M82Wnce() );
+                defender->SwitchAnimation( Monster_Info::WNCE );
+                AGG::PlaySound( defender->M82Wnce() );
                 ++finish;
             }
             else
@@ -2738,8 +2729,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 AGG::PlaySound( M82::RSBRYFZL );
             }
         }
-
-    const Point & topleft = border.GetArea();
+    }
 
     if ( deathColor != Color::UNUSED ) {
         const bool attackersTurn = deathColor == arena.GetArmyColor2();
@@ -2756,7 +2746,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     // targets damage animation loop
-    while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), std::mem_fun_ref( &TargetInfo::isFinishAnimFrame ) ) ) {
+    while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
@@ -2812,12 +2802,20 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
         }
     }
 
+    // Fade away animation for destroyed mirror images
+    if ( mirrorImages.size() )
+        RedrawActionRemoveMirrorImage( mirrorImages );
+
     // Set to static animation as attacker might still continue its animation
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-        if ( ( *it ).defender ) {
-            if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
-                it->defender->SwitchAnimation( Monster_Info::STATIC );
+        Unit * unit = ( *it ).defender;
+        if ( unit ) {
+            if ( unit->isFinishAnimFrame() && unit->GetAnimationState() == Monster_Info::WNCE ) {
+                unit->SwitchAnimation( Monster_Info::STATIC );
             }
+
+            if ( !unit->isValid() )
+                unit->PostKilledAction();
         }
     }
 }
@@ -2996,7 +2994,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( spell.isApplyWithoutFocusObject() || spell() == Spell::CHAINLIGHTNING ) ? OP_CAST_MASS : OP_CAST_UP );
+            opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
     }
@@ -3046,8 +3044,10 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         break;
 
     case Spell::HOLYWORD:
+        RedrawActionHolyShoutSpell( targets, 8 );
+        break;
     case Spell::HOLYSHOUT:
-        RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::FromSpell( spell() ), true );
+        RedrawActionHolyShoutSpell( targets, 16 );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -3153,16 +3153,18 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
 void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
 {
     if ( spell.isDamage() ) {
-        // targets damage animation
-        RedrawActionWincesKills( targets );
-
         u32 killed = 0;
         u32 damage = 0;
 
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-            killed += ( *it ).killed;
-            damage += ( *it ).damage;
+            if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
+                killed += ( *it ).killed;
+                damage += ( *it ).damage;
+            }
         }
+
+        // targets damage animation
+        RedrawActionWincesKills( targets );
 
         if ( damage ) {
             std::string msg;
@@ -3186,18 +3188,6 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
     }
 
     status.SetMessage( " ", false );
-
-    // restore
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it )
-        if ( ( *it ).defender ) {
-            TargetInfo & target = *it;
-            if ( !target.defender->isValid() ) {
-                target.defender->SetDeathAnim();
-            }
-            else
-                target.defender->SwitchAnimation( Monster_Info::STATIC );
-        }
-
     _movingUnit = NULL;
 }
 
@@ -3254,6 +3244,9 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         int width = 2;
         Rect src( 0, 0, width, luckSprite.h() );
         src.x = ( luckSprite.w() - src.w ) / 2;
+        int y = pos.y + pos.h - unitSprite.h() - src.h;
+        if ( y < 0 )
+            y = 0;
 
         AGG::PlaySound( M82::GOODLUCK );
 
@@ -3263,7 +3256,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
             if ( width < luckSprite.w() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
-                luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, pos.y + pos.h - unitSprite.h() - src.h, _mainSurface );
+                luckSprite.Blit( src, pos.x + ( pos.w - src.w ) / 2, y, _mainSurface );
 
                 RedrawPartialFinish();
 
@@ -3275,10 +3268,16 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         }
     }
     else {
-        int frameId = 0;
+        const int maxHeight = AGG::GetAbsoluteICNHeight( ICN::CLOUDLUK );
+        int y = pos.y + pos.h - 10;
+
+        // move drawing position if it will clip outside of the battle window
+        if ( y - maxHeight < 0 )
+            y = maxHeight;
 
         AGG::PlaySound( M82::BADLUCK );
 
+        int frameId = 0;
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
@@ -3286,7 +3285,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
                 RedrawPartialStart();
 
                 const Sprite & luckSprite = AGG::GetICN( ICN::CLOUDLUK, frameId );
-                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), pos.y + pos.h + luckSprite.y() - 10, _mainSurface );
+                luckSprite.Blit( pos.x + pos.w / 2 + luckSprite.x(), y + luckSprite.y(), _mainSurface );
 
                 RedrawPartialFinish();
 
@@ -3333,12 +3332,13 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
 {
     TargetsInfo targets;
     targets.push_back( target );
+    const bool isMirror = target.defender->isModes( CAP_MIRRORIMAGE );
 
     // targets damage animation
     RedrawActionWincesKills( targets );
 
     // draw status for first defender
-    std::string msg = _( "Tower do %{damage} damage." );
+    std::string msg = _( "Tower does %{damage} damage." );
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
         msg.append( " " );
@@ -3346,15 +3346,11 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
         StringReplace( msg, "%{count}", target.killed );
         StringReplace( msg, "%{defender}", target.defender->GetName() );
     }
-    status.SetMessage( msg, true );
-    status.SetMessage( "", false );
 
-    // restore
-    if ( !target.defender->isValid() ) {
-        target.defender->SetDeathAnim();
+    if ( !isMirror ) {
+        status.SetMessage( msg, true );
+        status.SetMessage( "", false );
     }
-    else
-        target.defender->SwitchAnimation( Monster_Info::STATIC );
 
     _movingUnit = NULL;
 }
@@ -3466,22 +3462,21 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
-    _currentUnit = &target;
-    b_current_sprite = &sprite;
-    b_current_alpha = 240;
+    uint32_t currentAlpha = target.GetCustomAlpha();
 
     AGG::PlaySound( M82::TELPTOUT );
 
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( b_current_alpha > 0 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( currentAlpha > 0 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha -= 15;
+            target.SetCustomAlpha( currentAlpha );
             Redraw();
-            b_current_alpha -= 15;
         }
     }
 
-    b_current_alpha = 0;
+    currentAlpha = 0;
     Redraw();
 
     target.SetPosition( dst );
@@ -3490,44 +3485,37 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( b_current_alpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( currentAlpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha += 15;
+            target.SetCustomAlpha( currentAlpha );
             Redraw();
-            b_current_alpha += 15;
         }
     }
 
-    b_current_alpha = 255;
-    _currentUnit = NULL;
-    b_current_sprite = NULL;
+    target.SetCustomAlpha( 255 );
 }
 
-void Battle::Interface::RedrawActionSummonElementalSpell( const Unit & target )
+void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
-
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
-    _currentUnit = &target;
-    b_current_sprite = &sprite;
-    b_current_alpha = 0;
+    uint32_t currentAlpha = 0;
 
     AGG::PlaySound( M82::SUMNELM );
 
-    while ( le.HandleEvents() && b_current_alpha < 220 ) {
+    while ( le.HandleEvents() && currentAlpha < 220 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha += 20;
+            target.SetCustomAlpha( currentAlpha );
             Redraw();
-            b_current_alpha += 20;
         }
     }
 
-    b_current_alpha = 255;
-    _currentUnit = NULL;
-    b_current_sprite = NULL;
+    target.SetCustomAlpha( 255 );
 }
 
 void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const Position & pos )
@@ -3572,7 +3560,6 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
     const Point roiOffset( drawRoi.x, drawRoi.y );
 
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::WAR_NONE );
@@ -3695,14 +3682,12 @@ void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
 
 void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & targets )
 {
+    const Point startingPos = arena.GetCurrentCommander() == opponent1->GetHero() ? opponent1->GetCastPosition() : opponent2->GetCastPosition();
     std::vector<Point> points;
+    points.push_back( startingPos );
+
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
         const Rect & pos = it->defender->GetRectPosition();
-
-        if ( points.empty() ) {
-            points.push_back( Point( pos.x + pos.w / 2, 0 ) );
-        }
-
         points.push_back( Point( pos.x + pos.w / 2, pos.y ) );
     }
 
@@ -3836,7 +3821,6 @@ void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
 void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // Casting hero position
@@ -3973,6 +3957,43 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
         }
 }
 
+void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength )
+{
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+
+    cursor.SetThemes( Cursor::WAR_NONE );
+
+    Surface original = _mainSurface.GetSurface();
+    Surface blurred = _mainSurface.RenderBoxBlur( 2, -strength, true );
+
+    _currentUnit = NULL;
+    AGG::PlaySound( M82::MASSCURS );
+
+    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / 20;
+    uint32_t frame = 0;
+    uint8_t alpha = 30;
+
+    while ( le.HandleEvents() && frame < 20 ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::AnimateCustomDelay( spellcastDelay ) ) {
+            // stay at maximum blur for 2 frames
+            if ( frame < 9 || frame > 10 ) {
+                cursor.Hide();
+                Surface::Blend( original, blurred, ( 255 - alpha ) * 100 / 255 ).Blit( _mainSurface );
+                cursor.Show();
+                RedrawPartialFinish();
+
+                alpha += ( frame < 10 ) ? 25 : -25;
+            }
+            ++frame;
+        }
+    }
+
+    RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
+}
+
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -4033,7 +4054,6 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Rect area = GetArea();
 
@@ -4090,7 +4110,6 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
 
 void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & targets )
 {
-    Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Rect area = GetArea();
@@ -4106,7 +4125,6 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     AGG::PlaySound( M82::ERTHQUAK );
 
     const u32 offset = Settings::Get().QVGA() ? 5 : 10;
-    bool restore = false;
 
     // draw earth quake
     while ( le.HandleEvents() && frame < 18 ) {
@@ -4160,9 +4178,30 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     }
 }
 
-void Battle::Interface::RedrawActionRemoveMirrorImage( const Unit & mirror )
+void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages )
 {
-    status.SetMessage( _( "MirrorImage ended" ), true );
+    if ( mirrorImages.empty() ) // nothing to animate
+        return;
+
+    LocalEvent & le = LocalEvent::Get();
+
+    int frame = 10;
+    while ( le.HandleEvents() && frame > 0 ) {
+        CheckGlobalEvents( le );
+
+        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
+            for ( std::vector<Unit *>::const_iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
+                if ( *it )
+                    ( *it )->SetCustomAlpha( alpha );
+            }
+
+            Redraw();
+
+            --frame;
+        }
+    }
+    status.SetMessage( _( "The mirror image is destroyed!" ), true );
 }
 
 void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsInfo & targets, int icn, int m82 )
@@ -4302,8 +4341,6 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
 {
     LocalEvent & le = LocalEvent::Get();
-
-    const Rect & pos = b.GetRectPosition();
 
     u32 frame = 0;
     const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );

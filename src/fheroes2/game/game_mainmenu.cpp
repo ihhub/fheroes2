@@ -28,7 +28,6 @@
 #include "game_interface.h"
 #include "gamedefs.h"
 #include "mus.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
 
@@ -46,8 +45,6 @@ int Game::MainMenu( void )
     Settings & conf = Settings::Get();
 
     conf.SetGameType( TYPE_MENU );
-    if ( conf.QVGA() )
-        return PocketPC::MainMenu();
 
     // cursor
     Cursor & cursor = Cursor::Get();

@@ -1468,7 +1468,7 @@ bool Castle::BuyBuilding( u32 build )
     switch ( build ) {
     case BUILD_CASTLE:
         building &= ~BUILD_TENT;
-        Maps::UpdateSpritesFromTownToCastle( GetCenter() );
+        Maps::UpdateCastleSprite( GetCenter(), race );
         Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
         break;
 
@@ -2017,7 +2017,13 @@ bool Castle::isBuildingCycling( uint32_t building, int race )
     switch ( building ) {
     case BUILD_MOAT:
         return true;
+    case BUILD_CAPTAIN:
+        if ( race == Race::WRLK || race == Race::KNGT )
+            return true;
+        break;
+    case DWELLING_MONSTER2:
     case BUILD_WEL2:
+    case BUILD_TAVERN:
         if ( race == Race::WRLK )
             return true;
         break;

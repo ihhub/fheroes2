@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,20 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2POCKETPC_H
-#define H2POCKETPC_H
+#pragma once
 
-#include "gamedefs.h"
+#include <string>
 
-class Heroes;
-class Castle;
-class Troop;
-class Kingdom;
-
-namespace PocketPC
+namespace Video
 {
-    void KeyboardDialog( std::string & );
-    u32 GetCursorAttackDialog( const Point &, int direction );
+    void ShowVideo( const std::string & videoPath, bool isLooped );
 }
-
-#endif

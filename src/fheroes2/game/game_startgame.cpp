@@ -45,7 +45,6 @@
 #include "m82.h"
 #include "maps_tiles.h"
 #include "mus.h"
-#include "pocketpc.h"
 #include "route.h"
 #include "settings.h"
 #include "splitter.h"
@@ -410,8 +409,12 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         const Castle * castle = world.GetCastle( tile.GetCenter() );
 
         if ( NULL != castle ) {
-            if ( tile.GetObject() == MP2::OBJN_CASTLE && from_hero.GetColor() == castle->GetColor() )
-                return Cursor::CASTLE;
+            if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
+                if ( from_hero.GetColor() == castle->GetColor() )
+                    return Cursor::CASTLE;
+                else
+                    return Cursor::POINTER;
+            }
             else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() )
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
             else if ( from_hero.GetColor() == castle->GetColor() )

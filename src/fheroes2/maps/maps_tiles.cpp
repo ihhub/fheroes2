@@ -403,7 +403,7 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     switch ( MP2::GetICNObject( object ) ) {
     // from sprite road
     case ICN::ROAD:
-        if ( 0 == index || 4 == index || 5 == index || 13 == index || 26 == index )
+        if ( 0 == index || 26 == index || 31 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM );
         else if ( 2 == index || 21 == index || 28 == index )
             return direct & ( Direction::LEFT | Direction::RIGHT );
@@ -413,14 +413,20 @@ bool Maps::TilesAddon::isRoad( int direct ) const
             return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
         else if ( 3 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT );
+        else if ( 4 == index )
+            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT );
+        else if ( 5 == index )
+            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_RIGHT );
         else if ( 6 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT );
         else if ( 7 == index )
             return direct & ( Direction::TOP | Direction::RIGHT );
         else if ( 9 == index )
-            return direct & ( Direction::BOTTOM | Direction::RIGHT );
+            return direct & ( Direction::BOTTOM | Direction::TOP_RIGHT );
         else if ( 12 == index )
-            return direct & ( Direction::BOTTOM | Direction::LEFT );
+            return direct & ( Direction::BOTTOM | Direction::TOP_LEFT );
+        else if ( 13 == index )
+            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT );
         else if ( 14 == index )
             return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT );
         else if ( 16 == index )
@@ -677,7 +683,7 @@ bool Maps::TilesAddon::isCastle( const TilesAddon & ta )
 bool Maps::TilesAddon::isRandomCastle( const TilesAddon & ta )
 {
     // OBJNTWRD
-    return ( ICN::OBJNTWRD == MP2::GetICNObject( ta.object ) && 32 > ta.index );
+    return ( ICN::OBJNTWRD == MP2::GetICNObject( ta.object ) );
 }
 
 bool Maps::TilesAddon::isRandomMonster( const TilesAddon & ta )
@@ -1305,7 +1311,7 @@ void Maps::Tiles::UpdatePassable( void )
         }
 
         // town twba
-        if ( tile_passable && FindAddonICN1( ICN::OBJNTWBA ) && ( mounts2 || trees2 ) ) {
+        if ( tile_passable && FindAddonICN( ICN::OBJNTWBA, 1 ) && ( mounts2 || trees2 ) ) {
             tile_passable = 0;
 #ifdef WITH_DEBUG
             passable_disable = 5;
@@ -1604,57 +1610,17 @@ void Maps::Tiles::RedrawObjects( Surface & dst ) const
 
 void Maps::Tiles::RedrawMonster( Surface & dst ) const
 {
-    const Settings & conf = Settings::Get();
     const Point mp = Maps::GetPoint( GetIndex() );
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-    s32 dst_index = -1;
 
-    if ( !( area.GetVisibleTileROI() & mp ) )
+    if ( !( Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & mp ) )
         return;
 
-    // scan hero around
-    const MapsIndexes & v = ScanAroundObject( GetIndex(), MP2::OBJ_HEROES );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-        const Tiles & tile = world.GetTiles( *it );
-        dst_index = *it;
-
-        if ( MP2::OBJ_HEROES != mp2_object ||
-             // skip bottom, bottom_right, bottom_left with ground objects
-             ( ( DIRECTION_BOTTOM_ROW & Direction::Get( GetIndex(), *it ) ) && MP2::isGroundObject( tile.GetObject( false ) ) ) ||
-             // skip ground check
-             ( tile.isWater() != isWater() ) )
-            dst_index = -1;
-        else
-            break;
-    }
-
     const Monster & monster = QuantityMonster();
-    uint32_t spriteIndex = monster.GetSpriteIndex() * 9;
-    uint32_t secondSprite = MAXU32;
+    const std::pair<int, int> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
-    // draw attack sprite
-    if ( -1 != dst_index && !conf.ExtWorldOnlyFirstMonsterAttack() ) {
-        bool revert = false;
-
-        switch ( Direction::Get( GetIndex(), dst_index ) ) {
-        case Direction::TOP_LEFT:
-        case Direction::LEFT:
-        case Direction::BOTTOM_LEFT:
-            revert = true;
-            break;
-        default:
-            break;
-        }
-
-        spriteIndex += ( revert ? 8 : 7 );
-    }
-    else {
-        secondSprite = spriteIndex + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monsterAnimationSequence )];
-    }
-
-    RedrawMapObject( dst, ICN::MINIMON, spriteIndex, mp, monster.hasColorCycling(), 16, TILEWIDTH );
-    if ( secondSprite != MAXU32 ) {
-        RedrawMapObject( dst, ICN::MINIMON, secondSprite, mp, monster.hasColorCycling(), 16, TILEWIDTH );
+    RedrawMapObject( dst, ICN::MINIMON, spriteIndicies.first, mp, monster.hasColorCycling(), 16, TILEWIDTH );
+    if ( spriteIndicies.second != -1 ) {
+        RedrawMapObject( dst, ICN::MINIMON, spriteIndicies.second, mp, monster.hasColorCycling(), 16, TILEWIDTH );
     }
 }
 
@@ -1684,6 +1650,7 @@ bool SkipRedrawTileBottom4Hero( const Maps::TilesAddon & ta, int passable )
         case ICN::OBJNWATR:
             return ta.index >= 202 && ta.index <= 225; /* whirlpool */
 
+        case ICN::OBJNTWSH:
         case ICN::OBJNTWBA:
         case ICN::ROAD:
         case ICN::STREAM:
@@ -1788,18 +1755,23 @@ void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
     }
 }
 
-Maps::TilesAddon * Maps::Tiles::FindAddonICN1( int icn1 )
+Maps::TilesAddon * Maps::Tiles::FindAddonICN( int icn, int level, int index )
 {
-    Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isICN ), icn1 ) );
-
-    return it != addons_level1.end() ? &( *it ) : NULL;
-}
-
-Maps::TilesAddon * Maps::Tiles::FindAddonICN2( int icn2 )
-{
-    Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isICN ), icn2 ) );
-
-    return it != addons_level2.end() ? &( *it ) : NULL;
+    if ( level == 1 || level == -1 ) {
+        for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+            if ( MP2::GetICNObject( it->object ) == icn && ( index == -1 || index == it->index ) ) {
+                return &( *it );
+            }
+        }
+    }
+    if ( level == 2 || level == -1 ) {
+        for ( Addons::iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
+            if ( MP2::GetICNObject( it->object ) == icn && ( index == -1 || index == it->index ) ) {
+                return &( *it );
+            }
+        }
+    }
+    return NULL;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( u32 uniq1 )
@@ -2013,16 +1985,16 @@ bool Maps::Tiles::isStream( void ) const
     return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isStream );
 }
 
-Maps::TilesAddon * Maps::Tiles::FindObject( int objs )
+Maps::TilesAddon * Maps::Tiles::FindObject( int objectID )
 {
-    return const_cast<Maps::TilesAddon *>( FindObjectConst( objs ) );
+    return const_cast<Maps::TilesAddon *>( FindObjectConst( objectID ) );
 }
 
-const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objs ) const
+const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objectID ) const
 {
     Addons::const_iterator it = addons_level1.size() ? addons_level1.begin() : addons_level1.end();
 
-    switch ( objs ) {
+    switch ( objectID ) {
     case MP2::OBJ_CAMPFIRE:
         it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isCampFire );
         break;
@@ -2125,10 +2097,16 @@ const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objs ) const
         break;
 
     case MP2::OBJ_RNDCASTLE:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isRandomCastle );
-        if ( it == addons_level1.end() ) {
-            it = std::find_if( addons_level2.begin(), addons_level2.end(), TilesAddon::isRandomCastle );
-            return addons_level2.end() != it ? &( *it ) : NULL;
+        for ( ; it != addons_level1.end(); ++it ) {
+            if ( it->isRandomCastle( *it ) ) {
+                return &( *it );
+            }
+        }
+
+        for ( Addons::const_iterator lvl2 = addons_level2.begin(); lvl2 != addons_level2.end(); ++lvl2 ) {
+            if ( lvl2->isRandomCastle( *lvl2 ) ) {
+                return &( *lvl2 );
+            }
         }
         break;
 
@@ -2146,7 +2124,7 @@ const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objs ) const
 
     default:
         if ( addons_level1.size() > 1 )
-            DEBUG( DBG_GAME, DBG_WARN, "FIXME for: " << MP2::StringObject( objs ) );
+            DEBUG( DBG_GAME, DBG_WARN, "FIXME for: " << MP2::StringObject( objectID ) );
         break;
     }
 
@@ -2529,6 +2507,45 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
                 shadow->index = addon->index - 1;
         }
     }
+}
+
+std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
+{
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    const int tileIndex = tile.GetIndex();
+    int attackerIndex = -1;
+
+    // scan hero around
+    const MapsIndexes & v = ScanAroundObject( tileIndex, MP2::OBJ_HEROES );
+    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
+        const Tiles & heroTile = world.GetTiles( *it );
+        if ( tile.isWater() != heroTile.isWater() ) {
+            attackerIndex = *it;
+            break;
+        }
+    }
+
+    std::pair<int, int> spriteIndices( monsterIndex * 9, -1 );
+
+    // draw attack sprite
+    if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
+        spriteIndices.first += 7;
+
+        switch ( Direction::Get( tileIndex, attackerIndex ) ) {
+        case Direction::TOP_LEFT:
+        case Direction::LEFT:
+        case Direction::BOTTOM_LEFT:
+            spriteIndices.first += 1;
+            break;
+        default:
+            break;
+        }
+    }
+    else {
+        const Point mp = Maps::GetPoint( tileIndex );
+        spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monsterAnimationSequence )];
+    }
+    return spriteIndices;
 }
 
 bool Maps::Tiles::isFog( int colors ) const

@@ -31,7 +31,6 @@
 #include "game.h"
 #include "kingdom.h"
 #include "monster.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
@@ -226,11 +225,6 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const Point & pos, u32 w
 
 void Dialog::ThievesGuild( bool oracle )
 {
-    if ( Settings::Get().QVGA() ) {
-        PocketPC::ThievesGuild( oracle );
-        return;
-    }
-
     Display & display = Display::Get();
 
     // cursor

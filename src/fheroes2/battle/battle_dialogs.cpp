@@ -484,10 +484,14 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     SpriteBack back( pos_rt );
 
     dialog.Blit( pos_rt.x, pos_rt.y );
-    hero.PortraitRedraw( pos_rt.x + 27, pos_rt.y + 42, PORT_BIG, display );
 
+    // first 15 pixels in the dialog is left shadow, skip
+    pos_rt.x += 15;
+    pos_rt.w -= 15;
+
+    hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
-    AGG::GetICN( ICN::VIEWGEN, col ).Blit( pos_rt.x + 148, pos_rt.y + 36 );
+    AGG::GetICN( ICN::VIEWGEN, col ).Blit( pos_rt.x + 133, pos_rt.y + 36 );
 
     Point tp( pos_rt );
 
@@ -499,48 +503,48 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     StringReplace( str, "%{race}", Race::String( hero.GetRace() ) );
     text.Set( str );
     tp.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2;
-    tp.y += 10;
+    tp.y = pos_rt.y + 11;
     text.Blit( tp );
     str = _( "Attack" ) + std::string( ": " ) + GetString( hero.GetAttack() );
     text.Set( str );
-    tp.x = pos_rt.x + 205 - text.w() / 2;
+    tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 40;
     text.Blit( tp );
     str = _( "Defense" ) + std::string( ": " ) + GetString( hero.GetDefense() );
     text.Set( str );
-    tp.x = pos_rt.x + 205 - text.w() / 2;
+    tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 51;
     text.Blit( tp );
     str = _( "Spell Power" ) + std::string( ": " ) + GetString( hero.GetPower() );
     text.Set( str );
-    tp.x = pos_rt.x + 205 - text.w() / 2;
+    tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 62;
     text.Blit( tp );
     str = _( "Knowledge" ) + std::string( ": " ) + GetString( hero.GetKnowledge() );
     text.Set( str );
-    tp.x = pos_rt.x + 205 - text.w() / 2;
+    tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 73;
     text.Blit( tp );
     str = _( "Morale" ) + std::string( ": " ) + Morale::String( hero.GetMorale() );
     text.Set( str );
-    tp.x = pos_rt.x + 205 - text.w() / 2;
+    tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 84;
     text.Blit( tp );
     str = _( "Luck" ) + std::string( ": " ) + Luck::String( hero.GetLuck() );
     text.Set( str );
-    tp.x = pos_rt.x + 205 - text.w() / 2;
+    tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 95;
     text.Blit( tp );
     str = _( "Spell Points" ) + std::string( ": " ) + GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() );
     text.Set( str );
-    tp.x = pos_rt.x + 205 - text.w() / 2;
+    tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 117;
     text.Blit( tp );
 
-    Button btnCast( pos_rt.x + 30, pos_rt.y + 148, ICN::VIEWGEN, 9, 10 );
-    Button btnRetreat( pos_rt.x + 89, pos_rt.y + 148, ICN::VIEWGEN, 11, 12 );
-    Button btnSurrender( pos_rt.x + 148, pos_rt.y + 148, ICN::VIEWGEN, 13, 14 );
-    Button btnClose( pos_rt.x + 207, pos_rt.y + 148, ICN::VIEWGEN, 15, 16 );
+    Button btnCast( pos_rt.x + 15, pos_rt.y + 148, ICN::VIEWGEN, 9, 10 );
+    Button btnRetreat( pos_rt.x + 74, pos_rt.y + 148, ICN::VIEWGEN, 11, 12 );
+    Button btnSurrender( pos_rt.x + 133, pos_rt.y + 148, ICN::VIEWGEN, 13, 14 );
+    Button btnClose( pos_rt.x + 192, pos_rt.y + 148, ICN::VIEWGEN, 15, 16 );
 
     btnCast.SetDisable( readonly || !hero.HaveSpellBook() || hero.Modes( Heroes::SPELLCASTED ) );
     btnRetreat.SetDisable( readonly || !CanRetreatOpponent( hero.GetColor() ) );

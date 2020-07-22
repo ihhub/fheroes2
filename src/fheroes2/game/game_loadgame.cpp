@@ -28,7 +28,6 @@
 #include "game_io.h"
 #include "gamedefs.h"
 #include "mus.h"
-#include "pocketpc.h"
 #include "settings.h"
 
 int Game::LoadCampain( void )
@@ -49,8 +48,6 @@ int Game::LoadGame( void )
     /*
         Mixer::Pause();
         AGG::PlayMusic(MUS::MAINMENU);
-
-        if(Settings::Get().QVGA()) return PocketPC::LoadGame();
 
         // cursor
         Cursor & cursor = Cursor::Get();

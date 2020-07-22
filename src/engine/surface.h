@@ -96,7 +96,7 @@ public:
     Surface( const Size & sz, u32 bpp, bool amask );
     Surface( const Size &, const SurfaceFormat & );
     Surface( const std::string & );
-    Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask ); /* agg: create raw tile */
+    Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask, bool useDefaultPalette = true ); /* agg: create raw tile */
     Surface( const Surface & bs, bool useReference = true );
     Surface( SDL_Surface * );
 
@@ -154,6 +154,7 @@ public:
     Surface RenderContour( const RGBA & ) const;
     Surface RenderGrayScale( void ) const;
     Surface RenderSepia( void ) const;
+    Surface RenderBoxBlur( int blurRadius, int colorChange = 0, bool redTint = false ) const;
     Surface RenderDeathWave( int position, int waveLength, int waveHeight ) const;
     Surface RenderRippleEffect( int frame, double scaleX = 0.05, double waveFrequency = 20.0 ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
@@ -187,6 +188,8 @@ public:
     // This is only for 8-bit images like TIL
     void ResetPalette();
 
+    void SetPalette( const std::vector<SDL_Color> & colors );
+
 protected:
     static void FreeSurface( Surface & );
 
@@ -214,12 +217,14 @@ protected:
     void SetPixel2( s32 x, s32 y, u32 color );
     void SetPixel1( s32 x, s32 y, u32 color );
     void SetPixel( int x, int y, u32 );
+    void SetRawPixel( int position, uint32_t pixel );
 
     u32 GetPixel4( s32 x, s32 y ) const;
     u32 GetPixel3( s32 x, s32 y ) const;
     u32 GetPixel2( s32 x, s32 y ) const;
     u32 GetPixel1( s32 x, s32 y ) const;
     u32 GetPixel( int x, int y ) const;
+    uint32_t GetRawPixelValue( int position ) const;
 
     SDL_Surface * surface;
     bool _isDisplay;

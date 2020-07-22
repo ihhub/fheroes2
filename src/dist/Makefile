@@ -10,6 +10,9 @@ TARGET := fheroes2
 LIBENGINE := ../engine/libengine.a
 CFLAGS := $(CFLAGS) -I../engine
 
+LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
+CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
+
 ifndef WITHOUT_XML
 LIBENGINE := $(LIBENGINE) ../xmlccwrap/libxmlccwrap.a
 CFLAGS := $(CFLAGS) -I../xmlccwrap

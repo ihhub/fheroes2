@@ -212,10 +212,10 @@ namespace Battle
         void RedrawActionCatapult( int );
         void RedrawActionTeleportSpell( Unit &, s32 );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
-        void RedrawActionSummonElementalSpell( const Unit & );
+        void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit &, const Position & );
         void RedrawActionSkipStatus( const Unit & );
-        void RedrawActionRemoveMirrorImage( const Unit & );
+        void RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages );
         void RedrawBridgeAnimation( bool down );
         void RedrawMissileAnimation( const Point & startPos, const Point & endPos, double angle, uint32_t monsterID );
 
@@ -245,7 +245,7 @@ namespace Battle
         void RedrawOpponentsFlags( void );
         void RedrawArmies( void );
         void RedrawTroopSprite( const Unit & );
-        void RedrawTroopCount( const Unit & );
+        void RedrawTroopCount( const Unit & unit );
 
         void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = NULL );
         void RedrawActionArrowSpell( const Unit & );
@@ -256,6 +256,7 @@ namespace Battle
         void RedrawActionColdRingSpell( s32, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell( const TargetsInfo & );
+        void RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength );
         void RedrawActionLightningBoltSpell( Unit & );
@@ -321,7 +322,8 @@ namespace Battle
         int catapult_frame;
 
         uint32_t _colorCycle;
-        std::vector<uint8_t> _creaturePalette;
+        std::vector<uint8_t> _customPalette;
+        bool _cycleBattlefield; // determines if new color cycle happened and we have to update cover
         uint8_t _contourColor;
         bool _brightLandType; // used to determin current monster contour cycling colors
         uint32_t _contourCycle;
@@ -330,7 +332,6 @@ namespace Battle
         const Unit * _movingUnit;
         const Unit * _flyingUnit;
         const Sprite * b_current_sprite;
-        u32 b_current_alpha;
         Point _movingPos;
         Point _flyingPos;
 

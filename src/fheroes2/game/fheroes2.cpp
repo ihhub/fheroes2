@@ -32,6 +32,7 @@
 #include "engine.h"
 #include "error.h"
 #include "game.h"
+//#include "game_video.h"
 #include "gamedefs.h"
 #include "images_pack.h"
 #include "settings.h"
@@ -128,7 +129,7 @@ int main( int argc, char ** argv )
             SetLangEnvPath( conf );
 
             if ( Mixer::isValid() ) {
-                Mixer::SetChannels( 8 );
+                Mixer::SetChannels( 16 );
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
                 if ( conf.Music() ) {
@@ -182,6 +183,8 @@ int main( int argc, char ** argv )
 
             // goto main menu
             int rs = ( test ? Game::TESTING : Game::MAINMENU );
+
+            // Video::ShowVideo( "data/nwclogo.smk", false );
 
             while ( rs != Game::QUITGAME ) {
                 switch ( rs ) {

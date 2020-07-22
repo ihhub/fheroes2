@@ -35,7 +35,6 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "m82.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "world.h"
 
@@ -149,11 +148,7 @@ void Interface::Basic::EventContinueMovement( void )
 void Interface::Basic::EventKingdomInfo( void )
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-
-    if ( Settings::Get().QVGA() )
-        PocketPC::KingdomOverviewDialog( myKingdom );
-    else
-        myKingdom.OverviewDialog();
+    myKingdom.OverviewDialog();
 
     iconsPanel.SetRedraw();
 }

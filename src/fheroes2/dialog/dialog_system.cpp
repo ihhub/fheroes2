@@ -76,19 +76,21 @@ int Dialog::SystemOptions( void )
 
     LocalEvent & le = LocalEvent::Get();
 
-    ButtonGroups btnGroups( area, Dialog::OK );
-    btnGroups.Draw();
+    Button buttonOkay( area.x + 96, area.y + 350, ICN::SPANBTN, 0, 1 );
+    buttonOkay.Draw();
 
     cursor.Show();
     display.Flip();
 
-    int btnres = Dialog::ZERO;
     int result = 0;
     bool redraw = false;
 
     // dialog menu loop
-    while ( btnres == Dialog::ZERO && le.HandleEvents() ) {
-        btnres = btnGroups.QueueEventProcessing();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonOkay ) ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
+        if ( le.MouseClickLeft( buttonOkay ) ) {
+            break;
+        }
 
         // set music volume
         if ( conf.Music() && le.MouseClickLeft( rect1 ) ) {
@@ -105,7 +107,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set music type
-        if ( le.MouseClickLeft( rect3 ) ) {
+        if ( !conf.MusicExt() && le.MouseClickLeft( rect3 ) ) {
             int type = conf.MusicType() + 1;
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.PriceLoyaltyVersion() )
@@ -160,6 +162,7 @@ int Dialog::SystemOptions( void )
             cursor.Hide();
             back2.Blit( area, display );
             DrawSystemInfo( rects );
+            buttonOkay.Draw();
             cursor.Show();
             display.Flip();
             redraw = false;

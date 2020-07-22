@@ -43,28 +43,28 @@ namespace MP2
         u16 tileIndex; // tile (ocean, grass, snow, swamp, lava, desert, dirt, wasteland, beach)
         u8 objectName1; // level 1.0
         u8 indexName1; // index level 1.0 or 0xFF
-        u8 quantity1; // count
-        u8 quantity2; // count
+        u8 quantity1; // Bitfield, first 3 bits are flags, rest is used as quantity
+        u8 quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
         u8 objectName2; // level 2.0
         u8 indexName2; // index level 2.0 or 0xFF
         u8 shape; // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         u8 generalObject; // zero or object
         u16 indexAddon; // zero or index addons_t
-        u32 uniqNumber1; // level 1.0
-        u32 uniqNumber2; // level 2.0
+        u32 uniqNumber1; // Map editor variable: object link
+        u32 uniqNumber2; // Map editor variable: overlay link
     };
 
     // origin mp2 addons tile
     struct mp2addon_t
     {
         u16 indexAddon; // zero or next addons_t
-        u8 objectNameN1; // level 1.N
+        u8 objectNameN1; // level 1.N. Last bit indicates if object is animated. Second-last controls overlay
         u8 indexNameN1; // level 1.N or 0xFF
-        u8 quantityN; //
+        u8 quantityN; // Bitfield containing metadata
         u8 objectNameN2; // level 2.N
         u8 indexNameN2; // level 1.N or 0xFF
-        u32 uniqNumberN1; // level 1.N
-        u32 uniqNumberN2; // level 2.N
+        u32 uniqNumberN1; // Map editor variable: object link
+        u32 uniqNumberN2; // Map editor variable: overlay link
     };
 
     // origin mp2 castle
@@ -260,12 +260,12 @@ namespace MP2
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-
+    // First bit indicates if you can interact with object
     enum
     {
         OBJ_ZERO = 0x00,
-        OBJ_UNKNW_02 = 0x02,
         OBJN_ALCHEMYLAB = 0x01,
+        OBJ_UNKNW_02 = 0x02,
         OBJ_UNKNW_03 = 0x03,
         OBJN_SKELETON = 0x04,
         OBJN_DAEMONCAVE = 0x05,

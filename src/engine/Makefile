@@ -3,6 +3,7 @@
 # libSDL C++ wrapper engine
 
 TARGET	:= libengine
+CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
 
 all: $(TARGET).a
 

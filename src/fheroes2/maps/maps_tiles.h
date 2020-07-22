@@ -175,14 +175,13 @@ namespace Maps
         bool isStream( void ) const;
         bool GoodForUltimateArtifact( void ) const;
 
-        TilesAddon * FindAddonICN1( int icn1 );
-        TilesAddon * FindAddonICN2( int icn2 );
+        TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
-        TilesAddon * FindObject( int );
-        const TilesAddon * FindObjectConst( int ) const;
+        TilesAddon * FindObject( int objectID );
+        const TilesAddon * FindObjectConst( int objectID ) const;
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
         void SetObject( int object );
@@ -257,6 +256,7 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static std::pair<int, int> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles &, const Monster &, u32 );
         static void UpdateAbandoneMineSprite( Tiles & );
         static void FixedPreload( Tiles & );

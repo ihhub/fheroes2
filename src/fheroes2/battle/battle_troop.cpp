@@ -133,6 +133,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , blindanswer( false )
     , animation( id )
     , idleTimer( animation.getIdleDelay() )
+    , customAlphaMask( 255 )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -282,6 +283,11 @@ bool Battle::Unit::isUID( u32 v ) const
 u32 Battle::Unit::GetUID( void ) const
 {
     return uid;
+}
+
+Battle::Unit * Battle::Unit::GetMirror()
+{
+    return mirror;
 }
 
 void Battle::Unit::SetMirror( Unit * ptr )
@@ -454,8 +460,11 @@ void Battle::Unit::NewTurn( void )
 
         // cancel mirror image
         if ( mode == CAP_MIRROROWNER && mirror ) {
-            if ( Arena::GetInterface() )
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( *mirror );
+            if ( Arena::GetInterface() ) {
+                std::vector<Unit *> images;
+                images.push_back( mirror );
+                Arena::GetInterface()->RedrawActionRemoveMirrorImage( images );
+            }
 
             mirror->SetCount( 0 );
             mirror = NULL;
@@ -594,14 +603,10 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
     if ( dmg && GetCount() ) {
         u32 killed = HowManyWillKilled( dmg );
 
-        // kill mirror image (slave)
+        // mirror image dies if recieves any damage
         if ( Modes( CAP_MIRRORIMAGE ) ) {
-            if ( Arena::GetInterface() )
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( *this );
-            mirror->ResetModes( CAP_MIRROROWNER );
             dmg = hp;
             killed = GetCount();
-            mirror = NULL;
         }
 
         DEBUG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed );
@@ -616,9 +621,6 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
         }
         hp -= ( dmg >= hp ? hp : dmg );
 
-        if ( !isValid() )
-            PostKilledAction();
-
         return killed;
     }
 
@@ -629,14 +631,17 @@ void Battle::Unit::PostKilledAction( void )
 {
     // kill mirror image (master)
     if ( Modes( CAP_MIRROROWNER ) ) {
-        if ( Arena::GetInterface() )
-            Arena::GetInterface()->RedrawActionRemoveMirrorImage( *mirror );
         modes = 0;
         mirror->hp = 0;
         mirror->SetCount( 0 );
         mirror->mirror = NULL;
         mirror = NULL;
         ResetModes( CAP_MIRROROWNER );
+    }
+    // kill mirror image (slave)
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        mirror->ResetModes( CAP_MIRROROWNER );
+        mirror = NULL;
     }
 
     ResetModes( IS_MAGIC );
@@ -1658,6 +1663,16 @@ void Battle::Unit::SetDeathAnim()
     animation.setToLastFrame();
 }
 
+void Battle::Unit::SetCustomAlpha( uint32_t alpha )
+{
+    customAlphaMask = alpha;
+}
+
+uint32_t Battle::Unit::GetCustomAlpha() const
+{
+    return customAlphaMask;
+}
+
 int Battle::Unit::GetFrameCount( void ) const
 {
     return animation.animationLength();
@@ -1680,8 +1695,6 @@ bool Battle::Unit::isFinishAnimFrame( void ) const
 
 AnimationSequence Battle::Unit::GetFrameState( int state ) const
 {
-    const monstersprite_t & msi = GetMonsterSprite();
-
     // Can't return a reference here - it will be destroyed
     return animation.getAnimationSequence( state );
 }

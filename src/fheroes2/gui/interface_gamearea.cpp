@@ -177,12 +177,30 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
     // remove animation
     Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
     if ( removalInfo.object != MP2::OBJ_ZERO ) {
-        Surface surface( removalInfo.surfaceSize, true );
-        const Sprite & sprite = AGG::GetICN( MP2::GetICNObject( removalInfo.object ), removalInfo.index );
-        sprite.Blit( sprite.x(), sprite.y(), surface );
-        surface.SetAlphaMod( removalInfo.alpha, false );
         const Point mp = Maps::GetPoint( removalInfo.tile );
-        BlitOnTile( dst, surface, 0, 0, mp );
+        const int icn = MP2::GetICNObject( removalInfo.object );
+
+        if ( icn == ICN::MONS32 ) {
+            const std::pair<int, int> monsterIndicies = Maps::Tiles::GetMonsterSpriteIndices( world.GetTiles( removalInfo.tile ), removalInfo.index );
+
+            // base monster sprite
+            if ( monsterIndicies.first >= 0 ) {
+                Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
+                sprite.SetAlphaMod( removalInfo.alpha, false );
+                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
+            }
+            // animated monster part
+            if ( monsterIndicies.second >= 0 ) {
+                Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
+                sprite.SetAlphaMod( removalInfo.alpha, false );
+                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
+            }
+        }
+        else {
+            Sprite sprite = AGG::GetICN( icn, removalInfo.index );
+            sprite.SetAlphaMod( removalInfo.alpha, false );
+            BlitOnTile( dst, sprite, 0, 0, mp );
+        }
     }
 
     // ext object
@@ -240,30 +258,33 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
     const Heroes * hero = flag & LEVEL_HEROES ? GetFocusHeroes() : NULL;
 
     if ( hero && hero->GetPath().isShow() ) {
-        s32 green = hero->GetPath().GetAllowStep();
+        const Route::Path & path = hero->GetPath();
+        s32 green = path.GetAllowStep();
 
+        const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
         const bool skipfirst = hero->isEnableMove() && 45 > hero->GetSpriteIndex() && 2 < ( hero->GetSpriteIndex() % 9 );
 
-        Route::Path::const_iterator it1 = hero->GetPath().begin();
-        Route::Path::const_iterator it2 = hero->GetPath().end();
-        Route::Path::const_iterator it3 = it1;
+        Route::Path::const_iterator pathEnd = path.end();
+        Route::Path::const_iterator currentStep = path.begin();
+        Route::Path::const_iterator nextStep = currentStep;
 
-        for ( ; it1 != it2; ++it1 ) {
-            const s32 & from = ( *it1 ).GetIndex();
+        for ( ; currentStep != pathEnd; ++currentStep ) {
+            const s32 & from = ( *currentStep ).GetIndex();
             const Point mp = Maps::GetPoint( from );
 
-            ++it3;
+            ++nextStep;
             --green;
 
             // is visible
-            if ( ( tileROI & mp ) &&
-                 // check skip first?
-                 !( it1 == hero->GetPath().begin() && skipfirst ) ) {
-                const u32 index
-                    = ( it3 == it2
-                            ? 0
-                            : Route::Path::GetIndexSprite( ( *it1 ).GetDirection(), ( *it3 ).GetDirection(),
-                                                           Maps::Ground::GetPenalty( from, Direction::CENTER, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) ) ) );
+            if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
+                uint32_t index = 0;
+                if ( pathEnd != nextStep ) {
+                    const uint32_t penaltyTo = Maps::Ground::GetPenalty( currentStep->GetFrom(), currentStep->GetDirection(), pathfinding, false );
+                    const uint32_t penaltyReverse
+                        = Maps::Ground::GetPenalty( currentStep->GetIndex(), Direction::Reflect( currentStep->GetDirection() ), pathfinding, false );
+
+                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), std::min( penaltyTo, penaltyReverse ) );
+                }
 
                 const Sprite & sprite = AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
                 BlitOnTile( dst, sprite, sprite.x() - 14, sprite.y(), mp );
@@ -577,7 +598,7 @@ Point Interface::GameArea::_getStartTileId() const
 
 void Interface::GameArea::_setCenterToTile( const Point & tile )
 {
-    _setCenter( Point( tile.x * TILEWIDTH - TILEWIDTH / 2, tile.y * TILEWIDTH - TILEWIDTH / 2 ) );
+    _setCenter( Point( tile.x * TILEWIDTH + TILEWIDTH / 2, tile.y * TILEWIDTH + TILEWIDTH / 2 ) );
 }
 
 void Interface::GameArea::_setCenter( const Point & point )
