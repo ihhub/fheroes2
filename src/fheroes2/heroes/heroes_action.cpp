@@ -285,7 +285,7 @@ void AnimationRemoveObject( Maps::Tiles & tile )
     if ( NULL == addon )
         return;
 
-    Game::RemoveAnimation::Set( Game::RemoveAnimation::Info( addon->object, addon->index, tile.GetIndex() ) );
+    Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( addon->object, addon->index, tile.GetIndex() ) );
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
