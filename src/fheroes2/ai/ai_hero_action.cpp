@@ -891,14 +891,11 @@ namespace AI
             }
         }
 
-        Interface::Basic & I = Interface::Basic::Get();
-        Interface::GameArea & gameArea = I.GetGameArea();
-
         hero.FadeOut();
         hero.Move2Dest( index_to, true );
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
-            gameArea.SetCenter( hero.GetCenter() );
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
         hero.ActionNewPosition();
@@ -925,7 +922,10 @@ namespace AI
             troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
 
         hero.GetPath().Reset();
-        hero.FadeIn();
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeIn();
+        }
         hero.ActionNewPosition();
 
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );

@@ -636,25 +636,22 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
     MapsIndexes result;
 
     if ( MP2::OBJ_STONELIGHTS == GetTiles( center ).GetObject( false ) ) {
-        result = Maps::GetObjectPositions( MP2::OBJ_STONELIGHTS, true );
+        MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELIGHTS, true );
 
-        if ( 2 > result.size() ) {
+        if ( 2 > allTeleporters.size() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is empty" );
-            result.clear();
         }
         else {
-            MapsIndexes::iterator itend = result.end();
+            const Maps::Tiles & entrance = GetTiles( center );
+            uint8_t teleportType = entrance.FindObjectConst( MP2::OBJ_STONELIGHTS )->index;
 
-            // remove if not type
-            itend = std::remove_if( result.begin(), itend, std::not1( std::bind2nd( std::ptr_fun( &TeleportCheckType ), GetTiles( center ).QuantityTeleportType() ) ) );
+            for ( MapsIndexes::iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
+                const Maps::Tiles & tile = GetTiles( *it );
 
-            // remove if index
-            itend = std::remove( result.begin(), itend, center );
-
-            // remove if not ground
-            itend = std::remove_if( result.begin(), itend, std::not1( std::bind2nd( std::ptr_fun( &TeleportCheckGround ), GetTiles( center ).isWater() ) ) );
-
-            result.resize( std::distance( result.begin(), itend ) );
+                if ( *it != center && tile.FindObjectConst( MP2::OBJ_STONELIGHTS )->index == teleportType && tile.isWater() == entrance.isWater() ) {
+                    result.push_back( *it );
+                }
+            }
         }
     }
 
