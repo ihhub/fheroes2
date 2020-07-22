@@ -1468,6 +1468,9 @@ namespace AI
         hero.Move2Dest( dst_index );
         hero.SetMapsObject( MP2::OBJ_ZERO );
         hero.SetShipMaster( true );
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+        }
         hero.GetPath().Reset();
 
         AI::Get().HeroesClearTask( hero );
@@ -1488,6 +1491,9 @@ namespace AI
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
         hero.FadeIn();
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+        }
 
         AI::Get().HeroesClearTask( hero );
 
