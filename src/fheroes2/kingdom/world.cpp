@@ -621,16 +621,6 @@ const std::string & World::GetRumors( void )
     return *Rand::Get( vec_rumors );
 }
 
-bool TeleportCheckType( s32 index, int type )
-{
-    return world.GetTiles( index ).QuantityTeleportType() == type;
-}
-
-bool TeleportCheckGround( s32 index, bool water )
-{
-    return world.GetTiles( index ).isWater() == water;
-}
-
 MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 {
     MapsIndexes result;

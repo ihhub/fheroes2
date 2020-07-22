@@ -358,16 +358,6 @@ int Maps::Tiles::QuantityColor( void ) const
     }
 }
 
-int Maps::Tiles::QuantityTeleportType( void ) const
-{
-    return quantity1;
-}
-
-void Maps::Tiles::QuantitySetTeleportType( int type )
-{
-    quantity1 = type;
-}
-
 Monster Maps::Tiles::QuantityMonster( void ) const
 {
     switch ( GetObject( false ) ) {
