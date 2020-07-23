@@ -635,8 +635,8 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 {
     MapsIndexes result;
 
-    if ( MP2::OBJ_STONELIGHTS == GetTiles( center ).GetObject( false ) ) {
-        result = Maps::GetObjectPositions( MP2::OBJ_STONELIGHTS, true );
+    if ( MP2::OBJ_STONELITHS == GetTiles( center ).GetObject( false ) ) {
+        result = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
 
         if ( 2 > result.size() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is empty" );

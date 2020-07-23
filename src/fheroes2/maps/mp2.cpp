@@ -375,8 +375,8 @@ const char * MP2::StringObject( int object )
     case OBJN_DWARFCOTT:
     case OBJ_DWARFCOTT:
         return _( "Dwarf Cottage" );
-    case OBJN_STONELIGHTS:
-    case OBJ_STONELIGHTS:
+    case OBJN_STONELITHS:
+    case OBJ_STONELITHS:
         return _( "Stone Liths" ); // https://sourceforge.net/projects/fheroes2/forums/forum/335991/topic/4605429
     case OBJN_MAGICWELL:
     case OBJ_MAGICWELL:
@@ -853,7 +853,7 @@ bool MP2::isGroundObject( int obj )
     case OBJ_ORACLE:
     case OBJ_SHIPWRECK:
     case OBJ_DESERTTENT:
-    case OBJ_STONELIGHTS:
+    case OBJ_STONELITHS:
     case OBJ_WAGONCAMP:
     case OBJ_WINDMILL:
     case OBJ_ARTIFACT:
@@ -999,7 +999,7 @@ bool MP2::isPickupObject( int obj )
 bool MP2::isMoveObject( int obj )
 {
     switch ( obj ) {
-    case OBJ_STONELIGHTS:
+    case OBJ_STONELITHS:
     case OBJ_WHIRLPOOL:
         return true;
 
@@ -1093,7 +1093,7 @@ int MP2::GetObjectDirect( int obj )
     case OBJ_MAGICWELL:
     case OBJ_OBSERVATIONTOWER:
     case OBJ_PEASANTHUT:
-    case OBJ_STONELIGHTS:
+    case OBJ_STONELITHS:
     case OBJ_STANDINGSTONES:
     case OBJ_GOBLINHUT:
     case OBJ_SHRINE1:

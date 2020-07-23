@@ -507,7 +507,7 @@ void Heroes::Action( s32 dst_index )
             break;
 
             // teleports
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
             ActionToTeleports( *this, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
@@ -786,7 +786,7 @@ void ActionToHeroes( Heroes & hero, u32 obj, s32 dst_index )
         }
 
         bool disable_auto_move
-            = hero.isShipMaster() || other_hero->isShipMaster() || other_hero_castle || world.GetTiles( hero.GetIndex() ).GetObject( false ) == MP2::OBJ_STONELIGHTS;
+            = hero.isShipMaster() || other_hero->isShipMaster() || other_hero_castle || world.GetTiles( hero.GetIndex() ).GetObject( false ) == MP2::OBJ_STONELITHS;
         DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
         // new battle
@@ -1899,7 +1899,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
     if ( other_hero ) {
-        ActionToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
+        ActionToHeroes( hero, MP2::OBJ_STONELITHS, index_to );
 
         // lose battle
         if ( hero.isFreeman() ) {

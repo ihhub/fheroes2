@@ -227,7 +227,7 @@ namespace AI
 
         if ( index < 0 ) {
             // check teleports
-            if ( MP2::OBJ_STONELIGHTS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) ) {
+            if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) ) {
                 AI::HeroesAction( hero, hero.GetIndex() );
             }
             else {

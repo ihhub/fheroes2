@@ -373,7 +373,7 @@ void Interface::Basic::EventDefaultAction( void )
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) && ( !MP2::isMoveObject( hero->GetMapsObject() ) || hero->CanMove() ) ) {
             hero->Action( hero->GetIndex() );
-            if ( MP2::OBJ_STONELIGHTS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
+            if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
                 SetRedraw( REDRAW_HEROES );
             SetRedraw( REDRAW_GAMEAREA );
         }

@@ -1423,7 +1423,7 @@ void World::PostLoad( void )
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_EVENT:
         case MP2::OBJ_BOAT:

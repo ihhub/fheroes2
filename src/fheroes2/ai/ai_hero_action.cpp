@@ -271,7 +271,7 @@ namespace AI
             break;
 
             // teleports
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
             AIToTeleports( hero, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
@@ -450,7 +450,7 @@ namespace AI
             }
 
             // bool disable_auto_move = hero.isShipMaster() || other_hero->isShipMaster() ||
-            //                    other_hero_castle || world.GetTiles(hero.GetIndex()).GetObject(false) == MP2::OBJ_STONELIGHTS;
+            //                    other_hero_castle || world.GetTiles(hero.GetIndex()).GetObject(false) == MP2::OBJ_STONELITHS;
 
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
@@ -876,7 +876,7 @@ namespace AI
             const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
 
             if ( other_hero ) {
-                AIToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
+                AIToHeroes( hero, MP2::OBJ_STONELITHS, index_to );
 
                 // lose battle
                 if ( hero.isFreeman() )
@@ -1837,7 +1837,7 @@ namespace AI
         }
 
         case MP2::OBJ_BOAT:
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
             // check later
             return true;
 
