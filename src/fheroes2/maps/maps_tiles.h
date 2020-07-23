@@ -65,7 +65,7 @@ namespace Maps
 
         std::string String( int level ) const;
 
-        static bool hasColorCycling( const TilesAddon & addon );
+        static bool hasColorCycling( uint8_t tileset, uint8_t index );
         static bool isStream( const TilesAddon & );
         static bool isRoad( const TilesAddon & );
 

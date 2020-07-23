@@ -460,57 +460,57 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     return false;
 }
 
-bool Maps::TilesAddon::hasColorCycling( const TilesAddon & addon )
+bool Maps::TilesAddon::hasColorCycling( uint8_t tileset, uint8_t index )
 {
-    switch ( MP2::GetICNObject( addon.object ) ) {
+    switch ( MP2::GetICNObject( tileset ) ) {
     case ICN::OBJNDIRT:
         // lakes and dirt oracle
-        if ( ( addon.index > 23 && addon.index < 59 ) || addon.index == 197 || addon.index == 198 )
+        if ( ( index > 23 && index < 59 ) || index == 197 || index == 198 )
             return true;
         break;
     case ICN::OBJNGRAS:
         // lake
-        if ( addon.index > 54 && addon.index < 76 )
+        if ( index > 54 && index < 76 )
             return true;
         break;
     case ICN::OBJNGRA2:
         // oracle
-        if ( addon.index == 125 || addon.index == 126 )
+        if ( index == 125 || index == 126 )
             return true;
         break;
     case ICN::OBJNSWMP:
         // swamp water
-        if ( addon.index > 86 && addon.index < 168 )
+        if ( index > 86 && index < 168 )
             return true;
         break;
     case ICN::OBJNCRCK:
         // wasteland lakes
-        if ( ( addon.index > 216 && addon.index < 221 ) || addon.index == 3 || addon.index == 4 )
+        if ( ( index > 216 && index < 221 ) || index == 3 || index == 4 )
             return true;
         break;
     case ICN::OBJNLAVA:
         // volcano, lava lakes, dungeon
-        if ( ( addon.index > 1 && addon.index < 78 ) || addon.index == 111 || addon.index == 112 )
+        if ( ( index > 1 && index < 78 ) || index == 111 || index == 112 )
             return true;
         break;
     case ICN::OBJNLAV2:
         // volcano
-        if ( ( addon.index > 21 && addon.index < 28 ) || addon.index == 1 )
+        if ( ( index > 21 && index < 28 ) || index == 1 )
             return true;
         break;
     case ICN::OBJNDSRT:
         // pyramid and oasis
-        if ( ( addon.index > 77 && addon.index < 83 ) || addon.index == 108 || addon.index == 109 )
+        if ( ( index > 77 && index < 83 ) || index == 108 || index == 109 )
             return true;
         break;
     case ICN::OBJNMUL2:
         // stream delta, fountain and teleporters
-        if ( addon.index == 116 || addon.index == 119 || addon.index == 120 || addon.index == 122 || addon.index < 16 )
+        if ( index == 116 || index == 119 || index == 120 || index == 122 || index < 16 )
             return true;
         break;
     case ICN::OBJNRSRC:
         // treasure chest
-        if ( addon.index == 19 )
+        if ( index == 19 )
             return true;
         break;
     case ICN::MTNLAVA: // Lava mountains, mines and additional volcanoes
@@ -1116,6 +1116,9 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     quantity3 = 0;
     fog_colors = Color::ALL;
 
+    objectTileset = mp2.objectName1;
+    objectIndex = mp2.indexName1;
+
     SetTile( mp2.tileIndex, mp2.shape );
     SetIndex( index );
     SetObject( mp2.mapObject );
@@ -1123,7 +1126,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     addons_level1.clear();
     addons_level2.clear();
 
-    AddonsPushLevel1( mp2 );
+    // AddonsPushLevel1( mp2 );
     AddonsPushLevel2( mp2 );
 }
 
@@ -1553,7 +1556,7 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
             const int icn = MP2::GetICNObject( ( *it ).object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                RedrawMapObject( dst, icn, index, mp, TilesAddon::hasColorCycling( *it ) );
+                RedrawMapObject( dst, icn, index, mp, TilesAddon::hasColorCycling( it->object, it->index ) );
 
                 // possible animation
                 if ( u32 anim_index = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ) {
@@ -1603,8 +1606,21 @@ void Maps::Tiles::RedrawObjects( Surface & dst ) const
         RedrawMonster( dst );
         break;
     //
-    default:
-        break;
+    default: {
+        const int icn = MP2::GetICNObject( objectTileset );
+
+        if ( ICN::UNKNOWN != icn ) {
+            const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+            const Point mp = Maps::GetPoint( GetIndex() );
+            RedrawMapObject( dst, icn, objectIndex, mp, TilesAddon::hasColorCycling( objectTileset, objectIndex ) );
+
+            // possible animation
+            if ( u32 anim_index = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 ) ) {
+                const Sprite & animationSprite = AGG::GetICN( icn, anim_index );
+                area.BlitOnTile( dst, animationSprite, mp );
+            }
+        }
+    } break;
     }
 }
 
@@ -1795,6 +1811,11 @@ std::string Maps::Tiles::String( void ) const
     os << "----------------:--------" << std::endl
        << "maps index      : " << GetIndex() << ", " << GetString( GetCenter() ) << std::endl
        << "tile index      : " << TileSpriteIndex() << std::endl
+       << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
+       << "object road flag: " << static_cast<int>( ( objectTileset >> 1 ) & 1 ) << std::endl
+       << "object anim flag: " << static_cast<int>( objectTileset & 1 ) << std::endl
+       << "tileset         : " << static_cast<int>( objectTileset >> 2 ) << std::endl
+       << "object index    : " << static_cast<int>( objectIndex ) << std::endl
        << "ground          : " << Ground::String( GetGround() );
     if ( isRoad() ) {
         Addons::const_iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &TilesAddon::isRoad ), DIRECTION_ALL ) );
@@ -1811,8 +1832,6 @@ std::string Maps::Tiles::String( void ) const
         os << ", disable(" << static_cast<int>( passable_disable ) << ")";
 #endif
     os << std::endl
-       << "mp2 object      : "
-       << "0x" << std::setw( 2 ) << std::setfill( '0' ) << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
        << "quantity 3      : " << static_cast<int>( GetQuantity3() ) << std::endl;
