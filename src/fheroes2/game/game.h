@@ -254,18 +254,19 @@ namespace Game
     void OpenCastleDialog( Castle & );
     std::string GetEncodeString( const std::string & );
 
-    namespace RemoveAnimation
+    namespace ObjectFadeAnimation
     {
         struct Info
         {
             Info();
-            Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u );
+            Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u, bool fadeOut = true );
 
             u8 object;
             u8 index;
             s32 tile;
             u32 alpha;
             Size surfaceSize;
+            bool isFadeOut;
         };
 
         void Set( const Info & info );
