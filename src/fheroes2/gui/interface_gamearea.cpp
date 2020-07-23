@@ -204,7 +204,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
         else {
             Sprite sprite = AGG::GetICN( icn, fadeInfo.index );
             sprite.SetAlphaMod( fadeInfo.alpha, false );
-            BlitOnTile( dst, sprite, 0, 0, mp );
+            BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
         }
     }
 
