@@ -329,10 +329,10 @@ void World::NewMaps( u32 sw, u32 sh )
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.indexName2 = 0xff; // index sprite level 2
         mp2tile.shape = Rand::Get( 0, 3 ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.generalObject = MP2::OBJ_ZERO;
+        mp2tile.mapObject = MP2::OBJ_ZERO;
         mp2tile.indexAddon = 0;
-        mp2tile.uniqNumber1 = 0;
-        mp2tile.uniqNumber2 = 0;
+        mp2tile.editorObjectLink = 0;
+        mp2tile.editorObjectOverlay = 0;
 
         ( *it ).Init( std::distance( vec_tiles.begin(), it ), mp2tile );
     }

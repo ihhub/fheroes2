@@ -1118,7 +1118,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 
     SetTile( mp2.tileIndex, mp2.shape );
     SetIndex( index );
-    SetObject( mp2.generalObject );
+    SetObject( mp2.mapObject );
 
     addons_level1.clear();
     addons_level2.clear();
@@ -1396,13 +1396,13 @@ int Maps::Tiles::GetPassable( void ) const
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName1 && mt.indexName1 < 0xFF )
-        AddonsPushLevel1( TilesAddon( 0, mt.uniqNumber1, mt.objectName1, mt.indexName1 ) );
+        AddonsPushLevel1( TilesAddon( 0, mt.editorObjectLink, mt.objectName1, mt.indexName1 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN1 && ma.indexNameN1 < 0xFF )
-        AddonsPushLevel1( TilesAddon( ma.quantityN, ma.uniqNumberN1, ma.objectNameN1, ma.indexNameN1 ) );
+        AddonsPushLevel1( TilesAddon( ma.quantityN, ma.editorObjectLink, ma.objectNameN1, ma.indexNameN1 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
@@ -1416,13 +1416,13 @@ void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName2 && mt.indexName2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( 0, mt.uniqNumber2, mt.objectName2, mt.indexName2 ) );
+        AddonsPushLevel2( TilesAddon( 0, mt.editorObjectOverlay, mt.objectName2, mt.indexName2 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN2 && ma.indexNameN2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.uniqNumberN2, ma.objectNameN2, ma.indexNameN2 ) );
+        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.indexAddon, ma.objectNameN2, ma.indexNameN2 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const TilesAddon & ta )

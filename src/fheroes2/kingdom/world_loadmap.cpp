@@ -1009,8 +1009,8 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2addon.objectNameN2 = fs.get();
         mp2addon.indexNameN2 = fs.get();
 
-        mp2addon.uniqNumberN1 = fs.getLE32();
-        mp2addon.uniqNumberN2 = fs.getLE32();
+        mp2addon.editorObjectLink = fs.getLE32();
+        mp2addon.editorObjectOverlay = fs.getLE32();
     }
 
     const u32 endof_addons = fs.tell();
@@ -1036,9 +1036,9 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2tile.objectName2 = fs.get();
         mp2tile.indexName2 = fs.get();
         mp2tile.shape = fs.get();
-        mp2tile.generalObject = fs.get();
+        mp2tile.mapObject = fs.get();
 
-        switch ( mp2tile.generalObject ) {
+        switch ( mp2tile.mapObject ) {
         case MP2::OBJ_RNDTOWN:
         case MP2::OBJ_RNDCASTLE:
         case MP2::OBJ_CASTLE:
@@ -1057,8 +1057,8 @@ bool World::LoadMapMP2( const std::string & filename )
         // offset first addon
         size_t offsetAddonsBlock = fs.getLE16();
 
-        mp2tile.uniqNumber1 = fs.getLE32();
-        mp2tile.uniqNumber2 = fs.getLE32();
+        mp2tile.editorObjectLink = fs.getLE32();
+        mp2tile.editorObjectOverlay = fs.getLE32();
 
         tile.Init( index, mp2tile );
 

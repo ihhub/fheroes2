@@ -48,10 +48,10 @@ namespace MP2
         u8 objectName2; // level 2.0
         u8 indexName2; // index level 2.0 or 0xFF
         u8 shape; // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        u8 generalObject; // zero or object
+        u8 mapObject; // zero or object
         u16 indexAddon; // zero or index addons_t
-        u32 uniqNumber1; // Map editor variable: object link
-        u32 uniqNumber2; // Map editor variable: overlay link
+        u32 editorObjectLink; // Map editor variable: object link
+        u32 editorObjectOverlay; // Map editor variable: overlay link
     };
 
     // origin mp2 addons tile
@@ -63,8 +63,8 @@ namespace MP2
         u8 quantityN; // Bitfield containing metadata
         u8 objectNameN2; // level 2.N
         u8 indexNameN2; // level 1.N or 0xFF
-        u32 uniqNumberN1; // Map editor variable: object link
-        u32 uniqNumberN2; // Map editor variable: overlay link
+        u32 editorObjectLink; // Map editor variable: object link
+        u32 editorObjectOverlay; // Map editor variable: overlay link
     };
 
     // origin mp2 castle

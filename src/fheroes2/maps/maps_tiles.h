@@ -302,8 +302,10 @@ namespace Maps
         u32 maps_index;
         u16 pack_sprite_index;
 
-        u16 tile_passable;
+        uint8_t objectTileset;
+        uint8_t objectIndex;
         u8 mp2_object;
+        u16 tile_passable;
         u8 fog_colors;
 
         u8 quantity1;
