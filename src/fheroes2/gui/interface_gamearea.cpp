@@ -196,6 +196,11 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
             }
         }
+        else if ( fadeInfo.object == MP2::OBJ_BOAT ) {
+            Sprite sprite = AGG::GetICN( ICN::BOAT32, fadeInfo.index );
+            sprite.SetAlphaMod( fadeInfo.alpha, false );
+            BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH, mp );
+        }
         else {
             Sprite sprite = AGG::GetICN( icn, fadeInfo.index );
             sprite.SetAlphaMod( fadeInfo.alpha, false );
