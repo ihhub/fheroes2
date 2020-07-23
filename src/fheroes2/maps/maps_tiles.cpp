@@ -536,6 +536,11 @@ bool Maps::TilesAddon::isRoad( const TilesAddon & ta )
     return ICN::ROAD == MP2::GetICNObject( ta.object );
 }
 
+bool Maps::TilesAddon::hasSpriteAnimation() const
+{
+    return object & 1;
+}
+
 bool Maps::TilesAddon::isWaterResource( const TilesAddon & ta )
 {
     return ( ICN::OBJNWATR == MP2::GetICNObject( ta.object )
@@ -1106,7 +1111,6 @@ Maps::Tiles::Tiles()
     , quantity2( 0 )
     , quantity3( 0 )
     , road( false )
-    , hasSpriteAnimation( false )
 #ifdef WITH_DEBUG
     , passable_disable( 0 )
 #endif
@@ -1129,7 +1133,6 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 
     // those bitfields are set by map editor regardless if map object is there
     road = ( mp2.objectName1 >> 1 ) & 1;
-    hasSpriteAnimation = mp2.objectName1 & 1;
 
     if ( mp2.mapObject == MP2::OBJ_ZERO ) {
         AddonsPushLevel1( mp2 );
@@ -1436,7 +1439,7 @@ void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN2 && ma.indexNameN2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.indexAddon, ma.objectNameN2, ma.indexNameN2 ) );
+        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.editorObjectOverlay, ma.objectNameN2, ma.indexNameN2 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const TilesAddon & ta )
@@ -1825,7 +1828,7 @@ std::string Maps::Tiles::String( void ) const
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset >> 2 ) << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << std::endl
-       << "object animated : " << static_cast<int>( hasSpriteAnimation ) << std::endl
+       << "object animated : " << static_cast<int>( hasSpriteAnimation() ) << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << road << ")" << std::endl
        << "passable        : " << ( tile_passable ? Direction::String( tile_passable ) : "false" );
 #ifdef WITH_DEBUG
@@ -2003,6 +2006,16 @@ bool Maps::Tiles::isRoad() const
 bool Maps::Tiles::isStream( void ) const
 {
     return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isStream );
+}
+
+bool Maps::Tiles::hasSpriteAnimation() const
+{
+    return objectTileset & 1;
+}
+
+bool Maps::Tiles::isObject( int obj ) const
+{
+    return obj == mp2_object;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindObject( int objectID )

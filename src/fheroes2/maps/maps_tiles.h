@@ -62,6 +62,7 @@ namespace Maps
         bool isUniq( u32 ) const;
         bool isRoad( int ) const;
         bool isICN( int ) const;
+        bool hasSpriteAnimation() const;
 
         std::string String( int level ) const;
 
@@ -168,10 +169,8 @@ namespace Maps
         bool isPassable( const Heroes & ) const;
         bool isPassable( const Heroes *, int direct, bool skipfog ) const;
         bool isRoad() const;
-        bool isObject( int obj ) const
-        {
-            return obj == mp2_object;
-        };
+        bool hasSpriteAnimation() const;
+        bool isObject( int obj ) const;
         bool isStream( void ) const;
         bool GoodForUltimateArtifact( void ) const;
 
@@ -313,7 +312,6 @@ namespace Maps
         u8 quantity3;
 
         bool road;
-        bool hasSpriteAnimation;
 
 #ifdef WITH_DEBUG
         u8 passable_disable;
