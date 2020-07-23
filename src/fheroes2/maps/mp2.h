@@ -536,7 +536,7 @@ namespace MP2
         OBJ_WATERALTAR = 0xFF
     };
 
-    int GetICNObject( int type );
+    int GetICNObject( int tileset );
     const char * StringObject( int object );
 
     bool isActionObject( int obj, bool water );
