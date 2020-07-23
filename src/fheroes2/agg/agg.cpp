@@ -1121,10 +1121,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         res.second.SetAlphaMod( 0, false );
     }
 
-    if ( icn == ICN::WOLF && index == 16 ) { // incorrect ICN offset for Wolf's animation
-        res.offset.x = -16;
-    }
-
     // TODO: fix air elemental sprite
     if ( icn == ICN::AELEM && res.first.w() > 3 && res.first.h() > 3 ) {
         res.first.RenderContour( RGBA( 0, 0x84, 0xe0 ) ).Blit( -1, -1, res.first );

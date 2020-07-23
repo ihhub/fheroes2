@@ -206,6 +206,15 @@ namespace Bin_Info
             animationFrames.push_back( anim );
         }
 
+        if ( monsterID == Monster::WOLF ) { // Wolves have incorrect frame for lower attack animation
+            if ( animationFrames[ATTACK3].size() == 3 && animationFrames[ATTACK3][0] == 16 ) {
+                animationFrames[ATTACK3][0] = 2;
+            }
+            if ( animationFrames[ATTACK3_END].size() == 3 && animationFrames[ATTACK3_END][2] == 16 ) {
+                animationFrames[ATTACK3_END][2] = 2;
+            }
+        }
+
         // Modify AnimInfo for upgraded monsters without own FRM file
         int speedDiff = 0;
         switch ( monsterID ) {
