@@ -633,7 +633,7 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
         }
         else {
             const Maps::Tiles & entrance = GetTiles( center );
-            uint8_t teleportType = entrance.FindObjectConst( MP2::OBJ_STONELIGHTS )->index;
+            const uint8_t teleportType = entrance.FindObjectConst( MP2::OBJ_STONELIGHTS )->index;
 
             for ( MapsIndexes::iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
                 const Maps::Tiles & tile = GetTiles( *it );
