@@ -186,24 +186,24 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
             // base monster sprite
             if ( monsterIndicies.first >= 0 ) {
                 Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
-                sprite.SetAlphaMod( fadeInfo.alpha, false );
+                sprite.SetAlphaMod( fadeInfo.alpha, true );
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
             }
             // animated monster part
             if ( monsterIndicies.second >= 0 ) {
                 Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
-                sprite.SetAlphaMod( fadeInfo.alpha, false );
+                sprite.SetAlphaMod( fadeInfo.alpha, true );
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
             }
         }
         else if ( fadeInfo.object == MP2::OBJ_BOAT ) {
             Sprite sprite = AGG::GetICN( ICN::BOAT32, fadeInfo.index );
-            sprite.SetAlphaMod( fadeInfo.alpha, false );
+            sprite.SetAlphaMod( fadeInfo.alpha, true );
             BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH, mp );
         }
         else {
             Sprite sprite = AGG::GetICN( icn, fadeInfo.index );
-            sprite.SetAlphaMod( fadeInfo.alpha, false );
+            sprite.SetAlphaMod( fadeInfo.alpha, true );
             BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
         }
     }
