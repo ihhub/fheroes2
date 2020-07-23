@@ -538,7 +538,8 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN( castleICN, -1, lookupID );
+            Maps::Tiles & tile = world.GetTiles( castleTile );
+            Maps::TilesAddon * addon = tile.FindAddonICN( castleICN, -1, lookupID );
 
             if ( addon ) {
                 if ( isRandom ) {

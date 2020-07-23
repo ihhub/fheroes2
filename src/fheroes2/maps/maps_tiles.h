@@ -167,7 +167,7 @@ namespace Maps
 
         bool isPassable( const Heroes & ) const;
         bool isPassable( const Heroes *, int direct, bool skipfog ) const;
-        bool isRoad( int = DIRECTION_ALL ) const;
+        bool isRoad() const;
         bool isObject( int obj ) const
         {
             return obj == mp2_object;
@@ -311,6 +311,9 @@ namespace Maps
         u8 quantity1;
         u8 quantity2;
         u8 quantity3;
+
+        bool road;
+        bool hasSpriteAnimation;
 
 #ifdef WITH_DEBUG
         u8 passable_disable;

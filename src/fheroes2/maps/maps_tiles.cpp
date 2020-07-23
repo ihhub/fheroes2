@@ -1099,10 +1099,14 @@ Maps::Tiles::Tiles()
     , pack_sprite_index( 0 )
     , tile_passable( DIRECTION_ALL )
     , mp2_object( 0 )
+    , objectTileset( 0 )
+    , objectIndex( 255 )
     , fog_colors( Color::ALL )
     , quantity1( 0 )
     , quantity2( 0 )
     , quantity3( 0 )
+    , road( false )
+    , hasSpriteAnimation( false )
 #ifdef WITH_DEBUG
     , passable_disable( 0 )
 #endif
@@ -1116,9 +1120,6 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     quantity3 = 0;
     fog_colors = Color::ALL;
 
-    objectTileset = mp2.objectName1;
-    objectIndex = mp2.indexName1;
-
     SetTile( mp2.tileIndex, mp2.shape );
     SetIndex( index );
     SetObject( mp2.mapObject );
@@ -1126,7 +1127,17 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     addons_level1.clear();
     addons_level2.clear();
 
-    // AddonsPushLevel1( mp2 );
+    // those bitfields are set by map editor regardless if map object is there
+    road = ( mp2.objectName1 >> 1 ) & 1;
+    hasSpriteAnimation = mp2.objectName1 & 1;
+
+    if ( mp2.mapObject == MP2::OBJ_ZERO ) {
+        AddonsPushLevel1( mp2 );
+    }
+    else {
+        objectTileset = mp2.objectName1;
+        objectIndex = mp2.indexName1;
+    }
     AddonsPushLevel2( mp2 );
 }
 
@@ -1812,21 +1823,11 @@ std::string Maps::Tiles::String( void ) const
        << "maps index      : " << GetIndex() << ", " << GetString( GetCenter() ) << std::endl
        << "tile index      : " << TileSpriteIndex() << std::endl
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
-       << "object road flag: " << static_cast<int>( ( objectTileset >> 1 ) & 1 ) << std::endl
-       << "object anim flag: " << static_cast<int>( objectTileset & 1 ) << std::endl
        << "tileset         : " << static_cast<int>( objectTileset >> 2 ) << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << std::endl
-       << "ground          : " << Ground::String( GetGround() );
-    if ( isRoad() ) {
-        Addons::const_iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &TilesAddon::isRoad ), DIRECTION_ALL ) );
-        os << ", ("
-           << "road";
-        if ( ICN::ROAD == MP2::GetICNObject( ( *it ).object ) )
-            os << ", "
-               << "index: " << static_cast<int>( ( *it ).index );
-        os << ")";
-    }
-    os << std::endl << "passable        : " << ( tile_passable ? Direction::String( tile_passable ) : "false" );
+       << "object animated : " << static_cast<int>( hasSpriteAnimation ) << std::endl
+       << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << road << ")" << std::endl
+       << "passable        : " << ( tile_passable ? Direction::String( tile_passable ) : "false" );
 #ifdef WITH_DEBUG
     if ( passable_disable )
         os << ", disable(" << static_cast<int>( passable_disable ) << ")";
@@ -1994,9 +1995,9 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 }
 
 /* check road */
-bool Maps::Tiles::isRoad( int direct ) const
+bool Maps::Tiles::isRoad() const
 {
-    return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &TilesAddon::isRoad ), direct ) );
+    return road;
 }
 
 bool Maps::Tiles::isStream( void ) const
