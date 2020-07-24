@@ -847,14 +847,14 @@ void Maps::Tiles::QuantityUpdate( void )
     case MP2::OBJ_RNDARTIFACT2:
     case MP2::OBJ_RNDARTIFACT3:
         // modify rnd artifact sprite
-        //UpdateRNDArtifactSprite( *this );
-        //QuantityUpdate();
+        UpdateRNDArtifactSprite( *this );
+        QuantityUpdate();
         break;
 
     case MP2::OBJ_RNDRESOURCE:
         // modify rnd resource sprite
-        //UpdateRNDResourceSprite( *this );
-        //QuantityUpdate();
+        UpdateRNDResourceSprite( *this );
+        QuantityUpdate();
         break;
 
     case MP2::OBJ_MONSTER:

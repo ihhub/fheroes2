@@ -1022,26 +1022,24 @@ void Maps::TilesAddon::UpdateAbandoneMineRightSprite( TilesAddon & ta )
     }
 }
 
-std::pair<int, int> Maps::TilesAddon::ColorRaceFromHeroSprite( const TilesAddon & ta )
+std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( uint32_t heroSpriteIndex )
 {
     std::pair<int, int> res;
 
-    if ( 7 > ta.index )
+    if ( 7 > heroSpriteIndex )
         res.first = Color::BLUE;
-    else if ( 14 > ta.index )
+    else if ( 14 > heroSpriteIndex )
         res.first = Color::GREEN;
-    else if ( 21 > ta.index )
+    else if ( 21 > heroSpriteIndex )
         res.first = Color::RED;
-    else if ( 28 > ta.index )
+    else if ( 28 > heroSpriteIndex )
         res.first = Color::YELLOW;
-    else if ( 35 > ta.index )
+    else if ( 35 > heroSpriteIndex )
         res.first = Color::ORANGE;
     else
         res.first = Color::PURPLE;
 
-    // res.second = Race::NONE;
-
-    switch ( ta.index % 7 ) {
+    switch ( heroSpriteIndex % 7 ) {
     case 0:
         res.second = Race::KNGT;
         break;
@@ -1103,6 +1101,7 @@ Maps::Tiles::Tiles()
     : maps_index( 0 )
     , pack_sprite_index( 0 )
     , tile_passable( DIRECTION_ALL )
+    , uniq( 0 )
     , mp2_object( 0 )
     , objectTileset( 0 )
     , objectIndex( 255 )
@@ -1140,6 +1139,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     else {
         objectTileset = mp2.objectName1;
         objectIndex = mp2.indexName1;
+        uniq = mp2.editorObjectLink;
     }
     AddonsPushLevel2( mp2 );
 }
@@ -1490,14 +1490,6 @@ bool Maps::Tiles::isWater( void ) const
     return 30 > TileSpriteIndex();
 }
 
-void Maps::Tiles::Remove( u32 uniq )
-{
-    if ( !addons_level1.empty() )
-        addons_level1.Remove( uniq );
-    if ( !addons_level2.empty() )
-        addons_level2.Remove( uniq );
-}
-
 void Maps::Tiles::RedrawTile( Surface & dst ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
@@ -1573,8 +1565,8 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
                 RedrawMapObject( dst, icn, index, mp, TilesAddon::hasColorCycling( it->object, it->index ) );
 
                 // possible animation
-                if ( u32 anim_index = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ) {
-                    const Sprite & animationSprite = AGG::GetICN( icn, anim_index );
+                if ( it->object & 1 ) {
+                    const Sprite & animationSprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) );
                     area.BlitOnTile( dst, animationSprite, mp );
                 }
             }
@@ -1629,8 +1621,8 @@ void Maps::Tiles::RedrawObjects( Surface & dst ) const
             RedrawMapObject( dst, icn, objectIndex, mp, TilesAddon::hasColorCycling( objectTileset, objectIndex ) );
 
             // possible animation
-            if ( u32 anim_index = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 ) ) {
-                const Sprite & animationSprite = AGG::GetICN( icn, anim_index );
+            if ( hasSpriteAnimation() ) {
+                const Sprite & animationSprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 ) );
                 area.BlitOnTile( dst, animationSprite, mp );
             }
         }
@@ -1721,8 +1713,8 @@ void Maps::Tiles::RedrawBottom4Hero( Surface & dst ) const
                 area.BlitOnTile( dst, sprite, mp );
 
                 // possible anime
-                if ( u32 anime_index = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ) {
-                    const Sprite & anime_sprite = AGG::GetICN( icn, anime_index );
+                if ( it->object & 1 ) {
+                    const Sprite & anime_sprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) );
                     area.BlitOnTile( dst, anime_sprite, mp );
                 }
             }
@@ -1776,8 +1768,8 @@ void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
                 area.BlitOnTile( dst, sprite, mp );
 
                 // possible anime
-                if ( u32 anime_index = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame() ) ) {
-                    const Sprite & anime_sprite = AGG::GetICN( icn, anime_index );
+                if ( object & 1 ) {
+                    const Sprite & anime_sprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame() ) );
                     area.BlitOnTile( dst, anime_sprite, mp );
                 }
             }
@@ -1824,7 +1816,7 @@ std::string Maps::Tiles::String( void ) const
 
     os << "----------------:--------" << std::endl
        << "maps index      : " << GetIndex() << ", " << GetString( GetCenter() ) << std::endl
-       << "tile index      : " << TileSpriteIndex() << std::endl
+       << "id              : " << uniq << std::endl
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset >> 2 ) << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << std::endl
@@ -2016,6 +2008,19 @@ bool Maps::Tiles::hasSpriteAnimation() const
 bool Maps::Tiles::isObject( int obj ) const
 {
     return obj == mp2_object;
+}
+
+uint32_t Maps::Tiles::GetObjectUniqueID() const
+{
+    return uniq;
+}
+uint8_t Maps::Tiles::GetObjectTileset() const
+{
+    return objectTileset;
+}
+uint8_t Maps::Tiles::GetObjectSpriteIndex() const
+{
+    return objectIndex;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindObject( int objectID )
@@ -2339,6 +2344,20 @@ bool Maps::Tiles::CaptureObjectIsProtection( void ) const
     return false;
 }
 
+void Maps::Tiles::Remove( u32 objectID )
+{
+    if ( uniq == objectID ) {
+        objectTileset = 0;
+        objectIndex = 255;
+        uniq = 0;
+    }
+
+    if ( !addons_level1.empty() )
+        addons_level1.Remove( objectID );
+    if ( !addons_level2.empty() )
+        addons_level2.Remove( objectID );
+}
+
 void Maps::Tiles::RemoveObjectSprite( void )
 {
     Maps::TilesAddon * addon = NULL;
@@ -2476,69 +2495,57 @@ void Maps::Tiles::UpdateAbandoneMineSprite( Tiles & tile )
 
 void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
 {
-    TilesAddon * addon = NULL;
-    u32 index = 0;
     Artifact art;
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_RNDARTIFACT:
-        addon = tile.FindObject( MP2::OBJ_RNDARTIFACT );
         art = Artifact::Rand( Artifact::ART_LEVEL123 );
-        index = art.IndexSprite();
         break;
     case MP2::OBJ_RNDARTIFACT1:
-        addon = tile.FindObject( MP2::OBJ_RNDARTIFACT1 );
         art = Artifact::Rand( Artifact::ART_LEVEL1 );
-        index = art.IndexSprite();
         break;
     case MP2::OBJ_RNDARTIFACT2:
-        addon = tile.FindObject( MP2::OBJ_RNDARTIFACT2 );
         art = Artifact::Rand( Artifact::ART_LEVEL2 );
-        index = art.IndexSprite();
         break;
     case MP2::OBJ_RNDARTIFACT3:
-        addon = tile.FindObject( MP2::OBJ_RNDARTIFACT3 );
         art = Artifact::Rand( Artifact::ART_LEVEL3 );
-        index = art.IndexSprite();
         break;
     default:
         return;
     }
 
     if ( !art.isValid() ) {
-        DEBUG( DBG_GAME, DBG_INFO, "unknown artifact" );
+        DEBUG( DBG_GAME, DBG_WARN, "unknown artifact" );
+        return;
     }
-    else if ( addon ) {
-        addon->index = index;
-        tile.SetObject( MP2::OBJ_ARTIFACT );
 
-        // replace shadow artifact
-        if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            Maps::Tiles & left_tile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) );
-            Maps::TilesAddon * shadow = left_tile.FindAddonLevel1( addon->uniq );
+    const uint8_t index = art.IndexSprite();
 
-            if ( shadow )
-                shadow->index = index - 1;
-        }
+    tile.SetObject( MP2::OBJ_ARTIFACT );
+    tile.objectIndex = index;
+
+    // replace artifact shadow
+    if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
+        Maps::Tiles & left_tile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) );
+        Maps::TilesAddon * shadow = left_tile.FindAddonLevel1( tile.uniq );
+
+        if ( shadow )
+            shadow->index = index - 1;
     }
 }
 
 void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 {
-    TilesAddon * addon = tile.FindObject( MP2::OBJ_RNDRESOURCE );
+    tile.SetObject( MP2::OBJ_RESOURCE );
+    tile.objectIndex = Resource::GetIndexSprite( Resource::Rand() );
 
-    if ( addon ) {
-        addon->index = Resource::GetIndexSprite( Resource::Rand() );
-        tile.SetObject( MP2::OBJ_RESOURCE );
+    // replace shadow artifact
+    if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
+        Maps::Tiles & left_tile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) );
+        Maps::TilesAddon * shadow = left_tile.FindAddonLevel1( tile.uniq );
 
-        // replace shadow artifact
-        if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            Maps::Tiles & left_tile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) );
-            Maps::TilesAddon * shadow = left_tile.FindAddonLevel1( addon->uniq );
-
-            if ( shadow )
-                shadow->index = addon->index - 1;
-        }
+        if ( shadow )
+            shadow->index = tile.objectIndex - 1;
     }
 }
 

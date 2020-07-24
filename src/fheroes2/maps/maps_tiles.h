@@ -115,8 +115,6 @@ namespace Maps
         static int ColorFromBarrierSprite( const TilesAddon & );
         static int ColorFromTravellerTentSprite( const TilesAddon & );
 
-        static std::pair<int, int> ColorRaceFromHeroSprite( const TilesAddon & );
-
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
@@ -145,6 +143,9 @@ namespace Maps
 
         void Init( s32, const MP2::mp2tile_t & );
 
+        uint32_t GetObjectUniqueID() const;
+        uint8_t GetObjectTileset() const;
+        uint8_t GetObjectSpriteIndex() const;
         s32 GetIndex( void ) const;
         Point GetCenter( void ) const;
         int GetObject( bool skip_hero = true ) const;
@@ -210,7 +211,7 @@ namespace Maps
         void AddonsPushLevel2( const TilesAddon & );
 
         void AddonsSort( void );
-        void Remove( u32 uniq );
+        void Remove( u32 objectID );
         void RemoveObjectSprite( void );
 
         std::string String( void ) const;
@@ -255,6 +256,7 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static std::pair<int, int> ColorRaceFromHeroSprite( uint32_t heroSpriteIndex );
         static std::pair<int, int> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles &, const Monster &, u32 );
         static void UpdateAbandoneMineSprite( Tiles & );
@@ -288,7 +290,6 @@ namespace Maps
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );
 
-    private:
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
 #ifdef WITH_XML
@@ -301,6 +302,7 @@ namespace Maps
         u32 maps_index;
         u16 pack_sprite_index;
 
+        uint32_t uniq;
         uint8_t objectTileset;
         uint8_t objectIndex;
         u8 mp2_object;

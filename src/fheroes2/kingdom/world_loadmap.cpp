@@ -1328,8 +1328,8 @@ bool World::LoadMapMP2( const std::string & filename )
                            "read heroes: "
                                << "incorrect size block: " << pblock.size() );
                 }
-                else if ( NULL != ( addon = tile.FindObjectConst( MP2::OBJ_HEROES ) ) ) {
-                    std::pair<int, int> colorRace = Maps::TilesAddon::ColorRaceFromHeroSprite( *addon );
+                else {
+                    std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
                     Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
@@ -1494,10 +1494,9 @@ void World::PostLoad( void )
             break;
 
         case MP2::OBJ_HEROES: {
-            Maps::TilesAddon * addon = tile.FindAddonICN( ICN::MINIHERO, 1 );
-            // remove event sprite
-            if ( addon )
-                tile.Remove( addon->uniq );
+            // remove map editor sprite
+            if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
+                tile.Remove( tile.GetObjectUniqueID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( ii ) ) );
         } break;
@@ -1577,15 +1576,11 @@ void World::PostLoad( void )
         }
     }
     else {
-        const Maps::TilesAddon * addon = NULL;
-
         // remove ultimate artifact sprite
-        if ( NULL != ( addon = ( *it ).FindObjectConst( MP2::OBJ_RNDULTIMATEARTIFACT ) ) ) {
-            ultimate_artifact.Set( ( *it ).GetIndex(), Artifact::FromMP2IndexSprite( addon->index ) );
-            ( *it ).Remove( addon->uniq );
-            ( *it ).SetObject( MP2::OBJ_ZERO );
-            ultimate_pos = ( *it ).GetCenter();
-        }
+        ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( it->GetObjectSpriteIndex() ) );
+        it->Remove( it->GetObjectUniqueID() );
+        it->SetObject( MP2::OBJ_ZERO );
+        ultimate_pos = ( *it ).GetCenter();
     }
 
     std::string rumor = _( "The ultimate artifact is really the %{name}" );
