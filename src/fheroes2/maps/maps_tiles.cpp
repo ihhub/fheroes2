@@ -1302,8 +1302,7 @@ void Maps::Tiles::UpdatePassable( void )
         bool trees2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isForestsTrees );
 
         // fix coast passable
-        if ( tile_passable &&
-             !emptyobj && Maps::TileIsCoast( GetIndex(), Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT )
+        if ( tile_passable && !emptyobj && Maps::TileIsCoast( GetIndex(), Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT )
              && ( addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), std::ptr_fun( &TilesAddon::isShadow ) ) ) ) ) {
             tile_passable = 0;
 #ifdef WITH_DEBUG
@@ -1372,9 +1371,8 @@ void Maps::Tiles::UpdatePassable( void )
     if ( Maps::isValidDirection( GetIndex(), Direction::TOP ) ) {
         Tiles & top = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::TOP ) );
 
-        if ( isWater() == top.isWater() && top.objectTileset == MP2::OBJ_MOUNTS && top.objectTileset != 0
-             && !MP2::isActionObject( top.GetObject( false ), isWater() ) && ( tile_passable && !( tile_passable & DIRECTION_TOP_ROW ) )
-             && !( top.tile_passable & DIRECTION_TOP_ROW ) ) {
+        if ( isWater() == top.isWater() && top.objectTileset == MP2::OBJ_MOUNTS && top.objectTileset != 0 && !MP2::isActionObject( top.GetObject( false ), isWater() )
+             && ( tile_passable && !( tile_passable & DIRECTION_TOP_ROW ) ) && !( top.tile_passable & DIRECTION_TOP_ROW ) ) {
             top.tile_passable = 0;
 #ifdef WITH_DEBUG
             top.impassableTileRule = 9;
