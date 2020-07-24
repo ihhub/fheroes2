@@ -1442,13 +1442,13 @@ void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName2 && mt.indexName2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( 0, mt.editorObjectOverlay, mt.objectName2, mt.indexName2 ) );
+        AddonsPushLevel2( TilesAddon( 0, mt.editorObjectLink, mt.objectName2, mt.indexName2 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN2 && ma.indexNameN2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.editorObjectOverlay, ma.objectNameN2, ma.indexNameN2 ) );
+        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.editorObjectLink, ma.objectNameN2, ma.indexNameN2 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const TilesAddon & ta )
@@ -2220,18 +2220,39 @@ bool Maps::Tiles::CaptureObjectIsProtection( void ) const
     return false;
 }
 
-void Maps::Tiles::Remove( u32 objectID )
+void Maps::Tiles::Remove( u32 uniqID )
 {
-    if ( uniq == objectID ) {
+    if ( !addons_level1.empty() )
+        addons_level1.Remove( uniqID );
+    if ( !addons_level2.empty() )
+        addons_level2.Remove( uniqID );
+
+    if ( uniq == uniqID ) {
         objectTileset = 0;
         objectIndex = 255;
         uniq = 0;
     }
+}
 
-    if ( !addons_level1.empty() )
-        addons_level1.Remove( objectID );
-    if ( !addons_level2.empty() )
-        addons_level2.Remove( objectID );
+void Maps::Tiles::UpdateObjectSprite( uint8_t rawTileset, uint8_t newTileset, uint8_t newIndex, bool replace )
+{
+    for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        if ( it->uniq == uniq && ( it->object >> 2 ) == rawTileset ) {
+            it->object = replace ? newTileset : it->object + newTileset;
+            it->index = replace ? newIndex : it->index + newIndex;
+        }
+    }
+    for ( Addons::iterator it2 = addons_level2.begin(); it2 != addons_level2.end(); ++it2 ) {
+        if ( it2->uniq == uniq && ( it2->object >> 2 ) == rawTileset ) {
+            it2->object = replace ? newTileset : it2->object + newTileset;
+            it2->index = replace ? newIndex : it2->index + newIndex;
+        }
+    }
+
+    if ( ( objectTileset >> 2 ) == rawTileset ) {
+        objectTileset = replace ? newTileset : objectTileset + newTileset;
+        objectIndex = replace ? newIndex : objectIndex + newIndex;
+    }
 }
 
 void Maps::Tiles::RemoveObjectSprite( void )

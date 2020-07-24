@@ -205,8 +205,9 @@ namespace Maps
         void AddonsPushLevel2( const TilesAddon & );
 
         void AddonsSort( void );
-        void Remove( u32 objectID );
+        void Remove( u32 uniqID );
         void RemoveObjectSprite( void );
+        void UpdateObjectSprite( uint8_t rawTileset, uint8_t newTileset, uint8_t newIndex, bool replace = true );
 
         std::string String( void ) const;
 
