@@ -2452,7 +2452,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
     const MapsIndexes & v = ScanAroundObject( tileIndex, MP2::OBJ_HEROES );
     for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
         const Tiles & heroTile = world.GetTiles( *it );
-        if ( tile.isWater() != heroTile.isWater() ) {
+        if ( tile.isWater() == heroTile.isWater() ) {
             attackerIndex = *it;
             break;
         }
