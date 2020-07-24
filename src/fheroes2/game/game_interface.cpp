@@ -227,7 +227,8 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
 
     Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarArea = radar.GetArea();
-    const Sprite & viewDoor = AGG::GetICN( ICN::VIEWDDOR, 0 );
+    Settings & conf = Settings::Get();
+    const Sprite & viewDoor = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     SpriteBack back( Rect( radarArea.x, radarArea.y, radarArea.w, radarArea.h ) );
     viewDoor.Blit( radarArea );
 
@@ -249,13 +250,12 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     }
 
     Cursor & cursor = Cursor::Get();
-    Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     s32 dst = -1;
     s32 returnValue = -1;
 
     const Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.h - 37 );
-    Button buttonExit( exitButtonPos.x, exitButtonPos.y, ICN::LGNDXTRA, 4, 5 );
+    Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( conf.ExtGameEvilInterface() ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
     buttonExit.Draw();
 
     while ( le.HandleEvents() ) {
