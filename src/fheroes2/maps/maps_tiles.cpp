@@ -121,7 +121,7 @@ Maps::TilesAddon::TilesAddon()
     , tmp( 0 )
 {}
 
-Maps::TilesAddon::TilesAddon( int lv, u32 gid, int obj, u32 ii )
+Maps::TilesAddon::TilesAddon( int lv, u32 gid,  int obj, u32 ii )
     : uniq( gid )
     , level( lv )
     , object( obj )
@@ -148,7 +148,7 @@ Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
     , level( ta.level )
     , object( ta.object )
     , index( ta.index )
-    , tmp( 0 )
+    , tmp( ta.tmp )
 {}
 
 Maps::TilesAddon & Maps::TilesAddon::operator=( const Maps::TilesAddon & ta )
@@ -157,6 +157,7 @@ Maps::TilesAddon & Maps::TilesAddon::operator=( const Maps::TilesAddon & ta )
     object = ta.object;
     index = ta.index;
     uniq = ta.uniq;
+    tmp = ta.tmp;
 
     return *this;
 }
@@ -1133,13 +1134,14 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     // those bitfields are set by map editor regardless if map object is there
     road = ( mp2.objectName1 >> 1 ) & 1;
 
-    if ( mp2.mapObject == MP2::OBJ_ZERO ) {
+    if ( mp2.mapObject == MP2::OBJ_ZERO || ( quantity1 >> 1 ) & 1 ) {
         AddonsPushLevel1( mp2 );
     }
     else {
         objectTileset = mp2.objectName1;
         objectIndex = mp2.indexName1;
         uniq = mp2.editorObjectLink;
+        uniq2 = mp2.editorObjectOverlay;
     }
     AddonsPushLevel2( mp2 );
 }
@@ -1442,13 +1444,13 @@ void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName2 && mt.indexName2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( 0, mt.editorObjectLink, mt.objectName2, mt.indexName2 ) );
+        AddonsPushLevel2( TilesAddon( 0, mt.editorObjectOverlay, mt.objectName2, mt.indexName2 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN2 && ma.indexNameN2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.editorObjectLink, ma.objectNameN2, ma.indexNameN2 ) );
+        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.editorObjectOverlay, ma.objectNameN2, ma.indexNameN2 ) );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const TilesAddon & ta )
@@ -1461,10 +1463,29 @@ void Maps::Tiles::AddonsPushLevel2( const TilesAddon & ta )
 
 void Maps::Tiles::AddonsSort( void )
 {
+    Addons::iterator lastObject = addons_level1.end();
+    for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        if ( it->level % 4 == 0 ) {
+            lastObject = it;
+        }
+    }
+
+    // Re-order tiles (Fixing mistakes of original maps)
+    if ( lastObject != addons_level1.end() ) {
+        if (objectTileset != 0 && objectIndex < 255)
+            addons_level1.push_front( TilesAddon( 0, uniq, objectTileset, objectIndex ) );
+
+        uniq = lastObject->uniq;
+        objectTileset = lastObject->object;
+        objectIndex = lastObject->index;
+        addons_level1.erase( lastObject );
+    }
+
     if ( !addons_level1.empty() )
         addons_level1.sort( TilesAddon::PredicateSortRules1 );
     if ( !addons_level2.empty() )
         addons_level2.sort( TilesAddon::PredicateSortRules2 );
+
 }
 
 int Maps::Tiles::GetGround( void ) const
@@ -1824,7 +1845,7 @@ std::string Maps::Tiles::String( void ) const
     std::ostringstream os;
 
     os << "----------------:--------" << std::endl
-       << "maps index      : " << GetIndex() << ", " << GetString( GetCenter() ) << std::endl
+       << "maps index      : " << uniq2 << ", " << GetString( GetCenter() ) << std::endl
        << "id              : " << uniq << std::endl
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset >> 2 ) << std::endl
@@ -2234,22 +2255,22 @@ void Maps::Tiles::Remove( u32 uniqID )
     }
 }
 
-void Maps::Tiles::UpdateObjectSprite( uint8_t rawTileset, uint8_t newTileset, uint8_t newIndex, bool replace )
+void Maps::Tiles::UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t newIndex, bool replace )
 {
     for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-        if ( it->uniq == uniq && ( it->object >> 2 ) == rawTileset ) {
+        if ( it->uniq == uniqID && ( it->object >> 2 ) == rawTileset ) {
             it->object = replace ? newTileset : it->object + newTileset;
             it->index = replace ? newIndex : it->index + newIndex;
         }
     }
     for ( Addons::iterator it2 = addons_level2.begin(); it2 != addons_level2.end(); ++it2 ) {
-        if ( it2->uniq == uniq && ( it2->object >> 2 ) == rawTileset ) {
+        if ( it2->uniq == uniqID && ( it2->object >> 2 ) == rawTileset ) {
             it2->object = replace ? newTileset : it2->object + newTileset;
             it2->index = replace ? newIndex : it2->index + newIndex;
         }
     }
 
-    if ( ( objectTileset >> 2 ) == rawTileset ) {
+    if ( uniq == uniqID && ( objectTileset >> 2 ) == rawTileset ) {
         objectTileset = replace ? newTileset : objectTileset + newTileset;
         objectIndex = replace ? newIndex : objectIndex + newIndex;
     }

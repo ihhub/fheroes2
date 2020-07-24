@@ -928,7 +928,7 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     MapResource * map_resource = NULL;
-    
+
     if ( tile.GetObject() == obj )
         map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
 

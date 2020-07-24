@@ -207,7 +207,7 @@ namespace Maps
         void AddonsSort( void );
         void Remove( u32 uniqID );
         void RemoveObjectSprite( void );
-        void UpdateObjectSprite( uint8_t rawTileset, uint8_t newTileset, uint8_t newIndex, bool replace = true );
+        void UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t newIndex, bool replace = true );
 
         std::string String( void ) const;
 
@@ -297,6 +297,7 @@ namespace Maps
         u16 pack_sprite_index;
 
         uint32_t uniq;
+        uint32_t uniq2;
         uint8_t objectTileset;
         uint8_t objectIndex;
         u8 mp2_object;

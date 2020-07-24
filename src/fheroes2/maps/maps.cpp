@@ -543,14 +543,14 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
         if ( isValidAbsIndex( castleTile ) ) {
             const uint8_t originalSet = 38; // OBJNTWRD
             const uint8_t tilesetChange = isRandom ? 35 * 4 : 0; // OBJNTOWN or no change
-            world.GetTiles( castleTile ).UpdateObjectSprite( originalSet, tilesetChange, indexChange, isRandom );
+            world.GetTiles( castleTile ).UpdateObjectSprite( castleID, originalSet, tilesetChange, indexChange, isRandom );
         }
 
         const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
         if ( isValidAbsIndex( shadowTile ) ) {
             const uint8_t originalSet = isRandom ? 38 : 37; // OBJNTWRD or OBJNTWSH
             const uint8_t tilesetChange = isRandom ? 37 * 4 : 0; // OBJNTWSH
-            world.GetTiles( shadowTile ).UpdateObjectSprite( originalSet, tilesetChange, indexChange, isRandom );
+            world.GetTiles( shadowTile ).UpdateObjectSprite( castleID, originalSet, tilesetChange, indexChange, isRandom );
         }
     }
 }
