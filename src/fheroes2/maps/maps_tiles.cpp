@@ -256,9 +256,9 @@ int Maps::TilesAddon::GetLoyaltyObject( const Maps::TilesAddon & addon )
     return MP2::OBJ_ZERO;
 }
 
-int Maps::TilesAddon::GetPassable( const Maps::TilesAddon & ta )
+int Maps::Tiles::GetPassable( uint32_t tileset, uint32_t index )
 {
-    int icn = MP2::GetICNObject( ta.object );
+    int icn = MP2::GetICNObject( tileset );
 
     switch ( icn ) {
     case ICN::MTNSNOW:
@@ -267,11 +267,11 @@ int Maps::TilesAddon::GetPassable( const Maps::TilesAddon & ta )
     case ICN::MTNDSRT:
     case ICN::MTNMULT:
     case ICN::MTNGRAS:
-        return ObjMnts1::GetPassable( icn, ta.index );
+        return ObjMnts1::GetPassable( icn, index );
 
     case ICN::MTNCRCK:
     case ICN::MTNDIRT:
-        return ObjMnts2::GetPassable( icn, ta.index );
+        return ObjMnts2::GetPassable( icn, index );
 
     case ICN::TREJNGL:
     case ICN::TREEVIL:
@@ -279,47 +279,47 @@ int Maps::TilesAddon::GetPassable( const Maps::TilesAddon & ta )
     case ICN::TREFIR:
     case ICN::TREFALL:
     case ICN::TREDECI:
-        return ObjTree::GetPassable( ta.index );
+        return ObjTree::GetPassable( index );
     case ICN::OBJNSNOW:
-        return ObjSnow::GetPassable( ta.index );
+        return ObjSnow::GetPassable( index );
     case ICN::OBJNSWMP:
-        return ObjSwmp::GetPassable( ta.index );
+        return ObjSwmp::GetPassable( index );
     case ICN::OBJNGRAS:
-        return ObjGras::GetPassable( ta.index );
+        return ObjGras::GetPassable( index );
     case ICN::OBJNGRA2:
-        return ObjGra2::GetPassable( ta.index );
+        return ObjGra2::GetPassable( index );
     case ICN::OBJNCRCK:
-        return ObjCrck::GetPassable( ta.index );
+        return ObjCrck::GetPassable( index );
     case ICN::OBJNDIRT:
-        return ObjDirt::GetPassable( ta.index );
+        return ObjDirt::GetPassable( index );
     case ICN::OBJNDSRT:
-        return ObjDsrt::GetPassable( ta.index );
+        return ObjDsrt::GetPassable( index );
     case ICN::OBJNMUL2:
-        return ObjMul2::GetPassable( ta.index );
+        return ObjMul2::GetPassable( index );
     case ICN::OBJNMULT:
-        return ObjMult::GetPassable( ta.index );
+        return ObjMult::GetPassable( index );
     case ICN::OBJNLAVA:
-        return ObjLava::GetPassable( ta.index );
+        return ObjLava::GetPassable( index );
     case ICN::OBJNLAV3:
-        return ObjLav3::GetPassable( ta.index );
+        return ObjLav3::GetPassable( index );
     case ICN::OBJNLAV2:
-        return ObjLav2::GetPassable( ta.index );
+        return ObjLav2::GetPassable( index );
     case ICN::OBJNWAT2:
-        return ObjWat2::GetPassable( ta.index );
+        return ObjWat2::GetPassable( index );
     case ICN::OBJNWATR:
-        return ObjWatr::GetPassable( ta.index );
+        return ObjWatr::GetPassable( index );
 
     case ICN::OBJNTWBA:
-        return ObjTwba::GetPassable( ta.index );
+        return ObjTwba::GetPassable( index );
     case ICN::OBJNTOWN:
-        return ObjTown::GetPassable( ta.index );
+        return ObjTown::GetPassable( index );
 
     case ICN::X_LOC1:
-        return ObjXlc1::GetPassable( ta.index );
+        return ObjXlc1::GetPassable( index );
     case ICN::X_LOC2:
-        return ObjXlc2::GetPassable( ta.index );
+        return ObjXlc2::GetPassable( index );
     case ICN::X_LOC3:
-        return ObjXlc3::GetPassable( ta.index );
+        return ObjXlc3::GetPassable( index );
 
     default:
         break;
@@ -1112,7 +1112,7 @@ Maps::Tiles::Tiles()
     , quantity3( 0 )
     , road( false )
 #ifdef WITH_DEBUG
-    , passable_disable( 0 )
+    , impassableTileRule( 0 )
 #endif
 {}
 
@@ -1279,36 +1279,35 @@ void Maps::Tiles::UpdatePassable( void )
 {
     tile_passable = DIRECTION_ALL;
 #ifdef WITH_DEBUG
-    passable_disable = 0;
+    impassableTileRule = 0;
 #endif
 
     const int obj = GetObject( false );
-    bool emptyobj = MP2::OBJ_ZERO == obj || MP2::OBJ_COAST == obj || MP2::OBJ_EVENT == obj;
+    const bool emptyobj = MP2::OBJ_ZERO == obj || MP2::OBJ_COAST == obj || MP2::OBJ_EVENT == obj;
 
     if ( MP2::isActionObject( obj, isWater() ) ) {
         tile_passable = MP2::GetObjectDirect( obj );
 #ifdef WITH_DEBUG
         if ( tile_passable == 0 )
-            passable_disable = 8;
+            impassableTileRule = 1;
 #endif
         return;
     }
 
     // on ground
     if ( MP2::OBJ_HEROES != mp2_object && !isWater() ) {
-        bool mounts1 = addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), isMountsRocs );
+        bool mounts1 = MP2::OBJ_MOUNTS == obj && objectTileset != 0;
         bool mounts2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isMountsRocs );
-        bool trees1 = addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), isForestsTrees );
+        bool trees1 = MP2::OBJ_TREES == obj && objectTileset != 0;
         bool trees2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isForestsTrees );
 
         // fix coast passable
         if ( tile_passable &&
-             //! MP2::isActionObject(obj, false) &&
              !emptyobj && Maps::TileIsCoast( GetIndex(), Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT )
              && ( addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), std::ptr_fun( &TilesAddon::isShadow ) ) ) ) ) {
             tile_passable = 0;
 #ifdef WITH_DEBUG
-            passable_disable = 1;
+            impassableTileRule = 2;
 #endif
         }
 
@@ -1316,7 +1315,7 @@ void Maps::Tiles::UpdatePassable( void )
         if ( tile_passable && ( MP2::OBJ_MOUNTS == obj || MP2::OBJ_TREES == obj ) && mounts1 && ( mounts2 || trees2 ) ) {
             tile_passable = 0;
 #ifdef WITH_DEBUG
-            passable_disable = 2;
+            impassableTileRule = 3;
 #endif
         }
 
@@ -1324,7 +1323,7 @@ void Maps::Tiles::UpdatePassable( void )
         if ( tile_passable && ( MP2::OBJ_MOUNTS == obj || MP2::OBJ_TREES == obj ) && trees1 && ( mounts2 || trees2 ) ) {
             tile_passable = 0;
 #ifdef WITH_DEBUG
-            passable_disable = 3;
+            impassableTileRule = 4;
 #endif
         }
 
@@ -1332,7 +1331,7 @@ void Maps::Tiles::UpdatePassable( void )
         if ( tile_passable && FindAddonICN( ICN::OBJNTWBA, 1 ) && ( mounts2 || trees2 ) ) {
             tile_passable = 0;
 #ifdef WITH_DEBUG
-            passable_disable = 5;
+            impassableTileRule = 5;
 #endif
         }
 
@@ -1342,32 +1341,29 @@ void Maps::Tiles::UpdatePassable( void )
             if ( top.isWater() && top.tile_passable && !( Direction::TOP & top.tile_passable ) ) {
                 top.tile_passable = 0;
 #ifdef WITH_DEBUG
-                top.passable_disable = 9;
+                top.impassableTileRule = 6;
 #endif
             }
         }
-
-        // if ( mp2_object != MP2::OBJ_ZERO ) {
-        //    tile_passable = 0;
-        //}
     }
 
     // fix bottom border: disable passable for all no action objects
     if ( tile_passable && !Maps::isValidDirection( GetIndex(), Direction::BOTTOM ) && !emptyobj && !MP2::isActionObject( obj, isWater() ) ) {
         tile_passable = 0;
 #ifdef WITH_DEBUG
-        passable_disable = 4;
+        impassableTileRule = 7;
 #endif
     }
 
     // check all sprite (level 1)
+    tile_passable &= Tiles::GetPassable( objectTileset, objectIndex );
     for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
         if ( tile_passable ) {
-            tile_passable &= TilesAddon::GetPassable( *it );
+            tile_passable &= Tiles::GetPassable( it->object, it->index );
 
 #ifdef WITH_DEBUG
             if ( 0 == tile_passable )
-                passable_disable = 6;
+                impassableTileRule = 8;
 #endif
         }
     }
@@ -1376,12 +1372,12 @@ void Maps::Tiles::UpdatePassable( void )
     if ( Maps::isValidDirection( GetIndex(), Direction::TOP ) ) {
         Tiles & top = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::TOP ) );
 
-        if ( isWater() == top.isWater() && top.addons_level1.end() != std::find_if( top.addons_level1.begin(), top.addons_level1.end(), TopObjectDisable )
+        if ( isWater() == top.isWater() && top.objectTileset == MP2::OBJ_MOUNTS && top.objectTileset != 0
              && !MP2::isActionObject( top.GetObject( false ), isWater() ) && ( tile_passable && !( tile_passable & DIRECTION_TOP_ROW ) )
              && !( top.tile_passable & DIRECTION_TOP_ROW ) ) {
             top.tile_passable = 0;
 #ifdef WITH_DEBUG
-            top.passable_disable = 7;
+            top.impassableTileRule = 9;
 #endif
         }
     }
@@ -1627,8 +1623,8 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
         if ( 0 == tile_passable || DIRECTION_ALL != tile_passable ) {
             Surface sf = PassableViewSurface( tile_passable );
 
-            if ( passable_disable ) {
-                Text text( GetString( passable_disable ), Font::SMALL );
+            if ( impassableTileRule ) {
+                Text text( GetString( impassableTileRule ), Font::SMALL );
                 text.Blit( 13, 13, sf );
             }
 
@@ -1862,8 +1858,8 @@ std::string Maps::Tiles::String( void ) const
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << road << ")" << std::endl
        << "passable        : " << ( tile_passable ? Direction::String( tile_passable ) : "false" );
 #ifdef WITH_DEBUG
-    if ( passable_disable )
-        os << ", disable(" << static_cast<int>( passable_disable ) << ")";
+    if ( impassableTileRule )
+        os << ", disable(" << static_cast<int>( impassableTileRule ) << ")";
 #endif
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
