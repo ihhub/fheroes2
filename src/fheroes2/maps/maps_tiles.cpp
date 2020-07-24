@@ -2037,143 +2037,12 @@ Maps::TilesAddon * Maps::Tiles::FindObject( int objectID )
 
 const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objectID ) const
 {
-    Addons::const_iterator it = addons_level1.size() ? addons_level1.begin() : addons_level1.end();
-
-    switch ( objectID ) {
-    case MP2::OBJ_CAMPFIRE:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isCampFire );
-        break;
-
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_ANCIENTLAMP:
-    case MP2::OBJ_RESOURCE:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isResource );
-        break;
-
-    case MP2::OBJ_RNDRESOURCE:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isRandomResource );
-        break;
-
-    case MP2::OBJ_FLOTSAM:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
-    case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_BOTTLE:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isWaterResource );
-        break;
-
-    case MP2::OBJ_ARTIFACT:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtifact );
-        break;
-
-    case MP2::OBJ_RNDARTIFACT:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isRandomArtifact );
-        break;
-
-    case MP2::OBJ_RNDARTIFACT1:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isRandomArtifact1 );
-        break;
-
-    case MP2::OBJ_RNDARTIFACT2:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isRandomArtifact2 );
-        break;
-
-    case MP2::OBJ_RNDARTIFACT3:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isRandomArtifact3 );
-        break;
-
-    case MP2::OBJ_RNDULTIMATEARTIFACT:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isUltimateArtifact );
-        break;
-
-    case MP2::OBJ_MONSTER:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isMonster );
-        break;
-
-    case MP2::OBJ_WHIRLPOOL:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isWhirlPool );
-        break;
-
-    case MP2::OBJ_STANDINGSTONES:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isStandingStone );
-        break;
-
-    case MP2::OBJ_ARTESIANSPRING:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtesianSpring );
-        break;
-
-    case MP2::OBJ_OASIS:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isOasis );
-        break;
-
-    case MP2::OBJ_WATERINGHOLE:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isWateringHole );
-        break;
-
-    case MP2::OBJ_MINES:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isMine );
-        break;
-
-    case MP2::OBJ_JAIL:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isJail );
-        break;
-
-    case MP2::OBJ_EVENT:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isEvent );
-        break;
-
-    case MP2::OBJ_BOAT:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isBoat );
-        break;
-
-    case MP2::OBJ_BARRIER:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isBarrier );
-        break;
-
-    case MP2::OBJ_HEROES:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isMiniHero );
-        break;
-
-    case MP2::OBJ_CASTLE:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isCastle );
-        if ( it == addons_level1.end() ) {
-            it = std::find_if( addons_level2.begin(), addons_level2.end(), TilesAddon::isCastle );
-            return addons_level2.end() != it ? &( *it ) : NULL;
-        }
-        break;
-
-    case MP2::OBJ_RNDCASTLE:
-        for ( ; it != addons_level1.end(); ++it ) {
-            if ( it->isRandomCastle( *it ) ) {
-                return &( *it );
-            }
-        }
-
-        for ( Addons::const_iterator lvl2 = addons_level2.begin(); lvl2 != addons_level2.end(); ++lvl2 ) {
-            if ( lvl2->isRandomCastle( *lvl2 ) ) {
-                return &( *lvl2 );
-            }
-        }
-        break;
-
-    case MP2::OBJ_RNDMONSTER:
-    case MP2::OBJ_RNDMONSTER1:
-    case MP2::OBJ_RNDMONSTER2:
-    case MP2::OBJ_RNDMONSTER3:
-    case MP2::OBJ_RNDMONSTER4:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isRandomMonster );
-        break;
-
-    case MP2::OBJ_SKELETON:
-        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isSkeleton );
-        break;
-
-    default:
-        if ( addons_level1.size() > 1 )
-            DEBUG( DBG_GAME, DBG_WARN, "FIXME for: " << MP2::StringObject( objectID ) );
-        break;
+    if ( objectID == MP2::OBJ_MINES ) {
+        Addons::const_iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isMine );
+        return addons_level1.end() != it ? &( *it ) : NULL;
     }
 
-    return addons_level1.end() != it ? &( *it ) : NULL;
+    return NULL;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindFlags( void )
@@ -2400,36 +2269,32 @@ void Maps::Tiles::RemoveBarrierSprite( void )
 
 void Maps::Tiles::RemoveJailSprite( void )
 {
-    Maps::TilesAddon * addon = FindObject( MP2::OBJ_JAIL );
+    // remove left sprite
+    if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) ) {
+        const s32 left = Maps::GetDirectionIndex( GetIndex(), Direction::LEFT );
+        world.GetTiles( left ).Remove( uniq );
 
-    if ( addon ) {
-        // remove left sprite
-        if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) ) {
-            const s32 left = Maps::GetDirectionIndex( GetIndex(), Direction::LEFT );
-            world.GetTiles( left ).Remove( addon->uniq );
-
-            // remove left left sprite
-            if ( Maps::isValidDirection( left, Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( left, Direction::LEFT ) ).Remove( addon->uniq );
-        }
-
-        // remove top sprite
-        if ( Maps::isValidDirection( GetIndex(), Direction::TOP ) ) {
-            const s32 top = Maps::GetDirectionIndex( GetIndex(), Direction::TOP );
-            world.GetTiles( top ).Remove( addon->uniq );
-            world.GetTiles( top ).SetObject( MP2::OBJ_ZERO );
-            world.GetTiles( top ).FixObject();
-
-            // remove top left sprite
-            if ( Maps::isValidDirection( top, Direction::LEFT ) ) {
-                world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).Remove( addon->uniq );
-                world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).SetObject( MP2::OBJ_ZERO );
-                world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).FixObject();
-            }
-        }
-
-        Remove( addon->uniq );
+        // remove left left sprite
+        if ( Maps::isValidDirection( left, Direction::LEFT ) )
+            world.GetTiles( Maps::GetDirectionIndex( left, Direction::LEFT ) ).Remove( uniq );
     }
+
+    // remove top sprite
+    if ( Maps::isValidDirection( GetIndex(), Direction::TOP ) ) {
+        const s32 top = Maps::GetDirectionIndex( GetIndex(), Direction::TOP );
+        world.GetTiles( top ).Remove( uniq );
+        world.GetTiles( top ).SetObject( MP2::OBJ_ZERO );
+        world.GetTiles( top ).FixObject();
+
+        // remove top left sprite
+        if ( Maps::isValidDirection( top, Direction::LEFT ) ) {
+            world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).Remove( uniq );
+            world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).SetObject( MP2::OBJ_ZERO );
+            world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).FixObject();
+        }
+    }
+
+    Remove( uniq );
 }
 
 void Maps::Tiles::UpdateAbandoneMineSprite( Tiles & tile )

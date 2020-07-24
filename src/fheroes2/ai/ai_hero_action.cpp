@@ -640,17 +640,9 @@ namespace AI
             destroy = true;
 
         if ( destroy ) {
-            Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-            if ( addon ) {
-                const u32 uniq = addon->uniq;
-                tile.Remove( uniq );
-                tile.MonsterSetCount( 0 );
-                tile.SetObject( MP2::OBJ_ZERO );
-
-                // remove shadow from left cell
-                if ( Maps::isValidDirection( dst_index, Direction::LEFT ) )
-                    world.GetTiles( Maps::GetDirectionIndex( dst_index, Direction::LEFT ) ).Remove( uniq );
-            }
+            tile.RemoveObjectSprite();
+            tile.MonsterSetCount( 0 );
+            tile.SetObject( MP2::OBJ_ZERO );
 
             if ( map_troop )
                 world.RemoveMapObject( map_troop );

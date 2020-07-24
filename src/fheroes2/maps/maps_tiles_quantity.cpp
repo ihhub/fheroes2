@@ -1016,18 +1016,6 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 co
         else
             tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
     }
-
-    //
-    Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-
-    if ( !addon ) {
-        // add new sprite
-        tile.AddonsPushLevel1( TilesAddon( TilesAddon::UPPER, World::GetUniq(), 0x33, mons.GetSpriteIndex() ) );
-    }
-    else if ( addon->index != mons() - 1 ) {
-        // fixed sprite
-        addon->index = mons() - 1; // ICN::MONS32 start from PEASANT
-    }
 }
 
 void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
