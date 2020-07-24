@@ -47,7 +47,7 @@ namespace MP2
         u8 quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
         u8 objectName2; // level 2.0
         u8 indexName2; // index level 2.0 or 0xFF
-        u8 shape; // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
+        u8 flags; // Bitfield: 1st bit is passability, last two is tile shape: 0 none, 1 vertical, 2 horizontal, 3 any
         u8 mapObject; // zero or object
         u16 indexAddon; // zero or index addons_t
         u32 editorObjectLink; // Map editor variable: object link

@@ -121,7 +121,7 @@ Maps::TilesAddon::TilesAddon()
     , tmp( 0 )
 {}
 
-Maps::TilesAddon::TilesAddon( int lv, u32 gid,  int obj, u32 ii )
+Maps::TilesAddon::TilesAddon( int lv, u32 gid, int obj, u32 ii )
     : uniq( gid )
     , level( lv )
     , object( obj )
@@ -1124,7 +1124,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     quantity3 = 0;
     fog_colors = Color::ALL;
 
-    SetTile( mp2.tileIndex, mp2.shape );
+    SetTile( mp2.tileIndex, mp2.flags );
     SetIndex( index );
     SetObject( mp2.mapObject );
 
@@ -1141,7 +1141,6 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
         objectTileset = mp2.objectName1;
         objectIndex = mp2.indexName1;
         uniq = mp2.editorObjectLink;
-        uniq2 = mp2.editorObjectOverlay;
     }
     AddonsPushLevel2( mp2 );
 }
@@ -1347,6 +1346,10 @@ void Maps::Tiles::UpdatePassable( void )
 #endif
             }
         }
+
+        // if ( mp2_object != MP2::OBJ_ZERO ) {
+        //    tile_passable = 0;
+        //}
     }
 
     // fix bottom border: disable passable for all no action objects
@@ -1465,6 +1468,8 @@ void Maps::Tiles::AddonsSort( void )
 {
     Addons::iterator lastObject = addons_level1.end();
     for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        // Level is actually a bitfield, but if 0 then it's an actual "full object"
+        // To compare: level 2 is shadow, level 3 is roads/river
         if ( it->level % 4 == 0 ) {
             lastObject = it;
         }
@@ -1472,7 +1477,7 @@ void Maps::Tiles::AddonsSort( void )
 
     // Re-order tiles (Fixing mistakes of original maps)
     if ( lastObject != addons_level1.end() ) {
-        if (objectTileset != 0 && objectIndex < 255)
+        if ( objectTileset != 0 && objectIndex < 255 )
             addons_level1.push_front( TilesAddon( 0, uniq, objectTileset, objectIndex ) );
 
         uniq = lastObject->uniq;
@@ -1481,11 +1486,16 @@ void Maps::Tiles::AddonsSort( void )
         addons_level1.erase( lastObject );
     }
 
-    if ( !addons_level1.empty() )
-        addons_level1.sort( TilesAddon::PredicateSortRules1 );
-    if ( !addons_level2.empty() )
-        addons_level2.sort( TilesAddon::PredicateSortRules2 );
+    // FIXME: check if sort is still needed
+    // if ( !addons_level1.empty() )
+    //    addons_level1.sort( TilesAddon::PredicateSortRules1 );
+    // if ( !addons_level2.empty() )
+    //    addons_level2.sort( TilesAddon::PredicateSortRules2 );
 
+    // check if tile is empty and shouldn't be an MP2 object (roof, etc)
+    // if ( mp2_object != MP2::OBJ_ZERO && objectTileset == 0 && objectIndex == 255 ) {
+    //    mp2_object = MP2::OBJ_ZERO;
+    //}
 }
 
 int Maps::Tiles::GetGround( void ) const
@@ -1509,8 +1519,6 @@ int Maps::Tiles::GetGround( void ) const
         return Maps::Ground::DIRT;
     else if ( 415 > index )
         return Maps::Ground::WASTELAND;
-
-    // else if(432 > pack_sprite_index)
 
     return Maps::Ground::BEACH;
 }
@@ -1845,7 +1853,7 @@ std::string Maps::Tiles::String( void ) const
     std::ostringstream os;
 
     os << "----------------:--------" << std::endl
-       << "maps index      : " << uniq2 << ", " << GetString( GetCenter() ) << std::endl
+       << "maps index      : " << GetIndex() << ", " << GetString( GetCenter() ) << std::endl
        << "id              : " << uniq << std::endl
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset >> 2 ) << std::endl

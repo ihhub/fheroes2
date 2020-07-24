@@ -1035,7 +1035,7 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2tile.quantity2 = fs.get();
         mp2tile.objectName2 = fs.get();
         mp2tile.indexName2 = fs.get();
-        mp2tile.shape = fs.get();
+        mp2tile.flags = fs.get();
         mp2tile.mapObject = fs.get();
 
         switch ( mp2tile.mapObject ) {

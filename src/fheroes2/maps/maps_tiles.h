@@ -297,7 +297,6 @@ namespace Maps
         u16 pack_sprite_index;
 
         uint32_t uniq;
-        uint32_t uniq2;
         uint8_t objectTileset;
         uint8_t objectIndex;
         u8 mp2_object;

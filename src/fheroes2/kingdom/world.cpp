@@ -328,7 +328,7 @@ void World::NewMaps( u32 sw, u32 sh )
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.indexName2 = 0xff; // index sprite level 2
-        mp2tile.shape = Rand::Get( 0, 3 ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
+        mp2tile.flags = Rand::Get( 0, 3 ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         mp2tile.mapObject = MP2::OBJ_ZERO;
         mp2tile.indexAddon = 0;
         mp2tile.editorObjectLink = 0;
