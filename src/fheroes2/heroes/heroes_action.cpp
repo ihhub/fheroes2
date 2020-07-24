@@ -729,31 +729,15 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
         destroy = true;
 
     if ( destroy ) {
-        Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-        if ( addon ) {
-            AGG::PlaySound( M82::KILLFADE );
-            const u32 uniq = addon->uniq;
-            AnimationRemoveObject( tile );
-            tile.Remove( uniq );
-            tile.MonsterSetCount( 0 );
-            tile.SetObject( MP2::OBJ_ZERO );
-
-            // remove shadow from left cell
-            if ( Maps::isValidDirection( dst_index, Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( dst_index, Direction::LEFT ) ).Remove( uniq );
-        }
+        AGG::PlaySound( M82::KILLFADE );
+        const uint32_t uniq = tile.GetObjectUniqueID();
+        AnimationRemoveObject( tile );
+        tile.MonsterSetCount( 0 );
+        tile.SetObject( MP2::OBJ_ZERO );
+        tile.RemoveObjectSprite();
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
-
-        // auto move hero
-        // disable: https://sourceforge.net/tracker/index.php?func=detail&aid=3155230&group_id=96859&atid=616180
-        /*
-        if(conf.ExtHeroAutoMove2BattleTarget() && allow_move)
-        {
-            hero.Move2Dest(dst_index);
-        }
-        */
     }
 }
 

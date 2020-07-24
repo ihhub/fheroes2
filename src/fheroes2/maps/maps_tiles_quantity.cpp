@@ -915,8 +915,7 @@ void Maps::Tiles::QuantityUpdate( void )
 
 int Maps::Tiles::MonsterJoinCondition( void ) const
 {
-    const Maps::TilesAddon * addon = FindObjectConst( MP2::OBJ_MONSTER );
-    return addon ? 0x03 & addon->tmp : 0;
+    return mp2_object == MP2::OBJ_MONSTER ? 0x03 & quantity3 : 0;
 }
 
 void Maps::Tiles::MonsterSetJoinCondition( int cond )
@@ -1042,16 +1041,11 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 co
 void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 {
     Monster mons;
-
+    
     if ( MP2::OBJ_MONSTER == tile.GetObject() ) {
-        const Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-
-        if ( addon )
-            mons = Monster( addon->index + 1 ); // ICN::MONS32 start from PEASANT
+        mons = Monster( tile.objectIndex + 1 ); // ICN::MONS32 start from PEASANT
     }
     else {
-        Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_RNDMONSTER );
-
         switch ( tile.GetObject() ) {
         case MP2::OBJ_RNDMONSTER:
             mons = Monster::Rand().GetID();
@@ -1074,9 +1068,7 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 
         // fixed random sprite
         tile.SetObject( MP2::OBJ_MONSTER );
-
-        if ( addon )
-            addon->index = mons() - 1; // ICN::MONS32 start from PEASANT
+        tile.objectIndex = mons() - 1; // ICN::MONS32 start from PEASANT
     }
 
     u32 count = 0;

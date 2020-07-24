@@ -2360,21 +2360,7 @@ void Maps::Tiles::Remove( u32 objectID )
 
 void Maps::Tiles::RemoveObjectSprite( void )
 {
-    Maps::TilesAddon * addon = NULL;
-
     switch ( GetObject() ) {
-    case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_BOTTLE:
-    case MP2::OBJ_FLOTSAM:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_ANCIENTLAMP:
-    case MP2::OBJ_RESOURCE:
-    case MP2::OBJ_ARTIFACT:
-    case MP2::OBJ_CAMPFIRE:
-        addon = FindObject( GetObject() );
-        break;
-
     case MP2::OBJ_JAIL:
         RemoveJailSprite();
         tile_passable = DIRECTION_ALL;
@@ -2385,31 +2371,24 @@ void Maps::Tiles::RemoveObjectSprite( void )
         break;
 
     default:
-        break;
-    }
-
-    if ( addon ) {
         // remove shadow sprite from left cell
         if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) )
-            world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::LEFT ) ).Remove( addon->uniq );
+            world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::LEFT ) ).Remove( uniq );
 
-        Remove( addon->uniq );
+        Remove( uniq );
+        break;
     }
 }
 
 void Maps::Tiles::RemoveBarrierSprite( void )
 {
-    Maps::TilesAddon * addon = FindObject( MP2::OBJ_BARRIER );
-
-    if ( addon ) {
-        // remove left sprite
-        if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) ) {
-            const s32 left = Maps::GetDirectionIndex( GetIndex(), Direction::LEFT );
-            world.GetTiles( left ).Remove( addon->uniq );
-        }
-
-        Remove( addon->uniq );
+    // remove left sprite
+    if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) ) {
+        const s32 left = Maps::GetDirectionIndex( GetIndex(), Direction::LEFT );
+        world.GetTiles( left ).Remove( uniq );
     }
+
+    Remove( uniq );
 }
 
 void Maps::Tiles::RemoveJailSprite( void )
