@@ -283,7 +283,7 @@ void AnimationRemoveObject( Maps::Tiles & tile )
     if ( tile.GetObject() == MP2::OBJ_ZERO )
         return;
 
-    Game::RemoveAnimation::Set( Game::RemoveAnimation::Info( tile.GetObjectTileset(), tile.GetObjectSpriteIndex(), tile.GetIndex() ) );
+    Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( tile.GetObjectTileset(), tile.GetObjectSpriteIndex(), tile.GetIndex() ) );
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )

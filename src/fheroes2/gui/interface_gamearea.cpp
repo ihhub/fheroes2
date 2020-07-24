@@ -174,32 +174,37 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
         }
     }
 
-    // remove animation
-    Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
-    if ( removalInfo.object != MP2::OBJ_ZERO ) {
-        const Point mp = Maps::GetPoint( removalInfo.tile );
-        const int icn = MP2::GetICNObject( removalInfo.object );
+    // object fade in/fade out animation
+    Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
+    if ( fadeInfo.object != MP2::OBJ_ZERO ) {
+        const Point mp = Maps::GetPoint( fadeInfo.tile );
+        const int icn = MP2::GetICNObject( fadeInfo.object );
 
         if ( icn == ICN::MONS32 ) {
-            const std::pair<int, int> monsterIndicies = Maps::Tiles::GetMonsterSpriteIndices( world.GetTiles( removalInfo.tile ), removalInfo.index );
+            const std::pair<int, int> monsterIndicies = Maps::Tiles::GetMonsterSpriteIndices( world.GetTiles( fadeInfo.tile ), fadeInfo.index );
 
             // base monster sprite
             if ( monsterIndicies.first >= 0 ) {
                 Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
-                sprite.SetAlphaMod( removalInfo.alpha, false );
+                sprite.SetAlphaMod( fadeInfo.alpha, true );
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
             }
             // animated monster part
             if ( monsterIndicies.second >= 0 ) {
                 Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
-                sprite.SetAlphaMod( removalInfo.alpha, false );
+                sprite.SetAlphaMod( fadeInfo.alpha, true );
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
             }
         }
+        else if ( fadeInfo.object == MP2::OBJ_BOAT ) {
+            Sprite sprite = AGG::GetICN( ICN::BOAT32, fadeInfo.index );
+            sprite.SetAlphaMod( fadeInfo.alpha, true );
+            BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH, mp );
+        }
         else {
-            Sprite sprite = AGG::GetICN( icn, removalInfo.index );
-            sprite.SetAlphaMod( removalInfo.alpha, false );
-            BlitOnTile( dst, sprite, 0, 0, mp );
+            Sprite sprite = AGG::GetICN( icn, fadeInfo.index );
+            sprite.SetAlphaMod( fadeInfo.alpha, true );
+            BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
         }
     }
 

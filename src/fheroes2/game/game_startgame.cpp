@@ -985,13 +985,17 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
-            if ( removalInfo.object != MP2::OBJ_ZERO ) {
-                if ( removalInfo.alpha < 20 ) {
-                    removalInfo.object = MP2::OBJ_ZERO;
+            Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
+            if ( fadeInfo.object != MP2::OBJ_ZERO ) {
+                if ( fadeInfo.isFadeOut && fadeInfo.alpha < 20 ) {
+                    fadeInfo.object = MP2::OBJ_ZERO;
+                }
+                else if ( !fadeInfo.isFadeOut && fadeInfo.alpha > 235 ) {
+                    world.GetTiles( fadeInfo.tile ).SetObject( fadeInfo.object );
+                    fadeInfo.object = MP2::OBJ_ZERO;
                 }
                 else {
-                    removalInfo.alpha -= 20;
+                    fadeInfo.alpha += ( fadeInfo.isFadeOut ) ? -20 : 20;
                 }
                 gameArea.SetRedraw();
             }

@@ -70,20 +70,22 @@ namespace Game
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
 
-    namespace RemoveAnimation
+    namespace ObjectFadeAnimation
     {
         Info::Info()
             : object( MP2::OBJ_ZERO )
             , index( 0 )
             , tile( 0 )
             , alpha( 255 )
+            , isFadeOut( true )
         {}
 
-        Info::Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ )
+        Info::Info( u8 object_, u8 index_, s32 tile_, u32 alpha_, bool fadeOut )
             : object( object_ )
             , tile( tile_ )
             , alpha( alpha_ )
             , surfaceSize( world.GetTiles( tile_ ).GetTileSurface().GetSize() )
+            , isFadeOut( fadeOut )
         {
             index = ICN::AnimationFrame( MP2::GetICNObject( object ), index_, 0 );
             if ( 0 == index ) {
@@ -201,12 +203,12 @@ void Game::SetCurrentMusic( int mus )
     current_music = mus;
 }
 
-void Game::RemoveAnimation::Set( const Info & info )
+void Game::ObjectFadeAnimation::Set( const Info & info )
 {
     removeInfo = info;
 }
 
-Game::RemoveAnimation::Info & Game::RemoveAnimation::Get()
+Game::ObjectFadeAnimation::Info & Game::ObjectFadeAnimation::Get()
 {
     return removeInfo;
 }
