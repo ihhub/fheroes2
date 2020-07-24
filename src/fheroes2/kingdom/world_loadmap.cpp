@@ -395,7 +395,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & heroes )
         Heroes * hero = NULL;
 
         if ( !jail ) {
-            colorRace = Maps::TilesAddon::ColorRaceFromHeroSprite( *addon );
+            colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
             Kingdom & kingdom = world.GetKingdom( colorRace.first );
 
             if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
