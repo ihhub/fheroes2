@@ -143,24 +143,18 @@ namespace Maps
 
         void Init( s32, const MP2::mp2tile_t & );
 
-        uint32_t GetObjectUniqueID() const;
-        uint8_t GetObjectTileset() const;
-        uint8_t GetObjectSpriteIndex() const;
         s32 GetIndex( void ) const;
         Point GetCenter( void ) const;
         int GetObject( bool skip_hero = true ) const;
-        u32 GetObjectUID( int obj ) const;
-        int GetQuantity1( void ) const
-        {
-            return quantity1;
-        }
-        int GetQuantity2( void ) const
-        {
-            return quantity2;
-        }
-        int GetPassable( void ) const;
-        int GetGround( void ) const;
-        bool isWater( void ) const;
+        uint8_t GetObjectTileset() const;
+        uint8_t GetObjectSpriteIndex() const;
+        u32 GetObjectUID() const;
+        int GetQuantity1() const;
+        int GetQuantity2() const;
+        int GetQuantity3() const;
+        int GetPassable() const;
+        int GetGround() const;
+        bool isWater() const;
 
         u32 TileSpriteIndex( void ) const;
         u32 TileSpriteShape( void ) const;
@@ -281,7 +275,6 @@ namespace Maps
         void QuantitySetResource( int, u32 );
         void QuantitySetTeleportType( int );
 
-        int GetQuantity3( void ) const;
         void SetQuantity3( int );
 
         static void UpdateMonsterInfo( Tiles & );

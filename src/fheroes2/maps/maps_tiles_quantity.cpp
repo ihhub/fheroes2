@@ -423,7 +423,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
         return Monster( Monster::GHOST );
 
     case MP2::OBJ_MONSTER:
-        return Monster( GetQuantity3() );
+        return Monster( objectIndex + 1 );
 
     default:
         break;
@@ -920,24 +920,18 @@ int Maps::Tiles::MonsterJoinCondition( void ) const
 
 void Maps::Tiles::MonsterSetJoinCondition( int cond )
 {
-    Maps::TilesAddon * addon = FindObject( MP2::OBJ_MONSTER );
-    if ( addon ) {
-        addon->tmp &= 0xFC;
-        addon->tmp |= ( cond & 0x03 );
-    }
+    quantity3 &= 0xFC;
+    quantity3 |= ( cond & 0x03 );
 }
 
 void Maps::Tiles::MonsterSetFixedCount( void )
 {
-    Maps::TilesAddon * addon = FindObject( MP2::OBJ_MONSTER );
-    if ( addon )
-        addon->tmp |= 0x80;
+    quantity3 |= 0x80;
 }
 
 bool Maps::Tiles::MonsterFixedCount( void ) const
 {
-    const Maps::TilesAddon * addon = FindObjectConst( MP2::OBJ_MONSTER );
-    return addon ? addon->tmp & 0x80 : 0;
+    return mp2_object == MP2::OBJ_MONSTER ? quantity3 & 0x80 : 0;
 }
 
 bool Maps::Tiles::MonsterJoinConditionSkip( void ) const
@@ -974,8 +968,6 @@ void Maps::Tiles::MonsterSetCount( u32 count )
 void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 count )
 {
     tile.SetObject( MP2::OBJ_MONSTER );
-    // monster type
-    tile.SetQuantity3( mons() );
 
     if ( count ) {
         tile.MonsterSetFixedCount();
@@ -1041,7 +1033,7 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 co
 void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 {
     Monster mons;
-    
+
     if ( MP2::OBJ_MONSTER == tile.GetObject() ) {
         mons = Monster( tile.objectIndex + 1 ); // ICN::MONS32 start from PEASANT
     }

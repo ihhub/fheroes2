@@ -1399,10 +1399,19 @@ void Maps::Tiles::UpdatePassable( void )
     }
 }
 
-u32 Maps::Tiles::GetObjectUID( int obj ) const
+u32 Maps::Tiles::GetObjectUID() const
 {
-    const Maps::TilesAddon * addon = FindObjectConst( obj );
-    return addon ? addon->uniq : 0;
+    return uniq;
+}
+
+int Maps::Tiles::GetQuantity1( void ) const
+{
+    return quantity1;
+}
+
+int Maps::Tiles::GetQuantity2( void ) const
+{
+    return quantity2;
 }
 
 int Maps::Tiles::GetPassable( void ) const
@@ -1555,7 +1564,7 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
     if ( ( area.GetVisibleTileROI() & mp ) && !addon.empty() ) {
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             // skip
-            if ( skipObjs && MP2::isRemoveObject( GetObject() ) && FindObjectConst( GetObject() ) == &( *it ) )
+            if ( skipObjs && MP2::isRemoveObject( GetObject() ) )
                 continue;
 
             const u8 & index = ( *it ).index;
@@ -2011,14 +2020,11 @@ bool Maps::Tiles::isObject( int obj ) const
     return obj == mp2_object;
 }
 
-uint32_t Maps::Tiles::GetObjectUniqueID() const
-{
-    return uniq;
-}
 uint8_t Maps::Tiles::GetObjectTileset() const
 {
     return objectTileset;
 }
+
 uint8_t Maps::Tiles::GetObjectSpriteIndex() const
 {
     return objectIndex;

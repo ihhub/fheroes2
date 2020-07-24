@@ -1496,7 +1496,7 @@ void World::PostLoad( void )
         case MP2::OBJ_HEROES: {
             // remove map editor sprite
             if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
-                tile.Remove( tile.GetObjectUniqueID() );
+                tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( ii ) ) );
         } break;
@@ -1578,7 +1578,7 @@ void World::PostLoad( void )
     else {
         // remove ultimate artifact sprite
         ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( it->GetObjectSpriteIndex() ) );
-        it->Remove( it->GetObjectUniqueID() );
+        it->Remove( it->GetObjectUID() );
         it->SetObject( MP2::OBJ_ZERO );
         ultimate_pos = ( *it ).GetCenter();
     }

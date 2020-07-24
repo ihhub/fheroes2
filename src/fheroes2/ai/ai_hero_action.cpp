@@ -573,7 +573,10 @@ namespace AI
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapMonster * map_troop = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
         Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
 
         JoinCount join = Army::GetJoinSolution( hero, tile, troop );
@@ -666,7 +669,10 @@ namespace AI
     void AIToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapResource * map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapResource * map_resource = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
 
         if ( obj != MP2::OBJ_BOTTLE )
             hero.GetKingdom().AddFundsResource( map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds() );
@@ -1375,7 +1381,10 @@ namespace AI
     void AIToArtifact( Heroes & hero, u32 obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapArtifact * map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapArtifact * map_artifact = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
 
         if ( !hero.IsFullBagArtifacts() ) {
             u32 cond = tile.QuantityVariant();

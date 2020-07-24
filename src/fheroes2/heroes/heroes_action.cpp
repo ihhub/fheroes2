@@ -645,9 +645,11 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 {
     bool destroy = false;
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapMonster * map_troop = NULL;
+    if ( tile.GetObject() == obj )
+        map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+
     Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
-    // const Settings & conf = Settings::Get();
 
     JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
@@ -730,7 +732,7 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
-        const uint32_t uniq = tile.GetObjectUniqueID();
+        const uint32_t uniq = tile.GetObjectUID();
         AnimationRemoveObject( tile );
         tile.MonsterSetCount( 0 );
         tile.SetObject( MP2::OBJ_ZERO );
@@ -927,10 +929,13 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapResource * map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapResource * map_resource = NULL;
+    
+    if ( tile.GetObject() == obj )
+        map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( obj == MP2::OBJ_BOTTLE ) {
-        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID() ) );
         Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
     }
     else {
@@ -1637,7 +1642,10 @@ void ActionToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapArtifact * map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapArtifact * map_artifact = NULL;
+
+    if ( tile.GetObject() == obj )
+        map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( hero.IsFullBagArtifacts() )
         Dialog::Message( "", _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );

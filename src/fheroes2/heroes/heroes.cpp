@@ -908,7 +908,7 @@ void Heroes::SetVisited( s32 index, Visit::type_t type )
 void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    const Maps::TilesAddon * addon = tile.FindObjectConst( object );
+    const uint32_t uid = tile.GetObjectUID();
     int wide = 0;
 
     switch ( object ) {
@@ -925,9 +925,9 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
         break;
     }
 
-    if ( addon && wide ) {
+    if ( tile.GetObject() == object && wide ) {
         for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).FindAddonLevel1( addon->uniq ) )
+            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
     }
 }

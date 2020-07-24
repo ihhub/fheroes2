@@ -876,7 +876,10 @@ Army::Army( const Maps::Tiles & t )
             }
         }
         else {
-            MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( t.GetObjectUID( MP2::OBJ_MONSTER ) ) );
+            MapMonster * map_troop = NULL;
+            if ( t.GetObject() == MP2::OBJ_MONSTER )
+                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( t.GetObjectUID() ) );
+
             Troop troop = map_troop ? map_troop->QuantityTroop() : t.QuantityTroop();
 
             at( 0 )->Set( troop );
@@ -1300,7 +1303,10 @@ void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 line
 
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
-    MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( MP2::OBJ_MONSTER ) ) );
+    MapMonster * map_troop = NULL;
+    if ( tile.GetObject() == MP2::OBJ_MONSTER )
+        map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+
     const u32 ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
     const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
 

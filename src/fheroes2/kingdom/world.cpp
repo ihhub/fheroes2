@@ -678,9 +678,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
         for ( MapsIndexes::const_iterator it = whilrpools.begin(); it != whilrpools.end(); ++it ) {
-            const Maps::TilesAddon * addon = GetTiles( *it ).FindObjectConst( MP2::OBJ_WHIRLPOOL );
-            if ( addon )
-                uniq_whirlpools[addon->uniq].push_back( *it );
+            uniq_whirlpools[GetTiles( *it ).GetObjectUID()].push_back( *it );
         }
         whilrpools.clear();
 
@@ -689,17 +687,15 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
             return MapsIndexes();
         }
 
-        const Maps::TilesAddon * addon = GetTiles( center ).FindObjectConst( MP2::OBJ_WHIRLPOOL );
+        const uint32_t currentUID = GetTiles( center ).GetObjectUID();
         MapsIndexes uniqs;
         uniqs.reserve( uniq_whirlpools.size() );
 
-        if ( addon ) {
-            for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
-                const u32 & uniq = ( *it ).first;
-                if ( uniq == addon->uniq )
-                    continue;
-                uniqs.push_back( uniq );
-            }
+        for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
+            const u32 & uniq = ( *it ).first;
+            if ( uniq == currentUID )
+                continue;
+            uniqs.push_back( uniq );
         }
 
         return uniq_whirlpools[*Rand::Get( uniqs )];
