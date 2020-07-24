@@ -1992,7 +1992,8 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 /* check road */
 bool Maps::Tiles::isRoad() const
 {
-    return road;
+    // additionally check if it's a castle/town entrance
+    return road || mp2_object == 163;
 }
 
 bool Maps::Tiles::isStream( void ) const
