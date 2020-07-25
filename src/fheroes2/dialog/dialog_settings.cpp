@@ -148,7 +148,7 @@ void Dialog::ExtSettings( bool readonly )
     Dialog::FrameBorder frameborder( Size( 320, window_h ) );
     const Rect & area = frameborder.GetArea();
 
-    Text text( "FHeroes2 Settings", Font::YELLOW_BIG );
+    Text text( "Game Settings", Font::YELLOW_BIG );
     text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;
