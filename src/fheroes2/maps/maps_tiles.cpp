@@ -1321,9 +1321,14 @@ void Maps::Tiles::AddonsSort( void )
 {
     Addons::iterator lastObject = addons_level1.end();
     for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        // force monster object on top (fix old saves)
+        if ( mp2_object == MP2::OBJ_MONSTER && MP2::GetICNObject( it->object ) == ICN::MONS32 ) {
+            lastObject = it;
+            break;
+        }
         // Level is actually a bitfield, but if 0 then it's an actual "full object"
         // To compare: level 2 is shadow, level 3 is roads/river
-        if ( it->level % 4 == 0 ) {
+        else if ( it->level % 4 == 0 ) {
             lastObject = it;
         }
     }
@@ -1344,11 +1349,6 @@ void Maps::Tiles::AddonsSort( void )
     //    addons_level1.sort( TilesAddon::PredicateSortRules1 );
     // if ( !addons_level2.empty() )
     //    addons_level2.sort( TilesAddon::PredicateSortRules2 );
-
-    // check if tile is empty and shouldn't be an MP2 object (roof, etc)
-    // if ( mp2_object != MP2::OBJ_ZERO && objectTileset == 0 && objectIndex == 255 ) {
-    //    mp2_object = MP2::OBJ_ZERO;
-    //}
 }
 
 int Maps::Tiles::GetGround( void ) const
