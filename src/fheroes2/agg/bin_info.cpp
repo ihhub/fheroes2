@@ -184,6 +184,12 @@ namespace Bin_Info
                 Point( *( reinterpret_cast<const int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<const int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
         }
 
+        // Elves and Grand Elves have incorrect start Y position for lower shooting attack
+        if ( monsterID == Monster::ELF || monsterID == Monster::GRAND_ELF ) {
+            if ( projectileOffset[2].y == -1 )
+                projectileOffset[2].y = -32;
+        }
+
         uint8_t projectileCount = data[186];
         if ( projectileCount > 12u )
             projectileCount = 12u; // here we need to reset our object
