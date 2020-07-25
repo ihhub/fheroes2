@@ -668,6 +668,12 @@ bool Maps::TilesAddon::isBoat( const TilesAddon & ta )
     return ( ICN::OBJNWAT2 == MP2::GetICNObject( ta.object ) && 0x17 == ta.index );
 }
 
+bool Maps::TilesAddon::isTeleporter( const TilesAddon & ta )
+{
+    // OBJNWAT2
+    return ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && ( ta.index == 116 || ta.index == 119 || ta.index == 122 ) );
+}
+
 bool Maps::TilesAddon::isMiniHero( const TilesAddon & ta )
 {
     // MINIHERO
@@ -2078,6 +2084,10 @@ const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objectID ) const
 
     case MP2::OBJ_BOAT:
         it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isBoat );
+        break;
+
+    case MP2::OBJ_STONELIGHTS:
+        it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isTeleporter );
         break;
 
     case MP2::OBJ_BARRIER:
