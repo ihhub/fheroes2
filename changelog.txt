@@ -1,4 +1,10 @@
-version 0.8 (31 July 2020)
+version 0.8 (26 July 2020)
+- add in-game option to change resolution
+- add fade-in / fade-out animation for AI heroes
+- fix logic when all stone liths were connected to each other even with different types
+- fix logic for stone liths in regard to allies
+- fix flickering of status bar in castle
+- fix attack cursor while pointing a monster
 - fix wolf's low attack animation
 - fix monster attack and fade animation on the World Map
 - add boat building animation
