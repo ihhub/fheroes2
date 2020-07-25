@@ -47,7 +47,6 @@ namespace
         void RedrawItem( const std::pair<int, int> & resolution, s32 offsetX, s32 offsetY, bool current )
         {
             Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-
             text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );
         }
 
