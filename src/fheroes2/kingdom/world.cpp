@@ -626,16 +626,16 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
     MapsIndexes result;
 
     if ( MP2::OBJ_STONELIGHTS == GetTiles( center ).GetObject( false ) ) {
-        MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELIGHTS, true );
+        const MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELIGHTS, true );
 
         if ( 2 > allTeleporters.size() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is empty" );
         }
         else {
             const Maps::Tiles & entrance = GetTiles( center );
-            uint8_t teleportType = entrance.FindObjectConst( MP2::OBJ_STONELIGHTS )->index;
+            const uint8_t teleportType = entrance.FindObjectConst( MP2::OBJ_STONELIGHTS )->index;
 
-            for ( MapsIndexes::iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
+            for ( MapsIndexes::const_iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
                 const Maps::Tiles & tile = GetTiles( *it );
                 const Maps::TilesAddon * addon = tile.FindObjectConst( MP2::OBJ_STONELIGHTS );
                 if ( addon && *it != center && addon->index == teleportType && tile.isWater() == entrance.isWater() ) {
