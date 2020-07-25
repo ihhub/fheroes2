@@ -637,8 +637,8 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 
             for ( MapsIndexes::iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
                 const Maps::Tiles & tile = GetTiles( *it );
-
-                if ( *it != center && tile.FindObjectConst( MP2::OBJ_STONELIGHTS )->index == teleportType && tile.isWater() == entrance.isWater() ) {
+                const Maps::TilesAddon * addon = tile.FindObjectConst( MP2::OBJ_STONELIGHTS );
+                if ( addon && *it != center && addon->index == teleportType && tile.isWater() == entrance.isWater() ) {
                     result.push_back( *it );
                 }
             }

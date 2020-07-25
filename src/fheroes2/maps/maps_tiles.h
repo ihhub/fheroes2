@@ -84,6 +84,7 @@ namespace Maps
         static bool isShadow( const TilesAddon & );
         static bool isEvent( const TilesAddon & );
         static bool isBoat( const TilesAddon & );
+        static bool isTeleporter( const TilesAddon & );
         static bool isMiniHero( const TilesAddon & );
         static bool isRandomResource( const TilesAddon & );
         static bool isRandomArtifact( const TilesAddon & );
