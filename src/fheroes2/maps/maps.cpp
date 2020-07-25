@@ -505,9 +505,6 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
         return;
     }
 
-    const int castleICN = isRandom ? ICN::OBJNTWRD : ICN::OBJNTOWN;
-    const int shadowICN = isRandom ? ICN::OBJNTWRD : ICN::OBJNTWSH;
-
     int raceIndex = 0;
     switch ( race ) {
     case Race::BARB:
@@ -541,9 +538,19 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
-            const uint8_t originalSet = 38; // OBJNTWRD
+            Tiles & tile = world.GetTiles( castleTile );
+            const uint8_t originalSet = isRandom ? 38 : 35; // OBJNTWRD
             const uint8_t tilesetChange = isRandom ? 35 * 4 : 0; // OBJNTOWN or no change
-            world.GetTiles( castleTile ).UpdateObjectSprite( castleID, originalSet, tilesetChange, indexChange, isRandom );
+            tile.UpdateObjectSprite( castleID, originalSet, tilesetChange, indexChange, isRandom );
+
+            // FIXME: 0.7 savegame fix (top of the castle not initialized)
+            if ( index == 0 ) {
+                TilesAddon * addon = tile.FindAddonLevel2( castleID );
+                if ( addon && MP2::GetICNObject( addon->object ) == ICN::OBJNTWRD ) {
+                    addon->object -= 12;
+                    addon->index = fullTownIndex - 16;
+                }
+            }
         }
 
         const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );

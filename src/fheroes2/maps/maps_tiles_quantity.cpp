@@ -842,6 +842,11 @@ void Maps::Tiles::QuantityUpdate( void )
             }
     } break;
 
+    case MP2::OBJ_EVENT:
+        objectTileset = 0;
+        objectIndex = 255;
+        break;
+
     case MP2::OBJ_RNDARTIFACT:
     case MP2::OBJ_RNDARTIFACT1:
     case MP2::OBJ_RNDARTIFACT2:
