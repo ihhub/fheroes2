@@ -808,7 +808,7 @@ namespace AI
                 }
 
                 // reset spell info
-                tile.SetQuantity3(0);
+                tile.SetQuantity3( 0 );
                 tile.QuantitySetColor( hero.GetColor() );
 
                 if ( MP2::OBJ_LIGHTHOUSE == obj )
