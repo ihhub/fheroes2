@@ -161,21 +161,19 @@ u32 CapturedObjects::GetCountMines( int type, int col ) const
 
         if ( objcol == objcol1 || objcol == objcol2 ) {
             // scan for find mines
-            const Maps::TilesAddon * addon = world.GetTiles( ( *it ).first ).FindObject( MP2::OBJ_MINES );
+            const uint8_t index = world.GetTiles( ( *it ).first ).GetObjectSpriteIndex();
 
-            if ( addon ) {
-                // index sprite EXTRAOVR
-                if ( 0 == addon->index && Resource::ORE == type )
-                    ++result;
-                else if ( 1 == addon->index && Resource::SULFUR == type )
-                    ++result;
-                else if ( 2 == addon->index && Resource::CRYSTAL == type )
-                    ++result;
-                else if ( 3 == addon->index && Resource::GEMS == type )
-                    ++result;
-                else if ( 4 == addon->index && Resource::GOLD == type )
-                    ++result;
-            }
+            // index sprite EXTRAOVR
+            if ( 0 == index && Resource::ORE == type )
+                ++result;
+            else if ( 1 == index && Resource::SULFUR == type )
+                ++result;
+            else if ( 2 == index && Resource::CRYSTAL == type )
+                ++result;
+            else if ( 3 == index && Resource::GEMS == type )
+                ++result;
+            else if ( 4 == index && Resource::GOLD == type )
+                ++result;
         }
     }
 

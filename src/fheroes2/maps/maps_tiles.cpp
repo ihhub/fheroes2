@@ -1768,13 +1768,13 @@ void Maps::Tiles::RedrawTop( Surface & dst, bool skipObjs ) const
         area.BlitOnTile( dst, anime_sprite, mp );
     }
     else if ( MP2::OBJ_MINES == GetObject() ) {
-        const Maps::TilesAddon * addon = FindObjectConst( MP2::OBJ_MINES );
-        if ( addon && addon->tmp == Spell::HAUNT ) {
-            const Sprite & anime_sprite = AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-            area.BlitOnTile( dst, anime_sprite, mp );
+        const uint8_t spellID = GetQuantity3();
+        if ( spellID == Spell::HAUNT ) {
+            const Sprite & animationSprite = AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
+            area.BlitOnTile( dst, animationSprite, mp );
         }
-        else if ( addon && addon->tmp >= Spell::SETEGUARDIAN && addon->tmp <= Spell::SETWGUARDIAN ) {
-            area.BlitOnTile( dst, AGG::GetICN( ICN::MONS32, Monster( Spell( addon->tmp ) ).GetSpriteIndex() ), TILEWIDTH, 0, mp );
+        else if ( spellID >= Spell::SETEGUARDIAN && spellID <= Spell::SETWGUARDIAN ) {
+            area.BlitOnTile( dst, AGG::GetICN( ICN::MONS32, Monster( Spell( spellID ) ).GetSpriteIndex() ), TILEWIDTH, 0, mp );
         }
     }
 
@@ -2025,7 +2025,7 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 bool Maps::Tiles::isRoad() const
 {
     // additionally check if it's a castle/town entrance
-    return road || mp2_object == 163;
+    return road || mp2_object == MP2::OBJ_CASTLE;
 }
 
 bool Maps::Tiles::isStream( void ) const
@@ -2051,21 +2051,6 @@ uint8_t Maps::Tiles::GetObjectTileset() const
 uint8_t Maps::Tiles::GetObjectSpriteIndex() const
 {
     return objectIndex;
-}
-
-Maps::TilesAddon * Maps::Tiles::FindObject( int objectID )
-{
-    return const_cast<Maps::TilesAddon *>( FindObjectConst( objectID ) );
-}
-
-const Maps::TilesAddon * Maps::Tiles::FindObjectConst( int objectID ) const
-{
-    if ( objectID == MP2::OBJ_MINES ) {
-        Addons::const_iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isMine );
-        return addons_level1.end() != it ? &( *it ) : NULL;
-    }
-
-    return NULL;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindFlags( void )

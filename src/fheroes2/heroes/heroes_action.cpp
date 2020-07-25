@@ -2071,10 +2071,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             }
 
             // reset spell info
-            Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MINES );
-            if ( addon )
-                addon->tmp = 0;
-
+            tile.SetQuantity3( 0 );
             tile.QuantitySetColor( hero.GetColor() );
 
             if ( MP2::OBJ_LIGHTHOUSE == obj )
@@ -2088,9 +2085,8 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
         Troop & troop1 = co.GetTroop();
         Troop troop2 = troop1;
 
-        // check set with spell ?
-        Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MINES );
-        bool readonly = addon ? addon->tmp : false;
+        // check if it is already guarded by a spell
+        const bool readonly = tile.GetQuantity3() != 0;
 
         if ( Dialog::SetGuardian( hero, troop2, co, readonly ) )
             troop1.Set( troop2(), troop2.GetCount() );

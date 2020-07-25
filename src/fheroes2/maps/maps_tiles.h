@@ -173,9 +173,6 @@ namespace Maps
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
-        TilesAddon * FindObject( int objectID );
-        const TilesAddon * FindObjectConst( int objectID ) const;
-
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
         void SetObject( int object );
         void SetIndex( int );
@@ -246,6 +243,7 @@ namespace Maps
         Troop QuantityTroop( void ) const;
 
         void SetObjectPassable( bool );
+        void SetQuantity3( int );
 
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
@@ -275,8 +273,6 @@ namespace Maps
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
         void QuantitySetTeleportType( int );
-
-        void SetQuantity3( int );
 
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & );

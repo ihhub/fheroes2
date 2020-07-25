@@ -808,10 +808,7 @@ namespace AI
                 }
 
                 // reset spell info
-                Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MINES );
-                if ( addon )
-                    addon->tmp = 0;
-
+                tile.SetQuantity3(0);
                 tile.QuantitySetColor( hero.GetColor() );
 
                 if ( MP2::OBJ_LIGHTHOUSE == obj )
