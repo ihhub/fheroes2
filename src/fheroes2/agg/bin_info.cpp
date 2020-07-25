@@ -184,6 +184,12 @@ namespace Bin_Info
                 Point( *( reinterpret_cast<const int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<const int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
         }
 
+        // Elves and Grand Elves have incorrect start Y position for lower shooting attack
+        if ( monsterID == Monster::ELF || monsterID == Monster::GRAND_ELF ) {
+            if ( projectileOffset[2].y == -1 )
+                projectileOffset[2].y = -32;
+        }
+
         uint8_t projectileCount = data[186];
         if ( projectileCount > 12u )
             projectileCount = 12u; // here we need to reset our object
@@ -204,6 +210,15 @@ namespace Bin_Info
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
             animationFrames.push_back( anim );
+        }
+
+        if ( monsterID == Monster::WOLF ) { // Wolves have incorrect frame for lower attack animation
+            if ( animationFrames[ATTACK3].size() == 3 && animationFrames[ATTACK3][0] == 16 ) {
+                animationFrames[ATTACK3][0] = 2;
+            }
+            if ( animationFrames[ATTACK3_END].size() == 3 && animationFrames[ATTACK3_END][2] == 16 ) {
+                animationFrames[ATTACK3_END][2] = 2;
+            }
         }
 
         // Modify AnimInfo for upgraded monsters without own FRM file
@@ -340,7 +355,7 @@ namespace Bin_Info
             if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
                 return id;
         }
-        return 0;
+        return angles.size() - 1;
     }
 
     AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )

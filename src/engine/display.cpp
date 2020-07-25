@@ -59,6 +59,11 @@ namespace
 
         return resolutions[id];
     }
+
+    bool SortResolutions( const std::pair<int, int> & first, const std::pair<int, int> & second )
+    {
+        return first.first > second.first || ( first.first == second.first && first.second >= second.second );
+    }
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -121,15 +126,8 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     }
 
     if ( !keepAspectRatio ) { // we don't allow random resolutions
-        const int displayModeCount = SDL_GetNumDisplayModes( 0 );
-        std::set<std::pair<int, int> > resolutionSet;
-        for ( int i = 0; i < displayModeCount; ++i ) {
-            SDL_DisplayMode videoMode;
-            SDL_GetDisplayMode( 0, i, &videoMode );
-            resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
-        }
-
-        if ( resolutionSet.empty() ) {
+        const std::vector<std::pair<int, int> > resolutions = GetAvailableResolutions();
+        if ( resolutions.empty() ) {
             SDL_DisplayMode currentVideoMode;
             SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
 
@@ -143,7 +141,6 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
             }
         }
         else {
-            const std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
             const std::pair<int, int> correctResolution = GetNearestResolution( w, h, resolutions );
             w = correctResolution.first;
             h = correctResolution.second;
@@ -197,18 +194,11 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     Set( w, h, false );
     Fill( RGBA( 0, 0, 0 ) );
 #else
-    SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
-    if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
-        std::set<std::pair<int, int> > resolutionSet;
-        for ( int i = 0; modes[i]; ++i ) {
-            resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
-        }
-        if ( !resolutionSet.empty() ) {
-            const std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
-            const std::pair<int, int> correctResolution = GetNearestResolution( w, h, resolutions );
-            w = correctResolution.first;
-            h = correctResolution.second;
-        }
+    const std::vector<std::pair<int, int> > resolutions = GetAvailableResolutions();
+    if ( !resolutions.empty() ) {
+        const std::pair<int, int> correctResolution = GetNearestResolution( w, h, resolutions );
+        w = correctResolution.first;
+        h = correctResolution.second;
     }
 
     u32 flags = System::GetRenderFlags();
@@ -322,6 +312,17 @@ void Display::ToggleFullScreen( void )
 #endif
 
     temp.Blit( *this );
+}
+
+bool Display::IsFullScreen() const
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    const u32 flags = SDL_GetWindowFlags( window );
+    return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
+#else
+    const uint32_t flags = surface->flags;
+    return ( flags & SDL_FULLSCREEN ) != 0;
+#endif
 }
 
 void Display::SetCaption( const char * str )
@@ -565,6 +566,34 @@ bool Display::isRedrawRequired()
 #else
     return false;
 #endif
+}
+
+std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
+{
+    std::set<std::pair<int, int> > resolutionSet;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+    for ( int i = 0; i < displayModeCount; ++i ) {
+        SDL_DisplayMode videoMode;
+        SDL_GetDisplayMode( 0, i, &videoMode );
+        resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+    }
+#else
+    SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
+    if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
+        for ( int i = 0; modes[i]; ++i ) {
+            resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
+        }
+    }
+#endif
+    if ( !resolutionSet.empty() ) {
+        std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
+        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+        return resolutions;
+    }
+
+    return std::vector<std::pair<int, int> >();
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
