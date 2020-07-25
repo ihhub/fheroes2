@@ -113,8 +113,6 @@ namespace Dialog
 
         spriteShadow.Blit( roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
 
-        const Rect enter_field( roi.x + 42, roi.y + 286, 260, 16 );
-
         Button buttonOk( roi.x + 34, roi.y + 315, ICN::REQUEST, 1, 2 );
         Button buttonCancel( roi.x + 244, roi.y + 315, ICN::REQUEST, 3, 4 );
 
