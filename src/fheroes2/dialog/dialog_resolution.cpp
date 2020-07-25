@@ -57,18 +57,10 @@ namespace
             panel.Blit( dst );
         }
 
-        void ActionCurrentUp( void )
-        {
-        }
-        void ActionCurrentDn( void )
-        {
-        }
-        void ActionListSingleClick( std::pair<int, int> & )
-        {
-        }
-        void ActionListPressRight( std::pair<int, int> & )
-        {
-        }
+        void ActionCurrentUp( void ) {}
+        void ActionCurrentDn( void ) {}
+        void ActionListSingleClick( std::pair<int, int> & ) {}
+        void ActionListPressRight( std::pair<int, int> & ) {}
 
         void ActionListDoubleClick( std::pair<int, int> & )
         {
@@ -192,10 +184,11 @@ namespace Dialog
         cursor.Hide();
         back.Restore();
 
-        if ( selectedResolution.first > 0 && selectedResolution.second > 0 && selectedResolution.first != currentResolution.w &&
-             selectedResolution.second != currentResolution.h ) {
+        if ( selectedResolution.first > 0 && selectedResolution.second > 0 && selectedResolution.first != currentResolution.w
+             && selectedResolution.second != currentResolution.h ) {
             Settings & conf = Settings::Get();
-            display.SetVideoMode( selectedResolution.first, selectedResolution.second, display.IsFullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
+            display.SetVideoMode( selectedResolution.first, selectedResolution.second, display.IsFullScreen(), conf.KeepAspectRatio(),
+                                  conf.ChangeFullscreenResolution() );
             return true;
         }
 

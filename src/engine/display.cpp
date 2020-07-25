@@ -589,7 +589,7 @@ std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
 #endif
     if ( !resolutionSet.empty() ) {
         std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
-        std::sort(resolutions.begin(), resolutions.end(), SortResolutions );
+        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
         return resolutions;
     }
 
