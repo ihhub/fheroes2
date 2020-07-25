@@ -542,36 +542,10 @@ bool Maps::TilesAddon::hasSpriteAnimation() const
     return object & 1;
 }
 
-bool Maps::TilesAddon::isWaterResource( const TilesAddon & ta )
-{
-    return ( ICN::OBJNWATR == MP2::GetICNObject( ta.object )
-             && ( 0 == ta.index || // buttle
-                  19 == ta.index || // chest
-                  45 == ta.index || // flotsam
-                  111 == ta.index ) // surviror
-    );
-}
-
-bool Maps::TilesAddon::isWhirlPool( const TilesAddon & ta )
-{
-    return ( ICN::OBJNWATR == MP2::GetICNObject( ta.object ) && ( ta.index >= 202 && ta.index <= 225 ) );
-}
-
-bool Maps::TilesAddon::isStandingStone( const TilesAddon & ta )
-{
-    return ( ICN::OBJNMULT == MP2::GetICNObject( ta.object ) && ( ta.index == 84 || ta.index == 85 ) );
-}
-
 bool Maps::TilesAddon::isResource( const TilesAddon & ta )
 {
     // OBJNRSRC
     return ICN::OBJNRSRC == MP2::GetICNObject( ta.object ) && ( ta.index % 2 );
-}
-
-bool Maps::TilesAddon::isRandomResource( const TilesAddon & ta )
-{
-    // OBJNRSRC
-    return ( ICN::OBJNRSRC == MP2::GetICNObject( ta.object ) && 17 == ta.index );
 }
 
 bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
@@ -580,122 +554,9 @@ bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
     return ( ICN::OBJNARTI == MP2::GetICNObject( ta.object ) && ( ta.index > 0x10 ) && ( ta.index % 2 ) );
 }
 
-bool Maps::TilesAddon::isRandomArtifact( const TilesAddon & ta )
-{
-    // OBJNARTI
-    return ( ICN::OBJNARTI == MP2::GetICNObject( ta.object ) && 0xA3 == ta.index );
-}
-
-bool Maps::TilesAddon::isRandomArtifact1( const TilesAddon & ta )
-{
-    // OBJNARTI
-    return ( ICN::OBJNARTI == MP2::GetICNObject( ta.object ) && 0xA7 == ta.index );
-}
-
-bool Maps::TilesAddon::isRandomArtifact2( const TilesAddon & ta )
-{
-    // OBJNARTI
-    return ( ICN::OBJNARTI == MP2::GetICNObject( ta.object ) && 0xA9 == ta.index );
-}
-
-bool Maps::TilesAddon::isRandomArtifact3( const TilesAddon & ta )
-{
-    // OBJNARTI
-    return ( ICN::OBJNARTI == MP2::GetICNObject( ta.object ) && 0xAB == ta.index );
-}
-
-bool Maps::TilesAddon::isUltimateArtifact( const TilesAddon & ta )
-{
-    // OBJNARTI
-    return ( ICN::OBJNARTI == MP2::GetICNObject( ta.object ) && 0xA4 == ta.index );
-}
-
-bool Maps::TilesAddon::isCampFire( const TilesAddon & ta )
-{
-    // MTNDSRT
-    return ( ( ICN::OBJNDSRT == MP2::GetICNObject( ta.object ) && 61 == ta.index ) ||
-             // OBJNMULT
-             ( ICN::OBJNMULT == MP2::GetICNObject( ta.object ) && 131 == ta.index ) ||
-             // OBJNSNOW
-             ( ICN::OBJNSNOW == MP2::GetICNObject( ta.object ) && 4 == ta.index ) );
-}
-
-bool Maps::TilesAddon::isMonster( const TilesAddon & ta )
-{
-    // MONS32
-    return ( ICN::MONS32 == MP2::GetICNObject( ta.object ) );
-}
-
-bool Maps::TilesAddon::isArtesianSpring( const TilesAddon & ta )
-{
-    return ( ICN::OBJNCRCK == MP2::GetICNObject( ta.object ) && ( ta.index == 3 || ta.index == 4 ) );
-}
-
-bool Maps::TilesAddon::isSkeleton( const TilesAddon & ta )
-{
-    return ( ICN::OBJNDSRT == MP2::GetICNObject( ta.object ) && ta.index == 84 );
-}
-
 bool Maps::TilesAddon::isSkeletonFix( const TilesAddon & ta )
 {
     return ( ICN::OBJNDSRT == MP2::GetICNObject( ta.object ) && ta.index == 83 );
-}
-
-bool Maps::TilesAddon::isOasis( const TilesAddon & ta )
-{
-    return ( ICN::OBJNDSRT == MP2::GetICNObject( ta.object ) && ( ta.index == 108 || ta.index == 109 ) );
-}
-
-bool Maps::TilesAddon::isWateringHole( const TilesAddon & ta )
-{
-    return ( ICN::OBJNCRCK == MP2::GetICNObject( ta.object ) && ( ta.index >= 217 && ta.index <= 220 ) );
-}
-
-bool Maps::TilesAddon::isJail( const TilesAddon & ta )
-{
-    return ( ICN::X_LOC2 == MP2::GetICNObject( ta.object ) && 0x09 == ta.index );
-}
-
-bool Maps::TilesAddon::isEvent( const TilesAddon & ta )
-{
-    // OBJNMUL2
-    return ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && 0xA3 == ta.index );
-}
-
-bool Maps::TilesAddon::isMine( const TilesAddon & ta )
-{
-    // EXTRAOVR
-    return ( ICN::EXTRAOVR == MP2::GetICNObject( ta.object ) );
-}
-
-bool Maps::TilesAddon::isBoat( const TilesAddon & ta )
-{
-    // OBJNWAT2
-    return ( ICN::OBJNWAT2 == MP2::GetICNObject( ta.object ) && 0x17 == ta.index );
-}
-
-bool Maps::TilesAddon::isMiniHero( const TilesAddon & ta )
-{
-    // MINIHERO
-    return ( ICN::MINIHERO == MP2::GetICNObject( ta.object ) );
-}
-
-bool Maps::TilesAddon::isCastle( const TilesAddon & ta )
-{
-    // OBJNTOWN
-    return ( ICN::OBJNTOWN == MP2::GetICNObject( ta.object ) );
-}
-
-bool Maps::TilesAddon::isRandomCastle( const TilesAddon & ta )
-{
-    // OBJNTWRD
-    return ( ICN::OBJNTWRD == MP2::GetICNObject( ta.object ) );
-}
-
-bool Maps::TilesAddon::isRandomMonster( const TilesAddon & ta )
-{
-    // MONS32
-    return ( ICN::MONS32 == MP2::GetICNObject( ta.object ) && ( 0x41 < ta.index && 0x47 > ta.index ) );
 }
 
 bool Maps::TilesAddon::isBarrier( const TilesAddon & ta )
