@@ -203,7 +203,6 @@ namespace Maps
         void QuantityReset( void );
         bool QuantityIsValid( void ) const;
         void QuantitySetColor( int );
-        int QuantityTeleportType( void ) const;
         int QuantityVariant( void ) const;
         int QuantityExt( void ) const;
         int QuantityColor( void ) const;
@@ -248,7 +247,6 @@ namespace Maps
         void QuantitySetSpell( int );
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
-        void QuantitySetTeleportType( int );
 
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & );

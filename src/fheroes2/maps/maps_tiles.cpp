@@ -2299,7 +2299,14 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
     const MapsIndexes & v = ScanAroundObject( tileIndex, MP2::OBJ_HEROES );
     for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
         const Tiles & heroTile = world.GetTiles( *it );
-        if ( tile.isWater() == heroTile.isWater() ) {
+        const Heroes * hero = heroTile.GetHeroes();
+        if ( hero == NULL ) { // no a hero? How can it be?!
+            continue;
+        }
+
+        Route::Path path( *hero );
+        path.Calculate( tileIndex, 2 ); // we need to make sure that a hero needs exactly 1 step to the creature
+        if ( path.size() == 1 && tile.isWater() == heroTile.isWater() ) {
             attackerIndex = *it;
             break;
         }
