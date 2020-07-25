@@ -374,21 +374,19 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & heroes )
         xml_hero->Attribute( "race", &race );
 
         const Maps::Tiles & tile = world.GetTiles( posx, posy );
+        const uint8_t object = tile.GetObject();
         bool jail = false;
 
-        const Maps::TilesAddon * addon = tile.FindObjectConst( MP2::OBJ_HEROES );
+        if ( object != MP2::OBJ_HEROES ) {
+            jail = object == MP2::OBJ_JAIL;
 
-        if ( !addon ) {
-            addon = tile.FindObjectConst( MP2::OBJ_JAIL );
-            jail = addon;
-        }
-
-        if ( !addon ) {
-            VERBOSE( "xml error: heroes not found"
-                     << ", "
-                     << "posx: " << posx << ", "
-                     << "posy: " << posy );
-            continue;
+            if ( !jail ) {
+                VERBOSE( "xml error: heroes not found"
+                         << ", "
+                         << "posx: " << posx << ", "
+                         << "posy: " << posy );
+                continue;
+            }
         }
 
         std::pair<int, int> colorRace( Color::NONE, race );
