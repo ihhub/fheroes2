@@ -2070,8 +2070,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
                 hero.SetMapsObject( MP2::OBJ_MINES );
             }
 
-            // reset spell info
-            tile.SetQuantity3( 0 );
             tile.QuantitySetColor( hero.GetColor() );
 
             if ( MP2::OBJ_LIGHTHOUSE == obj )

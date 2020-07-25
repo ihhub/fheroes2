@@ -837,32 +837,32 @@ bool Maps::TilesAddon::isTrees( const TilesAddon & ta )
     return false;
 }
 
-void Maps::TilesAddon::UpdateAbandoneMineLeftSprite( TilesAddon & ta, int resource )
+void Maps::Tiles::UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource )
 {
-    if ( ICN::OBJNGRAS == MP2::GetICNObject( ta.object ) && 6 == ta.index ) {
-        ta.object = 128; // MTNGRAS
-        ta.index = 82;
+    if ( ICN::OBJNGRAS == MP2::GetICNObject( tileset ) && 6 == index ) {
+        tileset = 128; // MTNGRAS
+        index = 82;
     }
-    else if ( ICN::OBJNDIRT == MP2::GetICNObject( ta.object ) && 8 == ta.index ) {
-        ta.object = 104; // MTNDIRT
-        ta.index = 112;
+    else if ( ICN::OBJNDIRT == MP2::GetICNObject( tileset ) && 8 == index ) {
+        tileset = 104; // MTNDIRT
+        index = 112;
     }
-    else if ( ICN::EXTRAOVR == MP2::GetICNObject( ta.object ) && 5 == ta.index ) {
+    else if ( ICN::EXTRAOVR == MP2::GetICNObject( tileset ) && 5 == index ) {
         switch ( resource ) {
         case Resource::ORE:
-            ta.index = 0;
+            index = 0;
             break;
         case Resource::SULFUR:
-            ta.index = 1;
+            index = 1;
             break;
         case Resource::CRYSTAL:
-            ta.index = 2;
+            index = 2;
             break;
         case Resource::GEMS:
-            ta.index = 3;
+            index = 3;
             break;
         case Resource::GOLD:
-            ta.index = 4;
+            index = 4;
             break;
         default:
             break;
@@ -870,15 +870,15 @@ void Maps::TilesAddon::UpdateAbandoneMineLeftSprite( TilesAddon & ta, int resour
     }
 }
 
-void Maps::TilesAddon::UpdateAbandoneMineRightSprite( TilesAddon & ta )
+void Maps::Tiles::UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index )
 {
-    if ( ICN::OBJNDIRT == MP2::GetICNObject( ta.object ) && ta.index == 9 ) {
-        ta.object = 104;
-        ta.index = 113;
+    if ( ICN::OBJNDIRT == MP2::GetICNObject( tileset ) && index == 9 ) {
+        tileset = 104;
+        index = 113;
     }
-    else if ( ICN::OBJNGRAS == MP2::GetICNObject( ta.object ) && ta.index == 7 ) {
-        ta.object = 128;
-        ta.index = 83;
+    else if ( ICN::OBJNGRAS == MP2::GetICNObject( tileset ) && index == 7 ) {
+        tileset = 128;
+        index = 83;
     }
 }
 
@@ -2187,23 +2187,24 @@ void Maps::Tiles::RemoveJailSprite( void )
 
 void Maps::Tiles::UpdateAbandoneMineSprite( Tiles & tile )
 {
-    Addons::iterator it = std::find_if( tile.addons_level1.begin(), tile.addons_level1.end(), TilesAddon::isAbandoneMineSprite );
-    u32 uniq = it != tile.addons_level1.end() ? ( *it ).uniq : 0;
-
-    if ( uniq ) {
+    if ( tile.uniq ) {
         const int type = tile.QuantityResourceCount().first;
 
+        Tiles::UpdateAbandoneMineLeftSprite( tile.objectTileset, tile.objectIndex, type );
         for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-            TilesAddon::UpdateAbandoneMineLeftSprite( *it, type );
+            Tiles::UpdateAbandoneMineLeftSprite( it->object, it->index, type );
 
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::RIGHT ) ) {
             Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::RIGHT ) );
-            TilesAddon * mines = tile2.FindAddonLevel1( uniq );
+            TilesAddon * mines = tile2.FindAddonLevel1( tile.uniq );
 
             if ( mines )
-                TilesAddon::UpdateAbandoneMineRightSprite( *mines );
-            if ( tile2.GetObject() == MP2::OBJN_ABANDONEDMINE )
+                Tiles::UpdateAbandoneMineRightSprite( mines->object, mines->index );
+
+            if ( tile2.GetObject() == MP2::OBJN_ABANDONEDMINE ) {
                 tile2.SetObject( MP2::OBJN_MINES );
+                Tiles::UpdateAbandoneMineRightSprite( tile2.objectTileset, tile2.objectIndex );
+            }
         }
     }
 

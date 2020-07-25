@@ -94,9 +94,6 @@ namespace Maps
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
-        static void UpdateAbandoneMineLeftSprite( TilesAddon &, int resource );
-        static void UpdateAbandoneMineRightSprite( TilesAddon & );
-
         static bool ForceLevel1( const TilesAddon & );
         static bool ForceLevel2( const TilesAddon & );
 
@@ -225,6 +222,8 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource );
+        static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
         static int GetPassable( uint32_t tileset, uint32_t index );
         static std::pair<int, int> ColorRaceFromHeroSprite( uint32_t heroSpriteIndex );
         static std::pair<int, int> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );

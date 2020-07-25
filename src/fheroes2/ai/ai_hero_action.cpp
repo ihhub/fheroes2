@@ -804,11 +804,9 @@ namespace AI
                 // update abandone mine
                 if ( obj == MP2::OBJ_ABANDONEDMINE ) {
                     tile.UpdateAbandoneMineSprite( tile );
-                    hero.SetMapsObject( MP2::OBJ_MINES );
+                    tile.SetHeroes( &hero );
                 }
 
-                // reset spell info
-                tile.SetQuantity3( 0 );
                 tile.QuantitySetColor( hero.GetColor() );
 
                 if ( MP2::OBJ_LIGHTHOUSE == obj )
