@@ -355,7 +355,7 @@ namespace Bin_Info
             if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
                 return id;
         }
-        return 0;
+        return angles.size() - 1;
     }
 
     AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )
