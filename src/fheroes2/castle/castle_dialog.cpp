@@ -337,7 +337,8 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
     LocalEvent & le = LocalEvent::Get();
     cursor.Show();
-    display.Flip();
+
+    bool firstDraw = true;
 
     int result = Dialog::CANCEL;
     bool need_redraw = false;
@@ -713,7 +714,8 @@ int Castle::OpenDialog( bool readonly, bool fade )
         }
 
         // animation sprite
-        if ( Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+        if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+            firstDraw = false;
             cursor.Hide();
             CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, ( conf.ExtCastleAllowFlash() ? GetCurrentFlash( *this, cacheBuildings ) : BUILD_NOTHING ) );
             cursor.Show();
