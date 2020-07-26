@@ -670,9 +670,12 @@ Point Battle::OpponentSprite::GetCastPosition( void ) const
     return Point( pos.x + ( reflect ? offset.x : pos.w - offset.x ), pos.y + pos.h / 2 + offset.y );
 }
 
-void Battle::OpponentSprite::Redraw( Surface & dst ) const
+void Battle::OpponentSprite::Redraw( Surface & dst, uint32_t cycleFrame ) const
 {
-    const Sprite & hero = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
+    Sprite hero = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
+    if ( !base->isCaptain() && base->GetRace() == Race::NECR ) {
+        AGG::ReplaceColors( hero, PAL::GetCyclingPalette( cycleFrame ), icn, _currentAnim.getFrame(), reflect );
+    }
 
     Point offset( _offset );
     if ( base->isCaptain() ) {
@@ -1138,9 +1141,9 @@ void Battle::Interface::RedrawArmies( void )
 void Battle::Interface::RedrawOpponents( void )
 {
     if ( opponent1 )
-        opponent1->Redraw( _mainSurface );
+        opponent1->Redraw( _mainSurface, _colorCycle );
     if ( opponent2 )
-        opponent2->Redraw( _mainSurface );
+        opponent2->Redraw( _mainSurface, _colorCycle );
 
     RedrawOpponentsFlags();
 }
@@ -1370,7 +1373,7 @@ void Battle::Interface::RedrawCoverStatic( Surface & dst )
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
         Sprite cbkg = AGG::GetICN( icn_cbkg, 0 );
-        if ( _cycleBattlefield && ( icn_cbkg == ICN::CBKGLAVA || icn_cbkg == ICN::CBKGWATR ) )
+        if ( _cycleBattlefield && ( icn_cbkg == ICN::CBKGLAVA || icn_cbkg == ICN::CBKGWATR || icn_cbkg == ICN::CBKGSWMP ) )
             AGG::ReplaceColors( cbkg, _customPalette, icn_cbkg, 0, false );
         cbkg.Blit( dst );
     }
