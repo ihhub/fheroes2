@@ -378,7 +378,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
         hero.ActionNewPosition();
 
-        I.SetFocus( &hero );
+        Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
 
         return false; /* SpellCasted apply */
     }
