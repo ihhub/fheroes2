@@ -206,6 +206,10 @@
     <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_base.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal.cpp" />
+    <ClCompile Include="src\fheroes2\ai\normal\ai_normal_battle.cpp" />
+    <ClCompile Include="src\fheroes2\ai\normal\ai_normal_castle.cpp" />
+    <ClCompile Include="src\fheroes2\ai\normal\ai_normal_hero.cpp" />
+    <ClCompile Include="src\fheroes2\ai\normal\ai_normal_kingdom.cpp" />
     <ClCompile Include="src\fheroes2\ai\simple\ai_simple_battle.cpp" />
     <ClCompile Include="src\fheroes2\ai\simple\ai_simple_castle.cpp" />
     <ClCompile Include="src\fheroes2\ai\simple\ai_simple_heroes.cpp" />
