@@ -64,6 +64,11 @@ namespace
     {
         return first.first > second.first || ( first.first == second.first && first.second >= second.second );
     }
+
+    bool IsLowerThanDefaultRes( const std::pair<int, int> & value )
+    {
+        return value.first < Display::DEFAULT_WIDTH || value.second < Display::DEFAULT_HEIGHT;
+    }
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -590,6 +595,11 @@ std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
     if ( !resolutionSet.empty() ) {
         std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
         std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+
+        if ( resolutions.front().first >= DEFAULT_WIDTH && resolutions.front().first >= DEFAULT_HEIGHT ) {
+            resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
+        }
+
         return resolutions;
     }
 
