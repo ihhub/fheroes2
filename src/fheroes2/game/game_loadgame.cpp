@@ -28,7 +28,6 @@
 #include "game_io.h"
 #include "gamedefs.h"
 #include "mus.h"
-#include "pocketpc.h"
 #include "settings.h"
 
 int Game::LoadCampain( void )

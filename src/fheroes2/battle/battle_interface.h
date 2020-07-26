@@ -87,7 +87,7 @@ namespace Battle
 
         const Rect & GetArea( void ) const;
         Point GetCastPosition() const;
-        void Redraw( Surface & dst ) const;
+        void Redraw( Surface & dst, uint32_t cycleFrame ) const;
         void Update();
         void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );

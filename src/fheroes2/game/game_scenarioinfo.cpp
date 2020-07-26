@@ -37,7 +37,6 @@
 #include "maps_fileinfo.h"
 #include "mus.h"
 #include "players.h"
-#include "pocketpc.h"
 #include "race.h"
 #include "settings.h"
 #include "splitter.h"

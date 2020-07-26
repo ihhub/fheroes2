@@ -31,7 +31,6 @@
 #include "game.h"
 #include "kingdom.h"
 #include "monster.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"

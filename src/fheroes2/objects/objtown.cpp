@@ -58,8 +58,6 @@ int ObjTwba::GetPassable( u32 index0 )
         else
             return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
     }
-
-    return DIRECTION_ALL;
 }
 
 bool ObjTown::isAction( u32 index )

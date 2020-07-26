@@ -84,6 +84,7 @@ namespace Maps
         static bool isShadow( const TilesAddon & );
         static bool isEvent( const TilesAddon & );
         static bool isBoat( const TilesAddon & );
+        static bool isTeleporter( const TilesAddon & );
         static bool isMiniHero( const TilesAddon & );
         static bool isRandomResource( const TilesAddon & );
         static bool isRandomArtifact( const TilesAddon & );
@@ -238,7 +239,6 @@ namespace Maps
         void QuantityReset( void );
         bool QuantityIsValid( void ) const;
         void QuantitySetColor( int );
-        int QuantityTeleportType( void ) const;
         int QuantityVariant( void ) const;
         int QuantityExt( void ) const;
         int QuantityColor( void ) const;
@@ -256,6 +256,7 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static std::pair<int, int> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles &, const Monster &, u32 );
         static void UpdateAbandoneMineSprite( Tiles & );
         static void FixedPreload( Tiles & );
@@ -277,7 +278,6 @@ namespace Maps
         void QuantitySetSpell( int );
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
-        void QuantitySetTeleportType( int );
 
         int GetQuantity3( void ) const;
         void SetQuantity3( int );

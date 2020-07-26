@@ -36,7 +36,6 @@
 #include "m82.h"
 #include "mus.h"
 #include "payment.h"
-#include "pocketpc.h"
 #include "profit.h"
 #include "race.h"
 #include "resource.h"
@@ -156,57 +155,29 @@ void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Poin
     const Heroes * hero1 = heroes.Guard();
     const Heroes * hero2 = heroes.Guest();
 
-    if ( Settings::Get().QVGA() ) {
-        AGG::GetICN( ICN::SWAPWIN, 0 ).Blit( Rect( 36, 267, 43, 43 ), pt.x + 2, pt.y + 79 );
-        AGG::GetICN( ICN::SWAPWIN, 0 ).Blit( Rect( 36, 267, 43, 43 ), pt.x + 2, pt.y + 124 );
+    AGG::GetICN( ICN::STRIP, 0 ).Blit( pt.x, pt.y + 256 );
 
-        Surface icon1, icon2;
+    Surface icon1, icon2;
 
-        if ( hero1 )
-            icon1 = hero1->GetPortrait( PORT_MEDIUM );
-        else if ( castle.isBuild( BUILD_CAPTAIN ) )
-            icon1 = castle.GetCaptain().GetPortrait( PORT_MEDIUM );
-        else
-            icon1 = AGG::GetICN( ICN::BRCREST, Color::GetIndex( castle.GetColor() ) );
+    if ( hero1 )
+        icon1 = hero1->GetPortrait( PORT_BIG );
+    else if ( castle.isBuild( BUILD_CAPTAIN ) )
+        icon1 = castle.GetCaptain().GetPortrait( PORT_BIG );
+    else
+        icon1 = AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) );
 
-        if ( hero2 )
-            icon2 = hero2->GetPortrait( PORT_MEDIUM );
-        else
-            icon2 = AGG::GetICN( ICN::BRCREST, Color::GetIndex( castle.GetColor() ) );
+    if ( hero2 )
+        icon2 = hero2->GetPortrait( PORT_BIG );
+    else
+        icon2 = AGG::GetICN( ICN::STRIP, 3 );
 
-        if ( icon1.isValid() )
-            icon1.Blit( Rect( ( icon1.w() - 41 ) / 2, ( icon1.h() - 41 ) / 2, 41, 41 ), pt.x + 3, pt.y + 80, display );
-        if ( icon2.isValid() )
-            icon2.Blit( Rect( ( icon2.w() - 41 ) / 2, ( icon2.h() - 41 ) / 2, 41, 41 ), pt.x + 3, pt.y + 125, display );
+    if ( icon1.isValid() )
+        icon1.Blit( pt.x + 5, pt.y + 262, display );
+    if ( icon2.isValid() )
+        icon2.Blit( pt.x + 5, pt.y + 361, display );
 
-        if ( !hero2 )
-            AGG::GetICN( ICN::STONEBAK, 0 ).Blit( Rect( 0, 0, 223, 53 ), pt.x + 47, pt.y + 124 );
-    }
-    else {
-        AGG::GetICN( ICN::STRIP, 0 ).Blit( pt.x, pt.y + 256 );
-
-        Surface icon1, icon2;
-
-        if ( hero1 )
-            icon1 = hero1->GetPortrait( PORT_BIG );
-        else if ( castle.isBuild( BUILD_CAPTAIN ) )
-            icon1 = castle.GetCaptain().GetPortrait( PORT_BIG );
-        else
-            icon1 = AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) );
-
-        if ( hero2 )
-            icon2 = hero2->GetPortrait( PORT_BIG );
-        else
-            icon2 = AGG::GetICN( ICN::STRIP, 3 );
-
-        if ( icon1.isValid() )
-            icon1.Blit( pt.x + 5, pt.y + 262, display );
-        if ( icon2.isValid() )
-            icon2.Blit( pt.x + 5, pt.y + 361, display );
-
-        if ( !hero2 )
-            AGG::GetICN( ICN::STRIP, 11 ).Blit( pt.x + 112, pt.y + 361 );
-    }
+    if ( !hero2 )
+        AGG::GetICN( ICN::STRIP, 11 ).Blit( pt.x + 112, pt.y + 361 );
 }
 
 Surface GetMeetingSprite( void )
@@ -345,7 +316,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
+    Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
 
     // fill cache buildings
     CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
@@ -366,7 +337,8 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
     LocalEvent & le = LocalEvent::Get();
     cursor.Show();
-    display.Flip();
+
+    bool firstDraw = true;
 
     int result = Dialog::CANCEL;
     bool need_redraw = false;
@@ -569,6 +541,28 @@ int Castle::OpenDialog( bool readonly, bool fade )
                         case BUILD_SHIPYARD:
                             if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat() ) ) {
                                 BuyBoat();
+
+                                int alpha = 1;
+                                uint32_t buildFrame = 0;
+                                const int boatICN = GetICNBoat( GetRace() );
+                                while ( le.HandleEvents() && alpha < 255 ) {
+                                    if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
+                                        cursor.Hide();
+
+                                        Sprite shipyardSprite = AGG::GetICN( boatICN, 0 );
+                                        shipyardSprite.SetAlphaMod( alpha, true );
+                                        shipyardSprite.Blit( cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y() );
+                                        Sprite boatSprite = AGG::GetICN( boatICN, 1 );
+                                        boatSprite.SetAlphaMod( alpha, true );
+                                        boatSprite.Blit( cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y() );
+
+                                        cursor.Show();
+                                        display.Flip();
+                                        alpha += 15;
+                                    }
+                                    ++buildFrame;
+                                }
+
                                 need_redraw = true;
                             }
                             break;
@@ -720,7 +714,8 @@ int Castle::OpenDialog( bool readonly, bool fade )
         }
 
         // animation sprite
-        if ( Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+        if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+            firstDraw = false;
             cursor.Hide();
             CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, ( conf.ExtCastleAllowFlash() ? GetCurrentFlash( *this, cacheBuildings ) : BUILD_NOTHING ) );
             cursor.Show();
@@ -834,7 +829,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt )
     // sprite button exit
     dst_pt.x = src_rt.x + 1;
     dst_pt.y = src_rt.y + 166;
-    const Sprite & exit = AGG::GetICN( ICN::SWAPBTN, 0 );
+    const Sprite & exit = AGG::GetICN( ICN::TREASURY, 1 );
     exit.Blit( dst_pt );
 
     return src_rt;

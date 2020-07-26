@@ -31,7 +31,6 @@
 #include "pal.h"
 #include "sprite.h"
 #include "til.h"
-#include "xmi.h"
 
 class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
 {

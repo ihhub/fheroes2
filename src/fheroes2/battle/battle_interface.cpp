@@ -670,9 +670,12 @@ Point Battle::OpponentSprite::GetCastPosition( void ) const
     return Point( pos.x + ( reflect ? offset.x : pos.w - offset.x ), pos.y + pos.h / 2 + offset.y );
 }
 
-void Battle::OpponentSprite::Redraw( Surface & dst ) const
+void Battle::OpponentSprite::Redraw( Surface & dst, uint32_t cycleFrame ) const
 {
-    const Sprite & hero = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
+    Sprite hero = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
+    if ( !base->isCaptain() && base->GetRace() == Race::NECR ) {
+        AGG::ReplaceColors( hero, PAL::GetCyclingPalette( cycleFrame ), icn, _currentAnim.getFrame(), reflect );
+    }
 
     Point offset( _offset );
     if ( base->isCaptain() ) {
@@ -1138,9 +1141,9 @@ void Battle::Interface::RedrawArmies( void )
 void Battle::Interface::RedrawOpponents( void )
 {
     if ( opponent1 )
-        opponent1->Redraw( _mainSurface );
+        opponent1->Redraw( _mainSurface, _colorCycle );
     if ( opponent2 )
-        opponent2->Redraw( _mainSurface );
+        opponent2->Redraw( _mainSurface, _colorCycle );
 
     RedrawOpponentsFlags();
 }
@@ -1370,7 +1373,7 @@ void Battle::Interface::RedrawCoverStatic( Surface & dst )
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
         Sprite cbkg = AGG::GetICN( icn_cbkg, 0 );
-        if ( _cycleBattlefield && ( icn_cbkg == ICN::CBKGLAVA || icn_cbkg == ICN::CBKGWATR ) )
+        if ( _cycleBattlefield && ( icn_cbkg == ICN::CBKGLAVA || icn_cbkg == ICN::CBKGWATR || icn_cbkg == ICN::CBKGSWMP ) )
             AGG::ReplaceColors( cbkg, _customPalette, icn_cbkg, 0, false );
         cbkg.Blit( dst );
     }
@@ -1458,7 +1461,6 @@ void Battle::Interface::RedrawCastle1( const Castle & castle, Surface & dst )
 
 void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
 {
-    const Settings & conf = Settings::Get();
     const int icn_castle = ICN::Get4Castle( castle.GetRace() );
 
     // catapult
@@ -1565,7 +1567,6 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
 
 void Battle::Interface::RedrawCastle3( const Castle & castle )
 {
-    // const Settings & conf = Settings::Get();
     const Sprite & sprite = AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TWR_CENTER )->isValid() ? 20 : 26 ) );
 
     sprite.Blit( sprite.x(), sprite.y(), _mainSurface );
@@ -1839,7 +1840,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
 
     cursor.SetThemes( Cursor::WAR_NONE );
     _currentUnit = &b;
@@ -3502,9 +3502,6 @@ void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const Sprite & sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
-
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
     uint32_t currentAlpha = 0;
@@ -3566,7 +3563,6 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
     const Point roiOffset( drawRoi.x, drawRoi.y );
 
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::WAR_NONE );
@@ -3828,7 +3824,6 @@ void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
 void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // Casting hero position
@@ -4062,7 +4057,6 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
 void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
     Rect area = GetArea();
 
@@ -4119,7 +4113,6 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
 
 void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & targets )
 {
-    Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Rect area = GetArea();
@@ -4135,7 +4128,6 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     AGG::PlaySound( M82::ERTHQUAK );
 
     const u32 offset = Settings::Get().QVGA() ? 5 : 10;
-    bool restore = false;
 
     // draw earth quake
     while ( le.HandleEvents() && frame < 18 ) {
@@ -4352,8 +4344,6 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
 {
     LocalEvent & le = LocalEvent::Get();
-
-    const Rect & pos = b.GetRectPosition();
 
     u32 frame = 0;
     const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );

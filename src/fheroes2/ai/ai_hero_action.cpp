@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <functional>
 
+#include "agg.h"
 #include "ai.h"
 #include "army.h"
 #include "battle.h"
@@ -38,6 +39,7 @@
 #include "luck.h"
 #include "maps_tiles.h"
 #include "morale.h"
+#include "mus.h"
 #include "payment.h"
 #include "race.h"
 #include "settings.h"
@@ -87,6 +89,8 @@ namespace AI
     void AIToBoat( Heroes & hero, u32 obj, s32 dst_index );
     void AIToCoast( Heroes & hero, u32 obj, s32 dst_index );
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
+    uint32_t AIGetAllianceColors( const Heroes & hero );
+    bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
 
     int AISelectPrimarySkill( Heroes & hero )
     {
@@ -420,6 +424,9 @@ namespace AI
             hero.GetPath().Reset();
 
         AI::Get().HeroesActionComplete( hero, dst_index );
+
+        // reset if during an action music was stopped
+        AGG::PlayMusic( MUS::COMPUTER_TURN );
     }
 
     void AIToHeroes( Heroes & hero, u32 obj, s32 dst_index )
@@ -868,7 +875,7 @@ namespace AI
         hero.ApplyPenaltyMovement();
 
         if ( index_from == index_to ) {
-            DEBUG( DBG_AI, DBG_WARN, "action unsuccessfully..." );
+            DEBUG( DBG_AI, DBG_WARN, "teleport unsuccessfull, can't find exit lith" );
             return;
         }
 
@@ -879,15 +886,24 @@ namespace AI
                 AIToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
 
                 // lose battle
-                if ( hero.isFreeman() )
+                if ( hero.isFreeman() ) {
+                    DEBUG( DBG_GAME, DBG_TRACE, hero.String() + " hero dismissed, teleport action cancelled" );
                     return;
-                else if ( !other_hero->isFreeman() )
-                    DEBUG( DBG_GAME, DBG_WARN, "is busy..." );
+                }
+                else if ( !other_hero->isFreeman() ) {
+                    DEBUG( DBG_GAME, DBG_WARN, other_hero->String() + " hero is blocking teleporter exit" );
+                    return;
+                }
             }
         }
 
+        hero.FadeOut();
         hero.Move2Dest( index_to, true );
         hero.GetPath().Reset();
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeIn();
+        }
         hero.ActionNewPosition();
 
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
@@ -903,6 +919,7 @@ namespace AI
             return;
         }
 
+        hero.FadeOut();
         hero.Move2Dest( index_to, true );
 
         Troop * troop = hero.GetArmy().GetWeakestTroop();
@@ -911,6 +928,10 @@ namespace AI
             troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
 
         hero.GetPath().Reset();
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeIn();
+        }
         hero.ActionNewPosition();
 
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
@@ -1447,10 +1468,14 @@ namespace AI
         for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
             hero.SetVisited( *it );
 
+        hero.FadeOut();
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         hero.SetMapsObject( MP2::OBJ_ZERO );
         hero.SetShipMaster( true );
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+        }
         hero.GetPath().Reset();
 
         AI::Get().HeroesClearTask( hero );
@@ -1470,6 +1495,10 @@ namespace AI
         from.SetObject( MP2::OBJ_BOAT );
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
+        hero.FadeIn();
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+        }
 
         AI::Get().HeroesClearTask( hero );
 

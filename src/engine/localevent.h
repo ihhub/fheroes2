@@ -327,6 +327,11 @@ private:
     u32 clock_delay;
     int loop_delay;
 
+    // These members are used for restoring music and sounds when an user reopens the window
+    bool _isHiddenWindow;
+    bool _isMusicPaused;
+    bool _isSoundPaused;
+
 #ifdef WITHOUT_MOUSE
     bool emulate_mouse;
     KeySym emulate_mouse_up;

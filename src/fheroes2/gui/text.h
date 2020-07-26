@@ -228,7 +228,7 @@ public:
     {
         return Rect::h;
     }
-    u32 row( void ) const
+    size_t row( void ) const
     {
         return messages.size();
     }

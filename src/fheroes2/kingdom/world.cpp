@@ -621,40 +621,27 @@ const std::string & World::GetRumors( void )
     return *Rand::Get( vec_rumors );
 }
 
-bool TeleportCheckType( s32 index, int type )
-{
-    return world.GetTiles( index ).QuantityTeleportType() == type;
-}
-
-bool TeleportCheckGround( s32 index, bool water )
-{
-    return world.GetTiles( index ).isWater() == water;
-}
-
 MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 {
     MapsIndexes result;
 
     if ( MP2::OBJ_STONELIGHTS == GetTiles( center ).GetObject( false ) ) {
-        result = Maps::GetObjectPositions( MP2::OBJ_STONELIGHTS, true );
+        const MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELIGHTS, true );
 
-        if ( 2 > result.size() ) {
+        if ( 2 > allTeleporters.size() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is empty" );
-            result.clear();
         }
         else {
-            MapsIndexes::iterator itend = result.end();
+            const Maps::Tiles & entrance = GetTiles( center );
+            const uint8_t teleportType = entrance.FindObjectConst( MP2::OBJ_STONELIGHTS )->index;
 
-            // remove if not type
-            itend = std::remove_if( result.begin(), itend, std::not1( std::bind2nd( std::ptr_fun( &TeleportCheckType ), GetTiles( center ).QuantityTeleportType() ) ) );
-
-            // remove if index
-            itend = std::remove( result.begin(), itend, center );
-
-            // remove if not ground
-            itend = std::remove_if( result.begin(), itend, std::not1( std::bind2nd( std::ptr_fun( &TeleportCheckGround ), GetTiles( center ).isWater() ) ) );
-
-            result.resize( std::distance( result.begin(), itend ) );
+            for ( MapsIndexes::const_iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
+                const Maps::Tiles & tile = GetTiles( *it );
+                const Maps::TilesAddon * addon = tile.FindObjectConst( MP2::OBJ_STONELIGHTS );
+                if ( addon && *it != center && addon->index == teleportType && tile.isWater() == entrance.isWater() ) {
+                    result.push_back( *it );
+                }
+            }
         }
     }
 
@@ -1135,7 +1122,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
         case MP2::OBJ_RESOURCE: {
             MapResource * ptr = new MapResource();
-            if ( FORMAT_VERSION_3269 > Game::GetLoadVersion() )
+            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
                 msg >> *static_cast<MapObjectSimple *>( ptr );
             else
                 msg >> *ptr;
@@ -1144,7 +1131,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
         case MP2::OBJ_ARTIFACT: {
             MapArtifact * ptr = new MapArtifact();
-            if ( FORMAT_VERSION_3269 > Game::GetLoadVersion() )
+            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
                 msg >> *static_cast<MapObjectSimple *>( ptr );
             else
                 msg >> *ptr;
@@ -1153,7 +1140,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
         case MP2::OBJ_MONSTER: {
             MapMonster * ptr = new MapMonster();
-            if ( FORMAT_VERSION_3269 > Game::GetLoadVersion() )
+            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
                 msg >> *static_cast<MapObjectSimple *>( ptr );
             else
                 msg >> *ptr;

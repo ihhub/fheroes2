@@ -24,6 +24,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "interface_list.h"
@@ -329,7 +330,7 @@ bool ActionSpellSummonBoat( Heroes & hero )
         if ( Maps::isValidAbsIndex( boat ) ) {
             if ( Rand::Get( 1, 100 ) <= chance ) {
                 world.GetTiles( boat ).SetObject( MP2::OBJ_ZERO );
-                world.GetTiles( dst_water ).SetObject( MP2::OBJ_BOAT );
+                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
                 return true;
             }
             break;
@@ -376,6 +377,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
         hero.ActionNewPosition();
+
+        I.SetFocus( &hero );
 
         return false; /* SpellCasted apply */
     }

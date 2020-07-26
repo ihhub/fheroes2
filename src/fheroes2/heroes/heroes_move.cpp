@@ -381,7 +381,8 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     if ( !( gamearea.GetVisibleTileROI() & mp ) )
         return;
 
-    bool reflect = ReflectSprite( direction );
+    const s32 centerIndex = GetIndex();
+    const bool reflect = ReflectSprite( direction );
 
     int flagFrameID = sprite_index;
     if ( !isEnableMove() ) {
@@ -455,7 +456,20 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     }
 
     if ( isShipMaster() && isEnableMove() ) {
-        sprite4.Blit( gamearea.RectFixed( dst_pt4, sprite4.w(), sprite4.h() ), dst_pt4, dst );
+        const Directions directions = Direction::All();
+        const int filter = DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT;
+
+        bool ocean = true;
+        for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it ) {
+            if ( ( *it & filter ) && Maps::isValidDirection( centerIndex, *it ) && !world.GetTiles( Maps::GetDirectionIndex( centerIndex, *it ) ).isWater() ) {
+                ocean = false;
+                break;
+            }
+        }
+
+        if ( ocean ) {
+            sprite4.Blit( gamearea.RectFixed( dst_pt4, sprite4.w(), sprite4.h() ), dst_pt4, dst );
+        }
     }
 
     // redraw sprites for shadow
@@ -468,7 +482,6 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
 
     // redraw dependences tiles
     Maps::Tiles & tile = world.GetTiles( center.x, center.y );
-    const s32 centerIndex = GetIndex();
     bool skip_ground = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
 
     tile.RedrawTop( dst );
