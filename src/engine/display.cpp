@@ -573,11 +573,15 @@ std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
     std::set<std::pair<int, int> > resolutionSet;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const int displayModeCount = SDL_GetNumDisplayModes( 0 );
-    for ( int i = 0; i < displayModeCount; ++i ) {
-        SDL_DisplayMode videoMode;
-        SDL_GetDisplayMode( 0, i, &videoMode );
-        resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+    const int displayCount = SDL_GetNumVideoDisplays();
+    if ( displayCount > 0 ) {
+        const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+        for ( int i = 0; i < displayModeCount; ++i ) {
+            SDL_DisplayMode videoMode;
+            if ( SDL_GetDisplayMode( 0, i, &videoMode ) == 0 ) {
+                resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+            }
+        }
     }
 #else
     SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
