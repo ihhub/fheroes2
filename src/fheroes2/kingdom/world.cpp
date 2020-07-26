@@ -1122,7 +1122,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
         case MP2::OBJ_RESOURCE: {
             MapResource * ptr = new MapResource();
-            if ( FORMAT_VERSION_3269 > Game::GetLoadVersion() )
+            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
                 msg >> *static_cast<MapObjectSimple *>( ptr );
             else
                 msg >> *ptr;
@@ -1131,7 +1131,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
         case MP2::OBJ_ARTIFACT: {
             MapArtifact * ptr = new MapArtifact();
-            if ( FORMAT_VERSION_3269 > Game::GetLoadVersion() )
+            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
                 msg >> *static_cast<MapObjectSimple *>( ptr );
             else
                 msg >> *ptr;
@@ -1140,7 +1140,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
         case MP2::OBJ_MONSTER: {
             MapMonster * ptr = new MapMonster();
-            if ( FORMAT_VERSION_3269 > Game::GetLoadVersion() )
+            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
                 msg >> *static_cast<MapObjectSimple *>( ptr );
             else
                 msg >> *ptr;
