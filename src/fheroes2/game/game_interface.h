@@ -146,6 +146,8 @@ namespace Interface
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
         void CalculateHeroPath( Heroes * hero, s32 destinationIdx );
 
+        void Reset(); // call this function only when changing the resolution
+
     private:
         Basic();
         void RedrawSystemInfo( s32, s32, u32 );

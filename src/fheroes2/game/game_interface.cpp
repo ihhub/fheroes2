@@ -43,6 +43,11 @@ Interface::Basic::Basic()
     , controlPanel( *this )
     , redraw( 0 )
 {
+    Reset();
+}
+
+void Interface::Basic::Reset()
+{
     Settings & conf = Settings::Get().Get();
     const Display & display = Display::Get();
     const int scroll_width = conf.QVGA() ? 12 : BORDERWIDTH;
