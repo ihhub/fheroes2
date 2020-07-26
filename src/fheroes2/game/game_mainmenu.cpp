@@ -183,7 +183,7 @@ int Game::MainMenu( void )
         else if ( le.MouseClickLeft( resolutionArea ) ) {
             if ( Dialog::SelectResolution() ) {
                 // force interface to reset area and positions
-                Interface::Basic::Get().SetHideInterface( false );
+                Interface::Basic::Get().Reset();
                 return MAINMENU;
             }
         }
