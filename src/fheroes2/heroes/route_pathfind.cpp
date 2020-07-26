@@ -207,13 +207,14 @@ u32 GetPenaltyFromTo( s32 from, s32 to, int direct, int pathfinding )
 {
     const u32 cost1 = Maps::Ground::GetPenalty( from, direct, pathfinding ); // penalty: for [cur] out
     const u32 cost2 = Maps::Ground::GetPenalty( to, Direction::Reflect( direct ), pathfinding ); // penalty: for [tmp] in
-    return ( cost1 + cost2 ) >> 1;
+    return std::min( cost1, cost2 );
 }
 
-bool Route::Path::Find( s32 to, int limit )
+uint32_t Route::Path::Find( s32 to, int limit )
 {
     const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
     const s32 from = hero->GetIndex();
+    uint32_t pathCost = 0;
 
     s32 cur = from;
     s32 alt = 0;
@@ -248,7 +249,7 @@ bool Route::Path::Find( s32 to, int limit )
                             list[tmp].cost_g = costg;
                             list[tmp].parent = cur;
                             list[tmp].open = 1;
-                            list[tmp].cost_d = 50 * Maps::GetApproximateDistance( tmp, to );
+                            list[tmp].cost_d = 75 * Maps::GetApproximateDistance( tmp, to );
                             list[tmp].cost_t = list[cur].cost_t + costg;
                         }
                     }
@@ -313,6 +314,7 @@ bool Route::Path::Find( s32 to, int limit )
     if ( cur == to ) {
         while ( cur != from ) {
             push_front( Route::Step( list[cur].parent, list[cur].direct, list[cur].cost_g ) );
+            pathCost += list[cur].cost_g;
             cur = list[cur].parent;
         }
     }
@@ -322,5 +324,5 @@ bool Route::Path::Find( s32 to, int limit )
                    << ", from:" << from << ", to: " << to );
     }
 
-    return !empty();
+    return pathCost;
 }

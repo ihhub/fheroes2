@@ -112,6 +112,10 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
 {
     Arena * arena = GetArena();
     Units enemies( arena->GetForce( unit.GetColor(), true ), true );
+    if ( unit.Modes( SP_BERSERKER ) ) {
+        Units allies( arena->GetForce( unit.GetColor(), false ), true );
+        enemies.insert( enemies.end(), allies.begin(), allies.end() );
+    }
 
     for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
         Unit * enemy = *it;
@@ -182,6 +186,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
 {
     const Castle * castle = Arena::GetCastle();
     const Bridge * bridge = Arena::GetBridge();
+    const bool isWide = b.isWide();
     std::map<s32, bcell_t> list;
     s32 cur = b.GetHeadIndex();
 
@@ -191,8 +196,8 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
 
     while ( cur != dst.GetHead()->GetIndex() ) {
         const Cell & center = at( cur );
-        Indexes around = b.isWide() ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) )
-                                    : GetAroundIndexes( cur );
+        Indexes around
+            = isWide ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) ) : GetAroundIndexes( cur );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
             Cell & cell = at( *it );
@@ -201,7 +206,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
                  // check bridge
                  ( !bridge || !Board::isBridgeIndex( *it ) || bridge->isPassable( b.GetColor() ) ) ) {
                 const s32 cost = 100 * Board::GetDistance( *it, dst.GetHead()->GetIndex() )
-                                 + ( b.isWide() && WideDifficultDirection( center.GetDirection(), GetDirection( *it, cur ) ) ? 100 : 0 )
+                                 + ( isWide && WideDifficultDirection( center.GetDirection(), GetDirection( *it, cur ) ) ? 100 : 0 )
                                  + ( castle && castle->isBuild( BUILD_MOAT ) && Board::isMoatIndex( *it ) ? 100 : 0 );
 
                 // new cell
@@ -237,7 +242,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
 
     // save path
     if ( cur == dst.GetHead()->GetIndex() ) {
-        while ( cur != b.GetHeadIndex() && isValidIndex( cur ) ) {
+        while ( cur != b.GetHeadIndex() && isValidIndex( cur ) && ( !isWide || isValidDirection( cur, b.isReflect() ? RIGHT : LEFT ) ) ) {
             result.push_back( cur );
             cur = list[cur].prnt;
         }
@@ -245,7 +250,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
         std::reverse( result.begin(), result.end() );
 
         // correct wide position
-        if ( b.isWide() && result.size() ) {
+        if ( isWide && result.size() ) {
             const s32 head = dst.GetHead()->GetIndex();
             const s32 tail = dst.GetTail()->GetIndex();
             const s32 prev = 1 < result.size() ? result[result.size() - 2] : b.GetHeadIndex();
@@ -279,7 +284,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
             Cell * cell = GetCell( *it );
             cell->SetDirection( cell->GetDirection() | GetDirection( *it, it == result.begin() ? b.GetHeadIndex() : *( it - 1 ) ) );
 
-            if ( b.isWide() ) {
+            if ( isWide ) {
                 const s32 head = *it;
                 const s32 prev = it != result.begin() ? *( it - 1 ) : b.GetHeadIndex();
                 Cell * tail = GetCell( head, LEFT_SIDE & GetDirection( head, prev ) ? LEFT : RIGHT );
@@ -316,6 +321,12 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
 {
     Indexes result;
     result.reserve( 30 );
+
+    // make sure we check current position first to avoid unnecessary move
+    const int headIndex = b.GetHeadIndex();
+    if ( GetCell( headIndex )->GetQuality() ) {
+        result.push_back( headIndex );
+    }
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it ).isPassable3( b, false ) && ( *it ).GetQuality() )

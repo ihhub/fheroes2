@@ -44,7 +44,7 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
 
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().h, true );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().h, buttons != 0 );
     Point pos = box.GetArea();
 
     if ( header.size() )

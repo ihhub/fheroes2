@@ -34,7 +34,7 @@ public:
     enum
     {
         DEFAULT_WIDTH = 640,
-        DEFAULT_HEIGHT = 480,
+        DEFAULT_HEIGHT = 480
     };
 
     ~Display();
@@ -55,6 +55,7 @@ public:
     void Present( void );
     void Clear( void );
     void ToggleFullScreen( void );
+    bool IsFullScreen() const;
 
     void Fade( int delay = 500 );
     void Fade( const Surface &, const Surface &, const Point &, int level, int delay );
@@ -73,6 +74,10 @@ public:
 
     bool isMouseFocusActive() const;
 
+    static bool isRedrawRequired(); // in case of no explicit redrawing we must redraw at least once in a second
+
+    static std::vector<std::pair<int, int> > GetAvailableResolutions();
+
 protected:
     friend class Texture;
 
@@ -84,6 +89,7 @@ protected:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_Window * window;
     SDL_Renderer * renderer;
+    SDL_Texture * displayTexture;
 #endif
 };
 

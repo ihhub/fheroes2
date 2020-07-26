@@ -146,11 +146,11 @@ public:
 
     int w( void ) const
     {
-        return gw;
+        return static_cast<int>( gw );
     }
     int h( void ) const
     {
-        return gh;
+        return static_cast<int>( gh );
     }
 
     void Blit( s32, s32, Surface & sf = Display::Get() ) const;
@@ -228,7 +228,7 @@ public:
     {
         return Rect::h;
     }
-    u32 row( void ) const
+    size_t row( void ) const
     {
         return messages.size();
     }

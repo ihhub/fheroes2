@@ -47,6 +47,9 @@ struct spellstats_t
     const char * description;
 };
 
+// The original resources don't have most of sprites for Mass Spells
+// so we made some tricks in AGG source file. All modified sprite IDs start from 60
+
 spellstats_t spells[] = {
     //  name                      sp   mp  spr value  bits cost     description
     {"Unknown", 0, 0, 0, 0, 0, COST_NONE, "Unknown spell."},
@@ -58,22 +61,22 @@ spellstats_t spells[] = {
      _( "Causes a bolt of electrical energy to strike a selected creature, then strike the nearest creature with half damage, then strike the NEXT nearest creature with half again damage, and so on, until it becomes too weak to be harmful.  Warning:  This spell can hit your own creatures!" )},
     {_( "Teleport" ), 9, 0, 10, 0, 0, COST_NONE, _( "Teleports the creature you select to any open position on the battlefield." )},
     {_( "Cure" ), 6, 0, 6, 5, 0, COST_NONE, _( "Removes all negative spells cast upon one of your units, and restores up to %{count} HP per level of spell power." )},
-    {_( "Mass Cure" ), 15, 0, 6, 5, 0, COST_NONE,
+    {_( "Mass Cure" ), 15, 0, 60, 5, 0, COST_NONE,
      _( "Removes all negative spells cast upon your forces, and restores up to %{count} HP per level of spell power, per creature." )},
     {_( "Resurrect" ), 12, 0, 13, 50, 0, COST_NONE, _( "Resurrects creatures from a damaged or dead unit until end of combat." )},
     {_( "Resurrect True" ), 15, 0, 12, 50, 0, COST_NONE, _( "Resurrects creatures from a damaged or dead unit permanently." )},
     {_( "Haste" ), 3, 0, 14, 0, 0, COST_NONE, _( "Increases the speed of any creature by %{count}." )},
-    {_( "Mass Haste" ), 10, 0, 14, 0, 0, COST_NONE, _( "Increases the speed of all of your creatures by %{count}." )},
+    {_( "Mass Haste" ), 10, 0, 61, 0, 0, COST_NONE, _( "Increases the speed of all of your creatures by %{count}." )},
     {_( "spell|Slow" ), 3, 0, 1, 0, 0, COST_NONE, _( "Slows target to half movement rate." )},
-    {_( "Mass Slow" ), 15, 0, 1, 0, 0, COST_NONE, _( "Slows all enemies to half movement rate." )},
+    {_( "Mass Slow" ), 15, 0, 62, 0, 0, COST_NONE, _( "Slows all enemies to half movement rate." )},
     //
     {_( "Blind " ), 6, 0, 21, 0, 0, COST_NONE, _( "Clouds the affected creatures' eyes, preventing them from moving." )},
     {_( "Bless" ), 3, 0, 7, 0, 0, COST_NONE, _( "Causes the selected creatures to inflict maximum damage." )},
-    {_( "Mass Bless" ), 12, 0, 7, 0, 0, COST_NONE, _( "Causes all of your units to inflict maximum damage." )},
+    {_( "Mass Bless" ), 12, 0, 63, 0, 0, COST_NONE, _( "Causes all of your units to inflict maximum damage." )},
     {_( "Stoneskin" ), 3, 0, 31, 3, 0, COST_NONE, _( "Magically increases the defense skill of the selected creatures." )},
     {_( "Steelskin" ), 6, 0, 30, 5, 0, COST_NONE, _( "Increases the defense skill of the targeted creatures.  This is an improved version of Stoneskin." )},
     {_( "Curse" ), 3, 0, 3, 0, 0, COST_NONE, _( "Causes the selected creatures to inflict minimum damage." )},
-    {_( "Mass Curse" ), 12, 0, 3, 0, 0, COST_NONE, _( "Causes all enemy troops to inflict minimum damage." )},
+    {_( "Mass Curse" ), 12, 0, 64, 0, 0, COST_NONE, _( "Causes all enemy troops to inflict minimum damage." )},
     {_( "Holy Word" ), 9, 0, 22, 10, 0, COST_NONE, _( "Damages all undead in the battle." )},
     {_( "Holy Shout" ), 12, 0, 23, 20, 0, COST_NONE, _( "Damages all undead in the battle.  This is an improved version of Holy Word." )},
     {_( "Anti-Magic" ), 7, 0, 17, 0, 0, COST_NONE, _( "Prevents harmful magic against the selected creatures." )},
@@ -98,7 +101,7 @@ spellstats_t spells[] = {
     {_( "Mirror Image" ), 25, 0, 26, 0, 0, COST_NONE,
      _( "Creates an illusionary unit that duplicates one of your existing units.  This illusionary unit does the same damages as the original, but will vanish if it takes any damage." )},
     {_( "Shield" ), 3, 0, 15, 2, 0, COST_NONE, _( "Halves damage received from ranged attacks for a single unit." )},
-    {_( "Mass Shield" ), 7, 0, 15, 0, 0, COST_NONE, _( "Halves damage received from ranged attacks for all of your units." )},
+    {_( "Mass Shield" ), 7, 0, 65, 0, 0, COST_NONE, _( "Halves damage received from ranged attacks for all of your units." )},
     {_( "Summon Earth Elemental" ), 30, 0, 56, 3, 0, COST_NONE, _( "Summons Earth Elementals to fight for your army." )},
     {_( "Summon Air Elemental" ), 30, 0, 57, 3, 0, COST_NONE, _( "Summons Air Elementals to fight for your army." )},
     {_( "Summon Fire Elemental" ), 30, 0, 58, 3, 0, COST_NONE, _( "Summons Fire Elementals to fight for your army." )},

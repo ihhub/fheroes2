@@ -257,7 +257,7 @@ public:
 
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
-    bool isVisited( int object, Visit::type_t = Visit::LOCAL ) const;
+    bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
 
     bool Move( bool fast = false );
@@ -272,7 +272,6 @@ public:
     bool ApplyPenaltyMovement( void );
     bool ActionSpellCast( const Spell & );
 
-    void Redraw( Surface &, bool ) const;
     void Redraw( Surface &, s32, s32, bool ) const;
     void PortraitRedraw( s32, s32, int type, Surface & ) const;
     int GetSpriteIndex( void ) const;
@@ -317,6 +316,11 @@ private:
     void AngleStep( int );
     bool MoveStep( bool fast = false );
     static void MoveStep( Heroes &, s32 from, s32 to, bool newpos );
+
+    // This function is useful only in a situation when AI hero moves out of the fog
+    // we don't update his direction during movement under the fog so there is a situation
+    // when initial hero's sprite is set incorrectly. This function fixes it
+    void SetValidDirectionSprite();
 
     std::string name;
     ColorBase killer_color;

@@ -43,6 +43,11 @@ Interface::Basic::Basic()
     , controlPanel( *this )
     , redraw( 0 )
 {
+    Reset();
+}
+
+void Interface::Basic::Reset()
+{
     Settings & conf = Settings::Get().Get();
     const Display & display = Display::Get();
     const int scroll_width = conf.QVGA() ? 12 : BORDERWIDTH;
@@ -227,31 +232,35 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
 
     Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarArea = radar.GetArea();
-    const Sprite & viewDoor = AGG::GetICN( ICN::VIEWDDOR, 0 );
+    Settings & conf = Settings::Get();
+    const Sprite & viewDoor = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     SpriteBack back( Rect( radarArea.x, radarArea.y, radarArea.w, radarArea.h ) );
     viewDoor.Blit( radarArea );
 
-    const Rect & visibleArea = gameArea.GetArea();
-    const bool isFadingEnabled = display.w() >= TILEWIDTH * ( distance + 1 ) && display.h() >= TILEWIDTH * ( distance + 1 );
+    const Rect & visibleArea = gameArea.GetROI();
+    const bool isFadingEnabled = ( gameArea.GetROI().w > TILEWIDTH * distance ) || ( gameArea.GetROI().h > TILEWIDTH * distance );
     const Surface & top = display.GetSurface( visibleArea );
+
+    // We need to add an extra one cell as a hero stands exactly in the middle of a cell
+    const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
+    const Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
+    const Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
+
     if ( isFadingEnabled ) {
         Surface back( top.GetSize(), false );
         back.Fill( ColorBlack );
-        const Point offset( visibleArea.x + visibleArea.w / 2 - TILEWIDTH * ( distance / 2 ) - TILEWIDTH / 2,
-                            visibleArea.y + visibleArea.h / 2 - TILEWIDTH * ( distance / 2 ) - TILEWIDTH / 2 );
-        const Surface middle = display.GetSurface( Rect( offset.x, offset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) ) );
 
-        display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, offset, 105, 300 );
+        const Surface middle = display.GetSurface( spellROI );
+        display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 105, 300 );
     }
 
     Cursor & cursor = Cursor::Get();
-    Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     s32 dst = -1;
     s32 returnValue = -1;
 
     const Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.h - 37 );
-    Button buttonExit( exitButtonPos.x, exitButtonPos.y, ICN::LGNDXTRA, 4, 5 );
+    Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( conf.ExtGameEvilInterface() ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
     buttonExit.Draw();
 
     while ( le.HandleEvents() ) {
@@ -264,16 +273,16 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
             if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
                 break;
         }
-        else if ( gameArea.GetArea() & mp ) {
-            dst = gameArea.GetIndexFromMousePoint( mp );
+        else if ( visibleArea & mp ) {
+            dst = gameArea.GetValidTileIdFromPoint( mp );
 
             bool valid = ( dst >= 0 );
 
             if ( valid ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
 
-                valid = ( ( gameArea.GetArea() & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
-                          && water == world.GetTiles( dst ).isWater() && ( distance / 2 ) >= Maps::GetApproximateDistance( from, dst ) );
+                valid = ( ( spellROI & mp ) && ( !tile.isFog( conf.CurrentColor() ) ) && MP2::isClearGroundObject( tile.GetObject() )
+                          && water == world.GetTiles( dst ).isWater() );
             }
 
             cursor.SetThemes( valid ? ( water ? Cursor::BOAT : Cursor::MOVE ) : Cursor::WAR_NONE );

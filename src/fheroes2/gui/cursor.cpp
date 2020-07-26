@@ -25,12 +25,30 @@
 #include "settings.h"
 #include "sprite.h"
 
-/* constructor */
 Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
     , offset_y( 0 )
+#if defined( USE_SDL_CURSOR )
+    , _cursorSDL( NULL )
+    , _isVisibleCursor( false )
+#endif
 {}
+
+Cursor::~Cursor()
+{
+    _free();
+}
+
+void Cursor::_free()
+{
+#if defined( USE_SDL_CURSOR )
+    if ( _cursorSDL != NULL ) {
+        SDL_FreeCursor( _cursorSDL );
+        _cursorSDL = NULL;
+    }
+#endif
+}
 
 Cursor & Cursor::Get( void )
 {
@@ -48,33 +66,36 @@ int Cursor::Themes( void )
 bool Cursor::SetThemes( int name, bool force )
 {
     if ( force || theme != name ) {
-        if ( isVisible() )
-            Hide();
         theme = name;
 
+        int icnID = ICN::ADVMCO;
         switch ( 0xF000 & name ) {
         case 0x3000:
-            Set( AGG::GetICN( ICN::SPELCO, 0xFF & name ), true );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::SPELCO ) << ", " << ( name & 0xFF ) );
+            icnID = ICN::SPELCO;
             break;
-
         case 0x2000:
-            Set( AGG::GetICN( ICN::CMSECO, 0xFF & name ), true );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::CMSECO ) << ", " << ( name & 0xFF ) );
+            icnID = ICN::CMSECO;
             break;
-
-        case 0x1000:
-            Set( AGG::GetICN( ICN::ADVMCO, 0xFF & name ), true );
-            DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( ICN::ADVMCO ) << ", " << ( name & 0xFF ) );
-            break;
-
         default:
-            // default Cursor::POINTER
-            Set( AGG::GetICN( ICN::ADVMCO, 0 ), true );
             break;
         }
+        const Sprite spr = AGG::GetICN( icnID, 0xFF & name );
+        SetOffset( name, Point( spr.w() / 2, spr.h() / 2 ) );
+        Set( spr, true );
+#if defined( USE_SDL_CURSOR )
+        SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, -offset_x, -offset_y );
+        if ( tempCursor == NULL ) {
+            DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, name = " << name << ", reason: " << SDL_GetError() );
+        }
+        SDL_SetCursor( tempCursor );
+        SDL_ShowCursor( 1 );
+        _free();
+        std::swap( tempCursor, _cursorSDL );
+#endif
 
-        SetOffset( name );
+        // immediately apply new offset, force
+        const Point currentPos = LocalEvent::Get().GetMouseCursor();
+        Move( currentPos.x, currentPos.y );
         return true;
     }
 
@@ -84,6 +105,7 @@ bool Cursor::SetThemes( int name, bool force )
 /* redraw cursor wrapper for local event */
 void Cursor::Redraw( s32 x, s32 y )
 {
+#if !defined( USE_SDL_CURSOR )
     Cursor & cur = Cursor::Get();
 
     if ( cur.isVisible() ) {
@@ -91,50 +113,33 @@ void Cursor::Redraw( s32 x, s32 y )
 
         Display::Get().Flip();
     }
+#endif
 }
 
 /* move cursor */
 void Cursor::Move( s32 x, s32 y )
 {
+#if defined( USE_SDL_CURSOR )
+    background.SetPos( Point( x, y ) );
+#else
     if ( isVisible() )
         SpriteMove::Move( x + offset_x, y + offset_y );
+#endif
 }
 
 /* set offset big cursor */
-void Cursor::SetOffset( int name )
+void Cursor::SetOffset( int name, const Point & defaultOffset )
 {
     switch ( name ) {
-    case Cursor::MOVE:
-    case Cursor::MOVE2:
-    case Cursor::MOVE3:
-    case Cursor::MOVE4:
-        offset_x = -12;
-        offset_y = -8;
-        break;
-
-    case Cursor::ACTION:
-    case Cursor::ACTION2:
-    case Cursor::ACTION3:
-    case Cursor::ACTION4:
-        offset_x = -14;
-        offset_y = -10;
-        break;
-
-    case Cursor::BOAT:
-    case Cursor::BOAT2:
-    case Cursor::BOAT3:
-    case Cursor::BOAT4:
-    case Cursor::REDBOAT:
-    case Cursor::REDBOAT2:
-    case Cursor::REDBOAT3:
-    case Cursor::REDBOAT4:
-        offset_x = -12;
-        offset_y = -12;
-        break;
-
-    case Cursor::CASTLE:
-        offset_x = -6;
-        offset_y = -4;
+    case Cursor::POINTER:
+    case Cursor::POINTER2:
+    case Cursor::WAR_POINTER:
+    case Cursor::FIGHT:
+    case Cursor::FIGHT2:
+    case Cursor::FIGHT3:
+    case Cursor::FIGHT4:
+        offset_x = 0;
+        offset_y = 0;
         break;
 
     case Cursor::SCROLL_TOPRIGHT:
@@ -180,76 +185,39 @@ void Cursor::SetOffset( int name )
         offset_y = -7;
         break;
 
-    case Cursor::WAR_MOVE:
-    case Cursor::WAR_FLY:
-        offset_x = -7;
-        offset_y = -14;
-        break;
-
-    case Cursor::WAR_NONE:
-    case Cursor::WAR_HERO:
-    case Cursor::WAR_ARROW:
-    case Cursor::WAR_INFO:
-    case Cursor::WAR_BROKENARROW:
-        offset_x = -7;
-        offset_y = -7;
-        break;
-
-    case Cursor::SP_SLOW:
-    case Cursor::SP_UNKNOWN:
-    case Cursor::SP_CURSE:
-    case Cursor::SP_LIGHTNINGBOLT:
-    case Cursor::SP_CHAINLIGHTNING:
-    case Cursor::SP_CURE:
-    case Cursor::SP_BLESS:
-    case Cursor::SP_FIREBALL:
-    case Cursor::SP_FIREBLAST:
-    case Cursor::SP_TELEPORT:
-    case Cursor::SP_ELEMENTALSTORM:
-    case Cursor::SP_RESURRECT:
-    case Cursor::SP_RESURRECTTRUE:
-    case Cursor::SP_HASTE:
-    case Cursor::SP_SHIELD:
-    case Cursor::SP_ARMAGEDDON:
-    case Cursor::SP_ANTIMAGIC:
-    case Cursor::SP_DISPEL:
-    case Cursor::SP_BERSERKER:
-    case Cursor::SP_PARALYZE:
-    case Cursor::SP_BLIND:
-    case Cursor::SP_HOLYWORD:
-    case Cursor::SP_HOLYSHOUT:
-    case Cursor::SP_METEORSHOWER:
-    case Cursor::SP_ANIMATEDEAD:
-    case Cursor::SP_MIRRORIMAGE:
-    case Cursor::SP_BLOODLUST:
-    case Cursor::SP_DEATHRIPPLE:
-    case Cursor::SP_DEATHWAVE:
-    case Cursor::SP_STEELSKIN:
-    case Cursor::SP_STONESKIN:
-    case Cursor::SP_DRAGONSLAYER:
-    case Cursor::SP_EARTHQUAKE:
-    case Cursor::SP_DISRUPTINGRAY:
-    case Cursor::SP_COLDRING:
-    case Cursor::SP_COLDRAY:
-    case Cursor::SP_HYPNOTIZE:
-    case Cursor::SP_ARROW: {
-        const ::Sprite & spr = AGG::GetICN( ICN::SPELCO, 0xFF & name );
-        offset_x = -spr.w() / 2;
-        offset_y = -spr.h() / 2;
-        break;
-    }
-
     default:
-        offset_x = 0;
-        offset_y = 0;
+        offset_x = -defaultOffset.x;
+        offset_y = -defaultOffset.y;
         break;
     }
 }
 
 void Cursor::Show( void )
 {
+#if defined( USE_SDL_CURSOR )
+    _isVisibleCursor = true;
+#else
     if ( !Settings::Get().ExtPocketHideCursor() )
         SpriteMove::Show();
+#endif
+}
+
+void Cursor::Hide( void )
+{
+#if defined( USE_SDL_CURSOR )
+    _isVisibleCursor = false;
+#else
+    SpriteMove::Hide();
+#endif
+}
+
+bool Cursor::isVisible( void ) const
+{
+#if defined( USE_SDL_CURSOR )
+    return ( SDL_ShowCursor( -1 ) == 1 ) && _isVisibleCursor;
+#else
+    return SpriteMove::isVisible();
+#endif
 }
 
 int Cursor::DistanceThemes( int theme, u32 dist )

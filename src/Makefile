@@ -108,6 +108,7 @@ all:
 ifndef WITHOUT_XML
 	$(MAKE) -C xmlccwrap
 endif
+	$(MAKE) -C thirdparty/libsmacker
 	$(MAKE) -C engine
 	$(MAKE) -C dist
 ifdef WITH_TOOLS
@@ -119,6 +120,7 @@ endif
 
 clean:
 	$(MAKE) -C xmlccwrap clean
+	$(MAKE) -C thirdparty/libsmacker clean
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean
 	$(MAKE) -C engine clean

@@ -20,6 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cmath>
+#include <set>
 #include <sstream>
 #include <string>
 
@@ -29,10 +32,50 @@
 #include "tools.h"
 #include "types.h"
 
+namespace
+{
+    SDL::Time redrawTiming; // a special timer to highlight that it's time to redraw a screen (only for SDL 2 as of now)
+
+    // Returns nearest screen supported resolution
+    std::pair<int, int> GetNearestResolution( int width, int height, const std::vector<std::pair<int, int> > & resolutions )
+    {
+        if ( resolutions.empty() )
+            return std::make_pair( width, height );
+
+        if ( width < 1 )
+            width = 1;
+        if ( height < 1 )
+            height = 1;
+
+        const double x = width;
+        const double y = height;
+
+        std::vector<double> similarity( resolutions.size(), 0 );
+        for ( size_t i = 0; i < resolutions.size(); ++i ) {
+            similarity[i] = std::fabs( resolutions[i].first - x ) / x + std::fabs( resolutions[i].second - y ) / y;
+        }
+
+        const std::vector<double>::difference_type id = std::distance( similarity.begin(), std::min_element( similarity.begin(), similarity.end() ) );
+
+        return resolutions[id];
+    }
+
+    bool SortResolutions( const std::pair<int, int> & first, const std::pair<int, int> & second )
+    {
+        return first.first > second.first || ( first.first == second.first && first.second >= second.second );
+    }
+
+    bool IsLowerThanDefaultRes( const std::pair<int, int> & value )
+    {
+        return value.first < Display::DEFAULT_WIDTH || value.second < Display::DEFAULT_HEIGHT;
+    }
+}
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Display::Display()
     : window( NULL )
     , renderer( NULL )
+    , displayTexture( NULL )
     , keepAspectRatio( false )
 {
     _isDisplay = true;
@@ -47,6 +90,11 @@ Display::Display()
 Display::~Display()
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( displayTexture ) {
+        SDL_DestroyTexture( displayTexture );
+        displayTexture = NULL;
+    }
+
     if ( renderer ) {
         SDL_DestroyRenderer( renderer );
         renderer = NULL;
@@ -70,7 +118,11 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
             flags |= SDL_WINDOW_FULLSCREEN;
         }
         else {
+#if defined( __WIN32__ )
+            flags |= SDL_WINDOW_FULLSCREEN;
+#else
             flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
         }
         keepAspectRatio = aspect;
     }
@@ -78,6 +130,30 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
         keepAspectRatio = false;
     }
 
+    if ( !keepAspectRatio ) { // we don't allow random resolutions
+        const std::vector<std::pair<int, int> > resolutions = GetAvailableResolutions();
+        if ( resolutions.empty() ) {
+            SDL_DisplayMode currentVideoMode;
+            SDL_GetCurrentDisplayMode( 0, &currentVideoMode );
+
+            currentVideoMode.w = w;
+            currentVideoMode.h = h;
+
+            SDL_DisplayMode closestVideoMode;
+            if ( SDL_GetClosestDisplayMode( 0, &currentVideoMode, &closestVideoMode ) != NULL ) {
+                w = closestVideoMode.w;
+                h = closestVideoMode.h;
+            }
+        }
+        else {
+            const std::pair<int, int> correctResolution = GetNearestResolution( w, h, resolutions );
+            w = correctResolution.first;
+            h = correctResolution.second;
+        }
+    }
+
+    if ( displayTexture )
+        SDL_DestroyTexture( displayTexture );
     if ( renderer )
         SDL_DestroyRenderer( renderer );
 
@@ -92,6 +168,7 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
 
     window = SDL_CreateWindow( "", prevX, prevY, w, h, flags );
     renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
+    displayTexture = SDL_CreateTexture( renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, w, h );
 
     if ( keepAspectRatio ) {
         SDL_DisplayMode currentVideoMode;
@@ -122,6 +199,13 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     Set( w, h, false );
     Fill( RGBA( 0, 0, 0 ) );
 #else
+    const std::vector<std::pair<int, int> > resolutions = GetAvailableResolutions();
+    if ( !resolutions.empty() ) {
+        const std::pair<int, int> correctResolution = GetNearestResolution( w, h, resolutions );
+        w = correctResolution.first;
+        h = correctResolution.second;
+    }
+
     u32 flags = System::GetRenderFlags();
 
     if ( fullscreen )
@@ -157,18 +241,20 @@ Size Display::GetDefaultSize( void )
 void Display::Flip( void )
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SDL_Texture * tx = SDL_CreateTextureFromSurface( renderer, surface );
+    redrawTiming.Start(); // TODO: for now it's only for SDL 2 but it should be for everything
 
-    if ( tx ) {
+    if ( displayTexture ) {
+        SDL_UpdateTexture( displayTexture, NULL, surface->pixels, surface->pitch );
+
         if ( 0 != SDL_SetRenderTarget( renderer, NULL ) ) {
             ERROR( SDL_GetError() );
         }
         else {
             int ret = 0;
             if ( keepAspectRatio )
-                ret = SDL_RenderCopy( renderer, tx, &srcRenderSurface, &dstRenderSurface );
+                ret = SDL_RenderCopy( renderer, displayTexture, &srcRenderSurface, &dstRenderSurface );
             else
-                ret = SDL_RenderCopy( renderer, tx, NULL, NULL );
+                ret = SDL_RenderCopy( renderer, displayTexture, NULL, NULL );
 
             if ( 0 != ret ) {
                 ERROR( SDL_GetError() );
@@ -177,11 +263,16 @@ void Display::Flip( void )
                 SDL_RenderPresent( renderer );
             }
         }
-
-        SDL_DestroyTexture( tx );
     }
-    else
+    else {
         ERROR( SDL_GetError() );
+
+        // TODO: This might be a hacky way to do but it works totally fine
+        if ( renderer )
+            SDL_DestroyRenderer( renderer );
+
+        renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
+    }
 #else
     SDL_Flip( surface );
 #endif
@@ -226,6 +317,17 @@ void Display::ToggleFullScreen( void )
 #endif
 
     temp.Blit( *this );
+}
+
+bool Display::IsFullScreen() const
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    const u32 flags = SDL_GetWindowFlags( window );
+    return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
+#else
+    const uint32_t flags = surface->flags;
+    return ( flags & SDL_FULLSCREEN ) != 0;
+#endif
 }
 
 void Display::SetCaption( const char * str )
@@ -459,6 +561,53 @@ Display & Display::Get( void )
 Surface Display::GetSurface( void ) const
 {
     return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
+}
+
+bool Display::isRedrawRequired()
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    redrawTiming.Stop();
+    return redrawTiming.Get() > 500; // 0.5 second
+#else
+    return false;
+#endif
+}
+
+std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
+{
+    std::set<std::pair<int, int> > resolutionSet;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    const int displayCount = SDL_GetNumVideoDisplays();
+    if ( displayCount > 0 ) {
+        const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+        for ( int i = 0; i < displayModeCount; ++i ) {
+            SDL_DisplayMode videoMode;
+            if ( SDL_GetDisplayMode( 0, i, &videoMode ) == 0 ) {
+                resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+            }
+        }
+    }
+#else
+    SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
+    if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
+        for ( int i = 0; modes[i]; ++i ) {
+            resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
+        }
+    }
+#endif
+    if ( !resolutionSet.empty() ) {
+        std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
+        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+
+        if ( resolutions.front().first >= DEFAULT_WIDTH && resolutions.front().first >= DEFAULT_HEIGHT ) {
+            resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
+        }
+
+        return resolutions;
+    }
+
+    return std::vector<std::pair<int, int> >();
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

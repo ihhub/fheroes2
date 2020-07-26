@@ -33,7 +33,6 @@
 #include "heroes_indicator.h"
 #include "kingdom.h"
 #include "payment.h"
-#include "pocketpc.h"
 #include "race.h"
 #include "settings.h"
 #include "skill.h"
@@ -44,9 +43,6 @@
 /* readonly: false, fade: false */
 int Heroes::OpenDialog( bool readonly, bool fade )
 {
-    if ( Settings::Get().QVGA() )
-        return PocketPC::HeroesOpenDialog( *this, readonly );
-
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
@@ -179,16 +175,16 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     bar.Blit( dst_pt );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 11 );
+    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // button prev
-    dst_pt.x = cur_pt.x + 1;
-    dst_pt.y = cur_pt.y + 480 - 20;
+    dst_pt.x = cur_pt.x;
+    dst_pt.y = cur_pt.y + Display::DEFAULT_HEIGHT - 20;
     Button buttonPrevHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 4, 5 );
 
     // button next
-    dst_pt.x = cur_pt.x + 640 - 23;
-    dst_pt.y = cur_pt.y + 480 - 20;
+    dst_pt.x = cur_pt.x + Display::DEFAULT_WIDTH - 22;
+    dst_pt.y = cur_pt.y + Display::DEFAULT_HEIGHT - 20;
     Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
 
     // button dismiss
@@ -201,18 +197,15 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     dst_pt.y = cur_pt.y + 318;
     Button buttonExit( dst_pt.x, dst_pt.y, ICN::HSBTNS, 2, 3 );
 
-    LocalEvent & le = LocalEvent::Get();
+    LocalEvent & le = LocalEvent::GetClean();
 
     if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
-        buttonDismiss.Press();
         buttonDismiss.SetDisable( true );
         if ( readonly )
             buttonDismiss.SetVisible( false );
     }
 
     if ( readonly || 2 > GetKingdom().GetHeroes().size() ) {
-        buttonNextHero.Press();
-        buttonPrevHero.Press();
         buttonNextHero.SetDisable( true );
         buttonPrevHero.SetDisable( true );
     }
@@ -280,12 +273,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             le.MousePressLeft( buttonNextHero ) ? buttonNextHero.PressDraw() : buttonNextHero.ReleaseDraw();
 
         // prev hero
-        if ( buttonPrevHero.isEnable() && le.MouseClickLeft( buttonPrevHero ) ) {
+        if ( buttonPrevHero.isEnable() && ( le.MouseClickLeft( buttonPrevHero ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
             return Dialog::PREV;
         }
 
         // next hero
-        if ( buttonNextHero.isEnable() && le.MouseClickLeft( buttonNextHero ) ) {
+        if ( buttonNextHero.isEnable() && ( le.MouseClickLeft( buttonNextHero ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
             return Dialog::NEXT;
         }
 
@@ -361,10 +354,10 @@ int Heroes::OpenDialog( bool readonly, bool fade )
                     message = _( "Dismiss hero" );
             }
         }
-        else if ( le.MouseCursor( buttonPrevHero ) )
-            message = _( "Show prev heroes" );
-        else if ( le.MouseCursor( buttonNextHero ) )
-            message = _( "Show next heroes" );
+        else if ( buttonPrevHero.isEnable() && le.MouseCursor( buttonPrevHero ) )
+            message = _( "Show previous hero" );
+        else if ( buttonNextHero.isEnable() && le.MouseCursor( buttonNextHero ) )
+            message = _( "Show next hero" );
 
         if ( message.empty() )
             statusBar.ShowMessage( _( "Hero Screen" ) );

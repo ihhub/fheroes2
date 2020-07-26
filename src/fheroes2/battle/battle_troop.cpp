@@ -132,8 +132,8 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , mirror( NULL )
     , blindanswer( false )
     , animation( id )
-    , idleTimer( 0 )
-    , idleTimerSet( false )
+    , idleTimer( animation.getIdleDelay() )
+    , customAlphaMask( 255 )
 {
     // set position
     if ( Board::isValidIndex( pos ) ) {
@@ -237,20 +237,22 @@ std::string Battle::Unit::GetSpeedString( void ) const
     return os.str();
 }
 
-Surface Battle::Unit::GetContour( int val ) const
+Surface Battle::Unit::GetContour( uint8_t colorId ) const
 {
-    const int frame = GetFrame();
+    const int frameId = GetFrame();
+    const bool isReflected = isReflect();
 
-    switch ( val ) {
-    case CONTOUR_MAIN:
-        return getContour( frame, contoursMain, false, false );
-    case CONTOUR_REFLECT:
-        return getContour( frame, contoursReflect, true, false );
-    default:
-        break;
+    const monstersprite_t & msi = GetMonsterSprite();
+    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
+
+    if ( !sprite.isValid() ) {
+        return Surface();
     }
 
-    return Surface();
+    Surface contour( sprite.GetSize(), sprite.GetFormat() );
+    AGG::DrawContour( contour, PAL::GetPaletteColor( colorId ).pack(), msi.icn_file, frameId, isReflected );
+
+    return contour;
 }
 
 u32 Battle::Unit::GetDead( void ) const
@@ -283,26 +285,9 @@ u32 Battle::Unit::GetUID( void ) const
     return uid;
 }
 
-const Surface & Battle::Unit::getContour( const int frameId, std::map<int, Surface> & contours, const bool isReflected, const bool isBlackWhite ) const
+Battle::Unit * Battle::Unit::GetMirror()
 {
-    std::map<int, Surface>::iterator iter = contours.find( frameId );
-    if ( iter != contours.end() )
-        return iter->second;
-
-    const monstersprite_t & msi = GetMonsterSprite();
-    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
-
-    if ( !sprite.isValid() ) {
-        iter = contours.insert( std::make_pair( frameId, Surface() ) ).first;
-        return iter->second;
-    }
-
-    if ( isBlackWhite )
-        iter = contours.insert( std::make_pair( frameId, sprite.RenderGrayScale() ) ).first;
-    else
-        iter = contours.insert( std::make_pair( frameId, sprite.RenderContour( RGBA( 0xe0, 0xe0, 0 ) ) ) ).first;
-
-    return iter->second;
+    return mirror;
 }
 
 void Battle::Unit::SetMirror( Unit * ptr )
@@ -427,7 +412,7 @@ bool Battle::Unit::isHandFighting( void ) const
 
 bool Battle::Unit::isHandFighting( const Unit & a, const Unit & b )
 {
-    return a.isValid() && !a.Modes( CAP_TOWER ) && b.isValid() && b.GetColor() != a.GetColor()
+    return a.isValid() && !a.Modes( CAP_TOWER ) && b.isValid() && b.GetColor() != a.GetCurrentColor()
            && ( Board::isNearIndexes( a.GetHeadIndex(), b.GetHeadIndex() ) || ( b.isWide() && Board::isNearIndexes( a.GetHeadIndex(), b.GetTailIndex() ) )
                 || ( a.isWide()
                      && ( Board::isNearIndexes( a.GetTailIndex(), b.GetHeadIndex() )
@@ -446,15 +431,7 @@ bool Battle::Unit::isIdling() const
 
 bool Battle::Unit::checkIdleDelay()
 {
-    if ( !idleTimerSet ) {
-        const uint32_t halfDelay = animation.getIdleDelay() / 2;
-        idleTimer.second = Rand::Get( 0, halfDelay / 2 ) + halfDelay * 3 / 2;
-        idleTimerSet = true;
-    }
-    const bool res = idleTimer.Trigger();
-    if ( res )
-        idleTimerSet = false;
-    return res;
+    return idleTimer.checkDelay();
 }
 
 void Battle::Unit::NewTurn( void )
@@ -483,8 +460,11 @@ void Battle::Unit::NewTurn( void )
 
         // cancel mirror image
         if ( mode == CAP_MIRROROWNER && mirror ) {
-            if ( Arena::GetInterface() )
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( *mirror );
+            if ( Arena::GetInterface() ) {
+                std::vector<Unit *> images;
+                images.push_back( mirror );
+                Arena::GetInterface()->RedrawActionRemoveMirrorImage( images );
+            }
 
             mirror->SetCount( 0 );
             mirror = NULL;
@@ -623,14 +603,10 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
     if ( dmg && GetCount() ) {
         u32 killed = HowManyWillKilled( dmg );
 
-        // kill mirror image (slave)
+        // mirror image dies if recieves any damage
         if ( Modes( CAP_MIRRORIMAGE ) ) {
-            if ( Arena::GetInterface() )
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( *this );
-            mirror->ResetModes( CAP_MIRROROWNER );
             dmg = hp;
             killed = GetCount();
-            mirror = NULL;
         }
 
         DEBUG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed );
@@ -645,9 +621,6 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
         }
         hp -= ( dmg >= hp ? hp : dmg );
 
-        if ( !isValid() )
-            PostKilledAction();
-
         return killed;
     }
 
@@ -658,14 +631,17 @@ void Battle::Unit::PostKilledAction( void )
 {
     // kill mirror image (master)
     if ( Modes( CAP_MIRROROWNER ) ) {
-        if ( Arena::GetInterface() )
-            Arena::GetInterface()->RedrawActionRemoveMirrorImage( *mirror );
         modes = 0;
         mirror->hp = 0;
         mirror->SetCount( 0 );
         mirror->mirror = NULL;
         mirror = NULL;
         ResetModes( CAP_MIRROROWNER );
+    }
+    // kill mirror image (slave)
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        mirror->ResetModes( CAP_MIRROROWNER );
+        mirror = NULL;
     }
 
     ResetModes( IS_MAGIC );
@@ -1095,7 +1071,7 @@ u32 Battle::Unit::GetHitPoints( void ) const
 
 int Battle::Unit::GetControl( void ) const
 {
-    return Modes( SP_BERSERKER ) || !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
+    return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
 }
 
 bool Battle::Unit::isArchers( void ) const
@@ -1687,6 +1663,16 @@ void Battle::Unit::SetDeathAnim()
     animation.setToLastFrame();
 }
 
+void Battle::Unit::SetCustomAlpha( uint32_t alpha )
+{
+    customAlphaMask = alpha;
+}
+
+uint32_t Battle::Unit::GetCustomAlpha() const
+{
+    return customAlphaMask;
+}
+
 int Battle::Unit::GetFrameCount( void ) const
 {
     return animation.animationLength();
@@ -1709,8 +1695,6 @@ bool Battle::Unit::isFinishAnimFrame( void ) const
 
 AnimationSequence Battle::Unit::GetFrameState( int state ) const
 {
-    const monstersprite_t & msi = GetMonsterSprite();
-
     // Can't return a reference here - it will be destroyed
     return animation.getAnimationSequence( state );
 }
@@ -1848,13 +1832,34 @@ int Battle::Unit::GetArmyColor( void ) const
 
 int Battle::Unit::GetColor( void ) const
 {
+    return GetArmyColor();
+}
+
+int Battle::Unit::GetCurrentColor() const
+{
     if ( Modes( SP_BERSERKER ) )
-        return 0;
+        return -1; // be aware of unknown color
     else if ( Modes( SP_HYPNOTIZE ) )
         return GetArena()->GetOppositeColor( GetArmyColor() );
 
     // default
-    return GetArmyColor();
+    return GetColor();
+}
+
+int Battle::Unit::GetCurrentControl() const
+{
+    if ( Modes( SP_BERSERKER ) )
+        return CONTROL_AI; // let's say that it belongs to AI which is not present in the battle
+
+    if ( Modes( SP_HYPNOTIZE ) ) {
+        const int color = GetCurrentColor();
+        if ( color == GetArena()->GetForce1().GetColor() )
+            return GetArena()->GetForce1().GetControl();
+        else
+            return GetArena()->GetForce2().GetControl();
+    }
+
+    return GetControl();
 }
 
 const HeroBase * Battle::Unit::GetCommander( void ) const

@@ -39,6 +39,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "xmi.h"
 
 #ifdef WITH_ZLIB
 #include "images_pack.h"
@@ -279,21 +280,6 @@ namespace AGG
     };
 
     std::map<std::pair<int, int>, ICNData> _icnIdVsData;
-
-    const std::vector<uint32_t> GetRGBColors()
-    {
-        static std::vector<uint32_t> colors;
-        if ( !colors.empty() )
-            return colors;
-
-        colors.resize( PALETTE_SIZE );
-        for ( size_t i = 0u; i < PALETTE_SIZE; ++i ) {
-            const RGBA & rgba = PAL::GetPaletteColor( static_cast<uint8_t>( i ) );
-            colors[i] = rgba.r() + ( rgba.g() << 8 ) + ( rgba.b() << 16 );
-        }
-
-        return colors;
-    }
 }
 
 Sprite ICNSprite::CreateSprite( bool reflect, bool shadow ) const
@@ -584,19 +570,8 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     case ICN::BTNCONFIG:
         count = 2;
         break;
-    case ICN::FOUNTAIN:
-        count = 2;
-        break;
-    case ICN::TREASURE:
-        count = 2;
-        break;
     case ICN::CSLMARKER:
         count = 3;
-        break;
-    case ICN::TELEPORT1:
-    case ICN::TELEPORT2:
-    case ICN::TELEPORT3:
-        count = 8;
         break;
     case ICN::FONT:
     case ICN::SMALFONT:
@@ -609,6 +584,8 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     case ICN::ROUTERED:
         count = 145;
         break;
+    case ICN::SPELLS:
+        count = 66;
 
     default:
         break;
@@ -761,46 +738,8 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     // change color
     for ( u32 ii = 0; ii < count; ++ii ) {
         Sprite & sprite = reflect ? v.reflect[ii] : v.sprites[ii];
-        std::map<RGBA, RGBA> colorPairs;
 
         switch ( icn ) {
-        case ICN::TELEPORT1:
-            LoadOrgICN( sprite, ICN::OBJNMUL2, 116, false );
-            sprite.ChangeColorIndex( 0xEE, 0xEE + ii / 2 );
-            break;
-
-        case ICN::TELEPORT2:
-            LoadOrgICN( sprite, ICN::OBJNMUL2, 119, false );
-            sprite.ChangeColorIndex( 0xEE, 0xEE + ii );
-            break;
-
-        case ICN::TELEPORT3:
-            LoadOrgICN( sprite, ICN::OBJNMUL2, 122, false );
-            sprite.ChangeColorIndex( 0xEE, 0xEE + ii );
-            break;
-
-        case ICN::FOUNTAIN:
-            LoadOrgICN( sprite, ICN::OBJNMUL2, 15, false );
-            colorPairs[PAL::GetPaletteColor( 0xE8 )] = PAL::GetPaletteColor( 0xE8 - ii );
-            colorPairs[PAL::GetPaletteColor( 0xE9 )] = PAL::GetPaletteColor( 0xE9 - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEA )] = PAL::GetPaletteColor( 0xEA - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEB )] = PAL::GetPaletteColor( 0xEB - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEC )] = PAL::GetPaletteColor( 0xEC - ii );
-            colorPairs[PAL::GetPaletteColor( 0xED )] = PAL::GetPaletteColor( 0xED - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEE )] = PAL::GetPaletteColor( 0xEE - ii );
-            colorPairs[PAL::GetPaletteColor( 0xEF )] = PAL::GetPaletteColor( 0xEF - ii );
-            sprite.ChangeColor( colorPairs );
-            break;
-
-        case ICN::TREASURE:
-            LoadOrgICN( sprite, ICN::OBJNRSRC, 19, false );
-            colorPairs[PAL::GetPaletteColor( 0x0A )] = PAL::GetPaletteColor( ii ? 0x00 : 0x0A );
-            colorPairs[PAL::GetPaletteColor( 0xC2 )] = PAL::GetPaletteColor( ii ? 0xD6 : 0xC2 );
-            colorPairs[PAL::GetPaletteColor( 0x64 )] = PAL::GetPaletteColor( ii ? 0xDA : 0x64 );
-            sprite.ChangeColor( colorPairs );
-
-            break;
-
         case ICN::ROUTERED:
             LoadOrgICN( sprite, ICN::ROUTE, ii, false );
             ReplaceColors( sprite, PAL::GetPalette( PAL::RED ), ICN::ROUTE, ii, false );
@@ -823,6 +762,39 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
             LoadOrgICN( sprite, icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
             ReplaceColors( sprite, PAL::GetPalette( PAL::GRAY_TEXT ), icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
             break;
+
+        case ICN::SPELLS:
+            if ( ii < 60 ) {
+                LoadOrgICN( sprite, icn, ii, false );
+            }
+            else {
+                int originalIndex = 0;
+                if ( ii == 60 ) // Mass Cure
+                    originalIndex = 6;
+                else if ( ii == 61 ) // Mass Haste
+                    originalIndex = 14;
+                else if ( ii == 62 ) // Mass Slow
+                    originalIndex = 1;
+                else if ( ii == 63 ) // Mass Bless
+                    originalIndex = 7;
+                else if ( ii == 64 ) // Mass Curse
+                    originalIndex = 3;
+                else if ( ii == 65 ) // Mass Shield
+                    originalIndex = 15;
+
+                Sprite icon = AGG::GetICN( ICN::SPELLS, originalIndex );
+
+                sprite = Sprite( Surface( Size( icon.GetSize().w + 8, icon.GetSize().h + 8 ), icon.amask() ), icon.x() - 4, icon.y() - 4 );
+                Sprite icon1( icon.GetSurface(), icon.x(), icon.y() );
+                icon1.SetAlphaMod( 128, false );
+                icon1.Blit( 0, 0, sprite );
+
+                Sprite icon2( icon.GetSurface(), icon.x(), icon.y() );
+                icon2.SetAlphaMod( 192, false );
+                icon2.Blit( 4, 4, sprite );
+
+                icon.Blit( 8, 8, sprite );
+            }
 
         default:
             break;
@@ -983,7 +955,7 @@ struct ICNHeader
         , offsetY( 0 )
         , width( 0 )
         , height( 0 )
-        , type( 0 )
+        , animationFrames( 0 )
         , offsetData( 0 )
     {}
 
@@ -991,7 +963,7 @@ struct ICNHeader
     u16 offsetY;
     u16 width;
     u16 height;
-    u8 type;
+    u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
     u32 offsetData;
 };
 
@@ -1001,7 +973,7 @@ StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
     icn.offsetY = st.getLE16();
     icn.width = st.getLE16();
     icn.height = st.getLE16();
-    icn.type = st.get();
+    icn.animationFrames = st.get();
     icn.offsetData = st.getLE32();
 
     return st;
@@ -1149,7 +1121,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         res.second.SetAlphaMod( 0, false );
     }
 
-    // fix air elem sprite
+    // TODO: fix air elemental sprite
     if ( icn == ICN::AELEM && res.first.w() > 3 && res.first.h() > 3 ) {
         res.first.RenderContour( RGBA( 0, 0x84, 0xe0 ) ).Blit( -1, -1, res.first );
     }
@@ -1313,6 +1285,23 @@ u32 AGG::GetICNCount( int icn )
     if ( icn_cache[icn].count == 0 )
         AGG::GetICN( icn, 0 );
     return icn_cache[icn].count;
+}
+
+// return height of the biggest frame in specific ICN
+int AGG::GetAbsoluteICNHeight( int icn )
+{
+    int result = 0;
+
+    if ( icn < static_cast<int>( icn_cache.size() ) ) {
+        const size_t frameCount = icn_cache[icn].count;
+        for ( int i = 0; i < frameCount; ++i ) {
+            const int offset = -icn_cache[icn].sprites[i].y();
+            if ( offset > result ) {
+                result = offset;
+            }
+        }
+    }
+    return result;
 }
 
 int AGG::PutICN( const Sprite & sprite, bool init_reflect )
@@ -2050,9 +2039,39 @@ void AGG::RegisterScalableICN( int icnId )
     scalableICNIds.insert( icnId );
 }
 
-bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMap, int icnId, int incIndex, bool reflect )
+bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int icnIndex, bool reflect )
 {
-    if ( !surface.isValid() || surface.depth() != 32 || colorMap.size() != PALETTE_SIZE || icnId < 0 || incIndex < 0 )
+    if ( colorIndexes.size() != PALETTE_SIZE )
+        return false;
+
+    const std::vector<uint32_t> & rgbColors = PAL::GetRGBColors();
+
+    std::vector<uint32_t> colors( colorIndexes.size() );
+    for ( size_t i = 0; i < colorIndexes.size(); ++i )
+        colors[i] = rgbColors[colorIndexes[i]];
+
+    return ReplaceColors( surface, colors, icnId, icnIndex, reflect );
+}
+
+bool AGG::ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int icnIndex, bool reflect )
+{
+    if ( !surface.isValid() || surface.depth() != 32 || rgbColors.size() != PALETTE_SIZE || icnId < 0 || icnIndex < 0 )
+        return false;
+
+    std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, icnIndex ) );
+    if ( iter == _icnIdVsData.end() )
+        return false;
+
+    const ICNData & data = iter->second;
+    if ( surface.w() != data.width() || surface.h() != data.height() )
+        return false;
+
+    return surface.SetColors( data.get(), rgbColors, reflect );
+}
+
+bool AGG::DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect )
+{
+    if ( !surface.isValid() || surface.depth() != 32 || icnId < 0 || incIndex < 0 )
         return false;
 
     std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, incIndex ) );
@@ -2063,11 +2082,5 @@ bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMa
     if ( surface.w() != data.width() || surface.h() != data.height() )
         return false;
 
-    const std::vector<uint32_t> & rgbColors = GetRGBColors();
-
-    std::vector<uint32_t> colors( colorMap.size(), 0 );
-    for ( size_t i = 0; i < colorMap.size(); ++i )
-        colors[i] = rgbColors[colorMap[i]];
-
-    return surface.SetColors( data.get(), colors, reflect );
+    return surface.GenerateContour( data.get(), value, reflect );
 }

@@ -387,7 +387,7 @@ u32 Castle::OpenTown( void )
     bar.Blit( dst_pt );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 11 );
+    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
 
     // redraw resource panel
     RedrawResourcePanel( cur_pt );
@@ -395,7 +395,7 @@ u32 Castle::OpenTown( void )
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
+    Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
 
     buttonExit.Draw();
 

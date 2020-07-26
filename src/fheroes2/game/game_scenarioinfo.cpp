@@ -37,7 +37,6 @@
 #include "maps_fileinfo.h"
 #include "mus.h"
 #include "players.h"
-#include "pocketpc.h"
 #include "race.h"
 #include "settings.h"
 #include "splitter.h"
@@ -50,8 +49,6 @@ void RedrawDifficultyInfo( const Point & dst, bool label = true );
 
 int Game::SelectScenario( void )
 {
-    if ( Settings::Get().QVGA() )
-        return PocketPC::SelectScenario();
     return SCENARIOINFO;
 }
 

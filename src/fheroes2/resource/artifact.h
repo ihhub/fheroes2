@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "gamedefs.h"
+#include "interface_itemsbar.h"
 
 class Spell;
 class Heroes;
@@ -228,7 +229,6 @@ public:
     std::string String( void ) const;
 };
 
-#include "interface_itemsbar.h"
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:

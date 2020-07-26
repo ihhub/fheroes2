@@ -38,58 +38,62 @@ namespace MUS
         const char * string;
     } musmap[] = {{UNUSED, ""},
                   {DATATRACK, ""},
-                  {BATTLE1, "Battle (1)"},
-                  {BATTLE2, "Battle (2)"},
-                  {BATTLE3, "Battle (3)"},
-                  {BARBARIAN, "Barbarian Castle"},
+                  {BATTLE1, "Battle 1"},
+                  {BATTLE2, "Battle 2"},
+                  {BATTLE3, "Battle 3"},
                   {SORCERESS, "Sorceress Castle"},
                   {WARLOCK, "Warlock Castle"},
-                  {WIZARD, "Wizard Castle"},
                   {NECROMANCER, "Necromancer Castle"},
                   {KNIGHT, "Knight Castle"},
+                  {BARBARIAN, "Barbarian Castle"},
+                  {WIZARD, "Wizard Castle"},
                   {LAVA, "Lava Theme"},
                   {WASTELAND, "Wasteland Theme"},
                   {DESERT, "Desert Theme"},
                   {SNOW, "Snow Theme"},
                   {SWAMP, "Swamp Theme"},
-                  {BEACH, "Ocean Theme"},
+                  {OCEAN, "Ocean Theme"},
                   {DIRT, "Dirt Theme"},
                   {GRASS, "Grass Theme"},
                   {LOSTGAME, "Lost Game"},
-                  {WEEK1, "Week (1)"},
-                  {WEEK2_MONTH1, "Week (2) Month (1)"},
-                  {MONTH2, "Month (2)"},
+                  {NEW_WEEK, "New Week"},
+                  {NEW_MONTH, "New Month"},
+                  {ARCHIBALD, "Archibald Campaign"},
                   {PUZZLE, "Map Puzzle"},
-                  {ROLAND, "Roland's Campaign"},
+                  {ROLAND, "Roland Campaign"},
                   {CARAVANS, "25"},
                   {CARAVANS_2, "26"},
                   {CARAVANS_3, "27"},
-                  {COMPUTER, "28"},
-                  {BATTLEWIN, "29"},
-                  {BATTLELOSE, "30"},
-                  {DEATH, "31"},
-                  {WATERSPRING, "32"},
-                  {ARABIAN, "33"},
-                  {NOMADTENTS, "34"},
-                  {TREEHOUSE, "35"},
-                  {DEMONCAVE, "36"},
-                  {EXPERIENCE, "37"},
-                  {SKILL, "38"},
-                  {WATCHTOWER, "39"},
-                  {EVENT15, "40"},
-                  {NEWS, "41"},
+                  {COMPUTER_TURN, "AI Turn"},
+                  {BATTLEWIN, "Battle Won"},
+                  {BATTLELOSE, "Battle Lost"},
+                  {DUNGEON, "Dungeon"},
+                  {WATERSPRING, "Waterspring"},
+                  {ARABIAN, "Arabian"},
+                  {HILLFORT, "Hillfort"},
+                  {TREEHOUSE, "Treehouse"},
+                  {DEMONCAVE, "Demoncave"},
+                  {EXPERIENCE, "Experience"},
+                  {SKILL, "Skill"},
+                  {WATCHTOWER, "Watchtower"},
+                  {XANADU, "Xanadu"},
+                  {ULTIMATE_ARTIFACT, "Ultimate Artifact"},
                   {MAINMENU, "Main Menu"},
                   {VICTORY, "Scenario Victory"},
                   {UNKNOWN, "UNKNOWN"}};
 
-    const std::string GetString( int mus, bool shortname )
+    const std::string GetString( int mus, bool longName )
     {
         std::stringstream sstream;
-        sstream << std::setw( 2 ) << std::setfill( '0' ) << mus;
-        if ( shortname )
-            sstream << ".ogg";
-        else
+        if ( longName ) {
+            sstream << std::setw( 2 ) << std::setfill( '0' ) << mus;
             sstream << " " << ( UNUSED <= mus && UNKNOWN > mus ? musmap[mus].string : musmap[UNKNOWN].string ) << ".ogg";
+        }
+        else {
+            // GOG version format, data track was ignored there so 02 becomes 01
+            sstream << "homm2_" << std::setw( 2 ) << std::setfill( '0' ) << mus - 1 << ".ogg";
+        }
+
         return sstream.str();
     }
 }
@@ -106,7 +110,7 @@ int MUS::FromGround( int ground )
     case Maps::Ground::WASTELAND:
         return WASTELAND;
     case Maps::Ground::BEACH:
-        return BEACH;
+        return OCEAN;
     case Maps::Ground::LAVA:
         return LAVA;
     case Maps::Ground::DIRT:
@@ -114,7 +118,7 @@ int MUS::FromGround( int ground )
     case Maps::Ground::GRASS:
         return GRASS;
     case Maps::Ground::WATER:
-        return BEACH;
+        return OCEAN;
     default:
         break;
     }
@@ -150,38 +154,55 @@ int MUS::FromMapObject( int object )
         return MUS::UNKNOWN;
 
     switch ( object ) {
+    case MP2::OBJ_PYRAMID:
+    case MP2::OBJ_DRAGONCITY:
+    case MP2::OBJ_CITYDEAD:
+    case MP2::OBJ_TROLLBRIDGE:
+        return MUS::DUNGEON;
+
+    case MP2::OBJ_ARTESIANSPRING:
+    case MP2::OBJ_MAGICWELL:
+    case MP2::OBJ_ORACLE:
+        return MUS::WATERSPRING;
+
+    case MP2::OBJ_DESERTTENT: // Changed OG selection to something more appropriate
+    case MP2::OBJ_SPHINX:
+    case MP2::OBJ_ANCIENTLAMP:
+        return MUS::ARABIAN;
+
+    case MP2::OBJ_HILLFORT:
+        return MUS::HILLFORT;
+
+    case MP2::OBJ_TREEHOUSE:
+    case MP2::OBJ_TREECITY:
+    case MP2::OBJ_WAGONCAMP:
+        return MUS::TREEHOUSE;
+
+    case MP2::OBJ_DAEMONCAVE:
+        return MUS::DEMONCAVE;
+
+    case MP2::OBJ_GAZEBO:
+    case MP2::OBJ_TREEKNOWLEDGE:
     case MP2::OBJ_WITCHSHUT:
+        return MUS::EXPERIENCE;
+
     case MP2::OBJ_FORT:
     case MP2::OBJ_MERCENARYCAMP:
     case MP2::OBJ_DOCTORHUT:
     case MP2::OBJ_STANDINGSTONES:
         return MUS::SKILL;
 
-    case MP2::OBJ_GAZEBO:
-    case MP2::OBJ_TREEKNOWLEDGE:
-        return MUS::EXPERIENCE;
-
-    case MP2::OBJ_DAEMONCAVE:
-        return MUS::DEMONCAVE;
-
-    case MP2::OBJ_TREEHOUSE:
-    case MP2::OBJ_TREECITY:
-        return MUS::TREEHOUSE;
-
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_ABANDONEDMINE:
+    case MP2::OBJ_MAGELLANMAPS:
     case MP2::OBJ_WATCHTOWER:
         return MUS::WATCHTOWER;
 
-    case MP2::OBJ_DESERTTENT:
-        return MUS::NOMADTENTS;
-
-    case MP2::OBJ_ARTESIANSPRING:
-        return MUS::WATERSPRING;
-
-    case MP2::OBJ_SPHINX:
-        return MUS::ARABIAN;
-
-    case MP2::OBJ_EVENT:
-        return MUS::NEWS;
+    case MP2::OBJ_XANADU:
+    case MP2::OBJ_LIGHTHOUSE:
+        return MUS::XANADU;
 
     default:
         return MUS::UNKNOWN;

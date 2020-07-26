@@ -185,6 +185,7 @@ class LocalEvent
 {
 public:
     static LocalEvent & Get( void );
+    static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
     void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
@@ -294,7 +295,7 @@ private:
         TAP_MODE = 0x0080,
         MOUSE_OFFSET = 0x0100,
         CLOCK_ON = 0x0200,
-        MOUSE_WHEEL = 0x0400,
+        MOUSE_WHEEL = 0x0400
     };
 
     void SetModes( flag_t );
@@ -325,6 +326,11 @@ private:
     SDL::Time clock;
     u32 clock_delay;
     int loop_delay;
+
+    // These members are used for restoring music and sounds when an user reopens the window
+    bool _isHiddenWindow;
+    bool _isMusicPaused;
+    bool _isSoundPaused;
 
 #ifdef WITHOUT_MOUSE
     bool emulate_mouse;

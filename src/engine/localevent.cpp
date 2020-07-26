@@ -38,6 +38,9 @@ LocalEvent::LocalEvent()
     , keyboard_filter_func( NULL )
     , clock_delay( TAP_DELAY_EMULATE )
     , loop_delay( 1 )
+    , _isHiddenWindow( false )
+    , _isMusicPaused( false )
+    , _isSoundPaused( false )
 {
 #ifdef WITHOUT_MOUSE
     emulate_mouse = false;
@@ -432,8 +435,25 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
+LocalEvent & LocalEvent::GetClean()
+{
+    LocalEvent & le = Get();
+    le.ResetModes( KEY_PRESSED );
+    le.ResetModes( MOUSE_MOTION );
+    le.ResetModes( MOUSE_PRESSED );
+    le.ResetModes( CLICK_LEFT );
+    le.ResetModes( CLICK_RIGHT );
+    le.ResetModes( CLICK_MIDDLE );
+    le.ResetModes( CLICK_MIDDLE );
+    return le;
+}
+
 bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 {
+    if ( Display::isRedrawRequired() ) {
+        Display::Get().Flip();
+    }
+
     SDL_Event event;
 
     ResetModes( MOUSE_MOTION );
@@ -447,13 +467,21 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_WINDOWEVENT:
             if ( Mixer::isValid() ) {
                 if ( event.window.event == SDL_WINDOWEVENT_HIDDEN ) {
+                    _isHiddenWindow = true;
+                    _isMusicPaused = Music::isPaused();
+                    _isSoundPaused = Mixer::isPaused( -1 );
                     Mixer::Pause();
                     Music::Pause();
                     loop_delay = 100;
                 }
                 else if ( event.window.event == SDL_WINDOWEVENT_SHOWN ) {
-                    Mixer::Resume();
-                    Music::Resume();
+                    if ( _isHiddenWindow ) {
+                        if ( !_isMusicPaused )
+                            Music::Resume();
+                        if ( !_isSoundPaused )
+                            Mixer::Resume();
+                        _isHiddenWindow = false;
+                    }
                     loop_delay = 1;
                 }
             }
@@ -464,13 +492,21 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 if ( Mixer::isValid() ) {
                     // iconify
                     if ( 0 == event.active.gain ) {
+                        _isHiddenWindow = true;
+                        _isMusicPaused = Music::isPaused();
+                        _isSoundPaused = Mixer::isPaused( -1 );
                         Mixer::Pause();
                         Music::Pause();
                         loop_delay = 100;
                     }
                     else {
-                        Mixer::Resume();
-                        Music::Resume();
+                        if ( _isHiddenWindow ) {
+                            if ( !_isMusicPaused )
+                                Music::Resume();
+                            if ( !_isSoundPaused )
+                                Mixer::Resume();
+                            _isHiddenWindow = false;
+                        }
                         loop_delay = 1;
                     }
                 }

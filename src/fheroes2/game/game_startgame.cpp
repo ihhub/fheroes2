@@ -45,7 +45,6 @@
 #include "m82.h"
 #include "maps_tiles.h"
 #include "mus.h"
-#include "pocketpc.h"
 #include "route.h"
 #include "settings.h"
 #include "splitter.h"
@@ -244,7 +243,7 @@ void ShowNewWeekDialog( void )
 
     // head
     std::string message = world.BeginMonth() ? _( "Astrologers proclaim Month of the %{name}." ) : _( "Astrologers proclaim Week of the %{name}." );
-    AGG::PlayMusic( world.BeginMonth() ? ( week.GetType() == Week::MONSTERS ? MUS::MONTH2 : MUS::WEEK2_MONTH1 ) : MUS::WEEK1, false );
+    AGG::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
@@ -279,7 +278,6 @@ void ShowEventDayDialog( void )
     EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
 
     for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it ) {
-        AGG::PlayMusic( MUS::NEWS, false );
         if ( ( *it ).resource.GetValidItemsCount() )
             Dialog::ResourceInfo( "", ( *it ).message, ( *it ).resource );
         else if ( ( *it ).message.size() )
@@ -292,7 +290,6 @@ int ShowWarningLostTownsDialog( void )
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     if ( 0 == myKingdom.GetLostTownDays() ) {
-        AGG::PlayMusic( MUS::DEATH, false );
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
         GameOver::Result::Get().SetResult( GameOver::LOSS_ALL );
         return Game::MAINMENU;
@@ -402,18 +399,19 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
             return Cursor::POINTER;
         else
-            // for direct monster attack
-            return Direction::UNKNOWN != Direction::Get( from_hero.GetIndex(), tile.GetIndex() )
-                       ? Cursor::FIGHT
-                       : Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.GetCastle( tile.GetCenter() );
 
         if ( NULL != castle ) {
-            if ( tile.GetObject() == MP2::OBJN_CASTLE && from_hero.GetColor() == castle->GetColor() )
-                return Cursor::CASTLE;
+            if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
+                if ( from_hero.GetColor() == castle->GetColor() )
+                    return Cursor::CASTLE;
+                else
+                    return Cursor::POINTER;
+            }
             else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() )
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
             else if ( from_hero.GetColor() == castle->GetColor() )
@@ -878,8 +876,13 @@ int Interface::Basic::HumanTurn( bool isload )
             res = controlPanel.QueueEventProcessing();
         }
         // cursor over game area
-        else if ( le.MouseCursor( gameArea.GetArea() ) && !gameArea.NeedScroll() ) {
+        else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
             gameArea.QueueEventProcessing();
+        }
+        else if ( !gameArea.NeedScroll() ) { // empty interface area so we set cursor to a normal pointer
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
+            gameArea.ResetCursorPosition();
         }
 
         // fast scroll
@@ -936,12 +939,9 @@ int Interface::Basic::HumanTurn( bool isload )
                             Point movement( hero->MovementDirection() );
                             if ( movement != Point() ) { // don't waste resources for no movement
                                 const int moveStep = hero->GetMoveStep();
-                                movement.x *= -moveStep;
-                                movement.y *= -moveStep;
-                                gameArea.SetMapsPos( gameArea.GetMapsPos() + movement );
-                                gameArea.SetCenter( hero->GetCenter() );
-                                ResetFocus( GameFocus::HEROES );
-                                RedrawFocus();
+                                movement.x *= moveStep;
+                                movement.y *= moveStep;
+                                gameArea.ShiftCenter( movement );
                             }
                         }
                         gameArea.SetRedraw();
@@ -972,17 +972,27 @@ int Interface::Basic::HumanTurn( bool isload )
         if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
+            gameArea.UpdateCyclingPalette( frame );
             gameArea.SetRedraw();
+
+            Army * focusArmy = GetFocusArmy();
+            if ( focusArmy && focusArmy->hasColorCycling() ) {
+                statusWindow.SetRedraw();
+            }
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            Game::RemoveAnimation::Info & removalInfo = Game::RemoveAnimation::Get();
-            if ( removalInfo.object != MP2::OBJ_ZERO ) {
-                if ( removalInfo.alpha < 20 ) {
-                    removalInfo.object = MP2::OBJ_ZERO;
+            Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
+            if ( fadeInfo.object != MP2::OBJ_ZERO ) {
+                if ( fadeInfo.isFadeOut && fadeInfo.alpha < 20 ) {
+                    fadeInfo.object = MP2::OBJ_ZERO;
+                }
+                else if ( !fadeInfo.isFadeOut && fadeInfo.alpha > 235 ) {
+                    world.GetTiles( fadeInfo.tile ).SetObject( fadeInfo.object );
+                    fadeInfo.object = MP2::OBJ_ZERO;
                 }
                 else {
-                    removalInfo.alpha -= 20;
+                    fadeInfo.alpha += ( fadeInfo.isFadeOut ) ? -20 : 20;
                 }
                 gameArea.SetRedraw();
             }

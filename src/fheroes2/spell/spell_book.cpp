@@ -119,11 +119,12 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( le.MouseClickLeft( prev_list ) && current_index ) {
+        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) && current_index ) {
             current_index -= small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( next_list ) && spells2.size() > ( current_index + ( small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2 ) ) ) {
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
+                  && spells2.size() > ( current_index + ( small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2 ) ) ) {
             current_index += small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2;
             redraw = true;
         }
@@ -409,28 +410,9 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
             }
 
             const Spell & spell = spells[ii + cur];
-            const Sprite & icon = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            Sprite icon = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             const Rect rect( px + ox - icon.w() / 2, py + oy - icon.h() / 2, icon.w(), icon.h() + 10 );
-
             icon.Blit( rect.x, rect.y );
-
-            // multiple icons for mass spells
-            if ( !small )
-                switch ( spell() ) {
-                case Spell::MASSBLESS:
-                case Spell::MASSCURE:
-                case Spell::MASSHASTE:
-                case Spell::MASSSLOW:
-                case Spell::MASSCURSE:
-                case Spell::MASSDISPEL:
-                case Spell::MASSSHIELD:
-                    icon.Blit( rect.x - 10, rect.y + 8 );
-                    icon.Blit( rect.x + 10, rect.y + 8 );
-                    break;
-
-                default:
-                    break;
-                }
 
             const uint32_t spellCost = spell.SpellPoint( &hero );
             const bool isAvailable = heroSpellPoints >= spellCost;

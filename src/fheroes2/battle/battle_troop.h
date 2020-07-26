@@ -84,8 +84,9 @@ namespace Battle
         u32 GetHitPointsLeft( void ) const;
         u32 GetAffectedDuration( u32 ) const;
         u32 GetSpeed( void ) const;
-        Surface GetContour( int ) const;
+        Surface GetContour( uint8_t colorId ) const;
 
+        Unit * GetMirror();
         void SetMirror( Unit * );
         void SetRandomMorale( void );
         void SetRandomLuck( void );
@@ -122,6 +123,8 @@ namespace Battle
         u32 GetDefense( void ) const;
         int GetArmyColor( void ) const;
         int GetColor( void ) const;
+        int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
+        int GetCurrentControl() const;
         u32 GetSpeed( bool skip_standing_check ) const;
         int GetControl( void ) const;
         u32 GetDamage( const Unit & ) const;
@@ -154,6 +157,8 @@ namespace Battle
         int GetFrame( void ) const;
         int GetFrameStart( void ) const;
         int GetFrameCount( void ) const;
+        uint32_t GetCustomAlpha() const;
+        void SetCustomAlpha( uint32_t alpha );
 
         Point GetStartMissileOffset( size_t ) const;
 
@@ -208,15 +213,10 @@ namespace Battle
         Position position;
         ModesAffected affected;
         Unit * mirror;
-        TimeDelay idleTimer;
-        bool idleTimerSet;
-
-        // These variables are mutable due to population of them of the fly as we don't want to calculate everything
-        mutable std::map<int, Surface> contoursMain;
-        mutable std::map<int, Surface> contoursReflect;
-        const Surface & getContour( const int frameId, std::map<int, Surface> & contours, const bool isReflected, const bool isBlackWhite ) const;
+        RandomizedDelay idleTimer;
 
         bool blindanswer;
+        uint32_t customAlphaMask;
     };
 
     StreamBase & operator<<( StreamBase &, const Unit & );

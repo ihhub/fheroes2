@@ -65,6 +65,7 @@ namespace Maps
 
         std::string String( int level ) const;
 
+        static bool hasColorCycling( const TilesAddon & addon );
         static bool isStream( const TilesAddon & );
         static bool isRoad( const TilesAddon & );
 
@@ -83,6 +84,7 @@ namespace Maps
         static bool isShadow( const TilesAddon & );
         static bool isEvent( const TilesAddon & );
         static bool isBoat( const TilesAddon & );
+        static bool isTeleporter( const TilesAddon & );
         static bool isMiniHero( const TilesAddon & );
         static bool isRandomResource( const TilesAddon & );
         static bool isRandomArtifact( const TilesAddon & );
@@ -118,9 +120,6 @@ namespace Maps
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
-        static void UpdateFountainSprite( TilesAddon & );
-        static void UpdateTreasureChestSprite( TilesAddon & );
-        static int UpdateStoneLightsSprite( TilesAddon & );
         static void UpdateAbandoneMineLeftSprite( TilesAddon &, int resource );
         static void UpdateAbandoneMineRightSprite( TilesAddon & );
 
@@ -177,14 +176,13 @@ namespace Maps
         bool isStream( void ) const;
         bool GoodForUltimateArtifact( void ) const;
 
-        TilesAddon * FindAddonICN1( int icn1 );
-        TilesAddon * FindAddonICN2( int icn2 );
+        TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
-        TilesAddon * FindObject( int );
-        const TilesAddon * FindObjectConst( int ) const;
+        TilesAddon * FindObject( int objectID );
+        const TilesAddon * FindObjectConst( int objectID ) const;
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
         void SetObject( int object );
@@ -197,12 +195,13 @@ namespace Maps
 
         void RedrawTile( Surface & ) const;
         static void RedrawEmptyTile( Surface & dst, const Point & mp );
-        void RedrawBottom( Surface &, bool skip_objs = false ) const;
+        void RedrawBottom( Surface & dst, bool skipObjs = false ) const;
         void RedrawBottom4Hero( Surface & ) const;
-        void RedrawTop( Surface &, const TilesAddon * skip = NULL ) const;
+        void RedrawTop( Surface & dst, bool skipObjs = false ) const;
         void RedrawTop4Hero( Surface &, bool skip_ground ) const;
         void RedrawObjects( Surface & ) const;
         void RedrawFogs( Surface &, int ) const;
+        void RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs = false ) const;
         void RedrawPassable( Surface & ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
@@ -240,7 +239,6 @@ namespace Maps
         void QuantityReset( void );
         bool QuantityIsValid( void ) const;
         void QuantitySetColor( int );
-        int QuantityTeleportType( void ) const;
         int QuantityVariant( void ) const;
         int QuantityExt( void ) const;
         int QuantityColor( void ) const;
@@ -258,6 +256,7 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static std::pair<int, int> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles &, const Monster &, u32 );
         static void UpdateAbandoneMineSprite( Tiles & );
         static void FixedPreload( Tiles & );
@@ -271,6 +270,7 @@ namespace Maps
 
         void RedrawBoat( Surface & ) const;
         void RedrawMonster( Surface & ) const;
+        void RedrawMapObject( Surface & dst, int icn, uint32_t index, const Point & mapPoint, bool cycle = false, int offsetX = 0, int offsetY = 0 ) const;
 
         void QuantitySetVariant( int );
         void QuantitySetExt( int );
@@ -278,7 +278,6 @@ namespace Maps
         void QuantitySetSpell( int );
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
-        void QuantitySetTeleportType( int );
 
         int GetQuantity3( void ) const;
         void SetQuantity3( int );
@@ -288,9 +287,6 @@ namespace Maps
         static void UpdateMonsterPopulation( Tiles & );
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );
-        static void UpdateStoneLightsSprite( Tiles & );
-        static void UpdateFountainSprite( Tiles & );
-        static void UpdateTreasureChestSprite( Tiles & );
 
     private:
         friend StreamBase & operator<<( StreamBase &, const Tiles & );

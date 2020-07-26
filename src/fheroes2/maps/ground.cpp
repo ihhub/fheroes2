@@ -56,7 +56,7 @@ const char * Maps::Ground::String( int ground )
     return str_ground[8];
 }
 
-u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level )
+u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level, bool diagonalCost )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
 
@@ -72,57 +72,57 @@ u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level )
     //    Water   1.00   1.00   1.00   1.00
     //    Road    0.75   0.75   0.75   0.75
 
-    if ( tile.isRoad( direct ) )
-        // road priority: need small value
-        return 59;
-
     u32 result = 100;
+    if ( tile.isRoad( direct ) ) {
+        result = 75;
+    }
+    else {
+        switch ( tile.GetGround() ) {
+        case DESERT:
+            switch ( level ) {
+            case Skill::Level::EXPERT:
+                break;
+            case Skill::Level::ADVANCED:
+                result += 50;
+                break;
+            case Skill::Level::BASIC:
+                result += 75;
+                break;
+            default:
+                result += 100;
+                break;
+            }
+            break;
 
-    switch ( tile.GetGround() ) {
-    case DESERT:
-        switch ( level ) {
-        case Skill::Level::EXPERT:
+        case SNOW:
+        case SWAMP:
+            switch ( level ) {
+            case Skill::Level::EXPERT:
+                break;
+            case Skill::Level::ADVANCED:
+                result += 25;
+                break;
+            case Skill::Level::BASIC:
+                result += 50;
+                break;
+            default:
+                result += 75;
+                break;
+            }
             break;
-        case Skill::Level::ADVANCED:
-            result += 50;
+
+        case WASTELAND:
+        case BEACH:
+            result += ( Skill::Level::NONE == level ? 25 : 0 );
             break;
-        case Skill::Level::BASIC:
-            result += 75;
-            break;
+
         default:
-            result += 100;
             break;
         }
-        break;
-
-    case SNOW:
-    case SWAMP:
-        switch ( level ) {
-        case Skill::Level::EXPERT:
-            break;
-        case Skill::Level::ADVANCED:
-            result += 25;
-            break;
-        case Skill::Level::BASIC:
-            result += 50;
-            break;
-        default:
-            result += 75;
-            break;
-        }
-        break;
-
-    case WASTELAND:
-    case BEACH:
-        result += ( Skill::Level::NONE == level ? 25 : 0 );
-        break;
-
-    default:
-        break;
     }
 
-    if ( direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
-        result += result * 55 / 100;
+    if ( diagonalCost && ( direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) )
+        result *= 1.5;
 
     return result;
 }

@@ -254,7 +254,7 @@ u32 Maps::Tiles::QuantityGold( void ) const
         case 3:
             return 5000;
         default:
-            return 2000;
+            break;
         }
 
     default:
@@ -356,16 +356,6 @@ int Maps::Tiles::QuantityColor( void ) const
     default:
         return world.ColorCapturedObject( GetIndex() );
     }
-}
-
-int Maps::Tiles::QuantityTeleportType( void ) const
-{
-    return quantity1;
-}
-
-void Maps::Tiles::QuantitySetTeleportType( int type )
-{
-    quantity1 = type;
 }
 
 Monster Maps::Tiles::QuantityMonster( void ) const
@@ -688,8 +678,6 @@ void Maps::Tiles::QuantityUpdate( void )
             QuantityUpdate();
         }
         else {
-            UpdateTreasureChestSprite( *this );
-
             Rand::Queue percents( 4 );
             // 31% - 2000 gold or 1500 exp
             percents.Push( 1, 31 );
@@ -849,14 +837,6 @@ void Maps::Tiles::QuantityUpdate( void )
                 break;
             }
     } break;
-
-    case MP2::OBJ_STONELIGHTS:
-        UpdateStoneLightsSprite( *this );
-        break;
-
-    case MP2::OBJ_FOUNTAIN:
-        UpdateFountainSprite( *this );
-        break;
 
     case MP2::OBJ_EVENT: {
         TilesAddon * addon = FindObject( MP2::OBJ_EVENT );

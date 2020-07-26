@@ -46,7 +46,7 @@ namespace Maps
         };
 
         const char * String( int );
-        u32 GetPenalty( s32, int direction, u32 pathfinding );
+        u32 GetPenalty( s32, int direction, u32 pathfinding, bool diagonalCost = true );
     }
 }
 

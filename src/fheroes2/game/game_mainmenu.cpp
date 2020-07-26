@@ -24,11 +24,11 @@
 #include "button.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_resolution.h"
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
 #include "mus.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
 
@@ -46,8 +46,6 @@ int Game::MainMenu( void )
     Settings & conf = Settings::Get();
 
     conf.SetGameType( TYPE_MENU );
-    if ( conf.QVGA() )
-        return PocketPC::MainMenu();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -96,6 +94,10 @@ int Game::MainMenu( void )
     cursor.Show();
     display.Flip();
 
+    const double scaleX = static_cast<double>( display.GetSize().w ) / Display::DEFAULT_WIDTH;
+    const double scaleY = static_cast<double>( display.GetSize().h ) / Display::DEFAULT_HEIGHT;
+    const Rect resolutionArea( 63 * scaleX, 202 * scaleY, 90 * scaleX, 160 * scaleY );
+
     u32 lantern_frame = 0;
 
     struct ButtonInfo
@@ -127,6 +129,8 @@ int Game::MainMenu( void )
             }
         }
 
+        bool redrawScreen = false;
+
         for ( u32 i = 0; i < ARRAY_COUNT( buttons ); i++ ) {
             buttons[i].wasOver = buttons[i].isOver;
 
@@ -137,17 +141,24 @@ int Game::MainMenu( void )
 
             buttons[i].isOver = le.MouseCursor( buttons[i].button );
 
-            if ( ( !buttons[i].isOver && buttons[i].wasOver ) || ( buttons[i].isOver && !buttons[i].wasOver ) ) {
+            if ( buttons[i].isOver != buttons[i].wasOver ) {
                 u32 frame = buttons[i].frame;
 
                 if ( buttons[i].isOver && !buttons[i].wasOver )
                     frame++;
 
-                cursor.Hide();
+                if ( !redrawScreen ) {
+                    cursor.Hide();
+                    redrawScreen = true;
+                }
                 const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, frame );
                 sprite.Blit( sprite.x(), sprite.y() );
-                cursor.Show();
             }
+        }
+
+        if ( redrawScreen ) {
+            cursor.Show();
+            display.Flip();
         }
 
         if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame ) )
@@ -167,6 +178,13 @@ int Game::MainMenu( void )
                 if ( conf.ExtGameUseFade() )
                     display.Fade();
                 return QUITGAME;
+            }
+        }
+        else if ( le.MouseClickLeft( resolutionArea ) ) {
+            if ( Dialog::SelectResolution() ) {
+                // force interface to reset area and positions
+                Interface::Basic::Get().Reset();
+                return MAINMENU;
             }
         }
 

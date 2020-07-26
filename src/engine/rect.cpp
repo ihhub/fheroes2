@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <cmath>
 #include <iterator>
 #include <sstream>
 
@@ -80,6 +81,27 @@ bool Point::inABC( const Point & pt1, const Point & pt2, const Point & pt3 ) con
     s32 c = ( pt3.x - x ) * ( pt1.y - pt3.y ) - ( pt1.x - pt3.x ) * ( pt3.y - y );
 
     return ( ( a >= 0 && b >= 0 && c >= 0 ) || ( a < 0 && b < 0 && c < 0 ) );
+}
+
+double Point::distance( const Point & point ) const
+{
+    const double diffX = x - point.x;
+    const double diffY = y - point.y;
+
+    return std::sqrt( diffX * diffX + diffY * diffY );
+}
+
+Point Point::rotate( double angle ) const
+{
+    const double sinValue = sin( angle );
+    const double cosValue = cos( angle );
+
+    return Point( x * cosValue - y * sinValue, x * sinValue + y * cosValue );
+}
+
+double Point::getAngle( const Point & point ) const
+{
+    return std::atan2( point.y - y, point.x - x );
 }
 
 Size::Size( u16 width, u16 height )
@@ -209,6 +231,11 @@ bool Rect::operator!=( const Rect & rt ) const
     return !( *this == rt );
 }
 
+Rect Rect::operator+( const Point & offset ) const
+{
+    return Rect( x + offset.x, y + offset.y, w, h );
+}
+
 bool Rect::operator&( const Point & pt ) const
 {
     return !( pt.x < x || pt.y < y || pt.x >= ( x + w ) || pt.y >= ( y + h ) );
@@ -247,6 +274,11 @@ Rect Rect::operator^( const Rect & other ) const
     }
 
     return temp;
+}
+
+const Point & Rect::getPosition() const
+{
+    return *this;
 }
 
 Rect Points::GetRect( void ) const

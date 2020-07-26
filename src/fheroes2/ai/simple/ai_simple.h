@@ -39,7 +39,7 @@
 
 namespace AI
 {
-    struct Queue : public std::list<s32>
+    struct Queue : public std::list<IndexDistance>
     {
         bool isPresent( s32 ) const;
     };

@@ -64,14 +64,18 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
                 continue;
 
             if ( filter.size() ) {
-                std::string filename( ep->d_name );
+                const int filenameLength = strlen( ep->d_name );
+                if ( filenameLength < filter.length() )
+                    continue;
+
+                const char * filenamePtr = ep->d_name + filenameLength - filter.length();
 
                 if ( sensitive ) {
-                    if ( std::string::npos == filename.find( filter ) )
+                    if ( strcmp( filenamePtr, filter.c_str() ) != 0 )
                         continue;
                 }
                 else {
-                    if ( std::string::npos == StringLower( filename ).find( StringLower( filter ) ) )
+                    if ( strcasecmp( filenamePtr, filter.c_str() ) != 0 )
                         continue;
                 }
             }

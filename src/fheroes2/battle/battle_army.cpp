@@ -413,6 +413,19 @@ bool Battle::Force::animateIdleUnits()
     return redrawNeeded;
 }
 
+void Battle::Force::resetIdleAnimation()
+{
+    for ( Force::iterator it = begin(); it != end(); ++it ) {
+        Unit & unit = **it;
+
+        // check if alive and not paralyzed
+        if ( unit.isValid() && !unit.Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+            if ( unit.GetAnimationState() == Monster_Info::STATIC )
+                unit.checkIdleDelay();
+        }
+    }
+}
+
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
     return end() != std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );

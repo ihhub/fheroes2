@@ -201,7 +201,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Castle & town )
         u32 kingdom_race = Players::GetPlayerRace( town.GetColor() );
         race = Color::NONE != town.GetColor() && ( Race::ALL & kingdom_race ) ? kingdom_race : Race::Rand();
 
-        Maps::UpdateRNDSpriteForCastle( town.GetCenter(), race, town.isCastle() );
+        Maps::UpdateCastleSprite( town.GetCenter(), race, town.isCastle(), true );
     }
     town.race = race;
 
@@ -1273,7 +1273,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     Castle * castle = GetCastle( Maps::GetPoint( findobject ) );
                     if ( castle ) {
                         castle->LoadFromMP2( StreamBuf( pblock ) );
-                        Maps::UpdateRNDSpriteForCastle( castle->GetCenter(), castle->GetRace(), castle->isCastle() );
+                        Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
                         Maps::MinimizeAreaForCastle( castle->GetCenter() );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
                     }
@@ -1494,7 +1494,7 @@ void World::PostLoad( void )
             break;
 
         case MP2::OBJ_HEROES: {
-            Maps::TilesAddon * addon = tile.FindAddonICN1( ICN::MINIHERO );
+            Maps::TilesAddon * addon = tile.FindAddonICN( ICN::MINIHERO, 1 );
             // remove event sprite
             if ( addon )
                 tile.Remove( addon->uniq );

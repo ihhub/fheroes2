@@ -32,7 +32,6 @@
 #include "game_interface.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
 
@@ -40,9 +39,6 @@ void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar
 
 void Heroes::MeetingDialog( Heroes & heroes2 )
 {
-    if ( Settings::Get().QVGA() )
-        return PocketPC::HeroesMeeting( *this, heroes2 );
-
     Display & display = Display::Get();
 
     // cursor
@@ -56,7 +52,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     Point dst_pt( cur_pt );
     std::string message;
 
-    Rect src_rt( 0, 0, 640, 480 );
+    Rect src_rt( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
 
     // background
     dst_pt.x = cur_pt.x;

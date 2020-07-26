@@ -27,12 +27,29 @@
 #include "game.h"
 #include "settings.h"
 
-enum
+namespace
 {
-    BTN_PRESSED = 0x0080,
-    BTN_DISABLE = 0x0008,
-    BTN_VISIBLE = 0x0800
-};
+    enum
+    {
+        BTN_PRESSED = 0x0080,
+        BTN_DISABLE = 0x0008,
+        BTN_VISIBLE = 0x0800
+    };
+
+    Surface GetDisabledButtonSurface( int icnId, int index )
+    {
+        // TODO: we still struggle with shadows so not all buttons look correct
+        // That's why we do such magic trick for now
+        if ( icnId == ICN::HSBTNS || icnId == ICN::ADVBTNS || icnId == ICN::ADVEBTNS || icnId == ICN::SMALLBAR || icnId == ICN::VIEWGEN ) {
+            Surface surface( AGG::GetICN( icnId, index ).GetSurface() );
+            if ( AGG::ReplaceColors( surface, PAL::GetPalette( PAL::DARKENING ), icnId, index, false ) ) {
+                return surface;
+            }
+        }
+
+        return Surface();
+    }
+}
 
 Button::Button()
     : flags( BTN_VISIBLE )
@@ -45,6 +62,7 @@ Button::Button( s32 ox, s32 oy, int icn, u32 index1, u32 index2 )
 
     sf1 = AGG::GetICN( icn, index1 );
     sf2 = AGG::GetICN( icn, index2 );
+    _disabledSurface = GetDisabledButtonSurface( icn, index1 );
 
     SetSize( sf1.w(), sf1.h() );
 }
@@ -95,6 +113,7 @@ void Button::SetSprite( int icn, u32 index1, u32 index2 )
 {
     sf1 = AGG::GetICN( icn, index1 );
     sf2 = AGG::GetICN( icn, index2 );
+    _disabledSurface = GetDisabledButtonSurface( icn, index1 );
 
     SetSize( sf1.w(), sf1.h() );
 }
@@ -165,7 +184,10 @@ void Button::Draw( void )
         localcursor = true;
     }
 
-    if ( isPressed() )
+    if ( isDisable() && _disabledSurface.isValid() ) {
+        _disabledSurface.Blit( x, y, Display::Get() );
+    }
+    else if ( isPressed() )
         sf2.Blit( x, y, Display::Get() );
     else
         sf1.Blit( x, y, Display::Get() );

@@ -23,6 +23,25 @@
 #include "settings.h"
 #include <algorithm>
 
+RandomizedDelay::RandomizedDelay( uint32_t delay )
+    : TimeDelay( delay )
+    , halfDelay( delay / 2 )
+    , timerIsSet( false )
+{}
+
+bool RandomizedDelay::checkDelay()
+{
+    if ( !timerIsSet ) {
+        // Randomize delay as 0.75 to 1.25 original value
+        second = Rand::Get( 0, halfDelay ) + halfDelay * 3 / 2;
+        timerIsSet = true;
+    }
+    const bool res = Trigger();
+    if ( res )
+        timerIsSet = false;
+    return res;
+}
+
 AnimationSequence::AnimationSequence( const std::vector<int> & seq )
     : _seq( seq )
     , _currentFrame( 0 )
@@ -454,6 +473,16 @@ uint32_t AnimationReference::getShootingSpeed() const
 size_t AnimationReference::getProjectileID( float angle ) const
 {
     return _monsterInfo.getProjectileID( angle );
+}
+
+Point AnimationReference::getBlindOffset() const
+{
+    return _monsterInfo.eyePosition;
+}
+
+int AnimationReference::getTroopCountOffset( bool isReflect ) const
+{
+    return isReflect ? _monsterInfo.troopCountOffsetRight : _monsterInfo.troopCountOffsetLeft;
 }
 
 Point AnimationReference::getProjectileOffset( size_t direction ) const

@@ -176,6 +176,7 @@ namespace Game
         CASTLE_AROUND_DELAY,
         CASTLE_BUYHERO_DELAY,
         CASTLE_BUILD_DELAY,
+        CASTLE_UNIT_DELAY,
         HEROES_FADE_DELAY,
         HEROES_PICKUP_DELAY,
         PUZZLE_FADE_DELAY,
@@ -192,8 +193,8 @@ namespace Game
         BATTLE_OPPONENTS_DELAY,
         BATTLE_FLAGS_DELAY,
         BATTLE_POPUP_DELAY,
-        COLOR_CYCLE_MAP_DELAY,
-        COLOR_CYCLE_BATTLE_DELAY,
+        BATTLE_COLOR_CYCLE_DELAY,
+        BATTLE_SELECTED_UNIT_DELAY,
         AUTOHIDE_STATUS_DELAY,
         //
         CURRENT_HERO_DELAY,
@@ -253,18 +254,19 @@ namespace Game
     void OpenCastleDialog( Castle & );
     std::string GetEncodeString( const std::string & );
 
-    namespace RemoveAnimation
+    namespace ObjectFadeAnimation
     {
         struct Info
         {
             Info();
-            Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u );
+            Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u, bool fadeOut = true );
 
             u8 object;
             u8 index;
             s32 tile;
             u32 alpha;
             Size surfaceSize;
+            bool isFadeOut;
         };
 
         void Set( const Info & info );

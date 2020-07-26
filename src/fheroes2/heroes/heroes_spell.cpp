@@ -24,6 +24,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "interface_list.h"
@@ -284,6 +285,11 @@ bool ActionSpellIdentifyHero( Heroes & hero )
 
 bool ActionSpellSummonBoat( Heroes & hero )
 {
+    if ( hero.isShipMaster() ) {
+        Dialog::Message( "", _( "This spell cannot be used on a boat." ), Font::BIG, Dialog::OK );
+        return false;
+    }
+
     const s32 center = hero.GetIndex();
 
     // find water
@@ -324,7 +330,7 @@ bool ActionSpellSummonBoat( Heroes & hero )
         if ( Maps::isValidAbsIndex( boat ) ) {
             if ( Rand::Get( 1, 100 ) <= chance ) {
                 world.GetTiles( boat ).SetObject( MP2::OBJ_ZERO );
-                world.GetTiles( dst_water ).SetObject( MP2::OBJ_BOAT );
+                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
                 return true;
             }
             break;
@@ -370,9 +376,9 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
-        I.SetFocus( &hero );
-
         hero.ActionNewPosition();
+
+        Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
 
         return false; /* SpellCasted apply */
     }

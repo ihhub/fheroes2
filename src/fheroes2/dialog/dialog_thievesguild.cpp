@@ -31,7 +31,6 @@
 #include "game.h"
 #include "kingdom.h"
 #include "monster.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
@@ -226,11 +225,6 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const Point & pos, u32 w
 
 void Dialog::ThievesGuild( bool oracle )
 {
-    if ( Settings::Get().QVGA() ) {
-        PocketPC::ThievesGuild( oracle );
-        return;
-    }
-
     Display & display = Display::Get();
 
     // cursor
@@ -291,8 +285,8 @@ void Dialog::ThievesGuild( bool oracle )
 
     // text bar
     text.Set( _( "Thieves' Guild: Player RanKings" ), Font::BIG );
-    dst_pt.x = cur_pt.x + 280 - text.w() / 2;
-    dst_pt.y = cur_pt.y + 461;
+    dst_pt.x = cur_pt.x + 290 - text.w() / 2;
+    dst_pt.y = cur_pt.y + 463;
     text.Blit( dst_pt );
 
     // button exit

@@ -32,14 +32,14 @@
 
 namespace Music
 {
-    void Play( Mix_Music * mix, u32 id, bool loop );
+    void Play( Mix_Music * mix, /*u32 id,*/ bool loop );
 
     Mix_Music * music = NULL;
     int fadein = 0;
     int fadeout = 0;
 }
 
-void Music::Play( Mix_Music * mix, u32 id, bool loop )
+void Music::Play( Mix_Music * mix, /*u32 id,*/ bool loop )
 {
     Reset();
 
@@ -50,48 +50,12 @@ void Music::Play( Mix_Music * mix, u32 id, bool loop )
     }
     else
         music = mix;
-    /*
-        std::list<play_t>::iterator
-        it = std::find(musics.begin(), musics.end(), f);
-
-        // skip repeat
-        if(it != musics.end())
-        {
-        if((*it).isPaused())
-        {
-            Pause();
-            current = it;
-            Resume();
-            DELAY(100);
-        }
-
-        if((*it).isPlay()) return;
-        }
-
-        // stop run
-        Pause();
-
-        info_t info;
-        info.file = f;
-        info.status = loop ? Music::LOOP : 0;
-
-        it = std::find_if(musics.begin(), musics.end(), play_t::isFree);
-
-        if(it == musics.end())
-        {
-        musics.push_back(play_t());
-        it = --musics.end();
-        }
-
-        (*it).Run(info);
-        current = it;
-    */
 }
 
 void Music::Play( const std::vector<u8> & v, bool loop )
 {
     if ( Mixer::isValid() && v.size() ) {
-        u32 id = CheckSum( v );
+        // u32 id = CheckSum( v );
         SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], v.size() );
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         Mix_Music * mix = Mix_LoadMUS_RW( rwops, 0 );
@@ -99,21 +63,21 @@ void Music::Play( const std::vector<u8> & v, bool loop )
         Mix_Music * mix = Mix_LoadMUS_RW( rwops );
 #endif
         SDL_FreeRW( rwops );
-        Music::Play( mix, id, loop );
+        Music::Play( mix, /*id,*/ loop );
     }
 }
 
 void Music::Play( const std::string & file, bool loop )
 {
     if ( Mixer::isValid() ) {
-        u32 id = CheckSum( file );
+        // u32 id = CheckSum( file );
         Mix_Music * mix = Mix_LoadMUS( file.c_str() );
 
         if ( !mix ) {
             ERROR( Mix_GetError() );
         }
         else
-            Music::Play( mix, id, loop );
+            Music::Play( mix, /*id,*/ loop );
     }
 }
 

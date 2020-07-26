@@ -185,6 +185,7 @@
     <ClCompile Include="src\engine\rect.cpp" />
     <ClCompile Include="src\engine\sdlnet.cpp" />
     <ClCompile Include="src\engine\serialize.cpp" />
+    <ClCompile Include="src\engine\smk_decoder.cpp" />
     <ClCompile Include="src\engine\sprites.cpp" />
     <ClCompile Include="src\engine\surface.cpp" />
     <ClCompile Include="src\engine\system.cpp" />
@@ -260,6 +261,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_message.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_quickinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_recrut.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_resolution.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_resourceinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectcount.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectfile.cpp" />
@@ -286,6 +288,7 @@
     <ClCompile Include="src\fheroes2\game\game_scenarioinfo.cpp" />
     <ClCompile Include="src\fheroes2\game\game_startgame.cpp" />
     <ClCompile Include="src\fheroes2\game\game_static.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_video.cpp" />
     <ClCompile Include="src\fheroes2\gui\button.cpp" />
     <ClCompile Include="src\fheroes2\gui\cursor.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_border.cpp" />
@@ -350,15 +353,7 @@
     <ClCompile Include="src\fheroes2\objects\objwatr.cpp" />
     <ClCompile Include="src\fheroes2\objects\objxloc.cpp" />
     <ClCompile Include="src\fheroes2\objects\trees.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_armyinfo.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_castle.cpp" />
     <ClCompile Include="src\fheroes2\pocketpc\pocketpc_dialog.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_heroes.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_kingdom.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_mainmenu.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_meeting.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_selectscenario.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_thievesguild.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact_ultimate.cpp" />
     <ClCompile Include="src\fheroes2\resource\maps_text.cpp" />
@@ -371,6 +366,9 @@
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
     <ClCompile Include="src\fheroes2\test\test.cpp" />
     <ClCompile Include="src\fheroes2\test\test_monstersprite.cpp" />
+    <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
+    <ClCompile Include="src\thirdparty\libsmacker\smk_bitstream.c" />
+    <ClCompile Include="src\thirdparty\libsmacker\smk_hufftree.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\audio.h" />
@@ -388,6 +386,7 @@
     <ClInclude Include="src\engine\rect.h" />
     <ClInclude Include="src\engine\sdlnet.h" />
     <ClInclude Include="src\engine\serialize.h" />
+    <ClInclude Include="src\engine\smk_decoder.h" />
     <ClInclude Include="src\engine\sprites.h" />
     <ClInclude Include="src\engine\surface.h" />
     <ClInclude Include="src\engine\system.h" />
@@ -434,6 +433,7 @@
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\castle\marketplace.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
@@ -442,6 +442,7 @@
     <ClInclude Include="src\fheroes2\game\game_io.h" />
     <ClInclude Include="src\fheroes2\game\game_over.h" />
     <ClInclude Include="src\fheroes2\game\game_static.h" />
+    <ClInclude Include="src\fheroes2\game\game_video.h" />
     <ClInclude Include="src\fheroes2\gui\button.h" />
     <ClInclude Include="src\fheroes2\gui\cursor.h" />
     <ClInclude Include="src\fheroes2\gui\interface_border.h" />
@@ -514,6 +515,10 @@
     <ClInclude Include="src\fheroes2\system\settings.h" />
     <ClInclude Include="src\fheroes2\test\test.h" />
     <ClInclude Include="src\tools\palette_h2.h" />
+    <ClInclude Include="src\thirdparty\libsmacker\smacker.h" />
+    <ClInclude Include="src\thirdparty\libsmacker\smk_bitstream.h" />
+    <ClInclude Include="src\thirdparty\libsmacker\smk_hufftree.h" />
+    <ClInclude Include="src\thirdparty\libsmacker\smk_malloc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

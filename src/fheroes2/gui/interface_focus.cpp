@@ -55,8 +55,9 @@ void Interface::Basic::SetFocus( Heroes * hero )
         gameArea.SetCenter( hero->GetCenter() );
         statusWindow.SetState( STATUS_ARMY );
 
-        if ( !Game::ChangeMusicDisabled() ) {
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( hero->GetIndex() ).GetGround() ) );
+        const int heroIndexPos = hero->GetIndex();
+        if ( !Game::ChangeMusicDisabled() && heroIndexPos >= 0 ) {
+            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ) );
             Game::EnvironmentSoundMixer();
         }
     }
@@ -170,6 +171,23 @@ Heroes * Interface::GetFocusHeroes( void )
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
     return player ? player->GetFocus().GetHeroes() : NULL;
+}
+
+Army * Interface::GetFocusArmy()
+{
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
+
+    if ( player == NULL )
+        return NULL;
+
+    if ( player->GetFocus().GetHeroes() ) {
+        return &player->GetFocus().GetHeroes()->GetArmy();
+    }
+    else if ( player->GetFocus().GetCastle() ) {
+        return &player->GetFocus().GetCastle()->GetArmy();
+    }
+
+    return NULL;
 }
 
 Point Interface::GetFocusCenter( void )

@@ -31,7 +31,6 @@
 #include "pal.h"
 #include "sprite.h"
 #include "til.h"
-#include "xmi.h"
 
 class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
 {
@@ -63,6 +62,7 @@ namespace AGG
     int PutICN( const Sprite &, bool init_reflect = false );
     Sprite GetICN( int icn, u32 index, bool reflect = false );
     u32 GetICNCount( int icn );
+    int GetAbsoluteICNHeight( int icn );
     Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
     std::vector<u8> LoadBINFRM( const char * frm_file );
@@ -80,8 +80,13 @@ namespace AGG
     // Some ICNs need to be rescaled. You have to register their IDs before calling GetICN() function
     void RegisterScalableICN( int icnId );
 
-    // Returns true only when the operation was successful
-    bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorMap, int icnId, int incIndex, bool reflect );
+    // Replace colors based on indexes provided. Returns true only when the operation was successful.
+    bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int incIndex, bool reflect );
+    // Replace colors with the ones provided. RGB map has to match the palette. Returns true only if successful.
+    bool ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int incIndex, bool reflect );
+
+    // Returns true in an event of success. Only for 32-bit images
+    bool DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect );
 }
 
 #endif

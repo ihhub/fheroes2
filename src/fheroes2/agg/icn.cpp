@@ -910,11 +910,6 @@ namespace ICN
                                {ZOMBIE, "ZOMBIE.ICN"},
 
                                {ROUTERED, "ROUTERED.ICN"},
-                               {TELEPORT1, "TELEPORT1.ICN"},
-                               {TELEPORT2, "TELEPORT2.ICN"},
-                               {TELEPORT3, "TELEPORT3.ICN"},
-                               {FOUNTAIN, "FOUNTAIN.ICN"},
-                               {TREASURE, "TREASURE.ICN"},
                                {YELLOW_FONT, "YELLOWBF.ICN"},
                                {YELLOW_SMALFONT, "YELLOWSF.ICN"},
                                {BATTLESKIP, "BATTLESKIP.ICN"},
@@ -941,15 +936,6 @@ const char * ICN::GetString( int icn )
 u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
 {
     switch ( icn ) {
-    case TELEPORT1:
-    case TELEPORT2:
-    case TELEPORT3:
-        return start + ticket % 8;
-
-    case FOUNTAIN:
-    case TREASURE:
-        return start + ticket % 2;
-
     case TWNBBOAT:
     case TWNKBOAT:
     case TWNNBOAT:
@@ -2144,6 +2130,26 @@ int ICN::Get4Castle( int race )
     }
 
     return UNKNOWN;
+}
+
+int ICN::GetFlagIcnId( int color )
+{
+    switch ( color ) {
+    case Color::BLUE:
+        return ICN::HEROFL00;
+    case Color::GREEN:
+        return ICN::HEROFL01;
+    case Color::RED:
+        return ICN::HEROFL02;
+    case Color::YELLOW:
+        return ICN::HEROFL03;
+    case Color::ORANGE:
+        return ICN::HEROFL04;
+    case Color::PURPLE:
+        return ICN::HEROFL05;
+    default:
+        return ICN::HEROFL06;
+    }
 }
 
 bool ICN::SkipLocalAlpha( int icn )

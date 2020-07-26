@@ -50,6 +50,7 @@ enum redraw_t
 
 class Castle;
 class Heroes;
+class Army;
 
 namespace Maps
 {
@@ -71,6 +72,7 @@ namespace Interface
 {
     Castle * GetFocusCastle( void );
     Heroes * GetFocusHeroes( void );
+    Army * GetFocusArmy();
     int GetFocusType( void );
     Point GetFocusCenter( void );
 
@@ -143,6 +145,8 @@ namespace Interface
         static int GetCursorFocusHeroes( const Heroes &, const Maps::Tiles & );
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
         void CalculateHeroPath( Heroes * hero, s32 destinationIdx );
+
+        void Reset(); // call this function only when changing the resolution
 
     private:
         Basic();

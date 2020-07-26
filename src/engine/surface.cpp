@@ -26,6 +26,7 @@
 #include <iostream>
 #include <math.h>
 #include <memory>
+#include <set>
 #include <sstream>
 
 #include "display.h"
@@ -33,6 +34,7 @@
 #include "localevent.h"
 #include "surface.h"
 #include "system.h"
+#include "tools.h"
 
 #ifdef WITH_IMAGE
 #include "IMG_savepng.h"
@@ -45,6 +47,9 @@ namespace
     RGBA default_color_key;
     SDL_Color * pal_colors = NULL;
     u32 pal_nums = 0;
+
+    std::set<const SDL_Surface *> paletteBasedSurface;
+    std::set<const SDL_Surface *> surfaceToUpdate;
 }
 
 SurfaceFormat GetRGBAMask( u32 bpp )
@@ -233,7 +238,7 @@ int RGBA::a( void ) const
 
 int RGBA::pack( void ) const
 {
-    return ( ( ( r() << 24 ) & 0xFF000000 ) | ( ( g() << 16 ) & 0x00FF0000 ) | ( ( b() << 8 ) & 0x0000FF00 ) | ( a() & 0x000000FF ) );
+    return ( ( ( a() << 24 ) & 0xFF000000 ) | ( ( b() << 16 ) & 0x00FF0000 ) | ( ( g() << 8 ) & 0x0000FF00 ) | ( r() & 0x000000FF ) );
 }
 
 RGBA RGBA::unpack( int v )
@@ -291,7 +296,7 @@ Surface::Surface( SDL_Surface * sf )
     , _isDisplay( false )
 {}
 
-Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask )
+Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask, bool useDefaultPalette )
     : surface( NULL )
     , _isDisplay( false )
 {
@@ -316,7 +321,9 @@ Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixe
         Error::Except( __FUNCTION__, SDL_GetError() );
 
     if ( 8 == fm.depth ) {
-        SetPalette();
+        if ( useDefaultPalette ) {
+            SetPalette();
+        }
         Lock();
         std::memcpy( surface->pixels, pixels, width * height );
         Unlock();
@@ -440,6 +447,8 @@ void Surface::SetDefaultPalette( SDL_Color * ptr, int num )
 {
     pal_colors = ptr;
     pal_nums = num;
+
+    surfaceToUpdate = paletteBasedSurface;
 }
 
 void Surface::SetDefaultColorKey( int r, int g, int b )
@@ -604,7 +613,34 @@ void Surface::SetPalette( void )
             surface->format->palette->ncolors = pal_nums;
         }
 
+        paletteBasedSurface.insert( surface );
         surface->format->palette->colors = pal_colors;
+    }
+}
+
+void Surface::ResetPalette()
+{
+    if ( isValid() && pal_colors != NULL && pal_nums > 0 && surface->format->palette ) {
+        std::set<const SDL_Surface *>::iterator item = surfaceToUpdate.find( surface );
+        if ( item != surfaceToUpdate.end() ) {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+            SDL_SetPaletteColors( surface->format->palette, pal_colors, 0, pal_nums );
+#else
+            SDL_SetPalette( surface, SDL_LOGPAL, pal_colors, 0, pal_nums );
+#endif
+            surfaceToUpdate.erase( item );
+        }
+    }
+}
+
+void Surface::SetPalette( const std::vector<SDL_Color> & colors )
+{
+    if ( isValid() && !colors.empty() && surface->format->palette ) {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        SDL_SetPaletteColors( surface->format->palette, colors.data(), 0, colors.size() );
+#else
+        SDL_SetPalette( surface, SDL_LOGPAL, const_cast<SDL_Color *>( colors.data() ), 0, colors.size() );
+#endif
     }
 }
 
@@ -745,6 +781,47 @@ u32 Surface::GetPixel( int x, int y ) const
     return pixel;
 }
 
+// Optimized version of SetPixel without error and boundries checking. Validate before use
+void Surface::SetRawPixel( int position, uint32_t pixel )
+{
+    switch ( surface->format->BitsPerPixel ) {
+    case 8:
+        *( static_cast<uint8_t *>( surface->pixels ) + position ) = static_cast<uint8_t>( pixel );
+        break;
+    case 15:
+    case 16:
+        *( static_cast<uint16_t *>( surface->pixels ) + position ) = static_cast<uint16_t>( pixel );
+        break;
+    case 24:
+        SetPixel24( static_cast<uint8_t *>( surface->pixels ) + position * 3, pixel );
+        break;
+    case 32:
+        *( static_cast<uint32_t *>( surface->pixels ) + position ) = static_cast<uint32_t>( pixel );
+        break;
+    default:
+        break;
+    }
+}
+
+// Optimized version of GetPixel without error and boundries checking. Private call, validate before use
+uint32_t Surface::GetRawPixelValue( int position ) const
+{
+    switch ( surface->format->BitsPerPixel ) {
+    case 8:
+        return *( static_cast<uint8_t *>( surface->pixels ) + position );
+    case 15:
+    case 16:
+        return *( static_cast<uint16_t *>( surface->pixels ) + position );
+    case 24:
+        return GetPixel24( static_cast<uint8_t *>( surface->pixels ) + position * 3 );
+    case 32:
+        return *( static_cast<uint32_t *>( surface->pixels ) + position );
+    default:
+        break;
+    }
+    return 0;
+}
+
 void Surface::Blit( const Rect & srt, const Point & dpt, Surface & dst ) const
 {
     SDL_Rect dstrect = SDLRect( dpt.x, dpt.y, srt.w, srt.h );
@@ -844,6 +921,8 @@ void Surface::FreeSurface( Surface & sf )
                 sf.surface->format->palette->colors = NULL;
                 sf.surface->format->palette->ncolors = 0;
             }
+
+            paletteBasedSurface.erase( sf.surface );
 
             SDL_FreeSurface( sf.surface );
             sf.surface = NULL;
@@ -1108,17 +1187,46 @@ Surface Surface::RenderSepia( void ) const
             pixel = GetPixel( x, y );
             if ( colkey == 0 || pixel != colkey ) {
                 RGBA col = GetRGB( pixel );
-// Numbers derived from http://blogs.techrepublic.com.com/howdoi/?p=120
-#define CLAMP255( val ) std::min<u16>( ( val ), 255 )
-                int outR = CLAMP255( static_cast<u16>( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f ) );
-                int outG = CLAMP255( static_cast<u16>( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f ) );
-                int outB = CLAMP255( static_cast<u16>( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f ) );
+                int outR = clamp<int>( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f, 0, 255 );
+                int outG = clamp<int>( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f, 0, 255 );
+                int outB = clamp<int>( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f, 0, 255 );
                 pixel = res.MapRGB( RGBA( outR, outG, outB, col.a() ) );
                 res.SetPixel( x, y, pixel );
-#undef CLAMP255
             }
         }
     res.Unlock();
+    return res;
+}
+
+// Renders the death wave starting at X position
+Surface Surface::RenderDeathWave( int position, int waveLength, int waveHeight ) const
+{
+    const int width = w();
+    const int height = h();
+
+    Surface res = GetSurface();
+
+    if ( position < width + waveLength ) {
+        const int offset = ( position < waveLength ) ? 0 : position - waveLength;
+        const int startX = ( position < waveLength ) ? waveLength - position : 0;
+        const int endX = ( position > width ) ? width - offset : waveLength;
+        const double waveLimit = waveLength / M_PI;
+
+        res.Lock();
+
+        for ( int x = startX; x < endX; ++x ) {
+            const int drawX = offset + x - startX;
+            // use tangent for the drop and sine for smooth wave rise
+            const int modifier = waveHeight * ( ( x < waveLimit ) ? tan( x / waveLimit ) / 2 : sin( x / waveLimit ) );
+
+            for ( int y = height - 1; y > modifier; --y ) {
+                res.SetPixel( drawX, y - modifier, GetPixel( drawX, y ) );
+            }
+        }
+
+        res.Unlock();
+    }
+
     return res;
 }
 
@@ -1145,6 +1253,86 @@ Surface Surface::RenderRippleEffect( int frame, double scaleX, double waveFreque
         for ( int x = 0; x < width; ++x ) {
             const int newX = x + static_cast<int>( rippleXModifier * sinYEffect ) + offsetX;
             res.SetPixel( newX, y, GetPixel( x, y ) );
+        }
+    }
+
+    res.Unlock();
+
+    return res;
+}
+
+Surface Surface::RenderBoxBlur( int blurRadius, int colorChange, bool redTint ) const
+{
+    const int height = h();
+    const int width = w();
+    const uint32_t imageDepth = depth();
+    uint32_t * rawSource = NULL;
+
+    SDL_Color currentColor;
+    uint8_t alphaChannel;
+
+    uint32_t lineWidth = surface->pitch;
+    if ( imageDepth == 32 ) {
+        lineWidth >>= 2;
+        rawSource = static_cast<uint32_t *>( surface->pixels );
+    }
+    else if ( imageDepth == 24 ) {
+        lineWidth /= 3;
+    }
+    else if ( imageDepth == 16 ) {
+        lineWidth >>= 1;
+    }
+
+    // create identical surface but do not blit on it
+    Surface res( Rect( Point( 0, 0 ), GetSize() ), GetFormat() );
+    res.Lock();
+
+    for ( int y = 0; y < height; ++y ) {
+        for ( int x = 0; x < width; ++x ) {
+            int red = 0;
+            int green = 0;
+            int blue = 0;
+            int alpha = 0;
+            uint32_t totalPixels = 0;
+
+            for ( int boxX = -blurRadius; boxX <= blurRadius; ++boxX ) {
+                const int currentX = x + boxX;
+                if ( currentX < 0 || currentX >= width )
+                    continue;
+
+                for ( int boxY = -blurRadius; boxY <= blurRadius; ++boxY ) {
+                    const int currentY = y + boxY;
+                    if ( currentY >= 0 && currentY < height ) {
+                        const int position = currentY * lineWidth + currentX;
+#ifdef WITH_DEBUG
+                        // Function call overhead slows this down on Debug build, optimize
+                        if ( rawSource )
+                            SDL_GetRGBA( rawSource[position], surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
+                        else
+#endif
+                            SDL_GetRGBA( GetRawPixelValue( position ), surface->format, &currentColor.r, &currentColor.g, &currentColor.b, &alphaChannel );
+
+                        red += currentColor.r;
+                        green += currentColor.g;
+                        blue += currentColor.b;
+                        alpha += alphaChannel;
+                        ++totalPixels;
+                    }
+                }
+            }
+
+            // Clamp the int values to uint8_t range
+            if ( redTint )
+                red = red / totalPixels;
+            else
+                red = clamp<int>( red / totalPixels + colorChange, 0, 255 );
+            green = clamp<int>( green / totalPixels + colorChange, 0, 255 );
+            blue = clamp<int>( blue / totalPixels + colorChange, 0, 255 );
+
+            alpha = alpha / totalPixels;
+
+            // outputPtr[y * lineWidth + x] = SDL_MapRGBA( res.surface->format, red, green, blue, alpha );
+            res.SetRawPixel( y * lineWidth + x, SDL_MapRGBA( res.surface->format, red, green, blue, alpha ) );
         }
     }
 
@@ -1380,7 +1568,7 @@ void Surface::FillRect( const Rect & rect, const RGBA & col )
     SDL_FillRect( surface, &dstrect, MapRGB( col ) );
 }
 
-void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
+void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color, const Rect & roi )
 {
     int x1 = p1.x;
     int y1 = p1.y;
@@ -1391,12 +1579,20 @@ void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
     const int dx = std::abs( x2 - x1 );
     const int dy = std::abs( y2 - y1 );
 
+    const bool isValidRoi = roi.w > 0 && roi.h > 0;
+
     Lock();
+    const int minX = isValidRoi ? roi.x : 0;
+    const int minY = isValidRoi ? roi.y : 0;
+    const int maxX = isValidRoi ? roi.x + roi.w : w();
+    const int maxY = isValidRoi ? roi.y + roi.h : h();
     if ( dx > dy ) {
         int ns = std::div( dx, 2 ).quot;
 
         for ( int i = 0; i <= dx; ++i ) {
-            SetPixel( x1, y1, pixel );
+            if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                SetPixel( x1, y1, pixel );
+            }
             x1 < x2 ? ++x1 : --x1;
             ns -= dy;
             if ( ns < 0 ) {
@@ -1409,7 +1605,9 @@ void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color )
         int ns = std::div( dy, 2 ).quot;
 
         for ( int i = 0; i <= dy; ++i ) {
-            SetPixel( x1, y1, pixel );
+            if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                SetPixel( x1, y1, pixel );
+            }
             y1 < y2 ? ++y1 : --y1;
             ns -= dx;
             if ( ns < 0 ) {
@@ -1537,13 +1735,13 @@ Surface Surface::RenderSurface( const Rect & srcrt, const Size & sz ) const
 
 bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect )
 {
-    if ( depth() != 32 )
+    if ( depth() != 32 || colors.empty() )
         return false;
 
     Lock();
 
-    const int height = h();
     const int width = w();
+    const int height = h();
     const uint16_t pitch = surface->pitch >> 2;
 
     if ( pitch != width || pitch * height != indexes.size() ) {
@@ -1597,6 +1795,57 @@ bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector
     return true;
 }
 
+bool Surface::GenerateContour( const std::vector<uint8_t> & indexes, uint32_t value, bool reflect )
+{
+    if ( depth() != 32 )
+        return false;
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width || pitch * height != indexes.size() ) {
+        Unlock();
+        return false;
+    }
+
+    uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+    const uint8_t * inY = indexes.data();
+
+    if ( reflect ) {
+        for ( int y = 0; y < height; ++y, inY += pitch, out += pitch ) {
+            const uint8_t * inX = inY;
+            for ( int x = 0; x < width; ++x, ++inX ) {
+                if ( *inX == 0 ) {
+                    if ( ( x > 0 && *( inX - 1 ) > 0 ) || ( x < width - 1 && *( inX + 1 ) > 0 ) || ( y > 0 && *( inX - pitch ) > 0 )
+                         || ( y < height - 1 && *( inX + pitch ) > 0 ) ) {
+                        out[width - 1 - x] = value;
+                    }
+                }
+            }
+        }
+    }
+    else {
+        for ( int y = 0; y < height; ++y, inY += pitch, out += pitch ) {
+            const uint8_t * inX = inY;
+            for ( int x = 0; x < width; ++x, ++inX ) {
+                if ( *inX == 0 ) {
+                    if ( ( x > 0 && *( inX - 1 ) > 0 ) || ( x < width - 1 && *( inX + 1 ) > 0 ) || ( y > 0 && *( inX - pitch ) > 0 )
+                         || ( y < height - 1 && *( inX + pitch ) > 0 ) ) {
+                        out[x] = value;
+                    }
+                }
+            }
+        }
+    }
+
+    Unlock();
+
+    return true;
+}
+
 Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t ratio )
 {
     if ( !first.isValid() || !second.isValid() || first.w() != second.w() || first.h() != second.h() || first.amask() != second.amask() || ratio > 100
@@ -1607,8 +1856,8 @@ Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t r
 
     surface.Lock();
 
-    const int height = surface.h();
     const int width = surface.w();
+    const int height = surface.h();
     const uint16_t pitch = surface.surface->pitch >> 2;
 
     if ( pitch != width ) {
@@ -1628,4 +1877,46 @@ Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t r
     surface.Unlock();
 
     return surface;
+}
+
+bool Surface::GammaCorrection( double a, double gamma )
+{
+    if ( !isValid() || depth() != 32 )
+        return false;
+
+    // We precalculate all values and store them in lookup table
+    std::vector<uint8_t> value( 256, 255u );
+
+    for ( uint16_t i = 0; i < 256; ++i ) {
+        const double data = a * pow( i / 255.0, gamma ) * 255 + 0.5;
+        if ( data < 256 )
+            value[i] = static_cast<uint8_t>( data );
+    }
+
+    Lock();
+
+    const int width = w();
+    const int height = h();
+    const uint16_t pitch = surface->pitch >> 2;
+
+    if ( pitch != width ) {
+        Unlock();
+        return false;
+    }
+
+    uint8_t * out = static_cast<uint8_t *>( surface->pixels );
+    const uint8_t * outEnd = out + pitch * height * 4;
+
+    for ( ; out != outEnd; ++out ) {
+        *out = value[*out];
+        ++out;
+        *out = value[*out];
+        ++out;
+        *out = value[*out];
+        ++out;
+    }
+
+    Unlock();
+
+    return true;
 }

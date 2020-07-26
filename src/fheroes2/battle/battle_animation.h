@@ -22,8 +22,22 @@
 #define H2BATTLE_ANIMATION_H
 
 #include "bin_info.h"
+#include "game_delays.h"
 #include "gamedefs.h"
 #include "monster_info.h"
+
+// This timer is used for randomized idle animation delays, automatically setting it in range of 75%-125% of the intended value
+class RandomizedDelay : TimeDelay
+{
+    uint32_t halfDelay;
+    bool timerIsSet;
+
+public:
+    RandomizedDelay( uint32_t delay );
+
+    // This function triggers the current delay, returning true if it is passed and automatically resets the timer.
+    bool checkDelay();
+};
 
 struct monsterReturnAnim
 {
@@ -98,7 +112,9 @@ public:
     uint32_t getFlightSpeed() const;
     uint32_t getShootingSpeed() const;
     size_t getProjectileID( float angle ) const;
+    Point getBlindOffset() const;
     Point getProjectileOffset( size_t direction ) const;
+    int getTroopCountOffset( bool isReflect ) const;
     uint32_t getIdleDelay() const;
 
 protected:
