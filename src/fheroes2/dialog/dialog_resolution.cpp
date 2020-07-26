@@ -181,8 +181,8 @@ namespace Dialog
         cursor.Hide();
         back.Restore();
 
-        if ( selectedResolution.first > 0 && selectedResolution.second > 0 && selectedResolution.first != currentResolution.w
-             && selectedResolution.second != currentResolution.h ) {
+        if ( selectedResolution.first > 0 && selectedResolution.second > 0 && ( selectedResolution.first != currentResolution.w
+             || selectedResolution.second != currentResolution.h ) ) {
             Settings & conf = Settings::Get();
             display.SetVideoMode( selectedResolution.first, selectedResolution.second, display.IsFullScreen(), conf.KeepAspectRatio(),
                                   conf.ChangeFullscreenResolution() );
