@@ -55,8 +55,9 @@ void Interface::Basic::SetFocus( Heroes * hero )
         gameArea.SetCenter( hero->GetCenter() );
         statusWindow.SetState( STATUS_ARMY );
 
-        if ( !Game::ChangeMusicDisabled() ) {
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( hero->GetIndex() ).GetGround() ) );
+        const int heroIndexPos = hero->GetIndex();
+        if ( !Game::ChangeMusicDisabled() && heroIndexPos >= 0 ) {
+            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ) );
             Game::EnvironmentSoundMixer();
         }
     }

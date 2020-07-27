@@ -2628,30 +2628,31 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> ta.tmp;
-    // FIXME: Fix invalid objects set in old (0.7) fheroes2 saves, remove this in 0.9
-    switch ( ta.object ) {
-    case 0x11:
-        ta.object = 0xA4;
-        ta.index = 116;
-        break;
-    case 0x12:
-        ta.object = 0xA4;
-        ta.index = 119;
-        break;
-    case 0x13:
-        ta.object = 0xA4;
-        ta.index = 122;
-        break;
-    case 0x14:
-        ta.object = 0xA4;
-        ta.index = 15;
-        break;
-    case 0x15:
-        ta.object = 0xB8;
-        ta.index = 19;
-        break;
-    default:
-        break;
+    if ( FORMAT_VERSION_080_RELEASE > Game::GetLoadVersion() ) {
+        switch ( ta.object ) {
+        case 0x11:
+            ta.object = 0xA4;
+            ta.index = 116;
+            break;
+        case 0x12:
+            ta.object = 0xA4;
+            ta.index = 119;
+            break;
+        case 0x13:
+            ta.object = 0xA4;
+            ta.index = 122;
+            break;
+        case 0x14:
+            ta.object = 0xA4;
+            ta.index = 15;
+            break;
+        case 0x15:
+            ta.object = 0xB8;
+            ta.index = 19;
+            break;
+        default:
+            break;
+        }
     }
     return msg;
 }
@@ -2665,7 +2666,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
     msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tile_passable;
-    if ( FORMAT_VERSION_070_RELEASE == Game::GetLoadVersion() ) {
+    if ( FORMAT_VERSION_090_RELEASE == Game::GetLoadVersion() ) {
         tile.uniq = 0;
         tile.objectTileset = 0;
         tile.objectIndex = 255;

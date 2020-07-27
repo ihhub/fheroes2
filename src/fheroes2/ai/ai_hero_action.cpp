@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <functional>
 
+#include "agg.h"
 #include "ai.h"
 #include "army.h"
 #include "battle.h"
@@ -38,6 +39,7 @@
 #include "luck.h"
 #include "maps_tiles.h"
 #include "morale.h"
+#include "mus.h"
 #include "payment.h"
 #include "race.h"
 #include "settings.h"
@@ -422,6 +424,9 @@ namespace AI
             hero.GetPath().Reset();
 
         AI::Get().HeroesActionComplete( hero, dst_index );
+
+        // reset if during an action music was stopped
+        AGG::PlayMusic( MUS::COMPUTER_TURN );
     }
 
     void AIToHeroes( Heroes & hero, u32 obj, s32 dst_index )

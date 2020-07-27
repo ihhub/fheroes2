@@ -24,6 +24,7 @@
 #include "button.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_resolution.h"
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
@@ -92,6 +93,10 @@ int Game::MainMenu( void )
 
     cursor.Show();
     display.Flip();
+
+    const double scaleX = static_cast<double>( display.GetSize().w ) / Display::DEFAULT_WIDTH;
+    const double scaleY = static_cast<double>( display.GetSize().h ) / Display::DEFAULT_HEIGHT;
+    const Rect resolutionArea( 63 * scaleX, 202 * scaleY, 90 * scaleX, 160 * scaleY );
 
     u32 lantern_frame = 0;
 
@@ -173,6 +178,13 @@ int Game::MainMenu( void )
                 if ( conf.ExtGameUseFade() )
                     display.Fade();
                 return QUITGAME;
+            }
+        }
+        else if ( le.MouseClickLeft( resolutionArea ) ) {
+            if ( Dialog::SelectResolution() ) {
+                // force interface to reset area and positions
+                Interface::Basic::Get().Reset();
+                return MAINMENU;
             }
         }
 
