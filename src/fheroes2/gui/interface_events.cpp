@@ -129,7 +129,9 @@ void Interface::Basic::EventNextHero( void )
         ++it;
         if ( it == myHeroes.end() )
             it = myHeroes.begin();
-        SetFocus( *it );
+
+        if ( ( *it )->MayStillMove() )
+            SetFocus( *it );
     }
     else {
         ResetFocus( GameFocus::HEROES );
