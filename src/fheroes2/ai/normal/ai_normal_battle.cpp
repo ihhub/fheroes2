@@ -40,8 +40,8 @@ namespace AI
 
         Board * board = Arena::GetBoard();
         const HeroBase * commander = currentUnit.GetCommander();
-        Force friendlyForce = arena.GetForce( myColor );
-        Force enemyForce = arena.GetForce( myColor, true );
+        const Force & friendlyForce = arena.GetForce( myColor );
+        const Force & enemyForce = arena.GetForce( myColor, true );
 
         // This should filter out all invalid units
         Units friendly = Units( friendlyForce, true );

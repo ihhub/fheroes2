@@ -1386,6 +1386,36 @@ void Maps::Tiles::UpdatePassable( void )
             tile_passable &= ~Direction::TOP_LEFT;
         }
     }
+
+    // custom bullshit
+    passable_disable = 0;
+    int chokepoints = 0;
+    int totalPassableTiles = 0;
+    int terrainDiff = 0;
+
+    const Directions directions = Direction::All();
+    const int currIndex = GetIndex();
+    const Point curr = GetPoint( currIndex );
+    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it ) {
+        if ( ( tile_passable & *it ) && Maps::isValidDirection( currIndex, *it ) ) {
+            int tmp = Maps::GetDirectionIndex( currIndex, *it );
+            if ( world.GetTiles( tmp ).tile_passable & Direction::Reflect( *it ) ) {
+                passable_disable++;
+            }
+        }
+        else {
+            terrainDiff++;
+        }
+    }
+
+    //for ( int x = curr.x - 2; x < curr.x + 2; ++x ) {
+    //    for ( int y = curr.y - 2; y < curr.y + 2; ++y ) {
+    //        const Point check( x, y );
+    //        if ( isValidAbsPoint( check ) && world.GetTiles( x, y ).tile_passable == 0 ) {
+    //            ++passable_disable;
+    //        }
+    //    }
+    //}
 }
 
 u32 Maps::Tiles::GetObjectUID( int obj ) const
@@ -1582,17 +1612,13 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( area.GetVisibleTileROI() & mp ) {
-        if ( 0 == tile_passable || DIRECTION_ALL != tile_passable ) {
-            Surface sf = PassableViewSurface( tile_passable );
+    if ( area.GetVisibleTileROI() & mp && 8 - passable_disable != 0 ) {
+        Surface sf = PassableViewSurface( tile_passable );
 
-            if ( passable_disable ) {
-                Text text( GetString( passable_disable ), Font::SMALL );
-                text.Blit( 13, 13, sf );
-            }
+        Text text( GetString( 8 - passable_disable ), Font::SMALL );
+        text.Blit( 13, 13, sf );
 
-            area.BlitOnTile( dst, sf, 0, 0, mp );
-        }
+        area.BlitOnTile( dst, sf, 0, 0, mp );
     }
 #endif
 }

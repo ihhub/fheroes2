@@ -204,6 +204,7 @@
     <ClCompile Include="src\fheroes2\agg\sprite.cpp" />
     <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
+    <ClCompile Include="src\fheroes2\ai\ai_common.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_base.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal.cpp" />

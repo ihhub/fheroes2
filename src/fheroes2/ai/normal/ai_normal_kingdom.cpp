@@ -39,7 +39,7 @@ namespace AI
         }
 
         if ( !Settings::Get().MusicMIDI() )
-            AGG::PlayMusic( MUS::COMPUTER );
+            AGG::PlayMusic( MUS::COMPUTER_TURN );
 
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 

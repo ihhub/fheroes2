@@ -119,7 +119,7 @@ namespace AI
     {
         CastleDevelopment( castle );
 
-        if ( world.LastDay() )
+        if ( world.BeginWeek() )
             castle.RecruitAllMonsters();
     }
 }
