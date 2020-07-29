@@ -724,7 +724,7 @@ const char * Castle::GetStringBuilding( u32 build, int race )
 const char * Castle::GetDescriptionBuilding( u32 build, int race )
 {
     const char * desc_build[]
-        = {_( "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns." ),
+        = {_( "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information" ),
            _( "The Tavern increases morale for troops defending the castle." ),
            _( "The Shipyard allows ships to be built." ),
            _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." ),
