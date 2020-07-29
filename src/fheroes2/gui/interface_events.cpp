@@ -126,10 +126,16 @@ void Interface::Basic::EventNextHero( void )
 
     if ( GetFocusHeroes() ) {
         KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
-        ++it;
-        if ( it == myHeroes.end() )
-            it = myHeroes.begin();
-        SetFocus( *it );
+        KingdomHeroes::const_iterator currentHero = it;
+        do {
+            ++it;
+            if ( it == myHeroes.end() )
+                it = myHeroes.begin();
+            if ( ( *it )->MayStillMove() ) {
+                SetFocus( *it );
+                break;
+            }
+        } while ( it != currentHero );
     }
     else {
         ResetFocus( GameFocus::HEROES );
