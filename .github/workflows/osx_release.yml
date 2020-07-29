@@ -21,7 +21,7 @@ jobs:
     - name: compile
       run: make -j 2
     - name: create package
-      run: zip fheroes2_osx_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_macos.sh
+      run: zip fheroes2_osx_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_macos.sh changelog.txt README.md
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_osx_sdl1.zip
@@ -50,7 +50,7 @@ jobs:
       env:
         WITH_SDL2: "ON"
     - name: create package
-      run: zip fheroes2_osx_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_2.sh script/demo/demo_macos.sh
+      run: zip fheroes2_osx_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_2.sh script/demo/demo_macos.sh  changelog.txt README.md
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_osx_sdl2.zip
