@@ -398,7 +398,7 @@ bool ActionSpellTownGate( Heroes & hero )
 
     // find the nearest castle
     for ( it = castles.begin(); it != castles.end(); ++it )
-        if ( *it && !( *it )->GetHeroes().Guest() ) {
+        if ( *it ) {
             int min2 = Maps::GetApproximateDistance( center, ( *it )->GetIndex() );
             if ( 0 > min || min2 < min ) {
                 min = min2;
@@ -415,8 +415,12 @@ bool ActionSpellTownGate( Heroes & hero )
     I.RedrawFocus();
     I.Redraw();
 
-    if ( !castle ) {
-        Dialog::Message( "", _( "No available towns. Spell Failed!!!" ), Font::BIG, Dialog::OK );
+    if ( castle && castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
+        Dialog::Message( "", _( "Nearest town occupied.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
+        return false;
+    }
+    else if ( !castle ) {
+        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
