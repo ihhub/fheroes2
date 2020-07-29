@@ -68,7 +68,14 @@ public:
     {
         result = Dialog::OK;
     };
-    void ActionListSingleClick( s32 & ){};
+    void ActionListSingleClick( s32 & destination )
+    {
+        Interface::Basic & I = Interface::Basic::Get();
+        I.GetGameArea().SetCenter( Maps::GetPoint( destination ) );
+        I.RedrawFocus();
+        I.Redraw();
+    };
+
     void ActionListPressRight( s32 & ){};
 
     int & result;
@@ -471,7 +478,9 @@ bool ActionSpellTownPortal( Heroes & hero )
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
+            frameborder->RenderRegular( frameborder->GetRect() );
             listbox.Redraw();
+            btnGroups.Draw();
             cursor.Show();
             display.Flip();
         }
