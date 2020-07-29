@@ -216,7 +216,7 @@ namespace Maps
         Troop QuantityTroop( void ) const;
 
         void SetObjectPassable( bool );
-        void SetQuantity3( int );
+        void SetQuantity3( int value );
 
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
@@ -270,7 +270,7 @@ namespace Maps
         uint8_t objectTileset;
         uint8_t objectIndex;
         u8 mp2_object;
-        u16 tile_passable;
+        uint16_t tilePassable;
         u8 fog_colors;
 
         u8 quantity1;

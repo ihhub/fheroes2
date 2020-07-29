@@ -960,7 +960,7 @@ u32 PackTileSpriteIndex( u32 index, u32 shape ) /* index max: 0x3FFF, shape valu
 Maps::Tiles::Tiles()
     : maps_index( 0 )
     , pack_sprite_index( 0 )
-    , tile_passable( DIRECTION_ALL )
+    , tilePassable( DIRECTION_ALL )
     , uniq( 0 )
     , mp2_object( 0 )
     , objectTileset( 0 )
@@ -977,7 +977,7 @@ Maps::Tiles::Tiles()
 
 void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 {
-    tile_passable = DIRECTION_ALL;
+    tilePassable = DIRECTION_ALL;
     quantity1 = mp2.quantity1;
     quantity2 = mp2.quantity2;
     quantity3 = 0;
@@ -1009,14 +1009,16 @@ void Maps::Tiles::SetIndex( int index )
     maps_index = index;
 }
 
+// Get third field containing Tile metadata (such as Hero ID or spell ID)
 int Maps::Tiles::GetQuantity3( void ) const
 {
     return quantity3;
 }
 
-void Maps::Tiles::SetQuantity3( int mod )
+// Set Tile metadata field (used for things like Hero ID or spell ID)
+void Maps::Tiles::SetQuantity3( int value )
 {
-    quantity3 = mod;
+    quantity3 = value;
 }
 
 Heroes * Maps::Tiles::GetHeroes( void ) const
@@ -1136,7 +1138,7 @@ bool Maps::Tiles::isLongObject( int direction )
 
 void Maps::Tiles::UpdatePassable( void )
 {
-    tile_passable = DIRECTION_ALL;
+    tilePassable = DIRECTION_ALL;
 #ifdef WITH_DEBUG
     impassableTileRule = 0;
 #endif
@@ -1145,9 +1147,9 @@ void Maps::Tiles::UpdatePassable( void )
     const bool emptyobj = MP2::OBJ_ZERO == obj || MP2::OBJ_COAST == obj || MP2::OBJ_EVENT == obj;
 
     if ( MP2::isActionObject( obj, isWater() ) ) {
-        tile_passable = MP2::GetObjectDirect( obj );
+        tilePassable = MP2::GetObjectDirect( obj );
 #ifdef WITH_DEBUG
-        if ( tile_passable == 0 )
+        if ( tilePassable == 0 )
             impassableTileRule = 1;
 #endif
         return;
@@ -1161,33 +1163,33 @@ void Maps::Tiles::UpdatePassable( void )
         bool trees2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isForestsTrees );
 
         // fix coast passable
-        if ( tile_passable && !emptyobj && Maps::TileIsCoast( GetIndex(), Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT )
+        if ( tilePassable && !emptyobj && Maps::TileIsCoast( GetIndex(), Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT )
              && ( addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), std::ptr_fun( &TilesAddon::isShadow ) ) ) ) ) {
-            tile_passable = 0;
+            tilePassable = 0;
 #ifdef WITH_DEBUG
             impassableTileRule = 2;
 #endif
         }
 
         // fix mountain layer
-        if ( tile_passable && ( MP2::OBJ_MOUNTS == obj || MP2::OBJ_TREES == obj ) && mounts1 && ( mounts2 || trees2 ) ) {
-            tile_passable = 0;
+        if ( tilePassable && ( MP2::OBJ_MOUNTS == obj || MP2::OBJ_TREES == obj ) && mounts1 && ( mounts2 || trees2 ) ) {
+            tilePassable = 0;
 #ifdef WITH_DEBUG
             impassableTileRule = 3;
 #endif
         }
 
         // fix trees layer
-        if ( tile_passable && ( MP2::OBJ_MOUNTS == obj || MP2::OBJ_TREES == obj ) && trees1 && ( mounts2 || trees2 ) ) {
-            tile_passable = 0;
+        if ( tilePassable && ( MP2::OBJ_MOUNTS == obj || MP2::OBJ_TREES == obj ) && trees1 && ( mounts2 || trees2 ) ) {
+            tilePassable = 0;
 #ifdef WITH_DEBUG
             impassableTileRule = 4;
 #endif
         }
 
         // town twba
-        if ( tile_passable && FindAddonICN( ICN::OBJNTWBA, 1 ) && ( mounts2 || trees2 ) ) {
-            tile_passable = 0;
+        if ( tilePassable && FindAddonICN( ICN::OBJNTWBA, 1 ) && ( mounts2 || trees2 ) ) {
+            tilePassable = 0;
 #ifdef WITH_DEBUG
             impassableTileRule = 5;
 #endif
@@ -1196,8 +1198,8 @@ void Maps::Tiles::UpdatePassable( void )
         if ( Maps::isValidDirection( GetIndex(), Direction::TOP ) ) {
             Tiles & top = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::TOP ) );
             // fix: rocs on water
-            if ( top.isWater() && top.tile_passable && !( Direction::TOP & top.tile_passable ) ) {
-                top.tile_passable = 0;
+            if ( top.isWater() && top.tilePassable && !( Direction::TOP & top.tilePassable ) ) {
+                top.tilePassable = 0;
 #ifdef WITH_DEBUG
                 top.impassableTileRule = 6;
 #endif
@@ -1206,21 +1208,21 @@ void Maps::Tiles::UpdatePassable( void )
     }
 
     // fix bottom border: disable passable for all no action objects
-    if ( tile_passable && !Maps::isValidDirection( GetIndex(), Direction::BOTTOM ) && !emptyobj && !MP2::isActionObject( obj, isWater() ) ) {
-        tile_passable = 0;
+    if ( tilePassable && !Maps::isValidDirection( GetIndex(), Direction::BOTTOM ) && !emptyobj && !MP2::isActionObject( obj, isWater() ) ) {
+        tilePassable = 0;
 #ifdef WITH_DEBUG
         impassableTileRule = 7;
 #endif
     }
 
     // check all sprite (level 1)
-    tile_passable &= Tiles::GetPassable( objectTileset, objectIndex );
+    tilePassable &= Tiles::GetPassable( objectTileset, objectIndex );
     for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-        if ( tile_passable ) {
-            tile_passable &= Tiles::GetPassable( it->object, it->index );
+        if ( tilePassable ) {
+            tilePassable &= Tiles::GetPassable( it->object, it->index );
 
 #ifdef WITH_DEBUG
-            if ( 0 == tile_passable )
+            if ( 0 == tilePassable )
                 impassableTileRule = 8;
 #endif
         }
@@ -1231,8 +1233,8 @@ void Maps::Tiles::UpdatePassable( void )
         Tiles & top = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::TOP ) );
 
         if ( isWater() == top.isWater() && top.objectTileset == MP2::OBJ_MOUNTS && top.objectTileset != 0 && !MP2::isActionObject( top.GetObject( false ), isWater() )
-             && ( tile_passable && !( tile_passable & DIRECTION_TOP_ROW ) ) && !( top.tile_passable & DIRECTION_TOP_ROW ) ) {
-            top.tile_passable = 0;
+             && ( tilePassable && !( tilePassable & DIRECTION_TOP_ROW ) ) && !( top.tilePassable & DIRECTION_TOP_ROW ) ) {
+            top.tilePassable = 0;
 #ifdef WITH_DEBUG
             top.impassableTileRule = 9;
 #endif
@@ -1244,15 +1246,15 @@ void Maps::Tiles::UpdatePassable( void )
         Tiles & left = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::LEFT ) );
 
         // left corner
-        if ( left.tile_passable && isLongObject( Direction::TOP ) && !( ( Direction::TOP | Direction::TOP_LEFT ) & tile_passable )
-             && ( Direction::TOP_RIGHT & left.tile_passable ) ) {
-            left.tile_passable &= ~Direction::TOP_RIGHT;
+        if ( left.tilePassable && isLongObject( Direction::TOP ) && !( ( Direction::TOP | Direction::TOP_LEFT ) & tilePassable )
+             && ( Direction::TOP_RIGHT & left.tilePassable ) ) {
+            left.tilePassable &= ~Direction::TOP_RIGHT;
         }
         else
             // right corner
-            if ( tile_passable && left.isLongObject( Direction::TOP ) && !( ( Direction::TOP | Direction::TOP_RIGHT ) & left.tile_passable )
-                 && ( Direction::TOP_LEFT & tile_passable ) ) {
-            tile_passable &= ~Direction::TOP_LEFT;
+            if ( tilePassable && left.isLongObject( Direction::TOP ) && !( ( Direction::TOP | Direction::TOP_RIGHT ) & left.tilePassable )
+                 && ( Direction::TOP_LEFT & tilePassable ) ) {
+            tilePassable &= ~Direction::TOP_LEFT;
         }
     }
 }
@@ -1262,11 +1264,13 @@ u32 Maps::Tiles::GetObjectUID() const
     return uniq;
 }
 
+// Get Tile metadata field #1 (used for things like monster count of resource amount)
 int Maps::Tiles::GetQuantity1( void ) const
 {
     return quantity1;
 }
 
+// Get Tile metadata field #2 (used for things like animations or resource type )
 int Maps::Tiles::GetQuantity2( void ) const
 {
     return quantity2;
@@ -1274,7 +1278,7 @@ int Maps::Tiles::GetQuantity2( void ) const
 
 int Maps::Tiles::GetPassable( void ) const
 {
-    return tile_passable;
+    return tilePassable;
 }
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
@@ -1456,7 +1460,7 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
                 RedrawMapObject( dst, icn, index, mp, TilesAddon::hasColorCycling( it->object, it->index ) );
 
                 // possible animation
-                if ( it->object & 1 ) {
+                if ( it->hasSpriteAnimation() ) {
                     const Sprite & animationSprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) );
                     area.BlitOnTile( dst, animationSprite, mp );
                 }
@@ -1477,8 +1481,8 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( area.GetVisibleTileROI() & mp ) {
-        if ( 0 == tile_passable || DIRECTION_ALL != tile_passable ) {
-            Surface sf = PassableViewSurface( tile_passable );
+        if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
+            Surface sf = PassableViewSurface( tilePassable );
 
             if ( impassableTileRule ) {
                 Text text( GetString( impassableTileRule ), Font::SMALL );
@@ -1595,7 +1599,7 @@ void Maps::Tiles::RedrawBottom4Hero( Surface & dst ) const
 
     if ( ( area.GetVisibleTileROI() & mp ) && !addons_level1.empty() ) {
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-            if ( !SkipRedrawTileBottom4Hero( *it, tile_passable ) ) {
+            if ( !SkipRedrawTileBottom4Hero( *it, tilePassable ) ) {
                 const u8 & object = ( *it ).object;
                 const u8 & index = ( *it ).index;
                 const int icn = MP2::GetICNObject( object );
@@ -1713,7 +1717,7 @@ std::string Maps::Tiles::String( void ) const
        << "object index    : " << static_cast<int>( objectIndex ) << std::endl
        << "object animated : " << static_cast<int>( hasSpriteAnimation() ) << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << road << ")" << std::endl
-       << "passable        : " << ( tile_passable ? Direction::String( tile_passable ) : "false" );
+       << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
 #ifdef WITH_DEBUG
     if ( impassableTileRule )
         os << ", disable(" << static_cast<int>( impassableTileRule ) << ")";
@@ -1862,7 +1866,7 @@ bool Maps::Tiles::isPassable( const Heroes * hero, int direct, bool skipfog ) co
     if ( hero && !isPassable( *hero ) )
         return false;
 
-    return direct & tile_passable;
+    return direct & tilePassable;
 }
 
 void Maps::Tiles::SetObjectPassable( bool pass )
@@ -1870,9 +1874,9 @@ void Maps::Tiles::SetObjectPassable( bool pass )
     switch ( GetObject( false ) ) {
     case MP2::OBJ_TROLLBRIDGE:
         if ( pass )
-            tile_passable |= Direction::TOP_LEFT;
+            tilePassable |= Direction::TOP_LEFT;
         else
-            tile_passable &= ~Direction::TOP_LEFT;
+            tilePassable &= ~Direction::TOP_LEFT;
         break;
 
     default:
@@ -2127,11 +2131,11 @@ void Maps::Tiles::RemoveObjectSprite( void )
     switch ( GetObject() ) {
     case MP2::OBJ_JAIL:
         RemoveJailSprite();
-        tile_passable = DIRECTION_ALL;
+        tilePassable = DIRECTION_ALL;
         break;
     case MP2::OBJ_BARRIER:
         RemoveBarrierSprite();
-        tile_passable = DIRECTION_ALL;
+        tilePassable = DIRECTION_ALL;
         break;
 
     default:
@@ -2170,15 +2174,17 @@ void Maps::Tiles::RemoveJailSprite( void )
     // remove top sprite
     if ( Maps::isValidDirection( GetIndex(), Direction::TOP ) ) {
         const s32 top = Maps::GetDirectionIndex( GetIndex(), Direction::TOP );
-        world.GetTiles( top ).Remove( uniq );
-        world.GetTiles( top ).SetObject( MP2::OBJ_ZERO );
-        world.GetTiles( top ).FixObject();
+        Maps::Tiles & topTile = world.GetTiles( top );
+        topTile.Remove( uniq );
+        topTile.SetObject( MP2::OBJ_ZERO );
+        topTile.FixObject();
 
         // remove top left sprite
         if ( Maps::isValidDirection( top, Direction::LEFT ) ) {
-            world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).Remove( uniq );
-            world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).SetObject( MP2::OBJ_ZERO );
-            world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) ).FixObject();
+            Maps::Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) );
+            leftTile.Remove( uniq );
+            leftTile.SetObject( MP2::OBJ_ZERO );
+            leftTile.FixObject();
         }
     }
 
@@ -2659,13 +2665,13 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
-    return msg << tile.maps_index << tile.pack_sprite_index << tile.tile_passable << tile.uniq << tile.objectTileset << tile.objectIndex << tile.mp2_object
+    return msg << tile.maps_index << tile.pack_sprite_index << tile.tilePassable << tile.uniq << tile.objectTileset << tile.objectIndex << tile.mp2_object
                << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.road << tile.addons_level1 << tile.addons_level2;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
-    msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tile_passable;
+    msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tilePassable;
     if ( FORMAT_VERSION_090_RELEASE == Game::GetLoadVersion() ) {
         tile.uniq = 0;
         tile.objectTileset = 0;

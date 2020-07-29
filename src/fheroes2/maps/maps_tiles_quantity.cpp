@@ -510,7 +510,7 @@ void Maps::Tiles::QuantityUpdate( void )
     } break;
 
     case MP2::OBJ_ARTIFACT: {
-        int art = Artifact::FromMP2IndexSprite( objectIndex ).GetID();
+        const int art = Artifact::FromMP2IndexSprite( objectIndex ).GetID();
 
         if ( Artifact::UNKNOWN != art ) {
             if ( art == Artifact::SPELL_SCROLL ) {
@@ -540,7 +540,7 @@ void Maps::Tiles::QuantityUpdate( void )
     } break;
 
     case MP2::OBJ_RESOURCE: {
-        int res = Resource::FromIndexSprite( objectIndex );
+        const int res = Resource::FromIndexSprite( objectIndex );
         u32 count = 0;
 
         switch ( res ) {
@@ -910,7 +910,7 @@ void Maps::Tiles::QuantityUpdate( void )
 
 int Maps::Tiles::MonsterJoinCondition( void ) const
 {
-    return mp2_object == MP2::OBJ_MONSTER ? 0x03 & quantity3 : 0;
+    return mp2_object == MP2::OBJ_MONSTER ? ( 0x03 & quantity3 ) : 0;
 }
 
 void Maps::Tiles::MonsterSetJoinCondition( int cond )
