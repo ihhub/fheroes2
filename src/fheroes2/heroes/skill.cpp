@@ -444,7 +444,7 @@ std::string Skill::Secondary::GetDescription( void ) const
         }
         else {
             str = _n( std::string( std::string( GetName() ) + std::string( " reduces the movement penalty for rough terrain by %{count} percent." ) ).c_str(),
-                        std::string( std::string( GetName() ) + std::string( " reduces the movement penalty for rough terrain by %{count} percent." ) ).c_str(), count );
+                      std::string( std::string( GetName() ) + std::string( " reduces the movement penalty for rough terrain by %{count} percent." ) ).c_str(), count );
         }
         break;
     case ARCHERY:
