@@ -444,7 +444,7 @@ bool ActionSpellTownPortal( Heroes & hero )
             castles.push_back( ( **it ).GetIndex() );
 
     if ( castles.empty() ) {
-        Dialog::Message( "", _( "No available towns. Spell Failed!!!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
