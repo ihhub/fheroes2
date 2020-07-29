@@ -68,6 +68,7 @@ public:
     {
         result = Dialog::OK;
     };
+
     void ActionListSingleClick( s32 & destination )
     {
         Interface::Basic & I = Interface::Basic::Get();
@@ -76,7 +77,12 @@ public:
         I.Redraw();
     };
 
-    void ActionListPressRight( s32 & ){};
+    void ActionListPressRight( s32 & destination )
+    {
+        const Castle * castle = world.GetCastle( Maps::GetPoint( destination ) );
+        if ( castle )
+            Dialog::QuickInfo( *castle );
+    };
 
     int & result;
 };
