@@ -6,7 +6,7 @@ the original game on GOG or Ubisoft Store platforms. Alternatively, you can
 download a free demo version of the game.
 
 --- Installation and Requirements ---
-You are required to have at least a demo version of Heroes of Might and Magic II
+You are required to have at a demo or full version of Heroes of Might and Magic II
 game to be able to play it.
 
 If you do not have the original Heroes of Might and Magic II game please run
