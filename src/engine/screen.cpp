@@ -19,9 +19,9 @@
  ***************************************************************************/
 
 #include "screen.h"
+#include "../../tools/palette_h2.h"
 #include <SDL_version.h>
 #include <SDL_video.h>
-#include "../../tools/palette_h2.h"
 
 #include <algorithm>
 #include <set>
@@ -117,7 +117,7 @@ namespace
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
         }
 
-        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const 
+        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const
         {
             std::set<std::pair<int, int> > resolutionSet;
 
@@ -144,21 +144,17 @@ namespace
         RenderEngine()
             : _window( NULL )
             , _surface( NULL )
-        {
-        }
+        {}
 
-        virtual void clear()
-        {
-        }
+        virtual void clear() {}
 
-        virtual void render( const fheroes2::Display & )
-        {
-        }
+        virtual void render( const fheroes2::Display & ) {}
 
         virtual bool allocate( uint32_t, uint32_t, bool )
         {
             return false;
         }
+
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
@@ -214,6 +210,7 @@ namespace
         {
             return new RenderEngine;
         }
+
     protected:
         RenderEngine()
             : _surface( NULL )
@@ -303,11 +300,11 @@ namespace
         int renderFlags() const
         {
 #if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-                return SDL_SWSURFACE;
+            return SDL_SWSURFACE;
 #elif defined( __WIN32__ ) || defined( ANDROID )
-                return SDL_HWSURFACE | SDL_HWPALETTE;
+            return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
-                return SDL_SWSURFACE;
+            return SDL_SWSURFACE;
 #endif
         }
 
@@ -326,12 +323,12 @@ namespace
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                         _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[i * 3] << 2, kb_pal[i * 3 + 1] << 2, kb_pal[i * 3 + 2] << 2 );
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[i * 3] << 2, kb_pal[i * 3 + 1] << 2, kb_pal[i * 3 + 2] << 2 );
                     }
                 }
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
-                 _palette8Bit.resize( 256 );
+                _palette8Bit.resize( 256 );
                 for ( uint32_t i = 0; i < 256; ++i ) {
                     const uint32_t index = i * 3;
                     SDL_Color & col = _palette8Bit[i];
@@ -344,7 +341,7 @@ namespace
                 SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
 
                 if ( !SDL_MUSTLOCK( _surface ) ) {
-                    linkRenderSurface( static_cast<uint8_t*>( _surface->pixels ) );
+                    linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                 }
             }
         }
@@ -363,8 +360,7 @@ namespace fheroes2
         : _engine( RenderEngine::create() )
         , _preprocessing( NULL )
         , _renderSurface( NULL )
-    {
-    }
+    {}
 
     Display::~Display()
     {
@@ -442,12 +438,10 @@ namespace fheroes2
 
     Cursor::Cursor()
         : _show( true )
-    {
-    }
+    {}
 
     Cursor::~Cursor()
-    {
-    }
+    {}
 
     Cursor & Cursor::instance()
     {

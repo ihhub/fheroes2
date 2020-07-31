@@ -37,10 +37,11 @@ namespace fheroes2
             return false;
         }
 
-        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const 
+        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const
         {
             return std::vector<std::pair<int, int> >();
         }
+
     protected:
         BaseRenderEngine() {}
 
@@ -80,6 +81,7 @@ namespace fheroes2
         virtual const uint8_t * image() const;
 
         BaseRenderEngine * engine();
+
     private:
         BaseRenderEngine * _engine;
         PreRenderProcessing _preprocessing;
