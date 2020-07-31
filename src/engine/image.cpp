@@ -22,6 +22,10 @@
 #include "../../tools/palette_h2.h"
 
 #include <cmath>
+#include <cstring>
+
+// FIXME: please remove me before merging to master branch
+#include <cstdio>
 
 namespace
 {
