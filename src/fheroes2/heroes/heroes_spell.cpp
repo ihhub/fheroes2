@@ -504,7 +504,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     if ( result == Dialog::OK )
         return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( listbox.GetCurrent() ) ) );
     else {
-        I.GetGameArea().SetCenter( Point{ focusArea.x + focusArea.w / 2, focusArea.y + focusArea.h / 2 } );
+        I.GetGameArea().SetCenter( Point( focusArea.x + focusArea.w / 2, focusArea.y + focusArea.h / 2 ) );
         I.RedrawFocus();
         I.Redraw();
     }
