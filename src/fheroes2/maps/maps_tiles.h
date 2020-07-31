@@ -140,6 +140,7 @@ namespace Maps
         bool hasSpriteAnimation() const;
         bool isObject( int obj ) const;
         bool isStream( void ) const;
+        bool isShadow( void ) const;
         bool GoodForUltimateArtifact( void ) const;
 
         TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );

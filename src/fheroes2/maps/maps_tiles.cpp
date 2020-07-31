@@ -1163,8 +1163,7 @@ void Maps::Tiles::UpdatePassable( void )
         bool trees2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isForestsTrees );
 
         // fix coast passable
-        if ( tilePassable && !emptyobj && Maps::TileIsCoast( GetIndex(), Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT )
-             && ( addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), std::ptr_fun( &TilesAddon::isShadow ) ) ) ) ) {
+        if ( tilePassable && !emptyobj && Maps::TileIsCoast( GetIndex(), Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) && !isShadow() ) {
             tilePassable = 0;
 #ifdef WITH_DEBUG
             impassableTileRule = 2;
@@ -1894,6 +1893,11 @@ bool Maps::Tiles::isRoad() const
 bool Maps::Tiles::isStream( void ) const
 {
     return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isStream );
+}
+
+bool Maps::Tiles::isShadow( void ) const
+{
+    return addons_level1.size() != std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow );
 }
 
 bool Maps::Tiles::hasSpriteAnimation() const
