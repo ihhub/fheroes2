@@ -458,10 +458,14 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
+    const Rect focusArea = I.GetGameArea().GetVisibleTileROI();
+    I.GetGameArea().SetCenter( Maps::GetPoint( castles.front() ) );
+    I.RedrawFocus();
+    I.Redraw();
+
     Dialog::FrameBorder * frameborder = new Dialog::FrameBorder( Size( 280, 200 ) );
 
     const Rect & area = frameborder->GetArea();
-    const Rect focusArea = I.GetGameArea().GetVisibleTileROI();
     int result = Dialog::ZERO;
 
     CastleIndexListBox listbox( area, result );
