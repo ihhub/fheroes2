@@ -415,12 +415,12 @@ bool ActionSpellTownGate( Heroes & hero )
     I.RedrawFocus();
     I.Redraw();
 
-    if ( castle && castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
-        Dialog::Message( "", _( "Nearest town occupied.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
+    if ( !castle ) {
+        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
-    else if ( !castle ) {
-        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
+    else if ( castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
+        Dialog::Message( "", _( "Nearest town occupied.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
