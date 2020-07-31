@@ -177,7 +177,7 @@ namespace
             const uint32_t flags = _surface->flags;
             clear();
 
-            _surface = SDL_SetVideoMode( 0, 0, 8, _surface->flags ^ SDL_FULLSCREEN );
+            _surface = SDL_SetVideoMode( 0, 0, 8, flags ^ SDL_FULLSCREEN );
             if ( _surface == NULL ) {
                 _surface = SDL_SetVideoMode( 0, 0, 8, flags );
             }
