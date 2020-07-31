@@ -24,6 +24,7 @@
 #include <SDL_video.h>
 
 #include <algorithm>
+#include <cmath>
 #include <set>
 
 namespace
