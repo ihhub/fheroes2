@@ -21,6 +21,8 @@
 #include "image.h"
 #include "../../tools/palette_h2.h"
 
+#include <cmath>
+
 namespace
 {
     // 0 in shadow part means no shadow, 1 means to skip any drawing so to don't waste extra CPU cycles for tableId - 2 command we just add a fake extra tables
