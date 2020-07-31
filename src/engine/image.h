@@ -31,7 +31,7 @@ namespace fheroes2
     class Image
     {
     public:
-        explicit Image( uint32_t width_ = 0, uint32_t height_ = 0 );
+        Image( uint32_t width_ = 0, uint32_t height_ = 0 );
         virtual ~Image();
 
         virtual void resize( uint32_t width_, uint32_t height_ );
@@ -61,7 +61,7 @@ namespace fheroes2
     class Sprite : public Image
     {
     public:
-        explicit Sprite( uint32_t width_ = 0, uint32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
+        Sprite( uint32_t width_ = 0, uint32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
         virtual ~Sprite();
 
         int32_t x() const;
