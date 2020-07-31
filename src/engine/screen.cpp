@@ -440,8 +440,7 @@ namespace fheroes2
         : _show( true )
     {}
 
-    Cursor::~Cursor()
-    {}
+    Cursor::~Cursor() {}
 
     Cursor & Cursor::instance()
     {
