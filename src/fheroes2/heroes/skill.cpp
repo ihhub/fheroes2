@@ -439,7 +439,7 @@ std::string Skill::Secondary::GetDescription( void ) const
 
     switch ( Skill() ) {
     case PATHFINDING:
-        if ( this->Level() == 3 ) {
+        if ( this->Level() >= 3 ) {
             str = _( GetName() + std::string( " eliminates the movement penalty for rough terrain." ) );
         }
         else {
