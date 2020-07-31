@@ -38,7 +38,7 @@
 
 #ifdef WITH_IMAGE
 #include "IMG_savepng.h"
-#include "SDL_image.h"
+#include <SDL_image.h>
 #endif
 
 namespace

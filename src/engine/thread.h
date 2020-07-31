@@ -23,7 +23,7 @@
 #ifndef SDLTHREAD_H
 #define SDLTHREAD_H
 
-#include "SDL_thread.h"
+#include <SDL_thread.h>
 #include "types.h"
 
 namespace SDL

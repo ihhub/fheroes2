@@ -29,7 +29,7 @@
 #include "types.h"
 
 #ifdef WITH_NET
-#include "SDL_net.h"
+#include <SDL_net.h>
 
 namespace Network
 {
