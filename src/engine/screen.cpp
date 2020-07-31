@@ -283,7 +283,7 @@ namespace
             if ( !_surface )
                 return false;
 
-            if ( _surface->w <= 0 || _surface <= 0 || static_cast<uint32_t>( _surface->w ) != width_ || static_cast<uint32_t>( _surface->h ) != height_ ) {
+            if ( _surface->w <= 0 || _surface->h <= 0 || static_cast<uint32_t>( _surface->w ) != width_ || static_cast<uint32_t>( _surface->h ) != height_ ) {
                 clear();
                 return false;
             }
