@@ -252,15 +252,21 @@ namespace
 
         virtual void clear()
         {
+            linkRenderSurface( NULL );
+
             if ( _surface != NULL ) {
+                // we need to copy the image to display buffer
+                if ( _surface->format->BitsPerPixel == 8 && !SDL_MUSTLOCK( _surface ) ) {
+                    fheroes2::Display & display = fheroes2::Display::instance();
+                    memcpy( display.image(), _surface->pixels, display.width() * display.height() );
+                }
+
                 SDL_FreeSurface( _surface );
                 _surface = NULL;
             }
 
             _palette32Bit.clear();
             _palette8Bit.clear();
-
-            linkRenderSurface( NULL );
         }
 
         virtual bool allocate( uint32_t width_, uint32_t height_, bool isFullScreen )
@@ -342,6 +348,10 @@ namespace
                 SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
 
                 if ( !SDL_MUSTLOCK( _surface ) ) {
+                    // copy the image from display buffer to SDL surface
+                    fheroes2::Display & display = fheroes2::Display::instance();
+                    memcpy( _surface->pixels, display.image(), display.width() * display.height() );
+
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                 }
             }
