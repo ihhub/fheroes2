@@ -179,7 +179,7 @@ namespace
         return one.width() == two.width() && one.height() == two.height();
     }
 
-    bool Validate( const fheroes2::Image & in, uint32_t inX, uint32_t inY, fheroes2::Image & out, uint32_t outX, uint32_t outY, uint32_t width, uint32_t height )
+    bool Validate( const fheroes2::Image & in, uint32_t inX, uint32_t inY, const fheroes2::Image & out, uint32_t outX, uint32_t outY, uint32_t width, uint32_t height )
     {
         if ( in.empty() || out.empty() || width == 0 || height == 0 ) // what' the reason to work with empty images?
             return false;
@@ -193,7 +193,8 @@ namespace
         return true;
     }
 
-    bool Verify( const fheroes2::Image & in, uint32_t & inX, uint32_t & inY, fheroes2::Image & out, int32_t & outX, int32_t & outY, uint32_t & width, uint32_t & height )
+    bool Verify( const fheroes2::Image & in, uint32_t & inX, uint32_t & inY, const fheroes2::Image & out, int32_t & outX, int32_t & outY, uint32_t & width,
+                 uint32_t & height )
     {
         if ( in.empty() || out.empty() || width == 0 || height == 0 ) // what' the reason to work with empty images?
             return false;
