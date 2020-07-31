@@ -441,6 +441,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     const Kingdom & kingdom = hero.GetKingdom();
     std::vector<s32> castles;
 
+    Interface::Basic & I = Interface::Basic::Get();
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -460,6 +461,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     Dialog::FrameBorder * frameborder = new Dialog::FrameBorder( Size( 280, 200 ) );
 
     const Rect & area = frameborder->GetArea();
+    const Rect focusArea = I.GetGameArea().GetVisibleTileROI();
     int result = Dialog::ZERO;
 
     CastleIndexListBox listbox( area, result );
@@ -497,6 +499,11 @@ bool ActionSpellTownPortal( Heroes & hero )
     // store
     if ( result == Dialog::OK )
         return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( listbox.GetCurrent() ) ) );
+    else {
+        I.GetGameArea().SetCenter( Point{ focusArea.x + focusArea.w / 2, focusArea.y + focusArea.h / 2 } );
+        I.RedrawFocus();
+        I.Redraw();
+    }
 
     return false;
 }
