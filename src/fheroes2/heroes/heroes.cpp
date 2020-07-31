@@ -1629,17 +1629,19 @@ void Heroes::RecalculateMovePoints( void )
         move_point = GetMaxMovePoints() * move_point_scale / 1000;
 }
 
-void Heroes::Move2Dest( const s32 & dst_index, bool skip_action /* false */ )
+void Heroes::Move2Dest( const s32 & dst_index, bool skip_action /* false */, bool skip_penalty /* false */ )
 {
     if ( dst_index != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );
         SetIndex( dst_index );
         Scoute();
-        ApplyPenaltyMovement();
         world.GetTiles( dst_index ).SetHeroes( this );
 
         if ( !skip_action )
             ActionNewPosition();
+
+        if ( !skip_penalty )
+            ApplyPenaltyMovement();
     }
 }
 

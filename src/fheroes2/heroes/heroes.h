@@ -261,7 +261,7 @@ public:
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
 
     bool Move( bool fast = false );
-    void Move2Dest( const s32 &, bool skip_action = false );
+    void Move2Dest( const s32 &, bool skip_action = false, bool skip_penalty = false );
     bool isEnableMove( void ) const;
     bool CanMove( void ) const;
     void SetMove( bool );

@@ -872,7 +872,6 @@ namespace AI
     void AIToTeleports( Heroes & hero, s32 index_from )
     {
         s32 index_to = world.NextTeleport( index_from );
-        hero.ApplyPenaltyMovement();
 
         if ( index_from == index_to ) {
             DEBUG( DBG_AI, DBG_WARN, "teleport unsuccessfull, can't find exit lith" );
@@ -898,7 +897,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to, true );
+        hero.Move2Dest( index_to, true, true );
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
@@ -912,7 +911,6 @@ namespace AI
     void AIToWhirlpools( Heroes & hero, s32 index_from )
     {
         s32 index_to = world.NextWhirlpool( index_from );
-        hero.ApplyPenaltyMovement();
 
         if ( index_from == index_to ) {
             DEBUG( DBG_AI, DBG_WARN, "action unsuccessfully..." );
@@ -920,7 +918,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to, true );
+        hero.Move2Dest( index_to, true, true );
 
         Troop * troop = hero.GetArmy().GetWeakestTroop();
 
