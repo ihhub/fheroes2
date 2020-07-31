@@ -296,19 +296,28 @@ bool Troops::AllTroopsIsRace( int race ) const
 
 bool Troops::CanJoinTroop( const Monster & mons ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
-    if ( it == end() )
-        it = std::find_if( begin(), end(), std::not1( std::mem_fun( &Troop::isValid ) ) );
-
-    return it != end();
+    const int monsterID = mons();
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isMonster( monsterID ) || !( *it )->isValid() )
+            return true;
+    }
+    return false;
 }
 
 bool Troops::JoinTroop( const Monster & mons, u32 count )
 {
     if ( mons.isValid() && count ) {
-        iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
-        if ( it == end() )
-            it = std::find_if( begin(), end(), std::not1( std::mem_fun( &Troop::isValid ) ) );
+        const int monsterID = mons();
+        iterator it = begin();
+        while ( it != end() && !( *it )->isMonster( monsterID ) ) {
+            ++it;
+        }
+        if ( it == end() ) {
+            it = begin();
+            while ( it != end() && ( *it )->isValid() ) {
+                ++it;
+            }
+        }
 
         if ( it != end() ) {
             if ( ( *it )->isValid() )
@@ -440,7 +449,8 @@ u32 Troops::GetDamageMax( void ) const
 
 void Troops::Clean( void )
 {
-    std::for_each( begin(), end(), std::mem_fun( &Troop::Reset ) );
+    for ( iterator it = begin(); it != end(); ++it )
+        ( *it )->Reset();
 }
 
 void Troops::UpgradeTroops( const Castle & castle )
@@ -459,8 +469,11 @@ void Troops::UpgradeTroops( const Castle & castle )
 
 Troop * Troops::GetFirstValid( void )
 {
-    iterator it = std::find_if( begin(), end(), std::mem_fun( &Troop::isValid ) );
-    return it == end() ? NULL : *it;
+    for ( iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() )
+            return *it;
+    }
+    return NULL;
 }
 
 Troop * Troops::GetWeakestTroop( void )
@@ -520,7 +533,11 @@ Troops Troops::GetOptimized( void ) const
 
     for ( const_iterator it1 = begin(); it1 != end(); ++it1 )
         if ( ( *it1 )->isValid() ) {
-            iterator it2 = std::find_if( result.begin(), result.end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), ( *it1 )->GetID() ) );
+            const int monsterID = ( *it1 )->GetID();
+            iterator it2 = result.begin();
+            while ( it2 != result.end() && !( *it2 )->isMonster( monsterID ) ) {
+                ++it2;
+            }
 
             if ( it2 == result.end() )
                 result.push_back( new Troop( **it1 ) );
