@@ -32,7 +32,7 @@
 class RGBA;
 
 #ifdef WITH_TTF
-#include "SDL_ttf.h"
+#include <SDL_ttf.h>
 
 class FontTTF
 {
