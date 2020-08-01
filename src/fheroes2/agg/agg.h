@@ -89,4 +89,16 @@ namespace AGG
     bool DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect );
 }
 
+namespace fheroes2
+{
+    class Image;
+    class Sprite;
+
+    namespace AGG
+    {
+        const Sprite & GetICN( int icnId, uint32_t index );
+        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
+    }
+}
+
 #endif

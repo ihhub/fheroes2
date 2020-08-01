@@ -34,6 +34,7 @@
 #include "error.h"
 #include "font.h"
 #include "game.h"
+#include "image.h"
 #include "m82.h"
 #include "mus.h"
 #include "settings.h"
@@ -47,6 +48,11 @@
 #endif
 
 #define FATSIZENAME 15
+
+namespace
+{
+    std::map<std::pair<int, int>, fheroes2::Sprite> _icnVsSprite;
+}
 
 namespace AGG
 {
@@ -1034,6 +1040,12 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     ICNData originalData( sz.w, sz.h );
     uint8_t * icnData = originalData.get().data();
 
+    fheroes2::Sprite image( sz.w, sz.h, res.offset.x, res.offset.y );
+    image.reset();
+
+    uint8_t * imageData = image.image();
+    uint8_t * imageTransform = image.transform();
+
     while ( 1 ) {
         // 0x00 - end line
         if ( 0 == *buf ) {
@@ -1048,6 +1060,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- && buf < max ) {
                 icnData[pt.y * sz.w + pt.x] = *buf;
+                imageData[pt.y * sz.w + pt.x] = *buf;
+                imageTransform[pt.y * sz.w + pt.x] = 0;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
                 ++buf;
@@ -1068,10 +1082,17 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             // 0xC0 - shadow
             if ( 0xC0 == *buf ) {
             ++buf;
+
+            const uint8_t transformValue = *buf;
+            const uint8_t transformType = ( ( transformValue & 0x3C ) << 6 ) / 256 + 2; // 1 is for skipping
+
             c = *buf % 4 ? *buf % 4 : *( ++buf );
             if ( sf1.depth() == 8 ) // skip alpha
             {
                 while ( c-- ) {
+                    if ( transformType <= 13 ) {
+                        imageTransform[pt.y * sz.w + pt.x] = transformType;
+                    }
                     ++pt.x;
                 }
             }
@@ -1079,6 +1100,9 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
                 if ( !sf2.isValid() )
                     sf2.Set( sz.w, sz.h, true );
                 while ( c-- ) {
+                    if ( transformType <= 13 ) {
+                        imageTransform[pt.y * sz.w + pt.x] = transformType;
+                    }
                     icnData[pt.y * sz.w + pt.x] = 0;
                     sf2.DrawPoint( pt, shadow );
                     ++pt.x;
@@ -1094,6 +1118,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- ) {
                 icnData[pt.y * sz.w + pt.x] = *buf;
+                imageData[pt.y * sz.w + pt.x] = *buf;
+                imageTransform[pt.y * sz.w + pt.x] = 0;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
@@ -1104,6 +1130,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- ) {
                 icnData[pt.y * sz.w + pt.x] = *buf;
+                imageData[pt.y * sz.w + pt.x] = *buf;
+                imageTransform[pt.y * sz.w + pt.x] = 0;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
@@ -1116,6 +1144,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     }
 
     _icnIdVsData[std::make_pair( icn, index )] = originalData;
+    _icnVsSprite[std::make_pair( icn, index )] = image;
 
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
         res.second.SetAlphaMod( 0, false );
@@ -2083,4 +2112,20 @@ bool AGG::DrawContour( Surface & surface, uint32_t value, int icnId, int incInde
         return false;
 
     return surface.GenerateContour( data.get(), value, reflect );
+}
+
+namespace fheroes2
+{
+    namespace AGG
+    {
+        const Sprite & AGG::GetICN( int icnId, uint32_t index )
+        {
+            return _icnVsSprite[std::make_pair( icnId, index )];
+        }
+
+        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
+        {
+            return Image();
+        }
+    }
 }
