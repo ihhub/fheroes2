@@ -29,6 +29,7 @@
 #include "game.h"
 #include "gamedefs.h"
 #include "mus.h"
+#include "radio_buttons_group.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
@@ -132,7 +133,7 @@ int Game::NewHotSeat( void )
     return Game::MAINMENU;
 }
 
-int Game::NewCampain( void )
+int Game::NewCampaign( void )
 {
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
@@ -156,6 +157,8 @@ int Game::NewCampain( void )
     Button buttonOk( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
     Button buttonCancel( top.x + 520, top.y + 430, ICN::NGEXTRA, 68, 69 );
 
+    RadioButtonsGroup radioGroup( Point( top.x + 550, top.y + 190 ), 3, 10);
+
     const std::vector<Maps::FileInfo> & campaignMap = GetRolandCampaign();
 
     buttonViewIntro.SetDisable( true );
@@ -163,6 +166,8 @@ int Game::NewCampain( void )
     buttonOk.SetDisable( campaignMap.empty() );
     buttonOk.Draw();
     buttonCancel.Draw();
+
+    radioGroup.Draw();
 
     Text textDaysSpent( "0", Font::BIG );
     textDaysSpent.Blit( top.x + 570 + textDaysSpent.w() / 2, top.y + 31 );
@@ -217,8 +222,10 @@ int Game::NewCampain( void )
         if ( !buttonOk.isDisable() )
             le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
 
-        if ( le.MouseClickLeft( buttonCancel ) )
-            return Game::NEWGAME;
+        radioGroup.QueueEventProcessing();
+
+        if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+            return Game::MAINMENU;
         else if ( !buttonOk.isDisable() && le.MouseClickLeft( buttonOk ) ) {
             conf.SetCurrentFileInfo( campaignMap[0] );
             Players & players = conf.GetPlayers();
@@ -239,6 +246,11 @@ int Game::NewCampain( void )
     }
 
     return Game::NEWGAME;
+}
+
+int Game::NewExpCampaign( void )
+{
+    return NewCampaign();
 }
 
 #ifdef NETWORK_ENABLE
@@ -332,14 +344,14 @@ int Game::NewGame( void )
     LocalEvent & le = LocalEvent::Get();
 
     Button buttonStandartGame( back.w() - 185, 45, ICN::BTNNEWGM, 0, 1 );
-    Button buttonCampainGame( back.w() - 185, 110, ICN::BTNNEWGM, 2, 3 );
+    Button buttonCampaignGame( back.w() - 185, 110, ICN::BTNNEWGM, 2, 3 );
     Button buttonMultiGame( back.w() - 185, 175, ICN::BTNNEWGM, 4, 5 );
     Button buttonBattleGame( back.w() - 185, 240, ICN::BTNBATTLEONLY, 0, 1 );
     Button buttonSettings( back.w() - 185, 305, ICN::BTNDCCFG, 4, 5 );
     Button buttonCancelGame( back.w() - 185, 375, ICN::BTNNEWGM, 6, 7 );
 
     buttonStandartGame.Draw();
-    buttonCampainGame.Draw();
+    buttonCampaignGame.Draw();
     buttonMultiGame.Draw();
     if ( conf.QVGA() )
         buttonBattleGame.SetDisable( true );
@@ -353,7 +365,7 @@ int Game::NewGame( void )
 
     while ( le.HandleEvents() ) { // new game loop
         le.MousePressLeft( buttonStandartGame ) ? buttonStandartGame.PressDraw() : buttonStandartGame.ReleaseDraw();
-        le.MousePressLeft( buttonCampainGame ) ? buttonCampainGame.PressDraw() : buttonCampainGame.ReleaseDraw();
+        le.MousePressLeft( buttonCampaignGame ) ? buttonCampaignGame.PressDraw() : buttonCampaignGame.ReleaseDraw();
         le.MousePressLeft( buttonMultiGame ) ? buttonMultiGame.PressDraw() : buttonMultiGame.ReleaseDraw();
         buttonBattleGame.isEnable() && le.MousePressLeft( buttonBattleGame ) ? buttonBattleGame.PressDraw() : buttonBattleGame.ReleaseDraw();
         le.MousePressLeft( buttonSettings ) ? buttonSettings.PressDraw() : buttonSettings.ReleaseDraw();
@@ -361,8 +373,8 @@ int Game::NewGame( void )
 
         if ( HotKeyPressEvent( EVENT_BUTTON_STANDARD ) || le.MouseClickLeft( buttonStandartGame ) )
             return NEWSTANDARD;
-        if ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIN ) || le.MouseClickLeft( buttonCampainGame ) )
-            return NEWCAMPAIN;
+        if ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIGN ) || le.MouseClickLeft( buttonCampaignGame ) )
+            return NEWCAMPAIGN;
         if ( HotKeyPressEvent( EVENT_BUTTON_MULTI ) || le.MouseClickLeft( buttonMultiGame ) )
             return NEWMULTI;
         if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings ) ) {
@@ -378,7 +390,7 @@ int Game::NewGame( void )
 
         if ( le.MousePressRight( buttonStandartGame ) )
             Dialog::Message( _( "Standard Game" ), _( "A single player game playing out a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonCampainGame ) )
+        if ( le.MousePressRight( buttonCampaignGame ) )
             Dialog::Message( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Font::BIG );
         if ( le.MousePressRight( buttonMultiGame ) )
             Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );

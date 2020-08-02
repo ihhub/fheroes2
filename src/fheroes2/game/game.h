@@ -44,7 +44,8 @@ namespace Game
         HIGHSCORES,
         CREDITS,
         NEWSTANDARD,
-        NEWCAMPAIN,
+        NEWCAMPAIGN,
+        NEWEXPCAMPAIGN,
         NEWMULTI,
         NEWHOTSEAT,
         NEWNETWORK,
@@ -104,7 +105,8 @@ namespace Game
         EVENT_BUTTON_HIGHSCORES,
         EVENT_BUTTON_CREDITS,
         EVENT_BUTTON_STANDARD,
-        EVENT_BUTTON_CAMPAIN,
+        EVENT_BUTTON_CAMPAIGN,
+        EVENT_BUTTON_EXPCAMPAIGN,
         EVENT_BUTTON_MULTI,
         EVENT_BUTTON_SETTINGS,
         EVENT_BUTTON_SELECT,
@@ -215,7 +217,8 @@ namespace Game
     int HighScores( bool );
     int Credits( void );
     int NewStandard( void );
-    int NewCampain( void );
+    int NewCampaign( void );
+    int NewExpCampaign( void );
     int NewMulti( void );
     int NewHotSeat( void );
     int NewNetwork( void );
