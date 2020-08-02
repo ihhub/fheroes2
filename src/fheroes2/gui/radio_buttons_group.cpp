@@ -18,14 +18,14 @@ RadioButtonsGroup::RadioButtonsGroup( const Point & pos, uint amount, uint vSpac
 
 RadioButtonsGroup::~RadioButtonsGroup()
 {
-    for ( std::vector<Button *>::iterator iter = buttons.begin(); iter != buttons.end(); ++iter) {
+    for ( std::vector<Button *>::iterator iter = buttons.begin(); iter != buttons.end(); ++iter ) {
         delete *iter;
     }
 }
 
 void RadioButtonsGroup::Draw( void )
 {
-    for ( std::vector<Button *>::iterator iter = buttons.begin(); iter != buttons.end(); ++iter) {
+    for ( std::vector<Button *>::iterator iter = buttons.begin(); iter != buttons.end(); ++iter ) {
         ( *iter )->Draw();
     }
 }
