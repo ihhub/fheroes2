@@ -41,7 +41,7 @@ public:
 
 protected:
     uint active;
-    std::vector< Button * > buttons;
+    std::vector<Button *> buttons;
 };
 
 #endif
