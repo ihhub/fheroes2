@@ -6,5 +6,5 @@ curl -O -L https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars
 unzip h2demo.zip
 rm h2demo.zip
 
-cp -r ./DATA ./../
-cp -r ./MAPS ./../
+cp -r ./DATA ./../../../
+cp -r ./MAPS ./../../../
