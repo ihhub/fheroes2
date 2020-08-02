@@ -28,10 +28,10 @@ if not "%sevenZipPath%" == "" (
 
     echo [4/4] copying files
     
-    if not exist "..\..\..\data" mkdir "..\..\..\data"
-    if not exist "..\..\..\maps" mkdir "..\..\..\maps"
-    xcopy /Y /s "DATA" "..\..\..\data"
-    xcopy /Y /s "MAPS" "..\..\..\maps"
+    if not exist "..\data" mkdir "..\data"
+    if not exist "..\maps" mkdir "..\maps"
+    xcopy /Y /s "DATA" "..\data"
+    xcopy /Y /s "MAPS" "..\maps"
 
     del demo.zip
     del wing32.zip
