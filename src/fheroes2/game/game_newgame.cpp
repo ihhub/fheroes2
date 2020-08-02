@@ -157,7 +157,7 @@ int Game::NewCampaign( void )
     Button buttonOk( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
     Button buttonCancel( top.x + 520, top.y + 430, ICN::NGEXTRA, 68, 69 );
 
-    RadioButtonsGroup radioGroup( Point( top.x + 550, top.y + 190 ), 3, 10);
+    RadioButtonsGroup radioGroup( Point( top.x + 550, top.y + 190 ), 3, 10 );
 
     const std::vector<Maps::FileInfo> & campaignMap = GetRolandCampaign();
 
