@@ -1635,7 +1635,7 @@ void Heroes::Move2Dest( const s32 & dstIndex, bool skipAction /* false */, bool 
         world.GetTiles( GetIndex() ).SetHeroes( NULL );
         SetIndex( dstIndex );
         Scoute();
-        world.GetTiles( dst_index ).SetHeroes( this );
+        world.GetTiles( dstIndex ).SetHeroes( this );
 
         if ( !skipAction )
             ActionNewPosition();
