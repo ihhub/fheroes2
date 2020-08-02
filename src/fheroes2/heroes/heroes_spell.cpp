@@ -441,7 +441,6 @@ bool ActionSpellTownPortal( Heroes & hero )
     const Kingdom & kingdom = hero.GetKingdom();
     std::vector<s32> castles;
 
-    Interface::Basic & I = Interface::Basic::Get();
     Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -458,6 +457,7 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
+    Interface::Basic & I = Interface::Basic::Get();
     const Rect focusArea = I.GetGameArea().GetVisibleTileROI();
     I.GetGameArea().SetCenter( Maps::GetPoint( castles.front() ) );
     I.RedrawFocus();
