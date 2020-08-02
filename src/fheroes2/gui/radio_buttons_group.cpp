@@ -35,7 +35,7 @@ int RadioButtonsGroup::QueueEventProcessing( void )
     LocalEvent & le = LocalEvent::Get();
 
     uint iterableID = 0;
-    for ( std::vector<Button *>::iterator iter = buttons.begin(); iter != buttons.end(); ++iter, ++iterableID) {
+    for ( std::vector<Button *>::iterator iter = buttons.begin(); iter != buttons.end(); ++iter, ++iterableID ) {
         if ( *iter && ( *iter )->isEnable() && le.MousePressLeft( **iter ) )
             SetActiveButton( iterableID );
     }
