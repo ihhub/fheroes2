@@ -566,10 +566,12 @@ namespace fheroes2
         double minDistance = sqrt( 3 * 255 * 255 );
         uint32_t bestPos = 0;
 
+        const uint8_t * palette = kb_pal;
+
         for ( uint32_t i = 0; i < 256; ++i ) {
-            const double offsetRed = static_cast<double>( kb_pal[i * 3] ) - static_cast<double>( red );
-            const double offsetGreen = static_cast<double>( kb_pal[i * 3 + 1] ) - static_cast<double>( green );
-            const double offsetBlue = static_cast<double>( kb_pal[i * 3 + 2] ) - static_cast<double>( blue );
+            const double offsetRed = static_cast<double>( *( palette++ ) ) - static_cast<double>( red );
+            const double offsetGreen = static_cast<double>( *( palette++ ) ) - static_cast<double>( green );
+            const double offsetBlue = static_cast<double>( *( palette++ ) ) - static_cast<double>( blue );
             const double distance = sqrt( offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue );
             if ( minDistance > distance ) {
                 minDistance = distance;
