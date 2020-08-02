@@ -897,7 +897,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to, true, true );
+        hero.Move2Dest( index_to, true, true ); // no action and no penalty
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
@@ -918,7 +918,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to, true, true );
+        hero.Move2Dest( index_to, true, true );  // no action and no penalty
 
         Troop * troop = hero.GetArmy().GetWeakestTroop();
 
