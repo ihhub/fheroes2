@@ -62,12 +62,12 @@ public:
     void RedrawItem( const s32 &, s32, s32, bool );
     void RedrawBackground( const Point & );
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
+    void ActionCurrentUp( void ){}
+    void ActionCurrentDn( void ){}
     void ActionListDoubleClick( s32 & )
     {
         result = Dialog::OK;
-    };
+    }
 
     void ActionListSingleClick( s32 & destination )
     {
@@ -75,14 +75,14 @@ public:
         I.GetGameArea().SetCenter( Maps::GetPoint( destination ) );
         I.RedrawFocus();
         I.Redraw();
-    };
+    }
 
     void ActionListPressRight( s32 & destination )
     {
         const Castle * castle = world.GetCastle( Maps::GetPoint( destination ) );
         if ( castle )
             Dialog::QuickInfo( *castle );
-    };
+    }
 
     int & result;
 };
