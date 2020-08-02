@@ -149,7 +149,7 @@ void Castle::OpenWell( void )
                 u32 can_recruit;
                 std::string str;
 
-                for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it )
+                for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it ) {
                     if ( 0 != ( can_recruit = HowManyRecruitMonster( *this, *it, total, cur ) ) ) {
                         results.push_back( dwelling_t( *it, can_recruit ) );
                         total += cur;
@@ -159,14 +159,29 @@ void Castle::OpenWell( void )
                         str.append( GetString( can_recruit ) );
                         str.append( "\n" );
                     }
+                }
 
-                if ( str.empty() )
-                    str = "None";
-
-                if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters:" ), str, total, Dialog::YES | Dialog::NO ) ) {
-                    for ( dwellings_t::const_iterator it = results.begin(); it != results.end(); ++it ) {
-                        const dwelling_t & dw = *it;
-                        RecruitMonsterFromDwelling( dw.first, dw.second );
+                if ( str.empty() ) {
+                    bool isCreaturePresent = false;
+                    for ( int i = 0; i < CASTLEMAXMONSTER; ++i ) {
+                        if ( dwelling[i] > 0 ) {
+                            isCreaturePresent = true;
+                            break;
+                        }
+                    }
+                    if ( isCreaturePresent ) {
+                        Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
+                    }
+                    else {
+                        Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
+                    }
+                }
+                else {
+                    if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters:" ), str, total, Dialog::YES | Dialog::NO ) ) {
+                        for ( dwellings_t::const_iterator it = results.begin(); it != results.end(); ++it ) {
+                            const dwelling_t & dw = *it;
+                            RecruitMonsterFromDwelling( dw.first, dw.second );
+                        }
                     }
                 }
             }
