@@ -918,7 +918,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to, true, true );  // no action and no penalty
+        hero.Move2Dest( index_to, true, true ); // no action and no penalty
 
         Troop * troop = hero.GetArmy().GetWeakestTroop();
 
