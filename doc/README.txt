@@ -3,7 +3,7 @@ All rights for the original game and its resources belong to former The 3DO Comp
 These rights were transferred to Ubisoft. We do not encourage and do not support
 any form of illegal usage of the original game. We strongly advise to purchase
 the original game on GOG or Ubisoft Store platforms. Alternatively, you can
-download a free demo version of the game.
+download a free demo version of the game with help of our scripts.
 
 --- Installation and Requirements ---
 You are required to have at a demo or full version of Heroes of Might and Magic II
