@@ -1916,7 +1916,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     Cursor::Get().Hide();
 
-    hero.Move2Dest( index_to, true, true );  // no action and no penalty
+    hero.Move2Dest( index_to, true, true ); // no action and no penalty
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -1950,7 +1950,7 @@ void ActionToWhirlpools( Heroes & hero, u32 obj, s32 index_from )
 
     Cursor::Get().Hide();
 
-    hero.Move2Dest( index_to, true, true );  // no action and no penalty
+    hero.Move2Dest( index_to, true, true ); // no action and no penalty
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );
