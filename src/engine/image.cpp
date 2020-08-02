@@ -580,7 +580,7 @@ namespace fheroes2
         return static_cast<uint8_t>( bestPos ); // it's safe to cast
     }
 
-    void Resize( const Image & in, Image & out )
+    void Resize( const Image & in, Image & out, bool isSubpixelAccuracy )
     {
         if ( in.empty() || out.empty() ) {
             return;
@@ -600,28 +600,77 @@ namespace fheroes2
         const uint8_t * transformInY = in.transform();
         uint8_t * outY = out.image();
         uint8_t * transformOutY = out.transform();
-        const uint8_t * outYEnd = outY + widthOut * heightOut;
 
-        uint32_t idY = 0;
+        if ( isSubpixelAccuracy ) {
+            std::vector<double> positionX( widthOut );
+            std::vector<double> positionY( heightOut );
+            for ( uint32_t x = 0; x < widthOut; ++x )
+                positionX[x] = static_cast<double>( x * widthIn ) / widthOut;
+            for ( uint32_t y = 0; y < heightOut; ++y )
+                positionY[y] = static_cast<double>( y * heightIn ) / heightOut;
 
-        // Precalculation of X position
-        std::vector<uint32_t> positionX( widthOut );
-        for ( uint32_t x = 0; x < widthOut; ++x )
-            positionX[x] = x * widthIn / widthOut;
+            for ( uint32_t y = 0; y < heightOut; ++y, outY += widthOut, transformOutY += widthOut ) {
+                const double posY = positionY[y];
+                const uint32_t startY = static_cast<uint32_t>( posY );
+                const double coeffY = posY - startY;
 
-        for ( ; outY != outYEnd; outY += widthOut, transformOutY += widthOut, ++idY ) {
-            uint8_t * outX = outY;
-            uint8_t * transformOutX = transformOutY;
-            const uint8_t * outXEnd = outX + widthOut;
+                uint8_t * outX = outY;
+                uint8_t * transformOutX = transformOutY;
 
-            const uint32_t offset = ( idY * heightIn / heightOut ) * widthIn;
-            const uint8_t * inX = inY + offset;
-            const uint8_t * transformInX = transformInY + offset;
-            const uint32_t * idX = positionX.data();
+                for ( uint32_t x = 0; x < widthOut; ++x, ++outX, ++transformOutX ) {
+                    const double posX = positionX[x];
+                    const uint32_t startX = static_cast<uint32_t>( posX );
+                    const uint32_t offsetIn = startY * widthIn + startX;
 
-            for ( ; outX != outXEnd; ++outX, ++idX ) {
-                *outX = *( inX + ( *idX ) );
-                *transformOutX = *( transformInX + ( *idX ) );
+                    if ( posX < widthIn - 1 && posY < heightIn - 1 ) {
+                        const double coeffX = posX - startX;
+                        const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
+                        const double coeff2 = ( coeffX ) * ( 1 - coeffY );
+                        const double coeff3 = ( 1 - coeffX ) * ( coeffY );
+                        const double coeff4 = ( coeffX ) * ( coeffY );
+
+                        const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *( inY + offsetIn ) ) * 3;
+                        const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( inY + offsetIn + 1 ) ) * 3;
+                        const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( inY + offsetIn + widthIn ) ) * 3;
+                        const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( inY + offsetIn + widthIn + 1 ) ) * 3;
+
+                        const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
+                        const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
+                        const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
+
+                        *outX = GetColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                    }
+                    else {
+                        *outX = *( inY + offsetIn );
+                    }
+
+                    *transformOutX = *( transformInY + offsetIn );
+                }
+            }
+        }
+        else {
+            const uint8_t * outYEnd = outY + widthOut * heightOut;
+            uint32_t idY = 0;
+
+            // Precalculation of X position
+            std::vector<uint32_t> positionX( widthOut );
+            for ( uint32_t x = 0; x < widthOut; ++x )
+                positionX[x] = ( x * widthIn + widthOut / 2 ) / widthOut;
+
+            for ( ; outY != outYEnd; outY += widthOut, transformOutY += widthOut, ++idY ) {
+                uint8_t * outX = outY;
+                uint8_t * transformOutX = transformOutY;
+                const uint8_t * outXEnd = outX + widthOut;
+
+                const uint32_t offset = ( ( idY * heightIn + heightOut / 2 ) / heightOut ) * widthIn;
+                const uint8_t * inX = inY + offset;
+                const uint8_t * transformInX = transformInY + offset;
+                const uint32_t * idX = positionX.data();
+
+                for ( ; outX != outXEnd; ++outX, ++idX ) {
+                    *outX = *( inX + ( *idX ) );
+                    *transformOutX = *( transformInX + ( *idX ) );
+                }
             }
         }
     }

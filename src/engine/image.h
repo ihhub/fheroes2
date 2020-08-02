@@ -92,7 +92,8 @@ namespace fheroes2
 
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
 
-    void Resize( const Image & in, Image & out );
+    // Please remember that subpixel accuracy resizing is extremely slow!
+    void Resize( const Image & in, Image & out, bool isSubpixelAccuracy = false );
 
     // FIXME: This is a test function and should be removed before merging to master branch
     bool SaveBitmap( const Image & image, const std::string & path );
