@@ -52,6 +52,7 @@
 namespace
 {
     std::map<std::pair<int, int>, fheroes2::Sprite> _icnVsSprite;
+    std::map<std::pair<int, int>, fheroes2::Image> _tilVsSprite;
 }
 
 namespace AGG
@@ -2118,14 +2119,14 @@ namespace fheroes2
 {
     namespace AGG
     {
-        const Sprite & AGG::GetICN( int icnId, uint32_t index )
+        const Sprite & GetICN( int icnId, uint32_t index )
         {
             return _icnVsSprite[std::make_pair( icnId, index )];
         }
 
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
-            return Image();
+            return _tilVsSprite[std::make_pair( tilId, index + shapeId )];
         }
     }
 }
