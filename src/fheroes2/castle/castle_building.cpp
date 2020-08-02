@@ -220,6 +220,9 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 
 void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, int alpha )
 {
+    if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
+        return;
+
     const Rect max = CastleGetMaxArea( castle, dst_pt );
 
     // correct build
@@ -291,6 +294,9 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
 
 void CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, u32 build, u32 frame )
 {
+    if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
+        return;
+
     const Rect max = CastleGetMaxArea( castle, dst_pt );
     int icn = Castle::GetICNBuilding( build, castle.GetRace() );
 
