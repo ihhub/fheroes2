@@ -62,8 +62,8 @@ public:
     void RedrawItem( const s32 &, s32, s32, bool );
     void RedrawBackground( const Point & );
 
-    void ActionCurrentUp( void ){}
-    void ActionCurrentDn( void ){}
+    void ActionCurrentUp( void ) {}
+    void ActionCurrentDn( void ) {}
     void ActionListDoubleClick( s32 & )
     {
         result = Dialog::OK;
