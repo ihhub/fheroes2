@@ -9,9 +9,10 @@ download a free demo version of the game.
 You are required to have at a demo or full version of Heroes of Might and Magic II
 game to be able to play it.
 
-If you do not have the original Heroes of Might and Magic II game please run
-install_demo.bat for Windows OS or install_demo.sh for MacOS and Linux OS. This
-script will download and install all needed files.
+If you do not have the original Heroes of Might and Magic II game please open
+script/demo directory and run demo_windows.bat for Windows OS, demo_linux.sh for
+Linux OS or or demo_macos.sh for MacOS. This script will download and install all
+needed files.
 
 If you have a legally purchased game you need to copy all files which belong to
 fheroes2 into a folder with the original game.
