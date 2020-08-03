@@ -31,7 +31,7 @@ class Button : public Rect
 {
 public:
     Button();
-    Button( s32, s32, int, u32 index1, u32 index2 );
+    Button( int, int, int, uint32_t indxDisabled, uint32_t indexPressed );
 
     bool isEnable( void ) const;
     bool isDisable( void ) const;
@@ -42,10 +42,10 @@ public:
     void Press( void );
     void Release( void );
 
-    void SetPos( s32, s32 );
+    void SetPos( int, int );
     void SetPos( const Point & );
-    void SetSize( u32, u32 );
-    void SetSprite( int icn, u32, u32 );
+    void SetSize( uint32_t, uint32_t );
+    void SetSprite( int icn, uint32_t, uint32_t );
     void SetSprite( const Surface &, const Surface & );
     void SetDisable( bool );
     void SetVisible( bool isVisible );
@@ -59,14 +59,14 @@ protected:
     Surface sf2;
     Surface _disabledSurface;
 
-    u32 flags;
+    uint32_t flags;
 };
 
 class LabeledButton : public Button
 {
 public:
     LabeledButton();
-    LabeledButton( s32 ox, s32 oy, int icn, u32 index1, u32 index2 );
+    LabeledButton( int ox, int oy, int icn, uint32_t indxDisabled, uint32_t indexPressed );
     void SetTopText( const std::string & text );
     void SetMidleText( const std::string & text );
     void SetBottomText( const std::string & text );
@@ -94,7 +94,7 @@ protected:
 class ButtonGroups
 {
 public:
-    ButtonGroups( const Rect &, u32 );
+    ButtonGroups( const Rect &, uint32_t );
     ~ButtonGroups();
 
     void Draw( void );

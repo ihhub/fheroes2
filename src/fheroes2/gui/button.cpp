@@ -55,14 +55,14 @@ Button::Button()
     : flags( BTN_VISIBLE )
 {}
 
-Button::Button( s32 ox, s32 oy, int icn, u32 index1, u32 index2 )
+Button::Button( int posX, int posY, int icn, uint32_t indexDefault, uint32_t indexPressed )
     : flags( BTN_VISIBLE )
 {
-    SetPos( ox, oy );
+    SetPos( posX, posY );
 
-    sf1 = AGG::GetICN( icn, index1 );
-    sf2 = AGG::GetICN( icn, index2 );
-    _disabledSurface = GetDisabledButtonSurface( icn, index1 );
+    sf1 = AGG::GetICN( icn, indexDefault );
+    sf2 = AGG::GetICN( icn, indexPressed );
+    _disabledSurface = GetDisabledButtonSurface( icn, indexDefault );
 
     SetSize( sf1.w(), sf1.h() );
 }
@@ -92,13 +92,13 @@ bool Button::isReleased( void ) const
     return !isPressed();
 }
 
-void Button::SetPos( s32 ox, s32 oy )
+void Button::SetPos( int posX, int posY )
 {
-    x = ox;
-    y = oy;
+    x = posX;
+    y = posY;
 }
 
-void Button::SetSize( u32 ow, u32 oh )
+void Button::SetSize( uint32_t ow, uint32_t oh )
 {
     w = ow;
     h = oh;
@@ -109,11 +109,11 @@ void Button::SetPos( const Point & pos )
     SetPos( pos.x, pos.y );
 }
 
-void Button::SetSprite( int icn, u32 index1, u32 index2 )
+void Button::SetSprite( int icn, uint32_t indexDefault, uint32_t indexPressed )
 {
-    sf1 = AGG::GetICN( icn, index1 );
-    sf2 = AGG::GetICN( icn, index2 );
-    _disabledSurface = GetDisabledButtonSurface( icn, index1 );
+    sf1 = AGG::GetICN( icn, indexDefault );
+    sf2 = AGG::GetICN( icn, indexPressed );
+    _disabledSurface = GetDisabledButtonSurface( icn, indexDefault );
 
     SetSize( sf1.w(), sf1.h() );
 }
@@ -196,7 +196,7 @@ void Button::Draw( void )
         cursor.Show();
 }
 
-ButtonGroups::ButtonGroups( const Rect & pos, u32 btns )
+ButtonGroups::ButtonGroups( const Rect & pos, uint32_t btns )
     : button1( NULL )
     , button2( NULL )
     , result1( Dialog::ZERO )
@@ -333,8 +333,8 @@ LabeledButton::LabeledButton()
     : Button()
 {}
 
-LabeledButton::LabeledButton( s32 ox, s32 oy, int icn, u32 index1, u32 index2 )
-    : Button( ox, oy, icn, index1, index2 )
+LabeledButton::LabeledButton( int posX, int posY, int icn, uint32_t indxDisabled, uint32_t indxEnabled )
+    : Button( posX, posY, icn, indxDisabled, indxEnabled )
 {}
 
 void LabeledButton::SetTopText( const std::string & text )

@@ -33,7 +33,7 @@ RadioButtonsGroup::RadioButtonsGroup( const Point & pos, uint32_t amount, uint32
             y += buttons[i - 1].h * i + vSpacingStep * i;
         }
 
-        buttons.push_back( Button( pos.x, y, ICN::NGEXTRA, 66, 67 ) );
+        buttons.push_back( Button( pos.x, y, ICN::CAMPXTRG, 9, 8 ) );
     }
 
     SetActiveButton( 0 );
