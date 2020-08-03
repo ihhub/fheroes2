@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,29 +17,26 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef RADIO_BUTTONS_GROUP_H
-#define RADIO_BUTTONS_GROUP_H
+
+#pragma once
 
 #include "agg.h"
 #include "button.h"
 #include "dialog.h"
-#include "game.h"
 #include "settings.h"
 
 class RadioButtonsGroup
 {
 public:
-    RadioButtonsGroup( const Point &, uint, uint );
+    RadioButtonsGroup( const Point &, uint32_t, uint32_t );
     ~RadioButtonsGroup();
 
-    void Draw( void );
-    uint GetSelected( void );
-    int QueueEventProcessing( void );
-    void SetActiveButton( uint );
+    void Draw();
+    uint32_t GetSelectedId();
+    void QueueEventProcessing();
+    void SetActiveButton( uint32_t );
 
 protected:
-    uint active;
-    std::vector<Button *> buttons;
+    uint32_t active;
+    std::vector<Button> buttons;
 };
-
-#endif
