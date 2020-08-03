@@ -55,3 +55,4 @@ Donation
 ---------------------------
 Currently we accept donations via PayPal. All donations will be used only for the future project development as we do not consider this project as a source of income by any means.
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2)
