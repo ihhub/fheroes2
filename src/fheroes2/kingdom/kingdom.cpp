@@ -119,9 +119,16 @@ void Kingdom::LossPostActions( void )
         Players::SetPlayerInGame( color, false );
 
         if ( heroes.size() ) {
-            std::for_each( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::SetFreeman ), static_cast<int>( Battle::RESULT_LOSS ) ) );
-
-            heroes.clear();
+            while ( !heroes.empty() ) {
+                if ( heroes.front() ) {
+                    // This call must remove it from KingdomHeroes list
+                    heroes.front()->SetFreeman( Battle::RESULT_LOSS );
+                }
+                else {
+                    ERROR( "Empty Hero pointer in KingdomHeroes list" );
+                    heroes.erase( heroes.begin() );
+                }
+            }
         }
         if ( castles.size() ) {
             castles.ChangeColors( GetColor(), Color::NONE );
