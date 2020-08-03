@@ -2676,7 +2676,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
     msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tilePassable;
-    if ( FORMAT_VERSION_090_RELEASE == Game::GetLoadVersion() ) {
+    if ( FORMAT_VERSION_090_RELEASE > Game::GetLoadVersion() ) {
         tile.uniq = 0;
         tile.objectTileset = 0;
         tile.objectIndex = 255;
