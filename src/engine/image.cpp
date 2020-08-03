@@ -249,6 +249,44 @@ namespace
 
         return true;
     }
+
+    uint8_t GetPALColorId( uint8_t red, uint8_t green, uint8_t blue )
+    {
+        static std::vector<uint8_t> rgbToId;
+        if ( rgbToId.empty() ) {
+            const uint32_t size = 64 * 64 * 64;
+            rgbToId.resize( size );
+
+            uint32_t r = 0;
+            uint32_t g = 0;
+            uint32_t b = 0;
+
+            for ( uint32_t id = 0; id < size; ++id ) {
+                r = ( id % 64 );
+                g = ( id >> 6 ) % 64;
+                b = ( id >> 12 );
+                double minDistance = 3 * 255 * 255;
+                uint32_t bestPos = 0;
+
+                const uint8_t * palette = kb_pal;
+
+                for ( uint32_t i = 0; i < 256; ++i ) {
+                    const double offsetRed = static_cast<double>( *( palette++ ) ) - static_cast<double>( r );
+                    const double offsetGreen = static_cast<double>( *( palette++ ) ) - static_cast<double>( g );
+                    const double offsetBlue = static_cast<double>( *( palette++ ) ) - static_cast<double>( b );
+                    const double distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
+                    if ( minDistance > distance ) {
+                        minDistance = distance;
+                        bestPos = i;
+                    }
+                }
+
+                rgbToId[id] = static_cast<uint8_t>( bestPos ); // it's safe to cast
+            }
+        }
+
+        return rgbToId[red + green * 64 + blue * 64 * 64];
+    }
 }
 
 namespace fheroes2
@@ -563,23 +601,7 @@ namespace fheroes2
 
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
-        double minDistance = sqrt( 3 * 255 * 255 );
-        uint32_t bestPos = 0;
-
-        const uint8_t * palette = kb_pal;
-
-        for ( uint32_t i = 0; i < 256; ++i ) {
-            const double offsetRed = static_cast<double>( *( palette++ ) ) - static_cast<double>( red );
-            const double offsetGreen = static_cast<double>( *( palette++ ) ) - static_cast<double>( green );
-            const double offsetBlue = static_cast<double>( *( palette++ ) ) - static_cast<double>( blue );
-            const double distance = sqrt( offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue );
-            if ( minDistance > distance ) {
-                minDistance = distance;
-                bestPos = i;
-            }
-        }
-
-        return static_cast<uint8_t>( bestPos ); // it's safe to cast
+        return GetPALColorId( red / 4, green / 4, blue / 4 );
     }
 
     void Resize( const Image & in, Image & out, bool isSubpixelAccuracy )
@@ -640,7 +662,7 @@ namespace fheroes2
                         const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
                         const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
 
-                        *outX = GetColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                        *outX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                     }
                     else {
                         *outX = *( inY + offsetIn );
@@ -657,14 +679,14 @@ namespace fheroes2
             // Precalculation of X position
             std::vector<uint32_t> positionX( widthOut );
             for ( uint32_t x = 0; x < widthOut; ++x )
-                positionX[x] = ( x * widthIn + widthOut / 2 ) / widthOut;
+                positionX[x] = ( x * widthIn ) / widthOut;
 
             for ( ; outY != outYEnd; outY += widthOut, transformOutY += widthOut, ++idY ) {
                 uint8_t * outX = outY;
                 uint8_t * transformOutX = transformOutY;
                 const uint8_t * outXEnd = outX + widthOut;
 
-                const uint32_t offset = ( ( idY * heightIn + heightOut / 2 ) / heightOut ) * widthIn;
+                const uint32_t offset = ( ( idY * heightIn ) / heightOut ) * widthIn;
                 const uint8_t * inX = inY + offset;
                 const uint8_t * transformInX = transformInY + offset;
                 const uint32_t * idX = positionX.data();

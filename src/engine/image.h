@@ -90,6 +90,7 @@ namespace fheroes2
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, uint32_t width, uint32_t height );
 
+    // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
 
     // Please remember that subpixel accuracy resizing is extremely slow!
