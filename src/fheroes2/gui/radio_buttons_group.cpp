@@ -28,7 +28,12 @@ RadioButtonsGroup::RadioButtonsGroup( const Point & pos, uint32_t amount, uint32
     }
 
     for ( uint32_t i = 0; i < amount; ++i ) {
-        buttons.push_back( Button( pos.x, pos.y + ( i == 0 ) ? 0 : buttons[i - 1].h * i + vSpacingStep * i, ICN::NGEXTRA, 66, 67 ) );
+        u32 y = pos.y;
+        if ( i != 0 ) {
+            y += buttons[i - 1].h * i + vSpacingStep * i;
+        }
+
+        buttons.push_back( Button( pos.x, y, ICN::NGEXTRA, 66, 67 ) );
     }
 
     SetActiveButton( 0 );
@@ -59,7 +64,7 @@ void RadioButtonsGroup::SetActiveButton( uint32_t activeID )
         return; // out of boundaries
 
     if ( activeID == active )
-        return ; // there is no need to do anything
+        return; // there is no need to do anything
 
     buttons[active].ReleaseDraw();
     buttons[activeID].PressDraw();
