@@ -524,9 +524,9 @@ bool ActionSpellTownPortal( Heroes & hero )
         display.Flip();
 
         while ( result == Dialog::ZERO && le.HandleEvents() ) {
-            if ( le.MouseClickLeft( buttonOkay ) )
+            if ( le.MouseClickLeft( buttonOkay ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )
                 result = Dialog::OK;
-            else if ( le.MouseClickLeft( buttonCancel ) )
+            else if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
                 result = Dialog::NO;
             le.MousePressLeft( buttonOkay ) ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
             le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
