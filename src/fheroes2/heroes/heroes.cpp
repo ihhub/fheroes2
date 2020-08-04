@@ -1981,7 +1981,7 @@ Heroes * AllHeroes::FromJail( s32 index ) const
 
 bool AllHeroes::HaveTwoFreemans( void ) const
 {
-    return 2 <= std::count_if( begin(), end(), std::mem_fun( &Heroes::isFreeman ) );
+    return 2 <= std::count_if( begin(), end(), []( const Heroes * hero ) { return hero->isFreeman(); } );
 }
 
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )

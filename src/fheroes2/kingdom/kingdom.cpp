@@ -119,7 +119,7 @@ void Kingdom::LossPostActions( void )
         Players::SetPlayerInGame( color, false );
 
         if ( heroes.size() ) {
-            std::for_each( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::SetFreeman ), static_cast<int>( Battle::RESULT_LOSS ) ) );
+            std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->SetFreeman( static_cast<int>( Battle::RESULT_LOSS ) ); } );
             heroes.clear();
         }
         if ( castles.size() ) {
@@ -133,7 +133,7 @@ void Kingdom::LossPostActions( void )
 void Kingdom::ActionBeforeTurn( void )
 {
     // rescan heroes path
-    std::for_each( heroes.begin(), heroes.end(), std::mem_fun( &Heroes::RescanPath ) );
+    std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->RescanPath(); } );
 }
 
 void Kingdom::ActionNewDay( void )
@@ -153,10 +153,10 @@ void Kingdom::ActionNewDay( void )
     // skip incomes for first day
     if ( 1 < world.CountDay() ) {
         // castle New Day
-        std::for_each( castles.begin(), castles.end(), std::mem_fun( &Castle::ActionNewDay ) );
+        std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
 
         // heroes New Day
-        std::for_each( heroes.begin(), heroes.end(), std::mem_fun( &Heroes::ActionNewDay ) );
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
 
         // income
         AddFundsResource( GetIncome() );
@@ -178,10 +178,10 @@ void Kingdom::ActionNewWeek( void )
     // skip first day
     if ( 1 < world.CountDay() ) {
         // castle New Week
-        std::for_each( castles.begin(), castles.end(), std::mem_fun( &Castle::ActionNewWeek ) );
+        std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
 
         // heroes New Week
-        std::for_each( heroes.begin(), heroes.end(), std::mem_fun( &Heroes::ActionNewWeek ) );
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewWeek(); } );
 
         // debug an gift
         if ( IS_DEVEL() && isControlHuman() ) {
@@ -202,10 +202,10 @@ void Kingdom::ActionNewMonth( void )
     // skip first day
     if ( 1 < world.CountDay() ) {
         // castle New Month
-        std::for_each( castles.begin(), castles.end(), std::mem_fun( &Castle::ActionNewMonth ) );
+        std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewMonth(); } );
 
         // heroes New Month
-        std::for_each( heroes.begin(), heroes.end(), std::mem_fun( &Heroes::ActionNewMonth ) );
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
     }
 
     // remove week visit object
@@ -310,12 +310,12 @@ u32 Kingdom::GetCountMarketplace( void ) const
 
 u32 Kingdom::GetCountNecromancyShrineBuild( void ) const
 {
-    return std::count_if( castles.begin(), castles.end(), std::mem_fun( &Castle::isNecromancyShrineBuild ) );
+    return std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return castle->isNecromancyShrineBuild(); } );
 }
 
 u32 Kingdom::GetCountBuilding( u32 build ) const
 {
-    return std::count_if( castles.begin(), castles.end(), std::bind2nd( std::mem_fun( &Castle::isBuild ), build ) );
+    return std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } );
 }
 
 bool Kingdom::AllowPayment( const Funds & funds ) const
@@ -359,7 +359,7 @@ void Kingdom::SetVisited( s32 index, int object )
 
 bool Kingdom::HeroesMayStillMove( void ) const
 {
-    return heroes.end() != std::find_if( heroes.begin(), heroes.end(), std::mem_fun( &Heroes::MayStillMove ) );
+    return heroes.end() != std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove(); } );
 }
 
 u32 Kingdom::GetCountCapital( void ) const
@@ -474,7 +474,7 @@ void Kingdom::HeroesActionNewPosition( void )
 {
     // Heroes::ActionNewPosition: can remove elements from heroes vector.
     KingdomHeroes heroes2( heroes );
-    std::for_each( heroes2.begin(), heroes2.end(), std::mem_fun( &Heroes::ActionNewPosition ) );
+    std::for_each( heroes2.begin(), heroes2.end(), []( Heroes * hero ) { hero->ActionNewPosition(); } );
 }
 
 Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
