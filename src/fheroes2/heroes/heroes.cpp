@@ -1371,8 +1371,6 @@ void Heroes::LevelUpSecondarySkill( int primary, bool autoselect )
     // level up sec. skill
     if ( selected ) {
         DEBUG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected->Skill() ) );
-        std::vector<Skill::Secondary>::iterator it;
-
         Skill::Secondary * secs = secondary_skills.FindSkill( selected->Skill() );
 
         if ( secs )
