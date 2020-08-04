@@ -1,6 +1,8 @@
 # makefile
 # project: libsmacker
 
+CFLAGS:=$(filter-out -std=c++11,$(CFLAGS))
+
 TARGET	:= libsmacker
 
 all: $(TARGET).a
