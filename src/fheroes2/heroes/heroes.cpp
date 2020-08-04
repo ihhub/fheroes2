@@ -1637,11 +1637,11 @@ void Heroes::Move2Dest( const s32 & dstIndex, bool skipAction /* false */, bool 
         Scoute();
         world.GetTiles( dstIndex ).SetHeroes( this );
 
-        if ( !skipAction )
-            ActionNewPosition();
-
         if ( !skipPenalty )
             ApplyPenaltyMovement();
+
+        if ( !skipAction )
+            ActionNewPosition();
     }
 }
 

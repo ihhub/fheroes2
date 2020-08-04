@@ -2816,9 +2816,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
             if ( unit->isFinishAnimFrame() && unit->GetAnimationState() == Monster_Info::WNCE ) {
                 unit->SwitchAnimation( Monster_Info::STATIC );
             }
-
-            if ( !unit->isValid() )
-                unit->PostKilledAction();
         }
     }
 }
