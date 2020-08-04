@@ -62,27 +62,40 @@ public:
     void RedrawItem( const s32 &, s32, s32, bool );
     void RedrawBackground( const Point & );
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListDoubleClick( s32 & )
+    void ActionCurrentUp( void )
     {
-        result = Dialog::OK;
+        Update();
     };
+
+    void ActionCurrentDn( void )
+    {
+        Update();
+    };
+
+    void ActionListDoubleClick( s32 & ){};
 
     void ActionListSingleClick( s32 & destination )
     {
-        Interface::Basic & I = Interface::Basic::Get();
-        I.GetGameArea().SetCenter( Maps::GetPoint( destination ) );
-        I.RedrawFocus();
-        I.Redraw();
+        Update();
     };
 
-    void ActionListPressRight( s32 & destination )
+    void ActionListPressRight( s32 & destination ){};
+
+    void Update()
     {
-        const Castle * castle = world.GetCastle( Maps::GetPoint( destination ) );
-        if ( castle )
-            Dialog::QuickInfo( *castle );
-    };
+        if ( IsValid() ) {
+            Interface::Basic & I = Interface::Basic::Get();
+
+            // NOTE Interface::Basic::SetFocus too massive and break logic
+            Focus & focus = Settings::Get().GetPlayers().GetCurrent()->GetFocus();
+            focus.Set( world.GetCastle( Maps::GetPoint( GetCurrent() ) ) );
+            I.GetStatusWindow().SetState( STATUS_ARMY );
+
+            I.GetGameArea().SetCenter( Maps::GetPoint( GetCurrent() ) );
+            I.SetRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_STATUS );
+            I.Redraw();
+        }
+    }
 
     int & result;
 };
@@ -99,21 +112,18 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
 
 void CastleIndexListBox::RedrawBackground( const Point & dst )
 {
-    Text text( _( "Town Portal" ), Font::YELLOW_BIG );
-    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 6 );
+    Text text( _( "Select castle:" ), Font::YELLOW_BIG );
+    text.Blit( dst.x + 72 - text.w() / 2, dst.y + 6 );
 
-    text.Set( _( "Select town to port to." ), Font::BIG );
-    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 30 );
-
-    AGG::GetICN( ICN::LISTBOX, 0 ).Blit( dst.x + 2, dst.y + 55 );
+    AGG::GetICN( ICN::LISTBOXS, 0 ).RenderScale( Size( 120, 19 ) ).Blit( dst.x + 2, dst.y + 30, Display::Get() );
     for ( u32 ii = 1; ii < 5; ++ii )
-        AGG::GetICN( ICN::LISTBOX, 1 ).Blit( dst.x + 2, dst.y + 55 + ( ii * 19 ) );
-    AGG::GetICN( ICN::LISTBOX, 2 ).Blit( dst.x + 2, dst.y + 145 );
+        AGG::GetICN( ICN::LISTBOXS, 1 ).RenderScale( Size( 120, 19 ) ).Blit( dst.x + 2, dst.y + 30 + ( ii * 19 ), Display::Get() );
+    AGG::GetICN( ICN::LISTBOXS, 2 ).RenderScale( Size( 120, 19 ) ).Blit( dst.x + 2, dst.y + 125, Display::Get() );
 
-    AGG::GetICN( ICN::LISTBOX, 7 ).Blit( dst.x + 256, dst.y + 75 );
+    AGG::GetICN( ICN::LISTBOXS, 7 ).Blit( dst.x + 120, dst.y + 50 );
     for ( u32 ii = 1; ii < 3; ++ii )
-        AGG::GetICN( ICN::LISTBOX, 8 ).Blit( dst.x + 256, dst.y + 74 + ( ii * 19 ) );
-    AGG::GetICN( ICN::LISTBOX, 9 ).Blit( dst.x + 256, dst.y + 126 );
+        AGG::GetICN( ICN::LISTBOXS, 8 ).Blit( dst.x + 120, dst.y + 50 + ( ii * 19 ) );
+    AGG::GetICN( ICN::LISTBOXS, 9 ).Blit( dst.x + 120, dst.y + 104 );
 }
 
 bool Heroes::ActionSpellCast( const Spell & spell )
@@ -441,14 +451,6 @@ bool ActionSpellTownPortal( Heroes & hero )
     const Kingdom & kingdom = hero.GetKingdom();
     std::vector<s32> castles;
 
-    Interface::Basic & I = Interface::Basic::Get();
-    Display & display = Display::Get();
-    Cursor & cursor = Cursor::Get();
-    LocalEvent & le = LocalEvent::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
-
     for ( KingdomCastles::const_iterator it = kingdom.GetCastles().begin(); it != kingdom.GetCastles().end(); ++it )
         if ( *it && !( *it )->GetHeroes().Guest() )
             castles.push_back( ( **it ).GetIndex() );
@@ -458,56 +460,110 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
+    Interface::Basic & I = Interface::Basic::Get();
+    Display & display = Display::Get();
+    Cursor & cursor = Cursor::Get();
+    LocalEvent & le = LocalEvent::Get();
+    Settings & conf = Settings::Get();
+    Focus & focus = conf.GetPlayers().GetCurrent()->GetFocus();
+
+    cursor.Hide();
+    cursor.SetThemes( cursor.POINTER );
+
+    // remember current area and interface settings
     const Rect focusArea = I.GetGameArea().GetVisibleTileROI();
-    I.GetGameArea().SetCenter( Maps::GetPoint( castles.front() ) );
-    I.RedrawFocus();
+    const Rect posRadar = I.GetRadar().GetRect();
+    const Rect posStatus = I.GetStatusWindow().GetRect();
+    const bool hideInterface = conf.ExtGameHideInterface();
+    const bool showPanel = hideInterface ? conf.ShowControlPanel() : true;
+    const bool showRadar = hideInterface ? conf.ShowRadar() : true;
+    const bool showIcons = hideInterface ? conf.ShowIcons() : true;
+    const bool showButtons = hideInterface ? conf.ShowButtons() : true;
+    const bool showStatus = hideInterface ? conf.ShowStatus() : true;
+
+    // forcing hide interface mode
+    I.SetHideInterface( true );
+    I.SetFocus( &hero );
+    conf.SetShowPanel( false );
+    conf.SetShowRadar( true );
+    conf.SetShowIcons( false );
+    conf.SetShowButtons( false );
+    conf.SetShowStatus( true );
+
+    // move radar to original position, place status window under radar
+    const u32 px = display.w() - BORDERWIDTH * 2 - RADARWIDTH;
+    I.GetRadar().SetPos( px, 0 );
+    I.GetStatusWindow().SetPos( px, I.GetRadar().GetArea().y + I.GetRadar().GetArea().h );
+    I.SetRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_STATUS );
     I.Redraw();
 
-    Dialog::FrameBorder * frameborder = new Dialog::FrameBorder( Size( 280, 200 ) );
-
-    const Rect & area = frameborder->GetArea();
+    s32 teleportDestination = -1;
     int result = Dialog::ZERO;
+    {
+        Dialog::FrameBorder frame( px, I.GetStatusWindow().GetArea().y + I.GetStatusWindow().GetArea().h, 144, 200 );
+        const Rect & area = frame.GetArea();
 
-    CastleIndexListBox listbox( area, result );
+        CastleIndexListBox listBox( area, result );
+        listBox.RedrawBackground( area );
+        listBox.SetScrollButtonUp( ICN::LISTBOXS, 3, 4, Point( area.x + 120, area.y + 30 ) );
+        listBox.SetScrollButtonDn( ICN::LISTBOXS, 5, 6, Point( area.x + 120, area.y + 123 ) );
+        listBox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOXS, 10 ), Rect( area.x + 124, area.y + 54, 14, 64 ) );
+        listBox.SetAreaMaxItems( 5 );
+        listBox.SetAreaItems( Rect( area.x + 5, area.y + 32, 120, 114 ) );
+        listBox.SetListContent( castles );
+        listBox.Unselect();
+        listBox.Redraw();
 
-    listbox.RedrawBackground( area );
-    listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, Point( area.x + 256, area.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, Point( area.x + 256, area.y + 145 ) );
-    listbox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 260, area.y + 78, 14, 64 ) );
-    listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( Rect( area.x + 10, area.y + 60, 250, 100 ) );
-    listbox.SetListContent( castles );
-    listbox.Redraw();
+        const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+        Button buttonOkay( px + 40, area.y + 148, system, 1, 2 );
+        Button buttonCancel( px + 40, area.y + 173, system, 3, 4 );
+        buttonOkay.Draw();
+        buttonCancel.Draw();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+        cursor.Show();
+        display.Flip();
 
-    cursor.Show();
+        while ( result == Dialog::ZERO && le.HandleEvents() ) {
+            if ( le.MouseClickLeft( buttonOkay ) )
+                result = Dialog::OK;
+            else if ( le.MouseClickLeft( buttonCancel ) )
+                result = Dialog::NO;
+            le.MousePressLeft( buttonOkay ) ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
+            le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+
+            listBox.QueueEventProcessing();
+
+            if ( !cursor.isVisible() ) {
+                frame.RenderRegular( frame.GetRect() );
+                listBox.Redraw();
+                buttonOkay.Draw();
+                buttonCancel.Draw();
+
+                cursor.Show();
+                display.Flip();
+            }
+        }
+        teleportDestination = listBox.GetCurrent();
+    }
+
+    // restore settings
+    conf.SetShowPanel( showPanel );
+    conf.SetShowRadar( showRadar );
+    conf.SetShowIcons( showIcons );
+    conf.SetShowButtons( showButtons );
+    conf.SetShowStatus( showStatus );
+    I.GetStatusWindow().SetPos( posStatus.x, posStatus.y );
+    I.GetRadar().SetPos( posRadar.x, posRadar.y );
+    I.SetRedraw( REDRAW_ALL );
+    I.SetHideInterface( hideInterface );
+    I.SetFocus( &hero );
+    I.Redraw();
     display.Flip();
 
-    while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
-        listbox.QueueEventProcessing();
-
-        if ( !cursor.isVisible() ) {
-            frameborder->RenderRegular( frameborder->GetRect() );
-            listbox.Redraw();
-            btnGroups.Draw();
-            cursor.Show();
-            display.Flip();
-        }
-    }
-
-    delete frameborder;
-
-    // store
     if ( result == Dialog::OK )
-        return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( listbox.GetCurrent() ) ) );
-    else {
+        return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( teleportDestination ) ) );
+    else
         I.GetGameArea().SetCenter( Point( focusArea.x + focusArea.w / 2, focusArea.y + focusArea.h / 2 ) );
-        I.RedrawFocus();
-        I.Redraw();
-    }
 
     return false;
 }
