@@ -47,7 +47,8 @@ matrix:
         - sudo apt-get install -y libsdl-mixer1.2-dev
         - sudo apt-get install -y libsdl-image1.2-dev
       before_deploy:
-        - zip fheroes2_linux_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh changelog.txt
+        - cp doc/README.txt .
+        - zip fheroes2_linux_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh changelog.txt README.txt
         - export TRAVIS_TAG=fheroes2-linux-sdl1_dev
         - git tag -f $TRAVIS_TAG
       deploy:
@@ -71,7 +72,8 @@ matrix:
         - sudo apt-get install -y libsdl2-image-dev
         - export WITH_SDL2="ON"
       before_deploy:
-        - zip fheroes2_linux_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt
+        - cp doc/README.txt .
+        - zip fheroes2_linux_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt README.txt
         - export TRAVIS_TAG=fheroes2-linux-sdl2_dev
         - git tag -f $TRAVIS_TAG
       deploy:
@@ -97,7 +99,8 @@ matrix:
         - sudo apt-get install -y gettext
         - sudo apt-get install -y zip
       before_deploy:
-        - zip fheroes2_linux_arm_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh changelog.txt
+        - cp doc/README.txt .
+        - zip fheroes2_linux_arm_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh changelog.txt README.txt
         - export TRAVIS_TAG=fheroes2-linux-arm-sdl1_dev
         - git tag -f $TRAVIS_TAG
       deploy:
@@ -124,7 +127,8 @@ matrix:
         - sudo apt-get install -y zip
         - export WITH_SDL2="ON"
       before_deploy:
-        - zip fheroes2_linux_arm_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt
+        - cp doc/README.txt .
+        - zip fheroes2_linux_arm_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt README.txt
         - export TRAVIS_TAG=fheroes2-linux-arm-sdl2_dev
         - git tag -f $TRAVIS_TAG
       deploy:

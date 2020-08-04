@@ -1889,7 +1889,6 @@ void ActionToAncientLamp( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToTeleports( Heroes & hero, s32 index_from )
 {
     s32 index_to = world.NextTeleport( index_from );
-    hero.ApplyPenaltyMovement();
 
     if ( index_from == index_to ) {
         AGG::PlaySound( M82::RSBRYFZL );
@@ -1917,7 +1916,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     Cursor::Get().Hide();
 
-    hero.Move2Dest( index_to, true );
+    hero.Move2Dest( index_to, true, true ); // no action and no penalty
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -1938,7 +1937,6 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 void ActionToWhirlpools( Heroes & hero, u32 obj, s32 index_from )
 {
     const s32 index_to = world.NextWhirlpool( index_from );
-    hero.ApplyPenaltyMovement();
 
     if ( index_from == index_to ) {
         AGG::PlaySound( M82::RSBRYFZL );
@@ -1952,7 +1950,7 @@ void ActionToWhirlpools( Heroes & hero, u32 obj, s32 index_from )
 
     Cursor::Get().Hide();
 
-    hero.Move2Dest( index_to, true );
+    hero.Move2Dest( index_to, true, true ); // no action and no penalty
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );

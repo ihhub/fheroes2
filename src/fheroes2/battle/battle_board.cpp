@@ -74,8 +74,14 @@ Rect Battle::Board::GetArea( void ) const
 
 void Battle::Board::Reset( void )
 {
-    std::for_each( begin(), end(), std::mem_fun_ref( &Cell::ResetQuality ) );
-    std::for_each( begin(), end(), std::mem_fun_ref( &Cell::ResetDirection ) );
+    for ( iterator it = begin(); it != end(); ++it ) {
+        Unit * unit = it->GetUnit();
+        if ( unit && !unit->isValid() ) {
+            unit->PostKilledAction();
+        }
+        it->ResetDirection();
+        it->ResetQuality();
+    }
 }
 
 void Battle::Board::SetPositionQuality( const Unit & b )
@@ -184,12 +190,20 @@ struct bcell_t
 
 Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & dst, bool debug )
 {
+    Indexes result;
+    const bool isWide = b.isWide();
+
+    // check if target position is valid
+    if ( !dst.GetHead() || ( isWide && !dst.GetTail() ) ) {
+        ERROR( "Board::GetAStarPath invalid destination for unit " + b.String() );
+        return result;
+    }
+
+    s32 cur = b.GetHeadIndex();
     const Castle * castle = Arena::GetCastle();
     const Bridge * bridge = Arena::GetBridge();
-    const bool isWide = b.isWide();
-    std::map<s32, bcell_t> list;
-    s32 cur = b.GetHeadIndex();
 
+    std::map<s32, bcell_t> list;
     list[cur].prnt = -1;
     list[cur].cost = 0;
     list[cur].open = false;
@@ -237,7 +251,6 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
             break;
     }
 
-    Indexes result;
     result.reserve( 15 );
 
     // save path

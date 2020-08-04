@@ -76,7 +76,7 @@ int Dialog::SystemOptions( void )
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonOkay( area.x + 96, area.y + 350, ICN::SPANBTN, 0, 1 );
+    Button buttonOkay( area.x + 96, area.y + 350, conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
     buttonOkay.Draw();
 
     cursor.Show();
