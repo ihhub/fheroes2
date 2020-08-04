@@ -12,7 +12,7 @@ SDL_LIBS := $(shell sdl-config --libs)
 SDL_FLAGS := $(shell sdl-config --cflags)
 endif
 
-CFLAGS := $(CFLAGS) -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -fsigned-char
+CFLAGS := $(CFLAGS) -std=c++11 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -fsigned-char
 LDFLAGS := $(LDFLAGS)
 LIBS :=
 
