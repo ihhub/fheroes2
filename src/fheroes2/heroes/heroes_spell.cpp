@@ -563,7 +563,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     if ( result == Dialog::OK )
         return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( teleportDestination ) ) );
 
-    // restore player focus
+    // restore the original focus
     I.GetGameArea().SetCenter( Point( focusArea.x + focusArea.w / 2, focusArea.y + focusArea.h / 2 ) );
     I.SetRedraw( REDRAW_RADAR );
 
