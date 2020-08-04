@@ -65,21 +65,21 @@ public:
     void ActionCurrentUp( void )
     {
         Update();
-    };
+    }
 
     void ActionCurrentDn( void )
     {
         Update();
-    };
+    }
 
-    void ActionListDoubleClick( s32 & ){};
+    void ActionListDoubleClick( s32 & ) {}
 
     void ActionListSingleClick( s32 & destination )
     {
         Update();
-    };
+    }
 
-    void ActionListPressRight( s32 & destination ){};
+    void ActionListPressRight( s32 & destination ) {}
 
     void Update()
     {
@@ -562,10 +562,10 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     if ( result == Dialog::OK )
         return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( teleportDestination ) ) );
-    else {
-        I.GetGameArea().SetCenter( Point( focusArea.x + focusArea.w / 2, focusArea.y + focusArea.h / 2 ) );
-        I.SetRedraw( REDRAW_RADAR );
-    }
+
+    // restore player focus
+    I.GetGameArea().SetCenter( Point( focusArea.x + focusArea.w / 2, focusArea.y + focusArea.h / 2 ) );
+    I.SetRedraw( REDRAW_RADAR );
 
     return false;
 }
