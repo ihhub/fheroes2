@@ -74,8 +74,14 @@ Rect Battle::Board::GetArea( void ) const
 
 void Battle::Board::Reset( void )
 {
-    std::for_each( begin(), end(), std::mem_fun_ref( &Cell::ResetQuality ) );
-    std::for_each( begin(), end(), std::mem_fun_ref( &Cell::ResetDirection ) );
+    for ( iterator it = begin(); it != end(); ++it ) {
+        Unit * unit = it->GetUnit();
+        if ( unit && !unit->isValid() ) {
+            unit->PostKilledAction();
+        }
+        it->ResetDirection();
+        it->ResetQuality();
+    }
 }
 
 void Battle::Board::SetPositionQuality( const Unit & b )
