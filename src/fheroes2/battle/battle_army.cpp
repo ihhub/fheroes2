@@ -93,7 +93,7 @@ Battle::Units::Units( const Units & units, bool filter )
     reserve( CAPACITY < units.size() ? units.size() : CAPACITY );
     assign( units.begin(), units.end() );
     if ( filter )
-        resize( std::distance( begin(), std::remove_if( begin(), end(), std::not1( std::mem_fun( &Unit::isValid ) ) ) ) );
+        resize( std::distance( begin(), std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ) ) );
 }
 
 Battle::Units::Units( const Units & units1, const Units & units2 )
@@ -173,14 +173,14 @@ void Battle::Units::SortArchers( void )
 
 Battle::Unit * Battle::Units::FindUID( u32 pid )
 {
-    iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Unit::isUID ), pid ) );
+    iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
 
     return it == end() ? NULL : *it;
 }
 
 Battle::Unit * Battle::Units::FindMode( u32 mod )
 {
-    iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Unit::Modes ), mod ) );
+    iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
     return it == end() ? NULL : *it;
 }
@@ -233,7 +233,7 @@ int Battle::Force::GetControl( void ) const
 
 bool Battle::Force::isValid( void ) const
 {
-    return end() != std::find_if( begin(), end(), std::mem_fun( &Unit::isValid ) );
+    return end() != std::find_if( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
 }
 
 u32 Battle::Force::GetSurrenderCost( void ) const
@@ -286,7 +286,7 @@ void Battle::Force::NewTurn( void )
     if ( GetCommander() )
         GetCommander()->ResetModes( Heroes::SPELLCASTED );
 
-    std::for_each( begin(), end(), std::mem_fun( &Unit::NewTurn ) );
+    std::for_each( begin(), end(), []( Unit * unit ) { unit->NewTurn(); } );
 }
 
 bool isUnitFirst( const Battle::Unit * last, bool part1, int army2_color )
@@ -428,7 +428,7 @@ void Battle::Force::resetIdleAnimation()
 
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
-    return end() != std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
+    return end() != std::find_if( begin(), end(), [mons]( const Unit * unit ) { return unit->isMonster( mons() ); } );
 }
 
 u32 Battle::Force::GetDeadCounts( void ) const
