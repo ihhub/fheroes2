@@ -523,11 +523,11 @@ bool ActionSpellTownPortal( Heroes & hero )
         display.Flip();
 
         while ( result == Dialog::ZERO && le.HandleEvents() ) {
-            if ( le.MouseClickLeft( buttonOkay ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )
+            if ( ( le.MouseClickLeft( buttonOkay ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) && listBox.isSelected() )
                 result = Dialog::OK;
             else if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
                 result = Dialog::NO;
-            le.MousePressLeft( buttonOkay ) ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
+            le.MousePressLeft( buttonOkay ) || !listBox.isSelected() ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
             le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
 
             listBox.QueueEventProcessing();
