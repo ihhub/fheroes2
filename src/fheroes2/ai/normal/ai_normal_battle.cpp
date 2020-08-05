@@ -71,24 +71,31 @@ namespace AI
         // Step 2. Friendly and enemy army analysis
         double myShooterStr = 0;
         double enemyShooterStr = 0;
+        double averageEnemyAttack = 0;
+        double averageEnemyDefense = 0;
 
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
-            Unit * unit = *it;
+            Unit & unit = **it;
 
-            if ( unit && unit->isArchers() ) {
-                DEBUG( DBG_AI, DBG_TRACE, "Friendly shooter: " << unit->String() );
-                myShooterStr += unit->GetStrength();
+            if ( unit.isArchers() ) {
+                DEBUG( DBG_AI, DBG_TRACE, "Friendly shooter: " << unit.GetCount() << " " << unit.GetName() );
+                myShooterStr += unit.GetStrength();
             }
         }
 
         for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-            Unit * unit = *it;
+            Unit & unit = **it;
 
-            if ( unit && unit->isArchers() ) {
-                DEBUG( DBG_AI, DBG_TRACE, "Enemy shooter: " << unit->GetCount() << " " << unit->GetName() );
-                enemyShooterStr += unit->GetStrength();
+            averageEnemyAttack += unit.GetAttack();
+            averageEnemyDefense += unit.GetDefense();
+
+            if ( unit.isArchers() ) {
+                DEBUG( DBG_AI, DBG_TRACE, "Enemy shooter: " << unit.GetCount() << " " << unit.GetName() );
+                enemyShooterStr += unit.GetStrength();
             }
         }
+        averageEnemyAttack /= enemies.size();
+        averageEnemyDefense /= enemies.size();
 
         // Step 3. Add castle siege (and battle arena) modifiers
         const Castle * castle = arena.GetCastle();
@@ -121,7 +128,7 @@ namespace AI
             // 1. For damage spells - maximum amount of enemy threat lost
             // 2. For buffs - friendly unit strength gained
             // 3. For debuffs - enemy unit threat lost
-            // 4. For dispell and cure - amount of unit strength recovered
+            // 4. For dispell, resurrect and cure - amount of unit strength recovered
             // 5. For antimagic - based on enemy hero spellcasting abilities multiplied by friendly unit strength
 
             // 6. Cast best spell with highest heuristic on target pointer saved
@@ -169,8 +176,8 @@ namespace AI
             // 1. Find highest value enemy unit, save as priority target
             // 2. If priority within reach, attack
             // 3. Otherwise search for another target nearby
-            // 4.a. Attack if found
-            // 4.b. Else move closer to priority target
+            // 4.a. Attack if found, from the tile that is closer to priority target
+            // 4.b. Else move to priority target
             DEBUG( DBG_AI, DBG_INFO,
                    currentUnit.GetName() << " melee offense, focus enemy ..."
                                          << " threat level: ..." );
