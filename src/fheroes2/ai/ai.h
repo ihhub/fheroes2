@@ -67,32 +67,32 @@ namespace AI
     class Base
     {
     public:
-        virtual void KingdomTurn( Kingdom & );
+        virtual void KingdomTurn( Kingdom & kingdom );
         virtual void CastleTurn( Castle & castle, bool defensive = false );
-        virtual void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
-        virtual void HeroTurn( Heroes & );
+        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
+        virtual void HeroTurn( Heroes & hero );
 
-        virtual void HeroesAdd( const Heroes & );
-        virtual void HeroesRemove( const Heroes & );
-        virtual void HeroesPreBattle( HeroBase & );
-        virtual void HeroesAfterBattle( HeroBase & );
-        virtual void HeroesPostLoad( Heroes & );
+        virtual void HeroesAdd( const Heroes & hero );
+        virtual void HeroesRemove( const Heroes & hero );
+        virtual void HeroesPreBattle( HeroBase & hero );
+        virtual void HeroesAfterBattle( HeroBase & hero );
+        virtual void HeroesPostLoad( Heroes & hero );
         virtual bool HeroesCanMove( const Heroes & hero );
-        virtual bool HeroesGetTask( Heroes & );
-        virtual void HeroesActionComplete( Heroes &, s32 );
-        virtual void HeroesActionNewPosition( Heroes & );
-        virtual void HeroesClearTask( const Heroes & );
-        virtual void HeroesLevelUp( Heroes & );
-        virtual bool HeroesSkipFog( void );
-        virtual std::string HeroesString( const Heroes & );
+        virtual bool HeroesGetTask( Heroes & hero );
+        virtual void HeroesActionComplete( Heroes & hero, int index );
+        virtual void HeroesActionNewPosition( Heroes & hero );
+        virtual void HeroesClearTask( const Heroes & hero );
+        virtual void HeroesLevelUp( Heroes & hero );
+        virtual bool HeroesSkipFog();
+        virtual std::string HeroesString( const Heroes & hero );
 
-        virtual void CastleAdd( const Castle & );
-        virtual void CastleRemove( const Castle & );
-        virtual void CastlePreBattle( Castle & );
-        virtual void CastleAfterBattle( Castle &, bool attacker_wins );
+        virtual void CastleAdd( const Castle & castle );
+        virtual void CastleRemove( const Castle & castle );
+        virtual void CastlePreBattle( Castle & castle );
+        virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
-        virtual const char * Type( void ) const;
-        virtual const char * License( void ) const;
+        virtual const char * Type() const;
+        virtual const char * License() const;
         virtual int GetPersonality() const;
         virtual std::string GetPersonalityString() const;
 

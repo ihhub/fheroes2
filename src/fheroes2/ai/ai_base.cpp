@@ -69,38 +69,38 @@ namespace AI
 
     void Base::Reset() {}
 
-    void Base::CastlePreBattle( Castle & ) {}
+    void Base::CastlePreBattle( Castle & castle ) {}
 
-    void Base::CastleAfterBattle( Castle &, bool attacker_wins ) {}
+    void Base::CastleAfterBattle( Castle & castle, bool attackerWins ) {}
 
     void Base::CastleTurn( Castle & castle, bool defensive ) {}
 
-    void Base::CastleAdd( const Castle & ) {}
+    void Base::CastleAdd( const Castle & castle ) {}
 
-    void Base::CastleRemove( const Castle & ) {}
+    void Base::CastleRemove( const Castle & castle ) {}
 
-    void Base::HeroesAdd( const Heroes & ) {}
+    void Base::HeroesAdd( const Heroes & hero ) {}
 
-    void Base::HeroesRemove( const Heroes & ) {}
+    void Base::HeroesRemove( const Heroes & hero ) {}
 
-    void Base::HeroesPreBattle( HeroBase & ) {}
+    void Base::HeroesPreBattle( HeroBase & hero ) {}
 
-    void Base::HeroesAfterBattle( HeroBase & ) {}
+    void Base::HeroesAfterBattle( HeroBase & hero ) {}
 
-    void Base::HeroesActionNewPosition( Heroes & ) {}
+    void Base::HeroesActionNewPosition( Heroes & hero ) {}
 
-    void Base::HeroesClearTask( const Heroes & ) {}
+    void Base::HeroesClearTask( const Heroes & hero ) {}
 
-    std::string Base::HeroesString( const Heroes & )
+    std::string Base::HeroesString( const Heroes & hero )
     {
         return "";
     }
 
-    void Base::HeroesActionComplete( Heroes &, s32 ) {}
+    void Base::HeroesActionComplete( Heroes & hero, int index ) {}
 
-    void Base::HeroesLevelUp( Heroes & ) {}
+    void Base::HeroesLevelUp( Heroes & hero ) {}
 
-    void Base::HeroesPostLoad( Heroes & ) {}
+    void Base::HeroesPostLoad( Heroes & hero ) {}
 
     bool Base::HeroesSkipFog()
     {
