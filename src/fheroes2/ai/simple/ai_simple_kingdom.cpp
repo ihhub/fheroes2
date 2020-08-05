@@ -185,7 +185,7 @@ namespace AI
 
             // every time
             if ( 0 == hunters && heroes.size() ) {
-                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->Modes( Heroes::PATROL ); } );
+                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::PATROL ); } );
 
                 if ( it != heroes.end() && !ai.capital->GetHeroes().Guest() )
                     HeroesSetHunterWithTarget( ( *it ), ai.capital->GetIndex() );
