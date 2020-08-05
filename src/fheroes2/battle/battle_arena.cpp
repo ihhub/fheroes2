@@ -690,14 +690,23 @@ bool Battle::Arena::CanRetreatOpponent( int color ) const
     return hero && hero->isHeroes() && NULL == hero->inCastle() && world.GetKingdom( hero->GetColor() ).GetCastles().size();
 }
 
-bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
+bool Battle::Arena::isSpellcastDisabled() const
 {
     const HeroBase * hero1 = army1->GetCommander();
     const HeroBase * hero2 = army2->GetCommander();
+
+    if ( ( hero1 && hero1->HasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->HasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
+        return true;
+    }
+    return false;
+}
+
+bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
+{
     const HeroBase * current_commander = GetCurrentCommander();
 
     // check sphere negation (only for heroes)
-    if ( ( hero1 && hero1->HasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->HasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
+    if ( isSpellcastDisabled() ) {
         if ( msg )
             *msg = _( "The Sphere of Negation artifact is in effect for this battle, disabling all combat spells." );
         return true;

@@ -40,8 +40,14 @@ namespace AI
         return false;
     }
 
+    bool CheckCommanderCanSpellcast( const Arena & arena, const HeroBase * commander )
+    {
+        return commander && commander->HaveSpellBook() && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
+    }
+
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
+        // Step 1. Check retreat/surrender condition
         if ( CheckBattleRetreat() ) {
             // Cast maximum damage spell
 
@@ -62,13 +68,14 @@ namespace AI
         Units friendly = Units( friendlyForce, true );
         Units enemies = Units( enemyForce, true );
 
+        // Step 2. Friendly and enemy army analysis
         double myShooterStr = 0;
         double enemyShooterStr = 0;
 
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
             Unit * unit = *it;
 
-            if ( unit && unit->isValid() && unit->isArchers() ) {
+            if ( unit && unit->isArchers() ) {
                 DEBUG( DBG_AI, DBG_TRACE, "Friendly shooter: " << unit->String() );
                 myShooterStr += unit->GetStrength();
             }
@@ -77,12 +84,13 @@ namespace AI
         for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
             Unit * unit = *it;
 
-            if ( unit && unit->isValid() && unit->isArchers() ) {
+            if ( unit && unit->isArchers() ) {
                 DEBUG( DBG_AI, DBG_TRACE, "Enemy shooter: " << unit->GetCount() << " " << unit->GetName() );
                 enemyShooterStr += unit->GetStrength();
             }
         }
 
+        // Step 3. Add castle siege (and battle arena) modifiers
         const Castle * castle = arena.GetCastle();
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->HasArtifact( Artifact::GOLDEN_BOW );
@@ -108,6 +116,18 @@ namespace AI
         DEBUG( DBG_AI, DBG_TRACE, "Comparing shooters: " << myShooterStr << ", vs enemy " << enemyShooterStr );
         const bool offensiveTactics = myShooterStr < enemyShooterStr;
 
+        // Step 4. Calculate spell heuristics
+        if ( CheckCommanderCanSpellcast( arena, commander ) ) {
+            // 1. For damage spells - maximum amount of enemy threat lost
+            // 2. For buffs - friendly unit strength gained
+            // 3. For debuffs - enemy unit threat lost
+            // 4. For dispell and cure - amount of unit strength recovered
+            // 5. For antimagic - based on enemy hero spellcasting abilities multiplied by friendly unit strength
+
+            // 6. Cast best spell with highest heuristic on target pointer saved
+        }
+
+        // Step 5. Current unit decision tree
         if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
             // Ranged unit decision tree
             if ( currentUnit.isHandFighting() ) {
