@@ -31,20 +31,17 @@ namespace AI
     {
         building_t building = BUILD_NOTHING;
         int priority = 1;
-        BuildOrder()
-            : building( BUILD_NOTHING )
-            , priority( 1 )
-        {}
+
+        BuildOrder() {}
         BuildOrder( building_t b, int p )
-        {
-            building = b;
-            priority = p;
-        }
+            : building( b )
+            , priority( p )
+        {}
     };
 
     const std::vector<BuildOrder> & GetDefensiveStructures( int type )
     {
-        static std::vector<BuildOrder> defensive
+        static const std::vector<BuildOrder> defensive
             = {{BUILD_LEFTTURRET, 1}, {BUILD_RIGHTTURRET, 1}, {BUILD_MOAT, 1}, {BUILD_CAPTAIN, 1}, {BUILD_SPEC, 2}, {BUILD_TAVERN, 1}};
 
         return defensive;
