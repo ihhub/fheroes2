@@ -37,9 +37,9 @@ namespace AI
 
     struct MapScanNode
     {
-        MapScanNode * prev;
-        int index;
-        uint32_t distance;
+        MapScanNode * prev = NULL;
+        int index = 0;
+        uint32_t distance = 0;
     };
 }
 
