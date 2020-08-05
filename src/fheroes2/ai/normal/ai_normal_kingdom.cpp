@@ -61,8 +61,14 @@ namespace AI
             heroLimit++;
 
         // Step 3. Buy new heroes, adjust roles, sort heroes based on priority or strength
-        if ( heroes.size() < heroLimit ) {
-            // Pick appropriate castle to buy hero from
+        if ( heroes.size() < heroLimit && castles.size() ) {
+            Recruits & rec = kingdom.GetRecruits();
+
+            // FIXME: Pick appropriate castle to buy hero from
+            Heroes * hero = castles.front()->GetHeroes().Guest();
+            if ( !hero ) {
+                castles.front()->RecruitHero( rec.GetHero1() );
+            }
         }
         VecHeroes sortedHeroList = heroes;
 

@@ -19,8 +19,42 @@
  ***************************************************************************/
 
 #include "ai_normal.h"
+#include "heroes.h"
+#include "maps.h"
+#include "mp2.h"
+#include "world.h"
 
 namespace AI
 {
-    void Normal::HeroTurn( Heroes & hero ) {}
+    bool MoveHero( Heroes & hero )
+    {
+        // FIXME: Very basic set up, targets and priorities should be fed from AI Kingdom
+        const int heroIndex = hero.GetIndex();
+
+        // Maps::GetAroundIndexes should sort tiles internally
+        const Maps::Indexes & seenTiles = Maps::GetAroundIndexes( heroIndex, 15, true );
+        for ( auto it = seenTiles.begin(); it != seenTiles.end(); ++it ) {
+            Maps::Tiles & tile = world.GetTiles( *it );
+            if ( HeroesValidObject( hero, *it ) && hero.GetPath().Calculate( *it ) ) {
+                HeroesMove( hero );
+                return true;
+            }
+        }
+
+        hero.SetModes( AI::HERO_WAITING );
+        return false;
+    }
+
+    void Normal::HeroTurn( Heroes & hero )
+    {
+        hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
+
+        while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
+            MoveHero( hero );
+        }
+
+        if ( !hero.MayStillMove() ) {
+            hero.SetModes( AI::HERO_MOVED );
+        }
+    }
 }
