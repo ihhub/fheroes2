@@ -296,9 +296,9 @@ bool Troops::AllTroopsIsRace( int race ) const
 
 bool Troops::CanJoinTroop( const Monster & mons ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
+    const_iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
     if ( it == end() )
-        it = std::find_if( begin(), end(), std::not1( std::mem_fun( &Troop::isValid ) ) );
+        it = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 
     return it != end();
 }
@@ -306,9 +306,9 @@ bool Troops::CanJoinTroop( const Monster & mons ) const
 bool Troops::JoinTroop( const Monster & mons, u32 count )
 {
     if ( mons.isValid() && count ) {
-        iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
+        iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
         if ( it == end() )
-            it = std::find_if( begin(), end(), std::not1( std::mem_fun( &Troop::isValid ) ) );
+            it = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 
         if ( it != end() ) {
             if ( ( *it )->isValid() )
@@ -440,7 +440,7 @@ u32 Troops::GetDamageMax( void ) const
 
 void Troops::Clean( void )
 {
-    std::for_each( begin(), end(), std::mem_fun( &Troop::Reset ) );
+    std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
 }
 
 void Troops::UpgradeTroops( const Castle & castle )
@@ -459,7 +459,7 @@ void Troops::UpgradeTroops( const Castle & castle )
 
 Troop * Troops::GetFirstValid( void )
 {
-    iterator it = std::find_if( begin(), end(), std::mem_fun( &Troop::isValid ) );
+    iterator it = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isValid(); } );
     return it == end() ? NULL : *it;
 }
 
@@ -520,7 +520,8 @@ Troops Troops::GetOptimized( void ) const
 
     for ( const_iterator it1 = begin(); it1 != end(); ++it1 )
         if ( ( *it1 )->isValid() ) {
-            iterator it2 = std::find_if( result.begin(), result.end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), ( *it1 )->GetID() ) );
+            const int monsterId = ( *it1 )->GetID();
+            iterator it2 = std::find_if( result.begin(), result.end(), [monsterId]( const Troop * troop ) { return troop->isMonster( monsterId ); } );
 
             if ( it2 == result.end() )
                 result.push_back( new Troop( **it1 ) );

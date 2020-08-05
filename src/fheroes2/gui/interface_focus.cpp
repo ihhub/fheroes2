@@ -102,7 +102,7 @@ void Interface::Basic::ResetFocus( int priority )
         case GameFocus::FIRSTHERO: {
             const KingdomHeroes & heroes = myKingdom.GetHeroes();
             // skip sleeping
-            KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), std::not1( std::bind2nd( std::mem_fun( &Heroes::Modes ), Heroes::SLEEPER ) ) );
+            KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
 
             if ( it != heroes.end() )
                 SetFocus( *it );

@@ -608,24 +608,24 @@ int Battle::Arena::GetOppositeColor( int col ) const
 
 Battle::Unit * Battle::Arena::GetTroopUID( u32 uid )
 {
-    Units::iterator it = std::find_if( army1->begin(), army1->end(), std::bind2nd( std::mem_fun( &Unit::isUID ), uid ) );
+    Units::iterator it = std::find_if( army1->begin(), army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
     if ( it != army1->end() )
         return *it;
 
-    it = std::find_if( army2->begin(), army2->end(), std::bind2nd( std::mem_fun( &Unit::isUID ), uid ) );
+    it = std::find_if( army2->begin(), army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
     return it != army2->end() ? *it : NULL;
 }
 
 const Battle::Unit * Battle::Arena::GetTroopUID( u32 uid ) const
 {
-    Units::const_iterator it = std::find_if( army1->begin(), army1->end(), std::bind2nd( std::mem_fun( &Unit::isUID ), uid ) );
+    Units::const_iterator it = std::find_if( army1->begin(), army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
     if ( it != army1->end() )
         return *it;
 
-    it = std::find_if( army2->begin(), army2->end(), std::bind2nd( std::mem_fun( &Unit::isUID ), uid ) );
+    it = std::find_if( army2->begin(), army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
     return it != army2->end() ? *it : NULL;
 }
