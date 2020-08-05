@@ -28,7 +28,7 @@ namespace AI
 {
     namespace
     {
-        const int temporaryHeroScanDist = 15; 
+        const int temporaryHeroScanDist = 15;
     }
 
     bool MoveHero( Heroes & hero )
