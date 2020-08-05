@@ -30,7 +30,7 @@ namespace AI
     public:
         Normal();
         void KingdomTurn( Kingdom & kingdom );
-        void CastleTurn( Castle & castle );
+        void CastleTurn( Castle & castle, bool defensive = false );
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
         void HeroTurn( Heroes & hero );
     };

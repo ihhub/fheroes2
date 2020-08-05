@@ -115,11 +115,16 @@ namespace AI
         return Build( castle, GetDefensiveStructures( castle.GetRace() ), 10 );
     }
 
-    void Normal::CastleTurn( Castle & castle )
+    void Normal::CastleTurn( Castle & castle, bool defensive )
     {
-        CastleDevelopment( castle );
+        if ( defensive ) {
+            Build( castle, GetDefensiveStructures( castle.GetRace() ) );
 
-        if ( world.BeginWeek() )
+            // Implement a smarter monster recruit option
             castle.RecruitAllMonsters();
+        }
+        else {
+            CastleDevelopment( castle );
+        }
     }
 }

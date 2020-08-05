@@ -73,7 +73,7 @@ namespace AI
 
     void Base::CastleAfterBattle( Castle &, bool attacker_wins ) {}
 
-    void Base::CastleTurn( Castle & ) {}
+    void Base::CastleTurn( Castle & castle, bool defensive ) {}
 
     void Base::CastleAdd( const Castle & ) {}
 

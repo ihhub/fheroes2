@@ -124,7 +124,7 @@ namespace AI
             castle.RecruitAllMonsters();
     }
 
-    void Simple::CastleTurn( Castle & castle )
+    void Simple::CastleTurn( Castle & castle, bool defensive )
     {
         // skip neutral town
         if ( castle.GetColor() == Color::NONE )
