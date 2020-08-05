@@ -29,43 +29,62 @@ namespace AI
 {
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
+        const int difficulty = Settings::Get().GameDifficulty();
         const int color = kingdom.GetColor();
-        KingdomHeroes & heroes = kingdom.GetHeroes();
-        KingdomCastles & castles = kingdom.GetCastles();
 
         if ( kingdom.isLoss() || color == Color::NONE ) {
             kingdom.LossPostActions();
             return;
         }
 
-        if ( !Settings::Get().MusicMIDI() )
-            AGG::PlayMusic( MUS::COMPUTER_TURN );
-
+        // reset indicator
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
-
-        // indicator
         status.RedrawTurnProgress( 0 );
+
+        AGG::PlayMusic( MUS::COMPUTER_TURN );
+        KingdomHeroes & heroes = kingdom.GetHeroes();
+        KingdomCastles & castles = kingdom.GetCastles();
+
+        // Step 1. Scan visible map (based on game difficulty), add goals and threats
+        status.RedrawTurnProgress( 1 );
+
+        // Step 2. Update AI variables and recalculate resource budget
+        int combinedHeroStrength = 0;
+        for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
+            if ( *it ) {
+                combinedHeroStrength += ( *it )->GetArmy().GetStrength();
+            }
+        }
 
         size_t heroLimit = Maps::XLARGE > world.w() ? ( Maps::LARGE > world.w() ? 2 : 3 ) : 4;
         if ( _personality == EXPLORER )
             heroLimit++;
 
-        // Scan visible map
-
-        status.RedrawTurnProgress( 1 );
-
-        // Buy heroes, adjust roles
-
+        // Step 3. Buy new heroes, adjust roles, sort heroes based on priority or strength
+        if ( heroes.size() < heroLimit ) {
+            // Pick appropriate castle to buy hero from
+        }
         VecHeroes sortedHeroList = heroes;
-        // Sort
 
         status.RedrawTurnProgress( 2 );
 
+        // Step 4. Move heroes until they have nothing to do (HERO_WAITING or HERO_MOVED state)
         size_t heroesMovedCount = 0;
-        for ( VecHeroes::iterator it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
+        for ( auto it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
             if ( *it ) {
                 HeroTurn( **it );
 
+                if ( ( *it )->Modes( HERO_MOVED ) ) {
+                    heroesMovedCount++;
+                    status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
+                }
+            }
+        }
+
+        // Step 5. Repeat process (maybe there was a path unlocked by a stronger hero)
+        for ( auto it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
+            if ( *it && !( *it )->Modes( HERO_MOVED ) ) {
+                HeroTurn( **it );
                 heroesMovedCount++;
                 status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
             }
@@ -73,6 +92,7 @@ namespace AI
 
         status.RedrawTurnProgress( 9 );
 
+        // Step 6. Castle development according to kingdom budget
         for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
             if ( *it ) {
                 CastleTurn( **it );
