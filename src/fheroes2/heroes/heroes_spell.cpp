@@ -514,9 +514,8 @@ bool ActionSpellTownPortal( Heroes & hero )
         listBox.Unselect();
         listBox.Redraw();
 
-        const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
-        Button buttonOkay( px + 40, area.y + 148, system, 1, 2 );
-        Button buttonCancel( px + 40, area.y + 173, system, 3, 4 );
+        Button buttonOkay( px + 40, area.y + 148, ICN::REQUESTS, 1, 2 );
+        Button buttonCancel( px + 40, area.y + 173, ICN::REQUESTS, 3, 4 );
         buttonOkay.Draw();
         buttonCancel.Draw();
 
