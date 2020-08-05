@@ -26,15 +26,16 @@
 
 namespace AI
 {
+    constexpr int temporaryHeroScanDist = 15;
+
     bool MoveHero( Heroes & hero )
     {
         // FIXME: Very basic set up, targets and priorities should be fed from AI Kingdom
         const int heroIndex = hero.GetIndex();
 
         // Maps::GetAroundIndexes should sort tiles internally
-        const Maps::Indexes & seenTiles = Maps::GetAroundIndexes( heroIndex, 15, true );
+        const Maps::Indexes & seenTiles = Maps::GetAroundIndexes( heroIndex, temporaryHeroScanDist, true );
         for ( auto it = seenTiles.begin(); it != seenTiles.end(); ++it ) {
-            Maps::Tiles & tile = world.GetTiles( *it );
             if ( HeroesValidObject( hero, *it ) && hero.GetPath().Calculate( *it ) ) {
                 HeroesMove( hero );
                 return true;
