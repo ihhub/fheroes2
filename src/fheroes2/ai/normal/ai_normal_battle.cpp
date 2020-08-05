@@ -36,8 +36,8 @@ namespace AI
 {
     bool CheckBattleRetreat()
     {
-        // FIXME: placeholder
-        return false;
+        // FIXME: force AI retreat from battle since battle logic is not implemented
+        return true;
     }
 
     bool CheckCommanderCanSpellcast( const Arena & arena, const HeroBase * commander )

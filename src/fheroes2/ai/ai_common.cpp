@@ -40,7 +40,7 @@ namespace AI
         case AI::NORMAL:
             return normal;
         }
-        return normal;
+        return empty;
     }
 
     bool BuildIfAvailable( Castle & castle, int building )
