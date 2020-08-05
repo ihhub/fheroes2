@@ -2533,7 +2533,7 @@ Castle * VecCastles::Get( const Point & position ) const
 
 Castle * VecCastles::GetFirstCastle( void ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::mem_fun( &Castle::isCastle ) );
+    const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
     return end() != it ? *it : NULL;
 }
 

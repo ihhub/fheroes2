@@ -181,11 +181,11 @@ namespace AI
 
         // set hunters
         if ( ai.capital ) {
-            const size_t hunters = std::count_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_HUNTER ) );
+            const size_t hunters = std::count_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->Modes( AI::HEROES_HUNTER ); } );
 
             // every time
             if ( 0 == hunters && heroes.size() ) {
-                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), std::not1( std::bind2nd( std::mem_fun( &Heroes::Modes ), Heroes::PATROL ) ) );
+                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::PATROL ); } );
 
                 if ( it != heroes.end() && !ai.capital->GetHeroes().Guest() )
                     HeroesSetHunterWithTarget( ( *it ), ai.capital->GetIndex() );
@@ -193,7 +193,7 @@ namespace AI
             else
                 // each month
                 if ( world.BeginMonth() && 1 < world.CountDay() ) {
-                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_HUNTER ) );
+                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->Modes( AI::HEROES_HUNTER ); } );
 
                 if ( it != heroes.end() && !ai.capital->GetHeroes().Guest() )
                     HeroesSetHunterWithTarget( *it, ai.capital->GetIndex() );
