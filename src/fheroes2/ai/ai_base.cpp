@@ -53,13 +53,10 @@ namespace AI
         switch ( _personality ) {
         case WARRIOR:
             return "Warrior";
-            break;
         case BUILDER:
             return "Builder";
-            break;
         case EXPLORER:
             return "Explorer";
-            break;
         default:
             break;
         }
@@ -69,38 +66,38 @@ namespace AI
 
     void Base::Reset() {}
 
-    void Base::CastlePreBattle( Castle & castle ) {}
+    void Base::CastlePreBattle( Castle & ) {}
 
-    void Base::CastleAfterBattle( Castle & castle, bool attackerWins ) {}
+    void Base::CastleAfterBattle( Castle &, bool ) {}
 
-    void Base::CastleTurn( Castle & castle, bool defensive ) {}
+    void Base::CastleTurn( Castle &, bool ) {}
 
-    void Base::CastleAdd( const Castle & castle ) {}
+    void Base::CastleAdd( const Castle & ) {}
 
-    void Base::CastleRemove( const Castle & castle ) {}
+    void Base::CastleRemove( const Castle & ) {}
 
-    void Base::HeroesAdd( const Heroes & hero ) {}
+    void Base::HeroesAdd( const Heroes & ) {}
 
-    void Base::HeroesRemove( const Heroes & hero ) {}
+    void Base::HeroesRemove( const Heroes & ) {}
 
-    void Base::HeroesPreBattle( HeroBase & hero ) {}
+    void Base::HeroesPreBattle( HeroBase & ) {}
 
-    void Base::HeroesAfterBattle( HeroBase & hero ) {}
+    void Base::HeroesAfterBattle( HeroBase & ) {}
 
-    void Base::HeroesActionNewPosition( Heroes & hero ) {}
+    void Base::HeroesActionNewPosition( Heroes & ) {}
 
-    void Base::HeroesClearTask( const Heroes & hero ) {}
+    void Base::HeroesClearTask( const Heroes & ) {}
 
     std::string Base::HeroesString( const Heroes & hero )
     {
         return "";
     }
 
-    void Base::HeroesActionComplete( Heroes & hero, int index ) {}
+    void Base::HeroesActionComplete( Heroes &, int ) {}
 
-    void Base::HeroesLevelUp( Heroes & hero ) {}
+    void Base::HeroesLevelUp( Heroes & ) {}
 
-    void Base::HeroesPostLoad( Heroes & hero ) {}
+    void Base::HeroesPostLoad( Heroes & ) {}
 
     bool Base::HeroesSkipFog()
     {

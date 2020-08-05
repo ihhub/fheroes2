@@ -29,13 +29,13 @@ namespace AI
 {
     struct buildOrder
     {
-        building_t building;
-        int priority;
+        building_t building = BUILD_NOTHING;
+        int priority = 1;
     };
 
     const std::vector<buildOrder> & GetDefensiveStructures( int type )
     {
-        static std::vector<buildOrder> defensive
+        static const std::vector<buildOrder> defensive
             = {{BUILD_LEFTTURRET, 1}, {BUILD_RIGHTTURRET, 1}, {BUILD_MOAT, 1}, {BUILD_CAPTAIN, 1}, {BUILD_SPEC, 2}, {BUILD_TAVERN, 1}};
 
         return defensive;
@@ -43,7 +43,7 @@ namespace AI
 
     const std::vector<buildOrder> & GetBuildOrder( int type )
     {
-        static std::vector<buildOrder> genericBuildOrder
+        static const std::vector<buildOrder> genericBuildOrder
             = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},      {DWELLING_UPGRADE7, 1}, {DWELLING_UPGRADE6, 1}, {DWELLING_MONSTER6, 1}, {DWELLING_UPGRADE5, 1},
                {DWELLING_MONSTER5, 1}, {DWELLING_UPGRADE4, 1}, {DWELLING_MONSTER4, 1}, {DWELLING_UPGRADE3, 2}, {DWELLING_MONSTER3, 2}, {DWELLING_UPGRADE2, 3},
                {DWELLING_MONSTER2, 3}, {DWELLING_MONSTER1, 4}, {BUILD_MAGEGUILD1, 2},  {BUILD_WEL2, 10},       {BUILD_TAVERN, 5},      {BUILD_THIEVESGUILD, 10},
@@ -51,21 +51,21 @@ namespace AI
 
         // De-prioritizing dwelling 5 (you can reach 6 without it), 1 and upgrades of 3 and 4
         // Well, tavern and Archery upgrade are more important
-        static std::vector<buildOrder> knightBuildOrder
+        static const std::vector<buildOrder> knightBuildOrder
             = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},      {DWELLING_UPGRADE6, 2}, {DWELLING_MONSTER6, 1},   {DWELLING_UPGRADE5, 2}, {DWELLING_MONSTER5, 2},
                {DWELLING_UPGRADE4, 2}, {DWELLING_MONSTER4, 1}, {DWELLING_UPGRADE3, 2}, {DWELLING_MONSTER3, 1},   {DWELLING_UPGRADE2, 1}, {DWELLING_MONSTER2, 3},
                {DWELLING_MONSTER1, 4}, {BUILD_WELL, 1},        {BUILD_TAVERN, 1},      {BUILD_MAGEGUILD1, 2},    {BUILD_MAGEGUILD2, 3},  {BUILD_MAGEGUILD3, 5},
                {BUILD_MAGEGUILD4, 5},  {BUILD_MAGEGUILD5, 5},  {BUILD_SPEC, 5},        {BUILD_THIEVESGUILD, 10}, {BUILD_WEL2, 20}};
 
         // Priority on Dwellings 5/6 and Mage guild level 2
-        static std::vector<buildOrder> necromancerBuildOrder
+        static const std::vector<buildOrder> necromancerBuildOrder
             = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},      {DWELLING_UPGRADE6, 1}, {DWELLING_MONSTER6, 1}, {DWELLING_UPGRADE5, 2},
                {DWELLING_MONSTER5, 1}, {BUILD_MAGEGUILD1, 1},  {DWELLING_UPGRADE4, 2}, {DWELLING_MONSTER4, 1}, {DWELLING_UPGRADE3, 3},
                {DWELLING_MONSTER3, 3}, {DWELLING_UPGRADE2, 4}, {DWELLING_MONSTER2, 2}, {DWELLING_MONSTER1, 3}, {BUILD_MAGEGUILD2, 2},
                {BUILD_WEL2, 8},        {BUILD_MAGEGUILD3, 4},  {BUILD_MAGEGUILD4, 5},  {BUILD_MAGEGUILD5, 5},  {BUILD_SHRINE, 10}};
 
         // Priority on Mage tower/guild and library
-        static std::vector<buildOrder> wizardBuildOrder
+        static const std::vector<buildOrder> wizardBuildOrder
             = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},      {DWELLING_UPGRADE6, 1}, {DWELLING_MONSTER6, 1}, {DWELLING_UPGRADE5, 1},
                {DWELLING_MONSTER5, 1}, {DWELLING_MONSTER4, 1}, {DWELLING_MONSTER3, 1}, {DWELLING_MONSTER2, 1}, {DWELLING_MONSTER1, 1},
                {BUILD_MAGEGUILD1, 1},  {DWELLING_UPGRADE3, 4}, {BUILD_SPEC, 2},        {BUILD_WEL2, 8},        {BUILD_MAGEGUILD2, 3},
@@ -85,9 +85,9 @@ namespace AI
         return genericBuildOrder;
     }
 
-    bool Build( Castle & castle, const std::vector<buildOrder> & bList, int multiplier = 1 )
+    bool Build( Castle & castle, const std::vector<buildOrder> & buildOrderList, int multiplier = 1 )
     {
-        for ( std::vector<buildOrder>::const_iterator it = bList.begin(); it != bList.end(); ++it ) {
+        for ( std::vector<buildOrder>::const_iterator it = buildOrderList.begin(); it != buildOrderList.end(); ++it ) {
             const int priority = it->priority * multiplier;
             if ( priority == 1 ) {
                 if ( BuildIfAvailable( castle, it->building ) )

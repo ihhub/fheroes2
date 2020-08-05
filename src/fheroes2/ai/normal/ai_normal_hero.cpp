@@ -26,7 +26,10 @@
 
 namespace AI
 {
-    constexpr int temporaryHeroScanDist = 15;
+    namespace
+    {
+        const int temporaryHeroScanDist = 15; 
+    }
 
     bool MoveHero( Heroes & hero )
     {

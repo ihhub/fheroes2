@@ -99,11 +99,9 @@ namespace AI
         virtual void Reset();
 
     protected:
-        int _personality;
+        int _personality = NONE;
 
-        Base()
-            : _personality( NONE )
-        {}
+        Base() {}
     };
 
     Base & Get( AI_TYPE type = SIMPLE );

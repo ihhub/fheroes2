@@ -81,7 +81,7 @@ namespace AI
                 HeroTurn( **it );
 
                 if ( ( *it )->Modes( HERO_MOVED ) ) {
-                    heroesMovedCount++;
+                    ++heroesMovedCount;
                     status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
                 }
             }
@@ -91,7 +91,7 @@ namespace AI
         for ( auto it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
             if ( *it && !( *it )->Modes( HERO_MOVED ) ) {
                 HeroTurn( **it );
-                heroesMovedCount++;
+                ++heroesMovedCount;
                 status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
             }
         }

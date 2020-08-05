@@ -65,8 +65,8 @@ namespace AI
         const Force & enemyForce = arena.GetForce( myColor, true );
 
         // This should filter out all invalid units
-        Units friendly = Units( friendlyForce, true );
-        Units enemies = Units( enemyForce, true );
+        const Units friendly( friendlyForce, true );
+        const Units enemies( enemyForce, true );
 
         // Step 2. Friendly and enemy army analysis
         double myShooterStr = 0;
@@ -75,7 +75,7 @@ namespace AI
         double averageEnemyDefense = 0;
 
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
-            Unit & unit = **it;
+            const Unit & unit = **it;
 
             if ( unit.isArchers() ) {
                 DEBUG( DBG_AI, DBG_TRACE, "Friendly shooter: " << unit.GetCount() << " " << unit.GetName() );
@@ -84,7 +84,7 @@ namespace AI
         }
 
         for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-            Unit & unit = **it;
+            const Unit & unit = **it;
 
             averageEnemyAttack += unit.GetAttack();
             averageEnemyDefense += unit.GetDefense();
