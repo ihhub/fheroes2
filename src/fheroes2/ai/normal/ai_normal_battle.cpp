@@ -34,8 +34,23 @@ using namespace Battle;
 
 namespace AI
 {
+    bool CheckBattleRetreat()
+    {
+        // FIXME: placeholder
+        return false;
+    }
+
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
+        if ( CheckBattleRetreat() ) {
+            // Cast maximum damage spell
+
+            actions.push_back( Command( MSG_BATTLE_RETREAT ) );
+            actions.push_back( Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+            return;
+        }
+
+        const int difficulty = Settings::Get().GameDifficulty();
         const int myColor = currentUnit.GetColor();
 
         Board * board = Arena::GetBoard();
@@ -53,9 +68,9 @@ namespace AI
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
             Unit * unit = *it;
 
-            if ( unit && unit->isArchers() ) {
-                DEBUG( DBG_AI, DBG_TRACE, "Friendly shooter: " << unit->GetName() << " count " << unit->GetCount() );
-                myShooterStr += currentUnit.GetStrength();
+            if ( unit && unit->isValid() && unit->isArchers() ) {
+                DEBUG( DBG_AI, DBG_TRACE, "Friendly shooter: " << unit->String() );
+                myShooterStr += unit->GetStrength();
             }
         }
 
@@ -63,8 +78,8 @@ namespace AI
             Unit * unit = *it;
 
             if ( unit && unit->isValid() && unit->isArchers() ) {
-                DEBUG( DBG_AI, DBG_TRACE, "Enemy shooter: " << unit->GetName() << " count " << unit->GetCount() );
-                enemyShooterStr += currentUnit.GetStrength();
+                DEBUG( DBG_AI, DBG_TRACE, "Enemy shooter: " << unit->GetCount() << " " << unit->GetName() );
+                enemyShooterStr += unit->GetStrength();
             }
         }
 
@@ -76,6 +91,7 @@ namespace AI
             towerStr += arena.GetTower( TWR_LEFT )->GetScoreQuality( currentUnit );
             towerStr += arena.GetTower( TWR_CENTER )->GetScoreQuality( currentUnit );
             towerStr += arena.GetTower( TWR_RIGHT )->GetScoreQuality( currentUnit );
+            DEBUG( DBG_AI, DBG_TRACE, "Castle strength: " << towerStr );
 
             if ( myColor == castle->GetColor() ) {
                 myShooterStr += towerStr;
@@ -90,9 +106,71 @@ namespace AI
         }
 
         DEBUG( DBG_AI, DBG_TRACE, "Comparing shooters: " << myShooterStr << ", vs enemy " << enemyShooterStr );
+        const bool offensiveTactics = myShooterStr < enemyShooterStr;
 
-        //const Unit * enemy = arena.GetEnemyMaxQuality( myColor );
-        //actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), enemy->GetUID(), enemy->GetHeadIndex(), 0 ) );
+        if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
+            // Ranged unit decision tree
+            if ( currentUnit.isHandFighting() ) {
+                // Current ranged unit is blocked by the enemy
+                int damageDiff = 0;
+
+                // Loop through all adjacent enemy units:
+                // 1. Calculate potential damage done
+                // 2. Calculate enemy retaliation after
+                // 3. Update damageDiff if it's bigger than current value
+                // 4. Save target selection
+
+                if ( damageDiff > 0 ) {
+                    // attack selected target
+                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << damageDiff );
+                }
+                else {
+                    // Kiting enemy
+                    // Search for a safe spot unit can move away
+                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer kiting enemy" );
+
+                    // Worst case scenario - Skip turn
+                }
+            }
+            else {
+                // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
+                // Attack the highest value unit
+
+                // const Unit * enemy = arena.GetEnemyMaxQuality( myColor );
+                // actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), enemy->GetUID(), enemy->GetHeadIndex(), 0 ) );
+                DEBUG( DBG_AI, DBG_INFO,
+                       currentUnit.GetName() << " archer focusing enemy ..."
+                                             << " threat level: ..." );
+            }
+        }
+        else if ( offensiveTactics ) {
+            // Melee unit - Offensive action
+
+            // 1. Find highest value enemy unit, save as priority target
+            // 2. If priority within reach, attack
+            // 3. Otherwise search for another target nearby
+            // 4.a. Attack if found
+            // 4.b. Else move closer to priority target
+            DEBUG( DBG_AI, DBG_INFO,
+                   currentUnit.GetName() << " melee offense, focus enemy ..."
+                                         << " threat level: ..." );
+        }
+        else {
+            // Melee unit - Defensive action
+
+            // Search for enemy units threatening our archers within range
+            const bool archersUnderThreat = false;
+
+            if ( archersUnderThreat ) {
+                DEBUG( DBG_AI, DBG_INFO,
+                       currentUnit.GetName() << " defending against ..."
+                                             << " threat level: ..." );
+            }
+            else {
+                // Find best friendly archer and move to them
+                DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " protecting unit ..." );
+            }
+        }
 
         actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
     }
