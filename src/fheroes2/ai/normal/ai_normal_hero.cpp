@@ -18,29 +18,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AI_NORMAL_H
-#define H2AI_NORMAL_H
-
-#include "ai.h"
+#include "ai_normal.h"
+#include "heroes.h"
+#include "maps.h"
+#include "mp2.h"
+#include "world.h"
 
 namespace AI
 {
-    class Normal : public Base
+    namespace
     {
-    public:
-        Normal();
-        void KingdomTurn( Kingdom & kingdom );
-        void CastleTurn( Castle & castle, bool defensive = false );
-        void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-        void HeroTurn( Heroes & hero );
-    };
+        const int temporaryHeroScanDist = 15;
+    }
 
-    struct MapScanNode
+    bool MoveHero( Heroes & hero )
     {
-        MapScanNode * prev = NULL;
-        int index = 0;
-        uint32_t distance = 0;
-    };
+        // FIXME: Very basic set up, targets and priorities should be fed from AI Kingdom
+        const int heroIndex = hero.GetIndex();
+
+        // Maps::GetAroundIndexes should sort tiles internally
+        const Maps::Indexes & seenTiles = Maps::GetAroundIndexes( heroIndex, temporaryHeroScanDist, true );
+        for ( auto it = seenTiles.begin(); it != seenTiles.end(); ++it ) {
+            if ( HeroesValidObject( hero, *it ) && hero.GetPath().Calculate( *it ) ) {
+                HeroesMove( hero );
+                return true;
+            }
+        }
+
+        hero.SetModes( AI::HERO_WAITING );
+        return false;
+    }
+
+    void Normal::HeroTurn( Heroes & hero )
+    {
+        hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
+
+        while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
+            MoveHero( hero );
+        }
+
+        if ( !hero.MayStillMove() ) {
+            hero.SetModes( AI::HERO_MOVED );
+        }
+    }
 }
-
-#endif

@@ -1508,13 +1508,13 @@ namespace AI
         if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
             Heroes::ScholarAction( hero1, hero2 );
 
-        if ( hero1.Modes( AI::HEROES_HUNTER ) )
+        if ( hero1.Modes( AI::HERO_HUNTER ) )
             hero1.GetArmy().JoinStrongestFromArmy( hero2.GetArmy() );
-        else if ( hero2.Modes( AI::HEROES_HUNTER ) )
+        else if ( hero2.Modes( AI::HERO_HUNTER ) )
             hero2.GetArmy().JoinStrongestFromArmy( hero1.GetArmy() );
-        else if ( hero1.Modes( AI::HEROES_SCOUTER ) )
+        else if ( hero1.Modes( AI::HERO_SCOUT ) )
             hero1.GetArmy().KeepOnlyWeakestTroops( hero2.GetArmy() );
-        else if ( hero2.Modes( AI::HEROES_SCOUTER ) )
+        else if ( hero2.Modes( AI::HERO_SCOUT ) )
             hero2.GetArmy().KeepOnlyWeakestTroops( hero1.GetArmy() );
 
         // artifacts change

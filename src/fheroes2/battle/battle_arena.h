@@ -109,6 +109,7 @@ namespace Battle
         TargetsInfo GetTargetsForSpells( const HeroBase *, const Spell &, s32 );
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & );
 
+        bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg );
 
         bool GraveyardAllowResurrect( s32, const Spell & ) const;
