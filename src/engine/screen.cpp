@@ -20,8 +20,14 @@
 
 #include "screen.h"
 #include "../../tools/palette_h2.h"
+
 #include <SDL_version.h>
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_render.h>
 #include <SDL_video.h>
+#else
+#include <SDL_video.h>
+#endif
 
 #include <algorithm>
 #include <cmath>
@@ -145,20 +151,195 @@ namespace
         RenderEngine()
             : _window( NULL )
             , _surface( NULL )
+            , _renderer( NULL )
+            , _texture( NULL )
         {}
 
-        virtual void clear() {}
-
-        virtual void render( const fheroes2::Display & ) {}
-
-        virtual bool allocate( uint32_t, uint32_t, bool )
+        virtual void clear()
         {
-            return false;
+            if ( _window != NULL ) {
+                SDL_DestroyWindow( _window );
+                _window = NULL;
+            }
+
+            if ( _renderer != NULL ) {
+                _renderer = NULL;
+                SDL_DestroyRenderer( _renderer );
+            }
+
+            if ( _texture != NULL ) {
+                SDL_DestroyTexture( _texture );
+                _texture = NULL;
+            }
+
+            if ( _surface != NULL ) {
+                SDL_FreeSurface( _surface );
+                _surface = NULL;
+            }
+        }
+
+        virtual void render( const fheroes2::Display & display )
+        {
+            if ( _surface == NULL )
+                return;
+
+            const uint32_t width = display.width();
+            const uint32_t height = display.height();
+
+            if ( SDL_MUSTLOCK( _surface ) )
+                SDL_LockSurface( _surface );
+
+            if ( _surface->format->BitsPerPixel == 32 ) {
+                const uint16_t pitch = _surface->pitch >> 2;
+                uint32_t * out = static_cast<uint32_t *>( _surface->pixels );
+                uint32_t * outEnd = out + width * height;
+                const uint8_t * in = display.image();
+                const uint32_t * transform = _palette32Bit.data();
+
+                for ( ; out != outEnd; ++out, ++in )
+                    *out = *( transform + *in );
+            }
+            else if ( _surface->format->BitsPerPixel == 8 ) {
+                if ( _surface->pixels != display.image() ) {
+                    memcpy( _surface->pixels, display.image(), width * height );
+                }
+            }
+
+            if ( SDL_MUSTLOCK( _surface ) )
+                SDL_UnlockSurface( _surface );
+
+            if ( SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch ) == 0 ) {
+                if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
+                    if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+                        SDL_RenderPresent( _renderer );
+                    }
+                }
+            }
+        }
+
+        virtual bool allocate( uint32_t width_, uint32_t height_, bool isFullScreen )
+        {
+            std::string previousWindowTitle;
+            int prevX = SDL_WINDOWPOS_CENTERED;
+            int prevY = SDL_WINDOWPOS_CENTERED;
+            if ( _window ) {
+                previousWindowTitle = SDL_GetWindowTitle( _window );
+                SDL_GetWindowPosition( _window, &prevX, &prevY );
+            }
+
+            clear();
+
+            const std::vector<std::pair<int, int> > resolutions = getAvailableResolutions();
+            if ( !resolutions.empty() ) {
+                const std::pair<int, int> correctResolution = GetNearestResolution( width_, height_, resolutions );
+                width_ = correctResolution.first;
+                height_ = correctResolution.second;
+            }
+
+            uint32_t flags = SDL_WINDOW_SHOWN;
+            if ( isFullScreen ) {
+#if defined( __WIN32__ )
+                flags |= SDL_WINDOW_FULLSCREEN;
+#else
+                flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
+            }
+
+            _window = SDL_CreateWindow( "", prevX, prevY, width_, height_, flags );
+            if ( _window == NULL ) {
+                clear();
+                return false;
+            }
+
+            _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
+            if ( _renderer == NULL ) {
+                clear();
+                return false;
+            }
+
+            _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
+            if ( _surface == NULL ) {
+                clear();
+                return false;
+            }
+
+            if ( _surface->w <= 0 || _surface->h <= 0 || static_cast<uint32_t>( _surface->w ) != width_ || static_cast<uint32_t>( _surface->h ) != height_ ) {
+                clear();
+                return false;
+            }
+
+            _createPalette();
+
+            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
+            if ( _texture == NULL ) {
+                clear();
+                return false;
+            }
+
+            return true;
         }
 
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
+        SDL_Renderer * _renderer;
+        SDL_Texture * _texture;
+
+        std::vector<uint32_t> _palette32Bit;
+        std::vector<SDL_Color> _palette8Bit;
+
+        int renderFlags() const
+        {
+#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
+            return SDL_RENDERER_SOFTWARE;
+#elif defined( __WIN32__ ) || defined( ANDROID )
+            return SDL_RENDERER_ACCELERATED;
+#else
+            return SDL_RENDERER_ACCELERATED;
+#endif
+        }
+
+        void _createPalette()
+        {
+            if ( _surface == NULL )
+                return;
+
+            if ( _surface->format->BitsPerPixel == 32 ) {
+                _palette32Bit.resize( 256u );
+
+                if ( _surface->format->Amask > 0 ) {
+                    for ( size_t i = 0; i < 256u; ++i ) {
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, kb_pal[i * 3] << 2, kb_pal[i * 3 + 1] << 2, kb_pal[i * 3 + 2] << 2, 255 );
+                    }
+                }
+                else {
+                    for ( size_t i = 0; i < 256u; ++i ) {
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[i * 3] << 2, kb_pal[i * 3 + 1] << 2, kb_pal[i * 3 + 2] << 2 );
+                    }
+                }
+            }
+            else if ( _surface->format->BitsPerPixel == 8 ) {
+                _palette8Bit.resize( 256 );
+                for ( uint32_t i = 0; i < 256; ++i ) {
+                    const uint32_t index = i * 3;
+                    SDL_Color & col = _palette8Bit[i];
+
+                    col.r = kb_pal[index] << 2;
+                    col.g = kb_pal[index + 1] << 2;
+                    col.b = kb_pal[index + 2] << 2;
+                }
+
+                SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
+
+                if ( !SDL_MUSTLOCK( _surface ) ) {
+                    // copy the image from display buffer to SDL surface
+                    fheroes2::Display & display = fheroes2::Display::instance();
+                    memcpy( _surface->pixels, display.image(), display.width() * display.height() );
+
+                    linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                }
+            }
+        }
     };
 #else
     class RenderEngine : public fheroes2::BaseRenderEngine
