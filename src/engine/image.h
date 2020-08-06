@@ -79,9 +79,10 @@ namespace fheroes2
     void ApplyPallete( const Image & in, Image & out, const std::vector<uint8_t> & palette );
 
     // draw one image onto another
-    void Blit( const Image & in, Image & out, bool flip = false );
-    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip = false );
-    void Blit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, bool flip = false );
+    void Blit( const Image & in, Image & out, bool flip = false, uint8_t alphaValue = 255u );
+    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip = false, uint8_t alphaValue = 255u );
+    void Blit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, bool flip = false,
+               uint8_t alphaValue = 255u );
 
     void Copy( const Image & in, Image & out );
     void Copy( const Image & in, uint32_t inX, uint32_t inY, Image & out, uint32_t outX, uint32_t outY, uint32_t width, uint32_t height );

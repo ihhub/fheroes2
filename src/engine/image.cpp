@@ -425,70 +425,138 @@ namespace fheroes2
         }
     }
 
-    void Blit( const Image & in, Image & out, bool flip )
+    void Blit( const Image & in, Image & out, bool flip, uint8_t alphaValue )
     {
-        Blit( in, 0, 0, out, 0, 0, in.width(), in.height(), flip );
+        Blit( in, 0, 0, out, 0, 0, in.width(), in.height(), flip, alphaValue );
     }
 
-    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip )
+    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip, uint8_t alphaValue )
     {
-        Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip );
+        Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip, alphaValue );
     }
 
-    void Blit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, bool flip )
+    void Blit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, bool flip, uint8_t alphaValue )
     {
         if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
             return;
         }
 
+        const bool applyAlpha = ( alphaValue != 255 );
+
         // Blitting one image onto another can be done only for image layer so we don't consider transform part of the output image
         const uint32_t widthIn = in.width();
         const uint32_t widthOut = out.width();
 
-        if ( flip ) {
-            const uint8_t * imageInY = in.image() + ( inY + height - 1 ) * widthIn + inX + width - 1;
-            const uint8_t * transformY = in.transform() + ( inY + height - 1 ) * widthIn + inX + width - 1;
-            uint8_t * imageOutY = out.image() + outY * out.width() + outX;
-            const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
+        if ( applyAlpha ) {
+            const uint8_t behindValue = 255 - alphaValue;
 
-            for ( ; imageOutY != imageOutYEnd; imageInY -= widthIn, transformY -= widthIn, imageOutY += widthOut ) {
-                const uint8_t * imageInX = imageInY;
-                const uint8_t * transformX = transformY;
-                uint8_t * imageOutX = imageOutY;
-                const uint8_t * imageOutXEnd = imageOutX + width;
+            if ( flip ) {
+                const uint8_t * imageInY = in.image() + ( inY + height - 1 ) * widthIn + inX + width - 1;
+                const uint8_t * transformY = in.transform() + ( inY + height - 1 ) * widthIn + inX + width - 1;
+                uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+                const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
-                for ( ; imageOutX != imageOutXEnd; --imageInX, --transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a tranformation
-                        if ( *transformX > 1 ) { // 1 is to skip data
-                            *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                for ( ; imageOutY != imageOutYEnd; imageInY -= widthIn, transformY -= widthIn, imageOutY += widthOut ) {
+                    const uint8_t * imageInX = imageInY;
+                    const uint8_t * transformX = transformY;
+                    uint8_t * imageOutX = imageOutY;
+                    const uint8_t * imageOutXEnd = imageOutX + width;
+
+                    for ( ; imageOutX != imageOutXEnd; --imageInX, --transformX, ++imageOutX ) {
+                        if ( *transformX > 0 ) { // apply a tranformation
+                            if ( *transformX > 1 ) { // 1 is to skip data
+                                *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                            }
+                        }
+                        else { // copy a pixel
+                            const uint8_t * inPAL = kb_pal + ( *imageInX ) * 3;
+                            const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
+
+                            const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
+                            const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
+                            const uint32_t blue = static_cast<uint32_t>( *( inPAL  + 2) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                         }
                     }
-                    else { // copy a pixel
-                        *imageOutX = *imageInX;
+                }
+            }
+            else {
+                const uint8_t * imageInY = in.image() + inY * widthIn + inX;
+                const uint8_t * transformY = in.transform() + inY * widthIn + inX;
+                uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+                const uint8_t * imageInYEnd = imageInY + height * widthIn;
+
+                for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
+                    const uint8_t * imageInX = imageInY;
+                    const uint8_t * transformX = transformY;
+                    uint8_t * imageOutX = imageOutY;
+                    const uint8_t * imageInXEnd = imageInX + width;
+
+                    for ( ; imageInX != imageInXEnd; ++imageInX, ++transformX, ++imageOutX ) {
+                        if ( *transformX > 0 ) { // apply a tranformation
+                            if ( *transformX > 1 ) { // 1 is to skip data
+                                *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                            }
+                        }
+                        else { // copy a pixel
+                            const uint8_t * inPAL = kb_pal + ( *imageInX ) * 3;
+                            const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
+
+                            const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
+                            const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
+                            const uint32_t blue = static_cast<uint32_t>( *( inPAL  + 2) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
+                        }
                     }
                 }
             }
         }
         else {
-            const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-            const uint8_t * transformY = in.transform() + inY * widthIn + inX;
-            uint8_t * imageOutY = out.image() + outY * out.width() + outX;
-            const uint8_t * imageInYEnd = imageInY + height * widthIn;
+            if ( flip ) {
+                const uint8_t * imageInY = in.image() + ( inY + height - 1 ) * widthIn + inX + width - 1;
+                const uint8_t * transformY = in.transform() + ( inY + height - 1 ) * widthIn + inX + width - 1;
+                uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+                const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
-                const uint8_t * imageInX = imageInY;
-                const uint8_t * transformX = transformY;
-                uint8_t * imageOutX = imageOutY;
-                const uint8_t * imageInXEnd = imageInX + width;
+                for ( ; imageOutY != imageOutYEnd; imageInY -= widthIn, transformY -= widthIn, imageOutY += widthOut ) {
+                    const uint8_t * imageInX = imageInY;
+                    const uint8_t * transformX = transformY;
+                    uint8_t * imageOutX = imageOutY;
+                    const uint8_t * imageOutXEnd = imageOutX + width;
 
-                for ( ; imageInX != imageInXEnd; ++imageInX, ++transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a tranformation
-                        if ( *transformX > 1 ) { // 1 is to skip data
-                            *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                    for ( ; imageOutX != imageOutXEnd; --imageInX, --transformX, ++imageOutX ) {
+                        if ( *transformX > 0 ) { // apply a tranformation
+                            if ( *transformX > 1 ) { // 1 is to skip data
+                                *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                            }
+                        }
+                        else { // copy a pixel
+                            *imageOutX = *imageInX;
                         }
                     }
-                    else { // copy a pixel
-                        *imageOutX = *imageInX;
+                }
+            }
+            else {
+                const uint8_t * imageInY = in.image() + inY * widthIn + inX;
+                const uint8_t * transformY = in.transform() + inY * widthIn + inX;
+                uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+                const uint8_t * imageInYEnd = imageInY + height * widthIn;
+
+                for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
+                    const uint8_t * imageInX = imageInY;
+                    const uint8_t * transformX = transformY;
+                    uint8_t * imageOutX = imageOutY;
+                    const uint8_t * imageInXEnd = imageInX + width;
+
+                    for ( ; imageInX != imageInXEnd; ++imageInX, ++transformX, ++imageOutX ) {
+                        if ( *transformX > 0 ) { // apply a tranformation
+                            if ( *transformX > 1 ) { // 1 is to skip data
+                                *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                            }
+                        }
+                        else { // copy a pixel
+                            *imageOutX = *imageInX;
+                        }
                     }
                 }
             }
