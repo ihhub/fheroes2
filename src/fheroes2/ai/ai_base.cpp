@@ -88,7 +88,7 @@ namespace AI
 
     void Base::HeroesClearTask( const Heroes & ) {}
 
-    std::string Base::HeroesString( const Heroes & hero )
+    std::string Base::HeroesString( const Heroes & )
     {
         return "";
     }

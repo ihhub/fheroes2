@@ -59,7 +59,6 @@ namespace AI
         const int difficulty = Settings::Get().GameDifficulty();
         const int myColor = currentUnit.GetColor();
 
-        Board * board = Arena::GetBoard();
         const HeroBase * commander = currentUnit.GetCommander();
         const Force & friendlyForce = arena.GetForce( myColor );
         const Force & enemyForce = arena.GetForce( myColor, true );
@@ -67,6 +66,7 @@ namespace AI
         // This should filter out all invalid units
         const Units friendly( friendlyForce, true );
         const Units enemies( enemyForce, true );
+        const size_t enemiesCount = enemies.size();
 
         // Step 2. Friendly and enemy army analysis
         double myShooterStr = 0;
@@ -94,16 +94,15 @@ namespace AI
                 enemyShooterStr += unit.GetStrength();
             }
         }
-        averageEnemyAttack /= enemies.size();
-        averageEnemyDefense /= enemies.size();
+        averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
+        averageEnemyDefense = ( enemiesCount > 0 ) ? averageEnemyDefense / enemiesCount : 1;
 
         // Step 3. Add castle siege (and battle arena) modifiers
         const Castle * castle = arena.GetCastle();
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->HasArtifact( Artifact::GOLDEN_BOW );
-            double towerStr = 0;
 
-            towerStr += arena.GetTower( TWR_LEFT )->GetScoreQuality( currentUnit );
+            double towerStr = arena.GetTower( TWR_LEFT )->GetScoreQuality( currentUnit );
             towerStr += arena.GetTower( TWR_CENTER )->GetScoreQuality( currentUnit );
             towerStr += arena.GetTower( TWR_RIGHT )->GetScoreQuality( currentUnit );
             DEBUG( DBG_AI, DBG_TRACE, "Castle strength: " << towerStr );
