@@ -474,7 +474,7 @@ namespace fheroes2
 
                             const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                             const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                            const uint32_t blue = static_cast<uint32_t>( *( inPAL  + 2) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                            const uint32_t blue = static_cast<uint32_t>( *( inPAL  + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
                             *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                         }
                     }
@@ -504,7 +504,7 @@ namespace fheroes2
 
                             const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                             const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                            const uint32_t blue = static_cast<uint32_t>( *( inPAL  + 2) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                            const uint32_t blue = static_cast<uint32_t>( *( inPAL  + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
                             *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                         }
                     }
