@@ -105,7 +105,7 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
     const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
 
     if ( castle ) {
-        Text text( castle->GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        Text text( castle->GetName().substr( 0, 10 ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 10, dsty );
     }
 }
