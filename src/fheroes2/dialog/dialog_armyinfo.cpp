@@ -92,7 +92,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     // button exit
     dst_pt.x = pos_rt.x + 415;
-    dst_pt.y = pos_rt.y + 225;
+    dst_pt.y = pos_rt.y + ( ( UPGRADE & flags ) ? 222 : 225 ); // in case of battle we shouldn't move this button up
     Button buttonExit( dst_pt.x, dst_pt.y, viewarmy, 3, 4 );
 
     if ( READONLY & flags ) {
