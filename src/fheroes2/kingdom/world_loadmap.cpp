@@ -1564,6 +1564,7 @@ void World::PostLoad( void )
     double obstacles = 0;
     const int width = w();
     const int heigth = h();
+    const Directions directions = Direction::All();
     std::vector<std::pair<int, int> > obsColumns;
     std::vector<std::pair<int, int> > obsRows;
     std::vector<std::pair<int, int> > connection;
@@ -1580,7 +1581,7 @@ void World::PostLoad( void )
 
             const int index = y * width + x;
             Maps::Tiles & tile = vec_tiles[index];
-            if ( tile.GetPassable() == 0 ) {
+            if ( tile.GetPassable() == 0 || tile.isWater() ) {
                 obstacles++;
                 obsColumns[x].second++;
                 obsRows[y].second++;
@@ -1596,14 +1597,14 @@ void World::PostLoad( void )
     for ( auto column : obsColumns ) {
         bool match = true;
         for ( int & val : emptyColumns ) {
-            if ( std::abs( val - column.first ) < width / 4 )
+            if ( std::abs( val - column.first ) < width / 5 )
                 match = false;
         }
 
         if ( match )
             emptyColumns.push_back( column.first );
 
-        if ( emptyColumns.size() > 4 )
+        if ( emptyColumns.size() > 5 )
             break;
     }
 
@@ -1611,35 +1612,46 @@ void World::PostLoad( void )
     for ( auto obsRow : obsRows ) {
         bool match = true;
         for ( int & val : emptyRows ) {
-            if ( std::abs( val - obsRow.first ) < width / 4 )
+            if ( std::abs( val - obsRow.first ) < width / 5 )
                 match = false;
         }
 
         if ( match )
             emptyRows.push_back( obsRow.first );
 
-        if ( emptyRows.size() > 4 )
+        if ( emptyRows.size() > 5 )
             break;
     }
 
-    std::vector<Point> regionCenters;
+    std::vector<int> regionCenters;
     for ( auto rowID : emptyRows ) {
         for ( auto colID : emptyColumns ) {
-            const Maps::Tiles & tile = vec_tiles[rowID * width + colID];
+            const int tileIndex = rowID * width + colID;
+            const Maps::Tiles & tile = vec_tiles[tileIndex];
             if ( tile.GetPassable() && !tile.isWater() ) {
-                regionCenters.push_back( Point( colID, rowID ) );
+                regionCenters.push_back( tileIndex );
+            }
+            else {
+                for ( int direction : directions ) {
+                    if ( Maps::isValidDirection( tileIndex, direction ) ) {
+                        const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
+                        const Maps::Tiles & newTile = vec_tiles[newIndex];
+                        if ( newTile.GetPassable() && !newTile.isWater() ) {
+                            regionCenters.push_back( newIndex );
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
 
-    std::vector<std::set<int> > openTiles(regionCenters.size());
+    std::vector<std::set<int> > openTiles( regionCenters.size() );
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-        const Point & pt = regionCenters[regionID];
-        openTiles[regionID].insert( pt.y * width + pt.x );
+        openTiles[regionID].insert( regionCenters[regionID] );
     }
 
     // Region growing
-    const Directions directions = Direction::All();
     for ( int radius = 0; radius < width / 2; ++radius ) {
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
             std::set<int> & tileSet = openTiles[regionID];
@@ -1671,9 +1683,9 @@ void World::PostLoad( void )
     std::sort( connection.begin(), connection.end(), []( const std::pair<int, int> & x, const std::pair<int, int> & y ) { return x.second > y.second; } );
 
     // view the hot spots
-    for ( auto conn : connection ) {
-        vec_tiles[conn.first]._region = conn.second;
-    }
+    // for ( auto conn : connection ) {
+    //    vec_tiles[conn.first]._region = conn.second;
+    //}
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
