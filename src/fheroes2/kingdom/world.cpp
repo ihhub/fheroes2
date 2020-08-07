@@ -1176,6 +1176,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     // update tile passable
     std::for_each( w.vec_tiles.begin(), w.vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
 
+    w.ComputeStaticAnalysis();
+
     // heroes postfix
     std::for_each( w.vec_heroes.begin(), w.vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
 

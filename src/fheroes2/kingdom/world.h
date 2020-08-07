@@ -254,6 +254,7 @@ public:
     static u32 GetUniq( void );
 
     void PostFixLoad( void );
+    void ComputeStaticAnalysis();
 
 private:
     World()

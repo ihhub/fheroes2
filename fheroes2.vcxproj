@@ -330,6 +330,7 @@
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\world.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\world_loadmap.cpp" />
+    <ClCompile Include="src\fheroes2\kingdom\world_regions.cpp" />
     <ClCompile Include="src\fheroes2\maps\ground.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_actions.cpp" />
