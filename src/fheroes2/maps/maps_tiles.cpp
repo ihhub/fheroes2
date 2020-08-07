@@ -1591,10 +1591,10 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( area.GetVisibleTileROI() & mp ) {
-        //Surface sf( Size( 31, 31 ), true );
-        Surface sf = PassableViewSurface( tile_passable );
-        if ( _region ) {
-            Text text( GetString( _region ), (_region < 100) ? Font::SMALL : Font::YELLOW_BIG );
+        Surface sf( Size( 31, 31 ), true );
+        //Surface sf = PassableViewSurface( tile_passable );
+        if ( _metadata ) {
+            Text text( GetString( _metadata ), Font::SMALL );
             text.Blit( 13, 13, sf );
         }
         area.BlitOnTile( dst, sf, 0, 0, mp );
@@ -1805,7 +1805,8 @@ std::string Maps::Tiles::String( void ) const
 
     os << "----------------:--------" << std::endl
        << "maps index      : " << GetIndex() << ", " << GetString( GetCenter() ) << std::endl
-       << "tile index      : " << TileSpriteIndex() << std::endl
+       << "region          : " << _region << std::endl
+       << "connections     : " << _metadata << std::endl
        << "ground          : " << Ground::String( GetGround() );
     if ( isRoad() ) {
         Addons::const_iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &TilesAddon::isRoad ), DIRECTION_ALL ) );

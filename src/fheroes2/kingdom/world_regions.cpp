@@ -44,20 +44,22 @@ void World::GrowRegion( std::set<int> & openTiles, std::vector<std::pair<int, in
 
     std::set<int> newTiles;
     for ( const int & tileIndex : tileSet ) {
-        vec_tiles[tileIndex]._region = regionID;
-        for ( int direction : directions ) {
-            if ( Maps::isValidDirection( tileIndex, direction ) && ( vec_tiles[tileIndex].GetPassable() & direction ) ) {
-                const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
-                const Maps::Tiles & newTile = vec_tiles[newIndex];
-                if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
-                    if ( newTile._region ) {
-                        if ( newTile._region != regionID ) {
-                            connection[newIndex].second++;
-                            // std::cout << "Map tile " << newIndex << " hit! " << newTile._region << " to " << regionID + 1 << std::endl;
+        if ( !vec_tiles[tileIndex]._region ) {
+            vec_tiles[tileIndex]._region = regionID;
+
+            for ( int direction : directions ) {
+                if ( Maps::isValidDirection( tileIndex, direction ) && ( vec_tiles[tileIndex].GetPassable() & direction ) ) {
+                    const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
+                    const Maps::Tiles & newTile = vec_tiles[newIndex];
+                    if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
+                        if ( newTile._region ) {
+                            if ( newTile._region != regionID ) {
+                                connection[newIndex].second++;
+                            }
                         }
-                    }
-                    else {
-                        newTiles.insert( Maps::GetDirectionIndex( tileIndex, direction ) );
+                        else {
+                            newTiles.insert( Maps::GetDirectionIndex( tileIndex, direction ) );
+                        }
                     }
                 }
             }
@@ -68,38 +70,7 @@ void World::GrowRegion( std::set<int> & openTiles, std::vector<std::pair<int, in
 
 void World::ComputeStaticAnalysis()
 {
-    int latestRegionID = 1;
-    // plain for loop to make sure tile access is sequential
-    // for ( size_t index = 0; index < vec_tiles.size(); ++index ) {
-    //    Maps::Tiles & tile = vec_tiles[index];
-    //    if ( tile.GetPassable() ) {
-    //        if ( index >= w() ) {
-    //            const Maps::Tiles & topTile = vec_tiles[index - w()];
-    //            if ( topTile._region && topTile.isWater() == tile.isWater() ) {
-    //                tile._region = topTile._region;
-    //            }
-    //        }
-    //        //if ( tile._region == 0 && index >= w() && index + 1 % w() != 0 ) {
-    //        if ( tile._region == 0 && index + 1 % w() != 0 ) {
-    //            const Maps::Tiles & topRightTile = vec_tiles[index + 1];
-    //            if ( topRightTile._region && topRightTile.isWater() == tile.isWater() ) {
-    //                tile._region = topRightTile._region;
-    //            }
-    //        }
-    //        if ( tile._region == 0 && index % w() ) {
-    //            const Maps::Tiles & leftTile = vec_tiles[index - 1];
-    //            if ( leftTile._region && leftTile.isWater() == tile.isWater() ) {
-    //                tile._region = leftTile._region;
-    //            }
-    //        }
-
-    //        if ( tile._region == 0 ) {
-    //            tile._region = latestRegionID++;
-    //        }
-    //    }
-    //}
-
-    double obstacles = 0;
+    int obstacles = 0;
     const int width = w();
     const int heigth = h();
     const int mapSize = std::max( width, heigth );
@@ -111,8 +82,8 @@ void World::ComputeStaticAnalysis()
 
     const uint32_t castleRegionSize = 16;
     const uint32_t extraRegionSize = 16;
+    const uint32_t emptyLineFrequency = 8;
     const int waterRegionSize = mapSize / 3;
-    const int emptyLineFrequency = 8;
 
     for ( int x = 0; x < width; x++ )
         obsColumns.emplace_back( x, 0 );
@@ -230,6 +201,6 @@ void World::ComputeStaticAnalysis()
 
     // view the hot spots
     for ( auto conn : connection ) {
-        vec_tiles[conn.first]._region = conn.second;
+        vec_tiles[conn.first]._metadata = conn.second;
     }
 }
