@@ -1568,6 +1568,11 @@ void World::PostLoad( void )
     std::vector<std::pair<int, int> > obsColumns;
     std::vector<std::pair<int, int> > obsRows;
     std::vector<std::pair<int, int> > connection;
+    std::vector<int> regionCenters;
+
+    const uint32_t castleRegionSize = 16;
+    const uint32_t extraRegionSize = 16;
+    const int emptyLineFrequency = 8;
 
     for ( int x = 0; x < width; x++ )
         obsColumns.emplace_back( x, 0 );
@@ -1597,39 +1602,66 @@ void World::PostLoad( void )
     for ( auto column : obsColumns ) {
         bool match = true;
         for ( int & val : emptyColumns ) {
-            if ( std::abs( val - column.first ) < width / 5 )
+            if ( std::abs( val - column.first ) < emptyLineFrequency )
                 match = false;
         }
 
         if ( match )
             emptyColumns.push_back( column.first );
-
-        if ( emptyColumns.size() > 5 )
-            break;
     }
 
     std::vector<int> emptyRows;
     for ( auto obsRow : obsRows ) {
         bool match = true;
         for ( int & val : emptyRows ) {
-            if ( std::abs( val - obsRow.first ) < width / 5 )
+            if ( std::abs( val - obsRow.first ) < emptyLineFrequency )
                 match = false;
         }
 
         if ( match )
             emptyRows.push_back( obsRow.first );
-
-        if ( emptyRows.size() > 5 )
-            break;
     }
 
-    std::vector<int> regionCenters;
+    const int mapSize = width * heigth;
+    const int usableTiles = mapSize - obstacles;
+    double freeTilesPerc = usableTiles * 100.0 / mapSize;
+    const int tilesPerCastle = usableTiles / vec_castles.size();
+
+    std::vector<std::pair<int, int> > castleCenters;
+    for ( auto castle : vec_castles ) {
+        castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
+    }
+    std::sort( castleCenters.begin(), castleCenters.end(), []( const std::pair<int, int> & left, const std::pair<int, int> & right ) {
+        if ( left.second == right.second )
+            return left.first < right.first;
+        return left.second > right.second;
+    } );
+
+    for ( auto castleTile : castleCenters ) {
+        bool match = true;
+        for ( int & val : regionCenters ) {
+            // Check if different colors? (Slugfest)
+            // GetCastle( Point( val % width, val / width ) )->GetColor();
+            if ( Maps::GetApproximateDistance( val, castleTile.first ) < castleRegionSize ) {
+                match = false;
+                break;
+            }
+        }
+
+        if ( match ) {
+            const int castleIndex = castleTile.first + width;
+            regionCenters.push_back( ( castleIndex > vec_tiles.size() ) ? castleTile.first : castleIndex );
+        }
+    }
+
     for ( auto rowID : emptyRows ) {
         for ( auto colID : emptyColumns ) {
+            int centerIndex = -1;
+
             const int tileIndex = rowID * width + colID;
             const Maps::Tiles & tile = vec_tiles[tileIndex];
             if ( tile.GetPassable() && !tile.isWater() ) {
-                regionCenters.push_back( tileIndex );
+                centerIndex = tileIndex;
             }
             else {
                 for ( int direction : directions ) {
@@ -1637,10 +1669,24 @@ void World::PostLoad( void )
                         const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
                         const Maps::Tiles & newTile = vec_tiles[newIndex];
                         if ( newTile.GetPassable() && !newTile.isWater() ) {
-                            regionCenters.push_back( newIndex );
+                            centerIndex = newIndex;
                             break;
                         }
                     }
+                }
+            }
+
+            if ( centerIndex >= 0 ) {
+                bool match = true;
+                for ( int & val : regionCenters ) {
+                    if ( Maps::GetApproximateDistance( val, centerIndex ) < extraRegionSize ) {
+                        match = false;
+                        break;
+                    }
+                }
+
+                if ( match ) {
+                    regionCenters.push_back( centerIndex );
                 }
             }
         }
@@ -1658,16 +1704,16 @@ void World::PostLoad( void )
 
             std::set<int> newTiles;
             for ( const int & tileIndex : tileSet ) {
-                vec_tiles[tileIndex]._region = regionID + 1;
+                vec_tiles[tileIndex]._region = regionID + ( ( radius ) ? 1 : 101 );
                 for ( int direction : directions ) {
-                    if ( Maps::isValidDirection( tileIndex, direction ) ) {
+                    if ( Maps::isValidDirection( tileIndex, direction ) && ( vec_tiles[tileIndex].GetPassable() & direction ) ) {
                         const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
                         const Maps::Tiles & newTile = vec_tiles[newIndex];
-                        if ( newTile.GetPassable() && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
+                        if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
                             if ( newTile._region ) {
                                 if ( newTile._region != regionID + 1 ) {
                                     connection[newIndex].second++;
-                                    std::cout << "Map tile " << newIndex << " hit! " << newTile._region << " to " << regionID + 1 << std::endl;
+                                    // std::cout << "Map tile " << newIndex << " hit! " << newTile._region << " to " << regionID + 1 << std::endl;
                                 }
                             }
                             else {
