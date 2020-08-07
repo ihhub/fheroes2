@@ -23,6 +23,7 @@
 #define H2WORLD_H
 
 #include <map>
+#include <set>
 #include <vector>
 
 #include "artifact_ultimate.h"
@@ -263,6 +264,8 @@ private:
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
     void PostLoad( void );
+
+    void GrowRegion( std::set<int> & openTiles, std::vector<std::pair<int, int> > & connection, int regionID );
 
 private:
     friend class Radar;

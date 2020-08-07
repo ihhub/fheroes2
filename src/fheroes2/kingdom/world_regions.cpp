@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <set>
-
 #include "world.h"
 
 namespace
@@ -37,6 +35,35 @@ namespace
 
         return match;
     }
+}
+
+void World::GrowRegion( std::set<int> & openTiles, std::vector<std::pair<int, int> > & connection, int regionID )
+{
+    static const Directions directions = Direction::All();
+    std::set<int> & tileSet = openTiles;
+
+    std::set<int> newTiles;
+    for ( const int & tileIndex : tileSet ) {
+        vec_tiles[tileIndex]._region = regionID;
+        for ( int direction : directions ) {
+            if ( Maps::isValidDirection( tileIndex, direction ) && ( vec_tiles[tileIndex].GetPassable() & direction ) ) {
+                const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
+                const Maps::Tiles & newTile = vec_tiles[newIndex];
+                if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
+                    if ( newTile._region ) {
+                        if ( newTile._region != regionID ) {
+                            connection[newIndex].second++;
+                            // std::cout << "Map tile " << newIndex << " hit! " << newTile._region << " to " << regionID + 1 << std::endl;
+                        }
+                    }
+                    else {
+                        newTiles.insert( Maps::GetDirectionIndex( tileIndex, direction ) );
+                    }
+                }
+            }
+        }
+    }
+    tileSet = std::move( newTiles );
 }
 
 void World::ComputeStaticAnalysis()
@@ -75,6 +102,7 @@ void World::ComputeStaticAnalysis()
     double obstacles = 0;
     const int width = w();
     const int heigth = h();
+    const int mapSize = std::max( width, heigth );
     const Directions directions = Direction::All();
     std::vector<std::pair<int, int> > obsColumns;
     std::vector<std::pair<int, int> > obsRows;
@@ -83,6 +111,7 @@ void World::ComputeStaticAnalysis()
 
     const uint32_t castleRegionSize = 16;
     const uint32_t extraRegionSize = 16;
+    const int waterRegionSize = mapSize / 3;
     const int emptyLineFrequency = 8;
 
     for ( int x = 0; x < width; x++ )
@@ -117,9 +146,9 @@ void World::ComputeStaticAnalysis()
         AppendIfFarEnough( emptyRows, row.first, emptyLineFrequency );
     }
 
-    const int mapSize = width * heigth;
-    const int usableTiles = mapSize - obstacles;
-    double freeTilesPercentage = usableTiles * 100.0 / mapSize;
+    const int tilesTotal = width * heigth;
+    const int usableTiles = tilesTotal - obstacles;
+    double freeTilesPercentage = usableTiles * 100.0 / tilesTotal;
     const int tilesPerCastle = usableTiles / vec_castles.size();
 
     std::vector<std::pair<int, int> > castleCenters;
@@ -133,20 +162,10 @@ void World::ComputeStaticAnalysis()
     } );
 
     for ( auto castleTile : castleCenters ) {
-        bool match = true;
-        for ( int & val : regionCenters ) {
-            // Check if different colors? (Slugfest)
-            // GetCastle( Point( val % width, val / width ) )->GetColor();
-            if ( Maps::GetApproximateDistance( val, castleTile.first ) < castleRegionSize ) {
-                match = false;
-                break;
-            }
-        }
-
-        if ( match ) {
-            const int castleIndex = castleTile.first + width;
-            regionCenters.push_back( ( castleIndex > vec_tiles.size() ) ? castleTile.first : castleIndex );
-        }
+        // Check if different colors? (Slugfest)
+        // GetCastle( Point( val % width, val / width ) )->GetColor();
+        const int castleIndex = castleTile.first + width;
+        AppendIfFarEnough( regionCenters, ( castleIndex > vec_tiles.size() ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
     for ( auto rowID : emptyRows ) {
@@ -172,17 +191,7 @@ void World::ComputeStaticAnalysis()
             }
 
             if ( centerIndex >= 0 ) {
-                bool match = true;
-                for ( int & val : regionCenters ) {
-                    if ( Maps::GetApproximateDistance( val, centerIndex ) < extraRegionSize ) {
-                        match = false;
-                        break;
-                    }
-                }
-
-                if ( match ) {
-                    regionCenters.push_back( centerIndex );
-                }
+                AppendIfFarEnough( regionCenters, centerIndex, extraRegionSize );
             }
         }
     }
@@ -193,53 +202,34 @@ void World::ComputeStaticAnalysis()
     }
 
     // Region growing
-    for ( int radius = 0; radius < width / 2; ++radius ) {
+    for ( int radius = 0; radius < mapSize / 2; ++radius ) {
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-            std::set<int> & tileSet = openTiles[regionID];
-
-            std::set<int> newTiles;
-            for ( const int & tileIndex : tileSet ) {
-                vec_tiles[tileIndex]._region = regionID + ( ( radius ) ? 1 : 101 );
-                for ( int direction : directions ) {
-                    if ( Maps::isValidDirection( tileIndex, direction ) && ( vec_tiles[tileIndex].GetPassable() & direction ) ) {
-                        const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
-                        const Maps::Tiles & newTile = vec_tiles[newIndex];
-                        if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
-                            if ( newTile._region ) {
-                                if ( newTile._region != regionID + 1 ) {
-                                    connection[newIndex].second++;
-                                    // std::cout << "Map tile " << newIndex << " hit! " << newTile._region << " to " << regionID + 1 << std::endl;
-                                }
-                            }
-                            else {
-                                newTiles.insert( Maps::GetDirectionIndex( tileIndex, direction ) );
-                            }
-                        }
-                    }
-                }
-            }
-            tileSet = std::move( newTiles );
+            GrowRegion( openTiles[regionID], connection, regionID + 1 );
         }
     }
 
+    // Fix missing islands and divide seas
+    size_t nextRegionID = regionCenters.size();
     for ( int y = 0; y < heigth; y++ ) {
         for ( int x = 0; x < width; x++ ) {
-            // initialize
-            connection.emplace_back( y * width + x, 0 );
+            const int tileIndex = y * width + x;
+            Maps::Tiles & tile = vec_tiles[tileIndex];
+            if ( tile.GetPassable() && tile._region == 0 ) {
+                std::set<int> openTiles;
+                openTiles.insert( tileIndex );
+                const int islandID = nextRegionID++;
 
-            const int index = y * width + x;
-            Maps::Tiles & tile = vec_tiles[index];
-            if ( tile.GetPassable() == 0 || tile.isWater() ) {
-                obstacles++;
-                obsColumns[x].second++;
-                obsRows[y].second++;
+                for ( int iteration = 0; iteration < waterRegionSize; ++iteration ) {
+                    GrowRegion( openTiles, connection, islandID );
+                }
             }
         }
     }
 
     std::sort( connection.begin(), connection.end(), []( const std::pair<int, int> & x, const std::pair<int, int> & y ) { return x.second > y.second; } );
+
     // view the hot spots
-    // for ( auto conn : connection ) {
-    //    vec_tiles[conn.first]._region = conn.second;
-    //}
+    for ( auto conn : connection ) {
+        vec_tiles[conn.first]._region = conn.second;
+    }
 }
