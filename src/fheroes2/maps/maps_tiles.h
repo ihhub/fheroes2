@@ -190,6 +190,7 @@ namespace Maps
 
         void FixObject( void );
 
+        bool UpdateRegion( int newRegionID );
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
@@ -261,6 +262,9 @@ namespace Maps
         static void UpdateAbandoneMineSprite( Tiles & );
         static void FixedPreload( Tiles & );
 
+        int _region = 0;
+        int _metadata = 0;
+
     private:
         TilesAddon * FindFlags( void );
         void CorrectFlags32( u32 index, bool );
@@ -308,7 +312,6 @@ namespace Maps
         u8 quantity1;
         u8 quantity2;
         u8 quantity3;
-
 #ifdef WITH_DEBUG
         u8 passable_disable;
 #endif

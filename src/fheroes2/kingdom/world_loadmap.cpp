@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <set>
 
 #include "agg.h"
 #include "ai.h"
@@ -1528,6 +1529,151 @@ void World::PostLoad( void )
 
     // update tile passable
     std::for_each( vec_tiles.begin(), vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
+
+    int latestRegionID = 1;
+    // plain for loop to make sure tile access is sequential
+    //for ( size_t index = 0; index < vec_tiles.size(); ++index ) {
+    //    Maps::Tiles & tile = vec_tiles[index];
+    //    if ( tile.GetPassable() ) {
+    //        if ( index >= w() ) {
+    //            const Maps::Tiles & topTile = vec_tiles[index - w()];
+    //            if ( topTile._region && topTile.isWater() == tile.isWater() ) {
+    //                tile._region = topTile._region;
+    //            }
+    //        }
+    //        //if ( tile._region == 0 && index >= w() && index + 1 % w() != 0 ) {
+    //        if ( tile._region == 0 && index + 1 % w() != 0 ) {
+    //            const Maps::Tiles & topRightTile = vec_tiles[index + 1];
+    //            if ( topRightTile._region && topRightTile.isWater() == tile.isWater() ) {
+    //                tile._region = topRightTile._region;
+    //            }
+    //        }
+    //        if ( tile._region == 0 && index % w() ) {
+    //            const Maps::Tiles & leftTile = vec_tiles[index - 1];
+    //            if ( leftTile._region && leftTile.isWater() == tile.isWater() ) {
+    //                tile._region = leftTile._region;
+    //            }
+    //        }
+
+    //        if ( tile._region == 0 ) {
+    //            tile._region = latestRegionID++;
+    //        }
+    //    }
+    //}
+
+    double obstacles = 0;
+    const int width = w();
+    const int heigth = h();
+    std::vector<std::pair<int, int> > obsColumns;
+    std::vector<std::pair<int, int> > obsRows;
+    std::vector<std::pair<int, int> > connection;
+
+    for ( int x = 0; x < width; x++ )
+        obsColumns.emplace_back( x, 0 );
+    for ( int y = 0; y < heigth; y++ )
+        obsRows.emplace_back( y, 0 );
+
+    for ( int y = 0; y < heigth; y++ ) {
+        for ( int x = 0; x < width; x++ ) {
+            // initialize
+            connection.emplace_back( y * width + x, 0 );
+
+            const int index = y * width + x;
+            Maps::Tiles & tile = vec_tiles[index];
+            if ( tile.GetPassable() == 0 ) {
+                obstacles++;
+                obsColumns[x].second++;
+                obsRows[y].second++;
+            }
+        }
+    }
+
+    double avgObs = obstacles / std::max( width, heigth );
+    std::sort( obsColumns.begin(), obsColumns.end(), []( const std::pair<int, int> & x, const std::pair<int, int> & y ) { return x.second < y.second; } );
+    std::sort( obsRows.begin(), obsRows.end(), []( const std::pair<int, int> & x, const std::pair<int, int> & y ) { return x.second < y.second; } );
+
+    std::vector<int> emptyColumns;
+    for ( auto column : obsColumns ) {
+        bool match = true;
+        for ( int & val : emptyColumns ) {
+            if ( std::abs( val - column.first ) < width / 4 )
+                match = false;
+        }
+
+        if ( match )
+            emptyColumns.push_back( column.first );
+
+        if ( emptyColumns.size() > 4 )
+            break;
+    }
+
+    std::vector<int> emptyRows;
+    for ( auto obsRow : obsRows ) {
+        bool match = true;
+        for ( int & val : emptyRows ) {
+            if ( std::abs( val - obsRow.first ) < width / 4 )
+                match = false;
+        }
+
+        if ( match )
+            emptyRows.push_back( obsRow.first );
+
+        if ( emptyRows.size() > 4 )
+            break;
+    }
+
+    std::vector<Point> regionCenters;
+    for ( auto rowID : emptyRows ) {
+        for ( auto colID : emptyColumns ) {
+            const Maps::Tiles & tile = vec_tiles[rowID * width + colID];
+            if ( tile.GetPassable() && !tile.isWater() ) {
+                regionCenters.push_back( Point( colID, rowID ) );
+            }
+        }
+    }
+
+    std::vector<std::set<int> > openTiles(regionCenters.size());
+    for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
+        const Point & pt = regionCenters[regionID];
+        openTiles[regionID].insert( pt.y * width + pt.x );
+    }
+
+    // Region growing
+    const Directions directions = Direction::All();
+    for ( int radius = 0; radius < width / 2; ++radius ) {
+        for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
+            std::set<int> & tileSet = openTiles[regionID];
+
+            std::set<int> newTiles;
+            for ( const int & tileIndex : tileSet ) {
+                vec_tiles[tileIndex]._region = regionID + 1;
+                for ( int direction : directions ) {
+                    if ( Maps::isValidDirection( tileIndex, direction ) ) {
+                        const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
+                        const Maps::Tiles & newTile = vec_tiles[newIndex];
+                        if ( newTile.GetPassable() && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
+                            if ( newTile._region ) {
+                                if ( newTile._region != regionID + 1 ) {
+                                    connection[newIndex].second++;
+                                    std::cout << "Map tile " << newIndex << " hit! " << newTile._region << " to " << regionID + 1 << std::endl;
+                                }
+                            }
+                            else {
+                                newTiles.insert( Maps::GetDirectionIndex( tileIndex, direction ) );
+                            }
+                        }
+                    }
+                }
+            }
+            tileSet = std::move( newTiles );
+        }
+    }
+    std::sort( connection.begin(), connection.end(), []( const std::pair<int, int> & x, const std::pair<int, int> & y ) { return x.second > y.second; } );
+
+    // view the hot spots
+    for ( auto conn : connection ) {
+        vec_tiles[conn.first]._region = conn.second;
+    }
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();

@@ -1388,6 +1388,14 @@ void Maps::Tiles::UpdatePassable( void )
     }
 }
 
+bool Maps::Tiles::UpdateRegion( int newRegionID )
+{
+    if ( tile_passable ) {
+        _region = newRegionID;
+    }
+    return false;
+}
+
 u32 Maps::Tiles::GetObjectUID( int obj ) const
 {
     const Maps::TilesAddon * addon = FindObjectConst( obj );
@@ -1583,16 +1591,13 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( area.GetVisibleTileROI() & mp ) {
-        if ( 0 == tile_passable || DIRECTION_ALL != tile_passable ) {
-            Surface sf = PassableViewSurface( tile_passable );
-
-            if ( passable_disable ) {
-                Text text( GetString( passable_disable ), Font::SMALL );
-                text.Blit( 13, 13, sf );
-            }
-
-            area.BlitOnTile( dst, sf, 0, 0, mp );
+        //Surface sf( Size( 31, 31 ), true );
+        Surface sf = PassableViewSurface( tile_passable );
+        if ( _region ) {
+            Text text( GetString( _region ), Font::SMALL );
+            text.Blit( 13, 13, sf );
         }
+        area.BlitOnTile( dst, sf, 0, 0, mp );
     }
 #endif
 }

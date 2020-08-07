@@ -301,8 +301,6 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
     if ( IS_DEVEL() ) {
         // redraw grid
         if ( flag & LEVEL_ALL ) {
-            const RGBA col = RGBA( 0x90, 0xA4, 0xE0 );
-
             for ( int16_t y = 0; y < tileROI.h; ++y ) {
                 const s32 offsetY = tileROI.y + y;
                 if ( offsetY < 0 || offsetY >= world.h() )
@@ -311,10 +309,6 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
                     const s32 offsetX = tileROI.x + x;
                     if ( offsetX < 0 || offsetX >= world.w() )
                         continue;
-
-                    const Point pos = GetRelativeTilePosition( Point( offsetX, offsetY ) );
-                    if ( _windowROI & pos )
-                        dst.DrawPoint( pos, col );
 
                     world.GetTiles( offsetX, offsetY ).RedrawPassable( dst );
                 }
