@@ -713,7 +713,7 @@ namespace fheroes2
         }
     }
 
-    void DrawLine( Image & image, const Point & start, const Point & end, const Rect & roi )
+    void DrawLine( Image & image, const Point & /*start*/, const Point & /*end*/, const Rect & /*roi*/ )
     {
         if ( image.empty() )
             return;

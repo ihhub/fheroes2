@@ -52,7 +52,6 @@
 namespace
 {
     std::map<std::pair<int, int>, fheroes2::Sprite> _icnVsSprite;
-    std::map<std::pair<int, int>, fheroes2::Image> _tilVsSprite;
 }
 
 namespace AGG
@@ -2119,6 +2118,57 @@ namespace fheroes2
 {
     namespace AGG
     {
+        std::vector<std::vector<fheroes2::Image> > _tilVsImage;
+        const fheroes2::Image errorImage;
+
+        void PrepareTILImages()
+        {
+            if ( _tilVsImage.empty() ) {
+                _tilVsImage.resize( TIL::LASTTIL );
+            }
+        }
+
+        bool IsValidTILId( int id )
+        {
+            if ( id < 0 ) {
+                return false;
+            }
+
+            PrepareTILImages();
+
+            return static_cast<size_t>( id ) < _tilVsImage.size();
+        }
+
+        size_t GetMaximumTILIndex( int id )
+        {
+            if ( _tilVsImage[id].empty() ) {
+                const uint32_t headerSize = 6;
+
+                const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
+                if ( data.size() < headerSize ) {
+                    return 0;
+                }
+
+                StreamBuf buffer( data );
+
+                const uint32_t count = buffer.getLE16();
+                const uint32_t width = buffer.getLE16();
+                const uint32_t height = buffer.getLE16();
+                const uint32_t size = width * height;
+                if ( headerSize + count * size != data.size() ) {
+                    return 0;
+                }
+
+                _tilVsImage[id].resize( count );
+                for ( uint32_t i = 0; i < count; ++i ) {
+                    _tilVsImage[id][i].resize( width, height );
+                    memcpy( _tilVsImage[id][i].image(), data.data() + headerSize + i * size, size );
+                }
+            }
+
+            return _tilVsImage[id].size();
+        }
+
         const Sprite & GetICN( int icnId, uint32_t index )
         {
             return _icnVsSprite[std::make_pair( icnId, index )];
@@ -2126,7 +2176,18 @@ namespace fheroes2
 
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
-            return _tilVsSprite[std::make_pair( tilId, index + shapeId )];
+            if ( !IsValidTILId( tilId ) ) {
+                return errorImage;
+            }
+
+            const size_t maxTILIndex = GetMaximumTILIndex( tilId );
+            if ( index >= maxTILIndex / 4 ) {
+                return errorImage;
+            }
+
+            // Generate proper TIL index
+            const size_t correctIndex = index + ( maxTILIndex / 4 ) * ( shapeId % 4 );
+            return _tilVsImage[tilId][correctIndex];
         }
     }
 }
