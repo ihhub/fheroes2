@@ -667,6 +667,44 @@ namespace fheroes2
         return out;
     }
 
+    void DrawBorder( Image & image, uint8_t value )
+    {
+        if ( image.empty() || image.width() < 2 || image.height() < 2 ) {
+            return;
+        }
+
+        const uint32_t width = image.width();
+        const uint32_t height = image.height();
+
+        // top side
+        uint8_t * data = image.image();
+        const uint8_t * dataEnd = data + width;
+        for ( ; data != dataEnd; ++data ) {
+            *data = value;
+        }
+
+        // bottom side
+        data = image.image() + width * ( height - 1 );
+        dataEnd = data + width;
+        for ( ; data != dataEnd; ++data ) {
+            *data = value;
+        }
+
+        // left side
+        data = image.image() + width;
+        dataEnd = data + width * ( height - 2 );
+        for ( ; data != dataEnd; data += width ) {
+            *data = value;
+        }
+
+        // right side
+        data = image.image() + width + width - 1;
+        dataEnd = data + width * ( height - 2 );
+        for ( ; data != dataEnd; data += width ) {
+            *data = value;
+        }
+    }
+
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
         return GetPALColorId( red / 4, green / 4, blue / 4 );
@@ -765,6 +803,15 @@ namespace fheroes2
                 }
             }
         }
+    }
+
+    void SetPixel( Image & image, uint32_t x, uint32_t y, uint8_t value )
+    {
+        if ( image.empty() || x >= image.width() || y >= image.height() ) {
+            return;
+        }
+
+        *( image.image() + y * image.width() + x ) = value;
     }
 
     bool SaveBitmap( const Image & image, const std::string & path )

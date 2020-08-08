@@ -91,11 +91,16 @@ namespace fheroes2
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, uint32_t width, uint32_t height );
 
+    void DrawBorder( Image & image, uint8_t value );
+
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
 
     // Please remember that subpixel accuracy resizing is extremely slow!
     void Resize( const Image & in, Image & out, bool isSubpixelAccuracy = false );
+
+    // Please use value from the main palette only
+    void SetPixel( Image & image, uint32_t x, uint32_t y, uint8_t value );
 
     // FIXME: This is a test function and should be removed before merging to master branch
     bool SaveBitmap( const Image & image, const std::string & path );
