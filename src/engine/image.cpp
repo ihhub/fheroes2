@@ -678,30 +678,38 @@ namespace fheroes2
 
         // top side
         uint8_t * data = image.image();
+        uint8_t * transform = image.transform();
         const uint8_t * dataEnd = data + width;
-        for ( ; data != dataEnd; ++data ) {
+        for ( ; data != dataEnd; ++data, ++transform ) {
             *data = value;
+            *transform = 0;
         }
 
         // bottom side
         data = image.image() + width * ( height - 1 );
+        transform = image.transform() + width * ( height - 1 );
         dataEnd = data + width;
-        for ( ; data != dataEnd; ++data ) {
+        for ( ; data != dataEnd; ++data, ++transform ) {
             *data = value;
+            *transform = 0;
         }
 
         // left side
         data = image.image() + width;
+        transform = image.transform() + width;
         dataEnd = data + width * ( height - 2 );
-        for ( ; data != dataEnd; data += width ) {
+        for ( ; data != dataEnd; data += width, transform += width ) {
             *data = value;
+            *transform = 0;
         }
 
         // right side
         data = image.image() + width + width - 1;
+        transform = image.transform() + width + width - 1;;
         dataEnd = data + width * ( height - 2 );
-        for ( ; data != dataEnd; data += width ) {
+        for ( ; data != dataEnd; data += width, transform += width ) {
             *data = value;
+            *transform = 0;
         }
     }
 
@@ -812,6 +820,7 @@ namespace fheroes2
         }
 
         *( image.image() + y * image.width() + x ) = value;
+        *( image.transform() + y * image.width() + x ) = 0;
     }
 
     bool SaveBitmap( const Image & image, const std::string & path )
