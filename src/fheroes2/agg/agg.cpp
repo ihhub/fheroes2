@@ -49,11 +49,6 @@
 
 #define FATSIZENAME 15
 
-namespace
-{
-    std::map<std::pair<int, int>, fheroes2::Sprite> _icnVsSprite;
-}
-
 namespace AGG
 {
     class FAT
@@ -1040,12 +1035,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     ICNData originalData( sz.w, sz.h );
     uint8_t * icnData = originalData.get().data();
 
-    fheroes2::Sprite image( sz.w, sz.h, res.offset.x, res.offset.y );
-    image.reset();
-
-    uint8_t * imageData = image.image();
-    uint8_t * imageTransform = image.transform();
-
     while ( 1 ) {
         // 0x00 - end line
         if ( 0 == *buf ) {
@@ -1060,8 +1049,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- && buf < max ) {
                 icnData[pt.y * sz.w + pt.x] = *buf;
-                imageData[pt.y * sz.w + pt.x] = *buf;
-                imageTransform[pt.y * sz.w + pt.x] = 0;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
                 ++buf;
@@ -1090,9 +1077,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             if ( sf1.depth() == 8 ) // skip alpha
             {
                 while ( c-- ) {
-                    if ( transformType <= 13 ) {
-                        imageTransform[pt.y * sz.w + pt.x] = transformType;
-                    }
                     ++pt.x;
                 }
             }
@@ -1100,9 +1084,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
                 if ( !sf2.isValid() )
                     sf2.Set( sz.w, sz.h, true );
                 while ( c-- ) {
-                    if ( transformType <= 13 ) {
-                        imageTransform[pt.y * sz.w + pt.x] = transformType;
-                    }
                     icnData[pt.y * sz.w + pt.x] = 0;
                     sf2.DrawPoint( pt, shadow );
                     ++pt.x;
@@ -1118,8 +1099,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- ) {
                 icnData[pt.y * sz.w + pt.x] = *buf;
-                imageData[pt.y * sz.w + pt.x] = *buf;
-                imageTransform[pt.y * sz.w + pt.x] = 0;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
@@ -1130,8 +1109,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- ) {
                 icnData[pt.y * sz.w + pt.x] = *buf;
-                imageData[pt.y * sz.w + pt.x] = *buf;
-                imageTransform[pt.y * sz.w + pt.x] = 0;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
@@ -1144,7 +1121,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     }
 
     _icnIdVsData[std::make_pair( icn, index )] = originalData;
-    _icnVsSprite[std::make_pair( icn, index )] = image;
 
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
         res.second.SetAlphaMod( 0, false );
@@ -2118,14 +2094,35 @@ namespace fheroes2
 {
     namespace AGG
     {
+        std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite;
+        const fheroes2::Sprite errorICNImage;
+
         std::vector<std::vector<fheroes2::Image> > _tilVsImage;
-        const fheroes2::Image errorImage;
+        const fheroes2::Image errorTILImage;
+
+        void PrepareICNImages()
+        {
+            if ( _icnVsSprite.empty() ) {
+                _icnVsSprite.resize( ICN::LASTICN );
+            }
+        }
 
         void PrepareTILImages()
         {
             if ( _tilVsImage.empty() ) {
                 _tilVsImage.resize( TIL::LASTTIL );
             }
+        }
+
+        bool IsValidICNId( int id )
+        {
+            if ( id < 0 ) {
+                return false;
+            }
+
+            PrepareICNImages();
+
+            return static_cast<size_t>( id ) < _icnVsSprite.size();
         }
 
         bool IsValidTILId( int id )
@@ -2137,6 +2134,145 @@ namespace fheroes2
             PrepareTILImages();
 
             return static_cast<size_t>( id ) < _tilVsImage.size();
+        }
+
+        void CreateICNSequence( int id )
+        {
+            const std::vector<u8> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
+
+            if ( body.empty() ) {
+                return;
+            }
+
+            StreamBuf imageStream( body );
+
+            const uint32_t count = imageStream.getLE16();
+            const uint32_t blockSize = imageStream.getLE32();
+            if ( count == 0 || blockSize == 0 ) {
+                return;
+            }
+
+            _icnVsSprite[id].resize( count );
+
+            for ( uint32_t i = 0; i < count; ++i ) {
+                imageStream.seek( 8 + i * 13 );
+
+                ICNHeader header1;
+                imageStream >> header1;
+
+                uint32_t sizeData = 0;
+                if ( i + 1 != count ) {
+                    ICNHeader header2;
+                    imageStream >> header2;
+                    sizeData = header2.offsetData - header1.offsetData;
+                }
+                else {
+                    sizeData = blockSize - header1.offsetData;
+                }
+
+                Sprite & sprite = _icnVsSprite[id][i];
+
+                sprite.resize( header1.width, header1.height );
+                sprite.reset();
+                sprite.setPosition( static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
+
+                uint8_t * imageData = sprite.image();
+                uint8_t * imageTransform = sprite.transform();
+
+                uint32_t posX = 0;
+                uint32_t posY = 0;
+                const uint32_t width = sprite.width();
+                const uint32_t height = sprite.height();
+
+                const uint8_t * data = body.data() + 6 + header1.offsetData;
+                const uint8_t * dataEnd = data + sizeData;
+
+                while ( 1 ) {
+                    if ( 0 == *data ) { // 0x00 - end line
+                        ++posY;
+                        posX = 0;
+                        ++data;
+                    }
+                    else if ( 0x80 > *data ) { // 0x7F - count data
+                        uint32_t c = *data;
+                        ++data;
+                        while ( c-- && data != dataEnd ) {
+                            imageData[posY * width + posX] = *data;
+                            imageTransform[posY * width + posX] = 0;
+                            ++posX;
+                            ++data;
+                        }
+                    }
+                    else if ( 0x80 == *data ) { // 0x80 - end data
+                        break;
+                    }
+                    else if ( 0xC0 > *data ) { // 0xBF - skip data
+                        posX += *data - 0x80;
+                        ++data;
+                    }
+                    else if ( 0xC0 == *data ) { // 0xC0 - transform layer
+                        ++data;
+
+                        const uint8_t transformValue = *data;
+                        const uint8_t transformType = ( ( transformValue & 0x3C ) << 6 ) / 256 + 2; // 1 is for skipping
+
+                        uint32_t c = *data % 4 ? *data % 4 : *( ++data );
+                        while ( c-- ) {
+                            if ( transformType <= 13 ) {
+                                imageTransform[posY * width + posX] = transformType;
+                            }
+                            ++posX;
+                        }
+                        ++data;
+                    }
+                    else if ( 0xC1 == *data ) { // 0xC1
+                        ++data;
+                        uint32_t c = *data;
+                        ++data;
+                        while ( c-- ) {
+                            imageData[posY * width + posX] = *data;
+                            imageTransform[posY * width + posX] = 0;
+                            ++posX;
+                        }
+                        ++data;
+                    }
+                    else {
+                        uint32_t c = *data - 0xC0;
+                        ++data;
+                        while ( c-- ) {
+                            imageData[posY * width + posX] = *data;
+                            imageTransform[posY * width + posX] = 0;
+                            ++posX;
+                        }
+                        ++data;
+                    }
+
+                    if ( data == dataEnd ) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        bool LoadModifiedICN( int /*id*/ )
+        {
+            return false;
+        }
+
+        void LoadOriginalICN( int id )
+        {
+            CreateICNSequence( id );
+        }
+
+        size_t GetMaximumICNIndex( int id )
+        {
+            if ( _icnVsSprite[id].empty() ) {
+                if ( !LoadModifiedICN( id ) ) {
+                    LoadOriginalICN( id );
+                }
+            }
+
+            return _icnVsSprite[id].size();
         }
 
         size_t GetMaximumTILIndex( int id )
@@ -2162,6 +2298,7 @@ namespace fheroes2
                 _tilVsImage[id].resize( count );
                 for ( uint32_t i = 0; i < count; ++i ) {
                     _tilVsImage[id][i].resize( width, height );
+                    _tilVsImage[id][i].reset();
                     memcpy( _tilVsImage[id][i].image(), data.data() + headerSize + i * size, size );
                 }
             }
@@ -2171,18 +2308,26 @@ namespace fheroes2
 
         const Sprite & GetICN( int icnId, uint32_t index )
         {
-            return _icnVsSprite[std::make_pair( icnId, index )];
+            if ( !IsValidICNId( icnId ) ) {
+                return errorICNImage;
+            }
+
+            if ( index >= GetMaximumICNIndex( icnId ) ) {
+                return errorICNImage;
+            }
+
+            return _icnVsSprite[icnId][index];
         }
 
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
             if ( !IsValidTILId( tilId ) ) {
-                return errorImage;
+                return errorTILImage;
             }
 
             const size_t maxTILIndex = GetMaximumTILIndex( tilId );
             if ( index >= maxTILIndex / 4 ) {
-                return errorImage;
+                return errorTILImage;
             }
 
             // Generate proper TIL index
