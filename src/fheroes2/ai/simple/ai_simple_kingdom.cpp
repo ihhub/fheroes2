@@ -157,9 +157,9 @@ namespace AI
             const u32 maxhero = Maps::XLARGE > world.w() ? ( Maps::LARGE > world.w() ? 2 : 3 ) : 4;
 
             if ( heroes.empty() )
-                modes = AI::HEROES_HUNTER | AI::HEROES_SCOUTER;
+                modes = AI::HERO_HUNTER | AI::HERO_SCOUT;
             else if ( heroes.size() < maxhero )
-                modes = AI::HEROES_HUNTER;
+                modes = AI::HERO_HUNTER;
 
             if ( modes && heroes.size() < Kingdom::GetMaxHeroes() ) {
                 Recruits & rec = kingdom.GetRecruits();
@@ -181,11 +181,11 @@ namespace AI
 
         // set hunters
         if ( ai.capital ) {
-            const size_t hunters = std::count_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_HUNTER ) );
+            const size_t hunters = std::count_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->Modes( AI::HERO_HUNTER ); } );
 
             // every time
             if ( 0 == hunters && heroes.size() ) {
-                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), std::not1( std::bind2nd( std::mem_fun( &Heroes::Modes ), Heroes::PATROL ) ) );
+                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::PATROL ); } );
 
                 if ( it != heroes.end() && !ai.capital->GetHeroes().Guest() )
                     HeroesSetHunterWithTarget( ( *it ), ai.capital->GetIndex() );
@@ -193,7 +193,7 @@ namespace AI
             else
                 // each month
                 if ( world.BeginMonth() && 1 < world.CountDay() ) {
-                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), std::bind2nd( std::mem_fun( &Heroes::Modes ), AI::HEROES_HUNTER ) );
+                KingdomHeroes::iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->Modes( AI::HERO_HUNTER ); } );
 
                 if ( it != heroes.end() && !ai.capital->GetHeroes().Guest() )
                     HeroesSetHunterWithTarget( *it, ai.capital->GetIndex() );
@@ -202,20 +202,20 @@ namespace AI
 
         // update roles
         for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
-            ( *it )->ResetModes( AI::HEROES_STUPID | AI::HEROES_WAITING );
-            ( *it )->SetModes( AI::HEROES_HUNTER );
+            ( *it )->ResetModes( AI::HERO_SKIP_TURN | AI::HERO_WAITING );
+            ( *it )->SetModes( AI::HERO_HUNTER );
         }
 
         // turn indicator
         status.RedrawTurnProgress( 2 );
 
         // heroes turns - hacky and ugly without lambas
-        // HeroesTurn might invalidate KingdomHeroes iterator (e.g. hero losing a battle), check after each one
+        // HeroTurn might invalidate KingdomHeroes iterator (e.g. hero losing a battle), check after each one
         size_t currentHero = 0;
         while ( currentHero < heroes.size() ) {
             size_t beforeTurn = heroes.size();
 
-            HeroesTurn( *heroes.at( currentHero ) );
+            HeroTurn( *heroes.at( currentHero ) );
 
             // Check if heroes vector was modified
             if ( beforeTurn == heroes.size() )
@@ -225,7 +225,7 @@ namespace AI
         while ( currentHero < heroes.size() ) {
             size_t beforeTurn = heroes.size();
 
-            HeroesTurn( *heroes.at( currentHero ) );
+            HeroTurn( *heroes.at( currentHero ) );
 
             if ( beforeTurn == heroes.size() )
                 currentHero++;

@@ -831,7 +831,7 @@ void Battle::ArmiesOrder::Redraw( const Unit * current )
     if ( orders ) {
         const u32 ow = ARMYORDERW + 2;
 
-        u32 ox = area.x + ( area.w - ow * std::count_if( orders->begin(), orders->end(), std::mem_fun( &Unit::isValid ) ) ) / 2;
+        u32 ox = area.x + ( area.w - ow * std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) ) / 2;
         u32 oy = area.y;
 
         Rect::x = ox;
@@ -2816,9 +2816,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
             if ( unit->isFinishAnimFrame() && unit->GetAnimationState() == Monster_Info::WNCE ) {
                 unit->SwitchAnimation( Monster_Info::STATIC );
             }
-
-            if ( !unit->isValid() )
-                unit->PostKilledAction();
         }
     }
 }
@@ -2832,9 +2829,14 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
+#ifdef DEBUG
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
     StringReplace( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
+#else
+    std::string msg = _( "Moved %{monster}" );
+    StringReplace( msg, "%{monster}", unit.GetName() );
+#endif
 
     _currentUnit = NULL;
     _movingUnit = &unit;
@@ -2886,7 +2888,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     _currentUnit = NULL;
     unit.SwitchAnimation( Monster_Info::STATIC );
 
+#ifdef DEBUG
     StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
+#endif
     status.SetMessage( msg, true );
 }
 

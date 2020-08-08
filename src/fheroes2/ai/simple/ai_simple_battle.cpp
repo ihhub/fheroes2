@@ -34,7 +34,6 @@
 #include "battle_arena.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_interface.h"
 #include "battle_troop.h"
 #include "castle.h"
 #include "heroes.h"
@@ -342,7 +341,7 @@ bool AI::Simple::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, co
     // troop bad spell - clean
     {
         // sort strongest
-        Units::iterator it = std::find_if( friends.begin(), friends.end(), std::bind2nd( std::mem_fun( &Unit::Modes ), IS_BAD_MAGIC ) );
+        Units::iterator it = std::find_if( friends.begin(), friends.end(), []( const Unit * unit ) { return unit->Modes( IS_BAD_MAGIC ); } );
         if ( it != friends.end() ) {
             if ( AIApplySpell( Spell::DISPEL, *it, *hero, a ) )
                 return true;
@@ -396,14 +395,14 @@ bool AI::Simple::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, co
     // up speed
     if ( hero->HaveSpell( Spell::HASTE ) && !enemy ) {
         // sort strongest
-        Units::iterator it = std::find_if( friends.begin(), friends.end(), std::not1( std::bind2nd( std::mem_fun( &Unit::Modes ), SP_HASTE ) ) );
+        Units::iterator it = std::find_if( friends.begin(), friends.end(), []( const Unit * unit ) { return !unit->Modes( SP_HASTE ); } );
         if ( it != friends.end() && AIApplySpell( Spell::HASTE, *it, *hero, a ) )
             return true;
     }
 
     // shield spell conditions
     {
-        Units::iterator it = std::find_if( enemies.begin(), enemies.end(), std::mem_fun( &Unit::isArchers ) );
+        Units::iterator it = std::find_if( enemies.begin(), enemies.end(), []( const Unit * unit ) { return unit->isArchers(); } );
 
         const Castle * castle = Arena::GetCastle();
 
@@ -418,7 +417,7 @@ bool AI::Simple::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, co
 
             // or other strongest friends
             if ( it == friends.end() )
-                it = std::find_if( friends.begin(), friends.end(), std::not1( std::bind2nd( std::mem_fun( &Unit::Modes ), SP_SHIELD ) ) );
+                it = std::find_if( friends.begin(), friends.end(), []( const Unit * unit ) { return !unit->Modes( SP_SHIELD ); } );
 
             if ( it != friends.end() && AIApplySpell( Spell::SHIELD, *it, *hero, a ) )
                 return true;
@@ -428,7 +427,7 @@ bool AI::Simple::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, co
     // enemy army spell
     {
         // find mirror image or summon elem
-        Units::iterator it = std::find_if( enemies.begin(), enemies.end(), std::bind2nd( std::mem_fun( &Unit::Modes ), CAP_MIRRORIMAGE | CAP_SUMMONELEM ) );
+        Units::iterator it = std::find_if( enemies.begin(), enemies.end(), []( const Unit * unit ) { return unit->Modes( CAP_MIRRORIMAGE | CAP_SUMMONELEM ); } );
 
         if ( it != enemies.end() ) {
             if ( AIApplySpell( Spell::ARROW, *it, *hero, a ) )
@@ -438,7 +437,7 @@ bool AI::Simple::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, co
         }
 
         // find good magic
-        it = std::find_if( enemies.begin(), enemies.end(), std::bind2nd( std::mem_fun( &Unit::Modes ), IS_GOOD_MAGIC ) );
+        it = std::find_if( enemies.begin(), enemies.end(), []( const Unit * unit ) { return unit->Modes( IS_GOOD_MAGIC ); } );
 
         if ( it != enemies.end() ) {
             // slow
@@ -453,8 +452,8 @@ bool AI::Simple::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, co
         }
 
         // check undead
-        if ( std::count_if( friends.begin(), friends.end(), std::mem_fun( &Unit::isUndead ) )
-             < std::count_if( enemies.begin(), enemies.end(), std::mem_fun( &Unit::isUndead ) ) ) {
+        if ( std::count_if( friends.begin(), friends.end(), []( const Unit * unit ) { return unit->isUndead(); } )
+             < std::count_if( enemies.begin(), enemies.end(), []( const Unit * unit ) { return unit->isUndead(); } ) ) {
             if ( AIApplySpell( Spell::HOLYSHOUT, NULL, *hero, a ) )
                 return true;
             if ( AIApplySpell( Spell::HOLYWORD, NULL, *hero, a ) )
@@ -462,8 +461,8 @@ bool AI::Simple::BattleMagicTurn( Arena & arena, const Unit & b, Actions & a, co
         }
 
         // check alife
-        if ( std::count_if( friends.begin(), friends.end(), std::mem_fun( &Unit::isAlive ) )
-             < std::count_if( enemies.begin(), enemies.end(), std::mem_fun( &Unit::isAlive ) ) ) {
+        if ( std::count_if( friends.begin(), friends.end(), []( const Unit * unit ) { return unit->isAlive(); } )
+             < std::count_if( enemies.begin(), enemies.end(), []( const Unit * unit ) { return unit->isAlive(); } ) ) {
             if ( AIApplySpell( Spell::DEATHRIPPLE, NULL, *hero, a ) )
                 return true;
             if ( AIApplySpell( Spell::DEATHWAVE, NULL, *hero, a ) )

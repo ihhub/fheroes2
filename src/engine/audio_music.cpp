@@ -28,7 +28,7 @@
 #include "tools.h"
 
 #ifdef WITH_MIXER
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 
 namespace Music
 {

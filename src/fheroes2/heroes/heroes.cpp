@@ -1371,8 +1371,6 @@ void Heroes::LevelUpSecondarySkill( int primary, bool autoselect )
     // level up sec. skill
     if ( selected ) {
         DEBUG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected->Skill() ) );
-        std::vector<Skill::Secondary>::iterator it;
-
         Skill::Secondary * secs = secondary_skills.FindSkill( selected->Skill() );
 
         if ( secs )
@@ -1629,16 +1627,18 @@ void Heroes::RecalculateMovePoints( void )
         move_point = GetMaxMovePoints() * move_point_scale / 1000;
 }
 
-void Heroes::Move2Dest( const s32 & dst_index, bool skip_action /* false */ )
+void Heroes::Move2Dest( const s32 & dstIndex, bool skipAction /* false */, bool skipPenalty /* false */ )
 {
-    if ( dst_index != GetIndex() ) {
+    if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );
-        SetIndex( dst_index );
+        SetIndex( dstIndex );
         Scoute();
-        ApplyPenaltyMovement();
-        world.GetTiles( dst_index ).SetHeroes( this );
+        world.GetTiles( dstIndex ).SetHeroes( this );
 
-        if ( !skip_action )
+        if ( !skipPenalty )
+            ApplyPenaltyMovement();
+
+        if ( !skipAction )
             ActionNewPosition();
     }
 }
@@ -1979,7 +1979,7 @@ Heroes * AllHeroes::FromJail( s32 index ) const
 
 bool AllHeroes::HaveTwoFreemans( void ) const
 {
-    return 2 <= std::count_if( begin(), end(), std::mem_fun( &Heroes::isFreeman ) );
+    return 2 <= std::count_if( begin(), end(), []( const Heroes * hero ) { return hero->isFreeman(); } );
 }
 
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )

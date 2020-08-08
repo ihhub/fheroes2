@@ -872,7 +872,6 @@ namespace AI
     void AIToTeleports( Heroes & hero, s32 index_from )
     {
         s32 index_to = world.NextTeleport( index_from );
-        hero.ApplyPenaltyMovement();
 
         if ( index_from == index_to ) {
             DEBUG( DBG_AI, DBG_WARN, "teleport unsuccessfull, can't find exit lith" );
@@ -898,7 +897,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to, true );
+        hero.Move2Dest( index_to, true, true ); // no action and no penalty
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
@@ -912,7 +911,6 @@ namespace AI
     void AIToWhirlpools( Heroes & hero, s32 index_from )
     {
         s32 index_to = world.NextWhirlpool( index_from );
-        hero.ApplyPenaltyMovement();
 
         if ( index_from == index_to ) {
             DEBUG( DBG_AI, DBG_WARN, "action unsuccessfully..." );
@@ -920,7 +918,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to, true );
+        hero.Move2Dest( index_to, true, true ); // no action and no penalty
 
         Troop * troop = hero.GetArmy().GetWeakestTroop();
 
@@ -1510,13 +1508,13 @@ namespace AI
         if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
             Heroes::ScholarAction( hero1, hero2 );
 
-        if ( hero1.Modes( AI::HEROES_HUNTER ) )
+        if ( hero1.Modes( AI::HERO_HUNTER ) )
             hero1.GetArmy().JoinStrongestFromArmy( hero2.GetArmy() );
-        else if ( hero2.Modes( AI::HEROES_HUNTER ) )
+        else if ( hero2.Modes( AI::HERO_HUNTER ) )
             hero2.GetArmy().JoinStrongestFromArmy( hero1.GetArmy() );
-        else if ( hero1.Modes( AI::HEROES_SCOUTER ) )
+        else if ( hero1.Modes( AI::HERO_SCOUT ) )
             hero1.GetArmy().KeepOnlyWeakestTroops( hero2.GetArmy() );
-        else if ( hero2.Modes( AI::HEROES_SCOUTER ) )
+        else if ( hero2.Modes( AI::HERO_SCOUT ) )
             hero2.GetArmy().KeepOnlyWeakestTroops( hero1.GetArmy() );
 
         // artifacts change

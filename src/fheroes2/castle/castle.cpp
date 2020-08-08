@@ -723,21 +723,21 @@ const char * Castle::GetStringBuilding( u32 build, int race )
 
 const char * Castle::GetDescriptionBuilding( u32 build, int race )
 {
-    const char * desc_build[]
-        = {_( "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns." ),
-           _( "The Tavern increases morale for troops defending the castle." ),
-           _( "The Shipyard allows ships to be built." ),
-           _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." ),
-           _( "The Statue increases your town's income by %{count} per day." ),
-           _( "The Left Turret provides extra firepower during castle combat." ),
-           _( "The Right Turret provides extra firepower during castle combat." ),
-           _( "The Marketplace can be used to convert one type of resource into another. The more marketplaces you control, the better the exchange rate." ),
-           _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." ),
-           _( "The Castle improves town defense and increases income to %{count} gold per day." ),
-           _( "The Tent provides workers to build a castle, provided the materials and the gold are available." ),
-           _( "The Captain's Quarters provides a captain to assist in the castle's defense when no hero is present." ),
-           _( "The Mage Guild allows heroes to learn spells and replenish their spell points." ),
-           "Unknown"};
+    const char * desc_build[] = {
+        _( "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information" ),
+        _( "The Tavern increases morale for troops defending the castle." ),
+        _( "The Shipyard allows ships to be built." ),
+        _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." ),
+        _( "The Statue increases your town's income by %{count} per day." ),
+        _( "The Left Turret provides extra firepower during castle combat." ),
+        _( "The Right Turret provides extra firepower during castle combat." ),
+        _( "The Marketplace can be used to convert one type of resource into another. The more marketplaces you control, the better the exchange rate." ),
+        _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." ),
+        _( "The Castle improves town defense and increases income to %{count} gold per day." ),
+        _( "The Tent provides workers to build a castle, provided the materials and the gold are available." ),
+        _( "The Captain's Quarters provides a captain to assist in the castle's defense when no hero is present." ),
+        _( "The Mage Guild allows heroes to learn spells and replenish their spell points." ),
+        "Unknown"};
 
     const char * desc_wel2[] = {_( "The Farm increases production of Peasants by %{count} per week." ),
                                 _( "The Garbage Heap increases production of Goblins by %{count} per week." ),
@@ -2326,7 +2326,7 @@ int Castle::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-void Castle::RecruitAllMonster( void )
+void Castle::RecruitAllMonsters( void )
 {
     bool skip_recruit = false;
 
@@ -2533,7 +2533,7 @@ Castle * VecCastles::Get( const Point & position ) const
 
 Castle * VecCastles::GetFirstCastle( void ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::mem_fun( &Castle::isCastle ) );
+    const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
     return end() != it ? *it : NULL;
 }
 

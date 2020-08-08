@@ -37,32 +37,9 @@
 
 namespace AI
 {
-    bool BuildIfAvailable( Castle & castle, int building )
-    {
-        if ( !castle.isBuild( building ) )
-            return castle.BuyBuilding( building );
-        return false;
-    }
-
-    bool BuildIfEnoughResources( Castle & castle, int building, u32 minimumMultiplicator )
-    {
-        if ( minimumMultiplicator < 1 || minimumMultiplicator > 99 ) // can't be that we need more than 100 times resources
-            return false;
-
-        const Kingdom & kingdom = castle.GetKingdom();
-        if ( kingdom.GetFunds() >= PaymentConditions::BuyBuilding( castle.GetRace(), building ) * minimumMultiplicator )
-            return BuildIfAvailable( castle, building );
-        return false;
-    }
-
-    u32 GetResourceMultiplier( Castle & castle, u32 min, u32 max )
-    {
-        return castle.isCapital() ? 1 : Rand::Get( min, max );
-    }
-
     void AICastleDefense( Castle & castle )
     {
-        castle.RecruitAllMonster(); // buy monsters at first place
+        castle.RecruitAllMonsters(); // buy monsters at first place
         const bool doesArmyExist = castle.GetActualArmy().GetCount() > 0;
 
         if ( castle.isCastle() && doesArmyExist ) {
@@ -144,10 +121,10 @@ namespace AI
         }
 
         if ( world.LastDay() ) // last day so buy monster
-            castle.RecruitAllMonster();
+            castle.RecruitAllMonsters();
     }
 
-    void Simple::CastleTurn( Castle & castle )
+    void Simple::CastleTurn( Castle & castle, bool defensive )
     {
         // skip neutral town
         if ( castle.GetColor() == Color::NONE )
@@ -196,7 +173,7 @@ namespace AI
             }
 
             if ( hero )
-                hero->SetModes( AI::HEROES_HUNTER );
+                hero->SetModes( AI::HERO_HUNTER );
         }
 
         // part III
@@ -210,7 +187,7 @@ namespace AI
                 hero = castle.RecruitHero( rec.GetHero2() );
 
             if ( hero )
-                hero->SetModes( AI::HEROES_HUNTER | AI::HEROES_SCOUTER );
+                hero->SetModes( AI::HERO_HUNTER | AI::HERO_SCOUT );
         }
     }
 

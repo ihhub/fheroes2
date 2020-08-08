@@ -18,29 +18,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AI_NORMAL_H
-#define H2AI_NORMAL_H
-
 #include "ai.h"
+#include "castle.h"
+#include "empty/ai_empty.h"
+#include "kingdom.h"
+#include "normal/ai_normal.h"
+#include "simple/ai_simple.h"
 
 namespace AI
 {
-    class Normal : public Base
+    // AI Selector here
+    Base & Get( AI_TYPE type )
     {
-    public:
-        Normal();
-        void KingdomTurn( Kingdom & kingdom );
-        void CastleTurn( Castle & castle, bool defensive = false );
-        void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-        void HeroTurn( Heroes & hero );
-    };
+        static AI::Empty empty;
+        static AI::Simple simple;
+        static AI::Normal normal;
 
-    struct MapScanNode
+        switch ( type ) {
+        case AI::SIMPLE:
+            return simple;
+        case AI::NORMAL:
+            return normal;
+        }
+        return empty;
+    }
+
+    bool BuildIfAvailable( Castle & castle, int building )
     {
-        MapScanNode * prev = NULL;
-        int index = 0;
-        uint32_t distance = 0;
-    };
+        if ( !castle.isBuild( building ) )
+            return castle.BuyBuilding( building );
+        return false;
+    }
+
+    bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator )
+    {
+        if ( minimumMultiplicator < 1 || minimumMultiplicator > 99 ) // can't be that we need more than 100 times resources
+            return false;
+
+        const Kingdom & kingdom = castle.GetKingdom();
+        if ( kingdom.GetFunds() >= PaymentConditions::BuyBuilding( castle.GetRace(), building ) * minimumMultiplicator )
+            return BuildIfAvailable( castle, building );
+        return false;
+    }
+
+    uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max )
+    {
+        return castle.isCapital() ? 1 : Rand::Get( min, max );
+    }
 }
-
-#endif

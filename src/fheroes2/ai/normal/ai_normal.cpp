@@ -22,5 +22,8 @@
 
 namespace AI
 {
-    Normal::Normal() {}
+    Normal::Normal()
+    {
+        _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
+    }
 }

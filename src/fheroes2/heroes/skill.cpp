@@ -439,7 +439,18 @@ std::string Skill::Secondary::GetDescription( void ) const
 
     switch ( Skill() ) {
     case PATHFINDING:
-        str = _n( "Reduces the movement penalty for rough terrain by %{count} percent.", "Reduces the movement penalty for rough terrain by %{count} percent.", count );
+        switch ( Level() ) {
+        case Level::BASIC:
+        case Level::ADVANCED: {
+            const std::string tmpDescription( std::string( GetName() ) + std::string( " reduces the movement penalty for rough terrain by %{count} percent." ) );
+            str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        } break;
+        case Level::EXPERT:
+            str = _( GetName() + std::string( " eliminates the movement penalty for rough terrain." ) );
+            break;
+        default:
+            break;
+        }
         break;
     case ARCHERY:
         str = _n( "Increases the damage done by range attacking creatures by %{count} percent.",
