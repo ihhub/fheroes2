@@ -23,6 +23,8 @@
 #include <string>
 #include <vector>
 
+#include "math_base.h"
+
 namespace fheroes2
 {
     // Image contains image layer and transform layer.
@@ -92,6 +94,8 @@ namespace fheroes2
     Sprite Crop( const Image & image, int32_t x, int32_t y, uint32_t width, uint32_t height );
 
     void DrawBorder( Image & image, uint8_t value );
+
+    void DrawLine( Image & image, const Point & start, const Point & end, const Rect & roi );
 
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );

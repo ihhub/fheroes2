@@ -713,6 +713,12 @@ namespace fheroes2
         }
     }
 
+    void DrawLine( Image & image, const Point & start, const Point & end, const Rect & roi )
+    {
+        if ( image.empty() )
+            return;
+    }
+
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
         return GetPALColorId( red / 4, green / 4, blue / 4 );
