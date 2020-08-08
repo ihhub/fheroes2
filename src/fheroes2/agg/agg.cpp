@@ -2155,7 +2155,7 @@ namespace fheroes2
             _icnVsSprite[id].resize( count );
 
             for ( uint32_t i = 0; i < count; ++i ) {
-                imageStream.seek( 8 + i * 13 );
+                imageStream.seek( 6 + i * 13 );
 
                 ICNHeader header1;
                 imageStream >> header1;
@@ -2180,7 +2180,7 @@ namespace fheroes2
                 uint8_t * imageTransform = sprite.transform();
 
                 uint32_t posX = 0;
-                uint32_t posY = 0;
+                uint32_t offsetX = 0;
                 const uint32_t width = sprite.width();
                 const uint32_t height = sprite.height();
 
@@ -2189,7 +2189,7 @@ namespace fheroes2
 
                 while ( 1 ) {
                     if ( 0 == *data ) { // 0x00 - end line
-                        ++posY;
+                        offsetX += width;
                         posX = 0;
                         ++data;
                     }
@@ -2197,8 +2197,8 @@ namespace fheroes2
                         uint32_t c = *data;
                         ++data;
                         while ( c-- && data != dataEnd ) {
-                            imageData[posY * width + posX] = *data;
-                            imageTransform[posY * width + posX] = 0;
+                            imageData[offsetX + posX] = *data;
+                            imageTransform[offsetX + posX] = 0;
                             ++posX;
                             ++data;
                         }
@@ -2219,7 +2219,7 @@ namespace fheroes2
                         uint32_t c = *data % 4 ? *data % 4 : *( ++data );
                         while ( c-- ) {
                             if ( transformType <= 13 ) {
-                                imageTransform[posY * width + posX] = transformType;
+                                imageTransform[offsetX + posX] = transformType;
                             }
                             ++posX;
                         }
@@ -2230,8 +2230,8 @@ namespace fheroes2
                         uint32_t c = *data;
                         ++data;
                         while ( c-- ) {
-                            imageData[posY * width + posX] = *data;
-                            imageTransform[posY * width + posX] = 0;
+                            imageData[offsetX + posX] = *data;
+                            imageTransform[offsetX + posX] = 0;
                             ++posX;
                         }
                         ++data;
@@ -2240,8 +2240,8 @@ namespace fheroes2
                         uint32_t c = *data - 0xC0;
                         ++data;
                         while ( c-- ) {
-                            imageData[posY * width + posX] = *data;
-                            imageTransform[posY * width + posX] = 0;
+                            imageData[offsetX + posX] = *data;
+                            imageTransform[offsetX + posX] = 0;
                             ++posX;
                         }
                         ++data;
