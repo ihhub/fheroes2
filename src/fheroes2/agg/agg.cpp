@@ -2100,6 +2100,8 @@ namespace fheroes2
         std::vector<std::vector<fheroes2::Image> > _tilVsImage;
         const fheroes2::Image errorTILImage;
 
+        const uint32_t headerSize = 6;
+
         void PrepareICNImages()
         {
             if ( _icnVsSprite.empty() ) {
@@ -2136,7 +2138,7 @@ namespace fheroes2
             return static_cast<size_t>( id ) < _tilVsImage.size();
         }
 
-        void CreateICNSequence( int id )
+        void LoadOriginalICN( int id )
         {
             const std::vector<u8> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
 
@@ -2155,7 +2157,7 @@ namespace fheroes2
             _icnVsSprite[id].resize( count );
 
             for ( uint32_t i = 0; i < count; ++i ) {
-                imageStream.seek( 6 + i * 13 );
+                imageStream.seek( headerSize + i * 13 );
 
                 ICNHeader header1;
                 imageStream >> header1;
@@ -2182,9 +2184,8 @@ namespace fheroes2
                 uint32_t posX = 0;
                 uint32_t offsetX = 0;
                 const uint32_t width = sprite.width();
-                const uint32_t height = sprite.height();
 
-                const uint8_t * data = body.data() + 6 + header1.offsetData;
+                const uint8_t * data = body.data() + headerSize + header1.offsetData;
                 const uint8_t * dataEnd = data + sizeData;
 
                 while ( 1 ) {
@@ -2247,7 +2248,7 @@ namespace fheroes2
                         ++data;
                     }
 
-                    if ( data == dataEnd ) {
+                    if ( data >= dataEnd ) {
                         break;
                     }
                 }
@@ -2257,11 +2258,6 @@ namespace fheroes2
         bool LoadModifiedICN( int /*id*/ )
         {
             return false;
-        }
-
-        void LoadOriginalICN( int id )
-        {
-            CreateICNSequence( id );
         }
 
         size_t GetMaximumICNIndex( int id )
@@ -2278,8 +2274,6 @@ namespace fheroes2
         size_t GetMaximumTILIndex( int id )
         {
             if ( _tilVsImage[id].empty() ) {
-                const uint32_t headerSize = 6;
-
                 const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
                 if ( data.size() < headerSize ) {
                     return 0;
