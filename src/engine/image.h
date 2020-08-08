@@ -51,7 +51,7 @@ namespace fheroes2
 
         void fill( uint8_t value ); // fill only 'image' layer
 
-    protected:
+    private:
         uint32_t _width;
         uint32_t _height;
         std::vector<uint8_t> _image;

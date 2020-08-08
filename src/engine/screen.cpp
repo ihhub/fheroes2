@@ -561,7 +561,7 @@ namespace fheroes2
 
     void Display::resize( uint32_t width_, uint32_t height_ )
     {
-        if ( width_ == 0 || height_ == 0 || ( width_ == _width && height_ == _height ) ) // nothing to resize
+        if ( width_ == 0 || height_ == 0 || ( width_ == width() && height_ == height() ) ) // nothing to resize
             return;
 
         // deallocate engine resources
