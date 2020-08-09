@@ -191,7 +191,7 @@ namespace
 
             if ( _surface->format->BitsPerPixel == 32 ) {
                 uint32_t * out = static_cast<uint32_t *>( _surface->pixels );
-                uint32_t * outEnd = out + width * height;
+                const uint32_t * outEnd = out + width * height;
                 const uint8_t * in = display.image();
                 const uint32_t * transform = _palette32Bit.data();
 
@@ -410,7 +410,7 @@ namespace
 
             if ( _surface->format->BitsPerPixel == 32 ) {
                 uint32_t * out = static_cast<uint32_t *>( _surface->pixels );
-                uint32_t * outEnd = out + width * height;
+                const uint32_t * outEnd = out + width * height;
                 const uint8_t * in = display.image();
                 const uint32_t * transform = _palette32Bit.data();
 
@@ -587,7 +587,7 @@ namespace fheroes2
             _preprocessing( *this );
         }
 
-        Cursor & cursor = Cursor::instance();
+        const Cursor & cursor = Cursor::instance();
         if ( cursor.isVisible() ) {
             const Sprite backup = Crop( *this, cursor.x(), cursor.y(), cursor.width(), cursor.height() );
             Blit( cursor, *this, cursor.x(), cursor.y() );
