@@ -39,43 +39,43 @@ namespace fheroes2
         PointBase2D( _Type _x = 0, _Type _y = 0 )
             : x( _x )
             , y( _y )
-        { }
+        {}
 
-        bool operator == ( const PointBase2D & point ) const
+        bool operator==( const PointBase2D & point ) const
         {
             return isEqual( x, point.x ) && isEqual( y, point.y );
         }
 
-        bool operator != ( const PointBase2D & point ) const
+        bool operator!=( const PointBase2D & point ) const
         {
             return !( *this == point );
         }
 
-        PointBase2D & operator += ( const PointBase2D & point )
+        PointBase2D & operator+=( const PointBase2D & point )
         {
             x += point.x;
             y += point.y;
             return *this;
         }
 
-        PointBase2D & operator -= ( const PointBase2D & point )
+        PointBase2D & operator-=( const PointBase2D & point )
         {
             x -= point.x;
             y -= point.y;
             return *this;
         }
 
-        PointBase2D operator + ( const PointBase2D & point ) const
+        PointBase2D operator+( const PointBase2D & point ) const
         {
             return PointBase2D( x + point.x, y + point.y );
         }
 
-        PointBase2D operator - ( const PointBase2D & point ) const
+        PointBase2D operator-( const PointBase2D & point ) const
         {
             return PointBase2D( x - point.x, y - point.y );
         }
 
-        PointBase2D operator * ( const _Type & value ) const
+        PointBase2D operator*( const _Type & value ) const
         {
             return PointBase2D( value * x, value * y );
         }
@@ -85,7 +85,7 @@ namespace fheroes2
     };
 
     template <typename _Type, typename T>
-    PointBase2D<_Type> operator * ( const T & value, const PointBase2D<_Type> & point )
+    PointBase2D<_Type> operator*( const T & value, const PointBase2D<_Type> & point )
     {
         return PointBase2D<_Type>( static_cast<_Type>( value ) * point.x, static_cast<_Type>( value ) * point.y );
     }
@@ -100,36 +100,36 @@ namespace fheroes2
             , height( _height )
         { }
 
-        bool operator == ( const RectBase2D & rect ) const
+        bool operator==( const RectBase2D & rect ) const
         {
             return isEqual( x, rect.x ) && isEqual( y, rect.y ) && isEqual( width, rect.width ) && isEqual( height, rect.height );
         }
 
-        bool operator != ( const RectBase2D & rect ) const
+        bool operator!=( const RectBase2D & rect ) const
         {
             return !( *this == rect );
         }
 
-        RectBase2D & operator += ( const PointBase2D<_TypePoint> & point )
+        RectBase2D & operator+=( const PointBase2D<_TypePoint> & point )
         {
             x += point.x;
             y += point.y;
             return *this;
         }
 
-        RectBase2D & operator -= ( const PointBase2D<_TypePoint> & point )
+        RectBase2D & operator-=( const PointBase2D<_TypePoint> & point )
         {
             x -= point.x;
             y -= point.y;
             return *this;
         }
 
-        RectBase2D operator + ( const PointBase2D<_TypePoint> & point ) const
+        RectBase2D operator+( const PointBase2D<_TypePoint> & point ) const
         {
             return RectBase2D( x + point.x, y + point.y, width, height );
         }
 
-        RectBase2D operator - ( const PointBase2D<_TypePoint> & point ) const
+        RectBase2D operator-( const PointBase2D<_TypePoint> & point ) const
         {
             return RectBase2D( x - point.x, y - point.y, width, height );
         }

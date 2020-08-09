@@ -705,7 +705,7 @@ namespace fheroes2
 
         // right side
         data = image.image() + width + width - 1;
-        transform = image.transform() + width + width - 1;;
+        transform = image.transform() + width + width - 1;
         dataEnd = data + width * ( height - 2 );
         for ( ; data != dataEnd; data += width, transform += width ) {
             *data = value;

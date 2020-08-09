@@ -96,7 +96,7 @@ namespace fheroes2
 
     void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
     {
-        _icnId =  icnId;
+        _icnId = icnId;
         _releasedIndex = releasedIndex;
         _pressedIndex = pressedIndex;
     }
