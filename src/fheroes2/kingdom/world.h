@@ -22,9 +22,9 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
-#include <map>
 #include <set>
 #include <vector>
+#include <unordered_map>
 
 #include "artifact_ultimate.h"
 #include "castle_heroes.h"
@@ -265,7 +265,7 @@ private:
     void MonthOfMonstersAction( const Monster & );
     void PostLoad( void );
 
-    void GrowRegion( std::set<int> & openTiles, std::vector<std::pair<int, int> > & connection, int regionID );
+    void GrowRegion( std::set<int> & openTiles, std::unordered_map<int, int> & connection, int regionID );
 
 private:
     friend class Radar;

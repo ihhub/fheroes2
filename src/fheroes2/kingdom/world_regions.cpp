@@ -18,10 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <set>
+
 #include "world.h"
 
 namespace
 {
+    // Aliases to make data structures easier to work with
+    // TileData.first is index, TileData.second is payload
+    using TileData = std::pair<int, int>;
+    using TileDataVector = std::vector<std::pair<int, int> >;
+
     bool AppendIfFarEnough( std::vector<int> & dataSet, int value, uint32_t distance )
     {
         bool match = true;
@@ -35,9 +42,34 @@ namespace
 
         return match;
     }
+
+    struct MapRegion
+    {
+        int id;
+        std::vector<MapRegion *> _neighbors;
+    };
+
+    struct MapRegionNode
+    {
+
+    };
+
+    struct RegionLink
+    {
+
+    };
+
+    struct RegionLinkRoute : std::list<int>
+    {
+        int _indexFrom;
+        int _indexTo;
+        size_t _length;
+        uint32_t _basePenalty;
+        uint32_t _roughTerrainPenalty;
+    };
 }
 
-void World::GrowRegion( std::set<int> & openTiles, std::vector<std::pair<int, int> > & connection, int regionID )
+void World::GrowRegion( std::set<int> & openTiles, std::unordered_map<int, int> & connection, int regionID )
 {
     static const Directions directions = Direction::All();
     std::set<int> & tileSet = openTiles;
@@ -54,7 +86,7 @@ void World::GrowRegion( std::set<int> & openTiles, std::vector<std::pair<int, in
                     if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
                         if ( newTile._region ) {
                             if ( newTile._region != regionID ) {
-                                connection[newIndex].second++;
+                                connection.emplace( newIndex, 1 );
                             }
                         }
                         else {
@@ -63,6 +95,9 @@ void World::GrowRegion( std::set<int> & openTiles, std::vector<std::pair<int, in
                     }
                 }
             }
+        }
+        else if ( vec_tiles[tileIndex]._region != regionID ) {
+            std::cout << "Regions " << regionID << " and " << vec_tiles[tileIndex]._region << " met in tile " << tileIndex << std::endl;
         }
     }
     tileSet = std::move( newTiles );
@@ -74,10 +109,12 @@ void World::ComputeStaticAnalysis()
     const int width = w();
     const int heigth = h();
     const int mapSize = std::max( width, heigth );
+
+    std::unordered_map<int, int> connectionMap;
     const Directions directions = Direction::All();
-    std::vector<std::pair<int, int> > obsColumns;
-    std::vector<std::pair<int, int> > obsRows;
-    std::vector<std::pair<int, int> > connection;
+    TileDataVector obsByColumn;
+    TileDataVector obsByRow;
+    TileDataVector castleCenters;
     std::vector<int> regionCenters;
 
     const uint32_t castleRegionSize = 16;
@@ -86,61 +123,60 @@ void World::ComputeStaticAnalysis()
     const int waterRegionSize = mapSize / 3;
 
     for ( int x = 0; x < width; x++ )
-        obsColumns.emplace_back( x, 0 );
+        obsByColumn.emplace_back( x, 0 );
     for ( int y = 0; y < heigth; y++ )
-        obsRows.emplace_back( y, 0 );
+        obsByRow.emplace_back( y, 0 );
 
     for ( int y = 0; y < heigth; y++ ) {
         for ( int x = 0; x < width; x++ ) {
-            // initialize
-            connection.emplace_back( y * width + x, 0 );
-
             const int index = y * width + x;
             Maps::Tiles & tile = vec_tiles[index];
             if ( tile.GetPassable() == 0 || tile.isWater() ) {
                 obstacles++;
-                obsColumns[x].second++;
-                obsRows[y].second++;
+                obsByColumn[x].second++;
+                obsByRow[y].second++;
             }
         }
     }
 
-    std::sort( obsColumns.begin(), obsColumns.end(), []( const std::pair<int, int> & x, const std::pair<int, int> & y ) { return x.second < y.second; } );
+    std::sort( obsByColumn.begin(), obsByColumn.end(), []( const TileData & left, TileData & right ) { return left.second < right.second; } );
     std::vector<int> emptyColumns;
-    for ( auto column : obsColumns ) {
+    for ( auto column : obsByColumn ) {
         AppendIfFarEnough( emptyColumns, column.first, emptyLineFrequency );
     }
 
-    std::sort( obsRows.begin(), obsRows.end(), []( const std::pair<int, int> & x, const std::pair<int, int> & y ) { return x.second < y.second; } );
+    std::sort( obsByRow.begin(), obsByRow.end(), []( const TileData & left, TileData & right ) { return left.second < right.second; } );
     std::vector<int> emptyRows;
-    for ( auto row : obsRows ) {
+    for ( auto row : obsByRow ) {
         AppendIfFarEnough( emptyRows, row.first, emptyLineFrequency );
     }
 
+    // Values used to tweak region generation parameters
     const int tilesTotal = width * heigth;
     const int usableTiles = tilesTotal - obstacles;
     double freeTilesPercentage = usableTiles * 100.0 / tilesTotal;
-    const int tilesPerCastle = usableTiles / vec_castles.size();
+    if ( vec_castles.size() ) {
+        const int tilesPerCastle = usableTiles / vec_castles.size();
+    }
 
-    std::vector<std::pair<int, int> > castleCenters;
-    for ( auto castle : vec_castles ) {
+    for ( Castle * castle : vec_castles ) {
         castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
     }
-    std::sort( castleCenters.begin(), castleCenters.end(), []( const std::pair<int, int> & left, const std::pair<int, int> & right ) {
+    std::sort( castleCenters.begin(), castleCenters.end(), []( const TileData & left, const TileData & right ) {
         if ( left.second == right.second )
             return left.first < right.first;
         return left.second > right.second;
     } );
 
     for ( auto castleTile : castleCenters ) {
-        // Check if different colors? (Slugfest)
+        // Check if different colors? (Slugfest map)
         // GetCastle( Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
         AppendIfFarEnough( regionCenters, ( castleIndex > vec_tiles.size() ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
-    for ( auto rowID : emptyRows ) {
-        for ( auto colID : emptyColumns ) {
+    for ( int rowID : emptyRows ) {
+        for ( int colID : emptyColumns ) {
             int centerIndex = -1;
 
             const int tileIndex = rowID * width + colID;
@@ -175,7 +211,7 @@ void World::ComputeStaticAnalysis()
     // Region growing
     for ( int radius = 0; radius < mapSize / 2; ++radius ) {
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-            GrowRegion( openTiles[regionID], connection, regionID + 1 );
+            GrowRegion( openTiles[regionID], connectionMap, regionID + 1 );
         }
     }
 
@@ -191,16 +227,20 @@ void World::ComputeStaticAnalysis()
                 const int islandID = nextRegionID++;
 
                 for ( int iteration = 0; iteration < waterRegionSize; ++iteration ) {
-                    GrowRegion( openTiles, connection, islandID );
+                    GrowRegion( openTiles, connectionMap, islandID );
                 }
             }
         }
     }
 
-    std::sort( connection.begin(), connection.end(), []( const std::pair<int, int> & x, const std::pair<int, int> & y ) { return x.second > y.second; } );
+    // Create region connection clusters
+    std::vector<int> conn;
+    
+
+    //std::sort( regionLink.begin(), regionLink.end(), []( const TileData & x, const TileData & y ) { return x.second > y.second; } );
 
     // view the hot spots
-    for ( auto conn : connection ) {
-        vec_tiles[conn.first]._metadata = conn.second;
-    }
+    //for ( auto conn : regionLink ) {
+    //    vec_tiles[conn.first]._metadata = conn.second;
+    //}
 }
