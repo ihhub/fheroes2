@@ -251,32 +251,12 @@ void World::ComputeStaticAnalysis()
         // begin() should be always valid if map is not empty
         TileData link = *connectionMap.begin();
 
-
-        //const int x = tileIndex % width;
-        //const int y = tileIndex / width;
-        //for ( int newY = y - 2; newY < y + 2; ++newY ) {
-        //    for ( int newX = x - 2; newX < x + 2; ++newX ) {
-        //        if ( Maps::isValidAbsPoint( newX, newY ) ) {
-        //            const int newIndex = Maps::GetIndexFromAbsPoint( newX, newY );
-
-        //            std::unordered_map<int, int>::iterator nextTile = connectionMap.find( newIndex );
-        //            if ( nextTile != connectionMap.end() ) {
-        //                indiciesToRemove.push_back( newIndex );
-        //                if ( nextTile->second > link.second ) {
-        //                    link = *nextTile;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        // FIND ROAD
-
         std::set<int> openTiles;
         openTiles.insert( link.first );
 
+        // Loop to find all tiles in a cluster, we only need 1 to make it a region link
         while ( !openTiles.empty() ) {
-            // pop first element
+            // pop_first() for std::set
             const int tileIndex = *openTiles.begin();
             openTiles.erase( openTiles.begin() );
 
@@ -299,17 +279,14 @@ void World::ComputeStaticAnalysis()
             }
         }
 
-
         regionLinks.push_back( link );
-
-        //for ( int idx : indiciesToRemove )
-        //    connectionMap.erase( idx );
     }
 
-    // std::sort( regionLink.begin(), regionLink.end(), []( const TileData & x, const TileData & y ) { return x.second > y.second; } );
-
     // view the hot spots
-    for ( auto conn : regionLinks ) {
-        vec_tiles[conn.first]._metadata = conn.second;
+    for ( const int center : regionCenters ) {
+        vec_tiles[center]._metadata = vec_tiles[center]._region;
+    }
+    for ( TileData link : regionLinks ) {
+        vec_tiles[link.first]._metadata = vec_tiles[link.first]._region;
     }
 }
