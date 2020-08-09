@@ -98,7 +98,7 @@ namespace fheroes2
             , y( _y )
             , width( _width )
             , height( _height )
-        { }
+        {}
 
         bool operator==( const RectBase2D & rect ) const
         {
