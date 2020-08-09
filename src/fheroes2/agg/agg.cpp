@@ -2258,8 +2258,8 @@ namespace fheroes2
         // Helper function for LoadModifiedICN
         void CopyICNWithPalette( int icnId, int originalIcnId, int paletteType )
         {
-            LoadOriginalICN( ICN::ROUTE );
-            _icnVsSprite[icnId] = _icnVsSprite[ICN::ROUTE];
+            LoadOriginalICN( originalIcnId );
+            _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
             const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
             for ( size_t i = 0; i < _icnVsSprite[icnId].size(); ++i ) {
                 ApplyPallete( _icnVsSprite[icnId][i], palette );
