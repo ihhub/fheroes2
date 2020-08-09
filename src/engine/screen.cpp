@@ -190,7 +190,6 @@ namespace
                 SDL_LockSurface( _surface );
 
             if ( _surface->format->BitsPerPixel == 32 ) {
-                const uint16_t pitch = _surface->pitch >> 2;
                 uint32_t * out = static_cast<uint32_t *>( _surface->pixels );
                 uint32_t * outEnd = out + width * height;
                 const uint8_t * in = display.image();
@@ -410,7 +409,6 @@ namespace
                 SDL_LockSurface( _surface );
 
             if ( _surface->format->BitsPerPixel == 32 ) {
-                const uint16_t pitch = _surface->pitch >> 2;
                 uint32_t * out = static_cast<uint32_t *>( _surface->pixels );
                 uint32_t * outEnd = out + width * height;
                 const uint8_t * in = display.image();
