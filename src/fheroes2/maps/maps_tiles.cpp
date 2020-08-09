@@ -1536,8 +1536,8 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
     if ( area.GetVisibleTileROI() & mp ) {
         Surface sf( Size( 31, 31 ), true );
         // Surface sf = PassableViewSurface( tile_passable );
-        if ( _region ) {
-            Text text( GetString( _region ), Font::SMALL );
+        if ( _metadata ) {
+            Text text( GetString( _metadata ), Font::SMALL );
             text.Blit( 13, 13, sf );
         }
         area.BlitOnTile( dst, sf, 0, 0, mp );

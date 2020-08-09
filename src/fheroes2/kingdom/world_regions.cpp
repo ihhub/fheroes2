@@ -50,14 +50,10 @@ namespace
     };
 
     struct MapRegionNode
-    {
-
-    };
+    {};
 
     struct RegionLink
-    {
-
-    };
+    {};
 
     struct RegionLinkRoute : std::list<int>
     {
@@ -86,7 +82,13 @@ void World::GrowRegion( std::set<int> & openTiles, std::unordered_map<int, int> 
                     if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
                         if ( newTile._region ) {
                             if ( newTile._region != regionID ) {
-                                connection.emplace( newIndex, 1 );
+                                auto currentValue = connection.find( newIndex );
+                                if ( currentValue != connection.end() ) {
+                                    ++currentValue->second;
+                                }
+                                else {
+                                    connection.emplace( newIndex, 1 );
+                                }
                             }
                         }
                         else {
@@ -111,6 +113,8 @@ void World::ComputeStaticAnalysis()
     const int mapSize = std::max( width, heigth );
 
     std::unordered_map<int, int> connectionMap;
+    connectionMap.reserve( static_cast<size_t>( mapSize ) * 3 ); // average amount of connections created
+
     const Directions directions = Direction::All();
     TileDataVector obsByColumn;
     TileDataVector obsByRow;
@@ -139,13 +143,14 @@ void World::ComputeStaticAnalysis()
         }
     }
 
-    std::sort( obsByColumn.begin(), obsByColumn.end(), []( const TileData & left, TileData & right ) { return left.second < right.second; } );
+    auto smallerThanSort = []( const TileData & left, TileData & right ) { return left.second < right.second; };
+    std::sort( obsByColumn.begin(), obsByColumn.end(), smallerThanSort );
     std::vector<int> emptyColumns;
     for ( auto column : obsByColumn ) {
         AppendIfFarEnough( emptyColumns, column.first, emptyLineFrequency );
     }
 
-    std::sort( obsByRow.begin(), obsByRow.end(), []( const TileData & left, TileData & right ) { return left.second < right.second; } );
+    std::sort( obsByRow.begin(), obsByRow.end(), smallerThanSort );
     std::vector<int> emptyRows;
     for ( auto row : obsByRow ) {
         AppendIfFarEnough( emptyRows, row.first, emptyLineFrequency );
@@ -234,13 +239,49 @@ void World::ComputeStaticAnalysis()
     }
 
     // Create region connection clusters
-    std::vector<int> conn;
-    
+    TileDataVector regionLinks;
 
-    //std::sort( regionLink.begin(), regionLink.end(), []( const TileData & x, const TileData & y ) { return x.second > y.second; } );
+    while ( !connectionMap.empty() ) {
+        // begin() should be always valid if map is not empty
+        std::unordered_map<int, int>::iterator current = connectionMap.begin();
+        const int tileIndex = current->first;
+        TileData link = *current;
+
+        std::vector<int> indiciesToRemove;
+        indiciesToRemove.push_back( tileIndex );
+
+        const int x = tileIndex % width;
+        const int y = tileIndex / width;
+        for ( int newY = y - 2; newY < y + 2; ++newY ) {
+            for ( int newX = x - 2; newX < x + 2; ++newX ) {
+                if ( Maps::isValidAbsPoint( newX, newY ) ) {
+                    const int newIndex = Maps::GetIndexFromAbsPoint( newX, newY );
+
+                    std::unordered_map<int, int>::iterator nextTile = connectionMap.find( newIndex );
+                    if ( nextTile != connectionMap.end() ) {
+                        indiciesToRemove.push_back( newIndex );
+                        if ( nextTile->second > link.second ) {
+                            link = *nextTile;
+                        }
+                    }
+                }
+            }
+        }
+
+        for ( int direction : directions ) {
+
+        }
+
+        regionLinks.push_back( link );
+
+        for ( int idx : indiciesToRemove )
+            connectionMap.erase( idx );
+    }
+
+    // std::sort( regionLink.begin(), regionLink.end(), []( const TileData & x, const TileData & y ) { return x.second > y.second; } );
 
     // view the hot spots
-    //for ( auto conn : regionLink ) {
-    //    vec_tiles[conn.first]._metadata = conn.second;
-    //}
+    for ( auto conn : regionLinks ) {
+        vec_tiles[conn.first]._metadata = conn.second;
+    }
 }
