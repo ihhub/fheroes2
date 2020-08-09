@@ -265,16 +265,16 @@ namespace
                 r = ( id % 64 );
                 g = ( id >> 6 ) % 64;
                 b = ( id >> 12 );
-                double minDistance = 3 * 255 * 255;
+                int32_t minDistance = 3 * 255 * 255;
                 uint32_t bestPos = 0;
 
                 const uint8_t * palette = kb_pal;
 
                 for ( uint32_t i = 0; i < 256; ++i ) {
-                    const double offsetRed = static_cast<double>( *( palette++ ) ) - static_cast<double>( r );
-                    const double offsetGreen = static_cast<double>( *( palette++ ) ) - static_cast<double>( g );
-                    const double offsetBlue = static_cast<double>( *( palette++ ) ) - static_cast<double>( b );
-                    const double distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
+                    const int32_t offsetRed = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( r );
+                    const int32_t offsetGreen = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( g );
+                    const int32_t offsetBlue = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( b );
+                    const int32_t distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
                     if ( minDistance > distance ) {
                         minDistance = distance;
                         bestPos = i;
