@@ -68,14 +68,13 @@ namespace
 void World::GrowRegion( std::set<int> & openTiles, std::unordered_map<int, int> & connection, int regionID )
 {
     static const Directions directions = Direction::All();
-    std::set<int> & tileSet = openTiles;
 
     std::set<int> newTiles;
-    for ( const int & tileIndex : tileSet ) {
+    for ( const int tileIndex : openTiles ) {
         if ( !vec_tiles[tileIndex]._region ) {
             vec_tiles[tileIndex]._region = regionID;
 
-            for ( int direction : directions ) {
+            for ( const int direction : directions ) {
                 if ( Maps::isValidDirection( tileIndex, direction ) && ( vec_tiles[tileIndex].GetPassable() & direction ) ) {
                     const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
                     const Maps::Tiles & newTile = vec_tiles[newIndex];
@@ -99,10 +98,17 @@ void World::GrowRegion( std::set<int> & openTiles, std::unordered_map<int, int> 
             }
         }
         else if ( vec_tiles[tileIndex]._region != regionID ) {
-            std::cout << "Regions " << regionID << " and " << vec_tiles[tileIndex]._region << " met in tile " << tileIndex << std::endl;
+            auto currentValue = connection.find( tileIndex );
+            if ( currentValue != connection.end() ) {
+                ++currentValue->second;
+            }
+            else {
+                //connection.emplace( tileIndex, 1 );
+            }
+            //std::cout << "Regions " << regionID << " and " << vec_tiles[tileIndex]._region << " met in tile " << tileIndex << std::endl;
         }
     }
-    tileSet = std::move( newTiles );
+    openTiles = std::move( newTiles );
 }
 
 void World::ComputeStaticAnalysis()
@@ -243,39 +249,61 @@ void World::ComputeStaticAnalysis()
 
     while ( !connectionMap.empty() ) {
         // begin() should be always valid if map is not empty
-        std::unordered_map<int, int>::iterator current = connectionMap.begin();
-        const int tileIndex = current->first;
-        TileData link = *current;
+        TileData link = *connectionMap.begin();
 
-        std::vector<int> indiciesToRemove;
-        indiciesToRemove.push_back( tileIndex );
 
-        const int x = tileIndex % width;
-        const int y = tileIndex / width;
-        for ( int newY = y - 2; newY < y + 2; ++newY ) {
-            for ( int newX = x - 2; newX < x + 2; ++newX ) {
-                if ( Maps::isValidAbsPoint( newX, newY ) ) {
-                    const int newIndex = Maps::GetIndexFromAbsPoint( newX, newY );
+        //const int x = tileIndex % width;
+        //const int y = tileIndex / width;
+        //for ( int newY = y - 2; newY < y + 2; ++newY ) {
+        //    for ( int newX = x - 2; newX < x + 2; ++newX ) {
+        //        if ( Maps::isValidAbsPoint( newX, newY ) ) {
+        //            const int newIndex = Maps::GetIndexFromAbsPoint( newX, newY );
 
-                    std::unordered_map<int, int>::iterator nextTile = connectionMap.find( newIndex );
-                    if ( nextTile != connectionMap.end() ) {
-                        indiciesToRemove.push_back( newIndex );
-                        if ( nextTile->second > link.second ) {
-                            link = *nextTile;
-                        }
-                    }
+        //            std::unordered_map<int, int>::iterator nextTile = connectionMap.find( newIndex );
+        //            if ( nextTile != connectionMap.end() ) {
+        //                indiciesToRemove.push_back( newIndex );
+        //                if ( nextTile->second > link.second ) {
+        //                    link = *nextTile;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        // FIND ROAD
+
+        std::set<int> openTiles;
+        openTiles.insert( link.first );
+
+        while ( !openTiles.empty() ) {
+            // pop first element
+            const int tileIndex = *openTiles.begin();
+            openTiles.erase( openTiles.begin() );
+
+            std::unordered_map<int, int>::iterator currentTile = connectionMap.find( tileIndex );
+            if ( currentTile != connectionMap.end() ) {
+                if ( currentTile->second > link.second ) {
+                    link = *currentTile;
+                }
+                connectionMap.erase( currentTile );
+            }
+
+            // find if there's more tiles around
+            for ( int direction : directions ) {
+                if ( Maps::isValidDirection( tileIndex, direction ) ) {
+                    const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
+
+                    if ( connectionMap.find( newIndex ) != connectionMap.end() )
+                        openTiles.insert( newIndex );
                 }
             }
         }
 
-        for ( int direction : directions ) {
-
-        }
 
         regionLinks.push_back( link );
 
-        for ( int idx : indiciesToRemove )
-            connectionMap.erase( idx );
+        //for ( int idx : indiciesToRemove )
+        //    connectionMap.erase( idx );
     }
 
     // std::sort( regionLink.begin(), regionLink.end(), []( const TileData & x, const TileData & y ) { return x.second > y.second; } );
