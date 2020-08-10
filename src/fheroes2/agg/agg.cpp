@@ -34,9 +34,9 @@
 #include "error.h"
 #include "font.h"
 #include "game.h"
-#include "image.h"
 #include "m82.h"
 #include "mus.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"
@@ -2102,6 +2102,9 @@ namespace fheroes2
 
         const uint32_t headerSize = 6;
 
+        const std::set<int> _scalableICNIds{ICN::HEROES, ICN::BTNSHNGL, ICN::SHNGANIM};
+        std::map<int, std::vector<fheroes2::Sprite> > _icnVsScaledSprite;
+
         void PrepareICNImages()
         {
             if ( _icnVsSprite.empty() ) {
@@ -2319,6 +2322,40 @@ namespace fheroes2
             return _tilVsImage[id].size();
         }
 
+        // We have few ICNs which we need to scale like some related to main screen
+        bool IsScalableICN( int id )
+        {
+            return std::find( _scalableICNIds.begin(), _scalableICNIds.end(), id ) != _scalableICNIds.end();
+        }
+
+        const Sprite & GetScaledICN( int icnId, uint32_t index )
+        {
+            const Sprite & originalIcn = _icnVsSprite[icnId][index];
+
+            if ( Display::DEFAULT_WIDTH == Display::instance().width() && Display::DEFAULT_HEIGHT == Display::instance().height() ) {
+                return originalIcn;
+            }
+
+            if ( _icnVsScaledSprite[icnId].empty() ) {
+                _icnVsScaledSprite[icnId].resize( _icnVsSprite[icnId].size() );
+            }
+
+            Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
+
+            const double scaleFactorX = static_cast<double>( Display::instance().width() ) / Display::DEFAULT_WIDTH;
+            const double scaleFactorY = static_cast<double>( Display::instance().height() ) / Display::DEFAULT_HEIGHT;
+
+            const uint32_t resizedWidth = static_cast<uint32_t>( originalIcn.width() * scaleFactorX + 0.5 );
+            const uint32_t resizedHeight = static_cast<uint32_t>( originalIcn.height() * scaleFactorY + 0.5 );
+            // Resize only if needed
+            if ( resizedIcn.width() != resizedWidth || resizedIcn.height() != resizedHeight ) {
+                resizedIcn.resize( resizedWidth, resizedHeight );
+                Resize( originalIcn, resizedIcn, true );
+            }
+
+            return resizedIcn;
+        }
+
         const Sprite & GetICN( int icnId, uint32_t index )
         {
             if ( !IsValidICNId( icnId ) ) {
@@ -2327,6 +2364,10 @@ namespace fheroes2
 
             if ( index >= GetMaximumICNIndex( icnId ) ) {
                 return errorICNImage;
+            }
+
+            if ( IsScalableICN( icnId ) ) {
+                return GetScaledICN( icnId, index );
             }
 
             return _icnVsSprite[icnId][index];
