@@ -71,7 +71,7 @@ namespace
 
     std::vector<std::pair<int, int> > FilterResolutions( const std::set<std::pair<int, int> > & resolutionSet )
     {
-        if ( !resolutionSet.empty() )
+        if ( resolutionSet.empty() )
             return std::vector<std::pair<int, int> >();
 
         std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
