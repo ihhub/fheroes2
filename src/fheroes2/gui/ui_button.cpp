@@ -127,4 +127,26 @@ namespace fheroes2
             }
         }
     }
+
+    void Button::drawOnPress( Image & area )
+    {
+        if ( !isPressed() ) {
+            press();
+            draw( area );
+        }
+    }
+
+    void Button::drawOnRelease( Image & area )
+    {
+        if ( isPressed() ) {
+            release();
+            draw( area );
+        }
+    }
+
+    Rect Button::area()
+    {
+        const Sprite & sprite = AGG::GetICN( _icnId, isPressed() ? _pressedIndex : _releasedIndex );
+        return Rect( _offsetX + sprite.x(), _offsetY + sprite.y(), sprite.width(), sprite.height() );
+    }
 }

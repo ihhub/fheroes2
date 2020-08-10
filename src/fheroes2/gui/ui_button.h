@@ -44,6 +44,10 @@ namespace fheroes2
         void setPosition( int32_t offsetX, int32_t offsetY );
 
         void draw( Image & area = Display::instance() ); // will draw on screen by default
+        void drawOnPress( Image & area = Display::instance() ); // will draw on screen by default
+        void drawOnRelease( Image & area = Display::instance() ); // will draw on screen by default
+
+        Rect area();
 
     private:
         int32_t _offsetX;
