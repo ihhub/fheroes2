@@ -150,7 +150,7 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
             return false;
 
         case MP2::OBJ_COAST:
-            return toTile.GetIndex() == dst;
+            return to == dst;
 
         default:
             break;
@@ -159,10 +159,10 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
     else if ( !fromTile.isWater() && toTile.isWater() ) {
         switch ( toTile.GetObject() ) {
         case MP2::OBJ_BOAT:
-            return true;
+            return to == dst;
 
         case MP2::OBJ_HEROES:
-            return toTile.GetIndex() == dst;
+            return to == dst;
 
         default:
             break;
