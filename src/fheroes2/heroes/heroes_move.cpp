@@ -524,45 +524,45 @@ void Heroes::Redraw( Surface & dst, s32 dx, s32 dy, bool with_shadow ) const
     }
 }
 
-void Heroes::MoveStep( Heroes & hero, s32 index_from, s32 index_to, bool newpos )
+void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
 {
+    Route::Path & path = hero.GetPath();
+    hero.ApplyPenaltyMovement( path.GetFrontPenalty() );
     if ( newpos ) {
-        hero.Move2Dest( index_to );
-        hero.GetPath().PopFront();
+        hero.Move2Dest( indexTo );
+        path.PopFront();
 
         // possible hero is die
-        if ( !hero.isFreeman() && index_to == hero.GetPath().GetDestinationIndex() ) {
+        if ( !hero.isFreeman() && indexTo == hero.GetPath().GetDestinationIndex() ) {
             hero.GetPath().Reset();
-            hero.Action( index_to );
+            hero.Action( indexTo );
             hero.SetMove( false );
         }
     }
     else {
-        hero.ApplyPenaltyMovement();
         hero.GetPath().Reset();
-        hero.Action( index_to );
+        hero.Action( indexTo );
         hero.SetMove( false );
     }
 }
 
 bool Heroes::MoveStep( bool fast )
 {
-    s32 index_from = GetIndex();
-    s32 index_to = Maps::GetDirectionIndex( index_from, path.GetFrontDirection() );
-    s32 index_dst = path.GetDestinationIndex();
+    const int32_t indexTo = Maps::GetDirectionIndex( GetIndex(), path.GetFrontDirection() );
+    const int32_t indexDest = path.GetDestinationIndex();
     const Point & mp = GetCenter();
 
     if ( fast ) {
-        if ( index_to == index_dst && isNeedStayFrontObject( *this, world.GetTiles( index_to ) ) )
-            MoveStep( *this, index_from, index_to, false );
+        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) )
+            MoveStep( *this, indexTo, false );
         else
-            MoveStep( *this, index_from, index_to, true );
+            MoveStep( *this, indexTo, true );
 
         return true;
     }
     else if ( 0 == sprite_index % 9 ) {
-        if ( index_to == index_dst && isNeedStayFrontObject( *this, world.GetTiles( index_to ) ) ) {
-            MoveStep( *this, index_from, index_to, false );
+        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
+            MoveStep( *this, indexTo, false );
 
             return true;
         }
@@ -574,7 +574,7 @@ bool Heroes::MoveStep( bool fast )
     }
     else if ( 8 == sprite_index % 9 ) {
         sprite_index -= 8;
-        MoveStep( *this, index_from, index_to, true );
+        MoveStep( *this, indexTo, true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
         if ( isEnableMove() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {

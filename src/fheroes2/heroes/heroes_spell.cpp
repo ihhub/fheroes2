@@ -35,6 +35,13 @@
 #include "spell.h"
 #include "world.h"
 
+namespace
+{
+    // Values are extracted from Heroes2 executable
+    const uint32_t dimensionDoorPenalty = 225;
+    const uint32_t townGatePenalty = 225;
+}
+
 void DialogSpellFailed( const Spell & );
 void DialogNotAvailable( void );
 
@@ -199,6 +206,7 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         hero.FadeOut();
 
         Cursor::Get().Hide();
+        hero.ApplyPenaltyMovement( townGatePenalty );
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -365,7 +373,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.SpellCasted( Spell::DIMENSIONDOOR );
 
         cursor.Hide();
-        hero.Move2Dest( dst, true );
+        hero.ApplyPenaltyMovement( dimensionDoorPenalty );
+        hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
         I.RedrawFocus();
