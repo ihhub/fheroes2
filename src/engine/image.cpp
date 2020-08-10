@@ -811,7 +811,7 @@ namespace fheroes2
                 const uint8_t * transformInX = transformInY + offset;
                 const uint32_t * idX = positionX.data();
 
-                for ( ; outX != outXEnd; ++outX, ++idX ) {
+                for ( ; outX != outXEnd; ++outX, ++transformOutX, ++idX ) {
                     *outX = *( inX + ( *idX ) );
                     *transformOutX = *( transformInX + ( *idX ) );
                 }
