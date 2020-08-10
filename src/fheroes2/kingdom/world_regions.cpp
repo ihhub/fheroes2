@@ -46,14 +46,15 @@ namespace
     struct MapRegion
     {
         int id;
-        std::vector<MapRegion *> _neighbors;
+        std::vector<MapRegion *> neighbours;
+        std::vector<MapRegionNode> nodes;
     };
 
     struct MapRegionNode
-    {};
-
-    struct RegionLink
-    {};
+    {
+        int index;
+        int region;
+    };
 
     struct RegionLinkRoute : std::list<int>
     {
@@ -96,16 +97,6 @@ void World::GrowRegion( std::set<int> & openTiles, std::unordered_map<int, int> 
                     }
                 }
             }
-        }
-        else if ( vec_tiles[tileIndex]._region != regionID ) {
-            auto currentValue = connection.find( tileIndex );
-            if ( currentValue != connection.end() ) {
-                ++currentValue->second;
-            }
-            else {
-                //connection.emplace( tileIndex, 1 );
-            }
-            //std::cout << "Regions " << regionID << " and " << vec_tiles[tileIndex]._region << " met in tile " << tileIndex << std::endl;
         }
     }
     openTiles = std::move( newTiles );
@@ -152,13 +143,13 @@ void World::ComputeStaticAnalysis()
     auto smallerThanSort = []( const TileData & left, TileData & right ) { return left.second < right.second; };
     std::sort( obsByColumn.begin(), obsByColumn.end(), smallerThanSort );
     std::vector<int> emptyColumns;
-    for ( auto column : obsByColumn ) {
+    for ( TileData column : obsByColumn ) {
         AppendIfFarEnough( emptyColumns, column.first, emptyLineFrequency );
     }
 
     std::sort( obsByRow.begin(), obsByRow.end(), smallerThanSort );
     std::vector<int> emptyRows;
-    for ( auto row : obsByRow ) {
+    for ( TileData row : obsByRow ) {
         AppendIfFarEnough( emptyRows, row.first, emptyLineFrequency );
     }
 
@@ -179,15 +170,15 @@ void World::ComputeStaticAnalysis()
         return left.second > right.second;
     } );
 
-    for ( auto castleTile : castleCenters ) {
-        // Check if different colors? (Slugfest map)
+    for ( TileData castleTile : castleCenters ) {
+        // Check if a lot of players next to each other? (Slugfest map)
         // GetCastle( Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
         AppendIfFarEnough( regionCenters, ( castleIndex > vec_tiles.size() ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
-    for ( int rowID : emptyRows ) {
-        for ( int colID : emptyColumns ) {
+    for ( const int rowID : emptyRows ) {
+        for ( const int colID : emptyColumns ) {
             int centerIndex = -1;
 
             const int tileIndex = rowID * width + colID;
@@ -196,7 +187,7 @@ void World::ComputeStaticAnalysis()
                 centerIndex = tileIndex;
             }
             else {
-                for ( int direction : directions ) {
+                for ( const int direction : directions ) {
                     if ( Maps::isValidDirection( tileIndex, direction ) ) {
                         const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
                         const Maps::Tiles & newTile = vec_tiles[newIndex];
@@ -250,6 +241,7 @@ void World::ComputeStaticAnalysis()
     while ( !connectionMap.empty() ) {
         // begin() should be always valid if map is not empty
         TileData link = *connectionMap.begin();
+        bool isRoad = vec_tiles[link.first].isRoad();
 
         std::set<int> openTiles;
         openTiles.insert( link.first );
@@ -262,8 +254,10 @@ void World::ComputeStaticAnalysis()
 
             std::unordered_map<int, int>::iterator currentTile = connectionMap.find( tileIndex );
             if ( currentTile != connectionMap.end() ) {
-                if ( currentTile->second > link.second ) {
+                const bool isCurrentTileRoad = vec_tiles[currentTile->first].isRoad();
+                if ( ( isRoad == isCurrentTileRoad && currentTile->second > link.second ) || ( !isRoad && isCurrentTileRoad ) ) {
                     link = *currentTile;
+                    isRoad = isCurrentTileRoad;
                 }
                 connectionMap.erase( currentTile );
             }
@@ -282,7 +276,7 @@ void World::ComputeStaticAnalysis()
         regionLinks.push_back( link );
     }
 
-    // view the hot spots
+    // DEBUG: view the hot spots
     for ( const int center : regionCenters ) {
         vec_tiles[center]._metadata = vec_tiles[center]._region;
     }
