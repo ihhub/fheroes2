@@ -766,30 +766,37 @@ namespace fheroes2
                     const uint32_t startX = static_cast<uint32_t>( posX );
                     const uint32_t offsetIn = startY * widthIn + startX;
 
+                    const uint8_t * inX = inY + offsetIn;
+                    const uint8_t * transformInX = transformInY + offsetIn;
+
                     if ( posX < widthIn - 1 && posY < heightIn - 1 ) {
-                        const double coeffX = posX - startX;
-                        const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                        const double coeff2 = ( coeffX ) * ( 1 - coeffY );
-                        const double coeff3 = ( 1 - coeffX ) * ( coeffY );
-                        const double coeff4 = ( coeffX ) * ( coeffY );
+                        if ( *( transformInX ) == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthIn ) == 0 && *( transformInX + widthIn + 1 ) == 0 ) {
+                            const double coeffX = posX - startX;
+                            const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
+                            const double coeff2 = ( coeffX ) * ( 1 - coeffY );
+                            const double coeff3 = ( 1 - coeffX ) * ( coeffY );
+                            const double coeff4 = ( coeffX ) * ( coeffY );
 
-                        const uint8_t * inX = inY + offsetIn;
-                        const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *( inX ) ) * 3;
-                        const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( inX + 1 ) ) * 3;
-                        const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( inX + widthIn ) ) * 3;
-                        const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( inX + widthIn + 1 ) ) * 3;
+                            const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *( inX ) ) * 3;
+                            const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( inX + 1 ) ) * 3;
+                            const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( inX + widthIn ) ) * 3;
+                            const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( inX + widthIn + 1 ) ) * 3;
 
-                        const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
-                        const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
-                        const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
+                            const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
+                            const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
+                            const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
 
-                        *outX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                            *outX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                        }
+                        else {
+                            *outX = *( inX );
+                        }
                     }
                     else {
-                        *outX = *( inY + offsetIn );
+                        *outX = *( inX );
                     }
 
-                    *transformOutX = *( transformInY + offsetIn );
+                    *transformOutX = *( transformInX );
                 }
             }
         }
