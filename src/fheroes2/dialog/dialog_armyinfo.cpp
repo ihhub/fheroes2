@@ -149,16 +149,14 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                     }
                 }
             }
-            else
-                // dismiss
-                if ( buttonDismiss.isEnable() && le.MouseClickLeft( buttonDismiss )
-                     && Dialog::YES == Dialog::Message( "", _( "Are you sure you want to dismiss this army?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+            // dismiss
+            if ( buttonDismiss.isEnable() && le.MouseClickLeft( buttonDismiss )
+                 && Dialog::YES == Dialog::Message( "", _( "Are you sure you want to dismiss this army?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 result = Dialog::DISMISS;
                 break;
             }
-            else
-                // exit
-                if ( le.MouseClickLeft( buttonExit ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+            // exit
+            if ( le.MouseClickLeft( buttonExit ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
                 result = Dialog::CANCEL;
                 break;
             }
