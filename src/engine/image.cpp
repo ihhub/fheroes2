@@ -773,10 +773,11 @@ namespace fheroes2
                         const double coeff3 = ( 1 - coeffX ) * ( coeffY );
                         const double coeff4 = ( coeffX ) * ( coeffY );
 
-                        const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *( inY + offsetIn ) ) * 3;
-                        const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( inY + offsetIn + 1 ) ) * 3;
-                        const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( inY + offsetIn + widthIn ) ) * 3;
-                        const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( inY + offsetIn + widthIn + 1 ) ) * 3;
+                        const uint8_t * inX = inY + offsetIn;
+                        const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *( inX ) ) * 3;
+                        const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( inX + 1 ) ) * 3;
+                        const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( inX + widthIn ) ) * 3;
+                        const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( inX + widthIn + 1 ) ) * 3;
 
                         const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
                         const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
