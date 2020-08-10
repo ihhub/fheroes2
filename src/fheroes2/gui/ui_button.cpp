@@ -128,20 +128,24 @@ namespace fheroes2
         }
     }
 
-    void Button::drawOnPress( Image & area )
+    bool Button::drawOnPress( Image & area )
     {
         if ( !isPressed() ) {
             press();
             draw( area );
+            return true;
         }
+        return false;
     }
 
-    void Button::drawOnRelease( Image & area )
+    bool Button::drawOnRelease( Image & area )
     {
         if ( isPressed() ) {
             release();
             draw( area );
+            return true;
         }
+        return false;
     }
 
     Rect Button::area()
