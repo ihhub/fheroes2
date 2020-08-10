@@ -166,8 +166,8 @@ namespace Maps
 
         Surface GetTileSurface( void ) const;
 
-        bool isPassable( const Heroes & ) const;
-        bool isPassable( const Heroes *, int direct, bool skipfog ) const;
+        bool validateWaterRules( bool fromWater ) const;
+        bool isPassable( int direct, bool fromWater, bool skipfog ) const;
         bool isRoad( int = DIRECTION_ALL ) const;
         bool isObject( int obj ) const
         {

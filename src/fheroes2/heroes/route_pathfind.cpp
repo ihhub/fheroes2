@@ -68,7 +68,7 @@ bool CheckMonsterProtectionAndNotDst( const s32 & to, const s32 & dst )
     return monsters.size() && monsters.end() == std::find( monsters.begin(), monsters.end(), dst );
 }
 
-bool PassableToTile( const Heroes & hero, const Maps::Tiles & toTile, int direct, s32 dst )
+bool PassableToTile( const Maps::Tiles & toTile, int direct, s32 dst, bool fromWater )
 {
     // check end point
     if ( toTile.GetIndex() == dst ) {
@@ -77,7 +77,7 @@ bool PassableToTile( const Heroes & hero, const Maps::Tiles & toTile, int direct
             return true;
 
         // check direct to object
-        if ( MP2::isActionObject( toTile.GetObject( false ), hero.isShipMaster() ) )
+        if ( MP2::isActionObject( toTile.GetObject( false ), fromWater ) )
             return Direction::Reflect( direct ) & toTile.GetPassable();
 
         if ( MP2::OBJ_HEROES == toTile.GetObject() )
@@ -85,11 +85,11 @@ bool PassableToTile( const Heroes & hero, const Maps::Tiles & toTile, int direct
     }
 
     // check to tile direct
-    if ( !toTile.isPassable( &hero, Direction::Reflect( direct ), false ) )
+    if ( !toTile.isPassable( Direction::Reflect( direct ), fromWater, false ) )
         return false;
 
     if ( toTile.GetIndex() != dst ) {
-        if ( MP2::isPickupObject( toTile.GetObject() ) || MP2::isActionObject( toTile.GetObject( false ), hero.isShipMaster() ) )
+        if ( MP2::isPickupObject( toTile.GetObject() ) || MP2::isActionObject( toTile.GetObject( false ), fromWater ) )
             return false;
 
         // check hero/monster on route
@@ -114,29 +114,30 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
 {
     const Maps::Tiles & fromTile = world.GetTiles( from );
     const Maps::Tiles & toTile = world.GetTiles( to );
+    const bool fromWater = hero.isShipMaster();
 
     // check start point
     if ( hero.GetIndex() == from ) {
-        if ( MP2::isActionObject( fromTile.GetObject( false ), hero.isShipMaster() ) ) {
+        if ( MP2::isActionObject( fromTile.GetObject( false ), fromWater ) ) {
             // check direct from object
             if ( !( direct & fromTile.GetPassable() ) )
                 return false;
         }
         else {
             // check from tile direct
-            if ( !fromTile.isPassable( &hero, direct, false ) )
+            if ( !fromTile.isPassable( direct, fromWater, false ) )
                 return false;
         }
     }
     else {
-        if ( MP2::isActionObject( fromTile.GetObject(), hero.isShipMaster() ) ) {
+        if ( MP2::isActionObject( fromTile.GetObject(), fromWater ) ) {
             // check direct from object
             if ( !( direct & fromTile.GetPassable() ) )
                 return false;
         }
         else {
             // check from tile direct
-            if ( !fromTile.isPassable( &hero, direct, false ) )
+            if ( !fromTile.isPassable( direct, fromWater, false ) )
                 return false;
         }
     }
@@ -200,7 +201,7 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
         }
     }
 
-    return PassableToTile( hero, toTile, direct, dst );
+    return PassableToTile( toTile, direct, dst, fromWater );
 }
 
 u32 GetPenaltyFromTo( s32 from, s32 to, int direct, int pathfinding )
