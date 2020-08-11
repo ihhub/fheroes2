@@ -1961,8 +1961,6 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 /* check road */
 bool Maps::Tiles::isRoad( int direct ) const
 {
-    // return mp2_object == MP2::OBJ_CASTLE
-    //       || addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), []( const TilesAddon & ta ) { return ta.isRoadObject(); } );
     return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &TilesAddon::isRoad ), direct ) );
 }
 

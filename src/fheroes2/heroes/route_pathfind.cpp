@@ -192,7 +192,7 @@ uint32_t GetPenaltyFromTo( int from, int to, int direction, uint32_t pathfinding
 
     // diagonal move costs 50% extra
     if ( direction & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
-        penalty *= 1.5;
+        penalty = penalty * 3 / 2;
 
     return penalty;
 }
