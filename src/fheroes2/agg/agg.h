@@ -98,6 +98,7 @@ namespace fheroes2
     {
         const Sprite & GetICN( int icnId, uint32_t index );
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
+        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
     }
 }
 

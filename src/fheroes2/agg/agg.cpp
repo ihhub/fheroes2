@@ -2275,6 +2275,18 @@ namespace fheroes2
             case ICN::ROUTERED:
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::RED );
                 return true;
+            case ICN::YELLOW_FONT:
+                CopyICNWithPalette( id, ICN::FONT, PAL::YELLOW_TEXT );
+                return true;
+            case ICN::YELLOW_SMALFONT:
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::YELLOW_TEXT );
+                return true;
+            case ICN::GRAY_FONT:
+                CopyICNWithPalette( id, ICN::FONT, PAL::GRAY_TEXT );
+                return true;
+            case ICN::GRAY_SMALL_FONT:
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::GRAY_TEXT );
+                return true;
             default:
                 break;
             }
@@ -2388,6 +2400,33 @@ namespace fheroes2
             // Generate proper TIL index
             const size_t correctIndex = index + ( maxTILIndex / 4 ) * ( shapeId % 4 );
             return _tilVsImage[tilId][correctIndex];
+        }
+
+        const Sprite & AGG::GetLetter( uint32_t character, uint32_t fontType )
+        {
+            if ( character < 0x21 ) {
+                return errorICNImage;
+            }
+
+            // TODO: correct naming and standartise the code
+            switch ( fontType ) {
+            case Font::GRAY_BIG:
+                return GetICN( ICN::GRAY_FONT, character - 0x20 );
+            case Font::GRAY_SMALL:
+                return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
+            case Font::YELLOW_BIG:
+                return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+            case Font::YELLOW_SMALL:
+                return GetICN( ICN::YELLOW_SMALFONT, character - 0x20 );
+            case Font::BIG:
+                return GetICN( ICN::FONT, character - 0x20 );
+            case Font::SMALL:
+                return GetICN( ICN::SMALFONT, character - 0x20 );
+            default:
+                break;
+            }
+
+            return GetICN( ICN::SMALFONT, character - 0x20 );
         }
     }
 }
