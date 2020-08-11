@@ -1748,13 +1748,7 @@ std::string Maps::Tiles::String( void ) const
        << "tile index      : " << TileSpriteIndex() << std::endl
        << "ground          : " << Ground::String( GetGround() );
     if ( isRoad() ) {
-        Addons::const_iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), []( const TilesAddon & ta ) { return ta.isRoadObject(); } );
-        os << ", ("
-           << "road";
-        if ( ICN::ROAD == MP2::GetICNObject( ( *it ).object ) )
-            os << ", "
-               << "index: " << static_cast<int>( ( *it ).index );
-        os << ")";
+        os << ", (road)";
     }
     os << std::endl << "passable        : " << ( tile_passable ? Direction::String( tile_passable ) : "false" );
 #ifdef WITH_DEBUG

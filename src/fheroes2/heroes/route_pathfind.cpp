@@ -183,11 +183,16 @@ bool PassableFromToTile( s32 from, s32 to, int direct, s32 dst, bool fromWater )
     return PassableToTile( toTile, directionReflect, dst, fromWater );
 }
 
-u32 GetPenaltyFromTo( s32 from, s32 to, int direct, int pathfinding )
+uint32_t GetPenaltyFromTo( int from, int to, int direction, uint32_t pathfinding )
 {
-    const u32 cost1 = Maps::Ground::GetPenalty( from, direct, pathfinding ); // penalty: for [cur] out
-    const u32 cost2 = Maps::Ground::GetPenalty( to, Direction::Reflect( direct ), pathfinding ); // penalty: for [tmp] in
-    return std::min( cost1, cost2 );
+    const Maps::Tiles & tileTo = world.GetTiles( to );
+    uint32_t penalty = ( world.GetTiles( from ).isRoad() && tileTo.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, pathfinding );
+
+    // diagonal move costs 50% extra
+    if ( direction & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
+        penalty *= 1.5;
+
+    return penalty;
 }
 
 uint32_t Route::Path::Find( int32_t from, int32_t to, bool fromWater /* false */, int limit /* -1 */, int pathfinding /* NONE */ )

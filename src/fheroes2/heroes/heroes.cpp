@@ -1179,7 +1179,7 @@ bool Heroes::isEnableMove( void ) const
 
 bool Heroes::CanMove( void ) const
 {
-    return move_point >= Maps::Ground::GetPenalty( GetIndex(), Direction::CENTER, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    return move_point >= Maps::Ground::GetPenalty( world.GetTiles( GetIndex() ), GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 /* set enable move */
