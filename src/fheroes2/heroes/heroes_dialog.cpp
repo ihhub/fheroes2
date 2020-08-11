@@ -35,7 +35,7 @@
 #include "payment.h"
 #include "race.h"
 #include "settings.h"
-#include "skill_bar.h"
+#include "skill.h"
 #include "statusbar.h"
 #include "text.h"
 #include "world.h"

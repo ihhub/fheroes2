@@ -36,7 +36,6 @@
 #include "kingdom.h"
 #include "race.h"
 #include "settings.h"
-#include "skill_bar.h"
 #include "text.h"
 #include "world.h"
 

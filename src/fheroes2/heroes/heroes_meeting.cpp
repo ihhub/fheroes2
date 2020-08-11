@@ -33,7 +33,6 @@
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "settings.h"
-#include "skill_bar.h"
 #include "text.h"
 
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * );

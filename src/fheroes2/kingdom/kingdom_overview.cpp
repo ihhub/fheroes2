@@ -33,7 +33,7 @@
 #include "interface_list.h"
 #include "kingdom.h"
 #include "settings.h"
-#include "skill_bar.h"
+#include "skill.h"
 #include "text.h"
 #include "world.h"
 
