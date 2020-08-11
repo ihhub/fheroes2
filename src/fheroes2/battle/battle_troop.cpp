@@ -674,6 +674,9 @@ u32 Battle::Unit::Resurrect( u32 points, bool allow_overflow, bool skip_dead )
 {
     u32 resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
+    if ( hp == 0 ) // Skip turn if already dead
+        SetModes( TR_MOVED );
+
     SetCount( GetCount() + resurrect );
     hp += points;
 
