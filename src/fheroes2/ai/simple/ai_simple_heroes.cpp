@@ -161,7 +161,8 @@ namespace AI
 
         for ( MapsIndexes::const_reverse_iterator it = v.rbegin(); it != v.rend() && res.size() < 4; ++it ) {
             // find fogs
-            if ( world.GetTiles( *it ).isFog( hero.GetColor() ) && world.GetTiles( *it ).isPassable( &hero, Direction::CENTER, true ) && hero.GetPath().Calculate( *it ) )
+            if ( world.GetTiles( *it ).isFog( hero.GetColor() ) && world.GetTiles( *it ).isPassable( Direction::CENTER, hero.isShipMaster(), true )
+                 && hero.GetPath().Calculate( *it ) )
                 res.push_back( *it );
         }
 
@@ -182,7 +183,7 @@ namespace AI
         v.resize( std::distance( v.begin(), std::remove_if( v.begin(), v.end(), std::ptr_fun( &Maps::TileIsUnderProtection ) ) ) );
 
         for ( MapsIndexes::const_reverse_iterator it = v.rbegin(); it != v.rend() && res.size() < 4; ++it ) {
-            if ( world.GetTiles( *it ).isPassable( &hero, Direction::CENTER, true ) && hero.GetPath().Calculate( *it ) )
+            if ( world.GetTiles( *it ).isPassable( Direction::CENTER, hero.isShipMaster(), true ) && hero.GetPath().Calculate( *it ) )
                 res.push_back( *it );
         }
 

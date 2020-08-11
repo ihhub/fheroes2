@@ -1179,7 +1179,7 @@ bool Heroes::isEnableMove( void ) const
 
 bool Heroes::CanMove( void ) const
 {
-    return move_point >= Maps::Ground::GetPenalty( GetIndex(), Direction::CENTER, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    return move_point >= Maps::Ground::GetPenalty( world.GetTiles( GetIndex() ), GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 /* set enable move */
@@ -1391,16 +1391,12 @@ void Heroes::LevelUpSecondarySkill( int primary, bool autoselect )
 }
 
 /* apply penalty */
-bool Heroes::ApplyPenaltyMovement( void )
+void Heroes::ApplyPenaltyMovement( uint32_t penalty )
 {
-    u32 penalty = path.isValid() ? path.GetFrontPenalty() : Maps::Ground::GetPenalty( GetIndex(), Direction::CENTER, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
-
     if ( move_point >= penalty )
         move_point -= penalty;
     else
-        return false;
-
-    return true;
+        move_point = 0;
 }
 
 void Heroes::ResetMovePoints( void )
@@ -1627,19 +1623,14 @@ void Heroes::RecalculateMovePoints( void )
         move_point = GetMaxMovePoints() * move_point_scale / 1000;
 }
 
-void Heroes::Move2Dest( const s32 & dstIndex, bool skipAction /* false */, bool skipPenalty /* false */ )
+// Move hero to a new position. This function applies no action and no penalty
+void Heroes::Move2Dest( const s32 & dstIndex )
 {
     if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );
         SetIndex( dstIndex );
         Scoute();
         world.GetTiles( dstIndex ).SetHeroes( this );
-
-        if ( !skipPenalty )
-            ApplyPenaltyMovement();
-
-        if ( !skipAction )
-            ActionNewPosition();
     }
 }
 

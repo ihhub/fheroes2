@@ -261,7 +261,7 @@ public:
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
 
     bool Move( bool fast = false );
-    void Move2Dest( const s32 & destination, bool skipAction = false, bool skipPenalty = false );
+    void Move2Dest( const s32 & destination );
     bool isEnableMove( void ) const;
     bool CanMove( void ) const;
     void SetMove( bool );
@@ -269,7 +269,7 @@ public:
     void ResetAction( void );
     void Action( s32 );
     void ActionNewPosition( void );
-    bool ApplyPenaltyMovement( void );
+    void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
     void Redraw( Surface &, s32, s32, bool ) const;
@@ -315,7 +315,7 @@ private:
     void LevelUpSecondarySkill( int, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( bool fast = false );
-    static void MoveStep( Heroes &, s32 from, s32 to, bool newpos );
+    static void MoveStep( Heroes &, s32 to, bool newpos );
 
     // This function is useful only in a situation when AI hero moves out of the fog
     // we don't update his direction during movement under the fog so there is a situation

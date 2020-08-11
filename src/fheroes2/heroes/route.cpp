@@ -124,7 +124,7 @@ uint32_t Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
 {
     dst = dst_index;
 
-    return Find( dst, limit );
+    return Find( hero->GetIndex(), dst, hero->isShipMaster(), limit, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 void Route::Path::Reset( void )
@@ -470,11 +470,6 @@ bool StepIsObstacle( const Route::Step & s )
     return false;
 }
 
-bool StepIsPassable( const Route::Step & s, const Heroes * h )
-{
-    return world.GetTiles( s.GetFrom() ).isPassable( h, s.GetDirection(), false );
-}
-
 bool Route::Path::hasObstacle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), StepIsObstacle );
@@ -502,7 +497,7 @@ void Route::Path::RescanPassable( void )
     iterator it = begin();
 
     for ( ; it != end(); ++it )
-        if ( !world.GetTiles( ( *it ).GetFrom() ).isPassable( NULL, ( *it ).GetDirection(), false ) )
+        if ( !world.GetTiles( ( *it ).GetFrom() ).isPassable( ( *it ).GetDirection(), hero->isShipMaster(), false ) )
             break;
 
     if ( hero->isControlAI() ) {

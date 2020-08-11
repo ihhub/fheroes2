@@ -460,6 +460,13 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     return false;
 }
 
+bool Maps::TilesAddon::isRoadObject() const
+{
+    // This MP2 "object" is a bitfield
+    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
+    return ( object >> 1 ) & 1;
+}
+
 bool Maps::TilesAddon::hasColorCycling( const TilesAddon & addon )
 {
     switch ( MP2::GetICNObject( addon.object ) ) {
@@ -1184,9 +1191,9 @@ s32 Maps::Tiles::GetIndex( void ) const
     return maps_index;
 }
 
-int Maps::Tiles::GetObject( bool skip_hero /* true */ ) const
+int Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 {
-    if ( !skip_hero && MP2::OBJ_HEROES == mp2_object ) {
+    if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == mp2_object ) {
         const Heroes * hero = GetHeroes();
         return hero ? hero->GetMapsObject() : MP2::OBJ_ZERO;
     }
@@ -1803,13 +1810,7 @@ std::string Maps::Tiles::String( void ) const
        << "tile index      : " << TileSpriteIndex() << std::endl
        << "ground          : " << Ground::String( GetGround() );
     if ( isRoad() ) {
-        Addons::const_iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &TilesAddon::isRoad ), DIRECTION_ALL ) );
-        os << ", ("
-           << "road";
-        if ( ICN::ROAD == MP2::GetICNObject( ( *it ).object ) )
-            os << ", "
-               << "index: " << static_cast<int>( ( *it ).index );
-        os << ")";
+        os << ", (road)";
     }
     os << std::endl << "passable        : " << ( tile_passable ? Direction::String( tile_passable ) : "false" );
 #ifdef WITH_DEBUG
@@ -1918,48 +1919,25 @@ bool TileIsGround( s32 index, int ground )
     return ground == world.GetTiles( index ).GetGround();
 }
 
-/* accept move */
-bool Maps::Tiles::isPassable( const Heroes & hero ) const
+bool Maps::Tiles::validateWaterRules( bool fromWater ) const
 {
-    if ( hero.isShipMaster() ) {
-        if ( !isWater() )
-            return false;
+    const bool tileIsWater = isWater();
+    if ( fromWater )
+        return mp2_object == MP2::OBJ_COAST || ( tileIsWater && mp2_object != MP2::OBJ_BOAT );
 
-        if ( MP2::OBJ_BOAT == GetObject() )
-            return false;
-    }
-    else
-        // if(! hero->isShipMaster() &&
-        if ( isWater() ) {
-        switch ( GetObject() ) {
-        // fix shipwreck: place on water
-        case MP2::OBJ_SHIPWRECK:
-            // check later
-            break;
-
-        // for: meetings/attack hero
-        case MP2::OBJ_HEROES: {
-            // scan ground
-            const MapsIndexes & v = Maps::GetAroundIndexes( GetIndex() );
-            if ( v.end() == std::find_if( v.begin(), v.end(), std::not1( std::bind2nd( std::ptr_fun( &TileIsGround ), static_cast<int>( Ground::WATER ) ) ) ) )
-                return false;
-        } break;
-
-        default:
-            // ! hero->isShipMaster() && isWater()
-            return false;
-        }
-    }
+    // if we're not in water but tile is; allow movement in two cases
+    if ( tileIsWater )
+        return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES;
 
     return true;
 }
 
-bool Maps::Tiles::isPassable( const Heroes * hero, int direct, bool skipfog ) const
+bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog ) const
 {
     if ( !skipfog && isFog( Settings::Get().CurrentColor() ) )
         return false;
 
-    if ( hero && !isPassable( *hero ) )
+    if ( !validateWaterRules( fromWater ) )
         return false;
 
     return direct & tile_passable;

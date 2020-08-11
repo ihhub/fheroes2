@@ -26,6 +26,7 @@
 
 #include "direction.h"
 #include "gamedefs.h"
+#include "skill.h"
 
 class Heroes;
 
@@ -104,7 +105,7 @@ namespace Route
         static int GetIndexSprite( int from, int to, int mod );
 
     private:
-        uint32_t Find( s32, int limit = -1 );
+        uint32_t Find( int32_t from, int32_t to, bool fromWater = false, int limit = -1, int pathfinding = Skill::Level::NONE );
 
         friend StreamBase & operator<<( StreamBase &, const Path & );
         friend StreamBase & operator>>( StreamBase &, Path & );

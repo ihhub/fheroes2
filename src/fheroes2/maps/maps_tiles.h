@@ -61,6 +61,7 @@ namespace Maps
 
         bool isUniq( u32 ) const;
         bool isRoad( int ) const;
+        bool isRoadObject() const;
         bool isICN( int ) const;
 
         std::string String( int level ) const;
@@ -147,7 +148,7 @@ namespace Maps
 
         s32 GetIndex( void ) const;
         Point GetCenter( void ) const;
-        int GetObject( bool skip_hero = true ) const;
+        int GetObject( bool ignoreObjectUnderHero = true ) const;
         u32 GetObjectUID( int obj ) const;
         int GetQuantity1( void ) const
         {
@@ -166,8 +167,8 @@ namespace Maps
 
         Surface GetTileSurface( void ) const;
 
-        bool isPassable( const Heroes & ) const;
-        bool isPassable( const Heroes *, int direct, bool skipfog ) const;
+        bool validateWaterRules( bool fromWater ) const;
+        bool isPassable( int direct, bool fromWater, bool skipfog ) const;
         bool isRoad( int = DIRECTION_ALL ) const;
         bool isObject( int obj ) const
         {
