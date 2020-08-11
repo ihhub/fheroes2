@@ -2402,7 +2402,7 @@ namespace fheroes2
             return _tilVsImage[tilId][correctIndex];
         }
 
-        const Sprite & AGG::GetLetter( uint32_t character, uint32_t fontType )
+        const Sprite & GetLetter( uint32_t character, uint32_t fontType )
         {
             if ( character < 0x21 ) {
                 return errorICNImage;
