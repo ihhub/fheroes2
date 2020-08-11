@@ -112,7 +112,7 @@ bool PassableToTile( const Maps::Tiles & toTile, int direct, s32 dst, bool fromW
     return true;
 }
 
-bool PassableFromToTile( s32 from, const s32 & to, int direct, s32 dst, bool fromWater )
+bool PassableFromToTile( s32 from, s32 to, int direct, s32 dst, bool fromWater )
 {
     const Maps::Tiles & fromTile = world.GetTiles( from );
     const Maps::Tiles & toTile = world.GetTiles( to );

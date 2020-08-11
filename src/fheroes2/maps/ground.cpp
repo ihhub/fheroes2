@@ -73,7 +73,7 @@ u32 Maps::Ground::GetPenalty( s32 index, int direct, u32 level, bool diagonalCos
     //    Road    0.75   0.75   0.75   0.75
 
     u32 result = 100;
-    if ( tile.isRoad( direct ) ) {
+    if ( tile.isRoad() ) {
         result = 75;
     }
     else {
