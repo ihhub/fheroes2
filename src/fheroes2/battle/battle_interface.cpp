@@ -2613,7 +2613,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     // post attack action
     switch ( attacker.GetID() ) {
     case Monster::VAMPIRE_LORD:
-        // possible: vampire ressurect animation
+        // possible: vampire resurrect animation
         // RedrawTroopWithFrameAnimation(attacker, , );
         break;
 
