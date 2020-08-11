@@ -161,7 +161,8 @@ namespace AI
 
         for ( MapsIndexes::const_reverse_iterator it = v.rbegin(); it != v.rend() && res.size() < 4; ++it ) {
             // find fogs
-            if ( world.GetTiles( *it ).isFog( hero.GetColor() ) && world.GetTiles( *it ).isPassable( Direction::CENTER, hero.isShipMaster(), true ) && hero.GetPath().Calculate( *it ) )
+            if ( world.GetTiles( *it ).isFog( hero.GetColor() ) && world.GetTiles( *it ).isPassable( Direction::CENTER, hero.isShipMaster(), true )
+                 && hero.GetPath().Calculate( *it ) )
                 res.push_back( *it );
         }
 

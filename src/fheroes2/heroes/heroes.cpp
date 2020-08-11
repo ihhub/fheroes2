@@ -1623,7 +1623,7 @@ void Heroes::RecalculateMovePoints( void )
         move_point = GetMaxMovePoints() * move_point_scale / 1000;
 }
 
- // Move hero to a new position. This function applies no action and no penalty
+// Move hero to a new position. This function applies no action and no penalty
 void Heroes::Move2Dest( const s32 & dstIndex )
 {
     if ( dstIndex != GetIndex() ) {
