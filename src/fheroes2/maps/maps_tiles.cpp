@@ -1184,9 +1184,9 @@ s32 Maps::Tiles::GetIndex( void ) const
     return maps_index;
 }
 
-int Maps::Tiles::GetObject( bool skip_hero /* true */ ) const
+int Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 {
-    if ( !skip_hero && MP2::OBJ_HEROES == mp2_object ) {
+    if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == mp2_object ) {
         const Heroes * hero = GetHeroes();
         return hero ? hero->GetMapsObject() : MP2::OBJ_ZERO;
     }
@@ -1922,8 +1922,8 @@ bool Maps::Tiles::validateWaterRules( bool fromWater ) const
 {
     const bool tileIsWater = isWater();
     if ( fromWater )
-        return tileIsWater && mp2_object != MP2::OBJ_BOAT;
-
+        return mp2_object == MP2::OBJ_COAST || ( tileIsWater && mp2_object != MP2::OBJ_BOAT );
+     
     // if we're not in water but tile is; allow movement in two cases
     if ( tileIsWater )
         return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES;

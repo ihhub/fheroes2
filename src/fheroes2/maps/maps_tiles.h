@@ -147,7 +147,7 @@ namespace Maps
 
         s32 GetIndex( void ) const;
         Point GetCenter( void ) const;
-        int GetObject( bool skip_hero = true ) const;
+        int GetObject( bool ignoreObjectUnderHero = true ) const;
         u32 GetObjectUID( int obj ) const;
         int GetQuantity1( void ) const
         {

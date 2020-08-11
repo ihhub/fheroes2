@@ -70,22 +70,24 @@ bool CheckMonsterProtectionAndNotDst( const s32 & to, const s32 & dst )
 
 bool PassableToTile( const Maps::Tiles & toTile, int direct, s32 dst, bool fromWater )
 {
+    const int object = toTile.GetObject();
+
     // check end point
     if ( toTile.GetIndex() == dst ) {
         // fix toTilePassable with action object
-        if ( MP2::isPickupObject( toTile.GetObject() ) )
+        if ( MP2::isPickupObject( object ) )
             return true;
 
         // check direct to object
         if ( MP2::isActionObject( toTile.GetObject( false ), fromWater ) )
-            return Direction::Reflect( direct ) & toTile.GetPassable();
+            return direct & toTile.GetPassable();
 
         if ( MP2::OBJ_HEROES == toTile.GetObject() )
-            return toTile.isPassable( NULL, Direction::Reflect( direct ), false );
+            return toTile.isPassable( NULL, direct, false );
     }
 
     // check to tile direct
-    if ( !toTile.isPassable( Direction::Reflect( direct ), fromWater, false ) )
+    if ( !toTile.isPassable( direct, fromWater, false ) )
         return false;
 
     if ( toTile.GetIndex() != dst ) {
@@ -115,32 +117,10 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
     const Maps::Tiles & fromTile = world.GetTiles( from );
     const Maps::Tiles & toTile = world.GetTiles( to );
     const bool fromWater = hero.isShipMaster();
+    const int directionReflect = Direction::Reflect( direct );
 
-    // check start point
-    if ( hero.GetIndex() == from ) {
-        if ( MP2::isActionObject( fromTile.GetObject( false ), fromWater ) ) {
-            // check direct from object
-            if ( !( direct & fromTile.GetPassable() ) )
-                return false;
-        }
-        else {
-            // check from tile direct
-            if ( !fromTile.isPassable( direct, fromWater, false ) )
-                return false;
-        }
-    }
-    else {
-        if ( MP2::isActionObject( fromTile.GetObject(), fromWater ) ) {
-            // check direct from object
-            if ( !( direct & fromTile.GetPassable() ) )
-                return false;
-        }
-        else {
-            // check from tile direct
-            if ( !fromTile.isPassable( direct, fromWater, false ) )
-                return false;
-        }
-    }
+    if ( !fromTile.isPassable( direct, fromWater, false ) )
+        return false;
 
     if ( fromTile.isWater() && !toTile.isWater() ) {
         switch ( toTile.GetObject() ) {
@@ -170,29 +150,29 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
     }
 
     // check corner water/coast
-    if ( hero.isShipMaster() && ( direct & ( Direction::TOP_LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+    if ( fromWater ) {
         switch ( direct ) {
         case Direction::TOP_LEFT:
-            if ( ( Maps::isValidDirection( from, Direction::TOP ) && !world.GetTiles( Maps::GetDirectionIndex( from, Direction::TOP ) ).isWater() )
-                 || ( Maps::isValidDirection( from, Direction::LEFT ) && !world.GetTiles( Maps::GetDirectionIndex( from, Direction::LEFT ) ).isWater() ) )
+            if ( !world.GetTiles( Maps::GetDirectionIndex( from, Direction::TOP ) ).isWater()
+                 || !world.GetTiles( Maps::GetDirectionIndex( from, Direction::LEFT ) ).isWater() )
                 return false;
             break;
 
         case Direction::TOP_RIGHT:
-            if ( ( Maps::isValidDirection( from, Direction::TOP ) && !world.GetTiles( Maps::GetDirectionIndex( from, Direction::TOP ) ).isWater() )
-                 || ( Maps::isValidDirection( from, Direction::RIGHT ) && !world.GetTiles( Maps::GetDirectionIndex( from, Direction::RIGHT ) ).isWater() ) )
+            if ( !world.GetTiles( Maps::GetDirectionIndex( from, Direction::TOP ) ).isWater()
+                 || !world.GetTiles( Maps::GetDirectionIndex( from, Direction::RIGHT ) ).isWater() )
                 return false;
             break;
 
         case Direction::BOTTOM_RIGHT:
-            if ( ( Maps::isValidDirection( from, Direction::BOTTOM ) && !world.GetTiles( Maps::GetDirectionIndex( from, Direction::BOTTOM ) ).isWater() )
-                 || ( Maps::isValidDirection( from, Direction::RIGHT ) && !world.GetTiles( Maps::GetDirectionIndex( from, Direction::RIGHT ) ).isWater() ) )
+            if ( !world.GetTiles( Maps::GetDirectionIndex( from, Direction::BOTTOM ) ).isWater()
+                 || !world.GetTiles( Maps::GetDirectionIndex( from, Direction::RIGHT ) ).isWater() )
                 return false;
             break;
 
         case Direction::BOTTOM_LEFT:
-            if ( ( Maps::isValidDirection( from, Direction::BOTTOM ) && !world.GetTiles( Maps::GetDirectionIndex( from, Direction::BOTTOM ) ).isWater() )
-                 || ( Maps::isValidDirection( from, Direction::LEFT ) && !world.GetTiles( Maps::GetDirectionIndex( from, Direction::LEFT ) ).isWater() ) )
+            if ( !world.GetTiles( Maps::GetDirectionIndex( from, Direction::BOTTOM ) ).isWater()
+                 || !world.GetTiles( Maps::GetDirectionIndex( from, Direction::LEFT ) ).isWater() )
                 return false;
             break;
 
@@ -201,7 +181,7 @@ bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int dire
         }
     }
 
-    return PassableToTile( toTile, direct, dst, fromWater );
+    return PassableToTile( toTile, directionReflect, dst, fromWater );
 }
 
 u32 GetPenaltyFromTo( s32 from, s32 to, int direct, int pathfinding )
