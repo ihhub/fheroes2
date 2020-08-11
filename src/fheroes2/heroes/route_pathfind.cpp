@@ -82,8 +82,8 @@ bool PassableToTile( const Maps::Tiles & toTile, int direct, s32 dst, bool fromW
         if ( MP2::isActionObject( toTile.GetObject( false ), fromWater ) )
             return direct & toTile.GetPassable();
 
-        if ( MP2::OBJ_HEROES == toTile.GetObject() )
-            return toTile.isPassable( NULL, direct, false );
+        if ( MP2::OBJ_HEROES == object )
+            return toTile.isPassable( direct, fromWater, false );
     }
 
     // check to tile direct
@@ -91,11 +91,11 @@ bool PassableToTile( const Maps::Tiles & toTile, int direct, s32 dst, bool fromW
         return false;
 
     if ( toTile.GetIndex() != dst ) {
-        if ( MP2::isPickupObject( toTile.GetObject() ) || MP2::isActionObject( toTile.GetObject( false ), fromWater ) )
+        if ( MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
             return false;
 
         // check hero/monster on route
-        switch ( toTile.GetObject() ) {
+        switch ( object ) {
         case MP2::OBJ_HEROES:
         case MP2::OBJ_MONSTER:
             return false;
@@ -112,11 +112,10 @@ bool PassableToTile( const Maps::Tiles & toTile, int direct, s32 dst, bool fromW
     return true;
 }
 
-bool PassableFromToTile( const Heroes & hero, s32 from, const s32 & to, int direct, s32 dst )
+bool PassableFromToTile( s32 from, const s32 & to, int direct, s32 dst, bool fromWater )
 {
     const Maps::Tiles & fromTile = world.GetTiles( from );
     const Maps::Tiles & toTile = world.GetTiles( to );
-    const bool fromWater = hero.isShipMaster();
     const int directionReflect = Direction::Reflect( direct );
 
     if ( !fromTile.isPassable( direct, fromWater, false ) )
@@ -191,10 +190,8 @@ u32 GetPenaltyFromTo( s32 from, s32 to, int direct, int pathfinding )
     return std::min( cost1, cost2 );
 }
 
-uint32_t Route::Path::Find( s32 to, int limit )
+uint32_t Route::Path::Find( int32_t from, int32_t to, bool fromWater /* false */, int limit /* -1 */, int pathfinding /* NONE */ )
 {
-    const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
-    const s32 from = hero->GetIndex();
     uint32_t pathCost = 0;
 
     s32 cur = from;
@@ -223,7 +220,7 @@ uint32_t Route::Path::Find( s32 to, int limit )
 
                     // new
                     if ( -1 == list[tmp].parent ) {
-                        if ( ( list[cur].passbl & *it ) || PassableFromToTile( *hero, cur, tmp, *it, to ) ) {
+                        if ( ( list[cur].passbl & *it ) || PassableFromToTile( cur, tmp, *it, to, fromWater ) ) {
                             list[cur].passbl |= *it;
 
                             list[tmp].direct = *it;
@@ -236,7 +233,7 @@ uint32_t Route::Path::Find( s32 to, int limit )
                     }
                     // check alt
                     else {
-                        if ( list[tmp].cost_t > list[cur].cost_t + costg && ( ( list[cur].passbl & *it ) || PassableFromToTile( *hero, cur, tmp, *it, to ) ) ) {
+                        if ( list[tmp].cost_t > list[cur].cost_t + costg && ( ( list[cur].passbl & *it ) || PassableFromToTile( cur, tmp, *it, to, fromWater ) ) ) {
                             list[cur].passbl |= *it;
 
                             list[tmp].direct = *it;

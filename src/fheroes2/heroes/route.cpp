@@ -124,7 +124,7 @@ uint32_t Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
 {
     dst = dst_index;
 
-    return Find( dst, limit );
+    return Find( hero->GetIndex(), dst, hero->isShipMaster(), limit, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 void Route::Path::Reset( void )
