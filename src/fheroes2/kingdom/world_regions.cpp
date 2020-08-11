@@ -123,19 +123,19 @@ void World::ComputeStaticAnalysis()
     const uint32_t emptyLineFrequency = 8;
     const int waterRegionSize = mapSize / 3;
 
-    for ( int x = 0; x < width; x++ )
+    for ( int x = 0; x < width; ++x )
         obsByColumn.emplace_back( x, 0 );
-    for ( int y = 0; y < heigth; y++ )
+    for ( int y = 0; y < heigth; ++y )
         obsByRow.emplace_back( y, 0 );
 
-    for ( int y = 0; y < heigth; y++ ) {
-        for ( int x = 0; x < width; x++ ) {
+    for ( int y = 0; y < heigth; ++y ) {
+        for ( int x = 0; x < width; ++x ) {
             const int index = y * width + x;
             Maps::Tiles & tile = vec_tiles[index];
             if ( tile.GetPassable() == 0 || tile.isWater() ) {
-                obstacles++;
-                obsByColumn[x].second++;
-                obsByRow[y].second++;
+                ++obstacles;
+                ++obsByColumn[x].second;
+                ++obsByRow[y].second;
             }
         }
     }
@@ -219,8 +219,8 @@ void World::ComputeStaticAnalysis()
 
     // Fix missing islands and divide seas
     size_t nextRegionID = regionCenters.size();
-    for ( int y = 0; y < heigth; y++ ) {
-        for ( int x = 0; x < width; x++ ) {
+    for ( int y = 0; y < heigth; ++y ) {
+        for ( int x = 0; x < width; ++x ) {
             const int tileIndex = y * width + x;
             Maps::Tiles & tile = vec_tiles[tileIndex];
             if ( tile.GetPassable() && tile._region == 0 ) {
