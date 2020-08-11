@@ -530,6 +530,7 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
     hero.ApplyPenaltyMovement( path.GetFrontPenalty() );
     if ( newpos ) {
         hero.Move2Dest( indexTo );
+        hero.ActionNewPosition();
         path.PopFront();
 
         // possible hero is die

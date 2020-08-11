@@ -1497,6 +1497,7 @@ namespace AI
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
         }
+        hero.ActionNewPosition();
 
         AI::Get().HeroesClearTask( hero );
 
