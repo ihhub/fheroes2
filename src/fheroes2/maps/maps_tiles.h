@@ -60,6 +60,7 @@ namespace Maps
         TilesAddon & operator=( const TilesAddon & ta );
 
         bool isUniq( u32 ) const;
+        bool isRoad( int ) const;
         bool isRoadObject() const;
         bool isICN( int ) const;
 
@@ -168,7 +169,7 @@ namespace Maps
 
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog ) const;
-        bool isRoad() const;
+        bool isRoad( int = DIRECTION_ALL ) const;
         bool isObject( int obj ) const
         {
             return obj == mp2_object;

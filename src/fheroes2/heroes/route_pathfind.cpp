@@ -186,7 +186,9 @@ bool PassableFromToTile( s32 from, s32 to, int direct, s32 dst, bool fromWater )
 uint32_t GetPenaltyFromTo( int from, int to, int direction, uint32_t pathfinding )
 {
     const Maps::Tiles & tileTo = world.GetTiles( to );
-    uint32_t penalty = ( world.GetTiles( from ).isRoad() && tileTo.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, pathfinding );
+    uint32_t penalty = ( world.GetTiles( from ).isRoad( direction ) || tileTo.isRoad( Direction::Reflect( direction ) ) )
+                           ? Maps::Ground::roadPenalty
+                           : Maps::Ground::GetPenalty( tileTo, pathfinding );
 
     // diagonal move costs 50% extra
     if ( direction & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
