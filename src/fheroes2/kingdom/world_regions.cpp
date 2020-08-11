@@ -129,8 +129,9 @@ void World::ComputeStaticAnalysis()
         obsByRow.emplace_back( y, 0 );
 
     for ( int y = 0; y < heigth; ++y ) {
+        const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
-            const int index = y * width + x;
+            const int index = rowIndex + x;
             Maps::Tiles & tile = vec_tiles[index];
             if ( tile.GetPassable() == 0 || tile.isWater() ) {
                 ++obstacles;
@@ -143,13 +144,13 @@ void World::ComputeStaticAnalysis()
     auto smallerThanSort = []( const TileData & left, TileData & right ) { return left.second < right.second; };
     std::sort( obsByColumn.begin(), obsByColumn.end(), smallerThanSort );
     std::vector<int> emptyColumns;
-    for ( TileData column : obsByColumn ) {
+    for ( const TileData & column : obsByColumn ) {
         AppendIfFarEnough( emptyColumns, column.first, emptyLineFrequency );
     }
 
     std::sort( obsByRow.begin(), obsByRow.end(), smallerThanSort );
     std::vector<int> emptyRows;
-    for ( TileData row : obsByRow ) {
+    for ( const TileData & row : obsByRow ) {
         AppendIfFarEnough( emptyRows, row.first, emptyLineFrequency );
     }
 
@@ -170,7 +171,7 @@ void World::ComputeStaticAnalysis()
         return left.second > right.second;
     } );
 
-    for ( TileData castleTile : castleCenters ) {
+    for ( const TileData & castleTile : castleCenters ) {
         // Check if a lot of players next to each other? (Slugfest map)
         // GetCastle( Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
@@ -280,7 +281,7 @@ void World::ComputeStaticAnalysis()
     for ( const int center : regionCenters ) {
         vec_tiles[center]._metadata = vec_tiles[center]._region;
     }
-    for ( TileData link : regionLinks ) {
+    for ( const TileData & link : regionLinks ) {
         vec_tiles[link.first]._metadata = vec_tiles[link.first]._region;
     }
 }

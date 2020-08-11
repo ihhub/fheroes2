@@ -23,8 +23,8 @@
 #define H2WORLD_H
 
 #include <set>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 #include "artifact_ultimate.h"
 #include "castle_heroes.h"
