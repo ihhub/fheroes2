@@ -21,15 +21,6 @@
 #include "ui_button.h"
 #include "agg.h"
 
-namespace
-{
-    enum BUTTON_STATE
-    {
-        ENABLED = 0x1,
-        PRESSED = 0x2
-    };
-}
-
 namespace fheroes2
 {
     Button::Button( int32_t offsetX, int32_t offsetY )
@@ -38,7 +29,8 @@ namespace fheroes2
         , _icnId( -1 )
         , _releasedIndex( 0 )
         , _pressedIndex( 0 )
-        , _state( ENABLED )
+        , _isPressed( false )
+        , _isEnabled( true )
     {}
 
     Button::Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
@@ -47,51 +39,53 @@ namespace fheroes2
         , _icnId( icnId )
         , _releasedIndex( releasedIndex )
         , _pressedIndex( pressedIndex )
-        , _state( ENABLED )
+        , _isPressed( false )
+        , _isEnabled( true )
     {}
 
     bool Button::isEnabled() const
     {
-        return ( _state & ENABLED ) == ENABLED;
+        return _isEnabled;
     }
 
     bool Button::isDisabled() const
     {
-        return !isEnabled();
+        return !_isEnabled;
     }
 
     bool Button::isPressed() const
     {
-        return ( _state & PRESSED ) == PRESSED;
+        return _isPressed;
     }
 
     bool Button::isReleased() const
     {
-        return !isPressed();
+        return !_isPressed;
     }
 
     void Button::press()
     {
         if ( isEnabled() ) {
-            _state = ( _state & ENABLED ) | PRESSED;
+            _isPressed = true;
         }
     }
 
     void Button::release()
     {
         if ( isEnabled() ) {
-            _state = ( _state & ENABLED );
+            _isPressed = false;
         }
     }
 
     void Button::enable()
     {
-        _state = ( _state & PRESSED ) | ENABLED;
+        _isEnabled = true;
     }
 
     void Button::disable()
     {
-        _state = 0; // button can't be disabled and pressed
+        _isEnabled = false;
+        _isPressed = false; // button can't be disabled and pressed
     }
 
     void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )

@@ -57,6 +57,7 @@ namespace fheroes2
         uint32_t _releasedIndex;
         uint32_t _pressedIndex;
 
-        int _state;
+        bool _isPressed;
+        bool _isEnabled;
     };
 }
