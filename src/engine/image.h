@@ -82,7 +82,7 @@ namespace fheroes2
     public:
         ImageRestorer( Image & image );
         ImageRestorer( Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height );
-        ~ImageRestorer();
+        ~ImageRestorer(); // restore method will be call upon object's destruction
 
         void restore();
 

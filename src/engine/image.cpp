@@ -402,11 +402,11 @@ namespace fheroes2
 
     ImageRestorer::ImageRestorer( Image & image )
         : _image( image )
-        , _isRestored( false )
         , _x( 0 )
         , _y( 0 )
         , _width( image.width() )
         , _height( image.height() )
+        , _isRestored( false )
     {
         _copy.resize( _width, _height );
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
@@ -414,11 +414,11 @@ namespace fheroes2
 
     ImageRestorer::ImageRestorer( Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height )
         : _image( image )
-        , _isRestored( false )
         , _x( x )
         , _y( y )
         , _width( width )
         , _height( height )
+        , _isRestored( false )
     {
         _copy.resize( _width, _height );
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
