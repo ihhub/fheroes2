@@ -2363,7 +2363,7 @@ namespace fheroes2
             if ( resizedIcn.width() != resizedWidth || resizedIcn.height() != resizedHeight ) {
                 resizedIcn.resize( resizedWidth, resizedHeight );
                 resizedIcn.setPosition( static_cast<uint32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<uint32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
-                Resize( originalIcn, resizedIcn, true );
+                Resize( originalIcn, resizedIcn, false );
             }
 
             return resizedIcn;
