@@ -1070,9 +1070,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             if ( 0xC0 == *buf ) {
             ++buf;
 
-            const uint8_t transformValue = *buf;
-            const uint8_t transformType = ( ( transformValue & 0x3C ) << 6 ) / 256 + 2; // 1 is for skipping
-
             c = *buf % 4 ? *buf % 4 : *( ++buf );
             if ( sf1.depth() == 8 ) // skip alpha
             {
