@@ -47,7 +47,7 @@ namespace fheroes2
         bool drawOnPress( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
         bool drawOnRelease( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
 
-        Rect area();
+        Rect area() const;
 
     private:
         int32_t _offsetX;

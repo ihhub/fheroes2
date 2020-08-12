@@ -142,7 +142,7 @@ namespace fheroes2
         return false;
     }
 
-    Rect Button::area()
+    Rect Button::area() const
     {
         const Sprite & sprite = AGG::GetICN( _icnId, isPressed() ? _pressedIndex : _releasedIndex );
         return Rect( _offsetX + sprite.x(), _offsetY + sprite.y(), sprite.width(), sprite.height() );
