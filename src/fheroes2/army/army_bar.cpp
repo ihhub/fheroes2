@@ -185,10 +185,10 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, Su
         }
 
         if ( use_mini_sprite ) {
-            text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h(), dstsf );
+            //text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h(), dstsf );
         }
         else {
-            text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1, dstsf );
+            //text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1, dstsf );
         }
 
         if ( selected )

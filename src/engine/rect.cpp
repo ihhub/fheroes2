@@ -177,6 +177,11 @@ Rect::Rect( const SDL_Rect & rt )
     , Size( rt.w, rt.h )
 {}
 
+Rect::Rect( const fheroes2::Rect & rect )
+    : Point( rect.x, rect.y )
+    , Size( rect.width, rect.height )
+{}
+
 Rect Rect::Get( const Point & pt1, const Point & pt2 )
 {
     Rect res;

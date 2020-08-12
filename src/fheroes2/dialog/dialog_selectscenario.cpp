@@ -41,7 +41,7 @@ Surface GetNonStandardSizeIcon( void )
     res.Fill( ColorBlack );
     res.FillRect( Rect( 1, 1, 15, 15 ), RGBA( 0x8D, 0x73, 0xFF ) );
     Text text( "N", Font::SMALL );
-    text.Blit( ( res.w() - text.w() ) / 2, ( res.h() - text.h() ) / 2, res );
+    //text.Blit( ( res.w() - text.w() ) / 2, ( res.h() - text.h() ) / 2, res );
     return res;
 }
 

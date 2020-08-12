@@ -1595,7 +1595,7 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
 
             if ( passable_disable ) {
                 Text text( GetString( passable_disable ), Font::SMALL );
-                text.Blit( 13, 13, sf );
+                //text.Blit( 13, 13, sf );
             }
 
             area.BlitOnTile( dst, sf, 0, 0, mp );

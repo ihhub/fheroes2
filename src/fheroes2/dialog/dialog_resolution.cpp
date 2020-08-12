@@ -23,6 +23,8 @@
 #include "display.h"
 #include "game.h"
 #include "interface_list.h"
+#include "screen.h"
+#include "ui_button.h"
 
 namespace
 {
@@ -52,8 +54,8 @@ namespace
 
         void RedrawBackground( const Point & dst )
         {
-            const Sprite & panel = AGG::GetICN( ICN::REQBKG, 0 );
-            panel.Blit( dst );
+            const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
+            fheroes2::Blit( panel, fheroes2::Display::instance(), dst.x, dst.y );
         }
 
         void ActionCurrentUp( void ) {}
@@ -91,30 +93,31 @@ namespace Dialog
 {
     bool SelectResolution()
     {
-        std::vector<std::pair<int, int> > resolutions = Display::GetAvailableResolutions();
+        std::vector<std::pair<int, int> > resolutions = fheroes2::engine().getAvailableResolutions();
         if ( resolutions.empty() )
             return false;
 
-        Display & display = Display::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
         Cursor & cursor = Cursor::Get();
 
         cursor.Hide();
         cursor.SetThemes( cursor.POINTER );
 
-        const Sprite & sprite = AGG::GetICN( ICN::REQBKG, 0 );
-        const Sprite & spriteShadow = AGG::GetICN( ICN::REQBKG, 1 );
-        Size panel( sprite.w(), sprite.h() );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
+        const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
+        Size panel( sprite.width(), sprite.height() );
 
-        const Point dialogOffset( ( display.w() - sprite.w() ) / 2, ( display.h() - sprite.h() ) / 2 );
+        const Point dialogOffset( ( display.width() - sprite.width() ) / 2, ( display.height() - sprite.height() ) / 2 );
         const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-        SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, sprite.w() + BORDERWIDTH, sprite.h() + BORDERWIDTH ) );
-        const Rect roi( dialogOffset.x, dialogOffset.y, sprite.w(), sprite.h() );
+        fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
+        //SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH ) );
+        const Rect roi( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
 
-        spriteShadow.Blit( roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
+        fheroes2::Blit( spriteShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
 
-        Button buttonOk( roi.x + 34, roi.y + 315, ICN::REQUEST, 1, 2 );
-        Button buttonCancel( roi.x + 244, roi.y + 315, ICN::REQUEST, 3, 4 );
+        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::REQUEST, 1, 2 );
+        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::REQUEST, 3, 4 );
 
         ResolutionList resList( roi );
 
@@ -127,7 +130,7 @@ namespace Dialog
 
         resList.SetListContent( resolutions );
 
-        const Size currentResolution = display.GetSize();
+        const Size currentResolution( display.width(), display.height() );
 
         std::pair<int, int> selectedResolution;
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
@@ -140,27 +143,28 @@ namespace Dialog
 
         resList.Redraw();
 
-        buttonOk.Draw();
-        buttonCancel.Draw();
+        buttonOk.draw();
+        buttonCancel.draw();
 
         RedrawInfo( roi, selectedResolution );
 
         cursor.Show();
-        display.Flip();
+        display.render();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonOk ) && buttonOk.isEnable() ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
-            le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+            bool redraw = false;
+            redraw = redraw || le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            redraw = redraw || le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
             resList.QueueEventProcessing();
 
-            if ( ( buttonOk.isEnable() && le.MouseClickLeft( buttonOk ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || resList.isDoubleClicked() ) {
+            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || resList.isDoubleClicked() ) {
                 if ( resList.isSelected() ) {
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
                 selectedResolution = std::make_pair( 0, 0 );
                 break;
             }
@@ -168,23 +172,23 @@ namespace Dialog
                 selectedResolution = resList.GetCurrent();
             }
 
-            if ( !cursor.isVisible() ) {
+            if ( redraw || !cursor.isVisible() ) {
                 resList.Redraw();
-                buttonOk.Draw();
-                buttonCancel.Draw();
+                buttonOk.draw();
+                buttonCancel.draw();
                 RedrawInfo( roi, selectedResolution );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
         cursor.Hide();
-        back.Restore();
+        //back.Restore();
 
         if ( selectedResolution.first > 0 && selectedResolution.second > 0
              && ( selectedResolution.first != currentResolution.w || selectedResolution.second != currentResolution.h ) ) {
             Settings & conf = Settings::Get();
-            display.SetVideoMode( selectedResolution.first, selectedResolution.second, display.IsFullScreen(), conf.KeepAspectRatio(),
+            Display::Get().SetVideoMode( selectedResolution.first, selectedResolution.second, fheroes2::engine().isFullScreen(), conf.KeepAspectRatio(),
                                   conf.ChangeFullscreenResolution() );
             return true;
         }

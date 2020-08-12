@@ -23,10 +23,12 @@
 #define H2DIALOG_H
 
 #include <list>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "gamedefs.h"
+#include "image.h"
 
 #define SHADOWWIDTH 16
 #define BOXAREA_WIDTH 245
@@ -127,7 +129,8 @@ namespace Dialog
         }
 
     protected:
-        SpriteBack background;
+        std::unique_ptr<fheroes2::ImageRestorer> _restorer;
+        //SpriteBack background;
         Rect area;
     };
 

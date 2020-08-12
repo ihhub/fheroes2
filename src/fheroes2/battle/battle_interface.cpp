@@ -1339,7 +1339,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     bar.Blit( sx, sy, _mainSurface );
 
     Text text( GetStringShort( unit.GetCount() ), Font::SMALL );
-    text.Blit( sx + ( bar.w() - text.w() ) / 2, sy, _mainSurface );
+    //text.Blit( sx + ( bar.w() - text.w() ) / 2, sy, _mainSurface );
 }
 
 void Battle::Interface::RedrawCover( void )

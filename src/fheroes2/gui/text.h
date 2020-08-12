@@ -28,6 +28,8 @@
 
 #include "gamedefs.h"
 
+#include "screen.h"
+
 namespace Font
 {
     enum
@@ -62,7 +64,7 @@ public:
     virtual int h( void ) const = 0;
     virtual size_t Size( void ) const = 0;
 
-    virtual void Blit( s32, s32, int maxw, Surface & sf = Display::Get() ) = 0;
+    virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) = 0;
 
     int font;
 };
@@ -83,7 +85,7 @@ public:
     int h( int ) const;
     size_t Size( void ) const;
 
-    void Blit( s32, s32, int maxw, Surface & sf = Display::Get() );
+    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() );
     static int CharWidth( int, int ft );
     static int CharHeight( int ft );
     static int CharAscent( int ft );
@@ -111,7 +113,7 @@ public:
     int h( int ) const;
     size_t Size( void ) const;
 
-    void Blit( s32, s32, int maxw, Surface & sf = Display::Get() );
+    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() );
 
     static bool isspace( int );
     static int CharWidth( int, int ft );
@@ -153,9 +155,9 @@ public:
         return static_cast<int>( gh );
     }
 
-    void Blit( s32, s32, Surface & sf = Display::Get() ) const;
-    void Blit( s32, s32, int maxw, Surface & sf = Display::Get() ) const;
-    void Blit( const Point &, Surface & sf = Display::Get() ) const;
+    void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
+    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
+    void Blit( const Point &, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
 
     static u32 width( const std::string &, int ft, u32 start = 0, u32 count = 0 );
     static u32 height( const std::string &, int ft, u32 width = 0 );
@@ -233,8 +235,8 @@ public:
         return messages.size();
     }
 
-    void Blit( s32, s32, Surface & sf = Display::Get() );
-    void Blit( const Point &, Surface & sf = Display::Get() );
+    void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() );
+    void Blit( const Point &, fheroes2::Image & sf = fheroes2::Display::instance() );
 
 private:
     void Append( const std::string &, int, u32 );

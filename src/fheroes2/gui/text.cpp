@@ -154,7 +154,7 @@ int TextAscii::h( int width ) const
     return res;
 }
 
-void TextAscii::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
+void TextAscii::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
 {
     if ( message.empty() )
         return;
@@ -172,8 +172,8 @@ void TextAscii::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
             continue;
         }
 
-        const Surface & sprite = AGG::GetLetter( *it, font );
-        if ( !sprite.isValid() )
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetLetter( *it, font );
+        if ( sprite.empty() )
             return;
 
         // valign
@@ -198,16 +198,16 @@ void TextAscii::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
         case 'p':
         case 'q':
         case 'j':
-            oy = CharAscent( font ) + CharDescent( font ) - sprite.h();
+            oy = CharAscent( font ) + CharDescent( font ) - sprite.height();
             break;
 
         default:
-            oy = CharAscent( font ) - sprite.h();
+            oy = CharAscent( font ) - sprite.height();
             break;
         }
 
-        sprite.Blit( ax, ay + 2 + oy, dst );
-        ax += sprite.w();
+        fheroes2::Blit( sprite, dst, ax, ay + 2 + oy );
+        ax += sprite.width();
     }
 }
 
@@ -346,7 +346,7 @@ int TextUnicode::h( int width ) const
     return res;
 }
 
-void TextUnicode::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
+void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
 {
     const s32 sx = ax;
 
@@ -364,7 +364,7 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
             continue;
         }
 
-        const Surface & sprite = AGG::GetUnicodeLetter( *it, font );
+        const fheroes2::Image & sprite = AGG::GetUnicodeLetter( *it, font );
         if ( !sprite.isValid() )
             return;
 
@@ -487,17 +487,17 @@ size_t Text::Size( void ) const
     return message->Size();
 }
 
-void Text::Blit( const Point & dst_pt, Surface & dst ) const
+void Text::Blit( const Point & dst_pt, fheroes2::Image & dst ) const
 {
     return message->Blit( dst_pt.x, dst_pt.y, 0, dst );
 }
 
-void Text::Blit( s32 ax, s32 ay, Surface & dst ) const
+void Text::Blit( s32 ax, s32 ay, fheroes2::Image & dst ) const
 {
     return message->Blit( ax, ay, 0, dst );
 }
 
-void Text::Blit( s32 ax, s32 ay, int maxw, Surface & dst ) const
+void Text::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst ) const
 {
     return message->Blit( ax, ay, maxw, dst );
 }
@@ -699,7 +699,7 @@ void TextBox::Append( const std::vector<u16> & msg, int ft, u32 width )
 }
 #endif
 
-void TextBox::Blit( s32 ax, s32 ay, Surface & sf )
+void TextBox::Blit( s32 ax, s32 ay, fheroes2::Image & sf )
 {
     Rect::x = ax;
     Rect::y = ay;
@@ -724,7 +724,7 @@ void TextBox::Blit( s32 ax, s32 ay, Surface & sf )
     }
 }
 
-void TextBox::Blit( const Point & pt, Surface & sf )
+void TextBox::Blit( const Point & pt, fheroes2::Image & sf )
 {
     Blit( pt.x, pt.y, sf );
 }
