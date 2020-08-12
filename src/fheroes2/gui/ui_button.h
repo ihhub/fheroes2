@@ -43,7 +43,7 @@ namespace fheroes2
         void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
         void setPosition( int32_t offsetX, int32_t offsetY );
 
-        void draw( Image & area = Display::instance() ); // will draw on screen by default
+        void draw( Image & area = Display::instance() ) const; // will draw on screen by default
         bool drawOnPress( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
         bool drawOnRelease( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
 

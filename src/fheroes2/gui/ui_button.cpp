@@ -101,7 +101,7 @@ namespace fheroes2
         _offsetY = offsetY;
     }
 
-    void Button::draw( Image & area )
+    void Button::draw( Image & area ) const
     {
         if ( isPressed() ) {
             // button can't be disabled and pressed
