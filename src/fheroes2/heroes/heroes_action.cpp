@@ -928,7 +928,7 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
 
     hero.ResetMovePoints();
-    hero.Move2Dest( dst_index, /*skipAction*/ true );
+    hero.Move2Dest( dst_index );
     from.SetObject( MP2::OBJ_BOAT );
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
@@ -1916,7 +1916,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     Cursor::Get().Hide();
 
-    hero.Move2Dest( index_to, true, true ); // no action and no penalty
+    hero.Move2Dest( index_to ); // no action and no penalty
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -1950,7 +1950,7 @@ void ActionToWhirlpools( Heroes & hero, u32 obj, s32 index_from )
 
     Cursor::Get().Hide();
 
-    hero.Move2Dest( index_to, true, true ); // no action and no penalty
+    hero.Move2Dest( index_to ); // no action and no penalty
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );

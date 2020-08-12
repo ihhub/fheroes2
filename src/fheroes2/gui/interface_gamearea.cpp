@@ -284,11 +284,14 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
             if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
                 uint32_t index = 0;
                 if ( pathEnd != nextStep ) {
-                    const uint32_t penaltyTo = Maps::Ground::GetPenalty( currentStep->GetFrom(), currentStep->GetDirection(), pathfinding, false );
-                    const uint32_t penaltyReverse
-                        = Maps::Ground::GetPenalty( currentStep->GetIndex(), Direction::Reflect( currentStep->GetDirection() ), pathfinding, false );
+                    const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
+                    uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
+                    const int direction = currentStep->GetDirection();
 
-                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), std::min( penaltyTo, penaltyReverse ) );
+                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad( direction ) || tileTo.isRoad( Direction::Reflect( direction ) ) )
+                        cost = Maps::Ground::roadPenalty;
+
+                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );
                 }
 
                 const Sprite & sprite = AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );

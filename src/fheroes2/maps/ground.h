@@ -25,6 +25,7 @@
 #include <string>
 
 #include "gamedefs.h"
+#include "maps_tiles.h"
 
 namespace Maps
 {
@@ -45,8 +46,11 @@ namespace Maps
             ALL = DESERT | SNOW | SWAMP | WASTELAND | BEACH | LAVA | DIRT | GRASS
         };
 
+        const uint32_t roadPenalty = 75;
+        const uint32_t defaultGroundPenalty = 100;
+
         const char * String( int );
-        u32 GetPenalty( s32, int direction, u32 pathfinding, bool diagonalCost = true );
+        uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfinding );
     }
 }
 
