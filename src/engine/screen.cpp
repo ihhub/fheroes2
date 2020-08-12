@@ -541,7 +541,7 @@ namespace
 
 namespace fheroes2
 {
-    void BaseRenderEngine::linkRenderSurface( uint8_t * surface )
+    void BaseRenderEngine::linkRenderSurface( uint8_t * surface ) const
     {
         Display::instance().linkRenderSurface( surface );
     }

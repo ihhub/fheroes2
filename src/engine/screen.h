@@ -52,7 +52,7 @@ namespace fheroes2
             return false;
         }
 
-        void linkRenderSurface( uint8_t * surface ); // declaration of this method is in source file
+        void linkRenderSurface( uint8_t * surface ) const; // declaration of this method is in source file
     };
 
     class Display : public Image
