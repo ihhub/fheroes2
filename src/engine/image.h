@@ -131,7 +131,4 @@ namespace fheroes2
 
     // Please use value from the main palette only
     void SetPixel( Image & image, uint32_t x, uint32_t y, uint8_t value );
-
-    // FIXME: This is a test function and should be removed before merging to master branch
-    bool SaveBitmap( const Image & image, const std::string & path );
 }
