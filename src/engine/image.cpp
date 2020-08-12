@@ -475,7 +475,7 @@ namespace fheroes2
                 const uint8_t * imageOutXEnd = imageOutX + width;
 
                 for ( ; imageOutX != imageOutXEnd; --imageInX, --transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a tranformation
+                    if ( *transformX > 0 ) { // apply a transformation
                         if ( *transformX > 1 ) { // 1 is to skip data
                             *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                         }
@@ -505,7 +505,7 @@ namespace fheroes2
                 const uint8_t * imageInXEnd = imageInX + width;
 
                 for ( ; imageInX != imageInXEnd; ++imageInX, ++transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a tranformation
+                    if ( *transformX > 0 ) { // apply a transformation
                         if ( *transformX > 1 ) { // 1 is to skip data
                             *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                         }
@@ -582,7 +582,7 @@ namespace fheroes2
                 const uint8_t * imageOutXEnd = imageOutX + width;
 
                 for ( ; imageOutX != imageOutXEnd; --imageInX, --transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a tranformation
+                    if ( *transformX > 0 ) { // apply a transformation
                         if ( *transformX > 1 ) { // 1 is to skip data
                             *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                         }
@@ -606,7 +606,7 @@ namespace fheroes2
                 const uint8_t * imageInXEnd = imageInX + width;
 
                 for ( ; imageInX != imageInXEnd; ++imageInX, ++transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a tranformation
+                    if ( *transformX > 0 ) { // apply a transformation
                         if ( *transformX > 1 ) { // 1 is to skip data
                             *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                         }
