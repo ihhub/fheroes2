@@ -36,6 +36,7 @@
 #include "game.h"
 #include "m82.h"
 #include "mus.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"
@@ -2083,4 +2084,345 @@ bool AGG::DrawContour( Surface & surface, uint32_t value, int icnId, int incInde
         return false;
 
     return surface.GenerateContour( data.get(), value, reflect );
+}
+
+namespace fheroes2
+{
+    namespace AGG
+    {
+        std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite;
+        const fheroes2::Sprite errorICNImage;
+
+        std::vector<std::vector<fheroes2::Image> > _tilVsImage;
+        const fheroes2::Image errorTILImage;
+
+        const uint32_t headerSize = 6;
+
+        const std::set<int> _scalableICNIds{ICN::HEROES, ICN::BTNSHNGL, ICN::SHNGANIM};
+        std::map<int, std::vector<fheroes2::Sprite> > _icnVsScaledSprite;
+
+        void PrepareICNImages()
+        {
+            if ( _icnVsSprite.empty() ) {
+                _icnVsSprite.resize( ICN::LASTICN );
+            }
+        }
+
+        void PrepareTILImages()
+        {
+            if ( _tilVsImage.empty() ) {
+                _tilVsImage.resize( TIL::LASTTIL );
+            }
+        }
+
+        bool IsValidICNId( int id )
+        {
+            if ( id < 0 ) {
+                return false;
+            }
+
+            PrepareICNImages();
+
+            return static_cast<size_t>( id ) < _icnVsSprite.size();
+        }
+
+        bool IsValidTILId( int id )
+        {
+            if ( id < 0 ) {
+                return false;
+            }
+
+            PrepareTILImages();
+
+            return static_cast<size_t>( id ) < _tilVsImage.size();
+        }
+
+        void LoadOriginalICN( int id )
+        {
+            const std::vector<u8> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
+
+            if ( body.empty() ) {
+                return;
+            }
+
+            StreamBuf imageStream( body );
+
+            const uint32_t count = imageStream.getLE16();
+            const uint32_t blockSize = imageStream.getLE32();
+            if ( count == 0 || blockSize == 0 ) {
+                return;
+            }
+
+            _icnVsSprite[id].resize( count );
+
+            for ( uint32_t i = 0; i < count; ++i ) {
+                imageStream.seek( headerSize + i * 13 );
+
+                ICNHeader header1;
+                imageStream >> header1;
+
+                uint32_t sizeData = 0;
+                if ( i + 1 != count ) {
+                    ICNHeader header2;
+                    imageStream >> header2;
+                    sizeData = header2.offsetData - header1.offsetData;
+                }
+                else {
+                    sizeData = blockSize - header1.offsetData;
+                }
+
+                Sprite & sprite = _icnVsSprite[id][i];
+
+                sprite.resize( header1.width, header1.height );
+                sprite.reset();
+                sprite.setPosition( static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
+
+                uint8_t * imageData = sprite.image();
+                uint8_t * imageTransform = sprite.transform();
+
+                uint32_t posX = 0;
+                uint32_t offsetX = 0;
+                const uint32_t width = sprite.width();
+
+                const uint8_t * data = body.data() + headerSize + header1.offsetData;
+                const uint8_t * dataEnd = data + sizeData;
+
+                while ( 1 ) {
+                    if ( 0 == *data ) { // 0x00 - end line
+                        offsetX += width;
+                        posX = 0;
+                        ++data;
+                    }
+                    else if ( 0x80 > *data ) { // 0x7F - count data
+                        uint32_t c = *data;
+                        ++data;
+                        while ( c-- && data != dataEnd ) {
+                            imageData[offsetX + posX] = *data;
+                            imageTransform[offsetX + posX] = 0;
+                            ++posX;
+                            ++data;
+                        }
+                    }
+                    else if ( 0x80 == *data ) { // 0x80 - end data
+                        break;
+                    }
+                    else if ( 0xC0 > *data ) { // 0xBF - skip data
+                        posX += *data - 0x80;
+                        ++data;
+                    }
+                    else if ( 0xC0 == *data ) { // 0xC0 - transform layer
+                        ++data;
+
+                        const uint8_t transformValue = *data;
+                        const uint8_t transformType = ( ( transformValue & 0x3C ) << 6 ) / 256 + 2; // 1 is for skipping
+
+                        uint32_t c = *data % 4 ? *data % 4 : *( ++data );
+                        while ( c-- ) {
+                            if ( transformType <= 13 ) {
+                                imageTransform[offsetX + posX] = transformType;
+                            }
+                            ++posX;
+                        }
+                        ++data;
+                    }
+                    else if ( 0xC1 == *data ) { // 0xC1
+                        ++data;
+                        uint32_t c = *data;
+                        ++data;
+                        while ( c-- ) {
+                            imageData[offsetX + posX] = *data;
+                            imageTransform[offsetX + posX] = 0;
+                            ++posX;
+                        }
+                        ++data;
+                    }
+                    else {
+                        uint32_t c = *data - 0xC0;
+                        ++data;
+                        while ( c-- ) {
+                            imageData[offsetX + posX] = *data;
+                            imageTransform[offsetX + posX] = 0;
+                            ++posX;
+                        }
+                        ++data;
+                    }
+
+                    if ( data >= dataEnd ) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Helper function for LoadModifiedICN
+        void CopyICNWithPalette( int icnId, int originalIcnId, int paletteType )
+        {
+            LoadOriginalICN( originalIcnId );
+            _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
+            const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
+            for ( size_t i = 0; i < _icnVsSprite[icnId].size(); ++i ) {
+                ApplyPallete( _icnVsSprite[icnId][i], palette );
+            }
+        }
+
+        bool LoadModifiedICN( int id )
+        {
+            switch ( id ) {
+            case ICN::ROUTERED:
+                CopyICNWithPalette( id, ICN::ROUTE, PAL::RED );
+                return true;
+            case ICN::YELLOW_FONT:
+                CopyICNWithPalette( id, ICN::FONT, PAL::YELLOW_TEXT );
+                return true;
+            case ICN::YELLOW_SMALFONT:
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::YELLOW_TEXT );
+                return true;
+            case ICN::GRAY_FONT:
+                CopyICNWithPalette( id, ICN::FONT, PAL::GRAY_TEXT );
+                return true;
+            case ICN::GRAY_SMALL_FONT:
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::GRAY_TEXT );
+                return true;
+            default:
+                break;
+            }
+
+            return false;
+        }
+
+        size_t GetMaximumICNIndex( int id )
+        {
+            if ( _icnVsSprite[id].empty() ) {
+                if ( !LoadModifiedICN( id ) ) {
+                    LoadOriginalICN( id );
+                }
+            }
+
+            return _icnVsSprite[id].size();
+        }
+
+        size_t GetMaximumTILIndex( int id )
+        {
+            if ( _tilVsImage[id].empty() ) {
+                const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
+                if ( data.size() < headerSize ) {
+                    return 0;
+                }
+
+                StreamBuf buffer( data );
+
+                const uint32_t count = buffer.getLE16();
+                const uint32_t width = buffer.getLE16();
+                const uint32_t height = buffer.getLE16();
+                const uint32_t size = width * height;
+                if ( headerSize + count * size != data.size() ) {
+                    return 0;
+                }
+
+                _tilVsImage[id].resize( count );
+                for ( uint32_t i = 0; i < count; ++i ) {
+                    _tilVsImage[id][i].resize( width, height );
+                    _tilVsImage[id][i].reset();
+                    memcpy( _tilVsImage[id][i].image(), data.data() + headerSize + i * size, size );
+                }
+            }
+
+            return _tilVsImage[id].size();
+        }
+
+        // We have few ICNs which we need to scale like some related to main screen
+        bool IsScalableICN( int id )
+        {
+            return std::find( _scalableICNIds.begin(), _scalableICNIds.end(), id ) != _scalableICNIds.end();
+        }
+
+        const Sprite & GetScaledICN( int icnId, uint32_t index )
+        {
+            const Sprite & originalIcn = _icnVsSprite[icnId][index];
+
+            if ( Display::DEFAULT_WIDTH == Display::instance().width() && Display::DEFAULT_HEIGHT == Display::instance().height() ) {
+                return originalIcn;
+            }
+
+            if ( _icnVsScaledSprite[icnId].empty() ) {
+                _icnVsScaledSprite[icnId].resize( _icnVsSprite[icnId].size() );
+            }
+
+            Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
+
+            const double scaleFactorX = static_cast<double>( Display::instance().width() ) / Display::DEFAULT_WIDTH;
+            const double scaleFactorY = static_cast<double>( Display::instance().height() ) / Display::DEFAULT_HEIGHT;
+
+            const uint32_t resizedWidth = static_cast<uint32_t>( originalIcn.width() * scaleFactorX + 0.5 );
+            const uint32_t resizedHeight = static_cast<uint32_t>( originalIcn.height() * scaleFactorY + 0.5 );
+            // Resize only if needed
+            if ( resizedIcn.width() != resizedWidth || resizedIcn.height() != resizedHeight ) {
+                resizedIcn.resize( resizedWidth, resizedHeight );
+                resizedIcn.setPosition( static_cast<uint32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<uint32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
+                Resize( originalIcn, resizedIcn, false );
+            }
+
+            return resizedIcn;
+        }
+
+        const Sprite & GetICN( int icnId, uint32_t index )
+        {
+            if ( !IsValidICNId( icnId ) ) {
+                return errorICNImage;
+            }
+
+            if ( index >= GetMaximumICNIndex( icnId ) ) {
+                return errorICNImage;
+            }
+
+            if ( IsScalableICN( icnId ) ) {
+                return GetScaledICN( icnId, index );
+            }
+
+            return _icnVsSprite[icnId][index];
+        }
+
+        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
+        {
+            if ( !IsValidTILId( tilId ) ) {
+                return errorTILImage;
+            }
+
+            const size_t maxTILIndex = GetMaximumTILIndex( tilId );
+            if ( index >= maxTILIndex / 4 ) {
+                return errorTILImage;
+            }
+
+            // Generate proper TIL index
+            const size_t correctIndex = index + ( maxTILIndex / 4 ) * ( shapeId % 4 );
+            return _tilVsImage[tilId][correctIndex];
+        }
+
+        const Sprite & GetLetter( uint32_t character, uint32_t fontType )
+        {
+            if ( character < 0x21 ) {
+                return errorICNImage;
+            }
+
+            // TODO: correct naming and standartise the code
+            switch ( fontType ) {
+            case Font::GRAY_BIG:
+                return GetICN( ICN::GRAY_FONT, character - 0x20 );
+            case Font::GRAY_SMALL:
+                return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
+            case Font::YELLOW_BIG:
+                return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+            case Font::YELLOW_SMALL:
+                return GetICN( ICN::YELLOW_SMALFONT, character - 0x20 );
+            case Font::BIG:
+                return GetICN( ICN::FONT, character - 0x20 );
+            case Font::SMALL:
+                return GetICN( ICN::SMALFONT, character - 0x20 );
+            default:
+                break;
+            }
+
+            return GetICN( ICN::SMALFONT, character - 0x20 );
+        }
+    }
 }
