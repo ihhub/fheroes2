@@ -187,7 +187,7 @@ namespace
         if ( inX > in.width() || inY > in.height() || outX > out.width() || outY > out.height() )
             return false;
 
-        if ( ( inX + width > in.width() ) || ( inY + height > in.height() ) || ( outX + width > out.width() ) || ( outY + height > in.height() ) )
+        if ( ( inX + width > in.width() ) || ( inY + height > in.height() ) || ( outX + width > out.width() ) || ( outY + height > out.height() ) )
             return false;
 
         return true;
@@ -398,6 +398,43 @@ namespace fheroes2
     {
         _x = x_;
         _y = y_;
+    }
+
+    ImageRestorer::ImageRestorer( Image & image )
+        : _image( image )
+        , _isRestored( false )
+        , _x( 0 )
+        , _y( 0 )
+        , _width( image.width() )
+        , _height( image.height() )
+    {
+        _copy.resize( _width, _height );
+        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
+    }
+
+    ImageRestorer::ImageRestorer( Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height )
+        : _image( image )
+        , _isRestored( false )
+        , _x( x )
+        , _y( y )
+        , _width( width )
+        , _height( height )
+    {
+        _copy.resize( _width, _height );
+        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
+    }
+
+    ImageRestorer::~ImageRestorer()
+    {
+        restore();
+    }
+
+    void ImageRestorer::restore()
+    {
+        if ( !_isRestored ) {
+            _isRestored = true;
+            Copy( _copy, 0, 0, _image, _x, _y, _width, _height );
+        }
     }
 
     void ApplyPallete( Image & image, const std::vector<uint8_t> & palette )

@@ -76,6 +76,28 @@ namespace fheroes2
         int32_t _y;
     };
 
+    // This class is used in situations when we draw a window within another window
+    class ImageRestorer
+    {
+    public:
+        ImageRestorer( Image & image );
+        ImageRestorer( Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height );
+        ~ImageRestorer();
+
+        void restore();
+
+    private:
+        Image & _image;
+        Image _copy;
+
+        uint32_t _x;
+        uint32_t _y;
+        uint32_t _width;
+        uint32_t _height;
+
+        bool _isRestored;
+    };
+
     // apply palette only for image layer, it doesn't affect transform part
     void ApplyPallete( Image & image, const std::vector<uint8_t> & palette );
     void ApplyPallete( const Image & in, Image & out, const std::vector<uint8_t> & palette );
