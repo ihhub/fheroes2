@@ -1069,7 +1069,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             // 0xC0 - shadow
             if ( 0xC0 == *buf ) {
             ++buf;
-
             c = *buf % 4 ? *buf % 4 : *( ++buf );
             if ( sf1.depth() == 8 ) // skip alpha
             {
