@@ -24,12 +24,9 @@
 #include <cmath>
 #include <cstring>
 
-// FIXME: please remove me before merging to master branch
-#include <cstdio>
-
 namespace
 {
-    // 0 in shadow part means no shadow, 1 means to skip any drawing so to don't waste extra CPU cycles for tableId - 2 command we just add a fake extra tables
+    // 0 in shadow part means no shadow, 1 means skip any drawings so to don't waste extra CPU cycles for ( tableId - 2 ) command we just add extra fake tables
     const uint8_t transformTable[256 * 14] = {
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
