@@ -367,7 +367,7 @@ void World::ComputeStaticAnalysis()
         for ( int x = 0; x < width; ++x ) {
             const int index = rowIndex + x;
             Maps::Tiles & tile = vec_tiles[index];
-            if ( tile.GetPassable() == 0 || tile.isWater() ) {
+            if ( tile.GetPassable() == 0 ) {
                 ++obstacles;
                 ++obsByColumn[x].second;
                 ++obsByRow[y].second;
@@ -418,7 +418,7 @@ void World::ComputeStaticAnalysis()
 
             const int tileIndex = rowID * width + colID;
             const Maps::Tiles & tile = vec_tiles[tileIndex];
-            if ( tile.GetPassable() && !tile.isWater() ) {
+            if ( tile.GetPassable() ) {
                 centerIndex = tileIndex;
             }
             else {
@@ -426,7 +426,7 @@ void World::ComputeStaticAnalysis()
                     if ( Maps::isValidDirection( tileIndex, direction ) ) {
                         const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
                         const Maps::Tiles & newTile = vec_tiles[newIndex];
-                        if ( newTile.GetPassable() && !newTile.isWater() ) {
+                        if ( newTile.GetPassable() ) {
                             centerIndex = newIndex;
                             break;
                         }
@@ -523,7 +523,7 @@ void World::ComputeStaticAnalysis()
             node.index = index;
             node.passable = tile.GetPassable();
             node.isWater = tile.isWater();
-            if ( node.passable != 0 && !node.isWater ) {
+            if ( node.passable != 0 ) {
                 node.type = OPEN;
             }
         }
@@ -533,7 +533,7 @@ void World::ComputeStaticAnalysis()
     std::vector<MapRegion> regions;
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
         const int tileIndex = regionCenters[regionID];
-        regions.push_back( { static_cast<int>( regionID ), tileIndex, false } );
+        regions.push_back( { static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater() } );
         data[ConvertIndex( tileIndex, extendedWidth )].type = REGION + regionID;
     }
 
