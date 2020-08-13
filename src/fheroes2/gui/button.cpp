@@ -280,15 +280,15 @@ int ButtonGroups::QueueEventProcessing( void )
 
     if ( button1 && button2 ) {
         if ( buttons == ( Dialog::YES | Dialog::NO ) || buttons == ( Dialog::OK | Dialog::CANCEL ) ) {
-            if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )
+            if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) && button1->isEnable() )
                 return result1;
-            if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+            if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) && button2->isEnable() )
                 return result2;
         }
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_LEFT ) )
+        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_LEFT ) && button1->isEnable() )
             return result1;
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_RIGHT ) )
+        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_RIGHT ) && button2->isEnable() )
             return result2;
     }
     else
