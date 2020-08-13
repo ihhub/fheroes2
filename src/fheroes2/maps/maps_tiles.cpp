@@ -1911,7 +1911,7 @@ bool Maps::Tiles::GoodForUltimateArtifact( void ) const
     return !isWater()
            && ( addons_level1.empty()
                 || addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), std::ptr_fun( &TilesAddon::isShadow ) ) ) )
-           && isPassable( NULL, Direction::CENTER, true );
+           && isPassable( Direction::CENTER, false, true );
 }
 
 bool TileIsGround( s32 index, int ground )
