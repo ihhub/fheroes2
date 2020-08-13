@@ -1530,6 +1530,12 @@ void World::PostLoad( void )
     // update tile passable
     std::for_each( vec_tiles.begin(), vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
 
+    //for ( int i = 0; i < 100; ++i ) {
+    //    ComputeStaticAnalysis();
+    //    for ( Maps::Tiles & tile : vec_tiles ) {
+    //        tile._region = 0;
+    //    }
+    //}
     ComputeStaticAnalysis();
 
     // play with hero

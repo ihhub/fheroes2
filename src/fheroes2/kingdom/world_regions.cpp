@@ -29,6 +29,116 @@ namespace
     using TileData = std::pair<int, int>;
     using TileDataVector = std::vector<std::pair<int, int> >;
 
+    void FillRegion( std::vector<uint8_t> & data, const Size & mapSize )
+    {
+        const uint32_t extendedWidth = mapSize.w + 2;
+
+        uint8_t * currentTile = data.data() + extendedWidth + 1;
+        uint8_t * mapEnd = data.data() + extendedWidth * ( mapSize.h + 1 );
+
+        uint32_t regionID = 10;
+
+        for ( ; currentTile != mapEnd; ++currentTile ) {
+            if ( *currentTile == OPEN ) {
+                std::vector<Point> regionTiles;
+                std::vector<Point> edge;
+
+                *currentTile = regionID;
+
+                const size_t currentPosition = currentTile - data.data();
+                regionTiles.push_back( Point( currentPosition % extendedWidth - 1, currentPosition / extendedWidth - 1 ) );
+
+                size_t tileIdx = 0;
+                do {
+                    Point pt = regionTiles[tileIdx++];
+
+                    uint8_t neighbourCount = 0;
+                    uint8_t * position = data.data() + ( pt.y + 1 ) * extendedWidth + ( pt.x + 1 );
+
+                    position = position - extendedWidth - 1;
+                    if ( *( position ) != BLOCKED ) {
+                        if ( *( position ) == OPEN ) {
+                            regionTiles.push_back( Point( pt.x - 1, pt.y - 1 ) );
+                            *( position ) = regionID;
+                        }
+                        ++neighbourCount;
+                    }
+
+                    ++position;
+                    if ( *( position ) != BLOCKED ) {
+                        if ( *( position ) == OPEN ) {
+                            regionTiles.push_back( Point( pt.x, pt.y - 1 ) );
+                            *( position ) = regionID;
+                        }
+                        ++neighbourCount;
+                    }
+
+                    ++position;
+                    if ( *( position ) != BLOCKED ) {
+                        if ( *( position ) == OPEN ) {
+                            regionTiles.push_back( Point( pt.x + 1, pt.y - 1 ) );
+                            *( position ) = regionID;
+                        }
+                        ++neighbourCount;
+                    }
+
+                    position = position + mapSize.w; // (mapWidth - 2) is width
+                    if ( *( position ) != BLOCKED ) {
+                        if ( *( position ) == OPEN ) {
+                            regionTiles.push_back( Point( pt.x - 1, pt.y ) );
+                            *( position ) = regionID;
+                        }
+                        ++neighbourCount;
+                    }
+
+                    position = position + 2;
+                    if ( *( position ) != BLOCKED ) {
+                        if ( *( position ) == OPEN ) {
+                            regionTiles.push_back( Point( pt.x + 1, pt.y ) );
+                            *( position ) = regionID;
+                        }
+                        ++neighbourCount;
+                    }
+
+                    position = position + mapSize.w; // (mapWidth - 2) is width
+                    if ( *( position ) != BLOCKED ) {
+                        if ( *( position ) == OPEN ) {
+                            regionTiles.push_back( Point( pt.x - 1, pt.y + 1 ) );
+                            *( position ) = regionID;
+                        }
+                        ++neighbourCount;
+                    }
+
+                    ++position;
+                    if ( *( position ) != BLOCKED ) {
+                        if ( *( position ) == OPEN ) {
+                            regionTiles.push_back( Point( pt.x, pt.y + 1 ) );
+                            *( position ) = regionID;
+                        }
+                        ++neighbourCount;
+                    }
+
+                    ++position;
+                    if ( *( position ) != BLOCKED ) {
+                        if ( *( position ) == OPEN ) {
+                            regionTiles.push_back( Point( pt.x + 1, pt.y + 1 ) );
+                            *( position ) = regionID;
+                        }
+                        ++neighbourCount;
+                    }
+
+                    // if ( neighbourCount != 8 ) {
+                    //    edge.push_back( pt );
+                    //    *( position - 1 - extendedWidth ) = BORDER;
+                    //}
+
+                } while ( tileIdx != regionTiles.size() );
+
+                ++regionID;
+            }
+        }
+    }
+
     bool AppendIfFarEnough( std::vector<int> & dataSet, int value, uint32_t distance )
     {
         bool match = true;
@@ -43,17 +153,17 @@ namespace
         return match;
     }
 
+    struct MapRegionNode
+    {
+        int index;
+        int region;
+    };
+
     struct MapRegion
     {
         int id;
         std::vector<MapRegion *> neighbours;
         std::vector<MapRegionNode> nodes;
-    };
-
-    struct MapRegionNode
-    {
-        int index;
-        int region;
     };
 
     struct RegionLinkRoute : std::list<int>
@@ -64,6 +174,72 @@ namespace
         uint32_t _basePenalty;
         uint32_t _roughTerrainPenalty;
     };
+
+    enum
+    {
+        BLOCKED = 0,
+        OPEN = 1,
+        BORDER = 2,
+        REGION = 3
+    };
+
+    struct MapNode
+    {
+        uint8_t type;
+        uint16_t passable;
+        bool isWater;
+    };
+}
+
+void World::FillRegion2( std::vector<uint8_t> & data, const Size & mapSize )
+{
+    static const Directions directions = Direction::All();
+    const uint32_t extendedWidth = mapSize.w + 2;
+
+    uint8_t * currentTile = data.data() + extendedWidth + 1;
+    uint8_t * mapEnd = data.data() + extendedWidth * ( mapSize.h + 1 );
+
+    uint32_t regionID = REGION;
+
+    for ( ; currentTile != mapEnd; ++currentTile ) {
+        if ( *currentTile == OPEN ) {
+            std::vector<Point> regionTiles;
+            std::vector<Point> edge;
+
+            *currentTile = regionID;
+
+            const size_t currentPosition = currentTile - data.data();
+            regionTiles.push_back( Point( currentPosition % extendedWidth - 1, currentPosition / extendedWidth - 1 ) );
+            bool isWater = false;
+
+            size_t tileIdx = 0;
+            do {
+                Point pt = regionTiles[tileIdx++];
+
+                const int tileIndex = pt.y * mapSize.w + pt.x;
+                uint8_t neighbourCount = 0;
+
+                for ( const int direction : directions ) {
+                    const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
+                    const Maps::Tiles & newTile = vec_tiles[newIndex];
+                    if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == isWater ) {
+                        Point coord( newIndex % extendedWidth - 1, newIndex / extendedWidth - 1 );
+                        regionTiles.push_back( coord );
+                        data[( coord.y + 1 ) * extendedWidth + coord.x + 1] = 4;
+                        ++neighbourCount;
+                    }
+                }
+
+                if ( neighbourCount < 5 ) {
+                    edge.push_back( pt );
+                    data[currentPosition] = BORDER;
+                }
+
+            } while ( tileIdx != regionTiles.size() );
+
+            ++regionID;
+        }
+    }
 }
 
 void World::GrowRegion( std::set<int> & openTiles, std::unordered_map<int, int> & connection, int regionID )
@@ -106,10 +282,12 @@ void World::ComputeStaticAnalysis()
 {
     int obstacles = 0;
     const int width = w();
-    const int heigth = h();
-    const int mapSize = std::max( width, heigth );
+    const int height = h();
+    const int mapSize = std::max( width, height );
 
     std::unordered_map<int, int> connectionMap;
+    std::vector<int> connectionVector( ( width + 1 ) * ( height + 1 ), 0 );
+    std::vector<int> regionVector( connectionVector );
     connectionMap.reserve( static_cast<size_t>( mapSize ) * 3 ); // average amount of connections created
 
     const Directions directions = Direction::All();
@@ -125,10 +303,10 @@ void World::ComputeStaticAnalysis()
 
     for ( int x = 0; x < width; ++x )
         obsByColumn.emplace_back( x, 0 );
-    for ( int y = 0; y < heigth; ++y )
+    for ( int y = 0; y < height; ++y )
         obsByRow.emplace_back( y, 0 );
 
-    for ( int y = 0; y < heigth; ++y ) {
+    for ( int y = 0; y < height; ++y ) {
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
             const int index = rowIndex + x;
@@ -155,7 +333,7 @@ void World::ComputeStaticAnalysis()
     }
 
     // Values used to tweak region generation parameters
-    const int tilesTotal = width * heigth;
+    const int tilesTotal = width * height;
     const int usableTiles = tilesTotal - obstacles;
     double freeTilesPercentage = usableTiles * 100.0 / tilesTotal;
     if ( vec_castles.size() ) {
@@ -220,7 +398,7 @@ void World::ComputeStaticAnalysis()
 
     // Fix missing islands and divide seas
     size_t nextRegionID = regionCenters.size();
-    for ( int y = 0; y < heigth; ++y ) {
+    for ( int y = 0; y < height; ++y ) {
         for ( int x = 0; x < width; ++x ) {
             const int tileIndex = y * width + x;
             Maps::Tiles & tile = vec_tiles[tileIndex];
@@ -277,11 +455,33 @@ void World::ComputeStaticAnalysis()
         regionLinks.push_back( link );
     }
 
+    std::vector<uint8_t> data( ( width + 2 ) * ( height + 2 ), BLOCKED );
+    for ( int y = 0; y < height; ++y ) {
+        const int rowIndex = y * width;
+        for ( int x = 0; x < width; ++x ) {
+            const size_t index = rowIndex + x;
+            Maps::Tiles & tile = vec_tiles[index];
+            if ( tile.GetPassable() != 0 && !tile.isWater() ) {
+                data[index + width + 1] = OPEN;
+            }
+        }
+    }
+
+    FillRegion2( data, Size( width, height ) );
+
+    for ( int y = 0; y < height; ++y ) {
+        const int rowIndex = y * width;
+        for ( int x = 0; x < width; ++x ) {
+            const size_t index = rowIndex + x;
+            vec_tiles[index]._metadata = data[index + width + 1];
+        }
+    }
+
     // DEBUG: view the hot spots
-    for ( const int center : regionCenters ) {
-        vec_tiles[center]._metadata = vec_tiles[center]._region;
-    }
-    for ( const TileData & link : regionLinks ) {
-        vec_tiles[link.first]._metadata = vec_tiles[link.first]._region;
-    }
+    // for ( const int center : regionCenters ) {
+    //    vec_tiles[center]._metadata = vec_tiles[center]._region;
+    //}
+    // for ( const TileData & link : regionLinks ) {
+    //    vec_tiles[link.first]._metadata = vec_tiles[link.first]._region;
+    //}
 }
