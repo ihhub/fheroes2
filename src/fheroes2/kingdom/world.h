@@ -265,7 +265,6 @@ private:
     void MonthOfMonstersAction( const Monster & );
     void PostLoad( void );
 
-    void FillRegion2( std::vector<uint8_t> & data, const Size & mapSize );
     void GrowRegion( std::set<int> & tiles, std::unordered_map<int, int> & connection, int regionID );
 
 private:

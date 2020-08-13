@@ -51,6 +51,7 @@ namespace Direction
     int Reflect( int direct );
 
     bool ShortDistanceClockWise( int direct1, int direct2 );
+    int GetDirectionIndex( int current, int direction, uint32_t width );
     Directions All( void );
 }
 

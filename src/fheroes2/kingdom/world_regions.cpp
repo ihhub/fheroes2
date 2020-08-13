@@ -29,6 +29,14 @@ namespace
     using TileData = std::pair<int, int>;
     using TileDataVector = std::vector<std::pair<int, int> >;
 
+    enum
+    {
+        BLOCKED = 0,
+        OPEN = 1,
+        BORDER = 2,
+        REGION = 3
+    };
+
     void FillRegion( std::vector<uint8_t> & data, const Size & mapSize )
     {
         const uint32_t extendedWidth = mapSize.w + 2;
@@ -175,38 +183,30 @@ namespace
         uint32_t _roughTerrainPenalty;
     };
 
-    enum
-    {
-        BLOCKED = 0,
-        OPEN = 1,
-        BORDER = 2,
-        REGION = 3
-    };
-
     struct MapNode
     {
-        uint8_t type;
-        uint16_t passable;
-        bool isWater;
+        uint8_t type = BLOCKED;
+        uint16_t passable = 0;
+        bool isWater = false;
     };
 }
 
-void World::FillRegion2( std::vector<uint8_t> & data, const Size & mapSize )
+void FillRegion2( std::vector<MapNode> & data, const Size & mapSize )
 {
     static const Directions directions = Direction::All();
     const uint32_t extendedWidth = mapSize.w + 2;
 
-    uint8_t * currentTile = data.data() + extendedWidth + 1;
-    uint8_t * mapEnd = data.data() + extendedWidth * ( mapSize.h + 1 );
+    MapNode * currentTile = data.data() + extendedWidth + 1;
+    MapNode * mapEnd = data.data() + extendedWidth * ( mapSize.h + 1 );
 
     uint32_t regionID = REGION;
 
     for ( ; currentTile != mapEnd; ++currentTile ) {
-        if ( *currentTile == OPEN ) {
+        if ( currentTile->type == OPEN ) {
             std::vector<Point> regionTiles;
             std::vector<Point> edge;
 
-            *currentTile = regionID;
+            currentTile->type = regionID;
 
             const size_t currentPosition = currentTile - data.data();
             regionTiles.push_back( Point( currentPosition % extendedWidth - 1, currentPosition / extendedWidth - 1 ) );
@@ -216,23 +216,23 @@ void World::FillRegion2( std::vector<uint8_t> & data, const Size & mapSize )
             do {
                 Point pt = regionTiles[tileIdx++];
 
-                const int tileIndex = pt.y * mapSize.w + pt.x;
+                const int tileIndex = ( pt.y + 1 ) * extendedWidth + pt.x + 1;
                 uint8_t neighbourCount = 0;
 
                 for ( const int direction : directions ) {
-                    const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
-                    const Maps::Tiles & newTile = vec_tiles[newIndex];
-                    if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == isWater ) {
+                    const int newIndex = Direction::GetDirectionIndex( tileIndex, direction, extendedWidth );
+                    const MapNode & newTile = data[newIndex];
+                    if ( newTile.type == OPEN && ( newTile.passable & Direction::Reflect( direction ) ) && newTile.isWater == isWater ) {
                         Point coord( newIndex % extendedWidth - 1, newIndex / extendedWidth - 1 );
                         regionTiles.push_back( coord );
-                        data[( coord.y + 1 ) * extendedWidth + coord.x + 1] = 4;
+                        data[( coord.y + 1 ) * extendedWidth + coord.x + 1].type = regionID;
                         ++neighbourCount;
                     }
                 }
 
                 if ( neighbourCount < 5 ) {
                     edge.push_back( pt );
-                    data[currentPosition] = BORDER;
+                    data[currentPosition].type = BORDER;
                 }
 
             } while ( tileIdx != regionTiles.size() );
@@ -455,14 +455,18 @@ void World::ComputeStaticAnalysis()
         regionLinks.push_back( link );
     }
 
-    std::vector<uint8_t> data( ( width + 2 ) * ( height + 2 ), BLOCKED );
+    std::vector<MapNode> data( ( width + 2 ) * ( height + 2 ) );
     for ( int y = 0; y < height; ++y ) {
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
             const size_t index = rowIndex + x;
-            Maps::Tiles & tile = vec_tiles[index];
-            if ( tile.GetPassable() != 0 && !tile.isWater() ) {
-                data[index + width + 1] = OPEN;
+            const Maps::Tiles & tile = vec_tiles[index];
+            MapNode & node = data[index + width + 1];
+
+            node.passable = tile.GetPassable();
+            node.isWater = tile.isWater();
+            if ( node.passable != 0 && !node.isWater ) {
+                node.type = OPEN;
             }
         }
     }
@@ -473,7 +477,7 @@ void World::ComputeStaticAnalysis()
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
             const size_t index = rowIndex + x;
-            vec_tiles[index]._metadata = data[index + width + 1];
+            vec_tiles[index]._metadata = data[index + width + 1].type;
         }
     }
 

@@ -206,6 +206,32 @@ int Direction::Reflect( int direct )
     return UNKNOWN;
 }
 
+int Direction::GetDirectionIndex( int index, int direction, uint32_t width )
+{
+    switch ( direction ) {
+    case Direction::TOP:
+        return index - width;
+    case Direction::TOP_RIGHT:
+        return index - width + 1;
+    case Direction::RIGHT:
+        return index + 1;
+    case Direction::BOTTOM_RIGHT:
+        return index + width + 1;
+    case Direction::BOTTOM:
+        return index + width;
+    case Direction::BOTTOM_LEFT:
+        return index + width - 1;
+    case Direction::LEFT:
+        return index - 1;
+    case Direction::TOP_LEFT:
+        return index - width - 1;
+    default:
+        break;
+    }
+
+    return -1;
+}
+
 Directions Direction::All( void )
 {
     const int directs[] = {TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT};
