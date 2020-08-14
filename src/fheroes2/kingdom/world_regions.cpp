@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <set>
-
 #include "world.h"
 
 namespace
@@ -59,13 +57,23 @@ namespace
         {}
     };
 
+    struct RegionBorderNode
+    {
+        int index = -1;
+        bool isCoast = false;
+        std::vector<int> neighbours;
+        RegionBorderNode( int index )
+            : index( index )
+        {}
+    };
+
     struct MapRegion
     {
         int id = REGION;
         bool isWater = false;
         std::vector<MapRegion *> neighbours;
         std::vector<MapRegionNode> nodes;
-        std::vector<MapRegionNode> edgeNodes;
+        std::vector<RegionBorderNode> borders;
         size_t lastProcessedNode = 0;
 
         MapRegion( int regionIndex, int mapIndex, bool water )
@@ -114,7 +122,7 @@ namespace
         MapRegionNode node = region.nodes[region.lastProcessedNode];
         const int extIDX = ConvertExtendedIndex( node.index, rawDataWidth );
 
-        uint8_t neighbourCount = 0;
+        std::vector<int> neighbourIDs;
         for ( const int direction : directions ) {
             const int newIndex = Direction::GetDirectionIndex( extIDX, direction, rawDataWidth );
             MapRegionNode & newTile = rawData[newIndex];
@@ -124,14 +132,16 @@ namespace
                     region.nodes.push_back( newTile );
                 }
                 else if ( newTile.type > REGION && newTile.type != region.id ) {
-                    ++neighbourCount;
+                    neighbourIDs.push_back( newTile.type );
                 }
             }
         }
 
-        if ( neighbourCount > 0 ) {
-            region.nodes[region.lastProcessedNode].type = BORDER;
-            region.edgeNodes.push_back( node );
+        if ( !neighbourIDs.empty() ) {
+            RegionBorderNode border( node.index );
+            neighbourIDs.push_back( region.id );
+            border.neighbours.swap( neighbourIDs );
+            region.borders.push_back( border );
         }
     }
 
@@ -182,10 +192,13 @@ void World::ComputeStaticAnalysis()
     TileDataVector castleCenters;
     std::vector<int> regionCenters;
 
+    // Parameters that control region generation: size and spacing between initial poitns
     const uint32_t castleRegionSize = 17;
     const uint32_t extraRegionSize = 18;
     const uint32_t emptyLineFrequency = 7;
 
+    // Step 1. Split map into terrain, water and ground points
+    // Initialize the obstacles vector
     for ( int x = 0; x < width; ++x ) {
         obstacles[0].emplace_back( x, 0 ); // water, columns
         obstacles[2].emplace_back( x, 0 ); // ground, columns
@@ -195,11 +208,13 @@ void World::ComputeStaticAnalysis()
         obstacles[3].emplace_back( y, 0 ); // ground, rows
     }
 
+    // Find the terrain
     for ( int y = 0; y < height; ++y ) {
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
             const int index = rowIndex + x;
             Maps::Tiles & tile = vec_tiles[index];
+            // If tile is blocked (mountain, trees, etc) then it's applied to both
             if ( tile.GetPassable() == 0 ) {
                 ++terrainTotal;
                 ++obstacles[0][x].second;
@@ -208,20 +223,23 @@ void World::ComputeStaticAnalysis()
                 ++obstacles[3][y].second;
             }
             else if ( tile.isWater() ) {
+                // if it's water then ground tiles consider it an obstacle
                 ++obstacles[2][x].second;
                 ++obstacles[3][y].second;
             }
             else {
+                // else then ground is an obstacle for water navigation
                 ++obstacles[0][x].second;
                 ++obstacles[1][y].second;
             }
         }
     }
 
-    auto smallerThanSort = []( const TileData & left, TileData & right ) { return left.second < right.second; };
+    // sort the map rows and columns based on amount of obstacles
     for ( int i = 0; i < 4; ++i )
-        std::sort( obstacles[i].begin(), obstacles[i].end(), smallerThanSort );
+        std::sort( obstacles[i].begin(), obstacles[i].end(), []( const TileData & left, TileData & right ) { return left.second < right.second; } );
 
+    // Step 2. Find lines (rows and columns) with most amount of usable space, use it for region centers later
     std::vector<int> emptyLines[4]; // 0,1 is water; 2,3 is ground
     for ( int i = 0; i < 4; ++i ) {
         for ( const TileData & line : obstacles[i] ) {
@@ -229,6 +247,7 @@ void World::ComputeStaticAnalysis()
         }
     }
 
+    // Step 3. Check all castles on the map and create region centres based on them
     for ( Castle * castle : vec_castles ) {
         castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
     }
@@ -247,6 +266,7 @@ void World::ComputeStaticAnalysis()
         AppendIfFarEnough( regionCenters, ( castleIndex > vec_tiles.size() ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
+    // Step 4. Add missing region centres based on distance (for water or if there's big chunks of space without castles)
     for ( int waterOrGround = false; waterOrGround < 2; ++waterOrGround ) {
         for ( const int rowID : emptyLines[waterOrGround * 2] ) {
             for ( const int colID : emptyLines[waterOrGround * 2 + 1] ) {
@@ -277,6 +297,7 @@ void World::ComputeStaticAnalysis()
         }
     }
 
+    // Step 5. Initialize extended (by 2 tiles) map data used for region growing based on actual Maps::Tiles
     const uint32_t extendedWidth = width + 2;
     std::vector<MapRegionNode> data( extendedWidth * ( height + 2 ) );
     for ( int y = 0; y < height; ++y ) {
@@ -295,6 +316,7 @@ void World::ComputeStaticAnalysis()
         }
     }
 
+    // Step 6. Initialize regions
     std::vector<MapRegion> regions;
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
         const int tileIndex = regionCenters[regionID];
@@ -302,12 +324,14 @@ void World::ComputeStaticAnalysis()
         data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION + regionID;
     }
 
+    // Step 7. Grow all regions one step at the time so they would compete for space
     for ( int i = 0; i < mapSize / 2; ++i ) {
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
             RegionExpansion( data, extendedWidth, regions[regionID] );
         }
     }
 
+    // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
     FindMissingRegions( data, Size( width, height ), regions );
 
     for ( auto reg : regions ) {
@@ -316,54 +340,8 @@ void World::ComputeStaticAnalysis()
         }
     }
 
-    // Create region connection clusters
+    // Step 9. Create region connections based on region.border data
     TileDataVector regionLinks;
-
-    // while ( !connectionMap.empty() ) {
-    //    // begin() should be always valid if map is not empty
-    //    TileData link = *connectionMap.begin();
-    //    bool isRoad = vec_tiles[link.first].isRoad();
-
-    //    std::set<int> openTiles;
-    //    openTiles.insert( link.first );
-
-    //    // Loop to find all tiles in a cluster, we only need 1 to make it a region link
-    //    while ( !openTiles.empty() ) {
-    //        // pop_first() for std::set
-    //        const int tileIndex = *openTiles.begin();
-    //        openTiles.erase( openTiles.begin() );
-
-    //        std::unordered_map<int, int>::iterator currentTile = connectionMap.find( tileIndex );
-    //        if ( currentTile != connectionMap.end() ) {
-    //            const bool isCurrentTileRoad = vec_tiles[currentTile->first].isRoad();
-    //            if ( ( isRoad == isCurrentTileRoad && currentTile->second > link.second ) || ( !isRoad && isCurrentTileRoad ) ) {
-    //                link = *currentTile;
-    //                isRoad = isCurrentTileRoad;
-    //            }
-    //            connectionMap.erase( currentTile );
-    //        }
-
-    //        // find if there's more tiles around
-    //        for ( int direction : directions ) {
-    //            if ( Maps::isValidDirection( tileIndex, direction ) ) {
-    //                const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
-
-    //                if ( connectionMap.find( newIndex ) != connectionMap.end() )
-    //                    openTiles.insert( newIndex );
-    //            }
-    //        }
-    //    }
-
-    //    regionLinks.push_back( link );
-    //}
-
-    // for ( int y = 0; y < height; ++y ) {
-    //    const int rowIndex = y * width;
-    //    for ( int x = 0; x < width; ++x ) {
-    //        const size_t index = rowIndex + x;
-    //        vec_tiles[index]._metadata = data[index + extendedWidth + 1].type;
-    //    }
-    //}
 
     // DEBUG: view the hot spots
     // for ( const int center : regionCenters ) {

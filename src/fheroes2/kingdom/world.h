@@ -22,8 +22,6 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
-#include <set>
-#include <unordered_map>
 #include <vector>
 
 #include "artifact_ultimate.h"
