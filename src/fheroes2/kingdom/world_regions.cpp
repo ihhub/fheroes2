@@ -102,25 +102,21 @@ namespace
 
     bool AppendIfFarEnough( std::vector<int> & dataSet, int value, uint32_t distance )
     {
-        bool match = true;
         for ( int & current : dataSet ) {
             if ( Maps::GetApproximateDistance( current, value ) < distance )
-                match = false;
+                return false;
         }
 
-        if ( match )
-            dataSet.push_back( value );
+        dataSet.push_back( value );
 
-        return match;
+        return true;
     }
 
     void CheckAdjacentTiles( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
     {
-        static const Directions directions = Direction::All();
-
         // region.nodes will be modified, so have to copy the node here
-        MapRegionNode node = region.nodes[region.lastProcessedNode];
-        const int extIDX = ConvertExtendedIndex( node.index, rawDataWidth );
+        const int nodeIndex = region.nodes[region.lastProcessedNode].index;
+        const int extIDX = ConvertExtendedIndex( nodeIndex, rawDataWidth );
 
         std::vector<int> neighbourIDs;
         for ( const int direction : directions ) {
@@ -138,7 +134,7 @@ namespace
         }
 
         if ( !neighbourIDs.empty() ) {
-            RegionBorderNode border( node.index );
+            RegionBorderNode border( nodeIndex );
             neighbourIDs.push_back( region.id );
             border.neighbours.swap( neighbourIDs );
             region.borders.push_back( border );
@@ -182,27 +178,25 @@ void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapS
 
 void World::ComputeStaticAnalysis()
 {
-    int terrainTotal = 0;
-    const int width = w();
-    const int height = h();
-    const int mapSize = std::max( width, height );
-
-    const Directions directions = Direction::All();
-    TileDataVector obstacles[4];
-    TileDataVector castleCenters;
-    std::vector<int> regionCenters;
-
-    // Parameters that control region generation: size and spacing between initial poitns
+    // Parameters that control region generation: size and spacing between initial points
     const uint32_t castleRegionSize = 17;
     const uint32_t extraRegionSize = 18;
     const uint32_t emptyLineFrequency = 7;
 
     // Step 1. Split map into terrain, water and ground points
     // Initialize the obstacles vector
+    const int width = w();
+    const int height = h();
+    TileDataVector obstacles[4];
+
+    obstacles[0].reserve( width );
+    obstacles[2].reserve( width );
     for ( int x = 0; x < width; ++x ) {
         obstacles[0].emplace_back( x, 0 ); // water, columns
         obstacles[2].emplace_back( x, 0 ); // ground, columns
     }
+    obstacles[1].reserve( height );
+    obstacles[3].reserve( height );
     for ( int y = 0; y < height; ++y ) {
         obstacles[1].emplace_back( y, 0 ); // water, rows
         obstacles[3].emplace_back( y, 0 ); // ground, rows
@@ -216,7 +210,6 @@ void World::ComputeStaticAnalysis()
             Maps::Tiles & tile = vec_tiles[index];
             // If tile is blocked (mountain, trees, etc) then it's applied to both
             if ( tile.GetPassable() == 0 ) {
-                ++terrainTotal;
                 ++obstacles[0][x].second;
                 ++obstacles[1][y].second;
                 ++obstacles[2][x].second;
@@ -248,6 +241,8 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 3. Check all castles on the map and create region centres based on them
+    std::vector<int> regionCenters;
+    TileDataVector castleCenters;
     for ( Castle * castle : vec_castles ) {
         castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
     }
@@ -325,7 +320,8 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 7. Grow all regions one step at the time so they would compete for space
-    for ( int i = 0; i < mapSize / 2; ++i ) {
+    const int maxDimension = std::max( width, height );
+    for ( int i = 0; i < maxDimension / 2; ++i ) {
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
             RegionExpansion( data, extendedWidth, regions[regionID] );
         }
