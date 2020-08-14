@@ -37,7 +37,7 @@ namespace
         REGION = 3
     };
 
-    int ConvertIndex( int index, uint32_t width )
+    int ConvertExtendedIndex( int index, uint32_t width )
     {
         const uint32_t originalWidth = width - 2;
         return ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1;
@@ -104,36 +104,42 @@ namespace
         }
     };
 
-    void RegionExpansion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
+    void CheckAdjacentTiles( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
     {
         static const Directions directions = Direction::All();
 
+        // region.nodes will be modified, so have to copy the node here
+        MapRegionNode node = region.nodes[region.lastProcessedNode];
+        const int extIDX = ConvertExtendedIndex( node.index, rawDataWidth );
+
+        uint8_t neighbourCount = 0;
+        for ( const int direction : directions ) {
+            const int newIndex = Direction::GetDirectionIndex( extIDX, direction, rawDataWidth );
+            MapRegionNode & newTile = rawData[newIndex];
+            if ( newTile.passable & Direction::Reflect( direction ) ) {
+                if ( newTile.type == OPEN && newTile.isWater == region.isWater ) {
+                    newTile.type = region.id;
+                    region.nodes.push_back( newTile );
+                }
+                else if ( newTile.type > REGION && newTile.type != region.id ) {
+                    ++neighbourCount;
+                }
+            }
+        }
+
+        if ( neighbourCount > 0 ) {
+            region.nodes[region.lastProcessedNode].type = BORDER;
+            region.edgeNodes.push_back( node );
+        }
+    }
+
+    void RegionExpansion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
+    {
+        // Process only "open" nodes that exist at the start of the loop and ignore what's added
         const size_t nodesEnd = region.nodes.size();
 
         while ( region.lastProcessedNode < nodesEnd ) {
-            uint8_t neighbourCount = 0;
-            // region.nodes will be modified, so have to copy the node here
-            MapRegionNode node = region.nodes[region.lastProcessedNode];
-            const int extIDX = ConvertIndex( node.index, rawDataWidth );
-
-            for ( const int direction : directions ) {
-                const int newIndex = Direction::GetDirectionIndex( extIDX, direction, rawDataWidth );
-                MapRegionNode & newTile = rawData[newIndex];
-                if ( newTile.type == OPEN && ( newTile.passable & Direction::Reflect( direction ) ) && newTile.isWater == region.isWater ) {
-                    newTile.type = region.id;
-                    region.nodes.push_back( newTile );
-                    ++neighbourCount;
-                }
-                else if ( newTile.type == region.id ) {
-                    ++neighbourCount;
-                }
-            }
-
-            if ( neighbourCount < 6 ) {
-                // region.nodes[region.lastProcessedNode].type = BORDER;
-                region.edgeNodes.push_back( node );
-            }
-
+            CheckAdjacentTiles( rawData, rawDataWidth, region );
             ++region.lastProcessedNode;
         }
     }
@@ -146,8 +152,6 @@ namespace
         MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
         MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
 
-        uint32_t regionID = REGION;
-
         for ( ; currentTile != mapEnd; ++currentTile ) {
             if ( currentTile->type == OPEN ) {
                 const size_t currentPosition = currentTile - rawData.data();
@@ -155,25 +159,8 @@ namespace
                 MapRegion region( regions.size(), currentTile->index, currentTile->isWater );
 
                 do {
-                    MapRegionNode node = region.nodes[region.lastProcessedNode++];
-                    const int extIDX = ConvertIndex( node.index, extendedWidth );
-
-                    uint8_t neighbourCount = 0;
-
-                    for ( const int direction : directions ) {
-                        const int newIndex = Direction::GetDirectionIndex( extIDX, direction, extendedWidth );
-                        MapRegionNode & newTile = rawData[newIndex];
-                        if ( newTile.type == OPEN && ( newTile.passable & Direction::Reflect( direction ) ) && newTile.isWater == region.isWater ) {
-                            newTile.type = region.id;
-                            region.nodes.push_back( newTile );
-                            ++neighbourCount;
-                        }
-                    }
-
-                    if ( neighbourCount < 6 ) {
-                        region.edgeNodes.push_back( node );
-                    }
-
+                    CheckAdjacentTiles( rawData, extendedWidth, region );
+                    ++region.lastProcessedNode;
                 } while ( region.lastProcessedNode != region.nodes.size() );
 
                 regions.push_back( region );
@@ -293,6 +280,8 @@ void World::ComputeStaticAnalysis()
         castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
     }
     std::sort( castleCenters.begin(), castleCenters.end(), []( const TileData & left, const TileData & right ) {
+        // Sort castles by color primarily (NONE is last)
+        // If same color then compare map index
         if ( left.second == right.second )
             return left.first < right.first;
         return left.second > right.second;
@@ -330,6 +319,45 @@ void World::ComputeStaticAnalysis()
             if ( centerIndex >= 0 ) {
                 AppendIfFarEnough( regionCenters, centerIndex, extraRegionSize );
             }
+        }
+    }
+
+    const uint32_t extendedWidth = width + 2;
+    std::vector<MapRegionNode> data( extendedWidth * ( height + 2 ) );
+    for ( int y = 0; y < height; ++y ) {
+        const int rowIndex = y * width;
+        for ( int x = 0; x < width; ++x ) {
+            const size_t index = rowIndex + x;
+            const Maps::Tiles & tile = vec_tiles[index];
+            MapRegionNode & node = data[ConvertExtendedIndex( index, extendedWidth )];
+
+            node.index = index;
+            node.passable = tile.GetPassable();
+            node.isWater = tile.isWater();
+            if ( node.passable != 0 ) {
+                node.type = OPEN;
+            }
+        }
+    }
+
+    std::vector<MapRegion> regions;
+    for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
+        const int tileIndex = regionCenters[regionID];
+        regions.push_back( { static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater() } );
+        data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION + regionID;
+    }
+
+    for ( int i = 0; i < mapSize / 2; ++i ) {
+        for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
+            RegionExpansion( data, extendedWidth, regions[regionID] );
+        }
+    }
+
+    FindMissingRegions( data, Size( width, height ), regions );
+
+    for ( auto reg : regions ) {
+        for ( auto node : reg.nodes ) {
+            vec_tiles[node.index]._metadata = node.type;
         }
     }
 
@@ -373,45 +401,6 @@ void World::ComputeStaticAnalysis()
 
     //    regionLinks.push_back( link );
     //}
-
-    const uint32_t extendedWidth = width + 2;
-    std::vector<MapRegionNode> data( extendedWidth * ( height + 2 ) );
-    for ( int y = 0; y < height; ++y ) {
-        const int rowIndex = y * width;
-        for ( int x = 0; x < width; ++x ) {
-            const size_t index = rowIndex + x;
-            const Maps::Tiles & tile = vec_tiles[index];
-            MapRegionNode & node = data[ConvertIndex( index, extendedWidth )];
-
-            node.index = index;
-            node.passable = tile.GetPassable();
-            node.isWater = tile.isWater();
-            if ( node.passable != 0 ) {
-                node.type = OPEN;
-            }
-        }
-    }
-
-    std::vector<MapRegion> regions;
-    for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-        const int tileIndex = regionCenters[regionID];
-        regions.push_back( { static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater() } );
-        data[ConvertIndex( tileIndex, extendedWidth )].type = REGION + regionID;
-    }
-
-    for ( int i = 0; i < mapSize / 2; ++i ) {
-        for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-            RegionExpansion( data, extendedWidth, regions[regionID] );
-        }
-    }
-
-    FindMissingRegions( data, Size( width, height ), regions );
-
-    for ( auto reg : regions ) {
-        for ( auto node : reg.nodes ) {
-            vec_tiles[node.index]._metadata = node.type;
-        }
-    }
 
     // for ( int y = 0; y < height; ++y ) {
     //    const int rowIndex = y * width;
