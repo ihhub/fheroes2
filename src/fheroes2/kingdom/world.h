@@ -265,7 +265,7 @@ private:
     void MonthOfMonstersAction( const Monster & );
     void PostLoad( void );
 
-    void GrowRegion( std::set<int> & tiles, std::unordered_map<int, int> & connection, int regionID );
+    // void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapSize );
 
 private:
     friend class Radar;

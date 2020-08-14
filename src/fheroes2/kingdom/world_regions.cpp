@@ -29,41 +29,14 @@ namespace
     using TileData = std::pair<int, int>;
     using TileDataVector = std::vector<std::pair<int, int> >;
 
+    static const Directions directions = Direction::All();
+
     enum
     {
         BLOCKED = 0,
         OPEN = 1,
         BORDER = 2,
         REGION = 3
-    };
-
-    int ConvertExtendedIndex( int index, uint32_t width )
-    {
-        const uint32_t originalWidth = width - 2;
-        return ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1;
-    }
-
-    bool AppendIfFarEnough( std::vector<int> & dataSet, int value, uint32_t distance )
-    {
-        bool match = true;
-        for ( int & current : dataSet ) {
-            if ( Maps::GetApproximateDistance( current, value ) < distance )
-                match = false;
-        }
-
-        if ( match )
-            dataSet.push_back( value );
-
-        return match;
-    }
-
-    struct RegionLinkRoute : std::list<int>
-    {
-        int _indexFrom;
-        int _indexTo;
-        size_t _length;
-        uint32_t _basePenalty;
-        uint32_t _roughTerrainPenalty;
     };
 
     struct MapRegionNode
@@ -104,6 +77,35 @@ namespace
         }
     };
 
+    struct RegionLinkRoute : std::list<int>
+    {
+        int _indexFrom;
+        int _indexTo;
+        size_t _length;
+        uint32_t _basePenalty;
+        uint32_t _roughTerrainPenalty;
+    };
+
+    int ConvertExtendedIndex( int index, uint32_t width )
+    {
+        const uint32_t originalWidth = width - 2;
+        return ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1;
+    }
+
+    bool AppendIfFarEnough( std::vector<int> & dataSet, int value, uint32_t distance )
+    {
+        bool match = true;
+        for ( int & current : dataSet ) {
+            if ( Maps::GetApproximateDistance( current, value ) < distance )
+                match = false;
+        }
+
+        if ( match )
+            dataSet.push_back( value );
+
+        return match;
+    }
+
     void CheckAdjacentTiles( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
     {
         static const Directions directions = Direction::All();
@@ -143,66 +145,29 @@ namespace
             ++region.lastProcessedNode;
         }
     }
-
-    void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapSize, std::vector<MapRegion> & regions )
-    {
-        static const Directions directions = Direction::All();
-        const uint32_t extendedWidth = mapSize.w + 2;
-
-        MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
-        MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
-
-        for ( ; currentTile != mapEnd; ++currentTile ) {
-            if ( currentTile->type == OPEN ) {
-                const size_t currentPosition = currentTile - rawData.data();
-
-                MapRegion region( regions.size(), currentTile->index, currentTile->isWater );
-
-                do {
-                    CheckAdjacentTiles( rawData, extendedWidth, region );
-                    ++region.lastProcessedNode;
-                } while ( region.lastProcessedNode != region.nodes.size() );
-
-                regions.push_back( region );
-            }
-        }
-    }
 }
 
-void World::GrowRegion( std::set<int> & openTiles, std::unordered_map<int, int> & connection, int regionID )
+void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapSize, std::vector<MapRegion> & regions )
 {
-    static const Directions directions = Direction::All();
+    const uint32_t extendedWidth = mapSize.w + 2;
 
-    std::set<int> newTiles;
-    for ( const int tileIndex : openTiles ) {
-        if ( !vec_tiles[tileIndex]._region ) {
-            vec_tiles[tileIndex]._region = regionID;
+    MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
+    MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
 
-            for ( const int direction : directions ) {
-                if ( Maps::isValidDirection( tileIndex, direction ) && ( vec_tiles[tileIndex].GetPassable() & direction ) ) {
-                    const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
-                    const Maps::Tiles & newTile = vec_tiles[newIndex];
-                    if ( ( newTile.GetPassable() & Direction::Reflect( direction ) ) && newTile.isWater() == vec_tiles[tileIndex].isWater() ) {
-                        if ( newTile._region ) {
-                            if ( newTile._region != regionID ) {
-                                auto currentValue = connection.find( newIndex );
-                                if ( currentValue != connection.end() ) {
-                                    ++currentValue->second;
-                                }
-                                else {
-                                    connection.emplace( newIndex, 1 );
-                                }
-                            }
-                        }
-                        else {
-                            newTiles.insert( Maps::GetDirectionIndex( tileIndex, direction ) );
-                        }
-                    }
-                }
-            }
+    for ( ; currentTile != mapEnd; ++currentTile ) {
+        if ( currentTile->type == OPEN ) {
+            const size_t currentPosition = currentTile - rawData.data();
+
+            MapRegion region( regions.size(), currentTile->index, currentTile->isWater );
+
+            do {
+                CheckAdjacentTiles( rawData, extendedWidth, region );
+                ++region.lastProcessedNode;
+            } while ( region.lastProcessedNode != region.nodes.size() );
+
+            regions.push_back( region );
         }
     }
-    openTiles = std::move( newTiles );
 }
 
 void World::ComputeStaticAnalysis()
@@ -212,18 +177,14 @@ void World::ComputeStaticAnalysis()
     const int height = h();
     const int mapSize = std::max( width, height );
 
-    std::unordered_map<int, int> connectionMap;
-    connectionMap.reserve( static_cast<size_t>( mapSize ) * 3 ); // average amount of connections created
-
     const Directions directions = Direction::All();
     TileDataVector obstacles[4];
     TileDataVector castleCenters;
     std::vector<int> regionCenters;
 
     const uint32_t castleRegionSize = 17;
-    const uint32_t extraRegionSize = 15;
-    const uint32_t emptyLineFrequency = 8;
-    const int waterRegionSize = mapSize / 3;
+    const uint32_t extraRegionSize = 18;
+    const uint32_t emptyLineFrequency = 7;
 
     for ( int x = 0; x < width; ++x ) {
         obstacles[0].emplace_back( x, 0 ); // water, columns
@@ -268,14 +229,6 @@ void World::ComputeStaticAnalysis()
         }
     }
 
-    // Values used to tweak region generation parameters
-    const int tilesTotal = width * height;
-    const int usableTiles = tilesTotal - terrainTotal;
-    double freeTilesPercentage = usableTiles * 100.0 / tilesTotal;
-    if ( vec_castles.size() ) {
-        const int tilesPerCastle = usableTiles / vec_castles.size();
-    }
-
     for ( Castle * castle : vec_castles ) {
         castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
     }
@@ -294,30 +247,32 @@ void World::ComputeStaticAnalysis()
         AppendIfFarEnough( regionCenters, ( castleIndex > vec_tiles.size() ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
-    for ( const int rowID : emptyLines[0] ) {
-        for ( const int colID : emptyLines[1] ) {
-            int centerIndex = -1;
+    for ( int waterOrGround = false; waterOrGround < 2; ++waterOrGround ) {
+        for ( const int rowID : emptyLines[waterOrGround * 2] ) {
+            for ( const int colID : emptyLines[waterOrGround * 2 + 1] ) {
+                int centerIndex = -1;
 
-            const int tileIndex = rowID * width + colID;
-            const Maps::Tiles & tile = vec_tiles[tileIndex];
-            if ( tile.GetPassable() && tile.isWater() ) {
-                centerIndex = tileIndex;
-            }
-            else {
-                for ( const int direction : directions ) {
-                    if ( Maps::isValidDirection( tileIndex, direction ) ) {
-                        const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
-                        const Maps::Tiles & newTile = vec_tiles[newIndex];
-                        if ( newTile.GetPassable() && tile.isWater() ) {
-                            centerIndex = newIndex;
-                            break;
+                const int tileIndex = rowID * width + colID;
+                const Maps::Tiles & tile = vec_tiles[tileIndex];
+                if ( tile.GetPassable() && tile.isWater() ) {
+                    centerIndex = tileIndex;
+                }
+                else {
+                    for ( const int direction : directions ) {
+                        if ( Maps::isValidDirection( tileIndex, direction ) ) {
+                            const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
+                            const Maps::Tiles & newTile = vec_tiles[newIndex];
+                            if ( newTile.GetPassable() && tile.isWater() == waterOrGround ) {
+                                centerIndex = newIndex;
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            if ( centerIndex >= 0 ) {
-                AppendIfFarEnough( regionCenters, centerIndex, extraRegionSize );
+                if ( centerIndex >= 0 ) {
+                    AppendIfFarEnough( regionCenters, centerIndex, extraRegionSize );
+                }
             }
         }
     }
