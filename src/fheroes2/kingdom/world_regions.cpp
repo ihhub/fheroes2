@@ -37,116 +37,6 @@ namespace
         REGION = 3
     };
 
-    void FillRegion( std::vector<uint8_t> & data, const Size & mapSize )
-    {
-        const uint32_t extendedWidth = mapSize.w + 2;
-
-        uint8_t * currentTile = data.data() + extendedWidth + 1;
-        uint8_t * mapEnd = data.data() + extendedWidth * ( mapSize.h + 1 );
-
-        uint32_t regionID = 10;
-
-        for ( ; currentTile != mapEnd; ++currentTile ) {
-            if ( *currentTile == OPEN ) {
-                std::vector<Point> regionTiles;
-                std::vector<Point> edge;
-
-                *currentTile = regionID;
-
-                const size_t currentPosition = currentTile - data.data();
-                regionTiles.push_back( Point( currentPosition % extendedWidth - 1, currentPosition / extendedWidth - 1 ) );
-
-                size_t tileIdx = 0;
-                do {
-                    Point pt = regionTiles[tileIdx++];
-
-                    uint8_t neighbourCount = 0;
-                    uint8_t * position = data.data() + ( pt.y + 1 ) * extendedWidth + ( pt.x + 1 );
-
-                    position = position - extendedWidth - 1;
-                    if ( *( position ) != BLOCKED ) {
-                        if ( *( position ) == OPEN ) {
-                            regionTiles.push_back( Point( pt.x - 1, pt.y - 1 ) );
-                            *( position ) = regionID;
-                        }
-                        ++neighbourCount;
-                    }
-
-                    ++position;
-                    if ( *( position ) != BLOCKED ) {
-                        if ( *( position ) == OPEN ) {
-                            regionTiles.push_back( Point( pt.x, pt.y - 1 ) );
-                            *( position ) = regionID;
-                        }
-                        ++neighbourCount;
-                    }
-
-                    ++position;
-                    if ( *( position ) != BLOCKED ) {
-                        if ( *( position ) == OPEN ) {
-                            regionTiles.push_back( Point( pt.x + 1, pt.y - 1 ) );
-                            *( position ) = regionID;
-                        }
-                        ++neighbourCount;
-                    }
-
-                    position = position + mapSize.w; // (mapWidth - 2) is width
-                    if ( *( position ) != BLOCKED ) {
-                        if ( *( position ) == OPEN ) {
-                            regionTiles.push_back( Point( pt.x - 1, pt.y ) );
-                            *( position ) = regionID;
-                        }
-                        ++neighbourCount;
-                    }
-
-                    position = position + 2;
-                    if ( *( position ) != BLOCKED ) {
-                        if ( *( position ) == OPEN ) {
-                            regionTiles.push_back( Point( pt.x + 1, pt.y ) );
-                            *( position ) = regionID;
-                        }
-                        ++neighbourCount;
-                    }
-
-                    position = position + mapSize.w; // (mapWidth - 2) is width
-                    if ( *( position ) != BLOCKED ) {
-                        if ( *( position ) == OPEN ) {
-                            regionTiles.push_back( Point( pt.x - 1, pt.y + 1 ) );
-                            *( position ) = regionID;
-                        }
-                        ++neighbourCount;
-                    }
-
-                    ++position;
-                    if ( *( position ) != BLOCKED ) {
-                        if ( *( position ) == OPEN ) {
-                            regionTiles.push_back( Point( pt.x, pt.y + 1 ) );
-                            *( position ) = regionID;
-                        }
-                        ++neighbourCount;
-                    }
-
-                    ++position;
-                    if ( *( position ) != BLOCKED ) {
-                        if ( *( position ) == OPEN ) {
-                            regionTiles.push_back( Point( pt.x + 1, pt.y + 1 ) );
-                            *( position ) = regionID;
-                        }
-                        ++neighbourCount;
-                    }
-
-                    // if ( neighbourCount != 8 ) {
-                    //    edge.push_back( pt );
-                    //    *( position - 1 - extendedWidth ) = BORDER;
-                    //}
-
-                } while ( tileIdx != regionTiles.size() );
-
-                ++regionID;
-            }
-        }
-    }
-
     int ConvertIndex( int index, uint32_t width )
     {
         const uint32_t originalWidth = width - 2;
@@ -214,7 +104,7 @@ namespace
         }
     };
 
-    void GrowRegion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
+    void RegionExpansion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
     {
         static const Directions directions = Direction::All();
 
@@ -240,7 +130,7 @@ namespace
             }
 
             if ( neighbourCount < 6 ) {
-                //region.nodes[region.lastProcessedNode].type = BORDER;
+                // region.nodes[region.lastProcessedNode].type = BORDER;
                 region.edgeNodes.push_back( node );
             }
 
@@ -446,7 +336,7 @@ void World::ComputeStaticAnalysis()
     // Create region connection clusters
     TileDataVector regionLinks;
 
-    //while ( !connectionMap.empty() ) {
+    // while ( !connectionMap.empty() ) {
     //    // begin() should be always valid if map is not empty
     //    TileData link = *connectionMap.begin();
     //    bool isRoad = vec_tiles[link.first].isRoad();
@@ -503,17 +393,17 @@ void World::ComputeStaticAnalysis()
     }
 
     std::vector<MapRegion> regions;
-    //for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-    //    const int tileIndex = regionCenters[regionID];
-    //    regions.push_back( { static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater() } );
-    //    data[ConvertIndex( tileIndex, extendedWidth )].type = REGION + regionID;
-    //}
+    for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
+        const int tileIndex = regionCenters[regionID];
+        regions.push_back( { static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater() } );
+        data[ConvertIndex( tileIndex, extendedWidth )].type = REGION + regionID;
+    }
 
-    //for ( int i = 0; i < 1; ++i ) {
-    //    for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-    //        FillRegion3( data, extendedWidth, regions[regionID] );
-    //    }
-    //}
+    for ( int i = 0; i < mapSize / 2; ++i ) {
+        for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
+            RegionExpansion( data, extendedWidth, regions[regionID] );
+        }
+    }
 
     FindMissingRegions( data, Size( width, height ), regions );
 
