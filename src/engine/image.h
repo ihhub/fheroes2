@@ -103,6 +103,9 @@ namespace fheroes2
     void AlphaBlit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, uint8_t alphaValue,
                     bool flip = false );
 
+    // inPos must contain non-negative values
+    void AlphaBlit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
+
     // apply palette only for image layer, it doesn't affect transform part
     void ApplyPallete( Image & image, const std::vector<uint8_t> & palette );
     void ApplyPallete( const Image & in, Image & out, const std::vector<uint8_t> & palette );
@@ -111,6 +114,9 @@ namespace fheroes2
     void Blit( const Image & in, Image & out, bool flip = false );
     void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip = false );
     void Blit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, bool flip = false );
+
+    // inPos must contain non-negative values
+    void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
 
     void Copy( const Image & in, Image & out );
     void Copy( const Image & in, uint32_t inX, uint32_t inY, Image & out, uint32_t outX, uint32_t outY, uint32_t width, uint32_t height );
