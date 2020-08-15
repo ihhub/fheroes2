@@ -27,8 +27,6 @@ namespace
     using TileData = std::pair<int, int>;
     using TileDataVector = std::vector<std::pair<int, int> >;
 
-    static const Directions directions = Direction::All();
-
     enum
     {
         BLOCKED = 0,
@@ -36,6 +34,45 @@ namespace
         BORDER = 2,
         REGION = 3
     };
+
+    enum
+    {
+        TOP_LEFT = 0,
+        TOP = 1,
+        TOP_RIGHT = 2,
+        RIGHT = 3,
+        BOTTOM_RIGHT = 4,
+        BOTTOM = 5,
+        BOTTOM_LEFT = 6,
+        LEFT = 7
+    };
+
+    const uint8_t directionIndicies[8] = { TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT };
+
+    uint8_t ReflectDirectionIndex( uint8_t direction )
+    {
+        return ( direction + 4 ) % 8;
+    }
+
+    uint16_t GetDirectionBitmask( uint8_t direction, bool reflect = false )
+    {
+        return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
+    }
+
+    std::vector<int> GetDirectionOffsets( uint32_t mapWidth )
+    {
+        const int width = static_cast<int>( mapWidth );
+        std::vector<int> offsets( 8 );
+        offsets[TOP_LEFT] = -width - 1;
+        offsets[TOP] = -width;
+        offsets[TOP_RIGHT] = -width + 1;
+        offsets[RIGHT] = 1;
+        offsets[BOTTOM_RIGHT] = width + 1;
+        offsets[BOTTOM] = width;
+        offsets[BOTTOM_LEFT] = width - 1;
+        offsets[LEFT] = -1;
+        return offsets;
+    }
 
     struct MapRegionNode
     {
@@ -112,17 +149,16 @@ namespace
         return true;
     }
 
-    void CheckAdjacentTiles( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
+    void CheckAdjacentTiles( std::vector<MapRegionNode> & rawData, MapRegion & region, uint32_t rawDataWidth, const std::vector<int> & offsets )
     {
         // region.nodes will be modified, so have to copy the node here
         const int nodeIndex = region.nodes[region.lastProcessedNode].index;
-        const int extIDX = ConvertExtendedIndex( nodeIndex, rawDataWidth );
 
         std::vector<int> neighbourIDs;
-        for ( const int direction : directions ) {
-            const int newIndex = Direction::GetDirectionIndex( extIDX, direction, rawDataWidth );
+        for ( uint8_t direction : directionIndicies ) {
+            const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             MapRegionNode & newTile = rawData[newIndex];
-            if ( newTile.passable & Direction::Reflect( direction ) ) {
+            if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
                 if ( newTile.type == OPEN && newTile.isWater == region.isWater ) {
                     newTile.type = region.id;
                     region.nodes.push_back( newTile );
@@ -145,9 +181,10 @@ namespace
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added
         const size_t nodesEnd = region.nodes.size();
+        const std::vector<int> & offsets = GetDirectionOffsets( rawDataWidth );
 
         while ( region.lastProcessedNode < nodesEnd ) {
-            CheckAdjacentTiles( rawData, rawDataWidth, region );
+            CheckAdjacentTiles( rawData, region, rawDataWidth, offsets );
             ++region.lastProcessedNode;
         }
     }
@@ -159,6 +196,7 @@ void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapS
 
     MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
     MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
+    const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
 
     for ( ; currentTile != mapEnd; ++currentTile ) {
         if ( currentTile->type == OPEN ) {
@@ -167,7 +205,7 @@ void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapS
             MapRegion region( regions.size(), currentTile->index, currentTile->isWater );
 
             do {
-                CheckAdjacentTiles( rawData, extendedWidth, region );
+                CheckAdjacentTiles( rawData, region, extendedWidth, offsets );
                 ++region.lastProcessedNode;
             } while ( region.lastProcessedNode != region.nodes.size() );
 
@@ -254,14 +292,16 @@ void World::ComputeStaticAnalysis()
         return left.second > right.second;
     } );
 
+    const size_t totalMapTiles = vec_tiles.size();
     for ( const TileData & castleTile : castleCenters ) {
         // Check if a lot of players next to each other? (Slugfest map)
         // GetCastle( Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
-        AppendIfFarEnough( regionCenters, ( castleIndex > vec_tiles.size() ) ? castleTile.first : castleIndex, castleRegionSize );
+        AppendIfFarEnough( regionCenters, ( castleIndex > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
     // Step 4. Add missing region centres based on distance (for water or if there's big chunks of space without castles)
+    const std::vector<int> & directionOffsets = GetDirectionOffsets( width );
     for ( int waterOrGround = false; waterOrGround < 2; ++waterOrGround ) {
         for ( const int rowID : emptyLines[waterOrGround * 2] ) {
             for ( const int colID : emptyLines[waterOrGround * 2 + 1] ) {
@@ -273,9 +313,9 @@ void World::ComputeStaticAnalysis()
                     centerIndex = tileIndex;
                 }
                 else {
-                    for ( const int direction : directions ) {
-                        if ( Maps::isValidDirection( tileIndex, direction ) ) {
-                            const int newIndex = Maps::GetDirectionIndex( tileIndex, direction );
+                    for ( const int directionIdx : directionIndicies ) {
+                        const int newIndex = tileIndex + directionOffsets[directionIdx];
+                        if ( newIndex >= 0 && newIndex < totalMapTiles ) {
                             const Maps::Tiles & newTile = vec_tiles[newIndex];
                             if ( newTile.GetPassable() && tile.isWater() == waterOrGround ) {
                                 centerIndex = newIndex;
@@ -330,14 +370,18 @@ void World::ComputeStaticAnalysis()
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
     FindMissingRegions( data, Size( width, height ), regions );
 
-    for ( auto reg : regions ) {
-        for ( auto node : reg.nodes ) {
+    for ( const MapRegion & reg : regions ) {
+        for ( const MapRegionNode & node : reg.nodes ) {
             vec_tiles[node.index]._metadata = node.type;
         }
+        //std::cout << reg.id << " nodes: " << reg.nodes.size() << "/" << reg.nodes.capacity() << ", borders: " << reg.borders.size() << "/" << reg.borders.capacity()
+        //          << std::endl;
     }
 
     // Step 9. Create region connections based on region.border data
     TileDataVector regionLinks;
+
+    // Step 10. Calculate paths between region links
 
     // DEBUG: view the hot spots
     // for ( const int center : regionCenters ) {
