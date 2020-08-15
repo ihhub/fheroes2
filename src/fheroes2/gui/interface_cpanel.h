@@ -23,8 +23,8 @@
 #ifndef H2INTERFACE_CPANEL_H
 #define H2INTERFACE_CPANEL_H
 
-#include "image.h"
 #include "gamedefs.h"
+#include "image.h"
 
 namespace Interface
 {
