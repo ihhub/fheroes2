@@ -63,9 +63,9 @@ int DialogOneSecondary( const std::string & name, const std::string & primary, c
     sprite_skill.Blit( 3, 3, drawSurface );
     // text
     Text text_skill( Skill::Secondary::String( sec.Skill() ), Font::SMALL );
-    //text_skill.Blit( 3 + ( sprite_skill.w() - text_skill.w() ) / 2, 6, drawSurface );
+    // text_skill.Blit( 3 + ( sprite_skill.w() - text_skill.w() ) / 2, 6, drawSurface );
     Text text_level( Skill::Level::String( sec.Level() ), Font::SMALL );
-    //text_level.Blit( 3 + ( sprite_skill.w() - text_level.w() ) / 2, sprite_skill.h() - 12, drawSurface );
+    // text_level.Blit( 3 + ( sprite_skill.w() - text_level.w() ) / 2, sprite_skill.h() - 12, drawSurface );
 
     Dialog::SpriteInfo( "", message, drawSurface );
 

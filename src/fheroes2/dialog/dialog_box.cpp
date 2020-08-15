@@ -63,7 +63,6 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
             posy = display.height() - area.h - ( ( evil ? BOXE_TOP : BOX_TOP ) - BOXAREA_TOP );
     }
 
-    //background.Save( Rect( posx, posy, BOX_WIDTH, height_top_bottom + height_middle ) );
     _restorer.reset( new fheroes2::ImageRestorer( display, posx, posy, BOX_WIDTH, height_top_bottom + height_middle ) );
 
     area.x = posx + 36;
@@ -79,12 +78,10 @@ Dialog::NonFixedFrameBox::~NonFixedFrameBox()
     if ( cursor.isVisible() ) {
         cursor.Hide();
         _restorer->restore();
-        //background.Restore();
         cursor.Show();
     }
     else {
         _restorer->restore();
-        //background.Restore();
     }
 
     Display::Get().Flip();
@@ -107,13 +104,11 @@ void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // AGG::GetICN( buybuild, 4 ).Blit( pt );
     fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 4 ), display, pt.x, pt.y );
 
     // right top sprite
     pt.x = posx + AGG::GetICN( buybuild, 4 ).w();
     fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 0 ), display, pt.x, pt.y );
-    //AGG::GetICN( buybuild, 0 ).Blit( pt );
 
     pt.y += AGG::GetICN( buybuild, 4 ).h();
     const int16_t posBeforeMiddle = pt.y;
@@ -122,7 +117,6 @@ void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight )
         pt.x = posx;
         const fheroes2::Sprite & sl = fheroes2::AGG::GetICN( buybuild, 5 );
         fheroes2::Blit( sl, 0, 10, display, pt.x, pt.y, sl.width(), BOXAREA_MIDDLE );
-        // sl.Blit( Rect( 0, 10, sl.w(), BOXAREA_MIDDLE ), pt );
 
         // right middle sprite
         pt.x += sl.width();
@@ -130,7 +124,6 @@ void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight )
             pt.x -= 1;
         const fheroes2::Sprite & sr = fheroes2::AGG::GetICN( buybuild, 1 );
         fheroes2::Blit( sr, 0, 10, display, pt.x, pt.y, sr.width(), BOXAREA_MIDDLE );
-        //sr.Blit( Rect( 0, 10, sr.w(), BOXAREA_MIDDLE ), pt );
         pt.y += BOXAREA_MIDDLE;
     }
 
@@ -138,10 +131,8 @@ void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight )
 
     // right bottom sprite
     fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 2 ), display, pt.x, pt.y );
-    //AGG::GetICN( buybuild, 2 ).Blit( pt );
 
     // left bottom sprite
     pt.x = posx;
     fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 6 ), display, pt.x, pt.y );
-    //AGG::GetICN( buybuild, 6 ).Blit( pt );
 }

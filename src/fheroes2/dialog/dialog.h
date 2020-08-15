@@ -130,7 +130,6 @@ namespace Dialog
 
     protected:
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
-        //SpriteBack background;
         Rect area;
     };
 

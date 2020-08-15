@@ -111,7 +111,6 @@ namespace Dialog
         const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
         fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
-        //SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH ) );
         const Rect roi( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
 
         fheroes2::Blit( spriteShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
@@ -183,13 +182,12 @@ namespace Dialog
         }
 
         cursor.Hide();
-        //back.Restore();
 
         if ( selectedResolution.first > 0 && selectedResolution.second > 0
              && ( selectedResolution.first != currentResolution.w || selectedResolution.second != currentResolution.h ) ) {
             Settings & conf = Settings::Get();
             Display::Get().SetVideoMode( selectedResolution.first, selectedResolution.second, fheroes2::engine().isFullScreen(), conf.KeepAspectRatio(),
-                                  conf.ChangeFullscreenResolution() );
+                                         conf.ChangeFullscreenResolution() );
             return true;
         }
 
