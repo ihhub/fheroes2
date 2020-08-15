@@ -60,4 +60,25 @@ namespace fheroes2
         bool _isPressed;
         bool _isEnabled;
     };
+
+    class ButtonGroup
+    {
+    public:
+        ButtonGroup( const Rect & area = Rect(), int buttonTypes = 0 );
+
+        void createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
+        void draw( Image & area = Display::instance() ) const; // will draw on screen by default
+
+        // Make sure that id is less than size!
+        Button & button( size_t id );
+        const Button & button( size_t id ) const;
+
+        size_t size() const;
+
+        int processEvents();
+
+    private:
+        std::vector<Button> _button;
+        std::vector<int> _value;
+    };
 }
