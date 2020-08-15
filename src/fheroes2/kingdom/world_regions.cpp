@@ -100,7 +100,7 @@ namespace
         RegionBorderNode( int index )
             : index( index )
         {
-            //neighbours.reserve( 8 );
+            neighbours.reserve( 7 );
         }
     };
 
@@ -113,12 +113,12 @@ namespace
         std::vector<RegionBorderNode> borders;
         size_t lastProcessedNode = 0;
 
-        MapRegion( int regionIndex, int mapIndex, bool water )
+        MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize )
             : id( REGION + regionIndex )
             , isWater( water )
         {
-            //nodes.reserve( 100 );
-            //borders.reserve( 50 );
+            nodes.reserve( expectedSize );
+            borders.reserve( expectedSize / 4 );
             nodes.push_back( { mapIndex } );
             nodes[0].type = id;
         }
@@ -156,8 +156,7 @@ namespace
         // region.nodes will be modified, so have to copy the node here
         const int nodeIndex = region.nodes[region.lastProcessedNode].index;
 
-        //static std::vector<int> neighbourIDs;
-        std::vector<int> neighbourIDs;
+        static std::vector<int> neighbourIDs;
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             MapRegionNode & newTile = rawData[newIndex];
@@ -204,7 +203,7 @@ void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapS
         if ( currentTile->type == OPEN ) {
             const size_t currentPosition = currentTile - rawData.data();
 
-            MapRegion region( regions.size(), currentTile->index, currentTile->isWater );
+            MapRegion region( static_cast<int>( regions.size() ), currentTile->index, currentTile->isWater, extendedWidth );
 
             do {
                 CheckAdjacentTiles( rawData, region, extendedWidth, offsets );
@@ -273,8 +272,10 @@ void World::ComputeStaticAnalysis()
         std::sort( obstacles[i].begin(), obstacles[i].end(), []( const TileData & left, TileData & right ) { return left.second < right.second; } );
 
     // Step 2. Find lines (rows and columns) with most amount of usable space, use it for region centers later
+    const int maxDimension = std::max( width, height );
     std::vector<int> emptyLines[4]; // 0,1 is water; 2,3 is ground
     for ( int i = 0; i < 4; ++i ) {
+        emptyLines[i].reserve( maxDimension / emptyLineFrequency );
         for ( const TileData & line : obstacles[i] ) {
             AppendIfFarEnough( emptyLines[i], line.first, emptyLineFrequency );
         }
@@ -354,15 +355,16 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 6. Initialize regions
+    size_t averageRegionSize = ( width * height * 2 ) / regionCenters.size();
+
     std::vector<MapRegion> regions;
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
         const int tileIndex = regionCenters[regionID];
-        regions.push_back( { static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater() } );
+        regions.push_back( { static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize } );
         data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION + regionID;
     }
 
     // Step 7. Grow all regions one step at the time so they would compete for space
-    const int maxDimension = std::max( width, height );
     const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
     for ( int i = 0; i < maxDimension / 2; ++i ) {
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
