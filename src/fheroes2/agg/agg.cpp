@@ -2283,6 +2283,30 @@ namespace fheroes2
             case ICN::GRAY_SMALL_FONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::GRAY_TEXT );
                 return true;
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 2 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 15, 13, 55, 14 );
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 70, 13, 55, 14 );
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 42, 28, 55, 14 );
+                    // add 'ba'
+                    Blit( GetICN( ICN::BTNCMPGN, i ), 41, 28, out, 30, 13, 28, 14 );
+                    // add 'tt'
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25, 13, out, 57, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25, 13, out, 70, 13, 13, 14 );
+                    // add 'le'
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97, 21, out, 83, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86, 21, out, 96, 13, 13, 14 );
+                    // add 'on'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44, 21, out, 40, 28, 31, 14 );
+                    // add 'ly'
+                    Blit( GetICN( ICN::BTNHOTST, i ), 47, 21, out, 71, 28, 13, 13 );
+                    Blit( GetICN( ICN::BTNHOTST, i ), 72, 21, out, 84, 28, 13, 13 );
+                }
+                return true;
             default:
                 break;
             }

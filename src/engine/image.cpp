@@ -524,6 +524,14 @@ namespace fheroes2
         }
     }
 
+    void AlphaBlit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip )
+    {
+        if ( inPos.x < 0 || inPos.y < 0 )
+            return;
+
+        AlphaBlit( in, static_cast<uint32_t>( inPos.x ), static_cast<uint32_t>( inPos.y ), out, outPos.x, outPos.y, size.width, size.height, flip );
+    }
+
     void ApplyPallete( Image & image, const std::vector<uint8_t> & palette )
     {
         ApplyPallete( image, image, palette );
@@ -617,6 +625,14 @@ namespace fheroes2
                 }
             }
         }
+    }
+
+    void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip )
+    {
+        if ( inPos.x < 0 || inPos.y < 0 )
+            return;
+
+        Blit( in, static_cast<uint32_t>( inPos.x ), static_cast<uint32_t>( inPos.y ), out, outPos.x, outPos.y, size.width, size.height, flip );
     }
 
     void Copy( const Image & in, Image & out )
