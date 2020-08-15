@@ -207,17 +207,19 @@ void DrawFlags( const std::vector<ValueColors> & v, const Point & pos, u32 width
 void DrawHeroIcons( const std::vector<ValueColors> & v, const Point & pos, u32 width )
 {
     if ( v.size() ) {
-        Display & display = Display::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
         const int chunk = width / v.size();
 
         for ( u32 ii = 0; ii < v.size(); ++ii ) {
             const Heroes * hero = world.GetHeroes( v[ii].first );
             if ( hero ) {
-                Surface icons = hero->GetPortrait( PORT_SMALL );
                 s32 px = pos.x + chunk / 2 + ii * chunk;
-                const Sprite & window = AGG::GetICN( ICN::LOCATORS, 22 );
-                window.Blit( px - window.w() / 2, pos.y - 4, display );
-                icons.Blit( px - icons.w() / 2, pos.y, display );
+                const fheroes2::Image & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
+                fheroes2::Blit( window, display, px - window.width() / 2, pos.y - 4 );
+
+                fheroes2::Image icon = hero->GetPortrait( PORT_SMALL );
+                if ( !icon.empty() )
+                    fheroes2::Blit( icon, fheroes2::Display::instance(), px - icon.width() / 2, pos.y );
             }
         }
     }

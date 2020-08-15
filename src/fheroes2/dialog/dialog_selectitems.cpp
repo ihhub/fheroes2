@@ -114,11 +114,10 @@ public:
 
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current )
     {
-        Display & display = Display::Get();
-        Surface port = Heroes::GetPortrait( index, PORT_SMALL );
+        fheroes2::Image port = Heroes::GetPortrait( index, PORT_SMALL );
 
-        if ( port.isValid() )
-            port.Blit( dstx + 5, dsty + 3, display );
+        if ( !port.empty() )
+            fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
         Text text( Heroes::GetName( index ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 50, dsty + 5 );
