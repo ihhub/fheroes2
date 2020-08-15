@@ -40,7 +40,7 @@ fheroes2::Image GetNonStandardSizeIcon( void )
     fheroes2::Image icon( 17, 17 );
     icon.reset();
     icon.fill( 0 );
-    //res.FillRect( Rect( 1, 1, 15, 15 ), RGBA( 0x8D, 0x73, 0xFF ) );
+    fheroes2::Fill( icon, 1, 1, 15, 15, fheroes2::GetColorId( 0x8D, 0x73, 0xFF ) );
     Text text( "N", Font::SMALL );
     text.Blit( ( 17 - text.w() ) / 2, ( 17 - text.h() ) / 2, icon );
     return icon;
