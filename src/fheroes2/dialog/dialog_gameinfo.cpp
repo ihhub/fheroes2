@@ -29,6 +29,7 @@
 #include "game_over.h"
 #include "icn.h"
 #include "maps.h"
+#include "player_info.h"
 #include "settings.h"
 #include "text.h"
 

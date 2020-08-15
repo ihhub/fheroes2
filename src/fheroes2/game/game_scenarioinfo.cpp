@@ -35,7 +35,7 @@
 #include "kingdom.h"
 #include "maps_fileinfo.h"
 #include "mus.h"
-#include "players.h"
+#include "player_info.h"
 #include "race.h"
 #include "settings.h"
 #include "splitter.h"
