@@ -32,6 +32,7 @@
 #include "game_interface.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
+#include "skill_bar.h"
 #include "settings.h"
 #include "text.h"
 
