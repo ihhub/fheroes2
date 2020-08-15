@@ -114,7 +114,7 @@ void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
 
 void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
 {
-    hero.PortraitRedraw( sx, sy, PORT_SMALL, Display::Get() );
+    hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
 
 void Interface::IconsBar::RedrawBackground( const Point & pos )

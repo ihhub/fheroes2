@@ -150,31 +150,31 @@ building_t GetCurrentFlash( const Castle & castle, CastleDialog::CacheBuildings 
 
 void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Point & pt )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     const Heroes * hero1 = heroes.Guard();
     const Heroes * hero2 = heroes.Guest();
 
     AGG::GetICN( ICN::STRIP, 0 ).Blit( pt.x, pt.y + 256 );
 
-    Surface icon1, icon2;
+    fheroes2::Image icon1, icon2;
 
     if ( hero1 )
         icon1 = hero1->GetPortrait( PORT_BIG );
     else if ( castle.isBuild( BUILD_CAPTAIN ) )
         icon1 = castle.GetCaptain().GetPortrait( PORT_BIG );
     else
-        icon1 = AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) );
+        icon1 = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) );
 
     if ( hero2 )
         icon2 = hero2->GetPortrait( PORT_BIG );
     else
-        icon2 = AGG::GetICN( ICN::STRIP, 3 );
+        icon2 = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
 
-    if ( icon1.isValid() )
-        icon1.Blit( pt.x + 5, pt.y + 262, display );
-    if ( icon2.isValid() )
-        icon2.Blit( pt.x + 5, pt.y + 361, display );
+    if ( !icon1.empty() )
+        fheroes2::Blit( icon1, display, pt.x + 5, pt.y + 262 );
+    if ( !icon2.empty() )
+        fheroes2::Blit( icon2, display, pt.x + 5, pt.y + 361 );
 
     if ( !hero2 )
         AGG::GetICN( ICN::STRIP, 11 ).Blit( pt.x + 112, pt.y + 361 );

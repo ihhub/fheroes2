@@ -464,7 +464,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
 int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
@@ -476,8 +476,8 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     const Sprite & dialog = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
     Rect pos_rt;
-    pos_rt.x = ( display.w() - dialog.w() ) / 2;
-    pos_rt.y = ( display.h() - dialog.h() ) / 2;
+    pos_rt.x = ( display.width() - dialog.w() ) / 2;
+    pos_rt.y = ( display.height() - dialog.h() ) / 2;
     pos_rt.w = dialog.w();
     pos_rt.h = dialog.h();
 
@@ -555,22 +555,10 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     btnSurrender.Draw();
     btnClose.Draw();
 
-    if ( !conf.QVGA() ) {
-        Surface shadow( btnCast, true );
-        shadow.Fill( ColorBlack );
-        shadow.SetAlphaMod( 80, false );
-        if ( btnCast.isDisable() )
-            shadow.Blit( btnCast, display );
-        if ( btnRetreat.isDisable() )
-            shadow.Blit( btnRetreat, display );
-        if ( btnSurrender.isDisable() )
-            shadow.Blit( btnSurrender, display );
-    }
-
     int result = 0;
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() && !result ) {
         btnCast.isEnable() && le.MousePressLeft( btnCast ) ? btnCast.PressDraw() : btnCast.ReleaseDraw();
@@ -615,7 +603,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     cursor.Hide();
     back.Restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 
     return result;
 }
@@ -625,7 +613,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     if ( kingdom.GetColor() == hero.GetColor() ) // this is weird. You're surrending to yourself!
         return false;
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
@@ -636,8 +624,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     const Sprite & dialog = AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
 
     Rect pos_rt;
-    pos_rt.x = ( display.w() - dialog.w() + 16 ) / 2;
-    pos_rt.y = ( display.h() - dialog.h() + 16 ) / 2;
+    pos_rt.x = ( display.width() - dialog.w() + 16 ) / 2;
+    pos_rt.y = ( display.height() - dialog.h() + 16 ) / 2;
     pos_rt.w = dialog.w();
     pos_rt.h = dialog.h();
 
@@ -687,7 +675,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     bool result = false;
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() && !result ) {
         if ( btnAccept.isEnable() )
@@ -717,7 +705,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     cursor.Hide();
     back.Restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 
     return result;
 }
