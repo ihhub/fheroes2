@@ -106,7 +106,7 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
 void ScenarioListBox::RedrawBackground( const Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQSBKG, 0 ), display, dst );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQSBKG, 0 ), display, dst.x, dst.y );
 
     if ( isSelected() ) {
         Text text;
@@ -205,8 +205,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     }
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
-    SpriteBack back( Rect( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() ) );
-    Rect rt = back.GetArea();
+    Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+    fheroes2::ImageRestorer background( display, rt.x, rt.y, rt.w, rt.h );
 
     const Rect countPlayers( rt.x + 45, rt.y + 55, 20, 175 );
     const Rect sizeMaps( rt.x + 62, rt.y + 55, 20, 175 );
@@ -243,6 +243,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     listbox.RedrawBackground( rt );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, Point( rt.x + 327, rt.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, Point( rt.x + 327, rt.y + 217 ) );
+    // FIXME: update Listbox
     listbox.SetScrollSplitter( AGG::GetICN( ICN::ESCROLL, 3 ), Rect( rt.x + 328, rt.y + 73, 12, 141 ) );
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
@@ -359,7 +360,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     }
 
     cursor.Hide();
-    back.Restore();
 
     return result;
 }
