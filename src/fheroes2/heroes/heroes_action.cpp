@@ -150,7 +150,7 @@ u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & st
     }
 
     Text text( perday, Font::SMALL );
-    //text.Blit( ( sf.w() - text.w() ) / 2, sf.h() - 12, sf );
+    // text.Blit( ( sf.w() - text.w() ) / 2, sf.h() - 12, sf );
 
     return Dialog::SpriteInfo( hdr, msg, sf, buttons );
 }
@@ -163,9 +163,9 @@ u32 DialogGoldWithExp( const std::string & hdr, const std::string & msg, u32 cou
     gold.Blit( 0, image.h() - gold.h() - 12, image );
     sprite.Blit( gold.w() + 50, 0, image );
     Text text( GetString( count ) );
-    //text.Blit( ( gold.w() - text.w() ) / 2, image.h() - 12, image );
+    // text.Blit( ( gold.w() - text.w() ) / 2, image.h() - 12, image );
     text.Set( GetString( exp ) );
-    //text.Blit( gold.w() + 50 + ( sprite.w() - text.w() ) / 2, image.h() - 12, image );
+    // text.Blit( gold.w() + 50 + ( sprite.w() - text.w() ) / 2, image.h() - 12, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
@@ -180,7 +180,7 @@ u32 DialogArtifactWithExp( const std::string & hdr, const std::string & msg, con
     artifact.Blit( 5, 5, image );
     sprite.Blit( border.w() + 50, ( border.h() - sprite.h() ) / 2, image );
     Text text( GetString( exp ), Font::SMALL );
-    //text.Blit( border.w() + 50 + ( sprite.w() - text.w() ) / 2, image.h() - 12, image );
+    // text.Blit( border.w() + 50 + ( sprite.w() - text.w() ) / 2, image.h() - 12, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
@@ -191,7 +191,7 @@ u32 DialogWithExp( const std::string & hdr, const std::string & msg, u32 exp, u3
     Surface image( sprite.GetSize() + Size( 0, 12 ), true );
     sprite.Blit( image );
     Text text( GetString( exp ), Font::SMALL );
-    //text.Blit( ( sprite.w() - text.w() ) / 2, sprite.h(), image );
+    // text.Blit( ( sprite.w() - text.w() ) / 2, sprite.h(), image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
@@ -206,7 +206,7 @@ u32 DialogWithArtifactAndGold( const std::string & hdr, const std::string & msg,
     artifact.Blit( 5, 5, image );
     gold.Blit( border.w() + 50, ( border.h() - gold.h() ) / 2, image );
     Text text( GetString( count ), Font::SMALL );
-    //text.Blit( border.w() + 50 + ( gold.w() - text.w() ) / 2, border.h() - 25, image );
+    // text.Blit( border.w() + 50 + ( gold.w() - text.w() ) / 2, border.h() - 25, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
@@ -217,7 +217,7 @@ u32 DialogWithGold( const std::string & hdr, const std::string & msg, u32 count,
     Surface image( gold.GetSize() + Size( 0, 12 ), true );
     gold.Blit( image );
     Text text( GetString( count ), Font::SMALL );
-    //text.Blit( ( gold.w() - text.w() ) / 2, gold.h(), image );
+    // text.Blit( ( gold.w() - text.w() ) / 2, gold.h(), image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }

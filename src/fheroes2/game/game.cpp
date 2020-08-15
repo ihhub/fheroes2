@@ -353,7 +353,7 @@ void Game::ShowLoadMapsText( void )
 
     // blit test
     display.Fill( ColorBlack );
-    //text.Blit( pos, display );
+    text.Blit( pos );
     display.Flip();
 }
 

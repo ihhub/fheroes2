@@ -881,15 +881,15 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, Surface & dsts
                 break;
             }
 
-            //if ( hero )
-                //text.Blit( pos.x + ( pos.w + toff.x - text.w() ) / 2, pos.y + pos.h + toff.y, dstsf );
+            // if ( hero )
+            //     text.Blit( pos.x + ( pos.w + toff.x - text.w() ) / 2, pos.y + pos.h + toff.y, dstsf );
         }
         else {
             const Sprite & sprite = AGG::GetICN( ICN::PRIMSKIL, skill - 1 );
             sprite.Blit( pos.x + ( pos.w - sprite.w() ) / 2, pos.y + ( pos.h - sprite.h() ) / 2, dstsf );
 
             Text text( Skill::Primary::String( skill ), Font::SMALL );
-            //text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
+            // text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
 
             if ( hero ) {
                 switch ( skill ) {
@@ -913,7 +913,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, Surface & dsts
                     break;
                 }
 
-                //text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + pos.h - text.h() - 3, dstsf );
+                // text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + pos.h - text.h() - 3, dstsf );
             }
         }
     }
@@ -988,14 +988,14 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos,
 
         if ( use_mini_sprite ) {
             Text text( GetString( skill.Level() ), Font::SMALL );
-            //text.Blit( pos.x + ( pos.w - text.w() ) - 3, pos.y + pos.h - 12, dstsf );
+            // text.Blit( pos.x + ( pos.w - text.w() ) - 3, pos.y + pos.h - 12, dstsf );
         }
         else {
             Text text( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
-            //text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
+            // text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
 
             text.Set( Skill::Level::String( skill.Level() ) );
-            //text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 50, dstsf );
+            // text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 50, dstsf );
         }
     }
 }
