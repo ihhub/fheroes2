@@ -110,4 +110,7 @@ namespace fheroes2
     };
 
     BaseRenderEngine & engine();
+
+    void FadeDisplay();
+    void RiseDisplay();
 }

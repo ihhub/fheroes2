@@ -652,4 +652,8 @@ namespace fheroes2
     {
         return *( Display::instance().engine() );
     }
+
+    void FadeDisplay() {}
+
+    void RiseDisplay() {}
 }
