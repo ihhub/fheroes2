@@ -152,9 +152,8 @@ namespace Dialog
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            bool redraw = false;
-            redraw = redraw || le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-            redraw = redraw || le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+            le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
             resList.QueueEventProcessing();
 
@@ -171,7 +170,7 @@ namespace Dialog
                 selectedResolution = resList.GetCurrent();
             }
 
-            if ( redraw || !cursor.isVisible() ) {
+            if ( !cursor.isVisible() ) {
                 resList.Redraw();
                 buttonOk.draw();
                 buttonCancel.draw();
