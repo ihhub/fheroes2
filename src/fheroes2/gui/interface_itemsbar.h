@@ -27,6 +27,7 @@
 #include <utility>
 
 #include "gamedefs.h"
+#include "image.h"
 
 namespace Interface
 {
@@ -71,8 +72,8 @@ namespace Interface
             bool		QueueEventProcessing(void);
         */
 
-        virtual void RedrawBackground( const Rect &, Surface & ) {}
-        virtual void RedrawItem( Item &, const Rect &, Surface & ) {}
+        virtual void RedrawBackground( const Rect &, fheroes2::Image & ) {}
+        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) {}
 
         virtual bool ActionBarSingleClick( const Point &, Item &, const Rect & )
         {
@@ -170,7 +171,7 @@ namespace Interface
             return colrows;
         }
 
-        void Redraw( Surface & dstsf = Display::Get() )
+        void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() )
         {
             Point dstpt( barsz );
 
@@ -234,7 +235,7 @@ namespace Interface
             return items.end();
         }
 
-        virtual void RedrawItemIter( ItemsIterator it, const Rect & pos, Surface & dstsf )
+        virtual void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf )
         {
             RedrawItem( **it, pos, dstsf );
         }
@@ -326,8 +327,8 @@ namespace Interface
             bool QueueEventProcessing(ItemsActionBar<Item> &);
         */
 
-        virtual void RedrawItem( Item &, const Rect &, Surface & ) {}
-        virtual void RedrawItem( Item &, const Rect &, bool, Surface & ) {}
+        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) {}
+        virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}
 
         virtual bool ActionBarSingleClick( const Point &, Item &, const Rect &, Item &, const Rect & )
         {
@@ -418,7 +419,7 @@ namespace Interface
             ResetSelected();
         }
 
-        void RedrawItemIter( ItemsIterator it, const Rect & pos, Surface & dstsf )
+        void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf )
         {
             RedrawItem( **it, pos, GetCurItemIter() == it, dstsf );
         }

@@ -238,7 +238,7 @@ public:
     void RedrawItem( Artifact &, const Rect &, bool, Surface & );
 
     void ResetSelected( void );
-    void Redraw( Surface & dstsf = Display::Get() );
+    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
     bool ActionBarSingleClick( const Point &, Artifact &, const Rect & );
     bool ActionBarSingleClick( const Point &, Artifact &, const Rect &, Artifact &, const Rect & );

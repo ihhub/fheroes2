@@ -203,7 +203,7 @@ void ArmyBar::ResetSelected( void )
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
 }
 
-void ArmyBar::Redraw( Surface & dstsf )
+void ArmyBar::Redraw( fheroes2::Image & dstsf )
 {
     Cursor::Get().Hide();
     spcursor.Hide();

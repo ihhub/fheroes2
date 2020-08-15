@@ -29,8 +29,8 @@ public:
     PrimarySkillsBar( const Heroes *, bool mini );
 
     void SetTextOff( s32, s32 );
-    void RedrawBackground( const Rect &, Surface & );
-    void RedrawItem( int &, const Rect &, Surface & );
+    void RedrawBackground( const Rect &, fheroes2::Image & );
+    void RedrawItem( int &, const Rect &, fheroes2::Image & );
 
     bool ActionBarSingleClick( const Point &, int &, const Rect & );
     bool ActionBarPressRight( const Point &, int &, const Rect & );
@@ -40,7 +40,7 @@ public:
 
 protected:
     const Heroes * hero;
-    Surface backsf;
+    fheroes2::Image backsf;
     bool use_mini_sprite;
     std::vector<int> content;
     Point toff;
@@ -52,8 +52,8 @@ class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
 public:
     SecondarySkillsBar( bool mini = true, bool change = false );
 
-    void RedrawBackground( const Rect &, Surface & );
-    void RedrawItem( Skill::Secondary &, const Rect &, Surface & );
+    void RedrawBackground( const Rect &, fheroes2::Image & );
+    void RedrawItem( Skill::Secondary &, const Rect &, fheroes2::Image & );
 
     bool ActionBarSingleClick( const Point &, Skill::Secondary &, const Rect & );
     bool ActionBarPressRight( const Point &, Skill::Secondary &, const Rect & );
@@ -62,7 +62,7 @@ public:
     bool QueueEventProcessing( std::string * = NULL );
 
 protected:
-    Surface backsf;
+    fheroes2::Image backsf;
     bool use_mini_sprite;
     bool can_change;
     std::string msg;

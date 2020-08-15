@@ -625,11 +625,12 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
                                 // animate fade in for hero army bar
                                 const Rect rt( 0, 100, 552, 107 );
-                                Surface sf( rt, false );
-                                AGG::GetICN( ICN::STRIP, 0 ).Blit( rt, 0, 0, sf );
-                                Surface port = heroes.Guest()->GetPortrait( PORT_BIG );
-                                if ( port.isValid() )
-                                    port.Blit( 5, 5, sf );
+                                fheroes2::Image sf( 552, 107 );
+                                sf.reset();
+                                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), sf, 0, 100 );
+                                // Surface port = heroes.Guest()->GetPortrait( PORT_BIG );
+                                // if ( port.isValid() )
+                                //    port.Blit( 5, 5, sf );
                                 const Point savept = selectArmy2.GetPos();
                                 selectArmy2.SetPos( 112, 5 );
                                 selectArmy2.Redraw( sf );
