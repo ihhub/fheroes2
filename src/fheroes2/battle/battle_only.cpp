@@ -46,20 +46,21 @@ void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar
 
 void Battle::ControlInfo::Redraw( void )
 {
-    const Sprite & cell = AGG::GetICN( ICN::CELLWIN, 1 );
-    const Sprite & mark = AGG::GetICN( ICN::CELLWIN, 2 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
 
-    cell.Blit( rtLocal.x, rtLocal.y );
+    fheroes2::Blit( cell, display, rtLocal.x, rtLocal.y );
     if ( result & CONTROL_HUMAN )
-        mark.Blit( rtLocal.x + 3, rtLocal.y + 2 );
+        fheroes2::Blit( mark, display, rtLocal.x + 3, rtLocal.y + 2 );
     Text text( "Human", Font::SMALL );
-    text.Blit( rtLocal.x + cell.w() + 5, rtLocal.y + 5 );
+    text.Blit( rtLocal.x + cell.width() + 5, rtLocal.y + 5 );
 
-    cell.Blit( rtAI.x, rtAI.y );
+    fheroes2::Blit( cell, display, rtAI.x, rtAI.y );
     if ( result & CONTROL_AI )
-        mark.Blit( rtAI.x + 3, rtAI.y + 2 );
+        fheroes2::Blit( mark, display, rtAI.x + 3, rtAI.y + 2 );
     text.Set( "AI" );
-    text.Blit( rtAI.x + cell.w() + 5, rtAI.y + 5 );
+    text.Blit( rtAI.x + cell.width() + 5, rtAI.y + 5 );
 }
 
 Battle::Only::Only()
@@ -83,25 +84,20 @@ Battle::Only::Only()
     , selectArtifacts2( NULL )
     , cinfo2( NULL )
     , rt1( 36, 267, 43, 53 )
-    , sfb1( rt1, false )
+    , sfb1( rt1.w, rt1.h )
     , rt2( 23, 347, 34, 34 )
-    , sfb2( rt2, false )
+    , sfb2( rt2.w, rt2.h )
 {
     player1.SetControl( CONTROL_HUMAN );
     player2.SetControl( CONTROL_AI );
 
-    const Sprite & backSprite = AGG::GetICN( ICN::SWAPWIN, 0 );
+    const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
 
-    backSprite.Blit( rt1, 0, 0, sfb1 );
-    backSprite.Blit( rt2, 0, 0, sfb2 );
+    fheroes2::Blit( backSprite, rt1.x, rt1.y, sfb1, 0, 0, rt1.w, rt1.h );
+    fheroes2::Blit( backSprite, rt2.x, rt2.y, sfb2, 0, 0, rt2.w, rt2.h );
 
-    const RGBA gray = RGBA( 0xb0, 0xb0, 0xb0 );
-
-    sfc1.Set( rt1.w, rt1.h, true );
-    sfc1.DrawBorder( gray );
-
-    sfc2.Set( rt2.w, rt2.h, true );
-    sfc2.DrawBorder( gray );
+    fheroes2::DrawBorder( sfb1, fheroes2::GetColorId( 0xb0, 0xb0, 0xb0 ) );
+    fheroes2::DrawBorder( sfb2, fheroes2::GetColorId( 0xb0, 0xb0, 0xb0 ) );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Battle::Only & b )
@@ -144,8 +140,8 @@ Recruits Battle::Only::GetHeroesFromStreamBuf( StreamBuf & msg )
 
 bool Battle::Only::ChangeSettings( void )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
-    Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -230,7 +226,7 @@ bool Battle::Only::ChangeSettings( void )
     buttonStart.Draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     while ( !exit && le.HandleEvents() ) {
@@ -434,7 +430,7 @@ bool Battle::Only::ChangeSettings( void )
                 cinfo2->Redraw();
             buttonStart.Draw();
             cursor.Show();
-            display.Flip();
+            display.render();
             redraw = false;
         }
     }
@@ -603,9 +599,9 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
 
 void Battle::Only::RedrawBaseInfo( const Point & top )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    AGG::GetICN( ICN::SWAPWIN, 0 ).Blit( top );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), display, top.x, top.y );
 
     // header
     std::string message = "%{name1} vs %{name2}";
@@ -617,17 +613,19 @@ void Battle::Only::RedrawBaseInfo( const Point & top )
     text.Blit( top.x + 320 - text.w() / 2, top.y + 26 );
 
     // portrait
-    Surface port1 = hero1->GetPortrait( PORT_BIG );
-    if ( port1.isValid() )
-        port1.Blit( rtPortrait1.x, rtPortrait1.y, display );
+    fheroes2::Image port1 = hero1->GetPortrait( PORT_BIG );
+    if ( !port1.empty() )
+        fheroes2::Blit( port1, display, rtPortrait2.x, rtPortrait2.y );
 
     if ( hero2 ) {
-        Surface port2 = hero2->GetPortrait( PORT_BIG );
-        if ( port2.isValid() )
-            port2.Blit( rtPortrait2.x, rtPortrait2.y, display );
+        fheroes2::Image port2 = hero2->GetPortrait( PORT_BIG );
+        if ( !port2.empty() )
+            fheroes2::Blit( port2, display, rtPortrait2.x, rtPortrait2.y );
     }
     else {
-        display.FillRect( rtPortrait2, ColorBlack );
+        fheroes2::Image emptyPort( rtPortrait2.w, rtPortrait2.h );
+        emptyPort.fill( 0 );
+        fheroes2::Blit( emptyPort, display, rtPortrait2.x, rtPortrait2.y );
         text.Set( "N/A", Font::BIG );
         text.Blit( rtPortrait2.x + ( rtPortrait2.w - text.w() ) / 2, rtPortrait2.y + rtPortrait2.h / 2 - 8 );
     }

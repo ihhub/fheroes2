@@ -69,7 +69,6 @@ void PrimarySkillsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dst
 
 void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Image & dstsf )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     if ( Skill::Primary::UNKNOWN != skill ) {
         if ( use_mini_sprite ) {
             const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );

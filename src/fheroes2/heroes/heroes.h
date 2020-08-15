@@ -130,7 +130,7 @@ public:
         UNKNOWN
     };
 
-    static Surface GetPortrait( int heroid, int type );
+    static fheroes2::Image GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
     enum flags_t
@@ -273,7 +273,7 @@ public:
     bool ActionSpellCast( const Spell & );
 
     void Redraw( Surface &, s32, s32, bool ) const;
-    void PortraitRedraw( s32, s32, int type, Surface & ) const;
+    void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
     int GetSpriteIndex( void ) const;
     void FadeOut( void ) const;
     void FadeIn( void ) const;
@@ -291,7 +291,7 @@ public:
     bool AllowBattle( bool attacker ) const;
 
     std::string String( void ) const;
-    Surface GetPortrait( int type ) const;
+    fheroes2::Image GetPortrait( int type ) const;
 
     static int GetLevelFromExperience( u32 );
     static u32 GetExperienceFromLevel( int );
