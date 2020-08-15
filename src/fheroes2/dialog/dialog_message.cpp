@@ -27,6 +27,8 @@
 #include "settings.h"
 #include "text.h"
 
+#include "ui_button.h"
+
 int Dialog::Message( const std::string & header, const std::string & message, int ft, int buttons )
 {
     Display & display = Display::Get();
@@ -50,8 +52,8 @@ int Dialog::Message( const std::string & header, const std::string & message, in
 
     LocalEvent & le = LocalEvent::Get();
 
-    ButtonGroups btnGroups( box.GetArea(), buttons );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup group( box.GetArea().convert(), buttons );
+    group.draw();
 
     cursor.Show();
     display.Flip();
@@ -62,7 +64,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         if ( !buttons && !le.MousePressRight() )
             break;
-        result = btnGroups.QueueEventProcessing();
+        result = group.processEvents();
     }
 
     cursor.Hide();

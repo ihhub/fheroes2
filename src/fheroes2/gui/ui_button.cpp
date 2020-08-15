@@ -129,6 +129,7 @@ namespace fheroes2
         if ( !isPressed() ) {
             press();
             draw( area );
+            Display::instance().render();
             return true;
         }
         return false;
@@ -139,6 +140,7 @@ namespace fheroes2
         if ( isPressed() ) {
             release();
             draw( area );
+            Display::instance().render();
             return true;
         }
         return false;

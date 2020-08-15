@@ -82,6 +82,7 @@ struct Rect : Point, Size
 
     // TODO: this method must be removed before merging to master
     Rect( const fheroes2::Rect & rect );
+    fheroes2::Rect convert() const;
 
     Rect & operator=( const Point & );
     bool operator==( const Rect & ) const;

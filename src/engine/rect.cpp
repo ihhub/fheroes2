@@ -182,6 +182,11 @@ Rect::Rect( const fheroes2::Rect & rect )
     , Size( rect.width, rect.height )
 {}
 
+fheroes2::Rect Rect::convert() const
+{
+    return fheroes2::Rect( x, y, w, h );
+}
+
 Rect Rect::Get( const Point & pt1, const Point & pt2 )
 {
     Rect res;
