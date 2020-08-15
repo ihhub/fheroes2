@@ -23,6 +23,7 @@
 #ifndef H2INTERFACE_CPANEL_H
 #define H2INTERFACE_CPANEL_H
 
+#include "image.h"
 #include "gamedefs.h"
 
 namespace Interface
@@ -44,11 +45,11 @@ namespace Interface
     private:
         Basic & interface;
 
-        Surface btn_radr;
-        Surface btn_icon;
-        Surface btn_bttn;
-        Surface btn_stat;
-        Surface btn_quit;
+        fheroes2::Image btn_radr;
+        fheroes2::Image btn_icon;
+        fheroes2::Image btn_bttn;
+        fheroes2::Image btn_stat;
+        fheroes2::Image btn_quit;
 
         Rect rt_radr;
         Rect rt_icon;

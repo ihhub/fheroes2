@@ -38,7 +38,6 @@
 #define ICONS_HEIGHT 22
 #define ICONS_CURSOR_WIDTH 56
 #define ICONS_CURSOR_HEIGHT 32
-#define ICONS_CURSOR_COLOR RGBA( 0xA0, 0xE0, 0xE0 )
 
 bool Interface::IconsBar::IsVisible( void )
 {
@@ -158,7 +157,7 @@ void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bo
         RedrawCastleIcon( *item, ox, oy );
 
         if ( current )
-            marker.Blit( ox - 5, oy - 5, Display::Get() );
+            fheroes2::Blit( marker, fheroes2::Display::instance(), ox - 5, oy - 5 );
     }
 }
 
@@ -245,7 +244,7 @@ void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bo
         RedrawHeroesIcon( *item, ox, oy );
 
         if ( current )
-            marker.Blit( ox - 5, oy - 5, Display::Get() );
+            fheroes2::Blit( marker, fheroes2::Display::instance(), ox - 5, oy - 5 );
     }
 }
 
@@ -339,8 +338,9 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
     , castleIcons( 4, sfMarker )
     , heroesIcons( 4, sfMarker )
 {
-    sfMarker.Set( ICONS_CURSOR_WIDTH, ICONS_CURSOR_HEIGHT, true );
-    sfMarker.DrawBorder( ICONS_CURSOR_COLOR );
+    sfMarker.resize( ICONS_CURSOR_WIDTH, ICONS_CURSOR_HEIGHT );
+    sfMarker.reset();
+    fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
 u32 Interface::IconsPanel::CountIcons( void ) const

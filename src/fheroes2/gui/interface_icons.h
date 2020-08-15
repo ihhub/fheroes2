@@ -41,7 +41,7 @@ namespace Interface
     class IconsBar
     {
     public:
-        IconsBar( u32 count, const Surface & sf )
+        IconsBar( u32 count, const fheroes2::Image & sf )
             : iconsCount( count )
             , marker( sf )
             , show( true )
@@ -72,7 +72,7 @@ namespace Interface
 
     protected:
         u32 iconsCount;
-        const Surface & marker;
+        const fheroes2::Image & marker;
         bool show;
     };
 
@@ -82,7 +82,7 @@ namespace Interface
     class HeroesIcons : public Interface::ListBox<HEROES>, public IconsBar
     {
     public:
-        HeroesIcons( u32 count, const Surface & sf )
+        HeroesIcons( u32 count, const fheroes2::Image & sf )
             : IconsBar( count, sf )
         {}
 
@@ -102,7 +102,7 @@ namespace Interface
     class CastleIcons : public Interface::ListBox<CASTLE>, public IconsBar
     {
     public:
-        CastleIcons( u32 count, const Surface & sf )
+        CastleIcons( u32 count, const fheroes2::Image & sf )
             : IconsBar( count, sf )
         {}
 
@@ -149,7 +149,7 @@ namespace Interface
     private:
         Basic & interface;
 
-        Surface sfMarker;
+        fheroes2::Image sfMarker;
 
         CastleIcons castleIcons;
         HeroesIcons heroesIcons;
