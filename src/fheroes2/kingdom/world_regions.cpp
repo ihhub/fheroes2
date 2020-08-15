@@ -100,7 +100,7 @@ namespace
         RegionBorderNode( int index )
             : index( index )
         {
-            neighbours.reserve( 7 );
+            neighbours.reserve( 8 );
         }
     };
 
@@ -119,7 +119,7 @@ namespace
         {
             nodes.reserve( expectedSize );
             borders.reserve( expectedSize / 4 );
-            nodes.push_back( { mapIndex } );
+            nodes.push_back( {mapIndex} );
             nodes[0].type = id;
         }
     };
@@ -305,12 +305,13 @@ void World::ComputeStaticAnalysis()
 
     // Step 4. Add missing region centres based on distance (for water or if there's big chunks of space without castles)
     const std::vector<int> & directionOffsets = GetDirectionOffsets( width );
-    for ( int waterOrGround = false; waterOrGround < 2; ++waterOrGround ) {
-        for ( const int rowID : emptyLines[waterOrGround * 2] ) {
-            for ( const int colID : emptyLines[waterOrGround * 2 + 1] ) {
+    for ( int waterOrGround = 0; waterOrGround < 4; waterOrGround += 2 ) {
+        for ( const int rowID : emptyLines[waterOrGround] ) {
+            const int rowIndex = rowID * width;
+            for ( const int colID : emptyLines[waterOrGround + 1] ) {
                 int centerIndex = -1;
 
-                const int tileIndex = rowID * width + colID;
+                const int tileIndex = rowIndex + colID;
                 const Maps::Tiles & tile = vec_tiles[tileIndex];
                 if ( tile.GetPassable() && tile.isWater() ) {
                     centerIndex = tileIndex;
@@ -360,15 +361,20 @@ void World::ComputeStaticAnalysis()
     std::vector<MapRegion> regions;
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
         const int tileIndex = regionCenters[regionID];
-        regions.push_back( { static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize } );
+        regions.push_back( {static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize} );
         data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION + regionID;
     }
 
     // Step 7. Grow all regions one step at the time so they would compete for space
     const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
-    for ( int i = 0; i < maxDimension / 2; ++i ) {
+    bool stillRoomToExpand = true;
+    while ( stillRoomToExpand ) {
+        stillRoomToExpand = false;
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-            RegionExpansion( data, extendedWidth, regions[regionID], offsets );
+            MapRegion & region = regions[regionID];
+            RegionExpansion( data, extendedWidth, region, offsets );
+            if ( !stillRoomToExpand && region.lastProcessedNode != region.nodes.size() )
+                stillRoomToExpand = true;
         }
     }
 
