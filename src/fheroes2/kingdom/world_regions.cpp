@@ -47,8 +47,6 @@ namespace
         LEFT = 7
     };
 
-    const uint8_t directionIndicies[8] = { TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT };
-
     uint8_t ReflectDirectionIndex( uint8_t direction )
     {
         return ( direction + 4 ) % 8;
@@ -101,7 +99,9 @@ namespace
         std::vector<int> neighbours;
         RegionBorderNode( int index )
             : index( index )
-        {}
+        {
+            //neighbours.reserve( 8 );
+        }
     };
 
     struct MapRegion
@@ -117,6 +117,8 @@ namespace
             : id( REGION + regionIndex )
             , isWater( water )
         {
+            //nodes.reserve( 100 );
+            //borders.reserve( 50 );
             nodes.push_back( { mapIndex } );
             nodes[0].type = id;
         }
@@ -154,8 +156,9 @@ namespace
         // region.nodes will be modified, so have to copy the node here
         const int nodeIndex = region.nodes[region.lastProcessedNode].index;
 
+        //static std::vector<int> neighbourIDs;
         std::vector<int> neighbourIDs;
-        for ( uint8_t direction : directionIndicies ) {
+        for ( uint8_t direction = 0; direction < 8; ++direction ) {
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             MapRegionNode & newTile = rawData[newIndex];
             if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
@@ -177,11 +180,10 @@ namespace
         }
     }
 
-    void RegionExpansion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region )
+    void RegionExpansion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region, const std::vector<int> & offsets )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added
         const size_t nodesEnd = region.nodes.size();
-        const std::vector<int> & offsets = GetDirectionOffsets( rawDataWidth );
 
         while ( region.lastProcessedNode < nodesEnd ) {
             CheckAdjacentTiles( rawData, region, rawDataWidth, offsets );
@@ -313,8 +315,8 @@ void World::ComputeStaticAnalysis()
                     centerIndex = tileIndex;
                 }
                 else {
-                    for ( const int directionIdx : directionIndicies ) {
-                        const int newIndex = tileIndex + directionOffsets[directionIdx];
+                    for ( uint8_t direction = 0; direction < 8; ++direction ) {
+                        const int newIndex = tileIndex + directionOffsets[direction];
                         if ( newIndex >= 0 && newIndex < totalMapTiles ) {
                             const Maps::Tiles & newTile = vec_tiles[newIndex];
                             if ( newTile.GetPassable() && tile.isWater() == waterOrGround ) {
@@ -361,9 +363,10 @@ void World::ComputeStaticAnalysis()
 
     // Step 7. Grow all regions one step at the time so they would compete for space
     const int maxDimension = std::max( width, height );
+    const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
     for ( int i = 0; i < maxDimension / 2; ++i ) {
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-            RegionExpansion( data, extendedWidth, regions[regionID] );
+            RegionExpansion( data, extendedWidth, regions[regionID], offsets );
         }
     }
 
@@ -374,7 +377,7 @@ void World::ComputeStaticAnalysis()
         for ( const MapRegionNode & node : reg.nodes ) {
             vec_tiles[node.index]._metadata = node.type;
         }
-        //std::cout << reg.id << " nodes: " << reg.nodes.size() << "/" << reg.nodes.capacity() << ", borders: " << reg.borders.size() << "/" << reg.borders.capacity()
+        // std::cout << reg.id << " nodes: " << reg.nodes.size() << "/" << reg.nodes.capacity() << ", borders: " << reg.borders.size() << "/" << reg.borders.capacity()
         //          << std::endl;
     }
 
