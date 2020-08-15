@@ -176,9 +176,20 @@ namespace
         return one.width() == two.width() && one.height() == two.height();
     }
 
+    bool Validate( const fheroes2::Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height )
+    {
+        if ( image.empty() || width == 0 || height == 0 ) // what' the reason to work with empty images?
+            return false;
+
+        if ( x > image.width() || y > image.height() )
+            return false;
+
+        return true;
+    }
+
     bool Validate( const fheroes2::Image & in, uint32_t inX, uint32_t inY, const fheroes2::Image & out, uint32_t outX, uint32_t outY, uint32_t width, uint32_t height )
     {
-        if ( in.empty() || out.empty() || width == 0 || height == 0 ) // what' the reason to work with empty images?
+        if ( in.empty() || out.empty() || width == 0 || height == 0 ) // what's the reason to work with empty images?
             return false;
 
         if ( inX > in.width() || inY > in.height() || outX > out.width() || outY > out.height() )
@@ -193,7 +204,7 @@ namespace
     bool Verify( const fheroes2::Image & in, uint32_t & inX, uint32_t & inY, const fheroes2::Image & out, int32_t & outX, int32_t & outY, uint32_t & width,
                  uint32_t & height )
     {
-        if ( in.empty() || out.empty() || width == 0 || height == 0 ) // what' the reason to work with empty images?
+        if ( in.empty() || out.empty() || width == 0 || height == 0 ) // what's the reason to work with empty images?
             return false;
 
         if ( inX > in.width() || inY > in.height() )
@@ -343,6 +354,7 @@ namespace fheroes2
     {
         if ( !empty() ) {
             std::fill( _image.begin(), _image.end(), value );
+            std::fill( _transform.begin(), _transform.end(), 0 );
         }
     }
 
@@ -789,6 +801,28 @@ namespace fheroes2
     {
         if ( image.empty() )
             return;
+    }
+
+    void Fill( Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint8_t colorId )
+    {
+        if ( !Validate( image, x, y, width, height ) )
+            return;
+
+        if ( image.width() == width && image.height() == height ) { // we need to fill whole image
+            image.fill( colorId );
+            return;
+        }
+
+        const uint32_t imageWidth = image.width();
+
+        uint8_t * imageY = image.image() + y * imageWidth + x;
+        uint8_t * transformY = image.transform() + y * imageWidth + x;
+        const uint8_t * imageYEnd = imageY + height * imageWidth;
+
+        for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
+            std::fill( imageY, imageY + width, colorId );
+            std::fill( transformY, transformY + width, 0 );
+        }
     }
 
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
