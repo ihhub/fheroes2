@@ -46,8 +46,7 @@ public:
 
     void RedrawBackground( const Point & dst )
     {
-        const Sprite & sf = AGG::GetICN( ICN::CELLWIN, 1 );
-        Dialog::FrameBorder::RenderOther( sf, Rect( dst.x, dst.y + 25, rtAreaItems.w + 5, rtAreaItems.h + 10 ) );
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), Rect( dst.x, dst.y + 25, rtAreaItems.w + 5, rtAreaItems.h + 10 ) );
 
         // scroll
         AGG::GetICN( ICN::LISTBOX, 7 ).Blit( dst.x + area.w - 24, dst.y + 45 );
@@ -224,7 +223,7 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     for ( size_t ii = 0; ii < MAXSECONDARYSKILL * 3; ++ii )
         skills[ii] = ii;
 
-    Dialog::FrameBorder frameborder( Size( 310, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 310, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumSecSkill listbox( area );
@@ -275,7 +274,7 @@ Spell Dialog::SelectSpell( int cur )
     for ( size_t ii = 0; ii < spells.size(); ++ii )
         spells[ii] = ii + 1;
 
-    Dialog::FrameBorder frameborder( Size( 340, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 340, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumSpell listbox( area );
@@ -320,7 +319,7 @@ Artifact Dialog::SelectArtifact( int cur )
     for ( size_t ii = 0; ii < artifacts.size(); ++ii )
         artifacts[ii] = ii;
 
-    Dialog::FrameBorder frameborder( Size( 370, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 370, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumArtifact listbox( area );
@@ -365,7 +364,7 @@ Monster Dialog::SelectMonster( int id )
     for ( size_t ii = 0; ii < monsters.size(); ++ii )
         monsters[ii] = ii + 1; // skip Monser::UNKNOWN
 
-    Dialog::FrameBorder frameborder( Size( 260, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 260, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumMonster listbox( area );
@@ -410,7 +409,7 @@ int Dialog::SelectHeroes( int cur )
     for ( size_t ii = 0; ii < heroes.size(); ++ii )
         heroes[ii] = ii;
 
-    Dialog::FrameBorder frameborder( Size( 240, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 240, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumHeroes listbox( area );

@@ -145,7 +145,7 @@ namespace Dialog
     public:
         FrameBorder( int v = BORDERWIDTH );
         FrameBorder( const Size & );
-        FrameBorder( const Size &, const Surface & );
+        FrameBorder( const Size &, const fheroes2::Image & );
         FrameBorder( s32, s32, u32, u32 );
         ~FrameBorder();
 
@@ -160,7 +160,7 @@ namespace Dialog
         const Rect & GetTop( void ) const;
 
         static void RenderRegular( const Rect & );
-        static void RenderOther( const Surface &, const Rect & );
+        static void RenderOther( const fheroes2::Image &, const Rect & );
 
     protected:
         SpriteBack background;
