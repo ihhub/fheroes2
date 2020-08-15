@@ -27,7 +27,7 @@
 #include <utility>
 
 #include "gamedefs.h"
-#include "image.h"
+#include "screen.h"
 
 namespace Interface
 {
