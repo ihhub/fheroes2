@@ -365,11 +365,11 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
         }
 
         const fheroes2::Image & sprite = fheroes2::AGG::GetUnicodeLetter( *it, font );
-        if ( !sprite.isValid() )
+        if ( sprite.empty() )
             return;
 
-        sprite.Blit( ax, ay, dst );
-        ax += sprite.w();
+        fheroes2::Blit( sprite, dst, ax, ay );
+        ax += sprite.width();
     }
 }
 
