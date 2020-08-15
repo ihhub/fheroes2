@@ -737,7 +737,7 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
     return killed;
 }
 
-bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg ) const
+bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const
 {
     if ( Modes( SP_ANTIMAGIC ) )
         return false;
@@ -750,7 +750,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
 
     if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
         return false;
-    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() )
+    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly )
         return false;
     if ( isMagicResist( spell, ( hero ? hero->GetPower() : 0 ) ) )
         return false;
@@ -808,7 +808,10 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
 
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
 {
-    if ( !AllowApplySpell( spell, hero ) )
+    // HACK!!! Chain lightining is the only spell which can't be casted on allies but could be applied on them
+    const bool isForceApply = ( spell() == Spell::CHAINLIGHTNING );
+
+    if ( !AllowApplySpell( spell, hero, NULL, isForceApply ) )
         return false;
 
     DEBUG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );

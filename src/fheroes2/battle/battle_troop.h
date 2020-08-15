@@ -138,7 +138,7 @@ namespace Battle
         u32 CalculateMaxDamage( const Unit & ) const;
         u32 CalculateDamageUnit( const Unit &, float ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
-        bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL ) const;
+        bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
         void PostAttackAction( Unit & );
         void ResetBlind( void );
         void SpellModesAction( const Spell &, u32, const HeroBase * );

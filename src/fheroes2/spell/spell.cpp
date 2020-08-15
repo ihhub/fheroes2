@@ -414,7 +414,7 @@ bool Spell::isAdventure( void ) const
 
 bool Spell::isDamage( void ) const
 {
-    return Damage();
+    return Damage() != 0;
 }
 
 u32 Spell::Damage( void ) const

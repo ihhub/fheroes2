@@ -967,8 +967,9 @@ bool ArtifactsBar::ActionBarDoubleClick( const Point & cursor, Artifact & art, c
                 const_cast<Heroes *>( hero )->TranscribeScroll( art );
         }
     }
-    else
+    else if ( art.isValid() ) {
         Dialog::ArtifactInfo( art.GetName(), "", art );
+    }
 
     ResetSelected();
 
