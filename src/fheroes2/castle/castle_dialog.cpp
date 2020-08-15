@@ -495,11 +495,32 @@ int Castle::OpenDialog( bool readonly, bool fade )
                 for ( u32 id = BUILD_MAGEGUILD5; id >= BUILD_MAGEGUILD1; id >>= 1 )
                     if ( isBuild( id ) && id == ( *it ).id ) {
                         if ( le.MouseClickLeft( ( *it ).coord ) ) {
-                            if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() && heroes.Guard()->BuySpellBook( this ) )
-                                need_redraw = true;
+                            bool noFreeSpaceForMagicBook = false;
 
-                            if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() && heroes.Guest()->BuySpellBook( this ) )
-                                need_redraw = true;
+                            if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
+                                if ( heroes.Guard()->IsFullBagArtifacts() ) {
+                                    noFreeSpaceForMagicBook = true;
+                                }
+                                else if ( heroes.Guard()->BuySpellBook( this ) ) {
+                                    need_redraw = true;
+                                }
+                            }
+
+                            if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
+                                if ( heroes.Guest()->IsFullBagArtifacts() ) {
+                                    noFreeSpaceForMagicBook = true;
+                                }
+                                else if ( heroes.Guest()->BuySpellBook( this ) ) {
+                                    need_redraw = true;
+                                }
+                            }
+
+                            if ( noFreeSpaceForMagicBook ) {
+                                Dialog::Message(
+                                    "",
+                                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                                    Font::BIG, Dialog::OK );
+                            }
 
                             OpenMageGuild( heroes );
                         }
