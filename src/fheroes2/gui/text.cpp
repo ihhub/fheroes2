@@ -364,7 +364,7 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
             continue;
         }
 
-        const fheroes2::Image & sprite = AGG::GetUnicodeLetter( *it, font );
+        const fheroes2::Image & sprite = fheroes2::AGG::GetUnicodeLetter( *it, font );
         if ( !sprite.isValid() )
             return;
 
