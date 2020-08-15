@@ -615,7 +615,7 @@ void Battle::Only::RedrawBaseInfo( const Point & top )
     // portrait
     fheroes2::Image port1 = hero1->GetPortrait( PORT_BIG );
     if ( !port1.empty() )
-        fheroes2::Blit( port1, display, rtPortrait2.x, rtPortrait2.y );
+        fheroes2::Blit( port1, display, rtPortrait1.x, rtPortrait1.y );
 
     if ( hero2 ) {
         fheroes2::Image port2 = hero2->GetPortrait( PORT_BIG );

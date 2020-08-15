@@ -24,8 +24,8 @@
 #define H2BATTLE_ONLY_H
 
 #include "army.h"
-#include "image.h"
 #include "heroes_recruits.h"
+#include "image.h"
 #include "players.h"
 
 class ArmyBar;

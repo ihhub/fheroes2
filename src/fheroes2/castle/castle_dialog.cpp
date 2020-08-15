@@ -218,7 +218,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     if ( conf.ExtGameDynamicInterface() )
         conf.SetEvilInterface( GetRace() & ( Race::BARB | Race::WRLK | Race::NECR ) );
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     CastleHeroes heroes = world.GetHeroes( *this );
 
@@ -230,7 +230,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
     // fade
     if ( conf.ExtGameUseFade() )
-        display.Fade();
+        fheroes2::FadeDisplay();
 
     Dialog::FrameBorder background( Display::GetDefaultSize() );
 
@@ -557,7 +557,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                         boatSprite.Blit( cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y() );
 
                                         cursor.Show();
-                                        display.Flip();
+                                        display.render();
                                         alpha += 15;
                                     }
                                     ++buildFrame;
@@ -618,7 +618,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                     if ( selectArmy2.isValid() )
                                         selectArmy2.Redraw();
                                     cursor.Show();
-                                    display.Flip();
+                                    display.render();
                                 }
                                 selectArmy2.SetArmy( &heroes.Guest()->GetArmy() );
                                 AGG::PlaySound( M82::BUILDTWN );
@@ -628,9 +628,10 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 fheroes2::Image sf( 552, 107 );
                                 sf.reset();
                                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), sf, 0, 100 );
-                                // Surface port = heroes.Guest()->GetPortrait( PORT_BIG );
-                                // if ( port.isValid() )
-                                //    port.Blit( 5, 5, sf );
+                                fheroes2::Image port = heroes.Guest()->GetPortrait( PORT_BIG );
+                                if ( !port.empty() )
+                                    fheroes2::Blit( port, sf, 5, 5 );
+
                                 const Point savept = selectArmy2.GetPos();
                                 selectArmy2.SetPos( 112, 5 );
                                 selectArmy2.Redraw( sf );
@@ -642,10 +643,9 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 while ( le.HandleEvents() && alpha < 240 ) {
                                     if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
                                         cursor.Hide();
-                                        //sf.SetAlphaMod( alpha, false );
-                                        //sf.Blit( cur_pt.x, cur_pt.y + 356, display );
+                                        fheroes2::AlphaBlit( sf, display, cur_pt.x, cur_pt.y + 356, alpha );
                                         cursor.Show();
-                                        display.Flip();
+                                        display.render();
                                         alpha += 10;
                                     }
                                 }
@@ -681,7 +681,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
             if ( buttonExit.isPressed() )
                 buttonExit.Draw();
             cursor.Show();
-            display.Flip();
+            display.render();
             need_redraw = false;
         }
 
@@ -720,7 +720,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
             cursor.Hide();
             CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, ( conf.ExtCastleAllowFlash() ? GetCurrentFlash( *this, cacheBuildings ) : BUILD_NOTHING ) );
             cursor.Show();
-            display.Flip();
+            display.render();
 
             Game::CastleAnimationFrame() += 1; // this function returns variable by reference
         }

@@ -105,7 +105,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
                 break;
             }
 
-             if ( hero )
+            if ( hero )
                 text.Blit( pos.x + ( pos.w + toff.x - text.w() ) / 2, pos.y + pos.h + toff.y, dstsf );
         }
         else {
