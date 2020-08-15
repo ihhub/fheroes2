@@ -2424,5 +2424,11 @@ namespace fheroes2
 
             return GetICN( ICN::SMALFONT, character - 0x20 );
         }
+
+        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType )
+        {
+            // TODO: Add Unicode character support
+            return GetLetter( character, fontType );
+        }
     }
 }
