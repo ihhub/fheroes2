@@ -207,7 +207,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 {
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
     int oldcursor = cursor.Themes();
@@ -220,9 +220,9 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
     Point dst_pt;
-    const Sprite & sprite = AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    FrameBox box( 10 + textbox.h() + 10 + sprite.h(), OK | CANCEL );
+    FrameBox box( 10 + textbox.h() + 10 + sprite.height(), OK | CANCEL );
     const Rect & box_rt = box.GetArea();
 
     // text
@@ -231,13 +231,13 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     textbox.Blit( dst_pt );
 
     dst_pt.y = box_rt.y + 10 + textbox.h() + 10;
-    dst_pt.x = box_rt.x + ( box_rt.w - sprite.w() ) / 2;
-    sprite.Blit( dst_pt, display );
-    const Rect text_rt( dst_pt.x, dst_pt.y, sprite.w(), sprite.h() );
+    dst_pt.x = box_rt.x + ( box_rt.w - sprite.width() ) / 2;
+    fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
+    const Rect text_rt( dst_pt.x, dst_pt.y, sprite.width(), sprite.height() );
 
     Text text( "_", Font::BIG );
-    sprite.Blit( text_rt, display );
-    text.Blit( dst_pt.x + ( sprite.w() - text.w() ) / 2, dst_pt.y - 1 );
+    fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
+    text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
@@ -252,7 +252,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     buttonCancel.Draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
@@ -284,12 +284,12 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
             text.Set( InsertString( res, charInsertPos, "_" ) );
 
-            if ( text.w() < sprite.w() - 24 ) {
+            if ( text.w() < sprite.width() - 24 ) {
                 cursor.Hide();
-                sprite.Blit( text_rt, display );
+                fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
                 text.Blit( text_rt.x + ( text_rt.w - text.w() ) / 2, text_rt.y - 1 );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
             redraw = false;
         }

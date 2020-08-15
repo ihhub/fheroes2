@@ -41,7 +41,7 @@ Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
 
 void Interface::PlayersInfo::UpdateInfo( Players & players, const Point & pt1, const Point & pt2 )
 {
-    const Sprite & sprite = AGG::GetICN( ICN::NGEXTRA, 3 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 3 );
 
     clear();
 
@@ -50,8 +50,8 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const Point & pt1, c
         PlayerInfo info;
 
         info.player = *it;
-        info.rect1 = Rect( pt1.x + Game::GetStep4Player( current, sprite.w(), players.size() ), pt1.y, sprite.w(), sprite.h() );
-        info.rect2 = Rect( pt2.x + Game::GetStep4Player( current, sprite.w(), players.size() ), pt2.y, sprite.w(), sprite.h() );
+        info.rect1 = Rect( pt1.x + Game::GetStep4Player( current, sprite.width(), players.size() ), pt1.y, sprite.width(), sprite.height() );
+        info.rect2 = Rect( pt2.x + Game::GetStep4Player( current, sprite.width(), players.size() ), pt2.y, sprite.width(), sprite.height() );
 
         push_back( info );
     }
@@ -60,9 +60,9 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const Point & pt1, c
         if ( ( it + 1 ) != end() ) {
             const Rect & rect1 = ( *it ).rect2;
             const Rect & rect2 = ( *( it + 1 ) ).rect2;
-            const Sprite & iconSprite = AGG::GetICN( ICN::ADVMCO, 8 );
+            const fheroes2::Sprite & iconSprite = fheroes2::AGG::GetICN( ICN::ADVMCO, 8 );
 
-            ( *it ).rect3 = Rect( rect1.x + rect1.w + ( rect2.x - ( rect1.x + rect1.w ) ) / 2 - 5, rect1.y + rect1.h + 20, iconSprite.w(), iconSprite.h() );
+            ( *it ).rect3 = Rect( rect1.x + rect1.w + ( rect2.x - ( rect1.x + rect1.w ) ) / 2 - 5, rect1.y + rect1.h + 20, iconSprite.width(), iconSprite.height() );
         }
     }
 }
@@ -106,6 +106,7 @@ Player * Interface::PlayersInfo::GetFromClassClick( const Point & pt )
 void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_play_info: show game info with color status (play/not play) */
 {
     const Settings & conf = Settings::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
     const u32 humans_colors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
@@ -145,8 +146,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
         if ( show_name )
             index += 24;
 
-        const Sprite & sprite1 = AGG::GetICN( ICN::NGEXTRA, index );
-        sprite1.Blit( rect1.x, rect1.y );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, index ), display, rect1.x, rect1.y );
 
         if ( show_name ) {
             // draw player name
@@ -190,8 +190,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
             continue;
         }
 
-        const Sprite & sprite2 = AGG::GetICN( ICN::NGEXTRA, index );
-        sprite2.Blit( rect2.x, rect2.y );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, index ), display, rect2.x, rect2.y );
 
         if ( show_race ) {
             const std::string & name = ( Race::NECR == player.GetRace() ? _( "Necroman" ) : Race::String( player.GetRace() ) );
@@ -202,8 +201,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
         // "swap" sprite
 
         if ( show_swap && !conf.QVGA() && ( it + 1 ) != end() ) {
-            const Sprite & sprite3 = AGG::GetICN( ICN::ADVMCO, 8 );
-            sprite3.Blit( rect3.x, rect3.y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ADVMCO, 8 ), display, rect3.x, rect3.y );
         }
     }
 }
