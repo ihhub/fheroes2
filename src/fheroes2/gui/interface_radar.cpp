@@ -52,7 +52,7 @@
 #define COLOR_PURPLE 0x87
 #define COLOR_GRAY 0x10
 
-u32 GetPaletteIndexFromGround( int ground )
+uint8_t GetPaletteIndexFromGround( int ground )
 {
     switch ( ground ) {
     case Maps::Ground::DESERT:
@@ -80,7 +80,7 @@ u32 GetPaletteIndexFromGround( int ground )
     return 0;
 }
 
-u32 GetPaletteIndexFromColor( int color )
+uint8_t GetPaletteIndexFromColor( int color )
 {
     switch ( color ) {
     case Color::BLUE:
@@ -139,31 +139,29 @@ void Interface::Radar::Generate( void )
     const s32 world_w = world.w();
     const s32 world_h = world.h();
 
-    spriteArea.Set( world_w, world_h, false );
+    spriteArea.resize( world_w, world_h );
+    spriteArea.reset();
 
     for ( s32 yy = 0; yy < world_h; ++yy ) {
         for ( s32 xx = 0; xx < world_w; ++xx ) {
             const Maps::Tiles & tile = world.GetTiles( xx, yy );
-            RGBA color( 0, 0, 0 );
+            uint8_t color = 0;
 
             if ( tile.isRoad() )
-                color = PAL::GetPaletteColor( COLOR_ROAD );
+                color = COLOR_ROAD;
             else {
-                u32 index = GetPaletteIndexFromGround( tile.GetGround() );
+                color = GetPaletteIndexFromGround( tile.GetGround() );
 
                 const int mapObject = tile.GetObject();
                 if ( mapObject == MP2::OBJ_MOUNTS || mapObject == MP2::OBJ_TREES )
-                    index += 3;
-
-                color = PAL::GetPaletteColor( index );
+                    color += 3;
             }
 
-            if ( color.pack() )
-                spriteArea.DrawPoint( Point( xx, yy ), color );
+            fheroes2::SetPixel( spriteArea, xx, yy, color );
         }
     }
 
-    if ( spriteArea.GetSize() != size ) {
+    if ( spriteArea.width() != size.w || spriteArea.height() != size.h ) {
         Size new_sz;
 
         if ( world_w < world_h ) {
@@ -183,7 +181,8 @@ void Interface::Radar::Generate( void )
             new_sz.h = size.h;
         }
 
-        spriteArea = spriteArea.RenderScale( new_sz );
+        spriteArea.resize( new_sz.w, new_sz.h );
+        // spriteArea = spriteArea.RenderScale( new_sz );
     }
 }
 
@@ -199,7 +198,7 @@ void Interface::Radar::SetRedraw( void ) const
 
 void Interface::Radar::Redraw( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
     const Rect & rect = GetArea();
 
@@ -211,10 +210,10 @@ void Interface::Radar::Redraw( void )
         if ( hide )
             AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ).Blit( rect.x, rect.y );
         else {
-            if ( world.w() != world.h() )
-                display.FillRect( rect, ColorBlack );
-            cursorArea.Hide();
-            spriteArea.Blit( rect.x + offset.x, rect.y + offset.y, display );
+            // if ( world.w() != world.h() )
+            //    display.FillRect( rect, ColorBlack );
+            cursorArea.hide();
+            fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
             RedrawObjects( Players::FriendColors() );
             RedrawCursor();
         }
@@ -347,12 +346,12 @@ void Interface::Radar::RedrawCursor( void )
         const Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
 
         // check change game area
-        if ( cursorArea.GetSize() != sz ) {
-            cursorArea.Set( sz.w, sz.h, true );
-            cursorArea.DrawBorder( PAL::GetPaletteColor( RADARCOLOR ), false );
+        if ( cursorArea.width() != sz.w || cursorArea.height() != sz.h ) {
+            cursorArea.resize( sz.w, sz.h );
+            fheroes2::DrawBorder( cursorArea, RADARCOLOR );
         }
 
-        cursorArea.Move( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );
+        cursorArea.setPosition( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );
     }
 }
 
