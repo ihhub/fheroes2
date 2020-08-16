@@ -127,7 +127,7 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.w(), back.h() ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.w(), back.h() ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, Point( pt.x + 626, pt.y ) );
     SetScrollButtonDn( ICN::SCROLL, 2, 3, Point( pt.x + 626, pt.y + 20 + back.h() ) );
     SetAreaMaxItems( 4 );
@@ -333,7 +333,7 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.w(), back.h() ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.w(), back.h() ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, Point( pt.x + 626, pt.y ) );
     SetScrollButtonDn( ICN::SCROLL, 2, 3, Point( pt.x + 626, pt.y + 20 + back.h() ) );
     SetAreaMaxItems( 4 );

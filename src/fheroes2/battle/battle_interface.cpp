@@ -185,7 +185,7 @@ namespace Battle
 
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, Point( ax, area.y ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, Point( ax, area.y + area.h - 20 ) );
-            SetScrollSplitter( AGG::GetICN( ICN::DROPLISL, 13 ),
+            SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ),
                                Rect( ax + 5, buttonPgUp.y + buttonPgUp.h + 3, 12, buttonPgDn.y - ( buttonPgUp.y + buttonPgUp.h ) - 6 ) );
             splitter.HideCursor();
             SetAreaItems( Rect( area.x, area.y, area.w - 10, area.h ) );

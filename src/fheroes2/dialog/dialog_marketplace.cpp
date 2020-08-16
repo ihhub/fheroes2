@@ -60,7 +60,7 @@ public:
         buttonLeft.SetSprite( tradpost, 3, 4 );
         buttonRight.SetSprite( tradpost, 5, 6 );
 
-        splitter.SetSprite( AGG::GetICN( tradpost, 2 ) );
+        splitter.SetSprite( fheroes2::AGG::GetICN( tradpost, 2 ) );
         splitter.SetArea( Rect( pos_rt.x + ( pos_rt.w - AGG::GetICN( tradpost, 1 ).w() ) / 2 + 21, pos_rt.y + 131, 189, 11 ) );
         splitter.HideCursor();
 

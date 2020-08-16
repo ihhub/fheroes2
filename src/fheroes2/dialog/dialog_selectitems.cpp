@@ -39,7 +39,7 @@ public:
         SetScrollButtonUp( ICN::LISTBOX, 3, 4, Point( rt.x + rt.w - 24, rt.y + 25 ) );
         SetScrollButtonDn( ICN::LISTBOX, 5, 6, Point( rt.x + rt.w - 24, rt.y + rt.h - 55 ) );
 
-        SetScrollSplitter( AGG::GetICN( ICN::LISTBOX, 10 ), Rect( rt.x + rt.w - 19, rt.y + 48, 14, rt.h - 106 ) );
+        SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), Rect( rt.x + rt.w - 19, rt.y + 48, 14, rt.h - 106 ) );
         SetAreaMaxItems( 5 );
         SetAreaItems( Rect( rt.x + 10, rt.y + 30, rt.w - 30, rt.h - 70 ) );
     };
