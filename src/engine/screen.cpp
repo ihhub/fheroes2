@@ -341,7 +341,7 @@ namespace
 
             std::vector<uint8_t> originalPalette( 256 );
             for ( uint32_t i = 0; i < 256; ++i ) {
-                originalPalette[i] = static_cast<uint8_t>( i ) ;
+                originalPalette[i] = static_cast<uint8_t>( i );
             }
 
             updatePalette( originalPalette );
@@ -554,7 +554,7 @@ namespace
 
             std::vector<uint8_t> originalPalette( 256 );
             for ( uint32_t i = 0; i < 256; ++i ) {
-                originalPalette[i] = static_cast<uint8_t>( i ) ;
+                originalPalette[i] = static_cast<uint8_t>( i );
             }
 
             updatePalette( originalPalette );

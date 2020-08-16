@@ -222,7 +222,7 @@ void Cursor::Hide( void )
 #if defined( USE_SDL_CURSOR )
     _isVisibleCursor = false;
 #else
-fheroes2::Cursor::instance().show( false );
+    fheroes2::Cursor::instance().show( false );
     // SpriteMove::Hide();
 #endif
 }
