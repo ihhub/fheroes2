@@ -118,11 +118,11 @@ void LuckIndicator::Redraw( void )
     descriptions.append( _( "Current Modifiers:" ) );
     descriptions.append( "\n \n" );
 
-    const Sprite & sprite = AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
     const int inter = 6;
     int count = ( 0 == luck ? 1 : std::abs( luck ) );
-    s32 cx = area.x + ( area.w - ( sprite.w() + inter * ( count - 1 ) ) ) / 2;
-    s32 cy = area.y + ( area.h - sprite.h() ) / 2;
+    s32 cx = area.x + ( area.w - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    s32 cy = area.y + ( area.h - sprite.height() ) / 2;
 
     if ( modificators.size() )
         descriptions.append( modificators );
@@ -131,7 +131,7 @@ void LuckIndicator::Redraw( void )
 
     back.Restore();
     while ( count-- ) {
-        sprite.Blit( cx, cy );
+        fheroes2::Blit( sprite, fheroes2::Display::instance(), cx, cy );
         cx += inter;
     }
 }

@@ -235,7 +235,7 @@ public:
     ArtifactsBar( const Heroes *, bool mini, bool ro, bool change = false );
 
     void RedrawBackground( const Rect &, Surface & );
-    void RedrawItem( Artifact &, const Rect &, bool, Surface & );
+    void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & );
 
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );

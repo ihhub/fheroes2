@@ -34,11 +34,15 @@ namespace fheroes2
         bool isDisabled() const;
         bool isPressed() const;
         bool isReleased() const;
+        bool isVisible() const;
+        bool isHidden() const;
 
         void press();
         void release();
         void enable();
         void disable(); // button becomes disabled and released
+        void show(); // this method doesn't call draw
+        void hide(); // this method doesn't call draw
 
         void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
         void setPosition( int32_t offsetX, int32_t offsetY );
@@ -59,6 +63,7 @@ namespace fheroes2
 
         bool _isPressed;
         bool _isEnabled;
+        bool _isVisible;
     };
 
     class ButtonGroup

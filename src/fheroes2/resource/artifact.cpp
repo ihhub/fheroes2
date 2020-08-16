@@ -887,15 +887,15 @@ void ArtifactsBar::RedrawBackground( const Rect & pos, Surface & dstsf )
         AGG::GetICN( ICN::ARTIFACT, 0 ).Blit( pos, dstsf );
 }
 
-void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, Surface & dstsf )
+void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
     if ( art.isValid() ) {
         Cursor::Get().Hide();
 
         if ( use_mini_sprite )
-            AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ).Blit( pos.x + 1, pos.y + 1, dstsf );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), dstsf, pos.x + 1, pos.y + 1 );
         else
-            AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() ).Blit( pos, dstsf );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() ), dstsf, pos.x, pos.y );
 
         if ( selected ) {
             if ( use_mini_sprite )

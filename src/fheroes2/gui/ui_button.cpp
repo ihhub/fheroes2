@@ -34,6 +34,7 @@ namespace fheroes2
         , _pressedIndex( 0 )
         , _isPressed( false )
         , _isEnabled( true )
+        , _isVisible( true )
     {}
 
     Button::Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
@@ -44,6 +45,7 @@ namespace fheroes2
         , _pressedIndex( pressedIndex )
         , _isPressed( false )
         , _isEnabled( true )
+        , _isVisible( true )
     {}
 
     bool Button::isEnabled() const
@@ -64,6 +66,16 @@ namespace fheroes2
     bool Button::isReleased() const
     {
         return !_isPressed;
+    }
+
+    bool Button::isVisible() const
+    {
+        return _isVisible;
+    }
+
+    bool Button::isHidden() const
+    {
+        return !_isVisible;
     }
 
     void Button::press()
@@ -91,6 +103,16 @@ namespace fheroes2
         _isPressed = false; // button can't be disabled and pressed
     }
 
+    void Button::show()
+    {
+        _isVisible = true;
+    }
+
+    void Button::hide()
+    {
+        _isVisible = false;
+    }
+
     void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
     {
         _icnId = icnId;
@@ -106,6 +128,9 @@ namespace fheroes2
 
     void Button::draw( Image & area ) const
     {
+        if ( !_isVisible )
+            return;
+
         if ( isPressed() ) {
             // button can't be disabled and pressed
             const Sprite & sprite = AGG::GetICN( _icnId, _pressedIndex );
