@@ -42,9 +42,9 @@ namespace fheroes2
         if ( x_ == x() && y_ == y() )
             return;
 
-        _restorer.restore();
+        hide();
         Sprite::setPosition( x_, y_ );
-        _restorer.update( x(), y(), width(), height() );
+        show();
     }
 
     void MovableSprite::show()
