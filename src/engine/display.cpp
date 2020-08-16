@@ -28,6 +28,7 @@
 
 #include "display.h"
 #include "error.h"
+#include "pal.h"
 #include "system.h"
 #include "tools.h"
 #include "types.h"
@@ -71,6 +72,19 @@ namespace
     bool IsLowerThanDefaultRes( const std::pair<int, int> & value )
     {
         return value.first < Display::DEFAULT_WIDTH || value.second < Display::DEFAULT_HEIGHT;
+    }
+
+    bool ApplyCycling( std::vector<uint8_t> & palette )
+    {
+        static SDL::Time cyclingTimer;
+        static uint32_t cyclingCounter = 0;
+        cyclingTimer.Stop();
+        if ( cyclingTimer.Get() > 200 ) {
+            cyclingTimer.Start();
+            palette = PAL::GetCyclingPalette( cyclingCounter++ );
+            return true;
+        }
+        return false;
     }
 }
 
@@ -116,7 +130,8 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
 {
     // new display
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Display::instance().resize( w, h );
+    display.subscribe( ApplyCycling );
+    display.resize( w, h );
 
     // old display
     Set( display.width(), display.height(), false );

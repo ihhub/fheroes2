@@ -278,6 +278,42 @@ namespace
             return true;
         }
 
+        virtual void updatePalette( const std::vector<uint8_t> & colorIds )
+        {
+            if ( _surface == NULL || colorIds.size() != 256 )
+                return;
+
+            if ( _surface->format->BitsPerPixel == 32 ) {
+                _palette32Bit.resize( 256u );
+
+                if ( _surface->format->Amask > 0 ) {
+                    for ( size_t i = 0; i < 256u; ++i ) {
+                        const uint32_t index = colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, kb_pal[index] << 2, kb_pal[index + 1] << 2, kb_pal[index + 2] << 2, 255 );
+                    }
+                }
+                else {
+                    for ( size_t i = 0; i < 256u; ++i ) {
+                        const uint32_t index = colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[index] << 2, kb_pal[index + 1] << 2, kb_pal[index + 2] << 2 );
+                    }
+                }
+            }
+            else if ( _surface->format->BitsPerPixel == 8 ) {
+                _palette8Bit.resize( 256 );
+                for ( uint32_t i = 0; i < 256; ++i ) {
+                    const uint32_t index = colorIds[i] * 3;
+                    SDL_Color & col = _palette8Bit[i];
+
+                    col.r = kb_pal[index] << 2;
+                    col.g = kb_pal[index + 1] << 2;
+                    col.b = kb_pal[index + 2] << 2;
+                }
+
+                SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
+            }
+        }
+
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
@@ -303,33 +339,14 @@ namespace
             if ( _surface == NULL )
                 return;
 
-            if ( _surface->format->BitsPerPixel == 32 ) {
-                _palette32Bit.resize( 256u );
-
-                if ( _surface->format->Amask > 0 ) {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, kb_pal[i * 3] << 2, kb_pal[i * 3 + 1] << 2, kb_pal[i * 3 + 2] << 2, 255 );
-                    }
-                }
-                else {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[i * 3] << 2, kb_pal[i * 3 + 1] << 2, kb_pal[i * 3 + 2] << 2 );
-                    }
-                }
+            std::vector<uint8_t> originalPalette( 256 );
+            for ( uint32_t i = 0; i < 256; ++i ) {
+                originalPalette[i] = static_cast<uint8_t>( i ) ;
             }
-            else if ( _surface->format->BitsPerPixel == 8 ) {
-                _palette8Bit.resize( 256 );
-                for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint32_t index = i * 3;
-                    SDL_Color & col = _palette8Bit[i];
 
-                    col.r = kb_pal[index] << 2;
-                    col.g = kb_pal[index + 1] << 2;
-                    col.b = kb_pal[index + 2] << 2;
-                }
+            updatePalette( originalPalette );
 
-                SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
-
+            if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( !SDL_MUSTLOCK( _surface ) ) {
                     // copy the image from display buffer to SDL surface
                     fheroes2::Display & display = fheroes2::Display::instance();
@@ -478,6 +495,42 @@ namespace
             return true;
         }
 
+        virtual void updatePalette( const std::vector<uint8_t> & colorIds )
+        {
+            if ( _surface == NULL || colorIds.size() != 256 )
+                return;
+
+            if ( _surface->format->BitsPerPixel == 32 ) {
+                _palette32Bit.resize( 256u );
+
+                if ( _surface->format->Amask > 0 ) {
+                    for ( size_t i = 0; i < 256u; ++i ) {
+                        const uint32_t index = colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, kb_pal[index] << 2, kb_pal[index + 1] << 2, kb_pal[index + 2] << 2, 255 );
+                    }
+                }
+                else {
+                    for ( size_t i = 0; i < 256u; ++i ) {
+                        const uint32_t index = colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[index] << 2, kb_pal[index + 1] << 2, kb_pal[index + 2] << 2 );
+                    }
+                }
+            }
+            else if ( _surface->format->BitsPerPixel == 8 ) {
+                _palette8Bit.resize( 256 );
+                for ( uint32_t i = 0; i < 256; ++i ) {
+                    const uint32_t index = colorIds[i] * 3;
+                    SDL_Color & col = _palette8Bit[i];
+
+                    col.r = kb_pal[index] << 2;
+                    col.g = kb_pal[index + 1] << 2;
+                    col.b = kb_pal[index + 2] << 2;
+                }
+
+                SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
+            }
+        }
+
     private:
         SDL_Surface * _surface;
         std::vector<uint32_t> _palette32Bit;
@@ -499,33 +552,14 @@ namespace
             if ( _surface == NULL )
                 return;
 
-            if ( _surface->format->BitsPerPixel == 32 ) {
-                _palette32Bit.resize( 256u );
-
-                if ( _surface->format->Amask > 0 ) {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, kb_pal[i * 3] << 2, kb_pal[i * 3 + 1] << 2, kb_pal[i * 3 + 2] << 2, 255 );
-                    }
-                }
-                else {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[i * 3] << 2, kb_pal[i * 3 + 1] << 2, kb_pal[i * 3 + 2] << 2 );
-                    }
-                }
+            std::vector<uint8_t> originalPalette( 256 );
+            for ( uint32_t i = 0; i < 256; ++i ) {
+                originalPalette[i] = static_cast<uint8_t>( i ) ;
             }
-            else if ( _surface->format->BitsPerPixel == 8 ) {
-                _palette8Bit.resize( 256 );
-                for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint32_t index = i * 3;
-                    SDL_Color & col = _palette8Bit[i];
 
-                    col.r = kb_pal[index] << 2;
-                    col.g = kb_pal[index + 1] << 2;
-                    col.b = kb_pal[index + 2] << 2;
-                }
+            updatePalette( originalPalette );
 
-                SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
-
+            if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( !SDL_MUSTLOCK( _surface ) ) {
                     // copy the image from display buffer to SDL surface
                     fheroes2::Display & display = fheroes2::Display::instance();
@@ -584,7 +618,10 @@ namespace fheroes2
     void Display::render()
     {
         if ( _preprocessing != NULL ) {
-            _preprocessing( *this );
+            std::vector<uint8_t> palette;
+            if ( _preprocessing( palette ) ) {
+                _engine->updatePalette( palette );
+            }
         }
 
         const Cursor & cursor = Cursor::instance();

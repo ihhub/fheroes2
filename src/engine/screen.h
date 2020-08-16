@@ -52,6 +52,9 @@ namespace fheroes2
             return false;
         }
 
+        // to support color cycling we need to update palette
+        virtual void updatePalette( const std::vector<uint8_t> & ) {}
+
         void linkRenderSurface( uint8_t * surface ) const; // declaration of this method is in source file
     };
 
@@ -73,7 +76,8 @@ namespace fheroes2
 
         virtual void resize( uint32_t width_, uint32_t height_ );
 
-        typedef void ( *PreRenderProcessing )( Image & display );
+        // this function must return true if new palette has been generated
+        typedef bool ( *PreRenderProcessing )( std::vector<uint8_t> & palette );
         void subscribe( PreRenderProcessing preprocessing );
 
         // For 8-bit mode we return a pointer to direct surface which we draw on screen
