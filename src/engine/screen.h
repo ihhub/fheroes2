@@ -95,6 +95,8 @@ namespace fheroes2
         uint8_t * _renderSurface;
 
         Display();
+
+        void _renderFrame(); // prepare and render a frame
     };
 
     class Cursor : public Sprite

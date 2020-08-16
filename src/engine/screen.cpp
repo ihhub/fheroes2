@@ -622,25 +622,28 @@ namespace fheroes2
             const Sprite backup = Crop( *this, cursor.x(), cursor.y(), cursor.width(), cursor.height() );
             Blit( cursor, *this, cursor.x(), cursor.y() );
 
-            if ( _preprocessing != NULL ) {
-                std::vector<uint8_t> palette;
-                if ( _preprocessing( palette ) ) {
-                    _engine->updatePalette( palette );
-                }
-            }
-
-            _engine->render( *this );
+            _renderFrame();
 
             Blit( backup, *this, backup.x(), backup.y() );
         }
         else {
-            if ( _preprocessing != NULL ) {
-                std::vector<uint8_t> palette;
-                if ( _preprocessing( palette ) ) {
-                    _engine->updatePalette( palette );
-                }
-            }
+            _renderFrame();
+        }
+    }
 
+    void Display::_renderFrame()
+    {
+        bool updateImage = true;
+        if ( _preprocessing != NULL ) {
+            std::vector<uint8_t> palette;
+            if ( _preprocessing( palette ) ) {
+                _engine->updatePalette( palette );
+                // when we change a palette for 8-bit image we unwillingly call render so we don't need to re-render the same frame again
+                updateImage = ( _renderSurface == NULL );
+            }
+        }
+
+        if ( updateImage ) {
             _engine->render( *this );
         }
     }
