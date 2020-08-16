@@ -148,15 +148,6 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
     }
 }
 
-Rect Interface::GameArea::getTileCoordinates( const fheroes2::Image & src, s32 ox, s32 oy, const Point & mp ) const 
-{
-    Point dstpt = GetRelativeTilePosition( mp ) + Point( ox, oy );
-
-    if ( _windowROI & Rect( dstpt, src.width(), src.height() ) ) {
-        return RectFixed( dstpt, src.width(), src.height() );
-    }
-}
-
 void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 {
     const Rect tileROI = GetVisibleTileROI();

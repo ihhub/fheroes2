@@ -84,7 +84,6 @@ namespace Interface
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
 
-        Rect getTileCoordinates( const fheroes2::Image &, s32, s32, const Point & ) const;
         Rect RectFixed( Point & dst, int rw, int rh ) const;
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( s32 );
