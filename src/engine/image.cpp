@@ -702,8 +702,8 @@ namespace fheroes2
 
         const uint8_t * imageInY = in.image() + inY * widthIn + inX;
         const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
-        uint8_t * imageOutY = out.image() + outY * out.width() + outX;
-        uint8_t * transformOutY = out.transform() + outY * widthIn + outX;
+        uint8_t * imageOutY = out.image() + outY * widthOut + outX;
+        uint8_t * transformOutY = out.transform() + outY * widthOut + outX;
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
         for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
