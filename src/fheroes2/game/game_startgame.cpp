@@ -972,7 +972,6 @@ int Interface::Basic::HumanTurn( bool isload )
         if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
-            gameArea.UpdateCyclingPalette( frame );
             gameArea.SetRedraw();
 
             Army * focusArmy = GetFocusArmy();

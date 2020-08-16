@@ -78,4 +78,6 @@ namespace fheroes2
     void FadeDisplay() {}
 
     void RiseDisplay() {}
+
+    void InvertedFade() {}
 }

@@ -101,33 +101,6 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
     _setCenterToTile( Point( world.w() / 2, world.h() / 2 ) );
 }
 
-void Interface::GameArea::UpdateCyclingPalette( int frame )
-{
-    const std::vector<uint8_t> & colorIndexes = PAL::GetCyclingPalette( frame );
-    const std::vector<uint32_t> & rgbColors = PAL::GetRGBColors();
-
-    if ( colorIndexes.size() == rgbColors.size() ) {
-        PAL::SetCustomSDLPalette( colorIndexes );
-
-        _cyclingRGBPalette.resize( colorIndexes.size() );
-        for ( size_t i = 0; i < colorIndexes.size(); ++i )
-            _cyclingRGBPalette[i] = rgbColors[colorIndexes[i]];
-
-        // reset cache as we'll need to re-color tiles
-        _spriteCache.clear();
-    }
-}
-
-const std::vector<uint32_t> & Interface::GameArea::GetCyclingRGBPalette() const
-{
-    return _cyclingRGBPalette;
-}
-
-MapObjectSprite & Interface::GameArea::GetSpriteCache()
-{
-    return _spriteCache;
-}
-
 void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp ) const
 {
     BlitOnTile( dst, src, src.x(), src.y(), mp );
