@@ -21,6 +21,7 @@
 #include "ui_button.h"
 #include "agg.h"
 #include "dialog.h"
+#include "game.h"
 #include "settings.h"
 
 namespace fheroes2
@@ -240,7 +241,16 @@ namespace fheroes2
             }
         }
 
-        // TODO: add keyboard support
+        for ( size_t i = 0; i < _button.size(); ++i ) {
+            if ( _button[i].isEnabled() ) {
+                if ( ( _value[i] == Dialog::YES || _value[i] == Dialog::OK ) && Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
+                    return _value[i];
+                }
+                if ( ( _value[i] == Dialog::CANCEL || _value[i] == Dialog::NO ) && Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+                    return _value[i];
+                }
+            }
+        }
 
         return Dialog::ZERO;
     }
