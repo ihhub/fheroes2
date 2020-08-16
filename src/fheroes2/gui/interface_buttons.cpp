@@ -187,9 +187,16 @@ void Interface::ButtonsArea::SetButtonStatus()
     Heroes * currentHero = GetFocusHeroes();
     if ( currentHero == NULL || !currentHero->GetPath().isValid() || !currentHero->MayStillMove() )
         buttonMovement.disable();
+    else
+        buttonMovement.enable();
+
     if ( currentHero == NULL || !currentHero->HaveSpellBook() )
         buttonSpell.disable();
+    else
+        buttonSpell.enable();
 
     if ( World::Get().GetKingdom( Settings::Get().CurrentColor() ).GetHeroes().empty() )
         buttonNextHero.disable();
+    else
+        buttonNextHero.enable();
 }
