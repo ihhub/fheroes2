@@ -181,8 +181,9 @@ void Interface::Radar::Generate( void )
             new_sz.h = size.h;
         }
 
-        spriteArea.resize( new_sz.w, new_sz.h );
-        // spriteArea = spriteArea.RenderScale( new_sz );
+        fheroes2::Image resized( new_sz.w, new_sz.h );
+        fheroes2::Resize( spriteArea, resized );
+        spriteArea = resized;
     }
 }
 
@@ -208,10 +209,8 @@ void Interface::Radar::Redraw( void )
 
     if ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) {
         if ( hide )
-            AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ).Blit( rect.x, rect.y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
         else {
-            // if ( world.w() != world.h() )
-            //    display.FillRect( rect, ColorBlack );
             cursorArea.hide();
             fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
             RedrawObjects( Players::FriendColors() );
@@ -238,7 +237,7 @@ int GetChunkSize( float size1, float size2 )
 /* redraw radar area for color */
 void Interface::Radar::RedrawObjects( int color )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Rect & rect = GetArea();
     const s32 world_w = world.w();
     const s32 world_h = world.h();
@@ -260,7 +259,7 @@ void Interface::Radar::RedrawObjects( int color )
     else
         sw = GetChunkSize( areah, world_h );
 
-    Surface sf( Size( sw, sw ), false );
+    fheroes2::Image sf( sw, sw );
 
     for ( s32 yy = 0; yy < world_h; yy += stepy ) {
         for ( s32 xx = 0; xx < world_w; xx += stepx ) {
@@ -270,21 +269,21 @@ void Interface::Radar::RedrawObjects( int color )
 #else
             const bool & show_tile = !tile.isFog( color );
 #endif
-            RGBA fillColor( 0, 0, 0 );
+            uint8_t fillColor = 0;
 
             if ( show_tile ) {
                 switch ( tile.GetObject() ) {
                 case MP2::OBJ_HEROES: {
                     const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                     if ( hero )
-                        fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( hero->GetColor() ) );
+                        fillColor = GetPaletteIndexFromColor( hero->GetColor() );
                 } break;
 
                 case MP2::OBJ_CASTLE:
                 case MP2::OBJN_CASTLE: {
                     const Castle * castle = world.GetCastle( tile.GetCenter() );
                     if ( castle )
-                        fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( castle->GetColor() ) );
+                        fillColor = GetPaletteIndexFromColor( castle->GetColor() );
                 } break;
 
                 case MP2::OBJ_DRAGONCITY:
@@ -292,7 +291,7 @@ void Interface::Radar::RedrawObjects( int color )
                 case MP2::OBJ_ALCHEMYLAB:
                 case MP2::OBJ_MINES:
                 case MP2::OBJ_SAWMILL:
-                    fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( tile.QuantityColor() ) );
+                    fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                     break;
 
                 default:
@@ -304,12 +303,12 @@ void Interface::Radar::RedrawObjects( int color )
             const int dsty = rect.y + offset.y + ( yy * areah ) / world_h;
 
             if ( sw > 1 ) {
-                sf.Fill( fillColor );
-                sf.Blit( dstx, dsty, display );
+                sf.fill( fillColor );
+                fheroes2::Blit( sf, display, dstx, dsty );
             }
             else {
-                if ( dstx < display.w() && dsty < display.h() )
-                    display.DrawPoint( Point( dstx, dsty ), fillColor );
+                if ( dstx < display.width() && dsty < display.height() )
+                    fheroes2::SetPixel( display, dstx, dsty, fillColor );
             }
         }
     }
@@ -348,6 +347,7 @@ void Interface::Radar::RedrawCursor( void )
         // check change game area
         if ( cursorArea.width() != sz.w || cursorArea.height() != sz.h ) {
             cursorArea.resize( sz.w, sz.h );
+            cursorArea.reset();
             fheroes2::DrawBorder( cursorArea, RADARCOLOR );
         }
 
