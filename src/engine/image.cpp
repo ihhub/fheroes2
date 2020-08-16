@@ -391,6 +391,12 @@ namespace fheroes2
         , _y( y_ )
     {}
 
+    Sprite::Sprite( const Image & image, int32_t x_, int32_t y_ )
+        : Image( image )
+        , _x( x_ )
+        , _y( y_ )
+    {}
+
     Sprite::~Sprite() {}
 
     int32_t Sprite::x() const

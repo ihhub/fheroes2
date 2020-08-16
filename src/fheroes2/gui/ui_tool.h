@@ -28,6 +28,7 @@ namespace fheroes2
     {
     public:
         MovableSprite( uint32_t width_ = 0, uint32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
+        MovableSprite( const Sprite & sprite );
         virtual ~MovableSprite();
 
         void show();
@@ -37,6 +38,7 @@ namespace fheroes2
         bool isHidden() const;
 
         virtual void setPosition( int32_t x_, int32_t y_ );
+
     private:
         ImageRestorer _restorer;
         bool _isHidden;
