@@ -980,4 +980,65 @@ namespace fheroes2
         *( image.image() + y * image.width() + x ) = value;
         *( image.transform() + y * image.width() + x ) = 0;
     }
+
+    Image Stretch( const Image & in, uint32_t inX, uint32_t inY, uint32_t widthIn, uint32_t heightIn, uint32_t widthOut, uint32_t heightOut )
+    {
+        if ( !Validate( in, inX, inY, widthIn, heightIn ) ) {
+            return Image();
+        }
+
+        Image out( widthOut, heightOut );
+
+        const uint32_t minWidth = widthIn < widthOut ? widthIn : widthOut;
+        const uint32_t minHeight = heightIn < heightOut ? heightIn : heightOut;
+
+        const uint32_t cornerWidth = minWidth / 3;
+        const uint32_t cornerHeight = minHeight / 3;
+        const uint32_t cornerX = inX + ( widthIn - cornerWidth ) / 2;
+        const uint32_t cornerY = inY + ( heightIn - cornerHeight ) / 2;
+        const uint32_t bodyWidth = minWidth - 2 * cornerWidth;
+        const uint32_t bodyHeight = minHeight - 2 * cornerHeight;
+
+        const uint32_t outX = ( widthOut - ( widthOut / bodyWidth ) * bodyWidth ) / 2;
+        const uint32_t outY = ( heightOut - ( heightOut / bodyHeight ) * bodyHeight ) / 2;
+
+        // Create internal area
+        if ( bodyWidth < widthOut && bodyHeight < heightOut ) {
+            for ( uint32_t y = 0; y < ( heightOut / bodyHeight ); ++y ) {
+                for ( uint32_t x = 0; x < ( widthOut / bodyWidth ); ++x ) {
+                    Copy( in, cornerX, cornerY, out, outX + x * bodyWidth, outY + y * bodyHeight, bodyWidth, bodyHeight );
+                }
+            }
+        }
+
+        // Create sides
+        // top and bottom side
+        for ( uint32_t x = 0; x < ( widthOut / bodyWidth ); ++x ) {
+            const uint32_t offsetX = outX + x * bodyWidth;
+            Copy( in, cornerX, inY, out, offsetX, 0, bodyWidth, cornerHeight );
+            Copy( in, cornerX, inY + heightIn - cornerHeight, out, offsetX, heightOut - cornerHeight, bodyWidth, cornerHeight );
+        }
+
+        // left and right sides
+        for ( uint32_t y = 0; y < ( heightOut / bodyHeight ); ++y ) {
+            const uint32_t offsetY = outY + y * bodyHeight;
+            Copy( in, inX, cornerY, out, 0, offsetY, cornerWidth, bodyHeight );
+            Copy( in, inX + widthIn - cornerWidth, cornerY, out, widthOut - cornerWidth, offsetY, cornerWidth, bodyHeight );
+        }
+
+        // Create corners
+        // top-left corner
+        Copy( in, inX, inY, out, 0, 0, cornerWidth, cornerHeight );
+
+        // top-right corner
+        Copy( in, inX + widthIn - cornerWidth, inY, out, widthOut - cornerWidth, 0, cornerWidth, cornerHeight );
+
+        // bottom-left corner
+        Copy( in, inX, inY + heightIn - cornerHeight, out, 0, heightOut - cornerHeight, cornerWidth, cornerHeight );
+
+        // bottom-right corner
+        Copy( in, inX + widthIn - cornerWidth, inY + heightIn - cornerHeight, out, widthOut - cornerWidth, heightOut - cornerHeight, cornerWidth, cornerHeight );
+
+        return out;
+    }
 }

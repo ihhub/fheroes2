@@ -148,4 +148,6 @@ namespace fheroes2
 
     // Please use value from the main palette only
     void SetPixel( Image & image, uint32_t x, uint32_t y, uint8_t value );
+
+    Image Stretch( const Image & in, uint32_t inX, uint32_t inY, uint32_t widthIn, uint32_t heightIn, uint32_t widthOut, uint32_t heightOut );
 }
