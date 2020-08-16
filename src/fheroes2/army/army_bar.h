@@ -35,7 +35,7 @@ public:
     ArmyBar( Army *, bool mini, bool ro, bool change = false );
 
     void RedrawBackground( const Rect &, Surface & );
-    void RedrawItem( ArmyTroop &, const Rect &, bool, Surface & );
+    void RedrawItem( ArmyTroop &, const Rect &, bool, fheroes2::Image & );
 
     void SetBackground( const Size &, const RGBA & );
     void SetArmy( Army * );

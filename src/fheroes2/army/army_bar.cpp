@@ -134,61 +134,61 @@ void ArmyBar::RedrawBackground( const Rect & pos, Surface & dstsf )
         AGG::GetICN( ICN::STRIP, 2 ).Blit( pos, dstsf );
 }
 
-void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, Surface & dstsf )
+void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
     if ( troop.isValid() ) {
         Text text( GetString( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
 
         if ( use_mini_sprite ) {
-            const Sprite & mons32 = AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
-            Rect srcrt( 0, 0, mons32.w(), mons32.h() );
+            const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
+            Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
-            if ( mons32.w() > pos.w ) {
-                srcrt.x = ( mons32.w() - pos.w ) / 2;
+            if ( mons32.width() > pos.w ) {
+                srcrt.x = ( mons32.width() - pos.w ) / 2;
                 srcrt.w = pos.w;
             }
 
-            if ( mons32.h() > pos.h ) {
-                srcrt.y = ( mons32.h() - pos.h ) / 2;
+            if ( mons32.height() > pos.h ) {
+                srcrt.y = ( mons32.height() - pos.h ) / 2;
                 srcrt.h = pos.h;
             }
 
-            mons32.Blit( srcrt, pos.x + ( pos.w - mons32.w() ) / 2, pos.y + pos.h - mons32.h() - 1, dstsf );
+            fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + pos.h - mons32.height() - 1, srcrt.w, srcrt.h );
         }
         else {
             switch ( troop.GetRace() ) {
             case Race::KNGT:
-                AGG::GetICN( ICN::STRIP, 4 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), dstsf, pos.x, pos.y );
                 break;
             case Race::BARB:
-                AGG::GetICN( ICN::STRIP, 5 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), dstsf, pos.x, pos.y );
                 break;
             case Race::SORC:
-                AGG::GetICN( ICN::STRIP, 6 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), dstsf, pos.x, pos.y );
                 break;
             case Race::WRLK:
-                AGG::GetICN( ICN::STRIP, 7 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), dstsf, pos.x, pos.y );
                 break;
             case Race::WZRD:
-                AGG::GetICN( ICN::STRIP, 8 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), dstsf, pos.x, pos.y );
                 break;
             case Race::NECR:
-                AGG::GetICN( ICN::STRIP, 9 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), dstsf, pos.x, pos.y );
                 break;
             default:
-                AGG::GetICN( ICN::STRIP, 10 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), dstsf, pos.x, pos.y );
                 break;
             }
 
-            const Sprite & spmonh = AGG::GetICN( troop.ICNMonh(), 0 );
-            spmonh.Blit( pos.x + spmonh.x(), pos.y + spmonh.y(), dstsf );
+            const fheroes2::Sprite & spmonh = fheroes2::AGG::GetICN( troop.ICNMonh(), 0 );
+            fheroes2::Blit( spmonh, dstsf, pos.x + spmonh.x(), pos.y + spmonh.y() );
         }
 
         if ( use_mini_sprite ) {
-            // text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h(), dstsf );
+            text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h(), dstsf );
         }
         else {
-            // text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1, dstsf );
+            text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1, dstsf );
         }
 
         if ( selected )

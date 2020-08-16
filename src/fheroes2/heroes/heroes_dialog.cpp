@@ -57,8 +57,8 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );
 
-    AGG::GetICN( ICN::HEROBKG, 0 ).Blit( dst_pt );
-    AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ).Blit( dst_pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
 
     std::string message;
 
@@ -101,10 +101,10 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // army format spread
     dst_pt.x = cur_pt.x + 515;
     dst_pt.y = cur_pt.y + 63;
-    const Sprite & sprite1 = AGG::GetICN( ICN::HSICONS, 9 );
-    sprite1.Blit( dst_pt );
+    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
+    fheroes2::Blit( sprite1, display, dst_pt.x, dst_pt.y );
 
-    const Rect rectSpreadArmyFormat( dst_pt, sprite1.w(), sprite1.h() );
+    const Rect rectSpreadArmyFormat( dst_pt, sprite1.width(), sprite1.height() );
     const std::string descriptionSpreadArmyFormat
         = _( "'Spread' combat formation spreads your armies from the top to the bottom of the battlefield, with at least one empty space between each army." );
     const Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
@@ -112,10 +112,10 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // army format grouped
     dst_pt.x = cur_pt.x + 552;
     dst_pt.y = cur_pt.y + 63;
-    const Sprite & sprite2 = AGG::GetICN( ICN::HSICONS, 10 );
-    sprite2.Blit( dst_pt );
+    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
+    fheroes2::Blit( sprite2, display, dst_pt.x, dst_pt.y );
 
-    const Rect rectGroupedArmyFormat( dst_pt, sprite2.w(), sprite2.h() );
+    const Rect rectGroupedArmyFormat( dst_pt, sprite2.width(), sprite2.height() );
     const std::string descriptionGroupedArmyFormat = _( "'Grouped' combat formation bunches your army together in the center of your side of the battlefield." );
     const Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
@@ -137,7 +137,8 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     dst_pt.x = cur_pt.x + 49;
     dst_pt.y = cur_pt.y + 130;
 
-    AGG::GetICN( ICN::CREST, Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ).Blit( dst_pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CREST, Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ),
+                    display, dst_pt.x, dst_pt.y );
 
     // monster
     dst_pt.x = cur_pt.x + 156;
@@ -172,11 +173,11 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // bottom small bar
     dst_pt.x = cur_pt.x + 22;
     dst_pt.y = cur_pt.y + 460;
-    const Sprite & bar = AGG::GetICN( ICN::HSBTNS, 8 );
-    bar.Blit( dst_pt );
+    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::HSBTNS, 8 );
+    fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
+    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
 
     // button prev
     dst_pt.x = cur_pt.x;
