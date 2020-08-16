@@ -353,7 +353,8 @@ namespace fheroes2
     void Image::fill( uint8_t value )
     {
         if ( !empty() ) {
-            std::fill( _image.begin(), _image.end(), value );
+            uint8_t * imageData = image(); // this method could be overloaded
+            std::fill( imageData, imageData + _width * _height, value );
             std::fill( _transform.begin(), _transform.end(), 0 );
         }
     }

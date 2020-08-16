@@ -350,14 +350,14 @@ u32 Game::GetGameOverScores( void )
 
 void Game::ShowLoadMapsText( void )
 {
-    Display & display = Display::Get();
-    const Rect pos( 0, display.h() / 2, display.w(), display.h() / 2 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
     TextBox text( _( "Maps Loading..." ), Font::BIG, pos.w );
 
     // blit test
-    display.Fill( ColorBlack );
+    display.fill( 0 );
     text.Blit( pos );
-    display.Flip();
+    display.render();
 }
 
 u32 Game::GetLostTownDays( void )
