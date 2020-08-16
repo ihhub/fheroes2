@@ -69,7 +69,7 @@ namespace fheroes2
         int32_t x() const;
         int32_t y() const;
 
-        void setPosition( int32_t x_, int32_t y_ );
+        virtual void setPosition( int32_t x_, int32_t y_ );
 
     private:
         int32_t _x;
@@ -81,8 +81,10 @@ namespace fheroes2
     {
     public:
         explicit ImageRestorer( Image & image );
-        ImageRestorer( Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height );
+        ImageRestorer( Image & image, uint32_t x_, uint32_t y_, uint32_t width, uint32_t height );
         ~ImageRestorer(); // restore method will be call upon object's destruction
+
+        void update( uint32_t x_, uint32_t y_, uint32_t width, uint32_t height );
 
         void restore();
 

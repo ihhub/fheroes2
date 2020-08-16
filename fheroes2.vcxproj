@@ -309,6 +309,7 @@
     <ClCompile Include="src\fheroes2\gui\statusbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
     <ClCompile Include="src\fheroes2\heroes\direction.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_action.cpp" />
@@ -469,6 +470,7 @@
     <ClInclude Include="src\fheroes2\gui\statusbar.h" />
     <ClInclude Include="src\fheroes2\gui\text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
     <ClInclude Include="src\fheroes2\heroes\direction.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes_base.h" />
