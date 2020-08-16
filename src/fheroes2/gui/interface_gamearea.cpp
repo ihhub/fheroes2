@@ -139,12 +139,7 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
 
     if ( _windowROI & Rect( dstpt, src.width(), src.height() ) ) {
         Rect fixedRect = RectFixed( dstpt, src.width(), src.height() );
-        if ( alpha == 255 ) {
-            fheroes2::Blit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, flip );
-        }
-        else {
-            fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, alpha, flip );
-        }
+        fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, alpha, flip );
     }
 }
 
