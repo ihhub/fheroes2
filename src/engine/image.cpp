@@ -513,12 +513,12 @@ namespace fheroes2
         const uint8_t behindValue = 255 - alphaValue;
 
         if ( flip ) {
-            const uint8_t * imageInY = in.image() + ( inY + height - 1 ) * widthIn + inX + width - 1;
-            const uint8_t * transformY = in.transform() + ( inY + height - 1 ) * widthIn + inX + width - 1;
+            const uint8_t * imageInY = in.image() + inY * widthIn + inX + width - 1;
+            const uint8_t * transformY = in.transform() + inY * widthIn + inX + width - 1;
             uint8_t * imageOutY = out.image() + outY * out.width() + outX;
             const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
-            for ( ; imageOutY != imageOutYEnd; imageInY -= widthIn, transformY -= widthIn, imageOutY += widthOut ) {
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
                 const uint8_t * transformX = transformY;
                 uint8_t * imageOutX = imageOutY;
@@ -628,12 +628,12 @@ namespace fheroes2
         const uint32_t widthOut = out.width();
 
         if ( flip ) {
-            const uint8_t * imageInY = in.image() + ( inY + height - 1 ) * widthIn + inX + width - 1;
-            const uint8_t * transformY = in.transform() + ( inY + height - 1 ) * widthIn + inX + width - 1;
+            const uint8_t * imageInY = in.image() + inY * widthIn + inX + width - 1;
+            const uint8_t * transformY = in.transform() + inY * widthIn + inX + width - 1;
             uint8_t * imageOutY = out.image() + outY * out.width() + outX;
             const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
-            for ( ; imageOutY != imageOutYEnd; imageInY -= widthIn, transformY -= widthIn, imageOutY += widthOut ) {
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
                 const uint8_t * transformX = transformY;
                 uint8_t * imageOutX = imageOutY;
