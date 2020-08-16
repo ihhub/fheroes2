@@ -97,6 +97,8 @@ namespace fheroes2
     namespace AGG
     {
         const Sprite & GetICN( int icnId, uint32_t index );
+
+        // shapeId could be 0, 1, 2 or 3 only
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
         const Sprite & GetLetter( uint32_t character, uint32_t fontType );
         const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
