@@ -176,7 +176,7 @@ void Interface::Basic::Redraw( int force )
     Settings & conf = Settings::Get();
 
     if ( ( redraw | force ) & REDRAW_GAMEAREA )
-        gameArea.Redraw( Display::Get(), LEVEL_ALL );
+        gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
 
     if ( ( conf.ExtGameHideInterface() && conf.ShowRadar() ) || ( ( redraw | force ) & REDRAW_RADAR ) )
         radar.Redraw();
