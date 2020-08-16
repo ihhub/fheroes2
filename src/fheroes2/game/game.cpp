@@ -84,9 +84,12 @@ namespace Game
             : object( object_ )
             , tile( tile_ )
             , alpha( alpha_ )
-            , surfaceSize( world.GetTiles( tile_ ).GetTileSurface().GetSize() )
             , isFadeOut( fadeOut )
         {
+            const fheroes2::Image & tileImage = world.GetTiles( tile_ ).GetTileSurface();
+            surfaceSize.w = tileImage.width();
+            surfaceSize.h = tileImage.height();
+
             index = ICN::AnimationFrame( MP2::GetICNObject( object ), index_, 0 );
             if ( 0 == index ) {
                 index = index_;
