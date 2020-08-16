@@ -123,7 +123,7 @@ namespace Dialog
         resList.RedrawBackground( roi );
         resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, Point( roi.x + 327, roi.y + 55 ) );
         resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, Point( roi.x + 327, roi.y + 257 ) );
-        resList.SetScrollSplitter( AGG::GetICN( ICN::ESCROLL, 3 ), Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
+        resList.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
         resList.SetAreaMaxItems( 11 );
         resList.SetAreaItems( Rect( roi.x + 40, roi.y + 55, 265, 215 ) );
 

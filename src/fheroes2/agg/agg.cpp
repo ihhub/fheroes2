@@ -2285,7 +2285,7 @@ namespace fheroes2
                 return true;
             case ICN::BTNBATTLEONLY:
                 _icnVsSprite[id].resize( 2 );
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 2 + i );
                     // clean the button
@@ -2345,9 +2345,10 @@ namespace fheroes2
 
                 _tilVsImage[id].resize( count );
                 for ( uint32_t i = 0; i < count; ++i ) {
-                    _tilVsImage[id][i].resize( width, height );
-                    _tilVsImage[id][i].reset();
-                    memcpy( _tilVsImage[id][i].image(), data.data() + headerSize + i * size, size );
+                    Image & tilImage = _tilVsImage[id][i];
+                    tilImage.resize( width, height );
+                    memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
+                    std::fill( tilImage.transform(), tilImage.transform() + width * height, 0 );
                 }
             }
 

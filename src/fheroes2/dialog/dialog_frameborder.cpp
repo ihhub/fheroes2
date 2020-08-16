@@ -126,25 +126,14 @@ const Rect & Dialog::FrameBorder::GetArea( void ) const
 
 void Dialog::FrameBorder::RenderRegular( const Rect & dstrt )
 {
-    // const Sprite & sf = AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
-    // sf.RenderSurface( Rect( shadow, 0, sf.w() - shadow, sf.h() - shadow ), Size( dstrt.w, dstrt.h ) ).Blit( dstrt.x, dstrt.y, Display::Get() );
-
-    // FIXME: RenderSuface analog
-    // fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
-    // const u32 shadow = 16;
-
-    // fheroes2::Crop( sprite, shadow, 0, sprite.width() - shadow, sprite.height() - shadow );
-    // fheroes2::Image scaled( dstrt.w, dstrt.h );
-    // fheroes2::Resize( sprite, scaled, false );
-
-    // fheroes2::Blit( scaled, fheroes2::Display::instance(), dstrt.x, dstrt.y );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
+    const uint32_t shadow = 16;
+    const fheroes2::Image renderedImage = fheroes2::Stretch( sprite, shadow, 0, sprite.width() - shadow, sprite.height() - shadow, dstrt.w, dstrt.h );
+    fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );
 }
 
 void Dialog::FrameBorder::RenderOther( const fheroes2::Image & srcsf, const Rect & dstrt )
 {
-    // srcsf.RenderSurface( Size( dstrt.w, dstrt.h ) ).Blit( dstrt.x, dstrt.y, Display::Get() );
-    // fheroes2::Image scaled( dstrt.w, dstrt.h );
-    // fheroes2::Resize( srcsf, scaled, false );
-
-    // fheroes2::Blit( scaled, fheroes2::Display::instance(), dstrt.x, dstrt.y );
+    const fheroes2::Image renderedImage = fheroes2::Stretch( srcsf, 0, 0, srcsf.width(), srcsf.height(), dstrt.w, dstrt.h );
+    fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );
 }
