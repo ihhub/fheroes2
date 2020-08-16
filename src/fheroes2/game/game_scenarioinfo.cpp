@@ -41,6 +41,7 @@
 #include "splitter.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 #include "world.h"
 
 void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw = false );
@@ -146,25 +147,26 @@ int Game::ScenarioInfo( void )
     rating.SetPos( rectPanel.x + 166, rectPanel.y + 383 );
     RedrawRatingInfo( rating );
 
-    // SpriteMove levelCursor( ngextra );
+    fheroes2::MovableSprite levelCursor( ngextra );
 
-    // switch ( conf.GameDifficulty() ) {
-    // case Difficulty::EASY:
-    //    levelCursor.Move( coordDifficulty[0] );
-    //    break;
-    // case Difficulty::NORMAL:
-    //    levelCursor.Move( coordDifficulty[1] );
-    //    break;
-    // case Difficulty::HARD:
-    //    levelCursor.Move( coordDifficulty[2] );
-    //    break;
-    // case Difficulty::EXPERT:
-    //    levelCursor.Move( coordDifficulty[3] );
-    //    break;
-    // case Difficulty::IMPOSSIBLE:
-    //    levelCursor.Move( coordDifficulty[4] );
-    //    break;
-    //}
+    switch ( conf.GameDifficulty() ) {
+    case Difficulty::EASY:
+        levelCursor.setPosition( coordDifficulty[0].x, coordDifficulty[0].y );
+        break;
+    case Difficulty::NORMAL:
+        levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
+        break;
+    case Difficulty::HARD:
+        levelCursor.setPosition( coordDifficulty[2].x, coordDifficulty[2].y );
+        break;
+    case Difficulty::EXPERT:
+        levelCursor.setPosition( coordDifficulty[3].x, coordDifficulty[3].y );
+        break;
+    case Difficulty::IMPOSSIBLE:
+        levelCursor.setPosition( coordDifficulty[4].x, coordDifficulty[4].y );
+        break;
+    }
+    levelCursor.redraw();
 
     buttonSelectMaps.draw();
     buttonOk.draw();
@@ -189,7 +191,6 @@ int Game::ScenarioInfo( void )
 
         // click select
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-            // levelCursor.Hide();
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, mapId );
             if ( fi ) {
                 conf.SetCurrentFileInfo( *fi );
@@ -200,8 +201,6 @@ int Game::ScenarioInfo( void )
                 RedrawDifficultyInfo( pointDifficultyInfo );
                 playersInfo.RedrawInfo();
                 RedrawRatingInfo( rating );
-                // default difficulty normal
-                // levelCursor.Move( coordDifficulty[1] );
                 conf.SetGameDifficulty( Difficulty::NORMAL );
                 buttonOk.draw();
                 buttonCancel.draw();
@@ -228,7 +227,8 @@ int Game::ScenarioInfo( void )
             // select difficulty
             if ( 0 <= index ) {
                 cursor.Hide();
-                // levelCursor.Move( coordDifficulty[index] );
+                levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
+                levelCursor.redraw();
                 conf.SetGameDifficulty( index );
                 RedrawRatingInfo( rating );
                 cursor.Show();
@@ -239,7 +239,7 @@ int Game::ScenarioInfo( void )
                 if ( playersInfo.QueueEventProcessing() ) {
                 cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
-                // levelCursor.Redraw();
+                levelCursor.redraw();
                 RedrawDifficultyInfo( pointDifficultyInfo );
 
                 playersInfo.RedrawInfo();

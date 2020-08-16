@@ -43,6 +43,7 @@
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
+#include "ui_tool.h"
 #include "world.h"
 
 void CastleRedrawTownName( const Castle & castle, const Point & dst );

@@ -38,6 +38,7 @@
 #include "skill_bar.h"
 #include "statusbar.h"
 #include "text.h"
+#include "ui_tool.h"
 #include "world.h"
 
 /* readonly: false, fade: false */

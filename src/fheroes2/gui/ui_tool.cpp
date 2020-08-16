@@ -74,4 +74,8 @@ namespace fheroes2
     {
         return _isHidden;
     }
+
+    void FadeDisplay() {}
+
+    void RiseDisplay() {}
 }

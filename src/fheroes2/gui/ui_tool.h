@@ -43,4 +43,7 @@ namespace fheroes2
         ImageRestorer _restorer;
         bool _isHidden;
     };
+
+    void FadeDisplay();
+    void RiseDisplay();
 }

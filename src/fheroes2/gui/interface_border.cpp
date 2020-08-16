@@ -25,6 +25,7 @@
 #include "game_interface.h"
 #include "maps.h"
 #include "settings.h"
+#include "ui_tool.h"
 
 void Interface::GameBorderRedraw( void )
 {
@@ -194,17 +195,17 @@ void Interface::BorderWindow::SetPosition( s32 px, s32 py, u32 pw, u32 ph )
 void Interface::BorderWindow::SetPosition( s32 px, s32 py )
 {
     if ( Settings::Get().ExtGameHideInterface() ) {
-        Display & display = Display::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( px + area.w < 0 )
             px = 0;
-        else if ( px > display.w() - area.w + border.BorderWidth() )
-            px = display.w() - area.w;
+        else if ( px > display.width() - area.w + border.BorderWidth() )
+            px = display.width() - area.w;
 
         if ( py + area.h < 0 )
             py = 0;
-        else if ( py > display.h() - area.h + border.BorderHeight() )
-            py = display.h() - area.h;
+        else if ( py > display.height() - area.h + border.BorderHeight() )
+            py = display.height() - area.h;
 
         area.x = px + border.BorderWidth();
         area.y = py + border.BorderHeight();
@@ -224,30 +225,30 @@ bool Interface::BorderWindow::QueueEventProcessing( void )
     LocalEvent & le = LocalEvent::Get();
 
     if ( conf.ExtGameHideInterface() && le.MousePressLeft( border.GetTop() ) ) {
-        Display & display = Display::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
         Cursor & cursor = Cursor::Get();
 
         const Point & mp = le.GetMouseCursor();
         const Rect & pos = GetRect();
 
-        SpriteMove moveIndicator( Surface( pos, false ) );
-        moveIndicator.DrawBorder( RGBA( 0xD0, 0xC0, 0x48 ), false );
+        fheroes2::MovableSprite moveIndicator( pos.w, pos.h, pos.x, pos.y );
+        fheroes2::DrawBorder( moveIndicator, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
 
         const s32 ox = mp.x - pos.x;
         const s32 oy = mp.y - pos.y;
 
         cursor.Hide();
-        moveIndicator.Move( pos.x, pos.y );
-        moveIndicator.Redraw();
+        moveIndicator.setPosition( pos.x, pos.y );
+        moveIndicator.redraw();
         cursor.Show();
-        display.Flip();
+        display.render();
 
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             if ( le.MouseMotion() ) {
                 cursor.Hide();
-                moveIndicator.Move( mp.x - ox, mp.y - oy );
+                moveIndicator.setPosition( mp.x - ox, mp.y - oy );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 

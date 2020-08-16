@@ -31,6 +31,7 @@
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace
