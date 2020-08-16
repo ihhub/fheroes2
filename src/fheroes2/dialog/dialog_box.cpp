@@ -59,8 +59,6 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
 
     if ( startYPos < 0 ) {
         posy = ( display.height() - height_top_bottom - height_middle ) / 2;
-        if ( Settings::Get().QVGA() && height > display.height() )
-            posy = display.height() - area.h - ( ( evil ? BOXE_TOP : BOX_TOP ) - BOXAREA_TOP );
     }
 
     _restorer.reset( new fheroes2::ImageRestorer( display, posx, posy, BOX_WIDTH, height_top_bottom + height_middle ) );
@@ -84,7 +82,7 @@ Dialog::NonFixedFrameBox::~NonFixedFrameBox()
         _restorer->restore();
     }
 
-    Display::Get().Flip();
+    fheroes2::Display::instance().render();
 }
 
 Dialog::FrameBox::FrameBox( int height, bool buttons )

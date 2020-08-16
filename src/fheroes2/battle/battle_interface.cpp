@@ -4589,7 +4589,7 @@ void Battle::PopupDamageInfo::Reset( void )
 {
     if ( redraw ) {
         Cursor::Get().Hide();
-        background.Restore();
+        restorer.restore();
         redraw = false;
         cell = NULL;
         attacker = NULL;

@@ -30,6 +30,7 @@
 
 Dialog::FrameBorder::FrameBorder( int v )
     : border( v )
+    , restorer( fheroes2::Display::instance() )
 {}
 
 Dialog::FrameBorder::~FrameBorder()
@@ -37,30 +38,37 @@ Dialog::FrameBorder::~FrameBorder()
     if ( Cursor::Get().isVisible() ) {
         Cursor::Get().Hide();
     };
-    background.Restore();
 }
 
 Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
     : border( BORDERWIDTH )
+    , restorer( fheroes2::Display::instance() )
 {
-    Display & display = Display::Get();
-    SetPosition( ( display.w() - sz.w - border * 2 ) / 2, ( display.h() - sz.h - border * 2 ) / 2, sz.w, sz.h );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
     RenderOther( sf, GetRect() );
 }
 
 Dialog::FrameBorder::FrameBorder( const Size & sz )
     : border( BORDERWIDTH )
+    , restorer( fheroes2::Display::instance() )
 {
-    Display & display = Display::Get();
-    SetPosition( ( display.w() - sz.w - border * 2 ) / 2, ( display.h() - sz.h - border * 2 ) / 2, sz.w, sz.h );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
     RenderRegular( GetRect() );
 }
 
 Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
     : border( BORDERWIDTH )
+    , restorer( fheroes2::Display::instance() )
 {
     SetPosition( posx, posy, encw, ench );
     RenderRegular( GetRect() );
+}
+
+bool Dialog::FrameBorder::isValid() const
+{
+    return rect.w != 0 && rect.h != 0;
 }
 
 int Dialog::FrameBorder::BorderWidth( void ) const
@@ -73,15 +81,9 @@ int Dialog::FrameBorder::BorderHeight( void ) const
     return border;
 }
 
-bool Dialog::FrameBorder::isValid( void ) const
-{
-    return background.isValid();
-}
-
 void Dialog::FrameBorder::SetPosition( s32 posx, s32 posy, u32 encw, u32 ench )
 {
-    if ( background.isValid() )
-        background.Restore();
+    restorer.restore();
 
     rect.x = posx;
     rect.y = posy;
@@ -90,13 +92,13 @@ void Dialog::FrameBorder::SetPosition( s32 posx, s32 posy, u32 encw, u32 ench )
         rect.w = encw + 2 * border;
         rect.h = ench + 2 * border;
 
-        background.Save( rect );
+        restorer.update( rect.x, rect.y, rect.w, rect.h );
 
         area.w = encw;
         area.h = ench;
     }
     else
-        background.Save( Point( posx, posy ) );
+        restorer.update( posx, posy, restorer.width(), restorer.height() );
 
     area.x = posx + border;
     area.y = posy + border;
