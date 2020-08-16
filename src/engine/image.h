@@ -64,6 +64,7 @@ namespace fheroes2
     {
     public:
         Sprite( uint32_t width_ = 0, uint32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
+        Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
         virtual ~Sprite();
 
         int32_t x() const;

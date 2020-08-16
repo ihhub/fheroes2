@@ -29,6 +29,12 @@ namespace fheroes2
         , _isHidden( false )
     {}
 
+    MovableSprite::MovableSprite( const Sprite & sprite )
+        : Sprite( sprite )
+        , _restorer( Display::instance() )
+        , _isHidden( false )
+    {}
+
     MovableSprite::~MovableSprite() {}
 
     void MovableSprite::setPosition( int32_t x_, int32_t y_ )
