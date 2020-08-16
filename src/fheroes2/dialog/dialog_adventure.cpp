@@ -21,16 +21,16 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 
 int Dialog::AdventureOptions( bool enabledig )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // preload
     const int apanbkg = Settings::Get().ExtGameEvilInterface() ? ICN::APANBKGE : ICN::APANBKG;
@@ -44,81 +44,82 @@ int Dialog::AdventureOptions( bool enabledig )
     cursor.SetThemes( cursor.POINTER );
 
     // image box
-    const Sprite & box = AGG::GetICN( apanbkg, 0 );
-    SpriteBack back( Rect( ( display.w() - box.w() ) / 2, ( display.h() - box.h() ) / 2, box.w(), box.h() ) );
-    const Point & rb = back.GetPos();
-    box.Blit( rb.x, rb.y );
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );
+
+    Point rb( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
+    fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
+    fheroes2::Blit( box, display, rb.x, rb.y );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonWorld( rb.x + 62, rb.y + 30, apanel, 0, 1 );
-    Button buttonPuzzle( rb.x + 195, rb.y + 30, apanel, 2, 3 );
-    Button buttonInfo( rb.x + 62, rb.y + 107, apanel, 4, 5 );
-    Button buttonDig( rb.x + 195, rb.y + 107, apanel, 6, 7 );
-    Button buttonCancel( rb.x + 128, rb.y + 184, apanel, 8, 9 );
+    fheroes2::Button buttonWorld( rb.x + 62, rb.y + 30, apanel, 0, 1 );
+    fheroes2::Button buttonPuzzle( rb.x + 195, rb.y + 30, apanel, 2, 3 );
+    fheroes2::Button buttonInfo( rb.x + 62, rb.y + 107, apanel, 4, 5 );
+    fheroes2::Button buttonDig( rb.x + 195, rb.y + 107, apanel, 6, 7 );
+    fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, apanel, 8, 9 );
 
     if ( !enabledig )
-        buttonDig.SetDisable( true );
+        buttonDig.disable();
 
-    buttonWorld.Draw();
-    buttonPuzzle.Draw();
-    buttonInfo.Draw();
-    buttonDig.Draw();
-    buttonCancel.Draw();
+    buttonWorld.draw();
+    buttonPuzzle.draw();
+    buttonInfo.draw();
+    buttonDig.draw();
+    buttonCancel.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     int result = Dialog::ZERO;
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonWorld ) ? buttonWorld.PressDraw() : buttonWorld.ReleaseDraw();
-        le.MousePressLeft( buttonPuzzle ) ? buttonPuzzle.PressDraw() : buttonPuzzle.ReleaseDraw();
-        le.MousePressLeft( buttonInfo ) ? buttonInfo.PressDraw() : buttonInfo.ReleaseDraw();
-        le.MousePressLeft( buttonDig ) ? buttonDig.PressDraw() : buttonDig.ReleaseDraw();
-        le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+        le.MousePressLeft( buttonWorld.area() ) ? buttonWorld.drawOnPress() : buttonWorld.drawOnRelease();
+        le.MousePressLeft( buttonPuzzle.area() ) ? buttonPuzzle.drawOnPress() : buttonPuzzle.drawOnRelease();
+        le.MousePressLeft( buttonInfo.area() ) ? buttonInfo.drawOnPress() : buttonInfo.drawOnRelease();
+        le.MousePressLeft( buttonDig.area() ) ? buttonDig.drawOnPress() : buttonDig.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonWorld ) ) {
+        if ( le.MouseClickLeft( buttonWorld.area() ) ) {
             result = Dialog::WORLD;
             break;
         }
-        if ( le.MouseClickLeft( buttonPuzzle ) ) {
+        if ( le.MouseClickLeft( buttonPuzzle.area() ) ) {
             result = Dialog::PUZZLE;
             break;
         }
-        if ( le.MouseClickLeft( buttonInfo ) ) {
+        if ( le.MouseClickLeft( buttonInfo.area() ) ) {
             result = Dialog::INFO;
             break;
         }
-        if ( le.MouseClickLeft( buttonDig ) && buttonDig.isEnable() ) {
+        if ( le.MouseClickLeft( buttonDig.area() ) && buttonDig.isEnabled() ) {
             result = Dialog::DIG;
             break;
         }
-        if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
             result = Dialog::CANCEL;
             break;
         }
 
         // right info
-        if ( le.MousePressRight( buttonWorld ) )
+        if ( le.MousePressRight( buttonWorld.area() ) )
             Dialog::Message( "", _( "View the entire world." ), Font::BIG );
-        if ( le.MousePressRight( buttonPuzzle ) )
+        if ( le.MousePressRight( buttonPuzzle.area() ) )
             Dialog::Message( "", _( "View the obelisk puzzle." ), Font::BIG );
-        if ( le.MousePressRight( buttonInfo ) )
+        if ( le.MousePressRight( buttonInfo.area() ) )
             Dialog::Message( "", _( "View information on the scenario you are currently playing." ), Font::BIG );
-        if ( le.MousePressRight( buttonDig ) )
+        if ( le.MousePressRight( buttonDig.area() ) )
             Dialog::Message( "", _( "Dig for the Ultimate Artifact." ), Font::BIG );
-        if ( le.MousePressRight( buttonCancel ) )
+        if ( le.MousePressRight( buttonCancel.area() ) )
             Dialog::Message( "", _( "Exit this menu without doing anything." ), Font::BIG );
     }
 
     // restore background
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.SetThemes( oldcursor );
     cursor.Show();
-    display.Flip();
+    display.render();
 
     return result;
 }

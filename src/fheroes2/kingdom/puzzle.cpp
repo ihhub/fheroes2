@@ -106,7 +106,7 @@ void Puzzle::ShowMapsDialog( void ) const
 
         AGG::PlayMusic( MUS::PUZZLE, false );
 
-        if ( display.width() == Display::DEFAULT_WIDTH && display.height() == Display::DEFAULT_HEIGHT && !Settings::Get().ExtGameHideInterface() )
+        if ( display.isDefaultSize() && !Settings::Get().ExtGameHideInterface() )
             ShowStandardDialog( *this, sf );
         else
             ShowExtendedDialog( *this, sf );
@@ -191,7 +191,7 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     if ( conf.ExtGameEvilInterface() )
         background.fill( fheroes2::GetColorId( 80, 80, 80 ) );
     else
-        background.fill( fheroes2::GetColorId( 80, 80, 80 ) );
+        background.fill( fheroes2::GetColorId( 128, 64, 32 ) );
 
     fheroes2::Blit( background, display, blitArea.x, blitArea.y );
     fheroes2::Blit( sf, display, blitArea.x, blitArea.y );
@@ -239,16 +239,13 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
             cursor.Hide();
             fheroes2::Blit( sf, display, dstx, dsty );
             for ( size_t ii = 0; ii < pzl.size(); ++ii ) {
-                const Sprite & sprite = AGG::GetICN( ICN::PUZZLE, ii );
-                Sprite piece = Sprite( sprite.GetSurface(), sprite.x(), sprite.y() );
+                const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, ii );
 
+                int pieceAlpha = 255;
                 if ( pzl.test( ii ) )
-                    piece.SetAlphaMod( alpha, false );
+                    pieceAlpha = alpha;
 
-                if ( Settings::Get().QVGA() )
-                    piece.Blit( dstx + 8 + piece.x() - BORDERWIDTH, dsty + 8 + piece.y() - BORDERWIDTH );
-                else
-                    piece.Blit( dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH );
+                fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
             }
             cursor.Show();
             display.render();
