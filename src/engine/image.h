@@ -140,6 +140,8 @@ namespace fheroes2
     // Please use GetColorId function if you want to use an RGB value
     void Fill( Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint8_t colorId );
 
+    Image Flip( const Image & in, bool horizontally, bool vertically );
+
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
 

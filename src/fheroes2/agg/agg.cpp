@@ -2093,7 +2093,7 @@ namespace fheroes2
         std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite;
         const fheroes2::Sprite errorICNImage;
 
-        std::vector<std::vector<fheroes2::Image> > _tilVsImage;
+        std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage;
         const fheroes2::Image errorTILImage;
 
         const uint32_t headerSize = 6;
@@ -2328,6 +2328,8 @@ namespace fheroes2
         size_t GetMaximumTILIndex( int id )
         {
             if ( _tilVsImage[id].empty() ) {
+                _tilVsImage[id].resize( 4 ); // 4 possible sides
+
                 const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
                 if ( data.size() < headerSize ) {
                     return 0;
@@ -2343,16 +2345,30 @@ namespace fheroes2
                     return 0;
                 }
 
-                _tilVsImage[id].resize( count );
+                std::vector<Image> & originalTIL = _tilVsImage[id][0];
+
+                originalTIL.resize( count );
                 for ( uint32_t i = 0; i < count; ++i ) {
-                    Image & tilImage = _tilVsImage[id][i];
+                    Image & tilImage = originalTIL[i];
                     tilImage.resize( width, height );
                     memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
                     std::fill( tilImage.transform(), tilImage.transform() + width * height, 0 );
                 }
+
+                for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
+                    std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
+                    currentTIL.resize( count );
+
+                    const bool horizontalFlip = ( shapeId & 2 ) != 0;
+                    const bool verticalFlip = ( shapeId & 1 ) != 0;
+
+                    for ( uint32_t i = 0; i < count; ++i ) {
+                        currentTIL[i] = Flip( originalTIL[i], horizontalFlip, verticalFlip );
+                    }
+                }
             }
 
-            return _tilVsImage[id].size();
+            return _tilVsImage[id][0].size();
         }
 
         // We have few ICNs which we need to scale like some related to main screen
@@ -2422,12 +2438,7 @@ namespace fheroes2
                 return errorTILImage;
             }
 
-            if ( shapeId == 0 ) {
-                return _tilVsImage[tilId][index];
-            }
-            else {
-                return _tilVsImage[tilId][index];
-            }
+            return _tilVsImage[tilId][shapeId][index];
         }
 
         const Sprite & GetLetter( uint32_t character, uint32_t fontType )

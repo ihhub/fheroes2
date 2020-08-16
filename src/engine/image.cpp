@@ -863,6 +863,69 @@ namespace fheroes2
         }
     }
 
+    Image Flip( const Image & in, bool horizontally, bool vertically )
+    {
+        if ( in.empty() ) {
+            return Image();
+        }
+
+        const uint32_t width = in.width();
+        const uint32_t height = in.height();
+
+        Image out( width, height );
+        if ( !horizontally && !vertically ) {
+            Copy( in, out );
+            return out;
+        }
+
+        uint8_t * imageOutY = out.image();
+        uint8_t * transformOutY = out.transform();
+        const uint8_t * imageOutYEnd = imageOutY + width * height;
+
+        if ( horizontally && !vertically ) {
+            const uint8_t * imageInY = in.image() + width - 1;
+            const uint8_t * transformInY = out.transform() + width - 1;
+            for ( ; imageOutY != imageOutYEnd; imageOutY += width, transformOutY += width, imageInY += width, transformInY += width ) {
+                uint8_t * imageOutX = imageOutY;
+                uint8_t * transformOutX = transformOutY;
+                const uint8_t * imageOutXEnd = imageOutX + width;
+                const uint8_t * imageInX = imageInY;
+                const uint8_t * transformInX = transformInY;
+
+                for ( ; imageOutX != imageOutXEnd; ++imageOutX, ++transformOutX, --imageInX, --transformInX ) {
+                    *imageOutX = *imageInX;
+                    *transformOutX = *transformInX;
+                }
+            }
+        }
+        else if ( !horizontally && vertically ) {
+            const uint8_t * imageInY = in.image() + ( height - 1 ) * width;
+            const uint8_t * transformInY = out.transform() + ( height - 1 ) * width;
+            for ( ; imageOutY != imageOutYEnd; imageOutY += width, transformOutY += width, imageInY -= width, transformInY -= width ) {
+                memcpy( imageOutY, imageInY, width );
+                memcpy( transformOutY, transformInY, width );
+            }
+        }
+        else {
+            const uint8_t * imageInY = in.image() + ( height - 1 ) * width + width - 1;
+            const uint8_t * transformInY = out.transform() + ( height - 1 ) * width + width - 1;
+            for ( ; imageOutY != imageOutYEnd; imageOutY += width, transformOutY += width, imageInY -= width, transformInY -= width ) {
+                uint8_t * imageOutX = imageOutY;
+                uint8_t * transformOutX = transformOutY;
+                const uint8_t * imageOutXEnd = imageOutX + width;
+                const uint8_t * imageInX = imageInY;
+                const uint8_t * transformInX = transformInY;
+
+                for ( ; imageOutX != imageOutXEnd; ++imageOutX, ++transformOutX, --imageInX, --transformInX ) {
+                    *imageOutX = *imageInX;
+                    *transformOutX = *transformInX;
+                }
+            }
+        }
+
+        return out;
+    }
+
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
         return GetPALColorId( red / 4, green / 4, blue / 4 );
