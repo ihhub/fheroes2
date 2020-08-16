@@ -18,10 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "player_info.h"
+#include <algorithm>
+
 #include "agg.h"
 #include "dialog.h"
 #include "game.h"
+#include "player_info.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"

@@ -731,32 +731,31 @@ void TextBox::Blit( const Point & pt, fheroes2::Image & sf )
 
 TextSprite::TextSprite()
     : hide( true )
+    , _restorer( fheroes2::Display::instance() )
 {}
 
 TextSprite::TextSprite( const std::string & msg, int ft, const Point & pt )
     : Text( msg, ft )
     , hide( true )
-{
-    back.Save( Rect( pt, gw, gh + 5 ) );
-}
+    , _restorer( fheroes2::Display::instance(), pt.x, pt.y, gw, gh + 5 )
+{}
 
 TextSprite::TextSprite( const std::string & msg, int ft, s32 ax, s32 ay )
     : Text( msg, ft )
     , hide( true )
-{
-    back.Save( Rect( ax, ay, gw, gh + 5 ) );
-}
+    , _restorer( fheroes2::Display::instance(), ax, ay, gw, gh + 5 )
+{}
 
 void TextSprite::Show( void )
 {
-    Blit( back.GetPos() );
+    Blit( Point( _restorer.x(), _restorer.y() ) );
     hide = false;
 }
 
 void TextSprite::Hide( void )
 {
     if ( !hide )
-        back.Restore();
+        _restorer.restore();
     hide = true;
 }
 
@@ -764,36 +763,36 @@ void TextSprite::SetText( const std::string & msg )
 {
     Hide();
     Set( msg );
-    back.Save( Rect( back.GetPos(), gw, gh + 5 ) );
+    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
 }
 
 void TextSprite::SetText( const std::string & msg, int ft )
 {
     Hide();
     Set( msg, ft );
-    back.Save( Rect( back.GetPos(), gw, gh + 5 ) );
+    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
 }
 
 void TextSprite::SetFont( int ft )
 {
     Hide();
     Set( ft );
-    back.Save( Rect( back.GetPos(), gw, gh + 5 ) );
+    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
 }
 
 void TextSprite::SetPos( s32 ax, s32 ay )
 {
-    back.Save( Rect( ax, ay, gw, gh + 5 ) );
+    _restorer.update( ax, ay, gw, gh + 5 );
 }
 
 int TextSprite::w( void )
 {
-    return back.GetSize().w;
+    return _restorer.width();
 }
 
 int TextSprite::h( void )
 {
-    return back.GetSize().h;
+    return _restorer.height();
 }
 
 bool TextSprite::isHide( void ) const
@@ -808,5 +807,5 @@ bool TextSprite::isShow( void ) const
 
 const Rect & TextSprite::GetRect( void ) const
 {
-    return back.GetArea();
+    return Rect( _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() );
 }
