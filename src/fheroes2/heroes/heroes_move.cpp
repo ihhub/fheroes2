@@ -462,7 +462,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool with_shadow ) c
 
         if ( ocean ) {
             Rect blitArea = gamearea.RectFixed( dst_pt4, sprite4.width(), sprite4.height() );
-            fheroes2::AlphaBlit( sprite4, blitArea.x, blitArea.y, dst, dst_pt4.x, dst_pt4.y, blitArea.w, blitArea.h, _alphaValue );
+            fheroes2::AlphaBlit( sprite4, blitArea.x, blitArea.y, dst, dst_pt4.x, dst_pt4.y, blitArea.w, blitArea.h, _alphaValue, reflect );
         }
     }
 
@@ -474,9 +474,9 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool with_shadow ) c
 
     // redraw sprites hero and flag
     Rect blitAreaHero = gamearea.RectFixed( dst_pt1, sprite1.width(), sprite1.height() );
-    fheroes2::AlphaBlit( sprite1, blitAreaHero.x, blitAreaHero.y, dst, dst_pt1.x, dst_pt1.y, blitAreaHero.w, blitAreaHero.h, _alphaValue );
+    fheroes2::AlphaBlit( sprite1, blitAreaHero.x, blitAreaHero.y, dst, dst_pt1.x, dst_pt1.y, blitAreaHero.w, blitAreaHero.h, _alphaValue, reflect );
     Rect blitAreaFlag = gamearea.RectFixed( dst_pt2, sprite2.width(), sprite2.height() );
-    fheroes2::AlphaBlit( sprite2, blitAreaFlag.x, blitAreaFlag.y, dst, dst_pt2.x, dst_pt2.y, blitAreaFlag.w, blitAreaFlag.h, _alphaValue );
+    fheroes2::AlphaBlit( sprite2, blitAreaFlag.x, blitAreaFlag.y, dst, dst_pt2.x, dst_pt2.y, blitAreaFlag.w, blitAreaFlag.h, _alphaValue, reflect );
 
     // redraw dependences tiles
     Maps::Tiles & tile = world.GetTiles( center.x, center.y );
