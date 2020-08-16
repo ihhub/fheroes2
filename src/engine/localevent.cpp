@@ -460,6 +460,7 @@ namespace
             _prevDraw.Stop();
             return _prevDraw.Get() >= 220;
         }
+
     private:
         SDL::Time _timer;
         SDL::Time _prevDraw;
