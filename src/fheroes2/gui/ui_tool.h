@@ -37,6 +37,7 @@ namespace fheroes2
         bool isHidden() const;
 
         virtual void setPosition( int32_t x_, int32_t y_ );
+
     private:
         ImageRestorer _restorer;
         bool _isHidden;
