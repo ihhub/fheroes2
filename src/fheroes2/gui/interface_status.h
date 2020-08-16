@@ -69,7 +69,6 @@ namespace Interface
         void DrawBackground( void ) const;
         void DrawAITurns( void ) const;
         static u32 ResetResourceStatus( u32, void * );
-        static u32 RedrawAIStatus( u32, void * );
 
         Basic & interface;
 
