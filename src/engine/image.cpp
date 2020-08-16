@@ -178,7 +178,7 @@ namespace
 
     bool Validate( const fheroes2::Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height )
     {
-        if ( image.empty() || width == 0 || height == 0 ) // what' the reason to work with empty images?
+        if ( image.empty() || width == 0 || height == 0 ) // what's the reason to work with empty images?
             return false;
 
         if ( x > image.width() || y > image.height() )
