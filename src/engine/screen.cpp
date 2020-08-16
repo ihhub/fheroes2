@@ -617,23 +617,30 @@ namespace fheroes2
 
     void Display::render()
     {
-        if ( _preprocessing != NULL ) {
-            std::vector<uint8_t> palette;
-            if ( _preprocessing( palette ) ) {
-                _engine->updatePalette( palette );
-            }
-        }
-
         const Cursor & cursor = Cursor::instance();
         if ( cursor.isVisible() ) {
             const Sprite backup = Crop( *this, cursor.x(), cursor.y(), cursor.width(), cursor.height() );
             Blit( cursor, *this, cursor.x(), cursor.y() );
+
+            if ( _preprocessing != NULL ) {
+                std::vector<uint8_t> palette;
+                if ( _preprocessing( palette ) ) {
+                    _engine->updatePalette( palette );
+                }
+            }
 
             _engine->render( *this );
 
             Blit( backup, *this, backup.x(), backup.y() );
         }
         else {
+            if ( _preprocessing != NULL ) {
+                std::vector<uint8_t> palette;
+                if ( _preprocessing( palette ) ) {
+                    _engine->updatePalette( palette );
+                }
+            }
+
             _engine->render( *this );
         }
     }
