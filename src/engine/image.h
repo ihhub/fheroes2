@@ -87,6 +87,11 @@ namespace fheroes2
 
         void update( uint32_t x_, uint32_t y_, uint32_t width, uint32_t height );
 
+        uint32_t x() const;
+        uint32_t y() const;
+        uint32_t width() const;
+        uint32_t height() const;
+
         void restore();
 
     private:
