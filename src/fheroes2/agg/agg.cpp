@@ -2409,18 +2409,25 @@ namespace fheroes2
 
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
+            if ( shapeId > 3 ) {
+                return errorTILImage;
+            }
+
             if ( !IsValidTILId( tilId ) ) {
                 return errorTILImage;
             }
 
             const size_t maxTILIndex = GetMaximumTILIndex( tilId );
-            if ( index >= maxTILIndex / 4 ) {
+            if ( index >= maxTILIndex ) {
                 return errorTILImage;
             }
 
-            // Generate proper TIL index
-            const size_t correctIndex = index + ( maxTILIndex / 4 ) * ( shapeId % 4 );
-            return _tilVsImage[tilId][correctIndex];
+            if ( shapeId == 0 ) {
+                return _tilVsImage[tilId][index];
+            }
+            else {
+                return _tilVsImage[tilId][index];
+            }
         }
 
         const Sprite & GetLetter( uint32_t character, uint32_t fontType )
