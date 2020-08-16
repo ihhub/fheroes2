@@ -110,12 +110,12 @@ bool Cursor::SetThemes( int name, bool force )
 /* redraw cursor wrapper for local event */
 void Cursor::Redraw( s32 x, s32 y )
 {
+#if !defined( USE_SDL_CURSOR )
     fheroes2::Cursor::instance().setPosition( x, y );
     if ( fheroes2::Cursor::instance().isVisible() ) {
         fheroes2::Display::instance().render();
     }
     /*
-#if !defined( USE_SDL_CURSOR )
     Cursor & cur = Cursor::Get();
 
     if ( cur.isVisible() ) {
@@ -123,8 +123,8 @@ void Cursor::Redraw( s32 x, s32 y )
 
         Display::Get().Flip();
     }
-#endif
     */
+#endif
 }
 
 /* move cursor */
@@ -208,39 +208,33 @@ void Cursor::SetOffset( int name, const Point & defaultOffset )
 
 void Cursor::Show( void )
 {
-    fheroes2::Cursor::instance().show( true );
-    /*
 #if defined( USE_SDL_CURSOR )
     _isVisibleCursor = true;
 #else
-    if ( !Settings::Get().ExtPocketHideCursor() )
-        SpriteMove::Show();
+    fheroes2::Cursor::instance().show( true );
+    // if ( !Settings::Get().ExtPocketHideCursor() )
+    //    SpriteMove::Show();
 #endif
-    */
 }
 
 void Cursor::Hide( void )
 {
-    fheroes2::Cursor::instance().show( false );
-    /*
 #if defined( USE_SDL_CURSOR )
     _isVisibleCursor = false;
 #else
-    SpriteMove::Hide();
+fheroes2::Cursor::instance().show( false );
+    // SpriteMove::Hide();
 #endif
-    */
 }
 
 bool Cursor::isVisible( void ) const
 {
-    return fheroes2::Cursor::instance().isVisible();
-    /*
 #if defined( USE_SDL_CURSOR )
     return ( SDL_ShowCursor( -1 ) == 1 ) && _isVisibleCursor;
 #else
-    return SpriteMove::isVisible();
+    return fheroes2::Cursor::instance().isVisible();
+    // return SpriteMove::isVisible();
 #endif
-    */
 }
 
 int Cursor::DistanceThemes( int theme, u32 dist )
