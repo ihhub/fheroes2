@@ -34,7 +34,12 @@ namespace fheroes2
     {
     public:
         Image( uint32_t width_ = 0, uint32_t height_ = 0 );
+        Image( const Image & image );
+        Image( Image && image );
         virtual ~Image();
+
+        Image & operator=( const Image & image );
+        Image & operator=( Image && image );
 
         virtual void resize( uint32_t width_, uint32_t height_ );
         uint32_t width() const;
@@ -53,6 +58,8 @@ namespace fheroes2
 
         void fill( uint8_t value ); // fill only 'image' layer
 
+        void swap( Image & image );
+
     private:
         uint32_t _width;
         uint32_t _height;
@@ -65,12 +72,19 @@ namespace fheroes2
     public:
         Sprite( uint32_t width_ = 0, uint32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
+        Sprite( const Sprite & image );
+        Sprite( Sprite && image );
         virtual ~Sprite();
+
+        Sprite & operator=( const Sprite & image );
+        Sprite & operator=( Sprite && image );
 
         int32_t x() const;
         int32_t y() const;
 
         virtual void setPosition( int32_t x_, int32_t y_ );
+
+        void swap( Sprite & image );
 
     private:
         int32_t _x;

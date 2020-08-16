@@ -306,9 +306,39 @@ namespace fheroes2
         resize( width_, height_ );
     }
 
+    Image::Image( const Image & image )
+        : _width( image.width() )
+        , _height( image.height() )
+    {
+        _image = image._image;
+        _transform = image._transform;
+    }
+
+    Image::Image( Image && image )
+        : _width( 0u )
+        , _height( 0u )
+    {
+        swap( image );
+    }
+
     Image::~Image()
     {
         clear();
+    }
+
+    Image & Image::operator=( const Image & image )
+    {
+        _width = image.width();
+        _height = image.height();
+        _image = image._image;
+        _transform = image._transform;
+        return *this;
+    }
+
+    Image & Image::operator=( Image && image )
+    {
+        swap( image );
+        return *this;
     }
 
     uint32_t Image::width() const
@@ -386,6 +416,15 @@ namespace fheroes2
         }
     }
 
+    void Image::swap( Image & image )
+    {
+        std::swap( _width, image._width );
+        std::swap( _height, image._height );
+
+        std::swap( _image, image._image );
+        std::swap( _transform, image._transform );
+    }
+
     Sprite::Sprite( uint32_t width_, uint32_t height_, int32_t x_, int32_t y_ )
         : Image( width_, height_ )
         , _x( x_ )
@@ -398,7 +437,32 @@ namespace fheroes2
         , _y( y_ )
     {}
 
+    Sprite::Sprite( const Sprite & image )
+        : Image( image )
+        , _x( image._x )
+        , _y( image._y )
+    {}
+
+    Sprite::Sprite( Sprite && image )
+    {
+        swap( image );
+    }
+
     Sprite::~Sprite() {}
+
+    Sprite & Sprite::operator=( const Sprite & image )
+    {
+        Image::operator=( image );
+        _x = image._x;
+        _y = image._y;
+        return *this;
+    }
+
+    Sprite & Sprite::operator=( Sprite && image )
+    {
+        swap( image );
+        return *this;
+    }
 
     int32_t Sprite::x() const
     {
@@ -414,6 +478,13 @@ namespace fheroes2
     {
         _x = x_;
         _y = y_;
+    }
+
+    void Sprite::swap( Sprite & image )
+    {
+        Image::swap( image );
+        std::swap( _x, image._x );
+        std::swap( _y, image._y );
     }
 
     ImageRestorer::ImageRestorer( Image & image )
