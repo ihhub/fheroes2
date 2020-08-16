@@ -288,26 +288,26 @@ namespace
 
                 if ( _surface->format->Amask > 0 ) {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint32_t index = colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, kb_pal[index] << 2, kb_pal[index + 1] << 2, kb_pal[index + 2] << 2, 255 );
+                        const uint8_t * value = kb_pal + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2, 255 );
                     }
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint32_t index = colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[index] << 2, kb_pal[index + 1] << 2, kb_pal[index + 2] << 2 );
+                        const uint8_t * value = kb_pal + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2 );
                     }
                 }
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 _palette8Bit.resize( 256 );
                 for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint32_t index = colorIds[i] * 3;
+                    const uint8_t * value = kb_pal + colorIds[i] * 3;
                     SDL_Color & col = _palette8Bit[i];
 
-                    col.r = kb_pal[index] << 2;
-                    col.g = kb_pal[index + 1] << 2;
-                    col.b = kb_pal[index + 2] << 2;
+                    col.r = *( value ) << 2;
+                    col.g = *( value + 1 ) << 2;
+                    col.b = *( value + 2 ) << 2;
                 }
 
                 SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
@@ -505,26 +505,26 @@ namespace
 
                 if ( _surface->format->Amask > 0 ) {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint32_t index = colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, kb_pal[index] << 2, kb_pal[index + 1] << 2, kb_pal[index + 2] << 2, 255 );
+                        const uint8_t * value = kb_pal + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2, 255 );
                     }
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint32_t index = colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, kb_pal[index] << 2, kb_pal[index + 1] << 2, kb_pal[index + 2] << 2 );
+                        const uint8_t * value = kb_pal + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2 );
                     }
                 }
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 _palette8Bit.resize( 256 );
                 for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint32_t index = colorIds[i] * 3;
+                    const uint8_t * value = kb_pal + colorIds[i] * 3;
                     SDL_Color & col = _palette8Bit[i];
 
-                    col.r = kb_pal[index] << 2;
-                    col.g = kb_pal[index + 1] << 2;
-                    col.b = kb_pal[index + 2] << 2;
+                    col.r = *( value ) << 2;
+                    col.g = *( value + 1 ) << 2;
+                    col.b = *( value + 2 ) << 2;
                 }
 
                 SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );

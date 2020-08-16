@@ -88,6 +88,7 @@ bool Cursor::SetThemes( int name, bool force )
         SetOffset( name, Point( spr.w() / 2, spr.h() / 2 ) );
         Set( spr, true );
 #if defined( USE_SDL_CURSOR )
+        fheroes2::Cursor::instance().show( false );
         SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, -offset_x, -offset_y );
         if ( tempCursor == NULL ) {
             DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, name = " << name << ", reason: " << SDL_GetError() );
