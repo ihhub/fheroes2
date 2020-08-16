@@ -297,12 +297,12 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
         }
         else
             // change players
-            if ( show_swap && !conf.QVGA() && NULL != ( player = GetFromOpponentChangeClick( le.GetMouseCursor() ) ) ) {
-            iterator it = std::find( begin(), end(), player );
+            if ( show_swap && NULL != ( player = GetFromOpponentChangeClick( le.GetMouseCursor() ) ) ) {
+            iterator it = std::find_if( begin(), end(), [player]( const PlayerInfo & pi ) { return pi.player == player; } );
             if ( it != end() && ( it + 1 ) != end() ) {
                 Players & players = conf.GetPlayers();
-                Players::iterator it1 = std::find( players.begin(), players.end(), ( *it ).player );
-                Players::iterator it2 = std::find( players.begin(), players.end(), ( *( it + 1 ) ).player );
+                Players::iterator it1 = std::find_if( players.begin(), players.end(), [it]( Player * p ) { return p == ( *it ).player; } );
+                Players::iterator it2 = std::find_if( players.begin(), players.end(), [it]( Player * p ) { return p == ( *( it + 1 ) ).player; } );
 
                 if ( it1 != players.end() && it2 != players.end() ) {
                     std::swap( ( *it ).player, ( *( it + 1 ) ).player );
