@@ -35,7 +35,6 @@
 //#include "game_video.h"
 #include "gamedefs.h"
 #include "images_pack.h"
-#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "test.h"
@@ -63,19 +62,6 @@ int PrintHelp( const char * basename )
 std::string GetCaption( void )
 {
     return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
-}
-
-bool ApplyCycling( std::vector<uint8_t> & palette )
-{
-    static SDL::Time cyclingTimer;
-    static uint32_t cyclingCounter = 0;
-    cyclingTimer.Stop();
-    if ( cyclingTimer.Get() > 200 ) {
-        cyclingTimer.Start();
-        palette = PAL::GetCyclingPalette( cyclingCounter++ );
-        return true;
-    }
-    return false;
 }
 
 #if defined( _MSC_VER )
@@ -160,11 +146,11 @@ int main( int argc, char ** argv )
 
             Display & display = Display::Get();
             display.SetVideoMode( conf.VideoMode().w, conf.VideoMode().h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
-            fheroes2::Display::instance().subscribe( ApplyCycling );
             display.HideCursor();
             display.SetCaption( GetCaption().c_str() );
 
             // Ensure the mouse position is updated to prevent bad initial values.
+            LocalEvent::Get().RegisterCycling();
             LocalEvent::Get().GetMouseCursor();
 
 #ifdef WITH_ZLIB

@@ -182,6 +182,7 @@
     <ClCompile Include="src\engine\image.cpp" />
     <ClCompile Include="src\engine\IMG_savepng.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
+    <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
     <ClCompile Include="src\engine\rect.cpp" />
     <ClCompile Include="src\engine\screen.cpp" />
@@ -202,7 +203,6 @@
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
-    <ClCompile Include="src\fheroes2\agg\pal.cpp" />
     <ClCompile Include="src\fheroes2\agg\sprite.cpp" />
     <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
@@ -391,6 +391,7 @@
     <ClInclude Include="src\engine\IMG_savepng.h" />
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
+    <ClInclude Include="src\engine\pal.h" />
     <ClInclude Include="src\engine\rand.h" />
     <ClInclude Include="src\engine\rect.h" />
     <ClInclude Include="src\engine\screen.h" />
@@ -411,7 +412,6 @@
     <ClInclude Include="src\fheroes2\agg\icn.h" />
     <ClInclude Include="src\fheroes2\agg\m82.h" />
     <ClInclude Include="src\fheroes2\agg\mus.h" />
-    <ClInclude Include="src\fheroes2\agg\pal.h" />
     <ClInclude Include="src\fheroes2\agg\sprite.h" />
     <ClInclude Include="src\fheroes2\agg\til.h" />
     <ClInclude Include="src\fheroes2\agg\xmi.h" />

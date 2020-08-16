@@ -269,6 +269,8 @@ public:
     bool EmulateMouseAction( KeySym );
 #endif
 
+    void RegisterCycling();
+
 private:
     LocalEvent();
 

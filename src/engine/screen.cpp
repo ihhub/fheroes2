@@ -584,6 +584,7 @@ namespace fheroes2
         : _engine( RenderEngine::create() )
         , _preprocessing( NULL )
         , _renderSurface( NULL )
+        , _postprocessing( NULL )
     {}
 
     Display::~Display()
@@ -629,6 +630,9 @@ namespace fheroes2
         else {
             _renderFrame();
         }
+
+        if ( _postprocessing != NULL )
+            _postprocessing();
     }
 
     void Display::_renderFrame()
@@ -648,9 +652,10 @@ namespace fheroes2
         }
     }
 
-    void Display::subscribe( PreRenderProcessing preprocessing )
+    void Display::subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing )
     {
         _preprocessing = preprocessing;
+        _postprocessing = postprocessing;
     }
 
     uint8_t * Display::image()

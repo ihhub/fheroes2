@@ -78,7 +78,8 @@ namespace fheroes2
 
         // this function must return true if new palette has been generated
         typedef bool ( *PreRenderProcessing )( std::vector<uint8_t> & palette );
-        void subscribe( PreRenderProcessing preprocessing );
+        typedef void ( *PostRenderProcessing )();
+        void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing );
 
         // For 8-bit mode we return a pointer to direct surface which we draw on screen
         virtual uint8_t * image();
@@ -89,6 +90,7 @@ namespace fheroes2
     private:
         BaseRenderEngine * _engine;
         PreRenderProcessing _preprocessing;
+        PostRenderProcessing _postprocessing;
 
         void linkRenderSurface( uint8_t * surface ); // only for cases of direct drawing on rendered 8-bit image
 
