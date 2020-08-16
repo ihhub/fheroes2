@@ -1634,82 +1634,91 @@ void Heroes::Move2Dest( const s32 & dstIndex )
     }
 }
 
-Surface Heroes::GetPortrait( int id, int type )
+fheroes2::Image Heroes::GetPortrait( int id, int type )
 {
     if ( Heroes::UNKNOWN != id )
         switch ( type ) {
         case PORT_BIG:
-            return AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
         case PORT_MEDIUM:
-            return Heroes::SANDYSANDY > id ? AGG::GetICN( ICN::PORTMEDI, id + 1 ) : AGG::GetICN( ICN::PORTMEDI, BAX + 1 );
+            return Heroes::SANDYSANDY > id ? fheroes2::AGG::GetICN( ICN::PORTMEDI, id + 1 ) : fheroes2::AGG::GetICN( ICN::PORTMEDI, BAX + 1 );
         case PORT_SMALL:
-            return Heroes::SANDYSANDY > id ? AGG::GetICN( ICN::MINIPORT, id ) : AGG::GetICN( ICN::MINIPORT, BAX );
+            return Heroes::SANDYSANDY > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
         default:
             break;
         }
 
-    return Surface();
+    return fheroes2::Image();
 }
 
-Surface Heroes::GetPortrait( int type ) const
+fheroes2::Image Heroes::GetPortrait( int type ) const
 {
     return Heroes::GetPortrait( portrait, type );
 }
 
-void Heroes::PortraitRedraw( s32 px, s32 py, int type, Surface & dstsf ) const
+void Heroes::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
 {
-    Surface port = GetPortrait( portrait, type );
+    fheroes2::Image port = GetPortrait( portrait, type );
     Point mp;
 
-    if ( port.isValid() ) {
+    if ( !port.empty() ) {
         if ( PORT_BIG == type ) {
-            port.Blit( px, py, dstsf );
+            fheroes2::Blit( port, dstsf, px, py );
             mp.y = 2;
-            mp.x = port.w() - 12;
+            mp.x = port.width() - 12;
         }
         else if ( PORT_MEDIUM == type ) {
-            port.Blit( px, py, dstsf );
-            mp.x = port.w() - 10;
+            fheroes2::Blit( port, dstsf, px, py );
+            mp.x = port.width() - 10;
         }
         else if ( PORT_SMALL == type ) {
-            const Sprite & mobility = AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
-            const Sprite & mana = AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
+            const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
+            const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
 
             const int iconsw = Interface::IconsBar::GetItemWidth();
             const int iconsh = Interface::IconsBar::GetItemHeight();
             const int barw = 7;
 
-            dstsf.FillRect( Rect( px, py, iconsw, iconsh ), ColorBlack );
-            const RGBA blue = RGBA( 15, 30, 120 );
+            fheroes2::Image blackBG( iconsw, iconsh );
+            blackBG.fill( 0 );
+            fheroes2::Image blueBG( barw, iconsh );
+            blackBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
+
+            // background
+            fheroes2::Blit( blackBG, dstsf, px, py );
 
             // mobility
-            dstsf.FillRect( Rect( px, py, barw, iconsh ), blue );
-            mobility.Blit( px, py + mobility.y(), dstsf );
+            fheroes2::Blit( blueBG, dstsf, px, py );
+            fheroes2::Blit( mobility, dstsf, px, py + mobility.y() );
 
             // portrait
-            port.Blit( px + barw + 1, py, dstsf );
+            fheroes2::Blit( port, dstsf, px + barw + 1, py );
 
             // mana
-            dstsf.FillRect( Rect( px + barw + port.w() + 2, py, barw, iconsh ), blue );
-            mana.Blit( px + barw + port.w() + 2, py + mana.y(), dstsf );
+            fheroes2::Blit( blueBG, dstsf, px + barw + port.width() + 2, py );
+            fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
 
             mp.x = 35;
         }
     }
 
     if ( Modes( Heroes::GUARDIAN ) ) {
-        const Sprite & sprite = AGG::GetICN( ICN::MISC6, 11 );
-        const Rect pos( px + mp.x + 3, py + mp.y, sprite.w(), sprite.h() );
-        dstsf.FillRect( pos, ColorBlack );
-        sprite.Blit( pos.x, pos.y, dstsf );
-        mp.y = sprite.h();
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC6, 11 );
+        fheroes2::Image guardianBG( sprite.width(), sprite.height() );
+        guardianBG.fill( 0 );
+
+        fheroes2::Blit( guardianBG, dstsf, px + mp.x + 3, py + mp.y );
+        fheroes2::Blit( sprite, dstsf, px + mp.x + 3, py + mp.y );
+        mp.y = sprite.height();
     }
 
     if ( Modes( Heroes::SLEEPER ) ) {
-        const Sprite & sprite = AGG::GetICN( ICN::MISC4, 14 );
-        const Rect pos( px + mp.x + 3, py + mp.y - 1, sprite.w() - 4, sprite.h() - 4 );
-        dstsf.FillRect( pos, ColorBlack );
-        sprite.Blit( pos.x - 2, pos.y - 2 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC4, 14 );
+        fheroes2::Image sleeperBG( sprite.width() - 4, sprite.height() - 4 );
+        sleeperBG.fill( 0 );
+
+        fheroes2::Blit( sleeperBG, dstsf, px + mp.x + 3, py + mp.y - 1 );
+        fheroes2::Blit( sprite, dstsf, px + mp.x + 1, py + mp.y - 3 );
     }
 }
 

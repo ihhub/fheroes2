@@ -81,7 +81,7 @@ public:
     virtual void ActionPreBattle( void ) = 0;
 
     virtual const Castle * inCastle( void ) const = 0;
-    virtual void PortraitRedraw( s32, s32, int type, Surface & ) const = 0;
+    virtual void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const = 0;
 
     virtual int GetType( void ) const = 0;
 

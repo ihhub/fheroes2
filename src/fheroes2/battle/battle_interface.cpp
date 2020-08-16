@@ -216,11 +216,10 @@ namespace Battle
             const Sprite & sp1 = AGG::GetICN( ICN::DROPLISL, 10 );
             const Sprite & sp2 = AGG::GetICN( ICN::DROPLISL, 12 );
             const Sprite & sp3 = AGG::GetICN( ICN::DROPLISL, 11 );
-            const Sprite & sp4 = AGG::GetICN( ICN::TEXTBAK2, 0 );
             const u32 ax = buttonPgUp.x;
             const u32 ah = buttonPgDn.y - ( buttonPgUp.y + buttonPgUp.h );
 
-            Dialog::FrameBorder::RenderOther( sp4, border.GetRect() );
+            Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), border.GetRect() );
 
             for ( u32 ii = 0; ii < ( ah / sp3.h() ); ++ii )
                 sp3.Blit( ax, buttonPgUp.y + buttonPgUp.h + ( sp3.h() * ii ) );
@@ -4650,8 +4649,7 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
         if ( borderRect.x != tx || borderRect.y != ty || borderArea.w != tw || borderArea.h != th )
             SetPosition( tx, ty, tw, th );
 
-        const Sprite & sf = AGG::GetICN( ICN::CELLWIN, 1 );
-        Dialog::FrameBorder::RenderOther( sf, GetRect() );
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), GetRect() );
 
         text1.Blit( borderArea.x, borderArea.y );
         text2.Blit( borderArea.x, borderArea.y + borderArea.h / 2 );

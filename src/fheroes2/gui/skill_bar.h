@@ -20,30 +20,50 @@
 
 #pragma once
 
-#include "image.h"
+#include "interface_itemsbar.h"
+#include "skill.h"
 
-namespace fheroes2
+class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
-    class MovableSprite : public Sprite
-    {
-    public:
-        MovableSprite( uint32_t width_ = 0, uint32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
-        MovableSprite( const Sprite & sprite );
-        virtual ~MovableSprite();
+public:
+    PrimarySkillsBar( const Heroes *, bool mini );
 
-        void show();
-        void hide();
-        void redraw(); // in case if Display has changed
+    void SetTextOff( s32, s32 );
+    void RedrawBackground( const Rect &, fheroes2::Image & );
+    void RedrawItem( int &, const Rect &, fheroes2::Image & );
 
-        bool isHidden() const;
+    bool ActionBarSingleClick( const Point &, int &, const Rect & );
+    bool ActionBarPressRight( const Point &, int &, const Rect & );
+    bool ActionBarCursor( const Point &, int &, const Rect & );
 
-        virtual void setPosition( int32_t x_, int32_t y_ );
+    bool QueueEventProcessing( std::string * = NULL );
 
-    private:
-        ImageRestorer _restorer;
-        bool _isHidden;
-    };
+protected:
+    const Heroes * hero;
+    fheroes2::Image backsf;
+    bool use_mini_sprite;
+    std::vector<int> content;
+    Point toff;
+    std::string msg;
+};
 
-    void FadeDisplay();
-    void RiseDisplay();
-}
+class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
+{
+public:
+    SecondarySkillsBar( bool mini = true, bool change = false );
+
+    void RedrawBackground( const Rect &, fheroes2::Image & );
+    void RedrawItem( Skill::Secondary &, const Rect &, fheroes2::Image & );
+
+    bool ActionBarSingleClick( const Point &, Skill::Secondary &, const Rect & );
+    bool ActionBarPressRight( const Point &, Skill::Secondary &, const Rect & );
+    bool ActionBarCursor( const Point &, Skill::Secondary &, const Rect & );
+
+    bool QueueEventProcessing( std::string * = NULL );
+
+protected:
+    fheroes2::Image backsf;
+    bool use_mini_sprite;
+    bool can_change;
+    std::string msg;
+};

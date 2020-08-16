@@ -35,22 +35,23 @@
 #include "payment.h"
 #include "race.h"
 #include "settings.h"
-#include "skill.h"
+#include "skill_bar.h"
 #include "statusbar.h"
 #include "text.h"
+#include "ui_tool.h"
 #include "world.h"
 
 /* readonly: false, fade: false */
 int Heroes::OpenDialog( bool readonly, bool fade )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
     // fade
     if ( fade && Settings::Get().ExtGameUseFade() )
-        display.Fade();
+        fheroes2::FadeDisplay();
 
     Dialog::FrameBorder background( Display::GetDefaultSize() );
     const Point & cur_pt = background.GetArea();
@@ -216,7 +217,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     buttonExit.Draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     bool redrawMorale = false;
     bool redrawLuck = false;
@@ -228,7 +229,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             cursor.Hide();
             moraleIndicator.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
             redrawMorale = false;
         }
 
@@ -236,7 +237,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             cursor.Hide();
             luckIndicator.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
             redrawLuck = false;
         }
 
@@ -302,23 +303,23 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             cursor.Hide();
             cursorFormat.Move( army1_pt );
             cursor.Show();
-            display.Flip();
+            display.render();
             army.SetSpreadFormat( true );
         }
         else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
             cursor.Hide();
             cursorFormat.Move( army2_pt );
             cursor.Show();
-            display.Flip();
+            display.render();
             army.SetSpreadFormat( false );
         }
         else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
         else if ( le.MouseCursor( primskill_bar.GetArea() ) && primskill_bar.QueueEventProcessing( &message ) ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         // right info

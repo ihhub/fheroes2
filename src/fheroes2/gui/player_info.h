@@ -20,30 +20,40 @@
 
 #pragma once
 
-#include "image.h"
+#include "players.h"
 
-namespace fheroes2
+namespace Interface
 {
-    class MovableSprite : public Sprite
+    struct PlayerInfo
     {
-    public:
-        MovableSprite( uint32_t width_ = 0, uint32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
-        MovableSprite( const Sprite & sprite );
-        virtual ~MovableSprite();
+        PlayerInfo()
+            : player( NULL )
+        {}
 
-        void show();
-        void hide();
-        void redraw(); // in case if Display has changed
+        bool operator==( const Player * ) const;
 
-        bool isHidden() const;
-
-        virtual void setPosition( int32_t x_, int32_t y_ );
-
-    private:
-        ImageRestorer _restorer;
-        bool _isHidden;
+        Player * player;
+        Rect rect1; // opponent
+        Rect rect2; // class
+        Rect rect3; // change
     };
 
-    void FadeDisplay();
-    void RiseDisplay();
+    struct PlayersInfo : std::vector<PlayerInfo>
+    {
+        PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
+
+        void UpdateInfo( Players &, const Point & opponents, const Point & classes );
+
+        Player * GetFromOpponentClick( const Point & pt );
+        Player * GetFromOpponentNameClick( const Point & pt );
+        Player * GetFromOpponentChangeClick( const Point & pt );
+        Player * GetFromClassClick( const Point & pt );
+
+        void RedrawInfo( bool show_play_info = false ) const;
+        bool QueueEventProcessing( void );
+
+        bool show_name;
+        bool show_race;
+        bool show_swap;
+    };
 }

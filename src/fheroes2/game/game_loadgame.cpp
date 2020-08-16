@@ -106,16 +106,15 @@ int Game::LoadStandard( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     AGG::RegisterScalableICN( ICN::HEROES );
 
     // image background
-    const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    back.Blit( Point( 0, 0 ) );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     std::string file = Dialog::SelectFileLoad();
     if ( file.empty() || !Game::Load( file ) )

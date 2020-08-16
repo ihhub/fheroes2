@@ -33,13 +33,14 @@
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "settings.h"
+#include "skill_bar.h"
 #include "text.h"
 
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * );
 
 void Heroes::MeetingDialog( Heroes & heroes2 )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -47,7 +48,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     cursor.SetThemes( cursor.POINTER );
 
     const Sprite & backSprite = AGG::GetICN( ICN::SWAPWIN, 0 );
-    const Point cur_pt( ( display.w() - backSprite.w() ) / 2, ( display.h() - backSprite.h() ) / 2 );
+    const Point cur_pt( ( display.width() - backSprite.w() ) / 2, ( display.height() - backSprite.h() ) / 2 );
     SpriteBack background( Rect( cur_pt, backSprite.w(), backSprite.h() ) );
     Point dst_pt( cur_pt );
     std::string message;
@@ -181,7 +182,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     buttonExit.Draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     MovePointsScaleFixed();
     heroes2.MovePointsScaleFixed();
@@ -216,7 +217,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         // selector artifacts event
@@ -239,7 +240,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         if ( ( le.MouseCursor( primskill_bar1.GetArea() ) && primskill_bar1.QueueEventProcessing() )
@@ -247,7 +248,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
              || ( le.MouseCursor( secskill_bar1.GetArea() ) && secskill_bar1.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar2.GetArea() ) && secskill_bar2.QueueEventProcessing() ) ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         if ( le.MouseCursor( moraleIndicator1.GetArea() ) )
@@ -268,7 +269,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     cursor.Hide();
     background.Restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 }
 
 void RedrawPrimarySkillInfo( const Point & cur_pt, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )

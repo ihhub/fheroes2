@@ -872,7 +872,7 @@ void ArtifactsBar::ResetSelected( void )
     Interface::ItemsActionBar<Artifact>::ResetSelected();
 }
 
-void ArtifactsBar::Redraw( Surface & dstsf )
+void ArtifactsBar::Redraw( fheroes2::Image & dstsf )
 {
     Cursor::Get().Hide();
     spcursor.Hide();

@@ -24,8 +24,6 @@
 #define H2SKILL_H
 
 #include <string>
-#include <utility>
-#include <vector>
 
 #include "gamedefs.h"
 
@@ -180,51 +178,4 @@ namespace Skill
     StreamBase & operator<<( StreamBase &, const Primary & );
     StreamBase & operator>>( StreamBase &, Primary & );
 }
-
-#include "interface_itemsbar.h"
-class PrimarySkillsBar : public Interface::ItemsBar<int>
-{
-public:
-    PrimarySkillsBar( const Heroes *, bool mini );
-
-    void SetTextOff( s32, s32 );
-    void RedrawBackground( const Rect &, Surface & );
-    void RedrawItem( int &, const Rect &, Surface & );
-
-    bool ActionBarSingleClick( const Point &, int &, const Rect & );
-    bool ActionBarPressRight( const Point &, int &, const Rect & );
-    bool ActionBarCursor( const Point &, int &, const Rect & );
-
-    bool QueueEventProcessing( std::string * = NULL );
-
-protected:
-    const Heroes * hero;
-    Surface backsf;
-    bool use_mini_sprite;
-    std::vector<int> content;
-    Point toff;
-    std::string msg;
-};
-
-class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
-{
-public:
-    SecondarySkillsBar( bool mini = true, bool change = false );
-
-    void RedrawBackground( const Rect &, Surface & );
-    void RedrawItem( Skill::Secondary &, const Rect &, Surface & );
-
-    bool ActionBarSingleClick( const Point &, Skill::Secondary &, const Rect & );
-    bool ActionBarPressRight( const Point &, Skill::Secondary &, const Rect & );
-    bool ActionBarCursor( const Point &, Skill::Secondary &, const Rect & );
-
-    bool QueueEventProcessing( std::string * = NULL );
-
-protected:
-    Surface backsf;
-    bool use_mini_sprite;
-    bool can_change;
-    std::string msg;
-};
-
 #endif

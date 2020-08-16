@@ -524,7 +524,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
 void Dialog::QuickInfo( const Castle & castle )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
@@ -559,10 +559,6 @@ void Dialog::QuickInfo( const Castle & castle )
     else
         // bottom right
         cur_rt = Rect( mx - box.w(), my - box.h(), box.w(), box.h() );
-
-    if ( Settings::Get().QVGA() ) {
-        cur_rt = Rect( ( display.w() - box.w() ) / 2, ( display.h() - box.h() ) / 2, box.w(), box.h() );
-    }
 
     SpriteBack back( cur_rt );
     box.Blit( cur_rt.x, cur_rt.y );
@@ -671,11 +667,11 @@ void Dialog::QuickInfo( const Castle & castle )
         text.Blit( dst_pt );
 
         // mini port heroes
-        Surface port = guardian->GetPortrait( PORT_SMALL );
-        if ( port.isValid() ) {
-            dst_pt.x = cur_rt.x + ( cur_rt.w - port.w() ) / 2;
+        fheroes2::Image port = guardian->GetPortrait( PORT_SMALL );
+        if ( !port.empty() ) {
+            dst_pt.x = cur_rt.x + ( cur_rt.w - port.width() ) / 2;
             dst_pt.y += 15;
-            port.Blit( dst_pt, display );
+            fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
         }
     }
 
@@ -694,7 +690,7 @@ void Dialog::QuickInfo( const Castle & castle )
         Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::NONE, false );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // quick info loop
     while ( le.HandleEvents() && le.MousePressRight() )
@@ -704,12 +700,12 @@ void Dialog::QuickInfo( const Castle & castle )
     cursor.Hide();
     back.Restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 }
 
 void Dialog::QuickInfo( const Heroes & hero )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
     Cursor & cursor = Cursor::Get();
@@ -746,10 +742,6 @@ void Dialog::QuickInfo( const Heroes & hero )
         // bottom right
         cur_rt = Rect( mx - box.w(), my - box.h(), box.w(), box.h() );
 
-    if ( Settings::Get().QVGA() ) {
-        cur_rt = Rect( ( display.w() - box.w() ) / 2, ( display.h() - box.h() ) / 2, box.w(), box.h() );
-    }
-
     SpriteBack back( cur_rt );
     box.Blit( cur_rt.x, cur_rt.y );
 
@@ -776,11 +768,11 @@ void Dialog::QuickInfo( const Heroes & hero )
     text.Blit( dst_pt );
 
     // mini port heroes
-    Surface port = hero.GetPortrait( PORT_SMALL );
-    if ( port.isValid() ) {
-        dst_pt.x = cur_rt.x + ( cur_rt.w - port.w() ) / 2;
+    fheroes2::Image port = hero.GetPortrait( PORT_SMALL );
+    if ( !port.empty() ) {
+        dst_pt.x = cur_rt.x + ( cur_rt.w - port.width() ) / 2;
         dst_pt.y = cur_rt.y + 13;
-        port.Blit( dst_pt, display );
+        fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
     }
 
     // luck
@@ -854,7 +846,7 @@ void Dialog::QuickInfo( const Heroes & hero )
         // attack
         text.Set( std::string( _( "Attack" ) ) + ":" );
         dst_pt.x = cur_rt.x + 10;
-        dst_pt.y += port.h();
+        dst_pt.y += port.height();
         text.Blit( dst_pt );
 
         text.Set( GetString( hero.GetAttack() ) );
@@ -919,7 +911,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     }
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // quick info loop
     while ( le.HandleEvents() && le.MousePressRight() )
@@ -929,5 +921,5 @@ void Dialog::QuickInfo( const Heroes & hero )
     cursor.Hide();
     back.Restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 }

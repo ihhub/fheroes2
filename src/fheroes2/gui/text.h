@@ -29,6 +29,7 @@
 #include "gamedefs.h"
 
 #include "screen.h"
+#include "ui_tool.h"
 
 namespace Font
 {
@@ -196,7 +197,7 @@ public:
     const Rect & GetRect( void ) const;
 
 private:
-    SpriteBack back;
+    fheroes2::ImageRestorer _restorer;
     bool hide;
 };
 

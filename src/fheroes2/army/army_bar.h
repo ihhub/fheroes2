@@ -43,7 +43,7 @@ public:
     bool isValid( void ) const;
 
     void ResetSelected( void );
-    void Redraw( Surface & dstsf = Display::Get() );
+    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
     bool ActionBarSingleClick( const Point &, ArmyTroop &, const Rect & );
     bool ActionBarSingleClick( const Point &, ArmyTroop &, const Rect &, ArmyTroop &, const Rect & );

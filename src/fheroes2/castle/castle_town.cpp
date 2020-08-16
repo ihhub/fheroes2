@@ -46,7 +46,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
 
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
@@ -118,7 +118,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
     button2.Draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
@@ -143,7 +143,7 @@ int Castle::DialogBuyCastle( bool buttons ) const
 
 u32 Castle::OpenTown( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
@@ -352,11 +352,17 @@ u32 Castle::OpenTown( void )
     dst_pt.x = cur_pt.x + 443;
     dst_pt.y = cur_pt.y + 260;
     const Rect rectHero1( dst_pt, 102, 93 );
+
+    fheroes2::Image noHeroPortrait( rectHero1.w, rectHero1.h );
+    noHeroPortrait.fill( 0 );
+
     if ( hero1 ) {
         hero1->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
-    else
-        display.FillRect( rectHero1, ColorBlack );
+    else {
+        fheroes2::Blit( noHeroPortrait, display, rectHero1.x, rectHero1.y );
+    }
+
     // indicator
     if ( !allow_buy_hero1 ) {
         dst_pt.x += 83;
@@ -371,8 +377,10 @@ u32 Castle::OpenTown( void )
     if ( hero2 ) {
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
-    else
-        display.FillRect( rectHero2, ColorBlack );
+    else {
+        fheroes2::Blit( noHeroPortrait, display, rectHero2.x, rectHero2.y );
+    }
+
     // indicator
     if ( !allow_buy_hero2 ) {
         dst_pt.x += 83;
@@ -400,7 +408,7 @@ u32 Castle::OpenTown( void )
     buttonExit.Draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -465,14 +473,14 @@ u32 Castle::OpenTown( void )
                 cursor.Hide();
                 cursorFormat.Move( pointSpreadArmyFormat );
                 cursor.Show();
-                display.Flip();
+                display.render();
                 army.SetSpreadFormat( true );
             }
             else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
                 cursor.Hide();
                 cursorFormat.Move( pointGroupedArmyFormat );
                 cursor.Show();
-                display.Flip();
+                display.render();
                 army.SetSpreadFormat( false );
             }
         }
@@ -485,12 +493,12 @@ u32 Castle::OpenTown( void )
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             hero1->OpenDialog( true );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
             hero2->OpenDialog( true );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         // status info

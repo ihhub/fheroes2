@@ -146,8 +146,7 @@ public:
 
 bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, bool readonly )
 {
-    Display & display = Display::Get();
-    // const Settings & conf = Settings::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
     // cursor
@@ -165,9 +164,9 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     dst_pt.y = area.y + 5;
     window.Blit( dst_pt );
 
-    Surface port = hero.GetPortrait( PORT_MEDIUM );
-    if ( port.isValid() )
-        port.Blit( dst_pt.x + 4, dst_pt.y + 4, display );
+    fheroes2::Image port = hero.GetPortrait( PORT_MEDIUM );
+    if ( !port.empty() )
+        fheroes2::Blit( port, display, dst_pt.x + 4, dst_pt.y + 4 );
 
     // indicators
     dst_pt.x = area.x + 185;
@@ -212,7 +211,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     const Troop shadow( troop );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     int buttons = Dialog::ZERO;
@@ -304,7 +303,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
             selectArmy.Redraw();
             armySplit.Redraw( troop );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
