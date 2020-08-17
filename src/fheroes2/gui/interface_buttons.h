@@ -54,7 +54,7 @@ namespace Interface
         fheroes2::Button buttonAdventure;
         fheroes2::Button buttonFile;
         fheroes2::Button buttonSystem;
-        
+
         Rect nextHeroRect;
         Rect movementRect;
         Rect kingdomRect;

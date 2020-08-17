@@ -559,7 +559,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     Rect btnHeroesArea = btnHeroes.area();
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
-        btnGroup.button(0).disable();
+        btnGroup.button( 0 ).disable();
 
     TextSprite tsEnough;
 

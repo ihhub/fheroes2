@@ -121,8 +121,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             current_index -= SPELL_PER_PAGE * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
-                  && spells2.size() > ( current_index + ( SPELL_PER_PAGE * 2 ) ) ) {
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) && spells2.size() > ( current_index + ( SPELL_PER_PAGE * 2 ) ) ) {
             current_index += SPELL_PER_PAGE * 2;
             redraw = true;
         }
@@ -368,7 +367,7 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
     if ( SpellBook::CMBT != only )
         fheroes2::Blit( bookmark_advn, display, pt.x + 270, pt.y + 270 );
     if ( SpellBook::ADVN != only )
-            fheroes2::Blit( bookmark_cmbt, display, pt.x + 304, pt.y + 278 );
+        fheroes2::Blit( bookmark_cmbt, display, pt.x + 304, pt.y + 278 );
 
     fheroes2::Blit( bookmark_clos, display, pt.x + 420, pt.y + 284 );
 

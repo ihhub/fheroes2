@@ -240,7 +240,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
 
     const Rect & visibleArea = gameArea.GetROI();
     const bool isFadingEnabled = ( gameArea.GetROI().w > TILEWIDTH * distance ) || ( gameArea.GetROI().h > TILEWIDTH * distance );
-    fheroes2::Image top(visibleArea.w, visibleArea.h);
+    fheroes2::Image top( visibleArea.w, visibleArea.h );
     fheroes2::Copy( display, visibleArea.x, visibleArea.y, top, 0, 0, visibleArea.w, visibleArea.h );
 
     // We need to add an extra one cell as a hero stands exactly in the middle of a cell
@@ -255,7 +255,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
         fheroes2::Image middle( spellROI.w, spellROI.h );
         fheroes2::Copy( display, spellROI.x, spellROI.y, middle, 0, 0, spellROI.w, spellROI.h );
 
-        //display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 105, 300 );
+        // display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 105, 300 );
         fheroes2::InvertedFade();
     }
 
