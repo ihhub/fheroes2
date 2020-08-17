@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -31,7 +30,7 @@
 
 int Dialog::FileOptions( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     // preload
     const int cpanbkg = Settings::Get().ExtGameEvilInterface() ? ICN::CPANBKGE : ICN::CPANBKG;
     const int cpanel = Settings::Get().ExtGameEvilInterface() ? ICN::CPANELE : ICN::CPANEL;
@@ -43,46 +42,46 @@ int Dialog::FileOptions( void )
     cursor.SetThemes( Cursor::POINTER );
 
     // image box
-    const Sprite & box = AGG::GetICN( cpanbkg, 0 );
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
 
-    SpriteBack back( Rect( ( display.w() - box.w() ) / 2, ( display.h() - box.h() ) / 2, box.w(), box.h() ) );
-    const Point & rb = back.GetPos();
-    box.Blit( rb.x, rb.y );
+    Point rb( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
+    fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
+    fheroes2::Blit( box, display, rb.x, rb.y );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonNew( rb.x + 62, rb.y + 31, cpanel, 0, 1 );
-    Button buttonLoad( rb.x + 195, rb.y + 31, cpanel, 2, 3 );
-    Button buttonSave( rb.x + 62, rb.y + 107, cpanel, 4, 5 );
-    Button buttonQuit( rb.x + 195, rb.y + 107, cpanel, 6, 7 );
-    Button buttonCancel( rb.x + 128, rb.y + 184, cpanel, 8, 9 );
+    fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, cpanel, 0, 1 );
+    fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, cpanel, 2, 3 );
+    fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, cpanel, 4, 5 );
+    fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, cpanel, 6, 7 );
+    fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, cpanel, 8, 9 );
 
-    buttonNew.Draw();
-    buttonLoad.Draw();
-    buttonSave.Draw();
-    buttonQuit.Draw();
-    buttonCancel.Draw();
+    buttonNew.draw();
+    buttonLoad.draw();
+    buttonSave.draw();
+    buttonQuit.draw();
+    buttonCancel.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     int result = Game::QUITGAME;
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonNew ) ? buttonNew.PressDraw() : buttonNew.ReleaseDraw();
-        le.MousePressLeft( buttonLoad ) ? buttonLoad.PressDraw() : buttonLoad.ReleaseDraw();
-        le.MousePressLeft( buttonSave ) ? buttonSave.PressDraw() : buttonSave.ReleaseDraw();
-        le.MousePressLeft( buttonQuit ) ? buttonQuit.PressDraw() : buttonQuit.ReleaseDraw();
-        le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+        le.MousePressLeft( buttonNew.area() ) ? buttonNew.drawOnPress() : buttonNew.drawOnRelease();
+        le.MousePressLeft( buttonLoad.area() ) ? buttonLoad.drawOnPress() : buttonLoad.drawOnRelease();
+        le.MousePressLeft( buttonSave.area() ) ? buttonSave.drawOnPress() : buttonSave.drawOnRelease();
+        le.MousePressLeft( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonNew ) ) {
+        if ( le.MouseClickLeft( buttonNew.area() ) ) {
             if ( Interface::Basic::Get().EventNewGame() == Game::NEWGAME ) {
                 result = Game::NEWGAME;
                 break;
             }
         }
-        if ( le.MouseClickLeft( buttonLoad ) ) {
+        if ( le.MouseClickLeft( buttonLoad.area() ) ) {
             if ( ListFiles::IsEmpty( Settings::GetSaveDir(), ".sav", false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
@@ -93,17 +92,17 @@ int Dialog::FileOptions( void )
                 }
             }
         }
-        if ( le.MouseClickLeft( buttonSave ) ) {
+        if ( le.MouseClickLeft( buttonSave.area() ) ) {
             result = Interface::Basic::Get().EventSaveGame();
             break;
         }
-        if ( le.MouseClickLeft( buttonQuit ) ) {
+        if ( le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::Get().EventExit() == Game::QUITGAME ) {
                 result = Game::QUITGAME;
                 break;
             }
         }
-        if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
             result = Game::CANCEL;
             break;
         }
@@ -111,10 +110,10 @@ int Dialog::FileOptions( void )
 
     // restore background
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.SetThemes( oldcursor );
     cursor.Show();
-    display.Flip();
+    display.render();
 
     return result;
 }

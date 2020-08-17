@@ -610,6 +610,11 @@ namespace fheroes2
         }
     }
 
+    bool Display::isDefaultSize() const
+    {
+        return width() == DEFAULT_WIDTH && height() == DEFAULT_HEIGHT;
+    }
+
     Display & Display::instance()
     {
         static Display display;

@@ -77,10 +77,6 @@ namespace Interface
         void BlitOnTile( fheroes2::Image & src, const fheroes2::Image & dst, int32_t ox, int32_t oy, const Point & mp, bool flip = false, uint8_t alpha = 255 ) const;
         void BlitOnTile( fheroes2::Image & src, const fheroes2::Sprite & dst, const Point & mp ) const;
 
-        void UpdateCyclingPalette( int frame );
-        const std::vector<uint32_t> & GetCyclingRGBPalette() const;
-        MapObjectSprite & GetSpriteCache();
-
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
 
@@ -112,9 +108,6 @@ namespace Interface
         int32_t _prevIndexPos;
         int scrollDirection;
         bool updateCursor;
-
-        std::vector<uint32_t> _cyclingRGBPalette;
-        MapObjectSprite _spriteCache;
 
         SDL::Time scrollTime;
 

@@ -152,9 +152,9 @@ namespace Dialog
         void SetBorder( int );
         int BorderWidth( void ) const;
         int BorderHeight( void ) const;
-        bool isValid( void ) const;
         void SetPosition( s32, s32, u32 = 0, u32 = 0 );
 
+        bool isValid() const;
         const Rect & GetRect( void ) const;
         const Rect & GetArea( void ) const;
         const Rect & GetTop( void ) const;
@@ -163,7 +163,7 @@ namespace Dialog
         static void RenderOther( const fheroes2::Image &, const Rect & );
 
     protected:
-        SpriteBack background;
+        fheroes2::ImageRestorer restorer;
         Rect rect;
         Rect area;
         Rect top;
