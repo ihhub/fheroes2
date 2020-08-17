@@ -92,27 +92,27 @@ void Game::DialogPlayers( int color, std::string str )
     const Player * player = Settings::Get().GetPlayers().Get( color );
     StringReplace( str, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
-    const Sprite & border = AGG::GetICN( ICN::BRCREST, 6 );
-    Surface sign = border.GetSurface();
+    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    fheroes2::Image sign = border;
 
     switch ( color ) {
     case Color::BLUE:
-        AGG::GetICN( ICN::BRCREST, 0 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 0 ), sign, 4, 4 );
         break;
     case Color::GREEN:
-        AGG::GetICN( ICN::BRCREST, 1 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 1 ), sign, 4, 4 );
         break;
     case Color::RED:
-        AGG::GetICN( ICN::BRCREST, 2 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 2 ), sign, 4, 4 );
         break;
     case Color::YELLOW:
-        AGG::GetICN( ICN::BRCREST, 3 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 3 ), sign, 4, 4 );
         break;
     case Color::ORANGE:
-        AGG::GetICN( ICN::BRCREST, 4 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 4 ), sign, 4, 4 );
         break;
     case Color::PURPLE:
-        AGG::GetICN( ICN::BRCREST, 5 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
         break;

@@ -1146,10 +1146,10 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
     }
 
     if ( isControlHuman() ) {
-        const Sprite & border = AGG::GetICN( ICN::RESOURCE, 7 );
-        Surface sprite = border.GetSurface();
+        const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+        fheroes2::Image sprite = border;
 
-        AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ).Blit( 5, 5, sprite );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
 
         header.append( " " );
         header.append( _( "Do you wish to buy one?" ) );

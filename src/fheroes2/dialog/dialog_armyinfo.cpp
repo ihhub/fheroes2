@@ -58,7 +58,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     const Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
     const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, sprite_dialog.width() + BORDERWIDTH, sprite_dialog.height() + BORDERWIDTH ) );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite_dialog.width() + BORDERWIDTH, sprite_dialog.height() + BORDERWIDTH );
     const Rect pos_rt( dialogOffset.x, dialogOffset.y, sprite_dialog.width(), sprite_dialog.height() );
 
     fheroes2::Blit( spriteDialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
@@ -196,7 +196,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     }
 
     cursor.Hide();
-    back.Restore();
 
     return result;
 }
