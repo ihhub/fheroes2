@@ -851,6 +851,8 @@ ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change 
         const Rect rt( 26, 21, 32, 32 );
 
         backsf.resize( rt.w + 2, rt.h + 2 );
+        backsf.reset();
+
         fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
         fheroes2::Blit( sprite, rt.x, rt.y, backsf, 1, 1, rt.w, rt.h );
 

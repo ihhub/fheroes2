@@ -60,7 +60,7 @@ public:
 protected:
     Army * army;
     fheroes2::Image backsf;
-    SpriteMove spcursor;
+    fheroes2::MovableSprite spcursor;
     bool use_mini_sprite;
     bool read_only;
     bool can_change;

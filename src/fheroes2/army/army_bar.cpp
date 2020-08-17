@@ -77,7 +77,7 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     : army( NULL )
-    , spcursor( AGG::GetICN( ICN::STRIP, 1 ) )
+    , spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
@@ -122,8 +122,9 @@ void ArmyBar::SetBackground( const Size & sz, const RGBA & fillColor )
 
         fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
 
-        spcursor.Set( sz.w, sz.h, true /* transparent */ );
-        spcursor.DrawBorder( RGBA( 0xc0, 0x2c, 0 ) );
+        spcursor.resize( sz.w, sz.h );
+        spcursor.reset();
+        fheroes2::DrawBorder( spcursor, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
     }
 }
 
@@ -193,21 +194,21 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
         }
 
         if ( selected )
-            spcursor.Move( pos.x, pos.y );
+            spcursor.setPosition( pos.x, pos.y );
     }
 }
 
 void ArmyBar::ResetSelected( void )
 {
     Cursor::Get().Hide();
-    spcursor.Hide();
+    spcursor.hide();
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
 }
 
 void ArmyBar::Redraw( fheroes2::Image & dstsf )
 {
     Cursor::Get().Hide();
-    spcursor.Hide();
+    spcursor.hide();
     Interface::ItemsActionBar<ArmyTroop>::Redraw( dstsf );
 }
 
@@ -311,7 +312,7 @@ bool ArmyBar::ActionBarSingleClick( const Point & cursor, ArmyTroop & troop, con
         if ( !read_only ) // select
         {
             Cursor::Get().Hide();
-            spcursor.Hide();
+            spcursor.hide();
         }
     }
     else {
