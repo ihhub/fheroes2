@@ -38,10 +38,10 @@ Rect CastleGetCoordBuilding( int, building_t, const Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
 Rect CastleGetMaxArea( const Castle &, const Point & );
 
-void CastleDialog::RedrawBuildingSpriteToArea( const Sprite & sprite, s32 dst_x, s32 dst_y, const Rect & max )
+void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, s32 dst_x, s32 dst_y, const Rect & max )
 {
-    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst_x, dst_y, sprite.w(), sprite.h() ), max );
-    sprite.Blit( res.first, res.second );
+    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst_x, dst_y, sprite.width(), sprite.height() ), max );
+    fheroes2::Blit( sprite, res.first.x, res.first.y, fheroes2::Display::instance(), res.second.x, res.second.y, res.first.w, res.first.h );
 }
 
 CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const Point & top )
@@ -91,30 +91,30 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 {
     const uint32_t frame = Game::CastleAnimationFrame();
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
-    Sprite townbkg;
+    fheroes2::Sprite townbkg;
 
     // before redraw
     switch ( castle.GetRace() ) {
     case Race::KNGT:
-        townbkg = AGG::GetICN( ICN::TOWNBKG0, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG0, 0 );
         break;
     case Race::BARB:
-        townbkg = AGG::GetICN( ICN::TOWNBKG1, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG1, 0 );
         break;
     case Race::SORC:
-        townbkg = AGG::GetICN( ICN::TOWNBKG2, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG2, 0 );
         break;
     case Race::WRLK:
-        townbkg = AGG::GetICN( ICN::TOWNBKG3, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG3, 0 );
         break;
     case Race::WZRD:
-        townbkg = AGG::GetICN( ICN::TOWNBKG4, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG4, 0 );
         break;
     case Race::NECR:
-        townbkg = AGG::GetICN( ICN::TOWNBKG5, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG5, 0 );
         break;
     default:
         break;
@@ -122,51 +122,51 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 
     const Rect max = CastleGetMaxArea( castle, dst_pt );
 
-    if ( townbkg.isValid() )
-        townbkg.Blit( dst_pt.x, dst_pt.y );
+    if ( !townbkg.empty() )
+        fheroes2::Blit( townbkg, display, dst_pt.x, dst_pt.y );
 
     if ( Race::BARB == castle.GetRace() ) {
-        const Sprite & sprite0 = AGG::GetICN( ICN::TWNBEXT1, 1 + frame % 5 );
-        sprite0.Blit( dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
+        const fheroes2::Sprite & sprite0 = fheroes2::AGG::GetICN( ICN::TWNBEXT1, 1 + frame % 5 );
+        fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
     }
 
     // sea anime
     if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) ) {
-        Sprite sprite50, sprite51;
+        fheroes2::Sprite sprite50, sprite51;
 
         switch ( castle.GetRace() ) {
         case Race::KNGT:
-            sprite50 = AGG::GetICN( ICN::TWNKEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNKEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 1 + frame % 5 );
             break;
         case Race::BARB:
-            sprite50 = AGG::GetICN( ICN::TWNBEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNBEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 1 + frame % 5 );
             break;
         case Race::SORC:
-            sprite50 = AGG::GetICN( ICN::TWNSEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNSEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 1 + frame % 5 );
             break;
         case Race::NECR:
-            sprite50 = AGG::GetICN( ICN::TWNNEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNNEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 1 + frame % 5 );
             break;
         case Race::WRLK:
-            sprite50 = AGG::GetICN( ICN::TWNWEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNWEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 1 + frame % 5 );
             break;
         case Race::WZRD:
-            sprite50 = AGG::GetICN( ICN::TWNZEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNZEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 1 + frame % 5 );
             break;
         default:
             break;
         }
 
-        if ( sprite50.isValid() )
+        if ( !sprite50.empty() )
             CastleDialog::RedrawBuildingSpriteToArea( sprite50, dst_pt.x + sprite50.x(), dst_pt.y + sprite50.y(), max );
 
-        if ( sprite51.isValid() )
+        if ( !sprite51.empty() )
             CastleDialog::RedrawBuildingSpriteToArea( sprite51, dst_pt.x + sprite51.x(), dst_pt.y + sprite51.y(), max );
     }
 
@@ -209,7 +209,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                 CastleRedrawTownName( castle, dst_pt );
 
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
             ++buildFrame;
         }
@@ -266,28 +266,16 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
 
     if ( icn != ICN::UNKNOWN ) {
         // simple first sprite
-        Sprite sprite1 = AGG::GetICN( icn, index );
-        if ( Castle::isBuildingCycling( build, race ) ) {
-            AGG::ReplaceColors( sprite1, PAL::GetCyclingPalette( frame ), icn, index, false );
-        }
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Sprite sprite1 = fheroes2::AGG::GetICN( icn, index );
 
-        if ( alpha ) {
-            sprite1.SetAlphaMod( alpha, true );
-            sprite1.Blit( dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y() );
-        }
-        else
-            CastleDialog::RedrawBuildingSpriteToArea( sprite1, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y(), max );
+        fheroes2::AlphaBlit( sprite1, display, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y() );
 
         // second anime sprite
         if ( const u32 index2 = ICN::AnimationFrame( icn, index, frame ) ) {
-            Sprite sprite2 = AGG::GetICN( icn, index2 );
+            fheroes2::Sprite sprite2 = fheroes2::AGG::GetICN( icn, index2 );
 
-            if ( alpha ) {
-                sprite2.SetAlphaMod( alpha, true );
-                sprite2.Blit( dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y() );
-            }
-            else
-                CastleDialog::RedrawBuildingSpriteToArea( sprite2, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), max );
+            fheroes2::AlphaBlit( sprite2, display, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), alpha );
         }
     }
 }
@@ -306,17 +294,17 @@ void CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, 
         if ( castle.PresentBoat() ) {
             const int icn2 = castle.GetICNBoat( castle.GetRace() );
 
-            const Sprite & sprite40 = AGG::GetICN( icn2, 0 );
+            const fheroes2::Sprite & sprite40 = fheroes2::AGG::GetICN( icn2, 0 );
             CastleDialog::RedrawBuildingSpriteToArea( sprite40, dst_pt.x + sprite40.x(), dst_pt.y + sprite40.y(), max );
 
             if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
-                const Sprite & sprite41 = AGG::GetICN( icn2, index2 );
+                const fheroes2::Sprite & sprite41 = fheroes2::AGG::GetICN( icn2, index2 );
                 CastleDialog::RedrawBuildingSpriteToArea( sprite41, dst_pt.x + sprite41.x(), dst_pt.y + sprite41.y(), max );
             }
         }
         else {
             if ( const u32 index2 = ICN::AnimationFrame( icn, 0, frame ) ) {
-                const Sprite & sprite3 = AGG::GetICN( icn, index2 );
+                const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( icn, index2 );
                 CastleDialog::RedrawBuildingSpriteToArea( sprite3, dst_pt.x + sprite3.x(), dst_pt.y + sprite3.y(), max );
             }
         }
@@ -326,11 +314,11 @@ void CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, 
         if ( Race::SORC == castle.GetRace() && BUILD_WEL2 == build ) {
         const int icn2 = castle.isBuild( BUILD_STATUE ) ? ICN::TWNSEXT1 : icn;
 
-        const Sprite & sprite20 = AGG::GetICN( icn2, 0 );
+        const fheroes2::Sprite & sprite20 = fheroes2::AGG::GetICN( icn2, 0 );
         CastleDialog::RedrawBuildingSpriteToArea( sprite20, dst_pt.x + sprite20.x(), dst_pt.y + sprite20.y(), max );
 
         if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
-            const Sprite & sprite21 = AGG::GetICN( icn2, index2 );
+            const fheroes2::Sprite & sprite21 = fheroes2::AGG::GetICN( icn2, index2 );
             CastleDialog::RedrawBuildingSpriteToArea( sprite21, dst_pt.x + sprite21.x(), dst_pt.y + sprite21.y(), max );
         }
     }

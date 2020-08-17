@@ -33,16 +33,17 @@
 #include "mageguild.h"
 #include "position.h"
 #include "sprite.h"
+#include "ui_button.h"
 
 class Heroes;
 
-class MeetingButton : public ButtonSprite
+class MeetingButton : public fheroes2::ButtonSprite
 {
 public:
     MeetingButton( s32, s32 );
 };
 
-class SwapButton : public ButtonSprite
+class SwapButton : public fheroes2::ButtonSprite
 {
 public:
     SwapButton( s32, s32 );
@@ -260,7 +261,7 @@ namespace CastleDialog
 
         building_t id;
         Rect coord;
-        Sprite contour;
+        fheroes2::Sprite contour;
     };
 
     struct CacheBuildings : std::vector<builds_t>
@@ -271,7 +272,7 @@ namespace CastleDialog
 
     void RedrawAllBuilding( const Castle &, const Point &, const CacheBuildings &, u32 flash = BUILD_NOTHING );
     void RedrawAnimationBuilding( const Castle &, const Point &, const CacheBuildings &, u32 build );
-    void RedrawBuildingSpriteToArea( const Sprite &, s32, s32, const Rect & );
+    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect & );
 }
 
 struct VecCastles : public std::vector<Castle *>

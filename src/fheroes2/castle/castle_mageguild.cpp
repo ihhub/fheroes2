@@ -39,9 +39,9 @@ RowSpells::RowSpells( const Point & pos, const Castle & castle, int lvl )
 {
     const MageGuild & guild = castle.GetMageGuild();
     bool hide = castle.GetLevelMageGuild() < lvl;
-    const Sprite & roll_show = AGG::GetICN( ICN::TOWNWIND, 0 );
-    const Sprite & roll_hide = AGG::GetICN( ICN::TOWNWIND, 1 );
-    const Sprite & roll = ( hide ? roll_hide : roll_show );
+    const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
+    const fheroes2::Sprite & roll_hide = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
+    const fheroes2::Sprite & roll = ( hide ? roll_hide : roll_show );
 
     u32 count = 0;
 
@@ -62,13 +62,13 @@ RowSpells::RowSpells( const Point & pos, const Castle & castle, int lvl )
     }
 
     for ( u32 ii = 0; ii < count; ++ii )
-        coords.push_back( Rect( pos.x + coords.size() * ( Settings::Get().QVGA() ? 72 : 110 ) - roll.w() / 2, pos.y, roll.w(), roll.h() ) );
+        coords.push_back( Rect( pos.x + coords.size() * 110 - roll.width() / 2, pos.y, roll.width(), roll.height() ) );
 
     if ( castle.HaveLibraryCapability() ) {
         if ( !hide && castle.isLibraryBuild() )
-            coords.push_back( Rect( pos.x + coords.size() * ( Settings::Get().QVGA() ? 72 : 110 ) - roll_show.w() / 2, pos.y, roll_show.w(), roll_show.h() ) );
+            coords.push_back( Rect( pos.x + coords.size() * 110 - roll_show.width() / 2, pos.y, roll_show.width(), roll_show.height() ) );
         else
-            coords.push_back( Rect( pos.x + coords.size() * ( Settings::Get().QVGA() ? 72 : 110 ) - roll_hide.w() / 2, pos.y, roll_hide.w(), roll_hide.h() ) );
+            coords.push_back( Rect( pos.x + coords.size() * 110 - roll_hide.width() / 2, pos.y, roll_hide.width(), roll_hide.height() ) );
     }
 
     spells.reserve( 6 );
@@ -78,40 +78,36 @@ RowSpells::RowSpells( const Point & pos, const Castle & castle, int lvl )
 
 void RowSpells::Redraw( void )
 {
-    const Sprite & roll_show = AGG::GetICN( ICN::TOWNWIND, 0 );
-    const Sprite & roll_hide = AGG::GetICN( ICN::TOWNWIND, 1 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
+    const fheroes2::Sprite & roll_hide = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
 
     for ( Rects::iterator it = coords.begin(); it != coords.end(); ++it ) {
         const Rect & dst = ( *it );
         const Spell & spell = spells[std::distance( coords.begin(), it )];
 
         // roll hide
-        if ( dst.w < roll_show.w() || spell == Spell::NONE ) {
-            roll_hide.Blit( dst );
+        if ( dst.w < roll_show.width() || spell == Spell::NONE ) {
+            fheroes2::Blit( roll_hide, display, dst.x, dst.y );
         }
         // roll show
         else {
-            roll_show.Blit( dst );
+            fheroes2::Blit( roll_show, display, dst.x, dst.y );
 
-            const Sprite & icon = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
 
-            if ( Settings::Get().QVGA() ) {
-                icon.Blit( dst.x + 2 + ( dst.w - icon.w() ) / 2, dst.y + 20 - icon.h() / 2 );
-            }
-            else {
-                icon.Blit( dst.x + 3 + ( dst.w - icon.w() ) / 2, dst.y + 31 - icon.h() / 2 );
+            fheroes2::Blit( icon, display, dst.x + 3 + ( dst.w - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
-                TextBox text( std::string( spell.GetName() ) + " [" + GetString( spell.SpellPoint( NULL ) ) + "]", Font::SMALL, 78 );
-                text.Blit( dst.x + 18, dst.y + 55 );
-            }
+            TextBox text( std::string( spell.GetName() ) + " [" + GetString( spell.SpellPoint( NULL ) ) + "]", Font::SMALL, 78 );
+            text.Blit( dst.x + 18, dst.y + 55 );
         }
     }
 }
 
 bool RowSpells::QueueEventProcessing( void )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
 
     const s32 index = coords.GetIndex( le.GetMouseCursor() );
@@ -123,7 +119,7 @@ bool RowSpells::QueueEventProcessing( void )
             cursor.Hide();
             Dialog::SpellInfo( spell, !le.MousePressRight() );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
@@ -132,7 +128,7 @@ bool RowSpells::QueueEventProcessing( void )
 
 void Castle::OpenMageGuild( const CastleHeroes & heroes )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
@@ -198,7 +194,7 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
     buttonExit.Draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
