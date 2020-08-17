@@ -35,6 +35,7 @@
 // This is new Graphics engine. To change the code slowly we have to do some hacks here for now
 #include "screen.h"
 
+/*
 namespace
 {
     // Returns nearest screen supported resolution
@@ -71,6 +72,7 @@ namespace
         return value.first < Display::DEFAULT_WIDTH || value.second < Display::DEFAULT_HEIGHT;
     }
 }
+*/
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Display::Display()
@@ -591,6 +593,7 @@ Surface Display::GetSurface( void ) const
     return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
 }
 
+/*
 std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
 {
     std::set<std::pair<int, int> > resolutionSet;
@@ -627,6 +630,7 @@ std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
 
     return std::vector<std::pair<int, int> >();
 }
+*/
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Texture::Texture()

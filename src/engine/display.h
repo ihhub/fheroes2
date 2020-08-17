@@ -74,7 +74,7 @@ public:
 
     bool isMouseFocusActive() const;
 
-    static std::vector<std::pair<int, int> > GetAvailableResolutions();
+    // static std::vector<std::pair<int, int> > GetAvailableResolutions();
 
 protected:
     friend class Texture;

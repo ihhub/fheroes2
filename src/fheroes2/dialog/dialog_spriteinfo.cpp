@@ -28,6 +28,7 @@
 #include "game.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 
 int Dialog::ArtifactInfo( const std::string & hdr, const std::string & msg, const Artifact & art, int buttons )
 {
@@ -77,8 +78,8 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
 
     LocalEvent & le = LocalEvent::Get();
 
-    ButtonGroups btnGroups( box.GetArea(), buttons );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.GetArea().x, box.GetArea().y, box.GetArea().w, box.GetArea().h ), buttons );
+    btnGroups.draw();
 
     cursor.Show();
     display.Flip();
@@ -89,7 +90,7 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         if ( !buttons && !le.MousePressRight() )
             break;
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
     }
 
     cursor.Hide();

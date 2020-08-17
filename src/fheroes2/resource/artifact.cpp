@@ -847,15 +847,15 @@ ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change 
     , can_change( change )
 {
     if ( use_mini_sprite ) {
-        const Sprite & sprite = AGG::GetICN( ICN::HSICONS, 0 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 0 );
         const Rect rt( 26, 21, 32, 32 );
 
-        backsf.Set( rt.w + 2, rt.h + 2, true );
-        backsf.DrawBorder( RGBA( 0xD0, 0xC0, 0x48 ) );
-        sprite.Blit( rt, 1, 1, backsf );
+        backsf.resize( rt.w + 2, rt.h + 2 );
+        fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
+        fheroes2::Blit( sprite, rt.x, rt.y, backsf, 1, 1, rt.w, rt.h );
 
-        SetItemSize( backsf.w(), backsf.h() );
-        spcursor.Set( backsf.w(), backsf.h(), true );
+        SetItemSize( backsf.width(), backsf.height() );
+        spcursor.Set( backsf.width(), backsf.height(), true );
         spcursor.DrawBorder( RGBA( 0xb0, 0xb0, 0xb0 ) );
     }
     else {
@@ -879,12 +879,12 @@ void ArtifactsBar::Redraw( fheroes2::Image & dstsf )
     Interface::ItemsActionBar<Artifact>::Redraw( dstsf );
 }
 
-void ArtifactsBar::RedrawBackground( const Rect & pos, Surface & dstsf )
+void ArtifactsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
 {
     if ( use_mini_sprite )
-        backsf.Blit( pos, dstsf );
+        fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
     else
-        AGG::GetICN( ICN::ARTIFACT, 0 ).Blit( pos, dstsf );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 ), dstsf, pos.x, pos.y );
 }
 
 void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, fheroes2::Image & dstsf )

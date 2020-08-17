@@ -34,7 +34,7 @@ class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
 public:
     ArmyBar( Army *, bool mini, bool ro, bool change = false );
 
-    void RedrawBackground( const Rect &, Surface & );
+    void RedrawBackground( const Rect &, fheroes2::Image & );
     void RedrawItem( ArmyTroop &, const Rect &, bool, fheroes2::Image & );
 
     void SetBackground( const Size &, const RGBA & );
@@ -59,7 +59,7 @@ public:
 
 protected:
     Army * army;
-    Surface backsf;
+    fheroes2::Image backsf;
     SpriteMove spcursor;
     bool use_mini_sprite;
     bool read_only;

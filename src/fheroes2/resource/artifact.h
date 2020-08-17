@@ -234,7 +234,7 @@ class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 public:
     ArtifactsBar( const Heroes *, bool mini, bool ro, bool change = false );
 
-    void RedrawBackground( const Rect &, Surface & );
+    void RedrawBackground( const Rect &, fheroes2::Image & );
     void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & );
 
     void ResetSelected( void );
@@ -253,7 +253,7 @@ public:
 
 protected:
     const Heroes * hero;
-    Surface backsf;
+    fheroes2::Image backsf;
     SpriteMove spcursor;
     bool use_mini_sprite;
     bool read_only;

@@ -117,21 +117,22 @@ void ArmyBar::SetBackground( const Size & sz, const RGBA & fillColor )
     if ( use_mini_sprite ) {
         SetItemSize( sz.w, sz.h );
 
-        backsf.Set( sz.w, sz.h, false );
-        backsf.Fill( fillColor );
-        backsf.DrawBorder( RGBA( 0xd0, 0xc0, 0x48 ) );
+        backsf.resize( sz.w, sz.h );
+        backsf.fill( fheroes2::GetColorId( fillColor.r(), fillColor.g(), fillColor.b() ) );
+
+        fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
 
         spcursor.Set( sz.w, sz.h, true /* transparent */ );
         spcursor.DrawBorder( RGBA( 0xc0, 0x2c, 0 ) );
     }
 }
 
-void ArmyBar::RedrawBackground( const Rect & pos, Surface & dstsf )
+void ArmyBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
 {
     if ( use_mini_sprite )
-        backsf.Blit( pos, dstsf );
+        fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
     else
-        AGG::GetICN( ICN::STRIP, 2 ).Blit( pos, dstsf );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), dstsf, pos.x, pos.y );
 }
 
 void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fheroes2::Image & dstsf )
@@ -243,17 +244,6 @@ bool ArmyBar::ActionBarCursor( const Point & cursor, ArmyTroop & troop, const Re
     ArmyTroop * troop_p = GetItem( le.GetMousePressLeft() );
 
     if ( !troop.isValid() && troop_p && troop_p->isValid() ) {
-        /*
-            const Rect* pos_p = GetItemPos(le.GetMousePressLeft());
-            const Point offset(Point(le.GetMousePressLeft()) - *pos_p);
-            Surface sf(pos.w, pos.h);
-            RedrawItem(*troop_p, Rect(0, 0, pos.w, pos.h), false, sf);
-            sf.GrayScale();
-            SpriteCursor sp;
-            sp.SetSprite(sf);
-            while(le.HandleEvents() && le.MousePressLeft()){ Cursor::Get().Hide(); sp.Move(Point(le.GetMouseCursor()) - offset); Cursor::Get().Show();
-           Display::Get().Flip(); DELAY(1); }; Cursor::Get().Hide(); sp.Hide();
-        */
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             Cursor::Get().Show();
             Display::Get().Flip();
