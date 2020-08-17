@@ -597,20 +597,22 @@ namespace fheroes2
                 const uint8_t * imageOutXEnd = imageOutX + width;
 
                 for ( ; imageOutX != imageOutXEnd; --imageInX, --transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a transformation
-                        if ( *transformX > 1 ) { // 1 is to skip data
-                            *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
-                        }
+                    if ( *transformX == 1 ) {
+                        continue;
                     }
-                    else { // copy a pixel
-                        const uint8_t * inPAL = kb_pal + ( *imageInX ) * 3;
-                        const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
+                    uint8_t inValue = *imageInX;
+                    if ( *transformX > 1 ) {
+                        inValue = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                     }
+
+                    const uint8_t * inPAL = kb_pal + ( inValue ) * 3;
+                    const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
+
+                    const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
+                    const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
+                    const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                    *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                 }
             }
         }
@@ -627,20 +629,22 @@ namespace fheroes2
                 const uint8_t * imageInXEnd = imageInX + width;
 
                 for ( ; imageInX != imageInXEnd; ++imageInX, ++transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a transformation
-                        if ( *transformX > 1 ) { // 1 is to skip data
-                            *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
-                        }
+                    if ( *transformX == 1 ) {
+                        continue;
                     }
-                    else { // copy a pixel
-                        const uint8_t * inPAL = kb_pal + ( *imageInX ) * 3;
-                        const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
+                    uint8_t inValue = *imageInX;
+                    if ( *transformX > 1 ) {
+                        inValue = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                     }
+
+                    const uint8_t * inPAL = kb_pal + ( inValue ) * 3;
+                    const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
+
+                    const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
+                    const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
+                    const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                    *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                 }
             }
         }
