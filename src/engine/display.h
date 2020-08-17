@@ -74,8 +74,6 @@ public:
 
     bool isMouseFocusActive() const;
 
-    static bool isRedrawRequired(); // in case of no explicit redrawing we must redraw at least once in a second
-
     static std::vector<std::pair<int, int> > GetAvailableResolutions();
 
 protected:

@@ -37,8 +37,6 @@
 
 namespace
 {
-    SDL::Time redrawTiming; // a special timer to highlight that it's time to redraw a screen (only for SDL 2 as of now)
-
     // Returns nearest screen supported resolution
     std::pair<int, int> GetNearestResolution( int width, int height, const std::vector<std::pair<int, int> > & resolutions )
     {
@@ -257,9 +255,6 @@ Size Display::GetDefaultSize( void )
 
 void Display::Flip( void )
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    redrawTiming.Start(); // TODO: for now it's only for SDL 2 but it should be for everything
-#endif
     fheroes2::Display::instance().render();
 
     /*
@@ -594,16 +589,6 @@ Display & Display::Get( void )
 Surface Display::GetSurface( void ) const
 {
     return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
-}
-
-bool Display::isRedrawRequired()
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    redrawTiming.Stop();
-    return redrawTiming.Get() > 500; // 0.5 second
-#else
-    return false;
-#endif
 }
 
 std::vector<std::pair<int, int> > Display::GetAvailableResolutions()

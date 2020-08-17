@@ -26,118 +26,99 @@
 
 namespace fheroes2
 {
-    Button::Button( int32_t offsetX, int32_t offsetY )
+    ButtonBase::ButtonBase( int32_t offsetX, int32_t offsetY )
         : _offsetX( offsetX )
         , _offsetY( offsetY )
-        , _icnId( -1 )
-        , _releasedIndex( 0 )
-        , _pressedIndex( 0 )
         , _isPressed( false )
         , _isEnabled( true )
         , _isVisible( true )
     {}
 
-    Button::Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
-        : _offsetX( offsetX )
-        , _offsetY( offsetY )
-        , _icnId( icnId )
-        , _releasedIndex( releasedIndex )
-        , _pressedIndex( pressedIndex )
-        , _isPressed( false )
-        , _isEnabled( true )
-        , _isVisible( true )
-    {}
+    ButtonBase::~ButtonBase() {}
 
-    bool Button::isEnabled() const
+    bool ButtonBase::isEnabled() const
     {
         return _isEnabled;
     }
 
-    bool Button::isDisabled() const
+    bool ButtonBase::isDisabled() const
     {
         return !_isEnabled;
     }
 
-    bool Button::isPressed() const
+    bool ButtonBase::isPressed() const
     {
         return _isPressed;
     }
 
-    bool Button::isReleased() const
+    bool ButtonBase::isReleased() const
     {
         return !_isPressed;
     }
 
-    bool Button::isVisible() const
+    bool ButtonBase::isVisible() const
     {
         return _isVisible;
     }
 
-    bool Button::isHidden() const
+    bool ButtonBase::isHidden() const
     {
         return !_isVisible;
     }
 
-    void Button::press()
+    void ButtonBase::press()
     {
         if ( isEnabled() ) {
             _isPressed = true;
         }
     }
 
-    void Button::release()
+    void ButtonBase::release()
     {
         if ( isEnabled() ) {
             _isPressed = false;
         }
     }
 
-    void Button::enable()
+    void ButtonBase::enable()
     {
         _isEnabled = true;
     }
 
-    void Button::disable()
+    void ButtonBase::disable()
     {
         _isEnabled = false;
         _isPressed = false; // button can't be disabled and pressed
     }
 
-    void Button::show()
+    void ButtonBase::show()
     {
         _isVisible = true;
     }
 
-    void Button::hide()
+    void ButtonBase::hide()
     {
         _isVisible = false;
     }
 
-    void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
+    void ButtonBase::setPosition( int32_t offsetX_, int32_t offsetY_ )
     {
-        _icnId = icnId;
-        _releasedIndex = releasedIndex;
-        _pressedIndex = pressedIndex;
+        _offsetX = offsetX_;
+        _offsetY = offsetY_;
     }
 
-    void Button::setPosition( int32_t offsetX, int32_t offsetY )
+    void ButtonBase::draw( Image & area ) const
     {
-        _offsetX = offsetX;
-        _offsetY = offsetY;
-    }
-
-    void Button::draw( Image & area ) const
-    {
-        if ( !_isVisible )
+        if ( !isVisible() )
             return;
 
         if ( isPressed() ) {
             // button can't be disabled and pressed
-            const Sprite & sprite = AGG::GetICN( _icnId, _pressedIndex );
+            const Sprite & sprite = _getPressed();
             Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
         }
         else {
-            const Sprite & sprite = AGG::GetICN( _icnId, _releasedIndex );
+            const Sprite & sprite = _getReleased();
             if ( isEnabled() ) {
                 Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
             }
@@ -150,7 +131,7 @@ namespace fheroes2
         }
     }
 
-    bool Button::drawOnPress( Image & area )
+    bool ButtonBase::drawOnPress( Image & area )
     {
         if ( !isPressed() ) {
             press();
@@ -161,7 +142,7 @@ namespace fheroes2
         return false;
     }
 
-    bool Button::drawOnRelease( Image & area )
+    bool ButtonBase::drawOnRelease( Image & area )
     {
         if ( isPressed() ) {
             release();
@@ -172,10 +153,71 @@ namespace fheroes2
         return false;
     }
 
-    Rect Button::area() const
+    Rect ButtonBase::area() const
     {
-        const Sprite & sprite = AGG::GetICN( _icnId, isPressed() ? _pressedIndex : _releasedIndex );
+        const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
         return Rect( _offsetX + sprite.x(), _offsetY + sprite.y(), sprite.width(), sprite.height() );
+    }
+
+    Button::Button( int32_t offsetX, int32_t offsetY )
+        : ButtonBase( offsetX, offsetY )
+        , _icnId( -1 )
+        , _releasedIndex( 0 )
+        , _pressedIndex( 0 )
+    {}
+
+    Button::Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
+        : ButtonBase( offsetX, offsetY )
+        , _icnId( icnId )
+        , _releasedIndex( releasedIndex )
+        , _pressedIndex( pressedIndex )
+    {}
+
+    Button::~Button() {}
+
+    void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
+    {
+        _icnId = icnId;
+        _releasedIndex = releasedIndex;
+        _pressedIndex = pressedIndex;
+    }
+
+    const Sprite & Button::_getPressed() const
+    {
+        return AGG::GetICN( _icnId, _pressedIndex );
+    }
+
+    const Sprite & Button::_getReleased() const
+    {
+        return AGG::GetICN( _icnId, _releasedIndex );
+    }
+
+    ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY )
+        : ButtonBase( offsetX, offsetY )
+    {}
+
+    ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed )
+        : ButtonBase( offsetX, offsetY )
+        , _released( released )
+        , _pressed( pressed )
+    {}
+
+    ButtonSprite::~ButtonSprite() {}
+
+    void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed )
+    {
+        _released = released;
+        _pressed = pressed;
+    }
+
+    const Sprite & ButtonSprite::_getPressed() const
+    {
+        return _pressed;
+    }
+
+    const Sprite & ButtonSprite::_getReleased() const
+    {
+        return _released;
     }
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
@@ -222,27 +264,43 @@ namespace fheroes2
         }
     }
 
+    ButtonGroup::~ButtonGroup()
+    {
+        for ( size_t i = 0; i < _button.size(); ++i ) {
+            delete _button[i];
+        }
+
+        _button.clear();
+        _value.clear();
+    }
+
     void ButtonGroup::createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue )
     {
-        _button.emplace_back( offsetX, offsetY, icnId, releasedIndex, pressedIndex );
+        _button.push_back( new Button( offsetX, offsetY, icnId, releasedIndex, pressedIndex ) );
+        _value.emplace_back( returnValue );
+    }
+
+    void ButtonGroup::createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue )
+    {
+        _button.push_back( new ButtonSprite( offsetX, offsetY, released, pressed ) );
         _value.emplace_back( returnValue );
     }
 
     void ButtonGroup::draw( Image & area ) const
     {
         for ( size_t i = 0; i < _button.size(); ++i ) {
-            _button[i].draw( area );
+            _button[i]->draw( area );
         }
     }
 
-    Button & ButtonGroup::button( size_t id )
+    ButtonBase & ButtonGroup::button( size_t id )
     {
-        return _button[id];
+        return *_button[id];
     }
 
-    const Button & ButtonGroup::button( size_t id ) const
+    const ButtonBase & ButtonGroup::button( size_t id ) const
     {
-        return _button[id];
+        return *_button[id];
     }
 
     size_t ButtonGroup::size() const
@@ -255,19 +313,19 @@ namespace fheroes2
         LocalEvent & le = LocalEvent::Get();
 
         for ( size_t i = 0; i < _button.size(); ++i ) {
-            if ( _button[i].isEnabled() ) {
-                le.MousePressLeft( _button[i].area() ) ? _button[i].drawOnPress() : _button[i].drawOnRelease();
+            if ( _button[i]->isEnabled() ) {
+                le.MousePressLeft( _button[i]->area() ) ? _button[i]->drawOnPress() : _button[i]->drawOnRelease();
             }
         }
 
         for ( size_t i = 0; i < _button.size(); ++i ) {
-            if ( _button[i].isEnabled() && le.MouseClickLeft( _button[i].area() ) ) {
+            if ( _button[i]->isEnabled() && le.MouseClickLeft( _button[i]->area() ) ) {
                 return _value[i];
             }
         }
 
         for ( size_t i = 0; i < _button.size(); ++i ) {
-            if ( _button[i].isEnabled() ) {
+            if ( _button[i]->isEnabled() ) {
                 if ( ( _value[i] == Dialog::YES || _value[i] == Dialog::OK ) && Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
                     return _value[i];
                 }
