@@ -117,6 +117,7 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     // new display
     fheroes2::Display & display = fheroes2::Display::instance();
     display.resize( w, h );
+    display.fill( 0 );
 
     // old display
     Set( display.width(), display.height(), false );

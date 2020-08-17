@@ -699,26 +699,31 @@ namespace fheroes2
             return;
         }
 
-        // Blitting one image onto another can be done only for image layer so we don't consider transform part of the output image
         const uint32_t widthIn = in.width();
         const uint32_t widthOut = out.width();
 
         if ( flip ) {
             const uint8_t * imageInY = in.image() + inY * widthIn + inX + width - 1;
-            const uint8_t * transformY = in.transform() + inY * widthIn + inX + width - 1;
+            const uint8_t * transformInY = in.transform() + inY * widthIn + inX + width - 1;
             uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+            uint8_t * transformOutY = out.transform() + outY * out.width() + outX;
             const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
-            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
-                const uint8_t * transformX = transformY;
+                const uint8_t * transformInX = transformInY;
                 uint8_t * imageOutX = imageOutY;
+                uint8_t * transformOutX = transformOutY;
                 const uint8_t * imageOutXEnd = imageOutX + width;
 
-                for ( ; imageOutX != imageOutXEnd; --imageInX, --transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a transformation
-                        if ( *transformX > 1 ) { // 1 is to skip data
-                            *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX, ++transformOutX ) {
+                    if ( *transformOutX == 1 ) { // copy value
+                        *transformOutX = *transformInX;
+                        *imageOutX = *imageInX;
+                    }
+                    else if ( *transformInX > 0 ) { // apply a transformation
+                        if ( *transformInX > 1 ) { // 1 is to skip data
+                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                         }
                     }
                     else { // copy a pixel
@@ -729,20 +734,26 @@ namespace fheroes2
         }
         else {
             const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-            const uint8_t * transformY = in.transform() + inY * widthIn + inX;
+            const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
             uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+            uint8_t * transformOutY = out.transform() + outY * out.width() + outX;
             const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
+            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
-                const uint8_t * transformX = transformY;
+                const uint8_t * transformInX = transformInY;
                 uint8_t * imageOutX = imageOutY;
+                uint8_t * transformOutX = transformOutY;
                 const uint8_t * imageInXEnd = imageInX + width;
 
-                for ( ; imageInX != imageInXEnd; ++imageInX, ++transformX, ++imageOutX ) {
-                    if ( *transformX > 0 ) { // apply a transformation
-                        if ( *transformX > 1 ) { // 1 is to skip data
-                            *imageOutX = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX, ++transformOutX ) {
+                    if ( *transformOutX == 1 ) { // copy value
+                        *transformOutX = *transformInX;
+                        *imageOutX = *imageInX;
+                    }
+                    else if ( *transformInX > 0 ) { // apply a transformation
+                        if ( *transformInX > 1 ) { // 1 is to skip data
+                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                         }
                     }
                     else { // copy a pixel

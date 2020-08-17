@@ -120,6 +120,7 @@ namespace fheroes2
         bool _isRestored;
     };
 
+    // make sure that output image's transform layer doesn't have skipping values (transform == 1)
     void AlphaBlit( const Image & in, Image & out, uint8_t alphaValue, bool flip = false );
     void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, uint8_t alphaValue, bool flip = false );
     void AlphaBlit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, uint8_t alphaValue,
