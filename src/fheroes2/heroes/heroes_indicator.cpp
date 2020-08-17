@@ -166,11 +166,11 @@ void MoraleIndicator::Redraw( void )
     descriptions.append( _( "Current Modifiers:" ) );
     descriptions.append( "\n \n" );
 
-    const Sprite & sprite = AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
     const int inter = 6;
     int count = ( 0 == morale ? 1 : std::abs( morale ) );
-    s32 cx = area.x + ( area.w - ( sprite.w() + inter * ( count - 1 ) ) ) / 2;
-    s32 cy = area.y + ( area.h - sprite.h() ) / 2;
+    s32 cx = area.x + ( area.w - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    s32 cy = area.y + ( area.h - sprite.height() ) / 2;
 
     if ( modificators.size() )
         descriptions.append( modificators );
@@ -179,7 +179,7 @@ void MoraleIndicator::Redraw( void )
 
     back.Restore();
     while ( count-- ) {
-        sprite.Blit( cx, cy );
+        fheroes2::Blit( sprite, fheroes2::Display::instance(), cx, cy );
         cx += inter;
     }
 }
@@ -207,8 +207,8 @@ ExperienceIndicator::ExperienceIndicator( const Heroes & h )
 
 void ExperienceIndicator::Redraw( void )
 {
-    const Sprite & sprite3 = AGG::GetICN( ICN::HSICONS, 1 );
-    sprite3.Blit( area.x, area.y );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
     Text text( GetString( hero.GetExperience() ), Font::SMALL );
     text.Blit( area.x + 18 - text.w() / 2, area.y + 23 );
@@ -240,8 +240,8 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes & h )
 
 void SpellPointsIndicator::Redraw( void )
 {
-    const Sprite & sprite3 = AGG::GetICN( ICN::HSICONS, 8 );
-    sprite3.Blit( area.x, area.y );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
+    fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
     Text text( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ), Font::SMALL );
     text.Blit( area.x + 18 - text.w() / 2, area.y + 21 );

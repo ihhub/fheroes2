@@ -121,8 +121,9 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     const Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // cursor format
-    SpriteMove cursorFormat( AGG::GetICN( ICN::HSICONS, 11 ) );
-    cursorFormat.Move( army.isSpreadFormat() ? army1_pt : army2_pt );
+    fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
+    const Point cursorFormatPos = army.isSpreadFormat() ? army1_pt : army2_pt;
+    cursorFormat.setPosition( cursorFormatPos.x, cursorFormatPos.y );
 
     // experience
     ExperienceIndicator experienceInfo( *this );
@@ -303,14 +304,14 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         // left click info
         if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
             cursor.Hide();
-            cursorFormat.Move( army1_pt );
+            cursorFormat.setPosition( army1_pt.x, army1_pt.y );
             cursor.Show();
             display.render();
             army.SetSpreadFormat( true );
         }
         else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
             cursor.Hide();
-            cursorFormat.Move( army2_pt );
+            cursorFormat.setPosition( army2_pt.x, army2_pt.y );
             cursor.Show();
             display.render();
             army.SetSpreadFormat( false );
