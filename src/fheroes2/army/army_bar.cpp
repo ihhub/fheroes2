@@ -85,8 +85,8 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     if ( use_mini_sprite )
         SetBackground( Size( 43, 43 ), RGBA( 0, 45, 0 ) );
     else {
-        const Sprite & sprite = AGG::GetICN( ICN::STRIP, 2 );
-        SetItemSize( sprite.w(), sprite.h() );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
+        SetItemSize( sprite.width(), sprite.height() );
     }
 
     SetArmy( ptr );
