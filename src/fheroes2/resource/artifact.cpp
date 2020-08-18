@@ -857,27 +857,29 @@ ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change 
         fheroes2::Blit( sprite, rt.x, rt.y, backsf, 1, 1, rt.w, rt.h );
 
         SetItemSize( backsf.width(), backsf.height() );
-        spcursor.Set( backsf.width(), backsf.height(), true );
-        spcursor.DrawBorder( RGBA( 0xb0, 0xb0, 0xb0 ) );
+
+        spcursor.resize( backsf.width(), backsf.height() );
+        spcursor.reset();
+        fheroes2::DrawBorder( spcursor, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
     }
     else {
-        const Sprite & sprite = AGG::GetICN( ICN::ARTIFACT, 0 );
-        SetItemSize( sprite.w(), sprite.h() );
-        spcursor = AGG::GetICN( ICN::NGEXTRA, 62 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
+        SetItemSize( sprite.width(), sprite.height() );
+        spcursor = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
     }
 }
 
 void ArtifactsBar::ResetSelected( void )
 {
     Cursor::Get().Hide();
-    spcursor.Hide();
+    spcursor.hide();
     Interface::ItemsActionBar<Artifact>::ResetSelected();
 }
 
 void ArtifactsBar::Redraw( fheroes2::Image & dstsf )
 {
     Cursor::Get().Hide();
-    spcursor.Hide();
+    spcursor.hide();
     Interface::ItemsActionBar<Artifact>::Redraw( dstsf );
 }
 
@@ -901,9 +903,11 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
 
         if ( selected ) {
             if ( use_mini_sprite )
-                spcursor.Move( pos.x, pos.y );
+                spcursor.setPosition( pos.x, pos.y );
             else
-                spcursor.Move( pos.x - 3, pos.y - 3 );
+                spcursor.setPosition( pos.x - 3, pos.y - 3 );
+
+            spcursor.show();
         }
     }
 }
@@ -918,7 +922,7 @@ bool ArtifactsBar::ActionBarSingleClick( const Point & cursor, Artifact & art, c
     else if ( art.isValid() ) {
         if ( !read_only ) {
             Cursor::Get().Hide();
-            spcursor.Hide();
+            spcursor.hide();
         }
     }
     else {

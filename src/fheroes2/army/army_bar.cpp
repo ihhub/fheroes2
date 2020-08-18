@@ -85,8 +85,8 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     if ( use_mini_sprite )
         SetBackground( Size( 43, 43 ), RGBA( 0, 45, 0 ) );
     else {
-        const Sprite & sprite = AGG::GetICN( ICN::STRIP, 2 );
-        SetItemSize( sprite.w(), sprite.h() );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
+        SetItemSize( sprite.width(), sprite.height() );
     }
 
     SetArmy( ptr );
@@ -193,8 +193,10 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
             text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1, dstsf );
         }
 
-        if ( selected )
+        if ( selected ) {
             spcursor.setPosition( pos.x, pos.y );
+            spcursor.show();
+        }
     }
 }
 

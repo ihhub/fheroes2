@@ -66,10 +66,12 @@ Rect Interface::GameArea::RectFixed( Point & dst, int rw, int rh ) const
 
 void Interface::GameArea::Build( void )
 {
+    const fheroes2::Display & display = fheroes2::Display::instance();
+
     if ( Settings::Get().ExtGameHideInterface() )
-        SetAreaPosition( 0, 0, Display::Get().w(), Display::Get().h() );
+        SetAreaPosition( 0, 0, display.width(), display.height() );
     else
-        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, Display::Get().w() - RADARWIDTH - 3 * BORDERWIDTH, Display::Get().h() - 2 * BORDERWIDTH );
+        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, display.width() - RADARWIDTH - 3 * BORDERWIDTH, display.height() - 2 * BORDERWIDTH );
 }
 
 void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )

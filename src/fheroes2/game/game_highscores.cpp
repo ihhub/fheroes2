@@ -214,7 +214,7 @@ int Game::HighScores( bool fill )
 
     cursor.Hide();
     const Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
-    Dialog::FrameBorder border( Display::GetDefaultSize() );
+    Dialog::FrameBorder border( Size( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT ) );
 
     hgs.RedrawList( top.x, top.y );
 

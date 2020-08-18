@@ -192,8 +192,8 @@ SecondarySkillsBar::SecondarySkillsBar( bool mini /* true */, bool change /* fal
     }
     else {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const Sprite & sprite = AGG::GetICN( ICN::SECSKILL, 0 );
-        SetItemSize( sprite.w(), sprite.h() );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SECSKILL, 0 );
+        SetItemSize( sprite.width(), sprite.height() );
     }
 }
 

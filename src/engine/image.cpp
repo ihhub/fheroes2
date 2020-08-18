@@ -556,6 +556,21 @@ namespace fheroes2
         }
     }
 
+    void AddTransparency( Image & image, uint8_t valueToReplace )
+    {
+        const uint32_t width = image.width();
+        const uint32_t height = image.height();
+
+        uint8_t * imageIn = image.image();
+        uint8_t * transformIn = image.transform();
+        const uint8_t * imageInEnd = imageIn + height * width;
+        for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
+            if ( *transformIn == 0 && *imageIn == valueToReplace ) { // only modify pixels with 0 value
+                *transformIn = 1;
+            }
+        }
+    }
+
     void AlphaBlit( const Image & in, Image & out, uint8_t alphaValue, bool flip )
     {
         AlphaBlit( in, 0, 0, out, 0, 0, in.width(), in.height(), alphaValue, flip );

@@ -25,23 +25,27 @@ namespace fheroes2
 {
     MovableSprite::MovableSprite( uint32_t width_, uint32_t height_, int32_t x_, int32_t y_ )
         : Sprite( width_, height_, x_, y_ )
-        , _restorer( Display::instance() )
+        , _restorer( Display::instance(), x_, y_, width_, height_ )
         , _isHidden( false )
     {}
 
     MovableSprite::MovableSprite( const Sprite & sprite )
         : Sprite( sprite )
-        , _restorer( Display::instance() )
+        , _restorer( Display::instance(), sprite.x(), sprite.y(), sprite.width(), sprite.height() )
         , _isHidden( false )
     {}
 
     MovableSprite::~MovableSprite() {}
 
+    MovableSprite & MovableSprite::operator=( const Sprite & sprite )
+    {
+        Sprite::operator=( sprite );
+        _restorer.update( x(), y(), width(), height() );
+        return *this;
+    }
+
     void MovableSprite::setPosition( int32_t x_, int32_t y_ )
     {
-        if ( x_ == x() && y_ == y() )
-            return;
-
         hide();
         Sprite::setPosition( x_, y_ );
         show();

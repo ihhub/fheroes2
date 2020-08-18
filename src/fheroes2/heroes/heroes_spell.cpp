@@ -93,21 +93,23 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
 
 void CastleIndexListBox::RedrawBackground( const Point & dst )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     Text text( _( "Town Portal" ), Font::YELLOW_BIG );
     text.Blit( dst.x + 140 - text.w() / 2, dst.y + 6 );
 
     text.Set( _( "Select town to port to." ), Font::BIG );
     text.Blit( dst.x + 140 - text.w() / 2, dst.y + 30 );
 
-    AGG::GetICN( ICN::LISTBOX, 0 ).Blit( dst.x + 2, dst.y + 55 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 0 ), display, dst.x + 2, dst.y + 55 );
     for ( u32 ii = 1; ii < 5; ++ii )
-        AGG::GetICN( ICN::LISTBOX, 1 ).Blit( dst.x + 2, dst.y + 55 + ( ii * 19 ) );
-    AGG::GetICN( ICN::LISTBOX, 2 ).Blit( dst.x + 2, dst.y + 145 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 1 ), display, dst.x + 2, dst.y + 55 + ( ii * 19 ) );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 2 ), display, dst.x + 2, dst.y + 145 );
 
-    AGG::GetICN( ICN::LISTBOX, 7 ).Blit( dst.x + 256, dst.y + 75 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 7 ), display, dst.x + 256, dst.y + 75 );
     for ( u32 ii = 1; ii < 3; ++ii )
-        AGG::GetICN( ICN::LISTBOX, 8 ).Blit( dst.x + 256, dst.y + 74 + ( ii * 19 ) );
-    AGG::GetICN( ICN::LISTBOX, 9 ).Blit( dst.x + 256, dst.y + 126 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 8 ), display, dst.x + 256, dst.y + 74 + ( ii * 19 ) );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + 256, dst.y + 126 );
 }
 
 bool Heroes::ActionSpellCast( const Spell & spell )
@@ -441,7 +443,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     const Kingdom & kingdom = hero.GetKingdom();
     std::vector<s32> castles;
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -473,20 +475,20 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.SetListContent( castles );
     listbox.Redraw();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 

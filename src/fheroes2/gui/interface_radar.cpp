@@ -32,7 +32,7 @@
 #include "settings.h"
 #include "world.h"
 
-#define RADARCOLOR 0x40 // index palette
+#define RADARCOLOR 0xB5 // index palette
 #define COLOR_DESERT 0x76
 #define COLOR_SNOW 0x0D
 #define COLOR_SWAMP 0x68
