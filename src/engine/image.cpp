@@ -621,7 +621,7 @@ namespace fheroes2
                         inValue = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                     }
 
-                    const uint8_t * inPAL = kb_pal + ( inValue ) * 3;
+                    const uint8_t * inPAL = kb_pal + inValue * 3;
                     const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
 
                     const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
@@ -653,7 +653,7 @@ namespace fheroes2
                         inValue = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                     }
 
-                    const uint8_t * inPAL = kb_pal + ( inValue ) * 3;
+                    const uint8_t * inPAL = kb_pal + inValue * 3;
                     const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
 
                     const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
