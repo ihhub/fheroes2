@@ -202,7 +202,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     const Point dialogOffset( ( display.width() - sprite.width() ) / 2, ( display.height() - sprite.height() ) / 2 );
     const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    fheroes2::ImageRestorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
     const Rect rt( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
 
     fheroes2::Blit( spriteShadow, display, rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );

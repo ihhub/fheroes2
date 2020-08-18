@@ -561,7 +561,7 @@ namespace fheroes2
         const uint32_t width = image.width();
         const uint32_t height = image.height();
 
-        uint8_t * imageIn = image.image();
+        const uint8_t * imageIn = image.image();
         uint8_t * transformIn = image.transform();
         const uint8_t * imageInEnd = imageIn + height * width;
         for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
@@ -1148,7 +1148,7 @@ namespace fheroes2
 
     Image Stretch( const Image & in, uint32_t inX, uint32_t inY, uint32_t widthIn, uint32_t heightIn, uint32_t widthOut, uint32_t heightOut )
     {
-        if ( !Validate( in, inX, inY, widthIn, heightIn ) ) {
+        if ( !Validate( in, inX, inY, widthIn, heightIn ) || widthOut == 0 || heightOut == 0 ) {
             return Image();
         }
 
