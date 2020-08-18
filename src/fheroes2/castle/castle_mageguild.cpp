@@ -135,12 +135,12 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
     Dialog::FrameBorder frameborder( Display::GetDefaultSize() );
     const Point & cur_pt = frameborder.GetArea();
 
-    AGG::GetICN( ICN::STONEBAK, 0 ).Blit( cur_pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
     Text text;
 
     // bar
-    AGG::GetICN( ICN::WELLXTRA, 2 ).Blit( cur_pt.x, cur_pt.y + 461 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLXTRA, 2 ), display, cur_pt.x, cur_pt.y + 461 );
 
     // text bar
     if ( ( !heroes.Guard() || !heroes.Guard()->HaveSpellBook() ) && ( !heroes.Guest() || !heroes.Guest()->HaveSpellBook() ) )
@@ -174,8 +174,8 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
     default:
         break;
     }
-    const Sprite & sprite = AGG::GetICN( icn, level - 1 );
-    sprite.Blit( cur_pt.x + 90 - sprite.w() / 2, cur_pt.y + 290 - sprite.h() );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, level - 1 );
+    fheroes2::Blit( sprite, display, cur_pt.x + 90 - sprite.width() / 2, cur_pt.y + 290 - sprite.height() );
 
     RowSpells spells5( Point( cur_pt.x + 250, cur_pt.y + 5 ), *this, 5 );
     RowSpells spells4( Point( cur_pt.x + 250, cur_pt.y + 95 ), *this, 4 );
@@ -190,8 +190,8 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
     spells5.Redraw();
 
     // button exit
-    Button buttonExit( cur_pt.x + 578, cur_pt.y + 461, ICN::WELLXTRA, 0, 1 );
-    buttonExit.Draw();
+    fheroes2::Button buttonExit( cur_pt.x + 578, cur_pt.y + 461, ICN::WELLXTRA, 0, 1 );
+    buttonExit.draw();
 
     cursor.Show();
     display.render();
@@ -200,9 +200,9 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
         if ( spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
