@@ -283,17 +283,17 @@ u32 Castle::OpenTown( void )
     buildingCaptain.Redraw();
 
     // combat format
-    const Sprite & spriteSpreadArmyFormat = AGG::GetICN( ICN::HSICONS, 9 );
-    const Sprite & spriteGroupedArmyFormat = AGG::GetICN( ICN::HSICONS, 10 );
-    const Rect rectSpreadArmyFormat( cur_pt.x + 550, cur_pt.y + 220, spriteSpreadArmyFormat.w(), spriteSpreadArmyFormat.h() );
-    const Rect rectGroupedArmyFormat( cur_pt.x + 585, cur_pt.y + 220, spriteGroupedArmyFormat.w(), spriteGroupedArmyFormat.h() );
+    const fheroes2::Sprite & spriteSpreadArmyFormat = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
+    const fheroes2::Sprite & spriteGroupedArmyFormat = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
+    const Rect rectSpreadArmyFormat( cur_pt.x + 550, cur_pt.y + 220, spriteSpreadArmyFormat.width(), spriteSpreadArmyFormat.height() );
+    const Rect rectGroupedArmyFormat( cur_pt.x + 585, cur_pt.y + 220, spriteGroupedArmyFormat.width(), spriteGroupedArmyFormat.height() );
     const std::string descriptionSpreadArmyFormat(
         _( "'Spread' combat formation spreads your armies from the top to the bottom of the battlefield, with at least one empty space between each army." ) );
     const std::string descriptionGroupedArmyFormat( _( "'Grouped' combat formation bunches your army toget her in the center of your side of the battlefield." ) );
     const Point pointSpreadArmyFormat( rectSpreadArmyFormat.x - 1, rectSpreadArmyFormat.y - 1 );
     const Point pointGroupedArmyFormat( rectGroupedArmyFormat.x - 1, rectGroupedArmyFormat.y - 1 );
 
-    SpriteMove cursorFormat( AGG::GetICN( ICN::HSICONS, 11 ) );
+    fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
 
     if ( isBuild( BUILD_CAPTAIN ) ) {
         text.Set( _( "Attack Skill" ) + std::string( " " ), Font::SMALL );
@@ -332,10 +332,13 @@ u32 Castle::OpenTown( void )
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        spriteSpreadArmyFormat.Blit( rectSpreadArmyFormat.x, rectSpreadArmyFormat.y );
-        spriteGroupedArmyFormat.Blit( rectGroupedArmyFormat.x, rectGroupedArmyFormat.y );
+        fheroes2::Blit( spriteSpreadArmyFormat, display, rectSpreadArmyFormat.x, rectSpreadArmyFormat.y );
+        fheroes2::Blit( spriteGroupedArmyFormat, display, rectGroupedArmyFormat.x, rectGroupedArmyFormat.y );
 
-        cursorFormat.Move( army.isSpreadFormat() ? pointSpreadArmyFormat : pointGroupedArmyFormat );
+        if ( army.isSpreadFormat() )
+            cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
+        else
+            cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
     }
 
     Kingdom & kingdom = GetKingdom();
@@ -366,7 +369,7 @@ u32 Castle::OpenTown( void )
     if ( !allow_buy_hero1 ) {
         dst_pt.x += 83;
         dst_pt.y += 75;
-        AGG::GetICN( ICN::TOWNWIND, 12 ).Blit( dst_pt );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ), display, dst_pt.x, dst_pt.y );
     }
 
     // second hero
@@ -384,17 +387,17 @@ u32 Castle::OpenTown( void )
     if ( !allow_buy_hero2 ) {
         dst_pt.x += 83;
         dst_pt.y += 75;
-        AGG::GetICN( ICN::TOWNWIND, 12 ).Blit( dst_pt );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ), display, dst_pt.x, dst_pt.y );
     }
 
     // bottom bar
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y + 461;
-    const Sprite & bar = AGG::GetICN( ICN::CASLBAR, 0 );
-    bar.Blit( dst_pt );
+    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::CASLBAR, 0 );
+    fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
+    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
 
     // redraw resource panel
     RedrawResourcePanel( cur_pt );
@@ -402,9 +405,9 @@ u32 Castle::OpenTown( void )
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
 
-    buttonExit.Draw();
+    buttonExit.draw();
 
     cursor.Show();
     display.render();
@@ -413,9 +416,9 @@ u32 Castle::OpenTown( void )
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
         // click left
@@ -470,14 +473,14 @@ u32 Castle::OpenTown( void )
         else if ( isBuild( BUILD_CAPTAIN ) ) {
             if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
                 cursor.Hide();
-                cursorFormat.Move( pointSpreadArmyFormat );
+                cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
                 cursor.Show();
                 display.render();
                 army.SetSpreadFormat( true );
             }
             else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
                 cursor.Hide();
-                cursorFormat.Move( pointGroupedArmyFormat );
+                cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
                 cursor.Show();
                 display.render();
                 army.SetSpreadFormat( false );
