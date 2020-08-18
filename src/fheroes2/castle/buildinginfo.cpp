@@ -561,7 +561,8 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     const fheroes2::Sprite & window_icons = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     const int space = 10;
-    Dialog::FrameBox box( space + window_icons.height() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h, buttons );
+    Dialog::FrameBox box( space + window_icons.height() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h,
+                          buttons );
     const Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
 
