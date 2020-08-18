@@ -71,15 +71,15 @@ class DwellingsBar : public Interface::ItemsBar<DwellingItem>
 public:
     DwellingsBar( Castle &, const Size &, const RGBA & fill );
 
-    void RedrawBackground( const Rect &, Surface & );
-    void RedrawItem( DwellingItem &, const Rect &, Surface & );
+    void RedrawBackground( const Rect &, fheroes2::Image & );
+    void RedrawItem( DwellingItem &, const Rect &, fheroes2::Image & );
 
     bool ActionBarSingleClick( const Point &, DwellingItem &, const Rect & );
     bool ActionBarPressRight( const Point &, DwellingItem &, const Rect & );
 
 protected:
     Castle & castle;
-    Surface backsf;
+    fheroes2::Image backsf;
     std::vector<DwellingItem> content;
 };
 
