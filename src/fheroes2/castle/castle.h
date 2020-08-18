@@ -272,7 +272,7 @@ namespace CastleDialog
 
     void RedrawAllBuilding( const Castle &, const Point &, const CacheBuildings &, u32 flash = BUILD_NOTHING );
     void RedrawAnimationBuilding( const Castle &, const Point &, const CacheBuildings &, u32 build );
-    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect & );
+    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
 }
 
 struct VecCastles : public std::vector<Castle *>

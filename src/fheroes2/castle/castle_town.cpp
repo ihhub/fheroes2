@@ -25,7 +25,6 @@
 
 #include "agg.h"
 #include "buildinginfo.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -37,6 +36,7 @@
 #include "settings.h"
 #include "statusbar.h"
 #include "text.h"
+#include "ui_button.h"
 #include "world.h"
 
 int Castle::DialogBuyHero( const Heroes * hero )
@@ -50,8 +50,8 @@ int Castle::DialogBuyHero( const Heroes * hero )
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    const int spacer = Settings::Get().QVGA() ? 5 : 10;
-    const Sprite & portrait_frame = AGG::GetICN( ICN::SURRENDR, 4 );
+    const int spacer = 10;
+    const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
 
     Text text( _( "Recruit Hero" ), Font::BIG );
 
@@ -76,7 +76,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
 
     Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
 
-    Dialog::FrameBox box( text.h() + spacer + portrait_frame.h() + spacer + box2.h() + spacer + rbs.GetArea().h, true );
+    Dialog::FrameBox box( text.h() + spacer + portrait_frame.height() + spacer + box2.h() + spacer + rbs.GetArea().h, true );
     const Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
     Point dst_pt;
@@ -86,16 +86,16 @@ int Castle::DialogBuyHero( const Heroes * hero )
     text.Blit( dst_pt );
 
     // portrait and frame
-    dst_pt.x = box_rt.x + ( box_rt.w - portrait_frame.w() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.w - portrait_frame.width() ) / 2;
     dst_pt.y = dst_pt.y + text.h() + spacer;
-    portrait_frame.Blit( dst_pt );
+    fheroes2::Blit( portrait_frame, display, dst_pt.x, dst_pt.y );
 
     dst_pt.x = dst_pt.x + 5;
     dst_pt.y = dst_pt.y + 5;
     hero->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = dst_pt.y + portrait_frame.h() + spacer;
+    dst_pt.y = dst_pt.y + portrait_frame.height() + spacer;
     box2.Blit( dst_pt );
 
     rbs.SetPos( dst_pt.x, dst_pt.y + box2.h() + spacer );
@@ -103,32 +103,31 @@ int Castle::DialogBuyHero( const Heroes * hero )
 
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
-    Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
+    fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
     if ( !AllowBuyHero( *hero ) ) {
-        button1.Press();
-        button1.SetDisable( true );
+        button1.disable();
     }
 
     dst_pt.x = box_rt.x + box_rt.w - AGG::GetICN( system, 3 ).w();
     dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 3 ).h();
-    Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
+    fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
 
-    button1.Draw();
-    button2.Draw();
+    button1.draw();
+    button2.draw();
 
     cursor.Show();
     display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( button1 ) ? button1.PressDraw() : button1.ReleaseDraw();
-        le.MousePressLeft( button2 ) ? button2.PressDraw() : button2.ReleaseDraw();
+        le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
+        le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
 
-        if ( button1.isEnable() && ( le.MouseClickLeft( button1 ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
+        if ( button1.isEnabled() && ( le.MouseClickLeft( button1.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
             return Dialog::OK;
 
-        if ( le.MouseClickLeft( button2 ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        if ( le.MouseClickLeft( button2.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             break;
     }
 
@@ -152,7 +151,7 @@ u32 Castle::OpenTown( void )
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );
 
-    AGG::GetICN( ICN::CASLWIND, 0 ).Blit( dst_pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
     // hide captain options
     if ( !( building & BUILD_CAPTAIN ) ) {
@@ -162,7 +161,7 @@ u32 Castle::OpenTown( void )
         dst_pt.x += cur_pt.x;
         dst_pt.y += cur_pt.y;
 
-        AGG::GetICN( ICN::STONEBAK, 0 ).Blit( rect, dst_pt );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), rect.x, rect.y, display, dst_pt.x, dst_pt.y, rect.w, rect.h );
     }
 
     // draw castle sprite

@@ -32,16 +32,16 @@
 
 void CastleRedrawTownName( const Castle &, const Point & );
 void CastleRedrawCurrentBuilding( const Castle &, const Point &, const CastleDialog::CacheBuildings &, u32 build, u32 flash );
-void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, int alpha );
+void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
 void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame );
 Rect CastleGetCoordBuilding( int, building_t, const Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
 Rect CastleGetMaxArea( const Castle &, const Point & );
 
-void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, s32 dst_x, s32 dst_y, const Rect & max )
+void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, s32 dst_x, s32 dst_y, const Rect & max, uint8_t alpha )
 {
     std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst_x, dst_y, sprite.width(), sprite.height() ), max );
-    fheroes2::Blit( sprite, res.first.x, res.first.y, fheroes2::Display::instance(), res.second.x, res.second.y, res.first.w, res.first.h );
+    fheroes2::AlphaBlit( sprite, res.first.x, res.first.y, fheroes2::Display::instance(), res.second.x, res.second.y, res.first.w, res.first.h, alpha );
 }
 
 CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const Point & top )
@@ -174,7 +174,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     if ( BUILD_NOTHING == build ) {
         for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
             if ( castle.isBuild( ( *it ).id ) ) {
-                CastleRedrawBuilding( castle, dst_pt, ( *it ).id, frame, 0 );
+                CastleRedrawBuilding( castle, dst_pt, ( *it ).id, frame );
 
                 if ( flash == ( *it ).id ) {
                     CastleDialog::RedrawBuildingSpriteToArea( ( *it ).contour, dst_pt.x + ( *it ).contour.x(), dst_pt.y + ( *it ).contour.y(), max );
@@ -197,7 +197,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                     const u32 & build2 = ( *it ).id;
 
                     if ( castle.isBuild( build2 ) ) {
-                        CastleRedrawBuilding( castle, dst_pt, build2, frame, 0 );
+                        CastleRedrawBuilding( castle, dst_pt, build2, frame );
                         CastleRedrawBuildingExtended( castle, dst_pt, build2, frame );
                     }
                     else if ( build2 == build ) {
@@ -218,7 +218,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     }
 }
 
-void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, int alpha )
+void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
 {
     if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
         return;
@@ -269,13 +269,13 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Sprite sprite1 = fheroes2::AGG::GetICN( icn, index );
 
-        fheroes2::AlphaBlit( sprite1, display, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y() );
+        CastleDialog::RedrawBuildingSpriteToArea( sprite1, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y(), max, alpha );
 
         // second anime sprite
         if ( const u32 index2 = ICN::AnimationFrame( icn, index, frame ) ) {
             fheroes2::Sprite sprite2 = fheroes2::AGG::GetICN( icn, index2 );
 
-            fheroes2::AlphaBlit( sprite2, display, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), alpha );
+            CastleDialog::RedrawBuildingSpriteToArea( sprite2, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), max, alpha );
         }
     }
 }
@@ -983,34 +983,34 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
 Rect CastleGetMaxArea( const Castle & castle, const Point & top )
 {
     Rect res( top, 0, 0 );
-    Sprite townbkg;
+    fheroes2::Sprite townbkg;
 
     switch ( castle.GetRace() ) {
     case Race::KNGT:
-        townbkg = AGG::GetICN( ICN::TOWNBKG0, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG0, 0 );
         break;
     case Race::BARB:
-        townbkg = AGG::GetICN( ICN::TOWNBKG1, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG1, 0 );
         break;
     case Race::SORC:
-        townbkg = AGG::GetICN( ICN::TOWNBKG2, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG2, 0 );
         break;
     case Race::WRLK:
-        townbkg = AGG::GetICN( ICN::TOWNBKG3, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG3, 0 );
         break;
     case Race::WZRD:
-        townbkg = AGG::GetICN( ICN::TOWNBKG4, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG4, 0 );
         break;
     case Race::NECR:
-        townbkg = AGG::GetICN( ICN::TOWNBKG5, 0 );
+        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG5, 0 );
         break;
     default:
         break;
     }
 
-    if ( townbkg.isValid() ) {
-        res.w = townbkg.w();
-        res.h = townbkg.h();
+    if ( !townbkg.empty() ) {
+        res.w = townbkg.width();
+        res.h = townbkg.height();
     }
 
     return res;
