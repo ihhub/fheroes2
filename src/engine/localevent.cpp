@@ -487,7 +487,7 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
-void LocalEvent::RegisterCycling()
+void LocalEvent::RegisterCycling() const
 {
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }

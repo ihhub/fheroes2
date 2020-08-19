@@ -26,7 +26,6 @@
 
 #include "agg.h"
 #include "army_bar.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -156,7 +155,7 @@ void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Poin
     const Heroes * hero1 = heroes.Guard();
     const Heroes * hero2 = heroes.Guest();
 
-    AGG::GetICN( ICN::STRIP, 0 ).Blit( pt.x, pt.y + 256 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), display, pt.x, pt.y + 256 );
 
     fheroes2::Image icon1, icon2;
 

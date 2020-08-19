@@ -105,10 +105,10 @@ void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight )
     fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 4 ), display, pt.x, pt.y );
 
     // right top sprite
-    pt.x = posx + AGG::GetICN( buybuild, 4 ).w();
+    pt.x = posx + fheroes2::AGG::GetICN( buybuild, 4 ).width();
     fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 0 ), display, pt.x, pt.y );
 
-    pt.y += AGG::GetICN( buybuild, 4 ).h();
+    pt.y += fheroes2::AGG::GetICN( buybuild, 4 ).height();
     const int16_t posBeforeMiddle = pt.y;
     for ( u32 i = 0; i < count; ++i ) {
         // left middle sprite

@@ -249,7 +249,7 @@ bool ArmyBar::ActionBarCursor( const Point & cursor, ArmyTroop & troop, const Re
     if ( !troop.isValid() && troop_p && troop_p->isValid() ) {
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             Cursor::Get().Show();
-            Display::Get().Flip();
+            fheroes2::Display::instance().render();
             DELAY( 1 );
         };
         ArmyTroop * troop_r = GetItem( le.GetMouseReleaseLeft() );

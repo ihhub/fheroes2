@@ -269,7 +269,7 @@ public:
     bool EmulateMouseAction( KeySym );
 #endif
 
-    void RegisterCycling();
+    void RegisterCycling() const;
 
 private:
     LocalEvent();

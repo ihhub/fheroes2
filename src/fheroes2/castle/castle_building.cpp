@@ -77,9 +77,9 @@ void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_p
 
 void CastleRedrawTownName( const Castle & castle, const Point & dst )
 {
-    const Sprite & ramka = AGG::GetICN( ICN::TOWNNAME, 0 );
-    Point dst_pt( dst.x + 320 - ramka.w() / 2, dst.y + 248 );
-    ramka.Blit( dst_pt );
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
+    Point dst_pt( dst.x + 320 - background.width() / 2, dst.y + 248 );
+    fheroes2::Blit( background, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
 
     Text text( castle.GetName(), Font::SMALL );
     dst_pt.x = dst.x + 320 - text.w() / 2;
@@ -266,7 +266,6 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
 
     if ( icn != ICN::UNKNOWN ) {
         // simple first sprite
-        fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Sprite sprite1 = fheroes2::AGG::GetICN( icn, index );
 
         CastleDialog::RedrawBuildingSpriteToArea( sprite1, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y(), max, alpha );

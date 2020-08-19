@@ -234,7 +234,7 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
 
 Size Display::GetSize( void ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
     return Size( display.width(), display.height() );
     /*
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

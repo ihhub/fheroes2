@@ -530,7 +530,7 @@ void Dialog::QuickInfo( const Castle & castle )
     const int qwiktown = ICN::QWIKTOWN;
 
     // image box
-    const Sprite & box = AGG::GetICN( qwiktown, 0 );
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( qwiktown, 0 );
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     const Rect ar( gamearea.GetROI() );
 
@@ -545,23 +545,23 @@ void Dialog::QuickInfo( const Castle & castle )
 
     // top left
     if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        cur_rt = Rect( mx + TILEWIDTH, my + TILEWIDTH, box.w(), box.h() );
+        cur_rt = Rect( mx + TILEWIDTH, my + TILEWIDTH, box.width(), box.height() );
     else
         // top right
         if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        cur_rt = Rect( mx - box.w(), my + TILEWIDTH, box.w(), box.h() );
+        cur_rt = Rect( mx - box.width(), my + TILEWIDTH, box.width(), box.height() );
     else
         // bottom left
         if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 )
-        cur_rt = Rect( mx + TILEWIDTH, my - box.h(), box.w(), box.h() );
+        cur_rt = Rect( mx + TILEWIDTH, my - box.height(), box.width(), box.height() );
     else
         // bottom right
-        cur_rt = Rect( mx - box.w(), my - box.h(), box.w(), box.h() );
+        cur_rt = Rect( mx - box.width(), my - box.height(), box.width(), box.height() );
 
-    SpriteBack back( cur_rt );
-    box.Blit( cur_rt.x, cur_rt.y );
+    fheroes2::ImageRestorer back( display, cur_rt.x, cur_rt.y, cur_rt.w, cur_rt.h );
+    fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
 
-    cur_rt = Rect( back.GetPos().x + 28, back.GetPos().y + 9, 178, 140 );
+    cur_rt = Rect( cur_rt.x + 28, cur_rt.y + 9, 178, 140 );
     Point dst_pt;
     Text text;
 
@@ -696,7 +696,7 @@ void Dialog::QuickInfo( const Castle & castle )
 
     // restore background
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.Show();
     display.render();
 }
@@ -776,28 +776,28 @@ void Dialog::QuickInfo( const Heroes & hero )
     // luck
     if ( showFullInfo ) {
         const s32 luck = hero.GetLuckWithModificators( NULL );
-        const Sprite & sprite = AGG::GetICN( ICN::MINILKMR, ( 0 > luck ? 0 : ( 0 < luck ? 1 : 2 ) ) );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > luck ? 0 : ( 0 < luck ? 1 : 2 ) ) );
         u32 count = ( 0 == luck ? 1 : std::abs( luck ) );
         dst_pt.x = cur_rt.x + 120;
         dst_pt.y = cur_rt.y + ( count == 1 ? 20 : 13 );
 
         while ( count-- ) {
-            sprite.Blit( dst_pt.x, dst_pt.y );
-            dst_pt.y += sprite.h() - 1;
+            fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
+            dst_pt.y += sprite.height() - 1;
         }
     }
 
     // morale
     if ( showFullInfo ) {
         const s32 morale = hero.GetMoraleWithModificators( NULL );
-        const Sprite & sprite = AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
         u32 count = ( 0 == morale ? 1 : std::abs( morale ) );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y = cur_rt.y + ( count == 1 ? 20 : 13 );
 
         while ( count-- ) {
-            sprite.Blit( dst_pt.x, dst_pt.y );
-            dst_pt.y += sprite.h() - 1;
+            fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
+            dst_pt.y += sprite.height() - 1;
         }
     }
 
@@ -832,13 +832,13 @@ void Dialog::QuickInfo( const Heroes & hero )
 
     dst_pt.y = cur_rt.y + 13;
 
-    const Sprite & l_flag = AGG::GetICN( ICN::FLAG32, index );
-    dst_pt.x = cur_rt.x + ( cur_rt.w - 40 ) / 2 - l_flag.w();
-    l_flag.Blit( dst_pt );
+    const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
+    dst_pt.x = cur_rt.x + ( cur_rt.w - 40 ) / 2 - l_flag.width();
+    fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
 
-    const Sprite & r_flag = AGG::GetICN( ICN::FLAG32, index + 1 );
+    const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
     dst_pt.x = cur_rt.x + ( cur_rt.w + 40 ) / 2;
-    r_flag.Blit( dst_pt );
+    fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
 
     if ( showFullInfo ) {
         // attack

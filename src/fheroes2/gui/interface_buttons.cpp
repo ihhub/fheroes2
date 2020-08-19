@@ -98,8 +98,6 @@ void Interface::ButtonsArea::Redraw( void )
     const Settings & conf = Settings::Get();
 
     if ( !conf.ExtGameHideInterface() || conf.ShowButtons() ) {
-        const int icnbtn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
-
         if ( conf.ExtGameHideInterface() )
             BorderWindow::Redraw();
 

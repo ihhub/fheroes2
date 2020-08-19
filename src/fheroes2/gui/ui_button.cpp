@@ -125,7 +125,7 @@ namespace fheroes2
             else {
                 // TODO: cache this Sprite to speed up everything
                 Sprite image = sprite;
-                ApplyPallete( image, PAL::GetPalette( PAL::DARKENING ) );
+                ApplyPalette( image, PAL::GetPalette( PAL::DARKENING ) );
                 Blit( image, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
             }
         }

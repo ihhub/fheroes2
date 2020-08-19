@@ -228,7 +228,7 @@ void SpellBook::Edit( const HeroBase & hero )
 
     const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
     const Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2, bookPage.height() + 70 );
-    SpriteBack back( pos );
+    fheroes2::ImageRestorer back( display, pos.x, pos.y, pos.w, pos.h );
 
     const Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
     const Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
@@ -299,7 +299,7 @@ void SpellBook::Edit( const HeroBase & hero )
     }
 
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.SetThemes( oldcursor );
     cursor.Show();
     display.render();

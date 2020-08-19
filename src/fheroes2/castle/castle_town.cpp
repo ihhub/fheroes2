@@ -102,15 +102,15 @@ int Castle::DialogBuyHero( const Heroes * hero )
     rbs.Redraw();
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
     if ( !AllowBuyHero( *hero ) ) {
         button1.disable();
     }
 
-    dst_pt.x = box_rt.x + box_rt.w - AGG::GetICN( system, 3 ).w();
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 3 ).h();
+    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
     fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
 
     button1.draw();

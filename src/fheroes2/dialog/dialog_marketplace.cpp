@@ -56,13 +56,13 @@ public:
         buttonLeft.setICNInfo( tradpost, 3, 4 );
         buttonRight.setICNInfo( tradpost, 5, 6 );
 
-        buttonGift.setPosition( pos_rt.x + ( pos_rt.w - AGG::GetICN( tradpost, 17 ).w() ) / 2, pos_rt.y + 120 );
-        buttonTrade.setPosition( pos_rt.x + ( pos_rt.w - AGG::GetICN( tradpost, 17 ).w() ) / 2, pos_rt.y + 150 );
+        buttonGift.setPosition( pos_rt.x + ( pos_rt.w - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 120 );
+        buttonTrade.setPosition( pos_rt.x + ( pos_rt.w - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
 
         splitter.SetSprite( fheroes2::AGG::GetICN( tradpost, 2 ) );
-        splitter.SetArea( Rect( pos_rt.x + ( pos_rt.w - AGG::GetICN( tradpost, 1 ).w() ) / 2 + 21, pos_rt.y + 131, 189, 11 ) );
+        splitter.SetArea( Rect( pos_rt.x + ( pos_rt.w - fheroes2::AGG::GetICN( tradpost, 1 ).width() ) / 2 + 21, pos_rt.y + 131, 189, 11 ) );
         splitter.HideCursor();
 
         const TextBox text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ), Font::BIG,

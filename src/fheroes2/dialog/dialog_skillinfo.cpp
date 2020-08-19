@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -87,8 +86,8 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     Point pt;
 
     if ( ok_button ) {
-        pt.x = box.GetArea().x + ( box.GetArea().w - AGG::GetICN( system, 1 ).w() ) / 2;
-        pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN( system, 1 ).h();
+        pt.x = box.GetArea().x + ( box.GetArea().w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
+        pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 1 ).height();
         button = new fheroes2::Button( pt.x, pt.y, system, 1, 2 );
     }
 
@@ -178,9 +177,9 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     // blit sprite
     pos.x = box.GetArea().x + ( pos.w - border.width() ) / 2;
     fheroes2::Blit( border, display, pos.x, pos.y );
-    const Sprite & sprite = AGG::GetICN( ICN::PRIMSKIL, index );
-    pos.x = box.GetArea().x + ( pos.w - sprite.w() ) / 2;
-    sprite.Blit( pos.x, pos.y + 6 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, index );
+    pos.x = box.GetArea().x + ( pos.w - sprite.width() ) / 2;
+    fheroes2::Blit( sprite, display, pos.x, pos.y + 6 );
 
     Text text;
 
@@ -196,8 +195,8 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
 
     Point pt;
 
-    pt.x = box.GetArea().x + ( box.GetArea().w - AGG::GetICN( system, 1 ).w() ) / 2;
-    pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN( system, 1 ).h();
+    pt.x = box.GetArea().x + ( box.GetArea().w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
+    pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button( pt.x, pt.y, system, 1, 2 );
 
     button.draw();

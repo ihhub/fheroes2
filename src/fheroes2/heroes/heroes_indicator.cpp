@@ -76,6 +76,7 @@ const char * LuckString( int luck )
 
 HeroesIndicator::HeroesIndicator( const Heroes & h )
     : hero( h )
+    , back( fheroes2::Display::instance() )
 {
     descriptions.reserve( 256 );
 }
@@ -95,7 +96,7 @@ void HeroesIndicator::SetPos( const Point & pt, bool skip_back )
     area.x = pt.x;
     area.y = pt.y;
     if ( !skip_back )
-        back.Save( area );
+        back.update( area.x, area.y, area.w, area.h );
 }
 
 LuckIndicator::LuckIndicator( const Heroes & h )
@@ -129,7 +130,7 @@ void LuckIndicator::Redraw( void )
     else
         descriptions.append( _( "None" ) );
 
-    back.Restore();
+    back.restore();
     while ( count-- ) {
         fheroes2::Blit( sprite, fheroes2::Display::instance(), cx, cy );
         cx += inter;
@@ -177,7 +178,7 @@ void MoraleIndicator::Redraw( void )
     else
         descriptions.append( _( "None" ) );
 
-    back.Restore();
+    back.restore();
     while ( count-- ) {
         fheroes2::Blit( sprite, fheroes2::Display::instance(), cx, cy );
         cx += inter;
@@ -211,7 +212,7 @@ void ExperienceIndicator::Redraw( void )
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
     Text text( GetString( hero.GetExperience() ), Font::SMALL );
-    text.Blit( area.x + 18 - text.w() / 2, area.y + 23 );
+    text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
 void ExperienceIndicator::QueueEventProcessing( void )

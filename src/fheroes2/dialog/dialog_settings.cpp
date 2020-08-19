@@ -73,7 +73,6 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool current
 void SettingsListBox::RedrawBackground( const Point & origin )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
 
     const int window_h = 400;
     const int ah = window_h - 54;

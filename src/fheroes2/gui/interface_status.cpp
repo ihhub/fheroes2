@@ -264,11 +264,11 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
     TextBox text( message, Font::SMALL, pos.w );
     text.Blit( pos.x, pos.y + 4 + oh );
 
-    const Sprite & spr = AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
-    spr.Blit( pos.x + ( pos.w - spr.w() ) / 2, pos.y + 6 + oh + text.h() );
+    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
+    fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.w - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
 
     text.Set( GetString( countLastResource ), Font::SMALL, pos.w );
-    text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + oh + text.h() * 2 + spr.h() + 8 );
+    text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + oh + text.h() * 2 + spr.height() + 8 );
 }
 
 void Interface::StatusWindow::DrawArmyInfo( int oh ) const
@@ -294,13 +294,15 @@ void Interface::StatusWindow::DrawAITurns( void ) const
         // restore background
         DrawBackground();
 
-        const Sprite & glass = AGG::GetICN( ICN::HOURGLAS, 0 );
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Sprite & glass = fheroes2::AGG::GetICN( ICN::HOURGLAS, 0 );
         const Rect & pos = GetArea();
 
-        s32 dst_x = pos.x + ( pos.w - glass.w() ) / 2;
-        s32 dst_y = pos.y + ( pos.h - glass.h() ) / 2;
+        s32 dst_x = pos.x + ( pos.w - glass.width() ) / 2;
+        s32 dst_y = pos.y + ( pos.h - glass.height() ) / 2;
 
-        glass.Blit( dst_x, dst_y );
+        fheroes2::Blit( glass, display, dst_x, dst_y );
 
         int color_index = 0;
 
@@ -327,19 +329,19 @@ void Interface::StatusWindow::DrawAITurns( void ) const
             return;
         }
 
-        const Sprite & crest = AGG::GetICN( ICN::BRCREST, color_index );
+        const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::BRCREST, color_index );
 
         dst_x += 2;
         dst_y += 2;
 
-        crest.Blit( dst_x, dst_y );
+        fheroes2::Blit( crest, display, dst_x, dst_y );
 
-        const Sprite & sand = AGG::GetICN( ICN::HOURGLAS, 1 + ( turn_progress % 10 ) );
+        const fheroes2::Sprite & sand = fheroes2::AGG::GetICN( ICN::HOURGLAS, 1 + ( turn_progress % 10 ) );
 
-        dst_x += ( glass.w() - sand.w() - sand.x() - 3 );
+        dst_x += ( glass.width() - sand.width() - sand.x() - 3 );
         dst_y += sand.y();
 
-        sand.Blit( dst_x, dst_y );
+        fheroes2::Blit( sand, display, dst_x, dst_y );
     }
 }
 
@@ -417,5 +419,5 @@ void Interface::StatusWindow::RedrawTurnProgress( u32 v )
     Cursor::Get().Hide();
     interface.Redraw();
     Cursor::Get().Show();
-    Display::Get().Flip();
+    fheroes2::Display::instance().render();
 }

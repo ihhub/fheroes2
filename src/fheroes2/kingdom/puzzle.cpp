@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"

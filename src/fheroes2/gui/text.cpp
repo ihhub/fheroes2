@@ -74,7 +74,7 @@ size_t TextAscii::Size( void ) const
 
 int TextAscii::CharWidth( int c, int f )
 {
-    return ( c < 0x21 ? ( isSmallFont( f ) ? 4 : 6 ) : AGG::GetLetter( c, f ).w() );
+    return ( c < 0x21 ? ( isSmallFont( f ) ? 4 : 6 ) : fheroes2::AGG::GetLetter( c, f ).width() );
 }
 
 int TextAscii::CharHeight( int f )
@@ -266,7 +266,7 @@ size_t TextUnicode::Size( void ) const
 
 int TextUnicode::CharWidth( int c, int f )
 {
-    return ( c < 0x0021 ? ( isSmallFont( f ) ? 4 : 6 ) : AGG::GetUnicodeLetter( c, f ).w() );
+    return ( c < 0x0021 ? ( isSmallFont( f ) ? 4 : 6 ) : fheroes2::AGG::GetUnicodeLetter( c, f ).width() );
 }
 
 int TextUnicode::CharHeight( int f )

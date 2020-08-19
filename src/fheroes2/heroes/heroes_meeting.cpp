@@ -26,7 +26,6 @@
 #include "agg.h"
 #include "army.h"
 #include "army_bar.h"
-#include "button.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"

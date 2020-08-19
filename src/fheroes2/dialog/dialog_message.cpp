@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "settings.h"
@@ -31,7 +30,7 @@
 
 int Dialog::Message( const std::string & header, const std::string & message, int ft, int buttons )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -56,7 +55,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     group.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     int result = Dialog::ZERO;

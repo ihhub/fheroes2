@@ -368,7 +368,7 @@ void Interface::IconsPanel::SetPos( s32 ox, s32 oy )
         iconsCount = 2;
     }
     else {
-        const u32 count_h = ( Display::Get().h() - Display::DEFAULT_HEIGHT ) / TILEWIDTH;
+        const u32 count_h = ( fheroes2::Display::instance().height() - Display::DEFAULT_HEIGHT ) / TILEWIDTH;
         iconsCount = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
     }
 

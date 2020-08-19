@@ -23,7 +23,6 @@
 #include <string>
 
 #include "agg.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -101,8 +100,8 @@ void Castle::OpenTavern( void )
             fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
 
             if ( const u32 index = ICN::AnimationFrame( tavwin, 0, frame++ ) ) {
-                const Sprite & s22 = AGG::GetICN( tavwin, index );
-                s22.Blit( dst_pt.x + s22.x(), dst_pt.y + s22.y() );
+                const fheroes2::Sprite & s22 = fheroes2::AGG::GetICN( tavwin, index );
+                fheroes2::Blit( s22, display, dst_pt.x + s22.x(), dst_pt.y + s22.y() );
             }
 
             cursor.Show();

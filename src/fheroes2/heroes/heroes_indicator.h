@@ -41,7 +41,7 @@ public:
 protected:
     const Heroes & hero;
     Rect area;
-    SpriteBack back;
+    fheroes2::ImageRestorer back;
     std::string descriptions;
 };
 

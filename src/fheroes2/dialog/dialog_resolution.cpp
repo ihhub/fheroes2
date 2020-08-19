@@ -24,6 +24,7 @@
 #include "game.h"
 #include "interface_list.h"
 #include "screen.h"
+#include "text.h"
 #include "ui_button.h"
 
 namespace
