@@ -293,7 +293,6 @@ void Dialog::Marketplace( bool fromTradingPost )
     const fheroes2::Sprite & sprite_exit = fheroes2::AGG::GetICN( tradpost, 17 );
     dst_pt.x = pos_rt.x + ( pos_rt.w - sprite_exit.width() ) / 2;
     dst_pt.y = pos_rt.y + pos_rt.h - sprite_exit.height();
-
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, tradpost, 17, 18 );
 
     buttonGift.draw();
