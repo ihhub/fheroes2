@@ -201,6 +201,7 @@ int Game::ScenarioInfo( void )
                 RedrawDifficultyInfo( pointDifficultyInfo );
                 playersInfo.RedrawInfo();
                 RedrawRatingInfo( rating );
+                levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
                 conf.SetGameDifficulty( Difficulty::NORMAL );
                 buttonOk.draw();
                 buttonCancel.draw();
