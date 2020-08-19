@@ -155,7 +155,24 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     // hero button
     pt.x = box.GetArea().x + box.GetArea().w / 2 - 18;
     pt.y = box.GetArea().y + box.GetArea().h - 36;
-    fheroes2::Button button_hero( pt.x, pt.y, ( Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 0, 1 );
+
+    Settings & conf = Settings::Get();
+
+    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
+    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
+    fheroes2::AddTransparency( armyButtonReleased, 36 );
+    fheroes2::AddTransparency( armyButtonPressed, 36 );
+
+    fheroes2::Sprite armyButtonReleasedBack( armyButtonReleased.width(), armyButtonReleased.height(), armyButtonReleased.x(), armyButtonReleased.y() );
+    fheroes2::Copy( display, pt.x, pt.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
+    fheroes2::Blit( armyButtonReleased, armyButtonReleasedBack );
+
+    fheroes2::Sprite armyButtonPressedBack( armyButtonPressed.width(), armyButtonPressed.height(), armyButtonPressed.x(), armyButtonPressed.y() );
+    fheroes2::Copy( display, pt.x, pt.y, armyButtonPressedBack, 0, 0, armyButtonPressedBack.width(), armyButtonPressedBack.height() );
+    fheroes2::Blit( armyButtonPressed, armyButtonPressedBack );
+
+    fheroes2::ButtonSprite button_hero( pt.x, pt.y, armyButtonReleasedBack, armyButtonPressedBack );
+
     text.Set( GetString( HEROESMAXSKILL ) + "/" + GetString( hero.GetSecondarySkills().Count() ), Font::BIG );
     text.Blit( box.GetArea().x + ( box.GetArea().w - text.w() ) / 2, pt.y - 15 );
 

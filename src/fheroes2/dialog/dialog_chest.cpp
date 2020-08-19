@@ -75,14 +75,14 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     pos.x = box.GetArea().x + box.GetArea().w / 2 - sprite_gold.width() - 30;
     fheroes2::Blit( sprite_gold, display, pos.x, pos.y - sprite_gold.height() );
     // text
-    text.Blit( pos.x + ( sprite_gold.width() - text.w() ) / 2, pos.y + 2 );
+    text.Blit( pos.x + sprite_gold.width() / 2 - text.w() / 2, pos.y + 2 );
 
     // sprite2
     pos.x = box.GetArea().x + box.GetArea().w / 2 + 30;
     fheroes2::Blit( sprite_expr, display, pos.x, pos.y - sprite_expr.height() );
     // text
     text.Set( GetString( expr ) + " " + "(" + "need: " + GetString( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")", Font::SMALL );
-    text.Blit( pos.x + ( sprite_expr.width() - text.w() ) / 2, pos.y + 2 );
+    text.Blit( pos.x + sprite_expr.width() / 2 - text.w() / 2, pos.y + 2 );
 
     button_yes.draw();
     button_no.draw();
