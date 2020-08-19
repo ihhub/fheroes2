@@ -805,7 +805,7 @@ bool TextSprite::isShow( void ) const
     return !hide;
 }
 
-const Rect & TextSprite::GetRect( void ) const
+Rect TextSprite::GetRect( void ) const
 {
     return Rect( _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() );
 }

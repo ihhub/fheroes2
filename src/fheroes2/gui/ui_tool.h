@@ -31,6 +31,8 @@ namespace fheroes2
         MovableSprite( const Sprite & sprite );
         virtual ~MovableSprite();
 
+        MovableSprite & operator=( const Sprite & sprite );
+
         void show();
         void hide();
         void redraw(); // in case if Display has changed

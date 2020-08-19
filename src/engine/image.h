@@ -120,6 +120,9 @@ namespace fheroes2
         bool _isRestored;
     };
 
+    // Replace a particular pixel value by transparency value (transform layer value will be 1)
+    void AddTransparency( Image & image, uint8_t valueToReplace );
+
     // make sure that output image's transform layer doesn't have skipping values (transform == 1)
     void AlphaBlit( const Image & in, Image & out, uint8_t alphaValue, bool flip = false );
     void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, uint8_t alphaValue, bool flip = false );

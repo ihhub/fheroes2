@@ -1682,7 +1682,7 @@ void Heroes::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf )
             fheroes2::Image blackBG( iconsw, iconsh );
             blackBG.fill( 0 );
             fheroes2::Image blueBG( barw, iconsh );
-            blackBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
+            blueBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
 
             // background
             fheroes2::Blit( blackBG, dstsf, px, py );

@@ -202,7 +202,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     const Point dialogOffset( ( display.width() - sprite.width() ) / 2, ( display.height() - sprite.height() ) / 2 );
     const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    fheroes2::ImageRestorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
     const Rect rt( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
 
     fheroes2::Blit( spriteShadow, display, rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
@@ -219,7 +219,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     listbox.RedrawBackground( rt );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, Point( rt.x + 327, rt.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, Point( rt.x + 327, rt.y + 117 ) );
+    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, Point( rt.x + 327, rt.y + 257 ) );
     listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), Rect( rt.x + 328, rt.y + 73, 12, 180 ) );
     listbox.SetAreaMaxItems( 11 );
     listbox.SetAreaItems( Rect( rt.x + 40, rt.y + 55, 265, 215 ) );

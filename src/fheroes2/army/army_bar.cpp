@@ -193,8 +193,10 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
             text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1, dstsf );
         }
 
-        if ( selected )
+        if ( selected ) {
             spcursor.setPosition( pos.x, pos.y );
+            spcursor.show();
+        }
     }
 }
 

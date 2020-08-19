@@ -556,6 +556,21 @@ namespace fheroes2
         }
     }
 
+    void AddTransparency( Image & image, uint8_t valueToReplace )
+    {
+        const uint32_t width = image.width();
+        const uint32_t height = image.height();
+
+        const uint8_t * imageIn = image.image();
+        uint8_t * transformIn = image.transform();
+        const uint8_t * imageInEnd = imageIn + height * width;
+        for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
+            if ( *transformIn == 0 && *imageIn == valueToReplace ) { // only modify pixels with 0 value
+                *transformIn = 1;
+            }
+        }
+    }
+
     void AlphaBlit( const Image & in, Image & out, uint8_t alphaValue, bool flip )
     {
         AlphaBlit( in, 0, 0, out, 0, 0, in.width(), in.height(), alphaValue, flip );
@@ -606,7 +621,7 @@ namespace fheroes2
                         inValue = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                     }
 
-                    const uint8_t * inPAL = kb_pal + ( inValue ) * 3;
+                    const uint8_t * inPAL = kb_pal + inValue * 3;
                     const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
 
                     const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
@@ -638,7 +653,7 @@ namespace fheroes2
                         inValue = *( transformTable + ( *transformX ) * 256 + *imageOutX );
                     }
 
-                    const uint8_t * inPAL = kb_pal + ( inValue ) * 3;
+                    const uint8_t * inPAL = kb_pal + inValue * 3;
                     const uint8_t * outPAL = kb_pal + ( *imageOutX ) * 3;
 
                     const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
@@ -1133,7 +1148,7 @@ namespace fheroes2
 
     Image Stretch( const Image & in, uint32_t inX, uint32_t inY, uint32_t widthIn, uint32_t heightIn, uint32_t widthOut, uint32_t heightOut )
     {
-        if ( !Validate( in, inX, inY, widthIn, heightIn ) ) {
+        if ( !Validate( in, inX, inY, widthIn, heightIn ) || widthOut == 0 || heightOut == 0 ) {
             return Image();
         }
 

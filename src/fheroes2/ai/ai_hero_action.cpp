@@ -1963,7 +1963,7 @@ namespace AI
 
                     I.Redraw( REDRAW_GAMEAREA );
                     cursor.Show();
-                    Display::Get().Flip();
+                    fheroes2::Display::instance().render();
                 }
 
                 if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {

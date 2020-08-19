@@ -187,8 +187,8 @@ namespace Battle
 
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, Point( ax, area.y ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, Point( ax, area.y + area.h - 20 ) );
-            SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ),
-                               Rect( ax + 5, buttonPgUp.y + buttonPgUp.h + 3, 12, buttonPgDn.y - ( buttonPgUp.y + buttonPgUp.h ) - 6 ) );
+            SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( ax + 5, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
+                                                                                 buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 6 ) );
             splitter.HideCursor();
             SetAreaItems( Rect( area.x, area.y, area.w - 10, area.h ) );
             SetListContent( messages );
@@ -218,16 +218,16 @@ namespace Battle
             const Sprite & sp1 = AGG::GetICN( ICN::DROPLISL, 10 );
             const Sprite & sp2 = AGG::GetICN( ICN::DROPLISL, 12 );
             const Sprite & sp3 = AGG::GetICN( ICN::DROPLISL, 11 );
-            const u32 ax = buttonPgUp.x;
-            const u32 ah = buttonPgDn.y - ( buttonPgUp.y + buttonPgUp.h );
+            const u32 ax = buttonPgUp.area().x;
+            const u32 ah = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height );
 
             Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), border.GetRect() );
 
             for ( u32 ii = 0; ii < ( ah / sp3.h() ); ++ii )
-                sp3.Blit( ax, buttonPgUp.y + buttonPgUp.h + ( sp3.h() * ii ) );
+                sp3.Blit( ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.h() * ii ) );
 
-            sp1.Blit( ax, buttonPgUp.y + buttonPgUp.h );
-            sp2.Blit( ax, buttonPgDn.y - sp2.h() );
+            sp1.Blit( ax, buttonPgUp.area().y + buttonPgUp.area().height );
+            sp2.Blit( ax, buttonPgDn.area().y - sp2.h() );
         }
 
         void ActionCurrentUp( void ) {}

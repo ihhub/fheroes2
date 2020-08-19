@@ -1141,14 +1141,16 @@ bool LocalEvent::EmulateMouseAction( KeySym key )
             SetModes( MOUSE_MOTION );
         }
 
+        const fheroes2::Display & display = fheroes2::Display::instance();
+
         if ( mouse_cu.x < 0 )
             mouse_cu.x = 0;
         if ( mouse_cu.y < 0 )
             mouse_cu.y = 0;
-        if ( mouse_cu.x > Display::Get().w() )
-            mouse_cu.x = Display::Get().w();
-        if ( mouse_cu.y > Display::Get().h() )
-            mouse_cu.y = Display::Get().h();
+        if ( mouse_cu.x > display.width() )
+            mouse_cu.x = display.width();
+        if ( mouse_cu.y > display.height() )
+            mouse_cu.y = display.height();
 
         if ( emulate_press_left == key ) {
             if ( modes & KEY_PRESSED ) {

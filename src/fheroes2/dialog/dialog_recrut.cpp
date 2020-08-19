@@ -235,8 +235,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     u32 result = max;
 
     payment_t paymentCosts( paymentMonster * result );
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
-    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECRBKG, 1 );
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
+    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
 
     const Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 - 65 );
     const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
