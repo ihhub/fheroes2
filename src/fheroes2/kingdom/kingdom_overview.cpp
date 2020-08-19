@@ -241,7 +241,7 @@ void StatsHeroesList::RedrawBackground( const Point & dst )
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
     // splitter background
-    AGG::GetICN( ICN::OVERVIEW, 13 ).Blit( dst.x + 628, dst.y + 17 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
 
     // items background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
@@ -330,12 +330,12 @@ public:
 StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     : Interface::ListBox<CstlRow>( pt )
 {
-    const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 13 );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.w(), back.h() ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, Point( pt.x + 626, pt.y ) );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, Point( pt.x + 626, pt.y + 20 + back.h() ) );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
     SetAreaItems( Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
 

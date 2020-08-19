@@ -23,7 +23,6 @@
 #ifndef H2INTERFACE_BUTTONS_H
 #define H2INTERFACE_BUTTONS_H
 
-#include "button.h"
 #include "interface_border.h"
 #include "ui_button.h"
 

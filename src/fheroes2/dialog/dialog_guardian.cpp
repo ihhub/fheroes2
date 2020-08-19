@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "army_bar.h"
 #include "army_troop.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -61,7 +60,7 @@ public:
             fheroes2::Blit( mons32, display, x + ( back.width() - mons32.width() ) / 2, y + back.height() - mons32.height() - 11 );
 
             if ( readonly )
-                AGG::GetICN( ICN::LOCATORS, 24 ).Blit( x + 33, y + 5 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LOCATORS, 24 ), display, x + 33, y + 5 );
 
             Text text( GetString( troop.GetCount() ), Font::SMALL );
             text.Blit( x + ( back.width() - text.w() ) / 2, y + back.height() - 11 );

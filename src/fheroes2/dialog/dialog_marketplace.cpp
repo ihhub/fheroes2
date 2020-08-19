@@ -56,9 +56,8 @@ public:
         buttonLeft.setICNInfo( tradpost, 3, 4 );
         buttonRight.setICNInfo( tradpost, 5, 6 );
 
-        const uint32_t buttonWidth = fheroes2::AGG::GetICN( tradpost, 17 ).width();
-        buttonGift.setPosition( pos_rt.x + ( pos_rt.w - buttonWidth ) / 2, pos_rt.y + 120 );
-        buttonTrade.setPosition( pos_rt.x + ( pos_rt.w - buttonWidth ) / 2, pos_rt.y + 150 );
+        buttonGift.setPosition( pos_rt.x + ( pos_rt.w - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 120 );
+        buttonTrade.setPosition( pos_rt.x + ( pos_rt.w - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
 

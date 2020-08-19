@@ -2261,7 +2261,7 @@ namespace fheroes2
             _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
             const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
             for ( size_t i = 0; i < _icnVsSprite[icnId].size(); ++i ) {
-                ApplyPallete( _icnVsSprite[icnId][i], palette );
+                ApplyPalette( _icnVsSprite[icnId][i], palette );
             }
         }
 
@@ -2305,6 +2305,17 @@ namespace fheroes2
                     // add 'ly'
                     Blit( GetICN( ICN::BTNHOTST, i ), 47, 21, out, 71, 28, 13, 13 );
                     Blit( GetICN( ICN::BTNHOTST, i ), 72, 21, out, 84, 28, 13, 13 );
+                }
+                return true;
+            case ICN::BTNMIN:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 30, 4, 31, 15 );
+                    // add 'IN'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 23, 20, out, 30, 4, 25, 15 );
                 }
                 return true;
             default:

@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -32,14 +31,21 @@
 
 namespace
 {
-    void SwitchMaxMinButtons( Button & minButton, Button & maxButton, uint32_t currentValue, uint32_t maximumValue )
+    void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t maximumValue )
     {
         const bool isMaxValue = ( currentValue >= maximumValue );
 
-        maxButton.SetDisable( isMaxValue );
-        minButton.SetDisable( !isMaxValue );
-        maxButton.SetVisible( !isMaxValue );
-        minButton.SetVisible( isMaxValue );
+        if ( isMaxValue ) {
+            minButton.show();
+            maxButton.hide();
+        }
+        else {
+            minButton.hide();
+            maxButton.show();
+        }
+
+        minButton.draw();
+        maxButton.draw();
     }
 }
 
@@ -242,11 +248,11 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.w - AGG::GetICN( system, 3 ).w();
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 3 ).h();
+    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, system, 3, 4 );
 
     if ( res.empty() )
@@ -394,14 +400,14 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     const uint32_t maximumAcceptedValue = savelast ? max : max - 1;
 
     const Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
-    Button buttonMax;
-    Button buttonMin;
-    buttonMax.SetPos( minMaxButtonOffset );
-    buttonMin.SetPos( minMaxButtonOffset );
+    fheroes2::ButtonSprite buttonMax( minMaxButtonOffset.x, minMaxButtonOffset. y );
+    fheroes2::ButtonSprite buttonMin( minMaxButtonOffset.x, minMaxButtonOffset. y );
 
     const Rect buttonArea( 5, 0, 61, 25 );
-    buttonMax.SetSprite( AGG::GetICN( ICN::RECRUIT, 4 ).GetSurface( buttonArea ), AGG::GetICN( ICN::RECRUIT, 5 ).GetSurface( buttonArea ) );
-    buttonMin.SetSprite( AGG::GetICN( ICN::BTNMIN, 0 ).GetSurface( buttonArea ), AGG::GetICN( ICN::BTNMIN, 1 ).GetSurface( buttonArea ) );
+    buttonMax.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
+                         fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ) );
+    buttonMin.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::BTNMIN, 0 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
+                         fheroes2::Crop( fheroes2::AGG::GetICN( ICN::BTNMIN, 1 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ) );
 
     SwitchMaxMinButtons( buttonMin, buttonMax, cur, maximumAcceptedValue );
 
@@ -415,22 +421,22 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     int bres = Dialog::ZERO;
     while ( bres == Dialog::ZERO && le.HandleEvents() ) {
         if ( buttonMax.isVisible() )
-            le.MousePressLeft( buttonMax ) ? buttonMax.PressDraw() : buttonMax.ReleaseDraw();
+            le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         if ( buttonMin.isVisible() )
-            le.MousePressLeft( buttonMin ) ? buttonMin.PressDraw() : buttonMin.ReleaseDraw();
+            le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
 
         if ( PressIntKey( max, cur ) ) {
             sel.SetCur( cur );
             redraw_count = true;
         }
-        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax ) ) {
-            le.MousePressLeft( buttonMax ) ? buttonMax.PressDraw() : buttonMax.ReleaseDraw();
+        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
+            le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
             cur = maximumAcceptedValue;
             sel.SetCur( maximumAcceptedValue );
             redraw_count = true;
         }
-        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin ) ) {
-            le.MousePressLeft( buttonMin ) ? buttonMin.PressDraw() : buttonMin.ReleaseDraw();
+        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
+            le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
             cur = min;
             sel.SetCur( min );
             redraw_count = true;
@@ -457,9 +463,9 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
             sel.Redraw();
 
             if ( buttonMax.isVisible() )
-                buttonMax.Draw();
+                buttonMax.draw();
             if ( buttonMin.isVisible() )
-                buttonMin.Draw();
+                buttonMin.draw();
 
             cursor.Show();
             display.render();

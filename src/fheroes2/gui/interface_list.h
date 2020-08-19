@@ -25,7 +25,6 @@
 
 #include <algorithm>
 
-#include "button.h"
 #include "cursor.h"
 #include "gamedefs.h"
 #include "icn.h"

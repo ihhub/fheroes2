@@ -1505,7 +1505,7 @@ void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
         I.Redraw();
         Cursor::Get().Show();
         // force flip, for monster attack show sprite
-        Display::Get().Flip();
+        fheroes2::Display::instance().render();
     }
     hero.Action( dst );
 }

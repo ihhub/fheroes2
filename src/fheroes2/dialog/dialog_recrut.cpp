@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -74,7 +73,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     const payment_t paymentMonster = monster.GetCost();
     const bool extres = 2 == paymentMonster.GetValidItemsCount();
 
-    // smear hardcore text "Cost per troop:"
+    // smear hardcored text "Cost per troop:"
     const fheroes2::Sprite & smear = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
     Point dst_pt( pos.x + 144, pos.y + 55 );
     fheroes2::Blit( smear, 8, 1, display, dst_pt.x, dst_pt.y, 120, 12 );
@@ -235,8 +234,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     u32 result = max;
 
     payment_t paymentCosts( paymentMonster * result );
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
-    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
+    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECRBKG, 1 );
 
     const Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 - 65 );
     const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -266,12 +265,12 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::RECRUIT, 4, 5 );
     fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::BTNMIN, 0, 1 );
 
-    dst_pt.x = pos.x + 208;
-    dst_pt.y = pos.y + 156;
+    dst_pt.x = pos.x + 205;
+    dst_pt.y = pos.y + 154;
     fheroes2::Button buttonUp( dst_pt.x, dst_pt.y, ICN::RECRUIT, 0, 1 );
 
-    dst_pt.x = pos.x + 208;
-    dst_pt.y = pos.y + 171;
+    dst_pt.x = pos.x + 205;
+    dst_pt.y = pos.y + 169;
     fheroes2::Button buttonDn( dst_pt.x, dst_pt.y, ICN::RECRUIT, 2, 3 );
 
     const Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
@@ -468,7 +467,6 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
     cursor.Show();
     display.render();
 
-    //
     while ( le.HandleEvents() && le.MousePressRight() )
         ;
 

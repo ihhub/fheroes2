@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -50,9 +49,9 @@ struct SelectRecipientsColors
 
         for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
             const u32 current = std::distance( colors.begin(), it );
-            const Sprite & sprite = AGG::GetICN( ICN::CELLWIN, 43 );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
 
-            positions.push_back( Rect( pos.x + Game::GetStep4Player( current, sprite.w() + 15, colors.size() ), pos.y, sprite.w(), sprite.h() ) );
+            positions.push_back( Rect( pos.x + Game::GetStep4Player( current, sprite.width() + 15, colors.size() ), pos.y, sprite.width(), sprite.height() ) );
         }
     }
 
@@ -63,12 +62,14 @@ struct SelectRecipientsColors
 
     void Redraw( void ) const
     {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
             const Rect & pos = positions[std::distance( colors.begin(), it )];
 
-            AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ).Blit( pos );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
             if ( recipients & *it )
-                AGG::GetICN( ICN::CELLWIN, 2 ).Blit( pos.x + 2, pos.y + 2 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
         }
     }
 
@@ -102,15 +103,15 @@ struct ResourceBar
         , pos( posx, posy )
     {
         positions.reserve( 7 );
-        const Sprite & sprite = AGG::GetICN( ICN::TRADPOST, 7 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
 
-        positions.push_back( Rect( posx, posy, sprite.w(), sprite.h() ) );
-        positions.push_back( Rect( posx + 40, posy, sprite.w(), sprite.h() ) );
-        positions.push_back( Rect( posx + 80, posy, sprite.w(), sprite.h() ) );
-        positions.push_back( Rect( posx + 120, posy, sprite.w(), sprite.h() ) );
-        positions.push_back( Rect( posx + 160, posy, sprite.w(), sprite.h() ) );
-        positions.push_back( Rect( posx + 200, posy, sprite.w(), sprite.h() ) );
-        positions.push_back( Rect( posx + 240, posy, sprite.w(), sprite.h() ) );
+        positions.push_back( Rect( posx, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( Rect( posx + 40, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( Rect( posx + 80, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( Rect( posx + 120, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( Rect( posx + 160, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( Rect( posx + 200, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( Rect( posx + 240, posy, sprite.width(), sprite.height() ) );
     }
 
     static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
@@ -119,9 +120,9 @@ struct ResourceBar
 
         os << count;
         Text text( os.str(), Font::SMALL );
-        const Sprite & sprite = AGG::GetICN( ICN::TRADPOST, 7 + Resource::GetIndexSprite2( type ) );
-        sprite.Blit( posx, posy );
-        text.Blit( posx + ( sprite.w() - text.w() ) / 2, posy + sprite.h() - 12 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::GetIndexSprite2( type ) );
+        fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
+        text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
     }
 
     void Redraw( const Funds * res = NULL ) const
@@ -187,7 +188,7 @@ struct ResourceBar
 void Dialog::MakeGiftResource( void )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
@@ -221,12 +222,12 @@ void Dialog::MakeGiftResource( void )
     ResourceBar info2( funds2, box.x + 25, box.y + 150 );
     info2.Redraw();
 
-    ButtonGroups btnGroups( box, Dialog::OK | Dialog::CANCEL );
-    btnGroups.DisableButton1( true );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.x, box.y, box.w, box.h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.button( 0 ).disable();
+    btnGroups.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     u32 count = Color::Count( selector.recipients );
 
@@ -236,7 +237,11 @@ void Dialog::MakeGiftResource( void )
         if ( selector.QueueEventProcessing() ) {
             u32 new_count = Color::Count( selector.recipients );
             cursor.Hide();
-            btnGroups.DisableButton1( 0 == new_count || 0 == funds2.GetValidItemsCount() );
+            if ( 0 == new_count || 0 == funds2.GetValidItemsCount() )
+                btnGroups.button( 0 ).disable();
+            else
+                btnGroups.button( 0 ).enable();
+
             if ( count != new_count ) {
                 funds1 = myKingdom.GetFunds();
                 funds2.Reset();
@@ -244,22 +249,27 @@ void Dialog::MakeGiftResource( void )
                 info2.Redraw();
                 count = new_count;
             }
-            btnGroups.Draw();
+            btnGroups.draw();
             selector.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
         else if ( info2.QueueEventProcessing( funds1, count ) ) {
             cursor.Hide();
-            btnGroups.DisableButton1( 0 == Color::Count( selector.recipients ) || 0 == funds2.GetValidItemsCount() );
+
+            if ( 0 == Color::Count( selector.recipients ) || 0 == funds2.GetValidItemsCount() )
+                btnGroups.button( 0 ).disable();
+            else
+                btnGroups.button( 0 ).enable();
+
             info1.Redraw();
             info2.Redraw();
-            btnGroups.Draw();
+            btnGroups.draw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
     }
 
     if ( Dialog::OK == result ) {

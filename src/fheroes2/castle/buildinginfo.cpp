@@ -22,7 +22,6 @@
 
 #include "buildinginfo.h"
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -347,9 +346,9 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
 
     // fix area for capratin
     if ( b == BUILD_CAPTAIN ) {
-        const Sprite & sprite = AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
-        area.w = sprite.w();
-        area.h = sprite.h();
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
+        area.w = sprite.width();
+        area.h = sprite.height();
     }
 }
 
@@ -439,10 +438,9 @@ void BuildingInfo::Redraw( void )
             fheroes2::Blit( infoSprite, display, area.x, area.y );
 
             const Point offset( 6, 59 );
-            fheroes2::Image grayedOut( 125, 12 );
-            fheroes2::Copy( infoSprite, offset.x, offset.y, grayedOut, 0, 0, 125, 12 );
-            fheroes2::ApplyPallete( grayedOut, PAL::GetPalette( PAL::GRAY ) );
-            fheroes2::Blit( infoSprite, display, area.x + offset.x, area.y + offset.y );
+            fheroes2::Image grayedOut = fheroes2::Crop( infoSprite, offset.x, offset.y, 125, 12 );
+            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::GRAY ) );
+            fheroes2::Blit( grayedOut, display, area.x + offset.x, area.y + offset.y );
         }
         else {
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 ), display, area.x, area.y );
@@ -468,7 +466,7 @@ void BuildingInfo::Redraw( void )
             fheroes2::Blit( sprite_allow, display, dst_pt.x, dst_pt.y );
         else if ( bcond == BUILD_DISABLE ) {
             fheroes2::Image disabledSprite( sprite_deny );
-            fheroes2::ApplyPallete( disabledSprite, PAL::GetPalette( PAL::GRAY ) );
+            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::GRAY ) );
             fheroes2::Blit( disabledSprite, display, dst_pt.x, dst_pt.y );
         }
         else if ( bcond != ALLOW_BUILD ) {
@@ -569,11 +567,11 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     Point dst_pt;
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.w - AGG::GetICN( system, 3 ).w();
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 3 ).h();
+    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
     fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
 
     dst_pt.x = box_rt.x + ( box_rt.w - window_icons.width() ) / 2;

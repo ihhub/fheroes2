@@ -133,8 +133,8 @@ namespace fheroes2
     void AlphaBlit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
 
     // apply palette only for image layer, it doesn't affect transform part
-    void ApplyPallete( Image & image, const std::vector<uint8_t> & palette );
-    void ApplyPallete( const Image & in, Image & out, const std::vector<uint8_t> & palette );
+    void ApplyPalette( Image & image, const std::vector<uint8_t> & palette );
+    void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette );
 
     // draw one image onto another
     void Blit( const Image & in, Image & out, bool flip = false );

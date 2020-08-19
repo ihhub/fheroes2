@@ -24,7 +24,6 @@
 
 #include "agg.h"
 #include "battle_cell.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"

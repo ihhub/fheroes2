@@ -91,24 +91,4 @@ protected:
     Surface sf;
 };
 
-class ButtonGroups
-{
-public:
-    ButtonGroups( const Rect &, u32 );
-    ~ButtonGroups();
-
-    void Draw( void );
-    int QueueEventProcessing( void );
-
-    void DisableButton1( bool );
-    void DisableButton2( bool );
-
-protected:
-    Button * button1;
-    Button * button2;
-    int result1;
-    int result2;
-    int buttons;
-};
-
 #endif

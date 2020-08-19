@@ -144,7 +144,6 @@ void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r
 void HGSData::RedrawList( int32_t ox, int32_t oy )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
 
     // image background
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );

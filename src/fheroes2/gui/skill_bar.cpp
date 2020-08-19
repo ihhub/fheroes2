@@ -48,7 +48,6 @@ PrimarySkillsBar::PrimarySkillsBar( const Heroes * hr, bool mini )
         SetItemSize( backsf.width(), backsf.height() );
     }
     else {
-        fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, 0 );
         SetItemSize( sprite.width(), sprite.height() );
     }
@@ -191,7 +190,6 @@ SecondarySkillsBar::SecondarySkillsBar( bool mini /* true */, bool change /* fal
         SetItemSize( backsf.width(), backsf.height() );
     }
     else {
-        fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SECSKILL, 0 );
         SetItemSize( sprite.width(), sprite.height() );
     }
