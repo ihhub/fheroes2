@@ -440,6 +440,7 @@ void BuildingInfo::Redraw( void )
             const Point offset( 6, 59 );
             fheroes2::Image grayedOut = fheroes2::Crop( infoSprite, offset.x, offset.y, 125, 12 );
             fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::GRAY ) );
+            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::DARKENING ) );
             fheroes2::Blit( grayedOut, display, area.x + offset.x, area.y + offset.y );
         }
         else {
@@ -467,6 +468,7 @@ void BuildingInfo::Redraw( void )
         else if ( bcond == BUILD_DISABLE ) {
             fheroes2::Image disabledSprite( sprite_deny );
             fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::GRAY ) );
+            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::DARKENING ) );
             fheroes2::Blit( disabledSprite, display, dst_pt.x, dst_pt.y );
         }
         else if ( bcond != ALLOW_BUILD ) {
