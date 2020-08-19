@@ -96,13 +96,13 @@ namespace fheroes2
     {
     public:
         explicit ImageRestorer( Image & image );
-        ImageRestorer( Image & image, uint32_t x_, uint32_t y_, uint32_t width, uint32_t height );
+        ImageRestorer( Image & image, int32_t x_, int32_t y_, uint32_t width, uint32_t height );
         ~ImageRestorer(); // restore method will be call upon object's destruction
 
-        void update( uint32_t x_, uint32_t y_, uint32_t width, uint32_t height );
+        void update( int32_t x_, int32_t y_, uint32_t width, uint32_t height );
 
-        uint32_t x() const;
-        uint32_t y() const;
+        int32_t x() const;
+        int32_t y() const;
         uint32_t width() const;
         uint32_t height() const;
 
@@ -112,10 +112,12 @@ namespace fheroes2
         Image & _image;
         Image _copy;
 
-        uint32_t _x;
-        uint32_t _y;
+        int32_t _x;
+        int32_t _y;
         uint32_t _width;
         uint32_t _height;
+
+        void _updateRoi();
 
         bool _isRestored;
     };

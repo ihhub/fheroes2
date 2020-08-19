@@ -235,6 +235,8 @@ namespace
 
         if ( inX + width > in.width() ) {
             const uint32_t offsetX = ( inX + width ) - in.width();
+            if ( offsetX >= width )
+                return false;
             width -= offsetX;
         }
 
@@ -247,11 +249,15 @@ namespace
 
         if ( static_cast<uint32_t>( outX ) + width > out.width() ) {
             const uint32_t offsetX = ( static_cast<uint32_t>( outX ) + width ) - out.width();
+            if ( offsetX >= width )
+                return false;
             width -= offsetX;
         }
 
         if ( static_cast<uint32_t>( outY ) + height > out.height() ) {
             const uint32_t offsetY = ( static_cast<uint32_t>( outY ) + height ) - out.height();
+            if ( offsetY >= height )
+                return false;
             height -= offsetY;
         }
 
@@ -495,11 +501,12 @@ namespace fheroes2
         , _height( image.height() )
         , _isRestored( false )
     {
+        _updateRoi();
         _copy.resize( _width, _height );
-        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
+        Copy( _image, static_cast<uint32_t>( _x ), static_cast<uint32_t>( _y ), _copy, 0, 0, _width, _height );
     }
 
-    ImageRestorer::ImageRestorer( Image & image, uint32_t x_, uint32_t y_, uint32_t width, uint32_t height )
+    ImageRestorer::ImageRestorer( Image & image, int32_t x_, int32_t y_, uint32_t width, uint32_t height )
         : _image( image )
         , _x( x_ )
         , _y( y_ )
@@ -507,8 +514,9 @@ namespace fheroes2
         , _height( height )
         , _isRestored( false )
     {
+        _updateRoi();
         _copy.resize( _width, _height );
-        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
+        Copy( _image, static_cast<uint32_t>( _x ), static_cast<uint32_t>( _y ), _copy, 0, 0, _width, _height );
     }
 
     ImageRestorer::~ImageRestorer()
@@ -516,24 +524,25 @@ namespace fheroes2
         restore();
     }
 
-    void ImageRestorer::update( uint32_t x_, uint32_t y_, uint32_t width, uint32_t height )
+    void ImageRestorer::update( int32_t x_, int32_t y_, uint32_t width, uint32_t height )
     {
         _isRestored = false;
         _x = x_;
         _y = y_;
         _width = width;
         _height = height;
+        _updateRoi();
 
         _copy.resize( _width, _height );
-        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
+        Copy( _image, static_cast<uint32_t>( _x ), static_cast<uint32_t>( _y ), _copy, 0, 0, _width, _height );
     }
 
-    uint32_t ImageRestorer::x() const
+    int32_t ImageRestorer::x() const
     {
         return _x;
     }
 
-    uint32_t ImageRestorer::y() const
+    int32_t ImageRestorer::y() const
     {
         return _y;
     }
@@ -552,7 +561,54 @@ namespace fheroes2
     {
         if ( !_isRestored ) {
             _isRestored = true;
-            Copy( _copy, 0, 0, _image, _x, _y, _width, _height );
+            Copy( _copy, 0, 0, _image, static_cast<uint32_t>( _x ), static_cast<uint32_t>( _y ), _width, _height );
+        }
+    }
+
+    void ImageRestorer::_updateRoi()
+    {
+        if ( _x < 0 ) {
+            const uint32_t offset = static_cast<uint32_t>( -_x );
+            _x = 0;
+            _width = _width < offset ? 0 : _width - offset;
+        }
+
+        if ( _y < 0 ) {
+            const uint32_t offset = static_cast<uint32_t>( -_y );
+            _y = 0;
+            _height = _height < offset ? 0 : _height - offset;
+        }
+
+        if ( static_cast<uint32_t>( _x ) >= _image.width() || static_cast<uint32_t>( _y ) >= _image.height() ) {
+            _x = 0;
+            _y = 0;
+            _width = 0;
+            _height = 0;
+            return;
+        }
+
+        if ( static_cast<uint32_t>( _x ) + _width > _image.width() ) {
+            const uint32_t offsetX = ( static_cast<uint32_t>( _x ) + _width ) - _image.width();
+            if ( offsetX >= _width ) {
+                _x = 0;
+                _y = 0;
+                _width = 0;
+                _height = 0;
+                return;
+            }
+            _width -= offsetX;
+        }
+
+        if ( static_cast<uint32_t>( _y ) + _height > _image.height() ) {
+            const uint32_t offsetY = ( static_cast<uint32_t>( _y ) + _height ) - _image.height();
+            if ( offsetY >= _height ) {
+                _x = 0;
+                _y = 0;
+                _width = 0;
+                _height = 0;
+                return;
+            }
+            _height -= offsetY;
         }
     }
 
