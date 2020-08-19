@@ -156,10 +156,10 @@ void Battle::SpeedRedraw( const Point & dst )
     std::string str = _( "speed: %{speed}" );
 
     StringReplace( str, "%{speed}", speed );
-    const Sprite & sprite = AGG::GetICN( ICN::CSPANEL, ( speed < 5 ? 0 : ( speed < 8 ? 1 : 2 ) ) );
-    sprite.Blit( dst );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CSPANEL, ( speed < 5 ? 0 : ( speed < 8 ? 1 : 2 ) ) );
+    fheroes2::Blit( sprite, fheroes2::Display::instance(), dst.x, dst.y );
     const Text text( str, Font::SMALL );
-    text.Blit( dst.x + ( sprite.w() - text.w() ) / 2, dst.y + sprite.h() + 3 );
+    text.Blit( dst.x + ( sprite.width() - text.w() ) / 2, dst.y + sprite.height() + 3 );
 }
 
 void Battle::SetButtonState( LabeledButton & button, Display & display, Cursor & cursor )
@@ -191,28 +191,29 @@ void Battle::InitButtonState( LabeledButton & button, bool state )
 
 void Battle::DialogBattleSettings( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
 
     cursor.Hide();
 
-    const Sprite & dialog = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
-    const Sprite & dialogShadow = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
+    const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
-    const Point dialogOffset( ( display.w() - dialog.w() ) / 2, ( display.h() - dialog.h() ) / 2 );
+    const Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
     const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, dialog.w() + BORDERWIDTH, dialog.h() + BORDERWIDTH ) );
-    const Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.w(), dialog.h() );
+    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+    const Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
 
-    display.FillRect( pos_rt, ColorBlack );
-    dialogShadow.Blit( pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
-    dialog.Blit( pos_rt.x, pos_rt.y );
+    fheroes2::Fill( display, pos_rt.x, pos_rt.y, pos_rt.w, pos_rt.h, 0 );
+    fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
+    fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
     Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
-    SpriteBack speed_buttom_back(
-        Rect( pos_rt.x + 36, pos_rt.y + 47 + AGG::GetICN( ICN::CSPANEL, 0 ).h(), AGG::GetICN( ICN::CSPANEL, 0 ).h(), Text::height( "speed", Font::SMALL ) + 3 ) );
+
+    fheroes2::ImageRestorer speed_buttom_back( display,
+        pos_rt.x + 36, pos_rt.y + 47 + AGG::GetICN( ICN::CSPANEL, 0 ).h(), AGG::GetICN( ICN::CSPANEL, 0 ).h(), Text::height( "speed", Font::SMALL ) + 3 );
     const Rect opt_speed( pos_rt.x + 36, pos_rt.y + 47, AGG::GetICN( ICN::CSPANEL, 0 ).w(), AGG::GetICN( ICN::CSPANEL, 0 ).h() + Text::height( "speed", Font::SMALL ) );
     LabeledButton opt_grid( pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9 );
     opt_grid.SetTopText( _( "Grid" ) );
@@ -236,7 +237,7 @@ void Battle::DialogBattleSettings( void )
     opt_shadow_cursor.Draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
@@ -245,22 +246,22 @@ void Battle::DialogBattleSettings( void )
             conf.SetBattleSpeed( conf.BattleSpeed() % 10 + 1 );
             Game::UpdateGameSpeed();
             cursor.Hide();
-            speed_buttom_back.Restore();
+            speed_buttom_back.restore();
             SpeedRedraw( opt_speed );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
         else if ( le.MouseClickLeft( opt_grid ) ) {
             conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
-            SetButtonState( opt_grid, display, cursor );
+            // SetButtonState( opt_grid, display, cursor );
         }
         else if ( le.MouseClickLeft( opt_shadow_movement ) ) {
             conf.SetBattleMovementShaded( !conf.ExtBattleShowMoveShadow() );
-            SetButtonState( opt_shadow_movement, display, cursor );
+            // SetButtonState( opt_shadow_movement, display, cursor );
         }
         else if ( le.MouseClickLeft( opt_shadow_cursor ) ) {
             conf.SetBattleMouseShaded( !conf.ExtBattleShowMouseShadow() );
-            SetButtonState( opt_shadow_cursor, display, cursor );
+            // SetButtonState( opt_shadow_cursor, display, cursor );
         }
         else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok ) ) {
             break;
@@ -269,9 +270,9 @@ void Battle::DialogBattleSettings( void )
 
     // restore background
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 }
 
 void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg )
@@ -473,17 +474,17 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     cursor.SetThemes( Cursor::POINTER );
 
     const bool readonly = current_color != hero.GetColor() || !buttons;
-    const Sprite & dialog = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
     Rect pos_rt;
-    pos_rt.x = ( display.width() - dialog.w() ) / 2;
-    pos_rt.y = ( display.height() - dialog.h() ) / 2;
-    pos_rt.w = dialog.w();
-    pos_rt.h = dialog.h();
+    pos_rt.x = ( display.width() - dialog.width() ) / 2;
+    pos_rt.y = ( display.height() - dialog.height() ) / 2;
+    pos_rt.w = dialog.width();
+    pos_rt.h = dialog.height();
 
-    SpriteBack back( pos_rt );
+    fheroes2::ImageRestorer back( display, pos_rt.x, pos_rt.y, pos_rt.w, pos_rt.h );
 
-    dialog.Blit( pos_rt.x, pos_rt.y );
+    fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
     // first 15 pixels in the dialog is left shadow, skip
     pos_rt.x += 15;
@@ -491,7 +492,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 
     hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
-    AGG::GetICN( ICN::VIEWGEN, col ).Blit( pos_rt.x + 133, pos_rt.y + 36 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::VIEWGEN, col ), display, pos_rt.x + 133, pos_rt.y + 36 );
 
     Point tp( pos_rt );
 
@@ -541,19 +542,24 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     tp.y = pos_rt.y + 117;
     text.Blit( tp );
 
-    Button btnCast( pos_rt.x + 15, pos_rt.y + 148, ICN::VIEWGEN, 9, 10 );
-    Button btnRetreat( pos_rt.x + 74, pos_rt.y + 148, ICN::VIEWGEN, 11, 12 );
-    Button btnSurrender( pos_rt.x + 133, pos_rt.y + 148, ICN::VIEWGEN, 13, 14 );
-    Button btnClose( pos_rt.x + 192, pos_rt.y + 148, ICN::VIEWGEN, 15, 16 );
+    fheroes2::Button btnCast( pos_rt.x + 15, pos_rt.y + 148, ICN::VIEWGEN, 9, 10 );
+    fheroes2::Button btnRetreat( pos_rt.x + 74, pos_rt.y + 148, ICN::VIEWGEN, 11, 12 );
+    fheroes2::Button btnSurrender( pos_rt.x + 133, pos_rt.y + 148, ICN::VIEWGEN, 13, 14 );
+    fheroes2::Button btnClose( pos_rt.x + 192, pos_rt.y + 148, ICN::VIEWGEN, 15, 16 );
 
-    btnCast.SetDisable( readonly || !hero.HaveSpellBook() || hero.Modes( Heroes::SPELLCASTED ) );
-    btnRetreat.SetDisable( readonly || !CanRetreatOpponent( hero.GetColor() ) );
-    btnSurrender.SetDisable( readonly || !CanSurrenderOpponent( hero.GetColor() ) );
+    if ( readonly || !hero.HaveSpellBook() || hero.Modes( Heroes::SPELLCASTED ) )
+        btnCast.disable();
 
-    btnCast.Draw();
-    btnRetreat.Draw();
-    btnSurrender.Draw();
-    btnClose.Draw();
+    if ( readonly || !CanRetreatOpponent( hero.GetColor() ) )
+        btnRetreat.disable();
+
+    if ( readonly || !CanSurrenderOpponent( hero.GetColor() ) )
+        btnSurrender.disable();
+
+    btnCast.draw();
+    btnRetreat.draw();
+    btnSurrender.draw();
+    btnClose.draw();
 
     int result = 0;
 
@@ -561,47 +567,47 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     display.render();
 
     while ( le.HandleEvents() && !result ) {
-        btnCast.isEnable() && le.MousePressLeft( btnCast ) ? btnCast.PressDraw() : btnCast.ReleaseDraw();
-        btnRetreat.isEnable() && le.MousePressLeft( btnRetreat ) ? btnRetreat.PressDraw() : btnRetreat.ReleaseDraw();
-        btnSurrender.isEnable() && le.MousePressLeft( btnSurrender ) ? btnSurrender.PressDraw() : btnSurrender.ReleaseDraw();
-        le.MousePressLeft( btnClose ) ? btnClose.PressDraw() : btnClose.ReleaseDraw();
+        btnCast.isEnabled() && le.MousePressLeft( btnCast.area() ) ? btnCast.drawOnPress() : btnCast.drawOnRelease();
+        btnRetreat.isEnabled() && le.MousePressLeft( btnRetreat.area() ) ? btnRetreat.drawOnPress() : btnRetreat.drawOnRelease();
+        btnSurrender.isEnabled() && le.MousePressLeft( btnSurrender.area() ) ? btnSurrender.drawOnPress() : btnSurrender.drawOnRelease();
+        le.MousePressLeft( btnClose.area() ) ? btnClose.drawOnPress() : btnClose.drawOnRelease();
 
         if ( !buttons && !le.MousePressRight() )
             break;
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_CASTSPELL ) || ( btnCast.isEnable() && le.MouseClickLeft( btnCast ) ) )
+        if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_CASTSPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCast.area() ) ) )
             result = 1;
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_RETREAT ) || ( btnRetreat.isEnable() && le.MouseClickLeft( btnRetreat ) ) )
+        if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_RETREAT ) || ( btnRetreat.isEnabled() && le.MouseClickLeft( btnRetreat.area() ) ) )
             result = 2;
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_SURRENDER ) || ( btnSurrender.isEnable() && le.MouseClickLeft( btnSurrender ) ) )
+        if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) )
             result = 3;
 
-        if ( le.MousePressRight( btnCast ) )
+        if ( le.MousePressRight( btnCast.area() ) )
             Dialog::Message( _( "Cast Spell" ),
                              _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn" ),
                              Font::BIG );
-        else if ( le.MousePressRight( btnRetreat ) )
+        else if ( le.MousePressRight( btnRetreat.area() ) )
             Dialog::Message(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnSurrender ) )
+        else if ( le.MousePressRight( btnSurrender.area() ) )
             Dialog::Message(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnClose ) )
+        else if ( le.MousePressRight( btnClose.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Return to the battle." ), Font::BIG );
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose ) )
+        if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )
             break;
     }
 
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.Show();
     display.render();
 
