@@ -362,6 +362,7 @@ fheroes2::Image DrawHexagon( const RGBA & color )
     }
 
     fheroes2::Image sf( w + 1, h + 1 );
+    sf.reset();
 
     // sf.DrawLine( Point( r, 0 ), Point( 0, l ), color );
     // sf.DrawLine( Point( r, 0 ), Point( w, l ), color );
@@ -391,14 +392,18 @@ fheroes2::Image DrawHexagonShadow( int alphaValue )
     }
 
     fheroes2::Image sf( w, h );
-    const RGBA shadow = RGBA( 0, 0, 0, alphaValue );
+    sf.reset();
     Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
     for ( int i = 0; i < w / 2; i += 2 ) {
         --rt.y;
         rt.h += 2;
         rt.x += 2;
         rt.w -= 4;
-        // sf.FillRect( rt, shadow );
+        for ( int x = 0; x < rt.w; ++x ) {
+            for ( int y = 0; y < rt.h; ++y ) {
+                fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
+            }
+        }
     }
 
     return sf;
@@ -952,8 +957,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
 
     // hexagon
     sf_hexagon = DrawHexagon( ( light ? RGBA( 0x78, 0x94, 0 ) : RGBA( 0x38, 0x48, 0 ) ) );
-    sf_cursor = DrawHexagonShadow( 0x60 );
-    sf_shadow = DrawHexagonShadow( 0x30 );
+    sf_cursor = DrawHexagonShadow( 2 );
+    sf_shadow = DrawHexagonShadow( 4 );
 
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );

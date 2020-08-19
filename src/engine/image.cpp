@@ -820,6 +820,7 @@ namespace fheroes2
         const uint32_t height = image.height();
 
         Image contour( width, height );
+        contour.reset();
         if ( image.empty() || width < 2 || height < 2 ) {
             return contour;
         }
