@@ -1142,8 +1142,20 @@ namespace fheroes2
             return;
         }
 
-        *( image.image() + y * image.width() + x ) = value;
-        *( image.transform() + y * image.width() + x ) = 0;
+        const uint32_t offset = y * image.width() + x;
+        *( image.image() + offset ) = value;
+        *( image.transform() + offset ) = 0;
+    }
+
+    void SetTransformPixel( Image & image, uint32_t x, uint32_t y, uint8_t value )
+    {
+        if ( image.empty() || x >= image.width() || y >= image.height() ) {
+            return;
+        }
+
+        const uint32_t offset = y * image.width() + x;
+        *( image.image() + offset ) = 0;
+        *( image.transform() + offset ) = value;
     }
 
     Image Stretch( const Image & in, uint32_t inX, uint32_t inY, uint32_t widthIn, uint32_t heightIn, uint32_t widthOut, uint32_t heightOut )

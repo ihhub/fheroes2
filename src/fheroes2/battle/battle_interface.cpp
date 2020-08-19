@@ -1286,7 +1286,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
         }
 
         if ( applyPalette != PAL::STANDARD ) {
-            fheroes2::ApplyPallete( spmon1, PAL::GetPalette( applyPalette ) );
+            fheroes2::ApplyPalette( spmon1, PAL::GetPalette( applyPalette ) );
         }
 
         fheroes2::AlphaBlit( spmon1, _mainSurface, sp.x, sp.y, b.GetCustomAlpha(), b.isReflect() );
@@ -3501,7 +3501,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
     fheroes2::Sprite sprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
-    fheroes2::ApplyPallete( sprite, PAL::GetPalette( PAL::MIRROR_IMAGE ) );
+    fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::MIRROR_IMAGE ) );
 
     const Rect & rt1 = target.GetRectPosition();
     const Rect & rt2 = pos.GetRect();
@@ -3690,7 +3690,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
         for ( size_t i = 1; i < originalPalette.size(); ++i ) {
             originalPalette[0] = PAL::CombinePalettes( originalPalette[0], originalPalette[i] );
         }
-        fheroes2::ApplyPallete( unitSprite, originalPalette[0] );
+        fheroes2::ApplyPalette( unitSprite, originalPalette[0] );
     }
 
     std::vector<uint8_t> convert = PAL::GetPalette( PAL::RED );
@@ -3699,7 +3699,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     }
 
     fheroes2::Sprite bloodlustEffect( unitSprite );
-    fheroes2::ApplyPallete( bloodlustEffect, convert );
+    fheroes2::ApplyPalette( bloodlustEffect, convert );
 
     fheroes2::Sprite mixSprite( unitSprite );
 
@@ -3739,7 +3739,7 @@ void Battle::Interface::RedrawActionStoneSpell( Unit & target )
     fheroes2::Sprite unitSprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
 
     fheroes2::Sprite stoneEffect( unitSprite );
-    fheroes2::ApplyPallete( stoneEffect, PAL::GetPalette( PAL::GRAY ) );
+    fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::GRAY ) );
 
     fheroes2::Sprite mixSprite( unitSprite );
 
