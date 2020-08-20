@@ -1220,7 +1220,7 @@ u32 Maps::Tiles::TileSpriteShape( void ) const
     return pack_sprite_index >> 14;
 }
 
-fheroes2::Image Maps::Tiles::GetTileSurface( void ) const
+const fheroes2::Image & Maps::Tiles::GetTileSurface( void ) const
 {
     return fheroes2::AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
 }
@@ -1538,7 +1538,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool
             const int icn = MP2::GetICNObject( ( *it ).object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                fheroes2::Sprite sprite = fheroes2::AGG::GetICN( icn, index );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
                 area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
                 // possible animation
@@ -1567,7 +1567,7 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
 
             if ( passable_disable ) {
                 Text text( GetString( passable_disable ), Font::SMALL );
-                // text.Blit( 13, 13, sf );
+                text.Blit( 13, 13, sf );
             }
 
             area.BlitOnTile( dst, sf, 0, 0, mp );
@@ -1604,7 +1604,7 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst ) const
     const Monster & monster = QuantityMonster();
     const std::pair<int, int> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
-    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
     area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
 
     if ( spriteIndicies.second != -1 ) {

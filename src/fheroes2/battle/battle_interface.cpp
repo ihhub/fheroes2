@@ -215,19 +215,20 @@ namespace Battle
 
         void RedrawBackground( const Point & pt )
         {
-            const Sprite & sp1 = AGG::GetICN( ICN::DROPLISL, 10 );
-            const Sprite & sp2 = AGG::GetICN( ICN::DROPLISL, 12 );
-            const Sprite & sp3 = AGG::GetICN( ICN::DROPLISL, 11 );
+            fheroes2::Display & display = fheroes2::Display::instance();
+            const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
+            const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
+            const fheroes2::Sprite & sp3 = fheroes2::AGG::GetICN( ICN::DROPLISL, 11 );
             const u32 ax = buttonPgUp.area().x;
             const u32 ah = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height );
 
             Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), border.GetRect() );
 
-            for ( u32 ii = 0; ii < ( ah / sp3.h() ); ++ii )
-                sp3.Blit( ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.h() * ii ) );
+            for ( u32 ii = 0; ii < ( ah / sp3.height() ); ++ii )
+                fheroes2::Blit( sp3, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * ii ) );
 
-            sp1.Blit( ax, buttonPgUp.area().y + buttonPgUp.area().height );
-            sp2.Blit( ax, buttonPgDn.area().y - sp2.h() );
+            fheroes2::Blit( sp1, display, ax, buttonPgUp.area().y + buttonPgUp.area().height );
+            fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
         }
 
         void ActionCurrentUp( void ) {}
@@ -570,10 +571,10 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
         break;
     }
 
-    const Sprite & sprite = AGG::GetICN( icn, _currentAnim.getFrame(), reflect );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, _currentAnim.getFrame() );
 
     if ( reflect ) {
-        pos.x = _offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.w() );
+        pos.x = _offset.x + Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.width() );
         pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
     }
     else {
@@ -589,8 +590,8 @@ Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, b
         pos.y += CAPTAIN_Y_OFFSET;
     }
 
-    pos.w = sprite.w();
-    pos.h = sprite.h();
+    pos.w = sprite.width();
+    pos.h = sprite.height();
 }
 
 int Battle::OpponentSprite::GetColor( void ) const
@@ -1245,7 +1246,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
                 spmon1 = *b_current_sprite;
             }
             else {
-                spmon2 = fheroes2::CreateContour( spmon1, 200 );
+                spmon2 = fheroes2::CreateContour( spmon1, _contourColor );
             }
         }
 
@@ -3424,17 +3425,6 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
 void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 {
     LocalEvent & le = LocalEvent::Get();
-
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    Sprite sprite = AGG::GetICN( msi.icn_file, target.GetFrame(), target.isReflect() );
-    sprite = Sprite( sprite.GetSurface(), sprite.x(), sprite.y() );
-
-    if ( target.Modes( SP_STONE ) ) {
-        AGG::ReplaceColors( sprite, PAL::GetPalette( PAL::GRAY ), msi.icn_file, target.GetFrame(), target.isReflect() );
-    }
-    else if ( target.Modes( CAP_MIRRORIMAGE ) ) {
-        AGG::ReplaceColors( sprite, PAL::GetPalette( PAL::MIRROR_IMAGE ), msi.icn_file, target.GetFrame(), target.isReflect() );
-    }
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
