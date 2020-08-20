@@ -207,7 +207,14 @@ namespace
             if ( SDL_MUSTLOCK( _surface ) )
                 SDL_UnlockSurface( _surface );
 
-            if ( SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch ) == 0 ) {
+            if ( _texture == NULL ) {
+                if ( _renderer != NULL )
+                    SDL_DestroyRenderer( _renderer );
+
+                _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
+            }
+            else {
+                SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
                 if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
                     if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
                         SDL_RenderPresent( _renderer );
