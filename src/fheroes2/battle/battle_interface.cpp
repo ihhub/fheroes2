@@ -3602,7 +3602,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
                 RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface,
                                  fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
-                fheroes2::AlphaBlit( whiteSurface, _mainSurface, 200 );
+                fheroes2::AlphaBlit( whiteSurface, _mainSurface, 50 );
 
                 RedrawPartialFinish();
             }

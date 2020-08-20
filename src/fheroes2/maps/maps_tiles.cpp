@@ -67,8 +67,8 @@ fheroes2::Image PassableViewSurface( int passable )
 {
     const u32 w = 31;
     const u32 h = 31;
-    uint8_t colr = fheroes2::GetColorId( 0xC0, 0x2C, 0 );
-    uint8_t colg = fheroes2::GetColorId( 0x90, 0xC0, 0 );
+    uint8_t colr = 0xBA;
+    uint8_t colg = 0x5A;
     fheroes2::Image sf( w, h );
     sf.reset();
 
