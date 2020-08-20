@@ -145,48 +145,48 @@ namespace
 namespace Battle
 {
     void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg );
-    void SpeedRedraw( const Point & );
-    void SetButtonState( LabeledButton & button, Display & display, Cursor & cursor );
-    void InitButtonState( LabeledButton & button, bool state );
+    void RedrawBattleSettings( const std::vector<Rect> & areas );
+    void RedrawOnOffSetting( const Rect & area, const std::string & name, uint32_t index, bool isSet );
 }
 
-void Battle::SpeedRedraw( const Point & dst )
+void Battle::RedrawBattleSettings( const std::vector<Rect> & areas )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
+    Settings & conf = Settings::Get();
+    
+    // Speed setting
+    const Text speedTitle( _( "Speed" ), Font::SMALL );
+    speedTitle.Blit( areas[0].x + ( areas[0].w - speedTitle.w() ) / 2, areas[0].y - 13 );
+
     int speed = Settings::Get().BattleSpeed();
-    std::string str = _( "speed: %{speed}" );
-
+    std::string str = _( "Speed: %{speed}" );
     StringReplace( str, "%{speed}", speed );
+
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CSPANEL, ( speed < 5 ? 0 : ( speed < 8 ? 1 : 2 ) ) );
-    fheroes2::Blit( sprite, fheroes2::Display::instance(), dst.x, dst.y );
-    const Text text( str, Font::SMALL );
-    text.Blit( dst.x + ( sprite.width() - text.w() ) / 2, dst.y + sprite.height() + 3 );
+    fheroes2::Blit( sprite, fheroes2::Display::instance(), areas[0].x, areas[0].y );
+    Text text( str, Font::SMALL );
+    text.Blit( areas[0].x + ( sprite.width() - text.w() ) / 2, areas[0].y + sprite.height() + 3 );
+
+    RedrawOnOffSetting( areas[3], _( "Grid" ), 8, conf.ExtBattleShowGrid() );
+    RedrawOnOffSetting( areas[4], _( "Shadow Movement" ), 10, conf.ExtBattleShowMoveShadow() );
+    RedrawOnOffSetting( areas[5], _( "Shadow Cursor" ), 12, conf.ExtBattleShowMouseShadow() );
+
+    display.render();
 }
 
-void Battle::SetButtonState( LabeledButton & button, Display & display, Cursor & cursor )
+void Battle::RedrawOnOffSetting( const Rect & area, const std::string & name, uint32_t index, bool isSet )
 {
-    cursor.Hide();
-    if ( button.isPressed() ) {
-        button.Release();
-        button.SetBottomText( _( "Off" ) );
-    }
-    else {
-        button.Press();
-        button.SetBottomText( _( "On" ) );
-    }
-    button.Draw();
-    cursor.Show();
-    display.Flip();
-}
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CSPANEL, isSet ? index + 1 : index );
+    const int textOffset = 2;
 
-void Battle::InitButtonState( LabeledButton & button, bool state )
-{
-    if ( state ) {
-        button.Press();
-        button.SetBottomText( _( "On" ) );
-    }
-    else {
-        button.SetBottomText( _( "Off" ) );
-    }
+    Text text( name, Font::SMALL );
+    text.Blit( area.x + ( area.w - text.w() ) / 2, area.y - text.h() - textOffset );
+
+    fheroes2::Blit( sprite, display, area.x, area.y );
+
+    text.Set( isSet ? _( "On" ) : _( "Off" ) );
+    text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + area.h + textOffset );
 }
 
 void Battle::DialogBattleSettings( void )
@@ -210,69 +210,56 @@ void Battle::DialogBattleSettings( void )
     fheroes2::Fill( display, pos_rt.x, pos_rt.y, pos_rt.w, pos_rt.h, 0 );
     fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-    Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
 
-    fheroes2::ImageRestorer speed_buttom_back( display,
-        pos_rt.x + 36, pos_rt.y + 47 + AGG::GetICN( ICN::CSPANEL, 0 ).h(), AGG::GetICN( ICN::CSPANEL, 0 ).h(), Text::height( "speed", Font::SMALL ) + 3 );
-    const Rect opt_speed( pos_rt.x + 36, pos_rt.y + 47, AGG::GetICN( ICN::CSPANEL, 0 ).w(), AGG::GetICN( ICN::CSPANEL, 0 ).h() + Text::height( "speed", Font::SMALL ) );
-    LabeledButton opt_grid( pos_rt.x + 36, pos_rt.y + 157, ICN::CSPANEL, 8, 9 );
-    opt_grid.SetTopText( _( "Grid" ) );
-    LabeledButton opt_shadow_movement( pos_rt.x + 128, pos_rt.y + 157, ICN::CSPANEL, 10, 11 );
-    opt_shadow_movement.SetTopText( _( "Shadow Movement" ) );
-    LabeledButton opt_shadow_cursor( pos_rt.x + 220, pos_rt.y + 157, ICN::CSPANEL, 12, 13 );
-    opt_shadow_cursor.SetTopText( _( "Shadow Cursor" ) );
+    const fheroes2::Sprite & panelSprite = fheroes2::AGG::GetICN( ICN::CSPANEL, 0 );
+    const int32_t panelWidth = panelSprite.width();
+    const int32_t panelHeight = panelSprite.height();
 
-    InitButtonState( opt_grid, conf.ExtBattleShowGrid() );
-    InitButtonState( opt_shadow_movement, conf.ExtBattleShowMoveShadow() );
-    InitButtonState( opt_shadow_cursor, conf.ExtBattleShowMouseShadow() );
+    std::vector<Rect> optionAreas;
+    optionAreas.push_back( Rect( pos_rt.x + 36, pos_rt.y + 47, panelWidth, panelHeight ) ); // speed
+    optionAreas.push_back( Rect( pos_rt.x + 128, pos_rt.y + 47, panelWidth, panelHeight ) ); // info
+    optionAreas.push_back( Rect( pos_rt.x + 220, pos_rt.y + 47, panelWidth, panelHeight ) ); // auto spell cast
+    optionAreas.push_back( Rect( pos_rt.x + 36, pos_rt.y + 157, panelWidth, panelHeight ) ); // grid
+    optionAreas.push_back( Rect( pos_rt.x + 128, pos_rt.y + 157, panelWidth, panelHeight ) ); // move shadow
+    optionAreas.push_back( Rect( pos_rt.x + 220, pos_rt.y + 157, panelWidth, panelHeight ) ); // cursor shadow
 
-    btn_ok.Draw();
+    fheroes2::Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
+    btn_ok.draw();
 
-    const Text speedTitle( "Speed", Font::SMALL );
-    speedTitle.Blit( opt_speed.x + ( AGG::GetICN( ICN::CSPANEL, 0 ).w() - speedTitle.w() ) / 2, opt_speed.y - 13 );
-
-    SpeedRedraw( opt_speed );
-    opt_grid.Draw();
-    opt_shadow_movement.Draw();
-    opt_shadow_cursor.Draw();
+    RedrawBattleSettings( optionAreas );
 
     cursor.Show();
     display.render();
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
+        le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
-        if ( le.MouseClickLeft( opt_speed ) ) {
+        if ( le.MouseClickLeft( optionAreas[0] ) ) {
             conf.SetBattleSpeed( conf.BattleSpeed() % 10 + 1 );
             Game::UpdateGameSpeed();
-            cursor.Hide();
-            speed_buttom_back.restore();
-            SpeedRedraw( opt_speed );
-            cursor.Show();
+            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+            RedrawBattleSettings( optionAreas );
             display.render();
         }
-        else if ( le.MouseClickLeft( opt_grid ) ) {
+        else if ( le.MouseClickLeft( optionAreas[3] ) ) {
             conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
-            // SetButtonState( opt_grid, display, cursor );
+            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+            RedrawBattleSettings( optionAreas );
         }
-        else if ( le.MouseClickLeft( opt_shadow_movement ) ) {
+        else if ( le.MouseClickLeft( optionAreas[4] ) ) {
             conf.SetBattleMovementShaded( !conf.ExtBattleShowMoveShadow() );
-            // SetButtonState( opt_shadow_movement, display, cursor );
+            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+            RedrawBattleSettings( optionAreas );
         }
-        else if ( le.MouseClickLeft( opt_shadow_cursor ) ) {
+        else if ( le.MouseClickLeft( optionAreas[5] ) ) {
             conf.SetBattleMouseShaded( !conf.ExtBattleShowMouseShadow() );
-            // SetButtonState( opt_shadow_cursor, display, cursor );
+            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+            RedrawBattleSettings( optionAreas );
         }
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok ) ) {
+        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok.area() ) ) {
             break;
         }
     }
-
-    // restore background
-    cursor.Hide();
-    back.restore();
-    cursor.Show();
-    display.render();
 }
 
 void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg )
