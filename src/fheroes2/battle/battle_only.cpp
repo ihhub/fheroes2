@@ -222,17 +222,17 @@ bool Battle::Only::ChangeSettings( void )
     bool allow1 = true;
     bool allow2 = true;
 
-    Button buttonStart( cur_pt.x + 280, cur_pt.y + 428, ICN::SYSTEM, 1, 2 );
-    buttonStart.Draw();
+    fheroes2::Button buttonStart( cur_pt.x + 280, cur_pt.y + 428, ICN::SYSTEM, 1, 2 );
+    buttonStart.draw();
 
     cursor.Show();
     display.render();
 
     // message loop
     while ( !exit && le.HandleEvents() ) {
-        buttonStart.isEnable() && le.MousePressLeft( buttonStart ) ? buttonStart.PressDraw() : buttonStart.ReleaseDraw();
+        buttonStart.isEnabled() && le.MousePressLeft( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
 
-        if ( ( buttonStart.isEnable() && le.MouseClickLeft( buttonStart ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
+        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
             result = true;
             exit = true;
         }
@@ -428,7 +428,7 @@ bool Battle::Only::ChangeSettings( void )
             selectArmy2->Redraw();
             if ( cinfo2 )
                 cinfo2->Redraw();
-            buttonStart.Draw();
+            buttonStart.draw();
             cursor.Show();
             display.render();
             redraw = false;

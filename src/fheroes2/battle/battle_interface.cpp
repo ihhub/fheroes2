@@ -348,18 +348,10 @@ fheroes2::Image DrawHexagon( const RGBA & color )
 {
     int r, l, w, h;
 
-    if ( Settings::Get().QVGA() ) {
-        r = 11;
-        l = 7;
-        w = CELLW2;
-        h = CELLH2;
-    }
-    else {
-        r = 22;
-        l = 10;
-        w = CELLW;
-        h = CELLH;
-    }
+    r = 22;
+    l = 10;
+    w = CELLW;
+    h = CELLH;
 
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
@@ -994,7 +986,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
         btn_skip.setPosition( area.x + area.w - btn_skip.area().width, area.y + area.h - btn_skip.area().height );
     }
 
-    status.SetPosition( area.x + settingsRect.width, autoRect.y );
+    status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );
 
     listlog = new StatusListBox();
 
@@ -1326,7 +1318,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     fheroes2::Blit( bar, _mainSurface, sx, sy );
 
     Text text( GetStringShort( unit.GetCount() ), Font::SMALL );
-    // text.Blit( sx + ( bar.w() - text.w() ) / 2, sy, _mainSurface );
+    text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
 }
 
 void Battle::Interface::RedrawCover( void )

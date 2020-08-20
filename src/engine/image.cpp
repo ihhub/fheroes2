@@ -521,7 +521,9 @@ namespace fheroes2
 
     ImageRestorer::~ImageRestorer()
     {
-        restore();
+        if ( !_isRestored ) {
+            restore();
+        }
     }
 
     void ImageRestorer::update( int32_t x_, int32_t y_, int32_t width, int32_t height )
@@ -559,10 +561,8 @@ namespace fheroes2
 
     void ImageRestorer::restore()
     {
-        if ( !_isRestored ) {
-            _isRestored = true;
-            Copy( _copy, 0, 0, _image, _x, _y, _width, _height );
-        }
+        _isRestored = true;
+        Copy( _copy, 0, 0, _image, _x, _y, _width, _height );
     }
 
     void ImageRestorer::_updateRoi()
