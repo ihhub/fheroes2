@@ -303,7 +303,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
 
 void Battle::Arena::DialogBattleSummary( const Result & res ) const
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
@@ -358,36 +358,28 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     if ( sequence.isFinished() ) // Cannot be!
         sequence.push( ICN::UNKNOWN, false );
 
-    const Sprite & dialog = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
-    const Sprite & dialogShadow = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
+    const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
 
-    const Point dialogOffset( ( display.w() - dialog.w() ) / 2, ( display.h() - dialog.h() ) / 2 );
+    const Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
     const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, dialog.w() + BORDERWIDTH, dialog.h() + BORDERWIDTH ) );
-    const Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.w(), conf.QVGA() ? 224 : dialog.h() );
+    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+    const Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
 
-    if ( conf.QVGA() ) {
-        dialog.Blit( Rect( 0, 232, pos_rt.w, 224 ), pos_rt.x, pos_rt.y );
-        dialog.Blit( Rect( 0, 0, pos_rt.w, 30 ), pos_rt.x, pos_rt.y );
-    }
-    else {
-        dialogShadow.Blit( pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
-        dialog.Blit( pos_rt.x, pos_rt.y );
-    }
+    fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
+    fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
     const int anime_ox = 47;
     const int anime_oy = 36;
 
-    if ( !conf.QVGA() ) {
-        const Sprite & sprite1 = AGG::GetICN( sequence.id(), 0 );
-        const Sprite & sprite2 = AGG::GetICN( sequence.id(), 1 );
+    const fheroes2::Sprite & sequenceBase = fheroes2::AGG::GetICN( sequence.id(), 0 );
+    const fheroes2::Sprite & sequenceStart = fheroes2::AGG::GetICN( sequence.id(), 1 );
 
-        sprite1.Blit( pos_rt.x + anime_ox + sprite1.x(), pos_rt.y + anime_oy + sprite1.y() );
-        sprite2.Blit( pos_rt.x + anime_ox + sprite2.x(), pos_rt.y + anime_oy + sprite2.y() );
-    }
+    fheroes2::Blit( sequenceBase, display, pos_rt.x + anime_ox + sequenceBase.x(), pos_rt.y + anime_oy + sequenceBase.y() );
+    fheroes2::Blit( sequenceStart, display, pos_rt.x + anime_ox + sequenceStart.x(), pos_rt.y + anime_oy + sequenceStart.y() );
 
-    Button btn_ok( pos_rt.x + 121, pos_rt.y + ( conf.QVGA() ? 176 : 410 ), ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
+    fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + ( conf.QVGA() ? 176 : 410 ), ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
 
     TextBox box( msg, Font::BIG, 270 );
     box.Blit( pos_rt.x + 25, pos_rt.y + ( conf.QVGA() ? 20 : 175 ) );
@@ -418,36 +410,27 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
         text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + ( conf.QVGA() ? 135 : 360 ) );
     }
 
-    btn_ok.Draw();
+    btn_ok.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( btn_ok ) ? btn_ok.PressDraw() : btn_ok.ReleaseDraw();
+        le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok ) )
+        if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
             break;
 
         // animation
         if ( !conf.QVGA() && Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
-            const Sprite & sprite1 = AGG::GetICN( sequence.id(), 0 );
-            const Sprite & sprite2 = AGG::GetICN( sequence.id(), sequence.frameId() );
+            const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
-            cursor.Hide();
-            sprite1.Blit( pos_rt.x + anime_ox + sprite1.x(), pos_rt.y + anime_oy + sprite1.y() );
-            sprite2.Blit( pos_rt.x + anime_ox + sprite2.x(), pos_rt.y + anime_oy + sprite2.y() );
-            cursor.Show();
-            display.Flip();
+            fheroes2::Blit( sequenceBase, display, pos_rt.x + anime_ox + sequenceBase.x(), pos_rt.y + anime_oy + sequenceBase.y() );
+            fheroes2::Blit( sequenceCurrent, display, pos_rt.x + anime_ox + sequenceCurrent.x(), pos_rt.y + anime_oy + sequenceCurrent.y() );
+            display.render();
         }
     }
-
-    // restore background
-    cursor.Hide();
-    back.Restore();
-    cursor.Show();
-    display.Flip();
 }
 
 int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
