@@ -22,7 +22,7 @@
 
 #include "statusbar.h"
 #include "cursor.h"
-#include "display.h"
+#include "screen.h"
 
 StatusBar::StatusBar() {}
 

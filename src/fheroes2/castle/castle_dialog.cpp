@@ -141,7 +141,7 @@ building_t GetCurrentFlash( const Castle & castle, CastleDialog::CacheBuildings 
 
         if ( ( *it ).contour.empty() ) {
             const fheroes2::Sprite & sprite = GetActualSpriteBuilding( castle, flash );
-            ( *it ).contour = fheroes2::CreateContour( sprite );
+            ( *it ).contour = fheroes2::CreateContour( sprite, 203 );
         }
     }
 

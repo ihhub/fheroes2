@@ -74,7 +74,7 @@ namespace fheroes2
 
         void render(); // render the image on screen
 
-        virtual void resize( uint32_t width_, uint32_t height_ );
+        virtual void resize( int32_t width_, int32_t height_ );
         bool isDefaultSize() const;
 
         // this function must return true if new palette has been generated

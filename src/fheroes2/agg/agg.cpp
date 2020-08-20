@@ -1142,48 +1142,6 @@ bool AGG::LoadOrgICN( Sprite & sp, int icn, u32 index, bool reflect )
     return false;
 }
 
-/*
-bool AGG::LoadOrgICN(Sprite & sp, int icn, u32 index, bool reflect)
-{
-    const std::vector<u8> & body = ReadICNChunk(icn, index);
-
-    if(body.size())
-    {
-    // loading original
-    DEBUG(DBG_ENGINE, DBG_TRACE, ICN::GetString(icn) << ", " << index);
-
-    StreamBuf st(body);
-
-    u32 count = st.getLE16();
-    u32 blockSize = st.getLE32();
-    u32 sizeData = 0;
-
-    if(index) st.skip(index * 13);
-
-    ICNHeader header1;
-    st >> header1;
-
-    if(index + 1 != count)
-    {
-        ICNHeader header2;
-        st >> header2;
-        sizeData = header2.offsetData - header1.offsetData;
-    }
-    else
-        sizeData = blockSize - header1.offsetData;
-
-    sp = Sprite::CreateICN(icn ,header1, &body[6 + header1.offsetData], sizeData, reflect);
-    Sprite::AddonExtensionModify(sp, icn, index);
-
-    return true;
-    }
-
-    DEBUG(DBG_ENGINE, DBG_WARN, "error: " << ICN::GetString(icn));
-
-    return false;
-}
-*/
-
 bool AGG::LoadOrgICN( int icn, u32 index, bool reflect )
 {
     icn_cache_t & v = icn_cache[icn];
@@ -2405,12 +2363,12 @@ namespace fheroes2
             const double scaleFactorX = static_cast<double>( Display::instance().width() ) / Display::DEFAULT_WIDTH;
             const double scaleFactorY = static_cast<double>( Display::instance().height() ) / Display::DEFAULT_HEIGHT;
 
-            const uint32_t resizedWidth = static_cast<uint32_t>( originalIcn.width() * scaleFactorX + 0.5 );
-            const uint32_t resizedHeight = static_cast<uint32_t>( originalIcn.height() * scaleFactorY + 0.5 );
+            const int32_t resizedWidth = static_cast<int32_t>( originalIcn.width() * scaleFactorX + 0.5 );
+            const int32_t resizedHeight = static_cast<int32_t>( originalIcn.height() * scaleFactorY + 0.5 );
             // Resize only if needed
             if ( resizedIcn.width() != resizedWidth || resizedIcn.height() != resizedHeight ) {
                 resizedIcn.resize( resizedWidth, resizedHeight );
-                resizedIcn.setPosition( static_cast<uint32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<uint32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
+                resizedIcn.setPosition( static_cast<int32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<int32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
                 Resize( originalIcn, resizedIcn, false );
             }
 

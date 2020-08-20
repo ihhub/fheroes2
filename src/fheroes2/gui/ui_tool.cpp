@@ -23,7 +23,7 @@
 
 namespace fheroes2
 {
-    MovableSprite::MovableSprite( uint32_t width_, uint32_t height_, int32_t x_, int32_t y_ )
+    MovableSprite::MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
         : Sprite( width_, height_, x_, y_ )
         , _restorer( Display::instance(), x_, y_, width_, height_ )
         , _isHidden( height_ == 0 && width_ == 0 )

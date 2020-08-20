@@ -618,21 +618,6 @@ void Surface::SetPalette( void )
     }
 }
 
-void Surface::ResetPalette()
-{
-    if ( isValid() && pal_colors != NULL && pal_nums > 0 && surface->format->palette ) {
-        std::set<const SDL_Surface *>::iterator item = surfaceToUpdate.find( surface );
-        if ( item != surfaceToUpdate.end() ) {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-            SDL_SetPaletteColors( surface->format->palette, pal_colors, 0, pal_nums );
-#else
-            SDL_SetPalette( surface, SDL_LOGPAL, pal_colors, 0, pal_nums );
-#endif
-            surfaceToUpdate.erase( item );
-        }
-    }
-}
-
 void Surface::SetPalette( const std::vector<SDL_Color> & colors )
 {
     if ( isValid() && !colors.empty() && surface->format->palette ) {
@@ -1154,50 +1139,6 @@ Surface Surface::RenderContour( const RGBA & color ) const
     return res;
 }
 
-Surface Surface::RenderGrayScale( void ) const
-{
-    Surface res( GetSize(), GetFormat() );
-    const u32 colkey = GetColorKey();
-    u32 pixel = 0;
-
-    res.Lock();
-    for ( int y = 0; y < h(); ++y )
-        for ( int x = 0; x < w(); ++x ) {
-            pixel = GetPixel( x, y );
-            if ( 0 == colkey || pixel != colkey ) {
-                RGBA col = GetRGB( pixel );
-                int z = col.r() * 0.299f + col.g() * 0.587f + col.b() * 0.114f;
-                pixel = res.MapRGB( RGBA( z, z, z, col.a() ) );
-                res.SetPixel( x, y, pixel );
-            }
-        }
-    res.Unlock();
-    return res;
-}
-
-Surface Surface::RenderSepia( void ) const
-{
-    Surface res( GetSize(), GetFormat() );
-    const u32 colkey = GetColorKey();
-    u32 pixel = 0;
-
-    res.Lock();
-    for ( int x = 0; x < w(); x++ )
-        for ( int y = 0; y < h(); y++ ) {
-            pixel = GetPixel( x, y );
-            if ( colkey == 0 || pixel != colkey ) {
-                RGBA col = GetRGB( pixel );
-                int outR = clamp<int>( col.r() * 0.693f + col.g() * 0.769f + col.b() * 0.189f, 0, 255 );
-                int outG = clamp<int>( col.r() * 0.449f + col.g() * 0.686f + col.b() * 0.168f, 0, 255 );
-                int outB = clamp<int>( col.r() * 0.272f + col.g() * 0.534f + col.b() * 0.131f, 0, 255 );
-                pixel = res.MapRGB( RGBA( outR, outG, outB, col.a() ) );
-                res.SetPixel( x, y, pixel );
-            }
-        }
-    res.Unlock();
-    return res;
-}
-
 // Renders the death wave starting at X position
 Surface Surface::RenderDeathWave( int position, int waveLength, int waveHeight ) const
 {
@@ -1568,57 +1509,6 @@ void Surface::FillRect( const Rect & rect, const RGBA & col )
     SDL_FillRect( surface, &dstrect, MapRGB( col ) );
 }
 
-void Surface::DrawLine( const Point & p1, const Point & p2, const RGBA & color, const Rect & roi )
-{
-    int x1 = p1.x;
-    int y1 = p1.y;
-    int x2 = p2.x;
-    int y2 = p2.y;
-
-    const u32 pixel = MapRGB( color );
-    const int dx = std::abs( x2 - x1 );
-    const int dy = std::abs( y2 - y1 );
-
-    const bool isValidRoi = roi.w > 0 && roi.h > 0;
-
-    Lock();
-    const int minX = isValidRoi ? roi.x : 0;
-    const int minY = isValidRoi ? roi.y : 0;
-    const int maxX = isValidRoi ? roi.x + roi.w : w();
-    const int maxY = isValidRoi ? roi.y + roi.h : h();
-    if ( dx > dy ) {
-        int ns = std::div( dx, 2 ).quot;
-
-        for ( int i = 0; i <= dx; ++i ) {
-            if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
-                SetPixel( x1, y1, pixel );
-            }
-            x1 < x2 ? ++x1 : --x1;
-            ns -= dy;
-            if ( ns < 0 ) {
-                y1 < y2 ? ++y1 : --y1;
-                ns += dx;
-            }
-        }
-    }
-    else {
-        int ns = std::div( dy, 2 ).quot;
-
-        for ( int i = 0; i <= dy; ++i ) {
-            if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
-                SetPixel( x1, y1, pixel );
-            }
-            y1 < y2 ? ++y1 : --y1;
-            ns -= dx;
-            if ( ns < 0 ) {
-                x1 < x2 ? ++x1 : --x1;
-                ns += dy;
-            }
-        }
-    }
-    Unlock();
-}
-
 void Surface::DrawPoint( const Point & pt, const RGBA & color )
 {
     Lock();
@@ -1877,46 +1767,4 @@ Surface Surface::Blend( const Surface & first, const Surface & second, uint8_t r
     surface.Unlock();
 
     return surface;
-}
-
-bool Surface::GammaCorrection( double a, double gamma )
-{
-    if ( !isValid() || depth() != 32 )
-        return false;
-
-    // We precalculate all values and store them in lookup table
-    std::vector<uint8_t> value( 256, 255u );
-
-    for ( uint16_t i = 0; i < 256; ++i ) {
-        const double data = a * pow( i / 255.0, gamma ) * 255 + 0.5;
-        if ( data < 256 )
-            value[i] = static_cast<uint8_t>( data );
-    }
-
-    Lock();
-
-    const int width = w();
-    const int height = h();
-    const uint16_t pitch = surface->pitch >> 2;
-
-    if ( pitch != width ) {
-        Unlock();
-        return false;
-    }
-
-    uint8_t * out = static_cast<uint8_t *>( surface->pixels );
-    const uint8_t * outEnd = out + pitch * height * 4;
-
-    for ( ; out != outEnd; ++out ) {
-        *out = value[*out];
-        ++out;
-        *out = value[*out];
-        ++out;
-        *out = value[*out];
-        ++out;
-    }
-
-    Unlock();
-
-    return true;
 }
