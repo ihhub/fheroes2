@@ -26,6 +26,7 @@
 #include <SDL_render.h>
 #include <SDL_video.h>
 #else
+#include <SDL_active.h>
 #include <SDL_video.h>
 #endif
 
@@ -321,6 +322,11 @@ namespace
             }
         }
 
+        virtual bool isMouseCursorActive() const
+        {
+            return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
+        }
+
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
@@ -538,6 +544,11 @@ namespace
             }
         }
 
+        virtual bool isMouseCursorActive() const
+        {
+            return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
+        }
+
     private:
         SDL_Surface * _surface;
         std::vector<uint32_t> _palette32Bit;
@@ -710,6 +721,11 @@ namespace fheroes2
     bool Cursor::isVisible() const
     {
         return _show;
+    }
+
+    bool Cursor::isFocusActive() const
+    {
+        return engine().isMouseCursorActive();
     }
 
     BaseRenderEngine & engine()

@@ -23,11 +23,13 @@
 
 namespace fheroes2
 {
+    class Cursor;
     class Display;
 
     class BaseRenderEngine
     {
     public:
+        friend class Cursor;
         friend class Display;
         virtual ~BaseRenderEngine() {}
 
@@ -48,6 +50,11 @@ namespace fheroes2
         virtual void clear() {}
         virtual void render( const Display & ) {}
         virtual bool allocate( uint32_t, uint32_t, bool )
+        {
+            return false;
+        }
+
+        virtual bool isMouseCursorActive() const
         {
             return false;
         }
@@ -111,6 +118,8 @@ namespace fheroes2
 
         void show( bool enable );
         bool isVisible() const;
+
+        bool isFocusActive() const;
 
     private:
         Cursor();
