@@ -142,7 +142,8 @@ namespace
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
 
-                fheroes2::DrawLine( surface, fheroes2::Point( first.x + xOffset * offset, first.y + yOffset * offset ), fheroes2::Point( second.x, second.y ), color, roi );
+                fheroes2::DrawLine( surface, fheroes2::Point( first.x + xOffset * offset, first.y + yOffset * offset ), fheroes2::Point( second.x, second.y ), color,
+                                    roi );
             }
         }
     }
@@ -884,7 +885,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     // border
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    _interfacePosition = Rect( ( display.width() - Display::DEFAULT_WIDTH ) / 2, ( display.height() - Display::DEFAULT_HEIGHT ) / 2, _surfaceInnerArea.w, _surfaceInnerArea.h );
+    _interfacePosition
+        = Rect( ( display.width() - Display::DEFAULT_WIDTH ) / 2, ( display.height() - Display::DEFAULT_HEIGHT ) / 2, _surfaceInnerArea.w, _surfaceInnerArea.h );
     border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
 
     // cover
@@ -1388,7 +1390,6 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
             if ( ( *it ).GetObject() == 0 )
                 fheroes2::Blit( sf_hexagon, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
     }
-
 
     if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
@@ -2182,7 +2183,7 @@ void Battle::Interface::FadeArena( void )
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.w, srt.h );
     fheroes2::Image back( srt.w, srt.h );
     back.fill( 0 );
-    //display.Fade( top, back, srt, 100, 300 );
+    // display.Fade( top, back, srt, 100, 300 );
     fheroes2::FadeDisplay();
     display.render();
 }
@@ -3617,7 +3618,8 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
                 RedrawPartialStart();
 
-                RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface, fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+                RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface,
+                                 fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
                 fheroes2::AlphaBlit( whiteSurface, _mainSurface, 200 );
 
                 RedrawPartialFinish();

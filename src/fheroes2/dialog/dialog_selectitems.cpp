@@ -330,7 +330,7 @@ Artifact Dialog::SelectArtifact( int cur )
         listbox.SetCurrent( static_cast<int>( cur ) );
     listbox.Redraw();
 
-    fheroes2:: ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
     cursor.Show();

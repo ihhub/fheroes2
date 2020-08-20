@@ -400,8 +400,8 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     const uint32_t maximumAcceptedValue = savelast ? max : max - 1;
 
     const Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
-    fheroes2::ButtonSprite buttonMax( minMaxButtonOffset.x, minMaxButtonOffset. y );
-    fheroes2::ButtonSprite buttonMin( minMaxButtonOffset.x, minMaxButtonOffset. y );
+    fheroes2::ButtonSprite buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y );
+    fheroes2::ButtonSprite buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y );
 
     const Rect buttonArea( 5, 0, 61, 25 );
     buttonMax.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
