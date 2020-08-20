@@ -623,7 +623,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 const Rect rt( 0, 100, 552, 107 );
                                 fheroes2::Image sf( 552, 107 );
                                 sf.reset();
-                                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), sf, 0, 100 );
+                                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, sf, 0, 0, 552, 107 );
                                 fheroes2::Image port = heroes.Guest()->GetPortrait( PORT_BIG );
                                 if ( !port.empty() )
                                     fheroes2::Blit( port, sf, 5, 5 );

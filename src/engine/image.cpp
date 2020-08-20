@@ -649,6 +649,10 @@ namespace fheroes2
             return;
         }
 
+        if ( alphaValue == 0 ) { // there is nothing we need to do
+            return;
+        }
+
         if ( alphaValue == 255 ) {
             Blit( in, inX, inY, out, outX, outY, width, height, flip );
             return;
