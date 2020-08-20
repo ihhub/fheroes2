@@ -118,7 +118,7 @@ namespace
     }
 
     void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, uint8_t color, fheroes2::Image & surface,
-                          const Rect & roi = Rect() )
+                          const fheroes2::Rect & roi = fheroes2::Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
             const Point & first = lightning[i].first.point;
@@ -127,8 +127,7 @@ namespace
             const int xOffset = isHorizontal ? 0 : 1;
             const int yOffset = isHorizontal ? 1 : 0;
 
-            // fheroes2::DrawLine( surface, first, second, color );
-            // surface.DrawLine( first, second, color, roi );
+            fheroes2::DrawLine( surface, fheroes2::Point( first.x, first.y ), fheroes2::Point( second.x, second.y ), color, roi );
 
             for ( uint32_t thickness = 1; thickness < lightning[i].second.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
@@ -136,14 +135,14 @@ namespace
                 const int x = xOffset * offset;
                 const int y = yOffset * offset;
 
-                // surface.DrawLine( Point( first.x + x, first.y + y ), Point( second.x + x, second.y + y ), color, roi );
+                fheroes2::DrawLine( surface, fheroes2::Point( first.x + x, first.y + y ), fheroes2::Point( second.x + x, second.y + y ), color, roi );
             }
 
             for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
 
-                // surface.DrawLine( Point( first.x + xOffset * offset, first.y + yOffset * offset ), second, color, roi );
+                fheroes2::DrawLine( surface, fheroes2::Point( first.x + xOffset * offset, first.y + yOffset * offset ), fheroes2::Point( second.x, second.y ), color, roi );
             }
         }
     }
@@ -364,14 +363,16 @@ fheroes2::Image DrawHexagon( const RGBA & color )
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
 
-    // sf.DrawLine( Point( r, 0 ), Point( 0, l ), color );
-    // sf.DrawLine( Point( r, 0 ), Point( w, l ), color );
+    const uint8_t colorId = fheroes2::GetColorId( color.r(), color.g(), color.b() );
 
-    // sf.DrawLine( Point( 0, l + 1 ), Point( 0, h - l ), color );
-    // sf.DrawLine( Point( w, l + 1 ), Point( w, h - l ), color );
+    fheroes2::DrawLine( sf, fheroes2::Point( r, 0 ), fheroes2::Point( 0, l ), colorId );
+    fheroes2::DrawLine( sf, fheroes2::Point( r, 0 ), fheroes2::Point( w, l ), colorId );
 
-    // sf.DrawLine( Point( r, h ), Point( 0, h - l ), color );
-    // sf.DrawLine( Point( r, h ), Point( w, h - l ), color );
+    fheroes2::DrawLine( sf, fheroes2::Point( 0, l + 1 ), fheroes2::Point( 0, h - l ), colorId );
+    fheroes2::DrawLine( sf, fheroes2::Point( w, l + 1 ), fheroes2::Point( w, h - l ), colorId );
+
+    fheroes2::DrawLine( sf, fheroes2::Point( r, h ), fheroes2::Point( 0, h - l ), colorId );
+    fheroes2::DrawLine( sf, fheroes2::Point( r, h ), fheroes2::Point( w, h - l ), colorId );
 
     return sf;
 }
@@ -1250,7 +1251,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
                 spmon1 = *b_current_sprite;
             }
             else {
-                spmon2 = fheroes2::CreateContour( spmon1 );
+                spmon2 = fheroes2::CreateContour( spmon1, 200 );
             }
         }
 
@@ -2491,7 +2492,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) );
 
     // Lich/Power lich has projectile speed of 25
-    const Points points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), static_cast<uint32_t>( 25 ) ) );
+    const Points points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
     Points::const_iterator pnt = points.begin();
 
     // convert the following code into a function/event service
@@ -2501,11 +2502,11 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
             RedrawPartialStart();
             if ( isMage ) {
-                //_mainSurface.DrawLine( Point( startPos.x, startPos.y - 2 ), Point( pnt->x, pnt->y - 2 ), PAL::GetPaletteColor( 0x77 ) );
-                //_mainSurface.DrawLine( Point( startPos.x, startPos.y - 1 ), Point( pnt->x, pnt->y - 1 ), PAL::GetPaletteColor( 0xB5 ) );
-                //_mainSurface.DrawLine( Point( startPos.x, startPos.y ), Point( pnt->x, pnt->y ), PAL::GetPaletteColor( 0xBC ) );
-                //_mainSurface.DrawLine( Point( startPos.x, startPos.y + 1 ), Point( pnt->x, pnt->y + 1 ), PAL::GetPaletteColor( 0xB5 ) );
-                //_mainSurface.DrawLine( Point( startPos.x, startPos.y + 2 ), Point( pnt->x, pnt->y + 2 ), PAL::GetPaletteColor( 0x77 ) );
+                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 2 ), fheroes2::Point( pnt->x, pnt->y - 2 ), 0x77 );
+                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 1 ), fheroes2::Point( pnt->x, pnt->y - 1 ), 0xB5 );
+                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y ), fheroes2::Point( pnt->x, pnt->y ), 0xBC );
+                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y + 1 ), fheroes2::Point( pnt->x, pnt->y + 1 ), 0xB5 );
+                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y + 2 ), fheroes2::Point( pnt->x, pnt->y + 2 ), 0x77 );
             }
             else {
                 fheroes2::Blit( missile, _mainSurface, reverse ? pnt->x - missile.width() : pnt->x, ( angle > 0 ) ? pnt->y - missile.height() : pnt->y, reverse );
@@ -3616,7 +3617,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
                 RedrawPartialStart();
 
-                RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface, Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+                RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface, fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
                 fheroes2::AlphaBlit( whiteSurface, _mainSurface, 200 );
 
                 RedrawPartialFinish();

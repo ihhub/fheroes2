@@ -176,23 +176,23 @@ namespace
         return one.width() == two.width() && one.height() == two.height();
     }
 
-    bool Validate( const fheroes2::Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height )
+    bool Validate( const fheroes2::Image & image, int32_t x, int32_t y, int32_t width, int32_t height )
     {
-        if ( image.empty() || width == 0 || height == 0 ) // what's the reason to work with empty images?
+        if ( image.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
             return false;
 
-        if ( x > image.width() || y > image.height() )
+        if ( x < 0 || y < 0 || x > image.width() || y > image.height() )
             return false;
 
         return true;
     }
 
-    bool Validate( const fheroes2::Image & in, uint32_t inX, uint32_t inY, const fheroes2::Image & out, uint32_t outX, uint32_t outY, uint32_t width, uint32_t height )
+    bool Validate( const fheroes2::Image & in, int32_t inX, int32_t inY, const fheroes2::Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
     {
-        if ( in.empty() || out.empty() || width == 0 || height == 0 ) // what's the reason to work with empty images?
+        if ( in.empty() || out.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
             return false;
 
-        if ( inX > in.width() || inY > in.height() || outX > out.width() || outY > out.height() )
+        if ( inX < 0 || inY < 0 || outX < 0 || outY < 0 || inX > in.width() || inY > in.height() || outX > out.width() || outY > out.height() )
             return false;
 
         if ( ( inX + width > in.width() ) || ( inY + height > in.height() ) || ( outX + width > out.width() ) || ( outY + height > out.height() ) )
@@ -201,17 +201,17 @@ namespace
         return true;
     }
 
-    bool Verify( const fheroes2::Image & in, uint32_t & inX, uint32_t & inY, const fheroes2::Image & out, int32_t & outX, int32_t & outY, uint32_t & width,
-                 uint32_t & height )
+    bool Verify( const fheroes2::Image & in, int32_t & inX, int32_t & inY, const fheroes2::Image & out, int32_t & outX, int32_t & outY, int32_t & width,
+                 int32_t & height )
     {
-        if ( in.empty() || out.empty() || width == 0 || height == 0 ) // what's the reason to work with empty images?
+        if ( in.empty() || out.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
             return false;
 
-        if ( inX > in.width() || inY > in.height() )
+        if ( inX < 0 || inY < 0 || inX > in.width() || inY > in.height() )
             return false;
 
         if ( outX < 0 ) {
-            const uint32_t offsetX = static_cast<uint32_t>( -outX );
+            const int32_t offsetX = -outX;
             if ( offsetX >= width )
                 return false;
 
@@ -221,41 +221,41 @@ namespace
         }
 
         if ( outY < 0 ) {
-            const uint32_t offsetY = static_cast<uint32_t>( -outY );
+            const int32_t offsetY = -outY;
             if ( offsetY >= height )
                 return false;
 
-            inY += static_cast<uint32_t>( -outY );
+            inY += offsetY;
             outY = 0;
             height -= offsetY;
         }
 
-        if ( static_cast<uint32_t>( outX ) > out.width() || static_cast<uint32_t>( outY ) > out.height() )
+        if ( outX < 0 || outY < 0 || outX > out.width() || outY > out.height() )
             return false;
 
         if ( inX + width > in.width() ) {
-            const uint32_t offsetX = ( inX + width ) - in.width();
+            const int32_t offsetX = inX + width - in.width();
             if ( offsetX >= width )
                 return false;
             width -= offsetX;
         }
 
         if ( inY + height > in.height() ) {
-            const uint32_t offsetY = ( inY + height ) - in.height();
+            const int32_t offsetY = inY + height - in.height();
             if ( offsetY >= height )
                 return false;
             height -= offsetY;
         }
 
-        if ( static_cast<uint32_t>( outX ) + width > out.width() ) {
-            const uint32_t offsetX = ( static_cast<uint32_t>( outX ) + width ) - out.width();
+        if ( outX + width > out.width() ) {
+            const int32_t offsetX = outX + width - out.width();
             if ( offsetX >= width )
                 return false;
             width -= offsetX;
         }
 
-        if ( static_cast<uint32_t>( outY ) + height > out.height() ) {
-            const uint32_t offsetY = ( static_cast<uint32_t>( outY ) + height ) - out.height();
+        if ( outY + height > out.height() ) {
+            const int32_t offsetY = outY + height - out.height();
             if ( offsetY >= height )
                 return false;
             height -= offsetY;
@@ -305,9 +305,9 @@ namespace
 
 namespace fheroes2
 {
-    Image::Image( uint32_t width_, uint32_t height_ )
-        : _width( 0u )
-        , _height( 0u )
+    Image::Image( int32_t width_, int32_t height_ )
+        : _width( 0 )
+        , _height( 0 )
     {
         resize( width_, height_ );
     }
@@ -321,8 +321,8 @@ namespace fheroes2
     }
 
     Image::Image( Image && image )
-        : _width( 0u )
-        , _height( 0u )
+        : _width( 0 )
+        , _height( 0 )
     {
         swap( image );
     }
@@ -347,12 +347,12 @@ namespace fheroes2
         return *this;
     }
 
-    uint32_t Image::width() const
+    int32_t Image::width() const
     {
         return _width;
     }
 
-    uint32_t Image::height() const
+    int32_t Image::height() const
     {
         return _height;
     }
@@ -382,8 +382,8 @@ namespace fheroes2
         _image.clear();
         _transform.clear();
 
-        _width = 0u;
-        _height = 0u;
+        _width = 0;
+        _height = 0;
     }
 
     void Image::fill( uint8_t value )
@@ -400,9 +400,9 @@ namespace fheroes2
         return _image.empty();
     }
 
-    void Image::resize( uint32_t width_, uint32_t height_ )
+    void Image::resize( int32_t width_, int32_t height_ )
     {
-        if ( width_ == 0 || height_ == 0 || ( width_ == _width && height_ == _height ) ) // nothing to resize
+        if ( width_ <= 0 || height_ <= 0 || ( width_ == _width && height_ == _height ) ) // nothing to resize
             return;
 
         clear();
@@ -417,8 +417,8 @@ namespace fheroes2
     void Image::reset()
     {
         if ( !empty() ) {
-            std::fill( _image.begin(), _image.end(), 0u );
-            std::fill( _transform.begin(), _transform.end(), 1u ); // skip all data
+            std::fill( _image.begin(), _image.end(), 0 );
+            std::fill( _transform.begin(), _transform.end(), 1 ); // skip all data
         }
     }
 
@@ -431,7 +431,7 @@ namespace fheroes2
         std::swap( _transform, image._transform );
     }
 
-    Sprite::Sprite( uint32_t width_, uint32_t height_, int32_t x_, int32_t y_ )
+    Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
         : Image( width_, height_ )
         , _x( x_ )
         , _y( y_ )
@@ -503,10 +503,10 @@ namespace fheroes2
     {
         _updateRoi();
         _copy.resize( _width, _height );
-        Copy( _image, static_cast<uint32_t>( _x ), static_cast<uint32_t>( _y ), _copy, 0, 0, _width, _height );
+        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
-    ImageRestorer::ImageRestorer( Image & image, int32_t x_, int32_t y_, uint32_t width, uint32_t height )
+    ImageRestorer::ImageRestorer( Image & image, int32_t x_, int32_t y_, int32_t width, int32_t height )
         : _image( image )
         , _x( x_ )
         , _y( y_ )
@@ -516,7 +516,7 @@ namespace fheroes2
     {
         _updateRoi();
         _copy.resize( _width, _height );
-        Copy( _image, static_cast<uint32_t>( _x ), static_cast<uint32_t>( _y ), _copy, 0, 0, _width, _height );
+        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
     ImageRestorer::~ImageRestorer()
@@ -524,7 +524,7 @@ namespace fheroes2
         restore();
     }
 
-    void ImageRestorer::update( int32_t x_, int32_t y_, uint32_t width, uint32_t height )
+    void ImageRestorer::update( int32_t x_, int32_t y_, int32_t width, int32_t height )
     {
         _isRestored = false;
         _x = x_;
@@ -534,7 +534,7 @@ namespace fheroes2
         _updateRoi();
 
         _copy.resize( _width, _height );
-        Copy( _image, static_cast<uint32_t>( _x ), static_cast<uint32_t>( _y ), _copy, 0, 0, _width, _height );
+        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
     int32_t ImageRestorer::x() const
@@ -547,12 +547,12 @@ namespace fheroes2
         return _y;
     }
 
-    uint32_t ImageRestorer::width() const
+    int32_t ImageRestorer::width() const
     {
         return _width;
     }
 
-    uint32_t ImageRestorer::height() const
+    int32_t ImageRestorer::height() const
     {
         return _height;
     }
@@ -561,25 +561,31 @@ namespace fheroes2
     {
         if ( !_isRestored ) {
             _isRestored = true;
-            Copy( _copy, 0, 0, _image, static_cast<uint32_t>( _x ), static_cast<uint32_t>( _y ), _width, _height );
+            Copy( _copy, 0, 0, _image, _x, _y, _width, _height );
         }
     }
 
     void ImageRestorer::_updateRoi()
     {
+        if ( _width < 0 )
+            _width = 0;
+
+        if ( _height < 0 )
+            _height = 0;
+
         if ( _x < 0 ) {
-            const uint32_t offset = static_cast<uint32_t>( -_x );
+            const int32_t offset = -_x;
             _x = 0;
             _width = _width < offset ? 0 : _width - offset;
         }
 
         if ( _y < 0 ) {
-            const uint32_t offset = static_cast<uint32_t>( -_y );
+            const int32_t offset = -_y;
             _y = 0;
             _height = _height < offset ? 0 : _height - offset;
         }
 
-        if ( static_cast<uint32_t>( _x ) >= _image.width() || static_cast<uint32_t>( _y ) >= _image.height() ) {
+        if ( _x >= _image.width() || _y >= _image.height() ) {
             _x = 0;
             _y = 0;
             _width = 0;
@@ -587,8 +593,8 @@ namespace fheroes2
             return;
         }
 
-        if ( static_cast<uint32_t>( _x ) + _width > _image.width() ) {
-            const uint32_t offsetX = ( static_cast<uint32_t>( _x ) + _width ) - _image.width();
+        if ( _x + _width > _image.width() ) {
+            const int32_t offsetX = _x + _width - _image.width();
             if ( offsetX >= _width ) {
                 _x = 0;
                 _y = 0;
@@ -599,8 +605,8 @@ namespace fheroes2
             _width -= offsetX;
         }
 
-        if ( static_cast<uint32_t>( _y ) + _height > _image.height() ) {
-            const uint32_t offsetY = ( static_cast<uint32_t>( _y ) + _height ) - _image.height();
+        if ( _y + _height > _image.height() ) {
+            const int32_t offsetY = _y + _height - _image.height();
             if ( offsetY >= _height ) {
                 _x = 0;
                 _y = 0;
@@ -614,8 +620,8 @@ namespace fheroes2
 
     void AddTransparency( Image & image, uint8_t valueToReplace )
     {
-        const uint32_t width = image.width();
-        const uint32_t height = image.height();
+        const int32_t width = image.width();
+        const int32_t height = image.height();
 
         const uint8_t * imageIn = image.image();
         uint8_t * transformIn = image.transform();
@@ -637,7 +643,7 @@ namespace fheroes2
         AlphaBlit( in, 0, 0, out, outX, outY, in.width(), in.height(), alphaValue, flip );
     }
 
-    void AlphaBlit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, uint8_t alphaValue,
+    void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue,
                     bool flip )
     {
         if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
@@ -650,8 +656,8 @@ namespace fheroes2
         }
 
         // Blitting one image onto another can be done only for image layer so we don't consider transform part of the output image
-        const uint32_t widthIn = in.width();
-        const uint32_t widthOut = out.width();
+        const int32_t widthIn = in.width();
+        const int32_t widthOut = out.width();
 
         const uint8_t behindValue = 255 - alphaValue;
 
@@ -726,7 +732,7 @@ namespace fheroes2
         if ( inPos.x < 0 || inPos.y < 0 )
             return;
 
-        AlphaBlit( in, static_cast<uint32_t>( inPos.x ), static_cast<uint32_t>( inPos.y ), out, outPos.x, outPos.y, size.width, size.height, flip );
+        AlphaBlit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, static_cast<int32_t>( size.width ), static_cast<int32_t>( size.height ), flip );
     }
 
     void ApplyPalette( Image & image, const std::vector<uint8_t> & palette )
@@ -740,8 +746,8 @@ namespace fheroes2
             return;
         }
 
-        const uint32_t width = in.width();
-        const uint32_t height = in.height();
+        const int32_t width = in.width();
+        const int32_t height = in.height();
 
         const uint8_t * imageIn = in.image();
         const uint8_t * transformIn = in.transform();
@@ -764,14 +770,14 @@ namespace fheroes2
         Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip );
     }
 
-    void Blit( const Image & in, uint32_t inX, uint32_t inY, Image & out, int32_t outX, int32_t outY, uint32_t width, uint32_t height, bool flip )
+    void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool flip )
     {
         if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
             return;
         }
 
-        const uint32_t widthIn = in.width();
-        const uint32_t widthOut = out.width();
+        const int32_t widthIn = in.width();
+        const int32_t widthOut = out.width();
 
         if ( flip ) {
             const uint8_t * imageInY = in.image() + inY * widthIn + inX + width - 1;
@@ -840,7 +846,7 @@ namespace fheroes2
         if ( inPos.x < 0 || inPos.y < 0 )
             return;
 
-        Blit( in, static_cast<uint32_t>( inPos.x ), static_cast<uint32_t>( inPos.y ), out, outPos.x, outPos.y, size.width, size.height, flip );
+        Blit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, static_cast<int32_t>( size.width ), static_cast<int32_t>( size.height ), flip );
     }
 
     void Copy( const Image & in, Image & out )
@@ -849,14 +855,14 @@ namespace fheroes2
         Copy( in, 0, 0, out, 0, 0, in.width(), in.height() );
     }
 
-    void Copy( const Image & in, uint32_t inX, uint32_t inY, Image & out, uint32_t outX, uint32_t outY, uint32_t width, uint32_t height )
+    void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
     {
         if ( !Validate( in, inX, inY, out, outX, outY, width, height ) ) {
             return;
         }
 
-        const uint32_t widthIn = in.width();
-        const uint32_t widthOut = out.width();
+        const int32_t widthIn = in.width();
+        const int32_t widthOut = out.width();
 
         const uint8_t * imageInY = in.image() + inY * widthIn + inX;
         const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
@@ -870,10 +876,10 @@ namespace fheroes2
         }
     }
 
-    Image CreateContour( const Image & image )
+    Image CreateContour( const Image & image, uint8_t value )
     {
-        const uint32_t width = image.width();
-        const uint32_t height = image.height();
+        const int32_t width = image.width();
+        const int32_t height = image.height();
 
         Image contour( width, height );
         contour.reset();
@@ -884,20 +890,20 @@ namespace fheroes2
         const uint8_t * inY = image.transform();
         uint8_t * outY = contour.transform();
 
-        const uint32_t reducedWidth = width - 1;
-        const uint32_t reducedHeight = height - 1;
+        const int32_t reducedWidth = width - 1;
+        const int32_t reducedHeight = height - 1;
 
-        for ( uint32_t y = 0; y < height; ++y, inY += width, outY += width ) {
+        for ( int32_t y = 0; y < height; ++y, inY += width, outY += width ) {
             const uint8_t * inX = inY;
 
             const bool isTopRow = ( y == 0 );
             const bool isBottomRow = ( y == reducedHeight );
 
-            for ( uint32_t x = 0; x < width; ++x, ++inX ) {
+            for ( int32_t x = 0; x < width; ++x, ++inX ) {
                 if ( *inX > 0 ) { // empty or shadow
                     if ( ( x > 0 && *( inX - 1 ) == 0 ) || ( x < reducedWidth && *( inX + 1 ) == 0 ) || ( !isTopRow && *( inX - width ) == 0 )
                          || ( !isBottomRow && *( inX + width ) == 0 ) ) {
-                        outY[x] = 0;
+                        outY[x] = value;
                     }
                 }
             }
@@ -906,13 +912,13 @@ namespace fheroes2
         return contour;
     }
 
-    Sprite Crop( const Image & image, int32_t x, int32_t y, uint32_t width, uint32_t height )
+    Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height )
     {
-        if ( image.empty() || width == 0 || height == 0 )
+        if ( image.empty() || width <= 0 || height <= 0 )
             return Sprite();
 
         if ( x < 0 ) {
-            const uint32_t offsetX = static_cast<uint32_t>( -x );
+            const int32_t offsetX = -x;
             if ( offsetX >= width )
                 return Sprite();
 
@@ -921,7 +927,7 @@ namespace fheroes2
         }
 
         if ( y < 0 ) {
-            const uint32_t offsetY = static_cast<uint32_t>( -y );
+            const int32_t offsetY = -y;
             if ( offsetY >= height )
                 return Sprite();
 
@@ -929,21 +935,21 @@ namespace fheroes2
             height -= offsetY;
         }
 
-        if ( static_cast<uint32_t>( x ) > image.width() || static_cast<uint32_t>( y ) > image.height() )
+        if ( x > image.width() || y > image.height() )
             return Sprite();
 
-        if ( static_cast<uint32_t>( x ) + width > image.width() ) {
-            const uint32_t offsetX = ( static_cast<uint32_t>( x ) + width ) - image.width();
+        if ( x + width > image.width() ) {
+            const int32_t offsetX = x + width - image.width();
             width -= offsetX;
         }
 
-        if ( static_cast<uint32_t>( y ) + height > image.height() ) {
-            const uint32_t offsetY = ( static_cast<uint32_t>( y ) + height ) - image.height();
+        if ( y + height > image.height() ) {
+            const int32_t offsetY = y + height - image.height();
             height -= offsetY;
         }
 
         Sprite out( width, height );
-        Copy( image, static_cast<uint32_t>( x ), static_cast<uint32_t>( y ), out, 0, 0, width, height );
+        Copy( image, x, y, out, 0, 0, width, height );
         out.setPosition( x, y );
         return out;
     }
@@ -954,8 +960,8 @@ namespace fheroes2
             return;
         }
 
-        const uint32_t width = image.width();
-        const uint32_t height = image.height();
+        const int32_t width = image.width();
+        const int32_t height = image.height();
 
         // top side
         uint8_t * data = image.image();
@@ -994,13 +1000,78 @@ namespace fheroes2
         }
     }
 
-    void DrawLine( Image & image, const Point & /*start*/, const Point & /*end*/, const Rect & /*roi*/ )
+    void DrawLine( Image & image, const Point & start, const Point & end, uint8_t value, const Rect & roi )
     {
         if ( image.empty() )
             return;
+
+        const int32_t width = image.width();
+        const int32_t height = image.height();
+
+        int32_t x1 = start.x;
+        int32_t y1 = start.y;
+        int32_t x2 = end.x;
+        int32_t y2 = end.y;
+
+        const int32_t dx = std::abs( x2 - x1 );
+        const int32_t dy = std::abs( y2 - y1 );
+
+        const bool isValidRoi = roi.width > 0 && roi.height > 0;
+
+        int32_t minX = isValidRoi ? roi.x : 0;
+        int32_t minY = isValidRoi ? roi.y : 0;
+        int32_t maxX = isValidRoi ? roi.x + static_cast<int32_t>( roi.width ) : width;
+        int32_t maxY = isValidRoi ? roi.y + static_cast<int32_t>( roi.height ) : height;
+
+        if ( minX >= width || minY >= height )
+            return;
+
+        if ( maxX >= width )
+            maxX = width;
+
+        if ( maxY >= height )
+            maxY = height;
+
+        uint8_t * data = image.image();
+        uint8_t * transform = image.transform();
+
+        if ( dx > dy ) {
+            int32_t ns = std::div( dx, 2 ).quot;
+
+            for ( int32_t i = 0; i <= dx; ++i ) {
+                if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                    const int32_t offset = x1 + y1 * width;
+                    *( data + offset ) = value;
+                    *( transform + offset ) = 0;
+                }
+                x1 < x2 ? ++x1 : --x1;
+                ns -= dy;
+                if ( ns < 0 ) {
+                    y1 < y2 ? ++y1 : --y1;
+                    ns += dx;
+                }
+            }
+        }
+        else {
+            int32_t ns = std::div( dy, 2 ).quot;
+
+            for ( int32_t i = 0; i <= dy; ++i ) {
+                if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                    const int32_t offset = x1 + y1 * width;
+                    *( data + offset ) = value;
+                    *( transform + offset ) = 0;
+                }
+                y1 < y2 ? ++y1 : --y1;
+                ns -= dx;
+                if ( ns < 0 ) {
+                    x1 < x2 ? ++x1 : --x1;
+                    ns += dy;
+                }
+            }
+        }
     }
 
-    void Fill( Image & image, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint8_t colorId )
+    void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId )
     {
         if ( !Validate( image, x, y, width, height ) )
             return;
@@ -1010,7 +1081,7 @@ namespace fheroes2
             return;
         }
 
-        const uint32_t imageWidth = image.width();
+        const int32_t imageWidth = image.width();
 
         uint8_t * imageY = image.image() + y * imageWidth + x;
         uint8_t * transformY = image.transform() + y * imageWidth + x;
@@ -1028,8 +1099,8 @@ namespace fheroes2
             return Image();
         }
 
-        const uint32_t width = in.width();
-        const uint32_t height = in.height();
+        const int32_t width = in.width();
+        const int32_t height = in.height();
 
         Image out( width, height );
         if ( !horizontally && !vertically ) {
@@ -1101,10 +1172,10 @@ namespace fheroes2
             return;
         }
 
-        const uint32_t widthIn = in.width();
-        const uint32_t heightIn = in.height();
-        const uint32_t widthOut = out.width();
-        const uint32_t heightOut = out.height();
+        const int32_t widthIn = in.width();
+        const int32_t heightIn = in.height();
+        const int32_t widthOut = out.width();
+        const int32_t heightOut = out.height();
 
         const uint8_t * inY = in.image();
         const uint8_t * transformInY = in.transform();
@@ -1114,23 +1185,23 @@ namespace fheroes2
         if ( isSubpixelAccuracy ) {
             std::vector<double> positionX( widthOut );
             std::vector<double> positionY( heightOut );
-            for ( uint32_t x = 0; x < widthOut; ++x )
+            for ( int32_t x = 0; x < widthOut; ++x )
                 positionX[x] = static_cast<double>( x * widthIn ) / widthOut;
-            for ( uint32_t y = 0; y < heightOut; ++y )
+            for ( int32_t y = 0; y < heightOut; ++y )
                 positionY[y] = static_cast<double>( y * heightIn ) / heightOut;
 
-            for ( uint32_t y = 0; y < heightOut; ++y, outY += widthOut, transformOutY += widthOut ) {
+            for ( int32_t y = 0; y < heightOut; ++y, outY += widthOut, transformOutY += widthOut ) {
                 const double posY = positionY[y];
-                const uint32_t startY = static_cast<uint32_t>( posY );
+                const int32_t startY = static_cast<int32_t>( posY );
                 const double coeffY = posY - startY;
 
                 uint8_t * outX = outY;
                 uint8_t * transformOutX = transformOutY;
 
-                for ( uint32_t x = 0; x < widthOut; ++x, ++outX, ++transformOutX ) {
+                for ( int32_t x = 0; x < widthOut; ++x, ++outX, ++transformOutX ) {
                     const double posX = positionX[x];
-                    const uint32_t startX = static_cast<uint32_t>( posX );
-                    const uint32_t offsetIn = startY * widthIn + startX;
+                    const int32_t startX = static_cast<int32_t>( posX );
+                    const int32_t offsetIn = startY * widthIn + startX;
 
                     const uint8_t * inX = inY + offsetIn;
                     const uint8_t * transformInX = transformInY + offsetIn;
@@ -1168,11 +1239,11 @@ namespace fheroes2
         }
         else {
             const uint8_t * outYEnd = outY + widthOut * heightOut;
-            uint32_t idY = 0;
+            int32_t idY = 0;
 
             // Precalculation of X position
-            std::vector<uint32_t> positionX( widthOut );
-            for ( uint32_t x = 0; x < widthOut; ++x )
+            std::vector<int32_t> positionX( widthOut );
+            for ( int32_t x = 0; x < widthOut; ++x )
                 positionX[x] = ( x * widthIn ) / widthOut;
 
             for ( ; outY != outYEnd; outY += widthOut, transformOutY += widthOut, ++idY ) {
@@ -1180,10 +1251,10 @@ namespace fheroes2
                 uint8_t * transformOutX = transformOutY;
                 const uint8_t * outXEnd = outX + widthOut;
 
-                const uint32_t offset = ( ( idY * heightIn ) / heightOut ) * widthIn;
+                const int32_t offset = ( ( idY * heightIn ) / heightOut ) * widthIn;
                 const uint8_t * inX = inY + offset;
                 const uint8_t * transformInX = transformInY + offset;
-                const uint32_t * idX = positionX.data();
+                const int32_t * idX = positionX.data();
 
                 for ( ; outX != outXEnd; ++outX, ++transformOutX, ++idX ) {
                     *outX = *( inX + ( *idX ) );
@@ -1193,53 +1264,53 @@ namespace fheroes2
         }
     }
 
-    void SetPixel( Image & image, uint32_t x, uint32_t y, uint8_t value )
+    void SetPixel( Image & image, int32_t x, int32_t y, uint8_t value )
     {
-        if ( image.empty() || x >= image.width() || y >= image.height() ) {
+        if ( image.empty() || x >= image.width() || y >= image.height() || x < 0 || y < 0 ) {
             return;
         }
 
-        const uint32_t offset = y * image.width() + x;
+        const int32_t offset = y * image.width() + x;
         *( image.image() + offset ) = value;
         *( image.transform() + offset ) = 0;
     }
 
-    void SetTransformPixel( Image & image, uint32_t x, uint32_t y, uint8_t value )
+    void SetTransformPixel( Image & image, int32_t x, int32_t y, uint8_t value )
     {
-        if ( image.empty() || x >= image.width() || y >= image.height() ) {
+        if ( image.empty() || x >= image.width() || y >= image.height() || x < 0 || y < 0 ) {
             return;
         }
 
-        const uint32_t offset = y * image.width() + x;
+        const int32_t offset = y * image.width() + x;
         *( image.image() + offset ) = 0;
         *( image.transform() + offset ) = value;
     }
 
-    Image Stretch( const Image & in, uint32_t inX, uint32_t inY, uint32_t widthIn, uint32_t heightIn, uint32_t widthOut, uint32_t heightOut )
+    Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, int32_t widthOut, int32_t heightOut )
     {
-        if ( !Validate( in, inX, inY, widthIn, heightIn ) || widthOut == 0 || heightOut == 0 ) {
+        if ( !Validate( in, inX, inY, widthIn, heightIn ) || widthOut <= 0 || heightOut <= 0 ) {
             return Image();
         }
 
         Image out( widthOut, heightOut );
 
-        const uint32_t minWidth = widthIn < widthOut ? widthIn : widthOut;
-        const uint32_t minHeight = heightIn < heightOut ? heightIn : heightOut;
+        const int32_t minWidth = widthIn < widthOut ? widthIn : widthOut;
+        const int32_t minHeight = heightIn < heightOut ? heightIn : heightOut;
 
-        const uint32_t cornerWidth = minWidth / 3;
-        const uint32_t cornerHeight = minHeight / 3;
-        const uint32_t cornerX = inX + ( widthIn - cornerWidth ) / 2;
-        const uint32_t cornerY = inY + ( heightIn - cornerHeight ) / 2;
-        const uint32_t bodyWidth = minWidth - 2 * cornerWidth;
-        const uint32_t bodyHeight = minHeight - 2 * cornerHeight;
+        const int32_t cornerWidth = minWidth / 3;
+        const int32_t cornerHeight = minHeight / 3;
+        const int32_t cornerX = inX + ( widthIn - cornerWidth ) / 2;
+        const int32_t cornerY = inY + ( heightIn - cornerHeight ) / 2;
+        const int32_t bodyWidth = minWidth - 2 * cornerWidth;
+        const int32_t bodyHeight = minHeight - 2 * cornerHeight;
 
-        const uint32_t outX = ( widthOut - ( widthOut / bodyWidth ) * bodyWidth ) / 2;
-        const uint32_t outY = ( heightOut - ( heightOut / bodyHeight ) * bodyHeight ) / 2;
+        const int32_t outX = ( widthOut - ( widthOut / bodyWidth ) * bodyWidth ) / 2;
+        const int32_t outY = ( heightOut - ( heightOut / bodyHeight ) * bodyHeight ) / 2;
 
         // Create internal area
         if ( bodyWidth < widthOut && bodyHeight < heightOut ) {
-            for ( uint32_t y = 0; y < ( heightOut / bodyHeight ); ++y ) {
-                for ( uint32_t x = 0; x < ( widthOut / bodyWidth ); ++x ) {
+            for ( int32_t y = 0; y < ( heightOut / bodyHeight ); ++y ) {
+                for ( int32_t x = 0; x < ( widthOut / bodyWidth ); ++x ) {
                     Copy( in, cornerX, cornerY, out, outX + x * bodyWidth, outY + y * bodyHeight, bodyWidth, bodyHeight );
                 }
             }
@@ -1247,15 +1318,15 @@ namespace fheroes2
 
         // Create sides
         // top and bottom side
-        for ( uint32_t x = 0; x < ( widthOut / bodyWidth ); ++x ) {
-            const uint32_t offsetX = outX + x * bodyWidth;
+        for ( int32_t x = 0; x < ( widthOut / bodyWidth ); ++x ) {
+            const int32_t offsetX = outX + x * bodyWidth;
             Copy( in, cornerX, inY, out, offsetX, 0, bodyWidth, cornerHeight );
             Copy( in, cornerX, inY + heightIn - cornerHeight, out, offsetX, heightOut - cornerHeight, bodyWidth, cornerHeight );
         }
 
         // left and right sides
-        for ( uint32_t y = 0; y < ( heightOut / bodyHeight ); ++y ) {
-            const uint32_t offsetY = outY + y * bodyHeight;
+        for ( int32_t y = 0; y < ( heightOut / bodyHeight ); ++y ) {
+            const int32_t offsetY = outY + y * bodyHeight;
             Copy( in, inX, cornerY, out, 0, offsetY, cornerWidth, bodyHeight );
             Copy( in, inX + widthIn - cornerWidth, cornerY, out, widthOut - cornerWidth, offsetY, cornerWidth, bodyHeight );
         }
