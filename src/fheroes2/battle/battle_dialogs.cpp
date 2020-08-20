@@ -153,7 +153,7 @@ void Battle::RedrawBattleSettings( const std::vector<Rect> & areas )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
-    
+
     // Speed setting
     const Text speedTitle( _( "Speed" ), Font::SMALL );
     speedTitle.Blit( areas[0].x + ( areas[0].w - speedTitle.w() ) / 2, areas[0].y - 13 );
@@ -440,7 +440,6 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
 
-    cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
     const bool readonly = current_color != hero.GetColor() || !buttons;
@@ -533,7 +532,6 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 
     int result = 0;
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() && !result ) {
@@ -575,11 +573,6 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
         if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )
             break;
     }
-
-    cursor.Hide();
-    back.restore();
-    cursor.Show();
-    display.render();
 
     return result;
 }
