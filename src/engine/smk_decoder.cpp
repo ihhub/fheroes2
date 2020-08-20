@@ -18,9 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "smk_decoder.h"
+#include <algorithm>
+
 #include "serialize.h"
 #include "smacker.h"
+#include "smk_decoder.h"
 
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
@@ -40,9 +42,9 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     double usf = 0;
 
     uint8_t trackMask = 0;
-    uint8_t channel[7] = { 0 };
-    uint8_t audioBitDepth[7] = { 0 };
-    unsigned long audioRate[7] = { 0 };
+    uint8_t channel[7] = {0};
+    uint8_t audioBitDepth[7] = {0};
+    unsigned long audioRate[7] = {0};
     std::vector<std::vector<uint8_t> > soundBuffer( 7 );
 
     smk_info_all( videoFile, NULL, &frameCount, &usf );
@@ -153,7 +155,8 @@ void SMKVideoSequence::_addNewFrame( const uint8_t * data )
 
     fheroes2::Image surface( _width, _height );
     surface.reset();
-    std::memcpy( surface.image(), data, static_cast<size_t>( _width ) * _height );
+    size_t size = static_cast<size_t>( _width ) * _height;
+    std::copy( data, data + size, surface.image() );
 
     _frames.push_back( surface );
 }
