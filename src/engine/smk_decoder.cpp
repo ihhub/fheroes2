@@ -40,9 +40,9 @@ bool SMKVideoSequence::_load( const std::string & filePath )
     double usf = 0;
 
     uint8_t trackMask = 0;
-    uint8_t channel[7] = {0};
-    uint8_t audioBitDepth[7] = {0};
-    unsigned long audioRate[7] = {0};
+    uint8_t channel[7] = { 0 };
+    uint8_t audioBitDepth[7] = { 0 };
+    unsigned long audioRate[7] = { 0 };
     std::vector<std::vector<uint8_t> > soundBuffer( 7 );
 
     smk_info_all( videoFile, NULL, &frameCount, &usf );
@@ -73,13 +73,13 @@ bool SMKVideoSequence::_load( const std::string & filePath )
             soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
         }
     }
-
-    _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
+    // smk_get_palette( videoFile );
+    _addNewFrame( smk_get_video( videoFile ) );
 
     for ( currentFrame = 1; currentFrame < frameCount; ++currentFrame ) {
         smk_next( videoFile );
 
-        _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
+        _addNewFrame( smk_get_video( videoFile ) );
 
         for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
             if ( trackMask & ( 1 << i ) ) {
@@ -146,26 +146,19 @@ double SMKVideoSequence::fps() const
     return _fps;
 }
 
-void SMKVideoSequence::_addNewFrame( const uint8_t * data, const uint8_t * palette )
+void SMKVideoSequence::_addNewFrame( const uint8_t * data )
 {
-    if ( data == NULL || palette == NULL )
+    if ( data == NULL )
         return;
 
-    Surface surface( data, _width, _height, 1, false, false );
-
-    std::vector<SDL_Color> colors( 256 );
-    for ( size_t i = 0; i < colors.size(); ++i ) {
-        colors[i].r = *palette++;
-        colors[i].g = *palette++;
-        colors[i].b = *palette++;
-    }
-
-    surface.SetPalette( colors );
+    fheroes2::Image surface( _width, _height );
+    surface.reset();
+    std::memcpy( surface.image(), data, static_cast<size_t>( _width ) * _height );
 
     _frames.push_back( surface );
 }
 
-const std::vector<Surface> & SMKVideoSequence::getFrames() const
+const std::vector<fheroes2::Image> & SMKVideoSequence::getFrames() const
 {
     return _frames;
 }
