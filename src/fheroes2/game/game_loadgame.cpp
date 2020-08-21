@@ -58,8 +58,6 @@ int Game::LoadStandard( void )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    AGG::RegisterScalableICN( ICN::HEROES );
-
     // image background
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
 

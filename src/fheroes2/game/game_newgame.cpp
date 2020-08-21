@@ -259,8 +259,6 @@ int Game::NewNetwork( void )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    AGG::RegisterScalableICN( ICN::HEROES );
-
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     fheroes2::Blit( back, display );

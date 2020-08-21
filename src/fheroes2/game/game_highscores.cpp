@@ -183,9 +183,6 @@ int Game::HighScores( bool fill )
     Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
 
-    // We have to register scalable ICNs in order to recieved a scaled version of it
-    AGG::RegisterScalableICN( ICN::HEROES );
-
     cursor.Hide();
     if ( fill && ( display.width() != display.DEFAULT_WIDTH || display.height() != display.DEFAULT_HEIGHT ) ) { // draw only for bigger resolutions
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );

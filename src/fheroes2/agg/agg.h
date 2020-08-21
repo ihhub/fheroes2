@@ -77,9 +77,6 @@ namespace AGG
 
     ICNSprite RenderICNSprite( int, u32, int palette = PAL::STANDARD );
 
-    // Some ICNs need to be rescaled. You have to register their IDs before calling GetICN() function
-    void RegisterScalableICN( int icnId );
-
     // Replace colors based on indexes provided. Returns true only when the operation was successful.
     bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int incIndex, bool reflect );
     // Replace colors with the ones provided. RGB map has to match the palette. Returns true only if successful.

@@ -83,10 +83,6 @@ int Game::ScenarioInfo( void )
     coordDifficulty.reserve( 5 );
 
     const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
-
-    // image background
-    AGG::RegisterScalableICN( ICN::HEROES );
-
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
 

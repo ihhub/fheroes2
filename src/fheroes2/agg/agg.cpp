@@ -147,10 +147,6 @@ namespace AGG
 
     bool memlimit_usage = true;
 
-    std::set<int> scalableICNIds;
-    Size scaledResolution;
-    std::map<int, std::vector<Sprite> > scaledSprites;
-
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
@@ -185,51 +181,6 @@ namespace AGG
     bool ReadDataDir( void );
     const std::vector<u8> & ReadICNChunk( int icn, u32 );
     const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
-
-    bool IsICNScalable( int icnId )
-    {
-        return scalableICNIds.find( icnId ) != scalableICNIds.end();
-    }
-
-    Sprite RescaleSpriteIfNeeded( int icnId, u32 index )
-    {
-        static const Size originalResolution( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
-        const Size resolution = Display::Get().GetSize();
-
-        if ( resolution == originalResolution || !IsICNScalable( icnId ) )
-            return icn_cache[icnId].sprites[index];
-
-        // resolution can be changed during application runtime
-        if ( scaledResolution != resolution ) {
-            scaledSprites.clear();
-            scaledResolution = resolution;
-        }
-
-        std::map<int, std::vector<Sprite> >::iterator iter = scaledSprites.find( icnId );
-        if ( iter == scaledSprites.end() ) {
-            scaledSprites[icnId] = std::vector<Sprite>();
-            iter = scaledSprites.find( icnId );
-            iter->second.resize( icn_cache[icnId].count );
-        }
-
-        if ( iter->second[index].isValid() )
-            return iter->second[index];
-
-        const icn_cache_t & cachedIcn = icn_cache[icnId];
-        if ( !cachedIcn.sprites[index].isValid() )
-            return Sprite();
-
-        const double scaleX = scaledResolution.w / static_cast<double>( Display::DEFAULT_WIDTH );
-        const double scaleY = scaledResolution.h / static_cast<double>( Display::DEFAULT_HEIGHT );
-
-        const Size originalSize = cachedIcn.sprites[index].GetSize();
-        iter->second[index] = Sprite( cachedIcn.sprites[index].RenderScale(
-                                          Size( static_cast<uint16_t>( originalSize.w * scaleX + 0.5 ), static_cast<uint16_t>( originalSize.h * scaleY + 0.5 ) ) ),
-                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().x * scaleX + 0.5 ),
-                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().y * scaleY + 0.5 ) );
-
-        return iter->second[index];
-    }
 
     // This class is a holder of the original 8-bit image after decompression
     class ICNData
@@ -1224,10 +1175,7 @@ Sprite AGG::GetICN( int icn, u32 index, bool reflect )
             }
         }
 
-        if ( !reflect && IsICNScalable( icn ) )
-            result = RescaleSpriteIfNeeded( icn, index );
-        else
-            result = reflect ? v.reflect[index] : v.sprites[index];
+        result = reflect ? v.reflect[index] : v.sprites[index];
 
         // invalid sprite?
         if ( !result.isValid() ) {
@@ -1986,16 +1934,9 @@ void AGG::Quit( void )
     fnt_cache.clear();
     PAL::Clear();
 
-    scaledSprites.clear();
-
 #ifdef WITH_TTF
     delete[] fonts;
 #endif
-}
-
-void AGG::RegisterScalableICN( int icnId )
-{
-    scalableICNIds.insert( icnId );
 }
 
 bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int icnIndex, bool reflect )

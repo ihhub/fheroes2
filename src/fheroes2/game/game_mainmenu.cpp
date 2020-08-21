@@ -53,11 +53,6 @@ int Game::MainMenu( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    // We have to register scalable ICNs in order to recieved a scaled version of it
-    AGG::RegisterScalableICN( ICN::HEROES );
-    AGG::RegisterScalableICN( ICN::BTNSHNGL );
-    AGG::RegisterScalableICN( ICN::SHNGANIM );
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
