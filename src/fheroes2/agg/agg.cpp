@@ -1073,11 +1073,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         res.second.SetAlphaMod( 0, false );
     }
 
-    // TODO: fix air elemental sprite
-    if ( icn == ICN::AELEM && res.first.w() > 3 && res.first.h() > 3 ) {
-        res.first.RenderContour( RGBA( 0, 0x84, 0xe0 ) ).Blit( -1, -1, res.first );
-    }
-
     return res;
 }
 
@@ -1967,22 +1962,6 @@ bool AGG::ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbCol
         return false;
 
     return surface.SetColors( data.get(), rgbColors, reflect );
-}
-
-bool AGG::DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect )
-{
-    if ( !surface.isValid() || surface.depth() != 32 || icnId < 0 || incIndex < 0 )
-        return false;
-
-    std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, incIndex ) );
-    if ( iter == _icnIdVsData.end() )
-        return false;
-
-    const ICNData & data = iter->second;
-    if ( surface.w() != data.width() || surface.h() != data.height() )
-        return false;
-
-    return surface.GenerateContour( data.get(), value, reflect );
 }
 
 namespace fheroes2

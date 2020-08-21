@@ -150,7 +150,6 @@ public:
     Surface RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both */ ) const;
     Surface RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */ ) const;
     Surface RenderStencil( const RGBA & ) const;
-    Surface RenderContour( const RGBA & ) const;
     Surface RenderBoxBlur( int blurRadius, int colorChange = 0, bool redTint = false ) const;
     Surface RenderDeathWave( int position, int waveLength, int waveHeight ) const;
     Surface RenderRippleEffect( int frame, double scaleX = 0.05, double waveFrequency = 20.0 ) const;
@@ -172,8 +171,6 @@ public:
     void SetAlphaMod( int level, bool makeCopy );
 
     bool SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect );
-
-    bool GenerateContour( const std::vector<uint8_t> & indexes, uint32_t value, bool reflect );
 
     static Surface Blend( const Surface & first, const Surface & second, uint8_t ratio );
 

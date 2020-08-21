@@ -1091,54 +1091,6 @@ Surface Surface::RenderStencil( const RGBA & color ) const
     return res;
 }
 
-Surface Surface::RenderContour( const RGBA & color ) const
-{
-    const RGBA fake = RGBA( 0x00, 0xFF, 0xFF );
-    Surface res( GetSize(), GetFormat() );
-    Surface trf = RenderStencil( fake );
-    u32 clkey0 = trf.GetColorKey();
-    RGBA clkey = trf.GetRGB( clkey0 );
-    const u32 pixel = res.MapRGB( color );
-    const u32 fake2 = trf.MapRGB( fake );
-
-    res.Lock();
-
-    const int width = trf.w();
-    const int height = trf.h();
-
-    for ( int y = 0; y < height; ++y )
-        for ( int x = 0; x < width; ++x )
-            if ( fake2 == trf.GetPixel( x, y ) ) {
-                if ( 0 == x || 0 == y || width - 1 == x || height - 1 == y )
-                    res.SetPixel( x, y, pixel );
-                else {
-                    if ( 0 < x ) {
-                        RGBA col = trf.GetRGB( trf.GetPixel( x - 1, y ) );
-                        if ( ( clkey0 && col == clkey ) || col.a() < 200 )
-                            res.SetPixel( x - 1, y, pixel );
-                    }
-                    if ( width - 1 > x ) {
-                        RGBA col = trf.GetRGB( trf.GetPixel( x + 1, y ) );
-                        if ( ( clkey0 && col == clkey ) || col.a() < 200 )
-                            res.SetPixel( x + 1, y, pixel );
-                    }
-
-                    if ( 0 < y ) {
-                        RGBA col = trf.GetRGB( trf.GetPixel( x, y - 1 ) );
-                        if ( ( clkey0 && col == clkey ) || col.a() < 200 )
-                            res.SetPixel( x, y - 1, pixel );
-                    }
-                    if ( height - 1 > y ) {
-                        RGBA col = trf.GetRGB( trf.GetPixel( x, y + 1 ) );
-                        if ( ( clkey0 && col == clkey ) || col.a() < 200 )
-                            res.SetPixel( x, y + 1, pixel );
-                    }
-                }
-            }
-    res.Unlock();
-    return res;
-}
-
 // Renders the death wave starting at X position
 Surface Surface::RenderDeathWave( int position, int waveLength, int waveHeight ) const
 {
@@ -1676,57 +1628,6 @@ bool Surface::SetColors( const std::vector<uint8_t> & indexes, const std::vector
         else {
             for ( ; out != outEnd; ++out, ++in ) {
                 *out = colors[*in];
-            }
-        }
-    }
-
-    Unlock();
-
-    return true;
-}
-
-bool Surface::GenerateContour( const std::vector<uint8_t> & indexes, uint32_t value, bool reflect )
-{
-    if ( depth() != 32 )
-        return false;
-
-    Lock();
-
-    const int width = w();
-    const int height = h();
-    const uint16_t pitch = surface->pitch >> 2;
-
-    if ( pitch != width || pitch * height != indexes.size() ) {
-        Unlock();
-        return false;
-    }
-
-    uint32_t * out = static_cast<uint32_t *>( surface->pixels );
-    const uint8_t * inY = indexes.data();
-
-    if ( reflect ) {
-        for ( int y = 0; y < height; ++y, inY += pitch, out += pitch ) {
-            const uint8_t * inX = inY;
-            for ( int x = 0; x < width; ++x, ++inX ) {
-                if ( *inX == 0 ) {
-                    if ( ( x > 0 && *( inX - 1 ) > 0 ) || ( x < width - 1 && *( inX + 1 ) > 0 ) || ( y > 0 && *( inX - pitch ) > 0 )
-                         || ( y < height - 1 && *( inX + pitch ) > 0 ) ) {
-                        out[width - 1 - x] = value;
-                    }
-                }
-            }
-        }
-    }
-    else {
-        for ( int y = 0; y < height; ++y, inY += pitch, out += pitch ) {
-            const uint8_t * inX = inY;
-            for ( int x = 0; x < width; ++x, ++inX ) {
-                if ( *inX == 0 ) {
-                    if ( ( x > 0 && *( inX - 1 ) > 0 ) || ( x < width - 1 && *( inX + 1 ) > 0 ) || ( y > 0 && *( inX - pitch ) > 0 )
-                         || ( y < height - 1 && *( inX + pitch ) > 0 ) ) {
-                        out[x] = value;
-                    }
-                }
             }
         }
     }
