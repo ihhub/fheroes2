@@ -71,16 +71,7 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
 
 Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 {
-    Cursor & cursor = Cursor::Get();
-
-    if ( cursor.isVisible() ) {
-        cursor.Hide();
-        _restorer->restore();
-        cursor.Show();
-    }
-    else {
-        _restorer->restore();
-    }
+    _restorer->restore();
 
     fheroes2::Display::instance().render();
 }

@@ -213,8 +213,6 @@ void Cursor::Show( void )
     _isVisibleCursor = true;
 #else
     fheroes2::Cursor::instance().show( true );
-    // if ( !Settings::Get().ExtPocketHideCursor() )
-    //    SpriteMove::Show();
 #endif
 }
 
@@ -224,7 +222,6 @@ void Cursor::Hide( void )
     _isVisibleCursor = false;
 #else
     fheroes2::Cursor::instance().show( false );
-    // SpriteMove::Hide();
 #endif
 }
 
@@ -234,7 +231,6 @@ bool Cursor::isVisible( void ) const
     return ( SDL_ShowCursor( -1 ) == 1 ) && _isVisibleCursor;
 #else
     return fheroes2::Cursor::instance().isVisible();
-    // return SpriteMove::isVisible();
 #endif
 }
 
