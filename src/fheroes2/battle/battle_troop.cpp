@@ -1800,7 +1800,7 @@ Point Battle::Unit::GetBackPoint( void ) const
 
 Point Battle::Unit::GetCenterPoint() const
 {
-    const Sprite & sprite = AGG::GetICN( GetMonsterSprite().icn_file, GetFrame(), isReflect() );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite().icn_file, GetFrame() );
 
     const Rect & pos = position.GetRect();
     const s32 centerY = pos.y + pos.h + sprite.y() / 2 - 10;
