@@ -27,7 +27,7 @@
 
 u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
     const Rect rt( dst.x - 32, dst.y - 32, 86, 86 );
@@ -40,18 +40,17 @@ u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
     const Sprite & sp_right = AGG::GetICN( ICN::CMSECO, 8 );
     const Sprite & sp_bright = AGG::GetICN( ICN::CMSECO, 9 );
 
-    Surface shadow( rt, false );
-    shadow.Fill( ColorBlack );
+    fheroes2::Image shadow( rt.w, rt.h );
+    shadow.fill( 0 );
 
-    SpriteBack back( rt );
+    fheroes2::ImageRestorer back( display, rt.x, rt.y, rt.w, rt.h );
 
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
     // blit alpha
-    shadow.SetAlphaMod( 120, false );
-    shadow.Blit( rt.x, rt.y, display );
+    fheroes2::AlphaBlit( shadow, display, rt.x, rt.y, 120 );
 
     const Rect rt_info( rt.x + ( rt.w - sp_info.w() ) / 2, rt.y + ( rt.h - sp_info.h() ) / 2, sp_info.w(), sp_info.h() );
     sp_info.Blit( rt_info.x, rt_info.y );
@@ -81,7 +80,7 @@ u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
         sp_bleft.Blit( rt_bleft.x, rt_bleft.y );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() && !le.MouseClickLeft() )
         ;
@@ -147,16 +146,16 @@ void RedrawTouchButton( const Surface & sf, const Rect & rt, const char * lb )
 void PocketPC::KeyboardDialog( std::string & str )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
     cursor.Hide();
 
     const u32 width = 337;
     const u32 height = 118;
 
-    SpriteBack back( Rect( ( display.w() - width ) / 2, 0, width, height ) );
-    const Rect & top = back.GetArea();
-    display.FillRect( top, ColorBlack );
+    fheroes2::ImageRestorer back( display, ( display.width() - width ) / 2, 0, width, height );
+    const Rect top( back.x(), back.y(), back.width(), back.height() );
+    fheroes2::Fill( display, back.x(), back.y(), back.width(), back.height(), 0 );
 
     const Surface sp = CreateTouchButton();
 
@@ -318,7 +317,7 @@ void PocketPC::KeyboardDialog( std::string & str )
     RedrawTouchButton( sp, rt_SPACE, "space" );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     bool redraw = true;
 
@@ -439,17 +438,17 @@ void PocketPC::KeyboardDialog( std::string & str )
             Text tx( str, Font::SMALL );
             if ( tx.w() < top.w ) {
                 cursor.Hide();
-                display.FillRect( Rect( top.x, top.y + top.h - 16, top.w, 16 ), ColorBlack );
+                fheroes2::Fill( display, top.x, top.y + top.h - 16, top.w, 16, 0 );
                 tx.Blit( top.x + ( top.w - tx.w() ) / 2, top.y + top.h - 16 + 2 );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
             redraw = false;
         }
     }
 
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 }
