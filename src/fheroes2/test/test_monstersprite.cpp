@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "army_troop.h"
 #include "battle_troop.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"

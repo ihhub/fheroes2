@@ -28,7 +28,6 @@
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_interface.h"
-#include "button.h"
 #include "cursor.h"
 #include "engine.h"
 #include "game.h"
