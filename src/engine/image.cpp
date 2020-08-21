@@ -27,7 +27,7 @@
 namespace
 {
     // 0 in shadow part means no shadow, 1 means skip any drawings so to don't waste extra CPU cycles for ( tableId - 2 ) command we just add extra fake tables
-    const uint8_t transformTable[256 * 14] = {
+    const uint8_t transformTable[256 * 15] = {
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
@@ -168,7 +168,18 @@ namespace
         142, 144, 144, 145, 145, 146, 147, 152, 153, 153, 154, 155, 156, 157, 158, 159, 159, 160, 161, 162, 163, 164, 164, 165, 166, 167, 168, 168, 168,
         169, 175, 176, 177, 177, 178, 179, 180, 181, 182, 182, 183, 184, 185, 186, 186, 187, 187, 189, 189, 193, 193, 146, 146, 109, 109, 198, 199, 201,
         201, 201, 44,  205, 45,  46,  47,  48,  50,  52,  29,  183, 185, 186, 189, 112, 112, 205, 49,  222, 88,  89,  91,  92,  93,  26,  27,  28,  67,
-        68,  70,  71,  69,  71,  71,  154, 0,   0,   75,  242, 242, 243, 244, 0,   0,   0,   0,   0,   0,   0,   0,   0,   10 // Twelfth
+        68,  70,  71,  69,  71,  71,  154, 0,   0,   75,  242, 242, 243, 244, 0,   0,   0,   0,   0,   0,   0,   0,   0,   10, // Twelfth
+
+        // No cycle table
+        0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
+        29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,
+        58,  59,  60,  61,  62,  63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,  86,
+        87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99,  100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115,
+        116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144,
+        145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173,
+        174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202,
+        203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 188, 188, 188, 188, 118, 118, 118, 118, 222, 223, 224, 225, 226, 227, 228, 229, 230, 69,
+        69,  69,  69,  69,  69,  69,  69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
     };
 
     bool IsEqual( const fheroes2::Image & one, const fheroes2::Image & two )
@@ -275,6 +286,8 @@ namespace
             uint32_t g = 0;
             uint32_t b = 0;
 
+            const uint8_t * corrector = transformTable + 14 * 256;
+
             for ( uint32_t id = 0; id < size; ++id ) {
                 r = ( id % 64 );
                 g = ( id >> 6 ) % 64;
@@ -282,9 +295,11 @@ namespace
                 int32_t minDistance = 3 * 255 * 255;
                 uint32_t bestPos = 0;
 
-                const uint8_t * palette = kb_pal;
+                const uint8_t * correctorX = corrector;
 
-                for ( uint32_t i = 0; i < 256; ++i ) {
+                for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
+                    const uint8_t * palette = kb_pal + *correctorX * 3;
+
                     const int32_t offsetRed = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( r );
                     const int32_t offsetGreen = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( g );
                     const int32_t offsetBlue = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( b );
@@ -891,22 +906,24 @@ namespace fheroes2
         }
 
         const uint8_t * inY = image.transform();
-        uint8_t * outY = contour.transform();
+        uint8_t * outImageY = contour.image();
+        uint8_t * outTransformY = contour.transform();
 
         const int32_t reducedWidth = width - 1;
         const int32_t reducedHeight = height - 1;
 
-        for ( int32_t y = 0; y < height; ++y, inY += width, outY += width ) {
+        for ( int32_t y = 0; y < height; ++y, inY += width, outImageY += width, outTransformY += width ) {
             const uint8_t * inX = inY;
 
-            const bool isTopRow = ( y == 0 );
-            const bool isBottomRow = ( y == reducedHeight );
+            const bool isNotTopRow = ( y > 0 );
+            const bool isNotBottomRow = ( y < reducedHeight );
 
             for ( int32_t x = 0; x < width; ++x, ++inX ) {
-                if ( *inX > 0 ) { // empty or shadow
-                    if ( ( x > 0 && *( inX - 1 ) == 0 ) || ( x < reducedWidth && *( inX + 1 ) == 0 ) || ( !isTopRow && *( inX - width ) == 0 )
-                         || ( !isBottomRow && *( inX + width ) == 0 ) ) {
-                        outY[x] = value;
+                if ( *inX > 0 ) {
+                    if ( ( x > 0 && *( inX - 1 ) == 0 ) || ( x < reducedWidth && *( inX + 1 ) == 0 ) || ( isNotTopRow && *( inX - width ) == 0 )
+                         || ( isNotBottomRow && *( inX + width ) == 0 ) ) {
+                        outImageY[x] = value;
+                        outTransformY[x] = 0;
                     }
                 }
             }
