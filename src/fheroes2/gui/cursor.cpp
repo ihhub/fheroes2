@@ -132,14 +132,6 @@ void Cursor::Redraw( s32 x, s32 y )
 void Cursor::Move( s32 x, s32 y )
 {
     fheroes2::Cursor::instance().setPosition( x, y );
-    /*
-#if defined( USE_SDL_CURSOR )
-    background.SetPos( Point( x, y ) );
-#else
-    if ( isVisible() )
-        SpriteMove::Move( x + offset_x, y + offset_y );
-#endif
-    */
 }
 
 /* set offset big cursor */
