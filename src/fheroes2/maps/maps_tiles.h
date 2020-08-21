@@ -165,7 +165,7 @@ namespace Maps
         u32 TileSpriteIndex( void ) const;
         u32 TileSpriteShape( void ) const;
 
-        fheroes2::Image GetTileSurface( void ) const;
+        const fheroes2::Image & GetTileSurface( void ) const;
 
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog ) const;

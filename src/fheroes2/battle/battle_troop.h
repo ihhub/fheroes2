@@ -84,7 +84,6 @@ namespace Battle
         u32 GetHitPointsLeft( void ) const;
         u32 GetAffectedDuration( u32 ) const;
         u32 GetSpeed( void ) const;
-        Surface GetContour( uint8_t colorId ) const;
 
         Unit * GetMirror();
         void SetMirror( Unit * );

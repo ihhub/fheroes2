@@ -590,45 +590,46 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    const Sprite & dialog = AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
 
     Rect pos_rt;
-    pos_rt.x = ( display.width() - dialog.w() + 16 ) / 2;
-    pos_rt.y = ( display.height() - dialog.h() + 16 ) / 2;
-    pos_rt.w = dialog.w();
-    pos_rt.h = dialog.h();
+    pos_rt.x = ( display.width() - dialog.width() + 16 ) / 2;
+    pos_rt.y = ( display.height() - dialog.height() + 16 ) / 2;
+    pos_rt.w = dialog.width();
+    pos_rt.h = dialog.height();
 
-    SpriteBack back( pos_rt );
+    fheroes2::ImageRestorer back( display, pos_rt.x, pos_rt.y, pos_rt.w, pos_rt.h );
 
-    dialog.Blit( pos_rt.x, pos_rt.y );
+    fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
     const int icn = conf.ExtGameEvilInterface() ? ICN::SURRENDE : ICN::SURRENDR;
 
-    Button btnAccept( pos_rt.x + 90, pos_rt.y + 150, icn, 0, 1 );
-    Button btnDecline( pos_rt.x + 295, pos_rt.y + 150, icn, 2, 3 );
-    Button btnMarket( pos_rt.x + ( pos_rt.w - 16 ) / 2, pos_rt.y + 145, ( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 4, 5 );
+    fheroes2::Button btnAccept( pos_rt.x + 90, pos_rt.y + 150, icn, 0, 1 );
+    fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 150, icn, 2, 3 );
+    fheroes2::Button btnMarket( pos_rt.x + ( pos_rt.w - 16 ) / 2, pos_rt.y + 145, ( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 4, 5 );
+    Rect marketRect = btnAccept.area();
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
-        btnAccept.SetDisable( true );
+        btnAccept.disable();
     }
 
     if ( kingdom.GetCountMarketplace() ) {
         if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) )
-            btnMarket.SetDisable( true );
+            btnMarket.disable();
         else {
             std::string msg = _( "Not enough gold (%{gold})" );
             StringReplace( msg, "%{gold}", cost - kingdom.GetFunds().Get( Resource::GOLD ) );
             Text text( msg, Font::SMALL );
-            text.Blit( btnMarket.x + ( btnMarket.w - text.w() ) / 2, btnMarket.y - 15 );
-            btnMarket.Draw();
+            text.Blit( marketRect.x + ( marketRect.w - text.w() ) / 2, marketRect.y - 15 );
+            btnMarket.draw();
         }
     }
 
-    btnAccept.Draw();
-    btnDecline.Draw();
+    btnAccept.draw();
+    btnDecline.draw();
 
-    const Sprite & window = AGG::GetICN( icn, 4 );
-    window.Blit( pos_rt.x + 54, pos_rt.y + 30 );
+    const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icn, 4 );
+    fheroes2::Blit( window, display, pos_rt.x + 54, pos_rt.y + 30 );
     hero.PortraitRedraw( pos_rt.x + 58, pos_rt.y + 38, PORT_BIG, display );
 
     std::string str = _( "%{name} states:" );
@@ -647,34 +648,29 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     display.render();
 
     while ( le.HandleEvents() && !result ) {
-        if ( btnAccept.isEnable() )
-            le.MousePressLeft( btnAccept ) ? btnAccept.PressDraw() : btnAccept.ReleaseDraw();
-        le.MousePressLeft( btnDecline ) ? btnDecline.PressDraw() : btnDecline.ReleaseDraw();
+        if ( btnAccept.isEnabled() )
+            le.MousePressLeft( btnAccept.area() ) ? btnAccept.drawOnPress() : btnAccept.drawOnRelease();
+        le.MousePressLeft( btnDecline.area() ) ? btnDecline.drawOnPress() : btnDecline.drawOnRelease();
 
-        if ( btnMarket.isEnable() )
-            le.MousePressLeft( btnMarket ) ? btnMarket.PressDraw() : btnMarket.ReleaseDraw();
+        if ( btnMarket.isEnabled() )
+            le.MousePressLeft( marketRect ) ? btnMarket.drawOnPress() : btnMarket.drawOnRelease();
 
-        if ( btnAccept.isEnable() && le.MouseClickLeft( btnAccept ) )
+        if ( btnAccept.isEnabled() && le.MouseClickLeft( btnAccept.area() ) )
             result = true;
 
-        if ( btnMarket.isEnable() && le.MouseClickLeft( btnMarket ) ) {
+        if ( btnMarket.isEnabled() && le.MouseClickLeft( marketRect ) ) {
             Dialog::Marketplace( false );
 
             if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
-                btnAccept.Release();
-                btnAccept.SetDisable( false );
+                btnAccept.release();
+                btnAccept.enable();
             }
         }
 
         // exit
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btnDecline ) )
+        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btnDecline.area() ) )
             break;
     }
-
-    cursor.Hide();
-    back.Restore();
-    cursor.Show();
-    display.render();
 
     return result;
 }
