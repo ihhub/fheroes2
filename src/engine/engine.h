@@ -29,7 +29,6 @@
 #include "font.h"
 #include "rand.h"
 #include "serialize.h"
-#include "sprites.h"
 #include "tools.h"
 #include "types.h"
 
