@@ -46,7 +46,6 @@ void TestMonsterSprite( void )
     fheroes2::ImageRestorer back( display );
     Rect pos;
 
-    
     LocalEvent & le = LocalEvent::Get();
 
     // std::string str;
