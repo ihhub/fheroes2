@@ -21,6 +21,8 @@
 #include "ui_tool.h"
 #include "screen.h"
 
+#include <cstring>
+
 namespace fheroes2
 {
     MovableSprite::MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
