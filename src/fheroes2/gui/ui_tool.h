@@ -46,6 +46,8 @@ namespace fheroes2
         bool _isHidden;
     };
 
+    Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
+
     void FadeDisplay();
     void RiseDisplay();
     void InvertedFade();

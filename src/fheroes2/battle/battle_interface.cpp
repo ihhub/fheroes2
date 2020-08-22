@@ -3822,8 +3822,8 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
     RedrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
 
     // Part 2 - ripple effect
-    const Sprite & unitSprite = AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame(), target.isReflect() );
-    Sprite rippleSprite;
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame() );
+    fheroes2::Sprite rippleSprite;
 
     const Unit * old_current = _currentUnit;
     _currentUnit = &target;
@@ -3834,8 +3834,10 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            // rippleSprite = Sprite( unitSprite.RenderRippleEffect( frame ), unitSprite.GetPos().x, unitSprite.GetPos().y );
-            // b_current_sprite = &rippleSprite;
+            rippleSprite = fheroes2::CreateRippleEffect( unitSprite, frame );
+            rippleSprite.setPosition( unitSprite.x(), unitSprite.y() );
+
+            b_current_sprite = &rippleSprite;
             Redraw();
 
             frame += 2;
