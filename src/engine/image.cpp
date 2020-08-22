@@ -698,9 +698,12 @@ namespace fheroes2
         const uint8_t behindValue = 255 - alphaValue;
 
         if ( flip ) {
-            const uint8_t * imageInY = in.image() + inY * widthIn + inX + width - 1;
-            const uint8_t * transformY = in.transform() + inY * widthIn + inX + width - 1;
-            uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+            const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
+            const uint8_t * imageInY = in.image() + offsetInY;
+            const uint8_t * transformY = in.transform() + offsetInY;
+
+            const int32_t offsetOutY = outY * widthOut + outX;
+            uint8_t * imageOutY = out.image() + offsetOutY;
             const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
@@ -819,10 +822,14 @@ namespace fheroes2
         const int32_t widthOut = out.width();
 
         if ( flip ) {
-            const uint8_t * imageInY = in.image() + inY * widthIn + inX + width - 1;
-            const uint8_t * transformInY = in.transform() + inY * widthIn + inX + width - 1;
-            uint8_t * imageOutY = out.image() + outY * out.width() + outX;
-            uint8_t * transformOutY = out.transform() + outY * out.width() + outX;
+            const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
+            const uint8_t * imageInY = in.image() + offsetInY;
+            const uint8_t * transformInY = in.transform() + offsetInY;
+
+            const int32_t offsetOutY = outY * widthOut + outX;
+            uint8_t * imageOutY = out.image() + offsetOutY;
+            uint8_t * transformOutY = out.transform() + offsetOutY;
+
             const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
