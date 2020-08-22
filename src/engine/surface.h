@@ -152,7 +152,6 @@ public:
     Surface RenderStencil( const RGBA & ) const;
     Surface RenderBoxBlur( int blurRadius, int colorChange = 0, bool redTint = false ) const;
     Surface RenderDeathWave( int position, int waveLength, int waveHeight ) const;
-    Surface RenderRippleEffect( int frame, double scaleX = 0.05, double waveFrequency = 20.0 ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
     Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
     Surface RenderSurface( const Rect & srt, const Size & ) const;
