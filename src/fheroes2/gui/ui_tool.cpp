@@ -81,6 +81,57 @@ namespace fheroes2
         return _isHidden;
     }
 
+    Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight )
+    {
+        if ( in.empty() )
+            return Image();
+
+        Image out = in;
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        if ( x + waveWidth < 0 || x - waveWidth >= width )
+            return out;
+
+        const int32_t startX = ( x > waveWidth ) ? x - waveWidth : 0;
+        const int32_t endX = ( x + waveWidth < width ) ? x + waveWidth : width;
+
+        const double pi = std::acos( -1 );
+        const double waveLimit = waveWidth / pi;
+
+        uint8_t * outImageX = out.image() + startX;
+        uint8_t * outTransformX = out.transform() + startX;
+
+        const uint8_t * inImageX = in.image() + startX;
+        const uint8_t * inTransformX = in.transform() + startX;
+
+        for ( int32_t posX = startX; posX < endX; ++posX, ++outImageX, ++outTransformX, ++inImageX, ++inTransformX ) {
+            const int32_t waveX = posX - x;
+
+            const int32_t offsetY = static_cast<int32_t>( waveHeight * ( ( waveX < waveLimit ) ? tan( waveX / waveLimit ) / 2 : sin( waveX / waveLimit ) ) );
+
+            const int32_t offsetOut = offsetY >= 0 ? offsetY * width : 0;
+            const int32_t offsetOutEnd = offsetY >= 0 ? ( height - 1 - offsetY ) * width : ( height - 1 + offsetY ) * width;
+
+            uint8_t * outImageY = outImageX + offsetOut;
+            uint8_t * outTransformY = outTransformX + offsetOut;
+            uint8_t * outImageYEnd = outImageX + offsetOutEnd;
+
+            const int32_t offsetIn = offsetY >= 0 ? 0 : -offsetY * width;
+
+            const uint8_t * inImageY = inImageX + offsetIn;
+            const uint8_t * inTransformY = inTransformX + offsetIn;
+
+            for ( ; outImageY != outImageYEnd; outImageY += width, outTransformY += width, inImageY += width, inTransformY += width ) {
+                *outImageY = *inImageY;
+                *outTransformY = *inTransformY;
+            }
+        }
+
+        return out;
+    }
+
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX, double waveFrequency )
     {
         if ( in.empty() )

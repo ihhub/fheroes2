@@ -3858,6 +3858,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     Rect area = GetArea();
     area.h -= 36;
 
+    fheroes2::Image copy = fheroes2::Crop( _mainSurface, area.x, area.y, area.w, area.h );
     const int waveLength = strength * 2 + 10;
 
     AGG::PlaySound( M82::MNRDEATH );
@@ -3868,7 +3869,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
-            // copy.RenderDeathWave( position, waveLength, strength ).Blit( _mainSurface );
+            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, strength ), _mainSurface );
             cursor.Show();
             RedrawPartialFinish();
 

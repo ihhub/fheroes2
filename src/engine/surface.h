@@ -151,7 +151,6 @@ public:
     Surface RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */ ) const;
     Surface RenderStencil( const RGBA & ) const;
     Surface RenderBoxBlur( int blurRadius, int colorChange = 0, bool redTint = false ) const;
-    Surface RenderDeathWave( int position, int waveLength, int waveHeight ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
     Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
     Surface RenderSurface( const Rect & srt, const Size & ) const;
