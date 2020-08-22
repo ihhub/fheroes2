@@ -139,6 +139,8 @@ namespace fheroes2
     // apply palette only for image layer, it doesn't affect transform part
     void ApplyPalette( Image & image, const std::vector<uint8_t> & palette );
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette );
+    void ApplyPalette( Image & image, uint8_t paletteId );
+    void ApplyPalette( const Image & in, Image & out, uint8_t paletteId );
 
     // draw one image onto another
     void Blit( const Image & in, Image & out, bool flip = false );

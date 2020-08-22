@@ -314,6 +314,26 @@ namespace
 
         return rgbToId[red + green * 64 + blue * 64 * 64];
     }
+
+    void ApplyRawPalette( const fheroes2::Image & in, fheroes2::Image & out, const uint8_t * palette )
+    {
+        if ( !IsEqual( in, out ) ) {
+            return;
+        }
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        const uint8_t * imageIn = in.image();
+        const uint8_t * transformIn = in.transform();
+        uint8_t * imageOut = out.image();
+        const uint8_t * imageInEnd = imageIn + height * width;
+        for ( ; imageIn != imageInEnd; ++imageIn, ++imageOut, ++transformIn ) {
+            if ( *transformIn == 0 ) { // only modify pixels with data
+                *imageOut = palette[*imageIn];
+            }
+        }
+    }
 }
 
 namespace fheroes2
@@ -758,22 +778,25 @@ namespace fheroes2
 
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette )
     {
-        if ( !IsEqual( in, out ) || palette.size() != 256 ) {
+        if ( palette.size() != 256 ) {
             return;
         }
 
-        const int32_t width = in.width();
-        const int32_t height = in.height();
+        ApplyRawPalette( in, out, palette.data() );
+    }
 
-        const uint8_t * imageIn = in.image();
-        const uint8_t * transformIn = in.transform();
-        uint8_t * imageOut = out.image();
-        const uint8_t * imageInEnd = imageIn + height * width;
-        for ( ; imageIn != imageInEnd; ++imageIn, ++imageOut, ++transformIn ) {
-            if ( *transformIn == 0 ) { // only modify pixels with data
-                *imageOut = palette[*imageIn];
-            }
+    void ApplyPalette( Image & image, uint8_t paletteId )
+    {
+        ApplyPalette( image, image, paletteId );
+    }
+
+    void ApplyPalette( const Image & in, Image & out, uint8_t paletteId )
+    {
+        if ( paletteId > 13 ) {
+            return;
         }
+
+        ApplyRawPalette( in, out, transformTable + paletteId * 256 );
     }
 
     void Blit( const Image & in, Image & out, bool flip )
