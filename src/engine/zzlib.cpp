@@ -151,4 +151,20 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
     return false;
 }
 
+fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * data, size_t size )
+{
+    if ( data == NULL || size == 0 || width <= 0 || height <= 0 )
+        return fheroes2::Image();
+
+    const std::vector<uint8_t> & uncompressedData = zlibDecompress( data, size );
+    if ( width * height != uncompressedData.size() )
+        return fheroes2::Image();
+
+    fheroes2::Image out( width, height );
+    out.reset();
+
+    std::memcpy( out.image(), uncompressedData.data(), uncompressedData.size() );
+    return out;
+}
+
 #endif

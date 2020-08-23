@@ -1848,19 +1848,15 @@ void AGG::ResetMixer( void )
 void AGG::ShowError( void )
 {
 #ifdef WITH_ZLIB
-    ZSurface zerr;
-    if ( zerr.Load( _ptr_080721d0.width, _ptr_080721d0.height, _ptr_080721d0.bpp, _ptr_080721d0.pitch, _ptr_080721d0.rmask, _ptr_080721d0.gmask, _ptr_080721d0.bmask,
-                    _ptr_080721d0.amask, _ptr_080721d0.zdata, sizeof( _ptr_080721d0.zdata ) ) ) {
-        Display & display = Display::Get();
-        LocalEvent & le = LocalEvent::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Image & image = CreateImageFromZlib( 288, 200, errorMessage, sizeof( errorMessage ) );
 
-        display.Fill( ColorBlack );
-        zerr.Blit( ( display.w() - zerr.w() ) / 2, ( display.h() - zerr.h() ) / 2, display );
-        display.Flip();
+    display.fill( 0 );
+    fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
 
-        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
             ;
-    }
 #endif
 }
 
