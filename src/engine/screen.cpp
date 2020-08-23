@@ -615,15 +615,15 @@ namespace fheroes2
         if ( width_ <= 0 || height_ <= 0 || ( width_ == width() && height_ == height() ) ) // nothing to resize
             return;
 
+        const bool isFullScreen = _engine->isFullScreen();
+
         // deallocate engine resources
-        if ( !empty() ) {
-            _engine->clear();
-        }
+        _engine->clear();
 
         Image::resize( width_, height_ );
 
         // allocate engine resources
-        if ( !_engine->allocate( width_, height_, false ) ) {
+        if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
         }
     }
