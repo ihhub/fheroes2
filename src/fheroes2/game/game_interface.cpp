@@ -245,7 +245,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
 
     // We need to add an extra one cell as a hero stands exactly in the middle of a cell
     const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
-    const Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
+    const fheroes2::Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
     const Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
 
     if ( isFadingEnabled ) {
@@ -255,8 +255,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
         fheroes2::Image middle( spellROI.w, spellROI.h );
         fheroes2::Copy( display, spellROI.x, spellROI.y, middle, 0, 0, spellROI.w, spellROI.h );
 
-        // display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 105, 300 );
-        fheroes2::InvertedFade();
+        fheroes2::InvertedFade( top, back, fheroes2::Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 155, 300 );
     }
 
     Cursor & cursor = Cursor::Get();

@@ -53,5 +53,6 @@ namespace fheroes2
 
     void FadeDisplay();
     void RiseDisplay();
-    void InvertedFade();
+
+    void InvertedFade( const Image & top, const Image & back, const Point & offset, const Image & middle, const Point & middleOffset, int level, int delay );
 }

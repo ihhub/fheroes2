@@ -20,6 +20,7 @@
 
 #include "ui_tool.h"
 #include "screen.h"
+#include "types.h"
 
 #include <cstring>
 
@@ -181,5 +182,27 @@ namespace fheroes2
 
     void RiseDisplay() {}
 
-    void InvertedFade() {}
+    void InvertedFade( const Image & top, const Image & back, const Point & offset, const Image & middle, const Point & middleOffset, int level, int delay )
+    {
+        Display & display = Display::instance();
+        Image shadow = top;
+        int alpha = 255;
+        const int step = 10;
+        const int min = step + 5;
+        const int delay2 = ( delay * step ) / ( alpha - min );
+
+        while ( alpha > min + level ) {
+            Blit( back, display, offset.x, offset.y );
+            Blit( shadow, display, offset.x, offset.y );
+
+            ApplyPalette( shadow, 5 );
+
+            Blit( middle, display, middleOffset.x, middleOffset.y );
+
+            display.render();
+
+            alpha -= step;
+            DELAY( delay2 );
+        }
+    }
 }
