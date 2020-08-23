@@ -1856,7 +1856,7 @@ void AGG::ShowError( void )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
-            ;
+        ;
 #endif
 }
 
