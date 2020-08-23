@@ -221,12 +221,7 @@ bool Display::IsFullScreen() const
 
 void Display::SetCaption( const char * str )
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( window )
-        SDL_SetWindowTitle( window, str );
-#else
-    SDL_WM_SetCaption( str, NULL );
-#endif
+    fheroes2::engine().setTitle( str );
 }
 
 void Display::SetIcons( Surface & icons )
@@ -442,45 +437,6 @@ Surface Display::GetSurface( void ) const
 {
     return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
 }
-
-/*
-std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
-{
-    std::set<std::pair<int, int> > resolutionSet;
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const int displayCount = SDL_GetNumVideoDisplays();
-    if ( displayCount > 0 ) {
-        const int displayModeCount = SDL_GetNumDisplayModes( 0 );
-        for ( int i = 0; i < displayModeCount; ++i ) {
-            SDL_DisplayMode videoMode;
-            if ( SDL_GetDisplayMode( 0, i, &videoMode ) == 0 ) {
-                resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
-            }
-        }
-    }
-#else
-    SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
-    if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
-        for ( int i = 0; modes[i]; ++i ) {
-            resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
-        }
-    }
-#endif
-    if ( !resolutionSet.empty() ) {
-        std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
-        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
-
-        if ( resolutions.front().first >= DEFAULT_WIDTH && resolutions.front().first >= DEFAULT_HEIGHT ) {
-            resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
-        }
-
-        return resolutions;
-    }
-
-    return std::vector<std::pair<int, int> >();
-}
-*/
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Texture::Texture()

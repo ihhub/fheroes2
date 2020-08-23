@@ -44,6 +44,8 @@ namespace fheroes2
             return std::vector<std::pair<int, int> >();
         }
 
+        virtual void setTitle( const std::string & ) {}
+
     protected:
         BaseRenderEngine() {}
 

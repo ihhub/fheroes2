@@ -143,6 +143,12 @@ namespace
             return FilterResolutions( resolutionSet );
         }
 
+        virtual void setTitle( const std::string & title )
+        {
+            if ( _window != NULL )
+                SDL_SetWindowTitle( _window, title.c_str() );
+        }
+
         static RenderEngine * create()
         {
             return new RenderEngine;
@@ -415,6 +421,11 @@ namespace
             }
 
             return FilterResolutions( resolutionSet );
+        }
+
+        virtual void setTitle( const std::string & title )
+        {
+            SDL_WM_SetCaption( title.c_str(), NULL );
         }
 
         static RenderEngine * create()

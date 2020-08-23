@@ -71,8 +71,6 @@ public:
     Surface GetSurface( void ) const;
     Surface GetSurface( const Rect & rt ) const;
 
-    // static std::vector<std::pair<int, int> > GetAvailableResolutions();
-
 protected:
     friend class Texture;
 
