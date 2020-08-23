@@ -27,7 +27,8 @@ namespace fheroes2
     class MovableSprite : public Sprite
     {
     public:
-        MovableSprite( int32_t width_ = 0, int32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
+        MovableSprite();
+        MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
         MovableSprite( const Sprite & sprite );
         virtual ~MovableSprite();
 

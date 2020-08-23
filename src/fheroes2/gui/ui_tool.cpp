@@ -25,6 +25,11 @@
 
 namespace fheroes2
 {
+    MovableSprite::MovableSprite()
+        : _restorer( Display::instance(), 0, 0, 0, 0 )
+        , _isHidden( true )
+    {}
+
     MovableSprite::MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
         : Sprite( width_, height_, x_, y_ )
         , _restorer( Display::instance(), x_, y_, width_, height_ )
@@ -33,7 +38,7 @@ namespace fheroes2
 
     MovableSprite::MovableSprite( const Sprite & sprite )
         : Sprite( sprite )
-        , _restorer( Display::instance(), sprite.x(), sprite.y(), sprite.width(), sprite.height() )
+        , _restorer( Display::instance(), 0, 0, 0, 0 )
         , _isHidden( false )
     {}
 
