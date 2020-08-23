@@ -56,24 +56,6 @@ namespace Interface
         {}
         virtual ~ItemsBar() {}
 
-        /*
-            void		SetColRows(u32, u32);
-            void        	SetPos(s32, s32);
-            void        	SetItemSize(u32, u32);
-            void		SetHSpace(int);
-            void		SetVSpace(int);
-            void		SetContent(const std::list<Item> &);
-            void		SetContent(const std::vector<Item> &);
-
-            const Point &	GetPos(void) const;
-            const Rect &	GetArea(void) const;
-            const Size &	GetColRows(void) const;
-            Item*		GetItem(const Point &) const;
-
-            void		Redraw(Surface & dstsf = Display::Get());
-            bool		QueueEventProcessing(void);
-        */
-
         virtual void RedrawBackground( const Rect &, fheroes2::Image & ) {}
         virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) {}
 
@@ -316,18 +298,6 @@ namespace Interface
         }
 
         virtual ~ItemsActionBar() {}
-
-        /*
-            Item*		GetSelectedItem(void);
-            Rect*		GetSelectedPos(void);
-            s32		GetSelectedIndex(void);
-
-            bool		isSelected(void);
-            void		ResetSelected(void);
-
-                bool QueueEventProcessing(void);
-            bool QueueEventProcessing(ItemsActionBar<Item> &);
-        */
 
         virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) {}
         virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}

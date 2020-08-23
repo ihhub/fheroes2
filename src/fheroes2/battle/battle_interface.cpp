@@ -1699,9 +1699,7 @@ void Battle::Interface::RedrawKilled( void )
 
 void Battle::Interface::RedrawBorder( void )
 {
-    const Size displaySize = Display::Get().GetSize();
-
-    if ( displaySize != Display::GetDefaultSize() )
+    if ( !fheroes2::Display::instance().isDefaultSize() )
         Dialog::FrameBorder::RenderRegular( border.GetRect() );
 }
 
