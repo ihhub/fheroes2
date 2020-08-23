@@ -99,27 +99,30 @@ namespace
 
         virtual void toggleFullScreen()
         {
-            if ( _window != NULL ) {
-                uint32_t flags = SDL_GetWindowFlags( _window );
-                if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
-                    flags = 0;
-                }
-                else {
-#if defined( __WIN32__ )
-                    flags = SDL_WINDOW_FULLSCREEN;
-#else
-                    flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
-#endif
-                }
-
-                SDL_SetWindowFullscreen( _window, flags );
+            if ( _window == NULL ) {
+                BaseRenderEngine::toggleFullScreen();
+                return;
             }
+
+            uint32_t flags = SDL_GetWindowFlags( _window );
+            if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
+                flags = 0;
+            }
+            else {
+#if defined( __WIN32__ )
+                flags = SDL_WINDOW_FULLSCREEN;
+#else
+                flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
+            }
+
+            SDL_SetWindowFullscreen( _window, flags );
         }
 
         virtual bool isFullScreen() const
         {
             if ( _window == NULL )
-                return false;
+                return BaseRenderEngine::isFullScreen();
 
             const uint32_t flags = SDL_GetWindowFlags( _window );
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
@@ -387,8 +390,10 @@ namespace
 
         virtual void toggleFullScreen()
         {
-            if ( _surface == NULL ) // nothing to render
+            if ( _surface == NULL ) { // nothing to render
+                BaseRenderEngine::toggleFullScreen();
                 return;
+            }
 
             const uint32_t flags = _surface->flags;
             clear();
@@ -404,7 +409,7 @@ namespace
         virtual bool isFullScreen() const
         {
             if ( _surface == NULL )
-                return false;
+                return BaseRenderEngine::isFullScreen();
 
             return ( ( _surface->flags & SDL_FULLSCREEN ) != 0 );
         }

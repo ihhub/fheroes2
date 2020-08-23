@@ -33,10 +33,14 @@ namespace fheroes2
         friend class Display;
         virtual ~BaseRenderEngine() {}
 
-        virtual void toggleFullScreen() {}
+        virtual void toggleFullScreen()
+        {
+            _isFullScreen = !_isFullScreen;
+        }
+
         virtual bool isFullScreen() const
         {
-            return false;
+            return _isFullScreen;
         }
 
         virtual std::vector<std::pair<int, int> > getAvailableResolutions() const
@@ -47,7 +51,9 @@ namespace fheroes2
         virtual void setTitle( const std::string & ) {}
 
     protected:
-        BaseRenderEngine() {}
+        BaseRenderEngine()
+            : _isFullScreen( false )
+        {}
 
         virtual void clear() {}
         virtual void render( const Display & ) {}
@@ -65,6 +71,9 @@ namespace fheroes2
         virtual void updatePalette( const std::vector<uint8_t> & ) {}
 
         void linkRenderSurface( uint8_t * surface ) const; // declaration of this method is in source file
+
+    private:
+        bool _isFullScreen;
     };
 
     class Display : public Image
