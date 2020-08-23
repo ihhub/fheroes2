@@ -35,45 +35,6 @@
 // This is new Graphics engine. To change the code slowly we have to do some hacks here for now
 #include "screen.h"
 
-/*
-namespace
-{
-    // Returns nearest screen supported resolution
-    std::pair<int, int> GetNearestResolution( int width, int height, const std::vector<std::pair<int, int> > & resolutions )
-    {
-        if ( resolutions.empty() )
-            return std::make_pair( width, height );
-
-        if ( width < 1 )
-            width = 1;
-        if ( height < 1 )
-            height = 1;
-
-        const double x = width;
-        const double y = height;
-
-        std::vector<double> similarity( resolutions.size(), 0 );
-        for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            similarity[i] = std::fabs( resolutions[i].first - x ) / x + std::fabs( resolutions[i].second - y ) / y;
-        }
-
-        const std::vector<double>::difference_type id = std::distance( similarity.begin(), std::min_element( similarity.begin(), similarity.end() ) );
-
-        return resolutions[id];
-    }
-
-    bool SortResolutions( const std::pair<int, int> & first, const std::pair<int, int> & second )
-    {
-        return first.first > second.first || ( first.first == second.first && first.second >= second.second );
-    }
-
-    bool IsLowerThanDefaultRes( const std::pair<int, int> & value )
-    {
-        return value.first < Display::DEFAULT_WIDTH || value.second < Display::DEFAULT_HEIGHT;
-    }
-}
-*/
-
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Display::Display()
     : window( NULL )
@@ -236,19 +197,6 @@ Size Display::GetSize( void ) const
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
     return Size( display.width(), display.height() );
-    /*
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( window ) {
-        int dw, dh;
-        SDL_GetWindowSize( window, &dw, &dh );
-        return Size( dw, dh );
-    }
-
-    return Size( 0, 0 );
-#else
-    return Size( w(), h() );
-#endif
-    */
 }
 
 Size Display::GetDefaultSize( void )
@@ -259,106 +207,16 @@ Size Display::GetDefaultSize( void )
 void Display::Flip( void )
 {
     fheroes2::Display::instance().render();
-
-    /*
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    redrawTiming.Start(); // TODO: for now it's only for SDL 2 but it should be for everything
-
-    if ( displayTexture ) {
-        SDL_UpdateTexture( displayTexture, NULL, surface->pixels, surface->pitch );
-
-        if ( 0 != SDL_SetRenderTarget( renderer, NULL ) ) {
-            ERROR( SDL_GetError() );
-        }
-        else {
-            int ret = 0;
-            if ( keepAspectRatio )
-                ret = SDL_RenderCopy( renderer, displayTexture, &srcRenderSurface, &dstRenderSurface );
-            else
-                ret = SDL_RenderCopy( renderer, displayTexture, NULL, NULL );
-
-            if ( 0 != ret ) {
-                ERROR( SDL_GetError() );
-            }
-            else {
-                SDL_RenderPresent( renderer );
-            }
-        }
-    }
-    else {
-        ERROR( SDL_GetError() );
-
-        // TODO: This might be a hacky way to do but it works totally fine
-        if ( renderer )
-            SDL_DestroyRenderer( renderer );
-
-        renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
-    }
-#else
-    SDL_Flip( surface );
-#endif
-    */
-}
-
-void Display::Present( void )
-{
-    fheroes2::Display::instance().render();
-    /*
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SDL_RenderPresent( renderer );
-#else
-    SDL_Flip( surface );
-#endif
-    */
 }
 
 void Display::ToggleFullScreen( void )
 {
     fheroes2::engine().toggleFullScreen();
-    /*
-    const Surface & temp = GetSurface();
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( window ) {
-        u32 flags = SDL_GetWindowFlags( window );
-
-        // toggle FullScreen
-        if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP )
-            flags = 0;
-        else
-#if defined( __WIN32__ )
-            flags = SDL_WINDOW_FULLSCREEN;
-#else
-            flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
-#endif
-
-        SDL_SetWindowFullscreen( window, flags );
-    }
-#else
-    const uint32_t flags = surface->flags;
-    surface = SDL_SetVideoMode( 0, 0, 0, surface->flags ^ SDL_FULLSCREEN );
-    if ( surface == NULL ) {
-        surface = SDL_SetVideoMode( 0, 0, 0, flags );
-        return;
-    }
-#endif
-
-    temp.Blit( *this );
-    */
 }
 
 bool Display::IsFullScreen() const
 {
     return fheroes2::engine().isFullScreen();
-    /*
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const u32 flags = SDL_GetWindowFlags( window );
-    return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
-#else
-    const uint32_t flags = surface->flags;
-    return ( flags & SDL_FULLSCREEN ) != 0;
-#endif
-    */
 }
 
 void Display::SetCaption( const char * str )

@@ -52,7 +52,6 @@ public:
     void SetIcons( Surface & );
 
     void Flip( void );
-    void Present( void );
     void Clear( void );
     void ToggleFullScreen( void );
     bool IsFullScreen() const;
