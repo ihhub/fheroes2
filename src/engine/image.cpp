@@ -700,26 +700,26 @@ namespace fheroes2
         if ( flip ) {
             const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
             const uint8_t * imageInY = in.image() + offsetInY;
-            const uint8_t * transformY = in.transform() + offsetInY;
+            const uint8_t * transformInY = in.transform() + offsetInY;
 
             const int32_t offsetOutY = outY * widthOut + outX;
             uint8_t * imageOutY = out.image() + offsetOutY;
             const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
 
-            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
+            for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
-                const uint8_t * transformX = transformY;
+                const uint8_t * transformInX = transformInY;
                 uint8_t * imageOutX = imageOutY;
                 const uint8_t * imageOutXEnd = imageOutX + width;
 
-                for ( ; imageOutX != imageOutXEnd; --imageInX, --transformX, ++imageOutX ) {
-                    if ( *transformX == 1 ) {
+                for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX ) {
+                    if ( *transformInX == 1 ) {
                         continue;
                     }
 
                     uint8_t inValue = *imageInX;
-                    if ( *transformX > 1 ) {
-                        inValue = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                    if ( *transformInX > 1 ) {
+                        inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
 
                     const uint8_t * inPAL = kb_pal + inValue * 3;
@@ -733,25 +733,27 @@ namespace fheroes2
             }
         }
         else {
-            const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-            const uint8_t * transformY = in.transform() + inY * widthIn + inX;
+            const int32_t offsetInY = inY * widthIn + inX;
+            const uint8_t * imageInY = in.image() + offsetInY;
+            const uint8_t * transformInY = in.transform() + offsetInY;
+
             uint8_t * imageOutY = out.image() + outY * out.width() + outX;
             const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
-            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformY += widthIn, imageOutY += widthOut ) {
+            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
-                const uint8_t * transformX = transformY;
+                const uint8_t * transformInX = transformInY;
                 uint8_t * imageOutX = imageOutY;
                 const uint8_t * imageInXEnd = imageInX + width;
 
-                for ( ; imageInX != imageInXEnd; ++imageInX, ++transformX, ++imageOutX ) {
-                    if ( *transformX == 1 ) {
+                for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX ) {
+                    if ( *transformInX == 1 ) {
                         continue;
                     }
 
                     uint8_t inValue = *imageInX;
-                    if ( *transformX > 1 ) {
-                        inValue = *( transformTable + ( *transformX ) * 256 + *imageOutX );
+                    if ( *transformInX > 1 ) {
+                        inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
 
                     const uint8_t * inPAL = kb_pal + inValue * 3;

@@ -2196,6 +2196,38 @@ namespace fheroes2
                     Blit( GetICN( ICN::APANEL, 4 + i ), 23, 20, out, 30, 4, 25, 15 );
                 }
                 return true;
+            case ICN::SPELLS:
+                LoadOriginalICN( ICN::SPELLS );
+                _icnVsSprite[id].resize( 66 );
+                for ( uint32_t i = 60; i < 66; ++i ) {
+                    int originalIndex = 0;
+                    if ( i == 60 ) // Mass Cure
+                        originalIndex = 6;
+                    else if ( i == 61 ) // Mass Haste
+                        originalIndex = 14;
+                    else if ( i == 62 ) // Mass Slow
+                        originalIndex = 1;
+                    else if ( i == 63 ) // Mass Bless
+                        originalIndex = 7;
+                    else if ( i == 64 ) // Mass Curse
+                        originalIndex = 3;
+                    else if ( i == 65 ) // Mass Shield
+                        originalIndex = 15;
+
+                    const Sprite & originalImage = _icnVsSprite[id][originalIndex];
+                    Sprite & image = _icnVsSprite[id][i];
+
+                    image.resize( originalImage.width() + 8, originalImage.height() + 8 );
+                    image.setPosition( originalImage.x() + 4, originalImage.y() + 4 );
+                    image.fill( 1 );
+
+                    AlphaBlit( originalImage, image, 0, 0, 128 );
+                    AlphaBlit( originalImage, image, 4, 4, 192 );
+                    Blit( originalImage, image, 8, 8 );
+
+                    AddTransparency( image, 1 );
+                }
+                return true;
             default:
                 break;
             }
