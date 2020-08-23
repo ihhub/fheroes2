@@ -707,16 +707,16 @@ void TextBox::Blit( s32 ax, s32 ay, fheroes2::Image & sf )
     for ( std::list<Text>::const_iterator it = messages.begin(); it != messages.end(); ++it ) {
         switch ( align ) {
         case ALIGN_LEFT:
-            ( *it ).Blit( ax, ay );
+            ( *it ).Blit( ax, ay, sf );
             break;
 
         case ALIGN_RIGHT:
-            ( *it ).Blit( ax + Rect::w - ( *it ).w(), ay );
+            ( *it ).Blit( ax + Rect::w - ( *it ).w(), ay, sf );
             break;
 
         // center
         default:
-            ( *it ).Blit( ax + ( Rect::w - ( *it ).w() ) / 2, ay );
+            ( *it ).Blit( ax + ( Rect::w - ( *it ).w() ) / 2, ay, sf );
             break;
         }
 
