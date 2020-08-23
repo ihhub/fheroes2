@@ -160,12 +160,10 @@ int main( int argc, char ** argv )
             LocalEvent::Get().RegisterCycling();
             LocalEvent::Get().GetMouseCursor();
 
-// #ifdef WITH_ZLIB
-//             ZSurface zicons;
-//             if ( zicons.Load( _ptr_08067830.width, _ptr_08067830.height, _ptr_08067830.bpp, _ptr_08067830.pitch, _ptr_08067830.rmask, _ptr_08067830.gmask,
-//                               _ptr_08067830.bmask, _ptr_08067830.amask, _ptr_08067830.zdata, sizeof( _ptr_08067830.zdata ) ) )
-//                 display.SetIcons( zicons );
-// #endif
+ #ifdef WITH_ZLIB
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
+            fheroes2::engine().setIcon( appIcon );
+ #endif
 
             DEBUG( DBG_GAME, DBG_INFO, conf.String() );
             // DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );

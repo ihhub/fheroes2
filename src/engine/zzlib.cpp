@@ -151,19 +151,35 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
     return false;
 }
 
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * data, size_t size )
+fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize )
 {
-    if ( data == NULL || size == 0 || width <= 0 || height <= 0 )
+    if ( imageData == NULL || imageSize == 0 || width <= 0 || height <= 0 )
         return fheroes2::Image();
 
-    const std::vector<uint8_t> & uncompressedData = zlibDecompress( data, size );
+    const std::vector<uint8_t> & uncompressedData = zlibDecompress( imageData, imageSize );
     if ( width * height != uncompressedData.size() )
         return fheroes2::Image();
 
     fheroes2::Image out( width, height );
-    out.reset();
+    out.fill( 0 );
 
     std::memcpy( out.image(), uncompressedData.data(), uncompressedData.size() );
+    return out;
+}
+
+fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, const uint8_t * transformData, size_t transformSize )
+{
+    if ( imageData == NULL || transformData == NULL || imageSize == 0 || width <= 0 || height <= 0 )
+        return fheroes2::Image();
+
+    const std::vector<uint8_t> & uncompressedImageData = zlibDecompress( imageData, imageSize );
+    const std::vector<uint8_t> & uncompressedTransformData = zlibDecompress( transformData, transformSize );
+    if ( width * height != uncompressedImageData.size() || uncompressedImageData.size() != uncompressedTransformData.size() )
+        return fheroes2::Image();
+
+    fheroes2::Image out( width, height );
+    std::memcpy( out.image(), uncompressedImageData.data(), uncompressedImageData.size() );
+    std::memcpy( out.transform(), uncompressedTransformData.data(), uncompressedTransformData.size() );
     return out;
 }
 

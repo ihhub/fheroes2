@@ -50,6 +50,8 @@ namespace fheroes2
 
         virtual void setTitle( const std::string & ) {}
 
+        virtual void setIcon( const Image & ) {}
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )

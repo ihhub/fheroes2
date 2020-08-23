@@ -152,6 +152,48 @@ namespace
                 SDL_SetWindowTitle( _window, title.c_str() );
         }
 
+        virtual void setIcon( const fheroes2::Image & icon )
+        {
+            if ( _window == NULL )
+                return;
+
+            SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+            if ( surface == NULL )
+                return;
+
+            const uint32_t width = icon.width();
+            const uint32_t height = icon.height();
+
+            uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+            const uint32_t * outEnd = out + width * height;
+            const uint8_t * in = icon.image();
+            const uint8_t * transform = icon.transform();
+
+            if ( surface->format->Amask > 0 ) {
+                for ( ; out != outEnd; ++out, ++in, ++transform ) {
+                    if ( *transform == 0 ) {
+                        const uint8_t * value = kb_pal + *in * 3;
+                        *out = SDL_MapRGBA( surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2, 255 );
+                    }
+                }
+            }
+            else {
+                for ( ; out != outEnd; ++out, ++in, ++transform ) {
+                    if ( *transform == 0 ) {
+                        const uint8_t * value = kb_pal + *in * 3;
+                        *out = SDL_MapRGB( surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2 );
+                    }
+                    else {
+                        *out = SDL_MapRGB( surface->format, 0, 0, 0 );
+                    }
+                }
+            }
+
+            SDL_SetWindowIcon( _window, surface );
+
+            SDL_FreeSurface( surface );
+        }
+
         static RenderEngine * create()
         {
             return new RenderEngine;
@@ -431,6 +473,45 @@ namespace
         virtual void setTitle( const std::string & title )
         {
             SDL_WM_SetCaption( title.c_str(), NULL );
+        }
+
+        virtual void setIcon( const fheroes2::Image & icon )
+        {
+            SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+            if ( surface == NULL )
+                return;
+
+            const uint32_t width = icon.width();
+            const uint32_t height = icon.height();
+
+            uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+            const uint32_t * outEnd = out + width * height;
+            const uint8_t * in = icon.image();
+            const uint8_t * transform = icon.transform();
+
+            if ( surface->format->Amask > 0 ) {
+                for ( ; out != outEnd; ++out, ++in, ++transform ) {
+                    if ( *transform == 0 ) {
+                        const uint8_t * value = kb_pal + *in * 3;
+                        *out = SDL_MapRGBA( surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2, 255 );
+                    }
+                }
+            }
+            else {
+                for ( ; out != outEnd; ++out, ++in, ++transform ) {
+                    if ( *transform == 0 ) {
+                        const uint8_t * value = kb_pal + *in * 3;
+                        *out = SDL_MapRGB( surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2 );
+                    }
+                    else {
+                        *out = SDL_MapRGB( surface->format, 0, 0, 0 );
+                    }
+                }
+            }
+
+            SDL_WM_SetIcon( surface, NULL );
+
+            SDL_FreeSurface( surface );
         }
 
         static RenderEngine * create()
