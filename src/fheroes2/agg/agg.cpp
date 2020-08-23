@@ -43,7 +43,7 @@
 #include "xmi.h"
 
 #ifdef WITH_ZLIB
-#include "images_pack.h"
+#include "embedded_image.h"
 #include "zzlib.h"
 #endif
 

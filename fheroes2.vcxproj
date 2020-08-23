@@ -475,7 +475,7 @@
     <ClInclude Include="src\fheroes2\heroes\route.h" />
     <ClInclude Include="src\fheroes2\heroes\skill.h" />
     <ClInclude Include="src\fheroes2\heroes\skill_static.h" />
-    <ClInclude Include="src\fheroes2\image\images_pack.h" />
+    <ClInclude Include="src\fheroes2\image\embedded_image.h" />
     <ClInclude Include="src\fheroes2\kingdom\color.h" />
     <ClInclude Include="src\fheroes2\kingdom\kingdom.h" />
     <ClInclude Include="src\fheroes2\kingdom\luck.h" />

@@ -29,12 +29,12 @@
 #include "bin_info.h"
 #include "cursor.h"
 #include "dir.h"
+#include "embedded_image.h"
 #include "engine.h"
 #include "error.h"
 #include "game.h"
 //#include "game_video.h"
 #include "gamedefs.h"
-#include "images_pack.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -160,10 +160,10 @@ int main( int argc, char ** argv )
             LocalEvent::Get().RegisterCycling();
             LocalEvent::Get().GetMouseCursor();
 
- #ifdef WITH_ZLIB
+#ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
             fheroes2::engine().setIcon( appIcon );
- #endif
+#endif
 
             DEBUG( DBG_GAME, DBG_INFO, conf.String() );
             // DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
