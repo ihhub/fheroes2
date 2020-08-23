@@ -59,7 +59,7 @@ int Game::LoadStandard( void )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
 
     cursor.Show();
     display.render();

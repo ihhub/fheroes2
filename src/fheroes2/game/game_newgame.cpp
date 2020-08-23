@@ -327,7 +327,7 @@ int Game::NewGame( void )
 
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+    fheroes2::Copy( back, display );
 
     const uint32_t backgroundWidth = back.width();
 
@@ -410,7 +410,7 @@ int Game::NewMulti( void )
 
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Blit( back, display );
+    fheroes2::Copy( back, display );
 
     const uint32_t backgroundWidth = back.width();
 
@@ -474,7 +474,7 @@ u32 Game::SelectCountPlayers( void )
 
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Blit( back, display );
+    fheroes2::Copy( back, display );
 
     const uint32_t backgroundWidth = back.width();
 

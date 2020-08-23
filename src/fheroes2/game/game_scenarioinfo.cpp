@@ -103,7 +103,7 @@ int Game::ScenarioInfo( void )
     fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
     fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::NGEXTRA, 68, 69 );
 
-    fheroes2::Blit( back, display );
+    fheroes2::Copy( back, display );
 
     bool resetStartingSettings = conf.MapsFile().empty();
     size_t mapId = 0;

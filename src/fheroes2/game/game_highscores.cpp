@@ -185,7 +185,7 @@ int Game::HighScores( bool fill )
 
     cursor.Hide();
     if ( fill && ( display.width() != display.DEFAULT_WIDTH || display.height() != display.DEFAULT_HEIGHT ) ) { // draw only for bigger resolutions
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
     }
 
 #ifdef WITH_DEBUG
