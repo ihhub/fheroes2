@@ -304,7 +304,7 @@ namespace
                     const int32_t distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
                     if ( minDistance > distance ) {
                         minDistance = distance;
-                        bestPos = i;
+                        bestPos = *correctorX;
                     }
                 }
 
