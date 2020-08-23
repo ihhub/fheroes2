@@ -731,7 +731,7 @@ void TextBox::Blit( const Point & pt, fheroes2::Image & sf )
 
 TextSprite::TextSprite()
     : hide( true )
-    , _restorer( fheroes2::Display::instance() )
+    , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
 {}
 
 TextSprite::TextSprite( const std::string & msg, int ft, const Point & pt )
@@ -787,12 +787,12 @@ void TextSprite::SetPos( s32 ax, s32 ay )
 
 int TextSprite::w( void )
 {
-    return _restorer.width();
+    return gw;
 }
 
 int TextSprite::h( void )
 {
-    return _restorer.height();
+    return gh + 5;
 }
 
 bool TextSprite::isHide( void ) const
