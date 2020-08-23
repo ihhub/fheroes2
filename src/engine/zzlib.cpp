@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #ifdef WITH_ZLIB
+#include <cstring>
 #include <sstream>
 #include <zlib.h>
 
