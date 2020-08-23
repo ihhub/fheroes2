@@ -2172,10 +2172,7 @@ void Battle::Interface::FadeArena( void )
     Rect srt = border.GetArea();
     fheroes2::Image top( srt.w, srt.h );
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.w, srt.h );
-    fheroes2::Image back( srt.w, srt.h );
-    back.fill( 0 );
-    // display.Fade( top, back, srt, 100, 300 );
-    fheroes2::FadeDisplay();
+    fheroes2::FadeDisplay( top, fheroes2::Point( srt.x, srt.y ), 150, 300 );
     display.render();
 }
 

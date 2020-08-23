@@ -249,13 +249,10 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     const Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
 
     if ( isFadingEnabled ) {
-        fheroes2::Image back( top.width(), top.height() );
-        back.fill( 0 );
-
         fheroes2::Image middle( spellROI.w, spellROI.h );
         fheroes2::Copy( display, spellROI.x, spellROI.y, middle, 0, 0, spellROI.w, spellROI.h );
 
-        fheroes2::InvertedFade( top, back, fheroes2::Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 155, 300 );
+        fheroes2::InvertedFade( top, fheroes2::Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 155, 300 );
     }
 
     Cursor & cursor = Cursor::Get();

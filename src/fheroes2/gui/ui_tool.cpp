@@ -178,11 +178,34 @@ namespace fheroes2
         return out;
     }
 
+    void FadeDisplay( const Image & top, const Point & pos, int level, int delay )
+    {
+        Display & display = Display::instance();
+
+        Image shadow = top;
+        int alpha = 255;
+        const int step = 10;
+        const int min = step + 5;
+        const int delay2 = ( delay * step ) / ( alpha - min );
+
+        while ( alpha > min + level ) {
+            // Blit( back, display, pos.x, pos.y );
+
+            ApplyPalette( shadow, 5 );
+            Blit( shadow, display, pos.x, pos.y );
+
+            display.render();
+
+            alpha -= step;
+            DELAY( delay2 );
+        }
+    }
+
     void FadeDisplay() {}
 
     void RiseDisplay() {}
 
-    void InvertedFade( const Image & top, const Image & back, const Point & offset, const Image & middle, const Point & middleOffset, int level, int delay )
+    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, int level, int delay )
     {
         Display & display = Display::instance();
         Image shadow = top;
@@ -192,7 +215,6 @@ namespace fheroes2
         const int delay2 = ( delay * step ) / ( alpha - min );
 
         while ( alpha > min + level ) {
-            Blit( back, display, offset.x, offset.y );
             Blit( shadow, display, offset.x, offset.y );
 
             ApplyPalette( shadow, 5 );

@@ -51,8 +51,11 @@ namespace fheroes2
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
 
+    void FadeDisplay( const Image & top, const Point & pos, int level, int delay );
+
     void FadeDisplay();
+
     void RiseDisplay();
 
-    void InvertedFade( const Image & top, const Image & back, const Point & offset, const Image & middle, const Point & middleOffset, int level, int delay );
+    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, int level, int delay );
 }
