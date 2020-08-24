@@ -547,9 +547,9 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                     if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
                                         cursor.Hide();
 
-                                        fheroes2::Sprite shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
+                                        const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
                                         fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
-                                        fheroes2::Sprite boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
+                                        const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
                                         fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
 
                                         cursor.Show();

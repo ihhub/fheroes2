@@ -1608,7 +1608,7 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst ) const
     area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
 
     if ( spriteIndicies.second != -1 ) {
-        fheroes2::Sprite animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.second );
+        const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.second );
         area.BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp );
     }
 }
@@ -2469,7 +2469,6 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 
 std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const int tileIndex = tile.GetIndex();
     int attackerIndex = -1;
 

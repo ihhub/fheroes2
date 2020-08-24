@@ -351,8 +351,10 @@ namespace fheroes2
     {
         resize( image_.width(), image_.height() );
 
-        memcpy( image(), image_.image(), _width * _height );
-        memcpy( transform(), image_.transform(), _width * _height );
+        const size_t totalSize = static_cast<size_t>( _width * _height );
+
+        memcpy( image(), image_.image(), totalSize );
+        memcpy( transform(), image_.transform(), totalSize );
     }
 
     Image::Image( Image && image_ )
@@ -424,9 +426,9 @@ namespace fheroes2
     void Image::fill( uint8_t value )
     {
         if ( !empty() ) {
-            uint8_t * imageData = image(); // this method could be overloaded
-            std::fill( imageData, imageData + _width * _height, value );
-            std::fill( _transform.begin(), _transform.end(), 0 );
+            const size_t totalSize = static_cast<size_t>( _width * _height );
+            std::fill( image(), image() + totalSize, value );
+            std::fill( transform(), transform() + totalSize, 0 );
         }
     }
 
@@ -445,8 +447,9 @@ namespace fheroes2
         _width = width_;
         _height = height_;
 
-        _image.resize( _width * _height );
-        _transform.resize( _width * _height );
+        const size_t totalSize = static_cast<size_t>( _width * _height );
+        _image.resize( totalSize );
+        _transform.resize( totalSize );
     }
 
     void Image::reset()

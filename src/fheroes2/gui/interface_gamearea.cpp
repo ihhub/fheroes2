@@ -161,21 +161,21 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 
             // base monster sprite
             if ( monsterIndicies.first >= 0 ) {
-                fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
             }
             // animated monster part
             if ( monsterIndicies.second >= 0 ) {
-                fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
                 BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
             }
         }
         else if ( fadeInfo.object == MP2::OBJ_BOAT ) {
-            fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::BOAT32, fadeInfo.index );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, fadeInfo.index );
             BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
         }
         else {
-            fheroes2::Sprite sprite = fheroes2::AGG::GetICN( icn, fadeInfo.index );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeInfo.index );
             BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeInfo.alpha );
         }
     }

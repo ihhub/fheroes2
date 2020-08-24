@@ -21,11 +21,13 @@
 #include "dialog_resolution.h"
 #include "agg.h"
 #include "display.h"
+#include "embedded_image.h"
 #include "game.h"
 #include "interface_list.h"
 #include "screen.h"
 #include "text.h"
 #include "ui_button.h"
+#include "zzlib.h"
 
 namespace
 {
@@ -186,8 +188,13 @@ namespace Dialog
         if ( selectedResolution.first > 0 && selectedResolution.second > 0
              && ( selectedResolution.first != currentResolution.w || selectedResolution.second != currentResolution.h ) ) {
             Settings & conf = Settings::Get();
-            Display::Get().SetVideoMode( selectedResolution.first, selectedResolution.second, fheroes2::engine().isFullScreen(), conf.KeepAspectRatio(),
-                                         conf.ChangeFullscreenResolution() );
+            display.resize( selectedResolution.first, selectedResolution.second );
+
+#ifdef WITH_ZLIB
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
+            fheroes2::engine().setIcon( appIcon );
+#endif
+
             return true;
         }
 

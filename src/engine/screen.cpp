@@ -205,23 +205,30 @@ namespace
             , _surface( NULL )
             , _renderer( NULL )
             , _texture( NULL )
+            , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
         {}
 
         virtual void clear() override
         {
-            if ( _window != NULL ) {
-                SDL_DestroyWindow( _window );
-                _window = NULL;
-            }
-
-            if ( _renderer != NULL ) {
-                _renderer = NULL;
-                SDL_DestroyRenderer( _renderer );
-            }
-
             if ( _texture != NULL ) {
                 SDL_DestroyTexture( _texture );
                 _texture = NULL;
+            }
+
+            if ( _renderer != NULL ) {
+                SDL_DestroyRenderer( _renderer );
+                _renderer = NULL;
+            }
+
+            if ( _window != NULL ) {
+                // Let's collect needed info about previous setup
+                if ( !isFullScreen() ) {
+                    SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
+                }
+                _previousWindowTitle = SDL_GetWindowTitle( _window );
+
+                SDL_DestroyWindow( _window );
+                _window = NULL;
             }
 
             if ( _surface != NULL ) {
@@ -277,14 +284,6 @@ namespace
 
         virtual bool allocate( uint32_t width_, uint32_t height_, bool isFullScreen ) override
         {
-            std::string previousWindowTitle;
-            int prevX = SDL_WINDOWPOS_CENTERED;
-            int prevY = SDL_WINDOWPOS_CENTERED;
-            if ( _window ) {
-                previousWindowTitle = SDL_GetWindowTitle( _window );
-                SDL_GetWindowPosition( _window, &prevX, &prevY );
-            }
-
             clear();
 
             const std::vector<std::pair<int, int> > resolutions = getAvailableResolutions();
@@ -303,11 +302,13 @@ namespace
 #endif
             }
 
-            _window = SDL_CreateWindow( "", prevX, prevY, width_, height_, flags );
+            _window = SDL_CreateWindow( "", _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
             if ( _window == NULL ) {
                 clear();
                 return false;
             }
+
+            SDL_SetWindowTitle( _window, _previousWindowTitle.data() );
 
             _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
             if ( _renderer == NULL ) {
@@ -386,6 +387,9 @@ namespace
 
         std::vector<uint32_t> _palette32Bit;
         std::vector<SDL_Color> _palette8Bit;
+
+        std::string _previousWindowTitle;
+        fheroes2::Point _prevWindowPos;
 
         int renderFlags() const
         {

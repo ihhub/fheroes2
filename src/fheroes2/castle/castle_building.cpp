@@ -94,27 +94,26 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
-    fheroes2::Sprite townbkg;
+    int townIcnId = -1;
 
-    // before redraw
     switch ( castle.GetRace() ) {
     case Race::KNGT:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG0, 0 );
+        townIcnId = ICN::TOWNBKG0;
         break;
     case Race::BARB:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG1, 0 );
+        townIcnId = ICN::TOWNBKG1;
         break;
     case Race::SORC:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG2, 0 );
+        townIcnId = ICN::TOWNBKG2;
         break;
     case Race::WRLK:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG3, 0 );
+        townIcnId = ICN::TOWNBKG3;
         break;
     case Race::WZRD:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG4, 0 );
+        townIcnId = ICN::TOWNBKG4;
         break;
     case Race::NECR:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG5, 0 );
+        townIcnId = ICN::TOWNBKG5;
         break;
     default:
         break;
@@ -122,8 +121,10 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 
     const Rect max = CastleGetMaxArea( castle, dst_pt );
 
-    if ( !townbkg.empty() )
-        fheroes2::Blit( townbkg, display, dst_pt.x, dst_pt.y );
+    if ( townIcnId != -1 ) {
+        const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
+        fheroes2::Copy( townbkg, 0, 0, display, dst_pt.x, dst_pt.y, townbkg.width(), townbkg.height() );
+    }
 
     if ( Race::BARB == castle.GetRace() ) {
         const fheroes2::Sprite & sprite0 = fheroes2::AGG::GetICN( ICN::TWNBEXT1, 1 + frame % 5 );
@@ -132,7 +133,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 
     // sea anime
     if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) ) {
-        fheroes2::Sprite sprite50, sprite51;
+        fheroes2::Sprite sprite50;
+        fheroes2::Sprite sprite51;
 
         switch ( castle.GetRace() ) {
         case Race::KNGT:
@@ -266,13 +268,13 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
 
     if ( icn != ICN::UNKNOWN ) {
         // simple first sprite
-        fheroes2::Sprite sprite1 = fheroes2::AGG::GetICN( icn, index );
+        const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( icn, index );
 
         CastleDialog::RedrawBuildingSpriteToArea( sprite1, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y(), max, alpha );
 
         // second anime sprite
         if ( const u32 index2 = ICN::AnimationFrame( icn, index, frame ) ) {
-            fheroes2::Sprite sprite2 = fheroes2::AGG::GetICN( icn, index2 );
+            const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn, index2 );
 
             CastleDialog::RedrawBuildingSpriteToArea( sprite2, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), max, alpha );
         }
@@ -982,35 +984,36 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
 Rect CastleGetMaxArea( const Castle & castle, const Point & top )
 {
     Rect res( top, 0, 0 );
-    fheroes2::Sprite townbkg;
+
+    int townIcnId = -1;
 
     switch ( castle.GetRace() ) {
     case Race::KNGT:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG0, 0 );
+        townIcnId = ICN::TOWNBKG0;
         break;
     case Race::BARB:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG1, 0 );
+        townIcnId = ICN::TOWNBKG1;
         break;
     case Race::SORC:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG2, 0 );
+        townIcnId = ICN::TOWNBKG2;
         break;
     case Race::WRLK:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG3, 0 );
+        townIcnId = ICN::TOWNBKG3;
         break;
     case Race::WZRD:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG4, 0 );
+        townIcnId = ICN::TOWNBKG4;
         break;
     case Race::NECR:
-        townbkg = fheroes2::AGG::GetICN( ICN::TOWNBKG5, 0 );
+        townIcnId = ICN::TOWNBKG5;
         break;
     default:
-        break;
+        return res;
     }
 
-    if ( !townbkg.empty() ) {
-        res.w = townbkg.width();
-        res.h = townbkg.height();
-    }
+
+    const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
+    res.w = townbkg.width();
+    res.h = townbkg.height();
 
     return res;
 }

@@ -1352,8 +1352,8 @@ void Battle::Interface::RedrawCover( void )
 void Battle::Interface::RedrawCoverStatic( fheroes2::Image & dst )
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
-        fheroes2::Sprite cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
-        fheroes2::Blit( cbkg, _mainSurface );
+        const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
+        fheroes2::Copy( cbkg, _mainSurface );
     }
 
     if ( icn_frng != ICN::UNKNOWN ) {
@@ -3611,7 +3611,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
         if ( ( frame == 0 ) || Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             RedrawPartialStart();
 
-            fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::SPARKS, frame );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SPARKS, frame );
 
             for ( size_t i = 1; i < points.size(); ++i ) {
                 Point pt = points[i] - Point( sprite.width() / 2, 0 ) + roiOffset;

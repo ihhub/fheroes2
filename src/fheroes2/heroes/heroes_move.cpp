@@ -389,10 +389,10 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool with_shadow ) c
         flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
     }
 
-    fheroes2::Sprite sprite1 = SpriteHero( *this, sprite_index, false );
-    fheroes2::Sprite sprite2 = SpriteFlag( *this, flagFrameID, false );
-    fheroes2::Sprite sprite3 = SpriteShad( *this, sprite_index );
-    fheroes2::Sprite sprite4 = SpriteFroth( *this, sprite_index );
+    const fheroes2::Sprite & sprite1 = SpriteHero( *this, sprite_index, false );
+    const fheroes2::Sprite & sprite2 = SpriteFlag( *this, flagFrameID, false );
+    const fheroes2::Sprite & sprite3 = SpriteShad( *this, sprite_index );
+    const fheroes2::Sprite & sprite4 = SpriteFroth( *this, sprite_index );
 
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.width() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
     Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.width() : sprite2.x() ), dy + sprite2.y() + TILEWIDTH );

@@ -404,7 +404,7 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
             }
 
             const Spell & spell = spells[ii + cur];
-            fheroes2::Sprite icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             const Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
             fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
 

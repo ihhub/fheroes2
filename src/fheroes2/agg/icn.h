@@ -904,7 +904,7 @@ namespace ICN
         BUYMAX,
         BTNCONFIG,
         BTNBATTLEONLY,
-        BOAT12,
+        BOAT12, // not in use anymore
         BTNGIFT,
         BTNMIN,
         CSLMARKER,
