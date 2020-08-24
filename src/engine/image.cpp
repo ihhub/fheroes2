@@ -345,19 +345,21 @@ namespace fheroes2
         resize( width_, height_ );
     }
 
-    Image::Image( const Image & image )
-        : _width( image.width() )
-        , _height( image.height() )
-    {
-        _image = image._image;
-        _transform = image._transform;
-    }
-
-    Image::Image( Image && image )
+    Image::Image( const Image & image_ )
         : _width( 0 )
         , _height( 0 )
     {
-        swap( image );
+        resize( image_.width(), image_.height() );
+
+        memcpy( image(), image_.image(), _width * _height );
+        memcpy( transform(), image_.transform(), _width * _height );
+    }
+
+    Image::Image( Image && image_ )
+        : _width( 0 )
+        , _height( 0 )
+    {
+        swap( image_ );
     }
 
     Image::~Image()
@@ -365,18 +367,18 @@ namespace fheroes2
         clear();
     }
 
-    Image & Image::operator=( const Image & image )
+    Image & Image::operator=( const Image & image_ )
     {
-        _width = image.width();
-        _height = image.height();
-        _image = image._image;
-        _transform = image._transform;
+        _width = image_.width();
+        _height = image_.height();
+        _image = image_._image;
+        _transform = image_._transform;
         return *this;
     }
 
-    Image & Image::operator=( Image && image )
+    Image & Image::operator=( Image && image_ )
     {
-        swap( image );
+        swap( image_ );
         return *this;
     }
 
@@ -802,6 +804,27 @@ namespace fheroes2
         }
 
         ApplyRawPalette( in, out, transformTable + paletteId * 256 );
+    }
+
+    void ApplyAlpha( Image & image, uint8_t alpha )
+    {
+        ApplyAlpha( image, image, alpha );
+    }
+
+    void ApplyAlpha( const Image & in, Image & out, uint8_t alpha )
+    {
+        std::vector<uint8_t> palette( 256 );
+
+        const uint8_t * value = kb_pal;
+
+        for ( uint32_t i = 0; i < 256; ++i ) {
+            const uint32_t red = static_cast<uint32_t>( *value++ ) * alpha / 255;
+            const uint32_t green = static_cast<uint32_t>( *value++ ) * alpha / 255;
+            const uint32_t blue = static_cast<uint32_t>( *value++ ) * alpha / 255;
+            palette[i] = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+        }
+
+        ApplyPalette( in, out, palette );
     }
 
     void Blit( const Image & in, Image & out, bool flip )

@@ -34,12 +34,12 @@ namespace fheroes2
     {
     public:
         Image( int32_t width_ = 0, int32_t height_ = 0 );
-        Image( const Image & image );
-        Image( Image && image );
+        Image( const Image & image_ );
+        Image( Image && image_ );
         virtual ~Image();
 
-        Image & operator=( const Image & image );
-        Image & operator=( Image && image );
+        Image & operator=( const Image & image_ );
+        Image & operator=( Image && image_ );
 
         virtual void resize( int32_t width_, int32_t height_ );
 
@@ -141,6 +141,9 @@ namespace fheroes2
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette );
     void ApplyPalette( Image & image, uint8_t paletteId );
     void ApplyPalette( const Image & in, Image & out, uint8_t paletteId );
+
+    void ApplyAlpha( Image & image, uint8_t alpha );
+    void ApplyAlpha( const Image & in, Image & out, uint8_t alpha );
 
     // draw one image onto another
     void Blit( const Image & in, Image & out, bool flip = false );

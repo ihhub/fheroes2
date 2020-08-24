@@ -40,7 +40,7 @@ namespace fheroes2
 
         bool isHidden() const;
 
-        virtual void setPosition( int32_t x_, int32_t y_ );
+        virtual void setPosition( int32_t x_, int32_t y_ ) override;
 
     private:
         ImageRestorer _restorer;
@@ -51,11 +51,9 @@ namespace fheroes2
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
 
-    void FadeDisplay( const Image & top, const Point & pos, int level, int delay );
+    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delay );
 
-    void FadeDisplay();
+    void FadeDisplay( int delay = 500 );
 
-    void RiseDisplay();
-
-    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, int level, int delay );
+    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delay );
 }

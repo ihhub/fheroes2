@@ -178,21 +178,19 @@ namespace fheroes2
         return out;
     }
 
-    void FadeDisplay( const Image & top, const Point & pos, int level, int delay )
+    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delay )
     {
         Display & display = Display::instance();
 
         Image shadow = top;
-        int alpha = 255;
-        const int step = 10;
-        const int min = step + 5;
+        uint8_t alpha = 255;
+        const uint8_t step = 10;
+        const uint8_t min = step + 5;
         const int delay2 = ( delay * step ) / ( alpha - min );
 
-        while ( alpha > min + level ) {
-            // Blit( back, display, pos.x, pos.y );
-
-            ApplyPalette( shadow, 5 );
-            Blit( shadow, display, pos.x, pos.y );
+        while ( alpha > min + endAlpha ) {
+            ApplyAlpha( top, shadow, alpha );
+            Copy( shadow, 0, 0, display, pos.x, pos.y, shadow.width(), shadow.height() );
 
             display.render();
 
@@ -201,25 +199,29 @@ namespace fheroes2
         }
     }
 
-    void FadeDisplay() {}
+    void FadeDisplay( int delay )
+    {
+        Display & display = Display::instance();
+        const Image temp = display;
 
-    void RiseDisplay() {}
+        FadeDisplay( temp, Point( 0, 0 ), 5, delay );
 
-    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, int level, int delay )
+        Copy( temp, display ); // restore the original image
+    }
+
+    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delay )
     {
         Display & display = Display::instance();
         Image shadow = top;
-        int alpha = 255;
-        const int step = 10;
-        const int min = step + 5;
+        uint8_t alpha = 255;
+        const uint8_t step = 10;
+        const uint8_t min = step + 5;
         const int delay2 = ( delay * step ) / ( alpha - min );
 
-        while ( alpha > min + level ) {
-            Blit( shadow, display, offset.x, offset.y );
-
-            ApplyPalette( shadow, 5 );
-
-            Blit( middle, display, middleOffset.x, middleOffset.y );
+        while ( alpha > min + endAlpha ) {
+            ApplyAlpha( top, shadow, alpha );
+            Copy( shadow, 0, 0, display, offset.x, offset.y, shadow.width(), shadow.height() );
+            Copy( middle, 0, 0, display, middleOffset.x, middleOffset.y, middle.width(), middle.height() );
 
             display.render();
 
