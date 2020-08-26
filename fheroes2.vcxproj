@@ -331,8 +331,6 @@
     <ClCompile Include="src\fheroes2\kingdom\race.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\speed.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
-    <ClCompile Include="src\fheroes2\kingdom\world.cpp" />
-    <ClCompile Include="src\fheroes2\kingdom\world_loadmap.cpp" />
     <ClCompile Include="src\fheroes2\maps\ground.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_actions.cpp" />
@@ -370,6 +368,8 @@
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
     <ClCompile Include="src\fheroes2\test\test.cpp" />
     <ClCompile Include="src\fheroes2\test\test_monstersprite.cpp" />
+    <ClCompile Include="src\fheroes2\world\world.cpp" />
+    <ClCompile Include="src\fheroes2\world\world_loadmap.cpp" />
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
     <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
     <ClCompile Include="src\thirdparty\libsmacker\smk_bitstream.c" />
@@ -485,7 +485,6 @@
     <ClInclude Include="src\fheroes2\kingdom\race.h" />
     <ClInclude Include="src\fheroes2\kingdom\speed.h" />
     <ClInclude Include="src\fheroes2\kingdom\week.h" />
-    <ClInclude Include="src\fheroes2\kingdom\world.h" />
     <ClInclude Include="src\fheroes2\maps\ground.h" />
     <ClInclude Include="src\fheroes2\maps\maps.h" />
     <ClInclude Include="src\fheroes2\maps\maps_actions.h" />
@@ -523,6 +522,7 @@
     <ClInclude Include="src\fheroes2\system\players.h" />
     <ClInclude Include="src\fheroes2\system\settings.h" />
     <ClInclude Include="src\fheroes2\test\test.h" />
+    <ClInclude Include="src\fheroes2\world\world.h" />
     <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\tools\palette_h2.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smacker.h" />
