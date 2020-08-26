@@ -2092,7 +2092,7 @@ namespace fheroes2
 
                         uint32_t c = *data % 4 ? *data % 4 : *( ++data );
                         while ( c-- ) {
-                            if ( transformType <= 13 ) {
+                            if ( transformType <= 15 ) {
                                 imageTransform[posX] = transformType;
                             }
                             ++posX;
