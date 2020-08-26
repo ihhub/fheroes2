@@ -2172,7 +2172,7 @@ void Battle::Interface::FadeArena( void )
     Rect srt = border.GetArea();
     fheroes2::Image top( srt.w, srt.h );
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.w, srt.h );
-    fheroes2::FadeDisplay( top, fheroes2::Point( srt.x, srt.y ), 100, 300 );
+    fheroes2::FadeDisplayWithPalette( top, fheroes2::Point( srt.x, srt.y ), 5, 300, 7 );
     display.render();
 }
 
@@ -4020,12 +4020,10 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
 
     area.h -= 37;
 
-    fheroes2::Image sprite1( area.w, area.h );
-    sprite1.reset();
-    fheroes2::Copy( _mainSurface, area.x, area.y, sprite1, 0, 0, area.w, area.h );
-
-    fheroes2::Image sprite2( area.w, area.h );
-    sprite2.fill( fheroes2::GetColorId( 0xFF, 0xFF, 0xFF ) );
+    fheroes2::Image spriteWhitening( area.w, area.h );
+    fheroes2::Image spriteReddish( area.w, area.h );
+    fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.w, area.h );
+    fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.w, area.h );
 
     cursor.SetThemes( Cursor::WAR_NONE );
 
@@ -4033,21 +4031,19 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
     AGG::PlaySound( M82::ARMGEDN );
     u32 alpha = 10;
 
-    while ( le.HandleEvents() && alpha < 180 ) {
+    while ( le.HandleEvents() && alpha < 100 ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            fheroes2::Image blended( sprite1 );
-            fheroes2::AlphaBlit( sprite2, blended, alpha );
-            fheroes2::Blit( blended, _mainSurface, area.x, area.y );
+            fheroes2::ApplyPalette( spriteWhitening, 9 );
+            fheroes2::Blit( spriteWhitening, _mainSurface, area.x, area.y );
             RedrawPartialFinish();
 
             alpha += 10;
         }
     }
 
-    sprite2.fill( fheroes2::GetColorId( 0xb0, 0x0c, 0 ) );
-    fheroes2::AlphaBlit( sprite2, sprite1, alpha );
+    fheroes2::ApplyPalette( spriteReddish, PAL::GetPalette( PAL::RED ) );
 
     cursor.Hide();
 
@@ -4077,7 +4073,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
                 shifted.h -= offset;
                 shifted.y = 0;
             }
-            fheroes2::Blit( sprite1, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.w, shifted.h );
+            fheroes2::Blit( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.w, shifted.h );
 
             RedrawPartialFinish();
         }

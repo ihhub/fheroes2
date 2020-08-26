@@ -53,7 +53,11 @@ namespace fheroes2
 
     void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delay );
 
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delay, int frameCount );
+
     void FadeDisplay( int delay = 500 );
 
     void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delay );
+
+    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay, int frameCount );
 }

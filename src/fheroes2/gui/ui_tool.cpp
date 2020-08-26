@@ -186,7 +186,7 @@ namespace fheroes2
         uint8_t alpha = 255;
         const uint8_t step = 10;
         const uint8_t min = step + 5;
-        const int delay2 = ( delay * step ) / ( alpha - min );
+        const int stepDelay = ( delay * step ) / ( alpha - min );
 
         while ( alpha > min + endAlpha ) {
             ApplyAlpha( top, shadow, alpha );
@@ -195,7 +195,24 @@ namespace fheroes2
             display.render();
 
             alpha -= step;
-            DELAY( delay2 );
+            DELAY( stepDelay );
+        }
+    }
+
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delay, int frameCount )
+    {
+        Display & display = Display::instance();
+        const int stepDelay = delay / frameCount;
+
+        Image shadow = top;
+
+        for ( int i = 0; i < frameCount; ++i ) {
+            ApplyPalette( shadow, paletteId );
+            Copy( shadow, 0, 0, display, pos.x, pos.y, shadow.width(), shadow.height() );
+
+            display.render();
+
+            DELAY( stepDelay );
         }
     }
 
@@ -216,7 +233,7 @@ namespace fheroes2
         uint8_t alpha = 255;
         const uint8_t step = 10;
         const uint8_t min = step + 5;
-        const int delay2 = ( delay * step ) / ( alpha - min );
+        const int stepDelay = ( delay * step ) / ( alpha - min );
 
         while ( alpha > min + endAlpha ) {
             ApplyAlpha( top, shadow, alpha );
@@ -226,7 +243,24 @@ namespace fheroes2
             display.render();
 
             alpha -= step;
-            DELAY( delay2 );
+            DELAY( stepDelay );
+        }
+    }
+
+    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay, int frameCount )
+    {
+        Display & display = Display::instance();
+        Image shadow = top;
+        const int stepDelay = delay / frameCount;
+
+        for ( int i = 0; i < frameCount; ++i ) {
+            ApplyPalette( shadow, paletteId );
+            Copy( shadow, 0, 0, display, offset.x, offset.y, shadow.width(), shadow.height() );
+            Copy( middle, 0, 0, display, middleOffset.x, middleOffset.y, middle.width(), middle.height() );
+
+            display.render();
+
+            DELAY( stepDelay );
         }
     }
 }
