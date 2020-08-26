@@ -56,24 +56,25 @@ namespace
     }
 }
 
-void BuildPath( int from, int target )
+void Pathfinder::buildPath( int from, int target, bool ignoreObjects )
 {
     std::vector<int> path;
-    int currentNode = 709;
-    while ( currentNode != 1900 && currentNode != -1 ) {
-        PathfindingNode & node = searchArray[currentNode];
+    int currentNode = target;
+    while ( currentNode != from && currentNode != -1 ) {
+        PathfindingNode & node = _cache[currentNode];
         path.push_back( currentNode );
         currentNode = node._from;
     }
 }
 
-void RecomputePathfindingCache( int start )
+void Pathfinder::evaluateMap( int start, uint32_t skillLevel )
 {
     const int width = world.w();
     const int height = world.h();
 
-    std::vector<PathfindingNode> searchArray( width * height );
-    searchArray[start] = PathfindingNode( start, -1, 0, false );
+    _cache.clear();
+    _cache.resize( width * height );
+    _cache[start] = PathfindingNode( start, -1, 0 );
 
     std::vector<int> processedNodes;
     processedNodes.push_back( start );
@@ -84,14 +85,13 @@ void RecomputePathfindingCache( int start )
             if ( Maps::isValidDirection( currentNodeIdx, GetDirectionBitmask( direction ) ) ) {
                 const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, GetDirectionBitmask( direction ) );
                 const Maps::Tiles & newTile = world.GetTiles( newIndex );
-                uint32_t moveCost = searchArray[currentNodeIdx]._cost + Maps::Ground::GetPenalty( newTile, 0 );
+                uint32_t moveCost = _cache[currentNodeIdx]._cost + Maps::Ground::GetPenalty( newTile, 0 );
                 if ( newTile.GetPassable() & GetDirectionBitmask( direction, true ) && !newTile.isWater() ) {
-                    if ( searchArray[newIndex]._isOpen || searchArray[newIndex]._cost > moveCost ) {
+                    if ( _cache[newIndex]._index == -1 || _cache[newIndex]._cost > moveCost ) {
                         processedNodes.push_back( newIndex );
-                        searchArray[newIndex]._index = newIndex;
-                        searchArray[newIndex]._from = currentNodeIdx;
-                        searchArray[newIndex]._cost = moveCost;
-                        searchArray[newIndex]._isOpen = false;
+                        _cache[newIndex]._index = newIndex;
+                        _cache[newIndex]._from = currentNodeIdx;
+                        _cache[newIndex]._cost = moveCost;
                     }
                 }
             }

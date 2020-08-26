@@ -39,14 +39,24 @@ namespace
         int _index = -1;
         int _from = -1;
         uint32_t _cost = 0;
-        bool _isOpen = true;
 
         PathfindingNode() {}
-        PathfindingNode( int idx, int node, uint32_t cost, bool isOpen )
+        PathfindingNode( int idx, int node, uint32_t cost )
             : _index( idx )
             , _from( node )
             , _cost( cost )
-            , _isOpen( isOpen )
         {}
+    };
+
+    class Pathfinder
+    {
+    public:
+        Pathfinder() {}
+        void evaluateMap( int start, uint32_t skillLevel );
+        void buildPath( int from, int target, bool ignoreObjects = true );
+
+    private:
+        std::vector<PathfindingNode> _cache;
+        int _pathStart = -1;
     };
 }
