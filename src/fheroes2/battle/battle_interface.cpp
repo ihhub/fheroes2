@@ -4018,7 +4018,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
     LocalEvent & le = LocalEvent::Get();
     Rect area = GetArea();
 
-    area.h -= 36;
+    area.h -= 37;
 
     fheroes2::Image sprite1( area.w, area.h );
     sprite1.reset();
@@ -4060,9 +4060,23 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
             const int16_t offsetX = Rand::Get( -7, 7 );
             const int16_t offsetY = Rand::Get( -7, 7 );
             const Rect initialArea( area.x, area.y, area.w, area.h );
-            const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
+            Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
-            const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            if ( shifted.x < 0 ) {
+                const int32_t offset = -shifted.x;
+                shifted.x = 0;
+                original.x += offset;
+                shifted.w -= offset;
+                shifted.x = 0;
+            }
+            if ( shifted.y < 0 ) {
+                const int32_t offset = -shifted.y;
+                shifted.y = 0;
+                original.y += offset;
+                shifted.h -= offset;
+                shifted.y = 0;
+            }
             fheroes2::Blit( sprite1, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.w, shifted.h );
 
             RedrawPartialFinish();
