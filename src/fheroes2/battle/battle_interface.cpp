@@ -3689,6 +3689,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
 
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
+    _movingUnit = &target;
 
     const uint32_t bloodlustDelay = 1800 / 20;
     // duration is 1900ms
@@ -3700,7 +3701,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
         CheckGlobalEvents( le );
 
         if ( frame < 20 && Game::AnimateCustomDelay( bloodlustDelay ) ) {
-            mixSprite = fheroes2::Sprite( unitSprite );
+            mixSprite = unitSprite;
             fheroes2::AlphaBlit( bloodlustEffect, mixSprite, alpha );
             Redraw();
 
@@ -3711,6 +3712,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
 
     _currentUnit = NULL;
     b_current_sprite = NULL;
+    _movingUnit = NULL;
 }
 
 void Battle::Interface::RedrawActionStoneSpell( Unit & target )
