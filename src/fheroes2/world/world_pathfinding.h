@@ -36,14 +36,12 @@ namespace
 
     struct PathfindingNode
     {
-        int _index = -1;
         int _from = -1;
         uint32_t _cost = 0;
 
         PathfindingNode() {}
-        PathfindingNode( int idx, int node, uint32_t cost )
-            : _index( idx )
-            , _from( node )
+        PathfindingNode( int node, uint32_t cost )
+            : _from( node )
             , _cost( cost )
         {}
     };
@@ -52,7 +50,7 @@ namespace
     {
     public:
         Pathfinder() {}
-        void evaluateMap( int start, uint32_t skillLevel );
+        void evaluateMap( int start, uint32_t skillLevel = 0 );
         void buildPath( int from, int target, bool ignoreObjects = true );
 
     private:

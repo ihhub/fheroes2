@@ -59,11 +59,17 @@ namespace
 void Pathfinder::buildPath( int from, int target, bool ignoreObjects )
 {
     std::vector<int> path;
+
+    // check if we have to re-cache the map (new hero selected, etc)
+    if ( _pathStart != from ) {
+        evaluateMap( from );
+    }
+
+    // trace the path from end point
     int currentNode = target;
     while ( currentNode != from && currentNode != -1 ) {
-        PathfindingNode & node = _cache[currentNode];
         path.push_back( currentNode );
-        currentNode = node._from;
+        currentNode = _cache[currentNode]._from;
     }
 }
 
@@ -74,24 +80,26 @@ void Pathfinder::evaluateMap( int start, uint32_t skillLevel )
 
     _cache.clear();
     _cache.resize( width * height );
-    _cache[start] = PathfindingNode( start, -1, 0 );
+    _cache[start] = PathfindingNode( -1, 0 );
 
-    std::vector<int> processedNodes;
-    processedNodes.push_back( start );
+    std::vector<int> nodesToExplore;
+    nodesToExplore.push_back( start );
     size_t lastProcessedNode = 0;
-    while ( lastProcessedNode != processedNodes.size() ) {
-        const int currentNodeIdx = processedNodes[lastProcessedNode];
+    while ( lastProcessedNode != nodesToExplore.size() ) {
+        const int currentNodeIdx = nodesToExplore[lastProcessedNode];
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
             if ( Maps::isValidDirection( currentNodeIdx, GetDirectionBitmask( direction ) ) ) {
                 const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, GetDirectionBitmask( direction ) );
                 const Maps::Tiles & newTile = world.GetTiles( newIndex );
+
                 uint32_t moveCost = _cache[currentNodeIdx]._cost + Maps::Ground::GetPenalty( newTile, 0 );
                 if ( newTile.GetPassable() & GetDirectionBitmask( direction, true ) && !newTile.isWater() ) {
-                    if ( _cache[newIndex]._index == -1 || _cache[newIndex]._cost > moveCost ) {
-                        processedNodes.push_back( newIndex );
-                        _cache[newIndex]._index = newIndex;
+                    if ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) {
                         _cache[newIndex]._from = currentNodeIdx;
                         _cache[newIndex]._cost = moveCost;
+
+                        // duplicates are allowed if we find a cheaper way there
+                        nodesToExplore.push_back( newIndex );
                     }
                 }
             }
