@@ -1017,16 +1017,16 @@ namespace fheroes2
                     for ( ; imageInX != imageInXEnd; ++imageInX ) {
                         const uint8_t * palette = kb_pal + *imageInX * 3;
 
-                        sumRed += (*palette++);
-                        sumGreen += (*palette++);
-                        sumBlue += (*palette++);
+                        sumRed += ( *palette++ );
+                        sumGreen += ( *palette++ );
+                        sumBlue += ( *palette++ );
                     }
                 }
 
                 const uint32_t roiSize = static_cast<uint32_t>( roiWidth * roiHeight );
 
-                *imageOutX = GetPALColorId( static_cast<uint8_t>( sumRed / roiSize ), static_cast<uint8_t>( sumGreen / roiSize ),
-                                            static_cast<uint8_t>( sumBlue / roiSize ) );
+                *imageOutX
+                    = GetPALColorId( static_cast<uint8_t>( sumRed / roiSize ), static_cast<uint8_t>( sumGreen / roiSize ), static_cast<uint8_t>( sumBlue / roiSize ) );
             }
         }
 

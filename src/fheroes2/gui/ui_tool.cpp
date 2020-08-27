@@ -247,7 +247,8 @@ namespace fheroes2
         }
     }
 
-    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay, int frameCount )
+    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay,
+                                  int frameCount )
     {
         Display & display = Display::instance();
         Image shadow = top;

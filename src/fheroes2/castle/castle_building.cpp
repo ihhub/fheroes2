@@ -1010,7 +1010,6 @@ Rect CastleGetMaxArea( const Castle & castle, const Point & top )
         return res;
     }
 
-
     const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
     res.w = townbkg.width();
     res.h = townbkg.height();
