@@ -1291,17 +1291,10 @@ int Heroes::GetDirection( void ) const
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
-    const u32 limit = maxMovePoints * 5 / 100; // limit ~5 day
 
-    // approximate distance, this restriction calculation
-    if ( ( 4 * maxMovePoints / 100 ) < Maps::GetApproximateDistance( GetIndex(), dst ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, "distance limit" );
-        return 0;
-    }
-
-    Route::Path test( *this );
     // approximate limit, this restriction path finding algorithm
-    uint32_t total = test.Calculate( dst, limit );
+    uint32_t total = world.getDistance( GetIndex(), dst, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );
     if ( total > 0 ) {
         if ( move_point >= total )
             return 1;
@@ -1317,7 +1310,7 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
         return 4;
     }
     else {
-        DEBUG( DBG_GAME, DBG_INFO, "iteration limit: " << limit );
+        DEBUG( DBG_GAME, DBG_INFO, " unreachable point: " << dst );
     }
 
     return 0;

@@ -252,6 +252,7 @@ public:
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
 
+    uint32_t getDistance( int from, int to, uint32_t skill );
     std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );
 
     static u32 GetUniq( void );

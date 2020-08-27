@@ -1037,6 +1037,11 @@ u32 World::GetUniq( void )
     return ++GameStatic::uniq;
 }
 
+uint32_t World::getDistance(int from, int to, uint32_t skill)
+{
+    return _pathfinder.getDistance( from, to, skill );
+}
+
 std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ignoreObjects )
 {
     return _pathfinder.buildPath( from, to, ignoreObjects );

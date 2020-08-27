@@ -61,9 +61,7 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, bool ignoreO
     std::list<Route::Step> path;
 
     // check if we have to re-cache the map (new hero selected, etc)
-    if ( _pathStart != from ) {
-        evaluateMap( from );
-    }
+    reEvaluateIfNeeded( from, 0 );
 
     // trace the path from end point
     int currentNode = target;
@@ -78,10 +76,28 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, bool ignoreO
     return path;
 }
 
-void Pathfinder::evaluateMap( int start, uint32_t skillLevel )
+uint32_t Pathfinder::getDistance(int from, int target, uint8_t skill)
+{
+    reEvaluateIfNeeded( from, skill );
+    return _cache[target]._cost;
+}
+
+bool Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill ) 
+{
+    if ( _pathStart != from || _pathfindingSkill != skill ) {
+        evaluateMap( from, skill );
+        return true;
+    }
+    return false;
+}
+
+void Pathfinder::evaluateMap( int start, uint8_t skill )
 {
     const int width = world.w();
     const int height = world.h();
+
+    _pathStart = start;
+    _pathfindingSkill = skill;
 
     _cache.clear();
     _cache.resize( width * height );
@@ -97,7 +113,7 @@ void Pathfinder::evaluateMap( int start, uint32_t skillLevel )
                 const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, GetDirectionBitmask( direction ) );
                 const Maps::Tiles & newTile = world.GetTiles( newIndex );
 
-                uint32_t moveCost = _cache[currentNodeIdx]._cost + Maps::Ground::GetPenalty( newTile, 0 );
+                uint32_t moveCost = _cache[currentNodeIdx]._cost + Maps::Ground::GetPenalty( newTile, skill );
                 if ( newTile.GetPassable() & GetDirectionBitmask( direction, true ) && !newTile.isWater() ) {
                     if ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) {
                         _cache[newIndex]._from = currentNodeIdx;
