@@ -37,7 +37,7 @@ public:
     void Set( s32, const Artifact & );
     void Reset( void );
 
-    const Surface & GetPuzzleMapSurface( void ) const;
+    const fheroes2::Image & GetPuzzleMapSurface( void ) const;
     const Artifact & GetArtifact( void ) const;
 
 private:
@@ -47,7 +47,7 @@ private:
     void MakeSurface( void );
 
     s32 index;
-    Surface puzzlemap;
+    fheroes2::Image puzzlemap;
     bool isfound;
 };
 

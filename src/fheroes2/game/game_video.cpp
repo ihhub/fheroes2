@@ -21,6 +21,7 @@
 #include "game_video.h"
 #include "cursor.h"
 #include "game.h"
+#include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
 
@@ -35,11 +36,11 @@ namespace Video
         Cursor & cursor = Cursor::Get();
         cursor.Hide();
 
-        Display & display = Display::Get();
-        display.Fill( RGBA() );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        display.fill( 0 );
 
         size_t currentFrame = 0;
-        const Point offset( ( display.GetSize().w - video.width() ) / 2, ( display.GetSize().h - video.height() ) / 2 );
+        const Point offset( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2 );
         bool isFirstFrame = true;
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
@@ -61,8 +62,8 @@ namespace Video
             if ( isFirstFrame || Game::AnimateCustomDelay( delay ) ) {
                 isFirstFrame = false;
 
-                video.getFrames()[currentFrame++].Blit( offset, display );
-                display.Flip();
+                fheroes2::Blit( video.getFrames()[currentFrame++], display, offset.x, offset.y );
+                display.render();
 
                 if ( isLooped && currentFrame >= video.getFrames().size() ) {
                     currentFrame = 0;

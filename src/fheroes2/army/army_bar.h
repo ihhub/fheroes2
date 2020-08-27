@@ -34,8 +34,8 @@ class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
 public:
     ArmyBar( Army *, bool mini, bool ro, bool change = false );
 
-    void RedrawBackground( const Rect &, Surface & );
-    void RedrawItem( ArmyTroop &, const Rect &, bool, Surface & );
+    void RedrawBackground( const Rect &, fheroes2::Image & );
+    void RedrawItem( ArmyTroop &, const Rect &, bool, fheroes2::Image & );
 
     void SetBackground( const Size &, const RGBA & );
     void SetArmy( Army * );
@@ -43,7 +43,7 @@ public:
     bool isValid( void ) const;
 
     void ResetSelected( void );
-    void Redraw( Surface & dstsf = Display::Get() );
+    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
     bool ActionBarSingleClick( const Point &, ArmyTroop &, const Rect & );
     bool ActionBarSingleClick( const Point &, ArmyTroop &, const Rect &, ArmyTroop &, const Rect & );
@@ -59,8 +59,8 @@ public:
 
 protected:
     Army * army;
-    Surface backsf;
-    SpriteMove spcursor;
+    fheroes2::Image backsf;
+    fheroes2::MovableSprite spcursor;
     bool use_mini_sprite;
     bool read_only;
     bool can_change;

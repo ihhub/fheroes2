@@ -92,7 +92,7 @@ void Interface::StatusWindow::SetPos( s32 ox, s32 oy )
     u32 oh = 72;
 
     if ( !Settings::Get().ExtGameHideInterface() ) {
-        oh = Display::Get().h() - oy - BORDERWIDTH;
+        oh = fheroes2::Display::instance().height() - oy - BORDERWIDTH;
     }
 
     BorderWindow::SetPosition( ox, oy, ow, oh );
@@ -107,31 +107,32 @@ void Interface::StatusWindow::SetState( int info )
 void Interface::StatusWindow::Redraw( void )
 {
     const Settings & conf = Settings::Get();
+    const Rect & pos = GetArea();
 
     if ( !conf.ExtGameHideInterface() || conf.ShowStatus() ) {
         if ( conf.ExtGameHideInterface() ) {
-            Display::Get().FillRect( GetArea(), RGBA( 0x51, 0x31, 0x18 ) );
+            fheroes2::Fill( fheroes2::Display::instance(), pos.x, pos.y, pos.w, pos.h, fheroes2::GetColorId( 0x51, 0x31, 0x18 ) );
             BorderWindow::Redraw();
         }
         else
             DrawBackground();
 
         // draw info: Day and Funds and Army
-        const Sprite & ston = AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
-        const Rect & pos = GetArea();
+        const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+        const uint32_t stonHeight = ston.height();
 
         if ( STATUS_AITURN == state )
             DrawAITurns();
-        else if ( STATUS_UNKNOWN != state && pos.h >= ( ston.h() * 3 + 15 ) ) {
+        else if ( STATUS_UNKNOWN != state && pos.h >= ( stonHeight * 3 + 15 ) ) {
             DrawDayInfo();
 
             if ( conf.CurrentColor() & Players::HumanColors() ) {
-                DrawKingdomInfo( ston.h() + 5 );
+                DrawKingdomInfo( stonHeight + 5 );
 
                 if ( state != STATUS_RESOURCE )
-                    DrawArmyInfo( 2 * ston.h() + 10 );
+                    DrawArmyInfo( 2 * stonHeight + 10 );
                 else
-                    DrawResourceInfo( 2 * ston.h() + 10 );
+                    DrawResourceInfo( 2 * stonHeight + 10 );
             }
         }
         else
@@ -180,7 +181,7 @@ void Interface::StatusWindow::DrawKingdomInfo( int oh ) const
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     // sprite all resource
-    AGG::GetICN( ICN::RESSMALL, 0 ).Blit( pos.x + 6, pos.y + 3 + oh );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RESSMALL, 0 ), fheroes2::Display::instance(), pos.x + 6, pos.y + 3 + oh );
 
     // count castle
     Text text( GetString( myKingdom.GetCountCastle() ), Font::SMALL );
@@ -215,7 +216,8 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
 {
     const Rect & pos = GetArea();
 
-    AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON, ( world.GetWeek() - 1 ) % 5 ).Blit( pos.x, pos.y + 1 + oh );
+    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON, ( world.GetWeek() - 1 ) % 5 ),
+                    fheroes2::Display::instance(), pos.x, pos.y + 1 + oh );
 
     std::string message = _( "Month: %{month} Week: %{week}" );
     StringReplace( message, "%{month}", world.GetMonth() );
@@ -262,11 +264,11 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
     TextBox text( message, Font::SMALL, pos.w );
     text.Blit( pos.x, pos.y + 4 + oh );
 
-    const Sprite & spr = AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
-    spr.Blit( pos.x + ( pos.w - spr.w() ) / 2, pos.y + 6 + oh + text.h() );
+    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
+    fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.w - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
 
     text.Set( GetString( countLastResource ), Font::SMALL, pos.w );
-    text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + oh + text.h() * 2 + spr.h() + 8 );
+    text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + oh + text.h() * 2 + spr.height() + 8 );
 }
 
 void Interface::StatusWindow::DrawArmyInfo( int oh ) const
@@ -292,13 +294,15 @@ void Interface::StatusWindow::DrawAITurns( void ) const
         // restore background
         DrawBackground();
 
-        const Sprite & glass = AGG::GetICN( ICN::HOURGLAS, 0 );
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Sprite & glass = fheroes2::AGG::GetICN( ICN::HOURGLAS, 0 );
         const Rect & pos = GetArea();
 
-        s32 dst_x = pos.x + ( pos.w - glass.w() ) / 2;
-        s32 dst_y = pos.y + ( pos.h - glass.h() ) / 2;
+        s32 dst_x = pos.x + ( pos.w - glass.width() ) / 2;
+        s32 dst_y = pos.y + ( pos.h - glass.height() ) / 2;
 
-        glass.Blit( dst_x, dst_y );
+        fheroes2::Blit( glass, display, dst_x, dst_y );
 
         int color_index = 0;
 
@@ -325,62 +329,57 @@ void Interface::StatusWindow::DrawAITurns( void ) const
             return;
         }
 
-        const Sprite & crest = AGG::GetICN( ICN::BRCREST, color_index );
+        const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::BRCREST, color_index );
 
         dst_x += 2;
         dst_y += 2;
 
-        crest.Blit( dst_x, dst_y );
+        fheroes2::Blit( crest, display, dst_x, dst_y );
 
-        const Sprite & sand = AGG::GetICN( ICN::HOURGLAS, 1 + ( turn_progress % 10 ) );
+        const fheroes2::Sprite & sand = fheroes2::AGG::GetICN( ICN::HOURGLAS, 1 + ( turn_progress % 10 ) );
 
-        dst_x += ( glass.w() - sand.w() - sand.x() - 3 );
+        dst_x += ( glass.width() - sand.width() - sand.x() - 3 );
         dst_y += sand.y();
 
-        sand.Blit( dst_x, dst_y );
-
-        // animation sand
-        //
-        // sprites ICN::HOURGLAS, 11, 30
-        //
+        fheroes2::Blit( sand, display, dst_x, dst_y );
     }
 }
 
 void Interface::StatusWindow::DrawBackground( void ) const
 {
-    Display & display = Display::Get();
-    const Sprite & icnston = AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const Rect & pos = GetArea();
 
-    if ( !Settings::Get().ExtGameHideInterface() && display.h() - BORDERWIDTH - icnston.h() > pos.y ) {
+    if ( !Settings::Get().ExtGameHideInterface() && display.height() - BORDERWIDTH - icnston.height() > pos.y ) {
         // top
         const uint32_t startY = 11;
         const uint32_t copyHeight = 46;
-        Rect srcrt( 0, 0, icnston.w(), startY );
+        Rect srcrt( 0, 0, icnston.width(), startY );
         Point dstpt( pos.x, pos.y );
-        icnston.Blit( srcrt, dstpt );
+        fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
 
         // middle
-        srcrt = Rect( 0, startY, icnston.w(), copyHeight );
-        const uint32_t count = ( pos.h - ( icnston.h() - copyHeight ) ) / copyHeight;
+        srcrt = Rect( 0, startY, icnston.width(), copyHeight );
+        const uint32_t count = ( pos.h - ( icnston.height() - copyHeight ) ) / copyHeight;
         for ( uint32_t i = 0; i < count; ++i ) {
             dstpt = Point( pos.x, pos.y + copyHeight * i + startY );
-            icnston.Blit( srcrt, dstpt );
+            fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
         }
 
         // botom
-        srcrt = Rect( 0, startY, icnston.w(), icnston.h() - startY );
-        dstpt = Point( pos.x, pos.y + pos.h - ( icnston.h() - startY ) );
-        icnston.Blit( srcrt, dstpt );
+        srcrt = Rect( 0, startY, icnston.width(), icnston.height() - startY );
+        dstpt = Point( pos.x, pos.y + pos.h - ( icnston.height() - startY ) );
+        fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
     }
     else {
-        icnston.Blit( pos.x, pos.y );
+        fheroes2::Blit( icnston, display, pos.x, pos.y );
     }
 }
 
 void Interface::StatusWindow::QueueEventProcessing( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Rect & drawnArea = GetArea();
@@ -394,12 +393,12 @@ void Interface::StatusWindow::QueueEventProcessing( void )
         NextState();
         Redraw();
         cursor.Show();
-        display.Flip();
+        display.render();
     }
     if ( le.MousePressRight( GetRect() ) ) {
-        const Sprite & ston = AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+        const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
         const Rect & pos = GetArea();
-        const bool isFullInfo = STATUS_UNKNOWN != state && pos.h >= ( ston.h() * 3 + 15 );
+        const bool isFullInfo = STATUS_UNKNOWN != state && pos.h >= ( ston.height() * 3 + 15 );
         if ( isFullInfo ) {
             Dialog::Message( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ), Font::BIG );
         }
@@ -420,5 +419,5 @@ void Interface::StatusWindow::RedrawTurnProgress( u32 v )
     Cursor::Get().Hide();
     interface.Redraw();
     Cursor::Get().Show();
-    Display::Get().Flip();
+    fheroes2::Display::instance().render();
 }

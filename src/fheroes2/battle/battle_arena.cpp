@@ -288,17 +288,17 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     //
     if ( interface ) {
         Cursor & cursor = Cursor::Get();
-        Display & display = Display::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         cursor.Hide();
         cursor.SetThemes( Cursor::WAR_NONE );
 
         if ( conf.ExtGameUseFade() )
-            display.Fade();
+            fheroes2::FadeDisplay();
 
         interface->Redraw();
         cursor.Show();
-        display.Flip();
+        display.render();
 
         // pause for play M82::PREBATTL
         if ( conf.Sound() )

@@ -165,7 +165,7 @@ namespace Maps
         u32 TileSpriteIndex( void ) const;
         u32 TileSpriteShape( void ) const;
 
-        Surface GetTileSurface( void ) const;
+        const fheroes2::Image & GetTileSurface( void ) const;
 
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog ) const;
@@ -194,16 +194,16 @@ namespace Maps
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
-        void RedrawTile( Surface & ) const;
-        static void RedrawEmptyTile( Surface & dst, const Point & mp );
-        void RedrawBottom( Surface & dst, bool skipObjs = false ) const;
-        void RedrawBottom4Hero( Surface & ) const;
-        void RedrawTop( Surface & dst, bool skipObjs = false ) const;
-        void RedrawTop4Hero( Surface &, bool skip_ground ) const;
-        void RedrawObjects( Surface & ) const;
-        void RedrawFogs( Surface &, int ) const;
-        void RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs = false ) const;
-        void RedrawPassable( Surface & ) const;
+        void RedrawTile( fheroes2::Image & ) const;
+        static void RedrawEmptyTile( fheroes2::Image & dst, const Point & mp );
+        void RedrawBottom( fheroes2::Image & dst, bool skipObjs = false ) const;
+        void RedrawBottom4Hero( fheroes2::Image & ) const;
+        void RedrawTop( fheroes2::Image & dst, bool skipObjs = false ) const;
+        void RedrawTop4Hero( fheroes2::Image &, bool skip_ground ) const;
+        void RedrawObjects( fheroes2::Image & ) const;
+        void RedrawFogs( fheroes2::Image &, int ) const;
+        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool skipObjs = false ) const;
+        void RedrawPassable( fheroes2::Image & ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
@@ -269,9 +269,8 @@ namespace Maps
         void RemoveBarrierSprite( void );
         bool isLongObject( int direction );
 
-        void RedrawBoat( Surface & ) const;
-        void RedrawMonster( Surface & ) const;
-        void RedrawMapObject( Surface & dst, int icn, uint32_t index, const Point & mapPoint, bool cycle = false, int offsetX = 0, int offsetY = 0 ) const;
+        void RedrawBoat( fheroes2::Image & ) const;
+        void RedrawMonster( fheroes2::Image & ) const;
 
         void QuantitySetVariant( int );
         void QuantitySetExt( int );

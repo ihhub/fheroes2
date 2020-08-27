@@ -22,12 +22,12 @@
 
 #include "game.h"
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_io.h"
 #include "gamedefs.h"
 #include "mus.h"
+#include "screen.h"
 #include "settings.h"
 
 int Game::LoadCampain( void )
@@ -45,56 +45,6 @@ int Game::LoadMulti( void )
 int Game::LoadGame( void )
 {
     return LOADSTANDARD;
-    /*
-        Mixer::Pause();
-        AGG::PlayMusic(MUS::MAINMENU);
-
-        // cursor
-        Cursor & cursor = Cursor::Get();
-        cursor.Hide();
-        cursor.SetThemes(cursor.POINTER);
-
-        Display & display = Display::Get();
-
-        // image background
-        const Sprite &back = AGG::GetICN(ICN::HEROES, 0);
-        const Point top((display.w() - back.w()) / 2, (display.h() - back.h()) / 2);
-        back.Blit(top);
-
-        const Sprite &panel = AGG::GetICN(ICN::REDBACK, 0);
-        panel.Blit(top.x + 405, top.y + 5);
-
-        LocalEvent & le = LocalEvent::Get();
-
-        Button buttonStandartGame(top.x + 455, top.y + 45, ICN::BTNNEWGM, 0, 1);
-        Button buttonCampainGame(top.x + 455, top.y + 110, ICN::BTNNEWGM, 2, 3);
-        Button buttonMultiGame(top.x + 455, top.y + 175, ICN::BTNNEWGM, 4, 5);
-        Button buttonCancelGame(top.x + 455, top.y + 375, ICN::BTNNEWGM, 6, 7);
-
-        buttonStandartGame.Draw();
-        buttonCampainGame.Draw();
-        buttonMultiGame.Draw();
-        buttonCancelGame.Draw();
-
-        cursor.Show();
-        display.Flip();
-
-        // loadgame loop
-        while(le.HandleEvents())
-        {
-        le.MousePressLeft(buttonStandartGame) ? buttonStandartGame.PressDraw() : buttonStandartGame.ReleaseDraw();
-        le.MousePressLeft(buttonCampainGame) ? buttonCampainGame.PressDraw() : buttonCampainGame.ReleaseDraw();
-        le.MousePressLeft(buttonMultiGame) ? buttonMultiGame.PressDraw() : buttonMultiGame.ReleaseDraw();
-        le.MousePressLeft(buttonCancelGame) ? buttonCancelGame.PressDraw() : buttonCancelGame.ReleaseDraw();
-
-        if(HotKeyPress(EVENT_BUTTON_STANDARD) || le.MouseClickLeft(buttonStandartGame)) return LOADSTANDARD;
-        if(HotKeyPress(EVENT_BUTTON_CAMPAIN) || le.MouseClickLeft(buttonCampainGame)) return LOADCAMPAIN;
-        if(HotKeyPress(EVENT_BUTTON_MULTI) || le.MouseClickLeft(buttonMultiGame)) return LOADMULTI;
-        if(HotKeyPress(EVENT_DEFAULT_EXIT) || le.MouseClickLeft(buttonCancelGame)) return MAINMENU;
-        }
-
-        return QUITGAME;
-    */
 }
 
 int Game::LoadStandard( void )
@@ -106,16 +56,13 @@ int Game::LoadStandard( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Display & display = Display::Get();
-
-    AGG::RegisterScalableICN( ICN::HEROES );
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    back.Blit( Point( 0, 0 ) );
+    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     std::string file = Dialog::SelectFileLoad();
     if ( file.empty() || !Game::Load( file ) )

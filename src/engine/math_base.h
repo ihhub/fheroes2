@@ -90,6 +90,57 @@ namespace fheroes2
         return PointBase2D<_Type>( static_cast<_Type>( value ) * point.x, static_cast<_Type>( value ) * point.y );
     }
 
+    template <typename _Type>
+    struct SizeBase2D
+    {
+        SizeBase2D( _Type _width = 0, _Type _height = 0 )
+            : width( _width )
+            , height( _height )
+        {}
+
+        bool operator==( const SizeBase2D & size ) const
+        {
+            return isEqual( width, size.width ) && isEqual( height, size.height );
+        }
+
+        bool operator!=( const SizeBase2D & size ) const
+        {
+            return !( *this == size );
+        }
+
+        SizeBase2D & operator+=( const SizeBase2D & size )
+        {
+            width += size.width;
+            height += size.height;
+            return *this;
+        }
+
+        SizeBase2D & operator-=( const SizeBase2D & size )
+        {
+            width -= size.width;
+            height -= size.height;
+            return *this;
+        }
+
+        SizeBase2D operator+( const SizeBase2D & size ) const
+        {
+            return SizeBase2D( width + size.width, height + size.height );
+        }
+
+        SizeBase2D operator-( const SizeBase2D & size ) const
+        {
+            return SizeBase2D( width - size.width, height - size.height );
+        }
+
+        SizeBase2D operator*( const _Type & value ) const
+        {
+            return SizeBase2D( value * width, value * height );
+        }
+
+        _Type width;
+        _Type height;
+    };
+
     template <typename _TypePoint, typename _TypeSize>
     struct RectBase2D
     {
@@ -98,6 +149,13 @@ namespace fheroes2
             , y( _y )
             , width( _width )
             , height( _height )
+        {}
+
+        RectBase2D( const PointBase2D<_TypePoint> & point, const SizeBase2D<_TypeSize> & size )
+            : x( point.x )
+            , y( point.y )
+            , width( size.width )
+            , height( size.height )
         {}
 
         bool operator==( const RectBase2D & rect ) const
@@ -141,5 +199,6 @@ namespace fheroes2
     };
 
     typedef PointBase2D<int32_t> Point;
+    typedef SizeBase2D<uint32_t> Size;
     typedef RectBase2D<int32_t, uint32_t> Rect;
 }

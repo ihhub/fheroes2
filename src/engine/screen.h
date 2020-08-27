@@ -23,18 +23,24 @@
 
 namespace fheroes2
 {
+    class Cursor;
     class Display;
 
     class BaseRenderEngine
     {
     public:
+        friend class Cursor;
         friend class Display;
         virtual ~BaseRenderEngine() {}
 
-        virtual void toggleFullScreen() {}
+        virtual void toggleFullScreen()
+        {
+            _isFullScreen = !_isFullScreen;
+        }
+
         virtual bool isFullScreen() const
         {
-            return false;
+            return _isFullScreen;
         }
 
         virtual std::vector<std::pair<int, int> > getAvailableResolutions() const
@@ -42,8 +48,14 @@ namespace fheroes2
             return std::vector<std::pair<int, int> >();
         }
 
+        virtual void setTitle( const std::string & ) {}
+
+        virtual void setIcon( const Image & ) {}
+
     protected:
-        BaseRenderEngine() {}
+        BaseRenderEngine()
+            : _isFullScreen( false )
+        {}
 
         virtual void clear() {}
         virtual void render( const Display & ) {}
@@ -52,7 +64,18 @@ namespace fheroes2
             return false;
         }
 
+        virtual bool isMouseCursorActive() const
+        {
+            return false;
+        }
+
+        // to support color cycling we need to update palette
+        virtual void updatePalette( const std::vector<uint8_t> & ) {}
+
         void linkRenderSurface( uint8_t * surface ) const; // declaration of this method is in source file
+
+    private:
+        bool _isFullScreen;
     };
 
     class Display : public Image
@@ -71,26 +94,32 @@ namespace fheroes2
 
         void render(); // render the image on screen
 
-        virtual void resize( uint32_t width_, uint32_t height_ );
+        virtual void resize( int32_t width_, int32_t height_ ) override;
+        bool isDefaultSize() const;
 
-        typedef void ( *PreRenderProcessing )( Image & display );
-        void subscribe( PreRenderProcessing preprocessing );
+        // this function must return true if new palette has been generated
+        typedef bool ( *PreRenderProcessing )( std::vector<uint8_t> & palette );
+        typedef void ( *PostRenderProcessing )();
+        void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing );
 
         // For 8-bit mode we return a pointer to direct surface which we draw on screen
-        virtual uint8_t * image();
-        virtual const uint8_t * image() const;
+        virtual uint8_t * image() override;
+        virtual const uint8_t * image() const override;
 
         BaseRenderEngine * engine();
 
     private:
         BaseRenderEngine * _engine;
         PreRenderProcessing _preprocessing;
+        PostRenderProcessing _postprocessing;
 
         void linkRenderSurface( uint8_t * surface ); // only for cases of direct drawing on rendered 8-bit image
 
         uint8_t * _renderSurface;
 
         Display();
+
+        void _renderFrame(); // prepare and render a frame
     };
 
     class Cursor : public Sprite
@@ -102,6 +131,8 @@ namespace fheroes2
 
         void show( bool enable );
         bool isVisible() const;
+
+        bool isFocusActive() const;
 
     private:
         Cursor();

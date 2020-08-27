@@ -24,6 +24,26 @@
 
 #include "gamedefs.h"
 
+class SpritePos : public Surface
+{
+public:
+    SpritePos();
+    SpritePos( const Surface &, const Point & );
+
+    void SetSurface( const Surface & );
+    void SetPos( const Point & );
+
+    void Reset( void );
+
+    const Point & GetPos( void ) const;
+    Rect GetArea( void ) const;
+
+    u32 GetMemoryUsage( void ) const;
+
+protected:
+    Point pos;
+};
+
 class Sprite : public SpritePos
 {
 public:

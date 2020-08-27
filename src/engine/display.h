@@ -52,7 +52,6 @@ public:
     void SetIcons( Surface & );
 
     void Flip( void );
-    void Present( void );
     void Clear( void );
     void ToggleFullScreen( void );
     bool IsFullScreen() const;
@@ -71,12 +70,6 @@ public:
 
     Surface GetSurface( void ) const;
     Surface GetSurface( const Rect & rt ) const;
-
-    bool isMouseFocusActive() const;
-
-    static bool isRedrawRequired(); // in case of no explicit redrawing we must redraw at least once in a second
-
-    static std::vector<std::pair<int, int> > GetAvailableResolutions();
 
 protected:
     friend class Texture;

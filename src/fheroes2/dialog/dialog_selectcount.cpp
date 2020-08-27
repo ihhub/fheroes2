@@ -21,24 +21,31 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 
 namespace
 {
-    void SwitchMaxMinButtons( Button & minButton, Button & maxButton, uint32_t currentValue, uint32_t maximumValue )
+    void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t maximumValue )
     {
         const bool isMaxValue = ( currentValue >= maximumValue );
 
-        maxButton.SetDisable( isMaxValue );
-        minButton.SetDisable( !isMaxValue );
-        maxButton.SetVisible( !isMaxValue );
-        minButton.SetVisible( isMaxValue );
+        if ( isMaxValue ) {
+            minButton.show();
+            maxButton.hide();
+        }
+        else {
+            minButton.hide();
+            maxButton.show();
+        }
+
+        minButton.draw();
+        maxButton.draw();
     }
 }
 
@@ -56,8 +63,8 @@ public:
         if ( vcur > vmax || vcur < vmin )
             vcur = vmin;
 
-        btnUp.SetSprite( ICN::TOWNWIND, 5, 6 );
-        btnDn.SetSprite( ICN::TOWNWIND, 7, 8 );
+        btnUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
+        btnDn.setICNInfo( ICN::TOWNWIND, 7, 8 );
 
         pos.w = 90;
         pos.h = 30;
@@ -82,8 +89,8 @@ public:
     {
         pos = pt;
 
-        btnUp.SetPos( pt.x + 70, pt.y );
-        btnDn.SetPos( pt.x + 70, pt.y + 16 );
+        btnUp.setPosition( pt.x + 70, pt.y );
+        btnDn.setPosition( pt.x + 70, pt.y + 16 );
     }
 
     u32 operator()( void ) const
@@ -93,30 +100,31 @@ public:
 
     void Redraw( void )
     {
-        const Sprite & sprite_edit = AGG::GetICN( ICN::TOWNWIND, 4 );
-        sprite_edit.Blit( pos.x, pos.y + 4 );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Sprite & sprite_edit = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
+        fheroes2::Blit( sprite_edit, display, pos.x, pos.y + 4 );
 
         Text text( GetString( vcur ), Font::BIG );
-        text.Blit( pos.x + ( sprite_edit.w() - text.w() ) / 2, pos.y + 5 );
+        text.Blit( pos.x + ( sprite_edit.width() - text.w() ) / 2, pos.y + 5 );
 
-        btnUp.Draw();
-        btnDn.Draw();
+        btnUp.draw();
+        btnDn.draw();
     }
 
     bool QueueEventProcessing( void )
     {
         LocalEvent & le = LocalEvent::Get();
 
-        le.MousePressLeft( btnUp ) ? btnUp.PressDraw() : btnUp.ReleaseDraw();
-        le.MousePressLeft( btnDn ) ? btnDn.PressDraw() : btnDn.ReleaseDraw();
+        le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
+        le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp( pos ) || le.MouseClickLeft( btnUp ) ) && vcur < vmax ) {
+        if ( ( le.MouseWheelUp( pos ) || le.MouseClickLeft( btnUp.area() ) ) && vcur < vmax ) {
             vcur += vcur + step <= vmax ? step : vmax - vcur;
             return true;
         }
         else
             // down
-            if ( ( le.MouseWheelDn( pos ) || le.MouseClickLeft( btnDn ) ) && vmin < vcur ) {
+            if ( ( le.MouseWheelDn( pos ) || le.MouseClickLeft( btnDn.area() ) ) && vmin < vcur ) {
             vcur -= vmin + vcur >= step ? step : vcur;
             return true;
         }
@@ -132,13 +140,13 @@ protected:
 
     Rect pos;
 
-    Button btnUp;
-    Button btnDn;
+    fheroes2::Button btnUp;
+    fheroes2::Button btnDn;
 };
 
 bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cur, int step )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -157,8 +165,8 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     sel.SetPos( Point( pos.x + 80, pos.y + 30 ) );
     sel.Redraw();
 
-    ButtonGroups btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.GetArea().x, box.GetArea().y, box.GetArea().w, box.GetArea().h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     text.Set( "MAX", Font::SMALL );
     const Rect rectMax( pos.x + 173, pos.y + 38, text.w(), text.h() );
@@ -168,7 +176,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
 
     bool redraw_count = false;
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     int result = Dialog::ZERO;
@@ -190,12 +198,12 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
             cursor.Hide();
             sel.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
 
             redraw_count = false;
         }
 
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
     }
 
     cur = result == Dialog::OK ? sel() : 0;
@@ -207,7 +215,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 {
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
     int oldcursor = cursor.Themes();
@@ -220,9 +228,9 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
     Point dst_pt;
-    const Sprite & sprite = AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    FrameBox box( 10 + textbox.h() + 10 + sprite.h(), OK | CANCEL );
+    FrameBox box( 10 + textbox.h() + 10 + sprite.height(), OK | CANCEL );
     const Rect & box_rt = box.GetArea();
 
     // text
@@ -231,45 +239,49 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     textbox.Blit( dst_pt );
 
     dst_pt.y = box_rt.y + 10 + textbox.h() + 10;
-    dst_pt.x = box_rt.x + ( box_rt.w - sprite.w() ) / 2;
-    sprite.Blit( dst_pt, display );
-    const Rect text_rt( dst_pt.x, dst_pt.y, sprite.w(), sprite.h() );
+    dst_pt.x = box_rt.x + ( box_rt.w - sprite.width() ) / 2;
+    fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
+    const Rect text_rt( dst_pt.x, dst_pt.y, sprite.width(), sprite.height() );
 
     Text text( "_", Font::BIG );
-    sprite.Blit( text_rt, display );
-    text.Blit( dst_pt.x + ( sprite.w() - text.w() ) / 2, dst_pt.y - 1 );
+    fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
+    text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
-    Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.w - AGG::GetICN( system, 3 ).w();
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 3 ).h();
-    Button buttonCancel( dst_pt.x, dst_pt.y, system, 3, 4 );
+    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, system, 3, 4 );
 
-    buttonOk.SetDisable( res.empty() );
-    buttonOk.Draw();
-    buttonCancel.Draw();
+    if ( res.empty() )
+        buttonOk.disable();
+    else
+        buttonOk.enable();
+
+    buttonOk.draw();
+    buttonCancel.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
 
     // message loop
     while ( le.HandleEvents() ) {
-        buttonOk.isEnable() && le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
-        le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+        buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         if ( Settings::Get().PocketPC() && le.MousePressLeft( text_rt ) ) {
             PocketPC::KeyboardDialog( res );
             redraw = true;
         }
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || ( buttonOk.isEnable() && le.MouseClickLeft( buttonOk ) ) )
+        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) )
             break;
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel ) ) {
+        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             res.clear();
             break;
         }
@@ -279,17 +291,20 @@ bool Dialog::InputString( const std::string & header, std::string & res )
         }
 
         if ( redraw ) {
-            buttonOk.SetDisable( res.empty() );
-            buttonOk.Draw();
+            if ( res.empty() )
+                buttonOk.disable();
+            else
+                buttonOk.enable();
+            buttonOk.draw();
 
             text.Set( InsertString( res, charInsertPos, "_" ) );
 
-            if ( text.w() < sprite.w() - 24 ) {
+            if ( text.w() < sprite.width() - 24 ) {
                 cursor.Hide();
-                sprite.Blit( text_rt, display );
+                fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
                 text.Blit( text_rt.x + ( text_rt.w - text.w() ) / 2, text_rt.y - 1 );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
             redraw = false;
         }
@@ -303,7 +318,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
 int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -325,8 +340,10 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     sel.SetPos( Point( pos.x + 70, pos.y + 30 ) );
     sel.Redraw();
 
-    SpriteMove ssp;
-    Surface sp3, sp4, sp5;
+    fheroes2::MovableSprite ssp;
+    fheroes2::Image sp3;
+    fheroes2::Image sp4;
+    fheroes2::Image sp5;
 
     std::vector<Rect> vrts( 3 );
 
@@ -339,84 +356,87 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
         break;
 
     case 3:
-        sp3 = AGG::GetICN( ICN::REQUESTS, 22 );
-        rt3 = Rect( center - sp3.w() / 2, pos.y + 95, sp3.w(), sp3.h() );
+        sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
+        rt3 = Rect( center - sp3.width() / 2, pos.y + 95, sp3.width(), sp3.height() );
         break;
 
     case 4:
-        sp3 = AGG::GetICN( ICN::REQUESTS, 22 );
-        sp4 = AGG::GetICN( ICN::REQUESTS, 23 );
-        rt3 = Rect( center - 5 - sp3.w(), pos.y + 95, sp3.w(), sp3.h() );
-        rt4 = Rect( center + 5, pos.y + 95, sp4.w(), sp4.h() );
+        sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
+        sp4 = fheroes2::AGG::GetICN( ICN::REQUESTS, 23 );
+        rt3 = Rect( center - 5 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
+        rt4 = Rect( center + 5, pos.y + 95, sp4.width(), sp4.height() );
         break;
 
     case 5:
-        sp3 = AGG::GetICN( ICN::REQUESTS, 22 );
-        sp4 = AGG::GetICN( ICN::REQUESTS, 23 );
-        sp5 = AGG::GetICN( ICN::REQUESTS, 24 );
-        rt3 = Rect( center - sp3.w() / 2 - 10 - sp3.w(), pos.y + 95, sp3.w(), sp3.h() );
-        rt4 = Rect( center - sp4.w() / 2, pos.y + 95, sp4.w(), sp4.h() );
-        rt5 = Rect( center + sp5.w() / 2 + 10, pos.y + 95, sp5.w(), sp5.h() );
+        sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
+        sp4 = fheroes2::AGG::GetICN( ICN::REQUESTS, 23 );
+        sp5 = fheroes2::AGG::GetICN( ICN::REQUESTS, 24 );
+        rt3 = Rect( center - sp3.width() / 2 - 10 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
+        rt4 = Rect( center - sp4.width() / 2, pos.y + 95, sp4.width(), sp4.height() );
+        rt5 = Rect( center + sp5.width() / 2 + 10, pos.y + 95, sp5.width(), sp5.height() );
         break;
     }
 
-    if ( sp3.isValid() ) {
+    if ( !sp3.empty() ) {
         text.Set( _( "Fast separation into slots:" ), Font::BIG );
         text.Blit( center - text.w() / 2, pos.y + 65 );
 
-        sp3.Blit( rt3, display );
-        if ( sp4.isValid() )
-            sp4.Blit( rt4, display );
-        if ( sp5.isValid() )
-            sp5.Blit( rt5, display );
+        fheroes2::Blit( sp3, display, rt3.x, rt3.y );
 
-        ssp.Set( sp3.w(), sp3.h(), true );
-        ssp.DrawBorder( RGBA( 0xC0, 0x2C, 0 ) );
+        if ( !sp4.empty() )
+            fheroes2::Blit( sp4, display, rt4.x, rt4.y );
+        if ( !sp5.empty() )
+            fheroes2::Blit( sp5, display, rt5.x, rt5.y );
+
+        ssp.hide();
+        ssp.resize( sp3.width(), sp3.height() );
+        ssp.reset();
+        fheroes2::DrawBorder( ssp, fheroes2::GetColorId( 0xC0, 0x2C, 0 ) );
     }
 
-    ButtonGroups btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.GetArea().x, box.GetArea().y, box.GetArea().w, box.GetArea().h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     const uint32_t maximumAcceptedValue = savelast ? max : max - 1;
 
     const Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
-    Button buttonMax;
-    Button buttonMin;
-    buttonMax.SetPos( minMaxButtonOffset );
-    buttonMin.SetPos( minMaxButtonOffset );
+    fheroes2::ButtonSprite buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y );
+    fheroes2::ButtonSprite buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y );
 
     const Rect buttonArea( 5, 0, 61, 25 );
-    buttonMax.SetSprite( AGG::GetICN( ICN::RECRUIT, 4 ).GetSurface( buttonArea ), AGG::GetICN( ICN::RECRUIT, 5 ).GetSurface( buttonArea ) );
-    buttonMin.SetSprite( AGG::GetICN( ICN::BTNMIN, 0 ).GetSurface( buttonArea ), AGG::GetICN( ICN::BTNMIN, 1 ).GetSurface( buttonArea ) );
+    buttonMax.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
+                         fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ) );
+    buttonMin.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::BTNMIN, 0 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
+                         fheroes2::Crop( fheroes2::AGG::GetICN( ICN::BTNMIN, 1 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ) );
 
     SwitchMaxMinButtons( buttonMin, buttonMax, cur, maximumAcceptedValue );
 
     LocalEvent & le = LocalEvent::Get();
 
-    bool redraw_count = true;
+    bool redraw_count = false;
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     int bres = Dialog::ZERO;
     while ( bres == Dialog::ZERO && le.HandleEvents() ) {
         if ( buttonMax.isVisible() )
-            le.MousePressLeft( buttonMax ) ? buttonMax.PressDraw() : buttonMax.ReleaseDraw();
+            le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         if ( buttonMin.isVisible() )
-            le.MousePressLeft( buttonMin ) ? buttonMin.PressDraw() : buttonMin.ReleaseDraw();
+            le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
 
         if ( PressIntKey( max, cur ) ) {
             sel.SetCur( cur );
             redraw_count = true;
         }
-        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax ) ) {
-            le.MousePressLeft( buttonMax ) ? buttonMax.PressDraw() : buttonMax.ReleaseDraw();
+        else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
+            le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
             cur = maximumAcceptedValue;
             sel.SetCur( maximumAcceptedValue );
             redraw_count = true;
         }
-        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin ) ) {
-            le.MousePressLeft( buttonMin ) ? buttonMin.PressDraw() : buttonMin.ReleaseDraw();
+        else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
+            le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
             cur = min;
             sel.SetCur( min );
             redraw_count = true;
@@ -424,35 +444,36 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
         else if ( sel.QueueEventProcessing() )
             redraw_count = true;
 
-        if ( ssp.isValid() )
+        if ( !ssp.empty() )
             for ( std::vector<Rect>::const_iterator it = vrts.begin(); it != vrts.end(); ++it ) {
                 if ( le.MouseClickLeft( *it ) ) {
                     cursor.Hide();
-                    ssp.Move( *it );
+                    ssp.setPosition( it->x, it->y );
+                    ssp.show();
                     cursor.Show();
-                    display.Flip();
+                    display.render();
                 }
             }
 
         if ( redraw_count ) {
             SwitchMaxMinButtons( buttonMin, buttonMax, cur, maximumAcceptedValue );
             cursor.Hide();
-            if ( ssp.isValid() )
-                ssp.Hide();
+            if ( !ssp.empty() )
+                ssp.hide();
             sel.Redraw();
 
             if ( buttonMax.isVisible() )
-                buttonMax.Draw();
+                buttonMax.draw();
             if ( buttonMin.isVisible() )
-                buttonMin.Draw();
+                buttonMin.draw();
 
             cursor.Show();
-            display.Flip();
+            display.render();
 
             redraw_count = false;
         }
 
-        bres = btnGroups.QueueEventProcessing();
+        bres = btnGroups.processEvents();
     }
 
     int result = 0;
@@ -460,8 +481,8 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     if ( bres == Dialog::OK ) {
         cur = sel();
 
-        if ( ssp.isVisible() ) {
-            const Rect & rt = ssp.GetArea();
+        if ( !ssp.isHidden() ) {
+            const Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );
 
             if ( rt == rt3 )
                 result = 3;

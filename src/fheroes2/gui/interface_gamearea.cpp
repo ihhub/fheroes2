@@ -66,10 +66,12 @@ Rect Interface::GameArea::RectFixed( Point & dst, int rw, int rh ) const
 
 void Interface::GameArea::Build( void )
 {
+    const fheroes2::Display & display = fheroes2::Display::instance();
+
     if ( Settings::Get().ExtGameHideInterface() )
-        SetAreaPosition( 0, 0, Display::Get().w(), Display::Get().h() );
+        SetAreaPosition( 0, 0, display.width(), display.height() );
     else
-        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, Display::Get().w() - RADARWIDTH - 3 * BORDERWIDTH, Display::Get().h() - 2 * BORDERWIDTH );
+        SetAreaPosition( BORDERWIDTH, BORDERWIDTH, display.width() - RADARWIDTH - 3 * BORDERWIDTH, display.height() - 2 * BORDERWIDTH );
 }
 
 void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
@@ -101,48 +103,22 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
     _setCenterToTile( Point( world.w() / 2, world.h() / 2 ) );
 }
 
-void Interface::GameArea::UpdateCyclingPalette( int frame )
-{
-    const std::vector<uint8_t> & colorIndexes = PAL::GetCyclingPalette( frame );
-    const std::vector<uint32_t> & rgbColors = PAL::GetRGBColors();
-
-    if ( colorIndexes.size() == rgbColors.size() ) {
-        PAL::SetCustomSDLPalette( colorIndexes );
-
-        _cyclingRGBPalette.resize( colorIndexes.size() );
-        for ( size_t i = 0; i < colorIndexes.size(); ++i )
-            _cyclingRGBPalette[i] = rgbColors[colorIndexes[i]];
-
-        // reset cache as we'll need to re-color tiles
-        _spriteCache.clear();
-    }
-}
-
-const std::vector<uint32_t> & Interface::GameArea::GetCyclingRGBPalette() const
-{
-    return _cyclingRGBPalette;
-}
-
-MapObjectSprite & Interface::GameArea::GetSpriteCache()
-{
-    return _spriteCache;
-}
-
-void Interface::GameArea::BlitOnTile( Surface & dst, const Sprite & src, const Point & mp ) const
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp ) const
 {
     BlitOnTile( dst, src, src.x(), src.y(), mp );
 }
 
-void Interface::GameArea::BlitOnTile( Surface & dst, const Surface & src, s32 ox, s32 oy, const Point & mp ) const
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip, uint8_t alpha ) const
 {
     Point dstpt = GetRelativeTilePosition( mp ) + Point( ox, oy );
 
-    if ( _windowROI & Rect( dstpt, src.w(), src.h() ) ) {
-        src.Blit( RectFixed( dstpt, src.w(), src.h() ), dstpt, dst );
+    if ( _windowROI & Rect( dstpt, src.width(), src.height() ) ) {
+        Rect fixedRect = RectFixed( dstpt, src.width(), src.height() );
+        fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, alpha, flip );
     }
 }
 
-void Interface::GameArea::Redraw( Surface & dst, int flag ) const
+void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 {
     const Rect tileROI = GetVisibleTileROI();
 
@@ -185,26 +161,22 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
 
             // base monster sprite
             if ( monsterIndicies.first >= 0 ) {
-                Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
-                sprite.SetAlphaMod( fadeInfo.alpha, true );
-                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
+                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
             }
             // animated monster part
             if ( monsterIndicies.second >= 0 ) {
-                Sprite sprite = AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
-                sprite.SetAlphaMod( fadeInfo.alpha, true );
-                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
+                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
             }
         }
         else if ( fadeInfo.object == MP2::OBJ_BOAT ) {
-            Sprite sprite = AGG::GetICN( ICN::BOAT32, fadeInfo.index );
-            sprite.SetAlphaMod( fadeInfo.alpha, true );
-            BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH, mp );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, fadeInfo.index );
+            BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
         }
         else {
-            Sprite sprite = AGG::GetICN( icn, fadeInfo.index );
-            sprite.SetAlphaMod( fadeInfo.alpha, true );
-            BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeInfo.index );
+            BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeInfo.alpha );
         }
     }
 
@@ -294,7 +266,7 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
                     index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );
                 }
 
-                const Sprite & sprite = AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
                 BlitOnTile( dst, sprite, sprite.x() - 14, sprite.y(), mp );
             }
         }
@@ -304,8 +276,6 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
     if ( IS_DEVEL() ) {
         // redraw grid
         if ( flag & LEVEL_ALL ) {
-            const RGBA col = RGBA( 0x90, 0xA4, 0xE0 );
-
             for ( int16_t y = 0; y < tileROI.h; ++y ) {
                 const s32 offsetY = tileROI.y + y;
                 if ( offsetY < 0 || offsetY >= world.h() )
@@ -314,10 +284,6 @@ void Interface::GameArea::Redraw( Surface & dst, int flag ) const
                     const s32 offsetX = tileROI.x + x;
                     if ( offsetX < 0 || offsetX >= world.w() )
                         continue;
-
-                    const Point pos = GetRelativeTilePosition( Point( offsetX, offsetY ) );
-                    if ( _windowROI & pos )
-                        dst.DrawPoint( pos, col );
 
                     world.GetTiles( offsetX, offsetY ).RedrawPassable( dst );
                 }
@@ -385,22 +351,23 @@ void Interface::GameArea::SetCenter( const Point & pt )
     scrollDirection = 0;
 }
 
-Surface Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 index )
+fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 index )
 {
-    Surface sf;
+    fheroes2::Image result;
 
     if ( Maps::isValidAbsIndex( index ) ) {
-        sf.Set( 448, 448, false );
+        result.resize( 448, 448 );
+        result.reset();
 
         GameArea & gamearea = Basic::Get().GetGameArea();
         const Rect origPosition( gamearea._windowROI );
-        gamearea.SetAreaPosition( 0, 0, sf.w(), sf.h() );
+        gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
         const Rect & rectMaps = gamearea.GetVisibleTileROI();
         Point pt = Maps::GetPoint( index );
 
         gamearea.SetCenter( pt );
-        gamearea.Redraw( sf, LEVEL_BOTTOM | LEVEL_TOP );
+        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP );
 
         // blit marker
         for ( u32 ii = 0; ii < rectMaps.h; ++ii )
@@ -413,23 +380,19 @@ Surface Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 index )
                 pt.x = ii;
                 break;
             }
-        const Sprite & marker = AGG::GetICN( ICN::ROUTE, 0 );
+        const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
         const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )
-                               + Point( sf.w() / 2, sf.h() / 2 ) );
+                               + Point( result.width() / 2, result.height() / 2 ) );
 
-        marker.Blit( markerPos.x, markerPos.y + 8, sf );
-
-        sf = ( Settings::Get().ExtGameEvilInterface() ? sf.RenderGrayScale() : sf.RenderSepia() );
-
-        if ( Settings::Get().QVGA() )
-            sf = Sprite::ScaleQVGASurface( sf );
+        fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
+        fheroes2::ApplyPalette( result, PAL::GetPalette( Settings::Get().ExtGameEvilInterface() ? PAL::GRAY : PAL::BROWN ) );
 
         gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
     }
     else
         DEBUG( DBG_ENGINE, DBG_WARN, "artifact not found" );
 
-    return sf;
+    return result;
 }
 
 bool Interface::GameArea::NeedScroll( void ) const
@@ -502,7 +465,7 @@ void Interface::GameArea::SetUpdateCursor( void )
 void Interface::GameArea::QueueEventProcessing( void )
 {
     const Settings & conf = Settings::Get();
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Point & mp = le.GetMouseCursor();
@@ -564,7 +527,7 @@ void Interface::GameArea::QueueEventProcessing( void )
                             interface.SetRedraw( REDRAW_GAMEAREA );
                             interface.Redraw();
                             cursor.Show();
-                            display.Flip();
+                            display.render();
                         }
                         else
                             break;

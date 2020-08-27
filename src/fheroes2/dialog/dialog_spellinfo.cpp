@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "settings.h"
 #include "spell.h"
 #include "text.h"
+#include "ui_button.h"
 
 void Dialog::SpellInfo( const Spell & spell, bool ok_button )
 {
@@ -57,8 +57,7 @@ void Dialog::SpellInfo( const Spell & spell, bool ok_button )
 
 void Dialog::SpellInfo( const std::string & header, const std::string & message, const Spell & spell, bool ok_button )
 {
-    Display & display = Display::Get();
-    const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -70,10 +69,10 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
     Text text( spell.GetName(), Font::SMALL );
 
-    const Sprite & sprite = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-    const int spacer = Settings::Get().QVGA() ? 5 : 10;
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+    const int spacer = 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.h() + 2 + text.h(), ok_button );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.height() + 2 + text.h(), ok_button );
     Rect pos = box.GetArea();
 
     if ( header.size() )
@@ -85,38 +84,38 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
     pos.y += box2.h() + spacer;
 
     // blit sprite
-    pos.x = box.GetArea().x + ( pos.w - sprite.w() ) / 2;
-    sprite.Blit( pos.x, pos.y );
+    pos.x = box.GetArea().x + ( pos.w - sprite.width() ) / 2;
+    fheroes2::Blit( sprite, display, pos.x, pos.y );
 
     // small text
     pos.x = box.GetArea().x + ( pos.w - text.w() ) / 2;
-    pos.y = pos.y + sprite.h() + 2;
+    pos.y = pos.y + sprite.height() + 2;
     text.Blit( pos );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button * button = NULL;
-    Point pt;
+    const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+    const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( system, 1 );
 
-    if ( ok_button ) {
-        pt.x = box.GetArea().x + ( box.GetArea().w - AGG::GetICN( system, 1 ).w() ) / 2;
-        pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN( system, 1 ).h();
-        button = new Button( pt.x, pt.y, system, 1, 2 );
+    fheroes2::Button button( box.GetArea().x + ( box.GetArea().w - buttonSprite.width() ) / 2, box.GetArea().y + box.GetArea().h - buttonSprite.height(), system, 1, 2 );
+
+    if ( !ok_button ) {
+        button.disable();
     }
 
-    if ( button )
-        ( *button ).Draw();
+    if ( button.isEnabled() )
+        button.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
         if ( !ok_button && !le.MousePressRight() )
             break;
-        if ( button )
-            le.MousePressLeft( *button ) ? button->PressDraw() : button->ReleaseDraw();
-        if ( button && le.MouseClickLeft( *button ) ) {
+        if ( button.isEnabled() )
+            le.MousePressLeft( button.area() ) ? button.drawOnPress() : button.drawOnRelease();
+        if ( button.isEnabled() && le.MouseClickLeft( button.area() ) ) {
             break;
         }
         if ( HotKeyCloseWindow ) {
@@ -125,6 +124,4 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
     }
 
     cursor.Hide();
-    if ( button )
-        delete button;
 }

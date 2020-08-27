@@ -43,7 +43,7 @@
 #include "xmi.h"
 
 #ifdef WITH_ZLIB
-#include "images_pack.h"
+#include "embedded_image.h"
 #include "zzlib.h"
 #endif
 
@@ -147,10 +147,6 @@ namespace AGG
 
     bool memlimit_usage = true;
 
-    std::set<int> scalableICNIds;
-    Size scaledResolution;
-    std::map<int, std::vector<Sprite> > scaledSprites;
-
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
@@ -185,51 +181,6 @@ namespace AGG
     bool ReadDataDir( void );
     const std::vector<u8> & ReadICNChunk( int icn, u32 );
     const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
-
-    bool IsICNScalable( int icnId )
-    {
-        return scalableICNIds.find( icnId ) != scalableICNIds.end();
-    }
-
-    Sprite RescaleSpriteIfNeeded( int icnId, u32 index )
-    {
-        static const Size originalResolution( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
-        const Size resolution = Display::Get().GetSize();
-
-        if ( resolution == originalResolution || !IsICNScalable( icnId ) )
-            return icn_cache[icnId].sprites[index];
-
-        // resolution can be changed during application runtime
-        if ( scaledResolution != resolution ) {
-            scaledSprites.clear();
-            scaledResolution = resolution;
-        }
-
-        std::map<int, std::vector<Sprite> >::iterator iter = scaledSprites.find( icnId );
-        if ( iter == scaledSprites.end() ) {
-            scaledSprites[icnId] = std::vector<Sprite>();
-            iter = scaledSprites.find( icnId );
-            iter->second.resize( icn_cache[icnId].count );
-        }
-
-        if ( iter->second[index].isValid() )
-            return iter->second[index];
-
-        const icn_cache_t & cachedIcn = icn_cache[icnId];
-        if ( !cachedIcn.sprites[index].isValid() )
-            return Sprite();
-
-        const double scaleX = scaledResolution.w / static_cast<double>( Display::DEFAULT_WIDTH );
-        const double scaleY = scaledResolution.h / static_cast<double>( Display::DEFAULT_HEIGHT );
-
-        const Size originalSize = cachedIcn.sprites[index].GetSize();
-        iter->second[index] = Sprite( cachedIcn.sprites[index].RenderScale(
-                                          Size( static_cast<uint16_t>( originalSize.w * scaleX + 0.5 ), static_cast<uint16_t>( originalSize.h * scaleY + 0.5 ) ) ),
-                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().x * scaleX + 0.5 ),
-                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().y * scaleY + 0.5 ) );
-
-        return iter->second[index];
-    }
 
     // This class is a holder of the original 8-bit image after decompression
     class ICNData
@@ -1122,11 +1073,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         res.second.SetAlphaMod( 0, false );
     }
 
-    // TODO: fix air elemental sprite
-    if ( icn == ICN::AELEM && res.first.w() > 3 && res.first.h() > 3 ) {
-        res.first.RenderContour( RGBA( 0, 0x84, 0xe0 ) ).Blit( -1, -1, res.first );
-    }
-
     return res;
 }
 
@@ -1141,48 +1087,6 @@ bool AGG::LoadOrgICN( Sprite & sp, int icn, u32 index, bool reflect )
 
     return false;
 }
-
-/*
-bool AGG::LoadOrgICN(Sprite & sp, int icn, u32 index, bool reflect)
-{
-    const std::vector<u8> & body = ReadICNChunk(icn, index);
-
-    if(body.size())
-    {
-    // loading original
-    DEBUG(DBG_ENGINE, DBG_TRACE, ICN::GetString(icn) << ", " << index);
-
-    StreamBuf st(body);
-
-    u32 count = st.getLE16();
-    u32 blockSize = st.getLE32();
-    u32 sizeData = 0;
-
-    if(index) st.skip(index * 13);
-
-    ICNHeader header1;
-    st >> header1;
-
-    if(index + 1 != count)
-    {
-        ICNHeader header2;
-        st >> header2;
-        sizeData = header2.offsetData - header1.offsetData;
-    }
-    else
-        sizeData = blockSize - header1.offsetData;
-
-    sp = Sprite::CreateICN(icn ,header1, &body[6 + header1.offsetData], sizeData, reflect);
-    Sprite::AddonExtensionModify(sp, icn, index);
-
-    return true;
-    }
-
-    DEBUG(DBG_ENGINE, DBG_WARN, "error: " << ICN::GetString(icn));
-
-    return false;
-}
-*/
 
 bool AGG::LoadOrgICN( int icn, u32 index, bool reflect )
 {
@@ -1266,10 +1170,7 @@ Sprite AGG::GetICN( int icn, u32 index, bool reflect )
             }
         }
 
-        if ( !reflect && IsICNScalable( icn ) )
-            result = RescaleSpriteIfNeeded( icn, index );
-        else
-            result = reflect ? v.reflect[index] : v.sprites[index];
+        result = reflect ? v.reflect[index] : v.sprites[index];
 
         // invalid sprite?
         if ( !result.isValid() ) {
@@ -1947,19 +1848,15 @@ void AGG::ResetMixer( void )
 void AGG::ShowError( void )
 {
 #ifdef WITH_ZLIB
-    ZSurface zerr;
-    if ( zerr.Load( _ptr_080721d0.width, _ptr_080721d0.height, _ptr_080721d0.bpp, _ptr_080721d0.pitch, _ptr_080721d0.rmask, _ptr_080721d0.gmask, _ptr_080721d0.bmask,
-                    _ptr_080721d0.amask, _ptr_080721d0.zdata, sizeof( _ptr_080721d0.zdata ) ) ) {
-        Display & display = Display::Get();
-        LocalEvent & le = LocalEvent::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Image & image = CreateImageFromZlib( 288, 200, errorMessage, sizeof( errorMessage ) );
 
-        display.Fill( ColorBlack );
-        zerr.Blit( ( display.w() - zerr.w() ) / 2, ( display.h() - zerr.h() ) / 2, display );
-        display.Flip();
+    display.fill( 0 );
+    fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
 
-        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
-            ;
-    }
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
+        ;
 #endif
 }
 
@@ -2028,16 +1925,9 @@ void AGG::Quit( void )
     fnt_cache.clear();
     PAL::Clear();
 
-    scaledSprites.clear();
-
 #ifdef WITH_TTF
     delete[] fonts;
 #endif
-}
-
-void AGG::RegisterScalableICN( int icnId )
-{
-    scalableICNIds.insert( icnId );
 }
 
 bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int icnIndex, bool reflect )
@@ -2070,22 +1960,6 @@ bool AGG::ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbCol
     return surface.SetColors( data.get(), rgbColors, reflect );
 }
 
-bool AGG::DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect )
-{
-    if ( !surface.isValid() || surface.depth() != 32 || icnId < 0 || incIndex < 0 )
-        return false;
-
-    std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, incIndex ) );
-    if ( iter == _icnIdVsData.end() )
-        return false;
-
-    const ICNData & data = iter->second;
-    if ( surface.w() != data.width() || surface.h() != data.height() )
-        return false;
-
-    return surface.GenerateContour( data.get(), value, reflect );
-}
-
 namespace fheroes2
 {
     namespace AGG
@@ -2093,7 +1967,7 @@ namespace fheroes2
         std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite;
         const fheroes2::Sprite errorICNImage;
 
-        std::vector<std::vector<fheroes2::Image> > _tilVsImage;
+        std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage;
         const fheroes2::Image errorTILImage;
 
         const uint32_t headerSize = 6;
@@ -2181,7 +2055,6 @@ namespace fheroes2
                 uint8_t * imageTransform = sprite.transform();
 
                 uint32_t posX = 0;
-                uint32_t offsetX = 0;
                 const uint32_t width = sprite.width();
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
@@ -2189,7 +2062,8 @@ namespace fheroes2
 
                 while ( 1 ) {
                     if ( 0 == *data ) { // 0x00 - end line
-                        offsetX += width;
+                        imageData += width;
+                        imageTransform += width;
                         posX = 0;
                         ++data;
                     }
@@ -2197,8 +2071,8 @@ namespace fheroes2
                         uint32_t c = *data;
                         ++data;
                         while ( c-- && data != dataEnd ) {
-                            imageData[offsetX + posX] = *data;
-                            imageTransform[offsetX + posX] = 0;
+                            imageData[posX] = *data;
+                            imageTransform[posX] = 0;
                             ++posX;
                             ++data;
                         }
@@ -2214,12 +2088,12 @@ namespace fheroes2
                         ++data;
 
                         const uint8_t transformValue = *data;
-                        const uint8_t transformType = ( ( transformValue & 0x3C ) << 6 ) / 256 + 2; // 1 is for skipping
+                        const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
 
                         uint32_t c = *data % 4 ? *data % 4 : *( ++data );
                         while ( c-- ) {
-                            if ( transformType <= 13 ) {
-                                imageTransform[offsetX + posX] = transformType;
+                            if ( transformType <= 15 ) {
+                                imageTransform[posX] = transformType;
                             }
                             ++posX;
                         }
@@ -2230,8 +2104,8 @@ namespace fheroes2
                         uint32_t c = *data;
                         ++data;
                         while ( c-- ) {
-                            imageData[offsetX + posX] = *data;
-                            imageTransform[offsetX + posX] = 0;
+                            imageData[posX] = *data;
+                            imageTransform[posX] = 0;
                             ++posX;
                         }
                         ++data;
@@ -2240,8 +2114,8 @@ namespace fheroes2
                         uint32_t c = *data - 0xC0;
                         ++data;
                         while ( c-- ) {
-                            imageData[offsetX + posX] = *data;
-                            imageTransform[offsetX + posX] = 0;
+                            imageData[posX] = *data;
+                            imageTransform[posX] = 0;
                             ++posX;
                         }
                         ++data;
@@ -2257,11 +2131,12 @@ namespace fheroes2
         // Helper function for LoadModifiedICN
         void CopyICNWithPalette( int icnId, int originalIcnId, int paletteType )
         {
-            LoadOriginalICN( originalIcnId );
+            GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
+
             _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
             const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
             for ( size_t i = 0; i < _icnVsSprite[icnId].size(); ++i ) {
-                ApplyPallete( _icnVsSprite[icnId][i], palette );
+                ApplyPalette( _icnVsSprite[icnId][i], palette );
             }
         }
 
@@ -2282,6 +2157,172 @@ namespace fheroes2
                 return true;
             case ICN::GRAY_SMALL_FONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::GRAY_TEXT );
+                return true;
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 2 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 15, 13, 55, 14 );
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 70, 13, 55, 14 );
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 42, 28, 55, 14 );
+                    // add 'ba'
+                    Blit( GetICN( ICN::BTNCMPGN, i ), 41, 28, out, 30, 13, 28, 14 );
+                    // add 'tt'
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25, 13, out, 57, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25, 13, out, 70, 13, 13, 14 );
+                    // add 'le'
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97, 21, out, 83, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86, 21, out, 96, 13, 13, 14 );
+                    // add 'on'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44, 21, out, 40, 28, 31, 14 );
+                    // add 'ly'
+                    Blit( GetICN( ICN::BTNHOTST, i ), 47, 21, out, 71, 28, 13, 13 );
+                    Blit( GetICN( ICN::BTNHOTST, i ), 72, 21, out, 84, 28, 13, 13 );
+                }
+                return true;
+            case ICN::BTNMIN:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 30, 4, 31, 15 );
+                    // add 'IN'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 23, 20, out, 30, 4, 25, 15 );
+                }
+                return true;
+            case ICN::SPELLS:
+                LoadOriginalICN( ICN::SPELLS );
+                _icnVsSprite[id].resize( 66 );
+                for ( uint32_t i = 60; i < 66; ++i ) {
+                    int originalIndex = 0;
+                    if ( i == 60 ) // Mass Cure
+                        originalIndex = 6;
+                    else if ( i == 61 ) // Mass Haste
+                        originalIndex = 14;
+                    else if ( i == 62 ) // Mass Slow
+                        originalIndex = 1;
+                    else if ( i == 63 ) // Mass Bless
+                        originalIndex = 7;
+                    else if ( i == 64 ) // Mass Curse
+                        originalIndex = 3;
+                    else if ( i == 65 ) // Mass Shield
+                        originalIndex = 15;
+
+                    const Sprite & originalImage = _icnVsSprite[id][originalIndex];
+                    Sprite & image = _icnVsSprite[id][i];
+
+                    image.resize( originalImage.width() + 8, originalImage.height() + 8 );
+                    image.setPosition( originalImage.x() + 4, originalImage.y() + 4 );
+                    image.fill( 1 );
+
+                    AlphaBlit( originalImage, image, 0, 0, 128 );
+                    AlphaBlit( originalImage, image, 4, 4, 192 );
+                    Blit( originalImage, image, 8, 8 );
+
+                    AddTransparency( image, 1 );
+                }
+                return true;
+            case ICN::CSLMARKER:
+                _icnVsSprite[id].resize( 3 );
+                for ( uint32_t i = 0; i < 3; ++i ) {
+                    _icnVsSprite[id][i] = GetICN( ICN::LOCATORS, 24 );
+                    if ( i == 1 ) {
+                        ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xD6 );
+                    }
+                    else if ( i == 2 ) {
+                        ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xDE );
+                    }
+                }
+                return true;
+            case ICN::BATTLESKIP: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TEXTBAR, 4 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
+
+                    // add 'skip'
+                    Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
+                }
+                return true;
+            case ICN::BATTLEWAIT: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TEXTBAR, 4 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
+
+                    // add 'wait'
+                    const Image wait = Crop( GetICN( ICN::ADVBTNS, 8 + i ), 5, 4, 28, 28 );
+                    Image resizedWait( wait.width() / 2, wait.height() / 2 );
+                    Resize( wait, resizedWait );
+
+                    Blit( resizedWait, 0, 0, out, ( out.width() - 14 ) / 2, 0, 14, 14 );
+                }
+                return true;
+            case ICN::BUYMAX: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::WELLXTRA, i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 2, 52, 14 );
+
+                    // add 'max'
+                    Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
+                }
+                return true;
+            case ICN::BTNGIFT_GOOD: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    // add 'G'
+                    Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    // add 'I'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    // add 'F'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'T'
+                    Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
+                return true;
+            case ICN::BTNGIFT_EVIL: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    // add 'G'
+                    Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    // add 'I'
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    // add 'F'
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'T'
+                    Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
                 return true;
             default:
                 break;
@@ -2304,6 +2345,8 @@ namespace fheroes2
         size_t GetMaximumTILIndex( int id )
         {
             if ( _tilVsImage[id].empty() ) {
+                _tilVsImage[id].resize( 4 ); // 4 possible sides
+
                 const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
                 if ( data.size() < headerSize ) {
                     return 0;
@@ -2319,15 +2362,30 @@ namespace fheroes2
                     return 0;
                 }
 
-                _tilVsImage[id].resize( count );
+                std::vector<Image> & originalTIL = _tilVsImage[id][0];
+
+                originalTIL.resize( count );
                 for ( uint32_t i = 0; i < count; ++i ) {
-                    _tilVsImage[id][i].resize( width, height );
-                    _tilVsImage[id][i].reset();
-                    memcpy( _tilVsImage[id][i].image(), data.data() + headerSize + i * size, size );
+                    Image & tilImage = originalTIL[i];
+                    tilImage.resize( width, height );
+                    memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
+                    std::fill( tilImage.transform(), tilImage.transform() + width * height, 0 );
+                }
+
+                for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
+                    std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
+                    currentTIL.resize( count );
+
+                    const bool horizontalFlip = ( shapeId & 2 ) != 0;
+                    const bool verticalFlip = ( shapeId & 1 ) != 0;
+
+                    for ( uint32_t i = 0; i < count; ++i ) {
+                        currentTIL[i] = Flip( originalTIL[i], horizontalFlip, verticalFlip );
+                    }
                 }
             }
 
-            return _tilVsImage[id].size();
+            return _tilVsImage[id][0].size();
         }
 
         // We have few ICNs which we need to scale like some related to main screen
@@ -2353,12 +2411,12 @@ namespace fheroes2
             const double scaleFactorX = static_cast<double>( Display::instance().width() ) / Display::DEFAULT_WIDTH;
             const double scaleFactorY = static_cast<double>( Display::instance().height() ) / Display::DEFAULT_HEIGHT;
 
-            const uint32_t resizedWidth = static_cast<uint32_t>( originalIcn.width() * scaleFactorX + 0.5 );
-            const uint32_t resizedHeight = static_cast<uint32_t>( originalIcn.height() * scaleFactorY + 0.5 );
+            const int32_t resizedWidth = static_cast<int32_t>( originalIcn.width() * scaleFactorX + 0.5 );
+            const int32_t resizedHeight = static_cast<int32_t>( originalIcn.height() * scaleFactorY + 0.5 );
             // Resize only if needed
             if ( resizedIcn.width() != resizedWidth || resizedIcn.height() != resizedHeight ) {
                 resizedIcn.resize( resizedWidth, resizedHeight );
-                resizedIcn.setPosition( static_cast<uint32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<uint32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
+                resizedIcn.setPosition( static_cast<int32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<int32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
                 Resize( originalIcn, resizedIcn, false );
             }
 
@@ -2384,18 +2442,20 @@ namespace fheroes2
 
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
+            if ( shapeId > 3 ) {
+                return errorTILImage;
+            }
+
             if ( !IsValidTILId( tilId ) ) {
                 return errorTILImage;
             }
 
             const size_t maxTILIndex = GetMaximumTILIndex( tilId );
-            if ( index >= maxTILIndex / 4 ) {
+            if ( index >= maxTILIndex ) {
                 return errorTILImage;
             }
 
-            // Generate proper TIL index
-            const size_t correctIndex = index + ( maxTILIndex / 4 ) * ( shapeId % 4 );
-            return _tilVsImage[tilId][correctIndex];
+            return _tilVsImage[tilId][shapeId][index];
         }
 
         const Sprite & GetLetter( uint32_t character, uint32_t fontType )
@@ -2423,6 +2483,12 @@ namespace fheroes2
             }
 
             return GetICN( ICN::SMALFONT, character - 0x20 );
+        }
+
+        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType )
+        {
+            // TODO: Add Unicode character support
+            return GetLetter( character, fontType );
         }
     }
 }

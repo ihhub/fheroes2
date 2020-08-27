@@ -77,7 +77,7 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     : army( NULL )
-    , spcursor( AGG::GetICN( ICN::STRIP, 1 ) )
+    , spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
@@ -85,8 +85,8 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     if ( use_mini_sprite )
         SetBackground( Size( 43, 43 ), RGBA( 0, 45, 0 ) );
     else {
-        const Sprite & sprite = AGG::GetICN( ICN::STRIP, 2 );
-        SetItemSize( sprite.w(), sprite.h() );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
+        SetItemSize( sprite.width(), sprite.height() );
     }
 
     SetArmy( ptr );
@@ -117,71 +117,73 @@ void ArmyBar::SetBackground( const Size & sz, const RGBA & fillColor )
     if ( use_mini_sprite ) {
         SetItemSize( sz.w, sz.h );
 
-        backsf.Set( sz.w, sz.h, false );
-        backsf.Fill( fillColor );
-        backsf.DrawBorder( RGBA( 0xd0, 0xc0, 0x48 ) );
+        backsf.resize( sz.w, sz.h );
+        backsf.fill( fheroes2::GetColorId( fillColor.r(), fillColor.g(), fillColor.b() ) );
 
-        spcursor.Set( sz.w, sz.h, true /* transparent */ );
-        spcursor.DrawBorder( RGBA( 0xc0, 0x2c, 0 ) );
+        fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
+
+        spcursor.resize( sz.w, sz.h );
+        spcursor.reset();
+        fheroes2::DrawBorder( spcursor, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
     }
 }
 
-void ArmyBar::RedrawBackground( const Rect & pos, Surface & dstsf )
+void ArmyBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
 {
     if ( use_mini_sprite )
-        backsf.Blit( pos, dstsf );
+        fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
     else
-        AGG::GetICN( ICN::STRIP, 2 ).Blit( pos, dstsf );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), dstsf, pos.x, pos.y );
 }
 
-void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, Surface & dstsf )
+void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
     if ( troop.isValid() ) {
         Text text( GetString( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
 
         if ( use_mini_sprite ) {
-            const Sprite & mons32 = AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
-            Rect srcrt( 0, 0, mons32.w(), mons32.h() );
+            const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
+            Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
-            if ( mons32.w() > pos.w ) {
-                srcrt.x = ( mons32.w() - pos.w ) / 2;
+            if ( mons32.width() > pos.w ) {
+                srcrt.x = ( mons32.width() - pos.w ) / 2;
                 srcrt.w = pos.w;
             }
 
-            if ( mons32.h() > pos.h ) {
-                srcrt.y = ( mons32.h() - pos.h ) / 2;
+            if ( mons32.height() > pos.h ) {
+                srcrt.y = ( mons32.height() - pos.h ) / 2;
                 srcrt.h = pos.h;
             }
 
-            mons32.Blit( srcrt, pos.x + ( pos.w - mons32.w() ) / 2, pos.y + pos.h - mons32.h() - 1, dstsf );
+            fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + pos.h - mons32.height() - 1, srcrt.w, srcrt.h );
         }
         else {
             switch ( troop.GetRace() ) {
             case Race::KNGT:
-                AGG::GetICN( ICN::STRIP, 4 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), dstsf, pos.x, pos.y );
                 break;
             case Race::BARB:
-                AGG::GetICN( ICN::STRIP, 5 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), dstsf, pos.x, pos.y );
                 break;
             case Race::SORC:
-                AGG::GetICN( ICN::STRIP, 6 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), dstsf, pos.x, pos.y );
                 break;
             case Race::WRLK:
-                AGG::GetICN( ICN::STRIP, 7 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), dstsf, pos.x, pos.y );
                 break;
             case Race::WZRD:
-                AGG::GetICN( ICN::STRIP, 8 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), dstsf, pos.x, pos.y );
                 break;
             case Race::NECR:
-                AGG::GetICN( ICN::STRIP, 9 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), dstsf, pos.x, pos.y );
                 break;
             default:
-                AGG::GetICN( ICN::STRIP, 10 ).Blit( pos, dstsf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), dstsf, pos.x, pos.y );
                 break;
             }
 
-            const Sprite & spmonh = AGG::GetICN( troop.ICNMonh(), 0 );
-            spmonh.Blit( pos.x + spmonh.x(), pos.y + spmonh.y(), dstsf );
+            const fheroes2::Sprite & spmonh = fheroes2::AGG::GetICN( troop.ICNMonh(), 0 );
+            fheroes2::Blit( spmonh, dstsf, pos.x + spmonh.x(), pos.y + spmonh.y() );
         }
 
         if ( use_mini_sprite ) {
@@ -191,22 +193,24 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, Su
             text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1, dstsf );
         }
 
-        if ( selected )
-            spcursor.Move( pos.x, pos.y );
+        if ( selected ) {
+            spcursor.setPosition( pos.x, pos.y );
+            spcursor.show();
+        }
     }
 }
 
 void ArmyBar::ResetSelected( void )
 {
     Cursor::Get().Hide();
-    spcursor.Hide();
+    spcursor.hide();
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
 }
 
-void ArmyBar::Redraw( Surface & dstsf )
+void ArmyBar::Redraw( fheroes2::Image & dstsf )
 {
     Cursor::Get().Hide();
-    spcursor.Hide();
+    spcursor.hide();
     Interface::ItemsActionBar<ArmyTroop>::Redraw( dstsf );
 }
 
@@ -243,20 +247,9 @@ bool ArmyBar::ActionBarCursor( const Point & cursor, ArmyTroop & troop, const Re
     ArmyTroop * troop_p = GetItem( le.GetMousePressLeft() );
 
     if ( !troop.isValid() && troop_p && troop_p->isValid() ) {
-        /*
-            const Rect* pos_p = GetItemPos(le.GetMousePressLeft());
-            const Point offset(Point(le.GetMousePressLeft()) - *pos_p);
-            Surface sf(pos.w, pos.h);
-            RedrawItem(*troop_p, Rect(0, 0, pos.w, pos.h), false, sf);
-            sf.GrayScale();
-            SpriteCursor sp;
-            sp.SetSprite(sf);
-            while(le.HandleEvents() && le.MousePressLeft()){ Cursor::Get().Hide(); sp.Move(Point(le.GetMouseCursor()) - offset); Cursor::Get().Show();
-           Display::Get().Flip(); DELAY(1); }; Cursor::Get().Hide(); sp.Hide();
-        */
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             Cursor::Get().Show();
-            Display::Get().Flip();
+            fheroes2::Display::instance().render();
             DELAY( 1 );
         };
         ArmyTroop * troop_r = GetItem( le.GetMouseReleaseLeft() );
@@ -321,7 +314,7 @@ bool ArmyBar::ActionBarSingleClick( const Point & cursor, ArmyTroop & troop, con
         if ( !read_only ) // select
         {
             Cursor::Get().Hide();
-            spcursor.Hide();
+            spcursor.hide();
         }
     }
     else {

@@ -348,18 +348,18 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
         Cursor::Get().Show();
         display.Flip();
     }
-    else if ( sym == key_events[EVENT_SYSTEM_SCREENSHOT] ) {
-        std::ostringstream stream;
-        stream << System::ConcatePath( Settings::GetSaveDir(), "screenshot_" ) << std::time( 0 );
-
-#ifndef WITH_IMAGE
-        stream << ".bmp";
-#else
-        stream << ".png";
-#endif
-        if ( display.Save( stream.str().c_str() ) )
-            DEBUG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
-    }
+//     else if ( sym == key_events[EVENT_SYSTEM_SCREENSHOT] ) {
+//         std::ostringstream stream;
+//         stream << System::ConcatePath( Settings::GetSaveDir(), "screenshot_" ) << std::time( 0 );
+//
+// #ifndef WITH_IMAGE
+//         stream << ".bmp";
+// #else
+//         stream << ".png";
+// #endif
+//         if ( display.Save( stream.str().c_str() ) )
+//             DEBUG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
+//     }
 #ifdef WITHOUT_MOUSE
     else if ( sym == key_events[EVENT_EMULATETOGGLE] )
         LocalEvent::Get().ToggleEmulateMouse();

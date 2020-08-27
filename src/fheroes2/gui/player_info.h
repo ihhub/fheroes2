@@ -20,31 +20,40 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include "players.h"
 
-#include "image.h"
-
-class SMKVideoSequence
+namespace Interface
 {
-public:
-    explicit SMKVideoSequence( const std::string & filePath );
+    struct PlayerInfo
+    {
+        PlayerInfo()
+            : player( NULL )
+        {}
 
-    const std::vector<fheroes2::Image> & getFrames() const;
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
+        bool operator==( const Player * ) const;
 
-    unsigned long width() const;
-    unsigned long height() const;
-    double fps() const;
+        Player * player;
+        Rect rect1; // opponent
+        Rect rect2; // class
+        Rect rect3; // change
+    };
 
-private:
-    bool _load( const std::string & filePath );
+    struct PlayersInfo : std::vector<PlayerInfo>
+    {
+        PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
 
-    void _addNewFrame( const uint8_t * data );
+        void UpdateInfo( Players &, const Point & opponents, const Point & classes );
 
-    std::vector<fheroes2::Image> _frames;
-    std::vector<std::vector<uint8_t> > _audioChannel;
-    unsigned long _width;
-    unsigned long _height;
-    double _fps;
-};
+        Player * GetFromOpponentClick( const Point & pt );
+        Player * GetFromOpponentNameClick( const Point & pt );
+        Player * GetFromOpponentChangeClick( const Point & pt );
+        Player * GetFromClassClick( const Point & pt );
+
+        void RedrawInfo( bool show_play_info = false ) const;
+        bool QueueEventProcessing( void );
+
+        bool show_name;
+        bool show_race;
+        bool show_swap;
+    };
+}

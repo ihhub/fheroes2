@@ -61,7 +61,6 @@ namespace PAL
     const std::vector<uint8_t> & GetPalette( int type );
     const std::vector<uint32_t> & GetRGBColors();
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
-    void SetCustomSDLPalette( const std::vector<uint8_t> & indexes );
 }
 
 #endif

@@ -25,6 +25,9 @@
 #include "settings.h"
 #include "sprite.h"
 
+// This is new Graphics engine. To change the code slowly we have to do some hacks here for now
+#include "screen.h"
+
 Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
@@ -80,9 +83,12 @@ bool Cursor::SetThemes( int name, bool force )
             break;
         }
         const Sprite spr = AGG::GetICN( icnID, 0xFF & name );
+        fheroes2::Copy( fheroes2::AGG::GetICN( icnID, 0xFF & name ), fheroes2::Cursor::instance() );
+
         SetOffset( name, Point( spr.w() / 2, spr.h() / 2 ) );
         Set( spr, true );
 #if defined( USE_SDL_CURSOR )
+        fheroes2::Cursor::instance().show( false );
         SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, -offset_x, -offset_y );
         if ( tempCursor == NULL ) {
             DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, name = " << name << ", reason: " << SDL_GetError() );
@@ -106,6 +112,11 @@ bool Cursor::SetThemes( int name, bool force )
 void Cursor::Redraw( s32 x, s32 y )
 {
 #if !defined( USE_SDL_CURSOR )
+    fheroes2::Cursor::instance().setPosition( x, y );
+    if ( fheroes2::Cursor::instance().isVisible() ) {
+        fheroes2::Display::instance().render();
+    }
+    /*
     Cursor & cur = Cursor::Get();
 
     if ( cur.isVisible() ) {
@@ -113,18 +124,14 @@ void Cursor::Redraw( s32 x, s32 y )
 
         Display::Get().Flip();
     }
+    */
 #endif
 }
 
 /* move cursor */
 void Cursor::Move( s32 x, s32 y )
 {
-#if defined( USE_SDL_CURSOR )
-    background.SetPos( Point( x, y ) );
-#else
-    if ( isVisible() )
-        SpriteMove::Move( x + offset_x, y + offset_y );
-#endif
+    fheroes2::Cursor::instance().setPosition( x, y );
 }
 
 /* set offset big cursor */
@@ -197,8 +204,7 @@ void Cursor::Show( void )
 #if defined( USE_SDL_CURSOR )
     _isVisibleCursor = true;
 #else
-    if ( !Settings::Get().ExtPocketHideCursor() )
-        SpriteMove::Show();
+    fheroes2::Cursor::instance().show( true );
 #endif
 }
 
@@ -207,7 +213,7 @@ void Cursor::Hide( void )
 #if defined( USE_SDL_CURSOR )
     _isVisibleCursor = false;
 #else
-    SpriteMove::Hide();
+    fheroes2::Cursor::instance().show( false );
 #endif
 }
 
@@ -216,7 +222,7 @@ bool Cursor::isVisible( void ) const
 #if defined( USE_SDL_CURSOR )
     return ( SDL_ShowCursor( -1 ) == 1 ) && _isVisibleCursor;
 #else
-    return SpriteMove::isVisible();
+    return fheroes2::Cursor::instance().isVisible();
 #endif
 }
 

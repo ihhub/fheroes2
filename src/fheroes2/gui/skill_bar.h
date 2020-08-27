@@ -20,31 +20,50 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include "interface_itemsbar.h"
+#include "skill.h"
 
-#include "image.h"
-
-class SMKVideoSequence
+class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
 public:
-    explicit SMKVideoSequence( const std::string & filePath );
+    PrimarySkillsBar( const Heroes *, bool mini );
 
-    const std::vector<fheroes2::Image> & getFrames() const;
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
+    void SetTextOff( s32, s32 );
+    void RedrawBackground( const Rect &, fheroes2::Image & );
+    void RedrawItem( int &, const Rect &, fheroes2::Image & );
 
-    unsigned long width() const;
-    unsigned long height() const;
-    double fps() const;
+    bool ActionBarSingleClick( const Point &, int &, const Rect & );
+    bool ActionBarPressRight( const Point &, int &, const Rect & );
+    bool ActionBarCursor( const Point &, int &, const Rect & );
 
-private:
-    bool _load( const std::string & filePath );
+    bool QueueEventProcessing( std::string * = NULL );
 
-    void _addNewFrame( const uint8_t * data );
+protected:
+    const Heroes * hero;
+    fheroes2::Image backsf;
+    bool use_mini_sprite;
+    std::vector<int> content;
+    Point toff;
+    std::string msg;
+};
 
-    std::vector<fheroes2::Image> _frames;
-    std::vector<std::vector<uint8_t> > _audioChannel;
-    unsigned long _width;
-    unsigned long _height;
-    double _fps;
+class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
+{
+public:
+    SecondarySkillsBar( bool mini = true, bool change = false );
+
+    void RedrawBackground( const Rect &, fheroes2::Image & );
+    void RedrawItem( Skill::Secondary &, const Rect &, fheroes2::Image & );
+
+    bool ActionBarSingleClick( const Point &, Skill::Secondary &, const Rect & );
+    bool ActionBarPressRight( const Point &, Skill::Secondary &, const Rect & );
+    bool ActionBarCursor( const Point &, Skill::Secondary &, const Rect & );
+
+    bool QueueEventProcessing( std::string * = NULL );
+
+protected:
+    fheroes2::Image backsf;
+    bool use_mini_sprite;
+    bool can_change;
+    std::string msg;
 };

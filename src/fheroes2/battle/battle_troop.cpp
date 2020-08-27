@@ -237,24 +237,6 @@ std::string Battle::Unit::GetSpeedString( void ) const
     return os.str();
 }
 
-Surface Battle::Unit::GetContour( uint8_t colorId ) const
-{
-    const int frameId = GetFrame();
-    const bool isReflected = isReflect();
-
-    const monstersprite_t & msi = GetMonsterSprite();
-    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
-
-    if ( !sprite.isValid() ) {
-        return Surface();
-    }
-
-    Surface contour( sprite.GetSize(), sprite.GetFormat() );
-    AGG::DrawContour( contour, PAL::GetPaletteColor( colorId ).pack(), msi.icn_file, frameId, isReflected );
-
-    return contour;
-}
-
 u32 Battle::Unit::GetDead( void ) const
 {
     return dead;
@@ -1818,7 +1800,7 @@ Point Battle::Unit::GetBackPoint( void ) const
 
 Point Battle::Unit::GetCenterPoint() const
 {
-    const Sprite & sprite = AGG::GetICN( GetMonsterSprite().icn_file, GetFrame(), isReflect() );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite().icn_file, GetFrame() );
 
     const Rect & pos = position.GetRect();
     const s32 centerY = pos.y + pos.h + sprite.y() / 2 - 10;

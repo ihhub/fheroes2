@@ -28,7 +28,7 @@
 #define USE_SDL_CURSOR
 #endif
 
-class Cursor : public SpriteMove
+class Cursor : public Surface
 {
 public:
     enum

@@ -20,31 +20,45 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "image.h"
 
-class SMKVideoSequence
+namespace fheroes2
 {
-public:
-    explicit SMKVideoSequence( const std::string & filePath );
+    class MovableSprite : public Sprite
+    {
+    public:
+        MovableSprite();
+        MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
+        MovableSprite( const Sprite & sprite );
+        virtual ~MovableSprite();
 
-    const std::vector<fheroes2::Image> & getFrames() const;
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
+        MovableSprite & operator=( const Sprite & sprite );
 
-    unsigned long width() const;
-    unsigned long height() const;
-    double fps() const;
+        void show();
+        void hide();
+        void redraw(); // in case if Display has changed
 
-private:
-    bool _load( const std::string & filePath );
+        bool isHidden() const;
 
-    void _addNewFrame( const uint8_t * data );
+        virtual void setPosition( int32_t x_, int32_t y_ ) override;
 
-    std::vector<fheroes2::Image> _frames;
-    std::vector<std::vector<uint8_t> > _audioChannel;
-    unsigned long _width;
-    unsigned long _height;
-    double _fps;
-};
+    private:
+        ImageRestorer _restorer;
+        bool _isHidden;
+    };
+
+    Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );
+
+    Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
+
+    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delay );
+
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delay, int frameCount );
+
+    void FadeDisplay( int delay = 500 );
+
+    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delay );
+
+    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay,
+                                  int frameCount );
+}

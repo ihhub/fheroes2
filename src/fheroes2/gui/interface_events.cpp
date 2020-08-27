@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "agg.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -354,7 +353,7 @@ int Interface::Basic::EventDigArtifact( void )
                 Cursor::Get().Hide();
                 iconsPanel.RedrawIcons( ICON_HEROES );
                 Cursor::Get().Show();
-                Display::Get().Flip();
+                fheroes2::Display::instance().render();
 
                 // check game over for ultimate artifact
                 return GameOver::Result::Get().LocalCheckGameOver();

@@ -27,6 +27,44 @@
 #include "pal.h"
 #include "settings.h"
 
+SpritePos::SpritePos() {}
+
+SpritePos::SpritePos( const Surface & sf, const Point & pt )
+    : Surface( sf )
+    , pos( pt )
+{}
+
+const Point & SpritePos::GetPos( void ) const
+{
+    return pos;
+}
+
+Rect SpritePos::GetArea( void ) const
+{
+    return Rect( GetPos(), GetSize() );
+}
+
+void SpritePos::SetSurface( const Surface & sf )
+{
+    Surface::Set( sf, true );
+}
+
+void SpritePos::SetPos( const Point & pt )
+{
+    pos = pt;
+}
+
+void SpritePos::Reset( void )
+{
+    pos = Point( 0, 0 );
+    Surface::Reset();
+}
+
+u32 SpritePos::GetMemoryUsage( void ) const
+{
+    return Surface::GetMemoryUsage() + sizeof( pos );
+}
+
 Sprite::Sprite() {}
 
 Sprite::Sprite( const Surface & sf, s32 ox, s32 oy )

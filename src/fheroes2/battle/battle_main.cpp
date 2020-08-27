@@ -267,11 +267,13 @@ void Battle::NecromancySkillAction( HeroBase & hero, u32 killed, bool local )
         std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}" );
         StringReplace( msg, "%{count}", count );
         StringReplace( msg, "%{monster}", mons.GetPluralName( count ) );
-        Surface sf1( Size( 40, 45 ), false );
-        const Sprite & sf2 = AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
-        sf2.Blit( ( sf1.w() - sf2.w() ) / 2, 0, sf1 );
+        fheroes2::Image sf1( 40, 45 );
+        sf1.reset();
+
+        const fheroes2::Sprite & sf2 = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+        fheroes2::Blit( sf2, sf1, ( sf1.width() - sf2.width() ) / 2, 0 );
         Text text( GetString( count ), Font::SMALL );
-        text.Blit( ( sf1.w() - text.w() ) / 2, sf2.h() + 3, sf1 );
+        text.Blit( ( sf1.width() - text.w() ) / 2, sf2.height() + 3, sf1 );
         Game::PlayPickupSound();
 
         Dialog::SpriteInfo( "", msg, sf1 );
