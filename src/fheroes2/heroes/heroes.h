@@ -130,7 +130,7 @@ public:
         UNKNOWN
     };
 
-    static Surface GetPortrait( int heroid, int type );
+    static fheroes2::Image GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
     enum flags_t
@@ -261,7 +261,7 @@ public:
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
 
     bool Move( bool fast = false );
-    void Move2Dest( const s32 & destination, bool skipAction = false, bool skipPenalty = false );
+    void Move2Dest( const s32 & destination );
     bool isEnableMove( void ) const;
     bool CanMove( void ) const;
     void SetMove( bool );
@@ -269,11 +269,11 @@ public:
     void ResetAction( void );
     void Action( s32 );
     void ActionNewPosition( void );
-    bool ApplyPenaltyMovement( void );
+    void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
-    void Redraw( Surface &, s32, s32, bool ) const;
-    void PortraitRedraw( s32, s32, int type, Surface & ) const;
+    void Redraw( fheroes2::Image &, s32, s32, bool ) const;
+    void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
     int GetSpriteIndex( void ) const;
     void FadeOut( void ) const;
     void FadeIn( void ) const;
@@ -291,7 +291,7 @@ public:
     bool AllowBattle( bool attacker ) const;
 
     std::string String( void ) const;
-    Surface GetPortrait( int type ) const;
+    fheroes2::Image GetPortrait( int type ) const;
 
     static int GetLevelFromExperience( u32 );
     static u32 GetExperienceFromLevel( int );
@@ -315,7 +315,7 @@ private:
     void LevelUpSecondarySkill( int, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( bool fast = false );
-    static void MoveStep( Heroes &, s32 from, s32 to, bool newpos );
+    static void MoveStep( Heroes &, s32 to, bool newpos );
 
     // This function is useful only in a situation when AI hero moves out of the fog
     // we don't update his direction during movement under the fog so there is a situation

@@ -32,6 +32,7 @@
 #include "mp2.h"
 #include "players.h"
 #include "settings.h"
+#include "ui_tool.h"
 #include "world.h"
 
 Interface::Basic::Basic()
@@ -48,16 +49,15 @@ Interface::Basic::Basic()
 
 void Interface::Basic::Reset()
 {
+    const fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get().Get();
-    const Display & display = Display::Get();
-    const int scroll_width = conf.QVGA() ? 12 : BORDERWIDTH;
 
     SetHideInterface( conf.ExtGameHideInterface() );
 
-    scrollLeft = Rect( 0, 0, scroll_width, display.h() );
-    scrollRight = Rect( display.w() - scroll_width, 0, scroll_width, display.h() );
-    scrollTop = conf.QVGA() ? Rect( 0, 0, controlPanel.GetArea().x, scroll_width ) : Rect( 0, 0, display.w(), scroll_width );
-    scrollBottom = Rect( 0, display.h() - scroll_width, display.w(), scroll_width );
+    scrollLeft = Rect( 0, 0, BORDERWIDTH, display.height() );
+    scrollRight = Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
+    scrollTop = Rect( 0, 0, display.width(), BORDERWIDTH );
+    scrollBottom = Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
 
     system_info.Set( Font::YELLOW_SMALL );
 }
@@ -94,10 +94,9 @@ Interface::ControlPanel & Interface::Basic::GetControlPanel( void )
 
 void Interface::Basic::SetHideInterface( bool f )
 {
+    const fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get().Get();
-    const Display & display = Display::Get();
-    const u32 px = display.w() - BORDERWIDTH - RADARWIDTH;
-    const u32 scroll_width = conf.QVGA() ? 12 : BORDERWIDTH;
+    const u32 px = display.width() - BORDERWIDTH - RADARWIDTH;
 
     conf.SetHideInterface( f );
 
@@ -118,7 +117,7 @@ void Interface::Basic::SetHideInterface( bool f )
         if ( 0 == pos_stat.x && 0 == pos_stat.y )
             pos_stat = Point( conf.QVGA() ? BORDERWIDTH : px - BORDERWIDTH, conf.QVGA() ? TILEWIDTH : buttonsArea.GetArea().y + buttonsArea.GetArea().h );
 
-        controlPanel.SetPos( display.w() - controlPanel.GetArea().w - scroll_width, 0 );
+        controlPanel.SetPos( display.width() - controlPanel.GetArea().w - BORDERWIDTH, 0 );
         radar.SetPos( pos_radr.x, pos_radr.y );
         iconsPanel.SetPos( pos_icon.x, pos_icon.y );
         buttonsArea.SetPos( pos_bttn.x, pos_bttn.y );
@@ -173,10 +172,11 @@ void Interface::Basic::SetRedraw( int f )
 
 void Interface::Basic::Redraw( int force )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
     if ( ( redraw | force ) & REDRAW_GAMEAREA )
-        gameArea.Redraw( Display::Get(), LEVEL_ALL );
+        gameArea.Redraw( display, LEVEL_ALL );
 
     if ( ( conf.ExtGameHideInterface() && conf.ShowRadar() ) || ( ( redraw | force ) & REDRAW_RADAR ) )
         radar.Redraw();
@@ -199,7 +199,7 @@ void Interface::Basic::Redraw( int force )
 
     // show system info
     if ( conf.ExtGameShowSystemInfo() )
-        RedrawSystemInfo( ( conf.ExtGameHideInterface() ? 10 : 26 ), Display::Get().h() - ( conf.ExtGameHideInterface() ? 14 : 30 ), System::GetMemoryUsage() );
+        RedrawSystemInfo( ( conf.ExtGameHideInterface() ? 10 : 26 ), display.height() - ( conf.ExtGameHideInterface() ? 14 : 30 ), System::GetMemoryUsage() );
 
     if ( ( redraw | force ) & REDRAW_BORDER )
         GameBorderRedraw();
@@ -228,30 +228,31 @@ void Interface::Basic::RedrawSystemInfo( s32 cx, s32 cy, u32 usage )
 
 s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool water ) const
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarArea = radar.GetArea();
     Settings & conf = Settings::Get();
-    const Sprite & viewDoor = AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
-    SpriteBack back( Rect( radarArea.x, radarArea.y, radarArea.w, radarArea.h ) );
-    viewDoor.Blit( radarArea );
+    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
+    fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
+
+    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
 
     const Rect & visibleArea = gameArea.GetROI();
     const bool isFadingEnabled = ( gameArea.GetROI().w > TILEWIDTH * distance ) || ( gameArea.GetROI().h > TILEWIDTH * distance );
-    const Surface & top = display.GetSurface( visibleArea );
+    fheroes2::Image top( visibleArea.w, visibleArea.h );
+    fheroes2::Copy( display, visibleArea.x, visibleArea.y, top, 0, 0, visibleArea.w, visibleArea.h );
 
     // We need to add an extra one cell as a hero stands exactly in the middle of a cell
     const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
-    const Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
+    const fheroes2::Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
     const Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
 
     if ( isFadingEnabled ) {
-        Surface back( top.GetSize(), false );
-        back.Fill( ColorBlack );
+        fheroes2::Image middle( spellROI.w, spellROI.h );
+        fheroes2::Copy( display, spellROI.x, spellROI.y, middle, 0, 0, spellROI.w, spellROI.h );
 
-        const Surface middle = display.GetSurface( spellROI );
-        display.InvertedFade( top, back, Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 105, 300 );
+        fheroes2::InvertedFadeWithPalette( top, fheroes2::Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 5, 300, 9 );
     }
 
     Cursor & cursor = Cursor::Get();
@@ -260,8 +261,8 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     s32 returnValue = -1;
 
     const Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.h - 37 );
-    Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( conf.ExtGameEvilInterface() ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
-    buttonExit.Draw();
+    fheroes2::Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( conf.ExtGameEvilInterface() ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+    buttonExit.draw();
 
     while ( le.HandleEvents() ) {
         const Point & mp = le.GetMouseCursor();
@@ -269,8 +270,8 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
         if ( radarArea & mp ) {
             cursor.SetThemes( Cursor::POINTER );
 
-            le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
-            if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
                 break;
         }
         else if ( visibleArea & mp ) {
@@ -303,18 +304,18 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
         // redraw cursor
         if ( !cursor.isVisible() ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
     cursor.Hide();
 
     if ( isFadingEnabled )
-        top.Blit( Point( visibleArea.x, visibleArea.y ), display );
+        fheroes2::Blit( top, display, visibleArea.x, visibleArea.y );
 
-    back.Restore();
+    back.restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 
     return returnValue;
 }

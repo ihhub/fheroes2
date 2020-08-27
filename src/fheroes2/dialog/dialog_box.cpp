@@ -53,17 +53,15 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
     area.w = BOXAREA_WIDTH;
     area.h = BOXAREA_TOP + BOXAREA_BOTTOM + height_middle;
 
-    Display & display = Display::Get();
-    s32 posx = ( display.w() - BOX_WIDTH ) / 2;
+    fheroes2::Display & display = fheroes2::Display::instance();
+    s32 posx = ( display.width() - BOX_WIDTH ) / 2;
     s32 posy = startYPos;
 
     if ( startYPos < 0 ) {
-        posy = ( display.h() - height_top_bottom - height_middle ) / 2;
-        if ( Settings::Get().QVGA() && height > display.h() )
-            posy = display.h() - area.h - ( ( evil ? BOXE_TOP : BOX_TOP ) - BOXAREA_TOP );
+        posy = ( display.height() - height_top_bottom - height_middle ) / 2;
     }
 
-    background.Save( Rect( posx, posy, BOX_WIDTH, height_top_bottom + height_middle ) );
+    _restorer.reset( new fheroes2::ImageRestorer( display, posx, posy, BOX_WIDTH, height_top_bottom + height_middle ) );
 
     area.x = posx + 36;
     area.y = posy + ( evil ? BOXE_TOP - BOXAREA_TOP : BOX_TOP - BOXAREA_TOP );
@@ -73,17 +71,9 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
 
 Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 {
-    Cursor & cursor = Cursor::Get();
+    _restorer->restore();
 
-    if ( cursor.isVisible() ) {
-        cursor.Hide();
-        background.Restore();
-        cursor.Show();
-    }
-    else
-        background.Restore();
-
-    Display::Get().Flip();
+    fheroes2::Display::instance().render();
 }
 
 Dialog::FrameBox::FrameBox( int height, bool buttons )
@@ -100,35 +90,38 @@ void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight )
     Point pt( posx, posy );
     if ( !Settings::Get().ExtGameEvilInterface() )
         ++pt.x;
-    AGG::GetICN( buybuild, 4 ).Blit( pt );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 4 ), display, pt.x, pt.y );
 
     // right top sprite
-    pt.x = posx + AGG::GetICN( buybuild, 4 ).w();
-    AGG::GetICN( buybuild, 0 ).Blit( pt );
+    pt.x = posx + fheroes2::AGG::GetICN( buybuild, 4 ).width();
+    fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 0 ), display, pt.x, pt.y );
 
-    pt.y += AGG::GetICN( buybuild, 4 ).h();
+    pt.y += fheroes2::AGG::GetICN( buybuild, 4 ).height();
     const int16_t posBeforeMiddle = pt.y;
     for ( u32 i = 0; i < count; ++i ) {
         // left middle sprite
         pt.x = posx;
-        const Sprite & sl = AGG::GetICN( buybuild, 5 );
-        sl.Blit( Rect( 0, 10, sl.w(), BOXAREA_MIDDLE ), pt );
+        const fheroes2::Sprite & sl = fheroes2::AGG::GetICN( buybuild, 5 );
+        fheroes2::Blit( sl, 0, 10, display, pt.x, pt.y, sl.width(), BOXAREA_MIDDLE );
 
         // right middle sprite
-        pt.x += sl.w();
+        pt.x += sl.width();
         if ( !Settings::Get().ExtGameEvilInterface() )
             pt.x -= 1;
-        const Sprite & sr = AGG::GetICN( buybuild, 1 );
-        sr.Blit( Rect( 0, 10, sr.w(), BOXAREA_MIDDLE ), pt );
+        const fheroes2::Sprite & sr = fheroes2::AGG::GetICN( buybuild, 1 );
+        fheroes2::Blit( sr, 0, 10, display, pt.x, pt.y, sr.width(), BOXAREA_MIDDLE );
         pt.y += BOXAREA_MIDDLE;
     }
 
     pt.y = posBeforeMiddle + middleHeight;
 
     // right bottom sprite
-    AGG::GetICN( buybuild, 2 ).Blit( pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 2 ), display, pt.x, pt.y );
 
     // left bottom sprite
     pt.x = posx;
-    AGG::GetICN( buybuild, 6 ).Blit( pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 6 ), display, pt.x, pt.y );
 }

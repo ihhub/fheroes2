@@ -23,12 +23,12 @@
 #include <algorithm>
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "interface_list.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 
 class SettingsListBox : public Interface::ListBox<u32>
 {
@@ -51,38 +51,39 @@ public:
 
 void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool current )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
-    const Sprite & cell = AGG::GetICN( ICN::CELLWIN, 1 );
-    const Sprite & mark = AGG::GetICN( ICN::CELLWIN, 2 );
+    const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
 
-    cell.Blit( ox, oy );
+    fheroes2::Blit( cell, display, ox, oy );
     if ( conf.ExtModes( item ) )
-        mark.Blit( ox + 3, oy + 2 );
+        fheroes2::Blit( mark, display, ox + 3, oy + 2 );
 
     TextBox msg( conf.ExtName( item ), Font::SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
 
     if ( 1 < msg.row() )
-        msg.Blit( ox + cell.w() + 5, oy - 1 );
+        msg.Blit( ox + cell.width() + 5, oy - 1 );
     else
-        msg.Blit( ox + cell.w() + 5, oy + 4 );
+        msg.Blit( ox + cell.width() + 5, oy + 4 );
 }
 
 void SettingsListBox::RedrawBackground( const Point & origin )
 {
-    const Settings & conf = Settings::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int window_h = conf.QVGA() ? 224 : 400;
+    const int window_h = 400;
     const int ah = window_h - 54;
 
-    AGG::GetICN( ICN::STONEBAK, 0 ).Blit( Rect( 15, 25, 280, ah ), origin.x + 15, origin.y + 25 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), 15, 25, display, origin.x + 15, origin.y + 25, 280, ah );
 
     for ( int ii = 1; ii < ( window_h / 25 ); ++ii )
-        AGG::GetICN( ICN::DROPLISL, 11 ).Blit( origin.x + 295, origin.y + 35 + ( 19 * ii ) );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 11 ), display, origin.x + 295, origin.y + 35 + ( 19 * ii ) );
 
-    AGG::GetICN( ICN::DROPLISL, 10 ).Blit( origin.x + 295, origin.y + 46 );
-    AGG::GetICN( ICN::DROPLISL, 12 ).Blit( origin.x + 295, origin.y + ah - 14 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 10 ), display, origin.x + 295, origin.y + 46 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 12 ), display, origin.x + 295, origin.y + ah - 14 );
 }
 
 void SettingsListBox::ActionListDoubleClick( u32 & item )
@@ -136,7 +137,7 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
 
 void Dialog::ExtSettings( bool readonly )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
     // cursor
@@ -144,8 +145,7 @@ void Dialog::ExtSettings( bool readonly )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const int window_h = conf.QVGA() ? 224 : 400;
-    Dialog::FrameBorder frameborder( Size( 320, window_h ) );
+    Dialog::FrameBorder frameborder( Size( 320, 400 ) );
     const Rect & area = frameborder.GetArea();
 
     Text text( "Game Settings", Font::YELLOW_BIG );
@@ -247,12 +247,12 @@ void Dialog::ExtSettings( bool readonly )
 
     SettingsListBox listbox( area, readonly );
 
-    const int ah = window_h - 60;
+    const int ah = 340;
 
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollSplitter( AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 43 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 43 ) );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
@@ -260,24 +260,24 @@ void Dialog::ExtSettings( bool readonly )
 
     LocalEvent & le = LocalEvent::Get();
 
-    const Rect buttonsArea( Point( area.x + 5, area.y ), Size( area.w - 10, area.h - 5 ) );
-    ButtonGroups btnGroups( buttonsArea, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.w - 10, area.h - 5 );
+    fheroes2::ButtonGroup btnGroup( buttonsArea, Dialog::OK | Dialog::CANCEL );
+    btnGroup.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroup.processEvents();
 
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 

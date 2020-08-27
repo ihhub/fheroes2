@@ -84,9 +84,12 @@ namespace Game
             : object( object_ )
             , tile( tile_ )
             , alpha( alpha_ )
-            , surfaceSize( world.GetTiles( tile_ ).GetTileSurface().GetSize() )
             , isFadeOut( fadeOut )
         {
+            const fheroes2::Image & tileImage = world.GetTiles( tile_ ).GetTileSurface();
+            surfaceSize.w = tileImage.width();
+            surfaceSize.h = tileImage.height();
+
             index = ICN::AnimationFrame( MP2::GetICNObject( object ), index_, 0 );
             if ( 0 == index ) {
                 index = index_;
@@ -347,14 +350,14 @@ u32 Game::GetGameOverScores( void )
 
 void Game::ShowLoadMapsText( void )
 {
-    Display & display = Display::Get();
-    const Rect pos( 0, display.h() / 2, display.w(), display.h() / 2 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
     TextBox text( _( "Maps Loading..." ), Font::BIG, pos.w );
 
     // blit test
-    display.Fill( ColorBlack );
-    text.Blit( pos, display );
-    display.Flip();
+    display.fill( 0 );
+    text.Blit( pos );
+    display.render();
 }
 
 u32 Game::GetLostTownDays( void )

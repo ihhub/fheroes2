@@ -24,7 +24,6 @@
 #include <string>
 
 #include "agg.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -186,18 +185,16 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
 
 void DrawFlags( const std::vector<ValueColors> & v, const Point & pos, u32 width, u32 count )
 {
-    bool qvga = Settings::Get().QVGA();
-
     for ( u32 ii = 0; ii < count; ++ii ) {
         const u32 chunk = width / count;
         if ( ii < v.size() ) {
             const Colors colors( v[ii].second );
-            const u32 sw = qvga ? AGG::GetICN( ICN::MISC6, 7 ).w() : AGG::GetICN( ICN::FLAG32, 1 ).w();
+            const u32 sw = fheroes2::AGG::GetICN( ICN::FLAG32, 1 ).width();
             s32 px = pos.x + chunk / 2 + ii * chunk - ( colors.size() * sw ) / 2;
 
             for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-                const Sprite & flag = qvga ? AGG::GetICN( ICN::MISC6, Color::GetIndex( *color ) + 7 ) : AGG::GetICN( ICN::FLAG32, Color::GetIndex( *color ) * 2 + 1 );
-                flag.Blit( px, ( qvga ? pos.y + 2 : pos.y ) );
+                const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::FLAG32, Color::GetIndex( *color ) * 2 + 1 );
+                fheroes2::Blit( flag, fheroes2::Display::instance(), px, pos.y );
                 px = px + sw;
             }
         }
@@ -207,17 +204,19 @@ void DrawFlags( const std::vector<ValueColors> & v, const Point & pos, u32 width
 void DrawHeroIcons( const std::vector<ValueColors> & v, const Point & pos, u32 width )
 {
     if ( v.size() ) {
-        Display & display = Display::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
         const int chunk = width / v.size();
 
         for ( u32 ii = 0; ii < v.size(); ++ii ) {
             const Heroes * hero = world.GetHeroes( v[ii].first );
             if ( hero ) {
-                Surface icons = hero->GetPortrait( PORT_SMALL );
                 s32 px = pos.x + chunk / 2 + ii * chunk;
-                const Sprite & window = AGG::GetICN( ICN::LOCATORS, 22 );
-                window.Blit( px - window.w() / 2, pos.y - 4, display );
-                icons.Blit( px - icons.w() / 2, pos.y, display );
+                const fheroes2::Image & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
+                fheroes2::Blit( window, display, px - window.width() / 2, pos.y - 4 );
+
+                fheroes2::Image icon = hero->GetPortrait( PORT_SMALL );
+                if ( !icon.empty() )
+                    fheroes2::Blit( icon, fheroes2::Display::instance(), px - icon.width() / 2, pos.y );
             }
         }
     }
@@ -225,7 +224,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const Point & pos, u32 w
 
 void Dialog::ThievesGuild( bool oracle )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -281,7 +280,7 @@ void Dialog::ThievesGuild( bool oracle )
     // bar
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y + 461;
-    AGG::GetICN( ICN::WELLXTRA, 2 ).Blit( dst_pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLXTRA, 2 ), display, dst_pt.x, dst_pt.y );
 
     // text bar
     text.Set( _( "Thieves' Guild: Player RanKings" ), Font::BIG );
@@ -292,7 +291,7 @@ void Dialog::ThievesGuild( bool oracle )
     // button exit
     dst_pt.x = cur_pt.x + 578;
     dst_pt.y = cur_pt.y + 461;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::WELLXTRA, 0, 1 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::WELLXTRA, 0, 1 );
 
     text.Set( _( "Number of Towns:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
@@ -427,18 +426,18 @@ void Dialog::ThievesGuild( bool oracle )
     // GetBestMonsterInfo(v);
     // if(3 < count) DrawHeroIcons(v, dst_pt, maxw);
 
-    buttonExit.Draw();
+    buttonExit.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
     }
 }

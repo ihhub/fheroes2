@@ -899,13 +899,15 @@ namespace ICN
         YELLOW_SMALFONT,
         BATTLESKIP,
         BATTLEWAIT,
-        BATTLEAUTO,
-        BATTLESETS,
+        BATTLEAUTO, // not in use anymore
+        BATTLESETS, // not in use anymore
         BUYMAX,
         BTNCONFIG,
         BTNBATTLEONLY,
-        BOAT12,
-        BTNGIFT,
+        BOAT12, // not in use anymore
+        BTNGIFT, // not in use anymore
+        BTNGIFT_GOOD,
+        BTNGIFT_EVIL,
         BTNMIN,
         CSLMARKER,
 

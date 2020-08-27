@@ -18,9 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "smk_decoder.h"
+#include <algorithm>
+
 #include "serialize.h"
 #include "smacker.h"
+#include "smk_decoder.h"
 
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
@@ -73,13 +75,13 @@ bool SMKVideoSequence::_load( const std::string & filePath )
             soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
         }
     }
-
-    _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
+    // smk_get_palette( videoFile );
+    _addNewFrame( smk_get_video( videoFile ) );
 
     for ( currentFrame = 1; currentFrame < frameCount; ++currentFrame ) {
         smk_next( videoFile );
 
-        _addNewFrame( smk_get_video( videoFile ), smk_get_palette( videoFile ) );
+        _addNewFrame( smk_get_video( videoFile ) );
 
         for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
             if ( trackMask & ( 1 << i ) ) {
@@ -146,26 +148,20 @@ double SMKVideoSequence::fps() const
     return _fps;
 }
 
-void SMKVideoSequence::_addNewFrame( const uint8_t * data, const uint8_t * palette )
+void SMKVideoSequence::_addNewFrame( const uint8_t * data )
 {
-    if ( data == NULL || palette == NULL )
+    if ( data == NULL )
         return;
 
-    Surface surface( data, _width, _height, 1, false, false );
-
-    std::vector<SDL_Color> colors( 256 );
-    for ( size_t i = 0; i < colors.size(); ++i ) {
-        colors[i].r = *palette++;
-        colors[i].g = *palette++;
-        colors[i].b = *palette++;
-    }
-
-    surface.SetPalette( colors );
+    fheroes2::Image surface( _width, _height );
+    surface.reset();
+    size_t size = static_cast<size_t>( _width ) * _height;
+    std::copy( data, data + size, surface.image() );
 
     _frames.push_back( surface );
 }
 
-const std::vector<Surface> & SMKVideoSequence::getFrames() const
+const std::vector<fheroes2::Image> & SMKVideoSequence::getFrames() const
 {
     return _frames;
 }

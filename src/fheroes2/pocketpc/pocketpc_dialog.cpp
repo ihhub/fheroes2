@@ -27,61 +27,60 @@
 
 u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
     const Rect rt( dst.x - 32, dst.y - 32, 86, 86 );
 
-    const Sprite & sp_info = AGG::GetICN( ICN::CMSECO, 5 );
-    const Sprite & sp_bleft = AGG::GetICN( ICN::CMSECO, 10 );
-    const Sprite & sp_left = AGG::GetICN( ICN::CMSECO, 11 );
-    const Sprite & sp_tleft = AGG::GetICN( ICN::CMSECO, 12 );
-    const Sprite & sp_tright = AGG::GetICN( ICN::CMSECO, 7 );
-    const Sprite & sp_right = AGG::GetICN( ICN::CMSECO, 8 );
-    const Sprite & sp_bright = AGG::GetICN( ICN::CMSECO, 9 );
+    const fheroes2::Sprite & sp_info = fheroes2::AGG::GetICN( ICN::CMSECO, 5 );
+    const fheroes2::Sprite & sp_bleft = fheroes2::AGG::GetICN( ICN::CMSECO, 10 );
+    const fheroes2::Sprite & sp_left = fheroes2::AGG::GetICN( ICN::CMSECO, 11 );
+    const fheroes2::Sprite & sp_tleft = fheroes2::AGG::GetICN( ICN::CMSECO, 12 );
+    const fheroes2::Sprite & sp_tright = fheroes2::AGG::GetICN( ICN::CMSECO, 7 );
+    const fheroes2::Sprite & sp_right = fheroes2::AGG::GetICN( ICN::CMSECO, 8 );
+    const fheroes2::Sprite & sp_bright = fheroes2::AGG::GetICN( ICN::CMSECO, 9 );
 
-    Surface shadow( rt, false );
-    shadow.Fill( ColorBlack );
+    fheroes2::Image shadow( rt.w, rt.h );
+    shadow.fill( 0 );
 
-    SpriteBack back( rt );
+    fheroes2::ImageRestorer back( display, rt.x, rt.y, rt.w, rt.h );
 
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
     // blit alpha
-    shadow.SetAlphaMod( 120, false );
-    shadow.Blit( rt.x, rt.y, display );
+    fheroes2::AlphaBlit( shadow, display, rt.x, rt.y, 120 );
 
-    const Rect rt_info( rt.x + ( rt.w - sp_info.w() ) / 2, rt.y + ( rt.h - sp_info.h() ) / 2, sp_info.w(), sp_info.h() );
-    sp_info.Blit( rt_info.x, rt_info.y );
+    const Rect rt_info( rt.x + ( rt.w - sp_info.width() ) / 2, rt.y + ( rt.h - sp_info.height() ) / 2, sp_info.width(), sp_info.height() );
+    fheroes2::Blit( sp_info, display, rt_info.x, rt_info.y );
 
-    const Rect rt_tright( rt.x + 1, rt.y + rt.h - 1 - sp_tright.h(), sp_tright.w(), sp_tright.h() );
+    const Rect rt_tright( rt.x + 1, rt.y + rt.h - 1 - sp_tright.height(), sp_tright.width(), sp_tright.height() );
     if ( allow & Battle::BOTTOM_LEFT )
-        sp_tright.Blit( rt_tright.x, rt_tright.y );
+        fheroes2::Blit( sp_tright, display, rt_tright.x, rt_tright.y );
 
-    const Rect rt_right( rt.x + 1, rt.y + ( rt.h - sp_right.h() ) / 2, sp_right.w(), sp_right.h() );
+    const Rect rt_right( rt.x + 1, rt.y + ( rt.h - sp_right.height() ) / 2, sp_right.width(), sp_right.height() );
     if ( allow & Battle::LEFT )
-        sp_right.Blit( rt_right.x, rt_right.y );
+        fheroes2::Blit( sp_right, display, rt_right.x, rt_right.y );
 
-    const Rect rt_bright( rt.x + 1, rt.y + 1, sp_bright.w(), sp_bright.h() );
+    const Rect rt_bright( rt.x + 1, rt.y + 1, sp_bright.width(), sp_bright.height() );
     if ( allow & Battle::TOP_LEFT )
-        sp_bright.Blit( rt_bright.x, rt_bright.y );
+        fheroes2::Blit( sp_bright, display, rt_bright.x, rt_bright.y );
 
-    const Rect rt_tleft( rt.x + rt.w - 1 - sp_tleft.w(), rt.y + rt.h - 1 - sp_tleft.h(), sp_tleft.w(), sp_tleft.h() );
+    const Rect rt_tleft( rt.x + rt.w - 1 - sp_tleft.width(), rt.y + rt.h - 1 - sp_tleft.height(), sp_tleft.width(), sp_tleft.height() );
     if ( allow & Battle::BOTTOM_RIGHT )
-        sp_tleft.Blit( rt_tleft.x, rt_tleft.y );
+        fheroes2::Blit( sp_tleft, display, rt_tleft.x, rt_tleft.y );
 
-    const Rect rt_left( rt.x + rt.w - 1 - sp_left.w(), rt.y + ( rt.h - sp_left.h() ) / 2, sp_left.w(), sp_left.h() );
+    const Rect rt_left( rt.x + rt.w - 1 - sp_left.width(), rt.y + ( rt.h - sp_left.height() ) / 2, sp_left.width(), sp_left.height() );
     if ( allow & Battle::RIGHT )
-        sp_left.Blit( rt_left.x, rt_left.y );
+        fheroes2::Blit( sp_left, display, rt_left.x, rt_left.y );
 
-    const Rect rt_bleft( rt.x + rt.w - 1 - sp_bleft.w(), rt.y + 1, sp_bleft.w(), sp_bleft.h() );
+    const Rect rt_bleft( rt.x + rt.w - 1 - sp_bleft.width(), rt.y + 1, sp_bleft.width(), sp_bleft.height() );
     if ( allow & Battle::TOP_RIGHT )
-        sp_bleft.Blit( rt_bleft.x, rt_bleft.y );
+        fheroes2::Blit( sp_bleft, display, rt_bleft.x, rt_bleft.y );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() && !le.MouseClickLeft() )
         ;
@@ -147,16 +146,16 @@ void RedrawTouchButton( const Surface & sf, const Rect & rt, const char * lb )
 void PocketPC::KeyboardDialog( std::string & str )
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
     cursor.Hide();
 
     const u32 width = 337;
     const u32 height = 118;
 
-    SpriteBack back( Rect( ( display.w() - width ) / 2, 0, width, height ) );
-    const Rect & top = back.GetArea();
-    display.FillRect( top, ColorBlack );
+    fheroes2::ImageRestorer back( display, ( display.width() - width ) / 2, 0, width, height );
+    const Rect top( back.x(), back.y(), back.width(), back.height() );
+    fheroes2::Fill( display, back.x(), back.y(), back.width(), back.height(), 0 );
 
     const Surface sp = CreateTouchButton();
 
@@ -318,7 +317,7 @@ void PocketPC::KeyboardDialog( std::string & str )
     RedrawTouchButton( sp, rt_SPACE, "space" );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     bool redraw = true;
 
@@ -439,17 +438,17 @@ void PocketPC::KeyboardDialog( std::string & str )
             Text tx( str, Font::SMALL );
             if ( tx.w() < top.w ) {
                 cursor.Hide();
-                display.FillRect( Rect( top.x, top.y + top.h - 16, top.w, 16 ), ColorBlack );
+                fheroes2::Fill( display, top.x, top.y + top.h - 16, top.w, 16, 0 );
                 tx.Blit( top.x + ( top.w - tx.w() ) / 2, top.y + top.h - 16 + 2 );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
             redraw = false;
         }
     }
 
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.Show();
-    display.Flip();
+    display.render();
 }

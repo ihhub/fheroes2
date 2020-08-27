@@ -23,10 +23,12 @@
 #define H2DIALOG_H
 
 #include <list>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "gamedefs.h"
+#include "image.h"
 
 #define SHADOWWIDTH 16
 #define BOXAREA_WIDTH 245
@@ -95,7 +97,7 @@ namespace Dialog
     void SecondarySkillInfo( const Skill::Secondary &, const bool ok_button = true );
     void SecondarySkillInfo( const std::string &, const std::string &, const Skill::Secondary &, const bool ok_button = true );
     void PrimarySkillInfo( const std::string &, const std::string &, int );
-    int SpriteInfo( const std::string &, const std::string &, const Surface &, int buttons = Dialog::OK );
+    int SpriteInfo( const std::string &, const std::string &, const fheroes2::Image &, int buttons = Dialog::OK );
     int ArtifactInfo( const std::string &, const std::string &, const Artifact &, int buttons = Dialog::OK );
     int ResourceInfo( const std::string &, const std::string &, const Funds &, int buttons = Dialog::OK );
     int SelectSkillFromArena( void );
@@ -127,7 +129,7 @@ namespace Dialog
         }
 
     protected:
-        SpriteBack background;
+        std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         Rect area;
     };
 
@@ -143,25 +145,25 @@ namespace Dialog
     public:
         FrameBorder( int v = BORDERWIDTH );
         FrameBorder( const Size & );
-        FrameBorder( const Size &, const Surface & );
+        FrameBorder( const Size &, const fheroes2::Image & );
         FrameBorder( s32, s32, u32, u32 );
         ~FrameBorder();
 
         void SetBorder( int );
         int BorderWidth( void ) const;
         int BorderHeight( void ) const;
-        bool isValid( void ) const;
         void SetPosition( s32, s32, u32 = 0, u32 = 0 );
 
+        bool isValid() const;
         const Rect & GetRect( void ) const;
         const Rect & GetArea( void ) const;
         const Rect & GetTop( void ) const;
 
         static void RenderRegular( const Rect & );
-        static void RenderOther( const Surface &, const Rect & );
+        static void RenderOther( const fheroes2::Image &, const Rect & );
 
     protected:
-        SpriteBack background;
+        fheroes2::ImageRestorer restorer;
         Rect rect;
         Rect area;
         Rect top;

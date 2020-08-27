@@ -77,16 +77,26 @@ namespace AGG
 
     ICNSprite RenderICNSprite( int, u32, int palette = PAL::STANDARD );
 
-    // Some ICNs need to be rescaled. You have to register their IDs before calling GetICN() function
-    void RegisterScalableICN( int icnId );
-
     // Replace colors based on indexes provided. Returns true only when the operation was successful.
     bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int incIndex, bool reflect );
     // Replace colors with the ones provided. RGB map has to match the palette. Returns true only if successful.
     bool ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int incIndex, bool reflect );
+}
 
-    // Returns true in an event of success. Only for 32-bit images
-    bool DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect );
+namespace fheroes2
+{
+    class Image;
+    class Sprite;
+
+    namespace AGG
+    {
+        const Sprite & GetICN( int icnId, uint32_t index );
+
+        // shapeId could be 0, 1, 2 or 3 only
+        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
+        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
+        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
+    }
 }
 
 #endif

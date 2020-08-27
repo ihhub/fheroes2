@@ -342,18 +342,3 @@ void PAL::Clear()
     standard_palette.clear();
     current_palette.clear();
 }
-
-void PAL::SetCustomSDLPalette( const std::vector<uint8_t> & indexes )
-{
-    if ( indexes.size() != PALETTE_SIZE )
-        return;
-
-    std::vector<SDL_Color> sdlPalette( PALETTE_SIZE );
-    for ( size_t i = 0; i < indexes.size(); ++i )
-        sdlPalette[i] = standard_palette[indexes[i]];
-
-    std::memcpy( current_palette.data(), sdlPalette.data(), sizeof( SDL_Color ) * PALETTE_SIZE );
-    currentPaletteId = CUSTOM;
-
-    Surface::SetDefaultPalette( &( current_palette )[0], static_cast<int>( current_palette.size() ) );
-}

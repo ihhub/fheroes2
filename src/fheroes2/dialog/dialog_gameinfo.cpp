@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -29,29 +28,25 @@
 #include "game_over.h"
 #include "icn.h"
 #include "maps.h"
+#include "player_info.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 
 void Dialog::GameInfo( void )
 {
-    // FIXME: QVGA version
-    if ( Settings::Get().QVGA() ) {
-        Dialog::Message( "", _( "For the QVGA version is not available." ), Font::SMALL, Dialog::OK );
-        return;
-    }
-
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();
 
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const Sprite & dlg = AGG::GetICN( ICN::SCENIBKG, 0 );
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
-    SpriteBack back( Rect( ( display.w() - dlg.w() ) / 2, ( display.h() - dlg.h() ) / 2, dlg.w(), dlg.h() ) );
-    const Point & pt = back.GetPos();
-    dlg.Blit( pt );
+    Point pt( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
+    fheroes2::ImageRestorer back( display, pt.x, pt.y, box.width(), box.height() );
+    fheroes2::Blit( box, display, pt.x, pt.y );
 
     TextBox text;
 
@@ -111,32 +106,31 @@ void Dialog::GameInfo( void )
     text.Set( "score: " + GetString( Game::GetGameOverScores() ), Font::YELLOW_SMALL, 80 );
     text.Blit( pt.x + 415 - text.w(), pt.y + 434 );
 
-    Button buttonOk( pt.x + 180, pt.y + 425, ICN::SYSTEM, 1, 2 );
-    Button buttonCfg( pt.x + 50, pt.y + 425, ICN::BTNCONFIG, 0, 1 );
+    fheroes2::Button buttonOk( pt.x + 180, pt.y + 425, ICN::SYSTEM, 1, 2 );
+    fheroes2::Button buttonCfg( pt.x + 50, pt.y + 425, ICN::BTNCONFIG, 0, 1 );
 
-    buttonOk.Draw();
-    buttonCfg.Draw();
+    buttonOk.draw();
+    buttonCfg.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
-        le.MousePressLeft( buttonCfg ) ? buttonCfg.PressDraw() : buttonCfg.ReleaseDraw();
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonCfg.area() ) ? buttonCfg.drawOnPress() : buttonCfg.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonCfg ) ) {
+        if ( le.MouseClickLeft( buttonCfg.area() ) ) {
             Dialog::ExtSettings( true );
             Cursor::Get().Show();
-            Display::Get().Flip();
+            display.render();
         }
 
-        if ( le.MouseClickLeft( buttonOk ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow )
             break;
     }
 
     cursor.Hide();
-    back.Restore();
 }

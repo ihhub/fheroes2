@@ -23,14 +23,14 @@
 #include <string>
 #include <vector>
 
-#include "surface.h"
+#include "image.h"
 
 class SMKVideoSequence
 {
 public:
     explicit SMKVideoSequence( const std::string & filePath );
 
-    const std::vector<Surface> & getFrames() const;
+    const std::vector<fheroes2::Image> & getFrames() const;
     const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
 
     unsigned long width() const;
@@ -40,9 +40,9 @@ public:
 private:
     bool _load( const std::string & filePath );
 
-    void _addNewFrame( const uint8_t * data, const uint8_t * palette );
+    void _addNewFrame( const uint8_t * data );
 
-    std::vector<Surface> _frames;
+    std::vector<fheroes2::Image> _frames;
     std::vector<std::vector<uint8_t> > _audioChannel;
     unsigned long _width;
     unsigned long _height;
