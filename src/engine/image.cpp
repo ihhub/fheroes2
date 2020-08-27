@@ -959,6 +959,80 @@ namespace fheroes2
         }
     }
 
+    Image CreateBlurredImage( const Image & in, int32_t blurRadius )
+    {
+        if ( in.empty() )
+            return Image();
+
+        if ( blurRadius < 1 )
+            return in;
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+        if ( blurRadius > width )
+            blurRadius = width;
+        if ( blurRadius > height )
+            blurRadius = height;
+
+        Image out( width, height );
+        std::fill( out.transform(), out.transform() + width * height, 0 );
+
+        uint8_t * imageOutY = out.image();
+        const uint8_t * imageIn = in.image();
+
+        for ( int32_t y = 0; y < height; ++y, imageOutY += width ) {
+            uint8_t * imageOutX = imageOutY;
+
+            int32_t startY = y - blurRadius;
+            int32_t endY = y + blurRadius;
+            if ( startY < 0 )
+                startY = 0;
+            if ( endY > height )
+                endY = height;
+
+            const int32_t roiHeight = endY - startY;
+
+            const uint8_t * imageInStartY = imageIn + startY * width;
+
+            for ( int32_t x = 0; x < width; ++x, ++imageOutX ) {
+                int32_t startX = x - blurRadius;
+                int32_t endX = x + blurRadius;
+                if ( startX < 0 )
+                    startX = 0;
+                if ( endX > width )
+                    endX = width;
+
+                const int32_t roiWidth = endX - startX;
+
+                uint32_t sumRed = 0;
+                uint32_t sumGreen = 0;
+                uint32_t sumBlue = 0;
+
+                const uint8_t * imageInY = imageInStartY + startX;
+                const uint8_t * imageInYEnd = imageInY + roiHeight * width;
+
+                for ( ; imageInY != imageInYEnd; imageInY += width ) {
+                    const uint8_t * imageInX = imageInY;
+                    const uint8_t * imageInXEnd = imageInX + roiWidth;
+                    for ( ; imageInX != imageInXEnd; ++imageInX ) {
+                        const uint8_t * palette = kb_pal + *imageInX * 3;
+
+                        sumRed += (*palette++);
+                        sumGreen += (*palette++);
+                        sumBlue += (*palette++);
+                    }
+                }
+
+                const uint32_t roiSize = static_cast<uint32_t>( roiWidth * roiHeight );
+
+                *imageOutX = GetPALColorId( static_cast<uint8_t>( sumRed / roiSize ), static_cast<uint8_t>( sumGreen / roiSize ),
+                                            static_cast<uint8_t>( sumBlue / roiSize ) );
+            }
+        }
+
+        return out;
+    }
+
     Image CreateContour( const Image & image, uint8_t value )
     {
         const int32_t width = image.width();
@@ -1244,6 +1318,21 @@ namespace fheroes2
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
         return GetPALColorId( red / 4, green / 4, blue / 4 );
+    }
+
+    void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId )
+    {
+        if ( image.empty() )
+            return;
+
+        uint8_t * data = image.image();
+        const uint8_t * dataEnd = data + image.width() * image.height();
+
+        for ( ; data != dataEnd; ++data ) {
+            if ( *data == oldColorId ) {
+                *data = newColorId;
+            }
+        }
     }
 
     void Resize( const Image & in, Image & out, bool isSubpixelAccuracy )

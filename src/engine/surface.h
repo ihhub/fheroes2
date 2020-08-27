@@ -150,7 +150,6 @@ public:
     Surface RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both */ ) const;
     Surface RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */ ) const;
     Surface RenderStencil( const RGBA & ) const;
-    Surface RenderBoxBlur( int blurRadius, int colorChange = 0, bool redTint = false ) const;
     Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
     Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
     Surface RenderSurface( const Rect & srt, const Size & ) const;

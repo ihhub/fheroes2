@@ -646,6 +646,8 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                     }
                                 }
 
+                                fheroes2::Blit( sf, display, cur_pt.x, cur_pt.y + 356 );
+
                                 RedrawIcons( *this, heroes, cur_pt );
                                 need_redraw = true;
                             }

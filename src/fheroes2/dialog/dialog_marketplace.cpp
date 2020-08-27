@@ -51,7 +51,7 @@ public:
     {
         back.update( rt.x - 5, rt.y + 15, rt.w + 10, 160 );
 
-        buttonGift.setICNInfo( ICN::BTNGIFT, 0, 1 );
+        buttonGift.setICNInfo( Settings::Get().ExtGameEvilInterface() ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
         buttonTrade.setICNInfo( tradpost, 15, 16 );
         buttonLeft.setICNInfo( tradpost, 3, 4 );
         buttonRight.setICNInfo( tradpost, 5, 6 );

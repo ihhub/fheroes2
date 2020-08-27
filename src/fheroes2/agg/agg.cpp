@@ -2131,7 +2131,8 @@ namespace fheroes2
         // Helper function for LoadModifiedICN
         void CopyICNWithPalette( int icnId, int originalIcnId, int paletteType )
         {
-            LoadOriginalICN( originalIcnId );
+            GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
+
             _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
             const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
             for ( size_t i = 0; i < _icnVsSprite[icnId].size(); ++i ) {
@@ -2222,6 +2223,105 @@ namespace fheroes2
                     Blit( originalImage, image, 8, 8 );
 
                     AddTransparency( image, 1 );
+                }
+                return true;
+            case ICN::CSLMARKER:
+                _icnVsSprite[id].resize( 3 );
+                for ( uint32_t i = 0; i < 3; ++i ) {
+                    _icnVsSprite[id][i] = GetICN( ICN::LOCATORS, 24 );
+                    if ( i == 1 ) {
+                        ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xD6 );
+                    }
+                    else if ( i == 2 ) {
+                        ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xDE );
+                    }
+                }
+                return true;
+            case ICN::BATTLESKIP: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TEXTBAR, 4 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
+
+                    // add 'skip'
+                    Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
+                }
+                return true;
+            case ICN::BATTLEWAIT: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TEXTBAR, 4 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
+
+                    // add 'wait'
+                    const Image wait = Crop( GetICN( ICN::ADVBTNS, 8 + i ), 5, 4, 28, 28 );
+                    Image resizedWait( wait.width() / 2, wait.height() / 2 );
+                    Resize( wait, resizedWait );
+
+                    Blit( resizedWait, 0, 0, out, ( out.width() - 14 ) / 2, 0, 14, 14 );
+                }
+                return true;
+            case ICN::BUYMAX: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::WELLXTRA, i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 2, 52, 14 );
+
+                    // add 'max'
+                    Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
+                }
+                return true;
+            case ICN::BTNGIFT_GOOD: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    // add 'G'
+                    Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    // add 'I'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    // add 'F'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'T'
+                    Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
+                return true;
+            case ICN::BTNGIFT_EVIL: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    // add 'G'
+                    Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    // add 'I'
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    // add 'F'
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'T'
+                    Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 return true;
             default:

@@ -156,6 +156,8 @@ namespace fheroes2
     void Copy( const Image & in, Image & out );
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
+    Image CreateBlurredImage( const Image & in, int32_t blurRadius );
+
     Image CreateContour( const Image & image, uint8_t value );
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height );
@@ -172,6 +174,9 @@ namespace fheroes2
 
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
+
+    // This function does NOT check transform layer
+    void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId );
 
     // Please remember that subpixel accuracy resizing is extremely slow!
     void Resize( const Image & in, Image & out, bool isSubpixelAccuracy = false );

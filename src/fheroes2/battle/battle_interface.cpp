@@ -3016,10 +3016,10 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         break;
 
     case Spell::HOLYWORD:
-        RedrawActionHolyShoutSpell( targets, 8 );
+        RedrawActionHolyShoutSpell( targets, 2 );
         break;
     case Spell::HOLYSHOUT:
-        RedrawActionHolyShoutSpell( targets, 16 );
+        RedrawActionHolyShoutSpell( targets, 4 );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -3927,8 +3927,8 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
 
     cursor.SetThemes( Cursor::WAR_NONE );
 
-    // Surface original = _mainSurface.GetSurface();
-    // Surface blurred = _mainSurface.RenderBoxBlur( 2, -strength, true );
+    const fheroes2::Image original( _mainSurface );
+    const fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
 
     _currentUnit = NULL;
     AGG::PlaySound( M82::MASSCURS );
@@ -3944,7 +3944,8 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
             // stay at maximum blur for 2 frames
             if ( frame < 9 || frame > 10 ) {
                 cursor.Hide();
-                // Surface::Blend( original, blurred, ( 255 - alpha ) * 100 / 255 ).Blit( _mainSurface );
+                fheroes2::Copy( original, _mainSurface );
+                fheroes2::AlphaBlit( blurred, _mainSurface, alpha );
                 cursor.Show();
                 RedrawPartialFinish();
 
