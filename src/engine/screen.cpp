@@ -702,8 +702,8 @@ namespace fheroes2
     Display::Display()
         : _engine( RenderEngine::create() )
         , _preprocessing( NULL )
-        , _renderSurface( NULL )
         , _postprocessing( NULL )
+        , _renderSurface( NULL )
     {}
 
     Display::~Display()
