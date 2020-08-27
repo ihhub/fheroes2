@@ -56,9 +56,9 @@ namespace
     }
 }
 
-void Pathfinder::buildPath( int from, int target, bool ignoreObjects )
+std::list<Route::Step> Pathfinder::buildPath( int from, int target, bool ignoreObjects )
 {
-    std::vector<int> path;
+    std::list<Route::Step> path;
 
     // check if we have to re-cache the map (new hero selected, etc)
     if ( _pathStart != from ) {
@@ -67,10 +67,15 @@ void Pathfinder::buildPath( int from, int target, bool ignoreObjects )
 
     // trace the path from end point
     int currentNode = target;
+    uint32_t cost = _cache[currentNode]._cost;
     while ( currentNode != from && currentNode != -1 ) {
-        path.push_back( currentNode );
-        currentNode = _cache[currentNode]._from;
+        PathfindingNode & node = _cache[currentNode];
+        path.push_front( { node._from, Direction::Get( node._from, currentNode ), cost - node._cost } );
+        currentNode = node._from;
+        cost = node._cost;
     }
+
+    return path;
 }
 
 void Pathfinder::evaluateMap( int start, uint32_t skillLevel )

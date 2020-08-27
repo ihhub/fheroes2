@@ -1037,6 +1037,11 @@ u32 World::GetUniq( void )
     return ++GameStatic::uniq;
 }
 
+std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ignoreObjects )
+{
+    return _pathfinder.buildPath( from, to, ignoreObjects );
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians << obj.split;

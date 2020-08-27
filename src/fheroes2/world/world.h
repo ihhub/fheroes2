@@ -34,6 +34,7 @@
 #include "maps_tiles.h"
 #include "sprite.h"
 #include "week.h"
+#include "world_pathfinding.h"
 #include <string>
 
 class Heroes;
@@ -251,6 +252,8 @@ public:
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
 
+    std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );
+
     static u32 GetUniq( void );
 
     void PostFixLoad( void );
@@ -295,6 +298,7 @@ private:
 
     MapActions map_actions;
     MapObjects map_objects;
+    Pathfinder _pathfinder;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

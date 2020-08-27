@@ -18,7 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "world.h"
+#pragma once
+
+#include "route.h"
 
 namespace
 {
@@ -33,28 +35,28 @@ namespace
         BOTTOM_LEFT = 6,
         LEFT = 7
     };
-
-    struct PathfindingNode
-    {
-        int _from = -1;
-        uint32_t _cost = 0;
-
-        PathfindingNode() {}
-        PathfindingNode( int node, uint32_t cost )
-            : _from( node )
-            , _cost( cost )
-        {}
-    };
-
-    class Pathfinder
-    {
-    public:
-        Pathfinder() {}
-        void evaluateMap( int start, uint32_t skillLevel = 0 );
-        void buildPath( int from, int target, bool ignoreObjects = true );
-
-    private:
-        std::vector<PathfindingNode> _cache;
-        int _pathStart = -1;
-    };
 }
+
+struct PathfindingNode
+{
+    int _from = -1;
+    uint32_t _cost = 0;
+
+    PathfindingNode() {}
+    PathfindingNode( int node, uint32_t cost )
+        : _from( node )
+        , _cost( cost )
+    {}
+};
+
+class Pathfinder
+{
+public:
+    Pathfinder() {}
+    void evaluateMap( int start, uint32_t skillLevel = 0 );
+    std::list<Route::Step> buildPath( int from, int target, bool ignoreObjects = true );
+
+private:
+    std::vector<PathfindingNode> _cache;
+    int _pathStart = -1;
+};
