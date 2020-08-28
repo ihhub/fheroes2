@@ -112,26 +112,19 @@ bool Cursor::SetThemes( int name, bool force )
 void Cursor::Redraw( s32 x, s32 y )
 {
 #if !defined( USE_SDL_CURSOR )
-    fheroes2::Cursor::instance().setPosition( x, y );
+    Cursor & cur = Cursor::Get();
+    cur.Move( x, y );
+
     if ( fheroes2::Cursor::instance().isVisible() ) {
         fheroes2::Display::instance().render();
     }
-    /*
-    Cursor & cur = Cursor::Get();
-
-    if ( cur.isVisible() ) {
-        cur.Move( x, y );
-
-        Display::Get().Flip();
-    }
-    */
 #endif
 }
 
 /* move cursor */
 void Cursor::Move( s32 x, s32 y )
 {
-    fheroes2::Cursor::instance().setPosition( x, y );
+    fheroes2::Cursor::instance().setPosition( x + offset_x, y + offset_y );
 }
 
 /* set offset big cursor */
