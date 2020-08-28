@@ -290,6 +290,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
             if ( filename.empty() )
                 buttonOk.disable();
+            else
+                buttonOk.enable();
             cursor.Hide();
         }
         if ( le.KeyPress( KEY_DELETE ) && listbox.isSelected() ) {
