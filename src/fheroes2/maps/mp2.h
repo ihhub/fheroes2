@@ -547,6 +547,7 @@ namespace MP2
     bool isPickupObject( int obj );
     bool isRemoveObject( int obj );
     bool isMoveObject( int obj );
+    bool isAbandonedMine( int obj );
 
     bool isNeedStayFront( int obj );
     bool isClearGroundObject( int obj );

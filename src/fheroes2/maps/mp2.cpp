@@ -1136,6 +1136,11 @@ bool MP2::isMoveObject( int obj )
     return false;
 }
 
+bool MP2::isAbandonedMine( int obj )
+{
+    return obj == MP2::OBJN_ABANDONEDMINE || obj == MP2::OBJ_ABANDONEDMINE;
+}
+
 bool MP2::isRemoveObject( int obj )
 {
     switch ( obj ) {
