@@ -1484,9 +1484,11 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & tile = world.GetTiles( dst_index );
     u32 gold = tile.QuantityGold();
     std::string ask, msg, win;
+    std::string caption;
 
     switch ( obj ) {
     case MP2::OBJ_GRAVEYARD:
+        caption = MP2::StringObject( MP2::OBJ_GRAVEYARD );
         ask = _( "You tentatively approach the burial ground of ancient warriors. Do you want to search the graves?" );
         msg = _( "Upon defeating the Zombies you spend several hours searching the graves and find nothing. Such a despicable act reduces your army's morale." );
         win = _( "Upon defeating the zomies you search the graves and find something!" );
@@ -1505,7 +1507,7 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
         break;
     }
 
-    if ( Dialog::YES == Dialog::Message( "", ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+    if ( Dialog::YES == Dialog::Message( caption, ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
         bool complete = false;
 
         if ( gold ) {
