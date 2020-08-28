@@ -209,7 +209,7 @@ void Dialog::Marketplace( bool fromTradingPost )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const int tradpost = Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST;
-    const std::string & header = _( "Marketplace" );
+    const std::string & header = fromTradingPost ? _( "Trading Post" ) : _( "Marketplace" );
 
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
@@ -554,8 +554,7 @@ std::string GetStringTradeCosts( int rs_from, int rs_to, bool tradingPost )
         res = _( "n/a" );
     }
     else {
-        if ( Resource::GOLD != rs_from && Resource::GOLD != rs_to )
-            res = "1/";
+        res = "1/";
         res.append( GetString( GetTradeCosts( rs_from, rs_to, tradingPost ) ) );
     }
 
