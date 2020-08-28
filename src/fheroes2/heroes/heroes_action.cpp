@@ -2946,7 +2946,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
                 "",
                 _( "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\"" ),
                 Font::BIG, Dialog::YES | Dialog::NO ) ) {
-            std::string header( _( "The Sphinx asks you the following riddle: %{riddle}. Your answer?" ) );
+            std::string header( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
             StringReplace( header, "%{riddle}", riddle->message );
             std::string answer;
             Dialog::InputString( header, answer );
