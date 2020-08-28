@@ -368,7 +368,7 @@ const char * MP2::StringObject( int object )
         return _( "Dragon City" );
     case OBJN_LIGHTHOUSE:
     case OBJ_LIGHTHOUSE:
-        return _( "Light House" );
+        return _( "Lighthouse" );
     case OBJN_WATERWHEEL:
     case OBJ_WATERWHEEL:
         return _( "Water Wheel" );
