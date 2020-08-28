@@ -2162,24 +2162,24 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::BTNNEWGM, 2 + i );
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 15, 13, 55, 14 );
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 70, 13, 55, 14 );
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 42, 28, 55, 14 );
+                    Image uniform( 83, 23 );
+                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
+                    Copy( uniform, 0, 0, out, 28, 18, uniform.width(), uniform.height() );
                     // add 'ba'
-                    Blit( GetICN( ICN::BTNCMPGN, i ), 41, 28, out, 30, 13, 28, 14 );
+                    Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
                     // add 'tt'
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25, 13, out, 57, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25, 13, out, 70, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
                     // add 'le'
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97, 21, out, 83, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86, 21, out, 96, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
                     // add 'on'
-                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44, 21, out, 40, 28, 31, 14 );
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
                     // add 'ly'
-                    Blit( GetICN( ICN::BTNHOTST, i ), 47, 21, out, 71, 28, 13, 13 );
-                    Blit( GetICN( ICN::BTNHOTST, i ), 72, 21, out, 84, 28, 13, 13 );
+                    Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
+                    Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
                 }
                 return true;
             case ICN::BTNMIN:
