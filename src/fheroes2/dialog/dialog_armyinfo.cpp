@@ -100,18 +100,9 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
         buttonDismiss.disable();
     }
 
-    if ( !troop.isBattle() && troop.isAllowUpgrade() ) {
-        if ( UPGRADE & flags ) {
-            if ( UPGRADE_DISABLE & flags ) {
-                buttonUpgrade.press();
-                buttonUpgrade.disable();
-            }
-            else
-                buttonUpgrade.enable();
-            buttonUpgrade.draw();
-        }
-        else
-            buttonUpgrade.disable();
+    if ( !troop.isBattle() && troop.isAllowUpgrade() && ( UPGRADE & flags ) ) {
+        buttonUpgrade.enable();
+        buttonUpgrade.draw();
     }
     else
         buttonUpgrade.disable();
@@ -139,26 +130,33 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
             // upgrade
             if ( buttonUpgrade.isEnabled() && le.MouseClickLeft( buttonUpgrade.area() ) ) {
-                std::string msg
-                    = 1.0f != Monster::GetUpgradeRatio() ? _(
-                          "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest number. Do you wish to upgrade them?" )
-                                                         : _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
-                StringReplace( msg, "%{ratio}", GetString( Monster::GetUpgradeRatio(), 2 ) );
-                if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
-                    result = Dialog::UPGRADE;
-                    break;
+                if ( UPGRADE_DISABLE & flags ) {
+                    const std::string msg( "You can't afford to upgrade your troops!" );
+                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::OK ) ) {
+                        result = Dialog::UPGRADE;
+                        break;
+                    }
+                }
+                else {
+                    std::string msg
+                        = 1.0f != Monster::GetUpgradeRatio() ? _(
+                              "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest number. Do you wish to upgrade them?" )
+                                                             : _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
+                    StringReplace( msg, "%{ratio}", GetString( Monster::GetUpgradeRatio(), 2 ) );
+                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
+                        result = Dialog::UPGRADE;
+                        break;
+                    }
                 }
             }
-            else
-                // dismiss
-                if ( buttonDismiss.isEnabled() && le.MouseClickLeft( buttonDismiss.area() )
-                     && Dialog::YES == Dialog::Message( "", _( "Are you sure you want to dismiss this army?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+            // dismiss
+            if ( buttonDismiss.isEnabled() && le.MouseClickLeft( buttonDismiss.area() )
+                 && Dialog::YES == Dialog::Message( "", _( "Are you sure you want to dismiss this army?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 result = Dialog::DISMISS;
                 break;
             }
-            else
-                // exit
-                if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+            // exit
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
                 result = Dialog::CANCEL;
                 break;
             }
