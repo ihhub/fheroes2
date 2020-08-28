@@ -191,7 +191,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     fheroes2::Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
 
     // button dismiss
-    dst_pt.x = cur_pt.x + 5;
+    dst_pt.x = cur_pt.x + 4;
     dst_pt.y = cur_pt.y + 318;
     fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, ICN::HSBTNS, 0, 1 );
 
