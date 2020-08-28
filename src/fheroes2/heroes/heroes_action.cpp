@@ -1489,7 +1489,7 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
     case MP2::OBJ_GRAVEYARD:
         ask = _( "You tentatively approach the burial ground of ancient warriors. Do you want to search the graves?" );
         msg = _( "Upon defeating the Zombies you spend several hours searching the graves and find nothing. Such a despicable act reduces your army's morale." );
-        win = _( "Upon defeating the zomies you search the graves and find something!" );
+        win = _( "Upon defeating the Zombies you search the graves and find something!" );
         break;
     case MP2::OBJ_SHIPWRECK:
         ask = _( "The rotting hulk of a great pirate ship creaks eerily as it is pushed against the rocks. Do you wish to search the shipwreck?" );
