@@ -35,7 +35,9 @@ class SettingsListBox : public Interface::ListBox<u32>
 public:
     SettingsListBox( const Point & pt, bool f )
         : Interface::ListBox<u32>( pt )
-        , readonly( f ){};
+        , readonly( f )
+        , _restorer( fheroes2::Display::instance() )
+    {}
 
     void RedrawItem( const u32 &, s32, s32, bool );
     void RedrawBackground( const Point & );
@@ -47,6 +49,7 @@ public:
     void ActionListPressRight( u32 & ){};
 
     bool readonly;
+    fheroes2::ImageRestorer _restorer;
 };
 
 void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool current )
@@ -77,7 +80,7 @@ void SettingsListBox::RedrawBackground( const Point & origin )
     const int window_h = 400;
     const int ah = window_h - 54;
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), 15, 25, display, origin.x + 15, origin.y + 25, 280, ah );
+    _restorer.restore();
 
     for ( int ii = 1; ii < ( window_h / 25 ); ++ii )
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 11 ), display, origin.x + 295, origin.y + 35 + ( 19 * ii ) );
@@ -246,6 +249,8 @@ void Dialog::ExtSettings( bool readonly )
     }
 
     SettingsListBox listbox( area, readonly );
+
+    listbox._restorer.update( area.x + 15, area.y + 25, 280, 336 );
 
     const int ah = 340;
 
