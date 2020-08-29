@@ -219,8 +219,9 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
         else {
             Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
         }
-        Interface::Basic::Get().RedrawFocus();
     }
+
+    Interface::Basic::Get().RedrawFocus();
 }
 
 void ShowNewWeekDialog( void )
