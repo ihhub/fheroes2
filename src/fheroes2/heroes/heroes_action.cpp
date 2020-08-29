@@ -695,17 +695,21 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
     else
         // join with cost
         if ( JOIN_COST == join.first ) {
-        u32 gold = troop.GetCost().gold;
+        const u32 gold = troop.GetCost().gold;
+        if ( hero.GetKingdom().GetFunds().gold >= gold ) {
+            if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.second, gold, hero ) ) {
+                DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
 
-        if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.second, gold, hero ) ) {
-            DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
-
-            hero.GetArmy().JoinTroop( troop(), join.second );
-            hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, gold ) );
-            statusWindow.SetRedraw();
+                hero.GetArmy().JoinTroop( troop(), join.second );
+                hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, gold ) );
+                statusWindow.SetRedraw();
+            }
+            else {
+                Dialog::Message( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Font::BIG, Dialog::OK );
+                join.first = JOIN_NONE;
+            }
         }
         else {
-            Dialog::Message( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Font::BIG, Dialog::OK );
             join.first = JOIN_NONE;
         }
     }
