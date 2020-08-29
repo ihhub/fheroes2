@@ -4047,6 +4047,7 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
     }
 
     fheroes2::ApplyPalette( spriteReddish, PAL::GetPalette( PAL::RED ) );
+    fheroes2::Copy( spriteReddish, 0, 0, _mainSurface, area.x, area.y, area.w, area.h );
 
     cursor.Hide();
 
