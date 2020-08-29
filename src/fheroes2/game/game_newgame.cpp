@@ -93,6 +93,11 @@ namespace
 
         return maps;
     }
+
+    bool IsCampaignPresent()
+    {
+        return !GetRolandCampaign().empty();
+    }
 }
 
 int Game::NewStandard( void )
@@ -344,6 +349,10 @@ int Game::NewGame( void )
     fheroes2::Button buttonSettings( buttonXPos, 305, ICN::BTNDCCFG, 4, 5 );
     fheroes2::Button buttonCancelGame( buttonXPos, 375, ICN::BTNNEWGM, 6, 7 );
 
+    if ( !IsCampaignPresent() ) {
+        buttonCampainGame.disable();
+    }
+
     buttonStandartGame.draw();
     buttonCampainGame.draw();
     buttonMultiGame.draw();
@@ -356,7 +365,10 @@ int Game::NewGame( void )
 
     while ( le.HandleEvents() ) { // new game loop
         le.MousePressLeft( buttonStandartGame.area() ) ? buttonStandartGame.drawOnPress() : buttonStandartGame.drawOnRelease();
-        le.MousePressLeft( buttonCampainGame.area() ) ? buttonCampainGame.drawOnPress() : buttonCampainGame.drawOnRelease();
+
+        if ( buttonCampainGame.isEnabled() ) {
+            le.MousePressLeft( buttonCampainGame.area() ) ? buttonCampainGame.drawOnPress() : buttonCampainGame.drawOnRelease();
+        }
         le.MousePressLeft( buttonMultiGame.area() ) ? buttonMultiGame.drawOnPress() : buttonMultiGame.drawOnRelease();
         le.MousePressLeft( buttonBattleGame.area() ) ? buttonBattleGame.drawOnPress() : buttonBattleGame.drawOnRelease();
         le.MousePressLeft( buttonSettings.area() ) ? buttonSettings.drawOnPress() : buttonSettings.drawOnRelease();
@@ -364,7 +376,7 @@ int Game::NewGame( void )
 
         if ( HotKeyPressEvent( EVENT_BUTTON_STANDARD ) || le.MouseClickLeft( buttonStandartGame.area() ) )
             return NEWSTANDARD;
-        if ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIN ) || le.MouseClickLeft( buttonCampainGame.area() ) )
+        if ( buttonCampainGame.isEnabled() && ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIN ) || le.MouseClickLeft( buttonCampainGame.area() ) ) )
             return NEWCAMPAIN;
         if ( HotKeyPressEvent( EVENT_BUTTON_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) )
             return NEWMULTI;
