@@ -25,6 +25,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_interface.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
@@ -171,9 +172,8 @@ int Dialog::SystemOptions( void )
     }
 
     // restore background
-    cursor.Hide();
+    Interface::Basic::Get().Reset();
     cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return result;
