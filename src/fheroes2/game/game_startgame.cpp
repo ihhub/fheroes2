@@ -541,7 +541,7 @@ int Interface::Basic::StartGame( void )
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
                         Redraw();
                         display.render();
-                        Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn" ) );
+                        Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn." ) );
                     }
                     conf.SetCurrentColor( player.GetColor() );
                     world.ClearFog( player.GetColor() );
