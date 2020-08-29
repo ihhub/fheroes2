@@ -282,10 +282,18 @@ int Game::ScenarioInfo( void )
         if ( lower.size() > 3 ) {
             std::string ext = lower.substr( lower.size() - 3 );
 
-            if ( ext == "mp2" || ext == "mx2" )
+            if ( ext == "mp2" || ext == "mx2" ) {
                 result = world.LoadMapMP2( conf.MapsFile() ) ? STARTGAME : MAINMENU;
-            else if ( ext == "map" )
+            }
+            else if ( ext == "map" ) {
                 result = world.LoadMapMAP( conf.MapsFile() ) ? STARTGAME : MAINMENU;
+            }
+            else {
+                result = MAINMENU;
+                DEBUG( DBG_GAME, DBG_WARN,
+                       conf.MapsFile() << ", "
+                                       << "unknown map format" );
+            }
         }
         else {
             result = MAINMENU;
