@@ -157,16 +157,6 @@ void Game::OpenCastleDialog( Castle & castle )
         ( *it )->OpenDialog( true, needFade );
     }
 
-    if ( it != myCastles.end() ) {
-        // focus priority: castle heroes
-        Heroes * hero = ( *it )->GetHeroes().Guest();
-
-        if ( hero && !hero->Modes( Heroes::GUARDIAN ) )
-            Interface::Basic::Get().SetFocus( hero );
-        else
-            Interface::Basic::Get().SetFocus( *it );
-    }
-
     Interface::Basic::Get().RedrawFocus();
 }
 
