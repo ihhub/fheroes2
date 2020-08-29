@@ -564,23 +564,38 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     tsTotal.Show();
 
     fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.w, pos.h ), buttons );
-    fheroes2::Button btnMarket( pos.x + pos.w / 2 - 60 - 36, posy, ( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 4, 5 );
+
+    fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
+    fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
+    fheroes2::AddTransparency( marketButtonReleased, 36 );
+    fheroes2::AddTransparency( marketButtonPressed, 36 );
+
+    const fheroes2::Point buttonMarketPos( pos.x + pos.w / 2 - 60 - 36, posy );
+    fheroes2::Sprite marketButtonReleasedBack( marketButtonReleased.width(), marketButtonReleased.height(), marketButtonReleased.x(), marketButtonReleased.y() );
+    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, 0, 0, marketButtonReleasedBack.width(), marketButtonReleasedBack.height() );
+    fheroes2::Blit( marketButtonReleased, marketButtonReleasedBack );
+
+    fheroes2::Sprite marketButtonPressedBack( marketButtonPressed.width(), marketButtonPressed.height(), marketButtonPressed.x(), marketButtonPressed.y() );
+    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonPressedBack, 0, 0, marketButtonPressedBack.width(), marketButtonPressedBack.height() );
+    fheroes2::Blit( marketButtonPressed, marketButtonPressedBack );
+
+    fheroes2::ButtonSprite btnMarket( buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, marketButtonPressedBack );
 
     fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
     fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
     fheroes2::AddTransparency( armyButtonReleased, 36 );
     fheroes2::AddTransparency( armyButtonPressed, 36 );
 
-    const fheroes2::Point buttonHeroPos( pos.x + pos.w / 2 + 60, posy );
+    const fheroes2::Point buttonArmyPos( pos.x + pos.w / 2 + 60, posy );
     fheroes2::Sprite armyButtonReleasedBack( armyButtonReleased.width(), armyButtonReleased.height(), armyButtonReleased.x(), armyButtonReleased.y() );
-    fheroes2::Copy( display, buttonHeroPos.x, buttonHeroPos.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
+    fheroes2::Copy( display, buttonArmyPos.x, buttonArmyPos.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
     fheroes2::Blit( armyButtonReleased, armyButtonReleasedBack );
 
     fheroes2::Sprite armyButtonPressedBack( armyButtonPressed.width(), armyButtonPressed.height(), armyButtonPressed.x(), armyButtonPressed.y() );
-    fheroes2::Copy( display, buttonHeroPos.x, buttonHeroPos.y, armyButtonPressedBack, 0, 0, armyButtonPressedBack.width(), armyButtonPressedBack.height() );
+    fheroes2::Copy( display, buttonArmyPos.x, buttonArmyPos.y, armyButtonPressedBack, 0, 0, armyButtonPressedBack.width(), armyButtonPressedBack.height() );
     fheroes2::Blit( armyButtonPressed, armyButtonPressedBack );
 
-    fheroes2::ButtonSprite btnHeroes( buttonHeroPos.x, buttonHeroPos.y, armyButtonReleasedBack, armyButtonPressedBack );
+    fheroes2::ButtonSprite btnHeroes( buttonArmyPos.x, buttonArmyPos.y, armyButtonReleasedBack, armyButtonPressedBack );
 
     const Kingdom & kingdom = hero.GetKingdom();
 
