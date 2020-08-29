@@ -205,7 +205,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
     Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
-    fheroes2::ImageRestorer background( display, rt.x, rt.y, rt.w, rt.h );
+
+    fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.w + SHADOWWIDTH, rt.h + SHADOWWIDTH );
+
+    const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
+    fheroes2::Blit( shadow, display, rt.x - SHADOWWIDTH, rt.y + SHADOWWIDTH );
 
     const Rect countPlayers( rt.x + 45, rt.y + 55, 20, 175 );
     const Rect sizeMaps( rt.x + 62, rt.y + 55, 20, 175 );
