@@ -147,8 +147,8 @@ void ScenarioListBox::RedrawBackground( const Point & dst )
         const fheroes2::Sprite & spriteLoss = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
         fheroes2::Blit( spriteLoss, display, dst.x + 275 + spriteWins.width() + 2, dst.y + 265 );
 
-        text.Set( _( "Maps Difficulty:" ), Font::BIG );
-        text.Blit( dst.x + 70, dst.y + 290 );
+        text.Set( _( "Map difficulty:" ), Font::BIG );
+        text.Blit( dst.x + 210 - text.w(), dst.y + 290 );
 
         text.Set( Difficulty::String( info.difficulty ) );
         text.Blit( dst.x + 275 - text.w() / 2, dst.y + 290 );
