@@ -216,8 +216,10 @@ int Game::HighScores( bool fill )
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button buttonCampain( top.x + 9, top.y + 315, ICN::HISCORE, 0, 1 );
+    fheroes2::Button buttonCampain( top.x + 8, top.y + 315, ICN::HISCORE, 0, 1 );
     fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
+
+    buttonCampain.disable(); // disable for now till full campaign support
 
     buttonCampain.draw();
     buttonExit.draw();
@@ -250,7 +252,9 @@ int Game::HighScores( bool fill )
         // key code info
         if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
             Dialog::Message( "Key Press:", GetString( le.KeyValue() ), Font::SMALL, Dialog::OK );
-        le.MousePressLeft( buttonCampain.area() ) ? buttonCampain.drawOnPress() : buttonCampain.drawOnRelease();
+        if ( buttonCampain.isEnabled() ) {
+            le.MousePressLeft( buttonCampain.area() ) ? buttonCampain.drawOnPress() : buttonCampain.drawOnRelease();
+        }
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
