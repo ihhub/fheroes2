@@ -293,6 +293,7 @@ int TestBlitSpeed( void )
 
 void LoadZLogo( void )
 {
+    /*
 #ifdef BUILD_RELEASE
     std::string file = Settings::GetLastFile( "image", "sdl_logo.png" );
     // SDL logo
@@ -315,6 +316,7 @@ void LoadZLogo( void )
         }
     }
 #endif
+    */
 }
 
 void ReadConfigs( void )

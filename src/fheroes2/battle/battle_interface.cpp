@@ -878,8 +878,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     // border
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    _interfacePosition
-        = Rect( ( display.width() - Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, _surfaceInnerArea.w, _surfaceInnerArea.h );
+    _interfacePosition = Rect( ( display.width() - Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, _surfaceInnerArea.w,
+                               _surfaceInnerArea.h );
     border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // cover
