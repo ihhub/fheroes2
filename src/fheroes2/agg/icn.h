@@ -920,10 +920,8 @@ namespace ICN
     const char * GetString( int );
     int FromString( const char * );
     u32 AnimationFrame( int icn, u32, u32, bool = false );
-    bool NeedMinify4PocketPC( int icn, u32 );
     bool HighlyObjectSprite( int icn, u32 );
     int PORTxxxx( int heroId );
-    u32 GetMissIndex( int icn, s32, s32 );
 
     bool isBattleMonsterICN( int );
     bool SkipLocalAlpha( int );

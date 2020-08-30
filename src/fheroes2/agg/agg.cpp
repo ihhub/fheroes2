@@ -508,9 +508,6 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
     const Settings & conf = Settings::Get();
 
     switch ( icn ) {
-    case ICN::BOAT12:
-        count = 1;
-        break;
     case ICN::BATTLESKIP:
     case ICN::BATTLEWAIT:
     case ICN::BATTLEAUTO:
@@ -657,15 +654,10 @@ bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
                 // clean
                 GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 3, 8, 43, 14 ), 3, 1, sprite );
                 // wait
-                Surface dst = Sprite::ScaleQVGASurface( GetICN( ICN::ADVBTNS, 8 + index ).GetSurface( Rect( 5, 4, 28, 28 ) ) );
-                dst.Blit( ( sprite.w() - dst.w() ) / 2, 2, sprite );
+                // Surface dst = Sprite::ScaleQVGASurface( GetICN( ICN::ADVBTNS, 8 + index ).GetSurface( Rect( 5, 4, 28, 28 ) ) );
+                // dst.Blit( ( sprite.w() - dst.w() ) / 2, 2, sprite );
             }
             break;
-
-        case ICN::BOAT12: {
-            LoadOrgICN( sprite, ICN::ADVMCO, 28 + index, false );
-            sprite.SetSurface( Sprite::ScaleQVGASurface( sprite ) );
-        } break;
 
         case ICN::CSLMARKER:
             // sprite: not allow build: complete, not today, all builds (white)
@@ -1135,12 +1127,6 @@ bool AGG::LoadICN( int icn, u32 index, bool reflect )
             if ( Settings::Get().UseAltResource() )
                 SaveICN( icn );
 #endif
-        }
-
-        // pocketpc: scale sprites
-        if ( Settings::Get().QVGA() && ICN::NeedMinify4PocketPC( icn, index ) ) {
-            Sprite & sp = reflect ? v.reflect[index] : v.sprites[index];
-            sp = Sprite::ScaleQVGASprite( sp );
         }
     }
     return true;

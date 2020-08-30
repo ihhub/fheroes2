@@ -204,66 +204,6 @@ Size Display::GetDefaultSize( void )
     return Size( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 }
 
-void Display::Flip( void )
-{
-    fheroes2::Display::instance().render();
-}
-
-Size Display::GetMaxMode( bool rotate ) const
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    int disp = 0;
-    int num = SDL_GetNumDisplayModes( disp );
-    SDL_DisplayMode mode;
-    int max = 0;
-    int cur = 0;
-
-    for ( int ii = 0; ii < num; ++ii ) {
-        SDL_GetDisplayMode( disp, ii, &mode );
-
-        if ( max < mode.w * mode.h ) {
-            max = mode.w * mode.h;
-            cur = ii;
-        }
-    }
-
-    SDL_GetDisplayMode( disp, cur, &mode );
-    Size result = Size( mode.w, mode.h );
-
-    if ( rotate && result.w < result.h )
-        std::swap( result.w, result.h );
-
-    return result;
-#else
-    Size result;
-    SDL_Rect ** modes = SDL_ListModes( NULL, SDL_ANYFORMAT );
-
-    if ( modes == (SDL_Rect **)0 || modes == (SDL_Rect **)-1 ) {
-        ERROR( "GetMaxMode: "
-               << "no modes available" );
-    }
-    else {
-        int max = 0;
-        int cur = 0;
-
-        for ( int ii = 0; modes[ii]; ++ii ) {
-            if ( max < modes[ii]->w * modes[ii]->h ) {
-                max = modes[ii]->w * modes[ii]->h;
-                cur = ii;
-            }
-        }
-
-        result.w = modes[cur]->w;
-        result.h = modes[cur]->h;
-
-        if ( rotate && result.w < result.h )
-            std::swap( result.w, result.h );
-    }
-
-    return result;
-#endif
-}
-
 std::string Display::GetInfo( void ) const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -280,33 +220,6 @@ std::string Display::GetInfo( void ) const
        << "driver: " << SDL_VideoDriverName( namebuf, 12 );
 
     return os.str();
-#endif
-}
-
-Surface Display::GetSurface( const Rect & rt ) const
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    /*
-        SDL_Rect srcrect = SDLRect(rt);
-        SDL_Surface *sf = SDL_CreateRGBSurface(0, rt.w, rt.h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
-        Surface res;
-
-
-        if(! sf)
-            ERROR(SDL_GetError());
-        else
-        {
-            if(0 != SDL_RenderReadPixels(renderer, &srcrect, SDL_PIXELFORMAT_ARGB8888, sf->pixels, sf->pitch))
-                ERROR(SDL_GetError());
-
-            res.Set(sf);
-        }
-    */
-    return Surface::GetSurface( rt );
-#else
-    Surface res( rt, GetFormat() );
-    Blit( rt, Point( 0, 0 ), res );
-    return res; // Surface(SDL_DisplayFormat(res()));
 #endif
 }
 
@@ -327,11 +240,6 @@ Display & Display::Get( void )
 {
     static Display inside;
     return inside;
-}
-
-Surface Display::GetSurface( void ) const
-{
-    return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

@@ -825,12 +825,6 @@ void Settings::PostLoad( void )
     }
 }
 
-void Settings::SetAutoVideoMode( void )
-{
-    video_mode = Display::Get().GetMaxMode( PocketPC() );
-    PostLoad();
-}
-
 bool Settings::Save( const std::string & filename ) const
 {
     if ( filename.empty() )
