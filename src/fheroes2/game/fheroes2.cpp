@@ -39,7 +39,6 @@
 #include "settings.h"
 #include "system.h"
 #include "test.h"
-#include "text.h"
 #include "zzlib.h"
 
 void LoadZLogo( void );
