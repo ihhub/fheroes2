@@ -209,30 +209,6 @@ void Display::Flip( void )
     fheroes2::Display::instance().render();
 }
 
-void Display::ToggleFullScreen( void )
-{
-    fheroes2::engine().toggleFullScreen();
-}
-
-bool Display::IsFullScreen() const
-{
-    return fheroes2::engine().isFullScreen();
-}
-
-void Display::SetCaption( const char * str )
-{
-    fheroes2::engine().setTitle( str );
-}
-
-void Display::SetIcons( Surface & icons )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SDL_SetWindowIcon( window, icons() );
-#else
-    SDL_WM_SetIcon( icons(), NULL );
-#endif
-}
-
 Size Display::GetMaxMode( bool rotate ) const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -334,11 +310,6 @@ Surface Display::GetSurface( const Rect & rt ) const
 #endif
 }
 
-void Display::Clear( void )
-{
-    Fill( ColorBlack );
-}
-
 /* hide system cursor */
 void Display::HideCursor( void )
 {
@@ -349,81 +320,6 @@ void Display::HideCursor( void )
 void Display::ShowCursor( void )
 {
     SDL_ShowCursor( SDL_ENABLE );
-}
-
-void Display::Fade( const Surface & top, const Surface & back, const Point & pt, int level, int delay )
-{
-    Surface shadow = top.GetSurface();
-    int alpha = 255;
-    const int step = 10;
-    const int min = step + 5;
-    const int delay2 = ( delay * step ) / ( alpha - min );
-
-    while ( alpha > min + level ) {
-        back.Blit( pt, *this );
-        shadow.SetAlphaMod( alpha, false );
-        shadow.Blit( pt, *this );
-        Flip();
-        alpha -= step;
-        DELAY( delay2 );
-    }
-}
-
-void Display::InvertedFade( const Surface & top, const Surface & back, const Point & offset, const Surface & middle, const Point & middleOffset, int level, int delay )
-{
-    Surface shadow = top.GetSurface();
-    int alpha = 255;
-    const int step = 10;
-    const int min = step + 5;
-    const int delay2 = ( delay * step ) / ( alpha - min );
-
-    while ( alpha > min + level ) {
-        back.Blit( offset, *this );
-        shadow.Blit( offset, *this );
-        shadow.SetAlphaMod( alpha, false );
-        middle.Blit( middleOffset, *this );
-        Flip();
-        alpha -= step;
-        DELAY( delay2 );
-    }
-}
-
-void Display::Fade( int delay )
-{
-    Surface top = GetSurface();
-    Surface back( GetSize(), false );
-    back.Fill( ColorBlack );
-    Fade( top, back, Point( 0, 0 ), 5, delay );
-    Blit( back );
-    Flip();
-}
-
-void Display::Rise( const Surface & top, const Surface & back, const Point & pt, int level, int delay )
-{
-    Surface shadow = top.GetSurface();
-    int alpha = 0;
-    const int step = 10;
-    const int max = level - step;
-    const int delay2 = ( delay * step ) / max;
-
-    while ( alpha < max ) {
-        back.Blit( *this );
-        shadow.SetAlphaMod( alpha, false );
-        shadow.Blit( *this );
-        Flip();
-        alpha += step;
-        DELAY( delay2 );
-    }
-}
-
-void Display::Rise( int delay )
-{
-    Surface top = GetSurface();
-    Surface back( GetSize(), false );
-    back.Fill( ColorBlack );
-    Rise( top, back, Point( 0, 0 ), 250, delay );
-    Blit( top );
-    Flip();
 }
 
 /* get video display */

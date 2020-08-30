@@ -59,11 +59,9 @@ namespace AGG
     bool Init( void );
     void Quit( void );
 
-    int PutICN( const Sprite &, bool init_reflect = false );
     Sprite GetICN( int icn, u32 index, bool reflect = false );
     u32 GetICNCount( int icn );
     int GetAbsoluteICNHeight( int icn );
-    Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
     std::vector<u8> LoadBINFRM( const char * frm_file );
 #ifdef WITH_TTF

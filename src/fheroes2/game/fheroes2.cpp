@@ -154,7 +154,6 @@ int main( int argc, char ** argv )
 
             // display.SetVideoMode( conf.VideoMode().w, conf.VideoMode().h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
             Display::Get().HideCursor();
-            // display.SetCaption( GetCaption().c_str() );
 
             // Ensure the mouse position is updated to prevent bad initial values.
             LocalEvent::Get().RegisterCycling();
@@ -294,6 +293,7 @@ int TestBlitSpeed( void )
 
 void LoadZLogo( void )
 {
+    /*
 #ifdef BUILD_RELEASE
     std::string file = Settings::GetLastFile( "image", "sdl_logo.png" );
     // SDL logo
@@ -316,6 +316,7 @@ void LoadZLogo( void )
         }
     }
 #endif
+    */
 }
 
 void ReadConfigs( void )

@@ -1206,23 +1206,6 @@ int AGG::GetAbsoluteICNHeight( int icn )
     return result;
 }
 
-int AGG::PutICN( const Sprite & sprite, bool init_reflect )
-{
-    icn_cache_t v;
-
-    v.count = 1;
-    v.sprites = new Sprite[1];
-    v.sprites[0] = sprite;
-
-    if ( init_reflect ) {
-        v.reflect = new Sprite[1];
-        v.reflect[0] = Sprite( sprite.RenderReflect( 2 ), sprite.x(), sprite.y() );
-    }
-
-    icn_cache.push_back( v );
-    return icn_cache.size() - 1;
-}
-
 bool AGG::LoadAltTIL( int til, u32 max )
 {
 #ifdef WITH_XML
@@ -1415,62 +1398,6 @@ void AGG::LoadTIL( int til )
 #endif
         }
     }
-}
-
-/* return TIL surface from AGG::Cache */
-Surface AGG::GetTIL( int til, u32 index, u32 shape )
-{
-    Surface result;
-
-    if ( til < static_cast<int>( til_cache.size() ) ) {
-        til_cache_t & v = til_cache[til];
-
-        if ( 0 == v.count )
-            LoadTIL( til );
-        u32 index2 = index;
-
-        if ( shape ) {
-            switch ( til ) {
-            case TIL::STON:
-                index2 += 36 * ( shape % 4 );
-                break;
-            case TIL::CLOF32:
-                index2 += 4 * ( shape % 4 );
-                break;
-            case TIL::GROUND32:
-                index2 += 432 * ( shape % 4 );
-                break;
-            default:
-                break;
-            }
-        }
-
-        if ( index2 >= v.count ) {
-            DEBUG( DBG_ENGINE, DBG_WARN,
-                   TIL::GetString( til ) << ", "
-                                         << "out of range: " << index );
-            index2 = 0;
-        }
-
-        Surface & surface = v.sprites[index2];
-
-        if ( shape && !surface.isValid() ) {
-            const Surface & src = v.sprites[index];
-
-            if ( src.isValid() )
-                surface = src.RenderReflect( shape );
-            else
-                DEBUG( DBG_ENGINE, DBG_WARN, "is NULL" );
-        }
-
-        if ( !surface.isValid() ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, "invalid sprite: " << TIL::GetString( til ) << ", index: " << index );
-        }
-
-        result = surface;
-    }
-
-    return result;
 }
 
 /* load 82M object to AGG::Cache in Audio::CVT */
