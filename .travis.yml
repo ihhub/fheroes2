@@ -16,6 +16,7 @@ matrix:
   include:
     - if: branch = master
       os: linux
+      jdk: oraclejdk11
       addons:
         sonarcloud:
           organization: "ihhub"
