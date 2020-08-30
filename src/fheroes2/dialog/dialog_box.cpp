@@ -38,7 +38,7 @@
 #define BOXAREA_MIDDLE 35
 #define BOXAREA_BOTTOM 35
 
-void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight );
+void BoxRedraw( s32 posx, s32 posy, u32 count, int32_t middleHeight );
 
 Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool showButtons )
 {
@@ -47,7 +47,7 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
 
     const bool evil = Settings::Get().ExtGameEvilInterface();
     const u32 count_middle = ( height <= BOXAREA_TOP + BOXAREA_BOTTOM ? 0 : 1 + ( height - BOXAREA_TOP - BOXAREA_BOTTOM ) / BOXAREA_MIDDLE );
-    const u32 height_middle = height <= BOXAREA_TOP + BOXAREA_BOTTOM ? 0 : height - BOXAREA_TOP - BOXAREA_BOTTOM;
+    const int32_t height_middle = height <= BOXAREA_TOP + BOXAREA_BOTTOM ? 0 : height - BOXAREA_TOP - BOXAREA_BOTTOM;
     const u32 height_top_bottom = ( evil ? BOXE_TOP + BOXE_BOTTOM : BOX_TOP + BOX_BOTTOM );
 
     area.w = BOXAREA_WIDTH;
@@ -82,7 +82,7 @@ Dialog::FrameBox::FrameBox( int height, bool buttons )
 
 Dialog::FrameBox::~FrameBox() {}
 
-void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight )
+void BoxRedraw( s32 posx, s32 posy, u32 count, int32_t middleHeight )
 {
     const int buybuild = Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILE : ICN::BUYBUILD;
 
@@ -101,19 +101,23 @@ void BoxRedraw( s32 posx, s32 posy, u32 count, uint32_t middleHeight )
 
     pt.y += fheroes2::AGG::GetICN( buybuild, 4 ).height();
     const int16_t posBeforeMiddle = pt.y;
+    int32_t middleLeftHeight = middleHeight;
     for ( u32 i = 0; i < count; ++i ) {
+        const int32_t chunkHeight = middleLeftHeight >= BOXAREA_MIDDLE ? BOXAREA_MIDDLE : middleLeftHeight;
         // left middle sprite
         pt.x = posx;
         const fheroes2::Sprite & sl = fheroes2::AGG::GetICN( buybuild, 5 );
-        fheroes2::Blit( sl, 0, 10, display, pt.x, pt.y, sl.width(), BOXAREA_MIDDLE );
+        fheroes2::Blit( sl, 0, 10, display, pt.x, pt.y, sl.width(), chunkHeight );
 
         // right middle sprite
         pt.x += sl.width();
         if ( !Settings::Get().ExtGameEvilInterface() )
             pt.x -= 1;
         const fheroes2::Sprite & sr = fheroes2::AGG::GetICN( buybuild, 1 );
-        fheroes2::Blit( sr, 0, 10, display, pt.x, pt.y, sr.width(), BOXAREA_MIDDLE );
-        pt.y += BOXAREA_MIDDLE;
+        fheroes2::Blit( sr, 0, 10, display, pt.x, pt.y, sr.width(), chunkHeight );
+
+        middleLeftHeight -= chunkHeight;
+        pt.y += chunkHeight;
     }
 
     pt.y = posBeforeMiddle + middleHeight;
