@@ -2251,6 +2251,16 @@ namespace fheroes2
                     Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 return true;
+            case ICN::BTNCONFIG: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEM, 11 + i );
+
+                    // add 'config'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 30 - i, 20, out, 8 - i, 5, 80, 16 );
+                }
+                return true;
             default:
                 break;
             }
