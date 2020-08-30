@@ -87,10 +87,10 @@ void Interface::ControlPanel::Redraw( void )
     const int alpha = 128;
 
     fheroes2::AlphaBlit( btn_radr, display, x, y, alpha );
-    fheroes2::AlphaBlit( btn_icon, display, x, y + 36, alpha );
-    fheroes2::AlphaBlit( btn_bttn, display, x, y + 72, alpha );
-    fheroes2::AlphaBlit( btn_stat, display, x, y + 108, alpha );
-    fheroes2::AlphaBlit( btn_quit, display, x, y + 144, alpha );
+    fheroes2::AlphaBlit( btn_icon, display, x + 36, y, alpha );
+    fheroes2::AlphaBlit( btn_bttn, display, x + 72, y, alpha );
+    fheroes2::AlphaBlit( btn_stat, display, x + 108, y, alpha );
+    fheroes2::AlphaBlit( btn_quit, display, x + 144, y, alpha );
 }
 
 int Interface::ControlPanel::QueueEventProcessing( void )
