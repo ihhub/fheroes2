@@ -321,7 +321,6 @@ public:
     bool ExtGameRememberLastFocus( void ) const;
     bool ExtGameContinueAfterVictory( void ) const;
     bool ExtGameRewriteConfirm( void ) const;
-    bool ExtGameAutosaveConfirm( void ) const;
     bool ExtGameShowSystemInfo( void ) const;
     bool ExtGameAutosaveBeginOfDay( void ) const;
     bool ExtGameAutosaveOn( void ) const;
