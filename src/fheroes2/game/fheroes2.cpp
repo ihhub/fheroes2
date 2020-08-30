@@ -46,8 +46,7 @@ void SetVideoDriver( const std::string & );
 void SetTimidityEnvPath( const Settings & );
 void SetLangEnvPath( const Settings & );
 void InitHomeDir( void );
-void ReadConfigs( void );
-int TestBlitSpeed( void );
+bool ReadConfigs( void );
 
 int PrintHelp( const char * basename )
 {
@@ -79,7 +78,7 @@ int main( int argc, char ** argv )
     conf.SetProgramPath( argv[0] );
 
     InitHomeDir();
-    ReadConfigs();
+    bool isFirstGameRun = ReadConfigs();
 
     // getopt
     {
@@ -168,12 +167,13 @@ int main( int argc, char ** argv )
             // DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
 
             // read data dir
-            if ( !AGG::Init() )
+            if ( !AGG::Init() ) {
+                fheroes2::Display::instance().release();
                 return EXIT_FAILURE;
+            }
 
             atexit( &AGG::Quit );
 
-            conf.SetBlitSpeed( TestBlitSpeed() );
 #ifdef WITH_ZLIB
             LoadZLogo();
 #endif
@@ -194,7 +194,8 @@ int main( int argc, char ** argv )
             while ( rs != Game::QUITGAME ) {
                 switch ( rs ) {
                 case Game::MAINMENU:
-                    rs = Game::MainMenu();
+                    rs = Game::MainMenu( isFirstGameRun );
+                    isFirstGameRun = false;
                     break;
                 case Game::NEWGAME:
                     rs = Game::NewGame();
@@ -260,35 +261,9 @@ int main( int argc, char ** argv )
             VERBOSE( std::endl << conf.String() );
         }
 #endif
+    fheroes2::Display::instance().release();
 
     return EXIT_SUCCESS;
-}
-
-int TestBlitSpeed( void )
-{
-    Display & display = Display::Get();
-    Surface sf( display.GetSize(), true );
-    Rect srcrt( 0, 0, display.w() / 3, display.h() );
-    SDL::Time t;
-
-    t.Start();
-    sf.Fill( RGBA( 0xFF, 0, 0 ) );
-    sf.Blit( srcrt, Point( 0, 0 ), display );
-    display.Flip();
-    sf.Fill( RGBA( 0, 0xFF, 0 ) );
-    sf.Blit( srcrt, Point( srcrt.w, 0 ), display );
-    display.Flip();
-    sf.Fill( RGBA( 0, 0, 0xFF ) );
-    sf.Blit( srcrt, Point( display.w() - srcrt.w, 0 ), display );
-    display.Flip();
-    sf.Fill( RGBA( 0, 0, 0 ) );
-    sf.Blit( display );
-    display.Flip();
-    t.Stop();
-
-    int res = t.Get();
-    DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, res );
-    return res;
 }
 
 void LoadZLogo( void )
@@ -319,10 +294,10 @@ void LoadZLogo( void )
     */
 }
 
-void ReadConfigs( void )
+bool ReadConfigs( void )
 {
     Settings & conf = Settings::Get();
-    ListFiles files = conf.GetListFiles( "", "fheroes2.cfg" );
+    const ListFiles & files = conf.GetListFiles( "", "fheroes2.cfg" );
 
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
@@ -336,6 +311,8 @@ void ReadConfigs( void )
 
     if ( !isValidConfigurationFile )
         conf.Save( "fheroes2.cfg" );
+
+    return !isValidConfigurationFile;
 }
 
 void InitHomeDir( void )

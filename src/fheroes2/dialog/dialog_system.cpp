@@ -175,6 +175,10 @@ int Dialog::SystemOptions( void )
     cursor.SetThemes( oldcursor );
     display.render();
 
+    if ( result != 0 ) {
+        conf.Save( "fheroes2.cfg" );
+    }
+
     return result;
 }
 

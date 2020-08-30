@@ -282,7 +282,7 @@ namespace
             }
         }
 
-        virtual bool allocate( uint32_t width_, uint32_t height_, bool isFullScreen ) override
+        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -322,7 +322,7 @@ namespace
                 return false;
             }
 
-            if ( _surface->w <= 0 || _surface->h <= 0 || static_cast<uint32_t>( _surface->w ) != width_ || static_cast<uint32_t>( _surface->h ) != height_ ) {
+            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != width_ || _surface->h != height_ ) {
                 clear();
                 return false;
             }
@@ -565,12 +565,6 @@ namespace
             linkRenderSurface( NULL );
 
             if ( _surface != NULL ) {
-                // we need to copy the image to display buffer
-                if ( _surface->format->BitsPerPixel == 8 && !SDL_MUSTLOCK( _surface ) ) {
-                    fheroes2::Display & display = fheroes2::Display::instance();
-                    memcpy( display.image(), _surface->pixels, display.width() * display.height() );
-                }
-
                 SDL_FreeSurface( _surface );
                 _surface = NULL;
             }
@@ -579,7 +573,7 @@ namespace
             _palette8Bit.clear();
         }
 
-        virtual bool allocate( uint32_t width_, uint32_t height_, bool isFullScreen ) override
+        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -596,10 +590,10 @@ namespace
 
             _surface = SDL_SetVideoMode( width_, height_, 8, flags );
 
-            if ( !_surface )
+            if ( _surface == NULL )
                 return false;
 
-            if ( _surface->w <= 0 || _surface->h <= 0 || static_cast<uint32_t>( _surface->w ) != width_ || static_cast<uint32_t>( _surface->h ) != height_ ) {
+            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != width_ || _surface->h != height_ ) {
                 clear();
                 return false;
             }
@@ -713,7 +707,7 @@ namespace fheroes2
 
     void Display::resize( int32_t width_, int32_t height_ )
     {
-        if ( width_ <= 0 || height_ <= 0 || ( width_ == width() && height_ == height() ) ) // nothing to resize
+        if ( width() > 0 && height() > 0 && width_ == width() && height_ == height() ) // nothing to resize
             return;
 
         const bool isFullScreen = _engine->isFullScreen();
@@ -721,12 +715,12 @@ namespace fheroes2
         // deallocate engine resources
         _engine->clear();
 
-        Image::resize( width_, height_ );
-
         // allocate engine resources
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
         }
+
+        Image::resize( width_, height_ );
     }
 
     bool Display::isDefaultSize() const
@@ -800,6 +794,12 @@ namespace fheroes2
     BaseRenderEngine * Display::engine()
     {
         return _engine;
+    }
+
+    void Display::release()
+    {
+        _engine->clear();
+        clear();
     }
 
     Cursor::Cursor()

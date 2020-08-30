@@ -23,7 +23,7 @@ jobs:
     - name: create package
       run: |
         cp doc/README.txt .
-        zip fheroes2_osx_sdl1.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_macos.sh changelog.txt README.txt
+        zip fheroes2_osx_sdl1.zip fheroes2 LICENSE fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_macos.sh changelog.txt README.txt
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_osx_sdl1.zip
@@ -54,7 +54,7 @@ jobs:
     - name: create package
       run: |
         cp doc/README.txt .
-        zip fheroes2_osx_sdl2.zip fheroes2 LICENSE fheroes2.cfg fheroes2.key script/macos/install_sdl_2.sh script/demo/demo_macos.sh  changelog.txt README.txt
+        zip fheroes2_osx_sdl2.zip fheroes2 LICENSE fheroes2.key script/macos/install_sdl_2.sh script/demo/demo_macos.sh  changelog.txt README.txt
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_osx_sdl2.zip
