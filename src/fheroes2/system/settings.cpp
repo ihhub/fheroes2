@@ -181,10 +181,6 @@ const settings_t settingsFHeroes2[] = {
         _( "game: always confirm for rewrite savefile" ),
     },
     {
-        Settings::GAME_ALSO_CONFIRM_AUTOSAVE,
-        _( "game: also confirm autosave" ),
-    },
-    {
         Settings::GAME_REMEMBER_LAST_FOCUS,
         _( "game: remember last focus" ),
     },
@@ -388,14 +384,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::BATTLE_MERGE_ARMIES,
         _( "battle: merge armies for hero from castle" ),
-    },
-    {
-        Settings::BATTLE_ARCHMAGE_RESIST_BAD_SPELL,
-        _( "battle: archmage can resists (20%) bad spells" ),
-    },
-    {
-        Settings::BATTLE_MAGIC_TROOP_RESIST,
-        _( "battle: magical creature resists (20%) the same magic" ),
     },
     {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
@@ -1787,24 +1775,9 @@ bool Settings::ExtBattleMergeArmies( void ) const
     return ExtModes( BATTLE_MERGE_ARMIES );
 }
 
-bool Settings::ExtBattleArchmageCanResistBadMagic( void ) const
-{
-    return ExtModes( BATTLE_ARCHMAGE_RESIST_BAD_SPELL );
-}
-
-bool Settings::ExtBattleMagicTroopCanResist( void ) const
-{
-    return ExtModes( BATTLE_MAGIC_TROOP_RESIST );
-}
-
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
-}
-
-bool Settings::ExtGameAutosaveConfirm( void ) const
-{
-    return ExtModes( GAME_ALSO_CONFIRM_AUTOSAVE );
 }
 
 bool Settings::ExtPocketHideCursor( void ) const
