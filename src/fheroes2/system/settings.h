@@ -154,13 +154,11 @@ public:
         WORLD_BAN_PLAGUES = 0x20000800,
         UNIONS_ALLOW_HERO_MEETINGS = 0x20001000,
         UNIONS_ALLOW_CASTLE_VISITING = 0x20002000,
-        // UNUSED			= 0x20004000,
-        HEROES_AUTO_MOVE_BATTLE_DST = 0x20008000,
+        // UNUSED = 0x20004000,
         WORLD_BAN_MONTHOF_MONSTERS = 0x20010000,
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
         WORLD_NEW_VERSION_WEEKOF = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
-        CASTLE_ALLOW_BUY_FROM_WELL = 0x20100000,
         HEROES_LEARN_SPELLS_WITH_DAY = 0x20200000,
         HEROES_ALLOW_BANNED_SECSKILLS = 0x20400000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
@@ -272,7 +270,6 @@ public:
     bool ExtHeroRecalculateMovement( void ) const;
     bool ExtHeroPatrolAllowPickup( void ) const;
     bool ExtHeroAllowTranscribingScroll( void ) const;
-    bool ExtHeroAutoMove2BattleTarget( void ) const;
     bool ExtHeroAllowBannedSecSkillsUpgrade( void ) const;
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
     bool ExtUnionsAllowCastleVisiting( void ) const;
@@ -302,7 +299,6 @@ public:
     bool ExtWorldExtObjectsCaptured( void ) const;
     bool ExtWorldGuardianObjectsTwoDefense( void ) const;
     bool ExtWorldDisableBarrowMounds( void ) const;
-    bool ExtCastleAllowBuyFromWell( void ) const;
     bool ExtCastleAllowGuardians( void ) const;
     bool ExtCastleAllowFlash( void ) const;
     bool ExtCastleGuildRestorePointsTurn( void ) const;

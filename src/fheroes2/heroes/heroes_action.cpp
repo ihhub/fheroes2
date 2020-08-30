@@ -770,15 +770,6 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
-
-        // auto move hero
-        // disable: https://sourceforge.net/tracker/index.php?func=detail&aid=3155230&group_id=96859&atid=616180
-        /*
-        if(conf.ExtHeroAutoMove2BattleTarget() && allow_move)
-        {
-            hero.Move2Dest(dst_index);
-        }
-        */
     }
 }
 
@@ -828,11 +819,6 @@ void ActionToHeroes( Heroes & hero, u32 obj, s32 dst_index )
         // wins attacker
         if ( res.AttackerWins() ) {
             hero.IncreaseExperience( res.GetExperienceAttacker() );
-
-            // auto move hero
-            if ( conf.ExtHeroAutoMove2BattleTarget() && !disable_auto_move ) {
-                hero.Move2Dest( dst_index );
-            }
         }
         else
             // wins defender
@@ -918,12 +904,6 @@ void ActionToCastle( Heroes & hero, u32 obj, s32 dst_index )
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
             allow_enter = true;
-        }
-
-        // auto move hero to castle
-        if ( conf.ExtHeroAutoMove2BattleTarget() && allow_enter ) {
-            hero.Move2Dest( dst_index );
-            ActionToCastle( hero, MP2::OBJ_CASTLE, dst_index );
         }
     }
 }

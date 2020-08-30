@@ -213,13 +213,9 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );
     states.push_back( Settings::HEROES_RECALCULATE_MOVEMENT );
     states.push_back( Settings::HEROES_PATROL_ALLOW_PICKUP );
-    states.push_back( Settings::HEROES_AUTO_MOVE_BATTLE_DST );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ALLOW_BANNED_SECSKILLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
-
-    if ( !conf.QVGA() )
-        states.push_back( Settings::CASTLE_ALLOW_BUY_FROM_WELL );
 
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::CASTLE_MAGEGUILD_POINTS_TURN );

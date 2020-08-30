@@ -111,11 +111,7 @@ void Castle::OpenWell( void )
 
     WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
-    if ( !conf.ExtCastleAllowBuyFromWell() )
-        buttonMax.disable();
-    else {
-        buttonMax.draw();
-    }
+    buttonMax.draw();
 
     std::vector<u32> alldwellings;
     alldwellings.reserve( 6 );
@@ -141,63 +137,61 @@ void Castle::OpenWell( void )
             break;
 
         // extended version (click - buy dialog monster)
-        if ( conf.ExtCastleAllowBuyFromWell() ) {
-            if ( buttonMax.isEnabled() && le.MouseClickLeft( buttonMax.area() ) ) {
-                dwellings_t results;
-                Funds cur, total;
-                u32 can_recruit;
-                std::string str;
+        if ( buttonMax.isEnabled() && le.MouseClickLeft( buttonMax.area() ) ) {
+            dwellings_t results;
+            Funds cur, total;
+            u32 can_recruit;
+            std::string str;
 
-                for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it ) {
-                    if ( 0 != ( can_recruit = HowManyRecruitMonster( *this, *it, total, cur ) ) ) {
-                        results.push_back( dwelling_t( *it, can_recruit ) );
-                        total += cur;
-                        const Monster ms( race, GetActualDwelling( *it ) );
-                        str.append( ms.GetPluralName( can_recruit ) );
-                        str.append( " - " );
-                        str.append( GetString( can_recruit ) );
-                        str.append( "\n" );
-                    }
-                }
-
-                if ( str.empty() ) {
-                    bool isCreaturePresent = false;
-                    for ( int i = 0; i < CASTLEMAXMONSTER; ++i ) {
-                        if ( dwelling[i] > 0 ) {
-                            isCreaturePresent = true;
-                            break;
-                        }
-                    }
-                    if ( isCreaturePresent ) {
-                        Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
-                    }
-                    else {
-                        Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
-                    }
-                }
-                else {
-                    if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters:" ), str, total, Dialog::YES | Dialog::NO ) ) {
-                        for ( dwellings_t::const_iterator it = results.begin(); it != results.end(); ++it ) {
-                            const dwelling_t & dw = *it;
-                            RecruitMonsterFromDwelling( dw.first, dw.second );
-                        }
-                    }
+            for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it ) {
+                if ( 0 != ( can_recruit = HowManyRecruitMonster( *this, *it, total, cur ) ) ) {
+                    results.push_back( dwelling_t( *it, can_recruit ) );
+                    total += cur;
+                    const Monster ms( race, GetActualDwelling( *it ) );
+                    str.append( ms.GetPluralName( can_recruit ) );
+                    str.append( " - " );
+                    str.append( GetString( can_recruit ) );
+                    str.append( "\n" );
                 }
             }
 
-            if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) );
-            else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) );
-            else if ( ( building & DWELLING_MONSTER3 ) && le.MouseClickLeft( rectMonster3 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true ) );
-            else if ( ( building & DWELLING_MONSTER4 ) && le.MouseClickLeft( rectMonster4 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true ) );
-            else if ( ( building & DWELLING_MONSTER5 ) && le.MouseClickLeft( rectMonster5 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) );
-            else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
+            if ( str.empty() ) {
+                bool isCreaturePresent = false;
+                for ( int i = 0; i < CASTLEMAXMONSTER; ++i ) {
+                    if ( dwelling[i] > 0 ) {
+                        isCreaturePresent = true;
+                        break;
+                    }
+                }
+                if ( isCreaturePresent ) {
+                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
+                }
+                else {
+                    Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
+                }
+            }
+            else {
+                if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters:" ), str, total, Dialog::YES | Dialog::NO ) ) {
+                    for ( dwellings_t::const_iterator it = results.begin(); it != results.end(); ++it ) {
+                        const dwelling_t & dw = *it;
+                        RecruitMonsterFromDwelling( dw.first, dw.second );
+                    }
+                }
+            }
         }
+
+        if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) );
+        else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) );
+        else if ( ( building & DWELLING_MONSTER3 ) && le.MouseClickLeft( rectMonster3 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true ) );
+        else if ( ( building & DWELLING_MONSTER4 ) && le.MouseClickLeft( rectMonster4 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true ) );
+        else if ( ( building & DWELLING_MONSTER5 ) && le.MouseClickLeft( rectMonster5 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) );
+        else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
 
         if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
             cursor.Hide();
@@ -221,11 +215,9 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
     Text text;
     Point dst_pt, pt;
 
-    if ( Settings::Get().ExtCastleAllowBuyFromWell() ) {
-        const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
-        Rect src_rt( 0, 461, button.width(), 19 );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width(), cur_pt.y + 461, src_rt.w, src_rt.h );
-    }
+    const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
+    Rect src_rt( 0, 461, button.width(), 19 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width(), cur_pt.y + 461, src_rt.w, src_rt.h );
 
     text.Set( _( "Town Population Information and Statistics" ), Font::BIG );
     dst_pt.x = cur_pt.x + 315 - text.w() / 2;
