@@ -1456,15 +1456,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
     if ( spell.isUndeadOnly() && !isUndead() )
         return 100;
 
-    if ( Settings::Get().ExtBattleMagicTroopCanResist() && spell == GetSpellMagic( true ) )
-        return 20;
-
     switch ( GetID() ) {
-    case Monster::ARCHMAGE:
-        if ( Settings::Get().ExtBattleArchmageCanResistBadMagic() && ( spell.isDamage() || spell.isApplyToEnemies() ) )
-            return 20;
-        break;
-
     // 25% unfortunatly
     case Monster::DWARF:
     case Monster::BATTLE_DWARF:

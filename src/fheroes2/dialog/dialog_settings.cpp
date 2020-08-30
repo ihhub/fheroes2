@@ -158,13 +158,9 @@ void Dialog::ExtSettings( bool readonly )
     states.reserve( 64 );
 
     states.push_back( Settings::GAME_SAVE_REWRITE_CONFIRM );
-    states.push_back( Settings::GAME_ALSO_CONFIRM_AUTOSAVE );
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_EVIL_INTERFACE );
-    states.push_back( Settings::GAME_BATTLE_SHOW_GRID );
-    states.push_back( Settings::GAME_BATTLE_SHOW_MOUSE_SHADOW );
-    states.push_back( Settings::GAME_BATTLE_SHOW_MOVE_SHADOW );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
 
     if ( !conf.QVGA() ) {
@@ -236,8 +232,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_OBJECTS_ARCHERS_PENALTY );
     states.push_back( Settings::BATTLE_MERGE_ARMIES );
-    states.push_back( Settings::BATTLE_ARCHMAGE_RESIST_BAD_SPELL );
-    states.push_back( Settings::BATTLE_MAGIC_TROOP_RESIST );
     states.push_back( Settings::BATTLE_SKIP_INCREASE_DEFENSE );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 

@@ -126,8 +126,7 @@ public:
         GAME_SHOW_SDL_LOGO = 0x10000800,
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
-        GAME_ALSO_CONFIRM_AUTOSAVE = 0x10004000,
-        // UNUSED			= 0x10008000,
+        // UNUSED = 0x10008000,
         GAME_DYNAMIC_INTERFACE = 0x10010000,
         GAME_BATTLE_SHOW_GRID = 0x10020000,
         GAME_BATTLE_SHOW_MOUSE_SHADOW = 0x10040000,
@@ -186,8 +185,6 @@ public:
         WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
         CASTLE_1HERO_HIRED_EVERY_WEEK = 0x30008000,
 
-        BATTLE_ARCHMAGE_RESIST_BAD_SPELL = 0x40001000,
-        BATTLE_MAGIC_TROOP_RESIST = 0x40002000,
         BATTLE_SHOW_ARMY_ORDER = 0x40004000,
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
@@ -314,8 +311,6 @@ public:
     bool ExtBattleShowDamage( void ) const;
     bool ExtBattleShowBattleOrder( void ) const;
     bool ExtBattleSoftWait( void ) const;
-    bool ExtBattleMagicTroopCanResist( void ) const;
-    bool ExtBattleArchmageCanResistBadMagic( void ) const;
     bool ExtBattleObjectsArchersPenalty( void ) const;
     bool ExtBattleMergeArmies( void ) const;
     bool ExtBattleSkipIncreaseDefense( void ) const;
@@ -326,7 +321,6 @@ public:
     bool ExtGameRememberLastFocus( void ) const;
     bool ExtGameContinueAfterVictory( void ) const;
     bool ExtGameRewriteConfirm( void ) const;
-    bool ExtGameAutosaveConfirm( void ) const;
     bool ExtGameShowSystemInfo( void ) const;
     bool ExtGameAutosaveBeginOfDay( void ) const;
     bool ExtGameAutosaveOn( void ) const;
