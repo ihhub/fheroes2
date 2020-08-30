@@ -59,7 +59,7 @@ namespace fheroes2
 
         virtual void clear() {}
         virtual void render( const Display & ) {}
-        virtual bool allocate( uint32_t, uint32_t, bool )
+        virtual bool allocate( int32_t &, int32_t &, bool )
         {
             return false;
         }
@@ -107,6 +107,8 @@ namespace fheroes2
         virtual const uint8_t * image() const override;
 
         BaseRenderEngine * engine();
+
+        void release(); // to release all allocated resources. Should be used at the end of the application
 
     private:
         BaseRenderEngine * _engine;

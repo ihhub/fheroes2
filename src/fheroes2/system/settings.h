@@ -362,7 +362,6 @@ public:
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
-    void SetBlitSpeed( int );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -373,7 +372,6 @@ public:
     int SoundVolume( void ) const;
     int MusicVolume( void ) const;
     MusicSource MusicType() const;
-    int BlitSpeed( void ) const;
 
     bool GameType( int ) const;
     int GameType( void ) const;
@@ -474,7 +472,6 @@ private:
     int ai_speed;
     int scroll_speed;
     int battle_speed;
-    int blit_speed;
 
     int game_type;
     int preferably_count_players;

@@ -483,7 +483,6 @@ Settings::Settings()
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
     , battle_speed( DEFAULT_SPEED_DELAY )
-    , blit_speed( 0 )
     , game_type( 0 )
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
@@ -500,6 +499,7 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
     opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+    opt_global.SetModes( GLOBAL_SOUND );
     // Set expansion version by default - turn off if heroes2x.agg not found
     opt_global.SetModes( GLOBAL_PRICELOYALTY );
     if ( System::isEmbededDevice() ) {
@@ -775,12 +775,9 @@ bool Settings::Read( const std::string & filename )
             video_mode.w = GetInt( width );
             video_mode.h = GetInt( height );
         }
-        else if ( value == "auto" ) {
-            video_mode.w = 0;
-            video_mode.h = 0;
-        }
-        else
+        else {
             DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
+        }
     }
 
 #ifdef WITHOUT_MOUSE
@@ -879,30 +876,65 @@ std::string Settings::String( void ) const
         musicType = "original";
     }
 
-    os << "# fheroes2 config, version: " << GetVersion() << std::endl;
+    os << "# fheroes2 configuration file (saved under version " << GetVersion() << ")" << std::endl;
+
+    os << std::endl << "# path to directory data" << std::endl;
     os << "data = " << data_params << std::endl;
 
+    os << std::endl << "# path to directory maps (you can set few map directies)" << std::endl;
     for ( ListDirs::const_iterator it = maps_params.begin(); it != maps_params.end(); ++it )
         os << "maps = " << *it << std::endl;
 
-    os << "videomode = ";
-    if ( video_mode.w && video_mode.h )
-        os << video_mode.w << "x" << video_mode.h << std::endl;
-    else
-        os << "auto" << std::endl;
+    os << std::endl << "# video mode (game resolution)" << std::endl;
+    os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
-    os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl
-       << "music = " << musicType << std::endl
-       << "sound volume = " << static_cast<int>( sound_volume ) << std::endl
-       << "music volume = " << static_cast<int>( music_volume ) << std::endl
-       << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl
-       << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
-       << std::endl
-       << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
-       << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl
-       << "debug = " << ( debug ? "on" : "off" ) << std::endl;
+    os << std::endl << "# sound: on off" << std::endl;
+    os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# music: original, expansion, cd, external" << std::endl;
+    os << "music = " << musicType << std::endl;
+
+    os << std::endl << "# sound volume: 0 - 10" << std::endl;
+    os << "sound volume = " << sound_volume << std::endl;
+
+    os << std::endl << "# music volume: 0 - 10" << std::endl;
+    os << "music volume = " << music_volume << std::endl;
+
+    os << std::endl << "# keep aspect ratio in fullscreen mode (experimental)" << std::endl;
+    os << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# change resolution in fullscreen mode (experimental)" << std::endl;
+    os << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
+        << std::endl;
+
+    os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
+    os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# use alternative resources (not in use anymore)" << std::endl;
+    os << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# run in debug mode (0 - 9) [only for development]" << std::endl;
+    os << "debug = " << ( debug ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# heroes move speed: 0 - 10" << std::endl;
+    os << "heroes speed = " << heroes_speed << std::endl;
+
+    os << std::endl << "# AI move speed: 0 - 10" << std::endl;
+    os << "ai speed = " << ai_speed << std::endl;
+
+    os << std::endl << "# battle speed: 0 - 10" << std::endl;
+    os << "battle speed = " << battle_speed << std::endl;
+
+    os << std::endl << "# scroll speed: 1 - 4" << std::endl;
+    os << "scroll speed = " << scroll_speed << std::endl;
+
+    if ( video_driver.size() ) {
+        os << std::endl << "# sdl video driver, windows: windib, directx, wince: gapi, raw, linux: x11, other see sdl manual (to be deprecated)" << std::endl;
+        os << "videodriver = " << video_driver << std::endl;
+    }
 
 #ifdef WITH_TTF
+    os << std::endl << "Below options are experimental and disabled in the game for now" << std::endl;
     os << "fonts normal = " << font_normal << std::endl
        << "fonts small = " << font_small << std::endl
        << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
@@ -911,12 +943,6 @@ std::string Settings::String( void ) const
     if ( force_lang.size() )
         os << "lang = " << force_lang << std::endl;
 #endif
-
-    if ( video_driver.size() )
-        os << "videodriver = " << video_driver << std::endl;
-
-    if ( opt_global.Modes( GLOBAL_POCKETPC ) )
-        os << "pocket pc = on" << std::endl;
 
     return os.str();
 }
@@ -1183,16 +1209,6 @@ void Settings::SetBattleSpeed( int speed )
         speed = 10;
     }
     battle_speed = speed;
-}
-
-void Settings::SetBlitSpeed( int speed )
-{
-    blit_speed = speed;
-}
-
-int Settings::BlitSpeed( void ) const
-{
-    return blit_speed;
 }
 
 /* set scroll speed: 1 - 4 */
