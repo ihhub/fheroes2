@@ -1739,6 +1739,32 @@ std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
     return AGG::ReadChunk( frm_file );
 }
 
+Surface AGG::GetLetter( u32 ch, u32 ft )
+{
+    if ( ch < 0x21 )
+        DEBUG( DBG_ENGINE, DBG_WARN, "unknown letter" );
+
+    switch ( ft ) {
+    case Font::GRAY_BIG:
+        return AGG::GetICN( ICN::GRAY_FONT, ch - 0x20 );
+    case Font::GRAY_SMALL:
+        return AGG::GetICN( ICN::GRAY_SMALL_FONT, ch - 0x20 );
+    case Font::YELLOW_BIG:
+        return AGG::GetICN( ICN::YELLOW_FONT, ch - 0x20 );
+    case Font::YELLOW_SMALL:
+        return AGG::GetICN( ICN::YELLOW_SMALFONT, ch - 0x20 );
+    case Font::BIG:
+        return AGG::GetICN( ICN::FONT, ch - 0x20 );
+    case Font::SMALL:
+        return AGG::GetICN( ICN::SMALFONT, ch - 0x20 );
+
+    default:
+        break;
+    }
+
+    return AGG::GetICN( ICN::SMALFONT, ch - 0x20 );
+}
+
 void AGG::ResetMixer( void )
 {
     Mixer::Reset();
