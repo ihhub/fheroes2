@@ -905,7 +905,7 @@ std::string Settings::String( void ) const
 
     os << std::endl << "# change resolution in fullscreen mode (experimental)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
-        << std::endl;
+       << std::endl;
 
     os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
