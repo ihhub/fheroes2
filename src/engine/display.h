@@ -48,22 +48,8 @@ public:
     Size GetMaxMode( bool enable_rotate ) const;
 
     void SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo );
-    void SetCaption( const char * );
-    void SetIcons( Surface & );
 
     void Flip( void );
-    void Clear( void );
-    void ToggleFullScreen( void );
-    bool IsFullScreen() const;
-
-    void Fade( int delay = 500 );
-    void Fade( const Surface &, const Surface &, const Point &, int level, int delay );
-
-    // Fade everything except middle
-    void InvertedFade( const Surface & top, const Surface & back, const Point & offset, const Surface & middle, const Point & middleOffset, int level, int delay );
-
-    void Rise( int delay = 500 );
-    void Rise( const Surface &, const Surface &, const Point &, int level, int delay );
 
     static void HideCursor( void );
     static void ShowCursor( void );
@@ -87,15 +73,6 @@ protected:
 };
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-class TextureTarget
-{
-public:
-    TextureTarget();
-
-    void Fill( const RGBA & );
-    void FillRect( const Rect &, const RGBA & );
-};
-
 class Texture
 {
 public:

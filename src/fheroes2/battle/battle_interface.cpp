@@ -851,8 +851,8 @@ void Battle::ArmiesOrder::Redraw( const Unit * current )
 
 Battle::Interface::Interface( Arena & a, s32 center )
     : arena( a )
-    , _surfaceInnerArea( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT )
-    , _mainSurface( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT )
+    , _surfaceInnerArea( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    , _mainSurface( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , icn_cbkg( ICN::UNKNOWN )
     , icn_frng( ICN::UNKNOWN )
     , humanturn_spell( Spell::NONE )
@@ -879,8 +879,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     _interfacePosition
-        = Rect( ( display.width() - Display::DEFAULT_WIDTH ) / 2, ( display.height() - Display::DEFAULT_HEIGHT ) / 2, _surfaceInnerArea.w, _surfaceInnerArea.h );
-    border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
+        = Rect( ( display.width() - Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, _surfaceInnerArea.w, _surfaceInnerArea.h );
+    border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // cover
     bool trees = Maps::ScanAroundObject( center, MP2::OBJ_TREES ).size();

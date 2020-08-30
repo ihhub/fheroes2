@@ -762,8 +762,8 @@ bool Settings::Read( const std::string & filename )
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
         // default
-        video_mode.w = Display::DEFAULT_WIDTH;
-        video_mode.h = Display::DEFAULT_HEIGHT;
+        video_mode.w = fheroes2::Display::DEFAULT_WIDTH;
+        video_mode.h = fheroes2::Display::DEFAULT_HEIGHT;
 
         std::string value = StringLower( sval );
         const size_t pos = value.find( 'x' );
@@ -1220,7 +1220,7 @@ void Settings::SetScrollSpeed( int speed )
 /* return full screen */
 bool Settings::QVGA( void ) const
 {
-    return video_mode.w && video_mode.h && ( video_mode.w < Display::DEFAULT_WIDTH || video_mode.h < Display::DEFAULT_HEIGHT );
+    return video_mode.w && video_mode.h && ( video_mode.w < fheroes2::Display::DEFAULT_WIDTH || video_mode.h < fheroes2::Display::DEFAULT_HEIGHT );
 }
 
 bool Settings::UseAltResource( void ) const
