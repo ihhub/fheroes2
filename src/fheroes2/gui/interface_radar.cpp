@@ -320,6 +320,9 @@ void Interface::Radar::RedrawCursor( void )
     const Settings & conf = Settings::Get();
 
     if ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) {
+        if ( world.w() < 1 || world.h() < 1 )
+            return;
+
         const Rect & rect = GetArea();
         const Rect & rectMaps = interface.GetGameArea().GetVisibleTileROI();
 

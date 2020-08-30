@@ -227,7 +227,10 @@ void Interface::Basic::EventSystemDialog( void )
 
     // interface themes
     if ( 0x08 & changes ) {
+        Interface::Basic::Get().Reset();
         SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+        ResetFocus( GameFocus::HEROES );
+        Redraw();
     }
 
     // interface hide/show

@@ -172,7 +172,6 @@ int Dialog::SystemOptions( void )
     }
 
     // restore background
-    Interface::Basic::Get().Reset();
     cursor.SetThemes( oldcursor );
     display.render();
 
