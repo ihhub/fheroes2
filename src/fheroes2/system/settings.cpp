@@ -302,10 +302,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: disable Barrow Mounds" ),
     },
     {
-        Settings::CASTLE_ALLOW_BUY_FROM_WELL,
-        _( "castle: allow buy from well" ),
-    },
-    {
         Settings::CASTLE_ALLOW_GUARDIANS,
         _( "castle: allow guardians" ),
     },
@@ -344,10 +340,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::HEROES_PATROL_ALLOW_PICKUP,
         _( "heroes: allow pickup objects for patrol" ),
-    },
-    {
-        Settings::HEROES_AUTO_MOVE_BATTLE_DST,
-        _( "heroes: after battle move to target cell" ),
     },
     {
         Settings::HEROES_TRANSCRIBING_SCROLLS,
@@ -478,7 +470,6 @@ Settings::Settings()
 {
     ExtSetModes( GAME_SHOW_SDL_LOGO );
     ExtSetModes( GAME_AUTOSAVE_ON );
-    ExtSetModes( CASTLE_ALLOW_BUY_FROM_WELL );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
     ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 
@@ -1600,11 +1591,6 @@ void Settings::ExtResetModes( u32 f )
     }
 }
 
-bool Settings::ExtCastleAllowBuyFromWell( void ) const
-{
-    return ExtModes( CASTLE_ALLOW_BUY_FROM_WELL );
-}
-
 bool Settings::ExtCastleGuildRestorePointsTurn( void ) const
 {
     return ExtModes( CASTLE_MAGEGUILD_POINTS_TURN );
@@ -1733,11 +1719,6 @@ bool Settings::ExtBattleSkipIncreaseDefense( void ) const
 bool Settings::ExtHeroAllowTranscribingScroll( void ) const
 {
     return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
-}
-
-bool Settings::ExtHeroAutoMove2BattleTarget( void ) const
-{
-    return ExtModes( HEROES_AUTO_MOVE_BATTLE_DST );
 }
 
 bool Settings::ExtBattleShowBattleOrder( void ) const
