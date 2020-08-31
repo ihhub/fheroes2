@@ -27,6 +27,7 @@
 #include "game_interface.h"
 #include "ground.h"
 #include "maps.h"
+#include "pal.h"
 #include "route.h"
 #include "settings.h"
 #include "world.h"

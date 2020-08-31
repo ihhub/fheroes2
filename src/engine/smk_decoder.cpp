@@ -155,7 +155,7 @@ void SMKVideoSequence::_addNewFrame( const uint8_t * data )
 
     fheroes2::Image surface( _width, _height );
     surface.reset();
-    size_t size = static_cast<size_t>( _width ) * _height;
+    const size_t size = static_cast<size_t>( _width ) * _height;
     std::copy( data, data + size, surface.image() );
 
     _frames.push_back( surface );

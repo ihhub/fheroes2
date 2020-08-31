@@ -65,33 +65,38 @@ const char * StringDebug( int name )
 
 enum
 {
+    // ??? = 0x00000001,
+    // ??? = 0x00000002,
     GLOBAL_PRICELOYALTY = 0x00000004,
 
-    GLOBAL_POCKETPC = 0x00000010,
-    GLOBAL_DEDICATEDSERVER = 0x00000020,
-    GLOBAL_LOCALCLIENT = 0x00000040,
+    GLOBAL_POCKETPC = 0x00000008,
+    GLOBAL_DEDICATEDSERVER = 0x00000010,
+    GLOBAL_LOCALCLIENT = 0x00000020,
 
-    GLOBAL_SHOWCPANEL = 0x00000100,
-    GLOBAL_SHOWRADAR = 0x00000200,
-    GLOBAL_SHOWICONS = 0x00000400,
-    GLOBAL_SHOWBUTTONS = 0x00000800,
-    GLOBAL_SHOWSTATUS = 0x00001000,
+    GLOBAL_SHOWCPANEL = 0x00000040,
+    GLOBAL_SHOWRADAR = 0x00000080,
+    GLOBAL_SHOWICONS = 0x00000100,
+    GLOBAL_SHOWBUTTONS = 0x00000200,
+    GLOBAL_SHOWSTATUS = 0x00000400,
 
-    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00002000,
-    GLOBAL_KEEP_ASPECT_RATIO = 0x00010000,
-    GLOBAL_FONTRENDERBLENDED1 = 0x00020000,
-    GLOBAL_FONTRENDERBLENDED2 = 0x00040000,
-    GLOBAL_FULLSCREEN = 0x00400000,
-    GLOBAL_USESWSURFACE = 0x00800000,
+    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00000800,
+    GLOBAL_KEEP_ASPECT_RATIO = 0x00001000,
+    GLOBAL_FONTRENDERBLENDED1 = 0x00002000,
+    GLOBAL_FONTRENDERBLENDED2 = 0x00004000,
+    GLOBAL_FULLSCREEN = 0x00008000,
+    GLOBAL_USESWSURFACE = 0x00010000,
 
-    GLOBAL_SOUND = 0x01000000,
-    GLOBAL_MUSIC_EXT = 0x02000000,
-    GLOBAL_MUSIC_CD = 0x04000000,
-    GLOBAL_MUSIC_MIDI = 0x08000000,
+    GLOBAL_SOUND = 0x00020000,
+    GLOBAL_MUSIC_EXT = 0x00040000,
+    GLOBAL_MUSIC_CD = 0x00080000,
+    GLOBAL_MUSIC_MIDI = 0x00100000,
 
-    // GLOBAL_UNUSED          = 0x20000000,
-    GLOBAL_USEUNICODE = 0x40000000,
-    GLOBAL_ALTRESOURCE = 0x80000000,
+    GLOBAL_USEUNICODE = 0x00200000,
+    GLOBAL_ALTRESOURCE = 0x00400000,
+
+    GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
+    GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
+    GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
 
     GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI
 };
@@ -183,15 +188,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::GAME_REMEMBER_LAST_FOCUS,
         _( "game: remember last focus" ),
-    },
-    {
-        Settings::GAME_BATTLE_SHOW_GRID,
-        _( "game: battle show grid" ),
-    },
-    {Settings::GAME_BATTLE_SHOW_MOUSE_SHADOW, _( "game: battle mouse shadow" )},
-    {
-        Settings::GAME_BATTLE_SHOW_MOVE_SHADOW,
-        _( "game: battle move shadow" ),
     },
     {
         Settings::GAME_BATTLE_SHOW_DAMAGE,
@@ -481,6 +477,11 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SOUND );
     // Set expansion version by default - turn off if heroes2x.agg not found
     opt_global.SetModes( GLOBAL_PRICELOYALTY );
+
+    opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
+    opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+    opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+
     if ( System::isEmbededDevice() ) {
         opt_global.SetModes( GLOBAL_POCKETPC );
         ExtSetModes( POCKETPC_HIDE_CURSOR );
@@ -705,6 +706,18 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "battle grid" ) ) {
+        SetBattleGrid( config.StrParams( "battle grid" ) == "on" );
+    }
+
+    if ( config.Exists( "battle shadow movement" ) ) {
+        SetBattleMovementShaded( config.StrParams( "battle shadow movement" ) == "on" );
+    }
+
+    if ( config.Exists( "battle shadow cursor" ) ) {
+        SetBattleMouseShaded( config.StrParams( "battle shadow cursor" ) == "on" );
+    }
+
     // network port
     port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
 
@@ -900,6 +913,15 @@ std::string Settings::String( void ) const
 
     os << std::endl << "# scroll speed: 1 - 4" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
+
+    os << std::endl << "# show battle grid: on off" << std::endl;
+    os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show battle shadow movement: on off" << std::endl;
+    os << "battle shadow movement = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show battle shadow cursor: on off" << std::endl;
+    os << "battle shadow cursor = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
 
     if ( video_driver.size() ) {
         os << std::endl << "# sdl video driver, windows: windib, directx, wince: gapi, raw, linux: x11, other see sdl manual (to be deprecated)" << std::endl;
@@ -1257,6 +1279,21 @@ bool Settings::PocketPC( void ) const
     return opt_global.Modes( GLOBAL_POCKETPC );
 }
 
+bool Settings::BattleShowGrid( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
+}
+
+bool Settings::BattleShowMouseShadow( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+}
+
+bool Settings::BattleShowMoveShadow( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+}
+
 /* get video mode */
 const Size & Settings::VideoMode( void ) const
 {
@@ -1465,17 +1502,17 @@ void Settings::SetHideInterface( bool f )
 
 void Settings::SetBattleGrid( bool f )
 {
-    f ? ExtSetModes( GAME_BATTLE_SHOW_GRID ) : ExtResetModes( GAME_BATTLE_SHOW_GRID );
+    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_GRID );
 }
 
 void Settings::SetBattleMovementShaded( bool f )
 {
-    f ? ExtSetModes( GAME_BATTLE_SHOW_MOVE_SHADOW ) : ExtResetModes( GAME_BATTLE_SHOW_MOVE_SHADOW );
+    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 void Settings::SetBattleMouseShaded( bool f )
 {
-    f ? ExtSetModes( GAME_BATTLE_SHOW_MOUSE_SHADOW ) : ExtResetModes( GAME_BATTLE_SHOW_MOUSE_SHADOW );
+    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
 void Settings::ResetSound( void )
@@ -1723,21 +1760,6 @@ bool Settings::ExtBattleShowBattleOrder( void ) const
 bool Settings::ExtBattleSoftWait( void ) const
 {
     return ExtModes( BATTLE_SOFT_WAITING );
-}
-
-bool Settings::ExtBattleShowGrid( void ) const
-{
-    return ExtModes( GAME_BATTLE_SHOW_GRID );
-}
-
-bool Settings::ExtBattleShowMouseShadow( void ) const
-{
-    return ExtModes( GAME_BATTLE_SHOW_MOUSE_SHADOW );
-}
-
-bool Settings::ExtBattleShowMoveShadow( void ) const
-{
-    return ExtModes( GAME_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 bool Settings::ExtBattleObjectsArchersPenalty( void ) const

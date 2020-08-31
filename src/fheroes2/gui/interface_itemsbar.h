@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <utility>
 
-#include "gamedefs.h"
 #include "screen.h"
 #include "splitter.h"
 #include "ui_button.h"

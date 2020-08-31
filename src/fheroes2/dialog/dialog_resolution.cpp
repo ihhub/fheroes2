@@ -25,6 +25,7 @@
 #include "game.h"
 #include "interface_list.h"
 #include "screen.h"
+#include "settings.h"
 #include "text.h"
 #include "ui_button.h"
 #include "zzlib.h"

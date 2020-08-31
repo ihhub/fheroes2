@@ -32,7 +32,6 @@
 #include "maps.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
-#include "sprite.h"
 #include "week.h"
 #include <string>
 

@@ -38,6 +38,7 @@
 #include "ground.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "pal.h"
 #include "pocketpc.h"
 #include "race.h"
 #include "settings.h"
@@ -1341,7 +1342,7 @@ void Battle::Interface::RedrawCover( void )
     // cursor
     const Cell * cell = Board::GetCell( index_pos );
 
-    if ( cell && _currentUnit && conf.ExtBattleShowMouseShadow() && Cursor::Get().Themes() != Cursor::WAR_NONE ) {
+    if ( cell && _currentUnit && conf.BattleShowMouseShadow() && Cursor::Get().Themes() != Cursor::WAR_NONE ) {
         Point cursorPt = cell->GetPos();
         fheroes2::Blit( sf_cursor, _mainSurface, cursorPt.x, cursorPt.y );
     }
@@ -1378,13 +1379,13 @@ void Battle::Interface::RedrawCoverStatic( fheroes2::Image & dst )
 
 void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & board )
 {
-    if ( conf.ExtBattleShowGrid() ) { // grid
+    if ( conf.BattleShowGrid() ) { // grid
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it )
             if ( ( *it ).GetObject() == 0 )
                 fheroes2::Blit( sf_hexagon, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
     }
 
-    if ( !_movingUnit && conf.ExtBattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
+    if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
             if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
                 fheroes2::Blit( sf_shadow, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );

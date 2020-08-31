@@ -32,7 +32,6 @@
 #include "battle_army.h"
 #include "bitmodes.h"
 #include "game_delays.h"
-#include "sprite.h"
 
 class Spell;
 class HeroBase;

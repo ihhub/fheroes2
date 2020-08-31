@@ -32,7 +32,6 @@
 #include "heroes.h"
 #include "mageguild.h"
 #include "position.h"
-#include "sprite.h"
 #include "ui_button.h"
 
 class Heroes;
