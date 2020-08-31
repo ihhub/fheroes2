@@ -118,13 +118,6 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
                 conf.ExtResetModes( Settings::GAME_AUTOSAVE_ON );
             break;
 
-        case Settings::WORLD_GUARDIAN_TWO_DEFENSE:
-            if ( conf.ExtModes( Settings::WORLD_GUARDIAN_TWO_DEFENSE ) )
-                conf.ExtSetModes( Settings::WORLD_ALLOW_SET_GUARDIAN );
-            else
-                conf.ExtResetModes( Settings::WORLD_ALLOW_SET_GUARDIAN );
-            break;
-
         case Settings::WORLD_NEW_VERSION_WEEKOF:
             if ( conf.ExtModes( Settings::WORLD_NEW_VERSION_WEEKOF ) )
                 conf.ExtSetModes( Settings::WORLD_BAN_WEEKOF );
@@ -163,10 +156,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_EVIL_INTERFACE );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
 
-    if ( !conf.QVGA() ) {
-        states.push_back( Settings::GAME_CASTLE_FLASH_BUILDING );
-        states.push_back( Settings::GAME_HIDE_INTERFACE );
-    }
+    states.push_back( Settings::GAME_HIDE_INTERFACE );
 
     if ( !conf.PocketPC() )
         states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
@@ -185,7 +175,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_ABANDONED_MINE_RANDOM );
     states.push_back( Settings::WORLD_SAVE_MONSTER_BATTLE );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
-    states.push_back( Settings::WORLD_GUARDIAN_TWO_DEFENSE );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_NOREQ_FOR_ARTIFACTS );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
@@ -207,7 +196,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS );
     states.push_back( Settings::WORLD_DISABLE_BARROW_MOUNDS );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
-    states.push_back( Settings::HEROES_LEARN_SPELLS_WITH_DAY );
     states.push_back( Settings::HEROES_COST_DEPENDED_FROM_LEVEL );
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
     states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );

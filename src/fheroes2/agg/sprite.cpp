@@ -81,21 +81,6 @@ int Sprite::y( void ) const
     return pos.y;
 }
 
-void Sprite::ChangeColorIndex( u32 fc, u32 tc )
-{
-    SetSurface( RenderChangeColor( PAL::GetPaletteColor( fc ), PAL::GetPaletteColor( tc ) ) );
-}
-
-void Sprite::ChangeColor( u32 index, RGBA color )
-{
-    SetSurface( RenderChangeColor( PAL::GetPaletteColor( index ), color ) );
-}
-
-void Sprite::ChangeColor( const std::map<RGBA, RGBA> & colorPairs )
-{
-    SetSurface( RenderChangeColor( colorPairs ) );
-}
-
 void Sprite::Blit( void ) const
 {
     Blit( Display::Get() );

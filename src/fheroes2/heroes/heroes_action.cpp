@@ -839,8 +839,7 @@ void ActionToCastle( Heroes & hero, u32 obj, s32 dst_index )
     else if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
         DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
         Mixer::Reduce();
-        if ( !conf.ExtHeroLearnSpellsWithDay() )
-            castle->MageGuildEducateHero( hero );
+        castle->MageGuildEducateHero( hero );
         Game::OpenCastleDialog( *castle );
         Mixer::Enhance();
     }

@@ -177,10 +177,6 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
         for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
             if ( castle.isBuild( ( *it ).id ) ) {
                 CastleRedrawBuilding( castle, dst_pt, ( *it ).id, frame );
-
-                if ( flash == ( *it ).id ) {
-                    CastleDialog::RedrawBuildingSpriteToArea( ( *it ).contour, dst_pt.x + ( *it ).contour.x(), dst_pt.y + ( *it ).contour.y(), max );
-                }
                 CastleRedrawBuildingExtended( castle, dst_pt, ( *it ).id, frame );
             }
         }

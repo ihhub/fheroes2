@@ -43,6 +43,8 @@
 #include "text.h"
 #include "xmi.h"
 
+#include "../../tools/palette_h2.h"
+
 #ifdef WITH_ZLIB
 #include "embedded_image.h"
 #include "zzlib.h"
@@ -661,9 +663,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         return res;
     }
 
-    if ( PAL::CurrentPalette() != palette )
-        PAL::SwapPalette( palette );
-
     // prepare icn data
     DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( icn ) << ", " << index );
 
@@ -716,7 +715,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- && buf < max ) {
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
                 ++buf;
             }
@@ -760,7 +760,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- ) {
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
             }
             ++buf;
@@ -769,7 +770,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf - 0xC0;
             ++buf;
             while ( c-- ) {
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
             }
             ++buf;
@@ -1518,9 +1520,6 @@ bool AGG::Init( void )
 
     til_cache.resize( TIL::LASTTIL );
 
-    // load palette
-    PAL::InitAllPalettes();
-
     // load font
     LoadFNT();
 
@@ -1552,7 +1551,6 @@ void AGG::Quit( void )
     mid_cache.clear();
     loop_sounds.clear();
     fnt_cache.clear();
-    PAL::Clear();
 
 #ifdef WITH_TTF
     delete[] fonts;

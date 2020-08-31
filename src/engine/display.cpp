@@ -201,7 +201,7 @@ Size Display::GetSize( void ) const
 
 Size Display::GetDefaultSize( void )
 {
-    return Size( DEFAULT_WIDTH, DEFAULT_HEIGHT );
+    return Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 }
 
 std::string Display::GetInfo( void ) const

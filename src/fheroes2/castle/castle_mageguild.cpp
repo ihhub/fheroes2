@@ -136,12 +136,11 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
-    Text text;
-
     // bar
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLXTRA, 2 ), display, cur_pt.x, cur_pt.y + 461 );
 
     // text bar
+    Text text;
     if ( ( !heroes.Guard() || !heroes.Guard()->HaveSpellBook() ) && ( !heroes.Guest() || !heroes.Guest()->HaveSpellBook() ) )
         text.Set( _( "The above spells are available here." ), Font::BIG );
     else

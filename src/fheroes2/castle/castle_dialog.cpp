@@ -117,37 +117,6 @@ fheroes2::Sprite GetActualSpriteBuilding( const Castle & castle, u32 build )
     return fheroes2::AGG::GetICN( castle.GetICNBuilding( build, castle.GetRace() ), index );
 }
 
-building_t GetCurrentFlash( const Castle & castle, CastleDialog::CacheBuildings & cache )
-{
-    LocalEvent & le = LocalEvent::Get();
-    CastleDialog::CacheBuildings::iterator it;
-    building_t flash = BUILD_NOTHING;
-
-    for ( it = cache.begin(); it != cache.end(); ++it ) {
-        if ( castle.isBuild( ( *it ).id ) && ( ( *it ).coord & le.GetMouseCursor() ) && AllowFlashBuilding( ( *it ).id ) ) {
-            if ( ( *it ).id & BUILD_MAGEGUILD ) {
-                u32 lvl = castle.GetLevelMageGuild();
-
-                if ( ( ( *it ).id == BUILD_MAGEGUILD1 && lvl > 1 ) || ( ( *it ).id == BUILD_MAGEGUILD2 && lvl > 2 ) || ( ( *it ).id == BUILD_MAGEGUILD3 && lvl > 3 )
-                     || ( ( *it ).id == BUILD_MAGEGUILD4 && lvl > 4 ) )
-                    continue;
-            }
-            break;
-        }
-    }
-
-    if ( it != cache.end() ) {
-        flash = ( *it ).id;
-
-        if ( ( *it ).contour.empty() ) {
-            const fheroes2::Sprite & sprite = GetActualSpriteBuilding( castle, flash );
-            ( *it ).contour = fheroes2::CreateContour( sprite, 203 );
-        }
-    }
-
-    return flash;
-}
-
 void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Point & pt )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -737,7 +706,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
         if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
             firstDraw = false;
             cursor.Hide();
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, ( conf.ExtCastleAllowFlash() ? GetCurrentFlash( *this, cacheBuildings ) : BUILD_NOTHING ) );
+            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, BUILD_NOTHING );
             cursor.Show();
             display.render();
 

@@ -119,7 +119,6 @@ public:
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
         GAME_REMEMBER_LAST_FOCUS = 0x10000020,
         GAME_SAVE_REWRITE_CONFIRM = 0x10000040,
-        GAME_CASTLE_FLASH_BUILDING = 0x10000080,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
         GAME_AUTOSAVE_ON = 0x10000200,
         GAME_USE_FADE = 0x10000400,
@@ -156,7 +155,6 @@ public:
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
         WORLD_NEW_VERSION_WEEKOF = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
-        HEROES_LEARN_SPELLS_WITH_DAY = 0x20200000,
         HEROES_ALLOW_BANNED_SECSKILLS = 0x20400000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
@@ -170,7 +168,6 @@ public:
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_DWELLING_ACCUMULATE_UNITS = 0x30000020,
-        WORLD_GUARDIAN_TWO_DEFENSE = 0x30000040,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
         WORLD_USE_UNIQUE_ARTIFACTS_ML = 0x30000100,
         WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
@@ -261,7 +258,6 @@ public:
     void ExtResetModes( u32 );
     const char * ExtName( u32 ) const;
 
-    bool ExtHeroLearnSpellsWithDay( void ) const;
     bool ExtHeroBuySpellBookFromShrine( void ) const;
     bool ExtHeroRecruitCostDependedFromLevel( void ) const;
     bool ExtHeroRememberPointsForRetreating( void ) const;
@@ -296,10 +292,8 @@ public:
     bool ExtWorldUseUniqueArtifactsPS( void ) const;
     bool ExtWorldUseUniqueArtifactsSS( void ) const;
     bool ExtWorldExtObjectsCaptured( void ) const;
-    bool ExtWorldGuardianObjectsTwoDefense( void ) const;
     bool ExtWorldDisableBarrowMounds( void ) const;
     bool ExtCastleAllowGuardians( void ) const;
-    bool ExtCastleAllowFlash( void ) const;
     bool ExtCastleGuildRestorePointsTurn( void ) const;
     bool ExtCastleAllowRecruitSpecialHeroes( void ) const;
     bool ExtCastleOneHeroHiredEveryWeek( void ) const;

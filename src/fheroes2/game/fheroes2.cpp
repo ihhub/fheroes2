@@ -275,7 +275,7 @@ void LoadZLogo( void )
 
         if ( sf.Load( file ) ) {
             Surface black( display.GetSize(), false );
-            black.Fill( ColorBlack );
+            black.Fill( RGBA( 0, 0, 0, 255 ) );
 
             // scale logo
             if ( Settings::Get().QVGA() )
