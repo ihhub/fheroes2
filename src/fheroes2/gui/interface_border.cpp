@@ -38,8 +38,8 @@ void Interface::GameBorderRedraw( void )
     const bool evil = Settings::Get().ExtGameEvilInterface();
     const int displayWidth = display.width();
     const int displayHeight = display.height();
-    u32 count_w = ( displayWidth >= Display::DEFAULT_WIDTH ? displayWidth - Display::DEFAULT_WIDTH : 0 ) / TILEWIDTH;
-    u32 count_h = ( displayHeight >= Display::DEFAULT_HEIGHT ? displayHeight - Display::DEFAULT_HEIGHT : 0 ) / TILEWIDTH;
+    u32 count_w = ( displayWidth >= fheroes2::Display::DEFAULT_WIDTH ? displayWidth - fheroes2::Display::DEFAULT_WIDTH : 0 ) / TILEWIDTH;
+    u32 count_h = ( displayHeight >= fheroes2::Display::DEFAULT_HEIGHT ? displayHeight - fheroes2::Display::DEFAULT_HEIGHT : 0 ) / TILEWIDTH;
     const u32 count_icons = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
 
     if ( displayWidth % TILEWIDTH )

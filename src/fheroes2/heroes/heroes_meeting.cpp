@@ -52,7 +52,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     Point dst_pt( cur_pt );
     std::string message;
 
-    Rect src_rt( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
+    Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // background
     dst_pt.x = cur_pt.x;

@@ -281,11 +281,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
             board.SetCobjObjects( world.GetTiles( index ) );
     }
 
-    // set guardian objects mode (+2 defense)
-    if ( conf.ExtWorldGuardianObjectsTwoDefense() && !castle && MP2::isCaptureObject( world.GetTiles( index ).GetObject( false ) ) )
-        army2->SetModes( ARMY_GUARDIANS_OBJECT );
 
-    //
     if ( interface ) {
         Cursor & cursor = Cursor::Get();
         fheroes2::Display & display = fheroes2::Display::instance();

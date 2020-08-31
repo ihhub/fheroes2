@@ -194,10 +194,6 @@ const settings_t settingsFHeroes2[] = {
         _( "game: battle show damage info" ),
     },
     {
-        Settings::GAME_CASTLE_FLASH_BUILDING,
-        _( "game: castle flash building" ),
-    },
-    {
         Settings::WORLD_SHOW_VISITED_CONTENT,
         _( "world: show visited content from objects" ),
     },
@@ -216,10 +212,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
         _( "world: allow set guardian to objects" ),
-    },
-    {
-        Settings::WORLD_GUARDIAN_TWO_DEFENSE,
-        _( "world: guardian objects gets +2 defense" ),
     },
     {
         Settings::WORLD_NOREQ_FOR_ARTIFACTS,
@@ -312,10 +304,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::HEROES_BUY_BOOK_FROM_SHRINES,
         _( "heroes: allow buy a spellbook from Shrines" ),
-    },
-    {
-        Settings::HEROES_LEARN_SPELLS_WITH_DAY,
-        _( "heroes: learn new spells with day" ),
     },
     {
         Settings::HEROES_COST_DEPENDED_FROM_LEVEL,
@@ -650,11 +638,6 @@ bool Settings::Read( const std::string & filename )
 
     // memory limit
     memory_limit = config.IntParams( "memory limit" );
-
-    // default depth
-    ival = config.IntParams( "default depth" );
-    if ( ival )
-        Surface::SetDefaultDepth( ival );
 
     // move speed
     if ( config.Exists( "ai speed" ) ) {
@@ -1627,11 +1610,6 @@ bool Settings::ExtCastleGuildRestorePointsTurn( void ) const
     return ExtModes( CASTLE_MAGEGUILD_POINTS_TURN );
 }
 
-bool Settings::ExtCastleAllowFlash( void ) const
-{
-    return ExtModes( GAME_CASTLE_FLASH_BUILDING );
-}
-
 bool Settings::ExtCastleAllowGuardians( void ) const
 {
     return ExtModes( CASTLE_ALLOW_GUARDIANS );
@@ -1715,11 +1693,6 @@ bool Settings::ExtHeroSurrenderingGiveExp( void ) const
 bool Settings::ExtHeroRecalculateMovement( void ) const
 {
     return ExtModes( HEROES_RECALCULATE_MOVEMENT );
-}
-
-bool Settings::ExtHeroLearnSpellsWithDay( void ) const
-{
-    return ExtModes( HEROES_LEARN_SPELLS_WITH_DAY );
 }
 
 bool Settings::ExtUnionsAllowCastleVisiting( void ) const
@@ -1925,11 +1898,6 @@ bool Settings::ExtHeroArenaCanChoiseAnySkills( void ) const
 bool Settings::ExtWorldExtObjectsCaptured( void ) const
 {
     return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
-}
-
-bool Settings::ExtWorldGuardianObjectsTwoDefense( void ) const
-{
-    return ExtModes( WORLD_GUARDIAN_TWO_DEFENSE );
 }
 
 bool Settings::ExtWorldDisableBarrowMounds( void ) const

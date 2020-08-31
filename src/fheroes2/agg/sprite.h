@@ -60,10 +60,6 @@ public:
     void Blit( const Point & ) const;
     void Blit( const Rect & srt, s32, s32 ) const;
     void Blit( const Rect & srt, const Point & ) const;
-
-    void ChangeColorIndex( u32 index1, u32 index2 );
-    void ChangeColor( u32 index, RGBA color );
-    void ChangeColor( const std::map<RGBA, RGBA> & colorPairs );
 };
 
 #endif

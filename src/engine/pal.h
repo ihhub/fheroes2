@@ -20,11 +20,8 @@
 #ifndef H2PAL_H
 #define H2PAL_H
 
-#include "surface.h"
-#include "types.h"
+#include <stdint.h>
 #include <vector>
-
-#define PALETTE_SIZE 256
 
 namespace PAL
 {
@@ -52,14 +49,7 @@ namespace PAL
     };
 
     std::vector<uint8_t> GetCyclingPalette( int stepId );
-    void CreateStandardPalette();
-    void InitAllPalettes();
-    void Clear();
-    int CurrentPalette();
-    void SwapPalette( int type );
-    RGBA GetPaletteColor( u8 index );
     const std::vector<uint8_t> & GetPalette( int type );
-    const std::vector<uint32_t> & GetRGBColors();
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
 }
 

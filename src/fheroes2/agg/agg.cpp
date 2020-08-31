@@ -661,9 +661,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         return res;
     }
 
-    if ( PAL::CurrentPalette() != palette )
-        PAL::SwapPalette( palette );
-
     // prepare icn data
     DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( icn ) << ", " << index );
 
@@ -716,7 +713,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- && buf < max ) {
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                // sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
                 ++buf;
             }
@@ -760,7 +757,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- ) {
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                // sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
             ++buf;
@@ -769,7 +766,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf - 0xC0;
             ++buf;
             while ( c-- ) {
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                // sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
             ++buf;
@@ -1518,9 +1515,6 @@ bool AGG::Init( void )
 
     til_cache.resize( TIL::LASTTIL );
 
-    // load palette
-    PAL::InitAllPalettes();
-
     // load font
     LoadFNT();
 
@@ -1552,7 +1546,6 @@ void AGG::Quit( void )
     mid_cache.clear();
     loop_sounds.clear();
     fnt_cache.clear();
-    PAL::Clear();
 
 #ifdef WITH_TTF
     delete[] fonts;

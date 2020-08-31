@@ -260,7 +260,6 @@ namespace CastleDialog
 
         building_t id;
         Rect coord;
-        fheroes2::Sprite contour;
     };
 
     struct CacheBuildings : std::vector<builds_t>

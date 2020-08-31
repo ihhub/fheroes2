@@ -951,9 +951,6 @@ u32 Battle::Unit::GetDefense( void ) const
 {
     u32 res = ArmyTroop::GetDefense();
 
-    if ( GetArena()->GetArmyColor2() == GetColor() && GetArena()->GetForce2().Modes( ARMY_GUARDIANS_OBJECT ) )
-        res += 2;
-
     if ( Modes( SP_STONESKIN ) )
         res += Spell( Spell::STONESKIN ).ExtraValue();
     else if ( Modes( SP_STEELSKIN ) )

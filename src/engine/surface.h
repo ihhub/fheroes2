@@ -68,8 +68,6 @@ protected:
     SDL_Color color;
 };
 
-#define ColorBlack RGBA( 0, 0, 0, 255 )
-
 struct SurfaceFormat
 {
     u32 depth;
@@ -144,32 +142,22 @@ public:
     void DrawBorder( const RGBA &, bool solid = true );
 
     virtual u32 GetMemoryUsage( void ) const;
-    std::string Info( void ) const;
 
     Surface RenderScale( const Size & ) const;
     Surface RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both */ ) const;
     Surface RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */ ) const;
     Surface RenderStencil( const RGBA & ) const;
-    Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
-    Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
-    Surface RenderSurface( const Rect & srt, const Size & ) const;
-    Surface RenderSurface( const Size & ) const;
 
     virtual Surface GetSurface( void ) const;
     virtual Surface GetSurface( const Rect & ) const;
 
     static void SetDefaultPalette( SDL_Color *, int );
-    static void SetDefaultDepth( u32 );
     static void SetDefaultColorKey( int, int, int );
     static void Swap( Surface &, Surface & );
 
     // Be aware that this affects all surfaces which have copy if this one
     // Use makeCopy flag to create another surface within the call
     void SetAlphaMod( int level, bool makeCopy );
-
-    bool SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect );
-
-    static Surface Blend( const Surface & first, const Surface & second, uint8_t ratio );
 
     void SetPalette( const std::vector<SDL_Color> & colors );
 

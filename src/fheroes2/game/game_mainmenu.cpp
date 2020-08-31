@@ -93,8 +93,8 @@ int Game::MainMenu( bool isFirstGameRun )
     cursor.Show();
     display.render();
 
-    const double scaleX = static_cast<double>( display.width() ) / Display::DEFAULT_WIDTH;
-    const double scaleY = static_cast<double>( display.height() ) / Display::DEFAULT_HEIGHT;
+    const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
+    const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
     const Rect resolutionArea( 63 * scaleX, 202 * scaleY, 90 * scaleX, 160 * scaleY );
 
     u32 lantern_frame = 0;

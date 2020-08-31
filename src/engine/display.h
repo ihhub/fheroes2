@@ -31,12 +31,6 @@ class Texture;
 class Display : public Surface
 {
 public:
-    enum
-    {
-        DEFAULT_WIDTH = 640,
-        DEFAULT_HEIGHT = 480
-    };
-
     ~Display();
 
     static Display & Get( void );

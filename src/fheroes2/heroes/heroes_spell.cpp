@@ -223,8 +223,7 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         I.SetFocus( &hero );
 
         // educate spells
-        if ( !Settings::Get().ExtHeroLearnSpellsWithDay() )
-            castle->MageGuildEducateHero( hero );
+        castle->MageGuildEducateHero( hero );
 
         return true;
     }
