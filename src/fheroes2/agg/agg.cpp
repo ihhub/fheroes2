@@ -716,7 +716,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- && buf < max ) {
                 const uint32_t id = *buf * 3;
-                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2) );
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
                 ++buf;
             }
@@ -761,7 +761,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- ) {
                 const uint32_t id = *buf * 3;
-                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2) );
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
             }
             ++buf;
@@ -771,7 +771,7 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             ++buf;
             while ( c-- ) {
                 const uint32_t id = *buf * 3;
-                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2) );
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
             }
             ++buf;
