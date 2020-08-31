@@ -210,7 +210,6 @@ public:
     int ScrollSpeed( void ) const;
     u32 MemoryLimit( void ) const;
 
-    const std::string & PlayMusCommand( void ) const;
     const std::string & SelectVideoDriver( void ) const;
 
     int GameDifficulty( void ) const;
@@ -331,7 +330,6 @@ public:
     bool ExtPocketDragDropScroll( void ) const;
 
     const Size & VideoMode( void ) const;
-    void SetAutoVideoMode( void );
 
     void SetDebug( int );
     void SetUnicode( bool );

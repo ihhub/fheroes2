@@ -45,17 +45,11 @@ public:
     static Size GetDefaultSize( void );
 
     std::string GetInfo( void ) const;
-    Size GetMaxMode( bool enable_rotate ) const;
 
     void SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo );
 
-    void Flip( void );
-
     static void HideCursor( void );
     static void ShowCursor( void );
-
-    Surface GetSurface( void ) const;
-    Surface GetSurface( const Rect & rt ) const;
 
 protected:
     friend class Texture;

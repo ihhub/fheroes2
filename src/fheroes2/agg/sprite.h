@@ -64,9 +64,6 @@ public:
     void ChangeColorIndex( u32 index1, u32 index2 );
     void ChangeColor( u32 index, RGBA color );
     void ChangeColor( const std::map<RGBA, RGBA> & colorPairs );
-
-    static Surface ScaleQVGASurface( const Surface & );
-    static Sprite ScaleQVGASprite( const Sprite & );
 };
 
 #endif

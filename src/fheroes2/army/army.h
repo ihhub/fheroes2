@@ -133,7 +133,6 @@ public:
     static bool FastestTroop( const Troop *, const Troop * );
     static bool ArchersFirst( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
-    static u32 UniqueCount( const Army & );
 
     // 0: fight, 1: free join, 2: join with gold, 3: flee
     static JoinCount GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );

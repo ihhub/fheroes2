@@ -141,9 +141,6 @@ int main( int argc, char ** argv )
                 conf.ResetMusic();
             }
 
-            if ( 0 == conf.VideoMode().w || 0 == conf.VideoMode().h )
-                conf.SetAutoVideoMode();
-
             fheroes2::Display & display = fheroes2::Display::instance();
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
                 fheroes2::engine().toggleFullScreen();

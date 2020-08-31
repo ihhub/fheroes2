@@ -81,43 +81,6 @@ int Sprite::y( void ) const
     return pos.y;
 }
 
-Surface Sprite::ScaleQVGASurface( const Surface & src )
-{
-    s32 w = src.w() / 2;
-    s32 h = src.h() / 2;
-    return src.RenderScale( Size( ( w ? w : 1 ), ( h ? h : 1 ) ) );
-}
-
-Sprite Sprite::ScaleQVGASprite( const Sprite & sp )
-{
-    Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
-    Sprite res;
-
-    if ( sp.w() > 3 && sp.h() > 3 ) {
-        int theme = 0;
-        if ( cursor.isVisible() && Cursor::WAIT != cursor.Themes() ) {
-            theme = cursor.Themes();
-            cursor.SetThemes( Cursor::WAIT );
-            cursor.Show();
-            display.Flip();
-        }
-
-        res.SetSurface( ScaleQVGASurface( sp ) );
-
-        if ( theme ) {
-            cursor.SetThemes( theme );
-            cursor.Show();
-            display.Flip();
-        }
-    }
-
-    const Point pt = sp.GetPos();
-    res.SetPos( Point( pt.x / 2, pt.y / 2 ) );
-
-    return res;
-}
-
 void Sprite::ChangeColorIndex( u32 fc, u32 tc )
 {
     SetSurface( RenderChangeColor( PAL::GetPaletteColor( fc ), PAL::GetPaletteColor( tc ) ) );
