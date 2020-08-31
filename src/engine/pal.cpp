@@ -20,6 +20,8 @@
 #include "pal.h"
 #include "../../tools/palette_h2.h"
 
+#include <cstring>
+
 #define PALETTE_SIZE 256
 
 namespace PAL
