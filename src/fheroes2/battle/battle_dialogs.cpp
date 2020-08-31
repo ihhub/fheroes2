@@ -166,9 +166,9 @@ void Battle::RedrawBattleSettings( const std::vector<Rect> & areas )
     Text text( str, Font::SMALL );
     text.Blit( areas[0].x + ( sprite.width() - text.w() ) / 2, areas[0].y + sprite.height() + 3 );
 
-    RedrawOnOffSetting( areas[3], _( "Grid" ), 8, conf.ExtBattleShowGrid() );
-    RedrawOnOffSetting( areas[4], _( "Shadow Movement" ), 10, conf.ExtBattleShowMoveShadow() );
-    RedrawOnOffSetting( areas[5], _( "Shadow Cursor" ), 12, conf.ExtBattleShowMouseShadow() );
+    RedrawOnOffSetting( areas[3], _( "Grid" ), 8, conf.BattleShowGrid() );
+    RedrawOnOffSetting( areas[4], _( "Shadow Movement" ), 10, conf.BattleShowMoveShadow() );
+    RedrawOnOffSetting( areas[5], _( "Shadow Cursor" ), 12, conf.BattleShowMouseShadow() );
 
     display.render();
 }
@@ -230,6 +230,8 @@ void Battle::DialogBattleSettings( void )
     cursor.Show();
     display.render();
 
+    bool saveConfiguration = false;
+
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
@@ -239,25 +241,33 @@ void Battle::DialogBattleSettings( void )
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );
             display.render();
+            saveConfiguration = true;
         }
         else if ( le.MouseClickLeft( optionAreas[3] ) ) {
-            conf.SetBattleGrid( !conf.ExtBattleShowGrid() );
+            conf.SetBattleGrid( !conf.BattleShowGrid() );
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );
+            saveConfiguration = true;
         }
         else if ( le.MouseClickLeft( optionAreas[4] ) ) {
-            conf.SetBattleMovementShaded( !conf.ExtBattleShowMoveShadow() );
+            conf.SetBattleMovementShaded( !conf.BattleShowMoveShadow() );
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );
+            saveConfiguration = true;
         }
         else if ( le.MouseClickLeft( optionAreas[5] ) ) {
-            conf.SetBattleMouseShaded( !conf.ExtBattleShowMouseShadow() );
+            conf.SetBattleMouseShaded( !conf.BattleShowMouseShadow() );
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );
+            saveConfiguration = true;
         }
         else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( btn_ok.area() ) ) {
             break;
         }
+    }
+
+    if ( saveConfiguration ) {
+        conf.Save( "fheroes2.cfg" );
     }
 }
 

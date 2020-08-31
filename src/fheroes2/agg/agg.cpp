@@ -36,6 +36,7 @@
 #include "game.h"
 #include "m82.h"
 #include "mus.h"
+#include "pal.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -48,6 +49,31 @@
 #endif
 
 #define FATSIZENAME 15
+
+namespace
+{
+    class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
+    {
+    public:
+        ICNSprite() {}
+        ICNSprite( const Surface & sf1, const Surface & sf2 )
+            : std::pair<Surface, Surface>( sf1, sf2 )
+        {}
+
+        bool isValid( void ) const;
+        Sprite CreateSprite( bool reflect, bool shadow ) const;
+        Surface First( void )
+        {
+            return first;
+        }
+        Surface Second( void )
+        {
+            return second;
+        }
+
+        Point offset;
+    };
+}
 
 namespace AGG
 {
@@ -160,7 +186,6 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
-    bool LoadExtICN( int icn, u32, bool );
     bool LoadAltICN( int icn, u32, bool );
     bool LoadOrgICN( Sprite &, int icn, u32, bool );
     bool LoadOrgICN( int icn, u32, bool );
@@ -182,56 +207,7 @@ namespace AGG
     const std::vector<u8> & ReadICNChunk( int icn, u32 );
     const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
 
-    // This class is a holder of the original 8-bit image after decompression
-    class ICNData
-    {
-    public:
-        explicit ICNData( uint32_t width_ = 0, uint32_t height_ = 0 )
-            : _width( 0 )
-            , _height( 0 )
-        {
-            resize( width_, height_ );
-        }
-
-        void resize( uint32_t width_ = 0, uint32_t height_ = 0 )
-        {
-            if ( width_ == _width && height_ == _height )
-                return;
-
-            _width = width_;
-            _height = height_;
-
-            _data.clear();
-            _data.resize( static_cast<size_t>( _width ) * _height, 0u );
-        }
-
-        const std::vector<uint8_t> & get() const
-        {
-            return _data;
-        }
-
-        std::vector<uint8_t> & get()
-        {
-            return _data;
-        }
-
-        uint32_t width() const
-        {
-            return _width;
-        }
-
-        uint32_t height() const
-        {
-            return _height;
-        }
-
-    private:
-        std::vector<uint8_t> _data;
-        uint32_t _width;
-        uint32_t _height;
-    };
-
-    std::map<std::pair<int, int>, ICNData> _icnIdVsData;
+    ICNSprite RenderICNSprite( int, u32, int palette = PAL::STANDARD );
 }
 
 Sprite ICNSprite::CreateSprite( bool reflect, bool shadow ) const
@@ -500,254 +476,6 @@ const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpa
     return heroes2_agg.Read( key );
 }
 
-/* load manual ICN object */
-bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
-{
-    // for animation sprite need update count for ICN::AnimationFrame
-    u32 count = 0;
-    const Settings & conf = Settings::Get();
-
-    switch ( icn ) {
-    case ICN::BATTLESKIP:
-    case ICN::BATTLEWAIT:
-    case ICN::BATTLEAUTO:
-    case ICN::BATTLESETS:
-    case ICN::BUYMAX:
-    case ICN::BTNBATTLEONLY:
-    case ICN::BTNGIFT:
-    case ICN::BTNMIN:
-    case ICN::BTNCONFIG:
-        count = 2;
-        break;
-    case ICN::CSLMARKER:
-        count = 3;
-        break;
-    case ICN::FONT:
-    case ICN::SMALFONT:
-    case ICN::YELLOW_FONT:
-    case ICN::YELLOW_SMALFONT:
-    case ICN::GRAY_FONT:
-    case ICN::GRAY_SMALL_FONT:
-        count = 96;
-        break;
-    case ICN::ROUTERED:
-        count = 145;
-        break;
-    case ICN::SPELLS:
-        count = 66;
-
-    default:
-        break;
-    }
-
-    // not modify sprite
-    if ( 0 == count )
-        return false;
-
-    icn_cache_t & v = icn_cache[icn];
-    DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( icn ) << ", " << index );
-
-    if ( NULL == v.sprites ) {
-        v.sprites = new Sprite[count];
-        v.reflect = new Sprite[count];
-        v.count = count;
-    }
-
-    // simple modify
-    if ( index < count ) {
-        Sprite & sprite = reflect ? v.reflect[index] : v.sprites[index];
-
-        memlimit_usage = false;
-
-        switch ( icn ) {
-        case ICN::BTNBATTLEONLY:
-            LoadOrgICN( sprite, ICN::BTNNEWGM, 2 + index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 55, 14 ), 15, 13, sprite );
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 55, 14 ), 70, 13, sprite );
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 55, 14 ), 42, 28, sprite );
-            // ba
-            GetICN( ICN::BTNCMPGN, index ).Blit( Rect( 41, 28, 28, 14 ), 30, 13, sprite );
-            // tt
-            GetICN( ICN::BTNNEWGM, index ).Blit( Rect( 25, 13, 13, 14 ), 57, 13, sprite );
-            GetICN( ICN::BTNNEWGM, index ).Blit( Rect( 25, 13, 13, 14 ), 70, 13, sprite );
-            // le
-            GetICN( ICN::BTNNEWGM, 6 + index ).Blit( Rect( 97, 21, 13, 14 ), 83, 13, sprite );
-            GetICN( ICN::BTNNEWGM, 6 + index ).Blit( Rect( 86, 21, 13, 14 ), 96, 13, sprite );
-            // on
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 44, 21, 31, 14 ), 40, 28, sprite );
-            // ly
-            GetICN( ICN::BTNHOTST, index ).Blit( Rect( 47, 21, 13, 13 ), 71, 28, sprite );
-            GetICN( ICN::BTNHOTST, index ).Blit( Rect( 72, 21, 13, 13 ), 84, 28, sprite );
-            break;
-
-        case ICN::BTNCONFIG:
-            LoadOrgICN( sprite, ICN::SYSTEM, 11 + index, false );
-            // config
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 30, 20, 80, 16 ), 8, 5, sprite );
-            break;
-
-        case ICN::BTNGIFT:
-            LoadOrgICN( sprite, ( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST ), 17 + index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 72, 15 ), 6, 4, sprite );
-            // G
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 94, 20, 15, 15 ), 20, 4, sprite );
-            // I
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 86, 20, 9, 15 ), 36, 4, sprite );
-            // F
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 74, 20, 13, 15 ), 46, 4, sprite );
-            // T
-            GetICN( ICN::BTNNEWGM, index ).Blit( Rect( 25, 13, 13, 14 ), 60, 5, sprite );
-            break;
-
-        case ICN::BTNMIN:
-            // max
-            LoadOrgICN( sprite, ICN::RECRUIT, index + 4, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 31, 15 ), 30, 4, sprite );
-            // add: IN
-            GetICN( ICN::APANEL, 4 + index ).Blit( Rect( 23, 20, 25, 15 ), 30, 4, sprite );
-            break;
-
-        case ICN::BUYMAX:
-            LoadOrgICN( sprite, ICN::WELLXTRA, index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 52, 14 ), 6, 2, sprite );
-            // max
-            GetICN( ICN::RECRUIT, 4 + index ).Blit( Rect( 12, 6, 50, 12 ), 7, 3, sprite );
-            break;
-
-        case ICN::BATTLESKIP:
-            if ( conf.PocketPC() )
-                LoadOrgICN( sprite, ICN::TEXTBAR, index, false );
-            else {
-                LoadOrgICN( sprite, ICN::TEXTBAR, 4 + index, false );
-                // clean
-                GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 3, 8, 43, 14 ), 3, 1, sprite );
-                // skip
-                GetICN( ICN::TEXTBAR, index ).Blit( Rect( 3, 8, 43, 14 ), 3, 0, sprite );
-            }
-            break;
-
-        case ICN::BATTLEAUTO:
-            LoadOrgICN( sprite, ICN::TEXTBAR, 0 + index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 4, 8, 43, 13 ), 3, 10, sprite );
-            //
-            GetICN( ICN::TEXTBAR, 4 + index ).Blit( Rect( 5, 2, 40, 12 ), 4, 11, sprite );
-            break;
-
-        case ICN::BATTLESETS:
-            LoadOrgICN( sprite, ICN::TEXTBAR, 0 + index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 4, 8, 43, 13 ), 3, 10, sprite );
-            //
-            GetICN( ICN::ADVBTNS, 14 + index ).Blit( Rect( 5, 5, 26, 26 ), 10, 6, sprite );
-            break;
-
-        case ICN::BATTLEWAIT:
-            if ( conf.PocketPC() )
-                LoadOrgICN( sprite, ICN::ADVBTNS, 8 + index, false );
-            else {
-                LoadOrgICN( sprite, ICN::TEXTBAR, 4 + index, false );
-                // clean
-                GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 3, 8, 43, 14 ), 3, 1, sprite );
-                // wait
-                // Surface dst = Sprite::ScaleQVGASurface( GetICN( ICN::ADVBTNS, 8 + index ).GetSurface( Rect( 5, 4, 28, 28 ) ) );
-                // dst.Blit( ( sprite.w() - dst.w() ) / 2, 2, sprite );
-            }
-            break;
-
-        case ICN::CSLMARKER:
-            // sprite: not allow build: complete, not today, all builds (white)
-            LoadOrgICN( sprite, ICN::LOCATORS, 24, false );
-
-            // sprite: not allow build: builds requires
-            if ( 1 == index )
-                sprite.ChangeColorIndex( 0x0A, 0xD6 );
-            else
-                // sprite: not allow build: lack resources (green)
-                if ( 2 == index )
-                sprite.ChangeColorIndex( 0x0A, 0xDE );
-            break;
-
-        default:
-            break;
-        }
-
-        memlimit_usage = true;
-    }
-
-    // change color
-    for ( u32 ii = 0; ii < count; ++ii ) {
-        Sprite & sprite = reflect ? v.reflect[ii] : v.sprites[ii];
-
-        switch ( icn ) {
-        case ICN::ROUTERED:
-            LoadOrgICN( sprite, ICN::ROUTE, ii, false );
-            ReplaceColors( sprite, PAL::GetPalette( PAL::RED ), ICN::ROUTE, ii, false );
-            break;
-
-        case ICN::FONT:
-        case ICN::SMALFONT:
-            LoadOrgICN( sprite, icn, ii, false );
-            ReplaceColors( sprite, PAL::GetPalette( PAL::WHITE_TEXT ), icn, ii, false );
-            break;
-
-        case ICN::YELLOW_FONT:
-        case ICN::YELLOW_SMALFONT:
-            LoadOrgICN( sprite, icn == ICN::YELLOW_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
-            ReplaceColors( sprite, PAL::GetPalette( PAL::YELLOW_TEXT ), icn == ICN::YELLOW_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
-            break;
-
-        case ICN::GRAY_FONT:
-        case ICN::GRAY_SMALL_FONT:
-            LoadOrgICN( sprite, icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
-            ReplaceColors( sprite, PAL::GetPalette( PAL::GRAY_TEXT ), icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
-            break;
-
-        case ICN::SPELLS:
-            if ( ii < 60 ) {
-                LoadOrgICN( sprite, icn, ii, false );
-            }
-            else {
-                int originalIndex = 0;
-                if ( ii == 60 ) // Mass Cure
-                    originalIndex = 6;
-                else if ( ii == 61 ) // Mass Haste
-                    originalIndex = 14;
-                else if ( ii == 62 ) // Mass Slow
-                    originalIndex = 1;
-                else if ( ii == 63 ) // Mass Bless
-                    originalIndex = 7;
-                else if ( ii == 64 ) // Mass Curse
-                    originalIndex = 3;
-                else if ( ii == 65 ) // Mass Shield
-                    originalIndex = 15;
-
-                Sprite icon = AGG::GetICN( ICN::SPELLS, originalIndex );
-
-                sprite = Sprite( Surface( Size( icon.GetSize().w + 8, icon.GetSize().h + 8 ), icon.amask() ), icon.x() - 4, icon.y() - 4 );
-                Sprite icon1( icon.GetSurface(), icon.x(), icon.y() );
-                icon1.SetAlphaMod( 128, false );
-                icon1.Blit( 0, 0, sprite );
-
-                Sprite icon2( icon.GetSurface(), icon.x(), icon.y() );
-                icon2.SetAlphaMod( 192, false );
-                icon2.Blit( 4, 4, sprite );
-
-                icon.Blit( 8, 8, sprite );
-            }
-
-        default:
-            break;
-        }
-    }
-
-    return true;
-}
-
 bool AGG::LoadAltICN( int icn, u32 index, bool reflect )
 {
 #ifdef WITH_XML
@@ -975,9 +703,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     u32 c = 0;
     Point pt( 0, 0 );
 
-    ICNData originalData( sz.w, sz.h );
-    uint8_t * icnData = originalData.get().data();
-
     while ( 1 ) {
         // 0x00 - end line
         if ( 0 == *buf ) {
@@ -991,7 +716,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- && buf < max ) {
-                icnData[pt.y * sz.w + pt.x] = *buf;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
                 ++buf;
@@ -1023,7 +747,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
                 if ( !sf2.isValid() )
                     sf2.Set( sz.w, sz.h, true );
                 while ( c-- ) {
-                    icnData[pt.y * sz.w + pt.x] = 0;
                     sf2.DrawPoint( pt, shadow );
                     ++pt.x;
                 }
@@ -1037,7 +760,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- ) {
-                icnData[pt.y * sz.w + pt.x] = *buf;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
@@ -1047,7 +769,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf - 0xC0;
             ++buf;
             while ( c-- ) {
-                icnData[pt.y * sz.w + pt.x] = *buf;
                 sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
                 ++pt.x;
             }
@@ -1058,8 +779,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             break;
         }
     }
-
-    _icnIdVsData[std::make_pair( icn, index )] = originalData;
 
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
         res.second.SetAlphaMod( 0, false );
@@ -1115,13 +834,10 @@ bool AGG::LoadICN( int icn, u32 index, bool reflect )
 
         // load from images dir
         if ( !conf.UseAltResource() || !LoadAltICN( icn, index, reflect ) ) {
-            // load modify sprite
-            if ( !LoadExtICN( icn, index, reflect ) ) {
-                // load origin sprite
-                if ( !LoadOrgICN( icn, index, reflect ) ) {
-                    ERROR( "ICN load error: asking for file " << icn << ", sprite index " << index );
-                    return false;
-                }
+            // load origin sprite
+            if ( !LoadOrgICN( icn, index, reflect ) ) {
+                ERROR( "ICN load error: asking for file " << icn << ", sprite index " << index );
+                return false;
             }
 #ifdef DEBUG
             if ( Settings::Get().UseAltResource() )
@@ -1841,36 +1557,6 @@ void AGG::Quit( void )
 #ifdef WITH_TTF
     delete[] fonts;
 #endif
-}
-
-bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int icnIndex, bool reflect )
-{
-    if ( colorIndexes.size() != PALETTE_SIZE )
-        return false;
-
-    const std::vector<uint32_t> & rgbColors = PAL::GetRGBColors();
-
-    std::vector<uint32_t> colors( colorIndexes.size() );
-    for ( size_t i = 0; i < colorIndexes.size(); ++i )
-        colors[i] = rgbColors[colorIndexes[i]];
-
-    return ReplaceColors( surface, colors, icnId, icnIndex, reflect );
-}
-
-bool AGG::ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int icnIndex, bool reflect )
-{
-    if ( !surface.isValid() || surface.depth() != 32 || rgbColors.size() != PALETTE_SIZE || icnId < 0 || icnIndex < 0 )
-        return false;
-
-    std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, icnIndex ) );
-    if ( iter == _icnIdVsData.end() )
-        return false;
-
-    const ICNData & data = iter->second;
-    if ( surface.w() != data.width() || surface.h() != data.height() )
-        return false;
-
-    return surface.SetColors( data.get(), rgbColors, reflect );
 }
 
 namespace fheroes2

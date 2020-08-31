@@ -26,11 +26,7 @@
 #include <algorithm>
 
 #include "cursor.h"
-#include "gamedefs.h"
-#include "icn.h"
-#include "settings.h"
 #include "splitter.h"
-#include "sprite.h"
 #include "ui_button.h"
 
 namespace Interface

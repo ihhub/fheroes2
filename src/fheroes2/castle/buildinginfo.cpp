@@ -28,6 +28,7 @@
 #include "kingdom.h"
 #include "m82.h"
 #include "monster.h"
+#include "pal.h"
 #include "profit.h"
 #include "race.h"
 #include "settings.h"

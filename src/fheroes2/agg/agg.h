@@ -28,31 +28,8 @@
 
 #include "gamedefs.h"
 #include "icn.h"
-#include "pal.h"
 #include "sprite.h"
 #include "til.h"
-
-class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
-{
-public:
-    ICNSprite() {}
-    ICNSprite( const Surface & sf1, const Surface & sf2 )
-        : std::pair<Surface, Surface>( sf1, sf2 )
-    {}
-
-    bool isValid( void ) const;
-    Sprite CreateSprite( bool reflect, bool shadow ) const;
-    Surface First( void )
-    {
-        return first;
-    }
-    Surface Second( void )
-    {
-        return second;
-    }
-
-    Point offset;
-};
 
 namespace AGG
 {
@@ -72,13 +49,6 @@ namespace AGG
     void PlaySound( int m82 );
     void PlayMusic( int mus, bool loop = true );
     void ResetMixer( void );
-
-    ICNSprite RenderICNSprite( int, u32, int palette = PAL::STANDARD );
-
-    // Replace colors based on indexes provided. Returns true only when the operation was successful.
-    bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int incIndex, bool reflect );
-    // Replace colors with the ones provided. RGB map has to match the palette. Returns true only if successful.
-    bool ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int incIndex, bool reflect );
 }
 
 namespace fheroes2

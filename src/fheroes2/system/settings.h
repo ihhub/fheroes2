@@ -128,9 +128,6 @@ public:
         GAME_HIDE_INTERFACE = 0x10002000,
         // UNUSED = 0x10008000,
         GAME_DYNAMIC_INTERFACE = 0x10010000,
-        GAME_BATTLE_SHOW_GRID = 0x10020000,
-        GAME_BATTLE_SHOW_MOUSE_SHADOW = 0x10040000,
-        GAME_BATTLE_SHOW_MOVE_SHADOW = 0x10080000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
         POCKETPC_HIDE_CURSOR = 0x10400000,
@@ -246,6 +243,9 @@ public:
     bool ShowStatus( void ) const;
     bool Unicode( void ) const;
     bool PocketPC( void ) const;
+    bool BattleShowGrid( void ) const;
+    bool BattleShowMouseShadow( void ) const;
+    bool BattleShowMoveShadow( void ) const;
     bool UseAltResource( void ) const;
     bool PriceLoyaltyVersion( void ) const;
     bool LoadedGameVersion( void ) const;
@@ -310,9 +310,6 @@ public:
     bool ExtBattleMergeArmies( void ) const;
     bool ExtBattleSkipIncreaseDefense( void ) const;
     bool ExtBattleReverseWaitOrder( void ) const;
-    bool ExtBattleShowGrid( void ) const;
-    bool ExtBattleShowMouseShadow( void ) const;
-    bool ExtBattleShowMoveShadow( void ) const;
     bool ExtGameRememberLastFocus( void ) const;
     bool ExtGameContinueAfterVictory( void ) const;
     bool ExtGameRewriteConfirm( void ) const;
