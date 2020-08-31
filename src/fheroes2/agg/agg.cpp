@@ -43,6 +43,8 @@
 #include "text.h"
 #include "xmi.h"
 
+#include "../../tools/palette_h2.h"
+
 #ifdef WITH_ZLIB
 #include "embedded_image.h"
 #include "zzlib.h"
@@ -713,7 +715,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- && buf < max ) {
-                // sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2) );
                 ++pt.x;
                 ++buf;
             }
@@ -757,7 +760,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- ) {
-                // sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2) );
                 ++pt.x;
             }
             ++buf;
@@ -766,7 +770,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf - 0xC0;
             ++buf;
             while ( c-- ) {
-                // sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2) );
                 ++pt.x;
             }
             ++buf;
