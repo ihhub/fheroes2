@@ -183,6 +183,7 @@ int Game::MainMenu( bool isFirstGameRun )
         }
         else if ( le.MouseClickLeft( resolutionArea ) ) {
             if ( Dialog::SelectResolution() ) {
+                conf.Save( "fheroes2.cfg" );
                 // force interface to reset area and positions
                 Interface::Basic::Get().Reset();
                 return MAINMENU;
