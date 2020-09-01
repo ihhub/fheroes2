@@ -244,15 +244,23 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
     // correct index (mage guild)
     switch ( build ) {
     case BUILD_MAGEGUILD1:
+        if ( castle.GetLevelMageGuild() > 1 )
+            return;
         index = 0;
         break;
     case BUILD_MAGEGUILD2:
+        if ( castle.GetLevelMageGuild() > 2 )
+            return;
         index = Race::NECR == race ? 6 : 1;
         break;
     case BUILD_MAGEGUILD3:
+        if ( castle.GetLevelMageGuild() > 3 )
+            return;
         index = Race::NECR == race ? 12 : 2;
         break;
     case BUILD_MAGEGUILD4:
+        if ( castle.GetLevelMageGuild() > 4 )
+            return;
         index = Race::NECR == race ? 18 : 3;
         break;
     case BUILD_MAGEGUILD5:
