@@ -164,6 +164,10 @@ void Interface::Basic::EventCastSpell( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
+        SetRedraw( REDRAW_ALL );
+        ResetFocus( GameFocus::HEROES );
+        Redraw();
+
         const Spell spell = hero->OpenSpellBook( SpellBook::ADVN, true );
         // apply cast spell
         if ( spell.isValid() ) {
