@@ -95,7 +95,8 @@ int Captain::GetDefense( void ) const
 
 int Captain::GetPower( void ) const
 {
-    return power + GetPowerModificator( NULL );
+    const int finalPower = power + GetPowerModificator( NULL );
+    return finalPower < 1 ? 1 : ( finalPower > 255 ? 255 : finalPower );
 }
 
 int Captain::GetKnowledge( void ) const

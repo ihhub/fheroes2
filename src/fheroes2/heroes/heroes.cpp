@@ -514,8 +514,8 @@ int Heroes::GetPower( void ) const
 
 int Heroes::GetPower( std::string * strs ) const
 {
-    int result = power + GetPowerModificator( strs );
-    return result < 0 ? 0 : ( result > 255 ? 255 : result );
+    const int result = power + GetPowerModificator( strs );
+    return result < 1 ? 1 : ( result > 255 ? 255 : result );
 }
 
 int Heroes::GetKnowledge( void ) const
