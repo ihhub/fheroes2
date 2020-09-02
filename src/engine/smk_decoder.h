@@ -34,7 +34,7 @@ public:
     ~SMKVideoSequence();
 
     void resetFrame();
-    bool getNextFrame( fheroes2::Image & image, std::vector<uint8_t> & palette );
+    void getNextFrame( fheroes2::Image & image, std::vector<uint8_t> & palette );
     const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
 
     unsigned long width() const;
