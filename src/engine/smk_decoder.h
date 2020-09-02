@@ -50,5 +50,5 @@ private:
     unsigned long _frameCount;
     unsigned long _currentFrameId;
 
-    struct smk_t* _videoFile;
+    struct smk_t * _videoFile;
 };
