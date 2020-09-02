@@ -33,7 +33,7 @@
 #include "engine.h"
 #include "error.h"
 #include "game.h"
-//#include "game_video.h"
+#include "game_video.h"
 #include "gamedefs.h"
 #include "screen.h"
 #include "settings.h"
@@ -186,7 +186,7 @@ int main( int argc, char ** argv )
             // goto main menu
             int rs = ( test ? Game::TESTING : Game::MAINMENU );
 
-            // Video::ShowVideo( "data/nwclogo.smk", false );
+            Video::ShowVideo( "heroes2/anim/H2XINTRO.smk", false );
 
             while ( rs != Game::QUITGAME ) {
                 switch ( rs ) {

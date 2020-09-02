@@ -492,6 +492,16 @@ void LocalEvent::RegisterCycling() const
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
+void LocalEvent::PauseCycling()
+{
+    fheroes2::Display::instance().subscribe( NULL, NULL );
+}
+
+void LocalEvent::ResumeCycling()
+{
+    RegisterCycling();
+}
+
 LocalEvent & LocalEvent::GetClean()
 {
     LocalEvent & le = Get();

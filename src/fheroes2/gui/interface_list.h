@@ -87,13 +87,13 @@ namespace Interface
             ptRedraw = tl;
         }
 
-        void SetScrollButtonUp( int icn, u32 index1, u32 index2, const Point & pos )
+        void SetScrollButtonUp( int icn, u32 index1, u32 index2, const fheroes2::Point & pos )
         {
             buttonPgUp.setICNInfo( icn, index1, index2 );
             buttonPgUp.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollButtonDn( int icn, u32 index1, u32 index2, const Point & pos )
+        void SetScrollButtonDn( int icn, u32 index1, u32 index2, const fheroes2::Point & pos )
         {
             buttonPgDn.setICNInfo( icn, index1, index2 );
             buttonPgDn.setPosition( pos.x, pos.y );

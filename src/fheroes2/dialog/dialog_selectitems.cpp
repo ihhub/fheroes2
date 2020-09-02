@@ -36,8 +36,8 @@ public:
         , ok( false )
     {
         RedrawBackground( rt );
-        SetScrollButtonUp( ICN::LISTBOX, 3, 4, Point( rt.x + rt.w - 24, rt.y + 25 ) );
-        SetScrollButtonDn( ICN::LISTBOX, 5, 6, Point( rt.x + rt.w - 24, rt.y + rt.h - 55 ) );
+        SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( rt.x + rt.w - 24, rt.y + 25 ) );
+        SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( rt.x + rt.w - 24, rt.y + rt.h - 55 ) );
 
         SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), Rect( rt.x + rt.w - 19, rt.y + 48, 14, rt.h - 106 ) );
         SetAreaMaxItems( 5 );
