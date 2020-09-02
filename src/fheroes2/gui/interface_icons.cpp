@@ -91,17 +91,17 @@ void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
     // white marker
     case UNKNOWN_COND:
     case NOT_TODAY:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), display, sx + 39, sy + 1 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), display, sx + 40, sy );
         break;
 
     // green marker
-    case LACK_RESOURCES:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 2 ), display, sx + 39, sy + 1 );
-        break;
+    // case LACK_RESOURCES:
+    //    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 2 ), display, sx + 40, sy );
+    //    break;
 
     // red marker
     case REQUIRES_BUILD:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), display, sx + 39, sy + 1 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), display, sx + 40, sy );
         break;
 
     default:
