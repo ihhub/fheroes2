@@ -38,11 +38,13 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
 
     double usf = 0;
 
+    const uint8_t audioChannelCount = 7;
+
     uint8_t trackMask = 0;
-    uint8_t channel[7] = {0};
-    uint8_t audioBitDepth[7] = {0};
-    unsigned long audioRate[7] = {0};
-    std::vector<std::vector<uint8_t> > soundBuffer( 7 );
+    uint8_t channel[audioChannelCount] = {0};
+    uint8_t audioBitDepth[audioChannelCount] = {0};
+    unsigned long audioRate[audioChannelCount] = {0};
+    std::vector<std::vector<uint8_t> > soundBuffer( audioChannelCount );
 
     smk_info_all( _videoFile, NULL, &_frameCount, &usf );
     smk_info_video( _videoFile, &_width, &_height, NULL );
@@ -54,7 +56,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     else
         _fps = 15; // let's use as a default
 
-    for ( int i = 0; i < 7; ++i ) {
+    for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
         if ( trackMask & ( 1 << i ) ) {
             smk_enable_audio( _videoFile, i, 1 );
         }
@@ -64,7 +66,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     unsigned long currentFrame = 0;
     smk_info_all( _videoFile, &currentFrame, NULL, NULL );
 
-    for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
+    for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
         if ( trackMask & ( 1 << i ) ) {
             const unsigned long length = smk_get_audio_size( _videoFile, i );
             const uint8_t * data = smk_get_audio( _videoFile, i );
@@ -76,7 +78,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     for ( currentFrame = 1; currentFrame < _frameCount; ++currentFrame ) {
         smk_next( _videoFile );
 
-        for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
+        for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
             if ( trackMask & ( 1 << i ) ) {
                 const unsigned long length = smk_get_audio_size( _videoFile, i );
                 const uint8_t * data = smk_get_audio( _videoFile, i );
@@ -103,7 +105,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
             // set up WAV header
             StreamBuf wavHeader( 44 );
             wavHeader.putLE32( 0x46464952 ); // RIFF
-            wavHeader.putLE32( soundBuffer[i].size() + 0x24 ); // size
+            wavHeader.putLE32( static_cast<uint32_t>( soundBuffer[i].size() ) + 0x24 ); // size
             wavHeader.putLE32( 0x45564157 ); // WAVE
             wavHeader.putLE32( 0x20746D66 ); // FMT
             wavHeader.putLE32( 0x10 ); // 16 == PCM
@@ -114,7 +116,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
             wavHeader.putLE16( 0x01 ); // align
             wavHeader.putLE16( audioBitDepth[i] ); // bitsper
             wavHeader.putLE32( 0x61746164 ); // DATA
-            wavHeader.putLE32( soundBuffer[i].size() ); // size
+            wavHeader.putLE32( static_cast<uint32_t>( soundBuffer[i].size() ) ); // size
 
             wavData.resize( soundBuffer[i].size() + 44 );
             wavData.assign( wavHeader.data(), wavHeader.data() + 44 );
@@ -161,10 +163,10 @@ void SMKVideoSequence::resetFrame()
     _currentFrameId = 0;
 }
 
-bool SMKVideoSequence::getNextFrame( fheroes2::Image & image, std::vector<uint8_t> & palette )
+void SMKVideoSequence::getNextFrame( fheroes2::Image & image, std::vector<uint8_t> & palette )
 {
     if ( _videoFile == NULL )
-        return false;
+        return;
 
     image.resize( _width, _height );
 
