@@ -24,22 +24,22 @@
 #include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
+#include "ui_tool.h"
 
 namespace Video
 {
     void ShowVideo( const std::string & videoPath, bool isLooped )
     {
-        const SMKVideoSequence video( videoPath );
-        if ( video.getFrames().empty() ) // nothing to show
+        SMKVideoSequence video( videoPath );
+        if ( video.frameCount() < 1 ) // nothing to show
             return;
 
         Cursor & cursor = Cursor::Get();
         cursor.Hide();
-
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
 
-        size_t currentFrame = 0;
+        unsigned int currentFrame = 0;
         const fheroes2::Point offset( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2 );
         bool isFirstFrame = true;
 
@@ -54,18 +54,32 @@ namespace Video
             }
         }
 
+        fheroes2::ScreenPaletteRestorer screenRestorer;
+
+        fheroes2::Image frame;
+        std::vector<uint8_t> palette;
+
         LocalEvent & le = LocalEvent::Get();
-        while ( ( isLooped || currentFrame < video.getFrames().size() ) && le.HandleEvents() ) {
+        while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents() ) {
             if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
                 break;
 
             if ( isFirstFrame || Game::AnimateCustomDelay( delay ) ) {
                 isFirstFrame = false;
 
-                fheroes2::Blit( video.getFrames()[currentFrame++], display, offset.x, offset.y );
+                if ( currentFrame == 0 )
+                    video.resetFrame();
+
+                video.getNextFrame( frame, palette );
+
+                screenRestorer.changePalette( palette.data() );
+
+                fheroes2::Blit( frame, display, offset.x, offset.y );
                 display.render();
 
-                if ( isLooped && currentFrame >= video.getFrames().size() ) {
+                ++currentFrame;
+
+                if ( isLooped && currentFrame >= video.frameCount() ) {
                     currentFrame = 0;
 
                     if ( hasSound ) {
@@ -78,7 +92,9 @@ namespace Video
             }
         }
 
+        display.fill( 0 );
         cursor.Show();
+
         Mixer::Reset();
 
         return;

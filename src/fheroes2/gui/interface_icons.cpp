@@ -218,8 +218,8 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
 
     SetTopLeft( Point( px, py ) );
     SetScrollSplitter( fheroes2::AGG::GetICN( icnscroll, 4 ), Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 37 ) );
-    SetScrollButtonUp( icnscroll, 0, 1, Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
-    SetScrollButtonDn( icnscroll, 2, 3, Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
+    SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
+    SetScrollButtonDn( icnscroll, 2, 3, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
     SetAreaMaxItems( iconsCount );
     SetAreaItems( Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
     DisableHotkeys( true );
@@ -304,8 +304,8 @@ void Interface::HeroesIcons::SetPos( s32 px, s32 py )
 
     SetTopLeft( Point( px, py ) );
     SetScrollSplitter( fheroes2::AGG::GetICN( icnscroll, 4 ), Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 37 ) );
-    SetScrollButtonUp( icnscroll, 0, 1, Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
-    SetScrollButtonDn( icnscroll, 2, 3, Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
+    SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
+    SetScrollButtonDn( icnscroll, 2, 3, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
     SetAreaMaxItems( iconsCount );
     SetAreaItems( Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
     DisableHotkeys( true );

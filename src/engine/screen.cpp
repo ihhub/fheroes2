@@ -84,6 +84,30 @@ namespace
 
         return resolutions;
     }
+
+    std::vector<uint8_t> StandardPaletteIndexes()
+    {
+        std::vector<uint8_t> indexes( 256 );
+        for ( uint32_t i = 0; i < 256; ++i ) {
+            indexes[i] = static_cast<uint8_t>( i );
+        }
+        return indexes;
+    }
+
+    const uint8_t * PALPAlette()
+    {
+        static std::vector<uint8_t> palette;
+        if ( palette.empty() ) {
+            palette.resize( 256 * 3 );
+            for ( size_t i = 0; i < palette.size(); ++i ) {
+                palette[i] = kb_pal[i] << 2;
+            }
+        }
+
+        return palette.data();
+    }
+
+    const uint8_t * currentPalette = PALPAlette();
 }
 
 namespace
@@ -172,16 +196,16 @@ namespace
             if ( surface->format->Amask > 0 ) {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = kb_pal + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2, 255 );
+                        const uint8_t * value = currentPalette + *in * 3;
+                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
             }
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = kb_pal + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2 );
+                        const uint8_t * value = currentPalette + *in * 3;
+                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -348,26 +372,26 @@ namespace
 
                 if ( _surface->format->Amask > 0 ) {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = kb_pal + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2, 255 );
+                        const uint8_t * value = currentPalette + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = kb_pal + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2 );
+                        const uint8_t * value = currentPalette + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
                     }
                 }
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 _palette8Bit.resize( 256 );
                 for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint8_t * value = kb_pal + colorIds[i] * 3;
+                    const uint8_t * value = currentPalette + colorIds[i] * 3;
                     SDL_Color & col = _palette8Bit[i];
 
-                    col.r = *( value ) << 2;
-                    col.g = *( value + 1 ) << 2;
-                    col.b = *( value + 2 ) << 2;
+                    col.r = *( value );
+                    col.g = *( value + 1 );
+                    col.b = *( value + 2 );
                 }
 
                 SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
@@ -407,12 +431,7 @@ namespace
             if ( _surface == NULL )
                 return;
 
-            std::vector<uint8_t> originalPalette( 256 );
-            for ( uint32_t i = 0; i < 256; ++i ) {
-                originalPalette[i] = static_cast<uint8_t>( i );
-            }
-
-            updatePalette( originalPalette );
+            updatePalette( StandardPaletteIndexes() );
 
             if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( !SDL_MUSTLOCK( _surface ) ) {
@@ -496,16 +515,16 @@ namespace
             if ( surface->format->Amask > 0 ) {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = kb_pal + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2, 255 );
+                        const uint8_t * value = currentPalette + *in * 3;
+                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
             }
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = kb_pal + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2 );
+                        const uint8_t * value = currentPalette + *in * 3;
+                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -613,26 +632,26 @@ namespace
 
                 if ( _surface->format->Amask > 0 ) {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = kb_pal + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2, 255 );
+                        const uint8_t * value = currentPalette + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = kb_pal + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ) << 2, *( value + 1 ) << 2, *( value + 2 ) << 2 );
+                        const uint8_t * value = currentPalette + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
                     }
                 }
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 _palette8Bit.resize( 256 );
                 for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint8_t * value = kb_pal + colorIds[i] * 3;
+                    const uint8_t * value = currentPalette + colorIds[i] * 3;
                     SDL_Color & col = _palette8Bit[i];
 
-                    col.r = *( value ) << 2;
-                    col.g = *( value + 1 ) << 2;
-                    col.b = *( value + 2 ) << 2;
+                    col.r = *( value );
+                    col.g = *( value + 1 );
+                    col.b = *( value + 2 );
                 }
 
                 SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
@@ -665,12 +684,7 @@ namespace
             if ( _surface == NULL )
                 return;
 
-            std::vector<uint8_t> originalPalette( 256 );
-            for ( uint32_t i = 0; i < 256; ++i ) {
-                originalPalette[i] = static_cast<uint8_t>( i );
-            }
-
-            updatePalette( originalPalette );
+            updatePalette( StandardPaletteIndexes() );
 
             if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( !SDL_MUSTLOCK( _surface ) ) {
@@ -800,6 +814,16 @@ namespace fheroes2
     {
         _engine->clear();
         clear();
+    }
+
+    void Display::changePalette( const uint8_t * palette )
+    {
+        if ( currentPalette == palette || ( palette == NULL && currentPalette == PALPAlette() ) )
+            return;
+
+        currentPalette = ( palette == NULL ) ? PALPAlette() : palette;
+
+        _engine->updatePalette( StandardPaletteIndexes() );
     }
 
     Cursor::Cursor()

@@ -47,6 +47,16 @@ namespace fheroes2
         bool _isHidden;
     };
 
+    // This class is useful for cases of playing videos only
+    class ScreenPaletteRestorer
+    {
+    public:
+        ScreenPaletteRestorer();
+        ~ScreenPaletteRestorer();
+
+        void changePalette( const uint8_t * palette );
+    };
+
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );

@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "ui_tool.h"
+#include "localevent.h"
 #include "screen.h"
 #include "types.h"
 
@@ -85,6 +86,22 @@ namespace fheroes2
     bool MovableSprite::isHidden() const
     {
         return _isHidden;
+    }
+
+    ScreenPaletteRestorer::ScreenPaletteRestorer()
+    {
+        LocalEvent::Get().PauseCycling();
+    }
+
+    ScreenPaletteRestorer::~ScreenPaletteRestorer()
+    {
+        Display::instance().changePalette( NULL );
+        LocalEvent::Get().ResumeCycling();
+    }
+
+    void ScreenPaletteRestorer::changePalette( const uint8_t * palette )
+    {
+        Display::instance().changePalette( palette );
     }
 
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight )
