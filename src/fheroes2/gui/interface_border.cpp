@@ -232,7 +232,8 @@ bool Interface::BorderWindow::QueueEventProcessing( void )
         const Rect & pos = GetRect();
 
         fheroes2::MovableSprite moveIndicator( pos.w, pos.h, pos.x, pos.y );
-        fheroes2::DrawBorder( moveIndicator, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
+        moveIndicator.reset();
+        fheroes2::DrawBorder( moveIndicator, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ), 6 );
 
         const s32 ox = mp.x - pos.x;
         const s32 oy = mp.y - pos.y;

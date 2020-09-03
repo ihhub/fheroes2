@@ -122,7 +122,6 @@ public:
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
         GAME_AUTOSAVE_ON = 0x10000200,
         GAME_USE_FADE = 0x10000400,
-        GAME_SHOW_SDL_LOGO = 0x10000800,
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
         // UNUSED = 0x10008000,
@@ -311,7 +310,6 @@ public:
     bool ExtGameAutosaveBeginOfDay( void ) const;
     bool ExtGameAutosaveOn( void ) const;
     bool ExtGameUseFade( void ) const;
-    bool ExtGameShowSDL( void ) const;
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;

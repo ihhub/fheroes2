@@ -1113,7 +1113,7 @@ namespace fheroes2
         return out;
     }
 
-    void DrawBorder( Image & image, uint8_t value )
+    void DrawBorder( Image & image, uint8_t value, uint32_t skipFactor )
     {
         if ( image.empty() || image.width() < 2 || image.height() < 2 ) {
             return;
@@ -1122,40 +1122,105 @@ namespace fheroes2
         const int32_t width = image.width();
         const int32_t height = image.height();
 
-        // top side
-        uint8_t * data = image.image();
-        uint8_t * transform = image.transform();
-        const uint8_t * dataEnd = data + width;
-        for ( ; data != dataEnd; ++data, ++transform ) {
-            *data = value;
-            *transform = 0;
-        }
+        if ( skipFactor < 2 ) {
+            // top side
+            uint8_t * data = image.image();
+            uint8_t * transform = image.transform();
+            const uint8_t * dataEnd = data + width;
+            for ( ; data != dataEnd; ++data, ++transform ) {
+                *data = value;
+                *transform = 0;
+            }
 
-        // bottom side
-        data = image.image() + width * ( height - 1 );
-        transform = image.transform() + width * ( height - 1 );
-        dataEnd = data + width;
-        for ( ; data != dataEnd; ++data, ++transform ) {
-            *data = value;
-            *transform = 0;
-        }
+            // bottom side
+            data = image.image() + width * ( height - 1 );
+            transform = image.transform() + width * ( height - 1 );
+            dataEnd = data + width;
+            for ( ; data != dataEnd; ++data, ++transform ) {
+                *data = value;
+                *transform = 0;
+            }
 
-        // left side
-        data = image.image() + width;
-        transform = image.transform() + width;
-        dataEnd = data + width * ( height - 2 );
-        for ( ; data != dataEnd; data += width, transform += width ) {
-            *data = value;
-            *transform = 0;
-        }
+            // left side
+            data = image.image() + width;
+            transform = image.transform() + width;
+            dataEnd = data + width * ( height - 2 );
+            for ( ; data != dataEnd; data += width, transform += width ) {
+                *data = value;
+                *transform = 0;
+            }
 
-        // right side
-        data = image.image() + width + width - 1;
-        transform = image.transform() + width + width - 1;
-        dataEnd = data + width * ( height - 2 );
-        for ( ; data != dataEnd; data += width, transform += width ) {
-            *data = value;
-            *transform = 0;
+            // right side
+            data = image.image() + width + width - 1;
+            transform = image.transform() + width + width - 1;
+            dataEnd = data + width * ( height - 2 );
+            for ( ; data != dataEnd; data += width, transform += width ) {
+                *data = value;
+                *transform = 0;
+            }
+        }
+        else {
+            uint32_t counter = 0;
+
+            // top side
+            uint8_t * data = image.image();
+            uint8_t * transform = image.transform();
+            const uint8_t * dataEnd = data + width;
+            for ( ; data != dataEnd; ++data, ++transform ) {
+                if ( counter != skipFactor ) {
+                    *data = value;
+                    *transform = 0;
+                }
+                else {
+                    counter = 0;
+                }
+                ++counter;
+            }
+
+            // right side
+            data = image.image() + width + width - 1;
+            transform = image.transform() + width + width - 1;
+            dataEnd = data + width * ( height - 2 );
+            for ( ; data != dataEnd; data += width, transform += width ) {
+                if ( counter != skipFactor ) {
+                    *data = value;
+                    *transform = 0;
+                }
+                else {
+                    counter = 0;
+                }
+                ++counter;
+            }
+
+            // bottom side
+            data = image.image() + width * ( height - 1 ) + width - 1;
+            transform = image.transform() + width * ( height - 1 ) + width - 1;
+            dataEnd = data - width;
+            for ( ; data != dataEnd; --data, --transform ) {
+                if ( counter != skipFactor ) {
+                    *data = value;
+                    *transform = 0;
+                }
+                else {
+                    counter = 0;
+                }
+                ++counter;
+            }
+
+            // left side
+            data = image.image() + width * ( height - 2 );
+            transform = image.transform() + width * ( height - 2 );
+            dataEnd = image.image();
+            for ( ; data != dataEnd; data -= width, transform -= width ) {
+                if ( counter != skipFactor ) {
+                    *data = value;
+                    *transform = 0;
+                }
+                else {
+                    counter = 0;
+                }
+                ++counter;
+            }
         }
     }
 

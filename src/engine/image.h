@@ -162,7 +162,8 @@ namespace fheroes2
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height );
 
-    void DrawBorder( Image & image, uint8_t value );
+    // skipFactor is responsible for non-solid line. You can interpret it as skip every N pixel
+    void DrawBorder( Image & image, uint8_t value, uint32_t skipFactor = 0 );
 
     // roi is an optional parameter when you need to draw in a small than image area
     void DrawLine( Image & image, const Point & start, const Point & end, uint8_t value, const Rect & roi = Rect() );
