@@ -191,7 +191,7 @@ const settings_t settingsFHeroes2[] = {
     },
     {
         Settings::GAME_BATTLE_SHOW_DAMAGE,
-        _( "game: battle show damage info" ),
+        _( "battle: show damage info" ),
     },
     {
         Settings::WORLD_SHOW_VISITED_CONTENT,
@@ -386,10 +386,6 @@ const settings_t settingsFHeroes2[] = {
         _( "game: use fade" ),
     },
     {
-        Settings::GAME_SHOW_SDL_LOGO,
-        _( "game: show SDL logo" ),
-    },
-    {
         Settings::GAME_EVIL_INTERFACE,
         _( "game: use evil interface" ),
     },
@@ -452,7 +448,7 @@ Settings::Settings()
     , port( DEFAULT_PORT )
     , memory_limit( 0 )
 {
-    ExtSetModes( GAME_SHOW_SDL_LOGO );
+    ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
     ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
@@ -1773,11 +1769,6 @@ bool Settings::ExtGameAutosaveOn( void ) const
 bool Settings::ExtGameUseFade( void ) const
 {
     return video_mode == Display::GetDefaultSize() && ExtModes( GAME_USE_FADE );
-}
-
-bool Settings::ExtGameShowSDL( void ) const
-{
-    return ExtModes( GAME_SHOW_SDL_LOGO );
 }
 
 bool Settings::ExtGameEvilInterface( void ) const

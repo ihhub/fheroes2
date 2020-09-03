@@ -219,15 +219,12 @@ void Interface::Radar::Redraw( void )
     }
 }
 
-int GetChunkSize( float size1, float size2 )
+int GetChunkSize( int size1, int size2 )
 {
     int res = 1;
     if ( size1 > size2 ) {
-        double intpart;
-        double fractpart = std::modf( size1 / size2, &intpart );
-        res = static_cast<int>( intpart );
-
-        if ( static_cast<int>( fractpart * 100 ) > 10 )
+        res = size1 / size2;
+        if ( ( size1 % size2 ) * 10 > size2 )
             res += 1;
     }
 
@@ -351,7 +348,7 @@ void Interface::Radar::RedrawCursor( void )
         if ( cursorArea.width() != sz.w || cursorArea.height() != sz.h ) {
             cursorArea.resize( sz.w, sz.h );
             cursorArea.reset();
-            fheroes2::DrawBorder( cursorArea, RADARCOLOR );
+            fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
         }
 
         cursorArea.setPosition( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );

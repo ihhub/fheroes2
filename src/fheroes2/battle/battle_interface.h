@@ -146,13 +146,13 @@ namespace Battle
         ArmiesOrder();
 
         void Set( const Rect &, const Units *, int );
-        void Redraw( const Unit * );
-        void QueueEventProcessing( std::string & );
+        void Redraw( const Unit * current, fheroes2::Image & output );
+        void QueueEventProcessing( std::string & msg, const Point & offset );
 
     private:
         typedef std::pair<const Unit *, Rect> UnitPos;
 
-        void RedrawUnit( const Rect &, const Unit &, bool, bool ) const;
+        void RedrawUnit( const Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const;
 
         const Units * orders;
         int army_color2;

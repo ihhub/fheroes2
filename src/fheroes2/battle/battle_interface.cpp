@@ -784,50 +784,50 @@ void Battle::ArmiesOrder::Set( const Rect & rt, const Units * units, int color )
         rects.reserve( units->size() );
 }
 
-void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg )
+void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const Point & offset )
 {
     LocalEvent & le = LocalEvent::Get();
 
     for ( std::vector<UnitPos>::const_iterator it = rects.begin(); it != rects.end(); ++it )
         if ( ( *it ).first ) {
-            if ( le.MouseCursor( ( *it ).second ) ) {
+            const Rect unitRoi = ( *it ).second + offset;
+            if ( le.MouseCursor( unitRoi ) ) {
                 msg = _( "View %{monster} info." );
                 StringReplace( msg, "%{monster}", ( *it ).first->GetName() );
             }
 
             const Unit & unit = *( *it ).first;
 
-            if ( le.MouseClickLeft( ( *it ).second ) )
+            if ( le.MouseClickLeft( unitRoi ) )
                 Dialog::ArmyInfo( unit, Dialog::READONLY | Dialog::BUTTONS, unit.isReflect() );
-            else if ( le.MousePressRight( ( *it ).second ) )
+            else if ( le.MousePressRight( unitRoi ) )
                 Dialog::ArmyInfo( unit, Dialog::READONLY, unit.isReflect() );
         }
 }
 
-void Battle::ArmiesOrder::RedrawUnit( const Rect & pos, const Battle::Unit & unit, bool revert, bool current ) const
+void Battle::ArmiesOrder::RedrawUnit( const Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
 
     // background
-    fheroes2::Fill( display, pos.x, pos.y, pos.w, pos.h, fheroes2::GetColorId( 0x33, 0x33, 0x33 ) );
+    fheroes2::Fill( output, pos.x, pos.y, pos.w, pos.h, fheroes2::GetColorId( 0x33, 0x33, 0x33 ) );
     // mons32 sprite
-    fheroes2::Blit( mons32, display, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + pos.h - mons32.height() - ( mons32.height() + 3 < pos.h ? 3 : 0 ), revert );
+    fheroes2::Blit( mons32, output, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + pos.h - mons32.height() - ( mons32.height() + 3 < pos.h ? 3 : 0 ), revert );
 
     // window
     if ( current )
-        fheroes2::Blit( sf_color[0], display, pos.x + 1, pos.y + 1 );
+        fheroes2::Blit( sf_color[0], output, pos.x + 1, pos.y + 1 );
     else if ( unit.Modes( Battle::TR_MOVED ) )
-        fheroes2::Blit( sf_color[1], display, pos.x + 1, pos.y + 1 );
+        fheroes2::Blit( sf_color[1], output, pos.x + 1, pos.y + 1 );
     else
-        fheroes2::Blit( sf_color[2], display, pos.x + 1, pos.y + 1 );
+        fheroes2::Blit( sf_color[2], output, pos.x + 1, pos.y + 1 );
 
     // number
     Text number( GetString( unit.GetCount() ), Font::SMALL );
-    number.Blit( pos.x + 2, pos.y + 2 );
+    number.Blit( pos.x + 2, pos.y + 2, output );
 }
 
-void Battle::ArmiesOrder::Redraw( const Unit * current )
+void Battle::ArmiesOrder::Redraw( const Unit * current, fheroes2::Image & output )
 {
     if ( orders ) {
         const u32 ow = ARMYORDERW + 2;
@@ -844,7 +844,7 @@ void Battle::ArmiesOrder::Redraw( const Unit * current )
         for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it )
             if ( *it && ( *it )->isValid() ) {
                 rects.push_back( UnitPos( *it, Rect( ox, oy, ow, ow ) ) );
-                RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it );
+                RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, output );
                 ox += ow;
                 Rect::w += ow;
             }
@@ -1072,10 +1072,11 @@ void Battle::Interface::RedrawPartialFinish()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
+    if ( Settings::Get().ExtBattleShowBattleOrder() )
+        armies_order.Redraw( _currentUnit, _mainSurface );
+
     fheroes2::Blit( _mainSurface, display, _interfacePosition.x, _interfacePosition.y );
     RedrawInterface();
-    if ( Settings::Get().ExtBattleShowBattleOrder() )
-        armies_order.Redraw( _currentUnit );
 
     Cursor::Get().Show();
     display.render();
@@ -1984,7 +1985,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armiesOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        armies_order.QueueEventProcessing( msg );
+        armies_order.QueueEventProcessing( msg, _interfacePosition.getPosition() );
     }
     else if ( le.MouseCursor( btn_auto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
@@ -2748,7 +2749,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                     if ( conf.ExtBattleShowDamage() && target.killed && ( pos.y - py ) > 0 ) {
                         std::string msg = "-" + GetString( target.killed );
                         Text txt( msg, Font::YELLOW_SMALL );
-                        txt.Blit( pos.x + ( pos.w - txt.w() ) / 2, pos.y - py );
+                        txt.Blit( pos.x + ( pos.w - txt.w() ) / 2, pos.y - py, _mainSurface );
                     }
                 }
             }

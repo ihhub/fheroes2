@@ -167,9 +167,6 @@ void Dialog::ExtSettings( bool readonly )
     if ( conf.VideoMode() == Display::GetDefaultSize() )
         states.push_back( Settings::GAME_USE_FADE );
 
-#ifdef BUILD_RELEASE
-    states.push_back( Settings::GAME_SHOW_SDL_LOGO );
-#endif
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
     states.push_back( Settings::WORLD_SHOW_VISITED_CONTENT );
     states.push_back( Settings::WORLD_ABANDONED_MINE_RANDOM );
@@ -225,6 +222,9 @@ void Dialog::ExtSettings( bool readonly )
         states.push_back( Settings::POCKETPC_LOW_MEMORY );
         states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
     }
+
+    std::sort( states.begin(), states.end(),
+               [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
 
     SettingsListBox listbox( area, readonly );
 
