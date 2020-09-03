@@ -223,8 +223,8 @@ void Dialog::ExtSettings( bool readonly )
         states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
     }
 
-    std::sort( states.begin(), states.end(), [&conf]( uint32_t first, uint32_t second )
-        { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
+    std::sort( states.begin(), states.end(),
+               [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
 
     SettingsListBox listbox( area, readonly );
 
