@@ -424,7 +424,7 @@ const settings_t settingsFHeroes2[] = {
 std::string Settings::GetVersion( void )
 {
     std::ostringstream os;
-    os << static_cast<int>( MAJOR_VERSION ) << "." << static_cast<int>( MINOR_VERSION );
+    os << static_cast<int>( MAJOR_VERSION ) << "." << static_cast<int>( MINOR_VERSION ) << "." << static_cast<int>( INTERMEDIATE_VERSION );
     return os.str();
 }
 
