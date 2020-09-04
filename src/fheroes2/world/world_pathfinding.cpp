@@ -56,6 +56,13 @@ namespace
     }
 }
 
+void Pathfinder::reset()
+{
+    _cache.clear();
+    _pathStart = -1;
+    _pathfindingSkill = Skill::Level::NONE;
+}
+
 std::list<Route::Step> Pathfinder::buildPath( int from, int target, bool ignoreObjects )
 {
     std::list<Route::Step> path;
@@ -112,6 +119,7 @@ bool Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill )
 
 void Pathfinder::evaluateMap( int start, uint8_t skill )
 {
+    const bool fromWater = world.GetTiles( start ).isWater();
     const int width = world.w();
     const int height = world.h();
 
@@ -128,12 +136,13 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
     while ( lastProcessedNode != nodesToExplore.size() ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
-            if ( Maps::isValidDirection( currentNodeIdx, GetDirectionBitmask( direction ) ) ) {
-                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, GetDirectionBitmask( direction ) );
+            const int dirBitmask = GetDirectionBitmask( direction );
+            if ( Maps::isValidDirection( currentNodeIdx, dirBitmask ) ) {
+                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, dirBitmask );
                 const Maps::Tiles & newTile = world.GetTiles( newIndex );
 
                 uint32_t moveCost = _cache[currentNodeIdx]._cost + Maps::Ground::GetPenalty( newTile, skill );
-                if ( newTile.GetPassable() & GetDirectionBitmask( direction, true ) && !newTile.isWater() ) {
+                if ( Route::PassableFromToTile( currentNodeIdx, newIndex, dirBitmask, -1, fromWater ) ) {
                     if ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) {
                         _cache[newIndex]._from = currentNodeIdx;
                         _cache[newIndex]._cost = moveCost;

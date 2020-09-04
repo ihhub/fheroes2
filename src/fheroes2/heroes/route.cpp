@@ -124,7 +124,7 @@ uint32_t Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
 {
     dst = dst_index;
 
-    swap( world.getPath( hero->GetIndex(), dst, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
+    swap( world.getPath( hero->GetIndex(), dst, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ), false ) );
 
     return world.getDistance( hero->GetIndex(), dst, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }

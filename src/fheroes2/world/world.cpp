@@ -1192,8 +1192,6 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     return msg;
 }
 
-void World::PostFixLoad( void ) {}
-
 void EventDate::LoadFromMP2( StreamBuf st )
 {
     // id

@@ -196,8 +196,6 @@ bool Game::Load( const std::string & fn )
 
     fz >> World::Get() >> Settings::Get() >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get() >> end_check;
 
-    World::Get().PostFixLoad();
-
     if ( fz.fail() || ( end_check != SAV2ID2 && end_check != SAV2ID3 ) ) {
         DEBUG( DBG_GAME, DBG_WARN, "invalid load file: " << fn );
         return false;

@@ -53,6 +53,7 @@ class Pathfinder
 {
 public:
     Pathfinder() {}
+    void reset();
     void evaluateMap( int start, uint8_t skill = 0 );
     std::list<Route::Step> buildPath( int from, int target, bool ignoreObjects = true );
     uint32_t getDistance( int from, int target, uint8_t skill = 0 );
