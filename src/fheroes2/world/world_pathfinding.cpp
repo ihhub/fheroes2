@@ -63,24 +63,18 @@ void Pathfinder::reset()
     _pathfindingSkill = Skill::Level::NONE;
 }
 
-std::list<Route::Step> Pathfinder::buildPath( int from, int target, bool ignoreObjects )
+std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skill )
 {
     std::list<Route::Step> path;
 
     // check if we have to re-cache the map (new hero selected, etc)
-    reEvaluateIfNeeded( from, 0 );
+    reEvaluateIfNeeded( from, skill, target );
 
     // trace the path from end point
     int currentNode = target;
     uint32_t cost = _cache[currentNode]._cost;
     while ( currentNode != from && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
-
-        // check for obstacles - if one found then exit immediately
-        if ( !ignoreObjects && world.GetTiles( currentNode ).GetObject() != MP2::OBJ_ZERO ) {
-            path.clear();
-            return path;
-        }
 
         path.push_front( { node._from, Direction::Get( node._from, currentNode ), cost - node._cost } );
         currentNode = node._from;
@@ -90,7 +84,7 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, bool ignoreO
     return path;
 }
 
-bool Pathfinder::isBlockedByObject(int from, int target)
+bool Pathfinder::isBlockedByObject( int from, int target )
 {
     int currentNode = target;
     while ( currentNode != from && currentNode != -1 ) {
@@ -102,22 +96,36 @@ bool Pathfinder::isBlockedByObject(int from, int target)
     return false;
 }
 
-uint32_t Pathfinder::getDistance(int from, int target, uint8_t skill)
+uint32_t Pathfinder::getDistance( int from, int target, uint8_t skill )
 {
-    reEvaluateIfNeeded( from, skill );
+    reEvaluateIfNeeded( from, skill, target );
     return _cache[target]._cost;
 }
 
-bool Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill ) 
+bool Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill, int destination )
 {
     if ( _pathStart != from || _pathfindingSkill != skill ) {
-        evaluateMap( from, skill );
+        evaluateMap( from, skill, destination );
         return true;
     }
     return false;
 }
 
-void Pathfinder::evaluateMap( int start, uint8_t skill )
+uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill )
+{
+    const Maps::Tiles & tileTo = world.GetTiles( target );
+    uint32_t penalty = ( world.GetTiles( from ).isRoad( direction ) || tileTo.isRoad( Direction::Reflect( direction ) ) ) ? Maps::Ground::roadPenalty
+                                                                                                                          : Maps::Ground::GetPenalty( tileTo, skill );
+
+    // diagonal move costs 50% extra
+    if ( direction & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
+        penalty = penalty * 3 / 2;
+
+    return penalty;
+}
+
+// Destination is optional
+void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
 {
     const bool fromWater = world.GetTiles( start ).isWater();
     const int width = world.w();
@@ -139,13 +147,14 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
             const int dirBitmask = GetDirectionBitmask( direction );
             if ( Maps::isValidDirection( currentNodeIdx, dirBitmask ) ) {
                 const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, dirBitmask );
-                const Maps::Tiles & newTile = world.GetTiles( newIndex );
+                Maps::Tiles & newTile = world.GetTiles( newIndex );
 
-                uint32_t moveCost = _cache[currentNodeIdx]._cost + Maps::Ground::GetPenalty( newTile, skill );
-                if ( Route::PassableFromToTile( currentNodeIdx, newIndex, dirBitmask, -1, fromWater ) ) {
+                uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, skill );
+                if ( Route::PassableFromToTile( currentNodeIdx, newIndex, dirBitmask, destination, fromWater ) ) {
                     if ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) {
                         _cache[newIndex]._from = currentNodeIdx;
                         _cache[newIndex]._cost = moveCost;
+                        newTile.test_value = moveCost;
 
                         // duplicates are allowed if we find a cheaper way there
                         nodesToExplore.push_back( newIndex );

@@ -54,13 +54,14 @@ class Pathfinder
 public:
     Pathfinder() {}
     void reset();
-    void evaluateMap( int start, uint8_t skill = 0 );
-    std::list<Route::Step> buildPath( int from, int target, bool ignoreObjects = true );
-    uint32_t getDistance( int from, int target, uint8_t skill = 0 );
+    void evaluateMap( int start, uint8_t skill, int destination = -1 );
+    std::list<Route::Step> buildPath( int from, int target, uint8_t skill = Skill::Level::NONE );
+    uint32_t getDistance( int from, int target, uint8_t skill = Skill::Level::NONE );
+    uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE );
     bool isBlockedByObject( int from, int target );
 
 private:
-    bool reEvaluateIfNeeded( int from, uint8_t skill );
+    bool reEvaluateIfNeeded( int from, uint8_t skill, int destination = -1 );
 
     std::vector<PathfindingNode> _cache;
     int _pathStart = -1;

@@ -1189,6 +1189,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     // heroes postfix
     std::for_each( w.vec_heroes.begin(), w.vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
 
+    world._pathfinder.reset();
+
     return msg;
 }
 
