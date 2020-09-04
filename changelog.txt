@@ -1,3 +1,62 @@
+version 0.8.1 (04 September 2020)
+- play video intro at the opening
+- set focus on a hero while opening spell book
+- set minimum Spell Power to be always 1
+- fix castle mini status icon
+- fix drawings of Mage Guilds in castles
+- remove multiple redundant / useless configuration settings
+- fix message dialog shadow
+- add proper support of configuration file
+- fix shift after opening and closing system options dialog
+- fix Gift button for evil interface
+- fix drawings of letters
+- fix Resurrect spell animation
+- add a support of disabled buttons
+- fix Air elemental drawings
+- remove "Manage creatures" button's shadow
+- add missing glowing effects of units in UI
+- fix screen dimming effects
+- change missing file message
+- fix Armageddon animation
+- update interface after exiting hero dialog
+- fix incorrect map extension crash
+- show diplomacy window always and fix marketplace button
+- add dot at the end of player's turn text
+- always center scenario window position
+- fix map difficulty text and its position
+- use proper config background window image
+- reset interface while changing its type
+- add game scenario dialog shadow
+- do not refocus after exiting castle's window
+- make Disabled Campaign button in High Score board
+- disable Campaign button if no files present
+- fix abandoned mine cursor
+- fix Sphinx message
+- modify Graveyard robber message
+- polish "battle only" button
+- show upgrade button if there's not enough money
+- fix lighthouse spelling
+- fix Dismiss button position in Hero's dialog
+- add missing title for graveyard message
+- fix graveyard message
+- fix marketplace text
+- show a dialog if a hero has no space for Spell Book
+- don't display artifact dialog for unknown artifact
+- fix an ability to skip button state by using a keyboard
+- apply Chain Lightning damage on allies as well
+- skip turn of resurrected troop
+- fix EXIT button position in creature window
+- fix AI turn crash
+- remove black background over army counter
+- don't show start and end position for monster log movement
+- add logic to handle inability to buy monsters in well
+- don't draw tent images in the castle window avoiding weird animation during castle construction
+- remove move penalty for visiting whirlpool/teleport
+- fix descriptions for Thief's Guild and for Pathfinding skill
+- fix logic of Town Gate spell
+- fix wrong OKAY button in System Options for Evil interface
+- skip heroes who do not have move points for move or sleep
+
 version 0.8 (26 July 2020)
 - add in-game option to change resolution
 - add fade-in / fade-out animation for AI heroes
