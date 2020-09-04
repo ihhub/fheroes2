@@ -68,12 +68,31 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, bool ignoreO
     uint32_t cost = _cache[currentNode]._cost;
     while ( currentNode != from && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
+
+        // check for obstacles - if one found then exit immediately
+        if ( !ignoreObjects && world.GetTiles( currentNode ).GetObject() != MP2::OBJ_ZERO ) {
+            path.clear();
+            return path;
+        }
+
         path.push_front( { node._from, Direction::Get( node._from, currentNode ), cost - node._cost } );
         currentNode = node._from;
         cost = node._cost;
     }
 
     return path;
+}
+
+bool Pathfinder::isBlockedByObject(int from, int target)
+{
+    int currentNode = target;
+    while ( currentNode != from && currentNode != -1 ) {
+        if ( world.GetTiles( currentNode ).GetObject() != MP2::OBJ_ZERO ) {
+            return true;
+        }
+        currentNode = _cache[currentNode]._from;
+    }
+    return false;
 }
 
 uint32_t Pathfinder::getDistance(int from, int target, uint8_t skill)

@@ -1310,7 +1310,7 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
         return 4;
     }
     else {
-        DEBUG( DBG_GAME, DBG_INFO, " unreachable point: " << dst );
+        DEBUG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
     }
 
     return 0;

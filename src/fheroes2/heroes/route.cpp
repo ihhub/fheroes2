@@ -124,7 +124,9 @@ uint32_t Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
 {
     dst = dst_index;
 
-    return Find( hero->GetIndex(), dst, hero->isShipMaster(), limit, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    swap( world.getPath( hero->GetIndex(), dst, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
+
+    return world.getDistance( hero->GetIndex(), dst, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 void Route::Path::Reset( void )
@@ -150,7 +152,7 @@ bool Route::Path::isValid( void ) const
 int Route::Path::GetIndexSprite( int from, int to, int mod )
 {
     // ICN::ROUTE
-    // start index 1, 25, 49, 73, 97, 121 (size arrow path)
+    // start index 1, 25, 49, 73, 97, 121 (path arrow size)
     int index = 1;
 
     switch ( mod ) {
