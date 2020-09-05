@@ -325,10 +325,13 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( rectResource ) )
+        if ( le.MouseClickLeft( rectResource ) ) {
+            fheroes2::ButtonRestorer exitRestorer( buttonExit );
             Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
-        else if ( le.MousePressRight( rectResource ) )
+        }
+        else if ( le.MousePressRight( rectResource ) ) {
             Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+        }
 
         // selector troops event
         if ( ( selectArmy2.isValid()
@@ -536,7 +539,8 @@ int Castle::OpenDialog( bool readonly, bool fade )
                             break;
                         }
 
-                        case BUILD_SHIPYARD:
+                        case BUILD_SHIPYARD: {
+                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat() ) ) {
                                 BuyBoat();
 
@@ -562,6 +566,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 need_redraw = true;
                             }
                             break;
+                        }
 
                         case BUILD_MARKETPLACE: {
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
