@@ -204,7 +204,6 @@ void Dialog::ExtSettings( bool readonly )
 
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::CASTLE_MAGEGUILD_POINTS_TURN );
-    states.push_back( Settings::CASTLE_ALLOW_RECRUITS_SPECIAL );
 
     states.push_back( Settings::UNIONS_ALLOW_HERO_MEETINGS );
     states.push_back( Settings::UNIONS_ALLOW_CASTLE_VISITING );

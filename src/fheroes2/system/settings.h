@@ -163,7 +163,6 @@ public:
 
         CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
         WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
-        CASTLE_ALLOW_RECRUITS_SPECIAL = 0x30000004,
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_DWELLING_ACCUMULATE_UNITS = 0x30000020,
@@ -294,7 +293,6 @@ public:
     bool ExtWorldDisableBarrowMounds( void ) const;
     bool ExtCastleAllowGuardians( void ) const;
     bool ExtCastleGuildRestorePointsTurn( void ) const;
-    bool ExtCastleAllowRecruitSpecialHeroes( void ) const;
     bool ExtCastleOneHeroHiredEveryWeek( void ) const;
     bool ExtBattleShowDamage( void ) const;
     bool ExtBattleShowBattleOrder( void ) const;

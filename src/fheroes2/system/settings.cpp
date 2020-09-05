@@ -298,10 +298,6 @@ const settings_t settingsFHeroes2[] = {
         _( "castle: higher mage guilds regenerate more spell points/turn (20/40/60/80/100%)" ),
     },
     {
-        Settings::CASTLE_ALLOW_RECRUITS_SPECIAL,
-        _( "castle: allow recruits special/expansion heroes" ),
-    },
-    {
         Settings::HEROES_BUY_BOOK_FROM_SHRINES,
         _( "heroes: allow buy a spellbook from Shrines" ),
     },
@@ -1799,11 +1795,6 @@ bool Settings::ExtPocketTapMode( void ) const
 bool Settings::ExtPocketDragDropScroll( void ) const
 {
     return ExtModes( POCKETPC_DRAG_DROP_SCROLL );
-}
-
-bool Settings::ExtCastleAllowRecruitSpecialHeroes( void ) const
-{
-    return PriceLoyaltyVersion() && ExtModes( CASTLE_ALLOW_RECRUITS_SPECIAL );
 }
 
 bool Settings::ExtWorldNewVersionWeekOf( void ) const
