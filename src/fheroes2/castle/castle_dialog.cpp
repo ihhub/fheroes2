@@ -449,7 +449,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                 if ( !readonly && le.MouseClickLeft( ( *it ).coord ) ) {
                     fheroes2::ButtonRestorer exitRestorer( buttonExit );
                     if ( Castle::RecruitMonster(
-                            Dialog::RecruitMonster( Monster( race, GetActualDwelling( ( *it ).id ) ), GetDwellingLivedCount( ( *it ).id ), true ) ) ) {
+                             Dialog::RecruitMonster( Monster( race, GetActualDwelling( ( *it ).id ) ), GetDwellingLivedCount( ( *it ).id ), true ) ) ) {
                         need_redraw = true;
                     }
                 }
