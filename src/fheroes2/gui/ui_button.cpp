@@ -338,4 +338,23 @@ namespace fheroes2
 
         return Dialog::ZERO;
     }
+
+    ButtonRestorer::ButtonRestorer( ButtonBase & button, Image & area )
+        : _button( button )
+        , _area( area )
+        , _isDisabled( button.isDisabled() )
+    {
+        if ( !_isDisabled ) {
+            _button.disable();
+            _button.draw( _area );
+        }
+    }
+
+    ButtonRestorer::~ButtonRestorer()
+    {
+        if ( !_isDisabled ) {
+            _button.enable();
+            _button.draw( _area );
+        }
+    }
 }

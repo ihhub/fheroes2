@@ -446,11 +446,15 @@ int Castle::OpenDialog( bool readonly, bool fade )
 #endif
         {
             if ( ( *it ).id == GetActualDwelling( ( *it ).id ) && isBuild( ( *it ).id ) ) {
-                if ( !readonly && le.MouseClickLeft( ( *it ).coord )
-                     && Castle::RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( ( *it ).id ) ), GetDwellingLivedCount( ( *it ).id ), true ) ) )
-                    need_redraw = true;
-                else if ( le.MousePressRight( ( *it ).coord ) )
+                if ( !readonly && le.MouseClickLeft( ( *it ).coord ) ) {
+                    fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                    if ( Castle::RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( ( *it ).id ) ), GetDwellingLivedCount( ( *it ).id ), true ) ) ) {
+                        need_redraw = true;
+                    }
+                }
+                else if ( le.MousePressRight( ( *it ).coord ) ) {
                     Dialog::DwellingInfo( Monster( race, GetActualDwelling( ( *it ).id ) ), GetDwellingLivedCount( ( *it ).id ) );
+                }
 
                 if ( le.MouseCursor( ( *it ).coord ) )
                     msg_status = Monster( race, ( *it ).id ).GetName();
@@ -462,6 +466,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                 for ( u32 id = BUILD_MAGEGUILD5; id >= BUILD_MAGEGUILD1; id >>= 1 )
                     if ( isBuild( id ) && id == ( *it ).id ) {
                         if ( le.MouseClickLeft( ( *it ).coord ) ) {
+                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             bool noFreeSpaceForMagicBook = false;
 
                             if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
@@ -513,18 +518,22 @@ int Castle::OpenDialog( bool readonly, bool fade )
                             Dialog::ThievesGuild( false );
                             break;
 
-                        case BUILD_TAVERN:
+                        case BUILD_TAVERN: {
+                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             OpenTavern();
                             break;
+                        }
 
                         case BUILD_CAPTAIN:
                         case BUILD_STATUE:
                         case BUILD_WEL2:
                         case BUILD_MOAT:
                         case BUILD_SPEC:
-                        case BUILD_SHRINE:
+                        case BUILD_SHRINE: {
+                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG, Dialog::OK );
                             break;
+                        }
 
                         case BUILD_SHIPYARD:
                             if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat() ) ) {
@@ -553,17 +562,20 @@ int Castle::OpenDialog( bool readonly, bool fade )
                             }
                             break;
 
-                        case BUILD_MARKETPLACE:
+                        case BUILD_MARKETPLACE: {
+                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             Dialog::Marketplace();
                             need_redraw = true;
                             break;
+                        }
 
                         case BUILD_WELL:
                             OpenWell();
                             need_redraw = true;
                             break;
 
-                        case BUILD_TENT:
+                        case BUILD_TENT: {
+                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             if ( !Modes( ALLOWCASTLE ) )
                                 Dialog::Message( _( "Town" ), _( "This town may not be upgraded to a castle." ), Font::BIG, Dialog::OK );
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
@@ -575,6 +587,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 need_redraw = true;
                             }
                             break;
+                        }
 
                         case BUILD_CASTLE: {
                             const Heroes * prev = heroes.Guest();
