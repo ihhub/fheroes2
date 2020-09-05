@@ -1400,7 +1400,6 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
         if ( !isValid() ) {
             // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
-            SwitchAnimation( Monster_Info::KILL, true );
         }
         // restore hp
         u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;

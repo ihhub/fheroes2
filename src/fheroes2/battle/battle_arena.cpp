@@ -339,8 +339,10 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
     }
 
     while ( !end_turn ) {
-        // bad morale
-        if ( current_troop->Modes( MORALE_BAD ) ) {
+        if ( !current_troop->isValid() ) { // looks like the unit died
+            end_turn = true;
+        }
+        else if ( current_troop->Modes( MORALE_BAD ) ) { // bad morale
             actions.push_back( Command( MSG_BATTLE_MORALE, current_troop->GetUID(), false ) );
             end_turn = true;
         }
