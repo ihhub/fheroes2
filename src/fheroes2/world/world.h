@@ -253,7 +253,7 @@ public:
     void RemoveMapObject( const MapObjectSimple * );
 
     bool isTileUnderProtection( int to, int dst );
-    bool isFinalTile( const Maps::Tiles & toTile, bool fromWater ) const;
+    bool isTileBlocked( int toTile, bool fromWater ) const;
     bool isValidPath( int index, int direction ) const;
     uint32_t getDistance( int from, int to, uint32_t skill );
     std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );

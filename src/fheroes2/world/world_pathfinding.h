@@ -58,7 +58,7 @@ public:
     std::list<Route::Step> buildPath( int from, int target, uint8_t skill = Skill::Level::NONE );
     uint32_t getDistance( int from, int target, uint8_t skill = Skill::Level::NONE );
     uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE );
-    bool isBlockedByObject( int from, int target );
+    bool isBlockedByObject( int from, int target, bool fromWater = false );
 
 private:
     bool reEvaluateIfNeeded( int from, uint8_t skill, int destination = -1 );

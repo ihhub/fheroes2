@@ -90,47 +90,25 @@ bool World::isTileUnderProtection( int to, int dst )
     return monsters.size() && monsters.end() == std::find( monsters.begin(), monsters.end(), dst );
 }
 
-bool World::isFinalTile( const Maps::Tiles & toTile, bool fromWater ) const
+bool World::isTileBlocked( int tileIndex, bool fromWater ) const
 {
-    const bool toWater = toTile.isWater();
-    const int object = toTile.GetObject();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const bool toWater = tile.isWater();
+    const int object = tile.GetObject();
 
-    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER )
+    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER || object == MP2::OBJ_BOAT )
         return true;
 
     if ( MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
         return true;
 
-    if ( fromWater && !toTile.isWater() ) {
-        switch ( toTile.GetObject() ) {
-        case MP2::OBJ_BOAT:
-        case MP2::OBJ_MONSTER:
-        case MP2::OBJ_HEROES:
-            return false;
+    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
+        return true;
 
-        case MP2::OBJ_COAST:
-            return true;
-
-        default:
-            break;
-        }
-    }
-    else if ( !fromWater && toTile.isWater() ) {
-        switch ( toTile.GetObject() ) {
-        case MP2::OBJ_BOAT:
-            return true;
-
-        case MP2::OBJ_HEROES:
-            return true;
-
-        default:
-            break;
-        }
-    }
     return false;
 }
 
-bool World::isValidPath(int index, int direction) const
+bool World::isValidPath( int index, int direction ) const
 {
     const Maps::Tiles & fromTile = GetTiles( index );
     const Maps::Tiles & toTile = GetTiles( Maps::GetDirectionIndex( index, direction ) );
@@ -140,26 +118,22 @@ bool World::isValidPath(int index, int direction) const
     if ( fromWater ) {
         switch ( direction ) {
         case Direction::TOP_LEFT:
-            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::TOP ) ).isWater()
-                 || !GetTiles( Maps::GetDirectionIndex( index, Direction::LEFT ) ).isWater() )
+            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::TOP ) ).isWater() || !GetTiles( Maps::GetDirectionIndex( index, Direction::LEFT ) ).isWater() )
                 return false;
             break;
 
         case Direction::TOP_RIGHT:
-            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::TOP ) ).isWater()
-                 || !GetTiles( Maps::GetDirectionIndex( index, Direction::RIGHT ) ).isWater() )
+            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::TOP ) ).isWater() || !GetTiles( Maps::GetDirectionIndex( index, Direction::RIGHT ) ).isWater() )
                 return false;
             break;
 
         case Direction::BOTTOM_RIGHT:
-            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::BOTTOM ) ).isWater()
-                 || !GetTiles( Maps::GetDirectionIndex( index, Direction::RIGHT ) ).isWater() )
+            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::BOTTOM ) ).isWater() || !GetTiles( Maps::GetDirectionIndex( index, Direction::RIGHT ) ).isWater() )
                 return false;
             break;
 
         case Direction::BOTTOM_LEFT:
-            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::BOTTOM ) ).isWater()
-                 || !GetTiles( Maps::GetDirectionIndex( index, Direction::LEFT ) ).isWater() )
+            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::BOTTOM ) ).isWater() || !GetTiles( Maps::GetDirectionIndex( index, Direction::LEFT ) ).isWater() )
                 return false;
             break;
 
@@ -174,11 +148,11 @@ bool World::isValidPath(int index, int direction) const
     return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
 }
 
-bool Pathfinder::isBlockedByObject( int from, int target )
+bool Pathfinder::isBlockedByObject( int from, int target, bool fromWater )
 {
     int currentNode = target;
     while ( currentNode != from && currentNode != -1 ) {
-        if ( world.GetTiles( currentNode ).GetObject() != MP2::OBJ_ZERO ) {
+        if ( world.isTileBlocked( currentNode, fromWater ) ) {
             return true;
         }
         currentNode = _cache[currentNode]._from;
@@ -234,14 +208,15 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
     size_t lastProcessedNode = 0;
     while ( lastProcessedNode != nodesToExplore.size() ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
-        for ( auto it = directions.begin(); it != directions.end(); ++it ) {
-            if ( Maps::isValidDirection( currentNodeIdx, *it ) ) {
-                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, *it );
-                Maps::Tiles & newTile = world.GetTiles( newIndex );
+        // bool protectedTile = !( _cache[currentNodeIdx]._from != -1 && !Maps::GetTilesUnderProtection( _cache[currentNodeIdx]._from ).empty() );
+        if ( currentNodeIdx == start || !world.isTileBlocked( currentNodeIdx, fromWater ) ) {
+            for ( auto it = directions.begin(); it != directions.end(); ++it ) {
+                if ( Maps::isValidDirection( currentNodeIdx, *it ) ) {
+                    const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, *it );
+                    Maps::Tiles & newTile = world.GetTiles( newIndex );
 
-                uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
-                if ( world.isValidPath( currentNodeIdx, *it ) ) {
-                    if ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) {
+                    uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
+                    if ( world.isValidPath( currentNodeIdx, *it ) && ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) ) {
                         _cache[newIndex]._from = currentNodeIdx;
                         _cache[newIndex]._cost = moveCost;
                         newTile.test_value = moveCost;
