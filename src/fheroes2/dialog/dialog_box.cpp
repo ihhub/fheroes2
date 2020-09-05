@@ -54,7 +54,7 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
     area.h = BOXAREA_TOP + BOXAREA_BOTTOM + height_middle;
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    s32 posx = ( display.width() - BOX_WIDTH ) / 2;
+    s32 posx = ( display.width() - BOX_WIDTH - SHADOWWIDTH ) / 2;
     s32 posy = startYPos;
 
     if ( startYPos < 0 ) {
@@ -93,13 +93,16 @@ void BoxRedraw( s32 posx, s32 posy, u32 count, int32_t middleHeight )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 4 ), display, pt.x, pt.y );
+    const fheroes2::Sprite & part0 = fheroes2::AGG::GetICN( buybuild, 0 );
+    const fheroes2::Sprite & part4 = fheroes2::AGG::GetICN( buybuild, 4 );
+
+    fheroes2::Blit( part4, display, pt.x, pt.y );
 
     // right top sprite
-    pt.x = posx + fheroes2::AGG::GetICN( buybuild, 4 ).width();
-    fheroes2::Blit( fheroes2::AGG::GetICN( buybuild, 0 ), display, pt.x, pt.y );
+    pt.x = posx + part4.width();
+    fheroes2::Blit( part0, display, pt.x, pt.y );
 
-    pt.y += fheroes2::AGG::GetICN( buybuild, 4 ).height();
+    pt.y += part4.height();
     const int16_t posBeforeMiddle = pt.y;
     int32_t middleLeftHeight = middleHeight;
     for ( u32 i = 0; i < count; ++i ) {
