@@ -1939,7 +1939,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
 
     default:
         min = Heroes::LORDKILBURN;
-        max = conf.ExtCastleAllowRecruitSpecialHeroes() ? ( conf.PriceLoyaltyVersion() ? Heroes::JARKONAS : Heroes::BAX ) : Heroes::CELIA;
+        max = Heroes::CELIA;
         break;
     }
 
@@ -1954,7 +1954,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     // not found, find any race
     if ( Race::NONE != race && freeman_heroes.empty() ) {
         min = Heroes::LORDKILBURN;
-        max = conf.ExtCastleAllowRecruitSpecialHeroes() ? ( conf.PriceLoyaltyVersion() ? Heroes::JARKONAS : Heroes::BAX ) : Heroes::CELIA;
+        max = Heroes::CELIA;
 
         for ( int ii = min; ii <= max; ++ii )
             if ( at( ii )->isFreeman() )
