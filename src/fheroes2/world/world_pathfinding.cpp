@@ -84,6 +84,96 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     return path;
 }
 
+bool World::isTileUnderProtection( int to, int dst )
+{
+    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( to );
+    return monsters.size() && monsters.end() == std::find( monsters.begin(), monsters.end(), dst );
+}
+
+bool World::isFinalTile( const Maps::Tiles & toTile, bool fromWater ) const
+{
+    const bool toWater = toTile.isWater();
+    const int object = toTile.GetObject();
+
+    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER )
+        return true;
+
+    if ( MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
+        return true;
+
+    if ( fromWater && !toTile.isWater() ) {
+        switch ( toTile.GetObject() ) {
+        case MP2::OBJ_BOAT:
+        case MP2::OBJ_MONSTER:
+        case MP2::OBJ_HEROES:
+            return false;
+
+        case MP2::OBJ_COAST:
+            return true;
+
+        default:
+            break;
+        }
+    }
+    else if ( !fromWater && toTile.isWater() ) {
+        switch ( toTile.GetObject() ) {
+        case MP2::OBJ_BOAT:
+            return true;
+
+        case MP2::OBJ_HEROES:
+            return true;
+
+        default:
+            break;
+        }
+    }
+    return false;
+}
+
+bool World::isValidPath(int index, int direction) const
+{
+    const Maps::Tiles & fromTile = GetTiles( index );
+    const Maps::Tiles & toTile = GetTiles( Maps::GetDirectionIndex( index, direction ) );
+    const bool fromWater = fromTile.isWater();
+
+    // check corner water/coast
+    if ( fromWater ) {
+        switch ( direction ) {
+        case Direction::TOP_LEFT:
+            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::TOP ) ).isWater()
+                 || !GetTiles( Maps::GetDirectionIndex( index, Direction::LEFT ) ).isWater() )
+                return false;
+            break;
+
+        case Direction::TOP_RIGHT:
+            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::TOP ) ).isWater()
+                 || !GetTiles( Maps::GetDirectionIndex( index, Direction::RIGHT ) ).isWater() )
+                return false;
+            break;
+
+        case Direction::BOTTOM_RIGHT:
+            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::BOTTOM ) ).isWater()
+                 || !GetTiles( Maps::GetDirectionIndex( index, Direction::RIGHT ) ).isWater() )
+                return false;
+            break;
+
+        case Direction::BOTTOM_LEFT:
+            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::BOTTOM ) ).isWater()
+                 || !GetTiles( Maps::GetDirectionIndex( index, Direction::LEFT ) ).isWater() )
+                return false;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    if ( !fromTile.isPassable( direction, fromWater, false ) )
+        return false;
+
+    return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
+}
+
 bool Pathfinder::isBlockedByObject( int from, int target )
 {
     int currentNode = target;
@@ -127,6 +217,7 @@ uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, ui
 // Destination is optional
 void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
 {
+    const Directions directions = Direction::All();
     const bool fromWater = world.GetTiles( start ).isWater();
     const int width = world.w();
     const int height = world.h();
@@ -143,14 +234,13 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
     size_t lastProcessedNode = 0;
     while ( lastProcessedNode != nodesToExplore.size() ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
-        for ( uint8_t direction = 0; direction < 8; ++direction ) {
-            const int dirBitmask = GetDirectionBitmask( direction );
-            if ( Maps::isValidDirection( currentNodeIdx, dirBitmask ) ) {
-                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, dirBitmask );
+        for ( auto it = directions.begin(); it != directions.end(); ++it ) {
+            if ( Maps::isValidDirection( currentNodeIdx, *it ) ) {
+                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, *it );
                 Maps::Tiles & newTile = world.GetTiles( newIndex );
 
-                uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, skill );
-                if ( Route::PassableFromToTile( currentNodeIdx, newIndex, dirBitmask, destination, fromWater ) ) {
+                uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
+                if ( world.isValidPath( currentNodeIdx, *it ) ) {
                     if ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) {
                         _cache[newIndex]._from = currentNodeIdx;
                         _cache[newIndex]._cost = moveCost;

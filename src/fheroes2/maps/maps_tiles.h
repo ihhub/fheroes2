@@ -262,6 +262,8 @@ namespace Maps
         static void UpdateAbandoneMineSprite( Tiles & );
         static void FixedPreload( Tiles & );
 
+        u16 test_value = 0;
+
     private:
         TilesAddon * FindFlags( void );
         void CorrectFlags32( u32 index, bool );

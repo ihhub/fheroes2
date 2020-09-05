@@ -1590,16 +1590,14 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( area.GetVisibleTileROI() & mp ) {
-        if ( 0 == tile_passable || DIRECTION_ALL != tile_passable ) {
             Surface sf = PassableViewSurface( tile_passable );
 
-            if ( passable_disable ) {
-                Text text( GetString( passable_disable ), Font::SMALL );
+            if ( test_value ) {
+                Text text( GetString( test_value ), Font::SMALL );
                 text.Blit( 13, 13, sf );
             }
 
             area.BlitOnTile( dst, sf, 0, 0, mp );
-        }
     }
 #endif
 }

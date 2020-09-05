@@ -115,8 +115,6 @@ namespace Route
         bool hide;
     };
 
-    bool PassableFromToTile( s32 from, s32 to, int direct, s32 dst, bool fromWater );
-
     StreamBase & operator<<( StreamBase &, const Step & );
     StreamBase & operator<<( StreamBase &, const Path & );
     StreamBase & operator>>( StreamBase &, Step & );
