@@ -41,7 +41,7 @@ public:
     void SetStatusMessage( StatusBar & ) const;
     bool IsDwelling( void ) const;
     void Redraw( void );
-    bool QueueEventProcessing( void );
+    bool QueueEventProcessing( fheroes2::ButtonBase & exitButton );
     bool DialogBuyBuilding( bool buttons ) const;
 
     static void UpdateCosts( const std::string & );

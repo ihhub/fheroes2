@@ -504,13 +504,15 @@ const std::string & BuildingInfo::GetDescription( void ) const
     return description;
 }
 
-bool BuildingInfo::QueueEventProcessing( void )
+bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton )
 {
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( area ) ) {
-        if ( bcond == ALLOW_BUILD )
+        if ( bcond == ALLOW_BUILD ) {
+            fheroes2::ButtonRestorer exitRestorer( exitButton );
             return DialogBuyBuilding( true );
+        }
     }
     else if ( le.MousePressRight( area ) ) {
         DialogBuyBuilding( false );

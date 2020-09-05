@@ -127,4 +127,17 @@ namespace fheroes2
         std::vector<ButtonBase *> _button;
         std::vector<int> _value;
     };
+
+    // this class is used for a situations when we need to disabled a button for certain action and restore it within the scope of code
+    class ButtonRestorer
+    {
+    public:
+        explicit ButtonRestorer( ButtonBase & button, Image & area = Display::instance() );
+        ~ButtonRestorer();
+
+    private:
+        ButtonBase & _button;
+        Image & _area;
+        bool _isDisabled;
+    };
 }
