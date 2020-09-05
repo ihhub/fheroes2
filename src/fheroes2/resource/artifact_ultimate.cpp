@@ -39,7 +39,7 @@ void UltimateArtifact::Set( s32 pos, const Artifact & a )
     MakeSurface();
 }
 
-const Surface & UltimateArtifact::GetPuzzleMapSurface( void ) const
+const fheroes2::Image & UltimateArtifact::GetPuzzleMapSurface( void ) const
 {
     return puzzlemap;
 }
@@ -67,7 +67,7 @@ bool UltimateArtifact::isPosition( s32 pos ) const
 void UltimateArtifact::Reset( void )
 {
     Artifact::Reset();
-    puzzlemap.Reset();
+    puzzlemap.reset();
     index = -1;
     isfound = false;
 }
@@ -77,7 +77,7 @@ void UltimateArtifact::MakeSurface( void )
     if ( Maps::isValidAbsIndex( index ) )
         puzzlemap = Interface::GameArea::GenerateUltimateArtifactAreaSurface( index );
     else
-        puzzlemap.Reset();
+        puzzlemap.reset();
 }
 
 StreamBase & operator<<( StreamBase & msg, const UltimateArtifact & ultimate )

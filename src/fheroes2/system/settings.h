@@ -119,19 +119,13 @@ public:
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
         GAME_REMEMBER_LAST_FOCUS = 0x10000020,
         GAME_SAVE_REWRITE_CONFIRM = 0x10000040,
-        GAME_CASTLE_FLASH_BUILDING = 0x10000080,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
         GAME_AUTOSAVE_ON = 0x10000200,
         GAME_USE_FADE = 0x10000400,
-        GAME_SHOW_SDL_LOGO = 0x10000800,
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
-        GAME_ALSO_CONFIRM_AUTOSAVE = 0x10004000,
-        // UNUSED			= 0x10008000,
+        // UNUSED = 0x10008000,
         GAME_DYNAMIC_INTERFACE = 0x10010000,
-        GAME_BATTLE_SHOW_GRID = 0x10020000,
-        GAME_BATTLE_SHOW_MOUSE_SHADOW = 0x10040000,
-        GAME_BATTLE_SHOW_MOVE_SHADOW = 0x10080000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
         POCKETPC_HIDE_CURSOR = 0x10400000,
@@ -155,14 +149,11 @@ public:
         WORLD_BAN_PLAGUES = 0x20000800,
         UNIONS_ALLOW_HERO_MEETINGS = 0x20001000,
         UNIONS_ALLOW_CASTLE_VISITING = 0x20002000,
-        // UNUSED			= 0x20004000,
-        HEROES_AUTO_MOVE_BATTLE_DST = 0x20008000,
+        // UNUSED = 0x20004000,
         WORLD_BAN_MONTHOF_MONSTERS = 0x20010000,
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
         WORLD_NEW_VERSION_WEEKOF = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
-        CASTLE_ALLOW_BUY_FROM_WELL = 0x20100000,
-        HEROES_LEARN_SPELLS_WITH_DAY = 0x20200000,
         HEROES_ALLOW_BANNED_SECSKILLS = 0x20400000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
@@ -176,7 +167,6 @@ public:
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_DWELLING_ACCUMULATE_UNITS = 0x30000020,
-        WORLD_GUARDIAN_TWO_DEFENSE = 0x30000040,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
         WORLD_USE_UNIQUE_ARTIFACTS_ML = 0x30000100,
         WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
@@ -186,8 +176,6 @@ public:
         WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
         CASTLE_1HERO_HIRED_EVERY_WEEK = 0x30008000,
 
-        BATTLE_ARCHMAGE_RESIST_BAD_SPELL = 0x40001000,
-        BATTLE_MAGIC_TROOP_RESIST = 0x40002000,
         BATTLE_SHOW_ARMY_ORDER = 0x40004000,
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
@@ -215,7 +203,6 @@ public:
     int ScrollSpeed( void ) const;
     u32 MemoryLimit( void ) const;
 
-    const std::string & PlayMusCommand( void ) const;
     const std::string & SelectVideoDriver( void ) const;
 
     int GameDifficulty( void ) const;
@@ -252,6 +239,9 @@ public:
     bool ShowStatus( void ) const;
     bool Unicode( void ) const;
     bool PocketPC( void ) const;
+    bool BattleShowGrid( void ) const;
+    bool BattleShowMouseShadow( void ) const;
+    bool BattleShowMoveShadow( void ) const;
     bool UseAltResource( void ) const;
     bool PriceLoyaltyVersion( void ) const;
     bool LoadedGameVersion( void ) const;
@@ -267,7 +257,6 @@ public:
     void ExtResetModes( u32 );
     const char * ExtName( u32 ) const;
 
-    bool ExtHeroLearnSpellsWithDay( void ) const;
     bool ExtHeroBuySpellBookFromShrine( void ) const;
     bool ExtHeroRecruitCostDependedFromLevel( void ) const;
     bool ExtHeroRememberPointsForRetreating( void ) const;
@@ -275,7 +264,6 @@ public:
     bool ExtHeroRecalculateMovement( void ) const;
     bool ExtHeroPatrolAllowPickup( void ) const;
     bool ExtHeroAllowTranscribingScroll( void ) const;
-    bool ExtHeroAutoMove2BattleTarget( void ) const;
     bool ExtHeroAllowBannedSecSkillsUpgrade( void ) const;
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
     bool ExtUnionsAllowCastleVisiting( void ) const;
@@ -303,35 +291,25 @@ public:
     bool ExtWorldUseUniqueArtifactsPS( void ) const;
     bool ExtWorldUseUniqueArtifactsSS( void ) const;
     bool ExtWorldExtObjectsCaptured( void ) const;
-    bool ExtWorldGuardianObjectsTwoDefense( void ) const;
     bool ExtWorldDisableBarrowMounds( void ) const;
-    bool ExtCastleAllowBuyFromWell( void ) const;
     bool ExtCastleAllowGuardians( void ) const;
-    bool ExtCastleAllowFlash( void ) const;
     bool ExtCastleGuildRestorePointsTurn( void ) const;
     bool ExtCastleAllowRecruitSpecialHeroes( void ) const;
     bool ExtCastleOneHeroHiredEveryWeek( void ) const;
     bool ExtBattleShowDamage( void ) const;
     bool ExtBattleShowBattleOrder( void ) const;
     bool ExtBattleSoftWait( void ) const;
-    bool ExtBattleMagicTroopCanResist( void ) const;
-    bool ExtBattleArchmageCanResistBadMagic( void ) const;
     bool ExtBattleObjectsArchersPenalty( void ) const;
     bool ExtBattleMergeArmies( void ) const;
     bool ExtBattleSkipIncreaseDefense( void ) const;
     bool ExtBattleReverseWaitOrder( void ) const;
-    bool ExtBattleShowGrid( void ) const;
-    bool ExtBattleShowMouseShadow( void ) const;
-    bool ExtBattleShowMoveShadow( void ) const;
     bool ExtGameRememberLastFocus( void ) const;
     bool ExtGameContinueAfterVictory( void ) const;
     bool ExtGameRewriteConfirm( void ) const;
-    bool ExtGameAutosaveConfirm( void ) const;
     bool ExtGameShowSystemInfo( void ) const;
     bool ExtGameAutosaveBeginOfDay( void ) const;
     bool ExtGameAutosaveOn( void ) const;
     bool ExtGameUseFade( void ) const;
-    bool ExtGameShowSDL( void ) const;
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
@@ -341,7 +319,6 @@ public:
     bool ExtPocketDragDropScroll( void ) const;
 
     const Size & VideoMode( void ) const;
-    void SetAutoVideoMode( void );
 
     void SetDebug( int );
     void SetUnicode( bool );
@@ -362,7 +339,6 @@ public:
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
-    void SetBlitSpeed( int );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -373,7 +349,6 @@ public:
     int SoundVolume( void ) const;
     int MusicVolume( void ) const;
     MusicSource MusicType() const;
-    int BlitSpeed( void ) const;
 
     bool GameType( int ) const;
     int GameType( void ) const;
@@ -474,7 +449,6 @@ private:
     int ai_speed;
     int scroll_speed;
     int battle_speed;
-    int blit_speed;
 
     int game_type;
     int preferably_count_players;

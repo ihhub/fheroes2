@@ -24,7 +24,6 @@
 
 #include "agg.h"
 #include "army_bar.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -35,29 +34,31 @@
 #include "payment.h"
 #include "race.h"
 #include "settings.h"
-#include "skill.h"
+#include "skill_bar.h"
 #include "statusbar.h"
 #include "text.h"
+#include "ui_button.h"
+#include "ui_tool.h"
 #include "world.h"
 
 /* readonly: false, fade: false */
 int Heroes::OpenDialog( bool readonly, bool fade )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
     // fade
     if ( fade && Settings::Get().ExtGameUseFade() )
-        display.Fade();
+        fheroes2::FadeDisplay();
 
     Dialog::FrameBorder background( Display::GetDefaultSize() );
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );
 
-    AGG::GetICN( ICN::HEROBKG, 0 ).Blit( dst_pt );
-    AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ).Blit( dst_pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
 
     std::string message;
 
@@ -100,10 +101,10 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // army format spread
     dst_pt.x = cur_pt.x + 515;
     dst_pt.y = cur_pt.y + 63;
-    const Sprite & sprite1 = AGG::GetICN( ICN::HSICONS, 9 );
-    sprite1.Blit( dst_pt );
+    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
+    fheroes2::Blit( sprite1, display, dst_pt.x, dst_pt.y );
 
-    const Rect rectSpreadArmyFormat( dst_pt, sprite1.w(), sprite1.h() );
+    const Rect rectSpreadArmyFormat( dst_pt, sprite1.width(), sprite1.height() );
     const std::string descriptionSpreadArmyFormat
         = _( "'Spread' combat formation spreads your armies from the top to the bottom of the battlefield, with at least one empty space between each army." );
     const Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
@@ -111,16 +112,17 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // army format grouped
     dst_pt.x = cur_pt.x + 552;
     dst_pt.y = cur_pt.y + 63;
-    const Sprite & sprite2 = AGG::GetICN( ICN::HSICONS, 10 );
-    sprite2.Blit( dst_pt );
+    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
+    fheroes2::Blit( sprite2, display, dst_pt.x, dst_pt.y );
 
-    const Rect rectGroupedArmyFormat( dst_pt, sprite2.w(), sprite2.h() );
+    const Rect rectGroupedArmyFormat( dst_pt, sprite2.width(), sprite2.height() );
     const std::string descriptionGroupedArmyFormat = _( "'Grouped' combat formation bunches your army together in the center of your side of the battlefield." );
     const Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // cursor format
-    SpriteMove cursorFormat( AGG::GetICN( ICN::HSICONS, 11 ) );
-    cursorFormat.Move( army.isSpreadFormat() ? army1_pt : army2_pt );
+    fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
+    const Point cursorFormatPos = army.isSpreadFormat() ? army1_pt : army2_pt;
+    cursorFormat.setPosition( cursorFormatPos.x, cursorFormatPos.y );
 
     // experience
     ExperienceIndicator experienceInfo( *this );
@@ -136,7 +138,8 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     dst_pt.x = cur_pt.x + 49;
     dst_pt.y = cur_pt.y + 130;
 
-    AGG::GetICN( ICN::CREST, Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ).Blit( dst_pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CREST, Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ),
+                    display, dst_pt.x, dst_pt.y );
 
     // monster
     dst_pt.x = cur_pt.x + 156;
@@ -171,52 +174,52 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // bottom small bar
     dst_pt.x = cur_pt.x + 22;
     dst_pt.y = cur_pt.y + 460;
-    const Sprite & bar = AGG::GetICN( ICN::HSBTNS, 8 );
-    bar.Blit( dst_pt );
+    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::HSBTNS, 8 );
+    fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.w() / 2, dst_pt.y + 12 );
+    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
 
     // button prev
     dst_pt.x = cur_pt.x;
-    dst_pt.y = cur_pt.y + Display::DEFAULT_HEIGHT - 20;
-    Button buttonPrevHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 4, 5 );
+    dst_pt.y = cur_pt.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
+    fheroes2::Button buttonPrevHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 4, 5 );
 
     // button next
-    dst_pt.x = cur_pt.x + Display::DEFAULT_WIDTH - 22;
-    dst_pt.y = cur_pt.y + Display::DEFAULT_HEIGHT - 20;
-    Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
+    dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - 22;
+    dst_pt.y = cur_pt.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
+    fheroes2::Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
 
     // button dismiss
-    dst_pt.x = cur_pt.x + 5;
+    dst_pt.x = cur_pt.x + 4;
     dst_pt.y = cur_pt.y + 318;
-    Button buttonDismiss( dst_pt.x, dst_pt.y, ICN::HSBTNS, 0, 1 );
+    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, ICN::HSBTNS, 0, 1 );
 
     // button exit
     dst_pt.x = cur_pt.x + 603;
     dst_pt.y = cur_pt.y + 318;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::HSBTNS, 2, 3 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::HSBTNS, 2, 3 );
 
     LocalEvent & le = LocalEvent::GetClean();
 
     if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
-        buttonDismiss.SetDisable( true );
+        buttonDismiss.disable();
         if ( readonly )
-            buttonDismiss.SetVisible( false );
+            buttonDismiss.hide();
     }
 
     if ( readonly || 2 > GetKingdom().GetHeroes().size() ) {
-        buttonNextHero.SetDisable( true );
-        buttonPrevHero.SetDisable( true );
+        buttonNextHero.disable();
+        buttonPrevHero.disable();
     }
 
-    buttonPrevHero.Draw();
-    buttonNextHero.Draw();
-    buttonDismiss.Draw();
-    buttonExit.Draw();
+    buttonPrevHero.draw();
+    buttonNextHero.draw();
+    buttonDismiss.draw();
+    buttonExit.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     bool redrawMorale = false;
     bool redrawLuck = false;
@@ -228,7 +231,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             cursor.Hide();
             moraleIndicator.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
             redrawMorale = false;
         }
 
@@ -236,12 +239,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             cursor.Hide();
             luckIndicator.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
             redrawLuck = false;
         }
 
         // exit
-        if ( le.MouseClickLeft( buttonExit ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             return Dialog::CANCEL;
 
         // heroes troops
@@ -264,26 +267,26 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         }
 
         // button click
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
-        if ( buttonDismiss.isEnable() )
-            le.MousePressLeft( buttonDismiss ) ? buttonDismiss.PressDraw() : buttonDismiss.ReleaseDraw();
-        if ( buttonPrevHero.isEnable() )
-            le.MousePressLeft( buttonPrevHero ) ? buttonPrevHero.PressDraw() : buttonPrevHero.ReleaseDraw();
-        if ( buttonNextHero.isEnable() )
-            le.MousePressLeft( buttonNextHero ) ? buttonNextHero.PressDraw() : buttonNextHero.ReleaseDraw();
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        if ( buttonDismiss.isEnabled() )
+            le.MousePressLeft( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
+        if ( buttonPrevHero.isEnabled() )
+            le.MousePressLeft( buttonPrevHero.area() ) ? buttonPrevHero.drawOnPress() : buttonPrevHero.drawOnRelease();
+        if ( buttonNextHero.isEnabled() )
+            le.MousePressLeft( buttonNextHero.area() ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
 
         // prev hero
-        if ( buttonPrevHero.isEnable() && ( le.MouseClickLeft( buttonPrevHero ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
+        if ( buttonPrevHero.isEnabled() && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
             return Dialog::PREV;
         }
 
         // next hero
-        if ( buttonNextHero.isEnable() && ( le.MouseClickLeft( buttonNextHero ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
+        if ( buttonNextHero.isEnabled() && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
             return Dialog::NEXT;
         }
 
         // dismiss
-        if ( buttonDismiss.isEnable() && buttonDismiss.isVisible() && le.MouseClickLeft( buttonDismiss )
+        if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible() && le.MouseClickLeft( buttonDismiss.area() )
              && Dialog::YES == Dialog::Message( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
             return Dialog::DISMISS;
         }
@@ -300,25 +303,25 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         // left click info
         if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
             cursor.Hide();
-            cursorFormat.Move( army1_pt );
+            cursorFormat.setPosition( army1_pt.x, army1_pt.y );
             cursor.Show();
-            display.Flip();
+            display.render();
             army.SetSpreadFormat( true );
         }
         else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
             cursor.Hide();
-            cursorFormat.Move( army2_pt );
+            cursorFormat.setPosition( army2_pt.x, army2_pt.y );
             cursor.Show();
-            display.Flip();
+            display.render();
             army.SetSpreadFormat( false );
         }
         else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
         else if ( le.MouseCursor( primskill_bar.GetArea() ) && primskill_bar.QueueEventProcessing( &message ) ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         // right info
@@ -344,9 +347,9 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             message = _( "Set army combat formation to 'Spread'" );
         else if ( le.MouseCursor( rectGroupedArmyFormat ) )
             message = _( "Set army combat formation to 'Grouped'" );
-        else if ( le.MouseCursor( buttonExit ) )
+        else if ( le.MouseCursor( buttonExit.area() ) )
             message = _( "Exit hero" );
-        else if ( le.MouseCursor( buttonDismiss ) ) {
+        else if ( le.MouseCursor( buttonDismiss.area() ) ) {
             if ( buttonDismiss.isVisible() ) {
                 if ( Modes( NOTDISMISS ) )
                     message = "Dismiss disabled, see game info";
@@ -354,9 +357,9 @@ int Heroes::OpenDialog( bool readonly, bool fade )
                     message = _( "Dismiss hero" );
             }
         }
-        else if ( buttonPrevHero.isEnable() && le.MouseCursor( buttonPrevHero ) )
+        else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) )
             message = _( "Show previous hero" );
-        else if ( buttonNextHero.isEnable() && le.MouseCursor( buttonNextHero ) )
+        else if ( buttonNextHero.isEnabled() && le.MouseCursor( buttonNextHero.area() ) )
             message = _( "Show next hero" );
 
         if ( message.empty() )

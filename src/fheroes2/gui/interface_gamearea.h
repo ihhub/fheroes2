@@ -24,6 +24,7 @@
 #define H2INTERFACE_GAMEAREA_H
 
 #include "gamedefs.h"
+#include "image.h"
 
 class Sprite;
 
@@ -71,21 +72,17 @@ namespace Interface
         void SetCenter( const Point & );
         void SetRedraw( void ) const;
 
-        void Redraw( Surface & dst, int ) const;
+        void Redraw( fheroes2::Image & dst, int ) const;
 
-        void BlitOnTile( Surface &, const Surface &, s32, s32, const Point & ) const;
-        void BlitOnTile( Surface &, const Sprite &, const Point & ) const;
-
-        void UpdateCyclingPalette( int frame );
-        const std::vector<uint32_t> & GetCyclingRGBPalette() const;
-        MapObjectSprite & GetSpriteCache();
+        void BlitOnTile( fheroes2::Image & src, const fheroes2::Image & dst, int32_t ox, int32_t oy, const Point & mp, bool flip = false, uint8_t alpha = 255 ) const;
+        void BlitOnTile( fheroes2::Image & src, const fheroes2::Sprite & dst, const Point & mp ) const;
 
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
 
         Rect RectFixed( Point & dst, int rw, int rh ) const;
 
-        static Surface GenerateUltimateArtifactAreaSurface( s32 );
+        static fheroes2::Image GenerateUltimateArtifactAreaSurface( s32 );
 
         int32_t GetValidTileIdFromPoint( const Point & point ) const; // returns -1 in case of invalid index (out of World Map)
         Point GetRelativeTilePosition( const Point & tileId ) const; // in relation to screen
@@ -111,9 +108,6 @@ namespace Interface
         int32_t _prevIndexPos;
         int scrollDirection;
         bool updateCursor;
-
-        std::vector<uint32_t> _cyclingRGBPalette;
-        MapObjectSprite _spriteCache;
 
         SDL::Time scrollTime;
 

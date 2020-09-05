@@ -26,15 +26,14 @@
 #include <string>
 
 #include "battle_board.h"
-#include "button.h"
 #include "dialog.h"
 #include "game_delays.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "spell.h"
-#include "sprite.h"
 #include "statusbar.h"
 #include "text.h"
+#include "ui_button.h"
 
 class Settings;
 
@@ -87,7 +86,7 @@ namespace Battle
 
         const Rect & GetArea( void ) const;
         Point GetCastPosition() const;
-        void Redraw( Surface & dst, uint32_t cycleFrame ) const;
+        void Redraw( fheroes2::Image & dst ) const;
         void Update();
         void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
@@ -135,8 +134,8 @@ namespace Battle
     private:
         Text bar1;
         Text bar2;
-        Sprite back1;
-        Sprite back2;
+        fheroes2::Sprite back1;
+        fheroes2::Sprite back2;
         std::string message;
         StatusListBox * listlog;
     };
@@ -147,18 +146,18 @@ namespace Battle
         ArmiesOrder();
 
         void Set( const Rect &, const Units *, int );
-        void Redraw( const Unit * );
-        void QueueEventProcessing( std::string & );
+        void Redraw( const Unit * current, fheroes2::Image & output );
+        void QueueEventProcessing( std::string & msg, const Point & offset );
 
     private:
         typedef std::pair<const Unit *, Rect> UnitPos;
 
-        void RedrawUnit( const Rect &, const Unit &, bool, bool ) const;
+        void RedrawUnit( const Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const;
 
         const Units * orders;
         int army_color2;
         Rect area;
-        Surface sf_color[3];
+        fheroes2::Image sf_color[3];
         std::vector<UnitPos> rects;
     };
 
@@ -232,11 +231,11 @@ namespace Battle
 
         void RedrawBorder( void );
         void RedrawCover( void );
-        void RedrawCoverStatic( Surface & );
+        void RedrawCoverStatic( fheroes2::Image & );
         void RedrawCoverBoard( const Settings &, const Board & );
-        void RedrawLowObjects( s32, Surface & );
+        void RedrawLowObjects( s32, fheroes2::Image & );
         void RedrawHighObjects( s32 );
-        void RedrawCastle1( const Castle &, Surface & );
+        void RedrawCastle1( const Castle &, fheroes2::Image & );
         void RedrawCastle2( const Castle &, s32 );
         void RedrawCastle3( const Castle & );
         void RedrawKilled( void );
@@ -273,7 +272,6 @@ namespace Battle
 
         bool IdleTroopsAnimation( void );
         void ResetIdleTroopAnimation( void );
-        void CycleColors();
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
 
@@ -297,19 +295,19 @@ namespace Battle
 
         Rect _interfacePosition;
         Rect _surfaceInnerArea;
-        Surface _mainSurface;
-        Surface sf_hexagon;
-        Surface sf_shadow;
-        Surface sf_cursor;
-        Surface sf_cover;
+        fheroes2::Image _mainSurface;
+        fheroes2::Image sf_hexagon;
+        fheroes2::Image sf_shadow;
+        fheroes2::Image sf_cursor;
+        fheroes2::Image sf_cover;
 
         int icn_cbkg;
         int icn_frng;
 
-        Button btn_auto;
-        Button btn_settings;
-        Button btn_skip;
-        Button btn_wait;
+        fheroes2::Button btn_auto;
+        fheroes2::Button btn_settings;
+        fheroes2::Button btn_skip;
+        fheroes2::Button btn_wait;
         Status status;
 
         OpponentSprite * opponent1;
@@ -321,9 +319,6 @@ namespace Battle
         u32 animation_flags_frame;
         int catapult_frame;
 
-        uint32_t _colorCycle;
-        std::vector<uint8_t> _customPalette;
-        bool _cycleBattlefield; // determines if new color cycle happened and we have to update cover
         uint8_t _contourColor;
         bool _brightLandType; // used to determin current monster contour cycling colors
         uint32_t _contourCycle;
@@ -331,7 +326,7 @@ namespace Battle
         const Unit * _currentUnit;
         const Unit * _movingUnit;
         const Unit * _flyingUnit;
-        const Sprite * b_current_sprite;
+        const fheroes2::Sprite * b_current_sprite;
         Point _movingPos;
         Point _flyingPos;
 

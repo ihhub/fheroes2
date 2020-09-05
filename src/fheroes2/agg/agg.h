@@ -28,42 +28,17 @@
 
 #include "gamedefs.h"
 #include "icn.h"
-#include "pal.h"
 #include "sprite.h"
 #include "til.h"
-
-class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
-{
-public:
-    ICNSprite() {}
-    ICNSprite( const Surface & sf1, const Surface & sf2 )
-        : std::pair<Surface, Surface>( sf1, sf2 )
-    {}
-
-    bool isValid( void ) const;
-    Sprite CreateSprite( bool reflect, bool shadow ) const;
-    Surface First( void )
-    {
-        return first;
-    }
-    Surface Second( void )
-    {
-        return second;
-    }
-
-    Point offset;
-};
 
 namespace AGG
 {
     bool Init( void );
     void Quit( void );
 
-    int PutICN( const Sprite &, bool init_reflect = false );
     Sprite GetICN( int icn, u32 index, bool reflect = false );
     u32 GetICNCount( int icn );
     int GetAbsoluteICNHeight( int icn );
-    Surface GetTIL( int til, u32 index, u32 shape );
     Surface GetLetter( u32 ch, u32 ft );
     std::vector<u8> LoadBINFRM( const char * frm_file );
 #ifdef WITH_TTF
@@ -74,19 +49,6 @@ namespace AGG
     void PlaySound( int m82 );
     void PlayMusic( int mus, bool loop = true );
     void ResetMixer( void );
-
-    ICNSprite RenderICNSprite( int, u32, int palette = PAL::STANDARD );
-
-    // Some ICNs need to be rescaled. You have to register their IDs before calling GetICN() function
-    void RegisterScalableICN( int icnId );
-
-    // Replace colors based on indexes provided. Returns true only when the operation was successful.
-    bool ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int incIndex, bool reflect );
-    // Replace colors with the ones provided. RGB map has to match the palette. Returns true only if successful.
-    bool ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int incIndex, bool reflect );
-
-    // Returns true in an event of success. Only for 32-bit images
-    bool DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect );
 }
 
 namespace fheroes2
@@ -97,8 +59,11 @@ namespace fheroes2
     namespace AGG
     {
         const Sprite & GetICN( int icnId, uint32_t index );
+
+        // shapeId could be 0, 1, 2 or 3 only
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
         const Sprite & GetLetter( uint32_t character, uint32_t fontType );
+        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
     }
 }
 

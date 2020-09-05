@@ -76,6 +76,7 @@ const char * LuckString( int luck )
 
 HeroesIndicator::HeroesIndicator( const Heroes & h )
     : hero( h )
+    , back( fheroes2::Display::instance() )
 {
     descriptions.reserve( 256 );
 }
@@ -95,7 +96,7 @@ void HeroesIndicator::SetPos( const Point & pt, bool skip_back )
     area.x = pt.x;
     area.y = pt.y;
     if ( !skip_back )
-        back.Save( area );
+        back.update( area.x, area.y, area.w, area.h );
 }
 
 LuckIndicator::LuckIndicator( const Heroes & h )
@@ -115,23 +116,23 @@ void LuckIndicator::Redraw( void )
     descriptions.clear();
     descriptions.append( Luck::Description( luck ) );
     descriptions.append( "\n \n" );
-    descriptions.append( _( "Current Modifiers:" ) );
+    descriptions.append( _( "Current Luck Modifiers:" ) );
     descriptions.append( "\n \n" );
 
-    const Sprite & sprite = AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
     const int inter = 6;
     int count = ( 0 == luck ? 1 : std::abs( luck ) );
-    s32 cx = area.x + ( area.w - ( sprite.w() + inter * ( count - 1 ) ) ) / 2;
-    s32 cy = area.y + ( area.h - sprite.h() ) / 2;
+    s32 cx = area.x + ( area.w - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    s32 cy = area.y + ( area.h - sprite.height() ) / 2;
 
     if ( modificators.size() )
         descriptions.append( modificators );
     else
         descriptions.append( _( "None" ) );
 
-    back.Restore();
+    back.restore();
     while ( count-- ) {
-        sprite.Blit( cx, cy );
+        fheroes2::Blit( sprite, fheroes2::Display::instance(), cx, cy );
         cx += inter;
     }
 }
@@ -163,23 +164,23 @@ void MoraleIndicator::Redraw( void )
     descriptions.clear();
     descriptions.append( Morale::Description( morale ) );
     descriptions.append( "\n \n" );
-    descriptions.append( _( "Current Modifiers:" ) );
+    descriptions.append( _( "Current Morale Modifiers:" ) );
     descriptions.append( "\n \n" );
 
-    const Sprite & sprite = AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
     const int inter = 6;
     int count = ( 0 == morale ? 1 : std::abs( morale ) );
-    s32 cx = area.x + ( area.w - ( sprite.w() + inter * ( count - 1 ) ) ) / 2;
-    s32 cy = area.y + ( area.h - sprite.h() ) / 2;
+    s32 cx = area.x + ( area.w - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    s32 cy = area.y + ( area.h - sprite.height() ) / 2;
 
     if ( modificators.size() )
         descriptions.append( modificators );
     else
         descriptions.append( _( "None" ) );
 
-    back.Restore();
+    back.restore();
     while ( count-- ) {
-        sprite.Blit( cx, cy );
+        fheroes2::Blit( sprite, fheroes2::Display::instance(), cx, cy );
         cx += inter;
     }
 }
@@ -207,11 +208,11 @@ ExperienceIndicator::ExperienceIndicator( const Heroes & h )
 
 void ExperienceIndicator::Redraw( void )
 {
-    const Sprite & sprite3 = AGG::GetICN( ICN::HSICONS, 1 );
-    sprite3.Blit( area.x, area.y );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
     Text text( GetString( hero.GetExperience() ), Font::SMALL );
-    text.Blit( area.x + 18 - text.w() / 2, area.y + 23 );
+    text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
 void ExperienceIndicator::QueueEventProcessing( void )
@@ -240,8 +241,8 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes & h )
 
 void SpellPointsIndicator::Redraw( void )
 {
-    const Sprite & sprite3 = AGG::GetICN( ICN::HSICONS, 8 );
-    sprite3.Blit( area.x, area.y );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
+    fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
     Text text( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ), Font::SMALL );
     text.Blit( area.x + 18 - text.w() / 2, area.y + 21 );

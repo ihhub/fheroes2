@@ -160,7 +160,6 @@ namespace Battle
         void ApplyActionEnd( Command & );
         void ApplyActionSkip( Command & );
         void ApplyActionMorale( Command & );
-        void ApplyActionLuck( Command & );
         void ApplyActionSpellCast( Command & );
         void ApplyActionTower( Command & );
         void ApplyActionCatapult( Command & );

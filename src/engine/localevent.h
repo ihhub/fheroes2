@@ -269,6 +269,12 @@ public:
     bool EmulateMouseAction( KeySym );
 #endif
 
+    void RegisterCycling() const;
+
+    // These two methods are useful for video playback
+    void PauseCycling();
+    void ResumeCycling();
+
 private:
     LocalEvent();
 

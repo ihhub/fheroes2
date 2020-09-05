@@ -32,44 +32,8 @@
 #include "tools.h"
 #include "types.h"
 
-namespace
-{
-    SDL::Time redrawTiming; // a special timer to highlight that it's time to redraw a screen (only for SDL 2 as of now)
-
-    // Returns nearest screen supported resolution
-    std::pair<int, int> GetNearestResolution( int width, int height, const std::vector<std::pair<int, int> > & resolutions )
-    {
-        if ( resolutions.empty() )
-            return std::make_pair( width, height );
-
-        if ( width < 1 )
-            width = 1;
-        if ( height < 1 )
-            height = 1;
-
-        const double x = width;
-        const double y = height;
-
-        std::vector<double> similarity( resolutions.size(), 0 );
-        for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            similarity[i] = std::fabs( resolutions[i].first - x ) / x + std::fabs( resolutions[i].second - y ) / y;
-        }
-
-        const std::vector<double>::difference_type id = std::distance( similarity.begin(), std::min_element( similarity.begin(), similarity.end() ) );
-
-        return resolutions[id];
-    }
-
-    bool SortResolutions( const std::pair<int, int> & first, const std::pair<int, int> & second )
-    {
-        return first.first > second.first || ( first.first == second.first && first.second >= second.second );
-    }
-
-    bool IsLowerThanDefaultRes( const std::pair<int, int> & value )
-    {
-        return value.first < Display::DEFAULT_WIDTH || value.second < Display::DEFAULT_HEIGHT;
-    }
-}
+// This is new Graphics engine. To change the code slowly we have to do some hacks here for now
+#include "screen.h"
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 Display::Display()
@@ -111,6 +75,16 @@ Display::~Display()
 
 void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo )
 {
+    // new display
+    fheroes2::Display & display = fheroes2::Display::instance();
+    display.resize( w, h );
+    display.fill( 0 );
+
+    // old display
+    Set( display.width(), display.height(), false );
+    Fill( RGBA( 0, 0, 0 ) );
+
+    /*
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     u32 flags = SDL_WINDOW_SHOWN;
     if ( fullscreen ) {
@@ -216,192 +190,18 @@ void Display::SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool cha
     if ( !surface )
         Error::Except( __FUNCTION__, SDL_GetError() );
 #endif
+    */
 }
 
 Size Display::GetSize( void ) const
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( window ) {
-        int dw, dh;
-        SDL_GetWindowSize( window, &dw, &dh );
-        return Size( dw, dh );
-    }
-
-    return Size( 0, 0 );
-#else
-    return Size( w(), h() );
-#endif
+    const fheroes2::Display & display = fheroes2::Display::instance();
+    return Size( display.width(), display.height() );
 }
 
 Size Display::GetDefaultSize( void )
 {
-    return Size( DEFAULT_WIDTH, DEFAULT_HEIGHT );
-}
-
-void Display::Flip( void )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    redrawTiming.Start(); // TODO: for now it's only for SDL 2 but it should be for everything
-
-    if ( displayTexture ) {
-        SDL_UpdateTexture( displayTexture, NULL, surface->pixels, surface->pitch );
-
-        if ( 0 != SDL_SetRenderTarget( renderer, NULL ) ) {
-            ERROR( SDL_GetError() );
-        }
-        else {
-            int ret = 0;
-            if ( keepAspectRatio )
-                ret = SDL_RenderCopy( renderer, displayTexture, &srcRenderSurface, &dstRenderSurface );
-            else
-                ret = SDL_RenderCopy( renderer, displayTexture, NULL, NULL );
-
-            if ( 0 != ret ) {
-                ERROR( SDL_GetError() );
-            }
-            else {
-                SDL_RenderPresent( renderer );
-            }
-        }
-    }
-    else {
-        ERROR( SDL_GetError() );
-
-        // TODO: This might be a hacky way to do but it works totally fine
-        if ( renderer )
-            SDL_DestroyRenderer( renderer );
-
-        renderer = SDL_CreateRenderer( window, -1, System::GetRenderFlags() );
-    }
-#else
-    SDL_Flip( surface );
-#endif
-}
-
-void Display::Present( void )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SDL_RenderPresent( renderer );
-#else
-    SDL_Flip( surface );
-#endif
-}
-
-void Display::ToggleFullScreen( void )
-{
-    const Surface & temp = GetSurface();
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( window ) {
-        u32 flags = SDL_GetWindowFlags( window );
-
-        // toggle FullScreen
-        if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP )
-            flags = 0;
-        else
-#if defined( __WIN32__ )
-            flags = SDL_WINDOW_FULLSCREEN;
-#else
-            flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
-#endif
-
-        SDL_SetWindowFullscreen( window, flags );
-    }
-#else
-    const uint32_t flags = surface->flags;
-    surface = SDL_SetVideoMode( 0, 0, 0, surface->flags ^ SDL_FULLSCREEN );
-    if ( surface == NULL ) {
-        surface = SDL_SetVideoMode( 0, 0, 0, flags );
-        return;
-    }
-#endif
-
-    temp.Blit( *this );
-}
-
-bool Display::IsFullScreen() const
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const u32 flags = SDL_GetWindowFlags( window );
-    return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
-#else
-    const uint32_t flags = surface->flags;
-    return ( flags & SDL_FULLSCREEN ) != 0;
-#endif
-}
-
-void Display::SetCaption( const char * str )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( window )
-        SDL_SetWindowTitle( window, str );
-#else
-    SDL_WM_SetCaption( str, NULL );
-#endif
-}
-
-void Display::SetIcons( Surface & icons )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SDL_SetWindowIcon( window, icons() );
-#else
-    SDL_WM_SetIcon( icons(), NULL );
-#endif
-}
-
-Size Display::GetMaxMode( bool rotate ) const
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    int disp = 0;
-    int num = SDL_GetNumDisplayModes( disp );
-    SDL_DisplayMode mode;
-    int max = 0;
-    int cur = 0;
-
-    for ( int ii = 0; ii < num; ++ii ) {
-        SDL_GetDisplayMode( disp, ii, &mode );
-
-        if ( max < mode.w * mode.h ) {
-            max = mode.w * mode.h;
-            cur = ii;
-        }
-    }
-
-    SDL_GetDisplayMode( disp, cur, &mode );
-    Size result = Size( mode.w, mode.h );
-
-    if ( rotate && result.w < result.h )
-        std::swap( result.w, result.h );
-
-    return result;
-#else
-    Size result;
-    SDL_Rect ** modes = SDL_ListModes( NULL, SDL_ANYFORMAT );
-
-    if ( modes == (SDL_Rect **)0 || modes == (SDL_Rect **)-1 ) {
-        ERROR( "GetMaxMode: "
-               << "no modes available" );
-    }
-    else {
-        int max = 0;
-        int cur = 0;
-
-        for ( int ii = 0; modes[ii]; ++ii ) {
-            if ( max < modes[ii]->w * modes[ii]->h ) {
-                max = modes[ii]->w * modes[ii]->h;
-                cur = ii;
-            }
-        }
-
-        result.w = modes[cur]->w;
-        result.h = modes[cur]->h;
-
-        if ( rotate && result.w < result.h )
-            std::swap( result.w, result.h );
-    }
-
-    return result;
-#endif
+    return Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 }
 
 std::string Display::GetInfo( void ) const
@@ -423,47 +223,6 @@ std::string Display::GetInfo( void ) const
 #endif
 }
 
-Surface Display::GetSurface( const Rect & rt ) const
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    /*
-        SDL_Rect srcrect = SDLRect(rt);
-        SDL_Surface *sf = SDL_CreateRGBSurface(0, rt.w, rt.h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
-        Surface res;
-
-
-        if(! sf)
-            ERROR(SDL_GetError());
-        else
-        {
-            if(0 != SDL_RenderReadPixels(renderer, &srcrect, SDL_PIXELFORMAT_ARGB8888, sf->pixels, sf->pitch))
-                ERROR(SDL_GetError());
-
-            res.Set(sf);
-        }
-    */
-    return Surface::GetSurface( rt );
-#else
-    Surface res( rt, GetFormat() );
-    Blit( rt, Point( 0, 0 ), res );
-    return res; // Surface(SDL_DisplayFormat(res()));
-#endif
-}
-
-bool Display::isMouseFocusActive() const
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    return ( SDL_GetWindowFlags( window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS;
-#else
-    return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
-#endif
-}
-
-void Display::Clear( void )
-{
-    Fill( ColorBlack );
-}
-
 /* hide system cursor */
 void Display::HideCursor( void )
 {
@@ -476,138 +235,11 @@ void Display::ShowCursor( void )
     SDL_ShowCursor( SDL_ENABLE );
 }
 
-void Display::Fade( const Surface & top, const Surface & back, const Point & pt, int level, int delay )
-{
-    Surface shadow = top.GetSurface();
-    int alpha = 255;
-    const int step = 10;
-    const int min = step + 5;
-    const int delay2 = ( delay * step ) / ( alpha - min );
-
-    while ( alpha > min + level ) {
-        back.Blit( pt, *this );
-        shadow.SetAlphaMod( alpha, false );
-        shadow.Blit( pt, *this );
-        Flip();
-        alpha -= step;
-        DELAY( delay2 );
-    }
-}
-
-void Display::InvertedFade( const Surface & top, const Surface & back, const Point & offset, const Surface & middle, const Point & middleOffset, int level, int delay )
-{
-    Surface shadow = top.GetSurface();
-    int alpha = 255;
-    const int step = 10;
-    const int min = step + 5;
-    const int delay2 = ( delay * step ) / ( alpha - min );
-
-    while ( alpha > min + level ) {
-        back.Blit( offset, *this );
-        shadow.Blit( offset, *this );
-        shadow.SetAlphaMod( alpha, false );
-        middle.Blit( middleOffset, *this );
-        Flip();
-        alpha -= step;
-        DELAY( delay2 );
-    }
-}
-
-void Display::Fade( int delay )
-{
-    Surface top = GetSurface();
-    Surface back( GetSize(), false );
-    back.Fill( ColorBlack );
-    Fade( top, back, Point( 0, 0 ), 5, delay );
-    Blit( back );
-    Flip();
-}
-
-void Display::Rise( const Surface & top, const Surface & back, const Point & pt, int level, int delay )
-{
-    Surface shadow = top.GetSurface();
-    int alpha = 0;
-    const int step = 10;
-    const int max = level - step;
-    const int delay2 = ( delay * step ) / max;
-
-    while ( alpha < max ) {
-        back.Blit( *this );
-        shadow.SetAlphaMod( alpha, false );
-        shadow.Blit( *this );
-        Flip();
-        alpha += step;
-        DELAY( delay2 );
-    }
-}
-
-void Display::Rise( int delay )
-{
-    Surface top = GetSurface();
-    Surface back( GetSize(), false );
-    back.Fill( ColorBlack );
-    Rise( top, back, Point( 0, 0 ), 250, delay );
-    Blit( top );
-    Flip();
-}
-
 /* get video display */
 Display & Display::Get( void )
 {
     static Display inside;
     return inside;
-}
-
-Surface Display::GetSurface( void ) const
-{
-    return GetSurface( Rect( Point( 0, 0 ), GetSize() ) );
-}
-
-bool Display::isRedrawRequired()
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    redrawTiming.Stop();
-    return redrawTiming.Get() > 500; // 0.5 second
-#else
-    return false;
-#endif
-}
-
-std::vector<std::pair<int, int> > Display::GetAvailableResolutions()
-{
-    std::set<std::pair<int, int> > resolutionSet;
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const int displayCount = SDL_GetNumVideoDisplays();
-    if ( displayCount > 0 ) {
-        const int displayModeCount = SDL_GetNumDisplayModes( 0 );
-        for ( int i = 0; i < displayModeCount; ++i ) {
-            SDL_DisplayMode videoMode;
-            if ( SDL_GetDisplayMode( 0, i, &videoMode ) == 0 ) {
-                resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
-            }
-        }
-    }
-#else
-    SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
-    if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
-        for ( int i = 0; modes[i]; ++i ) {
-            resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
-        }
-    }
-#endif
-    if ( !resolutionSet.empty() ) {
-        std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
-        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
-
-        if ( resolutions.front().first >= DEFAULT_WIDTH && resolutions.front().first >= DEFAULT_HEIGHT ) {
-            resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
-        }
-
-        return resolutions;
-    }
-
-    return std::vector<std::pair<int, int> >();
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

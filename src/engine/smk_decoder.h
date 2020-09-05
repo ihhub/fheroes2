@@ -23,28 +23,32 @@
 #include <string>
 #include <vector>
 
-#include "surface.h"
+#include "image.h"
+
+struct smk_t;
 
 class SMKVideoSequence
 {
 public:
     explicit SMKVideoSequence( const std::string & filePath );
+    ~SMKVideoSequence();
 
-    const std::vector<Surface> & getFrames() const;
+    void resetFrame();
+    void getNextFrame( fheroes2::Image & image, std::vector<uint8_t> & palette );
     const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
 
     unsigned long width() const;
     unsigned long height() const;
     double fps() const;
+    unsigned long frameCount() const;
 
 private:
-    bool _load( const std::string & filePath );
-
-    void _addNewFrame( const uint8_t * data, const uint8_t * palette );
-
-    std::vector<Surface> _frames;
     std::vector<std::vector<uint8_t> > _audioChannel;
     unsigned long _width;
     unsigned long _height;
     double _fps;
+    unsigned long _frameCount;
+    unsigned long _currentFrameId;
+
+    struct smk_t * _videoFile;
 };

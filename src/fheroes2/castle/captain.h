@@ -60,8 +60,8 @@ public:
     void ActionPreBattle( void );
     void ActionAfterBattle( void );
 
-    void PortraitRedraw( s32, s32, int type, Surface & ) const;
-    Surface GetPortrait( int type ) const;
+    void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
+    fheroes2::Image GetPortrait( int type ) const;
 
 private:
     Castle & home;

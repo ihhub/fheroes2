@@ -96,7 +96,7 @@ bool Game::Save( const std::string & fn )
     const Settings & conf = Settings::Get();
 
     // ask overwrite?
-    if ( System::IsFile( fn ) && ( ( !autosave && conf.ExtGameRewriteConfirm() ) || ( autosave && Settings::Get().ExtGameAutosaveConfirm() ) )
+    if ( System::IsFile( fn ) && !autosave && conf.ExtGameRewriteConfirm()
          && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
         return false;
     }

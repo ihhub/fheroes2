@@ -27,6 +27,44 @@
 #include "pal.h"
 #include "settings.h"
 
+SpritePos::SpritePos() {}
+
+SpritePos::SpritePos( const Surface & sf, const Point & pt )
+    : Surface( sf )
+    , pos( pt )
+{}
+
+const Point & SpritePos::GetPos( void ) const
+{
+    return pos;
+}
+
+Rect SpritePos::GetArea( void ) const
+{
+    return Rect( GetPos(), GetSize() );
+}
+
+void SpritePos::SetSurface( const Surface & sf )
+{
+    Surface::Set( sf, true );
+}
+
+void SpritePos::SetPos( const Point & pt )
+{
+    pos = pt;
+}
+
+void SpritePos::Reset( void )
+{
+    pos = Point( 0, 0 );
+    Surface::Reset();
+}
+
+u32 SpritePos::GetMemoryUsage( void ) const
+{
+    return Surface::GetMemoryUsage() + sizeof( pos );
+}
+
 Sprite::Sprite() {}
 
 Sprite::Sprite( const Surface & sf, s32 ox, s32 oy )
@@ -41,58 +79,6 @@ int Sprite::x( void ) const
 int Sprite::y( void ) const
 {
     return pos.y;
-}
-
-Surface Sprite::ScaleQVGASurface( const Surface & src )
-{
-    s32 w = src.w() / 2;
-    s32 h = src.h() / 2;
-    return src.RenderScale( Size( ( w ? w : 1 ), ( h ? h : 1 ) ) );
-}
-
-Sprite Sprite::ScaleQVGASprite( const Sprite & sp )
-{
-    Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
-    Sprite res;
-
-    if ( sp.w() > 3 && sp.h() > 3 ) {
-        int theme = 0;
-        if ( cursor.isVisible() && Cursor::WAIT != cursor.Themes() ) {
-            theme = cursor.Themes();
-            cursor.SetThemes( Cursor::WAIT );
-            cursor.Show();
-            display.Flip();
-        }
-
-        res.SetSurface( ScaleQVGASurface( sp ) );
-
-        if ( theme ) {
-            cursor.SetThemes( theme );
-            cursor.Show();
-            display.Flip();
-        }
-    }
-
-    const Point pt = sp.GetPos();
-    res.SetPos( Point( pt.x / 2, pt.y / 2 ) );
-
-    return res;
-}
-
-void Sprite::ChangeColorIndex( u32 fc, u32 tc )
-{
-    SetSurface( RenderChangeColor( PAL::GetPaletteColor( fc ), PAL::GetPaletteColor( tc ) ) );
-}
-
-void Sprite::ChangeColor( u32 index, RGBA color )
-{
-    SetSurface( RenderChangeColor( PAL::GetPaletteColor( index ), color ) );
-}
-
-void Sprite::ChangeColor( const std::map<RGBA, RGBA> & colorPairs )
-{
-    SetSurface( RenderChangeColor( colorPairs ) );
 }
 
 void Sprite::Blit( void ) const

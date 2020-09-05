@@ -32,16 +32,16 @@
 
 void CastleRedrawTownName( const Castle &, const Point & );
 void CastleRedrawCurrentBuilding( const Castle &, const Point &, const CastleDialog::CacheBuildings &, u32 build, u32 flash );
-void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, int alpha );
+void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
 void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame );
 Rect CastleGetCoordBuilding( int, building_t, const Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
 Rect CastleGetMaxArea( const Castle &, const Point & );
 
-void CastleDialog::RedrawBuildingSpriteToArea( const Sprite & sprite, s32 dst_x, s32 dst_y, const Rect & max )
+void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, s32 dst_x, s32 dst_y, const Rect & max, uint8_t alpha )
 {
-    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst_x, dst_y, sprite.w(), sprite.h() ), max );
-    sprite.Blit( res.first, res.second );
+    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst_x, dst_y, sprite.width(), sprite.height() ), max );
+    fheroes2::AlphaBlit( sprite, res.first.x, res.first.y, fheroes2::Display::instance(), res.second.x, res.second.y, res.first.w, res.first.h, alpha );
 }
 
 CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const Point & top )
@@ -77,9 +77,9 @@ void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_p
 
 void CastleRedrawTownName( const Castle & castle, const Point & dst )
 {
-    const Sprite & ramka = AGG::GetICN( ICN::TOWNNAME, 0 );
-    Point dst_pt( dst.x + 320 - ramka.w() / 2, dst.y + 248 );
-    ramka.Blit( dst_pt );
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
+    Point dst_pt( dst.x + 320 - background.width() / 2, dst.y + 248 );
+    fheroes2::Blit( background, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
 
     Text text( castle.GetName(), Font::SMALL );
     dst_pt.x = dst.x + 320 - text.w() / 2;
@@ -91,30 +91,29 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 {
     const uint32_t frame = Game::CastleAnimationFrame();
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
-    Sprite townbkg;
+    int townIcnId = -1;
 
-    // before redraw
     switch ( castle.GetRace() ) {
     case Race::KNGT:
-        townbkg = AGG::GetICN( ICN::TOWNBKG0, 0 );
+        townIcnId = ICN::TOWNBKG0;
         break;
     case Race::BARB:
-        townbkg = AGG::GetICN( ICN::TOWNBKG1, 0 );
+        townIcnId = ICN::TOWNBKG1;
         break;
     case Race::SORC:
-        townbkg = AGG::GetICN( ICN::TOWNBKG2, 0 );
+        townIcnId = ICN::TOWNBKG2;
         break;
     case Race::WRLK:
-        townbkg = AGG::GetICN( ICN::TOWNBKG3, 0 );
+        townIcnId = ICN::TOWNBKG3;
         break;
     case Race::WZRD:
-        townbkg = AGG::GetICN( ICN::TOWNBKG4, 0 );
+        townIcnId = ICN::TOWNBKG4;
         break;
     case Race::NECR:
-        townbkg = AGG::GetICN( ICN::TOWNBKG5, 0 );
+        townIcnId = ICN::TOWNBKG5;
         break;
     default:
         break;
@@ -122,51 +121,54 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 
     const Rect max = CastleGetMaxArea( castle, dst_pt );
 
-    if ( townbkg.isValid() )
-        townbkg.Blit( dst_pt.x, dst_pt.y );
+    if ( townIcnId != -1 ) {
+        const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
+        fheroes2::Copy( townbkg, 0, 0, display, dst_pt.x, dst_pt.y, townbkg.width(), townbkg.height() );
+    }
 
     if ( Race::BARB == castle.GetRace() ) {
-        const Sprite & sprite0 = AGG::GetICN( ICN::TWNBEXT1, 1 + frame % 5 );
-        sprite0.Blit( dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
+        const fheroes2::Sprite & sprite0 = fheroes2::AGG::GetICN( ICN::TWNBEXT1, 1 + frame % 5 );
+        fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
     }
 
     // sea anime
     if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) ) {
-        Sprite sprite50, sprite51;
+        fheroes2::Sprite sprite50;
+        fheroes2::Sprite sprite51;
 
         switch ( castle.GetRace() ) {
         case Race::KNGT:
-            sprite50 = AGG::GetICN( ICN::TWNKEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNKEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNKEXT0, 1 + frame % 5 );
             break;
         case Race::BARB:
-            sprite50 = AGG::GetICN( ICN::TWNBEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNBEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNBEXT0, 1 + frame % 5 );
             break;
         case Race::SORC:
-            sprite50 = AGG::GetICN( ICN::TWNSEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNSEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNSEXT0, 1 + frame % 5 );
             break;
         case Race::NECR:
-            sprite50 = AGG::GetICN( ICN::TWNNEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNNEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNNEXT0, 1 + frame % 5 );
             break;
         case Race::WRLK:
-            sprite50 = AGG::GetICN( ICN::TWNWEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNWEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNWEXT0, 1 + frame % 5 );
             break;
         case Race::WZRD:
-            sprite50 = AGG::GetICN( ICN::TWNZEXT0, 0 );
-            sprite51 = AGG::GetICN( ICN::TWNZEXT0, 1 + frame % 5 );
+            sprite50 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 0 );
+            sprite51 = fheroes2::AGG::GetICN( ICN::TWNZEXT0, 1 + frame % 5 );
             break;
         default:
             break;
         }
 
-        if ( sprite50.isValid() )
+        if ( !sprite50.empty() )
             CastleDialog::RedrawBuildingSpriteToArea( sprite50, dst_pt.x + sprite50.x(), dst_pt.y + sprite50.y(), max );
 
-        if ( sprite51.isValid() )
+        if ( !sprite51.empty() )
             CastleDialog::RedrawBuildingSpriteToArea( sprite51, dst_pt.x + sprite51.x(), dst_pt.y + sprite51.y(), max );
     }
 
@@ -174,11 +176,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     if ( BUILD_NOTHING == build ) {
         for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
             if ( castle.isBuild( ( *it ).id ) ) {
-                CastleRedrawBuilding( castle, dst_pt, ( *it ).id, frame, 0 );
-
-                if ( flash == ( *it ).id ) {
-                    CastleDialog::RedrawBuildingSpriteToArea( ( *it ).contour, dst_pt.x + ( *it ).contour.x(), dst_pt.y + ( *it ).contour.y(), max );
-                }
+                CastleRedrawBuilding( castle, dst_pt, ( *it ).id, frame );
                 CastleRedrawBuildingExtended( castle, dst_pt, ( *it ).id, frame );
             }
         }
@@ -197,7 +195,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                     const u32 & build2 = ( *it ).id;
 
                     if ( castle.isBuild( build2 ) ) {
-                        CastleRedrawBuilding( castle, dst_pt, build2, frame, 0 );
+                        CastleRedrawBuilding( castle, dst_pt, build2, frame );
                         CastleRedrawBuildingExtended( castle, dst_pt, build2, frame );
                     }
                     else if ( build2 == build ) {
@@ -209,7 +207,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                 CastleRedrawTownName( castle, dst_pt );
 
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
             ++buildFrame;
         }
@@ -218,7 +216,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     }
 }
 
-void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, int alpha )
+void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
 {
     if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
         return;
@@ -246,15 +244,23 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
     // correct index (mage guild)
     switch ( build ) {
     case BUILD_MAGEGUILD1:
+        if ( castle.GetLevelMageGuild() > 1 )
+            return;
         index = 0;
         break;
     case BUILD_MAGEGUILD2:
+        if ( castle.GetLevelMageGuild() > 2 )
+            return;
         index = Race::NECR == race ? 6 : 1;
         break;
     case BUILD_MAGEGUILD3:
+        if ( castle.GetLevelMageGuild() > 3 )
+            return;
         index = Race::NECR == race ? 12 : 2;
         break;
     case BUILD_MAGEGUILD4:
+        if ( castle.GetLevelMageGuild() > 4 )
+            return;
         index = Race::NECR == race ? 18 : 3;
         break;
     case BUILD_MAGEGUILD5:
@@ -266,28 +272,15 @@ void CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 buil
 
     if ( icn != ICN::UNKNOWN ) {
         // simple first sprite
-        Sprite sprite1 = AGG::GetICN( icn, index );
-        if ( Castle::isBuildingCycling( build, race ) ) {
-            AGG::ReplaceColors( sprite1, PAL::GetCyclingPalette( frame ), icn, index, false );
-        }
+        const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( icn, index );
 
-        if ( alpha ) {
-            sprite1.SetAlphaMod( alpha, true );
-            sprite1.Blit( dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y() );
-        }
-        else
-            CastleDialog::RedrawBuildingSpriteToArea( sprite1, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y(), max );
+        CastleDialog::RedrawBuildingSpriteToArea( sprite1, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y(), max, alpha );
 
         // second anime sprite
         if ( const u32 index2 = ICN::AnimationFrame( icn, index, frame ) ) {
-            Sprite sprite2 = AGG::GetICN( icn, index2 );
+            const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn, index2 );
 
-            if ( alpha ) {
-                sprite2.SetAlphaMod( alpha, true );
-                sprite2.Blit( dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y() );
-            }
-            else
-                CastleDialog::RedrawBuildingSpriteToArea( sprite2, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), max );
+            CastleDialog::RedrawBuildingSpriteToArea( sprite2, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), max, alpha );
         }
     }
 }
@@ -306,17 +299,17 @@ void CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, 
         if ( castle.PresentBoat() ) {
             const int icn2 = castle.GetICNBoat( castle.GetRace() );
 
-            const Sprite & sprite40 = AGG::GetICN( icn2, 0 );
+            const fheroes2::Sprite & sprite40 = fheroes2::AGG::GetICN( icn2, 0 );
             CastleDialog::RedrawBuildingSpriteToArea( sprite40, dst_pt.x + sprite40.x(), dst_pt.y + sprite40.y(), max );
 
             if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
-                const Sprite & sprite41 = AGG::GetICN( icn2, index2 );
+                const fheroes2::Sprite & sprite41 = fheroes2::AGG::GetICN( icn2, index2 );
                 CastleDialog::RedrawBuildingSpriteToArea( sprite41, dst_pt.x + sprite41.x(), dst_pt.y + sprite41.y(), max );
             }
         }
         else {
             if ( const u32 index2 = ICN::AnimationFrame( icn, 0, frame ) ) {
-                const Sprite & sprite3 = AGG::GetICN( icn, index2 );
+                const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( icn, index2 );
                 CastleDialog::RedrawBuildingSpriteToArea( sprite3, dst_pt.x + sprite3.x(), dst_pt.y + sprite3.y(), max );
             }
         }
@@ -326,11 +319,11 @@ void CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, 
         if ( Race::SORC == castle.GetRace() && BUILD_WEL2 == build ) {
         const int icn2 = castle.isBuild( BUILD_STATUE ) ? ICN::TWNSEXT1 : icn;
 
-        const Sprite & sprite20 = AGG::GetICN( icn2, 0 );
+        const fheroes2::Sprite & sprite20 = fheroes2::AGG::GetICN( icn2, 0 );
         CastleDialog::RedrawBuildingSpriteToArea( sprite20, dst_pt.x + sprite20.x(), dst_pt.y + sprite20.y(), max );
 
         if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
-            const Sprite & sprite21 = AGG::GetICN( icn2, index2 );
+            const fheroes2::Sprite & sprite21 = fheroes2::AGG::GetICN( icn2, index2 );
             CastleDialog::RedrawBuildingSpriteToArea( sprite21, dst_pt.x + sprite21.x(), dst_pt.y + sprite21.y(), max );
         }
     }
@@ -995,35 +988,35 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
 Rect CastleGetMaxArea( const Castle & castle, const Point & top )
 {
     Rect res( top, 0, 0 );
-    Sprite townbkg;
+
+    int townIcnId = -1;
 
     switch ( castle.GetRace() ) {
     case Race::KNGT:
-        townbkg = AGG::GetICN( ICN::TOWNBKG0, 0 );
+        townIcnId = ICN::TOWNBKG0;
         break;
     case Race::BARB:
-        townbkg = AGG::GetICN( ICN::TOWNBKG1, 0 );
+        townIcnId = ICN::TOWNBKG1;
         break;
     case Race::SORC:
-        townbkg = AGG::GetICN( ICN::TOWNBKG2, 0 );
+        townIcnId = ICN::TOWNBKG2;
         break;
     case Race::WRLK:
-        townbkg = AGG::GetICN( ICN::TOWNBKG3, 0 );
+        townIcnId = ICN::TOWNBKG3;
         break;
     case Race::WZRD:
-        townbkg = AGG::GetICN( ICN::TOWNBKG4, 0 );
+        townIcnId = ICN::TOWNBKG4;
         break;
     case Race::NECR:
-        townbkg = AGG::GetICN( ICN::TOWNBKG5, 0 );
+        townIcnId = ICN::TOWNBKG5;
         break;
     default:
-        break;
+        return res;
     }
 
-    if ( townbkg.isValid() ) {
-        res.w = townbkg.w();
-        res.h = townbkg.h();
-    }
+    const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
+    res.w = townbkg.width();
+    res.h = townbkg.height();
 
     return res;
 }

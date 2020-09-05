@@ -17,51 +17,43 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2PAL_H
-#define H2PAL_H
 
-#include "surface.h"
-#include "types.h"
-#include <vector>
+#pragma once
 
-#define PALETTE_SIZE 256
+#include "players.h"
 
-namespace PAL
+namespace Interface
 {
-    enum
+    struct PlayerInfo
     {
-        STANDARD, // default
-        YELLOW_TEXT,
-        WHITE_TEXT,
-        GRAY_TEXT,
-        RED, // blood lust, ...
-        GRAY, // petrify, ...
-        BROWN,
-        TAN, // puzzle
-        NO_CYCLE,
-        MIRROR_IMAGE,
-        DARKENING, // for disabled buttons
-        CUSTOM
+        PlayerInfo()
+            : player( NULL )
+        {}
+
+        bool operator==( const Player * ) const;
+
+        Player * player;
+        Rect rect1; // opponent
+        Rect rect2; // class
+        Rect rect3; // change
     };
 
-    struct CyclingColorSet
+    struct PlayersInfo : std::vector<PlayerInfo>
     {
-        uint8_t start;
-        uint8_t length;
-        bool forward;
-    };
+        PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
 
-    std::vector<uint8_t> GetCyclingPalette( int stepId );
-    void CreateStandardPalette();
-    void InitAllPalettes();
-    void Clear();
-    int CurrentPalette();
-    void SwapPalette( int type );
-    RGBA GetPaletteColor( u8 index );
-    const std::vector<uint8_t> & GetPalette( int type );
-    const std::vector<uint32_t> & GetRGBColors();
-    std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
-    void SetCustomSDLPalette( const std::vector<uint8_t> & indexes );
+        void UpdateInfo( Players &, const Point & opponents, const Point & classes );
+
+        Player * GetFromOpponentClick( const Point & pt );
+        Player * GetFromOpponentNameClick( const Point & pt );
+        Player * GetFromOpponentChangeClick( const Point & pt );
+        Player * GetFromClassClick( const Point & pt );
+
+        void RedrawInfo( bool show_play_info = false ) const;
+        bool QueueEventProcessing( void );
+
+        bool show_name;
+        bool show_race;
+        bool show_swap;
+    };
 }
-
-#endif

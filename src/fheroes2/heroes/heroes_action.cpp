@@ -96,12 +96,14 @@ void ActionToTravellersTent( Heroes & hero, u32 obj, s32 dst_index );
 
 u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & str, u32 res, u32 buttons = Dialog::OK )
 {
-    const Sprite & sprite = AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( res ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( res ) );
     std::string msg = str;
 
     // sprite resource with x / day test
-    Surface sf( sprite.GetSize() + Size( 30, 14 ), true );
-    sprite.Blit( 15, 0, sf );
+    fheroes2::Image sf( sprite.width() + 30, sprite.height() + 14 );
+    sf.reset();
+
+    fheroes2::Blit( sprite, sf, 15, 0 );
 
     std::string perday = _( "%{count} / day" );
     payment_t info = ProfitConditions::FromMine( res );
@@ -150,74 +152,92 @@ u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & st
     }
 
     Text text( perday, Font::SMALL );
-    text.Blit( ( sf.w() - text.w() ) / 2, sf.h() - 12, sf );
+    text.Blit( ( sf.width() - text.w() ) / 2, sf.height() - 12, sf );
 
     return Dialog::SpriteInfo( hdr, msg, sf, buttons );
 }
 
 u32 DialogGoldWithExp( const std::string & hdr, const std::string & msg, u32 count, u32 exp, u32 buttons = Dialog::OK )
 {
-    const Sprite & gold = AGG::GetICN( ICN::RESOURCE, 6 );
-    const Sprite & sprite = AGG::GetICN( ICN::EXPMRL, 4 );
-    Surface image( sprite.GetSize() + Size( gold.w() + 50, 12 ), true );
-    gold.Blit( 0, image.h() - gold.h() - 12, image );
-    sprite.Blit( gold.w() + 50, 0, image );
+    const fheroes2::Sprite & gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
+    fheroes2::Image image( sprite.width() + gold.width() + 50, sprite.width() + 10 );
+    image.reset();
+
+    fheroes2::Blit( gold, image, 0, image.height() - gold.height() - 12 );
+    fheroes2::Blit( sprite, image, gold.width() + 50, 0 );
+
     Text text( GetString( count ) );
-    text.Blit( ( gold.w() - text.w() ) / 2, image.h() - 12, image );
+    text.Blit( ( gold.width() - text.w() ) / 2, image.height() - 12, image );
     text.Set( GetString( exp ) );
-    text.Blit( gold.w() + 50 + ( sprite.w() - text.w() ) / 2, image.h() - 12, image );
+    text.Blit( gold.width() + 50 + ( sprite.width() - text.w() ) / 2, image.height() - 12, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
 
 u32 DialogArtifactWithExp( const std::string & hdr, const std::string & msg, const Artifact & art, u32 exp, u32 buttons = Dialog::OK )
 {
-    const Sprite & sprite = AGG::GetICN( ICN::EXPMRL, 4 );
-    const Sprite & border = AGG::GetICN( ICN::RESOURCE, 7 );
-    const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
-    Surface image( border.GetSize() + Size( sprite.w() + 50, 0 ), true );
-    border.Blit( image );
-    artifact.Blit( 5, 5, image );
-    sprite.Blit( border.w() + 50, ( border.h() - sprite.h() ) / 2, image );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
+    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+    const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+
+    fheroes2::Image image( border.width() + sprite.width() + 50, border.height() );
+    image.reset();
+
+    fheroes2::Blit( border, image );
+    fheroes2::Blit( artifact, image, 5, 5 );
+    fheroes2::Blit( sprite, image, border.width() + 50, ( border.height() - sprite.height() ) / 2 );
+
     Text text( GetString( exp ), Font::SMALL );
-    text.Blit( border.w() + 50 + ( sprite.w() - text.w() ) / 2, image.h() - 12, image );
+    text.Blit( border.width() + 50 + ( sprite.width() - text.w() ) / 2, image.height() - 12, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
 
 u32 DialogWithExp( const std::string & hdr, const std::string & msg, u32 exp, u32 buttons = Dialog::OK )
 {
-    const Sprite & sprite = AGG::GetICN( ICN::EXPMRL, 4 );
-    Surface image( sprite.GetSize() + Size( 0, 12 ), true );
-    sprite.Blit( image );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
+
+    fheroes2::Image image( sprite.width(), sprite.height() + 12 );
+    image.reset();
+
+    fheroes2::Blit( sprite, image );
     Text text( GetString( exp ), Font::SMALL );
-    text.Blit( ( sprite.w() - text.w() ) / 2, sprite.h(), image );
+    text.Blit( ( sprite.width() - text.w() ) / 2, sprite.height(), image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
 
 u32 DialogWithArtifactAndGold( const std::string & hdr, const std::string & msg, const Artifact & art, u32 count, u32 buttons = Dialog::OK )
 {
-    const Sprite & gold = AGG::GetICN( ICN::RESOURCE, 6 );
-    const Sprite & border = AGG::GetICN( ICN::RESOURCE, 7 );
-    const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
-    Surface image( border.GetSize() + Size( gold.w() + 50, 0 ), true );
-    border.Blit( image );
-    artifact.Blit( 5, 5, image );
-    gold.Blit( border.w() + 50, ( border.h() - gold.h() ) / 2, image );
+    const fheroes2::Sprite & gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
+    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+    const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+
+    fheroes2::Image image( border.width() + gold.width() + 50, border.height() );
+    image.reset();
+
+    fheroes2::Blit( border, image );
+    fheroes2::Blit( artifact, image, 5, 5 );
+    fheroes2::Blit( gold, image, border.width() + 50, ( border.height() - gold.height() ) / 2 );
+
     Text text( GetString( count ), Font::SMALL );
-    text.Blit( border.w() + 50 + ( gold.w() - text.w() ) / 2, border.h() - 25, image );
+    text.Blit( border.width() + 50 + ( gold.width() - text.w() ) / 2, border.height() - 25, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
 
 u32 DialogWithGold( const std::string & hdr, const std::string & msg, u32 count, u32 buttons = Dialog::OK )
 {
-    const Sprite & gold = AGG::GetICN( ICN::RESOURCE, 6 );
-    Surface image( gold.GetSize() + Size( 0, 12 ), true );
-    gold.Blit( image );
+    const fheroes2::Sprite & gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
+
+    fheroes2::Image image( gold.width(), gold.height() + 12 );
+    image.reset();
+
+    fheroes2::Blit( gold, image );
+
     Text text( GetString( count ), Font::SMALL );
-    text.Blit( ( gold.w() - text.w() ) / 2, gold.h(), image );
+    text.Blit( ( gold.width() - text.w() ) / 2, gold.height(), image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
 }
@@ -228,11 +248,14 @@ u32 DialogMorale( const std::string & hdr, const std::string & msg, bool good, u
         count = 1;
     if ( 3 < count )
         count = 3;
-    const Sprite & sprite = AGG::GetICN( ICN::EXPMRL, ( good ? 2 : 3 ) );
-    u32 offset = sprite.w() * 4 / 3;
-    Surface image( Size( sprite.w() + offset * ( count - 1 ), sprite.h() ), true );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, ( good ? 2 : 3 ) );
+    u32 offset = sprite.width() * 4 / 3;
+
+    fheroes2::Image image( sprite.width() + offset * ( count - 1 ), sprite.height() );
+    image.reset();
+
     for ( u32 ii = 0; ii < count; ++ii )
-        sprite.Blit( offset * ii, 0, image );
+        fheroes2::Blit( sprite, image, offset * ii, 0 );
 
     return Dialog::SpriteInfo( hdr, msg, image );
 }
@@ -243,11 +266,14 @@ u32 DialogLuck( const std::string & hdr, const std::string & msg, bool good, u32
         count = 1;
     if ( 3 < count )
         count = 3;
-    const Sprite & sprite = AGG::GetICN( ICN::EXPMRL, ( good ? 0 : 1 ) );
-    u32 offset = sprite.w() * 4 / 3;
-    Surface image( Size( sprite.w() + offset * ( count - 1 ), sprite.h() ), true );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, ( good ? 0 : 1 ) );
+    u32 offset = sprite.width() * 4 / 3;
+
+    fheroes2::Image image( sprite.width() + offset * ( count - 1 ), sprite.height() );
+    image.reset();
+
     for ( u32 ii = 0; ii < count; ++ii )
-        sprite.Blit( offset * ii, 0, image );
+        fheroes2::Blit( sprite, image, offset * ii, 0 );
 
     return Dialog::SpriteInfo( hdr, msg, image );
 }
@@ -669,8 +695,7 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
     else
         // join with cost
         if ( JOIN_COST == join.first ) {
-        u32 gold = troop.GetCost().gold;
-
+        const u32 gold = troop.GetCost().gold;
         if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.second, gold, hero ) ) {
             DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
 
@@ -745,15 +770,6 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
-
-        // auto move hero
-        // disable: https://sourceforge.net/tracker/index.php?func=detail&aid=3155230&group_id=96859&atid=616180
-        /*
-        if(conf.ExtHeroAutoMove2BattleTarget() && allow_move)
-        {
-            hero.Move2Dest(dst_index);
-        }
-        */
     }
 }
 
@@ -803,11 +819,6 @@ void ActionToHeroes( Heroes & hero, u32 obj, s32 dst_index )
         // wins attacker
         if ( res.AttackerWins() ) {
             hero.IncreaseExperience( res.GetExperienceAttacker() );
-
-            // auto move hero
-            if ( conf.ExtHeroAutoMove2BattleTarget() && !disable_auto_move ) {
-                hero.Move2Dest( dst_index );
-            }
         }
         else
             // wins defender
@@ -828,8 +839,7 @@ void ActionToCastle( Heroes & hero, u32 obj, s32 dst_index )
     else if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
         DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
         Mixer::Reduce();
-        if ( !conf.ExtHeroLearnSpellsWithDay() )
-            castle->MageGuildEducateHero( hero );
+        castle->MageGuildEducateHero( hero );
         Game::OpenCastleDialog( *castle );
         Mixer::Enhance();
     }
@@ -893,12 +903,6 @@ void ActionToCastle( Heroes & hero, u32 obj, s32 dst_index )
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
             allow_enter = true;
-        }
-
-        // auto move hero to castle
-        if ( conf.ExtHeroAutoMove2BattleTarget() && allow_enter ) {
-            hero.Move2Dest( dst_index );
-            ActionToCastle( hero, MP2::OBJ_CASTLE, dst_index );
         }
     }
 }
@@ -1458,12 +1462,14 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & tile = world.GetTiles( dst_index );
     u32 gold = tile.QuantityGold();
     std::string ask, msg, win;
+    std::string caption;
 
     switch ( obj ) {
     case MP2::OBJ_GRAVEYARD:
+        caption = MP2::StringObject( MP2::OBJ_GRAVEYARD );
         ask = _( "You tentatively approach the burial ground of ancient warriors. Do you want to search the graves?" );
         msg = _( "Upon defeating the Zombies you spend several hours searching the graves and find nothing. Such a despicable act reduces your army's morale." );
-        win = _( "Upon defeating the zomies you search the graves and find something!" );
+        win = _( "Upon defeating the Zombies you search the graves and find something!" );
         break;
     case MP2::OBJ_SHIPWRECK:
         ask = _( "The rotting hulk of a great pirate ship creaks eerily as it is pushed against the rocks. Do you wish to search the shipwreck?" );
@@ -1479,7 +1485,7 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
         break;
     }
 
-    if ( Dialog::YES == Dialog::Message( "", ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+    if ( Dialog::YES == Dialog::Message( caption, ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
         bool complete = false;
 
         if ( gold ) {
@@ -2451,37 +2457,39 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj, s32 dst_index )
     if ( mons.size() ) {
         // composite sprite
         u32 ox = 0;
-        const Sprite & br = AGG::GetICN( ICN::STRIP, 12 );
-        Surface sf( Size( br.w() * mons.size() + ( mons.size() - 1 ) * 4, br.h() ), false );
+        const fheroes2::Sprite & br = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+
+        fheroes2::Image sf( br.width() * mons.size() + ( mons.size() - 1 ) * 4, br.height() );
+        sf.reset();
 
         for ( std::vector<Monster>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
-            br.Blit( ox, 0, sf );
+            fheroes2::Blit( br, sf, ox, 0 );
             switch ( Monster( *it ).GetRace() ) {
             case Race::KNGT:
-                AGG::GetICN( ICN::STRIP, 4 ).Blit( ox + 6, 6, sf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), sf, 6, 6 );
                 break;
             case Race::BARB:
-                AGG::GetICN( ICN::STRIP, 5 ).Blit( ox + 6, 6, sf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), sf, 6, 6 );
                 break;
             case Race::SORC:
-                AGG::GetICN( ICN::STRIP, 6 ).Blit( ox + 6, 6, sf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), sf, 6, 6 );
                 break;
             case Race::WRLK:
-                AGG::GetICN( ICN::STRIP, 7 ).Blit( ox + 6, 6, sf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), sf, 6, 6 );
                 break;
             case Race::WZRD:
-                AGG::GetICN( ICN::STRIP, 8 ).Blit( ox + 6, 6, sf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), sf, 6, 6 );
                 break;
             case Race::NECR:
-                AGG::GetICN( ICN::STRIP, 9 ).Blit( ox + 6, 6, sf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), sf, 6, 6 );
                 break;
             default:
-                AGG::GetICN( ICN::STRIP, 10 ).Blit( ox + 6, 6, sf );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), sf, 6, 6 );
                 break;
             }
-            const Sprite & mon = AGG::GetICN( ( *it ).GetUpgrade().ICNMonh(), 0 );
-            mon.Blit( ox + 6 + mon.x(), 6 + mon.y(), sf );
-            ox += br.w() + 4;
+            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( ( *it ).GetUpgrade().ICNMonh(), 0 );
+            fheroes2::Blit( mon, sf, ox + 6 + mon.x(), 6 + mon.y() );
+            ox += br.width() + 4;
         }
         Dialog::SpriteInfo( MP2::StringObject( obj ), msg1, sf );
 
@@ -2597,7 +2605,7 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
 
         // free
         if ( conditions ) {
-            const Sprite & sprite = AGG::GetICN( ICN::EXPMRL, 4 );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
             msg = _(
                 "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
             Dialog::SpriteInfo( MP2::StringObject( obj ), msg, sprite );
@@ -2613,7 +2621,7 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
                 msg.append( _( "(Just bury it around my roots.)" ) );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
-                conditions = Dialog::YES == Dialog::SpriteInfo( MP2::StringObject( obj ), msg, AGG::GetICN( ICN::EXPMRL, 4 ), Dialog::YES | Dialog::NO );
+                conditions = Dialog::YES == Dialog::SpriteInfo( MP2::StringObject( obj ), msg, fheroes2::AGG::GetICN( ICN::EXPMRL, 4 ), Dialog::YES | Dialog::NO );
             }
             else {
                 msg = _( "Tears brim in the eyes of the tree." );
@@ -2916,7 +2924,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
                 "",
                 _( "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\"" ),
                 Font::BIG, Dialog::YES | Dialog::NO ) ) {
-            std::string header( _( "The Sphinx asks you the following riddle: %{riddle}. Your answer?" ) );
+            std::string header( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
             StringReplace( header, "%{riddle}", riddle->message );
             std::string answer;
             Dialog::InputString( header, answer );

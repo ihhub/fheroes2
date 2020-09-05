@@ -26,38 +26,38 @@
 #include "agg.h"
 #include "army.h"
 #include "army_bar.h"
-#include "button.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "settings.h"
+#include "skill_bar.h"
 #include "text.h"
 
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * );
 
 void Heroes::MeetingDialog( Heroes & heroes2 )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const Sprite & backSprite = AGG::GetICN( ICN::SWAPWIN, 0 );
-    const Point cur_pt( ( display.w() - backSprite.w() ) / 2, ( display.h() - backSprite.h() ) / 2 );
-    SpriteBack background( Rect( cur_pt, backSprite.w(), backSprite.h() ) );
+    const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    const Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
+    fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
     Point dst_pt( cur_pt );
     std::string message;
 
-    Rect src_rt( 0, 0, Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
+    Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // background
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y;
-    backSprite.Blit( src_rt, dst_pt );
+    fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.w, src_rt.h );
 
     // header
     message = _( "%{name1} meets %{name2}" );
@@ -100,7 +100,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     luckIndicator2.Redraw();
 
     // primary skill
-    SpriteBack backPrimary( Rect( cur_pt.x + 255, cur_pt.y + 50, 130, 135 ) );
+    fheroes2::ImageRestorer backPrimary( display, cur_pt.x + 255, cur_pt.y + 50, 130, 135 );
 
     PrimarySkillsBar primskill_bar1( this, true );
     primskill_bar1.SetColRows( 1, 4 );
@@ -176,12 +176,12 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     // button exit
     dst_pt.x = cur_pt.x + 280;
     dst_pt.y = cur_pt.y + 428;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
 
-    buttonExit.Draw();
+    buttonExit.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     MovePointsScaleFixed();
     heroes2.MovePointsScaleFixed();
@@ -194,8 +194,8 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
-        if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
         // selector troops event
@@ -216,7 +216,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         // selector artifacts event
@@ -232,14 +232,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
 
-            backPrimary.Restore();
+            backPrimary.restore();
             RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         if ( ( le.MouseCursor( primskill_bar1.GetArea() ) && primskill_bar1.QueueEventProcessing() )
@@ -247,7 +247,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
              || ( le.MouseCursor( secskill_bar1.GetArea() ) && secskill_bar1.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar2.GetArea() ) && secskill_bar2.QueueEventProcessing() ) ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
         if ( le.MouseCursor( moraleIndicator1.GetArea() ) )
@@ -265,10 +265,8 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         heroes2.RecalculateMovePoints();
     }
 
-    cursor.Hide();
-    background.Restore();
-    cursor.Show();
-    display.Flip();
+    restorer.restore();
+    display.render();
 }
 
 void RedrawPrimarySkillInfo( const Point & cur_pt, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )

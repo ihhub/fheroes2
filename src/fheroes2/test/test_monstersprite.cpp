@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "army_troop.h"
 #include "battle_troop.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -40,12 +39,13 @@ void TestMonsterSprite( void )
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     // Monster monster(Monster::PEASANT);
     Battle::Unit troop( Troop( Monster::PEASANT, 1 ), -1, false );
-    SpriteBack back;
+    fheroes2::ImageRestorer back( display );
     Rect pos;
 
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // std::string str;
@@ -56,11 +56,11 @@ void TestMonsterSprite( void )
     StatusBar frame_bar;
     StatusBar info_bar;
 
-    start_bar.SetCenter( 100, display.h() - 16 );
-    count_bar.SetCenter( 200, display.h() - 16 );
-    speed_bar.SetCenter( 300, display.h() - 16 );
-    frame_bar.SetCenter( 400, display.h() - 16 );
-    info_bar.SetCenter( 550, display.h() - 16 );
+    start_bar.SetCenter( 100, display.height() - 16 );
+    count_bar.SetCenter( 200, display.height() - 16 );
+    speed_bar.SetCenter( 300, display.height() - 16 );
+    frame_bar.SetCenter( 400, display.height() - 16 );
+    info_bar.SetCenter( 550, display.height() - 16 );
 
     u32 ticket = 0;
 
@@ -75,7 +75,7 @@ void TestMonsterSprite( void )
     count_bar.ShowMessage( "count: " + GetString( count ) );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // mainmenu loop
     while ( le.HandleEvents() ) {
@@ -91,7 +91,7 @@ void TestMonsterSprite( void )
                 count = AGG::GetICNCount( troop.ICNFile() );
                 frame = 0;
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
@@ -104,7 +104,7 @@ void TestMonsterSprite( void )
                     count = AGG::GetICNCount( troop.ICNFile() ) - start;
                 start_bar.ShowMessage( "start: " + GetString( start ) );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
@@ -116,7 +116,7 @@ void TestMonsterSprite( void )
                 frame = start;
                 count_bar.ShowMessage( "count: " + GetString( count ) );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
@@ -128,7 +128,7 @@ void TestMonsterSprite( void )
                 frame = start;
                 speed_bar.ShowMessage( "speed: " + GetString( speed ) );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
@@ -139,15 +139,15 @@ void TestMonsterSprite( void )
             pos.y = 240 + sprite.y();
             pos.w = sprite.w();
             pos.h = sprite.h();
-            back.Restore();
-            back.Save( pos );
+            back.restore();
+            back.update( pos.x, pos.y, pos.w, pos.h );
             sprite.Blit( pos );
 
             frame_bar.ShowMessage( "frame: " + GetString( frame ) );
             info_bar.ShowMessage( "ox: " + GetString( sprite.x() ) + ", oy: " + GetString( sprite.y() ) );
 
             cursor.Show();
-            display.Flip();
+            display.render();
 
             ++frame;
             if ( frame >= start + count )

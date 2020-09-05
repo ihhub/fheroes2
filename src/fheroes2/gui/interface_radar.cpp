@@ -32,7 +32,7 @@
 #include "settings.h"
 #include "world.h"
 
-#define RADARCOLOR 0x40 // index palette
+#define RADARCOLOR 0xB5 // index palette
 #define COLOR_DESERT 0x76
 #define COLOR_SNOW 0x0D
 #define COLOR_SWAMP 0x68
@@ -52,7 +52,7 @@
 #define COLOR_PURPLE 0x87
 #define COLOR_GRAY 0x10
 
-u32 GetPaletteIndexFromGround( int ground )
+uint8_t GetPaletteIndexFromGround( int ground )
 {
     switch ( ground ) {
     case Maps::Ground::DESERT:
@@ -80,7 +80,7 @@ u32 GetPaletteIndexFromGround( int ground )
     return 0;
 }
 
-u32 GetPaletteIndexFromColor( int color )
+uint8_t GetPaletteIndexFromColor( int color )
 {
     switch ( color ) {
     case Color::BLUE:
@@ -139,31 +139,29 @@ void Interface::Radar::Generate( void )
     const s32 world_w = world.w();
     const s32 world_h = world.h();
 
-    spriteArea.Set( world_w, world_h, false );
+    spriteArea.resize( world_w, world_h );
+    spriteArea.reset();
 
     for ( s32 yy = 0; yy < world_h; ++yy ) {
         for ( s32 xx = 0; xx < world_w; ++xx ) {
             const Maps::Tiles & tile = world.GetTiles( xx, yy );
-            RGBA color( 0, 0, 0 );
+            uint8_t color = 0;
 
             if ( tile.isRoad() )
-                color = PAL::GetPaletteColor( COLOR_ROAD );
+                color = COLOR_ROAD;
             else {
-                u32 index = GetPaletteIndexFromGround( tile.GetGround() );
+                color = GetPaletteIndexFromGround( tile.GetGround() );
 
                 const int mapObject = tile.GetObject();
                 if ( mapObject == MP2::OBJ_MOUNTS || mapObject == MP2::OBJ_TREES )
-                    index += 3;
-
-                color = PAL::GetPaletteColor( index );
+                    color += 3;
             }
 
-            if ( color.pack() )
-                spriteArea.DrawPoint( Point( xx, yy ), color );
+            fheroes2::SetPixel( spriteArea, xx, yy, color );
         }
     }
 
-    if ( spriteArea.GetSize() != size ) {
+    if ( spriteArea.width() != size.w || spriteArea.height() != size.h ) {
         Size new_sz;
 
         if ( world_w < world_h ) {
@@ -183,7 +181,9 @@ void Interface::Radar::Generate( void )
             new_sz.h = size.h;
         }
 
-        spriteArea = spriteArea.RenderScale( new_sz );
+        fheroes2::Image resized( new_sz.w, new_sz.h );
+        fheroes2::Resize( spriteArea, resized );
+        spriteArea = resized;
     }
 }
 
@@ -199,7 +199,7 @@ void Interface::Radar::SetRedraw( void ) const
 
 void Interface::Radar::Redraw( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
     const Rect & rect = GetArea();
 
@@ -209,27 +209,22 @@ void Interface::Radar::Redraw( void )
 
     if ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) {
         if ( hide )
-            AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ).Blit( rect.x, rect.y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
         else {
-            if ( world.w() != world.h() )
-                display.FillRect( rect, ColorBlack );
-            cursorArea.Hide();
-            spriteArea.Blit( rect.x + offset.x, rect.y + offset.y, display );
+            cursorArea.hide();
+            fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
             RedrawObjects( Players::FriendColors() );
             RedrawCursor();
         }
     }
 }
 
-int GetChunkSize( float size1, float size2 )
+int GetChunkSize( int size1, int size2 )
 {
     int res = 1;
     if ( size1 > size2 ) {
-        double intpart;
-        double fractpart = std::modf( size1 / size2, &intpart );
-        res = static_cast<int>( intpart );
-
-        if ( static_cast<int>( fractpart * 100 ) > 10 )
+        res = size1 / size2;
+        if ( ( size1 % size2 ) * 10 > size2 )
             res += 1;
     }
 
@@ -239,7 +234,7 @@ int GetChunkSize( float size1, float size2 )
 /* redraw radar area for color */
 void Interface::Radar::RedrawObjects( int color )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Rect & rect = GetArea();
     const s32 world_w = world.w();
     const s32 world_h = world.h();
@@ -261,7 +256,7 @@ void Interface::Radar::RedrawObjects( int color )
     else
         sw = GetChunkSize( areah, world_h );
 
-    Surface sf( Size( sw, sw ), false );
+    fheroes2::Image sf( sw, sw );
 
     for ( s32 yy = 0; yy < world_h; yy += stepy ) {
         for ( s32 xx = 0; xx < world_w; xx += stepx ) {
@@ -271,21 +266,21 @@ void Interface::Radar::RedrawObjects( int color )
 #else
             const bool & show_tile = !tile.isFog( color );
 #endif
-            RGBA fillColor( 0, 0, 0 );
+            uint8_t fillColor = 0;
 
             if ( show_tile ) {
                 switch ( tile.GetObject() ) {
                 case MP2::OBJ_HEROES: {
                     const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                     if ( hero )
-                        fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( hero->GetColor() ) );
+                        fillColor = GetPaletteIndexFromColor( hero->GetColor() );
                 } break;
 
                 case MP2::OBJ_CASTLE:
                 case MP2::OBJN_CASTLE: {
                     const Castle * castle = world.GetCastle( tile.GetCenter() );
                     if ( castle )
-                        fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( castle->GetColor() ) );
+                        fillColor = GetPaletteIndexFromColor( castle->GetColor() );
                 } break;
 
                 case MP2::OBJ_DRAGONCITY:
@@ -293,7 +288,7 @@ void Interface::Radar::RedrawObjects( int color )
                 case MP2::OBJ_ALCHEMYLAB:
                 case MP2::OBJ_MINES:
                 case MP2::OBJ_SAWMILL:
-                    fillColor = PAL::GetPaletteColor( GetPaletteIndexFromColor( tile.QuantityColor() ) );
+                    fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                     break;
 
                 default:
@@ -305,12 +300,12 @@ void Interface::Radar::RedrawObjects( int color )
             const int dsty = rect.y + offset.y + ( yy * areah ) / world_h;
 
             if ( sw > 1 ) {
-                sf.Fill( fillColor );
-                sf.Blit( dstx, dsty, display );
+                sf.fill( fillColor );
+                fheroes2::Blit( sf, display, dstx, dsty );
             }
             else {
-                if ( dstx < display.w() && dsty < display.h() )
-                    display.DrawPoint( Point( dstx, dsty ), fillColor );
+                if ( dstx < display.width() && dsty < display.height() )
+                    fheroes2::SetPixel( display, dstx, dsty, fillColor );
             }
         }
     }
@@ -322,6 +317,9 @@ void Interface::Radar::RedrawCursor( void )
     const Settings & conf = Settings::Get();
 
     if ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) {
+        if ( world.w() < 1 || world.h() < 1 )
+            return;
+
         const Rect & rect = GetArea();
         const Rect & rectMaps = interface.GetGameArea().GetVisibleTileROI();
 
@@ -347,12 +345,13 @@ void Interface::Radar::RedrawCursor( void )
         const Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
 
         // check change game area
-        if ( cursorArea.GetSize() != sz ) {
-            cursorArea.Set( sz.w, sz.h, true );
-            cursorArea.DrawBorder( PAL::GetPaletteColor( RADARCOLOR ), false );
+        if ( cursorArea.width() != sz.w || cursorArea.height() != sz.h ) {
+            cursorArea.resize( sz.w, sz.h );
+            cursorArea.reset();
+            fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
         }
 
-        cursorArea.Move( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );
+        cursorArea.setPosition( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );
     }
 }
 

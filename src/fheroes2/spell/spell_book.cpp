@@ -63,14 +63,12 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
         return Spell( Spell::NONE );
     }
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
-    bool small = Settings::Get().QVGA();
 
     const int oldcursor = cursor.Themes();
 
-    const Sprite & r_list = AGG::GetICN( ICN::BOOK, 0 );
-    const Sprite & l_list = AGG::GetICN( ICN::BOOK, 0, true );
+    const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
 
     int filter = ( filt == ALL ) ? ADVN : filt;
     SpellStorage spells2 = SetFilter( filter, &hero );
@@ -88,44 +86,43 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    const Sprite & bookmark_info = AGG::GetICN( ICN::BOOK, 6 );
-    const Sprite & bookmark_advn = AGG::GetICN( ICN::BOOK, 3 );
-    const Sprite & bookmark_cmbt = AGG::GetICN( ICN::BOOK, 4 );
-    const Sprite & bookmark_clos = AGG::GetICN( ICN::BOOK, 5 );
+    const fheroes2::Sprite & bookmark_info = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
+    const fheroes2::Sprite & bookmark_advn = fheroes2::AGG::GetICN( ICN::BOOK, 3 );
+    const fheroes2::Sprite & bookmark_cmbt = fheroes2::AGG::GetICN( ICN::BOOK, 4 );
+    const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
-    const Rect pos( ( display.w() - ( r_list.w() + l_list.w() ) ) / 2, ( display.h() - r_list.h() ) / 2, r_list.w() + l_list.w(), r_list.h() + 70 );
-    SpriteBack back( pos );
+    const Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2, bookPage.height() + 70 );
+    fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.w, pos.h );
 
-    const Rect prev_list( pos.x + ( small ? 15 : 30 ), pos.y + ( small ? 4 : 8 ), ( small ? 15 : 30 ), ( small ? 12 : 25 ) );
-    const Rect next_list( pos.x + ( small ? 205 : 410 ), pos.y + ( small ? 4 : 8 ), ( small ? 15 : 30 ), ( small ? 12 : 25 ) );
+    const Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
+    const Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
 
-    const Rect info_rt( pos.x + ( small ? 64 : 125 ), pos.y + ( small ? 137 : 275 ), bookmark_info.w(), bookmark_info.h() );
-    const Rect advn_rt( pos.x + ( small ? 135 : 270 ), pos.y + ( small ? 135 : 270 ), bookmark_advn.w(), bookmark_advn.h() );
-    const Rect cmbt_rt( pos.x + ( small ? 152 : 304 ), pos.y + ( small ? 138 : 278 ), bookmark_cmbt.w(), bookmark_cmbt.h() );
-    const Rect clos_rt( pos.x + ( small ? 210 : 420 ), pos.y + ( small ? 142 : 284 ), bookmark_clos.w(), bookmark_clos.h() );
+    const Rect info_rt( pos.x + 125, pos.y + 275, bookmark_info.width(), bookmark_info.height() );
+    const Rect advn_rt( pos.x + 270, pos.y + 270, bookmark_advn.width(), bookmark_advn.height() );
+    const Rect cmbt_rt( pos.x + 304, pos.y + 278, bookmark_cmbt.width(), bookmark_cmbt.height() );
+    const Rect clos_rt( pos.x + 420, pos.y + 284, bookmark_clos.width(), bookmark_clos.height() );
 
     Spell curspell( Spell::NONE );
 
     Rects coords;
-    coords.reserve( small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2 );
+    coords.reserve( SPELL_PER_PAGE * 2 );
 
     SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), filt, hero );
     bool redraw = false;
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
     while ( le.HandleEvents() ) {
         if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) && current_index ) {
-            current_index -= small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2;
+            current_index -= SPELL_PER_PAGE * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
-                  && spells2.size() > ( current_index + ( small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2 ) ) ) {
-            current_index += small ? SPELL_PER_PAGE_SMALL * 2 : SPELL_PER_PAGE * 2;
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) && spells2.size() > ( current_index + ( SPELL_PER_PAGE * 2 ) ) ) {
+            current_index += SPELL_PER_PAGE * 2;
             redraw = true;
         }
         else if ( ( le.MouseClickLeft( info_rt ) ) || ( le.MousePressRight( info_rt ) ) ) {
@@ -134,7 +131,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             cursor.Hide();
             Dialog::Message( "", str, Font::BIG, Dialog::OK );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
         else if ( le.MouseClickLeft( advn_rt ) && filter != ADVN && filt != CMBT ) {
             filter = ADVN;
@@ -169,14 +166,14 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
                             Dialog::Message( "", str, Font::BIG, Dialog::OK );
                             cursor.Show();
-                            display.Flip();
+                            display.render();
                         }
                     }
                     else {
                         cursor.Hide();
                         Dialog::SpellInfo( *spell, true );
                         cursor.Show();
-                        display.Flip();
+                        display.render();
                     }
                 }
             }
@@ -191,7 +188,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
                     cursor.Hide();
                     Dialog::SpellInfo( *spell, false );
                     cursor.Show();
-                    display.Flip();
+                    display.render();
                 }
             }
         }
@@ -200,29 +197,26 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             cursor.Hide();
             SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), filt, hero );
             cursor.Show();
-            display.Flip();
+            display.render();
             redraw = false;
         }
     }
 
     cursor.Hide();
-    back.Restore();
+    restorer.restore();
     cursor.SetThemes( oldcursor );
     cursor.Show();
-    display.Flip();
+    display.render();
 
     return curspell;
 }
 
 void SpellBook::Edit( const HeroBase & hero )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
     const int oldcursor = cursor.Themes();
-
-    const Sprite & r_list = AGG::GetICN( ICN::BOOK, 0 );
-    const Sprite & l_list = AGG::GetICN( ICN::BOOK, 0, true );
 
     size_t current_index = 0;
     SpellStorage spells2 = SetFilter( SpellBook::ALL, &hero );
@@ -230,14 +224,15 @@ void SpellBook::Edit( const HeroBase & hero )
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    const Sprite & bookmark_clos = AGG::GetICN( ICN::BOOK, 5 );
+    const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
-    const Rect pos( ( display.w() - ( r_list.w() + l_list.w() ) ) / 2, ( display.h() - r_list.h() ) / 2, r_list.w() + l_list.w(), r_list.h() + 70 );
-    SpriteBack back( pos );
+    const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
+    const Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2, bookPage.height() + 70 );
+    fheroes2::ImageRestorer back( display, pos.x, pos.y, pos.w, pos.h );
 
     const Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
     const Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
-    const Rect clos_rt( pos.x + 420, pos.y + 284, bookmark_clos.w(), bookmark_clos.h() );
+    const Rect clos_rt( pos.x + 420, pos.y + 284, bookmark_clos.width(), bookmark_clos.height() );
 
     Rects coords;
     coords.reserve( SPELL_PER_PAGE * 2 );
@@ -246,7 +241,7 @@ void SpellBook::Edit( const HeroBase & hero )
     bool redraw = false;
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -298,16 +293,16 @@ void SpellBook::Edit( const HeroBase & hero )
             cursor.Hide();
             SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), SpellBook::ALL, hero );
             cursor.Show();
-            display.Flip();
+            display.render();
             redraw = false;
         }
     }
 
     cursor.Hide();
-    back.Restore();
+    back.restore();
     cursor.SetThemes( oldcursor );
     cursor.Show();
-    display.Flip();
+    display.render();
 }
 
 SpellStorage SpellBook::SetFilter( int filter, const HeroBase * hero ) const
@@ -354,35 +349,34 @@ void SpellBookRedrawMP( const Point & dst, u32 mp )
 
 void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const size_t cur, const Point & pt, u32 sp, int only, const HeroBase & hero )
 {
-    bool small = Settings::Get().QVGA();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    const Sprite & r_list = AGG::GetICN( ICN::BOOK, 0 );
-    const Sprite & l_list = AGG::GetICN( ICN::BOOK, 0, true );
-    const Sprite & bookmark_info = AGG::GetICN( ICN::BOOK, 6 );
-    const Sprite & bookmark_advn = AGG::GetICN( ICN::BOOK, 3 );
-    const Sprite & bookmark_cmbt = AGG::GetICN( ICN::BOOK, 4 );
-    const Sprite & bookmark_clos = AGG::GetICN( ICN::BOOK, 5 );
+    const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
+    const fheroes2::Sprite & bookmark_info = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
+    const fheroes2::Sprite & bookmark_advn = fheroes2::AGG::GetICN( ICN::BOOK, 3 );
+    const fheroes2::Sprite & bookmark_cmbt = fheroes2::AGG::GetICN( ICN::BOOK, 4 );
+    const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
-    const Rect info_rt( pt.x + ( small ? 64 : 125 ), pt.y + ( small ? 137 : 275 ), bookmark_info.w(), bookmark_info.h() );
-    const Rect advn_rt( pt.x + ( small ? 135 : 270 ), pt.y + ( small ? 135 : 270 ), bookmark_advn.w(), bookmark_advn.h() );
-    const Rect cmbt_rt( pt.x + ( small ? 152 : 304 ), pt.y + ( small ? 138 : 278 ), bookmark_cmbt.w(), bookmark_cmbt.h() );
-    const Rect clos_rt( pt.x + ( small ? 210 : 420 ), pt.y + ( small ? 142 : 284 ), bookmark_clos.w(), bookmark_clos.h() );
+    const Rect info_rt( pt.x + 125, pt.y + 275, bookmark_info.width(), bookmark_info.height() );
 
-    l_list.Blit( pt.x, pt.y );
-    r_list.Blit( pt.x + l_list.w(), pt.y );
-    bookmark_info.Blit( info_rt );
+    fheroes2::Blit( bookPage, display, pt.x, pt.y, true );
+    fheroes2::Blit( bookPage, display, pt.x + bookPage.width(), pt.y );
+
+    fheroes2::Blit( bookmark_info, display, info_rt.x, info_rt.y );
+
     if ( SpellBook::CMBT != only )
-        bookmark_advn.Blit( advn_rt );
+        fheroes2::Blit( bookmark_advn, display, pt.x + 270, pt.y + 270 );
     if ( SpellBook::ADVN != only )
-        bookmark_cmbt.Blit( cmbt_rt );
-    bookmark_clos.Blit( clos_rt );
+        fheroes2::Blit( bookmark_cmbt, display, pt.x + 304, pt.y + 278 );
+
+    fheroes2::Blit( bookmark_clos, display, pt.x + 420, pt.y + 284 );
 
     if ( coords.size() )
         coords.clear();
 
     SpellBookRedrawMP( info_rt, sp );
     SpellBookRedrawSpells( spells, coords, cur, pt.x, pt.y, hero );
-    SpellBookRedrawSpells( spells, coords, cur + ( small ? SPELL_PER_PAGE_SMALL : SPELL_PER_PAGE ), pt.x + ( small ? 110 : 220 ), pt.y, hero );
+    SpellBookRedrawSpells( spells, coords, cur + SPELL_PER_PAGE, pt.x + 220, pt.y, hero );
 }
 
 void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const size_t cur, s32 px, s32 py, const HeroBase & hero )
@@ -410,9 +404,9 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
             }
 
             const Spell & spell = spells[ii + cur];
-            Sprite icon = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            const Rect rect( px + ox - icon.w() / 2, py + oy - icon.h() / 2, icon.w(), icon.h() + 10 );
-            icon.Blit( rect.x, rect.y );
+            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            const Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
+            fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
 
             const uint32_t spellCost = spell.SpellPoint( &hero );
             const bool isAvailable = heroSpellPoints >= spellCost;

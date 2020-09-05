@@ -29,12 +29,13 @@
 #include "bin_info.h"
 #include "cursor.h"
 #include "dir.h"
+#include "embedded_image.h"
 #include "engine.h"
 #include "error.h"
 #include "game.h"
-//#include "game_video.h"
+#include "game_video.h"
 #include "gamedefs.h"
-#include "images_pack.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "test.h"
@@ -45,8 +46,7 @@ void SetVideoDriver( const std::string & );
 void SetTimidityEnvPath( const Settings & );
 void SetLangEnvPath( const Settings & );
 void InitHomeDir( void );
-void ReadConfigs( void );
-int TestBlitSpeed( void );
+bool ReadConfigs( void );
 
 int PrintHelp( const char * basename )
 {
@@ -78,7 +78,7 @@ int main( int argc, char ** argv )
     conf.SetProgramPath( argv[0] );
 
     InitHomeDir();
-    ReadConfigs();
+    bool isFirstGameRun = ReadConfigs();
 
     // getopt
     {
@@ -141,34 +141,36 @@ int main( int argc, char ** argv )
                 conf.ResetMusic();
             }
 
-            if ( 0 == conf.VideoMode().w || 0 == conf.VideoMode().h )
-                conf.SetAutoVideoMode();
+            fheroes2::Display & display = fheroes2::Display::instance();
+            if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
+                fheroes2::engine().toggleFullScreen();
 
-            Display & display = Display::Get();
-            display.SetVideoMode( conf.VideoMode().w, conf.VideoMode().h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
-            display.HideCursor();
-            display.SetCaption( GetCaption().c_str() );
+            display.resize( conf.VideoMode().w, conf.VideoMode().h );
+            fheroes2::engine().setTitle( GetCaption() );
+
+            // display.SetVideoMode( conf.VideoMode().w, conf.VideoMode().h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
+            Display::Get().HideCursor();
 
             // Ensure the mouse position is updated to prevent bad initial values.
+            LocalEvent::Get().RegisterCycling();
             LocalEvent::Get().GetMouseCursor();
 
 #ifdef WITH_ZLIB
-            ZSurface zicons;
-            if ( zicons.Load( _ptr_08067830.width, _ptr_08067830.height, _ptr_08067830.bpp, _ptr_08067830.pitch, _ptr_08067830.rmask, _ptr_08067830.gmask,
-                              _ptr_08067830.bmask, _ptr_08067830.amask, _ptr_08067830.zdata, sizeof( _ptr_08067830.zdata ) ) )
-                display.SetIcons( zicons );
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
+            fheroes2::engine().setIcon( appIcon );
 #endif
 
             DEBUG( DBG_GAME, DBG_INFO, conf.String() );
-            DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
+            // DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
 
             // read data dir
-            if ( !AGG::Init() )
+            if ( !AGG::Init() ) {
+                fheroes2::Display::instance().release();
                 return EXIT_FAILURE;
+            }
 
             atexit( &AGG::Quit );
 
-            conf.SetBlitSpeed( TestBlitSpeed() );
 #ifdef WITH_ZLIB
             LoadZLogo();
 #endif
@@ -184,12 +186,13 @@ int main( int argc, char ** argv )
             // goto main menu
             int rs = ( test ? Game::TESTING : Game::MAINMENU );
 
-            // Video::ShowVideo( "data/nwclogo.smk", false );
+            Video::ShowVideo( "heroes2/anim/H2XINTRO.smk", false );
 
             while ( rs != Game::QUITGAME ) {
                 switch ( rs ) {
                 case Game::MAINMENU:
-                    rs = Game::MainMenu();
+                    rs = Game::MainMenu( isFirstGameRun );
+                    isFirstGameRun = false;
                     break;
                 case Game::NEWGAME:
                     rs = Game::NewGame();
@@ -255,39 +258,14 @@ int main( int argc, char ** argv )
             VERBOSE( std::endl << conf.String() );
         }
 #endif
+    fheroes2::Display::instance().release();
 
     return EXIT_SUCCESS;
 }
 
-int TestBlitSpeed( void )
-{
-    Display & display = Display::Get();
-    Surface sf( display.GetSize(), true );
-    Rect srcrt( 0, 0, display.w() / 3, display.h() );
-    SDL::Time t;
-
-    t.Start();
-    sf.Fill( RGBA( 0xFF, 0, 0 ) );
-    sf.Blit( srcrt, Point( 0, 0 ), display );
-    display.Flip();
-    sf.Fill( RGBA( 0, 0xFF, 0 ) );
-    sf.Blit( srcrt, Point( srcrt.w, 0 ), display );
-    display.Flip();
-    sf.Fill( RGBA( 0, 0, 0xFF ) );
-    sf.Blit( srcrt, Point( display.w() - srcrt.w, 0 ), display );
-    display.Flip();
-    sf.Fill( RGBA( 0, 0, 0 ) );
-    sf.Blit( display );
-    display.Flip();
-    t.Stop();
-
-    int res = t.Get();
-    DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, res );
-    return res;
-}
-
 void LoadZLogo( void )
 {
+    /*
 #ifdef BUILD_RELEASE
     std::string file = Settings::GetLastFile( "image", "sdl_logo.png" );
     // SDL logo
@@ -297,7 +275,7 @@ void LoadZLogo( void )
 
         if ( sf.Load( file ) ) {
             Surface black( display.GetSize(), false );
-            black.Fill( ColorBlack );
+            black.Fill( RGBA( 0, 0, 0, 255 ) );
 
             // scale logo
             if ( Settings::Get().QVGA() )
@@ -310,12 +288,13 @@ void LoadZLogo( void )
         }
     }
 #endif
+    */
 }
 
-void ReadConfigs( void )
+bool ReadConfigs( void )
 {
     Settings & conf = Settings::Get();
-    ListFiles files = conf.GetListFiles( "", "fheroes2.cfg" );
+    const ListFiles & files = conf.GetListFiles( "", "fheroes2.cfg" );
 
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
@@ -329,6 +308,8 @@ void ReadConfigs( void )
 
     if ( !isValidConfigurationFile )
         conf.Save( "fheroes2.cfg" );
+
+    return !isValidConfigurationFile;
 }
 
 void InitHomeDir( void )

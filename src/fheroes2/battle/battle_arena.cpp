@@ -281,24 +281,20 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
             board.SetCobjObjects( world.GetTiles( index ) );
     }
 
-    // set guardian objects mode (+2 defense)
-    if ( conf.ExtWorldGuardianObjectsTwoDefense() && !castle && MP2::isCaptureObject( world.GetTiles( index ).GetObject( false ) ) )
-        army2->SetModes( ARMY_GUARDIANS_OBJECT );
 
-    //
     if ( interface ) {
         Cursor & cursor = Cursor::Get();
-        Display & display = Display::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         cursor.Hide();
         cursor.SetThemes( Cursor::WAR_NONE );
 
         if ( conf.ExtGameUseFade() )
-            display.Fade();
+            fheroes2::FadeDisplay();
 
         interface->Redraw();
         cursor.Show();
-        display.Flip();
+        display.render();
 
         // pause for play M82::PREBATTL
         if ( conf.Sound() )
@@ -343,8 +339,10 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
     }
 
     while ( !end_turn ) {
-        // bad morale
-        if ( current_troop->Modes( MORALE_BAD ) ) {
+        if ( !current_troop->isValid() ) { // looks like the unit died
+            end_turn = true;
+        }
+        else if ( current_troop->Modes( MORALE_BAD ) ) { // bad morale
             actions.push_back( Command( MSG_BATTLE_MORALE, current_troop->GetUID(), false ) );
             end_turn = true;
         }

@@ -26,6 +26,7 @@
 
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 8
+#define INTERMEDIATE_VERSION 1
 
 #ifdef WITH_XML
 #include "xmlccwrap.h"

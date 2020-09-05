@@ -65,33 +65,38 @@ const char * StringDebug( int name )
 
 enum
 {
+    // ??? = 0x00000001,
+    // ??? = 0x00000002,
     GLOBAL_PRICELOYALTY = 0x00000004,
 
-    GLOBAL_POCKETPC = 0x00000010,
-    GLOBAL_DEDICATEDSERVER = 0x00000020,
-    GLOBAL_LOCALCLIENT = 0x00000040,
+    GLOBAL_POCKETPC = 0x00000008,
+    GLOBAL_DEDICATEDSERVER = 0x00000010,
+    GLOBAL_LOCALCLIENT = 0x00000020,
 
-    GLOBAL_SHOWCPANEL = 0x00000100,
-    GLOBAL_SHOWRADAR = 0x00000200,
-    GLOBAL_SHOWICONS = 0x00000400,
-    GLOBAL_SHOWBUTTONS = 0x00000800,
-    GLOBAL_SHOWSTATUS = 0x00001000,
+    GLOBAL_SHOWCPANEL = 0x00000040,
+    GLOBAL_SHOWRADAR = 0x00000080,
+    GLOBAL_SHOWICONS = 0x00000100,
+    GLOBAL_SHOWBUTTONS = 0x00000200,
+    GLOBAL_SHOWSTATUS = 0x00000400,
 
-    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00002000,
-    GLOBAL_KEEP_ASPECT_RATIO = 0x00010000,
-    GLOBAL_FONTRENDERBLENDED1 = 0x00020000,
-    GLOBAL_FONTRENDERBLENDED2 = 0x00040000,
-    GLOBAL_FULLSCREEN = 0x00400000,
-    GLOBAL_USESWSURFACE = 0x00800000,
+    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00000800,
+    GLOBAL_KEEP_ASPECT_RATIO = 0x00001000,
+    GLOBAL_FONTRENDERBLENDED1 = 0x00002000,
+    GLOBAL_FONTRENDERBLENDED2 = 0x00004000,
+    GLOBAL_FULLSCREEN = 0x00008000,
+    GLOBAL_USESWSURFACE = 0x00010000,
 
-    GLOBAL_SOUND = 0x01000000,
-    GLOBAL_MUSIC_EXT = 0x02000000,
-    GLOBAL_MUSIC_CD = 0x04000000,
-    GLOBAL_MUSIC_MIDI = 0x08000000,
+    GLOBAL_SOUND = 0x00020000,
+    GLOBAL_MUSIC_EXT = 0x00040000,
+    GLOBAL_MUSIC_CD = 0x00080000,
+    GLOBAL_MUSIC_MIDI = 0x00100000,
 
-    // GLOBAL_UNUSED          = 0x20000000,
-    GLOBAL_USEUNICODE = 0x40000000,
-    GLOBAL_ALTRESOURCE = 0x80000000,
+    GLOBAL_USEUNICODE = 0x00200000,
+    GLOBAL_ALTRESOURCE = 0x00400000,
+
+    GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
+    GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
+    GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
 
     GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI
 };
@@ -181,29 +186,12 @@ const settings_t settingsFHeroes2[] = {
         _( "game: always confirm for rewrite savefile" ),
     },
     {
-        Settings::GAME_ALSO_CONFIRM_AUTOSAVE,
-        _( "game: also confirm autosave" ),
-    },
-    {
         Settings::GAME_REMEMBER_LAST_FOCUS,
         _( "game: remember last focus" ),
     },
     {
-        Settings::GAME_BATTLE_SHOW_GRID,
-        _( "game: battle show grid" ),
-    },
-    {Settings::GAME_BATTLE_SHOW_MOUSE_SHADOW, _( "game: battle mouse shadow" )},
-    {
-        Settings::GAME_BATTLE_SHOW_MOVE_SHADOW,
-        _( "game: battle move shadow" ),
-    },
-    {
         Settings::GAME_BATTLE_SHOW_DAMAGE,
-        _( "game: battle show damage info" ),
-    },
-    {
-        Settings::GAME_CASTLE_FLASH_BUILDING,
-        _( "game: castle flash building" ),
+        _( "battle: show damage info" ),
     },
     {
         Settings::WORLD_SHOW_VISITED_CONTENT,
@@ -224,10 +212,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
         _( "world: allow set guardian to objects" ),
-    },
-    {
-        Settings::WORLD_GUARDIAN_TWO_DEFENSE,
-        _( "world: guardian objects gets +2 defense" ),
     },
     {
         Settings::WORLD_NOREQ_FOR_ARTIFACTS,
@@ -306,10 +290,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: disable Barrow Mounds" ),
     },
     {
-        Settings::CASTLE_ALLOW_BUY_FROM_WELL,
-        _( "castle: allow buy from well" ),
-    },
-    {
         Settings::CASTLE_ALLOW_GUARDIANS,
         _( "castle: allow guardians" ),
     },
@@ -324,10 +304,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::HEROES_BUY_BOOK_FROM_SHRINES,
         _( "heroes: allow buy a spellbook from Shrines" ),
-    },
-    {
-        Settings::HEROES_LEARN_SPELLS_WITH_DAY,
-        _( "heroes: learn new spells with day" ),
     },
     {
         Settings::HEROES_COST_DEPENDED_FROM_LEVEL,
@@ -348,10 +324,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::HEROES_PATROL_ALLOW_PICKUP,
         _( "heroes: allow pickup objects for patrol" ),
-    },
-    {
-        Settings::HEROES_AUTO_MOVE_BATTLE_DST,
-        _( "heroes: after battle move to target cell" ),
     },
     {
         Settings::HEROES_TRANSCRIBING_SCROLLS,
@@ -390,14 +362,6 @@ const settings_t settingsFHeroes2[] = {
         _( "battle: merge armies for hero from castle" ),
     },
     {
-        Settings::BATTLE_ARCHMAGE_RESIST_BAD_SPELL,
-        _( "battle: archmage can resists (20%) bad spells" ),
-    },
-    {
-        Settings::BATTLE_MAGIC_TROOP_RESIST,
-        _( "battle: magical creature resists (20%) the same magic" ),
-    },
-    {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
         _( "battle: skip increase +2 defense" ),
     },
@@ -420,10 +384,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::GAME_USE_FADE,
         _( "game: use fade" ),
-    },
-    {
-        Settings::GAME_SHOW_SDL_LOGO,
-        _( "game: show SDL logo" ),
     },
     {
         Settings::GAME_EVIL_INTERFACE,
@@ -464,7 +424,7 @@ const settings_t settingsFHeroes2[] = {
 std::string Settings::GetVersion( void )
 {
     std::ostringstream os;
-    os << static_cast<int>( MAJOR_VERSION ) << "." << static_cast<int>( MINOR_VERSION );
+    os << static_cast<int>( MAJOR_VERSION ) << "." << static_cast<int>( MINOR_VERSION ) << "." << static_cast<int>( INTERMEDIATE_VERSION );
     return os.str();
 }
 
@@ -483,15 +443,13 @@ Settings::Settings()
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
     , battle_speed( DEFAULT_SPEED_DELAY )
-    , blit_speed( 0 )
     , game_type( 0 )
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
     , memory_limit( 0 )
 {
-    ExtSetModes( GAME_SHOW_SDL_LOGO );
+    ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
-    ExtSetModes( CASTLE_ALLOW_BUY_FROM_WELL );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
     ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 
@@ -500,8 +458,14 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
     opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+    opt_global.SetModes( GLOBAL_SOUND );
     // Set expansion version by default - turn off if heroes2x.agg not found
     opt_global.SetModes( GLOBAL_PRICELOYALTY );
+
+    opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
+    opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+    opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+
     if ( System::isEmbededDevice() ) {
         opt_global.SetModes( GLOBAL_POCKETPC );
         ExtSetModes( POCKETPC_HIDE_CURSOR );
@@ -671,11 +635,6 @@ bool Settings::Read( const std::string & filename )
     // memory limit
     memory_limit = config.IntParams( "memory limit" );
 
-    // default depth
-    ival = config.IntParams( "default depth" );
-    if ( ival )
-        Surface::SetDefaultDepth( ival );
-
     // move speed
     if ( config.Exists( "ai speed" ) ) {
         ai_speed = config.IntParams( "ai speed" );
@@ -726,6 +685,18 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "battle grid" ) ) {
+        SetBattleGrid( config.StrParams( "battle grid" ) == "on" );
+    }
+
+    if ( config.Exists( "battle shadow movement" ) ) {
+        SetBattleMovementShaded( config.StrParams( "battle shadow movement" ) == "on" );
+    }
+
+    if ( config.Exists( "battle shadow cursor" ) ) {
+        SetBattleMouseShaded( config.StrParams( "battle shadow cursor" ) == "on" );
+    }
+
     // network port
     port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
 
@@ -762,8 +733,8 @@ bool Settings::Read( const std::string & filename )
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
         // default
-        video_mode.w = Display::DEFAULT_WIDTH;
-        video_mode.h = Display::DEFAULT_HEIGHT;
+        video_mode.w = fheroes2::Display::DEFAULT_WIDTH;
+        video_mode.h = fheroes2::Display::DEFAULT_HEIGHT;
 
         std::string value = StringLower( sval );
         const size_t pos = value.find( 'x' );
@@ -775,12 +746,9 @@ bool Settings::Read( const std::string & filename )
             video_mode.w = GetInt( width );
             video_mode.h = GetInt( height );
         }
-        else if ( value == "auto" ) {
-            video_mode.w = 0;
-            video_mode.h = 0;
-        }
-        else
+        else {
             DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
+        }
     }
 
 #ifdef WITHOUT_MOUSE
@@ -840,12 +808,6 @@ void Settings::PostLoad( void )
     }
 }
 
-void Settings::SetAutoVideoMode( void )
-{
-    video_mode = Display::Get().GetMaxMode( PocketPC() );
-    PostLoad();
-}
-
 bool Settings::Save( const std::string & filename ) const
 {
     if ( filename.empty() )
@@ -879,30 +841,74 @@ std::string Settings::String( void ) const
         musicType = "original";
     }
 
-    os << "# fheroes2 config, version: " << GetVersion() << std::endl;
+    os << "# fheroes2 configuration file (saved under version " << GetVersion() << ")" << std::endl;
+
+    os << std::endl << "# path to directory data" << std::endl;
     os << "data = " << data_params << std::endl;
 
+    os << std::endl << "# path to directory maps (you can set few map directies)" << std::endl;
     for ( ListDirs::const_iterator it = maps_params.begin(); it != maps_params.end(); ++it )
         os << "maps = " << *it << std::endl;
 
-    os << "videomode = ";
-    if ( video_mode.w && video_mode.h )
-        os << video_mode.w << "x" << video_mode.h << std::endl;
-    else
-        os << "auto" << std::endl;
+    os << std::endl << "# video mode (game resolution)" << std::endl;
+    os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
-    os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl
-       << "music = " << musicType << std::endl
-       << "sound volume = " << static_cast<int>( sound_volume ) << std::endl
-       << "music volume = " << static_cast<int>( music_volume ) << std::endl
-       << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl
-       << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
-       << std::endl
-       << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl
-       << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl
-       << "debug = " << ( debug ? "on" : "off" ) << std::endl;
+    os << std::endl << "# sound: on off" << std::endl;
+    os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# music: original, expansion, cd, external" << std::endl;
+    os << "music = " << musicType << std::endl;
+
+    os << std::endl << "# sound volume: 0 - 10" << std::endl;
+    os << "sound volume = " << sound_volume << std::endl;
+
+    os << std::endl << "# music volume: 0 - 10" << std::endl;
+    os << "music volume = " << music_volume << std::endl;
+
+    os << std::endl << "# keep aspect ratio in fullscreen mode (experimental)" << std::endl;
+    os << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# change resolution in fullscreen mode (experimental)" << std::endl;
+    os << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
+       << std::endl;
+
+    os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
+    os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# use alternative resources (not in use anymore)" << std::endl;
+    os << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# run in debug mode (0 - 9) [only for development]" << std::endl;
+    os << "debug = " << ( debug ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# heroes move speed: 0 - 10" << std::endl;
+    os << "heroes speed = " << heroes_speed << std::endl;
+
+    os << std::endl << "# AI move speed: 0 - 10" << std::endl;
+    os << "ai speed = " << ai_speed << std::endl;
+
+    os << std::endl << "# battle speed: 0 - 10" << std::endl;
+    os << "battle speed = " << battle_speed << std::endl;
+
+    os << std::endl << "# scroll speed: 1 - 4" << std::endl;
+    os << "scroll speed = " << scroll_speed << std::endl;
+
+    os << std::endl << "# show battle grid: on off" << std::endl;
+    os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show battle shadow movement: on off" << std::endl;
+    os << "battle shadow movement = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show battle shadow cursor: on off" << std::endl;
+    os << "battle shadow cursor = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
+
+    if ( video_driver.size() ) {
+        os << std::endl << "# sdl video driver, windows: windib, directx, wince: gapi, raw, linux: x11, other see sdl manual (to be deprecated)" << std::endl;
+        os << "videodriver = " << video_driver << std::endl;
+    }
 
 #ifdef WITH_TTF
+    os << std::endl << "Below options are experimental and disabled in the game for now" << std::endl;
     os << "fonts normal = " << font_normal << std::endl
        << "fonts small = " << font_small << std::endl
        << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
@@ -911,12 +917,6 @@ std::string Settings::String( void ) const
     if ( force_lang.size() )
         os << "lang = " << force_lang << std::endl;
 #endif
-
-    if ( video_driver.size() )
-        os << "videodriver = " << video_driver << std::endl;
-
-    if ( opt_global.Modes( GLOBAL_POCKETPC ) )
-        os << "pocket pc = on" << std::endl;
 
     return os.str();
 }
@@ -1185,16 +1185,6 @@ void Settings::SetBattleSpeed( int speed )
     battle_speed = speed;
 }
 
-void Settings::SetBlitSpeed( int speed )
-{
-    blit_speed = speed;
-}
-
-int Settings::BlitSpeed( void ) const
-{
-    return blit_speed;
-}
-
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
@@ -1220,7 +1210,7 @@ void Settings::SetScrollSpeed( int speed )
 /* return full screen */
 bool Settings::QVGA( void ) const
 {
-    return video_mode.w && video_mode.h && ( video_mode.w < Display::DEFAULT_WIDTH || video_mode.h < Display::DEFAULT_HEIGHT );
+    return video_mode.w && video_mode.h && ( video_mode.w < fheroes2::Display::DEFAULT_WIDTH || video_mode.h < fheroes2::Display::DEFAULT_HEIGHT );
 }
 
 bool Settings::UseAltResource( void ) const
@@ -1266,6 +1256,21 @@ bool Settings::Unicode( void ) const
 bool Settings::PocketPC( void ) const
 {
     return opt_global.Modes( GLOBAL_POCKETPC );
+}
+
+bool Settings::BattleShowGrid( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
+}
+
+bool Settings::BattleShowMouseShadow( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+}
+
+bool Settings::BattleShowMoveShadow( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 /* get video mode */
@@ -1476,17 +1481,17 @@ void Settings::SetHideInterface( bool f )
 
 void Settings::SetBattleGrid( bool f )
 {
-    f ? ExtSetModes( GAME_BATTLE_SHOW_GRID ) : ExtResetModes( GAME_BATTLE_SHOW_GRID );
+    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_GRID );
 }
 
 void Settings::SetBattleMovementShaded( bool f )
 {
-    f ? ExtSetModes( GAME_BATTLE_SHOW_MOVE_SHADOW ) : ExtResetModes( GAME_BATTLE_SHOW_MOVE_SHADOW );
+    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 void Settings::SetBattleMouseShaded( bool f )
 {
-    f ? ExtSetModes( GAME_BATTLE_SHOW_MOUSE_SHADOW ) : ExtResetModes( GAME_BATTLE_SHOW_MOUSE_SHADOW );
+    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
 void Settings::ResetSound( void )
@@ -1596,19 +1601,9 @@ void Settings::ExtResetModes( u32 f )
     }
 }
 
-bool Settings::ExtCastleAllowBuyFromWell( void ) const
-{
-    return ExtModes( CASTLE_ALLOW_BUY_FROM_WELL );
-}
-
 bool Settings::ExtCastleGuildRestorePointsTurn( void ) const
 {
     return ExtModes( CASTLE_MAGEGUILD_POINTS_TURN );
-}
-
-bool Settings::ExtCastleAllowFlash( void ) const
-{
-    return ExtModes( GAME_CASTLE_FLASH_BUILDING );
 }
 
 bool Settings::ExtCastleAllowGuardians( void ) const
@@ -1696,11 +1691,6 @@ bool Settings::ExtHeroRecalculateMovement( void ) const
     return ExtModes( HEROES_RECALCULATE_MOVEMENT );
 }
 
-bool Settings::ExtHeroLearnSpellsWithDay( void ) const
-{
-    return ExtModes( HEROES_LEARN_SPELLS_WITH_DAY );
-}
-
 bool Settings::ExtUnionsAllowCastleVisiting( void ) const
 {
     return ExtModes( UNIONS_ALLOW_CASTLE_VISITING );
@@ -1731,11 +1721,6 @@ bool Settings::ExtHeroAllowTranscribingScroll( void ) const
     return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
 }
 
-bool Settings::ExtHeroAutoMove2BattleTarget( void ) const
-{
-    return ExtModes( HEROES_AUTO_MOVE_BATTLE_DST );
-}
-
 bool Settings::ExtBattleShowBattleOrder( void ) const
 {
     return ExtModes( BATTLE_SHOW_ARMY_ORDER );
@@ -1744,21 +1729,6 @@ bool Settings::ExtBattleShowBattleOrder( void ) const
 bool Settings::ExtBattleSoftWait( void ) const
 {
     return ExtModes( BATTLE_SOFT_WAITING );
-}
-
-bool Settings::ExtBattleShowGrid( void ) const
-{
-    return ExtModes( GAME_BATTLE_SHOW_GRID );
-}
-
-bool Settings::ExtBattleShowMouseShadow( void ) const
-{
-    return ExtModes( GAME_BATTLE_SHOW_MOUSE_SHADOW );
-}
-
-bool Settings::ExtBattleShowMoveShadow( void ) const
-{
-    return ExtModes( GAME_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 bool Settings::ExtBattleObjectsArchersPenalty( void ) const
@@ -1771,24 +1741,9 @@ bool Settings::ExtBattleMergeArmies( void ) const
     return ExtModes( BATTLE_MERGE_ARMIES );
 }
 
-bool Settings::ExtBattleArchmageCanResistBadMagic( void ) const
-{
-    return ExtModes( BATTLE_ARCHMAGE_RESIST_BAD_SPELL );
-}
-
-bool Settings::ExtBattleMagicTroopCanResist( void ) const
-{
-    return ExtModes( BATTLE_MAGIC_TROOP_RESIST );
-}
-
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
-}
-
-bool Settings::ExtGameAutosaveConfirm( void ) const
-{
-    return ExtModes( GAME_ALSO_CONFIRM_AUTOSAVE );
 }
 
 bool Settings::ExtPocketHideCursor( void ) const
@@ -1814,11 +1769,6 @@ bool Settings::ExtGameAutosaveOn( void ) const
 bool Settings::ExtGameUseFade( void ) const
 {
     return video_mode == Display::GetDefaultSize() && ExtModes( GAME_USE_FADE );
-}
-
-bool Settings::ExtGameShowSDL( void ) const
-{
-    return ExtModes( GAME_SHOW_SDL_LOGO );
 }
 
 bool Settings::ExtGameEvilInterface( void ) const
@@ -1939,11 +1889,6 @@ bool Settings::ExtHeroArenaCanChoiseAnySkills( void ) const
 bool Settings::ExtWorldExtObjectsCaptured( void ) const
 {
     return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
-}
-
-bool Settings::ExtWorldGuardianObjectsTwoDefense( void ) const
-{
-    return ExtModes( WORLD_GUARDIAN_TWO_DEFENSE );
 }
 
 bool Settings::ExtWorldDisableBarrowMounds( void ) const

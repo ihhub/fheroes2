@@ -24,7 +24,6 @@
 
 #include "agg.h"
 #include "battle_cell.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -75,8 +74,8 @@ u32 HowManyRecruitMonster( const Castle & castle, u32 dw, const Funds & add, Fun
 
 void Castle::OpenWell( void )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
-    Display & display = Display::Get();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
@@ -87,11 +86,11 @@ void Castle::OpenWell( void )
     // button exit
     dst_pt.x = cur_pt.x + 578;
     dst_pt.y = cur_pt.y + 461;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::WELLXTRA, 0, 1 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::WELLXTRA, 0, 1 );
 
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y + 461;
-    Button buttonMax( dst_pt.x, dst_pt.y, ICN::BUYMAX, 0, 1 );
+    fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::BUYMAX, 0, 1 );
 
     const Rect rectMonster1( cur_pt.x + 20, cur_pt.y + 18, 288, 124 );
     const Rect rectMonster2( cur_pt.x + 20, cur_pt.y + 168, 288, 124 );
@@ -100,7 +99,7 @@ void Castle::OpenWell( void )
     const Rect rectMonster5( cur_pt.x + 334, cur_pt.y + 168, 288, 124 );
     const Rect rectMonster6( cur_pt.x + 334, cur_pt.y + 318, 288, 124 );
 
-    buttonExit.Draw();
+    buttonExit.draw();
 
     std::vector<RandomMonsterAnimation> monsterAnimInfo;
     monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, DWELLING_MONSTER1 ) ) );
@@ -112,11 +111,7 @@ void Castle::OpenWell( void )
 
     WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
-    if ( !conf.ExtCastleAllowBuyFromWell() )
-        buttonMax.SetDisable( true );
-    else {
-        buttonMax.Draw();
-    }
+    buttonMax.draw();
 
     std::vector<u32> alldwellings;
     alldwellings.reserve( 6 );
@@ -128,77 +123,75 @@ void Castle::OpenWell( void )
     alldwellings.push_back( DWELLING_MONSTER1 );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
     // loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        buttonMax.isEnable() && le.MousePressLeft( buttonMax ) ? buttonMax.PressDraw() : buttonMax.ReleaseDraw();
+        buttonMax.isEnabled() && le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
         // extended version (click - buy dialog monster)
-        if ( conf.ExtCastleAllowBuyFromWell() ) {
-            if ( buttonMax.isEnable() && le.MouseClickLeft( buttonMax ) ) {
-                dwellings_t results;
-                Funds cur, total;
-                u32 can_recruit;
-                std::string str;
+        if ( buttonMax.isEnabled() && le.MouseClickLeft( buttonMax.area() ) ) {
+            dwellings_t results;
+            Funds cur, total;
+            u32 can_recruit;
+            std::string str;
 
-                for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it ) {
-                    if ( 0 != ( can_recruit = HowManyRecruitMonster( *this, *it, total, cur ) ) ) {
-                        results.push_back( dwelling_t( *it, can_recruit ) );
-                        total += cur;
-                        const Monster ms( race, GetActualDwelling( *it ) );
-                        str.append( ms.GetPluralName( can_recruit ) );
-                        str.append( " - " );
-                        str.append( GetString( can_recruit ) );
-                        str.append( "\n" );
-                    }
-                }
-
-                if ( str.empty() ) {
-                    bool isCreaturePresent = false;
-                    for ( int i = 0; i < CASTLEMAXMONSTER; ++i ) {
-                        if ( dwelling[i] > 0 ) {
-                            isCreaturePresent = true;
-                            break;
-                        }
-                    }
-                    if ( isCreaturePresent ) {
-                        Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
-                    }
-                    else {
-                        Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
-                    }
-                }
-                else {
-                    if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters:" ), str, total, Dialog::YES | Dialog::NO ) ) {
-                        for ( dwellings_t::const_iterator it = results.begin(); it != results.end(); ++it ) {
-                            const dwelling_t & dw = *it;
-                            RecruitMonsterFromDwelling( dw.first, dw.second );
-                        }
-                    }
+            for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it ) {
+                if ( 0 != ( can_recruit = HowManyRecruitMonster( *this, *it, total, cur ) ) ) {
+                    results.push_back( dwelling_t( *it, can_recruit ) );
+                    total += cur;
+                    const Monster ms( race, GetActualDwelling( *it ) );
+                    str.append( ms.GetPluralName( can_recruit ) );
+                    str.append( " - " );
+                    str.append( GetString( can_recruit ) );
+                    str.append( "\n" );
                 }
             }
 
-            if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) );
-            else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) );
-            else if ( ( building & DWELLING_MONSTER3 ) && le.MouseClickLeft( rectMonster3 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true ) );
-            else if ( ( building & DWELLING_MONSTER4 ) && le.MouseClickLeft( rectMonster4 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true ) );
-            else if ( ( building & DWELLING_MONSTER5 ) && le.MouseClickLeft( rectMonster5 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) );
-            else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 ) )
-                RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
+            if ( str.empty() ) {
+                bool isCreaturePresent = false;
+                for ( int i = 0; i < CASTLEMAXMONSTER; ++i ) {
+                    if ( dwelling[i] > 0 ) {
+                        isCreaturePresent = true;
+                        break;
+                    }
+                }
+                if ( isCreaturePresent ) {
+                    Dialog::Message( "", _( "Not enough resources to buy monsters." ), Font::BIG, Dialog::OK );
+                }
+                else {
+                    Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
+                }
+            }
+            else {
+                if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters:" ), str, total, Dialog::YES | Dialog::NO ) ) {
+                    for ( dwellings_t::const_iterator it = results.begin(); it != results.end(); ++it ) {
+                        const dwelling_t & dw = *it;
+                        RecruitMonsterFromDwelling( dw.first, dw.second );
+                    }
+                }
+            }
         }
+
+        if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) );
+        else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) );
+        else if ( ( building & DWELLING_MONSTER3 ) && le.MouseClickLeft( rectMonster3 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true ) );
+        else if ( ( building & DWELLING_MONSTER4 ) && le.MouseClickLeft( rectMonster4 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true ) );
+        else if ( ( building & DWELLING_MONSTER5 ) && le.MouseClickLeft( rectMonster5 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true ) );
+        else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 ) )
+            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
 
         if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
             cursor.Hide();
@@ -207,25 +200,24 @@ void Castle::OpenWell( void )
             for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
                 monsterAnimInfo[i].increment();
 
-            buttonMax.Draw();
+            buttonMax.draw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 }
 
 void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo )
 {
-    AGG::GetICN( ICN::WELLBKG, 0 ).Blit( cur_pt );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
 
     Text text;
     Point dst_pt, pt;
 
-    if ( Settings::Get().ExtCastleAllowBuyFromWell() ) {
-        const Sprite & button = AGG::GetICN( ICN::BUYMAX, 0 );
-        Rect src_rt( 0, 461, button.w(), 19 );
-        AGG::GetICN( ICN::WELLBKG, 0 ).Blit( src_rt, cur_pt.x + button.w(), cur_pt.y + 461 );
-    }
+    const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
+    Rect src_rt( 0, 461, button.width(), 19 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width(), cur_pt.y + 461, src_rt.w, src_rt.h );
 
     text.Set( _( "Town Population Information and Statistics" ), Font::BIG );
     dst_pt.x = cur_pt.x + 315 - text.w() / 2;
@@ -298,7 +290,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
         // sprite
         dst_pt.x = pt.x + 21;
         dst_pt.y = pt.y + 35;
-        AGG::GetICN( ICN::Get4Building( race ), icnindex ).Blit( dst_pt );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Building( race ), icnindex ), display, dst_pt.x, dst_pt.y );
         // text
         text.Set( GetStringBuilding( dw_orig, race ), Font::SMALL );
         dst_pt.x = pt.x + 86 - text.w() / 2;
@@ -376,15 +368,15 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
         // monster
         const bool flipMonsterSprite = ( dw >= DWELLING_MONSTER4 );
 
-        const Sprite & smonster = AGG::GetICN( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId(), flipMonsterSprite );
+        const fheroes2::Sprite & smonster = fheroes2::AGG::GetICN( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId() );
         if ( flipMonsterSprite )
-            dst_pt.x = pt.x + 193 - ( smonster.x() + smonster.w() ) + ( monster.isWide() ? CELLW / 2 : 0 ) + monsterAnimInfo[monsterId].offset();
+            dst_pt.x = pt.x + 193 - ( smonster.x() + smonster.width() ) + ( monster.isWide() ? CELLW / 2 : 0 ) + monsterAnimInfo[monsterId].offset();
         else
             dst_pt.x = pt.x + 193 + smonster.x() - ( monster.isWide() ? CELLW / 2 : 0 ) - monsterAnimInfo[monsterId].offset();
 
         dst_pt.y = pt.y + 124 + smonster.y();
 
-        smonster.Blit( dst_pt );
+        fheroes2::Blit( smonster, display, dst_pt.x, dst_pt.y, flipMonsterSprite );
 
         dw <<= 1;
         ++monsterId;

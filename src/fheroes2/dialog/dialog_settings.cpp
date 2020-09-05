@@ -23,19 +23,21 @@
 #include <algorithm>
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "interface_list.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 
 class SettingsListBox : public Interface::ListBox<u32>
 {
 public:
     SettingsListBox( const Point & pt, bool f )
         : Interface::ListBox<u32>( pt )
-        , readonly( f ){};
+        , readonly( f )
+        , _restorer( fheroes2::Display::instance() )
+    {}
 
     void RedrawItem( const u32 &, s32, s32, bool );
     void RedrawBackground( const Point & );
@@ -47,42 +49,44 @@ public:
     void ActionListPressRight( u32 & ){};
 
     bool readonly;
+    fheroes2::ImageRestorer _restorer;
 };
 
 void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool current )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
-    const Sprite & cell = AGG::GetICN( ICN::CELLWIN, 1 );
-    const Sprite & mark = AGG::GetICN( ICN::CELLWIN, 2 );
+    const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
 
-    cell.Blit( ox, oy );
+    fheroes2::Blit( cell, display, ox, oy );
     if ( conf.ExtModes( item ) )
-        mark.Blit( ox + 3, oy + 2 );
+        fheroes2::Blit( mark, display, ox + 3, oy + 2 );
 
     TextBox msg( conf.ExtName( item ), Font::SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
 
     if ( 1 < msg.row() )
-        msg.Blit( ox + cell.w() + 5, oy - 1 );
+        msg.Blit( ox + cell.width() + 5, oy - 1 );
     else
-        msg.Blit( ox + cell.w() + 5, oy + 4 );
+        msg.Blit( ox + cell.width() + 5, oy + 4 );
 }
 
 void SettingsListBox::RedrawBackground( const Point & origin )
 {
-    const Settings & conf = Settings::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int window_h = conf.QVGA() ? 224 : 400;
+    const int window_h = 400;
     const int ah = window_h - 54;
 
-    AGG::GetICN( ICN::STONEBAK, 0 ).Blit( Rect( 15, 25, 280, ah ), origin.x + 15, origin.y + 25 );
+    _restorer.restore();
 
     for ( int ii = 1; ii < ( window_h / 25 ); ++ii )
-        AGG::GetICN( ICN::DROPLISL, 11 ).Blit( origin.x + 295, origin.y + 35 + ( 19 * ii ) );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 11 ), display, origin.x + 295, origin.y + 35 + ( 19 * ii ) );
 
-    AGG::GetICN( ICN::DROPLISL, 10 ).Blit( origin.x + 295, origin.y + 46 );
-    AGG::GetICN( ICN::DROPLISL, 12 ).Blit( origin.x + 295, origin.y + ah - 14 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 10 ), display, origin.x + 295, origin.y + 46 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 12 ), display, origin.x + 295, origin.y + ah - 14 );
 }
 
 void SettingsListBox::ActionListDoubleClick( u32 & item )
@@ -114,13 +118,6 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
                 conf.ExtResetModes( Settings::GAME_AUTOSAVE_ON );
             break;
 
-        case Settings::WORLD_GUARDIAN_TWO_DEFENSE:
-            if ( conf.ExtModes( Settings::WORLD_GUARDIAN_TWO_DEFENSE ) )
-                conf.ExtSetModes( Settings::WORLD_ALLOW_SET_GUARDIAN );
-            else
-                conf.ExtResetModes( Settings::WORLD_ALLOW_SET_GUARDIAN );
-            break;
-
         case Settings::WORLD_NEW_VERSION_WEEKOF:
             if ( conf.ExtModes( Settings::WORLD_NEW_VERSION_WEEKOF ) )
                 conf.ExtSetModes( Settings::WORLD_BAN_WEEKOF );
@@ -136,7 +133,7 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
 
 void Dialog::ExtSettings( bool readonly )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
     // cursor
@@ -144,8 +141,7 @@ void Dialog::ExtSettings( bool readonly )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const int window_h = conf.QVGA() ? 224 : 400;
-    Dialog::FrameBorder frameborder( Size( 320, window_h ) );
+    Dialog::FrameBorder frameborder( Size( 320, 400 ) );
     const Rect & area = frameborder.GetArea();
 
     Text text( "Game Settings", Font::YELLOW_BIG );
@@ -155,19 +151,12 @@ void Dialog::ExtSettings( bool readonly )
     states.reserve( 64 );
 
     states.push_back( Settings::GAME_SAVE_REWRITE_CONFIRM );
-    states.push_back( Settings::GAME_ALSO_CONFIRM_AUTOSAVE );
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_EVIL_INTERFACE );
-    states.push_back( Settings::GAME_BATTLE_SHOW_GRID );
-    states.push_back( Settings::GAME_BATTLE_SHOW_MOUSE_SHADOW );
-    states.push_back( Settings::GAME_BATTLE_SHOW_MOVE_SHADOW );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
 
-    if ( !conf.QVGA() ) {
-        states.push_back( Settings::GAME_CASTLE_FLASH_BUILDING );
-        states.push_back( Settings::GAME_HIDE_INTERFACE );
-    }
+    states.push_back( Settings::GAME_HIDE_INTERFACE );
 
     if ( !conf.PocketPC() )
         states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
@@ -178,15 +167,11 @@ void Dialog::ExtSettings( bool readonly )
     if ( conf.VideoMode() == Display::GetDefaultSize() )
         states.push_back( Settings::GAME_USE_FADE );
 
-#ifdef BUILD_RELEASE
-    states.push_back( Settings::GAME_SHOW_SDL_LOGO );
-#endif
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
     states.push_back( Settings::WORLD_SHOW_VISITED_CONTENT );
     states.push_back( Settings::WORLD_ABANDONED_MINE_RANDOM );
     states.push_back( Settings::WORLD_SAVE_MONSTER_BATTLE );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
-    states.push_back( Settings::WORLD_GUARDIAN_TWO_DEFENSE );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_NOREQ_FOR_ARTIFACTS );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
@@ -208,19 +193,14 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS );
     states.push_back( Settings::WORLD_DISABLE_BARROW_MOUNDS );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
-    states.push_back( Settings::HEROES_LEARN_SPELLS_WITH_DAY );
     states.push_back( Settings::HEROES_COST_DEPENDED_FROM_LEVEL );
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
     states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );
     states.push_back( Settings::HEROES_RECALCULATE_MOVEMENT );
     states.push_back( Settings::HEROES_PATROL_ALLOW_PICKUP );
-    states.push_back( Settings::HEROES_AUTO_MOVE_BATTLE_DST );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ALLOW_BANNED_SECSKILLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
-
-    if ( !conf.QVGA() )
-        states.push_back( Settings::CASTLE_ALLOW_BUY_FROM_WELL );
 
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::CASTLE_MAGEGUILD_POINTS_TURN );
@@ -233,8 +213,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_OBJECTS_ARCHERS_PENALTY );
     states.push_back( Settings::BATTLE_MERGE_ARMIES );
-    states.push_back( Settings::BATTLE_ARCHMAGE_RESIST_BAD_SPELL );
-    states.push_back( Settings::BATTLE_MAGIC_TROOP_RESIST );
     states.push_back( Settings::BATTLE_SKIP_INCREASE_DEFENSE );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
@@ -245,14 +223,19 @@ void Dialog::ExtSettings( bool readonly )
         states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
     }
 
+    std::sort( states.begin(), states.end(),
+               [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
+
     SettingsListBox listbox( area, readonly );
 
-    const int ah = window_h - 60;
+    listbox._restorer.update( area.x + 15, area.y + 25, 280, 336 );
+
+    const int ah = 340;
 
     listbox.RedrawBackground( area );
-    listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, Point( area.x + 295, area.y + 25 ) );
-    listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollSplitter( AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 43 ) );
+    listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
+    listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 43 ) );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
@@ -260,24 +243,24 @@ void Dialog::ExtSettings( bool readonly )
 
     LocalEvent & le = LocalEvent::Get();
 
-    const Rect buttonsArea( Point( area.x + 5, area.y ), Size( area.w - 10, area.h - 5 ) );
-    ButtonGroups btnGroups( buttonsArea, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.w - 10, area.h - 5 );
+    fheroes2::ButtonGroup btnGroup( buttonsArea, Dialog::OK | Dialog::CANCEL );
+    btnGroup.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroup.processEvents();
 
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 

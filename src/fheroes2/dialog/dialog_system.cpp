@@ -22,12 +22,13 @@
 
 #include "agg.h"
 #include "audio_music.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_interface.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 
 namespace Dialog
 {
@@ -37,7 +38,7 @@ namespace Dialog
 /* return 0x01 - change speed, 0x02 - change sound, 0x04 - hide interface, 0x08 - change interface, 0x10 - change scroll  */
 int Dialog::SystemOptions( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
     // cursor
@@ -46,7 +47,7 @@ int Dialog::SystemOptions( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder frameborder( ( display.w() - 250 - BORDERWIDTH * 2 ) / 2, ( display.h() - 382 - BORDERWIDTH * 2 ) / 2 - ( conf.QVGA() ? 25 : 0 ), 288, 382 );
+    Dialog::FrameBorder frameborder( ( display.width() - 250 - BORDERWIDTH * 2 ) / 2, ( display.height() - 382 - BORDERWIDTH * 2 ) / 2, 288, 382 );
     const Rect & area = frameborder.GetArea();
 
     Rects rects;
@@ -69,26 +70,27 @@ int Dialog::SystemOptions( void )
     const Rect & rect6 = rects[5];
     const Rect & rect7 = rects[6];
     const Rect & rect8 = rects[7];
-    //    const Rect & rect9 = rects[8];
+    const Rect & rect9 = rects[8];
 
-    Surface back2 = display.GetSurface( Rect( area.x, area.y, area.w, area.h - 30 ) );
+    fheroes2::Image back2( area.w, area.h - 30 );
+    fheroes2::Copy( display, area.x, area.y, back2, 0, 0, area.w, area.h - 30 );
     DrawSystemInfo( rects );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonOkay( area.x + 96, area.y + 350, conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
-    buttonOkay.Draw();
+    fheroes2::Button buttonOkay( area.x + 96, area.y + 350, conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
+    buttonOkay.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     int result = 0;
     bool redraw = false;
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonOkay ) ? buttonOkay.PressDraw() : buttonOkay.ReleaseDraw();
-        if ( le.MouseClickLeft( buttonOkay ) ) {
+        le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
+        if ( le.MouseClickLeft( buttonOkay.area() ) ) {
             break;
         }
 
@@ -160,41 +162,43 @@ int Dialog::SystemOptions( void )
 
         if ( redraw ) {
             cursor.Hide();
-            back2.Blit( area, display );
+            fheroes2::Blit( back2, display, area.x, area.y );
             DrawSystemInfo( rects );
-            buttonOkay.Draw();
+            buttonOkay.draw();
             cursor.Show();
-            display.Flip();
+            display.render();
             redraw = false;
         }
     }
 
     // restore background
-    cursor.Hide();
     cursor.SetThemes( oldcursor );
-    cursor.Show();
-    display.Flip();
+    display.render();
+
+    if ( result != 0 ) {
+        conf.Save( "fheroes2.cfg" );
+    }
 
     return result;
 }
 
 void Dialog::DrawSystemInfo( const Rects & rects )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
     std::string str;
     Text text;
 
-    Surface black( Size( 65, 65 ), false );
-    black.Fill( ColorBlack );
+    fheroes2::Image black( 65, 65 );
+    black.fill( 0 );
 
     const int textOffset = 2;
 
     // music
-    const Sprite & sprite1 = AGG::GetICN( ICN::SPANEL, conf.Music() ? 1 : 0 );
+    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Music() ? 1 : 0 );
     const Rect & rect1 = rects[0];
-    sprite1.Blit( rect1 );
+    fheroes2::Blit( sprite1, display, rect1.x, rect1.y );
     str = _( "Music" );
     text.Set( str, Font::SMALL );
     text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y - text.h() - textOffset );
@@ -207,9 +211,9 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y + rect1.h + textOffset );
 
     // sound
-    const Sprite & sprite2 = AGG::GetICN( ICN::SPANEL, conf.Sound() ? 3 : 2 );
+    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Sound() ? 3 : 2 );
     const Rect & rect2 = rects[1];
-    sprite2.Blit( rect2 );
+    fheroes2::Blit( sprite2, display, rect2.x, rect2.y );
     str = _( "Effects" );
     text.Set( str, Font::SMALL );
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y - text.h() - textOffset );
@@ -222,9 +226,9 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.h + rect2.y + textOffset );
 
     // Music Type
-    const Sprite & sprite3 = AGG::GetICN( ICN::SPANEL, conf.MusicType() == MUSIC_CDROM ? 11 : 10 );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.MusicType() == MUSIC_CDROM ? 11 : 10 );
     const Rect & rect3 = rects[2];
-    sprite3.Blit( rect3, display );
+    fheroes2::Blit( sprite3, display, rect3.x, rect3.y );
     str = _( "Music Type" );
     text.Set( str, Font::SMALL );
     text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y - text.h() - textOffset );
@@ -244,9 +248,9 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     // hero move speed
     const int heroSpeed = conf.HeroesMoveSpeed();
     const u32 is4 = heroSpeed ? ( heroSpeed < 4 ? 4 : 3 + heroSpeed / 2 ) : 9;
-    const Sprite & sprite4 = AGG::GetICN( ICN::SPANEL, is4 );
+    const fheroes2::Sprite & sprite4 = fheroes2::AGG::GetICN( ICN::SPANEL, is4 );
     const Rect & rect4 = rects[3];
-    sprite4.Blit( rect4 );
+    fheroes2::Blit( sprite4, display, rect4.x, rect4.y );
     str = _( "Hero Speed" );
     text.Set( str );
     text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y - text.h() - textOffset );
@@ -261,9 +265,9 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     // ai move speed
     const int aiSpeed = conf.AIMoveSpeed();
     const u32 is5 = aiSpeed ? ( aiSpeed < 4 ? 4 : 3 + aiSpeed / 2 ) : 9;
-    const Sprite & sprite5 = AGG::GetICN( ICN::SPANEL, is5 );
+    const fheroes2::Sprite & sprite5 = fheroes2::AGG::GetICN( ICN::SPANEL, is5 );
     const Rect & rect5 = rects[4];
-    sprite5.Blit( rect5 );
+    fheroes2::Blit( sprite5, display, rect5.x, rect5.y );
     str = _( "Enemy Speed" );
     text.Set( str );
     text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
@@ -277,9 +281,9 @@ void Dialog::DrawSystemInfo( const Rects & rects )
 
     // scroll speed
     const u32 is6 = ( conf.ScrollSpeed() < SCROLL_FAST2 ? ( conf.ScrollSpeed() < SCROLL_FAST1 ? ( conf.ScrollSpeed() < SCROLL_NORMAL ? 4 : 5 ) : 6 ) : 7 );
-    const Sprite & sprite6 = AGG::GetICN( ICN::SPANEL, is6 );
+    const fheroes2::Sprite & sprite6 = fheroes2::AGG::GetICN( ICN::SPANEL, is6 );
     const Rect & rect6 = rects[5];
-    sprite6.Blit( rect6 );
+    fheroes2::Blit( sprite6, display, rect6.x, rect6.y );
     str = _( "Scroll Speed" );
     text.Set( str );
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
@@ -289,9 +293,9 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect6.y + rect6.h + textOffset );
 
     // interface themes
-    const Sprite & sprite7 = AGG::GetICN( ICN::SPANEL, ( conf.ExtGameEvilInterface() ? 17 : 16 ) );
+    const fheroes2::Sprite & sprite7 = fheroes2::AGG::GetICN( ICN::SPANEL, ( conf.ExtGameEvilInterface() ? 17 : 16 ) );
     const Rect & rect7 = rects[6];
-    sprite7.Blit( rect7 );
+    fheroes2::Blit( sprite7, display, rect7.x, rect7.y );
     str = _( "Interface" );
     text.Set( str );
     text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y - text.h() - textOffset );
@@ -304,29 +308,29 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y + rect7.h + textOffset );
 
     // interface show/hide
-    const Sprite & sprite8 = AGG::GetICN( ICN::SPANEL, 16 );
-    const Sprite & sprite81 = AGG::GetICN( ICN::ESPANEL, 4 );
+    const fheroes2::Sprite & sprite8 = fheroes2::AGG::GetICN( ICN::SPANEL, 16 );
+    const fheroes2::Sprite & sprite81 = fheroes2::AGG::GetICN( ICN::ESPANEL, 4 );
     const Rect & rect8 = rects[7];
     str = _( "Interface" );
     text.Set( str );
     text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y - text.h() - textOffset );
 
     if ( conf.ExtGameHideInterface() ) {
-        sprite81.Blit( rect8, display );
+        fheroes2::Blit( sprite81, display, rect8.x, rect8.y );
         str = _( "Hide" );
     }
     else {
-        sprite8.Blit( rect8, display );
-        sprite81.Blit( Rect( 13, 13, 38, 38 ), rect8.x + 13, rect8.y + 13 );
+        fheroes2::Blit( sprite8, display, rect8.x, rect8.y );
+        fheroes2::Blit( sprite81, 13, 13, display, rect8.x + 13, rect8.y + 13, 38, 38 );
         str = _( "Show" );
     }
     text.Set( str );
     text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y + rect8.h + textOffset );
 
     // unused
-    // const Sprite & sprite9 = AGG::GetICN(ICN::SPANEL, 17);
+    // const fheroes2::Sprite & sprite9 = fheroes2::AGG::GetICN(ICN::SPANEL, 17);
     const Rect & rect9 = rects[8];
-    black.Blit( rect9, display );
+    fheroes2::Blit( black, display, rect9.x, rect9.y );
     str = "unused";
     text.Set( str );
     text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y + rect9.h + textOffset );

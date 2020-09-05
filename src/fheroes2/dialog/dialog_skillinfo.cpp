@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -29,6 +28,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "ui_button.h"
 
 void Dialog::SecondarySkillInfo( const Skill::Secondary & skill, const bool ok_button )
 {
@@ -37,7 +37,7 @@ void Dialog::SecondarySkillInfo( const Skill::Secondary & skill, const bool ok_b
 
 void Dialog::SecondarySkillInfo( const std::string & header, const std::string & message, const Skill::Secondary & skill, const bool ok_button )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // cursor
@@ -48,10 +48,10 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
-    const Sprite & border = AGG::GetICN( ICN::SECSKILL, 15 );
+    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.h(), ok_button );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), ok_button );
     Rect pos = box.GetArea();
 
     if ( header.size() )
@@ -63,11 +63,11 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     pos.y += box2.h() + spacer;
 
     // blit sprite
-    pos.x = box.GetArea().x + ( pos.w - border.w() ) / 2;
-    border.Blit( pos.x, pos.y );
-    const Sprite & sprite = AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
-    pos.x = box.GetArea().x + ( pos.w - sprite.w() ) / 2;
-    sprite.Blit( pos.x, pos.y + 3 );
+    pos.x = box.GetArea().x + ( pos.w - border.width() ) / 2;
+    fheroes2::Blit( border, display, pos.x, pos.y );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
+    pos.x = box.GetArea().x + ( pos.w - sprite.width() ) / 2;
+    fheroes2::Blit( sprite, display, pos.x, pos.y + 3 );
 
     Text text;
 
@@ -82,20 +82,20 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button * button = NULL;
+    fheroes2::Button * button = NULL;
     Point pt;
 
     if ( ok_button ) {
-        pt.x = box.GetArea().x + ( box.GetArea().w - AGG::GetICN( system, 1 ).w() ) / 2;
-        pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN( system, 1 ).h();
-        button = new Button( pt.x, pt.y, system, 1, 2 );
+        pt.x = box.GetArea().x + ( box.GetArea().w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
+        pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 1 ).height();
+        button = new fheroes2::Button( pt.x, pt.y, system, 1, 2 );
     }
 
     if ( button )
-        ( *button ).Draw();
+        button->draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
@@ -103,9 +103,9 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
             break;
 
         if ( button )
-            le.MousePressLeft( *button ) ? button->PressDraw() : button->ReleaseDraw();
+            le.MousePressLeft( button->area() ) ? button->drawOnPress() : button->drawOnRelease();
 
-        if ( button && le.MouseClickLeft( *button ) ) {
+        if ( button && le.MouseClickLeft( button->area() ) ) {
             break;
         }
 
@@ -121,7 +121,7 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
 
 void Dialog::PrimarySkillInfo( const std::string & header, const std::string & message, int skill )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // cursor
@@ -160,10 +160,10 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
 
     TextBox box1( header, Font::BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
-    const Sprite & border = AGG::GetICN( ICN::PRIMSKIL, 4 );
+    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::PRIMSKIL, 4 );
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.h(), Dialog::OK );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), Dialog::OK );
     Rect pos = box.GetArea();
 
     if ( header.size() )
@@ -175,11 +175,11 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     pos.y += box2.h() + spacer;
 
     // blit sprite
-    pos.x = box.GetArea().x + ( pos.w - border.w() ) / 2;
-    border.Blit( pos.x, pos.y );
-    const Sprite & sprite = AGG::GetICN( ICN::PRIMSKIL, index );
-    pos.x = box.GetArea().x + ( pos.w - sprite.w() ) / 2;
-    sprite.Blit( pos.x, pos.y + 6 );
+    pos.x = box.GetArea().x + ( pos.w - border.width() ) / 2;
+    fheroes2::Blit( border, display, pos.x, pos.y );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, index );
+    pos.x = box.GetArea().x + ( pos.w - sprite.width() ) / 2;
+    fheroes2::Blit( sprite, display, pos.x, pos.y + 6 );
 
     Text text;
 
@@ -195,20 +195,20 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
 
     Point pt;
 
-    pt.x = box.GetArea().x + ( box.GetArea().w - AGG::GetICN( system, 1 ).w() ) / 2;
-    pt.y = box.GetArea().y + box.GetArea().h - AGG::GetICN( system, 1 ).h();
-    Button button( pt.x, pt.y, system, 1, 2 );
+    pt.x = box.GetArea().x + ( box.GetArea().w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
+    pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 1 ).height();
+    fheroes2::Button button( pt.x, pt.y, system, 1, 2 );
 
-    button.Draw();
+    button.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( button ) ? button.PressDraw() : button.ReleaseDraw();
+        le.MousePressLeft( button.area() ) ? button.drawOnPress() : button.drawOnRelease();
 
-        if ( le.MouseClickLeft( button ) ) {
+        if ( le.MouseClickLeft( button.area() ) ) {
             break;
         }
 

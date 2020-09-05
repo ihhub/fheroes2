@@ -32,7 +32,6 @@
 #include "battle_army.h"
 #include "bitmodes.h"
 #include "game_delays.h"
-#include "sprite.h"
 
 class Spell;
 class HeroBase;
@@ -84,7 +83,6 @@ namespace Battle
         u32 GetHitPointsLeft( void ) const;
         u32 GetAffectedDuration( u32 ) const;
         u32 GetSpeed( void ) const;
-        Surface GetContour( uint8_t colorId ) const;
 
         Unit * GetMirror();
         void SetMirror( Unit * );

@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectscenario.h"
@@ -36,16 +35,18 @@
 #include "kingdom.h"
 #include "maps_fileinfo.h"
 #include "mus.h"
-#include "players.h"
+#include "player_info.h"
 #include "race.h"
 #include "settings.h"
 #include "splitter.h"
 #include "text.h"
+#include "ui_button.h"
+#include "ui_tool.h"
 #include "world.h"
 
 void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw = false );
 void RedrawRatingInfo( TextSprite & );
-void RedrawDifficultyInfo( const Point & dst, bool label = true );
+void RedrawDifficultyInfo( const Point & dst );
 
 int Game::SelectScenario( void )
 {
@@ -72,66 +73,37 @@ int Game::ScenarioInfo( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     Point pointDifficultyInfo, pointOpponentInfo, pointClassInfo;
     Rect rectPanel;
-    Button * buttonSelectMaps = NULL;
-    Button * buttonOk = NULL;
-    Button * buttonCancel = NULL;
 
     // vector coord difficulty
     Rects coordDifficulty;
     coordDifficulty.reserve( 5 );
 
-    const Sprite & ngextra = AGG::GetICN( ICN::NGEXTRA, 62 );
-    Dialog::FrameBorder * frameborder = NULL;
+    const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
 
-    // image background
-    if ( conf.QVGA() ) {
-        frameborder = new Dialog::FrameBorder( Size( 380, 224 ) );
-        rectPanel = frameborder->GetArea();
+    rectPanel = Rect( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+    pointDifficultyInfo = Point( rectPanel.x + 24, rectPanel.y + 93 );
+    pointOpponentInfo = Point( rectPanel.x + 24, rectPanel.y + 202 );
+    pointClassInfo = Point( rectPanel.x + 24, rectPanel.y + 282 );
 
-        pointDifficultyInfo = Point( rectPanel.x + 4, rectPanel.y + 24 );
-        pointOpponentInfo = Point( rectPanel.x + 4, rectPanel.y + 94 );
-        pointClassInfo = Point( rectPanel.x + 4, rectPanel.y + 148 );
+    const uint32_t ngextraWidth = ngextra.width();
+    const uint32_t ngextraHeight = ngextra.height();
+    coordDifficulty.push_back( Rect( rectPanel.x + 21, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
+    coordDifficulty.push_back( Rect( rectPanel.x + 98, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
+    coordDifficulty.push_back( Rect( rectPanel.x + 174, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
+    coordDifficulty.push_back( Rect( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
+    coordDifficulty.push_back( Rect( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
 
-        coordDifficulty.push_back( Rect( rectPanel.x + 1, rectPanel.y + 21, ngextra.w(), ngextra.h() ) );
-        coordDifficulty.push_back( Rect( rectPanel.x + 78, rectPanel.y + 21, ngextra.w(), ngextra.h() ) );
-        coordDifficulty.push_back( Rect( rectPanel.x + 154, rectPanel.y + 21, ngextra.w(), ngextra.h() ) );
-        coordDifficulty.push_back( Rect( rectPanel.x + 231, rectPanel.y + 21, ngextra.w(), ngextra.h() ) );
-        coordDifficulty.push_back( Rect( rectPanel.x + 308, rectPanel.y + 21, ngextra.w(), ngextra.h() ) );
+    fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
+    fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
+    fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::NGEXTRA, 68, 69 );
 
-        buttonOk = new Button( rectPanel.x + rectPanel.w / 2 - 160, rectPanel.y + rectPanel.h - 30, ICN::NGEXTRA, 66, 67 );
-        buttonCancel = new Button( rectPanel.x + rectPanel.w / 2 + 60, rectPanel.y + rectPanel.h - 30, ICN::NGEXTRA, 68, 69 );
-
-        Text text;
-        text.Set( conf.CurrentFileInfo().name, Font::BIG );
-        text.Blit( rectPanel.x + ( rectPanel.w - text.w() ) / 2, rectPanel.y + 5 );
-    }
-    else {
-        AGG::RegisterScalableICN( ICN::HEROES );
-
-        const Sprite & panel = AGG::GetICN( ICN::NGHSBKG, 0 );
-        const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-
-        rectPanel = Rect( 204, 32, panel.w(), panel.h() );
-        pointDifficultyInfo = Point( rectPanel.x + 24, rectPanel.y + 93 );
-        pointOpponentInfo = Point( rectPanel.x + 24, rectPanel.y + 202 );
-        pointClassInfo = Point( rectPanel.x + 24, rectPanel.y + 282 );
-
-        coordDifficulty.push_back( Rect( rectPanel.x + 21, rectPanel.y + 91, ngextra.w(), ngextra.h() ) );
-        coordDifficulty.push_back( Rect( rectPanel.x + 98, rectPanel.y + 91, ngextra.w(), ngextra.h() ) );
-        coordDifficulty.push_back( Rect( rectPanel.x + 174, rectPanel.y + 91, ngextra.w(), ngextra.h() ) );
-        coordDifficulty.push_back( Rect( rectPanel.x + 251, rectPanel.y + 91, ngextra.w(), ngextra.h() ) );
-        coordDifficulty.push_back( Rect( rectPanel.x + 328, rectPanel.y + 91, ngextra.w(), ngextra.h() ) );
-
-        buttonSelectMaps = new Button( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
-        buttonOk = new Button( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
-        buttonCancel = new Button( rectPanel.x + 287, rectPanel.y + 380, ICN::NGEXTRA, 68, 69 );
-
-        back.Blit( Point( 0, 0 ) );
-    }
+    fheroes2::Copy( back, display );
 
     bool resetStartingSettings = conf.MapsFile().empty();
     size_t mapId = 0;
@@ -162,63 +134,59 @@ int Game::ScenarioInfo( void )
     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
     RedrawScenarioStaticInfo( rectPanel, true );
-    RedrawDifficultyInfo( pointDifficultyInfo, !conf.QVGA() );
+    RedrawDifficultyInfo( pointDifficultyInfo );
 
     playersInfo.RedrawInfo();
 
-    TextSprite * rating = conf.QVGA() ? NULL : new TextSprite();
-    if ( rating ) {
-        rating->SetFont( Font::BIG );
-        rating->SetPos( rectPanel.x + 166, rectPanel.y + 383 );
-        RedrawRatingInfo( *rating );
-    }
+    TextSprite rating;
+    rating.SetFont( Font::BIG );
+    rating.SetPos( rectPanel.x + 166, rectPanel.y + 383 );
+    RedrawRatingInfo( rating );
 
-    SpriteMove levelCursor( ngextra );
+    fheroes2::MovableSprite levelCursor( ngextra );
 
     switch ( conf.GameDifficulty() ) {
     case Difficulty::EASY:
-        levelCursor.Move( coordDifficulty[0] );
+        levelCursor.setPosition( coordDifficulty[0].x, coordDifficulty[0].y );
         break;
     case Difficulty::NORMAL:
-        levelCursor.Move( coordDifficulty[1] );
+        levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
         break;
     case Difficulty::HARD:
-        levelCursor.Move( coordDifficulty[2] );
+        levelCursor.setPosition( coordDifficulty[2].x, coordDifficulty[2].y );
         break;
     case Difficulty::EXPERT:
-        levelCursor.Move( coordDifficulty[3] );
+        levelCursor.setPosition( coordDifficulty[3].x, coordDifficulty[3].y );
         break;
     case Difficulty::IMPOSSIBLE:
-        levelCursor.Move( coordDifficulty[4] );
+        levelCursor.setPosition( coordDifficulty[4].x, coordDifficulty[4].y );
         break;
     }
+    levelCursor.redraw();
 
-    if ( buttonSelectMaps )
-        buttonSelectMaps->Draw();
-    buttonOk->Draw();
-    buttonCancel->Draw();
+    buttonSelectMaps.draw();
+    buttonOk.draw();
+    buttonCancel.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( 1 ) {
         if ( !le.HandleEvents( true, true ) ) {
             if ( Interface::Basic::EventExit() == QUITGAME ) {
                 if ( conf.ExtGameUseFade() )
-                    display.Fade();
+                    fheroes2::FadeDisplay();
                 return QUITGAME;
             }
         }
 
         // press button
-        if ( buttonSelectMaps )
-            le.MousePressLeft( *buttonSelectMaps ) ? buttonSelectMaps->PressDraw() : buttonSelectMaps->ReleaseDraw();
-        le.MousePressLeft( *buttonOk ) ? buttonOk->PressDraw() : buttonOk->ReleaseDraw();
-        le.MousePressLeft( *buttonCancel ) ? buttonCancel->PressDraw() : buttonCancel->ReleaseDraw();
+        le.MousePressLeft( buttonSelectMaps.area() ) ? buttonSelectMaps.drawOnPress() : buttonSelectMaps.drawOnRelease();
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         // click select
-        if ( buttonSelectMaps && ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( *buttonSelectMaps ) ) ) {
-            levelCursor.Hide();
+        if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, mapId );
             if ( fi ) {
                 conf.SetCurrentFileInfo( *fi );
@@ -226,28 +194,26 @@ int Game::ScenarioInfo( void )
 
                 cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
-                RedrawDifficultyInfo( pointDifficultyInfo, !conf.QVGA() );
+                RedrawDifficultyInfo( pointDifficultyInfo );
                 playersInfo.RedrawInfo();
-                if ( rating )
-                    RedrawRatingInfo( *rating );
-                // default difficulty normal
-                levelCursor.Move( coordDifficulty[1] );
+                RedrawRatingInfo( rating );
+                levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
                 conf.SetGameDifficulty( Difficulty::NORMAL );
-                buttonOk->Draw();
-                buttonCancel->Draw();
+                buttonOk.draw();
+                buttonCancel.draw();
             }
             cursor.Show();
-            display.Flip();
+            display.render();
         }
         else
             // click cancel
-            if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( *buttonCancel ) ) {
+            if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             result = MAINMENU;
             break;
         }
         else
             // click ok
-            if ( HotKeyPressEvent( EVENT_DEFAULT_READY ) || le.MouseClickLeft( *buttonOk ) ) {
+            if ( HotKeyPressEvent( EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
             DEBUG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( conf.GameDifficulty() ) );
             result = STARTGAME;
             break;
@@ -258,46 +224,45 @@ int Game::ScenarioInfo( void )
             // select difficulty
             if ( 0 <= index ) {
                 cursor.Hide();
-                levelCursor.Move( coordDifficulty[index] );
+                levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
+                levelCursor.redraw();
                 conf.SetGameDifficulty( index );
-                if ( rating )
-                    RedrawRatingInfo( *rating );
+                RedrawRatingInfo( rating );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
             else
                 // playersInfo
                 if ( playersInfo.QueueEventProcessing() ) {
                 cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
-                levelCursor.Redraw();
-                RedrawDifficultyInfo( pointDifficultyInfo, !conf.QVGA() );
+                levelCursor.redraw();
+                RedrawDifficultyInfo( pointDifficultyInfo );
 
                 playersInfo.RedrawInfo();
-                if ( rating )
-                    RedrawRatingInfo( *rating );
-                buttonOk->Draw();
-                buttonCancel->Draw();
+                RedrawRatingInfo( rating );
+                buttonOk.draw();
+                buttonCancel.draw();
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
         if ( le.MousePressRight( rectPanel ) ) {
-            if ( buttonSelectMaps && le.MousePressRight( *buttonSelectMaps ) )
+            if ( le.MousePressRight( buttonSelectMaps.area() ) )
                 Dialog::Message( _( "Scenario" ), _( "Click here to select which scenario to play." ), Font::BIG );
             else if ( 0 <= coordDifficulty.GetIndex( le.GetMouseCursor() ) )
                 Dialog::Message(
                     _( "Game Difficulty" ),
                     _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
                     Font::BIG );
-            else if ( rating && le.MousePressRight( rating->GetRect() ) )
+            else if ( le.MousePressRight( rating.GetRect() ) )
                 Dialog::Message( _( "Difficulty Rating" ),
                                  _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
                                  Font::BIG );
-            else if ( le.MousePressRight( *buttonOk ) )
+            else if ( le.MousePressRight( buttonOk.area() ) )
                 Dialog::Message( _( "OK" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
-            else if ( le.MousePressRight( *buttonCancel ) )
+            else if ( le.MousePressRight( buttonCancel.area() ) )
                 Dialog::Message( _( "Cancel" ), _( "Click to return to the main menu." ), Font::BIG );
             else
                 playersInfo.QueueEventProcessing();
@@ -309,7 +274,7 @@ int Game::ScenarioInfo( void )
     if ( result == STARTGAME ) {
         players.SetStartGame();
         if ( conf.ExtGameUseFade() )
-            display.Fade();
+            fheroes2::FadeDisplay();
         Game::ShowLoadMapsText();
         // Load maps
         std::string lower = StringLower( conf.MapsFile() );
@@ -317,10 +282,18 @@ int Game::ScenarioInfo( void )
         if ( lower.size() > 3 ) {
             std::string ext = lower.substr( lower.size() - 3 );
 
-            if ( ext == "mp2" || ext == "mx2" )
+            if ( ext == "mp2" || ext == "mx2" ) {
                 result = world.LoadMapMP2( conf.MapsFile() ) ? STARTGAME : MAINMENU;
-            else if ( ext == "map" )
+            }
+            else if ( ext == "map" ) {
                 result = world.LoadMapMAP( conf.MapsFile() ) ? STARTGAME : MAINMENU;
+            }
+            else {
+                result = MAINMENU;
+                DEBUG( DBG_GAME, DBG_WARN,
+                       conf.MapsFile() << ", "
+                                       << "unknown map format" );
+            }
         }
         else {
             result = MAINMENU;
@@ -329,15 +302,6 @@ int Game::ScenarioInfo( void )
                                    << "unknown map format" );
         }
     }
-
-    if ( frameborder )
-        delete frameborder;
-    if ( rating )
-        delete rating;
-    if ( buttonSelectMaps )
-        delete buttonSelectMaps;
-    delete buttonOk;
-    delete buttonCancel;
 
     return result;
 }
@@ -350,60 +314,49 @@ u32 Game::GetStep4Player( u32 current, u32 width, u32 count )
 void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
 {
     Settings & conf = Settings::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( conf.QVGA() ) {
-        const Sprite & background = AGG::GetICN( ICN::STONEBAK, 0 );
-        background.Blit( Rect( 0, 0, rt.w, rt.h ), rt );
-
-        Text text;
-        text.Set( conf.CurrentFileInfo().name, Font::BIG );
-        text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 5 );
+    if ( firstDraw ) {
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGHSBKG, 1 ), display, rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
     }
-    else {
-        if ( firstDraw ) {
-            const Sprite & panelShadow = AGG::GetICN( ICN::NGHSBKG, 1 );
-            panelShadow.Blit( rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
-        }
 
-        // image panel
-        const Sprite & panel = AGG::GetICN( ICN::NGHSBKG, 0 );
-        panel.Blit( rt );
+    // image panel
+    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
+    fheroes2::Blit( panel, display, rt.x, rt.y );
 
-        // text scenario
-        Text text( _( "Scenario:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 20 );
+    // text scenario
+    Text text( _( "Scenario:" ), Font::BIG );
+    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 20 );
 
-        // maps name
-        text.Set( conf.MapsName() );
-        text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 46 );
+    // maps name
+    text.Set( conf.MapsName() );
+    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 46 );
 
-        // text game difficulty
-        text.Set( _( "Game Difficulty:" ) );
-        text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 75 );
+    // text game difficulty
+    text.Set( _( "Game Difficulty:" ) );
+    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 75 );
 
-        // text opponents
-        text.Set( _( "Opponents:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 181 );
+    // text opponents
+    text.Set( _( "Opponents:" ), Font::BIG );
+    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 181 );
 
-        // text class
-        text.Set( _( "Class:" ), Font::BIG );
-        text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 262 );
-    }
+    // text class
+    text.Set( _( "Class:" ), Font::BIG );
+    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 262 );
 }
 
-void RedrawDifficultyInfo( const Point & dst, bool label )
+void RedrawDifficultyInfo( const Point & dst )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
-        const Sprite & sprite = AGG::GetICN( ICN::NGHSBKG, 0 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
         Rect src_rt( 24, 94, 65, 65 );
         u32 offset = current * ( src_rt.w + 12 );
         src_rt.x = src_rt.x + offset;
-        sprite.Blit( src_rt, dst.x + offset, dst.y );
+        fheroes2::Blit( sprite, src_rt.x, src_rt.y, display, dst.x + offset, dst.y, src_rt.w, src_rt.h );
 
-        if ( label ) {
-            Text text( Difficulty::String( current ), Font::SMALL );
-            text.Blit( dst.x + offset + ( src_rt.w - text.w() ) / 2, dst.y + src_rt.h + 5 );
-        }
+        Text text( Difficulty::String( current ), Font::SMALL );
+        text.Blit( dst.x + offset + ( src_rt.w - text.w() ) / 2, dst.y + src_rt.h + 5 );
     }
 }
 

@@ -22,7 +22,6 @@
 
 #include "dialog_selectscenario.h"
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -31,22 +30,25 @@
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
+#include "ui_button.h"
 
 void LossConditionInfo( const Maps::FileInfo & );
 void VictoryConditionInfo( const Maps::FileInfo & );
 
-Surface GetNonStandardSizeIcon( void )
+fheroes2::Image GetNonStandardSizeIcon( void )
 {
-    Surface res( Size( 17, 17 ), false );
-    res.Fill( ColorBlack );
-    res.FillRect( Rect( 1, 1, 15, 15 ), RGBA( 0x8D, 0x73, 0xFF ) );
+    fheroes2::Image icon( 17, 17 );
+    icon.reset();
+    fheroes2::Fill( icon, 1, 1, 15, 15, fheroes2::GetColorId( 0x8D, 0x73, 0xFF ) );
     Text text( "N", Font::SMALL );
-    text.Blit( ( res.w() - text.w() ) / 2, ( res.h() - text.h() ) / 2, res );
-    return res;
+    text.Blit( ( 17 - text.w() ) / 2, ( 17 - text.h() ) / 2, icon );
+    return icon;
 }
 
 void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     Text text;
     int index = 19 + Color::Count( info.kingdom_colors );
 
@@ -55,11 +57,11 @@ void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
         dsty = dsty + 2;
     }
 
-    const Sprite & spriteCount = AGG::GetICN( ICN::REQUESTS, index );
-    spriteCount.Blit( dstx, dsty );
+    const fheroes2::Sprite & spriteCount = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
+    fheroes2::Blit( spriteCount, display, dstx, dsty );
 
     if ( info.size_w != info.size_h || info.size_w < Maps::SMALL || info.size_w > Maps::XLARGE ) {
-        GetNonStandardSizeIcon().Blit( dstx + spriteCount.w() + 2, dsty, Display::Get() );
+        fheroes2::Blit( GetNonStandardSizeIcon(), display, dstx + spriteCount.width() + 2, dsty );
     }
     else {
         switch ( info.size_w ) {
@@ -79,20 +81,20 @@ void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
             break;
         }
 
-        const Sprite & spriteSize = AGG::GetICN( ICN::REQUESTS, index );
-        spriteSize.Blit( dstx + spriteCount.w() + 2, dsty );
+        const fheroes2::Sprite & spriteSize = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
+        fheroes2::Blit( spriteSize, display, dstx + spriteCount.width() + 2, dsty );
     }
 
     text.Set( info.name, ( current ? Font::YELLOW_BIG : Font::BIG ) );
     text.Blit( dstx + 54, dsty + 2 );
 
     index = 30 + info.conditions_wins;
-    const Sprite & spriteWins = AGG::GetICN( ICN::REQUESTS, index );
-    spriteWins.Blit( dstx + 224, dsty );
+    const fheroes2::Sprite & spriteWins = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
+    fheroes2::Blit( spriteWins, display, dstx + 224, dsty );
 
     index = 36 + info.conditions_loss;
-    const Sprite & spriteLoss = AGG::GetICN( ICN::REQUESTS, index );
-    spriteLoss.Blit( dstx + 224 + spriteWins.w() + 2, dsty );
+    const fheroes2::Sprite & spriteLoss = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
+    fheroes2::Blit( spriteLoss, display, dstx + 224 + spriteWins.width() + 2, dsty );
 }
 
 void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
@@ -102,63 +104,57 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
 
 void ScenarioListBox::RedrawBackground( const Point & dst )
 {
-    if ( Settings::Get().QVGA() ) {
-        AGG::GetICN( ICN::STONEBAK, 0 ).Blit( Rect( 17, 37, 266, 156 ), dst.x + 15, dst.y + 35 );
-        AGG::GetICN( ICN::REQSBKG, 0 ).Blit( Rect( 325, 70, 16, 100 ), dst.x + 283, dst.y + 55 );
-        AGG::GetICN( ICN::REQSBKG, 0 ).Blit( Rect( 325, 167, 16, 50 ), dst.x + 283, dst.y + 125 );
-    }
-    else {
-        AGG::GetICN( ICN::REQSBKG, 0 ).Blit( dst );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQSBKG, 0 ), display, dst.x, dst.y );
 
-        if ( isSelected() ) {
-            Text text;
-            const Maps::FileInfo & info = GetCurrent();
-            int index = 19 + Color::Count( info.kingdom_colors );
+    if ( isSelected() ) {
+        Text text;
+        const Maps::FileInfo & info = GetCurrent();
+        int index = 19 + Color::Count( info.kingdom_colors );
 
-            const Sprite & spriteCount = AGG::GetICN( ICN::REQUESTS, index );
-            spriteCount.Blit( dst.x + 65, dst.y + 265 );
+        const fheroes2::Sprite & spriteCount = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
+        fheroes2::Blit( spriteCount, display, dst.x + 65, dst.y + 265 );
 
-            switch ( info.size_w ) {
-            case Maps::SMALL:
-                index = 26;
-                break;
-            case Maps::MEDIUM:
-                index = 27;
-                break;
-            case Maps::LARGE:
-                index = 28;
-                break;
-            case Maps::XLARGE:
-                index = 29;
-                break;
-            default:
-                index = 30;
-                break;
-            }
-
-            const Sprite & spriteSize = AGG::GetICN( ICN::REQUESTS, index );
-            spriteSize.Blit( dst.x + 65 + spriteCount.w() + 2, dst.y + 265 );
-
-            text.Set( info.name, Font::BIG );
-            text.Blit( dst.x + 190 - text.w() / 2, dst.y + 265 );
-
-            index = 30 + info.conditions_wins;
-            const Sprite & spriteWins = AGG::GetICN( ICN::REQUESTS, index );
-            spriteWins.Blit( dst.x + 275, dst.y + 265 );
-
-            index = 36 + info.conditions_loss;
-            const Sprite & spriteLoss = AGG::GetICN( ICN::REQUESTS, index );
-            spriteLoss.Blit( dst.x + 275 + spriteWins.w() + 2, dst.y + 265 );
-
-            text.Set( _( "Maps Difficulty:" ), Font::BIG );
-            text.Blit( dst.x + 70, dst.y + 290 );
-
-            text.Set( Difficulty::String( info.difficulty ) );
-            text.Blit( dst.x + 275 - text.w() / 2, dst.y + 290 );
-
-            TextBox box( info.description, Font::BIG, 290 );
-            box.Blit( dst.x + 45, dst.y + 320 );
+        switch ( info.size_w ) {
+        case Maps::SMALL:
+            index = 26;
+            break;
+        case Maps::MEDIUM:
+            index = 27;
+            break;
+        case Maps::LARGE:
+            index = 28;
+            break;
+        case Maps::XLARGE:
+            index = 29;
+            break;
+        default:
+            index = 30;
+            break;
         }
+
+        const fheroes2::Sprite & spriteSize = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
+        fheroes2::Blit( spriteSize, display, dst.x + 65 + spriteCount.width() + 2, dst.y + 265 );
+
+        text.Set( info.name, Font::BIG );
+        text.Blit( dst.x + 190 - text.w() / 2, dst.y + 265 );
+
+        index = 30 + info.conditions_wins;
+        const fheroes2::Sprite & spriteWins = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
+        fheroes2::Blit( spriteWins, display, dst.x + 275, dst.y + 265 );
+
+        index = 36 + info.conditions_loss;
+        const fheroes2::Sprite & spriteLoss = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
+        fheroes2::Blit( spriteLoss, display, dst.x + 275 + spriteWins.width() + 2, dst.y + 265 );
+
+        text.Set( _( "Map difficulty:" ), Font::BIG );
+        text.Blit( dst.x + 210 - text.w(), dst.y + 290 );
+
+        text.Set( Difficulty::String( info.difficulty ) );
+        text.Blit( dst.x + 275 - text.w() / 2, dst.y + 290 );
+
+        TextBox box( info.description, Font::BIG, 290 );
+        box.Blit( dst.x + 45, dst.y + 320 );
     }
 }
 
@@ -170,8 +166,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     if ( selectedId >= all.size() )
         selectedId = 0;
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
     cursor.Hide();
@@ -207,9 +203,13 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         }
     }
 
-    const Sprite & panel = AGG::GetICN( ICN::REQSBKG, 0 );
-    SpriteBack back( Rect( ( display.w() - panel.w() ) / 2, ( display.h() - panel.h() ) / 2, panel.w(), panel.h() ) );
-    const Rect & rt = back.GetArea();
+    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
+    Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+
+    fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.w + SHADOWWIDTH, rt.h + SHADOWWIDTH );
+
+    const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
+    fheroes2::Blit( shadow, display, rt.x - SHADOWWIDTH, rt.y + SHADOWWIDTH );
 
     const Rect countPlayers( rt.x + 45, rt.y + 55, 20, 175 );
     const Rect sizeMaps( rt.x + 62, rt.y + 55, 20, 175 );
@@ -224,57 +224,58 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     const Rect curDifficulty( rt.x + 220, rt.y + 292, 114, 20 );
     const Rect curDescription( rt.x + 42, rt.y + 316, 292, 90 );
 
-    Button buttonOk( rt.x + 140, rt.y + 410, ICN::REQUESTS, 1, 2 );
+    fheroes2::Button buttonOk( rt.x + 140, rt.y + 410, ICN::REQUESTS, 1, 2 );
 
-    Button buttonSelectSmall( rt.x + 37, rt.y + 22, ICN::REQUESTS, 9, 10 );
-    Button buttonSelectMedium( rt.x + 99, rt.y + 22, ICN::REQUESTS, 11, 12 );
-    Button buttonSelectLarge( rt.x + 161, rt.y + 22, ICN::REQUESTS, 13, 14 );
-    Button buttonSelectXLarge( rt.x + 223, rt.y + 22, ICN::REQUESTS, 15, 16 );
-    Button buttonSelectAll( rt.x + 285, rt.y + 22, ICN::REQUESTS, 17, 18 );
+    fheroes2::Button buttonSelectSmall( rt.x + 37, rt.y + 22, ICN::REQUESTS, 9, 10 );
+    fheroes2::Button buttonSelectMedium( rt.x + 99, rt.y + 22, ICN::REQUESTS, 11, 12 );
+    fheroes2::Button buttonSelectLarge( rt.x + 161, rt.y + 22, ICN::REQUESTS, 13, 14 );
+    fheroes2::Button buttonSelectXLarge( rt.x + 223, rt.y + 22, ICN::REQUESTS, 15, 16 );
+    fheroes2::Button buttonSelectAll( rt.x + 285, rt.y + 22, ICN::REQUESTS, 17, 18 );
 
     if ( small.empty() )
-        buttonSelectSmall.SetDisable( true );
+        buttonSelectSmall.disable();
     if ( medium.empty() )
-        buttonSelectMedium.SetDisable( true );
+        buttonSelectMedium.disable();
     if ( large.empty() )
-        buttonSelectLarge.SetDisable( true );
+        buttonSelectLarge.disable();
     if ( xlarge.empty() )
-        buttonSelectXLarge.SetDisable( true );
+        buttonSelectXLarge.disable();
 
     ScenarioListBox listbox( rt );
 
     listbox.RedrawBackground( rt );
-    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, Point( rt.x + 327, rt.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, Point( rt.x + 327, rt.y + 217 ) );
-    listbox.SetScrollSplitter( AGG::GetICN( ICN::ESCROLL, 3 ), Rect( rt.x + 328, rt.y + 73, 12, 141 ) );
+    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
+    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 217 ) );
+    // FIXME: update Listbox
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), Rect( rt.x + 328, rt.y + 73, 12, 141 ) );
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
     listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
     listbox.SetCurrent( selectedId );
     listbox.Redraw();
 
-    buttonOk.Draw();
-    buttonSelectSmall.Draw();
-    buttonSelectMedium.Draw();
-    buttonSelectLarge.Draw();
-    buttonSelectXLarge.Draw();
-    buttonSelectAll.Draw();
+    buttonOk.draw();
+    buttonSelectSmall.draw();
+    buttonSelectMedium.draw();
+    buttonSelectLarge.draw();
+    buttonSelectXLarge.draw();
+    buttonSelectAll.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() ) {
-        if ( buttonOk.isEnable() )
-            le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
-        le.MousePressLeft( buttonSelectSmall ) && buttonSelectSmall.isEnable() ? buttonSelectSmall.PressDraw() : buttonSelectSmall.ReleaseDraw();
-        le.MousePressLeft( buttonSelectMedium ) && buttonSelectMedium.isEnable() ? buttonSelectMedium.PressDraw() : buttonSelectMedium.ReleaseDraw();
-        le.MousePressLeft( buttonSelectLarge ) && buttonSelectLarge.isEnable() ? buttonSelectLarge.PressDraw() : buttonSelectLarge.ReleaseDraw();
-        le.MousePressLeft( buttonSelectXLarge ) && buttonSelectXLarge.isEnable() ? buttonSelectXLarge.PressDraw() : buttonSelectXLarge.ReleaseDraw();
-        le.MousePressLeft( buttonSelectAll ) ? buttonSelectAll.PressDraw() : buttonSelectAll.ReleaseDraw();
+        if ( buttonOk.isEnabled() )
+            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonSelectSmall.area() ) && buttonSelectSmall.isEnabled() ? buttonSelectSmall.drawOnPress() : buttonSelectSmall.drawOnRelease();
+        le.MousePressLeft( buttonSelectMedium.area() ) && buttonSelectMedium.isEnabled() ? buttonSelectMedium.drawOnPress() : buttonSelectMedium.drawOnRelease();
+        le.MousePressLeft( buttonSelectLarge.area() ) && buttonSelectLarge.isEnabled() ? buttonSelectLarge.drawOnPress() : buttonSelectLarge.drawOnRelease();
+        le.MousePressLeft( buttonSelectXLarge.area() ) && buttonSelectXLarge.isEnabled() ? buttonSelectXLarge.drawOnPress() : buttonSelectXLarge.drawOnRelease();
+        le.MousePressLeft( buttonSelectAll.area() ) ? buttonSelectAll.drawOnPress() : buttonSelectAll.drawOnRelease();
 
         listbox.QueueEventProcessing();
 
-        if ( ( buttonOk.isEnable() && le.MouseClickLeft( buttonOk ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.selectOk ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
             result = it != all.end() ? &( *it ) : NULL;
             break;
@@ -283,37 +284,37 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             result = NULL;
             break;
         }
-        else if ( ( le.MouseClickLeft( buttonSelectSmall ) || le.KeyPress( KEY_s ) ) && buttonSelectSmall.isEnable() ) {
+        else if ( ( le.MouseClickLeft( buttonSelectSmall.area() ) || le.KeyPress( KEY_s ) ) && buttonSelectSmall.isEnabled() ) {
             listbox.SetListContent( small );
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectMedium ) || le.KeyPress( KEY_m ) ) && buttonSelectMedium.isEnable() ) {
+        else if ( ( le.MouseClickLeft( buttonSelectMedium.area() ) || le.KeyPress( KEY_m ) ) && buttonSelectMedium.isEnabled() ) {
             listbox.SetListContent( medium );
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectLarge ) || le.KeyPress( KEY_l ) ) && buttonSelectLarge.isEnable() ) {
+        else if ( ( le.MouseClickLeft( buttonSelectLarge.area() ) || le.KeyPress( KEY_l ) ) && buttonSelectLarge.isEnabled() ) {
             listbox.SetListContent( large );
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectXLarge ) || le.KeyPress( KEY_x ) ) && buttonSelectXLarge.isEnable() ) {
+        else if ( ( le.MouseClickLeft( buttonSelectXLarge.area() ) || le.KeyPress( KEY_x ) ) && buttonSelectXLarge.isEnabled() ) {
             listbox.SetListContent( xlarge );
             cursor.Hide();
         }
-        else if ( le.MouseClickLeft( buttonSelectAll ) || le.KeyPress( KEY_a ) ) {
+        else if ( le.MouseClickLeft( buttonSelectAll.area() ) || le.KeyPress( KEY_a ) ) {
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
             cursor.Hide();
         }
 
         // right info
-        if ( le.MousePressRight( buttonSelectSmall ) )
+        if ( le.MousePressRight( buttonSelectSmall.area() ) )
             Dialog::Message( _( "Small Maps" ), _( "View only maps of size small (36x36)." ), Font::BIG );
-        else if ( le.MousePressRight( buttonSelectMedium ) )
+        else if ( le.MousePressRight( buttonSelectMedium.area() ) )
             Dialog::Message( _( "Medium Maps" ), _( "View only maps of size medium (72x72)." ), Font::BIG );
-        else if ( le.MousePressRight( buttonSelectLarge ) )
+        else if ( le.MousePressRight( buttonSelectLarge.area() ) )
             Dialog::Message( _( "Large Maps" ), _( "View only maps of size large (108x108)." ), Font::BIG );
-        else if ( le.MousePressRight( buttonSelectXLarge ) )
+        else if ( le.MousePressRight( buttonSelectXLarge.area() ) )
             Dialog::Message( _( "Extra Large Maps" ), _( "View only maps of size extra large (144x144)." ), Font::BIG );
-        else if ( le.MousePressRight( buttonSelectAll ) )
+        else if ( le.MousePressRight( buttonSelectAll.area() ) )
             Dialog::Message( _( "All Maps" ), _( "View all maps, regardless of size." ), Font::BIG );
         else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) )
             Dialog::Message( _( "Players Icon" ),
@@ -345,24 +346,23 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 Font::BIG );
         else if ( le.MousePressRight( curDescription ) )
             Dialog::Message( _( "Selected Description" ), _( "The description of the currently selected map." ), Font::BIG );
-        else if ( le.MousePressRight( buttonOk ) )
+        else if ( le.MousePressRight( buttonOk.area() ) )
             Dialog::Message( _( "OK" ), _( "Accept the choice made." ), Font::BIG );
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
-            buttonOk.Draw();
-            buttonSelectSmall.Draw();
-            buttonSelectMedium.Draw();
-            buttonSelectLarge.Draw();
-            buttonSelectXLarge.Draw();
-            buttonSelectAll.Draw();
+            buttonOk.draw();
+            buttonSelectSmall.draw();
+            buttonSelectMedium.draw();
+            buttonSelectLarge.draw();
+            buttonSelectXLarge.draw();
+            buttonSelectAll.draw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
     cursor.Hide();
-    back.Restore();
 
     return result;
 }

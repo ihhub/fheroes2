@@ -22,6 +22,7 @@
 
 #include "resource.h"
 #include "agg.h"
+#include "image.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "settings.h"
@@ -531,16 +532,15 @@ void Resource::BoxSprite::SetPos( s32 px, s32 py )
     y = py;
 }
 
-void RedrawResourceSprite( const Surface & sf, const Point & pos, u32 count, u32 width, u32 offset, s32 value )
+void RedrawResourceSprite( const fheroes2::Image & sf, const Point & pos, u32 count, u32 width, u32 offset, s32 value )
 {
-    Display & display = Display::Get();
     Point dst_pt;
     Text text;
 
     dst_pt.x = pos.x + width / 2 + count * width;
     dst_pt.y = pos.y + offset;
 
-    sf.Blit( dst_pt.x - sf.w() / 2, dst_pt.y - sf.h(), display );
+    fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
 
     text.Set( GetString( value ), Font::SMALL );
     text.Blit( dst_pt.x - text.w() / 2, dst_pt.y + 2 );
@@ -558,19 +558,19 @@ void Resource::BoxSprite::Redraw( void ) const
     u32 offset = 35;
 
     if ( rs.wood ) {
-        const Sprite & sprite = AGG::GetICN( ICN::RESOURCE, 0 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
         RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.wood );
         ++count;
     }
 
     if ( rs.ore ) {
-        const Sprite & sprite = AGG::GetICN( ICN::RESOURCE, 2 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 2 );
         RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.ore );
         ++count;
     }
 
     if ( rs.mercury ) {
-        const Sprite & sprite = AGG::GetICN( ICN::RESOURCE, 1 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
         RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.mercury );
         ++count;
     }
@@ -581,7 +581,7 @@ void Resource::BoxSprite::Redraw( void ) const
     }
 
     if ( rs.sulfur ) {
-        const Sprite & sprite = AGG::GetICN( ICN::RESOURCE, 3 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 3 );
         RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.sulfur );
         ++count;
     }
@@ -591,7 +591,7 @@ void Resource::BoxSprite::Redraw( void ) const
         offset += 45;
     }
     if ( rs.crystal ) {
-        const Sprite & sprite = AGG::GetICN( ICN::RESOURCE, 4 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 4 );
         RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.crystal );
         ++count;
     }
@@ -601,7 +601,7 @@ void Resource::BoxSprite::Redraw( void ) const
         offset += 45;
     }
     if ( rs.gems ) {
-        const Sprite & sprite = AGG::GetICN( ICN::RESOURCE, 5 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 5 );
         RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.gems );
         ++count;
     }
@@ -611,7 +611,7 @@ void Resource::BoxSprite::Redraw( void ) const
         offset += 45;
     }
     if ( rs.gold ) {
-        const Sprite & sprite = AGG::GetICN( ICN::RESOURCE, 6 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
         if ( !count )
             width = w;
         RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.gold );

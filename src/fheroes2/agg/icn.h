@@ -899,13 +899,15 @@ namespace ICN
         YELLOW_SMALFONT,
         BATTLESKIP,
         BATTLEWAIT,
-        BATTLEAUTO,
-        BATTLESETS,
+        BATTLEAUTO, // not in use anymore
+        BATTLESETS, // not in use anymore
         BUYMAX,
         BTNCONFIG,
         BTNBATTLEONLY,
-        BOAT12,
-        BTNGIFT,
+        BOAT12, // not in use anymore
+        BTNGIFT, // not in use anymore
+        BTNGIFT_GOOD,
+        BTNGIFT_EVIL,
         BTNMIN,
         CSLMARKER,
 
@@ -918,10 +920,8 @@ namespace ICN
     const char * GetString( int );
     int FromString( const char * );
     u32 AnimationFrame( int icn, u32, u32, bool = false );
-    bool NeedMinify4PocketPC( int icn, u32 );
     bool HighlyObjectSprite( int icn, u32 );
     int PORTxxxx( int heroId );
-    u32 GetMissIndex( int icn, s32, s32 );
 
     bool isBattleMonsterICN( int );
     bool SkipLocalAlpha( int );

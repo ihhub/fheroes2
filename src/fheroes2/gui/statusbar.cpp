@@ -22,7 +22,7 @@
 
 #include "statusbar.h"
 #include "cursor.h"
-#include "display.h"
+#include "screen.h"
 
 StatusBar::StatusBar() {}
 
@@ -45,7 +45,7 @@ void StatusBar::ShowMessage( const std::string & msg )
         SetPos( center.x - w() / 2, center.y - h() / 2 );
         Show();
         Cursor::Get().Show();
-        Display::Get().Flip();
+        fheroes2::Display::instance().render();
         prev = msg;
     }
 }

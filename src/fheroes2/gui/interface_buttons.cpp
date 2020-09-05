@@ -50,31 +50,47 @@ void Interface::ButtonsArea::SetPos( s32 ox, s32 oy )
 
     const int icnbtn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
-    buttonNextHero.SetSprite( icnbtn, 0, 1 );
-    buttonMovement.SetSprite( icnbtn, 2, 3 );
-    buttonKingdom.SetSprite( icnbtn, 4, 5 );
-    buttonSpell.SetSprite( icnbtn, 6, 7 );
-    buttonEndTur.SetSprite( icnbtn, 8, 9 );
-    buttonAdventure.SetSprite( icnbtn, 10, 11 );
-    buttonFile.SetSprite( icnbtn, 12, 13 );
-    buttonSystem.SetSprite( icnbtn, 14, 15 );
+    buttonNextHero.setICNInfo( icnbtn, 0, 1 );
+    buttonMovement.setICNInfo( icnbtn, 2, 3 );
+    buttonKingdom.setICNInfo( icnbtn, 4, 5 );
+    buttonSpell.setICNInfo( icnbtn, 6, 7 );
+    buttonEndTurn.setICNInfo( icnbtn, 8, 9 );
+    buttonAdventure.setICNInfo( icnbtn, 10, 11 );
+    buttonFile.setICNInfo( icnbtn, 12, 13 );
+    buttonSystem.setICNInfo( icnbtn, 14, 15 );
 
     SetButtonStatus();
 
     ox = GetArea().x;
     oy = GetArea().y;
 
-    buttonNextHero.SetPos( ox, oy );
-    buttonMovement.SetPos( buttonNextHero.x + buttonNextHero.w, oy );
-    buttonKingdom.SetPos( buttonMovement.x + buttonMovement.w, oy );
-    buttonSpell.SetPos( buttonKingdom.x + buttonKingdom.w, oy );
+    // Top row
+    buttonNextHero.setPosition( ox, oy );
+    nextHeroRect = buttonNextHero.area();
 
-    oy = buttonNextHero.y + buttonNextHero.h;
+    buttonMovement.setPosition( nextHeroRect.x + nextHeroRect.w, oy );
+    movementRect = buttonMovement.area();
 
-    buttonEndTur.SetPos( ox, oy );
-    buttonAdventure.SetPos( buttonEndTur.x + buttonEndTur.w, oy );
-    buttonFile.SetPos( buttonAdventure.x + buttonAdventure.w, oy );
-    buttonSystem.SetPos( buttonFile.x + buttonFile.w, oy );
+    buttonKingdom.setPosition( movementRect.x + movementRect.w, oy );
+    kingdomRect = buttonKingdom.area();
+
+    buttonSpell.setPosition( kingdomRect.x + kingdomRect.w, oy );
+    spellRect = buttonSpell.area();
+
+    // Bottom row
+    oy = nextHeroRect.y + nextHeroRect.h;
+
+    buttonEndTurn.setPosition( ox, oy );
+    endTurnRect = buttonEndTurn.area();
+
+    buttonAdventure.setPosition( endTurnRect.x + endTurnRect.w, oy );
+    adventureRect = buttonAdventure.area();
+
+    buttonFile.setPosition( adventureRect.x + adventureRect.w, oy );
+    fileRect = buttonFile.area();
+
+    buttonSystem.setPosition( fileRect.x + fileRect.w, oy );
+    systemRect = buttonSystem.area();
 }
 
 void Interface::ButtonsArea::Redraw( void )
@@ -82,30 +98,19 @@ void Interface::ButtonsArea::Redraw( void )
     const Settings & conf = Settings::Get();
 
     if ( !conf.ExtGameHideInterface() || conf.ShowButtons() ) {
-        const int icnbtn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
-
         if ( conf.ExtGameHideInterface() )
             BorderWindow::Redraw();
 
-        buttonNextHero.SetSprite( icnbtn, 0, 1 );
-        buttonMovement.SetSprite( icnbtn, 2, 3 );
-        buttonKingdom.SetSprite( icnbtn, 4, 5 );
-        buttonSpell.SetSprite( icnbtn, 6, 7 );
-        buttonEndTur.SetSprite( icnbtn, 8, 9 );
-        buttonAdventure.SetSprite( icnbtn, 10, 11 );
-        buttonFile.SetSprite( icnbtn, 12, 13 );
-        buttonSystem.SetSprite( icnbtn, 14, 15 );
-
         SetButtonStatus();
 
-        buttonNextHero.Draw();
-        buttonMovement.Draw();
-        buttonKingdom.Draw();
-        buttonSpell.Draw();
-        buttonEndTur.Draw();
-        buttonAdventure.Draw();
-        buttonFile.Draw();
-        buttonSystem.Draw();
+        buttonNextHero.draw();
+        buttonMovement.draw();
+        buttonKingdom.draw();
+        buttonSpell.draw();
+        buttonEndTurn.draw();
+        buttonAdventure.draw();
+        buttonFile.draw();
+        buttonSystem.draw();
     }
 }
 
@@ -115,85 +120,61 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
     LocalEvent & le = LocalEvent::Get();
     int res = Game::CANCEL;
 
-    if ( buttonNextHero.isEnable() )
-        le.MousePressLeft( buttonNextHero ) ? buttonNextHero.PressDraw() : buttonNextHero.ReleaseDraw();
-    le.MousePressLeft( buttonMovement ) ? buttonMovement.PressDraw() : buttonMovement.ReleaseDraw();
-    le.MousePressLeft( buttonKingdom ) ? buttonKingdom.PressDraw() : buttonKingdom.ReleaseDraw();
-    if ( buttonSpell.isEnable() )
-        le.MousePressLeft( buttonSpell ) ? buttonSpell.PressDraw() : buttonSpell.ReleaseDraw();
-    le.MousePressLeft( buttonEndTur ) ? buttonEndTur.PressDraw() : buttonEndTur.ReleaseDraw();
-    le.MousePressLeft( buttonAdventure ) ? buttonAdventure.PressDraw() : buttonAdventure.ReleaseDraw();
-    le.MousePressLeft( buttonFile ) ? buttonFile.PressDraw() : buttonFile.ReleaseDraw();
-    le.MousePressLeft( buttonSystem ) ? buttonSystem.PressDraw() : buttonSystem.ReleaseDraw();
+    if ( buttonNextHero.isEnabled() )
+        le.MousePressLeft( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
+    le.MousePressLeft( movementRect ) ? buttonMovement.drawOnPress() : buttonMovement.drawOnRelease();
+    le.MousePressLeft( kingdomRect ) ? buttonKingdom.drawOnPress() : buttonKingdom.drawOnRelease();
+    if ( buttonSpell.isEnabled() )
+        le.MousePressLeft( spellRect ) ? buttonSpell.drawOnPress() : buttonSpell.drawOnRelease();
+    le.MousePressLeft( endTurnRect ) ? buttonEndTurn.drawOnPress() : buttonEndTurn.drawOnRelease();
+    le.MousePressLeft( adventureRect ) ? buttonAdventure.drawOnPress() : buttonAdventure.drawOnRelease();
+    le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
+    le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
     if ( conf.ShowButtons() &&
          // move border window
          BorderWindow::QueueEventProcessing() ) {
     }
-    else if ( buttonNextHero.isEnable() && le.MouseClickLeft( buttonNextHero ) ) {
-        // for QVGA: auto hide buttons after click
-        if ( conf.QVGA() )
-            conf.SetShowButtons( false );
+    else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
         interface.EventNextHero();
     }
-    else if ( le.MouseClickLeft( buttonMovement ) ) {
-        // for QVGA: auto hide buttons after click
-        if ( conf.QVGA() )
-            conf.SetShowButtons( false );
+    else if ( le.MouseClickLeft( movementRect ) ) {
         interface.EventContinueMovement();
     }
-    else if ( le.MouseClickLeft( buttonKingdom ) ) {
-        // for QVGA: auto hide buttons after click
-        if ( conf.QVGA() )
-            conf.SetShowButtons( false );
+    else if ( le.MouseClickLeft( kingdomRect ) ) {
         interface.EventKingdomInfo();
     }
-    else if ( buttonSpell.isEnable() && le.MouseClickLeft( buttonSpell ) ) {
-        // for QVGA: auto hide buttons after click
-        if ( conf.QVGA() )
-            conf.SetShowButtons( false );
+    else if ( buttonSpell.isEnabled() && le.MouseClickLeft( spellRect ) ) {
         interface.EventCastSpell();
     }
-    else if ( le.MouseClickLeft( buttonEndTur ) ) {
-        // for QVGA: auto hide buttons after click
-        if ( conf.QVGA() )
-            conf.SetShowButtons( false );
+    else if ( le.MouseClickLeft( endTurnRect ) ) {
         res = interface.EventEndTurn();
     }
-    else if ( le.MouseClickLeft( buttonAdventure ) ) {
-        // for QVGA: auto hide buttons after click
-        if ( conf.QVGA() )
-            conf.SetShowButtons( false );
+    else if ( le.MouseClickLeft( adventureRect ) ) {
         res = interface.EventAdventureDialog();
     }
-    else if ( le.MouseClickLeft( buttonFile ) ) {
-        // for QVGA: auto hide buttons after click
-        if ( conf.QVGA() )
-            conf.SetShowButtons( false );
+    else if ( le.MouseClickLeft( fileRect ) ) {
         res = interface.EventFileDialog();
     }
-    else if ( le.MouseClickLeft( buttonSystem ) ) {
-        // for QVGA: auto hide buttons after click
-        if ( conf.QVGA() )
-            conf.SetShowButtons( false );
+    else if ( le.MouseClickLeft( systemRect ) ) {
         interface.EventSystemDialog();
     }
 
-    if ( le.MousePressRight( buttonNextHero ) )
+    if ( le.MousePressRight( nextHeroRect ) )
         Dialog::Message( _( "Next Hero" ), _( "Select the next Hero." ), Font::BIG );
-    else if ( le.MousePressRight( buttonMovement ) )
+    else if ( le.MousePressRight( movementRect ) )
         Dialog::Message( _( "Continue Movement" ), _( "Continue the Hero's movement along the current path." ), Font::BIG );
-    else if ( le.MousePressRight( buttonKingdom ) )
+    else if ( le.MousePressRight( kingdomRect ) )
         Dialog::Message( _( "Kingdom Summary" ), _( "View a Summary of your Kingdom." ), Font::BIG );
-    else if ( le.MousePressRight( buttonSpell ) )
+    else if ( le.MousePressRight( spellRect ) )
         Dialog::Message( _( "Cast Spell" ), _( "Cast an adventure spell." ), Font::BIG );
-    else if ( le.MousePressRight( buttonEndTur ) )
+    else if ( le.MousePressRight( endTurnRect ) )
         Dialog::Message( _( "End Turn" ), _( "End your turn and left the computer take its turn." ), Font::BIG );
-    else if ( le.MousePressRight( buttonAdventure ) )
+    else if ( le.MousePressRight( adventureRect ) )
         Dialog::Message( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Font::BIG );
-    else if ( le.MousePressRight( buttonFile ) )
+    else if ( le.MousePressRight( fileRect ) )
         Dialog::Message( _( "File Options" ), _( "Bring up the file options menu, alloving you to load menu, save etc." ), Font::BIG );
-    else if ( le.MousePressRight( buttonSystem ) )
+    else if ( le.MousePressRight( systemRect ) )
         Dialog::Message( _( "System Options" ), _( "Bring up the system options menu, alloving you to customize your game." ), Font::BIG );
 
     return res;
@@ -202,11 +183,18 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
 void Interface::ButtonsArea::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
-    const bool isMovementButtonDisabled = ( currentHero == NULL ) || !currentHero->GetPath().isValid() || !currentHero->MayStillMove();
-    buttonMovement.SetDisable( isMovementButtonDisabled );
-    const bool isSpellButtonDisabled = ( currentHero == NULL ) || !currentHero->HaveSpellBook();
-    buttonSpell.SetDisable( isSpellButtonDisabled );
+    if ( currentHero == NULL || !currentHero->GetPath().isValid() || !currentHero->MayStillMove() )
+        buttonMovement.disable();
+    else
+        buttonMovement.enable();
 
-    const bool isHeroPresent = !World::Get().GetKingdom( Settings::Get().CurrentColor() ).GetHeroes().empty();
-    buttonNextHero.SetDisable( !isHeroPresent );
+    if ( currentHero == NULL || !currentHero->HaveSpellBook() )
+        buttonSpell.disable();
+    else
+        buttonSpell.enable();
+
+    if ( World::Get().GetKingdom( Settings::Get().CurrentColor() ).GetHeroes().empty() )
+        buttonNextHero.disable();
+    else
+        buttonNextHero.enable();
 }

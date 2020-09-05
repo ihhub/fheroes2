@@ -257,7 +257,7 @@ namespace Bin_Info
             moveSpeed = static_cast<uint32_t>( ( 1 - MOVE_SPEED_UPGRADE * speedDiff ) * moveSpeed );
             // Ranger is special since he gets double attack on upgrade
             if ( monsterID == Monster::RANGER ) {
-                shootSpeed *= RANGER_SHOOT_SPEED;
+                shootSpeed = static_cast<uint32_t>( shootSpeed * RANGER_SHOOT_SPEED );
             }
             else {
                 shootSpeed = static_cast<uint32_t>( ( 1 - SHOOT_SPEED_UPGRADE * speedDiff ) * shootSpeed );

@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "army_bar.h"
 #include "army_troop.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -31,6 +30,7 @@
 #include "heroes_indicator.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 #include "world.h"
 
 class ArmyCell : public Rect
@@ -42,37 +42,38 @@ public:
         , select( false )
         , readonly( ro )
     {
-        const Sprite & backSprite = AGG::GetICN( ICN::SWAPWIN, 0 );
-        back = backSprite.GetSurface( Rect( 36, 267, w, h ) );
+        const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        back.resize( w, h );
+        fheroes2::Copy( backSprite, 36, 267, back, 0, 0, w, h );
 
-        curs.Set( w, h - 10, true );
-        curs.DrawBorder( RGBA( 0xc0, 0x2c, 0 ) );
+        curs.resize( w, h - 10 );
+        curs.reset();
+        fheroes2::DrawBorder( curs, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
     }
 
     void Redraw( void )
     {
-        Display & display = Display::Get();
-
-        back.Blit( *this, display );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Blit( back, display, x, y );
         if ( troop.isValid() ) {
-            const Sprite & mons32 = AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
-            mons32.Blit( x + ( back.w() - mons32.w() ) / 2, y + back.h() - mons32.h() - 11 );
+            const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
+            fheroes2::Blit( mons32, display, x + ( back.width() - mons32.width() ) / 2, y + back.height() - mons32.height() - 11 );
 
             if ( readonly )
-                AGG::GetICN( ICN::LOCATORS, 24 ).Blit( x + 33, y + 5 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LOCATORS, 24 ), display, x + 33, y + 5 );
 
             Text text( GetString( troop.GetCount() ), Font::SMALL );
-            text.Blit( x + ( back.w() - text.w() ) / 2, y + back.h() - 11 );
+            text.Blit( x + ( back.width() - text.w() ) / 2, y + back.height() - 11 );
         }
 
         if ( select )
-            curs.Blit( *this, display );
+            fheroes2::Blit( curs, display, x, y );
     };
 
     const Troop & troop;
     bool select;
-    Surface back;
-    Surface curs;
+    fheroes2::Image back;
+    fheroes2::Image curs;
     bool readonly;
 };
 
@@ -88,27 +89,29 @@ public:
 
     void Redraw( const Troop & troop )
     {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         Text txt1( "/1", Font::SMALL );
         Text txt2( "/3", Font::SMALL );
         Text txt3( "/5", Font::SMALL );
 
-        const Sprite & sp = AGG::GetICN( ICN::CAMPXTRG, 8 );
-        const Sprite & cr = AGG::GetICN( ICN::CELLWIN, 5 );
-
-        sp.Blit( rt1 );
-        sp.Blit( rt2 );
-        sp.Blit( rt3 );
+        const fheroes2::Sprite & sp = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 8 );
+        fheroes2::Blit( sp, display, rt1.x, rt1.y );
+        fheroes2::Blit( sp, display, rt2.x, rt2.y );
+        fheroes2::Blit( sp, display, rt3.x, rt3.y );
 
         if ( troop.isValid() ) {
+            const fheroes2::Sprite & cr = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
+
             switch ( cobj.GetSplit() ) {
             case 3:
-                cr.Blit( rt2.x + 1, rt2.y + 1 );
+                fheroes2::Blit( cr, display, rt2.x + 1, rt2.y + 1 );
                 break;
             case 5:
-                cr.Blit( rt3.x + 1, rt3.y + 1 );
+                fheroes2::Blit( cr, display, rt3.x + 1, rt3.y + 1 );
                 break;
             default:
-                cr.Blit( rt1.x + 1, rt1.y + 1 );
+                fheroes2::Blit( cr, display, rt1.x + 1, rt1.y + 1 );
                 break;
             }
         }
@@ -146,8 +149,7 @@ public:
 
 bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, bool readonly )
 {
-    Display & display = Display::Get();
-    // const Settings & conf = Settings::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
     // cursor
@@ -160,14 +162,14 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     Point dst_pt;
 
     // portrait
-    const Sprite & window = AGG::GetICN( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
     dst_pt.x = area.x + 3;
     dst_pt.y = area.y + 5;
-    window.Blit( dst_pt );
+    fheroes2::Blit( window, display, dst_pt.x, dst_pt.y );
 
-    Surface port = hero.GetPortrait( PORT_MEDIUM );
-    if ( port.isValid() )
-        port.Blit( dst_pt.x + 4, dst_pt.y + 4, display );
+    fheroes2::Image port = hero.GetPortrait( PORT_MEDIUM );
+    if ( !port.empty() )
+        fheroes2::Blit( port, display, dst_pt.x + 4, dst_pt.y + 4 );
 
     // indicators
     dst_pt.x = area.x + 185;
@@ -206,18 +208,18 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     ArmySplit armySplit( area, co );
     armySplit.Redraw( troop );
 
-    ButtonGroups btnGroups( area, Dialog::OK );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK );
+    btnGroups.draw();
 
     const Troop shadow( troop );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     int buttons = Dialog::ZERO;
     while ( buttons == Dialog::ZERO && le.HandleEvents() ) {
-        buttons = btnGroups.QueueEventProcessing();
+        buttons = btnGroups.processEvents();
 
         if ( le.MouseCursor( selectArmy.GetArea() ) ) {
             if ( guardian.select && le.MouseClickLeft( selectArmy.GetArea() ) ) {
@@ -304,7 +306,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
             selectArmy.Redraw();
             armySplit.Redraw( troop );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 

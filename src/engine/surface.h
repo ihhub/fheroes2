@@ -68,8 +68,6 @@ protected:
     SDL_Color color;
 };
 
-#define ColorBlack RGBA( 0, 0, 0, 255 )
-
 struct SurfaceFormat
 {
     u32 depth;
@@ -139,54 +137,27 @@ public:
 
     void Fill( const RGBA & );
     void FillRect( const Rect &, const RGBA & );
-    void DrawLine( const Point & p1, const Point & p2, const RGBA & color, const Rect & roi = Rect() );
     void DrawPoint( const Point &, const RGBA & );
     void DrawRect( const Rect &, const RGBA & );
     void DrawBorder( const RGBA &, bool solid = true );
 
     virtual u32 GetMemoryUsage( void ) const;
-    std::string Info( void ) const;
 
     Surface RenderScale( const Size & ) const;
     Surface RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both */ ) const;
     Surface RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */ ) const;
     Surface RenderStencil( const RGBA & ) const;
-    Surface RenderContour( const RGBA & ) const;
-    Surface RenderGrayScale( void ) const;
-    Surface RenderSepia( void ) const;
-    Surface RenderBoxBlur( int blurRadius, int colorChange = 0, bool redTint = false ) const;
-    Surface RenderDeathWave( int position, int waveLength, int waveHeight ) const;
-    Surface RenderRippleEffect( int frame, double scaleX = 0.05, double waveFrequency = 20.0 ) const;
-    Surface RenderChangeColor( const RGBA &, const RGBA & ) const;
-    Surface RenderChangeColor( const std::map<RGBA, RGBA> & colorPairs ) const;
-    Surface RenderSurface( const Rect & srt, const Size & ) const;
-    Surface RenderSurface( const Size & ) const;
 
     virtual Surface GetSurface( void ) const;
     virtual Surface GetSurface( const Rect & ) const;
 
     static void SetDefaultPalette( SDL_Color *, int );
-    static void SetDefaultDepth( u32 );
     static void SetDefaultColorKey( int, int, int );
     static void Swap( Surface &, Surface & );
 
     // Be aware that this affects all surfaces which have copy if this one
     // Use makeCopy flag to create another surface within the call
     void SetAlphaMod( int level, bool makeCopy );
-
-    bool SetColors( const std::vector<uint8_t> & indexes, const std::vector<uint32_t> & colors, bool reflect );
-
-    bool GenerateContour( const std::vector<uint8_t> & indexes, uint32_t value, bool reflect );
-
-    static Surface Blend( const Surface & first, const Surface & second, uint8_t ratio );
-
-    // Gamma correction works by formula:
-    // output = A * ((input / 255) ^ gamma) * 255, where A - multiplication, gamma - power base. Both values must be greater than 0
-    // Usually people set A as 1
-    bool GammaCorrection( double a, double gamma );
-
-    // This is only for 8-bit images like TIL
-    void ResetPalette();
 
     void SetPalette( const std::vector<SDL_Color> & colors );
 

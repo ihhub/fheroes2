@@ -24,7 +24,6 @@
 #include "army.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
@@ -33,8 +32,9 @@
 #include "interface_list.h"
 #include "kingdom.h"
 #include "settings.h"
-#include "skill.h"
+#include "skill_bar.h"
 #include "text.h"
+#include "ui_button.h"
 #include "world.h"
 
 struct HeroRow
@@ -124,12 +124,12 @@ public:
 StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     : Interface::ListBox<HeroRow>( pt )
 {
-    const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 13 );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.w(), back.h() ) );
-    SetScrollButtonUp( ICN::SCROLL, 0, 1, Point( pt.x + 626, pt.y ) );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, Point( pt.x + 626, pt.y + 20 + back.h() ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
+    SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( pt.x + 626, pt.y ) );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
     SetAreaItems( Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
 
@@ -188,8 +188,7 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool 
 {
     if ( row.hero ) {
         Text text( "", Font::SMALL );
-        const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 10 );
-        back.Blit( dstx, dsty );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), fheroes2::Display::instance(), dstx, dsty );
 
         // base info
         Interface::RedrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
@@ -226,10 +225,11 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool 
 
 void StatsHeroesList::RedrawBackground( const Point & dst )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     Text text( "", Font::SMALL );
 
     // header
-    AGG::GetICN( ICN::OVERVIEW, 6 ).Blit( dst.x + 30, dst.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 6 ), display, dst.x + 30, dst.y );
 
     text.Set( _( "Hero/Stats" ) );
     text.Blit( dst.x + 130 - text.w() / 2, dst.y + 1 );
@@ -241,12 +241,12 @@ void StatsHeroesList::RedrawBackground( const Point & dst )
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
     // splitter background
-    AGG::GetICN( ICN::OVERVIEW, 13 ).Blit( dst.x + 628, dst.y + 17 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
 
     // items background
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
     for ( int ii = 0; ii < VisibleItemCount(); ++ii ) {
-        const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 8 );
-        back.Blit( dst.x + 30, dst.y + 17 + ii * ( back.h() + 4 ) );
+        fheroes2::Blit( back, display, dst.x + 30, dst.y + 17 + ii * ( back.height() + 4 ) );
     }
 }
 
@@ -330,12 +330,12 @@ public:
 StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     : Interface::ListBox<CstlRow>( pt )
 {
-    const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 13 );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.w(), back.h() ) );
-    SetScrollButtonUp( ICN::SCROLL, 0, 1, Point( pt.x + 626, pt.y ) );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, Point( pt.x + 626, pt.y + 20 + back.h() ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
+    SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( pt.x + 626, pt.y ) );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
     SetAreaItems( Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
 
@@ -417,8 +417,7 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
 {
     if ( row.castle ) {
         Text text( "", Font::SMALL );
-        const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 11 );
-        back.Blit( dstx, dsty );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), fheroes2::Display::instance(), dstx, dsty );
 
         // base info
         Interface::RedrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
@@ -452,10 +451,11 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
 
 void StatsCastlesList::RedrawBackground( const Point & dst )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     Text text( "", Font::SMALL );
 
     // header
-    AGG::GetICN( ICN::OVERVIEW, 7 ).Blit( dst.x + 30, dst.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 7 ), display, dst.x + 30, dst.y );
 
     text.Set( _( "Town/Castle" ) );
     text.Blit( dst.x + 105 - text.w() / 2, dst.y + 1 );
@@ -467,14 +467,14 @@ void StatsCastlesList::RedrawBackground( const Point & dst )
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
     // splitter background
-    AGG::GetICN( ICN::OVERVIEW, 13 ).Blit( dst.x + 628, dst.y + 17 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
 
     // items background
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
     for ( int ii = 0; ii < VisibleItemCount(); ++ii ) {
-        const Sprite & back = AGG::GetICN( ICN::OVERVIEW, 8 );
-        back.Blit( dst.x + 30, dst.y + 17 + ii * ( back.h() + 4 ) );
+        fheroes2::Blit( back, display, dst.x + 30, dst.y + 17 + ii * ( back.height() + 4 ) );
         // fix bar
-        AGG::GetICN( ICN::OVERBACK, 0 ).Blit( Rect( 28, 12, 599, 6 ), dst.x + 28, dst.y + 12 + ii * ( back.h() + 4 ) );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 28, 12, display, dst.x + 28, dst.y + 12 + ii * ( back.height() + 4 ), 599, 6 );
     }
 }
 
@@ -527,7 +527,7 @@ void RedrawFundsInfo( const Point & pt, const Kingdom & myKingdom )
     const Funds & funds = myKingdom.GetFunds();
     Text text( "", Font::SMALL );
 
-    AGG::GetICN( ICN::OVERBACK, 0 ).Blit( Rect( 4, 422, 530, 56 ), pt.x + 4, pt.y + 422 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 4, 422, fheroes2::Display::instance(), pt.x + 4, pt.y + 422, 530, 56 );
 
     text.Set( GetString( funds.wood ) );
     text.Blit( pt.x + 56 - text.w() / 2, pt.y + 448 );
@@ -561,17 +561,17 @@ void RedrawFundsInfo( const Point & pt, const Kingdom & myKingdom )
 
 void Kingdom::OverviewDialog( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder background( Display::GetDefaultSize() );
+    Dialog::FrameBorder background( Size( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT ) );
 
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );
 
-    AGG::GetICN( ICN::OVERBACK, 0 ).Blit( dst_pt );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, dst_pt.x, dst_pt.y );
 
     RedrawIncomeInfo( cur_pt, *this );
     RedrawFundsInfo( cur_pt, *this );
@@ -582,15 +582,15 @@ void Kingdom::OverviewDialog( void )
     // buttons
     dst_pt.x = cur_pt.x + 540;
     dst_pt.y = cur_pt.y + 360;
-    Button buttonHeroes( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 0, 1 );
+    fheroes2::Button buttonHeroes( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 0, 1 );
 
     dst_pt.x = cur_pt.x + 540;
     dst_pt.y = cur_pt.y + 405;
-    Button buttonCastle( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 2, 3 );
+    fheroes2::Button buttonCastle( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 2, 3 );
 
     dst_pt.x = cur_pt.x + 540;
     dst_pt.y = cur_pt.y + 453;
-    Button buttonExit( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 4, 5 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 4, 5 );
 
     const Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
 
@@ -598,58 +598,54 @@ void Kingdom::OverviewDialog( void )
 
     // set state view: castles
     if ( Modes( OVERVIEWCSTL ) ) {
-        buttonCastle.Press();
-        buttonHeroes.Release();
+        buttonCastle.press();
+        buttonHeroes.release();
         listStats = &listCastles;
     }
     else
     // set state view: heroes
     {
-        buttonHeroes.Press();
-        buttonCastle.Release();
+        buttonHeroes.press();
+        buttonCastle.release();
         listStats = &listHeroes;
     }
 
     listStats->Redraw();
 
-    buttonHeroes.Draw();
-    buttonCastle.Draw();
-    buttonExit.Draw();
+    buttonHeroes.draw();
+    buttonCastle.draw();
+    buttonExit.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         // switch view: heroes/castle
-        if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes ) ) {
+        if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
             cursor.Hide();
-            buttonHeroes.Press();
-            buttonCastle.Release();
-            buttonHeroes.Draw();
-            buttonCastle.Draw();
+            buttonHeroes.drawOnPress();
+            buttonCastle.drawOnRelease();
             listStats = &listHeroes;
             ResetModes( OVERVIEWCSTL );
             redraw = true;
         }
-        else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle ) ) {
+        else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle.area() ) ) {
             cursor.Hide();
-            buttonCastle.Press();
-            buttonHeroes.Release();
-            buttonHeroes.Draw();
-            buttonCastle.Draw();
+            buttonCastle.drawOnPress();
+            buttonHeroes.drawOnRelease();
             listStats = &listCastles;
             SetModes( OVERVIEWCSTL );
             redraw = true;
         }
 
         // exit event
-        if ( le.MouseClickLeft( buttonExit ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             break;
 
         listStats->QueueEventProcessing();
@@ -664,7 +660,7 @@ void Kingdom::OverviewDialog( void )
             listStats->Redraw();
             RedrawFundsInfo( cur_pt, *this );
             cursor.Show();
-            display.Flip();
+            display.render();
             redraw = false;
         }
     }

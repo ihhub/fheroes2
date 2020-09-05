@@ -36,18 +36,46 @@
 #include "game.h"
 #include "m82.h"
 #include "mus.h"
+#include "pal.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"
 #include "xmi.h"
 
+#include "../../tools/palette_h2.h"
+
 #ifdef WITH_ZLIB
-#include "images_pack.h"
+#include "embedded_image.h"
 #include "zzlib.h"
 #endif
 
 #define FATSIZENAME 15
+
+namespace
+{
+    class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
+    {
+    public:
+        ICNSprite() {}
+        ICNSprite( const Surface & sf1, const Surface & sf2 )
+            : std::pair<Surface, Surface>( sf1, sf2 )
+        {}
+
+        bool isValid( void ) const;
+        Sprite CreateSprite( bool reflect, bool shadow ) const;
+        Surface First( void )
+        {
+            return first;
+        }
+        Surface Second( void )
+        {
+            return second;
+        }
+
+        Point offset;
+    };
+}
 
 namespace AGG
 {
@@ -147,10 +175,6 @@ namespace AGG
 
     bool memlimit_usage = true;
 
-    std::set<int> scalableICNIds;
-    Size scaledResolution;
-    std::map<int, std::vector<Sprite> > scaledSprites;
-
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
@@ -164,7 +188,6 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
-    bool LoadExtICN( int icn, u32, bool );
     bool LoadAltICN( int icn, u32, bool );
     bool LoadOrgICN( Sprite &, int icn, u32, bool );
     bool LoadOrgICN( int icn, u32, bool );
@@ -186,101 +209,7 @@ namespace AGG
     const std::vector<u8> & ReadICNChunk( int icn, u32 );
     const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
 
-    bool IsICNScalable( int icnId )
-    {
-        return scalableICNIds.find( icnId ) != scalableICNIds.end();
-    }
-
-    Sprite RescaleSpriteIfNeeded( int icnId, u32 index )
-    {
-        static const Size originalResolution( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT );
-        const Size resolution = Display::Get().GetSize();
-
-        if ( resolution == originalResolution || !IsICNScalable( icnId ) )
-            return icn_cache[icnId].sprites[index];
-
-        // resolution can be changed during application runtime
-        if ( scaledResolution != resolution ) {
-            scaledSprites.clear();
-            scaledResolution = resolution;
-        }
-
-        std::map<int, std::vector<Sprite> >::iterator iter = scaledSprites.find( icnId );
-        if ( iter == scaledSprites.end() ) {
-            scaledSprites[icnId] = std::vector<Sprite>();
-            iter = scaledSprites.find( icnId );
-            iter->second.resize( icn_cache[icnId].count );
-        }
-
-        if ( iter->second[index].isValid() )
-            return iter->second[index];
-
-        const icn_cache_t & cachedIcn = icn_cache[icnId];
-        if ( !cachedIcn.sprites[index].isValid() )
-            return Sprite();
-
-        const double scaleX = scaledResolution.w / static_cast<double>( Display::DEFAULT_WIDTH );
-        const double scaleY = scaledResolution.h / static_cast<double>( Display::DEFAULT_HEIGHT );
-
-        const Size originalSize = cachedIcn.sprites[index].GetSize();
-        iter->second[index] = Sprite( cachedIcn.sprites[index].RenderScale(
-                                          Size( static_cast<uint16_t>( originalSize.w * scaleX + 0.5 ), static_cast<uint16_t>( originalSize.h * scaleY + 0.5 ) ) ),
-                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().x * scaleX + 0.5 ),
-                                      static_cast<int32_t>( cachedIcn.sprites[index].GetPos().y * scaleY + 0.5 ) );
-
-        return iter->second[index];
-    }
-
-    // This class is a holder of the original 8-bit image after decompression
-    class ICNData
-    {
-    public:
-        explicit ICNData( uint32_t width_ = 0, uint32_t height_ = 0 )
-            : _width( 0 )
-            , _height( 0 )
-        {
-            resize( width_, height_ );
-        }
-
-        void resize( uint32_t width_ = 0, uint32_t height_ = 0 )
-        {
-            if ( width_ == _width && height_ == _height )
-                return;
-
-            _width = width_;
-            _height = height_;
-
-            _data.clear();
-            _data.resize( static_cast<size_t>( _width ) * _height, 0u );
-        }
-
-        const std::vector<uint8_t> & get() const
-        {
-            return _data;
-        }
-
-        std::vector<uint8_t> & get()
-        {
-            return _data;
-        }
-
-        uint32_t width() const
-        {
-            return _width;
-        }
-
-        uint32_t height() const
-        {
-            return _height;
-        }
-
-    private:
-        std::vector<uint8_t> _data;
-        uint32_t _width;
-        uint32_t _height;
-    };
-
-    std::map<std::pair<int, int>, ICNData> _icnIdVsData;
+    ICNSprite RenderICNSprite( int, u32, int palette = PAL::STANDARD );
 }
 
 Sprite ICNSprite::CreateSprite( bool reflect, bool shadow ) const
@@ -549,262 +478,6 @@ const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpa
     return heroes2_agg.Read( key );
 }
 
-/* load manual ICN object */
-bool AGG::LoadExtICN( int icn, u32 index, bool reflect )
-{
-    // for animation sprite need update count for ICN::AnimationFrame
-    u32 count = 0;
-    const Settings & conf = Settings::Get();
-
-    switch ( icn ) {
-    case ICN::BOAT12:
-        count = 1;
-        break;
-    case ICN::BATTLESKIP:
-    case ICN::BATTLEWAIT:
-    case ICN::BATTLEAUTO:
-    case ICN::BATTLESETS:
-    case ICN::BUYMAX:
-    case ICN::BTNBATTLEONLY:
-    case ICN::BTNGIFT:
-    case ICN::BTNMIN:
-    case ICN::BTNCONFIG:
-        count = 2;
-        break;
-    case ICN::CSLMARKER:
-        count = 3;
-        break;
-    case ICN::FONT:
-    case ICN::SMALFONT:
-    case ICN::YELLOW_FONT:
-    case ICN::YELLOW_SMALFONT:
-    case ICN::GRAY_FONT:
-    case ICN::GRAY_SMALL_FONT:
-        count = 96;
-        break;
-    case ICN::ROUTERED:
-        count = 145;
-        break;
-    case ICN::SPELLS:
-        count = 66;
-
-    default:
-        break;
-    }
-
-    // not modify sprite
-    if ( 0 == count )
-        return false;
-
-    icn_cache_t & v = icn_cache[icn];
-    DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( icn ) << ", " << index );
-
-    if ( NULL == v.sprites ) {
-        v.sprites = new Sprite[count];
-        v.reflect = new Sprite[count];
-        v.count = count;
-    }
-
-    // simple modify
-    if ( index < count ) {
-        Sprite & sprite = reflect ? v.reflect[index] : v.sprites[index];
-
-        memlimit_usage = false;
-
-        switch ( icn ) {
-        case ICN::BTNBATTLEONLY:
-            LoadOrgICN( sprite, ICN::BTNNEWGM, 2 + index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 55, 14 ), 15, 13, sprite );
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 55, 14 ), 70, 13, sprite );
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 55, 14 ), 42, 28, sprite );
-            // ba
-            GetICN( ICN::BTNCMPGN, index ).Blit( Rect( 41, 28, 28, 14 ), 30, 13, sprite );
-            // tt
-            GetICN( ICN::BTNNEWGM, index ).Blit( Rect( 25, 13, 13, 14 ), 57, 13, sprite );
-            GetICN( ICN::BTNNEWGM, index ).Blit( Rect( 25, 13, 13, 14 ), 70, 13, sprite );
-            // le
-            GetICN( ICN::BTNNEWGM, 6 + index ).Blit( Rect( 97, 21, 13, 14 ), 83, 13, sprite );
-            GetICN( ICN::BTNNEWGM, 6 + index ).Blit( Rect( 86, 21, 13, 14 ), 96, 13, sprite );
-            // on
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 44, 21, 31, 14 ), 40, 28, sprite );
-            // ly
-            GetICN( ICN::BTNHOTST, index ).Blit( Rect( 47, 21, 13, 13 ), 71, 28, sprite );
-            GetICN( ICN::BTNHOTST, index ).Blit( Rect( 72, 21, 13, 13 ), 84, 28, sprite );
-            break;
-
-        case ICN::BTNCONFIG:
-            LoadOrgICN( sprite, ICN::SYSTEM, 11 + index, false );
-            // config
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 30, 20, 80, 16 ), 8, 5, sprite );
-            break;
-
-        case ICN::BTNGIFT:
-            LoadOrgICN( sprite, ( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST ), 17 + index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 72, 15 ), 6, 4, sprite );
-            // G
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 94, 20, 15, 15 ), 20, 4, sprite );
-            // I
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 86, 20, 9, 15 ), 36, 4, sprite );
-            // F
-            GetICN( ICN::BTNDCCFG, 4 + index ).Blit( Rect( 74, 20, 13, 15 ), 46, 4, sprite );
-            // T
-            GetICN( ICN::BTNNEWGM, index ).Blit( Rect( 25, 13, 13, 14 ), 60, 5, sprite );
-            break;
-
-        case ICN::BTNMIN:
-            // max
-            LoadOrgICN( sprite, ICN::RECRUIT, index + 4, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 31, 15 ), 30, 4, sprite );
-            // add: IN
-            GetICN( ICN::APANEL, 4 + index ).Blit( Rect( 23, 20, 25, 15 ), 30, 4, sprite );
-            break;
-
-        case ICN::BUYMAX:
-            LoadOrgICN( sprite, ICN::WELLXTRA, index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 10, 6, 52, 14 ), 6, 2, sprite );
-            // max
-            GetICN( ICN::RECRUIT, 4 + index ).Blit( Rect( 12, 6, 50, 12 ), 7, 3, sprite );
-            break;
-
-        case ICN::BATTLESKIP:
-            if ( conf.PocketPC() )
-                LoadOrgICN( sprite, ICN::TEXTBAR, index, false );
-            else {
-                LoadOrgICN( sprite, ICN::TEXTBAR, 4 + index, false );
-                // clean
-                GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 3, 8, 43, 14 ), 3, 1, sprite );
-                // skip
-                GetICN( ICN::TEXTBAR, index ).Blit( Rect( 3, 8, 43, 14 ), 3, 0, sprite );
-            }
-            break;
-
-        case ICN::BATTLEAUTO:
-            LoadOrgICN( sprite, ICN::TEXTBAR, 0 + index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 4, 8, 43, 13 ), 3, 10, sprite );
-            //
-            GetICN( ICN::TEXTBAR, 4 + index ).Blit( Rect( 5, 2, 40, 12 ), 4, 11, sprite );
-            break;
-
-        case ICN::BATTLESETS:
-            LoadOrgICN( sprite, ICN::TEXTBAR, 0 + index, false );
-            // clean
-            GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 4, 8, 43, 13 ), 3, 10, sprite );
-            //
-            GetICN( ICN::ADVBTNS, 14 + index ).Blit( Rect( 5, 5, 26, 26 ), 10, 6, sprite );
-            break;
-
-        case ICN::BATTLEWAIT:
-            if ( conf.PocketPC() )
-                LoadOrgICN( sprite, ICN::ADVBTNS, 8 + index, false );
-            else {
-                LoadOrgICN( sprite, ICN::TEXTBAR, 4 + index, false );
-                // clean
-                GetICN( ICN::SYSTEM, 11 + index ).Blit( Rect( 3, 8, 43, 14 ), 3, 1, sprite );
-                // wait
-                Surface dst = Sprite::ScaleQVGASurface( GetICN( ICN::ADVBTNS, 8 + index ).GetSurface( Rect( 5, 4, 28, 28 ) ) );
-                dst.Blit( ( sprite.w() - dst.w() ) / 2, 2, sprite );
-            }
-            break;
-
-        case ICN::BOAT12: {
-            LoadOrgICN( sprite, ICN::ADVMCO, 28 + index, false );
-            sprite.SetSurface( Sprite::ScaleQVGASurface( sprite ) );
-        } break;
-
-        case ICN::CSLMARKER:
-            // sprite: not allow build: complete, not today, all builds (white)
-            LoadOrgICN( sprite, ICN::LOCATORS, 24, false );
-
-            // sprite: not allow build: builds requires
-            if ( 1 == index )
-                sprite.ChangeColorIndex( 0x0A, 0xD6 );
-            else
-                // sprite: not allow build: lack resources (green)
-                if ( 2 == index )
-                sprite.ChangeColorIndex( 0x0A, 0xDE );
-            break;
-
-        default:
-            break;
-        }
-
-        memlimit_usage = true;
-    }
-
-    // change color
-    for ( u32 ii = 0; ii < count; ++ii ) {
-        Sprite & sprite = reflect ? v.reflect[ii] : v.sprites[ii];
-
-        switch ( icn ) {
-        case ICN::ROUTERED:
-            LoadOrgICN( sprite, ICN::ROUTE, ii, false );
-            ReplaceColors( sprite, PAL::GetPalette( PAL::RED ), ICN::ROUTE, ii, false );
-            break;
-
-        case ICN::FONT:
-        case ICN::SMALFONT:
-            LoadOrgICN( sprite, icn, ii, false );
-            ReplaceColors( sprite, PAL::GetPalette( PAL::WHITE_TEXT ), icn, ii, false );
-            break;
-
-        case ICN::YELLOW_FONT:
-        case ICN::YELLOW_SMALFONT:
-            LoadOrgICN( sprite, icn == ICN::YELLOW_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
-            ReplaceColors( sprite, PAL::GetPalette( PAL::YELLOW_TEXT ), icn == ICN::YELLOW_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
-            break;
-
-        case ICN::GRAY_FONT:
-        case ICN::GRAY_SMALL_FONT:
-            LoadOrgICN( sprite, icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
-            ReplaceColors( sprite, PAL::GetPalette( PAL::GRAY_TEXT ), icn == ICN::GRAY_FONT ? ICN::FONT : ICN::SMALFONT, ii, false );
-            break;
-
-        case ICN::SPELLS:
-            if ( ii < 60 ) {
-                LoadOrgICN( sprite, icn, ii, false );
-            }
-            else {
-                int originalIndex = 0;
-                if ( ii == 60 ) // Mass Cure
-                    originalIndex = 6;
-                else if ( ii == 61 ) // Mass Haste
-                    originalIndex = 14;
-                else if ( ii == 62 ) // Mass Slow
-                    originalIndex = 1;
-                else if ( ii == 63 ) // Mass Bless
-                    originalIndex = 7;
-                else if ( ii == 64 ) // Mass Curse
-                    originalIndex = 3;
-                else if ( ii == 65 ) // Mass Shield
-                    originalIndex = 15;
-
-                Sprite icon = AGG::GetICN( ICN::SPELLS, originalIndex );
-
-                sprite = Sprite( Surface( Size( icon.GetSize().w + 8, icon.GetSize().h + 8 ), icon.amask() ), icon.x() - 4, icon.y() - 4 );
-                Sprite icon1( icon.GetSurface(), icon.x(), icon.y() );
-                icon1.SetAlphaMod( 128, false );
-                icon1.Blit( 0, 0, sprite );
-
-                Sprite icon2( icon.GetSurface(), icon.x(), icon.y() );
-                icon2.SetAlphaMod( 192, false );
-                icon2.Blit( 4, 4, sprite );
-
-                icon.Blit( 8, 8, sprite );
-            }
-
-        default:
-            break;
-        }
-    }
-
-    return true;
-}
-
 bool AGG::LoadAltICN( int icn, u32 index, bool reflect )
 {
 #ifdef WITH_XML
@@ -990,9 +663,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         return res;
     }
 
-    if ( PAL::CurrentPalette() != palette )
-        PAL::SwapPalette( palette );
-
     // prepare icn data
     DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( icn ) << ", " << index );
 
@@ -1032,9 +702,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
     u32 c = 0;
     Point pt( 0, 0 );
 
-    ICNData originalData( sz.w, sz.h );
-    uint8_t * icnData = originalData.get().data();
-
     while ( 1 ) {
         // 0x00 - end line
         if ( 0 == *buf ) {
@@ -1048,8 +715,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- && buf < max ) {
-                icnData[pt.y * sz.w + pt.x] = *buf;
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
                 ++buf;
             }
@@ -1080,7 +747,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
                 if ( !sf2.isValid() )
                     sf2.Set( sz.w, sz.h, true );
                 while ( c-- ) {
-                    icnData[pt.y * sz.w + pt.x] = 0;
                     sf2.DrawPoint( pt, shadow );
                     ++pt.x;
                 }
@@ -1094,8 +760,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf;
             ++buf;
             while ( c-- ) {
-                icnData[pt.y * sz.w + pt.x] = *buf;
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
             }
             ++buf;
@@ -1104,8 +770,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
             c = *buf - 0xC0;
             ++buf;
             while ( c-- ) {
-                icnData[pt.y * sz.w + pt.x] = *buf;
-                sf1.DrawPoint( pt, PAL::GetPaletteColor( *buf ) );
+                const uint32_t id = *buf * 3;
+                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
                 ++pt.x;
             }
             ++buf;
@@ -1116,15 +782,8 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         }
     }
 
-    _icnIdVsData[std::make_pair( icn, index )] = originalData;
-
     if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
         res.second.SetAlphaMod( 0, false );
-    }
-
-    // TODO: fix air elemental sprite
-    if ( icn == ICN::AELEM && res.first.w() > 3 && res.first.h() > 3 ) {
-        res.first.RenderContour( RGBA( 0, 0x84, 0xe0 ) ).Blit( -1, -1, res.first );
     }
 
     return res;
@@ -1141,48 +800,6 @@ bool AGG::LoadOrgICN( Sprite & sp, int icn, u32 index, bool reflect )
 
     return false;
 }
-
-/*
-bool AGG::LoadOrgICN(Sprite & sp, int icn, u32 index, bool reflect)
-{
-    const std::vector<u8> & body = ReadICNChunk(icn, index);
-
-    if(body.size())
-    {
-    // loading original
-    DEBUG(DBG_ENGINE, DBG_TRACE, ICN::GetString(icn) << ", " << index);
-
-    StreamBuf st(body);
-
-    u32 count = st.getLE16();
-    u32 blockSize = st.getLE32();
-    u32 sizeData = 0;
-
-    if(index) st.skip(index * 13);
-
-    ICNHeader header1;
-    st >> header1;
-
-    if(index + 1 != count)
-    {
-        ICNHeader header2;
-        st >> header2;
-        sizeData = header2.offsetData - header1.offsetData;
-    }
-    else
-        sizeData = blockSize - header1.offsetData;
-
-    sp = Sprite::CreateICN(icn ,header1, &body[6 + header1.offsetData], sizeData, reflect);
-    Sprite::AddonExtensionModify(sp, icn, index);
-
-    return true;
-    }
-
-    DEBUG(DBG_ENGINE, DBG_WARN, "error: " << ICN::GetString(icn));
-
-    return false;
-}
-*/
 
 bool AGG::LoadOrgICN( int icn, u32 index, bool reflect )
 {
@@ -1219,24 +836,15 @@ bool AGG::LoadICN( int icn, u32 index, bool reflect )
 
         // load from images dir
         if ( !conf.UseAltResource() || !LoadAltICN( icn, index, reflect ) ) {
-            // load modify sprite
-            if ( !LoadExtICN( icn, index, reflect ) ) {
-                // load origin sprite
-                if ( !LoadOrgICN( icn, index, reflect ) ) {
-                    ERROR( "ICN load error: asking for file " << icn << ", sprite index " << index );
-                    return false;
-                }
+            // load origin sprite
+            if ( !LoadOrgICN( icn, index, reflect ) ) {
+                ERROR( "ICN load error: asking for file " << icn << ", sprite index " << index );
+                return false;
             }
 #ifdef DEBUG
             if ( Settings::Get().UseAltResource() )
                 SaveICN( icn );
 #endif
-        }
-
-        // pocketpc: scale sprites
-        if ( Settings::Get().QVGA() && ICN::NeedMinify4PocketPC( icn, index ) ) {
-            Sprite & sp = reflect ? v.reflect[index] : v.sprites[index];
-            sp = Sprite::ScaleQVGASprite( sp );
         }
     }
     return true;
@@ -1266,10 +874,7 @@ Sprite AGG::GetICN( int icn, u32 index, bool reflect )
             }
         }
 
-        if ( !reflect && IsICNScalable( icn ) )
-            result = RescaleSpriteIfNeeded( icn, index );
-        else
-            result = reflect ? v.reflect[index] : v.sprites[index];
+        result = reflect ? v.reflect[index] : v.sprites[index];
 
         // invalid sprite?
         if ( !result.isValid() ) {
@@ -1303,23 +908,6 @@ int AGG::GetAbsoluteICNHeight( int icn )
         }
     }
     return result;
-}
-
-int AGG::PutICN( const Sprite & sprite, bool init_reflect )
-{
-    icn_cache_t v;
-
-    v.count = 1;
-    v.sprites = new Sprite[1];
-    v.sprites[0] = sprite;
-
-    if ( init_reflect ) {
-        v.reflect = new Sprite[1];
-        v.reflect[0] = Sprite( sprite.RenderReflect( 2 ), sprite.x(), sprite.y() );
-    }
-
-    icn_cache.push_back( v );
-    return icn_cache.size() - 1;
 }
 
 bool AGG::LoadAltTIL( int til, u32 max )
@@ -1514,62 +1102,6 @@ void AGG::LoadTIL( int til )
 #endif
         }
     }
-}
-
-/* return TIL surface from AGG::Cache */
-Surface AGG::GetTIL( int til, u32 index, u32 shape )
-{
-    Surface result;
-
-    if ( til < static_cast<int>( til_cache.size() ) ) {
-        til_cache_t & v = til_cache[til];
-
-        if ( 0 == v.count )
-            LoadTIL( til );
-        u32 index2 = index;
-
-        if ( shape ) {
-            switch ( til ) {
-            case TIL::STON:
-                index2 += 36 * ( shape % 4 );
-                break;
-            case TIL::CLOF32:
-                index2 += 4 * ( shape % 4 );
-                break;
-            case TIL::GROUND32:
-                index2 += 432 * ( shape % 4 );
-                break;
-            default:
-                break;
-            }
-        }
-
-        if ( index2 >= v.count ) {
-            DEBUG( DBG_ENGINE, DBG_WARN,
-                   TIL::GetString( til ) << ", "
-                                         << "out of range: " << index );
-            index2 = 0;
-        }
-
-        Surface & surface = v.sprites[index2];
-
-        if ( shape && !surface.isValid() ) {
-            const Surface & src = v.sprites[index];
-
-            if ( src.isValid() )
-                surface = src.RenderReflect( shape );
-            else
-                DEBUG( DBG_ENGINE, DBG_WARN, "is NULL" );
-        }
-
-        if ( !surface.isValid() ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, "invalid sprite: " << TIL::GetString( til ) << ", index: " << index );
-        }
-
-        result = surface;
-    }
-
-    return result;
 }
 
 /* load 82M object to AGG::Cache in Audio::CVT */
@@ -1947,19 +1479,15 @@ void AGG::ResetMixer( void )
 void AGG::ShowError( void )
 {
 #ifdef WITH_ZLIB
-    ZSurface zerr;
-    if ( zerr.Load( _ptr_080721d0.width, _ptr_080721d0.height, _ptr_080721d0.bpp, _ptr_080721d0.pitch, _ptr_080721d0.rmask, _ptr_080721d0.gmask, _ptr_080721d0.bmask,
-                    _ptr_080721d0.amask, _ptr_080721d0.zdata, sizeof( _ptr_080721d0.zdata ) ) ) {
-        Display & display = Display::Get();
-        LocalEvent & le = LocalEvent::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Image & image = CreateImageFromZlib( 288, 200, errorMessage, sizeof( errorMessage ) );
 
-        display.Fill( ColorBlack );
-        zerr.Blit( ( display.w() - zerr.w() ) / 2, ( display.h() - zerr.h() ) / 2, display );
-        display.Flip();
+    display.fill( 0 );
+    fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
 
-        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
-            ;
-    }
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
+        ;
 #endif
 }
 
@@ -1992,9 +1520,6 @@ bool AGG::Init( void )
 
     til_cache.resize( TIL::LASTTIL );
 
-    // load palette
-    PAL::InitAllPalettes();
-
     // load font
     LoadFNT();
 
@@ -2026,64 +1551,10 @@ void AGG::Quit( void )
     mid_cache.clear();
     loop_sounds.clear();
     fnt_cache.clear();
-    PAL::Clear();
-
-    scaledSprites.clear();
 
 #ifdef WITH_TTF
     delete[] fonts;
 #endif
-}
-
-void AGG::RegisterScalableICN( int icnId )
-{
-    scalableICNIds.insert( icnId );
-}
-
-bool AGG::ReplaceColors( Surface & surface, const std::vector<uint8_t> & colorIndexes, int icnId, int icnIndex, bool reflect )
-{
-    if ( colorIndexes.size() != PALETTE_SIZE )
-        return false;
-
-    const std::vector<uint32_t> & rgbColors = PAL::GetRGBColors();
-
-    std::vector<uint32_t> colors( colorIndexes.size() );
-    for ( size_t i = 0; i < colorIndexes.size(); ++i )
-        colors[i] = rgbColors[colorIndexes[i]];
-
-    return ReplaceColors( surface, colors, icnId, icnIndex, reflect );
-}
-
-bool AGG::ReplaceColors( Surface & surface, const std::vector<uint32_t> & rgbColors, int icnId, int icnIndex, bool reflect )
-{
-    if ( !surface.isValid() || surface.depth() != 32 || rgbColors.size() != PALETTE_SIZE || icnId < 0 || icnIndex < 0 )
-        return false;
-
-    std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, icnIndex ) );
-    if ( iter == _icnIdVsData.end() )
-        return false;
-
-    const ICNData & data = iter->second;
-    if ( surface.w() != data.width() || surface.h() != data.height() )
-        return false;
-
-    return surface.SetColors( data.get(), rgbColors, reflect );
-}
-
-bool AGG::DrawContour( Surface & surface, uint32_t value, int icnId, int incIndex, bool reflect )
-{
-    if ( !surface.isValid() || surface.depth() != 32 || icnId < 0 || incIndex < 0 )
-        return false;
-
-    std::map<std::pair<int, int>, ICNData>::const_iterator iter = _icnIdVsData.find( std::make_pair( icnId, incIndex ) );
-    if ( iter == _icnIdVsData.end() )
-        return false;
-
-    const ICNData & data = iter->second;
-    if ( surface.w() != data.width() || surface.h() != data.height() )
-        return false;
-
-    return surface.GenerateContour( data.get(), value, reflect );
 }
 
 namespace fheroes2
@@ -2093,7 +1564,7 @@ namespace fheroes2
         std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite;
         const fheroes2::Sprite errorICNImage;
 
-        std::vector<std::vector<fheroes2::Image> > _tilVsImage;
+        std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage;
         const fheroes2::Image errorTILImage;
 
         const uint32_t headerSize = 6;
@@ -2181,7 +1652,6 @@ namespace fheroes2
                 uint8_t * imageTransform = sprite.transform();
 
                 uint32_t posX = 0;
-                uint32_t offsetX = 0;
                 const uint32_t width = sprite.width();
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
@@ -2189,7 +1659,8 @@ namespace fheroes2
 
                 while ( 1 ) {
                     if ( 0 == *data ) { // 0x00 - end line
-                        offsetX += width;
+                        imageData += width;
+                        imageTransform += width;
                         posX = 0;
                         ++data;
                     }
@@ -2197,8 +1668,8 @@ namespace fheroes2
                         uint32_t c = *data;
                         ++data;
                         while ( c-- && data != dataEnd ) {
-                            imageData[offsetX + posX] = *data;
-                            imageTransform[offsetX + posX] = 0;
+                            imageData[posX] = *data;
+                            imageTransform[posX] = 0;
                             ++posX;
                             ++data;
                         }
@@ -2214,12 +1685,12 @@ namespace fheroes2
                         ++data;
 
                         const uint8_t transformValue = *data;
-                        const uint8_t transformType = ( ( transformValue & 0x3C ) << 6 ) / 256 + 2; // 1 is for skipping
+                        const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
 
                         uint32_t c = *data % 4 ? *data % 4 : *( ++data );
                         while ( c-- ) {
-                            if ( transformType <= 13 ) {
-                                imageTransform[offsetX + posX] = transformType;
+                            if ( transformType <= 15 ) {
+                                imageTransform[posX] = transformType;
                             }
                             ++posX;
                         }
@@ -2230,8 +1701,8 @@ namespace fheroes2
                         uint32_t c = *data;
                         ++data;
                         while ( c-- ) {
-                            imageData[offsetX + posX] = *data;
-                            imageTransform[offsetX + posX] = 0;
+                            imageData[posX] = *data;
+                            imageTransform[posX] = 0;
                             ++posX;
                         }
                         ++data;
@@ -2240,8 +1711,8 @@ namespace fheroes2
                         uint32_t c = *data - 0xC0;
                         ++data;
                         while ( c-- ) {
-                            imageData[offsetX + posX] = *data;
-                            imageTransform[offsetX + posX] = 0;
+                            imageData[posX] = *data;
+                            imageTransform[posX] = 0;
                             ++posX;
                         }
                         ++data;
@@ -2257,11 +1728,12 @@ namespace fheroes2
         // Helper function for LoadModifiedICN
         void CopyICNWithPalette( int icnId, int originalIcnId, int paletteType )
         {
-            LoadOriginalICN( originalIcnId );
+            GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
+
             _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
             const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
             for ( size_t i = 0; i < _icnVsSprite[icnId].size(); ++i ) {
-                ApplyPallete( _icnVsSprite[icnId][i], palette );
+                ApplyPalette( _icnVsSprite[icnId][i], palette );
             }
         }
 
@@ -2282,6 +1754,182 @@ namespace fheroes2
                 return true;
             case ICN::GRAY_SMALL_FONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::GRAY_TEXT );
+                return true;
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // clean the button
+                    Image uniform( 83, 23 );
+                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
+                    Copy( uniform, 0, 0, out, 28, 18, uniform.width(), uniform.height() );
+                    // add 'ba'
+                    Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
+                    // add 'tt'
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
+                    // add 'le'
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
+                    // add 'on'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
+                    // add 'ly'
+                    Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
+                    Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
+                }
+                return true;
+            case ICN::BTNMIN:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 30, 4, 31, 15 );
+                    // add 'IN'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 23, 20, out, 30, 4, 25, 15 );
+                }
+                return true;
+            case ICN::SPELLS:
+                LoadOriginalICN( ICN::SPELLS );
+                _icnVsSprite[id].resize( 66 );
+                for ( uint32_t i = 60; i < 66; ++i ) {
+                    int originalIndex = 0;
+                    if ( i == 60 ) // Mass Cure
+                        originalIndex = 6;
+                    else if ( i == 61 ) // Mass Haste
+                        originalIndex = 14;
+                    else if ( i == 62 ) // Mass Slow
+                        originalIndex = 1;
+                    else if ( i == 63 ) // Mass Bless
+                        originalIndex = 7;
+                    else if ( i == 64 ) // Mass Curse
+                        originalIndex = 3;
+                    else if ( i == 65 ) // Mass Shield
+                        originalIndex = 15;
+
+                    const Sprite & originalImage = _icnVsSprite[id][originalIndex];
+                    Sprite & image = _icnVsSprite[id][i];
+
+                    image.resize( originalImage.width() + 8, originalImage.height() + 8 );
+                    image.setPosition( originalImage.x() + 4, originalImage.y() + 4 );
+                    image.fill( 1 );
+
+                    AlphaBlit( originalImage, image, 0, 0, 128 );
+                    AlphaBlit( originalImage, image, 4, 4, 192 );
+                    Blit( originalImage, image, 8, 8 );
+
+                    AddTransparency( image, 1 );
+                }
+                return true;
+            case ICN::CSLMARKER:
+                _icnVsSprite[id].resize( 3 );
+                for ( uint32_t i = 0; i < 3; ++i ) {
+                    _icnVsSprite[id][i] = GetICN( ICN::LOCATORS, 24 );
+                    if ( i == 1 ) {
+                        ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xD6 );
+                    }
+                    else if ( i == 2 ) {
+                        ReplaceColorId( _icnVsSprite[id][i], 0x0A, 0xDE );
+                    }
+                }
+                return true;
+            case ICN::BATTLESKIP: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TEXTBAR, 4 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
+
+                    // add 'skip'
+                    Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
+                }
+                return true;
+            case ICN::BATTLEWAIT: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TEXTBAR, 4 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
+
+                    // add 'wait'
+                    const Image wait = Crop( GetICN( ICN::ADVBTNS, 8 + i ), 5, 4, 28, 28 );
+                    Image resizedWait( wait.width() / 2, wait.height() / 2 );
+                    Resize( wait, resizedWait );
+
+                    Blit( resizedWait, 0, 0, out, ( out.width() - 14 ) / 2, 0, 14, 14 );
+                }
+                return true;
+            case ICN::BUYMAX: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::WELLXTRA, i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 2, 52, 14 );
+
+                    // add 'max'
+                    Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
+                }
+                return true;
+            case ICN::BTNGIFT_GOOD: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    // add 'G'
+                    Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    // add 'I'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    // add 'F'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'T'
+                    Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
+                return true;
+            case ICN::BTNGIFT_EVIL: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    // add 'G'
+                    Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    // add 'I'
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    // add 'F'
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'T'
+                    Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
+                return true;
+            case ICN::BTNCONFIG: // a button
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEM, 11 + i );
+
+                    // add 'config'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 30 - i, 20, out, 8 - i, 5, 80, 16 );
+                }
                 return true;
             default:
                 break;
@@ -2304,6 +1952,8 @@ namespace fheroes2
         size_t GetMaximumTILIndex( int id )
         {
             if ( _tilVsImage[id].empty() ) {
+                _tilVsImage[id].resize( 4 ); // 4 possible sides
+
                 const std::vector<uint8_t> & data = ::AGG::ReadChunk( TIL::GetString( id ) );
                 if ( data.size() < headerSize ) {
                     return 0;
@@ -2319,15 +1969,30 @@ namespace fheroes2
                     return 0;
                 }
 
-                _tilVsImage[id].resize( count );
+                std::vector<Image> & originalTIL = _tilVsImage[id][0];
+
+                originalTIL.resize( count );
                 for ( uint32_t i = 0; i < count; ++i ) {
-                    _tilVsImage[id][i].resize( width, height );
-                    _tilVsImage[id][i].reset();
-                    memcpy( _tilVsImage[id][i].image(), data.data() + headerSize + i * size, size );
+                    Image & tilImage = originalTIL[i];
+                    tilImage.resize( width, height );
+                    memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
+                    std::fill( tilImage.transform(), tilImage.transform() + width * height, 0 );
+                }
+
+                for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
+                    std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
+                    currentTIL.resize( count );
+
+                    const bool horizontalFlip = ( shapeId & 2 ) != 0;
+                    const bool verticalFlip = ( shapeId & 1 ) != 0;
+
+                    for ( uint32_t i = 0; i < count; ++i ) {
+                        currentTIL[i] = Flip( originalTIL[i], horizontalFlip, verticalFlip );
+                    }
                 }
             }
 
-            return _tilVsImage[id].size();
+            return _tilVsImage[id][0].size();
         }
 
         // We have few ICNs which we need to scale like some related to main screen
@@ -2353,12 +2018,12 @@ namespace fheroes2
             const double scaleFactorX = static_cast<double>( Display::instance().width() ) / Display::DEFAULT_WIDTH;
             const double scaleFactorY = static_cast<double>( Display::instance().height() ) / Display::DEFAULT_HEIGHT;
 
-            const uint32_t resizedWidth = static_cast<uint32_t>( originalIcn.width() * scaleFactorX + 0.5 );
-            const uint32_t resizedHeight = static_cast<uint32_t>( originalIcn.height() * scaleFactorY + 0.5 );
+            const int32_t resizedWidth = static_cast<int32_t>( originalIcn.width() * scaleFactorX + 0.5 );
+            const int32_t resizedHeight = static_cast<int32_t>( originalIcn.height() * scaleFactorY + 0.5 );
             // Resize only if needed
             if ( resizedIcn.width() != resizedWidth || resizedIcn.height() != resizedHeight ) {
                 resizedIcn.resize( resizedWidth, resizedHeight );
-                resizedIcn.setPosition( static_cast<uint32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<uint32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
+                resizedIcn.setPosition( static_cast<int32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<int32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
                 Resize( originalIcn, resizedIcn, false );
             }
 
@@ -2384,18 +2049,20 @@ namespace fheroes2
 
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
+            if ( shapeId > 3 ) {
+                return errorTILImage;
+            }
+
             if ( !IsValidTILId( tilId ) ) {
                 return errorTILImage;
             }
 
             const size_t maxTILIndex = GetMaximumTILIndex( tilId );
-            if ( index >= maxTILIndex / 4 ) {
+            if ( index >= maxTILIndex ) {
                 return errorTILImage;
             }
 
-            // Generate proper TIL index
-            const size_t correctIndex = index + ( maxTILIndex / 4 ) * ( shapeId % 4 );
-            return _tilVsImage[tilId][correctIndex];
+            return _tilVsImage[tilId][shapeId][index];
         }
 
         const Sprite & GetLetter( uint32_t character, uint32_t fontType )
@@ -2423,6 +2090,12 @@ namespace fheroes2
             }
 
             return GetICN( ICN::SMALFONT, character - 0x20 );
+        }
+
+        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType )
+        {
+            // TODO: Add Unicode character support
+            return GetLetter( character, fontType );
         }
     }
 }
