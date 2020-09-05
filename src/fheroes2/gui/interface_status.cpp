@@ -216,8 +216,16 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
 {
     const Rect & pos = GetArea();
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON, ( world.GetWeek() - 1 ) % 5 ),
-                    fheroes2::Display::instance(), pos.x, pos.y + 1 + oh );
+    const int dayOfWeek = world.GetDay();
+    const int weekOfMonth = world.GetWeek();
+    const int month = world.GetMonth();
+    const int icnType = Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON;
+    uint32_t icnId = dayOfWeek > 1 ? 0 : ( ( weekOfMonth - 1 ) % 4 ) + 1;
+    if ( dayOfWeek == 1 && weekOfMonth == 1 && month == 1 ) { // special case
+        icnId = 0;
+    }
+
+    fheroes2::Blit( fheroes2::AGG::GetICN( icnType, icnId ), fheroes2::Display::instance(), pos.x, pos.y + 1 + oh );
 
     std::string message = _( "Month: %{month} Week: %{week}" );
     StringReplace( message, "%{month}", world.GetMonth() );
