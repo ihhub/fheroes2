@@ -1932,10 +1932,10 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::SYSTEM, 11 + i );
+                    out = GetICN( ICN::REQUESTS, 1 + i );
 
                     // add 'config'
-                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 30 - i, 20, out, 8 - i, 5, 80, 16 );
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 31 - i, 20, out, 10 - i, 4, 77, 16 );
                 }
                 return true;
             default:

@@ -106,8 +106,8 @@ void Dialog::GameInfo( void )
     text.Set( "score: " + GetString( Game::GetGameOverScores() ), Font::YELLOW_SMALL, 80 );
     text.Blit( pt.x + 415 - text.w(), pt.y + 434 );
 
-    fheroes2::Button buttonOk( pt.x + 180, pt.y + 425, ICN::SYSTEM, 1, 2 );
-    fheroes2::Button buttonCfg( pt.x + 50, pt.y + 425, ICN::BTNCONFIG, 0, 1 );
+    fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
+    fheroes2::Button buttonCfg( pt.x + 50, pt.y + 426, ICN::BTNCONFIG, 0, 1 );
 
     buttonOk.draw();
     buttonCfg.draw();
