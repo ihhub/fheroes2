@@ -27,6 +27,27 @@
 
 namespace fheroes2
 {
+    ActionObject::ActionObject()
+        : _receiver( nullptr )
+    {}
+
+    void ActionObject::subscribe( ActionObject * receiver )
+    {
+        _receiver = receiver;
+    }
+
+    void ActionObject::unsubscribe()
+    {
+        _receiver = nullptr;
+    }
+
+    void ActionObject::updateSubscription()
+    {
+        if ( _receiver != nullptr ) {
+            _receiver->senderUpdate( this );
+        }
+    }
+
     ButtonBase::ButtonBase( int32_t offsetX, int32_t offsetY )
         : _offsetX( offsetX )
         , _offsetY( offsetY )
@@ -71,6 +92,7 @@ namespace fheroes2
     {
         if ( isEnabled() ) {
             _isPressed = true;
+            updateSubscription();
         }
     }
 
@@ -78,28 +100,33 @@ namespace fheroes2
     {
         if ( isEnabled() ) {
             _isPressed = false;
+            updateSubscription();
         }
     }
 
     void ButtonBase::enable()
     {
         _isEnabled = true;
+        updateSubscription();
     }
 
     void ButtonBase::disable()
     {
         _isEnabled = false;
         _isPressed = false; // button can't be disabled and pressed
+        updateSubscription();
     }
 
     void ButtonBase::show()
     {
         _isVisible = true;
+        updateSubscription();
     }
 
     void ButtonBase::hide()
     {
         _isVisible = false;
+        updateSubscription();
     }
 
     void ButtonBase::setPosition( int32_t offsetX_, int32_t offsetY_ )
@@ -355,6 +382,63 @@ namespace fheroes2
         if ( !_isDisabled ) {
             _button.enable();
             _button.draw( _area );
+        }
+    }
+
+    void OptionButtonGroup::addButton( ButtonBase * button )
+    {
+        if ( button == nullptr )
+            return;
+
+        _button.push_back( button );
+        button->subscribe( this );
+    }
+
+    ButtonBase * OptionButtonGroup::currentPressedButton() const
+    {
+        for ( size_t i = 0; i < _button.size(); ++i ) {
+            if ( _button[i]->isPressed() ) {
+                return _button[i];
+            }
+        }
+
+        return nullptr;
+    }
+
+    void OptionButtonGroup::senderUpdate( const ActionObject * sender )
+    {
+        if ( sender == nullptr ) // how is it even possible?
+            return;
+
+        for ( size_t i = 0; i < _button.size(); ++i ) {
+            if ( sender == _button[i] ) {
+                ButtonBase * button = _button[i];
+                if ( button->isPressed() ) {
+                    unsubscribeAll();
+
+                    for ( size_t buttonId = 0; buttonId < _button.size(); ++buttonId ) {
+                        if ( i != buttonId ) {
+                            _button[buttonId]->release();
+                        }
+                    }
+
+                    subscribeAll();
+                }
+            }
+        }
+    }
+
+    void OptionButtonGroup::subscribeAll()
+    {
+        for ( size_t i = 0; i < _button.size(); ++i ) {
+            _button[i]->subscribe( this );
+        }
+    }
+
+    void OptionButtonGroup::unsubscribeAll()
+    {
+        for ( size_t i = 0; i < _button.size(); ++i ) {
+            _button[i]->unsubscribe();
         }
     }
 }
