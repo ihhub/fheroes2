@@ -1938,6 +1938,21 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 31 - i, 20, out, 10 - i, 4, 77, 16 );
                 }
                 return true;
+            case ICN::PHOENIX:
+                LoadOriginalICN( id );
+                // First sprite has cropped shadow. We copy missing part from another 'almost' identical frame
+                if ( _icnVsSprite[id].size() >= 32 ) {
+                    Copy( _icnVsSprite[id][32], 60, 73, _icnVsSprite[id][1], 60, 73, 14, 13 );
+                    Copy( _icnVsSprite[id][32], 56, 72, _icnVsSprite[id][30], 56, 72, 18, 9 );
+                }
+                return true;
+            case ICN::MONH0028: // phoenix
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 1 ) {
+                    const Sprite & correctFrame = GetICN( ICN::PHOENIX, 32 );
+                    Copy( correctFrame, 60, 73, _icnVsSprite[id][0], 58, 70, 14, 13 );
+                }
+                return true;
             default:
                 break;
             }
