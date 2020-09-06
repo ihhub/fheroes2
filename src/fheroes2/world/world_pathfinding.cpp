@@ -22,40 +22,6 @@
 #include "ground.h"
 #include "world.h"
 
-namespace
-{
-    uint8_t ReflectDirectionIndex( uint8_t direction )
-    {
-        return ( direction + 4 ) % 8;
-    }
-
-    uint16_t GetDirectionBitmask( uint8_t direction, bool reflect = false )
-    {
-        return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
-    }
-
-    std::vector<int> GetDirectionOffsets( uint32_t mapWidth )
-    {
-        const int width = static_cast<int>( mapWidth );
-        std::vector<int> offsets( 8 );
-        offsets[TOP_LEFT] = -width - 1;
-        offsets[TOP] = -width;
-        offsets[TOP_RIGHT] = -width + 1;
-        offsets[RIGHT] = 1;
-        offsets[BOTTOM_RIGHT] = width + 1;
-        offsets[BOTTOM] = width;
-        offsets[BOTTOM_LEFT] = width - 1;
-        offsets[LEFT] = -1;
-        return offsets;
-    }
-
-    int ConvertExtendedIndex( int index, uint32_t width )
-    {
-        const uint32_t originalWidth = width - 2;
-        return ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1;
-    }
-}
-
 void Pathfinder::reset()
 {
     _cache.clear();
