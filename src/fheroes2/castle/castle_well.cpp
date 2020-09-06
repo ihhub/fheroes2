@@ -75,7 +75,6 @@ u32 HowManyRecruitMonster( const Castle & castle, u32 dw, const Funds & add, Fun
 void Castle::OpenWell( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
@@ -216,8 +215,8 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
     Point dst_pt, pt;
 
     const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
-    Rect src_rt( 0, 461, button.width(), 19 );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width(), cur_pt.y + 461, src_rt.w, src_rt.h );
+    const fheroes2::Rect src_rt( 0, 461, button.width(), 19 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width(), cur_pt.y + 461, src_rt.width, src_rt.height );
 
     text.Set( _( "Town Population Information and Statistics" ), Font::BIG );
     dst_pt.x = cur_pt.x + 315 - text.w() / 2;
