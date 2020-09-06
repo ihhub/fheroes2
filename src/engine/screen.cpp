@@ -437,7 +437,9 @@ namespace
                 if ( !SDL_MUSTLOCK( _surface ) ) {
                     // copy the image from display buffer to SDL surface
                     fheroes2::Display & display = fheroes2::Display::instance();
-                    memcpy( _surface->pixels, display.image(), display.width() * display.height() );
+                    if ( _surface->w == display.width() && _surface->h == display.height() ) {
+                        memcpy( _surface->pixels, display.image(), display.width() * display.height() );
+                    }
 
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                 }
@@ -690,7 +692,9 @@ namespace
                 if ( !SDL_MUSTLOCK( _surface ) ) {
                     // copy the image from display buffer to SDL surface
                     fheroes2::Display & display = fheroes2::Display::instance();
-                    memcpy( _surface->pixels, display.image(), display.width() * display.height() );
+                    if ( _surface->w == display.width() && _surface->h == display.height() ) {
+                        memcpy( _surface->pixels, display.image(), display.width() * display.height() );
+                    }
 
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                 }
