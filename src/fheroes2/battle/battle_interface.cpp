@@ -177,18 +177,18 @@ namespace Battle
         void SetPosition( u32 px, u32 py )
         {
             const u32 mx = 6;
-            const u32 sw = 640;
+            const u32 sw = fheroes2::Display::DEFAULT_WIDTH;
             const u32 sh = mx * 20;
-            border.SetPosition( px, py - sh - 2, sw - 30, sh - 30 );
+            border.SetPosition( px, py - sh - 2, sw - 32, sh - 30 );
             const Rect & area = border.GetArea();
             const u32 ax = area.x + area.w - 20;
 
             SetTopLeft( area );
             SetAreaMaxItems( mx );
 
-            SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax, area.y ) );
-            SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax, area.y + area.h - 20 ) );
-            SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( ax + 5, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
+            SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
+            SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.h - 11 ) );
+            SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
                                                                                  buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 6 ) );
             splitter.HideCursor();
             SetAreaItems( Rect( area.x, area.y, area.w - 10, area.h ) );
