@@ -32,6 +32,7 @@ namespace fheroes2
 
         void subscribe( ActionObject * receiver );
         void unsubscribe();
+
     protected:
         void updateSubscription();
 
@@ -169,7 +170,7 @@ namespace fheroes2
         virtual void senderUpdate( const ActionObject * sender ) override;
 
     private:
-        std::vector<ButtonBase*> _button;
+        std::vector<ButtonBase *> _button;
 
         void subscribeAll();
         void unsubscribeAll();

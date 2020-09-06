@@ -270,7 +270,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
         if ( le.MousePressLeft( buttonSelectSmall.area() ) )
-             buttonSelectSmall.drawOnPress();
+            buttonSelectSmall.drawOnPress();
         if ( le.MousePressLeft( buttonSelectMedium.area() ) )
             buttonSelectMedium.drawOnPress();
         if ( le.MousePressLeft( buttonSelectLarge.area() ) )
