@@ -337,17 +337,23 @@ int Game::NewGame( void )
     const uint32_t backgroundWidth = back.width();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    fheroes2::Blit( panel, display, backgroundWidth - 235, 5 );
+    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+    fheroes2::Blit( panel, display, panelXPos, panelOffset );
 
-    LocalEvent & le = LocalEvent::Get();
-
-    const uint32_t buttonXPos = backgroundWidth - 185;
-    fheroes2::Button buttonStandartGame( buttonXPos, 45, ICN::BTNNEWGM, 0, 1 );
-    fheroes2::Button buttonCampainGame( buttonXPos, 110, ICN::BTNNEWGM, 2, 3 );
-    fheroes2::Button buttonMultiGame( buttonXPos, 175, ICN::BTNNEWGM, 4, 5 );
-    fheroes2::Button buttonBattleGame( buttonXPos, 240, ICN::BTNBATTLEONLY, 0, 1 );
-    fheroes2::Button buttonSettings( buttonXPos, 305, ICN::BTNDCCFG, 4, 5 );
-    fheroes2::Button buttonCancelGame( buttonXPos, 375, ICN::BTNNEWGM, 6, 7 );
+    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+    const uint32_t buttonWidth = buttonSample.width();
+    const uint32_t buttonHeight = buttonSample.height();
+    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+    const uint32_t buttonYPos = 46;
+    const uint32_t buttonYStep = 66;
+    fheroes2::Button buttonStandartGame( buttonXPos, buttonYPos, ICN::BTNNEWGM, 0, 1 );
+    fheroes2::Button buttonCampainGame( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNNEWGM, 2, 3 );
+    fheroes2::Button buttonMultiGame( buttonXPos, buttonYPos + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
+    fheroes2::Button buttonBattleGame( buttonXPos, buttonYPos + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
+    fheroes2::Button buttonSettings( buttonXPos, buttonYPos + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );
+    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
 
     if ( !IsCampaignPresent() ) {
         buttonCampainGame.disable();
@@ -362,6 +368,8 @@ int Game::NewGame( void )
 
     cursor.Show();
     display.render();
+
+    LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) { // new game loop
         le.MousePressLeft( buttonStandartGame.area() ) ? buttonStandartGame.drawOnPress() : buttonStandartGame.drawOnRelease();
