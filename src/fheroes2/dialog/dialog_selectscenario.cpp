@@ -232,14 +232,15 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     fheroes2::Button buttonSelectXLarge( rt.x + 223, rt.y + 22, ICN::REQUESTS, 15, 16 );
     fheroes2::Button buttonSelectAll( rt.x + 285, rt.y + 22, ICN::REQUESTS, 17, 18 );
 
-    if ( small.empty() )
-        buttonSelectSmall.disable();
-    if ( medium.empty() )
-        buttonSelectMedium.disable();
-    if ( large.empty() )
-        buttonSelectLarge.disable();
-    if ( xlarge.empty() )
-        buttonSelectXLarge.disable();
+    buttonSelectAll.press();
+    fheroes2::ButtonBase * currentPressedButton = &buttonSelectAll;
+
+    fheroes2::OptionButtonGroup buttonGroup;
+    buttonGroup.addButton( &buttonSelectSmall );
+    buttonGroup.addButton( &buttonSelectMedium );
+    buttonGroup.addButton( &buttonSelectLarge );
+    buttonGroup.addButton( &buttonSelectXLarge );
+    buttonGroup.addButton( &buttonSelectAll );
 
     ScenarioListBox listbox( rt );
 
@@ -267,11 +268,17 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     while ( le.HandleEvents() ) {
         if ( buttonOk.isEnabled() )
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.MousePressLeft( buttonSelectSmall.area() ) && buttonSelectSmall.isEnabled() ? buttonSelectSmall.drawOnPress() : buttonSelectSmall.drawOnRelease();
-        le.MousePressLeft( buttonSelectMedium.area() ) && buttonSelectMedium.isEnabled() ? buttonSelectMedium.drawOnPress() : buttonSelectMedium.drawOnRelease();
-        le.MousePressLeft( buttonSelectLarge.area() ) && buttonSelectLarge.isEnabled() ? buttonSelectLarge.drawOnPress() : buttonSelectLarge.drawOnRelease();
-        le.MousePressLeft( buttonSelectXLarge.area() ) && buttonSelectXLarge.isEnabled() ? buttonSelectXLarge.drawOnPress() : buttonSelectXLarge.drawOnRelease();
-        le.MousePressLeft( buttonSelectAll.area() ) ? buttonSelectAll.drawOnPress() : buttonSelectAll.drawOnRelease();
+
+        if ( le.MousePressLeft( buttonSelectSmall.area() ) )
+             buttonSelectSmall.drawOnPress();
+        if ( le.MousePressLeft( buttonSelectMedium.area() ) )
+            buttonSelectMedium.drawOnPress();
+        if ( le.MousePressLeft( buttonSelectLarge.area() ) )
+            buttonSelectLarge.drawOnPress();
+        if ( le.MousePressLeft( buttonSelectXLarge.area() ) )
+            buttonSelectXLarge.drawOnPress();
+        if ( le.MousePressLeft( buttonSelectAll.area() ) )
+            buttonSelectAll.drawOnPress();
 
         listbox.QueueEventProcessing();
 
@@ -284,24 +291,53 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             result = NULL;
             break;
         }
-        else if ( ( le.MouseClickLeft( buttonSelectSmall.area() ) || le.KeyPress( KEY_s ) ) && buttonSelectSmall.isEnabled() ) {
-            listbox.SetListContent( small );
+        else if ( ( le.MouseClickLeft( buttonSelectSmall.area() ) || le.KeyPress( KEY_s ) ) /*&& buttonSelectSmall.isEnabled()*/ ) {
+            if ( small.empty() ) {
+                Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
+                currentPressedButton->drawOnPress();
+            }
+            else {
+                listbox.SetListContent( small );
+                currentPressedButton = &buttonSelectSmall;
+            }
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectMedium.area() ) || le.KeyPress( KEY_m ) ) && buttonSelectMedium.isEnabled() ) {
-            listbox.SetListContent( medium );
+        else if ( ( le.MouseClickLeft( buttonSelectMedium.area() ) || le.KeyPress( KEY_m ) ) /*&& buttonSelectMedium.isEnabled()*/ ) {
+            if ( medium.empty() ) {
+                Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
+                currentPressedButton->drawOnPress();
+            }
+            else {
+                listbox.SetListContent( medium );
+                currentPressedButton = &buttonSelectMedium;
+            }
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectLarge.area() ) || le.KeyPress( KEY_l ) ) && buttonSelectLarge.isEnabled() ) {
-            listbox.SetListContent( large );
+        else if ( ( le.MouseClickLeft( buttonSelectLarge.area() ) || le.KeyPress( KEY_l ) ) /*&& buttonSelectLarge.isEnabled()*/ ) {
+            if ( large.empty() ) {
+                Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
+                currentPressedButton->drawOnPress();
+            }
+            else {
+                listbox.SetListContent( large );
+                currentPressedButton = &buttonSelectLarge;
+            }
             cursor.Hide();
         }
-        else if ( ( le.MouseClickLeft( buttonSelectXLarge.area() ) || le.KeyPress( KEY_x ) ) && buttonSelectXLarge.isEnabled() ) {
-            listbox.SetListContent( xlarge );
+        else if ( ( le.MouseClickLeft( buttonSelectXLarge.area() ) || le.KeyPress( KEY_x ) ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
+            if ( xlarge.empty() ) {
+                Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
+                currentPressedButton->drawOnPress();
+            }
+            else {
+                listbox.SetListContent( xlarge );
+                currentPressedButton = &buttonSelectXLarge;
+            }
             cursor.Hide();
         }
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || le.KeyPress( KEY_a ) ) {
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
+            currentPressedButton = &buttonSelectAll;
             cursor.Hide();
         }
 

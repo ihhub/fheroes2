@@ -24,8 +24,25 @@
 
 namespace fheroes2
 {
+    // Action-event class to communicate between sender and receiver (only for user actions)
+    class ActionObject
+    {
+    public:
+        ActionObject();
+
+        void subscribe( ActionObject * receiver );
+        void unsubscribe();
+    protected:
+        void updateSubscription();
+
+        virtual void senderUpdate( const ActionObject * ) {}
+
+    private:
+        ActionObject * _receiver;
+    };
+
     // An abstract class for button usage
-    class ButtonBase
+    class ButtonBase : public ActionObject
     {
     public:
         ButtonBase( int32_t offsetX = 0, int32_t offsetY = 0 );
@@ -139,5 +156,22 @@ namespace fheroes2
         ButtonBase & _button;
         Image & _area;
         bool _isDisabled;
+    };
+
+    class OptionButtonGroup : public ActionObject
+    {
+    public:
+        void addButton( ButtonBase * button );
+
+        ButtonBase * currentPressedButton() const;
+
+    protected:
+        virtual void senderUpdate( const ActionObject * sender ) override;
+
+    private:
+        std::vector<ButtonBase*> _button;
+
+        void subscribeAll();
+        void unsubscribeAll();
     };
 }
