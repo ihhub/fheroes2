@@ -508,16 +508,25 @@ u32 Game::SelectCountPlayers( void )
     const uint32_t backgroundWidth = back.width();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    fheroes2::Blit( panel, display, backgroundWidth - 235, 5 );
+    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+    fheroes2::Blit( panel, display, panelXPos, panelOffset );
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button button2Players( backgroundWidth - 185, 45, ICN::BTNHOTST, 0, 1 );
-    fheroes2::Button button3Players( backgroundWidth - 185, 110, ICN::BTNHOTST, 2, 3 );
-    fheroes2::Button button4Players( backgroundWidth - 185, 175, ICN::BTNHOTST, 4, 5 );
-    fheroes2::Button button5Players( backgroundWidth - 185, 240, ICN::BTNHOTST, 6, 7 );
-    fheroes2::Button button6Players( backgroundWidth - 185, 305, ICN::BTNHOTST, 8, 9 );
-    fheroes2::Button buttonCancel( backgroundWidth - 185, 375, ICN::BTNNEWGM, 6, 7 );
+    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+    const uint32_t buttonWidth = buttonSample.width();
+    const uint32_t buttonHeight = buttonSample.height();
+    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+    const uint32_t buttonYPos = 46;
+    const uint32_t buttonYStep = 66;
+    fheroes2::Button button2Players( buttonXPos, buttonYPos, ICN::BTNHOTST, 0, 1 );
+    fheroes2::Button button3Players( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNHOTST, 2, 3 );
+    fheroes2::Button button4Players( buttonXPos, buttonYPos + buttonYStep * 2, ICN::BTNHOTST, 4, 5 );
+    fheroes2::Button button5Players( buttonXPos, buttonYPos + buttonYStep * 3, ICN::BTNHOTST, 6, 7 );
+    fheroes2::Button button6Players( buttonXPos, buttonYPos + buttonYStep * 4, ICN::BTNHOTST, 8, 9 );
+    fheroes2::Button buttonCancel( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
 
     button2Players.draw();
     button3Players.draw();
