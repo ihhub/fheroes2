@@ -181,6 +181,9 @@ namespace fheroes2
     // This function does NOT check transform layer
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId );
 
+    // Use this function only when you need to convert pixel value into transform layer
+    void ReplaceColorIdByTransformId( Image & image, uint8_t colorId, uint8_t transformId );
+
     // Please remember that subpixel accuracy resizing is extremely slow!
     void Resize( const Image & in, Image & out, bool isSubpixelAccuracy = false );
 

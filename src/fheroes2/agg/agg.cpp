@@ -1743,6 +1743,13 @@ namespace fheroes2
             case ICN::ROUTERED:
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::RED );
                 return true;
+            case ICN::FONT:
+                LoadOriginalICN( id );
+                // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    ReplaceColorIdByTransformId( _icnVsSprite[id][i], 50, 2 );
+                }
+                return true;
             case ICN::YELLOW_FONT:
                 CopyICNWithPalette( id, ICN::FONT, PAL::YELLOW_TEXT );
                 return true;
