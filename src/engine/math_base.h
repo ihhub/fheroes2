@@ -199,6 +199,6 @@ namespace fheroes2
     };
 
     typedef PointBase2D<int32_t> Point;
-    typedef SizeBase2D<uint32_t> Size;
-    typedef RectBase2D<int32_t, uint32_t> Rect;
+    typedef SizeBase2D<int32_t> Size;
+    typedef RectBase2D<int32_t, int32_t> Rect;
 }

@@ -376,7 +376,14 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
 
         dst_pt.y = pt.y + 124 + smonster.y();
 
-        fheroes2::Blit( smonster, display, dst_pt.x, dst_pt.y, flipMonsterSprite );
+        fheroes2::Point inPos( 0, 0 );
+        fheroes2::Point outPos( dst_pt.x, dst_pt.y );
+        fheroes2::Size inSize( smonster.width(), smonster.height() );
+
+        if ( fheroes2::FitToRoi( smonster, inPos, display, outPos, inSize, fheroes2::Rect( cur_pt.x, cur_pt.y, fheroes2::Display::DEFAULT_WIDTH,
+                                                                                           fheroes2::Display::DEFAULT_HEIGHT ) ) ) {
+            fheroes2::Blit( smonster, inPos, display, outPos, inSize, flipMonsterSprite );
+        }
 
         dw <<= 1;
         ++monsterId;

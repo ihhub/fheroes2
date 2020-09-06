@@ -221,13 +221,13 @@ namespace
         return true;
     }
 
-    bool Verify( const fheroes2::Image & in, int32_t & inX, int32_t & inY, const fheroes2::Image & out, int32_t & outX, int32_t & outY, int32_t & width,
-                 int32_t & height )
+    bool Verify( int32_t & inX, int32_t & inY, int32_t & outX, int32_t & outY, int32_t & width, int32_t & height, int32_t widthIn, int32_t heightIn, int32_t widthOut,
+                 int32_t heightOut )
     {
-        if ( in.empty() || out.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
+        if ( widthIn <= 0 || heightIn <= 0 || widthOut <= 0 || heightOut <= 0 || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
             return false;
 
-        if ( inX < 0 || inY < 0 || inX > in.width() || inY > in.height() )
+        if ( inX < 0 || inY < 0 || inX > widthIn || inY > heightIn )
             return false;
 
         if ( outX < 0 ) {
@@ -250,38 +250,44 @@ namespace
             height -= offsetY;
         }
 
-        if ( outX < 0 || outY < 0 || outX > out.width() || outY > out.height() )
+        if ( outX < 0 || outY < 0 || outX > widthOut || outY > heightOut )
             return false;
 
-        if ( inX + width > in.width() ) {
-            const int32_t offsetX = inX + width - in.width();
+        if ( inX + width > widthIn ) {
+            const int32_t offsetX = inX + width - widthIn;
             if ( offsetX >= width )
                 return false;
             width -= offsetX;
         }
 
-        if ( inY + height > in.height() ) {
-            const int32_t offsetY = inY + height - in.height();
+        if ( inY + height > heightIn ) {
+            const int32_t offsetY = inY + height - heightIn;
             if ( offsetY >= height )
                 return false;
             height -= offsetY;
         }
 
-        if ( outX + width > out.width() ) {
-            const int32_t offsetX = outX + width - out.width();
+        if ( outX + width > widthOut ) {
+            const int32_t offsetX = outX + width - widthOut;
             if ( offsetX >= width )
                 return false;
             width -= offsetX;
         }
 
-        if ( outY + height > out.height() ) {
-            const int32_t offsetY = outY + height - out.height();
+        if ( outY + height > heightOut ) {
+            const int32_t offsetY = outY + height - heightOut;
             if ( offsetY >= height )
                 return false;
             height -= offsetY;
         }
 
         return true;
+    }
+
+    bool Verify( const fheroes2::Image & in, int32_t & inX, int32_t & inY, const fheroes2::Image & out, int32_t & outX, int32_t & outY, int32_t & width,
+                 int32_t & height )
+    {
+        return Verify( inX, inY, outX, outY, width, height, in.width(), in.height(), out.width(), out.height() );
     }
 
     uint8_t GetPALColorId( uint8_t red, uint8_t green, uint8_t blue )
@@ -787,7 +793,7 @@ namespace fheroes2
         if ( inPos.x < 0 || inPos.y < 0 )
             return;
 
-        AlphaBlit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, static_cast<int32_t>( size.width ), static_cast<int32_t>( size.height ), flip );
+        AlphaBlit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, size.width, size.height, flip );
     }
 
     void ApplyPalette( Image & image, const std::vector<uint8_t> & palette )
@@ -929,7 +935,7 @@ namespace fheroes2
         if ( inPos.x < 0 || inPos.y < 0 )
             return;
 
-        Blit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, static_cast<int32_t>( size.width ), static_cast<int32_t>( size.height ), flip );
+        Blit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, size.width, size.height, flip );
     }
 
     void Copy( const Image & in, Image & out )
@@ -1242,10 +1248,10 @@ namespace fheroes2
 
         const bool isValidRoi = roi.width > 0 && roi.height > 0;
 
-        int32_t minX = isValidRoi ? roi.x : 0;
-        int32_t minY = isValidRoi ? roi.y : 0;
-        int32_t maxX = isValidRoi ? roi.x + static_cast<int32_t>( roi.width ) : width;
-        int32_t maxY = isValidRoi ? roi.y + static_cast<int32_t>( roi.height ) : height;
+        const int32_t minX = isValidRoi ? roi.x : 0;
+        const int32_t minY = isValidRoi ? roi.y : 0;
+        int32_t maxX = isValidRoi ? roi.x + roi.width : width;
+        int32_t maxY = isValidRoi ? roi.y + roi.height : height;
 
         if ( minX >= width || minY >= height )
             return;
@@ -1315,6 +1321,25 @@ namespace fheroes2
             std::fill( imageY, imageY + width, colorId );
             std::fill( transformY, transformY + width, 0 );
         }
+    }
+
+    bool FitToRoi( const Image & in, Point & inPos, const Image & out, Point & outPos, Size & outputSize, const Rect & outputRoi )
+    {
+        if ( !Validate( out, outputRoi.x, outputRoi.y, outputRoi.width, outputRoi.height ) ) {
+            return false;
+        }
+
+        outPos.x -= outputRoi.x;
+        outPos.y -= outputRoi.y;
+
+        if ( !Verify( inPos.x, inPos.y, outPos.x, outPos.y, outputSize.width, outputSize.height, in.width(), in.height(), outputRoi.width, outputRoi.height ) ) {
+            return false;
+        }
+
+        outPos.x += outputRoi.x;
+        outPos.y += outputRoi.y;
+
+        return true;
     }
 
     Image Flip( const Image & in, bool horizontally, bool vertically )
