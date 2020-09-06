@@ -193,8 +193,21 @@ void Interface::ButtonsArea::SetButtonStatus()
     else
         buttonSpell.enable();
 
-    if ( World::Get().GetKingdom( Settings::Get().CurrentColor() ).GetHeroes().empty() )
-        buttonNextHero.disable();
-    else
+    const Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+    const KingdomHeroes & heroes = kingdom.GetHeroes();
+
+    bool isMovableHeroPresent = false;
+    for ( size_t i = 0; i < heroes.size(); ++i ) {
+        if ( heroes[i]->MayStillMove() ) {
+            isMovableHeroPresent = true;
+            break;
+        }
+    }
+
+    if ( isMovableHeroPresent ) {
         buttonNextHero.enable();
+    }
+    else {
+        buttonNextHero.disable();
+    }
 }
