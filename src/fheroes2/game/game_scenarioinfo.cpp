@@ -326,7 +326,7 @@ void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
 
     // text scenario
     Text text( _( "Scenario:" ), Font::BIG );
-    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 20 );
+    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 23 );
 
     // maps name
     text.Set( conf.MapsName() );
@@ -347,16 +347,13 @@ void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
 
 void RedrawDifficultyInfo( const Point & dst )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
-        Rect src_rt( 24, 94, 65, 65 );
-        u32 offset = current * ( src_rt.w + 12 );
-        src_rt.x = src_rt.x + offset;
-        fheroes2::Blit( sprite, src_rt.x, src_rt.y, display, dst.x + offset, dst.y, src_rt.w, src_rt.h );
+    const uint32_t width = 65;
+    const uint32_t height = 69;
 
+    for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
+        const uint32_t offset = current * ( width + 12 );
         Text text( Difficulty::String( current ), Font::SMALL );
-        text.Blit( dst.x + offset + ( src_rt.w - text.w() ) / 2, dst.y + src_rt.h + 5 );
+        text.Blit( dst.x + offset + ( width - text.w() ) / 2, dst.y + height );
     }
 }
 

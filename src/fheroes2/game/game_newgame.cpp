@@ -435,13 +435,22 @@ int Game::NewMulti( void )
     const uint32_t backgroundWidth = back.width();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    fheroes2::Blit( panel, display, backgroundWidth - 235, 5 );
+    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+    fheroes2::Blit( panel, display, panelXPos, panelOffset );
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button buttonHotSeat( backgroundWidth - 185, 45, ICN::BTNMP, 0, 1 );
-    fheroes2::Button buttonNetwork( backgroundWidth - 185, 110, ICN::BTNMP, 2, 3 );
-    fheroes2::Button buttonCancelGame( backgroundWidth - 185, 375, ICN::BTNMP, 8, 9 );
+    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+    const uint32_t buttonWidth = buttonSample.width();
+    const uint32_t buttonHeight = buttonSample.height();
+    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+    const uint32_t buttonYPos = 46;
+    const uint32_t buttonYStep = 66;
+    fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BTNMP, 0, 1 );
+    fheroes2::Button buttonNetwork( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNMP, 2, 3 );
+    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNMP, 8, 9 );
 
     buttonHotSeat.draw();
     buttonCancelGame.draw();
