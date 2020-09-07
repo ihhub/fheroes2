@@ -42,7 +42,7 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     while ( currentNode != from && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
 
-        path.push_front( { node._from, Direction::Get( node._from, currentNode ), cost - node._cost } );
+        path.push_front( {node._from, Direction::Get( node._from, currentNode ), cost - node._cost} );
         currentNode = node._from;
         cost = node._cost;
     }
