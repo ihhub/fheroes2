@@ -1037,7 +1037,7 @@ u32 World::GetUniq( void )
     return ++GameStatic::uniq;
 }
 
-uint32_t World::getDistance(int from, int to, uint32_t skill)
+uint32_t World::getDistance( int from, int to, uint32_t skill )
 {
     return _pathfinder.getDistance( from, to, skill );
 }
