@@ -42,7 +42,7 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     while ( currentNode != from && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
 
-        path.push_front( {node._from, Direction::Get( node._from, currentNode ), cost - node._cost} );
+        path.emplace_front( node._from, Direction::Get( node._from, currentNode ), cost - node._cost );
         currentNode = node._from;
         cost = node._cost;
     }
@@ -50,7 +50,7 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     return path;
 }
 
-bool World::isTileUnderProtection( int to, int dst )
+bool World::isTileUnderProtection( int to, int dst ) const
 {
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( to );
     return monsters.size() && monsters.end() == std::find( monsters.begin(), monsters.end(), dst );
@@ -181,7 +181,7 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
                     const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, *it );
                     Maps::Tiles & newTile = world.GetTiles( newIndex );
 
-                    uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
+                    const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
                     if ( world.isValidPath( currentNodeIdx, *it ) && ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) ) {
                         _cache[newIndex]._from = currentNodeIdx;
                         _cache[newIndex]._cost = moveCost;

@@ -122,11 +122,14 @@ s32 Route::Path::GetDestinedIndex( void ) const
 /* return length path */
 uint32_t Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
 {
+    const int fromIndex = hero->GetIndex();
+    const uint32_t skill = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
+
     dst = dst_index;
 
-    swap( world.getPath( hero->GetIndex(), dst, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ), false ) );
+    static_cast<std::list<Route::Step> &>( *this ) = world.getPath( fromIndex, dst, skill, false );
 
-    return world.getDistance( hero->GetIndex(), dst, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    return world.getDistance( fromIndex, dst, skill );
 }
 
 void Route::Path::Reset( void )
