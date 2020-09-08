@@ -158,7 +158,7 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
         break;
     }
 
-    TextBox box1( header, Font::BIG, BOXAREA_WIDTH );
+    TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::PRIMSKIL, 4 );
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
