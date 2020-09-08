@@ -50,12 +50,6 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     return path;
 }
 
-bool World::isTileUnderProtection( int to, int dst ) const
-{
-    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( to );
-    return monsters.size() && monsters.end() == std::find( monsters.begin(), monsters.end(), dst );
-}
-
 bool World::isTileBlocked( int tileIndex, bool fromWater ) const
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -172,18 +166,34 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
     size_t lastProcessedNode = 0;
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
-        // bool protectedTile = !( _cache[currentNodeIdx]._from != -1 && !Maps::GetTilesUnderProtection( _cache[currentNodeIdx]._from ).empty() );
-        if ( currentNodeIdx == start || !world.isTileBlocked( currentNodeIdx, fromWater ) ) {
+        const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+
+        // check if current tile is protected, can move only to adjacent monster
+        if ( !monsters.empty() ) {
+            for ( int monsterIndex : monsters ) {
+                const int direction = Direction::Get( currentNodeIdx, monsterIndex );
+
+                if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction ) ) {
+                    // add straight to cache, can't move further from the monster
+                    const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction, skill );
+                    if ( _cache[monsterIndex]._from == -1 || _cache[monsterIndex]._cost > moveCost ) {
+                        _cache[monsterIndex]._from = currentNodeIdx;
+                        _cache[monsterIndex]._cost = moveCost;
+                        world.GetTiles( monsterIndex ).test_value = moveCost;
+                    }
+                }
+            }
+        }
+        else if ( currentNodeIdx == start || !world.isTileBlocked( currentNodeIdx, fromWater ) ) {
             for ( auto it = directions.begin(); it != directions.end(); ++it ) {
                 if ( Maps::isValidDirection( currentNodeIdx, *it ) ) {
                     const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, *it );
-                    Maps::Tiles & newTile = world.GetTiles( newIndex );
 
                     const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
                     if ( world.isValidPath( currentNodeIdx, *it ) && ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) ) {
                         _cache[newIndex]._from = currentNodeIdx;
                         _cache[newIndex]._cost = moveCost;
-                        newTile.test_value = moveCost;
+                        world.GetTiles( newIndex ).test_value = moveCost;
 
                         // duplicates are allowed if we find a cheaper way there
                         nodesToExplore.push_back( newIndex );
