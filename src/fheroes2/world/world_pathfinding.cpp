@@ -34,7 +34,7 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     std::list<Route::Step> path;
 
     // check if we have to re-cache the map (new hero selected, etc)
-    reEvaluateIfNeeded( from, skill, target );
+    reEvaluateIfNeeded( from, skill );
 
     // trace the path from end point
     int currentNode = target;
@@ -122,14 +122,14 @@ bool Pathfinder::isBlockedByObject( int from, int target, bool fromWater )
 
 uint32_t Pathfinder::getDistance( int from, int target, uint8_t skill )
 {
-    reEvaluateIfNeeded( from, skill, target );
+    reEvaluateIfNeeded( from, skill );
     return _cache[target]._cost;
 }
 
-void Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill, int destination )
+void Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill )
 {
     if ( _pathStart != from || _pathfindingSkill != skill ) {
-        evaluateMap( from, skill, destination );
+        evaluateMap( from, skill );
     }
 }
 
@@ -147,7 +147,7 @@ uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, ui
 }
 
 // Destination is optional
-void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
+void Pathfinder::evaluateMap( int start, uint8_t skill )
 {
     const Directions directions = Direction::All();
     const bool fromWater = world.GetTiles( start ).isWater();
