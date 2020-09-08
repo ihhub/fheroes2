@@ -700,10 +700,25 @@ double Monster::GetMonsterStrength() const
 
 u32 Monster::GetRNDSize( bool skip_factor ) const
 {
+    if ( !isValid() )
+        return 0;
+
+    const uint32_t defaultArmySizePerLevel[6] = { 50, 30, 25, 16, 12, 9 };
+    uint32_t result = 0;
+
+    switch ( id ) {
+    case PEASANT:
+        result = 80;
+        break;
+    default:
+        result = defaultArmySizePerLevel[GetLevel()];
+        break;
+    }
+
     const u32 hps = ( GetGrown() ? GetGrown() : 1 ) * GetHitPoints();
     u32 res = Rand::Get( hps, hps + hps / 2 );
 
-    if ( !skip_factor ) {
+    if ( !skip_factor && Settings::Get().ExtWorldNeutralArmyDifficultyScaling() ) {
         u32 factor = 100;
 
         switch ( Settings::Get().GameDifficulty() ) {
@@ -732,7 +747,7 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
             res = 1;
     }
 
-    return isValid() ? GetCountFromHitPoints( id, res ) : 0;
+    return res;
 }
 
 bool Monster::hasMeleePenalty() const
@@ -952,26 +967,6 @@ bool Monster::isAlwaysRetaliating( void ) const
 bool Monster::isAffectedByMorale( void ) const
 {
     return !( isUndead() || isElemental() );
-}
-
-bool Monster::hasColorCycling() const
-{
-    switch ( id ) {
-    case PHOENIX:
-    case MAGE:
-    case ARCHMAGE:
-    case GIANT:
-    case TITAN:
-    case GENIE:
-    case WATER_ELEMENT:
-    case FIRE_ELEMENT:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
 }
 
 Monster Monster::GetDowngrade( void ) const

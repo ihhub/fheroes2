@@ -277,15 +277,6 @@ bool Troops::HasMonster( const Monster & mons ) const
     return false;
 }
 
-bool Troops::hasColorCycling() const
-{
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->hasColorCycling() )
-            return true;
-    }
-    return false;
-}
-
 bool Troops::AllTroopsIsRace( int race ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )

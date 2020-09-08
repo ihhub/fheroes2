@@ -65,7 +65,6 @@ public:
     u32 GetCount( void ) const;
     bool isValid( void ) const;
     bool HasMonster( const Monster & ) const;
-    bool hasColorCycling() const;
 
     bool AllTroopsIsRace( int ) const;
     u32 GetUniqueCount( void ) const;
