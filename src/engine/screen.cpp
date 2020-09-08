@@ -154,20 +154,26 @@ namespace
 
         virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
         {
-            std::set<std::pair<int, int> > resolutionSet;
+            static std::vector<std::pair<int, int> > filteredResolutions;
 
-            const int displayCount = SDL_GetNumVideoDisplays();
-            if ( displayCount > 0 ) {
-                const int displayModeCount = SDL_GetNumDisplayModes( 0 );
-                for ( int i = 0; i < displayModeCount; ++i ) {
-                    SDL_DisplayMode videoMode;
-                    if ( SDL_GetDisplayMode( 0, i, &videoMode ) == 0 ) {
-                        resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+            if ( filteredResolutions.empty() ) {
+                std::set<std::pair<int, int> > resolutionSet;
+
+                const int displayCount = SDL_GetNumVideoDisplays();
+                if ( displayCount > 0 ) {
+                    const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+                    for ( int i = 0; i < displayModeCount; ++i ) {
+                        SDL_DisplayMode videoMode;
+                        if ( SDL_GetDisplayMode( 0, i, &videoMode ) == 0 ) {
+                            resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+                        }
                     }
                 }
+
+                filteredResolutions = FilterResolutions( resolutionSet );
             }
 
-            return FilterResolutions( resolutionSet );
+            return filteredResolutions;
         }
 
         virtual void setTitle( const std::string & title ) override
@@ -462,12 +468,20 @@ namespace
                 return;
             }
 
+            fheroes2::Display & display = fheroes2::Display::instance();
+            if ( _surface->format->BitsPerPixel == 8 && _surface->pixels == display.image() ) {
+                if ( display.width() == _surface->w && display.height() == _surface->h ) {
+                    linkRenderSurface( NULL );
+                    memcpy( display.image(), _surface->pixels, display.width() * display.height() );
+                }
+            }
+
             const uint32_t flags = _surface->flags;
             clear();
 
-            _surface = SDL_SetVideoMode( 0, 0, 8, flags ^ SDL_FULLSCREEN );
+            _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags ^ SDL_FULLSCREEN );
             if ( _surface == NULL ) {
-                _surface = SDL_SetVideoMode( 0, 0, 8, flags );
+                _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags );
             }
 
             _createPalette();
@@ -483,16 +497,21 @@ namespace
 
         virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
         {
-            std::set<std::pair<int, int> > resolutionSet;
+            static std::vector<std::pair<int, int> > filteredResolutions;
 
-            SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
-            if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
-                for ( int i = 0; modes[i]; ++i ) {
-                    resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
+            if ( filteredResolutions.empty() ) {
+                std::set<std::pair<int, int> > resolutionSet;
+                SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
+                if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
+                    for ( int i = 0; modes[i]; ++i ) {
+                        resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
+                    }
                 }
+
+                filteredResolutions = FilterResolutions( resolutionSet );
             }
 
-            return FilterResolutions( resolutionSet );
+            return filteredResolutions;
         }
 
         virtual void setTitle( const std::string & title ) override
@@ -547,6 +566,7 @@ namespace
     protected:
         RenderEngine()
             : _surface( NULL )
+            , _bitDepth( 8 )
         {}
 
         virtual void render( const fheroes2::Display & display ) override
@@ -609,7 +629,7 @@ namespace
             if ( isFullScreen )
                 flags |= SDL_FULLSCREEN;
 
-            _surface = SDL_SetVideoMode( width_, height_, 8, flags );
+            _surface = SDL_SetVideoMode( width_, height_, _bitDepth, flags );
 
             if ( _surface == NULL )
                 return false;
@@ -669,6 +689,7 @@ namespace
         SDL_Surface * _surface;
         std::vector<uint32_t> _palette32Bit;
         std::vector<SDL_Color> _palette8Bit;
+        int _bitDepth;
 
         int renderFlags() const
         {
