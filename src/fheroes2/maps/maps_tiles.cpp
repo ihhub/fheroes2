@@ -1565,8 +1565,8 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
         if ( 0 == tile_passable || DIRECTION_ALL != tile_passable ) {
             fheroes2::Image sf = PassableViewSurface( tile_passable );
 
-            if ( test_value ) {
-                Text text( GetString( test_value ), Font::SMALL );
+            if ( tile_passable ) {
+                Text text( GetString( tile_passable ), Font::SMALL );
                 text.Blit( 13, 13, sf );
             }
 

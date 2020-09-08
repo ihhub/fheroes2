@@ -179,7 +179,6 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
                     if ( _cache[monsterIndex]._from == -1 || _cache[monsterIndex]._cost > moveCost ) {
                         _cache[monsterIndex]._from = currentNodeIdx;
                         _cache[monsterIndex]._cost = moveCost;
-                        world.GetTiles( monsterIndex ).test_value = moveCost;
                     }
                 }
             }
@@ -193,7 +192,6 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
                     if ( world.isValidPath( currentNodeIdx, *it ) && ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) ) {
                         _cache[newIndex]._from = currentNodeIdx;
                         _cache[newIndex]._cost = moveCost;
-                        world.GetTiles( newIndex ).test_value = moveCost;
 
                         // duplicates are allowed if we find a cheaper way there
                         nodesToExplore.push_back( newIndex );

@@ -319,7 +319,6 @@
     <ClCompile Include="src\fheroes2\heroes\heroes_recruits.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_spell.cpp" />
     <ClCompile Include="src\fheroes2\heroes\route.cpp" />
-    <ClCompile Include="src\fheroes2\heroes\route_pathfind.cpp" />
     <ClCompile Include="src\fheroes2\heroes\skill.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\color.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\kingdom.cpp" />
