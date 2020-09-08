@@ -163,7 +163,6 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( start );
-    size_t lastProcessedNode = 0;
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
         const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
