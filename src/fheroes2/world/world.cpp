@@ -1044,7 +1044,7 @@ uint32_t World::getDistance( int from, int to, uint32_t skill )
 
 std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ignoreObjects )
 {
-    return _pathfinder.buildPath( from, to, ignoreObjects );
+    return _pathfinder.buildPath( from, to, skill );
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )

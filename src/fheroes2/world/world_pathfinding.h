@@ -46,7 +46,7 @@ public:
     bool isBlockedByObject( int from, int target, bool fromWater = false );
 
 private:
-    bool reEvaluateIfNeeded( int from, uint8_t skill, int destination = -1 );
+    void reEvaluateIfNeeded( int from, uint8_t skill, int destination = -1 );
 
     std::vector<PathfindingNode> _cache;
     int _pathStart = -1;

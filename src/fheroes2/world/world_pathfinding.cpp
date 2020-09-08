@@ -132,13 +132,11 @@ uint32_t Pathfinder::getDistance( int from, int target, uint8_t skill )
     return _cache[target]._cost;
 }
 
-bool Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill, int destination )
+void Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill, int destination )
 {
     if ( _pathStart != from || _pathfindingSkill != skill ) {
         evaluateMap( from, skill, destination );
-        return true;
     }
-    return false;
 }
 
 uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill )
@@ -172,7 +170,7 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( start );
     size_t lastProcessedNode = 0;
-    while ( lastProcessedNode != nodesToExplore.size() ) {
+    for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
         // bool protectedTile = !( _cache[currentNodeIdx]._from != -1 && !Maps::GetTilesUnderProtection( _cache[currentNodeIdx]._from ).empty() );
         if ( currentNodeIdx == start || !world.isTileBlocked( currentNodeIdx, fromWater ) ) {
@@ -193,7 +191,5 @@ void Pathfinder::evaluateMap( int start, uint8_t skill, int destination )
                 }
             }
         }
-
-        ++lastProcessedNode;
     }
 }

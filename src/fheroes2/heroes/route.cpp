@@ -149,7 +149,7 @@ bool Route::Path::isComplete( void ) const
 
 bool Route::Path::isValid( void ) const
 {
-    return !empty();
+    return !empty() && front().GetDirection() != 0;
 }
 
 int Route::Path::GetIndexSprite( int from, int to, int mod )

@@ -2481,9 +2481,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
             continue;
         }
 
-        Route::Path path( *hero );
-        path.Calculate( tileIndex, 2 ); // we need to make sure that a hero needs exactly 1 step to the creature
-        if ( path.size() == 1 && tile.isWater() == heroTile.isWater() ) {
+        if ( tile.isWater() == heroTile.isWater() ) {
             attackerIndex = *it;
             break;
         }
