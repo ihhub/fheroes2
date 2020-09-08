@@ -1137,9 +1137,6 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile )
     case MP2::OBJ_EARTHALTAR:
     case MP2::OBJ_BARROWMOUNDS:
         count = troop().GetRNDSize( true );
-        // increase small if dwelling not open
-        if ( !Settings::Get().ExtWorldDwellingsAccumulateUnits() && count <= troop.GetCount() )
-            count = troop.GetCount() + Rand::Get( 1, 3 );
         break;
 
     case MP2::OBJ_TROLLBRIDGE:
@@ -1156,10 +1153,7 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile )
     }
 
     if ( count ) {
-        if ( Settings::Get().ExtWorldDwellingsAccumulateUnits() )
-            tile.MonsterSetCount( troop.GetCount() + count );
-        else
-            tile.MonsterSetCount( count );
+        tile.MonsterSetCount( troop.GetCount() + count );
     }
 }
 

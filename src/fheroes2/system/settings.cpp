@@ -259,11 +259,11 @@ const settings_t settingsFHeroes2[] = {
     },
     {
         Settings::CASTLE_1HERO_HIRED_EVERY_WEEK,
-        _( "world: each castle allows one hero to be recruited every week" ),
+        _( "world: Each castle allows one hero to be recruited every week" ),
     },
     {
-        Settings::WORLD_DWELLING_ACCUMULATE_UNITS,
-        _( "world: Outer creature dwellings should accumulate units" ),
+        Settings::WORLD_SCALE_NEUTRAL_ARMIES,
+        _( "world: Neutral armies scale with game difficulty" ),
     },
     {
         Settings::WORLD_USE_UNIQUE_ARTIFACTS_ML,
@@ -1847,9 +1847,9 @@ bool Settings::ExtCastleOneHeroHiredEveryWeek( void ) const
     return ExtModes( CASTLE_1HERO_HIRED_EVERY_WEEK );
 }
 
-bool Settings::ExtWorldDwellingsAccumulateUnits( void ) const
+bool Settings::ExtWorldNeutralArmyDifficultyScaling( void ) const
 {
-    return ExtModes( WORLD_DWELLING_ACCUMULATE_UNITS );
+    return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
 }
 
 bool Settings::ExtWorldUseUniqueArtifactsML( void ) const

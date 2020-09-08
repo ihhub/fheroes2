@@ -186,7 +186,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_STARTHERO_LOSSCOND4HUMANS );
     states.push_back( Settings::WORLD_1HERO_HIRED_EVERY_WEEK );
     states.push_back( Settings::CASTLE_1HERO_HIRED_EVERY_WEEK );
-    states.push_back( Settings::WORLD_DWELLING_ACCUMULATE_UNITS );
+    states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_ML );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
