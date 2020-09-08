@@ -1897,7 +1897,7 @@ bool Maps::Tiles::validateWaterRules( bool fromWater ) const
 
     // if we're not in water but tile is; allow movement in two cases
     if ( tileIsWater )
-        return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES;
+        return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES || mp2_object == MP2::OBJ_BOAT;
 
     return true;
 }
