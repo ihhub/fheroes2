@@ -711,7 +711,7 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
         result = 80;
         break;
     default:
-        result = defaultArmySizePerLevel[GetLevel()];
+        result = defaultArmySizePerLevel[GetRandomUnitLevel()];
         break;
     }
 
@@ -747,7 +747,7 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
             res = 1;
     }
 
-    return res;
+    return ( result > 1 ) ? Rand::Get( result / 2, result ) : 1;
 }
 
 bool Monster::hasMeleePenalty() const
@@ -1323,8 +1323,8 @@ Monster Monster::Rand( level_t level )
     if ( monsters[0].empty() ) {
         for ( u32 i = PEASANT; i <= WATER_ELEMENT; ++i ) {
             const Monster monster( i );
-            if ( monster.GetLevel() > LEVEL0 )
-                monsters[monster.GetLevel() - LEVEL0 - 1].push_back( monster );
+            if ( monster.GetRandomUnitLevel() > LEVEL0 )
+                monsters[monster.GetRandomUnitLevel() - LEVEL0 - 1].push_back( monster );
         }
     }
     return *Rand::Get( monsters[level - LEVEL0 - 1] );
@@ -1502,7 +1502,7 @@ u32 Monster::Rand4MonthOf( void )
     return UNKNOWN;
 }
 
-int Monster::GetLevel( void ) const
+int Monster::GetRandomUnitLevel( void ) const
 {
     switch ( id ) {
     case PEASANT:
