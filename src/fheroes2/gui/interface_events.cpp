@@ -340,7 +340,7 @@ int Interface::Basic::EventDigArtifact( void )
                     AGG::PlaySound( M82::TREASURE );
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
-                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}" ) );
+                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
                     Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate() );
 
