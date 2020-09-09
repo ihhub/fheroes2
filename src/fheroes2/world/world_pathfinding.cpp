@@ -76,24 +76,25 @@ bool World::isValidPath( int index, int direction ) const
 
     // check corner water/coast
     if ( fromWater ) {
+        const int mapWidth = world.w();
         switch ( direction ) {
         case Direction::TOP_LEFT:
-            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::TOP ) ).isWater() || !GetTiles( Maps::GetDirectionIndex( index, Direction::LEFT ) ).isWater() )
+            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
                 return false;
             break;
 
         case Direction::TOP_RIGHT:
-            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::TOP ) ).isWater() || !GetTiles( Maps::GetDirectionIndex( index, Direction::RIGHT ) ).isWater() )
+            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
                 return false;
             break;
 
         case Direction::BOTTOM_RIGHT:
-            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::BOTTOM ) ).isWater() || !GetTiles( Maps::GetDirectionIndex( index, Direction::RIGHT ) ).isWater() )
+            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
                 return false;
             break;
 
         case Direction::BOTTOM_LEFT:
-            if ( !GetTiles( Maps::GetDirectionIndex( index, Direction::BOTTOM ) ).isWater() || !GetTiles( Maps::GetDirectionIndex( index, Direction::LEFT ) ).isWater() )
+            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
                 return false;
             break;
 
