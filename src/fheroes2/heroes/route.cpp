@@ -127,7 +127,7 @@ uint32_t Route::Path::Calculate( const s32 & destIndex )
 
     dst = destIndex;
 
-    static_cast<std::list<Route::Step> &>( *this ) = world.getPath( fromIndex, dst, skill, false );
+    std::list<Step>::operator=( world.getPath( fromIndex, dst, skill, false ) );
 
     return world.getDistance( fromIndex, dst, skill );
 }
