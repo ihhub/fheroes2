@@ -37,8 +37,14 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     reEvaluateIfNeeded( from, skill );
 
     // trace the path from end point
+    PathfindingNode & firstNode = _cache[target];
+    uint32_t cost = firstNode._cost;
+
+    // add cost of the first node
+    if ( firstNode._from != -1 )
+        cost += cost - _cache[firstNode._from]._cost;
+
     int currentNode = target;
-    uint32_t cost = _cache[currentNode]._cost;
     while ( currentNode != from && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
 
@@ -193,6 +199,8 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
                     const int newIndex = currentNodeIdx + offset[i];
+                    if ( newIndex == start )
+                        continue;
 
                     const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], skill );
                     PathfindingNode & newNode = _cache[newIndex];
