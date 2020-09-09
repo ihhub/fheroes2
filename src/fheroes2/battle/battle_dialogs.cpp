@@ -563,7 +563,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 
         if ( le.MousePressRight( btnCast.area() ) )
             Dialog::Message( _( "Cast Spell" ),
-                             _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn" ),
+                             _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                              Font::BIG );
         else if ( le.MousePressRight( btnRetreat.area() ) )
             Dialog::Message(
