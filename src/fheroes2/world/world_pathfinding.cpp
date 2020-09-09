@@ -42,7 +42,7 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     while ( currentNode != from && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
 
-        path.emplace_front( node._from, Direction::Get( node._from, currentNode ), cost - node._cost );
+        path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost - node._cost );
         currentNode = node._from;
         cost = node._cost;
     }
@@ -170,7 +170,7 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
         // check if current tile is protected, can move only to adjacent monster
         if ( !monsters.empty() ) {
             for ( int monsterIndex : monsters ) {
-                const int direction = Direction::Get( currentNodeIdx, monsterIndex );
+                const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
                 if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction ) ) {
                     // add straight to cache, can't move further from the monster

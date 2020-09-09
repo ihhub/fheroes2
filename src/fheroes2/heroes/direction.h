@@ -47,7 +47,6 @@ namespace Direction
 
     std::string String( int );
 
-    int Get( s32 from, s32 to );
     int Reflect( int direct );
 
     bool ShortDistanceClockWise( int direct1, int direct2 );

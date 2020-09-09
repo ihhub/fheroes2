@@ -2464,7 +2464,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
     if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
         spriteIndices.first += 7;
 
-        switch ( Direction::Get( tileIndex, attackerIndex ) ) {
+        switch ( Maps::GetDirection( tileIndex, attackerIndex ) ) {
         case Direction::TOP_LEFT:
         case Direction::LEFT:
         case Direction::BOTTOM_LEFT:

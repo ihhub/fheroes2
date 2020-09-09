@@ -138,6 +138,42 @@ const char * Maps::GetMinesName( int type )
     return _( "Mine" );
 }
 
+int Maps::GetDirection( int from, int to )
+{
+    if ( from == to )
+        return Direction::CENTER;
+
+    const int diff = to - from;
+    const int width = world.w();
+
+    if ( diff == ( -width - 1 ) ) {
+        return Direction::TOP_LEFT;
+    }
+    else if ( diff == -width ) {
+        return Direction::TOP;
+    }
+    else if ( diff == ( -width + 1 ) ) {
+        return Direction::TOP_RIGHT;
+    }
+    else if ( diff == -1 ) {
+        return Direction::LEFT;
+    }
+    else if ( diff == 1 ) {
+        return Direction::RIGHT;
+    }
+    else if ( diff == width - 1 ) {
+        return Direction::BOTTOM_LEFT;
+    }
+    else if ( diff == width ) {
+        return Direction::BOTTOM;
+    }
+    else if ( diff == width + 1 ) {
+        return Direction::BOTTOM_RIGHT;
+    }
+
+    return Direction::UNKNOWN;
+}
+
 s32 Maps::GetDirectionIndex( s32 from, int vector )
 {
     switch ( vector ) {
@@ -428,9 +464,9 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
     const Maps::Tiles & tile2 = world.GetTiles( index );
 
     if ( tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
-        const int monsterDirection = Direction::Get( index, from );
+        const int monsterDirection = Maps::GetDirection( index, from );
         /* if monster can attack to */
-        result = ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Direction::Get( from, index ) );
+        result = ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) );
 
         if ( !result ) {
             /* h2 specific monster attack: BOTTOM_LEFT impassable! */
@@ -448,7 +484,7 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
 
 bool Maps::IsNearTiles( s32 index1, s32 index2 )
 {
-    return DIRECTION_ALL & Direction::Get( index1, index2 );
+    return DIRECTION_ALL & Maps::GetDirection( index1, index2 );
 }
 
 bool Maps::TileIsUnderProtection( s32 center )

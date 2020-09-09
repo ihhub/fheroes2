@@ -82,7 +82,7 @@ Route::Path & Route::Path::operator=( const Path & p )
 
 int Route::Path::GetFrontDirection( void ) const
 {
-    return empty() ? ( dst != hero->GetIndex() ? Direction::Get( hero->GetIndex(), dst ) : Direction::CENTER ) : front().GetDirection();
+    return empty() ? ( dst != hero->GetIndex() ? Maps::GetDirection( hero->GetIndex(), dst ) : Direction::CENTER ) : front().GetDirection();
 }
 
 u32 Route::Path::GetFrontPenalty( void ) const
@@ -144,7 +144,7 @@ void Route::Path::Reset( void )
 
 bool Route::Path::isComplete( void ) const
 {
-    return dst == hero->GetIndex() || ( empty() && Direction::UNKNOWN != Direction::Get( hero->GetIndex(), dst ) );
+    return dst == hero->GetIndex() || ( empty() && Direction::UNKNOWN != Maps::GetDirection( hero->GetIndex(), dst ) );
 }
 
 bool Route::Path::isValid( void ) const
