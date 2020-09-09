@@ -75,7 +75,7 @@ namespace Route
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
         u32 GetTotalPenalty( void ) const;
-        uint32_t Calculate( const s32 &, int limit = -1 );
+        uint32_t Calculate( const s32 & destIndex );
 
         void Show( void )
         {
