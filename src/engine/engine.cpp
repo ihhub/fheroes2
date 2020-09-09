@@ -38,6 +38,10 @@ namespace Cdrom
 }
 #endif
 
+#ifdef VITA
+SDL_Joystick * gGameController = NULL;
+#endif
+
 bool SDL::Init( const u32 system )
 {
     if ( System::isRunning() )
@@ -59,6 +63,9 @@ bool SDL::Init( const u32 system )
 #endif
 #ifdef WITH_NET
     Network::Init();
+#endif
+#ifdef VITA
+    gGameController = SDL_JoystickOpen( 0 );
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -90,7 +97,9 @@ void SDL::Quit( void )
 #endif
     if ( SubSystem( SDL_INIT_AUDIO ) )
         Mixer::Quit();
-
+#ifdef VITA
+    SDL_JoystickClose( gGameController );
+#endif
     SDL_Quit();
 }
 

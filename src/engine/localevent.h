@@ -275,6 +275,17 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
+#ifdef VITA
+    void SetVitaPointerSpeed( int newSpeed )
+    {
+        vita_pointer_speed = newSpeed;
+    }
+    void VitaTextInputActive( bool active )
+    {
+        vita_input_active = active;
+    }
+#endif
+
 private:
     LocalEvent();
 
@@ -347,6 +358,25 @@ private:
     int emulate_mouse_step;
     KeySym emulate_press_left;
     KeySym emulate_press_right;
+#endif
+
+#ifdef VITA
+    void HandleJoyAxisEvent( const SDL_JoyAxisEvent & motion );
+    void HandleJoyButtonEvent( const SDL_JoyButtonEvent & button );
+    void ProcessAxisMotion( void );
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+#endif
+
+    bool vita_input_active = false;
+    int vita_pointer_speed = 10;
+
+    Sint16 xaxisl_value = 0;
+    Sint16 yaxisl_value = 0;
+    float xaxis_float = 0;
+    float yaxis_float = 0;
+    bool secondTouchDown = false;
+    Uint32 lastTime = 0;
 #endif
 };
 

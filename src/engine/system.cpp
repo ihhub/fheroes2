@@ -27,6 +27,10 @@
 #include <locale>
 #include <sstream>
 
+#ifdef VITA
+#include <psp2/io/stat.h>
+#endif
+
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>
 #endif
@@ -85,6 +89,8 @@ int System::MakeDirectory( const std::string & path )
     return CreateDirectoryA( path.c_str(), NULL );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
+#elif defined( VITA )
+    return sceIoMkdir( path.c_str(), 0777 );
 #else
     return mkdir( path.c_str(), S_IRWXU );
 #endif
@@ -98,6 +104,10 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
 std::string System::GetHomeDirectory( const std::string & prog )
 {
     std::string res;
+#ifdef VITA
+    res = "ux0:data/fheroes2";
+    return res;
+#endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     char * path = SDL_GetPrefPath( "", prog.c_str() );
@@ -215,6 +225,9 @@ int System::SetEnvironment( const char * name, const char * value )
     // SDL 1.2.12 (char *)
     return SDL_putenv( &str[0] );
 #endif
+#elif defined( VITA )
+    // setenv not found with -std=c++11 on Vita
+    return 1;
 #else
     return setenv( name, value, 1 );
 #endif
@@ -319,7 +332,7 @@ bool System::IsFile( const std::string & name, bool writable )
 {
 #if defined( _MSC_VER )
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
-#elif defined( ANDROID )
+#elif defined( ANDROID ) || defined( VITA )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #else
     std::string correctedPath;
@@ -339,7 +352,7 @@ bool System::IsDirectory( const std::string & name, bool writable )
 {
 #if defined( _MSC_VER )
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
-#elif defined( ANDROID )
+#elif defined( ANDROID ) || defined( VITA )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #else
     std::string correctedPath;

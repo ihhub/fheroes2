@@ -58,3 +58,10 @@
 
 # build directory
 build
+
+# vita specific
+*.bin
+*.elf
+*.velf
+*.vpk
+*.sfo

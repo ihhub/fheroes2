@@ -443,6 +443,10 @@ Settings::Settings()
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
     , memory_limit( 0 )
+#ifdef VITA
+    , vita_pointer_speed( 10 )
+    , vita_keep_aspect_ratio( 1 )
+#endif
 {
     ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
@@ -758,6 +762,22 @@ bool Settings::Read( const std::string & filename )
     }
 #endif
 
+#ifdef VITA
+    if ( config.Exists( "vita_pointer_speed" ) ) {
+        vita_pointer_speed = config.IntParams( "vita_pointer_speed" );
+        if ( vita_pointer_speed > 100 )
+            vita_pointer_speed = 100;
+        if ( vita_pointer_speed < 0 )
+            vita_pointer_speed = 0;
+        LocalEvent::Get().SetVitaPointerSpeed( vita_pointer_speed );
+    }
+
+    if ( config.Exists( "vita_keep_aspect_ratio" ) ) {
+        vita_keep_aspect_ratio = config.IntParams( "vita_keep_aspect_ratio" );
+        fheroes2::Display::instance().engine()->vitaKeepAspectRatio = vita_keep_aspect_ratio;
+    }
+#endif
+
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
 #endif
@@ -810,7 +830,12 @@ bool Settings::Save( const std::string & filename ) const
         return false;
 
     std::fstream file;
+#ifdef VITA
+    std::string vita_filename = "ux0:data/fheroes2/" + filename;
+    file.open( vita_filename.data(), std::fstream::out | std::fstream::trunc );
+#else
     file.open( filename.data(), std::fstream::out | std::fstream::trunc );
+#endif
     if ( !file )
         return false;
 
@@ -912,6 +937,14 @@ std::string Settings::String( void ) const
        << "unicode = " << ( opt_global.Modes( GLOBAL_USEUNICODE ) ? "on" : "off" ) << std::endl;
     if ( force_lang.size() )
         os << "lang = " << force_lang << std::endl;
+#endif
+
+#ifdef VITA
+    os << std::endl << "# vita pointer speed" << std::endl;
+    os << "vita_pointer_speed = " << vita_pointer_speed << std::endl;
+
+    os << std::endl << "# vita keep aspect ratio" << std::endl;
+    os << "vita_keep_aspect_ratio = " << vita_keep_aspect_ratio << std::endl;
 #endif
 
     return os.str();
@@ -1017,6 +1050,11 @@ ListDirs Settings::GetRootDirs( void )
     const std::string & home = System::GetHomeDirectory( "fheroes2" );
     if ( !home.empty() )
         dirs.push_back( home );
+
+#ifdef VITA
+    dirs.push_back( "ux0:app/FHOMM0002" );
+    dirs.push_back( "ux0:data/fheroes2" );
+#endif
 
     return dirs;
 }

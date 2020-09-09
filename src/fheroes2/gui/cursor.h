@@ -24,7 +24,7 @@
 
 #include "gamedefs.h"
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( VITA )
 #define USE_SDL_CURSOR
 #endif
 

@@ -43,6 +43,14 @@ namespace std
         osss << x;                                                                                                                                                       \
         __android_log_print( ANDROID_LOG_INFO, "SDLHeroes2", "%s", osss.str().c_str() );                                                                                 \
     }
+#elif defined( VITA )
+#include <psp2/kernel/clib.h>
+#define COUT( x )                                                                                                                                                        \
+    {                                                                                                                                                                    \
+        std::ostringstream osss;                                                                                                                                         \
+        osss << x << std::endl;                                                                                                                                          \
+        sceClibPrintf( osss.str().c_str() );                                                                                                                             \
+    }
 #else
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \

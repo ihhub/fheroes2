@@ -262,6 +262,10 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     std::string result;
     bool is_limit = false;
 
+#ifdef VITA
+    le.VitaTextInputActive( true );
+#endif
+
     while ( le.HandleEvents() && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
@@ -329,6 +333,10 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     cursor.Hide();
+
+#ifdef VITA
+    le.VitaTextInputActive( false );
+#endif
 
     return result;
 }

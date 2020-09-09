@@ -169,7 +169,11 @@ namespace
                         }
                     }
                 }
-
+#ifdef VITA
+                // there's no available resolution on Vita
+                resolutionSet.insert( std::make_pair( 640, 480 ) );
+                resolutionSet.insert( std::make_pair( 960, 544 ) );
+#endif
                 filteredResolutions = FilterResolutions( resolutionSet );
             }
 
@@ -305,7 +309,11 @@ namespace
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
                 if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
+#ifdef VITA
+                    if ( SDL_RenderCopy( _renderer, _texture, NULL, &vitaDestRect ) == 0 ) {
+#else
                     if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+#endif
                         SDL_RenderPresent( _renderer );
                     }
                 }
@@ -345,8 +353,11 @@ namespace
                 clear();
                 return false;
             }
-
+#ifdef VITA
+            _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+#else
             _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
+#endif
             if ( _surface == NULL ) {
                 clear();
                 return false;
@@ -358,7 +369,44 @@ namespace
             }
 
             _createPalette();
+#ifdef VITA
+            // screen scaling calculation
+            vitaDestRect.x = 0;
+            vitaDestRect.y = 0;
+            vitaDestRect.w = width_;
+            vitaDestRect.h = height_;
 
+            if ( width_ != 960 || height_ != 544 ) {
+                if ( isFullScreen ) {
+                    // resize to fullscreen
+                    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
+
+                    if ( vitaKeepAspectRatio ) {
+                        if ( ( 960.0 / 544.0 ) >= ( (float)width_ / height_ ) ) {
+                            float scale = 544.0 / height_;
+                            vitaDestRect.w = width_ * scale;
+                            vitaDestRect.h = 544;
+                            vitaDestRect.x = ( 960 - vitaDestRect.w ) / 2;
+                        }
+                        else {
+                            float scale = 960.0 / width_;
+                            vitaDestRect.w = 960;
+                            vitaDestRect.h = height_ * scale;
+                            vitaDestRect.y = ( 544 - vitaDestRect.h ) / 2;
+                        }
+                    }
+                    else {
+                        vitaDestRect.w = 960;
+                        vitaDestRect.h = 544;
+                    }
+                }
+                else {
+                    // center game area
+                    vitaDestRect.x = ( 960 - width_ ) / 2;
+                    vitaDestRect.y = ( 544 - height_ ) / 2;
+                }
+            }
+#endif
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
             if ( _texture == NULL ) {
                 clear();
@@ -406,7 +454,12 @@ namespace
 
         virtual bool isMouseCursorActive() const override
         {
+#ifdef VITA
+            // required for edge of screen scrolling
+            return true;
+#else
             return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
+#endif
         }
 
     private:
@@ -507,7 +560,11 @@ namespace
                         resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
                     }
                 }
-
+#ifdef VITA
+                // there's no available resolution on Vita
+                resolutionSet.insert( std::make_pair( 640, 480 ) );
+                resolutionSet.insert( std::make_pair( 960, 544 ) );
+#endif
                 filteredResolutions = FilterResolutions( resolutionSet );
             }
 
@@ -682,7 +739,12 @@ namespace
 
         virtual bool isMouseCursorActive() const override
         {
+#ifdef VITA
+            // required for edge of screen scrolling
+            return true;
+#else
             return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
+#endif
         }
 
     private:

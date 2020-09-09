@@ -45,6 +45,45 @@ enum KeyMod
     MOD_NUM = KMOD_NUM
 };
 
+#ifdef VITA
+static const int TOTAL_CHARACTERS_VITA = 38;
+bool currentUpper;
+int currentCharIndex;
+
+KeySym vitaKeys[TOTAL_CHARACTERS_VITA] = {
+    // lowercase letters
+    KEY_a, KEY_b, KEY_c, KEY_d, KEY_e, KEY_f, KEY_g, KEY_h, KEY_i, KEY_j, KEY_k, KEY_l, KEY_m, KEY_n, KEY_o, KEY_p, KEY_q, KEY_r, KEY_s, KEY_t, KEY_u, KEY_v, KEY_w,
+    KEY_x, KEY_y, KEY_z,
+    // space, underscore
+    KEY_SPACE, KEY_UNDERSCORE,
+    // nums
+    KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9};
+
+char GetCurrentVitaChar()
+{
+    char c = CharFromKeySym( vitaKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
+    return c;
+}
+
+void SetCurrentVitaCharIndex( char current_char )
+{
+    if ( current_char >= 'A' && current_char <= 'Z' ) {
+        currentUpper = true;
+        current_char += 32;
+    }
+
+    KeySym keySym = KeySymFromChar( current_char );
+    for ( int i = 0; i < TOTAL_CHARACTERS_VITA; ++i ) {
+        if ( vitaKeys[i] == keySym ) {
+            currentCharIndex = i;
+            return;
+        }
+    }
+
+    currentCharIndex = 0;
+}
+#endif
+
 /* trim left right space */
 std::string StringTrim( std::string str )
 {
@@ -501,6 +540,97 @@ char CharFromKeySym( KeySym sym, u16 mod )
 
 size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
 {
+#ifdef VITA
+    // input with D-Pad
+    if ( res.size() ) {
+        SetCurrentVitaCharIndex( res.back() );
+    }
+    else {
+        currentUpper = true;
+        currentCharIndex = 0;
+    }
+
+    switch ( sym ) {
+    // delete char
+    case KEY_KP4: {
+        if ( res.size() && pos ) {
+            res.resize( res.size() - 1 );
+            pos--;
+        }
+
+        break;
+    }
+    // add new char
+    case KEY_KP6: {
+        currentUpper = ( res.size() == 0 );
+        currentCharIndex = 0;
+
+        char c = GetCurrentVitaChar();
+
+        if ( c )
+            res.push_back( c );
+
+        ++pos;
+
+        break;
+    }
+    // next char
+    case KEY_KP2: {
+        currentCharIndex++;
+        if ( currentCharIndex >= TOTAL_CHARACTERS_VITA )
+            currentCharIndex = 0;
+
+        if ( res.size() )
+            res.resize( res.size() - 1 );
+        else
+            pos++;
+
+        char c = GetCurrentVitaChar();
+
+        if ( c )
+            res.push_back( c );
+
+        break;
+    }
+    // previous char
+    case KEY_KP8: {
+        currentCharIndex--;
+        if ( currentCharIndex < 0 )
+            currentCharIndex = TOTAL_CHARACTERS_VITA - 1;
+
+        if ( res.size() )
+            res.resize( res.size() - 1 );
+        else
+            pos++;
+
+        char c = GetCurrentVitaChar();
+
+        if ( c )
+            res.push_back( c );
+
+        break;
+    }
+    // switch uppler/lowercase
+    case KEY_SHIFT: {
+        currentUpper = !currentUpper;
+
+        if ( res.size() )
+            res.resize( res.size() - 1 );
+        else
+            pos++;
+
+        char c = GetCurrentVitaChar();
+
+        if ( c )
+            res.push_back( c );
+
+        break;
+    }
+
+    default:
+        break;
+    }
+#else
     switch ( sym ) {
     case KEY_BACKSPACE: {
         if ( res.size() && pos ) {
@@ -530,7 +660,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         }
     }
     }
-
+#endif
     return pos;
 }
 

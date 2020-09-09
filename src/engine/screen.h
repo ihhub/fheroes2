@@ -20,6 +20,9 @@
 #pragma once
 
 #include "image.h"
+#ifdef VITA
+#include "types.h"
+#endif
 
 namespace fheroes2
 {
@@ -52,6 +55,10 @@ namespace fheroes2
 
         virtual void setIcon( const Image & ) {}
 
+#ifdef VITA
+        SDL_Rect vitaDestRect;
+        bool vitaKeepAspectRatio;
+#endif
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )

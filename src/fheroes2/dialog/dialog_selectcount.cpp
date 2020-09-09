@@ -269,6 +269,10 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
 
+#ifdef VITA
+    le.VitaTextInputActive( true );
+#endif
+
     // message loop
     while ( le.HandleEvents() ) {
         buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -312,6 +316,10 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
     cursor.SetThemes( oldcursor );
     cursor.Hide();
+
+#ifdef VITA
+    le.VitaTextInputActive( false );
+#endif
 
     return res.size();
 }

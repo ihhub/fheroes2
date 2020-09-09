@@ -151,6 +151,11 @@ int Game::Credits( void )
     str.append( "Author of original project on SourceForge:\n" );
     str.append( "Andrey Afletdinov, maintainer\n" );
     str.append( "email: fheroes2 at gmail.com\n" );
+#ifdef VITA
+    str.append( "\n \n" );
+    str.append( "PS Vita port:\n" );
+    str.append( "https://github.com/northfear/fheroes2-vita" );
+#endif
 
     Dialog::Message( "Free Heroes of Might and Magic II Engine", str, Font::SMALL, Dialog::OK );
 

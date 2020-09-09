@@ -80,4 +80,9 @@ T clamp( const T & value, const T & min, const T & max )
     return ( value < min ) ? min : ( max < value ) ? max : value;
 }
 
+#ifdef VITA
+char GetCurrentVitaChar();
+void SetCurrentVitaCharIndex( char current_char );
+#endif
+
 #endif

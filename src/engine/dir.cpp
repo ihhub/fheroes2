@@ -21,6 +21,8 @@
  ***************************************************************************/
 #if defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ )
 #include <windows.h>
+#elif defined( VITA )
+#include <psp2/io/dirent.h>
 #else
 #include <dirent.h>
 #endif
@@ -46,6 +48,41 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
         } while ( FindNextFile( hFind, &data ) != 0 );
         FindClose( hFind );
     }
+#elif defined( VITA )
+    // open the directory
+    int uid = sceIoDopen( path.c_str() );
+    if ( uid <= 0 )
+        return;
+
+    // iterate over the directory for files, print name and size of array (always 256)
+    // this means you use strlen() to get length of file name
+    SceIoDirent dir;
+
+    while ( sceIoDread( uid, &dir ) > 0 ) {
+        const std::string fullname = System::ConcatePath( path, dir.d_name );
+
+        // if not regular file
+        if ( !System::IsFile( fullname ) )
+            continue;
+
+        if ( filter.size() ) {
+            std::string filename( dir.d_name );
+
+            if ( sensitive ) {
+                if ( std::string::npos == filename.find( filter ) )
+                    continue;
+            }
+            else {
+                if ( std::string::npos == StringLower( filename ).find( StringLower( filter ) ) )
+                    continue;
+            }
+        }
+
+        push_back( fullname );
+    }
+
+    // clean up
+    sceIoDclose( uid );
 #else
     std::string correctedPath;
     if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
