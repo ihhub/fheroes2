@@ -166,6 +166,7 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
         const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+        PathfindingNode & currentNode = _cache[currentNodeIdx];
 
         // check if current tile is protected, can move only to adjacent monster
         if ( !monsters.empty() ) {
@@ -174,10 +175,11 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
 
                 if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction ) ) {
                     // add straight to cache, can't move further from the monster
-                    const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction, skill );
-                    if ( _cache[monsterIndex]._from == -1 || _cache[monsterIndex]._cost > moveCost ) {
-                        _cache[monsterIndex]._from = currentNodeIdx;
-                        _cache[monsterIndex]._cost = moveCost;
+                    const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction, skill );
+                    PathfindingNode & monsterNode = _cache[monsterIndex];
+                    if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
+                        monsterNode._from = currentNodeIdx;
+                        monsterNode._cost = moveCost;
                     }
                 }
             }
@@ -187,10 +189,11 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
                 if ( Maps::isValidDirection( currentNodeIdx, *it ) ) {
                     const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, *it );
 
-                    const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
-                    if ( world.isValidPath( currentNodeIdx, *it ) && ( _cache[newIndex]._from == -1 || _cache[newIndex]._cost > moveCost ) ) {
-                        _cache[newIndex]._from = currentNodeIdx;
-                        _cache[newIndex]._cost = moveCost;
+                    const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
+                    PathfindingNode & newNode = _cache[newIndex];
+                    if ( world.isValidPath( currentNodeIdx, *it ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
+                        newNode._from = currentNodeIdx;
+                        newNode._cost = moveCost;
 
                         // duplicates are allowed if we find a cheaper way there
                         nodesToExplore.push_back( newIndex );
