@@ -1373,6 +1373,11 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName1 && mt.indexName1 < 0xFF )
         AddonsPushLevel1( TilesAddon( 0, mt.uniqNumber1, mt.objectName1, mt.indexName1 ) );
+
+    // MP2 "objectName" is a bitfield
+    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
+    if ( ( mt.objectName1 >> 1 ) & 1 )
+        tileIsRoad = true;
 }
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
@@ -2809,7 +2814,12 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tile_passable >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
         >> tile.addons_level1 >> tile.addons_level2;
     if ( FORMAT_VERSION_082_RELEASE > Game::GetLoadVersion() ) {
-        
+        for ( const Maps::TilesAddon & addon : tile.addons_level1 ) {
+            if ( addon.isRoad() ) {
+                tile.tileIsRoad = true;
+                break;
+            }
+        }
     }
     else {
         msg >> tile.tileIsRoad;
