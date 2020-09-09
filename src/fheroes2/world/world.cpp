@@ -1037,6 +1037,16 @@ u32 World::GetUniq( void )
     return ++GameStatic::uniq;
 }
 
+uint32_t World::getDistance( int from, int to, uint32_t skill )
+{
+    return _pathfinder.getDistance( from, to, skill );
+}
+
+std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ignoreObjects )
+{
+    return _pathfinder.buildPath( from, to, skill );
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians << obj.split;
@@ -1179,10 +1189,10 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     // heroes postfix
     std::for_each( w.vec_heroes.begin(), w.vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
 
+    world._pathfinder.reset();
+
     return msg;
 }
-
-void World::PostFixLoad( void ) {}
 
 void EventDate::LoadFromMP2( StreamBuf st )
 {

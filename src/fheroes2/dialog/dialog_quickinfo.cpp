@@ -285,9 +285,9 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * 
     std::string str = Maps::Ground::String( tile.GetGround() );
 
     if ( show && hero ) {
-        int dir = Direction::Get( hero->GetIndex(), tile.GetIndex() );
+        int dir = Maps::GetDirection( hero->GetIndex(), tile.GetIndex() );
         if ( dir != Direction::UNKNOWN ) {
-            uint32_t cost = ( tile.isRoad( dir ) ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+            uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 
             if ( cost ) {
                 str.append( "\n" );

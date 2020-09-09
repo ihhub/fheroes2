@@ -33,6 +33,7 @@
 #include "maps_objects.h"
 #include "maps_tiles.h"
 #include "week.h"
+#include "world_pathfinding.h"
 #include <string>
 
 class Heroes;
@@ -250,9 +251,12 @@ public:
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
 
-    static u32 GetUniq( void );
+    bool isTileBlocked( int toTile, bool fromWater ) const;
+    bool isValidPath( int index, int direction ) const;
+    uint32_t getDistance( int from, int to, uint32_t skill );
+    std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );
 
-    void PostFixLoad( void );
+    static u32 GetUniq( void );
 
 private:
     World()
@@ -294,6 +298,7 @@ private:
 
     MapActions map_actions;
     MapObjects map_objects;
+    Pathfinder _pathfinder;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

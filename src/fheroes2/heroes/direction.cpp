@@ -54,17 +54,6 @@ std::string Direction::String( int direct )
     return res.empty() ? str_direct[0] : res;
 }
 
-int Direction::Get( s32 from, s32 to )
-{
-    const Directions directions = Direction::All();
-
-    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-        if ( to == Maps::GetDirectionIndex( from, *it ) )
-            return *it;
-
-    return to == from ? CENTER : UNKNOWN;
-}
-
 bool Direction::ShortDistanceClockWise( int from, int to )
 {
     switch ( from ) {

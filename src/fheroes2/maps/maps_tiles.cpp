@@ -397,59 +397,27 @@ int Maps::TilesAddon::GetActionObject( const Maps::TilesAddon & ta )
     return MP2::OBJ_ZERO;
 }
 
-bool Maps::TilesAddon::isRoad( int direct ) const
+bool Maps::TilesAddon::isRoad() const
 {
     switch ( MP2::GetICNObject( object ) ) {
     // from sprite road
     case ICN::ROAD:
-        if ( 0 == index || 26 == index || 31 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-        else if ( 2 == index || 21 == index || 28 == index )
-            return direct & ( Direction::LEFT | Direction::RIGHT );
-        else if ( 17 == index || 29 == index )
-            return direct & ( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT );
-        else if ( 18 == index || 30 == index )
-            return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
-        else if ( 3 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT );
-        else if ( 4 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT );
-        else if ( 5 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_RIGHT );
-        else if ( 6 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT );
-        else if ( 7 == index )
-            return direct & ( Direction::TOP | Direction::RIGHT );
-        else if ( 9 == index )
-            return direct & ( Direction::BOTTOM | Direction::TOP_RIGHT );
-        else if ( 12 == index )
-            return direct & ( Direction::BOTTOM | Direction::TOP_LEFT );
-        else if ( 13 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT );
-        else if ( 14 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT );
-        else if ( 16 == index )
-            return direct & ( Direction::TOP | Direction::LEFT );
-        else if ( 19 == index )
-            return direct & ( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT );
-        else if ( 20 == index )
-            return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
-
-        break;
+        if ( 1 == index || 8 == index || 10 == index || 11 == index || 15 == index || 22 == index || 23 == index || 24 == index || 25 == index || 27 == index )
+            return false;
+        else
+            return true;
 
     // castle and tower (gate)
     case ICN::OBJNTOWN:
         if ( 13 == index || 29 == index || 45 == index || 61 == index || 77 == index || 93 == index || 109 == index || 125 == index || 141 == index || 157 == index
              || 173 == index || 189 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-
+            return true;
         break;
 
         // castle lands (gate)
     case ICN::OBJNTWBA:
         if ( 7 == index || 17 == index || 27 == index || 37 == index || 47 == index || 57 == index || 67 == index || 77 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-
+            return true;
         break;
 
     default:
@@ -459,7 +427,7 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     return false;
 }
 
-bool Maps::TilesAddon::isRoadObject() const
+bool Maps::TilesAddon::hasRoadFlag() const
 {
     // This MP2 "object" is a bitfield
     // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
@@ -537,7 +505,7 @@ bool Maps::TilesAddon::isStream( const TilesAddon & ta )
     return ICN::STREAM == MP2::GetICNObject( ta.object ) || ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && ( ta.index < 14 ) );
 }
 
-bool Maps::TilesAddon::isRoad( const TilesAddon & ta )
+bool Maps::TilesAddon::isRoadObject( const TilesAddon & ta )
 {
     return ICN::ROAD == MP2::GetICNObject( ta.object );
 }
@@ -1237,7 +1205,7 @@ bool isForestsTrees( const Maps::TilesAddon & ta )
 
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
 {
-    return Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoad( ta ) || Maps::TilesAddon::isShadow( ta );
+    return Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) || Maps::TilesAddon::isShadow( ta );
 }
 
 bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
@@ -1407,6 +1375,11 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName1 && mt.indexName1 < 0xFF )
         AddonsPushLevel1( TilesAddon( 0, mt.uniqNumber1, mt.objectName1, mt.indexName1 ) );
+
+    // MP2 "objectName" is a bitfield
+    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
+    if ( ( mt.objectName1 >> 1 ) & 1 )
+        tileIsRoad = true;
 }
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
@@ -1627,7 +1600,7 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
 
 bool SkipRedrawTileBottom4Hero( const Maps::TilesAddon & ta, int passable )
 {
-    if ( Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoad( ta ) )
+    if ( Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) )
         return true;
     else
         switch ( MP2::GetICNObject( ta.object ) ) {
@@ -1895,9 +1868,9 @@ bool Maps::Tiles::validateWaterRules( bool fromWater ) const
     if ( fromWater )
         return mp2_object == MP2::OBJ_COAST || ( tileIsWater && mp2_object != MP2::OBJ_BOAT );
 
-    // if we're not in water but tile is; allow movement in two cases
+    // if we're not in water but tile is; allow movement in three cases
     if ( tileIsWater )
-        return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES;
+        return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES || mp2_object == MP2::OBJ_BOAT;
 
     return true;
 }
@@ -1929,9 +1902,9 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 }
 
 /* check road */
-bool Maps::Tiles::isRoad( int direct ) const
+bool Maps::Tiles::isRoad() const
 {
-    return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &TilesAddon::isRoad ), direct ) );
+    return tileIsRoad;
 }
 
 bool Maps::Tiles::isStream( void ) const
@@ -2481,9 +2454,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
             continue;
         }
 
-        Route::Path path( *hero );
-        path.Calculate( tileIndex, 2 ); // we need to make sure that a hero needs exactly 1 step to the creature
-        if ( path.size() == 1 && tile.isWater() == heroTile.isWater() ) {
+        if ( tile.isWater() == heroTile.isWater() ) {
             attackerIndex = *it;
             break;
         }
@@ -2495,7 +2466,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
     if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
         spriteIndices.first += 7;
 
-        switch ( Direction::Get( tileIndex, attackerIndex ) ) {
+        switch ( Maps::GetDirection( tileIndex, attackerIndex ) ) {
         case Direction::TOP_LEFT:
         case Direction::LEFT:
         case Direction::BOTTOM_LEFT:
@@ -2842,6 +2813,18 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
-    return msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tile_passable >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2
-           >> tile.quantity3 >> tile.addons_level1 >> tile.addons_level2;
+    msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tile_passable >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
+        >> tile.addons_level1 >> tile.addons_level2;
+    if ( FORMAT_VERSION_082_RELEASE > Game::GetLoadVersion() ) {
+        for ( const Maps::TilesAddon & addon : tile.addons_level1 ) {
+            if ( addon.isRoad() ) {
+                tile.tileIsRoad = true;
+                break;
+            }
+        }
+    }
+    else {
+        msg >> tile.tileIsRoad;
+    }
+    return msg;
 }

@@ -82,7 +82,7 @@ Route::Path & Route::Path::operator=( const Path & p )
 
 int Route::Path::GetFrontDirection( void ) const
 {
-    return empty() ? ( dst != hero->GetIndex() ? Direction::Get( hero->GetIndex(), dst ) : Direction::CENTER ) : front().GetDirection();
+    return empty() ? ( dst != hero->GetIndex() ? Maps::GetDirection( hero->GetIndex(), dst ) : Direction::CENTER ) : front().GetDirection();
 }
 
 u32 Route::Path::GetFrontPenalty( void ) const
@@ -120,11 +120,16 @@ s32 Route::Path::GetDestinedIndex( void ) const
 }
 
 /* return length path */
-uint32_t Route::Path::Calculate( const s32 & dst_index, int limit /* -1 */ )
+uint32_t Route::Path::Calculate( const s32 & destIndex )
 {
-    dst = dst_index;
+    const int fromIndex = hero->GetIndex();
+    const uint32_t skill = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-    return Find( hero->GetIndex(), dst, hero->isShipMaster(), limit, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    dst = destIndex;
+
+    std::list<Step>::operator=( world.getPath( fromIndex, dst, skill, false ) );
+
+    return world.getDistance( fromIndex, dst, skill );
 }
 
 void Route::Path::Reset( void )
@@ -139,18 +144,18 @@ void Route::Path::Reset( void )
 
 bool Route::Path::isComplete( void ) const
 {
-    return dst == hero->GetIndex() || ( empty() && Direction::UNKNOWN != Direction::Get( hero->GetIndex(), dst ) );
+    return dst == hero->GetIndex() || ( empty() && Direction::UNKNOWN != Maps::GetDirection( hero->GetIndex(), dst ) );
 }
 
 bool Route::Path::isValid( void ) const
 {
-    return !empty();
+    return !empty() && front().GetDirection() != Direction::UNKNOWN;
 }
 
 int Route::Path::GetIndexSprite( int from, int to, int mod )
 {
     // ICN::ROUTE
-    // start index 1, 25, 49, 73, 97, 121 (size arrow path)
+    // start index 1, 25, 49, 73, 97, 121 (path arrow size)
     int index = 1;
 
     switch ( mod ) {

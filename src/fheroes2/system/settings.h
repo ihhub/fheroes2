@@ -34,11 +34,14 @@
 #include "system.h"
 
 #define FORMAT_VERSION_090_RELEASE 9000
+#define FORMAT_VERSION_082_RELEASE 8200
 #define FORMAT_VERSION_080_RELEASE 8000
 #define FORMAT_VERSION_070_RELEASE 3269
 #define FORMAT_VERSION_3255 3255
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_080_RELEASE // TODO: update this value for a new release
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
+
+// Value is set to 8100+ to distinguish save format changes in master branch after 0.8.1 release
+#define CURRENT_FORMAT_VERSION 8111 // TODO: update this value for a new release
 
 enum
 {
