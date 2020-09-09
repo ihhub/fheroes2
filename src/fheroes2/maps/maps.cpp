@@ -203,27 +203,29 @@ s32 Maps::GetDirectionIndex( s32 from, int vector )
 // check bound
 bool Maps::isValidDirection( s32 from, int vector )
 {
+    const int32_t width = world.w();
+
     switch ( vector ) {
     case Direction::TOP:
-        return ( from >= world.w() );
+        return ( from >= width );
     case Direction::RIGHT:
-        return ( ( from % world.w() ) < ( world.w() - 1 ) );
+        return ( ( from % width ) < ( width - 1 ) );
     case Direction::BOTTOM:
-        return ( from < world.w() * ( world.h() - 1 ) );
+        return ( from < width * ( world.h() - 1 ) );
     case Direction::LEFT:
-        return ( from % world.w() );
+        return ( from % width );
 
     case Direction::TOP_RIGHT:
-        return isValidDirection( from, Direction::TOP ) && isValidDirection( from, Direction::RIGHT );
+        return ( from >= width ) && ( ( from % width ) < ( width - 1 ) );
 
     case Direction::BOTTOM_RIGHT:
-        return isValidDirection( from, Direction::BOTTOM ) && isValidDirection( from, Direction::RIGHT );
+        return ( from < width * ( world.h() - 1 ) ) && ( ( from % width ) < ( width - 1 ) );
 
     case Direction::BOTTOM_LEFT:
-        return isValidDirection( from, Direction::BOTTOM ) && isValidDirection( from, Direction::LEFT );
+        return ( from < width * ( world.h() - 1 ) ) && ( from % width );
 
     case Direction::TOP_LEFT:
-        return isValidDirection( from, Direction::TOP ) && isValidDirection( from, Direction::LEFT );
+        return ( from >= width ) && ( from % width );
 
     default:
         break;
