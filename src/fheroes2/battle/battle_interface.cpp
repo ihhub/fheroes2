@@ -2074,7 +2074,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
                 const Unit * b_enemy = cell->GetUnit();
-                popup.SetInfo( cell, _currentUnit, b_enemy );
+                popup.SetInfo( cell, _currentUnit, b_enemy, _interfacePosition );
             }
             else
                 popup.Reset();
@@ -2743,13 +2743,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                     if ( !redrawBattleField ) {
                         redrawBattleField = true;
                         RedrawPartialStart();
-                    }
-
-                    // extended damage info
-                    if ( conf.ExtBattleShowDamage() && target.killed && ( pos.y - py ) > 0 ) {
-                        std::string msg = "-" + GetString( target.killed );
-                        Text txt( msg, Font::YELLOW_SMALL );
-                        txt.Blit( pos.x + ( pos.w - txt.w() ) / 2, pos.y - py, _mainSurface );
                     }
                 }
             }
@@ -4537,7 +4530,7 @@ Battle::PopupDamageInfo::PopupDamageInfo()
     , redraw( false )
 {}
 
-void Battle::PopupDamageInfo::SetInfo( const Cell * c, const Unit * a, const Unit * b )
+void Battle::PopupDamageInfo::SetInfo( const Cell * c, const Unit * a, const Unit * b, const Point & offset )
 {
     if ( Settings::Get().ExtBattleShowDamage() && Battle::AnimateInfrequentDelay( Game::BATTLE_POPUP_DELAY )
          && ( !cell || ( c && cell != c ) || !attacker || ( a && attacker != a ) || !defender || ( b && defender != b ) ) ) {
@@ -4547,7 +4540,7 @@ void Battle::PopupDamageInfo::SetInfo( const Cell * c, const Unit * a, const Uni
         defender = b;
 
         const Rect & rt = cell->GetPos();
-        SetPosition( rt.x + rt.w, rt.y, 20, 20 );
+        SetPosition( rt.x + rt.w + offset.x, rt.y + offset.y, 20, 20 );
     }
 }
 
