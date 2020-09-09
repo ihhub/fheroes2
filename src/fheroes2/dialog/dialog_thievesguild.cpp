@@ -283,7 +283,7 @@ void Dialog::ThievesGuild( bool oracle )
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLXTRA, 2 ), display, dst_pt.x, dst_pt.y );
 
     // text bar
-    text.Set( _( "Shrine ~ Player Rankings" ), Font::BIG );
+    text.Set( _( "Shrine ~ Player RanKings" ), Font::BIG );
     dst_pt.x = cur_pt.x + 290 - text.w() / 2;
     dst_pt.y = cur_pt.y + 463;
     text.Blit( dst_pt );
