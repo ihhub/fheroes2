@@ -186,7 +186,7 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
 void DrawFlags( const std::vector<ValueColors> & v, const Point & pos, u32 width, u32 count )
 {
     for ( u32 ii = 0; ii < count; ++ii ) {
-        const u32 chunk = width / count;
+        const u32 chunk = width / (count+1);
         if ( ii < v.size() ) {
             const Colors colors( v[ii].second );
             const u32 sw = fheroes2::AGG::GetICN( ICN::FLAG32, 1 ).width();
@@ -205,7 +205,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const Point & pos, u32 w
 {
     if ( v.size() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const int chunk = width / v.size();
+        const int chunk = width / (v.size()+1);
 
         for ( u32 ii = 0; ii < v.size(); ++ii ) {
             const Heroes * hero = world.GetHeroes( v[ii].first );
@@ -272,7 +272,7 @@ void Dialog::ThievesGuild( bool oracle )
             break;
         }
 
-        dst_pt.x = cur_pt.x + startx + maxw / ( colors.size() * 2 ) + ii * maxw / colors.size() - text.w() / 2;
+        dst_pt.x = cur_pt.x + startx + maxw / (( colors.size()+1) * 2 ) + ii * maxw / colors.size() - text.w() / 2;
         dst_pt.y = cur_pt.y + 5;
         text.Blit( dst_pt );
     }
@@ -384,7 +384,7 @@ void Dialog::ThievesGuild( bool oracle )
     ii = 0;
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
         text.Set( Color::String( *color ) );
-        dst_pt.x = cur_pt.x + startx + maxw / ( colors.size() * 2 ) + ii * maxw / colors.size() - text.w() / 2;
+        dst_pt.x = cur_pt.x + startx + maxw / (( colors.size()+1) * 2 ) + ii * maxw / colors.size() - text.w() / 2;
         dst_pt.y = cur_pt.y + 270;
         text.Blit( dst_pt );
         ++ii;
