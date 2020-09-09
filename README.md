@@ -1,9 +1,9 @@
 # FHeroes2 port for PS Vita
 
 ## Install
-Download fheroes2_data.zip and fheroes2.vpk files from https://github.com/Northfear/fheroes2-vita/releases.
+Download fheroes2.vpk file from https://github.com/Northfear/fheroes2-vita/releases.
 
-Install fheroes2.vpk to your Vita. Extract "fheroes2" folder from fheroes2_data.zip into ux0:data.
+Install fheroes2.vpk to your Vita.
 
 FHeroes2 requires data files from the original Heroes of Might and Magic 2.
 
@@ -11,7 +11,7 @@ Copy HEROES2.AGG and HEROES2X.AGG (if you own Price of Loyalty expansion) from t
 
 Data from GoG version of the game is working nicely. Files from the demo version are working too.
 
-Music files in OGG format (from GoG release of the game) should be placed into the ux0:data/fheroes2/files/music/ folder. To enable OGG music set "music = external" option in 'ux0:data/fheroes2/fheroes2.cfg".
+Music files in OGG format (from GoG release of the game) should be placed into the "ux0:data/fheroes2/files/music/" folder. To enable OGG music set "music = external" option in "ux0:data/fheroes2/fheroes2.cfg".
 
 rePatch reDux0 plugin is required for proper suspend/resume support
 
@@ -46,13 +46,15 @@ Text input is done with D-Pad.
 
 ## Vita specific options
 
-Pointer movement speed can be changed with 'vita_pointer_speed' parameter in ux0:data/fheroes2/fheroes2.cfg.
+Pointer movement speed can be changed with 'vita_pointer_speed' parameter in "ux0:data/fheroes2/fheroes2.cfg".
 
 Use "fullscreen = on" option to scale game area to native Vita resolution or "fullscreen = off" to keep game area at the center of the screen.
 
 "vita_keep_aspect_ratio = 1" keeps aspect ratio of original image when scaling. "vita_keep_aspect_ratio = 0" just scales it to 960x544.
 
 Native resolution is supported (set "videomode = 960x544" option in config file or just click on the left door in main menu and select resolution manually. Game restart is required after resolution change).
+
+If "ux0:data/fheroes2/fheroes2.cfg" file is missing, just copy the default one from "ux0:app/FHOMM0002/" to "ux0:data/fheroes2"
 
 fheroes2
 ======
