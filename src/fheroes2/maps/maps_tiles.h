@@ -309,6 +309,8 @@ namespace Maps
         u8 quantity2;
         u8 quantity3;
 
+        bool tileIsRoad = false;
+
 #ifdef WITH_DEBUG
         u8 passable_disable;
 #endif

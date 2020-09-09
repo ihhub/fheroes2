@@ -402,55 +402,21 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     switch ( MP2::GetICNObject( object ) ) {
     // from sprite road
     case ICN::ROAD:
-        if ( 0 == index || 26 == index || 31 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-        else if ( 2 == index || 21 == index || 28 == index )
-            return direct & ( Direction::LEFT | Direction::RIGHT );
-        else if ( 17 == index || 29 == index )
-            return direct & ( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT );
-        else if ( 18 == index || 30 == index )
-            return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
-        else if ( 3 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT );
-        else if ( 4 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT );
-        else if ( 5 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_RIGHT );
-        else if ( 6 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT );
-        else if ( 7 == index )
-            return direct & ( Direction::TOP | Direction::RIGHT );
-        else if ( 9 == index )
-            return direct & ( Direction::BOTTOM | Direction::TOP_RIGHT );
-        else if ( 12 == index )
-            return direct & ( Direction::BOTTOM | Direction::TOP_LEFT );
-        else if ( 13 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT );
-        else if ( 14 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT );
-        else if ( 16 == index )
-            return direct & ( Direction::TOP | Direction::LEFT );
-        else if ( 19 == index )
-            return direct & ( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT );
-        else if ( 20 == index )
-            return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
-
-        break;
+        if ( 1 == index || 8 == index || 10 == index || 11 == index || 15 == index || 22 == index || 23 == index || 24 == index || 25 == index || 27 == index )
+            return false;
+        else
+            return true;
 
     // castle and tower (gate)
     case ICN::OBJNTOWN:
         if ( 13 == index || 29 == index || 45 == index || 61 == index || 77 == index || 93 == index || 109 == index || 125 == index || 141 == index || 157 == index
              || 173 == index || 189 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-
-        break;
+            return true;
 
         // castle lands (gate)
     case ICN::OBJNTWBA:
         if ( 7 == index || 17 == index || 27 == index || 37 == index || 47 == index || 57 == index || 67 == index || 77 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-
-        break;
+            return true;
 
     default:
         break;
@@ -2840,6 +2806,13 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
-    return msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tile_passable >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2
-           >> tile.quantity3 >> tile.addons_level1 >> tile.addons_level2;
+    msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tile_passable >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
+        >> tile.addons_level1 >> tile.addons_level2;
+    if ( FORMAT_VERSION_082_RELEASE > Game::GetLoadVersion() ) {
+        
+    }
+    else {
+        msg >> tile.tileIsRoad;
+    }
+    return msg;
 }

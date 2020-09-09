@@ -136,7 +136,7 @@ void Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill )
 uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill )
 {
     const Maps::Tiles & tileTo = world.GetTiles( target );
-    uint32_t penalty = ( world.GetTiles( from ).isRoad( direction ) || tileTo.isRoad( Direction::Reflect( direction ) ) ) ? Maps::Ground::roadPenalty
+    uint32_t penalty = ( world.GetTiles( from ).isRoad( direction ) && tileTo.isRoad( Direction::Reflect( direction ) ) ) ? Maps::Ground::roadPenalty
                                                                                                                           : Maps::Ground::GetPenalty( tileTo, skill );
 
     // diagonal move costs 50% extra
