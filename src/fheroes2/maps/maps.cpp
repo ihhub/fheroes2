@@ -248,14 +248,37 @@ Maps::Indexes Maps::GetAllIndexes( void )
 Maps::Indexes Maps::GetAroundIndexes( s32 center )
 {
     Indexes result;
+    if ( !isValidAbsIndex( center ) )
+        return result;
+
     result.reserve( 8 );
+    const int width = world.w();
+    const int x = center % width;
+    const int y = center / width;
 
-    if ( isValidAbsIndex( center ) ) {
-        const Directions directions = Direction::All();
+    if ( y > 1 ) {
+        if ( x > 1 )
+            result.push_back( center - width - 1 );
 
-        for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-            if ( isValidDirection( center, *it ) )
-                result.push_back( GetDirectionIndex( center, *it ) );
+        result.push_back( center - width );
+
+        if ( x < width - 1 )
+            result.push_back( center - width + 1 );
+    }
+
+    if ( x > 1 )
+        result.push_back( center - 1 );
+    if ( x < width - 1 )
+        result.push_back( center + 1 );
+
+    if ( y < world.h() - 1 ) {
+        if ( x > 1 )
+            result.push_back( center + width - 1 );
+
+        result.push_back( center + width );
+
+        if ( x < width - 1 )
+            result.push_back( center + width + 1 );
     }
 
     return result;
@@ -404,17 +427,18 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
     const Maps::Tiles & tile1 = world.GetTiles( from );
     const Maps::Tiles & tile2 = world.GetTiles( index );
 
-    if ( tile1.isWater() == tile2.isWater() ) {
+    if ( tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
+        const int monsterDirection = Direction::Get( index, from );
         /* if monster can attack to */
-        result = ( tile2.GetPassable() & Direction::Get( index, from ) ) && ( tile1.GetPassable() & Direction::Get( from, index ) );
+        result = ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Direction::Get( from, index ) );
 
         if ( !result ) {
             /* h2 specific monster attack: BOTTOM_LEFT impassable! */
-            if ( Direction::BOTTOM_LEFT == Direction::Get( index, from ) && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
+            if ( Direction::BOTTOM_LEFT == monsterDirection && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
                 result = true;
             else
                 /* h2 specific monster attack: BOTTOM_RIGHT impassable! */
-                if ( Direction::BOTTOM_RIGHT == Direction::Get( index, from ) && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
+                if ( Direction::BOTTOM_RIGHT == monsterDirection && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
                 result = true;
         }
     }
@@ -434,10 +458,10 @@ bool Maps::TileIsUnderProtection( s32 center )
 
 Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
 {
-    Indexes indexes = Maps::ScanAroundObject( center, MP2::OBJ_MONSTER );
+    Indexes indexes = Maps::GetAroundIndexes( center );
 
     indexes.resize( std::distance( indexes.begin(),
-                                   std::remove_if( indexes.begin(), indexes.end(), std::not1( std::bind1st( std::ptr_fun( &MapsTileIsUnderProtection ), center ) ) ) ) );
+                                   std::remove_if( indexes.begin(), indexes.end(), [&center]( int & index ) { return !MapsTileIsUnderProtection( center, index ); } ) ) );
 
     if ( MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() )
         indexes.push_back( center );
