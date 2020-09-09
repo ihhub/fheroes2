@@ -166,7 +166,7 @@ namespace Battle
     public:
         PopupDamageInfo();
 
-        void SetInfo( const Cell *, const Unit *, const Unit * );
+        void SetInfo( const Cell * c, const Unit * a, const Unit * b, const Point & offset );
         void Reset();
         void Redraw( int, int );
 
