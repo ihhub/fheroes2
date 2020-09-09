@@ -149,10 +149,15 @@ uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, ui
 // Destination is optional
 void Pathfinder::evaluateMap( int start, uint8_t skill )
 {
-    const Directions directions = Direction::All();
     const bool fromWater = world.GetTiles( start ).isWater();
     const int width = world.w();
     const int height = world.h();
+
+    const Directions directions = Direction::All();
+    std::vector<int> offset( directions.size() );
+    for ( size_t i = 0; i < directions.size(); ++i ) {
+        offset[i] = Maps::GetDirectionIndex( 0, directions[i] );
+    }
 
     _pathStart = start;
     _pathfindingSkill = skill;
@@ -185,13 +190,13 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
             }
         }
         else if ( currentNodeIdx == start || !world.isTileBlocked( currentNodeIdx, fromWater ) ) {
-            for ( auto it = directions.begin(); it != directions.end(); ++it ) {
-                if ( Maps::isValidDirection( currentNodeIdx, *it ) ) {
-                    const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, *it );
+            for ( size_t i = 0; i < directions.size(); ++i ) {
+                if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
+                    const int newIndex = currentNodeIdx + offset[i];
 
-                    const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, *it, skill );
+                    const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], skill );
                     PathfindingNode & newNode = _cache[newIndex];
-                    if ( world.isValidPath( currentNodeIdx, *it ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
+                    if ( world.isValidPath( currentNodeIdx, directions[i] ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
                         newNode._from = currentNodeIdx;
                         newNode._cost = moveCost;
 
