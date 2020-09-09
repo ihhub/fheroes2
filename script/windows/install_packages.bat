@@ -1,5 +1,21 @@
 @echo off
 
+set save_cwd=%cd%
+
+for /f "delims=" %%i in ('"where 7z.exe > nul"') do set sevenZipPath=%%i
+echo %sevenZipPath%
+
+if not exist "%sevenZipPath%" (
+    if exist "%ProgramFiles%\7-Zip\7z.exe" (
+        set sevenZipPath=%ProgramFiles%\7-Zip\7z.exe
+    )
+)
+
+if not exist "%sevenZipPath%" (
+    echo "Failed to unzip archives because 7-zip is not installed in system. Please unpack all archives in packages internal folders and manually run setup_packages.bat file after"
+    goto end
+)
+
 if not exist "..\..\..\packages"            mkdir "..\..\..\packages"
 if not exist "..\..\..\packages\zlib"       mkdir "..\..\..\packages\zlib"
 if not exist "..\..\..\packages\sdl"        mkdir "..\..\..\packages\sdl"
@@ -19,46 +35,34 @@ powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl
 xcopy /Y /s /Q "setup_packages.bat" "..\..\..\packages"
 cd "..\..\..\packages"
 
-set sevenZipPath=
+echo unpacking packages [1/5]
+cd zlib
+"%sevenZipPath%" x zlib1.2.11.zip -aoa > nul
 
-where 7z.exe >nul 2>nul
-if %errorlevel% == 0 (
-    set sevenZipPath=7z.exe
-) else (
-    if exist "%ProgramFiles%\7-Zip\7z.exe" (
-        set sevenZipPath=%ProgramFiles%\7-Zip\7z.exe
-    )
-)
+echo unpacking packages [2/5]
+cd ..\sdl
+"%sevenZipPath%" x sdl.zip -aoa > nul
 
-if not "%sevenZipPath%" == "" (
-    echo unpacking packages [1/5]
-    cd zlib
-    "%sevenZipPath%" x zlib1.2.11.zip -aoa > nul
+echo unpacking packages [3/5]
+cd ..\sdl_mixer
+"%sevenZipPath%" x sdl_mixer.zip -aoa > nul
 
-    echo unpacking packages [2/5]
-    cd ..\sdl
-    "%sevenZipPath%" x sdl.zip -aoa > nul
+echo unpacking packages [4/5]
+cd ..\sdl
+"%sevenZipPath%" x sdl2.zip -aoa > nul
 
-    echo unpacking packages [3/5]
-    cd ..\sdl_mixer
-    "%sevenZipPath%" x sdl_mixer.zip -aoa > nul
+echo unpacking packages [5/5]
+cd ..\sdl_mixer
+"%sevenZipPath%" x sdl_mixer2.zip -aoa > nul
 
-    echo unpacking packages [4/5]
-    cd ..\sdl
-    "%sevenZipPath%" x sdl2.zip -aoa > nul
-
-    echo unpacking packages [5/5]
-    cd ..\sdl_mixer
-    "%sevenZipPath%" x sdl_mixer2.zip -aoa > nul
-
-    cd ..
-    call "setup_packages.bat"
-    echo "SUCCESS! Installation is completed"
-) else (
-    echo "Failed to unzip archives because 7-zip is not installed in system. Please unpack all archives in packages internal folders and manually run setup_packages.bat file after"
-)
+cd ..
+call "setup_packages.bat"
+echo "SUCCESS! Installation is completed"
 
 if not "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
     echo Press any key to exit...
     pause >nul
 )
+
+:end
+cd %save_cwd%
