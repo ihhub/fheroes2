@@ -496,15 +496,48 @@ bool Maps::TileIsUnderProtection( s32 center )
 
 Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
 {
-    Indexes indexes = Maps::GetAroundIndexes( center );
+    Indexes result;
+    if ( !isValidAbsIndex( center ) )
+        return result;
 
-    indexes.resize( std::distance( indexes.begin(),
-                                   std::remove_if( indexes.begin(), indexes.end(), [&center]( int & index ) { return !MapsTileIsUnderProtection( center, index ); } ) ) );
+    result.reserve( 9 );
+    const int width = world.w();
+    const int x = center % width;
+    const int y = center / width;
 
+    auto validateAndInsert = [&result, &center]( const int index ) {
+        if ( MapsTileIsUnderProtection( center, index ) )
+            result.push_back( index );
+    };
+
+    if ( y > 1 ) {
+        if ( x > 1 )
+            validateAndInsert( center - width - 1 );
+
+        validateAndInsert( center - width );
+
+        if ( x < width - 1 )
+            validateAndInsert( center - width + 1 );
+    }
+
+    if ( x > 1 )
+        validateAndInsert( center - 1 );
     if ( MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() )
-        indexes.push_back( center );
+        result.push_back( center );
+    if ( x < width - 1 )
+        validateAndInsert( center + 1 );
 
-    return indexes;
+    if ( y < world.h() - 1 ) {
+        if ( x > 1 )
+            validateAndInsert( center + width - 1 );
+
+        validateAndInsert( center + width );
+
+        if ( x < width - 1 )
+            validateAndInsert( center + width + 1 );
+    }
+
+    return result;
 }
 
 u32 Maps::GetApproximateDistance( s32 index1, s32 index2 )
