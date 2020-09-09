@@ -259,9 +259,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
                 if ( pathEnd != nextStep ) {
                     const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
                     uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
-                    const int direction = currentStep->GetDirection();
 
-                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad( direction ) || tileTo.isRoad( Direction::Reflect( direction ) ) )
+                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() )
                         cost = Maps::Ground::roadPenalty;
 
                     index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );

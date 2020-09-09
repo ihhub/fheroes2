@@ -60,15 +60,15 @@ namespace Maps
         TilesAddon & operator=( const TilesAddon & ta );
 
         bool isUniq( u32 ) const;
-        bool isRoad( int ) const;
-        bool isRoadObject() const;
+        bool isRoad() const;
+        bool hasRoadFlag() const;
         bool isICN( int ) const;
 
         std::string String( int level ) const;
 
         static bool hasColorCycling( const TilesAddon & addon );
         static bool isStream( const TilesAddon & );
-        static bool isRoad( const TilesAddon & );
+        static bool isRoadObject( const TilesAddon & );
 
         static bool isResource( const TilesAddon & );
         static bool isWaterResource( const TilesAddon & );
@@ -169,7 +169,7 @@ namespace Maps
 
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog ) const;
-        bool isRoad( int = DIRECTION_ALL ) const;
+        bool isRoad() const;
         bool isObject( int obj ) const
         {
             return obj == mp2_object;

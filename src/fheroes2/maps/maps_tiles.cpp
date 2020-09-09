@@ -397,7 +397,7 @@ int Maps::TilesAddon::GetActionObject( const Maps::TilesAddon & ta )
     return MP2::OBJ_ZERO;
 }
 
-bool Maps::TilesAddon::isRoad( int direct ) const
+bool Maps::TilesAddon::isRoad() const
 {
     switch ( MP2::GetICNObject( object ) ) {
     // from sprite road
@@ -425,7 +425,7 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     return false;
 }
 
-bool Maps::TilesAddon::isRoadObject() const
+bool Maps::TilesAddon::hasRoadFlag() const
 {
     // This MP2 "object" is a bitfield
     // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
@@ -503,7 +503,7 @@ bool Maps::TilesAddon::isStream( const TilesAddon & ta )
     return ICN::STREAM == MP2::GetICNObject( ta.object ) || ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && ( ta.index < 14 ) );
 }
 
-bool Maps::TilesAddon::isRoad( const TilesAddon & ta )
+bool Maps::TilesAddon::isRoadObject( const TilesAddon & ta )
 {
     return ICN::ROAD == MP2::GetICNObject( ta.object );
 }
@@ -1203,7 +1203,7 @@ bool isForestsTrees( const Maps::TilesAddon & ta )
 
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
 {
-    return Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoad( ta ) || Maps::TilesAddon::isShadow( ta );
+    return Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) || Maps::TilesAddon::isShadow( ta );
 }
 
 bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
@@ -1593,7 +1593,7 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
 
 bool SkipRedrawTileBottom4Hero( const Maps::TilesAddon & ta, int passable )
 {
-    if ( Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoad( ta ) )
+    if ( Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) )
         return true;
     else
         switch ( MP2::GetICNObject( ta.object ) ) {
@@ -1895,9 +1895,9 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 }
 
 /* check road */
-bool Maps::Tiles::isRoad( int direct ) const
+bool Maps::Tiles::isRoad() const
 {
-    return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &TilesAddon::isRoad ), direct ) );
+    return tileIsRoad;
 }
 
 bool Maps::Tiles::isStream( void ) const
