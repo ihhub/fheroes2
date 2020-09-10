@@ -144,7 +144,7 @@ void Dialog::ExtSettings( bool readonly )
     Dialog::FrameBorder frameborder( Size( 320, 400 ) );
     const Rect & area = frameborder.GetArea();
 
-    Text text( "Game Settings", Font::YELLOW_BIG );
+    Text text( "Experimental Game Settings", Font::YELLOW_BIG );
     text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;

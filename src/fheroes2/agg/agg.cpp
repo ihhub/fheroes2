@@ -1299,42 +1299,60 @@ void AGG::PlayMusic( int mus, bool loop )
         return;
 
     Game::SetCurrentMusic( mus );
-    const std::string prefix_music = System::ConcatePath( "files", "music" );
+    const std::string prefix_music( "music" );
     const MusicSource type = conf.MusicType();
 
-    if ( conf.MusicExt() ) {
-        std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus ) );
+    bool isSongFound = false;
 
-        if ( !System::IsFile( filename ) )
-            filename.clear();
+    if ( type == MUSIC_EXTERNAL ) {
+        std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::DOS_VERSION ) );
+
+        if ( !System::IsFile( filename ) ) {
+            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::WIN_VERSION ) );
+            if ( !System::IsFile( filename ) ) {
+                filename.clear();
+            }
+        }
 
         if ( filename.empty() ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, true ) );
+            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::MAPPED ) );
 
             if ( !System::IsFile( filename ) ) {
                 StringReplace( filename, ".ogg", ".mp3" );
 
                 if ( !System::IsFile( filename ) ) {
-                    DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus ) ) << ", skipping..." );
+                    DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::MAPPED ) ) << ", skipping..." );
                     filename.clear();
                 }
             }
         }
 
-        if ( filename.size() )
+        if ( filename.size() ) {
             Music::Play( filename, loop );
+            isSongFound = true;
+        }
 
-        DEBUG( DBG_ENGINE, DBG_INFO, MUS::GetString( mus ) );
+        DEBUG( DBG_ENGINE, DBG_INFO, MUS::GetString( mus, MUS::MAPPED ) );
     }
 #ifdef WITH_AUDIOCD
     else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
         Cdrom::Play( mus, loop );
+        isSongFound = true;
         DEBUG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
     }
 #endif
-    else if ( type == MUSIC_MIDI_EXPANSION || type == MUSIC_MIDI_ORIGINAL ) {
+
+    if ( !isSongFound ) {
         // Check if music needs to be pulled from HEROES2X
-        const int xmi = XMI::FromMUS( mus, type == MUSIC_MIDI_EXPANSION && heroes2x_agg.isGood() );
+        int xmi = XMI::UNKNOWN;
+        if ( type == MUSIC_MIDI_EXPANSION ) {
+            xmi = XMI::FromMUS( mus, heroes2x_agg.isGood() );
+        }
+
+        if ( XMI::UNKNOWN == xmi ) {
+            xmi = XMI::FromMUS( mus, false );
+        }
+
         if ( XMI::UNKNOWN != xmi ) {
 #ifdef WITH_MIXER
             const std::vector<u8> & v = GetMID( xmi );
