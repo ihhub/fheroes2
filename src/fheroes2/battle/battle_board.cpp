@@ -980,20 +980,21 @@ bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
     return true;
 }
 
-Battle::Indexes Battle::Board::GetAdjacentUnits( const Unit & unit )
+Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
 {
     Indexes result;
     const bool isWide = unit.isWide();
+    const int currentColor = unit.GetArmyColor();
     result.reserve( isWide ? 8 : 6 );
 
-    const int leftmostIndex = unit.isReflect() ? unit.GetTailIndex() : unit.GetHeadIndex();
+    const int leftmostIndex = ( isWide && !unit.isReflect() ) ? unit.GetTailIndex() : unit.GetHeadIndex();
     const int x = leftmostIndex % ARENAW;
     const int y = leftmostIndex / ARENAW;
     const int mod = y % 2;
 
-    auto validateAndInsert = [&result]( const int index ) {
+    auto validateAndInsert = [&result, &currentColor]( const int index ) {
         Unit * unit = GetCell( index )->GetUnit();
-        if ( unit )
+        if ( unit && currentColor != unit->GetArmyColor() )
             result.push_back( index );
     };
 

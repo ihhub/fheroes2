@@ -129,6 +129,7 @@ namespace AI
             return;
         }
 
+
         // Step 4. Calculate spell heuristics
         if ( CheckCommanderCanSpellcast( arena, commander ) ) {
             // 1. For damage spells - maximum amount of enemy threat lost
@@ -142,22 +143,13 @@ namespace AI
 
 
         // Step 5. Current unit decision tree
-        if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
+        if ( currentUnit.isArchers() ) {
             // Ranged unit decision tree
             if ( currentUnit.isHandFighting() ) {
                 // Current ranged unit is blocked by the enemy
-                Unit * target;
+                const Unit * target = NULL;
+                int targetCell = -1;
                 int damageDiff = 0;
-
-                for ( Unit * enemy : enemies ) {
-                    const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
-                    const int retaliationDmg = enemy->CalculateRetaliationDamage( archerMeleeDmg );
-                    
-                    if ( damageDiff < archerMeleeDmg - retaliationDmg ) {
-                        damageDiff = archerMeleeDmg - retaliationDmg;
-                        target = enemy;
-                    }
-                }
 
                 // Loop through all adjacent enemy units:
                 // 1. Calculate potential damage done
@@ -165,9 +157,23 @@ namespace AI
                 // 3. Update damageDiff if it's bigger than current value
                 // 4. Save target selection
 
-                if ( damageDiff > 0 ) {
+                const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( currentUnit );
+                for ( const int cell : adjacentEnemies ) {
+                    const Unit * enemy = Board::GetCell( cell )->GetUnit();
+                    const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
+                    const int retaliationDmg = enemy->CalculateRetaliationDamage( archerMeleeDmg );
+                    
+                    if ( damageDiff < archerMeleeDmg - retaliationDmg ) {
+                        damageDiff = archerMeleeDmg - retaliationDmg;
+                        target = enemy;
+                        targetCell = cell;
+                    }
+                }
+
+                if ( target && targetCell != -1 ) {
                     // attack selected target
                     DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << damageDiff );
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), targetCell, 0 ) );
                 }
                 else {
                     // Kiting enemy
@@ -178,11 +184,22 @@ namespace AI
                 }
             }
             else {
-                // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
-                // Attack the highest value unit
+                const Unit * target = NULL;
+                uint32_t strength = 0;
 
-                // const Unit * enemy = arena.GetEnemyMaxQuality( myColor );
-                // actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), enemy->GetUID(), enemy->GetHeadIndex(), 0 ) );
+                // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
+                for ( const Unit * enemy : enemies ) {
+                    const uint32_t unitStr = enemy->GetScoreQuality( currentUnit );
+                    if ( unitStr > strength ) {
+                        strength = unitStr;
+                        target = enemy;
+                    }
+                }
+
+                // Attack the highest value unit
+                if ( target ) {
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
+                }
                 DEBUG( DBG_AI, DBG_INFO,
                        currentUnit.GetName() << " archer focusing enemy ..."
                                              << " threat level: ..." );

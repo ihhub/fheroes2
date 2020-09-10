@@ -152,7 +152,6 @@ uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, ui
     return penalty;
 }
 
-// Destination is optional
 void Pathfinder::evaluateMap( int start, uint8_t skill )
 {
     const bool fromWater = world.GetTiles( start ).isWater();
