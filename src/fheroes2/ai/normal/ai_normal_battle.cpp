@@ -34,7 +34,7 @@ using namespace Battle;
 
 namespace AI
 {
-    bool CheckBattleRetreat()
+    bool CheckBattleRetreat( const Units & friendly, const Units & enemies )
     {
         // FIXME: force AI retreat from battle since battle logic is not implemented
         return true;
@@ -45,17 +45,15 @@ namespace AI
         return commander && commander->HaveSpellBook() && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
     }
 
+    bool CheckIfUnitIsFaster( const Unit & currentUnit, const Unit & target )
+    {
+        if ( currentUnit.isFlying() == target.isFlying() )
+            return currentUnit.GetSpeed() > target.GetSpeed();
+        return currentUnit.isFlying();
+    }
+
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
-        // Step 1. Check retreat/surrender condition
-        if ( CheckBattleRetreat() ) {
-            // Cast maximum damage spell
-
-            actions.push_back( Command( MSG_BATTLE_RETREAT ) );
-            actions.push_back( Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
-            return;
-        }
-
         const int difficulty = Settings::Get().GameDifficulty();
         const int myColor = currentUnit.GetColor();
 
@@ -68,7 +66,7 @@ namespace AI
         const Units enemies( enemyForce, true );
         const size_t enemiesCount = enemies.size();
 
-        // Step 2. Friendly and enemy army analysis
+        // Step 1. Friendly and enemy army analysis
         double myShooterStr = 0;
         double enemyShooterStr = 0;
         double averageEnemyAttack = 0;
@@ -78,7 +76,6 @@ namespace AI
             const Unit & unit = **it;
 
             if ( unit.isArchers() ) {
-                DEBUG( DBG_AI, DBG_TRACE, "Friendly shooter: " << unit.GetCount() << " " << unit.GetName() );
                 myShooterStr += unit.GetStrength();
             }
         }
@@ -90,14 +87,14 @@ namespace AI
             averageEnemyDefense += unit.GetDefense();
 
             if ( unit.isArchers() ) {
-                DEBUG( DBG_AI, DBG_TRACE, "Enemy shooter: " << unit.GetCount() << " " << unit.GetName() );
                 enemyShooterStr += unit.GetStrength();
             }
         }
         averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
         averageEnemyDefense = ( enemiesCount > 0 ) ? averageEnemyDefense / enemiesCount : 1;
 
-        // Step 3. Add castle siege (and battle arena) modifiers
+        // Step 2. Add castle siege (and battle arena) modifiers
+        bool defendingCastle = false;
         const Castle * castle = arena.GetCastle();
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->HasArtifact( Artifact::GOLDEN_BOW );
@@ -108,6 +105,7 @@ namespace AI
             DEBUG( DBG_AI, DBG_TRACE, "Castle strength: " << towerStr );
 
             if ( myColor == castle->GetColor() ) {
+                defendingCastle = true;
                 myShooterStr += towerStr;
                 if ( !attackerIgnoresCover )
                     enemyShooterStr /= 2;
@@ -120,7 +118,16 @@ namespace AI
         }
 
         DEBUG( DBG_AI, DBG_TRACE, "Comparing shooters: " << myShooterStr << ", vs enemy " << enemyShooterStr );
-        const bool offensiveTactics = myShooterStr < enemyShooterStr;
+        const bool offensiveTactics = !defendingCastle && myShooterStr < enemyShooterStr;
+
+        // Step 3. Check retreat/surrender condition
+        if ( !defendingCastle && commander && CheckBattleRetreat( friendly, enemies ) ) {
+            // Cast maximum damage spell
+
+            actions.push_back( Command( MSG_BATTLE_RETREAT ) );
+            actions.push_back( Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+            return;
+        }
 
         // Step 4. Calculate spell heuristics
         if ( CheckCommanderCanSpellcast( arena, commander ) ) {
@@ -133,12 +140,24 @@ namespace AI
             // 6. Cast best spell with highest heuristic on target pointer saved
         }
 
+
         // Step 5. Current unit decision tree
         if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
             // Ranged unit decision tree
             if ( currentUnit.isHandFighting() ) {
                 // Current ranged unit is blocked by the enemy
+                Unit * target;
                 int damageDiff = 0;
+
+                for ( Unit * enemy : enemies ) {
+                    const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
+                    const int retaliationDmg = enemy->CalculateRetaliationDamage( archerMeleeDmg );
+                    
+                    if ( damageDiff < archerMeleeDmg - retaliationDmg ) {
+                        damageDiff = archerMeleeDmg - retaliationDmg;
+                        target = enemy;
+                    }
+                }
 
                 // Loop through all adjacent enemy units:
                 // 1. Calculate potential damage done

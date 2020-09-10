@@ -474,6 +474,15 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     return speed;
 }
 
+uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
+{
+    if ( damageTaken > hp )
+        return 0;
+
+    const uint32_t unitsLeft = ( hp - damageTaken ) / Monster::GetHitPoints();
+    return unitsLeft * ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+}
+
 u32 Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
 {
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMin() );
