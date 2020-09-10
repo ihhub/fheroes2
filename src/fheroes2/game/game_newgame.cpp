@@ -406,7 +406,7 @@ int Game::NewGame( void )
         if ( le.MousePressRight( buttonMultiGame.area() ) )
             Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );
         if ( le.MousePressRight( buttonSettings.area() ) )
-            Dialog::Message( _( "Settings" ), _( "FHeroes2 game settings." ), Font::BIG );
+            Dialog::Message( _( "Settings" ), _( "Experimental game settings." ), Font::BIG );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
