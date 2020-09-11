@@ -1,4 +1,4 @@
-# FHeroes2 port for PS Vita
+# PlayStation Vita port of [fheroes2](https://github.com/ihhub/fheroes2) project
 
 ## Install
 Download fheroes2.vpk file from https://github.com/Northfear/fheroes2-vita/releases.
