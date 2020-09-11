@@ -28,6 +28,7 @@
 #include "ai.h"
 #include "battle_board.h"
 #include "battle_grave.h"
+#include "battle_pathfinding.h"
 #include "gamedefs.h"
 #include "spell_storage.h"
 
@@ -102,6 +103,8 @@ namespace Battle
         void FadeArena( void ) const;
 
         Indexes GetPath( const Unit &, const Position & );
+        Indexes CalculatePath( const Unit & unit, int32_t indexTo );
+        uint32_t CalculateWalkingDistance( int32_t indexTo );
         void ApplyAction( Command & );
 
         TargetsInfo GetTargetsForDamage( Unit &, Unit &, s32 );
@@ -188,6 +191,7 @@ namespace Battle
         SpellStorage usage_spells;
 
         Board board;
+        ArenaPathfinder _pathfinder;
         int icn_covr;
 
         u32 current_turn;

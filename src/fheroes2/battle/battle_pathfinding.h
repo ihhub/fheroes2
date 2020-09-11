@@ -28,11 +28,13 @@ namespace Battle
     {
         int _from = -1;
         uint16_t _cost = 0;
+        bool _isOpen = true;
 
         ArenaNode() {}
-        ArenaNode( int node, uint16_t cost )
+        ArenaNode( int node, uint16_t cost, bool isOpen )
             : _from( node )
             , _cost( cost )
+            , _isOpen( isOpen )
         {}
     };
 
@@ -41,9 +43,9 @@ namespace Battle
     public:
         ArenaPathfinder();
         void reset();
-        void calculate( int index, bool isWide );
-        std::vector<int> getPath( int fromCell, int targetCell );
-        uint32_t getDistance( int fromCell, int targetCell );
+        void calculate( const Position & start, bool isWide );
+        std::vector<int> getPath( int fromCell, int targetCell ) const;
+        uint32_t getDistance( int targetCell ) const;
 
     private:
         std::vector<ArenaNode> _cache;

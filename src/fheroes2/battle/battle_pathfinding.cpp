@@ -32,13 +32,13 @@ namespace Battle
         switch ( directionMask ) {
         case Battle::TOP_LEFT:
             if ( y > 0 && ( x > 0 || ( y % 2 ) == 0 ) ) {
-                newIndex = fromCell - ARENAW - 1;
+                newIndex = fromCell - ARENAW - ( y % 2 ) ? 1 : 0;
                 reverse = true;
             }
             break;
         case Battle::TOP_RIGHT:
             if ( y > 0 && ( x < ARENAW - 1 || ( y % 2 ) == 1 ) )
-                newIndex = fromCell - ARENAW + 1;
+                newIndex = fromCell - ARENAW + ( y % 2 ) ? 0 : 1;
             break;
         case Battle::RIGHT:
             if ( x < ARENAW - 1 )
@@ -46,11 +46,11 @@ namespace Battle
             break;
         case Battle::BOTTOM_RIGHT:
             if ( y < ARENAH - 1 && ( x < ARENAW - 1 || ( y % 2 ) == 1 ) )
-                newIndex = fromCell + ARENAW + 1;
+                newIndex = fromCell + ARENAW + ( y % 2 ) ? 0 : 1;
             break;
         case Battle::BOTTOM_LEFT:
             if ( y < ARENAH - 1 && ( x > 0 || ( y % 2 ) == 0 ) ) {
-                newIndex = fromCell + ARENAW - 1;
+                newIndex = fromCell + ARENAW - ( y % 2 ) ? 1 : 0;
                 reverse = true;
             }
             break;
@@ -84,23 +84,42 @@ namespace Battle
         }
     }
 
-    void ArenaPathfinder::calculate( int index, bool isWide )
+    uint32_t ArenaPathfinder::getDistance( int targetCell ) const
     {
+        return _cache[targetCell]._cost;
+    }
+
+    void ArenaPathfinder::calculate( const Position & start, bool isWide )
+    {
+        reset();
+
         std::vector<int> nodesToExplore;
-        nodesToExplore.push_back( index );
+
+        if ( start.GetHead() ) {
+            const int headIdx = start.GetHead()->GetIndex();
+            nodesToExplore.push_back( headIdx );
+            _cache[headIdx]._isOpen = false;
+        }
+        if ( start.GetTail() ) {
+            const int tailIdx = start.GetTail()->GetIndex();
+            nodesToExplore.push_back( tailIdx );
+            _cache[tailIdx]._isOpen = false;
+        }
+
         for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
             const int nodeIdx = nodesToExplore[lastProcessedNode];
 
-            for ( int direction = TOP_LEFT; direction < CENTER; direction << 1 ) {
+            for ( int direction = TOP_LEFT; direction < CENTER; direction = direction << 1 ) {
                 const int newNode = GetValidMoveIndex( nodeIdx, direction, isWide );
 
                 if ( newNode != -1 ) {
                     const uint16_t cost = _cache[nodeIdx]._cost + 1;
                     ArenaNode & node = _cache[newNode];
-                    if ( node._from == -1 || cost < node._cost ) {
+                    if ( node._isOpen || cost < node._cost ) {
+                        node._isOpen = false;
                         node._from = nodeIdx;
                         node._cost = _cache[nodeIdx]._cost + 1;
-                        nodesToExplore.push_back( Board::GetIndexDirection( newNode, direction ) );
+                        nodesToExplore.push_back( newNode );
                     }
                 }
             }

@@ -347,6 +347,9 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             end_turn = true;
         }
         else {
+            // re-calculate possible paths in case unit moved or it's a new turn
+            _pathfinder.calculate( current_troop->GetPosition(), current_troop->isWide() );
+
             // turn opponents
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
@@ -562,6 +565,11 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
     }
 
     return result;
+}
+
+uint32_t Battle::Arena::CalculateWalkingDistance( int32_t indexTo )
+{
+    return _pathfinder.getDistance( indexTo );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
