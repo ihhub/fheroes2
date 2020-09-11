@@ -67,31 +67,54 @@ namespace AI
         const size_t enemiesCount = enemies.size();
 
         // Step 1. Friendly and enemy army analysis
+        const Unit * priorityTarget = NULL;
+        const Unit * target = NULL;
+        int targetCell = -1;
+
+        double myArmyStrength = 0;
+        double enemyArmyStrength = 0;
         double myShooterStr = 0;
         double enemyShooterStr = 0;
+        double averageAllyDefense = 0;
         double averageEnemyAttack = 0;
-        double averageEnemyDefense = 0;
+        int highestDamageExpected = 0;
+
+        double highestStrength = 0;
+        for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
+            const Unit & unit = **it;
+            const double unitStr = unit.GetScoreQuality( currentUnit );
+
+            if ( highestStrength < unitStr ) {
+                highestStrength = unitStr;
+                priorityTarget = *it;
+            }
+
+            enemyArmyStrength += unitStr;
+            if ( unit.isArchers() ) {
+                enemyShooterStr += unitStr;
+            }
+
+            const int dmg = unit.CalculateMaxDamage( currentUnit );
+            if ( dmg > highestDamageExpected )
+                highestDamageExpected = dmg;
+
+            averageEnemyAttack += unit.GetAttack();
+        }
 
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
             const Unit & unit = **it;
+            const double unitStr = unit.GetScoreQuality( *priorityTarget );
 
+            myArmyStrength += unitStr;
             if ( unit.isArchers() ) {
-                myShooterStr += unit.GetStrength();
+                myShooterStr += unitStr;
             }
+
+            averageAllyDefense += unit.GetDefense();
         }
 
-        for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-            const Unit & unit = **it;
-
-            averageEnemyAttack += unit.GetAttack();
-            averageEnemyDefense += unit.GetDefense();
-
-            if ( unit.isArchers() ) {
-                enemyShooterStr += unit.GetStrength();
-            }
-        }
+        averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
         averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
-        averageEnemyDefense = ( enemiesCount > 0 ) ? averageEnemyDefense / enemiesCount : 1;
 
         // Step 2. Add castle siege (and battle arena) modifiers
         bool defendingCastle = false;
@@ -141,30 +164,23 @@ namespace AI
             // 6. Cast best spell with highest heuristic on target pointer saved
         }
 
-
         // Step 5. Current unit decision tree
         if ( currentUnit.isArchers() ) {
             // Ranged unit decision tree
             if ( currentUnit.isHandFighting() ) {
                 // Current ranged unit is blocked by the enemy
-                const Unit * target = NULL;
-                int targetCell = -1;
-                int damageDiff = 0;
 
-                // Loop through all adjacent enemy units:
-                // 1. Calculate potential damage done
-                // 2. Calculate enemy retaliation after
-                // 3. Update damageDiff if it's bigger than current value
-                // 4. Save target selection
+                // force archer to fight back by setting initial expectation to lowest possible (if we're losing battle)
+                int bestOutcome = ( myArmyStrength < enemyArmyStrength ) ? -highestDamageExpected : 0;
 
                 const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( currentUnit );
                 for ( const int cell : adjacentEnemies ) {
                     const Unit * enemy = Board::GetCell( cell )->GetUnit();
                     const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
-                    const int retaliationDmg = enemy->CalculateRetaliationDamage( archerMeleeDmg );
+                    const int damageDiff = archerMeleeDmg - enemy->CalculateRetaliationDamage( archerMeleeDmg );
                     
-                    if ( damageDiff < archerMeleeDmg - retaliationDmg ) {
-                        damageDiff = archerMeleeDmg - retaliationDmg;
+                    if ( bestOutcome < damageDiff ) {
+                        bestOutcome = damageDiff;
                         target = enemy;
                         targetCell = cell;
                     }
@@ -172,7 +188,7 @@ namespace AI
 
                 if ( target && targetCell != -1 ) {
                     // attack selected target
-                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << damageDiff );
+                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
                     actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), targetCell, 0 ) );
                 }
                 else {
@@ -184,21 +200,9 @@ namespace AI
                 }
             }
             else {
-                const Unit * target = NULL;
-                uint32_t strength = 0;
-
-                // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
-                for ( const Unit * enemy : enemies ) {
-                    const uint32_t unitStr = enemy->GetScoreQuality( currentUnit );
-                    if ( unitStr > strength ) {
-                        strength = unitStr;
-                        target = enemy;
-                    }
-                }
-
-                // Attack the highest value unit
-                if ( target ) {
-                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
+                // Normal attack: focus the highest value unit
+                if ( priorityTarget ) {
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
                 }
                 DEBUG( DBG_AI, DBG_INFO,
                        currentUnit.GetName() << " archer focusing enemy ..."
@@ -207,6 +211,16 @@ namespace AI
         }
         else if ( offensiveTactics ) {
             // Melee unit - Offensive action
+            uint32_t strength = 0;
+
+            // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
+            for ( const Unit * enemy : enemies ) {
+                const uint32_t unitStr = enemy->GetScoreQuality( currentUnit );
+                if ( unitStr > strength ) {
+                    strength = unitStr;
+                    target = enemy;
+                }
+            }
 
             // 1. Find highest value enemy unit, save as priority target
             // 2. If priority within reach, attack
