@@ -164,11 +164,9 @@ int main( int argc, char ** argv )
         if ( buf.size() ) {
             Surface surf( Size( head.width, head.height ), /*false*/ true ); // accepting transparency
 
-            const RGBA clkey = RGBA( 0xFF, 0, 0xFF );
+            const RGBA clkey = RGBA( 0xFF, 0, 0xFF ), ColorBlack = RGBA( 0, 0, 0, 0xFF );
             surf.Fill( clkey );
             surf.SetColorKey( clkey );
-
-            // surf.Fill(0xff, 0xff, 0xff);
             surf.Fill( ColorBlack ); // filling with transparent color
 
             if ( 0x20 == head.type )
