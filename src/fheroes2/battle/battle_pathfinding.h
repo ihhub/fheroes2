@@ -24,17 +24,28 @@
 
 namespace Battle
 {
-    struct PathNode
+    struct ArenaNode
     {
         int _from = -1;
         uint16_t _cost = 0;
 
-        PathNode() {}
-        PathNode( int node, uint16_t cost )
+        ArenaNode() {}
+        ArenaNode( int node, uint16_t cost )
             : _from( node )
             , _cost( cost )
         {}
     };
 
+    class ArenaPathfinder
+    {
+    public:
+        ArenaPathfinder();
+        void reset();
+        void calculate( int index, bool isWide );
+        std::vector<int> getPath( int fromCell, int targetCell );
+        uint32_t getDistance( int fromCell, int targetCell );
 
+    private:
+        std::vector<ArenaNode> _cache;
+    };
 }
