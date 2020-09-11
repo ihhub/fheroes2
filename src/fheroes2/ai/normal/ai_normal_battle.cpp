@@ -141,7 +141,7 @@ namespace AI
         }
 
         DEBUG( DBG_AI, DBG_TRACE, "Comparing shooters: " << myShooterStr << ", vs enemy " << enemyShooterStr );
-        const bool offensiveTactics = !defendingCastle && myShooterStr < enemyShooterStr;
+        const bool defensiveTactics = defendingCastle || myShooterStr > enemyShooterStr;
 
         // Step 3. Check retreat/surrender condition
         if ( !defendingCastle && commander && CheckBattleRetreat( friendly, enemies ) ) {
@@ -209,42 +209,44 @@ namespace AI
                                              << " threat level: ..." );
             }
         }
-        else if ( offensiveTactics ) {
-            // Melee unit - Offensive action
-            uint32_t strength = 0;
+        else {
+            if ( defensiveTactics ) {
+                // Melee unit - Defensive action
 
-            // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
-            for ( const Unit * enemy : enemies ) {
-                const uint32_t unitStr = enemy->GetScoreQuality( currentUnit );
-                if ( unitStr > strength ) {
-                    strength = unitStr;
-                    target = enemy;
+                // Search for enemy units threatening our archers within range
+                const bool archersUnderThreat = false;
+
+                if ( archersUnderThreat ) {
+                    DEBUG( DBG_AI, DBG_INFO,
+                           currentUnit.GetName() << " defending against ..."
+                                                 << " threat level: ..." );
+                }
+                else {
+                    // Find best friendly archer and move to them
+                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " protecting unit ..." );
                 }
             }
-
-            // 1. Find highest value enemy unit, save as priority target
-            // 2. If priority within reach, attack
-            // 3. Otherwise search for another target nearby
-            // 4.a. Attack if found, from the tile that is closer to priority target
-            // 4.b. Else move to priority target
-            DEBUG( DBG_AI, DBG_INFO,
-                   currentUnit.GetName() << " melee offense, focus enemy ..."
-                                         << " threat level: ..." );
-        }
-        else {
-            // Melee unit - Defensive action
-
-            // Search for enemy units threatening our archers within range
-            const bool archersUnderThreat = false;
-
-            if ( archersUnderThreat ) {
-                DEBUG( DBG_AI, DBG_INFO,
-                       currentUnit.GetName() << " defending against ..."
-                                             << " threat level: ..." );
-            }
             else {
-                // Find best friendly archer and move to them
-                DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " protecting unit ..." );
+                // Melee unit - Offensive action
+                uint32_t strength = 0;
+
+                // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
+                for ( const Unit * enemy : enemies ) {
+                    const uint32_t unitStr = enemy->GetScoreQuality( currentUnit );
+                    if ( unitStr > strength ) {
+                        strength = unitStr;
+                        target = enemy;
+                    }
+                }
+
+                // 1. Find highest value enemy unit, save as priority target
+                // 2. If priority within reach, attack
+                // 3. Otherwise search for another target nearby
+                // 4.a. Attack if found, from the tile that is closer to priority target
+                // 4.b. Else move to priority target
+                DEBUG( DBG_AI, DBG_INFO,
+                       currentUnit.GetName() << " melee offense, focus enemy ..."
+                                             << " threat level: ..." );
             }
         }
 
