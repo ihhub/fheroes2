@@ -22,50 +22,52 @@
 
 namespace Battle
 {
+    // If move is not valid this function returns -1 otherwise returns new index after the move.
     int GetValidMoveIndex( int fromCell, int directionMask, bool isWide )
     {
         int newIndex = -1;
-        bool reverse = false;
+        int wideUnitOffset = 0;
         const int x = fromCell % ARENAW;
         const int y = fromCell / ARENAW;
 
         switch ( directionMask ) {
         case Battle::TOP_LEFT:
             if ( y > 0 && ( x > 0 || ( y % 2 ) == 0 ) ) {
-                newIndex = fromCell - ARENAW - ( y % 2 ) ? 1 : 0;
-                reverse = true;
+                newIndex = fromCell - ARENAW - ( ( y % 2 ) ? 1 : 0 );
+                wideUnitOffset = 1;
             }
             break;
         case Battle::TOP_RIGHT:
-            if ( y > 0 && ( x < ARENAW - 1 || ( y % 2 ) == 1 ) )
-                newIndex = fromCell - ARENAW + ( y % 2 ) ? 0 : 1;
+            if ( y > 0 && ( x < ARENAW - 1 || ( y % 2 ) == 1 ) ) {
+                newIndex = fromCell - ARENAW + ( ( y % 2 ) ? 0 : 1 );
+                wideUnitOffset = -1;
+            }
             break;
         case Battle::RIGHT:
             if ( x < ARENAW - 1 )
                 newIndex = fromCell + 1;
             break;
         case Battle::BOTTOM_RIGHT:
-            if ( y < ARENAH - 1 && ( x < ARENAW - 1 || ( y % 2 ) == 1 ) )
-                newIndex = fromCell + ARENAW + ( y % 2 ) ? 0 : 1;
+            if ( y < ARENAH - 1 && ( x < ARENAW - 1 || ( y % 2 ) == 1 ) ) {
+                newIndex = fromCell + ARENAW + ( ( y % 2 ) ? 0 : 1 );
+                wideUnitOffset = -1;
+            }
             break;
         case Battle::BOTTOM_LEFT:
             if ( y < ARENAH - 1 && ( x > 0 || ( y % 2 ) == 0 ) ) {
-                newIndex = fromCell + ARENAW - ( y % 2 ) ? 1 : 0;
-                reverse = true;
+                newIndex = fromCell + ARENAW - ( ( y % 2 ) ? 1 : 0 );
+                wideUnitOffset = 1;
             }
             break;
         case Battle::LEFT:
-            if ( x > 0 ) {
+            if ( x > 0 )
                 newIndex = fromCell - 1;
-                reverse = true;
-            }
             break;
         default:
             break;
         }
 
-        if ( newIndex != -1
-             && ( !Board::GetCell( newIndex )->isPassable1( true ) || ( isWide && !Board::GetCell( newIndex + ( reverse ? -1 : 1 ) )->isPassable1( true ) ) ) ) {
+        if ( newIndex != -1 && ( !Board::GetCell( newIndex )->isPassable1( true ) || ( isWide && !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( true ) ) ) ) {
             // invalidate move
             newIndex = -1;
         }
@@ -107,18 +109,18 @@ namespace Battle
         }
 
         for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-            const int nodeIdx = nodesToExplore[lastProcessedNode];
+            const int fromNode = nodesToExplore[lastProcessedNode];
 
             for ( int direction = TOP_LEFT; direction < CENTER; direction = direction << 1 ) {
-                const int newNode = GetValidMoveIndex( nodeIdx, direction, isWide );
+                const int newNode = GetValidMoveIndex( fromNode, direction, isWide );
 
                 if ( newNode != -1 ) {
-                    const uint16_t cost = _cache[nodeIdx]._cost + 1;
+                    const uint16_t cost = _cache[fromNode]._cost + 1;
                     ArenaNode & node = _cache[newNode];
                     if ( node._isOpen || cost < node._cost ) {
                         node._isOpen = false;
-                        node._from = nodeIdx;
-                        node._cost = _cache[nodeIdx]._cost + 1;
+                        node._from = fromNode;
+                        node._cost = cost;
                         nodesToExplore.push_back( newNode );
                     }
                 }

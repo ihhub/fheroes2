@@ -231,12 +231,32 @@ namespace AI
                 uint32_t strength = 0;
 
                 // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
-                for ( const Unit * enemy : enemies ) {
-                    const uint32_t unitStr = enemy->GetScoreQuality( currentUnit );
-                    if ( unitStr > strength ) {
-                        strength = unitStr;
-                        target = enemy;
+                // for ( const Unit * enemy : enemies ) {
+                //    const uint32_t unitStr = enemy->GetScoreQuality( currentUnit );
+                //    if ( unitStr > strength ) {
+                //        strength = unitStr;
+                //        target = enemy;
+                //    }
+                //}
+
+                uint32_t minDist = MAXU16;
+                Indexes & around = Board::GetAroundIndexes( *priorityTarget );
+                for ( const int cell : around ) {
+                    const uint32_t distance = arena.CalculateWalkingDistance( cell );
+                    if ( distance > 0 && distance < minDist ) {
+                        minDist = distance;
+                        targetCell = cell;
                     }
+                }
+
+                if ( minDist <= currentUnit.GetSpeed() ) {
+                    target = priorityTarget;
+                    // FIXME: target head index
+                    actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
+                }
+                else {
+                
                 }
 
                 // 1. Find highest value enemy unit, save as priority target
