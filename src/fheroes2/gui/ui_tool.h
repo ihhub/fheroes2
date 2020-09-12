@@ -67,6 +67,7 @@ namespace fheroes2
         static ScreenUpdater & instance();
 
         void update();
+
     private:
         ScreenUpdater();
 
@@ -87,6 +88,7 @@ namespace fheroes2
         void reset();
 
         bool isUpdateRequired() const;
+
     private:
         bool _update;
     };
