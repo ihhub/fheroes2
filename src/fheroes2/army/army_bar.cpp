@@ -83,7 +83,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , can_change( change )
 {
     if ( use_mini_sprite )
-        SetBackground( Size( 43, 43 ), RGBA( 0, 45, 0 ) );
+        SetBackground( Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
         SetItemSize( sprite.width(), sprite.height() );
@@ -112,13 +112,13 @@ bool ArmyBar::isValid( void ) const
     return army != NULL;
 }
 
-void ArmyBar::SetBackground( const Size & sz, const RGBA & fillColor )
+void ArmyBar::SetBackground( const Size & sz, const uint8_t fillColor )
 {
     if ( use_mini_sprite ) {
         SetItemSize( sz.w, sz.h );
 
         backsf.resize( sz.w, sz.h );
-        backsf.fill( fheroes2::GetColorId( fillColor.r(), fillColor.g(), fillColor.b() ) );
+        backsf.fill( fillColor );
 
         fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
 

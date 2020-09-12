@@ -28,29 +28,18 @@
 // This is new Graphics engine. To change the code slowly we have to do some hacks here for now
 #include "screen.h"
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#define USE_SDL_CURSOR
+#endif
+
 Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
     , offset_y( 0 )
-#if defined( USE_SDL_CURSOR )
-    , _cursorSDL( NULL )
-    , _isVisibleCursor( false )
-#endif
 {}
 
 Cursor::~Cursor()
 {
-    _free();
-}
-
-void Cursor::_free()
-{
-#if defined( USE_SDL_CURSOR )
-    if ( _cursorSDL != NULL ) {
-        SDL_FreeCursor( _cursorSDL );
-        _cursorSDL = NULL;
-    }
-#endif
 }
 
 Cursor & Cursor::Get( void )
@@ -82,22 +71,9 @@ bool Cursor::SetThemes( int name, bool force )
         default:
             break;
         }
-        const Sprite spr = AGG::GetICN( icnID, 0xFF & name );
-        fheroes2::Copy( fheroes2::AGG::GetICN( icnID, 0xFF & name ), fheroes2::Cursor::instance() );
-
-        SetOffset( name, Point( spr.w() / 2, spr.h() / 2 ) );
-        Set( spr, true );
-#if defined( USE_SDL_CURSOR )
-        fheroes2::Cursor::instance().show( false );
-        SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, -offset_x, -offset_y );
-        if ( tempCursor == NULL ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, name = " << name << ", reason: " << SDL_GetError() );
-        }
-        SDL_SetCursor( tempCursor );
-        SDL_ShowCursor( 1 );
-        _free();
-        std::swap( tempCursor, _cursorSDL );
-#endif
+        const fheroes2::Sprite spr = fheroes2::AGG::GetICN( icnID, 0xFF & name );
+        SetOffset( name, Point( spr.width() / 2, spr.height() / 2 ) );
+        fheroes2::cursor().update( spr, -offset_x, -offset_y );
 
         // immediately apply new offset, force
         const Point currentPos = LocalEvent::Get().GetMouseCursor();
@@ -115,7 +91,7 @@ void Cursor::Redraw( s32 x, s32 y )
     Cursor & cur = Cursor::Get();
     cur.Move( x, y );
 
-    if ( fheroes2::Cursor::instance().isVisible() ) {
+    if ( fheroes2::cursor().isVisible() ) {
         fheroes2::Display::instance().render();
     }
 #endif
@@ -124,7 +100,7 @@ void Cursor::Redraw( s32 x, s32 y )
 /* move cursor */
 void Cursor::Move( s32 x, s32 y )
 {
-    fheroes2::Cursor::instance().setPosition( x + offset_x, y + offset_y );
+    fheroes2::cursor().setPosition( x + offset_x, y + offset_y );
 }
 
 /* set offset big cursor */
@@ -194,29 +170,17 @@ void Cursor::SetOffset( int name, const Point & defaultOffset )
 
 void Cursor::Show( void )
 {
-#if defined( USE_SDL_CURSOR )
-    _isVisibleCursor = true;
-#else
-    fheroes2::Cursor::instance().show( true );
-#endif
+    fheroes2::cursor().show( true );
 }
 
 void Cursor::Hide( void )
 {
-#if defined( USE_SDL_CURSOR )
-    _isVisibleCursor = false;
-#else
-    fheroes2::Cursor::instance().show( false );
-#endif
+    fheroes2::cursor().show( false );
 }
 
 bool Cursor::isVisible( void ) const
 {
-#if defined( USE_SDL_CURSOR )
-    return ( SDL_ShowCursor( -1 ) == 1 ) && _isVisibleCursor;
-#else
-    return fheroes2::Cursor::instance().isVisible();
-#endif
+    return fheroes2::cursor().isVisible();
 }
 
 int Cursor::DistanceThemes( int theme, u32 dist )

@@ -36,9 +36,6 @@ namespace AGG
     bool Init( void );
     void Quit( void );
 
-    Sprite GetICN( int icn, u32 index, bool reflect = false );
-    u32 GetICNCount( int icn );
-    int GetAbsoluteICNHeight( int icn );
     Surface GetLetter( u32 ch, u32 ft );
     std::vector<u8> LoadBINFRM( const char * frm_file );
 #ifdef WITH_TTF
@@ -59,11 +56,14 @@ namespace fheroes2
     namespace AGG
     {
         const Sprite & GetICN( int icnId, uint32_t index );
+        uint32_t GetICNCount( int icnId );
 
         // shapeId could be 0, 1, 2 or 3 only
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
         const Sprite & GetLetter( uint32_t character, uint32_t fontType );
         const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
+
+        int32_t GetAbsoluteICNHeight( int icnId );
     }
 }
 
