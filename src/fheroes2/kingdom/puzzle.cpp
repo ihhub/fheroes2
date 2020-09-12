@@ -235,7 +235,6 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
 
     while ( le.HandleEvents() && 0 < alpha ) {
         if ( Game::AnimateInfrequentDelay( Game::PUZZLE_FADE_DELAY ) ) {
-            cursor.Hide();
             fheroes2::Blit( sf, display, dstx, dsty );
             for ( size_t ii = 0; ii < pzl.size(); ++ii ) {
                 const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, ii );
@@ -246,7 +245,6 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
 
                 fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
             }
-            cursor.Show();
             display.render();
             alpha -= 10;
         }

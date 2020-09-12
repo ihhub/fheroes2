@@ -195,9 +195,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
             redraw_count = true;
 
         if ( redraw_count ) {
-            cursor.Hide();
             sel.Redraw();
-            cursor.Show();
             display.render();
 
             redraw_count = false;
@@ -217,7 +215,6 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
     int oldcursor = cursor.Themes();
     cursor.SetThemes( cursor.POINTER );
 
@@ -263,7 +260,6 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     buttonOk.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -300,10 +296,8 @@ bool Dialog::InputString( const std::string & header, std::string & res )
             text.Set( InsertString( res, charInsertPos, "_" ) );
 
             if ( text.w() < sprite.width() - 24 ) {
-                cursor.Hide();
                 fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
                 text.Blit( text_rt.x + ( text_rt.w - text.w() ) / 2, text_rt.y - 1 );
-                cursor.Show();
                 display.render();
             }
             redraw = false;
@@ -447,17 +441,14 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
         if ( !ssp.empty() )
             for ( std::vector<Rect>::const_iterator it = vrts.begin(); it != vrts.end(); ++it ) {
                 if ( le.MouseClickLeft( *it ) ) {
-                    cursor.Hide();
                     ssp.setPosition( it->x, it->y );
                     ssp.show();
-                    cursor.Show();
                     display.render();
                 }
             }
 
         if ( redraw_count ) {
             SwitchMaxMinButtons( buttonMin, buttonMax, cur, maximumAcceptedValue );
-            cursor.Hide();
             if ( !ssp.empty() )
                 ssp.hide();
             sel.Redraw();
@@ -467,7 +458,6 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
             if ( buttonMin.isVisible() )
                 buttonMin.draw();
 
-            cursor.Show();
             display.render();
 
             redraw_count = false;

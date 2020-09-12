@@ -228,17 +228,13 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // dialog menu loop
     while ( le.HandleEvents() ) {
         if ( redrawMorale ) {
-            cursor.Hide();
             moraleIndicator.Redraw();
-            cursor.Show();
             display.render();
             redrawMorale = false;
         }
 
         if ( redrawLuck ) {
-            cursor.Hide();
             luckIndicator.Redraw();
-            cursor.Show();
             display.render();
             redrawLuck = false;
         }
@@ -302,16 +298,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
         // left click info
         if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
-            cursor.Hide();
             cursorFormat.setPosition( army1_pt.x, army1_pt.y );
-            cursor.Show();
             display.render();
             army.SetSpreadFormat( true );
         }
         else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
-            cursor.Hide();
             cursorFormat.setPosition( army2_pt.x, army2_pt.y );
-            cursor.Show();
             display.render();
             army.SetSpreadFormat( false );
         }

@@ -238,17 +238,13 @@ bool Interface::BorderWindow::QueueEventProcessing( void )
         const s32 ox = mp.x - pos.x;
         const s32 oy = mp.y - pos.y;
 
-        cursor.Hide();
         moveIndicator.setPosition( pos.x, pos.y );
         moveIndicator.redraw();
-        cursor.Show();
         display.render();
 
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             if ( le.MouseMotion() ) {
-                cursor.Hide();
                 moveIndicator.setPosition( mp.x - ox, mp.y - oy );
-                cursor.Show();
                 display.render();
             }
         }

@@ -112,10 +112,8 @@ int Game::MainMenu( bool isFirstGameRun )
                    {QUIT_DEFAULT, buttonQuit, false, false}};
 
     for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); i++ ) {
-        cursor.Hide();
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
-        cursor.Show();
     }
 
     // mainmenu loop
@@ -203,10 +201,8 @@ int Game::MainMenu( bool isFirstGameRun )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
 
         if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
-            cursor.Hide();
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame++ ) );
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
-            cursor.Show();
             display.render();
         }
     }

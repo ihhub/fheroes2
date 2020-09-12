@@ -201,8 +201,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         // selector troops event
         if ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
              || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArtifacts1.isSelected() )
                 selectArtifacts1.ResetSelected();
             else if ( selectArtifacts2.isSelected() )
@@ -215,15 +213,12 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
             display.render();
         }
 
         // selector artifacts event
         if ( ( le.MouseCursor( selectArtifacts1.GetArea() ) && selectArtifacts1.QueueEventProcessing( selectArtifacts2 ) )
              || ( le.MouseCursor( selectArtifacts2.GetArea() ) && selectArtifacts2.QueueEventProcessing( selectArtifacts1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArmy1.isSelected() )
                 selectArmy1.ResetSelected();
             else if ( selectArmy2.isSelected() )
@@ -238,7 +233,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
             display.render();
         }
 

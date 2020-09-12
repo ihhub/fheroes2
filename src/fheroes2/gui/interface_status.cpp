@@ -397,10 +397,8 @@ void Interface::StatusWindow::QueueEventProcessing( void )
          BorderWindow::QueueEventProcessing() ) {
     }
     else if ( le.MouseClickLeft( drawnArea ) ) {
-        cursor.Hide();
         NextState();
         Redraw();
-        cursor.Show();
         display.render();
     }
     if ( le.MousePressRight( GetRect() ) ) {

@@ -522,11 +522,9 @@ void Interface::GameArea::QueueEventProcessing( void )
                         }
 
                         if ( NeedScroll() ) {
-                            cursor.Hide();
                             Scroll();
                             interface.SetRedraw( REDRAW_GAMEAREA );
                             interface.Redraw();
-                            cursor.Show();
                             display.render();
                         }
                         else

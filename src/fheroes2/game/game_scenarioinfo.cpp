@@ -234,7 +234,6 @@ int Game::ScenarioInfo( void )
             else
                 // playersInfo
                 if ( playersInfo.QueueEventProcessing() ) {
-                cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
                 levelCursor.redraw();
                 RedrawDifficultyInfo( pointDifficultyInfo );
@@ -243,7 +242,6 @@ int Game::ScenarioInfo( void )
                 RedrawRatingInfo( rating );
                 buttonOk.draw();
                 buttonCancel.draw();
-                cursor.Show();
                 display.render();
             }
         }
