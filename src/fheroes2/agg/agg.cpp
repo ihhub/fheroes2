@@ -188,6 +188,8 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
+    Sprite GetICN( int icn, u32 index, bool reflect = false );
+
     bool LoadAltICN( int icn, u32, bool );
     bool LoadOrgICN( Sprite &, int icn, u32, bool );
     bool LoadOrgICN( int icn, u32, bool );
@@ -882,31 +884,6 @@ Sprite AGG::GetICN( int icn, u32 index, bool reflect )
         }
     }
 
-    return result;
-}
-
-/* return count of sprites from specific ICN */
-u32 AGG::GetICNCount( int icn )
-{
-    if ( icn_cache[icn].count == 0 )
-        AGG::GetICN( icn, 0 );
-    return icn_cache[icn].count;
-}
-
-// return height of the biggest frame in specific ICN
-int AGG::GetAbsoluteICNHeight( int icn )
-{
-    int result = 0;
-
-    if ( icn < static_cast<int>( icn_cache.size() ) ) {
-        const size_t frameCount = icn_cache[icn].count;
-        for ( int i = 0; i < frameCount; ++i ) {
-            const int offset = -icn_cache[icn].sprites[i].y();
-            if ( offset > result ) {
-                result = offset;
-            }
-        }
-    }
     return result;
 }
 
@@ -2087,6 +2064,15 @@ namespace fheroes2
             return _icnVsSprite[icnId][index];
         }
 
+        uint32_t GetICNCount( int icnId )
+        {
+            if ( !IsValidICNId( icnId ) ) {
+                return 0;
+            }
+
+            return static_cast<uint32_t>( GetMaximumICNIndex( icnId ) );
+        }
+
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
             if ( shapeId > 3 ) {
@@ -2136,6 +2122,24 @@ namespace fheroes2
         {
             // TODO: Add Unicode character support
             return GetLetter( character, fontType );
+        }
+
+        int32_t GetAbsoluteICNHeight( int icnId )
+        {
+            const uint32_t frameCount = GetICNCount( icnId );
+            if ( frameCount == 0 ) {
+                return 0;
+            }
+
+            int32_t height = 0;
+            for ( int32_t i = 0; i < frameCount; ++i ) {
+                const int32_t offset = -GetICN( icnId, i ).y();
+                if ( offset > height ) {
+                    height = offset;
+                }
+            }
+
+            return height;
         }
     }
 }

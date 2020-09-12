@@ -813,7 +813,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 le.SetTapMode( false );
         }
         else {
-            if ( fheroes2::Cursor::instance().isFocusActive() ) {
+            if ( fheroes2::cursor().isFocusActive() ) {
                 int scrollPosition = SCROLL_NONE;
                 if ( le.MouseCursor( GetScrollLeft() ) )
                     scrollPosition |= SCROLL_LEFT;

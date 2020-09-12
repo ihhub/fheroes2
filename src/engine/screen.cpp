@@ -23,6 +23,7 @@
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_mouse.h>
 #include <SDL_render.h>
 #include <SDL_video.h>
 #else
@@ -108,6 +109,133 @@ namespace
     }
 
     const uint8_t * currentPalette = PALPAlette();
+}
+
+namespace
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    class RenderCursor : public fheroes2::Cursor
+    {
+    public:
+        virtual ~RenderCursor()
+        {
+            clear();
+        }
+
+        virtual void show( bool enable ) override
+        {
+            _show = enable;
+        }
+
+        virtual bool isVisible() const override
+        {
+            return _show && ( SDL_ShowCursor( -1 ) == 1 );
+        }
+
+        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        {
+            SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+            if ( surface == NULL )
+                return;
+
+            const uint32_t width = image.width();
+            const uint32_t height = image.height();
+
+            uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+            const uint32_t * outEnd = out + width * height;
+            const uint8_t * in = image.image();
+            const uint8_t * transform = image.transform();
+
+            if ( surface->format->Amask > 0 ) {
+                for ( ; out != outEnd; ++out, ++in, ++transform ) {
+                    if ( *transform == 0 ) {
+                        const uint8_t * value = currentPalette + *in * 3;
+                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                    }
+                }
+            }
+            else {
+                for ( ; out != outEnd; ++out, ++in, ++transform ) {
+                    if ( *transform == 0 ) {
+                        const uint8_t * value = currentPalette + *in * 3;
+                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                    }
+                    else {
+                        *out = SDL_MapRGB( surface->format, 0, 0, 0 );
+                    }
+                }
+            }
+
+            SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
+            SDL_SetCursor( tempCursor );
+            SDL_ShowCursor( 1 );
+
+            clear();
+            std::swap( _cursor, tempCursor );
+        }
+
+        static RenderCursor * create()
+        {
+            return new RenderCursor;
+        }
+
+    protected:
+        RenderCursor()
+            : _cursor( NULL )
+            , _show( false )
+        {}
+
+    private:
+        SDL_Cursor * _cursor;
+        bool _show; // TODO: remove this member!
+
+        void clear()
+        {
+            if ( _cursor != NULL ) {
+                SDL_FreeCursor( _cursor );
+                _cursor = NULL;
+            }
+        }
+    };
+#else
+    class RenderCursor : public fheroes2::Cursor
+    {
+    public:
+        RenderCursor()
+            : _show( false )
+        {}
+
+        virtual ~RenderCursor() {}
+
+        virtual void show( bool enable ) override
+        {
+            _show = enable;
+        }
+
+        virtual bool isVisible() const
+        {
+            return _show;
+        }
+
+        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        {
+            _image = fheroes2::Sprite( image, offsetX, offsetY );
+        }
+
+        virtual void setPosition( int32_t offsetX, int32_t offsetY ) override
+        {
+            _image.setPosition( offsetX, offsetY );
+        }
+
+        static RenderCursor * create()
+        {
+            return new RenderCursor;
+        }
+
+    private:
+        bool _show;
+    };
+#endif
 }
 
 namespace
@@ -734,6 +862,7 @@ namespace fheroes2
 
     Display::Display()
         : _engine( RenderEngine::create() )
+        , _cursor( RenderCursor::create() )
         , _preprocessing( NULL )
         , _postprocessing( NULL )
         , _renderSurface( NULL )
@@ -741,6 +870,7 @@ namespace fheroes2
 
     Display::~Display()
     {
+        delete _cursor;
         delete _engine;
     }
 
@@ -775,10 +905,10 @@ namespace fheroes2
 
     void Display::render()
     {
-        const Cursor & cursor = Cursor::instance();
-        if ( cursor.isVisible() ) {
-            const Sprite backup = Crop( *this, cursor.x(), cursor.y(), cursor.width(), cursor.height() );
-            Blit( cursor, *this, cursor.x(), cursor.y() );
+        if ( _cursor->isVisible() && !_cursor->_image.empty() ) {
+            const Sprite & cursorImage = _cursor->_image;
+            const Sprite backup = Crop( *this, cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
+            Blit( cursorImage, *this, cursorImage.x(), cursorImage.y() );
 
             _renderFrame();
 
@@ -830,11 +960,6 @@ namespace fheroes2
         _renderSurface = surface;
     }
 
-    BaseRenderEngine * Display::engine()
-    {
-        return _engine;
-    }
-
     void Display::release()
     {
         _engine->clear();
@@ -851,28 +976,6 @@ namespace fheroes2
         _engine->updatePalette( StandardPaletteIndexes() );
     }
 
-    Cursor::Cursor()
-        : _show( true )
-    {}
-
-    Cursor::~Cursor() {}
-
-    Cursor & Cursor::instance()
-    {
-        static Cursor cursor;
-        return cursor;
-    }
-
-    void Cursor::show( bool enable )
-    {
-        _show = enable;
-    }
-
-    bool Cursor::isVisible() const
-    {
-        return _show;
-    }
-
     bool Cursor::isFocusActive() const
     {
         return engine().isMouseCursorActive();
@@ -880,6 +983,11 @@ namespace fheroes2
 
     BaseRenderEngine & engine()
     {
-        return *( Display::instance().engine() );
+        return *( Display::instance()._engine );
+    }
+
+    Cursor & cursor()
+    {
+        return *( Display::instance()._cursor );
     }
 }

@@ -731,7 +731,7 @@ DwellingItem::DwellingItem( Castle & castle, u32 dw )
     mons = Monster( castle.GetRace(), type );
 }
 
-DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz, const RGBA & fill )
+DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz )
     : castle( cstl )
     , backsf( sz.w, sz.h )
 {
