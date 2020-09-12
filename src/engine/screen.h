@@ -137,12 +137,16 @@ namespace fheroes2
         virtual ~Cursor() {}
 
         virtual void show( bool ) {}
-        virtual bool isVisible() const { return false; }
+        virtual bool isVisible() const
+        {
+            return false;
+        }
 
         bool isFocusActive() const;
 
         virtual void update( const fheroes2::Image &, int32_t, int32_t ) {}
         virtual void setPosition( int32_t, int32_t ) {}
+
     protected:
         Sprite _image;
 
