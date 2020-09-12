@@ -109,10 +109,8 @@ int Dialog::FileOptions( void )
     }
 
     // restore background
-    cursor.Hide();
     back.restore();
     cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return result;

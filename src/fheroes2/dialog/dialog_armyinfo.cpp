@@ -164,8 +164,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             }
 
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
-                cursor.Hide();
-
                 fheroes2::Blit( sprite_dialog, display, pos_rt.x, pos_rt.y );
 
                 DrawMonsterStats( monsterStatOffset, troop );
@@ -185,7 +183,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( buttonExit.isEnabled() )
                     buttonExit.draw();
 
-                cursor.Show();
                 display.render();
             }
         }
@@ -511,9 +508,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
         }
     }
 
-    cursor.Hide();
     cursor.SetThemes( oldthemes );
-    cursor.Show();
 
     return result;
 }

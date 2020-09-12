@@ -193,14 +193,12 @@ void Castle::OpenWell( void )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
 
         if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
-            cursor.Hide();
             WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
             for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
                 monsterAnimInfo[i].increment();
 
             buttonMax.draw();
-            cursor.Show();
             display.render();
         }
     }

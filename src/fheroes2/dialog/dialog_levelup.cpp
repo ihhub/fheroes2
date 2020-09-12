@@ -201,28 +201,20 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
 
         if ( le.MouseClickLeft( rect_image1 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec1 );
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( rect_image2 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec2 );
-            cursor.Show();
             display.render();
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec1, false );
-            cursor.Show();
             display.render();
         }
         else if ( le.MousePressRight( rect_image2 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec2, false );
-            cursor.Show();
             display.render();
         }
     }

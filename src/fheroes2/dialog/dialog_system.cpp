@@ -161,11 +161,9 @@ int Dialog::SystemOptions( void )
         }
 
         if ( redraw ) {
-            cursor.Hide();
             fheroes2::Blit( back2, display, area.x, area.y );
             DrawSystemInfo( rects );
             buttonOkay.draw();
-            cursor.Show();
             display.render();
             redraw = false;
         }

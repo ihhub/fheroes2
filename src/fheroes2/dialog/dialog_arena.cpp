@@ -138,10 +138,8 @@ int Dialog::SelectSkillFromArena( void )
         }
 
         if ( redraw ) {
-            cursor.Hide();
             InfoSkillClear( rect1, rect2, rect3, rect4 );
             InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
-            cursor.Show();
             display.render();
             redraw = false;
         }
@@ -150,9 +148,7 @@ int Dialog::SelectSkillFromArena( void )
             break;
     }
 
-    cursor.Hide();
     cursor.SetThemes( oldthemes );
-    cursor.Show();
 
     return res;
 }

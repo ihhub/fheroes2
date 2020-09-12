@@ -761,11 +761,8 @@ void Heroes::FadeOut( void ) const
 
     while ( le.HandleEvents() && _alphaValue > 0 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
-            Cursor::Get().Hide();
-
             gamearea.Redraw( display, LEVEL_ALL );
 
-            Cursor::Get().Show();
             display.render();
             _alphaValue -= 10;
         }

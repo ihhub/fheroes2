@@ -115,10 +115,8 @@ int Dialog::AdventureOptions( bool enabledig )
     }
 
     // restore background
-    cursor.Hide();
     back.restore();
     cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return result;

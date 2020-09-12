@@ -478,16 +478,12 @@ u32 Castle::OpenTown( void )
         }
         else if ( isBuild( BUILD_CAPTAIN ) ) {
             if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
-                cursor.Hide();
                 cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
-                cursor.Show();
                 display.render();
                 army.SetSpreadFormat( true );
             }
             else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
-                cursor.Hide();
                 cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
-                cursor.Show();
                 display.render();
                 army.SetSpreadFormat( false );
             }

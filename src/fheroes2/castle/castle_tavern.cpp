@@ -96,7 +96,6 @@ void Castle::OpenTavern( void )
 
         // animation
         if ( Game::AnimateInfrequentDelay( Game::CASTLE_TAVERN_DELAY ) ) {
-            cursor.Hide();
             fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
 
             if ( const u32 index = ICN::AnimationFrame( tavwin, 0, frame++ ) ) {
@@ -104,7 +103,6 @@ void Castle::OpenTavern( void )
                 fheroes2::Blit( s22, display, dst_pt.x + s22.x(), dst_pt.y + s22.y() );
             }
 
-            cursor.Show();
             display.render();
         }
     }

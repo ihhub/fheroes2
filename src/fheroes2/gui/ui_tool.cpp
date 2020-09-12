@@ -23,6 +23,7 @@
 #include "screen.h"
 #include "types.h"
 
+#include <assert.h>
 #include <cstring>
 
 namespace fheroes2
@@ -102,6 +103,56 @@ namespace fheroes2
     void ScreenPaletteRestorer::changePalette( const uint8_t * palette )
     {
         Display::instance().changePalette( palette );
+    }
+
+    ScreenUpdater::ScreenUpdater()
+        : _state( NULL )
+    {}
+
+    ScreenUpdater & ScreenUpdater::instance()
+    {
+        static ScreenUpdater state;
+        return state;
+    }
+
+    void ScreenUpdater::subscribe( ScreenState * state )
+    {
+        assert( _state == NULL );
+        _state = state;
+    }
+
+    void ScreenUpdater::unsubscribe()
+    {
+        _state = NULL;
+    }
+
+    void ScreenUpdater::update()
+    {
+        assert( _state != NULL );
+        if ( _state != NULL ) {
+            _state->_update = true;
+        }
+    }
+
+    ScreenState::ScreenState()
+        : _update( false )
+    {
+        ScreenUpdater::instance().subscribe( this );
+    }
+
+    ScreenState::~ScreenState()
+    {
+        ScreenUpdater::instance().unsubscribe();
+    }
+
+    void ScreenState::reset()
+    {
+        _update = false;
+    }
+
+    bool ScreenState::isUpdateRequired() const
+    {
+        return _update;
     }
 
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight )

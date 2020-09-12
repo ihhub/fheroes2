@@ -24,6 +24,8 @@
 
 namespace fheroes2
 {
+    class ScreenState;
+
     class MovableSprite : public Sprite
     {
     public:
@@ -55,6 +57,38 @@ namespace fheroes2
         ~ScreenPaletteRestorer();
 
         void changePalette( const uint8_t * palette );
+    };
+
+    // This class is used in cases when you need to signal to update drawings
+    class ScreenUpdater
+    {
+    public:
+        friend class ScreenState;
+        static ScreenUpdater & instance();
+
+        void update();
+    private:
+        ScreenUpdater();
+
+        void subscribe( ScreenState * state );
+        void unsubscribe();
+
+        ScreenState * _state;
+    };
+
+    // Useful for cases to check cases when we need to refresh drawings
+    class ScreenState
+    {
+    public:
+        friend class ScreenUpdater;
+        ScreenState();
+        ~ScreenState();
+
+        void reset();
+
+        bool isUpdateRequired() const;
+    private:
+        bool _update;
     };
 
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );

@@ -83,7 +83,6 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
 
     size_t current_index = 0;
 
-    cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
     const fheroes2::Sprite & bookmark_info = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
@@ -110,7 +109,6 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
     SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), filt, hero );
     bool redraw = false;
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -128,9 +126,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
         else if ( ( le.MouseClickLeft( info_rt ) ) || ( le.MousePressRight( info_rt ) ) ) {
             std::string str = _( "Your hero has %{point} spell points remaining" );
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-            cursor.Hide();
             Dialog::Message( "", str, Font::BIG, Dialog::OK );
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( advn_rt ) && filter != ADVN && filt != CMBT ) {
@@ -161,18 +157,14 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
                             break;
                         }
                         else {
-                            cursor.Hide();
                             StringReplace( str, "%{mana}", ( *spell ).SpellPoint( &hero ) );
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
                             Dialog::Message( "", str, Font::BIG, Dialog::OK );
-                            cursor.Show();
                             display.render();
                         }
                     }
                     else {
-                        cursor.Hide();
                         Dialog::SpellInfo( *spell, true );
-                        cursor.Show();
                         display.render();
                     }
                 }
@@ -185,27 +177,21 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             if ( 0 <= index ) {
                 SpellStorage::const_iterator spell = spells2.begin() + ( index + current_index );
                 if ( spell < spells2.end() ) {
-                    cursor.Hide();
                     Dialog::SpellInfo( *spell, false );
-                    cursor.Show();
                     display.render();
                 }
             }
         }
 
         if ( redraw ) {
-            cursor.Hide();
             SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), filt, hero );
-            cursor.Show();
             display.render();
             redraw = false;
         }
     }
 
-    cursor.Hide();
     restorer.restore();
     cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return curspell;
@@ -221,7 +207,6 @@ void SpellBook::Edit( const HeroBase & hero )
     size_t current_index = 0;
     SpellStorage spells2 = SetFilter( SpellBook::ALL, &hero );
 
-    cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
     const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
@@ -240,7 +225,6 @@ void SpellBook::Edit( const HeroBase & hero )
     SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), SpellBook::ALL, hero );
     bool redraw = false;
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -290,18 +274,14 @@ void SpellBook::Edit( const HeroBase & hero )
         }
 
         if ( redraw ) {
-            cursor.Hide();
             SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), SpellBook::ALL, hero );
-            cursor.Show();
             display.render();
             redraw = false;
         }
     }
 
-    cursor.Hide();
     back.restore();
     cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 }
 
