@@ -83,6 +83,7 @@ namespace Battle
         for ( size_t i = 0; i < _cache.size(); ++i ) {
             _cache[i]._from = -1;
             _cache[i]._cost = 0;
+            _cache[i]._isOpen = true;
         }
     }
 

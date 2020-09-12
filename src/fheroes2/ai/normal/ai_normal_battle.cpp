@@ -249,7 +249,7 @@ namespace AI
                     }
                 }
 
-                if ( minDist <= currentUnit.GetSpeed() ) {
+                if ( targetCell != -1 && ( currentUnit.isFlying() || minDist <= currentUnit.GetSpeed() ) ) {
                     target = priorityTarget;
                     // FIXME: target head index
                     actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );

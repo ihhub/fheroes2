@@ -1393,6 +1393,15 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
                 fheroes2::Blit( sf_shadow, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
         }
     }
+
+#ifdef WITH_DEBUG
+    if ( IS_DEVEL() ) {
+        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
+            Text text( GetString( arena.CalculateWalkingDistance( it->GetIndex() ) ), Font::SMALL );
+            text.Blit( ( *it ).GetPos().x + 20, ( *it ).GetPos().y + 22, _mainSurface );
+        }
+    }
+#endif
 }
 
 void Battle::Interface::RedrawCastle1( const Castle & castle, fheroes2::Image & dst )
