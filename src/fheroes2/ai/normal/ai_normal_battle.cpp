@@ -243,7 +243,7 @@ namespace AI
                 // 4.b. Else move to priority target
 
                 uint32_t minimalDist = MAXU16;
-                Indexes & around = Board::GetAroundIndexes( *priorityTarget );
+                const Indexes & around = Board::GetAroundIndexes( *priorityTarget );
                 for ( const int cell : around ) {
                     const uint32_t distance = arena.CalculateMoveDistance( cell );
                     if ( distance > 0 && distance < minimalDist ) {
@@ -262,7 +262,7 @@ namespace AI
                     minimalDist = MAXU16;
                     for ( const Unit * enemy : enemies ) {
                         // FIXME: track enemy retaliation damage
-                        Indexes & around = Board::GetAroundIndexes( *enemy );
+                        const Indexes & around = Board::GetAroundIndexes( *enemy );
                         for ( const int cell : around ) {
                             const uint32_t distance = arena.CalculateMoveDistance( cell );
                             if ( distance > 0 && distance <= currentUnitMoveRange && distance < minimalDist ) {
