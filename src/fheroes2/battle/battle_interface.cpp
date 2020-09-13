@@ -346,7 +346,7 @@ bool CursorAttack( u32 theme )
     return false;
 }
 
-fheroes2::Image DrawHexagon( const RGBA & color )
+fheroes2::Image DrawHexagon( const uint8_t colorId )
 {
     int r, l, w, h;
 
@@ -357,8 +357,6 @@ fheroes2::Image DrawHexagon( const RGBA & color )
 
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
-
-    const uint8_t colorId = fheroes2::GetColorId( color.r(), color.g(), color.b() );
 
     fheroes2::DrawLine( sf, fheroes2::Point( r, 0 ), fheroes2::Point( 0, l ), colorId );
     fheroes2::DrawLine( sf, fheroes2::Point( r, 0 ), fheroes2::Point( w, l ), colorId );
@@ -954,7 +952,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     sf_cover.reset();
 
     // hexagon
-    sf_hexagon = DrawHexagon( ( light ? RGBA( 0x78, 0x94, 0 ) : RGBA( 0x38, 0x48, 0 ) ) );
+    sf_hexagon = DrawHexagon( ( light ? fheroes2::GetColorId( 0x78, 0x94, 0 ) : fheroes2::GetColorId( 0x38, 0x48, 0 ) ) );
     sf_cursor = DrawHexagonShadow( 2 );
     sf_shadow = DrawHexagonShadow( 4 );
 
@@ -3248,7 +3246,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         }
     }
     else {
-        const int maxHeight = AGG::GetAbsoluteICNHeight( ICN::CLOUDLUK );
+        const int maxHeight = fheroes2::AGG::GetAbsoluteICNHeight( ICN::CLOUDLUK );
         int y = pos.y + pos.h - 10;
 
         // move drawing position if it will clip outside of the battle window
@@ -3388,7 +3386,7 @@ void Battle::Interface::RedrawActionCatapult( int target )
     int icn = target == CAT_MISS ? ICN::SMALCLOD : ICN::LICHCLOD;
     AGG::PlaySound( M82::CATSND02 );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_CATAPULT3_DELAY ) ) {
@@ -3613,7 +3611,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
     DELAY( 100 );
 
     uint32_t frame = 0;
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( ICN::SPARKS ) ) {
+    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( ICN::SPARKS ) ) {
         CheckGlobalEvents( le );
 
         if ( ( frame == 0 ) || Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
@@ -3782,7 +3780,7 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
 void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
 {
     RedrawRaySpell( target, ICN::COLDRAY, M82::COLDRAY, 18 );
-    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, WINCE );
+    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, NONE );
 }
 
 void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
@@ -3795,7 +3793,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     const Point targetPos = target.GetCenterPoint();
 
     const Points path = GetEuclideanLine( startingPos, targetPos, size );
-    const uint32_t spriteCount = AGG::GetICNCount( spellICN );
+    const uint32_t spriteCount = fheroes2::AGG::GetICNCount( spellICN );
 
     cursor.SetThemes( Cursor::WAR_NONE );
     AGG::PlaySound( spellSound );
@@ -3900,7 +3898,7 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -3971,7 +3969,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     const int icn = ICN::STORM;
     const int m82 = M82::FromSpell( Spell::ELEMENTALSTORM );
     const int spriteSize = 54;
-    const uint32_t icnCount = AGG::GetICNCount( icn );
+    const uint32_t icnCount = fheroes2::AGG::GetICNCount( icn );
 
     std::vector<fheroes2::Sprite> spriteCache;
     spriteCache.reserve( icnCount );
@@ -4134,7 +4132,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     int icn = ICN::LICHCLOD;
     AGG::PlaySound( M82::CATSND02 );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4200,7 +4198,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4262,7 +4260,7 @@ Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const f
     }
 
     if ( result.y < 0 ) {
-        const int maximumY = AGG::GetAbsoluteICNHeight( spellICN );
+        const int maximumY = fheroes2::AGG::GetAbsoluteICNHeight( spellICN );
         result.y = maximumY + spellSprite.y();
     }
 
@@ -4287,7 +4285,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4339,7 +4337,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {

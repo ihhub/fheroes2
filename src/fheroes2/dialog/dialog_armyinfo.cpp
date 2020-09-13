@@ -56,12 +56,13 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     cursor.SetThemes( cursor.POINTER );
 
     const Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
-    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    const Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
+    const Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
-    fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite_dialog.width() + BORDERWIDTH, sprite_dialog.height() + BORDERWIDTH );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
     const Rect pos_rt( dialogOffset.x, dialogOffset.y, sprite_dialog.width(), sprite_dialog.height() );
 
-    fheroes2::Blit( spriteDialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
+    fheroes2::Blit( spriteDialogShadow, display, pos_rt.x + shadowShift.x, pos_rt.y + shadowShift.y );
     fheroes2::Blit( sprite_dialog, display, pos_rt.x, pos_rt.y );
 
     const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
@@ -457,12 +458,12 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 
     fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.w, pos.h ), buttons );
 
-    const fheroes2::Point buttonHeroPos( pos.x + pos.w / 2 - 20, pos.y + pos.h - 35 );
-
     fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
     fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
     fheroes2::AddTransparency( armyButtonReleased, 36 );
     fheroes2::AddTransparency( armyButtonPressed, 36 );
+
+    const fheroes2::Point buttonHeroPos( pos.x + pos.w / 2 - armyButtonReleased.width() / 2, pos.y + pos.h - 35 );
 
     fheroes2::Sprite armyButtonReleasedBack( armyButtonReleased.width(), armyButtonReleased.height(), armyButtonReleased.x(), armyButtonReleased.y() );
     fheroes2::Copy( display, buttonHeroPos.x, buttonHeroPos.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
@@ -623,7 +624,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
         else {
             std::string msg = _( "Not enough gold (%{gold})" );
             StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-            tsEnough.SetText( msg, Font::YELLOW_SMALL );
+            tsEnough.SetText( msg, Font::SMALL );
             tsEnough.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
             tsEnough.Show();
             btnMarket.draw();

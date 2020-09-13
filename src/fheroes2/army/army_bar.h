@@ -37,7 +37,7 @@ public:
     void RedrawBackground( const Rect &, fheroes2::Image & );
     void RedrawItem( ArmyTroop &, const Rect &, bool, fheroes2::Image & );
 
-    void SetBackground( const Size &, const RGBA & );
+    void SetBackground( const Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );
 
     bool isValid( void ) const;

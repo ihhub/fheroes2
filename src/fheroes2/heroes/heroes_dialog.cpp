@@ -99,7 +99,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     luckIndicator.Redraw();
 
     // army format spread
-    dst_pt.x = cur_pt.x + 515;
+    dst_pt.x = cur_pt.x + 516;
     dst_pt.y = cur_pt.y + 63;
     const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
     fheroes2::Blit( sprite1, display, dst_pt.x, dst_pt.y );
@@ -126,12 +126,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
     // experience
     ExperienceIndicator experienceInfo( *this );
-    experienceInfo.SetPos( Point( cur_pt.x + 514, cur_pt.y + 85 ) );
+    experienceInfo.SetPos( Point( cur_pt.x + 512, cur_pt.y + 86 ) );
     experienceInfo.Redraw();
 
     // spell points
     SpellPointsIndicator spellPointsInfo( *this );
-    spellPointsInfo.SetPos( Point( cur_pt.x + 549, cur_pt.y + 87 ) );
+    spellPointsInfo.SetPos( Point( cur_pt.x + 550, cur_pt.y + 88 ) );
     spellPointsInfo.Redraw();
 
     // crest

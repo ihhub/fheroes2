@@ -640,7 +640,7 @@ void Battle::Unit::PostKilledAction( void )
         ResetModes( CAP_MIRROROWNER );
     }
     // kill mirror image (slave)
-    if ( Modes( CAP_MIRRORIMAGE ) ) {
+    if ( Modes( CAP_MIRRORIMAGE ) && mirror != NULL ) {
         mirror->ResetModes( CAP_MIRROROWNER );
         mirror = NULL;
     }

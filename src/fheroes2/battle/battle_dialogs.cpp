@@ -283,8 +283,8 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
             msg.append( _( "A glorious victory!" ) );
 
         if ( hero.isHeroes() ) {
-            msg.append( "\n" );
-            msg.append( _( "For valor in combat, %{name} receives %{exp} experience" ) );
+            msg.append( "\n \n" );
+            msg.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{exp}", exp );
         }
@@ -454,9 +454,11 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     const bool readonly = current_color != hero.GetColor() || !buttons;
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
+    const fheroes2::Point dialogShadow( 15, 15 );
+
     Rect pos_rt;
-    pos_rt.x = ( display.width() - dialog.width() ) / 2;
-    pos_rt.y = ( display.height() - dialog.height() ) / 2;
+    pos_rt.x = ( display.width() - dialog.width() - dialogShadow.x ) / 2;
+    pos_rt.y = ( display.height() - dialog.height() - dialogShadow.y ) / 2;
     pos_rt.w = dialog.width();
     pos_rt.h = dialog.height();
 

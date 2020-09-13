@@ -165,6 +165,25 @@ int Game::NewCampain( void )
     fheroes2::Button buttonOk( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
     fheroes2::Button buttonCancel( top.x + 520, top.y + 430, ICN::NGEXTRA, 68, 69 );
 
+    const fheroes2::Point optionButtonOffset( 590, 199 );
+    const int32_t optionButtonStep = 22;
+
+    const fheroes2::Sprite & pressedButton = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 8 );
+    fheroes2::Sprite releaseButton( pressedButton.width(), pressedButton.height(), pressedButton.x(), pressedButton.y() );
+    fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
+                    releaseButton.height() );
+
+    fheroes2::ButtonSprite firstChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + top.y, releaseButton, pressedButton );
+    fheroes2::ButtonSprite secondChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep + top.y, releaseButton, pressedButton );
+    fheroes2::ButtonSprite thirdChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * 2 + top.y, releaseButton, pressedButton );
+
+    firstChoice.press();
+
+    fheroes2::OptionButtonGroup buttonGroup;
+    buttonGroup.addButton( &firstChoice );
+    buttonGroup.addButton( &secondChoice );
+    buttonGroup.addButton( &thirdChoice );
+
     const std::vector<Maps::FileInfo> & campaignMap = GetRolandCampaign();
 
     buttonViewIntro.disable();
@@ -173,6 +192,10 @@ int Game::NewCampain( void )
         buttonOk.disable();
     buttonOk.draw();
     buttonCancel.draw();
+
+    firstChoice.draw();
+    secondChoice.draw();
+    thirdChoice.draw();
 
     Text textDaysSpent( "0", Font::BIG );
     textDaysSpent.Blit( top.x + 570 + textDaysSpent.w() / 2, top.y + 31 );
@@ -226,6 +249,19 @@ int Game::NewCampain( void )
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         if ( !buttonOk.isDisabled() )
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+
+        if ( le.MousePressLeft( firstChoice.area() ) ) {
+            firstChoice.press();
+            buttonGroup.draw();
+        }
+        if ( le.MousePressLeft( secondChoice.area() ) ) {
+            secondChoice.press();
+            buttonGroup.draw();
+        }
+        if ( le.MousePressLeft( thirdChoice.area() ) ) {
+            thirdChoice.press();
+            buttonGroup.draw();
+        }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) )
             return Game::NEWGAME;
@@ -406,7 +442,7 @@ int Game::NewGame( void )
         if ( le.MousePressRight( buttonMultiGame.area() ) )
             Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );
         if ( le.MousePressRight( buttonSettings.area() ) )
-            Dialog::Message( _( "Settings" ), _( "FHeroes2 game settings." ), Font::BIG );
+            Dialog::Message( _( "Settings" ), _( "Experimental game settings." ), Font::BIG );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }

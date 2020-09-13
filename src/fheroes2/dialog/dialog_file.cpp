@@ -44,7 +44,7 @@ int Dialog::FileOptions( void )
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
 
-    Point rb( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
+    Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() ) / 2 );
     fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
     fheroes2::Blit( box, display, rb.x, rb.y );
 

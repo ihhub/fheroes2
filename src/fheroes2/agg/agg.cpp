@@ -188,6 +188,8 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
+    Sprite GetICN( int icn, u32 index, bool reflect = false );
+
     bool LoadAltICN( int icn, u32, bool );
     bool LoadOrgICN( Sprite &, int icn, u32, bool );
     bool LoadOrgICN( int icn, u32, bool );
@@ -885,31 +887,6 @@ Sprite AGG::GetICN( int icn, u32 index, bool reflect )
     return result;
 }
 
-/* return count of sprites from specific ICN */
-u32 AGG::GetICNCount( int icn )
-{
-    if ( icn_cache[icn].count == 0 )
-        AGG::GetICN( icn, 0 );
-    return icn_cache[icn].count;
-}
-
-// return height of the biggest frame in specific ICN
-int AGG::GetAbsoluteICNHeight( int icn )
-{
-    int result = 0;
-
-    if ( icn < static_cast<int>( icn_cache.size() ) ) {
-        const size_t frameCount = icn_cache[icn].count;
-        for ( int i = 0; i < frameCount; ++i ) {
-            const int offset = -icn_cache[icn].sprites[i].y();
-            if ( offset > result ) {
-                result = offset;
-            }
-        }
-    }
-    return result;
-}
-
 bool AGG::LoadAltTIL( int til, u32 max )
 {
 #ifdef WITH_XML
@@ -1299,42 +1276,59 @@ void AGG::PlayMusic( int mus, bool loop )
         return;
 
     Game::SetCurrentMusic( mus );
-    const std::string prefix_music = System::ConcatePath( "files", "music" );
+    const std::string prefix_music( "music" );
     const MusicSource type = conf.MusicType();
 
-    if ( conf.MusicExt() ) {
-        std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus ) );
+    bool isSongFound = false;
 
-        if ( !System::IsFile( filename ) )
-            filename.clear();
+    if ( type == MUSIC_EXTERNAL ) {
+        std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::DOS_VERSION ) );
+
+        if ( !System::IsFile( filename ) ) {
+            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::WIN_VERSION ) );
+            if ( !System::IsFile( filename ) ) {
+                filename.clear();
+            }
+        }
 
         if ( filename.empty() ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, true ) );
+            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::MAPPED ) );
 
             if ( !System::IsFile( filename ) ) {
                 StringReplace( filename, ".ogg", ".mp3" );
 
                 if ( !System::IsFile( filename ) ) {
-                    DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus ) ) << ", skipping..." );
+                    DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::MAPPED ) ) << ", skipping..." );
                     filename.clear();
                 }
             }
         }
 
-        if ( filename.size() )
+        if ( filename.size() ) {
             Music::Play( filename, loop );
-
-        DEBUG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus ) );
+            isSongFound = true;
+        }
+        DEBUG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::MAPPED ) );
     }
 #ifdef WITH_AUDIOCD
     else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
         Cdrom::Play( mus, loop );
+        isSongFound = true;
         DEBUG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
     }
 #endif
-    else if ( type == MUSIC_MIDI_EXPANSION || type == MUSIC_MIDI_ORIGINAL ) {
+
+    if ( !isSongFound ) {
         // Check if music needs to be pulled from HEROES2X
-        const int xmi = XMI::FromMUS( mus, type == MUSIC_MIDI_EXPANSION && heroes2x_agg.isGood() );
+        int xmi = XMI::UNKNOWN;
+        if ( type == MUSIC_MIDI_EXPANSION ) {
+            xmi = XMI::FromMUS( mus, heroes2x_agg.isGood() );
+        }
+
+        if ( XMI::UNKNOWN == xmi ) {
+            xmi = XMI::FromMUS( mus, false );
+        }
+
         if ( XMI::UNKNOWN != xmi ) {
 #ifdef WITH_MIXER
             const std::vector<u8> & v = GetMID( xmi );
@@ -1688,12 +1682,17 @@ namespace fheroes2
                         const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
 
                         uint32_t c = *data % 4 ? *data % 4 : *( ++data );
-                        while ( c-- ) {
-                            if ( transformType <= 15 ) {
+
+                        if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
+                            while ( c-- ) {
                                 imageTransform[posX] = transformType;
+                                ++posX;
                             }
-                            ++posX;
                         }
+                        else {
+                            posX += c;
+                        }
+
                         ++data;
                     }
                     else if ( 0xC1 == *data ) { // 0xC1
@@ -2069,6 +2068,15 @@ namespace fheroes2
             return _icnVsSprite[icnId][index];
         }
 
+        uint32_t GetICNCount( int icnId )
+        {
+            if ( !IsValidICNId( icnId ) ) {
+                return 0;
+            }
+
+            return static_cast<uint32_t>( GetMaximumICNIndex( icnId ) );
+        }
+
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
             if ( shapeId > 3 ) {
@@ -2118,6 +2126,24 @@ namespace fheroes2
         {
             // TODO: Add Unicode character support
             return GetLetter( character, fontType );
+        }
+
+        int32_t GetAbsoluteICNHeight( int icnId )
+        {
+            const uint32_t frameCount = GetICNCount( icnId );
+            if ( frameCount == 0 ) {
+                return 0;
+            }
+
+            int32_t height = 0;
+            for ( int32_t i = 0; i < frameCount; ++i ) {
+                const int32_t offset = -GetICN( icnId, i ).y();
+                if ( offset > height ) {
+                    height = offset;
+                }
+            }
+
+            return height;
         }
     }
 }
