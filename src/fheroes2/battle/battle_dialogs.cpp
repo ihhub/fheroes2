@@ -284,7 +284,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
 
         if ( hero.isHeroes() ) {
             msg.append( "\n \n" );
-            msg.append( _( "For valor in combat, %{name} receives %{exp} experience" ) );
+            msg.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{exp}", exp );
         }
