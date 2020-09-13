@@ -157,7 +157,9 @@ void Game::OpenCastleDialog( Castle & castle )
         ( *it )->OpenDialog( true, needFade );
     }
 
-    Interface::Basic::Get().RedrawFocus();
+    Interface::Basic & basicInterface = Interface::Basic::Get();
+    basicInterface.SetFocus( *it );
+    basicInterface.RedrawFocus();
 }
 
 /* open heroes wrapper */
