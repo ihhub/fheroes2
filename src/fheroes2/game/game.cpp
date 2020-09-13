@@ -201,7 +201,7 @@ int Game::Credits( void )
 
     const std::string contributors(
         "LeHerosInconnu\nPavel aka shprotru\nAndrey Starodubtsev\nVasilenko Alexey\nKrzysztof Gorecki\nghostBot\nPalash Bansal\nMaria Sopkova\nHarri Nieminen\n"
-        "and many other contributors!");
+        "and many other contributors!" );
 
     name.Set( contributors, Font::BIG, textWidth );
     name.Blit( screenOffset.x + 2 * columnStep + ( columnStep - name.w() ) / 2, offsetY );
@@ -220,8 +220,7 @@ int Game::Credits( void )
     offsetY += name.h();
 
     const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
-    fheroes2::Blit( goblin, 0, 0, display, screenOffset.x + ( display.DEFAULT_WIDTH - goblin.width() ) / 2, screenOffset.y + ( display.DEFAULT_HEIGHT - goblin.height() ) / 2,
-                    goblin.width(), goblin.height() );
+    fheroes2::Blit( goblin, display, screenOffset.x + ( display.DEFAULT_WIDTH - goblin.width() ) / 2, screenOffset.y + ( display.DEFAULT_HEIGHT - goblin.height() ) / 2 );
 
     AGG::PlayMusic( MUS::VICTORY );
 
