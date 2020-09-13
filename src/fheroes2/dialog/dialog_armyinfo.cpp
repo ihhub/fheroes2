@@ -56,12 +56,13 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     cursor.SetThemes( cursor.POINTER );
 
     const Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
-    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    const Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
+    const Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
-    fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite_dialog.width() + BORDERWIDTH, sprite_dialog.height() + BORDERWIDTH );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
     const Rect pos_rt( dialogOffset.x, dialogOffset.y, sprite_dialog.width(), sprite_dialog.height() );
 
-    fheroes2::Blit( spriteDialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
+    fheroes2::Blit( spriteDialogShadow, display, pos_rt.x + shadowShift.x, pos_rt.y + shadowShift.y );
     fheroes2::Blit( sprite_dialog, display, pos_rt.x, pos_rt.y );
 
     const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
