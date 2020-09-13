@@ -34,6 +34,10 @@
 #include <cmath>
 #include <set>
 
+#ifdef VITA
+#include <SDL.h>
+#endif
+
 namespace
 {
     // Returns nearest screen supported resolution
@@ -169,11 +173,7 @@ namespace
                         }
                     }
                 }
-#ifdef VITA
-                // there's no available resolution on Vita
-                resolutionSet.insert( std::make_pair( 640, 480 ) );
-                resolutionSet.insert( std::make_pair( 960, 544 ) );
-#endif
+
                 filteredResolutions = FilterResolutions( resolutionSet );
             }
 
@@ -234,6 +234,9 @@ namespace
         }
 
     protected:
+#ifdef VITA
+        SDL_Rect vitaDestRect;
+#endif
         RenderEngine()
             : _window( NULL )
             , _surface( NULL )
@@ -369,44 +372,7 @@ namespace
             }
 
             _createPalette();
-#ifdef VITA
-            // screen scaling calculation
-            vitaDestRect.x = 0;
-            vitaDestRect.y = 0;
-            vitaDestRect.w = width_;
-            vitaDestRect.h = height_;
 
-            if ( width_ != 960 || height_ != 544 ) {
-                if ( isFullScreen ) {
-                    // resize to fullscreen
-                    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
-
-                    if ( vitaKeepAspectRatio ) {
-                        if ( ( 960.0 / 544.0 ) >= ( (float)width_ / height_ ) ) {
-                            float scale = 544.0 / height_;
-                            vitaDestRect.w = width_ * scale;
-                            vitaDestRect.h = 544;
-                            vitaDestRect.x = ( 960 - vitaDestRect.w ) / 2;
-                        }
-                        else {
-                            float scale = 960.0 / width_;
-                            vitaDestRect.w = 960;
-                            vitaDestRect.h = height_ * scale;
-                            vitaDestRect.y = ( 544 - vitaDestRect.h ) / 2;
-                        }
-                    }
-                    else {
-                        vitaDestRect.w = 960;
-                        vitaDestRect.h = 544;
-                    }
-                }
-                else {
-                    // center game area
-                    vitaDestRect.x = ( 960 - width_ ) / 2;
-                    vitaDestRect.y = ( 544 - height_ ) / 2;
-                }
-            }
-#endif
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
             if ( _texture == NULL ) {
                 clear();
@@ -454,12 +420,7 @@ namespace
 
         virtual bool isMouseCursorActive() const override
         {
-#ifdef VITA
-            // required for edge of screen scrolling
-            return true;
-#else
             return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
-#endif
         }
 
     private:
@@ -560,11 +521,7 @@ namespace
                         resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
                     }
                 }
-#ifdef VITA
-                // there's no available resolution on Vita
-                resolutionSet.insert( std::make_pair( 640, 480 ) );
-                resolutionSet.insert( std::make_pair( 960, 544 ) );
-#endif
+
                 filteredResolutions = FilterResolutions( resolutionSet );
             }
 
@@ -739,12 +696,7 @@ namespace
 
         virtual bool isMouseCursorActive() const override
         {
-#ifdef VITA
-            // required for edge of screen scrolling
-            return true;
-#else
             return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
-#endif
         }
 
     private:
@@ -785,6 +737,101 @@ namespace
         }
     };
 #endif
+
+#ifdef VITA
+    class VitaRenderEngine : public RenderEngine
+    {
+    public:
+        static VitaRenderEngine * create()
+        {
+            return new VitaRenderEngine;
+        }
+
+        fheroes2::Rect GetVitaDestRect() const override
+        {
+            fheroes2::Rect rect;
+            rect.x = vitaDestRect.x;
+            rect.y = vitaDestRect.y;
+            rect.width = vitaDestRect.w;
+            rect.height = vitaDestRect.h;
+            return rect;
+        }
+
+        bool GetVitaKeepAspectRatio() const override
+        {
+            return vitaKeepAspectRatio;
+        }
+
+        void SetVitaKeepAspectRatio( bool keepAspect ) override
+        {
+            vitaKeepAspectRatio = keepAspect;
+        }
+
+        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
+        {
+            static std::vector<std::pair<int, int> > filteredResolutions;
+
+            if ( filteredResolutions.empty() ) {
+                filteredResolutions.push_back( std::make_pair( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+                filteredResolutions.push_back( std::make_pair( fheroes2::Display::VITA_FULLSCREEN_WIDTH, fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) );
+            }
+
+            return filteredResolutions;
+        }
+
+    protected:
+        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        {
+            // screen scaling calculation
+            vitaDestRect.x = 0;
+            vitaDestRect.y = 0;
+            vitaDestRect.w = width_;
+            vitaDestRect.h = height_;
+
+            if ( width_ != fheroes2::Display::VITA_FULLSCREEN_WIDTH || height_ != fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) {
+                if ( isFullScreen ) {
+                    // resize to fullscreen
+                    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
+
+                    if ( vitaKeepAspectRatio ) {
+                        if ( ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / fheroes2::Display::VITA_FULLSCREEN_HEIGHT )
+                             >= ( static_cast<float>( width_ ) / height_ ) ) {
+                            float scale = static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) / height_;
+                            vitaDestRect.w = width_ * scale;
+                            vitaDestRect.h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
+                            vitaDestRect.x = ( fheroes2::Display::VITA_FULLSCREEN_WIDTH - vitaDestRect.w ) / 2;
+                        }
+                        else {
+                            float scale = static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / width_;
+                            vitaDestRect.w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
+                            vitaDestRect.h = height_ * scale;
+                            vitaDestRect.y = ( fheroes2::Display::VITA_FULLSCREEN_HEIGHT - vitaDestRect.h ) / 2;
+                        }
+                    }
+                    else {
+                        vitaDestRect.w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
+                        vitaDestRect.h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
+                    }
+                }
+                else {
+                    // center game area
+                    vitaDestRect.x = ( fheroes2::Display::VITA_FULLSCREEN_WIDTH - width_ ) / 2;
+                    vitaDestRect.y = ( fheroes2::Display::VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
+                }
+            }
+
+            return ( RenderEngine::allocate( width_, height_, isFullScreen ) );
+        }
+
+        virtual bool isMouseCursorActive() const override
+        {
+            return true;
+        }
+
+    private:
+        bool vitaKeepAspectRatio;
+    };
+#endif
 }
 
 namespace fheroes2
@@ -795,7 +842,11 @@ namespace fheroes2
     }
 
     Display::Display()
+#ifdef VITA
+        : _engine( VitaRenderEngine::create() )
+#else
         : _engine( RenderEngine::create() )
+#endif
         , _preprocessing( NULL )
         , _postprocessing( NULL )
         , _renderSurface( NULL )

@@ -61,8 +61,7 @@ KeySym vitaKeys[TOTAL_CHARACTERS_VITA] = {
 
 char GetCurrentVitaChar()
 {
-    char c = CharFromKeySym( vitaKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
-    return c;
+    return CharFromKeySym( vitaKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );;
 }
 
 void SetCurrentVitaCharIndex( char current_char )
@@ -555,7 +554,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     case KEY_KP4: {
         if ( res.size() && pos ) {
             res.resize( res.size() - 1 );
-            pos--;
+            --pos;
         }
 
         break;
@@ -576,14 +575,14 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     }
     // next char
     case KEY_KP2: {
-        currentCharIndex++;
+        ++currentCharIndex;
         if ( currentCharIndex >= TOTAL_CHARACTERS_VITA )
             currentCharIndex = 0;
 
         if ( res.size() )
             res.resize( res.size() - 1 );
         else
-            pos++;
+            ++pos;
 
         char c = GetCurrentVitaChar();
 
@@ -594,14 +593,14 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     }
     // previous char
     case KEY_KP8: {
-        currentCharIndex--;
+        --currentCharIndex;
         if ( currentCharIndex < 0 )
             currentCharIndex = TOTAL_CHARACTERS_VITA - 1;
 
         if ( res.size() )
             res.resize( res.size() - 1 );
         else
-            pos++;
+            ++pos;
 
         char c = GetCurrentVitaChar();
 
@@ -617,7 +616,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         if ( res.size() )
             res.resize( res.size() - 1 );
         else
-            pos++;
+            ++pos;
 
         char c = GetCurrentVitaChar();
 

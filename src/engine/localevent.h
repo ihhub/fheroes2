@@ -278,11 +278,11 @@ public:
 #ifdef VITA
     void SetVitaPointerSpeed( int newSpeed )
     {
-        vita_pointer_speed = newSpeed;
+        vitaPointerSpeed = newSpeed / VITA_SPEED_MOD;
     }
     void VitaTextInputActive( bool active )
     {
-        vita_input_active = active;
+        vitaInputActive = active;
     }
 #endif
 
@@ -367,16 +367,18 @@ private:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 #endif
+    const float VITA_SPEED_MOD = 2000000.0f;
+    const float VITA_AXIS_SPEEDUP = 1.03f;
 
-    bool vita_input_active = false;
-    int vita_pointer_speed = 10;
+    bool vitaInputActive = false;
+    float vitaPointerSpeed = 10.0f;
 
-    Sint16 xaxisl_value = 0;
-    Sint16 yaxisl_value = 0;
-    float xaxis_float = 0;
-    float yaxis_float = 0;
+    int16_t xAxisLValue = 0;
+    int16_t yAxisLValue = 0;
+    float xAxisFloat = 0;
+    float yAxisFloat = 0;
     bool secondTouchDown = false;
-    Uint32 lastTime = 0;
+    uint32_t lastTime = 0;
 #endif
 };
 

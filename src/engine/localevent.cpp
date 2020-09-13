@@ -554,7 +554,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     ResetModes( MOUSE_MOTION );
 #ifdef VITA
     // to make hold-button scroll working
-    if ( vita_input_active )
+    if ( vitaInputActive )
 #endif
     ResetModes( KEY_PRESSED );
 
@@ -712,38 +712,38 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         return;
     }
 
-    SDL_Rect vitaDestRect = fheroes2::Display::instance().engine()->vitaDestRect;
-
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Rect vitaDestRect = display.engine()->GetVitaDestRect();
     SetModes( MOUSE_MOTION );
 
-    int32_t w = 960;
-    int32_t h = 544;
+    int32_t w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
+    int32_t h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
 
     // cursor position with scaled images
-    if ( fheroes2::Display::instance().engine()->isFullScreen() ) {
-        w = fheroes2::Display::instance().width();
-        h = fheroes2::Display::instance().height();
+    if ( display.engine()->isFullScreen() ) {
+        w = display.width();
+        h = display.height();
 
-        if ( fheroes2::Display::instance().engine()->vitaKeepAspectRatio ) {
-            w *= ( 960.0 / vitaDestRect.w );
-            h *= ( 544.0 / vitaDestRect.h );
+        if ( display.engine()->GetVitaKeepAspectRatio() ) {
+            w *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / vitaDestRect.width );
+            h *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) / vitaDestRect.height );
         }
     }
 
-    xaxis_float = event.x * w - vitaDestRect.x;
-    yaxis_float = event.y * h - vitaDestRect.y;
+    xAxisFloat = event.x * w - vitaDestRect.x;
+    yAxisFloat = event.y * h - vitaDestRect.y;
 
-    if ( xaxis_float < 0 )
-        xaxis_float = 0;
-    if ( yaxis_float < 0 )
-        yaxis_float = 0;
-    if ( xaxis_float > vitaDestRect.w )
-        xaxis_float = vitaDestRect.w;
-    if ( yaxis_float > vitaDestRect.h )
-        yaxis_float = vitaDestRect.h;
+    if ( xAxisFloat < 0 )
+        xAxisFloat = 0;
+    if ( yAxisFloat < 0 )
+        yAxisFloat = 0;
+    if ( xAxisFloat > vitaDestRect.width )
+        xAxisFloat = vitaDestRect.width;
+    if ( yAxisFloat > vitaDestRect.height )
+        yAxisFloat = vitaDestRect.height;
 
-    mouse_cu.x = static_cast<s16>( xaxis_float );
-    mouse_cu.y = static_cast<s16>( yaxis_float );
+    mouse_cu.x = static_cast<int16_t>( xAxisFloat );
+    mouse_cu.y = static_cast<int16_t>( yAxisFloat );
 
     if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
         if ( modes & MOUSE_OFFSET )
@@ -782,15 +782,15 @@ void LocalEvent::HandleJoyAxisEvent( const SDL_JoyAxisEvent & motion )
 {
     if ( motion.axis == JOY_XAXIS ) {
         if ( std::abs( motion.value ) > JOY_DEADZONE )
-            xaxisl_value = motion.value;
+            xAxisLValue = motion.value;
         else
-            xaxisl_value = 0;
+            xAxisLValue = 0;
     }
     else if ( motion.axis == JOY_YAXIS ) {
         if ( std::abs( motion.value ) > JOY_DEADZONE )
-            yaxisl_value = motion.value;
+            yAxisLValue = motion.value;
         else
-            yaxisl_value = 0;
+            yAxisLValue = 0;
     }
 }
 
@@ -852,32 +852,34 @@ void LocalEvent::HandleJoyButtonEvent( const SDL_JoyButtonEvent & button )
 
 void LocalEvent::ProcessAxisMotion()
 {
-    Uint32 currentTime = SDL_GetTicks();
+    uint32_t currentTime = SDL_GetTicks();
     float deltaTime = currentTime - lastTime;
     lastTime = currentTime;
 
-    if ( xaxisl_value == 0 && yaxisl_value == 0 )
+    if ( xAxisLValue == 0 && yAxisLValue == 0 )
         return;
-
-    float movementSpeed = 200000;
-    float settingsSpeedMod = static_cast<float>( vita_pointer_speed ) / 10.0f;
 
     SetModes( MOUSE_MOTION );
 
-    xaxis_float += ( ( pow( abs( xaxisl_value ), 1.03f ) * ( xaxisl_value / abs( xaxisl_value ) ) * deltaTime ) / movementSpeed ) * settingsSpeedMod;
-    yaxis_float += ( ( pow( abs( yaxisl_value ), 1.03f ) * ( yaxisl_value / abs( yaxisl_value ) ) * deltaTime ) / movementSpeed ) * settingsSpeedMod;
+    int16_t xSign = ( xAxisLValue > 0 ) - ( xAxisLValue < 0 );
+    int16_t ySign = ( yAxisLValue > 0 ) - ( yAxisLValue < 0 );
 
-    if ( xaxis_float < 0 )
-        xaxis_float = 0;
-    if ( yaxis_float < 0 )
-        yaxis_float = 0;
-    if ( xaxis_float > fheroes2::Display::instance().width() )
-        xaxis_float = fheroes2::Display::instance().width();
-    if ( yaxis_float > fheroes2::Display::instance().height() )
-        yaxis_float = fheroes2::Display::instance().height();
+    xAxisFloat += pow( abs( xAxisLValue ), VITA_AXIS_SPEEDUP ) * xSign * deltaTime * vitaPointerSpeed;
+    yAxisFloat += pow( abs( yAxisLValue ), VITA_AXIS_SPEEDUP ) * ySign * deltaTime * vitaPointerSpeed;
 
-    mouse_cu.x = static_cast<s16>( xaxis_float );
-    mouse_cu.y = static_cast<s16>( yaxis_float );
+    const fheroes2::Display & display = fheroes2::Display::instance();
+
+    if ( xAxisFloat < 0 )
+        xAxisFloat = 0;
+    if ( yAxisFloat < 0 )
+        yAxisFloat = 0;
+    if ( xAxisFloat > display.width() )
+        xAxisFloat = display.width();
+    if ( yAxisFloat > display.height() )
+        yAxisFloat = display.height();
+
+    mouse_cu.x = static_cast<int16_t>( xAxisFloat );
+    mouse_cu.y = static_cast<int16_t>( yAxisFloat );
 
     if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
         if ( modes & MOUSE_OFFSET )

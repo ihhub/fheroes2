@@ -20,9 +20,6 @@
 #pragma once
 
 #include "image.h"
-#ifdef VITA
-#include "types.h"
-#endif
 
 namespace fheroes2
 {
@@ -56,9 +53,11 @@ namespace fheroes2
         virtual void setIcon( const Image & ) {}
 
 #ifdef VITA
-        SDL_Rect vitaDestRect;
-        bool vitaKeepAspectRatio;
+        virtual void SetVitaKeepAspectRatio( bool keepAspect ) {};
+        virtual bool GetVitaKeepAspectRatio() const {};
+        virtual fheroes2::Rect GetVitaDestRect() const {};
 #endif
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
@@ -94,6 +93,13 @@ namespace fheroes2
             DEFAULT_WIDTH = 640,
             DEFAULT_HEIGHT = 480
         };
+#ifdef VITA
+        enum
+        {
+            VITA_FULLSCREEN_WIDTH = 960,
+            VITA_FULLSCREEN_HEIGHT = 544
+        };
+#endif
 
         static Display & instance();
 
