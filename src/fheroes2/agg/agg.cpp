@@ -1134,7 +1134,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
     }
 #endif
 
-    DEBUG( DBG_ENGINE, DBG_INFO, M82::GetString( m82 ) );
+    DEBUG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & body = ReadChunk( M82::GetString( m82 ) );
 
     if ( body.size() ) {
@@ -1190,7 +1190,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
 /* load XMI object */
 void AGG::LoadMID( int xmi, std::vector<u8> & v )
 {
-    DEBUG( DBG_ENGINE, DBG_INFO, XMI::GetString( xmi ) );
+    DEBUG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
     const std::vector<u8> & body = ReadChunk( XMI::GetString( xmi ), xmi >= XMI::MIDI_ORIGINAL_KNIGHT );
 
     if ( body.size() )
@@ -1268,7 +1268,7 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols )
                     else
                         loop_sounds.push_back( loop_sound_t( m82, ch ) );
 
-                    DEBUG( DBG_ENGINE, DBG_INFO, M82::GetString( m82 ) );
+                    DEBUG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
                 }
             }
         }
@@ -1281,7 +1281,7 @@ void AGG::PlaySound( int m82 )
     const Settings & conf = Settings::Get();
 
     if ( conf.Sound() ) {
-        DEBUG( DBG_ENGINE, DBG_INFO, M82::GetString( m82 ) );
+        DEBUG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
         const std::vector<u8> & v = AGG::GetWAV( m82 );
         int ch = Mixer::Play( &v[0], v.size(), -1, false );
         Mixer::Pause( ch );
@@ -1324,7 +1324,7 @@ void AGG::PlayMusic( int mus, bool loop )
         if ( filename.size() )
             Music::Play( filename, loop );
 
-        DEBUG( DBG_ENGINE, DBG_INFO, MUS::GetString( mus ) );
+        DEBUG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus ) );
     }
 #ifdef WITH_AUDIOCD
     else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
@@ -1351,7 +1351,7 @@ void AGG::PlayMusic( int mus, bool loop )
             Music::Play( file, loop );
 #endif
         }
-        DEBUG( DBG_ENGINE, DBG_INFO, XMI::GetString( xmi ) );
+        DEBUG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
     }
 }
 
