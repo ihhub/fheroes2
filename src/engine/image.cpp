@@ -1037,7 +1037,7 @@ namespace fheroes2
 
         Image contour( width, height );
         contour.reset();
-        if ( image.empty() || width < 2 || height < 2 ) {
+        if ( width < 2 || height < 2 ) {
             return contour;
         }
 

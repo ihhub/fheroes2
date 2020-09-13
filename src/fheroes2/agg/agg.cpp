@@ -1683,12 +1683,17 @@ namespace fheroes2
                         const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
 
                         uint32_t c = *data % 4 ? *data % 4 : *( ++data );
-                        while ( c-- ) {
-                            if ( transformType <= 15 ) {
+
+                        if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
+                            while ( c-- ) {
                                 imageTransform[posX] = transformType;
+                                ++posX;
                             }
-                            ++posX;
                         }
+                        else {
+                            posX += c;
+                        }
+
                         ++data;
                     }
                     else if ( 0xC1 == *data ) { // 0xC1
