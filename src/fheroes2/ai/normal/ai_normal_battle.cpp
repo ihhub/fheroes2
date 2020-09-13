@@ -207,8 +207,8 @@ namespace AI
                     actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
                 }
                 DEBUG( DBG_AI, DBG_INFO,
-                       currentUnit.GetName() << " archer focusing enemy ..."
-                                             << " threat level: ..." );
+                       currentUnit.GetName() << " archer focusing enemy " << priorityTarget->GetName()
+                                             << " threat level: " << priorityTarget->GetScoreQuality( currentUnit ) );
             }
         }
         else {
@@ -230,7 +230,11 @@ namespace AI
             }
             else {
                 // Melee unit - Offensive action
-                uint32_t strength = 0;
+                // 1. Find highest value enemy unit, save as priority target
+                // 2. If priority within reach, attack
+                // 3. Otherwise search for another target nearby
+                // 4.a. Attack if found, from the tile that is closer to priority target
+                // 4.b. Else move to priority target
 
                 // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
                 // for ( const Unit * enemy : enemies ) {
@@ -261,11 +265,6 @@ namespace AI
                 
                 }
 
-                // 1. Find highest value enemy unit, save as priority target
-                // 2. If priority within reach, attack
-                // 3. Otherwise search for another target nearby
-                // 4.a. Attack if found, from the tile that is closer to priority target
-                // 4.b. Else move to priority target
                 DEBUG( DBG_AI, DBG_INFO,
                        currentUnit.GetName() << " melee offense, focus enemy ..."
                                              << " threat level: ..." );

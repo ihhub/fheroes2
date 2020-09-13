@@ -95,6 +95,23 @@ namespace Battle
         return _cache[targetCell]._cost;
     }
 
+    std::vector<int> ArenaPathfinder::getPath( int targetCell ) const
+    {
+        std::vector<int> path;
+
+        int nodeID = targetCell;
+        const ArenaNode & node = _cache[targetCell];
+        while ( _cache[nodeID]._cost != 0 ) {
+            path.push_back( nodeID );
+            nodeID = _cache[nodeID]._from;
+        }
+
+        if ( path.size() > 1 )
+            std::reverse( path.begin(), path.end() );
+            
+        return path;
+    }
+
     void ArenaPathfinder::calculate( const Position & start, bool isWide )
     {
         reset();

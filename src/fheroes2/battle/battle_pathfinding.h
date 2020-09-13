@@ -44,7 +44,7 @@ namespace Battle
         ArenaPathfinder();
         void reset();
         void calculate( const Position & start, bool isWide );
-        std::vector<int> getPath( int fromCell, int targetCell ) const;
+        std::vector<int> getPath( int targetCell ) const;
         uint32_t getDistance( int targetCell ) const;
 
     private:
