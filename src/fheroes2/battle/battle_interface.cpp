@@ -3768,7 +3768,7 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
 void Battle::Interface::RedrawActionColdRaySpell( Unit & target )
 {
     RedrawRaySpell( target, ICN::COLDRAY, M82::COLDRAY, 18 );
-    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, WINCE );
+    RedrawTroopWithFrameAnimation( target, ICN::ICECLOUD, M82::UNKNOWN, NONE );
 }
 
 void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size )
