@@ -245,7 +245,7 @@ void SpellPointsIndicator::Redraw( void )
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
     Text text( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ), Font::SMALL );
-    text.Blit( area.x + 18 - text.w() / 2, area.y + 21 );
+    text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 
 void SpellPointsIndicator::QueueEventProcessing( void )
