@@ -167,9 +167,7 @@ int main( int argc, char ** argv )
             const RGBA clkey = RGBA( 0xFF, 0, 0xFF );
             surf.Fill( clkey );
             surf.SetColorKey( clkey );
-
-            // surf.Fill(0xff, 0xff, 0xff);
-            surf.Fill( ColorBlack ); // filling with transparent color
+            surf.Fill( RGBA( 0, 0, 0, 0xFF ) ); // filling with transparent color
 
             if ( 0x20 == head.type )
                 SpriteDrawICNv2( surf, buf, debug );

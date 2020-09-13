@@ -447,6 +447,7 @@ Settings::Settings()
     , vita_pointer_speed( 10 )
     , vita_keep_aspect_ratio( 1 )
 #endif
+    , _musicType( MUSIC_EXTERNAL )
 {
     ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
@@ -457,7 +458,7 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
-    opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+    opt_global.SetModes( GLOBAL_MUSIC_EXT );
     opt_global.SetModes( GLOBAL_SOUND );
     // Set expansion version by default - turn off if heroes2x.agg not found
     opt_global.SetModes( GLOBAL_PRICELOYALTY );
@@ -591,7 +592,7 @@ bool Settings::Read( const std::string & filename )
     }
 
     // music source
-    _musicType = MUSIC_MIDI_ORIGINAL;
+    _musicType = MUSIC_EXTERNAL;
     sval = config.StrParams( "music" );
 
     if ( !sval.empty() ) {
@@ -614,7 +615,7 @@ bool Settings::Read( const std::string & filename )
         else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_EXT );
-            _musicType = MUSIC_CDROM;
+            _musicType = MUSIC_EXTERNAL;
         }
     }
 
@@ -849,7 +850,7 @@ std::string Settings::String( void ) const
 {
     std::ostringstream os;
     std::string musicType;
-    if ( opt_global.Modes( GLOBAL_MUSIC_EXT ) ) {
+    if ( MusicType() == MUSIC_EXTERNAL ) {
         musicType = "external";
     }
     else if ( MusicType() == MUSIC_CDROM ) {

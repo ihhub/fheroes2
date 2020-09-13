@@ -331,20 +331,21 @@ SpellStorage SpellBook::SetFilter( int filter, const HeroBase * hero ) const
 
 void SpellBookRedrawMP( const Point & dst, u32 mp )
 {
-    bool small = Settings::Get().QVGA();
-
-    Point tp( dst.x + ( small ? 5 : 11 ), dst.y + ( small ? 1 : 9 ) );
-    if ( 0 == mp ) {
-        Text text( "0", Font::SMALL );
-        text.Blit( tp.x - text.w() / 2, tp.y );
+    Point tp( dst.x + 11, dst.y + 9 );
+    if ( mp > 999 ) {
+        mp = 999; // just in case of broken code
     }
-    else
-        for ( u32 i = 100; i >= 1; i /= 10 )
-            if ( mp >= i ) {
-                Text text( GetString( ( mp % ( i * 10 ) ) / i ), Font::SMALL );
-                text.Blit( tp.x - text.w() / 2, tp.y );
-                tp.y += ( small ? -2 : 0 ) + text.h();
-            }
+
+    Text text( mp > 100 ? GetString( mp / 100 ) : " ", Font::SMALL );
+    text.Blit( tp.x - text.w() / 2, tp.y );
+    tp.y += text.h();
+
+    text.Set( mp > 10 ? GetString( ( mp % 100 ) / 10 ) : " ", Font::SMALL );
+    text.Blit( tp.x - text.w() / 2, tp.y );
+    tp.y += text.h();
+
+    text.Set( mp > 0 ? GetString( mp % 10 ) : "0", Font::SMALL );
+    text.Blit( tp.x - text.w() / 2, tp.y );
 }
 
 void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const size_t cur, const Point & pt, u32 sp, int only, const HeroBase & hero )

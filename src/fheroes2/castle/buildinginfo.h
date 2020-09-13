@@ -69,7 +69,7 @@ struct DwellingItem
 class DwellingsBar : public Interface::ItemsBar<DwellingItem>
 {
 public:
-    DwellingsBar( Castle &, const Size &, const RGBA & fill );
+    DwellingsBar( Castle &, const Size & );
 
     void RedrawBackground( const Rect &, fheroes2::Image & );
     void RedrawItem( DwellingItem &, const Rect &, fheroes2::Image & );

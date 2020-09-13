@@ -76,7 +76,7 @@ struct HeroRow
         Clear();
 
         armyBar = new ArmyBar( &hero->GetArmy(), true, false );
-        armyBar->SetBackground( Size( 41, 53 ), RGBA( 72, 28, 0 ) );
+        armyBar->SetBackground( Size( 41, 53 ), fheroes2::GetColorId( 72, 28, 0 ) );
         armyBar->SetColRows( 5, 1 );
         armyBar->SetHSpace( -1 );
 
@@ -283,7 +283,7 @@ struct CstlRow
         castle = ptr;
 
         Clear();
-        const RGBA fill( 40, 12, 0 );
+        const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
 
         armyBarGuard = new ArmyBar( &castle->GetArmy(), true, false );
         armyBarGuard->SetBackground( Size( 41, 41 ), fill );
@@ -299,7 +299,7 @@ struct CstlRow
             armyBarGuest->SetHSpace( -1 );
         }
 
-        dwellingsBar = new DwellingsBar( *castle, Size( 39, 52 ), fill );
+        dwellingsBar = new DwellingsBar( *castle, Size( 39, 52 ) );
         dwellingsBar->SetColRows( 6, 1 );
         dwellingsBar->SetHSpace( 2 );
     }

@@ -99,6 +99,7 @@ enum MusicSource
 {
     MUSIC_MIDI_ORIGINAL,
     MUSIC_MIDI_EXPANSION,
+    MUSIC_EXTERNAL,
     MUSIC_CDROM
 };
 

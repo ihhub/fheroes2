@@ -157,7 +157,9 @@ void Game::OpenCastleDialog( Castle & castle )
         ( *it )->OpenDialog( true, needFade );
     }
 
-    Interface::Basic::Get().RedrawFocus();
+    Interface::Basic & basicInterface = Interface::Basic::Get();
+    basicInterface.SetFocus( *it );
+    basicInterface.RedrawFocus();
 }
 
 /* open heroes wrapper */
@@ -813,7 +815,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 le.SetTapMode( false );
         }
         else {
-            if ( fheroes2::Cursor::instance().isFocusActive() ) {
+            if ( fheroes2::cursor().isFocusActive() ) {
                 int scrollPosition = SCROLL_NONE;
                 if ( le.MouseCursor( GetScrollLeft() ) )
                     scrollPosition |= SCROLL_LEFT;
