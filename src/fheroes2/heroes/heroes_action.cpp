@@ -167,7 +167,7 @@ u32 DialogGoldWithExp( const std::string & hdr, const std::string & msg, u32 cou
     fheroes2::Blit( gold, image, 0, image.height() - gold.height() - 12 );
     fheroes2::Blit( sprite, image, gold.width() + 50, 0 );
 
-    Text text( GetString( count ) );
+    Text text( GetString( count ), Font::SMALL );
     text.Blit( ( gold.width() - text.w() ) / 2, image.height() - 12, image );
     text.Set( GetString( exp ) );
     text.Blit( gold.width() + 50 + ( sprite.width() - text.w() ) / 2, image.height() - 12, image );
@@ -2713,7 +2713,7 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
             else if ( 3 == variant ) {
                 const u32 exp = 1000;
                 msg = _(
-                    "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp) experience points and %{count} gold." );
+                    "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
                 StringReplace( msg, "%{exp}", exp );
                 StringReplace( msg, "%{count}", gold );
                 DialogGoldWithExp( "", msg, gold, exp );
