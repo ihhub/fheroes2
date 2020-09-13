@@ -34,14 +34,9 @@ using namespace Battle;
 
 namespace AI
 {
-    bool CheckBattleRetreat( double myArmy, double enemy )
+    bool isHeroWorthSaving(const Heroes * hero)
     {
-        // FIXME: more sophisticated logic to see if remaining units are under threat
-        // Consider taking speed/turn order into account as well
-        // Pass in ( const Units & friendly, const Units & enemies ) instead
-
-        // Retreat if remaining army strength is 10% of enemy's army
-        return myArmy * 10 < enemy;
+        return hero && ( hero->GetLevel() > 2 || !hero->GetBagArtifacts().empty() );
     }
 
     bool CheckCommanderCanSpellcast( const Arena & arena, const HeroBase * commander )
@@ -49,11 +44,53 @@ namespace AI
         return commander && commander->HaveSpellBook() && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
     }
 
+    bool CheckBattleRetreat( double myArmy, double enemy )
+    {
+        // FIXME: more sophisticated logic to see if remaining units are under threat
+        // Consider taking speed/turn order into account as well
+        // Pass in ( const Units & friendly, const Units & enemies ) instead
+
+        // Retreat if remaining army strength is 10% of enemy's army
+        return myArmy < enemy;
+    }
+
     bool CheckIfUnitIsFaster( const Unit & currentUnit, const Unit & target )
     {
         if ( currentUnit.isFlying() == target.isFlying() )
             return currentUnit.GetSpeed() > target.GetSpeed();
         return currentUnit.isFlying();
+    }
+
+    void ForceSpellcastBeforeRetreat( Arena & arena, const HeroBase * commander, Actions & actions )
+    {
+        if ( CheckCommanderCanSpellcast( arena, commander ) ) {
+            std::vector<Spell> allSpells = commander->GetSpells();
+            int bestSpell = -1;
+            double bestHeuristic = 0;
+            int targetIdx = -1;
+
+            const Units friendly( arena.GetForce( commander->GetColor() ), true );
+            const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
+
+            for ( auto spell : allSpells ) {
+                if ( spell.isCombat() && spell.isDamage() && !spell.isApplyWithoutFocusObject() ) {
+                    uint32_t totalDamage = spell.Damage() * commander->GetPower();
+                    for ( const Unit * enemy : enemies ) {
+                        double spellHeuristic = enemy->GetMonsterStrength()
+                                                * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, commander->GetPower() ) ) / 100 );
+
+                        if ( spellHeuristic > bestHeuristic ) {
+                            bestSpell = spell.GetID();
+                            targetIdx = enemy->GetHeadIndex();
+                        }
+                    }
+                }
+            }
+
+            if ( bestSpell != -1 ) {
+                actions.push_back( Battle::Command( MSG_BATTLE_CAST, bestSpell, targetIdx ) );
+            }
+        }
     }
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
@@ -153,8 +190,10 @@ namespace AI
         const bool defensiveTactics = false;
 
         // Step 3. Check retreat/surrender condition
-        if ( !defendingCastle && commander && CheckBattleRetreat( myArmyStrength, enemyArmyStrength ) ) {
+        const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
+        if ( !defendingCastle && actualHero && isHeroWorthSaving( actualHero ) && CheckBattleRetreat( myArmyStrength, enemyArmyStrength ) ) {
             // Cast maximum damage spell
+            ForceSpellcastBeforeRetreat( arena, commander, actions );
 
             actions.push_back( Command( MSG_BATTLE_RETREAT ) );
             actions.push_back( Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
@@ -284,9 +323,6 @@ namespace AI
                     actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );
 
                     if ( target ) {
-                        // FIXME: check target head index
-                        Board::GetDistance( targetCell, target->GetHeadIndex() );
-
                         actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
                         DEBUG( DBG_AI, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy ..."

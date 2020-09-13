@@ -59,7 +59,7 @@ SpellStorage SpellStorage::GetSpells( int lvl ) const
     SpellStorage result;
     result.reserve( 20 );
     for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it ).isLevel( lvl ) )
+        if ( lvl == -1 || ( *it ).isLevel( lvl ) )
             result.push_back( *it );
     return result;
 }
