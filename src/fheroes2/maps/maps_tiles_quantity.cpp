@@ -395,7 +395,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
     case MP2::OBJ_DRAGONCITY:
         return Monster( Monster::RED_DRAGON );
     case MP2::OBJ_CITYDEAD:
-        return Monster( Monster::POWER_LICH );
+        return Monster( Monster::LICH );
 
     case MP2::OBJ_ANCIENTLAMP:
         return Monster( Monster::GENIE );
