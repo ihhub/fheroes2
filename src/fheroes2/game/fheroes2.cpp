@@ -186,7 +186,7 @@ int main( int argc, char ** argv )
             // goto main menu
             int rs = ( test ? Game::TESTING : Game::MAINMENU );
 
-            Video::ShowVideo( "heroes2/anim/H2XINTRO.smk", false );
+            Video::ShowVideo( Settings::GetLastFile( "data", "H2XINTRO.SMK" ), false );
 
             while ( rs != Game::QUITGAME ) {
                 switch ( rs ) {
