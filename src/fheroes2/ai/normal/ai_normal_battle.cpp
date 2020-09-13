@@ -34,7 +34,7 @@ using namespace Battle;
 
 namespace AI
 {
-    bool isHeroWorthSaving(const Heroes * hero)
+    bool isHeroWorthSaving( const Heroes * hero )
     {
         return hero && ( hero->GetLevel() > 2 || !hero->GetBagArtifacts().empty() );
     }
@@ -209,6 +209,7 @@ namespace AI
             // 5. For antimagic - based on enemy hero spellcasting abilities multiplied by friendly unit strength
 
             // 6. Cast best spell with highest heuristic on target pointer saved
+            ForceSpellcastBeforeRetreat( arena, commander, actions );
         }
 
         // Step 5. Current unit decision tree

@@ -104,7 +104,7 @@ namespace AI
         Base() {}
     };
 
-    Base & Get( AI_TYPE type = NORMAL );
+    Base & Get( AI_TYPE type = SIMPLE );
 
     // functionality in ai_hero_action.cpp
     void HeroesAction( Heroes & hero, s32 dst_index );
