@@ -283,7 +283,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
             msg.append( _( "A glorious victory!" ) );
 
         if ( hero.isHeroes() ) {
-            msg.append( "\n" );
+            msg.append( "\n \n" );
             msg.append( _( "For valor in combat, %{name} receives %{exp} experience" ) );
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{exp}", exp );
