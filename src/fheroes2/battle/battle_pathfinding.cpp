@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "battle_pathfinding.h"
+#include "battle_troop.h"
 #include <algorithm>
 
 namespace Battle
@@ -115,37 +116,66 @@ namespace Battle
         return path;
     }
 
-    void ArenaPathfinder::calculate( const Position & start, bool isWide )
+    void ArenaPathfinder::calculate( const Unit & unit )
     {
         reset();
 
-        std::vector<int> nodesToExplore;
-
-        if ( start.GetHead() ) {
-            const int headIdx = start.GetHead()->GetIndex();
-            nodesToExplore.push_back( headIdx );
-            _cache[headIdx]._isOpen = false;
-        }
-        if ( start.GetTail() ) {
-            const int tailIdx = start.GetTail()->GetIndex();
-            nodesToExplore.push_back( tailIdx );
-            _cache[tailIdx]._isOpen = false;
+        const Cell * unitHead = unit.GetPosition().GetHead();
+        if ( !unitHead ) {
+            DEBUG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() );
+            return;
         }
 
-        for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-            const int fromNode = nodesToExplore[lastProcessedNode];
+        const Cell * unitTail = unit.GetPosition().GetTail();
+        const bool unitIsWide = unit.isWide();
 
-            for ( int direction = TOP_LEFT; direction < CENTER; direction = direction << 1 ) {
-                const int newNode = GetValidMoveIndex( fromNode, direction, isWide );
+        if ( unit.isFlying() ) {
+            const Board & board = *Arena::GetBoard();
+            const int headIdx = unitHead->GetIndex();
+            const int tailOffset = unit.isReflect() ? 1 : -1;
 
-                if ( newNode != -1 ) {
-                    const uint16_t cost = _cache[fromNode]._cost + 1;
-                    ArenaNode & node = _cache[newNode];
-                    if ( node._isOpen || cost < node._cost ) {
-                        node._isOpen = false;
-                        node._from = fromNode;
-                        node._cost = cost;
-                        nodesToExplore.push_back( newNode );
+            for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
+                const int idx = it->GetIndex();
+                const int tailX = ( idx % ARENAW ) + tailOffset;
+                const bool wideUnitCheck = !unitIsWide || ( tailX >= 0 && tailX < ARENAW - 1 && board.GetCell( idx + tailOffset )->isPassable1( true ) );
+
+                if ( ( *it ).isPassable1( true ) && wideUnitCheck ) {
+                    ArenaNode & node = _cache[idx];
+                    node._isOpen = false;
+                    node._from = headIdx;
+                    node._cost = 1;
+                }
+            }
+        }
+        else {
+            std::vector<int> nodesToExplore;
+
+            if ( unitHead ) {
+                const int headIdx = unitHead->GetIndex();
+                nodesToExplore.push_back( headIdx );
+                _cache[headIdx]._isOpen = false;
+            }
+            if ( unitTail ) {
+                const int tailIdx = unitTail->GetIndex();
+                nodesToExplore.push_back( tailIdx );
+                _cache[tailIdx]._isOpen = false;
+            }
+
+            for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+                const int fromNode = nodesToExplore[lastProcessedNode];
+
+                for ( int direction = TOP_LEFT; direction < CENTER; direction = direction << 1 ) {
+                    const int newNode = GetValidMoveIndex( fromNode, direction, unitIsWide );
+
+                    if ( newNode != -1 ) {
+                        const uint16_t cost = _cache[fromNode]._cost + 1;
+                        ArenaNode & node = _cache[newNode];
+                        if ( node._isOpen || cost < node._cost ) {
+                            node._isOpen = false;
+                            node._from = fromNode;
+                            node._cost = cost;
+                            nodesToExplore.push_back( newNode );
+                        }
                     }
                 }
             }

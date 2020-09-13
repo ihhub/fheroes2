@@ -348,7 +348,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
         }
         else {
             // re-calculate possible paths in case unit moved or it's a new turn
-            _pathfinder.calculate( current_troop->GetPosition(), current_troop->isWide() );
+            _pathfinder.calculate( *current_troop );
 
             // turn opponents
             if ( current_troop->isControlRemote() )
