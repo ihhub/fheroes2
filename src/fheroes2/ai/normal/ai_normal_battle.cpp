@@ -39,6 +39,8 @@ namespace AI
         // FIXME: more sophisticated logic to see if remaining units are under threat
         // Consider taking speed/turn order into account as well
         // Pass in ( const Units & friendly, const Units & enemies ) instead
+
+        // Retreat if remaining army strength is 10% of enemy's army
         return myArmy * 10 < enemy;
     }
 

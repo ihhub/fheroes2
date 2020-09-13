@@ -481,7 +481,16 @@ uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
         return 0;
 
     const uint32_t unitsLeft = ( hp - damageTaken ) / Monster::GetHitPoints();
-    return unitsLeft * ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+
+    uint32_t damagePerUnit = 0;
+    if ( Modes( SP_CURSE ) )
+        damagePerUnit = Monster::GetDamageMin();
+    else if ( Modes( SP_BLESS ) )
+        damagePerUnit = Monster::GetDamageMax();
+    else
+        damagePerUnit = ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+
+    return unitsLeft * damagePerUnit;
 }
 
 u32 Battle::Unit::CalculateMinDamage( const Unit & enemy ) const

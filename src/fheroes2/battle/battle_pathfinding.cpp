@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "battle_pathfinding.h"
+#include <algorithm>
 
 namespace Battle
 {
@@ -29,17 +30,18 @@ namespace Battle
         int wideUnitOffset = 0;
         const int x = fromCell % ARENAW;
         const int y = fromCell / ARENAW;
+        const bool isOddRow = ( y % 2 );
 
         switch ( directionMask ) {
         case Battle::TOP_LEFT:
-            if ( y > 0 && ( x > 0 || ( y % 2 ) == 0 ) ) {
-                newIndex = fromCell - ARENAW - ( ( y % 2 ) ? 1 : 0 );
+            if ( y > 0 && ( x > 0 || !isOddRow ) ) {
+                newIndex = fromCell - ARENAW - ( isOddRow ? 1 : 0 );
                 wideUnitOffset = 1;
             }
             break;
         case Battle::TOP_RIGHT:
-            if ( y > 0 && ( x < ARENAW - 1 || ( y % 2 ) == 1 ) ) {
-                newIndex = fromCell - ARENAW + ( ( y % 2 ) ? 0 : 1 );
+            if ( y > 0 && ( x < ARENAW - 1 || isOddRow ) ) {
+                newIndex = fromCell - ARENAW + ( isOddRow ? 0 : 1 );
                 wideUnitOffset = -1;
             }
             break;
@@ -48,14 +50,14 @@ namespace Battle
                 newIndex = fromCell + 1;
             break;
         case Battle::BOTTOM_RIGHT:
-            if ( y < ARENAH - 1 && ( x < ARENAW - 1 || ( y % 2 ) == 1 ) ) {
-                newIndex = fromCell + ARENAW + ( ( y % 2 ) ? 0 : 1 );
+            if ( y < ARENAH - 1 && ( x < ARENAW - 1 || isOddRow ) ) {
+                newIndex = fromCell + ARENAW + ( isOddRow ? 0 : 1 );
                 wideUnitOffset = -1;
             }
             break;
         case Battle::BOTTOM_LEFT:
-            if ( y < ARENAH - 1 && ( x > 0 || ( y % 2 ) == 0 ) ) {
-                newIndex = fromCell + ARENAW - ( ( y % 2 ) ? 1 : 0 );
+            if ( y < ARENAH - 1 && ( x > 0 || !isOddRow ) ) {
+                newIndex = fromCell + ARENAW - ( isOddRow ? 1 : 0 );
                 wideUnitOffset = 1;
             }
             break;
@@ -84,9 +86,10 @@ namespace Battle
     void ArenaPathfinder::reset()
     {
         for ( size_t i = 0; i < _cache.size(); ++i ) {
-            _cache[i]._from = -1;
-            _cache[i]._cost = 0;
-            _cache[i]._isOpen = true;
+            ArenaNode & node = _cache[i];
+            node._from = -1;
+            node._cost = 0;
+            node._isOpen = true;
         }
     }
 
