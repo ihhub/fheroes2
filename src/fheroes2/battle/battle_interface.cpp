@@ -1397,7 +1397,7 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            uint32_t distance = arena.CalculateWalkingDistance( it->GetIndex() );
+            uint32_t distance = arena.CalculateMoveDistance( it->GetIndex() );
             if ( distance > 0 ) {
                 Text text( GetString( distance ), Font::SMALL );
                 text.Blit( ( *it ).GetPos().x + 20, ( *it ).GetPos().y + 22, _mainSurface );

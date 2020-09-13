@@ -573,7 +573,7 @@ Battle::Indexes Battle::Arena::CalculatePath( const Battle::Unit & unit, int32_t
     return _pathfinder.getPath( indexTo );
 }
 
-uint32_t Battle::Arena::CalculateWalkingDistance( int32_t indexTo )
+uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
 {
     return _pathfinder.getDistance( indexTo );
 }

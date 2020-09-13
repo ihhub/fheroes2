@@ -476,7 +476,8 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
 
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
 {
-    if ( damageTaken > hp )
+    // Check if there will be retaliation in the first place
+    if ( damageTaken > hp || !AllowResponse() )
         return 0;
 
     const uint32_t unitsLeft = ( hp - damageTaken ) / Monster::GetHitPoints();

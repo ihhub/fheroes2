@@ -56,6 +56,7 @@ namespace AI
     {
         const int difficulty = Settings::Get().GameDifficulty();
         const int myColor = currentUnit.GetColor();
+        const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
 
         const HeroBase * commander = currentUnit.GetCommander();
         const Force & friendlyForce = arena.GetForce( myColor );
@@ -141,9 +142,11 @@ namespace AI
                     myShooterStr /= 2;
             }
         }
-
         DEBUG( DBG_AI, DBG_TRACE, "Comparing shooters: " << myShooterStr << ", vs enemy " << enemyShooterStr );
-        const bool defensiveTactics = defendingCastle || myShooterStr > enemyShooterStr;
+
+        // FIXME: Disabled defensive tactics (not implemented yet)
+        // const bool defensiveTactics = defendingCastle || myShooterStr > enemyShooterStr;
+        const bool defensiveTactics = false;
 
         // Step 3. Check retreat/surrender condition
         if ( !defendingCastle && commander && CheckBattleRetreat( friendly, enemies ) ) {
@@ -236,38 +239,58 @@ namespace AI
                 // 4.a. Attack if found, from the tile that is closer to priority target
                 // 4.b. Else move to priority target
 
-                // Loop through all enemy units and calculate threat (to my army, Archers/Flyers/Fast units get bonuses)
-                // for ( const Unit * enemy : enemies ) {
-                //    const uint32_t unitStr = enemy->GetScoreQuality( currentUnit );
-                //    if ( unitStr > strength ) {
-                //        strength = unitStr;
-                //        target = enemy;
-                //    }
-                //}
-
-                uint32_t minDist = MAXU16;
+                uint32_t minimalDist = MAXU16;
                 Indexes & around = Board::GetAroundIndexes( *priorityTarget );
                 for ( const int cell : around ) {
-                    const uint32_t distance = arena.CalculateWalkingDistance( cell );
-                    if ( distance > 0 && distance < minDist ) {
-                        minDist = distance;
+                    const uint32_t distance = arena.CalculateMoveDistance( cell );
+                    if ( distance > 0 && distance < minimalDist ) {
+                        minimalDist = distance;
                         targetCell = cell;
                     }
                 }
 
-                if ( targetCell != -1 && ( currentUnit.isFlying() || minDist <= currentUnit.GetSpeed() ) ) {
+                if ( targetCell != -1 && minimalDist <= currentUnitMoveRange ) {
                     target = priorityTarget;
-                    // FIXME: target head index
-                    actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );
-                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
                 }
                 else {
-                
+                    // Can't reach priority target - trying to find another one
+
+                    int secondaryTargetCell = -1;
+                    minimalDist = MAXU16;
+                    for ( const Unit * enemy : enemies ) {
+                        // FIXME: track enemy retaliation damage
+                        Indexes & around = Board::GetAroundIndexes( *enemy );
+                        for ( const int cell : around ) {
+                            const uint32_t distance = arena.CalculateMoveDistance( cell );
+                            if ( distance > 0 && distance <= currentUnitMoveRange && distance < minimalDist ) {
+                                minimalDist = distance;
+                                secondaryTargetCell = cell;
+                                target = enemy;
+                            }
+                        }
+                    }
+
+                    if ( secondaryTargetCell != -1 ) {
+                        // overwrite priority target with secondary one
+                        targetCell = secondaryTargetCell;
+                    }
+                    // if no other target found try to move to priority target
                 }
 
-                DEBUG( DBG_AI, DBG_INFO,
-                       currentUnit.GetName() << " melee offense, focus enemy ..."
-                                             << " threat level: ..." );
+                if ( targetCell != -1 ) {
+                    actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );
+
+                    if ( target ) {
+                        // FIXME: check target head index
+                        Board::GetDistance( targetCell, target->GetHeadIndex() );
+
+                        actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
+                        DEBUG( DBG_AI, DBG_INFO,
+                               currentUnit.GetName() << " melee offense, focus enemy ..."
+                                                     << " threat level: ..." );
+                    }
+                }
+                // else skip
             }
         }
 
