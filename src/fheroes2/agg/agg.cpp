@@ -1684,11 +1684,9 @@ namespace fheroes2
 
                         uint32_t c = *data % 4 ? *data % 4 : *( ++data );
 
-                        if ( transformValue & 0x40 ) {
+                        if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
                             while ( c-- ) {
-                                if ( transformType <= 15 ) {
-                                    imageTransform[posX] = transformType;
-                                }
+                                imageTransform[posX] = transformType;
                                 ++posX;
                             }
                         }
