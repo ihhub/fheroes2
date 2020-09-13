@@ -73,7 +73,7 @@ namespace Battle
 
         if ( isWide && ( x + wideUnitOffset < 0 || x + wideUnitOffset > ARENAW - 1 || !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( true ) ) )
             return -1;
-        
+
         return newIndex;
     }
 
@@ -108,7 +108,7 @@ namespace Battle
 
         if ( path.size() > 1 )
             std::reverse( path.begin(), path.end() );
-            
+
         return path;
     }
 

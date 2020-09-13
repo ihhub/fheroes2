@@ -159,7 +159,6 @@ namespace AI
             return;
         }
 
-
         // Step 4. Calculate spell heuristics
         if ( CheckCommanderCanSpellcast( arena, commander ) ) {
             // 1. For damage spells - maximum amount of enemy threat lost
@@ -185,7 +184,7 @@ namespace AI
                     const Unit * enemy = Board::GetCell( cell )->GetUnit();
                     const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
                     const int damageDiff = archerMeleeDmg - enemy->CalculateRetaliationDamage( archerMeleeDmg );
-                    
+
                     if ( bestOutcome < damageDiff ) {
                         bestOutcome = damageDiff;
                         target = enemy;
