@@ -454,9 +454,11 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     const bool readonly = current_color != hero.GetColor() || !buttons;
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
+    const fheroes2::Point dialogShadow( 15, 15 );
+
     Rect pos_rt;
-    pos_rt.x = ( display.width() - dialog.width() ) / 2;
-    pos_rt.y = ( display.height() - dialog.height() ) / 2;
+    pos_rt.x = ( display.width() - dialog.width() - dialogShadow.x ) / 2;
+    pos_rt.y = ( display.height() - dialog.height() - dialogShadow.y ) / 2;
     pos_rt.w = dialog.width();
     pos_rt.h = dialog.height();
 
