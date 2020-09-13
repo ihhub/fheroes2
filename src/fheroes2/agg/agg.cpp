@@ -1691,7 +1691,6 @@ namespace fheroes2
                                 }
                                 ++posX;
                             }
-                            
                         }
                         else {
                             posX += c;
