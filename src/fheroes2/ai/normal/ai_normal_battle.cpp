@@ -122,9 +122,11 @@ namespace AI
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->HasArtifact( Artifact::GOLDEN_BOW );
 
-            double towerStr = arena.GetTower( TWR_LEFT )->GetScoreQuality( currentUnit );
-            towerStr += arena.GetTower( TWR_CENTER )->GetScoreQuality( currentUnit );
-            towerStr += arena.GetTower( TWR_RIGHT )->GetScoreQuality( currentUnit );
+            auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
+
+            double towerStr = getTowerStrength( arena.GetTower( TWR_CENTER ) );
+            towerStr += getTowerStrength( arena.GetTower( TWR_LEFT ) );
+            towerStr += getTowerStrength( arena.GetTower( TWR_RIGHT ) );
             DEBUG( DBG_AI, DBG_TRACE, "Castle strength: " << towerStr );
 
             if ( myColor == castle->GetColor() ) {

@@ -67,10 +67,13 @@ namespace Battle
             break;
         }
 
-        if ( newIndex != -1 && ( !Board::GetCell( newIndex )->isPassable1( true ) || ( isWide && !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( true ) ) ) ) {
-            // invalidate move
-            newIndex = -1;
-        }
+        // invalidate move
+        if ( newIndex != -1 && ( !Board::GetCell( newIndex )->isPassable1( true ) ) )
+            return -1;
+
+        if ( isWide && ( x + wideUnitOffset < 0 || x + wideUnitOffset > ARENAW - 1 || !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( true ) ) )
+            return -1;
+        
         return newIndex;
     }
 
