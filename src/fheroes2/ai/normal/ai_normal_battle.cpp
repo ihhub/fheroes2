@@ -34,10 +34,12 @@ using namespace Battle;
 
 namespace AI
 {
-    bool CheckBattleRetreat( const Units & friendly, const Units & enemies )
+    bool CheckBattleRetreat( double myArmy, double enemy )
     {
-        // FIXME: force AI retreat from battle since battle logic is not implemented
-        return true;
+        // FIXME: more sophisticated logic to see if remaining units are under threat
+        // Consider taking speed/turn order into account as well
+        // Pass in ( const Units & friendly, const Units & enemies ) instead
+        return myArmy * 10 < enemy;
     }
 
     bool CheckCommanderCanSpellcast( const Arena & arena, const HeroBase * commander )
@@ -149,7 +151,7 @@ namespace AI
         const bool defensiveTactics = false;
 
         // Step 3. Check retreat/surrender condition
-        if ( !defendingCastle && commander && CheckBattleRetreat( friendly, enemies ) ) {
+        if ( !defendingCastle && commander && CheckBattleRetreat( myArmyStrength, enemyArmyStrength ) ) {
             // Cast maximum damage spell
 
             actions.push_back( Command( MSG_BATTLE_RETREAT ) );
