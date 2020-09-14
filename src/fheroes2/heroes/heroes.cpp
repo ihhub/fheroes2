@@ -847,6 +847,9 @@ void Heroes::RescanPathPassable( void )
 
 void Heroes::RescanPath( void )
 {
+    if ( !path.isValid() )
+        path.clear();
+
     if ( path.isValid() ) {
         const Maps::Tiles & tile = world.GetTiles( path.GetDestinationIndex() );
 
