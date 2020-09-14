@@ -400,8 +400,8 @@ namespace
             if ( _surface == NULL )
                 return;
 
-            const uint32_t width = display.width();
-            const uint32_t height = display.height();
+            const int32_t width = display.width();
+            const int32_t height = display.height();
 
             if ( SDL_MUSTLOCK( _surface ) )
                 SDL_LockSurface( _surface );
@@ -417,7 +417,7 @@ namespace
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( _surface->pixels != display.image() ) {
-                    memcpy( _surface->pixels, display.image(), width * height );
+                    memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
                 }
             }
 
@@ -572,7 +572,7 @@ namespace
                     // copy the image from display buffer to SDL surface
                     fheroes2::Display & display = fheroes2::Display::instance();
                     if ( _surface->w == display.width() && _surface->h == display.height() ) {
-                        memcpy( _surface->pixels, display.image(), display.width() * display.height() );
+                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
                     }
 
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
@@ -600,7 +600,7 @@ namespace
             if ( _surface->format->BitsPerPixel == 8 && _surface->pixels == display.image() ) {
                 if ( display.width() == _surface->w && display.height() == _surface->h ) {
                     linkRenderSurface( NULL );
-                    memcpy( display.image(), _surface->pixels, display.width() * display.height() );
+                    memcpy( display.image(), _surface->pixels, static_cast<size_t>( display.width() * display.height() ) );
                 }
             }
 
@@ -702,8 +702,8 @@ namespace
             if ( _surface == NULL ) // nothing to render on
                 return;
 
-            const uint32_t width = display.width();
-            const uint32_t height = display.height();
+            const int32_t width = display.width();
+            const int32_t height = display.height();
 
             if ( SDL_MUSTLOCK( _surface ) )
                 SDL_LockSurface( _surface );
@@ -719,7 +719,7 @@ namespace
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( _surface->pixels != display.image() ) {
-                    memcpy( _surface->pixels, display.image(), width * height );
+                    memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
                 }
             }
 
@@ -842,7 +842,7 @@ namespace
                     // copy the image from display buffer to SDL surface
                     fheroes2::Display & display = fheroes2::Display::instance();
                     if ( _surface->w == display.width() && _surface->h == display.height() ) {
-                        memcpy( _surface->pixels, display.image(), display.width() * display.height() );
+                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
                     }
 
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );

@@ -23,7 +23,6 @@
 #include "cursor.h"
 #include "agg.h"
 #include "settings.h"
-#include "sprite.h"
 
 // This is new Graphics engine. To change the code slowly we have to do some hacks here for now
 #include "screen.h"

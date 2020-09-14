@@ -951,8 +951,8 @@ namespace fheroes2
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
         for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
-            memcpy( imageOutY, imageInY, width );
-            memcpy( transformOutY, transformInY, width );
+            memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
+            memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
         }
     }
 
@@ -1372,8 +1372,8 @@ namespace fheroes2
             const uint8_t * imageInY = in.image() + ( height - 1 ) * width;
             const uint8_t * transformInY = out.transform() + ( height - 1 ) * width;
             for ( ; imageOutY != imageOutYEnd; imageOutY += width, transformOutY += width, imageInY -= width, transformInY -= width ) {
-                memcpy( imageOutY, imageInY, width );
-                memcpy( transformOutY, transformInY, width );
+                memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
+                memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
             }
         }
         else {
