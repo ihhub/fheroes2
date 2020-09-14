@@ -162,7 +162,7 @@ int Game::Credits( void )
     offsetY += blackDragon.height();
 
     title.Set( "QA and Support", Font::YELLOW_BIG, textWidth );
-    name.Set( "Ihar Tsyvilka", Font::BIG, textWidth );
+    name.Set( "Igor Tsivilko", Font::BIG, textWidth );
     title.Blit( screenOffset.x + ( columnStep - title.w() ) / 2, offsetY );
     name.Blit( screenOffset.x + ( columnStep - name.w() ) / 2, offsetY + title.h() );
     offsetY += title.h() + name.h() + 10;
