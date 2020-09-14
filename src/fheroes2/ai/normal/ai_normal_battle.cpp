@@ -51,7 +51,7 @@ namespace AI
         // Pass in ( const Units & friendly, const Units & enemies ) instead
 
         // Retreat if remaining army strength is 10% of enemy's army
-        return myArmy < enemy;
+        return myArmy * 10 < enemy;
     }
 
     bool CheckIfUnitIsFaster( const Unit & currentUnit, const Unit & target )
@@ -73,7 +73,7 @@ namespace AI
             const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
 
             for ( auto spell : allSpells ) {
-                if ( spell.isCombat() && spell.isDamage() && !spell.isApplyWithoutFocusObject() ) {
+                if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
                     uint32_t totalDamage = spell.Damage() * commander->GetPower();
                     for ( const Unit * enemy : enemies ) {
                         double spellHeuristic = enemy->GetMonsterStrength()
