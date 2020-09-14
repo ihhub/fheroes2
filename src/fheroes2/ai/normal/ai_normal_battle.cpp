@@ -209,6 +209,8 @@ namespace AI
             // 5. For antimagic - based on enemy hero spellcasting abilities multiplied by friendly unit strength
 
             // 6. Cast best spell with highest heuristic on target pointer saved
+
+            // Temporary: force damage spell
             ForceSpellcastBeforeRetreat( arena, commander, actions );
         }
 
@@ -220,6 +222,7 @@ namespace AI
 
                 // force archer to fight back by setting initial expectation to lowest possible (if we're losing battle)
                 int bestOutcome = ( myArmyStrength < enemyArmyStrength ) ? -highestDamageExpected : 0;
+                bool canOutrunEnemy = true;
 
                 const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( currentUnit );
                 for ( const int cell : adjacentEnemies ) {
@@ -232,6 +235,8 @@ namespace AI
                         target = enemy;
                         targetCell = cell;
                     }
+                    if ( canOutrunEnemy && !CheckIfUnitIsFaster( currentUnit, *enemy ) )
+                        canOutrunEnemy = false;
                 }
 
                 if ( target && targetCell != -1 ) {
@@ -239,13 +244,12 @@ namespace AI
                     DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
                     actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), targetCell, 0 ) );
                 }
-                else {
+                else if ( canOutrunEnemy ) {
                     // Kiting enemy
                     // Search for a safe spot unit can move away
                     DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer kiting enemy" );
-
-                    // Worst case scenario - Skip turn
                 }
+                // Worst case scenario - Skip turn
             }
             else {
                 // Normal attack: focus the highest value unit

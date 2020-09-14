@@ -612,7 +612,7 @@ bool Spell::isALiveOnly( void ) const
     return false;
 }
 
-bool Spell::isSingleTarget( ) const
+bool Spell::isSingleTarget() const
 {
     switch ( id ) {
     case LIGHTNINGBOLT:
