@@ -1294,14 +1294,6 @@ bool Maps::Tiles::isWater( void ) const
     return 30 > TileSpriteIndex();
 }
 
-void Maps::Tiles::Remove( u32 uniq )
-{
-    if ( !addons_level1.empty() )
-        addons_level1.Remove( uniq );
-    if ( !addons_level2.empty() )
-        addons_level2.Remove( uniq );
-}
-
 void Maps::Tiles::RedrawTile( fheroes2::Image & dst ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
@@ -1412,7 +1404,7 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst ) const
             // possible animation
             if ( hasSpriteAnimation() ) {
                 const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 ) );
-                
+
                 area.BlitOnTile( dst, animationSprite, mp );
             }
         }
