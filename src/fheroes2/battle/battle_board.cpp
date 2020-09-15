@@ -1013,7 +1013,7 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     if ( x > 0 )
         validateAndInsert( leftmostIndex - 1 );
 
-    if ( x < ARENAW - ( isWide ? 1 : 0 ) )
+    if ( x < ARENAW - ( isWide ? 2 : 1 ) )
         validateAndInsert( leftmostIndex + ( isWide ? 2 : 1 ) );
 
     if ( y < ARENAH - 1 ) {
