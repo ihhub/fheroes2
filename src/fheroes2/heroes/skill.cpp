@@ -556,8 +556,8 @@ std::string Skill::Secondary::GetDescription( void ) const
         }
         break;
     case NECROMANCY: {
-        const std::string tmpDescription( std::string( GetName() ) +
-                                          std::string( " allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons." ) );
+        const std::string tmpDescription( std::string( GetName() )
+                                          + std::string( " allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons." ) );
         str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
         break;
     }
