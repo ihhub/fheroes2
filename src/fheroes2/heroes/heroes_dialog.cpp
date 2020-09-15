@@ -348,13 +348,17 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         else if ( le.MouseCursor( rectGroupedArmyFormat ) )
             message = _( "Set army combat formation to 'Grouped'" );
         else if ( le.MouseCursor( buttonExit.area() ) )
-            message = _( "Exit hero" );
+            message = _( "Exit Hero Screen" );
         else if ( le.MouseCursor( buttonDismiss.area() ) ) {
             if ( buttonDismiss.isVisible() ) {
-                if ( Modes( NOTDISMISS ) )
+                if ( Modes( NOTDISMISS ) ) {
                     message = "Dismiss disabled, see game info";
-                else
-                    message = _( "Dismiss hero" );
+                }
+                else {
+                    message = _( "Dismiss %{name} the %{race}" );
+                    StringReplace( message, "%{name}", name );
+                    StringReplace( message, "%{race}", Race::String( race ) );
+                }
             }
         }
         else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) )
