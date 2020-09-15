@@ -180,7 +180,7 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
         PathfindingNode & currentNode = _cache[currentNodeIdx];
 
         // check if current tile is protected, can move only to adjacent monster
-        if ( !monsters.empty() ) {
+        if ( currentNodeIdx != start && !monsters.empty() ) {
             for ( int monsterIndex : monsters ) {
                 const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
