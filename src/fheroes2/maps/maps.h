@@ -58,6 +58,7 @@ namespace Maps
     const char * SizeString( int size );
     const char * GetMinesName( int res );
 
+    int GetDirection( int from, int to );
     s32 GetDirectionIndex( s32, int direct );
     bool isValidDirection( s32, int direct );
 

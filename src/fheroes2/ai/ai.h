@@ -44,53 +44,77 @@ namespace AI
         SIMPLE,
         NORMAL
     };
+    enum AI_PERSONALITY
+    {
+        NONE,
+        WARRIOR,
+        BUILDER,
+        EXPLORER
+    };
 
     enum modes_t
     {
-        HEROES_MOVED = 0x08000000,
-        HEROES_SCOUTER = 0x10000000,
-        HEROES_HUNTER = 0x20000000,
-        HEROES_WAITING = 0x40000000,
-        HEROES_STUPID = 0x80000000
+        HERO_PATROL = 0x01000000,
+        HERO_SKIP_TURN = 0x02000000,
+        HERO_WAITING = 0x04000000,
+        HERO_MOVED = 0x08000000,
+        HERO_SCOUT = 0x10000000,
+        HERO_HUNTER = 0x20000000,
+        HERO_COURIER = 0x40000000,
+        HERO_CHAMPION = 0x80000000
     };
 
     class Base
     {
     public:
-        virtual void KingdomTurn( Kingdom & );
-        virtual void CastleTurn( Castle & );
-        virtual void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
-        virtual void HeroesTurn( Heroes & );
+        virtual void KingdomTurn( Kingdom & kingdom );
+        virtual void CastleTurn( Castle & castle, bool defensive = false );
+        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
+        virtual void HeroTurn( Heroes & hero );
 
-        virtual void HeroesAdd( const Heroes & );
-        virtual void HeroesRemove( const Heroes & );
-        virtual void HeroesPreBattle( HeroBase & );
-        virtual void HeroesAfterBattle( HeroBase & );
-        virtual void HeroesPostLoad( Heroes & );
+        virtual void HeroesAdd( const Heroes & hero );
+        virtual void HeroesRemove( const Heroes & hero );
+        virtual void HeroesPreBattle( HeroBase & hero );
+        virtual void HeroesAfterBattle( HeroBase & hero );
+        virtual void HeroesPostLoad( Heroes & hero );
         virtual bool HeroesCanMove( const Heroes & hero );
-        virtual bool HeroesGetTask( Heroes & );
-        virtual void HeroesActionComplete( Heroes &, s32 );
-        virtual void HeroesActionNewPosition( Heroes & );
-        virtual void HeroesClearTask( const Heroes & );
-        virtual void HeroesLevelUp( Heroes & );
-        virtual bool HeroesSkipFog( void );
-        virtual std::string HeroesString( const Heroes & );
+        virtual bool HeroesGetTask( Heroes & hero );
+        virtual void HeroesActionComplete( Heroes & hero, int index );
+        virtual void HeroesActionNewPosition( Heroes & hero );
+        virtual void HeroesClearTask( const Heroes & hero );
+        virtual void HeroesLevelUp( Heroes & hero );
+        virtual bool HeroesSkipFog();
+        virtual std::string HeroesString( const Heroes & hero );
 
-        virtual void CastleAdd( const Castle & );
-        virtual void CastleRemove( const Castle & );
-        virtual void CastlePreBattle( Castle & );
-        virtual void CastleAfterBattle( Castle &, bool attacker_wins );
+        virtual void CastleAdd( const Castle & castle );
+        virtual void CastleRemove( const Castle & castle );
+        virtual void CastlePreBattle( Castle & castle );
+        virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
-        virtual const char * Type( void ) const;
-        virtual const char * License( void ) const;
+        virtual const char * Type() const;
+        virtual const char * License() const;
+        virtual int GetPersonality() const;
+        virtual std::string GetPersonalityString() const;
+
         virtual void Reset();
+
+    protected:
+        int _personality = NONE;
+
+        Base() {}
     };
 
     Base & Get( AI_TYPE type = SIMPLE );
 
+    // functionality in ai_hero_action.cpp
     void HeroesAction( Heroes & hero, s32 dst_index );
     bool HeroesValidObject( const Heroes & hero, s32 index );
     void HeroesMove( Heroes & hero );
+
+    // functionality in ai_common.cpp
+    bool BuildIfAvailable( Castle & castle, int building );
+    bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
+    uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max );
 }
 
 #endif

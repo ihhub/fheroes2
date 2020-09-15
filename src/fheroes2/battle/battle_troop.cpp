@@ -237,24 +237,6 @@ std::string Battle::Unit::GetSpeedString( void ) const
     return os.str();
 }
 
-Surface Battle::Unit::GetContour( uint8_t colorId ) const
-{
-    const int frameId = GetFrame();
-    const bool isReflected = isReflect();
-
-    const monstersprite_t & msi = GetMonsterSprite();
-    const Sprite sprite = AGG::GetICN( msi.icn_file, frameId, isReflected );
-
-    if ( !sprite.isValid() ) {
-        return Surface();
-    }
-
-    Surface contour( sprite.GetSize(), sprite.GetFormat() );
-    AGG::DrawContour( contour, PAL::GetPaletteColor( colorId ).pack(), msi.icn_file, frameId, isReflected );
-
-    return contour;
-}
-
 u32 Battle::Unit::GetDead( void ) const
 {
     return dead;
@@ -639,7 +621,7 @@ void Battle::Unit::PostKilledAction( void )
         ResetModes( CAP_MIRROROWNER );
     }
     // kill mirror image (slave)
-    if ( Modes( CAP_MIRRORIMAGE ) ) {
+    if ( Modes( CAP_MIRRORIMAGE ) && mirror != NULL ) {
         mirror->ResetModes( CAP_MIRROROWNER );
         mirror = NULL;
     }
@@ -673,6 +655,9 @@ void Battle::Unit::PostKilledAction( void )
 u32 Battle::Unit::Resurrect( u32 points, bool allow_overflow, bool skip_dead )
 {
     u32 resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
+
+    if ( hp == 0 ) // Skip turn if already dead
+        SetModes( TR_MOVED );
 
     SetCount( GetCount() + resurrect );
     hp += points;
@@ -734,7 +719,7 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
     return killed;
 }
 
-bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg ) const
+bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const
 {
     if ( Modes( SP_ANTIMAGIC ) )
         return false;
@@ -747,7 +732,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
 
     if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
         return false;
-    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() )
+    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly )
         return false;
     if ( isMagicResist( spell, ( hero ? hero->GetPower() : 0 ) ) )
         return false;
@@ -805,7 +790,10 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
 
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
 {
-    if ( !AllowApplySpell( spell, hero ) )
+    // HACK!!! Chain lightining is the only spell which can't be casted on allies but could be applied on them
+    const bool isForceApply = ( spell() == Spell::CHAINLIGHTNING );
+
+    if ( !AllowApplySpell( spell, hero, NULL, isForceApply ) )
         return false;
 
     DEBUG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
@@ -962,9 +950,6 @@ u32 Battle::Unit::GetAttack( void ) const
 u32 Battle::Unit::GetDefense( void ) const
 {
     u32 res = ArmyTroop::GetDefense();
-
-    if ( GetArena()->GetArmyColor2() == GetColor() && GetArena()->GetForce2().Modes( ARMY_GUARDIANS_OBJECT ) )
-        res += 2;
 
     if ( Modes( SP_STONESKIN ) )
         res += Spell( Spell::STONESKIN ).ExtraValue();
@@ -1415,7 +1400,6 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
         if ( !isValid() ) {
             // TODO: buggy behaviour
             Arena::GetGraveyard()->RemoveTroop( *this );
-            SwitchAnimation( Monster_Info::KILL, true );
         }
         // restore hp
         u32 acount = hero ? hero->HasArtifact( Artifact::ANKH ) : 0;
@@ -1468,15 +1452,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
     if ( spell.isUndeadOnly() && !isUndead() )
         return 100;
 
-    if ( Settings::Get().ExtBattleMagicTroopCanResist() && spell == GetSpellMagic( true ) )
-        return 20;
-
     switch ( GetID() ) {
-    case Monster::ARCHMAGE:
-        if ( Settings::Get().ExtBattleArchmageCanResistBadMagic() && ( spell.isDamage() || spell.isApplyToEnemies() ) )
-            return 20;
-        break;
-
     // 25% unfortunatly
     case Monster::DWARF:
     case Monster::BATTLE_DWARF:
@@ -1812,7 +1788,7 @@ Point Battle::Unit::GetBackPoint( void ) const
 
 Point Battle::Unit::GetCenterPoint() const
 {
-    const Sprite & sprite = AGG::GetICN( GetMonsterSprite().icn_file, GetFrame(), isReflect() );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite().icn_file, GetFrame() );
 
     const Rect & pos = position.GetRect();
     const s32 centerY = pos.y + pos.h + sprite.y() / 2 - 10;

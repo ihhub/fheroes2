@@ -60,16 +60,18 @@ namespace Maps
         TilesAddon & operator=( const TilesAddon & ta );
 
         bool isUniq( u32 ) const;
-        bool isRoad( int ) const;
+        bool isRoad() const;
+        bool hasRoadFlag() const;
         bool isICN( int ) const;
         bool hasSpriteAnimation() const;
 
         std::string String( int level ) const;
 
-        static bool hasColorCycling( uint8_t tileset, uint8_t index );
         static bool isStream( const TilesAddon & );
         static bool isRoad( const TilesAddon & );
         static bool isShadow( const TilesAddon & );
+        static bool isRoadObject( const TilesAddon & );
+
         static bool isResource( const TilesAddon & );
         static bool isArtifact( const TilesAddon & );
         static bool isSkeletonFix( const TilesAddon & );
@@ -118,7 +120,7 @@ namespace Maps
 
         s32 GetIndex( void ) const;
         Point GetCenter( void ) const;
-        int GetObject( bool skip_hero = true ) const;
+        int GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
         uint8_t GetObjectSpriteIndex() const;
         u32 GetObjectUID() const;
@@ -132,13 +134,13 @@ namespace Maps
         u32 TileSpriteIndex( void ) const;
         u32 TileSpriteShape( void ) const;
 
-        Surface GetTileSurface( void ) const;
+        const fheroes2::Image & GetTileSurface( void ) const;
 
-        bool isPassable( const Heroes & ) const;
-        bool isPassable( const Heroes *, int direct, bool skipfog ) const;
-        bool isRoad() const;
-        bool hasSpriteAnimation() const;
         bool isObject( int obj ) const;
+        bool hasSpriteAnimation() const;
+        bool validateWaterRules( bool fromWater ) const;
+        bool isPassable( int direct, bool fromWater, bool skipfog ) const;
+        bool isRoad() const;
         bool isStream( void ) const;
         bool isShadow( void ) const;
         bool GoodForUltimateArtifact( void ) const;
@@ -157,16 +159,16 @@ namespace Maps
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
-        void RedrawTile( Surface & ) const;
-        static void RedrawEmptyTile( Surface & dst, const Point & mp );
-        void RedrawBottom( Surface & dst, bool skipObjs = false ) const;
-        void RedrawBottom4Hero( Surface & ) const;
-        void RedrawTop( Surface & dst, bool skipObjs = false ) const;
-        void RedrawTop4Hero( Surface &, bool skip_ground ) const;
-        void RedrawObjects( Surface & ) const;
-        void RedrawFogs( Surface &, int ) const;
-        void RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs = false ) const;
-        void RedrawPassable( Surface & ) const;
+        void RedrawTile( fheroes2::Image & ) const;
+        static void RedrawEmptyTile( fheroes2::Image & dst, const Point & mp );
+        void RedrawBottom( fheroes2::Image & dst, bool skipObjs = false ) const;
+        void RedrawBottom4Hero( fheroes2::Image & ) const;
+        void RedrawTop( fheroes2::Image & dst, bool skipObjs = false ) const;
+        void RedrawTop4Hero( fheroes2::Image &, bool skip_ground ) const;
+        void RedrawObjects( fheroes2::Image & ) const;
+        void RedrawFogs( fheroes2::Image &, int ) const;
+        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool skipObjs = false ) const;
+        void RedrawPassable( fheroes2::Image & ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
@@ -238,9 +240,8 @@ namespace Maps
         void RemoveBarrierSprite( void );
         bool isLongObject( int direction );
 
-        void RedrawBoat( Surface & ) const;
-        void RedrawMonster( Surface & ) const;
-        void RedrawMapObject( Surface & dst, int icn, uint32_t index, const Point & mapPoint, bool cycle = false, int offsetX = 0, int offsetY = 0 ) const;
+        void RedrawBoat( fheroes2::Image & ) const;
+        void RedrawMonster( fheroes2::Image & ) const;
 
         void QuantitySetVariant( int );
         void QuantitySetExt( int );
@@ -278,7 +279,7 @@ namespace Maps
         u8 quantity2;
         u8 quantity3;
 
-        bool road;
+        bool tileIsRoad = false;
 
 #ifdef WITH_DEBUG
         u8 impassableTileRule;

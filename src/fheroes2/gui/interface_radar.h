@@ -24,6 +24,7 @@
 #define H2INTERFACE_RADAR_H
 
 #include "interface_border.h"
+#include "ui_tool.h"
 
 namespace Interface
 {
@@ -51,8 +52,8 @@ namespace Interface
 
         Basic & interface;
 
-        Surface spriteArea;
-        SpriteMove cursorArea;
+        fheroes2::Image spriteArea;
+        fheroes2::MovableSprite cursorArea;
         Point offset;
         bool hide;
     };

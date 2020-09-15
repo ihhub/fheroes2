@@ -31,6 +31,7 @@
 #include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
+#include "players.h"
 #include "text.h"
 
 enum redraw_t

@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "army_troop.h"
 #include "battle_troop.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -40,12 +39,13 @@ void TestMonsterSprite( void )
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     // Monster monster(Monster::PEASANT);
     Battle::Unit troop( Troop( Monster::PEASANT, 1 ), -1, false );
-    SpriteBack back;
+    fheroes2::ImageRestorer back( display );
     Rect pos;
 
-    Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // std::string str;
@@ -56,16 +56,16 @@ void TestMonsterSprite( void )
     StatusBar frame_bar;
     StatusBar info_bar;
 
-    start_bar.SetCenter( 100, display.h() - 16 );
-    count_bar.SetCenter( 200, display.h() - 16 );
-    speed_bar.SetCenter( 300, display.h() - 16 );
-    frame_bar.SetCenter( 400, display.h() - 16 );
-    info_bar.SetCenter( 550, display.h() - 16 );
+    start_bar.SetCenter( 100, display.height() - 16 );
+    count_bar.SetCenter( 200, display.height() - 16 );
+    speed_bar.SetCenter( 300, display.height() - 16 );
+    frame_bar.SetCenter( 400, display.height() - 16 );
+    info_bar.SetCenter( 550, display.height() - 16 );
 
     u32 ticket = 0;
 
     u32 start = 0;
-    u32 count = AGG::GetICNCount( troop.ICNFile() );
+    u32 count = fheroes2::AGG::GetICNCount( troop.ICNFile() );
     u32 frame = 0;
     u32 speed = 100;
 
@@ -75,7 +75,7 @@ void TestMonsterSprite( void )
     count_bar.ShowMessage( "count: " + GetString( count ) );
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // mainmenu loop
     while ( le.HandleEvents() ) {
@@ -88,35 +88,35 @@ void TestMonsterSprite( void )
                 cursor.Hide();
                 troop.SetMonster( Monster( mons ) );
                 start = 0;
-                count = AGG::GetICNCount( troop.ICNFile() );
+                count = fheroes2::AGG::GetICNCount( troop.ICNFile() );
                 frame = 0;
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
         if ( le.MouseClickLeft( start_bar.GetRect() ) ) {
             u32 start2 = start;
-            if ( Dialog::SelectCount( "Start", 0, AGG::GetICNCount( troop.ICNFile() ) - 1, start2 ) ) {
+            if ( Dialog::SelectCount( "Start", 0, fheroes2::AGG::GetICNCount( troop.ICNFile() ) - 1, start2 ) ) {
                 cursor.Hide();
                 start = start2;
-                if ( start + count > AGG::GetICNCount( troop.ICNFile() ) )
-                    count = AGG::GetICNCount( troop.ICNFile() ) - start;
+                if ( start + count > fheroes2::AGG::GetICNCount( troop.ICNFile() ) )
+                    count = fheroes2::AGG::GetICNCount( troop.ICNFile() ) - start;
                 start_bar.ShowMessage( "start: " + GetString( start ) );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
         if ( le.MouseClickLeft( count_bar.GetRect() ) ) {
             u32 count2 = count;
-            if ( Dialog::SelectCount( "Count", 1, AGG::GetICNCount( troop.ICNFile() ), count2 ) ) {
+            if ( Dialog::SelectCount( "Count", 1, fheroes2::AGG::GetICNCount( troop.ICNFile() ), count2 ) ) {
                 cursor.Hide();
                 count = count2;
                 frame = start;
                 count_bar.ShowMessage( "count: " + GetString( count ) );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
@@ -128,26 +128,26 @@ void TestMonsterSprite( void )
                 frame = start;
                 speed_bar.ShowMessage( "speed: " + GetString( speed ) );
                 cursor.Show();
-                display.Flip();
+                display.render();
             }
         }
 
         if ( 0 == ( ticket % speed ) ) {
             cursor.Hide();
-            const Sprite & sprite = AGG::GetICN( troop.ICNFile(), frame );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( troop.ICNFile(), frame );
             pos.x = 320 + sprite.x();
             pos.y = 240 + sprite.y();
-            pos.w = sprite.w();
-            pos.h = sprite.h();
-            back.Restore();
-            back.Save( pos );
-            sprite.Blit( pos );
+            pos.w = sprite.width();
+            pos.h = sprite.height();
+            back.restore();
+            back.update( pos.x, pos.y, pos.w, pos.h );
+            fheroes2::Blit( sprite, display, pos.x, pos.y );
 
             frame_bar.ShowMessage( "frame: " + GetString( frame ) );
             info_bar.ShowMessage( "ox: " + GetString( sprite.x() ) + ", oy: " + GetString( sprite.y() ) );
 
             cursor.Show();
-            display.Flip();
+            display.render();
 
             ++frame;
             if ( frame >= start + count )

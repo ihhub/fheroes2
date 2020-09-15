@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -38,6 +37,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "ui_button.h"
 #include "world.h"
 #include "zzlib.h"
 
@@ -87,7 +87,7 @@ public:
     bool Load( const std::string & );
     bool Save( const std::string & );
     void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
-    void RedrawList( s32, s32 );
+    void RedrawList( int32_t ox, int32_t oy );
 
 private:
     std::vector<hgs_t> list;
@@ -141,19 +141,14 @@ void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r
     }
 }
 
-void HGSData::RedrawList( s32 ox, s32 oy )
+void HGSData::RedrawList( int32_t ox, int32_t oy )
 {
-    const Settings & conf = Settings::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    const Sprite & back = AGG::GetICN( ICN::HSBKG, 0 );
-    back.Blit( ox, oy );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );
 
-    const Sprite & head = AGG::GetICN( ICN::HISCORE, 6 );
-    if ( conf.QVGA() )
-        head.Blit( ox + 25, oy + 15 );
-    else
-        head.Blit( ox + 50, oy + 31 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 6 ), display, ox + 50, oy + 31 );
 
     std::sort( list.begin(), list.end(), RatingSort );
 
@@ -161,40 +156,36 @@ void HGSData::RedrawList( s32 ox, s32 oy )
     std::vector<hgs_t>::const_iterator it2 = list.end();
 
     Text text;
-    text.Set( conf.QVGA() ? Font::SMALL : Font::BIG );
+    text.Set( Font::BIG );
 
     for ( ; it1 != it2 && ( it1 - list.begin() < HGS_MAX ); ++it1 ) {
         const hgs_t & hgs = *it1;
 
         text.Set( hgs.player );
-        text.Blit( ox + ( conf.QVGA() ? 45 : 88 ), oy + ( conf.QVGA() ? 33 : 70 ) );
+        text.Blit( ox + 88, oy + 70 );
 
         text.Set( hgs.land );
-        text.Blit( ox + ( conf.QVGA() ? 170 : 260 ), oy + ( conf.QVGA() ? 33 : 70 ) );
+        text.Blit( ox + 260, oy + 70 );
 
         text.Set( GetString( hgs.days ) );
-        text.Blit( ox + ( conf.QVGA() ? 250 : 420 ), oy + ( conf.QVGA() ? 33 : 70 ) );
+        text.Blit( ox + 420, oy + 70 );
 
         text.Set( GetString( hgs.rating ) );
-        text.Blit( ox + ( conf.QVGA() ? 270 : 480 ), oy + ( conf.QVGA() ? 33 : 70 ) );
+        text.Blit( ox + 480, oy + 70 );
 
-        oy += conf.QVGA() ? 20 : 40;
+        oy += 40;
     }
 }
 
 int Game::HighScores( bool fill )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
     const Settings & conf = Settings::Get();
 
-    // We have to register scalable ICNs in order to recieved a scaled version of it
-    AGG::RegisterScalableICN( ICN::HEROES );
-
     cursor.Hide();
-    if ( fill && display.GetSize() != display.GetDefaultSize() ) { // draw only for bigger resolutions
-        const Sprite & sprite = AGG::GetICN( ICN::HEROES, 0 );
-        sprite.Blit( Point( 0, 0 ) );
+    if ( fill && ( display.width() != display.DEFAULT_WIDTH || display.height() != display.DEFAULT_HEIGHT ) ) { // draw only for bigger resolutions
+        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
     }
 
 #ifdef WITH_DEBUG
@@ -215,24 +206,26 @@ int Game::HighScores( bool fill )
     AGG::PlayMusic( MUS::MAINMENU );
     hgs.Load( stream.str().c_str() );
 
-    const Sprite & back = AGG::GetICN( ICN::HSBKG, 0 );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
     cursor.Hide();
-    const Point top( ( display.w() - back.w() ) / 2, ( display.h() - back.h() ) / 2 );
-    Dialog::FrameBorder border( Display::GetDefaultSize() );
+    const Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
+    Dialog::FrameBorder border( Size( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT ) );
 
     hgs.RedrawList( top.x, top.y );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonCampain( top.x + ( conf.QVGA() ? 0 : 9 ), top.y + ( conf.QVGA() ? 100 : 315 ), ICN::HISCORE, 0, 1 );
-    Button buttonExit( top.x + back.w() - ( conf.QVGA() ? 27 : 36 ), top.y + ( conf.QVGA() ? 100 : 315 ), ICN::HISCORE, 4, 5 );
+    fheroes2::Button buttonCampain( top.x + 8, top.y + 315, ICN::HISCORE, 0, 1 );
+    fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
 
-    buttonCampain.Draw();
-    buttonExit.Draw();
+    buttonCampain.disable(); // disable for now till full campaign support
+
+    buttonCampain.draw();
+    buttonExit.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     const u32 rating = GetGameOverScores();
     const u32 days = world.CountDay();
@@ -247,10 +240,10 @@ int Game::HighScores( bool fill )
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
         hgs.Save( stream.str().c_str() );
         hgs.RedrawList( top.x, top.y );
-        buttonCampain.Draw();
-        buttonExit.Draw();
+        buttonCampain.draw();
+        buttonExit.draw();
         cursor.Show();
-        display.Flip();
+        display.render();
         gameResult.Reset();
     }
 
@@ -259,10 +252,12 @@ int Game::HighScores( bool fill )
         // key code info
         if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
             Dialog::Message( "Key Press:", GetString( le.KeyValue() ), Font::SMALL, Dialog::OK );
-        le.MousePressLeft( buttonCampain ) ? buttonCampain.PressDraw() : buttonCampain.ReleaseDraw();
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
+        if ( buttonCampain.isEnabled() ) {
+            le.MousePressLeft( buttonCampain.area() ) ? buttonCampain.drawOnPress() : buttonCampain.drawOnRelease();
+        }
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             return MAINMENU;
     }
 

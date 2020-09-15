@@ -34,8 +34,8 @@ Splitter::Splitter()
     , cur( 0 )
 {}
 
-Splitter::Splitter( const Surface & sf, const Rect & rt )
-    : SpriteMove( sf )
+Splitter::Splitter( const fheroes2::Image & image, const Rect & rt )
+    : fheroes2::MovableSprite( image )
     , area( rt )
     , step( 0 )
     , min( 0 )
@@ -43,9 +43,9 @@ Splitter::Splitter( const Surface & sf, const Rect & rt )
     , cur( 0 )
 {}
 
-void Splitter::SetSprite( const Surface & sf )
+void Splitter::SetSprite( const fheroes2::Image & image )
 {
-    Surface::Set( sf, true );
+    fheroes2::Copy( image, *this );
 }
 
 void Splitter::SetArea( const Rect & rt )
@@ -66,16 +66,16 @@ void Splitter::SetRange( int smin, int smax )
     Point move;
 
     if ( min < max ) {
-        step = 100 * ( isVertical() ? ( area.h - SpriteMove::h() ) : ( area.w - SpriteMove::w() ) ) / ( max - min );
+        step = 100 * ( isVertical() ? ( area.h - height() ) : ( area.w - width() ) ) / ( max - min );
         cur = min;
         move = GetPositionCursor();
     }
     else {
         step = 0;
-        move = Point( area.x + ( area.w - SpriteMove::w() ) / 2, area.y + ( area.h - SpriteMove::h() ) / 2 );
+        move = Point( area.x + ( area.w - width() ) / 2, area.y + ( area.h - height() ) / 2 );
     }
 
-    SpriteMove::background.SetPos( move );
+    setPosition( move.x, move.y );
 }
 
 Point Splitter::GetPositionCursor( void )
@@ -83,12 +83,12 @@ Point Splitter::GetPositionCursor( void )
     Point res;
 
     if ( isVertical() ) {
-        res.x = area.x + ( area.w - SpriteMove::w() ) / 2;
+        res.x = area.x + ( area.w - width() ) / 2;
         res.y = area.y + cur * step / 100;
     }
     else {
         res.x = area.x + cur * step / 100;
-        res.y = area.y + ( area.h - SpriteMove::h() ) / 2;
+        res.y = area.y + ( area.h - height() ) / 2;
     }
 
     return res;
@@ -96,22 +96,22 @@ Point Splitter::GetPositionCursor( void )
 
 void Splitter::RedrawCursor( void )
 {
-    Redraw();
+    redraw();
 }
 
 void Splitter::HideCursor( void )
 {
-    Hide();
+    hide();
 }
 
 void Splitter::ShowCursor( void )
 {
-    Show();
+    show();
 }
 
 void Splitter::MoveCenter( void )
 {
-    Move( area.x + ( area.w - SpriteMove::w() ) / 2, area.y + ( area.h - SpriteMove::h() ) / 2 );
+    setPosition( area.x + ( area.w - width() ) / 2, area.y + ( area.h - height() ) / 2 );
 }
 
 /* move splitter to pos */
@@ -124,7 +124,7 @@ void Splitter::MoveIndex( int num )
     }
     else {
         cur = num;
-        Move( GetPositionCursor() );
+        setPosition( GetPositionCursor().x, GetPositionCursor().y );
     }
 }
 
@@ -133,7 +133,7 @@ void Splitter::Forward( void )
 {
     if ( cur != max ) {
         ++cur;
-        Move( GetPositionCursor() );
+        setPosition( GetPositionCursor().x, GetPositionCursor().y );
     }
 }
 
@@ -142,6 +142,6 @@ void Splitter::Backward( void )
 {
     if ( cur ) {
         --cur;
-        Move( GetPositionCursor() );
+        setPosition( GetPositionCursor().x, GetPositionCursor().y );
     }
 }

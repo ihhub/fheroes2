@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
@@ -33,6 +32,7 @@
 #include "mus.h"
 #include "puzzle.h"
 #include "settings.h"
+#include "ui_button.h"
 #include "world.h"
 
 const u8 zone1_index[] = {0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47};
@@ -42,9 +42,9 @@ const u8 zone4_index[] = {20, 21, 26, 27};
 
 bool ClosedTilesExists( const Puzzle &, const u8 *, const u8 * );
 void ZoneOpenFirstTiles( Puzzle &, u32 &, const u8 *, const u8 * );
-void ShowStandardDialog( const Puzzle &, const Surface & );
-void ShowExtendedDialog( const Puzzle &, const Surface & );
-void PuzzlesDraw( const Puzzle &, const Surface &, s32, s32 );
+void ShowStandardDialog( const Puzzle &, const fheroes2::Image & );
+void ShowExtendedDialog( const Puzzle &, const fheroes2::Image & );
+void PuzzlesDraw( const Puzzle &, const fheroes2::Image &, s32, s32 );
 
 Puzzle::Puzzle()
 {
@@ -92,20 +92,20 @@ void Puzzle::Update( u32 open_obelisk, u32 total_obelisk )
 void Puzzle::ShowMapsDialog( void ) const
 {
     Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     int old_cursor = cursor.Themes();
 
     if ( !Settings::Get().MusicMIDI() )
         AGG::PlayMusic( MUS::PUZZLE );
 
-    const Surface & sf = world.GetUltimateArtifact().GetPuzzleMapSurface();
+    const fheroes2::Image & sf = world.GetUltimateArtifact().GetPuzzleMapSurface();
 
-    if ( sf.isValid() ) {
+    if ( !sf.empty() ) {
         cursor.Hide();
 
         AGG::PlayMusic( MUS::PUZZLE, false );
 
-        if ( display.GetSize() == Display::GetDefaultSize() && !Settings::Get().ExtGameHideInterface() )
+        if ( display.isDefaultSize() && !Settings::Get().ExtGameHideInterface() )
             ShowStandardDialog( *this, sf );
         else
             ShowExtendedDialog( *this, sf );
@@ -138,88 +138,92 @@ void ZoneOpenFirstTiles( Puzzle & pzl, u32 & opens, const u8 * it1, const u8 * i
     }
 }
 
-void ShowStandardDialog( const Puzzle & pzl, const Surface & sf )
+void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
     Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    const Rect & radar_pos = radar.GetArea();
-    const bool evil_interface = Settings::Get().ExtGameEvilInterface();
+    const Rect & radarPos = radar.GetArea();
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    SpriteBack back( Rect( BORDERWIDTH, BORDERWIDTH, sf.w(), sf.h() ) );
+    fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
 
-    AGG::GetICN( ( evil_interface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ).Blit( radar_pos );
-    sf.Blit( BORDERWIDTH, BORDERWIDTH, display );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarPos.x, radarPos.y );
+    fheroes2::Blit( sf, display, BORDERWIDTH, BORDERWIDTH );
 
-    Point dst_pt( radar_pos.x + 32, radar_pos.y + radar_pos.h - 37 );
-    Button buttonExit( dst_pt.x, dst_pt.y, ( evil_interface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+    Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.h - 37 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 
-    buttonExit.Draw();
+    buttonExit.draw();
     PuzzlesDraw( pzl, sf, BORDERWIDTH, BORDERWIDTH );
 
     cursor.SetThemes( Cursor::POINTER );
     cursor.Show();
-    display.Flip();
+    display.render();
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
-        if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
     }
 
     radar.SetRedraw();
 
     cursor.Hide();
-    back.Restore();
 }
 
-void ShowExtendedDialog( const Puzzle & pzl, const Surface & sf )
+void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
     const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
-    Dialog::FrameBorder frameborder( gameArea.x + ( gameArea.w - sf.w() - BORDERWIDTH * 2 ) / 2, gameArea.y + ( gameArea.h - sf.h() - BORDERWIDTH * 2 ) / 2, sf.w(),
-                                     sf.h() );
+    Dialog::FrameBorder frameborder( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2, gameArea.y + ( gameArea.h - sf.height() - BORDERWIDTH * 2 ) / 2,
+                                     sf.width(), sf.height() );
 
+    Rect blitArea = frameborder.GetArea();
+
+    fheroes2::Image background( blitArea.w, blitArea.h );
     if ( conf.ExtGameEvilInterface() )
-        display.FillRect( frameborder.GetArea(), RGBA( 80, 80, 80 ) );
+        background.fill( fheroes2::GetColorId( 80, 80, 80 ) );
     else
-        display.FillRect( frameborder.GetArea(), RGBA( 128, 64, 32 ) );
-    sf.Blit( frameborder.GetArea(), display );
+        background.fill( fheroes2::GetColorId( 128, 64, 32 ) );
+
+    fheroes2::Blit( background, display, blitArea.x, blitArea.y );
+    fheroes2::Blit( sf, display, blitArea.x, blitArea.y );
 
     Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarPos = radar.GetArea();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ).Blit( radarPos );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarPos.x, radarPos.y );
 
     Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.h - 37 );
-    Button buttonExit( dst_pt.x, dst_pt.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 
-    buttonExit.Draw();
-    PuzzlesDraw( pzl, sf, frameborder.GetArea().x, frameborder.GetArea().y );
+    buttonExit.draw();
+    PuzzlesDraw( pzl, sf, blitArea.x, blitArea.y );
 
     cursor.SetThemes( Cursor::POINTER );
     cursor.Show();
-    display.Flip();
+    display.render();
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit ) ? buttonExit.PressDraw() : buttonExit.ReleaseDraw();
-        if ( le.MouseClickLeft( buttonExit ) || HotKeyCloseWindow )
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
     }
 
     radar.SetRedraw();
 }
 
-void PuzzlesDraw( const Puzzle & pzl, const Surface & sf, s32 dstx, s32 dsty )
+void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 dsty )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
     // show all for debug
@@ -232,21 +236,18 @@ void PuzzlesDraw( const Puzzle & pzl, const Surface & sf, s32 dstx, s32 dsty )
     while ( le.HandleEvents() && 0 < alpha ) {
         if ( Game::AnimateInfrequentDelay( Game::PUZZLE_FADE_DELAY ) ) {
             cursor.Hide();
-            sf.Blit( dstx, dsty, display );
+            fheroes2::Blit( sf, display, dstx, dsty );
             for ( size_t ii = 0; ii < pzl.size(); ++ii ) {
-                const Sprite & sprite = AGG::GetICN( ICN::PUZZLE, ii );
-                Sprite piece = Sprite( sprite.GetSurface(), sprite.x(), sprite.y() );
+                const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, ii );
 
+                int pieceAlpha = 255;
                 if ( pzl.test( ii ) )
-                    piece.SetAlphaMod( alpha, false );
+                    pieceAlpha = alpha;
 
-                if ( Settings::Get().QVGA() )
-                    piece.Blit( dstx + 8 + piece.x() - BORDERWIDTH, dsty + 8 + piece.y() - BORDERWIDTH );
-                else
-                    piece.Blit( dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH );
+                fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
             }
             cursor.Show();
-            display.Flip();
+            display.render();
             alpha -= 10;
         }
     }

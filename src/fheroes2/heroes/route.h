@@ -26,6 +26,7 @@
 
 #include "direction.h"
 #include "gamedefs.h"
+#include "skill.h"
 
 class Heroes;
 
@@ -74,7 +75,7 @@ namespace Route
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
         u32 GetTotalPenalty( void ) const;
-        uint32_t Calculate( const s32 &, int limit = -1 );
+        uint32_t Calculate( const s32 & destIndex );
 
         void Show( void )
         {
@@ -104,7 +105,6 @@ namespace Route
         static int GetIndexSprite( int from, int to, int mod );
 
     private:
-        uint32_t Find( s32, int limit = -1 );
 
         friend StreamBase & operator<<( StreamBase &, const Path & );
         friend StreamBase & operator>>( StreamBase &, Path & );

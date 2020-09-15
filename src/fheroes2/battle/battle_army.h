@@ -50,11 +50,6 @@ namespace Battle
         void SortArchers();
     };
 
-    enum
-    {
-        ARMY_GUARDIANS_OBJECT = 0x10000
-    };
-
     class Force : public Units, public BitModes
     {
     public:

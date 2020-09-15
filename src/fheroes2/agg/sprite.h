@@ -24,6 +24,26 @@
 
 #include "gamedefs.h"
 
+class SpritePos : public Surface
+{
+public:
+    SpritePos();
+    SpritePos( const Surface &, const Point & );
+
+    void SetSurface( const Surface & );
+    void SetPos( const Point & );
+
+    void Reset( void );
+
+    const Point & GetPos( void ) const;
+    Rect GetArea( void ) const;
+
+    u32 GetMemoryUsage( void ) const;
+
+protected:
+    Point pos;
+};
+
 class Sprite : public SpritePos
 {
 public:
@@ -40,13 +60,6 @@ public:
     void Blit( const Point & ) const;
     void Blit( const Rect & srt, s32, s32 ) const;
     void Blit( const Rect & srt, const Point & ) const;
-
-    void ChangeColorIndex( u32 index1, u32 index2 );
-    void ChangeColor( u32 index, RGBA color );
-    void ChangeColor( const std::map<RGBA, RGBA> & colorPairs );
-
-    static Surface ScaleQVGASurface( const Surface & );
-    static Sprite ScaleQVGASprite( const Sprite & );
 };
 
 #endif

@@ -313,7 +313,7 @@ int GameOver::Result::LocalCheckGameOver( void )
 
     for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it )
         if ( !world.GetKingdom( *it ).isPlay() ) {
-            Game::DialogPlayers( *it, _( "%{color} has been vanquished!" ) );
+            Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
             colors &= ( ~*it );
         }
 

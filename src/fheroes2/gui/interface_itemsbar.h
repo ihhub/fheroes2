@@ -26,7 +26,9 @@
 #include <algorithm>
 #include <utility>
 
-#include "gamedefs.h"
+#include "screen.h"
+#include "splitter.h"
+#include "ui_button.h"
 
 namespace Interface
 {
@@ -53,26 +55,8 @@ namespace Interface
         {}
         virtual ~ItemsBar() {}
 
-        /*
-            void		SetColRows(u32, u32);
-            void        	SetPos(s32, s32);
-            void        	SetItemSize(u32, u32);
-            void		SetHSpace(int);
-            void		SetVSpace(int);
-            void		SetContent(const std::list<Item> &);
-            void		SetContent(const std::vector<Item> &);
-
-            const Point &	GetPos(void) const;
-            const Rect &	GetArea(void) const;
-            const Size &	GetColRows(void) const;
-            Item*		GetItem(const Point &) const;
-
-            void		Redraw(Surface & dstsf = Display::Get());
-            bool		QueueEventProcessing(void);
-        */
-
-        virtual void RedrawBackground( const Rect &, Surface & ) {}
-        virtual void RedrawItem( Item &, const Rect &, Surface & ) {}
+        virtual void RedrawBackground( const Rect &, fheroes2::Image & ) {}
+        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) {}
 
         virtual bool ActionBarSingleClick( const Point &, Item &, const Rect & )
         {
@@ -170,7 +154,7 @@ namespace Interface
             return colrows;
         }
 
-        void Redraw( Surface & dstsf = Display::Get() )
+        void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() )
         {
             Point dstpt( barsz );
 
@@ -234,7 +218,7 @@ namespace Interface
             return items.end();
         }
 
-        virtual void RedrawItemIter( ItemsIterator it, const Rect & pos, Surface & dstsf )
+        virtual void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf )
         {
             RedrawItem( **it, pos, dstsf );
         }
@@ -314,20 +298,8 @@ namespace Interface
 
         virtual ~ItemsActionBar() {}
 
-        /*
-            Item*		GetSelectedItem(void);
-            Rect*		GetSelectedPos(void);
-            s32		GetSelectedIndex(void);
-
-            bool		isSelected(void);
-            void		ResetSelected(void);
-
-                bool QueueEventProcessing(void);
-            bool QueueEventProcessing(ItemsActionBar<Item> &);
-        */
-
-        virtual void RedrawItem( Item &, const Rect &, Surface & ) {}
-        virtual void RedrawItem( Item &, const Rect &, bool, Surface & ) {}
+        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) {}
+        virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}
 
         virtual bool ActionBarSingleClick( const Point &, Item &, const Rect &, Item &, const Rect & )
         {
@@ -418,7 +390,7 @@ namespace Interface
             ResetSelected();
         }
 
-        void RedrawItemIter( ItemsIterator it, const Rect & pos, Surface & dstsf )
+        void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf )
         {
             RedrawItem( **it, pos, GetCurItemIter() == it, dstsf );
         }
@@ -480,17 +452,14 @@ namespace Interface
     };
 }
 
-#include "button.h"
-#include "splitter.h"
-
 namespace Interface
 {
     template <class Item>
     class ItemsScroll : public ItemsActionBar<Item>
     {
     protected:
-        Button buttonPgUp;
-        Button buttonPgDn;
+        fheroes2::Button buttonPgUp;
+        fheroes2::Button buttonPgDn;
         Splitter splitterIndicator;
 
     public:

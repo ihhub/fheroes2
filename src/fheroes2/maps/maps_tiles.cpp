@@ -63,48 +63,47 @@ namespace
 }
 
 #ifdef WITH_DEBUG
-Surface PassableViewSurface( int passable )
+fheroes2::Image PassableViewSurface( int passable )
 {
     const u32 w = 31;
     const u32 h = 31;
-    const RGBA colr = RGBA( 0xC0, 0x2C, 0 );
-    const RGBA colg = RGBA( 0x90, 0xC0, 0 );
-    Surface sf( Size( w, h ), true );
+    uint8_t colr = 0xBA;
+    uint8_t colg = 0x5A;
+    fheroes2::Image sf( w, h );
+    sf.reset();
 
     if ( 0 == passable || Direction::CENTER == passable )
-        sf.DrawBorder( colr );
+        fheroes2::DrawBorder( sf, colr );
     else if ( DIRECTION_ALL == passable )
-        sf.DrawBorder( colg );
+        fheroes2::DrawBorder( sf, colg );
     else {
-        sf.Set( w, h, false );
-
         for ( u32 i = 0; i < w; ++i ) {
             if ( i < 10 ) {
-                sf.DrawPoint( Point( i, 0 ), ( passable & Direction::TOP_LEFT ? colg : colr ) );
-                sf.DrawPoint( Point( i, h - 1 ), ( passable & Direction::BOTTOM_LEFT ? colg : colr ) );
+                fheroes2::SetPixel( sf, i, 0, ( passable & Direction::TOP_LEFT ? colg : colr ) );
+                fheroes2::SetPixel( sf, i, h - 1, ( passable & Direction::BOTTOM_LEFT ? colg : colr ) );
             }
             else if ( i < 21 ) {
-                sf.DrawPoint( Point( i, 0 ), ( passable & Direction::TOP ? colg : colr ) );
-                sf.DrawPoint( Point( i, h - 1 ), ( passable & Direction::BOTTOM ? colg : colr ) );
+                fheroes2::SetPixel( sf, i, 0, ( passable & Direction::TOP ? colg : colr ) );
+                fheroes2::SetPixel( sf, i, h - 1, ( passable & Direction::BOTTOM ? colg : colr ) );
             }
             else {
-                sf.DrawPoint( Point( i, 0 ), ( passable & Direction::TOP_RIGHT ? colg : colr ) );
-                sf.DrawPoint( Point( i, h - 1 ), ( passable & Direction::BOTTOM_RIGHT ? colg : colr ) );
+                fheroes2::SetPixel( sf, i, 0, ( passable & Direction::TOP_RIGHT ? colg : colr ) );
+                fheroes2::SetPixel( sf, i, h - 1, ( passable & Direction::BOTTOM_RIGHT ? colg : colr ) );
             }
         }
 
         for ( u32 i = 0; i < h; ++i ) {
             if ( i < 10 ) {
-                sf.DrawPoint( Point( 0, i ), ( passable & Direction::TOP_LEFT ? colg : colr ) );
-                sf.DrawPoint( Point( w - 1, i ), ( passable & Direction::TOP_RIGHT ? colg : colr ) );
+                fheroes2::SetPixel( sf, 0, i, ( passable & Direction::TOP_LEFT ? colg : colr ) );
+                fheroes2::SetPixel( sf, w - 1, i, ( passable & Direction::TOP_RIGHT ? colg : colr ) );
             }
             else if ( i < 21 ) {
-                sf.DrawPoint( Point( 0, i ), ( passable & Direction::LEFT ? colg : colr ) );
-                sf.DrawPoint( Point( w - 1, i ), ( passable & Direction::RIGHT ? colg : colr ) );
+                fheroes2::SetPixel( sf, 0, i, ( passable & Direction::LEFT ? colg : colr ) );
+                fheroes2::SetPixel( sf, w - 1, i, ( passable & Direction::RIGHT ? colg : colr ) );
             }
             else {
-                sf.DrawPoint( Point( 0, i ), ( passable & Direction::BOTTOM_LEFT ? colg : colr ) );
-                sf.DrawPoint( Point( w - 1, i ), ( passable & Direction::BOTTOM_RIGHT ? colg : colr ) );
+                fheroes2::SetPixel( sf, 0, i, ( passable & Direction::BOTTOM_LEFT ? colg : colr ) );
+                fheroes2::SetPixel( sf, w - 1, i, ( passable & Direction::BOTTOM_RIGHT ? colg : colr ) );
             }
         }
     }
@@ -397,59 +396,27 @@ int Maps::TilesAddon::GetActionObject( const Maps::TilesAddon & ta )
     return MP2::OBJ_ZERO;
 }
 
-bool Maps::TilesAddon::isRoad( int direct ) const
+bool Maps::TilesAddon::isRoad() const
 {
     switch ( MP2::GetICNObject( object ) ) {
     // from sprite road
     case ICN::ROAD:
-        if ( 0 == index || 26 == index || 31 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-        else if ( 2 == index || 21 == index || 28 == index )
-            return direct & ( Direction::LEFT | Direction::RIGHT );
-        else if ( 17 == index || 29 == index )
-            return direct & ( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT );
-        else if ( 18 == index || 30 == index )
-            return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
-        else if ( 3 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT );
-        else if ( 4 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT );
-        else if ( 5 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_RIGHT );
-        else if ( 6 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT );
-        else if ( 7 == index )
-            return direct & ( Direction::TOP | Direction::RIGHT );
-        else if ( 9 == index )
-            return direct & ( Direction::BOTTOM | Direction::TOP_RIGHT );
-        else if ( 12 == index )
-            return direct & ( Direction::BOTTOM | Direction::TOP_LEFT );
-        else if ( 13 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::TOP_LEFT );
-        else if ( 14 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT );
-        else if ( 16 == index )
-            return direct & ( Direction::TOP | Direction::LEFT );
-        else if ( 19 == index )
-            return direct & ( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT );
-        else if ( 20 == index )
-            return direct & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT );
-
-        break;
+        if ( 1 == index || 8 == index || 10 == index || 11 == index || 15 == index || 22 == index || 23 == index || 24 == index || 25 == index || 27 == index )
+            return false;
+        else
+            return true;
 
     // castle and tower (gate)
     case ICN::OBJNTOWN:
         if ( 13 == index || 29 == index || 45 == index || 61 == index || 77 == index || 93 == index || 109 == index || 125 == index || 141 == index || 157 == index
              || 173 == index || 189 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-
+            return true;
         break;
 
         // castle lands (gate)
     case ICN::OBJNTWBA:
         if ( 7 == index || 17 == index || 27 == index || 37 == index || 47 == index || 57 == index || 67 == index || 77 == index )
-            return direct & ( Direction::TOP | Direction::BOTTOM );
-
+            return true;
         break;
 
     default:
@@ -459,70 +426,11 @@ bool Maps::TilesAddon::isRoad( int direct ) const
     return false;
 }
 
-bool Maps::TilesAddon::hasColorCycling( uint8_t tileset, uint8_t index )
+bool Maps::TilesAddon::hasRoadFlag() const
 {
-    switch ( MP2::GetICNObject( tileset ) ) {
-    case ICN::OBJNDIRT:
-        // lakes and dirt oracle
-        if ( ( index > 23 && index < 59 ) || index == 197 || index == 198 )
-            return true;
-        break;
-    case ICN::OBJNGRAS:
-        // lake
-        if ( index > 54 && index < 76 )
-            return true;
-        break;
-    case ICN::OBJNGRA2:
-        // oracle
-        if ( index == 125 || index == 126 )
-            return true;
-        break;
-    case ICN::OBJNSWMP:
-        // swamp water
-        if ( index > 86 && index < 168 )
-            return true;
-        break;
-    case ICN::OBJNCRCK:
-        // wasteland lakes
-        if ( ( index > 216 && index < 221 ) || index == 3 || index == 4 )
-            return true;
-        break;
-    case ICN::OBJNLAVA:
-        // volcano, lava lakes, dungeon
-        if ( ( index > 1 && index < 78 ) || index == 111 || index == 112 )
-            return true;
-        break;
-    case ICN::OBJNLAV2:
-        // volcano
-        if ( ( index > 21 && index < 28 ) || index == 1 )
-            return true;
-        break;
-    case ICN::OBJNDSRT:
-        // pyramid and oasis
-        if ( ( index > 77 && index < 83 ) || index == 108 || index == 109 )
-            return true;
-        break;
-    case ICN::OBJNMUL2:
-        // stream delta, fountain and teleporters
-        if ( index == 116 || index == 119 || index == 120 || index == 122 || index < 16 )
-            return true;
-        break;
-    case ICN::OBJNRSRC:
-        // treasure chest
-        if ( index == 19 )
-            return true;
-        break;
-    case ICN::MTNLAVA: // Lava mountains, mines and additional volcanoes
-    case ICN::OBJNWATR: // Water objects
-    case ICN::OBJNWAT2: // Water objects
-    case ICN::X_LOC1: // Price of Royalty objects
-    case ICN::X_LOC2: // Price of Royalty water objects
-    case ICN::STREAM: // Rivers
-        return true;
-    default:
-        break;
-    }
-    return false;
+    // This MP2 "object" is a bitfield
+    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
+    return ( object >> 1 ) & 1;
 }
 
 bool Maps::TilesAddon::isStream( const TilesAddon & ta )
@@ -530,7 +438,7 @@ bool Maps::TilesAddon::isStream( const TilesAddon & ta )
     return ICN::STREAM == MP2::GetICNObject( ta.object ) || ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && ( ta.index < 14 ) );
 }
 
-bool Maps::TilesAddon::isRoad( const TilesAddon & ta )
+bool Maps::TilesAddon::isRoadObject( const TilesAddon & ta )
 {
     return ICN::ROAD == MP2::GetICNObject( ta.object );
 }
@@ -969,7 +877,6 @@ Maps::Tiles::Tiles()
     , quantity1( 0 )
     , quantity2( 0 )
     , quantity3( 0 )
-    , road( false )
 #ifdef WITH_DEBUG
     , impassableTileRule( 0 )
 #endif
@@ -991,7 +898,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     addons_level2.clear();
 
     // those bitfields are set by map editor regardless if map object is there
-    road = ( mp2.objectName1 >> 1 ) & 1;
+    tileIsRoad = ( mp2.objectName1 >> 1 ) & 1;
 
     if ( mp2.mapObject == MP2::OBJ_ZERO || ( quantity1 >> 1 ) & 1 ) {
         AddonsPushLevel1( mp2 );
@@ -1057,9 +964,9 @@ s32 Maps::Tiles::GetIndex( void ) const
     return maps_index;
 }
 
-int Maps::Tiles::GetObject( bool skip_hero /* true */ ) const
+int Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 {
-    if ( !skip_hero && MP2::OBJ_HEROES == mp2_object ) {
+    if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == mp2_object ) {
         const Heroes * hero = GetHeroes();
         return hero ? hero->GetMapsObject() : MP2::OBJ_ZERO;
     }
@@ -1087,11 +994,9 @@ u32 Maps::Tiles::TileSpriteShape( void ) const
     return pack_sprite_index >> 14;
 }
 
-Surface Maps::Tiles::GetTileSurface( void ) const
+const fheroes2::Image & Maps::Tiles::GetTileSurface( void ) const
 {
-    Surface tile = AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
-    tile.ResetPalette();
-    return tile;
+    return fheroes2::AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
 }
 
 bool isMountsRocs( const Maps::TilesAddon & ta )
@@ -1106,7 +1011,7 @@ bool isForestsTrees( const Maps::TilesAddon & ta )
 
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
 {
-    return Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoad( ta ) || Maps::TilesAddon::isShadow( ta );
+    return Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) || Maps::TilesAddon::isShadow( ta );
 }
 
 bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
@@ -1284,6 +1189,11 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName1 && mt.indexName1 < 0xFF )
         AddonsPushLevel1( TilesAddon( 0, mt.editorObjectLink, mt.objectName1, mt.indexName1 ) );
+
+    // MP2 "objectName" is a bitfield
+    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
+    if ( ( mt.objectName1 >> 1 ) & 1 )
+        tileIsRoad = true;
 }
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
@@ -1384,7 +1294,15 @@ bool Maps::Tiles::isWater( void ) const
     return 30 > TileSpriteIndex();
 }
 
-void Maps::Tiles::RedrawTile( Surface & dst ) const
+void Maps::Tiles::Remove( u32 uniq )
+{
+    if ( !addons_level1.empty() )
+        addons_level1.Remove( uniq );
+    if ( !addons_level2.empty() )
+        addons_level2.Remove( uniq );
+}
+
+void Maps::Tiles::RedrawTile( fheroes2::Image & dst ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1393,55 +1311,30 @@ void Maps::Tiles::RedrawTile( Surface & dst ) const
         area.BlitOnTile( dst, GetTileSurface(), 0, 0, mp );
 }
 
-void Maps::Tiles::RedrawEmptyTile( Surface & dst, const Point & mp )
+void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp )
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     if ( area.GetVisibleTileROI() & mp ) {
         if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
-            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), 0, 0, mp );
+            area.BlitOnTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), 0, 0, mp );
         }
         else if ( mp.x == world.w() && mp.y >= 0 && mp.y < world.h() ) { // right first row
-            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 24 + ( mp.y % 4 ), 0 ), 0, 0, mp );
+            area.BlitOnTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 24 + ( mp.y % 4 ), 0 ), 0, 0, mp );
         }
         else if ( mp.y == world.h() && mp.x >= 0 && mp.x < world.w() ) { // bottom first row
-            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 28 + ( mp.x % 4 ), 0 ), 0, 0, mp );
+            area.BlitOnTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 28 + ( mp.x % 4 ), 0 ), 0, 0, mp );
         }
         else if ( mp.x == -1 && mp.y >= 0 && mp.y < world.h() ) { // left first row
-            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, 32 + ( mp.y % 4 ), 0 ), 0, 0, mp );
+            area.BlitOnTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 32 + ( mp.y % 4 ), 0 ), 0, 0, mp );
         }
         else {
-            area.BlitOnTile( dst, AGG::GetTIL( TIL::STON, ( abs( mp.y ) % 4 ) * 4 + abs( mp.x ) % 4, 0 ), 0, 0, mp );
+            area.BlitOnTile( dst, fheroes2::AGG::GetTIL( TIL::STON, ( abs( mp.y ) % 4 ) * 4 + abs( mp.x ) % 4, 0 ), 0, 0, mp );
         }
     }
 }
 
-// Private drawing function that will cycle colors if told to do so
-void Maps::Tiles::RedrawMapObject( Surface & dst, int icn, uint32_t index, const Point & mapPoint, bool cycle, int offsetX, int offsetY ) const
-{
-    Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-    Sprite sprite;
-
-    if ( cycle ) {
-        MapObjectSprite & spriteCache = area.GetSpriteCache();
-        const std::pair<int, uint32_t> spriteIndex( icn, index );
-        MapObjectSprite::iterator cachedSprite = spriteCache.find( spriteIndex );
-        if ( cachedSprite != spriteCache.end() ) {
-            sprite = cachedSprite->second;
-        }
-        else {
-            sprite = AGG::GetICN( icn, index );
-            AGG::ReplaceColors( sprite, area.GetCyclingRGBPalette(), icn, index, false );
-            spriteCache[spriteIndex] = sprite;
-        }
-    }
-    else {
-        sprite = AGG::GetICN( icn, index );
-    }
-    area.BlitOnTile( dst, sprite, sprite.x() + offsetX, sprite.y() + offsetY, mapPoint );
-}
-
-void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs ) const
+void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool skipObjs ) const
 {
     Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1456,24 +1349,24 @@ void Maps::Tiles::RedrawAddon( Surface & dst, const Addons & addon, bool skipObj
             const int icn = MP2::GetICNObject( ( *it ).object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
-                RedrawMapObject( dst, icn, index, mp, TilesAddon::hasColorCycling( it->object, it->index ) );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
+                area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
                 // possible animation
                 if ( it->hasSpriteAnimation() ) {
-                    const Sprite & animationSprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) );
-                    area.BlitOnTile( dst, animationSprite, mp );
+                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
                 }
             }
         }
     }
 }
 
-void Maps::Tiles::RedrawBottom( Surface & dst, bool skipObjs ) const
+void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, bool skipObjs ) const
 {
     RedrawAddon( dst, addons_level1, skipObjs );
 }
 
-void Maps::Tiles::RedrawPassable( Surface & dst ) const
+void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
 {
 #ifdef WITH_DEBUG
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
@@ -1481,7 +1374,7 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
 
     if ( area.GetVisibleTileROI() & mp ) {
         if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
-            Surface sf = PassableViewSurface( tilePassable );
+            fheroes2::Image sf = PassableViewSurface( tilePassable );
 
             if ( impassableTileRule ) {
                 Text text( GetString( impassableTileRule ), Font::SMALL );
@@ -1494,7 +1387,7 @@ void Maps::Tiles::RedrawPassable( Surface & dst ) const
 #endif
 }
 
-void Maps::Tiles::RedrawObjects( Surface & dst ) const
+void Maps::Tiles::RedrawObjects( fheroes2::Image & dst ) const
 {
     switch ( GetObject() ) {
     // boat
@@ -1512,11 +1405,14 @@ void Maps::Tiles::RedrawObjects( Surface & dst ) const
         if ( ICN::UNKNOWN != icn ) {
             const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
             const Point mp = Maps::GetPoint( GetIndex() );
-            RedrawMapObject( dst, icn, objectIndex, mp, TilesAddon::hasColorCycling( objectTileset, objectIndex ) );
+
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
+            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
             // possible animation
             if ( hasSpriteAnimation() ) {
-                const Sprite & animationSprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 ) );
+                const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 ) );
+                
                 area.BlitOnTile( dst, animationSprite, mp );
             }
         }
@@ -1524,37 +1420,41 @@ void Maps::Tiles::RedrawObjects( Surface & dst ) const
     }
 }
 
-void Maps::Tiles::RedrawMonster( Surface & dst ) const
+void Maps::Tiles::RedrawMonster( fheroes2::Image & dst ) const
 {
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( !( Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & mp ) )
+    if ( !( area.GetVisibleTileROI() & mp ) )
         return;
 
     const Monster & monster = QuantityMonster();
     const std::pair<int, int> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
-    RedrawMapObject( dst, ICN::MINIMON, spriteIndicies.first, mp, monster.hasColorCycling(), 16, TILEWIDTH );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
+    area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
+
     if ( spriteIndicies.second != -1 ) {
-        RedrawMapObject( dst, ICN::MINIMON, spriteIndicies.second, mp, monster.hasColorCycling(), 16, TILEWIDTH );
+        const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.second );
+        area.BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp );
     }
 }
 
-void Maps::Tiles::RedrawBoat( Surface & dst ) const
+void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     if ( area.GetVisibleTileROI() & mp ) {
         // FIXME: restore direction from Maps::Tiles
-        const Sprite & sprite = AGG::GetICN( ICN::BOAT32, 18 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, 18 );
         area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp );
     }
 }
 
 bool SkipRedrawTileBottom4Hero( const Maps::TilesAddon & ta, int passable )
 {
-    if ( Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoad( ta ) )
+    if ( Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) )
         return true;
     else
         switch ( MP2::GetICNObject( ta.object ) ) {
@@ -1591,7 +1491,7 @@ bool SkipRedrawTileBottom4Hero( const Maps::TilesAddon & ta, int passable )
     return false;
 }
 
-void Maps::Tiles::RedrawBottom4Hero( Surface & dst ) const
+void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1603,20 +1503,18 @@ void Maps::Tiles::RedrawBottom4Hero( Surface & dst ) const
                 const u8 & index = ( *it ).index;
                 const int icn = MP2::GetICNObject( object );
 
-                const Sprite & sprite = AGG::GetICN( icn, index );
-                area.BlitOnTile( dst, sprite, mp );
+                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
 
                 // possible anime
                 if ( it->object & 1 ) {
-                    const Sprite & anime_sprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) );
-                    area.BlitOnTile( dst, anime_sprite, mp );
+                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
                 }
             }
         }
     }
 }
 
-void Maps::Tiles::RedrawTop( Surface & dst, bool skipObjs ) const
+void Maps::Tiles::RedrawTop( fheroes2::Image & dst, bool skipObjs ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1626,24 +1524,22 @@ void Maps::Tiles::RedrawTop( Surface & dst, bool skipObjs ) const
 
     // animate objects
     if ( MP2::OBJ_ABANDONEDMINE == GetObject() ) {
-        const Sprite & anime_sprite = AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-        area.BlitOnTile( dst, anime_sprite, mp );
+        area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
     }
     else if ( MP2::OBJ_MINES == GetObject() ) {
         const uint8_t spellID = GetQuantity3();
         if ( spellID == Spell::HAUNT ) {
-            const Sprite & animationSprite = AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-            area.BlitOnTile( dst, animationSprite, mp );
+            area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
         }
         else if ( spellID >= Spell::SETEGUARDIAN && spellID <= Spell::SETWGUARDIAN ) {
-            area.BlitOnTile( dst, AGG::GetICN( ICN::MONS32, Monster( Spell( spellID ) ).GetSpriteIndex() ), TILEWIDTH, 0, mp );
+            area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::MONS32, Monster( Spell( spellID ) ).GetSpriteIndex() ), TILEWIDTH, 0, mp );
         }
     }
 
     RedrawAddon( dst, addons_level2, skipObjs );
 }
 
-void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
+void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, bool skip_ground ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1658,13 +1554,11 @@ void Maps::Tiles::RedrawTop4Hero( Surface & dst, bool skip_ground ) const
             const int icn = MP2::GetICNObject( object );
 
             if ( ICN::HighlyObjectSprite( icn, index ) ) {
-                const Sprite & sprite = AGG::GetICN( icn, index );
-                area.BlitOnTile( dst, sprite, mp );
+                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
 
                 // possible anime
                 if ( object & 1 ) {
-                    const Sprite & anime_sprite = AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame() ) );
-                    area.BlitOnTile( dst, anime_sprite, mp );
+                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame() ) ), mp );
                 }
             }
         }
@@ -1715,7 +1609,7 @@ std::string Maps::Tiles::String( void ) const
        << "tileset         : " << static_cast<int>( objectTileset >> 2 ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << std::endl
        << "object animated : " << static_cast<int>( hasSpriteAnimation() ) << std::endl
-       << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << road << ")" << std::endl
+       << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
 #ifdef WITH_DEBUG
     if ( impassableTileRule )
@@ -1813,7 +1707,7 @@ bool Maps::Tiles::GoodForUltimateArtifact( void ) const
     return !isWater()
            && ( addons_level1.empty()
                 || addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), std::ptr_fun( &TilesAddon::isShadow ) ) ) )
-           && isPassable( NULL, Direction::CENTER, true );
+           && isPassable( Direction::CENTER, false, true );
 }
 
 bool TileIsGround( s32 index, int ground )
@@ -1821,48 +1715,25 @@ bool TileIsGround( s32 index, int ground )
     return ground == world.GetTiles( index ).GetGround();
 }
 
-/* accept move */
-bool Maps::Tiles::isPassable( const Heroes & hero ) const
+bool Maps::Tiles::validateWaterRules( bool fromWater ) const
 {
-    if ( hero.isShipMaster() ) {
-        if ( !isWater() )
-            return false;
+    const bool tileIsWater = isWater();
+    if ( fromWater )
+        return mp2_object == MP2::OBJ_COAST || ( tileIsWater && mp2_object != MP2::OBJ_BOAT );
 
-        if ( MP2::OBJ_BOAT == GetObject() )
-            return false;
-    }
-    else
-        // if(! hero->isShipMaster() &&
-        if ( isWater() ) {
-        switch ( GetObject() ) {
-        // fix shipwreck: place on water
-        case MP2::OBJ_SHIPWRECK:
-            // check later
-            break;
-
-        // for: meetings/attack hero
-        case MP2::OBJ_HEROES: {
-            // scan ground
-            const MapsIndexes & v = Maps::GetAroundIndexes( GetIndex() );
-            if ( v.end() == std::find_if( v.begin(), v.end(), std::not1( std::bind2nd( std::ptr_fun( &TileIsGround ), static_cast<int>( Ground::WATER ) ) ) ) )
-                return false;
-        } break;
-
-        default:
-            // ! hero->isShipMaster() && isWater()
-            return false;
-        }
-    }
+    // if we're not in water but tile is; allow movement in three cases
+    if ( tileIsWater )
+        return mp2_object == MP2::OBJ_SHIPWRECK || mp2_object == MP2::OBJ_HEROES || mp2_object == MP2::OBJ_BOAT;
 
     return true;
 }
 
-bool Maps::Tiles::isPassable( const Heroes * hero, int direct, bool skipfog ) const
+bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog ) const
 {
     if ( !skipfog && isFog( Settings::Get().CurrentColor() ) )
         return false;
 
-    if ( hero && !isPassable( *hero ) )
+    if ( !validateWaterRules( fromWater ) )
         return false;
 
     return direct & tilePassable;
@@ -1886,8 +1757,7 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 /* check road */
 bool Maps::Tiles::isRoad() const
 {
-    // additionally check if it's a castle/town entrance
-    return road || mp2_object == MP2::OBJ_CASTLE;
+    return tileIsRoad || mp2_object == MP2::OBJ_CASTLE;
 }
 
 bool Maps::Tiles::isStream( void ) const
@@ -2301,7 +2171,6 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 
 std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const int tileIndex = tile.GetIndex();
     int attackerIndex = -1;
 
@@ -2314,9 +2183,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
             continue;
         }
 
-        Route::Path path( *hero );
-        path.Calculate( tileIndex, 2 ); // we need to make sure that a hero needs exactly 1 step to the creature
-        if ( path.size() == 1 && tile.isWater() == heroTile.isWater() ) {
+        if ( tile.isWater() == heroTile.isWater() ) {
             attackerIndex = *it;
             break;
         }
@@ -2328,7 +2195,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
     if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
         spriteIndices.first += 7;
 
-        switch ( Direction::Get( tileIndex, attackerIndex ) ) {
+        switch ( Maps::GetDirection( tileIndex, attackerIndex ) ) {
         case Direction::TOP_LEFT:
         case Direction::LEFT:
         case Direction::BOTTOM_LEFT:
@@ -2356,7 +2223,7 @@ void Maps::Tiles::ClearFog( int colors )
     fog_colors &= ~colors;
 }
 
-void Maps::Tiles::RedrawFogs( Surface & dst, int color ) const
+void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -2374,7 +2241,7 @@ void Maps::Tiles::RedrawFogs( Surface & dst, int color ) const
 
     // TIL::CLOF32
     if ( DIRECTION_ALL == around ) {
-        const Surface & sf = AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
+        const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
         area.BlitOnTile( dst, sf, 0, 0, mp );
     }
     else {
@@ -2620,13 +2487,13 @@ void Maps::Tiles::RedrawFogs( Surface & dst, int color ) const
         // unknown
         else {
             DEBUG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
-            const Surface & sf = AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
+            const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
             area.BlitOnTile( dst, sf, 0, 0, mp );
             return;
         }
 
-        const Sprite & sprite = AGG::GetICN( ICN::CLOP32, index, revert );
-        area.BlitOnTile( dst, sprite, ( revert ? sprite.x() + TILEWIDTH - sprite.w() : sprite.x() ), sprite.y(), mp );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CLOP32, index );
+        area.BlitOnTile( dst, sprite, ( revert ? sprite.x() + TILEWIDTH - sprite.width() : sprite.x() ), sprite.y(), mp, revert );
     }
 }
 
@@ -2670,23 +2537,32 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     return msg << tile.maps_index << tile.pack_sprite_index << tile.tilePassable << tile.uniq << tile.objectTileset << tile.objectIndex << tile.mp2_object
-               << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.road << tile.addons_level1 << tile.addons_level2;
+               << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
     msg >> tile.maps_index >> tile.pack_sprite_index >> tile.tilePassable;
-    if ( FORMAT_VERSION_090_RELEASE > Game::GetLoadVersion() ) {
+
+    // Backwards compatibility with saves pre-0.8.2 release
+    if ( FORMAT_VERSION_082_RELEASE > Game::GetLoadVersion() ) {
         tile.uniq = 0;
         tile.objectTileset = 0;
         tile.objectIndex = 255;
         msg >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.addons_level1 >> tile.addons_level2;
         tile.AddonsSort();
-        tile.road = ( tile.objectTileset >> 1 ) & 1;
+
+        for ( const Maps::TilesAddon & addon : tile.addons_level1 ) {
+            if ( addon.isRoad() ) {
+                tile.tileIsRoad = true;
+                break;
+            }
+        }
     }
     else {
         msg >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
-            >> tile.road >> tile.addons_level1 >> tile.addons_level2;
+            >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
     }
+
     return msg;
 }

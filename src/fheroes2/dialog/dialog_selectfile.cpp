@@ -28,7 +28,6 @@
 #include <string>
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
@@ -39,6 +38,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "ui_button.h"
 #include "world.h"
 
 std::string SelectFileListSimple( const std::string &, const std::string &, bool );
@@ -97,15 +97,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
 
 void FileInfoListBox::RedrawBackground( const Point & dst )
 {
-    const Sprite & panel = AGG::GetICN( ICN::REQBKG, 0 );
-
-    if ( Settings::Get().QVGA() ) {
-        panel.Blit( Rect( 0, 0, panel.w(), 120 ), dst.x, dst.y );
-        panel.Blit( Rect( 0, panel.h() - 120, panel.w(), 120 ), dst.x, dst.y + 224 - 120 );
-    }
-    else {
-        panel.Blit( dst );
-    }
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQBKG, 0 ), fheroes2::Display::instance(), dst.x, dst.y );
 }
 
 void FileInfoListBox::ActionCurrentUp( void )
@@ -196,33 +188,28 @@ std::string Dialog::SelectFileLoad( void )
 
 std::string SelectFileListSimple( const std::string & header, const std::string & lastfile, bool editor )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const Sprite & sprite = AGG::GetICN( ICN::REQBKG, 0 );
-    const Sprite & spriteShadow = AGG::GetICN( ICN::REQBKG, 1 );
-    Size panel( sprite.w(), sprite.h() );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
+    const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
 
-    bool pocket = Settings::Get().QVGA();
-    if ( pocket )
-        panel = Size( sprite.w(), 224 );
-
-    const Point dialogOffset( ( display.w() - sprite.w() ) / 2, ( display.h() - sprite.h() ) / 2 );
+    const Point dialogOffset( ( display.width() - sprite.width() ) / 2, ( display.height() - sprite.height() ) / 2 );
     const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    SpriteBack back( Rect( shadowOffset.x, shadowOffset.y, sprite.w() + BORDERWIDTH, sprite.h() + BORDERWIDTH ) );
-    const Rect rt( dialogOffset.x, dialogOffset.y, sprite.w(), sprite.h() );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
+    const Rect rt( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
 
-    spriteShadow.Blit( rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
+    fheroes2::Blit( spriteShadow, display, rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
 
-    const Rect enter_field( rt.x + 42, rt.y + ( pocket ? 148 : 286 ), 260, 16 );
+    const Rect enter_field( rt.x + 42, rt.y + 286, 260, 16 );
 
-    Button buttonOk( rt.x + 34, rt.y + ( pocket ? 176 : 315 ), ICN::REQUEST, 1, 2 );
-    Button buttonCancel( rt.x + 244, rt.y + ( pocket ? 176 : 315 ), ICN::REQUEST, 3, 4 );
+    fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::REQUEST, 1, 2 );
+    fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::REQUEST, 3, 4 );
 
     bool edit_mode = false;
 
@@ -230,11 +217,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     FileInfoListBox listbox( rt, edit_mode );
 
     listbox.RedrawBackground( rt );
-    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, Point( rt.x + 327, rt.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, Point( rt.x + 327, rt.y + ( pocket ? 117 : 257 ) ) );
-    listbox.SetScrollSplitter( AGG::GetICN( ICN::ESCROLL, 3 ), Rect( rt.x + 328, rt.y + 73, 12, ( pocket ? 40 : 180 ) ) );
-    listbox.SetAreaMaxItems( pocket ? 5 : 11 );
-    listbox.SetAreaItems( Rect( rt.x + 40, rt.y + 55, 265, ( pocket ? 78 : 215 ) ) );
+    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
+    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 257 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), Rect( rt.x + 328, rt.y + 73, 12, 180 ) );
+    listbox.SetAreaMaxItems( 11 );
+    listbox.SetAreaItems( Rect( rt.x + 40, rt.y + 55, 265, 215 ) );
     listbox.SetListContent( lists );
 
     std::string filename;
@@ -256,7 +243,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     if ( !editor && lists.empty() )
-        buttonOk.SetDisable( true );
+        buttonOk.disable();
 
     if ( filename.empty() && listbox.isSelected() ) {
         filename = ResizeToShortName( listbox.GetCurrent().file );
@@ -266,28 +253,28 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     listbox.Redraw();
     RedrawExtraInfo( rt, header, filename, enter_field );
 
-    buttonOk.Draw();
-    buttonCancel.Draw();
+    buttonOk.draw();
+    buttonCancel.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     std::string result;
     bool is_limit = false;
 
     while ( le.HandleEvents() && result.empty() ) {
-        le.MousePressLeft( buttonOk ) && buttonOk.isEnable() ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
-        le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+        le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         listbox.QueueEventProcessing();
 
-        if ( ( buttonOk.isEnable() && le.MouseClickLeft( buttonOk ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
             if ( filename.size() )
                 result = System::ConcatePath( Settings::GetSaveDir(), filename + ".sav" );
             else if ( listbox.isSelected() )
                 result = listbox.GetCurrent().file;
         }
-        else if ( le.MouseClickLeft( buttonCancel ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
             break;
         }
         else if ( le.MouseClickLeft( enter_field ) && editor ) {
@@ -295,15 +282,19 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
             if ( Settings::Get().PocketPC() )
                 PocketPC::KeyboardDialog( filename );
-            buttonOk.SetDisable( filename.empty() );
+            if ( filename.empty() )
+                buttonOk.disable();
             cursor.Hide();
         }
         else if ( edit_mode && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() ) ) {
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
-            buttonOk.SetDisable( filename.empty() );
+            if ( filename.empty() )
+                buttonOk.disable();
+            else
+                buttonOk.enable();
             cursor.Hide();
         }
-        if ( ( le.KeyPress( KEY_DELETE ) || ( pocket && le.MousePressRight() ) ) && listbox.isSelected() ) {
+        if ( le.KeyPress( KEY_DELETE ) && listbox.isSelected() ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
             msg.append( "\n \n" );
             msg.append( System::GetBasename( listbox.GetCurrent().file ) );
@@ -311,7 +302,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 System::Unlink( listbox.GetCurrent().file );
                 listbox.RemoveSelected();
                 if ( lists.empty() || filename.empty() )
-                    buttonOk.SetDisable( true );
+                    buttonOk.disable();
                 listbox.SetListContent( lists );
             }
             cursor.Hide();
@@ -330,15 +321,14 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             else
                 is_limit = RedrawExtraInfo( rt, header, filename, enter_field );
 
-            buttonOk.Draw();
-            buttonCancel.Draw();
+            buttonOk.draw();
+            buttonCancel.draw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
     cursor.Hide();
-    back.Restore();
 
     return result;
 }

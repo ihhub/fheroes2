@@ -51,19 +51,11 @@ void Interface::ControlPanel::ResetTheme( void )
     int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
     // Make a copy of Surface
-    btn_radr = Surface( AGG::GetICN( icn, 4 ).GetSurface(), false );
-    btn_icon = Surface( AGG::GetICN( icn, 0 ).GetSurface(), false );
-    btn_bttn = Surface( AGG::GetICN( icn, 12 ).GetSurface(), false );
-    btn_stat = Surface( AGG::GetICN( icn, 10 ).GetSurface(), false );
-    btn_quit = Surface( AGG::GetICN( icn, 8 ).GetSurface(), false );
-
-    const int alpha = 128;
-
-    btn_radr.SetAlphaMod( alpha, false );
-    btn_icon.SetAlphaMod( alpha, false );
-    btn_bttn.SetAlphaMod( alpha, false );
-    btn_stat.SetAlphaMod( alpha, false );
-    btn_quit.SetAlphaMod( alpha, false );
+    btn_radr = fheroes2::AGG::GetICN( icn, 4 );
+    btn_icon = fheroes2::AGG::GetICN( icn, 0 );
+    btn_bttn = fheroes2::AGG::GetICN( icn, 12 );
+    btn_stat = fheroes2::AGG::GetICN( icn, 10 );
+    btn_quit = fheroes2::AGG::GetICN( icn, 8 );
 }
 
 const Rect & Interface::ControlPanel::GetArea( void )
@@ -90,13 +82,15 @@ void Interface::ControlPanel::SetPos( s32 ox, s32 oy )
 
 void Interface::ControlPanel::Redraw( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    btn_radr.Blit( x, y, display );
-    btn_icon.Blit( x + 36, y, display );
-    btn_bttn.Blit( x + 72, y, display );
-    btn_stat.Blit( x + 108, y, display );
-    btn_quit.Blit( x + 144, y, display );
+    const int alpha = 128;
+
+    fheroes2::AlphaBlit( btn_radr, display, x, y, alpha );
+    fheroes2::AlphaBlit( btn_icon, display, x + 36, y, alpha );
+    fheroes2::AlphaBlit( btn_bttn, display, x + 72, y, alpha );
+    fheroes2::AlphaBlit( btn_stat, display, x + 108, y, alpha );
+    fheroes2::AlphaBlit( btn_quit, display, x + 144, y, alpha );
 }
 
 int Interface::ControlPanel::QueueEventProcessing( void )

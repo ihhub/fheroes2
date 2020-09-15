@@ -21,13 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "ui_button.h"
 
 void InfoSkillClear( const Rect &, const Rect &, const Rect &, const Rect & );
 void InfoSkillSelect( int, const Rect &, const Rect &, const Rect &, const Rect & );
@@ -36,7 +36,7 @@ int InfoSkillPrev( int );
 
 int Dialog::SelectSkillFromArena( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
     const bool allSkills = Settings::Get().ExtHeroArenaCanChoiseAnySkills();
 
@@ -49,10 +49,10 @@ int Dialog::SelectSkillFromArena( void )
     TextBox textbox(
         _( "You enter the arena and face a pack of vicious lions. You handily defeat them, to the wild cheers of the crowd.  Impressed by your skill, the aged trainer of gladiators agrees to train you in a skill of your choice." ),
         Font::BIG, BOXAREA_WIDTH );
-    const Sprite & sprite = AGG::GetICN( ICN::XPRIMARY, 0 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 );
     const int spacer = Settings::Get().QVGA() ? 5 : 10;
 
-    Dialog::FrameBox box( textbox.h() + spacer + sprite.h() + 15, true );
+    Dialog::FrameBox box( textbox.h() + spacer + sprite.height() + 15, true );
 
     const Rect & box_rt = box.GetArea();
     Point dst_pt = box_rt;
@@ -63,12 +63,12 @@ int Dialog::SelectSkillFromArena( void )
     int res = Skill::Primary::ATTACK;
     Rect rect1, rect2, rect3, rect4;
 
-    const int spacingX = allSkills ? ( static_cast<int>( box_rt.w ) - sprite.w() * 4 ) / 5 : ( static_cast<int>( box_rt.w ) - sprite.w() * 3 ) / 4;
+    const int spacingX = allSkills ? ( static_cast<int>( box_rt.w ) - sprite.width() * 4 ) / 5 : ( static_cast<int>( box_rt.w ) - sprite.width() * 3 ) / 4;
 
-    rect1 = Rect( dst_pt.x + spacingX, dst_pt.y, sprite.w(), sprite.h() );
-    rect2 = Rect( rect1.x + sprite.w() + spacingX, dst_pt.y, sprite.w(), sprite.h() );
-    rect3 = Rect( rect2.x + sprite.w() + spacingX, dst_pt.y, sprite.w(), sprite.h() );
-    rect4 = Rect( rect3.x + sprite.w() + spacingX, dst_pt.y, sprite.w(), sprite.h() );
+    rect1 = Rect( dst_pt.x + spacingX, dst_pt.y, sprite.width(), sprite.height() );
+    rect2 = Rect( rect1.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
+    rect3 = Rect( rect2.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
+    rect4 = Rect( rect3.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
 
     InfoSkillClear( rect1, rect2, rect3, rect4 );
     InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
@@ -97,20 +97,20 @@ int Dialog::SelectSkillFromArena( void )
     }
 
     // buttons
-    dst_pt.x = box_rt.x + ( box_rt.w - AGG::GetICN( system, 1 ).w() ) / 2;
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
-    Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.x = box_rt.x + ( box_rt.w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
     LocalEvent & le = LocalEvent::Get();
     bool redraw = false;
 
-    buttonOk.Draw();
+    buttonOk.draw();
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
         if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );
@@ -142,11 +142,11 @@ int Dialog::SelectSkillFromArena( void )
             InfoSkillClear( rect1, rect2, rect3, rect4 );
             InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
             cursor.Show();
-            display.Flip();
+            display.render();
             redraw = false;
         }
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk ) )
+        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) )
             break;
     }
 
@@ -159,28 +159,33 @@ int Dialog::SelectSkillFromArena( void )
 
 void InfoSkillClear( const Rect & rect1, const Rect & rect2, const Rect & rect3, const Rect & rect4 )
 {
-    AGG::GetICN( ICN::XPRIMARY, 0 ).Blit( rect1 );
-    AGG::GetICN( ICN::XPRIMARY, 1 ).Blit( rect2 );
-    AGG::GetICN( ICN::XPRIMARY, 2 ).Blit( rect3 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 ), display, rect1.x, rect1.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 1 ), display, rect2.x, rect2.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
+
     if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-        AGG::GetICN( ICN::XPRIMARY, 3 ).Blit( rect4 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 ), display, rect4.x, rect4.y );
 }
 
 void InfoSkillSelect( int skill, const Rect & rect1, const Rect & rect2, const Rect & rect3, const Rect & rect4 )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     switch ( skill ) {
     case Skill::Primary::ATTACK:
-        AGG::GetICN( ICN::XPRIMARY, 4 ).Blit( rect1 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 4 ), display, rect1.x, rect1.y );
         break;
     case Skill::Primary::DEFENSE:
-        AGG::GetICN( ICN::XPRIMARY, 5 ).Blit( rect2 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 5 ), display, rect2.x, rect2.y );
         break;
     case Skill::Primary::POWER:
-        AGG::GetICN( ICN::XPRIMARY, 6 ).Blit( rect3 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 6 ), display, rect3.x, rect3.y );
         break;
     case Skill::Primary::KNOWLEDGE:
         if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-            AGG::GetICN( ICN::XPRIMARY, 7 ).Blit( rect4 );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 ), display, rect4.x, rect4.y );
         break;
     default:
         break;

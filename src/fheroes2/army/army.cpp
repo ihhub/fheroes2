@@ -37,6 +37,7 @@
 #include "morale.h"
 #include "payment.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
 #include "speed.h"
 #include "text.h"
@@ -296,9 +297,9 @@ bool Troops::AllTroopsIsRace( int race ) const
 
 bool Troops::CanJoinTroop( const Monster & mons ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
+    const_iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
     if ( it == end() )
-        it = std::find_if( begin(), end(), std::not1( std::mem_fun( &Troop::isValid ) ) );
+        it = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 
     return it != end();
 }
@@ -306,9 +307,9 @@ bool Troops::CanJoinTroop( const Monster & mons ) const
 bool Troops::JoinTroop( const Monster & mons, u32 count )
 {
     if ( mons.isValid() && count ) {
-        iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), mons() ) );
+        iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
         if ( it == end() )
-            it = std::find_if( begin(), end(), std::not1( std::mem_fun( &Troop::isValid ) ) );
+            it = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 
         if ( it != end() ) {
             if ( ( *it )->isValid() )
@@ -440,7 +441,7 @@ u32 Troops::GetDamageMax( void ) const
 
 void Troops::Clean( void )
 {
-    std::for_each( begin(), end(), std::mem_fun( &Troop::Reset ) );
+    std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
 }
 
 void Troops::UpgradeTroops( const Castle & castle )
@@ -459,7 +460,7 @@ void Troops::UpgradeTroops( const Castle & castle )
 
 Troop * Troops::GetFirstValid( void )
 {
-    iterator it = std::find_if( begin(), end(), std::mem_fun( &Troop::isValid ) );
+    iterator it = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isValid(); } );
     return it == end() ? NULL : *it;
 }
 
@@ -520,7 +521,8 @@ Troops Troops::GetOptimized( void ) const
 
     for ( const_iterator it1 = begin(); it1 != end(); ++it1 )
         if ( ( *it1 )->isValid() ) {
-            iterator it2 = std::find_if( result.begin(), result.end(), std::bind2nd( std::mem_fun( &Troop::isMonster ), ( *it1 )->GetID() ) );
+            const int monsterId = ( *it1 )->GetID();
+            iterator it2 = std::find_if( result.begin(), result.end(), [monsterId]( const Troop * troop ) { return troop->isMonster( monsterId ); } );
 
             if ( it2 == result.end() )
                 result.push_back( new Troop( **it1 ) );
@@ -680,20 +682,18 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
         Text text;
         text.Set( Font::SMALL );
 
-        for ( const_iterator it = begin(); it != end(); ++it )
+        for ( const_iterator it = begin(); it != end(); ++it ) {
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
                     const uint32_t spriteIndex = ( *it )->GetSpriteIndex();
-                    Sprite monster = AGG::GetICN( ICN::MONS32, spriteIndex );
-                    if ( ( *it )->hasColorCycling() ) {
-                        AGG::ReplaceColors( monster, PAL::GetCyclingPalette( Game::MapsAnimationFrame() ), ICN::MONS32, spriteIndex, false );
-                    }
-                    const int offsetY = !compact ? 30 - monster.h() : ( monster.h() < 35 ) ? 35 - monster.h() : 0;
+                    const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, spriteIndex );
+                    const int offsetY = !compact ? 30 - monster.height() : ( monster.height() < 35 ) ? 35 - monster.height() : 0;
 
-                    monster.Blit( cx - monster.w() / 2, cy + offsetY );
+                    fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2, cy + offsetY );
+
                     text.Set( Game::CountScoute( ( *it )->GetCount(), scoute, compact ) );
                     if ( compact )
-                        text.Blit( cx + monster.w() / 2, cy + 23 );
+                        text.Blit( cx + monster.width() / 2, cy + 23 );
                     else
                         text.Blit( cx - text.w() / 2, cy + 29 );
 
@@ -703,6 +703,7 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
                 else
                     --first;
             }
+        }
     }
 }
 

@@ -35,6 +35,13 @@
 #include "spell.h"
 #include "world.h"
 
+namespace
+{
+    // Values are extracted from Heroes2 executable
+    const uint32_t dimensionDoorPenalty = 225;
+    const uint32_t townGatePenalty = 225;
+}
+
 void DialogSpellFailed( const Spell & );
 void DialogNotAvailable( void );
 
@@ -86,21 +93,23 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
 
 void CastleIndexListBox::RedrawBackground( const Point & dst )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     Text text( _( "Town Portal" ), Font::YELLOW_BIG );
     text.Blit( dst.x + 140 - text.w() / 2, dst.y + 6 );
 
     text.Set( _( "Select town to port to." ), Font::BIG );
     text.Blit( dst.x + 140 - text.w() / 2, dst.y + 30 );
 
-    AGG::GetICN( ICN::LISTBOX, 0 ).Blit( dst.x + 2, dst.y + 55 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 0 ), display, dst.x + 2, dst.y + 55 );
     for ( u32 ii = 1; ii < 5; ++ii )
-        AGG::GetICN( ICN::LISTBOX, 1 ).Blit( dst.x + 2, dst.y + 55 + ( ii * 19 ) );
-    AGG::GetICN( ICN::LISTBOX, 2 ).Blit( dst.x + 2, dst.y + 145 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 1 ), display, dst.x + 2, dst.y + 55 + ( ii * 19 ) );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 2 ), display, dst.x + 2, dst.y + 145 );
 
-    AGG::GetICN( ICN::LISTBOX, 7 ).Blit( dst.x + 256, dst.y + 75 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 7 ), display, dst.x + 256, dst.y + 75 );
     for ( u32 ii = 1; ii < 3; ++ii )
-        AGG::GetICN( ICN::LISTBOX, 8 ).Blit( dst.x + 256, dst.y + 74 + ( ii * 19 ) );
-    AGG::GetICN( ICN::LISTBOX, 9 ).Blit( dst.x + 256, dst.y + 126 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 8 ), display, dst.x + 256, dst.y + 74 + ( ii * 19 ) );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + 256, dst.y + 126 );
 }
 
 bool Heroes::ActionSpellCast( const Spell & spell )
@@ -199,6 +208,7 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         hero.FadeOut();
 
         Cursor::Get().Hide();
+        hero.ApplyPenaltyMovement( townGatePenalty );
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -213,8 +223,7 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         I.SetFocus( &hero );
 
         // educate spells
-        if ( !Settings::Get().ExtHeroLearnSpellsWithDay() )
-            castle->MageGuildEducateHero( hero );
+        castle->MageGuildEducateHero( hero );
 
         return true;
     }
@@ -365,7 +374,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.SpellCasted( Spell::DIMENSIONDOOR );
 
         cursor.Hide();
-        hero.Move2Dest( dst, true );
+        hero.ApplyPenaltyMovement( dimensionDoorPenalty );
+        hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
         I.RedrawFocus();
@@ -398,7 +408,7 @@ bool ActionSpellTownGate( Heroes & hero )
 
     // find the nearest castle
     for ( it = castles.begin(); it != castles.end(); ++it )
-        if ( *it && !( *it )->GetHeroes().Guest() ) {
+        if ( *it ) {
             int min2 = Maps::GetApproximateDistance( center, ( *it )->GetIndex() );
             if ( 0 > min || min2 < min ) {
                 min = min2;
@@ -416,7 +426,11 @@ bool ActionSpellTownGate( Heroes & hero )
     I.Redraw();
 
     if ( !castle ) {
-        Dialog::Message( "", _( "No available towns. Spell Failed!!!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
+        return false;
+    }
+    else if ( castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
+        Dialog::Message( "", _( "Nearest town occupied.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
@@ -428,7 +442,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     const Kingdom & kingdom = hero.GetKingdom();
     std::vector<s32> castles;
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -440,7 +454,7 @@ bool ActionSpellTownPortal( Heroes & hero )
             castles.push_back( ( **it ).GetIndex() );
 
     if ( castles.empty() ) {
-        Dialog::Message( "", _( "No available towns. Spell Failed!!!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
         return false;
     }
 
@@ -452,28 +466,28 @@ bool ActionSpellTownPortal( Heroes & hero )
     CastleIndexListBox listbox( area, result );
 
     listbox.RedrawBackground( area );
-    listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, Point( area.x + 256, area.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, Point( area.x + 256, area.y + 145 ) );
-    listbox.SetScrollSplitter( AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 260, area.y + 78, 14, 64 ) );
+    listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( area.x + 256, area.y + 55 ) );
+    listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 145 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 260, area.y + 78, 14, 64 ) );
     listbox.SetAreaMaxItems( 5 );
     listbox.SetAreaItems( Rect( area.x + 10, area.y + 60, 250, 100 ) );
     listbox.SetListContent( castles );
     listbox.Redraw();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 

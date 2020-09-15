@@ -36,26 +36,26 @@ public:
         , ok( false )
     {
         RedrawBackground( rt );
-        SetScrollButtonUp( ICN::LISTBOX, 3, 4, Point( rt.x + rt.w - 24, rt.y + 25 ) );
-        SetScrollButtonDn( ICN::LISTBOX, 5, 6, Point( rt.x + rt.w - 24, rt.y + rt.h - 55 ) );
+        SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( rt.x + rt.w - 24, rt.y + 25 ) );
+        SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( rt.x + rt.w - 24, rt.y + rt.h - 55 ) );
 
-        SetScrollSplitter( AGG::GetICN( ICN::LISTBOX, 10 ), Rect( rt.x + rt.w - 19, rt.y + 48, 14, rt.h - 106 ) );
+        SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), Rect( rt.x + rt.w - 19, rt.y + 48, 14, rt.h - 106 ) );
         SetAreaMaxItems( 5 );
         SetAreaItems( Rect( rt.x + 10, rt.y + 30, rt.w - 30, rt.h - 70 ) );
     };
 
     void RedrawBackground( const Point & dst )
     {
-        const Sprite & sf = AGG::GetICN( ICN::CELLWIN, 1 );
-        Dialog::FrameBorder::RenderOther( sf, Rect( dst.x, dst.y + 25, rtAreaItems.w + 5, rtAreaItems.h + 10 ) );
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), Rect( dst.x, dst.y + 25, rtAreaItems.w + 5, rtAreaItems.h + 10 ) );
 
         // scroll
-        AGG::GetICN( ICN::LISTBOX, 7 ).Blit( dst.x + area.w - 24, dst.y + 45 );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 7 ), display, dst.x + area.w - 24, dst.y + 45 );
 
         for ( u32 ii = 1; ii < 9; ++ii )
-            AGG::GetICN( ICN::LISTBOX, 8 ).Blit( dst.x + area.w - 24, dst.y + 44 + ( ii * 19 ) );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 8 ), display, dst.x + area.w - 24, dst.y + 44 + ( ii * 19 ) );
 
-        AGG::GetICN( ICN::LISTBOX, 9 ).Blit( dst.x + area.w - 24, dst.y + area.h - 74 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + area.w - 24, dst.y + area.h - 74 );
     };
 
     void ActionListDoubleClick( int & index )
@@ -82,7 +82,7 @@ public:
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current )
     {
         Monster mons( index );
-        AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ).Blit( dstx + 5, dsty + 3 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
         Text text( mons.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 50, dsty + 10 );
@@ -114,11 +114,10 @@ public:
 
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current )
     {
-        Display & display = Display::Get();
-        Surface port = Heroes::GetPortrait( index, PORT_SMALL );
+        fheroes2::Image port = Heroes::GetPortrait( index, PORT_SMALL );
 
-        if ( port.isValid() )
-            port.Blit( dstx + 5, dsty + 3, display );
+        if ( !port.empty() )
+            fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
         Text text( Heroes::GetName( index ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 50, dsty + 5 );
@@ -142,7 +141,7 @@ public:
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current )
     {
         Artifact art( index );
-        AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ).Blit( dstx + 5, dsty + 3 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
         Text text( art.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 50, dsty + 10 );
@@ -169,7 +168,7 @@ public:
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current )
     {
         Spell spell( index );
-        AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ).Blit( dstx + 5, dsty + 3 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
         Text text( spell.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 80, dsty + 10 );
@@ -196,7 +195,7 @@ public:
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current )
     {
         Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
-        AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ).Blit( dstx + 5, dsty + 3 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
         std::string str = skill.GetName();
         Text text( str, ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 50, dsty + 10 );
@@ -213,7 +212,7 @@ public:
 
 Skill::Secondary Dialog::SelectSecondarySkill( void )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -225,7 +224,7 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     for ( size_t ii = 0; ii < MAXSECONDARYSKILL * 3; ++ii )
         skills[ii] = ii;
 
-    Dialog::FrameBorder frameborder( Size( 310, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 310, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumSecSkill listbox( area );
@@ -233,22 +232,22 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     listbox.SetListContent( skills );
     listbox.Redraw();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     int result = Dialog::ZERO;
 
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
@@ -264,7 +263,7 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
 
 Spell Dialog::SelectSpell( int cur )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -276,7 +275,7 @@ Spell Dialog::SelectSpell( int cur )
     for ( size_t ii = 0; ii < spells.size(); ++ii )
         spells[ii] = ii + 1;
 
-    Dialog::FrameBorder frameborder( Size( 340, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 340, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumSpell listbox( area );
@@ -286,21 +285,21 @@ Spell Dialog::SelectSpell( int cur )
         listbox.SetCurrent( static_cast<int>( cur ) );
     listbox.Redraw();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
@@ -309,7 +308,7 @@ Spell Dialog::SelectSpell( int cur )
 
 Artifact Dialog::SelectArtifact( int cur )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -321,7 +320,7 @@ Artifact Dialog::SelectArtifact( int cur )
     for ( size_t ii = 0; ii < artifacts.size(); ++ii )
         artifacts[ii] = ii;
 
-    Dialog::FrameBorder frameborder( Size( 370, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 370, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumArtifact listbox( area );
@@ -331,21 +330,21 @@ Artifact Dialog::SelectArtifact( int cur )
         listbox.SetCurrent( static_cast<int>( cur ) );
     listbox.Redraw();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
@@ -354,7 +353,7 @@ Artifact Dialog::SelectArtifact( int cur )
 
 Monster Dialog::SelectMonster( int id )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -366,7 +365,7 @@ Monster Dialog::SelectMonster( int id )
     for ( size_t ii = 0; ii < monsters.size(); ++ii )
         monsters[ii] = ii + 1; // skip Monser::UNKNOWN
 
-    Dialog::FrameBorder frameborder( Size( 260, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 260, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumMonster listbox( area );
@@ -376,21 +375,21 @@ Monster Dialog::SelectMonster( int id )
         listbox.SetCurrent( static_cast<int>( id ) );
     listbox.Redraw();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
@@ -399,7 +398,7 @@ Monster Dialog::SelectMonster( int id )
 
 int Dialog::SelectHeroes( int cur )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -411,7 +410,7 @@ int Dialog::SelectHeroes( int cur )
     for ( size_t ii = 0; ii < heroes.size(); ++ii )
         heroes[ii] = ii;
 
-    Dialog::FrameBorder frameborder( Size( 240, 280 ), AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( Size( 240, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumHeroes listbox( area );
@@ -421,21 +420,21 @@ int Dialog::SelectHeroes( int cur )
         listbox.SetCurrent( cur );
     listbox.Redraw();
 
-    ButtonGroups btnGroups( area, Dialog::OK | Dialog::CANCEL );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    btnGroups.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     int result = Dialog::ZERO;
     while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = btnGroups.QueueEventProcessing();
+        result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 

@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "agg.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -84,6 +83,7 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
 
 void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
 {
+    const bool fromWater = hero.isShipMaster();
     if ( Maps::isValidDirection( hero.GetIndex(), direct ) ) {
         s32 dst = Maps::GetDirectionIndex( hero.GetIndex(), direct );
         const Maps::Tiles & tile = world.GetTiles( dst );
@@ -107,7 +107,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
             break;
 
         default:
-            allow = ( tile.isPassable( &hero, Direction::CENTER, false ) || MP2::isActionObject( tile.GetObject(), hero.isShipMaster() ) );
+            allow = ( tile.isPassable( Direction::CENTER, fromWater, false ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
             break;
         }
 
@@ -126,10 +126,16 @@ void Interface::Basic::EventNextHero( void )
 
     if ( GetFocusHeroes() ) {
         KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
-        ++it;
-        if ( it == myHeroes.end() )
-            it = myHeroes.begin();
-        SetFocus( *it );
+        KingdomHeroes::const_iterator currentHero = it;
+        do {
+            ++it;
+            if ( it == myHeroes.end() )
+                it = myHeroes.begin();
+            if ( ( *it )->MayStillMove() ) {
+                SetFocus( *it );
+                break;
+            }
+        } while ( it != currentHero );
     }
     else {
         ResetFocus( GameFocus::HEROES );
@@ -158,6 +164,10 @@ void Interface::Basic::EventCastSpell( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
+        SetRedraw( REDRAW_ALL );
+        ResetFocus( GameFocus::HEROES );
+        Redraw();
+
         const Spell spell = hero->OpenSpellBook( SpellBook::ADVN, true );
         // apply cast spell
         if ( spell.isValid() ) {
@@ -221,7 +231,10 @@ void Interface::Basic::EventSystemDialog( void )
 
     // interface themes
     if ( 0x08 & changes ) {
+        Interface::Basic::Get().Reset();
         SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+        ResetFocus( GameFocus::HEROES );
+        Redraw();
     }
 
     // interface hide/show
@@ -327,7 +340,7 @@ int Interface::Basic::EventDigArtifact( void )
                     AGG::PlaySound( M82::TREASURE );
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
-                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}" ) );
+                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
                     Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate() );
 
@@ -347,7 +360,7 @@ int Interface::Basic::EventDigArtifact( void )
                 Cursor::Get().Hide();
                 iconsPanel.RedrawIcons( ICON_HEROES );
                 Cursor::Get().Show();
-                Display::Get().Flip();
+                fheroes2::Display::instance().render();
 
                 // check game over for ultimate artifact
                 return GameOver::Result::Get().LocalCheckGameOver();

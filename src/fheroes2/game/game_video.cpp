@@ -21,25 +21,26 @@
 #include "game_video.h"
 #include "cursor.h"
 #include "game.h"
+#include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
+#include "ui_tool.h"
 
 namespace Video
 {
     void ShowVideo( const std::string & videoPath, bool isLooped )
     {
-        const SMKVideoSequence video( videoPath );
-        if ( video.getFrames().empty() ) // nothing to show
+        SMKVideoSequence video( videoPath );
+        if ( video.frameCount() < 1 ) // nothing to show
             return;
 
         Cursor & cursor = Cursor::Get();
         cursor.Hide();
+        fheroes2::Display & display = fheroes2::Display::instance();
+        display.fill( 0 );
 
-        Display & display = Display::Get();
-        display.Fill( RGBA() );
-
-        size_t currentFrame = 0;
-        const Point offset( ( display.GetSize().w - video.width() ) / 2, ( display.GetSize().h - video.height() ) / 2 );
+        unsigned int currentFrame = 0;
+        const fheroes2::Point offset( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2 );
         bool isFirstFrame = true;
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
@@ -49,35 +50,73 @@ namespace Video
         if ( hasSound ) {
             for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
                 if ( it->size() )
-                    Mixer::Play( &( *it )[0], it->size(), -1, false );
+                    Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
             }
         }
 
+        fheroes2::ScreenPaletteRestorer screenRestorer;
+
+        fheroes2::Image frame;
+        std::vector<uint8_t> palette;
+        std::vector<uint8_t> prevPalette;
+
+        bool isFrameReady = false;
+
         LocalEvent & le = LocalEvent::Get();
-        while ( ( isLooped || currentFrame < video.getFrames().size() ) && le.HandleEvents() ) {
+        while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents() ) {
             if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
                 break;
 
             if ( isFirstFrame || Game::AnimateCustomDelay( delay ) ) {
                 isFirstFrame = false;
 
-                video.getFrames()[currentFrame++].Blit( offset, display );
-                display.Flip();
+                if ( !isFrameReady ) {
+                    if ( currentFrame == 0 )
+                        video.resetFrame();
 
-                if ( isLooped && currentFrame >= video.getFrames().size() ) {
+                    video.getNextFrame( frame, palette );
+
+                    fheroes2::Blit( frame, display, offset.x, offset.y );
+                }
+                isFrameReady = false;
+
+                if ( prevPalette != palette ) {
+                    screenRestorer.changePalette( palette.data() );
+                    std::swap( prevPalette, palette );
+                }
+
+                display.render();
+
+                ++currentFrame;
+
+                if ( isLooped && currentFrame >= video.frameCount() ) {
                     currentFrame = 0;
 
                     if ( hasSound ) {
                         for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
                             if ( it->size() )
-                                Mixer::Play( &( *it )[0], it->size(), -1, false );
+                                Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
                         }
                     }
                 }
             }
+            else {
+                // Don't waste CPU resources, do some calculations while we're waiting for the next frame time position
+                if ( !isFrameReady ) {
+                    if ( currentFrame == 0 )
+                        video.resetFrame();
+
+                    video.getNextFrame( frame, palette );
+                    fheroes2::Blit( frame, display, offset.x, offset.y );
+
+                    isFrameReady = true;
+                }
+            }
         }
 
+        display.fill( 0 );
         cursor.Show();
+
         Mixer::Reset();
 
         return;

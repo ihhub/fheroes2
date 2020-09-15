@@ -21,15 +21,16 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "settings.h"
 #include "text.h"
 
+#include "ui_button.h"
+
 int Dialog::Message( const std::string & header, const std::string & message, int ft, int buttons )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -50,11 +51,11 @@ int Dialog::Message( const std::string & header, const std::string & message, in
 
     LocalEvent & le = LocalEvent::Get();
 
-    ButtonGroups btnGroups( box.GetArea(), buttons );
-    btnGroups.Draw();
+    fheroes2::ButtonGroup group( box.GetArea().convert(), buttons );
+    group.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     int result = Dialog::ZERO;
@@ -62,7 +63,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         if ( !buttons && !le.MousePressRight() )
             break;
-        result = btnGroups.QueueEventProcessing();
+        result = group.processEvents();
     }
 
     cursor.Hide();

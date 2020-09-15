@@ -25,6 +25,8 @@
 #include "audio_music.h"
 #include "display.h"
 #include "error.h"
+#include "pal.h"
+#include "screen.h"
 
 #define TAP_DELAY_EMULATE 1050
 
@@ -428,11 +430,76 @@ KeySym GetKeySym( int key )
     return KEY_NONE;
 }
 
+namespace
+{
+    class ColorCycling
+    {
+    public:
+        ColorCycling()
+            : _counter( 0 )
+        {}
+
+        bool applyCycling( std::vector<uint8_t> & palette )
+        {
+            _timer.Stop();
+            if ( _timer.Get() >= 220 ) {
+                _timer.Start();
+                palette = PAL::GetCyclingPalette( _counter++ );
+                return true;
+            }
+            return false;
+        }
+
+        void reset()
+        {
+            _prevDraw.Start();
+        }
+
+        bool isRedrawRequired()
+        {
+            _prevDraw.Stop();
+            return _prevDraw.Get() >= 220;
+        }
+
+    private:
+        SDL::Time _timer;
+        SDL::Time _prevDraw;
+        uint32_t _counter;
+    };
+
+    ColorCycling colorCycling;
+
+    bool ApplyCycling( std::vector<uint8_t> & palette )
+    {
+        return colorCycling.applyCycling( palette );
+    }
+
+    void ResetCycling()
+    {
+        colorCycling.reset();
+    }
+}
+
 LocalEvent & LocalEvent::Get( void )
 {
     static LocalEvent le;
 
     return le;
+}
+
+void LocalEvent::RegisterCycling() const
+{
+    fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
+}
+
+void LocalEvent::PauseCycling()
+{
+    fheroes2::Display::instance().subscribe( NULL, NULL );
+}
+
+void LocalEvent::ResumeCycling()
+{
+    RegisterCycling();
 }
 
 LocalEvent & LocalEvent::GetClean()
@@ -450,8 +517,8 @@ LocalEvent & LocalEvent::GetClean()
 
 bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 {
-    if ( Display::isRedrawRequired() ) {
-        Display::Get().Flip();
+    if ( colorCycling.isRedrawRequired() ) {
+        fheroes2::Display::instance().render();
     }
 
     SDL_Event event;
@@ -1084,14 +1151,16 @@ bool LocalEvent::EmulateMouseAction( KeySym key )
             SetModes( MOUSE_MOTION );
         }
 
+        const fheroes2::Display & display = fheroes2::Display::instance();
+
         if ( mouse_cu.x < 0 )
             mouse_cu.x = 0;
         if ( mouse_cu.y < 0 )
             mouse_cu.y = 0;
-        if ( mouse_cu.x > Display::Get().w() )
-            mouse_cu.x = Display::Get().w();
-        if ( mouse_cu.y > Display::Get().h() )
-            mouse_cu.y = Display::Get().h();
+        if ( mouse_cu.x > display.width() )
+            mouse_cu.x = display.width();
+        if ( mouse_cu.y > display.height() )
+            mouse_cu.y = display.height();
 
         if ( emulate_press_left == key ) {
             if ( modes & KEY_PRESSED ) {

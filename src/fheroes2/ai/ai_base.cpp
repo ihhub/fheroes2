@@ -25,33 +25,14 @@
 #include "battle_troop.h"
 #include "castle.h"
 #include "dialog.h"
-#include "empty/ai_empty.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "mus.h"
-#include "normal/ai_normal.h"
 #include "settings.h"
-#include "simple/ai_simple.h"
 
 namespace AI
 {
-    // AI Selector here
-    Base & Get( AI_TYPE type )
-    {
-        static AI::Empty empty;
-        static AI::Simple simple;
-        static AI::Normal normal;
-
-        switch ( type ) {
-        case AI::SIMPLE:
-            return simple;
-        case AI::NORMAL:
-            return normal;
-        }
-        return empty;
-    }
-
     const char * Base::Type() const
     {
         return "base";
@@ -62,13 +43,34 @@ namespace AI
         return "GPL-2.0";
     }
 
+    int Base::GetPersonality() const
+    {
+        return _personality;
+    }
+
+    std::string Base::GetPersonalityString() const
+    {
+        switch ( _personality ) {
+        case WARRIOR:
+            return "Warrior";
+        case BUILDER:
+            return "Builder";
+        case EXPLORER:
+            return "Explorer";
+        default:
+            break;
+        }
+
+        return Type();
+    }
+
     void Base::Reset() {}
 
     void Base::CastlePreBattle( Castle & ) {}
 
-    void Base::CastleAfterBattle( Castle &, bool attacker_wins ) {}
+    void Base::CastleAfterBattle( Castle &, bool ) {}
 
-    void Base::CastleTurn( Castle & ) {}
+    void Base::CastleTurn( Castle &, bool ) {}
 
     void Base::CastleAdd( const Castle & ) {}
 
@@ -91,7 +93,7 @@ namespace AI
         return "";
     }
 
-    void Base::HeroesActionComplete( Heroes &, s32 ) {}
+    void Base::HeroesActionComplete( Heroes &, int ) {}
 
     void Base::HeroesLevelUp( Heroes & ) {}
 
@@ -111,14 +113,14 @@ namespace AI
 
     bool Base::HeroesCanMove( const Heroes & hero )
     {
-        return hero.MayStillMove() && !hero.Modes( HEROES_MOVED );
+        return hero.MayStillMove() && !hero.Modes( HERO_MOVED );
     }
 
-    void Base::HeroesTurn( Heroes & hero )
+    void Base::HeroTurn( Heroes & hero )
     {
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
-        hero.ResetModes( HEROES_MOVED );
+        hero.ResetModes( HERO_MOVED );
 
         while ( Base::HeroesCanMove( hero ) ) {
             // turn indicator
@@ -134,7 +136,7 @@ namespace AI
 
             // heroes AI turn
             AI::HeroesMove( hero );
-            hero.SetModes( HEROES_MOVED );
+            hero.SetModes( HERO_MOVED );
 
             // turn indicator
             status.RedrawTurnProgress( 7 );
@@ -176,7 +178,7 @@ namespace AI
         // heroes turns
         for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
             if ( *it )
-                HeroesTurn( **it );
+                HeroTurn( **it );
 
         status.RedrawTurnProgress( 6 );
         status.RedrawTurnProgress( 7 );
@@ -186,9 +188,9 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, Color::String( color ) << " moved" );
     }
 
-    void Base::BattleTurn( Battle::Arena &, const Battle::Unit & b, Battle::Actions & a )
+    void Base::BattleTurn( Battle::Arena &, const Battle::Unit & currentUnit, Battle::Actions & actions )
     {
         // end action
-        a.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, b.GetUID() ) );
+        actions.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
     }
 }

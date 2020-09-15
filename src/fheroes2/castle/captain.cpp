@@ -95,7 +95,8 @@ int Captain::GetDefense( void ) const
 
 int Captain::GetPower( void ) const
 {
-    return power + GetPowerModificator( NULL );
+    const int finalPower = power + GetPowerModificator( NULL );
+    return finalPower < 1 ? 1 : ( finalPower > 255 ? 255 : finalPower );
 }
 
 int Captain::GetKnowledge( void ) const
@@ -221,44 +222,46 @@ const Castle * Captain::inCastle( void ) const
     return &home;
 }
 
-Surface Captain::GetPortrait( int type ) const
+fheroes2::Image Captain::GetPortrait( int type ) const
 {
     switch ( type ) {
     case PORT_BIG: {
         const int portraitIcnId = GetPortraitIcnId( GetRace() );
         if ( portraitIcnId < 0 )
-            return Surface();
+            return fheroes2::Image();
 
-        Surface portait = AGG::GetICN( portraitIcnId, 0 ).GetSurface();
-        const Sprite & flag = AGG::GetICN( ICN::GetFlagIcnId( GetColor() ), 0, false );
-        flag.Blit( GetFlagOffset( GetRace() ), portait );
+        fheroes2::Image portait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
+        const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( GetColor() ), 0 );
+
+        const Point & offset = GetFlagOffset( GetRace() );
+        fheroes2::Blit( flag, portait, offset.x, offset.y );
         return portait;
     }
     case PORT_MEDIUM:
     case PORT_SMALL:
         switch ( GetRace() ) {
         case Race::KNGT:
-            return AGG::GetICN( ICN::MINICAPT, 0 );
+            return fheroes2::AGG::GetICN( ICN::MINICAPT, 0 );
         case Race::BARB:
-            return AGG::GetICN( ICN::MINICAPT, 1 );
+            return fheroes2::AGG::GetICN( ICN::MINICAPT, 1 );
         case Race::SORC:
-            return AGG::GetICN( ICN::MINICAPT, 2 );
+            return fheroes2::AGG::GetICN( ICN::MINICAPT, 2 );
         case Race::WRLK:
-            return AGG::GetICN( ICN::MINICAPT, 3 );
+            return fheroes2::AGG::GetICN( ICN::MINICAPT, 3 );
         case Race::WZRD:
-            return AGG::GetICN( ICN::MINICAPT, 4 );
+            return fheroes2::AGG::GetICN( ICN::MINICAPT, 4 );
         case Race::NECR:
-            return AGG::GetICN( ICN::MINICAPT, 5 );
+            return fheroes2::AGG::GetICN( ICN::MINICAPT, 5 );
         default:
             break;
         }
         break;
     }
 
-    return Surface();
+    return fheroes2::Image();
 }
 
-void Captain::PortraitRedraw( s32 px, s32 py, int type, Surface & dstsf ) const
+void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
 {
-    GetPortrait( type ).Blit( px, py, dstsf );
+    fheroes2::Blit( GetPortrait( type ), dstsf, px, py );
 }

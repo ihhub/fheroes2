@@ -77,9 +77,9 @@ namespace AI
 
         // Overwrites for Base AI
         void KingdomTurn( Kingdom & );
-        void CastleTurn( Castle & );
+        void CastleTurn( Castle & castle, bool defensive = false );
         void BattleTurn( Battle::Arena &, const Battle::Unit &, Battle::Actions & );
-        void HeroesTurn( Heroes & );
+        void HeroTurn( Heroes & );
 
         void HeroesPreBattle( HeroBase & );
         void HeroesAfterBattle( HeroBase & );
