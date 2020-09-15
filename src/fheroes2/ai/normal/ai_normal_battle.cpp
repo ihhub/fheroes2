@@ -124,16 +124,18 @@ namespace AI
         double highestStrength = 0;
         for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
             const Unit & unit = **it;
-            const double unitStr = unit.GetScoreQuality( currentUnit );
-
-            if ( highestStrength < unitStr ) {
-                highestStrength = unitStr;
-                priorityTarget = *it;
-            }
+            const double unitStr = unit.GetStrength();
 
             enemyArmyStrength += unitStr;
             if ( unit.isArchers() ) {
                 enemyShooterStr += unitStr;
+            }
+
+            const double attackPriority = unit.GetScoreQuality( currentUnit );
+            DEBUG( DBG_AI, DBG_TRACE, "Unit " << unit.GetName() << " attack priority: " << attackPriority);
+            if ( highestStrength < attackPriority ) {
+                highestStrength = attackPriority;
+                priorityTarget = *it;
             }
 
             const int dmg = unit.CalculateMaxDamage( currentUnit );
@@ -145,7 +147,7 @@ namespace AI
 
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
             const Unit & unit = **it;
-            const double unitStr = unit.GetScoreQuality( *priorityTarget );
+            const double unitStr = unit.GetStrength();
 
             myArmyStrength += unitStr;
             if ( unit.isArchers() ) {
@@ -330,8 +332,8 @@ namespace AI
                     if ( target ) {
                         actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
                         DEBUG( DBG_AI, DBG_INFO,
-                               currentUnit.GetName() << " melee offense, focus enemy ..."
-                                                     << " threat level: ..." );
+                               currentUnit.GetName() << " melee offense, focus enemy " << target->GetName()
+                                                     << " threat level: " << target->GetScoreQuality( currentUnit ) );
                     }
                 }
                 // else skip

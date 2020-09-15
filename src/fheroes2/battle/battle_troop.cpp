@@ -477,7 +477,7 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
 {
     // Check if there will be retaliation in the first place
-    if ( damageTaken > hp || !AllowResponse() )
+    if ( damageTaken > hp || Modes( CAP_MIRRORIMAGE ) || !AllowResponse() )
         return 0;
 
     const uint32_t unitsLeft = ( hp - damageTaken ) / Monster::GetHitPoints();
@@ -1008,7 +1008,7 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     const Unit & attacker = *this;
 
     const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
-    const double attackerPowerLost = ( defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
+    const double attackerPowerLost = ( attacker.Modes( CAP_MIRRORIMAGE ) || defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
     const bool attackerIsArchers = isArchers();
 
     double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
@@ -1053,6 +1053,9 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
         break;
     }
 
+    // force big priority on mirror images as they get destroyed in 1 hit
+    if ( attacker.Modes( CAP_MIRRORIMAGE ) )
+        attackerThreat *= 10;
     // Ignore disabled units
     if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) )
         attackerThreat = 0;
