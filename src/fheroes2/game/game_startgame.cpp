@@ -132,6 +132,8 @@ void Game::OpenCastleDialog( Castle & castle )
     Interface::StatusWindow::ResetTimer();
     bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
+    const size_t heroCountBefore = myKingdom.GetHeroes().size();
+
     if ( it != myCastles.end() ) {
         int result = Dialog::ZERO;
         while ( Dialog::CANCEL != result ) {
@@ -158,7 +160,12 @@ void Game::OpenCastleDialog( Castle & castle )
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
-    basicInterface.SetFocus( *it );
+    if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+        basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
+    }
+    else {
+        basicInterface.SetFocus( *it );
+    }
     basicInterface.RedrawFocus();
 }
 
