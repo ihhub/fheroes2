@@ -556,7 +556,7 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
 
-    // new day - reset option: "heroes: remember MP/SP for retreat/surrender result"
+    // new day - reset option: "heroes: remember move points for retreat/surrender result"
     std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) { hero->ResetModes( Heroes::SAVEPOINTS ); } );
 }
 
