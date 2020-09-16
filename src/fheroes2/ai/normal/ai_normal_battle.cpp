@@ -132,7 +132,7 @@ namespace AI
             }
 
             const double attackPriority = unit.GetScoreQuality( currentUnit );
-            DEBUG( DBG_AI, DBG_TRACE, "Unit " << unit.GetName() << " attack priority: " << attackPriority);
+            DEBUG( DBG_AI, DBG_TRACE, "Unit " << unit.GetName() << " attack priority: " << attackPriority );
             if ( highestStrength < attackPriority ) {
                 highestStrength = attackPriority;
                 priorityTarget = *it;
