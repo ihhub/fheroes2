@@ -753,9 +753,6 @@ bool Heroes::Recruit( const Castle & castle )
 {
     if ( Recruit( castle.GetColor(), castle.GetCenter() ) ) {
         if ( castle.GetLevelMageGuild() ) {
-            // magic point
-            if ( !Modes( SAVEPOINTS ) )
-                SetSpellPoints( GetMaxSpellPoints() );
             // learn spell
             castle.MageGuildEducateHero( *this );
         }

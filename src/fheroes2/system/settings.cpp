@@ -307,7 +307,7 @@ const settings_t settingsFHeroes2[] = {
     },
     {
         Settings::HEROES_REMEMBER_POINTS_RETREAT,
-        _( "heroes: remember MP/SP for retreat/surrender result" ),
+        _( "heroes: remember move points for retreat/surrender result" ),
     },
     {
         Settings::HEROES_SURRENDERING_GIVE_EXP,
