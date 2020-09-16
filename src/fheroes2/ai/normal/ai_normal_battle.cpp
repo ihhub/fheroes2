@@ -291,6 +291,12 @@ namespace AI
                 uint32_t minimalDist = MAXU16;
                 const Indexes & around = Board::GetAroundIndexes( *priorityTarget );
                 for ( const int cell : around ) {
+                    if ( cell == currentUnit.GetHeadIndex() || currentUnit.GetTailIndex() ) {
+                        minimalDist = 0;
+                        targetCell = cell;
+                        break;
+                    }
+
                     const uint32_t distance = arena.CalculateMoveDistance( cell );
                     if ( distance > 0 && distance < minimalDist ) {
                         minimalDist = distance;
@@ -327,7 +333,8 @@ namespace AI
                 }
 
                 if ( targetCell != -1 ) {
-                    actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );
+                    if ( currentUnit.GetHeadIndex() != targetCell )
+                        actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );
 
                     if ( target ) {
                         actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
