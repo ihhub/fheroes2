@@ -621,16 +621,38 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell() ) {
         case Spell::CHAINLIGHTNING: {
+            uint32_t currentMonsterPos = dst;
+
             Indexes trgts;
             trgts.reserve( 12 );
-            trgts.push_back( dst );
+            trgts.push_back( currentMonsterPos );
+
+            Indexes ignoredMonster;
+            ignoredMonster.push_back( currentMonsterPos );
 
             // find targets
-            for ( u32 ii = 0; ii < 3; ++ii ) {
-                const Indexes reslt = board.GetNearestTroopIndexes( dst, &trgts );
-                if ( reslt.empty() )
+            while ( trgts.size() < 4 ) {
+                const Indexes nearestPosIds = board.GetNearestTroopIndexes( currentMonsterPos, &ignoredMonster );
+                if ( nearestPosIds.empty() )
                     break;
-                trgts.push_back( reslt.size() > 1 ? *Rand::Get( reslt ) : reslt.front() );
+
+                Indexes sortedIds;
+
+                for ( size_t monsterId = 0; monsterId < nearestPosIds.size(); ++monsterId ) {
+                    Unit * target = GetTroopBoard( nearestPosIds[monsterId] );
+                    if ( target != NULL && ( target->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
+                        sortedIds.push_back( nearestPosIds[monsterId] );
+                    }
+                    ignoredMonster.push_back( nearestPosIds[monsterId] );
+                }
+
+                if ( sortedIds.empty() ) {
+                    continue;
+                }
+
+                const uint32_t chosenMonsterPos = sortedIds.size() > 1 ? *Rand::Get( sortedIds ) : sortedIds.front();
+                trgts.push_back( chosenMonsterPos );
+                currentMonsterPos = chosenMonsterPos;
             }
 
             // save targets
