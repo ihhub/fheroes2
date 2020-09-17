@@ -226,7 +226,7 @@ namespace Interface
 
             if ( _currentId >= 0 && ( _topId > _currentId || _topId + maxItems <= _currentId ) ) { // out of view
                 if ( _currentId + maxItems < _size() ) {
-                    _topId = ( _currentId / maxItems ) * maxItems + ( _currentId % maxItems ) / 2;
+                    _topId = ( _currentId / maxItems ) * maxItems;
                 }
                 else if ( maxItems < _size() ) {
                     _topId = _size() - maxItems;
