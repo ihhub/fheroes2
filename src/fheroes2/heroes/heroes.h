@@ -140,7 +140,6 @@ public:
         SPELLCASTED = 0x00000004,
         ENABLEMOVE = 0x00000008,
         SAVE_SP_POINTS = 0x00000010,
-        // UNUSED	= 0x00000010,
         // UNUSED	= 0x00000020,
         // UNUSED	= 0x00000040,
         JAIL = 0x00000080,
