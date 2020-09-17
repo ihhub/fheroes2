@@ -72,7 +72,7 @@ namespace AI
             const Units friendly( arena.GetForce( commander->GetColor() ), true );
             const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
 
-            for ( auto spell : allSpells ) {
+            for ( const Spell & spell : allSpells ) {
                 if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
                     uint32_t totalDamage = spell.Damage() * commander->GetPower();
                     for ( const Unit * enemy : enemies ) {

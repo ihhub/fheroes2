@@ -71,7 +71,7 @@ namespace Battle
         }
 
         // invalidate move
-        if ( newIndex == -1 || !Board::GetCell( newIndex )->isPassable1( true ) )
+        if ( newIndex == -1 || !Board::GetCell( newIndex )->isPassable1( false ) )
             return -1;
 
         if ( isWide && ( x + wideUnitOffset < 0 || x + wideUnitOffset > ARENAW - 1 || !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( true ) ) )
@@ -89,7 +89,7 @@ namespace Battle
         for ( size_t i = 0; i < _cache.size(); ++i ) {
             ArenaNode & node = _cache[i];
             node._from = -1;
-            node._cost = 0;
+            node._cost = MAX_MOVE_COST;
             node._isOpen = true;
         }
     }
@@ -97,6 +97,11 @@ namespace Battle
     uint32_t ArenaPathfinder::getDistance( int targetCell ) const
     {
         return _cache[targetCell]._cost;
+    }
+
+    bool ArenaPathfinder::tileIsAccessible( int targetCell ) const
+    {
+        return _cache[targetCell]._from != -1;
     }
 
     std::vector<int> ArenaPathfinder::getPath( int targetCell ) const
@@ -139,7 +144,7 @@ namespace Battle
                 const int tailX = ( idx % ARENAW ) + tailOffset;
                 const bool wideUnitCheck = !unitIsWide || ( tailX >= 0 && tailX < ARENAW - 1 && board.GetCell( idx + tailOffset )->isPassable1( true ) );
 
-                if ( ( *it ).isPassable1( true ) && wideUnitCheck ) {
+                if ( ( *it ).isPassable1( false ) && wideUnitCheck ) {
                     ArenaNode & node = _cache[idx];
                     node._isOpen = false;
                     node._from = headIdx;
@@ -153,11 +158,13 @@ namespace Battle
             if ( unitHead ) {
                 const int headIdx = unitHead->GetIndex();
                 nodesToExplore.push_back( headIdx );
+                _cache[headIdx]._cost = 0;
                 _cache[headIdx]._isOpen = false;
             }
             if ( unitTail ) {
                 const int tailIdx = unitTail->GetIndex();
                 nodesToExplore.push_back( tailIdx );
+                _cache[tailIdx]._cost = 0;
                 _cache[tailIdx]._isOpen = false;
             }
 
@@ -168,12 +175,17 @@ namespace Battle
                     const int newNode = GetValidMoveIndex( fromNode, direction, unitIsWide );
 
                     if ( newNode != -1 ) {
-                        const uint16_t cost = _cache[fromNode]._cost + 1;
+                        const uint16_t cost = _cache[fromNode]._cost;
                         ArenaNode & node = _cache[newNode];
-                        if ( node._isOpen || cost < node._cost ) {
+                        if ( Board::GetCell( newNode )->GetUnit() && cost < node._cost ) {
                             node._isOpen = false;
                             node._from = fromNode;
                             node._cost = cost;
+                        }
+                        else if ( cost + 1 < node._cost ) {
+                            node._isOpen = true;
+                            node._from = fromNode;
+                            node._cost = cost + 1;
                             nodesToExplore.push_back( newNode );
                         }
                     }

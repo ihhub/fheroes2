@@ -105,6 +105,7 @@ namespace Battle
         Indexes GetPath( const Unit &, const Position & );
         Indexes CalculatePath( const Unit & unit, int32_t indexTo );
         uint32_t CalculateMoveDistance( int32_t indexTo );
+        bool TileIsAccessible( int32_t indexTo );
         void ApplyAction( Command & );
 
         TargetsInfo GetTargetsForDamage( Unit &, Unit &, s32 );

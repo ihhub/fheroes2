@@ -578,6 +578,11 @@ uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
     return _pathfinder.getDistance( indexTo );
 }
 
+bool Battle::Arena::TileIsAccessible( int32_t indexTo )
+{
+    return _pathfinder.tileIsAccessible( indexTo );
+}
+
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : NULL;

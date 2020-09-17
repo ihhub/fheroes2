@@ -24,10 +24,20 @@
 
 namespace Battle
 {
+    const uint16_t MAX_MOVE_COST = ARENASIZE;
+
+    /* ArenaNode, different situations
+     * default:  from: -1, isOpen: true, cost: MAX
+     * starting: from: -1, isOpen: false, cost: 0
+     * passable: from: 0-98, isOpen: true, cost: 1+
+     * oth.unit: from: 0-98, isOpen: false, cost: 0+
+     * terrain:  from: -1, isOpen: false, cost: MAX
+     * if tile wouldn't be reached it stays as default
+     */
     struct ArenaNode
     {
         int _from = -1;
-        uint16_t _cost = 0;
+        uint16_t _cost = MAX_MOVE_COST;
         bool _isOpen = true;
 
         ArenaNode() {}
@@ -46,6 +56,7 @@ namespace Battle
         void calculate( const Unit & unit );
         std::vector<int> getPath( int targetCell ) const;
         uint32_t getDistance( int targetCell ) const;
+        bool tileIsAccessible( int targetCell ) const;
 
     private:
         std::vector<ArenaNode> _cache;
