@@ -733,7 +733,7 @@ bool Heroes::Recruit( int cl, const Point & pt )
         SetColor( cl );
         killer_color.SetColor( Color::NONE );
         SetCenter( pt );
-        if ( !Modes( SAVEPOINTS ) )
+        if ( !Modes( SAVE_MP_POINTS ) )
             move_point = GetMaxMovePoints();
         MovePointsScaleFixed();
 
@@ -754,7 +754,7 @@ bool Heroes::Recruit( const Castle & castle )
     if ( Recruit( castle.GetColor(), castle.GetCenter() ) ) {
         if ( castle.GetLevelMageGuild() ) {
             // magic point
-            if ( !Modes( SAVEPOINTS ) )
+            if ( !Modes( SAVE_SP_POINTS ) )
                 SetSpellPoints( GetMaxSpellPoints() );
             // learn spell
             castle.MageGuildEducateHero( *this );
@@ -812,7 +812,7 @@ void Heroes::ActionNewDay( void )
     visit_object.remove_if( Visit::isDayLife );
 
     // new day, new capacities
-    ResetModes( SAVEPOINTS );
+    ResetModes( SAVE_MP_POINTS );
 }
 
 void Heroes::ActionNewWeek( void )
@@ -1454,7 +1454,8 @@ void Heroes::SetFreeman( int reason )
         SetMove( false );
         SetModes( ACTION );
         if ( savepoints )
-            SetModes( SAVEPOINTS );
+            SetModes( SAVE_MP_POINTS );
+        SetModes( SAVE_SP_POINTS );
     }
 }
 
