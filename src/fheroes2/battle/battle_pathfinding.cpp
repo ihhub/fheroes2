@@ -104,6 +104,11 @@ namespace Battle
         return _cache[targetCell]._from != -1;
     }
 
+    bool ArenaPathfinder::tileIsPassable( int targetCell ) const
+    {
+        return _cache[targetCell]._isOpen && _cache[targetCell]._from != -1;
+    }
+
     std::vector<int> ArenaPathfinder::getPath( int targetCell ) const
     {
         std::vector<int> path;

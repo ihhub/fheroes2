@@ -344,9 +344,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
         DEBUG( DBG_BATTLE, DBG_WARN,
                "incorrect param"
                    << ": "
-                   << "uid: "
-                      "0x"
-                   << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid << ", dst: " << dst );
+                   << "uid: " << uid << ", dst: " << dst );
     }
 }
 

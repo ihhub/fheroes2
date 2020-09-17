@@ -136,6 +136,7 @@ namespace AI
             if ( highestStrength < attackPriority ) {
                 highestStrength = attackPriority;
                 priorityTarget = *it;
+                DEBUG( DBG_AI, DBG_TRACE, "Set priority on " << unit.GetName() );
             }
 
             const int dmg = unit.CalculateMaxDamage( currentUnit );
@@ -253,11 +254,10 @@ namespace AI
                 }
                 // Worst case scenario - Skip turn
             }
-            else {
+            else if ( priorityTarget ) {
                 // Normal attack: focus the highest value unit
-                if ( priorityTarget ) {
-                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
-                }
+                actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
+
                 DEBUG( DBG_AI, DBG_INFO,
                        currentUnit.GetName() << " archer focusing enemy " << priorityTarget->GetName()
                                              << " threat level: " << priorityTarget->GetScoreQuality( currentUnit ) );
@@ -289,26 +289,32 @@ namespace AI
                 // 4.b. Else move to priority target
 
                 uint32_t minimalDist = MAXU16;
-                const Indexes & around = Board::GetAroundIndexes( *priorityTarget );
-                for ( const int cell : around ) {
-                    if ( cell == currentUnit.GetHeadIndex() || currentUnit.GetTailIndex() ) {
-                        minimalDist = 0;
-                        targetCell = cell;
-                        break;
-                    }
+                const bool priorityCanBeReached = arena.TileIsAccessible( priorityTarget->GetHeadIndex() ) || arena.TileIsAccessible( priorityTarget->GetHeadIndex() );
+                if ( priorityCanBeReached ) {
+                    const Indexes & around = Board::GetAroundIndexes( *priorityTarget );
+                    for ( const int cell : around ) {
+                        if ( cell == currentUnit.GetHeadIndex() || cell == currentUnit.GetTailIndex() ) {
+                            DEBUG( DBG_AI, DBG_TRACE, "Adjacent to priority " << priorityTarget->GetName() << " cell " << cell );
+                            minimalDist = 0;
+                            targetCell = cell;
+                            break;
+                        }
 
-                    const uint32_t distance = arena.CalculateMoveDistance( cell );
-                    if ( distance > 0 && distance < minimalDist ) {
-                        minimalDist = distance;
-                        targetCell = cell;
+                        const uint32_t distance = arena.CalculateMoveDistance( cell );
+                        if ( arena.TileIsPassable( cell ) && distance < minimalDist ) {
+                            minimalDist = distance;
+                            targetCell = cell;
+                        }
                     }
                 }
 
                 if ( targetCell != -1 && minimalDist <= currentUnitMoveRange ) {
+                    DEBUG( DBG_AI, DBG_TRACE, "Priority target is near " << minimalDist << " our range " << currentUnitMoveRange );
                     target = priorityTarget;
                 }
                 else {
                     // Can't reach priority target - trying to find another one
+                    DEBUG( DBG_AI, DBG_TRACE, "Can't reach priority target, minimalDist is " << minimalDist );
 
                     int secondaryTargetCell = -1;
                     minimalDist = MAXU16;
@@ -317,7 +323,7 @@ namespace AI
                         const Indexes & around = Board::GetAroundIndexes( *enemy );
                         for ( const int cell : around ) {
                             const uint32_t distance = arena.CalculateMoveDistance( cell );
-                            if ( distance > 0 && distance <= currentUnitMoveRange && distance < minimalDist ) {
+                            if ( arena.TileIsPassable( cell ) && distance < minimalDist && ( !priorityCanBeReached || distance <= currentUnitMoveRange ) ) {
                                 minimalDist = distance;
                                 secondaryTargetCell = cell;
                                 target = enemy;
@@ -325,13 +331,14 @@ namespace AI
                         }
                     }
 
-                    if ( secondaryTargetCell != -1 ) {
+                    if ( secondaryTargetCell != -1 && minimalDist <= currentUnitMoveRange ) {
                         // overwrite priority target with secondary one
                         targetCell = secondaryTargetCell;
                     }
                     // if no other target found try to move to priority target
                 }
 
+                DEBUG( DBG_AI, DBG_TRACE, "Melee phase end, targetCell is " << targetCell );
                 if ( targetCell != -1 ) {
                     if ( currentUnit.GetHeadIndex() != targetCell )
                         actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );

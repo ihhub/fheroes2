@@ -583,6 +583,11 @@ bool Battle::Arena::TileIsAccessible( int32_t indexTo )
     return _pathfinder.tileIsAccessible( indexTo );
 }
 
+bool Battle::Arena::TileIsPassable( int32_t indexTo )
+{
+    return _pathfinder.tileIsPassable( indexTo );
+}
+
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : NULL;
