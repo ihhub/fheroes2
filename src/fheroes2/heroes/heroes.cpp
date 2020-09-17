@@ -1439,6 +1439,8 @@ void Heroes::SetFreeman( int reason )
             army.Reset( false );
         else if ( ( Battle::RESULT_LOSS & reason ) && !( Battle::RESULT_SURRENDER & reason ) )
             army.Reset( true );
+        else if ( reason == 0 ) // Dismissed hero
+            army.Reset( true );
 
         if ( GetColor() != Color::NONE )
             kingdom.RemoveHeroes( this );
