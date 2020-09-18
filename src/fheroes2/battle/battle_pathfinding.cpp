@@ -139,6 +139,17 @@ namespace Battle
         const Cell * unitTail = unit.GetPosition().GetTail();
         const bool unitIsWide = unit.isWide();
 
+        const int headIdx = unitHead->GetIndex();
+        _cache[headIdx]._cost = 0;
+        _cache[headIdx]._isOpen = false;
+
+        int tailIdx = -1;
+        if ( unitTail ) {
+            tailIdx = unitTail->GetIndex();
+            _cache[tailIdx]._cost = 0;
+            _cache[tailIdx]._isOpen = false;
+        }
+
         if ( unit.isFlying() ) {
             const Board & board = *Arena::GetBoard();
             const int headIdx = unitHead->GetIndex();
@@ -149,29 +160,39 @@ namespace Battle
                 const int tailX = ( idx % ARENAW ) + tailOffset;
                 const bool wideUnitCheck = !unitIsWide || ( tailX >= 0 && tailX < ARENAW - 1 && board.GetCell( idx + tailOffset )->isPassable1( true ) );
 
-                if ( ( *it ).isPassable1( false ) && wideUnitCheck ) {
-                    ArenaNode & node = _cache[idx];
-                    node._isOpen = false;
+                ArenaNode & node = _cache[idx];
+                if ( it->isPassable1( false ) && wideUnitCheck ) {
+                    node._isOpen = true;
                     node._from = headIdx;
                     node._cost = 1;
+                }
+                else {
+                    node._isOpen = false;
+                }
+            }
+            for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
+                if ( it->GetUnit() ) {
+                    const int unitIdx = it->GetIndex();
+                    ArenaNode & unitNode = _cache[unitIdx];
+                    
+                    const Indexes & around = board.GetAroundIndexes( unitIdx );
+                    for ( const int cell : around ) {
+                        if ( tileIsPassable( cell ) ) {
+                            unitNode._isOpen = false;
+                            unitNode._from = headIdx;
+                            unitNode._cost = 1;
+                            break;
+                        }
+                    }
                 }
             }
         }
         else {
             std::vector<int> nodesToExplore;
+            nodesToExplore.push_back( headIdx );
 
-            if ( unitHead ) {
-                const int headIdx = unitHead->GetIndex();
-                nodesToExplore.push_back( headIdx );
-                _cache[headIdx]._cost = 0;
-                _cache[headIdx]._isOpen = false;
-            }
-            if ( unitTail ) {
-                const int tailIdx = unitTail->GetIndex();
+            if ( tailIdx != -1 )
                 nodesToExplore.push_back( tailIdx );
-                _cache[tailIdx]._cost = 0;
-                _cache[tailIdx]._isOpen = false;
-            }
 
             for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                 const int fromNode = nodesToExplore[lastProcessedNode];

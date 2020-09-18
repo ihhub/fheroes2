@@ -99,6 +99,8 @@ namespace AI
         const int myColor = currentUnit.GetColor();
         const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
 
+        DEBUG( DBG_AI, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << myColor );
+
         const HeroBase * commander = currentUnit.GetCommander();
         const Force & friendlyForce = arena.GetForce( myColor );
         const Force & enemyForce = arena.GetForce( myColor, true );
@@ -289,7 +291,7 @@ namespace AI
                 // 4.b. Else move to priority target
 
                 uint32_t minimalDist = MAXU16;
-                const bool priorityCanBeReached = arena.TileIsAccessible( priorityTarget->GetHeadIndex() ) || arena.TileIsAccessible( priorityTarget->GetHeadIndex() );
+                const bool priorityCanBeReached = arena.TileIsAccessible( priorityTarget->GetHeadIndex() ) || arena.TileIsAccessible( priorityTarget->GetTailIndex() );
                 if ( priorityCanBeReached ) {
                     const Indexes & around = Board::GetAroundIndexes( *priorityTarget );
                     for ( const int cell : around ) {
