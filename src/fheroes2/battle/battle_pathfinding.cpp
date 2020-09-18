@@ -106,7 +106,7 @@ namespace Battle
 
     bool ArenaPathfinder::tileIsPassable( int targetCell ) const
     {
-        return _cache[targetCell]._isOpen && _cache[targetCell]._from != -1;
+        return ( _cache[targetCell]._cost == 0 || _cache[targetCell]._isOpen ) && _cache[targetCell]._from != -1;
     }
 
     std::vector<int> ArenaPathfinder::getPath( int targetCell ) const
@@ -153,15 +153,15 @@ namespace Battle
         if ( unit.isFlying() ) {
             const Board & board = *Arena::GetBoard();
             const int headIdx = unitHead->GetIndex();
-            const int tailOffset = unit.isReflect() ? 1 : -1;
 
             for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
                 const int idx = it->GetIndex();
-                const int tailX = ( idx % ARENAW ) + tailOffset;
-                const bool wideUnitCheck = !unitIsWide || ( tailX >= 0 && tailX < ARENAW - 1 && board.GetCell( idx + tailOffset )->isPassable1( true ) );
+                const int x = ( idx % ARENAW );
+                const bool wideUnitCheck
+                    = !unitIsWide || ( x < ARENAW - 2 && board.GetCell( idx + 1 )->isPassable1( true ) ) || ( x > 0 && board.GetCell( idx - 1 )->isPassable1( true ) );
 
                 ArenaNode & node = _cache[idx];
-                if ( it->isPassable1( false ) && wideUnitCheck ) {
+                if ( it->isPassable1( false ) ) {
                     node._isOpen = true;
                     node._from = headIdx;
                     node._cost = 1;
@@ -174,7 +174,7 @@ namespace Battle
                 if ( it->GetUnit() ) {
                     const int unitIdx = it->GetIndex();
                     ArenaNode & unitNode = _cache[unitIdx];
-                    
+
                     const Indexes & around = board.GetAroundIndexes( unitIdx );
                     for ( const int cell : around ) {
                         if ( tileIsPassable( cell ) ) {
