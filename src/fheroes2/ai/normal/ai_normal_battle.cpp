@@ -77,7 +77,7 @@ namespace AI
                     const uint32_t totalDamage = spell.Damage() * commander->GetPower();
                     for ( const Unit * enemy : enemies ) {
                         const double spellHeuristic = enemy->GetMonsterStrength()
-                                                * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, commander->GetPower() ) ) / 100 );
+                                                      * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, commander->GetPower() ) ) / 100 );
 
                         if ( spellHeuristic > bestHeuristic ) {
                             bestHeuristic = spellHeuristic;
@@ -233,16 +233,23 @@ namespace AI
                 const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( currentUnit );
                 for ( const int cell : adjacentEnemies ) {
                     const Unit * enemy = Board::GetCell( cell )->GetUnit();
-                    const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
-                    const int damageDiff = archerMeleeDmg - enemy->CalculateRetaliationDamage( archerMeleeDmg );
+                    if ( enemy ) {
+                        const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
+                        const int damageDiff = archerMeleeDmg - enemy->CalculateRetaliationDamage( archerMeleeDmg );
 
-                    if ( bestOutcome < damageDiff ) {
-                        bestOutcome = damageDiff;
-                        target = enemy;
-                        targetCell = cell;
+                        if ( bestOutcome < damageDiff ) {
+                            bestOutcome = damageDiff;
+                            target = enemy;
+                            targetCell = cell;
+                        }
+
+                        // try to determine if it's worth running away (canOutrunEnemy stays true ONLY if all enemies are slower)
+                        if ( canOutrunEnemy && !CheckIfUnitIsFaster( currentUnit, *enemy ) )
+                            canOutrunEnemy = false;
                     }
-                    if ( canOutrunEnemy && !CheckIfUnitIsFaster( currentUnit, *enemy ) )
-                        canOutrunEnemy = false;
+                    else {
+                        DEBUG( DBG_AI, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" );
+                    }
                 }
 
                 if ( target && targetCell != -1 ) {
