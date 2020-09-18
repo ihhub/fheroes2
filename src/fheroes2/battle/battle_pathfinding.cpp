@@ -31,7 +31,7 @@ namespace Battle
         int wideUnitOffset = 0;
         const int x = fromCell % ARENAW;
         const int y = fromCell / ARENAW;
-        const bool isOddRow = ( y % 2 );
+        const bool isOddRow = ( y % 2 ) == 1;
 
         switch ( directionMask ) {
         case Battle::TOP_LEFT:
@@ -67,7 +67,7 @@ namespace Battle
                 newIndex = fromCell - 1;
             break;
         default:
-            break;
+            return -1;
         }
 
         // invalidate move

@@ -64,7 +64,7 @@ namespace AI
     void ForceSpellcastBeforeRetreat( Arena & arena, const HeroBase * commander, Actions & actions )
     {
         if ( CheckCommanderCanSpellcast( arena, commander ) ) {
-            std::vector<Spell> allSpells = commander->GetSpells();
+            const std::vector<Spell> allSpells = commander->GetSpells();
             int bestSpell = -1;
             double bestHeuristic = 0;
             int targetIdx = -1;
@@ -74,12 +74,13 @@ namespace AI
 
             for ( const Spell & spell : allSpells ) {
                 if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
-                    uint32_t totalDamage = spell.Damage() * commander->GetPower();
+                    const uint32_t totalDamage = spell.Damage() * commander->GetPower();
                     for ( const Unit * enemy : enemies ) {
-                        double spellHeuristic = enemy->GetMonsterStrength()
+                        const double spellHeuristic = enemy->GetMonsterStrength()
                                                 * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, commander->GetPower() ) ) / 100 );
 
                         if ( spellHeuristic > bestHeuristic ) {
+                            bestHeuristic = spellHeuristic;
                             bestSpell = spell.GetID();
                             targetIdx = enemy->GetHeadIndex();
                         }
