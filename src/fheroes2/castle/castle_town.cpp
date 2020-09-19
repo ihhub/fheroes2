@@ -72,7 +72,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
     StringReplace( str, "%{race}", Race::String( hero->GetRace() ) );
     StringReplace( str, "%{count}", count );
 
-    TextBox box2( str, Font::BIG, BOXAREA_WIDTH );
+    TextBox box2( str + ".", Font::BIG, BOXAREA_WIDTH );
 
     Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
 
