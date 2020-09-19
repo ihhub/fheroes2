@@ -135,11 +135,11 @@ namespace AI
             }
 
             const double attackPriority = unit.GetScoreQuality( currentUnit );
-            DEBUG( DBG_AI, DBG_TRACE, "Unit " << unit.GetName() << " attack priority: " << attackPriority );
+            DEBUG( DBG_AI, DBG_TRACE, "-- Unit " << unit.GetName() << " attack priority: " << attackPriority );
             if ( highestStrength < attackPriority ) {
                 highestStrength = attackPriority;
                 priorityTarget = *it;
-                DEBUG( DBG_AI, DBG_TRACE, "Set priority on " << unit.GetName() );
+                DEBUG( DBG_AI, DBG_TRACE, "- Set priority on " << unit.GetName() );
             }
 
             const int dmg = unit.CalculateMaxDamage( currentUnit );
@@ -175,7 +175,7 @@ namespace AI
             double towerStr = getTowerStrength( arena.GetTower( TWR_CENTER ) );
             towerStr += getTowerStrength( arena.GetTower( TWR_LEFT ) );
             towerStr += getTowerStrength( arena.GetTower( TWR_RIGHT ) );
-            DEBUG( DBG_AI, DBG_TRACE, "Castle strength: " << towerStr );
+            DEBUG( DBG_AI, DBG_TRACE, "- Castle strength: " << towerStr );
 
             if ( myColor == castle->GetColor() ) {
                 defendingCastle = true;
@@ -197,7 +197,7 @@ namespace AI
 
         // Step 3. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
-        if ( !defendingCastle && actualHero && isHeroWorthSaving( actualHero ) && CheckBattleRetreat( myArmyStrength, enemyArmyStrength ) ) {
+        if ( actualHero && arena.CanRetreatOpponent( myColor ) && isHeroWorthSaving( actualHero ) && CheckBattleRetreat( myArmyStrength, enemyArmyStrength ) ) {
             // Cast maximum damage spell
             ForceSpellcastBeforeRetreat( arena, commander, actions );
 
@@ -324,7 +324,7 @@ namespace AI
                 }
                 else {
                     // Can't reach priority target - trying to find another one
-                    DEBUG( DBG_AI, DBG_TRACE, "Can't reach priority target, minimalDist is " << minimalDist );
+                    DEBUG( DBG_AI, DBG_INFO, "Can't reach priority target, distance is " << minimalDist );
 
                     int secondaryTargetCell = -1;
                     minimalDist = MAXU16;
@@ -348,7 +348,7 @@ namespace AI
                     // if no other target found try to move to priority target
                 }
 
-                DEBUG( DBG_AI, DBG_TRACE, "Melee phase end, targetCell is " << targetCell );
+                DEBUG( DBG_AI, DBG_INFO, "Melee phase end, targetCell is " << targetCell );
                 if ( targetCell != -1 ) {
                     if ( currentUnit.GetHeadIndex() != targetCell )
                         actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );

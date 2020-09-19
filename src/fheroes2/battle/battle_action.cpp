@@ -455,7 +455,7 @@ void Battle::Arena::ApplyActionRetreat( Command & cmd )
         DEBUG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( current_color ) );
     }
     else
-        DEBUG( DBG_BATTLE, DBG_WARN, "incorrect param" );
+        DEBUG( DBG_BATTLE, DBG_WARN, "CanRetreatOpponent check failed" );
 }
 
 void Battle::Arena::ApplyActionSurrender( Command & cmd )
