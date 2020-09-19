@@ -56,8 +56,8 @@ namespace Battle
         void calculate( const Unit & unit );
         std::vector<int> getPath( int targetCell ) const;
         uint32_t getDistance( int targetCell ) const;
-        bool tileIsAccessible( int targetCell ) const;
-        bool tileIsPassable( int targetCell ) const;
+        bool hexIsAccessible( int targetCell ) const;
+        bool hexIsPassable( int targetCell ) const;
 
     private:
         std::vector<ArenaNode> _cache;

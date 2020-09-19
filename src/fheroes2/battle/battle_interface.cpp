@@ -1073,6 +1073,19 @@ void Battle::Interface::RedrawPartialFinish()
     if ( Settings::Get().ExtBattleShowBattleOrder() )
         armies_order.Redraw( _currentUnit, _mainSurface );
 
+#ifdef WITH_DEBUG
+    if ( IS_DEVEL() ) {
+        const Board & board = *Arena::GetBoard();
+        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
+            uint32_t distance = arena.CalculateMoveDistance( it->GetIndex() );
+            if ( distance != MAX_MOVE_COST ) {
+                Text text( GetString( distance ), Font::SMALL );
+                text.Blit( ( *it ).GetPos().x + 20, ( *it ).GetPos().y + 22, _mainSurface );
+            }
+        }
+    }
+#endif
+
     fheroes2::Blit( _mainSurface, display, _interfacePosition.x, _interfacePosition.y );
     RedrawInterface();
 
@@ -1391,18 +1404,6 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
                 fheroes2::Blit( sf_shadow, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
         }
     }
-
-#ifdef WITH_DEBUG
-    if ( IS_DEVEL() ) {
-        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            uint32_t distance = arena.CalculateMoveDistance( it->GetIndex() );
-            if ( distance != MAX_MOVE_COST ) {
-                Text text( GetString( distance ), Font::SMALL );
-                text.Blit( ( *it ).GetPos().x + 20, ( *it ).GetPos().y + 22, _mainSurface );
-            }
-        }
-    }
-#endif
 }
 
 void Battle::Interface::RedrawCastle1( const Castle & castle, fheroes2::Image & dst )

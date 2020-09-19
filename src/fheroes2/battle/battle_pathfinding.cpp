@@ -99,12 +99,12 @@ namespace Battle
         return _cache[targetCell]._cost;
     }
 
-    bool ArenaPathfinder::tileIsAccessible( int targetCell ) const
+    bool ArenaPathfinder::hexIsAccessible( int targetCell ) const
     {
         return _cache[targetCell]._from != -1;
     }
 
-    bool ArenaPathfinder::tileIsPassable( int targetCell ) const
+    bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
         return ( _cache[targetCell]._cost == 0 || _cache[targetCell]._isOpen ) && _cache[targetCell]._from != -1;
     }
@@ -177,7 +177,7 @@ namespace Battle
 
                     const Indexes & around = board.GetAroundIndexes( unitIdx );
                     for ( const int cell : around ) {
-                        if ( tileIsPassable( cell ) ) {
+                        if ( hexIsPassable( cell ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = headIdx;
                             unitNode._cost = 1;

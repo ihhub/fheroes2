@@ -578,14 +578,14 @@ uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
     return _pathfinder.getDistance( indexTo );
 }
 
-bool Battle::Arena::TileIsAccessible( int32_t indexTo )
+bool Battle::Arena::hexIsAccessible( int32_t indexTo )
 {
-    return _pathfinder.tileIsAccessible( indexTo );
+    return _pathfinder.hexIsAccessible( indexTo );
 }
 
-bool Battle::Arena::TileIsPassable( int32_t indexTo )
+bool Battle::Arena::hexIsPassable( int32_t indexTo )
 {
-    return _pathfinder.tileIsPassable( indexTo );
+    return _pathfinder.hexIsPassable( indexTo );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )

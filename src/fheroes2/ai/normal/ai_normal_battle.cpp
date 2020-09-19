@@ -299,7 +299,7 @@ namespace AI
                 // 4.b. Else move to priority target
 
                 uint32_t minimalDist = MAXU16;
-                const bool priorityCanBeReached = arena.TileIsAccessible( priorityTarget->GetHeadIndex() ) || arena.TileIsAccessible( priorityTarget->GetTailIndex() );
+                const bool priorityCanBeReached = arena.hexIsAccessible( priorityTarget->GetHeadIndex() ) || arena.hexIsAccessible( priorityTarget->GetTailIndex() );
                 if ( priorityCanBeReached ) {
                     const Indexes & around = Board::GetAroundIndexes( *priorityTarget );
                     for ( const int cell : around ) {
@@ -311,7 +311,7 @@ namespace AI
                         }
 
                         const uint32_t distance = arena.CalculateMoveDistance( cell );
-                        if ( arena.TileIsPassable( cell ) && distance < minimalDist ) {
+                        if ( arena.hexIsPassable( cell ) && distance < minimalDist ) {
                             minimalDist = distance;
                             targetCell = cell;
                         }
@@ -333,7 +333,7 @@ namespace AI
                         const Indexes & around = Board::GetAroundIndexes( *enemy );
                         for ( const int cell : around ) {
                             const uint32_t distance = arena.CalculateMoveDistance( cell );
-                            if ( arena.TileIsPassable( cell ) && distance < minimalDist && ( !priorityCanBeReached || distance <= currentUnitMoveRange ) ) {
+                            if ( arena.hexIsPassable( cell ) && distance < minimalDist && ( !priorityCanBeReached || distance <= currentUnitMoveRange ) ) {
                                 minimalDist = distance;
                                 secondaryTargetCell = cell;
                                 target = enemy;
