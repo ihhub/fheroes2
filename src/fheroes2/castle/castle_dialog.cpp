@@ -745,7 +745,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
 }
 
 /* redraw resource info panel */
-Rect Castle::RedrawResourcePanel( const Point & pt )
+Rect Castle::RedrawResourcePanel( const Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Funds & resource = world.GetKingdom( GetColor() ).GetFunds();

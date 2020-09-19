@@ -218,7 +218,7 @@ public:
 private:
     u32 * GetDwelling( u32 dw );
     void EducateHeroes( void );
-    Rect RedrawResourcePanel( const Point & );
+    Rect RedrawResourcePanel( const Point & ) const;
     u32 OpenTown( void );
     void OpenTavern( void );
     void OpenWell( void );
