@@ -269,7 +269,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     }
 
     // resource
-    const Rect rectResource = RedrawResourcePanel( cur_pt );
+    const Rect & rectResource = RedrawResourcePanel( cur_pt );
 
     // button swap
     SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 345 );

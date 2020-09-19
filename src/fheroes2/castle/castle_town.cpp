@@ -400,7 +400,7 @@ u32 Castle::OpenTown( void )
     statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
 
     // redraw resource panel
-    const Rect rectResource = RedrawResourcePanel( cur_pt );
+    const Rect & rectResource = RedrawResourcePanel( cur_pt );
 
     // button exit
     dst_pt.x = cur_pt.x + 553;
