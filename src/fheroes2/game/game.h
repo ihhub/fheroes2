@@ -212,7 +212,7 @@ namespace Game
     int MainMenu( bool isFirstGameRun );
     int NewGame( void );
     int LoadGame( void );
-    int HighScores( bool );
+    int HighScores();
     int Credits( void );
     int NewStandard( void );
     int NewCampain( void );

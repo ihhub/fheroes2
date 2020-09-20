@@ -343,7 +343,7 @@ int GameOver::Result::LocalCheckGameOver( void )
         if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
             continue_game = true;
             if ( res == Game::HIGHSCORES )
-                Game::HighScores( false );
+                Game::HighScores();
             res = Game::CANCEL;
             Interface::Basic::Get().SetRedraw( REDRAW_ALL );
         }
