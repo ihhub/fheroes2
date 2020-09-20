@@ -63,7 +63,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
 
     // FIXME: It is necessary to consider locale features for numerals (with getext).
     if ( count ) {
-        str += count > 1 ? _( " with %{count} artifacts." ) : _( " with 1 artifact." );
+        str += count > 1 ? _( "with %{count} artifacts." ) : _( "with 1 artifact." );
     }
     else {
         str += _( "without artifacts." );
