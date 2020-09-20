@@ -77,8 +77,8 @@ namespace AI
                 if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
                     const uint32_t totalDamage = spell.Damage() * spellPower;
                     for ( const Unit * enemy : enemies ) {
-                        const double spellHeuristic = enemy->GetMonsterStrength()
-                                                      * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, spellPower ) ) / 100 );
+                        const double spellHeuristic
+                            = enemy->GetMonsterStrength() * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, spellPower ) ) / 100 );
 
                         if ( spellHeuristic > bestHeuristic ) {
                             bestHeuristic = spellHeuristic;
