@@ -400,7 +400,7 @@ u32 Castle::OpenTown( void )
     statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
 
     // redraw resource panel
-    RedrawResourcePanel( cur_pt );
+    const Rect & rectResource = RedrawResourcePanel( cur_pt );
 
     // button exit
     dst_pt.x = cur_pt.x + 553;
@@ -420,6 +420,14 @@ u32 Castle::OpenTown( void )
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
+
+        if ( le.MouseClickLeft( rectResource ) ) {
+            fheroes2::ButtonRestorer exitRestorer( buttonExit );
+            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+        }
+        else if ( le.MousePressRight( rectResource ) ) {
+            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+        }
 
         // click left
         if ( le.MouseCursor( dwelling1.GetArea() ) && dwelling1.QueueEventProcessing( buttonExit ) )
