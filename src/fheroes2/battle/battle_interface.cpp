@@ -2784,7 +2784,13 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
-    const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+    uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+    if ( unit.Modes( SP_HASTE ) ) {
+        frameDelay = frameDelay * 8 / 10; // 20% faster
+    }
+    else if ( unit.Modes( SP_SLOW ) ) {
+        frameDelay = frameDelay * 12 / 10; // 20% slower
+    }
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
@@ -2872,7 +2878,13 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
     const uint32_t step = unit.animation.getFlightSpeed();
-    const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+    uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+    if ( unit.Modes( SP_HASTE ) ) {
+        frameDelay = frameDelay * 8 / 10; // 20% faster
+    }
+    else if ( unit.Modes( SP_SLOW ) ) {
+        frameDelay = frameDelay * 12 / 10; // 20% slower
+    }
 
     const Points points = GetEuclideanLine( destPos, targetPos, Settings::Get().QVGA() ? step / 2 : step );
     Points::const_iterator currentPoint = points.begin();
