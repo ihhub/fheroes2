@@ -391,7 +391,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
         ssp.hide();
         ssp.resize( sp3.width(), sp3.height() );
         ssp.reset();
-        fheroes2::DrawBorder( ssp, fheroes2::GetColorId( 0xC0, 0x2C, 0 ) );
+        fheroes2::DrawBorder( ssp, 214 );
     }
 
     fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.GetArea().x, box.GetArea().y, box.GetArea().w, box.GetArea().h ), Dialog::OK | Dialog::CANCEL );
