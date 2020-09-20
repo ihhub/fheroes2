@@ -124,7 +124,7 @@ void ArmyBar::SetBackground( const Size & sz, const uint8_t fillColor )
 
         spcursor.resize( sz.w, sz.h );
         spcursor.reset();
-        fheroes2::DrawBorder( spcursor, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
+        fheroes2::DrawBorder( spcursor, 214 );
     }
 }
 
