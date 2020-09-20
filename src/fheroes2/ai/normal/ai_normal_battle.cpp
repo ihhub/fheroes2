@@ -72,12 +72,13 @@ namespace AI
             const Units friendly( arena.GetForce( commander->GetColor() ), true );
             const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
 
+            const int spellPower = commander->GetPower();
             for ( const Spell & spell : allSpells ) {
                 if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
-                    const uint32_t totalDamage = spell.Damage() * commander->GetPower();
+                    const uint32_t totalDamage = spell.Damage() * spellPower;
                     for ( const Unit * enemy : enemies ) {
                         const double spellHeuristic = enemy->GetMonsterStrength()
-                                                      * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, commander->GetPower() ) ) / 100 );
+                                                      * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, spellPower ) ) / 100 );
 
                         if ( spellHeuristic > bestHeuristic ) {
                             bestHeuristic = spellHeuristic;
