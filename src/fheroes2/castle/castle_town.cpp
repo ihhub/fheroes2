@@ -59,12 +59,14 @@ int Castle::DialogBuyHero( const Heroes * hero )
     if ( hero->HasArtifact( Artifact::MAGIC_BOOK ) )
         count--;
 
-    std::string str = _( "%{name} is a level %{value} %{race}" );
+    std::string str = _( "%{name} is a level %{value} %{race} " );
 
     // FIXME: It is necessary to consider locale features for numerals (with getext).
     if ( count ) {
-        str += " ";
-        str += count > 1 ? _( " with %{count} artifacts" ) : _( " with one artifact" );
+        str += count > 1 ? _( " with %{count} artifacts." ) : _( " with 1 artifact." );
+    }
+    else {
+        str += _( "without artifacts." );
     }
 
     StringReplace( str, "%{name}", hero->GetName() );
@@ -72,7 +74,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
     StringReplace( str, "%{race}", Race::String( hero->GetRace() ) );
     StringReplace( str, "%{count}", count );
 
-    TextBox box2( str + ".", Font::BIG, BOXAREA_WIDTH );
+    TextBox box2( str, Font::BIG, BOXAREA_WIDTH );
 
     Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
 
