@@ -374,7 +374,7 @@ u32 Castle::OpenTown( void )
 
     // second hero
     dst_pt.x = cur_pt.x + 443;
-    dst_pt.y = cur_pt.y + 362;
+    dst_pt.y = cur_pt.y + 363;
     const Rect rectHero2( dst_pt, 102, 94 );
     if ( hero2 ) {
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
