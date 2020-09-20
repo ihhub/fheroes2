@@ -347,12 +347,15 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             end_turn = true;
         }
         else {
+            // re-calculate possible paths in case unit moved or it's a new turn
+            _pathfinder.calculate( *current_troop );
+
             // turn opponents
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
                 if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_color & auto_battle ) ) {
-                    AI::Get().BattleTurn( *this, *current_troop, actions );
+                    AI::Get( AI::NORMAL ).BattleTurn( *this, *current_troop, actions );
                 }
                 else {
                     HumanTurn( *current_troop, actions );
@@ -498,7 +501,7 @@ void Battle::Arena::Turns( void )
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
     DEBUG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
-    AI::Get().BattleTurn( *this, b, a );
+    AI::Get( AI::NORMAL ).BattleTurn( *this, b, a );
 }
 
 void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
@@ -562,6 +565,27 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
     }
 
     return result;
+}
+
+Battle::Indexes Battle::Arena::CalculatePath( const Battle::Unit & unit, int32_t indexTo )
+{
+    //_pathfinder.calculate( unit.GetPosition(), unit.isWide() );
+    return _pathfinder.getPath( indexTo );
+}
+
+uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
+{
+    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
+}
+
+bool Battle::Arena::hexIsAccessible( int32_t indexTo )
+{
+    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsAccessible( indexTo );
+}
+
+bool Battle::Arena::hexIsPassable( int32_t indexTo )
+{
+    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
