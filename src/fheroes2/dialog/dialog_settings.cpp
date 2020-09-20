@@ -243,16 +243,24 @@ void Dialog::ExtSettings( bool readonly )
     LocalEvent & le = LocalEvent::Get();
 
     const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.w - 10, area.h - 5 );
-    fheroes2::ButtonGroup btnGroup( buttonsArea, Dialog::OK | Dialog::CANCEL );
-    btnGroup.draw();
+
+    const int buttonIcnId = conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
+    const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+
+    fheroes2::Button buttonOk( buttonsArea.x + ( buttonsArea.width - buttonSprite.width() ) / 2, buttonsArea.y + buttonsArea.height - buttonSprite.height(), buttonIcnId,
+                               0, 1 );
+
+    buttonOk.draw();
 
     cursor.Show();
     display.render();
 
     // message loop
-    int result = Dialog::ZERO;
-    while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroup.processEvents();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        if ( le.MouseClickLeft( buttonOk.area() ) ) {
+            break;
+        }
 
         listbox.QueueEventProcessing();
 
@@ -263,9 +271,6 @@ void Dialog::ExtSettings( bool readonly )
         }
     }
 
-    // store
-    if ( result == Dialog::OK ) {
-        le.SetTapMode( conf.ExtPocketTapMode() );
-        Settings::Get().BinarySave();
-    }
+    le.SetTapMode( conf.ExtPocketTapMode() );
+    Settings::Get().BinarySave();
 }
