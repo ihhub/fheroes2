@@ -201,7 +201,7 @@ int main( int argc, char ** argv )
                     rs = Game::LoadGame();
                     break;
                 case Game::HIGHSCORES:
-                    rs = Game::HighScores( true );
+                    rs = Game::HighScores();
                     break;
                 case Game::CREDITS:
                     rs = Game::Credits();

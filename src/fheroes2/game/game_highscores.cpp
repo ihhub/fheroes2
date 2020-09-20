@@ -177,20 +177,17 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
     }
 }
 
-int Game::HighScores( bool fill )
+int Game::HighScores()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
 
     cursor.Hide();
-    if ( fill && ( display.width() != display.DEFAULT_WIDTH || display.height() != display.DEFAULT_HEIGHT ) ) { // draw only for bigger resolutions
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
-    }
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
-        std::string msg = std::string( "Devepoper mode, not save! \n \n Your result: " ) + GetString( GetGameOverScores() );
+        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + GetString( GetGameOverScores() );
         Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
         return MAINMENU;
     }
