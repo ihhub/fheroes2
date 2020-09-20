@@ -575,17 +575,17 @@ Battle::Indexes Battle::Arena::CalculatePath( const Battle::Unit & unit, int32_t
 
 uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
 {
-    return _pathfinder.getDistance( indexTo );
+    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
 }
 
 bool Battle::Arena::hexIsAccessible( int32_t indexTo )
 {
-    return _pathfinder.hexIsAccessible( indexTo );
+    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsAccessible( indexTo );
 }
 
 bool Battle::Arena::hexIsPassable( int32_t indexTo )
 {
-    return _pathfinder.hexIsPassable( indexTo );
+    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )

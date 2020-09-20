@@ -326,7 +326,7 @@ namespace AI
                     // Can't reach priority target - trying to find another one
                     DEBUG( DBG_AI, DBG_INFO, "Can't reach priority target, distance is " << minimalDist );
 
-                    int secondaryTargetCell = -1;
+                    const Unit * secondaryTarget = NULL;
                     minimalDist = MAXU16;
                     for ( const Unit * enemy : enemies ) {
                         // FIXME: track enemy retaliation damage
@@ -335,15 +335,15 @@ namespace AI
                             const uint32_t distance = arena.CalculateMoveDistance( cell );
                             if ( arena.hexIsPassable( cell ) && distance < minimalDist && ( !priorityCanBeReached || distance <= currentUnitMoveRange ) ) {
                                 minimalDist = distance;
-                                secondaryTargetCell = cell;
-                                target = enemy;
+                                targetCell = cell;
+                                secondaryTarget = enemy;
                             }
                         }
                     }
 
-                    if ( secondaryTargetCell != -1 && minimalDist <= currentUnitMoveRange ) {
+                    if ( targetCell != -1 && minimalDist <= currentUnitMoveRange ) {
                         // overwrite priority target with secondary one
-                        targetCell = secondaryTargetCell;
+                        target = secondaryTarget;
                     }
                     // if no other target found try to move to priority target
                 }
