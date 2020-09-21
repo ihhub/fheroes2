@@ -21,8 +21,12 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
+#include "math_base.h"
 
 namespace Video
 {
-    void ShowVideo( const std::string & videoPath, bool isLooped );
+    // Returns 0 by default if roi is empty
+    size_t ShowVideo( const std::string & videoPath, bool isLooped, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
 }

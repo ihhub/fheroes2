@@ -168,6 +168,8 @@ namespace fheroes2
     // roi is an optional parameter when you need to draw in a small than image area
     void DrawLine( Image & image, const Point & start, const Point & end, uint8_t value, const Rect & roi = Rect() );
 
+    void DrawRect( Image & image, const Rect & roi, uint8_t value );
+
     // Please use GetColorId function if you want to use an RGB value
     void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId );
 

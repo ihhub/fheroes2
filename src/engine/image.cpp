@@ -1292,6 +1292,22 @@ namespace fheroes2
         }
     }
 
+    void DrawRect( Image & image, const Rect & roi, uint8_t value )
+    {
+        if ( image.empty() || roi.width < 1 || roi.height < 1 )
+            return;
+
+        const Point point1( roi.x, roi.y );
+        const Point point2( roi.x + roi.width, roi.y );
+        const Point point3( roi.x + roi.width, roi.y + roi.height );
+        const Point point4( roi.x, roi.y + roi.height );
+
+        DrawLine( image, point1, point2, value );
+        DrawLine( image, point2, point3, value );
+        DrawLine( image, point3, point4, value );
+        DrawLine( image, point4, point1, value );
+    }
+
     void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId )
     {
         if ( !Validate( image, x, y, width, height ) )
