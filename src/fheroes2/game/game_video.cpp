@@ -36,8 +36,7 @@ namespace Video
 
         const bool hideCursor = roi.empty();
 
-        if ( hideCursor )
-        {
+        if ( hideCursor ) {
             Cursor::Get().Hide();
         }
 
@@ -73,7 +72,6 @@ namespace Video
 
         LocalEvent & le = LocalEvent::Get();
         while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents() ) {
-
             if ( roi.empty() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
                     break;
@@ -155,8 +153,7 @@ namespace Video
 
         display.fill( 0 );
 
-        if ( hideCursor )
-        {
+        if ( hideCursor ) {
             Cursor::Get().Show();
         }
 
