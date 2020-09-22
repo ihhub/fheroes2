@@ -86,7 +86,9 @@ void SettingsListBox::RedrawBackground( const Point & origin )
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 11 ), display, origin.x + 295, origin.y + 35 + ( 19 * ii ) );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 10 ), display, origin.x + 295, origin.y + 46 );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 12 ), display, origin.x + 295, origin.y + ah - 14 );
+
+    const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
+    fheroes2::Blit( lowerPart, display, origin.x + 295, origin.y + ah - lowerPart.height() );
 }
 
 void SettingsListBox::ActionListDoubleClick( u32 & item )
@@ -234,7 +236,7 @@ void Dialog::ExtSettings( bool readonly )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 43 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
