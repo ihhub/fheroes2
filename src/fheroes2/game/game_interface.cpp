@@ -230,8 +230,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    const Rect & radarArea = radar.GetArea();
+    const Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
     Settings & conf = Settings::Get();
     const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );

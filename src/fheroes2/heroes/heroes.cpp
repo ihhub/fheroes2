@@ -976,8 +976,6 @@ bool Heroes::PickupArtifact( const Artifact & art )
     if ( !art.isValid() )
         return false;
 
-    // const Settings & conf = Settings::Get();
-
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
             art() == Artifact::MAGIC_BOOK ? Dialog::Message(
@@ -1900,8 +1898,6 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 
 Heroes * AllHeroes::GetFreeman( int race ) const
 {
-    const Settings & conf = Settings::Get();
-
     int min = Heroes::UNKNOWN;
     int max = Heroes::UNKNOWN;
 
