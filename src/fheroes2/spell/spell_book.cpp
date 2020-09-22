@@ -125,13 +125,10 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             current_index += SPELL_PER_PAGE * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( info_rt ) ) || ( le.MousePressRight( info_rt ) ) ) {
+        else if ( le.MouseClickLeft( info_rt ) ) {
             std::string str = _( "Your hero has %{point} spell points remaining" );
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-            cursor.Hide();
             Dialog::Message( "", str, Font::BIG, Dialog::OK );
-            cursor.Show();
-            display.render();
         }
         else if ( le.MouseClickLeft( advn_rt ) && filter != ADVN && filt != CMBT ) {
             filter = ADVN;
@@ -144,6 +141,19 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             current_index = 0;
             spells2 = SetFilter( filter, &hero );
             redraw = true;
+        }
+        else if ( le.MousePressRight( info_rt ) ) {
+            std::string str = _( "Your hero has %{point} spell points remaining" );
+            StringReplace( str, "%{point}", hero.GetSpellPoints() );
+            Dialog::Message( "", str, Font::BIG );
+        }
+        else if ( le.MousePressRight( advn_rt ) ) {
+            const std::string str = _( "View Adventure Spells" );
+            Dialog::Message( "", str, Font::BIG );
+        }
+        else if ( le.MousePressRight( cmbt_rt ) ) {
+            const std::string str = _( "View Combat Spells" );
+            Dialog::Message( "", str, Font::BIG );
         }
         else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             break;
