@@ -453,6 +453,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
             }
+            else {
+                protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+            }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
