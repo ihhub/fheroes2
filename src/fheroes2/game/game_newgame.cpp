@@ -183,6 +183,7 @@ int Game::NewCampain( void )
 
     Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "INTRO.SMK" ), false );
     const size_t chosenCampaign = Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSE.SMK" ), true, campaignRoi );
+    Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSEW.SMK" ), false );
     const bool goodCampaign = chosenCampaign == 0;
 
     AGG::PlayMusic( MUS::VICTORY );
