@@ -182,8 +182,8 @@ int Game::NewCampain( void )
     campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
 
     Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "INTRO.SMK" ), false );
-    const size_t chosenCampaign = Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSE.SMK" ), true, campaignRoi );
     Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSEW.SMK" ), false );
+    const size_t chosenCampaign = Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSE.SMK" ), true, campaignRoi );
     const bool goodCampaign = chosenCampaign == 0;
 
     AGG::PlayMusic( MUS::VICTORY );
