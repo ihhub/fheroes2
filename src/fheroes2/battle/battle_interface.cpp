@@ -372,18 +372,9 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
 
 fheroes2::Image DrawHexagonShadow( int alphaValue )
 {
-    int l, w, h;
-
-    if ( Settings::Get().QVGA() ) {
-        l = 7;
-        w = CELLW2;
-        h = CELLH2;
-    }
-    else {
-        l = 13;
-        w = CELLW;
-        h = CELLH;
-    }
+    const int l = 13;
+    const int w = CELLW;
+    const int h = CELLH;
 
     fheroes2::Image sf( w, h );
     sf.reset();
@@ -945,8 +936,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
         light = true;
         icn_frng = ICN::FRNG0001;
     }
-    if ( conf.QVGA() || conf.ExtPocketLowMemory() )
-        icn_frng = ICN::UNKNOWN;
 
     sf_cover.resize( _mainSurface.width(), _mainSurface.height() );
     sf_cover.reset();
@@ -1106,8 +1095,7 @@ void Battle::Interface::RedrawInterface( void )
         btn_wait.draw();
     btn_skip.draw();
 
-    if ( !conf.QVGA() && !conf.ExtPocketLowMemory() )
-        popup.Redraw( _interfacePosition.x + _interfacePosition.w + 60, _interfacePosition.y + _interfacePosition.h );
+    popup.Redraw( _interfacePosition.x + _interfacePosition.w + 60, _interfacePosition.y + _interfacePosition.h );
 
     if ( listlog && listlog->isOpenLog() )
         listlog->Redraw();
@@ -2673,7 +2661,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     LocalEvent & le = LocalEvent::Get();
 
     // targets damage animation
-    int py = ( conf.QVGA() ? 20 : 50 );
+    int py = 50;
     int finish = 0;
     int deathColor = Color::UNUSED;
 
@@ -2773,7 +2761,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 }
             }
 
-            py += ( conf.QVGA() ? 5 : 10 );
+            py += 10;
         }
     }
 
@@ -2899,7 +2887,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         frameDelay = frameDelay * 12 / 10; // 20% slower
     }
 
-    const Points points = GetEuclideanLine( destPos, targetPos, Settings::Get().QVGA() ? step / 2 : step );
+    const Points points = GetEuclideanLine( destPos, targetPos, step );
     Points::const_iterator currentPoint = points.begin();
 
     // jump up

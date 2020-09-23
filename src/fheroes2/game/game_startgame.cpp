@@ -572,12 +572,6 @@ int Interface::Basic::StartGame( void )
                         statusWindow.Reset();
                         statusWindow.SetState( STATUS_AITURN );
 
-                        // for pocketpc: show status window
-                        if ( conf.QVGA() && !conf.ShowStatus() ) {
-                            conf.SetShowStatus( true );
-                            statusWindow.SetRedraw();
-                        }
-
                         cursor.Hide();
                         cursor.SetThemes( Cursor::WAIT );
                         Redraw();

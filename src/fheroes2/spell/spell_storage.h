@@ -36,8 +36,6 @@ class SpellStorage : public std::vector<Spell>
 public:
     SpellStorage();
 
-    u32 Size( int lvl = 0 ) const;
-
     SpellStorage GetSpells( int lvl = -1 ) const;
     void Append( const SpellStorage & );
     void Append( const Spell & );

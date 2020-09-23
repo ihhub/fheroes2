@@ -201,8 +201,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
         }
 
         // "swap" sprite
-
-        if ( show_swap && !conf.QVGA() && ( it + 1 ) != end() ) {
+        if ( show_swap && ( it + 1 ) != end() ) {
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ADVMCO, 8 ), display, rect3.x, rect3.y );
         }
     }

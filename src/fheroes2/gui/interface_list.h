@@ -42,8 +42,6 @@ namespace Interface
     class ListBox : public ListBasic
     {
     public:
-        typedef typename std::vector<Item>::iterator ItemsIterator;
-
         ListBox( const Point & pt = Point() )
             : content( NULL )
             , _currentId( -1 )

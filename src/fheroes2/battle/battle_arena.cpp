@@ -1083,7 +1083,7 @@ u32 Battle::Arena::GetObstaclesPenalty( const Unit & attacker, const Unit & defe
         return 0;
 
     u32 result = 0;
-    const u32 step = Settings::Get().QVGA() ? CELLW2 / 3 : CELLW / 3;
+    const u32 step = CELLW / 3;
 
     if ( castle ) {
         // archery skill

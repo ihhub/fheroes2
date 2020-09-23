@@ -20,12 +20,10 @@
 
 #include "dialog_resolution.h"
 #include "agg.h"
-#include "display.h"
 #include "embedded_image.h"
 #include "game.h"
 #include "interface_list.h"
 #include "screen.h"
-#include "settings.h"
 #include "text.h"
 #include "ui_button.h"
 #include "zzlib.h"
@@ -87,7 +85,7 @@ namespace
         text.Blit( dst.x + 175 - text.w() / 2, dst.y + 30 );
 
         if ( resolution.first > 0 && resolution.second > 0 ) {
-            Text text( GetResolutionString( resolution ), Font::YELLOW_BIG );
+            text.Set( GetResolutionString( resolution ), Font::YELLOW_BIG );
             text.Blit( dst.x + ( editBoxLength - text.w() ) / 2 + 40, dst.y + 288, editBoxLength );
         }
     }
@@ -109,7 +107,6 @@ namespace Dialog
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
         const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
-        Size panel( sprite.width(), sprite.height() );
 
         const Point dialogOffset( ( display.width() - sprite.width() ) / 2, ( display.height() - sprite.height() ) / 2 );
         const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -133,11 +130,11 @@ namespace Dialog
 
         resList.SetListContent( resolutions );
 
-        const Size currentResolution( display.width(), display.height() );
+        const fheroes2::Size currentResolution( display.width(), display.height() );
 
         std::pair<int, int> selectedResolution;
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            if ( resolutions[i].first == currentResolution.w && resolutions[i].second == currentResolution.h ) {
+            if ( resolutions[i].first == currentResolution.width && resolutions[i].second == currentResolution.height ) {
                 resList.SetCurrent( i );
                 selectedResolution = resList.GetCurrent();
                 break;
@@ -187,8 +184,7 @@ namespace Dialog
         cursor.Hide();
 
         if ( selectedResolution.first > 0 && selectedResolution.second > 0
-             && ( selectedResolution.first != currentResolution.w || selectedResolution.second != currentResolution.h ) ) {
-            Settings & conf = Settings::Get();
+             && ( selectedResolution.first != currentResolution.width || selectedResolution.second != currentResolution.height ) ) {
             display.resize( selectedResolution.first, selectedResolution.second );
 
 #ifdef WITH_ZLIB

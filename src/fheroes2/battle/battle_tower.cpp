@@ -23,7 +23,6 @@
 #include "battle_tower.h"
 #include "battle_cell.h"
 #include "castle.h"
-#include "settings.h"
 
 Battle::Tower::Tower( const Castle & castle, int twr )
     : Unit( Troop( Monster::ARCHER, 0 ), -1, false )
@@ -102,11 +101,6 @@ Point Battle::Tower::GetPortPosition( void ) const
         break;
     default:
         break;
-    }
-
-    if ( Settings::Get().QVGA() ) {
-        res.x /= 2;
-        res.y /= 2;
     }
 
     return res;

@@ -153,7 +153,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     cursor.Hide();
 
     Text text( header, Font::BIG );
-    const int spacer = Settings::Get().QVGA() ? 5 : 10;
+    const int spacer = 10;
 
     FrameBox box( text.h() + spacer + 30, true );
     SelectValue sel( min, max, cur, step );
@@ -325,7 +325,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     cursor.Hide();
 
     const u32 min = 1;
-    const int spacer = Settings::Get().QVGA() ? 5 : 10;
+    const int spacer = 10;
 
     FrameBox box( free_slots > 2 ? 90 + spacer : 45, true );
     SelectValue sel( min, max, cur, 1 );
