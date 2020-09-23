@@ -40,8 +40,7 @@ Display::Display()
     _isDisplay = true;
 }
 
-Display::~Display()
-{}
+Display::~Display() {}
 
 Size Display::GetSize( void ) const
 {
