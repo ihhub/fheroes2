@@ -251,7 +251,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     if ( troop().GetDamageMin() != troop().GetDamageMax() )
-        text.Set( GetString( troop().GetDamageMin() ) + " - " + GetString( troop().GetDamageMax() ) );
+        text.Set( GetString( troop().GetDamageMin() ) + "-" + GetString( troop().GetDamageMax() ) );
     else
         text.Set( GetString( troop().GetDamageMin() ) );
     dst_pt.x = dst.x + offsetX;
