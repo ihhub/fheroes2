@@ -73,8 +73,10 @@ namespace Video
         LocalEvent & le = LocalEvent::Get();
         while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents() ) {
             if ( roi.empty() ) {
-                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
+                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                    Mixer::Reset();
                     break;
+                }
             }
             else {
                 bool roiChosen = false;
@@ -86,8 +88,10 @@ namespace Video
                     }
                 }
 
-                if ( roiChosen )
+                if ( roiChosen ) {
+                    Mixer::Reset();
                     break;
+                }
             }
 
             if ( isFirstFrame || Game::AnimateCustomDelay( delay ) ) {
@@ -156,8 +160,6 @@ namespace Video
         if ( hideCursor ) {
             Cursor::Get().Show();
         }
-
-        Mixer::Reset();
 
         return roiChosenId;
     }

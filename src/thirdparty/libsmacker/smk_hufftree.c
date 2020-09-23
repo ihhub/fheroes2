@@ -286,8 +286,9 @@ struct smk_huff16_t* _smk_huff16_build(struct smk_bit_t* bs)
 
 	if (!bit)
 	{
-		fputs("libsmacker::smk_huff16_build(bs) - ERROR: initial get_bit returned 0\n", stderr);
-		goto error;
+		smk_malloc(big, sizeof(struct smk_huff16_t));
+		big->t = NULL;
+		return big;
 	}
 
 	/* build low-8-bits tree */
