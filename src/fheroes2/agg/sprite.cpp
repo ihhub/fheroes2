@@ -21,11 +21,7 @@
  ***************************************************************************/
 
 #include "sprite.h"
-#include "cursor.h"
 #include "display.h"
-#include "icn.h"
-#include "pal.h"
-#include "settings.h"
 
 SpritePos::SpritePos() {}
 
@@ -79,29 +75,4 @@ int Sprite::x( void ) const
 int Sprite::y( void ) const
 {
     return pos.y;
-}
-
-void Sprite::Blit( void ) const
-{
-    Blit( Display::Get() );
-}
-
-void Sprite::Blit( s32 dx, s32 dy ) const
-{
-    Blit( Point( dx, dy ), Display::Get() );
-}
-
-void Sprite::Blit( const Point & dpt ) const
-{
-    Blit( Rect( Point( 0, 0 ), GetSize() ), dpt, Display::Get() );
-}
-
-void Sprite::Blit( const Rect & srt, s32 dx, s32 dy ) const
-{
-    Blit( srt, Point( dx, dy ), Display::Get() );
-}
-
-void Sprite::Blit( const Rect & srt, const Point & dpt ) const
-{
-    Blit( srt, dpt, Display::Get() );
 }

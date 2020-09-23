@@ -109,13 +109,13 @@ void Interface::Basic::SetHideInterface( bool f )
         Point pos_stat = conf.PosStatus();
 
         if ( 0 == pos_radr.x && 0 == pos_radr.y )
-            pos_radr = Point( BORDERWIDTH, conf.QVGA() ? TILEWIDTH : BORDERWIDTH );
+            pos_radr = Point( BORDERWIDTH, BORDERWIDTH );
         if ( 0 == pos_icon.x && 0 == pos_icon.y )
-            pos_icon = Point( conf.QVGA() ? BORDERWIDTH : px - BORDERWIDTH, conf.QVGA() ? TILEWIDTH : radar.GetArea().y + radar.GetArea().h );
+            pos_icon = Point( px - BORDERWIDTH, radar.GetArea().y + radar.GetArea().h );
         if ( 0 == pos_bttn.x && 0 == pos_bttn.y )
-            pos_bttn = Point( conf.QVGA() ? BORDERWIDTH : px - BORDERWIDTH, conf.QVGA() ? TILEWIDTH : iconsPanel.GetArea().y + iconsPanel.GetArea().h );
+            pos_bttn = Point( px - BORDERWIDTH, iconsPanel.GetArea().y + iconsPanel.GetArea().h );
         if ( 0 == pos_stat.x && 0 == pos_stat.y )
-            pos_stat = Point( conf.QVGA() ? BORDERWIDTH : px - BORDERWIDTH, conf.QVGA() ? TILEWIDTH : buttonsArea.GetArea().y + buttonsArea.GetArea().h );
+            pos_stat = Point( px - BORDERWIDTH, buttonsArea.GetArea().y + buttonsArea.GetArea().h );
 
         controlPanel.SetPos( display.width() - controlPanel.GetArea().w - BORDERWIDTH, 0 );
         radar.SetPos( pos_radr.x, pos_radr.y );

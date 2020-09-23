@@ -33,27 +33,6 @@ SpellStorage::SpellStorage()
     reserve( 67 );
 }
 
-u32 SpellStorage::Size( int lvl ) const
-{
-    switch ( lvl ) {
-    case 1:
-        return std::count_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Spell::isLevel ), 1 ) );
-    case 2:
-        return std::count_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Spell::isLevel ), 2 ) );
-    case 3:
-        return std::count_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Spell::isLevel ), 3 ) );
-    case 4:
-        return std::count_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Spell::isLevel ), 4 ) );
-    case 5:
-        return std::count_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Spell::isLevel ), 5 ) );
-
-    default:
-        break;
-    }
-
-    return size();
-}
-
 SpellStorage SpellStorage::GetSpells( int lvl ) const
 {
     SpellStorage result;

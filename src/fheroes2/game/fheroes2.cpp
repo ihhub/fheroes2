@@ -29,6 +29,7 @@
 #include "bin_info.h"
 #include "cursor.h"
 #include "dir.h"
+#include "display.h"
 #include "embedded_image.h"
 #include "engine.h"
 #include "error.h"
@@ -148,7 +149,6 @@ int main( int argc, char ** argv )
             display.resize( conf.VideoMode().w, conf.VideoMode().h );
             fheroes2::engine().setTitle( GetCaption() );
 
-            // display.SetVideoMode( conf.VideoMode().w, conf.VideoMode().h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
             Display::Get().HideCursor();
 
             // Ensure the mouse position is updated to prevent bad initial values.

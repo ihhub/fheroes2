@@ -28,7 +28,6 @@
 #include "heroes_base.h"
 #include "luck.h"
 #include "morale.h"
-#include "settings.h"
 #include "speed.h"
 
 Troop::Troop()

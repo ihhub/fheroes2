@@ -37,11 +37,7 @@ namespace
 
 TextInterface::TextInterface( int ft )
     : font( ft )
-{
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? font = Font::YELLOW_SMALL : font = Font::SMALL;
-}
+{}
 
 TextAscii::TextAscii( const std::string & msg, int ft )
     : TextInterface( ft )
@@ -55,11 +51,7 @@ void TextAscii::SetText( const std::string & msg )
 
 void TextAscii::SetFont( int ft )
 {
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? font = Font::YELLOW_SMALL : font = Font::SMALL;
-    else
-        font = ft;
+    font = ft;
 }
 
 void TextAscii::Clear( void )
@@ -247,11 +239,7 @@ void TextUnicode::SetText( const std::string & msg )
 
 void TextUnicode::SetFont( int ft )
 {
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? font = Font::YELLOW_SMALL : font = Font::SMALL;
-    else
-        font = ft;
+    font = ft;
 }
 
 void TextUnicode::Clear( void )
@@ -609,10 +597,6 @@ void TextBox::SetAlign( int f )
 
 void TextBox::Append( const std::string & msg, int ft, u32 width )
 {
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? ft = Font::YELLOW_SMALL : ft = Font::SMALL;
-
     u32 www = 0;
     Rect::w = width;
 
@@ -655,10 +639,6 @@ void TextBox::Append( const std::string & msg, int ft, u32 width )
 #ifdef WITH_TTF
 void TextBox::Append( const std::vector<u16> & msg, int ft, u32 width )
 {
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? ft = Font::YELLOW_SMALL : ft = Font::SMALL;
-
     u32 www = 0;
     Rect::w = width;
 

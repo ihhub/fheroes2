@@ -27,7 +27,6 @@
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "race.h"
-#include "settings.h"
 #include "text.h"
 #include "world.h"
 

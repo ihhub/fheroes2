@@ -28,6 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "display.h"
 #include "game.h"
 #include "gamedefs.h"
 #include "heroes.h"

@@ -52,10 +52,8 @@ void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
     Text text;
     int index = 19 + Color::Count( info.kingdom_colors );
 
-    if ( !Settings::Get().QVGA() ) {
-        dstx = dstx - 10;
-        dsty = dsty + 2;
-    }
+    dstx = dstx - 10;
+    dsty = dsty + 2;
 
     const fheroes2::Sprite & spriteCount = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
     fheroes2::Blit( spriteCount, display, dstx, dsty );

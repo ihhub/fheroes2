@@ -29,13 +29,11 @@
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes_base.h"
-#include "settings.h"
 #include "skill.h"
 #include "spell_book.h"
 #include "text.h"
 
 #define SPELL_PER_PAGE 6
-#define SPELL_PER_PAGE_SMALL 2
 
 struct SpellFiltered : std::binary_function<Spell, int, bool>
 {
@@ -392,26 +390,16 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
 
 void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const size_t cur, s32 px, s32 py, const HeroBase & hero )
 {
-    bool small = Settings::Get().QVGA();
-
     s32 ox = 0;
     s32 oy = 0;
 
     const uint32_t heroSpellPoints = hero.GetSpellPoints();
 
-    for ( u32 ii = 0; ii < ( small ? SPELL_PER_PAGE_SMALL : SPELL_PER_PAGE ); ++ii )
+    for ( u32 ii = 0; ii < SPELL_PER_PAGE; ++ii )
         if ( spells.size() > cur + ii ) {
-            if ( small ) {
-                if ( 0 == ( ii % SPELL_PER_PAGE_SMALL ) ) {
-                    oy = 25;
-                    ox = 60;
-                }
-            }
-            else {
-                if ( 0 == ( ii % ( SPELL_PER_PAGE / 2 ) ) ) {
-                    oy = 50;
-                    ox += 80;
-                }
+            if ( 0 == ( ii % ( SPELL_PER_PAGE / 2 ) ) ) {
+                oy = 50;
+                ox += 80;
             }
 
             const Spell & spell = spells[ii + cur];
@@ -422,10 +410,10 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
             const uint32_t spellCost = spell.SpellPoint( &hero );
             const bool isAvailable = heroSpellPoints >= spellCost;
 
-            TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, ( small ? 94 : 80 ) );
-            box.Blit( px + ox - ( small ? 47 : 40 ), py + oy + ( small ? 22 : 25 ) );
+            TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
+            box.Blit( px + ox - 40, py + oy + 25 );
 
-            oy += small ? 65 : 80;
+            oy += 80;
 
             coords.push_back( rect );
         }

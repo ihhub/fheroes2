@@ -26,6 +26,7 @@
 #include "audio_music.h"
 #include "dialog.h"
 #include "difficulty.h"
+#include "display.h"
 #include "game.h"
 #include "maps.h"
 #include "race.h"

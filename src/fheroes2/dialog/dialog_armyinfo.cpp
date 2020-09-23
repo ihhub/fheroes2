@@ -205,7 +205,6 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
 {
     Point dst_pt;
     Text text;
-    const bool pda = Settings::Get().QVGA();
 
     // attack
     text.Set( std::string( _( "Attack" ) ) + ":" );
@@ -214,7 +213,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     const int offsetX = 6;
-    const int offsetY = pda ? 14 : 16;
+    const int offsetY = 16;
 
     text.Set( troop.GetAttackString() );
     dst_pt.x = dst.x + offsetX;

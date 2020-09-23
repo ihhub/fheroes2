@@ -25,6 +25,7 @@
 #include "agg.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "display.h"
 #include "interface_list.h"
 #include "settings.h"
 #include "text.h"

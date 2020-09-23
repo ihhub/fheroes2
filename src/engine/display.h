@@ -40,54 +40,11 @@ public:
 
     std::string GetInfo( void ) const;
 
-    void SetVideoMode( int w, int h, bool fullscreen, bool aspect, bool changeVideo );
-
     static void HideCursor( void );
     static void ShowCursor( void );
 
 protected:
-    friend class Texture;
-
-    bool keepAspectRatio;
-    SDL_Rect srcRenderSurface;
-    SDL_Rect dstRenderSurface;
     Display();
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SDL_Window * window;
-    SDL_Renderer * renderer;
-    SDL_Texture * displayTexture;
-#endif
 };
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-class Texture
-{
-public:
-    Texture();
-    Texture( const Surface & );
-    Texture( const Texture & );
-    ~Texture();
-
-    Texture & operator=( const Texture & );
-    Size GetSize( void ) const;
-
-    void Blit( Display & ) const;
-    void Blit( s32 dx, s32 dy, Display & ) const;
-    void Blit( const Point & dstpt, Display & ) const;
-    void Blit( const Rect & srcrt, s32 dx, s32 dy, Display & ) const;
-    void Blit( const Rect & srcrt, const Point & dstpt, Display & ) const;
-
-protected:
-    SDL_Texture * texture;
-    int * counter;
-};
-#else
-class Texture : public Surface
-{
-public:
-    Texture( const Surface & );
-};
-#endif
 
 #endif

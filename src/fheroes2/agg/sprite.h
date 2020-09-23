@@ -52,14 +52,6 @@ public:
 
     int x( void ) const;
     int y( void ) const;
-
-    using Surface::Blit;
-
-    void Blit( void ) const;
-    void Blit( s32, s32 ) const;
-    void Blit( const Point & ) const;
-    void Blit( const Rect & srt, s32, s32 ) const;
-    void Blit( const Rect & srt, const Point & ) const;
 };
 
 #endif

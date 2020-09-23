@@ -28,6 +28,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "display.h"
 #include "game.h"
 #include "heroes.h"
 #include "kingdom.h"

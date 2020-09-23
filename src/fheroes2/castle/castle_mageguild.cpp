@@ -28,10 +28,10 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "display.h"
 #include "game.h"
 #include "mageguild.h"
 #include "race.h"
-#include "settings.h"
 #include "text.h"
 
 RowSpells::RowSpells( const Point & pos, const Castle & castle, int lvl )

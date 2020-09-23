@@ -103,7 +103,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
 
     TextBox box1( header, Font::BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
-    const int spacer = Settings::Get().QVGA() ? 5 : 10;
+    const int spacer = 10;
 
     Dialog::FrameBox box( box1.h() + spacer + box2.h() + 10 + sprite_frame.height(), true );
 

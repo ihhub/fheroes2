@@ -108,7 +108,7 @@ int Game::ScenarioInfo( void )
     bool resetStartingSettings = conf.MapsFile().empty();
     size_t mapId = 0;
     Players & players = conf.GetPlayers();
-    Interface::PlayersInfo playersInfo( true, !conf.QVGA(), !conf.QVGA() );
+    Interface::PlayersInfo playersInfo( true, true, true );
 
     if ( !resetStartingSettings ) { // verify that current map really exists in map's list
         resetStartingSettings = true;

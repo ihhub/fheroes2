@@ -26,7 +26,6 @@
 #include "luck.h"
 #include "morale.h"
 #include "race.h"
-#include "settings.h"
 
 namespace
 {
