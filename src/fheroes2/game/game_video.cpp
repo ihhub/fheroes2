@@ -47,7 +47,7 @@ namespace Video
         const fheroes2::Point offset( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2 );
         bool isFirstFrame = true;
 
-        const uint32_t delay = static_cast<uint32_t>( 2000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
+        const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 
         const bool hasSound = Settings::Get().Sound();
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
@@ -71,7 +71,7 @@ namespace Video
         const uint8_t selectionColor = 51;
 
         LocalEvent & le = LocalEvent::Get();
-        while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents() ) {
+        while ( ( isLooped || currentFrame <= video.frameCount() ) && le.HandleEvents() ) {
             if ( roi.empty() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
                     break;
