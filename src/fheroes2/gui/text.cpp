@@ -151,7 +151,6 @@ void TextAscii::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
     if ( message.empty() )
         return;
 
-    int oy = 0;
     int sx = ax;
 
     for ( std::string::const_iterator it = message.begin(); it != message.end(); ++it ) {
@@ -168,37 +167,7 @@ void TextAscii::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
         if ( sprite.empty() )
             return;
 
-        // valign
-        switch ( *it ) {
-        case '-':
-            oy = CharAscent( font ) / 2;
-            break;
-
-        case '_':
-            oy = CharAscent( font );
-            break;
-
-        // "
-        case 0x22:
-            // '
-        case 0x27:
-            oy = 0;
-            break;
-
-        case 'y':
-        case 'g':
-        case 'p':
-        case 'q':
-        case 'j':
-            oy = CharAscent( font ) + CharDescent( font ) - sprite.height();
-            break;
-
-        default:
-            oy = CharAscent( font ) - sprite.height();
-            break;
-        }
-
-        fheroes2::Blit( sprite, dst, ax, ay + 2 + oy );
+        fheroes2::Blit( sprite, dst, ax + sprite.x(), ay + 2 + sprite.y() );
         ax += sprite.width();
     }
 }
@@ -356,7 +325,7 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
         if ( sprite.empty() )
             return;
 
-        fheroes2::Blit( sprite, dst, ax, ay );
+        fheroes2::Blit( sprite, dst, ax + sprite.x(), ay + sprite.y() );
         ax += sprite.width();
     }
 }

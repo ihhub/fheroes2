@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "sprite.h"
-#include "display.h"
 
 SpritePos::SpritePos() {}
 

@@ -25,7 +25,6 @@
 #include "agg.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "display.h"
 #include "interface_list.h"
 #include "settings.h"
 #include "text.h"
@@ -167,7 +166,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
 
-    if ( conf.VideoMode() == Display::GetDefaultSize() )
+    if ( conf.VideoMode() == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
         states.push_back( Settings::GAME_USE_FADE );
 
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );

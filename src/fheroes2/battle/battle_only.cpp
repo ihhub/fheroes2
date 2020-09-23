@@ -28,7 +28,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "display.h"
 #include "game.h"
 #include "gamedefs.h"
 #include "heroes.h"
@@ -148,7 +147,7 @@ bool Battle::Only::ChangeSettings( void )
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    Dialog::FrameBorder frameborder( Display::GetDefaultSize() );
+    Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
 
     const Point & cur_pt = frameborder.GetArea();
 

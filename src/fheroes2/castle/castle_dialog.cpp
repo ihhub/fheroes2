@@ -29,7 +29,6 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "display.h"
 #include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
@@ -200,7 +199,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     if ( conf.ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    Dialog::FrameBorder background( Display::GetDefaultSize() );
+    Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
 
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );

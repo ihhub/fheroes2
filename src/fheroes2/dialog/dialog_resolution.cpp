@@ -20,7 +20,6 @@
 
 #include "dialog_resolution.h"
 #include "agg.h"
-#include "display.h"
 #include "embedded_image.h"
 #include "game.h"
 #include "interface_list.h"

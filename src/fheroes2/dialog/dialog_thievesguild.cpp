@@ -27,7 +27,6 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "display.h"
 #include "game.h"
 #include "kingdom.h"
 #include "monster.h"
@@ -233,7 +232,7 @@ void Dialog::ThievesGuild( bool oracle )
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    Dialog::FrameBorder frameborder( Display::GetDefaultSize() );
+    Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const Point & cur_pt = frameborder.GetArea();
     Point dst_pt( cur_pt );
 

@@ -26,7 +26,6 @@
 #include "audio_music.h"
 #include "dialog.h"
 #include "difficulty.h"
-#include "display.h"
 #include "game.h"
 #include "maps.h"
 #include "race.h"
@@ -428,7 +427,7 @@ std::string Settings::GetVersion( void )
 /* constructor */
 Settings::Settings()
     : debug( DEFAULT_DEBUG )
-    , video_mode( Display::GetDefaultSize() )
+    , video_mode( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
     , game_difficulty( Difficulty::NORMAL )
     , font_normal( "dejavusans.ttf" )
     , font_small( "dejavusans.ttf" )
@@ -1766,7 +1765,7 @@ bool Settings::ExtGameAutosaveOn( void ) const
 
 bool Settings::ExtGameUseFade( void ) const
 {
-    return video_mode == Display::GetDefaultSize() && ExtModes( GAME_USE_FADE );
+    return video_mode == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
 }
 
 bool Settings::ExtGameEvilInterface( void ) const
