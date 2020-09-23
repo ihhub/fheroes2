@@ -325,7 +325,7 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
         if ( sprite.empty() )
             return;
 
-        fheroes2::Blit( sprite, dst, ax + sprite.x(), ay + sprite.y() );
+        fheroes2::Blit( sprite, dst, ax, ay );
         ax += sprite.width();
     }
 }
