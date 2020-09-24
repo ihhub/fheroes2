@@ -132,7 +132,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             redraw = true;
         }
         else if ( le.MouseClickLeft( info_rt ) ) {
-            std::string str = _( "Your hero has %{point} spell points remaining" );
+            std::string str = _( "Your hero has %{point} spell points remaining." );
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
             Dialog::Message( "", str, Font::BIG, Dialog::OK );
         }
@@ -149,7 +149,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             redraw = true;
         }
         else if ( le.MousePressRight( info_rt ) ) {
-            std::string str = _( "Your hero has %{point} spell points remaining" );
+            std::string str = _( "Your hero has %{point} spell points remaining." );
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
             Dialog::Message( "", str, Font::BIG );
         }
