@@ -264,7 +264,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, u32 killed, bool local )
     army.JoinTroop( mons, count );
 
     if ( local ) {
-        std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}" );
+        std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}." );
         StringReplace( msg, "%{count}", count );
         StringReplace( msg, "%{monster}", mons.GetPluralName( count ) );
         fheroes2::Image sf1( 40, 45 );
