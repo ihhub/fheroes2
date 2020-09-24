@@ -35,6 +35,14 @@
 
 #define SPELL_PER_PAGE 6
 
+namespace
+{
+    const fheroes2::Point bookmarkInfoOffset( 123, 273 );
+    const fheroes2::Point bookmarkAdvOffset( 266, 269 );
+    const fheroes2::Point bookmarkCombatoOffset( 299, 276 );
+    const fheroes2::Point bookmarkCloseOffset( 416, 280 );
+}
+
 struct SpellFiltered : std::binary_function<Spell, int, bool>
 {
     bool operator()( Spell s, int f ) const
@@ -95,10 +103,10 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
     const Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
     const Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
 
-    const Rect info_rt( pos.x + 125, pos.y + 275, bookmark_info.width(), bookmark_info.height() );
-    const Rect advn_rt( pos.x + 270, pos.y + 270, bookmark_advn.width(), bookmark_advn.height() );
-    const Rect cmbt_rt( pos.x + 304, pos.y + 278, bookmark_cmbt.width(), bookmark_cmbt.height() );
-    const Rect clos_rt( pos.x + 420, pos.y + 284, bookmark_clos.width(), bookmark_clos.height() );
+    const Rect info_rt( pos.x + bookmarkInfoOffset.x, pos.y + bookmarkInfoOffset.y, bookmark_info.width(), bookmark_info.height() );
+    const Rect advn_rt( pos.x + bookmarkAdvOffset.x, pos.y + bookmarkAdvOffset.y, bookmark_advn.width(), bookmark_advn.height() );
+    const Rect cmbt_rt( pos.x + bookmarkCombatoOffset.x, pos.y + bookmarkCombatoOffset.y, bookmark_cmbt.width(), bookmark_cmbt.height() );
+    const Rect clos_rt( pos.x + bookmarkCloseOffset.x, pos.y + bookmarkCloseOffset.y, bookmark_clos.width(), bookmark_clos.height() );
 
     Spell curspell( Spell::NONE );
 
@@ -366,7 +374,7 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
     const fheroes2::Sprite & bookmark_cmbt = fheroes2::AGG::GetICN( ICN::BOOK, 4 );
     const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
-    const Rect info_rt( pt.x + 125, pt.y + 275, bookmark_info.width(), bookmark_info.height() );
+    const Rect info_rt( pt.x + bookmarkInfoOffset.x, pt.y + bookmarkInfoOffset.y, bookmark_info.width(), bookmark_info.height() );
 
     fheroes2::Blit( bookPage, display, pt.x, pt.y, true );
     fheroes2::Blit( bookPage, display, pt.x + bookPage.width(), pt.y );
@@ -374,11 +382,11 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
     fheroes2::Blit( bookmark_info, display, info_rt.x, info_rt.y );
 
     if ( SpellBook::CMBT != only )
-        fheroes2::Blit( bookmark_advn, display, pt.x + 270, pt.y + 270 );
+        fheroes2::Blit( bookmark_advn, display, pt.x + bookmarkAdvOffset.x, pt.y + bookmarkAdvOffset.y );
     if ( SpellBook::ADVN != only )
-        fheroes2::Blit( bookmark_cmbt, display, pt.x + 304, pt.y + 278 );
+        fheroes2::Blit( bookmark_cmbt, display, pt.x + bookmarkCombatoOffset.x, pt.y + bookmarkCombatoOffset.y );
 
-    fheroes2::Blit( bookmark_clos, display, pt.x + 420, pt.y + 284 );
+    fheroes2::Blit( bookmark_clos, display, pt.x + bookmarkCloseOffset.x, pt.y + bookmarkCloseOffset.y );
 
     if ( coords.size() )
         coords.clear();
