@@ -98,6 +98,11 @@ namespace Battle
         }
     }
 
+    const ArenaNode & ArenaPathfinder::getNode( int targetCell ) const
+    {
+        return _cache[targetCell];
+    }
+
     uint32_t ArenaPathfinder::getDistance( int targetCell ) const
     {
         return _cache[targetCell]._cost;
@@ -168,7 +173,7 @@ namespace Battle
                 if ( it->isPassable1( false ) ) {
                     node._isOpen = true;
                     node._from = headIdx;
-                    node._cost = 1;
+                    node._cost = board.GetDistance( headIdx, idx );
                 }
                 else {
                     node._isOpen = false;
@@ -184,7 +189,7 @@ namespace Battle
                         if ( hexIsPassable( cell ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = headIdx;
-                            unitNode._cost = 1;
+                            unitNode._cost = board.GetDistance( headIdx, cell );
                             break;
                         }
                     }

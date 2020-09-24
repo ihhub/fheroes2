@@ -102,11 +102,15 @@ namespace Battle
 
         void FadeArena( void ) const;
 
-        Indexes GetPath( const Unit &, const Position & );
-        Indexes CalculatePath( const Unit & unit, int32_t indexTo );
+        // returns pair with move cell index and distance
+        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target );
+
         uint32_t CalculateMoveDistance( int32_t indexTo );
         bool hexIsAccessible( int32_t indexTo );
         bool hexIsPassable( int32_t indexTo );
+        Indexes GetPath( const Unit &, const Position & );
+        Indexes CalculatePath( const Unit & unit, int32_t indexTo );
+
         void ApplyAction( Command & );
 
         TargetsInfo GetTargetsForDamage( Unit &, Unit &, s32 );

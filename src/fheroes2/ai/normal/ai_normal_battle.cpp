@@ -34,6 +34,10 @@ using namespace Battle;
 
 namespace AI
 {
+    // Usual distance between units at the start of the battle is 10-14 tiles
+    // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
+    const double STRENGTH_DISTANCE_FACTOR = 5.0;
+
     bool isHeroWorthSaving( const Heroes * hero )
     {
         return hero && ( hero->GetLevel() > 2 || !hero->GetBagArtifacts().empty() );
@@ -113,10 +117,6 @@ namespace AI
         const size_t enemiesCount = enemies.size();
 
         // Step 1. Friendly and enemy army analysis
-        const Unit * priorityTarget = NULL;
-        const Unit * target = NULL;
-        int targetCell = -1;
-
         double myArmyStrength = 0;
         double enemyArmyStrength = 0;
         double myShooterStr = 0;
@@ -125,7 +125,6 @@ namespace AI
         double averageEnemyAttack = 0;
         int highestDamageExpected = 0;
 
-        double highestStrength = 0;
         for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
             const Unit & unit = **it;
             const double unitStr = unit.GetStrength();
@@ -133,14 +132,6 @@ namespace AI
             enemyArmyStrength += unitStr;
             if ( unit.isArchers() ) {
                 enemyShooterStr += unitStr;
-            }
-
-            const double attackPriority = unit.GetScoreQuality( currentUnit );
-            DEBUG( DBG_AI, DBG_TRACE, "-- Unit " << unit.GetName() << " attack priority: " << attackPriority );
-            if ( highestStrength < attackPriority ) {
-                highestStrength = attackPriority;
-                priorityTarget = *it;
-                DEBUG( DBG_AI, DBG_TRACE, "- Set priority on " << unit.GetName() );
             }
 
             const int dmg = unit.CalculateMaxDamage( currentUnit );
@@ -222,6 +213,10 @@ namespace AI
         }
 
         // Step 5. Current unit decision tree
+        const Unit * priorityTarget = NULL;
+        const Unit * target = NULL;
+        int targetCell = -1;
+
         if ( currentUnit.isArchers() ) {
             // Ranged unit decision tree
             if ( currentUnit.isHandFighting() ) {
@@ -265,13 +260,27 @@ namespace AI
                 }
                 // Worst case scenario - Skip turn
             }
-            else if ( priorityTarget ) {
+            else {
                 // Normal attack: focus the highest value unit
-                actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
+                for ( const Unit * enemy : enemies ) {
+                    const double attackPriority = enemy->GetScoreQuality( currentUnit );
+                    DEBUG( DBG_AI, DBG_TRACE, "-- Unit " << enemy->GetName() << " attack priority: " << attackPriority );
 
-                DEBUG( DBG_AI, DBG_INFO,
-                       currentUnit.GetName() << " archer focusing enemy " << priorityTarget->GetName()
-                                             << " threat level: " << priorityTarget->GetScoreQuality( currentUnit ) );
+                    double highestStrength = 0;
+                    if ( highestStrength < attackPriority ) {
+                        highestStrength = attackPriority;
+                        priorityTarget = enemy;
+                        DEBUG( DBG_AI, DBG_TRACE, "- Set priority on " << enemy->GetName() );
+                    }
+                }
+
+                if ( priorityTarget ) {
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
+
+                    DEBUG( DBG_AI, DBG_INFO,
+                           currentUnit.GetName() << " archer focusing enemy " << priorityTarget->GetName()
+                                                 << " threat level: " << priorityTarget->GetScoreQuality( currentUnit ) );
+                }
             }
         }
         else {
@@ -293,60 +302,26 @@ namespace AI
             }
             else {
                 // Melee unit - Offensive action
-                // 1. Find highest value enemy unit, save as priority target
-                // 2. If priority within reach, attack
-                // 3. Otherwise search for another target nearby
-                // 4.a. Attack if found, from the tile that is closer to priority target
-                // 4.b. Else move to priority target
+                const double distanceModifier = enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
+                double maxPriority = distanceModifier * ARENASIZE * -1;
 
-                uint32_t minimalDist = MAXU16;
-                const bool priorityCanBeReached = arena.hexIsAccessible( priorityTarget->GetHeadIndex() ) || arena.hexIsAccessible( priorityTarget->GetTailIndex() );
-                if ( priorityCanBeReached ) {
-                    const Indexes & around = Board::GetAroundIndexes( *priorityTarget );
-                    for ( const int cell : around ) {
-                        if ( cell == currentUnit.GetHeadIndex() || cell == currentUnit.GetTailIndex() ) {
-                            DEBUG( DBG_AI, DBG_TRACE, "Adjacent to priority " << priorityTarget->GetName() << " cell " << cell );
-                            minimalDist = 0;
-                            targetCell = cell;
-                            break;
-                        }
+                for ( const Unit * enemy : enemies ) {
+                    // move node pair consists of move hex index and distance
+                    std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
 
-                        const uint32_t distance = arena.CalculateMoveDistance( cell );
-                        if ( arena.hexIsPassable( cell ) && distance < minimalDist ) {
-                            minimalDist = distance;
-                            targetCell = cell;
-                        }
+                    if ( move.second <= currentUnitMoveRange ) {
+                        target = enemy;
+                        targetCell = move.first;
                     }
-                }
-
-                if ( targetCell != -1 && minimalDist <= currentUnitMoveRange ) {
-                    DEBUG( DBG_AI, DBG_TRACE, "Priority target is near " << minimalDist << " our range " << currentUnitMoveRange );
-                    target = priorityTarget;
-                }
-                else {
-                    // Can't reach priority target - trying to find another one
-                    DEBUG( DBG_AI, DBG_INFO, "Can't reach priority target, distance is " << minimalDist );
-
-                    const Unit * secondaryTarget = NULL;
-                    minimalDist = MAXU16;
-                    for ( const Unit * enemy : enemies ) {
-                        // FIXME: track enemy retaliation damage
-                        const Indexes & around = Board::GetAroundIndexes( *enemy );
-                        for ( const int cell : around ) {
-                            const uint32_t distance = arena.CalculateMoveDistance( cell );
-                            if ( arena.hexIsPassable( cell ) && distance < minimalDist && ( !priorityCanBeReached || distance <= currentUnitMoveRange ) ) {
-                                minimalDist = distance;
-                                targetCell = cell;
-                                secondaryTarget = enemy;
-                            }
+                    else if ( target == NULL ) {
+                        // For walking units that don't have a target within reach, pick based on priority
+                        const double unitPriority = enemy->GetStrength() - move.second * distanceModifier;
+                        if ( unitPriority > maxPriority ) {
+                            maxPriority = unitPriority;
+                            targetCell = move.first;
                         }
+                    
                     }
-
-                    if ( targetCell != -1 && minimalDist <= currentUnitMoveRange ) {
-                        // overwrite priority target with secondary one
-                        target = secondaryTarget;
-                    }
-                    // if no other target found try to move to priority target
                 }
 
                 DEBUG( DBG_AI, DBG_INFO, "Melee phase end, targetCell is " << targetCell );
