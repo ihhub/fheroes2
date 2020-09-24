@@ -213,7 +213,6 @@ namespace AI
         }
 
         // Step 5. Current unit decision tree
-        const Unit * priorityTarget = NULL;
         const Unit * target = NULL;
         int targetCell = -1;
 
@@ -269,17 +268,16 @@ namespace AI
                     double highestStrength = 0;
                     if ( highestStrength < attackPriority ) {
                         highestStrength = attackPriority;
-                        priorityTarget = enemy;
+                        target = enemy;
                         DEBUG( DBG_AI, DBG_TRACE, "- Set priority on " << enemy->GetName() );
                     }
                 }
 
-                if ( priorityTarget ) {
-                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), priorityTarget->GetUID(), priorityTarget->GetHeadIndex(), 0 ) );
+                if ( target ) {
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
 
                     DEBUG( DBG_AI, DBG_INFO,
-                           currentUnit.GetName() << " archer focusing enemy " << priorityTarget->GetName()
-                                                 << " threat level: " << priorityTarget->GetScoreQuality( currentUnit ) );
+                           currentUnit.GetName() << " archer focusing enemy " << target->GetName() << " threat level: " << target->GetScoreQuality( currentUnit ) );
                 }
             }
         }
@@ -311,11 +309,29 @@ namespace AI
 
                     if ( move.second <= currentUnitMoveRange ) {
                         target = enemy;
-                        targetCell = move.first;
+
+                        if ( currentUnit.isFlying() ) {
+                            // look for valid adjacent tile
+                            const Indexes & around = Board::GetAroundIndexes( *target );
+                            for ( const int cell : around ) {
+                                if ( arena.hexIsPassable( cell ) ) {
+                                    targetCell = cell;
+                                    break;
+                                }
+                            }
+
+                            // it must have one, otherwise ArenaPathfinder is bugged
+                            if ( targetCell == -1 ) {
+                                DEBUG( DBG_AI, DBG_WARN, "Flyer path error while targeting enemy " << enemy->GetName() << ". Check pathfinder." );
+                            }
+                        }
+                        else {
+                            targetCell = move.first;
+                        }
                     }
                     else if ( target == NULL ) {
                         // For walking units that don't have a target within reach, pick based on priority
-                        const double unitPriority = enemy->GetStrength() - move.second * distanceModifier;
+                        const double unitPriority = enemy->GetScoreQuality( currentUnit ) - move.second * distanceModifier;
                         if ( unitPriority > maxPriority ) {
                             maxPriority = unitPriority;
                             targetCell = move.first;
