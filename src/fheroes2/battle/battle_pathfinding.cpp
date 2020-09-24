@@ -123,7 +123,6 @@ namespace Battle
         std::vector<int> path;
 
         int nodeID = targetCell;
-        const ArenaNode & node = _cache[targetCell];
         while ( _cache[nodeID]._cost != 0 ) {
             path.push_back( nodeID );
             nodeID = _cache[nodeID]._from;
@@ -161,7 +160,6 @@ namespace Battle
 
         if ( unit.isFlying() ) {
             const Board & board = *Arena::GetBoard();
-            const int headIdx = unitHead->GetIndex();
 
             for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
                 const int idx = it->GetIndex();
