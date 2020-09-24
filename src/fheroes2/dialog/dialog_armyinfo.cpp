@@ -207,7 +207,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     Text text;
 
     // attack
-    text.Set( std::string( _( "Attack" ) ) + ":" );
+    text.Set( std::string( _( "Attack Skill" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y = dst.y;
     text.Blit( dst_pt );
@@ -220,7 +220,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     // defense
-    text.Set( std::string( _( "Defense" ) ) + ":" );
+    text.Set( std::string( _( "Defense Skill" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y += offsetY;
     text.Blit( dst_pt );
