@@ -115,7 +115,7 @@ namespace Battle
 
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
-        return ( _cache[targetCell]._cost == 0 || _cache[targetCell]._isOpen ) && _cache[targetCell]._from != -1;
+        return _cache[targetCell]._cost == 0 || ( _cache[targetCell]._isOpen && _cache[targetCell]._from != -1 );
     }
 
     std::vector<int> ArenaPathfinder::getPath( int targetCell ) const
@@ -178,7 +178,8 @@ namespace Battle
                 }
             }
             for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-                if ( it->GetUnit() ) {
+                const Unit * boardUnit = it->GetUnit();
+                if ( boardUnit && boardUnit->GetUID() != unit.GetUID() ) {
                     const int unitIdx = it->GetIndex();
                     ArenaNode & unitNode = _cache[unitIdx];
 
