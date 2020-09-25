@@ -168,7 +168,7 @@ namespace Battle
                     = !unitIsWide || ( x < ARENAW - 2 && board.GetCell( idx + 1 )->isPassable1( true ) ) || ( x > 0 && board.GetCell( idx - 1 )->isPassable1( true ) );
 
                 ArenaNode & node = _cache[idx];
-                if ( it->isPassable1( false ) ) {
+                if ( it->isPassable1( true ) ) {
                     node._isOpen = true;
                     node._from = headIdx;
                     node._cost = board.GetDistance( headIdx, idx );
@@ -183,11 +183,12 @@ namespace Battle
                     ArenaNode & unitNode = _cache[unitIdx];
 
                     const Indexes & around = board.GetAroundIndexes( unitIdx );
-                    for ( const int cell : around ) {
-                        if ( hexIsPassable( cell ) ) {
+                    for ( const int cellIdx : around ) {
+                        const Cell * cell = board.GetCell( cellIdx );
+                        if ( hexIsPassable( cellIdx ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = headIdx;
-                            unitNode._cost = board.GetDistance( headIdx, cell );
+                            unitNode._cost = board.GetDistance( headIdx, cellIdx );
                             break;
                         }
                     }

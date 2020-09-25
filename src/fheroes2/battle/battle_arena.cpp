@@ -575,7 +575,7 @@ Battle::Indexes Battle::Arena::CalculatePath( const Battle::Unit & unit, int32_t
 
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
 {
-    std::pair<int, uint32_t> result = {-1, 0};
+    std::pair<int, uint32_t> result = {-1, MAXU16};
 
     const Position & pos = target.GetPosition();
     const Cell * head = pos.GetHead();
@@ -583,13 +583,15 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
 
     if ( head ) {
         const ArenaNode & headNode = _pathfinder.getNode( head->GetIndex() );
-        result.first = headNode._from;
-        result.second = headNode._cost;
+        if ( headNode._from != -1 ) {
+            result.first = headNode._from;
+            result.second = headNode._cost;
+        }
     }
 
     if ( tail ) {
         const ArenaNode & tailNode = _pathfinder.getNode( tail->GetIndex() );
-        if ( tailNode._cost < result.second ) {
+        if ( tailNode._from != -1 && tailNode._cost < result.second ) {
             result.first = tailNode._from;
             result.second = tailNode._cost;
         }

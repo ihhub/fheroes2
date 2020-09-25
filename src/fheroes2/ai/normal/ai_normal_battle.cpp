@@ -307,22 +307,27 @@ namespace AI
                     // move node pair consists of move hex index and distance
                     std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
 
-                    if ( move.second <= currentUnitMoveRange ) {
+                    if ( move.first != -1 && move.second <= currentUnitMoveRange ) {
                         target = enemy;
 
                         if ( currentUnit.isFlying() ) {
-                            // look for valid adjacent tile
+                            // look for valid adjacent hex
                             const Indexes & around = Board::GetAroundIndexes( *target );
+
+                            int validCell = -1;
                             for ( const int cell : around ) {
                                 if ( arena.hexIsPassable( cell ) ) {
-                                    targetCell = cell;
+                                    validCell = cell;
                                     break;
                                 }
                             }
 
                             // it must have one, otherwise ArenaPathfinder is bugged
-                            if ( targetCell == -1 ) {
+                            if ( validCell == -1 ) {
                                 DEBUG( DBG_AI, DBG_WARN, "Flyer path error while targeting enemy " << enemy->GetName() << ". Check pathfinder." );
+                            }
+                            else {
+                                targetCell = validCell;
                             }
                         }
                         else {
