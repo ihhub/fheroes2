@@ -309,7 +309,7 @@ namespace AI
 
                 for ( const Unit * enemy : enemies ) {
                     // move node pair consists of move hex index and distance
-                    std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
+                    const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
                     const double enemyValue = enemy->GetScoreQuality( currentUnit );
 
                     if ( move.first != -1 && move.second <= currentUnitMoveRange && highestStrength < enemyValue ) {
