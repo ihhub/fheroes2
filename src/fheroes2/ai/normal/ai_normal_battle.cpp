@@ -302,12 +302,15 @@ namespace AI
                 // Melee unit - Offensive action
                 const double distanceModifier = enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
                 double maxPriority = distanceModifier * ARENASIZE * -1;
+                double highestStrength = 0;
 
                 for ( const Unit * enemy : enemies ) {
                     // move node pair consists of move hex index and distance
                     std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
+                    const double enemyValue = enemy->GetScoreQuality( currentUnit );
 
-                    if ( move.first != -1 && move.second <= currentUnitMoveRange ) {
+                    if ( move.first != -1 && move.second <= currentUnitMoveRange && highestStrength < enemyValue ) {
+                        highestStrength = enemyValue;
                         target = enemy;
 
                         if ( currentUnit.isFlying() ) {
@@ -336,7 +339,7 @@ namespace AI
                     }
                     else if ( target == NULL ) {
                         // For walking units that don't have a target within reach, pick based on priority
-                        const double unitPriority = enemy->GetScoreQuality( currentUnit ) - move.second * distanceModifier;
+                        const double unitPriority = enemyValue - move.second * distanceModifier;
                         if ( unitPriority > maxPriority ) {
                             maxPriority = unitPriority;
                             targetCell = move.first;
