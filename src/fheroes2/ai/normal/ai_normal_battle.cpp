@@ -37,6 +37,7 @@ namespace AI
     // Usual distance between units at the start of the battle is 10-14 tiles
     // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
+    const std::vector<int> underWallsIndicies = {7, 28, 49, 72, 95};
 
     bool isHeroWorthSaving( const Heroes * hero )
     {
@@ -157,6 +158,7 @@ namespace AI
         averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
 
         // Step 2. Add castle siege (and battle arena) modifiers
+        bool attackingCastle = false;
         bool defendingCastle = false;
         const Castle * castle = arena.GetCastle();
         if ( castle ) {
@@ -176,6 +178,7 @@ namespace AI
                     enemyShooterStr /= 2;
             }
             else {
+                attackingCastle = true;
                 enemyShooterStr += towerStr;
                 if ( !attackerIgnoresCover )
                     myShooterStr /= 2;
@@ -338,13 +341,27 @@ namespace AI
                         }
                     }
                     else if ( target == NULL ) {
-                        // For walking units that don't have a target within reach, pick based on priority
+                        // For walking units that don't have a target within reach, pick based on distance priority
                         const double unitPriority = enemyValue - move.second * distanceModifier;
                         if ( unitPriority > maxPriority ) {
                             maxPriority = unitPriority;
                             targetCell = move.first;
                         }
                     }
+                }
+
+                // Walkers: move closer to the castle walls during siege
+                if ( attackingCastle && targetCell == -1 ) {
+                    uint32_t shortestDist = MAXU16;
+
+                    for ( const int wallIndex : underWallsIndicies ) {
+                        const uint32_t dist = arena.CalculateMoveDistance( wallIndex );
+                        if ( dist < shortestDist ) {
+                            shortestDist = dist;
+                            targetCell = wallIndex;
+                        }
+                    }
+                    DEBUG( DBG_AI, DBG_INFO, "Walker unit moving towards castle walls " << currentUnit.GetName() << " cell " << targetCell );
                 }
 
                 DEBUG( DBG_AI, DBG_INFO, "Melee phase end, targetCell is " << targetCell );
