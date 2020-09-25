@@ -184,12 +184,11 @@ namespace Battle
                     ArenaNode & unitNode = _cache[unitIdx];
 
                     const Indexes & around = board.GetAroundIndexes( unitIdx );
-                    for ( const int cellIdx : around ) {
-                        const Cell * cell = board.GetCell( cellIdx );
-                        if ( hexIsPassable( cellIdx ) ) {
+                    for ( const int cell : around ) {
+                        if ( hexIsPassable( cell ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = headIdx;
-                            unitNode._cost = board.GetDistance( headIdx, cellIdx );
+                            unitNode._cost = board.GetDistance( headIdx, cell );
                             break;
                         }
                     }
