@@ -47,8 +47,10 @@ namespace Battle
             }
             break;
         case Battle::RIGHT:
-            if ( x < ARENAW - 1 )
+            if ( x < ARENAW - 1 ) {
                 newIndex = fromCell + 1;
+                wideUnitOffset = -1;
+            }
             break;
         case Battle::BOTTOM_RIGHT:
             if ( y < ARENAH - 1 && ( x < ARENAW - 1 || isOddRow ) ) {
@@ -63,8 +65,10 @@ namespace Battle
             }
             break;
         case Battle::LEFT:
-            if ( x > 0 )
+            if ( x > 0 ) {
                 newIndex = fromCell - 1;
+                wideUnitOffset = 1;
+            }
             break;
         default:
             return -1;
@@ -74,7 +78,7 @@ namespace Battle
         if ( newIndex == -1 || !Board::GetCell( newIndex )->isPassable1( false ) )
             return -1;
 
-        if ( isWide && ( x + wideUnitOffset < 0 || x + wideUnitOffset > ARENAW - 1 || !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( true ) ) )
+        if ( isWide && ( x + wideUnitOffset < 0 || x + wideUnitOffset > ARENAW - 1 || !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( false ) ) )
             return -1;
 
         return newIndex;
@@ -94,6 +98,11 @@ namespace Battle
         }
     }
 
+    const ArenaNode & ArenaPathfinder::getNode( int targetCell ) const
+    {
+        return _cache[targetCell];
+    }
+
     uint32_t ArenaPathfinder::getDistance( int targetCell ) const
     {
         return _cache[targetCell]._cost;
@@ -106,7 +115,7 @@ namespace Battle
 
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
-        return ( _cache[targetCell]._cost == 0 || _cache[targetCell]._isOpen ) && _cache[targetCell]._from != -1;
+        return _cache[targetCell]._cost == 0 || ( _cache[targetCell]._isOpen && _cache[targetCell]._from != -1 );
     }
 
     std::vector<int> ArenaPathfinder::getPath( int targetCell ) const
@@ -114,7 +123,6 @@ namespace Battle
         std::vector<int> path;
 
         int nodeID = targetCell;
-        const ArenaNode & node = _cache[targetCell];
         while ( _cache[nodeID]._cost != 0 ) {
             path.push_back( nodeID );
             nodeID = _cache[nodeID]._from;
@@ -152,7 +160,6 @@ namespace Battle
 
         if ( unit.isFlying() ) {
             const Board & board = *Arena::GetBoard();
-            const int headIdx = unitHead->GetIndex();
 
             for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
                 const int idx = it->GetIndex();
@@ -161,17 +168,18 @@ namespace Battle
                     = !unitIsWide || ( x < ARENAW - 2 && board.GetCell( idx + 1 )->isPassable1( true ) ) || ( x > 0 && board.GetCell( idx - 1 )->isPassable1( true ) );
 
                 ArenaNode & node = _cache[idx];
-                if ( it->isPassable1( false ) ) {
+                if ( it->isPassable1( true ) ) {
                     node._isOpen = true;
                     node._from = headIdx;
-                    node._cost = 1;
+                    node._cost = board.GetDistance( headIdx, idx );
                 }
                 else {
                     node._isOpen = false;
                 }
             }
             for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-                if ( it->GetUnit() ) {
+                const Unit * boardUnit = it->GetUnit();
+                if ( boardUnit && boardUnit->GetUID() != unit.GetUID() ) {
                     const int unitIdx = it->GetIndex();
                     ArenaNode & unitNode = _cache[unitIdx];
 
@@ -180,7 +188,7 @@ namespace Battle
                         if ( hexIsPassable( cell ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = headIdx;
-                            unitNode._cost = 1;
+                            unitNode._cost = board.GetDistance( headIdx, cell );
                             break;
                         }
                     }
@@ -203,6 +211,7 @@ namespace Battle
                     if ( newNode != -1 ) {
                         const uint16_t cost = _cache[fromNode]._cost;
                         ArenaNode & node = _cache[newNode];
+
                         if ( Board::GetCell( newNode )->GetUnit() && cost < node._cost ) {
                             node._isOpen = false;
                             node._from = fromNode;
