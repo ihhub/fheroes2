@@ -344,7 +344,6 @@ namespace AI
                             maxPriority = unitPriority;
                             targetCell = move.first;
                         }
-                    
                     }
                 }
 
