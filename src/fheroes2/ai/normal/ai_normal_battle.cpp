@@ -296,7 +296,7 @@ namespace AI
                 for ( const Unit * unitToDefend : friendly ) {
                     if ( unitToDefend->GetUID() != currentUnit.GetUID() && unitToDefend->isArchers() ) {
                         const int headIndexToDefend = unitToDefend->GetHeadIndex();
-                        std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *unitToDefend );
+                        const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *unitToDefend );
                         const uint32_t distanceToUnit = ( move.first != -1 ) ? move.second : Board::GetDistance( myHeadIndex, headIndexToDefend );
                         const double archerValue = unitToDefend->GetStrength() - distanceToUnit * defendDistanceModifier;
 
@@ -308,7 +308,7 @@ namespace AI
                             const Unit * enemy = Board::GetCell( cell )->GetUnit();
                             if ( enemy ) {
                                 const double enemyThreat = enemy->GetScoreQuality( currentUnit );
-                                std::pair<int, uint32_t> moveToEnemy = arena.CalculateMoveToUnit( *enemy );
+                                const std::pair<int, uint32_t> moveToEnemy = arena.CalculateMoveToUnit( *enemy );
                                 const bool canReach = moveToEnemy.first != -1 && moveToEnemy.second <= currentUnitMoveRange;
                                 const bool hadAnotherTarget = target != NULL;
 
@@ -318,7 +318,7 @@ namespace AI
                                 // 1. Enemy is within move range
                                 // 2. Archer unit value
                                 // 3. Enemy unit threat
-                                if ( canReach != hadAnotherTarget && canReach
+                                if ( ( canReach != hadAnotherTarget && canReach )
                                      || ( canReach == hadAnotherTarget
                                           && ( maxArcherValue < archerValue || ( maxArcherValue == archerValue && maxEnemyThreat < enemyThreat ) ) ) ) {
                                     targetCell = moveToEnemy.first;
