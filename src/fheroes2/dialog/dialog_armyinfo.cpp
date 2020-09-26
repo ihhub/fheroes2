@@ -404,7 +404,7 @@ void DrawMonsterInfo( const Point & offset, const Troop & troop )
     // count
     text.Set( GetString( troop.GetCount() ), Font::BIG );
     pos.x = offset.x + 140 - text.w() / 2;
-    pos.y = offset.y + 225;
+    pos.y = offset.y + 226;
     text.Blit( pos );
 }
 
