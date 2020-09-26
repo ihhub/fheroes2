@@ -299,8 +299,10 @@ namespace AI
                 for ( const Unit * enemy : enemies ) {
                     const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
 
-                    // Valid move, and less than half of width
-                    if ( move.first != -1 && move.second <= ARENAW / 2 ) {
+                    // Allow to move only within our half of the battlefield. If in castle make sure to stay inside.
+                    const bool isSafeToMove = ( !defendingCastle && move.second <= ARENAW / 2 ) || ( defendingCastle && Board::isCastleIndex( move.first ) );
+
+                    if ( move.first != -1 && isSafeToMove ) {
                         const double enemyValue = enemy->GetStrength() - move.second * attackDistanceModifier;
 
                         // Pick highest value unit if there's multiple
