@@ -189,6 +189,8 @@ namespace AI
         DEBUG( DBG_AI, DBG_TRACE, "Comparing shooters: " << myShooterStr << ", vs enemy " << enemyShooterStr );
 
         const bool defensiveTactics = defendingCastle || myShooterStr > enemyShooterStr;
+        const double attackDistanceModifier = enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
+        const double defenceDistanceModifier = myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
         // Step 3. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
@@ -289,20 +291,38 @@ namespace AI
 
             if ( defensiveTactics ) {
                 // Melee unit - Defensive action
-                const double defendDistanceModifier = myArmyStrength / STRENGTH_DISTANCE_FACTOR;
-                double maxArcherValue = defendDistanceModifier * ARENASIZE * -1;
+                double maxArcherValue = defenceDistanceModifier * ARENASIZE * -1;
+                double maxEnemyValue = attackDistanceModifier * ARENASIZE * -1;
                 double maxEnemyThreat = 0;
 
+                // 1. Check if there's a target within our half of the battlefield
+                for ( const Unit * enemy : enemies ) {
+                    const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
+
+                    // Valid move, and less than half of width
+                    if ( move.first != -1 && move.second <= ARENAW / 2 ) {
+                        const double enemyValue = enemy->GetStrength() - move.second * attackDistanceModifier;
+
+                        // Pick highest value unit if there's multiple
+                        if ( maxEnemyValue < enemyValue ) {
+                            maxEnemyValue = enemyValue;
+                            target = enemy;
+                            targetCell = move.first;
+                        }
+                    }
+                }
+
+                // 2. Check if our archer units are under threat - overwrite target and protect
                 for ( const Unit * unitToDefend : friendly ) {
                     if ( unitToDefend->GetUID() != currentUnit.GetUID() && unitToDefend->isArchers() ) {
                         const int headIndexToDefend = unitToDefend->GetHeadIndex();
                         const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *unitToDefend );
                         const uint32_t distanceToUnit = ( move.first != -1 ) ? move.second : Board::GetDistance( myHeadIndex, headIndexToDefend );
-                        const double archerValue = unitToDefend->GetStrength() - distanceToUnit * defendDistanceModifier;
+                        const double archerValue = unitToDefend->GetStrength() - distanceToUnit * defenceDistanceModifier;
 
                         DEBUG( DBG_AI, DBG_TRACE, unitToDefend->GetName() << " archer value " << archerValue << " distance: " << distanceToUnit );
 
-                        // Search for enemy units threatening our archers within range
+                        // 3. Search for enemy units blocking our archers within range move
                         const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( *unitToDefend );
                         for ( const int cell : adjacentEnemies ) {
                             const Unit * enemy = Board::GetCell( cell )->GetUnit();
@@ -315,9 +335,9 @@ namespace AI
                                 DEBUG( DBG_AI, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << enemyThreat << " distance " << moveToEnemy.second );
 
                                 // Composite priority criteria:
-                                // 1. Enemy is within move range
-                                // 2. Archer unit value
-                                // 3. Enemy unit threat
+                                // Primary - Enemy is within move range
+                                // Secondary - Archer unit value
+                                // Tertiary - Enemy unit threat
                                 if ( ( canReach != hadAnotherTarget && canReach )
                                      || ( canReach == hadAnotherTarget
                                           && ( maxArcherValue < archerValue || ( maxArcherValue == archerValue && maxEnemyThreat < enemyThreat ) ) ) ) {
@@ -333,7 +353,7 @@ namespace AI
                             }
                         }
 
-                        // No enemies found - move to protect
+                        // 4. No enemies found anywhere - move in closer to the friendly ranged unit
                         if ( !target && maxArcherValue < archerValue ) {
                             targetCell = move.first;
                             maxArcherValue = archerValue;
@@ -350,7 +370,6 @@ namespace AI
             }
             else {
                 // Melee unit - Offensive action
-                const double attackDistanceModifier = enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
                 double maxPriority = attackDistanceModifier * ARENASIZE * -1;
                 double highestStrength = 0;
 
