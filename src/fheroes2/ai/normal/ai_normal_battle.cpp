@@ -264,10 +264,11 @@ namespace AI
             }
             else {
                 // Normal attack: focus the highest value unit
+                double highestStrength = 0;
+
                 for ( const Unit * enemy : enemies ) {
                     const double attackPriority = enemy->GetScoreQuality( currentUnit );
 
-                    double highestStrength = 0;
                     if ( highestStrength < attackPriority ) {
                         highestStrength = attackPriority;
                         target = enemy;
@@ -284,6 +285,8 @@ namespace AI
             }
         }
         else {
+            // Melee unit decision tree (both flyers and walkers)
+
             if ( defensiveTactics ) {
                 // Melee unit - Defensive action
                 const double defendDistanceModifier = myArmyStrength / STRENGTH_DISTANCE_FACTOR;
@@ -297,6 +300,8 @@ namespace AI
                         const uint32_t distanceToUnit = ( move.first != -1 ) ? move.second : Board::GetDistance( myHeadIndex, headIndexToDefend );
                         const double archerValue = unitToDefend->GetStrength() - distanceToUnit * defendDistanceModifier;
 
+                        DEBUG( DBG_AI, DBG_TRACE, unitToDefend->GetName() << " archer value " << archerValue << " distance: " << distanceToUnit );
+
                         // Search for enemy units threatening our archers within range
                         const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( *unitToDefend );
                         for ( const int cell : adjacentEnemies ) {
@@ -305,17 +310,16 @@ namespace AI
                                 const double enemyThreat = enemy->GetScoreQuality( currentUnit );
                                 std::pair<int, uint32_t> moveToEnemy = arena.CalculateMoveToUnit( *enemy );
                                 const bool canReach = moveToEnemy.first != -1 && moveToEnemy.second <= currentUnitMoveRange;
-                                const bool prevReach = target != NULL;
-                                
+                                const bool hadAnotherTarget = target != NULL;
+
                                 // Composite priority criteria:
                                 // 1. Enemy is within move range
                                 // 2. Archer unit value
                                 // 3. Enemy unit threat
-                                if ( canReach != prevReach && canReach
-                                     || ( canReach == prevReach
+                                if ( canReach != hadAnotherTarget && canReach
+                                     || ( canReach == hadAnotherTarget
                                           && ( maxArcherValue < archerValue || ( maxArcherValue == archerValue && maxEnemyThreat < enemyThreat ) ) ) ) {
-                                    
-                                    targetCell = cell;
+                                    targetCell = moveToEnemy.first;
                                     target = enemy;
                                     maxArcherValue = archerValue;
                                     maxEnemyThreat = enemyThreat;
@@ -327,8 +331,9 @@ namespace AI
                         }
 
                         // No enemies found
-                        if ( targetCell == -1 ) {
+                        if ( targetCell == -1 && maxArcherValue < archerValue ) {
                             targetCell = move.first;
+                            maxArcherValue = archerValue;
                         }
                     }
                 }
