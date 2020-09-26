@@ -263,7 +263,7 @@ namespace AI
                 // Worst case scenario - Skip turn
             }
             else {
-                // Normal attack: focus the highest value unit
+                // Normal ranged attack: focus the highest value unit
                 double highestStrength = 0;
 
                 for ( const Unit * enemy : enemies ) {
@@ -312,6 +312,8 @@ namespace AI
                                 const bool canReach = moveToEnemy.first != -1 && moveToEnemy.second <= currentUnitMoveRange;
                                 const bool hadAnotherTarget = target != NULL;
 
+                                DEBUG( DBG_AI, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << enemyThreat << " distance " << moveToEnemy.second );
+
                                 // Composite priority criteria:
                                 // 1. Enemy is within move range
                                 // 2. Archer unit value
@@ -323,6 +325,7 @@ namespace AI
                                     target = enemy;
                                     maxArcherValue = archerValue;
                                     maxEnemyThreat = enemyThreat;
+                                    DEBUG( DBG_AI, DBG_TRACE, " - Target selected " << enemy->GetName() << " cell " << targetCell << " archer value " << archerValue );
                                 }
                             }
                             else {
@@ -330,8 +333,8 @@ namespace AI
                             }
                         }
 
-                        // No enemies found
-                        if ( targetCell == -1 && maxArcherValue < archerValue ) {
+                        // No enemies found - move to protect
+                        if ( !target && maxArcherValue < archerValue ) {
                             targetCell = move.first;
                             maxArcherValue = archerValue;
                         }
@@ -409,7 +412,9 @@ namespace AI
                 }
             }
 
+            // Melee unit final stage - action target should be determined already, add actions to the queue
             DEBUG( DBG_AI, DBG_INFO, "Melee phase end, targetCell is " << targetCell );
+
             if ( targetCell != -1 ) {
                 if ( myHeadIndex != targetCell )
                     actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );
