@@ -1691,10 +1691,11 @@ void Battle::Interface::RedrawKilled( void )
     const Indexes cells = arena.GraveyardClosedCells();
 
     for ( Indexes::const_iterator it = cells.begin(); it != cells.end(); ++it ) {
-        const Unit * b = arena.GraveyardLastTroop( *it );
-
-        if ( b && *it != b->GetTailIndex() ) {
-            RedrawTroopSprite( *b );
+        const std::vector<const Unit *> & units = arena.GetGraveyardTroops( *it );
+        for ( size_t i = 0; i < units.size(); ++i ) {
+            if ( units[i] && *it != units[i]->GetTailIndex() ) {
+                RedrawTroopSprite( *units[i] );
+            }
         }
     }
 }
