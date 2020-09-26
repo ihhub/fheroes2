@@ -848,6 +848,18 @@ const Battle::Unit * Battle::Arena::GraveyardLastTroop( s32 index ) const
     return GetTroopUID( graveyard.GetLastTroopUID( index ) );
 }
 
+std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t hexIndex ) const
+{
+    const TroopUIDs & ids = graveyard.GetTroopUIDs( hexIndex );
+
+    std::vector<const Battle::Unit *> units( ids.size() );
+    for ( size_t i = 0; i < ids.size(); ++i ) {
+        units[i] = GetTroopUID( ids[i] );
+    }
+
+    return units;
+}
+
 Battle::Indexes Battle::Arena::GraveyardClosedCells( void ) const
 {
     return graveyard.GetClosedCells();

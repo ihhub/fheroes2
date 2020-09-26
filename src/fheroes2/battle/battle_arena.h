@@ -123,6 +123,7 @@ namespace Battle
 
         bool GraveyardAllowResurrect( s32, const Spell & ) const;
         const Unit * GraveyardLastTroop( s32 ) const;
+        std::vector<const Unit *> GetGraveyardTroops( const int32_t hexIndex ) const;
         Indexes GraveyardClosedCells( void ) const;
 
         bool CanSurrenderOpponent( int color ) const;
