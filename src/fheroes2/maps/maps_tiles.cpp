@@ -1009,9 +1009,85 @@ bool isForestsTrees( const Maps::TilesAddon & ta )
     return Maps::TilesAddon::isForests( ta ) || Maps::TilesAddon::isTrees( ta ) || Maps::TilesAddon::isCactus( ta );
 }
 
-bool isImpassableIfOverlayed( uint8_t object, uint8_t objectTileset )
+// Return true if tile will be impassable if another object overlays it. Edge case when dealing with mountain and forest tiles.
+bool isImpassableIfOverlayed( uint8_t objectTileset, uint8_t icnIndex )
 {
-    return objectTileset != 0 && ( object == MP2::OBJ_MOUNTS || object == MP2::OBJ_TREES || object == MP2::OBJ_CACTUS || object == MP2::OBJ_STONES );
+    // Unfortunately can't be determined by the object ID, have to check the tiles
+    switch ( MP2::GetICNObject( objectTileset ) ) {
+    case ICN::MTNSNOW:
+    case ICN::MTNSWMP:
+    case ICN::MTNLAVA:
+    case ICN::MTNDSRT:
+    case ICN::MTNMULT:
+    case ICN::MTNGRAS:
+        return !ObjMnts1::isShadow( icnIndex );
+
+    case ICN::MTNCRCK:
+    case ICN::MTNDIRT:
+        return !ObjMnts2::isShadow( icnIndex );
+
+    case ICN::TREJNGL:
+    case ICN::TREEVIL:
+    case ICN::TRESNOW:
+    case ICN::TREFIR:
+    case ICN::TREFALL:
+    case ICN::TREDECI:
+        return !ObjTree::isShadow( icnIndex );
+
+    case ICN::OBJNSNOW:
+        if ( ( icnIndex > 21 && icnIndex < 25 ) || ( icnIndex > 25 && icnIndex < 29 ) || icnIndex == 30 || icnIndex == 32 || icnIndex == 34 || icnIndex == 35
+             || ( icnIndex > 36 && icnIndex < 40 ) )
+            return true;
+        break;
+
+    case ICN::OBJNSWMP:
+        if ( icnIndex == 201 || icnIndex == 205 || ( icnIndex > 207 && icnIndex < 211 ) )
+            return true;
+        break;
+
+    case ICN::OBJNGRAS:
+        if ( ( icnIndex > 32 && icnIndex < 36 ) || icnIndex == 37 || icnIndex == 38 || icnIndex == 40 || icnIndex == 41 || icnIndex == 43 || icnIndex == 45
+             || icnIndex == 80 || ( icnIndex > 82 && icnIndex < 86 ) || icnIndex == 87 || ( icnIndex > 88 && icnIndex < 92 ) )
+            return true;
+        break;
+
+    case ICN::OBJNDIRT:
+        if ( icnIndex == 92 || icnIndex == 93 || icnIndex == 95 || icnIndex == 98 || icnIndex == 99 || icnIndex == 101 || icnIndex == 102 || icnIndex == 104
+             || icnIndex == 105 || icnIndex == 115 || icnIndex == 118 || icnIndex == 120 || icnIndex == 123 || icnIndex == 125 || icnIndex == 127 )
+            return true;
+        break;
+
+    case ICN::OBJNCRCK:
+        if ( icnIndex == 10 || icnIndex == 11 || icnIndex == 14 || icnIndex == 16 || icnIndex == 18 || icnIndex == 19 || icnIndex == 21 || icnIndex == 22
+             || ( icnIndex > 23 && icnIndex < 28 ) || ( icnIndex > 28 && icnIndex < 33 ) || icnIndex == 34 || icnIndex == 35 || icnIndex == 37 || icnIndex == 38
+             || ( icnIndex > 39 && icnIndex < 45 ) || icnIndex == 46 || icnIndex == 47 || icnIndex == 49 || icnIndex == 50 || icnIndex == 52 || icnIndex == 53
+             || icnIndex == 55 )
+            return true;
+        break;
+
+    case ICN::OBJNWAT2:
+        if ( icnIndex == 0 || icnIndex == 2 )
+            return true;
+        break;
+
+    case ICN::OBJNWATR:
+        if ( icnIndex == 182 || icnIndex == 183 || ( icnIndex > 184 && icnIndex < 188 ) )
+            return true;
+        break;
+
+    case ICN::OBJNDSRT:
+        if ( icnIndex == 3 || icnIndex == 4 || icnIndex == 6 || icnIndex == 7 || icnIndex == 9 || icnIndex == 10 || icnIndex == 12 || icnIndex == 24 || icnIndex == 26
+             || icnIndex == 28 || ( icnIndex > 29 && icnIndex < 33 ) || icnIndex == 34 || icnIndex == 36 || icnIndex == 37 || icnIndex == 39 || icnIndex == 40
+             || icnIndex == 42 || icnIndex == 43 || icnIndex == 45 || icnIndex == 48 || icnIndex == 49 || icnIndex == 51 || icnIndex == 53 || icnIndex == 74
+             || icnIndex == 76 )
+            return true;
+        break;
+
+    default:
+        break;
+    }
+
+    return false;
 }
 
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
@@ -1062,7 +1138,7 @@ void Maps::Tiles::UpdatePassable( void )
 
     // on ground
     if ( MP2::OBJ_HEROES != mp2_object && !isWater() ) {
-        bool hasRocksOrTrees = isImpassableIfOverlayed( obj, objectTileset );
+        bool hasRocksOrTrees = isImpassableIfOverlayed( objectTileset, objectIndex );
         bool mounts2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isMountsRocs );
         bool trees2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isForestsTrees );
 
@@ -1127,7 +1203,7 @@ void Maps::Tiles::UpdatePassable( void )
     if ( Maps::isValidDirection( GetIndex(), Direction::TOP ) ) {
         Tiles & top = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::TOP ) );
 
-        if ( isWater() == top.isWater() && isImpassableIfOverlayed( top.mp2_object, top.objectTileset ) && !MP2::isActionObject( top.GetObject( false ), isWater() )
+        if ( isWater() == top.isWater() && isImpassableIfOverlayed( top.objectTileset, top.objectIndex ) && !MP2::isActionObject( top.GetObject( false ), isWater() )
              && ( tilePassable && !( tilePassable & DIRECTION_TOP_ROW ) ) && !( top.tilePassable & DIRECTION_TOP_ROW ) ) {
             top.tilePassable = 0;
 #ifdef WITH_DEBUG
