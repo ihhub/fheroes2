@@ -1394,17 +1394,13 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp )
     }
 }
 
-void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool skipObjs ) const
+void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon ) const
 {
     Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( ( area.GetVisibleTileROI() & mp ) && !addon.empty() ) {
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
-            // skip
-            if ( skipObjs && MP2::isRemoveObject( GetObject() ) )
-                continue;
-
             const u8 & index = ( *it ).index;
             const int icn = MP2::GetICNObject( ( *it ).object );
 
@@ -1422,9 +1418,9 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool
     }
 }
 
-void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, bool skipObjs ) const
+void Maps::Tiles::RedrawBottom( fheroes2::Image & dst ) const
 {
-    RedrawAddon( dst, addons_level1, skipObjs );
+    RedrawAddon( dst, addons_level1 );
 }
 
 void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
@@ -1589,7 +1585,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
     }
 }
 
-void Maps::Tiles::RedrawTop( fheroes2::Image & dst, bool skipObjs ) const
+void Maps::Tiles::RedrawTop( fheroes2::Image & dst ) const
 {
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1611,7 +1607,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, bool skipObjs ) const
         }
     }
 
-    RedrawAddon( dst, addons_level2, skipObjs );
+    RedrawAddon( dst, addons_level2 );
 }
 
 void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, bool skip_ground ) const

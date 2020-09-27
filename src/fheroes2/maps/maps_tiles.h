@@ -159,14 +159,14 @@ namespace Maps
 
         void RedrawTile( fheroes2::Image & ) const;
         static void RedrawEmptyTile( fheroes2::Image & dst, const Point & mp );
-        void RedrawBottom( fheroes2::Image & dst, bool skipObjs = false ) const;
+        void RedrawBottom( fheroes2::Image & dst ) const;
         void RedrawBottom4Hero( fheroes2::Image & ) const;
-        void RedrawTop( fheroes2::Image & dst, bool skipObjs = false ) const;
+        void RedrawTop( fheroes2::Image & dst ) const;
         void RedrawTop4Hero( fheroes2::Image &, bool skip_ground ) const;
         void RedrawObjects( fheroes2::Image & ) const;
         void RedrawMonstersAndBoat( fheroes2::Image & ) const;
         void RedrawFogs( fheroes2::Image &, int ) const;
-        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool skipObjs = false ) const;
+        void RedrawAddon( fheroes2::Image & dst, const Addons & addon ) const;
         void RedrawPassable( fheroes2::Image & ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
