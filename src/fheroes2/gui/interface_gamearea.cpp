@@ -125,7 +125,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 
     std::vector<std::pair<Point, const Heroes *> > heroList;
 
-    // ground
+    // ground and bottom layer
     for ( int16_t y = 0; y < tileROI.h; ++y ) {
         for ( s32 x = 0; x < tileROI.w; ++x ) {
             Point offset( tileROI.x + x, tileROI.y + y );
@@ -142,21 +142,35 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
                 // bottom
                 if ( flag & LEVEL_BOTTOM )
                     tile.RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
+            }
+        }
+    }
 
-                // map object
-                if ( flag & LEVEL_OBJECTS )
-                    tile.RedrawObjects( dst );
+    // objects and top layer
+    for ( int16_t y = 0; y < tileROI.h; ++y ) {
+        const s32 offsetY = tileROI.y + y;
+        if ( offsetY < 0 || offsetY >= world.h() )
+            continue;
+        for ( s32 x = 0; x < tileROI.w; ++x ) {
+            const s32 offsetX = tileROI.x + x;
+            if ( offsetX < 0 || offsetX >= world.w() )
+                continue;
 
-                // top
-                if ( flag & LEVEL_TOP )
-                    tile.RedrawTop( dst );
+            const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
 
-                // heroes will be drawn later
-                if ( tile.GetObject() == MP2::OBJ_HEROES && ( flag & LEVEL_HEROES ) ) {
-                    const Heroes * hero = tile.GetHeroes();
-                    if ( hero ) {
-                        heroList.emplace_back( GetRelativeTilePosition( offset ), hero );
-                    }
+            // map object
+            if ( flag & LEVEL_OBJECTS )
+                tile.RedrawObjects( dst );
+
+            // top
+            if ( flag & LEVEL_TOP )
+                tile.RedrawTop( dst );
+
+            // heroes will be drawn later
+            if ( tile.GetObject() == MP2::OBJ_HEROES && ( flag & LEVEL_HEROES ) ) {
+                const Heroes * hero = tile.GetHeroes();
+                if ( hero ) {
+                    heroList.emplace_back( GetRelativeTilePosition( Point( offsetX, offsetY ) ), hero );
                 }
             }
         }

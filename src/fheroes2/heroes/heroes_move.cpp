@@ -490,7 +490,6 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM ) ) {
         Maps::Tiles & tile_bottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
         tile_bottom.RedrawBottom4Hero( dst );
-        tile_bottom.RedrawObjects( dst );
         tile_bottom.RedrawTop( dst );
     }
 
@@ -499,7 +498,6 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
             if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) ) {
                 Maps::Tiles & tile_dir_bottom = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) );
                 tile_dir_bottom.RedrawBottom4Hero( dst );
-                tile_dir_bottom.RedrawObjects( dst );
                 tile_dir_bottom.RedrawTop( dst );
             }
             if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) ) {

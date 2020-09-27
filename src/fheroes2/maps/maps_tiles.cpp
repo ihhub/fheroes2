@@ -1435,41 +1435,43 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
     }
 }
 
-bool SkipRedrawTileBottom4Hero( const Maps::TilesAddon & ta, int passable )
+bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable )
 {
-    if ( Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) )
+    switch ( MP2::GetICNObject( tileset ) ) {
+    case ICN::UNKNOWN:
+    case ICN::MINIHERO:
+    case ICN::MONS32:
         return true;
-    else
-        switch ( MP2::GetICNObject( ta.object ) ) {
-        case ICN::UNKNOWN:
-        case ICN::MINIHERO:
-        case ICN::MONS32:
-            return true;
 
-        case ICN::OBJNWATR:
-            return ta.index >= 202 && ta.index <= 225; /* whirlpool */
+    // whirlpool
+    case ICN::OBJNWATR:
+        return icnIndex >= 202 && icnIndex <= 225;
 
-        case ICN::OBJNTWSH:
-        case ICN::OBJNTWBA:
-        case ICN::ROAD:
-        case ICN::STREAM:
-            return true;
+    // river delta
+    case ICN::OBJNMUL2:
+        return icnIndex < 14;
 
-        case ICN::OBJNCRCK:
-            return ( ta.index == 58 || ta.index == 59 || ta.index == 64 || ta.index == 65 || ta.index == 188 || ta.index == 189 || ( passable & DIRECTION_TOP_ROW ) );
+    case ICN::OBJNTWSH:
+    case ICN::OBJNTWBA:
+    case ICN::ROAD:
+    case ICN::STREAM:
+        return true;
 
-        case ICN::OBJNDIRT:
-        case ICN::OBJNDSRT:
-        case ICN::OBJNGRA2:
-        case ICN::OBJNGRAS:
-        case ICN::OBJNLAVA:
-        case ICN::OBJNSNOW:
-        case ICN::OBJNSWMP:
-            return ( passable & DIRECTION_TOP_ROW );
+    case ICN::OBJNCRCK:
+        return ( icnIndex == 58 || icnIndex == 59 || icnIndex == 64 || icnIndex == 65 || icnIndex == 188 || icnIndex == 189 || ( passable & DIRECTION_TOP_ROW ) );
 
-        default:
-            break;
-        }
+    case ICN::OBJNDIRT:
+    case ICN::OBJNDSRT:
+    case ICN::OBJNGRA2:
+    case ICN::OBJNGRAS:
+    case ICN::OBJNLAVA:
+    case ICN::OBJNSNOW:
+    case ICN::OBJNSWMP:
+        return ( passable & DIRECTION_TOP_ROW );
+
+    default:
+        break;
+    }
 
     return false;
 }
@@ -1479,9 +1481,9 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( area.GetVisibleTileROI() & mp ) && !addons_level1.empty() ) {
+    if ( ( area.GetVisibleTileROI() & mp ) ) {
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-            if ( !SkipRedrawTileBottom4Hero( *it, tilePassable ) ) {
+            if ( !SkipRedrawTileBottom4Hero( it->object, it->index, tilePassable ) ) {
                 const u8 & object = ( *it ).object;
                 const u8 & index = ( *it ).index;
                 const int icn = MP2::GetICNObject( object );
@@ -1493,6 +1495,10 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
                     area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
                 }
             }
+        }
+
+        if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
+            RedrawObjects( dst );
         }
     }
 }
