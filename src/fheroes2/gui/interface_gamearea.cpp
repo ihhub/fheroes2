@@ -356,7 +356,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 in
                                + Point( result.width() / 2, result.height() / 2 ) );
 
         fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
-        fheroes2::ApplyPalette( result, PAL::GetPalette( Settings::Get().ExtGameEvilInterface() ? PAL::GRAY : PAL::BROWN ) );
+        fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::TAN ) );
 
         gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
     }
