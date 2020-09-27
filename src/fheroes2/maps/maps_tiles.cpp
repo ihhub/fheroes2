@@ -2538,8 +2538,11 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         tile.uniq = 0;
         tile.objectTileset = 0;
         tile.objectIndex = 255;
+        tile.tileIsRoad = 0;
         msg >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2;
 
+        tile.heroID = 0;
+        tile.quantity3 = 0;
         if ( tile.mp2_object == MP2::OBJ_HEROES ) {
             msg >> tile.heroID;
         }
