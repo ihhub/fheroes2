@@ -401,10 +401,17 @@ void DrawMonsterInfo( const Point & offset, const Troop & troop )
     Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
     text.Blit( pos );
 
-    // count
+    // amount
+    const int offsetXGoodAmountBox = 80;
+    const int offsetYGoodAmountBox = 222;
+    const int offsetXEvilAmountBox = 89;
+    const int offsetYEvilAmountBox = 221;
+    const int widthAmountBox = 125;
+    const int heightAmountBox = 23;
+
     text.Set( GetString( troop.GetCount() ), Font::BIG );
-    pos.x = offset.x + 140 - text.w() / 2;
-    pos.y = offset.y + 226;
+    pos.x = offset.x + ( Settings::Get().ExtGameEvilInterface() ? offsetXEvilAmountBox : offsetXGoodAmountBox ) + widthAmountBox / 2 - text.w() / 2;
+    pos.y = offset.y + ( Settings::Get().ExtGameEvilInterface() ? offsetYEvilAmountBox : offsetYGoodAmountBox ) + heightAmountBox / 2 - text.h() / 2 + 1;
     text.Blit( pos );
 }
 
