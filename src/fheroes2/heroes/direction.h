@@ -25,8 +25,6 @@
 #include <string>
 #include <vector>
 
-#include "gamedefs.h"
-
 typedef std::vector<int> Directions;
 
 namespace Direction

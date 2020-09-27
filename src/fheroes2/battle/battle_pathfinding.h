@@ -20,13 +20,47 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include "battle_board.h"
 
-#include "math_base.h"
-
-namespace Video
+namespace Battle
 {
-    // Returns 0 by default if roi is empty
-    size_t ShowVideo( const std::string & videoPath, bool isLooped, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
+    const uint16_t MAX_MOVE_COST = ARENASIZE;
+
+    /* ArenaNode, different situations
+     * default:  from: -1, isOpen: true, cost: MAX
+     * starting: from: -1, isOpen: false, cost: 0
+     * passable: from: 0-98, isOpen: true, cost: 1+
+     * oth.unit: from: 0-98, isOpen: false, cost: 0+
+     * terrain:  from: -1, isOpen: false, cost: MAX
+     * if tile wouldn't be reached it stays as default
+     */
+    struct ArenaNode
+    {
+        int _from = -1;
+        uint16_t _cost = MAX_MOVE_COST;
+        bool _isOpen = true;
+
+        ArenaNode() {}
+        ArenaNode( int node, uint16_t cost, bool isOpen )
+            : _from( node )
+            , _cost( cost )
+            , _isOpen( isOpen )
+        {}
+    };
+
+    class ArenaPathfinder
+    {
+    public:
+        ArenaPathfinder();
+        void reset();
+        void calculate( const Unit & unit );
+        std::vector<int> getPath( int targetCell ) const;
+        uint32_t getDistance( int targetCell ) const;
+        const ArenaNode & getNode( int targetCell ) const;
+        bool hexIsAccessible( int targetCell ) const;
+        bool hexIsPassable( int targetCell ) const;
+
+    private:
+        std::vector<ArenaNode> _cache;
+    };
 }

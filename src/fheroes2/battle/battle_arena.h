@@ -28,6 +28,7 @@
 #include "ai.h"
 #include "battle_board.h"
 #include "battle_grave.h"
+#include "battle_pathfinding.h"
 #include "gamedefs.h"
 #include "spell_storage.h"
 
@@ -101,7 +102,15 @@ namespace Battle
 
         void FadeArena( void ) const;
 
+        // returns pair with move cell index and distance
+        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target );
+
+        uint32_t CalculateMoveDistance( int32_t indexTo );
+        bool hexIsAccessible( int32_t indexTo );
+        bool hexIsPassable( int32_t indexTo );
         Indexes GetPath( const Unit &, const Position & );
+        Indexes CalculatePath( const Unit & unit, int32_t indexTo );
+
         void ApplyAction( Command & );
 
         TargetsInfo GetTargetsForDamage( Unit &, Unit &, s32 );
@@ -114,6 +123,7 @@ namespace Battle
 
         bool GraveyardAllowResurrect( s32, const Spell & ) const;
         const Unit * GraveyardLastTroop( s32 ) const;
+        std::vector<const Unit *> GetGraveyardTroops( const int32_t hexIndex ) const;
         Indexes GraveyardClosedCells( void ) const;
 
         bool CanSurrenderOpponent( int color ) const;
@@ -188,6 +198,7 @@ namespace Battle
         SpellStorage usage_spells;
 
         Board board;
+        ArenaPathfinder _pathfinder;
         int icn_covr;
 
         u32 current_turn;

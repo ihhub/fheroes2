@@ -24,7 +24,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "resource.h"
-#include "settings.h"
 #include "text.h"
 #include "ui_button.h"
 
@@ -42,7 +41,7 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
     Resource::BoxSprite rbs( rs, BOXAREA_WIDTH );
 
-    const int spacer = Settings::Get().QVGA() ? 5 : 10;
+    const int spacer = 10;
 
     FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().h, buttons != 0 );
     Point pos = box.GetArea();

@@ -201,7 +201,7 @@ ExperienceIndicator::ExperienceIndicator( const Heroes & h )
     area.w = 39;
     area.h = 36;
 
-    descriptions = _( "Current experience %{exp1} Next level %{exp2}." );
+    descriptions = _( "Current experience %{exp1}.\n Next level %{exp2}." );
     StringReplace( descriptions, "%{exp1}", hero.GetExperience() );
     StringReplace( descriptions, "%{exp2}", hero.GetExperienceFromLevel( hero.GetLevelFromExperience( hero.GetExperience() ) ) );
 }

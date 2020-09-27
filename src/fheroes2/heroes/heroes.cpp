@@ -52,7 +52,7 @@ const char * Heroes::GetName( int id )
 {
     const char * names[]
         = {// knight
-           _( "Lord Kilburn" ), _( "Sir Gallanth" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
+           _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
            // barbarian
            _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
            // sorceress
@@ -64,7 +64,7 @@ const char * Heroes::GetName( int id )
            // necromant
            _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
            // campains
-           _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Bax" ),
+           _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
            // loyalty version
            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
            _( "Martine" ), _( "Jarkonas" ),
@@ -733,7 +733,7 @@ bool Heroes::Recruit( int cl, const Point & pt )
         SetColor( cl );
         killer_color.SetColor( Color::NONE );
         SetCenter( pt );
-        if ( !Modes( SAVEPOINTS ) )
+        if ( !Modes( SAVE_MP_POINTS ) )
             move_point = GetMaxMovePoints();
         MovePointsScaleFixed();
 
@@ -754,7 +754,7 @@ bool Heroes::Recruit( const Castle & castle )
     if ( Recruit( castle.GetColor(), castle.GetCenter() ) ) {
         if ( castle.GetLevelMageGuild() ) {
             // magic point
-            if ( !Modes( SAVEPOINTS ) )
+            if ( !Modes( SAVE_SP_POINTS ) )
                 SetSpellPoints( GetMaxSpellPoints() );
             // learn spell
             castle.MageGuildEducateHero( *this );
@@ -812,7 +812,7 @@ void Heroes::ActionNewDay( void )
     visit_object.remove_if( Visit::isDayLife );
 
     // new day, new capacities
-    ResetModes( SAVEPOINTS );
+    ResetModes( SAVE_MP_POINTS );
 }
 
 void Heroes::ActionNewWeek( void )
@@ -975,8 +975,6 @@ bool Heroes::PickupArtifact( const Artifact & art )
 {
     if ( !art.isValid() )
         return false;
-
-    // const Settings & conf = Settings::Get();
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
@@ -1439,6 +1437,8 @@ void Heroes::SetFreeman( int reason )
             army.Reset( false );
         else if ( ( Battle::RESULT_LOSS & reason ) && !( Battle::RESULT_SURRENDER & reason ) )
             army.Reset( true );
+        else if ( reason == 0 ) // Dismissed hero
+            army.Reset( true );
 
         if ( GetColor() != Color::NONE )
             kingdom.RemoveHeroes( this );
@@ -1452,7 +1452,8 @@ void Heroes::SetFreeman( int reason )
         SetMove( false );
         SetModes( ACTION );
         if ( savepoints )
-            SetModes( SAVEPOINTS );
+            SetModes( SAVE_MP_POINTS );
+        SetModes( SAVE_SP_POINTS );
     }
 }
 
@@ -1897,8 +1898,6 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 
 Heroes * AllHeroes::GetFreeman( int race ) const
 {
-    const Settings & conf = Settings::Get();
-
     int min = Heroes::UNKNOWN;
     int max = Heroes::UNKNOWN;
 

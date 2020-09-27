@@ -88,7 +88,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
             savname.erase( dotpos );
 
         text.Set( savname, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 5, dsty, ( Settings::Get().QVGA() ? 190 : 155 ) );
+        text.Blit( dstx + 5, dsty, 155 );
 
         text.Set( short_date, ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 265 - text.w(), dsty );

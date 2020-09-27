@@ -199,7 +199,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     if ( conf.ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    Dialog::FrameBorder background( Display::GetDefaultSize() );
+    Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
 
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );
@@ -269,7 +269,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     }
 
     // resource
-    const Rect rectResource = RedrawResourcePanel( cur_pt );
+    const Rect & rectResource = RedrawResourcePanel( cur_pt );
 
     // button swap
     SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 345 );
@@ -745,7 +745,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
 }
 
 /* redraw resource info panel */
-Rect Castle::RedrawResourcePanel( const Point & pt )
+Rect Castle::RedrawResourcePanel( const Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Funds & resource = world.GetKingdom( GetColor() ).GetFunds();

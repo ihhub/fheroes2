@@ -860,7 +860,7 @@ ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change 
 
         spcursor.resize( backsf.width(), backsf.height() );
         spcursor.reset();
-        fheroes2::DrawBorder( spcursor, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
+        fheroes2::DrawBorder( spcursor, 214 );
     }
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );

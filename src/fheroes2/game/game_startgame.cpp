@@ -132,6 +132,8 @@ void Game::OpenCastleDialog( Castle & castle )
     Interface::StatusWindow::ResetTimer();
     bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
+    const size_t heroCountBefore = myKingdom.GetHeroes().size();
+
     if ( it != myCastles.end() ) {
         int result = Dialog::ZERO;
         while ( Dialog::CANCEL != result ) {
@@ -158,7 +160,12 @@ void Game::OpenCastleDialog( Castle & castle )
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
-    basicInterface.SetFocus( *it );
+    if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+        basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
+    }
+    else {
+        basicInterface.SetFocus( *it );
+    }
     basicInterface.RedrawFocus();
 }
 
@@ -446,6 +453,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
             }
+            else {
+                protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+            }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
@@ -561,12 +571,6 @@ int Interface::Basic::StartGame( void )
                     if ( res == Game::ENDTURN ) {
                         statusWindow.Reset();
                         statusWindow.SetState( STATUS_AITURN );
-
-                        // for pocketpc: show status window
-                        if ( conf.QVGA() && !conf.ShowStatus() ) {
-                            conf.SetShowStatus( true );
-                            statusWindow.SetRedraw();
-                        }
 
                         cursor.Hide();
                         cursor.SetThemes( Cursor::WAIT );

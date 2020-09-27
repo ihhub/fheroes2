@@ -423,12 +423,6 @@ void Interface::Basic::EventSwitchShowRadar( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowIcons() || conf.ShowStatus() || conf.ShowButtons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowStatus( false );
-                conf.SetShowButtons( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowRadar( true );
             radar.SetRedraw();
         }
@@ -445,12 +439,6 @@ void Interface::Basic::EventSwitchShowButtons( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowStatus() || conf.ShowIcons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowStatus( false );
-                conf.SetShowRadar( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowButtons( true );
             buttonsArea.SetRedraw();
         }
@@ -467,12 +455,6 @@ void Interface::Basic::EventSwitchShowStatus( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowIcons() || conf.ShowButtons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowButtons( false );
-                conf.SetShowRadar( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowStatus( true );
             statusWindow.SetRedraw();
         }
@@ -489,12 +471,6 @@ void Interface::Basic::EventSwitchShowIcons( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowStatus() || conf.ShowButtons() ) ) {
-                conf.SetShowButtons( false );
-                conf.SetShowRadar( false );
-                conf.SetShowStatus( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowIcons( true );
             iconsPanel.SetCurrentVisible();
             iconsPanel.SetRedraw();

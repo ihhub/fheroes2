@@ -81,7 +81,7 @@ int Dialog::FileOptions( void )
                 break;
             }
         }
-        if ( le.MouseClickLeft( buttonLoad.area() ) ) {
+        else if ( le.MouseClickLeft( buttonLoad.area() ) ) {
             if ( ListFiles::IsEmpty( Settings::GetSaveDir(), ".sav", false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
@@ -92,19 +92,31 @@ int Dialog::FileOptions( void )
                 }
             }
         }
-        if ( le.MouseClickLeft( buttonSave.area() ) ) {
+        else if ( le.MouseClickLeft( buttonSave.area() ) ) {
             result = Interface::Basic::Get().EventSaveGame();
             break;
         }
-        if ( le.MouseClickLeft( buttonQuit.area() ) ) {
+        else if ( le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::Get().EventExit() == Game::QUITGAME ) {
                 result = Game::QUITGAME;
                 break;
             }
         }
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
             result = Game::CANCEL;
             break;
+        }
+        else if ( le.MousePressRight( buttonNew.area() ) ) {
+            Dialog::Message( "", _( "Start a single or multi-player game." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonLoad.area() ) ) {
+            Dialog::Message( "", _( "Load a previously saved game." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonSave.area() ) ) {
+            Dialog::Message( "", _( "Save the current game." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonQuit.area() ) ) {
+            Dialog::Message( "", _( "Quit out of Heroes of Might and Magic II." ), Font::BIG );
         }
     }
 

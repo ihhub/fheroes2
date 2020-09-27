@@ -69,10 +69,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     // portrait
     dst_pt.x = cur_pt.x + 93;
     dst_pt.y = cur_pt.y + 72;
+    const fheroes2::Image portrait1 = GetPortrait( PORT_BIG );
+    fheroes2::Rect hero1Area( dst_pt.x, dst_pt.y, portrait1.width(), portrait1.height() );
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = cur_pt.x + 445;
     dst_pt.y = cur_pt.y + 72;
+    const fheroes2::Image portrait2 = heroes2.GetPortrait( PORT_BIG );
+    fheroes2::Rect hero2Area( dst_pt.x, dst_pt.y, portrait2.width(), portrait2.height() );
     heroes2.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = cur_pt.x + 34;
@@ -250,14 +254,29 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             display.render();
         }
 
-        if ( le.MouseCursor( moraleIndicator1.GetArea() ) )
+        if ( le.MouseCursor( moraleIndicator1.GetArea() ) ) {
             MoraleIndicator::QueueEventProcessing( moraleIndicator1 );
-        else if ( le.MouseCursor( moraleIndicator2.GetArea() ) )
+        }
+        else if ( le.MouseCursor( moraleIndicator2.GetArea() ) ) {
             MoraleIndicator::QueueEventProcessing( moraleIndicator2 );
-        else if ( le.MouseCursor( luckIndicator1.GetArea() ) )
+        }
+        else if ( le.MouseCursor( luckIndicator1.GetArea() ) ) {
             LuckIndicator::QueueEventProcessing( luckIndicator1 );
-        else if ( le.MouseCursor( luckIndicator2.GetArea() ) )
+        }
+        else if ( le.MouseCursor( luckIndicator2.GetArea() ) ) {
             LuckIndicator::QueueEventProcessing( luckIndicator2 );
+        }
+
+        if ( le.MouseClickLeft( hero1Area ) ) {
+            OpenDialog( true, true );
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( hero2Area ) ) {
+            heroes2.OpenDialog( true, true );
+            cursor.Show();
+            display.render();
+        }
     }
 
     if ( Settings::Get().ExtHeroRecalculateMovement() ) {

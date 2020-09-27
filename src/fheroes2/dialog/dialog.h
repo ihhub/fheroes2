@@ -31,7 +31,7 @@
 #include "image.h"
 
 #define SHADOWWIDTH 16
-#define BOXAREA_WIDTH 245
+#define BOXAREA_WIDTH 244
 
 class Castle;
 class Heroes;

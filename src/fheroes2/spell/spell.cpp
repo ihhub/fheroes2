@@ -612,6 +612,40 @@ bool Spell::isALiveOnly( void ) const
     return false;
 }
 
+bool Spell::isSingleTarget() const
+{
+    switch ( id ) {
+    case LIGHTNINGBOLT:
+    case TELEPORT:
+    case CURE:
+    case RESURRECT:
+    case RESURRECTTRUE:
+    case HASTE:
+    case SLOW:
+    case BLIND:
+    case BLESS:
+    case STONESKIN:
+    case STEELSKIN:
+    case CURSE:
+    case ANTIMAGIC:
+    case DISPEL:
+    case ARROW:
+    case BERSERKER:
+    case PARALYZE:
+    case HYPNOTIZE:
+    case COLDRAY:
+    case DISRUPTINGRAY:
+    case DRAGONSLAYER:
+    case BLOODLUST:
+    case ANIMATEDEAD:
+    case MIRRORIMAGE:
+    case SHIELD:
+        return true;
+    }
+
+    return false;
+}
+
 bool Spell::isApplyWithoutFocusObject( void ) const
 {
     if ( isMassActions() || isSummon() )

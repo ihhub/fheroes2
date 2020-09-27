@@ -154,7 +154,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set interface hide/show
-        if ( le.MouseClickLeft( rect8 ) && !conf.QVGA() ) {
+        if ( le.MouseClickLeft( rect8 ) ) {
             conf.SetHideInterface( !conf.ExtGameHideInterface() );
             result |= 0x04;
             redraw = true;

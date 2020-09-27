@@ -205,23 +205,22 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
 {
     Point dst_pt;
     Text text;
-    const bool pda = Settings::Get().QVGA();
 
     // attack
-    text.Set( std::string( _( "Attack" ) ) + ":" );
+    text.Set( std::string( _( "Attack Skill" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y = dst.y;
     text.Blit( dst_pt );
 
     const int offsetX = 6;
-    const int offsetY = pda ? 14 : 16;
+    const int offsetY = 16;
 
     text.Set( troop.GetAttackString() );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt );
 
     // defense
-    text.Set( std::string( _( "Defense" ) ) + ":" );
+    text.Set( std::string( _( "Defense Skill" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y += offsetY;
     text.Blit( dst_pt );
@@ -251,7 +250,7 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
     text.Blit( dst_pt );
 
     if ( troop().GetDamageMin() != troop().GetDamageMax() )
-        text.Set( GetString( troop().GetDamageMin() ) + " - " + GetString( troop().GetDamageMax() ) );
+        text.Set( GetString( troop().GetDamageMin() ) + "-" + GetString( troop().GetDamageMax() ) );
     else
         text.Set( GetString( troop().GetDamageMin() ) );
     dst_pt.x = dst.x + offsetX;

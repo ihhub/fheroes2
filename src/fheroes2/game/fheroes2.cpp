@@ -148,8 +148,7 @@ int main( int argc, char ** argv )
             display.resize( conf.VideoMode().w, conf.VideoMode().h );
             fheroes2::engine().setTitle( GetCaption() );
 
-            // display.SetVideoMode( conf.VideoMode().w, conf.VideoMode().h, conf.FullScreen(), conf.KeepAspectRatio(), conf.ChangeFullscreenResolution() );
-            Display::Get().HideCursor();
+            SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Ensure the mouse position is updated to prevent bad initial values.
             LocalEvent::Get().RegisterCycling();
@@ -201,7 +200,7 @@ int main( int argc, char ** argv )
                     rs = Game::LoadGame();
                     break;
                 case Game::HIGHSCORES:
-                    rs = Game::HighScores( true );
+                    rs = Game::HighScores();
                     break;
                 case Game::CREDITS:
                     rs = Game::Credits();

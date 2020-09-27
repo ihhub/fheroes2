@@ -112,7 +112,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
             fheroes2::Blit( sprite, dstsf, pos.x + ( pos.w - sprite.width() ) / 2, pos.y + ( pos.h - sprite.height() ) / 2 );
 
             Text text( Skill::Primary::String( skill ), Font::SMALL );
-            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
+            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 4, dstsf );
 
             if ( hero ) {
                 switch ( skill ) {
@@ -136,7 +136,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
                     break;
                 }
 
-                text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + pos.h - text.h() - 3, dstsf );
+                text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + pos.h - text.h() - 2, dstsf );
             }
         }
     }
@@ -219,7 +219,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos,
             text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
 
             text.Set( Skill::Level::String( skill.Level() ) );
-            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 50, dstsf );
+            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 51, dstsf );
         }
     }
 }
