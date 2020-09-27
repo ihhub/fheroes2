@@ -147,16 +147,17 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
                 if ( flag & LEVEL_OBJECTS )
                     tile.RedrawObjects( dst );
 
+                // top
+                if ( flag & LEVEL_TOP )
+                    tile.RedrawTop( dst );
+
+                // heroes will be drawn later
                 if ( tile.GetObject() == MP2::OBJ_HEROES && ( flag & LEVEL_HEROES ) ) {
                     const Heroes * hero = tile.GetHeroes();
                     if ( hero ) {
                         heroList.emplace_back( GetRelativeTilePosition( offset ), hero );
                     }
                 }
-
-                // top
-                if ( flag & LEVEL_TOP )
-                    tile.RedrawTop( dst );
             }
         }
     }
@@ -191,7 +192,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
         }
     }
 
-    for ( auto hero : heroList ) {
+    for ( const std::pair<Point, const Heroes *> & hero : heroList ) {
         hero.second->Redraw( dst, hero.first.x, hero.first.y, true );
     }
 
