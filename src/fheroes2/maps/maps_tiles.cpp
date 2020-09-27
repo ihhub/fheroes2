@@ -433,11 +433,6 @@ bool Maps::TilesAddon::hasRoadFlag() const
     return ( object >> 1 ) & 1;
 }
 
-bool Maps::TilesAddon::isStream( const TilesAddon & ta )
-{
-    return ICN::STREAM == MP2::GetICNObject( ta.object ) || ( ICN::OBJNMUL2 == MP2::GetICNObject( ta.object ) && ( ta.index < 14 ) );
-}
-
 bool Maps::TilesAddon::isRoadObject( const TilesAddon & ta )
 {
     return ICN::ROAD == MP2::GetICNObject( ta.object );
@@ -1097,7 +1092,8 @@ bool isImpassableIfOverlayed( uint8_t objectTileset, uint8_t icnIndex )
 
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
 {
-    return Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) || Maps::TilesAddon::isShadow( ta );
+    int icn = MP2::GetICNObject( ta.object );
+    return Maps::Tiles::isShadowSprite( ta.object, ta.index ) || icn == ICN::ROAD || icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && ta.index < 14 );
 }
 
 bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
@@ -1783,7 +1779,7 @@ void Maps::Tiles::FixObject( void )
 
 bool Maps::Tiles::GoodForUltimateArtifact( void ) const
 {
-    return !isWater() && ( addons_level1.empty() || isShadow() ) && isPassable( Direction::CENTER, false, true );
+    return !isWater() && ( ( addons_level1.empty() && objectTileset == 0 ) || isShadow() ) && isPassable( Direction::CENTER, false, true );
 }
 
 bool TileIsGround( s32 index, int ground )
@@ -1838,12 +1834,18 @@ bool Maps::Tiles::isRoad() const
 
 bool Maps::Tiles::isStream( void ) const
 {
-    return addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isStream );
+    for ( auto it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        const int icn = MP2::GetICNObject( it->object );
+        if ( icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && it->index < 14 ) )
+            return true;
+    }
+    const int tileICN = MP2::GetICNObject( objectTileset );
+    return tileICN == ICN::STREAM || ( tileICN == ICN::OBJNMUL2 && objectIndex < 14 );
 }
 
 bool Maps::Tiles::isShadow( void ) const
 {
-    return isShadowSprite( objectTileset, objectIndex ) || addons_level1.size() != std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow );
+    return isShadowSprite( objectTileset, objectIndex ) && addons_level1.size() != std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow );
 }
 
 bool Maps::Tiles::hasSpriteAnimation() const

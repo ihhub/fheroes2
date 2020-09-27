@@ -67,7 +67,6 @@ namespace Maps
 
         std::string String( int level ) const;
 
-        static bool isStream( const TilesAddon & );
         static bool isShadow( const TilesAddon & );
         static bool isRoadObject( const TilesAddon & );
 
