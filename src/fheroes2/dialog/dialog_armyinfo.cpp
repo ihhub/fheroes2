@@ -38,6 +38,16 @@
 #include "ui_button.h"
 #include "world.h"
 
+namespace
+{
+    const int offsetXGoodAmountBox = 80;
+    const int offsetYGoodAmountBox = 223;
+    const int offsetXEvilAmountBox = 89;
+    const int offsetYEvilAmountBox = 222;
+    const int widthAmountBox = 125;
+    const int heightAmountBox = 23;
+}
+
 void DrawMonsterStats( const Point & dst, const Troop & troop );
 void DrawBattleStats( const Point &, const Troop & );
 void DrawMonsterInfo( const Point & dst, const Troop & troop );
@@ -402,13 +412,6 @@ void DrawMonsterInfo( const Point & offset, const Troop & troop )
     text.Blit( pos );
 
     // amount
-    const int offsetXGoodAmountBox = 80;
-    const int offsetYGoodAmountBox = 223;
-    const int offsetXEvilAmountBox = 89;
-    const int offsetYEvilAmountBox = 222;
-    const int widthAmountBox = 125;
-    const int heightAmountBox = 23;
-
     const Settings & conf = Settings::Get();
     text.Set( GetString( troop.GetCount() ), Font::BIG );
     pos.x = offset.x + ( conf.ExtGameEvilInterface() ? offsetXEvilAmountBox : offsetXGoodAmountBox ) + widthAmountBox / 2 - text.w() / 2;
