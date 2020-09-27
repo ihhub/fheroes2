@@ -133,7 +133,7 @@ std::string Maps::TilesAddon::String( int lvl ) const
     std::ostringstream os;
     os << "----------------" << lvl << "--------" << std::endl
        << "uniq            : " << uniq << std::endl
-       << "tileset         : " << static_cast<int>( object >> 2 ) << ", (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
+       << "tileset         : " << static_cast<int>( object ) << ", (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
        << "index           : " << static_cast<int>( index ) << std::endl
        << "level           : " << static_cast<int>( level ) << ", (" << static_cast<int>( level % 4 ) << ")" << std::endl
        << "tmp             : " << static_cast<int>( tmp ) << std::endl;
@@ -1412,8 +1412,9 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool
                 area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
                 // possible animation
-                if ( it->hasSpriteAnimation() ) {
-                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
+                uint32_t animationIndex = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 );
+                if ( animationIndex ) {
+                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
                 }
             }
         }
@@ -1469,8 +1470,9 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst ) const
             area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
             // possible animation
-            if ( hasSpriteAnimation() ) {
-                const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 ) );
+            uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 );
+            if ( animationIndex ) {
+                const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
                 area.BlitOnTile( dst, animationSprite, mp );
             }
@@ -1671,7 +1673,7 @@ std::string Maps::Tiles::String( void ) const
        << "maps index      : " << GetIndex() << ", " << GetString( GetCenter() ) << std::endl
        << "id              : " << uniq << std::endl
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
-       << "tileset         : " << static_cast<int>( objectTileset >> 2 ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
+       << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << std::endl
        << "object animated : " << static_cast<int>( hasSpriteAnimation() ) << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
