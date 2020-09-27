@@ -2627,14 +2627,14 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         }
 
         msg >> tile.addons_level1 >> tile.addons_level2;
-        tile.AddonsSort();
-
         for ( const Maps::TilesAddon & addon : tile.addons_level1 ) {
             if ( addon.isRoad() ) {
                 tile.tileIsRoad = true;
                 break;
             }
         }
+
+        tile.AddonsSort();
     }
     else {
         msg >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
