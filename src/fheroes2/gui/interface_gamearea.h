@@ -72,7 +72,7 @@ namespace Interface
         void SetCenter( const Point & );
         void SetRedraw( void ) const;
 
-        void Redraw( fheroes2::Image & dst, int ) const;
+        void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
         void BlitOnTile( fheroes2::Image & src, const fheroes2::Image & dst, int32_t ox, int32_t oy, const Point & mp, bool flip = false, uint8_t alpha = 255 ) const;
         void BlitOnTile( fheroes2::Image & src, const fheroes2::Sprite & dst, const Point & mp ) const;

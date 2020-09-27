@@ -119,7 +119,7 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
     }
 }
 
-void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
+void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw ) const
 {
     const Rect tileROI = GetVisibleTileROI();
 
@@ -145,7 +145,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 
                 // map object
                 if ( flag & LEVEL_BOTTOM )
-                    tile.RedrawObjects( dst );
+                    tile.RedrawObjects( dst, isPuzzleDraw );
             }
         }
     }
@@ -163,7 +163,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
             const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
 
             // map object
-            if ( flag & LEVEL_OBJECTS )
+            if ( flag & LEVEL_OBJECTS && !isPuzzleDraw )
                 tile.RedrawMonstersAndBoat( dst );
 
             // top
@@ -349,7 +349,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 in
         gamearea.SetCenter( pt );
 
         const Rect & rectMaps = gamearea.GetVisibleTileROI();
-        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP );
+        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
 
         const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
         const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )

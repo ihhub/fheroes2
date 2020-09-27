@@ -539,6 +539,7 @@ namespace MP2
     int GetICNObject( int tileset );
     const char * StringObject( int object );
 
+    bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
     bool isActionObject( int obj, bool water );
     bool isGroundObject( int obj );
     bool isWaterObject( int obj );
