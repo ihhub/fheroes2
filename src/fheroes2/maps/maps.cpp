@@ -638,7 +638,6 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
             const uint8_t tilesetChange = isRandom ? 35 * 4 : 0; // OBJNTOWN or no change
             tile.UpdateObjectSprite( castleID, originalSet, tilesetChange, indexChange, isRandom );
 
-            // FIXME: 0.7 savegame fix (top of the castle not initialized)
             if ( index == 0 ) {
                 TilesAddon * addon = tile.FindAddonLevel2( castleID );
                 if ( addon && MP2::GetICNObject( addon->object ) == ICN::OBJNTWRD ) {

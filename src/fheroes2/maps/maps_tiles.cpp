@@ -922,7 +922,7 @@ int Maps::Tiles::GetQuantity3( void ) const
     return quantity3;
 }
 
-// Set Tile metadata field (used for things adventure spell ID)
+// Set Tile metadata field (used for things like adventure spell ID)
 void Maps::Tiles::SetQuantity3( int value )
 {
     quantity3 = value;
@@ -1235,7 +1235,7 @@ u32 Maps::Tiles::GetObjectUID() const
     return uniq;
 }
 
-// Get Tile metadata field #1 (used for things like monster count of resource amount)
+// Get Tile metadata field #1 (used for things like monster count or resource amount)
 int Maps::Tiles::GetQuantity1( void ) const
 {
     return quantity1;
@@ -1412,7 +1412,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool
                 area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
                 // possible animation
-                uint32_t animationIndex = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 );
+                const uint32_t animationIndex = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 );
                 if ( animationIndex ) {
                     area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
                 }
@@ -1464,7 +1464,7 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst ) const
             area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
             // possible animation
-            uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 );
+            const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 );
             if ( animationIndex ) {
                 const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
@@ -1480,11 +1480,9 @@ void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst ) const
     case MP2::OBJ_BOAT:
         RedrawBoat( dst );
         break;
-    //
     case MP2::OBJ_MONSTER:
         RedrawMonster( dst );
         break;
-    //
     default:
         break;
     }

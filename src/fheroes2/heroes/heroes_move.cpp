@@ -480,7 +480,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
 
     // redraw dependences tiles
     Maps::Tiles & tile = world.GetTiles( center.x, center.y );
-    bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
+    const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
 
     tile.RedrawTop( dst );
 

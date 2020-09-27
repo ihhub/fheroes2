@@ -678,7 +678,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         uniqs.reserve( uniq_whirlpools.size() );
 
         for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
-            const u32 & uniq = ( *it ).first;
+            const u32 uniq = ( *it ).first;
             if ( uniq == currentUID )
                 continue;
             uniqs.push_back( uniq );
