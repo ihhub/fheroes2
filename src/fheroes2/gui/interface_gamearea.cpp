@@ -142,6 +142,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
                 // bottom
                 if ( flag & LEVEL_BOTTOM )
                     tile.RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
+
+                // map object
+                if ( flag & LEVEL_OBJECTS )
+                    tile.RedrawObjects( dst );
             }
         }
     }
@@ -160,7 +164,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 
             // map object
             if ( flag & LEVEL_OBJECTS )
-                tile.RedrawObjects( dst );
+                tile.RedrawMonstersAndBoat( dst );
 
             // top
             if ( flag & LEVEL_TOP )

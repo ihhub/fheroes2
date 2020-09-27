@@ -1449,17 +1449,11 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
 
 void Maps::Tiles::RedrawObjects( fheroes2::Image & dst ) const
 {
-    switch ( GetObject() ) {
-    // boat
-    case MP2::OBJ_BOAT:
-        RedrawBoat( dst );
-        break;
-    // monster
-    case MP2::OBJ_MONSTER:
-        RedrawMonster( dst );
-        break;
-    //
-    default: {
+    int object = GetObject();
+
+    // monsters and boats will be drawn later, on top of everything else
+    // hero object is accepted here since it replaces what was there originally
+    if ( object != MP2::OBJ_BOAT && object != MP2::OBJ_MONSTER ) {
         const int icn = MP2::GetICNObject( objectTileset );
 
         if ( ICN::UNKNOWN != icn ) {
@@ -1477,7 +1471,22 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst ) const
                 area.BlitOnTile( dst, animationSprite, mp );
             }
         }
-    } break;
+    }
+}
+
+void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst ) const
+{
+    switch ( GetObject() ) {
+    case MP2::OBJ_BOAT:
+        RedrawBoat( dst );
+        break;
+    //
+    case MP2::OBJ_MONSTER:
+        RedrawMonster( dst );
+        break;
+    //
+    default:
+        break;
     }
 }
 
