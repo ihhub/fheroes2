@@ -68,7 +68,6 @@ namespace Maps
         std::string String( int level ) const;
 
         static bool isStream( const TilesAddon & );
-        static bool isRoad( const TilesAddon & );
         static bool isShadow( const TilesAddon & );
         static bool isRoadObject( const TilesAddon & );
 
@@ -225,6 +224,7 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static bool isShadowSprite( uint8_t tileset, uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource );
         static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
         static int GetPassable( uint32_t tileset, uint32_t index );

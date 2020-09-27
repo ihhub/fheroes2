@@ -499,66 +499,7 @@ bool Maps::TilesAddon::isX_LOC123( const TilesAddon & ta )
 
 bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
 {
-    const int icn = MP2::GetICNObject( ta.object );
-
-    switch ( icn ) {
-    case ICN::MTNDSRT:
-    case ICN::MTNGRAS:
-    case ICN::MTNLAVA:
-    case ICN::MTNMULT:
-    case ICN::MTNSNOW:
-    case ICN::MTNSWMP:
-        return ObjMnts1::isShadow( ta.index );
-
-    case ICN::MTNCRCK:
-    case ICN::MTNDIRT:
-        return ObjMnts2::isShadow( ta.index );
-
-    case ICN::TREDECI:
-    case ICN::TREEVIL:
-    case ICN::TREFALL:
-    case ICN::TREFIR:
-    case ICN::TREJNGL:
-    case ICN::TRESNOW:
-        return ObjTree::isShadow( ta.index );
-
-    case ICN::OBJNCRCK:
-        return ObjCrck::isShadow( ta.index );
-    case ICN::OBJNDIRT:
-        return ObjDirt::isShadow( ta.index );
-    case ICN::OBJNDSRT:
-        return ObjDsrt::isShadow( ta.index );
-    case ICN::OBJNGRA2:
-        return ObjGra2::isShadow( ta.index );
-    case ICN::OBJNGRAS:
-        return ObjGras::isShadow( ta.index );
-    case ICN::OBJNMUL2:
-        return ObjMul2::isShadow( ta.index );
-    case ICN::OBJNMULT:
-        return ObjMult::isShadow( ta.index );
-    case ICN::OBJNSNOW:
-        return ObjSnow::isShadow( ta.index );
-    case ICN::OBJNSWMP:
-        return ObjSwmp::isShadow( ta.index );
-    case ICN::OBJNWAT2:
-        return ObjWat2::isShadow( ta.index );
-    case ICN::OBJNWATR:
-        return ObjWatr::isShadow( ta.index );
-
-    case ICN::OBJNARTI:
-    case ICN::OBJNRSRC:
-        return 0 == ( ta.index % 2 );
-
-    case ICN::OBJNTWRD:
-        return ta.index > 31;
-    case ICN::OBJNTWSH:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
+    return Tiles::isShadowSprite( ta.object, ta.index );
 }
 
 bool Maps::TilesAddon::isMounts( const TilesAddon & ta )
@@ -737,6 +678,70 @@ bool Maps::TilesAddon::isTrees( const TilesAddon & ta )
         if ( ta.index == 80 || ( ta.index > 82 && ta.index < 86 ) || ta.index == 87 || ( ta.index > 88 && ta.index < 92 ) )
             return true;
         break;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+bool Maps::Tiles::isShadowSprite( uint8_t tileset, uint8_t icnIndex )
+{
+    const int icn = MP2::GetICNObject( tileset );
+
+    switch ( icn ) {
+    case ICN::MTNDSRT:
+    case ICN::MTNGRAS:
+    case ICN::MTNLAVA:
+    case ICN::MTNMULT:
+    case ICN::MTNSNOW:
+    case ICN::MTNSWMP:
+        return ObjMnts1::isShadow( icnIndex );
+
+    case ICN::MTNCRCK:
+    case ICN::MTNDIRT:
+        return ObjMnts2::isShadow( icnIndex );
+
+    case ICN::TREDECI:
+    case ICN::TREEVIL:
+    case ICN::TREFALL:
+    case ICN::TREFIR:
+    case ICN::TREJNGL:
+    case ICN::TRESNOW:
+        return ObjTree::isShadow( icnIndex );
+
+    case ICN::OBJNCRCK:
+        return ObjCrck::isShadow( icnIndex );
+    case ICN::OBJNDIRT:
+        return ObjDirt::isShadow( icnIndex );
+    case ICN::OBJNDSRT:
+        return ObjDsrt::isShadow( icnIndex );
+    case ICN::OBJNGRA2:
+        return ObjGra2::isShadow( icnIndex );
+    case ICN::OBJNGRAS:
+        return ObjGras::isShadow( icnIndex );
+    case ICN::OBJNMUL2:
+        return ObjMul2::isShadow( icnIndex );
+    case ICN::OBJNMULT:
+        return ObjMult::isShadow( icnIndex );
+    case ICN::OBJNSNOW:
+        return ObjSnow::isShadow( icnIndex );
+    case ICN::OBJNSWMP:
+        return ObjSwmp::isShadow( icnIndex );
+    case ICN::OBJNWAT2:
+        return ObjWat2::isShadow( icnIndex );
+    case ICN::OBJNWATR:
+        return ObjWatr::isShadow( icnIndex );
+
+    case ICN::OBJNARTI:
+    case ICN::OBJNRSRC:
+        return 0 == ( icnIndex % 2 );
+
+    case ICN::OBJNTWRD:
+        return icnIndex > 31;
+    case ICN::OBJNTWSH:
+        return true;
 
     default:
         break;
@@ -1778,10 +1783,7 @@ void Maps::Tiles::FixObject( void )
 
 bool Maps::Tiles::GoodForUltimateArtifact( void ) const
 {
-    return !isWater()
-           && ( addons_level1.empty()
-                || addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), std::ptr_fun( &TilesAddon::isShadow ) ) ) )
-           && isPassable( Direction::CENTER, false, true );
+    return !isWater() && ( addons_level1.empty() || isShadow() ) && isPassable( Direction::CENTER, false, true );
 }
 
 bool TileIsGround( s32 index, int ground )
@@ -1841,7 +1843,7 @@ bool Maps::Tiles::isStream( void ) const
 
 bool Maps::Tiles::isShadow( void ) const
 {
-    return addons_level1.size() != std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow );
+    return isShadowSprite( objectTileset, objectIndex ) || addons_level1.size() != std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow );
 }
 
 bool Maps::Tiles::hasSpriteAnimation() const
