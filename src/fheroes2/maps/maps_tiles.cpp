@@ -2520,7 +2520,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     return msg << tile.maps_index << tile.pack_sprite_index << tile.tilePassable << tile.uniq << tile.objectTileset << tile.objectIndex << tile.mp2_object
-               << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.heroID << tile.quantity3 << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2;
+               << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -2553,7 +2553,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     }
     else {
         msg >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
-            >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
+            >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
     }
 
     return msg;
