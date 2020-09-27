@@ -123,30 +123,59 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 {
     const Rect tileROI = GetVisibleTileROI();
 
-    // ground
+    std::vector<std::pair<Point, const Heroes *> > heroList;
+
+    // ground and bottom layer
     for ( int16_t y = 0; y < tileROI.h; ++y ) {
-        const s32 offsetY = tileROI.y + y;
-        bool isEmptyTile = offsetY < 0 || offsetY >= world.h();
         for ( s32 x = 0; x < tileROI.w; ++x ) {
-            const s32 offsetX = tileROI.x + x;
-            if ( isEmptyTile || offsetX < 0 || offsetX >= world.w() )
-                Maps::Tiles::RedrawEmptyTile( dst, Point( offsetX, offsetY ) );
-            else
-                world.GetTiles( offsetX, offsetY ).RedrawTile( dst );
+            Point offset( tileROI.x + x, tileROI.y + y );
+            const bool isEmptyTile = offset.y < 0 || offset.y >= world.h();
+
+            if ( isEmptyTile || offset.x < 0 || offset.x >= world.w() ) {
+                Maps::Tiles::RedrawEmptyTile( dst, offset );
+            }
+            else {
+                const Maps::Tiles & tile = world.GetTiles( offset.x, offset.y );
+
+                tile.RedrawTile( dst );
+
+                // bottom
+                if ( flag & LEVEL_BOTTOM )
+                    tile.RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
+
+                // map object
+                if ( flag & LEVEL_OBJECTS )
+                    tile.RedrawObjects( dst );
+            }
         }
     }
 
-    // bottom
-    if ( flag & LEVEL_BOTTOM ) {
-        for ( int16_t y = 0; y < tileROI.h; ++y ) {
-            const s32 offsetY = tileROI.y + y;
-            if ( offsetY < 0 || offsetY >= world.h() )
+    // objects and top layer
+    for ( int16_t y = 0; y < tileROI.h; ++y ) {
+        const s32 offsetY = tileROI.y + y;
+        if ( offsetY < 0 || offsetY >= world.h() )
+            continue;
+        for ( s32 x = 0; x < tileROI.w; ++x ) {
+            const s32 offsetX = tileROI.x + x;
+            if ( offsetX < 0 || offsetX >= world.w() )
                 continue;
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
-                const s32 offsetX = tileROI.x + x;
-                if ( offsetX < 0 || offsetX >= world.w() )
-                    continue;
-                world.GetTiles( offsetX, offsetY ).RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
+
+            const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
+
+            // map object
+            if ( flag & LEVEL_OBJECTS )
+                tile.RedrawMonstersAndBoat( dst );
+
+            // top
+            if ( flag & LEVEL_TOP )
+                tile.RedrawTop( dst );
+
+            // heroes will be drawn later
+            if ( tile.GetObject() == MP2::OBJ_HEROES && ( flag & LEVEL_HEROES ) ) {
+                const Heroes * hero = tile.GetHeroes();
+                if ( hero ) {
+                    heroList.emplace_back( GetRelativeTilePosition( Point( offsetX, offsetY ) ), hero );
+                }
             }
         }
     }
@@ -181,55 +210,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
         }
     }
 
-    // ext object
-    if ( flag & LEVEL_OBJECTS ) {
-        for ( int16_t y = 0; y < tileROI.h; ++y ) {
-            const s32 offsetY = tileROI.y + y;
-            if ( offsetY < 0 || offsetY >= world.h() )
-                continue;
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
-                const s32 offsetX = tileROI.x + x;
-                if ( offsetX < 0 || offsetX >= world.w() )
-                    continue;
-                world.GetTiles( offsetX, offsetY ).RedrawObjects( dst );
-            }
-        }
-    }
-
-    // top
-    if ( flag & LEVEL_TOP ) {
-        for ( int16_t y = 0; y < tileROI.h; ++y ) {
-            const s32 offsetY = tileROI.y + y;
-            if ( offsetY < 0 || offsetY >= world.h() )
-                continue;
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
-                const s32 offsetX = tileROI.x + x;
-                if ( offsetX < 0 || offsetX >= world.w() )
-                    continue;
-                world.GetTiles( offsetX, offsetY ).RedrawTop( dst );
-            }
-        }
-    }
-
-    // heroes
-    for ( int16_t y = 0; y < tileROI.h; ++y ) {
-        const s32 offsetY = tileROI.y + y;
-        if ( offsetY < 0 || offsetY >= world.h() )
-            continue;
-        for ( s32 x = 0; x < tileROI.w; ++x ) {
-            const s32 offsetX = tileROI.x + x;
-            if ( offsetX < 0 || offsetX >= world.w() )
-                continue;
-            const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
-
-            if ( tile.GetObject() == MP2::OBJ_HEROES && ( flag & LEVEL_HEROES ) ) {
-                const Heroes * hero = tile.GetHeroes();
-                if ( hero ) {
-                    const Point pos = GetRelativeTilePosition( Point( offsetX, offsetY ) );
-                    hero->Redraw( dst, pos.x, pos.y, true );
-                }
-            }
-        }
+    for ( const std::pair<Point, const Heroes *> & hero : heroList ) {
+        hero.second->Redraw( dst, hero.first.x, hero.first.y, true );
     }
 
     // route

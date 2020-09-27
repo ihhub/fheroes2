@@ -161,21 +161,19 @@ u32 CapturedObjects::GetCountMines( int type, int col ) const
 
         if ( objcol == objcol1 || objcol == objcol2 ) {
             // scan for find mines
-            const Maps::TilesAddon * addon = world.GetTiles( ( *it ).first ).FindObject( MP2::OBJ_MINES );
+            const uint8_t index = world.GetTiles( ( *it ).first ).GetObjectSpriteIndex();
 
-            if ( addon ) {
-                // index sprite EXTRAOVR
-                if ( 0 == addon->index && Resource::ORE == type )
-                    ++result;
-                else if ( 1 == addon->index && Resource::SULFUR == type )
-                    ++result;
-                else if ( 2 == addon->index && Resource::CRYSTAL == type )
-                    ++result;
-                else if ( 3 == addon->index && Resource::GEMS == type )
-                    ++result;
-                else if ( 4 == addon->index && Resource::GOLD == type )
-                    ++result;
-            }
+            // index sprite EXTRAOVR
+            if ( 0 == index && Resource::ORE == type )
+                ++result;
+            else if ( 1 == index && Resource::SULFUR == type )
+                ++result;
+            else if ( 2 == index && Resource::CRYSTAL == type )
+                ++result;
+            else if ( 3 == index && Resource::GEMS == type )
+                ++result;
+            else if ( 4 == index && Resource::GOLD == type )
+                ++result;
         }
     }
 
@@ -328,11 +326,11 @@ void World::NewMaps( u32 sw, u32 sh )
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.indexName2 = 0xff; // index sprite level 2
-        mp2tile.shape = Rand::Get( 0, 3 ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.generalObject = MP2::OBJ_ZERO;
+        mp2tile.flags = Rand::Get( 0, 3 ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
+        mp2tile.mapObject = MP2::OBJ_ZERO;
         mp2tile.indexAddon = 0;
-        mp2tile.uniqNumber1 = 0;
-        mp2tile.uniqNumber2 = 0;
+        mp2tile.editorObjectLink = 0;
+        mp2tile.editorObjectOverlay = 0;
 
         ( *it ).Init( std::distance( vec_tiles.begin(), it ), mp2tile );
     }
@@ -628,20 +626,18 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 {
     MapsIndexes result;
 
-    if ( MP2::OBJ_STONELIGHTS == GetTiles( center ).GetObject( false ) ) {
-        const MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELIGHTS, true );
+    if ( MP2::OBJ_STONELITHS == GetTiles( center ).GetObject( false ) ) {
+        const MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
 
         if ( 2 > allTeleporters.size() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is empty" );
         }
         else {
             const Maps::Tiles & entrance = GetTiles( center );
-            const uint8_t teleportType = entrance.FindObjectConst( MP2::OBJ_STONELIGHTS )->index;
 
             for ( MapsIndexes::const_iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
                 const Maps::Tiles & tile = GetTiles( *it );
-                const Maps::TilesAddon * addon = tile.FindObjectConst( MP2::OBJ_STONELIGHTS );
-                if ( addon && *it != center && addon->index == teleportType && tile.isWater() == entrance.isWater() ) {
+                if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.isWater() == entrance.isWater() ) {
                     result.push_back( *it );
                 }
             }
@@ -668,9 +664,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
         for ( MapsIndexes::const_iterator it = whilrpools.begin(); it != whilrpools.end(); ++it ) {
-            const Maps::TilesAddon * addon = GetTiles( *it ).FindObjectConst( MP2::OBJ_WHIRLPOOL );
-            if ( addon )
-                uniq_whirlpools[addon->uniq].push_back( *it );
+            uniq_whirlpools[GetTiles( *it ).GetObjectUID()].push_back( *it );
         }
         whilrpools.clear();
 
@@ -679,17 +673,15 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
             return MapsIndexes();
         }
 
-        const Maps::TilesAddon * addon = GetTiles( center ).FindObjectConst( MP2::OBJ_WHIRLPOOL );
+        const uint32_t currentUID = GetTiles( center ).GetObjectUID();
         MapsIndexes uniqs;
         uniqs.reserve( uniq_whirlpools.size() );
 
-        if ( addon ) {
-            for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
-                const u32 & uniq = ( *it ).first;
-                if ( uniq == addon->uniq )
-                    continue;
-                uniqs.push_back( uniq );
-            }
+        for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
+            const u32 uniq = ( *it ).first;
+            if ( uniq == currentUID )
+                continue;
+            uniqs.push_back( uniq );
         }
 
         return uniq_whirlpools[*Rand::Get( uniqs )];

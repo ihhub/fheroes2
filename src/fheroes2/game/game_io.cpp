@@ -185,7 +185,9 @@ bool Game::Load( const std::string & fn )
     // check version: false
     if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION ) {
         std::ostringstream os;
-        os << "usupported save format: " << binver << std::endl << "game version: " << CURRENT_FORMAT_VERSION << std::endl << "last version: " << LAST_FORMAT_VERSION;
+        os << "usupported save format: " << binver << std::endl
+           << "game version: " << CURRENT_FORMAT_VERSION << std::endl
+           << "last supported version: " << LAST_FORMAT_VERSION;
         Dialog::Message( "Error", os.str(), Font::BIG, Dialog::OK );
         return false;
     }

@@ -38,6 +38,16 @@
 #include "ui_button.h"
 #include "world.h"
 
+namespace
+{
+    const int offsetXGoodAmountBox = 80;
+    const int offsetYGoodAmountBox = 223;
+    const int offsetXEvilAmountBox = 89;
+    const int offsetYEvilAmountBox = 222;
+    const int widthAmountBox = 125;
+    const int heightAmountBox = 23;
+}
+
 void DrawMonsterStats( const Point & dst, const Troop & troop );
 void DrawBattleStats( const Point &, const Troop & );
 void DrawMonsterInfo( const Point & dst, const Troop & troop );
@@ -401,10 +411,11 @@ void DrawMonsterInfo( const Point & offset, const Troop & troop )
     Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
     text.Blit( pos );
 
-    // count
+    // amount
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     text.Set( GetString( troop.GetCount() ), Font::BIG );
-    pos.x = offset.x + 140 - text.w() / 2;
-    pos.y = offset.y + 225;
+    pos.x = offset.x + ( isEvilInterface ? offsetXEvilAmountBox : offsetXGoodAmountBox ) + widthAmountBox / 2 - text.w() / 2;
+    pos.y = offset.y + ( isEvilInterface ? offsetYEvilAmountBox : offsetYGoodAmountBox ) + heightAmountBox / 2 - text.h() / 2;
     text.Blit( pos );
 }
 
@@ -434,7 +445,7 @@ void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop
 int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -457,8 +468,8 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 
     fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.w, pos.h ), buttons );
 
-    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
-    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
+    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
+    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
     fheroes2::AddTransparency( armyButtonReleased, 36 );
     fheroes2::AddTransparency( armyButtonPressed, 36 );
 
@@ -521,7 +532,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -575,8 +586,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.w, pos.h ), buttons );
 
-    fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
-    fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
+    fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
+    fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
     fheroes2::AddTransparency( marketButtonReleased, 36 );
     fheroes2::AddTransparency( marketButtonPressed, 36 );
 
@@ -591,8 +602,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     fheroes2::ButtonSprite btnMarket( buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, marketButtonPressedBack );
 
-    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
-    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
+    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
+    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
     fheroes2::AddTransparency( armyButtonReleased, 36 );
     fheroes2::AddTransparency( armyButtonPressed, 36 );
 

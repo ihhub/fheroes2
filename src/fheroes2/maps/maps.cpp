@@ -589,7 +589,9 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
     */
 
     // correct only RND town and castle
-    const int entranceObject = world.GetTiles( center.x, center.y ).GetObject();
+    const Maps::Tiles & entranceTile = world.GetTiles( center.x, center.y );
+    const int entranceObject = entranceTile.GetObject();
+    const uint32_t castleID = entranceTile.GetObjectUID();
 
     if ( isRandom && ( entranceObject != MP2::OBJ_RNDCASTLE && entranceObject != MP2::OBJ_RNDTOWN ) ) {
         DEBUG( DBG_GAME, DBG_WARN,
@@ -597,9 +599,6 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
                    << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) );
         return;
     }
-
-    const int castleICN = isRandom ? ICN::OBJNTWRD : ICN::OBJNTOWN;
-    const int shadowICN = isRandom ? ICN::OBJNTWRD : ICN::OBJNTWSH;
 
     int raceIndex = 0;
     switch ( race ) {
@@ -625,6 +624,7 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
     for ( int index = 0; index < 16; ++index ) {
         const int fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
         const int lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
+        const uint8_t indexChange = isRandom ? fullTownIndex : -16;
 
         static const int castleCoordinates[16][2]
             = {{0, -3}, {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2}, {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1}, {-2, 0}, {-1, 0}, {0, 0}, {1, 0}, {2, 0}};
@@ -633,32 +633,25 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN( castleICN, -1, lookupID );
+            Tiles & tile = world.GetTiles( castleTile );
+            const uint8_t originalSet = isRandom ? 38 : 35; // OBJNTWRD
+            const uint8_t tilesetChange = isRandom ? 35 * 4 : 0; // OBJNTOWN or no change
+            tile.UpdateObjectSprite( castleID, originalSet, tilesetChange, indexChange, isRandom );
 
-            if ( addon ) {
-                if ( isRandom ) {
-                    addon->object -= 12; // OBJNTWRD to OBJNTOWN
-                    addon->index = fullTownIndex;
-                }
-                else {
-                    addon->index -= 16;
+            if ( index == 0 ) {
+                TilesAddon * addon = tile.FindAddonLevel2( castleID );
+                if ( addon && MP2::GetICNObject( addon->object ) == ICN::OBJNTWRD ) {
+                    addon->object -= 12;
+                    addon->index = fullTownIndex - 16;
                 }
             }
         }
 
         const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
         if ( isValidAbsIndex( shadowTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( shadowTile ).FindAddonICN( shadowICN, -1, isRandom ? lookupID + 32 : lookupID );
-
-            if ( addon ) {
-                if ( isRandom ) {
-                    addon->object -= 4; // OBJNTWRD to OBJNTWSH
-                    addon->index = fullTownIndex;
-                }
-                else {
-                    addon->index -= 16;
-                }
-            }
+            const uint8_t originalSet = isRandom ? 38 : 37; // OBJNTWRD or OBJNTWSH
+            const uint8_t tilesetChange = isRandom ? 37 * 4 : 0; // OBJNTWSH
+            world.GetTiles( shadowTile ).UpdateObjectSprite( castleID, originalSet, tilesetChange, indexChange, isRandom );
         }
     }
 }
