@@ -265,24 +265,25 @@ namespace Maps
         Addons addons_level1;
         Addons addons_level2; // 16
 
-        u32 maps_index;
-        u16 pack_sprite_index;
+        uint32_t maps_index = 0;
+        uint16_t pack_sprite_index = 0;
 
-        uint32_t uniq;
-        uint8_t objectTileset;
-        uint8_t objectIndex;
-        u8 mp2_object;
-        uint16_t tilePassable;
-        u8 fog_colors;
+        uint32_t uniq = 0;
+        uint8_t objectTileset = 0;
+        uint8_t objectIndex = 255;
+        uint8_t mp2_object = 0;
+        uint16_t tilePassable = DIRECTION_ALL;
+        uint8_t fog_colors = Color::ALL;
 
-        u8 quantity1;
-        u8 quantity2;
-        u8 quantity3;
+        uint8_t heroID = 0;
+        uint8_t quantity1 = 0;
+        uint8_t quantity2 = 0;
+        uint8_t quantity3 = 0;
 
         bool tileIsRoad = false;
 
 #ifdef WITH_DEBUG
-        u8 impassableTileRule;
+        uint8_t impassableTileRule = 0;
 #endif
     };
 

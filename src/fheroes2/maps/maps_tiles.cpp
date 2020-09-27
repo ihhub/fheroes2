@@ -916,13 +916,13 @@ void Maps::Tiles::SetIndex( int index )
     maps_index = index;
 }
 
-// Get third field containing Tile metadata (such as Hero ID or spell ID)
+// Get third field containing Tile metadata (adventure spell ID)
 int Maps::Tiles::GetQuantity3( void ) const
 {
     return quantity3;
 }
 
-// Set Tile metadata field (used for things like Hero ID or spell ID)
+// Set Tile metadata field (used for things adventure spell ID)
 void Maps::Tiles::SetQuantity3( int value )
 {
     quantity3 = value;
@@ -930,14 +930,14 @@ void Maps::Tiles::SetQuantity3( int value )
 
 Heroes * Maps::Tiles::GetHeroes( void ) const
 {
-    return MP2::OBJ_HEROES == mp2_object && GetQuantity3() ? world.GetHeroes( GetQuantity3() - 1 ) : NULL;
+    return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( heroID - 1 ) : NULL;
 }
 
 void Maps::Tiles::SetHeroes( Heroes * hero )
 {
     if ( hero ) {
         hero->SetMapsObject( mp2_object );
-        SetQuantity3( hero->GetID() + 1 );
+        heroID = hero->GetID() + 1;
         SetObject( MP2::OBJ_HEROES );
     }
     else {
@@ -950,7 +950,7 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
         else
             SetObject( MP2::OBJ_ZERO );
 
-        SetQuantity3( 0 );
+        heroID = 0;
     }
 }
 
@@ -2520,7 +2520,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     return msg << tile.maps_index << tile.pack_sprite_index << tile.tilePassable << tile.uniq << tile.objectTileset << tile.objectIndex << tile.mp2_object
-               << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2;
+               << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.heroID << tile.quantity3 << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -2532,7 +2532,16 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         tile.uniq = 0;
         tile.objectTileset = 0;
         tile.objectIndex = 255;
-        msg >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.addons_level1 >> tile.addons_level2;
+        msg >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2;
+
+        if ( tile.mp2_object == MP2::OBJ_HEROES ) {
+            msg >> tile.heroID;
+        }
+        else {
+            msg >> tile.quantity3;
+        }
+
+        msg >> tile.addons_level1 >> tile.addons_level2;
         tile.AddonsSort();
 
         for ( const Maps::TilesAddon & addon : tile.addons_level1 ) {
