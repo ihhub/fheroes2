@@ -26,313 +26,187 @@
 #include "settings.h"
 
 /* return name icn object */
-int MP2::GetICNObject( int type )
+int MP2::GetICNObject( int tileset )
 {
-    switch ( type ) {
+    switch ( tileset >> 2 ) {
     // reserverd
     case 0:
         return ICN::UNKNOWN;
 
     // artifact
-    case 0x2C:
-    case 0x2D:
-    case 0x2E:
-    case 0x2F:
+    case 11:
         return ICN::OBJNARTI;
 
     // monster
-    case 0x30:
-    case 0x31:
-    case 0x32:
-    case 0x33:
+    case 12:
         return ICN::MONS32;
 
     // castle flags
-    case 0x38:
-    case 0x39:
-    case 0x3A:
-    case 0x3B:
+    case 14:
         return ICN::FLAG32;
 
     // heroes
-    case 0x54:
-    case 0x55:
-    case 0x56:
-    case 0x57:
+    case 21:
         return ICN::MINIHERO;
 
-    // relief: snow
-    case 0x58:
-    case 0x59:
-    case 0x5A:
-    case 0x5B:
+    // mountains: snow
+    case 22:
         return ICN::MTNSNOW;
 
-    // relief: swamp
-    case 0x5C:
-    case 0x5D:
-    case 0x5E:
-    case 0x5F:
+    // mountains: swamp
+    case 23:
         return ICN::MTNSWMP;
 
-    // relief: lava
-    case 0x60:
-    case 0x61:
-    case 0x62:
-    case 0x63:
+    // mountains: lava
+    case 24:
         return ICN::MTNLAVA;
 
-    // relief: desert
-    case 0x64:
-    case 0x65:
-    case 0x66:
-    case 0x67:
+    // mountains: desert
+    case 25:
         return ICN::MTNDSRT;
 
-    // relief: dirt
-    case 0x68:
-    case 0x69:
-    case 0x6A:
-    case 0x6B:
+    // mountains: dirt
+    case 26:
         return ICN::MTNDIRT;
 
-    // relief: others
-    case 0x6C:
-    case 0x6D:
-    case 0x6E:
-    case 0x6F:
+    // mountains: all terrains
+    case 27:
         return ICN::MTNMULT;
 
     // mines
-    case 0x74:
+    case 29:
         return ICN::EXTRAOVR;
 
     // road
-    case 0x78:
-    case 0x79:
-    case 0x7A:
-    case 0x7B:
+    case 30:
         return ICN::ROAD;
 
     // relief: crck
-    case 0x7C:
-    case 0x7D:
-    case 0x7E:
-    case 0x7F:
+    case 31:
         return ICN::MTNCRCK;
 
     // relief: gras
-    case 0x80:
-    case 0x81:
-    case 0x82:
-    case 0x83:
+    case 32:
         return ICN::MTNGRAS;
 
     // trees jungle
-    case 0x84:
-    case 0x85:
-    case 0x86:
-    case 0x87:
+    case 33:
         return ICN::TREJNGL;
 
     // trees evil
-    case 0x88:
-    case 0x89:
-    case 0x8A:
-    case 0x8B:
+    case 34:
         return ICN::TREEVIL;
 
-    // castle and tower
-    case 0x8C:
-    case 0x8D:
-    case 0x8E:
-    case 0x8F:
+    // castle and town sprites
+    case 35:
         return ICN::OBJNTOWN;
 
-    // castle lands
-    case 0x90:
-    case 0x91:
-    case 0x92:
-    case 0x93:
+    // castle base
+    case 36:
         return ICN::OBJNTWBA;
 
     // castle shadow
-    case 0x94:
-    case 0x95:
-    case 0x96:
-    case 0x97:
+    case 37:
         return ICN::OBJNTWSH;
 
     // random castle
-    case 0x98:
-    case 0x99:
-    case 0x9A:
-    case 0x9B:
+    case 38:
         return ICN::OBJNTWRD;
 
     // water object
-    case 0xA0:
-    case 0xA1:
-    case 0xA2:
-    case 0xA3:
+    case 40:
         return ICN::OBJNWAT2;
 
     // object other
-    case 0xA4:
-    case 0xA5:
-    case 0xA6:
-    case 0xA7:
+    case 41:
         return ICN::OBJNMUL2;
 
     // trees snow
-    case 0xA8:
-    case 0xA9:
-    case 0xAA:
-    case 0xAB:
+    case 42:
         return ICN::TRESNOW;
 
     // trees trefir
-    case 0xAC:
-    case 0xAD:
-    case 0xAE:
-    case 0xAF:
+    case 43:
         return ICN::TREFIR;
 
     // trees
-    case 0xB0:
-    case 0xB1:
-    case 0xB2:
-    case 0xB3:
+    case 44:
         return ICN::TREFALL;
 
     // river
-    case 0xB4:
-    case 0xB5:
-    case 0xB6:
-    case 0xB7:
+    case 45:
         return ICN::STREAM;
 
     // resource
-    case 0xB8:
-    case 0xB9:
-    case 0xBA:
-    case 0xBB:
+    case 46:
         return ICN::OBJNRSRC;
 
     // gras object
-    case 0xC0:
-    case 0xC1:
-    case 0xC2:
-    case 0xC3:
+    case 48:
         return ICN::OBJNGRA2;
 
     // trees tredeci
-    case 0xC4:
-    case 0xC5:
-    case 0xC6:
-    case 0xC7:
+    case 49:
         return ICN::TREDECI;
 
     // sea object
-    case 0xC8:
-    case 0xC9:
-    case 0xCA:
-    case 0xCB:
+    case 50:
         return ICN::OBJNWATR;
 
     // vegetation gras
-    case 0xCC:
-    case 0xCD:
-    case 0xCE:
-    case 0xCF:
+    case 51:
         return ICN::OBJNGRAS;
 
     // object on snow
-    case 0xD0:
-    case 0xD1:
-    case 0xD2:
-    case 0xD3:
+    case 52:
         return ICN::OBJNSNOW;
 
     // object on swamp
-    case 0xD4:
-    case 0xD5:
-    case 0xD6:
-    case 0xD7:
+    case 53:
         return ICN::OBJNSWMP;
 
     // object on lava
-    case 0xD8:
-    case 0xD9:
-    case 0xDA:
-    case 0xDB:
+    case 54:
         return ICN::OBJNLAVA;
 
     // object on desert
-    case 0xDC:
-    case 0xDD:
-    case 0xDE:
-    case 0xDF:
+    case 55:
         return ICN::OBJNDSRT;
 
     // object on dirt
-    case 0xE0:
-    case 0xE1:
-    case 0xE2:
-    case 0xE3:
+    case 56:
         return ICN::OBJNDIRT;
 
     // object on crck
-    case 0xE4:
-    case 0xE5:
-    case 0xE6:
-    case 0xE7:
+    case 57:
         return ICN::OBJNCRCK;
 
     // object on lava
-    case 0xE8:
-    case 0xE9:
-    case 0xEA:
-    case 0xEB:
+    case 58:
         return ICN::OBJNLAV3;
 
     // object on earth
-    case 0xEC:
-    case 0xED:
-    case 0xEE:
-    case 0xEF:
+    case 59:
         return ICN::OBJNMULT;
 
     //  object on lava
-    case 0xF0:
-    case 0xF1:
-    case 0xF2:
-    case 0xF3:
+    case 60:
         return ICN::OBJNLAV2;
 
     // extra objects for loyalty version
-    case 0xF4:
-    case 0xF5:
-    case 0xF6:
-    case 0xF7:
+    case 61:
         if ( Settings::Get().PriceLoyaltyVersion() )
             return ICN::X_LOC1;
         break;
 
     // extra objects for loyalty version
-    case 0xF8:
-    case 0xF9:
-    case 0xFA:
-    case 0xFB:
+    case 62:
         if ( Settings::Get().PriceLoyaltyVersion() )
             return ICN::X_LOC2;
         break;
 
     // extra objects for loyalty version
-    case 0xFC:
-    case 0xFD:
-    case 0xFE:
-    case 0xFF:
+    case 63:
         if ( Settings::Get().PriceLoyaltyVersion() )
             return ICN::X_LOC3;
         break;
@@ -341,7 +215,7 @@ int MP2::GetICNObject( int type )
         break;
     }
 
-    DEBUG( DBG_GAME, DBG_WARN, "unknown type: " << static_cast<int>( type ) );
+    DEBUG( DBG_GAME, DBG_WARN, "unknown type: " << static_cast<int>( tileset ) );
 
     return ICN::UNKNOWN;
 }
@@ -501,8 +375,8 @@ const char * MP2::StringObject( int object )
     case OBJN_DWARFCOTT:
     case OBJ_DWARFCOTT:
         return _( "Dwarf Cottage" );
-    case OBJN_STONELIGHTS:
-    case OBJ_STONELIGHTS:
+    case OBJN_STONELITHS:
+    case OBJ_STONELITHS:
         return _( "Stone Liths" ); // https://sourceforge.net/projects/fheroes2/forums/forum/335991/topic/4605429
     case OBJN_MAGICWELL:
     case OBJ_MAGICWELL:
@@ -951,97 +825,8 @@ bool MP2::isWaterObject( int obj )
 
 bool MP2::isGroundObject( int obj )
 {
-    switch ( obj ) {
-    case OBJ_TREASURECHEST:
-    case OBJ_ALCHEMYLAB:
-    case OBJ_SIGN:
-    case OBJ_SKELETON:
-    case OBJ_DAEMONCAVE:
-    case OBJ_FAERIERING:
-    case OBJ_CAMPFIRE:
-    case OBJ_FOUNTAIN:
-    case OBJ_GAZEBO:
-    case OBJ_ANCIENTLAMP:
-    case OBJ_GRAVEYARD:
-    case OBJ_ARCHERHOUSE:
-    case OBJ_GOBLINHUT:
-    case OBJ_DWARFCOTT:
-    case OBJ_PEASANTHUT:
-    case OBJ_THATCHEDHUT:
-    case OBJ_DRAGONCITY:
-    case OBJ_LIGHTHOUSE:
-    case OBJ_WATERWHEEL:
-    case OBJ_MINES:
-    case OBJ_OBELISK:
-    case OBJ_OASIS:
-    case OBJ_RESOURCE:
-    case OBJ_SAWMILL:
-    case OBJ_ORACLE:
-    case OBJ_SHIPWRECK:
-    case OBJ_DESERTTENT:
-    case OBJ_STONELIGHTS:
-    case OBJ_WAGONCAMP:
-    case OBJ_WINDMILL:
-    case OBJ_ARTIFACT:
-    case OBJ_WATCHTOWER:
-    case OBJ_TREEHOUSE:
-    case OBJ_TREECITY:
-    case OBJ_RUINS:
-    case OBJ_FORT:
-    case OBJ_TRADINGPOST:
-    case OBJ_ABANDONEDMINE:
-    case OBJ_STANDINGSTONES:
-    case OBJ_IDOL:
-    case OBJ_TREEKNOWLEDGE:
-    case OBJ_DOCTORHUT:
-    case OBJ_TEMPLE:
-    case OBJ_HILLFORT:
-    case OBJ_HALFLINGHOLE:
-    case OBJ_MERCENARYCAMP:
-    case OBJ_WATERINGHOLE:
-    case OBJ_SHRINE1:
-    case OBJ_SHRINE2:
-    case OBJ_SHRINE3:
-    case OBJ_PYRAMID:
-    case OBJ_CITYDEAD:
-    case OBJ_EXCAVATION:
-    case OBJ_SPHINX:
-    case OBJ_WAGON:
-    case OBJ_ARTESIANSPRING:
-    case OBJ_TROLLBRIDGE:
-    case OBJ_WITCHSHUT:
-    case OBJ_XANADU:
-    case OBJ_CAVE:
-    case OBJ_LEANTO:
-    case OBJ_MAGICWELL:
-    case OBJ_MAGICGARDEN:
-    case OBJ_OBSERVATIONTOWER:
-    case OBJ_FREEMANFOUNDRY:
-
-    case OBJ_MONSTER:
-    case OBJ_CASTLE:
-    case OBJ_BOAT:
-
-    case OBJ_BARRIER:
-    case OBJ_TRAVELLERTENT:
-    case OBJ_FIREALTAR:
-    case OBJ_AIRALTAR:
-    case OBJ_EARTHALTAR:
-    case OBJ_WATERALTAR:
-    case OBJ_BARROWMOUNDS:
-    case OBJ_ARENA:
-    case OBJ_JAIL:
-    case OBJ_STABLES:
-    case OBJ_ALCHEMYTOWER:
-    case OBJ_HUTMAGI:
-    case OBJ_EYEMAGI:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
+    // check if first bit is set
+    return obj > 127;
 }
 
 bool MP2::isQuantityObject( int obj )
@@ -1125,7 +910,7 @@ bool MP2::isPickupObject( int obj )
 bool MP2::isMoveObject( int obj )
 {
     switch ( obj ) {
-    case OBJ_STONELIGHTS:
+    case OBJ_STONELITHS:
     case OBJ_WHIRLPOOL:
         return true;
 
@@ -1224,7 +1009,7 @@ int MP2::GetObjectDirect( int obj )
     case OBJ_MAGICWELL:
     case OBJ_OBSERVATIONTOWER:
     case OBJ_PEASANTHUT:
-    case OBJ_STONELIGHTS:
+    case OBJ_STONELITHS:
     case OBJ_STANDINGSTONES:
     case OBJ_GOBLINHUT:
     case OBJ_SHRINE1:

@@ -413,7 +413,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
         return Monster( Monster::GHOST );
 
     case MP2::OBJ_MONSTER:
-        return Monster( GetQuantity3() );
+        return Monster( objectIndex + 1 );
 
     default:
         break;
@@ -510,59 +510,53 @@ void Maps::Tiles::QuantityUpdate( void )
     } break;
 
     case MP2::OBJ_ARTIFACT: {
-        TilesAddon * addon = FindObject( MP2::OBJ_ARTIFACT );
-        if ( addon ) {
-            int art = Artifact::FromMP2IndexSprite( addon->index ).GetID();
+        const int art = Artifact::FromMP2IndexSprite( objectIndex ).GetID();
 
-            if ( Artifact::UNKNOWN != art ) {
-                if ( art == Artifact::SPELL_SCROLL ) {
-                    QuantitySetVariant( 15 );
-                    // spell from origin mp2
-                    QuantitySetSpell( 1 + ( quantity2 * 256 + quantity1 ) / 8 );
-                }
-                else {
-                    // 0: 70% none
-                    // 1,2,3 - 2000g, 2500g+3res, 3000g+5res,
-                    // 4,5 - need have skill wisard or leadership,
-                    // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
-                    // 15 - spell
-                    int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
+        if ( Artifact::UNKNOWN != art ) {
+            if ( art == Artifact::SPELL_SCROLL ) {
+                QuantitySetVariant( 15 );
+                // spell from origin mp2
+                QuantitySetSpell( 1 + ( quantity2 * 256 + quantity1 ) / 8 );
+            }
+            else {
+                // 0: 70% none
+                // 1,2,3 - 2000g, 2500g+3res, 3000g+5res,
+                // 4,5 - need have skill wisard or leadership,
+                // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
+                // 15 - spell
+                int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
 
-                    // always available
-                    if ( Settings::Get().ExtWorldNoRequirementsForArtifacts() )
-                        cond = 0;
+                // always available
+                if ( Settings::Get().ExtWorldNoRequirementsForArtifacts() )
+                    cond = 0;
 
-                    QuantitySetVariant( cond );
-                    QuantitySetArtifact( art );
+                QuantitySetVariant( cond );
+                QuantitySetArtifact( art );
 
-                    if ( cond == 2 || cond == 3 )
-                        QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand() ) + 1 );
-                }
+                if ( cond == 2 || cond == 3 )
+                    QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand() ) + 1 );
             }
         }
     } break;
 
     case MP2::OBJ_RESOURCE: {
-        TilesAddon * addon = FindObject( MP2::OBJ_RESOURCE );
-        if ( addon ) {
-            int res = Resource::FromIndexSprite( addon->index );
-            u32 count = 0;
+        const int res = Resource::FromIndexSprite( objectIndex );
+        u32 count = 0;
 
-            switch ( res ) {
-            case Resource::GOLD:
-                count = 100 * Rand::Get( 5, 10 );
-                break;
-            case Resource::WOOD:
-            case Resource::ORE:
-                count = Rand::Get( 5, 10 );
-                break;
-            default:
-                count = Rand::Get( 3, 6 );
-                break;
-            }
-
-            QuantitySetResource( res, count );
+        switch ( res ) {
+        case Resource::GOLD:
+            count = 100 * Rand::Get( 5, 10 );
+            break;
+        case Resource::WOOD:
+        case Resource::ORE:
+            count = Rand::Get( 5, 10 );
+            break;
+        default:
+            count = Rand::Get( 3, 6 );
+            break;
         }
+
+        QuantitySetResource( res, count );
     } break;
 
     case MP2::OBJ_CAMPFIRE: {
@@ -767,12 +761,14 @@ void Maps::Tiles::QuantityUpdate( void )
         break;
 
     case MP2::OBJ_BARRIER: {
+        // FIXME: check this is stil valid
         Addons::const_reverse_iterator it = std::find_if( addons_level1.rbegin(), addons_level1.rend(), std::ptr_fun( &TilesAddon::ColorFromBarrierSprite ) );
         if ( it != addons_level1.rend() )
             QuantitySetColor( TilesAddon::ColorFromBarrierSprite( *it ) );
     } break;
 
     case MP2::OBJ_TRAVELLERTENT: {
+        // FIXME: check this is stil valid
         Addons::const_reverse_iterator it = std::find_if( addons_level1.rbegin(), addons_level1.rend(), std::ptr_fun( &TilesAddon::ColorFromTravellerTentSprite ) );
         if ( it != addons_level1.rend() )
             QuantitySetColor( TilesAddon::ColorFromTravellerTentSprite( *it ) );
@@ -787,27 +783,25 @@ void Maps::Tiles::QuantityUpdate( void )
         break;
 
     case MP2::OBJ_MINES: {
-        TilesAddon * addon = FindObject( MP2::OBJ_MINES );
-        if ( addon )
-            switch ( addon->index ) {
-            case 0:
-                QuantitySetResource( Resource::ORE, 2 );
-                break;
-            case 1:
-                QuantitySetResource( Resource::SULFUR, 1 );
-                break;
-            case 2:
-                QuantitySetResource( Resource::CRYSTAL, 1 );
-                break;
-            case 3:
-                QuantitySetResource( Resource::GEMS, 1 );
-                break;
-            case 4:
-                QuantitySetResource( Resource::GOLD, 1000 );
-                break;
-            default:
-                break;
-            }
+        switch ( objectIndex ) {
+        case 0:
+            QuantitySetResource( Resource::ORE, 2 );
+            break;
+        case 1:
+            QuantitySetResource( Resource::SULFUR, 1 );
+            break;
+        case 2:
+            QuantitySetResource( Resource::CRYSTAL, 1 );
+            break;
+        case 3:
+            QuantitySetResource( Resource::GEMS, 1 );
+            break;
+        case 4:
+            QuantitySetResource( Resource::GOLD, 1000 );
+            break;
+        default:
+            break;
+        }
     } break;
 
     case MP2::OBJ_ABANDONEDMINE: {
@@ -838,19 +832,10 @@ void Maps::Tiles::QuantityUpdate( void )
             }
     } break;
 
-    case MP2::OBJ_EVENT: {
-        TilesAddon * addon = FindObject( MP2::OBJ_EVENT );
-        // remove event sprite
-        if ( addon )
-            Remove( addon->uniq );
-    } break;
-
-    case MP2::OBJ_BOAT: {
-        TilesAddon * addon = FindObject( MP2::OBJ_BOAT );
-        // remove small sprite boat
-        if ( addon )
-            Remove( addon->uniq );
-    } break;
+    case MP2::OBJ_EVENT:
+        objectTileset = 0;
+        objectIndex = 255;
+        break;
 
     case MP2::OBJ_RNDARTIFACT:
     case MP2::OBJ_RNDARTIFACT1:
@@ -925,30 +910,23 @@ void Maps::Tiles::QuantityUpdate( void )
 
 int Maps::Tiles::MonsterJoinCondition( void ) const
 {
-    const Maps::TilesAddon * addon = FindObjectConst( MP2::OBJ_MONSTER );
-    return addon ? 0x03 & addon->tmp : 0;
+    return mp2_object == MP2::OBJ_MONSTER ? ( 0x03 & quantity3 ) : 0;
 }
 
 void Maps::Tiles::MonsterSetJoinCondition( int cond )
 {
-    Maps::TilesAddon * addon = FindObject( MP2::OBJ_MONSTER );
-    if ( addon ) {
-        addon->tmp &= 0xFC;
-        addon->tmp |= ( cond & 0x03 );
-    }
+    quantity3 &= 0xFC;
+    quantity3 |= ( cond & 0x03 );
 }
 
 void Maps::Tiles::MonsterSetFixedCount( void )
 {
-    Maps::TilesAddon * addon = FindObject( MP2::OBJ_MONSTER );
-    if ( addon )
-        addon->tmp |= 0x80;
+    quantity3 |= 0x80;
 }
 
 bool Maps::Tiles::MonsterFixedCount( void ) const
 {
-    const Maps::TilesAddon * addon = FindObjectConst( MP2::OBJ_MONSTER );
-    return addon ? addon->tmp & 0x80 : 0;
+    return mp2_object == MP2::OBJ_MONSTER ? quantity3 & 0x80 : 0;
 }
 
 bool Maps::Tiles::MonsterJoinConditionSkip( void ) const
@@ -985,8 +963,6 @@ void Maps::Tiles::MonsterSetCount( u32 count )
 void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 count )
 {
     tile.SetObject( MP2::OBJ_MONSTER );
-    // monster type
-    tile.SetQuantity3( mons() );
 
     if ( count ) {
         tile.MonsterSetFixedCount();
@@ -1035,18 +1011,6 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 co
         else
             tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
     }
-
-    //
-    Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-
-    if ( !addon ) {
-        // add new sprite
-        tile.AddonsPushLevel1( TilesAddon( TilesAddon::UPPER, World::GetUniq(), 0x33, mons.GetSpriteIndex() ) );
-    }
-    else if ( addon->index != mons() - 1 ) {
-        // fixed sprite
-        addon->index = mons() - 1; // ICN::MONS32 start from PEASANT
-    }
 }
 
 void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
@@ -1054,14 +1018,9 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
     Monster mons;
 
     if ( MP2::OBJ_MONSTER == tile.GetObject() ) {
-        const Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-
-        if ( addon )
-            mons = Monster( addon->index + 1 ); // ICN::MONS32 start from PEASANT
+        mons = Monster( tile.objectIndex + 1 ); // ICN::MONS32 start from PEASANT
     }
     else {
-        Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_RNDMONSTER );
-
         switch ( tile.GetObject() ) {
         case MP2::OBJ_RNDMONSTER:
             mons = Monster::Rand().GetID();
@@ -1084,9 +1043,7 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 
         // fixed random sprite
         tile.SetObject( MP2::OBJ_MONSTER );
-
-        if ( addon )
-            addon->index = mons() - 1; // ICN::MONS32 start from PEASANT
+        tile.objectIndex = mons() - 1; // ICN::MONS32 start from PEASANT
     }
 
     u32 count = 0;

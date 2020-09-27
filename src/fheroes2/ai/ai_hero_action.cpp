@@ -275,7 +275,7 @@ namespace AI
             break;
 
             // teleports
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
             AIToTeleports( hero, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
@@ -457,7 +457,7 @@ namespace AI
             }
 
             // bool disable_auto_move = hero.isShipMaster() || other_hero->isShipMaster() ||
-            //                    other_hero_castle || world.GetTiles(hero.GetIndex()).GetObject(false) == MP2::OBJ_STONELIGHTS;
+            //                    other_hero_castle || world.GetTiles(hero.GetIndex()).GetObject(false) == MP2::OBJ_STONELITHS;
 
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
@@ -563,7 +563,10 @@ namespace AI
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapMonster * map_troop = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
         Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
 
         JoinCount join = Army::GetJoinSolution( hero, tile, troop );
@@ -627,17 +630,9 @@ namespace AI
             destroy = true;
 
         if ( destroy ) {
-            Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-            if ( addon ) {
-                const u32 uniq = addon->uniq;
-                tile.Remove( uniq );
-                tile.MonsterSetCount( 0 );
-                tile.SetObject( MP2::OBJ_ZERO );
-
-                // remove shadow from left cell
-                if ( Maps::isValidDirection( dst_index, Direction::LEFT ) )
-                    world.GetTiles( Maps::GetDirectionIndex( dst_index, Direction::LEFT ) ).Remove( uniq );
-            }
+            tile.RemoveObjectSprite();
+            tile.MonsterSetCount( 0 );
+            tile.SetObject( MP2::OBJ_ZERO );
 
             if ( map_troop )
                 world.RemoveMapObject( map_troop );
@@ -647,7 +642,10 @@ namespace AI
     void AIToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapResource * map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapResource * map_resource = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
 
         if ( obj != MP2::OBJ_BOTTLE )
             hero.GetKingdom().AddFundsResource( map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds() );
@@ -787,13 +785,8 @@ namespace AI
                 // update abandone mine
                 if ( obj == MP2::OBJ_ABANDONEDMINE ) {
                     tile.UpdateAbandoneMineSprite( tile );
-                    hero.SetMapsObject( MP2::OBJ_MINES );
+                    tile.SetHeroes( &hero );
                 }
-
-                // reset spell info
-                Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MINES );
-                if ( addon )
-                    addon->tmp = 0;
 
                 tile.QuantitySetColor( hero.GetColor() );
 
@@ -856,7 +849,7 @@ namespace AI
             const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
 
             if ( other_hero ) {
-                AIToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
+                AIToHeroes( hero, MP2::OBJ_STONELITHS, index_to );
 
                 // lose battle
                 if ( hero.isFreeman() ) {
@@ -1368,7 +1361,10 @@ namespace AI
     void AIToArtifact( Heroes & hero, u32 obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapArtifact * map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapArtifact * map_artifact = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
 
         if ( !hero.IsFullBagArtifacts() ) {
             u32 cond = tile.QuantityVariant();
@@ -1839,7 +1835,7 @@ namespace AI
         }
 
         case MP2::OBJ_BOAT:
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
             // check later
             return true;
 

@@ -374,28 +374,26 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & heroes )
         xml_hero->Attribute( "race", &race );
 
         const Maps::Tiles & tile = world.GetTiles( posx, posy );
+        const uint8_t object = tile.GetObject();
         bool jail = false;
 
-        const Maps::TilesAddon * addon = tile.FindObjectConst( MP2::OBJ_HEROES );
+        if ( object != MP2::OBJ_HEROES ) {
+            jail = object == MP2::OBJ_JAIL;
 
-        if ( !addon ) {
-            addon = tile.FindObjectConst( MP2::OBJ_JAIL );
-            jail = addon;
-        }
-
-        if ( !addon ) {
-            VERBOSE( "xml error: heroes not found"
-                     << ", "
-                     << "posx: " << posx << ", "
-                     << "posy: " << posy );
-            continue;
+            if ( !jail ) {
+                VERBOSE( "xml error: heroes not found"
+                         << ", "
+                         << "posx: " << posx << ", "
+                         << "posy: " << posy );
+                continue;
+            }
         }
 
         std::pair<int, int> colorRace( Color::NONE, race );
         Heroes * hero = NULL;
 
         if ( !jail ) {
-            colorRace = Maps::TilesAddon::ColorRaceFromHeroSprite( *addon );
+            colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
             Kingdom & kingdom = world.GetKingdom( colorRace.first );
 
             if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
@@ -1009,8 +1007,8 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2addon.objectNameN2 = fs.get();
         mp2addon.indexNameN2 = fs.get();
 
-        mp2addon.uniqNumberN1 = fs.getLE32();
-        mp2addon.uniqNumberN2 = fs.getLE32();
+        mp2addon.editorObjectLink = fs.getLE32();
+        mp2addon.editorObjectOverlay = fs.getLE32();
     }
 
     const u32 endof_addons = fs.tell();
@@ -1035,10 +1033,10 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2tile.quantity2 = fs.get();
         mp2tile.objectName2 = fs.get();
         mp2tile.indexName2 = fs.get();
-        mp2tile.shape = fs.get();
-        mp2tile.generalObject = fs.get();
+        mp2tile.flags = fs.get();
+        mp2tile.mapObject = fs.get();
 
-        switch ( mp2tile.generalObject ) {
+        switch ( mp2tile.mapObject ) {
         case MP2::OBJ_RNDTOWN:
         case MP2::OBJ_RNDCASTLE:
         case MP2::OBJ_CASTLE:
@@ -1057,8 +1055,8 @@ bool World::LoadMapMP2( const std::string & filename )
         // offset first addon
         size_t offsetAddonsBlock = fs.getLE16();
 
-        mp2tile.uniqNumber1 = fs.getLE32();
-        mp2tile.uniqNumber2 = fs.getLE32();
+        mp2tile.editorObjectLink = fs.getLE32();
+        mp2tile.editorObjectOverlay = fs.getLE32();
 
         tile.Init( index, mp2tile );
 
@@ -1328,8 +1326,8 @@ bool World::LoadMapMP2( const std::string & filename )
                            "read heroes: "
                                << "incorrect size block: " << pblock.size() );
                 }
-                else if ( NULL != ( addon = tile.FindObjectConst( MP2::OBJ_HEROES ) ) ) {
-                    std::pair<int, int> colorRace = Maps::TilesAddon::ColorRaceFromHeroSprite( *addon );
+                else {
+                    std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
                     Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
@@ -1423,7 +1421,7 @@ void World::PostLoad( void )
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_EVENT:
         case MP2::OBJ_BOAT:
@@ -1494,10 +1492,9 @@ void World::PostLoad( void )
             break;
 
         case MP2::OBJ_HEROES: {
-            Maps::TilesAddon * addon = tile.FindAddonICN( ICN::MINIHERO, 1 );
-            // remove event sprite
-            if ( addon )
-                tile.Remove( addon->uniq );
+            // remove map editor sprite
+            if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
+                tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( ii ) ) );
         } break;
@@ -1579,15 +1576,11 @@ void World::PostLoad( void )
         }
     }
     else {
-        const Maps::TilesAddon * addon = NULL;
-
         // remove ultimate artifact sprite
-        if ( NULL != ( addon = ( *it ).FindObjectConst( MP2::OBJ_RNDULTIMATEARTIFACT ) ) ) {
-            ultimate_artifact.Set( ( *it ).GetIndex(), Artifact::FromMP2IndexSprite( addon->index ) );
-            ( *it ).Remove( addon->uniq );
-            ( *it ).SetObject( MP2::OBJ_ZERO );
-            ultimate_pos = ( *it ).GetCenter();
-        }
+        ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( it->GetObjectSpriteIndex() ) );
+        it->Remove( it->GetObjectUID() );
+        it->SetObject( MP2::OBJ_ZERO );
+        ultimate_pos = ( *it ).GetCenter();
     }
 
     std::string rumor = _( "The ultimate artifact is really the %{name}" );
