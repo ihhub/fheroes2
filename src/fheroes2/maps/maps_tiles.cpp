@@ -1009,6 +1009,11 @@ bool isForestsTrees( const Maps::TilesAddon & ta )
     return Maps::TilesAddon::isForests( ta ) || Maps::TilesAddon::isTrees( ta ) || Maps::TilesAddon::isCactus( ta );
 }
 
+bool isImpassableIfOverlayed( uint8_t object, uint8_t objectTileset )
+{
+    return objectTileset != 0 && ( object == MP2::OBJ_MOUNTS || object == MP2::OBJ_TREES || object == MP2::OBJ_CACTUS || object == MP2::OBJ_STONES );
+}
+
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
 {
     return Maps::TilesAddon::isStream( ta ) || Maps::TilesAddon::isRoadObject( ta ) || Maps::TilesAddon::isShadow( ta );
@@ -1020,11 +1025,6 @@ bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
         if ( !Exclude4LongObject( *it ) && ( *it ).isUniq( uid ) )
             return true;
     return false;
-}
-
-bool TopObjectDisable( const Maps::TilesAddon & ta )
-{
-    return isMountsRocs( ta ) || isForestsTrees( ta );
 }
 
 bool Maps::Tiles::isLongObject( int direction )
@@ -1062,9 +1062,8 @@ void Maps::Tiles::UpdatePassable( void )
 
     // on ground
     if ( MP2::OBJ_HEROES != mp2_object && !isWater() ) {
-        bool mounts1 = MP2::OBJ_MOUNTS == obj && objectTileset != 0;
+        bool hasRocksOrTrees = isImpassableIfOverlayed( obj, objectTileset );
         bool mounts2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isMountsRocs );
-        bool trees1 = MP2::OBJ_TREES == obj && objectTileset != 0;
         bool trees2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isForestsTrees );
 
         // fix coast passable
@@ -1076,18 +1075,10 @@ void Maps::Tiles::UpdatePassable( void )
         }
 
         // fix mountain layer
-        if ( tilePassable && ( MP2::OBJ_MOUNTS == obj || MP2::OBJ_TREES == obj ) && mounts1 && ( mounts2 || trees2 ) ) {
+        if ( tilePassable && hasRocksOrTrees && ( mounts2 || trees2 ) ) {
             tilePassable = 0;
 #ifdef WITH_DEBUG
             impassableTileRule = 3;
-#endif
-        }
-
-        // fix trees layer
-        if ( tilePassable && ( MP2::OBJ_MOUNTS == obj || MP2::OBJ_TREES == obj ) && trees1 && ( mounts2 || trees2 ) ) {
-            tilePassable = 0;
-#ifdef WITH_DEBUG
-            impassableTileRule = 4;
 #endif
         }
 
@@ -1136,7 +1127,7 @@ void Maps::Tiles::UpdatePassable( void )
     if ( Maps::isValidDirection( GetIndex(), Direction::TOP ) ) {
         Tiles & top = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), Direction::TOP ) );
 
-        if ( isWater() == top.isWater() && top.objectTileset == MP2::OBJ_MOUNTS && top.objectTileset != 0 && !MP2::isActionObject( top.GetObject( false ), isWater() )
+        if ( isWater() == top.isWater() && isImpassableIfOverlayed( top.mp2_object, top.objectTileset ) && !MP2::isActionObject( top.GetObject( false ), isWater() )
              && ( tilePassable && !( tilePassable & DIRECTION_TOP_ROW ) ) && !( top.tilePassable & DIRECTION_TOP_ROW ) ) {
             top.tilePassable = 0;
 #ifdef WITH_DEBUG
