@@ -262,7 +262,7 @@ public:
 
     bool Move( bool fast = false );
     void Move2Dest( const s32 & destination );
-    bool isEnableMove( void ) const;
+    bool isMoveEnabled( void ) const;
     bool CanMove( void ) const;
     void SetMove( bool );
     bool isAction( void ) const;

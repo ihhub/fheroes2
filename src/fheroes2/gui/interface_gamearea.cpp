@@ -219,10 +219,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     if ( hero && hero->GetPath().isShow() ) {
         const Route::Path & path = hero->GetPath();
-        s32 green = path.GetAllowStep();
+        int green = path.GetAllowedSteps();
 
         const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
-        const bool skipfirst = hero->isEnableMove() && 45 > hero->GetSpriteIndex() && 2 < ( hero->GetSpriteIndex() % 9 );
+        const bool skipfirst = hero->isMoveEnabled() && 45 > hero->GetSpriteIndex() && 2 < ( hero->GetSpriteIndex() % 9 );
 
         Route::Path::const_iterator pathEnd = path.end();
         Route::Path::const_iterator currentStep = path.begin();

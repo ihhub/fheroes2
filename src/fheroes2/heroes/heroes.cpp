@@ -1179,7 +1179,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 }
 
 /* return true is move enable */
-bool Heroes::isEnableMove( void ) const
+bool Heroes::isMoveEnabled( void ) const
 {
     return Modes( ENABLEMOVE ) && path.isValid() && path.getLastMovePenalty() <= move_point;
 }

@@ -102,7 +102,7 @@ namespace Route
 
         std::string String( void ) const;
 
-        int GetAllowStep( void ) const;
+        int GetAllowedSteps( void ) const;
         static int GetIndexSprite( int from, int to, int mod );
 
     private:
