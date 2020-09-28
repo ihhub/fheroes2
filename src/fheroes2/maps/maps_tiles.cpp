@@ -2074,7 +2074,7 @@ void Maps::Tiles::ReplaceObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint
     }
 }
 
-void Maps::Tiles::UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t indexChange )
+void Maps::Tiles::UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, int indexChange )
 {
     for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
         if ( it->uniq == uniqID && ( it->object >> 2 ) == rawTileset ) {
@@ -2091,7 +2091,7 @@ void Maps::Tiles::UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8
 
     if ( uniq == uniqID && ( objectTileset >> 2 ) == rawTileset ) {
         objectTileset = newTileset;
-        objectIndex = objectIndex + indexChange;
+        objectIndex += indexChange;
     }
 }
 
