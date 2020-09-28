@@ -255,7 +255,7 @@ int Maps::TilesAddon::GetLoyaltyObject( const Maps::TilesAddon & addon )
 
 int Maps::Tiles::GetPassable( uint32_t tileset, uint32_t index )
 {
-    int icn = MP2::GetICNObject( tileset );
+    const int icn = MP2::GetICNObject( tileset );
 
     switch ( icn ) {
     case ICN::MTNSNOW:
@@ -1092,7 +1092,7 @@ bool isImpassableIfOverlayed( uint8_t objectTileset, uint8_t icnIndex )
 
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
 {
-    int icn = MP2::GetICNObject( ta.object );
+    const int icn = MP2::GetICNObject( ta.object );
     return Maps::Tiles::isShadowSprite( ta.object, ta.index ) || icn == ICN::ROAD || icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && ta.index < 14 );
 }
 

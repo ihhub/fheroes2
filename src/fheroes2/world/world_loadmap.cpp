@@ -1577,7 +1577,7 @@ void World::PostLoad( void )
     }
     else {
         // remove ultimate artifact sprite
-        uint8_t objectIndex = it->GetObjectSpriteIndex();
+        const uint8_t objectIndex = it->GetObjectSpriteIndex();
         it->Remove( it->GetObjectUID() );
         it->SetObject( MP2::OBJ_ZERO );
         ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( objectIndex ) );
