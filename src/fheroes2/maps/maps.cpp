@@ -465,7 +465,7 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
     const Maps::Tiles & tile1 = world.GetTiles( from );
     const Maps::Tiles & tile2 = world.GetTiles( index );
 
-    if ( tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
+    if ( !MP2::isPickupObject( tile1.GetObject() ) && tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
         const int monsterDirection = Maps::GetDirection( index, from );
         /* if monster can attack to */
         result = ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) );
