@@ -627,8 +627,8 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
 
         static const int castleCoordinates[16][2]
             = {{0, -3}, {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2}, {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1}, {-2, 0}, {-1, 0}, {0, 0}, {1, 0}, {2, 0}};
-        static const int shadowCoordinates[16][2] = {{-4, -2}, {-3, -2}, {-2, -2}, {-1, -2}, {-5, -1}, {-4, -1}, {-3, -1}, {-2, -1},
-                                                     {-1, -1}, {-4, 0},  {-3, 0},  {-2, 0},  {-1, 0},  {-3, 1}, {-2, 1}, {-1, 1}};
+        static const int shadowCoordinates[16][2]
+            = {{-4, -2}, {-3, -2}, {-2, -2}, {-1, -2}, {-5, -1}, {-4, -1}, {-3, -1}, {-2, -1}, {-1, -1}, {-4, 0}, {-3, 0}, {-2, 0}, {-1, 0}, {-3, 1}, {-2, 1}, {-1, 1}};
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
