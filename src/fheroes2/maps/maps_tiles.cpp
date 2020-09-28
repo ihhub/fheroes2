@@ -1299,10 +1299,10 @@ void Maps::Tiles::AddonsPushLevel2( const TilesAddon & ta )
 
 void Maps::Tiles::AddonsSort( void )
 {
-    uint8_t lastLevel = 4;
     Addons::iterator lastObject = addons_level1.end();
     for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
         const int icn = MP2::GetICNObject( it->object );
+        const uint8_t level = it->level % 4;
 
         // force rivers and roads to be lowest priority
         if ( icn == ICN::STREAM || icn == ICN::ROAD )
@@ -1315,9 +1315,8 @@ void Maps::Tiles::AddonsSort( void )
         }
         // Level is actually a bitfield, but if 0 then it's an actual "full object"
         // To compare: level 2 is shadow, level 3 is roads/river
-        else if ( ( it->level % 4 ) < lastLevel ) {
+        else if ( level == 0 || ( lastObject == addons_level1.end() && level == 2 ) ) {
             lastObject = it;
-            lastLevel = it->level % 4;
         }
     }
 
