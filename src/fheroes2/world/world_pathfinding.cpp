@@ -146,7 +146,7 @@ uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, ui
     uint32_t penalty = ( world.GetTiles( from ).isRoad() && tileTo.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, skill );
 
     // diagonal move costs 50% extra
-    if ( direction & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
+    if ( Direction::isDiagonal( direction ) )
         penalty = penalty * 3 / 2;
 
     return penalty;

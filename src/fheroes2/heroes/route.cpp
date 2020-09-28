@@ -438,14 +438,25 @@ uint32_t Route::Path::getLastMovePenalty() const
     return Direction::isDiagonal( firstStep.GetDirection() ) ? penalty / 1.5 : penalty;
 }
 
-s32 Route::Path::GetAllowStep( void ) const
+int Route::Path::GetAllowStep( void ) const
 {
-    s32 green = 0;
-    u32 move_point = hero->GetMovePoints();
+    int green = 0;
+    uint32_t movePoints = hero->GetMovePoints();
 
-    for ( const_iterator it = begin(); it != end() && move_point >= ( *it ).GetPenalty(); ++it ) {
-        move_point -= ( *it ).GetPenalty();
-        ++green;
+    for ( const_iterator it = begin(); it != end() && movePoints > 0; ++it ) {
+        uint32_t penalty = it->GetPenalty();
+
+        if ( movePoints < penalty && Direction::isDiagonal( it->GetDirection() ) ) {
+            penalty /= 1.5;
+        }
+
+        if ( movePoints >= penalty ) {
+            movePoints -= penalty;
+            ++green;
+        }
+        else {
+            movePoints = 0;
+        }
     }
 
     return green;
