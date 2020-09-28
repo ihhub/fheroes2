@@ -510,8 +510,8 @@ Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
             result.push_back( index );
     };
 
-    if ( y > 1 ) {
-        if ( x > 1 )
+    if ( y > 0 ) {
+        if ( x > 0 )
             validateAndInsert( center - width - 1 );
 
         validateAndInsert( center - width );
@@ -520,7 +520,7 @@ Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
             validateAndInsert( center - width + 1 );
     }
 
-    if ( x > 1 )
+    if ( x > 0 )
         validateAndInsert( center - 1 );
     if ( MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() )
         result.push_back( center );
@@ -528,7 +528,7 @@ Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
         validateAndInsert( center + 1 );
 
     if ( y < world.h() - 1 ) {
-        if ( x > 1 )
+        if ( x > 0 )
             validateAndInsert( center + width - 1 );
 
         validateAndInsert( center + width );
