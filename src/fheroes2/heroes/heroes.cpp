@@ -1181,12 +1181,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 /* return true is move enable */
 bool Heroes::isEnableMove( void ) const
 {
-    if ( !Modes( ENABLEMOVE ) || !path.isValid() )
-        return false;
-
-    const Route::Step & firstStep = path.front();
-    const uint32_t penalty = firstStep.GetPenalty();
-    return ( Direction::isDiagonal( firstStep.GetDirection() ) ? penalty / 1.5 : penalty ) <= move_point;
+    return Modes( ENABLEMOVE ) && path.isValid() && path.getLastMovePenalty() <= move_point;
 }
 
 bool Heroes::CanMove( void ) const
@@ -1415,7 +1410,8 @@ bool Heroes::MayStillMove( void ) const
 {
     if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() )
         return false;
-    return path.isValid() ? ( move_point >= path.GetFrontPenalty() ) : CanMove();
+
+    return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
 }
 
 bool Heroes::isValid( void ) const

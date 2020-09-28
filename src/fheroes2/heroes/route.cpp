@@ -431,6 +431,13 @@ u32 Route::Path::GetTotalPenalty( void ) const
     return result;
 }
 
+uint32_t Route::Path::getLastMovePenalty() const
+{
+    const Route::Step & firstStep = front();
+    const uint32_t penalty = firstStep.GetPenalty();
+    return Direction::isDiagonal( firstStep.GetDirection() ) ? penalty / 1.5 : penalty;
+}
+
 s32 Route::Path::GetAllowStep( void ) const
 {
     s32 green = 0;
