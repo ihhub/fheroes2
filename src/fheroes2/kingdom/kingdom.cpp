@@ -81,6 +81,7 @@ void Kingdom::clear( void )
     recruits.Reset();
 
     heroes_cond_loss.clear();
+    puzzle_maps.reset();
 }
 
 int Kingdom::GetControl( void ) const
