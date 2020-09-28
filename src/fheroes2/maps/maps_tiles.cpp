@@ -1394,7 +1394,7 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp )
     }
 }
 
-void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon ) const
+void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool isPuzzleDraw ) const
 {
     Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1404,7 +1404,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon ) con
             const u8 & index = ( *it ).index;
             const int icn = MP2::GetICNObject( ( *it ).object );
 
-            if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn ) {
+            if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( it->object, index ) ) ) {
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
                 area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
@@ -1418,9 +1418,9 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon ) con
     }
 }
 
-void Maps::Tiles::RedrawBottom( fheroes2::Image & dst ) const
+void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, bool isPuzzleDraw ) const
 {
-    RedrawAddon( dst, addons_level1 );
+    RedrawAddon( dst, addons_level1, isPuzzleDraw );
 }
 
 void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const

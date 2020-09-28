@@ -141,7 +141,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 // bottom
                 if ( flag & LEVEL_BOTTOM )
-                    tile.RedrawBottom( dst );
+                    tile.RedrawBottom( dst, isPuzzleDraw );
 
                 // map object
                 if ( flag & LEVEL_BOTTOM )
