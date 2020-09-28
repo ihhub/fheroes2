@@ -181,7 +181,8 @@ namespace Maps
         void AddonsSort( void );
         void Remove( u32 uniqID );
         void RemoveObjectSprite( void );
-        void UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t newIndex, bool replace = true );
+        void UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t indexChange );
+        void ReplaceObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t indexToReplace, uint8_t newIndex );
 
         std::string String( void ) const;
 
