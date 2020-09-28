@@ -119,7 +119,7 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
     }
 }
 
-void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
+void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw ) const
 {
     const Rect tileROI = GetVisibleTileROI();
 
@@ -141,11 +141,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 
                 // bottom
                 if ( flag & LEVEL_BOTTOM )
-                    tile.RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
+                    tile.RedrawBottom( dst, isPuzzleDraw );
 
                 // map object
-                if ( flag & LEVEL_OBJECTS )
-                    tile.RedrawObjects( dst );
+                if ( flag & LEVEL_BOTTOM )
+                    tile.RedrawObjects( dst, isPuzzleDraw );
             }
         }
     }
@@ -163,7 +163,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
             const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
 
             // map object
-            if ( flag & LEVEL_OBJECTS )
+            if ( flag & LEVEL_OBJECTS && !isPuzzleDraw )
                 tile.RedrawMonstersAndBoat( dst );
 
             // top
@@ -345,29 +345,18 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 in
         const Rect origPosition( gamearea._windowROI );
         gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
-        const Rect & rectMaps = gamearea.GetVisibleTileROI();
         Point pt = Maps::GetPoint( index );
-
         gamearea.SetCenter( pt );
-        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP );
 
-        // blit marker
-        for ( u32 ii = 0; ii < rectMaps.h; ++ii )
-            if ( index < Maps::GetIndexFromAbsPoint( rectMaps.x + rectMaps.w - 1, rectMaps.y + ii ) ) {
-                pt.y = ii;
-                break;
-            }
-        for ( u32 ii = 0; ii < rectMaps.w; ++ii )
-            if ( index == Maps::GetIndexFromAbsPoint( rectMaps.x + ii, rectMaps.y + pt.y ) ) {
-                pt.x = ii;
-                break;
-            }
+        const Rect & rectMaps = gamearea.GetVisibleTileROI();
+        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
+
         const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
         const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )
                                + Point( result.width() / 2, result.height() / 2 ) );
 
         fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
-        fheroes2::ApplyPalette( result, PAL::GetPalette( Settings::Get().ExtGameEvilInterface() ? PAL::GRAY : PAL::BROWN ) );
+        fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::TAN ) );
 
         gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
     }

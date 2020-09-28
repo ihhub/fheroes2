@@ -67,8 +67,6 @@ namespace Maps
 
         std::string String( int level ) const;
 
-        static bool isStream( const TilesAddon & );
-        static bool isRoad( const TilesAddon & );
         static bool isShadow( const TilesAddon & );
         static bool isRoadObject( const TilesAddon & );
 
@@ -161,14 +159,14 @@ namespace Maps
 
         void RedrawTile( fheroes2::Image & ) const;
         static void RedrawEmptyTile( fheroes2::Image & dst, const Point & mp );
-        void RedrawBottom( fheroes2::Image & dst, bool skipObjs = false ) const;
+        void RedrawBottom( fheroes2::Image & dst, bool isPuzzleDraw = false ) const;
         void RedrawBottom4Hero( fheroes2::Image & ) const;
-        void RedrawTop( fheroes2::Image & dst, bool skipObjs = false ) const;
+        void RedrawTop( fheroes2::Image & dst ) const;
         void RedrawTop4Hero( fheroes2::Image &, bool skip_ground ) const;
-        void RedrawObjects( fheroes2::Image & ) const;
+        void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw = false ) const;
         void RedrawMonstersAndBoat( fheroes2::Image & ) const;
         void RedrawFogs( fheroes2::Image &, int ) const;
-        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool skipObjs = false ) const;
+        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool isPuzzleDraw = false ) const;
         void RedrawPassable( fheroes2::Image & ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
@@ -225,6 +223,7 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static bool isShadowSprite( uint8_t tileset, uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource );
         static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
         static int GetPassable( uint32_t tileset, uint32_t index );

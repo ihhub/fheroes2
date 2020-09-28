@@ -220,6 +220,16 @@ int MP2::GetICNObject( int tileset )
     return ICN::UNKNOWN;
 }
 
+bool MP2::isHiddenForPuzzle( uint8_t tileset, uint8_t index )
+{
+    const int icnID = tileset >> 2;
+    // Values extracted from 64-byte array at 0x004F0B50 offset of HEROES2W file
+    if ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) )
+        return true;
+
+    return false;
+}
+
 const char * MP2::StringObject( int object )
 {
     switch ( object ) {

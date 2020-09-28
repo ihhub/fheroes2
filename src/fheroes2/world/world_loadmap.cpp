@@ -1577,9 +1577,10 @@ void World::PostLoad( void )
     }
     else {
         // remove ultimate artifact sprite
-        ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( it->GetObjectSpriteIndex() ) );
+        const uint8_t objectIndex = it->GetObjectSpriteIndex();
         it->Remove( it->GetObjectUID() );
         it->SetObject( MP2::OBJ_ZERO );
+        ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( objectIndex ) );
         ultimate_pos = ( *it ).GetCenter();
     }
 
