@@ -44,6 +44,7 @@ namespace Direction
     };
 
     std::string String( int );
+    bool isDiagonal( int direction );
 
     int Reflect( int direct );
 
@@ -64,5 +65,6 @@ namespace Direction
 #define DIRECTION_TOP_LEFT_CORNER ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT )
 #define DIRECTION_BOTTOM_RIGHT_CORNER ( Direction::BOTTOM | Direction::BOTTOM_RIGHT | Direction::RIGHT )
 #define DIRECTION_BOTTOM_LEFT_CORNER ( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::LEFT )
+#define DIRECTION_ALL_CORNERS ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT )
 
 #endif

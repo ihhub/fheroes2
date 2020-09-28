@@ -1181,12 +1181,19 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 /* return true is move enable */
 bool Heroes::isEnableMove( void ) const
 {
-    return Modes( ENABLEMOVE ) && path.isValid() && path.GetFrontPenalty() <= move_point;
+    if ( !Modes( ENABLEMOVE ) || !path.isValid() )
+        return false;
+
+    const Route::Step & firstStep = path.front();
+    const uint32_t penalty = firstStep.GetPenalty();
+    return ( Direction::isDiagonal( firstStep.GetDirection() ) ? penalty / 1.5 : penalty ) <= move_point;
 }
 
 bool Heroes::CanMove( void ) const
 {
-    return move_point >= Maps::Ground::GetPenalty( world.GetTiles( GetIndex() ), GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    const Maps::Tiles & tile = world.GetTiles( GetIndex() );
+    return move_point >= tile.isRoad() ? Maps::Ground::roadPenalty
+                                       : Maps::Ground::GetPenalty( world.GetTiles( GetIndex() ), GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 /* set enable move */
