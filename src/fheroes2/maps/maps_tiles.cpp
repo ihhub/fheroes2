@@ -1302,8 +1302,14 @@ void Maps::Tiles::AddonsSort( void )
 {
     Addons::iterator lastObject = addons_level1.end();
     for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        const int icn = MP2::GetICNObject( it->object );
+
+        // force rivers and roads to be lowest priority
+        if ( icn == ICN::STREAM || icn == ICN::ROAD )
+            continue;
+
         // force monster object on top (fix old saves)
-        if ( mp2_object == MP2::OBJ_MONSTER && MP2::GetICNObject( it->object ) == ICN::MONS32 ) {
+        if ( mp2_object == MP2::OBJ_MONSTER && icn == ICN::MONS32 ) {
             lastObject = it;
             break;
         }
@@ -2053,24 +2059,45 @@ void Maps::Tiles::Remove( u32 uniqID )
     }
 }
 
-void Maps::Tiles::UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t newIndex, bool replace )
+void Maps::Tiles::ReplaceObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t indexToReplace, uint8_t newIndex )
+{
+    for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        if ( it->uniq == uniqID && ( it->object >> 2 ) == rawTileset && it->index == indexToReplace ) {
+            it->object = newTileset;
+            it->index = newIndex;
+        }
+    }
+    for ( Addons::iterator it2 = addons_level2.begin(); it2 != addons_level2.end(); ++it2 ) {
+        if ( it2->uniq == uniqID && ( it2->object >> 2 ) == rawTileset && it2->index == indexToReplace ) {
+            it2->object = newTileset;
+            it2->index = newIndex;
+        }
+    }
+
+    if ( uniq == uniqID && ( objectTileset >> 2 ) == rawTileset && objectIndex == indexToReplace ) {
+        objectTileset = newTileset;
+        objectIndex = newIndex;
+    }
+}
+
+void Maps::Tiles::UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, int indexChange )
 {
     for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
         if ( it->uniq == uniqID && ( it->object >> 2 ) == rawTileset ) {
-            it->object = replace ? newTileset : it->object + newTileset;
-            it->index = replace ? newIndex : it->index + newIndex;
+            it->object = newTileset;
+            it->index = it->index + indexChange;
         }
     }
     for ( Addons::iterator it2 = addons_level2.begin(); it2 != addons_level2.end(); ++it2 ) {
         if ( it2->uniq == uniqID && ( it2->object >> 2 ) == rawTileset ) {
-            it2->object = replace ? newTileset : it2->object + newTileset;
-            it2->index = replace ? newIndex : it2->index + newIndex;
+            it2->object = newTileset;
+            it2->index = it2->index + indexChange;
         }
     }
 
     if ( uniq == uniqID && ( objectTileset >> 2 ) == rawTileset ) {
-        objectTileset = replace ? newTileset : objectTileset + newTileset;
-        objectIndex = replace ? newIndex : objectIndex + newIndex;
+        objectTileset = newTileset;
+        objectIndex += indexChange;
     }
 }
 
