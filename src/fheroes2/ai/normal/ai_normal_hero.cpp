@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "ai_normal.h"
 #include "heroes.h"
 #include "maps.h"
@@ -26,27 +28,44 @@
 
 namespace AI
 {
-    namespace
+
+    int GetPriorityTarget( const std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
     {
-        const int temporaryHeroScanDist = 15;
+        int priorityTarget = -1;
+
+        const int heroIndex = hero.GetIndex();
+        const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
+
+        double maxPriority = 50000;
+        const size_t listSize = mapObjects.size();
+        
+        for ( size_t it = 0; it < listSize; ++it ) {
+            const MapObjectNode & node = mapObjects[it];
+            if ( HeroesValidObject( hero, node.first ) ) {
+                double value = world.getDistance( heroIndex, node.first, skill );
+                if ( value && value < maxPriority ) {
+                    maxPriority = value;
+                    priorityTarget = node.first;
+                }
+            }
+        }
+        return priorityTarget;
     }
 
-    bool MoveHero( Heroes & hero )
+    bool MoveHero( Heroes & hero, int target )
     {
-        // FIXME: Very basic set up, targets and priorities should be fed from AI Kingdom
-        const int heroIndex = hero.GetIndex();
-
-        // Maps::GetAroundIndexes should sort tiles internally
-        const Maps::Indexes & seenTiles = Maps::GetAroundIndexes( heroIndex, temporaryHeroScanDist, true );
-        for ( auto it = seenTiles.begin(); it != seenTiles.end(); ++it ) {
-            if ( HeroesValidObject( hero, *it ) && hero.GetPath().Calculate( *it ) ) {
-                HeroesMove( hero );
-                return true;
-            }
+        if ( target != -1 && hero.GetPath().Calculate( target ) ) {
+            HeroesMove( hero );
+            return true;
         }
 
         hero.SetModes( AI::HERO_WAITING );
         return false;
+    }
+
+    void Normal::HeroesActionComplete( Heroes & hero, int index )
+    {
+        // std::remove( mapObjects.begin(), mapObjects.end(), 3 );
     }
 
     void Normal::HeroTurn( Heroes & hero )
@@ -54,7 +73,7 @@ namespace AI
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            MoveHero( hero );
+            MoveHero( hero, GetPriorityTarget(mapObjects, hero ) );
         }
 
         if ( !hero.MayStillMove() ) {

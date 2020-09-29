@@ -27,6 +27,25 @@
 
 namespace AI
 {
+    bool IsValidKingdomObject( const Maps::Tiles & tile, int objectID, int kingdomColor )
+    {
+        if ( tile.isFog( kingdomColor ) || !MP2::isGroundObject( objectID ) )
+            return false;
+
+        if ( objectID == MP2::OBJ_HEROES ) {
+            const Heroes * hero = tile.GetHeroes();
+            return hero && kingdomColor != hero->GetColor();
+        }
+
+        if ( MP2::isCaptureObject( objectID ) )
+            return Players::isFriends( kingdomColor, tile.QuantityColor() );
+
+        if ( MP2::isQuantityObject( objectID ) )
+            return tile.QuantityIsValid();
+
+        return true;
+    }
+
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
         const int difficulty = Settings::Get().GameDifficulty();
@@ -46,6 +65,19 @@ namespace AI
         KingdomCastles & castles = kingdom.GetCastles();
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
+        int mapSize = world.w() * world.h();
+        mapObjects.clear();
+
+        for ( int idx = 0; idx < mapSize; ++idx ) {
+            const Maps::Tiles & tile = world.GetTiles( idx );
+            int objectID = tile.GetObject( true );
+
+            if ( !IsValidKingdomObject(tile, objectID, color ) )
+                continue;
+
+            mapObjects.push_back( {idx, objectID} );
+        }
+
         status.RedrawTurnProgress( 1 );
 
         // Step 2. Update AI variables and recalculate resource budget

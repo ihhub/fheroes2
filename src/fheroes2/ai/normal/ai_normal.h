@@ -25,6 +25,8 @@
 
 namespace AI
 {
+    using MapObjectNode = std::pair<int, int>;
+
     class Normal : public Base
     {
     public:
@@ -33,14 +35,13 @@ namespace AI
         void CastleTurn( Castle & castle, bool defensive = false );
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
         void HeroTurn( Heroes & hero );
+
+        void HeroesActionComplete( Heroes & hero, int index );
+
+    private:
+        std::vector<MapObjectNode> mapObjects;
     };
 
-    struct MapScanNode
-    {
-        MapScanNode * prev = NULL;
-        int index = 0;
-        uint32_t distance = 0;
-    };
 }
 
 #endif
