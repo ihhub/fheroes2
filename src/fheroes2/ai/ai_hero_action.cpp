@@ -1903,7 +1903,7 @@ namespace AI
             bool recenterNeeded = true;
 
             while ( LocalEvent::Get().HandleEvents() ) {
-                if ( hero.isFreeman() || !hero.isEnableMove() ) {
+                if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
                     break;
                 }
 

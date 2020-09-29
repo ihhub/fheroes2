@@ -148,7 +148,7 @@ void Interface::Basic::EventContinueMovement( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero && hero->GetPath().isValid() )
-        hero->SetMove( !hero->isEnableMove() );
+        hero->SetMove( !hero->isMoveEnabled() );
 }
 
 void Interface::Basic::EventKingdomInfo( void )

@@ -1179,14 +1179,15 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 }
 
 /* return true is move enable */
-bool Heroes::isEnableMove( void ) const
+bool Heroes::isMoveEnabled( void ) const
 {
-    return Modes( ENABLEMOVE ) && path.isValid() && path.GetFrontPenalty() <= move_point;
+    return Modes( ENABLEMOVE ) && path.isValid() && path.getLastMovePenalty() <= move_point;
 }
 
 bool Heroes::CanMove( void ) const
 {
-    return move_point >= Maps::Ground::GetPenalty( world.GetTiles( GetIndex() ), GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    const Maps::Tiles & tile = world.GetTiles( GetIndex() );
+    return move_point >= tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 /* set enable move */
@@ -1298,11 +1299,19 @@ int Heroes::GetDirection( void ) const
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
+    const int32_t currentIndex = GetIndex();
+    const uint32_t skill = GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-    // approximate limit, this restriction path finding algorithm
-    uint32_t total = world.getDistance( GetIndex(), dst, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    uint32_t total = world.getDistance( currentIndex, dst, skill );
     DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );
+
     if ( total > 0 ) {
+        // check if last step is diagonal and pre-adjust the total
+        const Route::Step lastStep = world.getPath( currentIndex, dst, skill ).back();
+        if ( Direction::isDiagonal( lastStep.GetDirection() ) ) {
+            total -= lastStep.GetPenalty() / 3;
+        }
+
         if ( move_point >= total )
             return 1;
 
@@ -1408,7 +1417,8 @@ bool Heroes::MayStillMove( void ) const
 {
     if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() )
         return false;
-    return path.isValid() ? ( move_point >= path.GetFrontPenalty() ) : CanMove();
+
+    return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
 }
 
 bool Heroes::isValid( void ) const

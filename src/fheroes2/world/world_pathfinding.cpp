@@ -38,19 +38,14 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
 
     // trace the path from end point
     PathfindingNode & firstNode = _cache[target];
-    uint32_t cost = firstNode._cost;
-
-    // add cost of the first node
-    if ( firstNode._from != -1 )
-        cost += cost - _cache[firstNode._from]._cost;
 
     int currentNode = target;
     while ( currentNode != from && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
+        const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
-        path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost - node._cost );
+        path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost );
         currentNode = node._from;
-        cost = node._cost;
     }
 
     return path;
@@ -146,7 +141,7 @@ uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, ui
     uint32_t penalty = ( world.GetTiles( from ).isRoad() && tileTo.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, skill );
 
     // diagonal move costs 50% extra
-    if ( direction & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) )
+    if ( Direction::isDiagonal( direction ) )
         penalty = penalty * 3 / 2;
 
     return penalty;

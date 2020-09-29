@@ -913,7 +913,7 @@ int Interface::Basic::HumanTurn( bool isload )
             Heroes * hero = GetFocusHeroes();
 
             if ( hero ) {
-                if ( hero->isEnableMove() ) {
+                if ( hero->isMoveEnabled() ) {
                     if ( hero->Move( 0 == conf.HeroesMoveSpeed() ) ) {
                         if ( !isOngoingFastScrollEvent ) {
                             gameArea.SetCenter( hero->GetCenter() );
@@ -1072,7 +1072,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
         if ( from_hero == NULL )
             break;
 
-        if ( from_hero->isEnableMove() )
+        if ( from_hero->isMoveEnabled() )
             from_hero->SetMove( false );
         else
             ShowPathOrStartMoveHero( from_hero, index_maps );
@@ -1090,7 +1090,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
     Heroes * hero = GetFocusHeroes();
 
     // stop hero
-    if ( hero && hero->isEnableMove() ) {
+    if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
         Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
     }

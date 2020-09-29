@@ -234,7 +234,7 @@ fheroes2::Sprite SpriteFlag( const Heroes & hero, int index, bool rotate )
 
     const int frameId = index % heroFrameCount;
     fheroes2::Sprite flag = fheroes2::AGG::GetICN( icn_flag, index_sprite + frameId );
-    if ( !hero.isEnableMove() ) {
+    if ( !hero.isMoveEnabled() ) {
         static const Point offsetTop[heroFrameCount]
             = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
         static const Point offsetBottom[heroFrameCount]
@@ -385,7 +385,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     const bool reflect = ReflectSprite( direction );
 
     int flagFrameID = sprite_index;
-    if ( !isEnableMove() ) {
+    if ( !isMoveEnabled() ) {
         flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
     }
 
@@ -448,7 +448,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
         dst_pt4.y += oy;
     }
 
-    if ( isShipMaster() && isEnableMove() ) {
+    if ( isShipMaster() && isMoveEnabled() ) {
         const Directions directions = Direction::All();
         const int filter = DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT;
 
@@ -576,7 +576,7 @@ bool Heroes::MoveStep( bool fast )
         MoveStep( *this, indexTo, true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
-        if ( isEnableMove() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {
+        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {
             if ( GetKingdom().isControlHuman() )
                 PlayWalkSound( world.GetTiles( mp.x, mp.y ).GetGround() );
             ++sprite_index;
@@ -807,7 +807,7 @@ bool Heroes::Move( bool fast )
         ResetModes( ACTION );
 
     // move hero
-    if ( path.isValid() && ( isEnableMove() || ( GetSpriteIndex() < 45 && GetSpriteIndex() % 9 ) || GetSpriteIndex() >= 45 ) ) {
+    if ( path.isValid() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && GetSpriteIndex() % 9 ) || GetSpriteIndex() >= 45 ) ) {
         // fast move for hide AI
         if ( fast ) {
             direction = path.GetFrontDirection();
