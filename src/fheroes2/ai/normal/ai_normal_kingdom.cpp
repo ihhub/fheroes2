@@ -37,8 +37,8 @@ namespace AI
             return hero && kingdomColor != hero->GetColor();
         }
 
-        if ( MP2::isCaptureObject( objectID ) )
-            return Players::isFriends( kingdomColor, tile.QuantityColor() );
+        if ( objectID != MP2::OBJ_CASTLE && MP2::isCaptureObject( objectID ) )
+            return !Players::isFriends( kingdomColor, tile.QuantityColor() );
 
         if ( MP2::isQuantityObject( objectID ) )
             return tile.QuantityIsValid();
@@ -64,6 +64,8 @@ namespace AI
         KingdomHeroes & heroes = kingdom.GetHeroes();
         KingdomCastles & castles = kingdom.GetCastles();
 
+        DEBUG( DBG_AI, DBG_INFO, Color::String( color ) << "Starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
+
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
         int mapSize = world.w() * world.h();
         mapObjects.clear();
@@ -76,6 +78,8 @@ namespace AI
                 continue;
 
             mapObjects.push_back( {idx, objectID} );
+
+            DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << "Found valid object " << MP2::StringObject( objectID ) << " at index: " << idx );
         }
 
         status.RedrawTurnProgress( 1 );
@@ -102,7 +106,14 @@ namespace AI
                 castles.front()->RecruitHero( rec.GetHero1() );
             }
         }
+
+        // Copy hero list and sort (original list may be altered during the turn)
         VecHeroes sortedHeroList = heroes;
+        std::sort( sortedHeroList.begin(), sortedHeroList.end(), []( const Heroes * left, const Heroes * right ) {
+            if ( left && right )
+                return left->GetArmy().GetStrength() < right->GetArmy().GetStrength();
+            return right == NULL;
+        } );
 
         status.RedrawTurnProgress( 2 );
 

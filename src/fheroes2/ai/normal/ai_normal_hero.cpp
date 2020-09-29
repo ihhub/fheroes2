@@ -36,6 +36,7 @@ namespace AI
         const int heroIndex = hero.GetIndex();
         const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
 
+        int objectID = 0;
         double maxPriority = 50000;
         const size_t listSize = mapObjects.size();
         
@@ -46,9 +47,13 @@ namespace AI
                 if ( value && value < maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
+                    objectID = node.second;
                 }
             }
         }
+        DEBUG( DBG_AI, DBG_TRACE,
+               hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << "(" << MP2::StringObject( objectID ) << ")" );
+
         return priorityTarget;
     }
 
@@ -65,7 +70,7 @@ namespace AI
 
     void Normal::HeroesActionComplete( Heroes & hero, int index )
     {
-        // std::remove( mapObjects.begin(), mapObjects.end(), 3 );
+
     }
 
     void Normal::HeroTurn( Heroes & hero )
@@ -73,6 +78,8 @@ namespace AI
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
+            const int mapIndex = hero.GetIndex();
+
             MoveHero( hero, GetPriorityTarget(mapObjects, hero ) );
         }
 
