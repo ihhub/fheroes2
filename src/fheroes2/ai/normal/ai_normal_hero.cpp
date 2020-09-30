@@ -104,9 +104,7 @@ namespace AI
     {
         Castle * castle = hero.inCastle();
         if ( castle ) {
-            hero.GetArmy().UpgradeTroops( *castle );
-            castle->RecruitAllMonsters();
-            hero.GetArmy().JoinStrongestFromArmy( castle->GetArmy() );
+            ReinforceHeroInCastle( hero, *castle );
         }
     }
 

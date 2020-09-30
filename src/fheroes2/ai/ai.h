@@ -115,6 +115,7 @@ namespace AI
     bool BuildIfAvailable( Castle & castle, int building );
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max );
+    void ReinforceHeroInCastle( Heroes & hero, Castle & castle );
 }
 
 #endif

@@ -97,6 +97,8 @@ namespace AI
         status.RedrawTurnProgress( 1 );
 
         // Step 2. Update AI variables and recalculate resource budget
+        const bool slowEarlyGame = world.CountDay() < 5 && castles.size() == 1;
+
         int combinedHeroStrength = 0;
         for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
             if ( *it ) {
@@ -107,6 +109,8 @@ namespace AI
         size_t heroLimit = Maps::XLARGE > world.w() ? ( Maps::LARGE > world.w() ? 2 : 3 ) : 4;
         if ( _personality == EXPLORER )
             heroLimit++;
+        if ( slowEarlyGame )
+            heroLimit = 2;
 
         // Step 3. Buy new heroes, adjust roles, sort heroes based on priority or strength
         if ( heroes.size() < heroLimit && castles.size() ) {
@@ -116,7 +120,10 @@ namespace AI
             // FIXME: Pick appropriate castle to buy hero from
             Heroes * hero = castle->GetHeroes().Guest();
             if ( !hero ) {
-                castle->RecruitHero( rec.GetHero1() );
+                hero = castle->RecruitHero( rec.GetHero1() );
+
+                if ( !slowEarlyGame && hero )
+                    ReinforceHeroInCastle( *hero, *castle );
             }
         }
 
