@@ -92,6 +92,9 @@ namespace AI
     uint32_t AIGetAllianceColors( const Heroes & hero );
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
 
+    const double ARMY_STRENGTH_ADVANTAGE = 1.25;
+    const double ARMY_STRENGTH_ADVANTAGE_CASTLE = 1.5;
+
     int AISelectPrimarySkill( Heroes & hero )
     {
         switch ( hero.GetRace() ) {
@@ -1533,7 +1536,7 @@ namespace AI
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     Army enemy( tile );
-                    return army.isStrongerThan( enemy );
+                    return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE );
                 }
                 else
                     return true;
@@ -1555,7 +1558,7 @@ namespace AI
                 if ( !hero.isFriends( tile.QuantityColor() ) ) {
                     if ( tile.CaptureObjectIsProtection() ) {
                         Army enemy( tile );
-                        return army.isStrongerThan( enemy );
+                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE );
                     }
                     else
                         return true;
@@ -1595,7 +1598,7 @@ namespace AI
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
                 if ( 5 < variants && 14 > variants ) {
                 Army enemy( tile );
-                return army.isStrongerThan( enemy );
+                return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE );
             }
             else
                 // other
@@ -1781,7 +1784,7 @@ namespace AI
         case MP2::OBJ_DERELICTSHIP:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
-                return enemy.isValid() && army.isStrongerThan( enemy );
+                return enemy.isValid() && army.isStrongerThan( enemy, 2 );
             }
             break;
 
@@ -1793,7 +1796,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ) );
+            return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE );
 
         // sign
         case MP2::OBJ_SIGN:
@@ -1811,7 +1814,7 @@ namespace AI
                     if ( hero.isFriends( castle->GetColor() ) )
                         return false;
                     else
-                        return army.isStrongerThan( castle->GetActualArmy() );
+                        return army.isStrongerThan( castle->GetActualArmy(), ARMY_STRENGTH_ADVANTAGE_CASTLE );
                 }
             }
             break;
@@ -1821,11 +1824,10 @@ namespace AI
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
                 if ( hero.GetColor() == hero2->GetColor() )
-                    return true;
-                // FIXME: AI skip visiting alliance
+                    return false;
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
-                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy() ) )
+                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE ) )
                     return true;
             }
             break;
