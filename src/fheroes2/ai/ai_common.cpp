@@ -66,10 +66,10 @@ namespace AI
         return castle.isCapital() ? 1 : Rand::Get( min, max );
     }
 
-    void ReinforceHeroInCastle( Heroes & hero, Castle & castle )
+    void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
     {
         hero.GetArmy().UpgradeTroops( castle );
-        castle.RecruitAllMonsters();
+        castle.recruitBestAvailable( budget );
         hero.GetArmy().JoinStrongestFromArmy( castle.GetArmy() );
     }
 }

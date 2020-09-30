@@ -124,7 +124,7 @@ namespace AI
                 hero = castle->RecruitHero( rec.GetHero1() );
 
                 if ( !slowEarlyGame && hero )
-                    ReinforceHeroInCastle( *hero, *castle );
+                    ReinforceHeroInCastle( *hero, *castle, kingdom.GetFunds() );
             }
         }
 

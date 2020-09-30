@@ -107,7 +107,7 @@ namespace AI
     {
         Castle * castle = hero.inCastle();
         if ( castle ) {
-            ReinforceHeroInCastle( hero, *castle );
+            ReinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
         }
     }
 

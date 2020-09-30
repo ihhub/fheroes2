@@ -1036,7 +1036,7 @@ bool Castle::RecruitMonsterFromDwelling( u32 dw, u32 count )
 }
 
 /* return current count monster in dwelling */
-u32 Castle::GetDwellingLivedCount( u32 dw ) const
+u32 Castle::getMonstersInDwelling( u32 dw ) const
 {
     switch ( dw ) {
     case DWELLING_MONSTER1:
@@ -2338,7 +2338,26 @@ void Castle::RecruitAllMonsters( void )
     if ( !skip_recruit )
         for ( u32 dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 )
             if ( isBuild( dw ) )
-                RecruitMonsterFromDwelling( dw, GetDwellingLivedCount( dw ) );
+                RecruitMonsterFromDwelling( dw, getMonstersInDwelling( dw ) );
+}
+
+void Castle::recruitBestAvailable( Funds budget )
+{
+    for ( u32 dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
+        if ( isBuild( dw ) ) {
+            const Monster monster( race, GetActualDwelling( dw ) );
+            uint32_t available = getMonstersInDwelling( dw );
+
+            uint32_t willRecruit = budget.getLowestQuotient( monster.GetCost() );
+            if ( available < willRecruit )
+                willRecruit = available;
+
+            if ( RecruitMonsterFromDwelling( dw, willRecruit ) ) {
+                // success, reduce the budget
+                budget -= ( monster.GetCost() * willRecruit );
+            }
+        }
+    }
 }
 
 const Army & Castle::GetArmy( void ) const

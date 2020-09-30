@@ -252,6 +252,26 @@ Funds & Funds::operator-=( const Funds & pm )
     return *this;
 }
 
+int Funds::getLowestQuotient( const Funds & divisor ) const
+{
+    int result = ( divisor.gold ) ? gold / divisor.gold : gold;
+
+    auto divisionLambda = [&result]( int left, int right ) {
+        int value = ( right != 0 ) ? left / right : left;
+        if ( value < result )
+            result = value;
+    };
+
+    divisionLambda( wood, divisor.wood );
+    divisionLambda( ore, divisor.ore );
+    divisionLambda( crystal, divisor.crystal );
+    divisionLambda( gems, divisor.gems );
+    divisionLambda( mercury, divisor.mercury );
+    divisionLambda( sulfur, divisor.sulfur );
+
+    return result;
+}
+
 // operator Funds *
 Funds Funds::operator*( u32 mul ) const
 {
