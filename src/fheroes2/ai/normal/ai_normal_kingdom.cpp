@@ -32,12 +32,23 @@ namespace AI
         if ( tile.isFog( kingdomColor ) || !MP2::isGroundObject( objectID ) )
             return false;
 
-        if ( objectID == MP2::OBJ_HEROES ) {
+        // Check castle first to ignore guest hero (tile with both Castle and Hero)
+        if ( objectID == MP2::OBJ_CASTLE ) {
+            if ( !Settings::Get().ExtUnionsAllowCastleVisiting() ) {
+                // false only if alliance castles can't be visited
+                const int tileColor = tile.QuantityColor();
+                return Players::isFriends( kingdomColor, tileColor ) && kingdomColor != tileColor;
+            }
+            return true;
+        }
+
+        // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
+        if ( tile.GetObject( true ) == MP2::OBJ_HEROES ) {
             const Heroes * hero = tile.GetHeroes();
             return hero && kingdomColor != hero->GetColor();
         }
 
-        if ( objectID != MP2::OBJ_CASTLE && MP2::isCaptureObject( objectID ) )
+        if ( MP2::isCaptureObject( objectID ) )
             return !Players::isFriends( kingdomColor, tile.QuantityColor() );
 
         if ( MP2::isQuantityObject( objectID ) )
@@ -72,9 +83,10 @@ namespace AI
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
-            int objectID = tile.GetObject( true );
+            // Pass false here to get object ID underneath the hero
+            int objectID = tile.GetObject( false );
 
-            if ( !IsValidKingdomObject(tile, objectID, color ) )
+            if ( !IsValidKingdomObject( tile, objectID, color ) )
                 continue;
 
             mapObjects.push_back( {idx, objectID} );

@@ -21,6 +21,7 @@
 #include <algorithm>
 
 #include "ai_normal.h"
+#include "ground.h"
 #include "heroes.h"
 #include "maps.h"
 #include "mp2.h"
@@ -28,6 +29,36 @@
 
 namespace AI
 {
+    double GetObjectValue( int index, int objectID )
+    {
+        // In the future these hardcoded values could be configured by the mod
+        double value = 0;
+        const Maps::Tiles & tile = world.GetTiles( index );
+
+        if ( objectID == MP2::OBJ_CASTLE ) {
+            const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+            if ( castle ) {
+                value = 10000.0;
+            }
+        }
+        else if ( objectID == MP2::OBJ_HEROES ) {
+            value = 8000.0;
+        }
+        else if ( objectID == MP2::OBJ_MONSTER ) {
+            value = 7000.0;
+        }
+        else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJN_ALCHEMYLAB ) {
+            value = 6000.0;
+        }
+        else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
+            value = 3000.0 * tile.QuantityArtifact().getArtifactValue();
+        }
+        else if ( MP2::isPickupObject( objectID ) ) {
+            value = 300.0 * tile.GetQuantity2();
+        }
+
+        return value;
+    }
 
     int GetPriorityTarget( const std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
     {
@@ -36,15 +67,16 @@ namespace AI
         const int heroIndex = hero.GetIndex();
         const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
 
+        double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
         int objectID = 0;
-        double maxPriority = 50000;
         const size_t listSize = mapObjects.size();
         
         for ( size_t it = 0; it < listSize; ++it ) {
             const MapObjectNode & node = mapObjects[it];
             if ( HeroesValidObject( hero, node.first ) ) {
-                double value = world.getDistance( heroIndex, node.first, skill );
-                if ( value && value < maxPriority ) {
+                uint32_t dist = world.getDistance( heroIndex, node.first, skill );
+                double value = GetObjectValue( node.first, node.second ) - static_cast<double>( dist );
+                if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
                     objectID = node.second;
@@ -52,7 +84,7 @@ namespace AI
             }
         }
         DEBUG( DBG_AI, DBG_TRACE,
-               hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << "(" << MP2::StringObject( objectID ) << ")" );
+               hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
 
         return priorityTarget;
     }
@@ -70,7 +102,12 @@ namespace AI
 
     void Normal::HeroesActionComplete( Heroes & hero, int index )
     {
-
+        Castle * castle = hero.inCastle();
+        if ( castle ) {
+            hero.GetArmy().UpgradeTroops( *castle );
+            castle->RecruitAllMonsters();
+            hero.GetArmy().JoinStrongestFromArmy( castle->GetActualArmy() );
+        }
     }
 
     void Normal::HeroTurn( Heroes & hero )
@@ -78,8 +115,6 @@ namespace AI
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            const int mapIndex = hero.GetIndex();
-
             MoveHero( hero, GetPriorityTarget(mapObjects, hero ) );
         }
 

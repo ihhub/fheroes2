@@ -1262,7 +1262,7 @@ bool Army::isStrongerThan( const Army & target ) const
     const double str1 = GetStrength();
     const double str2 = target.GetStrength();
 
-    DEBUG( DBG_AI, DBG_INFO, "Comparing troops: " << str1 << " versus " << str2 );
+    DEBUG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
 
     return str1 > str2;
 }

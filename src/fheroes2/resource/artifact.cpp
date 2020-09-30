@@ -545,6 +545,27 @@ int Artifact::Level( void ) const
     return ART_NONE;
 }
 
+// Convert artifact flags into simple usable level value
+int Artifact::getArtifactValue() const
+{
+    int level = Level();
+
+    if ( level & ART_LEVEL1 ) {
+        return 1;
+    }
+    else if ( level & ART_LEVEL2 ) {
+        return 2;
+    }
+    else if ( level & ART_LEVEL3 ) {
+        return 3;
+    }
+    else if ( level & ART_ULTIMATE ) {
+        return 5;
+    }
+
+    return 0;
+}
+
 /* return index sprite objnarti.icn */
 u32 Artifact::IndexSprite( void ) const
 {
