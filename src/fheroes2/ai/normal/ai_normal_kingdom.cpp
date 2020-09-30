@@ -79,7 +79,7 @@ namespace AI
         DEBUG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
-        int mapSize = world.w() * world.h();
+        const int mapSize = world.w() * world.h();
         mapObjects.clear();
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
@@ -90,7 +90,7 @@ namespace AI
             if ( !IsValidKingdomObject( tile, objectID, color ) )
                 continue;
 
-            mapObjects.push_back( {idx, objectID} );
+            mapObjects.emplace_back( idx, objectID );
         }
 
         DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << mapObjects.size() << " valid objects" );

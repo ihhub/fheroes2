@@ -548,7 +548,7 @@ int Artifact::Level( void ) const
 // Convert artifact flags into simple usable level value
 int Artifact::getArtifactValue() const
 {
-    int level = Level();
+    const int level = Level();
 
     if ( level & ART_LEVEL1 ) {
         return 1;

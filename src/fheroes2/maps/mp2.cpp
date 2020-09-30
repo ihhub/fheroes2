@@ -753,10 +753,7 @@ bool MP2::isWeekLife( int obj )
 
 bool MP2::isMonthLife( int objectID )
 {
-    if ( objectID == MP2::OBJ_CASTLE )
-        return true;
-
-    return false;
+    return objectID == MP2::OBJ_CASTLE;
 }
 
 bool MP2::isBattleLife( int obj )

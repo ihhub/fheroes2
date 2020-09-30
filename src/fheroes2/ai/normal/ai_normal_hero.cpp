@@ -32,35 +32,34 @@ namespace AI
     double GetObjectValue( int index, int objectID )
     {
         // In the future these hardcoded values could be configured by the mod
-        double value = 0;
         const Maps::Tiles & tile = world.GetTiles( index );
 
         if ( objectID == MP2::OBJ_CASTLE ) {
-            value = 2000.0;
+            return 2000.0;
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
-            value = 1700.0;
+            return 1700.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {
-            value = 900.0;
+            return 900.0;
         }
         else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJN_ALCHEMYLAB ) {
-            value = 1000.0;
+            return 1000.0;
         }
         else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
-            value = 500.0 * tile.QuantityArtifact().getArtifactValue();
+            return 500.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectID ) ) {
-            value = 300.0;
+            return 300.0;
         }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
-            value = 400.0;
+            return 400.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            value = 400.0;
+            return 400.0;
         }
 
-        return value;
+        return 0;
     }
 
     int GetPriorityTarget( const std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
@@ -72,13 +71,15 @@ namespace AI
 
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
         int objectID = 0;
-        const size_t listSize = mapObjects.size();
 
-        for ( size_t it = 0; it < listSize; ++it ) {
+        for ( size_t it = 0; it < mapObjects.size(); ++it ) {
             const MapObjectNode & node = mapObjects[it];
             if ( HeroesValidObject( hero, node.first ) ) {
-                uint32_t dist = world.getDistance( heroIndex, node.first, skill );
-                double value = GetObjectValue( node.first, node.second ) - static_cast<double>( dist );
+                const uint32_t dist = world.getDistance( heroIndex, node.first, skill );
+                if ( dist == 0 )
+                    continue;
+
+                const double value = GetObjectValue( node.first, node.second ) - static_cast<double>( dist );
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
