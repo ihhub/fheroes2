@@ -34,10 +34,10 @@ namespace AI
 
         // Check castle first to ignore guest hero (tile with both Castle and Hero)
         if ( objectID == MP2::OBJ_CASTLE ) {
-            if ( !Settings::Get().ExtUnionsAllowCastleVisiting() ) {
+            const int tileColor = tile.QuantityColor();
+            if ( !Settings::Get().ExtUnionsAllowCastleVisiting() && Players::isFriends( kingdomColor, tileColor ) ) {
                 // false only if alliance castles can't be visited
-                const int tileColor = tile.QuantityColor();
-                return Players::isFriends( kingdomColor, tileColor ) && kingdomColor == tileColor;
+                return kingdomColor == tileColor;
             }
             return true;
         }
@@ -45,7 +45,7 @@ namespace AI
         // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
         if ( tile.GetObject( true ) == MP2::OBJ_HEROES ) {
             const Heroes * hero = tile.GetHeroes();
-            return hero && kingdomColor != hero->GetColor();
+            return hero && !Players::isFriends( kingdomColor, hero->GetColor() );
         }
 
         if ( MP2::isCaptureObject( objectID ) )
