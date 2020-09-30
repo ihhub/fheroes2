@@ -4260,7 +4260,7 @@ msgstr ""
 #: ../fheroes2/heroes/skill.cpp:187
 msgid ""
 "Your knowledge determines how many spell points your hero may have. Under "
-"normal cirumstances, a hero is limited to 10 spell points per level of "
+"normal circumstances, a hero is limited to 10 spell points per level of "
 "knowledge."
 msgstr ""
 
