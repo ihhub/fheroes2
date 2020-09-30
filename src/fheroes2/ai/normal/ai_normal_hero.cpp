@@ -36,25 +36,25 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( index );
 
         if ( objectID == MP2::OBJ_CASTLE ) {
-            const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
-            if ( castle ) {
-                value = 10000.0;
-            }
+            value = 2000.0;
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
-            value = 8000.0;
+            value = 1750.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {
-            value = 7000.0;
+            value = 1000.0;
         }
         else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJN_ALCHEMYLAB ) {
-            value = 6000.0;
+            value = 1100.0;
         }
         else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
-            value = 3000.0 * tile.QuantityArtifact().getArtifactValue();
+            value = 600.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectID ) ) {
-            value = 300.0 * tile.GetQuantity2();
+            value = 500.0;
+        }
+        else if ( MP2::isHeroUpgradeObject( objectID ) ) {
+            value = 700.0;
         }
 
         return value;
@@ -106,7 +106,7 @@ namespace AI
         if ( castle ) {
             hero.GetArmy().UpgradeTroops( *castle );
             castle->RecruitAllMonsters();
-            hero.GetArmy().JoinStrongestFromArmy( castle->GetActualArmy() );
+            hero.GetArmy().JoinStrongestFromArmy( castle->GetArmy() );
         }
     }
 

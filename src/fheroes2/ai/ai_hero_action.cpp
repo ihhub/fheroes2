@@ -1824,8 +1824,7 @@ namespace AI
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
                 if ( hero.GetColor() == hero2->GetColor() )
-                    return true;
-                // FIXME: AI skip visiting alliance
+                    return false;
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
                 else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy() ) )

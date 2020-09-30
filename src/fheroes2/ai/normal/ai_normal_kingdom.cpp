@@ -37,7 +37,7 @@ namespace AI
             if ( !Settings::Get().ExtUnionsAllowCastleVisiting() ) {
                 // false only if alliance castles can't be visited
                 const int tileColor = tile.QuantityColor();
-                return Players::isFriends( kingdomColor, tileColor ) && kingdomColor != tileColor;
+                return Players::isFriends( kingdomColor, tileColor ) && kingdomColor == tileColor;
             }
             return true;
         }
