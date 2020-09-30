@@ -2343,10 +2343,10 @@ void Castle::RecruitAllMonsters( void )
 
 void Castle::recruitBestAvailable( Funds budget )
 {
-    for ( u32 dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
+    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
         if ( isBuild( dw ) ) {
             const Monster monster( race, GetActualDwelling( dw ) );
-            uint32_t available = getMonstersInDwelling( dw );
+            const uint32_t available = getMonstersInDwelling( dw );
 
             uint32_t willRecruit = budget.getLowestQuotient( monster.GetCost() );
             if ( available < willRecruit )

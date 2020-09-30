@@ -257,7 +257,7 @@ int Funds::getLowestQuotient( const Funds & divisor ) const
     int result = ( divisor.gold ) ? gold / divisor.gold : gold;
 
     auto divisionLambda = [&result]( int left, int right ) {
-        int value = ( right != 0 ) ? left / right : left;
+        const int value = ( right != 0 ) ? left / right : left;
         if ( value < result )
             result = value;
     };
