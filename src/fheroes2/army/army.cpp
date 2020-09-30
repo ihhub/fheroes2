@@ -884,7 +884,7 @@ Army::Army( const Maps::Tiles & t )
             Troop troop = map_troop ? map_troop->QuantityTroop() : t.QuantityTroop();
 
             at( 0 )->Set( troop );
-            ArrangeForBattle( !Settings::Get().ExtWorldSaveMonsterBattle() );
+            ArrangeForBattle( true );
         }
         break;
     }

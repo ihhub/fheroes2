@@ -206,10 +206,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: abandoned mine random resource" ),
     },
     {
-        Settings::WORLD_SAVE_MONSTER_BATTLE,
-        _( "world: save count monster after battle" ),
-    },
-    {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
         _( "world: allow set guardian to objects" ),
     },
@@ -1626,11 +1622,6 @@ bool Settings::ExtGameRememberLastFocus( void ) const
 bool Settings::ExtWorldAbandonedMineRandom( void ) const
 {
     return ExtModes( WORLD_ABANDONED_MINE_RANDOM );
-}
-
-bool Settings::ExtWorldSaveMonsterBattle( void ) const
-{
-    return ExtModes( WORLD_SAVE_MONSTER_BATTLE );
 }
 
 bool Settings::ExtWorldAllowSetGuardian( void ) const

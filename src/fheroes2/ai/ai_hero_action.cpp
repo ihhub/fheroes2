@@ -612,16 +612,14 @@ namespace AI
             }
             else {
                 AIBattleLose( hero, res, true );
-                if ( Settings::Get().ExtWorldSaveMonsterBattle() ) {
-                    tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
-                    if ( tile.MonsterJoinConditionFree() )
-                        tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+                tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+                if ( tile.MonsterJoinConditionFree() )
+                    tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
 
-                    if ( map_troop ) {
-                        map_troop->count = army.GetCountMonsters( troop() );
-                        if ( map_troop->JoinConditionFree() )
-                            map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                    }
+                if ( map_troop ) {
+                    map_troop->count = army.GetCountMonsters( troop() );
+                    if ( map_troop->JoinConditionFree() )
+                        map_troop->condition = Monster::JOIN_CONDITION_MONEY;
                 }
             }
         }
@@ -776,8 +774,7 @@ namespace AI
                 else {
                     capture = false;
                     AIBattleLose( hero, result, true );
-                    if ( Settings::Get().ExtWorldSaveMonsterBattle() )
-                        tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
+                    tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
                 }
             }
 
