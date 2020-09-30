@@ -114,7 +114,7 @@ namespace AI
 
         // Step 3. Buy new heroes, adjust roles, sort heroes based on priority or strength
 
-        // GetFirstCastle might return NULL if there's towns with a test
+        // GetFirstCastle might return NULL if there's only towns with a tent
         Castle * castle = castles.GetFirstCastle();
 
         if ( castle && heroes.size() < heroLimit ) {
