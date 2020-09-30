@@ -877,8 +877,8 @@ std::string Settings::String( void ) const
     os << std::endl << "# use alternative resources (not in use anymore)" << std::endl;
     os << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# run in debug mode (0 - 9) [only for development]" << std::endl;
-    os << "debug = " << ( debug ? "on" : "off" ) << std::endl;
+    os << std::endl << "# run in debug mode (0 - 11) [only for development]" << std::endl;
+    os << "debug = " << debug << std::endl;
 
     os << std::endl << "# heroes move speed: 0 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
