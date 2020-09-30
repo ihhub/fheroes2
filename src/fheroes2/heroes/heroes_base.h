@@ -105,6 +105,7 @@ public:
     void SpellCasted( const Spell & );
     void SetSpellPoints( u32 );
 
+    std::vector<Spell> GetSpells( int lvl = -1 ) const;
     void EditSpellBook( void );
     Spell OpenSpellBook( int filter, bool ) const;
     bool HaveSpellBook( void ) const;

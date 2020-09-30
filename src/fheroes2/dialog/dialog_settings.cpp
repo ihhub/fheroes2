@@ -86,7 +86,9 @@ void SettingsListBox::RedrawBackground( const Point & origin )
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 11 ), display, origin.x + 295, origin.y + 35 + ( 19 * ii ) );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 10 ), display, origin.x + 295, origin.y + 46 );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::DROPLISL, 12 ), display, origin.x + 295, origin.y + ah - 14 );
+
+    const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
+    fheroes2::Blit( lowerPart, display, origin.x + 295, origin.y + ah - lowerPart.height() );
 }
 
 void SettingsListBox::ActionListDoubleClick( u32 & item )
@@ -144,7 +146,7 @@ void Dialog::ExtSettings( bool readonly )
     Dialog::FrameBorder frameborder( Size( 320, 400 ) );
     const Rect & area = frameborder.GetArea();
 
-    Text text( "Game Settings", Font::YELLOW_BIG );
+    Text text( "Experimental Game Settings", Font::YELLOW_BIG );
     text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;
@@ -164,13 +166,12 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
 
-    if ( conf.VideoMode() == Display::GetDefaultSize() )
+    if ( conf.VideoMode() == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
         states.push_back( Settings::GAME_USE_FADE );
 
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
     states.push_back( Settings::WORLD_SHOW_VISITED_CONTENT );
     states.push_back( Settings::WORLD_ABANDONED_MINE_RANDOM );
-    states.push_back( Settings::WORLD_SAVE_MONSTER_BATTLE );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_NOREQ_FOR_ARTIFACTS );
@@ -234,7 +235,7 @@ void Dialog::ExtSettings( bool readonly )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 43 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
@@ -243,16 +244,24 @@ void Dialog::ExtSettings( bool readonly )
     LocalEvent & le = LocalEvent::Get();
 
     const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.w - 10, area.h - 5 );
-    fheroes2::ButtonGroup btnGroup( buttonsArea, Dialog::OK | Dialog::CANCEL );
-    btnGroup.draw();
+
+    const int buttonIcnId = conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
+    const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+
+    fheroes2::Button buttonOk( buttonsArea.x + ( buttonsArea.width - buttonSprite.width() ) / 2, buttonsArea.y + buttonsArea.height - buttonSprite.height(), buttonIcnId,
+                               0, 1 );
+
+    buttonOk.draw();
 
     cursor.Show();
     display.render();
 
     // message loop
-    int result = Dialog::ZERO;
-    while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroup.processEvents();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        if ( le.MouseClickLeft( buttonOk.area() ) ) {
+            break;
+        }
 
         listbox.QueueEventProcessing();
 
@@ -263,9 +272,6 @@ void Dialog::ExtSettings( bool readonly )
         }
     }
 
-    // store
-    if ( result == Dialog::OK ) {
-        le.SetTapMode( conf.ExtPocketTapMode() );
-        Settings::Get().BinarySave();
-    }
+    le.SetTapMode( conf.ExtPocketTapMode() );
+    Settings::Get().BinarySave();
 }

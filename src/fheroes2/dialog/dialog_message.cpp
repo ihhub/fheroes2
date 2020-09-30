@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "settings.h"
 #include "text.h"
 
 #include "ui_button.h"

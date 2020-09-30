@@ -405,6 +405,13 @@ namespace fheroes2
         return nullptr;
     }
 
+    void OptionButtonGroup::draw( Image & area ) const
+    {
+        for ( size_t i = 0; i < _button.size(); ++i ) {
+            _button[i]->draw();
+        }
+    }
+
     void OptionButtonGroup::senderUpdate( const ActionObject * sender )
     {
         if ( sender == nullptr ) // how is it even possible?

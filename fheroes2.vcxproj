@@ -175,7 +175,6 @@
     <ClCompile Include="src\engine\audio_mixer.cpp" />
     <ClCompile Include="src\engine\audio_music.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
-    <ClCompile Include="src\engine\display.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\error.cpp" />
     <ClCompile Include="src\engine\font.cpp" />
@@ -235,6 +234,7 @@
     <ClCompile Include="src\fheroes2\battle\battle_interface.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_main.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_only.cpp" />
+    <ClCompile Include="src\fheroes2\battle\battle_pathfinding.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_tower.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_troop.cpp" />
     <ClCompile Include="src\fheroes2\castle\buildinginfo.cpp" />
@@ -319,7 +319,6 @@
     <ClCompile Include="src\fheroes2\heroes\heroes_recruits.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_spell.cpp" />
     <ClCompile Include="src\fheroes2\heroes\route.cpp" />
-    <ClCompile Include="src\fheroes2\heroes\route_pathfind.cpp" />
     <ClCompile Include="src\fheroes2\heroes\skill.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\color.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\kingdom.cpp" />
@@ -332,8 +331,6 @@
     <ClCompile Include="src\fheroes2\kingdom\race.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\speed.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
-    <ClCompile Include="src\fheroes2\kingdom\world.cpp" />
-    <ClCompile Include="src\fheroes2\kingdom\world_loadmap.cpp" />
     <ClCompile Include="src\fheroes2\maps\ground.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_actions.cpp" />
@@ -371,6 +368,9 @@
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
     <ClCompile Include="src\fheroes2\test\test.cpp" />
     <ClCompile Include="src\fheroes2\test\test_monstersprite.cpp" />
+    <ClCompile Include="src\fheroes2\world\world.cpp" />
+    <ClCompile Include="src\fheroes2\world\world_loadmap.cpp" />
+    <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
     <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
     <ClCompile Include="src\thirdparty\libsmacker\smk_bitstream.c" />
     <ClCompile Include="src\thirdparty\libsmacker\smk_hufftree.c" />
@@ -381,7 +381,6 @@
     <ClInclude Include="src\engine\audio_mixer.h" />
     <ClInclude Include="src\engine\audio_music.h" />
     <ClInclude Include="src\engine\dir.h" />
-    <ClInclude Include="src\engine\display.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\engine\error.h" />
     <ClInclude Include="src\engine\font.h" />
@@ -431,6 +430,7 @@
     <ClInclude Include="src\fheroes2\battle\battle_grave.h" />
     <ClInclude Include="src\fheroes2\battle\battle_interface.h" />
     <ClInclude Include="src\fheroes2\battle\battle_only.h" />
+    <ClInclude Include="src\fheroes2\battle\battle_pathfinding.h" />
     <ClInclude Include="src\fheroes2\battle\battle_tower.h" />
     <ClInclude Include="src\fheroes2\battle\battle_troop.h" />
     <ClInclude Include="src\fheroes2\castle\buildinginfo.h" />
@@ -486,7 +486,6 @@
     <ClInclude Include="src\fheroes2\kingdom\race.h" />
     <ClInclude Include="src\fheroes2\kingdom\speed.h" />
     <ClInclude Include="src\fheroes2\kingdom\week.h" />
-    <ClInclude Include="src\fheroes2\kingdom\world.h" />
     <ClInclude Include="src\fheroes2\maps\ground.h" />
     <ClInclude Include="src\fheroes2\maps\maps.h" />
     <ClInclude Include="src\fheroes2\maps\maps_actions.h" />
@@ -524,6 +523,8 @@
     <ClInclude Include="src\fheroes2\system\players.h" />
     <ClInclude Include="src\fheroes2\system\settings.h" />
     <ClInclude Include="src\fheroes2\test\test.h" />
+    <ClInclude Include="src\fheroes2\world\world.h" />
+    <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\tools\palette_h2.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smacker.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smk_bitstream.h" />

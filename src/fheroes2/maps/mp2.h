@@ -47,11 +47,11 @@ namespace MP2
         u8 quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
         u8 objectName2; // level 2.0
         u8 indexName2; // index level 2.0 or 0xFF
-        u8 shape; // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        u8 generalObject; // zero or object
+        u8 flags; // Bitfield: 1st bit is passability, last two is tile shape: 0 none, 1 vertical, 2 horizontal, 3 any
+        u8 mapObject; // zero or object
         u16 indexAddon; // zero or index addons_t
-        u32 uniqNumber1; // Map editor variable: object link
-        u32 uniqNumber2; // Map editor variable: overlay link
+        u32 editorObjectLink; // Map editor variable: object link
+        u32 editorObjectOverlay; // Map editor variable: overlay link
     };
 
     // origin mp2 addons tile
@@ -63,8 +63,8 @@ namespace MP2
         u8 quantityN; // Bitfield containing metadata
         u8 objectNameN2; // level 2.N
         u8 indexNameN2; // level 1.N or 0xFF
-        u32 uniqNumberN1; // Map editor variable: object link
-        u32 uniqNumberN2; // Map editor variable: overlay link
+        u32 editorObjectLink; // Map editor variable: object link
+        u32 editorObjectOverlay; // Map editor variable: overlay link
     };
 
     // origin mp2 castle
@@ -301,7 +301,7 @@ namespace MP2
         OBJ_UNKNW_21 = 0x21,
         OBJN_DESERTTENT = 0x22,
         OBJN_CASTLE = 0x23,
-        OBJN_STONELIGHTS = 0x24,
+        OBJN_STONELITHS = 0x24,
         OBJN_WAGONCAMP = 0x25,
         OBJ_UNKNW_26 = 0x26,
         OBJ_UNKNW_27 = 0x27,
@@ -437,7 +437,7 @@ namespace MP2
         OBJ_UNKNW_A1 = 0xA1,
         OBJ_DESERTTENT = 0xA2,
         OBJ_CASTLE = 0xA3,
-        OBJ_STONELIGHTS = 0xA4,
+        OBJ_STONELITHS = 0xA4,
         OBJ_WAGONCAMP = 0xA5,
         OBJ_UNKNW_A6 = 0xA6,
         OBJ_WHIRLPOOL = 0xA7,
@@ -536,15 +536,18 @@ namespace MP2
         OBJ_WATERALTAR = 0xFF
     };
 
-    int GetICNObject( int type );
+    int GetICNObject( int tileset );
     const char * StringObject( int object );
 
+    bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
     bool isActionObject( int obj, bool water );
     bool isGroundObject( int obj );
     bool isWaterObject( int obj );
     bool isQuantityObject( int obj );
     bool isCaptureObject( int obj );
     bool isPickupObject( int obj );
+    bool isArtifactObject( int obj );
+    bool isHeroUpgradeObject( int obj );
     bool isRemoveObject( int obj );
     bool isMoveObject( int obj );
     bool isAbandonedMine( int obj );

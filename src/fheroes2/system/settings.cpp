@@ -206,10 +206,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: abandoned mine random resource" ),
     },
     {
-        Settings::WORLD_SAVE_MONSTER_BATTLE,
-        _( "world: save count monster after battle" ),
-    },
-    {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
         _( "world: allow set guardian to objects" ),
     },
@@ -307,7 +303,7 @@ const settings_t settingsFHeroes2[] = {
     },
     {
         Settings::HEROES_REMEMBER_POINTS_RETREAT,
-        _( "heroes: remember MP/SP for retreat/surrender result" ),
+        _( "heroes: remember move points for retreat/surrender result" ),
     },
     {
         Settings::HEROES_SURRENDERING_GIVE_EXP,
@@ -427,7 +423,7 @@ std::string Settings::GetVersion( void )
 /* constructor */
 Settings::Settings()
     : debug( DEFAULT_DEBUG )
-    , video_mode( Display::GetDefaultSize() )
+    , video_mode( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
     , game_difficulty( Difficulty::NORMAL )
     , font_normal( "dejavusans.ttf" )
     , font_small( "dejavusans.ttf" )
@@ -443,6 +439,7 @@ Settings::Settings()
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
     , memory_limit( 0 )
+    , _musicType( MUSIC_EXTERNAL )
 {
     ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
@@ -453,7 +450,7 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
-    opt_global.SetModes( GLOBAL_MUSIC_MIDI );
+    opt_global.SetModes( GLOBAL_MUSIC_EXT );
     opt_global.SetModes( GLOBAL_SOUND );
     // Set expansion version by default - turn off if heroes2x.agg not found
     opt_global.SetModes( GLOBAL_PRICELOYALTY );
@@ -587,7 +584,7 @@ bool Settings::Read( const std::string & filename )
     }
 
     // music source
-    _musicType = MUSIC_MIDI_ORIGINAL;
+    _musicType = MUSIC_EXTERNAL;
     sval = config.StrParams( "music" );
 
     if ( !sval.empty() ) {
@@ -610,7 +607,7 @@ bool Settings::Read( const std::string & filename )
         else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_EXT );
-            _musicType = MUSIC_CDROM;
+            _musicType = MUSIC_EXTERNAL;
         }
     }
 
@@ -824,7 +821,7 @@ std::string Settings::String( void ) const
 {
     std::ostringstream os;
     std::string musicType;
-    if ( opt_global.Modes( GLOBAL_MUSIC_EXT ) ) {
+    if ( MusicType() == MUSIC_EXTERNAL ) {
         musicType = "external";
     }
     else if ( MusicType() == MUSIC_CDROM ) {
@@ -1627,11 +1624,6 @@ bool Settings::ExtWorldAbandonedMineRandom( void ) const
     return ExtModes( WORLD_ABANDONED_MINE_RANDOM );
 }
 
-bool Settings::ExtWorldSaveMonsterBattle( void ) const
-{
-    return ExtModes( WORLD_SAVE_MONSTER_BATTLE );
-}
-
 bool Settings::ExtWorldAllowSetGuardian( void ) const
 {
     return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
@@ -1764,7 +1756,7 @@ bool Settings::ExtGameAutosaveOn( void ) const
 
 bool Settings::ExtGameUseFade( void ) const
 {
-    return video_mode == Display::GetDefaultSize() && ExtModes( GAME_USE_FADE );
+    return video_mode == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
 }
 
 bool Settings::ExtGameEvilInterface( void ) const

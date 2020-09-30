@@ -201,7 +201,7 @@ ExperienceIndicator::ExperienceIndicator( const Heroes & h )
     area.w = 39;
     area.h = 36;
 
-    descriptions = _( "Current experience %{exp1} Next level %{exp2}." );
+    descriptions = _( "Current experience %{exp1}.\n Next level %{exp2}." );
     StringReplace( descriptions, "%{exp1}", hero.GetExperience() );
     StringReplace( descriptions, "%{exp2}", hero.GetExperienceFromLevel( hero.GetLevelFromExperience( hero.GetExperience() ) ) );
 }
@@ -245,7 +245,7 @@ void SpellPointsIndicator::Redraw( void )
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
     Text text( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ), Font::SMALL );
-    text.Blit( area.x + 18 - text.w() / 2, area.y + 21 );
+    text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 
 void SpellPointsIndicator::QueueEventProcessing( void )

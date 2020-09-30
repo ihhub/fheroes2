@@ -18,29 +18,49 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AI_NORMAL_H
-#define H2AI_NORMAL_H
+#pragma once
 
-#include "ai.h"
+#include "battle_board.h"
 
-namespace AI
+namespace Battle
 {
-    using MapObjectNode = std::pair<int, int>;
+    const uint16_t MAX_MOVE_COST = ARENASIZE;
 
-    class Normal : public Base
+    /* ArenaNode, different situations
+     * default:  from: -1, isOpen: true, cost: MAX
+     * starting: from: -1, isOpen: false, cost: 0
+     * passable: from: 0-98, isOpen: true, cost: 1+
+     * oth.unit: from: 0-98, isOpen: false, cost: 0+
+     * terrain:  from: -1, isOpen: false, cost: MAX
+     * if tile wouldn't be reached it stays as default
+     */
+    struct ArenaNode
+    {
+        int _from = -1;
+        uint16_t _cost = MAX_MOVE_COST;
+        bool _isOpen = true;
+
+        ArenaNode() {}
+        ArenaNode( int node, uint16_t cost, bool isOpen )
+            : _from( node )
+            , _cost( cost )
+            , _isOpen( isOpen )
+        {}
+    };
+
+    class ArenaPathfinder
     {
     public:
-        Normal();
-        void KingdomTurn( Kingdom & kingdom );
-        void CastleTurn( Castle & castle, bool defensive = false );
-        void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-        void HeroTurn( Heroes & hero );
-
-        void HeroesActionComplete( Heroes & hero, int index );
+        ArenaPathfinder();
+        void reset();
+        void calculate( const Unit & unit );
+        std::vector<int> getPath( int targetCell ) const;
+        uint32_t getDistance( int targetCell ) const;
+        const ArenaNode & getNode( int targetCell ) const;
+        bool hexIsAccessible( int targetCell ) const;
+        bool hexIsPassable( int targetCell ) const;
 
     private:
-        std::vector<MapObjectNode> mapObjects;
+        std::vector<ArenaNode> _cache;
     };
 }
-
-#endif

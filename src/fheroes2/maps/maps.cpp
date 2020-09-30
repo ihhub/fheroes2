@@ -138,6 +138,42 @@ const char * Maps::GetMinesName( int type )
     return _( "Mine" );
 }
 
+int Maps::GetDirection( int from, int to )
+{
+    if ( from == to )
+        return Direction::CENTER;
+
+    const int diff = to - from;
+    const int width = world.w();
+
+    if ( diff == ( -width - 1 ) ) {
+        return Direction::TOP_LEFT;
+    }
+    else if ( diff == -width ) {
+        return Direction::TOP;
+    }
+    else if ( diff == ( -width + 1 ) ) {
+        return Direction::TOP_RIGHT;
+    }
+    else if ( diff == -1 ) {
+        return Direction::LEFT;
+    }
+    else if ( diff == 1 ) {
+        return Direction::RIGHT;
+    }
+    else if ( diff == width - 1 ) {
+        return Direction::BOTTOM_LEFT;
+    }
+    else if ( diff == width ) {
+        return Direction::BOTTOM;
+    }
+    else if ( diff == width + 1 ) {
+        return Direction::BOTTOM_RIGHT;
+    }
+
+    return Direction::UNKNOWN;
+}
+
 s32 Maps::GetDirectionIndex( s32 from, int vector )
 {
     switch ( vector ) {
@@ -167,27 +203,29 @@ s32 Maps::GetDirectionIndex( s32 from, int vector )
 // check bound
 bool Maps::isValidDirection( s32 from, int vector )
 {
+    const int32_t width = world.w();
+
     switch ( vector ) {
     case Direction::TOP:
-        return ( from >= world.w() );
+        return ( from >= width );
     case Direction::RIGHT:
-        return ( ( from % world.w() ) < ( world.w() - 1 ) );
+        return ( ( from % width ) < ( width - 1 ) );
     case Direction::BOTTOM:
-        return ( from < world.w() * ( world.h() - 1 ) );
+        return ( from < width * ( world.h() - 1 ) );
     case Direction::LEFT:
-        return ( from % world.w() );
+        return ( from % width );
 
     case Direction::TOP_RIGHT:
-        return isValidDirection( from, Direction::TOP ) && isValidDirection( from, Direction::RIGHT );
+        return ( from >= width ) && ( ( from % width ) < ( width - 1 ) );
 
     case Direction::BOTTOM_RIGHT:
-        return isValidDirection( from, Direction::BOTTOM ) && isValidDirection( from, Direction::RIGHT );
+        return ( from < width * ( world.h() - 1 ) ) && ( ( from % width ) < ( width - 1 ) );
 
     case Direction::BOTTOM_LEFT:
-        return isValidDirection( from, Direction::BOTTOM ) && isValidDirection( from, Direction::LEFT );
+        return ( from < width * ( world.h() - 1 ) ) && ( from % width );
 
     case Direction::TOP_LEFT:
-        return isValidDirection( from, Direction::TOP ) && isValidDirection( from, Direction::LEFT );
+        return ( from >= width ) && ( from % width );
 
     default:
         break;
@@ -248,14 +286,37 @@ Maps::Indexes Maps::GetAllIndexes( void )
 Maps::Indexes Maps::GetAroundIndexes( s32 center )
 {
     Indexes result;
+    if ( !isValidAbsIndex( center ) )
+        return result;
+
     result.reserve( 8 );
+    const int width = world.w();
+    const int x = center % width;
+    const int y = center / width;
 
-    if ( isValidAbsIndex( center ) ) {
-        const Directions directions = Direction::All();
+    if ( y > 1 ) {
+        if ( x > 1 )
+            result.push_back( center - width - 1 );
 
-        for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-            if ( isValidDirection( center, *it ) )
-                result.push_back( GetDirectionIndex( center, *it ) );
+        result.push_back( center - width );
+
+        if ( x < width - 1 )
+            result.push_back( center - width + 1 );
+    }
+
+    if ( x > 1 )
+        result.push_back( center - 1 );
+    if ( x < width - 1 )
+        result.push_back( center + 1 );
+
+    if ( y < world.h() - 1 ) {
+        if ( x > 1 )
+            result.push_back( center + width - 1 );
+
+        result.push_back( center + width );
+
+        if ( x < width - 1 )
+            result.push_back( center + width + 1 );
     }
 
     return result;
@@ -404,17 +465,18 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
     const Maps::Tiles & tile1 = world.GetTiles( from );
     const Maps::Tiles & tile2 = world.GetTiles( index );
 
-    if ( tile1.isWater() == tile2.isWater() ) {
+    if ( !MP2::isPickupObject( tile1.GetObject() ) && tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
+        const int monsterDirection = Maps::GetDirection( index, from );
         /* if monster can attack to */
-        result = ( tile2.GetPassable() & Direction::Get( index, from ) ) && ( tile1.GetPassable() & Direction::Get( from, index ) );
+        result = ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) );
 
         if ( !result ) {
             /* h2 specific monster attack: BOTTOM_LEFT impassable! */
-            if ( Direction::BOTTOM_LEFT == Direction::Get( index, from ) && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
+            if ( Direction::BOTTOM_LEFT == monsterDirection && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
                 result = true;
             else
                 /* h2 specific monster attack: BOTTOM_RIGHT impassable! */
-                if ( Direction::BOTTOM_RIGHT == Direction::Get( index, from ) && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
+                if ( Direction::BOTTOM_RIGHT == monsterDirection && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
                 result = true;
         }
     }
@@ -424,7 +486,7 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
 
 bool Maps::IsNearTiles( s32 index1, s32 index2 )
 {
-    return DIRECTION_ALL & Direction::Get( index1, index2 );
+    return DIRECTION_ALL & Maps::GetDirection( index1, index2 );
 }
 
 bool Maps::TileIsUnderProtection( s32 center )
@@ -434,15 +496,48 @@ bool Maps::TileIsUnderProtection( s32 center )
 
 Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
 {
-    Indexes indexes = Maps::ScanAroundObject( center, MP2::OBJ_MONSTER );
+    Indexes result;
+    if ( !isValidAbsIndex( center ) )
+        return result;
 
-    indexes.resize( std::distance( indexes.begin(),
-                                   std::remove_if( indexes.begin(), indexes.end(), std::not1( std::bind1st( std::ptr_fun( &MapsTileIsUnderProtection ), center ) ) ) ) );
+    result.reserve( 9 );
+    const int width = world.w();
+    const int x = center % width;
+    const int y = center / width;
 
+    auto validateAndInsert = [&result, &center]( const int index ) {
+        if ( MapsTileIsUnderProtection( center, index ) )
+            result.push_back( index );
+    };
+
+    if ( y > 0 ) {
+        if ( x > 0 )
+            validateAndInsert( center - width - 1 );
+
+        validateAndInsert( center - width );
+
+        if ( x < width - 1 )
+            validateAndInsert( center - width + 1 );
+    }
+
+    if ( x > 0 )
+        validateAndInsert( center - 1 );
     if ( MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() )
-        indexes.push_back( center );
+        result.push_back( center );
+    if ( x < width - 1 )
+        validateAndInsert( center + 1 );
 
-    return indexes;
+    if ( y < world.h() - 1 ) {
+        if ( x > 0 )
+            validateAndInsert( center + width - 1 );
+
+        validateAndInsert( center + width );
+
+        if ( x < width - 1 )
+            validateAndInsert( center + width + 1 );
+    }
+
+    return result;
 }
 
 u32 Maps::GetApproximateDistance( s32 index1, s32 index2 )
@@ -494,7 +589,9 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
     */
 
     // correct only RND town and castle
-    const int entranceObject = world.GetTiles( center.x, center.y ).GetObject();
+    const Maps::Tiles & entranceTile = world.GetTiles( center.x, center.y );
+    const int entranceObject = entranceTile.GetObject();
+    const uint32_t castleID = entranceTile.GetObjectUID();
 
     if ( isRandom && ( entranceObject != MP2::OBJ_RNDCASTLE && entranceObject != MP2::OBJ_RNDTOWN ) ) {
         DEBUG( DBG_GAME, DBG_WARN,
@@ -502,9 +599,6 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
                    << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) );
         return;
     }
-
-    const int castleICN = isRandom ? ICN::OBJNTWRD : ICN::OBJNTOWN;
-    const int shadowICN = isRandom ? ICN::OBJNTWRD : ICN::OBJNTWSH;
 
     int raceIndex = 0;
     switch ( race ) {
@@ -533,37 +627,33 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
 
         static const int castleCoordinates[16][2]
             = {{0, -3}, {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2}, {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1}, {-2, 0}, {-1, 0}, {0, 0}, {1, 0}, {2, 0}};
-        static const int shadowCoordinates[16][2] = {{-4, -2}, {-3, -2}, {-2, -2}, {-1, -2}, {-5, -1}, {-4, -1}, {-3, -1}, {-2, -1},
-                                                     {-1, -1}, {-4, 0},  {-3, 0},  {-2, 0},  {-1, 0},  {-3, -1}, {-2, -1}, {-1, -1}};
+        static const int shadowCoordinates[16][2]
+            = {{-4, -2}, {-3, -2}, {-2, -2}, {-1, -2}, {-5, -1}, {-4, -1}, {-3, -1}, {-2, -1}, {-1, -1}, {-4, 0}, {-3, 0}, {-2, 0}, {-1, 0}, {-3, 1}, {-2, 1}, {-1, 1}};
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( castleTile ).FindAddonICN( castleICN, -1, lookupID );
+            Tiles & tile = world.GetTiles( castleTile );
 
-            if ( addon ) {
-                if ( isRandom ) {
-                    addon->object -= 12; // OBJNTWRD to OBJNTOWN
-                    addon->index = fullTownIndex;
-                }
-                else {
-                    addon->index -= 16;
+            if ( isRandom )
+                tile.ReplaceObjectSprite( castleID, 38, 35 * 4, lookupID, fullTownIndex ); // OBJNTWRD to OBJNTOWN
+            else
+                tile.UpdateObjectSprite( castleID, 35, 35 * 4, -16 ); // no change in tileset
+
+            if ( index == 0 ) {
+                TilesAddon * addon = tile.FindAddonLevel2( castleID );
+                if ( addon && MP2::GetICNObject( addon->object ) == ICN::OBJNTWRD ) {
+                    addon->object -= 12;
+                    addon->index = fullTownIndex - 16;
                 }
             }
         }
 
         const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
         if ( isValidAbsIndex( shadowTile ) ) {
-            Maps::TilesAddon * addon = world.GetTiles( shadowTile ).FindAddonICN( shadowICN, -1, isRandom ? lookupID + 32 : lookupID );
-
-            if ( addon ) {
-                if ( isRandom ) {
-                    addon->object -= 4; // OBJNTWRD to OBJNTWSH
-                    addon->index = fullTownIndex;
-                }
-                else {
-                    addon->index -= 16;
-                }
-            }
+            if ( isRandom )
+                world.GetTiles( shadowTile ).ReplaceObjectSprite( castleID, 38, 37 * 4, lookupID + 32, fullTownIndex ); // OBJNTWRD to OBJNTWSH
+            else
+                world.GetTiles( shadowTile ).UpdateObjectSprite( castleID, 37, 37 * 4, -16 ); // no change in tileset
         }
     }
 }

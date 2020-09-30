@@ -107,13 +107,7 @@ Interface::Radar::Radar( Basic & basic )
     : BorderWindow( Rect( 0, 0, RADARWIDTH, RADARWIDTH ) )
     , interface( basic )
     , hide( true )
-{
-    if ( Settings::Get().QVGA() ) {
-        // for QVGA set small radar, 1 pixel = 1 tile
-        if ( RADARWIDTH > world.w() && RADARWIDTH > world.h() )
-            SetPosition( 0, 0, world.w(), world.h() );
-    }
-}
+{}
 
 void Interface::Radar::SavePosition( void )
 {
@@ -385,7 +379,7 @@ void Interface::Radar::QueueEventProcessing( void )
         }
         else if ( !conf.ExtPocketTapMode() && le.MousePressRight( GetRect() ) )
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
-        else if ( !conf.QVGA() && conf.ExtGameHideInterface() ) {
+        else if ( conf.ExtGameHideInterface() ) {
             Size newSize( rect.w, rect.h );
 
             if ( le.MouseWheelUp() ) {

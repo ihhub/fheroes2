@@ -545,6 +545,27 @@ int Artifact::Level( void ) const
     return ART_NONE;
 }
 
+// Convert artifact flags into simple usable level value
+int Artifact::getArtifactValue() const
+{
+    const int level = Level();
+
+    if ( level & ART_LEVEL1 ) {
+        return 1;
+    }
+    else if ( level & ART_LEVEL2 ) {
+        return 2;
+    }
+    else if ( level & ART_LEVEL3 ) {
+        return 3;
+    }
+    else if ( level & ART_ULTIMATE ) {
+        return 5;
+    }
+
+    return 0;
+}
+
 /* return index sprite objnarti.icn */
 u32 Artifact::IndexSprite( void ) const
 {
@@ -860,7 +881,7 @@ ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change 
 
         spcursor.resize( backsf.width(), backsf.height() );
         spcursor.reset();
-        fheroes2::DrawBorder( spcursor, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
+        fheroes2::DrawBorder( spcursor, 214 );
     }
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );

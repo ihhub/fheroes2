@@ -132,6 +132,8 @@ void Game::OpenCastleDialog( Castle & castle )
     Interface::StatusWindow::ResetTimer();
     bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
+    const size_t heroCountBefore = myKingdom.GetHeroes().size();
+
     if ( it != myCastles.end() ) {
         int result = Dialog::ZERO;
         while ( Dialog::CANCEL != result ) {
@@ -157,7 +159,14 @@ void Game::OpenCastleDialog( Castle & castle )
         ( *it )->OpenDialog( true, needFade );
     }
 
-    Interface::Basic::Get().RedrawFocus();
+    Interface::Basic & basicInterface = Interface::Basic::Get();
+    if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+        basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
+    }
+    else {
+        basicInterface.SetFocus( *it );
+    }
+    basicInterface.RedrawFocus();
 }
 
 /* open heroes wrapper */
@@ -444,6 +453,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
             }
+            else {
+                protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+            }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
@@ -559,12 +571,6 @@ int Interface::Basic::StartGame( void )
                     if ( res == Game::ENDTURN ) {
                         statusWindow.Reset();
                         statusWindow.SetState( STATUS_AITURN );
-
-                        // for pocketpc: show status window
-                        if ( conf.QVGA() && !conf.ShowStatus() ) {
-                            conf.SetShowStatus( true );
-                            statusWindow.SetRedraw();
-                        }
 
                         cursor.Hide();
                         cursor.SetThemes( Cursor::WAIT );
@@ -813,7 +819,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 le.SetTapMode( false );
         }
         else {
-            if ( fheroes2::Cursor::instance().isFocusActive() ) {
+            if ( fheroes2::cursor().isFocusActive() ) {
                 int scrollPosition = SCROLL_NONE;
                 if ( le.MouseCursor( GetScrollLeft() ) )
                     scrollPosition |= SCROLL_LEFT;
@@ -907,7 +913,7 @@ int Interface::Basic::HumanTurn( bool isload )
             Heroes * hero = GetFocusHeroes();
 
             if ( hero ) {
-                if ( hero->isEnableMove() ) {
+                if ( hero->isMoveEnabled() ) {
                     if ( hero->Move( 0 == conf.HeroesMoveSpeed() ) ) {
                         if ( !isOngoingFastScrollEvent ) {
                             gameArea.SetCenter( hero->GetCenter() );
@@ -1061,7 +1067,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
         if ( from_hero == NULL )
             break;
 
-        if ( from_hero->isEnableMove() )
+        if ( from_hero->isMoveEnabled() )
             from_hero->SetMove( false );
         else
             ShowPathOrStartMoveHero( from_hero, index_maps );
@@ -1079,7 +1085,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
     Heroes * hero = GetFocusHeroes();
 
     // stop hero
-    if ( hero && hero->isEnableMove() ) {
+    if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
         Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
     }

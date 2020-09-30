@@ -53,7 +53,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     if ( fade && Settings::Get().ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    Dialog::FrameBorder background( Display::GetDefaultSize() );
+    Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );
 
@@ -99,7 +99,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     luckIndicator.Redraw();
 
     // army format spread
-    dst_pt.x = cur_pt.x + 515;
+    dst_pt.x = cur_pt.x + 516;
     dst_pt.y = cur_pt.y + 63;
     const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
     fheroes2::Blit( sprite1, display, dst_pt.x, dst_pt.y );
@@ -126,12 +126,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
     // experience
     ExperienceIndicator experienceInfo( *this );
-    experienceInfo.SetPos( Point( cur_pt.x + 514, cur_pt.y + 85 ) );
+    experienceInfo.SetPos( Point( cur_pt.x + 512, cur_pt.y + 86 ) );
     experienceInfo.Redraw();
 
     // spell points
     SpellPointsIndicator spellPointsInfo( *this );
-    spellPointsInfo.SetPos( Point( cur_pt.x + 549, cur_pt.y + 87 ) );
+    spellPointsInfo.SetPos( Point( cur_pt.x + 550, cur_pt.y + 88 ) );
     spellPointsInfo.Redraw();
 
     // crest
@@ -348,13 +348,17 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         else if ( le.MouseCursor( rectGroupedArmyFormat ) )
             message = _( "Set army combat formation to 'Grouped'" );
         else if ( le.MouseCursor( buttonExit.area() ) )
-            message = _( "Exit hero" );
+            message = _( "Exit Hero Screen" );
         else if ( le.MouseCursor( buttonDismiss.area() ) ) {
             if ( buttonDismiss.isVisible() ) {
-                if ( Modes( NOTDISMISS ) )
+                if ( Modes( NOTDISMISS ) ) {
                     message = "Dismiss disabled, see game info";
-                else
-                    message = _( "Dismiss hero" );
+                }
+                else {
+                    message = _( "Dismiss %{name} the %{race}" );
+                    StringReplace( message, "%{name}", name );
+                    StringReplace( message, "%{race}", Race::String( race ) );
+                }
             }
         }
         else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) )

@@ -29,7 +29,7 @@
 #define INTERMEDIATE_VERSION 1
 
 #ifdef WITH_XML
-#include "xmlccwrap.h"
+#include "tinyxml.h"
 #endif
 
 #include "translations.h"

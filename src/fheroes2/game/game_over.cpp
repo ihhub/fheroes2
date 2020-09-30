@@ -313,7 +313,7 @@ int GameOver::Result::LocalCheckGameOver( void )
 
     for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it )
         if ( !world.GetKingdom( *it ).isPlay() ) {
-            Game::DialogPlayers( *it, _( "%{color} has been vanquished!" ) );
+            Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
             colors &= ( ~*it );
         }
 
@@ -343,7 +343,7 @@ int GameOver::Result::LocalCheckGameOver( void )
         if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
             continue_game = true;
             if ( res == Game::HIGHSCORES )
-                Game::HighScores( false );
+                Game::HighScores();
             res = Game::CANCEL;
             Interface::Basic::Get().SetRedraw( REDRAW_ALL );
         }

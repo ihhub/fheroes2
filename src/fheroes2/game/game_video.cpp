@@ -28,14 +28,18 @@
 
 namespace Video
 {
-    void ShowVideo( const std::string & videoPath, bool isLooped )
+    size_t ShowVideo( const std::string & videoPath, bool isLooped, const std::vector<fheroes2::Rect> & roi )
     {
         SMKVideoSequence video( videoPath );
         if ( video.frameCount() < 1 ) // nothing to show
-            return;
+            return 0;
 
-        Cursor & cursor = Cursor::Get();
-        cursor.Hide();
+        const bool hideCursor = roi.empty();
+
+        if ( hideCursor ) {
+            Cursor::Get().Hide();
+        }
+
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
 
@@ -62,10 +66,33 @@ namespace Video
 
         bool isFrameReady = false;
 
+        size_t roiChosenId = 0;
+
+        const uint8_t selectionColor = 51;
+
         LocalEvent & le = LocalEvent::Get();
         while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents() ) {
-            if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
-                break;
+            if ( roi.empty() ) {
+                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                    Mixer::Reset();
+                    break;
+                }
+            }
+            else {
+                bool roiChosen = false;
+                for ( size_t i = 0; i < roi.size(); ++i ) {
+                    if ( le.MouseClickLeft( Rect( roi[i].x, roi[i].y, roi[i].width, roi[i].height ) ) ) {
+                        roiChosenId = i;
+                        roiChosen = true;
+                        break;
+                    }
+                }
+
+                if ( roiChosen ) {
+                    Mixer::Reset();
+                    break;
+                }
+            }
 
             if ( isFirstFrame || Game::AnimateCustomDelay( delay ) ) {
                 isFirstFrame = false;
@@ -77,6 +104,13 @@ namespace Video
                     video.getNextFrame( frame, palette );
 
                     fheroes2::Blit( frame, display, offset.x, offset.y );
+
+                    for ( size_t i = 0; i < roi.size(); ++i ) {
+                        if ( le.MouseCursor( Rect( roi[i].x, roi[i].y, roi[i].width, roi[i].height ) ) ) {
+                            fheroes2::DrawRect( display, roi[i], selectionColor );
+                            break;
+                        }
+                    }
                 }
                 isFrameReady = false;
 
@@ -109,16 +143,24 @@ namespace Video
                     video.getNextFrame( frame, palette );
                     fheroes2::Blit( frame, display, offset.x, offset.y );
 
+                    for ( size_t i = 0; i < roi.size(); ++i ) {
+                        if ( le.MouseCursor( Rect( roi[i].x, roi[i].y, roi[i].width, roi[i].height ) ) ) {
+                            fheroes2::DrawRect( display, roi[i], selectionColor );
+                            break;
+                        }
+                    }
+
                     isFrameReady = true;
                 }
             }
         }
 
         display.fill( 0 );
-        cursor.Show();
 
-        Mixer::Reset();
+        if ( hideCursor ) {
+            Cursor::Get().Show();
+        }
 
-        return;
+        return roiChosenId;
     }
 }

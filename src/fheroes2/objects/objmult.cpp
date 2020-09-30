@@ -103,7 +103,7 @@ int ObjMul2::GetActionObject( u32 index )
     case 116:
     case 119:
     case 122:
-        return MP2::OBJ_STONELIGHTS;
+        return MP2::OBJ_STONELITHS;
     case 129:
         return MP2::OBJ_WAGONCAMP;
     case 162:

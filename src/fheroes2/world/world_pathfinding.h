@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,10 +18,37 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef XMLWRAP_H
-#define XMLWRAP_H
+#pragma once
 
-#include "tinyxml.h"
-#include "gzstream.h"
+#include "route.h"
 
-#endif
+struct PathfindingNode
+{
+    int _from = -1;
+    uint32_t _cost = 0;
+
+    PathfindingNode() {}
+    PathfindingNode( int node, uint32_t cost )
+        : _from( node )
+        , _cost( cost )
+    {}
+};
+
+class Pathfinder
+{
+public:
+    Pathfinder() {}
+    void reset();
+    void evaluateMap( int start, uint8_t skill );
+    std::list<Route::Step> buildPath( int from, int target, uint8_t skill = Skill::Level::NONE );
+    uint32_t getDistance( int from, int target, uint8_t skill = Skill::Level::NONE );
+    uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
+    bool isBlockedByObject( int from, int target, bool fromWater = false );
+
+private:
+    void reEvaluateIfNeeded( int from, uint8_t skill );
+
+    std::vector<PathfindingNode> _cache;
+    int _pathStart = -1;
+    uint8_t _pathfindingSkill = 0;
+};

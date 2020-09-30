@@ -119,34 +119,63 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
     }
 }
 
-void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
+void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw ) const
 {
     const Rect tileROI = GetVisibleTileROI();
 
-    // ground
+    std::vector<std::pair<Point, const Heroes *> > heroList;
+
+    // ground and bottom layer
     for ( int16_t y = 0; y < tileROI.h; ++y ) {
-        const s32 offsetY = tileROI.y + y;
-        bool isEmptyTile = offsetY < 0 || offsetY >= world.h();
         for ( s32 x = 0; x < tileROI.w; ++x ) {
-            const s32 offsetX = tileROI.x + x;
-            if ( isEmptyTile || offsetX < 0 || offsetX >= world.w() )
-                Maps::Tiles::RedrawEmptyTile( dst, Point( offsetX, offsetY ) );
-            else
-                world.GetTiles( offsetX, offsetY ).RedrawTile( dst );
+            Point offset( tileROI.x + x, tileROI.y + y );
+            const bool isEmptyTile = offset.y < 0 || offset.y >= world.h();
+
+            if ( isEmptyTile || offset.x < 0 || offset.x >= world.w() ) {
+                Maps::Tiles::RedrawEmptyTile( dst, offset );
+            }
+            else {
+                const Maps::Tiles & tile = world.GetTiles( offset.x, offset.y );
+
+                tile.RedrawTile( dst );
+
+                // bottom
+                if ( flag & LEVEL_BOTTOM )
+                    tile.RedrawBottom( dst, isPuzzleDraw );
+
+                // map object
+                if ( flag & LEVEL_BOTTOM )
+                    tile.RedrawObjects( dst, isPuzzleDraw );
+            }
         }
     }
 
-    // bottom
-    if ( flag & LEVEL_BOTTOM ) {
-        for ( int16_t y = 0; y < tileROI.h; ++y ) {
-            const s32 offsetY = tileROI.y + y;
-            if ( offsetY < 0 || offsetY >= world.h() )
+    // objects and top layer
+    for ( int16_t y = 0; y < tileROI.h; ++y ) {
+        const s32 offsetY = tileROI.y + y;
+        if ( offsetY < 0 || offsetY >= world.h() )
+            continue;
+        for ( s32 x = 0; x < tileROI.w; ++x ) {
+            const s32 offsetX = tileROI.x + x;
+            if ( offsetX < 0 || offsetX >= world.w() )
                 continue;
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
-                const s32 offsetX = tileROI.x + x;
-                if ( offsetX < 0 || offsetX >= world.w() )
-                    continue;
-                world.GetTiles( offsetX, offsetY ).RedrawBottom( dst, !( flag & LEVEL_OBJECTS ) );
+
+            const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
+
+            // map object
+            if ( flag & LEVEL_OBJECTS && !isPuzzleDraw )
+                tile.RedrawMonstersAndBoat( dst );
+
+            // top
+            if ( flag & LEVEL_TOP )
+                tile.RedrawTop( dst );
+
+            // heroes will be drawn later
+            if ( tile.GetObject() == MP2::OBJ_HEROES && ( flag & LEVEL_HEROES ) ) {
+                const Heroes * hero = tile.GetHeroes();
+                if ( hero ) {
+                    heroList.emplace_back( GetRelativeTilePosition( Point( offsetX, offsetY ) ), hero );
+                }
             }
         }
     }
@@ -181,55 +210,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
         }
     }
 
-    // ext object
-    if ( flag & LEVEL_OBJECTS ) {
-        for ( int16_t y = 0; y < tileROI.h; ++y ) {
-            const s32 offsetY = tileROI.y + y;
-            if ( offsetY < 0 || offsetY >= world.h() )
-                continue;
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
-                const s32 offsetX = tileROI.x + x;
-                if ( offsetX < 0 || offsetX >= world.w() )
-                    continue;
-                world.GetTiles( offsetX, offsetY ).RedrawObjects( dst );
-            }
-        }
-    }
-
-    // top
-    if ( flag & LEVEL_TOP ) {
-        for ( int16_t y = 0; y < tileROI.h; ++y ) {
-            const s32 offsetY = tileROI.y + y;
-            if ( offsetY < 0 || offsetY >= world.h() )
-                continue;
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
-                const s32 offsetX = tileROI.x + x;
-                if ( offsetX < 0 || offsetX >= world.w() )
-                    continue;
-                world.GetTiles( offsetX, offsetY ).RedrawTop( dst );
-            }
-        }
-    }
-
-    // heroes
-    for ( int16_t y = 0; y < tileROI.h; ++y ) {
-        const s32 offsetY = tileROI.y + y;
-        if ( offsetY < 0 || offsetY >= world.h() )
-            continue;
-        for ( s32 x = 0; x < tileROI.w; ++x ) {
-            const s32 offsetX = tileROI.x + x;
-            if ( offsetX < 0 || offsetX >= world.w() )
-                continue;
-            const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
-
-            if ( tile.GetObject() == MP2::OBJ_HEROES && ( flag & LEVEL_HEROES ) ) {
-                const Heroes * hero = tile.GetHeroes();
-                if ( hero ) {
-                    const Point pos = GetRelativeTilePosition( Point( offsetX, offsetY ) );
-                    hero->Redraw( dst, pos.x, pos.y, true );
-                }
-            }
-        }
+    for ( const std::pair<Point, const Heroes *> & hero : heroList ) {
+        hero.second->Redraw( dst, hero.first.x, hero.first.y, true );
     }
 
     // route
@@ -237,10 +219,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
 
     if ( hero && hero->GetPath().isShow() ) {
         const Route::Path & path = hero->GetPath();
-        s32 green = path.GetAllowStep();
+        int green = path.GetAllowedSteps();
 
         const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
-        const bool skipfirst = hero->isEnableMove() && 45 > hero->GetSpriteIndex() && 2 < ( hero->GetSpriteIndex() % 9 );
+        const bool skipfirst = hero->isMoveEnabled() && 45 > hero->GetSpriteIndex() && 2 < ( hero->GetSpriteIndex() % 9 );
 
         Route::Path::const_iterator pathEnd = path.end();
         Route::Path::const_iterator currentStep = path.begin();
@@ -259,9 +241,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag ) const
                 if ( pathEnd != nextStep ) {
                     const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
                     uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
-                    const int direction = currentStep->GetDirection();
 
-                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad( direction ) || tileTo.isRoad( Direction::Reflect( direction ) ) )
+                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() )
                         cost = Maps::Ground::roadPenalty;
 
                     index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );
@@ -364,29 +345,18 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 in
         const Rect origPosition( gamearea._windowROI );
         gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
-        const Rect & rectMaps = gamearea.GetVisibleTileROI();
         Point pt = Maps::GetPoint( index );
-
         gamearea.SetCenter( pt );
-        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP );
 
-        // blit marker
-        for ( u32 ii = 0; ii < rectMaps.h; ++ii )
-            if ( index < Maps::GetIndexFromAbsPoint( rectMaps.x + rectMaps.w - 1, rectMaps.y + ii ) ) {
-                pt.y = ii;
-                break;
-            }
-        for ( u32 ii = 0; ii < rectMaps.w; ++ii )
-            if ( index == Maps::GetIndexFromAbsPoint( rectMaps.x + ii, rectMaps.y + pt.y ) ) {
-                pt.x = ii;
-                break;
-            }
+        const Rect & rectMaps = gamearea.GetVisibleTileROI();
+        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
+
         const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
         const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )
                                + Point( result.width() / 2, result.height() / 2 ) );
 
         fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
-        fheroes2::ApplyPalette( result, PAL::GetPalette( Settings::Get().ExtGameEvilInterface() ? PAL::GRAY : PAL::BROWN ) );
+        fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::TAN ) );
 
         gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
     }

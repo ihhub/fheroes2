@@ -109,7 +109,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set music type
-        if ( !conf.MusicExt() && le.MouseClickLeft( rect3 ) ) {
+        if ( le.MouseClickLeft( rect3 ) ) {
             int type = conf.MusicType() + 1;
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.PriceLoyaltyVersion() )
@@ -154,7 +154,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set interface hide/show
-        if ( le.MouseClickLeft( rect8 ) && !conf.QVGA() ) {
+        if ( le.MouseClickLeft( rect8 ) ) {
             conf.SetHideInterface( !conf.ExtGameHideInterface() );
             result |= 0x04;
             redraw = true;
@@ -226,21 +226,25 @@ void Dialog::DrawSystemInfo( const Rects & rects )
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.h + rect2.y + textOffset );
 
     // Music Type
-    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.MusicType() == MUSIC_CDROM ? 11 : 10 );
+    const MusicSource musicType = conf.MusicType();
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, ( musicType == MUSIC_CDROM || musicType == MUSIC_EXTERNAL ) ? 11 : 10 );
     const Rect & rect3 = rects[2];
     fheroes2::Blit( sprite3, display, rect3.x, rect3.y );
     str = _( "Music Type" );
     text.Set( str, Font::SMALL );
     text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y - text.h() - textOffset );
 
-    if ( conf.MusicType() == MUSIC_MIDI_ORIGINAL ) {
+    if ( musicType == MUSIC_MIDI_ORIGINAL ) {
         str = _( "MIDI" );
     }
-    else if ( conf.MusicType() == MUSIC_MIDI_EXPANSION ) {
+    else if ( musicType == MUSIC_MIDI_EXPANSION ) {
         str = _( "MIDI Expansion" );
     }
-    else if ( conf.MusicType() == MUSIC_CDROM ) {
+    else if ( musicType == MUSIC_CDROM ) {
         str = _( "CD Stereo" );
+    }
+    else if ( musicType == MUSIC_EXTERNAL ) {
+        str = _( "External" );
     }
     text.Set( str );
     text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y + rect3.h + textOffset );

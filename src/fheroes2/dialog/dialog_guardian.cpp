@@ -28,7 +28,6 @@
 #include "game.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
-#include "settings.h"
 #include "text.h"
 #include "ui_button.h"
 #include "world.h"

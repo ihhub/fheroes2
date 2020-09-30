@@ -283,8 +283,8 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
             msg.append( _( "A glorious victory!" ) );
 
         if ( hero.isHeroes() ) {
-            msg.append( "\n" );
-            msg.append( _( "For valor in combat, %{name} receives %{exp} experience" ) );
+            msg.append( "\n \n" );
+            msg.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{exp}", exp );
         }
@@ -387,35 +387,35 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     fheroes2::Blit( sequenceBase, display, pos_rt.x + anime_ox + sequenceBase.x(), pos_rt.y + anime_oy + sequenceBase.y() );
     fheroes2::Blit( sequenceStart, display, pos_rt.x + anime_ox + sequenceStart.x(), pos_rt.y + anime_oy + sequenceStart.y() );
 
-    fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + ( conf.QVGA() ? 176 : 410 ), ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
+    fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + 410, ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
 
     TextBox box( msg, Font::BIG, 270 );
-    box.Blit( pos_rt.x + 25, pos_rt.y + ( conf.QVGA() ? 20 : 175 ) );
+    box.Blit( pos_rt.x + 25, pos_rt.y + 175 );
 
     // battlefield casualties
     Text text( _( "Battlefield Casualties" ), Font::SMALL );
-    text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + ( conf.QVGA() ? 58 : 270 ) );
+    text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + 270 );
 
     // attacker
     text.Set( _( "Attacker" ), Font::SMALL );
-    text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + ( conf.QVGA() ? 70 : 285 ) );
+    text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + 285 );
 
     if ( killed1.isValid() )
-        Army::DrawMons32Line( killed1, pos_rt.x + 25, pos_rt.y + ( conf.QVGA() ? 83 : 303 ), 270 );
+        Army::DrawMons32Line( killed1, pos_rt.x + 25, pos_rt.y + 303, 270 );
     else {
         text.Set( "None", Font::SMALL );
-        text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + ( conf.QVGA() ? 80 : 300 ) );
+        text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + 300 );
     }
 
     // defender
     text.Set( _( "Defender" ), Font::SMALL );
-    text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + ( conf.QVGA() ? 120 : 345 ) );
+    text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + 345 );
 
     if ( killed2.isValid() )
-        Army::DrawMons32Line( killed2, pos_rt.x + 25, pos_rt.y + ( conf.QVGA() ? 138 : 363 ), 270 );
+        Army::DrawMons32Line( killed2, pos_rt.x + 25, pos_rt.y + 363, 270 );
     else {
         text.Set( "None", Font::SMALL );
-        text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + ( conf.QVGA() ? 135 : 360 ) );
+        text.Blit( pos_rt.x + ( pos_rt.w - text.w() ) / 2, pos_rt.y + 360 );
     }
 
     btn_ok.draw();
@@ -454,9 +454,11 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     const bool readonly = current_color != hero.GetColor() || !buttons;
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
+    const fheroes2::Point dialogShadow( 15, 15 );
+
     Rect pos_rt;
-    pos_rt.x = ( display.width() - dialog.width() ) / 2;
-    pos_rt.y = ( display.height() - dialog.height() ) / 2;
+    pos_rt.x = ( display.width() - dialog.width() - dialogShadow.x ) / 2;
+    pos_rt.y = ( display.height() - dialog.height() - dialogShadow.y ) / 2;
     pos_rt.w = dialog.width();
     pos_rt.h = dialog.height();
 
@@ -563,7 +565,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 
         if ( le.MousePressRight( btnCast.area() ) )
             Dialog::Message( _( "Cast Spell" ),
-                             _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn" ),
+                             _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                              Font::BIG );
         else if ( le.MousePressRight( btnRetreat.area() ) )
             Dialog::Message(

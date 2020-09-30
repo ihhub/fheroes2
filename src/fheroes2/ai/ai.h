@@ -25,6 +25,7 @@
 
 #include "gamedefs.h"
 
+class Funds;
 class Castle;
 class HeroBase;
 class Heroes;
@@ -104,7 +105,7 @@ namespace AI
         Base() {}
     };
 
-    Base & Get( AI_TYPE type = SIMPLE );
+    Base & Get( AI_TYPE type = NORMAL );
 
     // functionality in ai_hero_action.cpp
     void HeroesAction( Heroes & hero, s32 dst_index );
@@ -115,6 +116,7 @@ namespace AI
     bool BuildIfAvailable( Castle & castle, int building );
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max );
+    void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
 }
 
 #endif

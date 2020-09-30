@@ -183,7 +183,7 @@ void RedrawStaticInfo( const Rect & pos, const Monster & monster, u32 available,
     // text number buy
     Text text;
     text.Set( _( "Number to buy:" ), Font::SMALL );
-    Point dst_pt( pos.x + 30, pos.y + 163 );
+    Point dst_pt( pos.x + 29, pos.y + 163 );
     text.Blit( dst_pt );
 }
 

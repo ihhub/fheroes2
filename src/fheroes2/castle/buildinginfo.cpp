@@ -731,7 +731,7 @@ DwellingItem::DwellingItem( Castle & castle, u32 dw )
     mons = Monster( castle.GetRace(), type );
 }
 
-DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz, const RGBA & fill )
+DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz )
     : castle( cstl )
     , backsf( sz.w, sz.h )
 {
@@ -756,7 +756,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
 
     if ( castle.isBuild( dwl.type ) ) {
         // count
-        Text text( GetString( castle.GetDwellingLivedCount( dwl.type ) ), Font::SMALL );
+        Text text( GetString( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
         text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1 );
 
         u32 grown = dwl.mons.GetGrown();
@@ -776,7 +776,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
 bool DwellingsBar::ActionBarSingleClick( const Point & cursor, DwellingItem & dwl, const Rect & pos )
 {
     if ( castle.isBuild( dwl.type ) ) {
-        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.GetDwellingLivedCount( dwl.type ), true ) );
+        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true ) );
     }
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         Dialog::Message( "", GetBuildConditionDescription( NEED_CASTLE ), Font::BIG, Dialog::OK );
@@ -794,7 +794,7 @@ bool DwellingsBar::ActionBarSingleClick( const Point & cursor, DwellingItem & dw
 
 bool DwellingsBar::ActionBarPressRight( const Point & cursor, DwellingItem & dwl, const Rect & pos )
 {
-    Dialog::ArmyInfo( Troop( dwl.mons, castle.GetDwellingLivedCount( dwl.type ) ), 0 );
+    Dialog::ArmyInfo( Troop( dwl.mons, castle.getMonstersInDwelling( dwl.type ) ), 0 );
 
     return true;
 }

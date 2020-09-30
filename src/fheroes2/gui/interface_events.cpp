@@ -148,7 +148,7 @@ void Interface::Basic::EventContinueMovement( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero && hero->GetPath().isValid() )
-        hero->SetMove( !hero->isEnableMove() );
+        hero->SetMove( !hero->isMoveEnabled() );
 }
 
 void Interface::Basic::EventKingdomInfo( void )
@@ -340,7 +340,7 @@ int Interface::Basic::EventDigArtifact( void )
                     AGG::PlaySound( M82::TREASURE );
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
-                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}" ) );
+                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
                     Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate() );
 
@@ -386,7 +386,7 @@ void Interface::Basic::EventDefaultAction( void )
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) && ( !MP2::isMoveObject( hero->GetMapsObject() ) || hero->CanMove() ) ) {
             hero->Action( hero->GetIndex() );
-            if ( MP2::OBJ_STONELIGHTS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
+            if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
                 SetRedraw( REDRAW_HEROES );
             SetRedraw( REDRAW_GAMEAREA );
         }
@@ -423,12 +423,6 @@ void Interface::Basic::EventSwitchShowRadar( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowIcons() || conf.ShowStatus() || conf.ShowButtons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowStatus( false );
-                conf.SetShowButtons( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowRadar( true );
             radar.SetRedraw();
         }
@@ -445,12 +439,6 @@ void Interface::Basic::EventSwitchShowButtons( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowStatus() || conf.ShowIcons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowStatus( false );
-                conf.SetShowRadar( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowButtons( true );
             buttonsArea.SetRedraw();
         }
@@ -467,12 +455,6 @@ void Interface::Basic::EventSwitchShowStatus( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowIcons() || conf.ShowButtons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowButtons( false );
-                conf.SetShowRadar( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowStatus( true );
             statusWindow.SetRedraw();
         }
@@ -489,12 +471,6 @@ void Interface::Basic::EventSwitchShowIcons( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowStatus() || conf.ShowButtons() ) ) {
-                conf.SetShowButtons( false );
-                conf.SetShowRadar( false );
-                conf.SetShowStatus( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowIcons( true );
             iconsPanel.SetCurrentVisible();
             iconsPanel.SetRedraw();

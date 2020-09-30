@@ -34,11 +34,13 @@
 #include "system.h"
 
 #define FORMAT_VERSION_090_RELEASE 9000
+#define FORMAT_VERSION_082_RELEASE 8200
 #define FORMAT_VERSION_080_RELEASE 8000
 #define FORMAT_VERSION_070_RELEASE 3269
 #define FORMAT_VERSION_3255 3255
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_080_RELEASE // TODO: update this value for a new release
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
+
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_082_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -96,6 +98,7 @@ enum MusicSource
 {
     MUSIC_MIDI_ORIGINAL,
     MUSIC_MIDI_EXPANSION,
+    MUSIC_EXTERNAL,
     MUSIC_CDROM
 };
 
@@ -137,7 +140,6 @@ public:
         /* influence on game balance: save to savefile */
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
         WORLD_ABANDONED_MINE_RANDOM = 0x20000002,
-        WORLD_SAVE_MONSTER_BATTLE = 0x20000004,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
         WORLD_NOREQ_FOR_ARTIFACTS = 0x20000010,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
@@ -271,7 +273,6 @@ public:
     bool ExtWorldShowVisitedContent( void ) const;
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
-    bool ExtWorldSaveMonsterBattle( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
     bool ExtWorldNoRequirementsForArtifacts( void ) const;
     bool ExtWorldArtifactCrystalBall( void ) const;

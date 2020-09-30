@@ -24,7 +24,6 @@
 
 #include "battle_arena.h"
 #include "battle_command.h"
-#include "settings.h"
 #include "spell.h"
 
 bool Battle::Actions::HaveCommand( u32 cmd ) const

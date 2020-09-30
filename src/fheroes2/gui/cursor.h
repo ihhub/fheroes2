@@ -24,11 +24,7 @@
 
 #include "gamedefs.h"
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#define USE_SDL_CURSOR
-#endif
-
-class Cursor : public Surface
+class Cursor
 {
 public:
     enum
@@ -153,16 +149,9 @@ private:
     void SetOffset( int name, const Point & defaultOffset );
     void Move( s32, s32 );
 
-    void _free();
-
     int theme;
     s32 offset_x;
     s32 offset_y;
-
-#if defined( USE_SDL_CURSOR )
-    SDL_Cursor * _cursorSDL;
-    bool _isVisibleCursor;
-#endif
 };
 
 #endif
