@@ -80,7 +80,6 @@ namespace
             std::swap( lines, oldLines );
 
             for ( size_t i = 0; i < oldLines.size(); ++i ) {
-                const int diffX = ( oldLines[i].first.point.x - oldLines[i].second.point.x );
                 Point middle( oldLines[i].first.point + oldLines[i].second.point );
                 middle.x /= 2;
                 middle.y /= 2;
