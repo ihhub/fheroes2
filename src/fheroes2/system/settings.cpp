@@ -498,31 +498,37 @@ bool Settings::Read( const std::string & filename )
         debug = DBG_ALL_WARN;
         break;
     case 1:
-        debug = DBG_ENGINE_INFO;
-        break;
-    case 2:
-        debug = DBG_ENGINE_INFO | DBG_GAME_INFO;
-        break;
-    case 3:
-        debug = DBG_ENGINE_INFO | DBG_BATTLE_INFO;
-        break;
-    case 4:
-        debug = DBG_ENGINE_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
-        break;
-    case 5:
         debug = DBG_ALL_INFO;
         break;
+    case 2:
+        debug = DBG_ALL_TRACE;
+        break;
+    case 3:
+        debug = DBG_ENGINE_TRACE;
+        break;
+    case 4:
+        debug = DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
+        break;
+    case 5:
+        debug = DBG_GAME_TRACE | DBG_AI_INFO | DBG_BATTLE_INFO;
+        break;
     case 6:
-        debug = DBG_GAME_TRACE;
+        debug = DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
         break;
     case 7:
-        debug = DBG_GAME_TRACE | DBG_AI_TRACE;
+        debug = DBG_BATTLE_TRACE | DBG_AI_INFO | DBG_GAME_INFO;
         break;
     case 8:
-        debug = DBG_BATTLE_TRACE | DBG_AI_TRACE;
+        debug = DBG_DEVEL | DBG_GAME_TRACE;
         break;
     case 9:
-        debug = DBG_ALL_TRACE;
+        debug = DBG_DEVEL | DBG_AI_INFO | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 10:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 11:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_TRACE | DBG_GAME_INFO;
         break;
     default:
         debug = ival;
