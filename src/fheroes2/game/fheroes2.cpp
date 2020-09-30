@@ -107,7 +107,6 @@ int main( int argc, char ** argv )
         SetVideoDriver( conf.SelectVideoDriver() );
 
     // random init
-    Rand::Init();
     if ( conf.Music() )
         SetTimidityEnvPath( conf );
 

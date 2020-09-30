@@ -31,14 +31,13 @@
 
 namespace Rand
 {
-    void Init( void );
-    u32 Get( u32 min, u32 max = 0 );
+    uint32_t Get( uint32_t from, uint32_t to = 0 );
 
     template <typename T>
     const T * Get( const std::vector<T> & vec )
     {
         typename std::vector<T>::const_iterator it = vec.begin();
-        std::advance( it, Rand::Get( vec.size() - 1 ) );
+        std::advance( it, Rand::Get( static_cast<uint32_t>( vec.size() - 1 ) ) );
         return it == vec.end() ? NULL : &( *it );
     }
 
@@ -46,7 +45,7 @@ namespace Rand
     const T * Get( const std::list<T> & list )
     {
         typename std::list<T>::const_iterator it = list.begin();
-        std::advance( it, Rand::Get( list.size() - 1 ) );
+        std::advance( it, Rand::Get( static_cast<uint32_t>( list.size() - 1 ) ) );
         return it == list.end() ? NULL : &( *it );
     }
 
