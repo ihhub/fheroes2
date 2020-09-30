@@ -113,9 +113,12 @@ namespace AI
             heroLimit = 2;
 
         // Step 3. Buy new heroes, adjust roles, sort heroes based on priority or strength
-        if ( heroes.size() < heroLimit && castles.size() ) {
+
+        // GetFirstCastle might return NULL if there's towns with a test
+        Castle * castle = castles.GetFirstCastle();
+
+        if ( castle && heroes.size() < heroLimit ) {
             Recruits & rec = kingdom.GetRecruits();
-            Castle * castle = castles.GetFirstCastle();
 
             // FIXME: Pick appropriate castle to buy hero from
             Heroes * hero = castle->GetHeroes().Guest();
