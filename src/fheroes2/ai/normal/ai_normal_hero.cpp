@@ -39,22 +39,25 @@ namespace AI
             value = 2000.0;
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
-            value = 1750.0;
+            value = 1700.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {
-            value = 1000.0;
+            value = 900.0;
         }
         else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJN_ALCHEMYLAB ) {
-            value = 1100.0;
+            value = 1000.0;
         }
         else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
-            value = 600.0 * tile.QuantityArtifact().getArtifactValue();
+            value = 500.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectID ) ) {
-            value = 500.0;
+            value = 300.0;
         }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
-            value = 700.0;
+            value = 400.0;
+        }
+        else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
+            value = 400.0;
         }
 
         return value;

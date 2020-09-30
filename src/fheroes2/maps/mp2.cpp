@@ -741,8 +741,6 @@ bool MP2::isWeekLife( int obj )
 
     // for AI
     case OBJ_COAST:
-        // for AI
-    case OBJ_CASTLE:
 
         return true;
 
@@ -753,9 +751,11 @@ bool MP2::isWeekLife( int obj )
     return false;
 }
 
-bool MP2::isMonthLife( int )
+bool MP2::isMonthLife( int objectID )
 {
-    // FIXME: list month object life
+    if ( objectID == MP2::OBJ_CASTLE )
+        return true;
+
     return false;
 }
 
