@@ -1536,7 +1536,7 @@ namespace AI
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     Army enemy( tile );
-                    return army.isStrongerThan( enemy );
+                    return army.isStrongerThan( enemy, 1.25 );
                 }
                 else
                     return true;
@@ -1558,7 +1558,7 @@ namespace AI
                 if ( !hero.isFriends( tile.QuantityColor() ) ) {
                     if ( tile.CaptureObjectIsProtection() ) {
                         Army enemy( tile );
-                        return army.isStrongerThan( enemy );
+                        return army.isStrongerThan( enemy, 1.25 );
                     }
                     else
                         return true;
@@ -1598,7 +1598,7 @@ namespace AI
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
                 if ( 5 < variants && 14 > variants ) {
                 Army enemy( tile );
-                return army.isStrongerThan( enemy );
+                return army.isStrongerThan( enemy, 1.25 );
             }
             else
                 // other
@@ -1784,7 +1784,7 @@ namespace AI
         case MP2::OBJ_DERELICTSHIP:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
-                return enemy.isValid() && army.isStrongerThan( enemy );
+                return enemy.isValid() && army.isStrongerThan( enemy, 2 );
             }
             break;
 
@@ -1796,7 +1796,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ) );
+            return army.isStrongerThan( Army( tile ), 1.25 );
 
         // sign
         case MP2::OBJ_SIGN:
@@ -1814,7 +1814,7 @@ namespace AI
                     if ( hero.isFriends( castle->GetColor() ) )
                         return false;
                     else
-                        return army.isStrongerThan( castle->GetActualArmy() );
+                        return army.isStrongerThan( castle->GetActualArmy(), 1.5 );
                 }
             }
             break;
@@ -1827,7 +1827,7 @@ namespace AI
                     return false;
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
-                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy() ) )
+                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), 1.25 ) )
                     return true;
             }
             break;

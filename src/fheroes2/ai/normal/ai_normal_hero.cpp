@@ -73,7 +73,7 @@ namespace AI
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
         int objectID = 0;
         const size_t listSize = mapObjects.size();
-        
+
         for ( size_t it = 0; it < listSize; ++it ) {
             const MapObjectNode & node = mapObjects[it];
             if ( HeroesValidObject( hero, node.first ) ) {
@@ -116,7 +116,7 @@ namespace AI
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            MoveHero( hero, GetPriorityTarget(mapObjects, hero ) );
+            MoveHero( hero, GetPriorityTarget( mapObjects, hero ) );
         }
 
         if ( !hero.MayStillMove() ) {

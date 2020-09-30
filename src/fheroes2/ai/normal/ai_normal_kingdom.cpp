@@ -75,7 +75,8 @@ namespace AI
         KingdomHeroes & heroes = kingdom.GetHeroes();
         KingdomCastles & castles = kingdom.GetCastles();
 
-        DEBUG( DBG_AI, DBG_INFO, Color::String( color ) << "Starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
+        DEBUG( DBG_AI, DBG_INFO, Color::String( color ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
+        DEBUG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
         int mapSize = world.w() * world.h();
@@ -90,9 +91,9 @@ namespace AI
                 continue;
 
             mapObjects.push_back( {idx, objectID} );
-
-            DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << "Found valid object " << MP2::StringObject( objectID ) << " at index: " << idx );
         }
+
+        DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << mapObjects.size() << " valid objects" );
 
         status.RedrawTurnProgress( 1 );
 

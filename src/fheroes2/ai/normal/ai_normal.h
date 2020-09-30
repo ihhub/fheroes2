@@ -41,7 +41,6 @@ namespace AI
     private:
         std::vector<MapObjectNode> mapObjects;
     };
-
 }
 
 #endif
