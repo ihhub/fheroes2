@@ -832,6 +832,7 @@ void Maps::Tiles::QuantityUpdate( void )
             }
     } break;
 
+    case MP2::OBJ_BOAT:
     case MP2::OBJ_EVENT:
         objectTileset = 0;
         objectIndex = 255;
