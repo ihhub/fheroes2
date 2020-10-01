@@ -31,12 +31,9 @@ namespace AI
     Base & Get( AI_TYPE type )
     {
         static AI::Empty empty;
-        static AI::Simple simple;
         static AI::Normal normal;
 
         switch ( type ) {
-        case AI::SIMPLE:
-            return simple;
         case AI::NORMAL:
             return normal;
         }
