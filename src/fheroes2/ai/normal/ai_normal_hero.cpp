@@ -62,7 +62,7 @@ namespace AI
         return 0;
     }
 
-    int GetPriorityTarget( const std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
+    int GetPriorityTarget( std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
     {
         int priorityTarget = -1;
 
@@ -70,10 +70,10 @@ namespace AI
         const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
 
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
-        int objectID = 0;
 
-        for ( size_t it = 0; it < mapObjects.size(); ++it ) {
-            const MapObjectNode & node = mapObjects[it];
+        std::vector<MapObjectNode>::iterator selectedNode = mapObjects.end();
+        for ( size_t idx = 0; idx < mapObjects.size(); ++idx ) {
+            const MapObjectNode & node = mapObjects[idx];
             if ( HeroesValidObject( hero, node.first ) ) {
                 const uint32_t dist = world.getDistance( heroIndex, node.first, skill );
                 if ( dist == 0 )
@@ -83,12 +83,19 @@ namespace AI
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
-                    objectID = node.second;
+                    selectedNode = mapObjects.begin() + idx;
                 }
             }
         }
-        DEBUG( DBG_AI, DBG_TRACE,
-               hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
+
+        if ( selectedNode != mapObjects.end() ) {
+            DEBUG( DBG_AI, DBG_TRACE,
+                   hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( selectedNode->second )
+                                  << ")" );
+
+            // Remove the object from the list to other heroes won't target it
+            mapObjects.erase( selectedNode );
+        }
 
         return priorityTarget;
     }
