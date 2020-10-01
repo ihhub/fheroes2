@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <set>
 
 #include "agg.h"
 #include "ai.h"

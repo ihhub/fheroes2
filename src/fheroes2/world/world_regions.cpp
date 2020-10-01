@@ -381,19 +381,10 @@ void World::ComputeStaticAnalysis()
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
     FindMissingRegions( data, Size( width, height ), regions );
 
+    // Assign regions to the map tiles
     for ( const MapRegion & reg : regions ) {
         for ( const MapRegionNode & node : reg.nodes ) {
             vec_tiles[node.index].UpdateRegion( node.type );
         }
-        // std::cout << reg.id << " nodes: " << reg.nodes.size() << "/" << reg.nodes.capacity() << ", borders: " << reg.borders.size() << "/" << reg.borders.capacity()
-        //          << std::endl;
     }
-
-    // DEBUG: view the hot spots
-    // for ( const int center : regionCenters ) {
-    //    vec_tiles[center]._metadata = vec_tiles[center]._region;
-    //}
-    // for ( const TileData & link : regionLinks ) {
-    //    vec_tiles[link.first]._metadata = vec_tiles[link.first]._region;
-    //}
 }

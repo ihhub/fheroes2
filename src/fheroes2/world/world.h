@@ -267,8 +267,6 @@ private:
     void MonthOfMonstersAction( const Monster & );
     void PostLoad( void );
 
-    // void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapSize );
-
 private:
     friend class Radar;
     friend StreamBase & operator<<( StreamBase &, const World & );
