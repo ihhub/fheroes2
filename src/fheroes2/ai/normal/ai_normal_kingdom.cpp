@@ -29,7 +29,7 @@ namespace AI
 {
     bool IsValidKingdomObject( const Maps::Tiles & tile, int objectID, int kingdomColor )
     {
-        if ( tile.isFog( kingdomColor ) || !MP2::isGroundObject( objectID ) )
+        if ( tile.isFog( kingdomColor ) || ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST ) )
             return false;
 
         // Check castle first to ignore guest hero (tile with both Castle and Hero)
@@ -120,7 +120,6 @@ namespace AI
         if ( castle && heroes.size() < heroLimit ) {
             Recruits & rec = kingdom.GetRecruits();
 
-            // FIXME: Pick appropriate castle to buy hero from
             Heroes * hero = castle->GetHeroes().Guest();
             if ( !hero ) {
                 hero = castle->RecruitHero( rec.GetHero1() );
