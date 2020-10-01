@@ -2137,15 +2137,21 @@ void Maps::Tiles::RemoveJailSprite( void )
         const s32 top = Maps::GetDirectionIndex( GetIndex(), Direction::TOP );
         Maps::Tiles & topTile = world.GetTiles( top );
         topTile.Remove( uniq );
-        topTile.SetObject( MP2::OBJ_ZERO );
-        topTile.FixObject();
+
+        if ( topTile.GetObject() == MP2::OBJ_JAIL ) {
+            topTile.SetObject( MP2::OBJ_ZERO );
+            topTile.FixObject();
+        }
 
         // remove top left sprite
         if ( Maps::isValidDirection( top, Direction::LEFT ) ) {
             Maps::Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) );
             leftTile.Remove( uniq );
-            leftTile.SetObject( MP2::OBJ_ZERO );
-            leftTile.FixObject();
+
+            if ( leftTile.GetObject() == MP2::OBJ_JAIL ) {
+                leftTile.SetObject( MP2::OBJ_ZERO );
+                leftTile.FixObject();
+            }
         }
     }
 
