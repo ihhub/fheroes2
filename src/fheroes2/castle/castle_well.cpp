@@ -56,7 +56,7 @@ u32 HowManyRecruitMonster( const Castle & castle, u32 dw, const Funds & add, Fun
     if ( !castle.GetArmy().CanJoinTroop( ms ) )
         return 0;
 
-    u32 count = castle.GetDwellingLivedCount( dw );
+    u32 count = castle.getMonstersInDwelling( dw );
     payment_t payment;
 
     while ( count ) {

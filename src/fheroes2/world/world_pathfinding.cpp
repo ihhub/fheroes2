@@ -37,8 +37,6 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     reEvaluateIfNeeded( from, skill );
 
     // trace the path from end point
-    PathfindingNode & firstNode = _cache[target];
-
     int currentNode = target;
     while ( currentNode != from && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
@@ -135,7 +133,7 @@ void Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill )
     }
 }
 
-uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill )
+uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill ) const
 {
     const Maps::Tiles & tileTo = world.GetTiles( target );
     uint32_t penalty = ( world.GetTiles( from ).isRoad() && tileTo.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, skill );
@@ -171,7 +169,7 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
         const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
-        PathfindingNode & currentNode = _cache[currentNodeIdx];
+        const PathfindingNode & currentNode = _cache[currentNodeIdx];
 
         // check if current tile is protected, can move only to adjacent monster
         if ( currentNodeIdx != start && !monsters.empty() ) {

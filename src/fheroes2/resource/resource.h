@@ -88,6 +88,7 @@ public:
     bool operator>( const Funds & ) const;
     bool operator>=( const Funds & ) const;
 
+    int getLowestQuotient( const Funds & ) const;
     int GetValidItems( void ) const;
     u32 GetValidItemsCount( void ) const;
 

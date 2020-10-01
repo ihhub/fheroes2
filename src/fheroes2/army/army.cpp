@@ -884,7 +884,7 @@ Army::Army( const Maps::Tiles & t )
             Troop troop = map_troop ? map_troop->QuantityTroop() : t.QuantityTroop();
 
             at( 0 )->Set( troop );
-            ArrangeForBattle( !Settings::Get().ExtWorldSaveMonsterBattle() );
+            ArrangeForBattle( true );
         }
         break;
     }
@@ -1254,15 +1254,15 @@ u32 Army::ActionToSirens( void )
     return res;
 }
 
-bool Army::isStrongerThan( const Army & target ) const
+bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
 {
     if ( !target.isValid() )
         return true;
 
-    const double str1 = GetStrength();
+    const double str1 = GetStrength() * safetyRatio;
     const double str2 = target.GetStrength();
 
-    DEBUG( DBG_AI, DBG_INFO, "Comparing troops: " << str1 << " versus " << str2 );
+    DEBUG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
 
     return str1 > str2;
 }

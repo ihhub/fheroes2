@@ -206,10 +206,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: abandoned mine random resource" ),
     },
     {
-        Settings::WORLD_SAVE_MONSTER_BATTLE,
-        _( "world: save count monster after battle" ),
-    },
-    {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
         _( "world: allow set guardian to objects" ),
     },
@@ -502,31 +498,37 @@ bool Settings::Read( const std::string & filename )
         debug = DBG_ALL_WARN;
         break;
     case 1:
-        debug = DBG_ENGINE_INFO;
-        break;
-    case 2:
-        debug = DBG_ENGINE_INFO | DBG_GAME_INFO;
-        break;
-    case 3:
-        debug = DBG_ENGINE_INFO | DBG_BATTLE_INFO;
-        break;
-    case 4:
-        debug = DBG_ENGINE_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
-        break;
-    case 5:
         debug = DBG_ALL_INFO;
         break;
+    case 2:
+        debug = DBG_ALL_TRACE;
+        break;
+    case 3:
+        debug = DBG_ENGINE_TRACE;
+        break;
+    case 4:
+        debug = DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
+        break;
+    case 5:
+        debug = DBG_GAME_TRACE | DBG_AI_INFO | DBG_BATTLE_INFO;
+        break;
     case 6:
-        debug = DBG_GAME_TRACE;
+        debug = DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
         break;
     case 7:
-        debug = DBG_GAME_TRACE | DBG_AI_TRACE;
+        debug = DBG_BATTLE_TRACE | DBG_AI_INFO | DBG_GAME_INFO;
         break;
     case 8:
-        debug = DBG_BATTLE_TRACE | DBG_AI_TRACE;
+        debug = DBG_DEVEL | DBG_GAME_TRACE;
         break;
     case 9:
-        debug = DBG_ALL_TRACE;
+        debug = DBG_DEVEL | DBG_AI_INFO | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 10:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 11:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_TRACE | DBG_GAME_INFO;
         break;
     default:
         debug = ival;
@@ -875,8 +877,8 @@ std::string Settings::String( void ) const
     os << std::endl << "# use alternative resources (not in use anymore)" << std::endl;
     os << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# run in debug mode (0 - 9) [only for development]" << std::endl;
-    os << "debug = " << ( debug ? "on" : "off" ) << std::endl;
+    os << std::endl << "# run in debug mode (0 - 11) [only for development]" << std::endl;
+    os << "debug = " << debug << std::endl;
 
     os << std::endl << "# heroes move speed: 0 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
@@ -1626,11 +1628,6 @@ bool Settings::ExtGameRememberLastFocus( void ) const
 bool Settings::ExtWorldAbandonedMineRandom( void ) const
 {
     return ExtModes( WORLD_ABANDONED_MINE_RANDOM );
-}
-
-bool Settings::ExtWorldSaveMonsterBattle( void ) const
-{
-    return ExtModes( WORLD_SAVE_MONSTER_BATTLE );
 }
 
 bool Settings::ExtWorldAllowSetGuardian( void ) const

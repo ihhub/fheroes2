@@ -48,6 +48,7 @@ namespace Maps
 
         const uint32_t roadPenalty = 75;
         const uint32_t defaultGroundPenalty = 100;
+        const uint32_t slowestMovePenalty = 200;
 
         const char * String( int );
         uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfinding );
