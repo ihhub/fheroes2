@@ -205,6 +205,9 @@ namespace Battle
             messages.push_back( str );
             SetListContent( messages );
             SetCurrent( messages.size() - 1 );
+            if ( !openlog ) {
+                splitter.HideCursor();
+            }
         }
 
         void RedrawItem( const std::string & str, s32 px, s32 py, bool f )
