@@ -134,22 +134,6 @@ namespace
         uint32_t _roughTerrainPenalty;
     };
 
-    struct PathfindingNode
-    {
-        int _index = -1;
-        int _from = -1;
-        uint32_t _cost = 0;
-        bool _isOpen = true;
-
-        PathfindingNode() {}
-        PathfindingNode( int idx, int node, uint32_t cost, bool isOpen )
-            : _index( idx )
-            , _from( node )
-            , _cost( cost )
-            , _isOpen( isOpen )
-        {}
-    };
-
     int ConvertExtendedIndex( int index, uint32_t width )
     {
         const uint32_t originalWidth = width - 2;
@@ -403,53 +387,6 @@ void World::ComputeStaticAnalysis()
         }
         // std::cout << reg.id << " nodes: " << reg.nodes.size() << "/" << reg.nodes.capacity() << ", borders: " << reg.borders.size() << "/" << reg.borders.capacity()
         //          << std::endl;
-    }
-
-    // Step 9. Create region connections based on region.border data
-    TileDataVector regionLinks;
-
-    // Step 10. Calculate paths between region links
-    const std::vector<int> & normalMapOffsets = GetDirectionOffsets( width );
-    std::vector<int> processedNodes;
-    std::vector<PathfindingNode> searchArray( vec_tiles.size() );
-    searchArray[1900] = PathfindingNode( 1900, -1, 0, false );
-    processedNodes.push_back( 1900 );
-    size_t lastProcessedNode = 0;
-    while ( lastProcessedNode != processedNodes.size() ) {
-        const int currentNodeIdx = processedNodes[lastProcessedNode];
-        for ( uint8_t direction = 0; direction < 8; ++direction ) {
-            if ( Maps::isValidDirection( currentNodeIdx, GetDirectionBitmask( direction ) ) ) {
-                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, GetDirectionBitmask( direction ) );
-                const Maps::Tiles & newTile = vec_tiles[newIndex];
-                GetTiles( 1 );
-                uint32_t moveCost = searchArray[currentNodeIdx]._cost + Maps::Ground::GetPenalty( newTile, 0 );
-                if ( newTile.GetPassable() & GetDirectionBitmask( direction, true ) && !newTile.isWater() ) {
-                    if ( searchArray[newIndex]._isOpen || searchArray[newIndex]._cost > moveCost ) {
-                        processedNodes.push_back( newIndex );
-                        searchArray[newIndex]._index = newIndex;
-                        searchArray[newIndex]._from = currentNodeIdx;
-                        searchArray[newIndex]._cost = moveCost;
-                        searchArray[newIndex]._isOpen = false;
-                    }
-                }
-            }
-        }
-
-        ++lastProcessedNode;
-    }
-
-    std::vector<int> path;
-    int currentNode = 709;
-    while ( currentNode != 1900 && currentNode != -1 ) {
-        PathfindingNode & node = searchArray[currentNode];
-        path.push_back( currentNode );
-        currentNode = node._from;
-    }
-
-    for ( auto & node : searchArray ) {
-        if ( !node._isOpen ) {
-            vec_tiles[node._index]._metadata = node._cost;
-        }
     }
 
     // DEBUG: view the hot spots
