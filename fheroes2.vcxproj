@@ -407,7 +407,6 @@
     <ClInclude Include="src\fheroes2\agg\til.h" />
     <ClInclude Include="src\fheroes2\agg\xmi.h" />
     <ClInclude Include="src\fheroes2\ai\ai.h" />
-    <ClInclude Include="src\fheroes2\ai\empty\ai_empty.h" />
     <ClInclude Include="src\fheroes2\ai\normal\ai_normal.h" />
     <ClInclude Include="src\fheroes2\army\army.h" />
     <ClInclude Include="src\fheroes2\army\army_bar.h" />

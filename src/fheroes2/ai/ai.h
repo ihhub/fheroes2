@@ -41,7 +41,6 @@ namespace AI
 {
     enum AI_TYPE
     {
-        EMPTY,
         NORMAL
     };
     enum AI_PERSONALITY
