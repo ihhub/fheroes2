@@ -79,6 +79,8 @@ namespace AI
         DEBUG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
+        std::vector<const Army *> enemyArmies;
+
         const int mapSize = world.w() * world.h();
         mapObjects.clear();
 
@@ -90,6 +92,18 @@ namespace AI
                 continue;
 
             mapObjects.emplace_back( idx, objectID );
+
+            if ( objectID == MP2::OBJ_HEROES ) {
+                const Heroes * enemy = tile.GetHeroes();
+                if ( enemy && !Players::isFriends( color, enemy->GetColor() ) ) {
+                    enemyArmies.push_back( &enemy->GetArmy() );
+                }
+            }
+            else if ( objectID == MP2::OBJ_CASTLE && !Players::isFriends( color, tile.QuantityColor() ) ) {
+                const Castle * castle = world.GetCastle( Maps::GetPoint( idx ) );
+                if ( castle )
+                    enemyArmies.push_back( &castle->GetArmy() );
+            }
         }
 
         DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << mapObjects.size() << " valid objects" );
@@ -103,6 +117,23 @@ namespace AI
         for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
             if ( *it ) {
                 combinedHeroStrength += ( *it )->GetArmy().GetStrength();
+            }
+        }
+
+        for ( auto it = castles.begin(); it != castles.end(); ++it ) {
+            if ( *it ) {
+                const double defenders = ( *it )->GetArmy().GetStrength();
+                double highestThreat = 0;
+
+                for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
+                    if ( *enemy ) {
+                        const double attackerThreat = ( *enemy )->GetStrength() - defenders;
+                        if ( attackerThreat > highestThreat ) {
+                            highestThreat = attackerThreat;
+                            // castle is under threat
+                        }
+                    }
+                }
             }
         }
 
