@@ -92,8 +92,8 @@ namespace AI
     uint32_t AIGetAllianceColors( const Heroes & hero );
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
 
-    const double ARMY_STRENGTH_ADVANTAGE = 1.25;
-    const double ARMY_STRENGTH_ADVANTAGE_CASTLE = 1.5;
+    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
+    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.6;
 
     int AISelectPrimarySkill( Heroes & hero )
     {
@@ -1536,7 +1536,7 @@ namespace AI
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     Army enemy( tile );
-                    return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE );
+                    return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_SMALL );
                 }
                 else
                     return true;
@@ -1558,7 +1558,7 @@ namespace AI
                 if ( !hero.isFriends( tile.QuantityColor() ) ) {
                     if ( tile.CaptureObjectIsProtection() ) {
                         Army enemy( tile );
-                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE );
+                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_LARGE );
                     }
                     else
                         return true;
@@ -1598,7 +1598,7 @@ namespace AI
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
                 if ( 5 < variants && 14 > variants ) {
                 Army enemy( tile );
-                return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE );
+                return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_LARGE );
             }
             else
                 // other
@@ -1796,7 +1796,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE );
+            return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_SMALL );
 
         // sign
         case MP2::OBJ_SIGN:
@@ -1814,7 +1814,7 @@ namespace AI
                     if ( hero.isFriends( castle->GetColor() ) )
                         return false;
                     else
-                        return army.isStrongerThan( castle->GetActualArmy(), ARMY_STRENGTH_ADVANTAGE_CASTLE );
+                        return army.isStrongerThan( castle->GetActualArmy(), ARMY_STRENGTH_ADVANTAGE_LARGE );
                 }
             }
             break;
@@ -1827,7 +1827,7 @@ namespace AI
                     return false;
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
-                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE ) )
+                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE_SMALL ) )
                     return true;
             }
             break;
