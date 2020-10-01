@@ -123,21 +123,23 @@ namespace AI
         const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
         std::vector<int> castlesInDanger;
 
-        for ( size_t idx = 0; idx < castles.size(); ++idx ) {
-            const Castle * castle = castles[idx];
-            if ( castle ) {
-                const int castleIndex = castle->GetIndex();
-                const double defenders = castle->GetArmy().GetStrength();
+        if ( !enemyArmies.empty() ) { // only if at least one enemy is nearby
+            for ( size_t idx = 0; idx < castles.size(); ++idx ) {
+                const Castle * castle = castles[idx];
+                if ( castle ) {
+                    const int castleIndex = castle->GetIndex();
+                    const double defenders = castle->GetArmy().GetStrength();
 
-                for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
-                    if ( enemy->second ) {
-                        const double attackerThreat = enemy->second->GetStrength() - defenders;
-                        if ( attackerThreat > 0 ) {
-                            const uint32_t dist = world.getDistance( castleIndex, enemy->first, 0 );
-                            if ( dist && dist < threatDistanceLimit ) {
-                                // castle is under threat
-                                castlesInDanger.push_back( castleIndex );
-                                break;
+                    for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
+                        if ( enemy->second ) {
+                            const double attackerThreat = enemy->second->GetStrength() - defenders;
+                            if ( attackerThreat > 0 ) {
+                                const uint32_t dist = world.getDistance( castleIndex, enemy->first, 0 );
+                                if ( dist && dist < threatDistanceLimit ) {
+                                    // castle is under threat
+                                    castlesInDanger.push_back( castleIndex );
+                                    break;
+                                }
                             }
                         }
                     }
