@@ -79,6 +79,8 @@ namespace AI
         DEBUG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
+        std::vector<std::pair<int, const Army *> > enemyArmies;
+
         const int mapSize = world.w() * world.h();
         mapObjects.clear();
 
@@ -90,6 +92,18 @@ namespace AI
                 continue;
 
             mapObjects.emplace_back( idx, objectID );
+
+            if ( objectID == MP2::OBJ_HEROES ) {
+                const Heroes * enemy = tile.GetHeroes();
+                if ( enemy && !Players::isFriends( color, enemy->GetColor() ) ) {
+                    enemyArmies.emplace_back( idx, &enemy->GetArmy() );
+                }
+            }
+            else if ( objectID == MP2::OBJ_CASTLE && !Players::isFriends( color, tile.QuantityColor() ) ) {
+                const Castle * castle = world.GetCastle( Maps::GetPoint( idx ) );
+                if ( castle )
+                    enemyArmies.emplace_back( idx, &castle->GetArmy() );
+            }
         }
 
         DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << mapObjects.size() << " valid objects" );
@@ -103,6 +117,33 @@ namespace AI
         for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
             if ( *it ) {
                 combinedHeroStrength += ( *it )->GetArmy().GetStrength();
+            }
+        }
+
+        const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
+        std::vector<int> castlesInDanger;
+
+        if ( !enemyArmies.empty() ) { // only if at least one enemy is nearby
+            for ( size_t idx = 0; idx < castles.size(); ++idx ) {
+                const Castle * castle = castles[idx];
+                if ( castle ) {
+                    const int castleIndex = castle->GetIndex();
+                    const double defenders = castle->GetArmy().GetStrength();
+
+                    for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
+                        if ( enemy->second ) {
+                            const double attackerThreat = enemy->second->GetStrength() - defenders;
+                            if ( attackerThreat > 0 ) {
+                                const uint32_t dist = world.getDistance( castleIndex, enemy->first, 0 );
+                                if ( dist && dist < threatDistanceLimit ) {
+                                    // castle is under threat
+                                    castlesInDanger.push_back( castleIndex );
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -166,7 +207,7 @@ namespace AI
         // Step 6. Castle development according to kingdom budget
         for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
             if ( *it ) {
-                CastleTurn( **it );
+                CastleTurn( **it, std::find( castlesInDanger.begin(), castlesInDanger.end(), ( *it )->GetIndex() ) != castlesInDanger.end() );
             }
         }
     }
