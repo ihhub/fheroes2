@@ -120,7 +120,6 @@ namespace AI
         if ( castle && heroes.size() < heroLimit ) {
             Recruits & rec = kingdom.GetRecruits();
 
-            // FIXME: Pick appropriate castle to buy hero from
             Heroes * hero = castle->GetHeroes().Guest();
             if ( !hero ) {
                 hero = castle->RecruitHero( rec.GetHero1() );

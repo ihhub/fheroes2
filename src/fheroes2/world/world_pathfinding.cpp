@@ -201,7 +201,8 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
                         newNode._cost = moveCost;
 
                         // duplicates are allowed if we find a cheaper way there
-                        nodesToExplore.push_back( newIndex );
+                        if ( world.GetTiles( newIndex ).isWater() == fromWater )
+                            nodesToExplore.push_back( newIndex );
                     }
                 }
             }
