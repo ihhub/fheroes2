@@ -100,6 +100,10 @@ namespace AI
             // Remove the object from the list to other heroes won't target it
             mapObjects.erase( selectedNode );
         }
+        else {
+            priorityTarget = world.searchForFog( hero );
+            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+        }
 
         return priorityTarget;
     }

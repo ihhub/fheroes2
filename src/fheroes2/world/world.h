@@ -255,6 +255,7 @@ public:
     bool isValidPath( int index, int direction ) const;
     uint32_t getDistance( int from, int to, uint32_t skill );
     std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );
+    int searchForFog( const Heroes & hero );
 
     static u32 GetUniq( void );
 
