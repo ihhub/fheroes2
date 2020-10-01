@@ -30,7 +30,6 @@
 #include "agg.h"
 #include "ai.h"
 #include "battle_only.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -92,27 +91,27 @@ void Game::DialogPlayers( int color, std::string str )
     const Player * player = Settings::Get().GetPlayers().Get( color );
     StringReplace( str, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
-    const Sprite & border = AGG::GetICN( ICN::BRCREST, 6 );
-    Surface sign = border.GetSurface();
+    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    fheroes2::Image sign = border;
 
     switch ( color ) {
     case Color::BLUE:
-        AGG::GetICN( ICN::BRCREST, 0 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 0 ), sign, 4, 4 );
         break;
     case Color::GREEN:
-        AGG::GetICN( ICN::BRCREST, 1 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 1 ), sign, 4, 4 );
         break;
     case Color::RED:
-        AGG::GetICN( ICN::BRCREST, 2 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 2 ), sign, 4, 4 );
         break;
     case Color::YELLOW:
-        AGG::GetICN( ICN::BRCREST, 3 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 3 ), sign, 4, 4 );
         break;
     case Color::ORANGE:
-        AGG::GetICN( ICN::BRCREST, 4 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 4 ), sign, 4, 4 );
         break;
     case Color::PURPLE:
-        AGG::GetICN( ICN::BRCREST, 5 ).Blit( 4, 4, sign );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
         break;
@@ -126,21 +125,21 @@ void Game::OpenCastleDialog( Castle & castle )
 {
     Mixer::Pause();
 
-    // Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
-    Display & display = Display::Get();
     KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
     Interface::StatusWindow::ResetTimer();
-    bool need_fade = conf.ExtGameUseFade() && display.GetSize() == Display::GetDefaultSize();
+    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+
+    const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
     if ( it != myCastles.end() ) {
         int result = Dialog::ZERO;
         while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false, need_fade );
-            if ( need_fade )
-                need_fade = false;
+            result = ( *it )->OpenDialog( false, needFade );
+            if ( needFade )
+                needFade = false;
 
             if ( it != myCastles.end() ) {
                 if ( Dialog::PREV == result ) {
@@ -157,20 +156,17 @@ void Game::OpenCastleDialog( Castle & castle )
         }
     }
     else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        ( *it )->OpenDialog( true, need_fade );
+        ( *it )->OpenDialog( true, needFade );
     }
 
-    if ( it != myCastles.end() ) {
-        // focus priority: castle heroes
-        Heroes * hero = ( *it )->GetHeroes().Guest();
-
-        if ( hero && !hero->Modes( Heroes::GUARDIAN ) )
-            Interface::Basic::Get().SetFocus( hero );
-        else
-            Interface::Basic::Get().SetFocus( *it );
+    Interface::Basic & basicInterface = Interface::Basic::Get();
+    if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+        basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
     }
-
-    Interface::Basic::Get().RedrawFocus();
+    else {
+        basicInterface.SetFocus( *it );
+    }
+    basicInterface.RedrawFocus();
 }
 
 /* open heroes wrapper */
@@ -179,20 +175,19 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
-    Display & display = Display::Get();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
     Interface::StatusWindow::ResetTimer();
     Interface::Basic & I = Interface::Basic::Get();
     Interface::GameArea & gameArea = I.GetGameArea();
-    bool need_fade = conf.ExtGameUseFade() && display.GetSize() == Display::GetDefaultSize();
+    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
     if ( it != myHeroes.end() ) {
         int result = Dialog::ZERO;
 
         while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false, need_fade );
-            if ( need_fade )
-                need_fade = false;
+            result = ( *it )->OpenDialog( false, needFade );
+            if ( needFade )
+                needFade = false;
 
             switch ( result ) {
             case Dialog::PREV:
@@ -233,8 +228,9 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
         else {
             Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
         }
-        Interface::Basic::Get().RedrawFocus();
     }
+
+    Interface::Basic::Get().RedrawFocus();
 }
 
 void ShowNewWeekDialog( void )
@@ -453,9 +449,13 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
             return Cursor::POINTER;
         else if ( MP2::isGroundObject( tile.GetObject() ) ) {
-            bool protection = ( MP2::isPickupObject( tile.GetObject() ) ? false
-                                                                        : ( Maps::TileIsUnderProtection( tile.GetIndex() )
-                                                                            || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) ) );
+            bool protection = false;
+            if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
+                protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
+            }
+            else {
+                protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+            }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
@@ -497,7 +497,7 @@ int Interface::Basic::StartGame( void )
 {
     Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // draw interface
     gameArea.Build();
@@ -553,8 +553,8 @@ int Interface::Basic::StartGame( void )
                         statusWindow.Reset();
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
                         Redraw();
-                        display.Flip();
-                        Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn" ) );
+                        display.render();
+                        Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn." ) );
                     }
                     conf.SetCurrentColor( player.GetColor() );
                     world.ClearFog( player.GetColor() );
@@ -572,17 +572,11 @@ int Interface::Basic::StartGame( void )
                         statusWindow.Reset();
                         statusWindow.SetState( STATUS_AITURN );
 
-                        // for pocketpc: show status window
-                        if ( conf.QVGA() && !conf.ShowStatus() ) {
-                            conf.SetShowStatus( true );
-                            statusWindow.SetRedraw();
-                        }
-
                         cursor.Hide();
                         cursor.SetThemes( Cursor::WAIT );
                         Redraw();
                         cursor.Show();
-                        display.Flip();
+                        display.render();
 
                         AI::Get().KingdomTurn( kingdom );
                     }
@@ -604,16 +598,16 @@ int Interface::Basic::StartGame( void )
     }
 
     if ( res == Game::ENDTURN )
-        display.Fill( ColorBlack );
+        display.fill( 0 );
     else if ( conf.ExtGameUseFade() )
-        display.Fade();
+        fheroes2::FadeDisplay();
 
     return res == Game::ENDTURN ? Game::QUITGAME : res;
 }
 
 int Interface::Basic::HumanTurn( bool isload )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();
     int res = Game::CANCEL;
@@ -645,7 +639,7 @@ int Interface::Basic::HumanTurn( bool isload )
     Game::EnvironmentSoundMixer();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     if ( !isload ) {
         // new week dialog
@@ -825,7 +819,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 le.SetTapMode( false );
         }
         else {
-            if ( Display::Get().isMouseFocusActive() ) {
+            if ( fheroes2::cursor().isFocusActive() ) {
                 int scrollPosition = SCROLL_NONE;
                 if ( le.MouseCursor( GetScrollLeft() ) )
                     scrollPosition |= SCROLL_LEFT;
@@ -840,7 +834,7 @@ int Interface::Basic::HumanTurn( bool isload )
             }
         }
 
-        const Rect displayArea( 0, 0, display.GetSize().w, display.GetSize().h );
+        const Rect displayArea( 0, 0, display.width(), display.height() );
         // Stop moving hero first
         if ( isMovingHero && ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) ) {
             stopHero = true;
@@ -905,7 +899,7 @@ int Interface::Basic::HumanTurn( bool isload )
             radar.SetRedraw();
             Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
 
             // enable right click emulation
             if ( conf.ExtPocketTapMode() )
@@ -919,7 +913,7 @@ int Interface::Basic::HumanTurn( bool isload )
             Heroes * hero = GetFocusHeroes();
 
             if ( hero ) {
-                if ( hero->isEnableMove() ) {
+                if ( hero->isMoveEnabled() ) {
                     if ( hero->Move( 0 == conf.HeroesMoveSpeed() ) ) {
                         if ( !isOngoingFastScrollEvent ) {
                             gameArea.SetCenter( hero->GetCenter() );
@@ -972,7 +966,6 @@ int Interface::Basic::HumanTurn( bool isload )
         if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
-            gameArea.UpdateCyclingPalette( frame );
             gameArea.SetRedraw();
 
             Army * focusArmy = GetFocusArmy();
@@ -1002,11 +995,11 @@ int Interface::Basic::HumanTurn( bool isload )
             cursor.Hide();
             Redraw();
             cursor.Show();
-            display.Flip();
+            display.render();
         }
         else if ( !cursor.isVisible() ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 
@@ -1079,7 +1072,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
         if ( from_hero == NULL )
             break;
 
-        if ( from_hero->isEnableMove() )
+        if ( from_hero->isMoveEnabled() )
             from_hero->SetMove( false );
         else
             ShowPathOrStartMoveHero( from_hero, index_maps );
@@ -1097,7 +1090,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
     Heroes * hero = GetFocusHeroes();
 
     // stop hero
-    if ( hero && hero->isEnableMove() ) {
+    if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
         Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
     }

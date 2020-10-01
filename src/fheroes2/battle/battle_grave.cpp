@@ -73,3 +73,12 @@ u32 Battle::Graveyard::GetLastTroopUID( s32 index ) const
 
     return 0;
 }
+
+Battle::TroopUIDs Battle::Graveyard::GetTroopUIDs( const int32_t hexIndex ) const
+{
+    for ( const_iterator it = begin(); it != end(); ++it )
+        if ( hexIndex == it->first )
+            return it->second;
+
+    return TroopUIDs();
+}

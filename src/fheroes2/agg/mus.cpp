@@ -82,16 +82,19 @@ namespace MUS
                   {VICTORY, "Scenario Victory"},
                   {UNKNOWN, "UNKNOWN"}};
 
-    const std::string GetString( int mus, bool longName )
+    const std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType )
     {
         std::stringstream sstream;
-        if ( longName ) {
-            sstream << std::setw( 2 ) << std::setfill( '0' ) << mus;
-            sstream << " " << ( UNUSED <= mus && UNKNOWN > mus ? musmap[mus].string : musmap[UNKNOWN].string ) << ".ogg";
+        if ( musicType == MAPPED ) {
+            sstream << std::setw( 2 ) << std::setfill( '0' ) << musicTrack;
+            sstream << " " << ( UNUSED <= musicTrack && UNKNOWN > musicTrack ? musmap[musicTrack].string : musmap[UNKNOWN].string ) << ".ogg";
         }
-        else {
+        else if ( musicType == DOS_VERSION ) {
             // GOG version format, data track was ignored there so 02 becomes 01
-            sstream << "homm2_" << std::setw( 2 ) << std::setfill( '0' ) << mus - 1 << ".ogg";
+            sstream << "homm2_" << std::setw( 2 ) << std::setfill( '0' ) << musicTrack - 1 << ".ogg";
+        }
+        else if ( musicType == WIN_VERSION ) {
+            sstream << "Track" << std::setw( 2 ) << std::setfill( '0' ) << musicTrack << ".ogg";
         }
 
         return sstream.str();

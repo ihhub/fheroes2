@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "agg.h"
-#include "button.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -149,7 +148,7 @@ void Interface::Basic::EventContinueMovement( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero && hero->GetPath().isValid() )
-        hero->SetMove( !hero->isEnableMove() );
+        hero->SetMove( !hero->isMoveEnabled() );
 }
 
 void Interface::Basic::EventKingdomInfo( void )
@@ -165,6 +164,10 @@ void Interface::Basic::EventCastSpell( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
+        SetRedraw( REDRAW_ALL );
+        ResetFocus( GameFocus::HEROES );
+        Redraw();
+
         const Spell spell = hero->OpenSpellBook( SpellBook::ADVN, true );
         // apply cast spell
         if ( spell.isValid() ) {
@@ -228,7 +231,10 @@ void Interface::Basic::EventSystemDialog( void )
 
     // interface themes
     if ( 0x08 & changes ) {
+        Interface::Basic::Get().Reset();
         SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+        ResetFocus( GameFocus::HEROES );
+        Redraw();
     }
 
     // interface hide/show
@@ -334,7 +340,7 @@ int Interface::Basic::EventDigArtifact( void )
                     AGG::PlaySound( M82::TREASURE );
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
-                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}" ) );
+                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
                     Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate() );
 
@@ -354,7 +360,7 @@ int Interface::Basic::EventDigArtifact( void )
                 Cursor::Get().Hide();
                 iconsPanel.RedrawIcons( ICON_HEROES );
                 Cursor::Get().Show();
-                Display::Get().Flip();
+                fheroes2::Display::instance().render();
 
                 // check game over for ultimate artifact
                 return GameOver::Result::Get().LocalCheckGameOver();
@@ -380,7 +386,7 @@ void Interface::Basic::EventDefaultAction( void )
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) && ( !MP2::isMoveObject( hero->GetMapsObject() ) || hero->CanMove() ) ) {
             hero->Action( hero->GetIndex() );
-            if ( MP2::OBJ_STONELIGHTS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
+            if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
                 SetRedraw( REDRAW_HEROES );
             SetRedraw( REDRAW_GAMEAREA );
         }
@@ -417,12 +423,6 @@ void Interface::Basic::EventSwitchShowRadar( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowIcons() || conf.ShowStatus() || conf.ShowButtons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowStatus( false );
-                conf.SetShowButtons( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowRadar( true );
             radar.SetRedraw();
         }
@@ -439,12 +439,6 @@ void Interface::Basic::EventSwitchShowButtons( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowStatus() || conf.ShowIcons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowStatus( false );
-                conf.SetShowRadar( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowButtons( true );
             buttonsArea.SetRedraw();
         }
@@ -461,12 +455,6 @@ void Interface::Basic::EventSwitchShowStatus( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowIcons() || conf.ShowButtons() ) ) {
-                conf.SetShowIcons( false );
-                conf.SetShowButtons( false );
-                conf.SetShowRadar( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowStatus( true );
             statusWindow.SetRedraw();
         }
@@ -483,12 +471,6 @@ void Interface::Basic::EventSwitchShowIcons( void )
             gameArea.SetRedraw();
         }
         else {
-            if ( conf.QVGA() && ( conf.ShowRadar() || conf.ShowStatus() || conf.ShowButtons() ) ) {
-                conf.SetShowButtons( false );
-                conf.SetShowRadar( false );
-                conf.SetShowStatus( false );
-                gameArea.SetRedraw();
-            }
             conf.SetShowIcons( true );
             iconsPanel.SetCurrentVisible();
             iconsPanel.SetRedraw();

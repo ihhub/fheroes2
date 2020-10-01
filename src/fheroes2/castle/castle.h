@@ -32,17 +32,17 @@
 #include "heroes.h"
 #include "mageguild.h"
 #include "position.h"
-#include "sprite.h"
+#include "ui_button.h"
 
 class Heroes;
 
-class MeetingButton : public ButtonSprite
+class MeetingButton : public fheroes2::ButtonSprite
 {
 public:
     MeetingButton( s32, s32 );
 };
 
-class SwapButton : public ButtonSprite
+class SwapButton : public fheroes2::ButtonSprite
 {
 public:
     SwapButton( s32, s32 );
@@ -148,12 +148,13 @@ public:
     Army & GetArmy( void );
     const Army & GetActualArmy( void ) const;
     Army & GetActualArmy( void );
-    u32 GetDwellingLivedCount( u32 ) const;
+    u32 getMonstersInDwelling( u32 ) const;
     u32 GetActualDwelling( u32 ) const;
 
     bool RecruitMonsterFromDwelling( u32 dw, u32 count );
     bool RecruitMonster( const Troop & );
     void RecruitAllMonsters( void );
+    void recruitBestAvailable( Funds budget );
 
     void ChangeColor( int );
 
@@ -218,7 +219,7 @@ public:
 private:
     u32 * GetDwelling( u32 dw );
     void EducateHeroes( void );
-    Rect RedrawResourcePanel( const Point & );
+    Rect RedrawResourcePanel( const Point & ) const;
     u32 OpenTown( void );
     void OpenTavern( void );
     void OpenWell( void );
@@ -260,7 +261,6 @@ namespace CastleDialog
 
         building_t id;
         Rect coord;
-        Sprite contour;
     };
 
     struct CacheBuildings : std::vector<builds_t>
@@ -271,7 +271,7 @@ namespace CastleDialog
 
     void RedrawAllBuilding( const Castle &, const Point &, const CacheBuildings &, u32 flash = BUILD_NOTHING );
     void RedrawAnimationBuilding( const Castle &, const Point &, const CacheBuildings &, u32 build );
-    void RedrawBuildingSpriteToArea( const Sprite &, s32, s32, const Rect & );
+    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
 }
 
 struct VecCastles : public std::vector<Castle *>

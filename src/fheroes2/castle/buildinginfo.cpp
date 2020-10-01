@@ -22,13 +22,13 @@
 
 #include "buildinginfo.h"
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "kingdom.h"
 #include "m82.h"
 #include "monster.h"
+#include "pal.h"
 #include "profit.h"
 #include "race.h"
 #include "settings.h"
@@ -347,9 +347,9 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
 
     // fix area for capratin
     if ( b == BUILD_CAPTAIN ) {
-        const Sprite & sprite = AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
-        area.w = sprite.w();
-        area.h = sprite.h();
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
+        area.w = sprite.width();
+        area.h = sprite.height();
     }
 }
 
@@ -393,20 +393,22 @@ bool BuildingInfo::IsDwelling( void ) const
 
 void BuildingInfo::RedrawCaptain( void )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     if ( bcond == ALREADY_BUILT ) {
-        Sprite captainSprite = AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 1 );
-        captainSprite = Sprite( captainSprite.GetSurface(), captainSprite.x(), captainSprite.y() );
-        const Sprite & flag = AGG::GetICN( ICN::GetFlagIcnId( castle.GetColor() ), 0, false );
-        flag.Blit( GetFlagOffset( castle.GetRace() ), captainSprite );
-        captainSprite.Blit( area.x, area.y );
+        const fheroes2::Sprite & captainSprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 1 );
+        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( castle.GetColor() ), 0 );
+
+        fheroes2::Blit( captainSprite, display, area.x, area.y );
+        Point flagOffset = GetFlagOffset( castle.GetRace() );
+        fheroes2::Blit( flag, display, area.x + flagOffset.x, area.y + flagOffset.y );
     }
     else {
-        AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 0 ).Blit( area.x, area.y );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), 0 ), display, area.x, area.y );
     }
 
-    const Sprite & sprite_allow = AGG::GetICN( ICN::TOWNWIND, 11 );
-    const Sprite & sprite_deny = AGG::GetICN( ICN::TOWNWIND, 12 );
-    const Sprite & sprite_money = AGG::GetICN( ICN::TOWNWIND, 13 );
+    const fheroes2::Sprite & sprite_allow = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
+    const fheroes2::Sprite & sprite_deny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+    const fheroes2::Sprite & sprite_money = fheroes2::AGG::GetICN( ICN::TOWNWIND, 13 );
     Point dst_pt;
     bool allow_buy = bcond == ALLOW_BUILD;
 
@@ -414,12 +416,12 @@ void BuildingInfo::RedrawCaptain( void )
     dst_pt.x = area.x + 65;
     dst_pt.y = area.y + 60;
     if ( bcond == ALREADY_BUILT )
-        sprite_allow.Blit( dst_pt );
+        fheroes2::Blit( sprite_allow, display, dst_pt.x, dst_pt.y );
     else if ( !allow_buy ) {
         if ( LACK_RESOURCES == bcond )
-            sprite_money.Blit( dst_pt );
+            fheroes2::Blit( sprite_money, display, dst_pt.x, dst_pt.y );
         else
-            sprite_deny.Blit( dst_pt );
+            fheroes2::Blit( sprite_deny, display, dst_pt.x, dst_pt.y );
     }
 }
 
@@ -429,53 +431,59 @@ void BuildingInfo::Redraw( void )
         RedrawCaptain();
     }
     else {
+        fheroes2::Display & display = fheroes2::Display::instance();
         int index = GetIndexBuildingSprite( building );
 
         if ( BUILD_DISABLE == bcond ) {
-            const Sprite infoSprite = AGG::GetICN( ICN::BLDGXTRA, 0 );
-            infoSprite.Blit( area.x, area.y, Display::Get() );
+            const fheroes2::Sprite infoSprite = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+            fheroes2::Blit( infoSprite, display, area.x, area.y );
 
             const Point offset( 6, 59 );
-            const Surface grayed = infoSprite.GetSurface( Rect( offset.x, offset.y, 125, 12 ) );
-            grayed.RenderGrayScale().Blit( area.x + offset.x, area.y + offset.y, Display::Get() );
+            fheroes2::Image grayedOut = fheroes2::Crop( infoSprite, offset.x, offset.y, 125, 12 );
+            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::GRAY ) );
+            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::DARKENING ) );
+            fheroes2::Blit( grayedOut, display, area.x + offset.x, area.y + offset.y );
         }
         else {
-            AGG::GetICN( ICN::BLDGXTRA, 0 ).Blit( area.x, area.y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 ), display, area.x, area.y );
         }
 
         // build image
         if ( BUILD_DISABLE == bcond && BUILD_TAVERN == building ) { // skip necromancer's tavern
-            AGG::GetICN( ICN::CASLXTRA, 0 ).Blit( area.x, area.y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLXTRA, 0 ), display, area.x, area.y );
             return;
         }
         else {
-            AGG::GetICN( ICN::Get4Building( castle.GetRace() ), index ).Blit( area.x + 1, area.y + 1 );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), index ), display, area.x + 1, area.y + 1 );
         }
 
-        const Sprite & sprite_allow = AGG::GetICN( ICN::TOWNWIND, 11 );
-        const Sprite & sprite_deny = AGG::GetICN( ICN::TOWNWIND, 12 );
-        const Sprite & sprite_money = AGG::GetICN( ICN::TOWNWIND, 13 );
+        const fheroes2::Sprite & sprite_allow = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
+        const fheroes2::Sprite & sprite_deny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        const fheroes2::Sprite & sprite_money = fheroes2::AGG::GetICN( ICN::TOWNWIND, 13 );
 
         Point dst_pt( area.x + 115, area.y + 40 );
 
         // indicator
         if ( bcond == ALREADY_BUILT )
-            sprite_allow.Blit( dst_pt );
+            fheroes2::Blit( sprite_allow, display, dst_pt.x, dst_pt.y );
         else if ( bcond == BUILD_DISABLE ) {
-            sprite_deny.RenderGrayScale().Blit( dst_pt, Display::Get() );
+            fheroes2::Image disabledSprite( sprite_deny );
+            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::GRAY ) );
+            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::DARKENING ) );
+            fheroes2::Blit( disabledSprite, display, dst_pt.x, dst_pt.y );
         }
         else if ( bcond != ALLOW_BUILD ) {
             if ( LACK_RESOURCES == bcond )
-                sprite_money.Blit( dst_pt );
+                fheroes2::Blit( sprite_money, display, dst_pt.x, dst_pt.y );
             else
-                sprite_deny.Blit( dst_pt );
+                fheroes2::Blit( sprite_deny, display, dst_pt.x, dst_pt.y );
         }
 
         // status bar
         if ( bcond != BUILD_DISABLE && bcond != ALREADY_BUILT ) {
             dst_pt.x = area.x;
             dst_pt.y = area.y + 58;
-            AGG::GetICN( ICN::CASLXTRA, bcond == ALLOW_BUILD ? 1 : 2 ).Blit( dst_pt );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLXTRA, bcond == ALLOW_BUILD ? 1 : 2 ), display, dst_pt.x, dst_pt.y );
         }
 
         // name
@@ -496,13 +504,15 @@ const std::string & BuildingInfo::GetDescription( void ) const
     return description;
 }
 
-bool BuildingInfo::QueueEventProcessing( void )
+bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton )
 {
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( area ) ) {
-        if ( bcond == ALLOW_BUILD )
+        if ( bcond == ALLOW_BUILD ) {
+            fheroes2::ButtonRestorer exitRestorer( exitButton );
             return DialogBuyBuilding( true );
+        }
     }
     else if ( le.MousePressRight( area ) ) {
         DialogBuyBuilding( false );
@@ -512,7 +522,7 @@ bool BuildingInfo::QueueEventProcessing( void )
 
 bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
 
@@ -552,30 +562,31 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), building ), BOXAREA_WIDTH );
 
-    const Sprite & window_icons = AGG::GetICN( ICN::BLDGXTRA, 0 );
-    const int space = Settings::Get().QVGA() ? 5 : 10;
-    Dialog::FrameBox box( space + window_icons.h() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h, buttons );
+    const fheroes2::Sprite & window_icons = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+    const int space = 10;
+    Dialog::FrameBox box( space + window_icons.height() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h,
+                          buttons );
     const Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
 
     Point dst_pt;
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 1 ).h();
-    Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
+    fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.w - AGG::GetICN( system, 3 ).w();
-    dst_pt.y = box_rt.y + box_rt.h - AGG::GetICN( system, 3 ).h();
-    Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
+    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
+    fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
 
-    dst_pt.x = box_rt.x + ( box_rt.w - window_icons.w() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.w - window_icons.width() ) / 2;
     dst_pt.y = box_rt.y + space;
-    window_icons.Blit( dst_pt );
+    fheroes2::Blit( window_icons, display, dst_pt.x, dst_pt.y );
 
-    const Sprite & building_icons = AGG::GetICN( ICN::Get4Building( castle.GetRace() ), GetIndexBuildingSprite( building ) );
-    dst_pt.x = box_rt.x + ( box_rt.w - building_icons.w() ) / 2;
+    const fheroes2::Sprite & building_icons = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), GetIndexBuildingSprite( building ) );
+    dst_pt.x = box_rt.x + ( box_rt.w - building_icons.width() ) / 2;
     dst_pt.y += 1;
-    building_icons.Blit( dst_pt );
+    fheroes2::Blit( building_icons, display, dst_pt.x, dst_pt.y );
 
     Text text( GetName(), Font::SMALL );
     dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
@@ -583,7 +594,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     text.Blit( dst_pt );
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + space + window_icons.h() + space;
+    dst_pt.y = box_rt.y + space + window_icons.height() + space;
     box1.Blit( dst_pt );
 
     dst_pt.y += box1.h() + space;
@@ -603,27 +614,27 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     if ( buttons ) {
         if ( ALLOW_BUILD != castle.CheckBuyBuilding( building ) )
-            button1.SetDisable( true );
+            button1.disable();
 
-        button1.Draw();
-        button2.Draw();
+        button1.draw();
+        button2.draw();
     }
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
         if ( !buttons && !le.MousePressRight() )
             break;
 
-        le.MousePressLeft( button1 ) ? button1.PressDraw() : button1.ReleaseDraw();
-        le.MousePressLeft( button2 ) ? button2.PressDraw() : button2.ReleaseDraw();
+        le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
+        le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
 
-        if ( button1.isEnable() && ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( button1 ) ) )
+        if ( button1.isEnabled() && ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( button1.area() ) ) )
             return true;
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( button2 ) )
+        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( button2.area() ) )
             break;
     }
 
@@ -720,31 +731,32 @@ DwellingItem::DwellingItem( Castle & castle, u32 dw )
     mons = Monster( castle.GetRace(), type );
 }
 
-DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz, const RGBA & fill )
+DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz )
     : castle( cstl )
+    , backsf( sz.w, sz.h )
 {
     for ( u32 dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 )
         content.push_back( DwellingItem( castle, dw ) );
 
     SetContent( content );
-    backsf.Set( sz.w, sz.h, false );
-    backsf.DrawBorder( RGBA( 0xd0, 0xc0, 0x48 ) );
+
+    fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
     SetItemSize( sz.w, sz.h );
 }
 
-void DwellingsBar::RedrawBackground( const Rect & pos, Surface & dstsf )
+void DwellingsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
 {
-    backsf.Blit( pos.x, pos.y, dstsf );
+    fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
 }
 
-void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, Surface & dstsf )
+void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::Image & dstsf )
 {
-    const Sprite & mons32 = AGG::GetICN( ICN::MONS32, dwl.mons.GetSpriteIndex() );
-    mons32.Blit( pos.x + ( pos.w - mons32.w() ) / 2, pos.y + ( pos.h - 3 - mons32.h() ) );
+    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, dwl.mons.GetSpriteIndex() );
+    fheroes2::Blit( mons32, dstsf, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + ( pos.h - 3 - mons32.height() ) );
 
     if ( castle.isBuild( dwl.type ) ) {
         // count
-        Text text( GetString( castle.GetDwellingLivedCount( dwl.type ) ), Font::SMALL );
+        Text text( GetString( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
         text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1 );
 
         u32 grown = dwl.mons.GetGrown();
@@ -758,13 +770,13 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, Surface & d
         text.Blit( pos.x + pos.w - text.w() - 3, pos.y + 2 );
     }
     else
-        AGG::GetICN( ICN::CSLMARKER, 0 ).Blit( pos.x + pos.w - 10, pos.y + 4, dstsf );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.w - 10, pos.y + 4 );
 }
 
 bool DwellingsBar::ActionBarSingleClick( const Point & cursor, DwellingItem & dwl, const Rect & pos )
 {
     if ( castle.isBuild( dwl.type ) ) {
-        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.GetDwellingLivedCount( dwl.type ), true ) );
+        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true ) );
     }
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         Dialog::Message( "", GetBuildConditionDescription( NEED_CASTLE ), Font::BIG, Dialog::OK );
@@ -782,7 +794,7 @@ bool DwellingsBar::ActionBarSingleClick( const Point & cursor, DwellingItem & dw
 
 bool DwellingsBar::ActionBarPressRight( const Point & cursor, DwellingItem & dwl, const Rect & pos )
 {
-    Dialog::ArmyInfo( Troop( dwl.mons, castle.GetDwellingLivedCount( dwl.type ) ), 0 );
+    Dialog::ArmyInfo( Troop( dwl.mons, castle.getMonstersInDwelling( dwl.type ) ), 0 );
 
     return true;
 }

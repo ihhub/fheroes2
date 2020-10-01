@@ -96,7 +96,7 @@ bool Game::Save( const std::string & fn )
     const Settings & conf = Settings::Get();
 
     // ask overwrite?
-    if ( System::IsFile( fn ) && ( ( !autosave && conf.ExtGameRewriteConfirm() ) || ( autosave && Settings::Get().ExtGameAutosaveConfirm() ) )
+    if ( System::IsFile( fn ) && !autosave && conf.ExtGameRewriteConfirm()
          && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
         return false;
     }
@@ -185,7 +185,9 @@ bool Game::Load( const std::string & fn )
     // check version: false
     if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION ) {
         std::ostringstream os;
-        os << "usupported save format: " << binver << std::endl << "game version: " << CURRENT_FORMAT_VERSION << std::endl << "last version: " << LAST_FORMAT_VERSION;
+        os << "usupported save format: " << binver << std::endl
+           << "game version: " << CURRENT_FORMAT_VERSION << std::endl
+           << "last supported version: " << LAST_FORMAT_VERSION;
         Dialog::Message( "Error", os.str(), Font::BIG, Dialog::OK );
         return false;
     }
@@ -195,8 +197,6 @@ bool Game::Load( const std::string & fn )
     u16 end_check = 0;
 
     fz >> World::Get() >> Settings::Get() >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get() >> end_check;
-
-    World::Get().PostFixLoad();
 
     if ( fz.fail() || ( end_check != SAV2ID2 && end_check != SAV2ID3 ) ) {
         DEBUG( DBG_GAME, DBG_WARN, "invalid load file: " << fn );

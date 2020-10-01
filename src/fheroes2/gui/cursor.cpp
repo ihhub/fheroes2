@@ -22,32 +22,22 @@
 
 #include "cursor.h"
 #include "agg.h"
-#include "settings.h"
-#include "sprite.h"
+
+// This is new Graphics engine. To change the code slowly we have to do some hacks here for now
+#include "screen.h"
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#define USE_SDL_CURSOR
+#endif
 
 Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
     , offset_y( 0 )
-#if defined( USE_SDL_CURSOR )
-    , _cursorSDL( NULL )
-    , _isVisibleCursor( false )
-#endif
 {}
 
 Cursor::~Cursor()
 {
-    _free();
-}
-
-void Cursor::_free()
-{
-#if defined( USE_SDL_CURSOR )
-    if ( _cursorSDL != NULL ) {
-        SDL_FreeCursor( _cursorSDL );
-        _cursorSDL = NULL;
-    }
-#endif
 }
 
 Cursor & Cursor::Get( void )
@@ -79,19 +69,9 @@ bool Cursor::SetThemes( int name, bool force )
         default:
             break;
         }
-        const Sprite spr = AGG::GetICN( icnID, 0xFF & name );
-        SetOffset( name, Point( spr.w() / 2, spr.h() / 2 ) );
-        Set( spr, true );
-#if defined( USE_SDL_CURSOR )
-        SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, -offset_x, -offset_y );
-        if ( tempCursor == NULL ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, "SDL_CreateColorCursor failure, name = " << name << ", reason: " << SDL_GetError() );
-        }
-        SDL_SetCursor( tempCursor );
-        SDL_ShowCursor( 1 );
-        _free();
-        std::swap( tempCursor, _cursorSDL );
-#endif
+        const fheroes2::Sprite spr = fheroes2::AGG::GetICN( icnID, 0xFF & name );
+        SetOffset( name, Point( spr.width() / 2, spr.height() / 2 ) );
+        fheroes2::cursor().update( spr, -offset_x, -offset_y );
 
         // immediately apply new offset, force
         const Point currentPos = LocalEvent::Get().GetMouseCursor();
@@ -107,11 +87,10 @@ void Cursor::Redraw( s32 x, s32 y )
 {
 #if !defined( USE_SDL_CURSOR )
     Cursor & cur = Cursor::Get();
+    cur.Move( x, y );
 
-    if ( cur.isVisible() ) {
-        cur.Move( x, y );
-
-        Display::Get().Flip();
+    if ( fheroes2::cursor().isVisible() ) {
+        fheroes2::Display::instance().render();
     }
 #endif
 }
@@ -119,12 +98,7 @@ void Cursor::Redraw( s32 x, s32 y )
 /* move cursor */
 void Cursor::Move( s32 x, s32 y )
 {
-#if defined( USE_SDL_CURSOR )
-    background.SetPos( Point( x, y ) );
-#else
-    if ( isVisible() )
-        SpriteMove::Move( x + offset_x, y + offset_y );
-#endif
+    fheroes2::cursor().setPosition( x + offset_x, y + offset_y );
 }
 
 /* set offset big cursor */
@@ -194,30 +168,17 @@ void Cursor::SetOffset( int name, const Point & defaultOffset )
 
 void Cursor::Show( void )
 {
-#if defined( USE_SDL_CURSOR )
-    _isVisibleCursor = true;
-#else
-    if ( !Settings::Get().ExtPocketHideCursor() )
-        SpriteMove::Show();
-#endif
+    fheroes2::cursor().show( true );
 }
 
 void Cursor::Hide( void )
 {
-#if defined( USE_SDL_CURSOR )
-    _isVisibleCursor = false;
-#else
-    SpriteMove::Hide();
-#endif
+    fheroes2::cursor().show( false );
 }
 
 bool Cursor::isVisible( void ) const
 {
-#if defined( USE_SDL_CURSOR )
-    return ( SDL_ShowCursor( -1 ) == 1 ) && _isVisibleCursor;
-#else
-    return SpriteMove::isVisible();
-#endif
+    return fheroes2::cursor().isVisible();
 }
 
 int Cursor::DistanceThemes( int theme, u32 dist )

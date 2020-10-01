@@ -32,7 +32,6 @@
 #include "battle_army.h"
 #include "bitmodes.h"
 #include "game_delays.h"
-#include "sprite.h"
 
 class Spell;
 class HeroBase;
@@ -84,7 +83,6 @@ namespace Battle
         u32 GetHitPointsLeft( void ) const;
         u32 GetAffectedDuration( u32 ) const;
         u32 GetSpeed( void ) const;
-        Surface GetContour( uint8_t colorId ) const;
 
         Unit * GetMirror();
         void SetMirror( Unit * );
@@ -134,11 +132,12 @@ namespace Battle
         u32 GetShots( void ) const;
         u32 ApplyDamage( Unit &, u32 );
         u32 ApplyDamage( u32 );
+        uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
         u32 CalculateMinDamage( const Unit & ) const;
         u32 CalculateMaxDamage( const Unit & ) const;
         u32 CalculateDamageUnit( const Unit &, float ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
-        bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL ) const;
+        bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
         void PostAttackAction( Unit & );
         void ResetBlind( void );
         void SpellModesAction( const Spell &, u32, const HeroBase * );

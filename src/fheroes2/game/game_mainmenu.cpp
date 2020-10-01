@@ -21,16 +21,17 @@
  ***************************************************************************/
 
 #include "agg.h"
-#include "button.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_resolution.h"
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
+#include "image.h"
 #include "mus.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
 
 #define NEWGAME_DEFAULT 1
 #define LOADGAME_DEFAULT 5
@@ -38,7 +39,7 @@
 #define CREDITS_DEFAULT 13
 #define QUIT_DEFAULT 17
 
-int Game::MainMenu( void )
+int Game::MainMenu( bool isFirstGameRun )
 {
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU );
@@ -52,50 +53,48 @@ int Game::MainMenu( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    // We have to register scalable ICNs in order to recieved a scaled version of it
-    AGG::RegisterScalableICN( ICN::HEROES );
-    AGG::RegisterScalableICN( ICN::BTNSHNGL );
-    AGG::RegisterScalableICN( ICN::SHNGANIM );
-
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    const Sprite & sprite = AGG::GetICN( ICN::HEROES, 0 );
-    sprite.Blit( Point( 0, 0 ) );
+    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+    if ( isFirstGameRun ) {
+        bool isResolutionChanged = Dialog::SelectResolution();
+        conf.Save( "fheroes2.cfg" );
+        if ( isResolutionChanged ) {
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+        }
+
+        Dialog::Message( "Please remember", "You can always change game resolution by clicking on the door on the left side of main menu. Enjoy the game!", Font::BIG,
+                         Dialog::OK );
+    }
 
     LocalEvent & le = LocalEvent::Get();
 
-    const Sprite & s1 = AGG::GetICN( ICN::BTNSHNGL, NEWGAME_DEFAULT );
-    const Sprite & s2 = AGG::GetICN( ICN::BTNSHNGL, LOADGAME_DEFAULT );
-    const Sprite & s3 = AGG::GetICN( ICN::BTNSHNGL, HIGHSCORES_DEFAULT );
-    const Sprite & s4 = AGG::GetICN( ICN::BTNSHNGL, CREDITS_DEFAULT );
-    const Sprite & s5 = AGG::GetICN( ICN::BTNSHNGL, QUIT_DEFAULT );
-
-    Button buttonNewGame( s1.x(), s1.y(), ICN::BTNSHNGL, NEWGAME_DEFAULT, NEWGAME_DEFAULT + 2 );
-    Button buttonLoadGame( s2.x(), s2.y(), ICN::BTNSHNGL, LOADGAME_DEFAULT, LOADGAME_DEFAULT + 2 );
-    Button buttonHighScores( s3.x(), s3.y(), ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
-    Button buttonCredits( s4.x(), s4.y(), ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
-    Button buttonQuit( s5.x(), s5.y(), ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
+    fheroes2::Button buttonNewGame( 0, 0, ICN::BTNSHNGL, NEWGAME_DEFAULT, NEWGAME_DEFAULT + 2 );
+    fheroes2::Button buttonLoadGame( 0, 0, ICN::BTNSHNGL, LOADGAME_DEFAULT, LOADGAME_DEFAULT + 2 );
+    fheroes2::Button buttonHighScores( 0, 0, ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
+    fheroes2::Button buttonCredits( 0, 0, ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
+    fheroes2::Button buttonQuit( 0, 0, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
     const Point lt_pt( 0, 0 );
 
-    const Sprite & lantern10 = AGG::GetICN( ICN::SHNGANIM, 0 );
-    lantern10.Blit( lantern10.x(), lantern10.y() );
+    const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
+    fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
 
-    const Sprite & lantern11 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
-    lantern11.Blit( lantern11.x(), lantern11.y() );
+    const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
+    fheroes2::Blit( lantern11, display, lantern11.x(), lantern11.y() );
 
-    buttonNewGame.Draw();
-    buttonLoadGame.Draw();
-    buttonHighScores.Draw();
-    buttonCredits.Draw();
-    buttonQuit.Draw();
+    buttonNewGame.draw();
+    buttonLoadGame.draw();
+    buttonHighScores.draw();
+    buttonCredits.draw();
+    buttonQuit.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
-    const double scaleX = static_cast<double>( display.GetSize().w ) / Display::DEFAULT_WIDTH;
-    const double scaleY = static_cast<double>( display.GetSize().h ) / Display::DEFAULT_HEIGHT;
+    const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
+    const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
     const Rect resolutionArea( 63 * scaleX, 202 * scaleY, 90 * scaleX, 160 * scaleY );
 
     u32 lantern_frame = 0;
@@ -103,7 +102,7 @@ int Game::MainMenu( void )
     struct ButtonInfo
     {
         u32 frame;
-        Button & button;
+        fheroes2::Button & button;
         bool isOver;
         bool wasOver;
     } buttons[] = {{NEWGAME_DEFAULT, buttonNewGame, false, false},
@@ -114,8 +113,8 @@ int Game::MainMenu( void )
 
     for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); i++ ) {
         cursor.Hide();
-        const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
-        sprite.Blit( sprite.x(), sprite.y() );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
+        fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
         cursor.Show();
     }
 
@@ -123,8 +122,8 @@ int Game::MainMenu( void )
     while ( 1 ) {
         if ( !le.HandleEvents( true, true ) ) {
             if ( Interface::Basic::EventExit() == QUITGAME ) {
-                if ( conf.ExtGameUseFade() )
-                    display.Fade();
+                // if ( conf.ExtGameUseFade() )
+                //    display.Fade();
                 break;
             }
         }
@@ -134,12 +133,14 @@ int Game::MainMenu( void )
         for ( u32 i = 0; i < ARRAY_COUNT( buttons ); i++ ) {
             buttons[i].wasOver = buttons[i].isOver;
 
-            if ( le.MousePressLeft( buttons[i].button ) )
-                buttons[i].button.PressDraw();
-            else
-                buttons[i].button.ReleaseDraw();
+            if ( le.MousePressLeft( buttons[i].button.area() ) ) {
+                buttons[i].button.drawOnPress();
+            }
+            else {
+                buttons[i].button.drawOnRelease();
+            }
 
-            buttons[i].isOver = le.MouseCursor( buttons[i].button );
+            buttons[i].isOver = le.MouseCursor( buttons[i].button.area() );
 
             if ( buttons[i].isOver != buttons[i].wasOver ) {
                 u32 frame = buttons[i].frame;
@@ -151,37 +152,38 @@ int Game::MainMenu( void )
                     cursor.Hide();
                     redrawScreen = true;
                 }
-                const Sprite & sprite = AGG::GetICN( ICN::BTNSHNGL, frame );
-                sprite.Blit( sprite.x(), sprite.y() );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, frame );
+                fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
             }
         }
 
         if ( redrawScreen ) {
             cursor.Show();
-            display.Flip();
+            display.render();
         }
 
-        if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame ) )
+        if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame.area() ) )
             return NEWGAME;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame ) ) {
+        else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame.area() ) ) {
             if ( ListFiles::IsEmpty( Settings::GetSaveDir(), ".sav", false ) )
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             else
                 return LOADGAME;
         }
-        else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores ) )
+        else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) )
             return HIGHSCORES;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits ) )
+        else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) )
             return CREDITS;
-        else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit ) ) {
+        else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == QUITGAME ) {
-                if ( conf.ExtGameUseFade() )
-                    display.Fade();
+                // if ( conf.ExtGameUseFade() )
+                //     display.Fade();
                 return QUITGAME;
             }
         }
         else if ( le.MouseClickLeft( resolutionArea ) ) {
             if ( Dialog::SelectResolution() ) {
+                conf.Save( "fheroes2.cfg" );
                 // force interface to reset area and positions
                 Interface::Basic::Get().Reset();
                 return MAINMENU;
@@ -189,23 +191,23 @@ int Game::MainMenu( void )
         }
 
         // right info
-        if ( le.MousePressRight( buttonQuit ) )
+        if ( le.MousePressRight( buttonQuit.area() ) )
             Dialog::Message( _( "Quit" ), _( "Quit Heroes of Might and Magic and return to the operating system." ), Font::BIG );
-        else if ( le.MousePressRight( buttonLoadGame ) )
+        else if ( le.MousePressRight( buttonLoadGame.area() ) )
             Dialog::Message( _( "Load Game" ), _( "Load a previously saved game." ), Font::BIG );
-        else if ( le.MousePressRight( buttonCredits ) )
+        else if ( le.MousePressRight( buttonCredits.area() ) )
             Dialog::Message( _( "Credits" ), _( "View the credits screen." ), Font::BIG );
-        else if ( le.MousePressRight( buttonHighScores ) )
+        else if ( le.MousePressRight( buttonHighScores.area() ) )
             Dialog::Message( _( "High Scores" ), _( "View the high score screen." ), Font::BIG );
-        else if ( le.MousePressRight( buttonNewGame ) )
+        else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
 
         if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
             cursor.Hide();
-            const Sprite & lantern12 = AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame++ ) );
-            lantern12.Blit( lantern12.x(), lantern12.y() );
+            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame++ ) );
+            fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
     }
 

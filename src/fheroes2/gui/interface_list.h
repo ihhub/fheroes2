@@ -25,13 +25,9 @@
 
 #include <algorithm>
 
-#include "button.h"
 #include "cursor.h"
-#include "gamedefs.h"
-#include "icn.h"
-#include "settings.h"
 #include "splitter.h"
-#include "sprite.h"
+#include "ui_button.h"
 
 namespace Interface
 {
@@ -46,8 +42,6 @@ namespace Interface
     class ListBox : public ListBasic
     {
     public:
-        typedef typename std::vector<Item>::iterator ItemsIterator;
-
         ListBox( const Point & pt = Point() )
             : content( NULL )
             , _currentId( -1 )
@@ -91,22 +85,22 @@ namespace Interface
             ptRedraw = tl;
         }
 
-        void SetScrollButtonUp( int icn, u32 index1, u32 index2, const Point & pos )
+        void SetScrollButtonUp( int icn, u32 index1, u32 index2, const fheroes2::Point & pos )
         {
-            buttonPgUp.SetSprite( icn, index1, index2 );
-            buttonPgUp.SetPos( pos );
+            buttonPgUp.setICNInfo( icn, index1, index2 );
+            buttonPgUp.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollButtonDn( int icn, u32 index1, u32 index2, const Point & pos )
+        void SetScrollButtonDn( int icn, u32 index1, u32 index2, const fheroes2::Point & pos )
         {
-            buttonPgDn.SetSprite( icn, index1, index2 );
-            buttonPgDn.SetPos( pos );
+            buttonPgDn.setICNInfo( icn, index1, index2 );
+            buttonPgDn.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollSplitter( const Sprite & sp, const Rect & area )
+        void SetScrollSplitter( const fheroes2::Image & image, const Rect & area )
         {
             splitter.SetArea( area );
-            splitter.SetSprite( sp );
+            splitter.SetSprite( image );
         }
 
         Splitter & GetSplitter( void )
@@ -168,8 +162,8 @@ namespace Interface
 
             RedrawBackground( ptRedraw );
 
-            buttonPgUp.Draw();
-            buttonPgDn.Draw();
+            buttonPgUp.draw();
+            buttonPgDn.draw();
             splitter.RedrawCursor();
 
             Verify(); // reset values if they are wrong
@@ -230,7 +224,7 @@ namespace Interface
 
             if ( _currentId >= 0 && ( _topId > _currentId || _topId + maxItems <= _currentId ) ) { // out of view
                 if ( _currentId + maxItems < _size() ) {
-                    _topId = ( _currentId / maxItems ) * maxItems + ( _currentId % maxItems ) / 2;
+                    _topId = ( _currentId / maxItems ) * maxItems;
                 }
                 else if ( maxItems < _size() ) {
                     _topId = _size() - maxItems;
@@ -278,8 +272,8 @@ namespace Interface
             LocalEvent & le = LocalEvent::Get();
             Cursor & cursor = Cursor::Get();
 
-            le.MousePressLeft( buttonPgUp ) ? buttonPgUp.PressDraw() : buttonPgUp.ReleaseDraw();
-            le.MousePressLeft( buttonPgDn ) ? buttonPgDn.PressDraw() : buttonPgDn.ReleaseDraw();
+            le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
+            le.MousePressLeft( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
 
             if ( !IsValid() )
                 return false;
@@ -319,13 +313,13 @@ namespace Interface
                 ActionCurrentDn();
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgUp ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && ( _topId > 0 ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && ( _topId > 0 ) ) {
                 cursor.Hide();
                 --_topId;
                 splitter.Backward();
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) )
+            else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) )
                       && ( _topId + maxItems < _size() ) ) {
                 cursor.Hide();
                 ++_topId;
@@ -380,8 +374,8 @@ namespace Interface
     protected:
         Rect rtAreaItems;
 
-        Button buttonPgUp;
-        Button buttonPgDn;
+        fheroes2::Button buttonPgUp;
+        fheroes2::Button buttonPgDn;
 
         Splitter splitter;
 

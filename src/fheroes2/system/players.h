@@ -179,40 +179,4 @@ public:
 StreamBase & operator<<( StreamBase &, const Players & );
 StreamBase & operator>>( StreamBase &, Players & );
 
-namespace Interface
-{
-    struct PlayerInfo
-    {
-        PlayerInfo()
-            : player( NULL )
-        {}
-
-        bool operator==( const Player * ) const;
-
-        Player * player;
-        Rect rect1; // opponent
-        Rect rect2; // class
-        Rect rect3; // change
-    };
-
-    struct PlayersInfo : std::vector<PlayerInfo>
-    {
-        PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
-
-        void UpdateInfo( Players &, const Point & opponents, const Point & classes );
-
-        Player * GetFromOpponentClick( const Point & pt );
-        Player * GetFromOpponentNameClick( const Point & pt );
-        Player * GetFromOpponentChangeClick( const Point & pt );
-        Player * GetFromClassClick( const Point & pt );
-
-        void RedrawInfo( bool show_play_info = false ) const;
-        bool QueueEventProcessing( void );
-
-        bool show_name;
-        bool show_race;
-        bool show_swap;
-    };
-}
-
 #endif

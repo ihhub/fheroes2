@@ -23,25 +23,25 @@
 #include <cstdlib>
 #include <ctime>
 #include <iterator>
+#include <random>
 
 #include "rand.h"
 #include "system.h"
 
-void Rand::Init( void )
+namespace
 {
-    std::srand( (u32)std::time( 0 ) );
+    std::random_device s_rd;
+    std::mt19937 s_gen( s_rd() );
 }
 
-u32 Rand::Get( u32 min, u32 max )
+uint32_t Rand::Get( uint32_t from, uint32_t to )
 {
-    if ( max ) {
-        if ( min > max )
-            std::swap( min, max );
+    if ( to == 0 || from > to )
+        std::swap( from, to );
 
-        return min + Get( max - min );
-    }
+    std::uniform_int_distribution<> distrib( from, to );
 
-    return static_cast<u32>( ( min + 1 ) * ( std::rand() / ( RAND_MAX + 1.0 ) ) );
+    return static_cast<uint32_t>( distrib( s_gen ) );
 }
 
 Rand::Queue::Queue( u32 size )

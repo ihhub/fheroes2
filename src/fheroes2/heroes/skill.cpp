@@ -201,7 +201,7 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
 
     case KNOWLEDGE:
         res = _(
-            "Your knowledge determines how many spell points your hero may have. Under normal cirumstances, a hero is limited to 10 spell points per level of knowledge." );
+            "Your knowledge determines how many spell points your hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
         if ( hero )
             hero->GetKnowledge( &ext );
         break;
@@ -452,90 +452,117 @@ std::string Skill::Secondary::GetDescription( void ) const
             break;
         }
         break;
-    case ARCHERY:
-        str = _n( "Increases the damage done by range attacking creatures by %{count} percent.",
-                  "Increases the damage done by range attacking creatures by %{count} percent.", count );
+    case ARCHERY: {
+        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases the damage done by range attacking creatures by %{count} percent." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
         break;
-    case LOGISTICS:
-        str = _n( "Increases your hero's movement points by %{count} percent.", "Increases your hero's movement points by %{count} percent.", count );
+    }
+    case LOGISTICS: {
+        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's movement points by %{count} percent." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
         break;
-    case SCOUTING:
-        str = _n( "Increases your hero's viewable area by %{count} square.", "Increases your hero's viewable area by %{count} squares.", count );
+    }
+    case SCOUTING: {
+        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's viewable area by %{count} square." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
         break;
+    }
     case DIPLOMACY:
-        str = _( "Allows you to negotiate with monsters who are weaker than your group." );
+        str = std::string( GetName() ) + _( " allows you to negotiate with monsters who are weaker than your group." );
         str.append( " " );
-        str.append( _n( "Approximately %{count} percent of the creatures may offer to join you.",
-                        "Approximately %{count} percent of the creatures may offer to join you.", count ) );
-        break;
-    case NAVIGATION:
-        str = _n( "Increases your hero's movement points over water by %{count} percent.", "Increases your hero's movement points over water by %{count} percent.",
-                  count );
-        break;
-    case LEADERSHIP:
-        str = _n( "Increases your hero's troops morale by %{count}.", "Increases your hero's troops morale by %{count}.", count );
-        break;
-    case WISDOM: {
         switch ( Level() ) {
         case Level::BASIC:
-            str = _( "Allows your hero to learn third level spells." );
+        case Level::ADVANCED: {
+            str.append( _n( "Approximately %{count} percent of the creatures may offer to join you.",
+                            "Approximately %{count} percent of the creatures may offer to join you.", count ) );
+        } break;
+        case Level::EXPERT:
+            str.append( _( "All of the creatures may offer to join you." ) );
+            break;
+        default:
+            break;
+        }
+        break;
+    case NAVIGATION: {
+        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's movement points over water by %{count} percent." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        break;
+    }
+    case LEADERSHIP: {
+        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's troops morale by %{count}." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        break;
+    }
+    case WISDOM: {
+        str = GetName();
+        switch ( Level() ) {
+        case Level::BASIC:
+            str += _( " allows your hero to learn third level spells." );
             break;
         case Level::ADVANCED:
-            str = _( "Allows your hero to learn fourth level spells." );
+            str += _( " allows your hero to learn fourth level spells." );
             break;
         case Level::EXPERT:
-            str = _( "Allows your hero to learn fifth level spells." );
+            str += _( " allows your hero to learn fifth level spells." );
             break;
         default:
             break;
         }
         break;
     }
-    case MYSTICISM:
-        str = _n( "Regenerates %{count} of your hero's spell point per day.", "Regenerates %{count} of your hero's spell points per day.", count );
+    case MYSTICISM: {
+        const std::string tmpDescription( std::string( GetName() ) + std::string( " regenerates %{count} of your hero's spell point per day." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
         break;
-    case LUCK:
-        str = _n( "Increases your hero's luck by %{count}.", "Increases your hero's luck by %{count}.", count );
+    }
+    case LUCK: {
+        const std::string tmpDescription( std::string( GetName() ) + std::string( " increases your hero's luck by %{count}." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
         break;
+    }
     case BALLISTICS:
+        str = GetName();
         switch ( Level() ) {
         case Level::BASIC:
-            str = _( "Gives your hero's catapult shots a greater chance to hit and do damage to castle walls." );
+            str += _( " gives your hero's catapult shots a greater chance to hit and do damage to castle walls." );
             break;
         case Level::ADVANCED:
-            str = _( "Gives your hero's catapult an extra shot, and each shot has a greater chance to hit and do damage to castle walls." );
+            str += _( " gives your hero's catapult an extra shot, and each shot has a greater chance to hit and do damage to castle walls." );
             break;
         case Level::EXPERT:
-            str = _( "Gives your hero's catapult an extra shot, and each shot automatically destroys any wall, except a fortified wall in a Knight town." );
+            str += _( " gives your hero's catapult an extra shot, and each shot automatically destroys any wall, except a fortified wall in a Knight town." );
             break;
         default:
             break;
         }
         break;
     case EAGLEEYE:
+        str = GetName();
         switch ( Level() ) {
         case Level::BASIC:
-            str = _n( "Gives your hero a %{count} percent chance to learn any given 1st or 2nd level enemy spell used against him in a combat.",
-                      "Gives your hero a %{count} percent chance to learn any given 1st or 2nd level enemy spell used against him in a combat.", count );
+            str += _n( " gives your hero a %{count} percent chance to learn any given 1st or 2nd level enemy spell used against him in a combat.",
+                       " gives your hero a %{count} percent chance to learn any given 1st or 2nd level enemy spell used against him in a combat.", count );
             break;
         case Level::ADVANCED:
-            str = _n( "Gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) used against him in combat.",
-                      "Gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) used against him in combat.", count );
+            str += _n( " gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) used against him in combat.",
+                       " gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) used against him in combat.", count );
             break;
         case Level::EXPERT:
-            str = _n( "Gives your hero a %{count} percent chance to learn any given 4th level spell (or below) used against him in combat.",
-                      "Gives your hero a %{count} percent chance to learn any given 4th level spell (or below) used against him in combat.", count );
+            str += _n( " gives your hero a %{count} percent chance to learn any given 4th level spell (or below) used against him in combat.",
+                       " gives your hero a %{count} percent chance to learn any given 4th level spell (or below) used against him in combat.", count );
             break;
         default:
             break;
         }
         break;
-    case NECROMANCY:
-        str = _n( "Allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons.",
-                  "Allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons.", count );
+    case NECROMANCY: {
+        const std::string tmpDescription( std::string( GetName() )
+                                          + std::string( " allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
         break;
+    }
     case ESTATES:
-        str = _n( "Your hero produce %{count} gold pieces per turn as tax revenue from estates.",
+        str = _n( "Your hero produces %{count} gold pieces per turn as tax revenue from estates.",
                   "Your hero produces %{count} gold pieces per turn as tax revenue from estates.", count );
         break;
     default:
@@ -801,255 +828,6 @@ StreamBase & Skill::operator>>( StreamBase & msg, Primary & skill )
     return msg >> skill.attack >> skill.defense >> skill.knowledge >> skill.power;
 }
 
-Surface GetBarBackgroundSprite( void )
-{
-    const Rect rt( 26, 21, 32, 32 );
-    Surface res( Size( rt.w, rt.h ) + Size( 2, 2 ), true );
-    res.DrawBorder( RGBA( 0xD0, 0xC0, 0x48 ) );
-    AGG::GetICN( ICN::HSICONS, 0 ).Blit( rt, 1, 1, res );
-    return res;
-}
-
-PrimarySkillsBar::PrimarySkillsBar( const Heroes * hr, bool mini )
-    : hero( hr )
-    , use_mini_sprite( mini )
-    , toff( 0, 0 )
-{
-    content.push_back( Skill::Primary::ATTACK );
-    content.push_back( Skill::Primary::DEFENSE );
-    content.push_back( Skill::Primary::POWER );
-    content.push_back( Skill::Primary::KNOWLEDGE );
-
-    if ( use_mini_sprite ) {
-        backsf = GetBarBackgroundSprite();
-        SetItemSize( backsf.w(), backsf.h() );
-    }
-    else {
-        const Sprite & sprite = AGG::GetICN( ICN::PRIMSKIL, 0 );
-        SetItemSize( sprite.w(), sprite.h() );
-    }
-
-    SetContent( content );
-}
-
-void PrimarySkillsBar::SetTextOff( s32 ox, s32 oy )
-{
-    toff = Point( ox, oy );
-}
-
-void PrimarySkillsBar::RedrawBackground( const Rect & pos, Surface & dstsf )
-{
-    if ( use_mini_sprite )
-        backsf.Blit( pos, dstsf );
-}
-
-void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, Surface & dstsf )
-{
-    if ( Skill::Primary::UNKNOWN != skill ) {
-        if ( use_mini_sprite ) {
-            const Sprite & backSprite = AGG::GetICN( ICN::SWAPWIN, 0 );
-            const int ww = 32;
-            Text text( "", Font::SMALL );
-            const Point dstpt( pos.x + ( pos.w - ww ) / 2, pos.y + ( pos.h - ww ) / 2 );
-
-            switch ( skill ) {
-            case Skill::Primary::ATTACK:
-                backSprite.Blit( Rect( 217, 52, ww, ww ), dstpt, dstsf );
-                if ( hero )
-                    text.Set( GetString( hero->GetAttack() ) );
-                break;
-
-            case Skill::Primary::DEFENSE:
-                backSprite.Blit( Rect( 217, 85, ww, ww ), dstpt, dstsf );
-                if ( hero )
-                    text.Set( GetString( hero->GetDefense() ) );
-                break;
-
-            case Skill::Primary::POWER:
-                backSprite.Blit( Rect( 217, 118, ww, ww ), dstpt, dstsf );
-                if ( hero )
-                    text.Set( GetString( hero->GetPower() ) );
-                break;
-
-            case Skill::Primary::KNOWLEDGE:
-                backSprite.Blit( Rect( 217, 151, ww, ww ), dstpt, dstsf );
-                if ( hero )
-                    text.Set( GetString( hero->GetKnowledge() ) );
-                break;
-
-            default:
-                break;
-            }
-
-            if ( hero )
-                text.Blit( pos.x + ( pos.w + toff.x - text.w() ) / 2, pos.y + pos.h + toff.y, dstsf );
-        }
-        else {
-            const Sprite & sprite = AGG::GetICN( ICN::PRIMSKIL, skill - 1 );
-            sprite.Blit( pos.x + ( pos.w - sprite.w() ) / 2, pos.y + ( pos.h - sprite.h() ) / 2, dstsf );
-
-            Text text( Skill::Primary::String( skill ), Font::SMALL );
-            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
-
-            if ( hero ) {
-                switch ( skill ) {
-                case Skill::Primary::ATTACK:
-                    text.Set( GetString( hero->GetAttack() ), Font::BIG );
-                    break;
-
-                case Skill::Primary::DEFENSE:
-                    text.Set( GetString( hero->GetDefense() ), Font::BIG );
-                    break;
-
-                case Skill::Primary::POWER:
-                    text.Set( GetString( hero->GetPower() ), Font::BIG );
-                    break;
-
-                case Skill::Primary::KNOWLEDGE:
-                    text.Set( GetString( hero->GetKnowledge() ), Font::BIG );
-                    break;
-
-                default:
-                    break;
-                }
-
-                text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + pos.h - text.h() - 3, dstsf );
-            }
-        }
-    }
-}
-
-bool PrimarySkillsBar::ActionBarSingleClick( const Point & cursor, int & skill, const Rect & pos )
-{
-    if ( Skill::Primary::UNKNOWN != skill ) {
-        Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, hero ), Font::BIG, Dialog::OK );
-        return true;
-    }
-
-    return false;
-}
-
-bool PrimarySkillsBar::ActionBarPressRight( const Point & cursor, int & skill, const Rect & pos )
-{
-    if ( Skill::Primary::UNKNOWN != skill ) {
-        Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, hero ), Font::BIG );
-        return true;
-    }
-
-    return false;
-}
-
-bool PrimarySkillsBar::ActionBarCursor( const Point & cursor, int & skill, const Rect & pos )
-{
-    if ( Skill::Primary::UNKNOWN != skill ) {
-        msg = _( "View %{skill} Info" );
-        StringReplace( msg, "%{skill}", Skill::Primary::String( skill ) );
-    }
-
-    return false;
-}
-
-bool PrimarySkillsBar::QueueEventProcessing( std::string * str )
-{
-    msg.clear();
-    bool res = Interface::ItemsBar<int>::QueueEventProcessing();
-    if ( str )
-        *str = msg;
-    return res;
-}
-
-SecondarySkillsBar::SecondarySkillsBar( bool mini /* true */, bool change /* false */ )
-    : use_mini_sprite( mini )
-    , can_change( change )
-{
-    if ( use_mini_sprite ) {
-        backsf = GetBarBackgroundSprite();
-        SetItemSize( backsf.w(), backsf.h() );
-    }
-    else {
-        const Sprite & sprite = AGG::GetICN( ICN::SECSKILL, 0 );
-        SetItemSize( sprite.w(), sprite.h() );
-    }
-}
-
-void SecondarySkillsBar::RedrawBackground( const Rect & pos, Surface & dstsf )
-{
-    if ( use_mini_sprite )
-        backsf.Blit( pos, dstsf );
-    else
-        AGG::GetICN( ICN::SECSKILL, 0 ).Blit( pos, dstsf );
-}
-
-void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos, Surface & dstsf )
-{
-    if ( skill.isValid() ) {
-        const Sprite & sprite = use_mini_sprite ? AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ) : AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
-        sprite.Blit( pos.x + ( pos.w - sprite.w() ) / 2, pos.y + ( pos.h - sprite.h() ) / 2, dstsf );
-
-        if ( use_mini_sprite ) {
-            Text text( GetString( skill.Level() ), Font::SMALL );
-            text.Blit( pos.x + ( pos.w - text.w() ) - 3, pos.y + pos.h - 12, dstsf );
-        }
-        else {
-            Text text( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
-            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
-
-            text.Set( Skill::Level::String( skill.Level() ) );
-            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 50, dstsf );
-        }
-    }
-}
-
-bool SecondarySkillsBar::ActionBarSingleClick( const Point & cursor, Skill::Secondary & skill, const Rect & pos )
-{
-    if ( skill.isValid() ) {
-        Dialog::SecondarySkillInfo( skill, true );
-        return true;
-    }
-    else if ( can_change ) {
-        Skill::Secondary alt = Dialog::SelectSecondarySkill();
-
-        if ( alt.isValid() ) {
-            skill = alt;
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool SecondarySkillsBar::ActionBarPressRight( const Point & cursor, Skill::Secondary & skill, const Rect & pos )
-{
-    if ( skill.isValid() ) {
-        if ( can_change )
-            skill.Reset();
-        else
-            Dialog::SecondarySkillInfo( skill, false );
-        return true;
-    }
-
-    return false;
-}
-
-bool SecondarySkillsBar::ActionBarCursor( const Point & cursor, Skill::Secondary & skill, const Rect & pos )
-{
-    if ( skill.isValid() ) {
-        msg = _( "View %{skill} Info" );
-        StringReplace( msg, "%{skill}", skill.GetName() );
-    }
-
-    return false;
-}
-
-bool SecondarySkillsBar::QueueEventProcessing( std::string * str )
-{
-    msg.clear();
-    bool res = Interface::ItemsBar<Skill::Secondary>::QueueEventProcessing();
-    if ( str )
-        *str = msg;
-    return res;
-}
-
 StreamBase & Skill::operator>>( StreamBase & sb, Secondary & st )
 {
     return sb >> st.first >> st.second;
@@ -1066,9 +844,7 @@ StreamBase & Skill::operator>>( StreamBase & sb, SecSkills & ss )
     std::vector<Secondary> & v = ss;
     sb >> v;
 
-    if ( FORMAT_VERSION_3255 > Game::GetLoadVersion() ) {
-        if ( v.size() > HEROESMAXSKILL )
-            v.resize( HEROESMAXSKILL );
-    }
+    if ( v.size() > HEROESMAXSKILL )
+        v.resize( HEROESMAXSKILL );
     return sb;
 }

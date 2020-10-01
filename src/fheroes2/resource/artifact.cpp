@@ -545,6 +545,27 @@ int Artifact::Level( void ) const
     return ART_NONE;
 }
 
+// Convert artifact flags into simple usable level value
+int Artifact::getArtifactValue() const
+{
+    const int level = Level();
+
+    if ( level & ART_LEVEL1 ) {
+        return 1;
+    }
+    else if ( level & ART_LEVEL2 ) {
+        return 2;
+    }
+    else if ( level & ART_LEVEL3 ) {
+        return 3;
+    }
+    else if ( level & ART_ULTIMATE ) {
+        return 5;
+    }
+
+    return 0;
+}
+
 /* return index sprite objnarti.icn */
 u32 Artifact::IndexSprite( void ) const
 {
@@ -847,61 +868,67 @@ ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change 
     , can_change( change )
 {
     if ( use_mini_sprite ) {
-        const Sprite & sprite = AGG::GetICN( ICN::HSICONS, 0 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 0 );
         const Rect rt( 26, 21, 32, 32 );
 
-        backsf.Set( rt.w + 2, rt.h + 2, true );
-        backsf.DrawBorder( RGBA( 0xD0, 0xC0, 0x48 ) );
-        sprite.Blit( rt, 1, 1, backsf );
+        backsf.resize( rt.w + 2, rt.h + 2 );
+        backsf.reset();
 
-        SetItemSize( backsf.w(), backsf.h() );
-        spcursor.Set( backsf.w(), backsf.h(), true );
-        spcursor.DrawBorder( RGBA( 0xb0, 0xb0, 0xb0 ) );
+        fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
+        fheroes2::Blit( sprite, rt.x, rt.y, backsf, 1, 1, rt.w, rt.h );
+
+        SetItemSize( backsf.width(), backsf.height() );
+
+        spcursor.resize( backsf.width(), backsf.height() );
+        spcursor.reset();
+        fheroes2::DrawBorder( spcursor, 214 );
     }
     else {
-        const Sprite & sprite = AGG::GetICN( ICN::ARTIFACT, 0 );
-        SetItemSize( sprite.w(), sprite.h() );
-        spcursor = AGG::GetICN( ICN::NGEXTRA, 62 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
+        SetItemSize( sprite.width(), sprite.height() );
+        spcursor = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
     }
 }
 
 void ArtifactsBar::ResetSelected( void )
 {
     Cursor::Get().Hide();
-    spcursor.Hide();
+    spcursor.hide();
     Interface::ItemsActionBar<Artifact>::ResetSelected();
 }
 
-void ArtifactsBar::Redraw( Surface & dstsf )
+void ArtifactsBar::Redraw( fheroes2::Image & dstsf )
 {
     Cursor::Get().Hide();
-    spcursor.Hide();
+    spcursor.hide();
     Interface::ItemsActionBar<Artifact>::Redraw( dstsf );
 }
 
-void ArtifactsBar::RedrawBackground( const Rect & pos, Surface & dstsf )
+void ArtifactsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
 {
     if ( use_mini_sprite )
-        backsf.Blit( pos, dstsf );
+        fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
     else
-        AGG::GetICN( ICN::ARTIFACT, 0 ).Blit( pos, dstsf );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 ), dstsf, pos.x, pos.y );
 }
 
-void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, Surface & dstsf )
+void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
     if ( art.isValid() ) {
         Cursor::Get().Hide();
 
         if ( use_mini_sprite )
-            AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ).Blit( pos.x + 1, pos.y + 1, dstsf );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), dstsf, pos.x + 1, pos.y + 1 );
         else
-            AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() ).Blit( pos, dstsf );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() ), dstsf, pos.x, pos.y );
 
         if ( selected ) {
             if ( use_mini_sprite )
-                spcursor.Move( pos.x, pos.y );
+                spcursor.setPosition( pos.x, pos.y );
             else
-                spcursor.Move( pos.x - 3, pos.y - 3 );
+                spcursor.setPosition( pos.x - 3, pos.y - 3 );
+
+            spcursor.show();
         }
     }
 }
@@ -916,7 +943,7 @@ bool ArtifactsBar::ActionBarSingleClick( const Point & cursor, Artifact & art, c
     else if ( art.isValid() ) {
         if ( !read_only ) {
             Cursor::Get().Hide();
-            spcursor.Hide();
+            spcursor.hide();
         }
     }
     else {
@@ -967,8 +994,9 @@ bool ArtifactsBar::ActionBarDoubleClick( const Point & cursor, Artifact & art, c
                 const_cast<Heroes *>( hero )->TranscribeScroll( art );
         }
     }
-    else
+    else if ( art.isValid() ) {
         Dialog::ArtifactInfo( art.GetName(), "", art );
+    }
 
     ResetSelected();
 

@@ -130,7 +130,7 @@ public:
         UNKNOWN
     };
 
-    static Surface GetPortrait( int heroid, int type );
+    static fheroes2::Image GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
     enum flags_t
@@ -139,12 +139,12 @@ public:
         // UNUSED	= 0x00000002,
         SPELLCASTED = 0x00000004,
         ENABLEMOVE = 0x00000008,
-        // UNUSED	= 0x00000010,
+        SAVE_SP_POINTS = 0x00000010,
         // UNUSED	= 0x00000020,
         // UNUSED	= 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
-        SAVEPOINTS = 0x00000200,
+        SAVE_MP_POINTS = 0x00000200,
         SLEEPER = 0x00000400,
         GUARDIAN = 0x00000800,
         NOTDEFAULTS = 0x00001000,
@@ -262,7 +262,7 @@ public:
 
     bool Move( bool fast = false );
     void Move2Dest( const s32 & destination );
-    bool isEnableMove( void ) const;
+    bool isMoveEnabled( void ) const;
     bool CanMove( void ) const;
     void SetMove( bool );
     bool isAction( void ) const;
@@ -272,8 +272,8 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
-    void Redraw( Surface &, s32, s32, bool ) const;
-    void PortraitRedraw( s32, s32, int type, Surface & ) const;
+    void Redraw( fheroes2::Image &, s32, s32, bool ) const;
+    void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
     int GetSpriteIndex( void ) const;
     void FadeOut( void ) const;
     void FadeIn( void ) const;
@@ -291,7 +291,7 @@ public:
     bool AllowBattle( bool attacker ) const;
 
     std::string String( void ) const;
-    Surface GetPortrait( int type ) const;
+    fheroes2::Image GetPortrait( int type ) const;
 
     static int GetLevelFromExperience( u32 );
     static u32 GetExperienceFromLevel( int );

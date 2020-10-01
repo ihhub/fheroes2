@@ -60,6 +60,9 @@ std::string StringTrim( std::string str )
     if ( iter != str.begin() )
         str.erase( str.begin(), iter );
 
+    if ( str.empty() )
+        return str;
+
     // right
     iter = str.end() - 1;
     while ( iter != str.begin() && std::isspace( *iter ) )

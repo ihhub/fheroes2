@@ -27,61 +27,58 @@
 
 u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
     const Rect rt( dst.x - 32, dst.y - 32, 86, 86 );
 
-    const Sprite & sp_info = AGG::GetICN( ICN::CMSECO, 5 );
-    const Sprite & sp_bleft = AGG::GetICN( ICN::CMSECO, 10 );
-    const Sprite & sp_left = AGG::GetICN( ICN::CMSECO, 11 );
-    const Sprite & sp_tleft = AGG::GetICN( ICN::CMSECO, 12 );
-    const Sprite & sp_tright = AGG::GetICN( ICN::CMSECO, 7 );
-    const Sprite & sp_right = AGG::GetICN( ICN::CMSECO, 8 );
-    const Sprite & sp_bright = AGG::GetICN( ICN::CMSECO, 9 );
+    const fheroes2::Sprite & sp_info = fheroes2::AGG::GetICN( ICN::CMSECO, 5 );
+    const fheroes2::Sprite & sp_bleft = fheroes2::AGG::GetICN( ICN::CMSECO, 10 );
+    const fheroes2::Sprite & sp_left = fheroes2::AGG::GetICN( ICN::CMSECO, 11 );
+    const fheroes2::Sprite & sp_tleft = fheroes2::AGG::GetICN( ICN::CMSECO, 12 );
+    const fheroes2::Sprite & sp_tright = fheroes2::AGG::GetICN( ICN::CMSECO, 7 );
+    const fheroes2::Sprite & sp_right = fheroes2::AGG::GetICN( ICN::CMSECO, 8 );
+    const fheroes2::Sprite & sp_bright = fheroes2::AGG::GetICN( ICN::CMSECO, 9 );
 
-    Surface shadow( rt, false );
-    shadow.Fill( ColorBlack );
+    fheroes2::Image shadow( rt.w, rt.h );
+    shadow.fill( 0 );
 
-    SpriteBack back( rt );
+    fheroes2::ImageRestorer back( display, rt.x, rt.y, rt.w, rt.h );
 
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
     // blit alpha
-    shadow.SetAlphaMod( 120, false );
-    shadow.Blit( rt.x, rt.y, display );
+    fheroes2::AlphaBlit( shadow, display, rt.x, rt.y, 120 );
 
-    const Rect rt_info( rt.x + ( rt.w - sp_info.w() ) / 2, rt.y + ( rt.h - sp_info.h() ) / 2, sp_info.w(), sp_info.h() );
-    sp_info.Blit( rt_info.x, rt_info.y );
+    const Rect rt_info( rt.x + ( rt.w - sp_info.width() ) / 2, rt.y + ( rt.h - sp_info.height() ) / 2, sp_info.width(), sp_info.height() );
+    fheroes2::Blit( sp_info, display, rt_info.x, rt_info.y );
 
-    const Rect rt_tright( rt.x + 1, rt.y + rt.h - 1 - sp_tright.h(), sp_tright.w(), sp_tright.h() );
+    const Rect rt_tright( rt.x + 1, rt.y + rt.h - 1 - sp_tright.height(), sp_tright.width(), sp_tright.height() );
     if ( allow & Battle::BOTTOM_LEFT )
-        sp_tright.Blit( rt_tright.x, rt_tright.y );
+        fheroes2::Blit( sp_tright, display, rt_tright.x, rt_tright.y );
 
-    const Rect rt_right( rt.x + 1, rt.y + ( rt.h - sp_right.h() ) / 2, sp_right.w(), sp_right.h() );
+    const Rect rt_right( rt.x + 1, rt.y + ( rt.h - sp_right.height() ) / 2, sp_right.width(), sp_right.height() );
     if ( allow & Battle::LEFT )
-        sp_right.Blit( rt_right.x, rt_right.y );
+        fheroes2::Blit( sp_right, display, rt_right.x, rt_right.y );
 
-    const Rect rt_bright( rt.x + 1, rt.y + 1, sp_bright.w(), sp_bright.h() );
+    const Rect rt_bright( rt.x + 1, rt.y + 1, sp_bright.width(), sp_bright.height() );
     if ( allow & Battle::TOP_LEFT )
-        sp_bright.Blit( rt_bright.x, rt_bright.y );
+        fheroes2::Blit( sp_bright, display, rt_bright.x, rt_bright.y );
 
-    const Rect rt_tleft( rt.x + rt.w - 1 - sp_tleft.w(), rt.y + rt.h - 1 - sp_tleft.h(), sp_tleft.w(), sp_tleft.h() );
+    const Rect rt_tleft( rt.x + rt.w - 1 - sp_tleft.width(), rt.y + rt.h - 1 - sp_tleft.height(), sp_tleft.width(), sp_tleft.height() );
     if ( allow & Battle::BOTTOM_RIGHT )
-        sp_tleft.Blit( rt_tleft.x, rt_tleft.y );
+        fheroes2::Blit( sp_tleft, display, rt_tleft.x, rt_tleft.y );
 
-    const Rect rt_left( rt.x + rt.w - 1 - sp_left.w(), rt.y + ( rt.h - sp_left.h() ) / 2, sp_left.w(), sp_left.h() );
+    const Rect rt_left( rt.x + rt.w - 1 - sp_left.width(), rt.y + ( rt.h - sp_left.height() ) / 2, sp_left.width(), sp_left.height() );
     if ( allow & Battle::RIGHT )
-        sp_left.Blit( rt_left.x, rt_left.y );
+        fheroes2::Blit( sp_left, display, rt_left.x, rt_left.y );
 
-    const Rect rt_bleft( rt.x + rt.w - 1 - sp_bleft.w(), rt.y + 1, sp_bleft.w(), sp_bleft.h() );
+    const Rect rt_bleft( rt.x + rt.w - 1 - sp_bleft.width(), rt.y + 1, sp_bleft.width(), sp_bleft.height() );
     if ( allow & Battle::TOP_RIGHT )
-        sp_bleft.Blit( rt_bleft.x, rt_bleft.y );
+        fheroes2::Blit( sp_bleft, display, rt_bleft.x, rt_bleft.y );
 
-    cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() && !le.MouseClickLeft() )
         ;
@@ -102,41 +99,42 @@ u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
     return Cursor::WAR_INFO;
 }
 
-Surface CreateTouchButton( void )
+fheroes2::Image CreateTouchButton( void )
 {
-    Surface sf( Size( 24, 24 ), false );
+    fheroes2::Image sf( 24, 24 );
 
-    const u32 ww = sf.w() / 2;
-    const u32 hh = sf.h() / 2;
+    const int32_t ww = sf.width() / 2;
+    const int32_t hh = sf.height() / 2;
 
-    const Sprite & sp0 = AGG::GetICN( ICN::LOCATORS, 22 );
+    const fheroes2::Sprite & sp0 = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
 
-    sp0.Blit( Rect( 0, 0, ww, hh ), Point( 0, 0 ), sf );
-    sp0.Blit( Rect( sp0.w() - ww, 0, ww, hh ), Point( ww, 0 ), sf );
-    sp0.Blit( Rect( 0, sp0.h() - hh, ww, hh ), Point( 0, hh ), sf );
-    sp0.Blit( Rect( sp0.w() - ww, sp0.h() - hh, ww, hh ), Point( ww, hh ), sf );
+    fheroes2::Blit( sp0, 0, 0, sf, 0, 0, ww, hh );
+    fheroes2::Blit( sp0, sp0.width() - ww, 0, sf, ww, 0, ww, hh );
+    fheroes2::Blit( sp0, 0, sp0.height() - hh, sf, 0, hh, ww, hh );
+    fheroes2::Blit( sp0.width() - ww, sp0.height() - hh, 0, sf, ww, hh, ww, hh );
 
     return sf;
 }
 
-void RedrawTouchButton( const Surface & sf, const Rect & rt, const char * lb )
+void RedrawTouchButton( const fheroes2::Image & sf, const Rect & rt, const char * lb )
 {
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( sf.w() != rt.w ) {
+    if ( sf.width() != rt.w ) {
         const u32 ww = 4;
-        sf.Blit( Rect( 0, 0, ww, sf.h() ), rt.x, rt.y, display );
+        fheroes2::Blit( sf, 0, 0, display, rt.x, rt.y, ww, sf.height() );
 
         if ( rt.w > 8 ) {
             const u32 count = ( rt.w - ww ) / ww;
             for ( u32 ii = 0; ii < count; ++ii )
-                sf.Blit( Rect( ww, 0, ww, sf.h() ), rt.x + ww * ( ii + 1 ), rt.y, display );
+                fheroes2::Blit( sf, ww, 0, display, rt.x + ww * ( ii + 1 ), rt.y, ww, sf.height() );
         }
 
-        sf.Blit( Rect( sf.w() - ww, 0, ww, sf.h() ), rt.x + rt.w - ww, rt.y, display );
+        fheroes2::Blit( sf, sf.width() - ww, 0, display, rt.x + rt.w - ww, rt.y, ww, sf.height() );
     }
-    else
-        sf.Blit( rt.x, rt.y, display );
+    else {
+        fheroes2::Blit( sf, display, rt.x, rt.y );
+    }
 
     if ( lb ) {
         Text tx( lb, Font::BIG );
@@ -146,179 +144,176 @@ void RedrawTouchButton( const Surface & sf, const Rect & rt, const char * lb )
 
 void PocketPC::KeyboardDialog( std::string & str )
 {
-    Cursor & cursor = Cursor::Get();
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    cursor.Hide();
 
     const u32 width = 337;
     const u32 height = 118;
 
-    SpriteBack back( Rect( ( display.w() - width ) / 2, 0, width, height ) );
-    const Rect & top = back.GetArea();
-    display.FillRect( top, ColorBlack );
+    fheroes2::ImageRestorer back( display, ( display.width() - width ) / 2, 0, width, height );
+    const Rect top( back.x(), back.y(), back.width(), back.height() );
+    fheroes2::Fill( display, back.x(), back.y(), back.width(), back.height(), 0 );
 
-    const Surface sp = CreateTouchButton();
+    const fheroes2::Image sp = CreateTouchButton();
 
     // 1 row
-    const Rect rt_1( top.x + 2, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_1( top.x + 2, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_1, "1" );
 
-    const Rect rt_2( rt_1.x + rt_1.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_2( rt_1.x + rt_1.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_2, "2" );
 
-    const Rect rt_3( rt_2.x + rt_2.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_3( rt_2.x + rt_2.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_3, "3" );
 
-    const Rect rt_4( rt_3.x + rt_3.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_4( rt_3.x + rt_3.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_4, "4" );
 
-    const Rect rt_5( rt_4.x + rt_4.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_5( rt_4.x + rt_4.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_5, "5" );
 
-    const Rect rt_6( rt_5.x + rt_5.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_6( rt_5.x + rt_5.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_6, "6" );
 
-    const Rect rt_7( rt_6.x + rt_6.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_7( rt_6.x + rt_6.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_7, "7" );
 
-    const Rect rt_8( rt_7.x + rt_7.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_8( rt_7.x + rt_7.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_8, "8" );
 
-    const Rect rt_9( rt_8.x + rt_8.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_9( rt_8.x + rt_8.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_9, "9" );
 
-    const Rect rt_0( rt_9.x + rt_9.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_0( rt_9.x + rt_9.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_0, "0" );
 
-    const Rect rt_MINUS( rt_0.x + rt_0.w + 1, top.y + 2, sp.w(), sp.h() );
+    const Rect rt_MINUS( rt_0.x + rt_0.w + 1, top.y + 2, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_MINUS, "-" );
 
-    const Rect rt_BACKSPACE( rt_MINUS.x + rt_MINUS.w + 1, top.y + 2, 58, sp.h() );
+    const Rect rt_BACKSPACE( rt_MINUS.x + rt_MINUS.w + 1, top.y + 2, 58, sp.height() );
     RedrawTouchButton( sp, rt_BACKSPACE, "back" );
 
     // 2 row
-    const Rect rt_EMPTY1( top.x + 2, top.y + 27, 8, sp.h() );
+    const Rect rt_EMPTY1( top.x + 2, top.y + 27, 8, sp.height() );
     RedrawTouchButton( sp, rt_EMPTY1, NULL );
 
-    const Rect rt_Q( rt_EMPTY1.x + rt_EMPTY1.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_Q( rt_EMPTY1.x + rt_EMPTY1.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_Q, "q" );
 
-    const Rect rt_W( rt_Q.x + rt_Q.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_W( rt_Q.x + rt_Q.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_W, "w" );
 
-    const Rect rt_E( rt_W.x + rt_W.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_E( rt_W.x + rt_W.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_E, "e" );
 
-    const Rect rt_R( rt_E.x + rt_E.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_R( rt_E.x + rt_E.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_R, "r" );
 
-    const Rect rt_T( rt_R.x + rt_R.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_T( rt_R.x + rt_R.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_T, "t" );
 
-    const Rect rt_Y( rt_T.x + rt_T.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_Y( rt_T.x + rt_T.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_Y, "y" );
 
-    const Rect rt_U( rt_Y.x + rt_Y.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_U( rt_Y.x + rt_Y.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_U, "u" );
 
-    const Rect rt_I( rt_U.x + rt_U.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_I( rt_U.x + rt_U.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_I, "i" );
 
-    const Rect rt_O( rt_I.x + rt_I.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_O( rt_I.x + rt_I.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_O, "o" );
 
-    const Rect rt_P( rt_O.x + rt_O.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_P( rt_O.x + rt_O.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_P, "p" );
 
-    const Rect rt_LB( rt_P.x + rt_P.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_LB( rt_P.x + rt_P.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_LB, "[" );
 
-    const Rect rt_RB( rt_LB.x + rt_LB.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_RB( rt_LB.x + rt_LB.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_RB, "]" );
 
-    const Rect rt_EQUAL( rt_RB.x + rt_RB.w + 1, top.y + 27, sp.w(), sp.h() );
+    const Rect rt_EQUAL( rt_RB.x + rt_RB.w + 1, top.y + 27, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_EQUAL, "=" );
 
     // 3 row
-    const Rect rt_EMPTY3( top.x + 2, top.y + 52, 15, sp.h() );
+    const Rect rt_EMPTY3( top.x + 2, top.y + 52, 15, sp.height() );
     RedrawTouchButton( sp, rt_EMPTY3, NULL );
 
-    const Rect rt_A( rt_EMPTY3.x + rt_EMPTY3.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_A( rt_EMPTY3.x + rt_EMPTY3.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_A, "a" );
 
-    const Rect rt_S( rt_A.x + rt_A.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_S( rt_A.x + rt_A.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_S, "s" );
 
-    const Rect rt_D( rt_S.x + rt_S.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_D( rt_S.x + rt_S.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_D, "d" );
 
-    const Rect rt_F( rt_D.x + rt_D.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_F( rt_D.x + rt_D.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_F, "f" );
 
-    const Rect rt_G( rt_F.x + rt_F.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_G( rt_F.x + rt_F.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_G, "g" );
 
-    const Rect rt_H( rt_G.x + rt_G.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_H( rt_G.x + rt_G.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_H, "h" );
 
-    const Rect rt_J( rt_H.x + rt_H.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_J( rt_H.x + rt_H.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_J, "j" );
 
-    const Rect rt_K( rt_J.x + rt_J.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_K( rt_J.x + rt_J.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_K, "k" );
 
-    const Rect rt_L( rt_K.x + rt_K.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_L( rt_K.x + rt_K.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_L, "l" );
 
-    const Rect rt_SP( rt_L.x + rt_L.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_SP( rt_L.x + rt_L.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_SP, ";" );
 
-    const Rect rt_CM( rt_SP.x + rt_SP.w + 1, top.y + 52, sp.w(), sp.h() );
+    const Rect rt_CM( rt_SP.x + rt_SP.w + 1, top.y + 52, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_CM, "'" );
 
-    const Rect rt_RETURN( rt_CM.x + rt_CM.w + 1, top.y + 52, 42, sp.h() );
+    const Rect rt_RETURN( rt_CM.x + rt_CM.w + 1, top.y + 52, 42, sp.height() );
     RedrawTouchButton( sp, rt_RETURN, "rtrn" );
 
     // 4 row
-    const Rect rt_EMPTY5( top.x + 2, top.y + 77, 26, sp.h() );
+    const Rect rt_EMPTY5( top.x + 2, top.y + 77, 26, sp.height() );
     RedrawTouchButton( sp, rt_EMPTY5, NULL );
 
-    const Rect rt_Z( rt_EMPTY5.x + rt_EMPTY5.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_Z( rt_EMPTY5.x + rt_EMPTY5.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_Z, "z" );
 
-    const Rect rt_X( rt_Z.x + rt_Z.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_X( rt_Z.x + rt_Z.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_X, "x" );
 
-    const Rect rt_C( rt_X.x + rt_X.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_C( rt_X.x + rt_X.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_C, "c" );
 
-    const Rect rt_V( rt_C.x + rt_C.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_V( rt_C.x + rt_C.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_V, "v" );
 
-    const Rect rt_B( rt_V.x + rt_V.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_B( rt_V.x + rt_V.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_B, "b" );
 
-    const Rect rt_N( rt_B.x + rt_B.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_N( rt_B.x + rt_B.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_N, "n" );
 
-    const Rect rt_M( rt_N.x + rt_N.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_M( rt_N.x + rt_N.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_M, "m" );
 
-    const Rect rt_CS( rt_M.x + rt_M.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_CS( rt_M.x + rt_M.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_CS, "," );
 
-    const Rect rt_DT( rt_CS.x + rt_CS.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_DT( rt_CS.x + rt_CS.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_DT, "." );
 
-    const Rect rt_SL( rt_DT.x + rt_DT.w + 1, top.y + 77, sp.w(), sp.h() );
+    const Rect rt_SL( rt_DT.x + rt_DT.w + 1, top.y + 77, sp.width(), sp.height() );
     RedrawTouchButton( sp, rt_SL, "/" );
 
-    const Rect rt_SPACE( rt_SL.x + rt_SL.w + 1, top.y + 77, 56, sp.h() );
+    const Rect rt_SPACE( rt_SL.x + rt_SL.w + 1, top.y + 77, 56, sp.height() );
     RedrawTouchButton( sp, rt_SPACE, "space" );
 
-    cursor.Show();
-    display.Flip();
+    display.render();
 
     bool redraw = true;
 
@@ -438,18 +433,14 @@ void PocketPC::KeyboardDialog( std::string & str )
         if ( redraw ) {
             Text tx( str, Font::SMALL );
             if ( tx.w() < top.w ) {
-                cursor.Hide();
-                display.FillRect( Rect( top.x, top.y + top.h - 16, top.w, 16 ), ColorBlack );
+                fheroes2::Fill( display, top.x, top.y + top.h - 16, top.w, 16, 0 );
                 tx.Blit( top.x + ( top.w - tx.w() ) / 2, top.y + top.h - 16 + 2 );
-                cursor.Show();
-                display.Flip();
+                display.render();
             }
             redraw = false;
         }
     }
 
-    cursor.Hide();
-    back.Restore();
-    cursor.Show();
-    display.Flip();
+    back.restore();
+    display.render();
 }

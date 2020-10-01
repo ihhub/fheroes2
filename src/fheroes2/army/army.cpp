@@ -37,6 +37,7 @@
 #include "morale.h"
 #include "payment.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
 #include "speed.h"
 #include "text.h"
@@ -681,20 +682,18 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
         Text text;
         text.Set( Font::SMALL );
 
-        for ( const_iterator it = begin(); it != end(); ++it )
+        for ( const_iterator it = begin(); it != end(); ++it ) {
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
                     const uint32_t spriteIndex = ( *it )->GetSpriteIndex();
-                    Sprite monster = AGG::GetICN( ICN::MONS32, spriteIndex );
-                    if ( ( *it )->hasColorCycling() ) {
-                        AGG::ReplaceColors( monster, PAL::GetCyclingPalette( Game::MapsAnimationFrame() ), ICN::MONS32, spriteIndex, false );
-                    }
-                    const int offsetY = !compact ? 30 - monster.h() : ( monster.h() < 35 ) ? 35 - monster.h() : 0;
+                    const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, spriteIndex );
+                    const int offsetY = !compact ? 30 - monster.height() : ( monster.height() < 35 ) ? 35 - monster.height() : 0;
 
-                    monster.Blit( cx - monster.w() / 2, cy + offsetY );
+                    fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2, cy + offsetY );
+
                     text.Set( Game::CountScoute( ( *it )->GetCount(), scoute, compact ) );
                     if ( compact )
-                        text.Blit( cx + monster.w() / 2, cy + 23 );
+                        text.Blit( cx + monster.width() / 2, cy + 23 );
                     else
                         text.Blit( cx - text.w() / 2, cy + 29 );
 
@@ -704,6 +703,7 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
                 else
                     --first;
             }
+        }
     }
 }
 
@@ -877,11 +877,14 @@ Army::Army( const Maps::Tiles & t )
             }
         }
         else {
-            MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( t.GetObjectUID( MP2::OBJ_MONSTER ) ) );
+            MapMonster * map_troop = NULL;
+            if ( t.GetObject() == MP2::OBJ_MONSTER )
+                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( t.GetObjectUID() ) );
+
             Troop troop = map_troop ? map_troop->QuantityTroop() : t.QuantityTroop();
 
             at( 0 )->Set( troop );
-            ArrangeForBattle( !Settings::Get().ExtWorldSaveMonsterBattle() );
+            ArrangeForBattle( true );
         }
         break;
     }
@@ -1251,15 +1254,15 @@ u32 Army::ActionToSirens( void )
     return res;
 }
 
-bool Army::isStrongerThan( const Army & target ) const
+bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
 {
     if ( !target.isValid() )
         return true;
 
-    const double str1 = GetStrength();
+    const double str1 = GetStrength() * safetyRatio;
     const double str2 = target.GetStrength();
 
-    DEBUG( DBG_AI, DBG_INFO, "Comparing troops: " << str1 << " versus " << str2 );
+    DEBUG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
 
     return str1 > str2;
 }
@@ -1301,7 +1304,10 @@ void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 line
 
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
-    MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( MP2::OBJ_MONSTER ) ) );
+    MapMonster * map_troop = NULL;
+    if ( tile.GetObject() == MP2::OBJ_MONSTER )
+        map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+
     const u32 ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
     const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
 

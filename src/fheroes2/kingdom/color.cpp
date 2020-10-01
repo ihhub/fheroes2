@@ -25,7 +25,6 @@
 #include "color.h"
 #include "game.h"
 #include "players.h"
-#include "settings.h"
 #include "world.h"
 
 const std::string & Color::String( int color )

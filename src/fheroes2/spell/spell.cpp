@@ -70,7 +70,7 @@ spellstats_t spells[] = {
     {_( "spell|Slow" ), 3, 0, 1, 0, 0, COST_NONE, _( "Slows target to half movement rate." )},
     {_( "Mass Slow" ), 15, 0, 62, 0, 0, COST_NONE, _( "Slows all enemies to half movement rate." )},
     //
-    {_( "Blind " ), 6, 0, 21, 0, 0, COST_NONE, _( "Clouds the affected creatures' eyes, preventing them from moving." )},
+    {_( "spell|Blind" ), 6, 0, 21, 0, 0, COST_NONE, _( "Clouds the affected creatures' eyes, preventing them from moving." )},
     {_( "Bless" ), 3, 0, 7, 0, 0, COST_NONE, _( "Causes the selected creatures to inflict maximum damage." )},
     {_( "Mass Bless" ), 12, 0, 63, 0, 0, COST_NONE, _( "Causes all of your units to inflict maximum damage." )},
     {_( "Stoneskin" ), 3, 0, 31, 3, 0, COST_NONE, _( "Magically increases the defense skill of the selected creatures." )},
@@ -414,7 +414,7 @@ bool Spell::isAdventure( void ) const
 
 bool Spell::isDamage( void ) const
 {
-    return Damage();
+    return Damage() != 0;
 }
 
 u32 Spell::Damage( void ) const
@@ -607,6 +607,40 @@ bool Spell::isALiveOnly( void ) const
 
     default:
         break;
+    }
+
+    return false;
+}
+
+bool Spell::isSingleTarget() const
+{
+    switch ( id ) {
+    case LIGHTNINGBOLT:
+    case TELEPORT:
+    case CURE:
+    case RESURRECT:
+    case RESURRECTTRUE:
+    case HASTE:
+    case SLOW:
+    case BLIND:
+    case BLESS:
+    case STONESKIN:
+    case STEELSKIN:
+    case CURSE:
+    case ANTIMAGIC:
+    case DISPEL:
+    case ARROW:
+    case BERSERKER:
+    case PARALYZE:
+    case HYPNOTIZE:
+    case COLDRAY:
+    case DISRUPTINGRAY:
+    case DRAGONSLAYER:
+    case BLOODLUST:
+    case ANIMATEDEAD:
+    case MIRRORIMAGE:
+    case SHIELD:
+        return true;
     }
 
     return false;

@@ -28,6 +28,7 @@
 #include <iostream>
 #include <vector>
 
+#include "image.h"
 #include "serialize.h"
 #include "surface.h"
 #include "types.h"
@@ -55,6 +56,15 @@ public:
 
     bool read( const std::string &, size_t offset = 0 );
     bool write( const std::string &, bool append = false ) const;
+};
+
+fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize );
+fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, const uint8_t * transformData, size_t transformSize );
+
+class ImageZlib : public fheroes2::Image
+{
+    ImageZlib( int32_t width, int32_t height, const uint8_t * data, size_t size );
+    virtual ~ImageZlib() {}
 };
 
 #endif

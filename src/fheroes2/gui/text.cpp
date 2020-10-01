@@ -37,11 +37,7 @@ namespace
 
 TextInterface::TextInterface( int ft )
     : font( ft )
-{
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? font = Font::YELLOW_SMALL : font = Font::SMALL;
-}
+{}
 
 TextAscii::TextAscii( const std::string & msg, int ft )
     : TextInterface( ft )
@@ -55,11 +51,7 @@ void TextAscii::SetText( const std::string & msg )
 
 void TextAscii::SetFont( int ft )
 {
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? font = Font::YELLOW_SMALL : font = Font::SMALL;
-    else
-        font = ft;
+    font = ft;
 }
 
 void TextAscii::Clear( void )
@@ -74,7 +66,7 @@ size_t TextAscii::Size( void ) const
 
 int TextAscii::CharWidth( int c, int f )
 {
-    return ( c < 0x21 ? ( isSmallFont( f ) ? 4 : 6 ) : AGG::GetLetter( c, f ).w() );
+    return ( c < 0x21 ? ( isSmallFont( f ) ? 4 : 6 ) : fheroes2::AGG::GetLetter( c, f ).width() );
 }
 
 int TextAscii::CharHeight( int f )
@@ -154,12 +146,11 @@ int TextAscii::h( int width ) const
     return res;
 }
 
-void TextAscii::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
+void TextAscii::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
 {
     if ( message.empty() )
         return;
 
-    int oy = 0;
     int sx = ax;
 
     for ( std::string::const_iterator it = message.begin(); it != message.end(); ++it ) {
@@ -172,42 +163,12 @@ void TextAscii::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
             continue;
         }
 
-        const Surface & sprite = AGG::GetLetter( *it, font );
-        if ( !sprite.isValid() )
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetLetter( *it, font );
+        if ( sprite.empty() )
             return;
 
-        // valign
-        switch ( *it ) {
-        case '-':
-            oy = CharAscent( font ) / 2;
-            break;
-
-        case '_':
-            oy = CharAscent( font );
-            break;
-
-        // "
-        case 0x22:
-            // '
-        case 0x27:
-            oy = 0;
-            break;
-
-        case 'y':
-        case 'g':
-        case 'p':
-        case 'q':
-        case 'j':
-            oy = CharAscent( font ) + CharDescent( font ) - sprite.h();
-            break;
-
-        default:
-            oy = CharAscent( font ) - sprite.h();
-            break;
-        }
-
-        sprite.Blit( ax, ay + 2 + oy, dst );
-        ax += sprite.w();
+        fheroes2::Blit( sprite, dst, ax + sprite.x(), ay + 2 + sprite.y() );
+        ax += sprite.width();
     }
 }
 
@@ -247,11 +208,7 @@ void TextUnicode::SetText( const std::string & msg )
 
 void TextUnicode::SetFont( int ft )
 {
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? font = Font::YELLOW_SMALL : font = Font::SMALL;
-    else
-        font = ft;
+    font = ft;
 }
 
 void TextUnicode::Clear( void )
@@ -266,7 +223,7 @@ size_t TextUnicode::Size( void ) const
 
 int TextUnicode::CharWidth( int c, int f )
 {
-    return ( c < 0x0021 ? ( isSmallFont( f ) ? 4 : 6 ) : AGG::GetUnicodeLetter( c, f ).w() );
+    return ( c < 0x0021 ? ( isSmallFont( f ) ? 4 : 6 ) : fheroes2::AGG::GetUnicodeLetter( c, f ).width() );
 }
 
 int TextUnicode::CharHeight( int f )
@@ -346,7 +303,7 @@ int TextUnicode::h( int width ) const
     return res;
 }
 
-void TextUnicode::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
+void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
 {
     const s32 sx = ax;
 
@@ -364,12 +321,12 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, Surface & dst )
             continue;
         }
 
-        const Surface & sprite = AGG::GetUnicodeLetter( *it, font );
-        if ( !sprite.isValid() )
+        const fheroes2::Image & sprite = fheroes2::AGG::GetUnicodeLetter( *it, font );
+        if ( sprite.empty() )
             return;
 
-        sprite.Blit( ax, ay, dst );
-        ax += sprite.w();
+        fheroes2::Blit( sprite, dst, ax, ay );
+        ax += sprite.width();
     }
 }
 
@@ -487,17 +444,17 @@ size_t Text::Size( void ) const
     return message->Size();
 }
 
-void Text::Blit( const Point & dst_pt, Surface & dst ) const
+void Text::Blit( const Point & dst_pt, fheroes2::Image & dst ) const
 {
     return message->Blit( dst_pt.x, dst_pt.y, 0, dst );
 }
 
-void Text::Blit( s32 ax, s32 ay, Surface & dst ) const
+void Text::Blit( s32 ax, s32 ay, fheroes2::Image & dst ) const
 {
     return message->Blit( ax, ay, 0, dst );
 }
 
-void Text::Blit( s32 ax, s32 ay, int maxw, Surface & dst ) const
+void Text::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst ) const
 {
     return message->Blit( ax, ay, maxw, dst );
 }
@@ -609,10 +566,6 @@ void TextBox::SetAlign( int f )
 
 void TextBox::Append( const std::string & msg, int ft, u32 width )
 {
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? ft = Font::YELLOW_SMALL : ft = Font::SMALL;
-
     u32 www = 0;
     Rect::w = width;
 
@@ -655,10 +608,6 @@ void TextBox::Append( const std::string & msg, int ft, u32 width )
 #ifdef WITH_TTF
 void TextBox::Append( const std::vector<u16> & msg, int ft, u32 width )
 {
-    const Settings & conf = Settings::Get();
-    if ( conf.QVGA() && !conf.Unicode() )
-        ft == Font::YELLOW_BIG || ft == Font::YELLOW_SMALL ? ft = Font::YELLOW_SMALL : ft = Font::SMALL;
-
     u32 www = 0;
     Rect::w = width;
 
@@ -699,7 +648,7 @@ void TextBox::Append( const std::vector<u16> & msg, int ft, u32 width )
 }
 #endif
 
-void TextBox::Blit( s32 ax, s32 ay, Surface & sf )
+void TextBox::Blit( s32 ax, s32 ay, fheroes2::Image & sf )
 {
     Rect::x = ax;
     Rect::y = ay;
@@ -707,16 +656,16 @@ void TextBox::Blit( s32 ax, s32 ay, Surface & sf )
     for ( std::list<Text>::const_iterator it = messages.begin(); it != messages.end(); ++it ) {
         switch ( align ) {
         case ALIGN_LEFT:
-            ( *it ).Blit( ax, ay );
+            ( *it ).Blit( ax, ay, sf );
             break;
 
         case ALIGN_RIGHT:
-            ( *it ).Blit( ax + Rect::w - ( *it ).w(), ay );
+            ( *it ).Blit( ax + Rect::w - ( *it ).w(), ay, sf );
             break;
 
         // center
         default:
-            ( *it ).Blit( ax + ( Rect::w - ( *it ).w() ) / 2, ay );
+            ( *it ).Blit( ax + ( Rect::w - ( *it ).w() ) / 2, ay, sf );
             break;
         }
 
@@ -724,39 +673,38 @@ void TextBox::Blit( s32 ax, s32 ay, Surface & sf )
     }
 }
 
-void TextBox::Blit( const Point & pt, Surface & sf )
+void TextBox::Blit( const Point & pt, fheroes2::Image & sf )
 {
     Blit( pt.x, pt.y, sf );
 }
 
 TextSprite::TextSprite()
     : hide( true )
+    , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
 {}
 
 TextSprite::TextSprite( const std::string & msg, int ft, const Point & pt )
     : Text( msg, ft )
     , hide( true )
-{
-    back.Save( Rect( pt, gw, gh + 5 ) );
-}
+    , _restorer( fheroes2::Display::instance(), pt.x, pt.y, gw, gh + 5 )
+{}
 
 TextSprite::TextSprite( const std::string & msg, int ft, s32 ax, s32 ay )
     : Text( msg, ft )
     , hide( true )
-{
-    back.Save( Rect( ax, ay, gw, gh + 5 ) );
-}
+    , _restorer( fheroes2::Display::instance(), ax, ay, gw, gh + 5 )
+{}
 
 void TextSprite::Show( void )
 {
-    Blit( back.GetPos() );
+    Blit( Point( _restorer.x(), _restorer.y() ) );
     hide = false;
 }
 
 void TextSprite::Hide( void )
 {
     if ( !hide )
-        back.Restore();
+        _restorer.restore();
     hide = true;
 }
 
@@ -764,36 +712,36 @@ void TextSprite::SetText( const std::string & msg )
 {
     Hide();
     Set( msg );
-    back.Save( Rect( back.GetPos(), gw, gh + 5 ) );
+    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
 }
 
 void TextSprite::SetText( const std::string & msg, int ft )
 {
     Hide();
     Set( msg, ft );
-    back.Save( Rect( back.GetPos(), gw, gh + 5 ) );
+    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
 }
 
 void TextSprite::SetFont( int ft )
 {
     Hide();
     Set( ft );
-    back.Save( Rect( back.GetPos(), gw, gh + 5 ) );
+    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
 }
 
 void TextSprite::SetPos( s32 ax, s32 ay )
 {
-    back.Save( Rect( ax, ay, gw, gh + 5 ) );
+    _restorer.update( ax, ay, gw, gh + 5 );
 }
 
 int TextSprite::w( void )
 {
-    return back.GetSize().w;
+    return gw;
 }
 
 int TextSprite::h( void )
 {
-    return back.GetSize().h;
+    return gh + 5;
 }
 
 bool TextSprite::isHide( void ) const
@@ -806,7 +754,7 @@ bool TextSprite::isShow( void ) const
     return !hide;
 }
 
-const Rect & TextSprite::GetRect( void ) const
+Rect TextSprite::GetRect( void ) const
 {
-    return back.GetArea();
+    return Rect( _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() );
 }

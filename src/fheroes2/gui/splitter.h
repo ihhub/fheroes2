@@ -23,12 +23,13 @@
 #define H2SPLITTER_H
 
 #include "gamedefs.h"
+#include "ui_tool.h"
 
-class Splitter : protected SpriteMove
+class Splitter : protected fheroes2::MovableSprite
 {
 public:
     Splitter();
-    Splitter( const Surface &, const Rect & );
+    Splitter( const fheroes2::Image & image, const Rect & );
 
     void Forward( void );
     void Backward( void );
@@ -39,7 +40,7 @@ public:
     void HideCursor( void );
     void ShowCursor( void );
 
-    void SetSprite( const Surface & );
+    void SetSprite( const fheroes2::Image & image );
     void SetArea( const Rect & );
     void SetRange( int smin, int smax );
 

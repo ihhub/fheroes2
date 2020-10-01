@@ -38,7 +38,6 @@
 #define ICONS_HEIGHT 22
 #define ICONS_CURSOR_WIDTH 56
 #define ICONS_CURSOR_HEIGHT 32
-#define ICONS_CURSOR_COLOR RGBA( 0xA0, 0xE0, 0xE0 )
 
 bool Interface::IconsBar::IsVisible( void )
 {
@@ -58,6 +57,7 @@ u32 Interface::IconsBar::GetItemHeight( void )
 
 void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     const bool evil = Settings::Get().ExtGameEvilInterface();
     u32 index_sprite = 1;
 
@@ -84,54 +84,52 @@ void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
         DEBUG( DBG_ENGINE, DBG_WARN, "unknown race" );
     }
 
-    AGG::GetICN( evil ? ICN::LOCATORE : ICN::LOCATORS, index_sprite ).Blit( sx, sy );
+    fheroes2::Blit( fheroes2::AGG::GetICN( evil ? ICN::LOCATORE : ICN::LOCATORS, index_sprite ), display, sx, sy );
 
     // castle build marker
     switch ( Castle::GetAllBuildingStatus( castle ) ) {
     // white marker
     case UNKNOWN_COND:
     case NOT_TODAY:
-        AGG::GetICN( ICN::CSLMARKER, 0 ).Blit( sx + 39, sy + 1 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), display, sx + 40, sy );
         break;
 
     // green marker
-    case LACK_RESOURCES:
-        AGG::GetICN( ICN::CSLMARKER, 2 ).Blit( sx + 39, sy + 1 );
-        break;
+    // case LACK_RESOURCES:
+    //    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 2 ), display, sx + 40, sy );
+    //    break;
 
     // red marker
     case REQUIRES_BUILD:
-        AGG::GetICN( ICN::CSLMARKER, 1 ).Blit( sx + 39, sy + 1 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), display, sx + 40, sy );
         break;
 
     default:
         break;
     }
-    //
-    //    if(! castle.AllowBuild())
-    //        AGG::GetICN(ICN::CSLMARKER, 0).Blit(sx + 39, sy + 1);
 }
 
 void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
 {
-    hero.PortraitRedraw( sx, sy, PORT_SMALL, Display::Get() );
+    hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
 
 void Interface::IconsBar::RedrawBackground( const Point & pos )
 {
-    const Sprite & icnadv = AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
-    const Sprite & back = AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, 1 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, 1 );
     Rect srcrt;
     Point dstpt;
 
-    srcrt.x = icnadv.w() - RADARWIDTH - BORDERWIDTH;
+    srcrt.x = icnadv.width() - RADARWIDTH - BORDERWIDTH;
     srcrt.y = RADARWIDTH + 2 * BORDERWIDTH;
     srcrt.w = RADARWIDTH / 2;
     srcrt.h = 32;
 
     dstpt.x = pos.x;
     dstpt.y = pos.y;
-    icnadv.Blit( srcrt, dstpt );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
 
     srcrt.y = srcrt.y + srcrt.h;
     dstpt.y = dstpt.y + srcrt.h;
@@ -139,16 +137,16 @@ void Interface::IconsBar::RedrawBackground( const Point & pos )
 
     if ( 2 < iconsCount )
         for ( u32 ii = 0; ii < iconsCount - 2; ++ii ) {
-            icnadv.Blit( srcrt, dstpt );
+            fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
             dstpt.y += srcrt.h;
         }
 
     srcrt.y = srcrt.y + 64;
     srcrt.h = 32;
-    icnadv.Blit( srcrt, dstpt );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
 
     for ( u32 ii = 0; ii < iconsCount; ++ii )
-        back.Blit( pos.x + 5, pos.y + 5 + ii * ( IconsBar::GetItemHeight() + 10 ) );
+        fheroes2::Blit( back, display, pos.x + 5, pos.y + 5 + ii * ( IconsBar::GetItemHeight() + 10 ) );
 }
 
 /* Interface::CastleIcons */
@@ -158,7 +156,7 @@ void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bo
         RedrawCastleIcon( *item, ox, oy );
 
         if ( current )
-            marker.Blit( ox - 5, oy - 5, Display::Get() );
+            fheroes2::Blit( marker, fheroes2::Display::instance(), ox - 5, oy - 5 );
     }
 }
 
@@ -181,10 +179,6 @@ void Interface::CastleIcons::ActionListDoubleClick( CASTLE & item )
 {
     if ( item ) {
         Game::OpenCastleDialog( *item );
-
-        // for QVGA: auto hide icons after click
-        if ( Settings::Get().QVGA() )
-            Settings::Get().SetShowIcons( false );
     }
 }
 
@@ -195,10 +189,6 @@ void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
 
         I.SetFocus( item );
         I.RedrawFocus();
-
-        // for QVGA: auto hide icons after click
-        if ( Settings::Get().QVGA() )
-            Settings::Get().SetShowIcons( false );
     }
 }
 
@@ -227,9 +217,9 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
     SetTopLeft( Point( px, py ) );
-    SetScrollSplitter( AGG::GetICN( icnscroll, 4 ), Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 37 ) );
-    SetScrollButtonUp( icnscroll, 0, 1, Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
-    SetScrollButtonDn( icnscroll, 2, 3, Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( icnscroll, 4 ), Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 37 ) );
+    SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
+    SetScrollButtonDn( icnscroll, 2, 3, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
     SetAreaMaxItems( iconsCount );
     SetAreaItems( Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
     DisableHotkeys( true );
@@ -245,7 +235,7 @@ void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bo
         RedrawHeroesIcon( *item, ox, oy );
 
         if ( current )
-            marker.Blit( ox - 5, oy - 5, Display::Get() );
+            fheroes2::Blit( marker, fheroes2::Display::instance(), ox - 5, oy - 5 );
     }
 }
 
@@ -274,10 +264,6 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
         }
         else
             Game::OpenHeroesDialog( *item, false );
-
-        // for QVGA: auto hide icons after click
-        if ( Settings::Get().QVGA() )
-            Settings::Get().SetShowIcons( false );
     }
 }
 
@@ -289,10 +275,6 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
         I.SetFocus( item );
         I.CalculateHeroPath( item, -1 );
         I.RedrawFocus();
-
-        // for QVGA: auto hide icons after click
-        if ( Settings::Get().QVGA() )
-            Settings::Get().SetShowIcons( false );
     }
 }
 
@@ -321,9 +303,9 @@ void Interface::HeroesIcons::SetPos( s32 px, s32 py )
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
     SetTopLeft( Point( px, py ) );
-    SetScrollSplitter( AGG::GetICN( icnscroll, 4 ), Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 37 ) );
-    SetScrollButtonUp( icnscroll, 0, 1, Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
-    SetScrollButtonDn( icnscroll, 2, 3, Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( icnscroll, 4 ), Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 37 ) );
+    SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
+    SetScrollButtonDn( icnscroll, 2, 3, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
     SetAreaMaxItems( iconsCount );
     SetAreaItems( Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
     DisableHotkeys( true );
@@ -339,8 +321,9 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
     , castleIcons( 4, sfMarker )
     , heroesIcons( 4, sfMarker )
 {
-    sfMarker.Set( ICONS_CURSOR_WIDTH, ICONS_CURSOR_HEIGHT, true );
-    sfMarker.DrawBorder( ICONS_CURSOR_COLOR );
+    sfMarker.resize( ICONS_CURSOR_WIDTH, ICONS_CURSOR_HEIGHT );
+    sfMarker.reset();
+    fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
 u32 Interface::IconsPanel::CountIcons( void ) const
@@ -385,7 +368,7 @@ void Interface::IconsPanel::SetPos( s32 ox, s32 oy )
         iconsCount = 2;
     }
     else {
-        const u32 count_h = ( Display::Get().h() - Display::DEFAULT_HEIGHT ) / TILEWIDTH;
+        const u32 count_h = ( fheroes2::Display::instance().height() - fheroes2::Display::DEFAULT_HEIGHT ) / TILEWIDTH;
         iconsCount = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
     }
 

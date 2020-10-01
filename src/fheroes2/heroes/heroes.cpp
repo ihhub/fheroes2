@@ -52,7 +52,7 @@ const char * Heroes::GetName( int id )
 {
     const char * names[]
         = {// knight
-           _( "Lord Kilburn" ), _( "Sir Gallanth" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
+           _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
            // barbarian
            _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
            // sorceress
@@ -64,7 +64,7 @@ const char * Heroes::GetName( int id )
            // necromant
            _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
            // campains
-           _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Bax" ),
+           _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
            // loyalty version
            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
            _( "Martine" ), _( "Jarkonas" ),
@@ -83,7 +83,13 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
-                strs->append( MP2::StringObject( objs[ii] ) );
+                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) { // it's a hack for now
+                    strs->append( _( "Graveyard robber" ) );
+                }
+                else {
+                    strs->append( MP2::StringObject( objs[ii] ) );
+                }
+
                 StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objs[ii] ) );
                 strs->append( "\n" );
             }
@@ -508,8 +514,8 @@ int Heroes::GetPower( void ) const
 
 int Heroes::GetPower( std::string * strs ) const
 {
-    int result = power + GetPowerModificator( strs );
-    return result < 0 ? 0 : ( result > 255 ? 255 : result );
+    const int result = power + GetPowerModificator( strs );
+    return result < 1 ? 1 : ( result > 255 ? 255 : result );
 }
 
 int Heroes::GetKnowledge( void ) const
@@ -727,7 +733,7 @@ bool Heroes::Recruit( int cl, const Point & pt )
         SetColor( cl );
         killer_color.SetColor( Color::NONE );
         SetCenter( pt );
-        if ( !Modes( SAVEPOINTS ) )
+        if ( !Modes( SAVE_MP_POINTS ) )
             move_point = GetMaxMovePoints();
         MovePointsScaleFixed();
 
@@ -748,11 +754,12 @@ bool Heroes::Recruit( const Castle & castle )
     if ( Recruit( castle.GetColor(), castle.GetCenter() ) ) {
         if ( castle.GetLevelMageGuild() ) {
             // magic point
-            if ( !Modes( SAVEPOINTS ) )
+            if ( !Modes( SAVE_SP_POINTS ) )
                 SetSpellPoints( GetMaxSpellPoints() );
             // learn spell
             castle.MageGuildEducateHero( *this );
         }
+        SetVisited( GetIndex() );
         return true;
     }
 
@@ -806,7 +813,7 @@ void Heroes::ActionNewDay( void )
     visit_object.remove_if( Visit::isDayLife );
 
     // new day, new capacities
-    ResetModes( SAVEPOINTS );
+    ResetModes( SAVE_MP_POINTS );
 }
 
 void Heroes::ActionNewWeek( void )
@@ -841,6 +848,9 @@ void Heroes::RescanPathPassable( void )
 
 void Heroes::RescanPath( void )
 {
+    if ( !path.isValid() )
+        path.clear();
+
     if ( path.isValid() ) {
         const Maps::Tiles & tile = world.GetTiles( path.GetDestinationIndex() );
 
@@ -908,7 +918,7 @@ void Heroes::SetVisited( s32 index, Visit::type_t type )
 void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    const Maps::TilesAddon * addon = tile.FindObjectConst( object );
+    const uint32_t uid = tile.GetObjectUID();
     int wide = 0;
 
     switch ( object ) {
@@ -925,9 +935,9 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
         break;
     }
 
-    if ( addon && wide ) {
+    if ( tile.GetObject() == object && wide ) {
         for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).FindAddonLevel1( addon->uniq ) )
+            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
     }
 }
@@ -966,8 +976,6 @@ bool Heroes::PickupArtifact( const Artifact & art )
 {
     if ( !art.isValid() )
         return false;
-
-    // const Settings & conf = Settings::Get();
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
@@ -1146,10 +1154,10 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
     }
 
     if ( isControlHuman() ) {
-        const Sprite & border = AGG::GetICN( ICN::RESOURCE, 7 );
-        Surface sprite = border.GetSurface();
+        const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+        fheroes2::Image sprite = border;
 
-        AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ).Blit( 5, 5, sprite );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
 
         header.append( " " );
         header.append( _( "Do you wish to buy one?" ) );
@@ -1172,14 +1180,15 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 }
 
 /* return true is move enable */
-bool Heroes::isEnableMove( void ) const
+bool Heroes::isMoveEnabled( void ) const
 {
-    return Modes( ENABLEMOVE ) && path.isValid() && path.GetFrontPenalty() <= move_point;
+    return Modes( ENABLEMOVE ) && path.isValid() && path.getLastMovePenalty() <= move_point;
 }
 
 bool Heroes::CanMove( void ) const
 {
-    return move_point >= Maps::Ground::GetPenalty( world.GetTiles( GetIndex() ), GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    const Maps::Tiles & tile = world.GetTiles( GetIndex() );
+    return move_point >= tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 /* set enable move */
@@ -1291,18 +1300,19 @@ int Heroes::GetDirection( void ) const
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
-    const u32 limit = maxMovePoints * 5 / 100; // limit ~5 day
+    const int32_t currentIndex = GetIndex();
+    const uint32_t skill = GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-    // approximate distance, this restriction calculation
-    if ( ( 4 * maxMovePoints / 100 ) < Maps::GetApproximateDistance( GetIndex(), dst ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, "distance limit" );
-        return 0;
-    }
+    uint32_t total = world.getDistance( currentIndex, dst, skill );
+    DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );
 
-    Route::Path test( *this );
-    // approximate limit, this restriction path finding algorithm
-    uint32_t total = test.Calculate( dst, limit );
     if ( total > 0 ) {
+        // check if last step is diagonal and pre-adjust the total
+        const Route::Step lastStep = world.getPath( currentIndex, dst, skill ).back();
+        if ( Direction::isDiagonal( lastStep.GetDirection() ) ) {
+            total -= lastStep.GetPenalty() / 3;
+        }
+
         if ( move_point >= total )
             return 1;
 
@@ -1317,7 +1327,7 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
         return 4;
     }
     else {
-        DEBUG( DBG_GAME, DBG_INFO, "iteration limit: " << limit );
+        DEBUG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
     }
 
     return 0;
@@ -1408,7 +1418,8 @@ bool Heroes::MayStillMove( void ) const
 {
     if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() )
         return false;
-    return path.isValid() ? ( move_point >= path.GetFrontPenalty() ) : CanMove();
+
+    return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
 }
 
 bool Heroes::isValid( void ) const
@@ -1437,6 +1448,8 @@ void Heroes::SetFreeman( int reason )
             army.Reset( false );
         else if ( ( Battle::RESULT_LOSS & reason ) && !( Battle::RESULT_SURRENDER & reason ) )
             army.Reset( true );
+        else if ( reason == 0 ) // Dismissed hero
+            army.Reset( true );
 
         if ( GetColor() != Color::NONE )
             kingdom.RemoveHeroes( this );
@@ -1450,7 +1463,8 @@ void Heroes::SetFreeman( int reason )
         SetMove( false );
         SetModes( ACTION );
         if ( savepoints )
-            SetModes( SAVEPOINTS );
+            SetModes( SAVE_MP_POINTS );
+        SetModes( SAVE_SP_POINTS );
     }
 }
 
@@ -1505,7 +1519,7 @@ void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
         I.Redraw();
         Cursor::Get().Show();
         // force flip, for monster attack show sprite
-        Display::Get().Flip();
+        fheroes2::Display::instance().render();
     }
     hero.Action( dst );
 }
@@ -1634,82 +1648,91 @@ void Heroes::Move2Dest( const s32 & dstIndex )
     }
 }
 
-Surface Heroes::GetPortrait( int id, int type )
+fheroes2::Image Heroes::GetPortrait( int id, int type )
 {
     if ( Heroes::UNKNOWN != id )
         switch ( type ) {
         case PORT_BIG:
-            return AGG::GetICN( ICN::PORTxxxx( id ), 0 );
+            return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
         case PORT_MEDIUM:
-            return Heroes::SANDYSANDY > id ? AGG::GetICN( ICN::PORTMEDI, id + 1 ) : AGG::GetICN( ICN::PORTMEDI, BAX + 1 );
+            return Heroes::SANDYSANDY > id ? fheroes2::AGG::GetICN( ICN::PORTMEDI, id + 1 ) : fheroes2::AGG::GetICN( ICN::PORTMEDI, BAX + 1 );
         case PORT_SMALL:
-            return Heroes::SANDYSANDY > id ? AGG::GetICN( ICN::MINIPORT, id ) : AGG::GetICN( ICN::MINIPORT, BAX );
+            return Heroes::SANDYSANDY > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
         default:
             break;
         }
 
-    return Surface();
+    return fheroes2::Image();
 }
 
-Surface Heroes::GetPortrait( int type ) const
+fheroes2::Image Heroes::GetPortrait( int type ) const
 {
     return Heroes::GetPortrait( portrait, type );
 }
 
-void Heroes::PortraitRedraw( s32 px, s32 py, int type, Surface & dstsf ) const
+void Heroes::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
 {
-    Surface port = GetPortrait( portrait, type );
+    fheroes2::Image port = GetPortrait( portrait, type );
     Point mp;
 
-    if ( port.isValid() ) {
+    if ( !port.empty() ) {
         if ( PORT_BIG == type ) {
-            port.Blit( px, py, dstsf );
+            fheroes2::Blit( port, dstsf, px, py );
             mp.y = 2;
-            mp.x = port.w() - 12;
+            mp.x = port.width() - 12;
         }
         else if ( PORT_MEDIUM == type ) {
-            port.Blit( px, py, dstsf );
-            mp.x = port.w() - 10;
+            fheroes2::Blit( port, dstsf, px, py );
+            mp.x = port.width() - 10;
         }
         else if ( PORT_SMALL == type ) {
-            const Sprite & mobility = AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
-            const Sprite & mana = AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
+            const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
+            const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
 
             const int iconsw = Interface::IconsBar::GetItemWidth();
             const int iconsh = Interface::IconsBar::GetItemHeight();
             const int barw = 7;
 
-            dstsf.FillRect( Rect( px, py, iconsw, iconsh ), ColorBlack );
-            const RGBA blue = RGBA( 15, 30, 120 );
+            fheroes2::Image blackBG( iconsw, iconsh );
+            blackBG.fill( 0 );
+            fheroes2::Image blueBG( barw, iconsh );
+            blueBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
+
+            // background
+            fheroes2::Blit( blackBG, dstsf, px, py );
 
             // mobility
-            dstsf.FillRect( Rect( px, py, barw, iconsh ), blue );
-            mobility.Blit( px, py + mobility.y(), dstsf );
+            fheroes2::Blit( blueBG, dstsf, px, py );
+            fheroes2::Blit( mobility, dstsf, px, py + mobility.y() );
 
             // portrait
-            port.Blit( px + barw + 1, py, dstsf );
+            fheroes2::Blit( port, dstsf, px + barw + 1, py );
 
             // mana
-            dstsf.FillRect( Rect( px + barw + port.w() + 2, py, barw, iconsh ), blue );
-            mana.Blit( px + barw + port.w() + 2, py + mana.y(), dstsf );
+            fheroes2::Blit( blueBG, dstsf, px + barw + port.width() + 2, py );
+            fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
 
             mp.x = 35;
         }
     }
 
     if ( Modes( Heroes::GUARDIAN ) ) {
-        const Sprite & sprite = AGG::GetICN( ICN::MISC6, 11 );
-        const Rect pos( px + mp.x + 3, py + mp.y, sprite.w(), sprite.h() );
-        dstsf.FillRect( pos, ColorBlack );
-        sprite.Blit( pos.x, pos.y, dstsf );
-        mp.y = sprite.h();
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC6, 11 );
+        fheroes2::Image guardianBG( sprite.width(), sprite.height() );
+        guardianBG.fill( 0 );
+
+        fheroes2::Blit( guardianBG, dstsf, px + mp.x + 3, py + mp.y );
+        fheroes2::Blit( sprite, dstsf, px + mp.x + 3, py + mp.y );
+        mp.y = sprite.height();
     }
 
     if ( Modes( Heroes::SLEEPER ) ) {
-        const Sprite & sprite = AGG::GetICN( ICN::MISC4, 14 );
-        const Rect pos( px + mp.x + 3, py + mp.y - 1, sprite.w() - 4, sprite.h() - 4 );
-        dstsf.FillRect( pos, ColorBlack );
-        sprite.Blit( pos.x - 2, pos.y - 2 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC4, 14 );
+        fheroes2::Image sleeperBG( sprite.width() - 4, sprite.height() - 4 );
+        sleeperBG.fill( 0 );
+
+        fheroes2::Blit( sleeperBG, dstsf, px + mp.x + 3, py + mp.y - 1 );
+        fheroes2::Blit( sprite, dstsf, px + mp.x + 1, py + mp.y - 3 );
     }
 }
 
@@ -1886,8 +1909,6 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 
 Heroes * AllHeroes::GetFreeman( int race ) const
 {
-    const Settings & conf = Settings::Get();
-
     int min = Heroes::UNKNOWN;
     int max = Heroes::UNKNOWN;
 
@@ -1924,7 +1945,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
 
     default:
         min = Heroes::LORDKILBURN;
-        max = conf.ExtCastleAllowRecruitSpecialHeroes() ? ( conf.PriceLoyaltyVersion() ? Heroes::JARKONAS : Heroes::BAX ) : Heroes::CELIA;
+        max = Heroes::CELIA;
         break;
     }
 
@@ -1939,7 +1960,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     // not found, find any race
     if ( Race::NONE != race && freeman_heroes.empty() ) {
         min = Heroes::LORDKILBURN;
-        max = conf.ExtCastleAllowRecruitSpecialHeroes() ? ( conf.PriceLoyaltyVersion() ? Heroes::JARKONAS : Heroes::BAX ) : Heroes::CELIA;
+        max = Heroes::CELIA;
 
         for ( int ii = min; ii <= max; ++ii )
             if ( at( ii )->isFreeman() )

@@ -25,6 +25,7 @@
 
 #include "army.h"
 #include "heroes_recruits.h"
+#include "image.h"
 #include "players.h"
 
 class ArmyBar;
@@ -97,12 +98,12 @@ namespace Battle
         Rect rtKnowledge2;
 
         const Rect rt1;
-        Surface sfb1;
-        Surface sfc1;
+        fheroes2::Image sfb1;
+        fheroes2::Image sfc1;
 
         const Rect rt2;
-        Surface sfb2;
-        Surface sfc2;
+        fheroes2::Image sfb2;
+        fheroes2::Image sfc2;
 
         bool ChangeSettings( void );
         void RedrawBaseInfo( const Point & );

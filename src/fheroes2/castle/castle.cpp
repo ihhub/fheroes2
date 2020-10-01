@@ -1036,7 +1036,7 @@ bool Castle::RecruitMonsterFromDwelling( u32 dw, u32 count )
 }
 
 /* return current count monster in dwelling */
-u32 Castle::GetDwellingLivedCount( u32 dw ) const
+u32 Castle::getMonstersInDwelling( u32 dw ) const
 {
     switch ( dw ) {
     case DWELLING_MONSTER1:
@@ -1524,6 +1524,7 @@ bool Castle::BuyBuilding( u32 build )
 /* draw image castle to position */
 void Castle::DrawImageCastle( const Point & pt )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::Tiles & tile = world.GetTiles( GetIndex() );
 
     u32 index = 0;
@@ -1561,17 +1562,17 @@ void Castle::DrawImageCastle( const Point & pt )
     }
 
     for ( u32 ii = 0; ii < 5; ++ii ) {
-        const Sprite & sprite = AGG::GetICN( ICN::OBJNTWBA, index + ii );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTWBA, index + ii );
         dst_pt.x = pt.x + ii * 32 + sprite.x();
         dst_pt.y = pt.y + 3 * 32 + sprite.y();
-        sprite.Blit( dst_pt );
+        fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     }
 
     for ( u32 ii = 0; ii < 5; ++ii ) {
-        const Sprite & sprite = AGG::GetICN( ICN::OBJNTWBA, index + 5 + ii );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTWBA, index + 5 + ii );
         dst_pt.x = pt.x + ii * 32 + sprite.x();
         dst_pt.y = pt.y + 4 * 32 + sprite.y();
-        sprite.Blit( dst_pt );
+        fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     }
 
     // draw castle
@@ -1599,27 +1600,27 @@ void Castle::DrawImageCastle( const Point & pt )
     }
     if ( !( BUILD_CASTLE & building ) )
         index += 16;
-    const Sprite & sprite2 = AGG::GetICN( ICN::OBJNTOWN, index );
+    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index );
     dst_pt.x = pt.x + 2 * 32 + sprite2.x();
     dst_pt.y = pt.y + sprite2.y();
-    sprite2.Blit( dst_pt );
+    fheroes2::Blit( sprite2, display, dst_pt.x, dst_pt.y );
     for ( u32 ii = 0; ii < 5; ++ii ) {
-        const Sprite & sprite = AGG::GetICN( ICN::OBJNTOWN, index + 1 + ii );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index + 1 + ii );
         dst_pt.x = pt.x + ii * 32 + sprite.x();
         dst_pt.y = pt.y + 32 + sprite.y();
-        sprite.Blit( dst_pt );
+        fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     }
     for ( u32 ii = 0; ii < 5; ++ii ) {
-        const Sprite & sprite = AGG::GetICN( ICN::OBJNTOWN, index + 6 + ii );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index + 6 + ii );
         dst_pt.x = pt.x + ii * 32 + sprite.x();
         dst_pt.y = pt.y + 2 * 32 + sprite.y();
-        sprite.Blit( dst_pt );
+        fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     }
     for ( u32 ii = 0; ii < 5; ++ii ) {
-        const Sprite & sprite = AGG::GetICN( ICN::OBJNTOWN, index + 11 + ii );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index + 11 + ii );
         dst_pt.x = pt.x + ii * 32 + sprite.x();
         dst_pt.y = pt.y + 3 * 32 + sprite.y();
-        sprite.Blit( dst_pt );
+        fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     }
 }
 
@@ -2337,7 +2338,26 @@ void Castle::RecruitAllMonsters( void )
     if ( !skip_recruit )
         for ( u32 dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 )
             if ( isBuild( dw ) )
-                RecruitMonsterFromDwelling( dw, GetDwellingLivedCount( dw ) );
+                RecruitMonsterFromDwelling( dw, getMonstersInDwelling( dw ) );
+}
+
+void Castle::recruitBestAvailable( Funds budget )
+{
+    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
+        if ( isBuild( dw ) ) {
+            const Monster monster( race, GetActualDwelling( dw ) );
+            const uint32_t available = getMonstersInDwelling( dw );
+
+            uint32_t willRecruit = budget.getLowestQuotient( monster.GetCost() );
+            if ( available < willRecruit )
+                willRecruit = available;
+
+            if ( RecruitMonsterFromDwelling( dw, willRecruit ) ) {
+                // success, reduce the budget
+                budget -= ( monster.GetCost() * willRecruit );
+            }
+        }
+    }
 }
 
 const Army & Castle::GetArmy( void ) const

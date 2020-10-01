@@ -209,10 +209,10 @@ namespace Game
     void AnimateResetDelay( int );
     void UpdateGameSpeed( void );
     uint32_t ApplyBattleSpeed( uint32_t delay );
-    int MainMenu( void );
+    int MainMenu( bool isFirstGameRun );
     int NewGame( void );
     int LoadGame( void );
-    int HighScores( bool );
+    int HighScores();
     int Credits( void );
     int NewStandard( void );
     int NewCampain( void );

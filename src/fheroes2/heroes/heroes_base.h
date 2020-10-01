@@ -81,7 +81,7 @@ public:
     virtual void ActionPreBattle( void ) = 0;
 
     virtual const Castle * inCastle( void ) const = 0;
-    virtual void PortraitRedraw( s32, s32, int type, Surface & ) const = 0;
+    virtual void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const = 0;
 
     virtual int GetType( void ) const = 0;
 
@@ -105,6 +105,7 @@ public:
     void SpellCasted( const Spell & );
     void SetSpellPoints( u32 );
 
+    std::vector<Spell> GetSpells( int lvl = -1 ) const;
     void EditSpellBook( void );
     Spell OpenSpellBook( int filter, bool ) const;
     bool HaveSpellBook( void ) const;

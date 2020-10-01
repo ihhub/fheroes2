@@ -92,6 +92,9 @@ namespace AI
     uint32_t AIGetAllianceColors( const Heroes & hero );
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
 
+    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
+    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.6;
+
     int AISelectPrimarySkill( Heroes & hero )
     {
         switch ( hero.GetRace() ) {
@@ -275,7 +278,7 @@ namespace AI
             break;
 
             // teleports
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
             AIToTeleports( hero, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
@@ -457,7 +460,7 @@ namespace AI
             }
 
             // bool disable_auto_move = hero.isShipMaster() || other_hero->isShipMaster() ||
-            //                    other_hero_castle || world.GetTiles(hero.GetIndex()).GetObject(false) == MP2::OBJ_STONELIGHTS;
+            //                    other_hero_castle || world.GetTiles(hero.GetIndex()).GetObject(false) == MP2::OBJ_STONELITHS;
 
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
@@ -475,14 +478,6 @@ namespace AI
             // wins attacker
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
-
-                // disable: auto move hero for AI
-                /*
-                    if(conf.ExtHeroAutoMove2BattleTarget() && !disable_auto_move)
-                    {
-                            hero.Move2Dest(dst_index);
-                    }
-                */
             }
             else
                 // wins defender
@@ -564,15 +559,6 @@ namespace AI
                 castle->Scoute();
                 // allow_enter = true;
             }
-
-            // disable: auto move hero to castle for AI
-            /*
-                if(conf.ExtHeroAutoMove2BattleTarget() && allow_enter)
-                {
-                    hero.Move2Dest(dst_index);
-                    AIToCastle(hero, MP2::OBJ_CASTLE, dst_index);
-                }
-            */
         }
     }
 
@@ -580,7 +566,10 @@ namespace AI
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapMonster * map_troop = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
         Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
 
         JoinCount join = Army::GetJoinSolution( hero, tile, troop );
@@ -626,16 +615,14 @@ namespace AI
             }
             else {
                 AIBattleLose( hero, res, true );
-                if ( Settings::Get().ExtWorldSaveMonsterBattle() ) {
-                    tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
-                    if ( tile.MonsterJoinConditionFree() )
-                        tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+                tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+                if ( tile.MonsterJoinConditionFree() )
+                    tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
 
-                    if ( map_troop ) {
-                        map_troop->count = army.GetCountMonsters( troop() );
-                        if ( map_troop->JoinConditionFree() )
-                            map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                    }
+                if ( map_troop ) {
+                    map_troop->count = army.GetCountMonsters( troop() );
+                    if ( map_troop->JoinConditionFree() )
+                        map_troop->condition = Monster::JOIN_CONDITION_MONEY;
                 }
             }
         }
@@ -644,36 +631,22 @@ namespace AI
             destroy = true;
 
         if ( destroy ) {
-            Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-            if ( addon ) {
-                const u32 uniq = addon->uniq;
-                tile.Remove( uniq );
-                tile.MonsterSetCount( 0 );
-                tile.SetObject( MP2::OBJ_ZERO );
-
-                // remove shadow from left cell
-                if ( Maps::isValidDirection( dst_index, Direction::LEFT ) )
-                    world.GetTiles( Maps::GetDirectionIndex( dst_index, Direction::LEFT ) ).Remove( uniq );
-            }
+            tile.RemoveObjectSprite();
+            tile.MonsterSetCount( 0 );
+            tile.SetObject( MP2::OBJ_ZERO );
 
             if ( map_troop )
                 world.RemoveMapObject( map_troop );
-
-            // auto move hero
-            // disable: https://sourceforge.net/tracker/index.php?func=detail&aid=3155230&group_id=96859&atid=616180
-            /*
-                if(conf.ExtHeroAutoMove2BattleTarget() && allow_move)
-                {
-                    hero.Move2Dest(dst_index);
-                }
-            */
         }
     }
 
     void AIToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapResource * map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapResource * map_resource = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
 
         if ( obj != MP2::OBJ_BOTTLE )
             hero.GetKingdom().AddFundsResource( map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds() );
@@ -804,8 +777,7 @@ namespace AI
                 else {
                     capture = false;
                     AIBattleLose( hero, result, true );
-                    if ( Settings::Get().ExtWorldSaveMonsterBattle() )
-                        tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
+                    tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
                 }
             }
 
@@ -813,13 +785,8 @@ namespace AI
                 // update abandone mine
                 if ( obj == MP2::OBJ_ABANDONEDMINE ) {
                     tile.UpdateAbandoneMineSprite( tile );
-                    hero.SetMapsObject( MP2::OBJ_MINES );
+                    tile.SetHeroes( &hero );
                 }
-
-                // reset spell info
-                Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MINES );
-                if ( addon )
-                    addon->tmp = 0;
 
                 tile.QuantitySetColor( hero.GetColor() );
 
@@ -882,7 +849,7 @@ namespace AI
             const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
 
             if ( other_hero ) {
-                AIToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
+                AIToHeroes( hero, MP2::OBJ_STONELITHS, index_to );
 
                 // lose battle
                 if ( hero.isFreeman() ) {
@@ -1394,7 +1361,10 @@ namespace AI
     void AIToArtifact( Heroes & hero, u32 obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapArtifact * map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapArtifact * map_artifact = NULL;
+        if ( tile.GetObject() == obj ) {
+            map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
+        }
 
         if ( !hero.IsFullBagArtifacts() ) {
             u32 cond = tile.QuantityVariant();
@@ -1566,7 +1536,7 @@ namespace AI
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
                     Army enemy( tile );
-                    return army.isStrongerThan( enemy );
+                    return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_SMALL );
                 }
                 else
                     return true;
@@ -1588,7 +1558,7 @@ namespace AI
                 if ( !hero.isFriends( tile.QuantityColor() ) ) {
                     if ( tile.CaptureObjectIsProtection() ) {
                         Army enemy( tile );
-                        return army.isStrongerThan( enemy );
+                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_LARGE );
                     }
                     else
                         return true;
@@ -1628,7 +1598,7 @@ namespace AI
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
                 if ( 5 < variants && 14 > variants ) {
                 Army enemy( tile );
-                return army.isStrongerThan( enemy );
+                return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_LARGE );
             }
             else
                 // other
@@ -1814,7 +1784,7 @@ namespace AI
         case MP2::OBJ_DERELICTSHIP:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
-                return enemy.isValid() && army.isStrongerThan( enemy );
+                return enemy.isValid() && army.isStrongerThan( enemy, 2 );
             }
             break;
 
@@ -1826,7 +1796,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ) );
+            return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_SMALL );
 
         // sign
         case MP2::OBJ_SIGN:
@@ -1844,7 +1814,7 @@ namespace AI
                     if ( hero.isFriends( castle->GetColor() ) )
                         return false;
                     else
-                        return army.isStrongerThan( castle->GetActualArmy() );
+                        return army.isStrongerThan( castle->GetActualArmy(), ARMY_STRENGTH_ADVANTAGE_LARGE );
                 }
             }
             break;
@@ -1854,18 +1824,17 @@ namespace AI
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
                 if ( hero.GetColor() == hero2->GetColor() )
-                    return true;
-                // FIXME: AI skip visiting alliance
+                    return false;
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
-                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy() ) )
+                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE_SMALL ) )
                     return true;
             }
             break;
         }
 
         case MP2::OBJ_BOAT:
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
             // check later
             return true;
 
@@ -1933,7 +1902,7 @@ namespace AI
             bool recenterNeeded = true;
 
             while ( LocalEvent::Get().HandleEvents() ) {
-                if ( hero.isFreeman() || !hero.isEnableMove() ) {
+                if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
                     break;
                 }
 
@@ -1963,7 +1932,7 @@ namespace AI
 
                     I.Redraw( REDRAW_GAMEAREA );
                     cursor.Show();
-                    Display::Get().Flip();
+                    fheroes2::Display::instance().render();
                 }
 
                 if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {

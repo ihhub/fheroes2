@@ -60,47 +60,23 @@ namespace Maps
         TilesAddon & operator=( const TilesAddon & ta );
 
         bool isUniq( u32 ) const;
-        bool isRoad( int ) const;
-        bool isRoadObject() const;
+        bool isRoad() const;
+        bool hasRoadFlag() const;
         bool isICN( int ) const;
+        bool hasSpriteAnimation() const;
 
         std::string String( int level ) const;
 
-        static bool hasColorCycling( const TilesAddon & addon );
-        static bool isStream( const TilesAddon & );
-        static bool isRoad( const TilesAddon & );
+        static bool isShadow( const TilesAddon & );
+        static bool isRoadObject( const TilesAddon & );
 
         static bool isResource( const TilesAddon & );
-        static bool isWaterResource( const TilesAddon & );
-        static bool isWhirlPool( const TilesAddon & );
-        static bool isStandingStone( const TilesAddon & );
         static bool isArtifact( const TilesAddon & );
-        static bool isCampFire( const TilesAddon & );
-        static bool isMonster( const TilesAddon & );
-        static bool isArtesianSpring( const TilesAddon & );
-        static bool isOasis( const TilesAddon & );
-        static bool isWateringHole( const TilesAddon & );
-        static bool isJail( const TilesAddon & );
-        static bool isMine( const TilesAddon & );
-        static bool isShadow( const TilesAddon & );
-        static bool isEvent( const TilesAddon & );
-        static bool isBoat( const TilesAddon & );
-        static bool isTeleporter( const TilesAddon & );
-        static bool isMiniHero( const TilesAddon & );
-        static bool isRandomResource( const TilesAddon & );
-        static bool isRandomArtifact( const TilesAddon & );
-        static bool isRandomArtifact1( const TilesAddon & );
-        static bool isRandomArtifact2( const TilesAddon & );
-        static bool isRandomArtifact3( const TilesAddon & );
-        static bool isUltimateArtifact( const TilesAddon & );
-        static bool isCastle( const TilesAddon & );
-        static bool isRandomCastle( const TilesAddon & );
-        static bool isRandomMonster( const TilesAddon & );
-        static bool isSkeleton( const TilesAddon & );
         static bool isSkeletonFix( const TilesAddon & );
         static bool isFlag32( const TilesAddon & );
         static bool isX_LOC123( const TilesAddon & );
         static bool isAbandoneMineSprite( const TilesAddon & );
+
         static bool isMounts( const TilesAddon & );
         static bool isRocs( const TilesAddon & );
         static bool isForests( const TilesAddon & );
@@ -108,7 +84,6 @@ namespace Maps
         static bool isDeadTrees( const TilesAddon & );
         static bool isCactus( const TilesAddon & );
         static bool isStump( const TilesAddon & );
-        static int GetPassable( const TilesAddon & );
         static int GetActionObject( const TilesAddon & );
         static int GetLoyaltyObject( const TilesAddon & );
 
@@ -116,13 +91,8 @@ namespace Maps
         static int ColorFromBarrierSprite( const TilesAddon & );
         static int ColorFromTravellerTentSprite( const TilesAddon & );
 
-        static std::pair<int, int> ColorRaceFromHeroSprite( const TilesAddon & );
-
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
-
-        static void UpdateAbandoneMineLeftSprite( TilesAddon &, int resource );
-        static void UpdateAbandoneMineRightSprite( TilesAddon & );
 
         static bool ForceLevel1( const TilesAddon & );
         static bool ForceLevel2( const TilesAddon & );
@@ -149,41 +119,34 @@ namespace Maps
         s32 GetIndex( void ) const;
         Point GetCenter( void ) const;
         int GetObject( bool ignoreObjectUnderHero = true ) const;
-        u32 GetObjectUID( int obj ) const;
-        int GetQuantity1( void ) const
-        {
-            return quantity1;
-        }
-        int GetQuantity2( void ) const
-        {
-            return quantity2;
-        }
-        int GetPassable( void ) const;
-        int GetGround( void ) const;
-        bool isWater( void ) const;
+        uint8_t GetObjectTileset() const;
+        uint8_t GetObjectSpriteIndex() const;
+        u32 GetObjectUID() const;
+        int GetQuantity1() const;
+        int GetQuantity2() const;
+        int GetQuantity3() const;
+        int GetPassable() const;
+        int GetGround() const;
+        bool isWater() const;
 
         u32 TileSpriteIndex( void ) const;
         u32 TileSpriteShape( void ) const;
 
-        Surface GetTileSurface( void ) const;
+        const fheroes2::Image & GetTileSurface( void ) const;
 
+        bool isObject( int obj ) const;
+        bool hasSpriteAnimation() const;
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog ) const;
-        bool isRoad( int = DIRECTION_ALL ) const;
-        bool isObject( int obj ) const
-        {
-            return obj == mp2_object;
-        };
+        bool isRoad() const;
         bool isStream( void ) const;
+        bool isShadow( void ) const;
         bool GoodForUltimateArtifact( void ) const;
 
         TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );
 
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
-
-        TilesAddon * FindObject( int objectID );
-        const TilesAddon * FindObjectConst( int objectID ) const;
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
         void SetObject( int object );
@@ -195,16 +158,17 @@ namespace Maps
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
-        void RedrawTile( Surface & ) const;
-        static void RedrawEmptyTile( Surface & dst, const Point & mp );
-        void RedrawBottom( Surface & dst, bool skipObjs = false ) const;
-        void RedrawBottom4Hero( Surface & ) const;
-        void RedrawTop( Surface & dst, bool skipObjs = false ) const;
-        void RedrawTop4Hero( Surface &, bool skip_ground ) const;
-        void RedrawObjects( Surface & ) const;
-        void RedrawFogs( Surface &, int ) const;
-        void RedrawAddon( Surface & dst, const Addons & addon, bool skipObjs = false ) const;
-        void RedrawPassable( Surface & ) const;
+        void RedrawTile( fheroes2::Image & ) const;
+        static void RedrawEmptyTile( fheroes2::Image & dst, const Point & mp );
+        void RedrawBottom( fheroes2::Image & dst, bool isPuzzleDraw = false ) const;
+        void RedrawBottom4Hero( fheroes2::Image & ) const;
+        void RedrawTop( fheroes2::Image & dst ) const;
+        void RedrawTop4Hero( fheroes2::Image &, bool skip_ground ) const;
+        void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw = false ) const;
+        void RedrawMonstersAndBoat( fheroes2::Image & ) const;
+        void RedrawFogs( fheroes2::Image &, int ) const;
+        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool isPuzzleDraw = false ) const;
+        void RedrawPassable( fheroes2::Image & ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
@@ -214,8 +178,10 @@ namespace Maps
         void AddonsPushLevel2( const TilesAddon & );
 
         void AddonsSort( void );
-        void Remove( u32 uniq );
+        void Remove( u32 uniqID );
         void RemoveObjectSprite( void );
+        void UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, int indexChange );
+        void ReplaceObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t indexToReplace, uint8_t newIndex );
 
         std::string String( void ) const;
 
@@ -254,10 +220,16 @@ namespace Maps
         Troop QuantityTroop( void ) const;
 
         void SetObjectPassable( bool );
+        void SetQuantity3( int value );
 
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static bool isShadowSprite( uint8_t tileset, uint8_t icnIndex );
+        static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource );
+        static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
+        static int GetPassable( uint32_t tileset, uint32_t index );
+        static std::pair<int, int> ColorRaceFromHeroSprite( uint32_t heroSpriteIndex );
         static std::pair<int, int> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles &, const Monster &, u32 );
         static void UpdateAbandoneMineSprite( Tiles & );
@@ -273,9 +245,8 @@ namespace Maps
         void RemoveBarrierSprite( void );
         bool isLongObject( int direction );
 
-        void RedrawBoat( Surface & ) const;
-        void RedrawMonster( Surface & ) const;
-        void RedrawMapObject( Surface & dst, int icn, uint32_t index, const Point & mapPoint, bool cycle = false, int offsetX = 0, int offsetY = 0 ) const;
+        void RedrawBoat( fheroes2::Image & ) const;
+        void RedrawMonster( fheroes2::Image & ) const;
 
         void QuantitySetVariant( int );
         void QuantitySetExt( int );
@@ -284,16 +255,12 @@ namespace Maps
         void QuantitySetArtifact( int );
         void QuantitySetResource( int, u32 );
 
-        int GetQuantity3( void ) const;
-        void SetQuantity3( int );
-
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & );
         static void UpdateMonsterPopulation( Tiles & );
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );
 
-    private:
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
 #ifdef WITH_XML
@@ -303,18 +270,25 @@ namespace Maps
         Addons addons_level1;
         Addons addons_level2; // 16
 
-        u32 maps_index;
-        u16 pack_sprite_index;
+        uint32_t maps_index = 0;
+        uint16_t pack_sprite_index = 0;
 
-        u16 tile_passable;
-        u8 mp2_object;
-        u8 fog_colors;
+        uint32_t uniq = 0;
+        uint8_t objectTileset = 0;
+        uint8_t objectIndex = 255;
+        uint8_t mp2_object = 0;
+        uint16_t tilePassable = DIRECTION_ALL;
+        uint8_t fog_colors = Color::ALL;
 
-        u8 quantity1;
-        u8 quantity2;
-        u8 quantity3;
+        uint8_t heroID = 0;
+        uint8_t quantity1 = 0;
+        uint8_t quantity2 = 0;
+        uint8_t quantity3 = 0;
+
+        bool tileIsRoad = false;
+
 #ifdef WITH_DEBUG
-        u8 passable_disable;
+        uint8_t impassableTileRule = 0;
 #endif
     };
 

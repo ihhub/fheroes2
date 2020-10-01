@@ -49,6 +49,7 @@ namespace Battle
         void AddTroop( const Unit & );
         void RemoveTroop( const Unit & );
         u32 GetLastTroopUID( s32 ) const;
+        TroopUIDs GetTroopUIDs( const int32_t hexIndex ) const;
     };
 }
 

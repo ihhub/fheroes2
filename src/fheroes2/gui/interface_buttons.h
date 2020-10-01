@@ -23,8 +23,8 @@
 #ifndef H2INTERFACE_BUTTONS_H
 #define H2INTERFACE_BUTTONS_H
 
-#include "button.h"
 #include "interface_border.h"
+#include "ui_button.h"
 
 namespace Interface
 {
@@ -45,14 +45,23 @@ namespace Interface
     private:
         Basic & interface;
 
-        Button buttonNextHero;
-        Button buttonMovement;
-        Button buttonKingdom;
-        Button buttonSpell;
-        Button buttonEndTur;
-        Button buttonAdventure;
-        Button buttonFile;
-        Button buttonSystem;
+        fheroes2::Button buttonNextHero;
+        fheroes2::Button buttonMovement;
+        fheroes2::Button buttonKingdom;
+        fheroes2::Button buttonSpell;
+        fheroes2::Button buttonEndTurn;
+        fheroes2::Button buttonAdventure;
+        fheroes2::Button buttonFile;
+        fheroes2::Button buttonSystem;
+
+        Rect nextHeroRect;
+        Rect movementRect;
+        Rect kingdomRect;
+        Rect spellRect;
+        Rect endTurnRect;
+        Rect adventureRect;
+        Rect fileRect;
+        Rect systemRect;
 
         void SetButtonStatus();
     };

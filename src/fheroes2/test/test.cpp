@@ -71,7 +71,7 @@ void RunTest1( void )
 void RunTest2( void )
 {
     VERBOSE( "Run Test2" );
-
+    /*
     Display & display = Display::Get();
     LocalEvent & le = LocalEvent::Get();
 
@@ -133,6 +133,7 @@ void RunTest2( void )
         if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             break;
     }
+    */
 }
 
 ListFiles GetMapsFiles( const char * );

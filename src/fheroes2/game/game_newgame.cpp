@@ -23,20 +23,28 @@
 #include <sstream>
 
 #include "agg.h"
-#include "button.h"
+#include "audio_music.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_video.h"
 #include "gamedefs.h"
 #include "mus.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_button.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace
 {
     const std::string rolandCampaignDescription[] = {_(
-        "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother. They are not allied with each other, so they will spend most of their time fighting with on another. Victory is yours when you have defeated all of their castles and heroes." )};
+        "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
+        " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." )};
+
+    const std::string archibaldCampaignDescription[] = {_(
+        "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
+        " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." )};
 
     std::string ConvertToString( int value )
     {
@@ -45,13 +53,16 @@ namespace
         return ostr.str();
     }
 
-    void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, Point offset )
+    void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, const Point & offset )
     {
-        const Sprite & campaignMapIcon = AGG::GetICN( ICN::CAMPXTRG, icnId );
-        campaignMapIcon.Blit( offset.x + 40 + 73 * offsetXMultipler, offset.y + 356 + campaignMapIcon.h() * ( offsetYMultipler - 0.5 ) );
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Sprite & campaignMapIcon = fheroes2::AGG::GetICN( ICN::CAMPXTRG, icnId );
+        fheroes2::Blit( campaignMapIcon, display, offset.x + 40 + 73 * offsetXMultipler, offset.y + 356 + campaignMapIcon.height() * ( offsetYMultipler - 0.5 ) );
+
         Text campaignMapText( ConvertToString( id ), Font::YELLOW_BIG );
-        campaignMapText.Blit( offset.x + 40 + 73 * offsetXMultipler + campaignMapIcon.w(),
-                              offset.y + 356 + campaignMapIcon.h() * ( offsetYMultipler + 0.5 ) - campaignMapText.h() );
+        campaignMapText.Blit( offset.x + 40 + 73 * offsetXMultipler + campaignMapIcon.width(),
+                              offset.y + 356 + campaignMapIcon.height() * ( offsetYMultipler + 0.5 ) - campaignMapText.h(), display );
     }
 
     bool hasEnding( std::string const & fullString, std::string const & ending )
@@ -62,19 +73,16 @@ namespace
             return false;
     }
 
-    std::vector<Maps::FileInfo> GetRolandCampaign()
+    std::vector<Maps::FileInfo> GetCampaignMaps( const std::vector<std::string> & fileNames )
     {
-        const size_t rolandMapCount = 11;
-        static const std::string rolandMap[rolandMapCount] = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
-                                                              "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
         const ListFiles files = Settings::Get().GetListFiles( "maps", ".h2c" );
 
         std::vector<Maps::FileInfo> maps;
 
-        for ( size_t i = 0; i < rolandMapCount; ++i ) {
+        for ( size_t i = 0; i < fileNames.size(); ++i ) {
             bool isPresent = false;
             for ( ListFiles::const_iterator file = files.begin(); file != files.end(); ++file ) {
-                if ( hasEnding( *file, rolandMap[i] ) ) {
+                if ( hasEnding( *file, fileNames[i] ) ) {
                     Maps::FileInfo fi;
                     if ( fi.ReadMP2( *file ) ) {
                         maps.push_back( fi );
@@ -88,6 +96,27 @@ namespace
         }
 
         return maps;
+    }
+
+    std::vector<Maps::FileInfo> GetRolandCampaign()
+    {
+        const std::vector<std::string> maps = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
+                                               "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
+
+        return GetCampaignMaps( maps );
+    }
+
+    std::vector<Maps::FileInfo> GetArchibaldCampaign()
+    {
+        const std::vector<std::string> maps = {"CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
+                                               "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C"};
+
+        return GetCampaignMaps( maps );
+    }
+
+    bool IsCampaignPresent()
+    {
+        return !GetRolandCampaign().empty() && !GetArchibaldCampaign().empty();
     }
 }
 
@@ -123,7 +152,7 @@ int Game::NewHotSeat( void )
         return StartBattleOnly();
     }
     else {
-        const u32 select = conf.QVGA() ? 2 : SelectCountPlayers();
+        const u32 select = SelectCountPlayers();
         if ( select ) {
             conf.SetPreferablyCountPlayers( select );
             return Game::SELECTSCENARIO;
@@ -137,6 +166,26 @@ int Game::NewCampain( void )
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
     Mixer::Pause();
+    Music::Pause();
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
+
+    display.fill( 0 );
+
+    const Text loadingScreen( "Loading video. Please wait...", Font::BIG );
+    loadingScreen.Blit( Point( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 ) );
+    display.render();
+
+    std::vector<fheroes2::Rect> campaignRoi;
+    campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
+    campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
+
+    Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "INTRO.SMK" ), false );
+    Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSEW.SMK" ), false );
+    const size_t chosenCampaign = Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSE.SMK" ), true, campaignRoi );
+    const bool goodCampaign = chosenCampaign == 0;
+
     AGG::PlayMusic( MUS::VICTORY );
     Settings & conf = Settings::Get();
 
@@ -145,24 +194,46 @@ int Game::NewCampain( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Display & display = Display::Get();
-    display.Fill( ColorBlack );
+    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
+    const Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
 
-    const Sprite & backgroundImage = AGG::GetICN( ICN::CAMPBKGG, 0 );
-    const Point top( ( display.w() - backgroundImage.w() ) / 2, ( display.h() - backgroundImage.h() ) / 2 );
-    backgroundImage.Blit( top );
+    fheroes2::Blit( backgroundImage, display, top.x, top.y );
 
-    Button buttonViewIntro( top.x + 30, top.y + 430, ICN::CAMPXTRG, 0, 1 );
-    Button buttonOk( top.x + 380, top.y + 430, ICN::NGEXTRA, 66, 67 );
-    Button buttonCancel( top.x + 520, top.y + 430, ICN::NGEXTRA, 68, 69 );
+    fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE, 0, 1 );
+    fheroes2::Button buttonOk( top.x + 367, top.y + 431, goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE, 4, 5 );
+    fheroes2::Button buttonCancel( top.x + 511, top.y + 431, goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE, 6, 7 );
 
-    const std::vector<Maps::FileInfo> & campaignMap = GetRolandCampaign();
+    const fheroes2::Point optionButtonOffset( 590, 199 );
+    const int32_t optionButtonStep = 22;
 
-    buttonViewIntro.SetDisable( true );
-    buttonViewIntro.Draw();
-    buttonOk.SetDisable( campaignMap.empty() );
-    buttonOk.Draw();
-    buttonCancel.Draw();
+    const fheroes2::Sprite & pressedButton = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 8 );
+    fheroes2::Sprite releaseButton( pressedButton.width(), pressedButton.height(), pressedButton.x(), pressedButton.y() );
+    fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
+                    releaseButton.height() );
+
+    fheroes2::ButtonSprite firstChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + top.y, releaseButton, pressedButton );
+    fheroes2::ButtonSprite secondChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep + top.y, releaseButton, pressedButton );
+    fheroes2::ButtonSprite thirdChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * 2 + top.y, releaseButton, pressedButton );
+
+    firstChoice.press();
+
+    fheroes2::OptionButtonGroup buttonGroup;
+    buttonGroup.addButton( &firstChoice );
+    buttonGroup.addButton( &secondChoice );
+    buttonGroup.addButton( &thirdChoice );
+
+    const std::vector<Maps::FileInfo> & campaignMap = goodCampaign ? GetRolandCampaign() : GetArchibaldCampaign();
+
+    buttonViewIntro.disable();
+    buttonViewIntro.draw();
+    if ( campaignMap.empty() )
+        buttonOk.disable();
+    buttonOk.draw();
+    buttonCancel.draw();
+
+    firstChoice.draw();
+    secondChoice.draw();
+    thirdChoice.draw();
 
     Text textDaysSpent( "0", Font::BIG );
     textDaysSpent.Blit( top.x + 570 + textDaysSpent.w() / 2, top.y + 31 );
@@ -174,18 +245,18 @@ int Game::NewCampain( void )
         Text campaignMapId( "1", Font::BIG );
         campaignMapId.Blit( top.x + 175 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
 
-        TextBox mapDescription( rolandCampaignDescription[0], Font::BIG, 350 );
-        mapDescription.Blit( top.x + 40, top.y + 140 );
+        TextBox mapDescription( goodCampaign ? rolandCampaignDescription[0] : archibaldCampaignDescription[0], Font::BIG, 356 );
+        mapDescription.Blit( top.x + 34, top.y + 132 );
 
         TextBox awards( _( "None" ), Font::BIG, 180 );
         awards.Blit( top.x + 425, top.y + 100 );
 
         Text choice1( _( "2000 Gold" ), Font::BIG );
         choice1.Blit( top.x + 425, top.y + 209 - choice1.h() / 2 );
-        Text choice2( _( "Thunder Mace" ), Font::BIG );
-        choice2.Blit( top.x + 425, top.y + 209 + 23 - choice2.h() / 2 );
-        Text choice3( _( "Gauntlets" ), Font::BIG );
-        choice3.Blit( top.x + 425, top.y + 209 + 45 - choice3.h() / 2 );
+        Text choice2( goodCampaign ? _( "Thunder Mace" ) : _( "Mage's Ring" ), Font::BIG );
+        choice2.Blit( top.x + 425, top.y + 209 + 22 - choice2.h() / 2 );
+        Text choice3( goodCampaign ? _( "Gauntlets" ) : _( "Minor Scroll" ), Font::BIG );
+        choice3.Blit( top.x + 425, top.y + 209 + 44 - choice3.h() / 2 );
     }
     else {
         TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 350 );
@@ -195,36 +266,64 @@ int Game::NewCampain( void )
         textDescription.Blit( top.x + 40, top.y + 200 );
     }
 
-    DrawCampaignScenarioIcon( 1, 0, 0, 14, top );
-    DrawCampaignScenarioIcon( 2, 1, 0, 15, top );
-    DrawCampaignScenarioIcon( 3, 1.5, -1, 15, top );
-    DrawCampaignScenarioIcon( 4, 2, 0, 15, top );
-    DrawCampaignScenarioIcon( 5, 3, 0, 15, top );
-    DrawCampaignScenarioIcon( 6, 4, 0, 15, top );
-    DrawCampaignScenarioIcon( 7, 5, 0, 15, top );
-    DrawCampaignScenarioIcon( 8, 6, -1, 15, top );
-    DrawCampaignScenarioIcon( 9, 6, 1, 15, top );
-    DrawCampaignScenarioIcon( 10, 7, 0, 15, top );
+    if ( goodCampaign ) {
+        DrawCampaignScenarioIcon( 1, 0, 0, 14, top );
+        DrawCampaignScenarioIcon( 2, 1, 0, 15, top );
+        DrawCampaignScenarioIcon( 3, 1.5, -1, 15, top );
+        DrawCampaignScenarioIcon( 4, 2, 0, 15, top );
+        DrawCampaignScenarioIcon( 5, 3, 0, 15, top );
+        DrawCampaignScenarioIcon( 6, 4, 0, 15, top );
+        DrawCampaignScenarioIcon( 7, 5, 0, 15, top );
+        DrawCampaignScenarioIcon( 8, 6, -1, 15, top );
+        DrawCampaignScenarioIcon( 9, 6, 1, 15, top );
+        DrawCampaignScenarioIcon( 10, 7, 0, 15, top );
+    }
+    else {
+        DrawCampaignScenarioIcon( 1, 0, 0, 17, top );
+        DrawCampaignScenarioIcon( 2, 1, 0, 18, top );
+        DrawCampaignScenarioIcon( 3, 2, -1, 18, top );
+        DrawCampaignScenarioIcon( 4, 2, 1, 18, top );
+        DrawCampaignScenarioIcon( 5, 3, 0, 18, top );
+        DrawCampaignScenarioIcon( 6, 4, 0, 18, top );
+        DrawCampaignScenarioIcon( 7, 4.5, -1, 18, top );
+        DrawCampaignScenarioIcon( 8, 5, 0, 18, top );
+        DrawCampaignScenarioIcon( 9, 6, -1, 18, top );
+        DrawCampaignScenarioIcon( 10, 6, 1, 18, top );
+        DrawCampaignScenarioIcon( 11, 7, 0, 18, top );
+    }
 
     LocalEvent & le = LocalEvent::Get();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     while ( le.HandleEvents() ) {
-        if ( !buttonCancel.isDisable() )
-            le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
-        if ( !buttonOk.isDisable() )
-            le.MousePressLeft( buttonOk ) ? buttonOk.PressDraw() : buttonOk.ReleaseDraw();
+        if ( !buttonCancel.isDisabled() )
+            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        if ( !buttonOk.isDisabled() )
+            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonCancel ) )
+        if ( le.MousePressLeft( firstChoice.area() ) ) {
+            firstChoice.press();
+            buttonGroup.draw();
+        }
+        if ( le.MousePressLeft( secondChoice.area() ) ) {
+            secondChoice.press();
+            buttonGroup.draw();
+        }
+        if ( le.MousePressLeft( thirdChoice.area() ) ) {
+            thirdChoice.press();
+            buttonGroup.draw();
+        }
+
+        if ( le.MouseClickLeft( buttonCancel.area() ) )
             return Game::NEWGAME;
-        else if ( !buttonOk.isDisable() && le.MouseClickLeft( buttonOk ) ) {
+        else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
             conf.SetCurrentFileInfo( campaignMap[0] );
             Players & players = conf.GetPlayers();
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
-                display.Fade();
+                fheroes2::FadeDisplay();
             Game::ShowLoadMapsText();
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
@@ -252,50 +351,48 @@ int Game::NewNetwork( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Display & display = Display::Get();
-    // Settings & conf = Settings::Get();
-
-    AGG::RegisterScalableICN( ICN::HEROES );
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    back.Blit( Point( 0, 0 ) );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+    fheroes2::Blit( back, display );
+    const uint32_t backgroundWidth = back.width();
 
-    const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
-    panel.Blit( back.w() - 235, 5 );
+    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+    fheroes2::Blit( panel, display, backgroundWidth - 235, 5 );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonHost( back.w() - 185, 45, ICN::BTNNET, 0, 1 );
-    Button buttonGuest( back.w() - 185, 110, ICN::BTNNET, 2, 3 );
-    Button buttonCancelGame( back.w() - 185, 375, ICN::BTNMP, 8, 9 );
+    fheroes2::Button buttonHost( backgroundWidth - 185, 45, ICN::BTNNET, 0, 1 );
+    fheroes2::Button buttonGuest( backgroundWidth - 185, 110, ICN::BTNNET, 2, 3 );
+    fheroes2::Button buttonCancelGame( backgroundWidth - 185, 375, ICN::BTNMP, 8, 9 );
 
-    buttonHost.Draw();
-    buttonGuest.Draw();
-    buttonCancelGame.Draw();
+    buttonHost.draw();
+    buttonGuest.draw();
+    buttonCancelGame.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // newgame loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonHost ) ? buttonHost.PressDraw() : buttonHost.ReleaseDraw();
-        le.MousePressLeft( buttonGuest ) ? buttonGuest.PressDraw() : buttonGuest.ReleaseDraw();
-        le.MousePressLeft( buttonCancelGame ) ? buttonCancelGame.PressDraw() : buttonCancelGame.ReleaseDraw();
+        le.MousePressLeft( buttonHost.area() ) ? buttonHost.drawOnPress() : buttonHost.drawOnRelease();
+        le.MousePressLeft( buttonGuest.area() ) ? buttonGuest.drawOnPress() : buttonGuest.drawOnRelease();
+        le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
         // if(le.MouseClickLeft(buttonHost) || HotKeyPressEvent(EVENT_BUTTON_HOST)) return NetworkHost();
         // if(le.MouseClickLeft(buttonGuest) || HotKeyPressEvent(EVENT_BUTTON_GUEST)) return NetworkGuest();
-        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame ) )
+        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return MAINMENU;
 
         // right info
-        if ( le.MousePressRight( buttonHost ) )
+        if ( le.MousePressRight( buttonHost.area() ) )
             Dialog::Message( _( "Host" ), _( "The host sets up the game options. There can only be one host per network game." ), Font::BIG );
-        if ( le.MousePressRight( buttonGuest ) )
+        if ( le.MousePressRight( buttonGuest.area() ) )
             Dialog::Message( _( "Guest" ),
                              _( "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games." ),
                              Font::BIG );
-        if ( le.MousePressRight( buttonCancelGame ) )
+        if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
 
@@ -317,74 +414,86 @@ int Game::NewGame( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // load game settings
     conf.BinaryLoad();
 
     // image background
-    const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    back.Blit( Point( 0, 0 ) );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+    fheroes2::Copy( back, display );
 
-    const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
-    panel.Blit( back.w() - 235, 5 );
+    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+    fheroes2::Blit( panel, display, panelXPos, panelOffset );
+
+    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+    const uint32_t buttonWidth = buttonSample.width();
+    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+    const uint32_t buttonYPos = 46;
+    const uint32_t buttonYStep = 66;
+    fheroes2::Button buttonStandartGame( buttonXPos, buttonYPos, ICN::BTNNEWGM, 0, 1 );
+    fheroes2::Button buttonCampainGame( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNNEWGM, 2, 3 );
+    fheroes2::Button buttonMultiGame( buttonXPos, buttonYPos + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
+    fheroes2::Button buttonBattleGame( buttonXPos, buttonYPos + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
+    fheroes2::Button buttonSettings( buttonXPos, buttonYPos + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );
+    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
+
+    if ( !IsCampaignPresent() ) {
+        buttonCampainGame.disable();
+    }
+
+    buttonStandartGame.draw();
+    buttonCampainGame.draw();
+    buttonMultiGame.draw();
+    buttonBattleGame.draw();
+    buttonSettings.draw();
+    buttonCancelGame.draw();
+
+    cursor.Show();
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonStandartGame( back.w() - 185, 45, ICN::BTNNEWGM, 0, 1 );
-    Button buttonCampainGame( back.w() - 185, 110, ICN::BTNNEWGM, 2, 3 );
-    Button buttonMultiGame( back.w() - 185, 175, ICN::BTNNEWGM, 4, 5 );
-    Button buttonBattleGame( back.w() - 185, 240, ICN::BTNBATTLEONLY, 0, 1 );
-    Button buttonSettings( back.w() - 185, 305, ICN::BTNDCCFG, 4, 5 );
-    Button buttonCancelGame( back.w() - 185, 375, ICN::BTNNEWGM, 6, 7 );
-
-    buttonStandartGame.Draw();
-    buttonCampainGame.Draw();
-    buttonMultiGame.Draw();
-    if ( conf.QVGA() )
-        buttonBattleGame.SetDisable( true );
-    else
-        buttonBattleGame.Draw();
-    buttonSettings.Draw();
-    buttonCancelGame.Draw();
-
-    cursor.Show();
-    display.Flip();
-
     while ( le.HandleEvents() ) { // new game loop
-        le.MousePressLeft( buttonStandartGame ) ? buttonStandartGame.PressDraw() : buttonStandartGame.ReleaseDraw();
-        le.MousePressLeft( buttonCampainGame ) ? buttonCampainGame.PressDraw() : buttonCampainGame.ReleaseDraw();
-        le.MousePressLeft( buttonMultiGame ) ? buttonMultiGame.PressDraw() : buttonMultiGame.ReleaseDraw();
-        buttonBattleGame.isEnable() && le.MousePressLeft( buttonBattleGame ) ? buttonBattleGame.PressDraw() : buttonBattleGame.ReleaseDraw();
-        le.MousePressLeft( buttonSettings ) ? buttonSettings.PressDraw() : buttonSettings.ReleaseDraw();
-        le.MousePressLeft( buttonCancelGame ) ? buttonCancelGame.PressDraw() : buttonCancelGame.ReleaseDraw();
+        le.MousePressLeft( buttonStandartGame.area() ) ? buttonStandartGame.drawOnPress() : buttonStandartGame.drawOnRelease();
 
-        if ( HotKeyPressEvent( EVENT_BUTTON_STANDARD ) || le.MouseClickLeft( buttonStandartGame ) )
+        if ( buttonCampainGame.isEnabled() ) {
+            le.MousePressLeft( buttonCampainGame.area() ) ? buttonCampainGame.drawOnPress() : buttonCampainGame.drawOnRelease();
+        }
+        le.MousePressLeft( buttonMultiGame.area() ) ? buttonMultiGame.drawOnPress() : buttonMultiGame.drawOnRelease();
+        le.MousePressLeft( buttonBattleGame.area() ) ? buttonBattleGame.drawOnPress() : buttonBattleGame.drawOnRelease();
+        le.MousePressLeft( buttonSettings.area() ) ? buttonSettings.drawOnPress() : buttonSettings.drawOnRelease();
+        le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
+
+        if ( HotKeyPressEvent( EVENT_BUTTON_STANDARD ) || le.MouseClickLeft( buttonStandartGame.area() ) )
             return NEWSTANDARD;
-        if ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIN ) || le.MouseClickLeft( buttonCampainGame ) )
+        if ( buttonCampainGame.isEnabled() && ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIN ) || le.MouseClickLeft( buttonCampainGame.area() ) ) )
             return NEWCAMPAIN;
-        if ( HotKeyPressEvent( EVENT_BUTTON_MULTI ) || le.MouseClickLeft( buttonMultiGame ) )
+        if ( HotKeyPressEvent( EVENT_BUTTON_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) )
             return NEWMULTI;
-        if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings ) ) {
+        if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
             Dialog::ExtSettings( false );
             cursor.Show();
-            display.Flip();
+            display.render();
         }
-        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame ) )
+        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return MAINMENU;
 
-        if ( buttonBattleGame.isEnable() && ( HotKeyPressEvent( EVENT_BUTTON_BATTLEONLY ) || le.MouseClickLeft( buttonBattleGame ) ) )
+        if ( HotKeyPressEvent( EVENT_BUTTON_BATTLEONLY ) || le.MouseClickLeft( buttonBattleGame.area() ) )
             return NEWBATTLEONLY;
 
-        if ( le.MousePressRight( buttonStandartGame ) )
+        if ( le.MousePressRight( buttonStandartGame.area() ) )
             Dialog::Message( _( "Standard Game" ), _( "A single player game playing out a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonCampainGame ) )
+        if ( le.MousePressRight( buttonCampainGame.area() ) )
             Dialog::Message( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Font::BIG );
-        if ( le.MousePressRight( buttonMultiGame ) )
+        if ( le.MousePressRight( buttonMultiGame.area() ) )
             Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonSettings ) )
-            Dialog::Message( _( "Settings" ), _( "FHeroes2 game settings." ), Font::BIG );
-        if ( le.MousePressRight( buttonCancelGame ) )
+        if ( le.MousePressRight( buttonSettings.area() ) )
+            Dialog::Message( _( "Settings" ), _( "Experimental game settings." ), Font::BIG );
+        if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
 
@@ -403,52 +512,60 @@ int Game::NewMulti( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    back.Blit( Point( 0, 0 ) );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+    fheroes2::Copy( back, display );
 
-    const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
-    panel.Blit( back.w() - 235, 5 );
+    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+    fheroes2::Blit( panel, display, panelXPos, panelOffset );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button buttonHotSeat( back.w() - 185, 45, ICN::BTNMP, 0, 1 );
-    Button buttonNetwork( back.w() - 185, 110, ICN::BTNMP, 2, 3 );
-    Button buttonCancelGame( back.w() - 185, 375, ICN::BTNMP, 8, 9 );
+    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+    const uint32_t buttonWidth = buttonSample.width();
+    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+    const uint32_t buttonYPos = 46;
+    const uint32_t buttonYStep = 66;
+    fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BTNMP, 0, 1 );
+    fheroes2::Button buttonNetwork( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNMP, 2, 3 );
+    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNMP, 8, 9 );
 
-    buttonHotSeat.Draw();
-    buttonCancelGame.Draw();
-    buttonNetwork.SetDisable( true );
+    buttonHotSeat.draw();
+    buttonCancelGame.draw();
+    buttonNetwork.disable();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // newgame loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonHotSeat ) ? buttonHotSeat.PressDraw() : buttonHotSeat.ReleaseDraw();
-        le.MousePressLeft( buttonCancelGame ) ? buttonCancelGame.PressDraw() : buttonCancelGame.ReleaseDraw();
+        le.MousePressLeft( buttonHotSeat.area() ) ? buttonHotSeat.drawOnPress() : buttonHotSeat.drawOnRelease();
+        le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonHotSeat ) || HotKeyPressEvent( EVENT_BUTTON_HOTSEAT ) )
+        if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( EVENT_BUTTON_HOTSEAT ) )
             return NEWHOTSEAT;
-        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame ) )
+        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return MAINMENU;
 
         // right info
-        if ( le.MousePressRight( buttonHotSeat ) )
+        if ( le.MousePressRight( buttonHotSeat.area() ) )
             Dialog::Message( _( "Hot Seat" ),
                              _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
                              Font::BIG );
-        if ( le.MousePressRight( buttonCancelGame ) )
+        if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
 
 #ifdef NETWORK_ENABLE
-        if ( buttonNetwork.isEnable() ) {
-            le.MousePressLeft( buttonNetwork ) ? buttonNetwork.PressDraw() : buttonNetwork.ReleaseDraw();
-            if ( le.MouseClickLeft( buttonNetwork ) || HotKeyPressEvent( EVENT_BUTTON_NETWORK ) )
+        if ( buttonNetwork.isEnabled() ) {
+            le.MousePressLeft( buttonNetwork.area() ) ? buttonNetwork.drawOnPress() : buttonNetwork.drawOnRelease();
+            if ( le.MouseClickLeft( buttonNetwork.area() ) || HotKeyPressEvent( EVENT_BUTTON_NETWORK ) )
                 return NEWNETWORK;
-            if ( le.MousePressRight( buttonNetwork ) )
+            if ( le.MousePressRight( buttonNetwork.area() ) )
                 Dialog::Message( _( "Network" ), _( "Play a network game, where 2 players use their own computers connected through a LAN (Local Area Network)." ),
                                  Font::BIG );
         }
@@ -465,70 +582,78 @@ u32 Game::SelectCountPlayers( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Display & display = Display::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    const Sprite & back = AGG::GetICN( ICN::HEROES, 0 );
-    back.Blit( Point( 0, 0 ) );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+    fheroes2::Copy( back, display );
 
-    const Sprite & panel = AGG::GetICN( ICN::REDBACK, 0 );
-    panel.Blit( back.w() - 235, 5 );
+    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+    fheroes2::Blit( panel, display, panelXPos, panelOffset );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Button button2Players( back.w() - 185, 45, ICN::BTNHOTST, 0, 1 );
-    Button button3Players( back.w() - 185, 110, ICN::BTNHOTST, 2, 3 );
-    Button button4Players( back.w() - 185, 175, ICN::BTNHOTST, 4, 5 );
-    Button button5Players( back.w() - 185, 240, ICN::BTNHOTST, 6, 7 );
-    Button button6Players( back.w() - 185, 305, ICN::BTNHOTST, 8, 9 );
-    Button buttonCancel( back.w() - 185, 375, ICN::BTNNEWGM, 6, 7 );
+    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+    const uint32_t buttonWidth = buttonSample.width();
+    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+    const uint32_t buttonYPos = 46;
+    const uint32_t buttonYStep = 66;
+    fheroes2::Button button2Players( buttonXPos, buttonYPos, ICN::BTNHOTST, 0, 1 );
+    fheroes2::Button button3Players( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNHOTST, 2, 3 );
+    fheroes2::Button button4Players( buttonXPos, buttonYPos + buttonYStep * 2, ICN::BTNHOTST, 4, 5 );
+    fheroes2::Button button5Players( buttonXPos, buttonYPos + buttonYStep * 3, ICN::BTNHOTST, 6, 7 );
+    fheroes2::Button button6Players( buttonXPos, buttonYPos + buttonYStep * 4, ICN::BTNHOTST, 8, 9 );
+    fheroes2::Button buttonCancel( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
 
-    button2Players.Draw();
-    button3Players.Draw();
-    button4Players.Draw();
-    button5Players.Draw();
-    button6Players.Draw();
-    buttonCancel.Draw();
+    button2Players.draw();
+    button3Players.draw();
+    button4Players.draw();
+    button5Players.draw();
+    button6Players.draw();
+    buttonCancel.draw();
 
     cursor.Show();
-    display.Flip();
+    display.render();
 
     // newgame loop
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( button2Players ) ? button2Players.PressDraw() : button2Players.ReleaseDraw();
-        le.MousePressLeft( button3Players ) ? button3Players.PressDraw() : button3Players.ReleaseDraw();
-        le.MousePressLeft( button4Players ) ? button4Players.PressDraw() : button4Players.ReleaseDraw();
-        le.MousePressLeft( button5Players ) ? button5Players.PressDraw() : button5Players.ReleaseDraw();
-        le.MousePressLeft( button6Players ) ? button6Players.PressDraw() : button6Players.ReleaseDraw();
+        le.MousePressLeft( button2Players.area() ) ? button2Players.drawOnPress() : button2Players.drawOnRelease();
+        le.MousePressLeft( button3Players.area() ) ? button3Players.drawOnPress() : button3Players.drawOnRelease();
+        le.MousePressLeft( button4Players.area() ) ? button4Players.drawOnPress() : button4Players.drawOnRelease();
+        le.MousePressLeft( button5Players.area() ) ? button5Players.drawOnPress() : button5Players.drawOnRelease();
+        le.MousePressLeft( button6Players.area() ) ? button6Players.drawOnPress() : button6Players.drawOnRelease();
 
-        le.MousePressLeft( buttonCancel ) ? buttonCancel.PressDraw() : buttonCancel.ReleaseDraw();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( button2Players ) || le.KeyPress( KEY_2 ) )
+        if ( le.MouseClickLeft( button2Players.area() ) || le.KeyPress( KEY_2 ) )
             return 2;
-        if ( le.MouseClickLeft( button3Players ) || le.KeyPress( KEY_3 ) )
+        if ( le.MouseClickLeft( button3Players.area() ) || le.KeyPress( KEY_3 ) )
             return 3;
-        if ( le.MouseClickLeft( button4Players ) || le.KeyPress( KEY_4 ) )
+        if ( le.MouseClickLeft( button4Players.area() ) || le.KeyPress( KEY_4 ) )
             return 4;
-        if ( le.MouseClickLeft( button5Players ) || le.KeyPress( KEY_5 ) )
+        if ( le.MouseClickLeft( button5Players.area() ) || le.KeyPress( KEY_5 ) )
             return 5;
-        if ( le.MouseClickLeft( button6Players ) || le.KeyPress( KEY_6 ) )
+        if ( le.MouseClickLeft( button6Players.area() ) || le.KeyPress( KEY_6 ) )
             return 6;
 
-        if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel ) )
+        if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) )
             return 0;
 
         // right info
-        if ( le.MousePressRight( button2Players ) )
+        if ( le.MousePressRight( button2Players.area() ) )
             Dialog::Message( _( "2 Players" ), _( "Play with 2 human players, and optionally, up, to 4 additional computer players." ), Font::BIG );
-        if ( le.MousePressRight( button3Players ) )
+        if ( le.MousePressRight( button3Players.area() ) )
             Dialog::Message( _( "3 Players" ), _( "Play with 3 human players, and optionally, up, to 3 additional computer players." ), Font::BIG );
-        if ( le.MousePressRight( button4Players ) )
+        if ( le.MousePressRight( button4Players.area() ) )
             Dialog::Message( _( "4 Players" ), _( "Play with 4 human players, and optionally, up, to 2 additional computer players." ), Font::BIG );
-        if ( le.MousePressRight( button5Players ) )
+        if ( le.MousePressRight( button5Players.area() ) )
             Dialog::Message( _( "5 Players" ), _( "Play with 5 human players, and optionally, up, to 1 additional computer players." ), Font::BIG );
-        if ( le.MousePressRight( button6Players ) )
+        if ( le.MousePressRight( button6Players.area() ) )
             Dialog::Message( _( "6 Players" ), _( "Play with 6 human players." ), Font::BIG );
-        if ( le.MousePressRight( buttonCancel ) )
+        if ( le.MousePressRight( buttonCancel.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
 

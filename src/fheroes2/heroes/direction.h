@@ -25,8 +25,6 @@
 #include <string>
 #include <vector>
 
-#include "gamedefs.h"
-
 typedef std::vector<int> Directions;
 
 namespace Direction
@@ -46,8 +44,8 @@ namespace Direction
     };
 
     std::string String( int );
+    bool isDiagonal( int direction );
 
-    int Get( s32 from, s32 to );
     int Reflect( int direct );
 
     bool ShortDistanceClockWise( int direct1, int direct2 );
@@ -68,5 +66,6 @@ namespace Direction
 #define DIRECTION_TOP_LEFT_CORNER ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT )
 #define DIRECTION_BOTTOM_RIGHT_CORNER ( Direction::BOTTOM | Direction::BOTTOM_RIGHT | Direction::RIGHT )
 #define DIRECTION_BOTTOM_LEFT_CORNER ( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::LEFT )
+#define DIRECTION_ALL_CORNERS ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT )
 
 #endif
