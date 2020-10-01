@@ -23,7 +23,6 @@
 #include "empty/ai_empty.h"
 #include "kingdom.h"
 #include "normal/ai_normal.h"
-#include "simple/ai_simple.h"
 
 namespace AI
 {
