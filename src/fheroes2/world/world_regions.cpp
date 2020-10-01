@@ -201,16 +201,13 @@ void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapS
 
     for ( ; currentTile != mapEnd; ++currentTile ) {
         if ( currentTile->type == OPEN ) {
-            const size_t currentPosition = currentTile - rawData.data();
+            regions.emplace_back( static_cast<int>( regions.size() ), currentTile->index, currentTile->isWater, extendedWidth );
 
-            MapRegion region( static_cast<int>( regions.size() ), currentTile->index, currentTile->isWater, extendedWidth );
-
+            MapRegion & region = regions.back();
             do {
                 CheckAdjacentTiles( rawData, region, extendedWidth, offsets );
                 ++region.lastProcessedNode;
             } while ( region.lastProcessedNode != region.nodes.size() );
-
-            regions.push_back( region );
         }
     }
 }
@@ -361,7 +358,7 @@ void World::ComputeStaticAnalysis()
     std::vector<MapRegion> regions;
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
         const int tileIndex = regionCenters[regionID];
-        regions.push_back( {static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize} );
+        regions.emplace_back( static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
         data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION + regionID;
     }
 
@@ -373,7 +370,7 @@ void World::ComputeStaticAnalysis()
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
             MapRegion & region = regions[regionID];
             RegionExpansion( data, extendedWidth, region, offsets );
-            if ( !stillRoomToExpand && region.lastProcessedNode != region.nodes.size() )
+            if ( region.lastProcessedNode != region.nodes.size() )
                 stillRoomToExpand = true;
         }
     }
