@@ -38,7 +38,7 @@ void Game::ShowCredits()
 
     fheroes2::Fill( display, screenOffset.x, screenOffset.y, display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT - background.height(), 0 );
 
-    Text caption( "Free Heroes of Might and Magic II (" + Settings::Get().GetVersion() + ")", Font::YELLOW_BIG );
+    Text caption( "Free Heroes of Might and Magic II (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
     caption.Blit( screenOffset.x + display.DEFAULT_WIDTH / 2 - caption.w() / 2, screenOffset.y + 15 );
 
     const int32_t columnStep = 210;
