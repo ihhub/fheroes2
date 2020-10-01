@@ -1231,12 +1231,16 @@ void Maps::Tiles::UpdatePassable( void )
     }
 }
 
-bool Maps::Tiles::UpdateRegion( int newRegionID )
+int Maps::Tiles::GetRegion() const
+{
+    return _region;
+}
+
+void Maps::Tiles::UpdateRegion( int newRegionID )
 {
     if ( tilePassable ) {
         _region = newRegionID;
     }
-    return false;
 }
 
 u32 Maps::Tiles::GetObjectUID() const
@@ -1693,7 +1697,7 @@ std::string Maps::Tiles::String( void ) const
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << static_cast<int>( hasSpriteAnimation() ) << ")" << std::endl
-       << "region          : " << _region << " data: " << _metadata << std::endl
+       << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
 #ifdef WITH_DEBUG

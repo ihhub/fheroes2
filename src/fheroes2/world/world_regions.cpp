@@ -383,7 +383,7 @@ void World::ComputeStaticAnalysis()
 
     for ( const MapRegion & reg : regions ) {
         for ( const MapRegionNode & node : reg.nodes ) {
-            vec_tiles[node.index]._metadata = node.type;
+            vec_tiles[node.index].UpdateRegion( node.type );
         }
         // std::cout << reg.id << " nodes: " << reg.nodes.size() << "/" << reg.nodes.capacity() << ", borders: " << reg.borders.size() << "/" << reg.borders.capacity()
         //          << std::endl;

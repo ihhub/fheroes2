@@ -154,7 +154,8 @@ namespace Maps
 
         void FixObject( void );
 
-        bool UpdateRegion( int newRegionID );
+        int GetRegion() const;
+        void UpdateRegion( int newRegionID );
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
@@ -235,9 +236,6 @@ namespace Maps
         static void UpdateAbandoneMineSprite( Tiles & );
         static void FixedPreload( Tiles & );
 
-        int _region = 0;
-        int _metadata = 0;
-
     private:
         TilesAddon * FindFlags( void );
         void CorrectFlags32( u32 index, bool );
@@ -286,6 +284,9 @@ namespace Maps
         uint8_t quantity3 = 0;
 
         bool tileIsRoad = false;
+
+        // This field does not persist in savegame
+        int _region = 0;
 
 #ifdef WITH_DEBUG
         uint8_t impassableTileRule = 0;
