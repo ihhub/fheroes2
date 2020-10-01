@@ -75,7 +75,7 @@ namespace AI
 
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
 
-        std::vector<MapObjectNode>::iterator selectedNode = mapObjects.end();
+        size_t selectedNode = mapObjects.size();
         for ( size_t idx = 0; idx < mapObjects.size(); ++idx ) {
             const MapObjectNode & node = mapObjects[idx];
             if ( HeroesValidObject( hero, node.first ) ) {
@@ -87,18 +87,18 @@ namespace AI
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
-                    selectedNode = mapObjects.begin() + idx;
+                    selectedNode = idx;
                 }
             }
         }
 
-        if ( selectedNode != mapObjects.end() ) {
+        if ( selectedNode < mapObjects.size() ) {
             DEBUG( DBG_AI, DBG_TRACE,
                    hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( selectedNode->second )
                                   << ")" );
 
             // Remove the object from the list to other heroes won't target it
-            mapObjects.erase( selectedNode );
+            mapObjects.erase( selectedNode + mapObjects.begin() );
         }
         else {
             priorityTarget = world.searchForFog( hero );
