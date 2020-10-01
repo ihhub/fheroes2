@@ -74,6 +74,7 @@ namespace AI
         const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
 
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
+        int objectID = MP2::OBJ_ZERO;
 
         size_t selectedNode = mapObjects.size();
         for ( size_t idx = 0; idx < mapObjects.size(); ++idx ) {
@@ -87,6 +88,7 @@ namespace AI
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
+                    objectID = node.second;
                     selectedNode = idx;
                 }
             }
@@ -94,8 +96,7 @@ namespace AI
 
         if ( selectedNode < mapObjects.size() ) {
             DEBUG( DBG_AI, DBG_TRACE,
-                   hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( selectedNode->second )
-                                  << ")" );
+                   hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
 
             // Remove the object from the list to other heroes won't target it
             mapObjects.erase( selectedNode + mapObjects.begin() );
