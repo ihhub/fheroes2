@@ -577,11 +577,14 @@ void Kingdom::OverviewDialog( void )
     RedrawFundsInfo( cur_pt, *this );
 
     StatsHeroesList listHeroes( dst_pt, heroes );
-    if ( listHeroes.GetSplitter().Max() > 0 )
-        listHeroes.GetSplitter().MoveIndex( prevHeroesSplitterPosition );
+    Splitter & splitterHeroes = listHeroes.GetSplitter();
+    if ( splitterHeroes.Max() > 0 )
+        splitterHeroes.MoveIndex( prevHeroesSplitterPosition );
+
     StatsCastlesList listCastles( dst_pt, castles );
-    if ( listCastles.GetSplitter().Max() > 0 )
-        listCastles.GetSplitter().MoveIndex( prevCastlesSplitterPosition );
+    Splitter & splitterCastles = listCastles.GetSplitter();
+    if ( splitterCastles.Max() > 0 )
+        splitterCastles.MoveIndex( prevCastlesSplitterPosition );
 
     // buttons
     dst_pt.x = cur_pt.x + 540;
@@ -669,6 +672,6 @@ void Kingdom::OverviewDialog( void )
         }
     }
 
-    prevCastlesSplitterPosition = listCastles.GetSplitter().GetCurrent();
-    prevHeroesSplitterPosition = listHeroes.GetSplitter().GetCurrent();
+    prevCastlesSplitterPosition = splitterCastles.GetCurrent();
+    prevHeroesSplitterPosition = splitterHeroes.GetCurrent();
 }
