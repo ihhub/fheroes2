@@ -339,7 +339,6 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     SetAreaMaxItems( 4 );
     SetAreaItems( Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
 
-
     content.resize( castles.size() );
 
     for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
