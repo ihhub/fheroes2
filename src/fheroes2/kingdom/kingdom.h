@@ -189,6 +189,9 @@ private:
     u32 visited_tents_colors;
 
     KingdomHeroes heroes_cond_loss;
+
+    int prevCastlesSplitterPosition;
+    int prevHeroesSplitterPosition;
 };
 
 class Kingdoms

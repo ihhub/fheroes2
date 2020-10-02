@@ -339,6 +339,7 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     SetAreaMaxItems( 4 );
     SetAreaItems( Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
 
+
     content.resize( castles.size() );
 
     for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
@@ -577,7 +578,11 @@ void Kingdom::OverviewDialog( void )
     RedrawFundsInfo( cur_pt, *this );
 
     StatsHeroesList listHeroes( dst_pt, heroes );
+    if ( listHeroes.GetSplitter().Max() > 0 )
+        listHeroes.GetSplitter().MoveIndex( prevHeroesSplitterPosition );
     StatsCastlesList listCastles( dst_pt, castles );
+    if ( listCastles.GetSplitter().Max() > 0 )
+        listCastles.GetSplitter().MoveIndex( prevCastlesSplitterPosition );
 
     // buttons
     dst_pt.x = cur_pt.x + 540;
@@ -664,4 +669,7 @@ void Kingdom::OverviewDialog( void )
             redraw = false;
         }
     }
+
+    prevCastlesSplitterPosition = listCastles.GetSplitter().GetCurrent();
+    prevHeroesSplitterPosition = listHeroes.GetSplitter().GetCurrent();
 }

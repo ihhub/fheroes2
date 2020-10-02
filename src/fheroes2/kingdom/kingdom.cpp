@@ -46,6 +46,8 @@ Kingdom::Kingdom()
     : color( Color::NONE )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
+    , prevCastlesSplitterPosition( 0 )
+    , prevHeroesSplitterPosition( 0 )
 {
     heroes_cond_loss.reserve( 4 );
 }
