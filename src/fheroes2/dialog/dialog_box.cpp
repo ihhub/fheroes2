@@ -101,9 +101,9 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
         height += buttonHeight;
 
     const bool evil = Settings::Get().ExtGameEvilInterface();
-    const u32 count_middle = ( height <= 2 * activeAreaHeight ? 0 : 1 + ( height - 2 * activeAreaHeight ) / activeAreaHeight );
+    const int32_t count_middle = ( height <= 2 * activeAreaHeight ? 0 : 1 + ( height - 2 * activeAreaHeight ) / activeAreaHeight );
     const int32_t height_middle = height <= 2 * activeAreaHeight ? 0 : height - 2 * activeAreaHeight;
-    const u32 height_top_bottom = topHeight( evil ) + bottomHeight( evil );
+    const int32_t height_top_bottom = topHeight( evil ) + bottomHeight( evil );
 
     area.w = BOXAREA_WIDTH;
     area.h = activeAreaHeight + activeAreaHeight + height_middle;
