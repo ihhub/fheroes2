@@ -765,7 +765,7 @@ void Maps::Tiles::QuantityUpdate( void )
     } break;
 
     case MP2::OBJ_TRAVELLERTENT: {
-        QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
+        QuantitySetColor( Tiles::ColorFromTravellerTentSprite( objectTileset, objectIndex ) );
     } break;
 
     case MP2::OBJ_ALCHEMYLAB:

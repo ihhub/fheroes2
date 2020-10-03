@@ -2085,10 +2085,8 @@ void Maps::Tiles::RemoveObjectSprite( void )
         tilePassable = DIRECTION_ALL;
         break;
     case MP2::OBJ_BARRIER:
-        RemoveBarrierSprite();
         tilePassable = DIRECTION_ALL;
-        break;
-
+        // fall-through
     default:
         // remove shadow sprite from left cell
         if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) )
@@ -2097,17 +2095,6 @@ void Maps::Tiles::RemoveObjectSprite( void )
         Remove( uniq );
         break;
     }
-}
-
-void Maps::Tiles::RemoveBarrierSprite( void )
-{
-    // remove left sprite
-    if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) ) {
-        const s32 left = Maps::GetDirectionIndex( GetIndex(), Direction::LEFT );
-        world.GetTiles( left ).Remove( uniq );
-    }
-
-    Remove( uniq );
 }
 
 void Maps::Tiles::RemoveJailSprite( void )

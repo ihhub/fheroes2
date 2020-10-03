@@ -233,7 +233,6 @@ namespace Maps
         TilesAddon * FindFlags( void );
         void CorrectFlags32( u32 index, bool );
         void RemoveJailSprite( void );
-        void RemoveBarrierSprite( void );
         bool isLongObject( int direction );
 
         void RedrawBoat( fheroes2::Image & ) const;
