@@ -267,7 +267,7 @@ void World::ComputeStaticAnalysis()
 
     // sort the map rows and columns based on amount of obstacles
     for ( int i = 0; i < 4; ++i )
-        std::sort( obstacles[i].begin(), obstacles[i].end(), []( const TileData & left, TileData & right ) { return left.second < right.second; } );
+        std::sort( obstacles[i].begin(), obstacles[i].end(), []( const TileData & left, const TileData & right ) { return left.second < right.second; } );
 
     // Step 2. Find lines (rows and columns) with most amount of usable space, use it for region centers later
     const int maxDimension = std::max( width, height );
