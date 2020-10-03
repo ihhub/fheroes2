@@ -761,17 +761,11 @@ void Maps::Tiles::QuantityUpdate( void )
         break;
 
     case MP2::OBJ_BARRIER: {
-        // FIXME: check this is stil valid
-        Addons::const_reverse_iterator it = std::find_if( addons_level1.rbegin(), addons_level1.rend(), std::ptr_fun( &TilesAddon::ColorFromBarrierSprite ) );
-        if ( it != addons_level1.rend() )
-            QuantitySetColor( TilesAddon::ColorFromBarrierSprite( *it ) );
+        QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
     } break;
 
     case MP2::OBJ_TRAVELLERTENT: {
-        // FIXME: check this is stil valid
-        Addons::const_reverse_iterator it = std::find_if( addons_level1.rbegin(), addons_level1.rend(), std::ptr_fun( &TilesAddon::ColorFromTravellerTentSprite ) );
-        if ( it != addons_level1.rend() )
-            QuantitySetColor( TilesAddon::ColorFromTravellerTentSprite( *it ) );
+        QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
     } break;
 
     case MP2::OBJ_ALCHEMYLAB:
@@ -1111,7 +1105,7 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile )
 
     case MP2::OBJ_TROLLBRIDGE:
     case MP2::OBJ_CITYDEAD:
-        count = 1 < world.CountWeek() && Color::NONE == tile.QuantityColor() ? 0 : troop().GetRNDSize( true );
+        count = 1 < world.CountWeek() && Color::NONE == tile.QuantityColor() ? 0 : troop().GetGrown();
         break;
 
     case MP2::OBJ_DRAGONCITY:
