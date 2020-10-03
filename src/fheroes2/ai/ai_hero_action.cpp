@@ -92,7 +92,8 @@ namespace AI
     uint32_t AIGetAllianceColors( const Heroes & hero );
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
 
-    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.5;
+    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
+    const double ARMY_STRENGTH_ADVANTAGE_MEDUIM = 1.5;
     const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;
 
     int AISelectPrimarySkill( Heroes & hero )
@@ -1560,7 +1561,7 @@ namespace AI
                 if ( !hero.isFriends( tile.QuantityColor() ) ) {
                     if ( tile.CaptureObjectIsProtection() ) {
                         Army enemy( tile );
-                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_LARGE );
+                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_MEDUIM );
                     }
                     else
                         return true;
@@ -1798,7 +1799,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_SMALL );
+            return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
 
         // sign
         case MP2::OBJ_SIGN:
@@ -1816,7 +1817,7 @@ namespace AI
                     if ( hero.isFriends( castle->GetColor() ) )
                         return false;
                     else
-                        return army.isStrongerThan( castle->GetActualArmy(), castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_SMALL );
+                        return army.isStrongerThan( castle->GetActualArmy(), castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM );
                 }
             }
             break;

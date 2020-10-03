@@ -1259,8 +1259,8 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
     if ( !target.isValid() )
         return true;
 
-    const double str1 = GetStrength() * safetyRatio;
-    const double str2 = target.GetStrength();
+    const double str1 = GetStrength();
+    const double str2 = target.GetStrength() * safetyRatio;
 
     DEBUG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
 
