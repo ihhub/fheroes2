@@ -429,6 +429,9 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
             text.Set( hero->StringSkills( "-" ) );
             text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
         }
+        else {
+            row.castle->GetCaptain().PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
+        }
 
         text.Set( row.castle->GetName() );
         text.Blit( dstx + 72 - text.w() / 2, dsty + 62 );

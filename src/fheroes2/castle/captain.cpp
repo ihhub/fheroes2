@@ -23,6 +23,7 @@
 #include "captain.h"
 #include "agg.h"
 #include "castle.h"
+#include "interface_icons.h"
 #include "luck.h"
 #include "morale.h"
 #include "race.h"
@@ -262,5 +263,39 @@ fheroes2::Image Captain::GetPortrait( int type ) const
 
 void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
 {
-    fheroes2::Blit( GetPortrait( type ), dstsf, px, py );
+    if ( !isValid() )
+        return;
+
+    const fheroes2::Image port = GetPortrait( type );
+
+    if ( PORT_SMALL == type ) {
+        const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, 0 );
+        const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
+
+        const int iconsw = Interface::IconsBar::GetItemWidth();
+        const int iconsh = Interface::IconsBar::GetItemHeight();
+        const int barw = 7;
+
+        fheroes2::Image blackBG( iconsw, iconsh );
+        blackBG.fill( 0 );
+        fheroes2::Image blueBG( barw, iconsh );
+        blueBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
+
+        // background
+        fheroes2::Blit( blackBG, dstsf, px, py );
+
+        // mobility is always 0
+        fheroes2::Blit( blueBG, dstsf, px, py );
+        fheroes2::Blit( mobility, dstsf, px, py + mobility.y() );
+
+        // portrait
+        fheroes2::Blit( port, dstsf, px + barw + 1, py );
+
+        // mana
+        fheroes2::Blit( blueBG, dstsf, px + barw + port.width() + 2, py );
+        fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
+    }
+    else {
+        fheroes2::Blit( port, dstsf, px, py );
+    }
 }
