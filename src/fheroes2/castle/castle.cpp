@@ -2493,8 +2493,8 @@ void Castle::Scoute( void ) const
 
 void Castle::JoinRNDArmy( void )
 {
-    uint32_t timeModifier = world.CountDay() / 10;
-    uint32_t reinforcementQuality = Rand::Get( 1, 15 ) + timeModifier;
+    const uint32_t timeModifier = world.CountDay() / 10;
+    const uint32_t reinforcementQuality = Rand::Get( 1, 15 ) + timeModifier;
 
     uint32_t count = timeModifier / 2;
     uint32_t dwelling = DWELLING_MONSTER1;
