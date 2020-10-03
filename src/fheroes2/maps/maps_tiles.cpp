@@ -454,26 +454,16 @@ bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
     return ( ICN::OBJNARTI == MP2::GetICNObject( ta.object ) && ( ta.index > 0x10 ) && ( ta.index % 2 ) );
 }
 
-bool Maps::TilesAddon::isBarrier( const TilesAddon & ta )
-{
-    return ICN::X_LOC3 == MP2::GetICNObject( ta.object ) && 60 <= ta.index && 102 >= ta.index && 0 == ( ta.index % 6 );
-}
-
-int Maps::TilesAddon::ColorFromBarrierSprite( const TilesAddon & ta )
+int Maps::Tiles::ColorFromBarrierSprite( uint8_t tileset, uint8_t icnIndex )
 {
     // 60, 66, 72, 78, 84, 90, 96, 102
-    return ICN::X_LOC3 == MP2::GetICNObject( ta.object ) && 60 <= ta.index && 102 >= ta.index ? ( ( ta.index - 60 ) / 6 ) + 1 : 0;
+    return ICN::X_LOC3 == MP2::GetICNObject( tileset ) && 60 <= icnIndex && 102 >= icnIndex ? ( ( icnIndex - 60 ) / 6 ) + 1 : 0;
 }
 
-int Maps::TilesAddon::ColorFromTravellerTentSprite( const TilesAddon & ta )
+int Maps::Tiles::ColorFromTravellerTentSprite( uint8_t tileset, uint8_t icnIndex )
 {
     // 110, 114, 118, 122, 126, 130, 134, 138
-    return ICN::X_LOC3 == MP2::GetICNObject( ta.object ) && 110 <= ta.index && 138 >= ta.index ? ( ( ta.index - 110 ) / 4 ) + 1 : 0;
-}
-
-bool Maps::TilesAddon::isAbandoneMineSprite( const TilesAddon & ta )
-{
-    return ( ICN::OBJNGRAS == MP2::GetICNObject( ta.object ) && 6 == ta.index ) || ( ICN::OBJNDIRT == MP2::GetICNObject( ta.object ) && 8 == ta.index );
+    return ICN::X_LOC3 == MP2::GetICNObject( tileset ) && 110 <= icnIndex && 138 >= icnIndex ? ( ( icnIndex - 110 ) / 4 ) + 1 : 0;
 }
 
 bool Maps::TilesAddon::isFlag32( const TilesAddon & ta )
@@ -2095,10 +2085,8 @@ void Maps::Tiles::RemoveObjectSprite( void )
         tilePassable = DIRECTION_ALL;
         break;
     case MP2::OBJ_BARRIER:
-        RemoveBarrierSprite();
         tilePassable = DIRECTION_ALL;
-        break;
-
+        // fall-through
     default:
         // remove shadow sprite from left cell
         if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) )
@@ -2107,17 +2095,6 @@ void Maps::Tiles::RemoveObjectSprite( void )
         Remove( uniq );
         break;
     }
-}
-
-void Maps::Tiles::RemoveBarrierSprite( void )
-{
-    // remove left sprite
-    if ( Maps::isValidDirection( GetIndex(), Direction::LEFT ) ) {
-        const s32 left = Maps::GetDirectionIndex( GetIndex(), Direction::LEFT );
-        world.GetTiles( left ).Remove( uniq );
-    }
-
-    Remove( uniq );
 }
 
 void Maps::Tiles::RemoveJailSprite( void )

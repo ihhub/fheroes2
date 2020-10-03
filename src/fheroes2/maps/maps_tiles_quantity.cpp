@@ -761,17 +761,11 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARRIER: {
-        // FIXME: check this is stil valid
-        Addons::const_reverse_iterator it = std::find_if( addons_level1.rbegin(), addons_level1.rend(), std::ptr_fun( &TilesAddon::ColorFromBarrierSprite ) );
-        if ( it != addons_level1.rend() )
-            QuantitySetColor( TilesAddon::ColorFromBarrierSprite( *it ) );
+        QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
     } break;
 
     case MP2::OBJ_TRAVELLERTENT: {
-        // FIXME: check this is stil valid
-        Addons::const_reverse_iterator it = std::find_if( addons_level1.rbegin(), addons_level1.rend(), std::ptr_fun( &TilesAddon::ColorFromTravellerTentSprite ) );
-        if ( it != addons_level1.rend() )
-            QuantitySetColor( TilesAddon::ColorFromTravellerTentSprite( *it ) );
+        QuantitySetColor( Tiles::ColorFromTravellerTentSprite( objectTileset, objectIndex ) );
     } break;
 
     case MP2::OBJ_ALCHEMYLAB:
