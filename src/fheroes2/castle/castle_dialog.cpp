@@ -130,13 +130,13 @@ void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Poin
 
     if ( hero1 )
         icon1 = hero1->GetPortrait( PORT_BIG );
-    else if ( castle.isBuild( BUILD_CAPTAIN ) )
-        icon1 = castle.GetCaptain().GetPortrait( PORT_BIG );
     else
         icon1 = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) );
 
     if ( hero2 )
         icon2 = hero2->GetPortrait( PORT_BIG );
+    else if ( castle.isBuild( BUILD_CAPTAIN ) )
+        icon2 = castle.GetCaptain().GetPortrait( PORT_BIG );
     else
         icon2 = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
 
