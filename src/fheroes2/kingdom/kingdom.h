@@ -160,7 +160,7 @@ public:
     const Puzzle & PuzzleMaps( void ) const;
     Puzzle & PuzzleMaps( void );
 
-    void SetVisitTravelersTent( int );
+    void SetVisitTravelersTent( int color );
     bool IsVisitTravelersTent( int ) const;
 
     void UpdateRecruits( void );
