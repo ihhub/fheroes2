@@ -92,8 +92,8 @@ namespace AI
     uint32_t AIGetAllianceColors( const Heroes & hero );
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
 
-    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
-    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.6;
+    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.5;
+    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;
 
     int AISelectPrimarySkill( Heroes & hero )
     {
@@ -1816,7 +1816,7 @@ namespace AI
                     if ( hero.isFriends( castle->GetColor() ) )
                         return false;
                     else
-                        return army.isStrongerThan( castle->GetActualArmy(), ARMY_STRENGTH_ADVANTAGE_LARGE );
+                        return army.isStrongerThan( castle->GetActualArmy(), castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_SMALL );
                 }
             }
             break;
