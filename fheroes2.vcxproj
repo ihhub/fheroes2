@@ -366,6 +366,7 @@
     <ClCompile Include="src\fheroes2\world\world.cpp" />
     <ClCompile Include="src\fheroes2\world\world_loadmap.cpp" />
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
+    <ClCompile Include="src\fheroes2\world\world_regions.cpp" />
     <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
     <ClCompile Include="src\thirdparty\libsmacker\smk_bitstream.c" />
     <ClCompile Include="src\thirdparty\libsmacker\smk_hufftree.c" />
