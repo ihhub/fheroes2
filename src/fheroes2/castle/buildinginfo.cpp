@@ -794,7 +794,7 @@ bool DwellingsBar::ActionBarSingleClick( const Point & cursor, DwellingItem & dw
 
 bool DwellingsBar::ActionBarPressRight( const Point & cursor, DwellingItem & dwl, const Rect & pos )
 {
-    Dialog::DwellingInfo( dwl.mons, castle.GetDwellingLivedCount( dwl.type ) );
+    Dialog::DwellingInfo( dwl.mons, castle.getMonstersInDwelling( dwl.type ) );
 
     return true;
 }
