@@ -73,7 +73,6 @@ namespace Maps
         static bool isResource( const TilesAddon & );
         static bool isArtifact( const TilesAddon & );
         static bool isFlag32( const TilesAddon & );
-        static bool isAbandoneMineSprite( const TilesAddon & );
 
         static bool isMounts( const TilesAddon & );
         static bool isRocs( const TilesAddon & );
@@ -83,10 +82,6 @@ namespace Maps
         static bool isCactus( const TilesAddon & );
         static bool isStump( const TilesAddon & );
         static int GetActionObject( const TilesAddon & );
-
-        static bool isBarrier( const TilesAddon & );
-        static int ColorFromBarrierSprite( const TilesAddon & );
-        static int ColorFromTravellerTentSprite( const TilesAddon & );
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
@@ -221,6 +216,8 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static int ColorFromBarrierSprite( uint8_t tileset, uint8_t icnIndex );
+        static int ColorFromTravellerTentSprite( uint8_t tileset, uint8_t icnIndex );
         static int GetLoyaltyObject( uint8_t tileset, uint8_t icnIndex );
         static bool isShadowSprite( uint8_t tileset, uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource );
