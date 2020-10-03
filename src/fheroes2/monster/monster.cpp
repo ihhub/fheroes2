@@ -703,7 +703,7 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     if ( !isValid() )
         return 0;
 
-    const uint32_t defaultArmySizePerLevel[7] = { 0, 50, 30, 25, 25, 12, 8 };
+    const uint32_t defaultArmySizePerLevel[7] = {0, 50, 30, 25, 25, 12, 8};
     uint32_t result = 0;
 
     // Check for outliers
