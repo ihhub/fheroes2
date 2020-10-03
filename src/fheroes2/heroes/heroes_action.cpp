@@ -903,6 +903,8 @@ void ActionToBoat( Heroes & hero, u32 obj, s32 dst_index )
     if ( hero.isShipMaster() )
         return;
 
+    hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
+
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeOut();

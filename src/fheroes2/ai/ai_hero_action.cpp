@@ -1436,6 +1436,8 @@ namespace AI
         for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
             hero.SetVisited( *it );
 
+        hero.setLastGroundRegion( world.GetTiles( from_index ).GetRegion() );
+
         hero.FadeOut();
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
@@ -1524,10 +1526,10 @@ namespace AI
 
         case MP2::OBJ_MAGELLANMAPS:
         case MP2::OBJ_WHIRLPOOL:
+            return hero.isShipMaster() && !hero.isVisited( tile );
+
         case MP2::OBJ_COAST:
-            if ( hero.isShipMaster() )
-                return true;
-            break;
+            return hero.isShipMaster() && !hero.isVisited( tile ) && tile.GetRegion() != hero.lastGroundRegion();
 
         // capture objects
         case MP2::OBJ_SAWMILL:

@@ -284,6 +284,8 @@ public:
 
     bool isShipMaster( void ) const;
     void SetShipMaster( bool );
+    int lastGroundRegion() const;
+    void setLastGroundRegion( int regionID );
 
     u32 GetExperience( void ) const;
     void IncreaseExperience( u32 );
@@ -345,6 +347,8 @@ private:
     int patrol_square;
 
     std::list<IndexObject> visit_object;
+    // persist this value later
+    int _lastGroundRegion = 0;
 
     mutable int _alphaValue;
 
