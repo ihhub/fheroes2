@@ -394,25 +394,25 @@ int Artifact::LoyaltyLevel( void ) const
     switch ( id ) {
     case MASTHEAD:
     case SPADE_NECROMANCY:
+    case HEART_FIRE:
+    case HEART_ICE:
         return ART_LEVEL2;
 
-    case BREASTPLATE_ANDURAN:
-    case BATTLE_GARB:
-    case HELMET_ANDURAN:
+    case ARM_MARTYR:
     case HOLY_HAMMER:
     case LEGENDARY_SCEPTER:
-    case SPHERE_NEGATION:
     case STAFF_WIZARDRY:
     case SWORD_BREAKER:
-    case SWORD_ANDURAN:
     case CRYSTAL_BALL:
         return ART_LEVEL3;
 
     case SPELL_SCROLL:
-    case ARM_MARTYR:
     case BROACH_SHIELDING:
-    case HEART_FIRE:
-    case HEART_ICE:
+    case SWORD_ANDURAN:
+    case BREASTPLATE_ANDURAN:
+    case BATTLE_GARB:
+    case HELMET_ANDURAN:
+    case SPHERE_NEGATION:
         return ART_NORANDOM;
 
     default:
