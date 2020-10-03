@@ -703,23 +703,57 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     if ( !isValid() )
         return 0;
 
-    const uint32_t defaultArmySizePerLevel[6] = { 50, 30, 25, 16, 12, 9 };
+    const uint32_t defaultArmySizePerLevel[7] = { 0, 50, 30, 25, 25, 12, 8 };
     uint32_t result = 0;
 
+    // Check for outliers
     switch ( id ) {
     case PEASANT:
         result = 80;
         break;
+    case ROGUE:
+        result = 40;
+        break;
+    case PIKEMAN:
+    case VETERAN_PIKEMAN:
+    case WOLF:
+    case ELF:
+    case GRAND_ELF:
+        result = 30;
+        break;
+    case GARGOYLE:
+        result = 25;
+        break;
+    case GHOST:
+    case MEDUSA:
+        result = 20;
+        break;
+    case MINOTAUR:
+    case MINOTAUR_KING:
+    case ROC:
+    case VAMPIRE:
+    case VAMPIRE_LORD:
+    case UNICORN:
+        result = 16;
+        break;
+    case CAVALRY:
+    case CHAMPION:
+        result = 18;
+        break;
+    case PALADIN:
+    case CRUSADER:
+    case CYCLOPS:
+    case PHOENIX:
+        result = 12;
+        break;
     default:
-        result = defaultArmySizePerLevel[GetRandomUnitLevel()];
+        // for most units default range is okay
+        result = defaultArmySizePerLevel[GetMonsterLevel()];
         break;
     }
 
-    const u32 hps = ( GetGrown() ? GetGrown() : 1 ) * GetHitPoints();
-    u32 res = Rand::Get( hps, hps + hps / 2 );
-
     if ( !skip_factor && Settings::Get().ExtWorldNeutralArmyDifficultyScaling() ) {
-        u32 factor = 100;
+        uint32_t factor = 100;
 
         switch ( Settings::Get().GameDifficulty() ) {
         case Difficulty::EASY:
@@ -741,10 +775,10 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
             break;
         }
 
-        res = ( res * factor / 100 );
+        result = ( result * factor / 100 );
         // force minimal
-        if ( res == 0 )
-            res = 1;
+        if ( result == 0 )
+            result = 1;
     }
 
     return ( result > 1 ) ? Rand::Get( result / 2, result ) : 1;
@@ -1500,6 +1534,94 @@ u32 Monster::Rand4MonthOf( void )
         break;
     }
     return UNKNOWN;
+}
+
+int Monster::GetMonsterLevel() const
+{
+    switch ( id ) {
+    case PEASANT:
+    case GOBLIN:
+    case SPRITE:
+    case CENTAUR:
+    case HALFLING:
+    case SKELETON:
+    case ROGUE:
+        return 1;
+
+    case ARCHER:
+    case RANGER:
+    case ORC:
+    case ORC_CHIEF:
+    case DWARF:
+    case BATTLE_DWARF:
+    case GARGOYLE:
+    case BOAR:
+    case ZOMBIE:
+    case MUTANT_ZOMBIE:
+        return 2;
+
+    case PIKEMAN:
+    case VETERAN_PIKEMAN:
+    case WOLF:
+    case ELF:
+    case GRAND_ELF:
+    case GRIFFIN:
+    case IRON_GOLEM:
+    case STEEL_GOLEM:
+    case MUMMY:
+    case ROYAL_MUMMY:
+    case NOMAD:
+        return 3;
+
+    case SWORDSMAN:
+    case MASTER_SWORDSMAN:
+    case OGRE:
+    case OGRE_LORD:
+    case DRUID:
+    case GREATER_DRUID:
+    case MINOTAUR:
+    case MINOTAUR_KING:
+    case ROC:
+    case VAMPIRE:
+    case VAMPIRE_LORD:
+    case GHOST:
+    case MEDUSA:
+    case EARTH_ELEMENT:
+    case AIR_ELEMENT:
+    case FIRE_ELEMENT:
+    case WATER_ELEMENT:
+        return 4;
+
+    case CAVALRY:
+    case CHAMPION:
+    case TROLL:
+    case WAR_TROLL:
+    case UNICORN:
+    case HYDRA:
+    case MAGE:
+    case ARCHMAGE:
+    case LICH:
+    case POWER_LICH:
+        return 5;
+
+    case PALADIN:
+    case CRUSADER:
+    case CYCLOPS:
+    case PHOENIX:
+    case GREEN_DRAGON:
+    case RED_DRAGON:
+    case BLACK_DRAGON:
+    case GIANT:
+    case TITAN:
+    case BONE_DRAGON:
+    case GENIE:
+        return 6;
+
+    default:
+        break;
+    }
+
+    return 0;
 }
 
 int Monster::GetRandomUnitLevel( void ) const

@@ -191,6 +191,7 @@ public:
     u32 GetHitPoints( void ) const;
     u32 GetSpeed( void ) const;
     u32 GetGrown( void ) const;
+    int GetMonsterLevel() const;
     int GetRandomUnitLevel( void ) const;
     u32 GetRNDSize( bool skip ) const;
 

@@ -979,30 +979,7 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 co
         tile.MonsterSetCount( count );
     }
     else {
-        int mul = 4;
-
-        // set random count
-        switch ( Settings::Get().GameDifficulty() ) {
-        case Difficulty::EASY:
-            mul = 3;
-            break;
-        case Difficulty::NORMAL:
-            mul = 4;
-            break;
-        case Difficulty::HARD:
-            mul = 4;
-            break;
-        case Difficulty::EXPERT:
-            mul = 5;
-            break;
-        case Difficulty::IMPOSSIBLE:
-            mul = 6;
-            break;
-        default:
-            break;
-        }
-
-        tile.MonsterSetCount( mul * mons.GetRNDSize( true ) );
+        tile.MonsterSetCount( mons.GetRNDSize( true ) );
     }
 
     // skip join
