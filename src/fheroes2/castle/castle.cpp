@@ -481,7 +481,7 @@ void Castle::ActionNewWeek( void )
         if ( isNeutral && !Modes( CUSTOMARMY ) ) {
             JoinRNDArmy();
             // if it's a town there's 40% chance (or it's a castle) to get extra troops
-            if ( isCastle() || Rand::Get( 0, 100 ) < 40 )
+            if ( isCastle() || Rand::Get( 1, 100 ) <= 40 )
                 JoinRNDArmy();
         }
     }
