@@ -156,6 +156,7 @@ namespace
     {
         const int nodeIndex = region.nodes[region.lastProcessedNode].index;
 
+        // TODO: make this variable non-static
         static std::vector<int> neighbourIDs;
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
