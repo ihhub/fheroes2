@@ -1706,7 +1706,7 @@ namespace AI
         case MP2::OBJ_PEASANTHUT:
         case MP2::OBJ_THATCHEDHUT: {
             const Troop & troop = tile.QuantityTroop();
-            if ( troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFlying() ) ) ) )
+            if ( troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) ) )
                 return true;
             break;
         }

@@ -539,7 +539,7 @@ void World::NewWeek( void )
         // update week object
         for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
             if ( MP2::isWeekLife( ( *it ).GetObject( false ) ) || MP2::OBJ_MONSTER == ( *it ).GetObject() )
-                ( *it ).QuantityUpdate();
+                ( *it ).QuantityUpdate( false );
 
         // update gray towns
         for ( AllCastles::iterator it = vec_castles.begin(); it != vec_castles.end(); ++it )
