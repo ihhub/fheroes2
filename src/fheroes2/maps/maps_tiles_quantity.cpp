@@ -761,17 +761,11 @@ void Maps::Tiles::QuantityUpdate( void )
         break;
 
     case MP2::OBJ_BARRIER: {
-        // FIXME: check this is stil valid
-        Addons::const_reverse_iterator it = std::find_if( addons_level1.rbegin(), addons_level1.rend(), std::ptr_fun( &TilesAddon::ColorFromBarrierSprite ) );
-        if ( it != addons_level1.rend() )
-            QuantitySetColor( TilesAddon::ColorFromBarrierSprite( *it ) );
+        QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
     } break;
 
     case MP2::OBJ_TRAVELLERTENT: {
-        // FIXME: check this is stil valid
-        Addons::const_reverse_iterator it = std::find_if( addons_level1.rbegin(), addons_level1.rend(), std::ptr_fun( &TilesAddon::ColorFromTravellerTentSprite ) );
-        if ( it != addons_level1.rend() )
-            QuantitySetColor( TilesAddon::ColorFromTravellerTentSprite( *it ) );
+        QuantitySetColor( Tiles::ColorFromTravellerTentSprite( objectTileset, objectIndex ) );
     } break;
 
     case MP2::OBJ_ALCHEMYLAB:
@@ -832,6 +826,7 @@ void Maps::Tiles::QuantityUpdate( void )
             }
     } break;
 
+    case MP2::OBJ_BOAT:
     case MP2::OBJ_EVENT:
         objectTileset = 0;
         objectIndex = 255;
@@ -963,6 +958,15 @@ void Maps::Tiles::MonsterSetCount( u32 count )
 void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 count )
 {
     tile.SetObject( MP2::OBJ_MONSTER );
+
+    // if there was another sprite here (shadow for example) push it down to Addons
+    if ( tile.objectTileset != 0 && tile.objectIndex != 255 ) {
+        tile.AddonsPushLevel1( TilesAddon( 0, tile.uniq, tile.objectTileset, tile.objectIndex ) );
+    }
+    // replace sprite with the one for the new monster
+    tile.uniq = 0;
+    tile.objectTileset = 48; // MONS32.ICN
+    tile.objectIndex = mons.GetSpriteIndex();
 
     if ( count ) {
         tile.MonsterSetFixedCount();
@@ -1101,7 +1105,7 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile )
 
     case MP2::OBJ_TROLLBRIDGE:
     case MP2::OBJ_CITYDEAD:
-        count = 1 < world.CountWeek() && Color::NONE == tile.QuantityColor() ? 0 : troop().GetRNDSize( true );
+        count = 1 < world.CountWeek() && Color::NONE == tile.QuantityColor() ? 0 : troop().GetGrown();
         break;
 
     case MP2::OBJ_DRAGONCITY:

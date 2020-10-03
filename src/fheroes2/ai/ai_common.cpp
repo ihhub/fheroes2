@@ -20,27 +20,16 @@
 
 #include "ai.h"
 #include "castle.h"
-#include "empty/ai_empty.h"
 #include "kingdom.h"
 #include "normal/ai_normal.h"
-#include "simple/ai_simple.h"
 
 namespace AI
 {
     // AI Selector here
     Base & Get( AI_TYPE type )
     {
-        static AI::Empty empty;
-        static AI::Simple simple;
         static AI::Normal normal;
-
-        switch ( type ) {
-        case AI::SIMPLE:
-            return simple;
-        case AI::NORMAL:
-            return normal;
-        }
-        return empty;
+        return normal;
     }
 
     bool BuildIfAvailable( Castle & castle, int building )
@@ -64,5 +53,12 @@ namespace AI
     uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max )
     {
         return castle.isCapital() ? 1 : Rand::Get( min, max );
+    }
+
+    void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
+    {
+        hero.GetArmy().UpgradeTroops( castle );
+        castle.recruitBestAvailable( budget );
+        hero.GetArmy().JoinStrongestFromArmy( castle.GetArmy() );
     }
 }

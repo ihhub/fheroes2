@@ -148,12 +148,13 @@ public:
     Army & GetArmy( void );
     const Army & GetActualArmy( void ) const;
     Army & GetActualArmy( void );
-    u32 GetDwellingLivedCount( u32 ) const;
+    u32 getMonstersInDwelling( u32 ) const;
     u32 GetActualDwelling( u32 ) const;
 
     bool RecruitMonsterFromDwelling( u32 dw, u32 count );
     bool RecruitMonster( const Troop & );
     void RecruitAllMonsters( void );
+    void recruitBestAvailable( Funds budget );
 
     void ChangeColor( int );
 

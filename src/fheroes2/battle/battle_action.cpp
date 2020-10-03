@@ -229,7 +229,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 }
 
                 // twice attack
-                if ( b1->isValid() && b1->isTwiceAttack() && !b1->Modes( IS_PARALYZE_MAGIC ) ) {
+                if ( b1->isValid() && b1->isTwiceAttack() && !b1->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                     DEBUG( DBG_BATTLE, DBG_TRACE, "twice attack" );
                     BattleProcess( *b1, *b2 );
                 }

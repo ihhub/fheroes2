@@ -18,7 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "ai_normal.h"
+#include "ground.h"
 #include "heroes.h"
 #include "maps.h"
 #include "mp2.h"
@@ -26,27 +29,103 @@
 
 namespace AI
 {
-    namespace
+    double GetObjectValue( int index, int objectID )
     {
-        const int temporaryHeroScanDist = 15;
+        // In the future these hardcoded values could be configured by the mod
+        const Maps::Tiles & tile = world.GetTiles( index );
+
+        if ( objectID == MP2::OBJ_CASTLE ) {
+            return 2000.0;
+        }
+        else if ( objectID == MP2::OBJ_HEROES ) {
+            return 1700.0;
+        }
+        else if ( objectID == MP2::OBJ_MONSTER ) {
+            return 900.0;
+        }
+        else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJN_ALCHEMYLAB ) {
+            return 1000.0;
+        }
+        else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
+            return 500.0 * tile.QuantityArtifact().getArtifactValue();
+        }
+        else if ( MP2::isPickupObject( objectID ) ) {
+            return 300.0;
+        }
+        else if ( MP2::isHeroUpgradeObject( objectID ) ) {
+            return 400.0;
+        }
+        else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
+            return 400.0;
+        }
+        else if ( objectID == MP2::OBJ_COAST || objectID == MP2::OBJ_BOAT ) {
+            // de-prioritize the swimming
+            return -2000.0;
+        }
+
+        return 0;
     }
 
-    bool MoveHero( Heroes & hero )
+    int GetPriorityTarget( std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
     {
-        // FIXME: Very basic set up, targets and priorities should be fed from AI Kingdom
-        const int heroIndex = hero.GetIndex();
+        int priorityTarget = -1;
 
-        // Maps::GetAroundIndexes should sort tiles internally
-        const Maps::Indexes & seenTiles = Maps::GetAroundIndexes( heroIndex, temporaryHeroScanDist, true );
-        for ( auto it = seenTiles.begin(); it != seenTiles.end(); ++it ) {
-            if ( HeroesValidObject( hero, *it ) && hero.GetPath().Calculate( *it ) ) {
-                HeroesMove( hero );
-                return true;
+        const int heroIndex = hero.GetIndex();
+        const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
+
+        double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
+        int objectID = MP2::OBJ_ZERO;
+
+        size_t selectedNode = mapObjects.size();
+        for ( size_t idx = 0; idx < mapObjects.size(); ++idx ) {
+            const MapObjectNode & node = mapObjects[idx];
+            if ( HeroesValidObject( hero, node.first ) ) {
+                const uint32_t dist = world.getDistance( heroIndex, node.first, skill );
+                if ( dist == 0 )
+                    continue;
+
+                const double value = GetObjectValue( node.first, node.second ) - static_cast<double>( dist );
+                if ( dist && value > maxPriority ) {
+                    maxPriority = value;
+                    priorityTarget = node.first;
+                    objectID = node.second;
+                    selectedNode = idx;
+                }
             }
+        }
+
+        if ( selectedNode < mapObjects.size() ) {
+            DEBUG( DBG_AI, DBG_TRACE,
+                   hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
+
+            // Remove the object from the list to other heroes won't target it
+            mapObjects.erase( selectedNode + mapObjects.begin() );
+        }
+        else {
+            priorityTarget = world.searchForFog( hero );
+            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+        }
+
+        return priorityTarget;
+    }
+
+    bool MoveHero( Heroes & hero, int target )
+    {
+        if ( target != -1 && hero.GetPath().Calculate( target ) ) {
+            HeroesMove( hero );
+            return true;
         }
 
         hero.SetModes( AI::HERO_WAITING );
         return false;
+    }
+
+    void Normal::HeroesActionComplete( Heroes & hero, int index )
+    {
+        Castle * castle = hero.inCastle();
+        if ( castle ) {
+            ReinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+        }
     }
 
     void Normal::HeroTurn( Heroes & hero )
@@ -54,7 +133,7 @@ namespace AI
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            MoveHero( hero );
+            MoveHero( hero, GetPriorityTarget( mapObjects, hero ) );
         }
 
         if ( !hero.MayStillMove() ) {

@@ -546,6 +546,8 @@ namespace MP2
     bool isQuantityObject( int obj );
     bool isCaptureObject( int obj );
     bool isPickupObject( int obj );
+    bool isArtifactObject( int obj );
+    bool isHeroUpgradeObject( int obj );
     bool isRemoveObject( int obj );
     bool isMoveObject( int obj );
     bool isAbandonedMine( int obj );

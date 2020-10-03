@@ -22,7 +22,6 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
-#include <map>
 #include <vector>
 
 #include "artifact_ultimate.h"
@@ -255,7 +254,9 @@ public:
     bool isValidPath( int index, int direction ) const;
     uint32_t getDistance( int from, int to, uint32_t skill );
     std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );
+    int searchForFog( const Heroes & hero );
 
+    void ComputeStaticAnalysis();
     static u32 GetUniq( void );
 
 private:

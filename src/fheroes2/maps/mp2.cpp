@@ -223,7 +223,7 @@ int MP2::GetICNObject( int tileset )
 bool MP2::isHiddenForPuzzle( uint8_t tileset, uint8_t index )
 {
     const int icnID = tileset >> 2;
-    // Values extracted from 64-byte array at 0x004F0B50 offset of HEROES2W file
+    // Values extracted from 64-byte array in original game
     if ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) )
         return true;
 
@@ -741,8 +741,6 @@ bool MP2::isWeekLife( int obj )
 
     // for AI
     case OBJ_COAST:
-        // for AI
-    case OBJ_CASTLE:
 
         return true;
 
@@ -753,10 +751,9 @@ bool MP2::isWeekLife( int obj )
     return false;
 }
 
-bool MP2::isMonthLife( int )
+bool MP2::isMonthLife( int objectID )
 {
-    // FIXME: list month object life
-    return false;
+    return objectID == MP2::OBJ_CASTLE;
 }
 
 bool MP2::isBattleLife( int obj )
@@ -844,8 +841,6 @@ bool MP2::isQuantityObject( int obj )
     switch ( obj ) {
     case OBJ_SKELETON:
     case OBJ_WAGON:
-    case OBJ_ARTIFACT:
-    case OBJ_RESOURCE:
     case OBJ_MAGICGARDEN:
     case OBJ_WATERWHEEL:
     case OBJ_WINDMILL:
@@ -853,7 +848,6 @@ bool MP2::isQuantityObject( int obj )
     case OBJ_CAMPFIRE:
     case OBJ_FLOTSAM:
     case OBJ_SHIPWRECKSURVIROR:
-    case OBJ_TREASURECHEST:
     case OBJ_WATERCHEST:
     case OBJ_DERELICTSHIP:
     case OBJ_SHIPWRECK:
@@ -917,6 +911,50 @@ bool MP2::isPickupObject( int obj )
     return false;
 }
 
+bool MP2::isArtifactObject( int obj )
+{
+    switch ( obj ) {
+    case MP2::OBJ_ARTIFACT:
+    case MP2::OBJ_WAGON:
+    case MP2::OBJ_SKELETON:
+    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_WATERCHEST:
+    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_GRAVEYARD:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+bool MP2::isHeroUpgradeObject( int obj )
+{
+    switch ( obj ) {
+    case MP2::OBJ_GAZEBO:
+    case MP2::OBJ_TREEKNOWLEDGE:
+    case MP2::OBJ_MERCENARYCAMP:
+    case MP2::OBJ_FORT:
+    case MP2::OBJ_STANDINGSTONES:
+    case MP2::OBJ_DOCTORHUT:
+    case MP2::OBJ_SHRINE1:
+    case MP2::OBJ_SHRINE2:
+    case MP2::OBJ_SHRINE3:
+    case MP2::OBJ_WITCHSHUT:
+    case MP2::OBJ_XANADU:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
 bool MP2::isMoveObject( int obj )
 {
     switch ( obj ) {
@@ -953,16 +991,7 @@ bool MP2::isRemoveObject( int obj )
 bool MP2::isNeedStayFront( int obj )
 {
     switch ( obj ) {
-    case OBJ_WATERCHEST:
-    case OBJ_SHIPWRECKSURVIROR:
-    case OBJ_FLOTSAM:
-    case OBJ_BOTTLE:
-    case OBJ_TREASURECHEST:
-    case OBJ_ANCIENTLAMP:
-    case OBJ_CAMPFIRE:
     case OBJ_MONSTER:
-    case OBJ_RESOURCE:
-    case OBJ_ARTIFACT:
     case OBJ_HEROES:
     case OBJ_BOAT:
     case OBJ_BARRIER:
@@ -975,7 +1004,7 @@ bool MP2::isNeedStayFront( int obj )
         break;
     }
 
-    return false;
+    return isPickupObject( obj );
 }
 
 bool MP2::isClearGroundObject( int obj )

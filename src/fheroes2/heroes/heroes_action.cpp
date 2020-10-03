@@ -735,17 +735,15 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
         }
         else {
             BattleLose( hero, res, true );
-            if ( Settings::Get().ExtWorldSaveMonsterBattle() ) {
-                tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
-                // reset "can join"
-                if ( tile.MonsterJoinConditionFree() )
-                    tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+            tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+            // reset "can join"
+            if ( tile.MonsterJoinConditionFree() )
+                tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
 
-                if ( map_troop ) {
-                    map_troop->count = army.GetCountMonsters( troop() );
-                    if ( map_troop->JoinConditionFree() )
-                        map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                }
+            if ( map_troop ) {
+                map_troop->count = army.GetCountMonsters( troop() );
+                if ( map_troop->JoinConditionFree() )
+                    map_troop->condition = Monster::JOIN_CONDITION_MONEY;
             }
         }
     }
@@ -1517,7 +1515,7 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
             hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
-        else if ( 0 == gold && !hero.isObjectTypeVisited( obj ) ) {
+        else if ( 0 == gold ) {
             // modify morale
             hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -2066,8 +2064,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             else {
                 capture = false;
                 BattleLose( hero, result, true );
-                if ( Settings::Get().ExtWorldSaveMonsterBattle() )
-                    tile.MonsterSetCount( army.GetCountMonsters( mons ) );
+                tile.MonsterSetCount( army.GetCountMonsters( mons ) );
             }
         }
 

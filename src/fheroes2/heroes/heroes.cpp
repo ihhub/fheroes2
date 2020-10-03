@@ -759,6 +759,7 @@ bool Heroes::Recruit( const Castle & castle )
             // learn spell
             castle.MageGuildEducateHero( *this );
         }
+        SetVisited( GetIndex() );
         return true;
     }
 
