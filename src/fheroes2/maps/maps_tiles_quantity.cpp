@@ -965,6 +965,15 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 co
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 
+    // if there was another sprite here (shadow for example) push it down to Addons
+    if ( tile.objectTileset != 0 && tile.objectIndex != 255 ) {
+        tile.AddonsPushLevel1( TilesAddon( 0, tile.uniq, tile.objectTileset, tile.objectIndex ) );
+    }
+    // replace sprite with the one for the new monster
+    tile.uniq = 0;
+    tile.objectTileset = 48; // MONS32.ICN
+    tile.objectIndex = mons.GetSpriteIndex();
+
     if ( count ) {
         tile.MonsterSetFixedCount();
         tile.MonsterSetCount( count );

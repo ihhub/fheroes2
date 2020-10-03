@@ -58,11 +58,15 @@ namespace AI
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
             return 400.0;
         }
+        else if ( objectID == MP2::OBJ_COAST || objectID == MP2::OBJ_BOAT ) {
+            // de-prioritize the swimming
+            return -2000.0;
+        }
 
         return 0;
     }
 
-    int GetPriorityTarget( const std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
+    int GetPriorityTarget( std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
     {
         int priorityTarget = -1;
 
@@ -70,10 +74,11 @@ namespace AI
         const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
 
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
-        int objectID = 0;
+        int objectID = MP2::OBJ_ZERO;
 
-        for ( size_t it = 0; it < mapObjects.size(); ++it ) {
-            const MapObjectNode & node = mapObjects[it];
+        size_t selectedNode = mapObjects.size();
+        for ( size_t idx = 0; idx < mapObjects.size(); ++idx ) {
+            const MapObjectNode & node = mapObjects[idx];
             if ( HeroesValidObject( hero, node.first ) ) {
                 const uint32_t dist = world.getDistance( heroIndex, node.first, skill );
                 if ( dist == 0 )
@@ -84,11 +89,22 @@ namespace AI
                     maxPriority = value;
                     priorityTarget = node.first;
                     objectID = node.second;
+                    selectedNode = idx;
                 }
             }
         }
-        DEBUG( DBG_AI, DBG_TRACE,
-               hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
+
+        if ( selectedNode < mapObjects.size() ) {
+            DEBUG( DBG_AI, DBG_TRACE,
+                   hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
+
+            // Remove the object from the list to other heroes won't target it
+            mapObjects.erase( selectedNode + mapObjects.begin() );
+        }
+        else {
+            priorityTarget = world.searchForFog( hero );
+            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+        }
 
         return priorityTarget;
     }

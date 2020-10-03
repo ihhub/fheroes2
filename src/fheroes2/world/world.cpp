@@ -1037,6 +1037,11 @@ uint32_t World::getDistance( int from, int to, uint32_t skill )
     return _pathfinder.getDistance( from, to, skill );
 }
 
+int World::searchForFog( const Heroes & hero )
+{
+    return _pathfinder.searchForFog( hero.GetColor(), hero.GetIndex(), hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+}
+
 std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ignoreObjects )
 {
     return _pathfinder.buildPath( from, to, skill );

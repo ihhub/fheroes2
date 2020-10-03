@@ -145,6 +145,47 @@ uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, ui
     return penalty;
 }
 
+int Pathfinder::searchForFog( int playerColor, int start, uint8_t skill )
+{
+    reEvaluateIfNeeded( start, skill );
+
+    const Directions directions = Direction::All();
+    std::vector<int> offset( directions.size() );
+    for ( size_t i = 0; i < directions.size(); ++i ) {
+        offset[i] = Maps::GetDirectionIndex( 0, directions[i] );
+    }
+
+    std::vector<bool> tilesVisited( world.w() * world.h(), false );
+
+    std::vector<int> nodesToExplore;
+    nodesToExplore.push_back( start );
+    tilesVisited[start] = true;
+
+    for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+        const int currentNodeIdx = nodesToExplore[lastProcessedNode];
+
+        for ( size_t i = 0; i < directions.size(); ++i ) {
+            if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
+                const int newIndex = currentNodeIdx + offset[i];
+                if ( newIndex == start )
+                    continue;
+
+                if ( world.GetTiles( newIndex ).isFog( playerColor ) ) {
+                    return currentNodeIdx;
+                }
+                else if ( !tilesVisited[newIndex] ) {
+                    tilesVisited[newIndex] = true;
+
+                    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
+                    if ( _cache[newIndex]._cost && monsters.empty() )
+                        nodesToExplore.push_back( newIndex );
+                }
+            }
+        }
+    }
+    return -1;
+}
+
 void Pathfinder::evaluateMap( int start, uint8_t skill )
 {
     const bool fromWater = world.GetTiles( start ).isWater();
@@ -201,7 +242,8 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
                         newNode._cost = moveCost;
 
                         // duplicates are allowed if we find a cheaper way there
-                        nodesToExplore.push_back( newIndex );
+                        if ( world.GetTiles( newIndex ).isWater() == fromWater )
+                            nodesToExplore.push_back( newIndex );
                     }
                 }
             }

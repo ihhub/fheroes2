@@ -20,27 +20,16 @@
 
 #include "ai.h"
 #include "castle.h"
-#include "empty/ai_empty.h"
 #include "kingdom.h"
 #include "normal/ai_normal.h"
-#include "simple/ai_simple.h"
 
 namespace AI
 {
     // AI Selector here
     Base & Get( AI_TYPE type )
     {
-        static AI::Empty empty;
-        static AI::Simple simple;
         static AI::Normal normal;
-
-        switch ( type ) {
-        case AI::SIMPLE:
-            return simple;
-        case AI::NORMAL:
-            return normal;
-        }
-        return empty;
+        return normal;
     }
 
     bool BuildIfAvailable( Castle & castle, int building )
