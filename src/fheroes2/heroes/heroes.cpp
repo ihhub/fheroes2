@@ -1241,7 +1241,7 @@ int Heroes::lastGroundRegion() const
     return _lastGroundRegion;
 }
 
-void Heroes::setLastGroundRegion( int regionID ) 
+void Heroes::setLastGroundRegion( int regionID )
 {
     _lastGroundRegion = regionID;
 }
