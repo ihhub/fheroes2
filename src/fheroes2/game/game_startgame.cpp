@@ -678,11 +678,6 @@ int Interface::Basic::HumanTurn( bool isload )
     bool stopHero = false;
 
     int heroAnimationFrameCount = 0;
-#ifdef WITH_DEBUG
-    const int heroAnimationFrameStep = 2; // debug mode is always slower in few times so at least we speed up a little
-#else
-    const int heroAnimationFrameStep = 1;
-#endif
     Point heroAnimationOffset;
     int heroAnimationSpriteId = 0;
 
@@ -924,9 +919,9 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    gameArea.ShiftCenter( Point( heroAnimationOffset.x * heroAnimationFrameStep, heroAnimationOffset.y * heroAnimationFrameStep ) );
+                    gameArea.ShiftCenter( Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
                     gameArea.SetRedraw();
-                    heroAnimationFrameCount -= heroAnimationFrameStep;
+                    heroAnimationFrameCount -= Game::HumanHeroAnimSkip();
                     if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
                         hero->SetSpriteIndex( heroAnimationSpriteId );
 
@@ -944,7 +939,7 @@ int Interface::Basic::HumanTurn( bool isload )
                         hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
                     }
                     if ( hero->isMoveEnabled() ) {
-                        if ( hero->Move( 0 == conf.HeroesMoveSpeed() ) ) {
+                        if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
                             if ( !isOngoingFastScrollEvent ) {
                                 gameArea.SetCenter( hero->GetCenter() );
                                 ResetFocus( GameFocus::HEROES );
@@ -965,10 +960,16 @@ int Interface::Basic::HumanTurn( bool isload )
                                     heroAnimationOffset = movement;
                                     gameArea.ShiftCenter( movement );
                                     ResetFocus( GameFocus::HEROES );
-                                    heroAnimationFrameCount = 32 - heroAnimationFrameStep;
+                                    heroAnimationFrameCount = 32 - Game::HumanHeroAnimSkip();
                                     heroAnimationSpriteId = hero->GetSpriteIndex();
-                                    hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                    hero->SetOffset( fheroes2::Point( heroAnimationOffset.x, heroAnimationOffset.y ) );
+                                    if ( Game::HumanHeroAnimSkip() < 4 ) {
+                                        hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
+                                        hero->SetOffset( fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(),
+                                                                          heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                                    }
+                                    else {
+                                        ++heroAnimationSpriteId;
+                                    }
                                 }
                             }
                             gameArea.SetRedraw();
