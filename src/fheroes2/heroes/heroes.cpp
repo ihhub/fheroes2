@@ -1198,7 +1198,7 @@ bool Heroes::isMoveEnabled( void ) const
 bool Heroes::CanMove( void ) const
 {
     const Maps::Tiles & tile = world.GetTiles( GetIndex() );
-    return move_point >= tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    return move_point >= ( tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
 }
 
 /* set enable move */
