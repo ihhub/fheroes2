@@ -910,7 +910,7 @@ void ActionToBoat( Heroes & hero, u32 obj, s32 dst_index )
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeOut( offset );
+    hero.FadeOut( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     hero.SetMapsObject( MP2::OBJ_ZERO );
@@ -936,7 +936,7 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeIn( offset );
+    hero.FadeIn( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.GetPath().Reset();
     hero.ActionNewPosition();
 

@@ -1444,7 +1444,7 @@ namespace AI
         const Point offset( destPos - hero.GetCenter() );
 
         if ( showAnimation ) {
-            hero.FadeOut( offset );
+            hero.FadeOut( Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
 
         hero.ResetMovePoints();
@@ -1480,7 +1480,7 @@ namespace AI
         hero.GetPath().Reset();
 
         if ( showAnimation ) {
-            hero.FadeIn( offset );
+            hero.FadeIn( Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
         }
         hero.ActionNewPosition();
