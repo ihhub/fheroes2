@@ -73,7 +73,7 @@ namespace Game
                           130, // CASTLE_BUYHERO_DELAY
                           130, // CASTLE_BUILD_DELAY
                           150, // CASTLE_UNIT_DELAY
-                          40, // HEROES_FADE_DELAY
+                          32, // HEROES_FADE_DELAY
                           40, // HEROES_PICKUP_DELAY
                           50, // PUZZLE_FADE_DELAY
                           75, // BATTLE_DIALOG_DELAY
@@ -92,8 +92,8 @@ namespace Game
                           220, // BATTLE_COLOR_CYCLE_DELAY
                           160, // BATTLE_SELECTED_UNIT_DELAY
                           300, // AUTOHIDE_STATUS_DELAY
-                          40, // CURRENT_HERO_DELAY
-                          40, // CURRENT_AI_DELAY
+                          10, // CURRENT_HERO_DELAY
+                          10, // CURRENT_AI_DELAY
                           0, // CUSTOM_DELAY
                           0};
 }
@@ -129,8 +129,8 @@ void Game::UpdateGameSpeed( void )
     const int heroSpeed = conf.HeroesMoveSpeed() - DEFAULT_SPEED_DELAY;
     const int aiSpeed = conf.AIMoveSpeed() - DEFAULT_SPEED_DELAY;
 
-    delays[CURRENT_HERO_DELAY] = 40 - heroSpeed * 8;
-    delays[CURRENT_AI_DELAY] = 40 - aiSpeed * 8;
+    delays[CURRENT_HERO_DELAY] = 10 - heroSpeed * 2;
+    delays[CURRENT_AI_DELAY] = 10 - aiSpeed * 2;
 
     const double adjustedBattleSpeed = ( 10 - conf.BattleSpeed() ) * battleSpeedAdjustment;
     delays[BATTLE_FRAME_DELAY] = 120 * adjustedBattleSpeed;

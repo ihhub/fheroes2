@@ -539,7 +539,7 @@ void World::NewWeek( void )
         // update week object
         for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
             if ( MP2::isWeekLife( ( *it ).GetObject( false ) ) || MP2::OBJ_MONSTER == ( *it ).GetObject() )
-                ( *it ).QuantityUpdate();
+                ( *it ).QuantityUpdate( false );
 
         // update gray towns
         for ( AllCastles::iterator it = vec_castles.begin(); it != vec_castles.end(); ++it )
@@ -1037,6 +1037,11 @@ uint32_t World::getDistance( int from, int to, uint32_t skill )
     return _pathfinder.getDistance( from, to, skill );
 }
 
+int World::searchForFog( const Heroes & hero )
+{
+    return _pathfinder.searchForFog( hero.GetColor(), hero.GetIndex(), hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+}
+
 std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ignoreObjects )
 {
     return _pathfinder.buildPath( from, to, skill );
@@ -1180,6 +1185,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     // update tile passable
     std::for_each( w.vec_tiles.begin(), w.vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
+
+    w.ComputeStaticAnalysis();
 
     // heroes postfix
     std::for_each( w.vec_heroes.begin(), w.vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );

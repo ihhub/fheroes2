@@ -903,9 +903,12 @@ void ActionToBoat( Heroes & hero, u32 obj, s32 dst_index )
     if ( hero.isShipMaster() )
         return;
 
+    const Point & destPos = Maps::GetPoint( dst_index );
+    const Point offset( destPos - hero.GetCenter() );
+
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeOut();
+    hero.FadeOut( offset );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     hero.SetMapsObject( MP2::OBJ_ZERO );
@@ -922,13 +925,16 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
 
     Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
 
+    const Point & destPos = Maps::GetPoint( dst_index );
+    const Point offset( destPos - hero.GetCenter() );
+
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     from.SetObject( MP2::OBJ_BOAT );
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeIn();
+    hero.FadeIn( offset );
     hero.GetPath().Reset();
     hero.ActionNewPosition();
 

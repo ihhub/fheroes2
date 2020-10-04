@@ -72,10 +72,7 @@ namespace Maps
 
         static bool isResource( const TilesAddon & );
         static bool isArtifact( const TilesAddon & );
-        static bool isSkeletonFix( const TilesAddon & );
         static bool isFlag32( const TilesAddon & );
-        static bool isX_LOC123( const TilesAddon & );
-        static bool isAbandoneMineSprite( const TilesAddon & );
 
         static bool isMounts( const TilesAddon & );
         static bool isRocs( const TilesAddon & );
@@ -85,11 +82,6 @@ namespace Maps
         static bool isCactus( const TilesAddon & );
         static bool isStump( const TilesAddon & );
         static int GetActionObject( const TilesAddon & );
-        static int GetLoyaltyObject( const TilesAddon & );
-
-        static bool isBarrier( const TilesAddon & );
-        static int ColorFromBarrierSprite( const TilesAddon & );
-        static int ColorFromTravellerTentSprite( const TilesAddon & );
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
@@ -154,6 +146,8 @@ namespace Maps
 
         void FixObject( void );
 
+        int GetRegion() const;
+        void UpdateRegion( int newRegionID );
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
@@ -202,7 +196,7 @@ namespace Maps
         bool CaptureObjectIsProtection( void ) const;
 
         /* object quantity operation */
-        void QuantityUpdate( void );
+        void QuantityUpdate( bool isFirstLoad = true );
         void QuantityReset( void );
         bool QuantityIsValid( void ) const;
         void QuantitySetColor( int );
@@ -224,6 +218,9 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        static int ColorFromBarrierSprite( uint8_t tileset, uint8_t icnIndex );
+        static int ColorFromTravellerTentSprite( uint8_t tileset, uint8_t icnIndex );
+        static int GetLoyaltyObject( uint8_t tileset, uint8_t icnIndex );
         static bool isShadowSprite( uint8_t tileset, uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource );
         static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
@@ -238,7 +235,6 @@ namespace Maps
         TilesAddon * FindFlags( void );
         void CorrectFlags32( u32 index, bool );
         void RemoveJailSprite( void );
-        void RemoveBarrierSprite( void );
         bool isLongObject( int direction );
 
         void RedrawBoat( fheroes2::Image & ) const;
@@ -252,7 +248,7 @@ namespace Maps
         void QuantitySetResource( int, u32 );
 
         static void UpdateMonsterInfo( Tiles & );
-        static void UpdateDwellingPopulation( Tiles & );
+        static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );
@@ -282,6 +278,9 @@ namespace Maps
         uint8_t quantity3 = 0;
 
         bool tileIsRoad = false;
+
+        // This field does not persist in savegame
+        int _region = 0;
 
 #ifdef WITH_DEBUG
         uint8_t impassableTileRule = 0;

@@ -212,11 +212,6 @@
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal_castle.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal_hero.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal_kingdom.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_battle.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_castle.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_heroes.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_simple_kingdom.cpp" />
-    <ClCompile Include="src\fheroes2\ai\simple\ai_simple.cpp" />
     <ClCompile Include="src\fheroes2\army\army.cpp" />
     <ClCompile Include="src\fheroes2\army\army_bar.cpp" />
     <ClCompile Include="src\fheroes2\army\army_troop.cpp" />
@@ -372,6 +367,7 @@
     <ClCompile Include="src\fheroes2\world\world.cpp" />
     <ClCompile Include="src\fheroes2\world\world_loadmap.cpp" />
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
+    <ClCompile Include="src\fheroes2\world\world_regions.cpp" />
     <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
     <ClCompile Include="src\thirdparty\libsmacker\smk_bitstream.c" />
     <ClCompile Include="src\thirdparty\libsmacker\smk_hufftree.c" />
@@ -413,9 +409,7 @@
     <ClInclude Include="src\fheroes2\agg\til.h" />
     <ClInclude Include="src\fheroes2\agg\xmi.h" />
     <ClInclude Include="src\fheroes2\ai\ai.h" />
-    <ClInclude Include="src\fheroes2\ai\empty\ai_empty.h" />
     <ClInclude Include="src\fheroes2\ai\normal\ai_normal.h" />
-    <ClInclude Include="src\fheroes2\ai\simple\ai_simple.h" />
     <ClInclude Include="src\fheroes2\army\army.h" />
     <ClInclude Include="src\fheroes2\army\army_bar.h" />
     <ClInclude Include="src\fheroes2\army\army_troop.h" />

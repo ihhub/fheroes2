@@ -403,7 +403,9 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     if ( sprite_index < 45 ) {
         s32 ox = 0;
         s32 oy = 0;
-        const int frame = ( sprite_index % 9 );
+        int frame = ( sprite_index % 9 );
+        if ( frame > 0 )
+            --frame;
 
         switch ( direction ) {
         case Direction::TOP:
@@ -437,6 +439,9 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
         default:
             break;
         }
+
+        ox += _offset.x;
+        oy += _offset.y;
 
         dst_pt1.x += ox;
         dst_pt1.y += oy;
@@ -747,54 +752,66 @@ void Heroes::AngleStep( int to_direct )
     }
 }
 
-void Heroes::FadeOut( void ) const
+void Heroes::FadeOut( const Point & offset ) const
 {
     const Point & mp = GetCenter();
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     if ( !( gamearea.GetVisibleTileROI() & mp ) )
         return;
 
+    const bool offsetScreen = offset.x != 0 || offset.y != 0;
+
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    _alphaValue = 250;
+    _alphaValue = 255 - 8;
 
     while ( le.HandleEvents() && _alphaValue > 0 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
             Cursor::Get().Hide();
 
+            if ( offsetScreen ) {
+                gamearea.ShiftCenter( offset );
+            }
+
             gamearea.Redraw( display, LEVEL_ALL );
 
             Cursor::Get().Show();
             display.render();
-            _alphaValue -= 10;
+            _alphaValue -= 8;
         }
     }
 
     _alphaValue = 255;
 }
 
-void Heroes::FadeIn( void ) const
+void Heroes::FadeIn( const Point & offset ) const
 {
     const Point & mp = GetCenter();
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     if ( !( gamearea.GetVisibleTileROI() & mp ) )
         return;
 
+    const bool offsetScreen = offset.x != 0 || offset.y != 0;
+
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    _alphaValue = 0;
+    _alphaValue = 8;
 
     while ( le.HandleEvents() && _alphaValue < 250 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
             Cursor::Get().Hide();
 
+            if ( offsetScreen ) {
+                gamearea.ShiftCenter( offset );
+            }
+
             gamearea.Redraw( display, LEVEL_ALL );
 
             Cursor::Get().Show();
             display.render();
-            _alphaValue += 10;
+            _alphaValue += 8;
         }
     }
 
@@ -839,11 +856,6 @@ bool Heroes::Move( bool fast )
     return false;
 }
 
-int Heroes::GetMoveStep() const
-{
-    return HERO_MOVE_STEP;
-}
-
 Point Heroes::MovementDirection() const
 {
     const int32_t from = GetIndex();
@@ -852,7 +864,7 @@ Point Heroes::MovementDirection() const
         return Point();
 
     if ( direction == Direction::TOP ) {
-        if ( sprite_index > 0 && sprite_index < 9 ) {
+        if ( sprite_index > 1 && sprite_index < 9 ) {
             return Point( 0, -1 );
         }
     }
