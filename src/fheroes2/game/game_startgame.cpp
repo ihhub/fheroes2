@@ -964,8 +964,8 @@ int Interface::Basic::HumanTurn( bool isload )
                                     heroAnimationSpriteId = hero->GetSpriteIndex();
                                     if ( Game::HumanHeroAnimSkip() < 4 ) {
                                         hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                        hero->SetOffset( fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(),
-                                                                          heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                                        hero->SetOffset(
+                                            fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
                                     }
                                     else {
                                         ++heroAnimationSpriteId;
