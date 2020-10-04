@@ -1,4 +1,18 @@
-version 0.8.2 (02 October 2020)
+version 0.8.2 (04 October 2020)
+- make correct spawn of neutral monsters and their growth
+- display correct window while right clicking on a monster in Kingdom Overview
+- add a transition while boarding and off-boarding boats
+- make hero animation movement smooth
+- fix price of loyalty artifact selection
+- fix tents/barriers from Price of Loyalty
+- fix monster placement at the beginning of months
+- fix missing dialog box in some rare cases
+- do not show journal scrollbar when it's not open
+- fix second attack for blinded creatures
+- fix typo in description of "Knowledge" skill at hero screen
+- replace the original project AI with an enhanced verion of AI (making it not that stupid)
+- save neutral army monsters after battle
+- always reduce moral for visited Graveyard and Ship Wreck
 - allow heroes to move last step with remaining move points
 - update village's shadow after a castle was built
 - fix drawing castle's shadows under roads
