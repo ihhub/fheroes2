@@ -28,7 +28,7 @@ msgid "View %{name}"
 msgstr "Žiūrėti %{name}"
 
 #: ../fheroes2/army/army_bar.cpp:226 ../fheroes2/army/army_bar.cpp:309
-msgid "Move or right click Redistribute %{name}"
+msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
 #: ../fheroes2/army/army_bar.cpp:232 ../fheroes2/army/army_bar.cpp:300
@@ -1645,7 +1645,7 @@ msgid "Number to buy:"
 msgstr "Norimas kiekis:"
 
 #: ../fheroes2/dialog/dialog_selectcount.cpp:314
-msgid "Move how many troops?"
+msgid "How many troops to move?"
 msgstr ""
 
 #: ../fheroes2/dialog/dialog_selectcount.cpp:358
