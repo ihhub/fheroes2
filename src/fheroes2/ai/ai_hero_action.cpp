@@ -1436,12 +1436,19 @@ namespace AI
         for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
             hero.SetVisited( *it );
 
-        hero.FadeOut();
+        const bool showAnimation = AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) );
+        const Point & destPos = Maps::GetPoint( dst_index );
+        const Point offset( destPos - hero.GetCenter() );
+
+        if ( showAnimation ) {
+            hero.FadeOut( offset );
+        }
+
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         hero.SetMapsObject( MP2::OBJ_ZERO );
         hero.SetShipMaster( true );
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+        if ( showAnimation ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
         }
         hero.GetPath().Reset();
@@ -1458,13 +1465,19 @@ namespace AI
 
         Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
 
+        const bool showAnimation = AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) );
+
+        const Point & destPos = Maps::GetPoint( dst_index );
+        const Point offset( destPos - hero.GetCenter() );
+
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         from.SetObject( MP2::OBJ_BOAT );
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
-        hero.FadeIn();
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+
+        if ( showAnimation ) {
+            hero.FadeIn( offset );
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
         }
         hero.ActionNewPosition();
@@ -1898,8 +1911,16 @@ namespace AI
             Interface::GameArea & gameArea = I.GetGameArea();
 
             const uint32_t colors = AIGetAllianceColors( hero );
-            const int moveStep = hero.GetMoveStep();
             bool recenterNeeded = true;
+
+            int heroAnimationFrameCount = 0;
+#ifdef WITH_DEBUG
+            const int heroAnimationFrameStep = 2; // debug mode is always slower in few times so at least we speed up a little
+#else
+            const int heroAnimationFrameStep = 1;
+#endif
+            Point heroAnimationOffset;
+            int heroAnimationSpriteId = 0;
 
             while ( LocalEvent::Get().HandleEvents() ) {
                 if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
@@ -1918,16 +1939,42 @@ namespace AI
                         recenterNeeded = false;
                     }
 
-                    if ( !hero.Move() ) {
-                        Point movement( hero.MovementDirection() );
-                        if ( movement != Point() ) { // don't waste resources for no movement
-                            movement.x *= moveStep;
-                            movement.y *= moveStep;
-                            gameArea.ShiftCenter( movement );
+                    bool resetHeroSprite = false;
+                    if ( heroAnimationFrameCount > 0 ) {
+                        gameArea.ShiftCenter( Point( heroAnimationOffset.x * heroAnimationFrameStep, heroAnimationOffset.y * heroAnimationFrameStep ) );
+                        gameArea.SetRedraw();
+                        heroAnimationFrameCount -= heroAnimationFrameStep;
+                        if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
+                            hero.SetSpriteIndex( heroAnimationSpriteId );
+
+                            if ( heroAnimationFrameCount == 0 )
+                                resetHeroSprite = true;
+                            else
+                                ++heroAnimationSpriteId;
                         }
+                        const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
+                        hero.SetOffset( fheroes2::Point( heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep ) );
                     }
-                    else {
-                        gameArea.SetCenter( hero.GetCenter() );
+
+                    if ( heroAnimationFrameCount == 0 ) {
+                        if ( resetHeroSprite ) {
+                            hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
+                        }
+
+                        if ( hero.Move() ) {
+                            gameArea.SetCenter( hero.GetCenter() );
+                        }
+                        else {
+                            Point movement( hero.MovementDirection() );
+                            if ( movement != Point() ) { // don't waste resources for no movement
+                                heroAnimationOffset = movement;
+                                gameArea.ShiftCenter( movement );
+                                heroAnimationFrameCount = 32 - heroAnimationFrameStep;
+                                heroAnimationSpriteId = hero.GetSpriteIndex();
+                                hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
+                                hero.SetOffset( fheroes2::Point( heroAnimationOffset.x, heroAnimationOffset.y ) );
+                            }
+                        }
                     }
 
                     I.Redraw( REDRAW_GAMEAREA );
