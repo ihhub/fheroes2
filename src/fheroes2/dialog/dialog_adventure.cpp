@@ -46,7 +46,7 @@ int Dialog::AdventureOptions( bool enabledig )
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );
 
-    Point rb( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
+    Point rb( ( display.width() - box.width() ) / 2 + BORDERWIDTH / 2, ( display.height() - box.height() ) / 2 + BORDERWIDTH / 2 );
     fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
     fheroes2::Blit( box, display, rb.x, rb.y );
 
