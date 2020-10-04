@@ -50,7 +50,7 @@ namespace AI
             return 500.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectID ) ) {
-            return 300.0;
+            return 400.0;
         }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
             return 400.0;
@@ -58,9 +58,13 @@ namespace AI
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
             return 400.0;
         }
-        else if ( objectID == MP2::OBJ_COAST || objectID == MP2::OBJ_BOAT ) {
-            // de-prioritize the swimming
-            return -2000.0;
+        else if ( objectID == MP2::OBJ_COAST ) {
+            // de-prioritize the landing
+            return -1500.0;
+        }
+        else if ( objectID == MP2::OBJ_BOAT ) {
+            // de-prioritize the boats even harder
+            return -2500.0;
         }
 
         return 0;

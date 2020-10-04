@@ -93,7 +93,8 @@ namespace AI
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
 
     const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
-    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.6;
+    const double ARMY_STRENGTH_ADVANTAGE_MEDUIM = 1.5;
+    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;
 
     int AISelectPrimarySkill( Heroes & hero )
     {
@@ -1436,6 +1437,8 @@ namespace AI
         for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
             hero.SetVisited( *it );
 
+        hero.setLastGroundRegion( world.GetTiles( from_index ).GetRegion() );
+
         const bool showAnimation = AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) );
         const Point & destPos = Maps::GetPoint( dst_index );
         const Point offset( destPos - hero.GetCenter() );
@@ -1537,10 +1540,10 @@ namespace AI
 
         case MP2::OBJ_MAGELLANMAPS:
         case MP2::OBJ_WHIRLPOOL:
+            return hero.isShipMaster() && !hero.isVisited( tile );
+
         case MP2::OBJ_COAST:
-            if ( hero.isShipMaster() )
-                return true;
-            break;
+            return hero.isShipMaster() && !hero.isVisited( tile ) && tile.GetRegion() != hero.lastGroundRegion();
 
         // capture objects
         case MP2::OBJ_SAWMILL:
@@ -1571,7 +1574,7 @@ namespace AI
                 if ( !hero.isFriends( tile.QuantityColor() ) ) {
                     if ( tile.CaptureObjectIsProtection() ) {
                         Army enemy( tile );
-                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_LARGE );
+                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_MEDUIM );
                     }
                     else
                         return true;
@@ -1809,7 +1812,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_SMALL );
+            return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
 
         // sign
         case MP2::OBJ_SIGN:
@@ -1827,7 +1830,7 @@ namespace AI
                     if ( hero.isFriends( castle->GetColor() ) )
                         return false;
                     else
-                        return army.isStrongerThan( castle->GetActualArmy(), ARMY_STRENGTH_ADVANTAGE_LARGE );
+                        return army.isStrongerThan( castle->GetActualArmy(), castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM );
                 }
             }
             break;

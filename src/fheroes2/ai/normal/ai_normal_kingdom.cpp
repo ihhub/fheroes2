@@ -93,13 +93,14 @@ namespace AI
 
             mapObjects.emplace_back( idx, objectID );
 
+            const int color = tile.QuantityColor();
             if ( objectID == MP2::OBJ_HEROES ) {
                 const Heroes * enemy = tile.GetHeroes();
                 if ( enemy && !Players::isFriends( color, enemy->GetColor() ) ) {
                     enemyArmies.emplace_back( idx, &enemy->GetArmy() );
                 }
             }
-            else if ( objectID == MP2::OBJ_CASTLE && !Players::isFriends( color, tile.QuantityColor() ) ) {
+            else if ( objectID == MP2::OBJ_CASTLE && color != Color::NONE && !Players::isFriends( color, color ) ) {
                 const Castle * castle = world.GetCastle( Maps::GetPoint( idx ) );
                 if ( castle )
                     enemyArmies.emplace_back( idx, &castle->GetArmy() );
