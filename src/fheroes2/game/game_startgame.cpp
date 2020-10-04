@@ -677,6 +677,15 @@ int Interface::Basic::HumanTurn( bool isload )
     bool isMovingHero = false;
     bool stopHero = false;
 
+    int heroAnimationFrameCount = 0;
+#ifdef WITH_DEBUG
+    const int heroAnimationFrameStep = 2; // debug mode is always slower in few times so at least we speed up a little
+#else
+    const int heroAnimationFrameStep = 1;
+#endif
+    Point heroAnimationOffset;
+    int heroAnimationSpriteId = 0;
+
     // startgame loop
     while ( Game::CANCEL == res ) {
         if ( !le.HandleEvents( true, true ) ) {
@@ -913,48 +922,73 @@ int Interface::Basic::HumanTurn( bool isload )
             Heroes * hero = GetFocusHeroes();
 
             if ( hero ) {
-                if ( hero->isMoveEnabled() ) {
-                    if ( hero->Move( 0 == conf.HeroesMoveSpeed() ) ) {
-                        if ( !isOngoingFastScrollEvent ) {
-                            gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES );
-                            RedrawFocus();
+                bool resetHeroSprite = false;
+                if ( heroAnimationFrameCount > 0 ) {
+                    gameArea.ShiftCenter( Point( heroAnimationOffset.x * heroAnimationFrameStep, heroAnimationOffset.y * heroAnimationFrameStep ) );
+                    gameArea.SetRedraw();
+                    heroAnimationFrameCount -= heroAnimationFrameStep;
+                    if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
+                        hero->SetSpriteIndex( heroAnimationSpriteId );
+
+                        if ( heroAnimationFrameCount == 0 )
+                            resetHeroSprite = true;
+                        else
+                            ++heroAnimationSpriteId;
+                    }
+                    const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
+                    hero->SetOffset( fheroes2::Point( heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep ) );
+                }
+
+                if ( heroAnimationFrameCount == 0 ) {
+                    if ( resetHeroSprite ) {
+                        hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
+                    }
+                    if ( hero->isMoveEnabled() ) {
+                        if ( hero->Move( 0 == conf.HeroesMoveSpeed() ) ) {
+                            if ( !isOngoingFastScrollEvent ) {
+                                gameArea.SetCenter( hero->GetCenter() );
+                                ResetFocus( GameFocus::HEROES );
+                                RedrawFocus();
+                            }
+
+                            if ( stopHero ) {
+                                hero->SetMove( false );
+                                stopHero = false;
+                            }
+
+                            gameArea.SetUpdateCursor();
+                        }
+                        else {
+                            if ( !isOngoingFastScrollEvent ) {
+                                Point movement( hero->MovementDirection() );
+                                if ( movement != Point() ) { // don't waste resources for no movement
+                                    heroAnimationOffset = movement;
+                                    gameArea.ShiftCenter( movement );
+                                    ResetFocus( GameFocus::HEROES );
+                                    heroAnimationFrameCount = 32 - heroAnimationFrameStep;
+                                    heroAnimationSpriteId = hero->GetSpriteIndex();
+                                    hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
+                                    hero->SetOffset( fheroes2::Point( heroAnimationOffset.x, heroAnimationOffset.y ) );
+                                }
+                            }
+                            gameArea.SetRedraw();
                         }
 
-                        if ( stopHero ) {
-                            hero->SetMove( false );
-                            stopHero = false;
-                        }
+                        isMovingHero = true;
 
-                        gameArea.SetUpdateCursor();
+                        if ( hero->isAction() ) {
+                            // check game over
+                            res = gameResult.LocalCheckGameOver();
+                            hero->ResetAction();
+                        }
                     }
                     else {
-                        if ( !isOngoingFastScrollEvent ) {
-                            Point movement( hero->MovementDirection() );
-                            if ( movement != Point() ) { // don't waste resources for no movement
-                                const int moveStep = hero->GetMoveStep();
-                                movement.x *= moveStep;
-                                movement.y *= moveStep;
-                                gameArea.ShiftCenter( movement );
-                            }
-                        }
-                        gameArea.SetRedraw();
+                        isMovingHero = false;
+                        stopHero = false;
+                        hero->SetMove( false );
+                        if ( Cursor::WAIT == cursor.Themes() )
+                            gameArea.SetUpdateCursor();
                     }
-
-                    isMovingHero = true;
-
-                    if ( hero->isAction() ) {
-                        // check game over
-                        res = gameResult.LocalCheckGameOver();
-                        hero->ResetAction();
-                    }
-                }
-                else {
-                    isMovingHero = false;
-                    stopHero = false;
-                    hero->SetMove( false );
-                    if ( Cursor::WAIT == cursor.Themes() )
-                        gameArea.SetUpdateCursor();
                 }
             }
             else {
