@@ -1246,6 +1246,16 @@ void Heroes::SetShipMaster( bool f )
     f ? SetModes( SHIPMASTER ) : ResetModes( SHIPMASTER );
 }
 
+int Heroes::lastGroundRegion() const
+{
+    return _lastGroundRegion;
+}
+
+void Heroes::setLastGroundRegion( int regionID )
+{
+    _lastGroundRegion = regionID;
+}
+
 Skill::SecSkills & Heroes::GetSecondarySkills( void )
 {
     return secondary_skills;
