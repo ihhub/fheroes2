@@ -453,7 +453,7 @@ void Maps::Tiles::QuantityReset( void )
         SetObject( MP2::OBJ_ZERO );
 }
 
-void Maps::Tiles::QuantityUpdate( void )
+void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_WITCHSHUT:
@@ -890,12 +890,12 @@ void Maps::Tiles::QuantityUpdate( void )
     case MP2::OBJ_AIRALTAR:
     case MP2::OBJ_FIREALTAR:
     case MP2::OBJ_EARTHALTAR:
-        UpdateDwellingPopulation( *this );
+        UpdateDwellingPopulation( *this, isFirstLoad );
         break;
 
     case MP2::OBJ_BARROWMOUNDS:
         if ( !Settings::Get().ExtWorldDisableBarrowMounds() )
-            UpdateDwellingPopulation( *this );
+            UpdateDwellingPopulation( *this, isFirstLoad );
         break;
 
     default:
@@ -973,30 +973,7 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 co
         tile.MonsterSetCount( count );
     }
     else {
-        int mul = 4;
-
-        // set random count
-        switch ( Settings::Get().GameDifficulty() ) {
-        case Difficulty::EASY:
-            mul = 3;
-            break;
-        case Difficulty::NORMAL:
-            mul = 4;
-            break;
-        case Difficulty::HARD:
-            mul = 4;
-            break;
-        case Difficulty::EXPERT:
-            mul = 5;
-            break;
-        case Difficulty::IMPOSSIBLE:
-            mul = 6;
-            break;
-        default:
-            break;
-        }
-
-        tile.MonsterSetCount( mul * mons.GetRNDSize( true ) );
+        tile.MonsterSetCount( mons.GetRNDSize( true ) );
     }
 
     // skip join
@@ -1063,53 +1040,69 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
     PlaceMonsterOnTile( tile, mons, count );
 }
 
-void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile )
+void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 {
-    u32 count = 0;
+    uint32_t count = isFirstLoad ? 0 : tile.MonsterCount();
     const int obj = tile.GetObject( false );
     const Troop & troop = tile.QuantityTroop();
 
     switch ( obj ) {
     // join monsters
     case MP2::OBJ_HALFLINGHOLE:
+        count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 5, 10 );
+        break;
     case MP2::OBJ_PEASANTHUT:
     case MP2::OBJ_THATCHEDHUT:
+        count += isFirstLoad ? Rand::Get( 20, 50 ) : Rand::Get( 5, 10 );
+        break;
     case MP2::OBJ_EXCAVATION:
-    case MP2::OBJ_CAVE:
     case MP2::OBJ_TREEHOUSE:
+        count += isFirstLoad ? Rand::Get( 10, 25 ) : Rand::Get( 4, 8 );
+        break;
+    case MP2::OBJ_CAVE:
+        count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 3, 6 );
+        break;
     case MP2::OBJ_GOBLINHUT:
-        count = troop().GetRNDSize( true ) * 3 / 2;
+        count += isFirstLoad ? Rand::Get( 15, 40 ) : Rand::Get( 3, 6 );
         break;
 
     case MP2::OBJ_TREECITY:
-        count = troop().GetRNDSize( true ) * 2;
+        count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 10, 20 );
         break;
 
     case MP2::OBJ_WATCHTOWER:
+        count += isFirstLoad ? Rand::Get( 7, 10 ) : Rand::Get( 2, 4 );
+        break;
     case MP2::OBJ_ARCHERHOUSE:
+        count += isFirstLoad ? Rand::Get( 10, 25 ) : Rand::Get( 2, 4 );
+        break;
     case MP2::OBJ_DWARFCOTT:
-    //
-    case MP2::OBJ_RUINS:
+        count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 3, 6 );
+        break;
     case MP2::OBJ_WAGONCAMP:
+        count += isFirstLoad ? Rand::Get( 30, 50 ) : Rand::Get( 3, 6 );
+        break;
     case MP2::OBJ_DESERTTENT:
+        count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 1, 3 );
+        break;
+    case MP2::OBJ_RUINS:
+        count += isFirstLoad ? Rand::Get( 3, 5 ) : Rand::Get( 1, 3 );
+        break;
     case MP2::OBJ_WATERALTAR:
     case MP2::OBJ_AIRALTAR:
     case MP2::OBJ_FIREALTAR:
     case MP2::OBJ_EARTHALTAR:
     case MP2::OBJ_BARROWMOUNDS:
-        count = troop().GetRNDSize( true );
-        // increase small if dwelling not open
-        if ( !Settings::Get().ExtWorldDwellingsAccumulateUnits() && count <= troop.GetCount() )
-            count = troop.GetCount() + Rand::Get( 1, 3 );
+        count += Rand::Get( 2, 5 );
         break;
 
     case MP2::OBJ_TROLLBRIDGE:
     case MP2::OBJ_CITYDEAD:
-        count = 1 < world.CountWeek() && Color::NONE == tile.QuantityColor() ? 0 : troop().GetGrown();
+        count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == tile.QuantityColor() ) ? count : count + Rand::Get( 1, 3 );
         break;
 
     case MP2::OBJ_DRAGONCITY:
-        count = 1 < world.CountWeek() && Color::NONE == tile.QuantityColor() ? 0 : 1;
+        count = isFirstLoad ? 2 : ( Color::NONE == tile.QuantityColor() ) ? count : count + 1;
         break;
 
     default:
@@ -1117,10 +1110,7 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile )
     }
 
     if ( count ) {
-        if ( Settings::Get().ExtWorldDwellingsAccumulateUnits() )
-            tile.MonsterSetCount( troop.GetCount() + count );
-        else
-            tile.MonsterSetCount( count );
+        tile.MonsterSetCount( troop.GetCount() + count );
     }
 }
 

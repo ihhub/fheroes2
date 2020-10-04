@@ -310,8 +310,11 @@ void Castle::PostLoad( void )
     EducateHeroes();
 
     // AI troops auto pack for gray towns
-    if ( Color::NONE == GetColor() && !Modes( CUSTOMARMY ) )
-        JoinRNDArmy();
+    if ( Color::NONE == GetColor() && !Modes( CUSTOMARMY ) ) {
+        // towns get 4 reinforcements at the start of the game
+        for ( int i = 0; i < 4; ++i )
+            JoinRNDArmy();
+    }
 
     // fix shipyard
     if ( !HaveNearlySea() )
@@ -432,6 +435,7 @@ u32 * Castle::GetDwelling( u32 dw )
 void Castle::ActionNewWeek( void )
 {
     ResetModes( DISABLEHIRES );
+    const bool isNeutral = GetColor() == Color::NONE;
 
     // increase population
     if ( world.GetWeekType().GetType() != Week::PLAGUE ) {
@@ -452,7 +456,7 @@ void Castle::ActionNewWeek( void )
                     growth += GetGrownWel2();
 
                 // neutral town: half population (normal for begin month)
-                if ( GetColor() == Color::NONE && !world.BeginMonth() )
+                if ( isNeutral && !world.BeginMonth() )
                     growth /= 2;
 
                 *dw += growth;
@@ -473,9 +477,13 @@ void Castle::ActionNewWeek( void )
                 }
         }
 
-        // neutral town: small increase garrisons (random)
-        if ( Color::NONE == GetColor() && !Modes( CUSTOMARMY ) )
+        // neutral town: increase garrisons
+        if ( isNeutral && !Modes( CUSTOMARMY ) ) {
             JoinRNDArmy();
+            // if it's a town there's 40% chance (or it's a castle) to get extra troops
+            if ( isCastle() || Rand::Get( 1, 100 ) <= 40 )
+                JoinRNDArmy();
+        }
     }
 }
 
@@ -2485,33 +2493,33 @@ void Castle::Scoute( void ) const
 
 void Castle::JoinRNDArmy( void )
 {
-    const Monster mon1( race, DWELLING_MONSTER1 );
-    const Monster mon2( race, DWELLING_MONSTER2 );
-    const Monster mon3( race, DWELLING_MONSTER3 );
+    const uint32_t timeModifier = world.CountDay() / 10;
+    const uint32_t reinforcementQuality = Rand::Get( 1, 15 ) + timeModifier;
 
-    switch ( Rand::Get( 1, 4 ) ) {
-    case 1:
-        army.JoinTroop( mon1, mon1.GetRNDSize( false ) * 3 );
-        army.JoinTroop( mon2, mon2.GetRNDSize( false ) );
-        break;
+    uint32_t count = timeModifier / 2;
+    uint32_t dwelling = DWELLING_MONSTER1;
 
-    case 2:
-        army.JoinTroop( mon1, mon1.GetRNDSize( false ) * 2 );
-        army.JoinTroop( mon2, mon2.GetRNDSize( false ) * 2 );
-        break;
-
-    case 3:
-
-        army.JoinTroop( mon1, mon1.GetRNDSize( false ) * 2 );
-        army.JoinTroop( mon2, mon2.GetRNDSize( false ) );
-        army.JoinTroop( mon3, mon3.GetRNDSize( false ) * 2 / 3 );
-        break;
-
-    default:
-        army.JoinTroop( mon1, mon1.GetRNDSize( false ) );
-        army.JoinTroop( mon3, mon3.GetRNDSize( false ) );
-        break;
+    if ( reinforcementQuality > 15 ) {
+        dwelling = DWELLING_MONSTER5;
+        count += 1;
     }
+    else if ( reinforcementQuality > 13 ) {
+        dwelling = DWELLING_MONSTER4;
+        count += Rand::Get( 1, 3 );
+    }
+    else if ( reinforcementQuality > 10 ) {
+        dwelling = DWELLING_MONSTER3;
+        count += Rand::Get( 3, 5 );
+    }
+    else if ( reinforcementQuality > 5 ) {
+        dwelling = DWELLING_MONSTER2;
+        count += Rand::Get( 5, 7 );
+    }
+    else {
+        count += Rand::Get( 8, 15 );
+    }
+
+    army.JoinTroop( Monster( race, dwelling ), count );
 }
 
 void Castle::ActionPreBattle( void )

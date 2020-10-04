@@ -947,6 +947,16 @@ int Heroes::GetSpriteIndex( void ) const
     return sprite_index;
 }
 
+void Heroes::SetSpriteIndex( int index )
+{
+    sprite_index = index;
+}
+
+void Heroes::SetOffset( const fheroes2::Point & offset )
+{
+    _offset = offset;
+}
+
 bool Heroes::isAction( void ) const
 {
     return Modes( ACTION );

@@ -275,8 +275,13 @@ public:
     void Redraw( fheroes2::Image &, s32, s32, bool ) const;
     void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
     int GetSpriteIndex( void ) const;
-    void FadeOut( void ) const;
-    void FadeIn( void ) const;
+
+    // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
+    void SetSpriteIndex( int index );
+    void SetOffset( const fheroes2::Point & offset );
+
+    void FadeOut( const Point & offset = Point() ) const;
+    void FadeIn( const Point & offset = Point() ) const;
     void Scoute( void ) const;
     int GetScoute( void ) const;
     int CanScouteTile( s32 ) const;
@@ -300,7 +305,6 @@ public:
 
     static void ScholarAction( Heroes &, Heroes & );
 
-    int GetMoveStep() const;
     Point MovementDirection() const;
 
 private:
@@ -342,6 +346,7 @@ private:
 
     int direction;
     int sprite_index;
+    fheroes2::Point _offset; // used only during hero's movement
 
     Point patrol_center;
     int patrol_square;
