@@ -167,7 +167,7 @@ public:
         WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
-        WORLD_DWELLING_ACCUMULATE_UNITS = 0x30000020,
+        WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
         WORLD_USE_UNIQUE_ARTIFACTS_ML = 0x30000100,
         WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
@@ -285,7 +285,7 @@ public:
     bool ExtWorldArtesianSpringSeparatelyVisit( void ) const;
     bool ExtWorldStartHeroLossCond4Humans( void ) const;
     bool ExtWorldOneHeroHiredEveryWeek( void ) const;
-    bool ExtWorldDwellingsAccumulateUnits( void ) const;
+    bool ExtWorldNeutralArmyDifficultyScaling( void ) const;
     bool ExtWorldUseUniqueArtifactsML( void ) const;
     bool ExtWorldUseUniqueArtifactsRS( void ) const;
     bool ExtWorldUseUniqueArtifactsPS( void ) const;

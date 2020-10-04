@@ -196,7 +196,7 @@ namespace Maps
         bool CaptureObjectIsProtection( void ) const;
 
         /* object quantity operation */
-        void QuantityUpdate( void );
+        void QuantityUpdate( bool isFirstLoad = true );
         void QuantityReset( void );
         bool QuantityIsValid( void ) const;
         void QuantitySetColor( int );
@@ -248,7 +248,7 @@ namespace Maps
         void QuantitySetResource( int, u32 );
 
         static void UpdateMonsterInfo( Tiles & );
-        static void UpdateDwellingPopulation( Tiles & );
+        static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );

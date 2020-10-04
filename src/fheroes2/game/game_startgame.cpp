@@ -1001,11 +1001,6 @@ int Interface::Basic::HumanTurn( bool isload )
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();
-
-            Army * focusArmy = GetFocusArmy();
-            if ( focusArmy && focusArmy->hasColorCycling() ) {
-                statusWindow.SetRedraw();
-            }
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {

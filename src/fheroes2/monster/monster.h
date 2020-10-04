@@ -191,7 +191,8 @@ public:
     u32 GetHitPoints( void ) const;
     u32 GetSpeed( void ) const;
     u32 GetGrown( void ) const;
-    int GetLevel( void ) const;
+    int GetMonsterLevel() const;
+    int GetRandomUnitLevel( void ) const;
     u32 GetRNDSize( bool skip ) const;
 
     const char * GetName( void ) const;
@@ -215,7 +216,6 @@ public:
     bool isAffectedByMorale( void ) const;
     bool isAlive( void ) const;
     bool hasMeleePenalty() const;
-    bool hasColorCycling() const;
 
     double GetMonsterStrength() const;
     int ICNMonh( void ) const;
