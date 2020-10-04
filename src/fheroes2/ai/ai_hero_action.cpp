@@ -1913,15 +1913,12 @@ namespace AI
             Interface::Basic & I = Interface::Basic::Get();
             Interface::GameArea & gameArea = I.GetGameArea();
 
+            Settings & conf = Settings::Get();
+
             const uint32_t colors = AIGetAllianceColors( hero );
             bool recenterNeeded = true;
 
             int heroAnimationFrameCount = 0;
-#ifdef WITH_DEBUG
-            const int heroAnimationFrameStep = 2; // debug mode is always slower in few times so at least we speed up a little
-#else
-            const int heroAnimationFrameStep = 1;
-#endif
             Point heroAnimationOffset;
             int heroAnimationSpriteId = 0;
 
@@ -1944,9 +1941,9 @@ namespace AI
 
                     bool resetHeroSprite = false;
                     if ( heroAnimationFrameCount > 0 ) {
-                        gameArea.ShiftCenter( Point( heroAnimationOffset.x * heroAnimationFrameStep, heroAnimationOffset.y * heroAnimationFrameStep ) );
+                        gameArea.ShiftCenter( Point( heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() ) );
                         gameArea.SetRedraw();
-                        heroAnimationFrameCount -= heroAnimationFrameStep;
+                        heroAnimationFrameCount -= Game::AIHeroAnimSkip();
                         if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
                             hero.SetSpriteIndex( heroAnimationSpriteId );
 
@@ -1964,7 +1961,7 @@ namespace AI
                             hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
                         }
 
-                        if ( hero.Move() ) {
+                        if ( hero.Move( 10 == conf.AIMoveSpeed() ) ) {
                             gameArea.SetCenter( hero.GetCenter() );
                         }
                         else {
@@ -1972,10 +1969,15 @@ namespace AI
                             if ( movement != Point() ) { // don't waste resources for no movement
                                 heroAnimationOffset = movement;
                                 gameArea.ShiftCenter( movement );
-                                heroAnimationFrameCount = 32 - heroAnimationFrameStep;
+                                heroAnimationFrameCount = 32 - Game::AIHeroAnimSkip();
                                 heroAnimationSpriteId = hero.GetSpriteIndex();
-                                hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                hero.SetOffset( fheroes2::Point( heroAnimationOffset.x, heroAnimationOffset.y ) );
+                                if ( Game::AIHeroAnimSkip() < 4 ) {
+                                    hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
+                                    hero.SetOffset( fheroes2::Point( heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() ) );
+                                }
+                                else {
+                                    ++heroAnimationSpriteId;
+                                }
                             }
                         }
                     }

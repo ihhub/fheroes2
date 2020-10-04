@@ -208,6 +208,10 @@ namespace Game
     bool AnimateInfrequentDelay( int );
     void AnimateResetDelay( int );
     void UpdateGameSpeed( void );
+
+    int HumanHeroAnimSkip();
+    int AIHeroAnimSkip();
+
     uint32_t ApplyBattleSpeed( uint32_t delay );
     int MainMenu( bool isFirstGameRun );
     int NewGame( void );
