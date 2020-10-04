@@ -6,7 +6,7 @@ CFLAGS := $(CFLAGS) -DVITA -I$(DOLCESDK)/arm-dolce-eabi/include -Ofast -mcpu=cor
 LDFLAGS := $(LDFLAGS) -L$(DOLCESDK)/arm-dolce-eabi/lib -L$(DOLCESDK)/lib -Wl,-q
 
 ifdef WITH_SDL2
-SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL2 -lSceAudio_stub -lSceCtrl_stub -lvita2d -lSceGxm_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub -lSceAppMgr_stub -lSceSysmodule_stub -lSceCommonDialog_stub -lScePower_stub -lFLAC -lmikmod -lmpg123
+SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL2 -lSceAudio_stub -lSceCtrl_stub -lvita2d -lSceGxm_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub -lSceDisplayUser_stub -lSceAppMgr_stub -lSceSysmodule_stub -lSceCommonDialog_stub -lScePower_stub -lFLAC -lmikmod -lmpg123
 SDL_FLAGS := -I$(DOLCESDK)/arm-dolce-eabi/include/SDL2 -D_REENTRANT
 else
 SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL -lvita2d -lSceDisplay_stub -lSceCtrl_stub -lSceAudio_stub -lSceSysmodule_stub -lSceGxm_stub -lSceHid_stub -lSceAppMgr_stub -lSceCommonDialog_stub -lScePower_stub -lmikmod
