@@ -109,16 +109,4 @@ public:
 
 StreamBase & operator>>( StreamBase &, ResourceCount & );
 
-/*
-template<class T>
-struct map_data_compare : public std::binary_function<typename T::value_type,
-                                                      typename T::mapped_type, bool>
-{
-    bool operator() (const typename T::value_type & p, const typename T::mapped_type & i) const
-    {
-        return p.second == i;
-    }
-};
-*/
-
 #endif

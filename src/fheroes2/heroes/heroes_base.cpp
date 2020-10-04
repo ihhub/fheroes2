@@ -225,6 +225,11 @@ bool HeroBase::HaveSpellBook( void ) const
     return HasArtifact( Artifact::MAGIC_BOOK );
 }
 
+std::vector<Spell> HeroBase::GetSpells( int lvl ) const
+{
+    return spell_book.GetSpells( lvl );
+}
+
 bool HeroBase::HaveSpell( const Spell & spell, bool skip_bag ) const
 {
     return HaveSpellBook() && ( spell_book.isPresentSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell ) ) );

@@ -177,6 +177,7 @@ public:
     int Level( void ) const;
     int LoyaltyLevel( void ) const;
     int Type( void ) const;
+    int getArtifactValue() const;
 
     /* objnarti.icn */
     u32 IndexSprite( void ) const;

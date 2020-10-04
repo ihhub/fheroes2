@@ -31,7 +31,6 @@
 #include "game.h"
 #include "mageguild.h"
 #include "race.h"
-#include "settings.h"
 #include "text.h"
 
 RowSpells::RowSpells( const Point & pos, const Castle & castle, int lvl )
@@ -131,7 +130,7 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    Dialog::FrameBorder frameborder( Display::GetDefaultSize() );
+    Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const Point & cur_pt = frameborder.GetArea();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );

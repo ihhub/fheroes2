@@ -91,6 +91,8 @@ namespace Battle
         static Indexes GetAroundIndexes( const Unit & );
         static Indexes GetMoveWideIndexes( s32, bool reflect );
         static bool isValidMirrorImageIndex( s32, const Unit * );
+
+        static Indexes GetAdjacentEnemies( const Unit & unit );
     };
 
     struct ShortestDistance : public std::binary_function<s32, s32, bool>

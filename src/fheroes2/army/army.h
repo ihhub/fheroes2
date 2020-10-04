@@ -65,7 +65,6 @@ public:
     u32 GetCount( void ) const;
     bool isValid( void ) const;
     bool HasMonster( const Monster & ) const;
-    bool hasColorCycling() const;
 
     bool AllTroopsIsRace( int ) const;
     u32 GetUniqueCount( void ) const;
@@ -154,7 +153,7 @@ public:
     u32 GetAttack( void ) const;
     u32 GetDefense( void ) const;
     double GetStrength() const;
-    bool isStrongerThan( const Army & target ) const;
+    bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
 
     void SetColor( int );
 

@@ -80,7 +80,6 @@ namespace
             std::swap( lines, oldLines );
 
             for ( size_t i = 0; i < oldLines.size(); ++i ) {
-                const int diffX = ( oldLines[i].first.point.x - oldLines[i].second.point.x );
                 Point middle( oldLines[i].first.point + oldLines[i].second.point );
                 middle.x /= 2;
                 middle.y /= 2;
@@ -206,6 +205,9 @@ namespace Battle
             messages.push_back( str );
             SetListContent( messages );
             SetCurrent( messages.size() - 1 );
+            if ( !openlog ) {
+                splitter.HideCursor();
+            }
         }
 
         void RedrawItem( const std::string & str, s32 px, s32 py, bool f )
@@ -372,18 +374,9 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
 
 fheroes2::Image DrawHexagonShadow( int alphaValue )
 {
-    int l, w, h;
-
-    if ( Settings::Get().QVGA() ) {
-        l = 7;
-        w = CELLW2;
-        h = CELLH2;
-    }
-    else {
-        l = 13;
-        w = CELLW;
-        h = CELLH;
-    }
+    const int l = 13;
+    const int w = CELLW;
+    const int h = CELLH;
 
     fheroes2::Image sf( w, h );
     sf.reset();
@@ -945,8 +938,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
         light = true;
         icn_frng = ICN::FRNG0001;
     }
-    if ( conf.QVGA() || conf.ExtPocketLowMemory() )
-        icn_frng = ICN::UNKNOWN;
 
     sf_cover.resize( _mainSurface.width(), _mainSurface.height() );
     sf_cover.reset();
@@ -1073,6 +1064,19 @@ void Battle::Interface::RedrawPartialFinish()
     if ( Settings::Get().ExtBattleShowBattleOrder() )
         armies_order.Redraw( _currentUnit, _mainSurface );
 
+#ifdef WITH_DEBUG
+    if ( IS_DEVEL() ) {
+        const Board & board = *Arena::GetBoard();
+        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
+            uint32_t distance = arena.CalculateMoveDistance( it->GetIndex() );
+            if ( distance != MAX_MOVE_COST ) {
+                Text text( GetString( distance ), Font::SMALL );
+                text.Blit( ( *it ).GetPos().x + 20, ( *it ).GetPos().y + 22, _mainSurface );
+            }
+        }
+    }
+#endif
+
     fheroes2::Blit( _mainSurface, display, _interfacePosition.x, _interfacePosition.y );
     RedrawInterface();
 
@@ -1093,8 +1097,7 @@ void Battle::Interface::RedrawInterface( void )
         btn_wait.draw();
     btn_skip.draw();
 
-    if ( !conf.QVGA() && !conf.ExtPocketLowMemory() )
-        popup.Redraw( _interfacePosition.x + _interfacePosition.w + 60, _interfacePosition.y + _interfacePosition.h );
+    popup.Redraw( _interfacePosition.x + _interfacePosition.w + 60, _interfacePosition.y + _interfacePosition.h );
 
     if ( listlog && listlog->isOpenLog() )
         listlog->Redraw();
@@ -1690,10 +1693,11 @@ void Battle::Interface::RedrawKilled( void )
     const Indexes cells = arena.GraveyardClosedCells();
 
     for ( Indexes::const_iterator it = cells.begin(); it != cells.end(); ++it ) {
-        const Unit * b = arena.GraveyardLastTroop( *it );
-
-        if ( b && *it != b->GetTailIndex() ) {
-            RedrawTroopSprite( *b );
+        const std::vector<const Unit *> & units = arena.GetGraveyardTroops( *it );
+        for ( size_t i = 0; i < units.size(); ++i ) {
+            if ( units[i] && *it != units[i]->GetTailIndex() ) {
+                RedrawTroopSprite( *units[i] );
+            }
         }
     }
 }
@@ -2660,7 +2664,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     LocalEvent & le = LocalEvent::Get();
 
     // targets damage animation
-    int py = ( conf.QVGA() ? 20 : 50 );
+    int py = 50;
     int finish = 0;
     int deathColor = Color::UNUSED;
 
@@ -2760,7 +2764,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 }
             }
 
-            py += ( conf.QVGA() ? 5 : 10 );
+            py += 10;
         }
     }
 
@@ -2784,7 +2788,13 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
-    const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+    uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+    if ( unit.Modes( SP_HASTE ) ) {
+        frameDelay = frameDelay * 8 / 10; // 20% faster
+    }
+    else if ( unit.Modes( SP_SLOW ) ) {
+        frameDelay = frameDelay * 12 / 10; // 20% slower
+    }
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
@@ -2872,9 +2882,15 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
     const uint32_t step = unit.animation.getFlightSpeed();
-    const uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+    uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
+    if ( unit.Modes( SP_HASTE ) ) {
+        frameDelay = frameDelay * 8 / 10; // 20% faster
+    }
+    else if ( unit.Modes( SP_SLOW ) ) {
+        frameDelay = frameDelay * 12 / 10; // 20% slower
+    }
 
-    const Points points = GetEuclideanLine( destPos, targetPos, Settings::Get().QVGA() ? step / 2 : step );
+    const Points points = GetEuclideanLine( destPos, targetPos, step );
     Points::const_iterator currentPoint = points.begin();
 
     // jump up

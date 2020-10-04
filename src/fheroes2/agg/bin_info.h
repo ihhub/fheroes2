@@ -83,7 +83,7 @@ namespace Bin_Info
         uint32_t idleAnimationDelay;
         std::vector<std::vector<int> > animationFrames;
 
-        MonsterAnimInfo( int monsterID = 0, const std::vector<u8> & bytes = std::vector<uint8_t>() );
+        MonsterAnimInfo( int monsterID = 0, const std::vector<uint8_t> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
         bool isValid() const;
         size_t getProjectileID( float angle ) const;

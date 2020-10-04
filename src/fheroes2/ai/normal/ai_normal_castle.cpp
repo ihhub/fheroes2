@@ -118,6 +118,10 @@ namespace AI
             return true;
         }
 
+        // Call internally checks if it's valid (space/resources) to buy one
+        if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * 2 )
+            castle.BuyBoat();
+
         return Build( castle, GetDefensiveStructures( castle.GetRace() ), 10 );
     }
 
@@ -126,8 +130,7 @@ namespace AI
         if ( defensive ) {
             Build( castle, GetDefensiveStructures( castle.GetRace() ) );
 
-            // Implement a smarter monster recruit option
-            castle.RecruitAllMonsters();
+            castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
         }
         else {
             CastleDevelopment( castle );

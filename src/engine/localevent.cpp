@@ -23,7 +23,6 @@
 #include "localevent.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
-#include "display.h"
 #include "error.h"
 #include "pal.h"
 #include "screen.h"

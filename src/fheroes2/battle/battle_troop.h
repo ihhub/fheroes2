@@ -132,6 +132,7 @@ namespace Battle
         u32 GetShots( void ) const;
         u32 ApplyDamage( Unit &, u32 );
         u32 ApplyDamage( u32 );
+        uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
         u32 CalculateMinDamage( const Unit & ) const;
         u32 CalculateMaxDamage( const Unit & ) const;
         u32 CalculateDamageUnit( const Unit &, float ) const;

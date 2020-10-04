@@ -25,7 +25,6 @@
 #include "audio.h"
 #include "audio_cdrom.h"
 #include "audio_mixer.h"
-#include "display.h"
 #include "font.h"
 #include "rand.h"
 #include "serialize.h"

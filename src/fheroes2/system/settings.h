@@ -40,8 +40,7 @@
 #define FORMAT_VERSION_3255 3255
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
 
-// Value is set to 8100+ to distinguish save format changes in master branch after 0.8.1 release
-#define CURRENT_FORMAT_VERSION 8111 // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_082_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -141,7 +140,6 @@ public:
         /* influence on game balance: save to savefile */
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
         WORLD_ABANDONED_MINE_RANDOM = 0x20000002,
-        WORLD_SAVE_MONSTER_BATTLE = 0x20000004,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
         WORLD_NOREQ_FOR_ARTIFACTS = 0x20000010,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
@@ -169,7 +167,7 @@ public:
         WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
-        WORLD_DWELLING_ACCUMULATE_UNITS = 0x30000020,
+        WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
         WORLD_USE_UNIQUE_ARTIFACTS_ML = 0x30000100,
         WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
@@ -275,7 +273,6 @@ public:
     bool ExtWorldShowVisitedContent( void ) const;
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
-    bool ExtWorldSaveMonsterBattle( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
     bool ExtWorldNoRequirementsForArtifacts( void ) const;
     bool ExtWorldArtifactCrystalBall( void ) const;
@@ -288,7 +285,7 @@ public:
     bool ExtWorldArtesianSpringSeparatelyVisit( void ) const;
     bool ExtWorldStartHeroLossCond4Humans( void ) const;
     bool ExtWorldOneHeroHiredEveryWeek( void ) const;
-    bool ExtWorldDwellingsAccumulateUnits( void ) const;
+    bool ExtWorldNeutralArmyDifficultyScaling( void ) const;
     bool ExtWorldUseUniqueArtifactsML( void ) const;
     bool ExtWorldUseUniqueArtifactsRS( void ) const;
     bool ExtWorldUseUniqueArtifactsPS( void ) const;

@@ -81,6 +81,7 @@ void Kingdom::clear( void )
     recruits.Reset();
 
     heroes_cond_loss.clear();
+    puzzle_maps.reset();
 }
 
 int Kingdom::GetControl( void ) const
@@ -421,12 +422,14 @@ Puzzle & Kingdom::PuzzleMaps( void )
 
 void Kingdom::SetVisitTravelersTent( int col )
 {
-    visited_tents_colors |= col;
+    // visited_tents_color is a bitfield
+    visited_tents_colors |= ( 1 << col );
 }
 
 bool Kingdom::IsVisitTravelersTent( int col ) const
 {
-    return visited_tents_colors & col;
+    // visited_tents_color is a bitfield
+    return visited_tents_colors & ( 1 << col );
 }
 
 bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const

@@ -132,6 +132,8 @@ void Game::OpenCastleDialog( Castle & castle )
     Interface::StatusWindow::ResetTimer();
     bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
+    const size_t heroCountBefore = myKingdom.GetHeroes().size();
+
     if ( it != myCastles.end() ) {
         int result = Dialog::ZERO;
         while ( Dialog::CANCEL != result ) {
@@ -158,7 +160,12 @@ void Game::OpenCastleDialog( Castle & castle )
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
-    basicInterface.SetFocus( *it );
+    if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+        basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
+    }
+    else {
+        basicInterface.SetFocus( *it );
+    }
     basicInterface.RedrawFocus();
 }
 
@@ -446,6 +453,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
             }
+            else {
+                protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+            }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
@@ -562,12 +572,6 @@ int Interface::Basic::StartGame( void )
                         statusWindow.Reset();
                         statusWindow.SetState( STATUS_AITURN );
 
-                        // for pocketpc: show status window
-                        if ( conf.QVGA() && !conf.ShowStatus() ) {
-                            conf.SetShowStatus( true );
-                            statusWindow.SetRedraw();
-                        }
-
                         cursor.Hide();
                         cursor.SetThemes( Cursor::WAIT );
                         Redraw();
@@ -672,6 +676,10 @@ int Interface::Basic::HumanTurn( bool isload )
 
     bool isMovingHero = false;
     bool stopHero = false;
+
+    int heroAnimationFrameCount = 0;
+    Point heroAnimationOffset;
+    int heroAnimationSpriteId = 0;
 
     // startgame loop
     while ( Game::CANCEL == res ) {
@@ -909,48 +917,79 @@ int Interface::Basic::HumanTurn( bool isload )
             Heroes * hero = GetFocusHeroes();
 
             if ( hero ) {
-                if ( hero->isEnableMove() ) {
-                    if ( hero->Move( 0 == conf.HeroesMoveSpeed() ) ) {
-                        if ( !isOngoingFastScrollEvent ) {
-                            gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES );
-                            RedrawFocus();
+                bool resetHeroSprite = false;
+                if ( heroAnimationFrameCount > 0 ) {
+                    gameArea.ShiftCenter( Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                    gameArea.SetRedraw();
+                    heroAnimationFrameCount -= Game::HumanHeroAnimSkip();
+                    if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
+                        hero->SetSpriteIndex( heroAnimationSpriteId );
+
+                        if ( heroAnimationFrameCount == 0 )
+                            resetHeroSprite = true;
+                        else
+                            ++heroAnimationSpriteId;
+                    }
+                    const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
+                    hero->SetOffset( fheroes2::Point( heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep ) );
+                }
+
+                if ( heroAnimationFrameCount == 0 ) {
+                    if ( resetHeroSprite ) {
+                        hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
+                    }
+                    if ( hero->isMoveEnabled() ) {
+                        if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
+                            if ( !isOngoingFastScrollEvent ) {
+                                gameArea.SetCenter( hero->GetCenter() );
+                                ResetFocus( GameFocus::HEROES );
+                                RedrawFocus();
+                            }
+
+                            if ( stopHero ) {
+                                hero->SetMove( false );
+                                stopHero = false;
+                            }
+
+                            gameArea.SetUpdateCursor();
+                        }
+                        else {
+                            if ( !isOngoingFastScrollEvent ) {
+                                Point movement( hero->MovementDirection() );
+                                if ( movement != Point() ) { // don't waste resources for no movement
+                                    heroAnimationOffset = movement;
+                                    gameArea.ShiftCenter( movement );
+                                    ResetFocus( GameFocus::HEROES );
+                                    heroAnimationFrameCount = 32 - Game::HumanHeroAnimSkip();
+                                    heroAnimationSpriteId = hero->GetSpriteIndex();
+                                    if ( Game::HumanHeroAnimSkip() < 4 ) {
+                                        hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
+                                        hero->SetOffset(
+                                            fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                                    }
+                                    else {
+                                        ++heroAnimationSpriteId;
+                                    }
+                                }
+                            }
+                            gameArea.SetRedraw();
                         }
 
-                        if ( stopHero ) {
-                            hero->SetMove( false );
-                            stopHero = false;
-                        }
+                        isMovingHero = true;
 
-                        gameArea.SetUpdateCursor();
+                        if ( hero->isAction() ) {
+                            // check game over
+                            res = gameResult.LocalCheckGameOver();
+                            hero->ResetAction();
+                        }
                     }
                     else {
-                        if ( !isOngoingFastScrollEvent ) {
-                            Point movement( hero->MovementDirection() );
-                            if ( movement != Point() ) { // don't waste resources for no movement
-                                const int moveStep = hero->GetMoveStep();
-                                movement.x *= moveStep;
-                                movement.y *= moveStep;
-                                gameArea.ShiftCenter( movement );
-                            }
-                        }
-                        gameArea.SetRedraw();
+                        isMovingHero = false;
+                        stopHero = false;
+                        hero->SetMove( false );
+                        if ( Cursor::WAIT == cursor.Themes() )
+                            gameArea.SetUpdateCursor();
                     }
-
-                    isMovingHero = true;
-
-                    if ( hero->isAction() ) {
-                        // check game over
-                        res = gameResult.LocalCheckGameOver();
-                        hero->ResetAction();
-                    }
-                }
-                else {
-                    isMovingHero = false;
-                    stopHero = false;
-                    hero->SetMove( false );
-                    if ( Cursor::WAIT == cursor.Themes() )
-                        gameArea.SetUpdateCursor();
                 }
             }
             else {
@@ -963,11 +1002,6 @@ int Interface::Basic::HumanTurn( bool isload )
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();
-
-            Army * focusArmy = GetFocusArmy();
-            if ( focusArmy && focusArmy->hasColorCycling() ) {
-                statusWindow.SetRedraw();
-            }
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
@@ -1068,7 +1102,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
         if ( from_hero == NULL )
             break;
 
-        if ( from_hero->isEnableMove() )
+        if ( from_hero->isMoveEnabled() )
             from_hero->SetMove( false );
         else
             ShowPathOrStartMoveHero( from_hero, index_maps );
@@ -1086,7 +1120,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
     Heroes * hero = GetFocusHeroes();
 
     // stop hero
-    if ( hero && hero->isEnableMove() ) {
+    if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
         Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
     }

@@ -306,12 +306,10 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int c
 
 void AnimationRemoveObject( Maps::Tiles & tile )
 {
-    Maps::TilesAddon * addon = MP2::isRemoveObject( tile.GetObject() ) ? tile.FindObject( tile.GetObject() ) : NULL;
-
-    if ( NULL == addon )
+    if ( tile.GetObject() == MP2::OBJ_ZERO )
         return;
 
-    Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( addon->object, addon->index, tile.GetIndex() ) );
+    Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( tile.GetObjectTileset(), tile.GetObjectSpriteIndex(), tile.GetIndex() ) );
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -533,7 +531,7 @@ void Heroes::Action( s32 dst_index )
             break;
 
             // teleports
-        case MP2::OBJ_STONELIGHTS:
+        case MP2::OBJ_STONELITHS:
             ActionToTeleports( *this, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
@@ -671,9 +669,11 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 {
     bool destroy = false;
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapMonster * map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapMonster * map_troop = NULL;
+    if ( tile.GetObject() == obj )
+        map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+
     Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
-    // const Settings & conf = Settings::Get();
 
     JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
@@ -735,17 +735,15 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
         }
         else {
             BattleLose( hero, res, true );
-            if ( Settings::Get().ExtWorldSaveMonsterBattle() ) {
-                tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
-                // reset "can join"
-                if ( tile.MonsterJoinConditionFree() )
-                    tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+            tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
+            // reset "can join"
+            if ( tile.MonsterJoinConditionFree() )
+                tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
 
-                if ( map_troop ) {
-                    map_troop->count = army.GetCountMonsters( troop() );
-                    if ( map_troop->JoinConditionFree() )
-                        map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                }
+            if ( map_troop ) {
+                map_troop->count = army.GetCountMonsters( troop() );
+                if ( map_troop->JoinConditionFree() )
+                    map_troop->condition = Monster::JOIN_CONDITION_MONEY;
             }
         }
     }
@@ -754,19 +752,12 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
         destroy = true;
 
     if ( destroy ) {
-        Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MONSTER );
-        if ( addon ) {
-            AGG::PlaySound( M82::KILLFADE );
-            const u32 uniq = addon->uniq;
-            AnimationRemoveObject( tile );
-            tile.Remove( uniq );
-            tile.MonsterSetCount( 0 );
-            tile.SetObject( MP2::OBJ_ZERO );
-
-            // remove shadow from left cell
-            if ( Maps::isValidDirection( dst_index, Direction::LEFT ) )
-                world.GetTiles( Maps::GetDirectionIndex( dst_index, Direction::LEFT ) ).Remove( uniq );
-        }
+        AGG::PlaySound( M82::KILLFADE );
+        const uint32_t uniq = tile.GetObjectUID();
+        AnimationRemoveObject( tile );
+        tile.MonsterSetCount( 0 );
+        tile.SetObject( MP2::OBJ_ZERO );
+        tile.RemoveObjectSprite();
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
@@ -802,7 +793,7 @@ void ActionToHeroes( Heroes & hero, u32 obj, s32 dst_index )
         }
 
         bool disable_auto_move
-            = hero.isShipMaster() || other_hero->isShipMaster() || other_hero_castle || world.GetTiles( hero.GetIndex() ).GetObject( false ) == MP2::OBJ_STONELIGHTS;
+            = hero.isShipMaster() || other_hero->isShipMaster() || other_hero_castle || world.GetTiles( hero.GetIndex() ).GetObject( false ) == MP2::OBJ_STONELITHS;
         DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
         // new battle
@@ -912,9 +903,14 @@ void ActionToBoat( Heroes & hero, u32 obj, s32 dst_index )
     if ( hero.isShipMaster() )
         return;
 
+    hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
+
+    const Point & destPos = Maps::GetPoint( dst_index );
+    const Point offset( destPos - hero.GetCenter() );
+
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeOut();
+    hero.FadeOut( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     hero.SetMapsObject( MP2::OBJ_ZERO );
@@ -931,13 +927,16 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
 
     Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
 
+    const Point & destPos = Maps::GetPoint( dst_index );
+    const Point offset( destPos - hero.GetCenter() );
+
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     from.SetObject( MP2::OBJ_BOAT );
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeIn();
+    hero.FadeIn( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.GetPath().Reset();
     hero.ActionNewPosition();
 
@@ -947,10 +946,13 @@ void ActionToCoast( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapResource * map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapResource * map_resource = NULL;
+
+    if ( tile.GetObject() == obj )
+        map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( obj == MP2::OBJ_BOTTLE ) {
-        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID() ) );
         Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
     }
     else {
@@ -1521,7 +1523,7 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
             hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
-        else if ( 0 == gold && !hero.isObjectTypeVisited( obj ) ) {
+        else if ( 0 == gold ) {
             // modify morale
             hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1658,7 +1660,10 @@ void ActionToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapArtifact * map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID( obj ) ) );
+    MapArtifact * map_artifact = NULL;
+
+    if ( tile.GetObject() == obj )
+        map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( hero.IsFullBagArtifacts() )
         Dialog::Message( "", _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
@@ -1903,7 +1908,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
     if ( other_hero ) {
-        ActionToHeroes( hero, MP2::OBJ_STONELIGHTS, index_to );
+        ActionToHeroes( hero, MP2::OBJ_STONELITHS, index_to );
 
         // lose battle
         if ( hero.isFreeman() ) {
@@ -2067,8 +2072,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             else {
                 capture = false;
                 BattleLose( hero, result, true );
-                if ( Settings::Get().ExtWorldSaveMonsterBattle() )
-                    tile.MonsterSetCount( army.GetCountMonsters( mons ) );
+                tile.MonsterSetCount( army.GetCountMonsters( mons ) );
             }
         }
 
@@ -2084,11 +2088,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
                 hero.SetMapsObject( MP2::OBJ_MINES );
             }
 
-            // reset spell info
-            Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MINES );
-            if ( addon )
-                addon->tmp = 0;
-
             tile.QuantitySetColor( hero.GetColor() );
 
             if ( MP2::OBJ_LIGHTHOUSE == obj )
@@ -2102,9 +2101,8 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
         Troop & troop1 = co.GetTroop();
         Troop troop2 = troop1;
 
-        // check set with spell ?
-        Maps::TilesAddon * addon = tile.FindObject( MP2::OBJ_MINES );
-        bool readonly = addon ? addon->tmp : false;
+        // check if it is already guarded by a spell
+        const bool readonly = tile.GetQuantity3() != 0;
 
         if ( Dialog::SetGuardian( hero, troop2, co, readonly ) )
             troop1.Set( troop2(), troop2.GetCount() );

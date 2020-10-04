@@ -52,7 +52,7 @@ const char * Heroes::GetName( int id )
 {
     const char * names[]
         = {// knight
-           _( "Lord Kilburn" ), _( "Sir Gallanth" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
+           _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
            // barbarian
            _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
            // sorceress
@@ -64,7 +64,7 @@ const char * Heroes::GetName( int id )
            // necromant
            _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
            // campains
-           _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Bax" ),
+           _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
            // loyalty version
            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
            _( "Martine" ), _( "Jarkonas" ),
@@ -733,7 +733,7 @@ bool Heroes::Recruit( int cl, const Point & pt )
         SetColor( cl );
         killer_color.SetColor( Color::NONE );
         SetCenter( pt );
-        if ( !Modes( SAVEPOINTS ) )
+        if ( !Modes( SAVE_MP_POINTS ) )
             move_point = GetMaxMovePoints();
         MovePointsScaleFixed();
 
@@ -754,11 +754,12 @@ bool Heroes::Recruit( const Castle & castle )
     if ( Recruit( castle.GetColor(), castle.GetCenter() ) ) {
         if ( castle.GetLevelMageGuild() ) {
             // magic point
-            if ( !Modes( SAVEPOINTS ) )
+            if ( !Modes( SAVE_SP_POINTS ) )
                 SetSpellPoints( GetMaxSpellPoints() );
             // learn spell
             castle.MageGuildEducateHero( *this );
         }
+        SetVisited( GetIndex() );
         return true;
     }
 
@@ -812,7 +813,7 @@ void Heroes::ActionNewDay( void )
     visit_object.remove_if( Visit::isDayLife );
 
     // new day, new capacities
-    ResetModes( SAVEPOINTS );
+    ResetModes( SAVE_MP_POINTS );
 }
 
 void Heroes::ActionNewWeek( void )
@@ -847,6 +848,9 @@ void Heroes::RescanPathPassable( void )
 
 void Heroes::RescanPath( void )
 {
+    if ( !path.isValid() )
+        path.clear();
+
     if ( path.isValid() ) {
         const Maps::Tiles & tile = world.GetTiles( path.GetDestinationIndex() );
 
@@ -914,7 +918,7 @@ void Heroes::SetVisited( s32 index, Visit::type_t type )
 void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    const Maps::TilesAddon * addon = tile.FindObjectConst( object );
+    const uint32_t uid = tile.GetObjectUID();
     int wide = 0;
 
     switch ( object ) {
@@ -931,9 +935,9 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
         break;
     }
 
-    if ( addon && wide ) {
+    if ( tile.GetObject() == object && wide ) {
         for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
-            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).FindAddonLevel1( addon->uniq ) )
+            if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
     }
 }
@@ -941,6 +945,16 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
 int Heroes::GetSpriteIndex( void ) const
 {
     return sprite_index;
+}
+
+void Heroes::SetSpriteIndex( int index )
+{
+    sprite_index = index;
+}
+
+void Heroes::SetOffset( const fheroes2::Point & offset )
+{
+    _offset = offset;
 }
 
 bool Heroes::isAction( void ) const
@@ -972,8 +986,6 @@ bool Heroes::PickupArtifact( const Artifact & art )
 {
     if ( !art.isValid() )
         return false;
-
-    // const Settings & conf = Settings::Get();
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
@@ -1178,14 +1190,15 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 }
 
 /* return true is move enable */
-bool Heroes::isEnableMove( void ) const
+bool Heroes::isMoveEnabled( void ) const
 {
-    return Modes( ENABLEMOVE ) && path.isValid() && path.GetFrontPenalty() <= move_point;
+    return Modes( ENABLEMOVE ) && path.isValid() && path.getLastMovePenalty() <= move_point;
 }
 
 bool Heroes::CanMove( void ) const
 {
-    return move_point >= Maps::Ground::GetPenalty( world.GetTiles( GetIndex() ), GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    const Maps::Tiles & tile = world.GetTiles( GetIndex() );
+    return move_point >= tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
 /* set enable move */
@@ -1231,6 +1244,16 @@ bool Heroes::isShipMaster( void ) const
 void Heroes::SetShipMaster( bool f )
 {
     f ? SetModes( SHIPMASTER ) : ResetModes( SHIPMASTER );
+}
+
+int Heroes::lastGroundRegion() const
+{
+    return _lastGroundRegion;
+}
+
+void Heroes::setLastGroundRegion( int regionID )
+{
+    _lastGroundRegion = regionID;
 }
 
 Skill::SecSkills & Heroes::GetSecondarySkills( void )
@@ -1297,11 +1320,19 @@ int Heroes::GetDirection( void ) const
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
+    const int32_t currentIndex = GetIndex();
+    const uint32_t skill = GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-    // approximate limit, this restriction path finding algorithm
-    uint32_t total = world.getDistance( GetIndex(), dst, GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+    uint32_t total = world.getDistance( currentIndex, dst, skill );
     DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );
+
     if ( total > 0 ) {
+        // check if last step is diagonal and pre-adjust the total
+        const Route::Step lastStep = world.getPath( currentIndex, dst, skill ).back();
+        if ( Direction::isDiagonal( lastStep.GetDirection() ) ) {
+            total -= lastStep.GetPenalty() / 3;
+        }
+
         if ( move_point >= total )
             return 1;
 
@@ -1407,7 +1438,8 @@ bool Heroes::MayStillMove( void ) const
 {
     if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() )
         return false;
-    return path.isValid() ? ( move_point >= path.GetFrontPenalty() ) : CanMove();
+
+    return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
 }
 
 bool Heroes::isValid( void ) const
@@ -1436,6 +1468,8 @@ void Heroes::SetFreeman( int reason )
             army.Reset( false );
         else if ( ( Battle::RESULT_LOSS & reason ) && !( Battle::RESULT_SURRENDER & reason ) )
             army.Reset( true );
+        else if ( reason == 0 ) // Dismissed hero
+            army.Reset( true );
 
         if ( GetColor() != Color::NONE )
             kingdom.RemoveHeroes( this );
@@ -1449,7 +1483,8 @@ void Heroes::SetFreeman( int reason )
         SetMove( false );
         SetModes( ACTION );
         if ( savepoints )
-            SetModes( SAVEPOINTS );
+            SetModes( SAVE_MP_POINTS );
+        SetModes( SAVE_SP_POINTS );
     }
 }
 
@@ -1894,8 +1929,6 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 
 Heroes * AllHeroes::GetFreeman( int race ) const
 {
-    const Settings & conf = Settings::Get();
-
     int min = Heroes::UNKNOWN;
     int max = Heroes::UNKNOWN;
 

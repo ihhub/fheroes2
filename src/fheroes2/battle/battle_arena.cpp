@@ -347,6 +347,9 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             end_turn = true;
         }
         else {
+            // re-calculate possible paths in case unit moved or it's a new turn
+            _pathfinder.calculate( *current_troop );
+
             // turn opponents
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
@@ -562,6 +565,54 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
     }
 
     return result;
+}
+
+Battle::Indexes Battle::Arena::CalculatePath( const Battle::Unit & unit, int32_t indexTo )
+{
+    //_pathfinder.calculate( unit.GetPosition(), unit.isWide() );
+    return _pathfinder.getPath( indexTo );
+}
+
+std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
+{
+    std::pair<int, uint32_t> result = {-1, MAXU16};
+
+    const Position & pos = target.GetPosition();
+    const Cell * head = pos.GetHead();
+    const Cell * tail = pos.GetTail();
+
+    if ( head ) {
+        const ArenaNode & headNode = _pathfinder.getNode( head->GetIndex() );
+        if ( headNode._from != -1 ) {
+            result.first = headNode._from;
+            result.second = headNode._cost;
+        }
+    }
+
+    if ( tail ) {
+        const ArenaNode & tailNode = _pathfinder.getNode( tail->GetIndex() );
+        if ( tailNode._from != -1 && tailNode._cost < result.second ) {
+            result.first = tailNode._from;
+            result.second = tailNode._cost;
+        }
+    }
+
+    return result;
+}
+
+uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
+{
+    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
+}
+
+bool Battle::Arena::hexIsAccessible( int32_t indexTo )
+{
+    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsAccessible( indexTo );
+}
+
+bool Battle::Arena::hexIsPassable( int32_t indexTo )
+{
+    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
@@ -795,6 +846,18 @@ bool Battle::Arena::GraveyardAllowResurrect( s32 index, const Spell & spell ) co
 const Battle::Unit * Battle::Arena::GraveyardLastTroop( s32 index ) const
 {
     return GetTroopUID( graveyard.GetLastTroopUID( index ) );
+}
+
+std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t hexIndex ) const
+{
+    const TroopUIDs & ids = graveyard.GetTroopUIDs( hexIndex );
+
+    std::vector<const Battle::Unit *> units( ids.size() );
+    for ( size_t i = 0; i < ids.size(); ++i ) {
+        units[i] = GetTroopUID( ids[i] );
+    }
+
+    return units;
 }
 
 Battle::Indexes Battle::Arena::GraveyardClosedCells( void ) const
@@ -1059,7 +1122,7 @@ u32 Battle::Arena::GetObstaclesPenalty( const Unit & attacker, const Unit & defe
         return 0;
 
     u32 result = 0;
-    const u32 step = Settings::Get().QVGA() ? CELLW2 / 3 : CELLW / 3;
+    const u32 step = CELLW / 3;
 
     if ( castle ) {
         // archery skill

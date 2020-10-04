@@ -140,6 +140,7 @@ public:
     bool isCombat( void ) const;
     bool isAdventure( void ) const;
     bool isDamage( void ) const;
+    bool isSingleTarget() const;
     bool isRestore( void ) const;
     bool isResurrect( void ) const;
     bool isMindInfluence( void ) const;

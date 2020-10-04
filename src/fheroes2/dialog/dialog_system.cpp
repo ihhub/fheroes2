@@ -86,6 +86,7 @@ int Dialog::SystemOptions( void )
 
     int result = 0;
     bool redraw = false;
+    bool saveConfig = false;
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
@@ -99,6 +100,7 @@ int Dialog::SystemOptions( void )
             conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
             redraw = true;
             Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
+            saveConfig = true;
         }
 
         // set sound volume
@@ -106,6 +108,7 @@ int Dialog::SystemOptions( void )
             conf.SetSoundVolume( 10 > conf.SoundVolume() ? conf.SoundVolume() + 1 : 0 );
             redraw = true;
             Game::EnvironmentSoundMixer();
+            saveConfig = true;
         }
 
         // set music type
@@ -121,6 +124,7 @@ int Dialog::SystemOptions( void )
             conf.SetMusicType( type > MUSIC_CDROM ? 0 : type );
             result |= 0x02;
             redraw = true;
+            saveConfig = true;
         }
 
         // set hero speed
@@ -129,6 +133,7 @@ int Dialog::SystemOptions( void )
             result |= 0x01;
             redraw = true;
             Game::UpdateGameSpeed();
+            saveConfig = true;
         }
 
         // set ai speed
@@ -137,6 +142,7 @@ int Dialog::SystemOptions( void )
             result |= 0x01;
             redraw = true;
             Game::UpdateGameSpeed();
+            saveConfig = true;
         }
 
         // set scroll speed
@@ -144,6 +150,7 @@ int Dialog::SystemOptions( void )
             conf.SetScrollSpeed( SCROLL_FAST2 > conf.ScrollSpeed() ? conf.ScrollSpeed() << 1 : SCROLL_SLOW );
             result |= 0x10;
             redraw = true;
+            saveConfig = true;
         }
 
         // set interface theme
@@ -151,13 +158,15 @@ int Dialog::SystemOptions( void )
             conf.SetEvilInterface( !conf.ExtGameEvilInterface() );
             result |= 0x08;
             redraw = true;
+            saveConfig = true;
         }
 
         // set interface hide/show
-        if ( le.MouseClickLeft( rect8 ) && !conf.QVGA() ) {
+        if ( le.MouseClickLeft( rect8 ) ) {
             conf.SetHideInterface( !conf.ExtGameHideInterface() );
             result |= 0x04;
             redraw = true;
+            saveConfig = true;
         }
 
         if ( redraw ) {
@@ -175,7 +184,7 @@ int Dialog::SystemOptions( void )
     cursor.SetThemes( oldcursor );
     display.render();
 
-    if ( result != 0 ) {
+    if ( saveConfig ) {
         conf.Save( "fheroes2.cfg" );
     }
 

@@ -32,6 +32,7 @@
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_credits.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "ground.h"
@@ -132,34 +133,7 @@ int Game::Testing( int t )
 
 int Game::Credits( void )
 {
-    std::string str;
-    str.reserve( 200 );
-
-    str.append( "version: " );
-    str.append( Settings::Get().GetVersion() );
-    str.append( "\n \n" );
-    str.append( "This program is distributed under the terms of the GPL v2." );
-    str.append( "\n" );
-    str.append( "AI engine: " );
-    str.append( AI::Get().Type() );
-    str.append( ", license: " );
-    str.append( AI::Get().License() );
-    str.append( "\n \n" );
-    str.append( "Site project:\n" );
-    str.append( "https://github.com/ihhub/fheroes2" );
-    str.append( "\n \n" );
-    str.append( "Author of original project on SourceForge:\n" );
-    str.append( "Andrey Afletdinov, maintainer\n" );
-    str.append( "email: fheroes2 at gmail.com\n" );
-#ifdef VITA
-    str.append( "\n \n" );
-    str.append( "PS Vita port:\n" );
-    str.append( "https://github.com/northfear/fheroes2-vita" );
-#endif
-
-    Dialog::Message( "Free Heroes of Might and Magic II Engine", str, Font::SMALL, Dialog::OK );
-
-    // VERBOSE("Credits: under construction.");
+    ShowCredits();
 
     return Game::MAINMENU;
 }

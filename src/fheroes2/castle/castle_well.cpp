@@ -30,7 +30,6 @@
 #include "game.h"
 #include "kingdom.h"
 #include "resource.h"
-#include "settings.h"
 #include "speed.h"
 #include "text.h"
 #include "world.h"
@@ -57,7 +56,7 @@ u32 HowManyRecruitMonster( const Castle & castle, u32 dw, const Funds & add, Fun
     if ( !castle.GetArmy().CanJoinTroop( ms ) )
         return 0;
 
-    u32 count = castle.GetDwellingLivedCount( dw );
+    u32 count = castle.getMonstersInDwelling( dw );
     payment_t payment;
 
     while ( count ) {
@@ -78,7 +77,7 @@ void Castle::OpenWell( void )
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    Dialog::FrameBorder frameborder( Display::GetDefaultSize() );
+    Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const Point cur_pt = frameborder.GetArea();
     Point dst_pt( cur_pt );
 

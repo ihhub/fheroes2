@@ -59,12 +59,14 @@ int Castle::DialogBuyHero( const Heroes * hero )
     if ( hero->HasArtifact( Artifact::MAGIC_BOOK ) )
         count--;
 
-    std::string str = _( "%{name} is a level %{value} %{race}" );
+    std::string str = _( "%{name} is a level %{value} %{race} " );
 
     // FIXME: It is necessary to consider locale features for numerals (with getext).
     if ( count ) {
-        str += " ";
-        str += count > 1 ? _( " with %{count} artifacts" ) : _( " with one artifact" );
+        str += count > 1 ? _( "with %{count} artifacts." ) : _( "with 1 artifact." );
+    }
+    else {
+        str += _( "without artifacts." );
     }
 
     StringReplace( str, "%{name}", hero->GetName() );
@@ -146,7 +148,7 @@ u32 Castle::OpenTown( void )
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    Dialog::FrameBorder background( Display::GetDefaultSize() );
+    Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
 
     const Point & cur_pt = background.GetArea();
     Point dst_pt( cur_pt );
@@ -374,7 +376,7 @@ u32 Castle::OpenTown( void )
 
     // second hero
     dst_pt.x = cur_pt.x + 443;
-    dst_pt.y = cur_pt.y + 362;
+    dst_pt.y = cur_pt.y + 363;
     const Rect rectHero2( dst_pt, 102, 94 );
     if ( hero2 ) {
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
@@ -400,7 +402,7 @@ u32 Castle::OpenTown( void )
     statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
 
     // redraw resource panel
-    RedrawResourcePanel( cur_pt );
+    const Rect & rectResource = RedrawResourcePanel( cur_pt );
 
     // button exit
     dst_pt.x = cur_pt.x + 553;
@@ -420,6 +422,14 @@ u32 Castle::OpenTown( void )
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
+
+        if ( le.MouseClickLeft( rectResource ) ) {
+            fheroes2::ButtonRestorer exitRestorer( buttonExit );
+            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+        }
+        else if ( le.MousePressRight( rectResource ) ) {
+            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+        }
 
         // click left
         if ( le.MouseCursor( dwelling1.GetArea() ) && dwelling1.QueueEventProcessing( buttonExit ) )

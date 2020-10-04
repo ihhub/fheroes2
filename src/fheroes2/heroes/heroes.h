@@ -139,12 +139,12 @@ public:
         // UNUSED	= 0x00000002,
         SPELLCASTED = 0x00000004,
         ENABLEMOVE = 0x00000008,
-        // UNUSED	= 0x00000010,
+        SAVE_SP_POINTS = 0x00000010,
         // UNUSED	= 0x00000020,
         // UNUSED	= 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
-        SAVEPOINTS = 0x00000200,
+        SAVE_MP_POINTS = 0x00000200,
         SLEEPER = 0x00000400,
         GUARDIAN = 0x00000800,
         NOTDEFAULTS = 0x00001000,
@@ -262,7 +262,7 @@ public:
 
     bool Move( bool fast = false );
     void Move2Dest( const s32 & destination );
-    bool isEnableMove( void ) const;
+    bool isMoveEnabled( void ) const;
     bool CanMove( void ) const;
     void SetMove( bool );
     bool isAction( void ) const;
@@ -275,8 +275,13 @@ public:
     void Redraw( fheroes2::Image &, s32, s32, bool ) const;
     void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
     int GetSpriteIndex( void ) const;
-    void FadeOut( void ) const;
-    void FadeIn( void ) const;
+
+    // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
+    void SetSpriteIndex( int index );
+    void SetOffset( const fheroes2::Point & offset );
+
+    void FadeOut( const Point & offset = Point() ) const;
+    void FadeIn( const Point & offset = Point() ) const;
     void Scoute( void ) const;
     int GetScoute( void ) const;
     int CanScouteTile( s32 ) const;
@@ -284,6 +289,8 @@ public:
 
     bool isShipMaster( void ) const;
     void SetShipMaster( bool );
+    int lastGroundRegion() const;
+    void setLastGroundRegion( int regionID );
 
     u32 GetExperience( void ) const;
     void IncreaseExperience( u32 );
@@ -298,7 +305,6 @@ public:
 
     static void ScholarAction( Heroes &, Heroes & );
 
-    int GetMoveStep() const;
     Point MovementDirection() const;
 
 private:
@@ -340,11 +346,14 @@ private:
 
     int direction;
     int sprite_index;
+    fheroes2::Point _offset; // used only during hero's movement
 
     Point patrol_center;
     int patrol_square;
 
     std::list<IndexObject> visit_object;
+    // persist this value later
+    int _lastGroundRegion = 0;
 
     mutable int _alphaValue;
 

@@ -75,6 +75,7 @@ namespace Route
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
         u32 GetTotalPenalty( void ) const;
+        uint32_t getLastMovePenalty() const;
         uint32_t Calculate( const s32 & destIndex );
 
         void Show( void )
@@ -101,7 +102,7 @@ namespace Route
 
         std::string String( void ) const;
 
-        s32 GetAllowStep( void ) const;
+        int GetAllowedSteps( void ) const;
         static int GetIndexSprite( int from, int to, int mod );
 
     private:

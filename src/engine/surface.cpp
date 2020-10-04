@@ -29,7 +29,6 @@
 #include <set>
 #include <sstream>
 
-#include "display.h"
 #include "error.h"
 #include "localevent.h"
 #include "surface.h"
