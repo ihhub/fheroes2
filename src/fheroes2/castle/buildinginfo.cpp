@@ -677,22 +677,22 @@ std::string BuildingInfo::GetConditionDescription( void ) const
         break;
 
     case LACK_RESOURCES:
-        res = _( "Cannot afford %{name}" );
+        res = _( "Cannot afford %{name}." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
     case ALREADY_BUILT:
-        res = _( "%{name} is already built" );
+        res = _( "%{name} is already built." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
     case REQUIRES_BUILD:
-        res = _( "Cannot build %{name}" );
+        res = _( "Cannot build %{name}." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
     case ALLOW_BUILD:
-        res = _( "Build %{name}" );
+        res = _( "Build %{name}." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
