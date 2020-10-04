@@ -1585,7 +1585,7 @@ void World::PostLoad( void )
         ultimate_pos = ( *it ).GetCenter();
     }
 
-    std::string rumor = _( "The ultimate artifact is really the %{name}" );
+    std::string rumor = _( "The ultimate artifact is really the %{name}." );
     StringReplace( rumor, "%{name}", ultimate_artifact.GetName() );
     vec_rumors.push_back( rumor );
 
@@ -1624,6 +1624,5 @@ void World::PostLoad( void )
     vec_rumors.push_back( _( "A Black Dragon will take out a Titan any day of the week." ) );
     vec_rumors.push_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
 
-    vec_rumors.push_back( _( "You can load the newest version of game from a site:\n https://github.com/ihhub/fheroes2/releases" ) );
-    vec_rumors.push_back( _( "This game is now in beta development version. ;)" ) );
+    vec_rumors.push_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }
