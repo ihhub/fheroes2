@@ -37,7 +37,7 @@ Please follow below instructions to be able to compile the project:
 - open **fheroes.vcxproj** by Visual Studio and compile the project.
 
 **MacOS and Linux**
-- open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For MacOS we recommend to run SDL 2 as latest versions of MacOS does not support SDL 1 fully.
+- open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For Arch based distros you need to install SDL with the command `sudo pacman -S sdl sdl_mixer` instead. For MacOS we recommend to run SDL 2 as latest versions of MacOS does not support SDL 1 fully.
 - open `script/demo` directory and run **demo_macos.sh** or **demo_linux.sh** file depending on your OS. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 2 compilation please run `export WITH_SDL2="ON"` command before compiling the project.
 
