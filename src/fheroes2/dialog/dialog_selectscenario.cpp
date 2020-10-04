@@ -381,7 +381,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         else if ( le.MousePressRight( curDescription ) )
             Dialog::Message( _( "Selected Description" ), _( "The description of the currently selected map." ), Font::BIG );
         else if ( le.MousePressRight( buttonOk.area() ) )
-            Dialog::Message( _( "OK" ), _( "Accept the choice made." ), Font::BIG );
+            Dialog::Message( _( "Okay" ), _( "Accept the choice made." ), Font::BIG );
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
