@@ -764,7 +764,7 @@ void Heroes::FadeOut( const Point & offset ) const
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    _alphaValue = 255;
+    _alphaValue = 255 - 8;
 
     while ( le.HandleEvents() && _alphaValue > 0 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
@@ -797,7 +797,7 @@ void Heroes::FadeIn( const Point & offset ) const
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    _alphaValue = 0;
+    _alphaValue = 8;
 
     while ( le.HandleEvents() && _alphaValue < 250 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
