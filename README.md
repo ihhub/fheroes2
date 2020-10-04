@@ -20,7 +20,8 @@ Requirements
 ---------------------------
 You are required to have at least a demo version of Heroes of Might and Magic II game to be able to play it. Please use one of our scripts to download the demo version of the original game. A script comes with the compiled game.
 
-**MacOS and Linux**   
+MacOS and Linux
+--------------------------
 Unix OSes need an explicit installation of SDL. Please go to `script/macos` or `script/linux` directory depending on your OS package and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS does not support SDL 1 fully.
 
 
@@ -30,14 +31,16 @@ Compilation
 
 Please follow below instructions to be able to compile the project:
 
-**Windows**
+Windows
+------------------------
 - **Optional step**: Install **7-zip** archiver at its default location as `C:\Program Files\7-Zip\7z.exe` or otherwise, you will need to manually extract each downloaded package (follow instructions shown by batch scripts mentioned below).
 - open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
 - open `script/demo` directory and run **demo_windows.bat** file. It downloads a demo version of the game which is needed for minimum development.
 - open **fheroes.vcxproj** by Visual Studio and compile the project.
 
-**MacOS and Linux**
-- open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For Arch based distros you need to install SDL with the command `sudo pacman -S sdl sdl_mixer` instead. For MacOS we recommend to run SDL 2 as latest versions of MacOS does not support SDL 1 fully.
+MacOS and Linux
+-------------------
+- open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_1.sh** or **install_sdl_2.sh** file.  For Arch based distros you need to install SDL with the command `sudo pacman -S sdl sdl_mixer` instead. For MacOS we recommend to run SDL 2 as latest versions of MacOS does not support SDL 1 fully.
 - open `script/demo` directory and run **demo_macos.sh** or **demo_linux.sh** file depending on your OS. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 2 compilation please run `export WITH_SDL2="ON"` command before compiling the project.
 

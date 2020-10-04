@@ -760,11 +760,15 @@ void Heroes::FadeOut( const Point & offset ) const
     if ( !( gamearea.GetVisibleTileROI() & mp ) )
         return;
 
+    int multiplier = std::max( std::abs( offset.x ), std::abs( offset.y ) );
+    if ( multiplier < 1 )
+        multiplier = 1;
+
     const bool offsetScreen = offset.x != 0 || offset.y != 0;
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    _alphaValue = 255 - 8;
+    _alphaValue = 255 - 8 * multiplier;
 
     while ( le.HandleEvents() && _alphaValue > 0 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
@@ -778,7 +782,7 @@ void Heroes::FadeOut( const Point & offset ) const
 
             Cursor::Get().Show();
             display.render();
-            _alphaValue -= 8;
+            _alphaValue -= 8 * multiplier;
         }
     }
 
@@ -793,11 +797,15 @@ void Heroes::FadeIn( const Point & offset ) const
     if ( !( gamearea.GetVisibleTileROI() & mp ) )
         return;
 
+    int multiplier = std::max( std::abs( offset.x ), std::abs( offset.y ) );
+    if ( multiplier < 1 )
+        multiplier = 1;
+
     const bool offsetScreen = offset.x != 0 || offset.y != 0;
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    _alphaValue = 8;
+    _alphaValue = 8 * multiplier;
 
     while ( le.HandleEvents() && _alphaValue < 250 ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_FADE_DELAY ) ) {
@@ -811,7 +819,7 @@ void Heroes::FadeIn( const Point & offset ) const
 
             Cursor::Get().Show();
             display.render();
-            _alphaValue += 8;
+            _alphaValue += 8 * multiplier;
         }
     }
 

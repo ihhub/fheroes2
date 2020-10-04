@@ -120,8 +120,8 @@ namespace Game
             multiplier = 1;
             break;
         case 5:
-            delay = 20;
-            multiplier = 2;
+            delay = 10;
+            multiplier = 1;
             break;
         case 6:
             delay = 16;
