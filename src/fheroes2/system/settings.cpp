@@ -775,7 +775,7 @@ bool Settings::Read( const std::string & filename )
 
     if ( config.Exists( "vita_keep_aspect_ratio" ) ) {
         vita_keep_aspect_ratio = config.IntParams( "vita_keep_aspect_ratio" );
-        fheroes2::Display::instance().engine()->SetVitaKeepAspectRatio( vita_keep_aspect_ratio );
+        fheroes2::engine().SetVitaKeepAspectRatio( vita_keep_aspect_ratio );
     }
 #endif
 

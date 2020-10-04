@@ -713,18 +713,18 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Rect vitaDestRect = display.engine()->GetVitaDestRect();
+    fheroes2::Rect vitaDestRect = fheroes2::engine().GetVitaDestRect();
     SetModes( MOUSE_MOTION );
 
     int32_t w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
     int32_t h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
 
     // cursor position with scaled images
-    if ( display.engine()->isFullScreen() ) {
+    if ( fheroes2::engine().isFullScreen() ) {
         w = display.width();
         h = display.height();
 
-        if ( display.engine()->GetVitaKeepAspectRatio() ) {
+        if ( fheroes2::engine().GetVitaKeepAspectRatio() ) {
             w *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / vitaDestRect.width );
             h *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) / vitaDestRect.height );
         }

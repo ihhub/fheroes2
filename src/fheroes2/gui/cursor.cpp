@@ -28,7 +28,7 @@
 // This is new Graphics engine. To change the code slowly we have to do some hacks here for now
 #include "screen.h"
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( VITA )
 #define USE_SDL_CURSOR
 #endif
 
