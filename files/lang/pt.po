@@ -29,7 +29,7 @@ msgstr "Ver %{name}"
 
 #: ../fheroes2/army/army_bar.cpp:227 ../fheroes2/army/army_bar.cpp:310
 #, fuzzy
-msgid "Move or right click Redistribute %{name}"
+msgid "Move or right click to redistribute %{name}"
 msgstr "Mova e clica com o botao direito para redistribuir %{name}"
 
 #: ../fheroes2/army/army_bar.cpp:233 ../fheroes2/army/army_bar.cpp:301
@@ -1742,7 +1742,7 @@ msgid "Number to buy:"
 msgstr "Qtd. à Comprar:"
 
 #: ../fheroes2/dialog/dialog_selectcount.cpp:314
-msgid "Move how many troops?"
+msgid "How many troops to move?"
 msgstr "Mover quantas tropas?"
 
 #: ../fheroes2/dialog/dialog_selectcount.cpp:358

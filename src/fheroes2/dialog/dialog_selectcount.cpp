@@ -334,7 +334,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     const Rect & pos = box.GetArea();
     const int center = pos.x + pos.w / 2;
 
-    text.Set( _( "Move how many troops?" ), Font::BIG );
+    text.Set( _( "How many troops to move?" ), Font::BIG );
     text.Blit( center - text.w() / 2, pos.y );
 
     sel.SetPos( Point( pos.x + 70, pos.y + 30 ) );
