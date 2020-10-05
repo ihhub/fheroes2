@@ -48,24 +48,24 @@ public:
     int GetCurrent( void ) const
     {
         return cur;
-    };
+    }
     int GetStep( void ) const
     {
         return step;
-    };
+    }
     int Max( void ) const
     {
         return max;
-    };
+    }
     int Min( void ) const
     {
         return min;
-    };
+    }
 
     const Rect & GetRect( void ) const
     {
         return area;
-    };
+    }
 
 private:
     Point GetPositionCursor( void );

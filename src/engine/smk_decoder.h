@@ -23,9 +23,12 @@
 #include <string>
 #include <vector>
 
-#include "image.h"
-
 struct smk_t;
+
+namespace fheroes2
+{
+    class Image;
+}
 
 class SMKVideoSequence
 {

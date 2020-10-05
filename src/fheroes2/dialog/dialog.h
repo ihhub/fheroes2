@@ -35,7 +35,6 @@
 
 class Castle;
 class Heroes;
-class Surface;
 class Artifact;
 class Spell;
 class Monster;

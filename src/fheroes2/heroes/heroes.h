@@ -35,7 +35,7 @@
 #include "visit.h"
 
 class Recruits;
-class Surface;
+
 namespace Battle
 {
     class Only;

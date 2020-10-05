@@ -270,7 +270,7 @@ Rect Rect::operator^( const Rect & other ) const
         temp.h -= diff;
     }
 
-    if ( temp.x > x + w || temp.y > y + h || temp.w < 0 || temp.h < 0 )
+    if ( temp.x > x + w || temp.y > y + h )
         return Rect();
 
     if ( temp.x + temp.w > x + w ) {
@@ -367,30 +367,6 @@ std::pair<Rect, Point> Rect::Fixed4Blit( const Rect & srcrt, const Rect & dstrt 
         if ( dstptfix.y + srcrtfix.h > dstrt.y + dstrt.h )
             srcrtfix.h = dstrt.y + dstrt.h - dstptfix.y;
     }
-
-    return res;
-}
-
-SDL_Rect SDLRect( s32 x, s32 y, u32 w, u32 h )
-{
-    SDL_Rect res;
-
-    res.x = x;
-    res.y = y;
-    res.w = w;
-    res.h = h;
-
-    return res;
-}
-
-SDL_Rect SDLRect( const Rect & rt2 )
-{
-    SDL_Rect res;
-
-    res.x = rt2.x;
-    res.y = rt2.y;
-    res.w = rt2.w;
-    res.h = rt2.h;
 
     return res;
 }
