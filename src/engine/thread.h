@@ -49,23 +49,6 @@ namespace SDL
         SDL_Thread * thread;
     };
 
-    class Mutex
-    {
-    public:
-        Mutex( bool init = false );
-        Mutex( const Mutex & );
-        ~Mutex();
-
-        Mutex & operator=( const Mutex & );
-
-        void Create( void );
-        bool Lock( void ) const;
-        bool Unlock( void ) const;
-
-    private:
-        SDL_mutex * mutex;
-    };
-
     class Timer
     {
     public:
