@@ -76,7 +76,7 @@ namespace
     struct MapRegionNode
     {
         int index = -1;
-        uint16_t type = BLOCKED;
+        int type = BLOCKED;
         uint16_t passable = 0;
         bool isWater = false;
 

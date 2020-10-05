@@ -422,7 +422,7 @@ std::string Settings::GetVersion( void )
 
 /* constructor */
 Settings::Settings()
-    : debug( DEFAULT_DEBUG )
+    : debug( 0 )
     , video_mode( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
     , game_difficulty( Difficulty::NORMAL )
     , font_normal( "dejavusans.ttf" )

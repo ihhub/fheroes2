@@ -207,7 +207,7 @@ namespace Interface
 
         void SetCurrent( size_t posId )
         {
-            if ( posId >= 0 && posId < content->size() )
+            if ( posId < content->size() )
                 _currentId = static_cast<int>( posId );
 
             SetCurrentVisible();

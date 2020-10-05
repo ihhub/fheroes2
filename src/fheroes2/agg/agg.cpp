@@ -752,10 +752,6 @@ ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
         }
     }
 
-    if ( icn == ICN::SPELLINL && index == 11 ) { // STONE spell status
-        res.second.SetAlphaMod( 0, false );
-    }
-
     return res;
 }
 
@@ -1628,7 +1624,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
 
                     // add 'wait'
-                    const Image wait = Crop( GetICN( ICN::ADVBTNS, 8 + i ), 5, 4, 28, 28 );
+                    const Sprite wait = Crop( GetICN( ICN::ADVBTNS, 8 + i ), 5, 4, 28, 28 );
                     Image resizedWait( wait.width() / 2, wait.height() / 2 );
                     Resize( wait, resizedWait );
 

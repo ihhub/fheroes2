@@ -49,6 +49,30 @@ namespace
 
     std::set<const SDL_Surface *> paletteBasedSurface;
     std::set<const SDL_Surface *> surfaceToUpdate;
+
+    SDL_Rect SDLRect( s32 x, s32 y, u32 w, u32 h )
+    {
+        SDL_Rect res;
+
+        res.x = x;
+        res.y = y;
+        res.w = w;
+        res.h = h;
+
+        return res;
+    }
+
+    SDL_Rect SDLRect( const Rect & rt2 )
+    {
+        SDL_Rect res;
+
+        res.x = rt2.x;
+        res.y = rt2.y;
+        res.w = rt2.w;
+        res.h = rt2.h;
+
+        return res;
+    }
 }
 
 SurfaceFormat GetRGBAMask( u32 bpp )
@@ -252,52 +276,44 @@ RGBA RGBA::unpack( int v )
 
 Surface::Surface()
     : surface( NULL )
-    , _isDisplay( false )
 {}
 
 Surface::Surface( const Size & sz, bool amask )
     : surface( NULL )
-    , _isDisplay( false )
 {
     Set( sz.w, sz.h, amask );
 }
 
 Surface::Surface( const Size & sz, u32 bpp, bool amask )
     : surface( NULL )
-    , _isDisplay( false )
 {
     Set( sz.w, sz.h, bpp, amask );
 }
 
 Surface::Surface( const Size & sz, const SurfaceFormat & fm )
     : surface( NULL )
-    , _isDisplay( false )
 {
     Set( sz.w, sz.h, fm );
 }
 
 Surface::Surface( const Surface & bs, bool useReference )
     : surface( NULL )
-    , _isDisplay( false )
 {
     Set( bs, useReference );
 }
 
 Surface::Surface( const std::string & file )
     : surface( NULL )
-    , _isDisplay( false )
 {
     Load( file );
 }
 
 Surface::Surface( SDL_Surface * sf )
     : surface( sf )
-    , _isDisplay( false )
 {}
 
 Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixel /* 1, 2, 3, 4 */, bool amask, bool useDefaultPalette )
     : surface( NULL )
-    , _isDisplay( false )
 {
     SurfaceFormat fm = GetRGBAMask( 8 * bytes_per_pixel );
 
@@ -331,8 +347,7 @@ Surface::Surface( const void * pixels, u32 width, u32 height, u32 bytes_per_pixe
 
 Surface::~Surface()
 {
-    if ( !isDisplay() )
-        FreeSurface( *this );
+    FreeSurface( *this );
 }
 
 /* operator = */
@@ -589,17 +604,6 @@ void Surface::SetPalette( void )
     }
 }
 
-void Surface::SetPalette( const std::vector<SDL_Color> & colors )
-{
-    if ( isValid() && !colors.empty() && surface->format->palette ) {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        SDL_SetPaletteColors( surface->format->palette, colors.data(), 0, colors.size() );
-#else
-        SDL_SetPalette( surface, SDL_LOGPAL, const_cast<SDL_Color *>( colors.data() ), 0, colors.size() );
-#endif
-    }
-}
-
 u32 Surface::GetColorKey( void ) const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -786,7 +790,7 @@ void Surface::Blit( const Rect & srt, const Point & dpt, Surface & dst ) const
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_BlitSurface( surface, &srcrect, dst.surface, &dstrect );
 #else
-    if ( !dst.isDisplay() && amask() && dst.amask() ) {
+    if ( amask() && dst.amask() ) {
         SDL_SetAlpha( surface, 0, 0 );
         SDL_BlitSurface( surface, &srcrect, dst.surface, &dstrect );
         SDL_SetAlpha( surface, SDL_SRCALPHA, 255 );
@@ -903,32 +907,6 @@ u32 Surface::GetMemoryUsage( void ) const
 void Surface::Swap( Surface & sf1, Surface & sf2 )
 {
     std::swap( sf1.surface, sf2.surface );
-}
-
-bool Surface::isDisplay( void ) const
-{
-    return _isDisplay;
-}
-
-Surface Surface::RenderScale( const Size & size ) const
-{
-    Surface res( size, GetFormat() );
-
-    if ( size.w >= 2 && size.h >= 2 ) {
-        float stretch_factor_x = size.w / static_cast<float>( w() );
-        float stretch_factor_y = size.h / static_cast<float>( h() );
-
-        res.Lock();
-        for ( s32 yy = 0; yy < h(); yy++ )
-            for ( s32 xx = 0; xx < w(); xx++ )
-                for ( s32 oy = 0; oy < stretch_factor_y; ++oy )
-                    for ( s32 ox = 0; ox < stretch_factor_x; ++ox ) {
-                        res.SetPixel( static_cast<s32>( stretch_factor_x * xx ) + ox, static_cast<s32>( stretch_factor_y * yy ) + oy, GetPixel( xx, yy ) );
-                    }
-        res.Unlock();
-    }
-
-    return res;
 }
 
 Surface Surface::RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both */ ) const
@@ -1064,12 +1042,6 @@ Surface Surface::GetSurface( const Rect & rt ) const
 {
     SurfaceFormat fm = GetFormat();
 
-    if ( isDisplay() ) {
-        Surface res( rt, fm );
-        Blit( rt, Point( 0, 0 ), res );
-        return res;
-    }
-
     Surface res( rt, fm );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1109,53 +1081,4 @@ void Surface::DrawPoint( const Point & pt, const RGBA & color )
     Lock();
     SetPixel( pt.x, pt.y, MapRGB( color ) );
     Unlock();
-}
-
-void Surface::DrawRect( const Rect & rt, const RGBA & color )
-{
-    const u32 pixel = MapRGB( color );
-
-    Lock();
-    for ( int i = rt.x; i < rt.x + rt.w; ++i ) {
-        SetPixel( i, rt.y, pixel );
-        SetPixel( i, rt.y + rt.y + rt.h - 1, pixel );
-    }
-
-    for ( int i = rt.y; i < rt.y + rt.h; ++i ) {
-        SetPixel( rt.x, i, pixel );
-        SetPixel( rt.x + rt.w - 1, i, pixel );
-    }
-    Unlock();
-}
-
-void Surface::DrawBorder( const RGBA & color, bool solid )
-{
-    if ( solid )
-        DrawRect( Rect( Point( 0, 0 ), GetSize() ), color );
-    else {
-        const u32 pixel = MapRGB( color );
-        const int width = w();
-        const int height = h();
-
-        for ( int i = 0; i < width; i += 4 ) {
-            SetPixel( i, 0, pixel );
-            if ( i + 1 < width )
-                SetPixel( i + 1, 0, pixel );
-        }
-        for ( int i = 0; i < width; i += 4 ) {
-            SetPixel( i, height - 1, pixel );
-            if ( i + 1 < width )
-                SetPixel( i + 1, height - 1, pixel );
-        }
-        for ( int i = 0; i < height; i += 4 ) {
-            SetPixel( 0, i, pixel );
-            if ( i + 1 < height )
-                SetPixel( 0, i + 1, pixel );
-        }
-        for ( int i = 0; i < height; i += 4 ) {
-            SetPixel( width - 1, i, pixel );
-            if ( i + 1 < height )
-                SetPixel( width - 1, i + 1, pixel );
-        }
-    }
 }

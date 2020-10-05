@@ -97,6 +97,8 @@ namespace AI
 
         virtual void Reset();
 
+        virtual ~Base() {}
+
     protected:
         int _personality = NONE;
 

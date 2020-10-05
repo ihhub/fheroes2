@@ -43,7 +43,7 @@
 
 void LoadZLogo( void );
 void SetVideoDriver( const std::string & );
-void SetTimidityEnvPath( const Settings & );
+void SetTimidityEnvPath();
 void SetLangEnvPath( const Settings & );
 void InitHomeDir( void );
 bool ReadConfigs( void );
@@ -108,7 +108,7 @@ int main( int argc, char ** argv )
 
     // random init
     if ( conf.Music() )
-        SetTimidityEnvPath( conf );
+        SetTimidityEnvPath();
 
     u32 subsystem = INIT_VIDEO | INIT_TIMER;
 
@@ -338,7 +338,7 @@ void SetVideoDriver( const std::string & driver )
     System::SetEnvironment( "SDL_VIDEODRIVER", driver.c_str() );
 }
 
-void SetTimidityEnvPath( const Settings & conf )
+void SetTimidityEnvPath()
 {
     const std::string prefix_timidity = System::ConcatePath( "files", "timidity" );
     const std::string result = Settings::GetLastFile( prefix_timidity, "timidity.cfg" );

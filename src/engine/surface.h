@@ -138,12 +138,9 @@ public:
     void Fill( const RGBA & );
     void FillRect( const Rect &, const RGBA & );
     void DrawPoint( const Point &, const RGBA & );
-    void DrawRect( const Rect &, const RGBA & );
-    void DrawBorder( const RGBA &, bool solid = true );
 
     virtual u32 GetMemoryUsage( void ) const;
 
-    Surface RenderScale( const Size & ) const;
     Surface RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both */ ) const;
     Surface RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */ ) const;
     Surface RenderStencil( const RGBA & ) const;
@@ -159,15 +156,11 @@ public:
     // Use makeCopy flag to create another surface within the call
     void SetAlphaMod( int level, bool makeCopy );
 
-    void SetPalette( const std::vector<SDL_Color> & colors );
-
 protected:
     static void FreeSurface( Surface & );
 
     // Only for 32-bit images with alpha channel and SDL 1 support
     Surface ModifyAlphaChannel( uint32_t alpha ) const;
-
-    bool isDisplay( void ) const;
 
     void Lock( void ) const;
     void Unlock( void ) const;
@@ -198,7 +191,6 @@ protected:
     uint32_t GetRawPixelValue( int position ) const;
 
     SDL_Surface * surface;
-    bool _isDisplay;
 };
 
 #endif

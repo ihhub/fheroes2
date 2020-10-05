@@ -251,7 +251,7 @@ namespace
             height -= offsetY;
         }
 
-        if ( outX < 0 || outY < 0 || outX > widthOut || outY > heightOut )
+        if ( outX > widthOut || outY > heightOut )
             return false;
 
         if ( inX + width > widthIn ) {
