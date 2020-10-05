@@ -352,7 +352,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             Dialog::Message( _( "All Maps" ), _( "View all maps, regardless of size." ), Font::BIG );
         else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) )
             Dialog::Message( _( "Players Icon" ),
-                             _( "Indicates how many players total are in the EditScenario. Any positions not occupied by humans will be occupied by computer players." ),
+                             _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ),
                              Font::BIG );
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
             Dialog::Message( _( "Size Icon" ), _( "Indicates whether the maps is small (36x36), medium (72x72), large (108x108), or extra large (144x144)." ),
@@ -376,12 +376,12 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         else if ( le.MousePressRight( curDifficulty ) )
             Dialog::Message(
                 _( "Selected Map Difficulty" ),
-                _( "The map difficulty of the currently selected map.  The map difficulty is determined by the EditScenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ),
+                _( "The map difficulty of the currently selected map.  The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ),
                 Font::BIG );
         else if ( le.MousePressRight( curDescription ) )
             Dialog::Message( _( "Selected Description" ), _( "The description of the currently selected map." ), Font::BIG );
         else if ( le.MousePressRight( buttonOk.area() ) )
-            Dialog::Message( _( "OK" ), _( "Accept the choice made." ), Font::BIG );
+            Dialog::Message( _( "Okay" ), _( "Accept the choice made." ), Font::BIG );
 
         if ( !cursor.isVisible() ) {
             listbox.Redraw();
