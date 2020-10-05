@@ -866,7 +866,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_ANCIENTLAMP:
         // Genies in the lamp do not accumulate
         if ( isFirstLoad )
-            MonsterSetCount( Rand::Get( 1, 5 ) );
+            MonsterSetCount( Rand::Get( 2, 4 ) );
         break;
 
     case MP2::OBJ_WATCHTOWER:
@@ -1111,7 +1111,7 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
     }
 
     if ( count ) {
-        tile.MonsterSetCount( troop.GetCount() + count );
+        tile.MonsterSetCount( count );
     }
 }
 
