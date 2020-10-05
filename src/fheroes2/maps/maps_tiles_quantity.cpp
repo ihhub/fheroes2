@@ -863,9 +863,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         UpdateMonsterInfo( *this );
         break;
 
-        // join dwelling
     case MP2::OBJ_ANCIENTLAMP:
-        MonsterSetCount( QuantityMonster().GetRNDSize( true ) );
+        // Genies in the lamp do not accumulate
+        if ( isFirstLoad )
+            MonsterSetCount( Rand::Get( 1, 5 ) );
         break;
 
     case MP2::OBJ_WATCHTOWER:
