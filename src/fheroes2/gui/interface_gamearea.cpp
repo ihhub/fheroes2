@@ -142,6 +142,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 // bottom
                 if ( flag & LEVEL_BOTTOM )
                     tile.RedrawBottom( dst, isPuzzleDraw );
+
+                // map object
+                if ( flag & LEVEL_BOTTOM )
+                    tile.RedrawObjects( dst, isPuzzleDraw );
             }
         }
     }
@@ -157,10 +161,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 continue;
 
             const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
-
-            // map object
-            if ( flag & LEVEL_BOTTOM )
-                tile.RedrawObjects( dst, isPuzzleDraw );
 
             // map object
             if ( flag & LEVEL_OBJECTS && !isPuzzleDraw )
