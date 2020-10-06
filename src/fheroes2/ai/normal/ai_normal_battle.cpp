@@ -79,6 +79,9 @@ namespace AI
 
             const int spellPower = commander->GetPower();
             for ( const Spell & spell : allSpells ) {
+                if ( !commander->HaveSpellPoints( spell ) )
+                    continue;
+
                 if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
                     const uint32_t totalDamage = spell.Damage() * spellPower;
                     for ( const Unit * enemy : enemies ) {

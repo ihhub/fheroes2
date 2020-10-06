@@ -1000,7 +1000,7 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
 
     if ( y > 0 ) {
         const int topRowIndex = ( y - 1 ) * ARENAW + x - mod;
-        if ( x - mod > 0 )
+        if ( x - mod >= 0 )
             validateAndInsert( topRowIndex );
 
         if ( x < ARENAW - 1 )
@@ -1018,7 +1018,7 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
 
     if ( y < ARENAH - 1 ) {
         const int bottomRowIndex = ( y + 1 ) * ARENAW + x - mod;
-        if ( x - mod > 0 )
+        if ( x - mod >= 0 )
             validateAndInsert( bottomRowIndex );
 
         if ( x < ARENAW - 1 )
