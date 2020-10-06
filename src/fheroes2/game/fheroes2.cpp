@@ -41,7 +41,6 @@
 #include "test.h"
 #include "zzlib.h"
 
-void LoadZLogo( void );
 void SetVideoDriver( const std::string & );
 void SetTimidityEnvPath();
 void SetLangEnvPath( const Settings & );
@@ -169,9 +168,6 @@ int main( int argc, char ** argv )
 
             atexit( &AGG::Quit );
 
-#ifdef WITH_ZLIB
-            LoadZLogo();
-#endif
             // load BIN data
             Bin_Info::InitBinInfo();
 
@@ -259,34 +255,6 @@ int main( int argc, char ** argv )
     fheroes2::Display::instance().release();
 
     return EXIT_SUCCESS;
-}
-
-void LoadZLogo( void )
-{
-    /*
-#ifdef BUILD_RELEASE
-    std::string file = Settings::GetLastFile( "image", "sdl_logo.png" );
-    // SDL logo
-    if ( Settings::Get().ExtGameShowSDL() && !file.empty() ) {
-        Display & display = Display::Get();
-        Surface sf;
-
-        if ( sf.Load( file ) ) {
-            Surface black( display.GetSize(), false );
-            black.Fill( RGBA( 0, 0, 0, 255 ) );
-
-            // scale logo
-            if ( Settings::Get().QVGA() )
-                sf = Sprite::ScaleQVGASurface( sf );
-
-            const Point offset( ( display.w() - sf.w() ) / 2, ( display.h() - sf.h() ) / 2 );
-
-            display.Rise( sf, black, offset, 250, 500 );
-            display.Fade( sf, black, offset, 10, 500 );
-        }
-    }
-#endif
-    */
 }
 
 bool ReadConfigs( void )
