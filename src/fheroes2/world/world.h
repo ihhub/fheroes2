@@ -255,6 +255,7 @@ public:
     uint32_t getDistance( int from, int to, uint32_t skill );
     std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );
     int searchForFog( const Heroes & hero );
+    void resetPathfinder();
 
     void ComputeStaticAnalysis();
     static u32 GetUniq( void );

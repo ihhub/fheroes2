@@ -956,6 +956,7 @@ int Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 void Maps::Tiles::SetObject( int object )
 {
     mp2_object = object;
+    world.resetPathfinder();
 }
 
 void Maps::Tiles::SetTile( u32 sprite_index, u32 shape )

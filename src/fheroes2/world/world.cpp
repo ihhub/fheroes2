@@ -1047,6 +1047,11 @@ std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ig
     return _pathfinder.buildPath( from, to, skill );
 }
 
+void World::resetPathfinder()
+{
+    _pathfinder.reset();
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians << obj.split;
