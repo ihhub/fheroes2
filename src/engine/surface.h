@@ -142,8 +142,6 @@ public:
     virtual u32 GetMemoryUsage( void ) const;
 
     Surface RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both */ ) const;
-    Surface RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */ ) const;
-    Surface RenderStencil( const RGBA & ) const;
 
     virtual Surface GetSurface( void ) const;
     virtual Surface GetSurface( const Rect & ) const;
@@ -152,21 +150,11 @@ public:
     static void SetDefaultColorKey( int, int, int );
     static void Swap( Surface &, Surface & );
 
-    // Be aware that this affects all surfaces which have copy if this one
-    // Use makeCopy flag to create another surface within the call
-    void SetAlphaMod( int level, bool makeCopy );
-
 protected:
     static void FreeSurface( Surface & );
 
-    // Only for 32-bit images with alpha channel and SDL 1 support
-    Surface ModifyAlphaChannel( uint32_t alpha ) const;
-
     void Lock( void ) const;
     void Unlock( void ) const;
-
-    // void SetColorMod(const RGBA &);
-    // void SetBlendMode(int);
 
     u32 MapRGB( const RGBA & ) const;
     RGBA GetRGB( u32 pixel ) const;
