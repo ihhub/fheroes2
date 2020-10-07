@@ -38,7 +38,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "test.h"
 #include "zzlib.h"
 
 void LoadZLogo( void );
@@ -71,7 +70,6 @@ std::string GetCaption( void )
 int main( int argc, char ** argv )
 {
     Settings & conf = Settings::Get();
-    int test = 0;
 
     DEBUG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
 
@@ -83,13 +81,9 @@ int main( int argc, char ** argv )
     // getopt
     {
         int opt;
-        while ( ( opt = System::GetCommandOptions( argc, argv, "ht:d:" ) ) != -1 )
+        while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
             switch ( opt ) {
 #ifndef BUILD_RELEASE
-            case 't':
-                test = GetInt( System::GetOptionsArgument() );
-                break;
-
             case 'd':
                 conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
                 break;
@@ -181,12 +175,9 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            // goto main menu
-            int rs = ( test ? Game::TESTING : Game::MAINMENU );
-
             Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "H2XINTRO.SMK" ), false );
 
-            while ( rs != Game::QUITGAME ) {
+            for ( int rs = Game::MAINMENU; rs != Game::QUITGAME; ) {
                 switch ( rs ) {
                 case Game::MAINMENU:
                     rs = Game::MainMenu( isFirstGameRun );
@@ -241,9 +232,6 @@ int main( int argc, char ** argv )
                     break;
                 case Game::STARTGAME:
                     rs = Game::StartGame();
-                    break;
-                case Game::TESTING:
-                    rs = Game::Testing( test );
                     break;
 
                 default:
