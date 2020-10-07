@@ -35,134 +35,133 @@ void Interface::GameBorderRedraw( void )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const bool evil = Settings::Get().ExtGameEvilInterface();
-    const int displayWidth = display.width();
-    const int displayHeight = display.height();
-    u32 count_w = ( displayWidth >= fheroes2::Display::DEFAULT_WIDTH ? displayWidth - fheroes2::Display::DEFAULT_WIDTH : 0 ) / TILEWIDTH;
-    u32 count_h = ( displayHeight >= fheroes2::Display::DEFAULT_HEIGHT ? displayHeight - fheroes2::Display::DEFAULT_HEIGHT : 0 ) / TILEWIDTH;
-    const u32 count_icons = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
+    const int32_t displayWidth = display.width();
+    const int32_t displayHeight = display.height();
+    int32_t count_w = ( displayWidth >= fheroes2::Display::DEFAULT_WIDTH ? displayWidth - fheroes2::Display::DEFAULT_WIDTH : 0 ) / TILEWIDTH;
+    int32_t count_h = ( displayHeight >= fheroes2::Display::DEFAULT_HEIGHT ? displayHeight - fheroes2::Display::DEFAULT_HEIGHT : 0 ) / TILEWIDTH;
+    const int32_t count_icons = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
 
     if ( displayWidth % TILEWIDTH )
         ++count_w;
     if ( displayHeight % TILEWIDTH )
         ++count_h;
 
-    Rect srcrt;
-    Point dstpt;
-    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( evil ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+    fheroes2::Rect srcrt;
+    fheroes2::Point dstpt;
+    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
 
     // TOP BORDER
     srcrt.x = 0;
     srcrt.y = 0;
-    srcrt.w = 223;
-    srcrt.h = BORDERWIDTH;
+    srcrt.width = 223;
+    srcrt.height = BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     srcrt.x = 223;
-    srcrt.w = TILEWIDTH;
+    srcrt.width = TILEWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = 0;
-    for ( u32 ii = 0; ii < count_w + 1; ++ii ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    for ( int32_t i = 0; i < count_w + 1; ++i ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.x += TILEWIDTH;
     }
     srcrt.x += TILEWIDTH;
-    srcrt.w = icnadv.width() - srcrt.x;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    srcrt.width = icnadv.width() - srcrt.x;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // LEFT BORDER
     srcrt.x = 0;
     srcrt.y = 0;
-    srcrt.w = BORDERWIDTH;
-    srcrt.h = 255;
+    srcrt.width = BORDERWIDTH;
+    srcrt.height = 255;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.y = 255;
-    srcrt.h = TILEWIDTH;
+    srcrt.height = TILEWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    for ( u32 ii = 0; ii < count_h + 1; ++ii ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    for ( int32_t i = 0; i < count_h + 1; ++i ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
     srcrt.y += TILEWIDTH;
-    srcrt.h = icnadv.height() - srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    srcrt.height = icnadv.height() - srcrt.y;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // MIDDLE BORDER
     srcrt.x = icnadv.width() - RADARWIDTH - 2 * BORDERWIDTH;
     srcrt.y = 0;
-    srcrt.w = BORDERWIDTH;
-    srcrt.h = 255;
+    srcrt.width = BORDERWIDTH;
+    srcrt.height = 255;
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.y = 255;
-    srcrt.h = TILEWIDTH;
+    srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
-    for ( u32 ii = 0; ii < count_h + 1; ++ii ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    for ( int32_t i = 0; i < count_h + 1; ++i ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
     srcrt.y += TILEWIDTH;
-    srcrt.h = icnadv.height() - srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    srcrt.height = icnadv.height() - srcrt.y;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // RIGHT BORDER
     srcrt.x = icnadv.width() - BORDERWIDTH;
     srcrt.y = 0;
-    srcrt.w = BORDERWIDTH;
-    srcrt.h = 255;
+    srcrt.width = BORDERWIDTH;
+    srcrt.height = 255;
     dstpt.x = displayWidth - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.y = 255;
-    srcrt.h = TILEWIDTH;
+    srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    for ( u32 ii = 0; ii < count_h + 1; ++ii ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    for ( int32_t i = 0; i < count_h + 1; ++i ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
     srcrt.y += TILEWIDTH;
-    srcrt.h = icnadv.height() - srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    srcrt.height = icnadv.height() - srcrt.y;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // BOTTOM BORDER
     srcrt.x = 0;
     srcrt.y = icnadv.height() - BORDERWIDTH;
-    srcrt.w = 223;
-    srcrt.h = BORDERWIDTH;
+    srcrt.width = 223;
+    srcrt.height = BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = displayHeight - BORDERWIDTH;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.x = 223;
-    srcrt.w = TILEWIDTH;
+    srcrt.width = TILEWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = displayHeight - BORDERWIDTH;
-    for ( u32 ii = 0; ii < count_w + 1; ++ii ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    for ( int32_t i = 0; i < count_w + 1; ++i ) {
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.x += TILEWIDTH;
     }
     srcrt.x += TILEWIDTH;
-    srcrt.w = icnadv.width() - srcrt.x;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    srcrt.width = icnadv.width() - srcrt.x;
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // ICON BORDER
     srcrt.x = icnadv.width() - RADARWIDTH - BORDERWIDTH;
     srcrt.y = RADARWIDTH + BORDERWIDTH;
-    srcrt.w = RADARWIDTH;
-    srcrt.h = BORDERWIDTH;
+    srcrt.width = RADARWIDTH;
+    srcrt.height = BORDERWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.y = srcrt.y + BORDERWIDTH + count_icons * 32;
     srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.w, srcrt.h );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 }
 
 Interface::BorderWindow::BorderWindow( const Rect & rt )

@@ -235,7 +235,6 @@ namespace Game
     int NetworkGuest( void );
     int Testing( int );
 
-    void DrawInterface( void );
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );

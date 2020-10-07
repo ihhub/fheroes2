@@ -79,7 +79,7 @@ void Castle::OpenWell( void )
 
     Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const Point cur_pt = frameborder.GetArea();
-    Point dst_pt( cur_pt );
+    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
     // button exit
     dst_pt.x = cur_pt.x + 578;
@@ -90,12 +90,12 @@ void Castle::OpenWell( void )
     dst_pt.y = cur_pt.y + 461;
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::BUYMAX, 0, 1 );
 
-    const Rect rectMonster1( cur_pt.x + 20, cur_pt.y + 18, 288, 124 );
-    const Rect rectMonster2( cur_pt.x + 20, cur_pt.y + 168, 288, 124 );
-    const Rect rectMonster3( cur_pt.x + 20, cur_pt.y + 318, 288, 124 );
-    const Rect rectMonster4( cur_pt.x + 334, cur_pt.y + 18, 288, 124 );
-    const Rect rectMonster5( cur_pt.x + 334, cur_pt.y + 168, 288, 124 );
-    const Rect rectMonster6( cur_pt.x + 334, cur_pt.y + 318, 288, 124 );
+    const fheroes2::Rect rectMonster1( cur_pt.x + 20, cur_pt.y + 18, 288, 124 );
+    const fheroes2::Rect rectMonster2( cur_pt.x + 20, cur_pt.y + 168, 288, 124 );
+    const fheroes2::Rect rectMonster3( cur_pt.x + 20, cur_pt.y + 318, 288, 124 );
+    const fheroes2::Rect rectMonster4( cur_pt.x + 334, cur_pt.y + 18, 288, 124 );
+    const fheroes2::Rect rectMonster5( cur_pt.x + 334, cur_pt.y + 168, 288, 124 );
+    const fheroes2::Rect rectMonster6( cur_pt.x + 334, cur_pt.y + 318, 288, 124 );
 
     buttonExit.draw();
 
@@ -211,7 +211,8 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
 
     Text text;
-    Point dst_pt, pt;
+    Point dst_pt;
+    Point pt;
 
     const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
     const fheroes2::Rect src_rt( 0, 461, button.width(), 19 );
