@@ -1686,11 +1686,6 @@ bool Settings::ExtUnionsAllowHeroesMeetings( void ) const
     return ExtModes( UNIONS_ALLOW_HERO_MEETINGS );
 }
 
-bool Settings::ExtUnionsAllowViewMaps( void ) const
-{
-    return true;
-}
-
 bool Settings::ExtBattleShowDamage( void ) const
 {
     return ExtModes( GAME_BATTLE_SHOW_DAMAGE );

@@ -267,7 +267,6 @@ public:
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
     bool ExtUnionsAllowCastleVisiting( void ) const;
     bool ExtUnionsAllowHeroesMeetings( void ) const;
-    bool ExtUnionsAllowViewMaps( void ) const;
     bool ExtWorldShowVisitedContent( void ) const;
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
