@@ -46,7 +46,6 @@
 #include "skill.h"
 #include "spell.h"
 #include "system.h"
-#include "test.h"
 #include "tinyconfig.h"
 #include "tools.h"
 #include "world.h"
@@ -118,16 +117,6 @@ const std::string & Game::GetLastSavename( void )
 void Game::SetLastSavename( const std::string & name )
 {
     last_name = name;
-}
-
-int Game::Testing( int t )
-{
-#ifndef BUILD_RELEASE
-    Test::Run( t );
-    return Game::QUITGAME;
-#else
-    return Game::MAINMENU;
-#endif
 }
 
 int Game::Credits( void )
