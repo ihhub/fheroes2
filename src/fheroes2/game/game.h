@@ -61,8 +61,7 @@ namespace Game
         EDITLOADMAP,
         EDITSAVEMAP,
         EDITSTART,
-        ENDTURN,
-        TESTING
+        ENDTURN
     };
 
     void Init( void );
@@ -229,7 +228,6 @@ namespace Game
     int StartBattleOnly( void );
     int NetworkHost( void );
     int NetworkGuest( void );
-    int Testing( int );
 
     void DrawInterface( void );
     void EnvironmentSoundMixer( void );
