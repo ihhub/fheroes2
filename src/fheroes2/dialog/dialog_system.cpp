@@ -32,7 +32,7 @@
 
 namespace Dialog
 {
-    void DrawSystemInfo( const Rects & );
+    void DrawSystemInfo( const std::vector<fheroes2::Rect> & );
 }
 
 /* return 0x01 - change speed, 0x02 - change sound, 0x04 - hide interface, 0x08 - change interface, 0x10 - change scroll  */
@@ -50,27 +50,26 @@ int Dialog::SystemOptions( void )
     Dialog::FrameBorder frameborder( ( display.width() - 250 - BORDERWIDTH * 2 ) / 2, ( display.height() - 382 - BORDERWIDTH * 2 ) / 2, 288, 382 );
     const Rect & area = frameborder.GetArea();
 
-    Rects rects;
+    std::vector<fheroes2::Rect> rects;
     const s32 posx = ( area.w - 256 ) / 2;
-    rects.push_back( Rect( area.x + posx, area.y + 30, 64, 64 ) );
-    rects.push_back( Rect( area.x + posx + 92, area.y + 30, 64, 64 ) );
-    rects.push_back( Rect( area.x + posx + 184, area.y + 30, 64, 64 ) );
-    rects.push_back( Rect( area.x + posx, area.y + 140, 64, 64 ) );
-    rects.push_back( Rect( area.x + posx + 92, area.y + 140, 64, 64 ) );
-    rects.push_back( Rect( area.x + posx + 184, area.y + 140, 64, 64 ) );
-    rects.push_back( Rect( area.x + posx, area.y + 250, 64, 64 ) );
-    rects.push_back( Rect( area.x + posx + 92, area.y + 250, 64, 64 ) );
-    rects.push_back( Rect( area.x + posx + 184, area.y + 250, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx, area.y + 30, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx + 92, area.y + 30, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx + 184, area.y + 30, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx, area.y + 140, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx + 92, area.y + 140, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx + 184, area.y + 140, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx, area.y + 250, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx + 92, area.y + 250, 64, 64 ) );
+    rects.push_back( fheroes2::Rect( area.x + posx + 184, area.y + 250, 64, 64 ) ); // not in use
 
-    const Rect & rect1 = rects[0];
-    const Rect & rect2 = rects[1];
-    const Rect & rect3 = rects[2];
-    const Rect & rect4 = rects[3];
-    const Rect & rect5 = rects[4];
-    const Rect & rect6 = rects[5];
-    const Rect & rect7 = rects[6];
-    const Rect & rect8 = rects[7];
-    const Rect & rect9 = rects[8];
+    const fheroes2::Rect & rect1 = rects[0];
+    const fheroes2::Rect & rect2 = rects[1];
+    const fheroes2::Rect & rect3 = rects[2];
+    const fheroes2::Rect & rect4 = rects[3];
+    const fheroes2::Rect & rect5 = rects[4];
+    const fheroes2::Rect & rect6 = rects[5];
+    const fheroes2::Rect & rect7 = rects[6];
+    const fheroes2::Rect & rect8 = rects[7];
 
     fheroes2::Image back2( area.w, area.h - 30 );
     fheroes2::Copy( display, area.x, area.y, back2, 0, 0, area.w, area.h - 30 );
@@ -191,7 +190,7 @@ int Dialog::SystemOptions( void )
     return result;
 }
 
-void Dialog::DrawSystemInfo( const Rects & rects )
+void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();

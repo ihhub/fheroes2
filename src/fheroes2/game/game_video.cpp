@@ -81,7 +81,7 @@ namespace Video
             else {
                 bool roiChosen = false;
                 for ( size_t i = 0; i < roi.size(); ++i ) {
-                    if ( le.MouseClickLeft( Rect( roi[i].x, roi[i].y, roi[i].width, roi[i].height ) ) ) {
+                    if ( le.MouseClickLeft( roi[i] ) ) {
                         roiChosenId = i;
                         roiChosen = true;
                         break;
@@ -106,7 +106,7 @@ namespace Video
                     fheroes2::Blit( frame, display, offset.x, offset.y );
 
                     for ( size_t i = 0; i < roi.size(); ++i ) {
-                        if ( le.MouseCursor( Rect( roi[i].x, roi[i].y, roi[i].width, roi[i].height ) ) ) {
+                        if ( le.MouseCursor( roi[i] ) ) {
                             fheroes2::DrawRect( display, roi[i], selectionColor );
                             break;
                         }
@@ -144,7 +144,7 @@ namespace Video
                     fheroes2::Blit( frame, display, offset.x, offset.y );
 
                     for ( size_t i = 0; i < roi.size(); ++i ) {
-                        if ( le.MouseCursor( Rect( roi[i].x, roi[i].y, roi[i].width, roi[i].height ) ) ) {
+                        if ( le.MouseCursor( roi[i] ) ) {
                             fheroes2::DrawRect( display, roi[i], selectionColor );
                             break;
                         }

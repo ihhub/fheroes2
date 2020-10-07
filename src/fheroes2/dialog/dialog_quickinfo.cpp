@@ -66,8 +66,9 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, int scoute )
         str = Maps::GetMinesName( tile.QuantityResourceCount().first );
         str.append( GetMinesIncomeString( tile.QuantityResourceCount().first ) );
     }
-    else
+    else {
         str = MP2::StringObject( tile.GetObject() );
+    }
 
     if ( troop.isValid() ) {
         str.append( "\n" );
@@ -82,18 +83,17 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, int scoute )
 
 std::string ShowMonsterInfo( const Maps::Tiles & tile, int scoute )
 {
-    std::string str;
     const Troop & troop = tile.QuantityTroop();
 
     if ( scoute ) {
-        str = "%{count} %{monster}";
+        std::string str = "%{count} %{monster}";
         StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoute ) );
         StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+        return str;
     }
-    else
-        str = Army::TroopSizeString( troop );
-
-    return str;
+    else {
+        return Army::TroopSizeString( troop );
+    }
 }
 
 std::string ShowArtifactInfo( const Maps::Tiles & tile, bool show )
@@ -343,33 +343,31 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     LocalEvent & le = LocalEvent::Get();
     const Point & mp = le.GetMouseCursor();
 
-    Rect pos;
+    fheroes2::Rect pos;
     const s32 mx = mp.x;
     const s32 my = mp.y;
 
-    // top left
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        pos = Rect( mx, my + TILEWIDTH / 2, box.width(), box.height() );
-    else
-        // top right
-        if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        pos = Rect( mx - box.width() - TILEWIDTH / 2, my + TILEWIDTH / 2, box.width(), box.height() );
-    else
-        // bottom left
-        if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 )
-        pos = Rect( mx, my - box.height(), box.width(), box.height() );
-    else
-        // bottom right
-        pos = Rect( mx - box.width() - TILEWIDTH / 2, my - box.height(), box.width(), box.height() );
+    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
+        pos = fheroes2::Rect( mx, my + TILEWIDTH / 2, box.width(), box.height() );
+    }
+    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
+        pos = fheroes2::Rect( mx - box.width() - TILEWIDTH / 2, my + TILEWIDTH / 2, box.width(), box.height() );
+    }
+    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
+        pos = fheroes2::Rect( mx, my - box.height(), box.width(), box.height() );
+    }
+    else { // bottom right
+        pos = fheroes2::Rect( mx - box.width() - TILEWIDTH / 2, my - box.height(), box.width(), box.height() );
+    }
 
-    fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.w, pos.h );
+    fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
     fheroes2::Blit( box, display, pos.x, pos.y );
 
     std::string name_object;
 
     const Heroes * from_hero = Interface::GetFocusHeroes();
     const Kingdom & kingdom = world.GetKingdom( settings.CurrentColor() );
-    int scoute = from_hero ? from_hero->CanScouteTile( tile.GetIndex() ) : 0;
+    const int scoute = from_hero ? from_hero->CanScouteTile( tile.GetIndex() ) : 0;
     const bool show = settings.ExtWorldShowVisitedContent();
 
     if ( tile.isFog( settings.CurrentColor() ) )
@@ -416,7 +414,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_ARTIFACT:
-            name_object = ShowArtifactInfo( tile, scoute );
+            name_object = ShowArtifactInfo( tile, scoute != 0 );
             break;
 
         case MP2::OBJ_MINES:
@@ -506,7 +504,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         }
 
     TextBox text( name_object, Font::SMALL, 118 );
-    text.Blit( pos.x + BORDERWIDTH + ( pos.w - BORDERWIDTH - text.w() ) / 2, pos.y + ( pos.h - BORDERWIDTH - text.h() ) / 2 );
+    text.Blit( pos.x + BORDERWIDTH + ( pos.width - BORDERWIDTH - text.w() ) / 2, pos.y + ( pos.height - BORDERWIDTH - text.h() ) / 2 );
 
     cursor.Show();
     display.render();
@@ -537,39 +535,35 @@ void Dialog::QuickInfo( const Castle & castle )
     LocalEvent & le = LocalEvent::Get();
     const Point & mp = le.GetMouseCursor();
 
-    Rect cur_rt;
-    s32 mx = ( mp.x - BORDERWIDTH ) / TILEWIDTH;
-    mx *= TILEWIDTH;
-    s32 my = ( mp.y - BORDERWIDTH ) / TILEWIDTH;
-    my *= TILEWIDTH;
+    fheroes2::Rect cur_rt;
+    const s32 mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
+    const s32 my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
 
-    // top left
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        cur_rt = Rect( mx + TILEWIDTH, my + TILEWIDTH, box.width(), box.height() );
-    else
-        // top right
-        if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        cur_rt = Rect( mx - box.width(), my + TILEWIDTH, box.width(), box.height() );
-    else
-        // bottom left
-        if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 )
-        cur_rt = Rect( mx + TILEWIDTH, my - box.height(), box.width(), box.height() );
-    else
-        // bottom right
-        cur_rt = Rect( mx - box.width(), my - box.height(), box.width(), box.height() );
+    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
+        cur_rt = fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, box.width(), box.height() );
+    }
+    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
+        cur_rt = fheroes2::Rect( mx - box.width(), my + TILEWIDTH, box.width(), box.height() );
+    }
+    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
+        cur_rt = fheroes2::Rect( mx + TILEWIDTH, my - box.height(), box.width(), box.height() );
+    }
+    else { // bottom right
+        cur_rt = fheroes2::Rect( mx - box.width(), my - box.height(), box.width(), box.height() );
+    }
 
-    fheroes2::ImageRestorer back( display, cur_rt.x, cur_rt.y, cur_rt.w, cur_rt.h );
+    fheroes2::ImageRestorer back( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
 
-    cur_rt = Rect( cur_rt.x + 28, cur_rt.y + 9, 178, 140 );
-    Point dst_pt;
+    cur_rt = fheroes2::Rect( cur_rt.x + 28, cur_rt.y + 9, 178, 140 );
+    fheroes2::Point dst_pt;
     Text text;
 
     // castle name
     text.Set( castle.GetName(), Font::SMALL );
-    dst_pt.x = cur_rt.x + ( cur_rt.w - text.w() ) / 2;
+    dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
     dst_pt.y = cur_rt.y;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     u32 index = 0;
 
@@ -600,7 +594,7 @@ void Dialog::QuickInfo( const Castle & castle )
     // castle icon
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::LOCATORS, index );
 
-    dst_pt.x = cur_rt.x + ( cur_rt.w - sprite.width() ) / 2;
+    dst_pt.x = cur_rt.x + ( cur_rt.width - sprite.width() ) / 2;
     dst_pt.y += 15;
     fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
 
@@ -632,18 +626,18 @@ void Dialog::QuickInfo( const Castle & castle )
     }
 
     const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
-    dst_pt.x = cur_rt.x + ( cur_rt.w - 60 ) / 2 - l_flag.width();
+    dst_pt.x = cur_rt.x + ( cur_rt.width - 60 ) / 2 - l_flag.width();
     fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
 
     const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
-    dst_pt.x = cur_rt.x + ( cur_rt.w + 60 ) / 2;
+    dst_pt.x = cur_rt.x + ( cur_rt.width + 60 ) / 2;
     fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
 
     // info
     text.Set( _( "Defenders:" ) );
-    dst_pt.x = cur_rt.x + ( cur_rt.w - text.w() ) / 2;
+    dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
     dst_pt.y += sprite.height() + 5;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     //
     u32 count = castle.GetArmy().GetCount();
@@ -660,14 +654,14 @@ void Dialog::QuickInfo( const Castle & castle )
            ( from_hero && Skill::Level::ADVANCED <= from_hero->GetSecondaryValues( Skill::Secondary::SCOUTING ) ) ) ) {
         // heroes name
         text.Set( guardian->GetName(), Font::SMALL );
-        dst_pt.x = cur_rt.x + ( cur_rt.w - text.w() ) / 2;
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
         dst_pt.y += 10;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         // mini port heroes
         fheroes2::Image port = guardian->GetPortrait( PORT_SMALL );
         if ( !port.empty() ) {
-            dst_pt.x = cur_rt.x + ( cur_rt.w - port.width() ) / 2;
+            dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
             dst_pt.y += 15;
             fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
         }
@@ -676,9 +670,9 @@ void Dialog::QuickInfo( const Castle & castle )
     // draw defenders
     if ( !count ) {
         text.Set( _( "None" ) );
-        dst_pt.x = cur_rt.x + ( cur_rt.w - text.w() ) / 2;
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
         dst_pt.y += 45;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
     }
     else if ( castle.isFriends( conf.CurrentColor() ) )
         // show all
@@ -719,32 +713,28 @@ void Dialog::QuickInfo( const Heroes & hero )
     LocalEvent & le = LocalEvent::Get();
     const Point & mp = le.GetMouseCursor();
 
-    Rect cur_rt;
-    s32 mx = ( mp.x - BORDERWIDTH ) / TILEWIDTH;
-    mx *= TILEWIDTH;
-    s32 my = ( mp.y - BORDERWIDTH ) / TILEWIDTH;
-    my *= TILEWIDTH;
+    fheroes2::Rect cur_rt;
+    const s32 mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
+    const s32 my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
 
-    // top left
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        cur_rt = Rect( mx + TILEWIDTH, my + TILEWIDTH, box.width(), box.height() );
-    else
-        // top right
-        if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 )
-        cur_rt = Rect( mx - box.width(), my + TILEWIDTH, box.width(), box.height() );
-    else
-        // bottom left
-        if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 )
-        cur_rt = Rect( mx + TILEWIDTH, my - box.height(), box.width(), box.height() );
-    else
-        // bottom right
-        cur_rt = Rect( mx - box.width(), my - box.height(), box.width(), box.height() );
+    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
+        cur_rt = fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, box.width(), box.height() );
+    }
+    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
+        cur_rt = fheroes2::Rect( mx - box.width(), my + TILEWIDTH, box.width(), box.height() );
+    }
+    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
+        cur_rt = fheroes2::Rect( mx + TILEWIDTH, my - box.height(), box.width(), box.height() );
+    }
+    else { // bottom right
+        cur_rt = fheroes2::Rect( mx - box.width(), my - box.height(), box.width(), box.height() );
+    }
 
-    fheroes2::ImageRestorer restorer( display, cur_rt.x, cur_rt.y, cur_rt.w, cur_rt.h );
+    fheroes2::ImageRestorer restorer( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
 
-    cur_rt = Rect( restorer.x() + 28, restorer.y() + 10, 146, 144 );
-    Point dst_pt;
+    cur_rt = fheroes2::Rect( restorer.x() + 28, restorer.y() + 10, 146, 144 );
+    fheroes2::Point dst_pt;
     Text text;
     std::string message;
 
@@ -761,14 +751,14 @@ void Dialog::QuickInfo( const Heroes & hero )
     else
         message = hero.GetName();
     text.Set( message, Font::SMALL );
-    dst_pt.x = cur_rt.x + ( cur_rt.w - text.w() ) / 2;
+    dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
     dst_pt.y = cur_rt.y;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // mini port heroes
     fheroes2::Image port = hero.GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
-        dst_pt.x = cur_rt.x + ( cur_rt.w - port.width() ) / 2;
+        dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
         dst_pt.y = cur_rt.y + 13;
         fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
     }
@@ -833,11 +823,11 @@ void Dialog::QuickInfo( const Heroes & hero )
     dst_pt.y = cur_rt.y + 13;
 
     const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
-    dst_pt.x = cur_rt.x + ( cur_rt.w - 40 ) / 2 - l_flag.width();
+    dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
     fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
 
     const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
-    dst_pt.x = cur_rt.x + ( cur_rt.w + 40 ) / 2;
+    dst_pt.x = cur_rt.x + ( cur_rt.width + 40 ) / 2;
     fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
 
     if ( showFullInfo ) {
@@ -845,61 +835,61 @@ void Dialog::QuickInfo( const Heroes & hero )
         text.Set( std::string( _( "Attack" ) ) + ":" );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += port.height();
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         text.Set( GetString( hero.GetAttack() ) );
         dst_pt.x += 75;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         // defense
         text.Set( std::string( _( "Defense" ) ) + ":" );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += 12;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         text.Set( GetString( hero.GetDefense() ) );
         dst_pt.x += 75;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         // power
         text.Set( std::string( _( "Spell Power" ) ) + ":" );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += 12;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         text.Set( GetString( hero.GetPower() ) );
         dst_pt.x += 75;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         // knowledge
         text.Set( std::string( _( "Knowledge" ) ) + ":" );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += 12;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         text.Set( GetString( hero.GetKnowledge() ) );
         dst_pt.x += 75;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         // spell point
         text.Set( std::string( _( "Spell Points" ) ) + ":" );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += 12;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         text.Set( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ) );
         dst_pt.x += 75;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         // move point
         text.Set( std::string( _( "Move Points" ) ) + ":" );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += 12;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         text.Set( GetString( hero.GetMobilityIndexSprite() ) + "/" + GetString( hero.GetMovePoints() ) + "/" + GetString( hero.GetMaxMovePoints() ) );
         dst_pt.x += 75;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 116, 160 );
     }

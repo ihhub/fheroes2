@@ -243,37 +243,37 @@ void DialogNotAvailable( void )
     Dialog::Message( "", "Not available for current version", Font::BIG, Dialog::OK );
 }
 
-bool ActionSpellViewMines( Heroes & hero )
+bool ActionSpellViewMines( Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellViewResources( Heroes & hero )
+bool ActionSpellViewResources( Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellViewArtifacts( Heroes & hero )
+bool ActionSpellViewArtifacts( Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellViewTowns( Heroes & hero )
+bool ActionSpellViewTowns( Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellViewHeroes( Heroes & hero )
+bool ActionSpellViewHeroes( Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellViewAll( Heroes & hero )
+bool ActionSpellViewAll( Heroes & )
 {
     DialogNotAvailable();
     return false;

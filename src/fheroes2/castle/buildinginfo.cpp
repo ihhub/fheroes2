@@ -409,12 +409,10 @@ void BuildingInfo::RedrawCaptain( void )
     const fheroes2::Sprite & sprite_allow = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
     const fheroes2::Sprite & sprite_deny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
     const fheroes2::Sprite & sprite_money = fheroes2::AGG::GetICN( ICN::TOWNWIND, 13 );
-    Point dst_pt;
-    bool allow_buy = bcond == ALLOW_BUILD;
+    bool allow_buy = ( bcond == ALLOW_BUILD );
 
     // indicator
-    dst_pt.x = area.x + 65;
-    dst_pt.y = area.y + 60;
+    const fheroes2::Point dst_pt( area.x + 65, area.y + 60 );
     if ( bcond == ALREADY_BUILT )
         fheroes2::Blit( sprite_allow, display, dst_pt.x, dst_pt.y );
     else if ( !allow_buy ) {
@@ -438,7 +436,7 @@ void BuildingInfo::Redraw( void )
             const fheroes2::Sprite infoSprite = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
             fheroes2::Blit( infoSprite, display, area.x, area.y );
 
-            const Point offset( 6, 59 );
+            const fheroes2::Point offset( 6, 59 );
             fheroes2::Image grayedOut = fheroes2::Crop( infoSprite, offset.x, offset.y, 125, 12 );
             fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::GRAY ) );
             fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::DARKENING ) );
