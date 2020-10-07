@@ -317,7 +317,7 @@ int GameOver::Result::LocalCheckGameOver( void )
 
     for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it )
         if ( !world.GetKingdom( *it ).isPlay() ) {
-            Game::DialogPlayers( *it, _( "You have been eliminated from the game!!!!" ) );
+            Game::DialogPlayers( *it, _( "You have been eliminated from the game!!!" ) );
             colors &= ( ~*it );
         }
 
