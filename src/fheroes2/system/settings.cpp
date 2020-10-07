@@ -314,10 +314,6 @@ const settings_t settingsFHeroes2[] = {
         _( "heroes: recalculate movement points after creatures movement" ),
     },
     {
-        Settings::HEROES_PATROL_ALLOW_PICKUP,
-        _( "heroes: allow pickup objects for patrol" ),
-    },
-    {
         Settings::HEROES_TRANSCRIBING_SCROLLS,
         _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
     },
@@ -1663,11 +1659,6 @@ bool Settings::ExtHeroBuySpellBookFromShrine( void ) const
 bool Settings::ExtHeroRecruitCostDependedFromLevel( void ) const
 {
     return ExtModes( HEROES_COST_DEPENDED_FROM_LEVEL );
-}
-
-bool Settings::ExtHeroPatrolAllowPickup( void ) const
-{
-    return ExtModes( HEROES_PATROL_ALLOW_PICKUP );
 }
 
 bool Settings::ExtHeroRememberPointsForRetreating( void ) const

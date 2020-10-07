@@ -161,7 +161,6 @@ public:
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
         HEROES_SURRENDERING_GIVE_EXP = 0x22000000,
         HEROES_RECALCULATE_MOVEMENT = 0x24000000,
-        HEROES_PATROL_ALLOW_PICKUP = 0x28000000,
 
         CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
         WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
@@ -263,7 +262,6 @@ public:
     bool ExtHeroRememberPointsForRetreating( void ) const;
     bool ExtHeroSurrenderingGiveExp( void ) const;
     bool ExtHeroRecalculateMovement( void ) const;
-    bool ExtHeroPatrolAllowPickup( void ) const;
     bool ExtHeroAllowTranscribingScroll( void ) const;
     bool ExtHeroAllowBannedSecSkillsUpgrade( void ) const;
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
