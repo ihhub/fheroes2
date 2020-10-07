@@ -820,36 +820,6 @@ void Surface::Blit( const Point & dpt, Surface & dst ) const
     Blit( Rect( Point( 0, 0 ), GetSize() ), dpt, dst );
 }
 
-void Surface::SetAlphaMod( int level, bool makeCopy )
-{
-    if ( makeCopy )
-        Set( GetSurface(), true );
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( isValid() ) {
-        SDL_SetSurfaceAlphaMod( surface, level );
-        SDL_SetSurfaceBlendMode( surface, SDL_BLENDMODE_BLEND );
-    }
-#else
-    if ( isValid() ) {
-        if ( amask() ) {
-            if ( depth() == 32 ) {
-                Set( ModifyAlphaChannel( level ), true );
-            }
-            else {
-                Surface res( GetSize(), false );
-                SDL_SetAlpha( surface, 0, 0 );
-                Blit( res );
-                SDL_SetAlpha( surface, SDL_SRCALPHA, 255 );
-                Set( res, true );
-            }
-        }
-
-        SDL_SetAlpha( surface, SDL_SRCALPHA, level );
-    }
-#endif
-}
-
 void Surface::Lock( void ) const
 {
     if ( SDL_MUSTLOCK( surface ) )
@@ -946,90 +916,6 @@ Surface Surface::RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both
         res.Unlock();
         break;
     }
-    return res;
-}
-
-Surface Surface::RenderRotate( int parm /* 0: none, 1 : 90 CW, 2: 90 CCW, 3: 180 */ ) const
-{
-    // 90 CW or 90 CCW
-    if ( parm == 1 || parm == 2 ) {
-        Surface res( Size( h(), w() ), GetFormat() ); /* height <-> width */
-
-        res.Lock();
-        const int height = h();
-        const int width = w();
-
-        if ( parm == 1 ) {
-            for ( int yy = 0; yy < height; ++yy )
-                for ( int xx = 0; xx < width; ++xx )
-                    res.SetPixel( yy, width - xx - 1, GetPixel( xx, yy ) );
-        }
-        else {
-            for ( int yy = 0; yy < height; ++yy )
-                for ( int xx = 0; xx < width; ++xx )
-                    res.SetPixel( height - yy - 1, xx, GetPixel( xx, yy ) );
-        }
-        res.Unlock();
-        return res;
-    }
-    else if ( parm == 3 ) {
-        return RenderReflect( 3 );
-    }
-
-    return RenderReflect( 0 );
-}
-
-Surface Surface::RenderStencil( const RGBA & color ) const
-{
-    Surface res( GetSize(), GetFormat() );
-    u32 clkey0 = GetColorKey();
-    RGBA clkey = GetRGB( clkey0 );
-    const u32 pixel = res.MapRGB( color );
-
-    res.Lock();
-    for ( int y = 0; y < h(); ++y )
-        for ( int x = 0; x < w(); ++x ) {
-            RGBA col = GetRGB( GetPixel( x, y ) );
-            if ( ( clkey0 && clkey == col ) || col.a() < 200 )
-                continue;
-            res.SetPixel( x, y, pixel );
-        }
-    res.Unlock();
-    return res;
-}
-
-Surface Surface::ModifyAlphaChannel( uint32_t alpha ) const
-{
-    Surface res = GetSurface();
-
-    if ( amask() && depth() == 32 && alpha < 256 ) {
-        res.Lock();
-
-        int height = h();
-        int width = w();
-        uint16_t pitch = res.surface->pitch >> 2;
-
-        if ( pitch == width ) {
-            width = width * height;
-            pitch = width;
-            height = 1;
-        }
-
-        uint32_t * y = static_cast<uint32_t *>( res.surface->pixels );
-        const uint32_t * yEnd = y + pitch * height;
-        for ( ; y != yEnd; y += pitch ) {
-            uint32_t * x = y;
-            const uint32_t * xEnd = x + width;
-            for ( ; x != xEnd; ++x ) {
-                const uint32_t rest = *x % 0x1000000;
-
-                *x = ( ( ( *x >> 24 ) * alpha / 255 ) << 24 ) + rest;
-            }
-        }
-
-        res.Unlock();
-    }
-
     return res;
 }
 
