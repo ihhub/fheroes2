@@ -216,7 +216,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
     if ( conf.PocketPC() ) {
-        states.push_back( Settings::POCKETPC_HIDE_CURSOR );
         states.push_back( Settings::POCKETPC_TAP_MODE );
         states.push_back( Settings::POCKETPC_LOW_MEMORY );
         states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );

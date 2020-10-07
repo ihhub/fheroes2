@@ -390,10 +390,6 @@ const settings_t settingsFHeroes2[] = {
         _( "game: offer to continue the game afer victory condition" ),
     },
     {
-        Settings::POCKETPC_HIDE_CURSOR,
-        _( "pocketpc: hide cursor" ),
-    },
-    {
         Settings::POCKETPC_TAP_MODE,
         _( "pocketpc: tap mode" ),
     },
@@ -457,7 +453,6 @@ Settings::Settings()
 
     if ( System::isEmbededDevice() ) {
         opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( POCKETPC_HIDE_CURSOR );
         ExtSetModes( POCKETPC_TAP_MODE );
         ExtSetModes( POCKETPC_DRAG_DROP_SCROLL );
     }
@@ -789,7 +784,6 @@ void Settings::PostLoad( void )
     if ( opt_global.Modes( GLOBAL_POCKETPC ) )
         opt_global.SetModes( GLOBAL_FULLSCREEN );
     else {
-        ExtResetModes( POCKETPC_HIDE_CURSOR );
         ExtResetModes( POCKETPC_TAP_MODE );
         ExtResetModes( POCKETPC_LOW_MEMORY );
     }
@@ -1724,11 +1718,6 @@ bool Settings::ExtBattleMergeArmies( void ) const
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
-}
-
-bool Settings::ExtPocketHideCursor( void ) const
-{
-    return ExtModes( POCKETPC_HIDE_CURSOR );
 }
 
 bool Settings::ExtGameShowSystemInfo( void ) const
