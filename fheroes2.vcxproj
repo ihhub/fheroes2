@@ -361,8 +361,6 @@
     <ClCompile Include="src\fheroes2\system\gamedefs.cpp" />
     <ClCompile Include="src\fheroes2\system\players.cpp" />
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
-    <ClCompile Include="src\fheroes2\test\test.cpp" />
-    <ClCompile Include="src\fheroes2\test\test_monstersprite.cpp" />
     <ClCompile Include="src\fheroes2\world\world.cpp" />
     <ClCompile Include="src\fheroes2\world\world_loadmap.cpp" />
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
@@ -515,7 +513,6 @@
     <ClInclude Include="src\fheroes2\system\gamedefs.h" />
     <ClInclude Include="src\fheroes2\system\players.h" />
     <ClInclude Include="src\fheroes2\system\settings.h" />
-    <ClInclude Include="src\fheroes2\test\test.h" />
     <ClInclude Include="src\fheroes2\world\world.h" />
     <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\tools\palette_h2.h" />
