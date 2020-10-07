@@ -133,9 +133,13 @@ std::string GameOver::GetActualDescription( int cond )
     }
     else if ( LOSS_TIME & cond ) {
         msg = _( "Fail to win by the end of month %{month}, week %{week}, day %{day}." );
-        StringReplace( msg, "%{day}", ( conf.LossCountDays() % DAYOFWEEK ) );
-        StringReplace( msg, "%{week}", ( conf.LossCountDays() / DAYOFWEEK ) + 1 );
-        StringReplace( msg, "%{month}", ( conf.LossCountDays() / ( DAYOFWEEK * WEEKOFMONTH ) ) + 1 );
+        const uint32_t dayCount = conf.LossCountDays() - 1;
+        const uint32_t month = dayCount / ( DAYOFWEEK * WEEKOFMONTH );
+        const uint32_t week = ( dayCount - month * ( DAYOFWEEK * WEEKOFMONTH ) ) / DAYOFWEEK;
+        const uint32_t day = dayCount % DAYOFWEEK;
+        StringReplace( msg, "%{day}", day + 1 );
+        StringReplace( msg, "%{week}", week + 1 );
+        StringReplace( msg, "%{month}", month + 1 );
     }
 
     if ( conf.ExtWorldStartHeroLossCond4Humans() ) {
