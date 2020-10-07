@@ -287,15 +287,15 @@ private:
 
     UltimateArtifact ultimate_artifact;
 
-    u32 day;
-    u32 week;
-    u32 month;
+    uint32_t day = 0;
+    uint32_t week = 0;
+    uint32_t month = 0;
 
     Week week_current;
     Week week_next;
 
-    int heroes_cond_wins;
-    int heroes_cond_loss;
+    int heroes_cond_wins = Heroes::UNKNOWN;
+    int heroes_cond_loss = Heroes::UNKNOWN;
 
     MapActions map_actions;
     MapObjects map_objects;

@@ -313,7 +313,7 @@ void World::NewMaps( u32 sw, u32 sh )
     Size::w = sw;
     Size::h = sh;
 
-    vec_tiles.resize( w() * h() );
+    vec_tiles.resize( static_cast<size_t>( Size::w ) * Size::h );
 
     // init all tiles
     for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {

@@ -155,7 +155,7 @@ int Pathfinder::searchForFog( int playerColor, int start, uint8_t skill )
         offset[i] = Maps::GetDirectionIndex( 0, directions[i] );
     }
 
-    std::vector<bool> tilesVisited( world.w() * world.h(), false );
+    std::vector<bool> tilesVisited( static_cast<size_t>( world.w() ) * world.h(), false );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( start );
@@ -202,7 +202,7 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
     _pathfindingSkill = skill;
 
     _cache.clear();
-    _cache.resize( width * height );
+    _cache.resize( static_cast<size_t>( world.w() ) * height );
     _cache[start] = PathfindingNode( -1, 0 );
 
     std::vector<int> nodesToExplore;
