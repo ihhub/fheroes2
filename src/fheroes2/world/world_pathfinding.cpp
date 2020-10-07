@@ -24,9 +24,11 @@
 
 void Pathfinder::reset()
 {
-    _cache.clear();
-    _pathStart = -1;
-    _pathfindingSkill = Skill::Level::NONE;
+    if ( _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE ) {
+        _cache.clear();
+        _pathStart = -1;
+        _pathfindingSkill = Skill::Level::NONE;
+    }
 }
 
 std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skill )
