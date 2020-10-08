@@ -189,7 +189,7 @@ namespace fheroes2
         }
 
         // Check whether a point within the rectanle
-        bool operator&( const PointBase2D<_TypePoint> & point )const
+        bool operator&( const PointBase2D<_TypePoint> & point ) const
         {
             return point.x >= x && point.y >= y && point.x < ( x + width ) && point.y < ( y + height );
         }
