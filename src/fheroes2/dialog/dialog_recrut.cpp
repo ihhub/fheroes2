@@ -31,7 +31,8 @@
 #include "text.h"
 #include "world.h"
 
-void RedrawCurrentInfo( const Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds, const std::string & label )
+void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
+                        const std::string & label )
 {
     Text text;
 
@@ -56,7 +57,7 @@ void RedrawCurrentInfo( const Point & pos, u32 result, const payment_t & payment
     text.Blit( pos.x + 165 - text.w() / 2, pos.y + 180 );
 }
 
-void RedrawResourceInfo( const fheroes2::Image & sres, const Point & pos, s32 value, s32 px1, s32 py1, s32 px2, s32 py2 )
+void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & pos, s32 value, s32 px1, s32 py1, s32 px2, s32 py2 )
 {
     Point dst_pt( pos.x + px1, pos.y + py1 );
     fheroes2::Blit( sres, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
@@ -67,7 +68,7 @@ void RedrawResourceInfo( const fheroes2::Image & sres, const Point & pos, s32 va
     text.Blit( dst_pt );
 }
 
-void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available, bool label, bool showTotalSum )
+void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool label, bool showTotalSum )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const payment_t paymentMonster = monster.GetCost();
@@ -75,21 +76,21 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
 
     // smear hardcored text "Cost per troop:"
     const fheroes2::Sprite & smear = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
-    Point dst_pt( pos.x + 144, pos.y + 55 );
+    fheroes2::Point dst_pt( pos.x + 144, pos.y + 55 );
     fheroes2::Blit( smear, 8, 1, display, dst_pt.x, dst_pt.y, 120, 12 );
 
     Text text( _( "Cost per troop:" ), Font::SMALL );
     dst_pt.x = pos.x + 206 - text.w() / 2;
     dst_pt.y = pos.y + 55;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // text recruit monster
     std::string str = _( "Recruit %{name}" );
     StringReplace( str, "%{name}", monster.GetMultiName() );
     text.Set( str, Font::BIG );
-    dst_pt.x = pos.x + ( pos.w - text.w() ) / 2;
+    dst_pt.x = pos.x + ( pos.width - text.w() ) / 2;
     dst_pt.y = pos.y + 25;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // sprite monster
     const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.ICNMonh(), 0 );
@@ -174,7 +175,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     text.Blit( pos.x + 70 - text.w() / 2, pos.y + 130 );
 }
 
-void RedrawStaticInfo( const Rect & pos, const Monster & monster, u32 available, bool label )
+void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool label )
 {
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RECRBKG, 0 ), fheroes2::Display::instance(), pos.x, pos.y );
 
@@ -237,20 +238,20 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECRBKG, 1 );
 
-    const Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 - 65 );
-    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 - 65 );
+    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
     fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, box.width() + BORDERWIDTH, box.height() + BORDERWIDTH );
-    const Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
+    const fheroes2::Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
     fheroes2::Blit( box, display, pos.x, pos.y );
 
-    const Rect rtChange( pos.x + 25, pos.y + 35, 85, 95 );
+    const fheroes2::Rect rtChange( pos.x + 25, pos.y + 35, 85, 95 );
     RedrawStaticInfo( pos, monster, available, ext && monster0.GetDowngrade() != monster0 );
 
     // buttons
-    Point dst_pt;
+    fheroes2::Point dst_pt;
 
     dst_pt.x = pos.x + 34;
     dst_pt.y = pos.y + 249;
@@ -451,11 +452,11 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
 
-    const Point dialogOffset( ( display.width() - box.width() ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
-    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
+    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
     fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, box.width() + BORDERWIDTH, box.height() + BORDERWIDTH );
-    const Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
+    const fheroes2::Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
     fheroes2::Blit( box, display, pos.x, pos.y );
