@@ -423,6 +423,7 @@ Settings::Settings()
     , size_small( 10 )
     , sound_volume( 6 )
     , music_volume( 6 )
+    , _musicType( MUSIC_EXTERNAL )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -431,7 +432,6 @@ Settings::Settings()
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
     , memory_limit( 0 )
-    , _musicType( MUSIC_EXTERNAL )
 {
     ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );

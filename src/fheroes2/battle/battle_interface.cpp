@@ -532,12 +532,12 @@ int Battle::GetDirectionFromCursorSword( u32 sword )
 
 Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, bool r )
     : base( b )
-    , icn( ICN::UNKNOWN )
-    , reflect( r )
-    , _offset( area.x, area.y )
     , _currentAnim( getHeroAnimation( b, OP_STATIC ) )
     , _animationType( OP_STATIC )
     , _idleTimer( 8000 )
+    , icn( ICN::UNKNOWN )
+    , reflect( r )
+    , _offset( area.x, area.y )
 {
     const bool isCaptain = b->isCaptain();
     switch ( b->GetRace() ) {
@@ -853,6 +853,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , humanturn_redraw( true )
     , animation_flags_frame( 0 )
     , catapult_frame( 0 )
+    , _contourColor( 110 )
+    , _brightLandType( false )
     , _currentUnit( NULL )
     , _movingUnit( NULL )
     , _flyingUnit( NULL )
@@ -861,8 +863,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , teleport_src( -1 )
     , listlog( NULL )
     , turn( 0 )
-    , _contourColor( 110 )
-    , _brightLandType( false )
 {
     const Settings & conf = Settings::Get();
 
