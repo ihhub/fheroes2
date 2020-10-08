@@ -183,11 +183,12 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
     }
 }
 
-void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, u32 width, u32 count )
+void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, size_t width, size_t count )
 {
+    const uint32_t chunk = static_cast<uint32_t>( width / count );
+
     for ( u32 ii = 0; ii < count; ++ii ) {
         if ( ii < v.size() ) {
-            const u32 chunk = width / count;
             const Colors colors( v[ii].second );
             const u32 sw = fheroes2::AGG::GetICN( ICN::FLAG32, 1 ).width();
             s32 px = pos.x + chunk / 2 + ii * chunk - ( colors.size() * sw ) / 2;

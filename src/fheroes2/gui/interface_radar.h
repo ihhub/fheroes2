@@ -54,7 +54,7 @@ namespace Interface
 
         fheroes2::Image spriteArea;
         fheroes2::MovableSprite cursorArea;
-        Point offset;
+        fheroes2::Point offset;
         bool hide;
     };
 }

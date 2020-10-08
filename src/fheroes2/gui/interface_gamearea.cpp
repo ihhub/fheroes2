@@ -152,11 +152,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // objects
     for ( int16_t y = 0; y < tileROI.h; ++y ) {
-        const s32 offsetY = tileROI.y + y;
+        const int32_t offsetY = tileROI.y + y;
         if ( offsetY < 0 || offsetY >= world.h() )
             continue;
         for ( s32 x = 0; x < tileROI.w; ++x ) {
-            const s32 offsetX = tileROI.x + x;
+            const int32_t offsetX = tileROI.x + x;
             if ( offsetX < 0 || offsetX >= world.w() )
                 continue;
 
@@ -170,11 +170,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // top layer
     for ( int16_t y = 0; y < tileROI.h; ++y ) {
-        const s32 offsetY = tileROI.y + y;
+        const int32_t offsetY = tileROI.y + y;
         if ( offsetY < 0 || offsetY >= world.h() )
             continue;
         for ( s32 x = 0; x < tileROI.w; ++x ) {
-            const s32 offsetX = tileROI.x + x;
+            const int32_t offsetX = tileROI.x + x;
             if ( offsetX < 0 || offsetX >= world.w() )
                 continue;
 
@@ -364,7 +364,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 in
     Point pt = Maps::GetPoint( index );
     gamearea.SetCenter( pt );
 
-    const Rect & rectMaps = gamearea.GetVisibleTileROI();
     gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
 
     const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
