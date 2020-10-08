@@ -142,16 +142,20 @@ namespace fheroes2
     };
 
     template <typename _TypePoint, typename _TypeSize>
-    struct RectBase2D : public PointBase2D<_TypePoint>, public SizeBase2D<_TypeSize>
+    struct RectBase2D
     {
         RectBase2D( _TypePoint _x = 0, _TypePoint _y = 0, _TypeSize _width = 0, _TypeSize _height = 0 )
-            : PointBase2D<_TypePoint>( _x, _y )
-            , SizeBase2D<_TypeSize>( _width, _height )
+            : x( _x )
+            , y( _y )
+            , width( _width )
+            , height( _height )
         {}
 
         RectBase2D( const PointBase2D<_TypePoint> & point, const SizeBase2D<_TypeSize> & size )
-            : PointBase2D<_TypePoint>( point )
-            , SizeBase2D<_TypeSize>( size )
+            : x( point.x )
+            , y( point.y )
+            , width( size.width )
+            , height( size.height )
         {}
 
         bool operator==( const RectBase2D & rect ) const
@@ -193,6 +197,11 @@ namespace fheroes2
         {
             return point.x >= x && point.y >= y && point.x < ( x + width ) && point.y < ( y + height );
         }
+
+        _TypePoint x;
+        _TypePoint y;
+        _TypeSize width;
+        _TypeSize height;
     };
 
     typedef PointBase2D<int32_t> Point;
