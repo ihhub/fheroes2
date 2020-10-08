@@ -50,7 +50,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::ButtonGroup group( box.GetArea().convert(), buttons );
+    fheroes2::ButtonGroup group( pos.convert(), buttons );
     group.draw();
 
     cursor.Show();

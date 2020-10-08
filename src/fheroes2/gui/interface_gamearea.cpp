@@ -349,40 +349,39 @@ void Interface::GameArea::SetCenter( const Point & pt )
 
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 index )
 {
-    fheroes2::Image result;
-
-    if ( Maps::isValidAbsIndex( index ) ) {
-        result.resize( 448, 448 );
-        result.reset();
-
-        GameArea & gamearea = Basic::Get().GetGameArea();
-        const Rect origPosition( gamearea._windowROI );
-        gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
-
-        Point pt = Maps::GetPoint( index );
-        gamearea.SetCenter( pt );
-
-        const Rect & rectMaps = gamearea.GetVisibleTileROI();
-        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
-
-        const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
-        const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )
-                               + Point( result.width() / 2, result.height() / 2 ) );
-
-        fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
-        fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::TAN ) );
-
-        gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
-    }
-    else
+    if ( !Maps::isValidAbsIndex( index ) ) {
         DEBUG( DBG_ENGINE, DBG_WARN, "artifact not found" );
+        return fheroes2::Image();
+    }
+
+    fheroes2::Image result( 448, 448 );
+    result.reset();
+
+    GameArea & gamearea = Basic::Get().GetGameArea();
+    const Rect origPosition( gamearea._windowROI );
+    gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
+
+    Point pt = Maps::GetPoint( index );
+    gamearea.SetCenter( pt );
+
+    const Rect & rectMaps = gamearea.GetVisibleTileROI();
+    gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
+
+    const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
+    const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )
+                           + Point( result.width() / 2, result.height() / 2 ) );
+
+    fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
+    fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::TAN ) );
+
+    gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
 
     return result;
 }
 
 bool Interface::GameArea::NeedScroll( void ) const
 {
-    return scrollDirection;
+    return scrollDirection != 0;
 }
 
 int Interface::GameArea::GetScrollCursor( void ) const

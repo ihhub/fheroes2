@@ -838,7 +838,7 @@ int Interface::Basic::HumanTurn( bool isload )
             }
         }
 
-        const Rect displayArea( 0, 0, display.width(), display.height() );
+        const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
         // Stop moving hero first
         if ( isMovingHero && ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) ) {
             stopHero = true;

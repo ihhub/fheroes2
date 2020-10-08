@@ -60,8 +60,6 @@ struct Size
     Size( u16 width = 0, u16 height = 0 );
     Size( const Point & );
 
-    bool isEmpty( void ) const;
-
     bool operator==( const Size & ) const;
     bool operator!=( const Size & ) const;
 

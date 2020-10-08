@@ -4123,8 +4123,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             const Rect initialArea( area.x, area.y, area.w, area.h );
             const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
-            const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
-            fheroes2::Blit( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.w, shifted.h );
+            const fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            fheroes2::Blit( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
             ++frame;

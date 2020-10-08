@@ -459,7 +459,7 @@ void BuildingInfo::Redraw( void )
         const fheroes2::Sprite & sprite_deny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
         const fheroes2::Sprite & sprite_money = fheroes2::AGG::GetICN( ICN::TOWNWIND, 13 );
 
-        Point dst_pt( area.x + 115, area.y + 40 );
+        fheroes2::Point dst_pt( area.x + 115, area.y + 40 );
 
         // indicator
         if ( bcond == ALREADY_BUILT )
@@ -488,7 +488,7 @@ void BuildingInfo::Redraw( void )
         Text text( Castle::GetStringBuilding( building, castle.GetRace() ), Font::SMALL );
         dst_pt.x = area.x + 68 - text.w() / 2;
         dst_pt.y = area.y + 59;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
     }
 }
 
@@ -567,7 +567,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
 
-    Point dst_pt;
+    fheroes2::Point dst_pt;
 
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
@@ -589,20 +589,20 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     Text text( GetName(), Font::SMALL );
     dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
     dst_pt.y += 57;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + space + window_icons.height() + space;
-    box1.Blit( dst_pt );
+    box1.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.y += box1.h() + space;
     if ( isRequired ) {
         dst_pt.x = box_rt.x + ( box_rt.w - requires_text.w() ) / 2;
-        requires_text.Blit( dst_pt );
+        requires_text.Blit( dst_pt.x, dst_pt.y );
 
         dst_pt.x = box_rt.x;
         dst_pt.y += requires_text.h();
-        box2.Blit( dst_pt );
+        box2.Blit( dst_pt.x, dst_pt.y );
 
         dst_pt.y += box2.h() + space;
     }

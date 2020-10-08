@@ -150,11 +150,6 @@ Size Size::operator-( const Size & sz ) const
     return Size( w - sz.w, h - sz.h );
 }
 
-bool Size::isEmpty( void ) const
-{
-    return 0 == w && 0 == h;
-}
-
 Rect::Rect() {}
 
 Rect::Rect( s16 rx, s16 ry, u16 rw, u16 rh )

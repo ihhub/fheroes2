@@ -26,11 +26,6 @@
 
 StatusBar::StatusBar() {}
 
-void StatusBar::SetCenter( const Point & pt )
-{
-    center = pt;
-}
-
 void StatusBar::SetCenter( s32 cx, s32 cy )
 {
     center.x = cx;
