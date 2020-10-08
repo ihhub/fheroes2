@@ -371,7 +371,7 @@ private:
     const float VITA_AXIS_SPEEDUP = 1.03f;
 
     bool vitaInputActive = false;
-    float vitaPointerSpeed = 10.0f;
+    float vitaPointerSpeed = 10.0f / VITA_SPEED_MOD;
 
     int16_t xAxisLValue = 0;
     int16_t yAxisLValue = 0;

@@ -45,7 +45,7 @@ eboot.bin: $(PROJECT).velf
 	dolce-make-fself $(PROJECT).velf eboot.bin
 
 param.sfo:
-	dolce-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" "$(PROJECT_TITLE)" param.sfo
+	dolce-mksfoex -s CONTENT_ID=HB0000-${PROJECT_TITLEID}_00-${PROJECT_TITLEID}0000000 "$(PROJECT_TITLE)" param.sfo
 
 $(PROJECT).velf: $(PROJECT).elf
 	arm-dolce-eabi-strip -g $<
