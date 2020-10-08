@@ -55,45 +55,44 @@ int Dialog::SelectSkillFromArena( void )
     Dialog::FrameBox box( textbox.h() + spacer + sprite.height() + 15, true );
 
     const Rect & box_rt = box.GetArea();
-    Point dst_pt = box_rt;
+    fheroes2::Point dst_pt( box_rt.x, box_rt.y );
 
-    textbox.Blit( dst_pt );
+    textbox.Blit( dst_pt.x, dst_pt.y );
     dst_pt.y += textbox.h() + spacer;
 
     int res = Skill::Primary::ATTACK;
-    Rect rect1, rect2, rect3, rect4;
 
     const int spacingX = allSkills ? ( static_cast<int>( box_rt.w ) - sprite.width() * 4 ) / 5 : ( static_cast<int>( box_rt.w ) - sprite.width() * 3 ) / 4;
 
-    rect1 = Rect( dst_pt.x + spacingX, dst_pt.y, sprite.width(), sprite.height() );
-    rect2 = Rect( rect1.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
-    rect3 = Rect( rect2.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
-    rect4 = Rect( rect3.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
+    fheroes2::Rect rect1( dst_pt.x + spacingX, dst_pt.y, sprite.width(), sprite.height() );
+    fheroes2::Rect rect2( rect1.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
+    fheroes2::Rect rect3( rect2.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
+    fheroes2::Rect rect4( rect3.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
 
     InfoSkillClear( rect1, rect2, rect3, rect4 );
     InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
 
     // info texts
     TextBox text( Skill::Primary::String( Skill::Primary::ATTACK ), Font::SMALL, 60 );
-    dst_pt.x = rect1.x + ( rect1.w - text.w() ) / 2;
-    dst_pt.y = rect1.y + rect1.h + 5;
-    text.Blit( dst_pt );
+    dst_pt.x = rect1.x + ( rect1.width - text.w() ) / 2;
+    dst_pt.y = rect1.y + rect1.height + 5;
+    text.Blit( dst_pt.x, dst_pt.y );
 
     text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ), Font::SMALL, 60 );
-    dst_pt.x = rect2.x + ( rect2.w - text.w() ) / 2;
-    dst_pt.y = rect2.y + rect2.h + 5;
-    text.Blit( dst_pt );
+    dst_pt.x = rect2.x + ( rect2.width - text.w() ) / 2;
+    dst_pt.y = rect2.y + rect2.height + 5;
+    text.Blit( dst_pt.x, dst_pt.y );
 
     text.Set( Skill::Primary::String( Skill::Primary::POWER ), Font::SMALL, 60 );
-    dst_pt.x = rect3.x + ( rect3.w - text.w() ) / 2;
-    dst_pt.y = rect3.y + rect3.h + 5;
-    text.Blit( dst_pt );
+    dst_pt.x = rect3.x + ( rect3.width - text.w() ) / 2;
+    dst_pt.y = rect3.y + rect3.height + 5;
+    text.Blit( dst_pt.x, dst_pt.y );
 
     if ( allSkills ) {
         text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), Font::SMALL, 65 );
-        dst_pt.x = rect4.x + ( rect4.w - text.w() ) / 2;
-        dst_pt.y = rect4.y + rect4.h + 5;
-        text.Blit( dst_pt );
+        dst_pt.x = rect4.x + ( rect4.width - text.w() ) / 2;
+        dst_pt.y = rect4.y + rect4.height + 5;
+        text.Blit( dst_pt.x, dst_pt.y );
     }
 
     // buttons

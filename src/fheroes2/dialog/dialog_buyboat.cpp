@@ -52,10 +52,8 @@ int Dialog::BuyBoat( bool enable )
     Dialog::FrameBox box( text.h() + spacer + sprite.height() + spacer + text.h() + spacer + rbs.GetArea().h - 20, true );
 
     const Rect & box_rt = box.GetArea();
-    Point dst_pt;
-    dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
-    dst_pt.y = box_rt.y;
-    text.Blit( dst_pt );
+    fheroes2::Point dst_pt( box_rt.x + ( box_rt.w - text.w() ) / 2, box_rt.y );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = box_rt.x + ( box_rt.w - sprite.width() ) / 2;
     dst_pt.y = box_rt.y + text.h() + spacer;
@@ -64,7 +62,7 @@ int Dialog::BuyBoat( bool enable )
     text.Set( _( "Resource cost:" ), Font::BIG );
     dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
     dst_pt.y = dst_pt.y + sprite.height() + spacer;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     rbs.SetPos( box_rt.x, dst_pt.y + spacer );
     rbs.Redraw();

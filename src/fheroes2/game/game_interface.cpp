@@ -53,10 +53,10 @@ void Interface::Basic::Reset()
 
     SetHideInterface( conf.ExtGameHideInterface() );
 
-    scrollLeft = Rect( 0, 0, BORDERWIDTH, display.height() );
-    scrollRight = Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
-    scrollTop = Rect( 0, 0, display.width(), BORDERWIDTH );
-    scrollBottom = Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
+    scrollLeft = fheroes2::Rect( 0, 0, BORDERWIDTH, display.height() );
+    scrollRight = fheroes2::Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
+    scrollTop = fheroes2::Rect( 0, 0, display.width(), BORDERWIDTH );
+    scrollBottom = fheroes2::Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
 
     system_info.Set( Font::YELLOW_SMALL );
 }
@@ -139,22 +139,22 @@ Interface::Basic & Interface::Basic::Get( void )
     return basic;
 }
 
-const Rect & Interface::Basic::GetScrollLeft( void ) const
+const fheroes2::Rect & Interface::Basic::GetScrollLeft( void ) const
 {
     return scrollLeft;
 }
 
-const Rect & Interface::Basic::GetScrollRight( void ) const
+const fheroes2::Rect & Interface::Basic::GetScrollRight( void ) const
 {
     return scrollRight;
 }
 
-const Rect & Interface::Basic::GetScrollTop( void ) const
+const fheroes2::Rect & Interface::Basic::GetScrollTop( void ) const
 {
     return scrollTop;
 }
 
-const Rect & Interface::Basic::GetScrollBottom( void ) const
+const fheroes2::Rect & Interface::Basic::GetScrollBottom( void ) const
 {
     return scrollBottom;
 }

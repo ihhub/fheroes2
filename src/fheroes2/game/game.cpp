@@ -319,12 +319,12 @@ u32 Game::GetGameOverScores( void )
 void Game::ShowLoadMapsText( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
-    TextBox text( _( "Maps Loading..." ), Font::BIG, pos.w );
+    const fheroes2::Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
+    TextBox text( _( "Maps Loading..." ), Font::BIG, pos.width );
 
     // blit test
     display.fill( 0 );
-    text.Blit( pos );
+    text.Blit( pos.x, pos.y );
     display.render();
 }
 

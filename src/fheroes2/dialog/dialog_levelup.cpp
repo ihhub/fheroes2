@@ -118,11 +118,11 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     Rect pos = box.GetArea();
 
     if ( header.size() )
-        box1.Blit( pos );
+        box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
     if ( message.size() )
-        box2.Blit( pos );
+        box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
     // sprite1

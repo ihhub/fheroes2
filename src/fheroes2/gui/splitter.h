@@ -68,7 +68,7 @@ public:
     }
 
 private:
-    Point GetPositionCursor( void );
+    fheroes2::Point GetPositionCursor();
 
     Rect area;
     int step;

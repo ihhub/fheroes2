@@ -1547,7 +1547,7 @@ bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable 
     case ICN::OBJNLAVA:
     case ICN::OBJNSNOW:
     case ICN::OBJNSWMP:
-        return ( passable & DIRECTION_TOP_ROW );
+        return ( passable & DIRECTION_TOP_ROW ) != 0;
 
     default:
         break;
@@ -1802,7 +1802,7 @@ bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog ) const
     if ( !validateWaterRules( fromWater ) )
         return false;
 
-    return direct & tilePassable;
+    return ( direct & tilePassable ) != 0;
 }
 
 void Maps::Tiles::SetObjectPassable( bool pass )

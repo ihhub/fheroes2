@@ -53,7 +53,7 @@ struct SpellFiltered : std::binary_function<Spell, int, bool>
 
 void SpellBookRedrawLists( const SpellStorage &, Rects &, size_t, const Point &, u32, int only, const HeroBase & hero );
 void SpellBookRedrawSpells( const SpellStorage &, Rects &, size_t, s32, s32, const HeroBase & hero );
-void SpellBookRedrawMP( const Point &, u32 );
+void SpellBookRedrawMP( const fheroes2::Point &, u32 );
 
 bool SpellBookSortingSpell( const Spell & spell1, const Spell & spell2 )
 {
@@ -100,8 +100,8 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
     const Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2, bookPage.height() + 70 );
     fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.w, pos.h );
 
-    const Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
-    const Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
+    const fheroes2::Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
+    const fheroes2::Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
 
     const fheroes2::Rect info_rt( pos.x + bookmarkInfoOffset.x, pos.y + bookmarkInfoOffset.y, bookmark_info.width(), bookmark_info.height() );
     const fheroes2::Rect advn_rt( pos.x + bookmarkAdvOffset.x, pos.y + bookmarkAdvOffset.y, bookmark_advn.width(), bookmark_advn.height() );
@@ -246,9 +246,9 @@ void SpellBook::Edit( const HeroBase & hero )
     const Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2, bookPage.height() + 70 );
     fheroes2::ImageRestorer back( display, pos.x, pos.y, pos.w, pos.h );
 
-    const Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
-    const Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
-    const Rect clos_rt( pos.x + 420, pos.y + 284, bookmark_clos.width(), bookmark_clos.height() );
+    const fheroes2::Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
+    const fheroes2::Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
+    const fheroes2::Rect clos_rt( pos.x + 420, pos.y + 284, bookmark_clos.width(), bookmark_clos.height() );
 
     Rects coords;
     coords.reserve( SPELL_PER_PAGE * 2 );
@@ -345,9 +345,9 @@ SpellStorage SpellBook::SetFilter( int filter, const HeroBase * hero ) const
     return res;
 }
 
-void SpellBookRedrawMP( const Point & dst, u32 mp )
+void SpellBookRedrawMP( const fheroes2::Point & dst, u32 mp )
 {
-    Point tp( dst.x + 11, dst.y + 9 );
+    fheroes2::Point tp( dst.x + 11, dst.y + 9 );
     if ( mp > 999 ) {
         mp = 999; // just in case of broken code
     }
@@ -374,7 +374,7 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
     const fheroes2::Sprite & bookmark_cmbt = fheroes2::AGG::GetICN( ICN::BOOK, 4 );
     const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
-    const Rect info_rt( pt.x + bookmarkInfoOffset.x, pt.y + bookmarkInfoOffset.y, bookmark_info.width(), bookmark_info.height() );
+    const fheroes2::Rect info_rt( pt.x + bookmarkInfoOffset.x, pt.y + bookmarkInfoOffset.y, bookmark_info.width(), bookmark_info.height() );
 
     fheroes2::Blit( bookPage, display, pt.x, pt.y, true );
     fheroes2::Blit( bookPage, display, pt.x + bookPage.width(), pt.y );
@@ -391,7 +391,7 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
     if ( coords.size() )
         coords.clear();
 
-    SpellBookRedrawMP( info_rt, sp );
+    SpellBookRedrawMP( fheroes2::Point( info_rt.x, info_rt.y ), sp );
     SpellBookRedrawSpells( spells, coords, cur, pt.x, pt.y, hero );
     SpellBookRedrawSpells( spells, coords, cur + SPELL_PER_PAGE, pt.x + 220, pt.y, hero );
 }

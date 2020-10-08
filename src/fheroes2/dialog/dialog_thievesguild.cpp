@@ -142,7 +142,7 @@ void GetObelisksInfo( std::vector<ValueColors> & v, const Colors & colors )
     v.clear();
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        int value = world.GetKingdom( *color ).CountVisitedObjects( MP2::OBJ_OBELISK );
+        const int value = world.GetKingdom( *color ).CountVisitedObjects( MP2::OBJ_OBELISK );
         UpdateValuesColors( v, value, *color );
     }
 
@@ -154,7 +154,7 @@ void GetArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
     v.clear();
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        int value = world.GetKingdom( *color ).GetArmiesStrength();
+        const int value = world.GetKingdom( *color ).GetArmiesStrength();
         UpdateValuesColors( v, value, *color );
     }
 
@@ -183,11 +183,11 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
     }
 }
 
-void DrawFlags( const std::vector<ValueColors> & v, const Point & pos, u32 width, u32 count )
+void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, u32 width, u32 count )
 {
     for ( u32 ii = 0; ii < count; ++ii ) {
-        const u32 chunk = width / count;
         if ( ii < v.size() ) {
+            const u32 chunk = width / count;
             const Colors colors( v[ii].second );
             const u32 sw = fheroes2::AGG::GetICN( ICN::FLAG32, 1 ).width();
             s32 px = pos.x + chunk / 2 + ii * chunk - ( colors.size() * sw ) / 2;
@@ -201,7 +201,7 @@ void DrawFlags( const std::vector<ValueColors> & v, const Point & pos, u32 width
     }
 }
 
-void DrawHeroIcons( const std::vector<ValueColors> & v, const Point & pos, u32 width )
+void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & pos, u32 width )
 {
     if ( v.size() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -234,7 +234,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const Point & cur_pt = frameborder.GetArea();
-    Point dst_pt( cur_pt );
+    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
     const u32 count = oracle ? 0xFF : world.GetKingdom( Settings::Get().CurrentColor() ).GetCountBuilding( BUILD_THIEVESGUILD );
 
@@ -274,7 +274,7 @@ void Dialog::ThievesGuild( bool oracle )
 
         dst_pt.x = cur_pt.x + startx + maxw / ( colors.size() * 2 ) + ii * maxw / colors.size() - text.w() / 2;
         dst_pt.y = cur_pt.y + 5;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
     }
 
     // bar
@@ -286,7 +286,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Thieves' Guild: Player RanKings" ), Font::BIG );
     dst_pt.x = cur_pt.x + 290 - text.w() / 2;
     dst_pt.y = cur_pt.y + 463;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // button exit
     dst_pt.x = cur_pt.x + 578;
@@ -296,7 +296,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Number of Towns:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 28;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetTownsInfo( v, colors );
@@ -305,7 +305,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Number of Castles:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 54;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetCastlesInfo( v, colors );
@@ -314,7 +314,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Number of Heroes:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 80;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetHeroesInfo( v, colors );
@@ -323,7 +323,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Gold in Treasury:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 106;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetGoldsInfo( v, colors );
@@ -333,7 +333,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Wood & Ore:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 132;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetWoodOreInfo( v, colors );
@@ -343,7 +343,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Gems, Cr, Slf & Mer:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 158;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetGemsCrSlfMerInfo( v, colors );
@@ -353,7 +353,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Obelisks Found:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 184;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetObelisksInfo( v, colors );
@@ -363,7 +363,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Total Army Strength:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 210;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetArmyInfo( v, colors );
@@ -373,7 +373,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Income:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 238;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetIncomesInfo( v, colors );
@@ -386,14 +386,14 @@ void Dialog::ThievesGuild( bool oracle )
         text.Set( Color::String( *color ) );
         dst_pt.x = cur_pt.x + startx + maxw / ( colors.size() * 2 ) + ii * maxw / colors.size() - text.w() / 2;
         dst_pt.y = cur_pt.y + 270;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
         ++ii;
     }
 
     text.Set( _( "Best Hero:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 306;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     GetBestHeroArmyInfo( v, colors );
@@ -402,7 +402,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Best Hero Stats:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 347;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     // GetBestHeroStatsInfo(v);
@@ -411,7 +411,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Personality:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 388;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     // GetPersonalityInfo(v);
@@ -420,7 +420,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Set( _( "Best Monster:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
     dst_pt.y = cur_pt.y + 429;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
     // GetBestMonsterInfo(v);

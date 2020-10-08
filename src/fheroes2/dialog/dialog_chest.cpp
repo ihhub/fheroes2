@@ -63,11 +63,11 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     Rect pos = box.GetArea();
 
     if ( header.size() )
-        box1.Blit( pos );
+        box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
     if ( message.size() )
-        box2.Blit( pos );
+        box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
     pos.y += sprite_expr.height();
