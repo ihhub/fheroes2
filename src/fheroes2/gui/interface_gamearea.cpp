@@ -364,7 +364,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 in
     Point pt = Maps::GetPoint( index );
     gamearea.SetCenter( pt );
 
-    const Rect & rectMaps = gamearea.GetVisibleTileROI();
     gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
 
     const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
