@@ -1454,41 +1454,40 @@ bool Heroes::isFreeman( void ) const
 
 void Heroes::SetFreeman( int reason )
 {
-    if ( isFreeman() )
-        return;
+    if ( !isFreeman() ) {
+        bool savepoints = false;
+        Kingdom & kingdom = GetKingdom();
 
-    bool savepoints = false;
-    Kingdom & kingdom = GetKingdom();
+        if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
+            if ( Settings::Get().ExtHeroRememberPointsForRetreating() )
+                savepoints = true;
+            kingdom.SetLastLostHero( *this );
+        }
 
-    if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-        if ( Settings::Get().ExtHeroRememberPointsForRetreating() )
-            savepoints = true;
-        kingdom.SetLastLostHero( *this );
+        if ( reason & Battle::RESULT_RETREAT )
+            army.Reset( true );
+        else if ( ( Battle::RESULT_LOSS & reason ) ) {
+            bool isSurrender = reason & Battle::RESULT_SURRENDER;
+            army.Reset( !isSurrender );
+        }
+        else if ( reason == 0 ) // Dismissed hero
+            army.Reset( true );
+
+        if ( GetColor() != Color::NONE )
+            kingdom.RemoveHeroes( this );
+
+        SetColor( Color::NONE );
+        world.GetTiles( GetIndex() ).SetHeroes( NULL );
+        modes = 0;
+        SetIndex( -1 );
+        move_point_scale = -1;
+        path.Reset();
+        SetMove( false );
+        SetModes( ACTION );
+        if ( savepoints )
+            SetModes( SAVE_MP_POINTS );
+        SetModes( SAVE_SP_POINTS );
     }
-
-    if ( reason & Battle::RESULT_RETREAT )
-        army.Reset( true );
-    else if ( ( Battle::RESULT_LOSS & reason ) ) {
-        bool isSurrender = reason & Battle::RESULT_SURRENDER;
-        army.Reset( !isSurrender );
-    }
-    else if ( reason == 0 ) // Dismissed hero
-        army.Reset( true );
-
-    if ( GetColor() != Color::NONE )
-        kingdom.RemoveHeroes( this );
-
-    SetColor( Color::NONE );
-    world.GetTiles( GetIndex() ).SetHeroes( NULL );
-    modes = 0;
-    SetIndex( -1 );
-    move_point_scale = -1;
-    path.Reset();
-    SetMove( false );
-    SetModes( ACTION );
-    if ( savepoints )
-        SetModes( SAVE_MP_POINTS );
-    SetModes( SAVE_SP_POINTS );
 }
 
 void Heroes::SetKillerColor( int col )
