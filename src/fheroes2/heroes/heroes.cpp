@@ -1467,7 +1467,7 @@ void Heroes::SetFreeman( int reason )
         if ( reason & Battle::RESULT_RETREAT )
             army.Reset( true );
         else if ( ( Battle::RESULT_LOSS & reason ) ) {
-            bool isSurrender = reason & Battle::RESULT_SURRENDER;
+            const bool isSurrender = reason & Battle::RESULT_SURRENDER;
             army.Reset( !isSurrender );
         }
         else if ( reason == 0 ) // Dismissed hero
