@@ -348,8 +348,8 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     // fix area for capratin
     if ( b == BUILD_CAPTAIN ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
-        area.w = sprite.width();
-        area.h = sprite.height();
+        area.width = sprite.width();
+        area.height = sprite.height();
     }
 }
 
@@ -364,7 +364,7 @@ void BuildingInfo::SetPos( s32 x, s32 y )
     area.y = y;
 }
 
-const Rect & BuildingInfo::GetArea( void ) const
+const fheroes2::Rect & BuildingInfo::GetArea( void ) const
 {
     return area;
 }
