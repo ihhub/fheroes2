@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <assert.h>
 #include <iostream>
 #include <map>
 #include <set>
@@ -51,31 +52,6 @@
 #endif
 
 #define FATSIZENAME 15
-
-namespace
-{
-    class ICNSprite : public std::pair<Surface, Surface> /* first: image with out alpha, second: shadow with alpha */
-    {
-    public:
-        ICNSprite() {}
-        ICNSprite( const Surface & sf1, const Surface & sf2 )
-            : std::pair<Surface, Surface>( sf1, sf2 )
-        {}
-
-        bool isValid( void ) const;
-        Sprite CreateSprite( bool reflect, bool shadow ) const;
-        Surface First( void )
-        {
-            return first;
-        }
-        Surface Second( void )
-        {
-            return second;
-        }
-
-        Point offset;
-    };
-}
 
 namespace AGG
 {
@@ -117,19 +93,6 @@ namespace AGG
         std::vector<u8> body;
     };
 
-    struct icn_cache_t
-    {
-        icn_cache_t()
-            : sprites( NULL )
-            , reflect( NULL )
-            , count( 0 )
-        {}
-
-        Sprite * sprites;
-        Sprite * reflect;
-        u32 count;
-    };
-
     struct fnt_cache_t
     {
         Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
@@ -154,14 +117,10 @@ namespace AGG
     File heroes2_agg;
     File heroes2x_agg;
 
-    std::vector<icn_cache_t> icn_cache;
-
     std::map<int, std::vector<u8> > wav_cache;
     std::map<int, std::vector<u8> > mid_cache;
     std::vector<loop_sound_t> loop_sounds;
     std::map<u32, fnt_cache_t> fnt_cache;
-
-    bool memlimit_usage = true;
 
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
@@ -176,41 +135,10 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
-    Sprite GetICN( int icn, u32 index, bool reflect = false );
-
-    bool LoadAltICN( int icn, u32, bool );
-    bool LoadOrgICN( Sprite &, int icn, u32, bool );
-    bool LoadOrgICN( int icn, u32, bool );
-    bool LoadICN( int icn, u32, bool reflect = false );
-    void SaveICN( int icn );
-
     void LoadFNT( void );
-    void ShowError( void );
-
-    bool CheckMemoryLimit( void );
-    u32 ClearFreeObjects( void );
 
     bool ReadDataDir( void );
-    const std::vector<u8> & ReadICNChunk( int icn, u32 );
     const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
-
-    ICNSprite RenderICNSprite( int, u32, int palette = PAL::STANDARD );
-}
-
-Sprite ICNSprite::CreateSprite( bool reflect, bool shadow ) const
-{
-    Surface res( first.GetSize(), shadow );
-    first.Blit( res );
-
-    if ( shadow && second.isValid() )
-        second.Blit( res );
-
-    return Sprite( reflect ? res.RenderReflect( 2 ) : res, offset.x, offset.y );
-}
-
-bool ICNSprite::isValid( void ) const
-{
-    return first.isValid();
 }
 
 /*AGG::File constructor */
@@ -227,7 +155,7 @@ bool AGG::File::Open( const std::string & fname )
         return false;
     }
 
-    const u32 size = stream.size();
+    const size_t size = stream.size();
     count_items = stream.getLE16();
     DEBUG( DBG_ENGINE, DBG_INFO, "load: " << filename << ", count items: " << count_items );
 
@@ -300,114 +228,6 @@ const std::vector<u8> & AGG::File::Read( const std::string & str )
     return body;
 }
 
-u32 AGG::ClearFreeObjects( void )
-{
-    u32 total = 0;
-
-    // wav cache
-    for ( std::map<int, std::vector<u8> >::iterator it = wav_cache.begin(); it != wav_cache.end(); ++it )
-        total += ( *it ).second.size();
-
-    DEBUG( DBG_ENGINE, DBG_INFO,
-           "WAV"
-               << " "
-               << "memory: " << total );
-    total = 0;
-
-    // mus cache
-    for ( std::map<int, std::vector<u8> >::iterator it = mid_cache.begin(); it != mid_cache.end(); ++it )
-        total += ( *it ).second.size();
-
-    DEBUG( DBG_ENGINE, DBG_INFO,
-           "MID"
-               << " "
-               << "memory: " << total );
-    total = 0;
-
-#ifdef WITH_TTF
-    // fnt cache
-    for ( std::map<u32, fnt_cache_t>::iterator it = fnt_cache.begin(); it != fnt_cache.end(); ++it ) {
-        total += ( *it ).second.sfs[0].GetMemoryUsage();
-        total += ( *it ).second.sfs[1].GetMemoryUsage();
-        total += ( *it ).second.sfs[2].GetMemoryUsage();
-        total += ( *it ).second.sfs[3].GetMemoryUsage();
-    }
-
-    DEBUG( DBG_ENGINE, DBG_INFO,
-           "FNT"
-               << " "
-               << "memory: " << total );
-    total = 0;
-#endif
-    // icn cache
-    u32 used = 0;
-
-    for ( std::vector<icn_cache_t>::iterator it = icn_cache.begin(); it != icn_cache.end(); ++it ) {
-        icn_cache_t & icns = ( *it );
-
-        for ( u32 jj = 0; jj < icns.count; ++jj ) {
-            if ( icns.sprites ) {
-                Sprite & sprite1 = icns.sprites[jj];
-
-                if ( !sprite1.isRefCopy() ) {
-                    total += sprite1.GetMemoryUsage();
-                    sprite1.Reset();
-                }
-                else
-                    used += sprite1.GetMemoryUsage();
-            }
-
-            if ( icns.reflect ) {
-                Sprite & sprite2 = icns.reflect[jj];
-
-                if ( !sprite2.isRefCopy() ) {
-                    total += sprite2.GetMemoryUsage();
-                    sprite2.Reset();
-                }
-                else
-                    used += sprite2.GetMemoryUsage();
-            }
-        }
-    }
-
-    DEBUG( DBG_ENGINE, DBG_INFO,
-           "ICN"
-               << " "
-               << "memory: " << used );
-
-    return total;
-}
-
-bool AGG::CheckMemoryLimit( void )
-{
-    Settings & conf = Settings::Get();
-
-    // memory limit trigger
-    if ( conf.ExtPocketLowMemory() && 0 < conf.MemoryLimit() && memlimit_usage ) {
-        u32 usage = System::GetMemoryUsage();
-
-        if ( 0 < usage && conf.MemoryLimit() < usage ) {
-            VERBOSE( "settings: " << conf.MemoryLimit() << ", game usage: " << usage );
-            const u32 freemem = ClearFreeObjects();
-            VERBOSE( "free " << freemem );
-
-            usage = System::GetMemoryUsage();
-
-            if ( conf.MemoryLimit() < usage + ( 300 * 1024 ) ) {
-                VERBOSE( "settings: " << conf.MemoryLimit() << ", too small" );
-                // increase + 300Kb
-                conf.SetMemoryLimit( usage + ( 300 * 1024 ) );
-                VERBOSE( "settings: "
-                         << "increase limit on 300kb, current value: " << conf.MemoryLimit() );
-            }
-
-            return true;
-        }
-    }
-
-    return false;
-}
-
 /* read data directory */
 bool AGG::ReadDataDir( void )
 {
@@ -448,150 +268,6 @@ const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpa
     return heroes2_agg.Read( key );
 }
 
-bool AGG::LoadAltICN( int icn, u32 index, bool reflect )
-{
-#ifdef WITH_XML
-    const std::string prefix_images_icn = System::ConcatePath( System::ConcatePath( "files", "images" ), StringLower( ICN::GetString( icn ) ) );
-    const std::string xml_spec = Settings::GetLastFile( prefix_images_icn, "spec.xml" );
-
-    // parse spec.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_icn = NULL;
-
-    if ( doc.LoadFile( xml_spec.c_str() ) && NULL != ( xml_icn = doc.FirstChildElement( "icn" ) ) ) {
-        int count, ox, oy;
-        xml_icn->Attribute( "count", &count );
-        icn_cache_t & v = icn_cache[icn];
-
-        if ( NULL == v.sprites ) {
-            v.count = count;
-            v.sprites = new Sprite[v.count];
-            v.reflect = new Sprite[v.count];
-        }
-
-        // find current image
-        const TiXmlElement * xml_sprite = xml_icn->FirstChildElement( "sprite" );
-        int index1 = index;
-        int index2 = 0;
-
-        for ( ; xml_sprite; xml_sprite = xml_sprite->NextSiblingElement( "sprite" ) ) {
-            xml_sprite->Attribute( "index", &index2 );
-            if ( index1 == index2 )
-                break;
-        }
-
-        if ( xml_sprite && index2 == index1 ) {
-            xml_sprite->Attribute( "ox", &ox );
-            xml_sprite->Attribute( "oy", &oy );
-            std::string name( xml_spec );
-            StringReplace( name, "spec.xml", xml_sprite->Attribute( "name" ) );
-
-            Sprite & sp1 = v.sprites[index];
-            Sprite & sp2 = v.reflect[index];
-
-            if ( !sp1.isValid() && System::IsFile( name ) && sp1.Load( name.c_str() ) ) {
-                sp1.SetPos( Point( ox, oy ) );
-                DEBUG( DBG_ENGINE, DBG_TRACE, xml_spec << ", " << index );
-                if ( !reflect )
-                    return sp1.isValid();
-            }
-
-            if ( reflect && sp1.isValid() && !sp2.isValid() ) {
-                sp2 = Sprite( sp1.RenderReflect( 2 ), ox, oy );
-                return sp2.isValid();
-            }
-        }
-
-        DEBUG( DBG_ENGINE, DBG_WARN, "broken xml file: " << xml_spec );
-    }
-#endif
-
-    return false;
-}
-
-void AGG::SaveICN( int icn )
-{
-#ifdef WITH_XML
-#ifdef WITH_DEBUG
-    const std::string images_dir = Settings::GetWriteableDir( "images" );
-
-    if ( images_dir.size() ) {
-        icn_cache_t & v = icn_cache[icn];
-
-        const std::string icn_lower = StringLower( ICN::GetString( icn ) );
-        const std::string icn_dir = System::ConcatePath( images_dir, icn_lower );
-
-        if ( !System::IsDirectory( icn_dir ) )
-            System::MakeDirectory( icn_dir );
-
-        if ( System::IsDirectory( icn_dir, true ) ) {
-            const std::string stats_file = System::ConcatePath( icn_dir, "spec.xml" );
-            bool need_save = false;
-            TiXmlDocument doc;
-            TiXmlElement * icn_element = NULL;
-
-            if ( doc.LoadFile( stats_file.c_str() ) )
-                icn_element = doc.FirstChildElement( "icn" );
-
-            if ( !icn_element ) {
-                TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
-                doc.LinkEndChild( decl );
-
-                icn_element = new TiXmlElement( "icn" );
-                icn_element->SetAttribute( "name", icn_lower.c_str() );
-                icn_element->SetAttribute( "count", v.count );
-
-                doc.LinkEndChild( icn_element );
-                need_save = true;
-            }
-
-            for ( u32 index = 0; index < v.count; ++index ) {
-                const Sprite & sp = v.sprites[index];
-
-                if ( sp.isValid() ) {
-                    std::ostringstream sp_name;
-                    sp_name << std::setw( 3 ) << std::setfill( '0' ) << index;
-#ifndef WITH_IMAGE
-                    sp_name << ".bmp";
-#else
-                    sp_name << ".png";
-#endif
-                    const std::string image_full = System::ConcatePath( icn_dir, sp_name.str() );
-
-                    if ( !System::IsFile( image_full ) ) {
-                        sp.Save( image_full );
-
-                        TiXmlElement * sprite_element = new TiXmlElement( "sprite" );
-                        sprite_element->SetAttribute( "index", index );
-                        sprite_element->SetAttribute( "name", sp_name.str().c_str() );
-                        sprite_element->SetAttribute( "ox", sp.x() );
-                        sprite_element->SetAttribute( "oy", sp.y() );
-
-                        icn_element->LinkEndChild( sprite_element );
-
-                        need_save = true;
-                    }
-                }
-            }
-
-            if ( need_save )
-                doc.SaveFile( stats_file.c_str() );
-        }
-    }
-#endif
-#endif
-}
-
-const std::vector<u8> & AGG::ReadICNChunk( int icn, u32 index )
-{
-    // hard fix artifact "ultimate stuff" sprite for loyalty version
-    if ( ICN::ARTIFACT == icn && Artifact( Artifact::ULTIMATE_STAFF ).IndexSprite64() == index && heroes2x_agg.isGood() ) {
-        return heroes2x_agg.Read( ICN::GetString( icn ) );
-    }
-
-    return ReadChunk( ICN::GetString( icn ) );
-}
-
 struct ICNHeader
 {
     ICNHeader()
@@ -621,234 +297,6 @@ StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
     icn.offsetData = st.getLE32();
 
     return st;
-}
-
-ICNSprite AGG::RenderICNSprite( int icn, u32 index, int palette )
-{
-    ICNSprite res;
-    const std::vector<u8> & body = ReadICNChunk( icn, index );
-
-    if ( body.empty() ) {
-        DEBUG( DBG_ENGINE, DBG_WARN, "error: " << ICN::GetString( icn ) );
-        return res;
-    }
-
-    // prepare icn data
-    DEBUG( DBG_ENGINE, DBG_TRACE, ICN::GetString( icn ) << ", " << index );
-
-    StreamBuf st( body );
-
-    u32 count = st.getLE16();
-    u32 blockSize = st.getLE32();
-    u32 sizeData = 0;
-
-    if ( index )
-        st.skip( index * 13 );
-
-    ICNHeader header1;
-    st >> header1;
-
-    if ( index + 1 != count ) {
-        ICNHeader header2;
-        st >> header2;
-        sizeData = header2.offsetData - header1.offsetData;
-    }
-    else
-        sizeData = blockSize - header1.offsetData;
-
-    // start render
-    Size sz = Size( header1.width, header1.height );
-
-    const u8 * buf = &body[6 + header1.offsetData];
-    const u8 * max = buf + sizeData;
-
-    res.offset = Point( header1.offsetX, header1.offsetY );
-    Surface & sf1 = res.first;
-    Surface & sf2 = res.second;
-
-    sf1.Set( sz.w, sz.h, false );
-    RGBA shadow = RGBA( 0, 0, 0, 0x40 );
-
-    u32 c = 0;
-    Point pt( 0, 0 );
-
-    while ( 1 ) {
-        // 0x00 - end line
-        if ( 0 == *buf ) {
-            ++pt.y;
-            pt.x = 0;
-            ++buf;
-        }
-        else
-            // 0x7F - count data
-            if ( 0x80 > *buf ) {
-            c = *buf;
-            ++buf;
-            while ( c-- && buf < max ) {
-                const uint32_t id = *buf * 3;
-                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
-                ++pt.x;
-                ++buf;
-            }
-        }
-        else
-            // 0x80 - end data
-            if ( 0x80 == *buf ) {
-            break;
-        }
-        else
-            // 0xBF - skip data
-            if ( 0xC0 > *buf ) {
-            pt.x += *buf - 0x80;
-            ++buf;
-        }
-        else
-            // 0xC0 - shadow
-            if ( 0xC0 == *buf ) {
-            ++buf;
-            c = *buf % 4 ? *buf % 4 : *( ++buf );
-            if ( sf1.depth() == 8 ) // skip alpha
-            {
-                while ( c-- ) {
-                    ++pt.x;
-                }
-            }
-            else {
-                if ( !sf2.isValid() )
-                    sf2.Set( sz.w, sz.h, true );
-                while ( c-- ) {
-                    sf2.DrawPoint( pt, shadow );
-                    ++pt.x;
-                }
-            }
-            ++buf;
-        }
-        else
-            // 0xC1
-            if ( 0xC1 == *buf ) {
-            ++buf;
-            c = *buf;
-            ++buf;
-            while ( c-- ) {
-                const uint32_t id = *buf * 3;
-                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
-                ++pt.x;
-            }
-            ++buf;
-        }
-        else {
-            c = *buf - 0xC0;
-            ++buf;
-            while ( c-- ) {
-                const uint32_t id = *buf * 3;
-                sf1.DrawPoint( pt, RGBA( kb_pal[id] << 2, kb_pal[id + 1] << 2, kb_pal[id + 2] << 2 ) );
-                ++pt.x;
-            }
-            ++buf;
-        }
-        if ( buf >= max ) {
-            DEBUG( DBG_ENGINE, DBG_WARN, "out of range: " << buf - max );
-            break;
-        }
-    }
-
-    return res;
-}
-
-bool AGG::LoadOrgICN( Sprite & sp, int icn, u32 index, bool reflect )
-{
-    ICNSprite icnSprite = AGG::RenderICNSprite( icn, index );
-
-    if ( icnSprite.isValid() ) {
-        sp = icnSprite.CreateSprite( reflect, !ICN::SkipLocalAlpha( icn ) );
-        return true;
-    }
-
-    return false;
-}
-
-bool AGG::LoadOrgICN( int icn, u32 index, bool reflect )
-{
-    icn_cache_t & v = icn_cache[icn];
-
-    if ( NULL == v.sprites ) {
-        const std::vector<u8> & body = ReadChunk( ICN::GetString( icn ) );
-
-        if ( body.size() ) {
-            v.count = StreamBuf( body ).getLE16();
-            if ( v.count < 1 )
-                return false;
-            v.sprites = new Sprite[v.count];
-            v.reflect = new Sprite[v.count];
-        }
-        else
-            return false;
-    }
-
-    Sprite & sp = reflect ? v.reflect[index] : v.sprites[index];
-
-    return LoadOrgICN( sp, icn, index, reflect );
-}
-
-/* load ICN object */
-bool AGG::LoadICN( int icn, u32 index, bool reflect )
-{
-    icn_cache_t & v = icn_cache[icn];
-
-    // need load
-    if ( ( reflect && ( !v.reflect || ( index < v.count && !v.reflect[index].isValid() ) ) )
-         || ( !reflect && ( !v.sprites || ( index < v.count && !v.sprites[index].isValid() ) ) ) ) {
-        const Settings & conf = Settings::Get();
-
-        // load from images dir
-        if ( !conf.UseAltResource() || !LoadAltICN( icn, index, reflect ) ) {
-            // load origin sprite
-            if ( !LoadOrgICN( icn, index, reflect ) ) {
-                ERROR( "ICN load error: asking for file " << icn << ", sprite index " << index );
-                return false;
-            }
-#ifdef DEBUG
-            if ( Settings::Get().UseAltResource() )
-                SaveICN( icn );
-#endif
-        }
-    }
-    return true;
-}
-
-/* return ICN sprite */
-Sprite AGG::GetICN( int icn, u32 index, bool reflect )
-{
-    Sprite result;
-
-    if ( icn < static_cast<int>( icn_cache.size() ) ) {
-        icn_cache_t & v = icn_cache[icn];
-
-        // out of range?
-        if ( v.count && index >= v.count ) {
-            DEBUG( DBG_ENGINE, DBG_WARN,
-                   ICN::GetString( icn ) << ", "
-                                         << "out of range: " << index );
-            index = 0;
-        }
-
-        // need load?
-        if ( 0 == v.count || ( ( reflect && ( !v.reflect || !v.reflect[index].isValid() ) ) || ( !v.sprites || !v.sprites[index].isValid() ) ) ) {
-            CheckMemoryLimit();
-            if ( !LoadICN( icn, index, reflect ) ) {
-                return result;
-            }
-        }
-
-        result = reflect ? v.reflect[index] : v.sprites[index];
-
-        // invalid sprite?
-        if ( !result.isValid() ) {
-            DEBUG( DBG_ENGINE, DBG_INFO, "invalid sprite: " << ICN::GetString( icn ) << ", index: " << index << ", reflect: " << ( reflect ? "true" : "false" ) );
-        }
-    }
-
-    return result;
 }
 
 /* load 82M object to AGG::Cache in Audio::CVT */
@@ -1175,7 +623,7 @@ Surface AGG::GetUnicodeLetter( u32 ch, u32 ft )
     bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
 
     if ( !ttf_valid )
-        return GetLetter( ch, ft );
+        return Surface();
 
     if ( !fnt_cache[ch].sfs[0].isValid() )
         LoadTTFChar( ch );
@@ -1207,32 +655,6 @@ std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
     return AGG::ReadChunk( frm_file );
 }
 
-Surface AGG::GetLetter( u32 ch, u32 ft )
-{
-    if ( ch < 0x21 )
-        DEBUG( DBG_ENGINE, DBG_WARN, "unknown letter" );
-
-    switch ( ft ) {
-    case Font::GRAY_BIG:
-        return AGG::GetICN( ICN::GRAY_FONT, ch - 0x20 );
-    case Font::GRAY_SMALL:
-        return AGG::GetICN( ICN::GRAY_SMALL_FONT, ch - 0x20 );
-    case Font::YELLOW_BIG:
-        return AGG::GetICN( ICN::YELLOW_FONT, ch - 0x20 );
-    case Font::YELLOW_SMALL:
-        return AGG::GetICN( ICN::YELLOW_SMALFONT, ch - 0x20 );
-    case Font::BIG:
-        return AGG::GetICN( ICN::FONT, ch - 0x20 );
-    case Font::SMALL:
-        return AGG::GetICN( ICN::SMALFONT, ch - 0x20 );
-
-    default:
-        break;
-    }
-
-    return AGG::GetICN( ICN::SMALFONT, ch - 0x20 );
-}
-
 void AGG::ResetMixer( void )
 {
     Mixer::Reset();
@@ -1240,27 +662,24 @@ void AGG::ResetMixer( void )
     loop_sounds.reserve( 7 );
 }
 
-void AGG::ShowError( void )
-{
-#ifdef WITH_ZLIB
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Image & image = CreateImageFromZlib( 288, 200, errorMessage, sizeof( errorMessage ) );
-
-    display.fill( 0 );
-    fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
-
-    LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
-        ;
-#endif
-}
-
 bool AGG::Init( void )
 {
     // read data dir
     if ( !ReadDataDir() ) {
         DEBUG( DBG_ENGINE, DBG_WARN, "data files not found" );
-        ShowError();
+
+#ifdef WITH_ZLIB
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Image & image = CreateImageFromZlib( 288, 200, errorMessage, sizeof( errorMessage ) );
+
+        display.fill( 0 );
+        fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
+
+        LocalEvent & le = LocalEvent::Get();
+        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
+            ;
+#endif
+
         return false;
     }
 
@@ -1279,9 +698,6 @@ bool AGG::Init( void )
     }
 #endif
 
-    icn_cache.reserve( ICN::LASTICN + 256 );
-    icn_cache.resize( ICN::LASTICN );
-
     // load font
     LoadFNT();
 
@@ -1290,18 +706,6 @@ bool AGG::Init( void )
 
 void AGG::Quit( void )
 {
-    for ( std::vector<icn_cache_t>::iterator it = icn_cache.begin(); it != icn_cache.end(); ++it ) {
-        icn_cache_t & icns = ( *it );
-
-        if ( icns.sprites )
-            delete[] icns.sprites;
-        icns.sprites = NULL;
-        if ( icns.reflect )
-            delete[] icns.reflect;
-        icns.reflect = NULL;
-    }
-
-    icn_cache.clear();
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
