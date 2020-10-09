@@ -29,9 +29,9 @@ public:
     MapPathfinder() {}
     void reset();
     void reEvaluateIfNeeded( int from, uint8_t skill );
-    std::list<Route::Step> buildPath( int target );
-    uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
+    std::list<Route::Step> buildPath( int target ) const;
     bool isBlockedByObject( int target, bool fromWater = false );
+    uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
     int searchForFog( int playerColor, int start, uint8_t skill = Skill::Level::NONE );
 
 private:

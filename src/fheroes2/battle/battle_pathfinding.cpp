@@ -85,8 +85,9 @@ namespace Battle
     }
 
     ArenaPathfinder::ArenaPathfinder()
-        : _cache( ARENASIZE )
-    {}
+    {
+        _cache.resize( ARENASIZE );
+    }
 
     void ArenaPathfinder::reset()
     {
@@ -96,16 +97,6 @@ namespace Battle
             node._cost = MAX_MOVE_COST;
             node._isOpen = true;
         }
-    }
-
-    const ArenaNode & ArenaPathfinder::getNode( int targetCell ) const
-    {
-        return _cache[targetCell];
-    }
-
-    uint32_t ArenaPathfinder::getDistance( int targetCell ) const
-    {
-        return _cache[targetCell]._cost;
     }
 
     bool ArenaPathfinder::hexIsAccessible( int targetCell ) const
@@ -118,18 +109,16 @@ namespace Battle
         return _cache[targetCell]._cost == 0 || ( _cache[targetCell]._isOpen && _cache[targetCell]._from != -1 );
     }
 
-    std::vector<int> ArenaPathfinder::getPath( int targetCell ) const
+    std::list<Route::Step> ArenaPathfinder::buildPath( int targetCell ) const
     {
-        std::vector<int> path;
+        std::list<Route::Step> path;
 
-        int nodeID = targetCell;
-        while ( _cache[nodeID]._cost != 0 ) {
-            path.push_back( nodeID );
-            nodeID = _cache[nodeID]._from;
+        int currentNode = targetCell;
+        while ( currentNode != targetCell && _cache[currentNode]._cost != 0 ) {
+            const ArenaNode & node = _cache[currentNode];
+            path.emplace_front( node._from, 0, 1 );
+            currentNode = node._from;
         }
-
-        if ( path.size() > 1 )
-            std::reverse( path.begin(), path.end() );
 
         return path;
     }

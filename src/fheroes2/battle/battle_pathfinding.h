@@ -21,6 +21,7 @@
 #pragma once
 
 #include "battle_board.h"
+#include "pathfinding.h"
 
 namespace Battle
 {
@@ -34,33 +35,27 @@ namespace Battle
      * terrain:  from: -1, isOpen: false, cost: MAX
      * if tile wouldn't be reached it stays as default
      */
-    struct ArenaNode
+    struct ArenaNode : public PathfindingNode
     {
-        int _from = -1;
-        uint16_t _cost = MAX_MOVE_COST;
         bool _isOpen = true;
 
-        ArenaNode() {}
+        ArenaNode()
+            : PathfindingNode( -1, MAX_MOVE_COST )
+        {}
         ArenaNode( int node, uint16_t cost, bool isOpen )
-            : _from( node )
-            , _cost( cost )
+            : PathfindingNode( node, cost )
             , _isOpen( isOpen )
         {}
     };
 
-    class ArenaPathfinder
+    class ArenaPathfinder : public Pathfinder<ArenaNode>
     {
     public:
         ArenaPathfinder();
         void reset();
         void calculate( const Unit & unit );
-        std::vector<int> getPath( int targetCell ) const;
-        uint32_t getDistance( int targetCell ) const;
-        const ArenaNode & getNode( int targetCell ) const;
+        std::list<Route::Step> buildPath( int targetCell ) const;
         bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
-
-    private:
-        std::vector<ArenaNode> _cache;
     };
 }

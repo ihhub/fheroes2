@@ -70,14 +70,14 @@ void MapPathfinder::reset()
     _pathfindingSkill = Skill::Level::NONE;
 }
 
-std::list<Route::Step> MapPathfinder::buildPath( int target )
+std::list<Route::Step> MapPathfinder::buildPath( int target ) const
 {
     std::list<Route::Step> path;
 
     // trace the path from end point
     int currentNode = target;
     while ( currentNode != _pathStart && currentNode != -1 ) {
-        PathfindingNode & node = _cache[currentNode];
+        const PathfindingNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
         path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost );
