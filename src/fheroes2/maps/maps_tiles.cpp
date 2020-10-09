@@ -847,11 +847,11 @@ u32 PackTileSpriteIndex( u32 index, u32 shape ) /* index max: 0x3FFF, shape valu
 Maps::Tiles::Tiles()
     : maps_index( 0 )
     , pack_sprite_index( 0 )
-    , tilePassable( DIRECTION_ALL )
     , uniq( 0 )
-    , mp2_object( 0 )
     , objectTileset( 0 )
     , objectIndex( 255 )
+    , mp2_object( 0 )
+    , tilePassable( DIRECTION_ALL )
     , fog_colors( Color::ALL )
     , quantity1( 0 )
     , quantity2( 0 )
@@ -956,6 +956,7 @@ int Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 void Maps::Tiles::SetObject( int object )
 {
     mp2_object = object;
+    world.resetPathfinder();
 }
 
 void Maps::Tiles::SetTile( u32 sprite_index, u32 shape )
@@ -1546,7 +1547,7 @@ bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable 
     case ICN::OBJNLAVA:
     case ICN::OBJNSNOW:
     case ICN::OBJNSWMP:
-        return ( passable & DIRECTION_TOP_ROW );
+        return ( passable & DIRECTION_TOP_ROW ) != 0;
 
     default:
         break;
@@ -1801,7 +1802,7 @@ bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog ) const
     if ( !validateWaterRules( fromWater ) )
         return false;
 
-    return direct & tilePassable;
+    return ( direct & tilePassable ) != 0;
 }
 
 void Maps::Tiles::SetObjectPassable( bool pass )

@@ -314,10 +314,6 @@ const settings_t settingsFHeroes2[] = {
         _( "heroes: recalculate movement points after creatures movement" ),
     },
     {
-        Settings::HEROES_PATROL_ALLOW_PICKUP,
-        _( "heroes: allow pickup objects for patrol" ),
-    },
-    {
         Settings::HEROES_TRANSCRIBING_SCROLLS,
         _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
     },
@@ -394,10 +390,6 @@ const settings_t settingsFHeroes2[] = {
         _( "game: offer to continue the game afer victory condition" ),
     },
     {
-        Settings::POCKETPC_HIDE_CURSOR,
-        _( "pocketpc: hide cursor" ),
-    },
-    {
         Settings::POCKETPC_TAP_MODE,
         _( "pocketpc: tap mode" ),
     },
@@ -431,6 +423,7 @@ Settings::Settings()
     , size_small( 10 )
     , sound_volume( 6 )
     , music_volume( 6 )
+    , _musicType( MUSIC_EXTERNAL )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -439,7 +432,6 @@ Settings::Settings()
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
     , memory_limit( 0 )
-    , _musicType( MUSIC_EXTERNAL )
 {
     ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
@@ -461,7 +453,6 @@ Settings::Settings()
 
     if ( System::isEmbededDevice() ) {
         opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( POCKETPC_HIDE_CURSOR );
         ExtSetModes( POCKETPC_TAP_MODE );
         ExtSetModes( POCKETPC_DRAG_DROP_SCROLL );
     }
@@ -793,7 +784,6 @@ void Settings::PostLoad( void )
     if ( opt_global.Modes( GLOBAL_POCKETPC ) )
         opt_global.SetModes( GLOBAL_FULLSCREEN );
     else {
-        ExtResetModes( POCKETPC_HIDE_CURSOR );
         ExtResetModes( POCKETPC_TAP_MODE );
         ExtResetModes( POCKETPC_LOW_MEMORY );
     }
@@ -1216,31 +1206,37 @@ bool Settings::UseAltResource( void ) const
 {
     return opt_global.Modes( GLOBAL_ALTRESOURCE );
 }
+
 bool Settings::PriceLoyaltyVersion( void ) const
 {
     return opt_global.Modes( GLOBAL_PRICELOYALTY );
 }
+
 bool Settings::LoadedGameVersion( void ) const
 {
-    return game_type & Game::TYPE_LOADFILE;
+    return ( game_type & Game::TYPE_LOADFILE ) != 0;
 }
 
 bool Settings::ShowControlPanel( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWCPANEL );
 }
+
 bool Settings::ShowRadar( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWRADAR );
 }
+
 bool Settings::ShowIcons( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWICONS );
 }
+
 bool Settings::ShowButtons( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWBUTTONS );
 }
+
 bool Settings::ShowStatus( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWSTATUS );
@@ -1251,6 +1247,7 @@ bool Settings::Unicode( void ) const
 {
     return opt_global.Modes( GLOBAL_USEUNICODE );
 }
+
 /* pocketpc mode */
 bool Settings::PocketPC( void ) const
 {
@@ -1328,8 +1325,9 @@ void Settings::SetMusicType( int v )
 /* check game type */
 bool Settings::GameType( int f ) const
 {
-    return game_type & f;
+    return ( game_type & f ) != 0;
 }
+
 int Settings::GameType( void ) const
 {
     return game_type;
@@ -1393,7 +1391,7 @@ Size Settings::MapsSize( void ) const
 
 bool Settings::AllowChangeRace( int f ) const
 {
-    return current_maps_file.rnd_races & f;
+    return ( current_maps_file.rnd_races & f ) != 0;
 }
 
 bool Settings::GameStartWithHeroes( void ) const
@@ -1665,11 +1663,6 @@ bool Settings::ExtHeroRecruitCostDependedFromLevel( void ) const
     return ExtModes( HEROES_COST_DEPENDED_FROM_LEVEL );
 }
 
-bool Settings::ExtHeroPatrolAllowPickup( void ) const
-{
-    return ExtModes( HEROES_PATROL_ALLOW_PICKUP );
-}
-
 bool Settings::ExtHeroRememberPointsForRetreating( void ) const
 {
     return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
@@ -1693,11 +1686,6 @@ bool Settings::ExtUnionsAllowCastleVisiting( void ) const
 bool Settings::ExtUnionsAllowHeroesMeetings( void ) const
 {
     return ExtModes( UNIONS_ALLOW_HERO_MEETINGS );
-}
-
-bool Settings::ExtUnionsAllowViewMaps( void ) const
-{
-    return true;
 }
 
 bool Settings::ExtBattleShowDamage( void ) const
@@ -1738,11 +1726,6 @@ bool Settings::ExtBattleMergeArmies( void ) const
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
-}
-
-bool Settings::ExtPocketHideCursor( void ) const
-{
-    return ExtModes( POCKETPC_HIDE_CURSOR );
 }
 
 bool Settings::ExtGameShowSystemInfo( void ) const

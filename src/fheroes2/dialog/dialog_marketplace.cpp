@@ -46,8 +46,8 @@ class TradeWindowGUI
 public:
     TradeWindowGUI( const Rect & rt )
         : pos_rt( rt )
-        , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
         , back( fheroes2::Display::instance() )
+        , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
     {
         back.update( rt.x - 5, rt.y + 15, rt.w + 10, 160 );
 
@@ -75,8 +75,8 @@ public:
     void RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy );
     void ShowTradeArea( int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, bool fromTradingPost );
 
-    Rect buttonMax;
-    Rect buttonMin;
+    fheroes2::Rect buttonMax;
+    fheroes2::Rect buttonMin;
     fheroes2::Button buttonTrade;
     fheroes2::Button buttonLeft;
     fheroes2::Button buttonRight;
@@ -110,8 +110,8 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
         buttonLeft.disable();
         buttonRight.disable();
         buttonGift.draw();
-        buttonMax = Rect();
-        buttonMin = Rect();
+        buttonMax = fheroes2::Rect();
+        buttonMin = fheroes2::Rect();
         cursor.Show();
         display.render();
     }
@@ -119,7 +119,7 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
         cursor.Hide();
         back.restore();
 
-        Point dst_pt;
+        fheroes2::Point dst_pt;
         const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpost, 1 );
         dst_pt.x = pos_rt.x + ( pos_rt.w - bar.width() ) / 2 - 2;
         dst_pt.y = pos_rt.y + 128;
@@ -154,17 +154,17 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
         Text text( "max", Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 80;
-        buttonMax = Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
-        text.Blit( dst_pt );
+        buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
+        text.Blit( dst_pt.x, dst_pt.y );
         text.Set( "min", Font::YELLOW_SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 103;
-        buttonMin = Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
-        text.Blit( dst_pt );
+        buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
+        text.Blit( dst_pt.x, dst_pt.y );
         text.Set( _( "Qty to trade" ), Font::SMALL );
         dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2;
         dst_pt.y = pos_rt.y + 115;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         buttonGift.disable();
         buttonTrade.enable();
@@ -184,7 +184,7 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
 
 void TradeWindowGUI::RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy )
 {
-    Point dst_pt;
+    fheroes2::Point dst_pt;
 
     splitter.HideCursor();
 
@@ -192,14 +192,14 @@ void TradeWindowGUI::RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_s
     textSell.SetText( std::string( "-" ) + GetString( count_sell ) + " " + "(" + GetString( max_sell - count_sell ) + ")" );
     dst_pt.x = pos_rt.x + pos_rt.w / 2 - 70 - textSell.w() / 2;
     dst_pt.y = pos_rt.y + 116;
-    textSell.SetPos( dst_pt );
+    textSell.SetPos( dst_pt.x, dst_pt.y );
     textSell.Show();
 
     textBuy.Hide();
     textBuy.SetText( std::string( "+" ) + GetString( count_buy ) + " " + "(" + GetString( orig_buy + count_buy ) + ")" );
     dst_pt.x = pos_rt.x + pos_rt.w / 2 + 70 - textBuy.w() / 2;
     dst_pt.y = pos_rt.y + 116;
-    textBuy.SetPos( dst_pt );
+    textBuy.SetPos( dst_pt.x, dst_pt.y );
     textBuy.Show();
 
     splitter.ShowCursor();
@@ -218,14 +218,14 @@ void Dialog::Marketplace( bool fromTradingPost )
     Dialog::FrameBox box( 297, true );
 
     const Rect & pos_rt = box.GetArea();
-    Point dst_pt( pos_rt.x, pos_rt.y );
+    fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
 
     // header
     Text text;
     text.Set( header, Font::YELLOW_BIG );
     dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2;
     dst_pt.y = pos_rt.y;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     TradeWindowGUI gui( pos_rt );
 
@@ -250,7 +250,7 @@ void Dialog::Marketplace( bool fromTradingPost )
     text.Set( header_from, Font::SMALL );
     dst_pt.x = pt1.x + ( 108 - text.w() ) / 2;
     dst_pt.y = pt1.y - 15;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
     RedrawFromResource( pt1, fundsFrom );
 
     const std::string & header_to = _( "Available Trades" );
@@ -272,7 +272,7 @@ void Dialog::Marketplace( bool fromTradingPost )
     text.Set( header_to, Font::SMALL );
     dst_pt.x = pt2.x + ( 108 - text.w() ) / 2;
     dst_pt.y = pt2.y - 15;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
     RedrawToResource( pt2, false, fromTradingPost );
 
     u32 count_sell = 0;
@@ -281,8 +281,8 @@ void Dialog::Marketplace( bool fromTradingPost )
     u32 max_sell = 0;
     u32 max_buy = 0;
 
-    Rect & buttonMax = gui.buttonMax;
-    Rect & buttonMin = gui.buttonMin;
+    fheroes2::Rect & buttonMax = gui.buttonMax;
+    fheroes2::Rect & buttonMin = gui.buttonMin;
     fheroes2::Button & buttonGift = gui.buttonGift;
     fheroes2::Button & buttonTrade = gui.buttonTrade;
     fheroes2::Button & buttonLeft = gui.buttonLeft;
@@ -410,7 +410,7 @@ void Dialog::Marketplace( bool fromTradingPost )
         }
         else
             // click max
-            if ( buttonMax.w && max_buy && le.MouseClickLeft( buttonMax ) ) {
+            if ( buttonMax.width && max_buy && le.MouseClickLeft( buttonMax ) ) {
             const u32 & max = splitter.Max();
 
             count_buy = max * ( Resource::GOLD == resourceTo ? GetTradeCosts( resourceFrom, resourceTo, fromTradingPost ) : 1 );
@@ -423,7 +423,7 @@ void Dialog::Marketplace( bool fromTradingPost )
             display.render();
         }
         // click min
-        if ( buttonMin.w && max_buy && le.MouseClickLeft( buttonMin ) ) {
+        if ( buttonMin.width && max_buy && le.MouseClickLeft( buttonMin ) ) {
             const u32 min = 1;
 
             count_buy = min * ( Resource::GOLD == resourceTo ? GetTradeCosts( resourceFrom, resourceTo, fromTradingPost ) : 1 );
@@ -483,13 +483,13 @@ void Dialog::Marketplace( bool fromTradingPost )
 void RedrawResourceSprite( const fheroes2::Image & sf, s32 px, s32 py, s32 value )
 {
     Text text;
-    Point dst_pt( px, py );
+    fheroes2::Point dst_pt( px, py );
 
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
     text.Set( GetString( value ), Font::SMALL );
     dst_pt.x += ( 34 - text.w() ) / 2;
     dst_pt.y += 21;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 }
 
 void RedrawFromResource( const Point & pt, const Funds & rs )
@@ -514,7 +514,7 @@ void RedrawFromResource( const Point & pt, const Funds & rs )
 
 void RedrawResourceSprite2( const fheroes2::Image & sf, s32 px, s32 py, bool show, int from, int res, bool trading )
 {
-    Point dst_pt( px, py );
+    fheroes2::Point dst_pt( px, py );
 
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
 
@@ -522,7 +522,7 @@ void RedrawResourceSprite2( const fheroes2::Image & sf, s32 px, s32 py, bool sho
         Text text( GetStringTradeCosts( from, res, trading ), Font::SMALL );
         dst_pt.x += ( 34 - text.w() ) / 2;
         dst_pt.y += 21;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
     }
 }
 

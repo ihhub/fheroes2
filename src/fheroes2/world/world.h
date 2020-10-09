@@ -250,11 +250,12 @@ public:
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
 
-    bool isTileBlocked( int toTile, bool fromWater, bool isAIMode = false ) const;
+    bool isTileBlocked( int toTile, bool fromWater ) const;
     bool isValidPath( int index, int direction ) const;
     uint32_t getDistance( int from, int to, uint32_t skill );
     std::list<Route::Step> getPath( int from, int to, uint32_t skill );
     int searchForFog( const Heroes & hero );
+    void resetPathfinder();
 
     void ComputeStaticAnalysis();
     static u32 GetUniq( void );

@@ -61,8 +61,7 @@ namespace Game
         EDITLOADMAP,
         EDITSAVEMAP,
         EDITSTART,
-        ENDTURN,
-        TESTING
+        ENDTURN
     };
 
     void Init( void );
@@ -233,9 +232,7 @@ namespace Game
     int StartBattleOnly( void );
     int NetworkHost( void );
     int NetworkGuest( void );
-    int Testing( int );
 
-    void DrawInterface( void );
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
     int GetActualKingdomColors( void );
@@ -265,11 +262,11 @@ namespace Game
             Info();
             Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u, bool fadeOut = true );
 
-            u8 object;
-            u8 index;
-            s32 tile;
-            u32 alpha;
-            Size surfaceSize;
+            uint8_t object;
+            uint8_t index;
+            int32_t tile;
+            uint32_t alpha;
+            fheroes2::Size surfaceSize;
             bool isFadeOut;
         };
 

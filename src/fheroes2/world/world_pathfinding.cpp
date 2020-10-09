@@ -22,6 +22,52 @@
 #include "ground.h"
 #include "world.h"
 
+bool isTileBlockedForArmy( const Army & army, int color, int tileIndex, bool fromWater )
+{
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const bool toWater = tile.isWater();
+    const int object = tile.GetObject();
+
+    if ( object == MP2::OBJ_BOAT )
+        return true;
+
+    if ( object == MP2::OBJ_HEROES ) {
+        const Heroes * otherHero = tile.GetHeroes();
+        if ( otherHero ) {
+            if ( otherHero->isFriends( color ) )
+                return true;
+            else
+                return !otherHero->AllowBattle( false ) || !army.isStrongerThan( otherHero->GetArmy() );
+        }
+    }
+
+    if ( object == MP2::OBJ_MONSTER )
+        return !army.isStrongerThan( Army( tile ) );
+
+    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
+        return true;
+
+    return false;
+}
+
+bool World::isTileBlocked( int tileIndex, bool fromWater ) const
+{
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const bool toWater = tile.isWater();
+    const int object = tile.GetObject();
+
+    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER || object == MP2::OBJ_BOAT )
+        return true;
+
+    if ( MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
+        return true;
+
+    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
+        return true;
+
+    return false;
+}
+
 bool World::isValidPath( int index, int direction ) const
 {
     const Maps::Tiles & fromTile = GetTiles( index );
@@ -63,29 +109,13 @@ bool World::isValidPath( int index, int direction ) const
     return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
 }
 
-bool World::isTileBlocked( int tileIndex, bool fromWater, bool isAIMode ) const
-{
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const bool toWater = tile.isWater();
-    const int object = tile.GetObject();
-
-    if ( object == MP2::OBJ_BOAT )
-        return true;
-
-    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER || MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
-        return !isAIMode;
-
-    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
-        return true;
-
-    return false;
-}
-
 void WorldPathfinder::reset()
 {
-    _cache.clear();
-    _pathStart = -1;
-    _pathfindingSkill = Skill::Level::NONE;
+    if ( _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE ) {
+        _cache.clear();
+        _pathStart = -1;
+        _pathfindingSkill = Skill::Level::NONE;
+    }
 }
 
 std::list<Route::Step> WorldPathfinder::buildPath( int target ) const
@@ -103,34 +133,6 @@ std::list<Route::Step> WorldPathfinder::buildPath( int target ) const
     }
 
     return path;
-}
-
-bool isTileBlockedForAIHero( const Army & army, int color, int tileIndex, bool fromWater )
-{
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const bool toWater = tile.isWater();
-    const int object = tile.GetObject();
-
-    if ( object == MP2::OBJ_BOAT )
-        return true;
-
-    if ( object == MP2::OBJ_HEROES ) {
-        const Heroes * otherHero = tile.GetHeroes();
-        if ( otherHero ) {
-            if ( otherHero->isFriends( color ) )
-                return true;
-            else
-                return !otherHero->AllowBattle( false ) || !army.isStrongerThan( otherHero->GetArmy() );
-        }
-    }
-
-    if ( object == MP2::OBJ_MONSTER )
-        return !army.isStrongerThan( Army( tile ) );
-
-    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
-        return true;
-
-    return false;
 }
 
 bool WorldPathfinder::isBlockedByObject( int target, bool fromWater )
@@ -272,9 +274,13 @@ void WorldPathfinder::evaluateMap( int start, uint8_t skill )
 
 void AIWorldPathfinder::reset()
 {
-    WorldPathfinder::reset();
-    _armyStrength = -1;
-    _currentColor = Color::NONE;
+    if ( _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE || _armyStrength >= 0 || _currentColor != Color::NONE ) {
+        _cache.clear();
+        _pathStart = -1;
+        _pathfindingSkill = Skill::Level::NONE;
+        _armyStrength = -1;
+        _currentColor = Color::NONE;
+    }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( int start, uint8_t skill, double armyStrength, int color )
@@ -313,9 +319,7 @@ void AIWorldPathfinder::evaluateMap( int start, uint8_t skill, double armyStreng
         const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
         const PathfindingNode & currentNode = _cache[currentNodeIdx];
 
-        // check if current tile is protected, can move only to adjacent monster
-
-        if ( currentNodeIdx == start || !isTileBlockedForAIHero( amm1, Color::BLUE, currentNodeIdx, fromWater ) ) {
+        if ( currentNodeIdx == start || !isTileBlockedForArmy( amm1, Color::BLUE, currentNodeIdx, fromWater ) ) {
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
                     const int newIndex = currentNodeIdx + offset[i];

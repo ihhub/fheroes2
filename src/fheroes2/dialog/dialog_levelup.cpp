@@ -91,7 +91,6 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     const fheroes2::Sprite & sprite_skill1 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec1.GetIndexSprite1() );
     const fheroes2::Sprite & sprite_skill2 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec2.GetIndexSprite1() );
 
-    Point pt;
     std::string message = _( "You may learn either:" );
     message.append( "\n%{skill1}\n" );
     message.append( " " );
@@ -107,6 +106,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
 
     Dialog::FrameBox box( box1.h() + spacer + box2.h() + 10 + sprite_frame.height(), true );
 
+    fheroes2::Point pt;
     pt.x = box.GetArea().x + box.GetArea().w / 2 - fheroes2::AGG::GetICN( system, 9 ).width() - 20;
     pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 9 ).height();
     fheroes2::Button button_learn1( pt.x, pt.y, system, 9, 10 );
@@ -115,21 +115,22 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 9 ).height();
     fheroes2::Button button_learn2( pt.x, pt.y, system, 9, 10 );
 
-    Rect pos = box.GetArea();
+    const Rect & boxArea = box.GetArea();
+    fheroes2::Point pos( boxArea.x, boxArea.y );
 
     if ( header.size() )
-        box1.Blit( pos );
+        box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
     if ( message.size() )
-        box2.Blit( pos );
+        box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
     // sprite1
     pos.x = box.GetArea().x + box.GetArea().w / 2 - sprite_frame.width() - 20;
     fheroes2::Blit( sprite_frame, display, pos.x, pos.y );
     pos.x += 3;
-    Rect rect_image1( pos, sprite_skill1.width(), sprite_skill1.height() );
+    fheroes2::Rect rect_image1( pos.x, pos.y, sprite_skill1.width(), sprite_skill1.height() );
     fheroes2::Blit( sprite_skill1, display, pos.x, pos.y + 3 );
 
     Text text;
@@ -144,7 +145,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     fheroes2::Blit( sprite_frame, display, pos.x, pos.y );
     pos.x += 3;
 
-    Rect rect_image2( pos, sprite_skill2.width(), sprite_skill2.height() );
+    fheroes2::Rect rect_image2( pos.x, pos.y, sprite_skill2.width(), sprite_skill2.height() );
     fheroes2::Blit( sprite_skill2, display, pos.x, pos.y + 3 );
     // text
     Text name_skill2( Skill::Secondary::String( sec2.Skill() ), Font::SMALL );

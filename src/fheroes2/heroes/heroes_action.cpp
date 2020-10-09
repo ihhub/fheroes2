@@ -350,7 +350,7 @@ void Heroes::Action( s32 dst_index )
     if ( GetKingdom().isControlAI() )
         return AI::HeroesAction( *this, dst_index );
 
-    const Maps::Tiles & tile = world.GetTiles( dst_index );
+    Maps::Tiles & tile = world.GetTiles( dst_index );
     const int object = ( dst_index == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
 
     if ( MUS::FromMapObject( object ) != MUS::UNKNOWN )
@@ -399,7 +399,6 @@ void Heroes::Action( s32 dst_index )
     /* default actions */
     if ( cancel_default ) {
         if ( MP2::isPickupObject( object ) ) {
-            Maps::Tiles & tile = world.GetTiles( dst_index );
             AnimationRemoveObject( tile );
             tile.RemoveObjectSprite();
             tile.QuantityReset();

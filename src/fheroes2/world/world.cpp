@@ -763,8 +763,7 @@ void World::ResetCapturedObjects( int color )
 
 void World::ClearFog( int colors )
 {
-    if ( Settings::Get().ExtUnionsAllowViewMaps() )
-        colors = Players::GetPlayerFriends( colors );
+    colors = Players::GetPlayerFriends( colors );
 
     // clear abroad castles
     vec_castles.Scoute( colors );
@@ -1047,6 +1046,11 @@ std::list<Route::Step> World::getPath( int from, int to, uint32_t skill )
 {
     _pathfinder.reEvaluateIfNeeded( from, skill );
     return _pathfinder.buildPath( to );
+}
+
+void World::resetPathfinder()
+{
+    _pathfinder.reset();
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
