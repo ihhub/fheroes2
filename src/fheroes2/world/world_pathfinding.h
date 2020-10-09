@@ -23,20 +23,33 @@
 #include "pathfinding.h"
 #include "route.h"
 
-class MapPathfinder : public Pathfinder<PathfindingNode>
+class WorldPathfinder : public Pathfinder<PathfindingNode>
 {
 public:
-    MapPathfinder() {}
-    void reset();
-    void reEvaluateIfNeeded( int from, uint8_t skill );
-    std::list<Route::Step> buildPath( int target ) const;
+    WorldPathfinder() {}
+    virtual void reset();
+    virtual std::list<Route::Step> buildPath( int target ) const;
+    void reEvaluateIfNeeded( int start, uint8_t skill );
     bool isBlockedByObject( int target, bool fromWater = false );
-    uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
+    uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
     int searchForFog( int playerColor, int start, uint8_t skill = Skill::Level::NONE );
 
-private:
+protected:
     void evaluateMap( int start, uint8_t skill );
-    void evaluateMapSpecial( int start, uint8_t skill );
 
     uint8_t _pathfindingSkill = 0;
+};
+
+class AIWorldPathfinder : public WorldPathfinder
+{
+public:
+    AIWorldPathfinder() {}
+    virtual void reset();
+    void reEvaluateIfNeeded( int start, uint8_t skill, double armyStrength, int color );
+
+private:
+    void evaluateMap( int start, uint8_t skill, double armyStrength, int color );
+
+    double _armyStrength = -1;
+    int _currentColor = Color::NONE;
 };

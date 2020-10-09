@@ -299,7 +299,7 @@ private:
 
     MapActions map_actions;
     MapObjects map_objects;
-    MapPathfinder _pathfinder;
+    WorldPathfinder _pathfinder;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );
