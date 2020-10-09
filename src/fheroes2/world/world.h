@@ -253,7 +253,7 @@ public:
     bool isTileBlocked( int toTile, bool fromWater, bool isAIMode = false ) const;
     bool isValidPath( int index, int direction ) const;
     uint32_t getDistance( int from, int to, uint32_t skill );
-    std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );
+    std::list<Route::Step> getPath( int from, int to, uint32_t skill );
     int searchForFog( const Heroes & hero );
 
     void ComputeStaticAnalysis();
@@ -299,7 +299,7 @@ private:
 
     MapActions map_actions;
     MapObjects map_objects;
-    Pathfinder _pathfinder;
+    MapPathfinder _pathfinder;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

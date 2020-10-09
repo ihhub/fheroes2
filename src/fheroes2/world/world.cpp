@@ -1034,7 +1034,8 @@ u32 World::GetUniq( void )
 
 uint32_t World::getDistance( int from, int to, uint32_t skill )
 {
-    return _pathfinder.getDistance( from, to, skill );
+    _pathfinder.reEvaluateIfNeeded( from, skill );
+    return _pathfinder.getDistance( to );
 }
 
 int World::searchForFog( const Heroes & hero )
@@ -1042,9 +1043,10 @@ int World::searchForFog( const Heroes & hero )
     return _pathfinder.searchForFog( hero.GetColor(), hero.GetIndex(), hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 }
 
-std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ignoreObjects )
+std::list<Route::Step> World::getPath( int from, int to, uint32_t skill )
 {
-    return _pathfinder.buildPath( from, to, skill );
+    _pathfinder.reEvaluateIfNeeded( from, skill );
+    return _pathfinder.buildPath( to );
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )

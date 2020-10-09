@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include "types.h"
-#include <vector>
+#include "route.h"
 
 struct PathfindingNode
 {
@@ -38,9 +37,11 @@ struct PathfindingNode
 template <class T>
 class Pathfinder
 {
+public:
     virtual void reset() = 0;
+    virtual std::list<Route::Step> buildPath( int target ) = 0;
 
-    virtual uint32_t getDistance(int targetIndex) const
+    virtual uint32_t getDistance( int targetIndex ) const
     {
         return _cache[targetIndex]._cost;
     }

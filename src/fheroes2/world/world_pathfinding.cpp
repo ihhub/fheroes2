@@ -22,23 +22,61 @@
 #include "ground.h"
 #include "world.h"
 
-void Pathfinder::reset()
+bool World::isValidPath( int index, int direction ) const
+{
+    const Maps::Tiles & fromTile = GetTiles( index );
+    const Maps::Tiles & toTile = GetTiles( Maps::GetDirectionIndex( index, direction ) );
+    const bool fromWater = fromTile.isWater();
+
+    // check corner water/coast
+    if ( fromWater ) {
+        const int mapWidth = world.w();
+        switch ( direction ) {
+        case Direction::TOP_LEFT:
+            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
+                return false;
+            break;
+
+        case Direction::TOP_RIGHT:
+            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
+                return false;
+            break;
+
+        case Direction::BOTTOM_RIGHT:
+            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
+                return false;
+            break;
+
+        case Direction::BOTTOM_LEFT:
+            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
+                return false;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    if ( !fromTile.isPassable( direction, fromWater, false ) )
+        return false;
+
+    return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
+}
+
+void MapPathfinder::reset()
 {
     _cache.clear();
     _pathStart = -1;
     _pathfindingSkill = Skill::Level::NONE;
 }
 
-std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skill )
+std::list<Route::Step> MapPathfinder::buildPath( int target )
 {
     std::list<Route::Step> path;
 
-    // check if we have to re-cache the map (new hero selected, etc)
-    reEvaluateIfNeeded( from, skill );
-
     // trace the path from end point
     int currentNode = target;
-    while ( currentNode != from && currentNode != -1 ) {
+    while ( currentNode != _pathStart && currentNode != -1 ) {
         PathfindingNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
@@ -95,51 +133,10 @@ bool World::isTileBlocked( int tileIndex, bool fromWater, bool isAIMode ) const
     return false;
 }
 
-bool World::isValidPath( int index, int direction ) const
-{
-    const Maps::Tiles & fromTile = GetTiles( index );
-    const Maps::Tiles & toTile = GetTiles( Maps::GetDirectionIndex( index, direction ) );
-    const bool fromWater = fromTile.isWater();
-
-    // check corner water/coast
-    if ( fromWater ) {
-        const int mapWidth = world.w();
-        switch ( direction ) {
-        case Direction::TOP_LEFT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
-                return false;
-            break;
-
-        case Direction::TOP_RIGHT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
-                return false;
-            break;
-
-        case Direction::BOTTOM_RIGHT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
-                return false;
-            break;
-
-        case Direction::BOTTOM_LEFT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
-                return false;
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    if ( !fromTile.isPassable( direction, fromWater, false ) )
-        return false;
-
-    return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
-}
-
-bool Pathfinder::isBlockedByObject( int from, int target, bool fromWater )
+bool MapPathfinder::isBlockedByObject( int target, bool fromWater )
 {
     int currentNode = target;
-    while ( currentNode != from && currentNode != -1 ) {
+    while ( currentNode != _pathStart && currentNode != -1 ) {
         if ( world.isTileBlocked( currentNode, fromWater ) ) {
             return true;
         }
@@ -148,20 +145,14 @@ bool Pathfinder::isBlockedByObject( int from, int target, bool fromWater )
     return false;
 }
 
-uint32_t Pathfinder::getDistance( int from, int target, uint8_t skill )
-{
-    reEvaluateIfNeeded( from, skill );
-    return _cache[target]._cost;
-}
-
-void Pathfinder::reEvaluateIfNeeded( int from, uint8_t skill )
+void MapPathfinder::reEvaluateIfNeeded( int from, uint8_t skill )
 {
     if ( _pathStart != from || _pathfindingSkill != skill ) {
         evaluateMap( from, skill );
     }
 }
 
-uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill ) const
+uint32_t MapPathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill ) const
 {
     const Maps::Tiles & tileTo = world.GetTiles( target );
     uint32_t penalty = ( world.GetTiles( from ).isRoad() && tileTo.isRoad() ) ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tileTo, skill );
@@ -173,7 +164,7 @@ uint32_t Pathfinder::getMovementPenalty( int from, int target, int direction, ui
     return penalty;
 }
 
-int Pathfinder::searchForFog( int playerColor, int start, uint8_t skill )
+int MapPathfinder::searchForFog( int playerColor, int start, uint8_t skill )
 {
     reEvaluateIfNeeded( start, skill );
 
@@ -214,7 +205,7 @@ int Pathfinder::searchForFog( int playerColor, int start, uint8_t skill )
     return -1;
 }
 
-void Pathfinder::evaluateMap( int start, uint8_t skill )
+void MapPathfinder::evaluateMap( int start, uint8_t skill )
 {
     const bool fromWater = world.GetTiles( start ).isWater();
     const int width = world.w();
@@ -268,7 +259,7 @@ void Pathfinder::evaluateMap( int start, uint8_t skill )
     }
 }
 
-void Pathfinder::evaluateMapSpecial( int start, uint8_t skill )
+void MapPathfinder::evaluateMapSpecial( int start, uint8_t skill )
 {
     const bool fromWater = world.GetTiles( start ).isWater();
     const int width = world.w();

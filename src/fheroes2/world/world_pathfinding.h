@@ -20,37 +20,23 @@
 
 #pragma once
 
+#include "pathfinding.h"
 #include "route.h"
 
-struct PathfindingNode
-{
-    int _from = -1;
-    uint32_t _cost = 0;
-
-    PathfindingNode() {}
-    PathfindingNode( int node, uint32_t cost )
-        : _from( node )
-        , _cost( cost )
-    {}
-};
-
-class Pathfinder
+class MapPathfinder : public Pathfinder<PathfindingNode>
 {
 public:
-    Pathfinder() {}
+    MapPathfinder() {}
     void reset();
-    void evaluateMap( int start, uint8_t skill );
-    std::list<Route::Step> buildPath( int from, int target, uint8_t skill = Skill::Level::NONE );
-    uint32_t getDistance( int from, int target, uint8_t skill = Skill::Level::NONE );
+    void reEvaluateIfNeeded( int from, uint8_t skill );
+    std::list<Route::Step> buildPath( int target );
     uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
-    bool isBlockedByObject( int from, int target, bool fromWater = false );
+    bool isBlockedByObject( int target, bool fromWater = false );
     int searchForFog( int playerColor, int start, uint8_t skill = Skill::Level::NONE );
 
 private:
-    void reEvaluateIfNeeded( int from, uint8_t skill );
+    void evaluateMap( int start, uint8_t skill );
     void evaluateMapSpecial( int start, uint8_t skill );
 
-    std::vector<PathfindingNode> _cache;
-    int _pathStart = -1;
     uint8_t _pathfindingSkill = 0;
 };
