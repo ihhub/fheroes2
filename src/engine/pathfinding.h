@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include "route.h"
+#include "types.h"
+#include <vector>
 
 struct PathfindingNode
 {
@@ -34,23 +35,22 @@ struct PathfindingNode
     {}
 };
 
+template <class T>
 class Pathfinder
 {
-public:
-    Pathfinder() {}
-    void reset();
-    void evaluateMap( int start, uint8_t skill );
-    std::list<Route::Step> buildPath( int from, int target, uint8_t skill = Skill::Level::NONE );
-    uint32_t getDistance( int from, int target, uint8_t skill = Skill::Level::NONE );
-    uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
-    bool isBlockedByObject( int from, int target, bool fromWater = false );
-    int searchForFog( int playerColor, int start, uint8_t skill = Skill::Level::NONE );
+    virtual void reset() = 0;
 
-private:
-    void reEvaluateIfNeeded( int from, uint8_t skill );
-    void evaluateMapSpecial( int start, uint8_t skill );
+    virtual uint32_t getDistance(int targetIndex) const
+    {
+        return _cache[targetIndex]._cost;
+    }
 
-    std::vector<PathfindingNode> _cache;
+    virtual const T & getNode( int targetIndex ) const
+    {
+        return _cache[targetIndex];
+    }
+
+protected:
+    std::vector<T> _cache;
     int _pathStart = -1;
-    uint8_t _pathfindingSkill = 0;
 };

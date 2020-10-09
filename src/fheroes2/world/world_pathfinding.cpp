@@ -49,17 +49,45 @@ std::list<Route::Step> Pathfinder::buildPath( int from, int target, uint8_t skil
     return path;
 }
 
-bool World::isTileBlocked( int tileIndex, bool fromWater ) const
+bool isTileBlockedForAIHero( const Army & army, int color, int tileIndex, bool fromWater )
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
     const bool toWater = tile.isWater();
     const int object = tile.GetObject();
 
-    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER || object == MP2::OBJ_BOAT )
+    if ( object == MP2::OBJ_BOAT )
         return true;
 
-    if ( MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
+    if ( object == MP2::OBJ_HEROES ) {
+        const Heroes * otherHero = tile.GetHeroes();
+        if ( otherHero ) {
+            if ( otherHero->isFriends( color ) )
+                return true;
+            else
+                return !otherHero->AllowBattle( false ) || !army.isStrongerThan( otherHero->GetArmy() );
+        }
+    }
+
+    if ( object == MP2::OBJ_MONSTER )
+        return !army.isStrongerThan( Army( tile ) );
+
+    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
         return true;
+
+    return false;
+}
+
+bool World::isTileBlocked( int tileIndex, bool fromWater, bool isAIMode ) const
+{
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const bool toWater = tile.isWater();
+    const int object = tile.GetObject();
+
+    if ( object == MP2::OBJ_BOAT )
+        return true;
+
+    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER || MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
+        return !isAIMode;
 
     if ( fromWater && !toWater && object == MP2::OBJ_COAST )
         return true;
@@ -187,6 +215,60 @@ int Pathfinder::searchForFog( int playerColor, int start, uint8_t skill )
 }
 
 void Pathfinder::evaluateMap( int start, uint8_t skill )
+{
+    const bool fromWater = world.GetTiles( start ).isWater();
+    const int width = world.w();
+    const int height = world.h();
+
+    const Directions directions = Direction::All();
+    std::vector<int> offset( directions.size() );
+    for ( size_t i = 0; i < directions.size(); ++i ) {
+        offset[i] = Maps::GetDirectionIndex( 0, directions[i] );
+    }
+
+    _pathStart = start;
+    _pathfindingSkill = skill;
+
+    _cache.clear();
+    _cache.resize( static_cast<size_t>( world.w() ) * height );
+    _cache[start] = PathfindingNode( -1, 0 );
+
+    const Heroes * hrro = world.GetTiles( start ).GetHeroes();
+    Army amm1( world.GetTiles( start ) );
+
+    std::vector<int> nodesToExplore;
+    nodesToExplore.push_back( start );
+    for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+        const int currentNodeIdx = nodesToExplore[lastProcessedNode];
+        const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+        const PathfindingNode & currentNode = _cache[currentNodeIdx];
+
+        // check if current tile is protected, can move only to adjacent monster
+        
+        if ( currentNodeIdx == start || !isTileBlockedForAIHero( amm1, Color::BLUE, currentNodeIdx, fromWater ) ) {
+            for ( size_t i = 0; i < directions.size(); ++i ) {
+                if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
+                    const int newIndex = currentNodeIdx + offset[i];
+                    if ( newIndex == start )
+                        continue;
+
+                    const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], skill );
+                    PathfindingNode & newNode = _cache[newIndex];
+                    if ( world.isValidPath( currentNodeIdx, directions[i] ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
+                        newNode._from = currentNodeIdx;
+                        newNode._cost = moveCost;
+
+                        // duplicates are allowed if we find a cheaper way there
+                        if ( world.GetTiles( newIndex ).isWater() == fromWater )
+                            nodesToExplore.push_back( newIndex );
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Pathfinder::evaluateMapSpecial( int start, uint8_t skill )
 {
     const bool fromWater = world.GetTiles( start ).isWater();
     const int width = world.w();

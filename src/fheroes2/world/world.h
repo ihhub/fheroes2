@@ -250,7 +250,7 @@ public:
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
 
-    bool isTileBlocked( int toTile, bool fromWater ) const;
+    bool isTileBlocked( int toTile, bool fromWater, bool isAIMode = false ) const;
     bool isValidPath( int index, int direction ) const;
     uint32_t getDistance( int from, int to, uint32_t skill );
     std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );

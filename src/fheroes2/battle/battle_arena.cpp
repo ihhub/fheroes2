@@ -567,12 +567,6 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
     return result;
 }
 
-Battle::Indexes Battle::Arena::CalculatePath( const Battle::Unit & unit, int32_t indexTo )
-{
-    //_pathfinder.calculate( unit.GetPosition(), unit.isWide() );
-    return _pathfinder.getPath( indexTo );
-}
-
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
 {
     std::pair<int, uint32_t> result = {-1, MAXU16};
