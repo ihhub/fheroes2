@@ -348,7 +348,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
         wavHeader.putLE16( 0x01 ); // align
         wavHeader.putLE16( 0x08 ); // bitsper
         wavHeader.putLE32( 0x61746164 ); // DATA
-        wavHeader.putLE32( body.size() ); // size
+        wavHeader.putLE32( static_cast<uint32_t>( body.size() ) ); // size
 
         v.reserve( body.size() + 44 );
         v.assign( wavHeader.data(), wavHeader.data() + 44 );
@@ -446,7 +446,7 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols )
                 // new sound
                 if ( 0 != vol ) {
                 const std::vector<u8> & v = GetWAV( m82 );
-                int ch = Mixer::Play( &v[0], v.size(), -1, true );
+                const int ch = Mixer::Play( &v[0], v.size(), -1, true );
 
                 if ( 0 <= ch ) {
                     Mixer::Pause( ch );
@@ -454,7 +454,7 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols )
                     Mixer::Resume( ch );
 
                     // find unused
-                    std::vector<loop_sound_t>::iterator itl = std::find( loop_sounds.begin(), loop_sounds.end(), static_cast<int>( M82::UNKNOWN ) );
+                    itl = std::find( loop_sounds.begin(), loop_sounds.end(), static_cast<int>( M82::UNKNOWN ) );
 
                     if ( itl != loop_sounds.end() ) {
                         ( *itl ).sound = m82;
@@ -478,7 +478,7 @@ void AGG::PlaySound( int m82 )
     if ( conf.Sound() ) {
         DEBUG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
         const std::vector<u8> & v = AGG::GetWAV( m82 );
-        int ch = Mixer::Play( &v[0], v.size(), -1, false );
+        const int ch = Mixer::Play( &v[0], v.size(), -1, false );
         Mixer::Pause( ch );
         Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
         Mixer::Resume( ch );
