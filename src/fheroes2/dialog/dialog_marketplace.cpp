@@ -46,8 +46,8 @@ class TradeWindowGUI
 public:
     TradeWindowGUI( const Rect & rt )
         : pos_rt( rt )
-        , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
         , back( fheroes2::Display::instance() )
+        , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
     {
         back.update( rt.x - 5, rt.y + 15, rt.w + 10, 160 );
 

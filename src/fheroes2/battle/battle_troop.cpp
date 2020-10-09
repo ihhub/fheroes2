@@ -102,7 +102,6 @@ void Battle::ModesAffected::RemoveMode( u32 mode )
 {
     iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &ModeDuration::isMode ), mode ) );
     if ( it != end() ) {
-        // erase(it)
         if ( it + 1 != end() )
             std::swap( *it, back() );
         pop_back();
@@ -122,6 +121,7 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
 
 Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     : ArmyTroop( NULL, t )
+    , animation( id )
     , uid( World::GetUniq() )
     , hp( t.GetHitPoints() )
     , count0( t.GetCount() )
@@ -130,9 +130,8 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , disruptingray( 0 )
     , reflect( ref )
     , mirror( NULL )
-    , blindanswer( false )
-    , animation( id )
     , idleTimer( animation.getIdleDelay() )
+    , blindanswer( false )
     , customAlphaMask( 255 )
 {
     // set position

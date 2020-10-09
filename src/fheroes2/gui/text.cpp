@@ -679,20 +679,20 @@ void TextBox::Blit( const fheroes2::Point & pt, fheroes2::Image & sf )
 }
 
 TextSprite::TextSprite()
-    : hide( true )
-    , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
+    : _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
+    , hide( true )
 {}
 
 TextSprite::TextSprite( const std::string & msg, int ft, const Point & pt )
     : Text( msg, ft )
-    , hide( true )
     , _restorer( fheroes2::Display::instance(), pt.x, pt.y, gw, gh + 5 )
+    , hide( true )
 {}
 
 TextSprite::TextSprite( const std::string & msg, int ft, s32 ax, s32 ay )
     : Text( msg, ft )
-    , hide( true )
     , _restorer( fheroes2::Display::instance(), ax, ay, gw, gh + 5 )
+    , hide( true )
 {}
 
 void TextSprite::Show( void )
