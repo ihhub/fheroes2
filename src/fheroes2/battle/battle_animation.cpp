@@ -126,8 +126,8 @@ bool AnimationSequence::isValid() const
 
 TimedSequence::TimedSequence( const std::vector<int> & seq, uint32_t duration )
     : AnimationSequence( seq )
-    , _duration( duration )
     , _currentTime( 0 )
+    , _duration( duration )
 {}
 
 int TimedSequence::playAnimation( uint32_t delta, bool loop )
@@ -500,8 +500,8 @@ uint32_t AnimationReference::getIdleDelay() const
 
 AnimationState::AnimationState( int monsterID )
     : AnimationReference( monsterID )
-    , _currentSequence( _static )
     , _animState( Monster_Info::STATIC )
+    , _currentSequence( _static )
 {}
 
 AnimationState::AnimationState( const AnimationReference & ref, int state )

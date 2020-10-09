@@ -29,8 +29,8 @@
 #define ANGLEWIDTH 44
 
 Dialog::FrameBorder::FrameBorder( int v )
-    : border( v )
-    , restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance() )
+    , border( v )
 {}
 
 Dialog::FrameBorder::~FrameBorder()
@@ -41,8 +41,8 @@ Dialog::FrameBorder::~FrameBorder()
 }
 
 Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
-    : border( BORDERWIDTH )
-    , restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance() )
+    , border( BORDERWIDTH )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
@@ -50,8 +50,8 @@ Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
 }
 
 Dialog::FrameBorder::FrameBorder( const Size & sz )
-    : border( BORDERWIDTH )
-    , restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance() )
+    , border( BORDERWIDTH )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
@@ -59,8 +59,8 @@ Dialog::FrameBorder::FrameBorder( const Size & sz )
 }
 
 Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
-    : border( BORDERWIDTH )
-    , restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance() )
+    , border( BORDERWIDTH )
 {
     SetPosition( posx, posy, encw, ench );
     RenderRegular( GetRect() );

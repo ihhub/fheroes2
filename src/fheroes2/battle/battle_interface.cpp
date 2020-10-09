@@ -532,12 +532,12 @@ int Battle::GetDirectionFromCursorSword( u32 sword )
 
 Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, bool r )
     : base( b )
-    , icn( ICN::UNKNOWN )
-    , reflect( r )
-    , _offset( area.x, area.y )
     , _currentAnim( getHeroAnimation( b, OP_STATIC ) )
     , _animationType( OP_STATIC )
     , _idleTimer( 8000 )
+    , icn( ICN::UNKNOWN )
+    , reflect( r )
+    , _offset( area.x, area.y )
 {
     const bool isCaptain = b->isCaptain();
     switch ( b->GetRace() ) {
@@ -853,6 +853,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , humanturn_redraw( true )
     , animation_flags_frame( 0 )
     , catapult_frame( 0 )
+    , _contourColor( 110 )
+    , _brightLandType( false )
     , _currentUnit( NULL )
     , _movingUnit( NULL )
     , _flyingUnit( NULL )
@@ -861,8 +863,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , teleport_src( -1 )
     , listlog( NULL )
     , turn( 0 )
-    , _contourColor( 110 )
-    , _brightLandType( false )
 {
     const Settings & conf = Settings::Get();
 
@@ -2660,7 +2660,6 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
 void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker )
 {
-    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // targets damage animation
@@ -4070,22 +4069,22 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
             const Rect initialArea( area.x, area.y, area.w, area.h );
             Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
-            Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
             if ( shifted.x < 0 ) {
                 const int32_t offset = -shifted.x;
                 shifted.x = 0;
                 original.x += offset;
-                shifted.w -= offset;
+                shifted.width -= offset;
                 shifted.x = 0;
             }
             if ( shifted.y < 0 ) {
                 const int32_t offset = -shifted.y;
                 shifted.y = 0;
                 original.y += offset;
-                shifted.h -= offset;
+                shifted.height -= offset;
                 shifted.y = 0;
             }
-            fheroes2::Blit( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.w, shifted.h );
+            fheroes2::Blit( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
         }
@@ -4226,13 +4225,13 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
         }
 }
 
-Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
+fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
 {
     const Rect & pos = target.GetRectPosition();
     const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame() );
 
     // Bottom-left corner (default) position with spell offset applied
-    Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
+    fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
 
     switch ( spellICN ) {
     case ICN::SHIELD:
@@ -4299,7 +4298,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                 if ( ( *it ).defender ) {
                     const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
                     const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                    Point pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
+                    const fheroes2::Point & pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
                     fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
                 }
             RedrawPartialFinish();
@@ -4348,7 +4347,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
             RedrawPartialStart();
 
             const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-            Point pos = CalculateSpellPosition( b, icn, spellSprite );
+            const fheroes2::Point & pos = CalculateSpellPosition( b, icn, spellSprite );
             fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
             RedrawPartialFinish();
 

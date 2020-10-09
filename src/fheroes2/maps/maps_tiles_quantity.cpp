@@ -1045,7 +1045,6 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 {
     uint32_t count = isFirstLoad ? 0 : tile.MonsterCount();
     const int obj = tile.GetObject( false );
-    const Troop & troop = tile.QuantityTroop();
 
     switch ( obj ) {
     // join monsters

@@ -1235,7 +1235,6 @@ bool World::LoadMapMP2( const std::string & filename )
 
         if ( 0 <= findobject ) {
             const Maps::Tiles & tile = vec_tiles[findobject];
-            const Maps::TilesAddon * addon = NULL;
 
             switch ( tile.GetObject() ) {
             case MP2::OBJ_CASTLE:

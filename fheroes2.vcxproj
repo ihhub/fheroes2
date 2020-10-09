@@ -201,7 +201,6 @@
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
-    <ClCompile Include="src\fheroes2\agg\sprite.cpp" />
     <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_common.cpp" />
@@ -403,7 +402,6 @@
     <ClInclude Include="src\fheroes2\agg\icn.h" />
     <ClInclude Include="src\fheroes2\agg\m82.h" />
     <ClInclude Include="src\fheroes2\agg\mus.h" />
-    <ClInclude Include="src\fheroes2\agg\sprite.h" />
     <ClInclude Include="src\fheroes2\agg\til.h" />
     <ClInclude Include="src\fheroes2\agg\xmi.h" />
     <ClInclude Include="src\fheroes2\ai\ai.h" />

@@ -114,7 +114,7 @@ namespace AI
         // Step 2. Update AI variables and recalculate resource budget
         const bool slowEarlyGame = world.CountDay() < 5 && castles.size() == 1;
 
-        int combinedHeroStrength = 0;
+        double combinedHeroStrength = 0;
         for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
             if ( *it ) {
                 combinedHeroStrength += ( *it )->GetArmy().GetStrength();

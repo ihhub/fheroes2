@@ -41,11 +41,6 @@ namespace Interface
         typedef std::pair<ItemsIterator, Rect> ItemIterPos;
 
         Items items;
-        Rect barsz;
-        Size itemsz;
-        Size colrows;
-        int hspace;
-        int vspace;
 
     public:
         ItemsBar()
@@ -55,8 +50,8 @@ namespace Interface
         {}
         virtual ~ItemsBar() {}
 
-        virtual void RedrawBackground( const Rect &, fheroes2::Image & ) {}
-        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) {}
+        virtual void RedrawBackground( const Rect &, fheroes2::Image & ) = 0;
+        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) = 0;
 
         virtual bool ActionBarSingleClick( const Point &, Item &, const Rect & )
         {
@@ -147,11 +142,6 @@ namespace Interface
         const Rect & GetArea( void ) const
         {
             return barsz;
-        }
-
-        const Size & GetColRows( void ) const
-        {
-            return colrows;
         }
 
         void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() )
@@ -278,6 +268,12 @@ namespace Interface
             barsz.w = colrows.w ? colrows.w * itemsz.w + ( colrows.w - 1 ) * hspace : 0;
             barsz.h = colrows.h ? colrows.h * itemsz.h + ( colrows.h - 1 ) * vspace : 0;
         }
+
+        Rect barsz;
+        Size itemsz;
+        Size colrows;
+        int hspace;
+        int vspace;
     };
 
     template <class Item>
@@ -305,6 +301,7 @@ namespace Interface
         {
             return false;
         }
+
         virtual bool ActionBarPressRight( const Point &, Item &, const Rect &, Item &, const Rect & )
         {
             return false;
@@ -314,10 +311,12 @@ namespace Interface
         {
             return false;
         }
+
         virtual bool ActionBarDoubleClick( const Point & cursor, Item & item, const Rect & pos )
         {
             return ActionBarSingleClick( cursor, item, pos );
         }
+
         virtual bool ActionBarPressRight( const Point &, Item &, const Rect & )
         {
             return false;
@@ -327,6 +326,7 @@ namespace Interface
         {
             return false;
         }
+
         virtual bool ActionBarCursor( const Point &, Item &, const Rect &, Item &, const Rect & )
         {
             return false;
@@ -400,8 +400,9 @@ namespace Interface
             if ( iterPos.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
 
-                if ( ActionBarCursor( cursor, **iterPos.first, iterPos.second ) )
+                if ( ActionBarCursor( cursor, **iterPos.first, iterPos.second ) ) {
                     return true;
+                }
                 else if ( le.MouseClickLeft( iterPos.second ) ) {
                     if ( iterPos.first == GetCurItemIter() ) {
                         return ActionBarDoubleClick( cursor, **iterPos.first, iterPos.second );
@@ -415,8 +416,9 @@ namespace Interface
                         return true;
                     }
                 }
-                else if ( le.MousePressRight( iterPos.second ) )
+                else if ( le.MousePressRight( iterPos.second ) ) {
                     return ActionBarPressRight( cursor, **iterPos.first, iterPos.second );
+                }
             }
 
             return false;
@@ -430,8 +432,9 @@ namespace Interface
             if ( iterPos1.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
 
-                if ( ActionBarCursor( cursor, **iterPos1.first, iterPos1.second, **iterPos2.first, iterPos2.second ) )
+                if ( ActionBarCursor( cursor, **iterPos1.first, iterPos1.second, **iterPos2.first, iterPos2.second ) ) {
                     return true;
+                }
                 else if ( le.MouseClickLeft( iterPos1.second ) ) {
                     if ( ActionBarSingleClick( cursor, **iterPos1.first, iterPos1.second, **iterPos2.first, iterPos2.second ) )
                         curItemPos = iterPos1;
