@@ -116,7 +116,7 @@ namespace Battle
         int currentNode = targetCell;
         while ( currentNode != targetCell && _cache[currentNode]._cost != 0 ) {
             const ArenaNode & node = _cache[currentNode];
-            path.emplace_front( node._from, 0, 1 );
+            path.emplace_front( node._from, Board::GetDirection( node._from, currentNode ), 1 );
             currentNode = node._from;
         }
 

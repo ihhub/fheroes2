@@ -36,7 +36,8 @@ public:
     int searchForFog( int playerColor, int start, uint8_t skill = Skill::Level::NONE );
 
 protected:
-    void evaluateMap( int start, uint8_t skill );
+    void processWorldMap( int pathStart );
+    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
     void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
 
     uint8_t _pathfindingSkill = 0;
@@ -51,7 +52,7 @@ public:
     void reEvaluateIfNeeded( int start, uint8_t skill, double armyStrength, int color );
 
 private:
-    void evaluateMap( int start, uint8_t skill, double armyStrength, int color );
+    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
 
     double _armyStrength = -1;
     int _currentColor = Color::NONE;
