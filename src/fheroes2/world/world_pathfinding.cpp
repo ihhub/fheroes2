@@ -340,7 +340,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 }
 
-int AIWorldPathfinder::searchForFog( const Heroes & hero )
+int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );

@@ -105,7 +105,7 @@ namespace AI
             _mapObjects.erase( selectedNode + _mapObjects.begin() );
         }
         else {
-            priorityTarget = _pathfinder.searchForFog( hero );
+            priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
         }
 
