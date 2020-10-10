@@ -637,7 +637,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 if ( !port.empty() )
                                     fheroes2::Blit( port, sf, 5, 5 );
 
-                                const Point savept = selectArmy2.GetPos();
+                                const fheroes2::Point savept = selectArmy2.GetPos();
                                 selectArmy2.SetPos( 112, 5 );
                                 selectArmy2.Redraw( sf );
                                 selectArmy2.SetPos( savept.x, savept.y );

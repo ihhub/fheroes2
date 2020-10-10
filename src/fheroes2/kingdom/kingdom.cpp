@@ -429,7 +429,7 @@ void Kingdom::SetVisitTravelersTent( int col )
 bool Kingdom::IsVisitTravelersTent( int col ) const
 {
     // visited_tents_color is a bitfield
-    return visited_tents_colors & ( 1 << col );
+    return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
 bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const

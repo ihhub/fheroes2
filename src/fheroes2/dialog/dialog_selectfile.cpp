@@ -42,7 +42,7 @@
 #include "world.h"
 
 std::string SelectFileListSimple( const std::string &, const std::string &, bool );
-bool RedrawExtraInfo( const Point &, const std::string &, const std::string &, const Rect & );
+bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::string &, const fheroes2::Rect & );
 
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
@@ -202,11 +202,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
     fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
-    const Rect rt( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
+    const fheroes2::Rect rt( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
 
     fheroes2::Blit( spriteShadow, display, rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
 
-    const Rect enter_field( rt.x + 42, rt.y + 286, 260, 16 );
+    const fheroes2::Rect enter_field( rt.x + 42, rt.y + 286, 260, 16 );
 
     fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::REQUEST, 1, 2 );
     fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::REQUEST, 3, 4 );
@@ -214,14 +214,14 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     bool edit_mode = false;
 
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
-    FileInfoListBox listbox( rt, edit_mode );
+    FileInfoListBox listbox( Point( rt.x, rt.y ), edit_mode );
 
-    listbox.RedrawBackground( rt );
+    listbox.RedrawBackground( Point( rt.x, rt.y ) );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 257 ) );
     listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), Rect( rt.x + 328, rt.y + 73, 12, 180 ) );
     listbox.SetAreaMaxItems( 11 );
-    listbox.SetAreaItems( Rect( rt.x + 40, rt.y + 55, 265, 215 ) );
+    listbox.SetAreaItems( fheroes2::Rect( rt.x + 40, rt.y + 55, 265, 215 ) );
     listbox.SetListContent( lists );
 
     std::string filename;
@@ -251,7 +251,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     listbox.Redraw();
-    RedrawExtraInfo( rt, header, filename, enter_field );
+    RedrawExtraInfo( fheroes2::Point( rt.x, rt.y ), header, filename, enter_field );
 
     buttonOk.draw();
     buttonCancel.draw();
@@ -312,14 +312,14 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             listbox.Redraw();
 
             if ( edit_mode && editor )
-                is_limit = RedrawExtraInfo( rt, header, InsertString( filename, charInsertPos, "_" ), enter_field );
+                is_limit = RedrawExtraInfo( fheroes2::Point( rt.x, rt.y ), header, InsertString( filename, charInsertPos, "_" ), enter_field );
             else if ( listbox.isSelected() ) {
                 filename = ResizeToShortName( listbox.GetCurrent().file );
                 charInsertPos = filename.size();
-                is_limit = RedrawExtraInfo( rt, header, filename, enter_field );
+                is_limit = RedrawExtraInfo( fheroes2::Point( rt.x, rt.y ), header, filename, enter_field );
             }
             else
-                is_limit = RedrawExtraInfo( rt, header, filename, enter_field );
+                is_limit = RedrawExtraInfo( fheroes2::Point( rt.x, rt.y ), header, filename, enter_field );
 
             buttonOk.draw();
             buttonCancel.draw();
@@ -333,15 +333,15 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     return result;
 }
 
-bool RedrawExtraInfo( const Point & dst, const std::string & header, const std::string & filename, const Rect & field )
+bool RedrawExtraInfo( const fheroes2::Point & dst, const std::string & header, const std::string & filename, const fheroes2::Rect & field )
 {
     Text text( header, Font::BIG );
     text.Blit( dst.x + 175 - text.w() / 2, dst.y + 30 );
 
     if ( filename.size() ) {
         text.Set( filename, Font::BIG );
-        text.Blit( field.x, field.y + 1, field.w );
+        text.Blit( field.x, field.y + 1, field.width );
     }
 
-    return text.w() + 10 > field.w;
+    return text.w() + 10 > field.width;
 }

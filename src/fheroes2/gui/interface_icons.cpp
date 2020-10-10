@@ -221,7 +221,7 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
     SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
     SetScrollButtonDn( icnscroll, 2, 3, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
     SetAreaMaxItems( iconsCount );
-    SetAreaItems( Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
+    SetAreaItems( fheroes2::Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
     DisableHotkeys( true );
 
     SetListContent( world.GetKingdom( Settings::Get().CurrentColor() ).GetCastles() );
@@ -307,7 +307,7 @@ void Interface::HeroesIcons::SetPos( s32 px, s32 py )
     SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
     SetScrollButtonDn( icnscroll, 2, 3, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
     SetAreaMaxItems( iconsCount );
-    SetAreaItems( Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
+    SetAreaItems( fheroes2::Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
     DisableHotkeys( true );
 
     SetListContent( world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes() );

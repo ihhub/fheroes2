@@ -346,7 +346,7 @@ const Captain & Castle::GetCaptain( void ) const
 
 bool Castle::isCastle( void ) const
 {
-    return building & BUILD_CASTLE;
+    return ( building & BUILD_CASTLE ) != 0;
 }
 
 bool Castle::isCapital( void ) const
@@ -1536,7 +1536,7 @@ void Castle::DrawImageCastle( const Point & pt )
     const Maps::Tiles & tile = world.GetTiles( GetIndex() );
 
     u32 index = 0;
-    Point dst_pt;
+    fheroes2::Point dst_pt;
 
     // draw ground
     switch ( tile.GetGround() ) {
@@ -2437,7 +2437,7 @@ bool Castle::AllowBuild( void ) const
 
 bool Castle::isBuild( u32 bd ) const
 {
-    return building & bd;
+    return ( building & bd ) != 0;
 }
 
 bool Castle::isNecromancyShrineBuild( void ) const

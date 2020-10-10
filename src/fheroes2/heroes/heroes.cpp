@@ -1565,7 +1565,7 @@ void Heroes::ActionNewPosition( void )
         }
 
         // other around targets
-        for ( MapsIndexes::const_iterator it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
+        for ( it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
             RedrawGameAreaAndHeroAttackMonster( *this, *it );
             if ( conf.ExtWorldOnlyFirstMonsterAttack() )
                 skip_battle = true;
@@ -1693,7 +1693,7 @@ fheroes2::Image Heroes::GetPortrait( int type ) const
 void Heroes::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
 {
     fheroes2::Image port = GetPortrait( portrait, type );
-    Point mp;
+    fheroes2::Point mp;
 
     if ( !port.empty() ) {
         if ( PORT_BIG == type ) {

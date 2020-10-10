@@ -41,12 +41,12 @@ public:
 
         SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), Rect( rt.x + rt.w - 19, rt.y + 48, 14, rt.h - 106 ) );
         SetAreaMaxItems( 5 );
-        SetAreaItems( Rect( rt.x + 10, rt.y + 30, rt.w - 30, rt.h - 70 ) );
+        SetAreaItems( fheroes2::Rect( rt.x + 10, rt.y + 30, rt.w - 30, rt.h - 70 ) );
     };
 
     void RedrawBackground( const Point & dst )
     {
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), Rect( dst.x, dst.y + 25, rtAreaItems.w + 5, rtAreaItems.h + 10 ) );
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), Rect( dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 10 ) );
 
         // scroll
         fheroes2::Display & display = fheroes2::Display::instance();

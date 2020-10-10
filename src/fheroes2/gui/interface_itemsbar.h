@@ -68,10 +68,10 @@ namespace Interface
         }
 
         // body
-        void SetColRows( u32 col, u32 row )
+        void SetColRows( int32_t col, int32_t row )
         {
-            colrows.w = col;
-            colrows.h = row;
+            colrows.width = col;
+            colrows.height = row;
             RescanSize();
         }
 
@@ -91,16 +91,16 @@ namespace Interface
             SetContentItems();
         }
 
-        void SetPos( s32 px, s32 py )
+        void SetPos( int32_t px, int32_t py )
         {
             barsz.x = px;
             barsz.y = py;
         }
 
-        void SetItemSize( u32 pw, u32 ph )
+        void SetItemSize( int32_t pw, int32_t ph )
         {
-            itemsz.w = pw;
-            itemsz.h = ph;
+            itemsz.width = pw;
+            itemsz.height = ph;
             RescanSize();
         }
 
@@ -134,47 +134,49 @@ namespace Interface
             return posItem != items.end() ? std::distance( items.end(), posItem ) : -1;
         }
 
-        const Point & GetPos( void ) const
+        fheroes2::Point GetPos( void ) const
         {
-            return barsz;
+            return fheroes2::Point( barsz.x, barsz.y );
         }
 
-        const Rect & GetArea( void ) const
+        const fheroes2::Rect & GetArea( void ) const
         {
             return barsz;
         }
 
         void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() )
         {
-            Point dstpt( barsz );
+            fheroes2::Point dstpt( barsz.x, barsz.y );
 
-            for ( u32 yy = 0; yy < colrows.h; ++yy ) {
-                for ( u32 xx = 0; xx < colrows.w; ++xx ) {
-                    RedrawBackground( Rect( dstpt, itemsz.w, itemsz.h ), dstsf );
+            for ( int32_t y = 0; y < colrows.height; ++y ) {
+                for ( int32_t x = 0; x < colrows.width; ++x ) {
+                    RedrawBackground( fheroes2::Rect( dstpt.x, dstpt.y, itemsz.width, itemsz.height ), dstsf );
 
-                    dstpt.x += hspace + itemsz.w;
+                    dstpt.x += hspace + itemsz.width;
                 }
 
                 dstpt.x = barsz.x;
-                dstpt.y += vspace + itemsz.h;
+                dstpt.y += vspace + itemsz.height;
             }
 
-            dstpt = barsz;
+            dstpt.x = barsz.x;
+            dstpt.y = barsz.y;
+
             ItemsIterator posItem = GetTopItemIter();
 
-            for ( u32 yy = 0; yy < colrows.h; ++yy ) {
-                for ( u32 xx = 0; xx < colrows.w; ++xx ) {
+            for ( int32_t y = 0; y < colrows.height; ++y ) {
+                for ( int32_t x = 0; x < colrows.width; ++x ) {
                     if ( posItem != items.end() ) {
-                        RedrawItemIter( posItem, Rect( dstpt, itemsz.w, itemsz.h ), dstsf );
+                        RedrawItemIter( posItem, fheroes2::Rect( dstpt.x, dstpt.y, itemsz.width, itemsz.height ), dstsf );
 
                         ++posItem;
                     }
 
-                    dstpt.x += hspace + itemsz.w;
+                    dstpt.x += hspace + itemsz.width;
                 }
 
                 dstpt.x = barsz.x;
-                dstpt.y += vspace + itemsz.h;
+                dstpt.y += vspace + itemsz.height;
             }
         }
 
@@ -241,22 +243,23 @@ namespace Interface
 
         ItemIterPos GetItemIterPos( const Point & pt )
         {
-            Rect dstrt( barsz, itemsz.w, itemsz.h );
+            const fheroes2::Point position( pt.x, pt.y );
+            fheroes2::Rect dstrt( barsz.x, barsz.y, itemsz.width, itemsz.height );
             ItemsIterator posItem = GetTopItemIter();
 
-            for ( u32 yy = 0; yy < colrows.h; ++yy ) {
-                for ( u32 xx = 0; xx < colrows.w; ++xx ) {
+            for ( int32_t y = 0; y < colrows.height; ++y ) {
+                for ( int32_t x = 0; x < colrows.width; ++x ) {
                     if ( posItem != items.end() ) {
-                        if ( dstrt & pt )
+                        if ( dstrt & position )
                             return ItemIterPos( posItem, dstrt );
                         ++posItem;
                     }
 
-                    dstrt.x += hspace + itemsz.w;
+                    dstrt.x += hspace + itemsz.width;
                 }
 
                 dstrt.x = barsz.x;
-                dstrt.y += vspace + itemsz.h;
+                dstrt.y += vspace + itemsz.height;
             }
 
             return std::pair<ItemsIterator, Rect>( items.end(), Rect() );
@@ -265,15 +268,15 @@ namespace Interface
     private:
         void RescanSize( void )
         {
-            barsz.w = colrows.w ? colrows.w * itemsz.w + ( colrows.w - 1 ) * hspace : 0;
-            barsz.h = colrows.h ? colrows.h * itemsz.h + ( colrows.h - 1 ) * vspace : 0;
+            barsz.width = colrows.width ? colrows.width * itemsz.width + ( colrows.width - 1 ) * hspace : 0;
+            barsz.height = colrows.height ? colrows.height * itemsz.height + ( colrows.height - 1 ) * vspace : 0;
         }
 
-        Rect barsz;
-        Size itemsz;
-        Size colrows;
-        int hspace;
-        int vspace;
+        fheroes2::Rect barsz;
+        fheroes2::Size itemsz;
+        fheroes2::Size colrows;
+        int32_t hspace;
+        int32_t vspace;
     };
 
     template <class Item>

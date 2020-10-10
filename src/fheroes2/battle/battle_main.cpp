@@ -322,12 +322,12 @@ u32 Battle::Result::GetExperienceDefender( void ) const
 
 bool Battle::Result::AttackerWins( void ) const
 {
-    return army1 & RESULT_WINS;
+    return ( army1 & RESULT_WINS ) != 0;
 }
 
 bool Battle::Result::DefenderWins( void ) const
 {
-    return army2 & RESULT_WINS;
+    return ( army2 & RESULT_WINS ) != 0;
 }
 
 StreamBase & Battle::operator<<( StreamBase & msg, const Result & res )
