@@ -22,6 +22,7 @@
 
 #include "route.h"
 
+// Base representation of the dataset that mirrors the 2D map being traversed
 struct PathfindingNode
 {
     int _from = -1;
@@ -34,6 +35,7 @@ struct PathfindingNode
     {}
 };
 
+// Template class have to be either PathfindingNode or its derivative
 template <class T>
 class Pathfinder
 {

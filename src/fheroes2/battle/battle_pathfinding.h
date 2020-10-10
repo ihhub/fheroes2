@@ -39,6 +39,7 @@ namespace Battle
     {
         bool _isOpen = true;
 
+        // ArenaNode has different default values
         ArenaNode()
             : PathfindingNode( -1, MAX_MOVE_COST )
         {}

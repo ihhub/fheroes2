@@ -37,6 +37,7 @@ public:
 
 protected:
     void evaluateMap( int start, uint8_t skill );
+    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
 
     uint8_t _pathfindingSkill = 0;
     std::vector<int> _mapOffset;
