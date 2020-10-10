@@ -24,32 +24,49 @@
 #include "pathfinding.h"
 #include "route.h"
 
+// Abstract class that provides base functionality to path through World map
 class WorldPathfinder : public Pathfinder<PathfindingNode>
 {
 public:
-    WorldPathfinder();
+    WorldPathfinder() {}
     virtual void reset();
+
+    // Common methods
     virtual std::list<Route::Step> buildPath( int target ) const;
-    void reEvaluateIfNeeded( int start, uint8_t skill );
-    bool isBlockedByObject( int target, bool fromWater = false );
+    bool isBlockedByObject( int target, bool fromWater = false ) const;
     uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
-    int searchForFog( int playerColor, int start, uint8_t skill = Skill::Level::NONE );
-    void processWorldMap( int pathStart );
 
 protected:
-    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+    void processWorldMap( int pathStart );
     void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+
+    // This methods defines pathfinding rules. This has to be implemented by the derived class.
+    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
 
     uint8_t _pathfindingSkill = 0;
     std::vector<int> _mapOffset;
 };
 
+class PlayerWorldPathfinder : public WorldPathfinder
+{
+public:
+    PlayerWorldPathfinder() {}
+    virtual void reset();
+
+    void reEvaluateIfNeeded( int start, uint8_t skill );
+
+private:
+    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+
+};
+
 class AIWorldPathfinder : public WorldPathfinder
 {
 public:
-    AIWorldPathfinder();
+    AIWorldPathfinder() {}
     virtual void reset();
     void reEvaluateIfNeeded( int start, uint8_t skill, double armyStrength, int color );
+    int searchForFog( int start, uint8_t skill, double armyStrength, int color );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
