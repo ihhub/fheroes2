@@ -70,7 +70,7 @@ namespace AI
         return 0;
     }
 
-    int GetPriorityTarget( std::vector<MapObjectNode> & mapObjects, const Heroes & hero )
+    int AI::Normal::GetPriorityTarget( const Heroes & hero )
     {
         int priorityTarget = -1;
 
@@ -80,9 +80,9 @@ namespace AI
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
         int objectID = MP2::OBJ_ZERO;
 
-        size_t selectedNode = mapObjects.size();
-        for ( size_t idx = 0; idx < mapObjects.size(); ++idx ) {
-            const MapObjectNode & node = mapObjects[idx];
+        size_t selectedNode = _mapObjects.size();
+        for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
+            const MapObjectNode & node = _mapObjects[idx];
             if ( HeroesValidObject( hero, node.first ) ) {
                 const uint32_t dist = world.getDistance( heroIndex, node.first, skill );
                 if ( dist == 0 )
@@ -98,15 +98,15 @@ namespace AI
             }
         }
 
-        if ( selectedNode < mapObjects.size() ) {
+        if ( selectedNode < _mapObjects.size() ) {
             DEBUG( DBG_AI, DBG_TRACE,
                    hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
 
             // Remove the object from the list to other heroes won't target it
-            mapObjects.erase( selectedNode + mapObjects.begin() );
+            _mapObjects.erase( selectedNode + _mapObjects.begin() );
         }
         else {
-            priorityTarget = world.searchForFog( hero );
+            priorityTarget = _pathfinder.searchForFog( heroIndex, skill, hero.GetArmy().GetStrength(), hero.GetColor() );
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
         }
 
@@ -137,7 +137,7 @@ namespace AI
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            MoveHero( hero, GetPriorityTarget( mapObjects, hero ) );
+            MoveHero( hero, GetPriorityTarget( hero ) );
         }
 
         if ( !hero.MayStillMove() ) {

@@ -255,7 +255,6 @@ public:
     bool isValidPath( int index, int direction ) const;
     uint32_t getDistance( int from, int to, uint32_t skill );
     std::list<Route::Step> getPath( int from, int to, uint32_t skill );
-    int searchForFog( const Heroes & hero );
     void resetPathfinder();
 
     void ComputeStaticAnalysis();
@@ -301,7 +300,7 @@ private:
 
     MapActions map_actions;
     MapObjects map_objects;
-    WorldPathfinder _pathfinder;
+    PlayerWorldPathfinder _pathfinder;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

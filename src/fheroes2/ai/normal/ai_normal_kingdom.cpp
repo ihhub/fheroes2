@@ -82,7 +82,7 @@ namespace AI
         std::vector<std::pair<int, const Army *> > enemyArmies;
 
         const int mapSize = world.w() * world.h();
-        mapObjects.clear();
+        _mapObjects.clear();
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
@@ -91,7 +91,7 @@ namespace AI
             if ( !IsValidKingdomObject( tile, objectID, color ) )
                 continue;
 
-            mapObjects.emplace_back( idx, objectID );
+            _mapObjects.emplace_back( idx, objectID );
 
             const int color = tile.QuantityColor();
             if ( objectID == MP2::OBJ_HEROES ) {
@@ -107,7 +107,7 @@ namespace AI
             }
         }
 
-        DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << mapObjects.size() << " valid objects" );
+        DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << _mapObjects.size() << " valid objects" );
 
         status.RedrawTurnProgress( 1 );
 
