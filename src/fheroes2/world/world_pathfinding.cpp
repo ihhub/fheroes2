@@ -125,31 +125,6 @@ void WorldPathfinder::checkWorldSize()
     }
 }
 
-std::list<Route::Step> WorldPathfinder::buildPath( int target ) const
-{
-    std::list<Route::Step> path;
-
-    // trace the path from end point
-    int currentNode = target;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
-        const PathfindingNode & node = _cache[currentNode];
-        const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
-
-        path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost );
-
-        // Sanity check
-        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
-            break;
-        }
-        else {
-            currentNode = node._from;
-        }
-    }
-
-    return path;
-}
-
 bool WorldPathfinder::isBlockedByObject( int target, bool fromWater ) const
 {
     int currentNode = target;
@@ -238,6 +213,31 @@ void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
         processWorldMap( startIndex );
     }
+}
+
+std::list<Route::Step> PlayerWorldPathfinder::buildPath( int target ) const
+{
+    std::list<Route::Step> path;
+
+    // trace the path from end point
+    int currentNode = target;
+    while ( currentNode != _pathStart && currentNode != -1 ) {
+        const PathfindingNode & node = _cache[currentNode];
+        const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
+
+        path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost );
+
+        // Sanity check
+        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
+            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            break;
+        }
+        else {
+            currentNode = node._from;
+        }
+    }
+
+    return path;
 }
 
 // Follows regular (for user's interface) passability rules
@@ -376,6 +376,45 @@ int AIWorldPathfinder::searchForFog( const Heroes & hero )
         }
     }
     return -1;
+}
+
+std::list<Route::Step> AIWorldPathfinder::buildPath( int target ) const
+{
+    std::list<Route::Step> path;
+    if ( _pathStart == -1 )
+        return path;
+
+    const bool fromWater = world.GetTiles( _pathStart ).isWater();
+
+    // trace the path from end point
+    int lastValidNode = target;
+    int currentNode = target;
+    while ( currentNode != _pathStart && currentNode != -1 ) {
+        if ( world.isTileBlocked( currentNode, fromWater ) ) {
+            lastValidNode = currentNode;
+        }
+
+        const PathfindingNode & node = _cache[currentNode];
+        const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
+
+        path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost );
+
+        // Sanity check
+        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
+            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            break;
+        }
+        else {
+            currentNode = node._from;
+        }
+    }
+
+    // Cut the path to the last valid tile
+    if ( lastValidNode != target ) {
+        path.erase( std::find_if( path.begin(), path.end(), [&lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
+    }
+
+    return path;
 }
 
 uint32_t AIWorldPathfinder::getDistance( const Heroes & hero, int targetIndex )
