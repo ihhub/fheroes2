@@ -60,7 +60,6 @@ public:
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
-
 };
 
 class AIWorldPathfinder : public WorldPathfinder

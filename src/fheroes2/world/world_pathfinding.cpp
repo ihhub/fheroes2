@@ -333,7 +333,7 @@ int AIWorldPathfinder::searchForFog( const Heroes & hero )
     return -1;
 }
 
-uint32_t AIWorldPathfinder::getDistance( const Heroes & hero, int targetIndex ) 
+uint32_t AIWorldPathfinder::getDistance( const Heroes & hero, int targetIndex )
 {
     reEvaluateIfNeeded( hero );
     return _cache[targetIndex]._cost;
