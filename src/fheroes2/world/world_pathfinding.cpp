@@ -293,7 +293,21 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
 // Overwrites base version in WorldPathfinder, using custom node passability rules
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
-    if ( currentNodeIdx == pathStart || !isTileBlockedForArmy( currentNodeIdx, _currentColor, _armyStrength, fromWater ) ) {
+    // find out if current node is protected by a strong army 
+    bool isProtected = false;
+    const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
+    for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
+        isProtected = Army( world.GetTiles( *it ) ).GetStrength() > _armyStrength;
+        if ( isProtected )
+            break;
+    }
+
+    // if it is we can't move here, reset
+    if ( isProtected )
+        _cache[currentNodeIdx].resetNode();
+
+    // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
+    if ( currentNodeIdx == pathStart || ( !isProtected && !isTileBlockedForArmy( currentNodeIdx, _currentColor, _armyStrength, fromWater ) ) ) {
         checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, fromWater );
     }
 }
