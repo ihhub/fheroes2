@@ -52,10 +52,10 @@ class PlayerWorldPathfinder : public WorldPathfinder
 {
 public:
     PlayerWorldPathfinder() {}
-    void reset();
+    virtual void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
-    std::list<Route::Step> buildPath( int target ) const;
+    virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
@@ -65,7 +65,7 @@ class AIWorldPathfinder : public WorldPathfinder
 {
 public:
     AIWorldPathfinder() {}
-    void reset();
+    virtual void reset() override;
 
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );
@@ -76,7 +76,7 @@ public:
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
     // Override builds path to the nearest valid object
-    std::list<Route::Step> buildPath( int target ) const;
+    virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );

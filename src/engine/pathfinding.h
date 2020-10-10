@@ -41,13 +41,13 @@ struct PathfindingNode
     }
 };
 
-// Template class have to be either PathfindingNode or its derivative
+// Template class has to be either PathfindingNode or its derivative
 template <class T>
 class Pathfinder
 {
 public:
     virtual void reset() = 0;
-    virtual std::list<Route::Step> buildPath( int target ) const = 0;
+    virtual std::list<Route::Step> buildPath( int targetIndex ) const = 0;
 
     virtual uint32_t getDistance( int targetIndex ) const
     {

@@ -48,16 +48,16 @@ namespace Battle
             , _isOpen( isOpen )
         {}
         // Override the base version of the call to use proper values
-        virtual void resetNode();
+        virtual void resetNode() override;
     };
 
     class ArenaPathfinder : public Pathfinder<ArenaNode>
     {
     public:
         ArenaPathfinder();
-        void reset();
+        virtual void reset() override;
         void calculate( const Unit & unit );
-        std::list<Route::Step> buildPath( int targetCell ) const;
+        virtual std::list<Route::Step> buildPath( int targetCell ) const override;
         bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
     };

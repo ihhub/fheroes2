@@ -215,12 +215,12 @@ void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     }
 }
 
-std::list<Route::Step> PlayerWorldPathfinder::buildPath( int target ) const
+std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 {
     std::list<Route::Step> path;
 
     // trace the path from end point
-    int currentNode = target;
+    int currentNode = targetIndex;
     while ( currentNode != _pathStart && currentNode != -1 ) {
         const PathfindingNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
@@ -310,7 +310,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
         }
     }
 
-    // if it is we can't move here, reset
+    // if we can't move here, reset
     if ( isProtected )
         currentNode.resetNode();
 
@@ -378,7 +378,7 @@ int AIWorldPathfinder::searchForFog( const Heroes & hero )
     return -1;
 }
 
-std::list<Route::Step> AIWorldPathfinder::buildPath( int target ) const
+std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex ) const
 {
     std::list<Route::Step> path;
     if ( _pathStart == -1 )
@@ -387,8 +387,8 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int target ) const
     const bool fromWater = world.GetTiles( _pathStart ).isWater();
 
     // trace the path from end point
-    int lastValidNode = target;
-    int currentNode = target;
+    int lastValidNode = targetIndex;
+    int currentNode = targetIndex;
     while ( currentNode != _pathStart && currentNode != -1 ) {
         if ( world.isTileBlocked( currentNode, fromWater ) ) {
             lastValidNode = currentNode;
@@ -410,7 +410,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int target ) const
     }
 
     // Cut the path to the last valid tile
-    if ( lastValidNode != target ) {
+    if ( lastValidNode != targetIndex ) {
         path.erase( std::find_if( path.begin(), path.end(), [&lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
     }
 
