@@ -109,12 +109,11 @@ bool World::isValidPath( int index, int direction ) const
     return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
 }
 
-void WorldPathfinder::reset()
+bool WorldPathfinder::checkWorldSize()
 {
     const size_t worldSize = world.getSize();
-    const bool needResizing = _cache.size() != worldSize;
 
-    if ( needResizing ) {
+    if ( _cache.size() != worldSize ) {
         _cache.clear();
         _cache.resize( worldSize );
 
@@ -123,7 +122,10 @@ void WorldPathfinder::reset()
         for ( size_t i = 0; i < directions.size(); ++i ) {
             _mapOffset[i] = Maps::GetDirectionIndex( 0, directions[i] );
         }
+
+        return true;
     }
+    return false;
 }
 
 std::list<Route::Step> WorldPathfinder::buildPath( int target ) const
@@ -181,8 +183,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
     nodesToExplore.push_back( pathStart );
 
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-        const int currentNodeIdx = nodesToExplore[lastProcessedNode];
-        processCurrentNode( nodesToExplore, pathStart, currentNodeIdx, fromWater );
+        processCurrentNode( nodesToExplore, pathStart, nodesToExplore[lastProcessedNode], fromWater );
     }
 }
 
@@ -213,23 +214,11 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
 
 void PlayerWorldPathfinder::reset()
 {
-    const size_t worldSize = world.getSize();
-    const bool needResizing = _cache.size() != worldSize;
+    WorldPathfinder::checkWorldSize();
 
-    if ( needResizing || _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE ) {
+    if ( _pathStart != -1 ) {
         _pathStart = -1;
         _pathfindingSkill = Skill::Level::NONE;
-    }
-
-    if ( needResizing ) {
-        _cache.clear();
-        _cache.resize( worldSize );
-
-        const Directions directions = Direction::All();
-        _mapOffset.resize( directions.size() );
-        for ( size_t i = 0; i < directions.size(); ++i ) {
-            _mapOffset[i] = Maps::GetDirectionIndex( 0, directions[i] );
-        }
     }
 }
 
@@ -243,6 +232,7 @@ void PlayerWorldPathfinder::reEvaluateIfNeeded( int start, uint8_t skill )
     }
 }
 
+// Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
@@ -270,10 +260,9 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
 
 void AIWorldPathfinder::reset()
 {
-    WorldPathfinder::reset();
+    WorldPathfinder::checkWorldSize();
 
-    if ( _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE || _armyStrength >= 0 || _currentColor != Color::NONE ) {
-        _cache.clear();
+    if ( _pathStart != -1 ) {
         _pathStart = -1;
         _pathfindingSkill = Skill::Level::NONE;
         _armyStrength = -1;

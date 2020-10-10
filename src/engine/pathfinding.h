@@ -33,7 +33,7 @@ struct PathfindingNode
         : _from( node )
         , _cost( cost )
     {}
-    // Sets node values to the defaults; used before processing new path
+    // Sets node values back to the defaults; used before processing new path
     virtual void resetNode()
     {
         _from = -1;

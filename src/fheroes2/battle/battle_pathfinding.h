@@ -39,7 +39,7 @@ namespace Battle
     {
         bool _isOpen = true;
 
-        // ArenaNode has different default values
+        // ArenaNode uses different default values
         ArenaNode()
             : PathfindingNode( -1, MAX_MOVE_COST )
         {}
@@ -47,7 +47,7 @@ namespace Battle
             : PathfindingNode( node, cost )
             , _isOpen( isOpen )
         {}
-        // Overwrite the base version of the call; ArenaNode uses different defaults
+        // Override the base version of the call to use proper values
         virtual void resetNode();
     };
 

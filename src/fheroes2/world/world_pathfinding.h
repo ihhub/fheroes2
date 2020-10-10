@@ -29,9 +29,12 @@ class WorldPathfinder : public Pathfinder<PathfindingNode>
 {
 public:
     WorldPathfinder() {}
-    virtual void reset();
 
-    // Common methods
+    // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
+    // Returns true if resize was performed.
+    virtual bool checkWorldSize();
+
+    // Shared helper methods
     virtual std::list<Route::Step> buildPath( int target ) const;
     bool isBlockedByObject( int target, bool fromWater = false ) const;
     uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
@@ -51,7 +54,7 @@ class PlayerWorldPathfinder : public WorldPathfinder
 {
 public:
     PlayerWorldPathfinder() {}
-    virtual void reset();
+    void reset();
 
     void reEvaluateIfNeeded( int start, uint8_t skill );
 
@@ -64,7 +67,8 @@ class AIWorldPathfinder : public WorldPathfinder
 {
 public:
     AIWorldPathfinder() {}
-    virtual void reset();
+    void reset();
+
     void reEvaluateIfNeeded( int start, uint8_t skill, double armyStrength, int color );
     int searchForFog( int start, uint8_t skill, double armyStrength, int color );
 
