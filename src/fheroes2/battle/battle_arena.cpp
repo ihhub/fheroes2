@@ -364,14 +364,10 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
         }
 
         // apply task
-        while ( actions.size() ) {
+        while ( actions.size() && !end_turn ) {
             // apply action
             ApplyAction( actions.front() );
             actions.pop_front();
-            if ( !army1->isValid() || !army2->isValid() ) {
-                end_turn = true;
-                break;
-            }
 
             // rescan orders
             if ( armies_order )
