@@ -109,7 +109,7 @@ bool World::isValidPath( int index, int direction ) const
     return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
 }
 
-bool WorldPathfinder::checkWorldSize()
+void WorldPathfinder::checkWorldSize()
 {
     const size_t worldSize = world.getSize();
 
@@ -122,10 +122,7 @@ bool WorldPathfinder::checkWorldSize()
         for ( size_t i = 0; i < directions.size(); ++i ) {
             _mapOffset[i] = Maps::GetDirectionIndex( 0, directions[i] );
         }
-
-        return true;
     }
-    return false;
 }
 
 std::list<Route::Step> WorldPathfinder::buildPath( int target ) const

@@ -39,6 +39,7 @@ namespace AI
 
         void HeroesActionComplete( Heroes & hero, int index );
         int GetPriorityTarget( const Heroes & hero );
+        void resetPathfinder();
 
     private:
         std::vector<MapObjectNode> _mapObjects;

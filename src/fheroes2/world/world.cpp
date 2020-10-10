@@ -1051,6 +1051,7 @@ std::list<Route::Step> World::getPath( const Heroes & hero, int targetIndex )
 void World::resetPathfinder()
 {
     _pathfinder.reset();
+    AI::Get().resetPathfinder();
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
@@ -1192,6 +1193,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     // update tile passable
     std::for_each( w.vec_tiles.begin(), w.vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
 
+    w.resetPathfinder();
     w.ComputeStaticAnalysis();
 
     // heroes postfix

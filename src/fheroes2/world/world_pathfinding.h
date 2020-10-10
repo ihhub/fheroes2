@@ -31,8 +31,7 @@ public:
     WorldPathfinder() {}
 
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
-    // Returns true if resize was performed.
-    virtual bool checkWorldSize();
+    virtual void checkWorldSize();
 
     // Shared helper methods
     virtual std::list<Route::Step> buildPath( int target ) const;
