@@ -185,6 +185,10 @@ namespace AI
             hero.IncreaseExperience( exp );
         }
 
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors( hero ) ) ) {
+            hero.FadeOut();
+        }
+
         hero.SetKillerColor( color );
         hero.SetFreeman( reason );
     }
