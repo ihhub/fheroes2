@@ -364,18 +364,20 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
         }
 
         // apply task
-        while ( actions.size() && !end_turn ) {
+        while ( actions.size() ) {
             // apply action
             ApplyAction( actions.front() );
             actions.pop_front();
 
+            // check end battle
+            if ( !BattleValid() ) {
+                end_turn = true;
+                break;
+            }
+
             // rescan orders
             if ( armies_order )
                 Force::UpdateOrderUnits( *army1, *army2, *armies_order );
-
-            // check end battle
-            if ( !BattleValid() )
-                end_turn = true;
 
             // good morale
             if ( !end_turn && current_troop->isValid() && !current_troop->Modes( TR_SKIPMOVE ) && current_troop->Modes( TR_MOVED ) && current_troop->Modes( MORALE_GOOD )
