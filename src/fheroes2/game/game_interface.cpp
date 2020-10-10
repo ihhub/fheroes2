@@ -161,7 +161,7 @@ const fheroes2::Rect & Interface::Basic::GetScrollBottom( void ) const
 
 bool Interface::Basic::NeedRedraw( void ) const
 {
-    return redraw;
+    return redraw != 0;
 }
 
 void Interface::Basic::SetRedraw( int f )

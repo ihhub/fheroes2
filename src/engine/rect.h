@@ -76,11 +76,9 @@ struct Rect : Point, Size
     Rect( s16, s16, u16, u16 );
     Rect( const Point &, u16, u16 );
     Rect( const Point &, const Size & );
-    Rect( const SDL_Rect & );
 
     // TODO: this method must be removed before merging to master
     Rect( const fheroes2::Rect & rect );
-    fheroes2::Rect convert() const;
 
     Rect & operator=( const Point & );
     bool operator==( const Rect & ) const;

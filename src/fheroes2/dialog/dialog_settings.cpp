@@ -235,7 +235,7 @@ void Dialog::ExtSettings( bool readonly )
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
     listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
     listbox.SetAreaMaxItems( ah / 40 );
-    listbox.SetAreaItems( Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
     listbox.Redraw();
 

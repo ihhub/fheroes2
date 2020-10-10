@@ -222,7 +222,7 @@ Spell HeroBase::OpenSpellBook( int filter, bool canselect ) const
 
 bool HeroBase::HaveSpellBook( void ) const
 {
-    return HasArtifact( Artifact::MAGIC_BOOK );
+    return HasArtifact( Artifact::MAGIC_BOOK ) != 0;
 }
 
 std::vector<Spell> HeroBase::GetSpells( int lvl ) const

@@ -116,7 +116,7 @@ void MapEvent::SetVisited( int color )
 
 bool MapEvent::isAllow( int col ) const
 {
-    return col & colors;
+    return ( col & colors ) != 0;
 }
 
 MapSphinx::MapSphinx()

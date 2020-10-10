@@ -190,7 +190,7 @@ namespace Battle
             SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
                                                                                  buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 6 ) );
             splitter.HideCursor();
-            SetAreaItems( Rect( area.x, area.y, area.w - 10, area.h ) );
+            SetAreaItems( fheroes2::Rect( area.x, area.y, area.w - 10, area.h ) );
             SetListContent( messages );
             splitter.ShowCursor();
         }

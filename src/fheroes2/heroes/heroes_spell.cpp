@@ -470,7 +470,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 145 ) );
     listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 260, area.y + 78, 14, 64 ) );
     listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( Rect( area.x + 10, area.y + 60, 250, 100 ) );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 60, 250, 100 ) );
     listbox.SetListContent( castles );
     listbox.Redraw();
 

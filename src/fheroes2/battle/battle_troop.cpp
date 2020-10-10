@@ -64,7 +64,7 @@ Battle::ModeDuration::ModeDuration( u32 mode, u32 duration )
 
 bool Battle::ModeDuration::isMode( u32 mode ) const
 {
-    return ( first & mode );
+    return ( first & mode ) != 0;
 }
 
 bool Battle::ModeDuration::isZeroDuration( void ) const

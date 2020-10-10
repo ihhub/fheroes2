@@ -248,7 +248,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     // FIXME: update Listbox
     listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), Rect( rt.x + 328, rt.y + 73, 12, 141 ) );
     listbox.SetAreaMaxItems( 9 );
-    listbox.SetAreaItems( Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
+    listbox.SetAreaItems( fheroes2::Rect( rt.x + 55, rt.y + 55, 270, 175 ) );
     listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
     listbox.SetCurrent( selectedId );
     listbox.Redraw();

@@ -315,5 +315,5 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
         }
     }
 
-    return player;
+    return player != NULL;
 }

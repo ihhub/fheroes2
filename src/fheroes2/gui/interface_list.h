@@ -114,7 +114,7 @@ namespace Interface
             Reset();
         }
 
-        void SetAreaItems( const Rect & rt )
+        void SetAreaItems( const fheroes2::Rect & rt )
         {
             rtAreaItems = rt;
         }
@@ -172,7 +172,7 @@ namespace Interface
                 int id = _topId;
                 const int end = ( _topId + maxItems ) > _size() ? _size() - _topId : _topId + maxItems;
                 for ( ; id < end; ++id )
-                    RedrawItem( ( *content )[id], rtAreaItems.x, rtAreaItems.y + ( id - _topId ) * rtAreaItems.h / maxItems, id == _currentId );
+                    RedrawItem( ( *content )[id], rtAreaItems.x, rtAreaItems.y + ( id - _topId ) * rtAreaItems.height / maxItems, id == _currentId );
             }
         }
 
@@ -192,13 +192,13 @@ namespace Interface
             if ( !IsValid() )
                 return NULL;
 
-            if ( mp.y < rtAreaItems.y || mp.y >= rtAreaItems.y + rtAreaItems.h ) // out of boundaries
+            if ( mp.y < rtAreaItems.y || mp.y >= rtAreaItems.y + rtAreaItems.height ) // out of boundaries
                 return NULL;
 
-            if ( mp.x < rtAreaItems.x || mp.x >= rtAreaItems.x + rtAreaItems.w ) // out of boundaries
+            if ( mp.x < rtAreaItems.x || mp.x >= rtAreaItems.x + rtAreaItems.width ) // out of boundaries
                 return NULL;
 
-            const int id = ( mp.y - rtAreaItems.y ) * maxItems / rtAreaItems.h;
+            const int id = ( mp.y - rtAreaItems.y ) * maxItems / rtAreaItems.height;
             if ( _topId + id >= _size() ) // out of items
                 return NULL;
 
@@ -244,7 +244,7 @@ namespace Interface
             if ( pos == content->end() )
                 Reset();
             else
-                _currentId = pos - content->begin();
+                _currentId = static_cast<int>( pos - content->begin() );
 
             SetCurrentVisible();
         }
@@ -338,9 +338,10 @@ namespace Interface
                 return true;
             }
 
-            const Point mousePos = le.GetMouseCursor();
+            const Point & position = le.GetMouseCursor();
+            const fheroes2::Point mousePos( position.x, position.y );
             if ( rtAreaItems & mousePos ) { // within our rectangle
-                const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.h + _topId;
+                const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
                 cursor.Hide();
 
                 if ( id < _size() ) {
@@ -372,7 +373,7 @@ namespace Interface
         }
 
     protected:
-        Rect rtAreaItems;
+        fheroes2::Rect rtAreaItems;
 
         fheroes2::Button buttonPgUp;
         fheroes2::Button buttonPgDn;
