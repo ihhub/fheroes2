@@ -293,13 +293,14 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
 // Overwrites base version in WorldPathfinder, using custom node passability rules
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
-    // find out if current node is protected by a strong army 
+    // find out if current node is protected by a strong army
     bool isProtected = false;
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
     for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
-        isProtected = Army( world.GetTiles( *it ) ).GetStrength() > _armyStrength;
-        if ( isProtected )
+        if ( Army( world.GetTiles( *it ) ).GetStrength() > _armyStrength ) {
+            isProtected = true;
             break;
+        }
     }
 
     // if it is we can't move here, reset
@@ -309,6 +310,12 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
     if ( currentNodeIdx == pathStart || ( !isProtected && !isTileBlockedForArmy( currentNodeIdx, _currentColor, _armyStrength, fromWater ) ) ) {
         checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, fromWater );
+
+        // special case: move through teleporters
+        const MapsIndexes & teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+        for ( const int teleportIdx : teleporters ) {
+            checkAdjacentNodes( nodesToExplore, pathStart, teleportIdx, fromWater );
+        }
     }
 }
 
