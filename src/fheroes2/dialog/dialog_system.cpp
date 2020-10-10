@@ -47,20 +47,35 @@ int Dialog::SystemOptions( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder frameborder( ( display.width() - 250 - BORDERWIDTH * 2 ) / 2, ( display.height() - 382 - BORDERWIDTH * 2 ) / 2, 288, 382 );
-    const Rect & area = frameborder.GetArea();
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 0 );
+    const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG ), 1 );
+
+    const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
+    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+
+    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+    const fheroes2::Rect dialogArea( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
+
+    fheroes2::Fill( display, dialogArea.x, dialogArea.y, dialogArea.width, dialogArea.height, 0 );
+    fheroes2::Blit( dialogShadow, display, dialogArea.x - BORDERWIDTH, dialogArea.y + BORDERWIDTH );
+    fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
+
+    const fheroes2::Sprite & optionSprite = fheroes2::AGG::GetICN( ICN::SPANEL, 0 );
+    const fheroes2::Point optionOffset( 36 + dialogArea.x, 47 + dialogArea.y );
+    const fheroes2::Point optionStep( 92, 110 );
 
     std::vector<fheroes2::Rect> rects;
-    const s32 posx = ( area.w - 256 ) / 2;
-    rects.push_back( fheroes2::Rect( area.x + posx, area.y + 30, 64, 64 ) );
-    rects.push_back( fheroes2::Rect( area.x + posx + 92, area.y + 30, 64, 64 ) );
-    rects.push_back( fheroes2::Rect( area.x + posx + 184, area.y + 30, 64, 64 ) );
-    rects.push_back( fheroes2::Rect( area.x + posx, area.y + 140, 64, 64 ) );
-    rects.push_back( fheroes2::Rect( area.x + posx + 92, area.y + 140, 64, 64 ) );
-    rects.push_back( fheroes2::Rect( area.x + posx + 184, area.y + 140, 64, 64 ) );
-    rects.push_back( fheroes2::Rect( area.x + posx, area.y + 250, 64, 64 ) );
-    rects.push_back( fheroes2::Rect( area.x + posx + 92, area.y + 250, 64, 64 ) );
-    rects.push_back( fheroes2::Rect( area.x + posx + 184, area.y + 250, 64, 64 ) ); // not in use
+    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
+    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
+    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
+    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
+    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
+    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
+    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) );
+    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) );
+    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) ); // not in use
 
     const fheroes2::Rect & rect1 = rects[0];
     const fheroes2::Rect & rect2 = rects[1];
@@ -71,13 +86,12 @@ int Dialog::SystemOptions( void )
     const fheroes2::Rect & rect7 = rects[6];
     const fheroes2::Rect & rect8 = rects[7];
 
-    fheroes2::Image back2( area.w, area.h - 30 );
-    fheroes2::Copy( display, area.x, area.y, back2, 0, 0, area.w, area.h - 30 );
     DrawSystemInfo( rects );
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button buttonOkay( area.x + 96, area.y + 350, conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
+    const fheroes2::Point buttonOffset( 113 + dialogArea.x, 362 + dialogArea.y );
+    fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
     buttonOkay.draw();
 
     cursor.Show();
@@ -98,7 +112,7 @@ int Dialog::SystemOptions( void )
         if ( conf.Music() && le.MouseClickLeft( rect1 ) ) {
             conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
             redraw = true;
-            Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
+            Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
             saveConfig = true;
         }
 
@@ -170,7 +184,7 @@ int Dialog::SystemOptions( void )
 
         if ( redraw ) {
             cursor.Hide();
-            fheroes2::Blit( back2, display, area.x, area.y );
+            fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
             DrawSystemInfo( rects );
             buttonOkay.draw();
             cursor.Show();
@@ -197,9 +211,6 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
 
     std::string str;
     Text text;
-
-    fheroes2::Image black( 65, 65 );
-    black.fill( 0 );
 
     const int textOffset = 2;
 
@@ -342,7 +353,6 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     // unused
     // const fheroes2::Sprite & sprite9 = fheroes2::AGG::GetICN(ICN::SPANEL, 17);
     const Rect & rect9 = rects[8];
-    fheroes2::Blit( black, display, rect9.x, rect9.y );
     str = "unused";
     text.Set( str );
     text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y + rect9.h + textOffset );
