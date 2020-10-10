@@ -220,7 +220,7 @@ void Kingdom::AddHeroes( Heroes * hero )
             heroes.push_back( hero );
 
         Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) )
+        if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
 
         AI::Get().HeroesAdd( *hero );

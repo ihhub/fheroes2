@@ -646,8 +646,8 @@ void Battle::Only::StartBattle( void )
 
     conf.SetCurrentColor( player1.GetColor() );
 
-    players.SetPlayerControl( player1.GetColor(), player1.GetControl() );
-    players.SetPlayerControl( player2.GetColor(), player2.GetControl() );
+    players.SetPlayerControl( player1.GetColor(), CONTROL_AI );
+    players.SetPlayerControl( player2.GetColor(), CONTROL_AI );
 
     if ( hero1 ) {
         hero1->SetSpellPoints( hero1->GetMaxSpellPoints() );
@@ -657,6 +657,9 @@ void Battle::Only::StartBattle( void )
             hero2->SetSpellPoints( hero2->GetMaxSpellPoints() );
             hero2->Recruit( player2.GetColor(), Point( 5, 6 ) );
         }
+
+        players.SetPlayerControl( player1.GetColor(), player1.GetControl() );
+        players.SetPlayerControl( player2.GetColor(), player2.GetControl() );
 
         Battle::Loader( hero1->GetArmy(), ( hero2 ? hero2->GetArmy() : monsters ), hero1->GetIndex() + 1 );
     }
