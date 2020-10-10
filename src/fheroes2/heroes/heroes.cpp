@@ -1464,7 +1464,7 @@ void Heroes::SetFreeman( int reason )
             kingdom.SetLastLostHero( *this );
         }
 
-        if ( (reason & Battle::RESULT_SURRENDER) == 0 )
+        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 )
             army.Reset( true );
         else
             army.Reset( false );
