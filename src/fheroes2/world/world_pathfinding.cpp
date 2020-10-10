@@ -136,7 +136,15 @@ std::list<Route::Step> WorldPathfinder::buildPath( int target ) const
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
         path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost );
-        currentNode = node._from;
+
+        // Sanity check
+        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
+            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            break;
+        }
+        else {
+            currentNode = node._from;
+        }
     }
 
     return path;
@@ -290,6 +298,8 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
 // Overwrites base version in WorldPathfinder, using custom node passability rules
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
+    const bool isFirstNode = currentNodeIdx == pathStart;
+    PathfindingNode & currentNode = _cache[currentNodeIdx];
     // find out if current node is protected by a strong army
     bool isProtected = false;
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
@@ -302,16 +312,30 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
 
     // if it is we can't move here, reset
     if ( isProtected )
-        _cache[currentNodeIdx].resetNode();
+        currentNode.resetNode();
 
     // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( currentNodeIdx == pathStart || ( !isProtected && !isTileBlockedForArmy( currentNodeIdx, _currentColor, _armyStrength, fromWater ) ) ) {
-        checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, fromWater );
+    if ( isFirstNode || ( !isProtected && !isTileBlockedForArmy( currentNodeIdx, _currentColor, _armyStrength, fromWater ) ) ) {
+        const MapsIndexes & teleporters = world.GetTeleportEndPoints( currentNodeIdx );
+
+        // do not check adjacent if we're going through the teleport in the middle of the path
+        if ( isFirstNode || teleporters.empty() || std::find( teleporters.begin(), teleporters.end(), currentNode._from ) != teleporters.end() ) {
+            checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, fromWater );
+        }
 
         // special case: move through teleporters
-        const MapsIndexes & teleporters = world.GetTeleportEndPoints( currentNodeIdx );
         for ( const int teleportIdx : teleporters ) {
-            checkAdjacentNodes( nodesToExplore, pathStart, teleportIdx, fromWater );
+            if ( teleportIdx == pathStart )
+                continue;
+
+            PathfindingNode & teleportNode = _cache[teleportIdx];
+
+            // check if move is actually faster through teleporter
+            if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
+                teleportNode._from = currentNodeIdx;
+                teleportNode._cost = currentNode._cost;
+                nodesToExplore.push_back( teleportIdx );
+            }
         }
     }
 }
