@@ -368,7 +368,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             // apply action
             ApplyAction( actions.front() );
             actions.pop_front();
-            if( !army1->isValid() || !army2->isValid() ) {
+            if ( !army1->isValid() || !army2->isValid() ) {
                 end_turn = true;
                 break;
             }
