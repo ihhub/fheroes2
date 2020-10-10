@@ -84,6 +84,13 @@ namespace Battle
         return newIndex;
     }
 
+    void ArenaNode::resetNode()
+    {
+        _from = -1;
+        _cost = MAX_MOVE_COST;
+        _isOpen = true;
+    }
+
     ArenaPathfinder::ArenaPathfinder()
     {
         _cache.resize( ARENASIZE );
@@ -92,10 +99,7 @@ namespace Battle
     void ArenaPathfinder::reset()
     {
         for ( size_t i = 0; i < _cache.size(); ++i ) {
-            ArenaNode & node = _cache[i];
-            node._from = -1;
-            node._cost = MAX_MOVE_COST;
-            node._isOpen = true;
+            _cache[i].resetNode();
         }
     }
 

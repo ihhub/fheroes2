@@ -47,6 +47,8 @@ namespace Battle
             : PathfindingNode( node, cost )
             , _isOpen( isOpen )
         {}
+        // Overwrite the base version of the call; ArenaNode uses different defaults
+        virtual void resetNode();
     };
 
     class ArenaPathfinder : public Pathfinder<ArenaNode>

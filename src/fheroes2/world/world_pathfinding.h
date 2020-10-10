@@ -34,9 +34,9 @@ public:
     bool isBlockedByObject( int target, bool fromWater = false );
     uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
     int searchForFog( int playerColor, int start, uint8_t skill = Skill::Level::NONE );
+    void processWorldMap( int pathStart );
 
 protected:
-    void processWorldMap( int pathStart );
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
     void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
 

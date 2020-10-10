@@ -33,6 +33,12 @@ struct PathfindingNode
         : _from( node )
         , _cost( cost )
     {}
+    // Sets node values to the defaults; used before processing new path
+    virtual void resetNode()
+    {
+        _from = -1;
+        _cost = 0;
+    }
 };
 
 // Template class have to be either PathfindingNode or its derivative

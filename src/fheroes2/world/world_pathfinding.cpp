@@ -117,12 +117,12 @@ void WorldPathfinder::reset()
     const bool needResizing = _cache.size() != worldSize;
 
     if ( needResizing || _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE ) {
-        _cache.clear();
         _pathStart = -1;
         _pathfindingSkill = Skill::Level::NONE;
     }
 
     if ( needResizing ) {
+        _cache.clear();
         _cache.resize( worldSize );
 
         const Directions directions = Direction::All();
@@ -228,8 +228,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
 
     // reset cache back to default value
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
-        _cache[idx]._from = -1;
-        _cache[idx]._cost = 0;
+        _cache[idx].resetNode();
     }
     _cache[pathStart] = PathfindingNode( -1, 0 );
 
