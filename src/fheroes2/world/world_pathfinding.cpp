@@ -22,7 +22,7 @@
 #include "ground.h"
 #include "world.h"
 
-bool isTileBlockedForArmy( double armyStrength, int color, int tileIndex, bool fromWater )
+bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool fromWater )
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
     const bool toWater = tile.isWater();
@@ -222,13 +222,16 @@ void PlayerWorldPathfinder::reset()
     }
 }
 
-void PlayerWorldPathfinder::reEvaluateIfNeeded( int start, uint8_t skill )
+void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    if ( _pathStart != start || _pathfindingSkill != skill ) {
-        _pathStart = start;
+    const int startIndex = hero.GetIndex();
+    const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
+
+    if ( _pathStart != startIndex || _pathfindingSkill != skill ) {
+        _pathStart = startIndex;
         _pathfindingSkill = skill;
 
-        processWorldMap( start );
+        processWorldMap( startIndex );
     }
 }
 
@@ -290,7 +293,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStr
 // Overwrites base version in WorldPathfinder, using custom node passability rules
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
-    if ( currentNodeIdx == pathStart || !isTileBlockedForArmy( _armyStrength, Color::BLUE, currentNodeIdx, fromWater ) ) {
+    if ( currentNodeIdx == pathStart || !isTileBlockedForArmy( currentNodeIdx, _currentColor, _armyStrength, fromWater ) ) {
         checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, fromWater );
     }
 }

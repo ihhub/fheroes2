@@ -56,7 +56,7 @@ public:
     PlayerWorldPathfinder() {}
     void reset();
 
-    void reEvaluateIfNeeded( int start, uint8_t skill );
+    void reEvaluateIfNeeded( const Heroes & hero );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );

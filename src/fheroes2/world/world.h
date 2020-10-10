@@ -253,8 +253,8 @@ public:
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
     bool isValidPath( int index, int direction ) const;
-    uint32_t getDistance( int from, int to, uint32_t skill );
-    std::list<Route::Step> getPath( int from, int to, uint32_t skill );
+    uint32_t getDistance( const Heroes & hero, int targetIndex );
+    std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();
 
     void ComputeStaticAnalysis();

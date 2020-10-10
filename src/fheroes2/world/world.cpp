@@ -1036,16 +1036,16 @@ u32 World::GetUniq( void )
     return ++GameStatic::uniq;
 }
 
-uint32_t World::getDistance( int from, int to, uint32_t skill )
+uint32_t World::getDistance( const Heroes & hero, int targetIndex )
 {
-    _pathfinder.reEvaluateIfNeeded( from, skill );
-    return _pathfinder.getDistance( to );
+    _pathfinder.reEvaluateIfNeeded( hero );
+    return _pathfinder.getDistance( targetIndex );
 }
 
-std::list<Route::Step> World::getPath( int from, int to, uint32_t skill )
+std::list<Route::Step> World::getPath( const Heroes & hero, int targetIndex )
 {
-    _pathfinder.reEvaluateIfNeeded( from, skill );
-    return _pathfinder.buildPath( to );
+    _pathfinder.reEvaluateIfNeeded( hero );
+    return _pathfinder.buildPath( targetIndex );
 }
 
 void World::resetPathfinder()
