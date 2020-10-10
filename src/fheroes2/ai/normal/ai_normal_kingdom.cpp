@@ -133,9 +133,10 @@ namespace AI
 
                     for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
                         if ( enemy->second ) {
-                            const double attackerThreat = enemy->second->GetStrength() - defenders;
+                            const double attackerStrength = enemy->second->GetStrength();
+                            const double attackerThreat = attackerStrength - defenders;
                             if ( attackerThreat > 0 ) {
-                                const uint32_t dist = world.getDistance( castleIndex, enemy->first, 0 );
+                                const uint32_t dist = _pathfinder.getDistance( castleIndex, enemy->first, attackerStrength, color );
                                 if ( dist && dist < threatDistanceLimit ) {
                                     // castle is under threat
                                     castlesInDanger.push_back( castleIndex );

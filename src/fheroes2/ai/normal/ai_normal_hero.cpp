@@ -75,16 +75,15 @@ namespace AI
         int priorityTarget = -1;
 
         const int heroIndex = hero.GetIndex();
-        const uint32_t skill = hero.GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-        double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.w() * world.h();
+        double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         int objectID = MP2::OBJ_ZERO;
 
         size_t selectedNode = _mapObjects.size();
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const MapObjectNode & node = _mapObjects[idx];
             if ( HeroesValidObject( hero, node.first ) ) {
-                const uint32_t dist = world.getDistance( heroIndex, node.first, skill );
+                const uint32_t dist = _pathfinder.getDistance( hero, node.first );
                 if ( dist == 0 )
                     continue;
 
@@ -106,7 +105,7 @@ namespace AI
             _mapObjects.erase( selectedNode + _mapObjects.begin() );
         }
         else {
-            priorityTarget = _pathfinder.searchForFog( heroIndex, skill, hero.GetArmy().GetStrength(), hero.GetColor() );
+            priorityTarget = _pathfinder.searchForFog( hero );
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
         }
 

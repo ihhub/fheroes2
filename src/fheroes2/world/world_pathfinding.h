@@ -37,7 +37,7 @@ public:
     // Shared helper methods
     virtual std::list<Route::Step> buildPath( int target ) const;
     bool isBlockedByObject( int target, bool fromWater = false ) const;
-    uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
+    uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::EXPERT ) const;
 
 protected:
     void processWorldMap( int pathStart );
@@ -46,7 +46,7 @@ protected:
     // This methods defines pathfinding rules. This has to be implemented by the derived class.
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
 
-    uint8_t _pathfindingSkill = 0;
+    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
     std::vector<int> _mapOffset;
 };
 
@@ -69,12 +69,17 @@ public:
     AIWorldPathfinder() {}
     void reset();
 
-    void reEvaluateIfNeeded( int start, uint8_t skill, double armyStrength, int color );
-    int searchForFog( int start, uint8_t skill, double armyStrength, int color );
+    void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
+    void reEvaluateIfNeeded( const Heroes & hero );
+    int searchForFog( const Heroes & hero );
+    uint32_t getDistance( const Heroes & hero, int targetIndex );
+
+    // Used for non-hero armies, like castles or monsters
+    uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
 
-    double _armyStrength = -1;
     int _currentColor = Color::NONE;
+    double _armyStrength = -1;
 };

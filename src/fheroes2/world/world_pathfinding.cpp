@@ -218,7 +218,7 @@ void PlayerWorldPathfinder::reset()
 
     if ( _pathStart != -1 ) {
         _pathStart = -1;
-        _pathfindingSkill = Skill::Level::NONE;
+        _pathfindingSkill = Skill::Level::EXPERT;
     }
 }
 
@@ -264,19 +264,24 @@ void AIWorldPathfinder::reset()
 
     if ( _pathStart != -1 ) {
         _pathStart = -1;
-        _pathfindingSkill = Skill::Level::NONE;
-        _armyStrength = -1;
         _currentColor = Color::NONE;
+        _armyStrength = -1;
+        _pathfindingSkill = Skill::Level::EXPERT;
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( int start, uint8_t skill, double armyStrength, int color )
+void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    if ( _pathStart != start || _pathfindingSkill != skill || _armyStrength != armyStrength || _currentColor != color ) {
+    reEvaluateIfNeeded( hero.GetIndex(), hero.GetColor(), hero.GetArmy().GetStrength(), hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+}
+
+void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill )
+{
+    if ( _pathStart != start || _currentColor != color || _armyStrength != armyStrength || _pathfindingSkill != skill ) {
         _pathStart = start;
-        _pathfindingSkill = skill;
-        _armyStrength = armyStrength;
         _currentColor = color;
+        _armyStrength = armyStrength;
+        _pathfindingSkill = skill;
 
         processWorldMap( start );
     }
@@ -290,10 +295,11 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 }
 
-int AIWorldPathfinder::searchForFog( int start, uint8_t skill, double armyStrength, int color )
+int AIWorldPathfinder::searchForFog( const Heroes & hero )
 {
     // paths have to be pre-calculated to find a spot where we're able to move
-    reEvaluateIfNeeded( start, skill, armyStrength, color );
+    reEvaluateIfNeeded( hero );
+    const int start = hero.GetIndex();
 
     const Directions directions = Direction::All();
     std::vector<bool> tilesVisited( world.getSize(), false );
@@ -325,4 +331,16 @@ int AIWorldPathfinder::searchForFog( int start, uint8_t skill, double armyStreng
         }
     }
     return -1;
+}
+
+uint32_t AIWorldPathfinder::getDistance( const Heroes & hero, int targetIndex ) 
+{
+    reEvaluateIfNeeded( hero );
+    return _cache[targetIndex]._cost;
+}
+
+uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )
+{
+    reEvaluateIfNeeded( start, color, armyStrength, skill );
+    return _cache[targetIndex]._cost;
 }
