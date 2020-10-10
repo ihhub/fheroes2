@@ -467,8 +467,7 @@ void Battle::Force::SyncArmyCount( bool checkResurrected )
                 const Unit * unit = FindUID( uids.at( index ) );
                 if ( unit ) {
                     if ( unit->GetDead() > 0 ) {
-                        if ( unit->GetDead() < troop->GetCount() )
-                        {
+                        if ( unit->GetDead() < troop->GetCount() ) {
                             isAllDead = false;
                             break;
                         }
