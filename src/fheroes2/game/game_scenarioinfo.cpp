@@ -53,6 +53,25 @@ int Game::SelectScenario( void )
     return SCENARIOINFO;
 }
 
+void updatePlayers( Players & players, const int humanPlayerCount )
+{
+    if ( humanPlayerCount < 2 )
+        return;
+
+    int foundHumans = 0;
+
+    for ( size_t i = 0; i < players.size(); ++i ) {
+        if ( players[i]->isControlHuman() ) {
+            ++foundHumans;
+            if ( players[i]->isControlAI() )
+                players[i]->SetControl( CONTROL_HUMAN );
+        }
+
+        if ( foundHumans == humanPlayerCount )
+            break;
+    }
+}
+
 int Game::ScenarioInfo( void )
 {
     Settings & conf = Settings::Get();
@@ -110,6 +129,8 @@ int Game::ScenarioInfo( void )
     Players & players = conf.GetPlayers();
     Interface::PlayersInfo playersInfo( true, true, true );
 
+    const int humanPlayerCount = Settings::Get().PreferablyCountPlayers();
+
     if ( !resetStartingSettings ) { // verify that current map really exists in map's list
         resetStartingSettings = true;
         const std::string & mapName = conf.CurrentFileInfo().name;
@@ -131,6 +152,7 @@ int Game::ScenarioInfo( void )
     if ( resetStartingSettings )
         conf.SetCurrentFileInfo( lists.front() );
 
+    updatePlayers( players, humanPlayerCount );
     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
     RedrawScenarioStaticInfo( rectPanel, true );
@@ -190,6 +212,7 @@ int Game::ScenarioInfo( void )
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, mapId );
             if ( fi ) {
                 conf.SetCurrentFileInfo( *fi );
+                updatePlayers( players, humanPlayerCount );
                 playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
                 cursor.Hide();
