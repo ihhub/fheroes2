@@ -200,6 +200,7 @@ public:
     const UltimateArtifact & GetUltimateArtifact( void ) const;
     bool DiggingForUltimateArtifact( const Point & );
 
+    size_t getSize() const;
     int GetDay( void ) const;
     int GetWeek( void ) const;
     int GetMonth( void ) const;

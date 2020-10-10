@@ -20,13 +20,14 @@
 
 #pragma once
 
+#include "color.h"
 #include "pathfinding.h"
 #include "route.h"
 
 class WorldPathfinder : public Pathfinder<PathfindingNode>
 {
 public:
-    WorldPathfinder() {}
+    WorldPathfinder();
     virtual void reset();
     virtual std::list<Route::Step> buildPath( int target ) const;
     void reEvaluateIfNeeded( int start, uint8_t skill );
@@ -38,12 +39,13 @@ protected:
     void evaluateMap( int start, uint8_t skill );
 
     uint8_t _pathfindingSkill = 0;
+    std::vector<int> _mapOffset;
 };
 
 class AIWorldPathfinder : public WorldPathfinder
 {
 public:
-    AIWorldPathfinder() {}
+    AIWorldPathfinder();
     virtual void reset();
     void reEvaluateIfNeeded( int start, uint8_t skill, double armyStrength, int color );
 

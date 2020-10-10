@@ -109,12 +109,30 @@ bool World::isValidPath( int index, int direction ) const
     return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
 }
 
+WorldPathfinder::WorldPathfinder()
+{
+    reset();
+}
+
 void WorldPathfinder::reset()
 {
-    if ( _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE ) {
+    const size_t worldSize = world.getSize();
+    const bool needResizing = _cache.size() != worldSize;
+
+    if ( needResizing || _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE ) {
         _cache.clear();
         _pathStart = -1;
         _pathfindingSkill = Skill::Level::NONE;
+    }
+
+    if ( needResizing ) {
+        _cache.resize( worldSize );
+
+        const Directions directions = Direction::All();
+        _mapOffset.resize( directions.size() );
+        for ( size_t i = 0; i < directions.size(); ++i ) {
+            _mapOffset[i] = Maps::GetDirectionIndex( 0, directions[i] );
+        }
     }
 }
 
@@ -171,12 +189,8 @@ int WorldPathfinder::searchForFog( int playerColor, int start, uint8_t skill )
     reEvaluateIfNeeded( start, skill );
 
     const Directions directions = Direction::All();
-    std::vector<int> offset( directions.size() );
-    for ( size_t i = 0; i < directions.size(); ++i ) {
-        offset[i] = Maps::GetDirectionIndex( 0, directions[i] );
-    }
 
-    std::vector<bool> tilesVisited( static_cast<size_t>( world.w() ) * world.h(), false );
+    std::vector<bool> tilesVisited( world.getSize(), false );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( start );
@@ -187,7 +201,7 @@ int WorldPathfinder::searchForFog( int playerColor, int start, uint8_t skill )
 
         for ( size_t i = 0; i < directions.size(); ++i ) {
             if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
-                const int newIndex = currentNodeIdx + offset[i];
+                const int newIndex = currentNodeIdx + _mapOffset[i];
                 if ( newIndex == start )
                     continue;
 
@@ -214,16 +228,9 @@ void WorldPathfinder::evaluateMap( int start, uint8_t skill )
     const int height = world.h();
 
     const Directions directions = Direction::All();
-    std::vector<int> offset( directions.size() );
-    for ( size_t i = 0; i < directions.size(); ++i ) {
-        offset[i] = Maps::GetDirectionIndex( 0, directions[i] );
-    }
 
     _pathStart = start;
     _pathfindingSkill = skill;
-
-    _cache.clear();
-    _cache.resize( static_cast<size_t>( world.w() ) * height );
     _cache[start] = PathfindingNode( -1, 0 );
 
     std::vector<int> nodesToExplore;
@@ -252,7 +259,7 @@ void WorldPathfinder::evaluateMap( int start, uint8_t skill )
         else if ( currentNodeIdx == start || !world.isTileBlocked( currentNodeIdx, fromWater ) ) {
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
-                    const int newIndex = currentNodeIdx + offset[i];
+                    const int newIndex = currentNodeIdx + _mapOffset[i];
                     if ( newIndex == start )
                         continue;
 
@@ -272,8 +279,15 @@ void WorldPathfinder::evaluateMap( int start, uint8_t skill )
     }
 }
 
+AIWorldPathfinder::AIWorldPathfinder()
+{
+    reset();
+}
+
 void AIWorldPathfinder::reset()
 {
+    WorldPathfinder::reset();
+
     if ( _pathStart != -1 || _pathfindingSkill != Skill::Level::NONE || _armyStrength >= 0 || _currentColor != Color::NONE ) {
         _cache.clear();
         _pathStart = -1;
@@ -292,25 +306,17 @@ void AIWorldPathfinder::reEvaluateIfNeeded( int start, uint8_t skill, double arm
 
 void AIWorldPathfinder::evaluateMap( int start, uint8_t skill, double armyStrength, int color )
 {
-    const bool fromWater = world.GetTiles( start ).isWater();
-    const int width = world.w();
-    const int height = world.h();
+    const Maps::Tiles & startTile = world.GetTiles( start );
+    const bool fromWater = startTile.isWater();
+
+    const Heroes * hrro = startTile.GetHeroes();
+    Army amm1( startTile );
 
     const Directions directions = Direction::All();
-    std::vector<int> offset( directions.size() );
-    for ( size_t i = 0; i < directions.size(); ++i ) {
-        offset[i] = Maps::GetDirectionIndex( 0, directions[i] );
-    }
 
     _pathStart = start;
     _pathfindingSkill = skill;
-
-    _cache.clear();
-    _cache.resize( static_cast<size_t>( world.w() ) * height );
     _cache[start] = PathfindingNode( -1, 0 );
-
-    const Heroes * hrro = world.GetTiles( start ).GetHeroes();
-    Army amm1( world.GetTiles( start ) );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( start );
@@ -322,7 +328,7 @@ void AIWorldPathfinder::evaluateMap( int start, uint8_t skill, double armyStreng
         if ( currentNodeIdx == start || !isTileBlockedForArmy( amm1, Color::BLUE, currentNodeIdx, fromWater ) ) {
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
-                    const int newIndex = currentNodeIdx + offset[i];
+                    const int newIndex = currentNodeIdx + _mapOffset[i];
                     if ( newIndex == start )
                         continue;
 

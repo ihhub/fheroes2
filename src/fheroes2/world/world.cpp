@@ -386,6 +386,11 @@ Maps::Tiles & World::GetTiles( s32 index )
 #endif
 }
 
+size_t World::getSize() const
+{
+    return vec_tiles.size();
+}
+
 /* get kingdom */
 Kingdom & World::GetKingdom( int color )
 {
