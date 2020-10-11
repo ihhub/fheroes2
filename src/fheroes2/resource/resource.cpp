@@ -554,87 +554,73 @@ void Resource::BoxSprite::SetPos( s32 px, s32 py )
 
 void RedrawResourceSprite( const fheroes2::Image & sf, const Point & pos, u32 count, u32 width, u32 offset, s32 value )
 {
-    Point dst_pt;
-    Text text;
-
-    dst_pt.x = pos.x + width / 2 + count * width;
-    dst_pt.y = pos.y + offset;
-
+    const fheroes2::Point dst_pt( pos.x + width / 2 + count * width, pos.y + offset );
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
 
-    text.Set( GetString( value ), Font::SMALL );
+    const Text text( GetString( value ), Font::SMALL );
     text.Blit( dst_pt.x - text.w() / 2, dst_pt.y + 2 );
 }
 
 void Resource::BoxSprite::Redraw( void ) const
 {
-    const u32 valid_resource = rs.GetValidItemsCount();
-    if ( 0 == valid_resource )
-        return;
+    std::vector<std::pair<int32_t, uint32_t> > valueVsSprite;
 
-    u32 width = 2 < valid_resource ? w / 3 : w / valid_resource;
+    if ( rs.wood )
+        valueVsSprite.emplace_back( rs.wood, 0 );
 
-    u32 count = 0;
-    u32 offset = 35;
+    if ( rs.ore )
+        valueVsSprite.emplace_back( rs.ore, 2 );
 
-    if ( rs.wood ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
-        RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.wood );
-        ++count;
+    if ( rs.mercury )
+        valueVsSprite.emplace_back( rs.mercury, 1 );
+
+    if ( rs.sulfur )
+        valueVsSprite.emplace_back( rs.sulfur, 3 );
+
+    if ( rs.crystal )
+        valueVsSprite.emplace_back( rs.crystal, 4 );
+
+    if ( rs.gems )
+        valueVsSprite.emplace_back( rs.gems, 5 );
+
+    if ( rs.gold )
+        valueVsSprite.emplace_back( rs.gold, 6 );
+
+    uint32_t offsetY = 35;
+    size_t id = 0;
+
+    while ( valueVsSprite.size() - id > 2 ) {
+        const uint32_t width = w / 3;
+        const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
+        const fheroes2::Sprite & res2 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 1].second );
+        const fheroes2::Sprite & res3 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 2].second );
+
+        RedrawResourceSprite( res1, Point( x, y ), 0, width, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res2, Point( x, y ), 1, width, offsetY, valueVsSprite[id + 1].first );
+        RedrawResourceSprite( res3, Point( x, y ), 2, width, offsetY, valueVsSprite[id + 2].first );
+
+        id += 3;
+        offsetY += 45;
     }
 
-    if ( rs.ore ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 2 );
-        RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.ore );
-        ++count;
-    }
+    const bool isManyResources = valueVsSprite.size() > 2;
 
-    if ( rs.mercury ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
-        RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.mercury );
-        ++count;
-    }
+    if ( valueVsSprite.size() - id == 2 ) {
+        const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
+        const fheroes2::Sprite & res2 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 1].second );
 
-    if ( 2 < count ) {
-        count = 0;
-        offset += 45;
-    }
+        const uint32_t width = isManyResources ? w / 3 : w / 2;
+        const int32_t offsetX = isManyResources ? width / 2 : 0;
 
-    if ( rs.sulfur ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 3 );
-        RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.sulfur );
-        ++count;
+        RedrawResourceSprite( res1, Point( x + offsetX, y ), 0, width, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res2, Point( x + offsetX, y ), 1, width, offsetY, valueVsSprite[id + 1].first );
     }
+    else if ( valueVsSprite.size() - id == 1 ) {
+        const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
 
-    if ( 2 < count ) {
-        count = 0;
-        offset += 45;
-    }
-    if ( rs.crystal ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 4 );
-        RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.crystal );
-        ++count;
-    }
+        const uint32_t width = isManyResources ? w / 3 : w;
 
-    if ( 2 < count ) {
-        count = 0;
-        offset += 45;
-    }
-    if ( rs.gems ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 5 );
-        RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.gems );
-        ++count;
-    }
-
-    if ( 2 < count ) {
-        count = 0;
-        offset += 45;
-    }
-    if ( rs.gold ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
-        if ( !count )
-            width = w;
-        RedrawResourceSprite( sprite, Point( x, y ), count, width, offset, rs.gold );
+        RedrawResourceSprite( res1, Point( x, y ), isManyResources ? 1 : 0, width, offsetY, valueVsSprite[id].first );
     }
 }
 
