@@ -51,7 +51,7 @@ struct SpellFiltered : std::binary_function<Spell, int, bool>
     }
 };
 
-void SpellBookRedrawLists( const SpellStorage &, Rects &, size_t, const Point &, u32, int only, const HeroBase & hero );
+void SpellBookRedrawLists( const SpellStorage &, Rects &, size_t, const fheroes2::Point &, u32, int only, const HeroBase & hero );
 void SpellBookRedrawSpells( const SpellStorage &, Rects &, size_t, s32, s32, const HeroBase & hero );
 void SpellBookRedrawMP( const fheroes2::Point &, u32 );
 
@@ -97,8 +97,9 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
     const fheroes2::Sprite & bookmark_cmbt = fheroes2::AGG::GetICN( ICN::BOOK, 4 );
     const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
-    const Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2, bookPage.height() + 70 );
-    fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.w, pos.h );
+    const fheroes2::Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2,
+                              bookPage.height() + 70 );
+    fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
 
     const fheroes2::Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
     const fheroes2::Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
@@ -113,7 +114,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
     Rects coords;
     coords.reserve( SPELL_PER_PAGE * 2 );
 
-    SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), filt, hero );
+    SpellBookRedrawLists( spells2, coords, current_index, fheroes2::Point( pos.x, pos.y ), hero.GetSpellPoints(), filt, hero );
     bool redraw = false;
 
     cursor.Show();
@@ -211,7 +212,7 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
 
         if ( redraw ) {
             cursor.Hide();
-            SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), filt, hero );
+            SpellBookRedrawLists( spells2, coords, current_index, fheroes2::Point( pos.x, pos.y ), hero.GetSpellPoints(), filt, hero );
             cursor.Show();
             display.render();
             redraw = false;
@@ -243,8 +244,9 @@ void SpellBook::Edit( const HeroBase & hero )
     const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
     const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
-    const Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2, bookPage.height() + 70 );
-    fheroes2::ImageRestorer back( display, pos.x, pos.y, pos.w, pos.h );
+    const fheroes2::Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, bookPage.width() * 2,
+                              bookPage.height() + 70 );
+    fheroes2::ImageRestorer back( display, pos.x, pos.y, pos.width, pos.height );
 
     const fheroes2::Rect prev_list( pos.x + 30, pos.y + 8, 30, 25 );
     const fheroes2::Rect next_list( pos.x + 410, pos.y + 8, 30, 25 );
@@ -253,7 +255,7 @@ void SpellBook::Edit( const HeroBase & hero )
     Rects coords;
     coords.reserve( SPELL_PER_PAGE * 2 );
 
-    SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), SpellBook::ALL, hero );
+    SpellBookRedrawLists( spells2, coords, current_index, fheroes2::Point( pos.x, pos.y ), hero.GetSpellPoints(), SpellBook::ALL, hero );
     bool redraw = false;
 
     cursor.Show();
@@ -307,7 +309,7 @@ void SpellBook::Edit( const HeroBase & hero )
 
         if ( redraw ) {
             cursor.Hide();
-            SpellBookRedrawLists( spells2, coords, current_index, pos, hero.GetSpellPoints(), SpellBook::ALL, hero );
+            SpellBookRedrawLists( spells2, coords, current_index, fheroes2::Point( pos.x, pos.y ), hero.GetSpellPoints(), SpellBook::ALL, hero );
             cursor.Show();
             display.render();
             redraw = false;
@@ -364,7 +366,7 @@ void SpellBookRedrawMP( const fheroes2::Point & dst, u32 mp )
     text.Blit( tp.x - text.w() / 2, tp.y );
 }
 
-void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const size_t cur, const Point & pt, u32 sp, int only, const HeroBase & hero )
+void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const size_t cur, const fheroes2::Point & pt, u32 sp, int only, const HeroBase & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -412,7 +414,7 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
 
             const Spell & spell = spells[ii + cur];
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            const Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
+            const fheroes2::Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
             fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
 
             const uint32_t spellCost = spell.SpellPoint( &hero );

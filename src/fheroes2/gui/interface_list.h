@@ -97,7 +97,7 @@ namespace Interface
             buttonPgDn.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollSplitter( const fheroes2::Image & image, const Rect & area )
+        void SetScrollSplitter( const fheroes2::Image & image, const fheroes2::Rect & area )
         {
             splitter.SetArea( area );
             splitter.SetSprite( image );

@@ -60,7 +60,8 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 7 ).height();
     fheroes2::Button button_no( pt.x, pt.y, system, 7, 8 );
 
-    Rect pos = box.GetArea();
+    const Rect & boxArea = box.GetArea();
+    fheroes2::Rect pos( boxArea.x, boxArea.y, boxArea.w, boxArea.h );
 
     if ( header.size() )
         box1.Blit( pos.x, pos.y );

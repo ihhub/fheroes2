@@ -549,10 +549,10 @@ TextBox::TextBox( const std::string & msg, int ft, u32 width )
     Set( msg, ft, width );
 }
 
-TextBox::TextBox( const std::string & msg, int ft, const Rect & rt )
+TextBox::TextBox( const std::string & msg, int ft, const fheroes2::Rect & rt )
     : align( ALIGN_CENTER )
 {
-    Set( msg, ft, rt.w );
+    Set( msg, ft, rt.width );
     Blit( rt.x, rt.y );
 }
 

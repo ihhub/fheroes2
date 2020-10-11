@@ -33,7 +33,7 @@ Splitter::Splitter()
     , cur( 0 )
 {}
 
-Splitter::Splitter( const fheroes2::Image & image, const Rect & rt )
+Splitter::Splitter( const fheroes2::Image & image, const fheroes2::Rect & rt )
     : fheroes2::MovableSprite( image )
     , area( rt )
     , step( 0 )
@@ -47,14 +47,14 @@ void Splitter::SetSprite( const fheroes2::Image & image )
     fheroes2::Copy( image, *this );
 }
 
-void Splitter::SetArea( const Rect & rt )
+void Splitter::SetArea( const fheroes2::Rect & rt )
 {
     area = rt;
 }
 
 bool Splitter::isVertical( void ) const
 {
-    return area.w < area.h;
+    return area.width < area.height;
 }
 
 /* set range */
@@ -65,13 +65,13 @@ void Splitter::SetRange( int smin, int smax )
     fheroes2::Point move;
 
     if ( min < max ) {
-        step = 100 * ( isVertical() ? ( area.h - height() ) : ( area.w - width() ) ) / ( max - min );
+        step = 100 * ( isVertical() ? ( area.height - height() ) : ( area.width - width() ) ) / ( max - min );
         cur = min;
         move = GetPositionCursor();
     }
     else {
         step = 0;
-        move = fheroes2::Point( area.x + ( area.w - width() ) / 2, area.y + ( area.h - height() ) / 2 );
+        move = fheroes2::Point( area.x + ( area.width - width() ) / 2, area.y + ( area.height - height() ) / 2 );
     }
 
     setPosition( move.x, move.y );
@@ -80,10 +80,10 @@ void Splitter::SetRange( int smin, int smax )
 fheroes2::Point Splitter::GetPositionCursor()
 {
     if ( isVertical() ) {
-        return fheroes2::Point( area.x + ( area.w - width() ) / 2, area.y + cur * step / 100 );
+        return fheroes2::Point( area.x + ( area.width - width() ) / 2, area.y + cur * step / 100 );
     }
     else {
-        return fheroes2::Point( area.x + cur * step / 100, area.y + ( area.h - height() ) / 2 );
+        return fheroes2::Point( area.x + cur * step / 100, area.y + ( area.height - height() ) / 2 );
     }
 }
 
@@ -104,7 +104,7 @@ void Splitter::ShowCursor( void )
 
 void Splitter::MoveCenter( void )
 {
-    setPosition( area.x + ( area.w - width() ) / 2, area.y + ( area.h - height() ) / 2 );
+    setPosition( area.x + ( area.width - width() ) / 2, area.y + ( area.height - height() ) / 2 );
 }
 
 /* move splitter to pos */
