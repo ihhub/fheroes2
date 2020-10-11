@@ -235,6 +235,9 @@ void Dialog::ThievesGuild( bool oracle )
 
     Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const Point & cur_pt = frameborder.GetArea();
+
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
+
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
     const u32 count = oracle ? 0xFF : world.GetKingdom( Settings::Get().CurrentColor() ).GetCountBuilding( BUILD_THIEVESGUILD );
