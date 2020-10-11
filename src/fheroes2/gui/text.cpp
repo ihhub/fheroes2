@@ -167,8 +167,12 @@ void TextAscii::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
         if ( sprite.empty() )
             return;
 
+        const int updatedWidth = ax + sprite.width();
+        if ( maxw && ( updatedWidth - sx ) >= maxw )
+            break;
+
         fheroes2::Blit( sprite, dst, ax + sprite.x(), ay + 2 + sprite.y() );
-        ax += sprite.width();
+        ax = updatedWidth;
     }
 }
 
@@ -494,6 +498,45 @@ u32 Text::height( const std::string & str, int ft, u32 width )
     }
 
     return 0;
+}
+
+int32_t Text::getFitWidth( const std::string & text, const int fontId, const int32_t width_ )
+{
+    if ( text.empty() || width_ < 1 )
+        return 0;
+
+    int32_t fitWidth = 0;
+    uint32_t characterCount = 0;
+
+#ifdef WITH_TTF
+    if ( Settings::Get().Unicode() ) {
+        TextUnicode textWrapper( text, fontId );
+
+        while ( fitWidth < width_ && characterCount < text.size() ) {
+            ++characterCount;
+            const int32_t foundWidth = textWrapper.w( 0, characterCount );
+            if ( foundWidth > width_ )
+                break;
+
+            fitWidth = foundWidth;
+        }
+    }
+    else
+#endif
+    {
+        TextAscii textWrapper( text, fontId );
+
+        while ( fitWidth < width_ && characterCount < text.size() ) {
+            ++characterCount;
+            const int32_t foundWidth = textWrapper.w( 0, characterCount );
+            if ( foundWidth > width_ )
+                break;
+
+            fitWidth = foundWidth;
+        }
+    }
+
+    return fitWidth;
 }
 
 TextBox::TextBox()
