@@ -96,6 +96,7 @@ namespace AI
         virtual std::string GetPersonalityString() const;
 
         virtual void Reset();
+        virtual void resetPathfinder() = 0;
 
         virtual ~Base() {}
 

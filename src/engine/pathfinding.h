@@ -18,17 +18,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ai_normal.h"
+#pragma once
 
-namespace AI
+#include "route.h"
+
+// Base representation of the dataset that mirrors the 2D map being traversed
+struct PathfindingNode
 {
-    Normal::Normal()
+    int _from = -1;
+    uint32_t _cost = 0;
+
+    PathfindingNode() {}
+    PathfindingNode( int node, uint32_t cost )
+        : _from( node )
+        , _cost( cost )
+    {}
+    // Sets node values back to the defaults; used before processing new path
+    virtual void resetNode()
     {
-        _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
+        _from = -1;
+        _cost = 0;
+    }
+};
+
+// Template class has to be either PathfindingNode or its derivative
+template <class T>
+class Pathfinder
+{
+public:
+    virtual void reset() = 0;
+    virtual std::list<Route::Step> buildPath( int targetIndex ) const = 0;
+
+    virtual uint32_t getDistance( int targetIndex ) const
+    {
+        return _cache[targetIndex]._cost;
     }
 
-    void Normal::resetPathfinder()
+    virtual const T & getNode( int targetIndex ) const
     {
-        _pathfinder.reset();
+        return _cache[targetIndex];
     }
-}
+
+protected:
+    std::vector<T> _cache;
+    int _pathStart = -1;
+};

@@ -313,7 +313,7 @@ void World::NewMaps( u32 sw, u32 sh )
     Size::w = sw;
     Size::h = sh;
 
-    vec_tiles.resize( w() * h() );
+    vec_tiles.resize( static_cast<size_t>( Size::w ) * Size::h );
 
     // init all tiles
     for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
@@ -384,6 +384,11 @@ Maps::Tiles & World::GetTiles( s32 index )
 #else
     return vec_tiles[index];
 #endif
+}
+
+size_t World::getSize() const
+{
+    return vec_tiles.size();
 }
 
 /* get kingdom */
@@ -1031,24 +1036,22 @@ u32 World::GetUniq( void )
     return ++GameStatic::uniq;
 }
 
-uint32_t World::getDistance( int from, int to, uint32_t skill )
+uint32_t World::getDistance( const Heroes & hero, int targetIndex )
 {
-    return _pathfinder.getDistance( from, to, skill );
+    _pathfinder.reEvaluateIfNeeded( hero );
+    return _pathfinder.getDistance( targetIndex );
 }
 
-int World::searchForFog( const Heroes & hero )
+std::list<Route::Step> World::getPath( const Heroes & hero, int targetIndex )
 {
-    return _pathfinder.searchForFog( hero.GetColor(), hero.GetIndex(), hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
-}
-
-std::list<Route::Step> World::getPath( int from, int to, uint32_t skill, bool ignoreObjects )
-{
-    return _pathfinder.buildPath( from, to, skill );
+    _pathfinder.reEvaluateIfNeeded( hero );
+    return _pathfinder.buildPath( targetIndex );
 }
 
 void World::resetPathfinder()
 {
     _pathfinder.reset();
+    AI::Get().resetPathfinder();
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
@@ -1190,6 +1193,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     // update tile passable
     std::for_each( w.vec_tiles.begin(), w.vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
 
+    w.resetPathfinder();
     w.ComputeStaticAnalysis();
 
     // heroes postfix

@@ -1323,12 +1323,12 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
     const int32_t currentIndex = GetIndex();
     const uint32_t skill = GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-    uint32_t total = world.getDistance( currentIndex, dst, skill );
+    uint32_t total = world.getDistance( *this, dst );
     DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );
 
     if ( total > 0 ) {
         // check if last step is diagonal and pre-adjust the total
-        const Route::Step lastStep = world.getPath( currentIndex, dst, skill ).back();
+        const Route::Step lastStep = world.getPath( *this, dst ).back();
         if ( Direction::isDiagonal( lastStep.GetDirection() ) ) {
             total -= lastStep.GetPenalty() / 3;
         }

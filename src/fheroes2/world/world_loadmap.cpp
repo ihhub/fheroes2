@@ -1525,8 +1525,8 @@ void World::PostLoad( void )
     // update tile passable
     std::for_each( vec_tiles.begin(), vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
 
+    resetPathfinder();
     ComputeStaticAnalysis();
-    _pathfinder.reset();
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
