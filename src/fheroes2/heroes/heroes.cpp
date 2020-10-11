@@ -1464,11 +1464,8 @@ void Heroes::SetFreeman( int reason )
             kingdom.SetLastLostHero( *this );
         }
 
-        if ( !army.isValid() || ( Battle::RESULT_RETREAT & reason ) )
-            army.Reset( false );
-        else if ( ( Battle::RESULT_LOSS & reason ) && !( Battle::RESULT_SURRENDER & reason ) )
-            army.Reset( true );
-        else if ( reason == 0 ) // Dismissed hero
+        // if not surrendering, reset army
+        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 )
             army.Reset( true );
 
         if ( GetColor() != Color::NONE )
