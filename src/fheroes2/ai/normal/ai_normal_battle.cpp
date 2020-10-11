@@ -221,6 +221,7 @@ namespace AI
         }
 
         // Step 5. Current unit decision tree
+        const size_t actionsSize = actions.size();
         const Unit * target = NULL;
         int targetCell = -1;
 
@@ -450,6 +451,11 @@ namespace AI
                 }
             }
             // else skip
+        }
+
+        // no action was taken - skip
+        if ( actions.size() == actionsSize ) {
+            actions.push_back( Command( MSG_BATTLE_SKIP, currentUnit.GetUID(), true ) );
         }
 
         actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
