@@ -29,7 +29,7 @@ class Splitter : protected fheroes2::MovableSprite
 {
 public:
     Splitter();
-    Splitter( const fheroes2::Image & image, const Rect & );
+    Splitter( const fheroes2::Image & image, const fheroes2::Rect & );
 
     void Forward( void );
     void Backward( void );
@@ -41,7 +41,7 @@ public:
     void ShowCursor( void );
 
     void SetSprite( const fheroes2::Image & image );
-    void SetArea( const Rect & );
+    void SetArea( const fheroes2::Rect & );
     void SetRange( int smin, int smax );
 
     bool isVertical( void ) const;
@@ -62,7 +62,7 @@ public:
         return min;
     }
 
-    const Rect & GetRect( void ) const
+    const fheroes2::Rect & GetRect( void ) const
     {
         return area;
     }
@@ -70,7 +70,7 @@ public:
 private:
     fheroes2::Point GetPositionCursor();
 
-    Rect area;
+    fheroes2::Rect area;
     int step;
     int min;
     int max;
