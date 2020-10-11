@@ -1728,7 +1728,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                 if ( _currentUnit->isArchers() && !_currentUnit->isHandFighting() ) {
                     statusMsg = _( "Shoot %{monster}" );
                     statusMsg.append( " " );
-                    statusMsg.append( _n( "(one shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
+                    statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
                     StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                     StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
 
