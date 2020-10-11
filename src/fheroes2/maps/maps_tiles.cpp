@@ -2306,12 +2306,8 @@ void Maps::Tiles::ClearFog( int colors )
     fog_colors &= ~colors;
 }
 
-void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
+int Maps::Tiles::GetFogDirections( int color ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-    const Point mp = Maps::GetPoint( GetIndex() );
-
-    // get direction around foga
     int around = 0;
     const Directions directions = Direction::All();
 
@@ -2321,6 +2317,16 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
 
     if ( isFog( color ) )
         around |= Direction::CENTER;
+
+    return around;
+}
+
+void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
+{
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    const Point mp = Maps::GetPoint( GetIndex() );
+
+    const int around = GetFogDirections( color );
 
     // TIL::CLOF32
     if ( DIRECTION_ALL == around ) {

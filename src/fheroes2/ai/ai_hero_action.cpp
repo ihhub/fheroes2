@@ -1894,16 +1894,19 @@ namespace AI
 
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors )
     {
-        const s32 indexFrom = hero.GetIndex();
+        if ( colors == 0 )
+            return false;
 
-        if ( colors && Maps::isValidAbsIndex( indexFrom ) ) {
-            if ( !world.GetTiles( indexFrom ).isFog( colors ) ) {
-                return true;
-            }
+        const int32_t indexFrom = hero.GetIndex();
+        if ( !Maps::isValidAbsIndex( indexFrom ) )
+            return false;
 
-            const Route::Path & path = hero.GetPath();
-            return path.isValid() && !world.GetTiles( path.front().GetIndex() ).isFog( colors );
-        }
+        if ( !world.GetTiles( indexFrom ).isFog( colors ) )
+            return true;
+
+        const Route::Path & path = hero.GetPath();
+        if ( path.isValid() && world.GetTiles( path.front().GetIndex() ).GetFogDirections( colors ) != DIRECTION_ALL )
+            return true;
 
         return false;
     }
