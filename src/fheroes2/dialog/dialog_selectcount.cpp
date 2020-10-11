@@ -302,7 +302,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
             if ( text.w() < sprite.width() - 24 ) {
                 cursor.Hide();
                 fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
-                text.Blit( text_rt.x + ( text_rt.width - text.w() ) / 2, text_rt.y - 1 );
+                text.Blit( text_rt.x + ( text_rt.width - text.w() ) / 2, text_rt.y + 1 );
                 cursor.Show();
                 display.render();
             }

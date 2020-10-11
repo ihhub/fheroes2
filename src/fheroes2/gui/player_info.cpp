@@ -149,9 +149,9 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
         if ( show_name )
             index += 24;
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, index ), display, rect1.x, rect1.y );
+        const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, index );
+        fheroes2::Blit( playerIcon, display, rect1.x, rect1.y );
         if ( currentSelectedPlayer != nullptr && it->player == currentSelectedPlayer ) {
-            const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, index );
             fheroes2::Image selection( playerIcon.width(), playerIcon.height() );
             selection.reset();
             fheroes2::DrawBorder( selection, 214 );
@@ -161,7 +161,10 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
         if ( show_name ) {
             // draw player name
             Text name( player.GetName(), Font::SMALL );
-            name.Blit( rect1.x + ( rect1.w - name.w() ) / 2, rect1.y + rect1.h - ( show_name ? 1 : 14 ) );
+
+            const int32_t maximumTextWidth = playerIcon.width() - 4;
+            const int32_t fitWidth = Text::getFitWidth( player.GetName(), Font::SMALL, maximumTextWidth );
+            name.Blit( rect1.x + 2 + ( maximumTextWidth - fitWidth ) / 2, rect1.y + rect1.h - show_name, maximumTextWidth );
         }
 
         // 2. redraw class
