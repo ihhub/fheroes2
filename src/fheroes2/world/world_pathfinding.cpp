@@ -44,10 +44,7 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
     if ( object == MP2::OBJ_MONSTER )
         return Army( tile ).GetStrength() > armyStrength;
 
-    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
-        return true;
-
-    return false;
+    return ( fromWater && !toWater && object == MP2::OBJ_COAST );
 }
 
 bool World::isTileBlocked( int tileIndex, bool fromWater ) const
