@@ -2636,7 +2636,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
             if ( killed ) {
                 msg.append( " " );
-                msg.append( _n( "one creature perishes.", "%{count} creatures perish.", killed ) );
+                msg.append( _n( "1 creature perishes.", "%{count} creatures perish.", killed ) );
                 StringReplace( msg, "%{count}", killed );
             }
         }
@@ -3161,7 +3161,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
 
             if ( killed ) {
                 status.SetMessage( msg, true );
-                msg = _n( "one creature perishes.", "%{count} creatures perish.", killed );
+                msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
                 StringReplace( msg, "%{count}", killed );
             }
 
