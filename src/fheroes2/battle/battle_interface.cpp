@@ -2646,7 +2646,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
             if ( target.killed ) {
                 msg.append( " " );
-                msg.append( _n( "one %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
+                msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
                 StringReplace( msg, "%{count}", target.killed );
                 StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
             }
@@ -3324,7 +3324,7 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
         msg.append( " " );
-        msg.append( _n( "one %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
+        msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
         StringReplace( msg, "%{count}", target.killed );
         StringReplace( msg, "%{defender}", target.defender->GetName() );
     }
