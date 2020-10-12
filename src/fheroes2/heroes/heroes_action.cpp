@@ -2761,7 +2761,7 @@ void ActionToAlchemistsTower( Heroes & hero )
     u32 cursed = std::count_if( bag.begin(), bag.end(), std::mem_fun_ref( &Artifact::isAlchemistRemove ) );
 
     if ( cursed ) {
-        payment_t payment = PaymentConditions::ForAlchemist( cursed );
+        payment_t payment = PaymentConditions::ForAlchemist();
 
         if ( hero.GetKingdom().AllowPayment( payment ) ) {
             std::string msg = "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you.";

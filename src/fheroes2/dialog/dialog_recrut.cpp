@@ -59,13 +59,13 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t
 
 void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & pos, s32 value, s32 px1, s32 py1, s32 px2, s32 py2 )
 {
-    Point dst_pt( pos.x + px1, pos.y + py1 );
+    fheroes2::Point dst_pt( pos.x + px1, pos.y + py1 );
     fheroes2::Blit( sres, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
 
     const Text text( GetString( value ), Font::SMALL );
     dst_pt.x = pos.x + px2 - text.w() / 2;
     dst_pt.y = pos.y + py2;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 }
 
 void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool label, bool showTotalSum )
@@ -184,8 +184,7 @@ void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 
     // text number buy
     Text text;
     text.Set( _( "Number to buy:" ), Font::SMALL );
-    Point dst_pt( pos.x + 29, pos.y + 163 );
-    text.Blit( dst_pt );
+    text.Blit( pos.x + 29, pos.y + 163 );
 }
 
 const char * SwitchMaxMinButtons( fheroes2::Button & btnMax, fheroes2::Button & btnMin, bool max )
@@ -274,7 +273,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     dst_pt.y = pos.y + 169;
     fheroes2::Button buttonDn( dst_pt.x, dst_pt.y, ICN::RECRUIT, 2, 3 );
 
-    const Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
+    const fheroes2::Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
 
     if ( 0 == result ) {
         buttonOk.disable();

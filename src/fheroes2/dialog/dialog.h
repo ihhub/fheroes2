@@ -122,14 +122,14 @@ namespace Dialog
         explicit NonFixedFrameBox( int height = 0, int startYPos = -1, bool showButtons = false );
         virtual ~NonFixedFrameBox();
 
-        const Rect & GetArea( void )
+        const fheroes2::Rect & GetArea( void )
         {
             return area;
         }
 
     protected:
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
-        Rect area;
+        fheroes2::Rect area;
     };
 
     class FrameBox : public NonFixedFrameBox

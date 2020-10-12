@@ -196,7 +196,7 @@ public:
     int w( void );
     int h( void );
 
-    Rect GetRect( void ) const;
+    fheroes2::Rect GetRect( void ) const;
 
 private:
     fheroes2::ImageRestorer _restorer;

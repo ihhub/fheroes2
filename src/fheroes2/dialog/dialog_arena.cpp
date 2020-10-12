@@ -54,7 +54,7 @@ int Dialog::SelectSkillFromArena( void )
 
     Dialog::FrameBox box( textbox.h() + spacer + sprite.height() + 15, true );
 
-    const Rect & box_rt = box.GetArea();
+    const fheroes2::Rect & box_rt = box.GetArea();
     fheroes2::Point dst_pt( box_rt.x, box_rt.y );
 
     textbox.Blit( dst_pt.x, dst_pt.y );
@@ -62,7 +62,7 @@ int Dialog::SelectSkillFromArena( void )
 
     int res = Skill::Primary::ATTACK;
 
-    const int spacingX = allSkills ? ( static_cast<int>( box_rt.w ) - sprite.width() * 4 ) / 5 : ( static_cast<int>( box_rt.w ) - sprite.width() * 3 ) / 4;
+    const int spacingX = allSkills ? ( box_rt.width - sprite.width() * 4 ) / 5 : ( box_rt.width - sprite.width() * 3 ) / 4;
 
     fheroes2::Rect rect1( dst_pt.x + spacingX, dst_pt.y, sprite.width(), sprite.height() );
     fheroes2::Rect rect2( rect1.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
@@ -96,8 +96,8 @@ int Dialog::SelectSkillFromArena( void )
     }
 
     // buttons
-    dst_pt.x = box_rt.x + ( box_rt.w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
+    dst_pt.x = box_rt.x + ( box_rt.width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
     LocalEvent & le = LocalEvent::Get();

@@ -797,7 +797,7 @@ bool TextSprite::isShow( void ) const
     return !hide;
 }
 
-Rect TextSprite::GetRect( void ) const
+fheroes2::Rect TextSprite::GetRect( void ) const
 {
-    return Rect( _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() );
+    return fheroes2::Rect( _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() );
 }

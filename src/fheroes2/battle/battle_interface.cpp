@@ -64,7 +64,7 @@ namespace
         const int distance = static_cast<int>( src.distance( dst ) );
         const double angle = src.getAngle( dst );
 
-        uint32_t iterationCount = ( distance + 50 ) / 100;
+        int iterationCount = ( distance + 50 ) / 100;
         if ( iterationCount < 3 )
             iterationCount = 3;
         if ( iterationCount > 5 )
@@ -373,7 +373,7 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     return sf;
 }
 
-fheroes2::Image DrawHexagonShadow( int alphaValue )
+fheroes2::Image DrawHexagonShadow( uint8_t alphaValue )
 {
     const int l = 13;
     const int w = CELLW;
@@ -1216,7 +1216,7 @@ void Battle::Interface::RedrawOpponentsFlags( void )
     }
 }
 
-Point GetTroopPosition( const Battle::Unit & b, const fheroes2::Sprite & sprite )
+fheroes2::Point GetTroopPosition( const Battle::Unit & b, const fheroes2::Sprite & sprite )
 {
     const Rect & rt = b.GetRectPosition();
 
@@ -1224,7 +1224,7 @@ Point GetTroopPosition( const Battle::Unit & b, const fheroes2::Sprite & sprite 
         = b.isReflect() ? rt.x + ( b.isWide() ? rt.w / 2 + rt.w / 4 : rt.w / 2 ) - sprite.width() - sprite.x() : rt.x + ( b.isWide() ? rt.w / 4 : rt.w / 2 ) + sprite.x();
     const s32 sy = rt.y + rt.h + sprite.y() - 10;
 
-    return Point( sx, sy );
+    return fheroes2::Point( sx, sy );
 }
 
 void Battle::Interface::RedrawTroopSprite( const Unit & b )
@@ -1262,7 +1262,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
 
     if ( !spmon1.empty() ) {
         const Rect & rt = b.GetRectPosition();
-        Point sp = GetTroopPosition( b, spmon1 );
+        fheroes2::Point sp = GetTroopPosition( b, spmon1 );
 
         // move offset
         if ( _movingUnit == &b ) {
@@ -2536,7 +2536,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     // long distance attack animation
     if ( archer ) {
         const fheroes2::Sprite & attackerSprite = fheroes2::AGG::GetICN( attacker.GetMonsterSprite().icn_file, attacker.GetFrame() );
-        const Point attackerPos = GetTroopPosition( attacker, attackerSprite );
+        const fheroes2::Point attackerPos = GetTroopPosition( attacker, attackerSprite );
 
         // For shooter position we need bottom center position of rear tile
         // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
@@ -3224,9 +3224,9 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame() );
 
         int width = 2;
-        Rect src( 0, 0, width, luckSprite.height() );
-        src.x = ( luckSprite.width() - src.w ) / 2;
-        int y = pos.y + pos.h - unitSprite.height() - src.h;
+        fheroes2::Rect src( 0, 0, width, luckSprite.height() );
+        src.x = ( luckSprite.width() - src.width ) / 2;
+        int y = pos.y + pos.h - unitSprite.height() - src.height;
         if ( y < 0 )
             y = 0;
 
@@ -3238,12 +3238,12 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
             if ( width < luckSprite.width() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
-                fheroes2::Blit( luckSprite, src.x, src.y, _mainSurface, pos.x + ( pos.w - src.w ) / 2, y, src.w, src.h );
+                fheroes2::Blit( luckSprite, src.x, src.y, _mainSurface, pos.x + ( pos.w - src.width ) / 2, y, src.width, src.height );
 
                 RedrawPartialFinish();
 
-                src.w = width;
-                src.x = ( luckSprite.width() - src.w ) / 2;
+                src.width = width;
+                src.x = ( luckSprite.width() - src.width ) / 2;
 
                 width += 3;
             }
@@ -3510,7 +3510,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            const Point & sp = GetTroopPosition( target, sprite );
+            const fheroes2::Point & sp = GetTroopPosition( target, sprite );
 
             RedrawPartialStart();
             fheroes2::Blit( sprite, _mainSurface, sp.x - rt1.x + ( *pnt ).x, sp.y - rt1.y + ( *pnt ).y, target.isReflect() );
@@ -3541,69 +3541,69 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
         const Point & endPos = points[i];
 
         const std::vector<std::pair<LightningPoint, LightningPoint> > & lightningBolt = GenerateLightning( startingPos + roiOffset, endPos + roiOffset );
-        Rect roi;
+        fheroes2::Rect roi;
         const bool isHorizontalBolt = std::abs( startingPos.x - endPos.x ) > std::abs( startingPos.y - endPos.y );
         const bool isForwardDirection = isHorizontalBolt ? ( endPos.x > startingPos.x ) : ( endPos.y > startingPos.y );
         const int animationStep = 100;
 
         if ( isHorizontalBolt ) {
-            roi.h = drawRoi.h;
+            roi.height = drawRoi.h;
             if ( isForwardDirection ) {
                 roi.x = 0;
-                roi.w = startingPos.x;
+                roi.width = startingPos.x;
             }
             else {
                 roi.x = startingPos.x;
-                roi.w = drawRoi.w - startingPos.x;
+                roi.width = drawRoi.w - startingPos.x;
             }
         }
         else {
-            roi.w = drawRoi.w;
+            roi.width = drawRoi.w;
             if ( isForwardDirection ) {
                 roi.y = 0;
-                roi.h = startingPos.y;
+                roi.height = startingPos.y;
             }
             else {
                 roi.y = startingPos.y;
-                roi.h = drawRoi.h - startingPos.y;
+                roi.height = drawRoi.h - startingPos.y;
             }
         }
 
-        while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.w < drawRoi.w ) || ( !isHorizontalBolt && roi.h < drawRoi.h ) ) ) {
+        while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.width < drawRoi.w ) || ( !isHorizontalBolt && roi.height < drawRoi.h ) ) ) {
             if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
                 if ( isHorizontalBolt ) {
                     if ( isForwardDirection ) {
-                        roi.w += animationStep;
+                        roi.width += animationStep;
                     }
                     else {
-                        roi.w += animationStep;
+                        roi.width += animationStep;
                         roi.x -= animationStep;
                     }
 
                     if ( roi.x < 0 )
                         roi.x = 0;
-                    if ( roi.w > drawRoi.w )
-                        roi.w = drawRoi.w;
+                    if ( roi.width > drawRoi.w )
+                        roi.width = drawRoi.w;
                 }
                 else {
                     if ( isForwardDirection ) {
-                        roi.h += animationStep;
+                        roi.height += animationStep;
                     }
                     else {
-                        roi.h += animationStep;
+                        roi.height += animationStep;
                         roi.y -= animationStep;
                     }
 
                     if ( roi.y < 0 )
                         roi.y = 0;
-                    if ( roi.h > drawRoi.h )
-                        roi.h = drawRoi.h;
+                    if ( roi.height > drawRoi.h )
+                        roi.height = drawRoi.h;
                 }
 
                 RedrawPartialStart();
 
                 RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface,
-                                 fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+                                 fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.width, roi.height ) );
                 fheroes2::ApplyPalette( _mainSurface, 7 );
 
                 RedrawPartialFinish();
@@ -3808,7 +3808,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
-            const uint32_t frame = i * spriteCount / path.size();
+            const uint32_t frame = static_cast<uint32_t>( i * spriteCount / path.size() ); // it's safe to do such as i <= path.size()
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( spellICN, frame );
             fheroes2::Blit( sprite, _mainSurface, path[i].x - sprite.width() / 2, path[i].y - sprite.height() / 2 );
             RedrawPartialFinish();

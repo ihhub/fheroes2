@@ -146,7 +146,7 @@ public:
 private:
     Cursor();
     ~Cursor();
-    void SetOffset( int name, const Point & defaultOffset );
+    void SetOffset( int name, const fheroes2::Point & defaultOffset );
     void Move( s32, s32 );
 
     int theme;

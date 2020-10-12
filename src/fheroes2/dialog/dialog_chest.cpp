@@ -42,7 +42,6 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     const fheroes2::Sprite & sprite_gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
     const fheroes2::Sprite & sprite_expr = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
 
-    Point pt;
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
 
@@ -52,16 +51,16 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     const int spacer = 10;
     FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite_expr.height() + 2 + text.h(), true );
 
-    pt.x = box.GetArea().x + box.GetArea().w / 2 - fheroes2::AGG::GetICN( system, 9 ).width() - 20;
-    pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 5 ).height();
+    fheroes2::Point pt;
+    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( system, 9 ).width() - 20;
+    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 5 ).height();
     fheroes2::Button button_yes( pt.x, pt.y, system, 5, 6 );
 
-    pt.x = box.GetArea().x + box.GetArea().w / 2 + 20;
-    pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 7 ).height();
+    pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
+    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 7 ).height();
     fheroes2::Button button_no( pt.x, pt.y, system, 7, 8 );
 
-    const Rect & boxArea = box.GetArea();
-    fheroes2::Rect pos( boxArea.x, boxArea.y, boxArea.w, boxArea.h );
+    fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )
         box1.Blit( pos.x, pos.y );
@@ -73,13 +72,13 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     pos.y += sprite_expr.height();
     // sprite1
-    pos.x = box.GetArea().x + box.GetArea().w / 2 - sprite_gold.width() - 30;
+    pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_gold.width() - 30;
     fheroes2::Blit( sprite_gold, display, pos.x, pos.y - sprite_gold.height() );
     // text
     text.Blit( pos.x + sprite_gold.width() / 2 - text.w() / 2, pos.y + 2 );
 
     // sprite2
-    pos.x = box.GetArea().x + box.GetArea().w / 2 + 30;
+    pos.x = box.GetArea().x + box.GetArea().width / 2 + 30;
     fheroes2::Blit( sprite_expr, display, pos.x, pos.y - sprite_expr.height() );
     // text
     text.Set( GetString( expr ) + " " + "(" + "need: " + GetString( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")", Font::SMALL );

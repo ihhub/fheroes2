@@ -107,12 +107,12 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     Dialog::FrameBox box( box1.h() + spacer + box2.h() + 10 + sprite_frame.height(), true );
 
     fheroes2::Point pt;
-    pt.x = box.GetArea().x + box.GetArea().w / 2 - fheroes2::AGG::GetICN( system, 9 ).width() - 20;
-    pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 9 ).height();
+    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( system, 9 ).width() - 20;
+    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 9 ).height();
     fheroes2::Button button_learn1( pt.x, pt.y, system, 9, 10 );
 
-    pt.x = box.GetArea().x + box.GetArea().w / 2 + 20;
-    pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 9 ).height();
+    pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
+    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 9 ).height();
     fheroes2::Button button_learn2( pt.x, pt.y, system, 9, 10 );
 
     const Rect & boxArea = box.GetArea();
@@ -127,7 +127,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pos.y += box2.h() + spacer;
 
     // sprite1
-    pos.x = box.GetArea().x + box.GetArea().w / 2 - sprite_frame.width() - 20;
+    pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_frame.width() - 20;
     fheroes2::Blit( sprite_frame, display, pos.x, pos.y );
     pos.x += 3;
     fheroes2::Rect rect_image1( pos.x, pos.y, sprite_skill1.width(), sprite_skill1.height() );
@@ -141,7 +141,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     text.Blit( pos.x + ( sprite_skill1.width() - text.w() ) / 2, pos.y + sprite_skill1.height() - 12 );
 
     // sprite2
-    pos.x = box.GetArea().x + box.GetArea().w / 2 + 20;
+    pos.x = box.GetArea().x + box.GetArea().width / 2 + 20;
     fheroes2::Blit( sprite_frame, display, pos.x, pos.y );
     pos.x += 3;
 
@@ -154,8 +154,8 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     name_level2.Blit( pos.x + ( sprite_skill2.width() - name_level2.w() ) / 2, pos.y + sprite_skill2.height() - 12 );
 
     // hero button
-    pt.x = box.GetArea().x + box.GetArea().w / 2 - 18;
-    pt.y = box.GetArea().y + box.GetArea().h - 36;
+    pt.x = box.GetArea().x + box.GetArea().width / 2 - 18;
+    pt.y = box.GetArea().y + box.GetArea().height - 36;
 
     Settings & conf = Settings::Get();
 
@@ -175,7 +175,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     fheroes2::ButtonSprite button_hero( pt.x, pt.y, armyButtonReleasedBack, armyButtonPressedBack );
 
     text.Set( GetString( HEROESMAXSKILL ) + "/" + GetString( hero.GetSecondarySkills().Count() ), Font::BIG );
-    text.Blit( box.GetArea().x + ( box.GetArea().w - text.w() ) / 2, pt.y - 15 );
+    text.Blit( box.GetArea().x + ( box.GetArea().width - text.w() ) / 2, pt.y - 15 );
 
     button_learn1.draw();
     button_learn2.draw();
