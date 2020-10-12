@@ -41,7 +41,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     TextBox textbox2( message, ft, BOXAREA_WIDTH );
 
     FrameBox box( 10 + ( header.size() ? textbox1.h() + 10 : 0 ) + textbox2.h(), buttons );
-    const Rect & pos = box.GetArea();
+    const fheroes2::Rect & pos = box.GetArea();
 
     if ( header.size() )
         textbox1.Blit( pos.x, pos.y + 10 );
@@ -50,7 +50,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::ButtonGroup group( fheroes2::Rect( pos.x, pos.y, pos.w, pos.h ), buttons );
+    fheroes2::ButtonGroup group( pos, buttons );
     group.draw();
 
     cursor.Show();

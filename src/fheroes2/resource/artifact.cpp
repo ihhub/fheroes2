@@ -807,7 +807,7 @@ bool BagArtifacts::MakeBattleGarb( void )
 
 u32 BagArtifacts::CountArtifacts( void ) const
 {
-    return std::count_if( begin(), end(), std::mem_fun_ref( &Artifact::isValid ) );
+    return static_cast<uint32_t>( std::count_if( begin(), end(), std::mem_fun_ref( &Artifact::isValid ) ) ); // no way that we have more than 4 billion artifacts
 }
 
 bool BagArtifacts::ContainUltimateArtifact( void ) const
@@ -837,7 +837,7 @@ std::string BagArtifacts::String( void ) const
 
 u32 BagArtifacts::Count( const Artifact & art ) const
 {
-    return std::count( begin(), end(), art );
+    return static_cast<uint32_t>( std::count( begin(), end(), art ) ); // no way that we have more than 4 billion artifacts
 }
 
 u32 GoldInsteadArtifact( int obj )

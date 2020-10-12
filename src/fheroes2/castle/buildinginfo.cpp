@@ -564,30 +564,30 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const int space = 10;
     Dialog::FrameBox box( space + window_icons.height() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h,
                           buttons );
-    const Rect & box_rt = box.GetArea();
+    const fheroes2::Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
 
     fheroes2::Point dst_pt;
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
     fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
 
-    dst_pt.x = box_rt.x + ( box_rt.w - window_icons.width() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - window_icons.width() ) / 2;
     dst_pt.y = box_rt.y + space;
     fheroes2::Blit( window_icons, display, dst_pt.x, dst_pt.y );
 
     const fheroes2::Sprite & building_icons = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), GetIndexBuildingSprite( building ) );
-    dst_pt.x = box_rt.x + ( box_rt.w - building_icons.width() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - building_icons.width() ) / 2;
     dst_pt.y += 1;
     fheroes2::Blit( building_icons, display, dst_pt.x, dst_pt.y );
 
     Text text( GetName(), Font::SMALL );
-    dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - text.w() ) / 2;
     dst_pt.y += 57;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -597,7 +597,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     dst_pt.y += box1.h() + space;
     if ( isRequired ) {
-        dst_pt.x = box_rt.x + ( box_rt.w - requires_text.w() ) / 2;
+        dst_pt.x = box_rt.x + ( box_rt.width - requires_text.w() ) / 2;
         requires_text.Blit( dst_pt.x, dst_pt.y );
 
         dst_pt.x = box_rt.x;

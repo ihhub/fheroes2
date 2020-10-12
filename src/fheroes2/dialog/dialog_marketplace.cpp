@@ -215,8 +215,7 @@ void Dialog::Marketplace( bool fromTradingPost )
 
     Dialog::FrameBox box( 297, true );
 
-    const Rect & boxArea = box.GetArea();
-    const fheroes2::Rect pos_rt( boxArea.x, boxArea.y, boxArea.w, boxArea.h );
+    const fheroes2::Rect & pos_rt = box.GetArea();
     fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
 
     // header

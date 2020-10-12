@@ -47,7 +47,7 @@ int Dialog::AdventureOptions( bool enabledig )
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );
 
     // The sprite contains shadow area at left and bottom side so to center it we have to subtract it
-    Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() + BORDERWIDTH ) / 2 );
+    fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() + BORDERWIDTH ) / 2 );
     fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
     fheroes2::Blit( box, display, rb.x, rb.y );
 

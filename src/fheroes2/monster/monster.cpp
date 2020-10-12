@@ -470,6 +470,8 @@ void Monster::UpdateStats( const std::string & spec )
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
+#else
+    (void)spec;
 #endif
 }
 
@@ -1353,15 +1355,15 @@ Monster Monster::Rand( level_t level )
         return Monster( UNKNOWN );
     if ( level == LEVEL0 )
         return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
-    static std::vector<Monster> monsters[LEVEL4 - LEVEL0];
-    if ( monsters[0].empty() ) {
+    static std::vector<Monster> monstersVec[LEVEL4 - LEVEL0];
+    if ( monstersVec[0].empty() ) {
         for ( u32 i = PEASANT; i <= WATER_ELEMENT; ++i ) {
             const Monster monster( i );
             if ( monster.GetRandomUnitLevel() > LEVEL0 )
-                monsters[monster.GetRandomUnitLevel() - LEVEL0 - 1].push_back( monster );
+                monstersVec[monster.GetRandomUnitLevel() - LEVEL0 - 1].push_back( monster );
         }
     }
-    return *Rand::Get( monsters[level - LEVEL0 - 1] );
+    return *Rand::Get( monstersVec[level - LEVEL0 - 1] );
 }
 
 u32 Monster::Rand4WeekOf( void )

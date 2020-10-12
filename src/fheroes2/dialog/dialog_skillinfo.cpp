@@ -52,8 +52,7 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     const int spacer = 10;
 
     FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), ok_button );
-    const Rect & boxArea = box.GetArea();
-    fheroes2::Rect pos( boxArea.x, boxArea.y, boxArea.w, boxArea.h );
+    fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )
         box1.Blit( pos.x, pos.y );
@@ -86,8 +85,8 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     fheroes2::Button * button = NULL;
 
     if ( ok_button ) {
-        const fheroes2::Point pt( box.GetArea().x + ( box.GetArea().w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2,
-                                  box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 1 ).height() );
+        const fheroes2::Point pt( box.GetArea().x + ( box.GetArea().width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2,
+                                  box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 1 ).height() );
         button = new fheroes2::Button( pt.x, pt.y, system, 1, 2 );
     }
 
@@ -164,8 +163,7 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     const int spacer = 10;
 
     FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), Dialog::OK );
-    const Rect & boxArea = box.GetArea();
-    fheroes2::Rect pos( boxArea.x, boxArea.y, boxArea.w, boxArea.h );
+    fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )
         box1.Blit( pos.x, pos.y );
@@ -194,8 +192,8 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
 
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Point pt( box.GetArea().x + ( box.GetArea().w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2,
-                              box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 1 ).height() );
+    const fheroes2::Point pt( box.GetArea().x + ( box.GetArea().width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2,
+                              box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 1 ).height() );
     fheroes2::Button button( pt.x, pt.y, system, 1, 2 );
 
     button.draw();

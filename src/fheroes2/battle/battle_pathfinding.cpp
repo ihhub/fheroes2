@@ -200,7 +200,7 @@ namespace Battle
                     const int newNode = GetValidMoveIndex( fromNode, direction, unitIsWide );
 
                     if ( newNode != -1 ) {
-                        const uint16_t cost = _cache[fromNode]._cost;
+                        const uint32_t cost = _cache[fromNode]._cost;
                         ArenaNode & node = _cache[newNode];
 
                         if ( Board::GetCell( newNode )->GetUnit() && cost < node._cost ) {
