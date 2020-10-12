@@ -1138,9 +1138,6 @@ void ActionToFlotSam( Heroes & hero, u32 obj, s32 dst_index )
     std::string msg;
     const Funds & funds = tile.QuantityFunds();
 
-    Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
-
     if ( 0 < funds.GetValidItemsCount() ) {
         msg = funds.wood && funds.gold ? _( "You search through the flotsam, and find some wood and some gold." )
                                        : _( "You search through the flotsam, and find some wood." );
@@ -1152,6 +1149,8 @@ void ActionToFlotSam( Heroes & hero, u32 obj, s32 dst_index )
         Dialog::Message( MP2::StringObject( obj ), msg, Font::BIG, Dialog::OK );
     }
 
+    Game::PlayPickupSound();
+    AnimationRemoveObject( tile );
     tile.RemoveObjectSprite();
     tile.QuantityReset();
 
