@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "screen.h"
-#include "../../tools/palette_h2.h"
+#include "palette_h2.h"
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
