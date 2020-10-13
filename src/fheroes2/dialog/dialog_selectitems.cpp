@@ -46,7 +46,7 @@ public:
 
     void RedrawBackground( const Point & dst )
     {
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), Rect( dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 10 ) );
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), fheroes2::Rect( dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 10 ) );
 
         // scroll
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -221,8 +221,8 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    for ( size_t ii = 0; ii < MAXSECONDARYSKILL * 3; ++ii )
-        skills[ii] = ii;
+    for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i )
+        skills[i] = i;
 
     Dialog::FrameBorder frameborder( Size( 310, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
@@ -272,8 +272,8 @@ Spell Dialog::SelectSpell( int cur )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    for ( size_t ii = 0; ii < spells.size(); ++ii )
-        spells[ii] = ii + 1;
+    for ( size_t i = 0; i < spells.size(); ++i )
+        spells[i] = static_cast<int>( i + 1 ); // safe to do this as the number of spells can't be more than 2 billion
 
     Dialog::FrameBorder frameborder( Size( 340, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
@@ -317,8 +317,8 @@ Artifact Dialog::SelectArtifact( int cur )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    for ( size_t ii = 0; ii < artifacts.size(); ++ii )
-        artifacts[ii] = ii;
+    for ( size_t i = 0; i < artifacts.size(); ++i )
+        artifacts[i] = static_cast<int>( i ); // safe to do this as the number of artifacts can't be more than 2 billion
 
     Dialog::FrameBorder frameborder( Size( 370, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
@@ -362,8 +362,8 @@ Monster Dialog::SelectMonster( int id )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    for ( size_t ii = 0; ii < monsters.size(); ++ii )
-        monsters[ii] = ii + 1; // skip Monser::UNKNOWN
+    for ( size_t i = 0; i < monsters.size(); ++i )
+        monsters[i] = static_cast<int>( i + 1 ); // skip Monser::UNKNOWN, safe to do this as the monsters of spells can't be more than 2 billion
 
     Dialog::FrameBorder frameborder( Size( 260, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
@@ -407,8 +407,8 @@ int Dialog::SelectHeroes( int cur )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    for ( size_t ii = 0; ii < heroes.size(); ++ii )
-        heroes[ii] = ii;
+    for ( size_t i = 0; i < heroes.size(); ++i )
+        heroes[i] = static_cast<int>( i ); // safe to do this as the heroes of spells can't be more than 2 billion
 
     Dialog::FrameBorder frameborder( Size( 240, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();

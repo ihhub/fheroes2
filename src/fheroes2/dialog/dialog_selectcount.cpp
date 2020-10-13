@@ -66,8 +66,8 @@ public:
         btnUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
         btnDn.setICNInfo( ICN::TOWNWIND, 7, 8 );
 
-        pos.w = 90;
-        pos.h = 30;
+        pos.width = 90;
+        pos.height = 30;
     }
 
     u32 Min( void )
@@ -85,9 +85,10 @@ public:
         vcur = v;
     }
 
-    void SetPos( const Point & pt )
+    void SetPos( const fheroes2::Point & pt )
     {
-        pos = pt;
+        pos.x = pt.x;
+        pos.y = pt.y;
 
         btnUp.setPosition( pt.x + 70, pt.y );
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
@@ -138,7 +139,7 @@ protected:
     u32 vcur;
     u32 step;
 
-    Rect pos;
+    fheroes2::Rect pos;
 
     fheroes2::Button btnUp;
     fheroes2::Button btnDn;
@@ -162,7 +163,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
 
     text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y );
 
-    sel.SetPos( Point( pos.x + 80, pos.y + 30 ) );
+    sel.SetPos( fheroes2::Point( pos.x + 80, pos.y + 30 ) );
     sel.Redraw();
 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
@@ -337,7 +338,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     text.Set( _( "How many troops to move?" ), Font::BIG );
     text.Blit( center - text.w() / 2, pos.y );
 
-    sel.SetPos( Point( pos.x + 70, pos.y + 30 ) );
+    sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + 30 ) );
     sel.Redraw();
 
     fheroes2::MovableSprite ssp;
@@ -399,7 +400,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
 
     const uint32_t maximumAcceptedValue = savelast ? max : max - 1;
 
-    const Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
+    const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
     fheroes2::ButtonSprite buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y );
     fheroes2::ButtonSprite buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y );
 
