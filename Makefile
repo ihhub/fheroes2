@@ -18,7 +18,6 @@
 #
 
 TARGET	:= fheroes2
-MAKE	:= make
 
 all:
 	$(MAKE) -C src
