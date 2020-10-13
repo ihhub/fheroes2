@@ -1506,7 +1506,7 @@ int Heroes::GetControl( void ) const
     return GetKingdom().GetControl();
 }
 
-u32 Heroes::GetStartingXp( void ) const
+uint32_t Heroes::GetStartingXp()
 {
     return Rand::Get( 40, 90 );
 }
