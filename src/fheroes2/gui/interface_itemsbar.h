@@ -53,16 +53,17 @@ namespace Interface
         virtual void RedrawBackground( const Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) = 0;
 
-        virtual bool ActionBarSingleClick( const Point &, Item &, const Rect & )
-        {
-            return false;
-        }
-        virtual bool ActionBarPressRight( const Point &, Item &, const Rect & )
+        virtual bool ActionBarSingleClick( Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarCursor( const Point &, Item &, const Rect & )
+        virtual bool ActionBarPressRight( Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarCursor( Item & )
         {
             return false;
         }
@@ -215,17 +216,17 @@ namespace Interface
             RedrawItem( **it, pos, dstsf );
         }
 
-        virtual bool ActionCursorItemIter( const Point & cursor, ItemIterPos iterPos )
+        virtual bool ActionCursorItemIter( const Point &, ItemIterPos iterPos )
         {
             if ( iterPos.first != GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
 
-                if ( ActionBarCursor( cursor, **iterPos.first, iterPos.second ) )
+                if ( ActionBarCursor( **iterPos.first ) )
                     return true;
                 else if ( le.MouseClickLeft( iterPos.second ) )
-                    return ActionBarSingleClick( cursor, **iterPos.first, iterPos.second );
+                    return ActionBarSingleClick( **iterPos.first );
                 else if ( le.MousePressRight( iterPos.second ) )
-                    return ActionBarPressRight( cursor, **iterPos.first, iterPos.second );
+                    return ActionBarPressRight( **iterPos.first );
             }
 
             return false;
@@ -297,40 +298,40 @@ namespace Interface
 
         virtual ~ItemsActionBar() {}
 
-        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) {}
+        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) override {}
         virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}
 
-        virtual bool ActionBarSingleClick( const Point &, Item &, const Rect &, Item &, const Rect & )
+        virtual bool ActionBarSingleClick( Item &, Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarPressRight( const Point &, Item &, const Rect &, Item &, const Rect & )
+        virtual bool ActionBarPressRight( Item &, Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarSingleClick( const Point &, Item &, const Rect & )
+        virtual bool ActionBarSingleClick( Item & ) override
         {
             return false;
         }
 
-        virtual bool ActionBarDoubleClick( const Point & cursor, Item & item, const Rect & pos )
+        virtual bool ActionBarDoubleClick( Item & item )
         {
-            return ActionBarSingleClick( cursor, item, pos );
+            return ActionBarSingleClick( item );
         }
 
-        virtual bool ActionBarPressRight( const Point &, Item &, const Rect & )
-        {
-            return false;
-        }
-
-        virtual bool ActionBarCursor( const Point &, Item &, const Rect & )
+        virtual bool ActionBarPressRight( Item & ) override
         {
             return false;
         }
 
-        virtual bool ActionBarCursor( const Point &, Item &, const Rect &, Item &, const Rect & )
+        virtual bool ActionBarCursor( Item & ) override
+        {
+            return false;
+        }
+
+        virtual bool ActionBarCursor( Item &, Item & )
         {
             return false;
         }
@@ -398,20 +399,20 @@ namespace Interface
             RedrawItem( **it, pos, GetCurItemIter() == it, dstsf );
         }
 
-        bool ActionCursorItemIter( const Point & cursor, ItemIterPos iterPos )
+        bool ActionCursorItemIter( const Point &, ItemIterPos iterPos )
         {
             if ( iterPos.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
 
-                if ( ActionBarCursor( cursor, **iterPos.first, iterPos.second ) ) {
+                if ( ActionBarCursor( **iterPos.first ) ) {
                     return true;
                 }
                 else if ( le.MouseClickLeft( iterPos.second ) ) {
                     if ( iterPos.first == GetCurItemIter() ) {
-                        return ActionBarDoubleClick( cursor, **iterPos.first, iterPos.second );
+                        return ActionBarDoubleClick( **iterPos.first );
                     }
                     else {
-                        if ( ActionBarSingleClick( cursor, **iterPos.first, iterPos.second ) )
+                        if ( ActionBarSingleClick( **iterPos.first ) )
                             curItemPos = iterPos;
                         else
                             ResetSelected();
@@ -420,7 +421,7 @@ namespace Interface
                     }
                 }
                 else if ( le.MousePressRight( iterPos.second ) ) {
-                    return ActionBarPressRight( cursor, **iterPos.first, iterPos.second );
+                    return ActionBarPressRight( **iterPos.first );
                 }
             }
 
@@ -435,11 +436,11 @@ namespace Interface
             if ( iterPos1.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
 
-                if ( ActionBarCursor( cursor, **iterPos1.first, iterPos1.second, **iterPos2.first, iterPos2.second ) ) {
+                if ( ActionBarCursor( **iterPos1.first, **iterPos2.first ) ) {
                     return true;
                 }
                 else if ( le.MouseClickLeft( iterPos1.second ) ) {
-                    if ( ActionBarSingleClick( cursor, **iterPos1.first, iterPos1.second, **iterPos2.first, iterPos2.second ) )
+                    if ( ActionBarSingleClick( **iterPos1.first, **iterPos2.first ) )
                         curItemPos = iterPos1;
                     else
                         ResetSelected();
@@ -449,7 +450,7 @@ namespace Interface
                 }
                 else if ( le.MousePressRight( iterPos1.second ) ) {
                     other.ResetSelected();
-                    return ActionBarPressRight( cursor, **iterPos1.first, iterPos1.second, **iterPos2.first, iterPos2.second );
+                    return ActionBarPressRight( **iterPos1.first, **iterPos2.first );
                 }
             }
 

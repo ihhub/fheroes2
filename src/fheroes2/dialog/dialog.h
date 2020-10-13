@@ -159,7 +159,7 @@ namespace Dialog
         const Rect & GetTop( void ) const;
 
         static void RenderRegular( const Rect & );
-        static void RenderOther( const fheroes2::Image &, const Rect & );
+        static void RenderOther( const fheroes2::Image &, const fheroes2::Rect & );
 
     protected:
         fheroes2::ImageRestorer restorer;

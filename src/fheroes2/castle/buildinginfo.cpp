@@ -206,6 +206,8 @@ void BuildingInfo::UpdateCosts( const std::string & spec )
     else {
         VERBOSE( spec << ": " << doc.ErrorDesc() );
     }
+#else
+    (void)spec;
 #endif
 }
 
@@ -771,7 +773,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.w - 10, pos.y + 4 );
 }
 
-bool DwellingsBar::ActionBarSingleClick( const Point & cursor, DwellingItem & dwl, const Rect & pos )
+bool DwellingsBar::ActionBarSingleClick( DwellingItem & dwl )
 {
     if ( castle.isBuild( dwl.type ) ) {
         castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true ) );
@@ -790,7 +792,7 @@ bool DwellingsBar::ActionBarSingleClick( const Point & cursor, DwellingItem & dw
     return true;
 }
 
-bool DwellingsBar::ActionBarPressRight( const Point & cursor, DwellingItem & dwl, const Rect & pos )
+bool DwellingsBar::ActionBarPressRight( DwellingItem & dwl )
 {
     Dialog::DwellingInfo( dwl.mons, castle.getMonstersInDwelling( dwl.type ) );
 

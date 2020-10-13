@@ -57,7 +57,7 @@ PrimarySkillsBar::PrimarySkillsBar( const Heroes * hr, bool mini )
 
 void PrimarySkillsBar::SetTextOff( s32 ox, s32 oy )
 {
-    toff = Point( ox, oy );
+    toff = fheroes2::Point( ox, oy );
 }
 
 void PrimarySkillsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
@@ -142,7 +142,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
     }
 }
 
-bool PrimarySkillsBar::ActionBarSingleClick( const Point & cursor, int & skill, const Rect & pos )
+bool PrimarySkillsBar::ActionBarSingleClick( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
         Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, hero ), Font::BIG, Dialog::OK );
@@ -152,7 +152,7 @@ bool PrimarySkillsBar::ActionBarSingleClick( const Point & cursor, int & skill, 
     return false;
 }
 
-bool PrimarySkillsBar::ActionBarPressRight( const Point & cursor, int & skill, const Rect & pos )
+bool PrimarySkillsBar::ActionBarPressRight( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
         Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, hero ), Font::BIG );
@@ -162,7 +162,7 @@ bool PrimarySkillsBar::ActionBarPressRight( const Point & cursor, int & skill, c
     return false;
 }
 
-bool PrimarySkillsBar::ActionBarCursor( const Point & cursor, int & skill, const Rect & pos )
+bool PrimarySkillsBar::ActionBarCursor( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
         msg = _( "View %{skill} Info" );
@@ -224,7 +224,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos,
     }
 }
 
-bool SecondarySkillsBar::ActionBarSingleClick( const Point & cursor, Skill::Secondary & skill, const Rect & pos )
+bool SecondarySkillsBar::ActionBarSingleClick( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
         Dialog::SecondarySkillInfo( skill, true );
@@ -242,7 +242,7 @@ bool SecondarySkillsBar::ActionBarSingleClick( const Point & cursor, Skill::Seco
     return false;
 }
 
-bool SecondarySkillsBar::ActionBarPressRight( const Point & cursor, Skill::Secondary & skill, const Rect & pos )
+bool SecondarySkillsBar::ActionBarPressRight( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
         if ( can_change )
@@ -255,7 +255,7 @@ bool SecondarySkillsBar::ActionBarPressRight( const Point & cursor, Skill::Secon
     return false;
 }
 
-bool SecondarySkillsBar::ActionBarCursor( const Point & cursor, Skill::Secondary & skill, const Rect & pos )
+bool SecondarySkillsBar::ActionBarCursor( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
         msg = _( "View %{skill} Info" );
