@@ -106,7 +106,7 @@ export CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 
 all:
 ifndef WITHOUT_XML
-	$(MAKE) -C xmlccwrap
+	$(MAKE) -C thirdparty/tinyxml
 endif
 	$(MAKE) -C thirdparty/libsmacker
 	$(MAKE) -C engine
@@ -119,7 +119,7 @@ ifndef WITHOUT_UNICODE
 endif
 
 clean:
-	$(MAKE) -C xmlccwrap clean
+	$(MAKE) -C thirdparty/tinyxml clean
 	$(MAKE) -C thirdparty/libsmacker clean
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean

@@ -14,8 +14,8 @@ LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
 CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
 
 ifndef WITHOUT_XML
-LIBENGINE := $(LIBENGINE) ../xmlccwrap/libxmlccwrap.a
-CFLAGS := $(CFLAGS) -I../xmlccwrap
+LIBENGINE := $(LIBENGINE) ../thirdparty/tinyxml/libtinyxml.a
+CFLAGS := $(CFLAGS) -I../thirdparty/tinyxml
 endif
 
 ifdef PREFIX
