@@ -56,7 +56,12 @@ endif
 endif
 
 ifndef WITHOUT_XML
+ifndef WITHOUT_BUNDLED_LIBS
 CFLAGS := $(CFLAGS) -DWITH_XML
+else
+CFLAGS := $(CFLAGS) $(shell pkg-config tinyxml --cflags)
+LIBS := $(LIBS) $(shell pkg-config tinyxml --libs)
+endif
 endif
 
 ifndef WITHOUT_ZLIB
@@ -103,7 +108,9 @@ export CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 
 all:
 ifndef WITHOUT_XML
+ifndef WITHOUT_BUNDLED_LIBS
 	$(MAKE) -C thirdparty/tinyxml CFLAGS="$(CXXFLAGS_TP)"
+endif
 endif
 	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
 	$(MAKE) -C engine
