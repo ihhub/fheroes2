@@ -351,6 +351,9 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     // experience
     experience = st.getLE32();
 
+    if ( experience == 0 )
+        experience = GetStartingXp();
+
     bool custom_secskill = st.get();
 
     // custom skill
@@ -1501,6 +1504,11 @@ int Heroes::GetKillerColor( void ) const
 int Heroes::GetControl( void ) const
 {
     return GetKingdom().GetControl();
+}
+
+u32 Heroes::GetStartingXp( void ) const
+{
+    return Rand::Get( 40, 90 );
 }
 
 int Heroes::GetMapsObject( void ) const

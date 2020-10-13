@@ -173,6 +173,7 @@ public:
     int GetColor( void ) const;
     int GetType( void ) const;
     int GetControl( void ) const;
+    u32 GetStartingXp( void ) const;
 
     int GetKillerColor( void ) const;
     void SetKillerColor( int );
