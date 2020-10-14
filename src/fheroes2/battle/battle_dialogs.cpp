@@ -396,8 +396,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
     if ( msg.length() > 0 ) {
         TextBox box( msg, Font::BIG, 270 );
-        box.Blit( pos_rt.x + 25,
-            pos_rt.y + 175 + ( isTitlePresent ? 30 : 0 ) );
+        box.Blit( pos_rt.x + 25, pos_rt.y + 175 + ( isTitlePresent ? 30 : 0 ) );
     }
 
     // battlefield casualties
