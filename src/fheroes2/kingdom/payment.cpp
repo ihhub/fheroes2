@@ -90,6 +90,8 @@ void PaymentConditions::UpdateCosts( const std::string & spec )
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
+#else
+    (void)spec;
 #endif
 }
 
@@ -175,7 +177,7 @@ payment_t PaymentConditions::RecruitHero( int level )
     return result;
 }
 
-payment_t PaymentConditions::ForAlchemist( int arts )
+payment_t PaymentConditions::ForAlchemist()
 {
     payment_t result;
     paymentstats_t * ptr = &_payments[0];

@@ -130,6 +130,8 @@ ListDirs System::GetDataDirectories( const std::string & prog )
 
     dirs.push_back( System::ConcatePath( "/storage/sdcard0", prog ) );
     dirs.push_back( System::ConcatePath( "/storage/sdcard1", prog ) );
+#else
+    (void)prog;
 #endif
 
     return dirs;
@@ -158,6 +160,10 @@ ListFiles System::GetListFiles( const std::string & prog, const std::string & pr
     for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
         res.ReadDir( prefix.size() ? System::ConcatePath( *it, prefix ) : *it, filter, false );
     }
+#else
+    (void)prog;
+    (void)prefix;
+    (void)filter;
 #endif
     return res;
 }
@@ -257,6 +263,9 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
 {
 #if defined( __MINGW32CE__ ) || defined( _MSC_VER )
+    (void)argc;
+    (void)argv;
+    (void)optstring;
     return -1;
 #else
     return getopt( argc, argv, optstring );
@@ -380,6 +389,8 @@ int System::CreateTrayIcon( bool fl )
     }
 
     return Shell_NotifyIcon( NIM_DELETE, &nid );
+#else
+    (void)fl;
 #endif
     return 0;
 }
@@ -446,6 +457,8 @@ void System::PowerManagerOff( bool fl )
         SetEvent( hEvent );
         CloseHandle( hEvent );
     }
+#else
+    (void)fl;
 #endif
 }
 

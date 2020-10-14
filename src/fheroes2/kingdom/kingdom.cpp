@@ -220,7 +220,7 @@ void Kingdom::AddHeroes( Heroes * hero )
             heroes.push_back( hero );
 
         Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) )
+        if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
 
         AI::Get().HeroesAdd( *hero );
@@ -429,7 +429,7 @@ void Kingdom::SetVisitTravelersTent( int col )
 bool Kingdom::IsVisitTravelersTent( int col ) const
 {
     // visited_tents_color is a bitfield
-    return visited_tents_colors & ( 1 << col );
+    return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
 bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const

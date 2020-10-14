@@ -28,8 +28,8 @@
 namespace fheroes2
 {
     // Image contains image layer and transform layer.
-    // - transform layer is used to apply some changes to an image on which we draw the current one. For example, shadowing
-    // - image layer is used to copy pixel value to destination image
+    // - image layer contains visible pixels which are copy to a destination image
+    // - transform layer is used to apply some transformation to an image on which we draw the current one. For example, shadowing
     class Image
     {
     public:
@@ -55,10 +55,10 @@ namespace fheroes2
 
         bool empty() const;
 
-        void reset(); // makes image fully transparent (transform layer is 1)
+        void reset(); // makes image fully transparent (transform layer is set to 1)
         void clear(); // makes the image empty
 
-        void fill( uint8_t value ); // fill only 'image' layer
+        void fill( uint8_t value ); // fill 'image' layer with given value, setting 'transform' layer set to 0
 
         void swap( Image & image );
 

@@ -36,37 +36,37 @@
 #include "ui_button.h"
 #include "world.h"
 
-void RedrawFromResource( const Point &, const Funds & );
-void RedrawToResource( const Point &, bool showcost, bool tradingPost, int from_resource = 0 );
+void RedrawFromResource( const fheroes2::Point &, const Funds & );
+void RedrawToResource( const fheroes2::Point &, bool showcost, bool tradingPost, int from_resource = 0 );
 std::string GetStringTradeCosts( int rs_from, int rs_to, bool tradingPost );
 u32 GetTradeCosts( int rs_from, int rs_to, bool tradingPost );
 
 class TradeWindowGUI
 {
 public:
-    TradeWindowGUI( const Rect & rt )
+    TradeWindowGUI( const fheroes2::Rect & rt )
         : pos_rt( rt )
-        , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
         , back( fheroes2::Display::instance() )
+        , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
     {
-        back.update( rt.x - 5, rt.y + 15, rt.w + 10, 160 );
+        back.update( rt.x - 5, rt.y + 15, rt.width + 10, 160 );
 
         buttonGift.setICNInfo( Settings::Get().ExtGameEvilInterface() ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
         buttonTrade.setICNInfo( tradpost, 15, 16 );
         buttonLeft.setICNInfo( tradpost, 3, 4 );
         buttonRight.setICNInfo( tradpost, 5, 6 );
 
-        buttonGift.setPosition( pos_rt.x + ( pos_rt.w - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 120 );
-        buttonTrade.setPosition( pos_rt.x + ( pos_rt.w - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 150 );
+        buttonGift.setPosition( pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 120 );
+        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpost, 17 ).width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
 
         splitter.SetSprite( fheroes2::AGG::GetICN( tradpost, 2 ) );
-        splitter.SetArea( Rect( pos_rt.x + ( pos_rt.w - fheroes2::AGG::GetICN( tradpost, 1 ).width() ) / 2 + 21, pos_rt.y + 131, 189, 11 ) );
+        splitter.SetArea( fheroes2::Rect( pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpost, 1 ).width() ) / 2 + 21, pos_rt.y + 131, 189, 11 ) );
         splitter.HideCursor();
 
         const TextBox text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ), Font::BIG,
-                            Rect( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 ) );
+                            fheroes2::Rect( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 ) );
 
         textSell.SetFont( Font::SMALL );
         textBuy.SetFont( Font::SMALL );
@@ -75,8 +75,8 @@ public:
     void RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy );
     void ShowTradeArea( int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, bool fromTradingPost );
 
-    Rect buttonMax;
-    Rect buttonMin;
+    fheroes2::Rect buttonMax;
+    fheroes2::Rect buttonMin;
     fheroes2::Button buttonTrade;
     fheroes2::Button buttonLeft;
     fheroes2::Button buttonRight;
@@ -84,7 +84,7 @@ public:
     Splitter splitter;
 
 private:
-    Rect pos_rt;
+    fheroes2::Rect pos_rt;
     fheroes2::ImageRestorer back;
     int tradpost;
 
@@ -102,7 +102,7 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
         cursor.Hide();
         splitter.HideCursor();
         back.restore();
-        Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 );
+        fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
         const TextBox displayMesssage( _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" ),
                                        Font::BIG, dst_rt );
         buttonGift.enable();
@@ -110,22 +110,19 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
         buttonLeft.disable();
         buttonRight.disable();
         buttonGift.draw();
-        buttonMax = Rect();
-        buttonMin = Rect();
-        cursor.Show();
-        display.render();
+        buttonMax = fheroes2::Rect();
+        buttonMin = fheroes2::Rect();
     }
     else {
         cursor.Hide();
         back.restore();
 
-        Point dst_pt;
         const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpost, 1 );
-        dst_pt.x = pos_rt.x + ( pos_rt.w - bar.width() ) / 2 - 2;
-        dst_pt.y = pos_rt.y + 128;
+        fheroes2::Point dst_pt( pos_rt.x + ( pos_rt.width - bar.width() ) / 2 - 2, pos_rt.y + 128 );
         fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
+
         splitter.SetRange( 0, ( Resource::GOLD == resourceTo ? max_sell : max_buy ) );
-        u32 exchange_rate = GetTradeCosts( resourceFrom, resourceTo, fromTradingPost );
+        const uint32_t exchange_rate = GetTradeCosts( resourceFrom, resourceTo, fromTradingPost );
         std::string message;
         if ( Resource::GOLD == resourceTo ) {
             message = _( "I can offer you %{count} for 1 unit of %{resfrom}." );
@@ -138,33 +135,33 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
             StringReplace( message, "%{resfrom}", Resource::String( resourceFrom ) );
             StringReplace( message, "%{count}", exchange_rate );
         }
-        const TextBox displayMessage( message, Font::BIG, Rect( pos_rt.x, pos_rt.y + 30, pos_rt.w, 100 ) );
+        const TextBox displayMessage( message, Font::BIG, fheroes2::Rect( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 ) );
         const fheroes2::Sprite & sprite_from = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( resourceFrom ) );
-        dst_pt.x = pos_rt.x + ( pos_rt.w - sprite_from.width() ) / 2 - 70;
+        dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_from.width() ) / 2 - 70;
         dst_pt.y = pos_rt.y + 115 - sprite_from.height();
         fheroes2::Blit( sprite_from, display, dst_pt.x, dst_pt.y );
         const fheroes2::Sprite & sprite_to = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( resourceTo ) );
-        dst_pt.x = pos_rt.x + ( pos_rt.w - sprite_to.width() ) / 2 + 70;
+        dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_to.width() ) / 2 + 70;
         dst_pt.y = pos_rt.y + 115 - sprite_to.height();
         fheroes2::Blit( sprite_to, display, dst_pt.x, dst_pt.y );
         const fheroes2::Sprite & sprite_fromto = fheroes2::AGG::GetICN( tradpost, 0 );
-        dst_pt.x = pos_rt.x + ( pos_rt.w - sprite_fromto.width() ) / 2;
+        dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
         dst_pt.y = pos_rt.y + 90;
         fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );
         Text text( "max", Font::YELLOW_SMALL );
-        dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2 - 5;
+        dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 80;
-        buttonMax = Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
-        text.Blit( dst_pt );
+        buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
+        text.Blit( dst_pt.x, dst_pt.y );
         text.Set( "min", Font::YELLOW_SMALL );
-        dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2 - 5;
+        dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 103;
-        buttonMin = Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
-        text.Blit( dst_pt );
+        buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
+        text.Blit( dst_pt.x, dst_pt.y );
         text.Set( _( "Qty to trade" ), Font::SMALL );
-        dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2;
+        dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2;
         dst_pt.y = pos_rt.y + 115;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         buttonGift.disable();
         buttonTrade.enable();
@@ -177,29 +174,30 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
 
         RedrawInfoBuySell( count_sell, count_buy, max_sell, world.GetKingdom( Settings::Get().CurrentColor() ).GetFunds().Get( resourceTo ) );
         splitter.ShowCursor();
-        cursor.Show();
-        display.render();
     }
+
+    cursor.Show();
+    display.render();
 }
 
 void TradeWindowGUI::RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy )
 {
-    Point dst_pt;
+    fheroes2::Point dst_pt;
 
     splitter.HideCursor();
 
     textSell.Hide();
     textSell.SetText( std::string( "-" ) + GetString( count_sell ) + " " + "(" + GetString( max_sell - count_sell ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.w / 2 - 70 - textSell.w() / 2;
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - textSell.w() / 2;
     dst_pt.y = pos_rt.y + 116;
-    textSell.SetPos( dst_pt );
+    textSell.SetPos( dst_pt.x, dst_pt.y );
     textSell.Show();
 
     textBuy.Hide();
     textBuy.SetText( std::string( "+" ) + GetString( count_buy ) + " " + "(" + GetString( orig_buy + count_buy ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.w / 2 + 70 - textBuy.w() / 2;
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - textBuy.w() / 2;
     dst_pt.y = pos_rt.y + 116;
-    textBuy.SetPos( dst_pt );
+    textBuy.SetPos( dst_pt.x, dst_pt.y );
     textBuy.Show();
 
     splitter.ShowCursor();
@@ -217,15 +215,15 @@ void Dialog::Marketplace( bool fromTradingPost )
 
     Dialog::FrameBox box( 297, true );
 
-    const Rect & pos_rt = box.GetArea();
-    Point dst_pt( pos_rt.x, pos_rt.y );
+    const fheroes2::Rect & pos_rt = box.GetArea();
+    fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
 
     // header
     Text text;
     text.Set( header, Font::YELLOW_BIG );
-    dst_pt.x = pos_rt.x + ( pos_rt.w - text.w() ) / 2;
+    dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2;
     dst_pt.y = pos_rt.y;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     TradeWindowGUI gui( pos_rt );
 
@@ -235,44 +233,44 @@ void Dialog::Marketplace( bool fromTradingPost )
 
     Funds fundsFrom = kingdom.GetFunds();
     int resourceFrom = 0;
-    const Point pt1( pos_rt.x, pos_rt.y + 190 );
-    Rects rectsFrom;
+    const fheroes2::Point pt1( pos_rt.x, pos_rt.y + 190 );
+    std::vector<fheroes2::Rect> rectsFrom;
     rectsFrom.reserve( 7 );
-    rectsFrom.push_back( Rect( pt1.x, pt1.y, 34, 34 ) ); // wood
-    rectsFrom.push_back( Rect( pt1.x + 37, pt1.y, 34, 34 ) ); // mercury
-    rectsFrom.push_back( Rect( pt1.x + 74, pt1.y, 34, 34 ) ); // ore
-    rectsFrom.push_back( Rect( pt1.x, pt1.y + 37, 34, 34 ) ); // sulfur
-    rectsFrom.push_back( Rect( pt1.x + 37, pt1.y + 37, 34, 34 ) ); // crystal
-    rectsFrom.push_back( Rect( pt1.x + 74, pt1.y + 37, 34, 34 ) ); // gems
-    rectsFrom.push_back( Rect( pt1.x + 37, pt1.y + 74, 34, 34 ) ); // gold
+    rectsFrom.push_back( fheroes2::Rect( pt1.x, pt1.y, 34, 34 ) ); // wood
+    rectsFrom.push_back( fheroes2::Rect( pt1.x + 37, pt1.y, 34, 34 ) ); // mercury
+    rectsFrom.push_back( fheroes2::Rect( pt1.x + 74, pt1.y, 34, 34 ) ); // ore
+    rectsFrom.push_back( fheroes2::Rect( pt1.x, pt1.y + 37, 34, 34 ) ); // sulfur
+    rectsFrom.push_back( fheroes2::Rect( pt1.x + 37, pt1.y + 37, 34, 34 ) ); // crystal
+    rectsFrom.push_back( fheroes2::Rect( pt1.x + 74, pt1.y + 37, 34, 34 ) ); // gems
+    rectsFrom.push_back( fheroes2::Rect( pt1.x + 37, pt1.y + 74, 34, 34 ) ); // gold
 
     fheroes2::MovableSprite cursorFrom( fheroes2::AGG::GetICN( tradpost, 14 ) );
     text.Set( header_from, Font::SMALL );
     dst_pt.x = pt1.x + ( 108 - text.w() ) / 2;
     dst_pt.y = pt1.y - 15;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
     RedrawFromResource( pt1, fundsFrom );
 
     const std::string & header_to = _( "Available Trades" );
 
     Funds fundsTo;
     int resourceTo = 0;
-    const Point pt2( 138 + pos_rt.x, pos_rt.y + 190 );
-    Rects rectsTo;
+    const fheroes2::Point pt2( 138 + pos_rt.x, pos_rt.y + 190 );
+    std::vector<fheroes2::Rect> rectsTo;
     rectsTo.reserve( 7 );
-    rectsTo.push_back( Rect( pt2.x, pt2.y, 34, 34 ) ); // wood
-    rectsTo.push_back( Rect( pt2.x + 37, pt2.y, 34, 34 ) ); // mercury
-    rectsTo.push_back( Rect( pt2.x + 74, pt2.y, 34, 34 ) ); // ore
-    rectsTo.push_back( Rect( pt2.x, pt2.y + 37, 34, 34 ) ); // sulfur
-    rectsTo.push_back( Rect( pt2.x + 37, pt2.y + 37, 34, 34 ) ); // crystal
-    rectsTo.push_back( Rect( pt2.x + 74, pt2.y + 37, 34, 34 ) ); // gems
-    rectsTo.push_back( Rect( pt2.x + 37, pt2.y + 74, 34, 34 ) ); // gold
+    rectsTo.push_back( fheroes2::Rect( pt2.x, pt2.y, 34, 34 ) ); // wood
+    rectsTo.push_back( fheroes2::Rect( pt2.x + 37, pt2.y, 34, 34 ) ); // mercury
+    rectsTo.push_back( fheroes2::Rect( pt2.x + 74, pt2.y, 34, 34 ) ); // ore
+    rectsTo.push_back( fheroes2::Rect( pt2.x, pt2.y + 37, 34, 34 ) ); // sulfur
+    rectsTo.push_back( fheroes2::Rect( pt2.x + 37, pt2.y + 37, 34, 34 ) ); // crystal
+    rectsTo.push_back( fheroes2::Rect( pt2.x + 74, pt2.y + 37, 34, 34 ) ); // gems
+    rectsTo.push_back( fheroes2::Rect( pt2.x + 37, pt2.y + 74, 34, 34 ) ); // gold
 
     fheroes2::MovableSprite cursorTo( fheroes2::AGG::GetICN( tradpost, 14 ) );
     text.Set( header_to, Font::SMALL );
     dst_pt.x = pt2.x + ( 108 - text.w() ) / 2;
     dst_pt.y = pt2.y - 15;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
     RedrawToResource( pt2, false, fromTradingPost );
 
     u32 count_sell = 0;
@@ -281,8 +279,8 @@ void Dialog::Marketplace( bool fromTradingPost )
     u32 max_sell = 0;
     u32 max_buy = 0;
 
-    Rect & buttonMax = gui.buttonMax;
-    Rect & buttonMin = gui.buttonMin;
+    fheroes2::Rect & buttonMax = gui.buttonMax;
+    fheroes2::Rect & buttonMin = gui.buttonMin;
     fheroes2::Button & buttonGift = gui.buttonGift;
     fheroes2::Button & buttonTrade = gui.buttonTrade;
     fheroes2::Button & buttonLeft = gui.buttonLeft;
@@ -291,8 +289,8 @@ void Dialog::Marketplace( bool fromTradingPost )
 
     // button exit
     const fheroes2::Sprite & sprite_exit = fheroes2::AGG::GetICN( tradpost, 17 );
-    dst_pt.x = pos_rt.x + ( pos_rt.w - sprite_exit.width() ) / 2;
-    dst_pt.y = pos_rt.y + pos_rt.h - sprite_exit.height();
+    dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_exit.width() ) / 2;
+    dst_pt.y = pos_rt.y + pos_rt.height - sprite_exit.height();
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, tradpost, 17, 18 );
 
     buttonGift.draw();
@@ -329,7 +327,7 @@ void Dialog::Marketplace( bool fromTradingPost )
 
         // click from
         for ( u32 ii = 0; ii < rectsFrom.size(); ++ii ) {
-            const Rect & rect_from = rectsFrom[ii];
+            const fheroes2::Rect & rect_from = rectsFrom[ii];
 
             if ( le.MouseClickLeft( rect_from ) ) {
                 resourceFrom = Resource::FromIndexSprite2( ii );
@@ -410,7 +408,7 @@ void Dialog::Marketplace( bool fromTradingPost )
         }
         else
             // click max
-            if ( buttonMax.w && max_buy && le.MouseClickLeft( buttonMax ) ) {
+            if ( buttonMax.width && max_buy && le.MouseClickLeft( buttonMax ) ) {
             const u32 & max = splitter.Max();
 
             count_buy = max * ( Resource::GOLD == resourceTo ? GetTradeCosts( resourceFrom, resourceTo, fromTradingPost ) : 1 );
@@ -423,7 +421,7 @@ void Dialog::Marketplace( bool fromTradingPost )
             display.render();
         }
         // click min
-        if ( buttonMin.w && max_buy && le.MouseClickLeft( buttonMin ) ) {
+        if ( buttonMin.width && max_buy && le.MouseClickLeft( buttonMin ) ) {
             const u32 min = 1;
 
             count_buy = min * ( Resource::GOLD == resourceTo ? GetTradeCosts( resourceFrom, resourceTo, fromTradingPost ) : 1 );
@@ -483,16 +481,16 @@ void Dialog::Marketplace( bool fromTradingPost )
 void RedrawResourceSprite( const fheroes2::Image & sf, s32 px, s32 py, s32 value )
 {
     Text text;
-    Point dst_pt( px, py );
+    fheroes2::Point dst_pt( px, py );
 
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
     text.Set( GetString( value ), Font::SMALL );
     dst_pt.x += ( 34 - text.w() ) / 2;
     dst_pt.y += 21;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 }
 
-void RedrawFromResource( const Point & pt, const Funds & rs )
+void RedrawFromResource( const fheroes2::Point & pt, const Funds & rs )
 {
     const int tradpost = Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST;
 
@@ -514,7 +512,7 @@ void RedrawFromResource( const Point & pt, const Funds & rs )
 
 void RedrawResourceSprite2( const fheroes2::Image & sf, s32 px, s32 py, bool show, int from, int res, bool trading )
 {
-    Point dst_pt( px, py );
+    fheroes2::Point dst_pt( px, py );
 
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
 
@@ -522,11 +520,11 @@ void RedrawResourceSprite2( const fheroes2::Image & sf, s32 px, s32 py, bool sho
         Text text( GetStringTradeCosts( from, res, trading ), Font::SMALL );
         dst_pt.x += ( 34 - text.w() ) / 2;
         dst_pt.y += 21;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
     }
 }
 
-void RedrawToResource( const Point & pt, bool showcost, bool tradingPost, int from_resource )
+void RedrawToResource( const fheroes2::Point & pt, bool showcost, bool tradingPost, int from_resource )
 {
     const int tradpost = Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST;
 

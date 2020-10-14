@@ -67,6 +67,7 @@ public:
 
     virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) = 0;
 
+protected:
     int font;
 };
 
@@ -76,17 +77,18 @@ public:
     TextAscii(){};
     TextAscii( const std::string &, int = Font::BIG );
 
-    void SetText( const std::string & );
-    void SetFont( int );
-    void Clear( void );
+    virtual void SetText( const std::string & ) override;
+    virtual void SetFont( int ) override;
+    virtual void Clear( void ) override;
 
-    int w( void ) const;
+    virtual int w( void ) const override;
+    virtual int h( void ) const override;
+    virtual size_t Size( void ) const override;
+
     int w( u32, u32 ) const;
-    int h( void ) const;
     int h( int ) const;
-    size_t Size( void ) const;
 
-    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() );
+    virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
     static int CharWidth( int, int ft );
     static int CharHeight( int ft );
     static int CharAscent( int ft );
@@ -104,17 +106,18 @@ public:
     TextUnicode( const std::string &, int ft = Font::BIG );
     TextUnicode( const u16 *, size_t, int ft = Font::BIG );
 
-    void SetText( const std::string & );
-    void SetFont( int );
-    void Clear( void );
+    virtual void SetText( const std::string & ) override;
+    virtual void SetFont( int ) override;
+    virtual void Clear( void ) override;
 
-    int w( void ) const;
+    virtual int w( void ) const override;
+    virtual int h( void ) const override;
+    virtual size_t Size( void ) const override;
+
     int w( u32, u32 ) const;
-    int h( void ) const;
     int h( int ) const;
-    size_t Size( void ) const;
 
-    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() );
+    virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
 
     static bool isspace( int );
     static int CharWidth( int, int ft );
@@ -163,6 +166,9 @@ public:
     static u32 width( const std::string &, int ft, u32 start = 0, u32 count = 0 );
     static u32 height( const std::string &, int ft, u32 width = 0 );
 
+    // Use this method when you need to find the maximum width of of a string to be fit within given width
+    static int32_t getFitWidth( const std::string & text, const int fontId, const int32_t width_ );
+
 protected:
     TextInterface * message;
     u32 gw;
@@ -176,10 +182,6 @@ public:
     TextSprite( const std::string &, int ft, const Point & pt );
     TextSprite( const std::string &, int ft, s32, s32 );
 
-    void SetPos( const Point & pt )
-    {
-        SetPos( pt.x, pt.y );
-    }
     void SetPos( s32, s32 );
     void SetText( const std::string & );
     void SetText( const std::string &, int );
@@ -194,50 +196,50 @@ public:
     int w( void );
     int h( void );
 
-    Rect GetRect( void ) const;
+    fheroes2::Rect GetRect( void ) const;
 
 private:
     fheroes2::ImageRestorer _restorer;
     bool hide;
 };
 
-class TextBox : protected Rect
+class TextBox : protected fheroes2::Rect
 {
 public:
     TextBox();
     TextBox( const std::string &, int, u32 width );
-    TextBox( const std::string &, int, const Rect & );
+    TextBox( const std::string &, int, const fheroes2::Rect & );
 
     void Set( const std::string &, int, u32 width );
     void SetAlign( int type );
 
-    const Rect & GetRect( void ) const
+    int32_t x() const
     {
-        return *this;
+        return fheroes2::Rect::x;
     }
-    s32 x( void ) const
+
+    int32_t y() const
     {
-        return Rect::x;
+        return fheroes2::Rect::y;
     }
-    s32 y( void ) const
+
+    int32_t w() const
     {
-        return Rect::y;
+        return fheroes2::Rect::width;
     }
-    int w( void ) const
+
+    int32_t h() const
     {
-        return Rect::w;
+        return fheroes2::Rect::height;
     }
-    int h( void ) const
-    {
-        return Rect::h;
-    }
-    size_t row( void ) const
+
+    size_t row() const
     {
         return messages.size();
     }
 
     void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() );
-    void Blit( const Point &, fheroes2::Image & sf = fheroes2::Display::instance() );
+    void Blit( const fheroes2::Point &, fheroes2::Image & sf = fheroes2::Display::instance() );
 
 private:
     void Append( const std::string &, int, u32 );

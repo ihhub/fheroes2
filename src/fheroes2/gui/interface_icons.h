@@ -50,11 +50,13 @@ namespace Interface
         void SetShow( bool f )
         {
             show = f;
-        };
+        }
+
         bool IsShow( void ) const
         {
             return show;
-        };
+        }
+
         void RedrawBackground( const Point & );
 
         u32 CountIcons( void ) const

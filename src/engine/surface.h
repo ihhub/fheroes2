@@ -141,8 +141,6 @@ public:
 
     virtual u32 GetMemoryUsage( void ) const;
 
-    Surface RenderReflect( int shape /* 0: none, 1 : vert, 2: horz, 3: both */ ) const;
-
     virtual Surface GetSurface( void ) const;
     virtual Surface GetSurface( const Rect & ) const;
 
@@ -169,14 +167,6 @@ protected:
     void SetPixel2( s32 x, s32 y, u32 color );
     void SetPixel1( s32 x, s32 y, u32 color );
     void SetPixel( int x, int y, u32 );
-    void SetRawPixel( int position, uint32_t pixel );
-
-    u32 GetPixel4( s32 x, s32 y ) const;
-    u32 GetPixel3( s32 x, s32 y ) const;
-    u32 GetPixel2( s32 x, s32 y ) const;
-    u32 GetPixel1( s32 x, s32 y ) const;
-    u32 GetPixel( int x, int y ) const;
-    uint32_t GetRawPixelValue( int position ) const;
 
     SDL_Surface * surface;
 };

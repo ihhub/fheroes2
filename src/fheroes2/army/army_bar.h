@@ -34,8 +34,8 @@ class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
 public:
     ArmyBar( Army *, bool mini, bool ro, bool change = false );
 
-    void RedrawBackground( const Rect &, fheroes2::Image & );
-    void RedrawItem( ArmyTroop &, const Rect &, bool, fheroes2::Image & );
+    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
+    virtual void RedrawItem( ArmyTroop &, const Rect &, bool, fheroes2::Image & ) override;
 
     void SetBackground( const Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );
@@ -45,14 +45,14 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    bool ActionBarSingleClick( const Point &, ArmyTroop &, const Rect & );
-    bool ActionBarSingleClick( const Point &, ArmyTroop &, const Rect &, ArmyTroop &, const Rect & );
-    bool ActionBarDoubleClick( const Point &, ArmyTroop &, const Rect & );
-    bool ActionBarPressRight( const Point &, ArmyTroop &, const Rect & );
-    bool ActionBarPressRight( const Point &, ArmyTroop &, const Rect &, ArmyTroop &, const Rect & );
+    virtual bool ActionBarSingleClick( ArmyTroop & ) override;
+    virtual bool ActionBarSingleClick( ArmyTroop &, ArmyTroop & ) override;
+    virtual bool ActionBarDoubleClick( ArmyTroop & ) override;
+    virtual bool ActionBarPressRight( ArmyTroop & ) override;
+    virtual bool ActionBarPressRight( ArmyTroop &, ArmyTroop & ) override;
 
-    bool ActionBarCursor( const Point &, ArmyTroop &, const Rect & );
-    bool ActionBarCursor( const Point &, ArmyTroop &, const Rect &, ArmyTroop &, const Rect & );
+    virtual bool ActionBarCursor( ArmyTroop & ) override;
+    virtual bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
     bool QueueEventProcessing( ArmyBar &, std::string * = NULL );

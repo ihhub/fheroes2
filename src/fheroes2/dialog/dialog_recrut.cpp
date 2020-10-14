@@ -31,7 +31,8 @@
 #include "text.h"
 #include "world.h"
 
-void RedrawCurrentInfo( const Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds, const std::string & label )
+void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
+                        const std::string & label )
 {
     Text text;
 
@@ -56,18 +57,18 @@ void RedrawCurrentInfo( const Point & pos, u32 result, const payment_t & payment
     text.Blit( pos.x + 165 - text.w() / 2, pos.y + 180 );
 }
 
-void RedrawResourceInfo( const fheroes2::Image & sres, const Point & pos, s32 value, s32 px1, s32 py1, s32 px2, s32 py2 )
+void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & pos, s32 value, s32 px1, s32 py1, s32 px2, s32 py2 )
 {
-    Point dst_pt( pos.x + px1, pos.y + py1 );
+    fheroes2::Point dst_pt( pos.x + px1, pos.y + py1 );
     fheroes2::Blit( sres, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
 
     const Text text( GetString( value ), Font::SMALL );
     dst_pt.x = pos.x + px2 - text.w() / 2;
     dst_pt.y = pos.y + py2;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 }
 
-void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available, bool label, bool showTotalSum )
+void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool label, bool showTotalSum )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const payment_t paymentMonster = monster.GetCost();
@@ -75,21 +76,21 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
 
     // smear hardcored text "Cost per troop:"
     const fheroes2::Sprite & smear = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
-    Point dst_pt( pos.x + 144, pos.y + 55 );
+    fheroes2::Point dst_pt( pos.x + 144, pos.y + 55 );
     fheroes2::Blit( smear, 8, 1, display, dst_pt.x, dst_pt.y, 120, 12 );
 
     Text text( _( "Cost per troop:" ), Font::SMALL );
     dst_pt.x = pos.x + 206 - text.w() / 2;
     dst_pt.y = pos.y + 55;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // text recruit monster
     std::string str = _( "Recruit %{name}" );
     StringReplace( str, "%{name}", monster.GetMultiName() );
     TextBox recruitMonsterText( str, Font::YELLOW_BIG, BOXAREA_WIDTH );
-    dst_pt.x = pos.x + ( pos.w - recruitMonsterText.w() ) / 2;
+    dst_pt.x = pos.x + ( pos.width - recruitMonsterText.w() ) / 2;
     dst_pt.y = pos.y + 25;
-    recruitMonsterText.Blit( dst_pt );
+    recruitMonsterText.Blit( dst_pt.x, dst_pt.y );
 
     // sprite monster
     const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.ICNMonh(), 0 );
@@ -106,7 +107,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     // info resource
     // gold
     const fheroes2::Sprite & sgold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
-    RedrawResourceInfo( sgold, pos, paymentMonster.gold, extres ? 150 : 175, 75, extres ? 183 : 205, 103 );
+    RedrawResourceInfo( sgold, fheroes2::Point( pos.x, pos.y ), paymentMonster.gold, extres ? 150 : 175, 75, extres ? 183 : 205, 103 );
     if ( showTotalSum ) {
         dst_pt.x = pos.x + ( extres ? 105 : 130 );
         dst_pt.y = pos.y + 200;
@@ -115,7 +116,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
 
     if ( paymentMonster.crystal ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 4 );
-        RedrawResourceInfo( sres, pos, paymentMonster.crystal, 222, 69, 240, 103 );
+        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.crystal, 222, 69, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 177;
             dst_pt.y = pos.y + 194;
@@ -124,7 +125,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     }
     else if ( paymentMonster.mercury ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
-        RedrawResourceInfo( sres, pos, paymentMonster.mercury, 225, 72, 240, 103 );
+        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.mercury, 225, 72, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 197;
@@ -133,7 +134,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     }
     else if ( paymentMonster.wood ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
-        RedrawResourceInfo( sres, pos, paymentMonster.wood, 225, 72, 240, 103 );
+        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.wood, 225, 72, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 197;
@@ -142,7 +143,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     }
     else if ( paymentMonster.ore ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 2 );
-        RedrawResourceInfo( sres, pos, paymentMonster.ore, 225, 72, 240, 103 );
+        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.ore, 225, 72, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 197;
@@ -151,7 +152,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     }
     else if ( paymentMonster.sulfur ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 3 );
-        RedrawResourceInfo( sres, pos, paymentMonster.sulfur, 225, 75, 240, 103 );
+        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.sulfur, 225, 75, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 200;
@@ -160,7 +161,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     }
     else if ( paymentMonster.gems ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 5 );
-        RedrawResourceInfo( sres, pos, paymentMonster.gems, 225, 75, 240, 103 );
+        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.gems, 225, 75, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 200;
@@ -174,7 +175,7 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     text.Blit( pos.x + 70 - text.w() / 2, pos.y + 130 );
 }
 
-void RedrawStaticInfo( const Rect & pos, const Monster & monster, u32 available, bool label )
+void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool label )
 {
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RECRBKG, 0 ), fheroes2::Display::instance(), pos.x, pos.y );
 
@@ -183,8 +184,7 @@ void RedrawStaticInfo( const Rect & pos, const Monster & monster, u32 available,
     // text number buy
     Text text;
     text.Set( _( "Number to buy:" ), Font::SMALL );
-    Point dst_pt( pos.x + 29, pos.y + 163 );
-    text.Blit( dst_pt );
+    text.Blit( pos.x + 29, pos.y + 163 );
 }
 
 const char * SwitchMaxMinButtons( fheroes2::Button & btnMax, fheroes2::Button & btnMin, bool max )
@@ -237,20 +237,20 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECRBKG, 1 );
 
-    const Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 - 65 );
-    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 - 65 );
+    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
     fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, box.width() + BORDERWIDTH, box.height() + BORDERWIDTH );
-    const Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
+    const fheroes2::Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
     fheroes2::Blit( box, display, pos.x, pos.y );
 
-    const Rect rtChange( pos.x + 25, pos.y + 35, 85, 95 );
+    const fheroes2::Rect rtChange( pos.x + 25, pos.y + 35, 85, 95 );
     RedrawStaticInfo( pos, monster, available, ext && monster0.GetDowngrade() != monster0 );
 
     // buttons
-    Point dst_pt;
+    fheroes2::Point dst_pt;
 
     dst_pt.x = pos.x + 34;
     dst_pt.y = pos.y + 249;
@@ -273,7 +273,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     dst_pt.y = pos.y + 169;
     fheroes2::Button buttonDn( dst_pt.x, dst_pt.y, ICN::RECRUIT, 2, 3 );
 
-    const Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
+    const fheroes2::Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
 
     if ( 0 == result ) {
         buttonOk.disable();
@@ -284,7 +284,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     const Funds & funds = kingdom.GetFunds();
     std::string maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
-    RedrawCurrentInfo( pos, result, paymentMonster, paymentCosts, funds, maxmin );
+    RedrawCurrentInfo( fheroes2::Point( pos.x, pos.y ), result, paymentMonster, paymentCosts, funds, maxmin );
 
     buttonOk.draw();
     buttonCancel.draw();
@@ -397,7 +397,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
         if ( redraw ) {
             cursor.Hide();
             RedrawStaticInfo( pos, monster, available, ext && monster0.GetDowngrade() != monster0 );
-            RedrawCurrentInfo( pos, result, paymentMonster, paymentCosts, funds, maxmin );
+            RedrawCurrentInfo( fheroes2::Point( pos.x, pos.y ), result, paymentMonster, paymentCosts, funds, maxmin );
 
             if ( 0 == result ) {
                 buttonOk.disable();
@@ -451,11 +451,11 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
 
-    const Point dialogOffset( ( display.width() - box.width() ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
-    const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
+    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
     fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, box.width() + BORDERWIDTH, box.height() + BORDERWIDTH );
-    const Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
+    const fheroes2::Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
     fheroes2::Blit( box, display, pos.x, pos.y );

@@ -838,37 +838,38 @@ int Interface::Basic::HumanTurn( bool isload )
             }
         }
 
-        const Rect displayArea( 0, 0, display.width(), display.height() );
+        const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
+        const bool isHiddenInterface = conf.ExtGameHideInterface();
         // Stop moving hero first
         if ( isMovingHero && ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) ) {
             stopHero = true;
         }
         // cursor over radar
-        else if ( ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             radar.QueueEventProcessing();
         }
         // cursor over icons panel
-        else if ( ( !conf.ExtGameHideInterface() || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             iconsPanel.QueueEventProcessing();
         }
         // cursor over buttons area
-        else if ( ( !conf.ExtGameHideInterface() || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = buttonsArea.QueueEventProcessing();
         }
         // cursor over status area
-        else if ( ( !conf.ExtGameHideInterface() || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             statusWindow.QueueEventProcessing();
         }
         // cursor over control panel
-        else if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
+        else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = controlPanel.QueueEventProcessing();

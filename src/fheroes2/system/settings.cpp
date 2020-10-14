@@ -423,6 +423,7 @@ Settings::Settings()
     , size_small( 10 )
     , sound_volume( 6 )
     , music_volume( 6 )
+    , _musicType( MUSIC_EXTERNAL )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -431,7 +432,6 @@ Settings::Settings()
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
     , memory_limit( 0 )
-    , _musicType( MUSIC_EXTERNAL )
 {
     ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
@@ -1206,31 +1206,37 @@ bool Settings::UseAltResource( void ) const
 {
     return opt_global.Modes( GLOBAL_ALTRESOURCE );
 }
+
 bool Settings::PriceLoyaltyVersion( void ) const
 {
     return opt_global.Modes( GLOBAL_PRICELOYALTY );
 }
+
 bool Settings::LoadedGameVersion( void ) const
 {
-    return game_type & Game::TYPE_LOADFILE;
+    return ( game_type & Game::TYPE_LOADFILE ) != 0;
 }
 
 bool Settings::ShowControlPanel( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWCPANEL );
 }
+
 bool Settings::ShowRadar( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWRADAR );
 }
+
 bool Settings::ShowIcons( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWICONS );
 }
+
 bool Settings::ShowButtons( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWBUTTONS );
 }
+
 bool Settings::ShowStatus( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWSTATUS );
@@ -1241,6 +1247,7 @@ bool Settings::Unicode( void ) const
 {
     return opt_global.Modes( GLOBAL_USEUNICODE );
 }
+
 /* pocketpc mode */
 bool Settings::PocketPC( void ) const
 {
@@ -1318,8 +1325,9 @@ void Settings::SetMusicType( int v )
 /* check game type */
 bool Settings::GameType( int f ) const
 {
-    return game_type & f;
+    return ( game_type & f ) != 0;
 }
+
 int Settings::GameType( void ) const
 {
     return game_type;
@@ -1383,7 +1391,7 @@ Size Settings::MapsSize( void ) const
 
 bool Settings::AllowChangeRace( int f ) const
 {
-    return current_maps_file.rnd_races & f;
+    return ( current_maps_file.rnd_races & f ) != 0;
 }
 
 bool Settings::GameStartWithHeroes( void ) const

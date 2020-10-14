@@ -185,7 +185,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
     const bool interface = conf.ExtGameEvilInterface();
     if ( conf.ExtGameDynamicInterface() )
-        conf.SetEvilInterface( GetRace() & ( Race::BARB | Race::WRLK | Race::NECR ) );
+        conf.SetEvilInterface( ( GetRace() & ( Race::BARB | Race::WRLK | Race::NECR ) ) != 0 );
 
     CastleHeroes heroes = world.GetHeroes( *this );
 
@@ -202,7 +202,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
 
     const Point & cur_pt = background.GetArea();
-    Point dst_pt( cur_pt );
+    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
     std::string msg_date, msg_status;
 
     // date string
@@ -232,7 +232,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
     dst_pt.x = cur_pt.x + 5;
     dst_pt.y = cur_pt.y + 262;
-    const Rect rectSign1( dst_pt, crest.width(), crest.height() );
+    const fheroes2::Rect rectSign1( dst_pt.x, dst_pt.y, crest.width(), crest.height() );
 
     RedrawIcons( *this, heroes, cur_pt );
 
@@ -637,7 +637,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 if ( !port.empty() )
                                     fheroes2::Blit( port, sf, 5, 5 );
 
-                                const Point savept = selectArmy2.GetPos();
+                                const fheroes2::Point savept = selectArmy2.GetPos();
                                 selectArmy2.SetPos( 112, 5 );
                                 selectArmy2.Redraw( sf );
                                 selectArmy2.SetPos( savept.x, savept.y );

@@ -37,6 +37,8 @@ void ListFiles::Append( const ListFiles & list )
 void ListFiles::ReadDir( const std::string & path, const std::string & filter, bool sensitive )
 {
 #if defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ )
+    (void)sensitive;
+
     std::string pattern( path + "\\*" + filter );
     WIN32_FIND_DATA data;
     HANDLE hFind;

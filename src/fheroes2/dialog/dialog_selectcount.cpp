@@ -66,8 +66,8 @@ public:
         btnUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
         btnDn.setICNInfo( ICN::TOWNWIND, 7, 8 );
 
-        pos.w = 90;
-        pos.h = 30;
+        pos.width = 90;
+        pos.height = 30;
     }
 
     u32 Min( void )
@@ -85,9 +85,10 @@ public:
         vcur = v;
     }
 
-    void SetPos( const Point & pt )
+    void SetPos( const fheroes2::Point & pt )
     {
-        pos = pt;
+        pos.x = pt.x;
+        pos.y = pt.y;
 
         btnUp.setPosition( pt.x + 70, pt.y );
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
@@ -138,7 +139,7 @@ protected:
     u32 vcur;
     u32 step;
 
-    Rect pos;
+    fheroes2::Rect pos;
 
     fheroes2::Button btnUp;
     fheroes2::Button btnDn;
@@ -158,18 +159,18 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     FrameBox box( text.h() + spacer + 30, true );
     SelectValue sel( min, max, cur, step );
 
-    const Rect & pos = box.GetArea();
+    const fheroes2::Rect & pos = box.GetArea();
 
-    text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y );
+    text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y );
 
-    sel.SetPos( Point( pos.x + 80, pos.y + 30 ) );
+    sel.SetPos( fheroes2::Point( pos.x + 80, pos.y + 30 ) );
     sel.Redraw();
 
-    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.GetArea().x, box.GetArea().y, box.GetArea().w, box.GetArea().h ), Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
     text.Set( "MAX", Font::SMALL );
-    const Rect rectMax( pos.x + 173, pos.y + 38, text.w(), text.h() );
+    const fheroes2::Rect rectMax( pos.x + 173, pos.y + 38, text.w(), text.h() );
     text.Blit( rectMax.x, rectMax.y );
 
     LocalEvent & le = LocalEvent::Get();
@@ -227,32 +228,32 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     size_t charInsertPos = 0;
 
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
-    Point dst_pt;
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     FrameBox box( 10 + textbox.h() + 10 + sprite.height(), OK | CANCEL );
-    const Rect & box_rt = box.GetArea();
+    const fheroes2::Rect & box_rt = box.GetArea();
 
     // text
-    dst_pt.x = box_rt.x + ( box_rt.w - textbox.w() ) / 2;
+    fheroes2::Point dst_pt;
+    dst_pt.x = box_rt.x + ( box_rt.width - textbox.w() ) / 2;
     dst_pt.y = box_rt.y + 10;
-    textbox.Blit( dst_pt );
+    textbox.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.y = box_rt.y + 10 + textbox.h() + 10;
-    dst_pt.x = box_rt.x + ( box_rt.w - sprite.width() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - sprite.width() ) / 2;
     fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
-    const Rect text_rt( dst_pt.x, dst_pt.y, sprite.width(), sprite.height() );
+    const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, sprite.width(), sprite.height() );
 
     Text text( "_", Font::BIG );
     fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
     text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, system, 3, 4 );
 
     if ( res.empty() )
@@ -302,7 +303,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
             if ( text.w() < sprite.width() - 24 ) {
                 cursor.Hide();
                 fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
-                text.Blit( text_rt.x + ( text_rt.w - text.w() ) / 2, text_rt.y - 1 );
+                text.Blit( text_rt.x + ( text_rt.width - text.w() ) / 2, text_rt.y + 1 );
                 cursor.Show();
                 display.render();
             }
@@ -313,7 +314,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     cursor.SetThemes( oldcursor );
     cursor.Hide();
 
-    return res.size();
+    return !res.empty();
 }
 
 int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
@@ -331,13 +332,13 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     SelectValue sel( min, max, cur, 1 );
     Text text;
 
-    const Rect & pos = box.GetArea();
-    const int center = pos.x + pos.w / 2;
+    const fheroes2::Rect & pos = box.GetArea();
+    const int center = pos.x + pos.width / 2;
 
     text.Set( _( "How many troops to move?" ), Font::BIG );
     text.Blit( center - text.w() / 2, pos.y );
 
-    sel.SetPos( Point( pos.x + 70, pos.y + 30 ) );
+    sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + 30 ) );
     sel.Redraw();
 
     fheroes2::MovableSprite ssp;
@@ -345,11 +346,11 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     fheroes2::Image sp4;
     fheroes2::Image sp5;
 
-    std::vector<Rect> vrts( 3 );
+    std::vector<fheroes2::Rect> vrts( 3 );
 
-    Rect & rt3 = vrts[0];
-    Rect & rt4 = vrts[1];
-    Rect & rt5 = vrts[2];
+    fheroes2::Rect & rt3 = vrts[0];
+    fheroes2::Rect & rt4 = vrts[1];
+    fheroes2::Rect & rt5 = vrts[2];
 
     switch ( free_slots ) {
     case 0:
@@ -357,23 +358,23 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
 
     case 3:
         sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
-        rt3 = Rect( center - sp3.width() / 2, pos.y + 95, sp3.width(), sp3.height() );
+        rt3 = fheroes2::Rect( center - sp3.width() / 2, pos.y + 95, sp3.width(), sp3.height() );
         break;
 
     case 4:
         sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
         sp4 = fheroes2::AGG::GetICN( ICN::REQUESTS, 23 );
-        rt3 = Rect( center - 5 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
-        rt4 = Rect( center + 5, pos.y + 95, sp4.width(), sp4.height() );
+        rt3 = fheroes2::Rect( center - 5 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
+        rt4 = fheroes2::Rect( center + 5, pos.y + 95, sp4.width(), sp4.height() );
         break;
 
     case 5:
         sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
         sp4 = fheroes2::AGG::GetICN( ICN::REQUESTS, 23 );
         sp5 = fheroes2::AGG::GetICN( ICN::REQUESTS, 24 );
-        rt3 = Rect( center - sp3.width() / 2 - 10 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
-        rt4 = Rect( center - sp4.width() / 2, pos.y + 95, sp4.width(), sp4.height() );
-        rt5 = Rect( center + sp5.width() / 2 + 10, pos.y + 95, sp5.width(), sp5.height() );
+        rt3 = fheroes2::Rect( center - sp3.width() / 2 - 10 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
+        rt4 = fheroes2::Rect( center - sp4.width() / 2, pos.y + 95, sp4.width(), sp4.height() );
+        rt5 = fheroes2::Rect( center + sp5.width() / 2 + 10, pos.y + 95, sp5.width(), sp5.height() );
         break;
     }
 
@@ -394,12 +395,12 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
         fheroes2::DrawBorder( ssp, 214 );
     }
 
-    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.GetArea().x, box.GetArea().y, box.GetArea().w, box.GetArea().h ), Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
     const uint32_t maximumAcceptedValue = savelast ? max : max - 1;
 
-    const Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
+    const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
     fheroes2::ButtonSprite buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y );
     fheroes2::ButtonSprite buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y );
 
@@ -445,7 +446,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
             redraw_count = true;
 
         if ( !ssp.empty() )
-            for ( std::vector<Rect>::const_iterator it = vrts.begin(); it != vrts.end(); ++it ) {
+            for ( std::vector<fheroes2::Rect>::const_iterator it = vrts.begin(); it != vrts.end(); ++it ) {
                 if ( le.MouseClickLeft( *it ) ) {
                     cursor.Hide();
                     ssp.setPosition( it->x, it->y );
@@ -482,7 +483,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
         cur = sel();
 
         if ( !ssp.isHidden() ) {
-            const Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );
+            const fheroes2::Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );
 
             if ( rt == rt3 )
                 result = 3;

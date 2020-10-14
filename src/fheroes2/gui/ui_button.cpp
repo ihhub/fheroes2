@@ -408,7 +408,7 @@ namespace fheroes2
     void OptionButtonGroup::draw( Image & area ) const
     {
         for ( size_t i = 0; i < _button.size(); ++i ) {
-            _button[i]->draw();
+            _button[i]->draw( area );
         }
     }
 

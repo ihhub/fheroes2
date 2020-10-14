@@ -847,11 +847,11 @@ u32 PackTileSpriteIndex( u32 index, u32 shape ) /* index max: 0x3FFF, shape valu
 Maps::Tiles::Tiles()
     : maps_index( 0 )
     , pack_sprite_index( 0 )
-    , tilePassable( DIRECTION_ALL )
     , uniq( 0 )
-    , mp2_object( 0 )
     , objectTileset( 0 )
     , objectIndex( 255 )
+    , mp2_object( 0 )
+    , tilePassable( DIRECTION_ALL )
     , fog_colors( Color::ALL )
     , quantity1( 0 )
     , quantity2( 0 )
@@ -1547,7 +1547,7 @@ bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable 
     case ICN::OBJNLAVA:
     case ICN::OBJNSNOW:
     case ICN::OBJNSWMP:
-        return ( passable & DIRECTION_TOP_ROW );
+        return ( passable & DIRECTION_TOP_ROW ) != 0;
 
     default:
         break;
@@ -1802,7 +1802,7 @@ bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog ) const
     if ( !validateWaterRules( fromWater ) )
         return false;
 
-    return direct & tilePassable;
+    return ( direct & tilePassable ) != 0;
 }
 
 void Maps::Tiles::SetObjectPassable( bool pass )
@@ -2306,12 +2306,8 @@ void Maps::Tiles::ClearFog( int colors )
     fog_colors &= ~colors;
 }
 
-void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
+int Maps::Tiles::GetFogDirections( int color ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-    const Point mp = Maps::GetPoint( GetIndex() );
-
-    // get direction around foga
     int around = 0;
     const Directions directions = Direction::All();
 
@@ -2321,6 +2317,16 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
 
     if ( isFog( color ) )
         around |= Direction::CENTER;
+
+    return around;
+}
+
+void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
+{
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    const Point mp = Maps::GetPoint( GetIndex() );
+
+    const int around = GetFogDirections( color );
 
     // TIL::CLOF32
     if ( DIRECTION_ALL == around ) {

@@ -150,11 +150,6 @@ Size Size::operator-( const Size & sz ) const
     return Size( w - sz.w, h - sz.h );
 }
 
-bool Size::isEmpty( void ) const
-{
-    return 0 == w && 0 == h;
-}
-
 Rect::Rect() {}
 
 Rect::Rect( s16 rx, s16 ry, u16 rw, u16 rh )
@@ -172,20 +167,10 @@ Rect::Rect( const Point & pt, const Size & sz )
     , Size( sz )
 {}
 
-Rect::Rect( const SDL_Rect & rt )
-    : Point( rt.x, rt.y )
-    , Size( rt.w, rt.h )
-{}
-
 Rect::Rect( const fheroes2::Rect & rect )
     : Point( rect.x, rect.y )
     , Size( rect.width, rect.height )
 {}
-
-fheroes2::Rect Rect::convert() const
-{
-    return fheroes2::Rect( x, y, w, h );
-}
 
 Rect Rect::Get( const Point & pt1, const Point & pt2 )
 {

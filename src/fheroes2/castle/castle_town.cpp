@@ -79,16 +79,16 @@ int Castle::DialogBuyHero( const Heroes * hero )
     Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
 
     Dialog::FrameBox box( recruitHeroText.h() + spacer + portrait_frame.height() + spacer + heroDescriptionText.h() + spacer + rbs.GetArea().h, true );
-    const Rect & box_rt = box.GetArea();
+    const fheroes2::Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
-    Point dst_pt;
+    fheroes2::Point dst_pt;
 
-    dst_pt.x = box_rt.x + ( box_rt.w - recruitHeroText.w() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - recruitHeroText.w() ) / 2;
     dst_pt.y = box_rt.y;
-    recruitHeroText.Blit( dst_pt );
+    recruitHeroText.Blit( dst_pt.x, dst_pt.y );
 
     // portrait and frame
-    dst_pt.x = box_rt.x + ( box_rt.w - portrait_frame.width() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - portrait_frame.width() ) / 2;
     dst_pt.y = dst_pt.y + recruitHeroText.h() + spacer;
     fheroes2::Blit( portrait_frame, display, dst_pt.x, dst_pt.y );
 
@@ -98,21 +98,21 @@ int Castle::DialogBuyHero( const Heroes * hero )
 
     dst_pt.x = box_rt.x;
     dst_pt.y = dst_pt.y + portrait_frame.height() + spacer;
-    heroDescriptionText.Blit( dst_pt );
+    heroDescriptionText.Blit( dst_pt.x, dst_pt.y );
 
     rbs.SetPos( dst_pt.x, dst_pt.y + heroDescriptionText.h() + spacer );
     rbs.Redraw();
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
     if ( !AllowBuyHero( *hero ) ) {
         button1.disable();
     }
 
-    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
     fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
 
     button1.draw();
@@ -287,13 +287,13 @@ u32 Castle::OpenTown( void )
     // combat format
     const fheroes2::Sprite & spriteSpreadArmyFormat = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
     const fheroes2::Sprite & spriteGroupedArmyFormat = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
-    const Rect rectSpreadArmyFormat( cur_pt.x + 550, cur_pt.y + 220, spriteSpreadArmyFormat.width(), spriteSpreadArmyFormat.height() );
-    const Rect rectGroupedArmyFormat( cur_pt.x + 585, cur_pt.y + 220, spriteGroupedArmyFormat.width(), spriteGroupedArmyFormat.height() );
+    const fheroes2::Rect rectSpreadArmyFormat( cur_pt.x + 550, cur_pt.y + 220, spriteSpreadArmyFormat.width(), spriteSpreadArmyFormat.height() );
+    const fheroes2::Rect rectGroupedArmyFormat( cur_pt.x + 585, cur_pt.y + 220, spriteGroupedArmyFormat.width(), spriteGroupedArmyFormat.height() );
     const std::string descriptionSpreadArmyFormat(
         _( "'Spread' combat formation spreads your armies from the top to the bottom of the battlefield, with at least one empty space between each army." ) );
     const std::string descriptionGroupedArmyFormat( _( "'Grouped' combat formation bunches your army toget her in the center of your side of the battlefield." ) );
-    const Point pointSpreadArmyFormat( rectSpreadArmyFormat.x - 1, rectSpreadArmyFormat.y - 1 );
-    const Point pointGroupedArmyFormat( rectGroupedArmyFormat.x - 1, rectGroupedArmyFormat.y - 1 );
+    const fheroes2::Point pointSpreadArmyFormat( rectSpreadArmyFormat.x - 1, rectSpreadArmyFormat.y - 1 );
+    const fheroes2::Point pointGroupedArmyFormat( rectGroupedArmyFormat.x - 1, rectGroupedArmyFormat.y - 1 );
 
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
 

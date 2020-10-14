@@ -235,22 +235,22 @@ class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 public:
     ArtifactsBar( const Heroes *, bool mini, bool ro, bool change = false );
 
-    void RedrawBackground( const Rect &, fheroes2::Image & );
-    void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & );
+    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
+    virtual void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & ) override;
 
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    bool ActionBarSingleClick( const Point &, Artifact &, const Rect & );
-    bool ActionBarSingleClick( const Point &, Artifact &, const Rect &, Artifact &, const Rect & );
-    bool ActionBarDoubleClick( const Point &, Artifact &, const Rect & );
-    bool ActionBarPressRight( const Point &, Artifact &, const Rect & );
+    virtual bool ActionBarSingleClick( Artifact & ) override;
+    virtual bool ActionBarSingleClick( Artifact &, Artifact & ) override;
+    virtual bool ActionBarDoubleClick( Artifact & ) override;
+    virtual bool ActionBarPressRight( Artifact & ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
     bool QueueEventProcessing( ArtifactsBar &, std::string * = NULL );
 
-    bool ActionBarCursor( const Point &, Artifact &, const Rect & );
-    bool ActionBarCursor( const Point &, Artifact &, const Rect &, Artifact &, const Rect & );
+    virtual bool ActionBarCursor( Artifact & ) override;
+    virtual bool ActionBarCursor( Artifact &, Artifact & ) override;
 
 protected:
     const Heroes * hero;

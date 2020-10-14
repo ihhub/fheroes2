@@ -53,7 +53,7 @@ namespace
         return ostr.str();
     }
 
-    void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, const Point & offset )
+    void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, const fheroes2::Point & offset )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -169,12 +169,12 @@ int Game::NewCampain( void )
     Music::Pause();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
+    const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 
     display.fill( 0 );
 
     const Text loadingScreen( "Loading video. Please wait...", Font::BIG );
-    loadingScreen.Blit( Point( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 ) );
+    loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
     display.render();
 
     std::vector<fheroes2::Rect> campaignRoi;
@@ -195,7 +195,7 @@ int Game::NewCampain( void )
     cursor.SetThemes( cursor.POINTER );
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
-    const Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
+    const fheroes2::Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
 
     fheroes2::Blit( backgroundImage, display, top.x, top.y );
 

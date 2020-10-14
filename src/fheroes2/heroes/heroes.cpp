@@ -1323,12 +1323,12 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
     const int32_t currentIndex = GetIndex();
     const uint32_t skill = GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-    uint32_t total = world.getDistance( currentIndex, dst, skill );
+    uint32_t total = world.getDistance( *this, dst );
     DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );
 
     if ( total > 0 ) {
         // check if last step is diagonal and pre-adjust the total
-        const Route::Step lastStep = world.getPath( currentIndex, dst, skill ).back();
+        const Route::Step lastStep = world.getPath( *this, dst ).back();
         if ( Direction::isDiagonal( lastStep.GetDirection() ) ) {
             total -= lastStep.GetPenalty() / 3;
         }
@@ -1464,11 +1464,8 @@ void Heroes::SetFreeman( int reason )
             kingdom.SetLastLostHero( *this );
         }
 
-        if ( !army.isValid() || ( Battle::RESULT_RETREAT & reason ) )
-            army.Reset( false );
-        else if ( ( Battle::RESULT_LOSS & reason ) && !( Battle::RESULT_SURRENDER & reason ) )
-            army.Reset( true );
-        else if ( reason == 0 ) // Dismissed hero
+        // if not surrendering, reset army
+        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 )
             army.Reset( true );
 
         if ( GetColor() != Color::NONE )
@@ -1565,7 +1562,7 @@ void Heroes::ActionNewPosition( void )
         }
 
         // other around targets
-        for ( MapsIndexes::const_iterator it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
+        for ( it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
             RedrawGameAreaAndHeroAttackMonster( *this, *it );
             if ( conf.ExtWorldOnlyFirstMonsterAttack() )
                 skip_battle = true;
@@ -1693,7 +1690,7 @@ fheroes2::Image Heroes::GetPortrait( int type ) const
 void Heroes::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
 {
     fheroes2::Image port = GetPortrait( portrait, type );
-    Point mp;
+    fheroes2::Point mp;
 
     if ( !port.empty() ) {
         if ( PORT_BIG == type ) {

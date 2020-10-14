@@ -86,10 +86,10 @@ namespace Interface
         void SetRedraw( int );
         void Redraw( int f = 0 );
 
-        const Rect & GetScrollLeft( void ) const;
-        const Rect & GetScrollRight( void ) const;
-        const Rect & GetScrollTop( void ) const;
-        const Rect & GetScrollBottom( void ) const;
+        const fheroes2::Rect & GetScrollLeft( void ) const;
+        const fheroes2::Rect & GetScrollRight( void ) const;
+        const fheroes2::Rect & GetScrollTop( void ) const;
+        const fheroes2::Rect & GetScrollBottom( void ) const;
 
         s32 GetDimensionDoorDestination( s32, u32, bool ) const;
 
@@ -165,10 +165,10 @@ namespace Interface
 
         int redraw;
 
-        Rect scrollLeft;
-        Rect scrollRight;
-        Rect scrollBottom;
-        Rect scrollTop;
+        fheroes2::Rect scrollLeft;
+        fheroes2::Rect scrollRight;
+        fheroes2::Rect scrollBottom;
+        fheroes2::Rect scrollTop;
 
         Text system_info;
     };

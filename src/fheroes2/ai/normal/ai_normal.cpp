@@ -26,4 +26,9 @@ namespace AI
     {
         _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
     }
+
+    void Normal::resetPathfinder()
+    {
+        _pathfinder.reset();
+    }
 }
