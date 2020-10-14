@@ -358,7 +358,7 @@ void Dialog::Marketplace( bool fromTradingPost )
                 display.render();
             }
             else if ( le.MousePressRight( rect_from ) )
-                Dialog::ResourceInfo( "", _( "Income:" ), kingdom.GetIncome( INCOME_ALL ), 0 );
+                Dialog::ResourceInfo( _( "Income" ), "", kingdom.GetIncome( INCOME_ALL ), 0 );
         }
 
         // click to

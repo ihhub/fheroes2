@@ -169,7 +169,7 @@ void Castle::OpenWell( void )
                 }
             }
             else {
-                if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters:" ), str, total, Dialog::YES | Dialog::NO ) ) {
+                if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters" ), str, total, Dialog::YES | Dialog::NO ) ) {
                     for ( dwellings_t::const_iterator it = results.begin(); it != results.end(); ++it ) {
                         const dwelling_t & dw = *it;
                         RecruitMonsterFromDwelling( dw.first, dw.second );

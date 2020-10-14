@@ -86,10 +86,10 @@ void RedrawMonsterInfo( const Rect & pos, const Monster & monster, u32 available
     // text recruit monster
     std::string str = _( "Recruit %{name}" );
     StringReplace( str, "%{name}", monster.GetMultiName() );
-    text.Set( str, Font::BIG );
-    dst_pt.x = pos.x + ( pos.w - text.w() ) / 2;
+    TextBox recruitMonsterText( str, Font::YELLOW_BIG, BOXAREA_WIDTH );
+    dst_pt.x = pos.x + ( pos.w - recruitMonsterText.w() ) / 2;
     dst_pt.y = pos.y + 25;
-    text.Blit( dst_pt );
+    recruitMonsterText.Blit( dst_pt );
 
     // sprite monster
     const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.ICNMonh(), 0 );

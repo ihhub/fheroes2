@@ -651,9 +651,9 @@ void Kingdom::OverviewDialog( void )
         listStats->QueueEventProcessing();
 
         if ( le.MouseClickLeft( rectIncome ) )
-            Dialog::ResourceInfo( "", _( "Income:" ), GetIncome( INCOME_ALL ), Dialog::OK );
+            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), Dialog::OK );
         else if ( le.MousePressRight( rectIncome ) )
-            Dialog::ResourceInfo( "", _( "Income:" ), GetIncome( INCOME_ALL ), 0 );
+            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
 
         // redraw
         if ( !cursor.isVisible() || redraw ) {

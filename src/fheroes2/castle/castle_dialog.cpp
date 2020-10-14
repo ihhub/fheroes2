@@ -327,10 +327,10 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
         if ( le.MouseClickLeft( rectResource ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
         }
         else if ( le.MousePressRight( rectResource ) ) {
-            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
         // selector troops event

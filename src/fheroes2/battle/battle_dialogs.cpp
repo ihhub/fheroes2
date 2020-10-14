@@ -143,7 +143,7 @@ namespace
 
 namespace Battle
 {
-    void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg );
+    void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg );
     void RedrawBattleSettings( const std::vector<Rect> & areas );
     void RedrawOnOffSetting( const Rect & area, const std::string & name, uint32_t index, bool isSet );
 }
@@ -271,19 +271,19 @@ void Battle::DialogBattleSettings( void )
     }
 }
 
-void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg )
+void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg )
 {
     if ( res1 & RESULT_WINS ) {
         sequence.push( ICN::WINCMBT, true );
         if ( res2 & RESULT_SURRENDER )
-            msg.append( _( "The enemy has surrendered!" ) );
+            title.append( _( "The enemy has surrendered!" ) );
         else if ( res2 & RESULT_RETREAT )
-            msg.append( _( "The enemy has fled!" ) );
+            title.append( _( "The enemy has fled!" ) );
         else
-            msg.append( _( "A glorious victory!" ) );
+            title.append( _( "A glorious victory!" ) );
 
         if ( hero.isHeroes() ) {
-            msg.append( "\n \n" );
+            // msg.append( "\n \n" );
             msg.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{exp}", exp );
@@ -322,26 +322,26 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
     cursor.SetThemes( Cursor::POINTER );
 
-    std::string msg;
+    std::string title, msg;
     LoopedAnimationSequence sequence;
 
     if ( ( res.army1 & RESULT_WINS ) && army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, msg );
+        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( ( res.army2 & RESULT_WINS ) && army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, msg );
+        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, msg );
+        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else if ( army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, msg );
+        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
@@ -389,8 +389,17 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
     fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + 410, ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
 
-    TextBox box( msg, Font::BIG, 270 );
-    box.Blit( pos_rt.x + 25, pos_rt.y + 175 );
+    const bool isTitlePresent = title.length() > 0;
+    if ( isTitlePresent ) {
+        TextBox box( title, Font::YELLOW_BIG, 270 );
+        box.Blit( pos_rt.x + 25, pos_rt.y + 175 );
+    }
+
+    if ( msg.length() > 0 ) {
+        TextBox box( msg, Font::BIG, 270 );
+        box.Blit( pos_rt.x + 25,
+            pos_rt.y + 175 + ( isTitlePresent ? 30 : 0 ) );
+    }
 
     // battlefield casualties
     Text text( _( "Battlefield Casualties" ), Font::SMALL );
