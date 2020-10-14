@@ -190,7 +190,7 @@ bool StatsHeroesList::ActionListCursor( HeroRow & row, const Point & cursor )
 
 void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool current )
 {
-    (void) current;
+    (void)current;
 
     if ( row.hero ) {
         Text text( "", Font::SMALL );

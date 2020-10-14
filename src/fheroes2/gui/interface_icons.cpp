@@ -144,7 +144,7 @@ void Interface::IconsBar::RedrawBackground( const Point & pos )
 
     srcrt.y = srcrt.y + 64;
     srcrt.height = 32;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width , srcrt.height );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     for ( u32 ii = 0; ii < iconsCount; ++ii )
         fheroes2::Blit( back, display, pos.x + 5, pos.y + 5 + ii * ( IconsBar::GetItemHeight() + 10 ) );
