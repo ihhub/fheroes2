@@ -556,7 +556,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     if ( str.size() )
         str.replace( str.size() - sep.size(), sep.size(), "" );
 
-    const bool isRequired = str.size();
+    const bool isRequired = !str.empty();
     Text requires_text( _( "Requires:" ), Font::BIG );
     TextBox box2( str, Font::BIG, BOXAREA_WIDTH );
 

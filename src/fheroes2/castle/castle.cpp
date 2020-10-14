@@ -2237,12 +2237,12 @@ std::string Castle::String( void ) const
     return os.str();
 }
 
-int Castle::GetAttackModificator( std::string * strs ) const
+int Castle::GetAttackModificator( std::string * ) const
 {
     return 0;
 }
 
-int Castle::GetDefenseModificator( std::string * strs ) const
+int Castle::GetDefenseModificator( std::string * ) const
 {
     return 0;
 }
@@ -2263,7 +2263,7 @@ int Castle::GetPowerModificator( std::string * strs ) const
     return result;
 }
 
-int Castle::GetKnowledgeModificator( std::string * strs ) const
+int Castle::GetKnowledgeModificator( std::string * ) const
 {
     return 0;
 }
@@ -2476,29 +2476,29 @@ void Castle::JoinRNDArmy( void )
     const uint32_t reinforcementQuality = Rand::Get( 1, 15 ) + timeModifier;
 
     uint32_t count = timeModifier / 2;
-    uint32_t dwelling = DWELLING_MONSTER1;
+    uint32_t dwellingType = DWELLING_MONSTER1;
 
     if ( reinforcementQuality > 15 ) {
-        dwelling = DWELLING_MONSTER5;
+        dwellingType = DWELLING_MONSTER5;
         count += 1;
     }
     else if ( reinforcementQuality > 13 ) {
-        dwelling = DWELLING_MONSTER4;
+        dwellingType = DWELLING_MONSTER4;
         count += Rand::Get( 1, 3 );
     }
     else if ( reinforcementQuality > 10 ) {
-        dwelling = DWELLING_MONSTER3;
+        dwellingType = DWELLING_MONSTER3;
         count += Rand::Get( 3, 5 );
     }
     else if ( reinforcementQuality > 5 ) {
-        dwelling = DWELLING_MONSTER2;
+        dwellingType = DWELLING_MONSTER2;
         count += Rand::Get( 5, 7 );
     }
     else {
         count += Rand::Get( 8, 15 );
     }
 
-    army.JoinTroop( Monster( race, dwelling ), count );
+    army.JoinTroop( Monster( race, dwellingType ), count );
 }
 
 void Castle::ActionPreBattle( void )

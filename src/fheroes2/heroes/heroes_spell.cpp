@@ -57,7 +57,7 @@ bool ActionSpellDimensionDoor( Heroes & );
 bool ActionSpellTownGate( Heroes & );
 bool ActionSpellTownPortal( Heroes & );
 bool ActionSpellVisions( Heroes & );
-bool ActionSpellSetGuardian( Heroes &, const Spell &, int mons );
+bool ActionSpellSetGuardian( Heroes &, const Spell & );
 
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
@@ -166,19 +166,19 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         apply = ActionSpellVisions( *this );
         break;
     case Spell::HAUNT:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::GHOST );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     case Spell::SETEGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::EARTH_ELEMENT );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     case Spell::SETAGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::AIR_ELEMENT );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     case Spell::SETFGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::FIRE_ELEMENT );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     case Spell::SETWGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::WATER_ELEMENT );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     default:
         break;
@@ -562,7 +562,7 @@ bool ActionSpellVisions( Heroes & hero )
     return true;
 }
 
-bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell, int mons )
+bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
 {
     Maps::Tiles & tile = world.GetTiles( hero.GetIndex() );
 

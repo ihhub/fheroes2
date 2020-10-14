@@ -130,16 +130,13 @@ void Game::OpenCastleDialog( Castle & castle )
     const KingdomCastles & myCastles = myKingdom.GetCastles();
     KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
     Interface::StatusWindow::ResetTimer();
-    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
     if ( it != myCastles.end() ) {
         int result = Dialog::ZERO;
         while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false, needFade );
-            if ( needFade )
-                needFade = false;
+            result = ( *it )->OpenDialog( false );
 
             if ( it != myCastles.end() ) {
                 if ( Dialog::PREV == result ) {
@@ -156,7 +153,7 @@ void Game::OpenCastleDialog( Castle & castle )
         }
     }
     else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        ( *it )->OpenDialog( true, needFade );
+        ( *it )->OpenDialog( true );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();

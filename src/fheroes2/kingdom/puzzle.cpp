@@ -237,14 +237,14 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
         if ( Game::AnimateInfrequentDelay( Game::PUZZLE_FADE_DELAY ) ) {
             cursor.Hide();
             fheroes2::Blit( sf, display, dstx, dsty );
-            for ( size_t ii = 0; ii < pzl.size(); ++ii ) {
-                const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, ii );
+            for ( size_t i = 0; i < pzl.size(); ++i ) {
+                const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
 
                 int pieceAlpha = 255;
-                if ( pzl.test( ii ) )
+                if ( pzl.test( i ) )
                     pieceAlpha = alpha;
 
-                fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
+                fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, static_cast<uint8_t>( pieceAlpha ) );
             }
             cursor.Show();
             display.render();

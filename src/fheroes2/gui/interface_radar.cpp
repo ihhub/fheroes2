@@ -336,11 +336,11 @@ void Interface::Radar::RedrawCursor( void )
         const uint16_t width = static_cast<uint16_t>( xEnd - xStart );
         const uint16_t height = static_cast<uint16_t>( yEnd - yStart );
 
-        const Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
+        const fheroes2::Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
 
         // check change game area
-        if ( cursorArea.width() != sz.w || cursorArea.height() != sz.h ) {
-            cursorArea.resize( sz.w, sz.h );
+        if ( cursorArea.width() != sz.width || cursorArea.height() != sz.height ) {
+            cursorArea.resize( sz.width, sz.height );
             cursorArea.reset();
             fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
         }

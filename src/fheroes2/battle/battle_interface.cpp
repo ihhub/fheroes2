@@ -211,14 +211,16 @@ namespace Battle
             }
         }
 
-        void RedrawItem( const std::string & str, s32 px, s32 py, bool f )
+        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool f ) override
         {
             Text text( str, Font::BIG );
             text.Blit( px, py );
         }
 
-        void RedrawBackground( const Point & pt )
+        virtual void RedrawBackground( const Point & pt ) override
         {
+            (void)pt;
+
             fheroes2::Display & display = fheroes2::Display::instance();
             const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
             const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
@@ -236,11 +238,11 @@ namespace Battle
             fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
         }
 
-        void ActionCurrentUp( void ) {}
-        void ActionCurrentDn( void ) {}
-        void ActionListDoubleClick( std::string & ) {}
-        void ActionListSingleClick( std::string & ) {}
-        void ActionListPressRight( std::string & ) {}
+        virtual void ActionCurrentUp( void ) override {}
+        virtual void ActionCurrentDn( void ) override {}
+        virtual void ActionListDoubleClick( std::string & ) override {}
+        virtual void ActionListSingleClick( std::string & ) override {}
+        virtual void ActionListPressRight( std::string & ) override {}
 
         void SetOpenLog( bool f )
         {
@@ -878,7 +880,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // cover
-    bool trees = Maps::ScanAroundObject( center, MP2::OBJ_TREES ).size();
+    const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
     const Maps::Tiles & tile = world.GetTiles( center );
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
     bool light = true;
@@ -1332,7 +1334,7 @@ void Battle::Interface::RedrawCover( void )
 {
     const Settings & conf = Settings::Get();
 
-    RedrawCoverStatic( _mainSurface );
+    RedrawCoverStatic();
 
     const Board & board = *Arena::GetBoard();
     RedrawCoverBoard( conf, board );
@@ -1355,7 +1357,7 @@ void Battle::Interface::RedrawCover( void )
     RedrawKilled();
 }
 
-void Battle::Interface::RedrawCoverStatic( fheroes2::Image & dst )
+void Battle::Interface::RedrawCoverStatic()
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
@@ -1374,12 +1376,12 @@ void Battle::Interface::RedrawCoverStatic( fheroes2::Image & dst )
 
     // ground obstacles
     for ( u32 ii = 0; ii < ARENASIZE; ++ii ) {
-        RedrawLowObjects( ii, dst );
+        RedrawLowObjects( ii );
     }
 
     const Castle * castle = Arena::GetCastle();
     if ( castle )
-        RedrawCastle1( *castle, dst );
+        RedrawCastle1( *castle );
 }
 
 void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & board )
@@ -1398,7 +1400,7 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
     }
 }
 
-void Battle::Interface::RedrawCastle1( const Castle & castle, fheroes2::Image & dst )
+void Battle::Interface::RedrawCastle1( const Castle & castle )
 {
     const bool fortification = ( Race::KNGT == castle.GetRace() ) && castle.isBuild( BUILD_SPEC );
 
@@ -1554,7 +1556,7 @@ void Battle::Interface::RedrawCastle3( const Castle & castle )
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
 
-void Battle::Interface::RedrawLowObjects( s32 cell_index, fheroes2::Image & dst )
+void Battle::Interface::RedrawLowObjects( s32 cell_index )
 {
     const Cell * cell = Board::GetCell( cell_index );
     if ( cell == NULL )
@@ -2740,9 +2742,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
-                    TargetInfo & target = *it;
-                    const Rect & pos = target.defender->GetRectPosition();
-
                     if ( !redrawBattleField ) {
                         redrawBattleField = true;
                         RedrawPartialStart();
@@ -3037,7 +3036,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         RedrawActionElementalStormSpell( targets );
         break;
     case Spell::ARMAGEDDON:
-        RedrawActionArmageddonSpell( targets );
+        RedrawActionArmageddonSpell(); // hit everything
         break;
 
     default:
@@ -3311,7 +3310,7 @@ void Battle::Interface::RedrawActionTowerPart1( Tower & tower, Unit & defender )
     RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ORC );
 }
 
-void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & target )
+void Battle::Interface::RedrawActionTowerPart2( TargetInfo & target )
 {
     TargetsInfo targets;
     targets.push_back( target );
@@ -4024,7 +4023,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
         }
 }
 
-void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets )
+void Battle::Interface::RedrawActionArmageddonSpell()
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();

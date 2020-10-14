@@ -51,6 +51,8 @@ void Battle::UpdateMonsterAttributes( const std::string & spec )
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
+#else
+    (void)spec;
 #endif
 }
 
@@ -458,7 +460,7 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     if ( !skip_standing_check && ( !GetCount() || Modes( TR_MOVED | SP_BLIND | IS_PARALYZE_MAGIC ) ) )
         return Speed::STANDING;
 
-    int speed = Monster::GetSpeed();
+    uint32_t speed = Monster::GetSpeed();
     Spell spell;
 
     if ( Modes( SP_HASTE ) ) {

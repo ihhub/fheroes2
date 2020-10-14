@@ -30,7 +30,7 @@ namespace Interface
 {
     class Basic;
 
-    class ControlPanel : protected Rect
+    class ControlPanel : protected fheroes2::Rect
     {
     public:
         ControlPanel( Basic & );
@@ -40,7 +40,7 @@ namespace Interface
         void ResetTheme( void );
         int QueueEventProcessing( void );
 
-        const Rect & GetArea( void );
+        const fheroes2::Rect & GetArea( void );
 
     private:
         Basic & interface;
@@ -51,11 +51,11 @@ namespace Interface
         fheroes2::Image btn_stat;
         fheroes2::Image btn_quit;
 
-        Rect rt_radr;
-        Rect rt_icon;
-        Rect rt_bttn;
-        Rect rt_stat;
-        Rect rt_quit;
+        fheroes2::Rect rt_radr;
+        fheroes2::Rect rt_icon;
+        fheroes2::Rect rt_bttn;
+        fheroes2::Rect rt_stat;
+        fheroes2::Rect rt_quit;
     };
 }
 
