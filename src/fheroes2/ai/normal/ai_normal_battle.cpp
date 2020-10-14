@@ -158,6 +158,7 @@ namespace AI
             averageAllyDefense += unit.GetDefense();
         }
 
+        const double enemyArcherRatio = enemyShooterStr / enemyArmyStrength;
         // Will be used for better unit strength heuristic
         averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
         averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
@@ -189,9 +190,10 @@ namespace AI
                     myShooterStr /= 2;
             }
         }
-        DEBUG( DBG_AI, DBG_TRACE, "Comparing shooters: " << myShooterStr << ", vs enemy " << enemyShooterStr );
 
-        const bool defensiveTactics = defendingCastle || myShooterStr > enemyShooterStr;
+        const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr );
+        DEBUG( DBG_AI, DBG_TRACE, "Tactic " << defensiveTactics << " chosen. Archers: " << myShooterStr << ", vs enemy " << enemyShooterStr << " ratio is " << enemyArcherRatio );
+
         const double attackDistanceModifier = enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
         const double defenceDistanceModifier = myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
