@@ -1980,8 +1980,6 @@ void Maps::Tiles::CorrectFlags32( u32 index, bool up )
 
 void Maps::Tiles::FixedPreload( Tiles & tile )
 {
-    Addons::iterator it;
-
     // fix skeleton: left position
     if ( MP2::GetICNObject( tile.objectTileset ) == ICN::OBJNDSRT && tile.objectIndex == 83 ) {
         tile.SetObject( MP2::OBJN_SKELETON );

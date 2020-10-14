@@ -755,7 +755,7 @@ void Skill::UpdateStats( const std::string & spec )
 }
 
 #else
-void Skill::UpdateStats( const std::string & stats ) {}
+void Skill::UpdateStats( const std::string & ) {}
 #endif
 
 GameStatic::Data & GameStatic::Data::Get( void )

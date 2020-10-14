@@ -374,20 +374,20 @@ void Heroes::Action( s32 dst_index )
                 break;
 
             case ACTION_DEFAULT:
-                if ( !ActionDefault::Action( static_cast<ActionDefault *>( *it ), dst_index, *this ) )
+                if ( !ActionDefault::Action( static_cast<ActionDefault *>( *it ) ) )
                     cancel_default = true;
                 break;
 
             case ACTION_MESSAGE:
-                ActionMessage::Action( static_cast<ActionMessage *>( *it ), dst_index, *this );
+                ActionMessage::Action( static_cast<ActionMessage *>( *it ) );
                 break;
 
             case ACTION_RESOURCES:
-                ActionResources::Action( static_cast<ActionResources *>( *it ), dst_index, *this );
+                ActionResources::Action( static_cast<ActionResources *>( *it ), *this );
                 break;
 
             case ACTION_ARTIFACT:
-                ActionArtifact::Action( static_cast<ActionArtifact *>( *it ), dst_index, *this );
+                ActionArtifact::Action( static_cast<ActionArtifact *>( *it ), *this );
                 break;
 
             default:
@@ -791,8 +791,6 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
             return;
         }
 
-        bool disable_auto_move
-            = hero.isShipMaster() || other_hero->isShipMaster() || other_hero_castle || world.GetTiles( hero.GetIndex() ).GetObject( false ) == MP2::OBJ_STONELITHS;
         DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
         // new battle
@@ -2455,7 +2453,8 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         u32 ox = 0;
         const fheroes2::Sprite & br = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
 
-        fheroes2::Image sf( br.width() * mons.size() + ( mons.size() - 1 ) * 4, br.height() );
+        const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
+        fheroes2::Image sf( br.width() * monsterCount + ( monsterCount - 1 ) * 4, br.height() );
         sf.reset();
 
         for ( std::vector<Monster>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
@@ -2757,7 +2756,7 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToAlchemistsTower( Heroes & hero )
 {
     BagArtifacts & bag = hero.GetBagArtifacts();
-    u32 cursed = std::count_if( bag.begin(), bag.end(), std::mem_fun_ref( &Artifact::isAlchemistRemove ) );
+    const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), std::mem_fun_ref( &Artifact::isAlchemistRemove ) ) );
 
     if ( cursed ) {
         payment_t payment = PaymentConditions::ForAlchemist();
@@ -2781,8 +2780,9 @@ void ActionToAlchemistsTower( Heroes & hero )
         else
             Dialog::Message( "", _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG, Dialog::OK );
     }
-    else
+    else {
         Dialog::Message( "", _( "You hear a voice from high above in the tower, \"Go away! I can't help you!\"" ), Font::BIG, Dialog::OK );
+    }
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

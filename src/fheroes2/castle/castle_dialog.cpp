@@ -178,7 +178,7 @@ SwapButton::SwapButton( s32 px, s32 py )
     setPosition( px, py );
 }
 
-int Castle::OpenDialog( bool readonly, bool fade )
+int Castle::OpenDialog( bool readonly )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();

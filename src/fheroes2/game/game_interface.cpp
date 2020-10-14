@@ -116,7 +116,7 @@ void Interface::Basic::SetHideInterface( bool f )
         if ( 0 == pos_stat.x && 0 == pos_stat.y )
             pos_stat = Point( px - BORDERWIDTH, buttonsArea.GetArea().y + buttonsArea.GetArea().h );
 
-        controlPanel.SetPos( display.width() - controlPanel.GetArea().w - BORDERWIDTH, 0 );
+        controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
         radar.SetPos( pos_radr.x, pos_radr.y );
         iconsPanel.SetPos( pos_icon.x, pos_icon.y );
         buttonsArea.SetPos( pos_bttn.x, pos_bttn.y );
