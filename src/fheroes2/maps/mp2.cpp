@@ -360,7 +360,7 @@ const char * MP2::StringObject( int object )
         return _( "Derelict Ship" );
     case OBJN_SHIPWRECK:
     case OBJ_SHIPWRECK:
-        return _( "Ship Wreck" );
+        return _( "Shipwreck" );
     case OBJN_OBSERVATIONTOWER:
     case OBJ_OBSERVATIONTOWER:
         return _( "Observation Tower" );
