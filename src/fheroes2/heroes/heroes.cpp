@@ -116,7 +116,7 @@ Heroes::Heroes()
 Heroes::Heroes( int heroid, int rc )
     : HeroBase( HeroBase::HEROES, rc )
     , ColorBase( Color::NONE )
-    , experience( 0 )
+    , experience( GetStartingXp() )
     , move_point_scale( -1 )
     , secondary_skills( rc )
     , army( this )
@@ -350,6 +350,9 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
 
     // experience
     experience = st.getLE32();
+
+    if ( experience == 0 )
+        experience = GetStartingXp();
 
     bool custom_secskill = st.get();
 
@@ -1498,6 +1501,11 @@ int Heroes::GetKillerColor( void ) const
 int Heroes::GetControl( void ) const
 {
     return GetKingdom().GetControl();
+}
+
+uint32_t Heroes::GetStartingXp()
+{
+    return Rand::Get( 40, 90 );
 }
 
 int Heroes::GetMapsObject( void ) const
