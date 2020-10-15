@@ -86,9 +86,9 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
                 if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) { // it's a hack for now
                     strs->append( _( "Graveyard robber" ) );
                 }
-		else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) { // and it is a hack too
-		    strs->append( _( "Shipwreck robber" ) );
-		}
+                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) { // and it is a hack too
+                    strs->append( _( "Shipwreck robber" ) );
+                }
                 else {
                     strs->append( MP2::StringObject( objs[ii] ) );
                 }
