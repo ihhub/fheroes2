@@ -192,7 +192,8 @@ namespace AI
         }
 
         const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr );
-        DEBUG( DBG_AI, DBG_TRACE, "Tactic " << defensiveTactics << " chosen. Archers: " << myShooterStr << ", vs enemy " << enemyShooterStr << " ratio is " << enemyArcherRatio );
+        DEBUG( DBG_AI, DBG_TRACE,
+               "Tactic " << defensiveTactics << " chosen. Archers: " << myShooterStr << ", vs enemy " << enemyShooterStr << " ratio is " << enemyArcherRatio );
 
         const double attackDistanceModifier = enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
         const double defenceDistanceModifier = myArmyStrength / STRENGTH_DISTANCE_FACTOR;
