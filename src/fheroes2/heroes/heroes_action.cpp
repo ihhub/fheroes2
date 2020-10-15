@@ -843,7 +843,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
         }
 
         Army & army = castle->GetActualArmy();
-        bool allow_enter = false;
 
         if ( army.isValid() ) {
             DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
@@ -873,7 +872,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
                 Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
 
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
-                allow_enter = true;
             }
             else
                 // wins defender
@@ -889,7 +887,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             world.CaptureObject( dst_index, hero.GetColor() );
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
-            allow_enter = true;
         }
     }
 }
