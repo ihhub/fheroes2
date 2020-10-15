@@ -950,7 +950,7 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( obj == MP2::OBJ_BOTTLE ) {
         MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
-        Dialog::Message( _(""), ( sign ? sign->message : "No message provided" ), Font::BIG, Dialog::OK );
+        Dialog::Message( _( "" ), ( sign ? sign->message : "No message provided" ), Font::BIG, Dialog::OK );
     }
     else {
         Funds funds = map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds();
