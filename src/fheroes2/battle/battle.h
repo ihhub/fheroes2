@@ -71,7 +71,6 @@ namespace Battle
     StreamBase & operator>>( StreamBase &, Result & );
 
     Result Loader( Army &, Army &, s32 );
-    void UpdateMonsterAttributes( const std::string & );
 
     struct TargetInfo
     {

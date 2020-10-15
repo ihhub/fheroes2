@@ -105,7 +105,6 @@ namespace AI
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
-        const int difficulty = Settings::Get().GameDifficulty();
         const int myColor = currentUnit.GetColor();
         const int myHeadIndex = currentUnit.GetHeadIndex();
         const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();

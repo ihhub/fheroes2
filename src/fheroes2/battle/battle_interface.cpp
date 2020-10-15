@@ -4109,8 +4109,6 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     _currentUnit = NULL;
     AGG::PlaySound( M82::ERTHQUAK );
 
-    const u32 offset = 10;
-
     // draw earth quake
     while ( le.HandleEvents() && frame < 18 ) {
         CheckGlobalEvents( le );

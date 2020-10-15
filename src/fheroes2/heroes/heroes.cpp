@@ -1326,8 +1326,6 @@ int Heroes::GetDirection( void ) const
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
-    const int32_t currentIndex = GetIndex();
-    const uint32_t skill = GetLevelSkill( Skill::Secondary::PATHFINDING );
 
     uint32_t total = world.getDistance( *this, dst );
     DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );

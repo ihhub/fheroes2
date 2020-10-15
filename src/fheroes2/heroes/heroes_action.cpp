@@ -752,7 +752,6 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
-        const uint32_t uniq = tile.GetObjectUID();
         AnimationRemoveObject( tile );
         tile.MonsterSetCount( 0 );
         tile.SetObject( MP2::OBJ_ZERO );

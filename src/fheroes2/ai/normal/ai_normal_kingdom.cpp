@@ -59,7 +59,6 @@ namespace AI
 
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
-        const int difficulty = Settings::Get().GameDifficulty();
         const int color = kingdom.GetColor();
 
         if ( kingdom.isLoss() || color == Color::NONE ) {
