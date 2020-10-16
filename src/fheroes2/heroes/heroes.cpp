@@ -657,7 +657,7 @@ int Heroes::GetMorale( void ) const
 
 int Heroes::GetMoraleWithModificators( std::string * strs ) const
 {
-    if ( army.AllTroopsIsRace( Race::NECR ) )
+    if ( army.AllTroopsAreUndead() )
         return Morale::NORMAL;
 
     int result = Morale::NORMAL;

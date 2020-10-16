@@ -286,6 +286,15 @@ bool Troops::AllTroopsIsRace( int race ) const
     return true;
 }
 
+bool Troops::AllTroopsAreUndead() const 
+{
+    for ( const_iterator it = begin(); it != end(); ++it )
+        if ( ( *it )->isValid() && !( *it )->isUndead() )
+            return false;
+
+    return true;
+}
+
 bool Troops::CanJoinTroop( const Monster & mons ) const
 {
     const_iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
