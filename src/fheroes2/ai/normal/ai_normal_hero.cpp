@@ -43,7 +43,7 @@ namespace AI
         else if ( objectID == MP2::OBJ_MONSTER ) {
             return 900.0;
         }
-        else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJN_ALCHEMYLAB ) {
+        else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJ_ALCHEMYLAB ) {
             return 1000.0;
         }
         else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
@@ -62,8 +62,8 @@ namespace AI
             // de-prioritize the landing
             return -1500.0;
         }
-        else if ( objectID == MP2::OBJ_BOAT ) {
-            // de-prioritize the boats even harder
+        else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
+            // de-prioritize the water movement even harder
             return -2500.0;
         }
 
@@ -86,11 +86,15 @@ namespace AI
                     continue;
 
                 const double value = GetObjectValue( node.first, node.second ) - static_cast<double>( dist );
+
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
                     objectID = node.second;
                     selectedNode = idx;
+
+                    DEBUG( DBG_AI, DBG_TRACE,
+                           hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
                 }
             }
         }
@@ -110,17 +114,6 @@ namespace AI
         return priorityTarget;
     }
 
-    bool MoveHero( Heroes & hero, int target )
-    {
-        if ( target != -1 && hero.GetPath().Calculate( target ) ) {
-            HeroesMove( hero );
-            return true;
-        }
-
-        hero.SetModes( AI::HERO_WAITING );
-        return false;
-    }
-
     void Normal::HeroesActionComplete( Heroes & hero, int index )
     {
         Castle * castle = hero.inCastle();
@@ -134,7 +127,18 @@ namespace AI
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            MoveHero( hero, GetPriorityTarget( hero ) );
+            const int targetIndex = GetPriorityTarget( hero );
+            
+
+            if ( targetIndex != -1 ) {
+                auto path = _pathfinder.buildPath( targetIndex );
+                hero.GetPath().assign( path.begin(), path.end() );
+                HeroesMove( hero );
+            }
+            else {
+                hero.SetModes( AI::HERO_WAITING );
+                break;
+            }
         }
 
         if ( !hero.MayStillMove() ) {
