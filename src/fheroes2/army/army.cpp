@@ -288,9 +288,10 @@ bool Troops::AllTroopsIsRace( int race ) const
 
 bool Troops::AllTroopsAreUndead() const 
 {
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() && ( *it )->isUndead() == false )
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() && !( *it )->isUndead() )
             return false;
+    }
 
     return true;
 }
