@@ -1235,7 +1235,6 @@ bool World::LoadMapMP2( const std::string & filename )
 
         if ( 0 <= findobject ) {
             const Maps::Tiles & tile = vec_tiles[findobject];
-            const Maps::TilesAddon * addon = NULL;
 
             switch ( tile.GetObject() ) {
             case MP2::OBJ_CASTLE:
@@ -1526,8 +1525,8 @@ void World::PostLoad( void )
     // update tile passable
     std::for_each( vec_tiles.begin(), vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
 
+    resetPathfinder();
     ComputeStaticAnalysis();
-    _pathfinder.reset();
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();

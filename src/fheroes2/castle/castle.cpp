@@ -346,7 +346,7 @@ const Captain & Castle::GetCaptain( void ) const
 
 bool Castle::isCastle( void ) const
 {
-    return building & BUILD_CASTLE;
+    return ( building & BUILD_CASTLE ) != 0;
 }
 
 bool Castle::isCapital( void ) const
@@ -732,7 +732,7 @@ const char * Castle::GetStringBuilding( u32 build, int race )
 const char * Castle::GetDescriptionBuilding( u32 build, int race )
 {
     const char * desc_build[] = {
-        _( "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information" ),
+        _( "The Thieves' Guild provides information on enemy players. Thieves' Guilds can also provide scouting information on enemy towns. Additional Guilds provide more information." ),
         _( "The Tavern increases morale for troops defending the castle." ),
         _( "The Shipyard allows ships to be built." ),
         _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." ),
@@ -1536,7 +1536,7 @@ void Castle::DrawImageCastle( const Point & pt )
     const Maps::Tiles & tile = world.GetTiles( GetIndex() );
 
     u32 index = 0;
-    Point dst_pt;
+    fheroes2::Point dst_pt;
 
     // draw ground
     switch ( tile.GetGround() ) {
@@ -2021,27 +2021,6 @@ int Castle::GetICNBuilding( u32 build, int race )
     return ICN::UNKNOWN;
 }
 
-bool Castle::isBuildingCycling( uint32_t building, int race )
-{
-    switch ( building ) {
-    case BUILD_MOAT:
-        return true;
-    case BUILD_CAPTAIN:
-        if ( race == Race::WRLK || race == Race::KNGT )
-            return true;
-        break;
-    case DWELLING_MONSTER2:
-    case BUILD_WEL2:
-    case BUILD_TAVERN:
-        if ( race == Race::WRLK )
-            return true;
-        break;
-    default:
-        break;
-    }
-    return false;
-}
-
 CastleHeroes Castle::GetHeroes( void ) const
 {
     return world.GetHeroes( *this );
@@ -2258,12 +2237,12 @@ std::string Castle::String( void ) const
     return os.str();
 }
 
-int Castle::GetAttackModificator( std::string * strs ) const
+int Castle::GetAttackModificator( std::string * ) const
 {
     return 0;
 }
 
-int Castle::GetDefenseModificator( std::string * strs ) const
+int Castle::GetDefenseModificator( std::string * ) const
 {
     return 0;
 }
@@ -2284,7 +2263,7 @@ int Castle::GetPowerModificator( std::string * strs ) const
     return result;
 }
 
-int Castle::GetKnowledgeModificator( std::string * strs ) const
+int Castle::GetKnowledgeModificator( std::string * ) const
 {
     return 0;
 }
@@ -2458,7 +2437,7 @@ bool Castle::AllowBuild( void ) const
 
 bool Castle::isBuild( u32 bd ) const
 {
-    return building & bd;
+    return ( building & bd ) != 0;
 }
 
 bool Castle::isNecromancyShrineBuild( void ) const
@@ -2497,29 +2476,29 @@ void Castle::JoinRNDArmy( void )
     const uint32_t reinforcementQuality = Rand::Get( 1, 15 ) + timeModifier;
 
     uint32_t count = timeModifier / 2;
-    uint32_t dwelling = DWELLING_MONSTER1;
+    uint32_t dwellingType = DWELLING_MONSTER1;
 
     if ( reinforcementQuality > 15 ) {
-        dwelling = DWELLING_MONSTER5;
+        dwellingType = DWELLING_MONSTER5;
         count += 1;
     }
     else if ( reinforcementQuality > 13 ) {
-        dwelling = DWELLING_MONSTER4;
+        dwellingType = DWELLING_MONSTER4;
         count += Rand::Get( 1, 3 );
     }
     else if ( reinforcementQuality > 10 ) {
-        dwelling = DWELLING_MONSTER3;
+        dwellingType = DWELLING_MONSTER3;
         count += Rand::Get( 3, 5 );
     }
     else if ( reinforcementQuality > 5 ) {
-        dwelling = DWELLING_MONSTER2;
+        dwellingType = DWELLING_MONSTER2;
         count += Rand::Get( 5, 7 );
     }
     else {
         count += Rand::Get( 8, 15 );
     }
 
-    army.JoinTroop( Monster( race, dwelling ), count );
+    army.JoinTroop( Monster( race, dwellingType ), count );
 }
 
 void Castle::ActionPreBattle( void )

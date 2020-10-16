@@ -105,9 +105,9 @@ artifactstats_t artifacts[] = {
     {0, 2, TYPE0, _( "Enchanted Hourglass" ), _( "The %{name} extends the duration of all your spells by %{count} turns." )},
     {0, 0, TYPE0, _( "Gold Watch" ), _( "The %{name} doubles the effectiveness of your hypnotize spells." )},
     {0, 0, TYPE0, _( "Skullcap" ), _( "The %{name} halves the casting cost of all mind influencing spells." )},
-    {0, 0, TYPE0, _( "Ice Cloak" ), _( "The %{name} halves all damage your troops take from cold spells." )},
-    {0, 0, TYPE0, _( "Fire Cloak" ), _( "The %{name} halves all damage your troops take from fire spells." )},
-    {0, 0, TYPE0, _( "Lightning Helm" ), _( "The %{name} halves all damage your troops take from lightning spells." )},
+    {0, 50, TYPE0, _( "Ice Cloak" ), _( "The %{name} halves all damage your troops take from cold spells." )},
+    {0, 50, TYPE0, _( "Fire Cloak" ), _( "The %{name} halves all damage your troops take from fire spells." )},
+    {0, 50, TYPE0, _( "Lightning Helm" ), _( "The %{name} halves all damage your troops take from lightning spells." )},
     {0, 50, TYPE0, _( "Evercold Icicle" ), _( "The %{name} causes your cold spells to do %{count} percent more damage to enemy troops." )},
     {0, 50, TYPE0, _( "Everhot Lava Rock" ), _( "The %{name} causes your fire spells to do %{count} percent more damage to enemy troops." )},
     {0, 50, TYPE0, _( "Lightning Rod" ), _( "The %{name} causes your lightning spells to do %{count} percent more damage to enemy troops." )},
@@ -123,7 +123,7 @@ artifactstats_t artifacts[] = {
     {0, 0, TYPE0, _( "Kinetic Pendant" ), _( "The %{name} makes all your troops immune to paralyze spells." )},
     {0, 0, TYPE0, _( "Pendant of Death" ), _( "The %{name} makes all your troops immune to holy spells." )},
     {0, 0, TYPE0, _( "Wand of Negation" ), _( "The %{name} protects your troops from the Dispel Magic spell." )},
-    {0, 50, TYPE0, _( "Golden Bow" ), _( "The %{name} eliminates the %{count} percent penalty for your troops shooting past obstacles. (e.g. castle walls)" )},
+    {0, 50, TYPE0, _( "Golden Bow" ), _( "The %{name} eliminates the %{count} percent penalty for your troops shooting past obstacles (e.g. castle walls)." )},
     {0, 1, TYPE4, _( "Telescope" ), _( "The %{name} increases the amount of terrain your hero reveals when adventuring by %{count} extra square." )},
     {0, 10, TYPE0, _( "Statesman's Quill" ), _( "The %{name} reduces the cost of surrender to %{count} percent of the total cost of troops you have in your army." )},
     {0, 10, TYPE0, _( "Wizard's Hat" ), _( "The %{name} increases the duration of your spells by %{count} turns." )},
@@ -257,6 +257,8 @@ void Artifact::UpdateStats( const std::string & spec )
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
+#else
+    (void)spec;
 #endif
 }
 
@@ -807,7 +809,7 @@ bool BagArtifacts::MakeBattleGarb( void )
 
 u32 BagArtifacts::CountArtifacts( void ) const
 {
-    return std::count_if( begin(), end(), std::mem_fun_ref( &Artifact::isValid ) );
+    return static_cast<uint32_t>( std::count_if( begin(), end(), std::mem_fun_ref( &Artifact::isValid ) ) ); // no way that we have more than 4 billion artifacts
 }
 
 bool BagArtifacts::ContainUltimateArtifact( void ) const
@@ -837,7 +839,7 @@ std::string BagArtifacts::String( void ) const
 
 u32 BagArtifacts::Count( const Artifact & art ) const
 {
-    return std::count( begin(), end(), art );
+    return static_cast<uint32_t>( std::count( begin(), end(), art ) ); // no way that we have more than 4 billion artifacts
 }
 
 u32 GoldInsteadArtifact( int obj )
@@ -933,7 +935,7 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
     }
 }
 
-bool ArtifactsBar::ActionBarSingleClick( const Point & cursor, Artifact & art, const Rect & pos )
+bool ArtifactsBar::ActionBarSingleClick( Artifact & art )
 {
     if ( isSelected() ) {
         if ( !read_only )
@@ -956,7 +958,7 @@ bool ArtifactsBar::ActionBarSingleClick( const Point & cursor, Artifact & art, c
     return true;
 }
 
-bool ArtifactsBar::ActionBarDoubleClick( const Point & cursor, Artifact & art, const Rect & pos )
+bool ArtifactsBar::ActionBarDoubleClick( Artifact & art )
 {
     if ( art() == Artifact::MAGIC_BOOK ) {
         if ( can_change )
@@ -1003,7 +1005,7 @@ bool ArtifactsBar::ActionBarDoubleClick( const Point & cursor, Artifact & art, c
     return true;
 }
 
-bool ArtifactsBar::ActionBarPressRight( const Point & cursor, Artifact & art, const Rect & pos )
+bool ArtifactsBar::ActionBarPressRight( Artifact & art )
 {
     ResetSelected();
 
@@ -1017,7 +1019,7 @@ bool ArtifactsBar::ActionBarPressRight( const Point & cursor, Artifact & art, co
     return true;
 }
 
-bool ArtifactsBar::ActionBarSingleClick( const Point & cursor, Artifact & art1, const Rect & pos1, Artifact & art2, const Rect & pos2 )
+bool ArtifactsBar::ActionBarSingleClick( Artifact & art1, Artifact & art2 )
 {
     if ( art1() != Artifact::MAGIC_BOOK && art2() != Artifact::MAGIC_BOOK ) {
         std::swap( art1, art2 );
@@ -1027,7 +1029,7 @@ bool ArtifactsBar::ActionBarSingleClick( const Point & cursor, Artifact & art1, 
     return true;
 }
 
-bool ArtifactsBar::ActionBarCursor( const Point & cursor, Artifact & art, const Rect & pos )
+bool ArtifactsBar::ActionBarCursor( Artifact & art )
 {
     if ( isSelected() ) {
         Artifact * art2 = GetSelectedItem();
@@ -1062,7 +1064,7 @@ bool ArtifactsBar::ActionBarCursor( const Point & cursor, Artifact & art, const 
     return false;
 }
 
-bool ArtifactsBar::ActionBarCursor( const Point & cursor, Artifact & art1, const Rect & pos1, Artifact & art2 /* selected */, const Rect & pos2 )
+bool ArtifactsBar::ActionBarCursor( Artifact & art1, Artifact & art2 /* selected */ )
 {
     if ( art2() == Artifact::MAGIC_BOOK || art1() == Artifact::MAGIC_BOOK )
         msg = _( "Cannot move artifact" );

@@ -142,19 +142,19 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
 
         if ( use_mini_sprite ) {
             const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
-            Rect srcrt( 0, 0, mons32.width(), mons32.height() );
+            fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
             if ( mons32.width() > pos.w ) {
                 srcrt.x = ( mons32.width() - pos.w ) / 2;
-                srcrt.w = pos.w;
+                srcrt.width = pos.w;
             }
 
             if ( mons32.height() > pos.h ) {
                 srcrt.y = ( mons32.height() - pos.h ) / 2;
-                srcrt.h = pos.h;
+                srcrt.height = pos.h;
             }
 
-            fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + pos.h - mons32.height() - 1, srcrt.w, srcrt.h );
+            fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + pos.h - mons32.height() - 1, srcrt.width, srcrt.height );
         }
         else {
             switch ( troop.GetRace() ) {
@@ -213,7 +213,7 @@ void ArmyBar::Redraw( fheroes2::Image & dstsf )
     Interface::ItemsActionBar<ArmyTroop>::Redraw( dstsf );
 }
 
-bool ArmyBar::ActionBarCursor( const Point & cursor, ArmyTroop & troop, const Rect & pos )
+bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 {
     if ( isSelected() ) {
         ArmyTroop * troop2 = GetSelectedItem();
@@ -223,7 +223,7 @@ bool ArmyBar::ActionBarCursor( const Point & cursor, ArmyTroop & troop, const Re
             StringReplace( msg, "%{name}", troop.GetName() );
         }
         else if ( !troop.isValid() ) {
-            msg = _( "Move or right click Redistribute %{name}" );
+            msg = _( "Move or right click to redistribute %{name}" );
             StringReplace( msg, "%{name}", troop2->GetName() );
         }
         else if ( troop.GetID() == troop2->GetID() ) {
@@ -266,7 +266,7 @@ bool ArmyBar::ActionBarCursor( const Point & cursor, ArmyTroop & troop, const Re
     return false;
 }
 
-bool ArmyBar::ActionBarCursor( const Point & cursor, ArmyTroop & troop1, const Rect & pos1, ArmyTroop & troop2 /* selected */, const Rect & pos2 )
+bool ArmyBar::ActionBarCursor( ArmyTroop & troop1, ArmyTroop & troop2 /* selected */ )
 {
     bool save_last_troop = troop2.GetArmy()->SaveLastTroop();
 
@@ -286,14 +286,14 @@ bool ArmyBar::ActionBarCursor( const Point & cursor, ArmyTroop & troop1, const R
     else if ( save_last_troop )
         msg = _( "Cannot move last troop" );
     else {
-        msg = _( "Move or right click Redistribute %{name}" );
+        msg = _( "Move or right click to redistribute %{name}" );
         StringReplace( msg, "%{name}", troop2.GetName() );
     }
 
     return false;
 }
 
-bool ArmyBar::ActionBarSingleClick( const Point & cursor, ArmyTroop & troop, const Rect & pos )
+bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
 {
     if ( isSelected() ) {
         ArmyTroop * troop2 = GetSelectedItem();
@@ -361,7 +361,7 @@ bool ArmyBar::ActionBarSingleClick( const Point & cursor, ArmyTroop & troop, con
     return true;
 }
 
-bool ArmyBar::ActionBarSingleClick( const Point & cursor, ArmyTroop & troop1, const Rect & pos1, ArmyTroop & troop2 /* selected */, const Rect & pos2 )
+bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop1, ArmyTroop & troop2 /* selected */ )
 {
     if ( troop2.GetArmy()->SaveLastTroop() ) {
         if ( troop1.isValid() )
@@ -381,7 +381,7 @@ bool ArmyBar::ActionBarSingleClick( const Point & cursor, ArmyTroop & troop1, co
     return false; // reset cursor
 }
 
-bool ArmyBar::ActionBarDoubleClick( const Point & cursor, ArmyTroop & troop, const Rect & pos )
+bool ArmyBar::ActionBarDoubleClick( ArmyTroop & troop )
 {
     ArmyTroop * troop2 = GetSelectedItem();
 
@@ -418,7 +418,7 @@ bool ArmyBar::ActionBarDoubleClick( const Point & cursor, ArmyTroop & troop, con
     return true;
 }
 
-bool ArmyBar::ActionBarPressRight( const Point & cursor, ArmyTroop & troop, const Rect & pos )
+bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
 {
     if ( troop.isValid() ) {
         ResetSelected();
@@ -439,7 +439,7 @@ bool ArmyBar::ActionBarPressRight( const Point & cursor, ArmyTroop & troop, cons
     return true;
 }
 
-bool ArmyBar::ActionBarPressRight( const Point & cursor, ArmyTroop & troop1, const Rect & pos1, ArmyTroop & troop2 /* selected */, const Rect & pos2 )
+bool ArmyBar::ActionBarPressRight( ArmyTroop & troop1, ArmyTroop & troop2 /* selected */ )
 {
     ResetSelected();
 

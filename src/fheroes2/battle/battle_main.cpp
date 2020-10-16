@@ -103,8 +103,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // save count troop
-    arena.GetForce1().SyncArmyCount();
-    arena.GetForce2().SyncArmyCount();
+    arena.GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
+    arena.GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
 
     // after battle army1
     if ( army1.GetCommander() ) {
@@ -322,12 +322,12 @@ u32 Battle::Result::GetExperienceDefender( void ) const
 
 bool Battle::Result::AttackerWins( void ) const
 {
-    return army1 & RESULT_WINS;
+    return ( army1 & RESULT_WINS ) != 0;
 }
 
 bool Battle::Result::DefenderWins( void ) const
 {
-    return army2 & RESULT_WINS;
+    return ( army2 & RESULT_WINS ) != 0;
 }
 
 StreamBase & Battle::operator<<( StreamBase & msg, const Result & res )

@@ -51,31 +51,29 @@ int Dialog::BuyBoat( bool enable )
 
     Dialog::FrameBox box( text.h() + spacer + sprite.height() + spacer + text.h() + spacer + rbs.GetArea().h - 20, true );
 
-    const Rect & box_rt = box.GetArea();
-    Point dst_pt;
-    dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
-    dst_pt.y = box_rt.y;
-    text.Blit( dst_pt );
+    const fheroes2::Rect & box_rt = box.GetArea();
+    fheroes2::Point dst_pt( box_rt.x + ( box_rt.width - text.w() ) / 2, box_rt.y );
+    text.Blit( dst_pt.x, dst_pt.y );
 
-    dst_pt.x = box_rt.x + ( box_rt.w - sprite.width() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - sprite.width() ) / 2;
     dst_pt.y = box_rt.y + text.h() + spacer;
     fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
 
     text.Set( _( "Resource cost:" ), Font::BIG );
-    dst_pt.x = box_rt.x + ( box_rt.w - text.w() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - text.w() ) / 2;
     dst_pt.y = dst_pt.y + sprite.height() + spacer;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     rbs.SetPos( box_rt.x, dst_pt.y + spacer );
     rbs.Redraw();
 
     // buttons
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 1 ).height();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.w - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.h - fheroes2::AGG::GetICN( system, 3 ).height();
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
     fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
 
     if ( !enable ) {

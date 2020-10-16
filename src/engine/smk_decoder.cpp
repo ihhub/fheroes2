@@ -20,6 +20,7 @@
 
 #include <algorithm>
 
+#include "image.h"
 #include "serialize.h"
 #include "smacker.h"
 #include "smk_decoder.h"

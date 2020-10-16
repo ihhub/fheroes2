@@ -59,7 +59,6 @@ namespace AI
 
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
-        const int difficulty = Settings::Get().GameDifficulty();
         const int color = kingdom.GetColor();
 
         if ( kingdom.isLoss() || color == Color::NONE ) {
@@ -82,7 +81,7 @@ namespace AI
         std::vector<std::pair<int, const Army *> > enemyArmies;
 
         const int mapSize = world.w() * world.h();
-        mapObjects.clear();
+        _mapObjects.clear();
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
@@ -91,7 +90,7 @@ namespace AI
             if ( !IsValidKingdomObject( tile, objectID, color ) )
                 continue;
 
-            mapObjects.emplace_back( idx, objectID );
+            _mapObjects.emplace_back( idx, objectID );
 
             const int color = tile.QuantityColor();
             if ( objectID == MP2::OBJ_HEROES ) {
@@ -107,14 +106,14 @@ namespace AI
             }
         }
 
-        DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << mapObjects.size() << " valid objects" );
+        DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << _mapObjects.size() << " valid objects" );
 
         status.RedrawTurnProgress( 1 );
 
         // Step 2. Update AI variables and recalculate resource budget
         const bool slowEarlyGame = world.CountDay() < 5 && castles.size() == 1;
 
-        int combinedHeroStrength = 0;
+        double combinedHeroStrength = 0;
         for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
             if ( *it ) {
                 combinedHeroStrength += ( *it )->GetArmy().GetStrength();
@@ -133,9 +132,10 @@ namespace AI
 
                     for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
                         if ( enemy->second ) {
-                            const double attackerThreat = enemy->second->GetStrength() - defenders;
+                            const double attackerStrength = enemy->second->GetStrength();
+                            const double attackerThreat = attackerStrength - defenders;
                             if ( attackerThreat > 0 ) {
-                                const uint32_t dist = world.getDistance( castleIndex, enemy->first, 0 );
+                                const uint32_t dist = _pathfinder.getDistance( castleIndex, enemy->first, attackerStrength, color );
                                 if ( dist && dist < threatDistanceLimit ) {
                                     // castle is under threat
                                     castlesInDanger.push_back( castleIndex );

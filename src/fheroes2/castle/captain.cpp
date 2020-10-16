@@ -49,23 +49,23 @@ namespace
         }
     }
 
-    Point GetFlagOffset( int race )
+    fheroes2::Point GetFlagOffset( int race )
     {
         switch ( race ) {
         case Race::KNGT:
-            return Point( 43, 9 );
+            return fheroes2::Point( 43, 9 );
         case Race::BARB:
-            return Point( 42, 8 );
+            return fheroes2::Point( 42, 8 );
         case Race::SORC:
-            return Point( 43, 9 );
+            return fheroes2::Point( 43, 9 );
         case Race::WRLK:
-            return Point( 41, 9 );
+            return fheroes2::Point( 41, 9 );
         case Race::WZRD:
-            return Point( 42, 10 );
+            return fheroes2::Point( 42, 10 );
         case Race::NECR:
-            return Point( 42, 9 );
+            return fheroes2::Point( 42, 9 );
         default:
-            return Point();
+            return fheroes2::Point();
         }
     }
 }
@@ -232,7 +232,7 @@ fheroes2::Image Captain::GetPortrait( int type ) const
         fheroes2::Image portait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
         const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( GetColor() ), 0 );
 
-        const Point & offset = GetFlagOffset( GetRace() );
+        const fheroes2::Point & offset = GetFlagOffset( GetRace() );
         fheroes2::Blit( flag, portait, offset.x, offset.y );
         return portait;
     }

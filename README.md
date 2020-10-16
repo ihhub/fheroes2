@@ -60,7 +60,7 @@ fheroes2
 ======
 [![Build status](https://travis-ci.org/ihhub/fheroes2.svg?branch=master)](https://travis-ci.org/ihhub/fheroes2) [![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2) [![Github Downloads (monthly)](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases) [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2)
 
-Free implementation of Heroes of the Might and Magic II engine.
+Free implementation of Heroes of Might and Magic II engine.
 
 <img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="410">
 
@@ -80,7 +80,7 @@ You are required to have at least a demo version of Heroes of Might and Magic II
 
 MacOS and Linux
 --------------------------
-Unix OSes need an explicit installation of SDL. Please go to `script/macos` or `script/linux` directory depending on your OS package and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS does not support SDL 1 fully.
+Unix OSes need an explicit installation of SDL. Please go to `script/macos` or `script/linux` directory depending on your OS package and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For Arch based Linux distributions use the command `sudo pacman -S sdl sdl_mixer` instead. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS do not fully support SDL 1.
 
 
 Compilation

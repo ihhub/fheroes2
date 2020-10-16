@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 
+#include "image.h"
 #include "surface.h"
 #include "types.h"
 
@@ -78,12 +79,12 @@ private:
 class FontPSF
 {
 public:
-    FontPSF( const std::string &, const Size & );
+    FontPSF( const std::string & filePath, const fheroes2::Size & size );
 
-    Surface RenderText( const std::string &, const RGBA & ) const;
+    fheroes2::Image RenderText( const std::string & text, const uint8_t color ) const;
 
 private:
-    std::vector<u8> buf;
-    Size size;
+    const std::vector<uint8_t> _data;
+    const fheroes2::Size _size;
 };
 #endif

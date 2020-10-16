@@ -60,23 +60,23 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
     const int spacer = 10;
 
     FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.height(), buttons );
-    Rect pos = box.GetArea();
+    fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )
-        box1.Blit( pos );
+        box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
     if ( message.size() )
-        box2.Blit( pos );
+        box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
     // blit sprite
-    pos.x = box.GetArea().x + ( pos.w - sprite.width() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - sprite.width() ) / 2;
     fheroes2::Blit( sprite, display, pos.x, pos.y );
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.GetArea().x, box.GetArea().y, box.GetArea().w, box.GetArea().h ), buttons );
+    fheroes2::ButtonGroup btnGroups( box.GetArea(), buttons );
     btnGroups.draw();
 
     cursor.Show();

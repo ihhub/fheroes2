@@ -30,7 +30,6 @@ class StatusBar : public TextSprite
 public:
     StatusBar();
 
-    void SetCenter( const Point & pt );
     void SetCenter( s32 cx, s32 cy );
 
     void ShowMessage( const std::string & msg );
@@ -39,7 +38,7 @@ public:
     const std::string & GetMessage( void ) const;
 
 private:
-    Point center;
+    fheroes2::Point center;
     std::string prev;
 };
 

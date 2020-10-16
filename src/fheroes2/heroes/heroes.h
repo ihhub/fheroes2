@@ -35,7 +35,7 @@
 #include "visit.h"
 
 class Recruits;
-class Surface;
+
 namespace Battle
 {
     class Only;
@@ -322,6 +322,7 @@ private:
     void AngleStep( int );
     bool MoveStep( bool fast = false );
     static void MoveStep( Heroes &, s32 to, bool newpos );
+    static uint32_t GetStartingXp();
 
     // This function is useful only in a situation when AI hero moves out of the fog
     // we don't update his direction during movement under the fog so there is a situation

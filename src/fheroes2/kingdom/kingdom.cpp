@@ -220,7 +220,7 @@ void Kingdom::AddHeroes( Heroes * hero )
             heroes.push_back( hero );
 
         Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) )
+        if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
 
         AI::Get().HeroesAdd( *hero );
@@ -296,27 +296,27 @@ void Kingdom::RemoveCastle( const Castle * castle )
 
 u32 Kingdom::GetCountCastle( void ) const
 {
-    return std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCastle );
+    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCastle ) );
 }
 
 u32 Kingdom::GetCountTown( void ) const
 {
-    return std::count_if( castles.begin(), castles.end(), Castle::PredicateIsTown );
+    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsTown ) );
 }
 
 u32 Kingdom::GetCountMarketplace( void ) const
 {
-    return std::count_if( castles.begin(), castles.end(), Castle::PredicateIsBuildMarketplace );
+    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsBuildMarketplace ) );
 }
 
 u32 Kingdom::GetCountNecromancyShrineBuild( void ) const
 {
-    return std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return castle->isNecromancyShrineBuild(); } );
+    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return castle->isNecromancyShrineBuild(); } ) );
 }
 
 u32 Kingdom::GetCountBuilding( u32 build ) const
 {
-    return std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } );
+    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } ) );
 }
 
 bool Kingdom::AllowPayment( const Funds & funds ) const
@@ -365,7 +365,7 @@ bool Kingdom::HeroesMayStillMove( void ) const
 
 u32 Kingdom::GetCountCapital( void ) const
 {
-    return std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCapital );
+    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCapital ) );
 }
 
 void Kingdom::AddFundsResource( const Funds & funds )
@@ -429,7 +429,7 @@ void Kingdom::SetVisitTravelersTent( int col )
 bool Kingdom::IsVisitTravelersTent( int col ) const
 {
     // visited_tents_color is a bitfield
-    return visited_tents_colors & ( 1 << col );
+    return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
 bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const
@@ -446,7 +446,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
             first = castles.front();
 
         // check manual set hero (castle position + point(0, 1))?
-        const Point & cp = ( first )->GetCenter();
+        const Point & cp = first->GetCenter();
         Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).GetHeroes();
 
         // and move manual set hero to castle
@@ -461,7 +461,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
             }
         }
         else if ( Settings::Get().GameStartWithHeroes() ) {
-            Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
+            hero = world.GetFreemanHeroes( first->GetRace() );
             if ( hero && AllowRecruitHero( false, 0 ) )
                 hero->Recruit( *first );
         }

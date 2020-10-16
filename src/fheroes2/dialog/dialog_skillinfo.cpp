@@ -52,42 +52,41 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     const int spacer = 10;
 
     FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), ok_button );
-    Rect pos = box.GetArea();
+    fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )
-        box1.Blit( pos );
+        box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
     if ( message.size() )
-        box2.Blit( pos );
+        box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
     // blit sprite
-    pos.x = box.GetArea().x + ( pos.w - border.width() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - border.width() ) / 2;
     fheroes2::Blit( border, display, pos.x, pos.y );
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
-    pos.x = box.GetArea().x + ( pos.w - sprite.width() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - sprite.width() ) / 2;
     fheroes2::Blit( sprite, display, pos.x, pos.y + 3 );
 
     Text text;
 
     // small text
     text.Set( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
-    pos.x = box.GetArea().x + ( pos.w - text.w() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     text.Blit( pos.x, pos.y + 3 );
 
     text.Set( Skill::Level::String( skill.Level() ) );
-    pos.x = box.GetArea().x + ( pos.w - text.w() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     text.Blit( pos.x, pos.y + 55 );
 
     LocalEvent & le = LocalEvent::Get();
 
     fheroes2::Button * button = NULL;
-    Point pt;
 
     if ( ok_button ) {
-        pt.x = box.GetArea().x + ( box.GetArea().w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
-        pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 1 ).height();
+        const fheroes2::Point pt( box.GetArea().x + ( box.GetArea().width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2,
+                                  box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 1 ).height() );
         button = new fheroes2::Button( pt.x, pt.y, system, 1, 2 );
     }
 
@@ -164,39 +163,37 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     const int spacer = 10;
 
     FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), Dialog::OK );
-    Rect pos = box.GetArea();
+    fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )
-        box1.Blit( pos );
+        box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
     if ( message.size() )
-        box2.Blit( pos );
+        box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
     // blit sprite
-    pos.x = box.GetArea().x + ( pos.w - border.width() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - border.width() ) / 2;
     fheroes2::Blit( border, display, pos.x, pos.y );
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, index );
-    pos.x = box.GetArea().x + ( pos.w - sprite.width() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - sprite.width() ) / 2;
     fheroes2::Blit( sprite, display, pos.x, pos.y + 6 );
 
     Text text;
 
     text.Set( skill_name, Font::SMALL );
-    pos.x = box.GetArea().x + ( pos.w - text.w() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     text.Blit( pos.x, pos.y + 8 );
 
     text.Set( "+1", Font::BIG );
-    pos.x = box.GetArea().x + ( pos.w - text.w() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     text.Blit( pos.x, pos.y + 80 );
 
     LocalEvent & le = LocalEvent::Get();
 
-    Point pt;
-
-    pt.x = box.GetArea().x + ( box.GetArea().w - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
-    pt.y = box.GetArea().y + box.GetArea().h - fheroes2::AGG::GetICN( system, 1 ).height();
+    const fheroes2::Point pt( box.GetArea().x + ( box.GetArea().width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2,
+                              box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 1 ).height() );
     fheroes2::Button button( pt.x, pt.y, system, 1, 2 );
 
     button.draw();

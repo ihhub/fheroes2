@@ -166,7 +166,7 @@ public:
 
     void DrawImageCastle( const Point & pt );
 
-    int OpenDialog( bool readonly = false, bool fade = false );
+    int OpenDialog( bool readonly = false );
 
     int GetAttackModificator( std::string * ) const;
     int GetDefenseModificator( std::string * ) const;
@@ -194,7 +194,6 @@ public:
     static const char * GetStringBuilding( u32, int race );
     static const char * GetDescriptionBuilding( u32, int race );
 
-    static bool isBuildingCycling( uint32_t building, int race );
     static int GetICNBuilding( u32, int race );
     static int GetICNBoat( int race );
     u32 GetUpgradeBuilding( u32 ) const;

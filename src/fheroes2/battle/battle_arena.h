@@ -109,7 +109,6 @@ namespace Battle
         bool hexIsAccessible( int32_t indexTo );
         bool hexIsPassable( int32_t indexTo );
         Indexes GetPath( const Unit &, const Position & );
-        Indexes CalculatePath( const Unit & unit, int32_t indexTo );
 
         void ApplyAction( Command & );
 

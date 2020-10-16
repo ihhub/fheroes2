@@ -178,18 +178,18 @@ void Game::UpdateGameSpeed( void )
     SetupHeroMovement( conf.AIMoveSpeed(), delays[CURRENT_AI_DELAY], aiHeroMultiplier );
 
     const double adjustedBattleSpeed = ( 10 - conf.BattleSpeed() ) * battleSpeedAdjustment;
-    delays[BATTLE_FRAME_DELAY] = 120 * adjustedBattleSpeed;
-    delays[BATTLE_MISSILE_DELAY] = 40 * adjustedBattleSpeed;
-    delays[BATTLE_SPELL_DELAY] = 75 * adjustedBattleSpeed;
-    delays[BATTLE_IDLE_DELAY] = 150 * adjustedBattleSpeed;
-    delays[BATTLE_DISRUPTING_DELAY] = 25 * adjustedBattleSpeed;
-    delays[BATTLE_CATAPULT_DELAY] = 90 * adjustedBattleSpeed;
-    delays[BATTLE_CATAPULT2_DELAY] = 40 * adjustedBattleSpeed;
-    delays[BATTLE_CATAPULT3_DELAY] = 40 * adjustedBattleSpeed;
-    delays[BATTLE_BRIDGE_DELAY] = 90 * adjustedBattleSpeed;
-    delays[BATTLE_OPPONENTS_DELAY] = 350 * adjustedBattleSpeed;
+    delays[BATTLE_FRAME_DELAY] = static_cast<uint32_t>( 120 * adjustedBattleSpeed );
+    delays[BATTLE_MISSILE_DELAY] = static_cast<uint32_t>( 40 * adjustedBattleSpeed );
+    delays[BATTLE_SPELL_DELAY] = static_cast<uint32_t>( 75 * adjustedBattleSpeed );
+    delays[BATTLE_IDLE_DELAY] = static_cast<uint32_t>( 150 * adjustedBattleSpeed );
+    delays[BATTLE_DISRUPTING_DELAY] = static_cast<uint32_t>( 25 * adjustedBattleSpeed );
+    delays[BATTLE_CATAPULT_DELAY] = static_cast<uint32_t>( 90 * adjustedBattleSpeed );
+    delays[BATTLE_CATAPULT2_DELAY] = static_cast<uint32_t>( 40 * adjustedBattleSpeed );
+    delays[BATTLE_CATAPULT3_DELAY] = static_cast<uint32_t>( 40 * adjustedBattleSpeed );
+    delays[BATTLE_BRIDGE_DELAY] = static_cast<uint32_t>( 90 * adjustedBattleSpeed );
+    delays[BATTLE_OPPONENTS_DELAY] = static_cast<uint32_t>( 350 * adjustedBattleSpeed );
 
-    delays[BATTLE_FLAGS_DELAY] = ( adjustedBattleSpeed < 0.1 ) ? 25 : 250 * adjustedBattleSpeed;
+    delays[BATTLE_FLAGS_DELAY] = static_cast<uint32_t>( ( adjustedBattleSpeed < 0.1 ) ? 25 : 250 * adjustedBattleSpeed );
 }
 
 int Game::HumanHeroAnimSkip()

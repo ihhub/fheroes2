@@ -391,7 +391,7 @@ void Maps::ClearFog( s32 index, int scoute, int color )
             }
         }
 
-        int colors = conf.ExtUnionsAllowViewMaps() ? Players::GetPlayerFriends( color ) : color;
+        const int colors = Players::GetPlayerFriends( color );
 
         const int revealRadiusSquared = scoute * scoute + 4; // constant factor for "backwards compatibility"
         for ( s32 y = center.y - scoute; y <= center.y + scoute; ++y ) {

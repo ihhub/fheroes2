@@ -105,8 +105,8 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
     const int32_t height_middle = height <= 2 * activeAreaHeight ? 0 : height - 2 * activeAreaHeight;
     const int32_t height_top_bottom = topHeight( evil ) + bottomHeight( evil );
 
-    area.w = BOXAREA_WIDTH;
-    area.h = activeAreaHeight + activeAreaHeight + height_middle;
+    area.width = BOXAREA_WIDTH;
+    area.height = activeAreaHeight + activeAreaHeight + height_middle;
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const int32_t leftSideOffset = leftOffset( evil );

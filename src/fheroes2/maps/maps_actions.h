@@ -77,7 +77,7 @@ struct ActionMessage : public ActionSimple
     ActionMessage()
         : ActionSimple( ACTION_MESSAGE )
     {}
-    static bool Action( ActionMessage *, s32, Heroes & );
+    static bool Action( ActionMessage * );
 };
 
 struct ActionDefault : public ActionSimple
@@ -89,7 +89,7 @@ struct ActionDefault : public ActionSimple
         : ActionSimple( ACTION_DEFAULT )
         , enabled( true )
     {}
-    static bool Action( ActionDefault *, s32, Heroes & );
+    static bool Action( ActionDefault * );
 };
 
 struct ActionAccess : public ActionSimple
@@ -116,7 +116,7 @@ struct ActionArtifact : public ActionSimple
     ActionArtifact()
         : ActionSimple( ACTION_ARTIFACT )
     {}
-    static bool Action( ActionArtifact *, s32, Heroes & );
+    static bool Action( ActionArtifact *, Heroes & );
 };
 
 struct ActionResources : public ActionSimple
@@ -127,7 +127,7 @@ struct ActionResources : public ActionSimple
     ActionResources()
         : ActionSimple( ACTION_RESOURCES )
     {}
-    static bool Action( ActionResources *, s32, Heroes & );
+    static bool Action( ActionResources *, Heroes & );
 };
 
 #endif

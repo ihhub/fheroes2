@@ -142,25 +142,25 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 // bottom
                 if ( flag & LEVEL_BOTTOM )
                     tile.RedrawBottom( dst, isPuzzleDraw );
+
+                // map object
+                if ( flag & LEVEL_BOTTOM )
+                    tile.RedrawObjects( dst, isPuzzleDraw );
             }
         }
     }
 
     // objects
     for ( int16_t y = 0; y < tileROI.h; ++y ) {
-        const s32 offsetY = tileROI.y + y;
+        const int32_t offsetY = tileROI.y + y;
         if ( offsetY < 0 || offsetY >= world.h() )
             continue;
         for ( s32 x = 0; x < tileROI.w; ++x ) {
-            const s32 offsetX = tileROI.x + x;
+            const int32_t offsetX = tileROI.x + x;
             if ( offsetX < 0 || offsetX >= world.w() )
                 continue;
 
             const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
-
-            // map object
-            if ( flag & LEVEL_BOTTOM )
-                tile.RedrawObjects( dst, isPuzzleDraw );
 
             // map object
             if ( flag & LEVEL_OBJECTS && !isPuzzleDraw )
@@ -170,11 +170,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // top layer
     for ( int16_t y = 0; y < tileROI.h; ++y ) {
-        const s32 offsetY = tileROI.y + y;
+        const int32_t offsetY = tileROI.y + y;
         if ( offsetY < 0 || offsetY >= world.h() )
             continue;
         for ( s32 x = 0; x < tileROI.w; ++x ) {
-            const s32 offsetX = tileROI.x + x;
+            const int32_t offsetX = tileROI.x + x;
             if ( offsetX < 0 || offsetX >= world.w() )
                 continue;
 
@@ -349,40 +349,38 @@ void Interface::GameArea::SetCenter( const Point & pt )
 
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 index )
 {
-    fheroes2::Image result;
-
-    if ( Maps::isValidAbsIndex( index ) ) {
-        result.resize( 448, 448 );
-        result.reset();
-
-        GameArea & gamearea = Basic::Get().GetGameArea();
-        const Rect origPosition( gamearea._windowROI );
-        gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
-
-        Point pt = Maps::GetPoint( index );
-        gamearea.SetCenter( pt );
-
-        const Rect & rectMaps = gamearea.GetVisibleTileROI();
-        gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
-
-        const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
-        const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )
-                               + Point( result.width() / 2, result.height() / 2 ) );
-
-        fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
-        fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::TAN ) );
-
-        gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
-    }
-    else
+    if ( !Maps::isValidAbsIndex( index ) ) {
         DEBUG( DBG_ENGINE, DBG_WARN, "artifact not found" );
+        return fheroes2::Image();
+    }
+
+    fheroes2::Image result( 448, 448 );
+    result.reset();
+
+    GameArea & gamearea = Basic::Get().GetGameArea();
+    const Rect origPosition( gamearea._windowROI );
+    gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
+
+    Point pt = Maps::GetPoint( index );
+    gamearea.SetCenter( pt );
+
+    gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
+
+    const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
+    const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )
+                           + Point( result.width() / 2, result.height() / 2 ) );
+
+    fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
+    fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::TAN ) );
+
+    gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
 
     return result;
 }
 
 bool Interface::GameArea::NeedScroll( void ) const
 {
-    return scrollDirection;
+    return scrollDirection != 0;
 }
 
 int Interface::GameArea::GetScrollCursor( void ) const

@@ -76,7 +76,7 @@ namespace
     struct MapRegionNode
     {
         int index = -1;
-        uint16_t type = BLOCKED;
+        int type = BLOCKED;
         uint16_t passable = 0;
         bool isWater = false;
 
@@ -319,7 +319,7 @@ void World::ComputeStaticAnalysis()
                         const int newIndex = tileIndex + directionOffsets[direction];
                         if ( newIndex >= 0 && newIndex < totalMapTiles ) {
                             const Maps::Tiles & newTile = vec_tiles[newIndex];
-                            if ( newTile.GetPassable() && tile.isWater() == waterOrGround ) {
+                            if ( newTile.GetPassable() && tile.isWater() == static_cast<bool>( waterOrGround ) ) {
                                 centerIndex = newIndex;
                                 break;
                             }
@@ -354,7 +354,7 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 6. Initialize regions
-    size_t averageRegionSize = ( width * height * 2 ) / regionCenters.size();
+    size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
 
     std::vector<MapRegion> regions;
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {

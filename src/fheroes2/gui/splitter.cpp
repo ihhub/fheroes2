@@ -26,7 +26,6 @@
 #include "settings.h"
 #include "splitter.h"
 
-/* splitter constructor */
 Splitter::Splitter()
     : step( 0 )
     , min( 0 )
@@ -34,7 +33,7 @@ Splitter::Splitter()
     , cur( 0 )
 {}
 
-Splitter::Splitter( const fheroes2::Image & image, const Rect & rt )
+Splitter::Splitter( const fheroes2::Image & image, const fheroes2::Rect & rt )
     : fheroes2::MovableSprite( image )
     , area( rt )
     , step( 0 )
@@ -48,14 +47,14 @@ void Splitter::SetSprite( const fheroes2::Image & image )
     fheroes2::Copy( image, *this );
 }
 
-void Splitter::SetArea( const Rect & rt )
+void Splitter::SetArea( const fheroes2::Rect & rt )
 {
     area = rt;
 }
 
 bool Splitter::isVertical( void ) const
 {
-    return area.w < area.h;
+    return area.width < area.height;
 }
 
 /* set range */
@@ -63,35 +62,29 @@ void Splitter::SetRange( int smin, int smax )
 {
     min = smin;
     max = smax;
-    Point move;
+    fheroes2::Point move;
 
     if ( min < max ) {
-        step = 100 * ( isVertical() ? ( area.h - height() ) : ( area.w - width() ) ) / ( max - min );
+        step = 100 * ( isVertical() ? ( area.height - height() ) : ( area.width - width() ) ) / ( max - min );
         cur = min;
         move = GetPositionCursor();
     }
     else {
         step = 0;
-        move = Point( area.x + ( area.w - width() ) / 2, area.y + ( area.h - height() ) / 2 );
+        move = fheroes2::Point( area.x + ( area.width - width() ) / 2, area.y + ( area.height - height() ) / 2 );
     }
 
     setPosition( move.x, move.y );
 }
 
-Point Splitter::GetPositionCursor( void )
+fheroes2::Point Splitter::GetPositionCursor()
 {
-    Point res;
-
     if ( isVertical() ) {
-        res.x = area.x + ( area.w - width() ) / 2;
-        res.y = area.y + cur * step / 100;
+        return fheroes2::Point( area.x + ( area.width - width() ) / 2, area.y + cur * step / 100 );
     }
     else {
-        res.x = area.x + cur * step / 100;
-        res.y = area.y + ( area.h - height() ) / 2;
+        return fheroes2::Point( area.x + cur * step / 100, area.y + ( area.height - height() ) / 2 );
     }
-
-    return res;
 }
 
 void Splitter::RedrawCursor( void )
@@ -111,7 +104,7 @@ void Splitter::ShowCursor( void )
 
 void Splitter::MoveCenter( void )
 {
-    setPosition( area.x + ( area.w - width() ) / 2, area.y + ( area.h - height() ) / 2 );
+    setPosition( area.x + ( area.width - width() ) / 2, area.y + ( area.height - height() ) / 2 );
 }
 
 /* move splitter to pos */
@@ -124,7 +117,8 @@ void Splitter::MoveIndex( int num )
     }
     else {
         cur = num;
-        setPosition( GetPositionCursor().x, GetPositionCursor().y );
+        const fheroes2::Point & position = GetPositionCursor();
+        setPosition( position.x, position.y );
     }
 }
 
@@ -133,7 +127,8 @@ void Splitter::Forward( void )
 {
     if ( cur != max ) {
         ++cur;
-        setPosition( GetPositionCursor().x, GetPositionCursor().y );
+        const fheroes2::Point & position = GetPositionCursor();
+        setPosition( position.x, position.y );
     }
 }
 
@@ -142,6 +137,7 @@ void Splitter::Backward( void )
 {
     if ( cur ) {
         --cur;
-        setPosition( GetPositionCursor().x, GetPositionCursor().y );
+        const fheroes2::Point & position = GetPositionCursor();
+        setPosition( position.x, position.y );
     }
 }

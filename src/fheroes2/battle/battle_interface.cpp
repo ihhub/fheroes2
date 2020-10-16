@@ -64,7 +64,7 @@ namespace
         const int distance = static_cast<int>( src.distance( dst ) );
         const double angle = src.getAngle( dst );
 
-        uint32_t iterationCount = ( distance + 50 ) / 100;
+        int iterationCount = ( distance + 50 ) / 100;
         if ( iterationCount < 3 )
             iterationCount = 3;
         if ( iterationCount > 5 )
@@ -187,10 +187,11 @@ namespace Battle
 
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.h - 11 ) );
-            SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
-                                                                                 buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 6 ) );
+            SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ),
+                               fheroes2::Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
+                                               buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 6 ) );
             splitter.HideCursor();
-            SetAreaItems( Rect( area.x, area.y, area.w - 10, area.h ) );
+            SetAreaItems( fheroes2::Rect( area.x, area.y, area.w - 10, area.h ) );
             SetListContent( messages );
             splitter.ShowCursor();
         }
@@ -210,14 +211,16 @@ namespace Battle
             }
         }
 
-        void RedrawItem( const std::string & str, s32 px, s32 py, bool f )
+        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool f ) override
         {
             Text text( str, Font::BIG );
             text.Blit( px, py );
         }
 
-        void RedrawBackground( const Point & pt )
+        virtual void RedrawBackground( const Point & pt ) override
         {
+            (void)pt;
+
             fheroes2::Display & display = fheroes2::Display::instance();
             const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
             const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
@@ -225,7 +228,8 @@ namespace Battle
             const u32 ax = buttonPgUp.area().x;
             const u32 ah = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height );
 
-            Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), border.GetRect() );
+            const Rect & borderRect = border.GetRect();
+            Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), fheroes2::Rect( borderRect.x, borderRect.y, borderRect.w, borderRect.h ) );
 
             for ( u32 ii = 0; ii < ( ah / sp3.height() ); ++ii )
                 fheroes2::Blit( sp3, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * ii ) );
@@ -234,11 +238,11 @@ namespace Battle
             fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
         }
 
-        void ActionCurrentUp( void ) {}
-        void ActionCurrentDn( void ) {}
-        void ActionListDoubleClick( std::string & ) {}
-        void ActionListSingleClick( std::string & ) {}
-        void ActionListPressRight( std::string & ) {}
+        virtual void ActionCurrentUp( void ) override {}
+        virtual void ActionCurrentDn( void ) override {}
+        virtual void ActionListDoubleClick( std::string & ) override {}
+        virtual void ActionListSingleClick( std::string & ) override {}
+        virtual void ActionListPressRight( std::string & ) override {}
 
         void SetOpenLog( bool f )
         {
@@ -372,7 +376,7 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     return sf;
 }
 
-fheroes2::Image DrawHexagonShadow( int alphaValue )
+fheroes2::Image DrawHexagonShadow( uint8_t alphaValue )
 {
     const int l = 13;
     const int w = CELLW;
@@ -532,12 +536,12 @@ int Battle::GetDirectionFromCursorSword( u32 sword )
 
 Battle::OpponentSprite::OpponentSprite( const Rect & area, const HeroBase * b, bool r )
     : base( b )
-    , icn( ICN::UNKNOWN )
-    , reflect( r )
-    , _offset( area.x, area.y )
     , _currentAnim( getHeroAnimation( b, OP_STATIC ) )
     , _animationType( OP_STATIC )
     , _idleTimer( 8000 )
+    , icn( ICN::UNKNOWN )
+    , reflect( r )
+    , _offset( area.x, area.y )
 {
     const bool isCaptain = b->isCaptain();
     switch ( b->GetRace() ) {
@@ -853,6 +857,8 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , humanturn_redraw( true )
     , animation_flags_frame( 0 )
     , catapult_frame( 0 )
+    , _contourColor( 110 )
+    , _brightLandType( false )
     , _currentUnit( NULL )
     , _movingUnit( NULL )
     , _flyingUnit( NULL )
@@ -861,8 +867,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , teleport_src( -1 )
     , listlog( NULL )
     , turn( 0 )
-    , _contourColor( 110 )
-    , _brightLandType( false )
 {
     const Settings & conf = Settings::Get();
 
@@ -876,7 +880,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // cover
-    bool trees = Maps::ScanAroundObject( center, MP2::OBJ_TREES ).size();
+    const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
     const Maps::Tiles & tile = world.GetTiles( center );
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
     bool light = true;
@@ -1215,7 +1219,7 @@ void Battle::Interface::RedrawOpponentsFlags( void )
     }
 }
 
-Point GetTroopPosition( const Battle::Unit & b, const fheroes2::Sprite & sprite )
+fheroes2::Point GetTroopPosition( const Battle::Unit & b, const fheroes2::Sprite & sprite )
 {
     const Rect & rt = b.GetRectPosition();
 
@@ -1223,7 +1227,7 @@ Point GetTroopPosition( const Battle::Unit & b, const fheroes2::Sprite & sprite 
         = b.isReflect() ? rt.x + ( b.isWide() ? rt.w / 2 + rt.w / 4 : rt.w / 2 ) - sprite.width() - sprite.x() : rt.x + ( b.isWide() ? rt.w / 4 : rt.w / 2 ) + sprite.x();
     const s32 sy = rt.y + rt.h + sprite.y() - 10;
 
-    return Point( sx, sy );
+    return fheroes2::Point( sx, sy );
 }
 
 void Battle::Interface::RedrawTroopSprite( const Unit & b )
@@ -1261,7 +1265,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
 
     if ( !spmon1.empty() ) {
         const Rect & rt = b.GetRectPosition();
-        Point sp = GetTroopPosition( b, spmon1 );
+        fheroes2::Point sp = GetTroopPosition( b, spmon1 );
 
         // move offset
         if ( _movingUnit == &b ) {
@@ -1330,7 +1334,7 @@ void Battle::Interface::RedrawCover( void )
 {
     const Settings & conf = Settings::Get();
 
-    RedrawCoverStatic( _mainSurface );
+    RedrawCoverStatic();
 
     const Board & board = *Arena::GetBoard();
     RedrawCoverBoard( conf, board );
@@ -1353,7 +1357,7 @@ void Battle::Interface::RedrawCover( void )
     RedrawKilled();
 }
 
-void Battle::Interface::RedrawCoverStatic( fheroes2::Image & dst )
+void Battle::Interface::RedrawCoverStatic()
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
@@ -1372,12 +1376,12 @@ void Battle::Interface::RedrawCoverStatic( fheroes2::Image & dst )
 
     // ground obstacles
     for ( u32 ii = 0; ii < ARENASIZE; ++ii ) {
-        RedrawLowObjects( ii, dst );
+        RedrawLowObjects( ii );
     }
 
     const Castle * castle = Arena::GetCastle();
     if ( castle )
-        RedrawCastle1( *castle, dst );
+        RedrawCastle1( *castle );
 }
 
 void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & board )
@@ -1396,7 +1400,7 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
     }
 }
 
-void Battle::Interface::RedrawCastle1( const Castle & castle, fheroes2::Image & dst )
+void Battle::Interface::RedrawCastle1( const Castle & castle )
 {
     const bool fortification = ( Race::KNGT == castle.GetRace() ) && castle.isBuild( BUILD_SPEC );
 
@@ -1552,7 +1556,7 @@ void Battle::Interface::RedrawCastle3( const Castle & castle )
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
 
-void Battle::Interface::RedrawLowObjects( s32 cell_index, fheroes2::Image & dst )
+void Battle::Interface::RedrawLowObjects( s32 cell_index )
 {
     const Cell * cell = Board::GetCell( cell_index );
     if ( cell == NULL )
@@ -1727,7 +1731,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                 if ( _currentUnit->isArchers() && !_currentUnit->isHandFighting() ) {
                     statusMsg = _( "Shoot %{monster}" );
                     statusMsg.append( " " );
-                    statusMsg.append( _n( "(one shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
+                    statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
                     StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                     StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
 
@@ -2535,7 +2539,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     // long distance attack animation
     if ( archer ) {
         const fheroes2::Sprite & attackerSprite = fheroes2::AGG::GetICN( attacker.GetMonsterSprite().icn_file, attacker.GetFrame() );
-        const Point attackerPos = GetTroopPosition( attacker, attackerSprite );
+        const fheroes2::Point attackerPos = GetTroopPosition( attacker, attackerSprite );
 
         // For shooter position we need bottom center position of rear tile
         // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
@@ -2635,7 +2639,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
             if ( killed ) {
                 msg.append( " " );
-                msg.append( _n( "one creature perishes.", "%{count} creatures perish.", killed ) );
+                msg.append( _n( "1 creature perishes.", "%{count} creatures perish.", killed ) );
                 StringReplace( msg, "%{count}", killed );
             }
         }
@@ -2645,7 +2649,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
             if ( target.killed ) {
                 msg.append( " " );
-                msg.append( _n( "one %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
+                msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
                 StringReplace( msg, "%{count}", target.killed );
                 StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
             }
@@ -2660,7 +2664,6 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
 
 void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker )
 {
-    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // targets damage animation
@@ -2739,9 +2742,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
-                    TargetInfo & target = *it;
-                    const Rect & pos = target.defender->GetRectPosition();
-
                     if ( !redrawBattleField ) {
                         redrawBattleField = true;
                         RedrawPartialStart();
@@ -3036,7 +3036,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         RedrawActionElementalStormSpell( targets );
         break;
     case Spell::ARMAGEDDON:
-        RedrawActionArmageddonSpell( targets );
+        RedrawActionArmageddonSpell(); // hit everything
         break;
 
     default:
@@ -3161,7 +3161,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
 
             if ( killed ) {
                 status.SetMessage( msg, true );
-                msg = _n( "one creature perishes.", "%{count} creatures perish.", killed );
+                msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
                 StringReplace( msg, "%{count}", killed );
             }
 
@@ -3224,9 +3224,9 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
         const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame() );
 
         int width = 2;
-        Rect src( 0, 0, width, luckSprite.height() );
-        src.x = ( luckSprite.width() - src.w ) / 2;
-        int y = pos.y + pos.h - unitSprite.height() - src.h;
+        fheroes2::Rect src( 0, 0, width, luckSprite.height() );
+        src.x = ( luckSprite.width() - src.width ) / 2;
+        int y = pos.y + pos.h - unitSprite.height() - src.height;
         if ( y < 0 )
             y = 0;
 
@@ -3238,12 +3238,12 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
             if ( width < luckSprite.width() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
-                fheroes2::Blit( luckSprite, src.x, src.y, _mainSurface, pos.x + ( pos.w - src.w ) / 2, y, src.w, src.h );
+                fheroes2::Blit( luckSprite, src.x, src.y, _mainSurface, pos.x + ( pos.w - src.width ) / 2, y, src.width, src.height );
 
                 RedrawPartialFinish();
 
-                src.w = width;
-                src.x = ( luckSprite.width() - src.w ) / 2;
+                src.width = width;
+                src.x = ( luckSprite.width() - src.width ) / 2;
 
                 width += 3;
             }
@@ -3310,7 +3310,7 @@ void Battle::Interface::RedrawActionTowerPart1( Tower & tower, Unit & defender )
     RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ORC );
 }
 
-void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & target )
+void Battle::Interface::RedrawActionTowerPart2( TargetInfo & target )
 {
     TargetsInfo targets;
     targets.push_back( target );
@@ -3324,7 +3324,7 @@ void Battle::Interface::RedrawActionTowerPart2( Tower & tower, TargetInfo & targ
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
         msg.append( " " );
-        msg.append( _n( "one %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
+        msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
         StringReplace( msg, "%{count}", target.killed );
         StringReplace( msg, "%{defender}", target.defender->GetName() );
     }
@@ -3510,7 +3510,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            const Point & sp = GetTroopPosition( target, sprite );
+            const fheroes2::Point & sp = GetTroopPosition( target, sprite );
 
             RedrawPartialStart();
             fheroes2::Blit( sprite, _mainSurface, sp.x - rt1.x + ( *pnt ).x, sp.y - rt1.y + ( *pnt ).y, target.isReflect() );
@@ -3541,69 +3541,69 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
         const Point & endPos = points[i];
 
         const std::vector<std::pair<LightningPoint, LightningPoint> > & lightningBolt = GenerateLightning( startingPos + roiOffset, endPos + roiOffset );
-        Rect roi;
+        fheroes2::Rect roi;
         const bool isHorizontalBolt = std::abs( startingPos.x - endPos.x ) > std::abs( startingPos.y - endPos.y );
         const bool isForwardDirection = isHorizontalBolt ? ( endPos.x > startingPos.x ) : ( endPos.y > startingPos.y );
         const int animationStep = 100;
 
         if ( isHorizontalBolt ) {
-            roi.h = drawRoi.h;
+            roi.height = drawRoi.h;
             if ( isForwardDirection ) {
                 roi.x = 0;
-                roi.w = startingPos.x;
+                roi.width = startingPos.x;
             }
             else {
                 roi.x = startingPos.x;
-                roi.w = drawRoi.w - startingPos.x;
+                roi.width = drawRoi.w - startingPos.x;
             }
         }
         else {
-            roi.w = drawRoi.w;
+            roi.width = drawRoi.w;
             if ( isForwardDirection ) {
                 roi.y = 0;
-                roi.h = startingPos.y;
+                roi.height = startingPos.y;
             }
             else {
                 roi.y = startingPos.y;
-                roi.h = drawRoi.h - startingPos.y;
+                roi.height = drawRoi.h - startingPos.y;
             }
         }
 
-        while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.w < drawRoi.w ) || ( !isHorizontalBolt && roi.h < drawRoi.h ) ) ) {
+        while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.width < drawRoi.w ) || ( !isHorizontalBolt && roi.height < drawRoi.h ) ) ) {
             if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
                 if ( isHorizontalBolt ) {
                     if ( isForwardDirection ) {
-                        roi.w += animationStep;
+                        roi.width += animationStep;
                     }
                     else {
-                        roi.w += animationStep;
+                        roi.width += animationStep;
                         roi.x -= animationStep;
                     }
 
                     if ( roi.x < 0 )
                         roi.x = 0;
-                    if ( roi.w > drawRoi.w )
-                        roi.w = drawRoi.w;
+                    if ( roi.width > drawRoi.w )
+                        roi.width = drawRoi.w;
                 }
                 else {
                     if ( isForwardDirection ) {
-                        roi.h += animationStep;
+                        roi.height += animationStep;
                     }
                     else {
-                        roi.h += animationStep;
+                        roi.height += animationStep;
                         roi.y -= animationStep;
                     }
 
                     if ( roi.y < 0 )
                         roi.y = 0;
-                    if ( roi.h > drawRoi.h )
-                        roi.h = drawRoi.h;
+                    if ( roi.height > drawRoi.h )
+                        roi.height = drawRoi.h;
                 }
 
                 RedrawPartialStart();
 
                 RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface,
-                                 fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.w, roi.h ) );
+                                 fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.width, roi.height ) );
                 fheroes2::ApplyPalette( _mainSurface, 7 );
 
                 RedrawPartialFinish();
@@ -3808,7 +3808,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
-            const uint32_t frame = i * spriteCount / path.size();
+            const uint32_t frame = static_cast<uint32_t>( i * spriteCount / path.size() ); // it's safe to do such as i <= path.size()
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( spellICN, frame );
             fheroes2::Blit( sprite, _mainSurface, path[i].x - sprite.width() / 2, path[i].y - sprite.height() / 2 );
             RedrawPartialFinish();
@@ -4023,7 +4023,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
         }
 }
 
-void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets )
+void Battle::Interface::RedrawActionArmageddonSpell()
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -4070,22 +4070,22 @@ void Battle::Interface::RedrawActionArmageddonSpell( const TargetsInfo & targets
             const Rect initialArea( area.x, area.y, area.w, area.h );
             Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
-            Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
             if ( shifted.x < 0 ) {
                 const int32_t offset = -shifted.x;
                 shifted.x = 0;
                 original.x += offset;
-                shifted.w -= offset;
+                shifted.width -= offset;
                 shifted.x = 0;
             }
             if ( shifted.y < 0 ) {
                 const int32_t offset = -shifted.y;
                 shifted.y = 0;
                 original.y += offset;
-                shifted.h -= offset;
+                shifted.height -= offset;
                 shifted.y = 0;
             }
-            fheroes2::Blit( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.w, shifted.h );
+            fheroes2::Blit( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
         }
@@ -4109,8 +4109,6 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     _currentUnit = NULL;
     AGG::PlaySound( M82::ERTHQUAK );
 
-    const u32 offset = 10;
-
     // draw earth quake
     while ( le.HandleEvents() && frame < 18 ) {
         CheckGlobalEvents( le );
@@ -4123,8 +4121,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             const Rect initialArea( area.x, area.y, area.w, area.h );
             const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
-            const Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
-            fheroes2::Blit( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.w, shifted.h );
+            const fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            fheroes2::Blit( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
             ++frame;
@@ -4226,13 +4224,13 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
         }
 }
 
-Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
+fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
 {
     const Rect & pos = target.GetRectPosition();
     const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame() );
 
     // Bottom-left corner (default) position with spell offset applied
-    Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
+    fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
 
     switch ( spellICN ) {
     case ICN::SHIELD:
@@ -4299,7 +4297,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                 if ( ( *it ).defender ) {
                     const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
                     const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                    Point pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
+                    const fheroes2::Point & pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
                     fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
                 }
             RedrawPartialFinish();
@@ -4348,7 +4346,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
             RedrawPartialStart();
 
             const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-            Point pos = CalculateSpellPosition( b, icn, spellSprite );
+            const fheroes2::Point & pos = CalculateSpellPosition( b, icn, spellSprite );
             fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
             RedrawPartialFinish();
 
@@ -4622,7 +4620,8 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
         if ( borderRect.x != tx || borderRect.y != ty || borderArea.w != tw || borderArea.h != th )
             SetPosition( tx, ty, tw, th );
 
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), GetRect() );
+        const Rect & currectArea = GetRect();
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), fheroes2::Rect( currectArea.x, currectArea.y, currectArea.w, currectArea.h ) );
 
         text1.Blit( borderArea.x, borderArea.y );
         text2.Blit( borderArea.x, borderArea.y + borderArea.h / 2 );

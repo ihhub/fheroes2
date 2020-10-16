@@ -192,6 +192,12 @@ namespace fheroes2
             return RectBase2D( x - point.x, y - point.y, width, height );
         }
 
+        // Check whether a point within the rectangle
+        bool operator&( const PointBase2D<_TypePoint> & point ) const
+        {
+            return point.x >= x && point.y >= y && point.x < ( x + width ) && point.y < ( y + height );
+        }
+
         _TypePoint x;
         _TypePoint y;
         _TypeSize width;

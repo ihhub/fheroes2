@@ -374,12 +374,14 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
                 Force::UpdateOrderUnits( *army1, *army2, *armies_order );
 
             // check end battle
-            if ( !BattleValid() )
+            if ( !BattleValid() ) {
                 end_turn = true;
+                break;
+            }
 
             // good morale
-            if ( !end_turn && current_troop->isValid() && !current_troop->Modes( TR_SKIPMOVE ) && current_troop->Modes( TR_MOVED ) && current_troop->Modes( MORALE_GOOD )
-                 && BattleValid() ) {
+            if ( !end_turn && current_troop->isValid() && !current_troop->Modes( TR_SKIPMOVE ) && current_troop->Modes( TR_MOVED )
+                 && current_troop->Modes( MORALE_GOOD ) ) {
                 actions.push_back( Command( MSG_BATTLE_MORALE, current_troop->GetUID(), true ) );
                 end_turn = false;
             }
@@ -565,12 +567,6 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
     }
 
     return result;
-}
-
-Battle::Indexes Battle::Arena::CalculatePath( const Battle::Unit & unit, int32_t indexTo )
-{
-    //_pathfinder.calculate( unit.GetPosition(), unit.isWide() );
-    return _pathfinder.getPath( indexTo );
 }
 
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )

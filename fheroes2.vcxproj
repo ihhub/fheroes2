@@ -201,7 +201,6 @@
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
-    <ClCompile Include="src\fheroes2\agg\sprite.cpp" />
     <ClCompile Include="src\fheroes2\agg\til.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_common.cpp" />
@@ -362,8 +361,6 @@
     <ClCompile Include="src\fheroes2\system\gamedefs.cpp" />
     <ClCompile Include="src\fheroes2\system\players.cpp" />
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
-    <ClCompile Include="src\fheroes2\test\test.cpp" />
-    <ClCompile Include="src\fheroes2\test\test_monstersprite.cpp" />
     <ClCompile Include="src\fheroes2\world\world.cpp" />
     <ClCompile Include="src\fheroes2\world\world_loadmap.cpp" />
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
@@ -386,6 +383,7 @@
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
+    <ClInclude Include="src\engine\pathfinding.h" />
     <ClInclude Include="src\engine\rand.h" />
     <ClInclude Include="src\engine\rect.h" />
     <ClInclude Include="src\engine\screen.h" />
@@ -405,7 +403,6 @@
     <ClInclude Include="src\fheroes2\agg\icn.h" />
     <ClInclude Include="src\fheroes2\agg\m82.h" />
     <ClInclude Include="src\fheroes2\agg\mus.h" />
-    <ClInclude Include="src\fheroes2\agg\sprite.h" />
     <ClInclude Include="src\fheroes2\agg\til.h" />
     <ClInclude Include="src\fheroes2\agg\xmi.h" />
     <ClInclude Include="src\fheroes2\ai\ai.h" />
@@ -518,7 +515,6 @@
     <ClInclude Include="src\fheroes2\system\gamedefs.h" />
     <ClInclude Include="src\fheroes2\system\players.h" />
     <ClInclude Include="src\fheroes2\system\settings.h" />
-    <ClInclude Include="src\fheroes2\test\test.h" />
     <ClInclude Include="src\fheroes2\world\world.h" />
     <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\tools\palette_h2.h" />

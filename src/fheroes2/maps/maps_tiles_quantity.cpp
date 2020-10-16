@@ -863,9 +863,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         UpdateMonsterInfo( *this );
         break;
 
-        // join dwelling
     case MP2::OBJ_ANCIENTLAMP:
-        MonsterSetCount( QuantityMonster().GetRNDSize( true ) );
+        // Genies in the lamp do not accumulate
+        if ( isFirstLoad )
+            MonsterSetCount( Rand::Get( 2, 4 ) );
         break;
 
     case MP2::OBJ_WATCHTOWER:
@@ -1044,7 +1045,6 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 {
     uint32_t count = isFirstLoad ? 0 : tile.MonsterCount();
     const int obj = tile.GetObject( false );
-    const Troop & troop = tile.QuantityTroop();
 
     switch ( obj ) {
     // join monsters
@@ -1110,7 +1110,7 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
     }
 
     if ( count ) {
-        tile.MonsterSetCount( troop.GetCount() + count );
+        tile.MonsterSetCount( count );
     }
 }
 

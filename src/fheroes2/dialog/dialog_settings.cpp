@@ -39,14 +39,14 @@ public:
         , _restorer( fheroes2::Display::instance() )
     {}
 
-    void RedrawItem( const u32 &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    virtual void RedrawItem( const u32 &, s32, s32, bool ) override;
+    virtual void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListDoubleClick( u32 & );
-    void ActionListSingleClick( u32 & );
-    void ActionListPressRight( u32 & ){};
+    virtual void ActionCurrentUp( void ) override {}
+    virtual void ActionCurrentDn( void ) override {}
+    virtual void ActionListDoubleClick( u32 & ) override;
+    virtual void ActionListSingleClick( u32 & ) override;
+    virtual void ActionListPressRight( u32 & ) override {}
 
     bool readonly;
     fheroes2::ImageRestorer _restorer;
@@ -198,7 +198,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
     states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );
     states.push_back( Settings::HEROES_RECALCULATE_MOVEMENT );
-    states.push_back( Settings::HEROES_PATROL_ALLOW_PICKUP );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ALLOW_BANNED_SECSKILLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
@@ -217,7 +216,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
     if ( conf.PocketPC() ) {
-        states.push_back( Settings::POCKETPC_HIDE_CURSOR );
         states.push_back( Settings::POCKETPC_TAP_MODE );
         states.push_back( Settings::POCKETPC_LOW_MEMORY );
         states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
@@ -235,9 +233,9 @@ void Dialog::ExtSettings( bool readonly )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
     listbox.SetAreaMaxItems( ah / 40 );
-    listbox.SetAreaItems( Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
     listbox.Redraw();
 

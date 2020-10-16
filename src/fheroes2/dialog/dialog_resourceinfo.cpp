@@ -44,14 +44,14 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
     const int spacer = 10;
 
     FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().h, buttons != 0 );
-    Point pos = box.GetArea();
+    fheroes2::Point pos( box.GetArea().x, box.GetArea().y );
 
     if ( header.size() )
-        box1.Blit( pos );
+        box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
     if ( message.size() )
-        box2.Blit( pos );
+        box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
     rbs.SetPos( pos.x, pos.y );
@@ -59,7 +59,7 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( box.GetArea().x, box.GetArea().y, box.GetArea().w, box.GetArea().h ), buttons );
+    fheroes2::ButtonGroup btnGroups( box.GetArea(), buttons );
     btnGroups.draw();
 
     cursor.Show();

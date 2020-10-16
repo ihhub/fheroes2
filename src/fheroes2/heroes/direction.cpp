@@ -56,7 +56,7 @@ std::string Direction::String( int direct )
 
 bool Direction::isDiagonal( int direction )
 {
-    return direction & DIRECTION_ALL_CORNERS;
+    return ( direction & DIRECTION_ALL_CORNERS ) != 0;
 }
 
 bool Direction::ShortDistanceClockWise( int from, int to )

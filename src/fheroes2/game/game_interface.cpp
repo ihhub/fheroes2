@@ -30,7 +30,6 @@
 #include "game_interface.h"
 #include "maps.h"
 #include "mp2.h"
-#include "players.h"
 #include "settings.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -54,10 +53,10 @@ void Interface::Basic::Reset()
 
     SetHideInterface( conf.ExtGameHideInterface() );
 
-    scrollLeft = Rect( 0, 0, BORDERWIDTH, display.height() );
-    scrollRight = Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
-    scrollTop = Rect( 0, 0, display.width(), BORDERWIDTH );
-    scrollBottom = Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
+    scrollLeft = fheroes2::Rect( 0, 0, BORDERWIDTH, display.height() );
+    scrollRight = fheroes2::Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
+    scrollTop = fheroes2::Rect( 0, 0, display.width(), BORDERWIDTH );
+    scrollBottom = fheroes2::Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
 
     system_info.Set( Font::YELLOW_SMALL );
 }
@@ -117,7 +116,7 @@ void Interface::Basic::SetHideInterface( bool f )
         if ( 0 == pos_stat.x && 0 == pos_stat.y )
             pos_stat = Point( px - BORDERWIDTH, buttonsArea.GetArea().y + buttonsArea.GetArea().h );
 
-        controlPanel.SetPos( display.width() - controlPanel.GetArea().w - BORDERWIDTH, 0 );
+        controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
         radar.SetPos( pos_radr.x, pos_radr.y );
         iconsPanel.SetPos( pos_icon.x, pos_icon.y );
         buttonsArea.SetPos( pos_bttn.x, pos_bttn.y );
@@ -140,29 +139,29 @@ Interface::Basic & Interface::Basic::Get( void )
     return basic;
 }
 
-const Rect & Interface::Basic::GetScrollLeft( void ) const
+const fheroes2::Rect & Interface::Basic::GetScrollLeft( void ) const
 {
     return scrollLeft;
 }
 
-const Rect & Interface::Basic::GetScrollRight( void ) const
+const fheroes2::Rect & Interface::Basic::GetScrollRight( void ) const
 {
     return scrollRight;
 }
 
-const Rect & Interface::Basic::GetScrollTop( void ) const
+const fheroes2::Rect & Interface::Basic::GetScrollTop( void ) const
 {
     return scrollTop;
 }
 
-const Rect & Interface::Basic::GetScrollBottom( void ) const
+const fheroes2::Rect & Interface::Basic::GetScrollBottom( void ) const
 {
     return scrollBottom;
 }
 
 bool Interface::Basic::NeedRedraw( void ) const
 {
-    return redraw;
+    return redraw != 0;
 }
 
 void Interface::Basic::SetRedraw( int f )

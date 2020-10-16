@@ -22,6 +22,7 @@
 #define H2AI_NORMAL_H
 
 #include "ai.h"
+#include "world_pathfinding.h"
 
 namespace AI
 {
@@ -37,9 +38,12 @@ namespace AI
         void HeroTurn( Heroes & hero );
 
         void HeroesActionComplete( Heroes & hero, int index );
+        int GetPriorityTarget( const Heroes & hero );
+        void resetPathfinder();
 
     private:
-        std::vector<MapObjectNode> mapObjects;
+        std::vector<MapObjectNode> _mapObjects;
+        AIWorldPathfinder _pathfinder;
     };
 }
 

@@ -28,44 +28,6 @@
 
 namespace SDL
 {
-    class Thread
-    {
-    public:
-        Thread();
-        ~Thread();
-        Thread( const Thread & );
-
-        Thread & operator=( const Thread & );
-
-        void Create( int ( * )( void * ), void * param = NULL );
-        int Wait( void );
-        void Kill( void );
-
-        bool IsRun( void ) const;
-
-        u32 GetID( void ) const;
-
-    private:
-        SDL_Thread * thread;
-    };
-
-    class Mutex
-    {
-    public:
-        Mutex( bool init = false );
-        Mutex( const Mutex & );
-        ~Mutex();
-
-        Mutex & operator=( const Mutex & );
-
-        void Create( void );
-        bool Lock( void ) const;
-        bool Unlock( void ) const;
-
-    private:
-        SDL_mutex * mutex;
-    };
-
     class Timer
     {
     public:

@@ -35,7 +35,7 @@ public:
 
     u32 operator()( void ) const;
     void SetPos( s32, s32 );
-    const Rect & GetArea( void ) const;
+    const fheroes2::Rect & GetArea( void ) const;
     const char * GetName( void ) const;
     const std::string & GetDescription( void ) const;
     void SetStatusMessage( StatusBar & ) const;
@@ -54,7 +54,7 @@ private:
     const Castle & castle;
     u32 building;
     std::string description;
-    Rect area;
+    fheroes2::Rect area;
     int bcond;
 };
 
@@ -71,11 +71,11 @@ class DwellingsBar : public Interface::ItemsBar<DwellingItem>
 public:
     DwellingsBar( Castle &, const Size & );
 
-    void RedrawBackground( const Rect &, fheroes2::Image & );
-    void RedrawItem( DwellingItem &, const Rect &, fheroes2::Image & );
+    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
+    virtual void RedrawItem( DwellingItem &, const Rect &, fheroes2::Image & ) override;
 
-    bool ActionBarSingleClick( const Point &, DwellingItem &, const Rect & );
-    bool ActionBarPressRight( const Point &, DwellingItem &, const Rect & );
+    virtual bool ActionBarSingleClick( DwellingItem & ) override;
+    virtual bool ActionBarPressRight( DwellingItem & ) override;
 
 protected:
     Castle & castle;

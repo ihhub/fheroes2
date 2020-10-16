@@ -131,7 +131,6 @@ public:
         GAME_DYNAMIC_INTERFACE = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
-        POCKETPC_HIDE_CURSOR = 0x10400000,
         POCKETPC_LOW_MEMORY = 0x10800000,
         POCKETPC_TAP_MODE = 0x11000000,
         POCKETPC_DRAG_DROP_SCROLL = 0x12000000,
@@ -161,7 +160,6 @@ public:
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
         HEROES_SURRENDERING_GIVE_EXP = 0x22000000,
         HEROES_RECALCULATE_MOVEMENT = 0x24000000,
-        HEROES_PATROL_ALLOW_PICKUP = 0x28000000,
 
         CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
         WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
@@ -202,7 +200,6 @@ public:
     int AIMoveSpeed( void ) const;
     int BattleSpeed( void ) const;
     int ScrollSpeed( void ) const;
-    u32 MemoryLimit( void ) const;
 
     const std::string & SelectVideoDriver( void ) const;
 
@@ -263,13 +260,11 @@ public:
     bool ExtHeroRememberPointsForRetreating( void ) const;
     bool ExtHeroSurrenderingGiveExp( void ) const;
     bool ExtHeroRecalculateMovement( void ) const;
-    bool ExtHeroPatrolAllowPickup( void ) const;
     bool ExtHeroAllowTranscribingScroll( void ) const;
     bool ExtHeroAllowBannedSecSkillsUpgrade( void ) const;
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
     bool ExtUnionsAllowCastleVisiting( void ) const;
     bool ExtUnionsAllowHeroesMeetings( void ) const;
-    bool ExtUnionsAllowViewMaps( void ) const;
     bool ExtWorldShowVisitedContent( void ) const;
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
@@ -312,7 +307,6 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
-    bool ExtPocketHideCursor( void ) const;
     bool ExtPocketLowMemory( void ) const;
     bool ExtPocketTapMode( void ) const;
     bool ExtPocketDragDropScroll( void ) const;
@@ -333,7 +327,6 @@ public:
     void SetShowIcons( bool );
     void SetShowButtons( bool );
     void SetShowStatus( bool );
-    void SetMemoryLimit( u32 );
     void SetAIMoveSpeed( int );
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
@@ -458,7 +451,6 @@ private:
     std::string video_driver;
 
     int port;
-    u32 memory_limit;
 
     Point pos_radr;
     Point pos_bttn;

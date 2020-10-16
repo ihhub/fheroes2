@@ -55,5 +55,6 @@ namespace Interface
         bool show_name;
         bool show_race;
         bool show_swap;
+        Player * currentSelectedPlayer;
     };
 }

@@ -35,7 +35,6 @@
 
 class Castle;
 class Heroes;
-class Surface;
 class Artifact;
 class Spell;
 class Monster;
@@ -123,14 +122,14 @@ namespace Dialog
         explicit NonFixedFrameBox( int height = 0, int startYPos = -1, bool showButtons = false );
         virtual ~NonFixedFrameBox();
 
-        const Rect & GetArea( void )
+        const fheroes2::Rect & GetArea( void )
         {
             return area;
         }
 
     protected:
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
-        Rect area;
+        fheroes2::Rect area;
     };
 
     class FrameBox : public NonFixedFrameBox
@@ -160,7 +159,7 @@ namespace Dialog
         const Rect & GetTop( void ) const;
 
         static void RenderRegular( const Rect & );
-        static void RenderOther( const fheroes2::Image &, const Rect & );
+        static void RenderOther( const fheroes2::Image &, const fheroes2::Rect & );
 
     protected:
         fheroes2::ImageRestorer restorer;

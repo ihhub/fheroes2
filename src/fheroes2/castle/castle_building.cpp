@@ -34,7 +34,7 @@ void CastleRedrawTownName( const Castle &, const Point & );
 void CastleRedrawCurrentBuilding( const Castle &, const Point &, const CastleDialog::CacheBuildings &, u32 build, u32 flash );
 void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
 void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame );
-Rect CastleGetCoordBuilding( int, building_t, const Point & );
+fheroes2::Rect CastleGetCoordBuilding( int, building_t, const Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
 Rect CastleGetMaxArea( const Castle &, const Point & );
 
@@ -329,23 +329,23 @@ void CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, 
     }
 }
 
-Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
+fheroes2::Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
 {
     switch ( building ) {
     case BUILD_THIEVESGUILD:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 0, pt.y + 130, 50, 60 );
+            return fheroes2::Rect( pt.x + 0, pt.y + 130, 50, 60 );
         case Race::BARB:
-            return Rect( pt.x + 478, pt.y + 100, 76, 42 );
+            return fheroes2::Rect( pt.x + 478, pt.y + 100, 76, 42 );
         case Race::SORC:
-            return Rect( pt.x + 423, pt.y + 165, 65, 49 );
+            return fheroes2::Rect( pt.x + 423, pt.y + 165, 65, 49 );
         case Race::WRLK:
-            return Rect( pt.x + 525, pt.y + 109, 60, 48 );
+            return fheroes2::Rect( pt.x + 525, pt.y + 109, 60, 48 );
         case Race::WZRD:
-            return Rect( pt.x + 507, pt.y + 55, 47, 42 );
+            return fheroes2::Rect( pt.x + 507, pt.y + 55, 47, 42 );
         case Race::NECR:
-            return Rect( pt.x + 291, pt.y + 134, 43, 59 );
+            return fheroes2::Rect( pt.x + 291, pt.y + 134, 43, 59 );
         default:
             break;
         }
@@ -354,15 +354,15 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_TAVERN:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 350, pt.y + 110, 46, 56 );
+            return fheroes2::Rect( pt.x + 350, pt.y + 110, 46, 56 );
         case Race::BARB:
-            return Rect( pt.x + 0, pt.y + 205, 125, 60 );
+            return fheroes2::Rect( pt.x + 0, pt.y + 205, 125, 60 );
         case Race::SORC:
-            return Rect( pt.x + 494, pt.y + 140, 131, 87 );
+            return fheroes2::Rect( pt.x + 494, pt.y + 140, 131, 87 );
         case Race::WRLK:
-            return Rect( pt.x + 479, pt.y + 100, 39, 52 );
+            return fheroes2::Rect( pt.x + 479, pt.y + 100, 39, 52 );
         case Race::WZRD:
-            return Rect( pt.x, pt.y + 160, 118, 50 );
+            return fheroes2::Rect( pt.x, pt.y + 160, 118, 50 );
         default:
             break;
         }
@@ -371,7 +371,7 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_SHRINE:
         switch ( race ) {
         case Race::NECR:
-            return Rect( pt.x + 453, pt.y + 36, 55, 96 );
+            return fheroes2::Rect( pt.x + 453, pt.y + 36, 55, 96 );
         default:
             break;
         }
@@ -380,17 +380,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_SHIPYARD:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 537, pt.y + 221, 103, 33 );
+            return fheroes2::Rect( pt.x + 537, pt.y + 221, 103, 33 );
         case Race::BARB:
-            return Rect( pt.x + 535, pt.y + 210, 105, 45 );
+            return fheroes2::Rect( pt.x + 535, pt.y + 210, 105, 45 );
         case Race::SORC:
-            return Rect( pt.x + 0, pt.y + 220, 134, 35 );
+            return fheroes2::Rect( pt.x + 0, pt.y + 220, 134, 35 );
         case Race::WRLK:
-            return Rect( pt.x + 520, pt.y + 206, 120, 47 );
+            return fheroes2::Rect( pt.x + 520, pt.y + 206, 120, 47 );
         case Race::WZRD:
-            return Rect( pt.x, pt.y + 218, 185, 35 );
+            return fheroes2::Rect( pt.x, pt.y + 218, 185, 35 );
         case Race::NECR:
-            return Rect( pt.x + 516, pt.y + 221, 124, 28 );
+            return fheroes2::Rect( pt.x + 516, pt.y + 221, 124, 28 );
         default:
             break;
         }
@@ -399,17 +399,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_WELL:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 194, pt.y + 225, 29, 27 );
+            return fheroes2::Rect( pt.x + 194, pt.y + 225, 29, 27 );
         case Race::BARB:
-            return Rect( pt.x + 272, pt.y + 215, 44, 32 );
+            return fheroes2::Rect( pt.x + 272, pt.y + 215, 44, 32 );
         case Race::SORC:
-            return Rect( pt.x + 346, pt.y + 209, 43, 25 );
+            return fheroes2::Rect( pt.x + 346, pt.y + 209, 43, 25 );
         case Race::WRLK:
-            return Rect( pt.x + 348, pt.y + 221, 63, 30 );
+            return fheroes2::Rect( pt.x + 348, pt.y + 221, 63, 30 );
         case Race::WZRD:
-            return Rect( pt.x + 254, pt.y + 143, 19, 28 );
+            return fheroes2::Rect( pt.x + 254, pt.y + 143, 19, 28 );
         case Race::NECR:
-            return Rect( pt.x + 217, pt.y + 225, 23, 26 );
+            return fheroes2::Rect( pt.x + 217, pt.y + 225, 23, 26 );
         default:
             break;
         }
@@ -418,17 +418,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_STATUE:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 480, pt.y + 205, 45, 50 );
+            return fheroes2::Rect( pt.x + 480, pt.y + 205, 45, 50 );
         case Race::BARB:
-            return Rect( pt.x + 470, pt.y + 180, 30, 58 );
+            return fheroes2::Rect( pt.x + 470, pt.y + 180, 30, 58 );
         case Race::SORC:
-            return Rect( pt.x + 158, pt.y + 173, 17, 58 );
+            return fheroes2::Rect( pt.x + 158, pt.y + 173, 17, 58 );
         case Race::WRLK:
-            return Rect( pt.x + 473, pt.y + 172, 45, 51 );
+            return fheroes2::Rect( pt.x + 473, pt.y + 172, 45, 51 );
         case Race::WZRD:
-            return Rect( pt.x + 464, pt.y + 58, 26, 62 );
+            return fheroes2::Rect( pt.x + 464, pt.y + 58, 26, 62 );
         case Race::NECR:
-            return Rect( pt.x + 374, pt.y + 174, 26, 70 );
+            return fheroes2::Rect( pt.x + 374, pt.y + 174, 26, 70 );
         default:
             break;
         }
@@ -437,17 +437,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_MARKETPLACE:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 220, pt.y + 144, 115, 20 );
+            return fheroes2::Rect( pt.x + 220, pt.y + 144, 115, 20 );
         case Race::BARB:
-            return Rect( pt.x + 224, pt.y + 168, 52, 36 );
+            return fheroes2::Rect( pt.x + 224, pt.y + 168, 52, 36 );
         case Race::SORC:
-            return Rect( pt.x + 412, pt.y + 122, 56, 40 );
+            return fheroes2::Rect( pt.x + 412, pt.y + 122, 56, 40 );
         case Race::WRLK:
-            return Rect( pt.x + 391, pt.y + 185, 70, 26 );
+            return fheroes2::Rect( pt.x + 391, pt.y + 185, 70, 26 );
         case Race::WZRD:
-            return Rect( pt.x + 254, pt.y + 176, 105, 39 );
+            return fheroes2::Rect( pt.x + 254, pt.y + 176, 105, 39 );
         case Race::NECR:
-            return Rect( pt.x + 415, pt.y + 216, 85, 35 );
+            return fheroes2::Rect( pt.x + 415, pt.y + 216, 85, 35 );
         default:
             break;
         }
@@ -456,17 +456,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_WEL2:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 288, pt.y + 97, 63, 18 );
+            return fheroes2::Rect( pt.x + 288, pt.y + 97, 63, 18 );
         case Race::BARB:
-            return Rect( pt.x + 252, pt.y + 120, 44, 16 );
+            return fheroes2::Rect( pt.x + 252, pt.y + 120, 44, 16 );
         case Race::SORC:
-            return Rect( pt.x + 135, pt.y + 200, 63, 31 );
+            return fheroes2::Rect( pt.x + 135, pt.y + 200, 63, 31 );
         case Race::WRLK:
-            return Rect( pt.x + 69, pt.y + 46, 24, 124 );
+            return fheroes2::Rect( pt.x + 69, pt.y + 46, 24, 124 );
         case Race::WZRD:
-            return Rect( pt.x + 234, pt.y + 225, 107, 22 );
+            return fheroes2::Rect( pt.x + 234, pt.y + 225, 107, 22 );
         case Race::NECR:
-            return Rect( pt.x + 275, pt.y + 206, 68, 39 );
+            return fheroes2::Rect( pt.x + 275, pt.y + 206, 68, 39 );
         default:
             break;
         }
@@ -475,17 +475,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_MOAT:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 53, pt.y + 150, 93, 30 );
+            return fheroes2::Rect( pt.x + 53, pt.y + 150, 93, 30 );
         case Race::BARB:
-            return Rect( pt.x + 113, pt.y + 155, 106, 30 );
+            return fheroes2::Rect( pt.x + 113, pt.y + 155, 106, 30 );
         case Race::SORC:
-            return Rect( pt.x + 143, pt.y + 169, 98, 11 );
+            return fheroes2::Rect( pt.x + 143, pt.y + 169, 98, 11 );
         case Race::WRLK:
-            return Rect( pt.x + 327, pt.y + 166, 66, 17 );
+            return fheroes2::Rect( pt.x + 327, pt.y + 166, 66, 17 );
         case Race::WZRD:
-            return Rect( pt.x, pt.y + 91, 198, 11 );
+            return fheroes2::Rect( pt.x, pt.y + 91, 198, 11 );
         case Race::NECR:
-            return Rect( pt.x + 336, pt.y + 169, 71, 15 );
+            return fheroes2::Rect( pt.x + 336, pt.y + 169, 71, 15 );
         default:
             break;
         }
@@ -494,17 +494,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_SPEC:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 0, pt.y + 80, 250, 20 );
+            return fheroes2::Rect( pt.x + 0, pt.y + 80, 250, 20 );
         case Race::BARB:
-            return Rect( pt.x + 223, pt.y + 79, 124, 27 );
+            return fheroes2::Rect( pt.x + 223, pt.y + 79, 124, 27 );
         case Race::SORC:
-            return Rect( pt.x + 147, pt.y + 0, 252, 30 );
+            return fheroes2::Rect( pt.x + 147, pt.y + 0, 252, 30 );
         case Race::WRLK:
-            return Rect( pt.x, pt.y + 162, 70, 77 );
+            return fheroes2::Rect( pt.x, pt.y + 162, 70, 77 );
         case Race::WZRD:
-            return Rect( pt.x + 304, pt.y + 111, 95, 50 );
+            return fheroes2::Rect( pt.x + 304, pt.y + 111, 95, 50 );
         case Race::NECR:
-            return Rect( pt.x, pt.y, 640, 54 );
+            return fheroes2::Rect( pt.x, pt.y, 640, 54 );
         default:
             break;
         }
@@ -513,17 +513,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_CASTLE:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 0, pt.y + 55, 290, 85 );
+            return fheroes2::Rect( pt.x + 0, pt.y + 55, 290, 85 );
         case Race::BARB:
-            return Rect( pt.x + 0, pt.y + 88, 202, 62 );
+            return fheroes2::Rect( pt.x + 0, pt.y + 88, 202, 62 );
         case Race::SORC:
-            return Rect( pt.x + 0, pt.y + 67, 198, 100 );
+            return fheroes2::Rect( pt.x + 0, pt.y + 67, 198, 100 );
         case Race::WRLK:
-            return Rect( pt.x + 268, pt.y + 35, 131, 129 );
+            return fheroes2::Rect( pt.x + 268, pt.y + 35, 131, 129 );
         case Race::WZRD:
-            return Rect( pt.x, pt.y + 48, 187, 39 );
+            return fheroes2::Rect( pt.x, pt.y + 48, 187, 39 );
         case Race::NECR:
-            return Rect( pt.x + 322, pt.y + 63, 73, 97 );
+            return fheroes2::Rect( pt.x + 322, pt.y + 63, 73, 97 );
         default:
             break;
         }
@@ -532,17 +532,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_CAPTAIN:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 293, pt.y + 109, 48, 27 );
+            return fheroes2::Rect( pt.x + 293, pt.y + 109, 48, 27 );
         case Race::BARB:
-            return Rect( pt.x + 210, pt.y + 104, 40, 35 );
+            return fheroes2::Rect( pt.x + 210, pt.y + 104, 40, 35 );
         case Race::SORC:
-            return Rect( pt.x + 238, pt.y + 136, 32, 34 );
+            return fheroes2::Rect( pt.x + 238, pt.y + 136, 32, 34 );
         case Race::WRLK:
-            return Rect( pt.x + 420, pt.y + 102, 52, 60 );
+            return fheroes2::Rect( pt.x + 420, pt.y + 102, 52, 60 );
         case Race::WZRD:
-            return Rect( pt.x + 210, pt.y + 55, 28, 32 );
+            return fheroes2::Rect( pt.x + 210, pt.y + 55, 28, 32 );
         case Race::NECR:
-            return Rect( pt.x + 423, pt.y + 126, 41, 46 );
+            return fheroes2::Rect( pt.x + 423, pt.y + 126, 41, 46 );
         default:
             break;
         }
@@ -551,17 +551,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_MAGEGUILD1:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 398, pt.y + 150, 58, 30 );
+            return fheroes2::Rect( pt.x + 398, pt.y + 150, 58, 30 );
         case Race::BARB:
-            return Rect( pt.x + 348, pt.y + 118, 50, 25 );
+            return fheroes2::Rect( pt.x + 348, pt.y + 118, 50, 25 );
         case Race::SORC:
-            return Rect( pt.x + 285, pt.y + 32, 55, 129 );
+            return fheroes2::Rect( pt.x + 285, pt.y + 32, 55, 129 );
         case Race::WRLK:
-            return Rect( pt.x + 590, pt.y + 135, 50, 35 );
+            return fheroes2::Rect( pt.x + 590, pt.y + 135, 50, 35 );
         case Race::WZRD:
-            return Rect( pt.x + 583, pt.y + 73, 57, 48 );
+            return fheroes2::Rect( pt.x + 583, pt.y + 73, 57, 48 );
         case Race::NECR:
-            return Rect( pt.x + 565, pt.y + 131, 73, 74 );
+            return fheroes2::Rect( pt.x + 565, pt.y + 131, 73, 74 );
         default:
             break;
         }
@@ -570,17 +570,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_MAGEGUILD2:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 398, pt.y + 128, 58, 52 );
+            return fheroes2::Rect( pt.x + 398, pt.y + 128, 58, 52 );
         case Race::BARB:
-            return Rect( pt.x + 348, pt.y + 94, 50, 49 );
+            return fheroes2::Rect( pt.x + 348, pt.y + 94, 50, 49 );
         case Race::SORC:
-            return Rect( pt.x + 285, pt.y + 32, 55, 129 );
+            return fheroes2::Rect( pt.x + 285, pt.y + 32, 55, 129 );
         case Race::WRLK:
-            return Rect( pt.x + 590, pt.y + 108, 50, 60 );
+            return fheroes2::Rect( pt.x + 590, pt.y + 108, 50, 60 );
         case Race::WZRD:
-            return Rect( pt.x + 585, pt.y + 69, 55, 50 );
+            return fheroes2::Rect( pt.x + 585, pt.y + 69, 55, 50 );
         case Race::NECR:
-            return Rect( pt.x + 568, pt.y + 102, 62, 104 );
+            return fheroes2::Rect( pt.x + 568, pt.y + 102, 62, 104 );
         default:
             break;
         }
@@ -589,17 +589,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_MAGEGUILD3:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 398, pt.y + 105, 58, 75 );
+            return fheroes2::Rect( pt.x + 398, pt.y + 105, 58, 75 );
         case Race::BARB:
-            return Rect( pt.x + 348, pt.y + 72, 50, 72 );
+            return fheroes2::Rect( pt.x + 348, pt.y + 72, 50, 72 );
         case Race::SORC:
-            return Rect( pt.x + 285, pt.y + 32, 55, 129 );
+            return fheroes2::Rect( pt.x + 285, pt.y + 32, 55, 129 );
         case Race::WRLK:
-            return Rect( pt.x + 590, pt.y + 77, 50, 90 );
+            return fheroes2::Rect( pt.x + 590, pt.y + 77, 50, 90 );
         case Race::WZRD:
-            return Rect( pt.x + 585, pt.y + 44, 55, 78 );
+            return fheroes2::Rect( pt.x + 585, pt.y + 44, 55, 78 );
         case Race::NECR:
-            return Rect( pt.x + 570, pt.y + 79, 56, 130 );
+            return fheroes2::Rect( pt.x + 570, pt.y + 79, 56, 130 );
         default:
             break;
         }
@@ -608,17 +608,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_MAGEGUILD4:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 398, pt.y + 85, 58, 95 );
+            return fheroes2::Rect( pt.x + 398, pt.y + 85, 58, 95 );
         case Race::BARB:
-            return Rect( pt.x + 348, pt.y + 48, 50, 96 );
+            return fheroes2::Rect( pt.x + 348, pt.y + 48, 50, 96 );
         case Race::SORC:
-            return Rect( pt.x + 285, pt.y + 32, 55, 129 );
+            return fheroes2::Rect( pt.x + 285, pt.y + 32, 55, 129 );
         case Race::WRLK:
-            return Rect( pt.x + 590, pt.y + 45, 50, 125 );
+            return fheroes2::Rect( pt.x + 590, pt.y + 45, 50, 125 );
         case Race::WZRD:
-            return Rect( pt.x + 585, pt.y + 20, 54, 102 );
+            return fheroes2::Rect( pt.x + 585, pt.y + 20, 54, 102 );
         case Race::NECR:
-            return Rect( pt.x + 570, pt.y + 61, 60, 146 );
+            return fheroes2::Rect( pt.x + 570, pt.y + 61, 60, 146 );
         default:
             break;
         }
@@ -627,17 +627,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_MAGEGUILD5:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 398, pt.y + 55, 58, 125 );
+            return fheroes2::Rect( pt.x + 398, pt.y + 55, 58, 125 );
         case Race::BARB:
-            return Rect( pt.x + 348, pt.y + 20, 50, 124 );
+            return fheroes2::Rect( pt.x + 348, pt.y + 20, 50, 124 );
         case Race::SORC:
-            return Rect( pt.x + 285, pt.y + 32, 55, 129 );
+            return fheroes2::Rect( pt.x + 285, pt.y + 32, 55, 129 );
         case Race::WRLK:
-            return Rect( pt.x + 590, pt.y + 14, 50, 155 );
+            return fheroes2::Rect( pt.x + 590, pt.y + 14, 50, 155 );
         case Race::WZRD:
-            return Rect( pt.x + 585, pt.y, 57, 122 );
+            return fheroes2::Rect( pt.x + 585, pt.y, 57, 122 );
         case Race::NECR:
-            return Rect( pt.x + 570, pt.y + 45, 61, 162 );
+            return fheroes2::Rect( pt.x + 570, pt.y + 45, 61, 162 );
         default:
             break;
         }
@@ -646,17 +646,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case BUILD_TENT:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 82, pt.y + 132, 42, 30 );
+            return fheroes2::Rect( pt.x + 82, pt.y + 132, 42, 30 );
         case Race::BARB:
-            return Rect( pt.x + 53, pt.y + 119, 67, 35 );
+            return fheroes2::Rect( pt.x + 53, pt.y + 119, 67, 35 );
         case Race::SORC:
-            return Rect( pt.x + 88, pt.y + 145, 62, 36 );
+            return fheroes2::Rect( pt.x + 88, pt.y + 145, 62, 36 );
         case Race::WRLK:
-            return Rect( pt.x + 308, pt.y + 140, 52, 28 );
+            return fheroes2::Rect( pt.x + 308, pt.y + 140, 52, 28 );
         case Race::WZRD:
-            return Rect( pt.x + 60, pt.y + 68, 46, 33 );
+            return fheroes2::Rect( pt.x + 60, pt.y + 68, 46, 33 );
         case Race::NECR:
-            return Rect( pt.x + 333, pt.y + 131, 49, 51 );
+            return fheroes2::Rect( pt.x + 333, pt.y + 131, 49, 51 );
         default:
             break;
         }
@@ -665,17 +665,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case DWELLING_MONSTER1:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 195, pt.y + 175, 50, 40 );
+            return fheroes2::Rect( pt.x + 195, pt.y + 175, 50, 40 );
         case Race::BARB:
-            return Rect( pt.x + 258, pt.y + 142, 71, 41 );
+            return fheroes2::Rect( pt.x + 258, pt.y + 142, 71, 41 );
         case Race::SORC:
-            return Rect( pt.x + 478, pt.y + 70, 92, 62 );
+            return fheroes2::Rect( pt.x + 478, pt.y + 70, 92, 62 );
         case Race::WRLK:
-            return Rect( pt.x, pt.y + 63, 68, 53 );
+            return fheroes2::Rect( pt.x, pt.y + 63, 68, 53 );
         case Race::WZRD:
-            return Rect( pt.x + 459, pt.y + 181, 45, 32 );
+            return fheroes2::Rect( pt.x + 459, pt.y + 181, 45, 32 );
         case Race::NECR:
-            return Rect( pt.x + 404, pt.y + 181, 56, 25 );
+            return fheroes2::Rect( pt.x + 404, pt.y + 181, 56, 25 );
         default:
             break;
         }
@@ -685,17 +685,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case DWELLING_UPGRADE2:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 145, pt.y + 155, 58, 20 );
+            return fheroes2::Rect( pt.x + 145, pt.y + 155, 58, 20 );
         case Race::BARB:
-            return Rect( pt.x + 152, pt.y + 190, 68, 50 );
+            return fheroes2::Rect( pt.x + 152, pt.y + 190, 68, 50 );
         case Race::SORC:
-            return Rect( pt.x + 345, pt.y + 149, 70, 56 );
+            return fheroes2::Rect( pt.x + 345, pt.y + 149, 70, 56 );
         case Race::WRLK:
-            return Rect( pt.x + 248, pt.y + 192, 60, 55 );
+            return fheroes2::Rect( pt.x + 248, pt.y + 192, 60, 55 );
         case Race::WZRD:
-            return Rect( pt.x + 253, pt.y + 69, 90, 29 );
+            return fheroes2::Rect( pt.x + 253, pt.y + 69, 90, 29 );
         case Race::NECR:
-            return Rect( pt.x + 147, pt.y + 184, 92, 32 );
+            return fheroes2::Rect( pt.x + 147, pt.y + 184, 92, 32 );
         default:
             break;
         }
@@ -705,17 +705,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case DWELLING_UPGRADE3:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 250, pt.y + 177, 70, 50 );
+            return fheroes2::Rect( pt.x + 250, pt.y + 177, 70, 50 );
         case Race::BARB:
-            return Rect( pt.x + 582, pt.y + 81, 58, 40 );
+            return fheroes2::Rect( pt.x + 582, pt.y + 81, 58, 40 );
         case Race::SORC:
-            return Rect( pt.x + 90, pt.y + 180, 56, 21 );
+            return fheroes2::Rect( pt.x + 90, pt.y + 180, 56, 21 );
         case Race::WRLK:
-            return Rect( pt.x + 504, pt.y + 53, 38, 30 );
+            return fheroes2::Rect( pt.x + 504, pt.y + 53, 38, 30 );
         case Race::WZRD:
-            return Rect( pt.x + 156, pt.y + 139, 74, 51 );
+            return fheroes2::Rect( pt.x + 156, pt.y + 139, 74, 51 );
         case Race::NECR:
-            return Rect( pt.x + 108, pt.y + 69, 117, 91 );
+            return fheroes2::Rect( pt.x + 108, pt.y + 69, 117, 91 );
         default:
             break;
         }
@@ -725,17 +725,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case DWELLING_UPGRADE4:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 328, pt.y + 195, 100, 50 );
+            return fheroes2::Rect( pt.x + 328, pt.y + 195, 100, 50 );
         case Race::BARB:
-            return Rect( pt.x + 509, pt.y + 148, 123, 57 );
+            return fheroes2::Rect( pt.x + 509, pt.y + 148, 123, 57 );
         case Race::SORC:
-            return Rect( pt.x + 208, pt.y + 182, 127, 55 );
+            return fheroes2::Rect( pt.x + 208, pt.y + 182, 127, 55 );
         case Race::WRLK:
-            return Rect( pt.x + 154, pt.y + 168, 171, 76 );
+            return fheroes2::Rect( pt.x + 154, pt.y + 168, 171, 76 );
         case Race::WZRD:
-            return Rect( pt.x + 593, pt.y + 187, 47, 28 );
+            return fheroes2::Rect( pt.x + 593, pt.y + 187, 47, 28 );
         case Race::NECR:
-            return Rect( pt.x, pt.y + 154, 140, 74 );
+            return fheroes2::Rect( pt.x, pt.y + 154, 140, 74 );
         default:
             break;
         }
@@ -745,17 +745,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case DWELLING_UPGRADE5:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 0, pt.y + 200, 150, 55 );
+            return fheroes2::Rect( pt.x + 0, pt.y + 200, 150, 55 );
         case Race::BARB:
-            return Rect( pt.x + 331, pt.y + 186, 121, 44 );
+            return fheroes2::Rect( pt.x + 331, pt.y + 186, 121, 44 );
         case Race::SORC:
-            return Rect( pt.x + 345, pt.y + 231, 165, 21 );
+            return fheroes2::Rect( pt.x + 345, pt.y + 231, 165, 21 );
         case Race::WRLK:
-            return Rect( pt.x + 149, pt.y + 98, 95, 58 );
+            return fheroes2::Rect( pt.x + 149, pt.y + 98, 95, 58 );
         case Race::WZRD:
-            return Rect( pt.x + 417, pt.y + 25, 35, 140 );
+            return fheroes2::Rect( pt.x + 417, pt.y + 25, 35, 140 );
         case Race::NECR:
-            return Rect( pt.x + 235, pt.y + 136, 53, 70 );
+            return fheroes2::Rect( pt.x + 235, pt.y + 136, 53, 70 );
         default:
             break;
         }
@@ -766,17 +766,17 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
     case DWELLING_UPGRADE7:
         switch ( race ) {
         case Race::KNGT:
-            return Rect( pt.x + 465, pt.y + 85, 175, 110 );
+            return fheroes2::Rect( pt.x + 465, pt.y + 85, 175, 110 );
         case Race::BARB:
-            return Rect( pt.x + 407, pt.y + 13, 109, 80 );
+            return fheroes2::Rect( pt.x + 407, pt.y + 13, 109, 80 );
         case Race::SORC:
-            return Rect( pt.x + 202, pt.y + 38, 42, 65 );
+            return fheroes2::Rect( pt.x + 202, pt.y + 38, 42, 65 );
         case Race::WRLK:
-            return Rect( pt.x + 98, pt.y + 25, 55, 229 );
+            return fheroes2::Rect( pt.x + 98, pt.y + 25, 55, 229 );
         case Race::WZRD:
-            return Rect( pt.x + 196, pt.y + 7, 129, 38 );
+            return fheroes2::Rect( pt.x + 196, pt.y + 7, 129, 38 );
         case Race::NECR:
-            return Rect( pt.x + 468, pt.y + 112, 92, 78 );
+            return fheroes2::Rect( pt.x + 468, pt.y + 112, 92, 78 );
         default:
             break;
         }
@@ -786,7 +786,7 @@ Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
         break;
     }
 
-    return Rect();
+    return fheroes2::Rect();
 }
 
 void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> & ordersBuildings )

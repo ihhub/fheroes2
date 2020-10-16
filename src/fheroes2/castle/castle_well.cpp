@@ -79,7 +79,7 @@ void Castle::OpenWell( void )
 
     Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const Point cur_pt = frameborder.GetArea();
-    Point dst_pt( cur_pt );
+    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
     // button exit
     dst_pt.x = cur_pt.x + 578;
@@ -90,12 +90,12 @@ void Castle::OpenWell( void )
     dst_pt.y = cur_pt.y + 461;
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::BUYMAX, 0, 1 );
 
-    const Rect rectMonster1( cur_pt.x + 20, cur_pt.y + 18, 288, 124 );
-    const Rect rectMonster2( cur_pt.x + 20, cur_pt.y + 168, 288, 124 );
-    const Rect rectMonster3( cur_pt.x + 20, cur_pt.y + 318, 288, 124 );
-    const Rect rectMonster4( cur_pt.x + 334, cur_pt.y + 18, 288, 124 );
-    const Rect rectMonster5( cur_pt.x + 334, cur_pt.y + 168, 288, 124 );
-    const Rect rectMonster6( cur_pt.x + 334, cur_pt.y + 318, 288, 124 );
+    const fheroes2::Rect rectMonster1( cur_pt.x + 20, cur_pt.y + 18, 288, 124 );
+    const fheroes2::Rect rectMonster2( cur_pt.x + 20, cur_pt.y + 168, 288, 124 );
+    const fheroes2::Rect rectMonster3( cur_pt.x + 20, cur_pt.y + 318, 288, 124 );
+    const fheroes2::Rect rectMonster4( cur_pt.x + 334, cur_pt.y + 18, 288, 124 );
+    const fheroes2::Rect rectMonster5( cur_pt.x + 334, cur_pt.y + 168, 288, 124 );
+    const fheroes2::Rect rectMonster6( cur_pt.x + 334, cur_pt.y + 318, 288, 124 );
 
     buttonExit.draw();
 
@@ -211,7 +211,8 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
 
     Text text;
-    Point dst_pt, pt;
+    fheroes2::Point dst_pt;
+    fheroes2::Point pt;
 
     const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
     const fheroes2::Rect src_rt( 0, 461, button.width(), 19 );
@@ -220,7 +221,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
     text.Set( _( "Town Population Information and Statistics" ), Font::BIG );
     dst_pt.x = cur_pt.x + 315 - text.w() / 2;
     dst_pt.y = cur_pt.y + 463;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     u32 dw = DWELLING_MONSTER1;
     size_t monsterId = 0u;
@@ -235,14 +236,14 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
         case DWELLING_MONSTER1:
             pt.x = cur_pt.x;
             pt.y = cur_pt.y + 1;
-            present = DWELLING_MONSTER1 & building;
+            present = ( DWELLING_MONSTER1 & building ) != 0;
             icnindex = 19;
             available = dwelling[0];
             break;
         case DWELLING_MONSTER2:
             pt.x = cur_pt.x;
             pt.y = cur_pt.y + 151;
-            present = DWELLING_MONSTER2 & building;
+            present = ( DWELLING_MONSTER2 & building ) != 0;
             dw_orig = GetActualDwelling( DWELLING_MONSTER2 );
             icnindex = DWELLING_UPGRADE2 & building ? 25 : 20;
             available = dwelling[1];
@@ -250,7 +251,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
         case DWELLING_MONSTER3:
             pt.x = cur_pt.x;
             pt.y = cur_pt.y + 301;
-            present = DWELLING_MONSTER3 & building;
+            present = ( DWELLING_MONSTER3 & building ) != 0;
             dw_orig = GetActualDwelling( DWELLING_MONSTER3 );
             icnindex = DWELLING_UPGRADE3 & building ? 26 : 21;
             available = dwelling[2];
@@ -258,7 +259,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
         case DWELLING_MONSTER4:
             pt.x = cur_pt.x + 314;
             pt.y = cur_pt.y + 1;
-            present = DWELLING_MONSTER4 & building;
+            present = ( DWELLING_MONSTER4 & building ) != 0;
             dw_orig = GetActualDwelling( DWELLING_MONSTER4 );
             icnindex = DWELLING_UPGRADE4 & building ? 27 : 22;
             available = dwelling[3];
@@ -266,7 +267,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
         case DWELLING_MONSTER5:
             pt.x = cur_pt.x + 314;
             pt.y = cur_pt.y + 151;
-            present = DWELLING_MONSTER5 & building;
+            present = ( DWELLING_MONSTER5 & building ) != 0;
             dw_orig = GetActualDwelling( DWELLING_MONSTER5 );
             icnindex = DWELLING_UPGRADE5 & building ? 28 : 23;
             available = dwelling[4];
@@ -274,7 +275,7 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
         case DWELLING_MONSTER6:
             pt.x = cur_pt.x + 314;
             pt.y = cur_pt.y + 301;
-            present = DWELLING_MONSTER6 & building;
+            present = ( DWELLING_MONSTER6 & building ) != 0;
             dw_orig = GetActualDwelling( DWELLING_MONSTER6 );
             icnindex = DWELLING_UPGRADE7 & building ? 30 : ( DWELLING_UPGRADE6 & building ? 29 : 24 );
             available = dwelling[5];
@@ -293,48 +294,48 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
         text.Set( GetStringBuilding( dw_orig, race ), Font::SMALL );
         dst_pt.x = pt.x + 86 - text.w() / 2;
         dst_pt.y = pt.y + 103;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         // name
         text.Set( monster.GetMultiName() );
         dst_pt.x = pt.x + 122 - text.w() / 2;
         dst_pt.y = pt.y + 17;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
         // attack
         std::string str;
         str = std::string( _( "Attack" ) ) + ": " + GetString( monster.GetAttack() );
         text.Set( str );
         dst_pt.x = pt.x + 268 - text.w() / 2;
         dst_pt.y = pt.y + 22;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
         // defense
         str = std::string( _( "Defense" ) ) + ": " + GetString( monster.GetDefense() );
         text.Set( str );
         dst_pt.x = pt.x + 268 - text.w() / 2;
         dst_pt.y = pt.y + 34;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
         // damage
         str = std::string( _( "Damage" ) ) + ": " + GetString( monster.GetDamageMin() ) + "-" + GetString( monster.GetDamageMax() );
         text.Set( str );
         dst_pt.x = pt.x + 268 - text.w() / 2;
         dst_pt.y = pt.y + 46;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
         // hp
         str = std::string( _( "HP" ) ) + ": " + GetString( monster.GetHitPoints() );
         text.Set( str );
         dst_pt.x = pt.x + 268 - text.w() / 2;
         dst_pt.y = pt.y + 58;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
         // speed
         str = std::string( _( "Speed" ) ) + ": ";
         text.Set( str );
         dst_pt.x = pt.x + 268 - text.w() / 2;
         dst_pt.y = pt.y + 78;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
         text.Set( Speed::String( monster.GetSpeed() ) );
         dst_pt.x = pt.x + 268 - text.w() / 2;
         dst_pt.y = pt.y + 90;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         if ( present ) {
             u32 grown = monster.GetGrown();
@@ -345,22 +346,22 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
             text.Set( _( "Growth" ) );
             dst_pt.x = pt.x + 268 - text.w() / 2;
             dst_pt.y = pt.y + 110;
-            text.Blit( dst_pt );
+            text.Blit( dst_pt.x, dst_pt.y );
             str = std::string( "+ " ) + GetString( grown ) + " / " + _( "week" );
             text.Set( str );
             dst_pt.x = pt.x + 268 - text.w() / 2;
             dst_pt.y = pt.y + 122;
-            text.Blit( dst_pt );
+            text.Blit( dst_pt.x, dst_pt.y );
 
             str = std::string( _( "Available" ) ) + ": ";
             text.Set( str );
             dst_pt.x = pt.x + 44;
             dst_pt.y = pt.y + 122;
-            text.Blit( dst_pt );
+            text.Blit( dst_pt.x, dst_pt.y );
             text.Set( GetString( available ), Font::YELLOW_BIG );
             dst_pt.x = pt.x + 129 - text.w() / 2;
             dst_pt.y = pt.y + 119;
-            text.Blit( dst_pt );
+            text.Blit( dst_pt.x, dst_pt.y );
         }
 
         // monster

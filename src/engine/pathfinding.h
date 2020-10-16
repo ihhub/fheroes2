@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,39 +17,49 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPRITE_H
-#define H2SPRITE_H
 
-#include "gamedefs.h"
+#pragma once
 
-class SpritePos : public Surface
+#include "route.h"
+
+// Base representation of the dataset that mirrors the 2D map being traversed
+struct PathfindingNode
+{
+    int _from = -1;
+    uint32_t _cost = 0;
+
+    PathfindingNode() {}
+    PathfindingNode( int node, uint32_t cost )
+        : _from( node )
+        , _cost( cost )
+    {}
+    // Sets node values back to the defaults; used before processing new path
+    virtual void resetNode()
+    {
+        _from = -1;
+        _cost = 0;
+    }
+};
+
+// Template class has to be either PathfindingNode or its derivative
+template <class T>
+class Pathfinder
 {
 public:
-    SpritePos();
-    SpritePos( const Surface &, const Point & );
+    virtual void reset() = 0;
+    virtual std::list<Route::Step> buildPath( int targetIndex ) const = 0;
 
-    void SetSurface( const Surface & );
-    void SetPos( const Point & );
+    virtual uint32_t getDistance( int targetIndex ) const
+    {
+        return _cache[targetIndex]._cost;
+    }
 
-    void Reset( void );
-
-    const Point & GetPos( void ) const;
-    Rect GetArea( void ) const;
-
-    u32 GetMemoryUsage( void ) const;
+    virtual const T & getNode( int targetIndex ) const
+    {
+        return _cache[targetIndex];
+    }
 
 protected:
-    Point pos;
+    std::vector<T> _cache;
+    int _pathStart = -1;
 };
-
-class Sprite : public SpritePos
-{
-public:
-    Sprite();
-    Sprite( const Surface &, s32, s32 );
-
-    int x( void ) const;
-    int y( void ) const;
-};
-
-#endif
