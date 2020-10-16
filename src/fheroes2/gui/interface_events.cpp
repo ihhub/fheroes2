@@ -49,7 +49,8 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
-        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << path.Calculate( destinationIdx ) << ", route: " << path.String() );
+        hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
+        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
         LocalEvent & le = LocalEvent::Get();

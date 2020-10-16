@@ -131,8 +131,7 @@ namespace AI
             
 
             if ( targetIndex != -1 ) {
-                auto path = _pathfinder.buildPath( targetIndex );
-                hero.GetPath().assign( path.begin(), path.end() );
+                hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
                 HeroesMove( hero );
             }
             else {
