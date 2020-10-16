@@ -74,8 +74,6 @@ namespace AI
     {
         int priorityTarget = -1;
 
-        const int heroIndex = hero.GetIndex();
-
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         int objectID = MP2::OBJ_ZERO;
 

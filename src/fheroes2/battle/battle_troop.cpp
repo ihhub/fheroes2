@@ -40,22 +40,6 @@
 #include "speed.h"
 #include "world.h"
 
-void Battle::UpdateMonsterAttributes( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse battle.xml
-    TiXmlDocument doc;
-
-    if ( doc.LoadFile( spec.c_str() ) ) {
-        const TiXmlElement * xml_battle = doc.FirstChildElement( "battle" );
-    }
-    else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
-#else
-    (void)spec;
-#endif
-}
-
 Battle::ModeDuration::ModeDuration()
     : std::pair<u32, u32>( 0, 0 )
 {}

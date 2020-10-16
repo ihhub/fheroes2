@@ -156,9 +156,8 @@ namespace Battle
 
             for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
                 const int idx = it->GetIndex();
-                const int x = ( idx % ARENAW );
-
                 ArenaNode & node = _cache[idx];
+
                 if ( it->isPassable1( true ) ) {
                     node._isOpen = true;
                     node._from = headIdx;

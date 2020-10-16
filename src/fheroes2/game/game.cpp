@@ -386,12 +386,6 @@ void Game::LoadExternalResource()
     if ( System::IsFile( spec ) )
         Game::UpdateGlobalDefines( spec );
 
-    // battle.xml
-    spec = Settings::GetLastFile( prefix_stats, "battle.xml" );
-
-    if ( System::IsFile( spec ) )
-        Battle::UpdateMonsterAttributes( spec );
-
     // monsters.xml
     spec = Settings::GetLastFile( prefix_stats, "monsters.xml" );
 

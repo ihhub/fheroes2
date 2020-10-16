@@ -447,7 +447,6 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const payment_t paymentMonster = monster.GetCost();
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
 
