@@ -92,10 +92,15 @@ Maps::Indexes & MapsIndexesFilteredObjects( Maps::Indexes & indexes, const u8 * 
     return indexes;
 }
 
-Maps::Indexes & MapsIndexesFilteredObject( Maps::Indexes & indexes, int obj )
+Maps::Indexes & MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj )
 {
-    indexes.resize( std::distance( indexes.begin(), std::remove_if( indexes.begin(), indexes.end(), std::not1( std::bind2nd( std::ptr_fun( &TileIsObject ), obj ) ) ) ) );
-    return indexes;
+    Maps::Indexes result;
+    for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
+        if ( TileIsObject( indexes[idx], obj ) ) {
+            result.push_back( idx );
+        }
+    }
+    return result;
 }
 
 const char * Maps::SizeString( int s )
@@ -276,10 +281,11 @@ s32 Maps::GetIndexFromAbsPoint( s32 px, s32 py )
 Maps::Indexes Maps::GetAllIndexes( void )
 {
     Indexes result;
-    result.assign( world.w() * world.h(), 0 );
+    const size_t mapSize = world.getSize();
+    result.reserve( mapSize );
 
-    for ( Indexes::iterator it = result.begin(); it != result.end(); ++it )
-        *it = std::distance( result.begin(), it );
+    for ( size_t idx = 0; idx < mapSize; ++idx )
+        result.push_back( idx );
     return result;
 }
 
@@ -431,8 +437,7 @@ Maps::Indexes Maps::ScanAroundObjects( s32 center, u32 dist, const u8 * objs )
 
 Maps::Indexes Maps::GetObjectPositions( int obj, bool check_hero )
 {
-    Maps::Indexes results = GetAllIndexes();
-    MapsIndexesFilteredObject( results, obj );
+    Maps::Indexes results = MapsIndexesFilteredObject( GetAllIndexes(), obj );
 
     if ( check_hero && obj != MP2::OBJ_HEROES ) {
         const Indexes & v = GetObjectPositions( MP2::OBJ_HEROES, false );
