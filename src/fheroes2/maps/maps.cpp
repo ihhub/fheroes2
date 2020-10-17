@@ -69,26 +69,26 @@ void Maps::IndexesDistance::Assign( s32 from, const Indexes & indexes, int sort 
         std::sort( begin(), end(), IndexDistance::Longest );
 }
 
-Maps::Indexes & MapsIndexesFilteredObjects( const Maps::Indexes & indexes, const u8 * objs, bool checkUnderHero = false )
+Maps::Indexes MapsIndexesFilteredObjects( const Maps::Indexes & indexes, const u8 * objs, bool checkUnderHero = false )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        const int objectID = world.GetTiles( idx ).GetObject( !checkUnderHero );
+        const int objectID = world.GetTiles( indexes[idx] ).GetObject( !checkUnderHero );
         while ( objs && *objs ) {
             if ( *objs == objectID )
-                result.push_back( idx );
+                result.push_back( indexes[idx] );
             ++objs;
         }
     }
     return result;
 }
 
-Maps::Indexes & MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj, bool checkUnderHero = false )
+Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj, bool checkUnderHero = false )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( world.GetTiles( idx ).GetObject( !checkUnderHero ) == obj ) {
-            result.push_back( idx );
+        if ( world.GetTiles( indexes[idx] ).GetObject( !checkUnderHero ) == obj ) {
+            result.push_back( indexes[idx] );
         }
     }
     return result;
