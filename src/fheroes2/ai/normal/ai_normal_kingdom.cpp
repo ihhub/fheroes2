@@ -179,7 +179,7 @@ namespace AI
         VecHeroes sortedHeroList = heroes;
         std::sort( sortedHeroList.begin(), sortedHeroList.end(), []( const Heroes * left, const Heroes * right ) {
             if ( left && right )
-                return left->GetArmy().GetStrength() < right->GetArmy().GetStrength();
+                return left->GetArmy().GetStrength() > right->GetArmy().GetStrength();
             return right == NULL;
         } );
 

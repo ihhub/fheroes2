@@ -146,6 +146,7 @@ public:
     ~Army();
 
     void Reset( bool = false ); // reset: soft or hard
+    void setFromTile( const Maps::Tiles & tile );
 
     int GetRace( void ) const;
     int GetColor( void ) const;
