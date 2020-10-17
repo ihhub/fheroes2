@@ -540,6 +540,10 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
             totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
     }
 
+    if ( isControlAI() ) {
+        totalIncome.gold *= Difficulty::GetGoldIncomeBonus( Settings::Get().GameDifficulty() );
+    }
+
     return totalIncome;
 }
 
