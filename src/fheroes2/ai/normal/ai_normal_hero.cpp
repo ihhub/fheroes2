@@ -50,13 +50,13 @@ namespace AI
             return 500.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectID ) ) {
-            return 400.0;
+            return 500.0;
         }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
             return 400.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return 400.0;
+            return 500.0;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             // de-prioritize the landing
@@ -77,7 +77,6 @@ namespace AI
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         int objectID = MP2::OBJ_ZERO;
 
-        size_t selectedNode = _mapObjects.size();
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const MapObjectNode & node = _mapObjects[idx];
             if ( HeroesValidObject( hero, node.first ) ) {
@@ -91,7 +90,6 @@ namespace AI
                     maxPriority = value;
                     priorityTarget = node.first;
                     objectID = node.second;
-                    selectedNode = idx;
 
                     DEBUG( DBG_AI, DBG_TRACE,
                            hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
@@ -99,7 +97,7 @@ namespace AI
             }
         }
 
-        if ( selectedNode < _mapObjects.size() ) {
+        if ( priorityTarget != -1 ) {
             DEBUG( DBG_AI, DBG_INFO,
                    hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
         }
@@ -130,8 +128,7 @@ namespace AI
             if ( targetIndex != -1 ) {
                 objectsToErase.push_back( targetIndex );
                 _pathfinder.reEvaluateIfNeeded( hero );
-                auto path = _pathfinder.buildPath( targetIndex );
-                hero.GetPath().setPath( path, targetIndex );
+                hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
                 HeroesMove( hero );
             }
             else {
@@ -143,10 +140,13 @@ namespace AI
         // Remove the object from the list so other heroes won't target it
         for ( size_t idx = 0; idx < _mapObjects.size() && !objectsToErase.empty(); ++idx ) {
             auto it = std::find( objectsToErase.begin(), objectsToErase.end(), _mapObjects[idx].first );
-            if ( it != objectsToErase.end() && ( MP2::isCaptureObject( _mapObjects[idx].second ) || MP2::isPickupObject( _mapObjects[idx].second ) ) ) {
-                // this method does not retain the vector order
-                _mapObjects[idx] = _mapObjects.back();
-                _mapObjects.pop_back();
+            if ( it != objectsToErase.end() ) {
+                // Actually remove if this object single use only
+                if ( MP2::isCaptureObject( _mapObjects[idx].second ) || MP2::isRemoveObject( _mapObjects[idx].second ) ) {
+                    // this method does not retain the vector order
+                    _mapObjects[idx] = _mapObjects.back();
+                    _mapObjects.pop_back();
+                }
                 objectsToErase.erase( it );
             }
         }
