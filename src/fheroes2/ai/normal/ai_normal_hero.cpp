@@ -41,7 +41,7 @@ namespace AI
             return 1700.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {
-            return 900.0;
+            return 400.0;
         }
         else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJ_ALCHEMYLAB ) {
             return 1000.0;
@@ -100,11 +100,8 @@ namespace AI
         }
 
         if ( selectedNode < _mapObjects.size() ) {
-            DEBUG( DBG_AI, DBG_TRACE,
+            DEBUG( DBG_AI, DBG_INFO,
                    hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
-
-            // Remove the object from the list to other heroes won't target it
-            _mapObjects.erase( selectedNode + _mapObjects.begin() );
         }
         else {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
@@ -126,17 +123,31 @@ namespace AI
     {
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
+        std::vector<int> objectsToErase;
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
             const int targetIndex = GetPriorityTarget( hero );
-            
 
             if ( targetIndex != -1 ) {
-                hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
+                objectsToErase.push_back( targetIndex );
+                _pathfinder.reEvaluateIfNeeded( hero );
+                auto path = _pathfinder.buildPath( targetIndex );
+                hero.GetPath().setPath( path, targetIndex );
                 HeroesMove( hero );
             }
             else {
                 hero.SetModes( AI::HERO_WAITING );
                 break;
+            }
+        }
+
+        // Remove the object from the list so other heroes won't target it
+        for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
+            auto it = std::find( objectsToErase.begin(), objectsToErase.end(), _mapObjects[idx].first );
+            if ( it != objectsToErase.end() ) {
+                // this method does not retain the vector order
+                _mapObjects[idx] = _mapObjects.back();
+                _mapObjects.pop_back();
+                objectsToErase.erase( it );
             }
         }
 
