@@ -1909,7 +1909,9 @@ namespace AI
 
     void HeroesMove( Heroes & hero )
     {
-        if ( hero.GetPath().isValid() ) {
+        Route::Path & path = hero.GetPath();
+
+        if ( path.isValid() ) {
             hero.SetMove( true );
 
             Cursor & cursor = Cursor::Get();
@@ -1998,6 +2000,10 @@ namespace AI
             }
 
             hero.SetMove( false );
+        }
+        else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
+            if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
+                hero.Action( hero.GetIndex() );
         }
     }
 }

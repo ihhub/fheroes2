@@ -123,6 +123,7 @@ namespace AI
 
         std::vector<int> objectsToErase;
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
+            const int startIndex = hero.GetIndex();
             const int targetIndex = GetPriorityTarget( hero );
 
             if ( targetIndex != -1 ) {
@@ -130,6 +131,12 @@ namespace AI
                 _pathfinder.reEvaluateIfNeeded( hero );
                 hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
                 HeroesMove( hero );
+
+                // Check if hero is stuck
+                if ( targetIndex != startIndex && hero.GetIndex() == startIndex ) {
+                    hero.SetModes( AI::HERO_WAITING );
+                    DEBUG( DBG_AI, DBG_WARN, hero.GetName() << " is stuck trying to reach " << targetIndex );
+                }
             }
             else {
                 hero.SetModes( AI::HERO_WAITING );
