@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "world_pathfinding.h"
+#include "ai.h"
 #include "ground.h"
 #include "world.h"
 
@@ -301,7 +302,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     bool isProtected = false;
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
     for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
-        if ( Army( world.GetTiles( *it ) ).GetStrength() > _armyStrength ) {
+        if ( Army( world.GetTiles( *it ) ).GetStrength() * _advantage > _armyStrength ) {
             isProtected = true;
             break;
         }

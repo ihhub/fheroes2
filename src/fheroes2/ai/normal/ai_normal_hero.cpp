@@ -141,9 +141,9 @@ namespace AI
         }
 
         // Remove the object from the list so other heroes won't target it
-        for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
+        for ( size_t idx = 0; idx < _mapObjects.size() && !objectsToErase.empty(); ++idx ) {
             auto it = std::find( objectsToErase.begin(), objectsToErase.end(), _mapObjects[idx].first );
-            if ( it != objectsToErase.end() ) {
+            if ( it != objectsToErase.end() && ( MP2::isCaptureObject( _mapObjects[idx].second ) || MP2::isPickupObject( _mapObjects[idx].second ) ) ) {
                 // this method does not retain the vector order
                 _mapObjects[idx] = _mapObjects.back();
                 _mapObjects.pop_back();
