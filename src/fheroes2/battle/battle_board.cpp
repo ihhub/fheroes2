@@ -665,7 +665,6 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
         case Maps::Ground::LAVA:
             objs.push_back( ICN::COBJ0007 );
             objs.push_back( ICN::COBJ0029 );
-            objs.push_back( ICN::COBJ0030 );
             objs.push_back( ICN::COBJ0031 );
             break;
 
