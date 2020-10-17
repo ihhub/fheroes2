@@ -1119,6 +1119,7 @@ double Army::GetStrength( void ) const
 {
     double res = 0;
     const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+    const int armyMorale = GetMorale();
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Troop * troop = *it;
@@ -1130,8 +1131,9 @@ double Army::GetStrength( void ) const
             }
 
             // GetMorale checks if unit is affected by it
-            const int morale = troop->GetMorale();
-            strength *= 1 + ( ( morale < 0 ) ? morale / 12.0 : morale / 24.0 );
+            if ( troop->isAffectedByMorale() )
+                strength *= 1 + ( ( armyMorale < 0 ) ? armyMorale / 12.0 : armyMorale / 24.0 );
+
             strength *= 1 + troop->GetLuck() / 24.0;
 
             res += strength;
