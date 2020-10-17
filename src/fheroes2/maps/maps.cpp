@@ -373,22 +373,7 @@ void Maps::ClearFog( s32 index, int scoute, int color )
 
         // AI advantage
         if ( world.GetKingdom( color ).isControlAI() ) {
-            switch ( conf.GameDifficulty() ) {
-            case Difficulty::NORMAL:
-                scoute += 2;
-                break;
-            case Difficulty::HARD:
-                scoute += 3;
-                break;
-            case Difficulty::EXPERT:
-                scoute += 4;
-                break;
-            case Difficulty::IMPOSSIBLE:
-                scoute += 6;
-                break;
-            default:
-                break;
-            }
+            scoute += Difficulty::GetScoutingBonus( conf.GameDifficulty() );
         }
 
         const int colors = Players::GetPlayerFriends( color );

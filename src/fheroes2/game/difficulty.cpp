@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "difficulty.h"
+#include "resource.h"
 
 const std::string & Difficulty::String( int difficulty )
 {
@@ -43,4 +44,52 @@ const std::string & Difficulty::String( int difficulty )
     }
 
     return str_difficulty[5];
+}
+
+cost_t Difficulty::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
+{
+    static cost_t startingResourcesSet[] = { { 10000, 30, 10, 30, 10, 10, 10 },
+                                             { 7500, 20, 5, 20, 5, 5, 5 },
+                                             { 5000, 10, 2, 10, 2, 2, 2 },
+                                             { 2500, 5, 0, 5, 0, 0, 0 },
+                                             { 0, 0, 0, 0, 0, 0, 0 },
+                                             // ai resource
+                                             { 10000, 30, 10, 30, 10, 10, 10 } };
+
+    if ( isAIKingdom )
+        return startingResourcesSet[5];
+
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return startingResourcesSet[0];
+    case Difficulty::NORMAL:
+        return startingResourcesSet[1];
+    case Difficulty::HARD:
+        return startingResourcesSet[2];
+    case Difficulty::EXPERT:
+        return startingResourcesSet[3];
+    case Difficulty::IMPOSSIBLE:
+        return startingResourcesSet[4];
+    default:
+        break;
+    }
+
+    return startingResourcesSet[1];
+}
+
+int Difficulty::GetScoutingBonus( int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::NORMAL:
+        return 1;
+    case Difficulty::HARD:
+        return 2;
+    case Difficulty::EXPERT:
+        return 3;
+    case Difficulty::IMPOSSIBLE:
+        return 4;
+    default:
+        break;
+    }
+    return 0;
 }

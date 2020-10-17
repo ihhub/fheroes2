@@ -101,7 +101,7 @@ int Kingdom::GetRace( void ) const
 
 void Kingdom::UpdateStartingResource( void )
 {
-    resource = GameStatic::GetKingdomStartingResource( isControlAI() ? 5 : Settings::Get().GameDifficulty() );
+    resource = Difficulty::GetKingdomStartingResources( Settings::Get().GameDifficulty(), isControlAI() );
 }
 
 bool Kingdom::isLoss( void ) const

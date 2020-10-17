@@ -24,6 +24,7 @@
 
 #include "gamedefs.h"
 
+struct cost_t;
 namespace Difficulty
 {
     enum
@@ -36,6 +37,9 @@ namespace Difficulty
     };
 
     const std::string & String( int );
+
+    cost_t GetKingdomStartingResources( int difficulty, bool isAIKingdom );
+    int GetScoutingBonus( int difficulty );
 }
 
 #endif
