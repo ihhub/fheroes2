@@ -33,6 +33,10 @@ int MP2::GetICNObject( int tileset )
     case 0:
         return ICN::UNKNOWN;
 
+    // custom: boat sprite
+    case 6:
+        return ICN::BOAT32;
+
     // artifact
     case 11:
         return ICN::OBJNARTI;

@@ -959,6 +959,52 @@ void Maps::Tiles::SetObject( int object )
     world.resetPathfinder();
 }
 
+void Maps::Tiles::setBoat( int direction )
+{
+    if ( objectTileset != 0 && objectIndex != 255 ) {
+        AddonsPushLevel1( TilesAddon( 0, 0, objectTileset, objectIndex ) );
+    }
+    SetObject( MP2::OBJ_BOAT );
+    objectTileset = ICN::BOAT32;
+
+    // Left-side sprites have to flipped, add 128 to index
+    switch ( direction ) {
+    case Direction::TOP:
+        objectIndex = 0;
+        break;
+    case Direction::TOP_RIGHT:
+        objectIndex = 9;
+        break;
+    case Direction::RIGHT:
+        objectIndex = 18;
+        break;
+    case Direction::BOTTOM_RIGHT:
+        objectIndex = 27;
+        break;
+    case Direction::BOTTOM:
+        objectIndex = 36;
+        break;
+    case Direction::BOTTOM_LEFT:
+        objectIndex = 27 + 128;
+        break;
+    case Direction::LEFT:
+        objectIndex = 18 + 128;
+        break;
+    case Direction::TOP_LEFT:
+        objectIndex = 9 + 128;
+        break;
+    default:
+        objectIndex = 18;
+        break;
+    }
+}
+
+void Maps::Tiles::resetObjectSprite()
+{
+    objectTileset = 0;
+    objectIndex = 255;
+}
+
 void Maps::Tiles::SetTile( u32 sprite_index, u32 shape )
 {
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
@@ -1509,9 +1555,8 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     if ( area.GetVisibleTileROI() & mp ) {
-        // FIXME: restore direction from Maps::Tiles
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, 18 );
-        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, objectIndex % 128 );
+        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp, ( objectIndex > 128 ) );
     }
 }
 
@@ -2040,8 +2085,7 @@ void Maps::Tiles::Remove( u32 uniqID )
         addons_level2.Remove( uniqID );
 
     if ( uniq == uniqID ) {
-        objectTileset = 0;
-        objectIndex = 255;
+        resetObjectSprite();
         uniq = 0;
     }
 }

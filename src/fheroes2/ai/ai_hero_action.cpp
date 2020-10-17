@@ -1450,6 +1450,7 @@ namespace AI
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         hero.SetMapsObject( MP2::OBJ_ZERO );
+        world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
         if ( showAnimation ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
@@ -1466,7 +1467,8 @@ namespace AI
         if ( !hero.isShipMaster() )
             return;
 
-        Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
+        const int fromIndex = hero.GetIndex();
+        Maps::Tiles & from = world.GetTiles( fromIndex );
 
         const bool showAnimation = AIHeroesShowAnimation( hero, AIGetAllianceColors() );
 
@@ -1475,7 +1477,7 @@ namespace AI
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        from.SetObject( MP2::OBJ_BOAT );
+        from.setBoat( Maps::GetDirection( fromIndex, dst_index ) );
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
 

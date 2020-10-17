@@ -827,9 +827,12 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     } break;
 
     case MP2::OBJ_BOAT:
+        objectTileset = 27;
+        objectIndex = 18;
+        break;
+
     case MP2::OBJ_EVENT:
-        objectTileset = 0;
-        objectIndex = 255;
+        resetObjectSprite();
         break;
 
     case MP2::OBJ_RNDARTIFACT:
