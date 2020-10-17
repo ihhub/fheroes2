@@ -27,9 +27,13 @@
 
 namespace AI
 {
-    bool IsValidKingdomObject( const Maps::Tiles & tile, int objectID, int kingdomColor )
+    bool IsValidKingdomObject( const Kingdom & kingdom, const Maps::Tiles & tile, int objectID )
     {
+        const int kingdomColor = kingdom.GetColor();
         if ( tile.isFog( kingdomColor ) || ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST ) )
+            return false;
+
+        if ( kingdom.isVisited( tile.GetIndex(), objectID ) )
             return false;
 
         // Check castle first to ignore guest hero (tile with both Castle and Hero)
@@ -87,7 +91,7 @@ namespace AI
             const Maps::Tiles & tile = world.GetTiles( idx );
             int objectID = tile.GetObject();
 
-            if ( !IsValidKingdomObject( tile, objectID, color ) )
+            if ( !IsValidKingdomObject( kingdom, tile, objectID ) )
                 continue;
 
             _mapObjects.emplace_back( idx, objectID );
@@ -175,7 +179,7 @@ namespace AI
         VecHeroes sortedHeroList = heroes;
         std::sort( sortedHeroList.begin(), sortedHeroList.end(), []( const Heroes * left, const Heroes * right ) {
             if ( left && right )
-                return left->GetArmy().GetStrength() < right->GetArmy().GetStrength();
+                return left->GetArmy().GetStrength() > right->GetArmy().GetStrength();
             return right == NULL;
         } );
 

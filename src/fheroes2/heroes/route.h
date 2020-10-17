@@ -76,7 +76,7 @@ namespace Route
         u32 GetFrontPenalty( void ) const;
         u32 GetTotalPenalty( void ) const;
         uint32_t getLastMovePenalty() const;
-        uint32_t Calculate( const s32 & destIndex );
+        void setPath( const std::list<Step> & path, int32_t destIndex );
 
         void Show( void )
         {

@@ -2376,7 +2376,7 @@ Army & Castle::GetActualArmy( void )
 bool Castle::AllowBuyBoat( void ) const
 {
     // check payment and present other boat
-    return ( HaveNearlySea() && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
+    return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
 }
 
 bool Castle::BuyBoat( void )
