@@ -354,7 +354,7 @@ u32 Troops::GetUniqueCount( void ) const
     std::set<int> monsters;
 
     for ( size_t idx = 0; idx < size(); ++idx ) {
-        const Troop * troop = operator[](idx);
+        const Troop * troop = operator[]( idx );
         if ( troop && troop->isValid() )
             monsters.insert( troop->GetID() );
     }
@@ -750,7 +750,7 @@ Army::~Army()
     clear();
 }
 
-void Army::setFromTile( const Maps::Tiles & tile ) 
+void Army::setFromTile( const Maps::Tiles & tile )
 {
     Reset();
 
