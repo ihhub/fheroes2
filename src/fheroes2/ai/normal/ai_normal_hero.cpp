@@ -130,10 +130,9 @@ namespace AI
 
         if ( hero.Modes( Heroes::PATROL ) ) {
             patrolDistance = hero.GetSquarePatrol();
-            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " dist: " << patrolDistance << " center: " << hero.GetCenterPatrol().x );
 
             if ( patrolDistance == 0 ) {
-                DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " standing still. Skip turn." );
+                DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " standing still. Skip turn." );
                 hero.SetModes( AI::HERO_MOVED );
                 return;
             }
