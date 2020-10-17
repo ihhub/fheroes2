@@ -955,6 +955,29 @@ bool MP2::isHeroUpgradeObject( int obj )
     return false;
 }
 
+bool MP2::isProtectedObject( int obj )
+{
+    switch ( obj ) {
+    case OBJ_MONSTER:
+    case OBJ_ARTIFACT:
+    case OBJ_DERELICTSHIP:
+    case OBJ_SHIPWRECK:
+    case OBJ_GRAVEYARD:
+    case OBJ_PYRAMID:
+    case OBJ_DAEMONCAVE:
+    case OBJ_ABANDONEDMINE:
+    case OBJ_CITYDEAD:
+    case OBJ_TROLLBRIDGE:
+    case OBJ_DRAGONCITY:
+        return true;
+
+    default:
+        break;
+    }
+
+    return isCaptureObject( obj );
+}
+
 bool MP2::isMoveObject( int obj )
 {
     switch ( obj ) {

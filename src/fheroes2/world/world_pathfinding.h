@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "army.h"
 #include "color.h"
 #include "pathfinding.h"
 #include "route.h"
@@ -86,4 +87,5 @@ private:
     int _currentColor = Color::NONE;
     double _armyStrength = -1;
     double _advantage = 1.0;
+    Army _temporaryArmy; // for internal calculations
 };
