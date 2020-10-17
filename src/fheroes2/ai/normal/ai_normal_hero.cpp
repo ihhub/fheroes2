@@ -70,8 +70,9 @@ namespace AI
         return 0;
     }
 
-    int AI::Normal::GetPriorityTarget( const Heroes & hero )
+    int AI::Normal::GetPriorityTarget( const Heroes & hero, int patrolIndex, uint32_t distanceLimit )
     {
+        const bool heroInPatrolMode = patrolIndex != -1;
         int priorityTarget = -1;
 
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
@@ -79,6 +80,11 @@ namespace AI
 
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const MapObjectNode & node = _mapObjects[idx];
+
+            // Skip if hero in patrol mode and object outside of reach
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( patrolIndex, node.first ) > distanceLimit )
+                continue;
+
             if ( HeroesValidObject( hero, node.first ) ) {
                 const uint32_t dist = _pathfinder.getDistance( hero, node.first );
                 if ( dist == 0 )
@@ -101,7 +107,7 @@ namespace AI
             DEBUG( DBG_AI, DBG_INFO,
                    hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
         }
-        else {
+        else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
         }
@@ -119,11 +125,26 @@ namespace AI
 
     void Normal::HeroTurn( Heroes & hero )
     {
+        int patrolCenter = -1;
+        uint32_t patrolDistance = 0;
+
+        if ( hero.Modes( Heroes::PATROL ) ) {
+            patrolDistance = hero.GetSquarePatrol();
+            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " dist: " << patrolDistance << " center: " << hero.GetCenterPatrol().x );
+
+            if ( patrolDistance == 0 ) {
+                DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " standing still. Skip turn." );
+                hero.SetModes( AI::HERO_MOVED );
+                return;
+            }
+            patrolCenter = Maps::GetIndexFromAbsPoint( hero.GetCenterPatrol() );
+        }
+
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
         std::vector<int> objectsToErase;
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            const int targetIndex = GetPriorityTarget( hero );
+            const int targetIndex = GetPriorityTarget( hero, patrolCenter, patrolDistance );
 
             if ( targetIndex != -1 ) {
                 objectsToErase.push_back( targetIndex );
