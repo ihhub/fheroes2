@@ -69,34 +69,25 @@ void Maps::IndexesDistance::Assign( s32 from, const Indexes & indexes, int sort 
         std::sort( begin(), end(), IndexDistance::Longest );
 }
 
-bool TileIsObject( s32 index, int obj )
-{
-    return obj == world.GetTiles( index ).GetObject();
-}
-
-bool TileIsObjects( s32 index, const u8 * objs )
-{
-    while ( objs && *objs ) {
-        if ( *objs == world.GetTiles( index ).GetObject() )
-            return true;
-        ++objs;
-    }
-    return false;
-}
-
-Maps::Indexes & MapsIndexesFilteredObjects( Maps::Indexes & indexes, const u8 * objs )
-{
-    indexes.resize(
-        std::distance( indexes.begin(), std::remove_if( indexes.begin(), indexes.end(), std::not1( std::bind2nd( std::ptr_fun( &TileIsObjects ), objs ) ) ) ) );
-
-    return indexes;
-}
-
-Maps::Indexes & MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj )
+Maps::Indexes & MapsIndexesFilteredObjects( const Maps::Indexes & indexes, const u8 * objs, bool checkUnderHero = false )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( TileIsObject( indexes[idx], obj ) ) {
+        const int objectID = world.GetTiles( idx ).GetObject( !checkUnderHero );
+        while ( objs && *objs ) {
+            if ( *objs == objectID )
+                result.push_back( idx );
+            ++objs;
+        }
+    }
+    return result;
+}
+
+Maps::Indexes & MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj, bool checkUnderHero = false )
+{
+    Maps::Indexes result;
+    for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
+        if ( world.GetTiles( idx ).GetObject( !checkUnderHero ) == obj ) {
             result.push_back( idx );
         }
     }
@@ -435,25 +426,14 @@ Maps::Indexes Maps::ScanAroundObjects( s32 center, u32 dist, const u8 * objs )
     return MapsIndexesFilteredObjects( results, objs );
 }
 
-Maps::Indexes Maps::GetObjectPositions( int obj, bool check_hero )
+Maps::Indexes Maps::GetObjectPositions( int obj, bool checkUnderHero )
 {
-    Maps::Indexes results = MapsIndexesFilteredObject( GetAllIndexes(), obj );
-
-    if ( check_hero && obj != MP2::OBJ_HEROES ) {
-        const Indexes & v = GetObjectPositions( MP2::OBJ_HEROES, false );
-        for ( Indexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-            const Heroes * hero = world.GetHeroes( GetPoint( *it ) );
-            if ( hero && obj == hero->GetMapsObject() )
-                results.push_back( *it );
-        }
-    }
-
-    return results;
+    return MapsIndexesFilteredObject( GetAllIndexes(), obj, checkUnderHero );
 }
 
-Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool check_hero )
+Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool checkUnderHero )
 {
-    Indexes results = Maps::GetObjectPositions( obj, check_hero );
+    Indexes results = MapsIndexesFilteredObject( GetAllIndexes(), obj, checkUnderHero );
     std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
     return results;
 }
