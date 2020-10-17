@@ -30,6 +30,10 @@ class Castle;
 class HeroBase;
 class Heroes;
 class Kingdom;
+namespace Maps
+{
+    class Tiles;
+}
 namespace Battle
 {
     class Arena;
@@ -74,6 +78,8 @@ namespace AI
         virtual void CastleTurn( Castle & castle, bool defensive = false );
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
         virtual void HeroTurn( Heroes & hero );
+
+        virtual void revealFog( const Maps::Tiles & tile );
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );

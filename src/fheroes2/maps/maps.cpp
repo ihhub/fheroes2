@@ -22,6 +22,7 @@
 
 #include <algorithm>
 
+#include "ai.h"
 #include "difficulty.h"
 #include "game.h"
 #include "icn.h"
@@ -372,7 +373,8 @@ void Maps::ClearFog( s32 index, int scoute, int color )
         const Settings & conf = Settings::Get();
 
         // AI advantage
-        if ( world.GetKingdom( color ).isControlAI() ) {
+        const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
+        if ( isAIPlayer ) {
             scoute += Difficulty::GetScoutingBonus( conf.GameDifficulty() );
         }
 
@@ -383,8 +385,12 @@ void Maps::ClearFog( s32 index, int scoute, int color )
             for ( s32 x = center.x - scoute; x <= center.x + scoute; ++x ) {
                 const s32 dx = x - center.x;
                 const s32 dy = y - center.y;
-                if ( isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy )
-                    world.GetTiles( GetIndexFromAbsPoint( x, y ) ).ClearFog( colors );
+                if ( isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
+                    Maps::Tiles & tile = world.GetTiles( GetIndexFromAbsPoint( x, y ) );
+                    tile.ClearFog( colors );
+                    if ( isAIPlayer )
+                        AI::Get().revealFog( tile );
+                }
             }
         }
     }
