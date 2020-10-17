@@ -1624,6 +1624,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
 
         if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
             RedrawObjects( dst );
+            RedrawMonstersAndBoat( dst );
         }
     }
 }
