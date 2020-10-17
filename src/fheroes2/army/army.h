@@ -67,6 +67,7 @@ public:
     bool HasMonster( const Monster & ) const;
 
     bool AllTroopsIsRace( int ) const;
+    bool AllTroopsAreUndead() const;
     u32 GetUniqueCount( void ) const;
 
     bool JoinTroop( const Troop & );
@@ -146,6 +147,7 @@ public:
     ~Army();
 
     void Reset( bool = false ); // reset: soft or hard
+    void setFromTile( const Maps::Tiles & tile );
 
     int GetRace( void ) const;
     int GetColor( void ) const;

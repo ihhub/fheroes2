@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "army.h"
 #include "color.h"
 #include "pathfinding.h"
 #include "route.h"
@@ -64,7 +65,9 @@ private:
 class AIWorldPathfinder : public WorldPathfinder
 {
 public:
-    AIWorldPathfinder() {}
+    AIWorldPathfinder( double advantage )
+        : _advantage( advantage )
+    {}
     virtual void reset() override;
 
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
@@ -83,4 +86,6 @@ private:
 
     int _currentColor = Color::NONE;
     double _armyStrength = -1;
+    double _advantage = 1.0;
+    Army _temporaryArmy; // for internal calculations
 };

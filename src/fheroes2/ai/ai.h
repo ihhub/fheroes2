@@ -63,6 +63,10 @@ namespace AI
         HERO_CHAMPION = 0x80000000
     };
 
+    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
+    const double ARMY_STRENGTH_ADVANTAGE_MEDUIM = 1.5;
+    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;
+
     class Base
     {
     public:

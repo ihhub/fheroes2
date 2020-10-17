@@ -28,6 +28,27 @@
 
 namespace SDL
 {
+    class Thread
+    {
+    public:
+        Thread();
+        ~Thread();
+        Thread( const Thread & );
+
+        Thread & operator=( const Thread & );
+
+        void Create( int ( * )( void * ), void * param = NULL );
+        int Wait( void );
+        void Kill( void );
+
+        bool IsRun( void ) const;
+
+        u32 GetID( void ) const;
+
+    private:
+        SDL_Thread * thread;
+    };
+
     class Timer
     {
     public:

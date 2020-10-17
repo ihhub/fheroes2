@@ -495,8 +495,12 @@ void Battle::Force::SyncArmyCount( bool checkResurrected )
         if ( troop && troop->isValid() ) {
             const Unit * unit = FindUID( uids.at( index ) );
 
-            if ( unit && unit->GetDead() )
-                troop->SetCount( unit->GetDead() > troop->GetCount() ? 0 : troop->GetCount() - unit->GetDead() );
+            if ( unit ) {
+                if ( unit->GetDead() )
+                    troop->SetCount( unit->GetDead() > troop->GetCount() ? 0 : troop->GetCount() - unit->GetDead() );
+                else if ( unit->GetID() == Monster::GHOST )
+                    troop->SetCount( unit->GetCount() );
+            }
         }
     }
 
