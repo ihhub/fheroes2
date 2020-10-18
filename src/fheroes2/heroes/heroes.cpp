@@ -30,6 +30,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
+#include "difficulty.h"
 #include "direction.h"
 #include "game.h"
 #include "game_interface.h"
@@ -646,6 +647,10 @@ u32 Heroes::GetMaxMovePoints( void ) const
     acount = HasArtifact( Artifact::TRUE_COMPASS_MOBILITY );
     if ( acount )
         point += acount * 500;
+
+    if ( isControlAI() ) {
+        point += Difficulty::GetHeroMovementBonus( Settings::Get().GameDifficulty() );
+    }
 
     return point;
 }

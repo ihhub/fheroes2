@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "ai_normal.h"
+#include "maps_tiles.h"
 
 namespace AI
 {
@@ -31,5 +32,10 @@ namespace AI
     void Normal::resetPathfinder()
     {
         _pathfinder.reset();
+    }
+
+    void Normal::revealFog( const Maps::Tiles & tile )
+    {
+        _mapObjects.emplace_back( tile.GetIndex(), tile.GetObject() );
     }
 }
