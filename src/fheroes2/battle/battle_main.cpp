@@ -48,6 +48,21 @@ namespace Battle
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 {
+    // Validate the arguments - check if battle should even load
+    if ( !army1.isValid() || !army2.isValid() ) {
+        Result result;
+        // Check second army first so attacker would win by default
+        if ( !army2.isValid() ) {
+            result.army1 = RESULT_WINS;
+            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() );
+        }
+        else {
+            result.army2 = RESULT_WINS;
+            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() );
+        }
+        return result;
+    }
+
     // pre battle army1
     if ( army1.GetCommander() ) {
         if ( army1.GetCommander()->isCaptain() )
