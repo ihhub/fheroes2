@@ -346,7 +346,7 @@ int Interface::Basic::EventDigArtifact( void )
 
                     // set all obelisks visited
                     Kingdom & kingdom = world.GetKingdom( hero->GetColor() );
-                    const MapsIndexes obelisks = Maps::GetObjectPositions( MP2::OBJ_OBELISK, true );
+                    const MapsIndexes obelisks = Maps::GetObjectPositions( MP2::OBJ_OBELISK, false );
 
                     for ( MapsIndexes::const_iterator it = obelisks.begin(); it != obelisks.end(); ++it )
                         if ( !hero->isVisited( world.GetTiles( *it ), Visit::GLOBAL ) )

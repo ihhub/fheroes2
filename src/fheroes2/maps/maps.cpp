@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <numeric>
 
 #include "ai.h"
 #include "difficulty.h"
@@ -70,33 +71,32 @@ void Maps::IndexesDistance::Assign( s32 from, const Indexes & indexes, int sort 
         std::sort( begin(), end(), IndexDistance::Longest );
 }
 
-bool TileIsObject( s32 index, int obj )
+Maps::Indexes MapsIndexesFilteredObjects( const Maps::Indexes & indexes, const u8 * objs, bool ignoreHeroes = true )
 {
-    return obj == world.GetTiles( index ).GetObject();
-}
+    Maps::Indexes result;
+    if ( !objs )
+        return result;
 
-bool TileIsObjects( s32 index, const u8 * objs )
-{
-    while ( objs && *objs ) {
-        if ( *objs == world.GetTiles( index ).GetObject() )
-            return true;
-        ++objs;
+    for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
+        const int objectID = world.GetTiles( indexes[idx] ).GetObject( ignoreHeroes );
+        while ( objs && *objs ) {
+            if ( *objs == objectID )
+                result.push_back( indexes[idx] );
+            ++objs;
+        }
     }
-    return false;
+    return result;
 }
 
-Maps::Indexes & MapsIndexesFilteredObjects( Maps::Indexes & indexes, const u8 * objs )
+Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj, bool ignoreHeroes = true )
 {
-    indexes.resize(
-        std::distance( indexes.begin(), std::remove_if( indexes.begin(), indexes.end(), std::not1( std::bind2nd( std::ptr_fun( &TileIsObjects ), objs ) ) ) ) );
-
-    return indexes;
-}
-
-Maps::Indexes & MapsIndexesFilteredObject( Maps::Indexes & indexes, int obj )
-{
-    indexes.resize( std::distance( indexes.begin(), std::remove_if( indexes.begin(), indexes.end(), std::not1( std::bind2nd( std::ptr_fun( &TileIsObject ), obj ) ) ) ) );
-    return indexes;
+    Maps::Indexes result;
+    for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
+        if ( world.GetTiles( indexes[idx] ).GetObject( ignoreHeroes ) == obj ) {
+            result.push_back( indexes[idx] );
+        }
+    }
+    return result;
 }
 
 const char * Maps::SizeString( int s )
@@ -277,10 +277,8 @@ s32 Maps::GetIndexFromAbsPoint( s32 px, s32 py )
 Maps::Indexes Maps::GetAllIndexes( void )
 {
     Indexes result;
-    result.assign( world.w() * world.h(), 0 );
-
-    for ( Indexes::iterator it = result.begin(); it != result.end(); ++it )
-        *it = std::distance( result.begin(), it );
+    result.resize( world.getSize() );
+    std::iota( result.begin(), result.end(), 0 );
     return result;
 }
 
@@ -420,26 +418,14 @@ Maps::Indexes Maps::ScanAroundObjects( s32 center, u32 dist, const u8 * objs )
     return MapsIndexesFilteredObjects( results, objs );
 }
 
-Maps::Indexes Maps::GetObjectPositions( int obj, bool check_hero )
+Maps::Indexes Maps::GetObjectPositions( int obj, bool ignoreHeroes )
 {
-    Maps::Indexes results = GetAllIndexes();
-    MapsIndexesFilteredObject( results, obj );
-
-    if ( check_hero && obj != MP2::OBJ_HEROES ) {
-        const Indexes & v = GetObjectPositions( MP2::OBJ_HEROES, false );
-        for ( Indexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-            const Heroes * hero = world.GetHeroes( GetPoint( *it ) );
-            if ( hero && obj == hero->GetMapsObject() )
-                results.push_back( *it );
-        }
-    }
-
-    return results;
+    return MapsIndexesFilteredObject( GetAllIndexes(), obj, ignoreHeroes );
 }
 
-Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool check_hero )
+Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool ignoreHeroes )
 {
-    Indexes results = Maps::GetObjectPositions( obj, check_hero );
+    Indexes results = MapsIndexesFilteredObject( GetAllIndexes(), obj, ignoreHeroes );
     std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
     return results;
 }
