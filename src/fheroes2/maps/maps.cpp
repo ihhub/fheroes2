@@ -74,6 +74,9 @@ void Maps::IndexesDistance::Assign( s32 from, const Indexes & indexes, int sort 
 Maps::Indexes MapsIndexesFilteredObjects( const Maps::Indexes & indexes, const u8 * objs, bool ignoreHeroes = true )
 {
     Maps::Indexes result;
+    if ( !objs )
+        return result;
+
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
         const int objectID = world.GetTiles( indexes[idx] ).GetObject( ignoreHeroes );
         while ( objs && *objs ) {
