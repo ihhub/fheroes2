@@ -143,6 +143,8 @@ namespace Maps
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
         void SetObject( int object );
         void SetIndex( int );
+        void setBoat( int direction );
+        void resetObjectSprite();
 
         void FixObject( void );
 

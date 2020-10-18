@@ -30,6 +30,10 @@ class Castle;
 class HeroBase;
 class Heroes;
 class Kingdom;
+namespace Maps
+{
+    class Tiles;
+}
 namespace Battle
 {
     class Arena;
@@ -53,7 +57,6 @@ namespace AI
 
     enum modes_t
     {
-        HERO_PATROL = 0x01000000,
         HERO_SKIP_TURN = 0x02000000,
         HERO_WAITING = 0x04000000,
         HERO_MOVED = 0x08000000,
@@ -74,6 +77,8 @@ namespace AI
         virtual void CastleTurn( Castle & castle, bool defensive = false );
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
         virtual void HeroTurn( Heroes & hero );
+
+        virtual void revealFog( const Maps::Tiles & tile );
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
