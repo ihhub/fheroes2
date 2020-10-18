@@ -1137,12 +1137,16 @@ double Army::GetStrength( void ) const
 {
     double res = 0;
     const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+    // Hero bonus calculation is slow, cache it
+    const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
+    const int bonusDefense = ( commander ? commander->GetDefense() : 0 );
     const int armyMorale = GetMorale();
+    const int armyLuck = GetLuck();
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Troop * troop = *it;
         if ( troop != NULL && troop->isValid() ) {
-            double strength = troop->GetStrength();
+            double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
 
             if ( archery > 0 && troop->isArchers() ) {
                 strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
@@ -1152,7 +1156,7 @@ double Army::GetStrength( void ) const
             if ( troop->isAffectedByMorale() )
                 strength *= 1 + ( ( armyMorale < 0 ) ? armyMorale / 12.0 : armyMorale / 24.0 );
 
-            strength *= 1 + troop->GetLuck() / 24.0;
+            strength *= 1 + armyLuck / 24.0;
 
             res += strength;
         }

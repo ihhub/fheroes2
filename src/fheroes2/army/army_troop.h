@@ -67,6 +67,7 @@ public:
     virtual u32 GetSpeed( void ) const;
     virtual u32 GetAffectedDuration( u32 ) const;
     virtual double GetStrength() const;
+    virtual double GetStrengthWithBonus( int attack, int defense ) const;
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Troop & );

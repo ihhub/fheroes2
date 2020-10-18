@@ -117,6 +117,11 @@ double Troop::GetStrength() const
     return Monster::GetMonsterStrength() * count;
 }
 
+double Troop::GetStrengthWithBonus( int attack, int defense ) const
+{
+    return Monster::GetMonsterStrength( attack, defense ) * count;
+}
+
 bool Troop::isValid( void ) const
 {
     return Monster::isValid() && count;
