@@ -40,7 +40,7 @@ namespace AI
         void revealFog( const Maps::Tiles & tile );
 
         void HeroesActionComplete( Heroes & hero, int index );
-        int GetPriorityTarget( const Heroes & hero );
+        int GetPriorityTarget( const Heroes & hero, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder();
 
     private:

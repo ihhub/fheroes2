@@ -57,7 +57,6 @@ namespace AI
 
     enum modes_t
     {
-        HERO_PATROL = 0x01000000,
         HERO_SKIP_TURN = 0x02000000,
         HERO_WAITING = 0x04000000,
         HERO_MOVED = 0x08000000,
