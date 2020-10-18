@@ -2062,6 +2062,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
 
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
+                tile.SetQuantity3( 0 );
             }
             else {
                 capture = false;
