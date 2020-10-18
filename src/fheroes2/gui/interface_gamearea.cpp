@@ -60,7 +60,7 @@ void Interface::GameArea::ShiftCenter( const Point & offset )
 
 Rect Interface::GameArea::RectFixed( Point & dst, int rw, int rh ) const
 {
-    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst.x, dst.y, rw, rh ), interface.GetGameArea().GetROI() );
+    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst.x, dst.y, rw, rh ), GetROI() );
     dst = res.second;
     return res.first;
 }
