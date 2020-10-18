@@ -259,6 +259,7 @@ public:
     MapEvent * GetMapEvent( const Point & );
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
+    const MapRegion * getRegion( size_t id );
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
     bool isValidPath( int index, int direction ) const;
@@ -310,6 +311,7 @@ private:
     MapActions map_actions;
     MapObjects map_objects;
 
+    // This data isn't serialized
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };

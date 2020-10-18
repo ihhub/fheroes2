@@ -52,20 +52,17 @@ struct MapRegionNode
     {}
 };
 
-struct MapRegion
+class MapRegion
 {
-    int id = REGION_NODE_FOUND;
-    bool isWater = false;
-    std::set<int> neighbours;
-    std::vector<MapRegionNode> nodes;
-    size_t lastProcessedNode = 0;
+public:
+    int _id = REGION_NODE_FOUND;
+    bool _isWater = false;
+    std::set<int> _neighbours;
+    std::vector<MapRegionNode> _nodes;
+    size_t _lastProcessedNode = 0;
 
-    MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize )
-        : id( REGION_NODE_FOUND + regionIndex )
-        , isWater( water )
-    {
-        nodes.reserve( expectedSize );
-        nodes.push_back( { mapIndex } );
-        nodes[0].type = id;
-    }
+    MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
+    std::vector<int> getNeighbours() const;
+    std::vector<std::pair<int, int> > getObjectList() const;
+    double getFogRatio( int color ) const;
 };

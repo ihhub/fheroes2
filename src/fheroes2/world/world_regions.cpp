@@ -87,18 +87,18 @@ namespace
 
     void CheckAdjacentTiles( std::vector<MapRegionNode> & rawData, MapRegion & region, uint32_t rawDataWidth, const std::vector<int> & offsets )
     {
-        const int nodeIndex = region.nodes[region.lastProcessedNode].index;
+        const int nodeIndex = region._nodes[region._lastProcessedNode].index;
 
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             MapRegionNode & newTile = rawData[newIndex];
             if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
-                if ( newTile.type == REGION_NODE_OPEN && newTile.isWater == region.isWater ) {
-                    newTile.type = region.id;
-                    region.nodes.push_back( newTile );
+                if ( newTile.type == REGION_NODE_OPEN && newTile.isWater == region._isWater ) {
+                    newTile.type = region._id;
+                    region._nodes.push_back( newTile );
                 }
-                else if ( newTile.type > REGION_NODE_FOUND && newTile.type != region.id ) {
-                    region.neighbours.insert( newTile.type );
+                else if ( newTile.type > REGION_NODE_FOUND && newTile.type != region._id ) {
+                    region._neighbours.insert( newTile.type );
                 }
             }
         }
@@ -107,34 +107,75 @@ namespace
     void RegionExpansion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region, const std::vector<int> & offsets )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added
-        const size_t nodesEnd = region.nodes.size();
+        const size_t nodesEnd = region._nodes.size();
 
-        while ( region.lastProcessedNode < nodesEnd ) {
+        while ( region._lastProcessedNode < nodesEnd ) {
             CheckAdjacentTiles( rawData, region, rawDataWidth, offsets );
-            ++region.lastProcessedNode;
+            ++region._lastProcessedNode;
+        }
+    }
+
+    void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapSize, std::vector<MapRegion> & regions )
+    {
+        const uint32_t extendedWidth = mapSize.w + 2;
+
+        MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
+        MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
+        const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
+
+        for ( ; currentTile != mapEnd; ++currentTile ) {
+            if ( currentTile->type == REGION_NODE_OPEN ) {
+                regions.emplace_back( static_cast<int>( regions.size() ), currentTile->index, currentTile->isWater, extendedWidth );
+
+                MapRegion & region = regions.back();
+                do {
+                    CheckAdjacentTiles( rawData, region, extendedWidth, offsets );
+                    ++region._lastProcessedNode;
+                } while ( region._lastProcessedNode != region._nodes.size() );
+            }
         }
     }
 }
 
-void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapSize, std::vector<MapRegion> & regions )
+MapRegion::MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize )
+    : _id( REGION_NODE_FOUND + regionIndex )
+    , _isWater( water )
 {
-    const uint32_t extendedWidth = mapSize.w + 2;
+    _nodes.reserve( expectedSize );
+    _nodes.push_back( { mapIndex } );
+    _nodes[0].type = _id;
+}
 
-    MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
-    MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
-    const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
+std::vector<int> MapRegion::getNeighbours() const
+{
+    return std::vector<int>( _neighbours.begin(), _neighbours.end() );
+}
 
-    for ( ; currentTile != mapEnd; ++currentTile ) {
-        if ( currentTile->type == REGION_NODE_OPEN ) {
-            regions.emplace_back( static_cast<int>( regions.size() ), currentTile->index, currentTile->isWater, extendedWidth );
+std::vector<std::pair<int, int> > MapRegion::getObjectList() const
+{
+    std::vector<std::pair<int, int> > result;
 
-            MapRegion & region = regions.back();
-            do {
-                CheckAdjacentTiles( rawData, region, extendedWidth, offsets );
-                ++region.lastProcessedNode;
-            } while ( region.lastProcessedNode != region.nodes.size() );
+    for ( const MapRegionNode & node : _nodes ) {
+        if ( node.mapObject != 0 ) {
+            result.emplace_back( node.index, node.mapObject );
         }
     }
+    return result;
+}
+
+double MapRegion::getFogRatio( int color ) const
+{
+    double fogCount = 0;
+    for ( const MapRegionNode & node : _nodes ) {
+        if ( world.GetTiles( node.index ).isFog( color ) )
+            ++fogCount;
+    }
+    return fogCount / _nodes.size();
+}
+
+const MapRegion * World::getRegion( size_t id )
+{
+    return ( id < _regions.size() ) ? &_regions[id] : NULL;
 }
 
 void World::ComputeStaticAnalysis()
@@ -269,9 +310,11 @@ void World::ComputeStaticAnalysis()
             MapRegionNode & node = data[ConvertExtendedIndex( index, extendedWidth )];
 
             node.index = index;
-            node.mapObject = tile.GetObject();
             node.passable = tile.GetPassable();
             node.isWater = tile.isWater();
+
+            const int object = tile.GetObject();
+            node.mapObject = MP2::isActionObject( object, node.isWater ) ? object : 0;
             if ( node.passable != 0 ) {
                 node.type = REGION_NODE_OPEN;
             }
@@ -295,7 +338,7 @@ void World::ComputeStaticAnalysis()
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
             MapRegion & region = _regions[regionID];
             RegionExpansion( data, extendedWidth, region, offsets );
-            if ( region.lastProcessedNode != region.nodes.size() )
+            if ( region._lastProcessedNode != region._nodes.size() )
                 stillRoomToExpand = true;
         }
     }
@@ -305,7 +348,7 @@ void World::ComputeStaticAnalysis()
 
     // Assign regions to the map tiles
     for ( const MapRegion & reg : _regions ) {
-        for ( const MapRegionNode & node : reg.nodes ) {
+        for ( const MapRegionNode & node : reg._nodes ) {
             vec_tiles[node.index].UpdateRegion( node.type );
         }
     }
