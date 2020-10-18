@@ -2401,17 +2401,17 @@ bool Castle::BuyBoat( void )
     if ( MP2::OBJ_ZERO == left.GetObject() && left.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        left.SetObject( MP2::OBJ_BOAT );
+        left.setBoat( Direction::RIGHT );
     }
     else if ( MP2::OBJ_ZERO == right.GetObject() && right.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        right.SetObject( MP2::OBJ_BOAT );
+        right.setBoat( Direction::RIGHT );
     }
     else if ( MP2::OBJ_ZERO == middle.GetObject() && middle.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        middle.SetObject( MP2::OBJ_BOAT );
+        middle.setBoat( Direction::RIGHT );
     }
 
     return true;
