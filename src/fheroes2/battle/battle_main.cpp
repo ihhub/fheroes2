@@ -54,11 +54,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         // Check second army first so attacker would win by default
         if ( !army2.isValid() ) {
             result.army1 = RESULT_WINS;
-            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detercted! Index " << mapsindex << ", Army: " << army2.String() );
+            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() );
         }
         else {
             result.army2 = RESULT_WINS;
-            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detercted! Index " << mapsindex << ", Army: " << army1.String() );
+            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() );
         }
         return result;
     }
