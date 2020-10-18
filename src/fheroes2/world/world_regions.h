@@ -18,22 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <set>
+#pragma once
 
-#include "world.h"
+#include <set>
+#include <vector>
 
 enum
 {
-    BLOCKED = 0,
-    OPEN = 1,
-    BORDER = 2,
-    REGION = 3
+    REGION_NODE_BLOCKED = 0,
+    REGION_NODE_OPEN = 1,
+    REGION_NODE_BORDER = 2,
+    REGION_NODE_FOUND = 3
 };
 
 struct MapRegionNode
 {
     int index = -1;
-    int type = BLOCKED;
+    int type = REGION_NODE_BLOCKED;
     uint16_t mapObject = 0;
     uint16_t passable = 0;
     bool isWater = false;
@@ -41,11 +42,11 @@ struct MapRegionNode
     MapRegionNode() {}
     MapRegionNode( int index )
         : index( index )
-        , type( OPEN )
+        , type( REGION_NODE_OPEN )
     {}
     MapRegionNode( int index, uint16_t pass, bool water )
         : index( index )
-        , type( OPEN )
+        , type( REGION_NODE_OPEN )
         , passable( pass )
         , isWater( water )
     {}
@@ -53,14 +54,14 @@ struct MapRegionNode
 
 struct MapRegion
 {
-    int id = REGION;
+    int id = REGION_NODE_FOUND;
     bool isWater = false;
     std::set<int> neighbours;
     std::vector<MapRegionNode> nodes;
     size_t lastProcessedNode = 0;
 
     MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize )
-        : id( REGION + regionIndex )
+        : id( REGION_NODE_FOUND + regionIndex )
         , isWater( water )
     {
         nodes.reserve( expectedSize );

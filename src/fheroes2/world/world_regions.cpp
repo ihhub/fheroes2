@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "world_regions.h"
 #include "ground.h"
+#include "world.h"
 
 namespace
 {
@@ -28,6 +28,8 @@ namespace
     using TileData = std::pair<int, int>;
     using TileDataVector = std::vector<std::pair<int, int> >;
 
+    // Values in Direction namespace can't be used as index, use a custom value here
+    // Converted into bitfield later
     enum
     {
         TOP_LEFT = 0,
@@ -91,11 +93,11 @@ namespace
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             MapRegionNode & newTile = rawData[newIndex];
             if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
-                if ( newTile.type == OPEN && newTile.isWater == region.isWater ) {
+                if ( newTile.type == REGION_NODE_OPEN && newTile.isWater == region.isWater ) {
                     newTile.type = region.id;
                     region.nodes.push_back( newTile );
                 }
-                else if ( newTile.type > REGION && newTile.type != region.id ) {
+                else if ( newTile.type > REGION_NODE_FOUND && newTile.type != region.id ) {
                     region.neighbours.insert( newTile.type );
                 }
             }
@@ -123,7 +125,7 @@ void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapS
     const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
 
     for ( ; currentTile != mapEnd; ++currentTile ) {
-        if ( currentTile->type == OPEN ) {
+        if ( currentTile->type == REGION_NODE_OPEN ) {
             regions.emplace_back( static_cast<int>( regions.size() ), currentTile->index, currentTile->isWater, extendedWidth );
 
             MapRegion & region = regions.back();
@@ -267,10 +269,11 @@ void World::ComputeStaticAnalysis()
             MapRegionNode & node = data[ConvertExtendedIndex( index, extendedWidth )];
 
             node.index = index;
+            node.mapObject = tile.GetObject();
             node.passable = tile.GetPassable();
             node.isWater = tile.isWater();
             if ( node.passable != 0 ) {
-                node.type = OPEN;
+                node.type = REGION_NODE_OPEN;
             }
         }
     }
@@ -278,11 +281,10 @@ void World::ComputeStaticAnalysis()
     // Step 6. Initialize regions
     size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
 
-    std::vector<MapRegion> regions;
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
         const int tileIndex = regionCenters[regionID];
-        regions.emplace_back( static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
-        data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION + regionID;
+        _regions.emplace_back( static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
+        data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION_NODE_FOUND + regionID;
     }
 
     // Step 7. Grow all regions one step at the time so they would compete for space
@@ -291,7 +293,7 @@ void World::ComputeStaticAnalysis()
     while ( stillRoomToExpand ) {
         stillRoomToExpand = false;
         for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-            MapRegion & region = regions[regionID];
+            MapRegion & region = _regions[regionID];
             RegionExpansion( data, extendedWidth, region, offsets );
             if ( region.lastProcessedNode != region.nodes.size() )
                 stillRoomToExpand = true;
@@ -299,10 +301,10 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
-    FindMissingRegions( data, Size( width, height ), regions );
+    FindMissingRegions( data, Size( width, height ), _regions );
 
     // Assign regions to the map tiles
-    for ( const MapRegion & reg : regions ) {
+    for ( const MapRegion & reg : _regions ) {
         for ( const MapRegionNode & node : reg.nodes ) {
             vec_tiles[node.index].UpdateRegion( node.type );
         }

@@ -33,6 +33,7 @@
 #include "maps_tiles.h"
 #include "week.h"
 #include "world_pathfinding.h"
+#include "world_regions.h"
 #include <string>
 
 class Heroes;
@@ -308,6 +309,8 @@ private:
 
     MapActions map_actions;
     MapObjects map_objects;
+
+    std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };
 
