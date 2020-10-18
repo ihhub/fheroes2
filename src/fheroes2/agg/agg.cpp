@@ -725,7 +725,6 @@ namespace fheroes2
 
         const uint32_t headerSize = 6;
 
-        const std::set<int> _scalableICNIds{ICN::HEROES, ICN::BTNSHNGL, ICN::SHNGANIM};
         std::map<int, std::vector<fheroes2::Sprite> > _icnVsScaledSprite;
 
         void PrepareICNImages()
@@ -1181,7 +1180,7 @@ namespace fheroes2
         // We have few ICNs which we need to scale like some related to main screen
         bool IsScalableICN( int id )
         {
-            return std::find( _scalableICNIds.begin(), _scalableICNIds.end(), id ) != _scalableICNIds.end();
+            return id == ICN::HEROES || id == ICN::BTNSHNGL || id == ICN::SHNGANIM;
         }
 
         const Sprite & GetScaledICN( int icnId, uint32_t index )
