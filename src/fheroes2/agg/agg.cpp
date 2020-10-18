@@ -43,8 +43,6 @@
 #include "text.h"
 #include "xmi.h"
 
-#include "../../tools/palette_h2.h"
-
 #ifdef WITH_ZLIB
 #include "embedded_image.h"
 #include "zzlib.h"

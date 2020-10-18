@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "image.h"
-#include "../../tools/palette_h2.h"
+#include "palette_h2.h"
 
 #include <cmath>
 #include <cstring>

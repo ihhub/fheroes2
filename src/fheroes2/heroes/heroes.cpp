@@ -30,6 +30,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
+#include "difficulty.h"
 #include "direction.h"
 #include "game.h"
 #include "game_interface.h"
@@ -647,6 +648,10 @@ u32 Heroes::GetMaxMovePoints( void ) const
     if ( acount )
         point += acount * 500;
 
+    if ( isControlAI() ) {
+        point += Difficulty::GetHeroMovementBonus( Settings::Get().GameDifficulty() );
+    }
+
     return point;
 }
 
@@ -941,7 +946,7 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
         break;
     }
 
-    if ( tile.GetObject() == object && wide ) {
+    if ( tile.GetObject( false ) == object && wide ) {
         for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );

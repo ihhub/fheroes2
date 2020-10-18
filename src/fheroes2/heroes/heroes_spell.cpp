@@ -339,7 +339,7 @@ bool ActionSpellSummonBoat( Heroes & hero )
         if ( Maps::isValidAbsIndex( boat ) ) {
             if ( Rand::Get( 1, 100 ) <= chance ) {
                 world.GetTiles( boat ).SetObject( MP2::OBJ_ZERO );
-                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
+                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( 27, 18, dst_water, 0, false ) );
                 return true;
             }
             break;
