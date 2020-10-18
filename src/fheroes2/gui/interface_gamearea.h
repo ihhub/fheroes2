@@ -115,7 +115,6 @@ namespace Interface
         Point _getStartTileId() const;
         void _setCenterToTile( const Point & tile ); // set center to the middle of tile (input is tile ID)
         void _setCenter( const Point & point ); // in pixels
-        Point _getRelativePosition( const Point & point ) const; // returns relative to screen position
     };
 }
 

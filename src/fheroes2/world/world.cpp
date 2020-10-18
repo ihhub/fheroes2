@@ -348,16 +348,6 @@ void World::InitKingdoms( void )
     vec_kingdoms.Init();
 }
 
-s32 World::w( void ) const
-{
-    return Size::w;
-}
-
-s32 World::h( void ) const
-{
-    return Size::h;
-}
-
 const Maps::Tiles & World::GetTiles( u32 ax, u32 ay ) const
 {
     return GetTiles( ay * w() + ax );
