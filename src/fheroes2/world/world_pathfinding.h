@@ -73,13 +73,20 @@ public:
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );
     int getFogDiscoveryTile( const Heroes & hero );
-    uint32_t getDistance( const Heroes & hero, int targetIndex );
+    virtual uint32_t getDistance( const Heroes & hero, int targetIndex );
 
     // Used for non-hero armies, like castles or monsters
-    uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
+    virtual uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
     // Override builds path to the nearest valid object
     virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
+
+    // Faster, but does not re-evaluate the map
+    // Base class implementation is hidden by finicky override logic, expose it
+    virtual uint32_t getDistance( int targetIndex )
+    {
+        return Pathfinder::getDistance( targetIndex );
+    }
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );

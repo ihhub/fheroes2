@@ -77,10 +77,13 @@ namespace AI
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         int objectID = MP2::OBJ_ZERO;
 
+        // pre-cache the pathfinder
+        _pathfinder.reEvaluateIfNeeded( hero );
+
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const MapObjectNode & node = _mapObjects[idx];
             if ( HeroesValidObject( hero, node.first ) ) {
-                const uint32_t dist = _pathfinder.getDistance( hero, node.first );
+                const uint32_t dist = _pathfinder.getDistance( node.first );
                 if ( dist == 0 )
                     continue;
 
