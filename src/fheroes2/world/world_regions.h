@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <set>
+
 #include "world.h"
 
 enum
@@ -32,6 +34,7 @@ struct MapRegionNode
 {
     int index = -1;
     int type = BLOCKED;
+    uint16_t mapObject = 0;
     uint16_t passable = 0;
     bool isWater = false;
 
@@ -48,25 +51,12 @@ struct MapRegionNode
     {}
 };
 
-struct RegionBorderNode
-{
-    int index = -1;
-    bool isCoast = false;
-    std::vector<int> neighbours;
-    RegionBorderNode( int index )
-        : index( index )
-    {
-        neighbours.reserve( 8 );
-    }
-};
-
 struct MapRegion
 {
     int id = REGION;
     bool isWater = false;
-    std::vector<MapRegion *> neighbours;
+    std::set<int> neighbours;
     std::vector<MapRegionNode> nodes;
-    std::vector<RegionBorderNode> borders;
     size_t lastProcessedNode = 0;
 
     MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize )
@@ -74,7 +64,6 @@ struct MapRegion
         , isWater( water )
     {
         nodes.reserve( expectedSize );
-        borders.reserve( expectedSize / 4 );
         nodes.push_back( { mapIndex } );
         nodes[0].type = id;
     }

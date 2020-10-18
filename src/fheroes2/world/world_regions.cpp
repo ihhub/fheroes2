@@ -87,8 +87,6 @@ namespace
     {
         const int nodeIndex = region.nodes[region.lastProcessedNode].index;
 
-        // TODO: make this variable non-static
-        static std::vector<int> neighbourIDs;
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             MapRegionNode & newTile = rawData[newIndex];
@@ -98,16 +96,9 @@ namespace
                     region.nodes.push_back( newTile );
                 }
                 else if ( newTile.type > REGION && newTile.type != region.id ) {
-                    neighbourIDs.push_back( newTile.type );
+                    region.neighbours.insert( newTile.type );
                 }
             }
-        }
-
-        if ( !neighbourIDs.empty() ) {
-            RegionBorderNode border( nodeIndex );
-            neighbourIDs.push_back( region.id );
-            border.neighbours.swap( neighbourIDs );
-            region.borders.push_back( border );
         }
     }
 
