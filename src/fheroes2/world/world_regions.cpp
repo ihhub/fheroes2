@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "world.h"
-#include <ground.h>
+#include "world_regions.h"
+#include "ground.h"
 
 namespace
 {
@@ -27,14 +27,6 @@ namespace
     // TileData.first is index, TileData.second is payload
     using TileData = std::pair<int, int>;
     using TileDataVector = std::vector<std::pair<int, int> >;
-
-    enum
-    {
-        BLOCKED = 0,
-        OPEN = 1,
-        BORDER = 2,
-        REGION = 3
-    };
 
     enum
     {
@@ -72,67 +64,6 @@ namespace
         offsets[LEFT] = -1;
         return offsets;
     }
-
-    struct MapRegionNode
-    {
-        int index = -1;
-        int type = BLOCKED;
-        uint16_t passable = 0;
-        bool isWater = false;
-
-        MapRegionNode() {}
-        MapRegionNode( int index )
-            : index( index )
-            , type( OPEN )
-        {}
-        MapRegionNode( int index, uint16_t pass, bool water )
-            : index( index )
-            , type( OPEN )
-            , passable( pass )
-            , isWater( water )
-        {}
-    };
-
-    struct RegionBorderNode
-    {
-        int index = -1;
-        bool isCoast = false;
-        std::vector<int> neighbours;
-        RegionBorderNode( int index )
-            : index( index )
-        {
-            neighbours.reserve( 8 );
-        }
-    };
-
-    struct MapRegion
-    {
-        int id = REGION;
-        bool isWater = false;
-        std::vector<MapRegion *> neighbours;
-        std::vector<MapRegionNode> nodes;
-        std::vector<RegionBorderNode> borders;
-        size_t lastProcessedNode = 0;
-
-        MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize )
-            : id( REGION + regionIndex )
-            , isWater( water )
-        {
-            nodes.reserve( expectedSize );
-            borders.reserve( expectedSize / 4 );
-            nodes.push_back( {mapIndex} );
-            nodes[0].type = id;
-        }
-    };
-
-    struct RegionLinkRoute : std::list<int>
-    {
-        int _indexFrom;
-        int _indexTo;
-        size_t _length;
-        uint32_t _basePenalty;
-        uint32_t _roughTerrainPenalty;
-    };
 
     int ConvertExtendedIndex( int index, uint32_t width )
     {
