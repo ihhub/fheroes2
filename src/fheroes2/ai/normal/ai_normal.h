@@ -37,6 +37,8 @@ namespace AI
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
         void HeroTurn( Heroes & hero );
 
+        void revealFog( const Maps::Tiles & tile );
+
         void HeroesActionComplete( Heroes & hero, int index );
         int GetPriorityTarget( const Heroes & hero );
         void resetPathfinder();

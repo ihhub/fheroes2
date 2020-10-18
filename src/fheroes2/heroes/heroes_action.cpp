@@ -907,6 +907,7 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     hero.SetMapsObject( MP2::OBJ_ZERO );
+    world.GetTiles( dst_index ).resetObjectSprite();
     hero.SetShipMaster( true );
     hero.GetPath().Reset();
 
@@ -918,14 +919,15 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     if ( !hero.isShipMaster() )
         return;
 
-    Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
+    const int fromIndex = hero.GetIndex();
+    Maps::Tiles & from = world.GetTiles( fromIndex );
 
     const Point & destPos = Maps::GetPoint( dst_index );
     const Point offset( destPos - hero.GetCenter() );
 
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
-    from.SetObject( MP2::OBJ_BOAT );
+    from.setBoat( Maps::GetDirection( fromIndex, dst_index ) );
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -2060,6 +2062,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
 
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
+                tile.SetQuantity3( 0 );
             }
             else {
                 capture = false;

@@ -455,6 +455,9 @@ void Castle::ActionNewWeek( void )
                 if ( ( dwellings1[ii] == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) )
                     growth += GetGrownWel2();
 
+                if ( isControlAI() )
+                    growth *= Difficulty::GetUnitGrowthBonus( Settings::Get().GameDifficulty() );
+
                 // neutral town: half population (normal for begin month)
                 if ( isNeutral && !world.BeginMonth() )
                     growth /= 2;
@@ -2398,17 +2401,17 @@ bool Castle::BuyBoat( void )
     if ( MP2::OBJ_ZERO == left.GetObject() && left.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        left.SetObject( MP2::OBJ_BOAT );
+        left.setBoat( Direction::RIGHT );
     }
     else if ( MP2::OBJ_ZERO == right.GetObject() && right.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        right.SetObject( MP2::OBJ_BOAT );
+        right.setBoat( Direction::RIGHT );
     }
     else if ( MP2::OBJ_ZERO == middle.GetObject() && middle.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        middle.SetObject( MP2::OBJ_BOAT );
+        middle.setBoat( Direction::RIGHT );
     }
 
     return true;

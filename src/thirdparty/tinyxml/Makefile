@@ -2,7 +2,7 @@
 # xml wrapper
 # http://www.sourceforge.net/projects/tinyxml
 
-TARGET	:= libxmlccwrap
+TARGET	:= libtinyxml
 
 all: $(TARGET).a
 
