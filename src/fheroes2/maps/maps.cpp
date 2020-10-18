@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <numeric>
 
 #include "ai.h"
 #include "difficulty.h"
@@ -70,11 +71,11 @@ void Maps::IndexesDistance::Assign( s32 from, const Indexes & indexes, int sort 
         std::sort( begin(), end(), IndexDistance::Longest );
 }
 
-Maps::Indexes MapsIndexesFilteredObjects( const Maps::Indexes & indexes, const u8 * objs, bool checkUnderHero = false )
+Maps::Indexes MapsIndexesFilteredObjects( const Maps::Indexes & indexes, const u8 * objs, bool ignoreHeroes = true )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        const int objectID = world.GetTiles( indexes[idx] ).GetObject( !checkUnderHero );
+        const int objectID = world.GetTiles( indexes[idx] ).GetObject( ignoreHeroes );
         while ( objs && *objs ) {
             if ( *objs == objectID )
                 result.push_back( indexes[idx] );
@@ -84,11 +85,11 @@ Maps::Indexes MapsIndexesFilteredObjects( const Maps::Indexes & indexes, const u
     return result;
 }
 
-Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj, bool checkUnderHero = false )
+Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj, bool ignoreHeroes = true )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( world.GetTiles( indexes[idx] ).GetObject( !checkUnderHero ) == obj ) {
+        if ( world.GetTiles( indexes[idx] ).GetObject( ignoreHeroes ) == obj ) {
             result.push_back( indexes[idx] );
         }
     }
@@ -273,11 +274,8 @@ s32 Maps::GetIndexFromAbsPoint( s32 px, s32 py )
 Maps::Indexes Maps::GetAllIndexes( void )
 {
     Indexes result;
-    const size_t mapSize = world.getSize();
-    result.reserve( mapSize );
-
-    for ( size_t idx = 0; idx < mapSize; ++idx )
-        result.push_back( idx );
+    result.resize( world.getSize() );
+    std::iota( result.begin(), result.end(), 0 );
     return result;
 }
 
@@ -417,14 +415,14 @@ Maps::Indexes Maps::ScanAroundObjects( s32 center, u32 dist, const u8 * objs )
     return MapsIndexesFilteredObjects( results, objs );
 }
 
-Maps::Indexes Maps::GetObjectPositions( int obj, bool checkUnderHero )
+Maps::Indexes Maps::GetObjectPositions( int obj, bool ignoreHeroes )
 {
-    return MapsIndexesFilteredObject( GetAllIndexes(), obj, checkUnderHero );
+    return MapsIndexesFilteredObject( GetAllIndexes(), obj, ignoreHeroes );
 }
 
-Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool checkUnderHero )
+Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool ignoreHeroes )
 {
-    Indexes results = MapsIndexesFilteredObject( GetAllIndexes(), obj, checkUnderHero );
+    Indexes results = MapsIndexesFilteredObject( GetAllIndexes(), obj, ignoreHeroes );
     std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
     return results;
 }

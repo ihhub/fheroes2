@@ -85,8 +85,8 @@ namespace Maps
     bool TileIsUnderProtection( s32 );
     bool IsNearTiles( s32, s32 );
 
-    Indexes GetObjectPositions( int obj, bool checkUnderHero );
-    Indexes GetObjectPositions( s32, int obj, bool checkUnderHero );
+    Indexes GetObjectPositions( int obj, bool ignoreHeroes );
+    Indexes GetObjectPositions( s32, int obj, bool ignoreHeroes );
     Indexes GetObjectsPositions( const u8 * objs );
 
     int TileIsCoast( s32, int direct = DIRECTION_ALL );
