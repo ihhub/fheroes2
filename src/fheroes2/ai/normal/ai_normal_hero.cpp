@@ -29,7 +29,7 @@
 
 namespace AI
 {
-    double GetObjectValue( int index, int objectID )
+    double GetObjectValue( int color, int index, int objectID )
     {
         // In the future these hardcoded values could be configured by the mod
         const Maps::Tiles & tile = world.GetTiles( index );
@@ -56,11 +56,10 @@ namespace AI
             return 400.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return 500.0;
+            return world.getRegion( tile.GetRegion() ).getFogRatio( color ) * 1500;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
-            // de-prioritize the landing
-            return -1500.0;
+            return ( world.getRegion( tile.GetRegion() ).getValue() - 30 ) * 50.0;
         }
         else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
             // de-prioritize the water movement even harder
@@ -72,6 +71,7 @@ namespace AI
 
     int AI::Normal::GetPriorityTarget( const Heroes & hero, int patrolIndex, uint32_t distanceLimit )
     {
+        const int heroColor = hero.GetColor();
         const bool heroInPatrolMode = patrolIndex != -1;
         int priorityTarget = -1;
 
@@ -90,7 +90,7 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                const double value = GetObjectValue( node.first, node.second ) - static_cast<double>( dist );
+                const double value = GetObjectValue( heroColor, node.first, node.second ) - static_cast<double>( dist );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;

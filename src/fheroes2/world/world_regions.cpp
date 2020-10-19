@@ -163,6 +163,16 @@ std::vector<std::pair<int, int> > MapRegion::getObjectList() const
     return result;
 }
 
+int MapRegion::getValue() const
+{
+    int result = 0;
+    for ( const MapRegionNode & node : _nodes ) {
+        if ( node.mapObject != 0 )
+            ++result;
+    }
+    return result;
+}
+
 double MapRegion::getFogRatio( int color ) const
 {
     double fogCount = 0;
@@ -173,9 +183,10 @@ double MapRegion::getFogRatio( int color ) const
     return fogCount / _nodes.size();
 }
 
-const MapRegion * World::getRegion( size_t id )
+const MapRegion & World::getRegion( size_t id )
 {
-    return ( id < _regions.size() ) ? &_regions[id] : NULL;
+    // empty MapRegion object is still valid; const reference will make sure it's not cleaned up
+    return ( id < _regions.size() ) ? _regions[id] : MapRegion();
 }
 
 void World::ComputeStaticAnalysis()

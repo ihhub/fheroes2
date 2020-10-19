@@ -114,12 +114,18 @@ namespace AI
             return BuildIfAvailable( castle, BUILD_WELL );
         }
 
+        const bool islandCastle = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighbours().size() < 2;
+
+        if ( islandCastle && BuildIfEnoughResources( castle, BUILD_SHIPYARD, 2 ) ) {
+            return true;
+        }
+
         if ( Build( castle, GetBuildOrder( castle.GetRace() ) ) ) {
             return true;
         }
 
         // Call internally checks if it's valid (space/resources) to buy one
-        if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * 2 )
+        if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * ( islandCastle ? 2 : 4 ) )
             castle.BuyBoat();
 
         return Build( castle, GetDefensiveStructures( castle.GetRace() ), 10 );

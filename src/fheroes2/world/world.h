@@ -259,7 +259,7 @@ public:
     MapEvent * GetMapEvent( const Point & );
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
-    const MapRegion * getRegion( size_t id );
+    const MapRegion & getRegion( size_t id );
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
     bool isValidPath( int index, int direction ) const;

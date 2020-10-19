@@ -61,8 +61,10 @@ public:
     std::vector<MapRegionNode> _nodes;
     size_t _lastProcessedNode = 0;
 
+    MapRegion(){};
     MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
     std::vector<int> getNeighbours() const;
     std::vector<std::pair<int, int> > getObjectList() const;
+    int getValue() const;
     double getFogRatio( int color ) const;
 };
