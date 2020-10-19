@@ -73,10 +73,10 @@ public:
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );
     int getFogDiscoveryTile( const Heroes & hero );
-    virtual uint32_t getDistance( const Heroes & hero, int targetIndex );
+    uint32_t getDistance( const Heroes & hero, int targetIndex );
 
     // Used for non-hero armies, like castles or monsters
-    virtual uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
+    uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
     // Override builds path to the nearest valid object
     virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
