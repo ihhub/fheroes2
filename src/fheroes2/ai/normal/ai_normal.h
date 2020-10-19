@@ -26,8 +26,6 @@
 
 namespace AI
 {
-    using MapObjectNode = std::pair<int, int>;
-
     class Normal : public Base
     {
     public:
@@ -44,7 +42,7 @@ namespace AI
         void resetPathfinder();
 
     private:
-        std::vector<MapObjectNode> _mapObjects;
+        std::vector<IndexObject> _mapObjects;
         AIWorldPathfinder _pathfinder;
     };
 }

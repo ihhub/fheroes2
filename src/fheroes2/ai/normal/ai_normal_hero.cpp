@@ -79,7 +79,7 @@ namespace AI
         int objectID = MP2::OBJ_ZERO;
 
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
-            const MapObjectNode & node = _mapObjects[idx];
+            const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
             if ( heroInPatrolMode && Maps::GetApproximateDistance( patrolIndex, node.first ) > distanceLimit )

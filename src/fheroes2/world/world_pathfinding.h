@@ -73,6 +73,7 @@ public:
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );
     int getFogDiscoveryTile( const Heroes & hero );
+    std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, uint32_t lookupRadius );
     uint32_t getDistance( const Heroes & hero, int targetIndex );
 
     // Used for non-hero armies, like castles or monsters
