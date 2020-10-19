@@ -88,8 +88,15 @@ namespace fheroes2
         Sprite & operator=( const Sprite & image );
         Sprite & operator=( Sprite && image );
 
-        int32_t x() const;
-        int32_t y() const;
+        int32_t x() const
+        {
+            return _x;
+        }
+
+        int32_t y() const
+        {
+            return _y;
+        }
 
         virtual void setPosition( int32_t x_, int32_t y_ );
 

@@ -43,11 +43,6 @@ Interface::GameArea::GameArea( Basic & basic )
     , updateCursor( false )
 {}
 
-const Rect & Interface::GameArea::GetROI( void ) const
-{
-    return _windowROI;
-}
-
 Rect Interface::GameArea::GetVisibleTileROI( void ) const
 {
     return Rect( _getStartTileId(), _visibleTileCount );
@@ -348,7 +343,7 @@ void Interface::GameArea::SetCenter( const Point & pt )
     scrollDirection = 0;
 }
 
-fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 index )
+fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_t index )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
         DEBUG( DBG_ENGINE, DBG_WARN, "artifact not found" );
