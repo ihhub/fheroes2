@@ -151,9 +151,9 @@ std::vector<int> MapRegion::getNeighbours() const
     return std::vector<int>( _neighbours.begin(), _neighbours.end() );
 }
 
-std::vector<std::pair<int, int> > MapRegion::getObjectList() const
+std::vector<IndexObject> MapRegion::getObjectList() const
 {
-    std::vector<std::pair<int, int> > result;
+    std::vector<IndexObject> result;
 
     for ( const MapRegionNode & node : _nodes ) {
         if ( node.mapObject != 0 ) {

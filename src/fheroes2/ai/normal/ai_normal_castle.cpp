@@ -115,9 +115,11 @@ namespace AI
             return BuildIfAvailable( castle, BUILD_WELL );
         }
 
-        const bool castleOnIsland = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighbours().size() < 2;
+        const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighbours().size();
+        const bool islandOrPeninsula = neighbourRegions < 3;
 
-        if ( castleOnIsland && BuildIfEnoughResources( castle, BUILD_SHIPYARD, 2 ) ) {
+        // force building a shipyard, +1 to cost check since we can have 0 neighbours
+        if ( islandOrPeninsula && BuildIfEnoughResources( castle, BUILD_SHIPYARD, neighbourRegions + 1 ) ) {
             return true;
         }
 
@@ -126,7 +128,7 @@ namespace AI
         }
 
         // Call internally checks if it's valid (space/resources) to buy one
-        if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * ( castleOnIsland ? 2 : 4 ) )
+        if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) )
             castle.BuyBoat();
 
         return Build( castle, GetDefensiveStructures( castle.GetRace() ), 10 );

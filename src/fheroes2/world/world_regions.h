@@ -64,7 +64,7 @@ public:
     MapRegion(){};
     MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
     std::vector<int> getNeighbours() const;
-    std::vector<std::pair<int, int> > getObjectList() const;
+    std::vector<IndexObject> getObjectList() const;
     int getObjectCount() const;
     double getFogRatio( int color ) const;
 };
