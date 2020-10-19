@@ -163,7 +163,7 @@ std::vector<std::pair<int, int> > MapRegion::getObjectList() const
     return result;
 }
 
-int MapRegion::getValue() const
+int MapRegion::getObjectCount() const
 {
     int result = 0;
     for ( const MapRegionNode & node : _nodes ) {
@@ -175,18 +175,22 @@ int MapRegion::getValue() const
 
 double MapRegion::getFogRatio( int color ) const
 {
-    double fogCount = 0;
+    size_t fogCount = 0;
     for ( const MapRegionNode & node : _nodes ) {
         if ( world.GetTiles( node.index ).isFog( color ) )
             ++fogCount;
     }
-    return fogCount / _nodes.size();
+    return static_cast<double>( fogCount ) / _nodes.size();
 }
 
 const MapRegion & World::getRegion( size_t id )
 {
-    // empty MapRegion object is still valid; const reference will make sure it's not cleaned up
-    return ( id < _regions.size() ) ? _regions[id] : MapRegion();
+    if ( id < _regions.size() )
+        return _regions[id];
+
+    // empty MapRegion object is still valid to use
+    static const MapRegion region;
+    return region;
 }
 
 void World::ComputeStaticAnalysis()

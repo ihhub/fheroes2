@@ -52,7 +52,7 @@ struct MapRegionNode
     {}
 };
 
-class MapRegion
+struct MapRegion
 {
 public:
     int _id = REGION_NODE_FOUND;
@@ -65,6 +65,6 @@ public:
     MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
     std::vector<int> getNeighbours() const;
     std::vector<std::pair<int, int> > getObjectList() const;
-    int getValue() const;
+    int getObjectCount() const;
     double getFogRatio( int color ) const;
 };
