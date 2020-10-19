@@ -93,7 +93,8 @@ namespace AI
                 double value = 0;
                 auto list = _pathfinder.getObjectsOnTheWay( node.first, 0 );
                 for ( const IndexObject & pair : list ) {
-                    value += GetObjectValue( pair.first, pair.second );
+                    if ( HeroesValidObject( hero, pair.first ) )
+                        value += GetObjectValue( pair.first, pair.second );
                 }
                 value -= static_cast<double>( dist );
 
@@ -108,6 +109,7 @@ namespace AI
                     if ( list.size() > 1 ) {
                         std::cout << "===== New target " << priorityTarget <<  " ======" << std::endl;
                         for ( const IndexObject & pair : list ) {
+                            if ( HeroesValidObject( hero, pair.first ) )
                                 std::cout << "Found: " << MP2::StringObject( pair.second ) << " at " << pair.first << ", value " << GetObjectValue( pair.first, pair.second )
                                           << std::endl;
                         }

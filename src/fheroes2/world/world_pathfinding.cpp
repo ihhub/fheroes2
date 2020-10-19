@@ -399,19 +399,37 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     if ( _pathStart == -1 || _currentColor == Color::NONE || targetIndex == -1 || _cache[targetIndex]._cost == 0 )
         return result;
 
+    const Kingdom & kingdom = world.GetKingdom( _currentColor );
     const Directions directions = Direction::All();
     const bool isWater = world.GetTiles( _pathStart ).isWater();
 
+    auto validateAndAdd = [this, &result, &kingdom]( int index, int object ) {
+        if ( kingdom.isValidKingdomObject( world.GetTiles( index ), object ) ) {
+            result.emplace_back( index, object );
+        }
+    };
+
     // trace the path from end point
     int currentNode = targetIndex;
+    int previousNode = -1;
     while ( currentNode != _pathStart && currentNode != -1 ) {
         const PathfindingNode & node = _cache[currentNode];
 
-        if ( MP2::isActionObject( node._objectID, isWater ) ) {
-            result.emplace_back( currentNode, node._objectID );
-        }
+        validateAndAdd( currentNode, node._objectID );
 
         if ( checkAdjacent ) {
+            for ( size_t i = 0; i < directions.size(); ++i ) {
+                if ( Maps::isValidDirection( currentNode, directions[i] ) ) {
+                    const int newIndex = currentNode + _mapOffset[i];
+                    const PathfindingNode & adjacent = _cache[newIndex];
+
+                    // make sure we don't double count
+                    if ( newIndex == previousNode || newIndex == node._from || adjacent._cost != 0 )
+                        continue;
+
+                    validateAndAdd( newIndex, adjacent._objectID );
+                }
+            }
         }
 
         // Sanity check
@@ -419,9 +437,9 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
             DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
             break;
         }
-        else {
-            currentNode = node._from;
-        }
+
+        previousNode = currentNode;
+        currentNode = node._from;
     }
 
     return result;
