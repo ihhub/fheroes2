@@ -30,14 +30,14 @@
 
 Spell GetUniqueCombatSpellCompatibility( const SpellStorage &, int race, int level );
 Spell GetCombatSpellCompatibility( int race, int level );
-Spell GetGuaranteedSpell();
+Spell GetGuaranteedSpellForMageGuild();
 
 void MageGuild::Builds( int race, bool libraryCap )
 {
     general.clear();
     library.clear();
 
-    const Spell guaranteedSpell = GetGuaranteedSpell();
+    const Spell guaranteedSpell = GetGuaranteedSpellForMageGuild();
     const int guaranteedSpellLevel = guaranteedSpell.Level();
     general.Append( guaranteedSpell );
 
@@ -121,7 +121,7 @@ Spell GetCombatSpellCompatibility( int race, int lvl )
     return spell;
 }
 
-Spell GetGuaranteedSpell()
+Spell GetGuaranteedSpellForMageGuild()
 {
     switch ( Rand::Get( 0, 4 ) ) {
     case 0:
