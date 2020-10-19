@@ -30,50 +30,88 @@
 
 Spell GetUniqueCombatSpellCompatibility( const SpellStorage &, int race, int level );
 Spell GetCombatSpellCompatibility( int race, int level );
-Spell GetGuaranteedSpellForMageGuild();
+Spell GetUniqueSpellCompatibility( const SpellStorage &, const int race, const int level);
+Spell GetGuaranteedDamageSpellForMageGuild();
+Spell GetGuaranteedNonDamageSpellForMageGuild();
 
 void MageGuild::Builds( int race, bool libraryCap )
 {
     general.clear();
     library.clear();
 
-    const Spell guaranteedSpell = GetGuaranteedSpellForMageGuild();
-    const int guaranteedSpellLevel = guaranteedSpell.Level();
-    general.Append( guaranteedSpell );
+    const Spell guaranteedDamageSpell = GetGuaranteedDamageSpellForMageGuild();
+    const int guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
 
-    // level 5
-    if ( guaranteedSpellLevel != 5 )
-        general.Append( 7 > Rand::Get( 1, 10 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 ) );
+    const Spell guaranteedNonDamageSpell = GetGuaranteedNonDamageSpellForMageGuild();
+    const int guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
 
-    // level 4
-    if ( guaranteedSpellLevel != 4 )
-        general.Append( GetCombatSpellCompatibility( race, 4 ) );
-    general.Append( Spell::RandAdventure( 4 ) );
+    general.Append( guaranteedDamageSpell );
+    general.Append( guaranteedNonDamageSpell );
 
-    // level 3
-    if ( guaranteedSpellLevel != 3 )
-        general.Append( GetCombatSpellCompatibility( race, 3 ) );
-    general.Append( Spell::RandAdventure( 3 ) );
-
-    // level 2
-    if ( guaranteedSpellLevel != 2 )
-        general.Append( GetCombatSpellCompatibility( race, 2 ) );
-    general.Append( GetUniqueCombatSpellCompatibility( general, race, 2 ) );
-    general.Append( Spell::RandAdventure( 2 ) );
-
-    // level 1
-    if ( guaranteedSpellLevel != 1 )
-        general.Append( GetCombatSpellCompatibility( race, 1 ) );
-    general.Append( GetUniqueCombatSpellCompatibility( general, race, 1 ) );
-    general.Append( Spell::RandAdventure( 1 ) );
+    int level1SpellCount = 3;
+    int level2SpellCount = 3;
+    int level3SpellCount = 2;
+    int level4SpellCount = 2;
+    int level5SpellCount = 1;
 
     if ( libraryCap ) {
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 1 ) );
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 2 ) );
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 3 ) );
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 4 ) );
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 5 ) );
+        level1SpellCount++;
+        level2SpellCount++;
+        level3SpellCount++;
+        level4SpellCount++;
+        level5SpellCount++;
     }
+
+    switch ( guaranteedDamageSpellLevel ) {
+    case 1:
+        level1SpellCount--;
+        break;
+    case 2:
+        level2SpellCount--;
+        break;
+    case 3:
+        level3SpellCount--;
+        break;
+    case 4:
+        level4SpellCount--;
+        break;
+    case 5:
+        level5SpellCount--;
+        break;
+    }
+
+    switch ( guaranteedNonDamageSpellLevel ) {
+    case 1:
+        level1SpellCount--;
+        break;
+    case 2:
+        level2SpellCount--;
+        break;
+    case 3:
+        level3SpellCount--;
+        break;
+    case 4:
+        level4SpellCount--;
+        break;
+    case 5:
+        level5SpellCount--;
+        break;
+    }
+
+    for ( int i = 0; i < level5SpellCount; ++i )
+        general.Append( GetUniqueSpellCompatibility( general, race, 5 ) );
+
+    for ( int i = 0; i < level4SpellCount; ++i )
+        general.Append( GetUniqueSpellCompatibility( general, race, 4 ) );
+
+    for ( int i = 0; i < level3SpellCount; ++i )
+        general.Append( GetUniqueSpellCompatibility( general, race, 3 ) );
+
+    for ( int i = 0; i < level2SpellCount; ++i )
+        general.Append( GetUniqueSpellCompatibility( general, race, 2 ) );
+
+    for ( int i = 0; i < level1SpellCount; ++i )
+        general.Append( GetUniqueSpellCompatibility( general, race, 1 ) );
 }
 
 SpellStorage MageGuild::GetSpells( int lvlmage, bool islibrary, int level ) const
@@ -113,6 +151,16 @@ Spell GetUniqueCombatSpellCompatibility( const SpellStorage & spells, int race, 
     return spell;
 }
 
+Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
+{
+    Spell spell = Spell::Rand( lvl, Rand::Get( 0, 1 ) == 0 ? true : false );
+
+    while ( spells.isPresentSpell( spell ) || !spell.isRaceCompatible( race ) )
+        spell = Spell::Rand( lvl, Rand::Get( 0, 1 ) == 0 ? true : false );
+
+    return spell;
+}
+
 Spell GetCombatSpellCompatibility( int race, int lvl )
 {
     Spell spell = Spell::RandCombat( lvl );
@@ -121,7 +169,25 @@ Spell GetCombatSpellCompatibility( int race, int lvl )
     return spell;
 }
 
-Spell GetGuaranteedSpellForMageGuild()
+Spell GetGuaranteedDamageSpellForMageGuild()
+{
+    switch ( Rand::Get( 0, 4 ) ) {
+    case 0:
+        return Spell::ARROW;
+    case 1:
+        return Spell::COLDRAY;
+    case 2:
+        return Spell::LIGHTNINGBOLT;
+    case 3:
+        return Spell::COLDRING;
+    case 4:
+        return Spell::FIREBALL;
+    default:
+        return Spell::RANDOM;
+    }
+}
+
+Spell GetGuaranteedNonDamageSpellForMageGuild()
 {
     switch ( Rand::Get( 0, 4 ) ) {
     case 0:
