@@ -392,6 +392,41 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     return -1;
 }
 
+std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex, bool checkAdjacent )
+{
+    std::vector<IndexObject> result;
+    // validate that path can be created
+    if ( _pathStart == -1 || _currentColor == Color::NONE || targetIndex == -1 || _cache[targetIndex]._cost == 0 )
+        return result;
+
+    const Directions directions = Direction::All();
+    const bool isWater = world.GetTiles( _pathStart ).isWater();
+
+    // trace the path from end point
+    int currentNode = targetIndex;
+    while ( currentNode != _pathStart && currentNode != -1 ) {
+        const PathfindingNode & node = _cache[currentNode];
+
+        if ( MP2::isActionObject( node._objectID, isWater ) ) {
+            result.emplace_back( currentNode, node._objectID );
+        }
+
+        if ( checkAdjacent ) {
+        }
+
+        // Sanity check
+        if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
+            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            break;
+        }
+        else {
+            currentNode = node._from;
+        }
+    }
+
+    return result;
+}
+
 std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex ) const
 {
     std::list<Route::Step> path;

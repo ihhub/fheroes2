@@ -90,7 +90,12 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                const double value = GetObjectValue( node.first, node.second ) - static_cast<double>( dist );
+                double value = 0;
+                auto list = _pathfinder.getObjectsOnTheWay( node.first, 0 );
+                for ( const IndexObject & pair : list ) {
+                    value += GetObjectValue( pair.first, pair.second );
+                }
+                value -= static_cast<double>( dist );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
@@ -99,6 +104,14 @@ namespace AI
 
                     DEBUG( DBG_AI, DBG_TRACE,
                            hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
+
+                    if ( list.size() > 1 ) {
+                        std::cout << "===== New target " << priorityTarget <<  " ======" << std::endl;
+                        for ( const IndexObject & pair : list ) {
+                                std::cout << "Found: " << MP2::StringObject( pair.second ) << " at " << pair.first << ", value " << GetObjectValue( pair.first, pair.second )
+                                          << std::endl;
+                        }
+                    }
                 }
             }
         }
