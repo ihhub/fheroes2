@@ -212,7 +212,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
             const Heroes * hero = world.GetHeroes( v[ii].first );
             if ( hero ) {
                 s32 px = pos.x + chunk / 2 + ii * chunk;
-                const fheroes2::Image & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
+                const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
                 fheroes2::Blit( window, display, px - window.width() / 2, pos.y - 4 );
 
                 fheroes2::Image icon = hero->GetPortrait( PORT_SMALL );
