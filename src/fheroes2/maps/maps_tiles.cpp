@@ -1555,8 +1555,9 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     if ( area.GetVisibleTileROI() & mp ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, objectIndex % 128 );
-        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp, ( objectIndex > 128 ) );
+        const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
+        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp, ( spriteIndex > 128 ) );
     }
 }
 
