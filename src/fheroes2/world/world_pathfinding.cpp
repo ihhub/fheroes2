@@ -155,7 +155,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
     }
-    _cache[pathStart] = PathfindingNode( -1, 0 );
+    _cache[pathStart] = PathfindingNode( -1, 0, 0 );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( pathStart );
@@ -179,11 +179,14 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
             const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], _pathfindingSkill );
             PathfindingNode & newNode = _cache[newIndex];
             if ( world.isValidPath( currentNodeIdx, directions[i] ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
+                const Maps::Tiles & tile = world.GetTiles( newIndex );
+
                 newNode._from = currentNodeIdx;
                 newNode._cost = moveCost;
+                newNode._objectID = tile.GetObject();
 
                 // duplicates are allowed if we find a cheaper way there
-                if ( world.GetTiles( newIndex ).isWater() == fromWater )
+                if ( tile.isWater() == fromWater )
                     nodesToExplore.push_back( newIndex );
             }
         }
@@ -344,6 +347,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
             if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
                 teleportNode._from = currentNodeIdx;
                 teleportNode._cost = currentNode._cost;
+                teleportNode._objectID = MP2::OBJ_STONELITHS;
                 nodesToExplore.push_back( teleportIdx );
             }
         }

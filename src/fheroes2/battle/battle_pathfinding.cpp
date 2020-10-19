@@ -88,6 +88,7 @@ namespace Battle
     {
         _from = -1;
         _cost = MAX_MOVE_COST;
+        _objectID = 0;
         _isOpen = true;
     }
 
