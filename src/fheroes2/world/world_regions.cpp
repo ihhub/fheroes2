@@ -142,7 +142,7 @@ MapRegion::MapRegion( int regionIndex, int mapIndex, bool water, size_t expected
     , _isWater( water )
 {
     _nodes.reserve( expectedSize );
-    _nodes.push_back( { mapIndex } );
+    _nodes.emplace_back( mapIndex );
     _nodes[0].type = _id;
 }
 
