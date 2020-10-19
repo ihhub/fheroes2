@@ -91,9 +91,10 @@ namespace AI
                     continue;
 
                 double value = 0;
-                auto list = _pathfinder.getObjectsOnTheWay( node.first, 0 );
+                auto list = _pathfinder.getObjectsOnTheWay( node.first, true );
                 for ( const IndexObject & pair : list ) {
-                    if ( HeroesValidObject( hero, pair.first ) )
+                    if ( HeroesValidObject( hero, pair.first )
+                         && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
                         value += GetObjectValue( pair.first, pair.second );
                 }
                 value -= static_cast<double>( dist );
@@ -105,15 +106,6 @@ namespace AI
 
                     DEBUG( DBG_AI, DBG_TRACE,
                            hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
-
-                    if ( list.size() > 1 ) {
-                        std::cout << "===== New target " << priorityTarget <<  " ======" << std::endl;
-                        for ( const IndexObject & pair : list ) {
-                            if ( HeroesValidObject( hero, pair.first ) )
-                                std::cout << "Found: " << MP2::StringObject( pair.second ) << " at " << pair.first << ", value " << GetObjectValue( pair.first, pair.second )
-                                          << std::endl;
-                        }
-                    }
                 }
             }
         }
@@ -165,12 +157,18 @@ namespace AI
                 objectsToErase.push_back( targetIndex );
                 _pathfinder.reEvaluateIfNeeded( hero );
                 hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
+                const int destIndex = hero.GetPath().GetDestinedIndex();
                 HeroesMove( hero );
 
                 // Check if hero is stuck
                 if ( targetIndex != startIndex && hero.GetIndex() == startIndex ) {
                     hero.SetModes( AI::HERO_WAITING );
                     DEBUG( DBG_AI, DBG_WARN, hero.GetName() << " is stuck trying to reach " << targetIndex );
+                }
+                else {
+                    auto toErase = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&destIndex]( const IndexObject & obj ) { return destIndex == obj.first; } );
+                    if ( toErase != _mapObjects.end() )
+                        _mapObjects.erase( toErase );
                 }
             }
             else {
@@ -180,18 +178,25 @@ namespace AI
         }
 
         // Remove the object from the list so other heroes won't target it
-        for ( size_t idx = 0; idx < _mapObjects.size() && !objectsToErase.empty(); ++idx ) {
-            auto it = std::find( objectsToErase.begin(), objectsToErase.end(), _mapObjects[idx].first );
-            if ( it != objectsToErase.end() ) {
-                // Actually remove if this object single use only
-                if ( MP2::isCaptureObject( _mapObjects[idx].second ) || MP2::isRemoveObject( _mapObjects[idx].second ) ) {
-                    // this method does not retain the vector order
-                    _mapObjects[idx] = _mapObjects.back();
-                    _mapObjects.pop_back();
-                }
-                objectsToErase.erase( it );
-            }
-        }
+        //if ( objectsToErase.size() ) {
+        //    std::vector<IndexObject> replacement;
+        //    replacement.reserve( _mapObjects.size() );
+        //    for ( size_t idx = 0; idx < _mapObjects.size() && !objectsToErase.empty(); ++idx ) {
+        //        auto it = std::find( objectsToErase.begin(), objectsToErase.end(), _mapObjects[idx].first );
+        //        if ( it != objectsToErase.end() ) {
+        //            // Actually remove if this object single use only
+        //            if ( !MP2::isCaptureObject( _mapObjects[idx].second ) && !MP2::isRemoveObject( _mapObjects[idx].second ) ) {
+        //                // retain the vector order
+        //                replacement.push_back( _mapObjects[idx] );
+        //            }
+        //            objectsToErase.erase( it );
+        //        }
+        //        else {
+        //            replacement.push_back( _mapObjects[idx] );
+        //        }
+        //    }
+        //    _mapObjects = std::move( replacement );
+        //}
 
         if ( !hero.MayStillMove() ) {
             hero.SetModes( AI::HERO_MOVED );
