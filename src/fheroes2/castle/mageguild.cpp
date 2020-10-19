@@ -30,30 +30,40 @@
 
 Spell GetUniqueCombatSpellCompatibility( const SpellStorage &, int race, int level );
 Spell GetCombatSpellCompatibility( int race, int level );
+Spell GetGuaranteedSpell();
 
 void MageGuild::Builds( int race, bool libraryCap )
 {
     general.clear();
     library.clear();
 
+    const Spell guaranteedSpell = GetGuaranteedSpell();
+    const int guaranteedSpellLevel = guaranteedSpell.Level();
+    general.Append( guaranteedSpell );
+
     // level 5
-    general.Append( 7 > Rand::Get( 1, 10 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 ) );
+    if ( guaranteedSpellLevel != 5 )
+        general.Append( 7 > Rand::Get( 1, 10 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 ) );
 
     // level 4
-    general.Append( GetCombatSpellCompatibility( race, 4 ) );
+    if ( guaranteedSpellLevel != 4 )
+        general.Append( GetCombatSpellCompatibility( race, 4 ) );
     general.Append( Spell::RandAdventure( 4 ) );
 
     // level 3
-    general.Append( GetCombatSpellCompatibility( race, 3 ) );
+    if ( guaranteedSpellLevel != 3 )
+        general.Append( GetCombatSpellCompatibility( race, 3 ) );
     general.Append( Spell::RandAdventure( 3 ) );
 
     // level 2
-    general.Append( GetCombatSpellCompatibility( race, 2 ) );
+    if ( guaranteedSpellLevel != 2 )
+        general.Append( GetCombatSpellCompatibility( race, 2 ) );
     general.Append( GetUniqueCombatSpellCompatibility( general, race, 2 ) );
     general.Append( Spell::RandAdventure( 2 ) );
 
     // level 1
-    general.Append( GetCombatSpellCompatibility( race, 1 ) );
+    if ( guaranteedSpellLevel != 1 )
+        general.Append( GetCombatSpellCompatibility( race, 1 ) );
     general.Append( GetUniqueCombatSpellCompatibility( general, race, 1 ) );
     general.Append( Spell::RandAdventure( 1 ) );
 
@@ -109,6 +119,24 @@ Spell GetCombatSpellCompatibility( int race, int lvl )
     while ( !spell.isRaceCompatible( race ) )
         spell = Spell::RandCombat( lvl );
     return spell;
+}
+
+Spell GetGuaranteedSpell()
+{
+    switch ( Rand::Get( 0, 4 ) ) {
+    case 0:
+        return Spell::DISPEL;
+    case 1:
+        return Spell::MASSDISPEL;
+    case 2:
+        return Spell::CURE;
+    case 3:
+        return Spell::MASSCURE;
+    case 4:
+        return Spell::ANTIMAGIC;
+    default:
+        return Spell::RANDOM;
+    }
 }
 
 StreamBase & operator<<( StreamBase & msg, const MageGuild & guild )
