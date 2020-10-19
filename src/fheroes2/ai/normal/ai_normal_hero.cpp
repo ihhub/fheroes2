@@ -59,7 +59,7 @@ namespace AI
             return world.getRegion( tile.GetRegion() ).getFogRatio( color ) * 1500;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
-            return ( world.getRegion( tile.GetRegion() ).getValue() - 30 ) * 50.0;
+            return world.getRegion( tile.GetRegion() ).getObjectCount() * 50.0 - 2000;
         }
         else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
             // de-prioritize the water movement even harder
