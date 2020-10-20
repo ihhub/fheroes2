@@ -415,7 +415,9 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     while ( currentNode != _pathStart && currentNode != -1 ) {
         const PathfindingNode & node = _cache[currentNode];
 
-        validateAndAdd( currentNode, node._objectID );
+        // skip the target itself
+        if ( currentNode != targetIndex )
+            validateAndAdd( currentNode, node._objectID );
 
         if ( checkAdjacent ) {
             for ( size_t i = 0; i < directions.size(); ++i ) {

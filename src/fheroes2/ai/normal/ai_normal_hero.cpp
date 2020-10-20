@@ -78,6 +78,7 @@ namespace AI
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         int objectID = MP2::OBJ_ZERO;
 
+        std::vector<IndexObject> additionalObjectsList;
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const IndexObject & node = _mapObjects[idx];
 
@@ -90,19 +91,22 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                double value = 0;
+                double value = GetObjectValue( node.first, node.second );
+
                 auto list = _pathfinder.getObjectsOnTheWay( node.first, true );
                 for ( const IndexObject & pair : list ) {
                     if ( HeroesValidObject( hero, pair.first )
                          && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
                         value += GetObjectValue( pair.first, pair.second );
                 }
+
                 value -= static_cast<double>( dist );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
                     objectID = node.second;
+                    additionalObjectsList = list;
 
                     DEBUG( DBG_AI, DBG_TRACE,
                            hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
@@ -117,6 +121,12 @@ namespace AI
         else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+        }
+
+        for ( const IndexObject & pair : additionalObjectsList ) {
+            auto toErase = std::find( _mapObjects.begin(), _mapObjects.end(), pair );
+            if ( toErase != _mapObjects.end() )
+                _mapObjects.erase( toErase );
         }
 
         return priorityTarget;
