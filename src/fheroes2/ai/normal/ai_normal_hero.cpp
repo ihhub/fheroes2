@@ -93,7 +93,7 @@ namespace AI
 
                 double value = GetObjectValue( node.first, node.second );
 
-                auto list = _pathfinder.getObjectsOnTheWay( node.first, false );
+                auto list = _pathfinder.getObjectsOnTheWay( node.first );
                 for ( const IndexObject & pair : list ) {
                     if ( HeroesValidObject( hero, pair.first )
                          && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
@@ -165,26 +165,37 @@ namespace AI
             const int targetIndex = GetPriorityTarget( hero, patrolCenter, patrolDistance );
 
             if ( targetIndex != -1 ) {
-                objectsToErase.push_back( targetIndex );
                 _pathfinder.reEvaluateIfNeeded( hero );
                 hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
+                objectsToErase.push_back( hero.GetPath().GetDestinationIndex() );
                 const int destIndex = hero.GetPath().GetDestinationIndex();
+                const int destIndex1 = hero.GetPath().GetDestinedIndex();
                 HeroesMove( hero );
+                const int destIndex2 = hero.GetPath().GetDestinationIndex();
+                const int destIndex3 = hero.GetPath().GetDestinedIndex();
+                const int startIndex2 = hero.GetIndex();
 
-                // Check if hero is stuck
-                if ( targetIndex != startIndex && hero.GetIndex() == startIndex ) {
-                    hero.SetModes( AI::HERO_WAITING );
-                    DEBUG( DBG_AI, DBG_WARN, hero.GetName() << " is stuck trying to reach " << targetIndex );
-                }
-                else {
-                    auto toErase = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&destIndex]( const IndexObject & obj ) { return destIndex == obj.first; } );
-                    if ( toErase != _mapObjects.end() )
-                        _mapObjects.erase( toErase );
+                if ( targetIndex == destIndex ) {
+                    //auto toErase = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&destIndex]( const IndexObject & obj ) { return destIndex == obj.first; } );
+                    //if ( toErase != _mapObjects.end() )
+                    //    _mapObjects.erase( toErase );
                 }
             }
             else {
                 hero.SetModes( AI::HERO_WAITING );
                 break;
+            }
+        }
+
+        // Remove the object from the list so other heroes won't target it
+        if ( objectsToErase.size() ) {
+            for ( const int idxToErase : objectsToErase ) {
+                auto it = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&idxToErase]( const IndexObject & o ) { return o.first == idxToErase; } );
+                // Actually remove if this object single use only
+                if ( it != _mapObjects.end() && !MP2::isCaptureObject( it->second ) && !MP2::isRemoveObject( it->second ) ) {
+                    // retains the vector order for binary search
+                    _mapObjects.erase( it );
+                }
             }
         }
 
