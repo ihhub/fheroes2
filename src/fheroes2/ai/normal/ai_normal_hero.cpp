@@ -78,7 +78,6 @@ namespace AI
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         int objectID = MP2::OBJ_ZERO;
 
-        std::vector<IndexObject> additionalObjectsList;
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const IndexObject & node = _mapObjects[idx];
 
@@ -93,11 +92,10 @@ namespace AI
 
                 double value = GetObjectValue( node.first, node.second );
 
-                auto list = _pathfinder.getObjectsOnTheWay( node.first );
+                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
                 for ( const IndexObject & pair : list ) {
-                    if ( HeroesValidObject( hero, pair.first )
-                         && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
-                        value += ( GetObjectValue( pair.first, pair.second ) / 2 );
+                    if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
+                        value += GetObjectValue( pair.first, pair.second );
                 }
 
                 value -= static_cast<double>( dist );
@@ -106,7 +104,6 @@ namespace AI
                     maxPriority = value;
                     priorityTarget = node.first;
                     objectID = node.second;
-                    additionalObjectsList = list;
 
                     DEBUG( DBG_AI, DBG_TRACE,
                            hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
@@ -117,13 +114,6 @@ namespace AI
         if ( priorityTarget != -1 ) {
             DEBUG( DBG_AI, DBG_INFO,
                    hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
-
-            for ( const IndexObject & pair : additionalObjectsList ) {
-                DEBUG( DBG_AI, DBG_INFO, hero.GetName() << ": on the way: " << pair.first << " (" << MP2::StringObject( pair.second ) << ")" );
-                //auto toErase = std::find( _mapObjects.begin(), _mapObjects.end(), pair );
-                //if ( toErase != _mapObjects.end() )
-                //    _mapObjects.erase( toErase );
-            }
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
@@ -168,18 +158,8 @@ namespace AI
                 _pathfinder.reEvaluateIfNeeded( hero );
                 hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
                 objectsToErase.push_back( hero.GetPath().GetDestinationIndex() );
-                const int destIndex = hero.GetPath().GetDestinationIndex();
-                const int destIndex1 = hero.GetPath().GetDestinedIndex();
-                HeroesMove( hero );
-                const int destIndex2 = hero.GetPath().GetDestinationIndex();
-                const int destIndex3 = hero.GetPath().GetDestinedIndex();
-                const int startIndex2 = hero.GetIndex();
 
-                if ( targetIndex == destIndex ) {
-                    //auto toErase = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&destIndex]( const IndexObject & obj ) { return destIndex == obj.first; } );
-                    //if ( toErase != _mapObjects.end() )
-                    //    _mapObjects.erase( toErase );
-                }
+                HeroesMove( hero );
             }
             else {
                 hero.SetModes( AI::HERO_WAITING );
