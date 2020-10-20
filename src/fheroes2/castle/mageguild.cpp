@@ -39,7 +39,7 @@ void MageGuild::Builds( int race, bool libraryCap )
     general.clear();
     library.clear();
 
-    int spellCountByLevel[] = { 3, 3, 2, 2, 1 };
+    int spellCountByLevel[] = {3, 3, 2, 2, 1};
 
     const Spell guaranteedDamageSpell = GetGuaranteedDamageSpellForMageGuild();
     const int guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
