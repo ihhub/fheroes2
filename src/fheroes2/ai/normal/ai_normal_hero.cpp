@@ -93,11 +93,11 @@ namespace AI
 
                 double value = GetObjectValue( node.first, node.second );
 
-                auto list = _pathfinder.getObjectsOnTheWay( node.first, true );
+                auto list = _pathfinder.getObjectsOnTheWay( node.first, false );
                 for ( const IndexObject & pair : list ) {
                     if ( HeroesValidObject( hero, pair.first )
                          && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
-                        value += GetObjectValue( pair.first, pair.second );
+                        value += ( GetObjectValue( pair.first, pair.second ) / 2 );
                 }
 
                 value -= static_cast<double>( dist );
@@ -117,16 +117,17 @@ namespace AI
         if ( priorityTarget != -1 ) {
             DEBUG( DBG_AI, DBG_INFO,
                    hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
+
+            for ( const IndexObject & pair : additionalObjectsList ) {
+                DEBUG( DBG_AI, DBG_INFO, hero.GetName() << ": on the way: " << pair.first << " (" << MP2::StringObject( pair.second ) << ")" );
+                //auto toErase = std::find( _mapObjects.begin(), _mapObjects.end(), pair );
+                //if ( toErase != _mapObjects.end() )
+                //    _mapObjects.erase( toErase );
+            }
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
-        }
-
-        for ( const IndexObject & pair : additionalObjectsList ) {
-            auto toErase = std::find( _mapObjects.begin(), _mapObjects.end(), pair );
-            if ( toErase != _mapObjects.end() )
-                _mapObjects.erase( toErase );
         }
 
         return priorityTarget;
@@ -167,7 +168,7 @@ namespace AI
                 objectsToErase.push_back( targetIndex );
                 _pathfinder.reEvaluateIfNeeded( hero );
                 hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
-                const int destIndex = hero.GetPath().GetDestinedIndex();
+                const int destIndex = hero.GetPath().GetDestinationIndex();
                 HeroesMove( hero );
 
                 // Check if hero is stuck
@@ -186,27 +187,6 @@ namespace AI
                 break;
             }
         }
-
-        // Remove the object from the list so other heroes won't target it
-        //if ( objectsToErase.size() ) {
-        //    std::vector<IndexObject> replacement;
-        //    replacement.reserve( _mapObjects.size() );
-        //    for ( size_t idx = 0; idx < _mapObjects.size() && !objectsToErase.empty(); ++idx ) {
-        //        auto it = std::find( objectsToErase.begin(), objectsToErase.end(), _mapObjects[idx].first );
-        //        if ( it != objectsToErase.end() ) {
-        //            // Actually remove if this object single use only
-        //            if ( !MP2::isCaptureObject( _mapObjects[idx].second ) && !MP2::isRemoveObject( _mapObjects[idx].second ) ) {
-        //                // retain the vector order
-        //                replacement.push_back( _mapObjects[idx] );
-        //            }
-        //            objectsToErase.erase( it );
-        //        }
-        //        else {
-        //            replacement.push_back( _mapObjects[idx] );
-        //        }
-        //    }
-        //    _mapObjects = std::move( replacement );
-        //}
 
         if ( !hero.MayStillMove() ) {
             hero.SetModes( AI::HERO_MOVED );
