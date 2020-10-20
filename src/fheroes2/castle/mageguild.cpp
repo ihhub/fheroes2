@@ -39,27 +39,27 @@ void MageGuild::Builds( int race, bool libraryCap )
     general.clear();
     library.clear();
 
-    std::vector<size_t> spellCountByLevel = { 3, 3, 2, 2, 1 };
+    int spellCountByLevel[] = { 3, 3, 2, 2, 1 };
 
     const Spell guaranteedDamageSpell = GetGuaranteedDamageSpellForMageGuild();
-    const uint32_t guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
+    const int guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
 
     const Spell guaranteedNonDamageSpell = GetGuaranteedNonDamageSpellForMageGuild();
-    const uint32_t guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
+    const int guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
 
     general.Append( guaranteedDamageSpell );
     general.Append( guaranteedNonDamageSpell );
 
     if ( libraryCap ) {
-        for ( size_t i = 0; i < 5; ++i )
+        for ( int i = 0; i < 5; ++i )
             ++spellCountByLevel[i];
     }
 
     --spellCountByLevel[guaranteedDamageSpellLevel - 1];
     --spellCountByLevel[guaranteedNonDamageSpellLevel - 1];
 
-    for ( size_t i = 0; i < 5; ++i ) {
-        for ( size_t j = 0; j < spellCountByLevel[i]; ++j )
+    for ( int i = 0; i < 5; ++i ) {
+        for ( int j = 0; j < spellCountByLevel[i]; ++j )
             general.Append( GetUniqueSpellCompatibility( general, race, i + 1 ) );
     }
 }
