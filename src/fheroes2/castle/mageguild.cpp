@@ -39,79 +39,29 @@ void MageGuild::Builds( int race, bool libraryCap )
     general.clear();
     library.clear();
 
+    std::vector<int> spellCountByLevel = { 3, 3, 2, 2, 1 };
+
     const Spell guaranteedDamageSpell = GetGuaranteedDamageSpellForMageGuild();
-    const int guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
+    const size_t guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
 
     const Spell guaranteedNonDamageSpell = GetGuaranteedNonDamageSpellForMageGuild();
-    const int guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
+    const size_t guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
 
     general.Append( guaranteedDamageSpell );
     general.Append( guaranteedNonDamageSpell );
 
-    int level1SpellCount = 3;
-    int level2SpellCount = 3;
-    int level3SpellCount = 2;
-    int level4SpellCount = 2;
-    int level5SpellCount = 1;
-
     if ( libraryCap ) {
-        level1SpellCount++;
-        level2SpellCount++;
-        level3SpellCount++;
-        level4SpellCount++;
-        level5SpellCount++;
+        for ( size_t i = 0; i < 5; ++i )
+            ++spellCountByLevel[i];
     }
 
-    switch ( guaranteedDamageSpellLevel ) {
-    case 1:
-        level1SpellCount--;
-        break;
-    case 2:
-        level2SpellCount--;
-        break;
-    case 3:
-        level3SpellCount--;
-        break;
-    case 4:
-        level4SpellCount--;
-        break;
-    case 5:
-        level5SpellCount--;
-        break;
+    --spellCountByLevel[guaranteedDamageSpellLevel - 1];
+    --spellCountByLevel[guaranteedNonDamageSpellLevel - 1];
+
+    for ( size_t i = 0; i < 5; ++i ) {
+        for ( size_t j = 0; j < spellCountByLevel[i]; ++j )
+            general.Append( GetUniqueSpellCompatibility( general, race, i + 1 ) );
     }
-
-    switch ( guaranteedNonDamageSpellLevel ) {
-    case 1:
-        level1SpellCount--;
-        break;
-    case 2:
-        level2SpellCount--;
-        break;
-    case 3:
-        level3SpellCount--;
-        break;
-    case 4:
-        level4SpellCount--;
-        break;
-    case 5:
-        level5SpellCount--;
-        break;
-    }
-
-    for ( int i = 0; i < level5SpellCount; ++i )
-        general.Append( GetUniqueSpellCompatibility( general, race, 5 ) );
-
-    for ( int i = 0; i < level4SpellCount; ++i )
-        general.Append( GetUniqueSpellCompatibility( general, race, 4 ) );
-
-    for ( int i = 0; i < level3SpellCount; ++i )
-        general.Append( GetUniqueSpellCompatibility( general, race, 3 ) );
-
-    for ( int i = 0; i < level2SpellCount; ++i )
-        general.Append( GetUniqueSpellCompatibility( general, race, 2 ) );
-
-    for ( int i = 0; i < level1SpellCount; ++i )
-        general.Append( GetUniqueSpellCompatibility( general, race, 1 ) );
 }
 
 SpellStorage MageGuild::GetSpells( int lvlmage, bool islibrary, int level ) const
