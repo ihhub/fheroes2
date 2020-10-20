@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <set>
+
 #include "world_pathfinding.h"
 #include "ai.h"
 #include "ground.h"
@@ -403,21 +405,23 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     const Directions directions = Direction::All();
     const bool isWater = world.GetTiles( _pathStart ).isWater();
 
-    auto validateAndAdd = [this, &result, &kingdom]( int index, int object ) {
-        if ( kingdom.isValidKingdomObject( world.GetTiles( index ), object ) ) {
+    std::set<int> uniqueIndicies;
+    auto validateAndAdd = [this, &kingdom, &result, &uniqueIndicies]( int index, int object ) {
+        // std::set insert returns a pair, second value is true if it was unique
+        if ( uniqueIndicies.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), object ) ) {
             result.emplace_back( index, object );
         }
     };
 
+    // skip the target itself to make sure we don't double count
+    uniqueIndicies.insert( targetIndex );
+
     // trace the path from end point
     int currentNode = targetIndex;
-    int previousNode = -1;
     while ( currentNode != _pathStart && currentNode != -1 ) {
         const PathfindingNode & node = _cache[currentNode];
 
-        // skip the target itself
-        if ( currentNode != targetIndex )
-            validateAndAdd( currentNode, node._objectID );
+        validateAndAdd( currentNode, node._objectID );
 
         if ( checkAdjacent ) {
             for ( size_t i = 0; i < directions.size(); ++i ) {
@@ -425,8 +429,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
                     const int newIndex = currentNode + _mapOffset[i];
                     const PathfindingNode & adjacent = _cache[newIndex];
 
-                    // make sure we don't double count
-                    if ( newIndex == previousNode || newIndex == node._from || adjacent._cost != 0 )
+                    if ( adjacent._cost == 0 || adjacent._objectID == 0 )
                         continue;
 
                     validateAndAdd( newIndex, adjacent._objectID );
@@ -440,7 +443,6 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
             break;
         }
 
-        previousNode = currentNode;
         currentNode = node._from;
     }
 
