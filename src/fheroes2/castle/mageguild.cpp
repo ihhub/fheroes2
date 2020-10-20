@@ -39,13 +39,13 @@ void MageGuild::Builds( int race, bool libraryCap )
     general.clear();
     library.clear();
 
-    std::vector<int> spellCountByLevel = { 3, 3, 2, 2, 1 };
+    std::vector<size_t> spellCountByLevel = { 3, 3, 2, 2, 1 };
 
     const Spell guaranteedDamageSpell = GetGuaranteedDamageSpellForMageGuild();
-    const size_t guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
+    const uint32_t guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
 
     const Spell guaranteedNonDamageSpell = GetGuaranteedNonDamageSpellForMageGuild();
-    const size_t guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
+    const uint32_t guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
 
     general.Append( guaranteedDamageSpell );
     general.Append( guaranteedNonDamageSpell );
