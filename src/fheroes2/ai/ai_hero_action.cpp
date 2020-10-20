@@ -1746,8 +1746,7 @@ namespace AI
             const Troop & troop = tile.QuantityTroop();
             const payment_t paymentCosts = troop.GetCost();
 
-            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts )
-                 && ( army.HasMonster( troop() ) || !army.isFullHouse() ) )
+            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() ) )
                 return true;
             break;
         }
@@ -1758,7 +1757,8 @@ namespace AI
         case MP2::OBJ_TROLLBRIDGE: {
             if ( Color::NONE == tile.QuantityColor() ) {
                 return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
-            } else {
+            }
+            else {
                 const Troop & troop = tile.QuantityTroop();
                 const payment_t paymentCosts = troop.GetCost();
 
