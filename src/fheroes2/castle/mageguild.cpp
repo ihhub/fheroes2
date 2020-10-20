@@ -103,10 +103,12 @@ Spell GetUniqueCombatSpellCompatibility( const SpellStorage & spells, int race, 
 
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
 {
-    Spell spell = Spell::Rand( lvl, Rand::Get( 0, 1 ) == 0 ? true : false );
+    const bool hasAdventureSpell = spells.hasAdventureSpell( lvl );
+    const bool isLookingForCombatSpell = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
+    Spell spell = Spell::Rand( lvl, isLookingForCombatSpell );
 
     while ( spells.isPresentSpell( spell ) || !spell.isRaceCompatible( race ) )
-        spell = Spell::Rand( lvl, Rand::Get( 0, 1 ) == 0 ? true : false );
+        spell = Spell::Rand( lvl, isLookingForCombatSpell );
 
     return spell;
 }
