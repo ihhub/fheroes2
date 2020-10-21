@@ -59,8 +59,12 @@ void MageGuild::Builds( int race, bool libraryCap )
     --spellCountByLevel[guaranteedNonDamageSpellLevel - 1];
 
     for ( int i = 0; i < 5; ++i ) {
-        for ( int j = 0; j < spellCountByLevel[i]; ++j )
-            general.Append( GetUniqueSpellCompatibility( general, race, i + 1 ) );
+        for ( int j = 0; j < spellCountByLevel[i]; ++j ) {
+            const Spell spell = GetUniqueSpellCompatibility( general, race, i + 1 );
+
+            if ( spell != Spell::NONE )
+                general.Append( spell );
+        }
     }
 }
 
@@ -104,11 +108,15 @@ Spell GetUniqueCombatSpellCompatibility( const SpellStorage & spells, int race, 
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
 {
     const bool hasAdventureSpell = spells.hasAdventureSpell( lvl );
-    const bool isLookingForCombatSpell = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
-    Spell spell = Spell::Rand( lvl, isLookingForCombatSpell );
+    const bool isLookingForAdventureSpell = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
+    Spell spell = Spell::Rand( lvl, isLookingForAdventureSpell );
 
-    while ( spells.isPresentSpell( spell ) || !spell.isRaceCompatible( race ) )
-        spell = Spell::Rand( lvl, isLookingForCombatSpell );
+    while ( spells.isPresentSpell( spell ) || !spell.isRaceCompatible( race ) ) {
+        spell = Spell::Rand( lvl, isLookingForAdventureSpell );
+
+        if ( spell == Spell::NONE )
+            return spell;
+    }
 
     return spell;
 }
