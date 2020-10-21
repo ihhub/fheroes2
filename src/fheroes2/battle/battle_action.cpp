@@ -856,45 +856,22 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     }
 }
 
+std::pair<int, int> damage_range( const HeroBase * );
+
 void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
 {
     std::vector<int> targets = GetCastleTargets();
-
     if ( interface ) {
         interface->RedrawActionEarthQuakeSpell( targets );
     }
 
     auto commander = GetCurrentCommander();
-    auto spell_points = commander->GetSpellPoints();
-
-    auto min_damage = 0;
-    auto max_damage = 0;
-    switch ( spell_points ) {
-    case 0..24:
-        min_damage = 0;
-        max_damage = 1;
-        break;
-    case 25..49:
-        min_damage = 0;
-        max_damage = 2;
-        break;
-    case 50..74:
-        min_damage = 0;
-        max_damage = 3;
-        break;
-    case 75..100:
-        min_damage = 1;
-        max_damage = 3;
+    auto range = damage_range( commander );
+    for ( auto i : { 8, 29, 73, 96 } ) {
+        if ( 0 != board[i].GetObject() ) {
+            board[i].SetObject( Rand::Get( range.first, range.second ) );
+        }
     }
-
-    if ( 0 != board[8].GetObject() )
-        board[8].SetObject( Rand::Get( min_damage, max_damage ) );
-    if ( 0 != board[29].GetObject() )
-        board[29].SetObject( Rand::Get( min_damage, max_damage ) );
-    if ( 0 != board[73].GetObject() )
-        board[73].SetObject( Rand::Get( min_damage, max_damage ) );
-    if ( 0 != board[96].GetObject() )
-        board[96].SetObject( Rand::Get( min_damage, max_damage ) );
 
     if ( towers[0] && towers[0]->isValid() && Rand::Get( 1 ) )
         towers[0]->SetDestroy();
@@ -902,6 +879,28 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
         towers[2]->SetDestroy();
 
     DEBUG( DBG_BATTLE, DBG_TRACE, "spell: " << Spell( Spell::EARTHQUAKE ).GetName() << ", targets: " << targets.size() );
+}
+
+std::pair<int, int> damage_range( const HeroBase * commander )
+{
+    auto spell_points = commander->GetSpellPoints();
+    auto result = std::make_pair( 0, 1 );
+    if ( ( spell_points >= 0 ) && ( spell_points < 24 ) ) {
+        result = std::make_pair( 0, 1 );
+    }
+    else if ( ( spell_points >= 25 ) && ( spell_points < 50 ) ) {
+        result = std::make_pair( 0, 2 );
+    }
+    else if ( ( spell_points >= 50 ) && ( spell_points < 75 ) ) {
+        result = std::make_pair( 0, 3 );
+    }
+    else if ( ( spell_points >= 75 ) && ( spell_points <= 100 ) ) {
+        result = std::make_pair( 1, 3 );
+    }
+    else {
+        DEBUG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spell_points value: " << spell_points << " for commander " << commander );
+    }
+    return result;
 }
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
