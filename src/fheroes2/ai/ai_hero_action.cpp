@@ -193,6 +193,7 @@ namespace AI
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const int object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+        bool isAction = true;
 
         if ( MP2::isActionObject( object, hero.isShipMaster() ) )
             hero.SetModes( Heroes::ACTION );
@@ -421,13 +422,16 @@ namespace AI
             break;
 
         default:
+            isAction = false;
             break;
         }
 
         if ( MP2::isNeedStayFront( object ) )
             hero.GetPath().Reset();
 
-        AI::Get().HeroesActionComplete( hero, dst_index );
+        // ignore empty tiles
+        if ( isAction )
+            AI::Get().HeroesActionComplete( hero, dst_index );
 
         // reset if during an action music was stopped
         AGG::PlayMusic( MUS::COMPUTER_TURN );
@@ -1742,8 +1746,7 @@ namespace AI
             const Troop & troop = tile.QuantityTroop();
             const payment_t paymentCosts = troop.GetCost();
 
-            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts )
-                 && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFlying() ) ) ) )
+            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() ) )
                 return true;
             break;
         }
@@ -1752,8 +1755,10 @@ namespace AI
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE: {
-            const bool battle = ( Color::NONE == tile.QuantityColor() );
-            if ( !battle ) {
+            if ( Color::NONE == tile.QuantityColor() ) {
+                return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            }
+            else {
                 const Troop & troop = tile.QuantityTroop();
                 const payment_t paymentCosts = troop.GetCost();
 
@@ -1810,7 +1815,7 @@ namespace AI
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
-                return true;
+                return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
             break;
 
         case MP2::OBJ_MONSTER:

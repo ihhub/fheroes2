@@ -20,45 +20,51 @@
 
 #pragma once
 
-#include "battle_board.h"
-#include "pathfinding.h"
+#include <set>
+#include <vector>
 
-namespace Battle
+enum
 {
-    const uint16_t MAX_MOVE_COST = ARENASIZE;
+    REGION_NODE_BLOCKED = 0,
+    REGION_NODE_OPEN = 1,
+    REGION_NODE_BORDER = 2,
+    REGION_NODE_FOUND = 3
+};
 
-    /* ArenaNode, different situations
-     * default:  from: -1, isOpen: true, cost: MAX
-     * starting: from: -1, isOpen: false, cost: 0
-     * passable: from: 0-98, isOpen: true, cost: 1+
-     * oth.unit: from: 0-98, isOpen: false, cost: 0+
-     * terrain:  from: -1, isOpen: false, cost: MAX
-     * if tile wouldn't be reached it stays as default
-     */
-    struct ArenaNode : public PathfindingNode
-    {
-        bool _isOpen = true;
+struct MapRegionNode
+{
+    int index = -1;
+    int type = REGION_NODE_BLOCKED;
+    uint16_t mapObject = 0;
+    uint16_t passable = 0;
+    bool isWater = false;
 
-        // ArenaNode uses different default values
-        ArenaNode()
-            : PathfindingNode( -1, MAX_MOVE_COST, 0 )
-        {}
-        ArenaNode( int node, uint16_t cost, bool isOpen )
-            : PathfindingNode( node, cost, 0 )
-            , _isOpen( isOpen )
-        {}
-        // Override the base version of the call to use proper values
-        virtual void resetNode() override;
-    };
+    MapRegionNode() {}
+    MapRegionNode( int index )
+        : index( index )
+        , type( REGION_NODE_OPEN )
+    {}
+    MapRegionNode( int index, uint16_t pass, bool water )
+        : index( index )
+        , type( REGION_NODE_OPEN )
+        , passable( pass )
+        , isWater( water )
+    {}
+};
 
-    class ArenaPathfinder : public Pathfinder<ArenaNode>
-    {
-    public:
-        ArenaPathfinder();
-        virtual void reset() override;
-        void calculate( const Unit & unit );
-        virtual std::list<Route::Step> buildPath( int targetCell ) const override;
-        bool hexIsAccessible( int targetCell ) const;
-        bool hexIsPassable( int targetCell ) const;
-    };
-}
+struct MapRegion
+{
+public:
+    int _id = REGION_NODE_FOUND;
+    bool _isWater = false;
+    std::set<int> _neighbours;
+    std::vector<MapRegionNode> _nodes;
+    size_t _lastProcessedNode = 0;
+
+    MapRegion(){};
+    MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
+    std::vector<int> getNeighbours() const;
+    std::vector<IndexObject> getObjectList() const;
+    int getObjectCount() const;
+    double getFogRatio( int color ) const;
+};
