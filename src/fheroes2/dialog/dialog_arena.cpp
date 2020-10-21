@@ -89,7 +89,7 @@ int Dialog::SelectSkillFromArena( void )
     text.Blit( dst_pt.x, dst_pt.y );
 
     if ( allSkills ) {
-        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), Font::SMALL, 65 );
+        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), Font::SMALL, 66 );
         dst_pt.x = rect4.x + ( rect4.width - text.w() ) / 2;
         dst_pt.y = rect4.y + rect4.height + 5;
         text.Blit( dst_pt.x, dst_pt.y );
