@@ -669,7 +669,7 @@ Point Battle::OpponentSprite::GetCastPosition( void ) const
 
 void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
 {
-    fheroes2::Sprite hero = fheroes2::AGG::GetICN( icn, _currentAnim.getFrame() );
+    const fheroes2::Sprite & hero = fheroes2::AGG::GetICN( icn, _currentAnim.getFrame() );
 
     Point offset( _offset );
     if ( base->isCaptain() ) {
@@ -942,9 +942,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
         light = true;
         icn_frng = ICN::FRNG0001;
     }
-
-    sf_cover.resize( _mainSurface.width(), _mainSurface.height() );
-    sf_cover.reset();
 
     // hexagon
     sf_hexagon = DrawHexagon( ( light ? fheroes2::GetColorId( 0x78, 0x94, 0 ) : fheroes2::GetColorId( 0x38, 0x48, 0 ) ) );
@@ -1269,7 +1266,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
 
         // move offset
         if ( _movingUnit == &b ) {
-            fheroes2::Sprite spmon0 = fheroes2::AGG::GetICN( msi.icn_file, _movingUnit->animation.firstFrame() );
+            const fheroes2::Sprite & spmon0 = fheroes2::AGG::GetICN( msi.icn_file, _movingUnit->animation.firstFrame() );
             const s32 ox = spmon1.x() - spmon0.x();
 
             if ( _movingUnit->animation.animationLength() ) {
@@ -1434,7 +1431,7 @@ void Battle::Interface::RedrawCastle1( const Castle & castle )
 
     // moat
     if ( castle.isBuild( BUILD_MOAT ) ) {
-        fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
         fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
     }
 
@@ -2181,7 +2178,7 @@ void Battle::Interface::FadeArena( void )
     Rect srt = border.GetArea();
     fheroes2::Image top( srt.w, srt.h );
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.w, srt.h );
-    fheroes2::FadeDisplayWithPalette( top, fheroes2::Point( srt.x, srt.y ), 5, 300, 7 );
+    fheroes2::FadeDisplayWithPalette( top, fheroes2::Point( srt.x, srt.y ), 5, 300, 5 );
     display.render();
 }
 
@@ -3728,7 +3725,7 @@ void Battle::Interface::RedrawActionStoneSpell( Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    fheroes2::Sprite unitSprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
 
     fheroes2::Sprite stoneEffect( unitSprite );
     fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::GRAY ) );

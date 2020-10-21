@@ -217,7 +217,7 @@ public:
     bool isAlive( void ) const;
     bool hasMeleePenalty() const;
 
-    double GetMonsterStrength() const;
+    double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
     int ICNMonh( void ) const;
 
     u32 GetSpriteIndex( void ) const;
