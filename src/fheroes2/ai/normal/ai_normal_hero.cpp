@@ -82,7 +82,7 @@ namespace AI
         _pathfinder.reEvaluateIfNeeded( hero );
 
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
-            const MapObjectNode & node = _mapObjects[idx];
+            const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
             if ( heroInPatrolMode && Maps::GetApproximateDistance( patrolIndex, node.first ) > distanceLimit )
@@ -93,7 +93,15 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                const double value = GetObjectValue( heroColor, node.first, node.second ) - static_cast<double>( dist );
+                double value = GetObjectValue( heroColor, node.first, node.second );
+
+                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
+                for ( const IndexObject & pair : list ) {
+                    if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
+                        value += GetObjectValue( heroColor, pair.first, pair.second );
+                }
+
+                value -= static_cast<double>( dist );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
@@ -150,16 +158,11 @@ namespace AI
             const int targetIndex = GetPriorityTarget( hero, patrolCenter, patrolDistance );
 
             if ( targetIndex != -1 ) {
-                objectsToErase.push_back( targetIndex );
                 _pathfinder.reEvaluateIfNeeded( hero );
                 hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
-                HeroesMove( hero );
+                objectsToErase.push_back( hero.GetPath().GetDestinationIndex() );
 
-                // Check if hero is stuck
-                if ( targetIndex != startIndex && hero.GetIndex() == startIndex ) {
-                    hero.SetModes( AI::HERO_WAITING );
-                    DEBUG( DBG_AI, DBG_WARN, hero.GetName() << " is stuck trying to reach " << targetIndex );
-                }
+                HeroesMove( hero );
             }
             else {
                 hero.SetModes( AI::HERO_WAITING );
@@ -168,16 +171,14 @@ namespace AI
         }
 
         // Remove the object from the list so other heroes won't target it
-        for ( size_t idx = 0; idx < _mapObjects.size() && !objectsToErase.empty(); ++idx ) {
-            auto it = std::find( objectsToErase.begin(), objectsToErase.end(), _mapObjects[idx].first );
-            if ( it != objectsToErase.end() ) {
+        if ( objectsToErase.size() ) {
+            for ( const int idxToErase : objectsToErase ) {
+                auto it = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&idxToErase]( const IndexObject & o ) { return o.first == idxToErase; } );
                 // Actually remove if this object single use only
-                if ( MP2::isCaptureObject( _mapObjects[idx].second ) || MP2::isRemoveObject( _mapObjects[idx].second ) ) {
-                    // this method does not retain the vector order
-                    _mapObjects[idx] = _mapObjects.back();
-                    _mapObjects.pop_back();
+                if ( it != _mapObjects.end() && !MP2::isCaptureObject( it->second ) && !MP2::isRemoveObject( it->second ) ) {
+                    // retains the vector order for binary search
+                    _mapObjects.erase( it );
                 }
-                objectsToErase.erase( it );
             }
         }
 

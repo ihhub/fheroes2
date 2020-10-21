@@ -22,6 +22,7 @@
 
 #include "army.h"
 #include "color.h"
+#include "pairs.h"
 #include "pathfinding.h"
 #include "route.h"
 
@@ -73,6 +74,7 @@ public:
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );
     int getFogDiscoveryTile( const Heroes & hero );
+    std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
     uint32_t getDistance( const Heroes & hero, int targetIndex );
 
     // Used for non-hero armies, like castles or monsters
