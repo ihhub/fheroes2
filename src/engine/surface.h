@@ -62,7 +62,6 @@ public:
     int a( void ) const;
 
     int pack( void ) const;
-    static RGBA unpack( int );
 
 protected:
     SDL_Color color;
@@ -120,33 +119,17 @@ public:
     u32 amask( void ) const;
     u32 alpha( void ) const;
 
-    Size GetSize( void ) const;
     bool isRefCopy( void ) const;
-    SurfaceFormat GetFormat( void ) const;
 
     bool isValid( void ) const;
 
     void SetColorKey( const RGBA & );
-    u32 GetColorKey( void ) const;
-
-    void Blit( Surface & ) const;
-    void Blit( s32, s32, Surface & ) const;
-    void Blit( const Point &, Surface & ) const;
-    void Blit( const Rect & srt, s32, s32, Surface & ) const;
-    void Blit( const Rect & srt, const Point &, Surface & ) const;
 
     void Fill( const RGBA & );
     void FillRect( const Rect &, const RGBA & );
-    void DrawPoint( const Point &, const RGBA & );
-
-    virtual u32 GetMemoryUsage( void ) const;
-
-    virtual Surface GetSurface( void ) const;
-    virtual Surface GetSurface( const Rect & ) const;
 
     static void SetDefaultPalette( SDL_Color *, int );
     static void SetDefaultColorKey( int, int, int );
-    static void Swap( Surface &, Surface & );
 
 protected:
     static void FreeSurface( Surface & );
@@ -155,18 +138,11 @@ protected:
     void Unlock( void ) const;
 
     u32 MapRGB( const RGBA & ) const;
-    RGBA GetRGB( u32 pixel ) const;
 
     void Set( const Surface &, bool refcopy );
     void Set( u32 sw, u32 sh, u32 bpp /* bpp: 8, 16, 24, 32 */, bool amask );
     void Set( SDL_Surface * );
     void SetPalette( void );
-
-    void SetPixel4( s32 x, s32 y, u32 color );
-    void SetPixel3( s32 x, s32 y, u32 color );
-    void SetPixel2( s32 x, s32 y, u32 color );
-    void SetPixel1( s32 x, s32 y, u32 color );
-    void SetPixel( int x, int y, u32 );
 
     SDL_Surface * surface;
 };

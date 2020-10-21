@@ -25,6 +25,62 @@
 
 using namespace SDL;
 
+Thread::Thread()
+    : thread( NULL )
+{}
+
+Thread::~Thread()
+{
+    Kill();
+}
+
+Thread::Thread( const Thread & )
+    : thread( NULL )
+{}
+
+Thread & Thread::operator=( const Thread & )
+{
+    return *this;
+}
+
+void Thread::Create( int ( *fn )( void * ), void * param )
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    thread = SDL_CreateThread( fn, "", param );
+#else
+    thread = SDL_CreateThread( fn, param );
+#endif
+}
+
+int Thread::Wait( void )
+{
+    int status = 0;
+    if ( thread )
+        SDL_WaitThread( thread, &status );
+    thread = NULL;
+    return status;
+}
+
+void Thread::Kill( void )
+{
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#else
+    if ( thread )
+        SDL_KillThread( thread );
+    thread = NULL;
+#endif
+}
+
+bool Thread::IsRun( void ) const
+{
+    return GetID();
+}
+
+u32 Thread::GetID( void ) const
+{
+    return thread ? SDL_GetThreadID( thread ) : 0;
+}
+
 Timer::Timer()
     : id( 0 )
 {}

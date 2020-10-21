@@ -166,7 +166,7 @@ public:
 
     void DrawImageCastle( const Point & pt );
 
-    int OpenDialog( bool readonly = false, bool fade = false );
+    int OpenDialog( bool readonly = false );
 
     int GetAttackModificator( std::string * ) const;
     int GetDefenseModificator( std::string * ) const;

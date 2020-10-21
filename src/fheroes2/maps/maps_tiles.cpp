@@ -959,6 +959,52 @@ void Maps::Tiles::SetObject( int object )
     world.resetPathfinder();
 }
 
+void Maps::Tiles::setBoat( int direction )
+{
+    if ( objectTileset != 0 && objectIndex != 255 ) {
+        AddonsPushLevel1( TilesAddon( 0, 0, objectTileset, objectIndex ) );
+    }
+    SetObject( MP2::OBJ_BOAT );
+    objectTileset = ICN::BOAT32;
+
+    // Left-side sprites have to flipped, add 128 to index
+    switch ( direction ) {
+    case Direction::TOP:
+        objectIndex = 0;
+        break;
+    case Direction::TOP_RIGHT:
+        objectIndex = 9;
+        break;
+    case Direction::RIGHT:
+        objectIndex = 18;
+        break;
+    case Direction::BOTTOM_RIGHT:
+        objectIndex = 27;
+        break;
+    case Direction::BOTTOM:
+        objectIndex = 36;
+        break;
+    case Direction::BOTTOM_LEFT:
+        objectIndex = 27 + 128;
+        break;
+    case Direction::LEFT:
+        objectIndex = 18 + 128;
+        break;
+    case Direction::TOP_LEFT:
+        objectIndex = 9 + 128;
+        break;
+    default:
+        objectIndex = 18;
+        break;
+    }
+}
+
+void Maps::Tiles::resetObjectSprite()
+{
+    objectTileset = 0;
+    objectIndex = 255;
+}
+
 void Maps::Tiles::SetTile( u32 sprite_index, u32 shape )
 {
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
@@ -1399,7 +1445,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool
 
     if ( ( area.GetVisibleTileROI() & mp ) && !addon.empty() ) {
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
-            const u8 & index = ( *it ).index;
+            const u8 index = ( *it ).index;
             const int icn = MP2::GetICNObject( ( *it ).object );
 
             if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( it->object, index ) ) ) {
@@ -1509,9 +1555,9 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     if ( area.GetVisibleTileROI() & mp ) {
-        // FIXME: restore direction from Maps::Tiles
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, 18 );
-        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp );
+        const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
+        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp, ( spriteIndex > 128 ) );
     }
 }
 
@@ -1579,6 +1625,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
 
         if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
             RedrawObjects( dst );
+            RedrawMonstersAndBoat( dst );
         }
     }
 }
@@ -1980,8 +2027,6 @@ void Maps::Tiles::CorrectFlags32( u32 index, bool up )
 
 void Maps::Tiles::FixedPreload( Tiles & tile )
 {
-    Addons::iterator it;
-
     // fix skeleton: left position
     if ( MP2::GetICNObject( tile.objectTileset ) == ICN::OBJNDSRT && tile.objectIndex == 83 ) {
         tile.SetObject( MP2::OBJN_SKELETON );
@@ -2042,8 +2087,7 @@ void Maps::Tiles::Remove( u32 uniqID )
         addons_level2.Remove( uniqID );
 
     if ( uniq == uniqID ) {
-        objectTileset = 0;
-        objectIndex = 255;
+        resetObjectSprite();
         uniq = 0;
     }
 }

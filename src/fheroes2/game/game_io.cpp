@@ -92,7 +92,7 @@ namespace Game
 bool Game::Save( const std::string & fn )
 {
     DEBUG( DBG_GAME, DBG_INFO, fn );
-    const bool autosave = ( System::GetBasename( fn ) == "autosave.sav" );
+    const bool autosave = ( System::GetBasename( fn ) == "AUTOSAVE.sav" );
     const Settings & conf = Settings::Get();
 
     // ask overwrite?

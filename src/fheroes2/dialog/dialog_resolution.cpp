@@ -30,7 +30,7 @@
 
 namespace
 {
-    const int editBoxLength = 265;
+    const int editBoxLength = 266;
 
     std::string GetResolutionString( const std::pair<int, int> & resolution )
     {
@@ -50,7 +50,7 @@ namespace
 
         virtual void RedrawItem( const std::pair<int, int> & resolution, s32 offsetX, s32 offsetY, bool current ) override
         {
-            Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
+            const Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
             text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );
         }
 
@@ -81,12 +81,12 @@ namespace
 
     void RedrawInfo( const fheroes2::Point & dst, const std::pair<int, int> & resolution )
     {
-        Text text( "Select game resolution:", Font::YELLOW_BIG );
-        text.Blit( dst.x + 175 - text.w() / 2, dst.y + 30 );
+        Text text( "Select Game Resolution:", Font::YELLOW_BIG );
+        text.Blit( dst.x + ( 377 - text.w() ) / 2, dst.y + 30 );
 
         if ( resolution.first > 0 && resolution.second > 0 ) {
             text.Set( GetResolutionString( resolution ), Font::YELLOW_BIG );
-            text.Blit( dst.x + ( editBoxLength - text.w() ) / 2 + 40, dst.y + 288, editBoxLength );
+            text.Blit( dst.x + ( editBoxLength - text.w() ) / 2 + 41, dst.y + 287 + ( 19 - text.h() + 2 ) / 2, editBoxLength );
         }
     }
 }
@@ -126,7 +126,7 @@ namespace Dialog
         resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( roi.x + 327, roi.y + 257 ) );
         resList.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
         resList.SetAreaMaxItems( 11 );
-        resList.SetAreaItems( fheroes2::Rect( roi.x + 40, roi.y + 55, 265, 215 ) );
+        resList.SetAreaItems( fheroes2::Rect( roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 ) );
 
         resList.SetListContent( resolutions );
 

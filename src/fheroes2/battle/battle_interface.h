@@ -207,7 +207,7 @@ namespace Battle
         void RedrawActionMorale( Unit &, bool );
         void RedrawActionLuck( Unit & );
         void RedrawActionTowerPart1( Tower &, Unit & );
-        void RedrawActionTowerPart2( Tower &, TargetInfo & );
+        void RedrawActionTowerPart2( TargetInfo & );
         void RedrawActionCatapult( int );
         void RedrawActionTeleportSpell( Unit &, s32 );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
@@ -231,11 +231,11 @@ namespace Battle
 
         void RedrawBorder( void );
         void RedrawCover( void );
-        void RedrawCoverStatic( fheroes2::Image & );
+        void RedrawCoverStatic();
         void RedrawCoverBoard( const Settings &, const Board & );
-        void RedrawLowObjects( s32, fheroes2::Image & );
+        void RedrawLowObjects( s32 );
         void RedrawHighObjects( s32 );
-        void RedrawCastle1( const Castle &, fheroes2::Image & );
+        void RedrawCastle1( const Castle & );
         void RedrawCastle2( const Castle &, s32 );
         void RedrawCastle3( const Castle & );
         void RedrawKilled( void );
@@ -254,7 +254,7 @@ namespace Battle
         void RedrawActionStoneSpell( Unit & target );
         void RedrawActionColdRingSpell( s32, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
-        void RedrawActionArmageddonSpell( const TargetsInfo & );
+        void RedrawActionArmageddonSpell();
         void RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength );
@@ -299,7 +299,6 @@ namespace Battle
         fheroes2::Image sf_hexagon;
         fheroes2::Image sf_shadow;
         fheroes2::Image sf_cursor;
-        fheroes2::Image sf_cover;
 
         int icn_cbkg;
         int icn_frng;

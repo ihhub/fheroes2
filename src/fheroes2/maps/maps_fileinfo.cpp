@@ -767,7 +767,7 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
             lists.resize( std::distance( lists.begin(), it ) );
     }
 
-    return lists.size();
+    return !lists.empty();
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )

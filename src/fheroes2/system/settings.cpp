@@ -431,7 +431,6 @@ Settings::Settings()
     , game_type( 0 )
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
-    , memory_limit( 0 )
 {
     ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
@@ -621,9 +620,6 @@ bool Settings::Read( const std::string & filename )
         if ( music_volume > 10 )
             music_volume = 10;
     }
-
-    // memory limit
-    memory_limit = config.IntParams( "memory limit" );
 
     // move speed
     if ( config.Exists( "ai speed" ) ) {
@@ -1934,16 +1930,6 @@ void Settings::BinaryLoad( void )
 
         fs >> version >> opt_game >> opt_world >> opt_battle >> opt_addons >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
     }
-}
-
-void Settings::SetMemoryLimit( u32 limit )
-{
-    memory_limit = limit;
-}
-
-u32 Settings::MemoryLimit( void ) const
-{
-    return memory_limit;
 }
 
 bool Settings::FullScreen( void ) const

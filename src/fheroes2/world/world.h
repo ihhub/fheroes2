@@ -167,8 +167,15 @@ public:
 
     static World & Get( void );
 
-    s32 w( void ) const;
-    s32 h( void ) const;
+    s32 w( void ) const
+    {
+        return Size::w;
+    }
+
+    s32 h( void ) const
+    {
+        return Size::h;
+    }
 
     const Maps::Tiles & GetTiles( u32, u32 ) const;
     Maps::Tiles & GetTiles( u32, u32 );

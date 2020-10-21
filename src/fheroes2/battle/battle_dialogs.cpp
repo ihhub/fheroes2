@@ -179,13 +179,13 @@ void Battle::RedrawOnOffSetting( const Rect & area, const std::string & name, ui
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CSPANEL, isSet ? index + 1 : index );
     const int textOffset = 2;
 
-    Text text( name, Font::SMALL );
-    text.Blit( area.x + ( area.w - text.w() ) / 2, area.y - text.h() - textOffset );
+    TextBox upperText( name, Font::SMALL, area.w );
+    upperText.Blit( area.x + ( area.w - upperText.w() ) / 2, area.y - upperText.h() - textOffset );
 
     fheroes2::Blit( sprite, display, area.x, area.y );
 
-    text.Set( isSet ? _( "On" ) : _( "Off" ) );
-    text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + area.h + textOffset );
+    const Text lowerText( isSet ? _( "On" ) : _( "Off" ), Font::SMALL );
+    lowerText.Blit( area.x + ( area.w - lowerText.w() ) / 2, area.y + area.h + textOffset );
 }
 
 void Battle::DialogBattleSettings( void )

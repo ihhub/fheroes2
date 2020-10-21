@@ -348,16 +348,6 @@ void World::InitKingdoms( void )
     vec_kingdoms.Init();
 }
 
-s32 World::w( void ) const
-{
-    return Size::w;
-}
-
-s32 World::h( void ) const
-{
-    return Size::h;
-}
-
 const Maps::Tiles & World::GetTiles( u32 ax, u32 ay ) const
 {
     return GetTiles( ay * w() + ax );
@@ -632,7 +622,7 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
     MapsIndexes result;
 
     if ( MP2::OBJ_STONELITHS == GetTiles( center ).GetObject( false ) ) {
-        const MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
+        const MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, false );
 
         if ( 2 > allTeleporters.size() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is empty" );
@@ -665,7 +655,7 @@ s32 World::NextTeleport( s32 index ) const
 MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
 {
     if ( MP2::OBJ_WHIRLPOOL == GetTiles( center ).GetObject( false ) ) {
-        MapsIndexes whilrpools = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, false );
+        MapsIndexes whilrpools = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
         for ( MapsIndexes::const_iterator it = whilrpools.begin(); it != whilrpools.end(); ++it ) {
@@ -871,7 +861,7 @@ void World::ActionForMagellanMaps( int color )
 
 void World::ActionToEyeMagi( int color ) const
 {
-    MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+    MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, false );
 
     if ( vec_eyes.size() ) {
         for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it )

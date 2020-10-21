@@ -25,7 +25,6 @@
 
 #include "gamedefs.h"
 
-struct cost_t;
 namespace Skill
 {
     struct stats_t;
@@ -48,7 +47,6 @@ namespace GameStatic
     u32 GetGameOverLostDays( void );
     u32 GetOverViewDistance( u32 );
 
-    cost_t & GetKingdomStartingResource( int difficulty );
     u32 GetKingdomMaxHeroes( void );
 
     u32 GetCastleGrownWell( void );

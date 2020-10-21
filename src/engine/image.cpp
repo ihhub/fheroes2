@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "image.h"
-#include "../../tools/palette_h2.h"
+#include "palette_h2.h"
 
 #include <cmath>
 #include <cstring>
@@ -400,16 +400,6 @@ namespace fheroes2
         return *this;
     }
 
-    int32_t Image::width() const
-    {
-        return _width;
-    }
-
-    int32_t Image::height() const
-    {
-        return _height;
-    }
-
     uint8_t * Image::image()
     {
         return _image.data();
@@ -522,16 +512,6 @@ namespace fheroes2
     {
         swap( image );
         return *this;
-    }
-
-    int32_t Sprite::x() const
-    {
-        return _x;
-    }
-
-    int32_t Sprite::y() const
-    {
-        return _y;
     }
 
     void Sprite::setPosition( int32_t x_, int32_t y_ )
@@ -689,16 +669,16 @@ namespace fheroes2
 
     void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue, bool flip )
     {
-        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
-            return;
-        }
-
         if ( alphaValue == 0 ) { // there is nothing we need to do
             return;
         }
 
         if ( alphaValue == 255 ) {
             Blit( in, inX, inY, out, outX, outY, width, height, flip );
+            return;
+        }
+
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
             return;
         }
 
@@ -748,7 +728,7 @@ namespace fheroes2
             const uint8_t * imageInY = in.image() + offsetInY;
             const uint8_t * transformInY = in.transform() + offsetInY;
 
-            uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+            uint8_t * imageOutY = out.image() + outY * widthOut + outX;
             const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
             for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
@@ -890,10 +870,13 @@ namespace fheroes2
             }
         }
         else {
-            const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-            const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
-            uint8_t * imageOutY = out.image() + outY * out.width() + outX;
-            uint8_t * transformOutY = out.transform() + outY * out.width() + outX;
+            const int32_t offsetInY = inY * widthIn + inX;
+            const uint8_t * imageInY = in.image() + offsetInY;
+            const uint8_t * transformInY = in.transform() + offsetInY;
+
+            const int32_t offsetOutY = outY * widthOut + outX;
+            uint8_t * imageOutY = out.image() + offsetOutY;
+            uint8_t * transformOutY = out.transform() + offsetOutY;
             const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
             for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
@@ -944,10 +927,13 @@ namespace fheroes2
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
-        const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-        const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
-        uint8_t * imageOutY = out.image() + outY * widthOut + outX;
-        uint8_t * transformOutY = out.transform() + outY * widthOut + outX;
+        const int32_t offsetInY = inY * widthIn + inX;
+        const uint8_t * imageInY = in.image() + offsetInY;
+        const uint8_t * transformInY = in.transform() + offsetInY;
+
+        const int32_t offsetOutY = outY * widthOut + outX;
+        uint8_t * imageOutY = out.image() + offsetOutY;
+        uint8_t * transformOutY = out.transform() + offsetOutY;
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
         for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {

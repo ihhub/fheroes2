@@ -39,14 +39,14 @@ public:
         , _restorer( fheroes2::Display::instance() )
     {}
 
-    void RedrawItem( const u32 &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    virtual void RedrawItem( const u32 &, s32, s32, bool ) override;
+    virtual void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListDoubleClick( u32 & );
-    void ActionListSingleClick( u32 & );
-    void ActionListPressRight( u32 & ){};
+    virtual void ActionCurrentUp( void ) override {}
+    virtual void ActionCurrentDn( void ) override {}
+    virtual void ActionListDoubleClick( u32 & ) override;
+    virtual void ActionListSingleClick( u32 & ) override;
+    virtual void ActionListPressRight( u32 & ) override {}
 
     bool readonly;
     fheroes2::ImageRestorer _restorer;

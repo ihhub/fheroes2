@@ -321,6 +321,8 @@ void SetLangEnvPath( const Settings & conf )
         else
             ERROR( "translation not found: " << mofile );
     }
+#else
+    (void)conf;
 #endif
     Translation::setStripContext( '|' );
 }

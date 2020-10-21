@@ -190,6 +190,8 @@ bool StatsHeroesList::ActionListCursor( HeroRow & row, const Point & cursor )
 
 void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool current )
 {
+    (void)current;
+
     if ( row.hero ) {
         Text text( "", Font::SMALL );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), fheroes2::Display::instance(), dstx, dsty );
@@ -422,6 +424,8 @@ bool StatsCastlesList::ActionListCursor( CstlRow & row, const Point & cursor )
 
 void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool current )
 {
+    (void)current;
+
     if ( row.castle ) {
         Text text( "", Font::SMALL );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), fheroes2::Display::instance(), dstx, dsty );

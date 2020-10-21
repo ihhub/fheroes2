@@ -40,20 +40,6 @@
 #include "speed.h"
 #include "world.h"
 
-void Battle::UpdateMonsterAttributes( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse battle.xml
-    TiXmlDocument doc;
-
-    if ( doc.LoadFile( spec.c_str() ) ) {
-        const TiXmlElement * xml_battle = doc.FirstChildElement( "battle" );
-    }
-    else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
-#endif
-}
-
 Battle::ModeDuration::ModeDuration()
     : std::pair<u32, u32>( 0, 0 )
 {}
@@ -458,7 +444,7 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     if ( !skip_standing_check && ( !GetCount() || Modes( TR_MOVED | SP_BLIND | IS_PARALYZE_MAGIC ) ) )
         return Speed::STANDING;
 
-    int speed = Monster::GetSpeed();
+    uint32_t speed = Monster::GetSpeed();
     Spell spell;
 
     if ( Modes( SP_HASTE ) ) {
@@ -1292,71 +1278,65 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
 
     // check artifact
     if ( hero ) {
-        const HeroBase * myhero = GetCommander();
-        u32 acount = 0;
+        const HeroBase * defendingHero = GetCommander();
 
         switch ( spell() ) {
         case Spell::COLDRAY:
         case Spell::COLDRING:
             // +50%
-            acount = hero->HasArtifact( Artifact::EVERCOLD_ICICLE );
-            if ( acount )
-                dmg += dmg * acount * Artifact( Artifact::EVERCOLD_ICICLE ).ExtraValue() / 100;
-            acount = hero->HasArtifact( Artifact::EVERCOLD_ICICLE );
-            if ( acount )
-                dmg += dmg * acount * Artifact( Artifact::EVERCOLD_ICICLE ).ExtraValue() / 100;
-            // -50%
-            acount = myhero ? myhero->HasArtifact( Artifact::ICE_CLOAK ) : 0;
-            if ( acount )
-                dmg /= acount * 2;
-            acount = myhero ? myhero->HasArtifact( Artifact::HEART_ICE ) : 0;
-            if ( acount )
-                dmg -= dmg * acount * Artifact( Artifact::HEART_ICE ).ExtraValue() / 100;
-            // 100%
-            acount = myhero ? myhero->HasArtifact( Artifact::HEART_FIRE ) : 0;
-            if ( acount )
-                dmg *= acount * 2;
+            if ( hero->HasArtifact( Artifact::EVERCOLD_ICICLE ) )
+                dmg += dmg * Artifact( Artifact::EVERCOLD_ICICLE ).ExtraValue() / 100;
+
+            if ( defendingHero ) {
+                // -50%
+                if ( defendingHero->HasArtifact( Artifact::ICE_CLOAK ) )
+                    dmg -= dmg * Artifact( Artifact::ICE_CLOAK ).ExtraValue() / 100;
+
+                if ( defendingHero->HasArtifact( Artifact::HEART_ICE ) )
+                    dmg -= dmg * Artifact( Artifact::HEART_ICE ).ExtraValue() / 100;
+
+                // 100%
+                if ( defendingHero->HasArtifact( Artifact::HEART_FIRE ) )
+                    dmg *= 2;
+            }
             break;
 
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
             // +50%
-            acount = hero->HasArtifact( Artifact::EVERHOT_LAVA_ROCK );
-            if ( acount )
-                dmg += dmg * acount * Artifact( Artifact::EVERHOT_LAVA_ROCK ).ExtraValue() / 100;
-            // -50%
-            acount = myhero ? myhero->HasArtifact( Artifact::FIRE_CLOAK ) : 0;
-            if ( acount )
-                dmg /= acount * 2;
-            acount = myhero ? myhero->HasArtifact( Artifact::HEART_FIRE ) : 0;
-            if ( acount )
-                dmg -= dmg * acount * Artifact( Artifact::HEART_FIRE ).ExtraValue() / 100;
-            // 100%
-            acount = myhero ? myhero->HasArtifact( Artifact::HEART_ICE ) : 0;
-            if ( acount )
-                dmg *= acount * 2;
+            if ( hero->HasArtifact( Artifact::EVERHOT_LAVA_ROCK ) )
+                dmg += dmg * Artifact( Artifact::EVERHOT_LAVA_ROCK ).ExtraValue() / 100;
+
+            if ( defendingHero ) {
+                // -50%
+                if ( defendingHero->HasArtifact( Artifact::FIRE_CLOAK ) )
+                    dmg -= dmg * Artifact( Artifact::FIRE_CLOAK ).ExtraValue() / 100;
+
+                if ( defendingHero->HasArtifact( Artifact::HEART_FIRE ) )
+                    dmg -= dmg * Artifact( Artifact::HEART_FIRE ).ExtraValue() / 100;
+
+                // 100%
+                if ( defendingHero->HasArtifact( Artifact::HEART_ICE ) )
+                    dmg *= 2;
+            }
             break;
 
         case Spell::LIGHTNINGBOLT:
             // +50%
-            acount = hero->HasArtifact( Artifact::LIGHTNING_ROD );
-            if ( acount )
-                dmg += dmg * acount * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
+            if ( hero->HasArtifact( Artifact::LIGHTNING_ROD ) )
+                dmg += dmg * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
             // -50%
-            acount = myhero ? myhero->HasArtifact( Artifact::LIGHTNING_HELM ) : 0;
-            if ( acount )
-                dmg /= acount * 2;
+            if ( defendingHero && defendingHero->HasArtifact( Artifact::LIGHTNING_HELM ) )
+                dmg -= dmg * Artifact( Artifact::LIGHTNING_HELM ).ExtraValue() / 100;
             break;
 
         case Spell::CHAINLIGHTNING:
             // +50%
-            acount = hero->HasArtifact( Artifact::LIGHTNING_ROD );
-            if ( acount )
-                dmg += acount * dmg / 2;
+            if ( hero->HasArtifact( Artifact::LIGHTNING_ROD ) )
+                dmg += dmg * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
             // -50%
-            acount = myhero ? myhero->HasArtifact( Artifact::LIGHTNING_HELM ) : 0;
-            if ( acount )
-                dmg /= acount * 2;
+            if ( defendingHero && defendingHero->HasArtifact( Artifact::LIGHTNING_HELM ) )
+                dmg -= dmg * Artifact( Artifact::LIGHTNING_HELM ).ExtraValue() / 100;
             // update orders damage
             switch ( target.damage ) {
             case 0:
@@ -1378,9 +1358,8 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
         case Spell::ELEMENTALSTORM:
         case Spell::ARMAGEDDON:
             // -50%
-            acount = myhero ? myhero->HasArtifact( Artifact::BROACH_SHIELDING ) : 0;
-            if ( acount )
-                dmg /= acount * 2;
+            if ( defendingHero && defendingHero->HasArtifact( Artifact::BROACH_SHIELDING ) )
+                dmg /= 2;
             break;
 
         default:

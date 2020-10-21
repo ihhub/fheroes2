@@ -374,20 +374,20 @@ void Heroes::Action( s32 dst_index )
                 break;
 
             case ACTION_DEFAULT:
-                if ( !ActionDefault::Action( static_cast<ActionDefault *>( *it ), dst_index, *this ) )
+                if ( !ActionDefault::Action( static_cast<ActionDefault *>( *it ) ) )
                     cancel_default = true;
                 break;
 
             case ACTION_MESSAGE:
-                ActionMessage::Action( static_cast<ActionMessage *>( *it ), dst_index, *this );
+                ActionMessage::Action( static_cast<ActionMessage *>( *it ) );
                 break;
 
             case ACTION_RESOURCES:
-                ActionResources::Action( static_cast<ActionResources *>( *it ), dst_index, *this );
+                ActionResources::Action( static_cast<ActionResources *>( *it ), *this );
                 break;
 
             case ACTION_ARTIFACT:
-                ActionArtifact::Action( static_cast<ActionArtifact *>( *it ), dst_index, *this );
+                ActionArtifact::Action( static_cast<ActionArtifact *>( *it ), *this );
                 break;
 
             default:
@@ -752,7 +752,6 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
-        const uint32_t uniq = tile.GetObjectUID();
         AnimationRemoveObject( tile );
         tile.MonsterSetCount( 0 );
         tile.SetObject( MP2::OBJ_ZERO );
@@ -791,8 +790,6 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
             return;
         }
 
-        bool disable_auto_move
-            = hero.isShipMaster() || other_hero->isShipMaster() || other_hero_castle || world.GetTiles( hero.GetIndex() ).GetObject( false ) == MP2::OBJ_STONELITHS;
         DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
         // new battle
@@ -846,7 +843,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
         }
 
         Army & army = castle->GetActualArmy();
-        bool allow_enter = false;
 
         if ( army.isValid() ) {
             DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
@@ -876,7 +872,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
                 Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
 
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
-                allow_enter = true;
             }
             else
                 // wins defender
@@ -892,7 +887,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             world.CaptureObject( dst_index, hero.GetColor() );
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
-            allow_enter = true;
         }
     }
 }
@@ -913,6 +907,7 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     hero.SetMapsObject( MP2::OBJ_ZERO );
+    world.GetTiles( dst_index ).resetObjectSprite();
     hero.SetShipMaster( true );
     hero.GetPath().Reset();
 
@@ -924,14 +919,15 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     if ( !hero.isShipMaster() )
         return;
 
-    Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
+    const int fromIndex = hero.GetIndex();
+    Maps::Tiles & from = world.GetTiles( fromIndex );
 
     const Point & destPos = Maps::GetPoint( dst_index );
     const Point offset( destPos - hero.GetCenter() );
 
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
-    from.SetObject( MP2::OBJ_BOAT );
+    from.setBoat( Maps::GetDirection( fromIndex, dst_index ) );
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -951,8 +947,8 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
         map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( obj == MP2::OBJ_BOTTLE ) {
-        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID() ) );
-        Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
+        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
+        Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "No message provided" ), Font::BIG, Dialog::OK );
     }
     else {
         Funds funds = map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds();
@@ -2066,6 +2062,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
 
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
+                tile.SetQuantity3( 0 );
             }
             else {
                 capture = false;
@@ -2455,7 +2452,8 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         u32 ox = 0;
         const fheroes2::Sprite & br = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
 
-        fheroes2::Image sf( br.width() * mons.size() + ( mons.size() - 1 ) * 4, br.height() );
+        const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
+        fheroes2::Image sf( br.width() * monsterCount + ( monsterCount - 1 ) * 4, br.height() );
         sf.reset();
 
         for ( std::vector<Monster>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
@@ -2757,7 +2755,7 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToAlchemistsTower( Heroes & hero )
 {
     BagArtifacts & bag = hero.GetBagArtifacts();
-    u32 cursed = std::count_if( bag.begin(), bag.end(), std::mem_fun_ref( &Artifact::isAlchemistRemove ) );
+    const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), std::mem_fun_ref( &Artifact::isAlchemistRemove ) ) );
 
     if ( cursed ) {
         payment_t payment = PaymentConditions::ForAlchemist();
@@ -2781,8 +2779,9 @@ void ActionToAlchemistsTower( Heroes & hero )
         else
             Dialog::Message( "", _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG, Dialog::OK );
     }
-    else
+    else {
         Dialog::Message( "", _( "You hear a voice from high above in the tower, \"Go away! I can't help you!\"" ), Font::BIG, Dialog::OK );
+    }
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

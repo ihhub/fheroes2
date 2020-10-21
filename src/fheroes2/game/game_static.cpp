@@ -371,26 +371,6 @@ u32 GameStatic::GetGameOverLostDays( void )
     return gameover_lost_days;
 }
 
-cost_t & GameStatic::GetKingdomStartingResource( int df )
-{
-    switch ( df ) {
-    case Difficulty::EASY:
-        return kingdom_starting_resource[0];
-    case Difficulty::NORMAL:
-        return kingdom_starting_resource[1];
-    case Difficulty::HARD:
-        return kingdom_starting_resource[2];
-    case Difficulty::EXPERT:
-        return kingdom_starting_resource[3];
-    case Difficulty::IMPOSSIBLE:
-        return kingdom_starting_resource[4];
-    default:
-        break;
-    }
-
-    return kingdom_starting_resource[5];
-}
-
 u32 GameStatic::GetHeroesRestoreSpellPointsPerDay( void )
 {
     return heroes_spell_points_day;
@@ -755,7 +735,7 @@ void Skill::UpdateStats( const std::string & spec )
 }
 
 #else
-void Skill::UpdateStats( const std::string & stats ) {}
+void Skill::UpdateStats( const std::string & ) {}
 #endif
 
 GameStatic::Data & GameStatic::Data::Get( void )

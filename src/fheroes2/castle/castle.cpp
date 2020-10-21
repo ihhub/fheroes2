@@ -455,6 +455,9 @@ void Castle::ActionNewWeek( void )
                 if ( ( dwellings1[ii] == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) )
                     growth += GetGrownWel2();
 
+                if ( isControlAI() )
+                    growth *= Difficulty::GetUnitGrowthBonus( Settings::Get().GameDifficulty() );
+
                 // neutral town: half population (normal for begin month)
                 if ( isNeutral && !world.BeginMonth() )
                     growth /= 2;
@@ -2237,12 +2240,12 @@ std::string Castle::String( void ) const
     return os.str();
 }
 
-int Castle::GetAttackModificator( std::string * strs ) const
+int Castle::GetAttackModificator( std::string * ) const
 {
     return 0;
 }
 
-int Castle::GetDefenseModificator( std::string * strs ) const
+int Castle::GetDefenseModificator( std::string * ) const
 {
     return 0;
 }
@@ -2263,7 +2266,7 @@ int Castle::GetPowerModificator( std::string * strs ) const
     return result;
 }
 
-int Castle::GetKnowledgeModificator( std::string * strs ) const
+int Castle::GetKnowledgeModificator( std::string * ) const
 {
     return 0;
 }
@@ -2376,7 +2379,7 @@ Army & Castle::GetActualArmy( void )
 bool Castle::AllowBuyBoat( void ) const
 {
     // check payment and present other boat
-    return ( HaveNearlySea() && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
+    return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
 }
 
 bool Castle::BuyBoat( void )
@@ -2398,17 +2401,17 @@ bool Castle::BuyBoat( void )
     if ( MP2::OBJ_ZERO == left.GetObject() && left.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        left.SetObject( MP2::OBJ_BOAT );
+        left.setBoat( Direction::RIGHT );
     }
     else if ( MP2::OBJ_ZERO == right.GetObject() && right.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        right.SetObject( MP2::OBJ_BOAT );
+        right.setBoat( Direction::RIGHT );
     }
     else if ( MP2::OBJ_ZERO == middle.GetObject() && middle.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
-        middle.SetObject( MP2::OBJ_BOAT );
+        middle.setBoat( Direction::RIGHT );
     }
 
     return true;
@@ -2476,29 +2479,29 @@ void Castle::JoinRNDArmy( void )
     const uint32_t reinforcementQuality = Rand::Get( 1, 15 ) + timeModifier;
 
     uint32_t count = timeModifier / 2;
-    uint32_t dwelling = DWELLING_MONSTER1;
+    uint32_t dwellingType = DWELLING_MONSTER1;
 
     if ( reinforcementQuality > 15 ) {
-        dwelling = DWELLING_MONSTER5;
+        dwellingType = DWELLING_MONSTER5;
         count += 1;
     }
     else if ( reinforcementQuality > 13 ) {
-        dwelling = DWELLING_MONSTER4;
+        dwellingType = DWELLING_MONSTER4;
         count += Rand::Get( 1, 3 );
     }
     else if ( reinforcementQuality > 10 ) {
-        dwelling = DWELLING_MONSTER3;
+        dwellingType = DWELLING_MONSTER3;
         count += Rand::Get( 3, 5 );
     }
     else if ( reinforcementQuality > 5 ) {
-        dwelling = DWELLING_MONSTER2;
+        dwellingType = DWELLING_MONSTER2;
         count += Rand::Get( 5, 7 );
     }
     else {
         count += Rand::Get( 8, 15 );
     }
 
-    army.JoinTroop( Monster( race, dwelling ), count );
+    army.JoinTroop( Monster( race, dwellingType ), count );
 }
 
 void Castle::ActionPreBattle( void )

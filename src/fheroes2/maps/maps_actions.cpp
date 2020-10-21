@@ -202,7 +202,7 @@ bool ActionAccess::Action( ActionAccess * act, s32 index, Heroes & hero )
     return false;
 }
 
-bool ActionDefault::Action( ActionDefault * act, s32 index, Heroes & hero )
+bool ActionDefault::Action( ActionDefault * act )
 {
     if ( act ) {
         if ( !act->message.empty() )
@@ -213,7 +213,7 @@ bool ActionDefault::Action( ActionDefault * act, s32 index, Heroes & hero )
     return false;
 }
 
-bool ActionArtifact::Action( ActionArtifact * act, s32 index, Heroes & hero )
+bool ActionArtifact::Action( ActionArtifact * act, Heroes & hero )
 {
     if ( act && act->artifact != Artifact::UNKNOWN ) {
         if ( !act->message.empty() )
@@ -226,7 +226,7 @@ bool ActionArtifact::Action( ActionArtifact * act, s32 index, Heroes & hero )
     return false;
 }
 
-bool ActionResources::Action( ActionResources * act, s32 index, Heroes & hero )
+bool ActionResources::Action( ActionResources * act, Heroes & hero )
 {
     if ( act && 0 < act->resources.GetValidItems() ) {
         Dialog::ResourceInfo( "", act->message, act->resources );
@@ -238,7 +238,7 @@ bool ActionResources::Action( ActionResources * act, s32 index, Heroes & hero )
     return false;
 }
 
-bool ActionMessage::Action( ActionMessage * act, s32 index, Heroes & hero )
+bool ActionMessage::Action( ActionMessage * act )
 {
     if ( act ) {
         if ( !act->message.empty() )
