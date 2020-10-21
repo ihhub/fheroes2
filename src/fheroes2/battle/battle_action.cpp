@@ -860,20 +860,41 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
 {
     std::vector<int> targets = GetCastleTargets();
 
-    if ( interface )
+    if ( interface ) {
         interface->RedrawActionEarthQuakeSpell( targets );
+    }
 
-    // FIXME: Arena::ApplyActionSpellEarthQuake: check hero spell power
+    auto commander = GetCurrentCommander();
+    auto spell_points = commander->GetSpellPoints();
 
-    // apply random damage
+    auto min_damage = 0;
+    auto max_damage = 0;
+    switch ( spell_points ) {
+    case 0..24:
+        min_damage = 0;
+        max_damage = 1;
+        break;
+    case 25..49:
+        min_damage = 0;
+        max_damage = 2;
+        break;
+    case 50..74:
+        min_damage = 0;
+        max_damage = 3;
+        break;
+    case 75..100:
+        min_damage = 1;
+        max_damage = 3;
+    }
+
     if ( 0 != board[8].GetObject() )
-        board[8].SetObject( Rand::Get( board[8].GetObject() ) );
+        board[8].SetObject( Rand::Get( min_damage, max_damage ) );
     if ( 0 != board[29].GetObject() )
-        board[29].SetObject( Rand::Get( board[29].GetObject() ) );
+        board[29].SetObject( Rand::Get( min_damage, max_damage ) );
     if ( 0 != board[73].GetObject() )
-        board[73].SetObject( Rand::Get( board[73].GetObject() ) );
+        board[73].SetObject( Rand::Get( min_damage, max_damage ) );
     if ( 0 != board[96].GetObject() )
-        board[96].SetObject( Rand::Get( board[96].GetObject() ) );
+        board[96].SetObject( Rand::Get( min_damage, max_damage ) );
 
     if ( towers[0] && towers[0]->isValid() && Rand::Get( 1 ) )
         towers[0]->SetDestroy();
