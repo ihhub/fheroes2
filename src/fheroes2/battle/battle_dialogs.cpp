@@ -321,7 +321,8 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
     cursor.SetThemes( Cursor::POINTER );
 
-    std::string title, msg;
+    std::string msg;
+    std::string title;
     LoopedAnimationSequence sequence;
 
     if ( ( res.army1 & RESULT_WINS ) && army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
@@ -388,15 +389,14 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
     fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + 410, ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
 
-    const bool isTitlePresent = title.length() > 0;
-    if ( isTitlePresent ) {
+    if ( !title.empty() ) {
         TextBox box( title, Font::YELLOW_BIG, 270 );
         box.Blit( pos_rt.x + 25, pos_rt.y + 175 );
     }
 
     if ( msg.length() > 0 ) {
         TextBox box( msg, Font::BIG, 270 );
-        box.Blit( pos_rt.x + 25, pos_rt.y + 175 + ( isTitlePresent ? 30 : 0 ) );
+        box.Blit( pos_rt.x + 25, pos_rt.y + 175 + ( !title.empty() ? 30 : 0 ) );
     }
 
     // battlefield casualties
