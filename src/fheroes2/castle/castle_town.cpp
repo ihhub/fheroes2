@@ -582,6 +582,8 @@ u32 Castle::OpenTown( void )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Spread'" ) );
         else if ( le.MouseCursor( rectGroupedArmyFormat ) )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
+        else if ( le.MouseCursor( buttonExit.area() ) )
+            statusBar.ShowMessage( _( "Exit Castle Options" ) );
         else
             // clear all
             statusBar.ShowMessage( _( "Castle Options" ) );
