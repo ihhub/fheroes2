@@ -625,13 +625,20 @@ void TextBox::Append( const std::string & msg, int ft, u32 width_ )
         if ( www + char_w >= width_ ) {
             www = 0;
             fheroes2::Rect::height += TextAscii::CharHeight( ft );
-            if ( pos3 != space )
-                pos2 = space + 1;
-
-            if ( pos3 != space )
-                messages.push_back( Text( msg.substr( pos1 - msg.begin(), pos2 - pos1 - 1 ), ft ) );
-            else
+            if ( pos3 != space ) {
+                if ( space == msg.begin() ) {
+                    if ( pos2 - pos1 < 1 ) // this should never happen!
+                        return;
+                    messages.push_back( Text( msg.substr( pos1 - msg.begin(), pos2 - pos1 - 1 ), ft ) );
+                }
+                else {
+                    pos2 = space + 1;
+                    messages.push_back( Text( msg.substr( pos1 - msg.begin(), pos2 - pos1 - 1 ), ft ) );
+                }
+            }
+            else {
                 messages.push_back( Text( msg.substr( pos1 - msg.begin(), pos2 - pos1 ), ft ) );
+            }
 
             pos1 = pos2;
             space = pos3;
