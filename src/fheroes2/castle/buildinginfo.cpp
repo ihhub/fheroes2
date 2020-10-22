@@ -547,7 +547,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const std::string sep = "\n";
 
     for ( u32 itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( requirement & itr ) && !castle.isBuild( itr ) ) {
+        if ( requirement & itr ) {
             str.append( Castle::GetStringBuilding( itr, castle.GetRace() ) );
             str.append( sep );
         }
