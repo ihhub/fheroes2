@@ -2899,9 +2899,9 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
         MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, false );
 
         if ( vec_eyes.size() ) {
+            Interface::Basic & I = Interface::Basic::Get();
             for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
                 Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
-                Interface::Basic & I = Interface::Basic::Get();
                 I.GetGameArea().SetCenter( Maps::GetPoint( *it ) );
                 I.RedrawFocus();
                 I.Redraw();
@@ -2916,6 +2916,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
                     }
                 }
             }
+            I.GetGameArea().SetCenter( hero.GetCenter() );
         }
     }
 
