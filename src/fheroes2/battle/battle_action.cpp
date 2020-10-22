@@ -856,7 +856,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     }
 }
 
-std::pair<int, int> damage_range( const HeroBase * commander );
+std::pair<int, int> earthquake_damage_range( const HeroBase * commander );
 
 void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
 {
@@ -866,7 +866,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = damage_range( commander );
+    const std::pair<int, int> range = earthquake_damage_range( commander );
     static const int[] cells_affected_by_earthquake = { 8, 29, 73, 96 };
     for ( int i : cells_affected_by_earthquake ) {
         if ( 0 != board[i].GetObject() ) {
@@ -882,24 +882,27 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
     DEBUG( DBG_BATTLE, DBG_TRACE, "spell: " << Spell( Spell::EARTHQUAKE ).GetName() << ", targets: " << targets.size() );
 }
 
-std::pair<int, int> damage_range( const HeroBase * commander )
+std::pair<int, int> earthquake_damage_range( const HeroBase * commander )
 {
-    const u32 spell_points = commander->GetSpellPoints();
-    if ( ( spell_points >= 0 ) && ( spell_points < 24 ) ) {
+    const int spell_power = commander->GetPower();
+    if ( spell_power == 0 ) {
+        return std::make_pair( 0, 0 );
+    }
+    else if ( ( spell_power > 0 ) && ( spell_power < 3 ) ) {
         return std::make_pair( 0, 1 );
     }
-    else if ( ( spell_points >= 25 ) && ( spell_points < 50 ) ) {
+    else if ( ( spell_power >= 3 ) && ( spell_power < 6 ) ) {
         return std::make_pair( 0, 2 );
     }
-    else if ( ( spell_points >= 50 ) && ( spell_points < 75 ) ) {
+    else if ( ( spell_power >= 6 ) && ( spell_power < 10 ) ) {
         return std::make_pair( 0, 3 );
     }
-    else if ( ( spell_points >= 75 ) && ( spell_points <= 100 ) ) {
+    else if ( spell_power >= 10 ) {
         return std::make_pair( 1, 3 );
     }
     else {
-        DEBUG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spell_points value: " << spell_points << " for commander " << commander );
-        return std::make_pair( 0, 1 );
+        DEBUG( DBG_BATTLE, DBG_TRACE, "earthquake_damage_range: unexpected spell power value: " << spell_power << " for commander " << commander );
+        return std::make_pair( 0, 0 );
     }
 }
 
