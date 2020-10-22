@@ -409,7 +409,7 @@ bool Spell::isCombat( void ) const
 
 bool Spell::isEnabled() const
 {
-    return !( spells[id].bits & SP_DISABLE );
+    return ( spells[id].bits & SP_DISABLE ) == 0;
 }
 
 bool Spell::isAdventure( void ) const
