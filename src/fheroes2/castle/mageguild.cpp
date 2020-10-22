@@ -30,7 +30,7 @@
 
 Spell GetUniqueCombatSpellCompatibility( const SpellStorage &, int race, int level );
 Spell GetCombatSpellCompatibility( int race, int level );
-Spell GetUniqueSpellCompatibility( const SpellStorage &, const int race, const int level );
+Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int level );
 Spell GetGuaranteedDamageSpellForMageGuild();
 Spell GetGuaranteedNonDamageSpellForMageGuild();
 
