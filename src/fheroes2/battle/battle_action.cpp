@@ -856,7 +856,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     }
 }
 
-std::pair<int, int> damage_range( const HeroBase * );
+std::pair<int, int> damage_range( const HeroBase * commander );
 
 void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
 {
@@ -865,9 +865,10 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
         interface->RedrawActionEarthQuakeSpell( targets );
     }
 
-    auto commander = GetCurrentCommander();
-    auto range = damage_range( commander );
-    for ( auto i : { 8, 29, 73, 96 } ) {
+    const HeroBase * commander = GetCurrentCommander();
+    const std::pair<int, int> range = damage_range( commander );
+    static const int[] cells_affected_by_earthquake = { 8, 29, 73, 96 };
+    for ( int i : cells_affected_by_earthquake ) {
         if ( 0 != board[i].GetObject() ) {
             board[i].SetObject( Rand::Get( range.first, range.second ) );
         }
@@ -883,24 +884,23 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
 
 std::pair<int, int> damage_range( const HeroBase * commander )
 {
-    auto spell_points = commander->GetSpellPoints();
-    auto result = std::make_pair( 0, 1 );
+    const u32 spell_points = commander->GetSpellPoints();
     if ( ( spell_points >= 0 ) && ( spell_points < 24 ) ) {
-        result = std::make_pair( 0, 1 );
+        return std::make_pair( 0, 1 );
     }
     else if ( ( spell_points >= 25 ) && ( spell_points < 50 ) ) {
-        result = std::make_pair( 0, 2 );
+        return std::make_pair( 0, 2 );
     }
     else if ( ( spell_points >= 50 ) && ( spell_points < 75 ) ) {
-        result = std::make_pair( 0, 3 );
+        return std::make_pair( 0, 3 );
     }
     else if ( ( spell_points >= 75 ) && ( spell_points <= 100 ) ) {
-        result = std::make_pair( 1, 3 );
+        return std::make_pair( 1, 3 );
     }
     else {
         DEBUG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spell_points value: " << spell_points << " for commander " << commander );
+        return std::make_pair( 0, 1 );
     }
-    return result;
 }
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )

@@ -59,7 +59,3 @@
 
 # build directory
 build
-
-src/dist/
-script/demo/demo
-fheroes2
