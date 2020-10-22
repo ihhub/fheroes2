@@ -694,9 +694,9 @@ int Castle::OpenDialog( bool readonly )
 
         // status message exit
         if ( le.MouseCursor( buttonExit.area() ) )
-            msg_status = isCastle() ? _( "Exit castle" ) : _( "Exit town" );
+            msg_status = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
         else if ( le.MouseCursor( rectResource ) )
-            msg_status = _( "Show income" );
+            msg_status = _( "Show Income" );
         else
             // status message prev castle
             if ( buttonPrevCastle.isEnabled() && le.MouseCursor( buttonPrevCastle.area() ) )
