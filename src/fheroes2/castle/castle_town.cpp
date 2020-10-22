@@ -584,6 +584,8 @@ u32 Castle::OpenTown( void )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
         else if ( le.MouseCursor( buttonExit.area() ) )
             statusBar.ShowMessage( _( "Exit Castle Options" ) );
+        else if ( le.MouseCursor( rectResource ) )
+            statusBar.ShowMessage( _( "Show Income" ) );
         else
             // clear all
             statusBar.ShowMessage( _( "Castle Options" ) );
