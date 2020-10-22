@@ -700,11 +700,11 @@ int Castle::OpenDialog( bool readonly )
         else
             // status message prev castle
             if ( buttonPrevCastle.isEnabled() && le.MouseCursor( buttonPrevCastle.area() ) )
-            msg_status = _( "Show Previous Town" );
+            msg_status = _( "Show previous town" );
         else
             // status message next castle
             if ( buttonNextCastle.isEnabled() && le.MouseCursor( buttonNextCastle.area() ) )
-            msg_status = _( "Show Next Town" );
+            msg_status = _( "Show next town" );
         else if ( heroes.Guest() && heroes.Guard() && le.MouseCursor( buttonSwap.area() ) )
             msg_status = _( "Swap Heroes" );
         else if ( heroes.Guest() && heroes.Guard() && le.MouseCursor( buttonMeeting.area() ) )
