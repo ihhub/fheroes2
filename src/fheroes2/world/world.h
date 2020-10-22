@@ -244,7 +244,6 @@ public:
     ListActions * GetListActions( s32 );
 
     void ActionForMagellanMaps( int color );
-    void ActionToEyeMagi( int color ) const;
     void ClearFog( int color );
     void UpdateRecruits( Recruits & ) const;
 

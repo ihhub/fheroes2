@@ -2896,7 +2896,17 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( !hero.isObjectTypeVisited( obj, Visit::GLOBAL ) ) {
         hero.SetVisited( dst_index, Visit::GLOBAL );
-        world.ActionToEyeMagi( hero.GetColor() );
+        MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, false );
+
+        if ( vec_eyes.size() ) {
+            for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
+                Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
+                Interface::Basic & I = Interface::Basic::Get();
+                I.GetGameArea().SetCenter( hero.GetCenter() );
+                I.RedrawFocus();
+                I.Redraw();
+            }
+        }
     }
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
