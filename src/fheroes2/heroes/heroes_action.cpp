@@ -2902,9 +2902,19 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
             for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
                 Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
                 Interface::Basic & I = Interface::Basic::Get();
-                I.GetGameArea().SetCenter( hero.GetCenter() );
+                I.GetGameArea().SetCenter( Maps::GetPoint( *it ) );
                 I.RedrawFocus();
                 I.Redraw();
+
+                fheroes2::Display::instance().render();
+
+                LocalEvent & le = LocalEvent::Get();
+                int delay = 0;
+                while ( le.HandleEvents() && delay < 7 ) {
+                    if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+                        ++delay;
+                    }
+                }
             }
         }
     }
