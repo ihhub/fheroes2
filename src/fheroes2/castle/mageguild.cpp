@@ -125,7 +125,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
         if ( spell.Level() != lvl || !spell.isEnabled() )
             continue;
 
-        if ( ( ( lookForAdv && !spell.isCombat() ) || ( !lookForAdv && spell.isCombat() ) ) )
+        if ( lookForAdv != spell.isCombat() )
             v.push_back( spell );
     }
 
