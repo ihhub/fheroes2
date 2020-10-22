@@ -1052,10 +1052,10 @@ void Battle::Interface::RedrawPartialStart()
     Cursor::Get().Hide();
     RedrawBorder();
     RedrawCover();
-    RedrawOpponents();
     if ( castle )
         RedrawCastle3( *castle );
     RedrawArmies();
+    RedrawOpponents();
 }
 
 void Battle::Interface::RedrawPartialFinish()
