@@ -396,14 +396,16 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
     fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + 410, ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
 
+    int32_t messageYOffset = 0;
     if ( !title.empty() ) {
         TextBox box( title, Font::YELLOW_BIG, bsTextWidth );
         box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
+        messageYOffset = bsTextIndent;
     }
 
     if ( msg.length() > 0 ) {
         TextBox box( msg, Font::BIG, bsTextWidth );
-        box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + ( !title.empty() ? bsTextIndent : 0 ) );
+        box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + messageYOffset );
     }
 
     // battlefield casualties
