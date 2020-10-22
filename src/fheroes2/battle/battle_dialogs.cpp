@@ -42,6 +42,13 @@
 
 namespace
 {
+    // BattleSummaryDialog values begin
+    const int bsTextWidth = 270;
+    const int bsTextXOffset = 25;
+    const int bsTextYOffset = 175;
+    const int bsTextIndent = 30;
+    // BattleSummaryDialog values end
+
     class LoopedAnimation
     {
     public:
@@ -390,13 +397,13 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + 410, ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
 
     if ( !title.empty() ) {
-        TextBox box( title, Font::YELLOW_BIG, 270 );
-        box.Blit( pos_rt.x + 25, pos_rt.y + 175 );
+        TextBox box( title, Font::YELLOW_BIG, bsTextWidth );
+        box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
     }
 
     if ( msg.length() > 0 ) {
-        TextBox box( msg, Font::BIG, 270 );
-        box.Blit( pos_rt.x + 25, pos_rt.y + 175 + ( !title.empty() ? 30 : 0 ) );
+        TextBox box( msg, Font::BIG, bsTextWidth );
+        box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + ( !title.empty() ? bsTextIndent : 0 ) );
     }
 
     // battlefield casualties
