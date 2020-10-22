@@ -1055,7 +1055,6 @@ void Battle::Interface::RedrawPartialStart()
     if ( castle )
         RedrawCastle3( *castle );
     RedrawArmies();
-    RedrawOpponents();
 }
 
 void Battle::Interface::RedrawPartialFinish()
@@ -1123,6 +1122,11 @@ void Battle::Interface::RedrawArmies( void )
 
             if ( _movingUnit != b && b->isValid() )
                 RedrawTroopCount( *b );
+        }
+
+		// 21 is the last tile in the second row. Draw heroes now, because their position must be between tiles 21 and 22.
+        if ( ii == 21 ) {
+            RedrawOpponents();
         }
     }
 
