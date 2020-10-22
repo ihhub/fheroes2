@@ -108,17 +108,28 @@ Spell GetUniqueCombatSpellCompatibility( const SpellStorage & spells, int race, 
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
 {
     const bool hasAdventureSpell = spells.hasAdventureSpell( lvl );
-    const bool isLookingForAdventureSpell = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
-    Spell spell = Spell::Rand( lvl, isLookingForAdventureSpell );
+    const bool lookForAdv = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
 
-    while ( spells.isPresentSpell( spell ) || !spell.isRaceCompatible( race ) ) {
-        spell = Spell::Rand( lvl, isLookingForAdventureSpell );
+    std::vector<Spell> v;
+    v.reserve( 15 );
 
-        if ( spell == Spell::NONE )
-            return spell;
+    for ( u32 sp = Spell::NONE; sp < Spell::STONE; ++sp ) {
+        const Spell spell( sp );
+
+        if ( spells.isPresentSpell( spell ) )
+            continue;
+
+        if ( !spell.isRaceCompatible( race ) )
+            continue;
+
+        if ( spell.Level() != lvl || !spell.isEnabled() )
+            continue;
+
+        if ( ( ( lookForAdv && !spell.isCombat() ) || ( !lookForAdv && spell.isCombat() ) ) )
+            v.push_back( spell );
     }
 
-    return spell;
+    return v.size() ? *Rand::Get( v ) : Spell( Spell::NONE );
 }
 
 Spell GetCombatSpellCompatibility( int race, int lvl )

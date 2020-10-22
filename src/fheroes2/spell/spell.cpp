@@ -407,6 +407,11 @@ bool Spell::isCombat( void ) const
     return true;
 }
 
+bool Spell::isEnabled() const
+{
+    return !( spells[id].bits & SP_DISABLE );
+}
+
 bool Spell::isAdventure( void ) const
 {
     return !isCombat();
@@ -560,7 +565,7 @@ Spell Spell::Rand( int lvl, bool adv )
 
     for ( u32 sp = NONE; sp < STONE; ++sp ) {
         const Spell spell( sp );
-        if ( ( ( adv && !spell.isCombat() ) || ( !adv && spell.isCombat() ) ) && lvl == spell.Level() && !( spells[sp].bits & SP_DISABLE ) )
+        if ( ( ( adv && !spell.isCombat() ) || ( !adv && spell.isCombat() ) ) && lvl == spell.Level() && spell.isEnabled() )
             v.push_back( spell );
     }
     return v.size() ? *Rand::Get( v ) : Spell( Spell::NONE );
