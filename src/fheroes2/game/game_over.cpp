@@ -26,6 +26,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_video.h"
 #include "gamedefs.h"
 #include "kingdom.h"
 #include "mus.h"
@@ -333,10 +334,12 @@ int GameOver::Result::LocalCheckGameOver( void )
         if ( Settings::Get().CurrentColor() & Players::HumanColors() ) {
         if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
             GameOver::DialogWins( result );
+            Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "WIN.SMK" ), false );
             res = Game::HIGHSCORES;
         }
         else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
             GameOver::DialogLoss( result );
+            Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "LOSE.SMK" ), true );
             res = Game::MAINMENU;
         }
     }
