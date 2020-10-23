@@ -204,6 +204,14 @@ namespace Battle
         int auto_battle;
 
         bool end_turn;
+
+        enum
+        {
+            FIRST_WALL_HEX_POSITION = 8,
+            SECOND_WALL_HEX_POSITION = 29,
+            THIRD_WALL_HEX_POSITION = 73,
+            FORTH_WALL_HEX_POSITION = 96
+        };
     };
 
     Arena * GetArena( void );
