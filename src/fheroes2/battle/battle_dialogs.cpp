@@ -42,12 +42,11 @@
 
 namespace
 {
-    // BattleSummaryDialog values begin
+    // DialogBattleSummary text related values
     const int bsTextWidth = 270;
     const int bsTextXOffset = 25;
     const int bsTextYOffset = 175;
     const int bsTextIndent = 30;
-    // BattleSummaryDialog values end
 
     class LoopedAnimation
     {
