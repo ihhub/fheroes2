@@ -26,9 +26,9 @@
 
 namespace
 {
-    const uint8_t * PALPAlette()
+    const std::vector<uint8_t> PALPAlette()
     {
-        static std::vector<uint8_t> palette;
+        std::vector<uint8_t> palette;
         if ( palette.empty() ) {
             palette.resize( 256 * 3 );
             for ( size_t i = 0; i < palette.size(); ++i ) {
@@ -36,12 +36,13 @@ namespace
             }
         }
 
-        return palette.data();
+        return palette;
     }
 
     bool SaveImage( const fheroes2::Image & image, const std::string & path )
     {
-        const uint8_t * currentPalette = PALPAlette();
+        const std::vector<uint8_t> & palette = PALPAlette();
+        const uint8_t * currentPalette = palette.data();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
