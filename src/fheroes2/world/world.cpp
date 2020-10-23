@@ -859,16 +859,6 @@ void World::ActionForMagellanMaps( int color )
             ( *it ).ClearFog( color );
 }
 
-void World::ActionToEyeMagi( int color ) const
-{
-    MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, false );
-
-    if ( vec_eyes.size() ) {
-        for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it )
-            Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), color );
-    }
-}
-
 MapEvent * World::GetMapEvent( const Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
