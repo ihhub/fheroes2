@@ -897,9 +897,9 @@ std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander )
     else if ( spellPower >= 10 ) {
         return std::make_pair( 1, 3 );
     }
-    else {
-        return std::make_pair( 0, 0 );
-    }
+
+    DEBUG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spellPower value: " << spellPower << " for commander " << commander );
+    return std::make_pair( 0, 0 );
 }
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
