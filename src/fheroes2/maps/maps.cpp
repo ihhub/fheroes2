@@ -376,7 +376,7 @@ void Maps::ClearFog( s32 index, int scoute, int color )
             scoute += Difficulty::GetScoutingBonus( conf.GameDifficulty() );
         }
 
-        const int colors = Players::GetPlayerFriends( color );
+        const int alliedColors = Players::GetPlayerFriends( color );
 
         const int revealRadiusSquared = scoute * scoute + 4; // constant factor for "backwards compatibility"
         for ( s32 y = center.y - scoute; y <= center.y + scoute; ++y ) {
@@ -385,9 +385,10 @@ void Maps::ClearFog( s32 index, int scoute, int color )
                 const s32 dy = y - center.y;
                 if ( isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
                     Maps::Tiles & tile = world.GetTiles( GetIndexFromAbsPoint( x, y ) );
-                    tile.ClearFog( colors );
-                    if ( isAIPlayer )
+                    if ( isAIPlayer && tile.isFog( color ) )
                         AI::Get().revealFog( tile );
+
+                    tile.ClearFog( alliedColors );
                 }
             }
         }

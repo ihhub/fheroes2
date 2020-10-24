@@ -91,8 +91,7 @@ namespace Game
         VIEW_HEROES = 2,
         VIEW_TELESCOPE = 3,
         VIEW_OBSERVATION_TOWER = 4,
-        VIEW_MAGI_EYES = 5,
-        VIEW_LIGHT_HOUSE = 6
+        VIEW_MAGI_EYES = 5
     };
 
     enum

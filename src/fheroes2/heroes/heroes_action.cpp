@@ -753,9 +753,9 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
         AnimationRemoveObject( tile );
+        tile.RemoveObjectSprite();
         tile.MonsterSetCount( 0 );
         tile.SetObject( MP2::OBJ_ZERO );
-        tile.RemoveObjectSprite();
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
@@ -2084,9 +2084,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             }
 
             tile.QuantitySetColor( hero.GetColor() );
-
-            if ( MP2::OBJ_LIGHTHOUSE == obj )
-                Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_LIGHT_HOUSE ), hero.GetColor() );
         }
     }
     else
@@ -2896,7 +2893,28 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( !hero.isObjectTypeVisited( obj, Visit::GLOBAL ) ) {
         hero.SetVisited( dst_index, Visit::GLOBAL );
-        world.ActionToEyeMagi( hero.GetColor() );
+        MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, false );
+
+        if ( vec_eyes.size() ) {
+            Interface::Basic & I = Interface::Basic::Get();
+            for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
+                Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
+                I.GetGameArea().SetCenter( Maps::GetPoint( *it ) );
+                I.RedrawFocus();
+                I.Redraw();
+
+                fheroes2::Display::instance().render();
+
+                LocalEvent & le = LocalEvent::Get();
+                int delay = 0;
+                while ( le.HandleEvents() && delay < 7 ) {
+                    if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+                        ++delay;
+                    }
+                }
+            }
+            I.GetGameArea().SetCenter( hero.GetCenter() );
+        }
     }
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );

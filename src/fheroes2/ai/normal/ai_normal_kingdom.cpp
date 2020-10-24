@@ -27,40 +27,6 @@
 
 namespace AI
 {
-    bool IsValidKingdomObject( const Kingdom & kingdom, const Maps::Tiles & tile, int objectID )
-    {
-        const int kingdomColor = kingdom.GetColor();
-        if ( tile.isFog( kingdomColor ) || ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST ) )
-            return false;
-
-        if ( kingdom.isVisited( tile.GetIndex(), objectID ) )
-            return false;
-
-        // Check castle first to ignore guest hero (tile with both Castle and Hero)
-        if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
-            const int tileColor = tile.QuantityColor();
-            if ( !Settings::Get().ExtUnionsAllowCastleVisiting() && Players::isFriends( kingdomColor, tileColor ) ) {
-                // false only if alliance castles can't be visited
-                return kingdomColor == tileColor;
-            }
-            return true;
-        }
-
-        // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
-        if ( objectID == MP2::OBJ_HEROES ) {
-            const Heroes * hero = tile.GetHeroes();
-            return hero && !Players::isFriends( kingdomColor, hero->GetColor() );
-        }
-
-        if ( MP2::isCaptureObject( objectID ) )
-            return !Players::isFriends( kingdomColor, tile.QuantityColor() );
-
-        if ( MP2::isQuantityObject( objectID ) )
-            return tile.QuantityIsValid();
-
-        return true;
-    }
-
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
         const int color = kingdom.GetColor();
@@ -91,7 +57,7 @@ namespace AI
             const Maps::Tiles & tile = world.GetTiles( idx );
             int objectID = tile.GetObject();
 
-            if ( !IsValidKingdomObject( kingdom, tile, objectID ) )
+            if ( !kingdom.isValidKingdomObject( tile, objectID ) )
                 continue;
 
             _mapObjects.emplace_back( idx, objectID );

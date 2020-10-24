@@ -435,7 +435,7 @@ void BuildingInfo::Redraw( void )
         int index = GetIndexBuildingSprite( building );
 
         if ( BUILD_DISABLE == bcond ) {
-            const fheroes2::Sprite infoSprite = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+            const fheroes2::Sprite & infoSprite = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
             fheroes2::Blit( infoSprite, display, area.x, area.y );
 
             const fheroes2::Point offset( 6, 59 );
@@ -547,7 +547,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const std::string sep = "\n";
 
     for ( u32 itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( requirement & itr ) && !castle.isBuild( itr ) ) {
+        if ( requirement & itr ) {
             str.append( Castle::GetStringBuilding( itr, castle.GetRace() ) );
             str.append( sep );
         }

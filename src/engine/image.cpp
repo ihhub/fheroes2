@@ -514,16 +514,6 @@ namespace fheroes2
         return *this;
     }
 
-    int32_t Sprite::x() const
-    {
-        return _x;
-    }
-
-    int32_t Sprite::y() const
-    {
-        return _y;
-    }
-
     void Sprite::setPosition( int32_t x_, int32_t y_ )
     {
         _x = x_;
@@ -738,7 +728,7 @@ namespace fheroes2
             const uint8_t * imageInY = in.image() + offsetInY;
             const uint8_t * transformInY = in.transform() + offsetInY;
 
-            uint8_t * imageOutY = out.image() + outY * out.width() + outX;
+            uint8_t * imageOutY = out.image() + outY * widthOut + outX;
             const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
             for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
@@ -880,10 +870,13 @@ namespace fheroes2
             }
         }
         else {
-            const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-            const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
-            uint8_t * imageOutY = out.image() + outY * out.width() + outX;
-            uint8_t * transformOutY = out.transform() + outY * out.width() + outX;
+            const int32_t offsetInY = inY * widthIn + inX;
+            const uint8_t * imageInY = in.image() + offsetInY;
+            const uint8_t * transformInY = in.transform() + offsetInY;
+
+            const int32_t offsetOutY = outY * widthOut + outX;
+            uint8_t * imageOutY = out.image() + offsetOutY;
+            uint8_t * transformOutY = out.transform() + offsetOutY;
             const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
             for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
@@ -934,10 +927,13 @@ namespace fheroes2
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
-        const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-        const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
-        uint8_t * imageOutY = out.image() + outY * widthOut + outX;
-        uint8_t * transformOutY = out.transform() + outY * widthOut + outX;
+        const int32_t offsetInY = inY * widthIn + inX;
+        const uint8_t * imageInY = in.image() + offsetInY;
+        const uint8_t * transformInY = in.transform() + offsetInY;
+
+        const int32_t offsetOutY = outY * widthOut + outX;
+        uint8_t * imageOutY = out.image() + offsetOutY;
+        uint8_t * transformOutY = out.transform() + offsetOutY;
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
         for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {

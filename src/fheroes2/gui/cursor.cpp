@@ -69,7 +69,7 @@ bool Cursor::SetThemes( int name, bool force )
         default:
             break;
         }
-        const fheroes2::Sprite spr = fheroes2::AGG::GetICN( icnID, 0xFF & name );
+        const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( icnID, 0xFF & name );
         SetOffset( name, fheroes2::Point( spr.width() / 2, spr.height() / 2 ) );
         fheroes2::cursor().update( spr, -offset_x, -offset_y );
 

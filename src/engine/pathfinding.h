@@ -27,17 +27,20 @@ struct PathfindingNode
 {
     int _from = -1;
     uint32_t _cost = 0;
+    uint16_t _objectID = 0;
 
     PathfindingNode() {}
-    PathfindingNode( int node, uint32_t cost )
+    PathfindingNode( int node, uint32_t cost, uint16_t object )
         : _from( node )
         , _cost( cost )
+        , _objectID( object )
     {}
     // Sets node values back to the defaults; used before processing new path
     virtual void resetNode()
     {
         _from = -1;
         _cost = 0;
+        _objectID = 0;
     }
 };
 

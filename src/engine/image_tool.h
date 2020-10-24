@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,30 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SPELLSTORAGE_H
-#define H2SPELLSTORAGE_H
+#pragma once
 
-#include <vector>
+#include "image.h"
 
-#include "gamedefs.h"
-#include "spell.h"
-
-class Artifact;
-class BagArtifacts;
-
-class SpellStorage : public std::vector<Spell>
+namespace fheroes2
 {
-public:
-    SpellStorage();
-
-    SpellStorage GetSpells( int lvl = -1 ) const;
-    void Append( const SpellStorage & );
-    void Append( const Spell & );
-    void Append( const BagArtifacts & );
-    void Append( const Artifact & );
-    bool isPresentSpell( const Spell & ) const;
-    bool hasAdventureSpell( const int lvl ) const;
-    std::string String( void ) const;
-};
-
-#endif
+    // Save an image into file. 'background' represents palette index from the original palette
+    bool Save( const Image & image, const std::string & path, uint8_t background = 23 );
+}

@@ -516,8 +516,12 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
                 btnGroup.button( 0 ).enable();
-                btnGroup.draw();
             }
+            else {
+                btnGroup.button( 0 ).disable();
+            }
+
+            btnGroup.draw();
 
             cursor.Show();
             display.render();

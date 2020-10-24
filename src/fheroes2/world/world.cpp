@@ -202,10 +202,6 @@ void CapturedObjects::ClearFog( int colors )
                 scoute = 2;
                 break;
 
-            case MP2::OBJ_LIGHTHOUSE:
-                scoute = 4;
-                break; // FIXME: scoute and lighthouse
-
             default:
                 break;
             }
@@ -857,16 +853,6 @@ void World::ActionForMagellanMaps( int color )
     for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
         if ( ( *it ).isWater() )
             ( *it ).ClearFog( color );
-}
-
-void World::ActionToEyeMagi( int color ) const
-{
-    MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, false );
-
-    if ( vec_eyes.size() ) {
-        for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it )
-            Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), color );
-    }
 }
 
 MapEvent * World::GetMapEvent( const Point & pos )
