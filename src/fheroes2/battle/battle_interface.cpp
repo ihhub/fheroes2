@@ -1313,14 +1313,16 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
 
-    const int tileInFront = Board::GetIndexDirection( unit.GetHeadIndex(), isReflected ? Battle::LEFT : Battle::RIGHT );
+    const int32_t monsterIndex = unit.GetHeadIndex();
+    const int tileInFront = Board::GetIndexDirection( monsterIndex, isReflected ? Battle::LEFT : Battle::RIGHT );
+    const bool isValidFrontMonster = ( monsterIndex / ARENAW ) == ( tileInFront == ARENAW );
 
     s32 sx = rt.x + ( isReflected ? -7 : rt.w - 13 );
     const s32 sy = rt.y + rt.h - bar.height() - ( isReflected ? 23 : 11 );
 
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
     // check if has unit standing in front
-    if ( xOffset > 0 && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
+    if ( xOffset > 0 && isValidFrontMonster && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
         xOffset = 0;
 
     sx += isReflected ? -xOffset : xOffset;
