@@ -84,11 +84,14 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
-                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) { // it's a hack for now
+                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) {
                     strs->append( _( "Graveyard robber" ) );
                 }
-                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) { // and it is a hack too
+                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) {
                     strs->append( _( "Shipwreck robber" ) );
+                }
+                else if ( objs[ii] == MP2::OBJ_PYRAMID ) {
+                    strs->append( _( "Pyramid raided" ) );
                 }
                 else {
                     strs->append( MP2::StringObject( objs[ii] ) );
