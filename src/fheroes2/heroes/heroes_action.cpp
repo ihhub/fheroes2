@@ -753,9 +753,9 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
         AnimationRemoveObject( tile );
+        tile.RemoveObjectSprite();
         tile.MonsterSetCount( 0 );
         tile.SetObject( MP2::OBJ_ZERO );
-        tile.RemoveObjectSprite();
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
