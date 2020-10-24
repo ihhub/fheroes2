@@ -551,10 +551,26 @@ int Castle::OpenDialog( bool readonly )
                                     if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
                                         cursor.Hide();
 
-                                        const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
-                                        fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
-                                        const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
-                                        fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
+                                        const uint32_t castleAnimationFrame = Game::CastleAnimationFrame();
+
+                                        for ( CastleDialog::CacheBuildings::const_iterator it = cacheBuildings.begin(); it != cacheBuildings.end(); ++it ) {
+                                            const u32 & build2 = ( *it ).id;
+                                            if ( isBuild( build2 ) ) {
+                                                if ( build2 == BUILD_SHIPYARD ) {
+                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, build2, castleAnimationFrame );
+                                                    const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
+                                                    fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
+                                                    const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
+                                                    fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
+                                                }
+                                                else {
+                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, build2, castleAnimationFrame );
+                                                    CastleDialog::CastleRedrawBuildingExtended( *this, cur_pt, build2, castleAnimationFrame );
+                                                }
+                                            }
+                                        }
+
+                                        CastleRedrawTownName( *this, cur_pt );
 
                                         cursor.Show();
                                         display.render();
