@@ -866,7 +866,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = getEarthquakeDamageRange( commander );
+    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0 , 0 );
     const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
