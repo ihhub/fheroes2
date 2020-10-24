@@ -2137,6 +2137,9 @@ void Maps::Tiles::UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8
 void Maps::Tiles::RemoveObjectSprite( void )
 {
     switch ( GetObject() ) {
+    case MP2::OBJ_MONSTER:
+        Remove( uniq );
+        break;
     case MP2::OBJ_JAIL:
         RemoveJailSprite();
         tilePassable = DIRECTION_ALL;
