@@ -200,7 +200,6 @@ public:
     int AIMoveSpeed( void ) const;
     int BattleSpeed( void ) const;
     int ScrollSpeed( void ) const;
-    u32 MemoryLimit( void ) const;
 
     const std::string & SelectVideoDriver( void ) const;
 
@@ -328,7 +327,6 @@ public:
     void SetShowIcons( bool );
     void SetShowButtons( bool );
     void SetShowStatus( bool );
-    void SetMemoryLimit( u32 );
     void SetAIMoveSpeed( int );
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
@@ -450,7 +448,6 @@ private:
     std::string video_driver;
 
     int port;
-    u32 memory_limit;
 
     Point pos_radr;
     Point pos_bttn;

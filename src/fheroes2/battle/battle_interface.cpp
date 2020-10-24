@@ -669,7 +669,7 @@ Point Battle::OpponentSprite::GetCastPosition( void ) const
 
 void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
 {
-    fheroes2::Sprite hero = fheroes2::AGG::GetICN( icn, _currentAnim.getFrame() );
+    const fheroes2::Sprite & hero = fheroes2::AGG::GetICN( icn, _currentAnim.getFrame() );
 
     Point offset( _offset );
     if ( base->isCaptain() ) {
@@ -943,9 +943,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
         icn_frng = ICN::FRNG0001;
     }
 
-    sf_cover.resize( _mainSurface.width(), _mainSurface.height() );
-    sf_cover.reset();
-
     // hexagon
     sf_hexagon = DrawHexagon( ( light ? fheroes2::GetColorId( 0x78, 0x94, 0 ) : fheroes2::GetColorId( 0x38, 0x48, 0 ) ) );
     sf_cursor = DrawHexagonShadow( 2 );
@@ -1055,7 +1052,6 @@ void Battle::Interface::RedrawPartialStart()
     Cursor::Get().Hide();
     RedrawBorder();
     RedrawCover();
-    RedrawOpponents();
     if ( castle )
         RedrawCastle3( *castle );
     RedrawArmies();
@@ -1126,6 +1122,11 @@ void Battle::Interface::RedrawArmies( void )
 
             if ( _movingUnit != b && b->isValid() )
                 RedrawTroopCount( *b );
+        }
+
+        // Draw heroes now, because their position must be between second and third rows.
+        if ( ii == 2 * ARENAW - 1 ) {
+            RedrawOpponents();
         }
     }
 
@@ -1269,7 +1270,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
 
         // move offset
         if ( _movingUnit == &b ) {
-            fheroes2::Sprite spmon0 = fheroes2::AGG::GetICN( msi.icn_file, _movingUnit->animation.firstFrame() );
+            const fheroes2::Sprite & spmon0 = fheroes2::AGG::GetICN( msi.icn_file, _movingUnit->animation.firstFrame() );
             const s32 ox = spmon1.x() - spmon0.x();
 
             if ( _movingUnit->animation.animationLength() ) {
@@ -1312,14 +1313,16 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
 
-    const int tileInFront = Board::GetIndexDirection( unit.GetHeadIndex(), isReflected ? Battle::LEFT : Battle::RIGHT );
+    const int32_t monsterIndex = unit.GetHeadIndex();
+    const int tileInFront = Board::GetIndexDirection( monsterIndex, isReflected ? Battle::LEFT : Battle::RIGHT );
+    const bool isValidFrontMonster = ( monsterIndex / ARENAW ) == ( tileInFront == ARENAW );
 
     s32 sx = rt.x + ( isReflected ? -7 : rt.w - 13 );
     const s32 sy = rt.y + rt.h - bar.height() - ( isReflected ? 23 : 11 );
 
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
     // check if has unit standing in front
-    if ( xOffset > 0 && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
+    if ( xOffset > 0 && isValidFrontMonster && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
         xOffset = 0;
 
     sx += isReflected ? -xOffset : xOffset;
@@ -1434,7 +1437,7 @@ void Battle::Interface::RedrawCastle1( const Castle & castle )
 
     // moat
     if ( castle.isBuild( BUILD_MOAT ) ) {
-        fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
         fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
     }
 
@@ -2181,7 +2184,7 @@ void Battle::Interface::FadeArena( void )
     Rect srt = border.GetArea();
     fheroes2::Image top( srt.w, srt.h );
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.w, srt.h );
-    fheroes2::FadeDisplayWithPalette( top, fheroes2::Point( srt.x, srt.y ), 5, 300, 7 );
+    fheroes2::FadeDisplayWithPalette( top, fheroes2::Point( srt.x, srt.y ), 5, 300, 5 );
     display.render();
 }
 
@@ -3728,7 +3731,7 @@ void Battle::Interface::RedrawActionStoneSpell( Unit & target )
     LocalEvent & le = LocalEvent::Get();
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    fheroes2::Sprite unitSprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
 
     fheroes2::Sprite stoneEffect( unitSprite );
     fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::GRAY ) );
@@ -4108,8 +4111,6 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
 
     _currentUnit = NULL;
     AGG::PlaySound( M82::ERTHQUAK );
-
-    const u32 offset = 10;
 
     // draw earth quake
     while ( le.HandleEvents() && frame < 18 ) {

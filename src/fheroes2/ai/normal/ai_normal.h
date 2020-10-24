@@ -22,12 +22,11 @@
 #define H2AI_NORMAL_H
 
 #include "ai.h"
+#include "pairs.h"
 #include "world_pathfinding.h"
 
 namespace AI
 {
-    using MapObjectNode = std::pair<int, int>;
-
     class Normal : public Base
     {
     public:
@@ -37,12 +36,14 @@ namespace AI
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
         void HeroTurn( Heroes & hero );
 
+        void revealFog( const Maps::Tiles & tile );
+
         void HeroesActionComplete( Heroes & hero, int index );
-        int GetPriorityTarget( const Heroes & hero );
+        int GetPriorityTarget( const Heroes & hero, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder();
 
     private:
-        std::vector<MapObjectNode> _mapObjects;
+        std::vector<IndexObject> _mapObjects;
         AIWorldPathfinder _pathfinder;
     };
 }

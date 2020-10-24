@@ -29,7 +29,7 @@
 
 namespace AI
 {
-    double GetObjectValue( int index, int objectID )
+    double GetObjectValue( int color, int index, int objectID )
     {
         // In the future these hardcoded values could be configured by the mod
         const Maps::Tiles & tile = world.GetTiles( index );
@@ -41,86 +41,89 @@ namespace AI
             return 1700.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {
-            return 900.0;
+            return 400.0;
         }
-        else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJN_ALCHEMYLAB ) {
+        else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJ_ALCHEMYLAB ) {
             return 1000.0;
         }
         else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
             return 500.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectID ) ) {
-            return 400.0;
+            return 500.0;
         }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
             return 400.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return 400.0;
+            return world.getRegion( tile.GetRegion() ).getFogRatio( color ) * 1500;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
-            // de-prioritize the landing
-            return -1500.0;
+            return world.getRegion( tile.GetRegion() ).getObjectCount() * 50.0 - 2000;
         }
-        else if ( objectID == MP2::OBJ_BOAT ) {
-            // de-prioritize the boats even harder
+        else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
+            // de-prioritize the water movement even harder
             return -2500.0;
         }
 
         return 0;
     }
 
-    int AI::Normal::GetPriorityTarget( const Heroes & hero )
+    int AI::Normal::GetPriorityTarget( const Heroes & hero, int patrolIndex, uint32_t distanceLimit )
     {
+        const int heroColor = hero.GetColor();
+        const bool heroInPatrolMode = patrolIndex != -1;
         int priorityTarget = -1;
-
-        const int heroIndex = hero.GetIndex();
 
         double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         int objectID = MP2::OBJ_ZERO;
 
-        size_t selectedNode = _mapObjects.size();
+        // pre-cache the pathfinder
+        _pathfinder.reEvaluateIfNeeded( hero );
+
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
-            const MapObjectNode & node = _mapObjects[idx];
+            const IndexObject & node = _mapObjects[idx];
+
+            // Skip if hero in patrol mode and object outside of reach
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( patrolIndex, node.first ) > distanceLimit )
+                continue;
+
             if ( HeroesValidObject( hero, node.first ) ) {
-                const uint32_t dist = _pathfinder.getDistance( hero, node.first );
+                const uint32_t dist = _pathfinder.getDistance( node.first );
                 if ( dist == 0 )
                     continue;
 
-                const double value = GetObjectValue( node.first, node.second ) - static_cast<double>( dist );
+                double value = GetObjectValue( heroColor, node.first, node.second );
+
+                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
+                for ( const IndexObject & pair : list ) {
+                    if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
+                        value += GetObjectValue( heroColor, pair.first, pair.second );
+                }
+
+                value -= static_cast<double>( dist );
+
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
                     objectID = node.second;
-                    selectedNode = idx;
+
+                    DEBUG( DBG_AI, DBG_TRACE,
+                           hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
                 }
             }
         }
 
-        if ( selectedNode < _mapObjects.size() ) {
-            DEBUG( DBG_AI, DBG_TRACE,
+        if ( priorityTarget != -1 ) {
+            DEBUG( DBG_AI, DBG_INFO,
                    hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
-
-            // Remove the object from the list to other heroes won't target it
-            _mapObjects.erase( selectedNode + _mapObjects.begin() );
         }
-        else {
+        else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
         }
 
         return priorityTarget;
-    }
-
-    bool MoveHero( Heroes & hero, int target )
-    {
-        if ( target != -1 && hero.GetPath().Calculate( target ) ) {
-            HeroesMove( hero );
-            return true;
-        }
-
-        hero.SetModes( AI::HERO_WAITING );
-        return false;
     }
 
     void Normal::HeroesActionComplete( Heroes & hero, int index )
@@ -133,10 +136,50 @@ namespace AI
 
     void Normal::HeroTurn( Heroes & hero )
     {
+        int patrolCenter = -1;
+        uint32_t patrolDistance = 0;
+
+        if ( hero.Modes( Heroes::PATROL ) ) {
+            patrolDistance = hero.GetSquarePatrol();
+
+            if ( patrolDistance == 0 ) {
+                DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << " standing still. Skip turn." );
+                hero.SetModes( AI::HERO_MOVED );
+                return;
+            }
+            patrolCenter = Maps::GetIndexFromAbsPoint( hero.GetCenterPatrol() );
+        }
+
         hero.ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
 
+        std::vector<int> objectsToErase;
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            MoveHero( hero, GetPriorityTarget( hero ) );
+            const int startIndex = hero.GetIndex();
+            const int targetIndex = GetPriorityTarget( hero, patrolCenter, patrolDistance );
+
+            if ( targetIndex != -1 ) {
+                _pathfinder.reEvaluateIfNeeded( hero );
+                hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
+                objectsToErase.push_back( hero.GetPath().GetDestinationIndex() );
+
+                HeroesMove( hero );
+            }
+            else {
+                hero.SetModes( AI::HERO_WAITING );
+                break;
+            }
+        }
+
+        // Remove the object from the list so other heroes won't target it
+        if ( objectsToErase.size() ) {
+            for ( const int idxToErase : objectsToErase ) {
+                auto it = std::find_if( _mapObjects.begin(), _mapObjects.end(), [&idxToErase]( const IndexObject & o ) { return o.first == idxToErase; } );
+                // Actually remove if this object single use only
+                if ( it != _mapObjects.end() && !MP2::isCaptureObject( it->second ) && !MP2::isRemoveObject( it->second ) ) {
+                    // retains the vector order for binary search
+                    _mapObjects.erase( it );
+                }
+            }
         }
 
         if ( !hero.MayStillMove() ) {

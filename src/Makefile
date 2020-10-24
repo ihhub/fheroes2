@@ -4,22 +4,28 @@
 
 TARGET := fheroes2
 
+ifdef DEBUG
+CFLAGS := $(CFLAGS) -O0 -g -pedantic -DWITH_DEBUG
+else
+CFLAGS := -O3 $(CFLAGS)
+endif
+
+CFLAGS := $(CFLAGS) -fsigned-char
+CXXFLAGS := -std=c++11 $(CFLAGS)
+LDFLAGS := $(LDFLAGS)
+LIBS :=
+
+CFLAGS_TP := $(CFLAGS)
+CXXFLAGS_TP := $(CXXFLAGS)
+
+CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion
+
 ifdef WITH_SDL2
 SDL_LIBS := $(shell sdl2-config --libs)
 SDL_FLAGS := $(shell sdl2-config --cflags)
 else
 SDL_LIBS := $(shell sdl-config --libs)
 SDL_FLAGS := $(shell sdl-config --cflags)
-endif
-
-CFLAGS := $(CFLAGS) -std=c++11 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -fsigned-char
-LDFLAGS := $(LDFLAGS)
-LIBS :=
-
-ifdef DEBUG
-CFLAGS := $(CFLAGS) -O0 -g -pedantic -DWITH_DEBUG
-else
-CFLAGS := -O3 $(CFLAGS)
 endif
 
 ifndef WITHOUT_MIXER
@@ -49,17 +55,13 @@ SDL_LIBS := $(SDL_LIBS) -lSDL_ttf
 endif
 endif
 
-#ifndef WITHOUT_NETWORK
-#CFLAGS := $(CFLAGS) -DWITH_NET_DISABLE
-#ifdef WITH_SDL2
-#SDL_LIBS := $(SDL_LIBS) -lSDL2_net
-#else
-#SDL_LIBS := $(SDL_LIBS) -lSDL_net
-#endif
-#endif
-
 ifndef WITHOUT_XML
+ifndef WITHOUT_BUNDLED_LIBS
 CFLAGS := $(CFLAGS) -DWITH_XML
+else
+CFLAGS := $(CFLAGS) $(shell pkg-config tinyxml --cflags)
+LIBS := $(LIBS) $(shell pkg-config tinyxml --libs)
+endif
 endif
 
 ifndef WITHOUT_ZLIB
@@ -106,9 +108,11 @@ export CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 
 all:
 ifndef WITHOUT_XML
-	$(MAKE) -C xmlccwrap
+ifndef WITHOUT_BUNDLED_LIBS
+	$(MAKE) -C thirdparty/tinyxml CFLAGS="$(CXXFLAGS_TP)"
 endif
-	$(MAKE) -C thirdparty/libsmacker
+endif
+	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
 	$(MAKE) -C engine
 	$(MAKE) -C dist
 ifdef WITH_TOOLS
@@ -119,7 +123,7 @@ ifndef WITHOUT_UNICODE
 endif
 
 clean:
-	$(MAKE) -C xmlccwrap clean
+	$(MAKE) -C thirdparty/tinyxml clean
 	$(MAKE) -C thirdparty/libsmacker clean
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean

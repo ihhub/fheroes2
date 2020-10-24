@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,63 +18,53 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SDLTHREAD_H
-#define SDLTHREAD_H
+#pragma once
 
-#include "types.h"
-#include <SDL_thread.h>
+#include <set>
+#include <vector>
 
-namespace SDL
+enum
 {
-    class Thread
-    {
-    public:
-        Thread();
-        ~Thread();
-        Thread( const Thread & );
+    REGION_NODE_BLOCKED = 0,
+    REGION_NODE_OPEN = 1,
+    REGION_NODE_BORDER = 2,
+    REGION_NODE_FOUND = 3
+};
 
-        Thread & operator=( const Thread & );
+struct MapRegionNode
+{
+    int index = -1;
+    int type = REGION_NODE_BLOCKED;
+    uint16_t mapObject = 0;
+    uint16_t passable = 0;
+    bool isWater = false;
 
-        void Create( int ( * )( void * ), void * param = NULL );
-        int Wait( void );
-        void Kill( void );
+    MapRegionNode() {}
+    MapRegionNode( int index )
+        : index( index )
+        , type( REGION_NODE_OPEN )
+    {}
+    MapRegionNode( int index, uint16_t pass, bool water )
+        : index( index )
+        , type( REGION_NODE_OPEN )
+        , passable( pass )
+        , isWater( water )
+    {}
+};
 
-        bool IsRun( void ) const;
+struct MapRegion
+{
+public:
+    int _id = REGION_NODE_FOUND;
+    bool _isWater = false;
+    std::set<int> _neighbours;
+    std::vector<MapRegionNode> _nodes;
+    size_t _lastProcessedNode = 0;
 
-        u32 GetID( void ) const;
-
-    private:
-        SDL_Thread * thread;
-    };
-
-    class Timer
-    {
-    public:
-        Timer();
-
-        bool IsValid( void ) const;
-
-        void Run( u32, u32 ( * )( u32, void * ), void * param = NULL );
-        void Remove( void );
-
-    private:
-        SDL_TimerID id;
-    };
-
-    class Time
-    {
-    public:
-        Time();
-
-        void Start( void );
-        void Stop( void );
-        u32 Get( void ) const;
-        void Print( const char * header = NULL ) const;
-
-    private:
-        u32 tick1;
-        u32 tick2;
-    };
-}
-
-#endif
+    MapRegion(){};
+    MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
+    std::vector<int> getNeighbours() const;
+    std::vector<IndexObject> getObjectList() const;
+    int getObjectCount() const;
+    double getFogRatio( int color ) const;
+};

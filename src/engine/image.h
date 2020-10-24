@@ -44,8 +44,15 @@ namespace fheroes2
         virtual void resize( int32_t width_, int32_t height_ );
 
         // It's safe to cast to uint32_t as width and height are always >= 0
-        int32_t width() const;
-        int32_t height() const;
+        int32_t width() const
+        {
+            return _width;
+        }
+
+        int32_t height() const
+        {
+            return _height;
+        }
 
         virtual uint8_t * image();
         virtual const uint8_t * image() const;
@@ -81,8 +88,15 @@ namespace fheroes2
         Sprite & operator=( const Sprite & image );
         Sprite & operator=( Sprite && image );
 
-        int32_t x() const;
-        int32_t y() const;
+        int32_t x() const
+        {
+            return _x;
+        }
+
+        int32_t y() const
+        {
+            return _y;
+        }
 
         virtual void setPosition( int32_t x_, int32_t y_ );
 

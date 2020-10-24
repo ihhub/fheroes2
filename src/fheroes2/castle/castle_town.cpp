@@ -93,7 +93,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
     fheroes2::Blit( portrait_frame, display, dst_pt.x, dst_pt.y );
 
     dst_pt.x = dst_pt.x + 5;
-    dst_pt.y = dst_pt.y + 5;
+    dst_pt.y = dst_pt.y + 6;
     hero->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = box_rt.x;
@@ -582,6 +582,10 @@ u32 Castle::OpenTown( void )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Spread'" ) );
         else if ( le.MouseCursor( rectGroupedArmyFormat ) )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
+        else if ( le.MouseCursor( buttonExit.area() ) )
+            statusBar.ShowMessage( _( "Exit Castle Options" ) );
+        else if ( le.MouseCursor( rectResource ) )
+            statusBar.ShowMessage( _( "Show Income" ) );
         else
             // clear all
             statusBar.ShowMessage( _( "Castle Options" ) );

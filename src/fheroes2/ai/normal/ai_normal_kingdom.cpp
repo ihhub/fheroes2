@@ -27,39 +27,8 @@
 
 namespace AI
 {
-    bool IsValidKingdomObject( const Maps::Tiles & tile, int objectID, int kingdomColor )
-    {
-        if ( tile.isFog( kingdomColor ) || ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST ) )
-            return false;
-
-        // Check castle first to ignore guest hero (tile with both Castle and Hero)
-        if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
-            const int tileColor = tile.QuantityColor();
-            if ( !Settings::Get().ExtUnionsAllowCastleVisiting() && Players::isFriends( kingdomColor, tileColor ) ) {
-                // false only if alliance castles can't be visited
-                return kingdomColor == tileColor;
-            }
-            return true;
-        }
-
-        // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
-        if ( objectID == MP2::OBJ_HEROES ) {
-            const Heroes * hero = tile.GetHeroes();
-            return hero && !Players::isFriends( kingdomColor, hero->GetColor() );
-        }
-
-        if ( MP2::isCaptureObject( objectID ) )
-            return !Players::isFriends( kingdomColor, tile.QuantityColor() );
-
-        if ( MP2::isQuantityObject( objectID ) )
-            return tile.QuantityIsValid();
-
-        return true;
-    }
-
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
-        const int difficulty = Settings::Get().GameDifficulty();
         const int color = kingdom.GetColor();
 
         if ( kingdom.isLoss() || color == Color::NONE ) {
@@ -88,7 +57,7 @@ namespace AI
             const Maps::Tiles & tile = world.GetTiles( idx );
             int objectID = tile.GetObject();
 
-            if ( !IsValidKingdomObject( tile, objectID, color ) )
+            if ( !kingdom.isValidKingdomObject( tile, objectID ) )
                 continue;
 
             _mapObjects.emplace_back( idx, objectID );
@@ -176,7 +145,7 @@ namespace AI
         VecHeroes sortedHeroList = heroes;
         std::sort( sortedHeroList.begin(), sortedHeroList.end(), []( const Heroes * left, const Heroes * right ) {
             if ( left && right )
-                return left->GetArmy().GetStrength() < right->GetArmy().GetStrength();
+                return left->GetArmy().GetStrength() > right->GetArmy().GetStrength();
             return right == NULL;
         } );
 

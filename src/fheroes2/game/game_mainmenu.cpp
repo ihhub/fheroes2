@@ -201,6 +201,8 @@ int Game::MainMenu( bool isFirstGameRun )
             Dialog::Message( _( "High Scores" ), _( "View the high score screen." ), Font::BIG );
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
+        else if ( le.MousePressRight( resolutionArea ) )
+            Dialog::Message( _( "Select Game Resolution" ), _( "Change resolution of the game." ), Font::BIG );
 
         if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
             cursor.Hide();

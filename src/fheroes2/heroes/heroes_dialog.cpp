@@ -178,7 +178,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
+    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 13 );
 
     // button prev
     dst_pt.x = cur_pt.x;

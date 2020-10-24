@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <functional>
 #include <math.h>
+#include <set>
 
 #include "agg.h"
 #include "army.h"
@@ -286,6 +287,16 @@ bool Troops::AllTroopsIsRace( int race ) const
     return true;
 }
 
+bool Troops::AllTroopsAreUndead() const
+{
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() && !( *it )->isUndead() )
+            return false;
+    }
+
+    return true;
+}
+
 bool Troops::CanJoinTroop( const Monster & mons ) const
 {
     const_iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
@@ -350,15 +361,13 @@ void Troops::JoinTroops( Troops & troops2 )
 
 u32 Troops::GetUniqueCount( void ) const
 {
-    std::vector<int> monsters;
-    monsters.reserve( size() );
+    std::set<int> monsters;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            monsters.push_back( ( *it )->GetID() );
-
-    std::sort( monsters.begin(), monsters.end() );
-    monsters.resize( std::distance( monsters.begin(), std::unique( monsters.begin(), monsters.end() ) ) );
+    for ( size_t idx = 0; idx < size(); ++idx ) {
+        const Troop * troop = operator[]( idx );
+        if ( troop && troop->isValid() )
+            monsters.insert( troop->GetID() );
+    }
 
     return monsters.size();
 }
@@ -741,10 +750,25 @@ Army::Army( const Maps::Tiles & t )
     for ( u32 ii = 0; ii < ARMYMAXTROOPS; ++ii )
         push_back( new ArmyTroop( this ) );
 
-    if ( MP2::isCaptureObject( t.GetObject() ) )
-        color = t.QuantityColor();
+    setFromTile( t );
+}
 
-    switch ( t.GetObject( false ) ) {
+Army::~Army()
+{
+    for ( iterator it = begin(); it != end(); ++it )
+        delete *it;
+    clear();
+}
+
+void Army::setFromTile( const Maps::Tiles & tile )
+{
+    Reset();
+
+    const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject() );
+    if ( isCaptureObject )
+        color = tile.QuantityColor();
+
+    switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
         at( 0 )->Set( Monster::ROYAL_MUMMY, 10 );
         at( 1 )->Set( Monster::VAMPIRE_LORD, 10 );
@@ -759,7 +783,7 @@ Army::Army( const Maps::Tiles & t )
         break;
 
     case MP2::OBJ_SHIPWRECK:
-        at( 0 )->Set( Monster::GHOST, t.GetQuantity2() );
+        at( 0 )->Set( Monster::GHOST, tile.GetQuantity2() );
         ArrangeForBattle( false );
         break;
 
@@ -769,7 +793,7 @@ Army::Army( const Maps::Tiles & t )
         break;
 
     case MP2::OBJ_ARTIFACT:
-        switch ( t.QuantityVariant() ) {
+        switch ( tile.QuantityVariant() ) {
         case 6:
             at( 0 )->Set( Monster::ROGUE, 50 );
             break;
@@ -835,8 +859,8 @@ Army::Army( const Maps::Tiles & t )
         break;
 
     default:
-        if ( MP2::isCaptureObject( t.GetObject() ) ) {
-            CapturedObject & co = world.GetCapturedObject( t.GetIndex() );
+        if ( isCaptureObject ) {
+            CapturedObject & co = world.GetCapturedObject( tile.GetIndex() );
             Troop & troop = co.GetTroop();
 
             switch ( co.GetSplit() ) {
@@ -869,23 +893,17 @@ Army::Army( const Maps::Tiles & t )
         }
         else {
             MapMonster * map_troop = NULL;
-            if ( t.GetObject() == MP2::OBJ_MONSTER )
-                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( t.GetObjectUID() ) );
+            if ( tile.GetObject() == MP2::OBJ_MONSTER )
+                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
-            Troop troop = map_troop ? map_troop->QuantityTroop() : t.QuantityTroop();
+            Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
 
             at( 0 )->Set( troop );
-            ArrangeForBattle( true );
+            if ( troop.isValid() )
+                ArrangeForBattle( true );
         }
         break;
     }
-}
-
-Army::~Army()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    clear();
 }
 
 bool Army::isFullHouse( void ) const
@@ -1119,20 +1137,26 @@ double Army::GetStrength( void ) const
 {
     double res = 0;
     const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+    // Hero bonus calculation is slow, cache it
+    const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
+    const int bonusDefense = ( commander ? commander->GetDefense() : 0 );
+    const int armyMorale = GetMorale();
+    const int armyLuck = GetLuck();
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Troop * troop = *it;
         if ( troop != NULL && troop->isValid() ) {
-            double strength = troop->GetStrength();
+            double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
 
             if ( archery > 0 && troop->isArchers() ) {
                 strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
             }
 
             // GetMorale checks if unit is affected by it
-            const int morale = troop->GetMorale();
-            strength *= 1 + ( ( morale < 0 ) ? morale / 12.0 : morale / 24.0 );
-            strength *= 1 + troop->GetLuck() / 24.0;
+            if ( troop->isAffectedByMorale() )
+                strength *= 1 + ( ( armyMorale < 0 ) ? armyMorale / 12.0 : armyMorale / 24.0 );
+
+            strength *= 1 + armyLuck / 24.0;
 
             res += strength;
         }

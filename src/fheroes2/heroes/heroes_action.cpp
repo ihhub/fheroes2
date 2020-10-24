@@ -752,11 +752,10 @@ void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
-        const uint32_t uniq = tile.GetObjectUID();
         AnimationRemoveObject( tile );
+        tile.RemoveObjectSprite();
         tile.MonsterSetCount( 0 );
         tile.SetObject( MP2::OBJ_ZERO );
-        tile.RemoveObjectSprite();
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
@@ -844,7 +843,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
         }
 
         Army & army = castle->GetActualArmy();
-        bool allow_enter = false;
 
         if ( army.isValid() ) {
             DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
@@ -874,7 +872,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
                 Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
 
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
-                allow_enter = true;
             }
             else
                 // wins defender
@@ -890,7 +887,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             world.CaptureObject( dst_index, hero.GetColor() );
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
-            allow_enter = true;
         }
     }
 }
@@ -911,6 +907,7 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     hero.SetMapsObject( MP2::OBJ_ZERO );
+    world.GetTiles( dst_index ).resetObjectSprite();
     hero.SetShipMaster( true );
     hero.GetPath().Reset();
 
@@ -922,14 +919,15 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     if ( !hero.isShipMaster() )
         return;
 
-    Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
+    const int fromIndex = hero.GetIndex();
+    Maps::Tiles & from = world.GetTiles( fromIndex );
 
     const Point & destPos = Maps::GetPoint( dst_index );
     const Point offset( destPos - hero.GetCenter() );
 
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
-    from.SetObject( MP2::OBJ_BOAT );
+    from.setBoat( Maps::GetDirection( fromIndex, dst_index ) );
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -949,8 +947,8 @@ void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
         map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( obj == MP2::OBJ_BOTTLE ) {
-        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( tile.GetObjectUID() ) );
-        Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
+        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
+        Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "No message provided" ), Font::BIG, Dialog::OK );
     }
     else {
         Funds funds = map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds();
@@ -2064,6 +2062,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
 
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
+                tile.SetQuantity3( 0 );
             }
             else {
                 capture = false;
@@ -2085,9 +2084,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             }
 
             tile.QuantitySetColor( hero.GetColor() );
-
-            if ( MP2::OBJ_LIGHTHOUSE == obj )
-                Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_LIGHT_HOUSE ), hero.GetColor() );
         }
     }
     else
@@ -2897,7 +2893,28 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( !hero.isObjectTypeVisited( obj, Visit::GLOBAL ) ) {
         hero.SetVisited( dst_index, Visit::GLOBAL );
-        world.ActionToEyeMagi( hero.GetColor() );
+        MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, false );
+
+        if ( vec_eyes.size() ) {
+            Interface::Basic & I = Interface::Basic::Get();
+            for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
+                Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
+                I.GetGameArea().SetCenter( Maps::GetPoint( *it ) );
+                I.RedrawFocus();
+                I.Redraw();
+
+                fheroes2::Display::instance().render();
+
+                LocalEvent & le = LocalEvent::Get();
+                int delay = 0;
+                while ( le.HandleEvents() && delay < 7 ) {
+                    if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+                        ++delay;
+                    }
+                }
+            }
+            I.GetGameArea().SetCenter( hero.GetCenter() );
+        }
     }
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );

@@ -92,10 +92,6 @@ namespace AI
     uint32_t AIGetAllianceColors();
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
 
-    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
-    const double ARMY_STRENGTH_ADVANTAGE_MEDUIM = 1.5;
-    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;
-
     int AISelectPrimarySkill( Heroes & hero )
     {
         switch ( hero.GetRace() ) {
@@ -197,6 +193,7 @@ namespace AI
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const int object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+        bool isAction = true;
 
         if ( MP2::isActionObject( object, hero.isShipMaster() ) )
             hero.SetModes( Heroes::ACTION );
@@ -425,13 +422,16 @@ namespace AI
             break;
 
         default:
+            isAction = false;
             break;
         }
 
         if ( MP2::isNeedStayFront( object ) )
             hero.GetPath().Reset();
 
-        AI::Get().HeroesActionComplete( hero, dst_index );
+        // ignore empty tiles
+        if ( isAction )
+            AI::Get().HeroesActionComplete( hero, dst_index );
 
         // reset if during an action music was stopped
         AGG::PlayMusic( MUS::COMPUTER_TURN );
@@ -794,9 +794,6 @@ namespace AI
                 }
 
                 tile.QuantitySetColor( hero.GetColor() );
-
-                if ( MP2::OBJ_LIGHTHOUSE == obj )
-                    Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_LIGHT_HOUSE ), hero.GetColor() );
             }
         }
 
@@ -1454,6 +1451,7 @@ namespace AI
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         hero.SetMapsObject( MP2::OBJ_ZERO );
+        world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
         if ( showAnimation ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
@@ -1470,7 +1468,8 @@ namespace AI
         if ( !hero.isShipMaster() )
             return;
 
-        Maps::Tiles & from = world.GetTiles( hero.GetIndex() );
+        const int fromIndex = hero.GetIndex();
+        Maps::Tiles & from = world.GetTiles( fromIndex );
 
         const bool showAnimation = AIHeroesShowAnimation( hero, AIGetAllianceColors() );
 
@@ -1479,7 +1478,7 @@ namespace AI
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        from.SetObject( MP2::OBJ_BOAT );
+        from.setBoat( Maps::GetDirection( fromIndex, dst_index ) );
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
 
@@ -1744,8 +1743,7 @@ namespace AI
             const Troop & troop = tile.QuantityTroop();
             const payment_t paymentCosts = troop.GetCost();
 
-            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts )
-                 && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFlying() ) ) ) )
+            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() ) )
                 return true;
             break;
         }
@@ -1754,8 +1752,10 @@ namespace AI
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE: {
-            const bool battle = ( Color::NONE == tile.QuantityColor() );
-            if ( !battle ) {
+            if ( Color::NONE == tile.QuantityColor() ) {
+                return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            }
+            else {
                 const Troop & troop = tile.QuantityTroop();
                 const payment_t paymentCosts = troop.GetCost();
 
@@ -1812,7 +1812,7 @@ namespace AI
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
-                return true;
+                return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
             break;
 
         case MP2::OBJ_MONSTER:
@@ -1913,7 +1913,9 @@ namespace AI
 
     void HeroesMove( Heroes & hero )
     {
-        if ( hero.GetPath().isValid() ) {
+        Route::Path & path = hero.GetPath();
+
+        if ( path.isValid() ) {
             hero.SetMove( true );
 
             Cursor & cursor = Cursor::Get();
@@ -2002,6 +2004,10 @@ namespace AI
             }
 
             hero.SetMove( false );
+        }
+        else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
+            if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
+                hero.Action( hero.GetIndex() );
         }
     }
 }

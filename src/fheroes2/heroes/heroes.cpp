@@ -30,6 +30,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
+#include "difficulty.h"
 #include "direction.h"
 #include "game.h"
 #include "game_interface.h"
@@ -83,11 +84,14 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
-                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) { // it's a hack for now
+                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) {
                     strs->append( _( "Graveyard robber" ) );
                 }
-                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) { // and it is a hack too
+                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) {
                     strs->append( _( "Shipwreck robber" ) );
+                }
+                else if ( objs[ii] == MP2::OBJ_PYRAMID || objs[ii] == MP2::OBJN_PYRAMID ) {
+                    strs->append( _( "Pyramid raided" ) );
                 }
                 else {
                     strs->append( MP2::StringObject( objs[ii] ) );
@@ -647,6 +651,10 @@ u32 Heroes::GetMaxMovePoints( void ) const
     if ( acount )
         point += acount * 500;
 
+    if ( isControlAI() ) {
+        point += Difficulty::GetHeroMovementBonus( Settings::Get().GameDifficulty() );
+    }
+
     return point;
 }
 
@@ -657,7 +665,7 @@ int Heroes::GetMorale( void ) const
 
 int Heroes::GetMoraleWithModificators( std::string * strs ) const
 {
-    if ( army.AllTroopsIsRace( Race::NECR ) )
+    if ( army.AllTroopsAreUndead() )
         return Morale::NORMAL;
 
     int result = Morale::NORMAL;
@@ -941,7 +949,7 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
         break;
     }
 
-    if ( tile.GetObject() == object && wide ) {
+    if ( tile.GetObject( false ) == object && wide ) {
         for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
@@ -1326,8 +1334,6 @@ int Heroes::GetDirection( void ) const
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
-    const int32_t currentIndex = GetIndex();
-    const uint32_t skill = GetLevelSkill( Skill::Secondary::PATHFINDING );
 
     uint32_t total = world.getDistance( *this, dst );
     DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );

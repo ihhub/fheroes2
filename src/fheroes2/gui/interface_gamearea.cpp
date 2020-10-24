@@ -43,11 +43,6 @@ Interface::GameArea::GameArea( Basic & basic )
     , updateCursor( false )
 {}
 
-const Rect & Interface::GameArea::GetROI( void ) const
-{
-    return _windowROI;
-}
-
 Rect Interface::GameArea::GetVisibleTileROI( void ) const
 {
     return Rect( _getStartTileId(), _visibleTileCount );
@@ -60,7 +55,7 @@ void Interface::GameArea::ShiftCenter( const Point & offset )
 
 Rect Interface::GameArea::RectFixed( Point & dst, int rw, int rh ) const
 {
-    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst.x, dst.y, rw, rh ), interface.GetGameArea().GetROI() );
+    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst.x, dst.y, rw, rh ), GetROI() );
     dst = res.second;
     return res.first;
 }
@@ -114,7 +109,7 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
     Point dstpt = GetRelativeTilePosition( mp ) + Point( ox, oy );
 
     if ( _windowROI & Rect( dstpt, src.width(), src.height() ) ) {
-        Rect fixedRect = RectFixed( dstpt, src.width(), src.height() );
+        const Rect & fixedRect = RectFixed( dstpt, src.width(), src.height() );
         fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, alpha, flip );
     }
 }
@@ -127,9 +122,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // ground and bottom layer
     for ( int16_t y = 0; y < tileROI.h; ++y ) {
+        Point offset( 0, tileROI.y + y );
+        const bool isEmptyTile = offset.y < 0 || offset.y >= world.h();
         for ( s32 x = 0; x < tileROI.w; ++x ) {
-            Point offset( tileROI.x + x, tileROI.y + y );
-            const bool isEmptyTile = offset.y < 0 || offset.y >= world.h();
+            offset.x = tileROI.x + x;
 
             if ( isEmptyTile || offset.x < 0 || offset.x >= world.w() ) {
                 Maps::Tiles::RedrawEmptyTile( dst, offset );
@@ -197,7 +193,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // object fade in/fade out animation
     Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
     if ( fadeInfo.object != MP2::OBJ_ZERO ) {
-        const Point mp = Maps::GetPoint( fadeInfo.tile );
+        const Point & mp = Maps::GetPoint( fadeInfo.tile );
         const int icn = MP2::GetICNObject( fadeInfo.object );
 
         if ( icn == ICN::MONS32 ) {
@@ -244,7 +240,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         for ( ; currentStep != pathEnd; ++currentStep ) {
             const s32 & from = ( *currentStep ).GetIndex();
-            const Point mp = Maps::GetPoint( from );
+            const Point & mp = Maps::GetPoint( from );
 
             ++nextStep;
             --green;
@@ -347,7 +343,7 @@ void Interface::GameArea::SetCenter( const Point & pt )
     scrollDirection = 0;
 }
 
-fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( s32 index )
+fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_t index )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
         DEBUG( DBG_ENGINE, DBG_WARN, "artifact not found" );
@@ -589,12 +585,7 @@ int32_t Interface::GameArea::GetValidTileIdFromPoint( const Point & point ) cons
 
 Point Interface::GameArea::GetRelativeTilePosition( const Point & tileId ) const
 {
-    return _getRelativePosition( Point( tileId.x * TILEWIDTH, tileId.y * TILEWIDTH ) );
-}
-
-Point Interface::GameArea::_getRelativePosition( const Point & point ) const
-{
-    return point - _topLeftTileOffset + Point( _windowROI.x, _windowROI.y );
+    return Point( tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y );
 }
 
 void Interface::GameArea::ResetCursorPosition()
