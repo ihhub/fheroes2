@@ -1052,7 +1052,6 @@ void Battle::Interface::RedrawPartialStart()
     Cursor::Get().Hide();
     RedrawBorder();
     RedrawCover();
-    RedrawOpponents();
     if ( castle )
         RedrawCastle3( *castle );
     RedrawArmies();
@@ -1123,6 +1122,11 @@ void Battle::Interface::RedrawArmies( void )
 
             if ( _movingUnit != b && b->isValid() )
                 RedrawTroopCount( *b );
+        }
+
+        // Draw heroes now, because their position must be between second and third rows.
+        if ( ii == 2 * ARENAW - 1 ) {
+            RedrawOpponents();
         }
     }
 
