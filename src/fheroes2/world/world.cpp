@@ -202,10 +202,6 @@ void CapturedObjects::ClearFog( int colors )
                 scoute = 2;
                 break;
 
-            case MP2::OBJ_LIGHTHOUSE:
-                scoute = 4;
-                break; // FIXME: scoute and lighthouse
-
             default:
                 break;
             }

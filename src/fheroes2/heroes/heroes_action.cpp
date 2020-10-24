@@ -2084,9 +2084,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             }
 
             tile.QuantitySetColor( hero.GetColor() );
-
-            if ( MP2::OBJ_LIGHTHOUSE == obj )
-                Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_LIGHT_HOUSE ), hero.GetColor() );
         }
     }
     else

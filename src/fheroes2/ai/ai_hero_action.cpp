@@ -794,9 +794,6 @@ namespace AI
                 }
 
                 tile.QuantitySetColor( hero.GetColor() );
-
-                if ( MP2::OBJ_LIGHTHOUSE == obj )
-                    Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_LIGHT_HOUSE ), hero.GetColor() );
             }
         }
 
