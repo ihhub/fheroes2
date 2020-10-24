@@ -338,6 +338,7 @@ void World::ComputeStaticAnalysis()
 
     // Step 6. Initialize regions
     size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
+    _regions.clear();
 
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
         const int tileIndex = regionCenters[regionID];
