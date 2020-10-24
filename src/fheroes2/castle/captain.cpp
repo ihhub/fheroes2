@@ -266,19 +266,19 @@ void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf 
     if ( !isValid() )
         return;
 
-    const fheroes2::Image port = GetPortrait( type );
+    const fheroes2::Image & port = GetPortrait( type );
 
     if ( PORT_SMALL == type ) {
         const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, 0 );
         const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
 
-        const int iconsw = Interface::IconsBar::GetItemWidth();
-        const int iconsh = Interface::IconsBar::GetItemHeight();
-        const int barw = 7;
+        const int iconWidth = Interface::IconsBar::GetItemWidth();
+        const int iconHeight = Interface::IconsBar::GetItemHeight();
+        const int barWidth = 7;
 
-        fheroes2::Image blackBG( iconsw, iconsh );
+        fheroes2::Image blackBG( iconWidth, iconHeight );
         blackBG.fill( 0 );
-        fheroes2::Image blueBG( barw, iconsh );
+        fheroes2::Image blueBG( barWidth, iconHeight );
         blueBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
 
         // background
