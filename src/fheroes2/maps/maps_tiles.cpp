@@ -1557,7 +1557,7 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
     if ( area.GetVisibleTileROI() & mp ) {
         const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
-        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y(), mp, ( spriteIndex > 128 ) );
+        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ) );
     }
 }
 
