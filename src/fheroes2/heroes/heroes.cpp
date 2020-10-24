@@ -90,7 +90,7 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
                 else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) {
                     strs->append( _( "Shipwreck robber" ) );
                 }
-                else if ( objs[ii] == MP2::OBJ_PYRAMID ) {
+                else if ( objs[ii] == MP2::OBJ_PYRAMID || objs[ii] == MP2::OBJN_PYRAMID ) {
                     strs->append( _( "Pyramid raided" ) );
                 }
                 else {
