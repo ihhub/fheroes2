@@ -620,9 +620,8 @@ void Troops::JoinStrongest( Troops & troops2, bool save_last )
     // save half weak of strongest to army2
     if ( save_last && !troops2.isValid() ) {
         Troop & last = *priority.back();
-        u32 count = last.GetCount() / 2;
-        troops2.JoinTroop( last, last.GetCount() - count );
-        last.SetCount( count );
+        troops2.JoinTroop( last, 1 );
+        last.SetCount( last.GetCount() - 1 );
     }
 
     // strongest to army
