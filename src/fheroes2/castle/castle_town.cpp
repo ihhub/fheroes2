@@ -93,7 +93,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
     fheroes2::Blit( portrait_frame, display, dst_pt.x, dst_pt.y );
 
     dst_pt.x = dst_pt.x + 5;
-    dst_pt.y = dst_pt.y + 5;
+    dst_pt.y = dst_pt.y + 6;
     hero->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = box_rt.x;
