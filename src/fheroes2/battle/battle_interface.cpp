@@ -1124,8 +1124,8 @@ void Battle::Interface::RedrawArmies( void )
                 RedrawTroopCount( *b );
         }
 
-        // 21 is the last tile in the second row. Draw heroes now, because their position must be between tiles 21 and 22.
-        if ( ii == 21 ) {
+        // Draw heroes now, because their position must be between second and third rows.
+        if ( ii == 2 * ARENAW - 1 ) {
             RedrawOpponents();
         }
     }
