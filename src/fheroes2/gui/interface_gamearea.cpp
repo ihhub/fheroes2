@@ -108,9 +108,33 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
 {
     Point dstpt = GetRelativeTilePosition( mp ) + Point( ox, oy );
 
-    if ( _windowROI & Rect( dstpt, src.width(), src.height() ) ) {
-        const Rect & fixedRect = RectFixed( dstpt, src.width(), src.height() );
+    const int32_t width = src.width();
+    const int32_t height = src.height();
+
+    // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
+    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.w && dstpt.y + height <= _windowROI.y + _windowROI.h ) {
+        fheroes2::AlphaBlit( src, 0, 0, dst, dstpt.x, dstpt.y, width, height, alpha, flip );
+    }
+    else if ( _windowROI & Rect( dstpt, width, height ) ) {
+        const Rect & fixedRect = RectFixed( dstpt, width, height );
         fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, alpha, flip );
+    }
+}
+
+void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image & src, const Point & mp ) const
+{
+    Point dstpt = GetRelativeTilePosition( mp );
+
+    const int32_t width = src.width();
+    const int32_t height = src.height();
+
+    // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
+    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.w && dstpt.y + height <= _windowROI.y + _windowROI.h ) {
+        fheroes2::Copy( src, 0, 0, dst, dstpt.x, dstpt.y, width, height );
+    }
+    else if ( _windowROI & Rect( dstpt, width, height ) ) {
+        const Rect & fixedRect = RectFixed( dstpt, width, height );
+        fheroes2::Blit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h );
     }
 }
 
@@ -259,7 +283,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
 
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
-                BlitOnTile( dst, sprite, sprite.x() - 14, sprite.y(), mp );
+                BlitOnTile( dst, sprite, sprite.x() - 12, sprite.y() + 2, mp );
             }
         }
     }
