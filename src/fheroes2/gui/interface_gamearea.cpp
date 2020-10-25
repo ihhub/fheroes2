@@ -255,7 +255,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     for ( const std::pair<Point, const Heroes *> & hero : heroList ) {
-        hero.second->Redraw( dst, hero.first.x, hero.first.y, true );
+        hero.second->Redraw( dst, hero.first.x, hero.first.y - 1, true );
     }
 
     // route
