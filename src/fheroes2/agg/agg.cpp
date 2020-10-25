@@ -727,27 +727,15 @@ namespace fheroes2
 
         std::map<int, std::vector<fheroes2::Sprite> > _icnVsScaledSprite;
 
-        void PrepareICNImages()
-        {
-            if ( _icnVsSprite.empty() ) {
-                _icnVsSprite.resize( ICN::LASTICN );
-            }
-        }
-
-        void PrepareTILImages()
-        {
-            if ( _tilVsImage.empty() ) {
-                _tilVsImage.resize( TIL::LASTTIL );
-            }
-        }
-
         bool IsValidICNId( int id )
         {
             if ( id < 0 ) {
                 return false;
             }
 
-            PrepareICNImages();
+            if ( _icnVsSprite.empty() ) {
+                _icnVsSprite.resize( ICN::LASTICN );
+            }
 
             return static_cast<size_t>( id ) < _icnVsSprite.size();
         }
@@ -758,7 +746,9 @@ namespace fheroes2
                 return false;
             }
 
-            PrepareTILImages();
+            if ( _tilVsImage.empty() ) {
+                _tilVsImage.resize( TIL::LASTTIL );
+            }
 
             return static_cast<size_t>( id ) < _tilVsImage.size();
         }
