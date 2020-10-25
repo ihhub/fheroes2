@@ -667,6 +667,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             priority.PopBack();
         }
 
+        // assign stongest to army1, keep unit order
         Assign( priority );
     }
 
@@ -674,10 +675,8 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
     if ( saveLast && !troops2.isValid() ) {
         iterator last = end();
         for ( auto it = begin(); it != end(); ++it ) {
-            if ( ( *it )->isValid() ) {
-                if ( last == end() || Army::WeakestTroop( *it, *last ) ) {
-                    last = it;
-                }
+            if ( ( *it )->isValid() && ( last == end() || Army::WeakestTroop( *it, *last ) ) ) {
+                last = it;
             }
         }
 
