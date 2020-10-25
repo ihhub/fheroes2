@@ -649,29 +649,43 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 
     // if there's more units than slots, start optimizing
     if ( troops2.GetCount() ) {
-        Troops priority = GetOptimized();
-        priority.reserve( ARMYMAXTROOPS * 2 );
-
-        const Troops & priority2 = troops2.GetOptimized();
-        priority.Insert( priority2 );
-
-        Clean();
+        Troops rightPriority = troops2.GetOptimized();
         troops2.Clean();
+        // strongest at the end
+        std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
 
-        // sort: strongest
-        std::sort( priority.begin(), priority.end(), Army::StrongestTroop );
+        // 1. Merge any remaining stacks to free some space
+        MergeTroops();
 
-        // weakest to army2
-        while ( size() < priority.size() ) {
-            troops2.JoinTroop( *priority.back() );
-            priority.PopBack();
+        // 2. Fill empty slots with best troops (if there are any)
+        uint32_t count = GetCount();
+        while ( count < ARMYMAXTROOPS && rightPriority.size() ) {
+            JoinTroop( *rightPriority.back() );
+            rightPriority.PopBack();
+            count++;
         }
 
-        // assign stongest to army1, keep unit order
-        Assign( priority );
+        // 3. Swap weakest and strongest unit until there's no left
+        while ( rightPriority.size() ) {
+            Troop * weakest = GetWeakestTroop();
+
+            if ( weakest && Army::StrongestTroop( rightPriority.back(), weakest ) ) {
+                Army::SwapTroops( *weakest, *rightPriority.back() );
+                std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
+            }
+            else {
+                break;
+            }
+        }
+
+        // 4. The rest goes back to second army
+        while ( rightPriority.size() ) {
+            troops2.JoinTroop( *rightPriority.back() );
+            rightPriority.PopBack();
+        }
     }
 
-    // save half weak of strongest to army2
+    // save weakest unit to army2 (for heroes)
     if ( saveLast && !troops2.isValid() ) {
         iterator last = end();
         for ( auto it = begin(); it != end(); ++it ) {
