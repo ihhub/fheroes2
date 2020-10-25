@@ -612,15 +612,19 @@ void Troops::ArrangeForBattle( bool upgrade )
     }
 }
 
-void Troops::JoinStrongest( Troops & troops2, bool save_last )
+void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 {
     if ( this == &troops2 )
         return;
 
+    // validate the size (can be different from ARMYMAXTROOPS)
+    if ( troops2.size() < size() )
+        troops2.resize( size() );
+
     // first try to keep units in the same slots
-    for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
+    for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * leftTroop = at( slot );
-        Troop * rightTroop = troops2.at( slot );
+        Troop * rightTroop = troops2[slot];
         if ( rightTroop && rightTroop->isValid() ) {
             if ( !leftTroop->isValid() ) {
                 // if slot is empty, simply move the unit
@@ -637,8 +641,9 @@ void Troops::JoinStrongest( Troops & troops2, bool save_last )
 
     // there's still unmerged units left and there's empty room for them
     for ( size_t slot = 0; slot < troops2.size(); ++slot ) {
-        if ( troops2[slot]->isValid() && JoinTroop( *troops2[slot] ) ) {
-            troops2[slot]->Reset();
+        Troop * rightTroop = troops2[slot];
+        if ( rightTroop && rightTroop->isValid() && JoinTroop( *rightTroop ) ) {
+            rightTroop->Reset();
         }
     }
 
@@ -662,18 +667,22 @@ void Troops::JoinStrongest( Troops & troops2, bool save_last )
             priority.PopBack();
         }
 
-        // strongest to army
-        while ( priority.size() ) {
-            JoinTroop( *priority.back() );
-            priority.PopBack();
-        }
+        Assign( priority );
     }
 
     // save half weak of strongest to army2
-    if ( save_last && !troops2.isValid() ) {
-        auto it = std::find( begin(), end(), Army::WeakestTroop );
-        if ( it != end() && ( *it )->isValid() ) {
-            Troop & weakest = *( *it );
+    if ( saveLast && !troops2.isValid() ) {
+        iterator last = end();
+        for ( auto it = begin(); it != end(); ++it ) {
+            if ( ( *it )->isValid() ) {
+                if ( last == end() || Army::WeakestTroop( *it, *last ) ) {
+                    last = it;
+                }
+            }
+        }
+
+        if ( last != end() ) {
+            Troop & weakest = *( *last );
             troops2.JoinTroop( weakest, 1 );
             weakest.SetCount( weakest.GetCount() - 1 );
         }
