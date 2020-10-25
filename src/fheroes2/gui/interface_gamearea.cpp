@@ -259,7 +259,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
 
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
-                BlitOnTile( dst, sprite, sprite.x() - 14, sprite.y(), mp );
+                BlitOnTile( dst, sprite, sprite.x() - 12, sprite.y() + 2, mp );
             }
         }
     }
