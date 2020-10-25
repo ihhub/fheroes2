@@ -674,6 +674,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
                 std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
             }
             else {
+                // we're done processing if second army units are weaker
                 break;
             }
         }
@@ -687,17 +688,11 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 
     // save weakest unit to army2 (for heroes)
     if ( saveLast && !troops2.isValid() ) {
-        iterator last = end();
-        for ( auto it = begin(); it != end(); ++it ) {
-            if ( ( *it )->isValid() && ( last == end() || Army::WeakestTroop( *it, *last ) ) ) {
-                last = it;
-            }
-        }
+        Troop * weakest = GetWeakestTroop();
 
-        if ( last != end() ) {
-            Troop & weakest = *( *last );
-            troops2.JoinTroop( weakest, 1 );
-            weakest.SetCount( weakest.GetCount() - 1 );
+        if ( weakest && weakest->isValid() ) {
+            troops2.JoinTroop( *weakest, 1 );
+            weakest->SetCount( weakest->GetCount() - 1 );
         }
     }
 }
