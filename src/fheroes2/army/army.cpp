@@ -514,6 +514,24 @@ Troop * Troops::GetSlowestTroop( void )
     return *lowest;
 }
 
+void Troops::MergeTroops()
+{
+    for ( size_t slot = 0; slot < size(); ++slot ) {
+        Troop * troop = at( slot );
+        if ( !troop || !troop->isValid() )
+            continue;
+
+        const int id = troop->GetID();
+        for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
+            Troop * secondaryTroop = at( secondary );
+            if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
+                troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
+                secondaryTroop->Reset();
+            }
+        }
+    }
+}
+
 Troops Troops::GetOptimized( void ) const
 {
     Troops result;
@@ -599,35 +617,66 @@ void Troops::JoinStrongest( Troops & troops2, bool save_last )
     if ( this == &troops2 )
         return;
 
-    Troops priority = GetOptimized();
-    priority.reserve( ARMYMAXTROOPS * 2 );
+    // first try to keep units in the same slots
+    for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
+        Troop * leftTroop = at( slot );
+        Troop * rightTroop = troops2.at( slot );
+        if ( rightTroop && rightTroop->isValid() ) {
+            if ( !leftTroop->isValid() ) {
+                // if slot is empty, simply move the unit
+                leftTroop->Set( *rightTroop );
+                rightTroop->Reset();
+            }
+            else if ( leftTroop->GetID() == rightTroop->GetID() ) {
+                // check if we can merge them
+                leftTroop->SetCount( leftTroop->GetCount() + rightTroop->GetCount() );
+                rightTroop->Reset();
+            }
+        }
+    }
 
-    const Troops & priority2 = troops2.GetOptimized();
-    priority.Insert( priority2 );
+    // there's still unmerged units left and there's empty room for them
+    for ( size_t slot = 0; slot < troops2.size(); ++slot ) {
+        if ( troops2[slot]->isValid() && JoinTroop( *troops2[slot] ) ) {
+            troops2[slot]->Reset();
+        }
+    }
 
-    Clean();
-    troops2.Clean();
+    // if there's more units than slots, start optimizing
+    if ( troops2.GetCount() ) {
+        Troops priority = GetOptimized();
+        priority.reserve( ARMYMAXTROOPS * 2 );
 
-    // sort: strongest
-    std::sort( priority.begin(), priority.end(), Army::StrongestTroop );
+        const Troops & priority2 = troops2.GetOptimized();
+        priority.Insert( priority2 );
 
-    // weakest to army2
-    while ( size() < priority.size() ) {
-        troops2.JoinTroop( *priority.back() );
-        priority.PopBack();
+        Clean();
+        troops2.Clean();
+
+        // sort: strongest
+        std::sort( priority.begin(), priority.end(), Army::StrongestTroop );
+
+        // weakest to army2
+        while ( size() < priority.size() ) {
+            troops2.JoinTroop( *priority.back() );
+            priority.PopBack();
+        }
+
+        // strongest to army
+        while ( priority.size() ) {
+            JoinTroop( *priority.back() );
+            priority.PopBack();
+        }
     }
 
     // save half weak of strongest to army2
     if ( save_last && !troops2.isValid() ) {
-        Troop & last = *priority.back();
-        troops2.JoinTroop( last, 1 );
-        last.SetCount( last.GetCount() - 1 );
-    }
-
-    // strongest to army
-    while ( priority.size() ) {
-        JoinTroop( *priority.back() );
-        priority.PopBack();
+        auto it = std::find( begin(), end(), Army::WeakestTroop );
+        if ( it != end() && ( *it )->isValid() ) {
+            Troop & weakest = *( *it );
+            troops2.JoinTroop( weakest, 1 );
+            weakest.SetCount( weakest.GetCount() - 1 );
+        }
     }
 }
 
