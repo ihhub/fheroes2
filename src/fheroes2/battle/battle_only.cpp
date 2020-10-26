@@ -589,7 +589,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         selectArtifacts2->SetContent( hero2->GetBagArtifacts() );
         selectArtifacts2->SetPos( cur_pt.x + 367, cur_pt.y + 347 );
 
-        army1 = &hero1->GetArmy();
+        army2 = &hero2->GetArmy();
 
         selectArmy2 = new ArmyBar( army2, true, false, true );
         selectArmy2->SetColRows( 5, 1 );
