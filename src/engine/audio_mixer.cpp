@@ -192,7 +192,8 @@ void Mixer::Reset( void )
 
 u8 Mixer::isPlaying( int channel )
 {
-    return Mix_Playing( channel );
+    const int currentMusicVolume = Mix_VolumeMusic( -1 ); // -1 is used to get current value without modification
+    return ( currentMusicVolume != 0 ) ? Mix_Playing( channel ) : 0;
 }
 
 u8 Mixer::isPaused( int channel )
@@ -433,9 +434,14 @@ void Mixer::Resume( int ch )
     }
 }
 
-u8 Mixer::isPlaying( int ch )
+u8 Mixer::isPlaying( int chunk )
 {
-    return 0 <= ch && ch < static_cast<int>( chunks.size() ) && ( chunks[ch].state & MIX_PLAY );
+    const int currentVolume = Music::Volume( -1 ); // -1 is used to get current value without modification
+    if ( currentVolume == 0 ) {
+        return 0;
+    }
+    const bool isValidChunk = ( 0 <= chunk ) && ( chunk < static_cast<int>( chunks.size() ) );
+    return isValidChunk ? ( chunks[chunk].state & MIX_PLAY ) : 0;
 }
 
 u8 Mixer::isPaused( int ch )
