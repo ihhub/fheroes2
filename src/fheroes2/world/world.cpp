@@ -142,9 +142,10 @@ u32 CapturedObjects::GetCount( int obj, int col ) const
 
     const ObjectColor objcol( obj, col );
 
-    for ( const_iterator it = begin(); it != end(); ++it )
+    for ( const_iterator it = begin(); it != end(); ++it ) {
         if ( objcol == ( *it ).second.objcol )
             ++result;
+    }
 
     return result;
 }

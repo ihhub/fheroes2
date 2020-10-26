@@ -2100,6 +2100,9 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             troop1.Set( troop2(), troop2.GetCount() );
     }
 
+    if ( obj == MP2::OBJ_LIGHTHOUSE )
+        world.CaptureObject( dst_index, hero.GetColor() );
+
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( obj ) );
 }
 
