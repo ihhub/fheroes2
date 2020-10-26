@@ -115,7 +115,7 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
     int32_t posy = startYPos;
 
     if ( startYPos < 0 ) {
-        posy = ( display.height() - height_top_bottom - height_middle ) / 2;
+        posy = ( ( display.height() - height_middle ) / 2 ) - topHeight( evil );
     }
 
     _restorer.reset( new fheroes2::ImageRestorer( display, posx, posy, overallWidth( evil ), height_top_bottom + height_middle ) );
