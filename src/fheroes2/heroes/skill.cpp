@@ -638,6 +638,18 @@ int Skill::SecSkills::Count( void ) const
     return std::count_if( begin(), end(), std::mem_fun_ref( &Secondary::isValid ) );
 }
 
+int Skill::SecSkills::GetTotalLevel() const
+{
+    int result = 0;
+    for ( const Skill::Secondary skill : *this ) {
+        if ( skill.isValid() ) {
+            result += skill.Level();
+        }
+    }
+    return result;
+}
+
+
 void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {

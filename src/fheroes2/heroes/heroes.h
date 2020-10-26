@@ -155,6 +155,8 @@ public:
         CUSTOMSKILLS = 0x00020000
     };
 
+    const double SKILL_VALUE = 100.0;
+
     Heroes();
     Heroes( int heroid, int rc );
 
@@ -181,6 +183,10 @@ public:
     Army & GetArmy( void );
 
     int GetID( void ) const;
+
+    double getMeetingValue( const Heroes & otherHero ) const;
+    double getRecruitValue() const;
+    int getStatsValue() const;
 
     int GetAttack( void ) const;
     int GetDefense( void ) const;

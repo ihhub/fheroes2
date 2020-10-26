@@ -812,6 +812,16 @@ u32 BagArtifacts::CountArtifacts( void ) const
     return static_cast<uint32_t>( std::count_if( begin(), end(), std::mem_fun_ref( &Artifact::isValid ) ) ); // no way that we have more than 4 billion artifacts
 }
 
+int BagArtifacts::getArtifactValue() const
+{
+    int result = 0;
+    for ( const Artifact & art : *this )
+        if ( art.isValid() )
+            result += art.getArtifactValue();
+
+    return result;
+}
+
 bool BagArtifacts::ContainUltimateArtifact( void ) const
 {
     return end() != std::find_if( begin(), end(), std::mem_fun_ref( &Artifact::isUltimate ) );

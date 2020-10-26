@@ -495,6 +495,24 @@ int Heroes::GetManaIndexSprite( void ) const
     return 25 >= r ? r : 25;
 }
 
+int Heroes::getStatsValue() const
+{
+    // experience and artifacts don't matter here, only natural stats
+    return attack + defense + power + knowledge + secondary_skills.GetTotalLevel();
+}
+
+double Heroes::getRecruitValue() const
+{
+    // experience and artifacts don't matter, only natural stats
+    return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 2.0 + getStatsValue() ) * SKILL_VALUE );
+}
+
+double Heroes::getMeetingValue( const Heroes & otherHero ) const
+{
+    // experience and artifacts don't matter, only natural stats
+    return army.GetStrength();
+}
+
 int Heroes::GetAttack( void ) const
 {
     return GetAttack( NULL );
