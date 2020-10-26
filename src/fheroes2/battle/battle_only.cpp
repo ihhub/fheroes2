@@ -401,10 +401,12 @@ bool Battle::Only::ChangeSettings( void )
 
         if ( cinfo2 && allow1 ) {
             if ( hero2 && le.MouseClickLeft( cinfo2->rtLocal ) && player2.isControlAI() ) {
+                cinfo2->result = CONTROL_HUMAN;
                 player2.SetControl( CONTROL_HUMAN );
                 redraw = true;
             }
             else if ( le.MouseClickLeft( cinfo2->rtAI ) && player2.isControlHuman() ) {
+                cinfo2->result = CONTROL_AI;
                 player2.SetControl( CONTROL_AI );
                 redraw = true;
             }
