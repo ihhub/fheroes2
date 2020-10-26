@@ -662,21 +662,20 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
         while ( count < ARMYMAXTROOPS && rightPriority.size() ) {
             JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
-            count++;
+            ++count;
         }
 
         // 3. Swap weakest and strongest unit until there's no left
         while ( rightPriority.size() ) {
             Troop * weakest = GetWeakestTroop();
 
-            if ( weakest && Army::StrongestTroop( rightPriority.back(), weakest ) ) {
-                Army::SwapTroops( *weakest, *rightPriority.back() );
-                std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
-            }
-            else {
+            if ( !weakest || Army::StrongestTroop( weakest, rightPriority.back() ) ) {
                 // we're done processing if second army units are weaker
                 break;
             }
+
+            Army::SwapTroops( *weakest, *rightPriority.back() );
+            std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
         }
 
         // 4. The rest goes back to second army
