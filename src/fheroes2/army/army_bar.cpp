@@ -363,13 +363,25 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop1, ArmyTroop & troop2 /* selected */ )
 {
-    if ( troop2.GetArmy()->SaveLastTroop() ) {
-        if ( troop1.isValid() )
+    if ( troop2.GetArmy()->SaveLastTroop() && troop1.isValid() ) {
+        if ( troop1.GetID() == troop2.GetID() ) {
+            troop1.SetCount( troop1.GetCount() + troop2.GetCount() - 1 );
+            troop2.SetCount( 1 );
+        }
+        else {
             Army::SwapTroops( troop1, troop2 );
+        }
     }
     else {
-        if ( !troop1.isValid() )
-            Army::SwapTroops( troop1, troop2 );
+        if ( !troop1.isValid() ) {
+            if ( troop2.GetArmy()->SaveLastTroop() ) {
+                troop1.Set( troop2, troop2.GetCount() - 1 );
+                troop2.SetCount( 1 );
+            }
+            else {
+                Army::SwapTroops( troop1, troop2 );
+            }
+        }
         else if ( troop1.isValid() && troop1.GetID() == troop2.GetID() ) {
             troop1.SetCount( troop1.GetCount() + troop2.GetCount() );
             troop2.Reset();
