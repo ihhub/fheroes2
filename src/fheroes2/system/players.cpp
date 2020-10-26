@@ -318,7 +318,7 @@ Player * Players::Get( int color )
 bool Players::isFriends( int player, int colors )
 {
     const Player * ptr = Get( player );
-    return ptr ? ptr->GetFriends() & colors : false;
+    return ptr ? ( ptr->GetFriends() & colors ) != 0 : false;
 }
 
 void Players::SetPlayerRace( int color, int race )
