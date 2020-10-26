@@ -553,8 +553,9 @@ int Castle::OpenDialog( bool readonly )
 
                                         const uint32_t castleAnimationFrame = Game::CastleAnimationFrame();
 
-                                        for ( CastleDialog::CacheBuildings::const_iterator it = cacheBuildings.begin(); it != cacheBuildings.end(); ++it ) {
-                                            const u32 & build2 = ( *it ).id;
+                                        for ( CastleDialog::CacheBuildings::const_iterator buildingIt = cacheBuildings.begin(); buildingIt != cacheBuildings.end();
+                                              ++buildingIt ) {
+                                            const u32 & build2 = buildingIt->id;
                                             if ( isBuild( build2 ) ) {
                                                 if ( build2 == BUILD_SHIPYARD ) {
                                                     CastleDialog::CastleRedrawBuilding( *this, cur_pt, build2, castleAnimationFrame );
