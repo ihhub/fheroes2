@@ -380,8 +380,8 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             }
 
             // good morale
-            if ( !end_turn && current_troop->isValid() && !current_troop->Modes( TR_SKIPMOVE ) && current_troop->Modes( TR_MOVED )
-                 && current_troop->Modes( MORALE_GOOD ) && !current_troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+            if ( !end_turn && current_troop->isValid() && !current_troop->Modes( TR_SKIPMOVE ) && current_troop->Modes( TR_MOVED ) && current_troop->Modes( MORALE_GOOD )
+                 && !current_troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                 actions.push_back( Command( MSG_BATTLE_MORALE, current_troop->GetUID(), true ) );
                 end_turn = false;
             }
