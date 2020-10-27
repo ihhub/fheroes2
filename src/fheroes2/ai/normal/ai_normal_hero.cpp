@@ -51,7 +51,7 @@ namespace AI
                 return valueToIgnore;
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
-                if ( hero.getStatsValue() >= otherHero->getStatsValue() )
+                if ( hero.getStatsValue() >= otherHero->getStatsValue() + 1 )
                     return valueToIgnore;
 
                 const double value = hero.getMeetingValue( *otherHero );

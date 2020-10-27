@@ -1495,6 +1495,9 @@ namespace AI
 
     void AIMeeting( Heroes & left, Heroes & right )
     {
+        left.markHeroMeeting( right.GetID() );
+        right.markHeroMeeting( left.GetID() );
+
         if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
             Heroes::ScholarAction( left, right );
 
@@ -1848,8 +1851,8 @@ namespace AI
         case MP2::OBJ_HEROES: {
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
-                if ( hero.GetColor() == hero2->GetColor() )
-                    return true;
+                if ( hero.GetColor() == hero2->GetColor() && !hero.hasMetWithHero( hero2->GetID() ) )
+                    return !hero2->inCastle();
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
                 else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE_SMALL ) )

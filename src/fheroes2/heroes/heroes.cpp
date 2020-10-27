@@ -979,6 +979,17 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
     }
 }
 
+void Heroes::markHeroMeeting( int heroID )
+{
+    if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
+        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+}
+
+bool Heroes::hasMetWithHero( int heroID ) const
+{
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HEROES ) );
+}
+
 int Heroes::GetSpriteIndex( void ) const
 {
     return sprite_index;

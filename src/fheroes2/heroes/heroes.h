@@ -265,6 +265,8 @@ public:
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
     bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
+    bool hasMetWithHero( int heroID ) const;
+    void markHeroMeeting( int heroID );
 
     bool Move( bool fast = false );
     void Move2Dest( const s32 & destination );
