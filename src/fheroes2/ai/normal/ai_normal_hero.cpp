@@ -55,8 +55,8 @@ namespace AI
                     return valueToIgnore;
 
                 const double value = hero.getMeetingValue( *otherHero );
-                // limit the max value of friendly hero meeting
-                return ( value < 100 ) ? valueToIgnore : std::min( value, 3000.0 );
+                // limit the max value of friendly hero meeting to 30 tiles
+                return ( value < 200 ) ? valueToIgnore : std::min( value, 3000.0 );
             }
             return 1700.0;
         }

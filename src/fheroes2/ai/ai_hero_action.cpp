@@ -1508,7 +1508,10 @@ namespace AI
         else
             right.GetArmy().JoinStrongestFromArmy( left.GetArmy() );
 
-        // artifacts exchange
+        if ( rightToLeft )
+            left.GetBagArtifacts().exchangeArtifacts( right.GetBagArtifacts() );
+        else
+            right.GetBagArtifacts().exchangeArtifacts( left.GetBagArtifacts() );
     }
 
     bool HeroesValidObject( const Heroes & hero, s32 index )

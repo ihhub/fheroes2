@@ -822,6 +822,34 @@ int BagArtifacts::getArtifactValue() const
     return result;
 }
 
+void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
+{
+    std::vector<Artifact> combined;
+    for ( auto it = begin(); it != end(); ++it )
+        if ( it->isValid() && it->GetID() != Artifact::MAGIC_BOOK ) {
+            combined.push_back( *it );
+            it->Reset();
+        }
+
+    for ( auto it = giftBag.begin(); it != giftBag.end(); ++it )
+        if ( it->isValid() && it->GetID() != Artifact::MAGIC_BOOK ) {
+            combined.push_back( *it );
+            it->Reset();
+        }
+
+    // better artifacts at the end
+    std::sort( combined.begin(), combined.end(), []( const Artifact & left, const Artifact & right ) { return left.getArtifactValue() < right.getArtifactValue(); } );
+
+    // reset and clear all current artifacts, put back the best
+    while ( combined.size() && PushArtifact( combined.back() ) ) {
+        combined.pop_back();
+    }
+
+    while ( combined.size() && giftBag.PushArtifact( combined.back() ) ) {
+        combined.pop_back();
+    }
+}
+
 bool BagArtifacts::ContainUltimateArtifact( void ) const
 {
     return end() != std::find_if( begin(), end(), std::mem_fun_ref( &Artifact::isUltimate ) );
