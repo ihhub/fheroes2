@@ -402,7 +402,14 @@ int Castle::getBuildingValue() const
     int value = CountBuildings();
 
     // Additional value for the most important buildings
-    for ( uint32_t upgrade = DWELLING_UPGRADE2; upgrade <= DWELLING_UPGRADE7; upgrade <<= 1 )
+    if ( isBuild( BUILD_CASTLE ) )
+        value += 5;
+
+    if ( isBuild( DWELLING_MONSTER6 ) )
+        value += 6;
+
+    // DWELLING_UPGRADE7 resolves to a negative, can't use <= operator
+    for ( uint32_t upgrade = DWELLING_UPGRADE2; upgrade != DWELLING_UPGRADE7; upgrade <<= 1 )
         if ( isBuild( upgrade ) )
             ++value;
 
@@ -412,9 +419,6 @@ int Castle::getBuildingValue() const
             value += increase;
         ++increase;
     }
-
-    if ( isBuild( DWELLING_MONSTER6 ) )
-        value += 8;
 
     return value;
 }
@@ -439,7 +443,6 @@ double Castle::getVisitValue( const Heroes & hero ) const
 
 void Castle::ActionNewDay( void )
 {
-    std::cout << name << ": value " << getBuildingValue() << std::endl;
     EducateHeroes();
 
     SetModes( ALLOWBUILD );
@@ -2260,14 +2263,24 @@ std::string Castle::String( void ) const
     const CastleHeroes heroes = GetHeroes();
     const Heroes * hero = NULL;
 
-    os << "name            : " << name << std::endl
-       << "race            : " << Race::String( race ) << std::endl
+    os << "name and type   : " << name << " (" << Race::String( race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
-       << "build           : "
-       << "0x" << std::hex << building << std::dec << std::endl
-       << "present boat    : " << ( PresentBoat() ? "yes" : "no" ) << std::endl
-       << "nearly sea      : " << ( HaveNearlySea() ? "yes" : "no" ) << std::endl
-       << "is castle       : " << ( isCastle() ? "yes" : "no" ) << std::endl
+       << "dwellings       : ";
+
+    for ( uint32_t level = 0; level < 6; ++level ) {
+        if ( isBuild( DWELLING_MONSTER1 << level ) )
+            os << level + 1;
+        if ( level && isBuild( DWELLING_UPGRADE2 << ( level - 1 ) ) )
+            os << "U";
+
+        if ( level < 5 )
+            os << ", ";
+    }
+    os << std::endl;
+
+    os << "buildings       : " << CountBuildings() << " (mage guild: " << GetLevelMageGuild() << ")" << std::endl
+       << "coast/has boat  : " << ( HaveNearlySea() ? "yes" : "no" ) << " / " << ( PresentBoat() ? "yes" : "no" ) << std::endl
+       << "is castle       : " << ( isCastle() ? "yes" : "no" ) << " (" << getBuildingValue() << ")" << std::endl
        << "army            : " << army.String() << std::endl;
 
     if ( NULL != ( hero = heroes.Guard() ) ) {
