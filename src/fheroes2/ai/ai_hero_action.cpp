@@ -846,7 +846,6 @@ namespace AI
         if ( path.size() ) {
             const int dest = path.front().GetIndex();
             while ( indexTo != dest ) {
-                std::cout << "Teleporters: fishing for " << dest << " got " << indexTo << std::endl;
                 indexTo = world.NextTeleport( index_from );
                 const Maps::Tiles & tile = world.GetTiles( indexTo );
                 if ( index_from == indexTo || tile.isFog( hero.GetColor() ) || tile.GetObject() == MP2::OBJ_HEROES )
