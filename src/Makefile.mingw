@@ -1,16 +1,10 @@
 # ifndef WITHOUT_AUDIOCD
-# ifdef FHEROES2_SDL1
 # CFLAGS := $(CFLAGS) -DWITH_AUDIOCD
-# endif
 # endif
 
 # ifndef WITHOUT_NETWORK
-# LIBS := $(LIBS) -lwsock32 //-lws2_32
+# LIBS := $(LIBS) -lwsock32
 # endif
-
-ifdef DEBUG
-LIBS := $(filter-out -mwindows,$(LIBS))
-endif
 
 AR := ar
 CXX := g++
@@ -22,3 +16,12 @@ ifndef WITHOUT_UNICODE
 CFLAGS := $(CFLAGS) -DWITH_ICONV
 LIBS := $(LIBS) -liconv
 endif
+
+ifdef WITH_ICONS
+export WITH_ICONS=0
+# ifndef WITH_ICONS
+# export WITH_ICONS=1
+# endif
+# IDICON := 1099
+# CFLAGS := $(CFLAGS) -DID_ICON=$(IDICON)
+# export IDICON
