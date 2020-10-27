@@ -159,7 +159,7 @@ public:
     u32 GetDefense( void ) const;
 
     double GetStrength() const;
-    double getReinforcementValue( const Army & reinforcement ) const;
+    double getReinforcementValue( const Troops & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
 
     void SetColor( int );

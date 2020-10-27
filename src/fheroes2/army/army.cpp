@@ -1246,7 +1246,7 @@ double Army::GetStrength( void ) const
     return res;
 }
 
-double Army::getReinforcementValue( const Army & reinforcement ) const
+double Army::getReinforcementValue( const Troops & reinforcement ) const
 {
     Troops combined;
     combined.Assign( *this );

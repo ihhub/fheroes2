@@ -397,8 +397,49 @@ void Castle::EducateHeroes( void )
     }
 }
 
+int Castle::getBuildingValue() const
+{
+    int value = CountBuildings();
+
+    // Additional value for the most important buildings
+    for ( uint32_t upgrade = DWELLING_UPGRADE2; upgrade <= DWELLING_UPGRADE7; upgrade <<= 1 )
+        if ( isBuild( upgrade ) )
+            ++value;
+
+    int increase = 1;
+    for ( uint32_t guild = BUILD_MAGEGUILD2; guild <= BUILD_MAGEGUILD5; guild <<= 1 ) {
+        if ( isBuild( guild ) )
+            value += increase;
+        ++increase;
+    }
+
+    if ( isBuild( DWELLING_MONSTER6 ) )
+        value += 8;
+
+    return value;
+}
+
+double Castle::getVisitValue( const Heroes & hero ) const
+{
+    double spellValue = 0;
+    const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
+    for ( const Spell & spell : guildSpells ) {
+        if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
+            spellValue += spell.Level() * 100.0;
+        }
+    }
+
+    Troops reinforcement;
+    for ( u32 dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 )
+        if ( isBuild( dw ) )
+            reinforcement.PushBack( Monster( race, GetActualDwelling( dw ) ), getMonstersInDwelling( dw ) );
+
+    return spellValue + hero.GetArmy().getReinforcementValue( reinforcement );
+}
+
 void Castle::ActionNewDay( void )
 {
+    std::cout << name << ": value " << getBuildingValue() << std::endl;
     EducateHeroes();
 
     SetModes( ALLOWBUILD );
