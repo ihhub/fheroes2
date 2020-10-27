@@ -34,35 +34,6 @@
 #include "text.h"
 #include "world.h"
 
-// class Castle::RumorOfWeek
-// {
-//     int week;
-//     const std::string * rumor;
-
-// public:
-//     RumorOfWeek()
-//         : week( world.GetWeek() )
-//         , rumor( &world.GetRumors() )
-//     {}
-
-//     const std::string & get()
-//     {
-//         int currentWeek = world.GetWeek();
-//         if ( week == currentWeek ) {
-//             return *rumor;
-//         }
-//         else {
-//             week = currentWeek;
-//             const std::string * currentRumor = &world.GetRumors();
-//             while ( rumor == currentRumor ) {
-//                 currentRumor = &world.GetRumors();
-//             }
-//             rumor = currentRumor;
-//             return *rumor;
-//         }
-//     }
-// };
-
 Castle::RumorOfWeek::RumorOfWeek()
     : week( world.GetWeek() )
     , rumor( &world.GetRumors() )
@@ -71,18 +42,15 @@ Castle::RumorOfWeek::RumorOfWeek()
 const std::string & Castle::RumorOfWeek::get()
 {
     int currentWeek = world.GetWeek();
-    if ( week == currentWeek ) {
-        return *rumor;
-    }
-    else {
+    if ( week != currentWeek ) {
         week = currentWeek;
         const std::string * currentRumor = &world.GetRumors();
         while ( rumor == currentRumor ) {
             currentRumor = &world.GetRumors();
         }
         rumor = currentRumor;
-        return *rumor;
     }
+    return *rumor;
 }
 
 void Castle::OpenTavern( void )
