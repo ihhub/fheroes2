@@ -2506,14 +2506,13 @@ void Castle::JoinRNDArmy( void )
 
 void Castle::ActionPreBattle( void )
 {
+    CastleHeroes heroes = world.GetHeroes( *this );
+    Heroes * hero = heroes.GuardFirst();
+    if ( hero && army.isValid() )
+        hero->GetArmy().JoinStrongestFromArmy( army );
+
     if ( isControlAI() )
         AI::Get().CastlePreBattle( *this );
-    else if ( Settings::Get().ExtBattleMergeArmies() ) {
-        CastleHeroes heroes = world.GetHeroes( *this );
-        Heroes * hero = heroes.GuardFirst();
-        if ( hero && army.isValid() )
-            hero->GetArmy().JoinStrongestFromArmy( army );
-    }
 }
 
 void Castle::ActionAfterBattle( bool attacker_wins )
