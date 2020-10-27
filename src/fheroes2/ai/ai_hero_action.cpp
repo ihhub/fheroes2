@@ -1660,11 +1660,18 @@ namespace AI
         case MP2::OBJ_MERCENARYCAMP:
         case MP2::OBJ_DOCTORHUT:
         case MP2::OBJ_STANDINGSTONES:
-        // sec skill
-        case MP2::OBJ_WITCHSHUT:
         // exp
         case MP2::OBJ_GAZEBO:
             if ( !hero.isVisited( tile ) )
+                return true;
+            break;
+
+        // sec skill
+        case MP2::OBJ_WITCHSHUT:
+            const Skill::Secondary & skill = tile.QuantitySkill();
+
+            // check skill
+            if ( skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) )
                 return true;
             break;
 
