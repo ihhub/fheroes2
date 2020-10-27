@@ -81,6 +81,7 @@ public:
 
     virtual u32 GetAttack( void ) const;
     virtual u32 GetDefense( void ) const;
+    virtual double GetStrength() const;
 
     u32 GetHitPoints( void ) const;
     u32 GetDamageMin( void ) const;
@@ -154,7 +155,9 @@ public:
     int GetControl( void ) const;
     u32 GetAttack( void ) const;
     u32 GetDefense( void ) const;
+
     double GetStrength() const;
+    double getReinforcementValue( const Army & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
 
     void SetColor( int );

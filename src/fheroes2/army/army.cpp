@@ -372,6 +372,15 @@ u32 Troops::GetUniqueCount( void ) const
     return monsters.size();
 }
 
+double Troops::GetStrength() const
+{
+    double strength = 0;
+    for ( const Troop * troop : *this )
+        if ( troop && troop->isValid() )
+            strength += troop->GetStrength();
+    return strength;
+}
+
 u32 Troops::GetAttack( void ) const
 {
     u32 res = 0;
@@ -1166,6 +1175,19 @@ double Army::GetStrength( void ) const
     // composition
 
     return res;
+}
+
+double Army::getReinforcementValue(const Army & reinforcement) const
+{
+    double result = 0.0;
+
+    Troops combined;
+    combined.Assign( *this );
+    const double valueBefore = combined.GetStrength();
+
+    combined.Insert( reinforcement.GetOptimized() );
+
+    return result;
 }
 
 void Army::Reset( bool soft )
