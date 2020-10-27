@@ -401,10 +401,12 @@ bool Battle::Only::ChangeSettings( void )
 
         if ( cinfo2 && allow1 ) {
             if ( hero2 && le.MouseClickLeft( cinfo2->rtLocal ) && player2.isControlAI() ) {
+                cinfo2->result = CONTROL_HUMAN;
                 player2.SetControl( CONTROL_HUMAN );
                 redraw = true;
             }
             else if ( le.MouseClickLeft( cinfo2->rtAI ) && player2.isControlHuman() ) {
+                cinfo2->result = CONTROL_AI;
                 player2.SetControl( CONTROL_AI );
                 redraw = true;
             }
@@ -587,7 +589,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         selectArtifacts2->SetContent( hero2->GetBagArtifacts() );
         selectArtifacts2->SetPos( cur_pt.x + 367, cur_pt.y + 347 );
 
-        army1 = &hero1->GetArmy();
+        army2 = &hero2->GetArmy();
 
         selectArmy2 = new ArmyBar( army2, true, false, true );
         selectArmy2->SetColRows( 5, 1 );
