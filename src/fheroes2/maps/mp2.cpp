@@ -117,6 +117,10 @@ int MP2::GetICNObject( int tileset )
     case 38:
         return ICN::OBJNTWRD;
 
+    // mine guardians (elementals)
+    case 39:
+        return ICN::OBJNXTRA;
+
     // water object
     case 40:
         return ICN::OBJNWAT2;

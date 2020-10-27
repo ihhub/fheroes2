@@ -1638,17 +1638,18 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst ) const
     if ( !( area.GetVisibleTileROI() & mp ) )
         return;
 
+    const int objectID = GetObject( false );
     // animate objects
-    if ( MP2::OBJ_ABANDONEDMINE == GetObject() ) {
+    if ( objectID == MP2::OBJ_ABANDONEDMINE ) {
         area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
     }
-    else if ( MP2::OBJ_MINES == GetObject() ) {
+    else if ( objectID == MP2::OBJ_MINES ) {
         const uint8_t spellID = GetQuantity3();
         if ( spellID == Spell::HAUNT ) {
             area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
         }
         else if ( spellID >= Spell::SETEGUARDIAN && spellID <= Spell::SETWGUARDIAN ) {
-            area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::MONS32, Monster( Spell( spellID ) ).GetSpriteIndex() ), TILEWIDTH, 0, mp );
+            area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN ), TILEWIDTH, 0, mp );
         }
     }
 
