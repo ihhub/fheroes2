@@ -21,7 +21,7 @@ ifdef WITH_ICONS
 export WITH_ICONS=0
 # ifndef WITH_ICONS
 # export WITH_ICONS=1
-# endif
+endif
 # IDICON := 1099
 # CFLAGS := $(CFLAGS) -DID_ICON=$(IDICON)
 # export IDICON
