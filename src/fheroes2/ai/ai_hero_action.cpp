@@ -1667,13 +1667,13 @@ namespace AI
             break;
 
         // sec skill
-        case MP2::OBJ_WITCHSHUT:
+        case MP2::OBJ_WITCHSHUT: {
             const Skill::Secondary & skill = tile.QuantitySkill();
 
             // check skill
             if ( skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) )
                 return true;
-            break;
+        } break;
 
         case MP2::OBJ_TREEKNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
