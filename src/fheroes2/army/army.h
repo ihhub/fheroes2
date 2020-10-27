@@ -95,6 +95,7 @@ public:
     Troop * GetWeakestTroop( void );
     Troop * GetSlowestTroop( void );
 
+    void SortStrongest();
     void ArrangeForBattle( bool = false );
 
     void JoinStrongest( Troops &, bool );

@@ -503,7 +503,6 @@ int Heroes::getStatsValue() const
 
 double Heroes::getRecruitValue() const
 {
-    // experience and artifacts don't matter, only natural stats
     return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 2.0 + getStatsValue() ) * SKILL_VALUE );
 }
 
@@ -512,12 +511,12 @@ double Heroes::getMeetingValue( const Heroes & recievingHero ) const
     const uint32_t artCount = bag_artifacts.CountArtifacts();
     const uint32_t canFit = HEROESMAXARTIFACT - recievingHero.bag_artifacts.CountArtifacts();
 
-    double artifactValue = bag_artifacts.getArtifactValue();
+    double artifactValue = bag_artifacts.getArtifactValue() * 2.0;
     if ( artCount > canFit ) {
         artifactValue = canFit * ( artifactValue / artCount );
     }
 
-    return army.GetStrength() + artifactValue * SKILL_VALUE * 2;
+    return recievingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
 }
 
 int Heroes::GetAttack( void ) const

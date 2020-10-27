@@ -560,6 +560,11 @@ Troops Troops::GetOptimized( void ) const
     return result;
 }
 
+void Troops::SortStrongest()
+{
+    std::sort( begin(), end(), Army::StrongestTroop );
+}
+
 void Troops::ArrangeForBattle( bool upgrade )
 {
     const Troops & priority = GetOptimized();
@@ -1241,17 +1246,21 @@ double Army::GetStrength( void ) const
     return res;
 }
 
-double Army::getReinforcementValue(const Army & reinforcement) const
+double Army::getReinforcementValue( const Army & reinforcement ) const
 {
-    double result = 0.0;
-
     Troops combined;
     combined.Assign( *this );
-    const double valueBefore = combined.GetStrength();
+    const double initialValue = combined.GetStrength();
 
     combined.Insert( reinforcement.GetOptimized() );
+    combined.MergeTroops();
+    combined.SortStrongest();
 
-    return result;
+    while ( combined.Size() > ARMYMAXTROOPS ) {
+        combined.PopBack();
+    }
+
+    return combined.GetStrength() - initialValue;
 }
 
 void Army::Reset( bool soft )
