@@ -34,9 +34,9 @@ class MageGuild
 public:
     MageGuild(){};
 
-    void Builds( int race, bool libraryCap );
-    void EducateHero( HeroBase &, int lvlmage, bool isLibraryBuild ) const;
-    SpellStorage GetSpells( int lvlmage, bool islibrary, int ) const;
+    void initialize( int race, bool libraryCap );
+    void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
+    SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const MageGuild & );

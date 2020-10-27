@@ -305,7 +305,7 @@ void Castle::PostLoad( void )
         captain.LoadDefaults( HeroBase::CAPTAIN, race );
 
     // MageGuild
-    mageguild.Builds( race, HaveLibraryCapability() );
+    mageguild.initialize( race, HaveLibraryCapability() );
     // educate heroes and captain
     EducateHeroes();
 
@@ -557,7 +557,7 @@ bool Castle::isLibraryBuild( void ) const
 
 void Castle::MageGuildEducateHero( HeroBase & hero ) const
 {
-    mageguild.EducateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+    mageguild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
 }
 
 const char * Castle::GetStringBuilding( u32 build, int race )

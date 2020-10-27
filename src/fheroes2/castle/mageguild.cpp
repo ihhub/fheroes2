@@ -34,7 +34,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
 Spell GetGuaranteedDamageSpellForMageGuild();
 Spell GetGuaranteedNonDamageSpellForMageGuild();
 
-void MageGuild::Builds( int race, bool libraryCap )
+void MageGuild::initialize( int race, bool libraryCap )
 {
     general.clear();
     library.clear();
@@ -68,32 +68,32 @@ void MageGuild::Builds( int race, bool libraryCap )
     }
 }
 
-SpellStorage MageGuild::GetSpells( int lvlmage, bool islibrary, int level ) const
+SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLevel ) const
 {
     SpellStorage result;
 
-    if ( lvlmage >= level ) {
-        result = general.GetSpells( level );
-        if ( islibrary )
-            result.Append( library.GetSpells( level ) );
+    if ( spellLevel == -1 ) {
+        // get all available spells
+        for ( int level = 1; level <= guildLevel; ++level ) {
+            result.Append( general.GetSpells( level ) );
+            if ( hasLibrary )
+                result.Append( library.GetSpells( level ) );
+        }
+    }
+    else if ( spellLevel <= guildLevel ) {
+        result = general.GetSpells( spellLevel );
+        if ( hasLibrary )
+            result.Append( library.GetSpells( spellLevel ) );
     }
 
     return result;
 }
 
-void MageGuild::EducateHero( HeroBase & hero, int lvlmage, bool isLibraryBuild ) const
+void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
 {
-    if ( hero.HaveSpellBook() && lvlmage ) {
-        SpellStorage spells;
-
-        for ( s32 level = 1; level <= 5; ++level )
-            if ( level <= lvlmage ) {
-                spells.Append( general.GetSpells( level ) );
-                if ( isLibraryBuild )
-                    spells.Append( library.GetSpells( level ) );
-            }
-
-        hero.AppendSpellsToBook( spells );
+    if ( hero.HaveSpellBook() && guildLevel ) {
+        // this method will check wisdom requirement
+        hero.AppendSpellsToBook( MageGuild::GetSpells( guildLevel, hasLibrary ) );
     }
 }
 
