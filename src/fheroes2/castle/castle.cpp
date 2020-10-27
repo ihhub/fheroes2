@@ -429,7 +429,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
     const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
     for ( const Spell & spell : guildSpells ) {
         if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
-            spellValue += spell.Level() * 100.0;
+            spellValue += spell.Level() * 250.0;
         }
     }
 
