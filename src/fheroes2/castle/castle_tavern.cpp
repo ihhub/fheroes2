@@ -34,33 +34,56 @@
 #include "text.h"
 #include "world.h"
 
-class RumorOfWeek
+// class Castle::RumorOfWeek
+// {
+//     int week;
+//     const std::string * rumor;
+
+// public:
+//     RumorOfWeek()
+//         : week( world.GetWeek() )
+//         , rumor( &world.GetRumors() )
+//     {}
+
+//     const std::string & get()
+//     {
+//         int currentWeek = world.GetWeek();
+//         if ( week == currentWeek ) {
+//             return *rumor;
+//         }
+//         else {
+//             week = currentWeek;
+//             const std::string * currentRumor = &world.GetRumors();
+//             while ( rumor == currentRumor ) {
+//                 currentRumor = &world.GetRumors();
+//             }
+//             rumor = currentRumor;
+//             return *rumor;
+//         }
+//     }
+// };
+
+Castle::RumorOfWeek::RumorOfWeek()
+    : week( world.GetWeek() )
+    , rumor( &world.GetRumors() )
+{}
+
+const std::string & Castle::RumorOfWeek::get()
 {
-    int currentWeek;
-    const std::string & currentRumor;
-
-public:
-    RumorOfWeek()
-        : currentWeek( world.GetWeek() )
-        , currentRumor( world.GetRumors() )
-    {}
-
-    const std::string & get()
-    {
-        int currentWeek = world.GetWeek();
-        if ( this->currentWeek == currentWeek ) {
-            return currentRumor;
-        }
-        else {
-            this->currentWeek = currentWeek;
-            const std::string & currentRumor = world.GetRumors();
-            while ( this->currentRumor == currentRumor ) {
-                currentRumor = world.GetRumors();
-            }
-            return currentRumor;
-        }
+    int currentWeek = world.GetWeek();
+    if ( week == currentWeek ) {
+        return *rumor;
     }
-};
+    else {
+        week = currentWeek;
+        const std::string * currentRumor = &world.GetRumors();
+        while ( rumor == currentRumor ) {
+            currentRumor = &world.GetRumors();
+        }
+        rumor = currentRumor;
+        return *rumor;
+    }
+}
 
 void Castle::OpenTavern( void )
 {
@@ -68,7 +91,7 @@ void Castle::OpenTavern( void )
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
     const int tavwin = ICN::TAVWIN;
     const std::string & tavern = GetStringBuilding( BUILD_TAVERN );
-    const std::string & message = world.GetRumors();
+    const std::string & message = rumorOfWeek.get();
     world.GetWeek();
 
     fheroes2::Display & display = fheroes2::Display::instance();

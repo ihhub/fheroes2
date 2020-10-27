@@ -227,6 +227,17 @@ private:
     void JoinRNDArmy( void );
     void PostLoad( void );
 
+    class RumorOfWeek
+    {
+        int week;
+        const std::string * rumor;
+
+    public:
+        RumorOfWeek();
+        const std::string & get();
+    };
+    RumorOfWeek rumorOfWeek;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Castle & );
     friend StreamBase & operator>>( StreamBase &, Castle & );
