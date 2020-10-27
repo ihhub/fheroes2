@@ -77,6 +77,7 @@ public:
     void JoinTroops( Troops & );
     bool CanJoinTroops( const Troops & ) const;
 
+    void MergeTroops();
     Troops GetOptimized( void ) const;
 
     virtual u32 GetAttack( void ) const;

@@ -514,6 +514,24 @@ Troop * Troops::GetSlowestTroop( void )
     return *lowest;
 }
 
+void Troops::MergeTroops()
+{
+    for ( size_t slot = 0; slot < size(); ++slot ) {
+        Troop * troop = at( slot );
+        if ( !troop || !troop->isValid() )
+            continue;
+
+        const int id = troop->GetID();
+        for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
+            Troop * secondaryTroop = at( secondary );
+            if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
+                troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
+                secondaryTroop->Reset();
+            }
+        }
+    }
+}
+
 Troops Troops::GetOptimized( void ) const
 {
     Troops result;
@@ -594,41 +612,87 @@ void Troops::ArrangeForBattle( bool upgrade )
     }
 }
 
-void Troops::JoinStrongest( Troops & troops2, bool save_last )
+void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 {
     if ( this == &troops2 )
         return;
 
-    Troops priority = GetOptimized();
-    priority.reserve( ARMYMAXTROOPS * 2 );
+    // validate the size (can be different from ARMYMAXTROOPS)
+    if ( troops2.size() < size() )
+        troops2.resize( size() );
 
-    const Troops & priority2 = troops2.GetOptimized();
-    priority.Insert( priority2 );
-
-    Clean();
-    troops2.Clean();
-
-    // sort: strongest
-    std::sort( priority.begin(), priority.end(), Army::StrongestTroop );
-
-    // weakest to army2
-    while ( size() < priority.size() ) {
-        troops2.JoinTroop( *priority.back() );
-        priority.PopBack();
+    // first try to keep units in the same slots
+    for ( size_t slot = 0; slot < size(); ++slot ) {
+        Troop * leftTroop = at( slot );
+        Troop * rightTroop = troops2[slot];
+        if ( rightTroop && rightTroop->isValid() ) {
+            if ( !leftTroop->isValid() ) {
+                // if slot is empty, simply move the unit
+                leftTroop->Set( *rightTroop );
+                rightTroop->Reset();
+            }
+            else if ( leftTroop->GetID() == rightTroop->GetID() ) {
+                // check if we can merge them
+                leftTroop->SetCount( leftTroop->GetCount() + rightTroop->GetCount() );
+                rightTroop->Reset();
+            }
+        }
     }
 
-    // save half weak of strongest to army2
-    if ( save_last && !troops2.isValid() ) {
-        Troop & last = *priority.back();
-        u32 count = last.GetCount() / 2;
-        troops2.JoinTroop( last, last.GetCount() - count );
-        last.SetCount( count );
+    // there's still unmerged units left and there's empty room for them
+    for ( size_t slot = 0; slot < troops2.size(); ++slot ) {
+        Troop * rightTroop = troops2[slot];
+        if ( rightTroop && rightTroop->isValid() && JoinTroop( *rightTroop ) ) {
+            rightTroop->Reset();
+        }
     }
 
-    // strongest to army
-    while ( priority.size() ) {
-        JoinTroop( *priority.back() );
-        priority.PopBack();
+    // if there's more units than slots, start optimizing
+    if ( troops2.GetCount() ) {
+        Troops rightPriority = troops2.GetOptimized();
+        troops2.Clean();
+        // strongest at the end
+        std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
+
+        // 1. Merge any remaining stacks to free some space
+        MergeTroops();
+
+        // 2. Fill empty slots with best troops (if there are any)
+        uint32_t count = GetCount();
+        while ( count < ARMYMAXTROOPS && rightPriority.size() ) {
+            JoinTroop( *rightPriority.back() );
+            rightPriority.PopBack();
+            ++count;
+        }
+
+        // 3. Swap weakest and strongest unit until there's no left
+        while ( rightPriority.size() ) {
+            Troop * weakest = GetWeakestTroop();
+
+            if ( !weakest || Army::StrongestTroop( weakest, rightPriority.back() ) ) {
+                // we're done processing if second army units are weaker
+                break;
+            }
+
+            Army::SwapTroops( *weakest, *rightPriority.back() );
+            std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
+        }
+
+        // 4. The rest goes back to second army
+        while ( rightPriority.size() ) {
+            troops2.JoinTroop( *rightPriority.back() );
+            rightPriority.PopBack();
+        }
+    }
+
+    // save weakest unit to army2 (for heroes)
+    if ( saveLast && !troops2.isValid() ) {
+        Troop * weakest = GetWeakestTroop();
+
+        if ( weakest && weakest->isValid() ) {
+            troops2.JoinTroop( *weakest, 1 );
+            weakest->SetCount( weakest->GetCount() - 1 );
+        }
     }
 }
 
