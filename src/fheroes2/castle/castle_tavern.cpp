@@ -34,6 +34,34 @@
 #include "text.h"
 #include "world.h"
 
+class RumorOfWeek
+{
+    int currentWeek;
+    const std::string & currentRumor;
+
+public:
+    RumorOfWeek()
+        : currentWeek( world.GetWeek() )
+        , currentRumor( world.GetRumors() )
+    {}
+
+    const std::string & get()
+    {
+        int currentWeek = world.GetWeek();
+        if ( this->currentWeek == currentWeek ) {
+            return currentRumor;
+        }
+        else {
+            this->currentWeek = currentWeek;
+            const std::string & currentRumor = world.GetRumors();
+            while ( this->currentRumor == currentRumor ) {
+                currentRumor = world.GetRumors();
+            }
+            return currentRumor;
+        }
+    }
+};
+
 void Castle::OpenTavern( void )
 {
     const std::string & header = _( "A generous tip for the barkeep yields the following rumor:" );
@@ -41,6 +69,7 @@ void Castle::OpenTavern( void )
     const int tavwin = ICN::TAVWIN;
     const std::string & tavern = GetStringBuilding( BUILD_TAVERN );
     const std::string & message = world.GetRumors();
+    world.GetWeek();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
