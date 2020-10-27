@@ -29,13 +29,20 @@
 
 namespace AI
 {
-    double GetObjectValue( int color, int index, int objectID )
+    double GetObjectValue( const Heroes & hero, int index, int objectID )
     {
         // In the future these hardcoded values could be configured by the mod
         const Maps::Tiles & tile = world.GetTiles( index );
 
         if ( objectID == MP2::OBJ_CASTLE ) {
-            return 2000.0;
+            Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+            if ( !castle )
+                return 0;
+
+            if ( hero.GetColor() == castle->GetColor() )
+                return castle->getVisitValue( hero );
+            else
+                return castle->getBuildingValue() * 70.0 + 1250;
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
             return 1700.0;
@@ -56,7 +63,7 @@ namespace AI
             return 400.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return world.getRegion( tile.GetRegion() ).getFogRatio( color ) * 1500;
+            return world.getRegion( tile.GetRegion() ).getFogRatio( hero.GetColor() ) * 1500;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             return world.getRegion( tile.GetRegion() ).getObjectCount() * 50.0 - 2000;
@@ -71,7 +78,6 @@ namespace AI
 
     int AI::Normal::GetPriorityTarget( const Heroes & hero, int patrolIndex, uint32_t distanceLimit )
     {
-        const int heroColor = hero.GetColor();
         const bool heroInPatrolMode = patrolIndex != -1;
         int priorityTarget = -1;
 
@@ -93,12 +99,12 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                double value = GetObjectValue( heroColor, node.first, node.second );
+                double value = GetObjectValue( hero, node.first, node.second );
 
                 const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
                 for ( const IndexObject & pair : list ) {
                     if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
-                        value += GetObjectValue( heroColor, pair.first, pair.second );
+                        value += GetObjectValue( hero, pair.first, pair.second );
                 }
 
                 value -= static_cast<double>( dist );
