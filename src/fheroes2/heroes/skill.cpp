@@ -649,7 +649,6 @@ int Skill::SecSkills::GetTotalLevel() const
     return result;
 }
 
-
 void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
