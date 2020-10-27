@@ -50,10 +50,14 @@ namespace AI
             if ( !otherHero )
                 return valueToIgnore;
 
-            // limit the max value of friendly hero meeting
-            if ( hero.GetColor() == otherHero->GetColor() )
-                return std::min( hero.getMeetingValue( *otherHero ), 3000.0 );
+            if ( hero.GetColor() == otherHero->GetColor() ) {
+                if ( hero.getStatsValue() >= otherHero->getStatsValue() )
+                    return valueToIgnore;
 
+                const double value = hero.getMeetingValue( *otherHero );
+                // limit the max value of friendly hero meeting
+                return ( value < 100 ) ? valueToIgnore : std::min( value, 3000.0 );
+            }
             return 1700.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {

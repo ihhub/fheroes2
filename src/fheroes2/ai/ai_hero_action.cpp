@@ -1493,21 +1493,19 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIMeeting( Heroes & hero1, Heroes & hero2 )
+    void AIMeeting( Heroes & left, Heroes & right )
     {
         if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
-            Heroes::ScholarAction( hero1, hero2 );
+            Heroes::ScholarAction( left, right );
 
-        if ( hero1.Modes( AI::HERO_HUNTER ) )
-            hero1.GetArmy().JoinStrongestFromArmy( hero2.GetArmy() );
-        else if ( hero2.Modes( AI::HERO_HUNTER ) )
-            hero2.GetArmy().JoinStrongestFromArmy( hero1.GetArmy() );
-        else if ( hero1.Modes( AI::HERO_SCOUT ) )
-            hero1.GetArmy().KeepOnlyWeakestTroops( hero2.GetArmy() );
-        else if ( hero2.Modes( AI::HERO_SCOUT ) )
-            hero2.GetArmy().KeepOnlyWeakestTroops( hero1.GetArmy() );
+        const bool rightToLeft = right.getStatsValue() < left.getStatsValue();
 
-        // artifacts change
+        if ( rightToLeft )
+            left.GetArmy().JoinStrongestFromArmy( right.GetArmy() );
+        else
+            right.GetArmy().JoinStrongestFromArmy( left.GetArmy() );
+
+        // artifacts exchange
     }
 
     bool HeroesValidObject( const Heroes & hero, s32 index )
@@ -1851,7 +1849,7 @@ namespace AI
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
                 if ( hero.GetColor() == hero2->GetColor() )
-                    return false;
+                    return true;
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
                 else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE_SMALL ) )
