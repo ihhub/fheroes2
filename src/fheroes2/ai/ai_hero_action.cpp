@@ -840,22 +840,35 @@ namespace AI
 
     void AIToTeleports( Heroes & hero, s32 index_from )
     {
-        s32 index_to = world.NextTeleport( index_from );
+        int indexTo = world.NextTeleport( index_from );
 
-        if ( index_from == index_to ) {
+        const Route::Path & path = hero.GetPath();
+        if ( path.size() ) {
+            const int dest = path.front().GetIndex();
+            while ( indexTo != dest ) {
+                std::cout << "Teleporters: fishing for " << dest << " got " << indexTo << std::endl;
+                indexTo = world.NextTeleport( index_from );
+                const Maps::Tiles & tile = world.GetTiles( indexTo );
+                if ( index_from == indexTo || tile.isFog( hero.GetColor() ) || tile.GetObject() == MP2::OBJ_HEROES )
+                    break;
+            }
+        }
+
+        if ( index_from == indexTo ) {
             DEBUG( DBG_AI, DBG_WARN, "teleport unsuccessfull, can't find exit lith" );
             return;
         }
 
-        if ( MP2::OBJ_HEROES == world.GetTiles( index_to ).GetObject() ) {
-            const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
+        if ( MP2::OBJ_HEROES == world.GetTiles( indexTo ).GetObject() ) {
+            const Heroes * other_hero = world.GetTiles( indexTo ).GetHeroes();
 
             if ( other_hero ) {
-                AIToHeroes( hero, index_to );
+                AIToHeroes( hero, indexTo );
 
                 // lose battle
                 if ( hero.isFreeman() ) {
                     DEBUG( DBG_GAME, DBG_TRACE, hero.String() + " hero dismissed, teleport action cancelled" );
+                    hero.FadeOut();
                     return;
                 }
                 else if ( !other_hero->isFreeman() ) {
@@ -866,7 +879,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to );
+        hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
