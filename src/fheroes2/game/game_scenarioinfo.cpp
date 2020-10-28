@@ -72,6 +72,25 @@ void updatePlayers( Players & players, const int humanPlayerCount )
     }
 }
 
+size_t GetSelectedMapId()
+{
+    Settings & conf = Settings::Get();
+
+    MapsFileInfoList lists;
+    if ( PrepareMapsFileInfoList( lists, ( conf.GameType( Game::TYPE_MULTI ) ) ) ) {
+        const std::string & mapName = conf.CurrentFileInfo().name;
+        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+        size_t mapId = 0;
+        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
+            if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
+                return mapId;
+            }
+        }
+    }
+
+    return 0;
+}
+
 int Game::ScenarioInfo( void )
 {
     Settings & conf = Settings::Get();
@@ -125,7 +144,6 @@ int Game::ScenarioInfo( void )
     fheroes2::Copy( back, display );
 
     bool resetStartingSettings = conf.MapsFile().empty();
-    size_t mapId = 0;
     Players & players = conf.GetPlayers();
     Interface::PlayersInfo playersInfo( true, true, true );
 
@@ -135,13 +153,11 @@ int Game::ScenarioInfo( void )
         resetStartingSettings = true;
         const std::string & mapName = conf.CurrentFileInfo().name;
         const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
-        size_t tempId = 0;
-        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++tempId ) {
+        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
                 if ( mapIter->file != conf.CurrentFileInfo().file )
                     conf.SetCurrentFileInfo( *mapIter );
 
-                mapId = tempId;
                 resetStartingSettings = false;
                 break;
             }
@@ -209,7 +225,7 @@ int Game::ScenarioInfo( void )
 
         // click select
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-            const Maps::FileInfo * fi = Dialog::SelectScenario( lists, mapId );
+            const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId() );
             if ( fi ) {
                 conf.SetCurrentFileInfo( *fi );
                 updatePlayers( players, humanPlayerCount );
