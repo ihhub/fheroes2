@@ -235,7 +235,8 @@ private:
 
     private:
         int _week;
-        const std::string * _rumor;
+        uint32_t _rumorNum;
+        const std::list<std::string> & _rumors;
     };
 
 private:

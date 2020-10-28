@@ -226,7 +226,7 @@ public:
     void NewWeek( void );
     void NewMonth( void );
 
-    const std::string & GetRumors( void );
+    const Rumors & GetRumors( void );
 
     s32 NextTeleport( s32 ) const;
     MapsIndexes GetTeleportEndPoints( s32 ) const;

@@ -34,9 +34,15 @@
 #include "text.h"
 #include "world.h"
 
+uint32_t randomIndex( const Rumors & rumors )
+{
+    return Rand::Get( 0, static_cast<uint32_t>( rumors.size() - 1 ) );
+}
+
 Castle::RumorOfWeek::RumorOfWeek()
     : _week( world.GetWeek() )
-    , _rumor( &world.GetRumors() )
+    , _rumorNum( randomIndex( world.GetRumors() ) )
+    , _rumors( world.GetRumors() )
 {}
 
 const std::string & Castle::RumorOfWeek::get()
@@ -44,13 +50,16 @@ const std::string & Castle::RumorOfWeek::get()
     const int currentWeek = world.GetWeek();
     if ( _week != currentWeek ) {
         _week = currentWeek;
-        const std::string * currentRumor = &world.GetRumors();
-        while ( _rumor == currentRumor ) {
-            currentRumor = &world.GetRumors();
+        uint32_t currentRumorNum = randomIndex( _rumors );
+        while ( _rumorNum == currentRumorNum ) {
+            currentRumorNum = randomIndex( _rumors );
         }
-        _rumor = currentRumor;
+        _rumorNum = currentRumorNum;
     }
-    return *_rumor;
+
+    std::list<std::string>::const_iterator result = _rumors.begin();
+    std::advance( result, _rumorNum );
+    return *result;
 }
 
 void Castle::OpenTavern( void )

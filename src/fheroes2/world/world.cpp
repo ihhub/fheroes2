@@ -608,10 +608,9 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-const std::string & World::GetRumors( void )
+const Rumors & World::GetRumors( void )
 {
-    // vec_rumors always contain values
-    return *Rand::Get( vec_rumors );
+    return vec_rumors;
 }
 
 MapsIndexes World::GetTeleportEndPoints( s32 center ) const
