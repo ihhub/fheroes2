@@ -29,6 +29,14 @@
 
 namespace AI
 {
+    double ScaleWithDistance( double value, uint32_t distance )
+    {
+        if ( distance == 0 )
+            return value;
+        // scale non-linearly (more value lost as distance increases)
+        return value - ( distance * std::log10( distance ) );
+    }
+
     double GetObjectValue( int color, int index, int objectID )
     {
         // In the future these hardcoded values could be configured by the mod
@@ -85,7 +93,7 @@ namespace AI
             const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && Maps::GetApproximateDistance( patrolIndex, node.first ) > distanceLimit )
+            if ( heroInPatrolMode && _pathfinder.buildPath( node.first ).size() > distanceLimit )
                 continue;
 
             if ( HeroesValidObject( hero, node.first ) ) {
@@ -100,8 +108,7 @@ namespace AI
                     if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
                         value += GetObjectValue( heroColor, pair.first, pair.second );
                 }
-
-                value -= static_cast<double>( dist );
+                value = ScaleWithDistance( value, dist );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
