@@ -22,7 +22,7 @@ You are required to have at least a demo version of Heroes of Might and Magic II
 
 MacOS and Linux
 --------------------------
-Unix OSes need an explicit installation of SDL. Please go to `script/macos` or `script/linux` directory depending on your OS package and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For Arch based Linux distributions use the command `sudo pacman -S sdl sdl_mixer` instead. RPM based distributions like Fedora/Red Hat use the commands `sudo yum/dnf install SDL*`. openSUSE supports the One-Click-Install, execute the file `SDL_mixer.ymp` in `script/linux`. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS does not support SDL 1 fully.
+Unix OSes need an explicit installation of SDL. Please go to `script/macos` or `script/linux` directory depending on your OS package and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For Arch based Linux distributions use the command `sudo pacman -S sdl sdl_mixer` instead. RPM based distributions like Fedora/Red Hat use the commands `sudo yum/dnf install SDL*`. openSUSE supports the One-Click-Install via `SDL_mixer.ymp` file in `script/linux`. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS does not support SDL 1 fully.
 
 
 Compilation
