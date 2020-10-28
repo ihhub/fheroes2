@@ -346,10 +346,6 @@ const settings_t settingsFHeroes2[] = {
         _( "battle: high objects are an obstacle for archers" ),
     },
     {
-        Settings::BATTLE_MERGE_ARMIES,
-        _( "battle: merge armies for hero from castle" ),
-    },
-    {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
         _( "battle: skip increase +2 defense" ),
     },
@@ -423,6 +419,7 @@ Settings::Settings()
     , size_small( 10 )
     , sound_volume( 6 )
     , music_volume( 6 )
+    , _musicType( MUSIC_EXTERNAL )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -430,10 +427,7 @@ Settings::Settings()
     , game_type( 0 )
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
-    , memory_limit( 0 )
-    , _musicType( MUSIC_EXTERNAL )
 {
-    ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
     ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
@@ -621,9 +615,6 @@ bool Settings::Read( const std::string & filename )
         if ( music_volume > 10 )
             music_volume = 10;
     }
-
-    // memory limit
-    memory_limit = config.IntParams( "memory limit" );
 
     // move speed
     if ( config.Exists( "ai speed" ) ) {
@@ -1206,31 +1197,37 @@ bool Settings::UseAltResource( void ) const
 {
     return opt_global.Modes( GLOBAL_ALTRESOURCE );
 }
+
 bool Settings::PriceLoyaltyVersion( void ) const
 {
     return opt_global.Modes( GLOBAL_PRICELOYALTY );
 }
+
 bool Settings::LoadedGameVersion( void ) const
 {
-    return game_type & Game::TYPE_LOADFILE;
+    return ( game_type & Game::TYPE_LOADFILE ) != 0;
 }
 
 bool Settings::ShowControlPanel( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWCPANEL );
 }
+
 bool Settings::ShowRadar( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWRADAR );
 }
+
 bool Settings::ShowIcons( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWICONS );
 }
+
 bool Settings::ShowButtons( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWBUTTONS );
 }
+
 bool Settings::ShowStatus( void ) const
 {
     return opt_global.Modes( GLOBAL_SHOWSTATUS );
@@ -1241,6 +1238,7 @@ bool Settings::Unicode( void ) const
 {
     return opt_global.Modes( GLOBAL_USEUNICODE );
 }
+
 /* pocketpc mode */
 bool Settings::PocketPC( void ) const
 {
@@ -1318,8 +1316,9 @@ void Settings::SetMusicType( int v )
 /* check game type */
 bool Settings::GameType( int f ) const
 {
-    return game_type & f;
+    return ( game_type & f ) != 0;
 }
+
 int Settings::GameType( void ) const
 {
     return game_type;
@@ -1383,7 +1382,7 @@ Size Settings::MapsSize( void ) const
 
 bool Settings::AllowChangeRace( int f ) const
 {
-    return current_maps_file.rnd_races & f;
+    return ( current_maps_file.rnd_races & f ) != 0;
 }
 
 bool Settings::GameStartWithHeroes( void ) const
@@ -1710,11 +1709,6 @@ bool Settings::ExtBattleObjectsArchersPenalty( void ) const
     return ExtModes( BATTLE_OBJECTS_ARCHERS_PENALTY );
 }
 
-bool Settings::ExtBattleMergeArmies( void ) const
-{
-    return ExtModes( BATTLE_MERGE_ARMIES );
-}
-
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
@@ -1926,16 +1920,6 @@ void Settings::BinaryLoad( void )
 
         fs >> version >> opt_game >> opt_world >> opt_battle >> opt_addons >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
     }
-}
-
-void Settings::SetMemoryLimit( u32 limit )
-{
-    memory_limit = limit;
-}
-
-u32 Settings::MemoryLimit( void ) const
-{
-    return memory_limit;
 }
 
 bool Settings::FullScreen( void ) const

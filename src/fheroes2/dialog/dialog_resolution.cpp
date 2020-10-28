@@ -30,7 +30,7 @@
 
 namespace
 {
-    const int editBoxLength = 265;
+    const int editBoxLength = 266;
 
     std::string GetResolutionString( const std::pair<int, int> & resolution )
     {
@@ -48,24 +48,24 @@ namespace
             , _isDoubleClicked( false )
         {}
 
-        void RedrawItem( const std::pair<int, int> & resolution, s32 offsetX, s32 offsetY, bool current )
+        virtual void RedrawItem( const std::pair<int, int> & resolution, s32 offsetX, s32 offsetY, bool current ) override
         {
-            Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
+            const Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
             text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );
         }
 
-        void RedrawBackground( const Point & dst )
+        virtual void RedrawBackground( const Point & dst ) override
         {
             const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
             fheroes2::Blit( panel, fheroes2::Display::instance(), dst.x, dst.y );
         }
 
-        void ActionCurrentUp( void ) {}
-        void ActionCurrentDn( void ) {}
-        void ActionListSingleClick( std::pair<int, int> & ) {}
-        void ActionListPressRight( std::pair<int, int> & ) {}
+        virtual void ActionCurrentUp() override {}
+        virtual void ActionCurrentDn() override {}
+        virtual void ActionListSingleClick( std::pair<int, int> & ) override {}
+        virtual void ActionListPressRight( std::pair<int, int> & ) override {}
 
-        void ActionListDoubleClick( std::pair<int, int> & )
+        virtual void ActionListDoubleClick( std::pair<int, int> & ) override
         {
             _isDoubleClicked = true;
         }
@@ -79,14 +79,14 @@ namespace
         bool _isDoubleClicked;
     };
 
-    void RedrawInfo( const Point & dst, const std::pair<int, int> & resolution )
+    void RedrawInfo( const fheroes2::Point & dst, const std::pair<int, int> & resolution )
     {
-        Text text( "Select game resolution:", Font::YELLOW_BIG );
-        text.Blit( dst.x + 175 - text.w() / 2, dst.y + 30 );
+        Text text( "Select Game Resolution:", Font::YELLOW_BIG );
+        text.Blit( dst.x + ( 377 - text.w() ) / 2, dst.y + 30 );
 
         if ( resolution.first > 0 && resolution.second > 0 ) {
             text.Set( GetResolutionString( resolution ), Font::YELLOW_BIG );
-            text.Blit( dst.x + ( editBoxLength - text.w() ) / 2 + 40, dst.y + 288, editBoxLength );
+            text.Blit( dst.x + ( editBoxLength - text.w() ) / 2 + 41, dst.y + 287 + ( 19 - text.h() + 2 ) / 2, editBoxLength );
         }
     }
 }
@@ -108,8 +108,8 @@ namespace Dialog
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
         const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
 
-        const Point dialogOffset( ( display.width() - sprite.width() ) / 2, ( display.height() - sprite.height() ) / 2 );
-        const Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        const fheroes2::Point dialogOffset( ( display.width() - sprite.width() ) / 2, ( display.height() - sprite.height() ) / 2 );
+        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
         fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
         const Rect roi( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
@@ -124,9 +124,9 @@ namespace Dialog
         resList.RedrawBackground( roi );
         resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( roi.x + 327, roi.y + 55 ) );
         resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( roi.x + 327, roi.y + 257 ) );
-        resList.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
+        resList.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
         resList.SetAreaMaxItems( 11 );
-        resList.SetAreaItems( Rect( roi.x + 40, roi.y + 55, 265, 215 ) );
+        resList.SetAreaItems( fheroes2::Rect( roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 ) );
 
         resList.SetListContent( resolutions );
 
@@ -146,7 +146,7 @@ namespace Dialog
         buttonOk.draw();
         buttonCancel.draw();
 
-        RedrawInfo( roi, selectedResolution );
+        RedrawInfo( fheroes2::Point( roi.x, roi.y ), selectedResolution );
 
         cursor.Show();
         display.render();
@@ -175,7 +175,7 @@ namespace Dialog
                 resList.Redraw();
                 buttonOk.draw();
                 buttonCancel.draw();
-                RedrawInfo( roi, selectedResolution );
+                RedrawInfo( fheroes2::Point( roi.x, roi.y ), selectedResolution );
                 cursor.Show();
                 display.render();
             }

@@ -28,8 +28,8 @@
 namespace fheroes2
 {
     // Image contains image layer and transform layer.
-    // - transform layer is used to apply some changes to an image on which we draw the current one. For example, shadowing
-    // - image layer is used to copy pixel value to destination image
+    // - image layer contains visible pixels which are copy to a destination image
+    // - transform layer is used to apply some transformation to an image on which we draw the current one. For example, shadowing
     class Image
     {
     public:
@@ -44,8 +44,15 @@ namespace fheroes2
         virtual void resize( int32_t width_, int32_t height_ );
 
         // It's safe to cast to uint32_t as width and height are always >= 0
-        int32_t width() const;
-        int32_t height() const;
+        int32_t width() const
+        {
+            return _width;
+        }
+
+        int32_t height() const
+        {
+            return _height;
+        }
 
         virtual uint8_t * image();
         virtual const uint8_t * image() const;
@@ -55,10 +62,10 @@ namespace fheroes2
 
         bool empty() const;
 
-        void reset(); // makes image fully transparent (transform layer is 1)
+        void reset(); // makes image fully transparent (transform layer is set to 1)
         void clear(); // makes the image empty
 
-        void fill( uint8_t value ); // fill only 'image' layer
+        void fill( uint8_t value ); // fill 'image' layer with given value, setting 'transform' layer set to 0
 
         void swap( Image & image );
 
@@ -81,8 +88,15 @@ namespace fheroes2
         Sprite & operator=( const Sprite & image );
         Sprite & operator=( Sprite && image );
 
-        int32_t x() const;
-        int32_t y() const;
+        int32_t x() const
+        {
+            return _x;
+        }
+
+        int32_t y() const
+        {
+            return _y;
+        }
 
         virtual void setPosition( int32_t x_, int32_t y_ );
 

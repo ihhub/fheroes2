@@ -27,39 +27,8 @@
 
 namespace AI
 {
-    bool IsValidKingdomObject( const Maps::Tiles & tile, int objectID, int kingdomColor )
-    {
-        if ( tile.isFog( kingdomColor ) || ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST ) )
-            return false;
-
-        // Check castle first to ignore guest hero (tile with both Castle and Hero)
-        if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
-            const int tileColor = tile.QuantityColor();
-            if ( !Settings::Get().ExtUnionsAllowCastleVisiting() && Players::isFriends( kingdomColor, tileColor ) ) {
-                // false only if alliance castles can't be visited
-                return kingdomColor == tileColor;
-            }
-            return true;
-        }
-
-        // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
-        if ( objectID == MP2::OBJ_HEROES ) {
-            const Heroes * hero = tile.GetHeroes();
-            return hero && !Players::isFriends( kingdomColor, hero->GetColor() );
-        }
-
-        if ( MP2::isCaptureObject( objectID ) )
-            return !Players::isFriends( kingdomColor, tile.QuantityColor() );
-
-        if ( MP2::isQuantityObject( objectID ) )
-            return tile.QuantityIsValid();
-
-        return true;
-    }
-
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
-        const int difficulty = Settings::Get().GameDifficulty();
         const int color = kingdom.GetColor();
 
         if ( kingdom.isLoss() || color == Color::NONE ) {
@@ -82,16 +51,16 @@ namespace AI
         std::vector<std::pair<int, const Army *> > enemyArmies;
 
         const int mapSize = world.w() * world.h();
-        mapObjects.clear();
+        _mapObjects.clear();
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
             int objectID = tile.GetObject();
 
-            if ( !IsValidKingdomObject( tile, objectID, color ) )
+            if ( !kingdom.isValidKingdomObject( tile, objectID ) )
                 continue;
 
-            mapObjects.emplace_back( idx, objectID );
+            _mapObjects.emplace_back( idx, objectID );
 
             const int color = tile.QuantityColor();
             if ( objectID == MP2::OBJ_HEROES ) {
@@ -107,14 +76,14 @@ namespace AI
             }
         }
 
-        DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << mapObjects.size() << " valid objects" );
+        DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << _mapObjects.size() << " valid objects" );
 
         status.RedrawTurnProgress( 1 );
 
         // Step 2. Update AI variables and recalculate resource budget
         const bool slowEarlyGame = world.CountDay() < 5 && castles.size() == 1;
 
-        int combinedHeroStrength = 0;
+        double combinedHeroStrength = 0;
         for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
             if ( *it ) {
                 combinedHeroStrength += ( *it )->GetArmy().GetStrength();
@@ -133,9 +102,10 @@ namespace AI
 
                     for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
                         if ( enemy->second ) {
-                            const double attackerThreat = enemy->second->GetStrength() - defenders;
+                            const double attackerStrength = enemy->second->GetStrength();
+                            const double attackerThreat = attackerStrength - defenders;
                             if ( attackerThreat > 0 ) {
-                                const uint32_t dist = world.getDistance( castleIndex, enemy->first, 0 );
+                                const uint32_t dist = _pathfinder.getDistance( castleIndex, enemy->first, attackerStrength, color );
                                 if ( dist && dist < threatDistanceLimit ) {
                                     // castle is under threat
                                     castlesInDanger.push_back( castleIndex );
@@ -175,7 +145,7 @@ namespace AI
         VecHeroes sortedHeroList = heroes;
         std::sort( sortedHeroList.begin(), sortedHeroList.end(), []( const Heroes * left, const Heroes * right ) {
             if ( left && right )
-                return left->GetArmy().GetStrength() < right->GetArmy().GetStrength();
+                return left->GetArmy().GetStrength() > right->GetArmy().GetStrength();
             return right == NULL;
         } );
 

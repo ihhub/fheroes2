@@ -153,6 +153,7 @@ public:
     bool isApplyToEnemies( void ) const;
     bool isMassActions( void ) const;
     bool isRaceCompatible( int race ) const;
+    bool isEnabled() const;
 
     /* return index sprite spells.icn */
     u32 IndexSprite( void ) const;

@@ -60,8 +60,6 @@ struct Size
     Size( u16 width = 0, u16 height = 0 );
     Size( const Point & );
 
-    bool isEmpty( void ) const;
-
     bool operator==( const Size & ) const;
     bool operator!=( const Size & ) const;
 
@@ -78,11 +76,9 @@ struct Rect : Point, Size
     Rect( s16, s16, u16, u16 );
     Rect( const Point &, u16, u16 );
     Rect( const Point &, const Size & );
-    Rect( const SDL_Rect & );
 
     // TODO: this method must be removed before merging to master
     Rect( const fheroes2::Rect & rect );
-    fheroes2::Rect convert() const;
 
     Rect & operator=( const Point & );
     bool operator==( const Rect & ) const;

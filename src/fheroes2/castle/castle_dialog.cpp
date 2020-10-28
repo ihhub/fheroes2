@@ -178,14 +178,14 @@ SwapButton::SwapButton( s32 px, s32 py )
     setPosition( px, py );
 }
 
-int Castle::OpenDialog( bool readonly, bool fade )
+int Castle::OpenDialog( bool readonly )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
     const bool interface = conf.ExtGameEvilInterface();
     if ( conf.ExtGameDynamicInterface() )
-        conf.SetEvilInterface( GetRace() & ( Race::BARB | Race::WRLK | Race::NECR ) );
+        conf.SetEvilInterface( ( GetRace() & ( Race::BARB | Race::WRLK | Race::NECR ) ) != 0 );
 
     CastleHeroes heroes = world.GetHeroes( *this );
 
@@ -202,7 +202,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
 
     const Point & cur_pt = background.GetArea();
-    Point dst_pt( cur_pt );
+    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
     std::string msg_date, msg_status;
 
     // date string
@@ -232,7 +232,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
     dst_pt.x = cur_pt.x + 5;
     dst_pt.y = cur_pt.y + 262;
-    const Rect rectSign1( dst_pt, crest.width(), crest.height() );
+    const fheroes2::Rect rectSign1( dst_pt.x, dst_pt.y, crest.width(), crest.height() );
 
     RedrawIcons( *this, heroes, cur_pt );
 
@@ -551,10 +551,27 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                     if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
                                         cursor.Hide();
 
-                                        const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
-                                        fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
-                                        const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
-                                        fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
+                                        const uint32_t castleAnimationFrame = Game::CastleAnimationFrame();
+
+                                        for ( CastleDialog::CacheBuildings::const_iterator buildingIt = cacheBuildings.begin(); buildingIt != cacheBuildings.end();
+                                              ++buildingIt ) {
+                                            const u32 & build2 = buildingIt->id;
+                                            if ( isBuild( build2 ) ) {
+                                                if ( build2 == BUILD_SHIPYARD ) {
+                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, build2, castleAnimationFrame );
+                                                    const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
+                                                    fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
+                                                    const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
+                                                    fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
+                                                }
+                                                else {
+                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, build2, castleAnimationFrame );
+                                                    CastleDialog::CastleRedrawBuildingExtended( *this, cur_pt, build2, castleAnimationFrame );
+                                                }
+                                            }
+                                        }
+
+                                        CastleRedrawTownName( *this, cur_pt );
 
                                         cursor.Show();
                                         display.render();
@@ -637,7 +654,7 @@ int Castle::OpenDialog( bool readonly, bool fade )
                                 if ( !port.empty() )
                                     fheroes2::Blit( port, sf, 5, 5 );
 
-                                const Point savept = selectArmy2.GetPos();
+                                const fheroes2::Point savept = selectArmy2.GetPos();
                                 selectArmy2.SetPos( 112, 5 );
                                 selectArmy2.Redraw( sf );
                                 selectArmy2.SetPos( savept.x, savept.y );
@@ -694,9 +711,9 @@ int Castle::OpenDialog( bool readonly, bool fade )
 
         // status message exit
         if ( le.MouseCursor( buttonExit.area() ) )
-            msg_status = isCastle() ? _( "Exit castle" ) : _( "Exit town" );
+            msg_status = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
         else if ( le.MouseCursor( rectResource ) )
-            msg_status = _( "Show income" );
+            msg_status = _( "Show Income" );
         else
             // status message prev castle
             if ( buttonPrevCastle.isEnabled() && le.MouseCursor( buttonPrevCastle.area() ) )

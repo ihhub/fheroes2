@@ -20,36 +20,81 @@
 
 #pragma once
 
+#include "army.h"
+#include "color.h"
+#include "pairs.h"
+#include "pathfinding.h"
 #include "route.h"
 
-struct PathfindingNode
-{
-    int _from = -1;
-    uint32_t _cost = 0;
-
-    PathfindingNode() {}
-    PathfindingNode( int node, uint32_t cost )
-        : _from( node )
-        , _cost( cost )
-    {}
-};
-
-class Pathfinder
+// Abstract class that provides base functionality to path through World map
+class WorldPathfinder : public Pathfinder<PathfindingNode>
 {
 public:
-    Pathfinder() {}
-    void reset();
-    void evaluateMap( int start, uint8_t skill );
-    std::list<Route::Step> buildPath( int from, int target, uint8_t skill = Skill::Level::NONE );
-    uint32_t getDistance( int from, int target, uint8_t skill = Skill::Level::NONE );
-    uint32_t getMovementPenalty( int from, int target, int direction, uint8_t skill = Skill::Level::NONE ) const;
-    bool isBlockedByObject( int from, int target, bool fromWater = false );
-    int searchForFog( int playerColor, int start, uint8_t skill = Skill::Level::NONE );
+    WorldPathfinder() {}
+
+    // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
+    virtual void checkWorldSize();
+
+    // Shared helper methods
+    bool isBlockedByObject( int target, bool fromWater = false ) const;
+    uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::EXPERT ) const;
+
+protected:
+    void processWorldMap( int pathStart );
+    void checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+
+    // This method defines pathfinding rules. This has to be implemented by the derived class.
+    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
+
+    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
+    std::vector<int> _mapOffset;
+};
+
+class PlayerWorldPathfinder : public WorldPathfinder
+{
+public:
+    PlayerWorldPathfinder() {}
+    virtual void reset() override;
+
+    void reEvaluateIfNeeded( const Heroes & hero );
+    virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
 
 private:
-    void reEvaluateIfNeeded( int from, uint8_t skill );
+    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+};
 
-    std::vector<PathfindingNode> _cache;
-    int _pathStart = -1;
-    uint8_t _pathfindingSkill = 0;
+class AIWorldPathfinder : public WorldPathfinder
+{
+public:
+    AIWorldPathfinder( double advantage )
+        : _advantage( advantage )
+    {}
+    virtual void reset() override;
+
+    void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
+    void reEvaluateIfNeeded( const Heroes & hero );
+    int getFogDiscoveryTile( const Heroes & hero );
+    std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
+    uint32_t getDistance( const Heroes & hero, int targetIndex );
+
+    // Used for non-hero armies, like castles or monsters
+    uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
+
+    // Override builds path to the nearest valid object
+    virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
+
+    // Faster, but does not re-evaluate the map
+    // Base class implementation is hidden by finicky override logic, expose it
+    virtual uint32_t getDistance( int targetIndex )
+    {
+        return Pathfinder::getDistance( targetIndex );
+    }
+
+private:
+    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+
+    int _currentColor = Color::NONE;
+    double _armyStrength = -1;
+    double _advantage = 1.0;
+    Army _temporaryArmy; // for internal calculations
 };

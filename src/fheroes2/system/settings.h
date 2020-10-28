@@ -179,7 +179,6 @@ public:
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
-        BATTLE_MERGE_ARMIES = 0x40100000,
         BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000,
         BATTLE_OBJECTS_ARCHERS_PENALTY = 0x42000000,
 
@@ -200,7 +199,6 @@ public:
     int AIMoveSpeed( void ) const;
     int BattleSpeed( void ) const;
     int ScrollSpeed( void ) const;
-    u32 MemoryLimit( void ) const;
 
     const std::string & SelectVideoDriver( void ) const;
 
@@ -295,7 +293,6 @@ public:
     bool ExtBattleShowBattleOrder( void ) const;
     bool ExtBattleSoftWait( void ) const;
     bool ExtBattleObjectsArchersPenalty( void ) const;
-    bool ExtBattleMergeArmies( void ) const;
     bool ExtBattleSkipIncreaseDefense( void ) const;
     bool ExtBattleReverseWaitOrder( void ) const;
     bool ExtGameRememberLastFocus( void ) const;
@@ -328,7 +325,6 @@ public:
     void SetShowIcons( bool );
     void SetShowButtons( bool );
     void SetShowStatus( bool );
-    void SetMemoryLimit( u32 );
     void SetAIMoveSpeed( int );
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
@@ -450,7 +446,6 @@ private:
     std::string video_driver;
 
     int port;
-    u32 memory_limit;
 
     Point pos_radr;
     Point pos_bttn;

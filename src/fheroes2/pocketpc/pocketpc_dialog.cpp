@@ -54,27 +54,27 @@ u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
     const fheroes2::Rect rt_info( rt.x + ( rt.w - sp_info.width() ) / 2, rt.y + ( rt.h - sp_info.height() ) / 2, sp_info.width(), sp_info.height() );
     fheroes2::Blit( sp_info, display, rt_info.x, rt_info.y );
 
-    const Rect rt_tright( rt.x + 1, rt.y + rt.h - 1 - sp_tright.height(), sp_tright.width(), sp_tright.height() );
+    const fheroes2::Rect rt_tright( rt.x + 1, rt.y + rt.h - 1 - sp_tright.height(), sp_tright.width(), sp_tright.height() );
     if ( allow & Battle::BOTTOM_LEFT )
         fheroes2::Blit( sp_tright, display, rt_tright.x, rt_tright.y );
 
-    const Rect rt_right( rt.x + 1, rt.y + ( rt.h - sp_right.height() ) / 2, sp_right.width(), sp_right.height() );
+    const fheroes2::Rect rt_right( rt.x + 1, rt.y + ( rt.h - sp_right.height() ) / 2, sp_right.width(), sp_right.height() );
     if ( allow & Battle::LEFT )
         fheroes2::Blit( sp_right, display, rt_right.x, rt_right.y );
 
-    const Rect rt_bright( rt.x + 1, rt.y + 1, sp_bright.width(), sp_bright.height() );
+    const fheroes2::Rect rt_bright( rt.x + 1, rt.y + 1, sp_bright.width(), sp_bright.height() );
     if ( allow & Battle::TOP_LEFT )
         fheroes2::Blit( sp_bright, display, rt_bright.x, rt_bright.y );
 
-    const Rect rt_tleft( rt.x + rt.w - 1 - sp_tleft.width(), rt.y + rt.h - 1 - sp_tleft.height(), sp_tleft.width(), sp_tleft.height() );
+    const fheroes2::Rect rt_tleft( rt.x + rt.w - 1 - sp_tleft.width(), rt.y + rt.h - 1 - sp_tleft.height(), sp_tleft.width(), sp_tleft.height() );
     if ( allow & Battle::BOTTOM_RIGHT )
         fheroes2::Blit( sp_tleft, display, rt_tleft.x, rt_tleft.y );
 
-    const Rect rt_left( rt.x + rt.w - 1 - sp_left.width(), rt.y + ( rt.h - sp_left.height() ) / 2, sp_left.width(), sp_left.height() );
+    const fheroes2::Rect rt_left( rt.x + rt.w - 1 - sp_left.width(), rt.y + ( rt.h - sp_left.height() ) / 2, sp_left.width(), sp_left.height() );
     if ( allow & Battle::RIGHT )
         fheroes2::Blit( sp_left, display, rt_left.x, rt_left.y );
 
-    const Rect rt_bleft( rt.x + rt.w - 1 - sp_bleft.width(), rt.y + 1, sp_bleft.width(), sp_bleft.height() );
+    const fheroes2::Rect rt_bleft( rt.x + rt.w - 1 - sp_bleft.width(), rt.y + 1, sp_bleft.width(), sp_bleft.height() );
     if ( allow & Battle::TOP_RIGHT )
         fheroes2::Blit( sp_bleft, display, rt_bleft.x, rt_bleft.y );
 
@@ -83,17 +83,20 @@ u32 PocketPC::GetCursorAttackDialog( const Point & dst, int allow )
     while ( le.HandleEvents() && !le.MouseClickLeft() )
         ;
 
-    if ( ( allow & Battle::BOTTOM_LEFT ) && ( rt_tright & le.GetMouseCursor() ) )
+    const Point & mousePos = le.GetMouseCursor();
+    const fheroes2::Point position( mousePos.x, mousePos.y );
+
+    if ( ( allow & Battle::BOTTOM_LEFT ) && ( rt_tright & position ) )
         return Cursor::SWORD_TOPRIGHT;
-    else if ( ( allow & Battle::LEFT ) && ( rt_right & le.GetMouseCursor() ) )
+    else if ( ( allow & Battle::LEFT ) && ( rt_right & position ) )
         return Cursor::SWORD_RIGHT;
-    else if ( ( allow & Battle::TOP_LEFT ) && ( rt_bright & le.GetMouseCursor() ) )
+    else if ( ( allow & Battle::TOP_LEFT ) && ( rt_bright & position ) )
         return Cursor::SWORD_BOTTOMRIGHT;
-    else if ( ( allow & Battle::BOTTOM_RIGHT ) && ( rt_tleft & le.GetMouseCursor() ) )
+    else if ( ( allow & Battle::BOTTOM_RIGHT ) && ( rt_tleft & position ) )
         return Cursor::SWORD_TOPLEFT;
-    else if ( ( allow & Battle::RIGHT ) && ( rt_left & le.GetMouseCursor() ) )
+    else if ( ( allow & Battle::RIGHT ) && ( rt_left & position ) )
         return Cursor::SWORD_LEFT;
-    else if ( ( allow & Battle::TOP_RIGHT ) && ( rt_bleft & le.GetMouseCursor() ) )
+    else if ( ( allow & Battle::TOP_RIGHT ) && ( rt_bleft & position ) )
         return Cursor::SWORD_BOTTOMLEFT;
 
     return Cursor::WAR_INFO;
@@ -111,7 +114,7 @@ fheroes2::Image CreateTouchButton( void )
     fheroes2::Blit( sp0, 0, 0, sf, 0, 0, ww, hh );
     fheroes2::Blit( sp0, sp0.width() - ww, 0, sf, ww, 0, ww, hh );
     fheroes2::Blit( sp0, 0, sp0.height() - hh, sf, 0, hh, ww, hh );
-    fheroes2::Blit( sp0.width() - ww, sp0.height() - hh, 0, sf, ww, hh, ww, hh );
+    fheroes2::Blit( sp0, sp0.width() - ww, sp0.height() - hh, sf, ww, hh, ww, hh );
 
     return sf;
 }
@@ -151,7 +154,7 @@ void PocketPC::KeyboardDialog( std::string & str )
     const u32 height = 118;
 
     fheroes2::ImageRestorer back( display, ( display.width() - width ) / 2, 0, width, height );
-    const Rect top( back.x(), back.y(), back.width(), back.height() );
+    const fheroes2::Rect top( back.x(), back.y(), back.width(), back.height() );
     fheroes2::Fill( display, back.x(), back.y(), back.width(), back.height(), 0 );
 
     const fheroes2::Image sp = CreateTouchButton();
@@ -432,9 +435,9 @@ void PocketPC::KeyboardDialog( std::string & str )
 
         if ( redraw ) {
             Text tx( str, Font::SMALL );
-            if ( tx.w() < top.w ) {
-                fheroes2::Fill( display, top.x, top.y + top.h - 16, top.w, 16, 0 );
-                tx.Blit( top.x + ( top.w - tx.w() ) / 2, top.y + top.h - 16 + 2 );
+            if ( tx.w() < top.width ) {
+                fheroes2::Fill( display, top.x, top.y + top.height - 16, top.width, 16, 0 );
+                tx.Blit( top.x + ( top.width - tx.w() ) / 2, top.y + top.height - 16 + 2 );
                 display.render();
             }
             redraw = false;

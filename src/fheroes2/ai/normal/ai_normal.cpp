@@ -19,11 +19,23 @@
  ***************************************************************************/
 
 #include "ai_normal.h"
+#include "maps_tiles.h"
 
 namespace AI
 {
     Normal::Normal()
+        : _pathfinder( ARMY_STRENGTH_ADVANTAGE_MEDUIM )
     {
         _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
+    }
+
+    void Normal::resetPathfinder()
+    {
+        _pathfinder.reset();
+    }
+
+    void Normal::revealFog( const Maps::Tiles & tile )
+    {
+        _mapObjects.emplace_back( tile.GetIndex(), tile.GetObject() );
     }
 }

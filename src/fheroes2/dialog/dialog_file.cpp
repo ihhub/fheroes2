@@ -44,7 +44,7 @@ int Dialog::FileOptions( void )
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
 
-    Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() ) / 2 );
+    const fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() ) / 2 );
     fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
     fheroes2::Blit( box, display, rb.x, rb.y );
 
@@ -107,16 +107,19 @@ int Dialog::FileOptions( void )
             break;
         }
         else if ( le.MousePressRight( buttonNew.area() ) ) {
-            Dialog::Message( "", _( "Start a single or multi-player game." ), Font::BIG );
+            Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonLoad.area() ) ) {
-            Dialog::Message( "", _( "Load a previously saved game." ), Font::BIG );
+            Dialog::Message( _( "Load Game" ), _( "Load a previously saved game." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonSave.area() ) ) {
-            Dialog::Message( "", _( "Save the current game." ), Font::BIG );
+            Dialog::Message( _( "Save Game" ), _( "Save the current game." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonQuit.area() ) ) {
-            Dialog::Message( "", _( "Quit out of Heroes of Might and Magic II." ), Font::BIG );
+            Dialog::Message( _( "Quit" ), _( "Quit out of Free Heroes of Might and Magic II." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+            Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
         }
     }
 

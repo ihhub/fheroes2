@@ -57,7 +57,7 @@ namespace Game
     void AnimateDelaysInitialize( void );
     void KeyboardGlobalFilter( int, int );
     void UpdateGlobalDefines( const std::string & );
-    void LoadExternalResource( const Settings & );
+    void LoadExternalResource();
 
     void HotKeysDefaults( void );
     void HotKeysLoad( const std::string & );
@@ -87,8 +87,8 @@ namespace Game
             , isFadeOut( fadeOut )
         {
             const fheroes2::Image & tileImage = world.GetTiles( tile_ ).GetTileSurface();
-            surfaceSize.w = tileImage.width();
-            surfaceSize.h = tileImage.height();
+            surfaceSize.width = tileImage.width();
+            surfaceSize.height = tileImage.height();
 
             index = ICN::AnimationFrame( MP2::GetICNObject( object ), index_, 0 );
             if ( 0 == index ) {
@@ -132,7 +132,7 @@ bool Game::ChangeMusicDisabled( void )
     return disable_change_music;
 }
 
-void Game::DisableChangeMusic( bool f )
+void Game::DisableChangeMusic( bool /*f*/ )
 {
     // disable_change_music = f;
 }
@@ -144,7 +144,7 @@ void Game::Init( void )
 
     // update all global defines
     if ( conf.UseAltResource() )
-        LoadExternalResource( conf );
+        LoadExternalResource();
 
     // default events
     le.SetStateDefaults();
@@ -319,12 +319,12 @@ u32 Game::GetGameOverScores( void )
 void Game::ShowLoadMapsText( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
-    TextBox text( _( "Maps Loading..." ), Font::BIG, pos.w );
+    const fheroes2::Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
+    TextBox text( _( "Maps Loading..." ), Font::BIG, pos.width );
 
     // blit test
     display.fill( 0 );
-    text.Blit( pos );
+    text.Blit( pos.x, pos.y );
     display.render();
 }
 
@@ -365,6 +365,8 @@ void Game::UpdateGlobalDefines( const std::string & spec )
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
+#else
+    (void)spec;
 #endif
 }
 
@@ -373,7 +375,7 @@ u32 Game::GetWhirlpoolPercent( void )
     return GameStatic::GetLostOnWhirlpoolPercent();
 }
 
-void Game::LoadExternalResource( const Settings & conf )
+void Game::LoadExternalResource()
 {
     std::string spec;
     const std::string prefix_stats = System::ConcatePath( "files", "stats" );
@@ -383,12 +385,6 @@ void Game::LoadExternalResource( const Settings & conf )
 
     if ( System::IsFile( spec ) )
         Game::UpdateGlobalDefines( spec );
-
-    // battle.xml
-    spec = Settings::GetLastFile( prefix_stats, "battle.xml" );
-
-    if ( System::IsFile( spec ) )
-        Battle::UpdateMonsterAttributes( spec );
 
     // monsters.xml
     spec = Settings::GetLastFile( prefix_stats, "monsters.xml" );

@@ -48,6 +48,21 @@ namespace Battle
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 {
+    // Validate the arguments - check if battle should even load
+    if ( !army1.isValid() || !army2.isValid() ) {
+        Result result;
+        // Check second army first so attacker would win by default
+        if ( !army2.isValid() ) {
+            result.army1 = RESULT_WINS;
+            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() );
+        }
+        else {
+            result.army2 = RESULT_WINS;
+            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() );
+        }
+        return result;
+    }
+
     // pre battle army1
     if ( army1.GetCommander() ) {
         if ( army1.GetCommander()->isCaptain() )
@@ -103,8 +118,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // save count troop
-    arena.GetForce1().SyncArmyCount();
-    arena.GetForce2().SyncArmyCount();
+    arena.GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
+    arena.GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
 
     // after battle army1
     if ( army1.GetCommander() ) {
@@ -258,9 +273,9 @@ void Battle::NecromancySkillAction( HeroBase & hero, u32 killed, bool local )
         percent = 90;
 
     const Monster mons( Monster::SKELETON );
-    const u32 count = Monster::GetCountFromHitPoints( Monster::SKELETON, mons.GetHitPoints() * killed * percent / 100 );
+    uint32_t count = Monster::GetCountFromHitPoints( Monster::SKELETON, mons.GetHitPoints() * killed * percent / 100 );
     if ( count == 0u )
-        return;
+        count = 1;
     army.JoinTroop( mons, count );
 
     if ( local ) {
@@ -322,12 +337,12 @@ u32 Battle::Result::GetExperienceDefender( void ) const
 
 bool Battle::Result::AttackerWins( void ) const
 {
-    return army1 & RESULT_WINS;
+    return ( army1 & RESULT_WINS ) != 0;
 }
 
 bool Battle::Result::DefenderWins( void ) const
 {
-    return army2 & RESULT_WINS;
+    return ( army2 & RESULT_WINS ) != 0;
 }
 
 StreamBase & Battle::operator<<( StreamBase & msg, const Result & res )

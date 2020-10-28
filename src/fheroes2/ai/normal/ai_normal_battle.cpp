@@ -105,7 +105,6 @@ namespace AI
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
-        const int difficulty = Settings::Get().GameDifficulty();
         const int myColor = currentUnit.GetColor();
         const int myHeadIndex = currentUnit.GetHeadIndex();
         const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
@@ -158,6 +157,7 @@ namespace AI
             averageAllyDefense += unit.GetDefense();
         }
 
+        const double enemyArcherRatio = enemyShooterStr / enemyArmyStrength;
         // Will be used for better unit strength heuristic
         averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
         averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
@@ -189,9 +189,11 @@ namespace AI
                     myShooterStr /= 2;
             }
         }
-        DEBUG( DBG_AI, DBG_TRACE, "Comparing shooters: " << myShooterStr << ", vs enemy " << enemyShooterStr );
 
-        const bool defensiveTactics = defendingCastle || myShooterStr > enemyShooterStr;
+        const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr );
+        DEBUG( DBG_AI, DBG_TRACE,
+               "Tactic " << defensiveTactics << " chosen. Archers: " << myShooterStr << ", vs enemy " << enemyShooterStr << " ratio is " << enemyArcherRatio );
+
         const double attackDistanceModifier = enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
         const double defenceDistanceModifier = myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
@@ -221,6 +223,7 @@ namespace AI
         }
 
         // Step 5. Current unit decision tree
+        const size_t actionsSize = actions.size();
         const Unit * target = NULL;
         int targetCell = -1;
 
@@ -450,6 +453,11 @@ namespace AI
                 }
             }
             // else skip
+        }
+
+        // no action was taken - skip
+        if ( actions.size() == actionsSize ) {
+            actions.push_back( Command( MSG_BATTLE_SKIP, currentUnit.GetUID(), true ) );
         }
 
         actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );

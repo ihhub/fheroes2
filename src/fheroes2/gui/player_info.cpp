@@ -37,6 +37,7 @@ Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
     : show_name( name )
     , show_race( race )
     , show_swap( swap )
+    , currentSelectedPlayer( nullptr )
 {
     reserve( KINGDOMMAX );
 }
@@ -148,12 +149,22 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
         if ( show_name )
             index += 24;
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, index ), display, rect1.x, rect1.y );
+        const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, index );
+        fheroes2::Blit( playerIcon, display, rect1.x, rect1.y );
+        if ( currentSelectedPlayer != nullptr && it->player == currentSelectedPlayer ) {
+            fheroes2::Image selection( playerIcon.width(), playerIcon.height() );
+            selection.reset();
+            fheroes2::DrawBorder( selection, 214 );
+            fheroes2::Blit( selection, display, rect1.x, rect1.y );
+        }
 
         if ( show_name ) {
             // draw player name
             Text name( player.GetName(), Font::SMALL );
-            name.Blit( rect1.x + ( rect1.w - name.w() ) / 2, rect1.y + rect1.h - ( show_name ? 1 : 14 ) );
+
+            const int32_t maximumTextWidth = playerIcon.width() - 4;
+            const int32_t fitWidth = Text::getFitWidth( player.GetName(), Font::SMALL, maximumTextWidth );
+            name.Blit( rect1.x + 2 + ( maximumTextWidth - fitWidth ) / 2, rect1.y + rect1.h - show_name, maximumTextWidth );
         }
 
         // 2. redraw class
@@ -240,12 +251,24 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 u32 humans = players.GetColors( CONTROL_HUMAN, true );
 
                 if ( conf.GameType( Game::TYPE_MULTI ) ) {
-                    /* set color */
-                    if ( !( humans & player->GetColor() ) )
-                        player->SetControl( CONTROL_HUMAN );
-                    /* reset color */
-                    else if ( 1 < Color::Count( humans ) )
-                        players.SetPlayerControl( player->GetColor(), CONTROL_AI | CONTROL_HUMAN );
+                    if ( currentSelectedPlayer == nullptr ) {
+                        currentSelectedPlayer = player;
+                    }
+                    else if ( currentSelectedPlayer == player ) {
+                        currentSelectedPlayer = nullptr;
+                    }
+                    else if ( player->isControlAI() != currentSelectedPlayer->isControlAI() ) {
+                        if ( !( humans & player->GetColor() ) ) {
+                            player->SetControl( CONTROL_HUMAN );
+                            players.SetPlayerControl( currentSelectedPlayer->GetColor(), CONTROL_AI | CONTROL_HUMAN );
+                        }
+                        else {
+                            currentSelectedPlayer->SetControl( CONTROL_HUMAN );
+                            players.SetPlayerControl( player->GetColor(), CONTROL_AI | CONTROL_HUMAN );
+                        }
+
+                        currentSelectedPlayer = nullptr;
+                    }
                 }
                 else
                 // single play
@@ -315,5 +338,5 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
         }
     }
 
-    return player;
+    return player != NULL;
 }

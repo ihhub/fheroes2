@@ -470,6 +470,8 @@ void Monster::UpdateStats( const std::string & spec )
     }
     else
         VERBOSE( spec << ": " << doc.ErrorDesc() );
+#else
+    (void)spec;
 #endif
 }
 
@@ -641,10 +643,17 @@ u32 Monster::GetGrown( void ) const
 
 // Get universal heuristic of Monster type regardless of context; both combat and strategic value
 // Doesn't account for situational special bonuses such as spell immunity
-double Monster::GetMonsterStrength() const
+double Monster::GetMonsterStrength( int attack, int defense ) const
 {
+    // If no modified values were provided then re-calculate
     // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
-    const double attackDefense = 1.0 + GetAttack() * 0.1 + GetDefense() * 0.05;
+    if ( attack == -1 )
+        attack = GetAttack();
+
+    if ( defense == -1 )
+        attack = GetDefense();
+
+    const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
     const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.4 : 1 );
 
     double damagePotential = ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2;
@@ -1353,15 +1362,15 @@ Monster Monster::Rand( level_t level )
         return Monster( UNKNOWN );
     if ( level == LEVEL0 )
         return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
-    static std::vector<Monster> monsters[LEVEL4 - LEVEL0];
-    if ( monsters[0].empty() ) {
+    static std::vector<Monster> monstersVec[LEVEL4 - LEVEL0];
+    if ( monstersVec[0].empty() ) {
         for ( u32 i = PEASANT; i <= WATER_ELEMENT; ++i ) {
             const Monster monster( i );
             if ( monster.GetRandomUnitLevel() > LEVEL0 )
-                monsters[monster.GetRandomUnitLevel() - LEVEL0 - 1].push_back( monster );
+                monstersVec[monster.GetRandomUnitLevel() - LEVEL0 - 1].push_back( monster );
         }
     }
-    return *Rand::Get( monsters[level - LEVEL0 - 1] );
+    return *Rand::Get( monstersVec[level - LEVEL0 - 1] );
 }
 
 u32 Monster::Rand4WeekOf( void )

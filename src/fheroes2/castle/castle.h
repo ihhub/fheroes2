@@ -166,7 +166,7 @@ public:
 
     void DrawImageCastle( const Point & pt );
 
-    int OpenDialog( bool readonly = false, bool fade = false );
+    int OpenDialog( bool readonly = false );
 
     int GetAttackModificator( std::string * ) const;
     int GetDefenseModificator( std::string * ) const;
@@ -271,6 +271,9 @@ namespace CastleDialog
     void RedrawAllBuilding( const Castle &, const Point &, const CacheBuildings &, u32 flash = BUILD_NOTHING );
     void RedrawAnimationBuilding( const Castle &, const Point &, const CacheBuildings &, u32 build );
     void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
+
+    void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
+    void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame );
 }
 
 struct VecCastles : public std::vector<Castle *>

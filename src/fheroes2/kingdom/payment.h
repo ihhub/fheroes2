@@ -44,7 +44,7 @@ namespace PaymentConditions
     payment_t BuyBoat( void );
     payment_t BuySpellBook( int shrine = 0 );
     payment_t RecruitHero( int level );
-    payment_t ForAlchemist( int arts );
+    payment_t ForAlchemist();
 
     void UpdateCosts( const std::string & );
 }

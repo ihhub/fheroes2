@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <functional>
 #include <math.h>
+#include <set>
 
 #include "agg.h"
 #include "army.h"
@@ -286,6 +287,16 @@ bool Troops::AllTroopsIsRace( int race ) const
     return true;
 }
 
+bool Troops::AllTroopsAreUndead() const
+{
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() && !( *it )->isUndead() )
+            return false;
+    }
+
+    return true;
+}
+
 bool Troops::CanJoinTroop( const Monster & mons ) const
 {
     const_iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
@@ -350,15 +361,13 @@ void Troops::JoinTroops( Troops & troops2 )
 
 u32 Troops::GetUniqueCount( void ) const
 {
-    std::vector<int> monsters;
-    monsters.reserve( size() );
+    std::set<int> monsters;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            monsters.push_back( ( *it )->GetID() );
-
-    std::sort( monsters.begin(), monsters.end() );
-    monsters.resize( std::distance( monsters.begin(), std::unique( monsters.begin(), monsters.end() ) ) );
+    for ( size_t idx = 0; idx < size(); ++idx ) {
+        const Troop * troop = operator[]( idx );
+        if ( troop && troop->isValid() )
+            monsters.insert( troop->GetID() );
+    }
 
     return monsters.size();
 }
@@ -505,6 +514,24 @@ Troop * Troops::GetSlowestTroop( void )
     return *lowest;
 }
 
+void Troops::MergeTroops()
+{
+    for ( size_t slot = 0; slot < size(); ++slot ) {
+        Troop * troop = at( slot );
+        if ( !troop || !troop->isValid() )
+            continue;
+
+        const int id = troop->GetID();
+        for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
+            Troop * secondaryTroop = at( secondary );
+            if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
+                troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
+                secondaryTroop->Reset();
+            }
+        }
+    }
+}
+
 Troops Troops::GetOptimized( void ) const
 {
     Troops result;
@@ -585,41 +612,87 @@ void Troops::ArrangeForBattle( bool upgrade )
     }
 }
 
-void Troops::JoinStrongest( Troops & troops2, bool save_last )
+void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 {
     if ( this == &troops2 )
         return;
 
-    Troops priority = GetOptimized();
-    priority.reserve( ARMYMAXTROOPS * 2 );
+    // validate the size (can be different from ARMYMAXTROOPS)
+    if ( troops2.size() < size() )
+        troops2.resize( size() );
 
-    const Troops & priority2 = troops2.GetOptimized();
-    priority.Insert( priority2 );
-
-    Clean();
-    troops2.Clean();
-
-    // sort: strongest
-    std::sort( priority.begin(), priority.end(), Army::StrongestTroop );
-
-    // weakest to army2
-    while ( size() < priority.size() ) {
-        troops2.JoinTroop( *priority.back() );
-        priority.PopBack();
+    // first try to keep units in the same slots
+    for ( size_t slot = 0; slot < size(); ++slot ) {
+        Troop * leftTroop = at( slot );
+        Troop * rightTroop = troops2[slot];
+        if ( rightTroop && rightTroop->isValid() ) {
+            if ( !leftTroop->isValid() ) {
+                // if slot is empty, simply move the unit
+                leftTroop->Set( *rightTroop );
+                rightTroop->Reset();
+            }
+            else if ( leftTroop->GetID() == rightTroop->GetID() ) {
+                // check if we can merge them
+                leftTroop->SetCount( leftTroop->GetCount() + rightTroop->GetCount() );
+                rightTroop->Reset();
+            }
+        }
     }
 
-    // save half weak of strongest to army2
-    if ( save_last && !troops2.isValid() ) {
-        Troop & last = *priority.back();
-        u32 count = last.GetCount() / 2;
-        troops2.JoinTroop( last, last.GetCount() - count );
-        last.SetCount( count );
+    // there's still unmerged units left and there's empty room for them
+    for ( size_t slot = 0; slot < troops2.size(); ++slot ) {
+        Troop * rightTroop = troops2[slot];
+        if ( rightTroop && rightTroop->isValid() && JoinTroop( *rightTroop ) ) {
+            rightTroop->Reset();
+        }
     }
 
-    // strongest to army
-    while ( priority.size() ) {
-        JoinTroop( *priority.back() );
-        priority.PopBack();
+    // if there's more units than slots, start optimizing
+    if ( troops2.GetCount() ) {
+        Troops rightPriority = troops2.GetOptimized();
+        troops2.Clean();
+        // strongest at the end
+        std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
+
+        // 1. Merge any remaining stacks to free some space
+        MergeTroops();
+
+        // 2. Fill empty slots with best troops (if there are any)
+        uint32_t count = GetCount();
+        while ( count < ARMYMAXTROOPS && rightPriority.size() ) {
+            JoinTroop( *rightPriority.back() );
+            rightPriority.PopBack();
+            ++count;
+        }
+
+        // 3. Swap weakest and strongest unit until there's no left
+        while ( rightPriority.size() ) {
+            Troop * weakest = GetWeakestTroop();
+
+            if ( !weakest || Army::StrongestTroop( weakest, rightPriority.back() ) ) {
+                // we're done processing if second army units are weaker
+                break;
+            }
+
+            Army::SwapTroops( *weakest, *rightPriority.back() );
+            std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
+        }
+
+        // 4. The rest goes back to second army
+        while ( rightPriority.size() ) {
+            troops2.JoinTroop( *rightPriority.back() );
+            rightPriority.PopBack();
+        }
+    }
+
+    // save weakest unit to army2 (for heroes)
+    if ( saveLast && !troops2.isValid() ) {
+        Troop * weakest = GetWeakestTroop();
+
+        if ( weakest && weakest->isValid() ) {
+            troops2.JoinTroop( *weakest, 1 );
+            weakest->SetCount( weakest->GetCount() - 1 );
+        }
     }
 }
 
@@ -741,10 +814,25 @@ Army::Army( const Maps::Tiles & t )
     for ( u32 ii = 0; ii < ARMYMAXTROOPS; ++ii )
         push_back( new ArmyTroop( this ) );
 
-    if ( MP2::isCaptureObject( t.GetObject() ) )
-        color = t.QuantityColor();
+    setFromTile( t );
+}
 
-    switch ( t.GetObject( false ) ) {
+Army::~Army()
+{
+    for ( iterator it = begin(); it != end(); ++it )
+        delete *it;
+    clear();
+}
+
+void Army::setFromTile( const Maps::Tiles & tile )
+{
+    Reset();
+
+    const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject() );
+    if ( isCaptureObject )
+        color = tile.QuantityColor();
+
+    switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
         at( 0 )->Set( Monster::ROYAL_MUMMY, 10 );
         at( 1 )->Set( Monster::VAMPIRE_LORD, 10 );
@@ -759,7 +847,7 @@ Army::Army( const Maps::Tiles & t )
         break;
 
     case MP2::OBJ_SHIPWRECK:
-        at( 0 )->Set( Monster::GHOST, t.GetQuantity2() );
+        at( 0 )->Set( Monster::GHOST, tile.GetQuantity2() );
         ArrangeForBattle( false );
         break;
 
@@ -769,7 +857,7 @@ Army::Army( const Maps::Tiles & t )
         break;
 
     case MP2::OBJ_ARTIFACT:
-        switch ( t.QuantityVariant() ) {
+        switch ( tile.QuantityVariant() ) {
         case 6:
             at( 0 )->Set( Monster::ROGUE, 50 );
             break;
@@ -835,8 +923,8 @@ Army::Army( const Maps::Tiles & t )
         break;
 
     default:
-        if ( MP2::isCaptureObject( t.GetObject() ) ) {
-            CapturedObject & co = world.GetCapturedObject( t.GetIndex() );
+        if ( isCaptureObject ) {
+            CapturedObject & co = world.GetCapturedObject( tile.GetIndex() );
             Troop & troop = co.GetTroop();
 
             switch ( co.GetSplit() ) {
@@ -869,23 +957,17 @@ Army::Army( const Maps::Tiles & t )
         }
         else {
             MapMonster * map_troop = NULL;
-            if ( t.GetObject() == MP2::OBJ_MONSTER )
-                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( t.GetObjectUID() ) );
+            if ( tile.GetObject() == MP2::OBJ_MONSTER )
+                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
-            Troop troop = map_troop ? map_troop->QuantityTroop() : t.QuantityTroop();
+            Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
 
             at( 0 )->Set( troop );
-            ArrangeForBattle( true );
+            if ( troop.isValid() )
+                ArrangeForBattle( true );
         }
         break;
     }
-}
-
-Army::~Army()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    clear();
 }
 
 bool Army::isFullHouse( void ) const
@@ -1119,20 +1201,26 @@ double Army::GetStrength( void ) const
 {
     double res = 0;
     const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+    // Hero bonus calculation is slow, cache it
+    const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
+    const int bonusDefense = ( commander ? commander->GetDefense() : 0 );
+    const int armyMorale = GetMorale();
+    const int armyLuck = GetLuck();
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Troop * troop = *it;
         if ( troop != NULL && troop->isValid() ) {
-            double strength = troop->GetStrength();
+            double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
 
             if ( archery > 0 && troop->isArchers() ) {
                 strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
             }
 
             // GetMorale checks if unit is affected by it
-            const int morale = troop->GetMorale();
-            strength *= 1 + ( ( morale < 0 ) ? morale / 12.0 : morale / 24.0 );
-            strength *= 1 + troop->GetLuck() / 24.0;
+            if ( troop->isAffectedByMorale() )
+                strength *= 1 + ( ( armyMorale < 0 ) ? armyMorale / 12.0 : armyMorale / 24.0 );
+
+            strength *= 1 + armyLuck / 24.0;
 
             res += strength;
         }

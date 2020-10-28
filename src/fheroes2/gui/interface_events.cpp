@@ -49,8 +49,8 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
-        const uint32_t distance = path.Calculate( destinationIdx );
-        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << distance << ", route: " << path.String() );
+        hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
+        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
         LocalEvent & le = LocalEvent::Get();
@@ -346,7 +346,7 @@ int Interface::Basic::EventDigArtifact( void )
 
                     // set all obelisks visited
                     Kingdom & kingdom = world.GetKingdom( hero->GetColor() );
-                    const MapsIndexes obelisks = Maps::GetObjectPositions( MP2::OBJ_OBELISK, true );
+                    const MapsIndexes obelisks = Maps::GetObjectPositions( MP2::OBJ_OBELISK, false );
 
                     for ( MapsIndexes::const_iterator it = obelisks.begin(); it != obelisks.end(); ++it )
                         if ( !hero->isVisited( world.GetTiles( *it ), Visit::GLOBAL ) )

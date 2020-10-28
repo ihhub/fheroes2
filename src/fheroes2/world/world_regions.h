@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,58 +18,53 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "sprite.h"
+#pragma once
 
-SpritePos::SpritePos() {}
+#include <set>
+#include <vector>
 
-SpritePos::SpritePos( const Surface & sf, const Point & pt )
-    : Surface( sf )
-    , pos( pt )
-{}
-
-const Point & SpritePos::GetPos( void ) const
+enum
 {
-    return pos;
-}
+    REGION_NODE_BLOCKED = 0,
+    REGION_NODE_OPEN = 1,
+    REGION_NODE_BORDER = 2,
+    REGION_NODE_FOUND = 3
+};
 
-Rect SpritePos::GetArea( void ) const
+struct MapRegionNode
 {
-    return Rect( GetPos(), GetSize() );
-}
+    int index = -1;
+    int type = REGION_NODE_BLOCKED;
+    uint16_t mapObject = 0;
+    uint16_t passable = 0;
+    bool isWater = false;
 
-void SpritePos::SetSurface( const Surface & sf )
+    MapRegionNode() {}
+    MapRegionNode( int index )
+        : index( index )
+        , type( REGION_NODE_OPEN )
+    {}
+    MapRegionNode( int index, uint16_t pass, bool water )
+        : index( index )
+        , type( REGION_NODE_OPEN )
+        , passable( pass )
+        , isWater( water )
+    {}
+};
+
+struct MapRegion
 {
-    Surface::Set( sf, true );
-}
+public:
+    int _id = REGION_NODE_FOUND;
+    bool _isWater = false;
+    std::set<int> _neighbours;
+    std::vector<MapRegionNode> _nodes;
+    size_t _lastProcessedNode = 0;
 
-void SpritePos::SetPos( const Point & pt )
-{
-    pos = pt;
-}
-
-void SpritePos::Reset( void )
-{
-    pos = Point( 0, 0 );
-    Surface::Reset();
-}
-
-u32 SpritePos::GetMemoryUsage( void ) const
-{
-    return Surface::GetMemoryUsage() + sizeof( pos );
-}
-
-Sprite::Sprite() {}
-
-Sprite::Sprite( const Surface & sf, s32 ox, s32 oy )
-    : SpritePos( sf, Point( ox, oy ) )
-{}
-
-int Sprite::x( void ) const
-{
-    return pos.x;
-}
-
-int Sprite::y( void ) const
-{
-    return pos.y;
-}
+    MapRegion(){};
+    MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
+    std::vector<int> getNeighbours() const;
+    std::vector<IndexObject> getObjectList() const;
+    int getObjectCount() const;
+    double getFogRatio( int color ) const;
+};

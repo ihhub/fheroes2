@@ -645,7 +645,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
 bool LocalEvent::MouseMotion( void ) const
 {
-    return modes & MOUSE_MOTION;
+    return ( modes & MOUSE_MOTION ) == MOUSE_MOTION;
 }
 
 bool LocalEvent::MouseMotion( const Rect & rt ) const

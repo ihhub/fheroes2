@@ -109,7 +109,6 @@ namespace Battle
         bool hexIsAccessible( int32_t indexTo );
         bool hexIsPassable( int32_t indexTo );
         Indexes GetPath( const Unit &, const Position & );
-        Indexes CalculatePath( const Unit & unit, int32_t indexTo );
 
         void ApplyAction( Command & );
 
@@ -205,6 +204,14 @@ namespace Battle
         int auto_battle;
 
         bool end_turn;
+
+        enum
+        {
+            FIRST_WALL_HEX_POSITION = 8,
+            SECOND_WALL_HEX_POSITION = 29,
+            THIRD_WALL_HEX_POSITION = 73,
+            FORTH_WALL_HEX_POSITION = 96
+        };
     };
 
     Arena * GetArena( void );

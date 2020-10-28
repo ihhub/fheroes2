@@ -48,10 +48,11 @@ namespace
     const int heightAmountBox = 23;
 }
 
-void DrawMonsterStats( const Point & dst, const Troop & troop );
-void DrawBattleStats( const Point &, const Troop & );
-void DrawMonsterInfo( const Point & dst, const Troop & troop );
-void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const Point & offset, bool isReflected, bool isAnimated, const fheroes2::Rect & roi );
+void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
+void DrawBattleStats( const fheroes2::Point &, const Troop & );
+void DrawMonsterInfo( const fheroes2::Point & dst, const Troop & troop );
+void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
+                  const fheroes2::Rect & roi );
 
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
@@ -65,28 +66,28 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
-    const Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
-    const Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
+    const fheroes2::Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
+    const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
+    const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
     fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
-    const Rect pos_rt( dialogOffset.x, dialogOffset.y, sprite_dialog.width(), sprite_dialog.height() );
+    const fheroes2::Rect pos_rt( dialogOffset.x, dialogOffset.y, sprite_dialog.width(), sprite_dialog.height() );
 
     fheroes2::Blit( spriteDialogShadow, display, pos_rt.x + shadowShift.x, pos_rt.y + shadowShift.y );
     fheroes2::Blit( sprite_dialog, display, pos_rt.x, pos_rt.y );
 
-    const Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
+    const fheroes2::Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
     DrawMonsterStats( monsterStatOffset, troop );
 
-    const Point battleStatOffset( pos_rt.x + 400, pos_rt.y + ( ( ( BUTTONS & flags ) == BUTTONS ) ? 181 : 190 ) );
+    const fheroes2::Point battleStatOffset( pos_rt.x + 400, pos_rt.y + ( ( ( BUTTONS & flags ) == BUTTONS ) ? 181 : 190 ) );
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
-    DrawMonsterInfo( pos_rt, troop );
+    DrawMonsterInfo( fheroes2::Point( pos_rt.x, pos_rt.y ), troop );
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
     RandomMonsterAnimation monsterAnimation( troop );
-    const Point monsterOffset( pos_rt.x + pos_rt.w / 4, pos_rt.y + 180 );
+    const fheroes2::Point monsterOffset( pos_rt.x + pos_rt.width / 4, pos_rt.y + 180 );
     if ( !isAnimated )
         monsterAnimation.reset();
 
@@ -94,7 +95,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
     // button upgrade
-    Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
+    fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
     dst_pt.x = pos_rt.x + 284;
     dst_pt.y = pos_rt.y + 190;
     fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, viewarmy, 5, 6 );
@@ -184,7 +185,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( troop.isBattle() )
                     DrawBattleStats( battleStatOffset, troop );
 
-                DrawMonsterInfo( pos_rt, troop );
+                DrawMonsterInfo( fheroes2::Point( pos_rt.x, pos_rt.y ), troop );
                 DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
 
                 if ( buttonUpgrade.isEnabled() )
@@ -211,33 +212,33 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     return result;
 }
 
-void DrawMonsterStats( const Point & dst, const Troop & troop )
+void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
 {
-    Point dst_pt;
+    fheroes2::Point dst_pt;
     Text text;
 
     // attack
     text.Set( std::string( _( "Attack Skill" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y = dst.y;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     const int offsetX = 6;
     const int offsetY = 16;
 
     text.Set( troop.GetAttackString() );
     dst_pt.x = dst.x + offsetX;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // defense
     text.Set( std::string( _( "Defense Skill" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y += offsetY;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     text.Set( troop.GetDefenseString() );
     dst_pt.x = dst.x + offsetX;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // shot
     if ( troop.isArchers() ) {
@@ -246,76 +247,76 @@ void DrawMonsterStats( const Point & dst, const Troop & troop )
         text.Set( message );
         dst_pt.x = dst.x - text.w();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         text.Set( troop.GetShotString() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
     }
 
     // damage
     text.Set( std::string( _( "Damage" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y += offsetY;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     if ( troop().GetDamageMin() != troop().GetDamageMax() )
         text.Set( GetString( troop().GetDamageMin() ) + "-" + GetString( troop().GetDamageMax() ) );
     else
         text.Set( GetString( troop().GetDamageMin() ) );
     dst_pt.x = dst.x + offsetX;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // hp
     text.Set( std::string( _( "Hit Points" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y += offsetY;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     text.Set( GetString( troop().GetHitPoints() ) );
     dst_pt.x = dst.x + offsetX;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     if ( troop.isBattle() ) {
         text.Set( std::string( _( "Hit Points Left" ) ) + ":" );
         dst_pt.x = dst.x - text.w();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
 
         text.Set( GetString( troop.GetHitPointsLeft() ) );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt );
+        text.Blit( dst_pt.x, dst_pt.y );
     }
 
     // speed
     text.Set( std::string( _( "Speed" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y += offsetY;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     text.Set( troop.GetSpeedString() );
     dst_pt.x = dst.x + offsetX;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // morale
     text.Set( std::string( _( "Morale" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y += offsetY;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     text.Set( Morale::String( troop.GetMorale() ) );
     dst_pt.x = dst.x + offsetX;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     // luck
     text.Set( std::string( _( "Luck" ) ) + ":" );
     dst_pt.x = dst.x - text.w();
     dst_pt.y += offsetY;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 
     text.Set( Luck::String( troop.GetLuck() ) );
     dst_pt.x = dst.x + offsetX;
-    text.Blit( dst_pt );
+    text.Blit( dst_pt.x, dst_pt.y );
 }
 
 fheroes2::Sprite GetModesSprite( u32 mod )
@@ -363,14 +364,14 @@ bool SortSpells( const std::pair<uint32_t, uint32_t> & first, const std::pair<ui
     return first.second > 0 && first.second < second.second;
 }
 
-void DrawBattleStats( const Point & dst, const Troop & b )
+void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
     const u32 modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
                          Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
                          Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
 
     // accumulate width
-    u32 ow = 0;
+    int32_t ow = 0;
     std::vector<std::pair<uint32_t, uint32_t> > spellVsDuration;
 
     for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii )
@@ -404,25 +405,26 @@ void DrawBattleStats( const Point & dst, const Troop & b )
     }
 }
 
-void DrawMonsterInfo( const Point & offset, const Troop & troop )
+void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
 {
     // name
     Text text( troop.GetName(), Font::YELLOW_BIG );
-    Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
-    text.Blit( pos );
+    fheroes2::Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
+    text.Blit( pos.x, pos.y );
 
     // amount
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     text.Set( GetString( troop.GetCount() ), Font::BIG );
     pos.x = offset.x + ( isEvilInterface ? offsetXEvilAmountBox : offsetXGoodAmountBox ) + widthAmountBox / 2 - text.w() / 2;
     pos.y = offset.y + ( isEvilInterface ? offsetYEvilAmountBox : offsetYGoodAmountBox ) + heightAmountBox / 2 - text.h() / 2;
-    text.Blit( pos );
+    text.Blit( pos.x, pos.y );
 }
 
-void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const Point & offset, bool isReflected, bool isAnimated, const fheroes2::Rect & roi )
+void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
+                  const fheroes2::Rect & roi )
 {
     const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId() );
-    Point monsterPos( offset.x, offset.y + monsterSprite.y() );
+    fheroes2::Point monsterPos( offset.x, offset.y + monsterSprite.y() );
     if ( isReflected )
         monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? CELLW / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.width();
     else
@@ -461,19 +463,19 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     int posy = 0;
 
     FrameBox box( 10 + textbox.h() + 10, buttons );
-    const Rect & pos = box.GetArea();
+    const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;
     textbox.Blit( pos.x, posy );
 
-    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.w, pos.h ), buttons );
+    fheroes2::ButtonGroup btnGroup( pos, buttons );
 
     fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
     fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
     fheroes2::AddTransparency( armyButtonReleased, 36 );
     fheroes2::AddTransparency( armyButtonPressed, 36 );
 
-    const fheroes2::Point buttonHeroPos( pos.x + pos.w / 2 - armyButtonReleased.width() / 2, pos.y + pos.h - 35 );
+    const fheroes2::Point buttonHeroPos( pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35 );
 
     fheroes2::Sprite armyButtonReleasedBack( armyButtonReleased.width(), armyButtonReleased.height(), armyButtonReleased.x(), armyButtonReleased.y() );
     fheroes2::Copy( display, buttonHeroPos.x, buttonHeroPos.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
@@ -514,8 +516,12 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
                 btnGroup.button( 0 ).enable();
-                btnGroup.draw();
             }
+            else {
+                btnGroup.button( 0 ).disable();
+            }
+
+            btnGroup.draw();
 
             cursor.Show();
             display.render();
@@ -569,29 +575,29 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     text.Set( message, Font::BIG );
 
     FrameBox box( 10 + textbox.h() + 10 + text.h() + 40 + sprite.height() + 10, buttons );
-    const Rect & pos = box.GetArea();
+    const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;
     textbox.Blit( pos.x, posy );
 
     posy += textbox.h() + 10;
-    text.Blit( pos.x + ( pos.w - text.w() ) / 2, posy );
+    text.Blit( pos.x + ( pos.width - text.w() ) / 2, posy );
 
     posy += text.h() + 40;
-    fheroes2::Blit( sprite, display, pos.x + ( pos.w - sprite.width() ) / 2, posy );
+    fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
     TextSprite tsTotal( GetString( gold ) + " " + "(" + "total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")", Font::SMALL,
-                        pos.x + ( pos.w - text.w() ) / 2, posy + sprite.height() + 5 );
+                        pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
     tsTotal.Show();
 
-    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.w, pos.h ), buttons );
+    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.width, pos.height ), buttons );
 
     fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
     fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
     fheroes2::AddTransparency( marketButtonReleased, 36 );
     fheroes2::AddTransparency( marketButtonPressed, 36 );
 
-    const fheroes2::Point buttonMarketPos( pos.x + pos.w / 2 - 60 - 36, posy );
+    const fheroes2::Point buttonMarketPos( pos.x + pos.width / 2 - 60 - 36, posy );
     fheroes2::Sprite marketButtonReleasedBack( marketButtonReleased.width(), marketButtonReleased.height(), marketButtonReleased.x(), marketButtonReleased.y() );
     fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, 0, 0, marketButtonReleasedBack.width(), marketButtonReleasedBack.height() );
     fheroes2::Blit( marketButtonReleased, marketButtonReleasedBack );
@@ -607,7 +613,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     fheroes2::AddTransparency( armyButtonReleased, 36 );
     fheroes2::AddTransparency( armyButtonPressed, 36 );
 
-    const fheroes2::Point buttonArmyPos( pos.x + pos.w / 2 + 60, posy );
+    const fheroes2::Point buttonArmyPos( pos.x + pos.width / 2 + 60, posy );
     fheroes2::Sprite armyButtonReleasedBack( armyButtonReleased.width(), armyButtonReleased.height(), armyButtonReleased.x(), armyButtonReleased.y() );
     fheroes2::Copy( display, buttonArmyPos.x, buttonArmyPos.y, armyButtonReleasedBack, 0, 0, armyButtonReleasedBack.width(), armyButtonReleasedBack.height() );
     fheroes2::Blit( armyButtonReleased, armyButtonReleasedBack );

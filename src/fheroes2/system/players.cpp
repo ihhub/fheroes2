@@ -59,12 +59,12 @@ void PlayerFixRandomRace( Player * player )
 
 bool Control::isControlAI( void ) const
 {
-    return CONTROL_AI & GetControl();
+    return ( CONTROL_AI & GetControl() ) != 0;
 }
 
 bool Control::isControlHuman( void ) const
 {
-    return CONTROL_HUMAN & GetControl();
+    return ( CONTROL_HUMAN & GetControl() ) != 0;
 }
 
 bool Control::isControlLocal( void ) const
@@ -74,7 +74,7 @@ bool Control::isControlLocal( void ) const
 
 bool Control::isControlRemote( void ) const
 {
-    return CONTROL_REMOTE & GetControl();
+    return ( CONTROL_REMOTE & GetControl() ) != 0;
 }
 
 Player::Player( int col )
@@ -318,7 +318,7 @@ Player * Players::Get( int color )
 bool Players::isFriends( int player, int colors )
 {
     const Player * ptr = Get( player );
-    return ptr ? ptr->GetFriends() & colors : false;
+    return ptr ? ( ptr->GetFriends() & colors ) != 0 : false;
 }
 
 void Players::SetPlayerRace( int color, int race )

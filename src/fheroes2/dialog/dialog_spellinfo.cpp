@@ -73,31 +73,32 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
     const int spacer = 10;
 
     FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.height() + 2 + text.h(), ok_button );
-    Rect pos = box.GetArea();
+    fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )
-        box1.Blit( pos );
+        box1.Blit( pos.x, pos.y );
     pos.y += box1.h() + spacer;
 
     if ( message.size() )
-        box2.Blit( pos );
+        box2.Blit( pos.x, pos.y );
     pos.y += box2.h() + spacer;
 
     // blit sprite
-    pos.x = box.GetArea().x + ( pos.w - sprite.width() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - sprite.width() ) / 2;
     fheroes2::Blit( sprite, display, pos.x, pos.y );
 
     // small text
-    pos.x = box.GetArea().x + ( pos.w - text.w() ) / 2;
+    pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     pos.y = pos.y + sprite.height() + 2;
-    text.Blit( pos );
+    text.Blit( pos.x, pos.y );
 
     LocalEvent & le = LocalEvent::Get();
 
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
     const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( system, 1 );
 
-    fheroes2::Button button( box.GetArea().x + ( box.GetArea().w - buttonSprite.width() ) / 2, box.GetArea().y + box.GetArea().h - buttonSprite.height(), system, 1, 2 );
+    fheroes2::Button button( box.GetArea().x + ( box.GetArea().width - buttonSprite.width() ) / 2, box.GetArea().y + box.GetArea().height - buttonSprite.height(), system,
+                             1, 2 );
 
     if ( !ok_button ) {
         button.disable();

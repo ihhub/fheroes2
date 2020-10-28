@@ -64,7 +64,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     StringReplace( message, "%{name1}", GetName() );
     StringReplace( message, "%{name2}", heroes2.GetName() );
     Text text( message, Font::BIG );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 26 );
+    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 27 );
 
     // portrait
     dst_pt.x = cur_pt.x + 93;

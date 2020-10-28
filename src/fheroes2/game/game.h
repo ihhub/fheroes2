@@ -91,8 +91,7 @@ namespace Game
         VIEW_HEROES = 2,
         VIEW_TELESCOPE = 3,
         VIEW_OBSERVATION_TOWER = 4,
-        VIEW_MAGI_EYES = 5,
-        VIEW_LIGHT_HOUSE = 6
+        VIEW_MAGI_EYES = 5
     };
 
     enum
@@ -262,11 +261,11 @@ namespace Game
             Info();
             Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u, bool fadeOut = true );
 
-            u8 object;
-            u8 index;
-            s32 tile;
-            u32 alpha;
-            Size surfaceSize;
+            uint8_t object;
+            uint8_t index;
+            int32_t tile;
+            uint32_t alpha;
+            fheroes2::Size surfaceSize;
             bool isFadeOut;
         };
 

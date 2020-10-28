@@ -30,6 +30,7 @@
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
+#include "difficulty.h"
 #include "direction.h"
 #include "game.h"
 #include "game_interface.h"
@@ -83,8 +84,14 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
-                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) { // it's a hack for now
+                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) {
                     strs->append( _( "Graveyard robber" ) );
+                }
+                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) {
+                    strs->append( _( "Shipwreck robber" ) );
+                }
+                else if ( objs[ii] == MP2::OBJ_PYRAMID || objs[ii] == MP2::OBJN_PYRAMID ) {
+                    strs->append( _( "Pyramid raided" ) );
                 }
                 else {
                     strs->append( MP2::StringObject( objs[ii] ) );
@@ -116,7 +123,7 @@ Heroes::Heroes()
 Heroes::Heroes( int heroid, int rc )
     : HeroBase( HeroBase::HEROES, rc )
     , ColorBase( Color::NONE )
-    , experience( 0 )
+    , experience( GetStartingXp() )
     , move_point_scale( -1 )
     , secondary_skills( rc )
     , army( this )
@@ -350,6 +357,9 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
 
     // experience
     experience = st.getLE32();
+
+    if ( experience == 0 )
+        experience = GetStartingXp();
 
     bool custom_secskill = st.get();
 
@@ -587,8 +597,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
             point += acount * 1000;
 
         // visited object
-        if ( isObjectTypeVisited( MP2::OBJ_LIGHTHOUSE ) )
-            point += 500;
+        point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
         Troop * troop = const_cast<Army &>( army ).GetSlowestTroop();
@@ -641,6 +650,10 @@ u32 Heroes::GetMaxMovePoints( void ) const
     if ( acount )
         point += acount * 500;
 
+    if ( isControlAI() ) {
+        point += Difficulty::GetHeroMovementBonus( Settings::Get().GameDifficulty() );
+    }
+
     return point;
 }
 
@@ -651,7 +664,7 @@ int Heroes::GetMorale( void ) const
 
 int Heroes::GetMoraleWithModificators( std::string * strs ) const
 {
-    if ( army.AllTroopsIsRace( Race::NECR ) )
+    if ( army.AllTroopsAreUndead() )
         return Morale::NORMAL;
 
     int result = Morale::NORMAL;
@@ -935,7 +948,7 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
         break;
     }
 
-    if ( tile.GetObject() == object && wide ) {
+    if ( tile.GetObject( false ) == object && wide ) {
         for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
@@ -1320,15 +1333,13 @@ int Heroes::GetDirection( void ) const
 int Heroes::GetRangeRouteDays( s32 dst ) const
 {
     const u32 maxMovePoints = GetMaxMovePoints();
-    const int32_t currentIndex = GetIndex();
-    const uint32_t skill = GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-    uint32_t total = world.getDistance( currentIndex, dst, skill );
+    uint32_t total = world.getDistance( *this, dst );
     DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );
 
     if ( total > 0 ) {
         // check if last step is diagonal and pre-adjust the total
-        const Route::Step lastStep = world.getPath( currentIndex, dst, skill ).back();
+        const Route::Step lastStep = world.getPath( *this, dst ).back();
         if ( Direction::isDiagonal( lastStep.GetDirection() ) ) {
             total -= lastStep.GetPenalty() / 3;
         }
@@ -1464,11 +1475,8 @@ void Heroes::SetFreeman( int reason )
             kingdom.SetLastLostHero( *this );
         }
 
-        if ( !army.isValid() || ( Battle::RESULT_RETREAT & reason ) )
-            army.Reset( false );
-        else if ( ( Battle::RESULT_LOSS & reason ) && !( Battle::RESULT_SURRENDER & reason ) )
-            army.Reset( true );
-        else if ( reason == 0 ) // Dismissed hero
+        // if not surrendering, reset army
+        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 )
             army.Reset( true );
 
         if ( GetColor() != Color::NONE )
@@ -1501,6 +1509,11 @@ int Heroes::GetKillerColor( void ) const
 int Heroes::GetControl( void ) const
 {
     return GetKingdom().GetControl();
+}
+
+uint32_t Heroes::GetStartingXp()
+{
+    return Rand::Get( 40, 90 );
 }
 
 int Heroes::GetMapsObject( void ) const
@@ -1565,7 +1578,7 @@ void Heroes::ActionNewPosition( void )
         }
 
         // other around targets
-        for ( MapsIndexes::const_iterator it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
+        for ( it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
             RedrawGameAreaAndHeroAttackMonster( *this, *it );
             if ( conf.ExtWorldOnlyFirstMonsterAttack() )
                 skip_battle = true;
@@ -1693,7 +1706,7 @@ fheroes2::Image Heroes::GetPortrait( int type ) const
 void Heroes::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
 {
     fheroes2::Image port = GetPortrait( portrait, type );
-    Point mp;
+    fheroes2::Point mp;
 
     if ( !port.empty() ) {
         if ( PORT_BIG == type ) {

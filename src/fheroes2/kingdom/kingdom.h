@@ -155,6 +155,8 @@ public:
     bool isVisited( const Maps::Tiles & ) const;
     bool isVisited( s32, int obj ) const;
 
+    bool isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const;
+
     bool HeroesMayStillMove( void ) const;
 
     const Puzzle & PuzzleMaps( void ) const;

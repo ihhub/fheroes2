@@ -752,7 +752,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
             interface->RedrawActionTowerPart1( *tower, *b2 );
         target.killed = b2->ApplyDamage( *tower, target.damage );
         if ( interface )
-            interface->RedrawActionTowerPart2( *tower, target );
+            interface->RedrawActionTowerPart2( target );
 
         if ( b2->Modes( SP_BLIND ) )
             b2->ResetBlind();
@@ -856,24 +856,23 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     }
 }
 
+std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander );
+
 void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
 {
     std::vector<int> targets = GetCastleTargets();
-
-    if ( interface )
+    if ( interface ) {
         interface->RedrawActionEarthQuakeSpell( targets );
+    }
 
-    // FIXME: Arena::ApplyActionSpellEarthQuake: check hero spell power
-
-    // apply random damage
-    if ( 0 != board[8].GetObject() )
-        board[8].SetObject( Rand::Get( board[8].GetObject() ) );
-    if ( 0 != board[29].GetObject() )
-        board[29].SetObject( Rand::Get( board[29].GetObject() ) );
-    if ( 0 != board[73].GetObject() )
-        board[73].SetObject( Rand::Get( board[73].GetObject() ) );
-    if ( 0 != board[96].GetObject() )
-        board[96].SetObject( Rand::Get( board[96].GetObject() ) );
+    const HeroBase * commander = GetCurrentCommander();
+    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0 , 0 );
+    const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
+    for ( int position : wallHexPositions ) {
+        if ( 0 != board[position].GetObject() ) {
+            board[position].SetObject( Rand::Get( range.first, range.second ) );
+        }
+    }
 
     if ( towers[0] && towers[0]->isValid() && Rand::Get( 1 ) )
         towers[0]->SetDestroy();
@@ -881,6 +880,26 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
         towers[2]->SetDestroy();
 
     DEBUG( DBG_BATTLE, DBG_TRACE, "spell: " << Spell( Spell::EARTHQUAKE ).GetName() << ", targets: " << targets.size() );
+}
+
+std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander )
+{
+    const int spellPower = commander->GetPower();
+    if ( ( spellPower > 0 ) && ( spellPower < 3 ) ) {
+        return std::make_pair( 0, 1 );
+    }
+    else if ( ( spellPower >= 3 ) && ( spellPower < 6 ) ) {
+        return std::make_pair( 0, 2 );
+    }
+    else if ( ( spellPower >= 6 ) && ( spellPower < 10 ) ) {
+        return std::make_pair( 0, 3 );
+    }
+    else if ( spellPower >= 10 ) {
+        return std::make_pair( 1, 3 );
+    }
+
+    DEBUG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spellPower value: " << spellPower << " for commander " << commander );
+    return std::make_pair( 0, 0 );
 }
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )

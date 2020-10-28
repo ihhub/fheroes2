@@ -29,8 +29,8 @@
 #define ANGLEWIDTH 44
 
 Dialog::FrameBorder::FrameBorder( int v )
-    : border( v )
-    , restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance() )
+    , border( v )
 {}
 
 Dialog::FrameBorder::~FrameBorder()
@@ -41,17 +41,18 @@ Dialog::FrameBorder::~FrameBorder()
 }
 
 Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
-    : border( BORDERWIDTH )
-    , restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance() )
+    , border( BORDERWIDTH )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
-    RenderOther( sf, GetRect() );
+    const Rect & currentArea = GetRect();
+    RenderOther( sf, fheroes2::Rect( currentArea.x, currentArea.y, currentArea.w, currentArea.h ) );
 }
 
 Dialog::FrameBorder::FrameBorder( const Size & sz )
-    : border( BORDERWIDTH )
-    , restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance() )
+    , border( BORDERWIDTH )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
@@ -59,8 +60,8 @@ Dialog::FrameBorder::FrameBorder( const Size & sz )
 }
 
 Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
-    : border( BORDERWIDTH )
-    , restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance() )
+    , border( BORDERWIDTH )
 {
     SetPosition( posx, posy, encw, ench );
     RenderRegular( GetRect() );
@@ -133,8 +134,8 @@ void Dialog::FrameBorder::RenderRegular( const Rect & dstrt )
     fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );
 }
 
-void Dialog::FrameBorder::RenderOther( const fheroes2::Image & srcsf, const Rect & dstrt )
+void Dialog::FrameBorder::RenderOther( const fheroes2::Image & srcsf, const fheroes2::Rect & dstrt )
 {
-    const fheroes2::Image renderedImage = fheroes2::Stretch( srcsf, 0, 0, srcsf.width(), srcsf.height(), dstrt.w, dstrt.h );
+    const fheroes2::Image renderedImage = fheroes2::Stretch( srcsf, 0, 0, srcsf.width(), srcsf.height(), dstrt.width, dstrt.height );
     fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );
 }

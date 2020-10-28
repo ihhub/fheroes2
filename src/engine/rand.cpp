@@ -88,8 +88,8 @@ s32 Rand::Queue::Get( void )
     for ( ; it != end(); ++it )
         max += ( *it ).second;
 
-    u8 rand = Rand::Get( max );
-    u8 amount = 0;
+    uint32_t rand = Rand::Get( max );
+    uint32_t amount = 0;
 
     it = begin();
     for ( ; it != end(); ++it ) {

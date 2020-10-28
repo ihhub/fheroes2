@@ -827,9 +827,12 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     } break;
 
     case MP2::OBJ_BOAT:
+        objectTileset = 27;
+        objectIndex = 18;
+        break;
+
     case MP2::OBJ_EVENT:
-        objectTileset = 0;
-        objectIndex = 255;
+        resetObjectSprite();
         break;
 
     case MP2::OBJ_RNDARTIFACT:
@@ -1045,7 +1048,6 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 {
     uint32_t count = isFirstLoad ? 0 : tile.MonsterCount();
     const int obj = tile.GetObject( false );
-    const Troop & troop = tile.QuantityTroop();
 
     switch ( obj ) {
     // join monsters

@@ -60,7 +60,11 @@ namespace Interface
         GameArea( Basic & );
         void Build( void );
 
-        const Rect & GetROI( void ) const; // returns visible Game Area ROI in pixels
+        const Rect & GetROI() const // returns visible Game Area ROI in pixels
+        {
+            return _windowROI;
+        }
+
         Rect GetVisibleTileROI( void ) const;
         void ShiftCenter( const Point & offset ); // in pixels
 
@@ -74,15 +78,18 @@ namespace Interface
 
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
-        void BlitOnTile( fheroes2::Image & src, const fheroes2::Image & dst, int32_t ox, int32_t oy, const Point & mp, bool flip = false, uint8_t alpha = 255 ) const;
-        void BlitOnTile( fheroes2::Image & src, const fheroes2::Sprite & dst, const Point & mp ) const;
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip = false, uint8_t alpha = 255 ) const;
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp ) const;
+
+        // Use this method to draw TIL images
+        void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const Point & mp ) const;
 
         void SetUpdateCursor( void );
         void QueueEventProcessing( void );
 
         Rect RectFixed( Point & dst, int rw, int rh ) const;
 
-        static fheroes2::Image GenerateUltimateArtifactAreaSurface( s32 );
+        static fheroes2::Image GenerateUltimateArtifactAreaSurface( int32_t index );
 
         int32_t GetValidTileIdFromPoint( const Point & point ) const; // returns -1 in case of invalid index (out of World Map)
         Point GetRelativeTilePosition( const Point & tileId ) const; // in relation to screen
@@ -115,7 +122,6 @@ namespace Interface
         Point _getStartTileId() const;
         void _setCenterToTile( const Point & tile ); // set center to the middle of tile (input is tile ID)
         void _setCenter( const Point & point ); // in pixels
-        Point _getRelativePosition( const Point & point ) const; // returns relative to screen position
     };
 }
 

@@ -33,6 +33,7 @@
 #include "maps_tiles.h"
 #include "week.h"
 #include "world_pathfinding.h"
+#include "world_regions.h"
 #include <string>
 
 class Heroes;
@@ -167,8 +168,15 @@ public:
 
     static World & Get( void );
 
-    s32 w( void ) const;
-    s32 h( void ) const;
+    s32 w( void ) const
+    {
+        return Size::w;
+    }
+
+    s32 h( void ) const
+    {
+        return Size::h;
+    }
 
     const Maps::Tiles & GetTiles( u32, u32 ) const;
     Maps::Tiles & GetTiles( u32, u32 );
@@ -200,6 +208,8 @@ public:
     const UltimateArtifact & GetUltimateArtifact( void ) const;
     bool DiggingForUltimateArtifact( const Point & );
 
+    // overall number of cells of the world map: width * height
+    size_t getSize() const;
     int GetDay( void ) const;
     int GetWeek( void ) const;
     int GetMonth( void ) const;
@@ -234,7 +244,6 @@ public:
     ListActions * GetListActions( s32 );
 
     void ActionForMagellanMaps( int color );
-    void ActionToEyeMagi( int color ) const;
     void ClearFog( int color );
     void UpdateRecruits( Recruits & ) const;
 
@@ -249,12 +258,12 @@ public:
     MapEvent * GetMapEvent( const Point & );
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
+    const MapRegion & getRegion( size_t id );
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
     bool isValidPath( int index, int direction ) const;
-    uint32_t getDistance( int from, int to, uint32_t skill );
-    std::list<Route::Step> getPath( int from, int to, uint32_t skill, bool ignoreObjects = true );
-    int searchForFog( const Heroes & hero );
+    uint32_t getDistance( const Heroes & hero, int targetIndex );
+    std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();
 
     void ComputeStaticAnalysis();
@@ -288,19 +297,22 @@ private:
 
     UltimateArtifact ultimate_artifact;
 
-    u32 day;
-    u32 week;
-    u32 month;
+    uint32_t day = 0;
+    uint32_t week = 0;
+    uint32_t month = 0;
 
     Week week_current;
     Week week_next;
 
-    int heroes_cond_wins;
-    int heroes_cond_loss;
+    int heroes_cond_wins = Heroes::UNKNOWN;
+    int heroes_cond_loss = Heroes::UNKNOWN;
 
     MapActions map_actions;
     MapObjects map_objects;
-    Pathfinder _pathfinder;
+
+    // This data isn't serialized
+    std::vector<MapRegion> _regions;
+    PlayerWorldPathfinder _pathfinder;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

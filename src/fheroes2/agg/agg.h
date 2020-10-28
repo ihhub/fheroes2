@@ -28,7 +28,7 @@
 
 #include "gamedefs.h"
 #include "icn.h"
-#include "sprite.h"
+#include "surface.h"
 #include "til.h"
 
 namespace AGG
@@ -36,7 +36,6 @@ namespace AGG
     bool Init( void );
     void Quit( void );
 
-    Surface GetLetter( u32 ch, u32 ft );
     std::vector<u8> LoadBINFRM( const char * frm_file );
 #ifdef WITH_TTF
     Surface GetUnicodeLetter( u32 ch, u32 ft );

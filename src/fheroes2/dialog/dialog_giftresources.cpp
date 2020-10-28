@@ -28,18 +28,30 @@
 #include "text.h"
 #include "world.h"
 
-s32 GetIndexClickRects( const Rects & rects )
+int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
     LocalEvent & le = LocalEvent::Get();
-    const s32 index = rects.GetIndex( le.GetMouseCursor() );
-    return 0 <= index && le.MouseClickLeft() ? index : -1;
+
+    const Point & pos = le.GetMouseCursor();
+    const fheroes2::Point position( pos.x, pos.y );
+
+    for ( size_t i = 0; i < rects.size(); ++i ) {
+        if ( rects[i] & position ) {
+            if ( le.MouseClickLeft() )
+                return static_cast<int32_t>( i );
+            else
+                return -1;
+        }
+    }
+
+    return -1;
 }
 
 struct SelectRecipientsColors
 {
     const Colors colors;
     int recipients;
-    Rects positions;
+    std::vector<fheroes2::Rect> positions;
 
     SelectRecipientsColors( const Point & pos )
         : colors( Settings::Get().GetPlayers().GetColors() & ~Settings::Get().GetPlayers().current_color )
@@ -51,7 +63,7 @@ struct SelectRecipientsColors
             const u32 current = std::distance( colors.begin(), it );
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
 
-            positions.push_back( Rect( pos.x + Game::GetStep4Player( current, sprite.width() + 15, colors.size() ), pos.y, sprite.width(), sprite.height() ) );
+            positions.push_back( fheroes2::Rect( pos.x + Game::GetStep4Player( current, sprite.width() + 15, colors.size() ), pos.y, sprite.width(), sprite.height() ) );
         }
     }
 
@@ -65,7 +77,7 @@ struct SelectRecipientsColors
         fheroes2::Display & display = fheroes2::Display::instance();
 
         for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
-            const Rect & pos = positions[std::distance( colors.begin(), it )];
+            const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
 
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
             if ( recipients & *it )
@@ -96,7 +108,7 @@ struct ResourceBar
 {
     Funds & resource;
     Point pos;
-    Rects positions;
+    std::vector<fheroes2::Rect> positions;
 
     ResourceBar( Funds & funds, s32 posx, s32 posy )
         : resource( funds )
@@ -105,13 +117,13 @@ struct ResourceBar
         positions.reserve( 7 );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
 
-        positions.push_back( Rect( posx, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( Rect( posx + 40, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( Rect( posx + 80, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( Rect( posx + 120, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( Rect( posx + 160, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( Rect( posx + 200, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( Rect( posx + 240, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( fheroes2::Rect( posx, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( fheroes2::Rect( posx + 40, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( fheroes2::Rect( posx + 80, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( fheroes2::Rect( posx + 120, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( fheroes2::Rect( posx + 160, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( fheroes2::Rect( posx + 200, posy, sprite.width(), sprite.height() ) );
+        positions.push_back( fheroes2::Rect( posx + 240, posy, sprite.width(), sprite.height() ) );
     }
 
     static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
@@ -130,9 +142,9 @@ struct ResourceBar
         if ( !res )
             res = &resource;
 
-        for ( Rects::const_iterator it = positions.begin(); it != positions.end(); ++it ) {
-            int rs = Resource::FromIndexSprite2( std::distance( positions.begin(), it ) );
-            RedrawResource( rs, res->Get( rs ), ( *it ).x, ( *it ).y );
+        for ( size_t i = 0; i < positions.size(); ++i ) {
+            const int rs = Resource::FromIndexSprite2( static_cast<uint32_t>( i ) );
+            RedrawResource( rs, res->Get( rs ), positions[i].x, positions[i].y );
         }
     }
 

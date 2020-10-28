@@ -29,26 +29,26 @@
 Interface::ControlPanel::ControlPanel( Basic & basic )
     : interface( basic )
 {
-    w = 180;
-    h = 36;
+    width = 180;
+    height = 36;
 
-    rt_radr.w = 36;
-    rt_radr.h = 36;
-    rt_icon.w = 36;
-    rt_icon.h = 36;
-    rt_bttn.w = 36;
-    rt_bttn.h = 36;
-    rt_stat.w = 36;
-    rt_stat.h = 36;
-    rt_quit.w = 36;
-    rt_quit.h = 36;
+    rt_radr.width = 36;
+    rt_radr.height = 36;
+    rt_icon.width = 36;
+    rt_icon.height = 36;
+    rt_bttn.width = 36;
+    rt_bttn.height = 36;
+    rt_stat.width = 36;
+    rt_stat.height = 36;
+    rt_quit.width = 36;
+    rt_quit.height = 36;
 
     ResetTheme();
 }
 
 void Interface::ControlPanel::ResetTheme( void )
 {
-    int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
+    const int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
     // Make a copy of Surface
     btn_radr = fheroes2::AGG::GetICN( icn, 4 );
@@ -58,7 +58,7 @@ void Interface::ControlPanel::ResetTheme( void )
     btn_quit = fheroes2::AGG::GetICN( icn, 8 );
 }
 
-const Rect & Interface::ControlPanel::GetArea( void )
+const fheroes2::Rect & Interface::ControlPanel::GetArea( void )
 {
     return *this;
 }
@@ -84,7 +84,7 @@ void Interface::ControlPanel::Redraw( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int alpha = 128;
+    const uint8_t alpha = 128;
 
     fheroes2::AlphaBlit( btn_radr, display, x, y, alpha );
     fheroes2::AlphaBlit( btn_icon, display, x + 36, y, alpha );

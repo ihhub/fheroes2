@@ -119,17 +119,10 @@ s32 Route::Path::GetDestinedIndex( void ) const
     return dst;
 }
 
-/* return length path */
-uint32_t Route::Path::Calculate( const s32 & destIndex )
+void Route::Path::setPath( const std::list<Route::Step> & path, int32_t destIndex )
 {
-    const int fromIndex = hero->GetIndex();
-    const uint32_t skill = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
-
+    assign( path.begin(), path.end() );
     dst = destIndex;
-
-    std::list<Step>::operator=( world.getPath( fromIndex, dst, skill, false ) );
-
-    return world.getDistance( fromIndex, dst, skill );
 }
 
 void Route::Path::Reset( void )
@@ -508,10 +501,14 @@ void Route::Path::RescanObstacle( void )
     if ( it != end() && ( *it ).GetIndex() != GetLastIndex() ) {
         size_t size1 = size();
         s32 reduce = ( *it ).GetFrom();
-        Calculate( dst );
+
+        std::list<Step> path = world.getPath( *hero, dst );
+        const bool reducePath = path.size() > size1 * 2;
         // reduce
-        if ( size() > size1 * 2 )
-            Calculate( reduce );
+        if ( reducePath )
+            path = world.getPath( *hero, reduce );
+
+        setPath( path, reducePath ? reduce : dst );
     }
 }
 

@@ -130,14 +130,14 @@ void Interface::Radar::Build( void )
 void Interface::Radar::Generate( void )
 {
     const Size & size = GetArea();
-    const s32 world_w = world.w();
-    const s32 world_h = world.h();
+    const int32_t world_w = world.w();
+    const int32_t world_h = world.h();
 
     spriteArea.resize( world_w, world_h );
     spriteArea.reset();
 
-    for ( s32 yy = 0; yy < world_h; ++yy ) {
-        for ( s32 xx = 0; xx < world_w; ++xx ) {
+    for ( int32_t yy = 0; yy < world_h; ++yy ) {
+        for ( int32_t xx = 0; xx < world_w; ++xx ) {
             const Maps::Tiles & tile = world.GetTiles( xx, yy );
             uint8_t color = 0;
 
@@ -156,26 +156,26 @@ void Interface::Radar::Generate( void )
     }
 
     if ( spriteArea.width() != size.w || spriteArea.height() != size.h ) {
-        Size new_sz;
+        fheroes2::Size new_sz;
 
         if ( world_w < world_h ) {
-            new_sz.w = ( world_w * size.h ) / world_h;
-            new_sz.h = size.h;
-            offset.x = ( size.w - new_sz.w ) / 2;
+            new_sz.width = ( world_w * size.h ) / world_h;
+            new_sz.height = size.h;
+            offset.x = ( size.w - new_sz.width ) / 2;
             offset.y = 0;
         }
         else if ( world_w > world_h ) {
-            new_sz.w = size.w;
-            new_sz.h = ( world_h * size.w ) / world_w;
+            new_sz.width = size.w;
+            new_sz.height = ( world_h * size.w ) / world_w;
             offset.x = 0;
-            offset.y = ( size.h - new_sz.h ) / 2;
+            offset.y = ( size.h - new_sz.height ) / 2;
         }
         else {
-            new_sz.w = size.w;
-            new_sz.h = size.h;
+            new_sz.width = size.w;
+            new_sz.height = size.h;
         }
 
-        fheroes2::Image resized( new_sz.w, new_sz.h );
+        fheroes2::Image resized( new_sz.width, new_sz.height );
         fheroes2::Resize( spriteArea, resized );
         spriteArea = resized;
     }
@@ -193,17 +193,19 @@ void Interface::Radar::SetRedraw( void ) const
 
 void Interface::Radar::Redraw( void )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
-    const Rect & rect = GetArea();
+    const bool hideInterface = conf.ExtGameHideInterface();
 
-    if ( conf.ExtGameHideInterface() && conf.ShowRadar() ) {
+    if ( hideInterface && conf.ShowRadar() ) {
         BorderWindow::Redraw();
     }
 
-    if ( !conf.ExtGameHideInterface() || conf.ShowRadar() ) {
-        if ( hide )
+    if ( !hideInterface || conf.ShowRadar() ) {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const Rect & rect = GetArea();
+        if ( hide ) {
             fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
+        }
         else {
             cursorArea.hide();
             fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
@@ -253,12 +255,14 @@ void Interface::Radar::RedrawObjects( int color )
     fheroes2::Image sf( sw, sw );
 
     for ( s32 yy = 0; yy < world_h; yy += stepy ) {
+        const int dsty = rect.y + offset.y + ( yy * areah ) / world_h; // calculate once per row
+
         for ( s32 xx = 0; xx < world_w; xx += stepx ) {
             const Maps::Tiles & tile = world.GetTiles( xx, yy );
 #ifdef WITH_DEBUG
             bool show_tile = IS_DEVEL() || !tile.isFog( color );
 #else
-            const bool & show_tile = !tile.isFog( color );
+            const bool show_tile = !tile.isFog( color );
 #endif
             uint8_t fillColor = 0;
 
@@ -291,7 +295,6 @@ void Interface::Radar::RedrawObjects( int color )
             }
 
             const int dstx = rect.x + offset.x + ( xx * areaw ) / world_w;
-            const int dsty = rect.y + offset.y + ( yy * areah ) / world_h;
 
             if ( sw > 1 ) {
                 sf.fill( fillColor );
@@ -336,11 +339,11 @@ void Interface::Radar::RedrawCursor( void )
         const uint16_t width = static_cast<uint16_t>( xEnd - xStart );
         const uint16_t height = static_cast<uint16_t>( yEnd - yStart );
 
-        const Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
+        const fheroes2::Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
 
         // check change game area
-        if ( cursorArea.width() != sz.w || cursorArea.height() != sz.h ) {
-            cursorArea.resize( sz.w, sz.h );
+        if ( cursorArea.width() != sz.width || cursorArea.height() != sz.height ) {
+            cursorArea.resize( sz.width, sz.height );
             cursorArea.reset();
             fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
         }

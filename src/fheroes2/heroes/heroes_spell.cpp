@@ -57,7 +57,7 @@ bool ActionSpellDimensionDoor( Heroes & );
 bool ActionSpellTownGate( Heroes & );
 bool ActionSpellTownPortal( Heroes & );
 bool ActionSpellVisions( Heroes & );
-bool ActionSpellSetGuardian( Heroes &, const Spell &, int mons );
+bool ActionSpellSetGuardian( Heroes &, const Spell & );
 
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
@@ -116,7 +116,7 @@ bool Heroes::ActionSpellCast( const Spell & spell )
 {
     std::string error;
 
-    if ( !CanMove() ) {
+    if ( !CanMove() && ( spell == Spell::DIMENSIONDOOR || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) ) {
         Dialog::Message( "", _( "Your hero is too tired to cast this spell today. Try again tomorrow." ), Font::BIG, Dialog::OK );
         return false;
     }
@@ -166,19 +166,19 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         apply = ActionSpellVisions( *this );
         break;
     case Spell::HAUNT:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::GHOST );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     case Spell::SETEGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::EARTH_ELEMENT );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     case Spell::SETAGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::AIR_ELEMENT );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     case Spell::SETFGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::FIRE_ELEMENT );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     case Spell::SETWGUARDIAN:
-        apply = ActionSpellSetGuardian( *this, spell, Monster::WATER_ELEMENT );
+        apply = ActionSpellSetGuardian( *this, spell );
         break;
     default:
         break;
@@ -339,7 +339,7 @@ bool ActionSpellSummonBoat( Heroes & hero )
         if ( Maps::isValidAbsIndex( boat ) ) {
             if ( Rand::Get( 1, 100 ) <= chance ) {
                 world.GetTiles( boat ).SetObject( MP2::OBJ_ZERO );
-                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
+                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( 27, 18, dst_water, 0, false ) );
                 return true;
             }
             break;
@@ -468,9 +468,9 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( area.x + 256, area.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 145 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), Rect( area.x + 260, area.y + 78, 14, 64 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( area.x + 260, area.y + 78, 14, 64 ) );
     listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( Rect( area.x + 10, area.y + 60, 250, 100 ) );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 60, 250, 100 ) );
     listbox.SetListContent( castles );
     listbox.Redraw();
 
@@ -562,7 +562,7 @@ bool ActionSpellVisions( Heroes & hero )
     return true;
 }
 
-bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell, int mons )
+bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
 {
     Maps::Tiles & tile = world.GetTiles( hero.GetIndex() );
 

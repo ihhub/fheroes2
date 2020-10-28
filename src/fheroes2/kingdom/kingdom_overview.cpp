@@ -127,11 +127,11 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( pt.x + 626, pt.y ) );
     SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
-    SetAreaItems( Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
+    SetAreaItems( fheroes2::Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
 
     content.resize( heroes.size() );
 
@@ -148,35 +148,39 @@ void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const Point & cursor
 
 void StatsHeroesList::ActionListSingleClick( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
 {
-    if ( row.hero && ( Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
+    if ( row.hero
+         && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) )
         Game::OpenHeroesDialog( *row.hero, false );
 }
 
 void StatsHeroesList::ActionListPressRight( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
 {
-    if ( row.hero && ( Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
+    if ( row.hero
+         && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) )
         Dialog::QuickInfo( *row.hero );
 }
 
 bool StatsHeroesList::ActionListCursor( HeroRow & row, const Point & cursor )
 {
-    if ( ( row.armyBar->GetArea() & cursor ) && row.armyBar->QueueEventProcessing() ) {
+    const fheroes2::Point cursorPos( cursor.x, cursor.y );
+
+    if ( ( row.armyBar->GetArea() & cursorPos ) && row.armyBar->QueueEventProcessing() ) {
         if ( row.artifactsBar->isSelected() )
             row.artifactsBar->ResetSelected();
         Cursor::Get().Hide();
         return true;
     }
-    else if ( ( row.artifactsBar->GetArea() & cursor ) && row.artifactsBar->QueueEventProcessing() ) {
+    else if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
         if ( row.armyBar->isSelected() )
             row.armyBar->ResetSelected();
         Cursor::Get().Hide();
         return true;
     }
-    else if ( ( row.primskillsBar->GetArea() & cursor ) && row.primskillsBar->QueueEventProcessing() ) {
+    else if ( ( row.primskillsBar->GetArea() & cursorPos ) && row.primskillsBar->QueueEventProcessing() ) {
         Cursor::Get().Hide();
         return true;
     }
-    else if ( ( row.secskillsBar->GetArea() & cursor ) && row.secskillsBar->QueueEventProcessing() ) {
+    else if ( ( row.secskillsBar->GetArea() & cursorPos ) && row.secskillsBar->QueueEventProcessing() ) {
         Cursor::Get().Hide();
         return true;
     }
@@ -186,6 +190,8 @@ bool StatsHeroesList::ActionListCursor( HeroRow & row, const Point & cursor )
 
 void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool current )
 {
+    (void)current;
+
     if ( row.hero ) {
         Text text( "", Font::SMALL );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), fheroes2::Display::instance(), dstx, dsty );
@@ -333,11 +339,11 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
+    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( pt.x + 626, pt.y ) );
     SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
-    SetAreaItems( Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
+    SetAreaItems( fheroes2::Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
 
     content.resize( castles.size() );
 
@@ -356,13 +362,13 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const Point & curso
 {
     if ( row.castle ) {
         // click castle icon
-        if ( Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) {
             Game::OpenCastleDialog( *row.castle );
             row.Init( row.castle );
         }
         else
             // click hero icon
-            if ( Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+            if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) {
             Heroes * hero = row.castle->GetHeroes().GuardFirst();
             if ( hero ) {
                 Game::OpenHeroesDialog( *hero, false );
@@ -375,9 +381,10 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const Point & curso
 void StatsCastlesList::ActionListPressRight( CstlRow & row, const Point & cursor, s32 ox, s32 oy )
 {
     if ( row.castle ) {
-        if ( ( Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
+        if ( ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) )
             Dialog::QuickInfo( *row.castle );
-        else if ( Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+        else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() )
+                  & fheroes2::Point( cursor.x, cursor.y ) ) {
             Heroes * hero = row.castle->GetHeroes().GuardFirst();
             if ( hero )
                 Dialog::QuickInfo( *hero );
@@ -387,21 +394,23 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const Point & cursor
 
 bool StatsCastlesList::ActionListCursor( CstlRow & row, const Point & cursor )
 {
-    if ( row.armyBarGuard && ( row.armyBarGuard->GetArea() & cursor )
+    const fheroes2::Point cursorPos( cursor.x, cursor.y );
+
+    if ( row.armyBarGuard && ( row.armyBarGuard->GetArea() & cursorPos )
          && ( row.armyBarGuest ? row.armyBarGuard->QueueEventProcessing( *row.armyBarGuest ) : row.armyBarGuard->QueueEventProcessing() ) ) {
         Cursor::Get().Hide();
         if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
             row.armyBarGuest->ResetSelected();
         return true;
     }
-    else if ( row.armyBarGuest && ( row.armyBarGuest->GetArea() & cursor )
+    else if ( row.armyBarGuest && ( row.armyBarGuest->GetArea() & cursorPos )
               && ( row.armyBarGuard ? row.armyBarGuest->QueueEventProcessing( *row.armyBarGuard ) : row.armyBarGuest->QueueEventProcessing() ) ) {
         Cursor::Get().Hide();
         if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
             row.armyBarGuard->ResetSelected();
         return true;
     }
-    else if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursor ) && row.dwellingsBar->QueueEventProcessing() ) {
+    else if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
         Cursor::Get().Hide();
         if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
             row.armyBarGuest->ResetSelected();
@@ -415,6 +424,8 @@ bool StatsCastlesList::ActionListCursor( CstlRow & row, const Point & cursor )
 
 void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool current )
 {
+    (void)current;
+
     if ( row.castle ) {
         Text text( "", Font::SMALL );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), fheroes2::Display::instance(), dstx, dsty );
