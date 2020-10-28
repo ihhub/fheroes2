@@ -62,14 +62,14 @@ namespace AI
 
             _mapObjects.emplace_back( idx, objectID );
 
-            const int color = tile.QuantityColor();
+            const int tileColor = tile.QuantityColor();
             if ( objectID == MP2::OBJ_HEROES ) {
                 const Heroes * enemy = tile.GetHeroes();
                 if ( enemy && !Players::isFriends( color, enemy->GetColor() ) ) {
                     enemyArmies.emplace_back( idx, &enemy->GetArmy() );
                 }
             }
-            else if ( objectID == MP2::OBJ_CASTLE && color != Color::NONE && !Players::isFriends( color, color ) ) {
+            else if ( objectID == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
                 const Castle * castle = world.GetCastle( Maps::GetPoint( idx ) );
                 if ( castle )
                     enemyArmies.emplace_back( idx, &castle->GetArmy() );
@@ -105,7 +105,7 @@ namespace AI
                             const double attackerStrength = enemy->second->GetStrength();
                             const double attackerThreat = attackerStrength - defenders;
                             if ( attackerThreat > 0 ) {
-                                const uint32_t dist = _pathfinder.getDistance( castleIndex, enemy->first, attackerStrength, color );
+                                const uint32_t dist = _pathfinder.getDistance( castleIndex, enemy->first, color, attackerStrength );
                                 if ( dist && dist < threatDistanceLimit ) {
                                     // castle is under threat
                                     castlesInDanger.push_back( castleIndex );
