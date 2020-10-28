@@ -96,7 +96,7 @@ void Battle::Board::SetPositionQuality( const Unit & b )
         const Unit * unit = *it1;
 
         if ( unit && unit->isValid() ) {
-            const s32 unitStrength = GetCell( unit->GetHeadIndex() )->GetQuality();
+            const s32 unitStrength = unit->GetScoreQuality( b );
             const Indexes around = GetAroundIndexes( *unit );
 
             for ( Indexes::const_iterator it2 = around.begin(); it2 != around.end(); ++it2 ) {

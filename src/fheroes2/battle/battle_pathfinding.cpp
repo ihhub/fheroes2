@@ -176,11 +176,11 @@ namespace Battle
 
                     const Indexes & around = board.GetAroundIndexes( unitIdx );
                     for ( const int cell : around ) {
-                        if ( hexIsPassable( cell ) ) {
+                        const int flyingDist = board.GetDistance( headIdx, cell );
+                        if ( hexIsPassable( cell ) && ( flyingDist < unitNode._cost ) ) {
                             unitNode._isOpen = false;
-                            unitNode._from = headIdx;
-                            unitNode._cost = board.GetDistance( headIdx, cell );
-                            break;
+                            unitNode._from = cell;
+                            unitNode._cost = static_cast<uint32_t>( flyingDist );
                         }
                     }
                 }
