@@ -35,13 +35,10 @@ namespace Route
     class Step
     {
     public:
-        Step()
-            : from( -1 )
-            , direction( Direction::CENTER )
-            , penalty( 0 )
-        {}
-        Step( s32 index, int dir, u32 cost )
-            : from( index )
+        Step() {}
+        Step( int index, s32 fromIndex, int dir, u32 cost )
+            : currentIndex( index )
+            , from( fromIndex )
             , direction( dir )
             , penalty( cost )
         {}
@@ -56,9 +53,10 @@ namespace Route
         friend StreamBase & operator<<( StreamBase &, const Step & );
         friend StreamBase & operator>>( StreamBase &, Step & );
 
-        s32 from;
-        int direction;
-        u32 penalty;
+        int currentIndex = -1;
+        s32 from = -1;
+        int direction = Direction::CENTER;
+        uint32_t penalty = 0;
     };
 
     class Path : public std::list<Step>
