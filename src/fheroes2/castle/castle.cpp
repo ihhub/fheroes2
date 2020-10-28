@@ -408,10 +408,14 @@ int Castle::getBuildingValue() const
     if ( isBuild( DWELLING_MONSTER6 ) )
         value += 6;
 
+    if ( race == Race::WRLK && isBuild( DWELLING_UPGRADE7 ) )
+        value += 2;
+
     // DWELLING_UPGRADE7 resolves to a negative, can't use <= operator
-    for ( uint32_t upgrade = DWELLING_UPGRADE2; upgrade != DWELLING_UPGRADE7; upgrade <<= 1 )
+    for ( uint32_t upgrade = DWELLING_UPGRADE2; upgrade <= DWELLING_UPGRADE6; upgrade <<= 1 ) {
         if ( isBuild( upgrade ) )
             ++value;
+    }
 
     int increase = 1;
     for ( uint32_t guild = BUILD_MAGEGUILD2; guild <= BUILD_MAGEGUILD5; guild <<= 1 ) {
@@ -434,9 +438,10 @@ double Castle::getVisitValue( const Heroes & hero ) const
     }
 
     Troops reinforcement;
-    for ( u32 dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 )
+    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
         if ( isBuild( dw ) )
             reinforcement.PushBack( Monster( race, GetActualDwelling( dw ) ), getMonstersInDwelling( dw ) );
+    }
 
     return spellValue + hero.GetArmy().getReinforcementValue( reinforcement );
 }

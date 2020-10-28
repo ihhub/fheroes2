@@ -375,9 +375,10 @@ u32 Troops::GetUniqueCount( void ) const
 double Troops::GetStrength() const
 {
     double strength = 0;
-    for ( const Troop * troop : *this )
+    for ( const Troop * troop : *this ) {
         if ( troop && troop->isValid() )
             strength += troop->GetStrength();
+    }
     return strength;
 }
 

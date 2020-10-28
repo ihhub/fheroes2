@@ -815,9 +815,10 @@ u32 BagArtifacts::CountArtifacts( void ) const
 int BagArtifacts::getArtifactValue() const
 {
     int result = 0;
-    for ( const Artifact & art : *this )
+    for ( const Artifact & art : *this ) {
         if ( art.isValid() )
             result += art.getArtifactValue();
+    }
 
     return result;
 }
@@ -825,17 +826,19 @@ int BagArtifacts::getArtifactValue() const
 void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
 {
     std::vector<Artifact> combined;
-    for ( auto it = begin(); it != end(); ++it )
+    for ( auto it = begin(); it != end(); ++it ) {
         if ( it->isValid() && it->GetID() != Artifact::MAGIC_BOOK ) {
             combined.push_back( *it );
             it->Reset();
         }
+    }
 
-    for ( auto it = giftBag.begin(); it != giftBag.end(); ++it )
+    for ( auto it = giftBag.begin(); it != giftBag.end(); ++it ) {
         if ( it->isValid() && it->GetID() != Artifact::MAGIC_BOOK ) {
             combined.push_back( *it );
             it->Reset();
         }
+    }
 
     // better artifacts at the end
     std::sort( combined.begin(), combined.end(), []( const Artifact & left, const Artifact & right ) { return left.getArtifactValue() < right.getArtifactValue(); } );

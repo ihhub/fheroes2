@@ -641,7 +641,7 @@ int Skill::SecSkills::Count( void ) const
 int Skill::SecSkills::GetTotalLevel() const
 {
     int result = 0;
-    for ( const Skill::Secondary skill : *this ) {
+    for ( const Skill::Secondary & skill : *this ) {
         if ( skill.isValid() ) {
             result += skill.Level();
         }
