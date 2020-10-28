@@ -129,7 +129,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
         fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
     }
 
-    // sea anime
+    // Bay animation
     if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) ) {
         fheroes2::Sprite sprite50;
         fheroes2::Sprite sprite51;
