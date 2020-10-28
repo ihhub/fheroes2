@@ -2272,13 +2272,14 @@ std::string Castle::String( void ) const
        << "color           : " << Color::String( GetColor() ) << std::endl
        << "dwellings       : ";
 
-    for ( uint32_t level = 0; level < 6; ++level ) {
-        if ( isBuild( DWELLING_MONSTER1 << level ) )
+    for ( uint32_t level = 0; level < 7; ++level ) {
+        // there is no dwelling 7
+        if ( level != 6 && isBuild( DWELLING_MONSTER1 << level ) )
             os << level + 1;
-        if ( level && isBuild( DWELLING_UPGRADE2 << ( level - 1 ) ) )
-            os << "U";
 
-        if ( level < 5 )
+        if ( level && isBuild( DWELLING_UPGRADE2 << ( level - 1 ) ) )
+            os << "U, ";
+        else
             os << ", ";
     }
     os << std::endl;
