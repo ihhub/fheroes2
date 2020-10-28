@@ -35,22 +35,22 @@
 #include "world.h"
 
 Castle::RumorOfWeek::RumorOfWeek()
-    : week( world.GetWeek() )
-    , rumor( &world.GetRumors() )
+    : _week( world.GetWeek() )
+    , _rumor( &world.GetRumors() )
 {}
 
 const std::string & Castle::RumorOfWeek::get()
 {
-    int currentWeek = world.GetWeek();
-    if ( week != currentWeek ) {
-        week = currentWeek;
+    const int currentWeek = world.GetWeek();
+    if ( _week != currentWeek ) {
+        _week = currentWeek;
         const std::string * currentRumor = &world.GetRumors();
-        while ( rumor == currentRumor ) {
+        while ( _rumor == currentRumor ) {
             currentRumor = &world.GetRumors();
         }
-        rumor = currentRumor;
+        _rumor = currentRumor;
     }
-    return *rumor;
+    return *_rumor;
 }
 
 void Castle::OpenTavern( void )
@@ -59,8 +59,7 @@ void Castle::OpenTavern( void )
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
     const int tavwin = ICN::TAVWIN;
     const std::string & tavern = GetStringBuilding( BUILD_TAVERN );
-    const std::string & message = rumorOfWeek.get();
-    world.GetWeek();
+    const std::string & message = _rumorOfWeek.get();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();

@@ -229,14 +229,14 @@ private:
 
     class RumorOfWeek
     {
-        int week;
-        const std::string * rumor;
-
     public:
         RumorOfWeek();
         const std::string & get();
+
+    private:
+        int _week;
+        const std::string * _rumor;
     };
-    RumorOfWeek rumorOfWeek;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Castle & );
@@ -254,6 +254,7 @@ private:
     MageGuild mageguild;
     u32 dwelling[CASTLEMAXMONSTER];
     Army army;
+    RumorOfWeek _rumorOfWeek;
 };
 
 namespace CastleDialog

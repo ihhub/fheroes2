@@ -44,8 +44,15 @@
 #include "world.h"
 
 Castle::Castle()
-    : Castle( -1, -1, Race::NONE )
-{}
+    : race( Race::NONE )
+    , building( 0 )
+    , captain( *this )
+    , army( NULL )
+    , _rumorOfWeek( RumorOfWeek() )
+{
+    std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
+    army.SetCommander( &captain );
+}
 
 Castle::Castle( s32 cx, s32 cy, int rc )
     : MapPosition( Point( cx, cy ) )
@@ -53,7 +60,7 @@ Castle::Castle( s32 cx, s32 cy, int rc )
     , building( 0 )
     , captain( *this )
     , army( NULL )
-    , rumorOfWeek( RumorOfWeek() )
+    , _rumorOfWeek( RumorOfWeek() )
 {
     std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
     army.SetCommander( &captain );
