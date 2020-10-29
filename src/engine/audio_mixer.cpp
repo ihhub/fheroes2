@@ -434,14 +434,16 @@ void Mixer::Resume( int ch )
     }
 }
 
-u8 Mixer::isPlaying( int chunk )
+u8 Mixer::isPlaying( int chunkNum )
 {
-    const int currentVolume = Music::Volume( -1 ); // -1 is used to get current value without modification
-    if ( currentVolume == 0 ) {
+    const bool isValidChunk = ( 0 <= chunkNum ) && ( chunkNum < static_cast<int>( chunks.size() ) );
+    if ( !isValidChunk ) {
         return 0;
     }
-    const bool isValidChunk = ( 0 <= chunk ) && ( chunk < static_cast<int>( chunks.size() ) );
-    return isValidChunk ? ( chunks[chunk].state & MIX_PLAY ) : 0;
+
+    const chunk_t chunk = chunks[chunkNum];
+    const bool isSilence = ( chunk.volume1 <= 0 ) && ( chunk.volume2 <= 0 );
+    return isSilence ? 0 : ( chunk.state & MIX_PLAY );
 }
 
 u8 Mixer::isPaused( int ch )
