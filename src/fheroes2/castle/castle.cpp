@@ -2277,7 +2277,7 @@ std::string Castle::String( void ) const
         if ( level != 6 && isBuild( DWELLING_MONSTER1 << level ) )
             os << level + 1;
 
-        if ( level && isBuild( DWELLING_UPGRADE2 << ( level - 1 ) ) )
+        if ( level > 0 && isBuild( DWELLING_UPGRADE2 << ( level - 1 ) ) )
             os << "U, ";
         else
             os << ", ";
