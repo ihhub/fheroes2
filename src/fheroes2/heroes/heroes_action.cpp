@@ -1628,7 +1628,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( hero.IsFullBagArtifacts() ) {
         const int object = static_cast<int>( obj );
-        const u32 gold = GoldInsteadArtifact( static_cast<int>( object ) );
+        const u32 gold = GoldInsteadArtifact( object );
         DialogWithGold(
             MP2::StringObject( object ),
             _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, \"I would give you an artifact as a reward, but you're all full.\"" ),
