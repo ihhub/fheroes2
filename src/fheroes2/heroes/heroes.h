@@ -155,8 +155,6 @@ public:
         CUSTOMSKILLS = 0x00020000
     };
 
-    const double SKILL_VALUE = 100.0;
-
     Heroes();
     Heroes( int heroid, int rc );
 
@@ -336,6 +334,11 @@ private:
     // we don't update his direction during movement under the fog so there is a situation
     // when initial hero's sprite is set incorrectly. This function fixes it
     void SetValidDirectionSprite();
+
+    enum
+    {
+        SKILL_VALUE = 100
+    };
 
     std::string name;
     ColorBase killer_color;
