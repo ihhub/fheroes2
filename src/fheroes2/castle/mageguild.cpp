@@ -91,7 +91,7 @@ SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLev
 
 void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
 {
-    if ( hero.HaveSpellBook() && guildLevel ) {
+    if ( hero.HaveSpellBook() && guildLevel > 0 ) {
         // this method will check wisdom requirement
         hero.AppendSpellsToBook( MageGuild::GetSpells( guildLevel, hasLibrary ) );
     }
