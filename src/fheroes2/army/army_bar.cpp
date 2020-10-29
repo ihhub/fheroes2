@@ -372,7 +372,6 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
     }
 
     if ( !destTroop.isEmpty() && destTroop.GetID() == selectedTroop.GetID() ) { // destination troop has units and both troops are the same creature type
-
         if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
             // move all but one units to destination
             destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
