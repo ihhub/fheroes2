@@ -273,7 +273,10 @@ namespace CastleDialog
     void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
 
     void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
-    void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame );
+    void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
+
+    bool RoadConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress );
+    void RedrawRoadConnection( const Castle & castle, const Point & position, const uint32_t buildId, const uint8_t alpha = 255 );
 }
 
 struct VecCastles : public std::vector<Castle *>
