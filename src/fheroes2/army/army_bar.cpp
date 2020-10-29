@@ -377,17 +377,14 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
             destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
             // leave a single unit behind
             selectedTroop.SetCount( 1 );
-
-            return false;
         }
         else { // source has other troops
             // move all troops to the destination slot
             destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() );
             // empty the source slot
             selectedTroop.Reset();
-
-            return false;
         }
+        return false;
     }
 
     // no risk of emptying selected troop's army, swap the troops
