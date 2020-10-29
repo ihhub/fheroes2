@@ -52,7 +52,7 @@ void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToFlotSam( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index );
 void ActionToShrine( Heroes & hero, s32 dst_index );
 void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index );
@@ -1622,15 +1622,14 @@ void ActionToExperienceObject( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
     if ( hero.IsFullBagArtifacts() ) {
-        const int object = static_cast<int>( obj );
-        const u32 gold = GoldInsteadArtifact( object );
+        const u32 gold = GoldInsteadArtifact( obj );
         DialogWithGold(
-            MP2::StringObject( object ),
+            MP2::StringObject( obj ),
             _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, \"I would give you an artifact as a reward, but you're all full.\"" ),
             gold, Dialog::OK );
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
