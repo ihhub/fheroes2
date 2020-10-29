@@ -156,6 +156,9 @@ public:
     void RecruitAllMonsters( void );
     void recruitBestAvailable( Funds budget );
 
+    int getBuildingValue() const;
+    double getVisitValue( const Heroes & hero ) const;
+
     void ChangeColor( int );
 
     void ActionNewDay( void );

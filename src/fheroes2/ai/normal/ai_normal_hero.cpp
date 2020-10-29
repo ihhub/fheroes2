@@ -37,22 +37,42 @@ namespace AI
         return value - ( distance * std::log10( distance ) );
     }
 
-    double GetObjectValue( int color, int index, int objectID )
+    double GetObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore )
     {
         // In the future these hardcoded values could be configured by the mod
+        // 1 tile distance is 100.0 value approximately
         const Maps::Tiles & tile = world.GetTiles( index );
 
         if ( objectID == MP2::OBJ_CASTLE ) {
-            return 2000.0;
+            Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+            if ( !castle )
+                return valueToIgnore;
+
+            if ( hero.GetColor() == castle->GetColor() )
+                return castle->getVisitValue( hero );
+            else
+                return castle->getBuildingValue() * 70.0 + 1250;
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
+            const Heroes * otherHero = tile.GetHeroes();
+            if ( !otherHero )
+                return valueToIgnore;
+
+            if ( hero.GetColor() == otherHero->GetColor() ) {
+                if ( hero.getStatsValue() + 2 > otherHero->getStatsValue() )
+                    return valueToIgnore;
+
+                const double value = hero.getMeetingValue( *otherHero );
+                // limit the max value of friendly hero meeting to 30 tiles
+                return ( value < 200 ) ? valueToIgnore : std::min( value, 3000.0 );
+            }
             return 1700.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {
             return 400.0;
         }
         else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJ_ALCHEMYLAB ) {
-            return 1000.0;
+            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 2000.0 : 1000.0;
         }
         else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
             return 500.0 * tile.QuantityArtifact().getArtifactValue();
@@ -60,11 +80,14 @@ namespace AI
         else if ( MP2::isPickupObject( objectID ) ) {
             return 500.0;
         }
+        else if ( objectID == MP2::OBJ_XANADU ) {
+            return 2000.0;
+        }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
             return 400.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return world.getRegion( tile.GetRegion() ).getFogRatio( color ) * 1500;
+            return world.getRegion( tile.GetRegion() ).getFogRatio( hero.GetColor() ) * 1500;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             return world.getRegion( tile.GetRegion() ).getObjectCount() * 50.0 - 2000;
@@ -79,11 +102,11 @@ namespace AI
 
     int AI::Normal::GetPriorityTarget( const Heroes & hero, int patrolIndex, uint32_t distanceLimit )
     {
-        const int heroColor = hero.GetColor();
         const bool heroInPatrolMode = patrolIndex != -1;
+        const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         int priorityTarget = -1;
 
-        double maxPriority = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
+        double maxPriority = lowestPossibleValue;
         int objectID = MP2::OBJ_ZERO;
 
         // pre-cache the pathfinder
@@ -101,12 +124,12 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                double value = GetObjectValue( heroColor, node.first, node.second );
+                double value = GetObjectValue( hero, node.first, node.second, lowestPossibleValue );
 
                 const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
                 for ( const IndexObject & pair : list ) {
                     if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
-                        value += GetObjectValue( heroColor, pair.first, pair.second );
+                        value += GetObjectValue( hero, pair.first, pair.second, lowestPossibleValue );
                 }
                 value = ScaleWithDistance( value, dist );
 

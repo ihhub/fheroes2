@@ -134,7 +134,14 @@ namespace AI
 
             Heroes * hero = castle->GetHeroes().Guest();
             if ( !hero ) {
-                hero = castle->RecruitHero( rec.GetHero1() );
+                Heroes * firstRecruit = rec.GetHero1();
+                Heroes * secondRecruit = rec.GetHero2();
+                if ( firstRecruit && secondRecruit && secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
+                    hero = castle->RecruitHero( secondRecruit );
+                }
+                else {
+                    hero = castle->RecruitHero( firstRecruit );
+                }
 
                 if ( !slowEarlyGame && hero )
                     ReinforceHeroInCastle( *hero, *castle, kingdom.GetFunds() );
