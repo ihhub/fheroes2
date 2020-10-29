@@ -1627,9 +1627,10 @@ void ActionToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
     if ( hero.IsFullBagArtifacts() ) {
-        const u32 gold = GoldInsteadArtifact( obj );
+        const int object = static_cast<int>( obj );
+        const u32 gold = GoldInsteadArtifact( static_cast<int>( object ) );
         DialogWithGold(
-            MP2::StringObject( obj ),
+            MP2::StringObject( object ),
             _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, \"I would give you an artifact as a reward, but you're all full.\"" ),
             gold, Dialog::OK );
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
@@ -1643,6 +1644,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index )
         hero.PickupArtifact( art );
     }
 
+    Game::PlayPickupSound();
     AnimationRemoveObject( tile );
 
     tile.RemoveObjectSprite();
