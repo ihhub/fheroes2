@@ -276,6 +276,7 @@ private:
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
     void PostLoad( void );
+    void pickRumor();
 
 private:
     friend class Radar;

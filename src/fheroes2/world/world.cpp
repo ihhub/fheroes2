@@ -486,6 +486,15 @@ const Week & World::GetWeekType( void ) const
     return week_current;
 }
 
+void World::pickRumor()
+{
+    const std::string * current = _rumor;
+    while ( current == _rumor ) {
+        // vec_rumors always contain values
+        _rumor = Rand::Get( vec_rumors );
+    }
+}
+
 /* new day */
 void World::NewDay( void )
 {
@@ -493,9 +502,8 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
-        // vec_rumors always contain values
-        _rumor = Rand::Get( vec_rumors );
-        
+        pickRumor();
+
         if ( BeginMonth() )
             ++month;
     }
@@ -614,8 +622,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 const std::string & World::GetRumors( void )
 {
     if ( !_rumor ) {
-        // vec_rumors always contain values
-        _rumor = Rand::Get( vec_rumors );
+        pickRumor();
     }
     return *_rumor;
 }
