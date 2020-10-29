@@ -57,6 +57,7 @@ public:
     payment_t GetUpgradeCost( void ) const;
 
     virtual bool isValid( void ) const;
+    virtual bool isEmpty( void ) const;
     virtual bool isBattle( void ) const;
     virtual bool isModes( u32 ) const;
     virtual std::string GetAttackString( void ) const;
