@@ -51,7 +51,7 @@ namespace AI
             if ( hero.GetColor() == castle->GetColor() )
                 return castle->getVisitValue( hero );
             else
-                return castle->getBuildingValue() * 70.0 + 1250;
+                return castle->getBuildingValue() * 100.0 + 2000;
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
@@ -64,33 +64,33 @@ namespace AI
 
                 const double value = hero.getMeetingValue( *otherHero );
                 // limit the max value of friendly hero meeting to 30 tiles
-                return ( value < 200 ) ? valueToIgnore : std::min( value, 3000.0 );
+                return ( value < 200 ) ? valueToIgnore : std::min( value, 6000.0 );
             }
-            return 1700.0;
+            return 5000.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {
-            return 400.0;
+            return 1500.0;
         }
         else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJ_ALCHEMYLAB ) {
-            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 2000.0 : 1000.0;
+            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 4000.0 : 2000.0;
         }
         else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
-            return 500.0 * tile.QuantityArtifact().getArtifactValue();
+            return 1250.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectID ) ) {
-            return 500.0;
+            return 1000.0;
         }
         else if ( objectID == MP2::OBJ_XANADU ) {
-            return 2000.0;
+            return 3000.0;
         }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
-            return 400.0;
+            return 750.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return world.getRegion( tile.GetRegion() ).getFogRatio( hero.GetColor() ) * 1500;
+            return world.getRegion( tile.GetRegion() ).getFogRatio( hero.GetColor() ) * 3500;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
-            return world.getRegion( tile.GetRegion() ).getObjectCount() * 50.0 - 2000;
+            return world.getRegion( tile.GetRegion() ).getObjectCount() * 100.0 - 3000;
         }
         else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
             // de-prioritize the water movement even harder
