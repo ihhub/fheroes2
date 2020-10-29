@@ -493,6 +493,9 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
+        // vec_rumors always contain values
+        _rumor = Rand::Get( vec_rumors );
+        
         if ( BeginMonth() )
             ++month;
     }
@@ -608,9 +611,13 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-const Rumors & World::GetRumors( void )
+const std::string & World::GetRumors( void )
 {
-    return vec_rumors;
+    if ( !_rumor ) {
+        // vec_rumors always contain values
+        _rumor = Rand::Get( vec_rumors );
+    }
+    return *_rumor;
 }
 
 MapsIndexes World::GetTeleportEndPoints( s32 center ) const

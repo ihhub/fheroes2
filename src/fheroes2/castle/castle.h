@@ -227,18 +227,6 @@ private:
     void JoinRNDArmy( void );
     void PostLoad( void );
 
-    class RumorOfWeek
-    {
-    public:
-        RumorOfWeek();
-        const std::string & get();
-
-    private:
-        int _week;
-        uint32_t _rumorNum;
-        const std::list<std::string> & _rumors;
-    };
-
 private:
     friend StreamBase & operator<<( StreamBase &, const Castle & );
     friend StreamBase & operator>>( StreamBase &, Castle & );
@@ -255,7 +243,6 @@ private:
     MageGuild mageguild;
     u32 dwelling[CASTLEMAXMONSTER];
     Army army;
-    RumorOfWeek _rumorOfWeek;
 };
 
 namespace CastleDialog

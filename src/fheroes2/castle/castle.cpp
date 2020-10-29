@@ -48,7 +48,6 @@ Castle::Castle()
     , building( 0 )
     , captain( *this )
     , army( NULL )
-    , _rumorOfWeek( RumorOfWeek() )
 {
     std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
     army.SetCommander( &captain );
@@ -60,7 +59,6 @@ Castle::Castle( s32 cx, s32 cy, int rc )
     , building( 0 )
     , captain( *this )
     , army( NULL )
-    , _rumorOfWeek( RumorOfWeek() )
 {
     std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
     army.SetCommander( &captain );

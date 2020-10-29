@@ -34,41 +34,13 @@
 #include "text.h"
 #include "world.h"
 
-uint32_t randomIndex( const Rumors & rumors )
-{
-    return Rand::Get( 0, static_cast<uint32_t>( rumors.size() - 1 ) );
-}
-
-Castle::RumorOfWeek::RumorOfWeek()
-    : _week( world.GetWeek() )
-    , _rumorNum( randomIndex( world.GetRumors() ) )
-    , _rumors( world.GetRumors() )
-{}
-
-const std::string & Castle::RumorOfWeek::get()
-{
-    const int currentWeek = world.GetWeek();
-    if ( _week != currentWeek ) {
-        _week = currentWeek;
-        uint32_t currentRumorNum = randomIndex( _rumors );
-        while ( _rumorNum == currentRumorNum ) {
-            currentRumorNum = randomIndex( _rumors );
-        }
-        _rumorNum = currentRumorNum;
-    }
-
-    std::list<std::string>::const_iterator result = _rumors.begin();
-    std::advance( result, _rumorNum );
-    return *result;
-}
-
 void Castle::OpenTavern( void )
 {
     const std::string & header = _( "A generous tip for the barkeep yields the following rumor:" );
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
     const int tavwin = ICN::TAVWIN;
     const std::string & tavern = GetStringBuilding( BUILD_TAVERN );
-    const std::string & message = _rumorOfWeek.get();
+    const std::string & message = world.GetRumors();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();

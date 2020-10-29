@@ -226,7 +226,7 @@ public:
     void NewWeek( void );
     void NewMonth( void );
 
-    const Rumors & GetRumors( void );
+    const std::string & GetRumors( void );
 
     s32 NextTeleport( s32 ) const;
     MapsIndexes GetTeleportEndPoints( s32 ) const;
@@ -290,6 +290,7 @@ private:
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
     Rumors vec_rumors;
+    const std::string * _rumor;
     EventsDate vec_eventsday;
 
     // index, object, color
