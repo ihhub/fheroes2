@@ -555,18 +555,21 @@ int Castle::OpenDialog( bool readonly )
 
                                         for ( CastleDialog::CacheBuildings::const_iterator buildingIt = cacheBuildings.begin(); buildingIt != cacheBuildings.end();
                                               ++buildingIt ) {
-                                            const u32 & build2 = buildingIt->id;
-                                            if ( isBuild( build2 ) ) {
-                                                if ( build2 == BUILD_SHIPYARD ) {
-                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, build2, castleAnimationFrame );
+                                            const uint32_t currentBuildId = it->id;
+                                            if ( isBuild( currentBuildId ) ) {
+                                                if ( currentBuildId == BUILD_SHIPYARD ) {
+                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, currentBuildId, castleAnimationFrame );
                                                     const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
                                                     fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
                                                     const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
                                                     fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
                                                 }
                                                 else {
-                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, build2, castleAnimationFrame );
-                                                    CastleDialog::CastleRedrawBuildingExtended( *this, cur_pt, build2, castleAnimationFrame );
+                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, currentBuildId, castleAnimationFrame );
+                                                    CastleDialog::CastleRedrawBuildingExtended( *this, cur_pt, currentBuildId, castleAnimationFrame );
+                                                    if ( CastleDialog::RoadConnectionNeeded( *this, currentBuildId, false ) ) {
+                                                        CastleDialog::RedrawRoadConnection( *this, cur_pt, currentBuildId );
+                                                    }
                                                 }
                                             }
                                         }

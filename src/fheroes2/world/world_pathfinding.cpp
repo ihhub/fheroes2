@@ -228,7 +228,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
         const PathfindingNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
-        path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost );
+        path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
 
         // Sanity check
         if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
@@ -468,7 +468,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex ) const
         const PathfindingNode & node = _cache[currentNode];
         const uint32_t cost = ( node._from != -1 ) ? node._cost - _cache[node._from]._cost : node._cost;
 
-        path.emplace_front( node._from, Maps::GetDirection( node._from, currentNode ), cost );
+        path.emplace_front( currentNode, node._from, Maps::GetDirection( node._from, currentNode ), cost );
 
         // Sanity check
         if ( node._from != -1 && _cache[node._from]._from == currentNode ) {

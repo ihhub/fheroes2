@@ -246,7 +246,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
         else if ( fadeInfo.object == MP2::OBJ_BOAT ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, fadeInfo.index );
-            BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
+            BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH - 11, mp, false, fadeInfo.alpha );
         }
         else {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeInfo.index );

@@ -372,6 +372,16 @@ u32 Troops::GetUniqueCount( void ) const
     return monsters.size();
 }
 
+double Troops::GetStrength() const
+{
+    double strength = 0;
+    for ( const Troop * troop : *this ) {
+        if ( troop && troop->isValid() )
+            strength += troop->GetStrength();
+    }
+    return strength;
+}
+
 u32 Troops::GetAttack( void ) const
 {
     u32 res = 0;
@@ -549,6 +559,11 @@ Troops Troops::GetOptimized( void ) const
         }
 
     return result;
+}
+
+void Troops::SortStrongest()
+{
+    std::sort( begin(), end(), Army::StrongestTroop );
 }
 
 void Troops::ArrangeForBattle( bool upgrade )
@@ -1230,6 +1245,23 @@ double Army::GetStrength( void ) const
     // composition
 
     return res;
+}
+
+double Army::getReinforcementValue( const Troops & reinforcement ) const
+{
+    Troops combined;
+    combined.Assign( *this );
+    const double initialValue = combined.GetStrength();
+
+    combined.Insert( reinforcement.GetOptimized() );
+    combined.MergeTroops();
+    combined.SortStrongest();
+
+    while ( combined.Size() > ARMYMAXTROOPS ) {
+        combined.PopBack();
+    }
+
+    return combined.GetStrength() - initialValue;
 }
 
 void Army::Reset( bool soft )

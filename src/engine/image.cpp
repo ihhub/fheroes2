@@ -704,7 +704,7 @@ namespace fheroes2
                 const uint8_t * imageOutXEnd = imageOutX + width;
 
                 for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX ) {
-                    if ( *transformInX == 1 ) {
+                    if ( *transformInX == 1 ) { // skip pixel
                         continue;
                     }
 
@@ -738,7 +738,7 @@ namespace fheroes2
                 const uint8_t * imageInXEnd = imageInX + width;
 
                 for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX ) {
-                    if ( *transformInX == 1 ) {
+                    if ( *transformInX == 1 ) { // skip pixel
                         continue;
                     }
 
@@ -854,16 +854,15 @@ namespace fheroes2
                 const uint8_t * imageOutXEnd = imageOutX + width;
 
                 for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX, ++transformOutX ) {
-                    if ( *transformOutX == 1 ) { // copy value
-                        *transformOutX = *transformInX;
-                        *imageOutX = *imageInX;
+                    if ( *transformInX == 1 ) { // skip pixel
+                        continue;
                     }
-                    else if ( *transformInX > 0 ) { // apply a transformation
-                        if ( *transformInX > 1 ) { // 1 is to skip data
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
-                        }
+
+                    if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
+                        *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
                     else { // copy a pixel
+                        *transformOutX = *transformInX;
                         *imageOutX = *imageInX;
                     }
                 }
@@ -887,16 +886,15 @@ namespace fheroes2
                 const uint8_t * imageInXEnd = imageInX + width;
 
                 for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX, ++transformOutX ) {
-                    if ( *transformOutX == 1 ) { // copy value
-                        *transformOutX = *transformInX;
-                        *imageOutX = *imageInX;
+                    if ( *transformInX == 1 ) { // skip pixel
+                        continue;
                     }
-                    else if ( *transformInX > 0 ) { // apply a transformation
-                        if ( *transformInX > 1 ) { // 1 is to skip data
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
-                        }
+
+                    if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
+                        *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
                     else { // copy a pixel
+                        *transformOutX = *transformInX;
                         *imageOutX = *imageInX;
                     }
                 }

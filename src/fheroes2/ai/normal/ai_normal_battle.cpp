@@ -294,6 +294,8 @@ namespace AI
         }
         else {
             // Melee unit decision tree (both flyers and walkers)
+            Board & board = *arena.GetBoard();
+            board.SetPositionQuality( currentUnit );
 
             if ( defensiveTactics ) {
                 // Melee unit - Defensive action
@@ -379,44 +381,27 @@ namespace AI
             else {
                 // Melee unit - Offensive action
                 double maxPriority = attackDistanceModifier * ARENASIZE * -1;
-                double highestStrength = 0;
+                int highestValue = 0;
 
                 for ( const Unit * enemy : enemies ) {
-                    // move node pair consists of move hex index and distance
-                    const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
-                    const double enemyValue = enemy->GetScoreQuality( currentUnit );
-
-                    if ( move.first != -1 && move.second <= currentUnitMoveRange && highestStrength < enemyValue ) {
-                        highestStrength = enemyValue;
-                        target = enemy;
-
-                        if ( currentUnit.isFlying() ) {
-                            // look for valid adjacent hex
-                            const Indexes & around = Board::GetAroundIndexes( *target );
-
-                            int validCell = -1;
-                            for ( const int cell : around ) {
-                                if ( arena.hexIsPassable( cell ) ) {
-                                    validCell = cell;
-                                    break;
-                                }
-                            }
-
-                            // it must have one, otherwise ArenaPathfinder is bugged
-                            if ( validCell == -1 ) {
-                                DEBUG( DBG_AI, DBG_WARN, "Flyer path error while targeting enemy " << enemy->GetName() << ". Check pathfinder." );
-                            }
-                            else {
-                                targetCell = validCell;
-                            }
-                        }
-                        else {
-                            targetCell = move.first;
+                    const Indexes & around = Board::GetAroundIndexes( *enemy );
+                    for ( const int cell : around ) {
+                        const int quality = board.GetCell( cell )->GetQuality();
+                        const uint32_t dist = arena.CalculateMoveDistance( cell );
+                        if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
+                            highestValue = quality;
+                            target = enemy;
+                            targetCell = cell;
+                            break;
                         }
                     }
-                    else if ( target == NULL ) {
-                        // For walking units that don't have a target within reach, pick based on distance priority
-                        const double unitPriority = enemyValue - move.second * attackDistanceModifier;
+
+                    // For walking units that don't have a target within reach, pick based on distance priority
+                    if ( target == NULL ) {
+                        // move node pair consists of move hex index and distance
+                        const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
+
+                        const double unitPriority = enemy->GetScoreQuality( currentUnit ) - move.second * attackDistanceModifier;
                         if ( unitPriority > maxPriority ) {
                             maxPriority = unitPriority;
                             targetCell = move.first;
