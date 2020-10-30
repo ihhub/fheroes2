@@ -467,45 +467,45 @@ int Castle::OpenDialog( bool readonly )
 
         for ( CastleDialog::CacheBuildings::const_iterator it = cacheBuildings.begin(); it != cacheBuildings.end(); ++it ) {
             if ( BUILD_MAGEGUILD & ( *it ).id ) {
-                for ( u32 id = BUILD_MAGEGUILD5; id >= BUILD_MAGEGUILD1; id >>= 1 )
-                    if ( isBuild( id ) && id == ( *it ).id ) {
-                        if ( le.MouseClickLeft( ( *it ).coord ) ) {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            bool noFreeSpaceForMagicBook = false;
+                const int mageGuildLevel = GetLevelMageGuild();
+                if ( ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
+                    if ( le.MouseClickLeft( ( *it ).coord ) ) {
+                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        bool noFreeSpaceForMagicBook = false;
 
-                            if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
-                                if ( heroes.Guard()->IsFullBagArtifacts() ) {
-                                    noFreeSpaceForMagicBook = true;
-                                }
-                                else if ( heroes.Guard()->BuySpellBook( this ) ) {
-                                    need_redraw = true;
-                                }
+                        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
+                            if ( heroes.Guard()->IsFullBagArtifacts() ) {
+                                noFreeSpaceForMagicBook = true;
                             }
-
-                            if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
-                                if ( heroes.Guest()->IsFullBagArtifacts() ) {
-                                    noFreeSpaceForMagicBook = true;
-                                }
-                                else if ( heroes.Guest()->BuySpellBook( this ) ) {
-                                    need_redraw = true;
-                                }
+                            else if ( heroes.Guard()->BuySpellBook( this ) ) {
+                                need_redraw = true;
                             }
-
-                            if ( noFreeSpaceForMagicBook ) {
-                                Dialog::Message(
-                                    "",
-                                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                                    Font::BIG, Dialog::OK );
-                            }
-
-                            OpenMageGuild( heroes );
                         }
-                        else if ( le.MousePressRight( ( *it ).coord ) )
-                            Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
 
-                        if ( le.MouseCursor( ( *it ).coord ) )
-                            msg_status = GetStringBuilding( ( *it ).id );
+                        if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
+                            if ( heroes.Guest()->IsFullBagArtifacts() ) {
+                                noFreeSpaceForMagicBook = true;
+                            }
+                            else if ( heroes.Guest()->BuySpellBook( this ) ) {
+                                need_redraw = true;
+                            }
+                        }
+
+                        if ( noFreeSpaceForMagicBook ) {
+                            Dialog::Message(
+                                "",
+                                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                                Font::BIG, Dialog::OK );
+                        }
+
+                        OpenMageGuild( heroes );
                     }
+                    else if ( le.MousePressRight( ( *it ).coord ) )
+                        Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
+
+                    if ( le.MouseCursor( ( *it ).coord ) )
+                        msg_status = GetStringBuilding( ( *it ).id );
+                }
             }
             else if ( isBuild( ( *it ).id ) ) {
                 if ( le.MouseClickLeft( ( *it ).coord ) ) {
