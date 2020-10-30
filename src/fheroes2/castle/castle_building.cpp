@@ -342,12 +342,12 @@ bool CastleDialog::RoadConnectionNeeded( const Castle & castle, const uint32_t b
 {
     if ( Race::BARB == castle.GetRace() ) {
         if ( buildId & BUILD_MAGEGUILD ) {
-            const int gameGuildLevel = castle.GetLevelMageGuild();
+            const int mageGuildLevel = castle.GetLevelMageGuild();
             if ( constructionInProgress ) {
-                return gameGuildLevel == 0 || buildId > ( BUILD_MAGEGUILD1 << ( gameGuildLevel - 1 ) );
+                return mageGuildLevel == 0 || buildId > ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
             }
             else {
-                return buildId == ( BUILD_MAGEGUILD1 << ( gameGuildLevel - 1 ) );
+                return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
             }
         }
         else if ( buildId == BUILD_THIEVESGUILD ) {
