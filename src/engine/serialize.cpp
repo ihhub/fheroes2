@@ -548,8 +548,7 @@ StreamFile::~StreamFile()
 
 bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
-    const std::string bmode = mode + "b";
-    fp = std::fopen( fn.c_str(), bmode.c_str() );
+    fp = std::fopen( fn.c_str(), mode.c_str() );
     if ( !fp )
         ERROR( fn );
     return fp;
