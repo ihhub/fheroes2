@@ -246,8 +246,8 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
         if ( NULL != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) ) {
             const Maps::FileInfo & fi = conf.CurrentFileInfo();
             Players & players = conf.GetPlayers();
-
-            if ( ( player->GetColor() & fi.AllowHumanColors() ) && ( !Settings::Get().IsGameType( Game::TYPE_MULTI ) || !( player->GetColor() & fi.HumanOnlyColors() ) ) ) {
+            if ( ( player->GetColor() & fi.AllowHumanColors() )
+                 && ( !Settings::Get().IsGameType( Game::TYPE_MULTI ) || !( player->GetColor() & fi.HumanOnlyColors() ) ) ) {
                 u32 humans = players.GetColors( CONTROL_HUMAN, true );
 
                 if ( conf.IsGameType( Game::TYPE_MULTI ) ) {
