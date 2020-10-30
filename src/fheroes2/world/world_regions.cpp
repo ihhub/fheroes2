@@ -185,6 +185,8 @@ double MapRegion::getFogRatio( int color ) const
 
 const MapRegion & World::getRegion( size_t id )
 {
+    // region IDs start from 3
+    id -= REGION_NODE_FOUND;
     if ( id < _regions.size() )
         return _regions[id];
 

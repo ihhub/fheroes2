@@ -1400,11 +1400,9 @@ namespace AI
                     hero.GetKingdom().OddFundsResource( payment );
                 }
             }
-            else
-                // 4,5 - need have skill wisard or leadership,
-                if ( 3 < cond && cond < 6 ) {
-                if ( hero.HasSecondarySkill( tile.QuantitySkill().Skill() ) )
-                    result = true;
+            else if ( 3 < cond && cond < 6 ) {
+                // 4,5 - bypass wisdom and leadership requirement
+                result = true;
             }
             else
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
