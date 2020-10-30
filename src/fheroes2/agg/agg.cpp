@@ -948,7 +948,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::SPELLS:
-                LoadOriginalICN( ICN::SPELLS );
+                LoadOriginalICN( id );
                 _icnVsSprite[id].resize( 66 );
                 for ( uint32_t i = 60; i < 66; ++i ) {
                     int originalIndex = 0;
@@ -1092,8 +1092,9 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 // First sprite has cropped shadow. We copy missing part from another 'almost' identical frame
                 if ( _icnVsSprite[id].size() >= 32 ) {
-                    Copy( _icnVsSprite[id][32], 60, 73, _icnVsSprite[id][1], 60, 73, 14, 13 );
-                    Copy( _icnVsSprite[id][32], 56, 72, _icnVsSprite[id][30], 56, 72, 18, 9 );
+                    const Sprite & in = _icnVsSprite[id][32];
+                    Copy( in, 60, 73, _icnVsSprite[id][1], 60, 73, 14, 13 );
+                    Copy( in, 56, 72, _icnVsSprite[id][30], 56, 72, 18, 9 );
                 }
                 return true;
             case ICN::MONH0028: // phoenix
@@ -1101,6 +1102,25 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() == 1 ) {
                     const Sprite & correctFrame = GetICN( ICN::PHOENIX, 32 );
                     Copy( correctFrame, 60, 73, _icnVsSprite[id][0], 58, 70, 14, 13 );
+                }
+                return true;
+            case ICN::CAVALRYR:
+                LoadOriginalICN( id );
+                // Sprite 23 has incorrect colors, we need to replace them
+                if ( _icnVsSprite[id].size() >= 23 ) {
+                    Sprite & out = _icnVsSprite[id][23];
+                    ReplaceColorId( out, 69, 187 );
+                    ReplaceColorId( out, 71, 195 );
+                    ReplaceColorId( out, 73, 188 );
+                    ReplaceColorId( out, 74, 190 );
+                    ReplaceColorId( out, 75, 193 );
+                    ReplaceColorId( out, 76, 191 );
+                    ReplaceColorId( out, 77, 195 );
+                    ReplaceColorId( out, 80, 195 );
+                    ReplaceColorId( out, 81, 196 );
+                    ReplaceColorId( out, 83, 196 );
+                    ReplaceColorId( out, 84, 197 );
+                    ReplaceColorId( out, 151, 197 );
                 }
                 return true;
             default:
