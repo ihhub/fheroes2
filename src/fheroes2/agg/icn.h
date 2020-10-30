@@ -914,6 +914,8 @@ namespace ICN
         GRAY_FONT,
         GRAY_SMALL_FONT,
 
+        TROLL2MSL,
+
         LASTICN
     };
 

@@ -1123,6 +1123,65 @@ namespace fheroes2
                     ReplaceColorId( out, 151, 197 );
                 }
                 return true;
+            case ICN::TROLLMSL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 1 ) {
+                    Sprite & out = _icnVsSprite[id][0];
+                    // The original sprite contains 2 pixels which are empty
+                    if ( out.width() * out.height() > 188 && out.transform()[147] == 1 && out.transform()[188] == 1 ) {
+                        out.transform()[147] = 0;
+                        out.image()[147] = 22;
+
+                        out.transform()[188] = 0;
+                        out.image()[188] = 24;
+                    }
+                }
+                return true;
+            case ICN::TROLL2MSL:
+                LoadOriginalICN( ICN::TROLLMSL );
+                if ( _icnVsSprite[ICN::TROLLMSL].size() == 1 ) {
+                    _icnVsSprite[id].resize( 1 );
+
+                    Sprite & out = _icnVsSprite[id][0];
+                    out = _icnVsSprite[ICN::TROLLMSL][0];
+
+                    // The original sprite contains 2 pixels which are empty
+                    if ( out.width() * out.height() > 188 && out.transform()[147] == 1 && out.transform()[188] == 1 ) {
+                        out.transform()[147] = 0;
+                        out.image()[147] = 22;
+
+                        out.transform()[188] = 0;
+                        out.image()[188] = 24;
+                    }
+
+                    ReplaceColorId( out, 10, 152 );
+                    ReplaceColorId( out, 11, 153 );
+                    ReplaceColorId( out, 12, 154 );
+                    ReplaceColorId( out, 13, 155 );
+                    ReplaceColorId( out, 14, 155 );
+                    ReplaceColorId( out, 15, 156 );
+                    ReplaceColorId( out, 16, 157 );
+                    ReplaceColorId( out, 17, 158 );
+                    ReplaceColorId( out, 18, 159 );
+                    ReplaceColorId( out, 19, 160 );
+                    ReplaceColorId( out, 20, 160 );
+                    ReplaceColorId( out, 21, 161 );
+                    ReplaceColorId( out, 22, 162 );
+                    ReplaceColorId( out, 23, 163 );
+                    ReplaceColorId( out, 24, 164 );
+                    ReplaceColorId( out, 25, 165 );
+                    ReplaceColorId( out, 26, 166 );
+                    ReplaceColorId( out, 27, 166 );
+                    ReplaceColorId( out, 28, 167 );
+                    ReplaceColorId( out, 29, 168 );
+                    ReplaceColorId( out, 30, 169 );
+                    ReplaceColorId( out, 31, 170 );
+                    ReplaceColorId( out, 32, 171 );
+                    ReplaceColorId( out, 33, 172 );
+                    ReplaceColorId( out, 34, 172 );
+                    ReplaceColorId( out, 35, 173 );
+                }
+                return true;
             default:
                 break;
             }
