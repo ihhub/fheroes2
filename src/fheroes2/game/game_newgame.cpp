@@ -38,13 +38,13 @@
 
 namespace
 {
-    const std::string rolandCampaignDescription[] = {_(
+    const std::string rolandCampaignDescription[] = { _(
         "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
-        " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." )};
+        " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ) };
 
-    const std::string archibaldCampaignDescription[] = {_(
+    const std::string archibaldCampaignDescription[] = { _(
         "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
-        " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." )};
+        " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ) };
 
     std::string ConvertToString( int value )
     {
@@ -100,16 +100,16 @@ namespace
 
     std::vector<Maps::FileInfo> GetRolandCampaign()
     {
-        const std::vector<std::string> maps = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
-                                               "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
+        const std::vector<std::string> maps = { "CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
+                                                "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C" };
 
         return GetCampaignMaps( maps );
     }
 
     std::vector<Maps::FileInfo> GetArchibaldCampaign()
     {
-        const std::vector<std::string> maps = {"CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
-                                               "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C"};
+        const std::vector<std::string> maps = { "CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
+                                                "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C" };
 
         return GetCampaignMaps( maps );
     }
@@ -146,7 +146,7 @@ int Game::NewHotSeat( void )
 
     conf.SetGameType( conf.GameType() | Game::TYPE_HOTSEAT );
 
-    if ( conf.GameType( Game::TYPE_BATTLEONLY ) ) {
+    if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
         world.NewMaps( 10, 10 );
         return StartBattleOnly();
@@ -504,7 +504,7 @@ int Game::NewMulti( void )
 {
     Settings & conf = Settings::Get();
 
-    if ( !( conf.GameType( Game::TYPE_BATTLEONLY ) ) )
+    if ( !( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) )
         conf.SetGameType( Game::TYPE_STANDARD );
 
     // cursor

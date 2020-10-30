@@ -340,7 +340,7 @@ public:
     int MusicVolume( void ) const;
     MusicSource MusicType() const;
 
-    bool GameType( int ) const;
+    bool IsGameType( int ) const;
     int GameType( void ) const;
     void SetGameType( int );
 

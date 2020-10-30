@@ -398,7 +398,7 @@ const settings_t settingsFHeroes2[] = {
         _( "pocketpc: low memory" ),
     },
 
-    {0, NULL},
+    { 0, NULL },
 };
 
 std::string Settings::GetVersion( void )
@@ -1314,7 +1314,7 @@ void Settings::SetMusicType( int v )
 }
 
 /* check game type */
-bool Settings::GameType( int f ) const
+bool Settings::IsGameType( int f ) const
 {
     return ( game_type & f ) != 0;
 }

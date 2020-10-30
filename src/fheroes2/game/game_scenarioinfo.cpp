@@ -77,7 +77,7 @@ size_t GetSelectedMapId()
     Settings & conf = Settings::Get();
 
     MapsFileInfoList lists;
-    if ( PrepareMapsFileInfoList( lists, ( conf.GameType( Game::TYPE_MULTI ) ) ) ) {
+    if ( PrepareMapsFileInfoList( lists, ( conf.IsGameType( Game::TYPE_MULTI ) ) ) ) {
         const std::string & mapName = conf.CurrentFileInfo().name;
         const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
         size_t mapId = 0;
@@ -98,7 +98,7 @@ int Game::ScenarioInfo( void )
     AGG::PlayMusic( MUS::MAINMENU );
 
     MapsFileInfoList lists;
-    if ( !PrepareMapsFileInfoList( lists, ( conf.GameType( Game::TYPE_MULTI ) ) ) ) {
+    if ( !PrepareMapsFileInfoList( lists, ( conf.IsGameType( Game::TYPE_MULTI ) ) ) ) {
         Dialog::Message( _( "Warning" ), _( "No maps available!" ), Font::BIG, Dialog::OK );
         return MAINMENU;
     }
