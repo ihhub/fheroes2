@@ -398,7 +398,7 @@ const settings_t settingsFHeroes2[] = {
         _( "pocketpc: low memory" ),
     },
 
-    { 0, NULL },
+    {0, NULL},
 };
 
 std::string Settings::GetVersion( void )

@@ -30,7 +30,7 @@
 
 namespace
 {
-    Player * _players[KINGDOMMAX + 1] = { NULL };
+    Player * _players[KINGDOMMAX + 1] = {NULL};
     int human_colors = 0;
 
     enum
