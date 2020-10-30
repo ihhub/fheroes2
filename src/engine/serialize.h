@@ -23,11 +23,13 @@
 #ifndef H2SERIALIZE_H
 #define H2SERIALIZE_H
 
+#include <cstdio>
 #include <list>
 #include <map>
 #include <string>
 #include <vector>
 
+#include "endian.h"
 #include "types.h"
 
 struct Point;
@@ -260,7 +262,7 @@ protected:
 
 class StreamFile : public StreamBase
 {
-    SDL_RWops * rw;
+    std::FILE * fp;
 
     StreamFile( const StreamFile & ) {}
 
@@ -272,7 +274,7 @@ public:
     size_t size( void ) const;
     size_t tell( void ) const;
 
-    bool open( const std::string &, const char * mode );
+    bool open( const std::string &, const std::string & mode );
     void close( void );
 
     StreamBuf toStreamBuf( size_t = 0 /* all data */ );
@@ -308,6 +310,18 @@ protected:
 
     u8 get8();
     void put8( char );
+
+private:
+    template<typename T> T get_uint() {
+	T val;
+	if( fp ) std::fread( &val, sizeof(T), 1, fp );
+	else return 0;
+	return val;
+    }
+
+    template<typename T> void put_uint( T val ) {
+	if( fp ) std::fwrite( &val, sizeof(T), 1, fp );
+    }
 };
 
 #endif

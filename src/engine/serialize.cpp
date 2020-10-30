@@ -26,6 +26,7 @@
 #include <sstream>
 #include <string>
 
+#include "endian.h"
 #include "rect.h"
 #include "serialize.h"
 #include "system.h"
@@ -268,11 +269,7 @@ StreamBuf::StreamBuf( size_t sz )
 {
     if ( sz )
         reallocbuf( sz );
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    setbigendian( true ); /* default: hardware endian */
-#else
-    setbigendian( false ); /* default: hardware endian */
-#endif
+    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
 }
 
 StreamBuf::~StreamBuf()
@@ -301,11 +298,7 @@ StreamBuf::StreamBuf( const std::vector<u8> & buf )
     itget = itbeg;
     itput = itend;
     setconstbuf( true );
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    setbigendian( true ); /* default: hardware endian */
-#else
-    setbigendian( false ); /* default: hardware endian */
-#endif
+    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
 }
 
 StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
@@ -319,11 +312,7 @@ StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
     itget = itbeg;
     itput = itend;
     setconstbuf( true );
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    setbigendian( true ); /* default: hardware endian */
-#else
-    setbigendian( false ); /* default: hardware endian */
-#endif
+    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
 }
 
 StreamBuf & StreamBuf::operator=( const StreamBuf & st )
@@ -542,64 +531,14 @@ void StreamBuf::seek( size_t sz )
     itget = itbeg + sz < itend ? itbeg + sz : itend;
 }
 
-/*
-std::ostream & operator<< (std::ostream & os, StreamBuf & sb)
-{
-    const u32 count = sb.sizeg();
-
-    os.unsetf(std::ios::skipws);
-    sb.bigendian() ? StreamBase::putBE32(os, count) : StreamBase::putLE32(os, count);
-
-    if(os.write((char*) sb.itget, count))
-    sb.itget += count;
-
-    return os;
-}
-
-size_t available_count(std::istream & is)
-{
-    const size_t curpos = is.tellg();
-    is.seekg(0, std::ios_base::end);
-    const size_t sizeis = is.tellg();
-    is.seekg(curpos, std::ios_base::beg);
-    return sizeis  > curpos ? sizeis - curpos : 0;
-}
-
-std::istream & operator>> (std::istream & is, StreamBuf & sb)
-{
-    is.unsetf(std::ios::skipws);
-    const u32 count = sb.bigendian() ? StreamBase::getBE32(is) : StreamBase::getLE32(is);
-
-    if(count > available_count(is))
-    {
-    sb.setfail();
-    return is;
-    }
-
-    if(sb.sizep() < count)
-    sb.reallocbuf(count);
-
-    if(is.read((char*) sb.itput, count))
-    sb.itput += count;
-    else
-    sb.setfail();
-
-    return is;
-}
-*/
-
 StreamFile::StreamFile()
-    : rw( NULL )
+    : fp( NULL )
 {}
 
 StreamFile::StreamFile( const std::string & fn, const char * mode )
 {
     open( fn, mode );
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    setbigendian( true ); /* default: hardware endian */
-#else
-    setbigendian( false ); /* default: hardware endian */
-#endif
+    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
 }
 
 StreamFile::~StreamFile()
@@ -607,29 +546,30 @@ StreamFile::~StreamFile()
     close();
 }
 
-bool StreamFile::open( const std::string & fn, const char * mode )
+bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
-    rw = SDL_RWFromFile( fn.c_str(), mode );
-    if ( !rw )
-        ERROR( SDL_GetError() );
-    return rw;
+    const std::string bmode = mode + "b";
+    fp = std::fopen( fn.c_str(), bmode.c_str() );
+    if ( !fp )
+        ERROR( fn );
+    return fp;
 }
 
 void StreamFile::close( void )
 {
-    if ( rw )
-        SDL_RWclose( rw );
-    rw = NULL;
+    if ( fp )
+        std::fclose( fp );
+    fp = NULL;
 }
 
 size_t StreamFile::size( void ) const
 {
-    if ( rw ) {
-        size_t pos = SDL_RWtell( rw );
-        SDL_RWseek( rw, 0, RW_SEEK_END );
-        size_t len = SDL_RWseek( rw, 0, SEEK_END );
-        SDL_RWseek( rw, pos, RW_SEEK_SET );
-        return len;
+    if ( fp ) {
+        long pos = std::ftell( fp );
+        std::fseek( fp, 0, SEEK_END );
+        long len = std::ftell( fp );
+        std::fseek( fp, pos, SEEK_SET );
+        return static_cast<size_t>( len );
     }
     return 0;
 }
@@ -641,24 +581,25 @@ size_t StreamFile::tell( void ) const
 
 void StreamFile::seek( size_t pos )
 {
-    if ( rw )
-        SDL_RWseek( rw, pos, RW_SEEK_SET );
+    if ( fp )
+        std::fseek( fp, static_cast<long>( pos ), SEEK_SET );
 }
 
 size_t StreamFile::sizeg( void ) const
 {
-    if ( rw ) {
-        size_t pos = SDL_RWtell( rw );
-        size_t len = SDL_RWseek( rw, 0, RW_SEEK_END );
-        SDL_RWseek( rw, pos, RW_SEEK_SET );
-        return len - pos;
+    if ( fp ) {
+        long pos = std::ftell( fp );
+        std::fseek( fp, 0, SEEK_END );
+	long len = std::ftell( fp );
+        std::fseek( fp, pos, SEEK_SET );
+        return static_cast<size_t>( len - pos );
     }
     return 0;
 }
 
 size_t StreamFile::tellg( void ) const
 {
-    return rw ? SDL_RWtell( rw ) : 0;
+    return fp ? static_cast<size_t>( std::ftell( fp ) ) : 0;
 }
 
 size_t StreamFile::sizep( void ) const
@@ -673,93 +614,85 @@ size_t StreamFile::tellp( void ) const
 
 void StreamFile::skip( size_t pos )
 {
-    if ( rw )
-        SDL_RWseek( rw, pos, RW_SEEK_CUR );
+    if ( fp )
+        std::fseek( fp, static_cast<long int>( pos ), SEEK_CUR );
 }
 
 u8 StreamFile::get8()
 {
-    u8 ch = '\0';
-    if ( rw )
-        SDL_RWread( rw, &ch, 1, 1 );
-    return ch;
+    return get_uint<uint8_t>();
 }
 
 void StreamFile::put8( char ch )
 {
-    if ( rw )
-        SDL_RWwrite( rw, &ch, 1, 1 );
+    put_uint<char>(ch);
 }
 
-u16 StreamFile::getBE16()
+uint16_t StreamFile::getBE16()
 {
-    return rw ? SDL_ReadBE16( rw ) : 0u;
+    return be16toh( get_uint<uint16_t>() );
 }
 
-u16 StreamFile::getLE16()
+uint16_t StreamFile::getLE16()
 {
-    return rw ? SDL_ReadLE16( rw ) : 0u;
+    return le16toh( get_uint<uint16_t>() );
 }
 
-u32 StreamFile::getBE32()
+uint32_t StreamFile::getBE32()
 {
-    return rw ? SDL_ReadBE32( rw ) : 0u;
+    return be32toh( get_uint<uint32_t>() );
 }
 
-u32 StreamFile::getLE32()
+uint32_t StreamFile::getLE32()
 {
-    return rw ? SDL_ReadLE32( rw ) : 0u;
+    return le32toh( get_uint<uint32_t>() );
 }
 
-void StreamFile::putBE32( u32 val )
+void StreamFile::putBE32( uint32_t val )
 {
-    if ( rw )
-        SDL_WriteBE32( rw, val );
+    put_uint<uint32_t>( htobe32( val ) );
 }
 
-void StreamFile::putLE32( u32 val )
+void StreamFile::putLE32( uint32_t val )
 {
-    if ( rw )
-        SDL_WriteLE32( rw, val );
+    put_uint<uint32_t>( htole32( val) );
 }
 
-void StreamFile::putBE16( u16 val )
+void StreamFile::putBE16( uint16_t val )
 {
-    if ( rw )
-        SDL_WriteBE16( rw, val );
+    put_uint<uint16_t>( htobe16( val ) );
 }
 
-void StreamFile::putLE16( u16 val )
+void StreamFile::putLE16( uint16_t val )
 {
-    if ( rw )
-        SDL_WriteLE16( rw, val );
+    put_uint<uint16_t>( htole16( val ) );
 }
 
-std::vector<u8> StreamFile::getRaw( size_t sz )
+std::vector<uint8_t> StreamFile::getRaw( size_t sz )
 {
-    std::vector<u8> v( sz ? sz : sizeg(), 0 );
-    if ( rw && !v.empty() )
-        SDL_RWread( rw, &v[0], v.size(), 1 );
+    std::vector<uint8_t> v( sz ? sz : sizeg(), 0 );
+    if ( fp && !v.empty() )
+        std::fread( &v[0], v.size(), 1, fp );
     return v;
 }
 
 void StreamFile::putRaw( const char * ptr, size_t sz )
 {
-    if ( rw )
-        SDL_RWwrite( rw, ptr, sz, 1 );
+    if ( fp )
+        std::fwrite( ptr, sz, 1, fp );
 }
 
 StreamBuf StreamFile::toStreamBuf( size_t sz )
 {
     StreamBuf sb;
-    std::vector<u8> buf = getRaw( sz );
+    std::vector<uint8_t> buf = getRaw( sz );
     sb.putRaw( reinterpret_cast<const char *>( &buf[0] ), buf.size() );
     return sb;
 }
 
 std::string StreamFile::toString( size_t sz )
 {
-    const std::vector<u8> buf = getRaw( sz );
-    std::vector<u8>::const_iterator itend = std::find( buf.begin(), buf.end(), 0 );
+    const std::vector<uint8_t> buf = getRaw( sz );
+    std::vector<uint8_t>::const_iterator itend = std::find( buf.begin(), buf.end(), 0 );
     return std::string( buf.begin(), itend != buf.end() ? itend : buf.end() );
 }
