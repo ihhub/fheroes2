@@ -361,22 +361,34 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop1, ArmyTroop & troop2 /* selected */ )
+bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    if ( troop2.GetArmy()->SaveLastTroop() ) {
-        if ( troop1.isValid() )
-            Army::SwapTroops( troop1, troop2 );
+    // destination troop is empty, source army would be emptied by moving all
+    if ( destTroop.isEmpty() && selectedTroop.GetArmy()->SaveLastTroop() ) {
+        // move all but one units into the empty destination slot
+        destTroop.Set( selectedTroop, selectedTroop.GetCount() - 1 );
+        selectedTroop.SetCount( 1 );
+        return false;
     }
-    else {
-        if ( !troop1.isValid() )
-            Army::SwapTroops( troop1, troop2 );
-        else if ( troop1.isValid() && troop1.GetID() == troop2.GetID() ) {
-            troop1.SetCount( troop1.GetCount() + troop2.GetCount() );
-            troop2.Reset();
+
+    if ( !destTroop.isEmpty() && destTroop.GetID() == selectedTroop.GetID() ) { // destination troop has units and both troops are the same creature type
+        if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
+            // move all but one units to destination
+            destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
+            // leave a single unit behind
+            selectedTroop.SetCount( 1 );
         }
-        else
-            Army::SwapTroops( troop1, troop2 );
+        else { // source has other troops
+            // move all troops to the destination slot
+            destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() );
+            // empty the source slot
+            selectedTroop.Reset();
+        }
+        return false;
     }
+
+    // no risk of emptying selected troop's army, swap the troops
+    Army::SwapTroops( destTroop, selectedTroop );
 
     return false; // reset cursor
 }

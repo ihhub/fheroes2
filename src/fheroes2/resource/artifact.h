@@ -223,7 +223,9 @@ public:
 
     void RemoveArtifact( const Artifact & );
     void RemoveScroll( const Artifact & );
+    void exchangeArtifacts( BagArtifacts & giftBag );
 
+    int getArtifactValue() const;
     u32 CountArtifacts( void ) const;
     u32 Count( const Artifact & ) const;
 

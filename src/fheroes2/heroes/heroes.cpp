@@ -495,6 +495,30 @@ int Heroes::GetManaIndexSprite( void ) const
     return 25 >= r ? r : 25;
 }
 
+int Heroes::getStatsValue() const
+{
+    // experience and artifacts don't matter here, only natural stats
+    return attack + defense + power + knowledge + secondary_skills.GetTotalLevel();
+}
+
+double Heroes::getRecruitValue() const
+{
+    return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 2.0 + getStatsValue() ) * SKILL_VALUE );
+}
+
+double Heroes::getMeetingValue( const Heroes & recievingHero ) const
+{
+    const uint32_t artCount = bag_artifacts.CountArtifacts();
+    const uint32_t canFit = HEROESMAXARTIFACT - recievingHero.bag_artifacts.CountArtifacts();
+
+    double artifactValue = bag_artifacts.getArtifactValue() * 2.0;
+    if ( artCount > canFit ) {
+        artifactValue = canFit * ( artifactValue / artCount );
+    }
+
+    return recievingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
+}
+
 int Heroes::GetAttack( void ) const
 {
     return GetAttack( NULL );
@@ -953,6 +977,17 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
     }
+}
+
+void Heroes::markHeroMeeting( int heroID )
+{
+    if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
+        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+}
+
+bool Heroes::hasMetWithHero( int heroID ) const
+{
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HEROES ) );
 }
 
 int Heroes::GetSpriteIndex( void ) const

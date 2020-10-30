@@ -127,6 +127,11 @@ bool Troop::isValid( void ) const
     return Monster::isValid() && count;
 }
 
+bool Troop::isEmpty( void ) const
+{
+    return !isValid();
+}
+
 payment_t Troop::GetCost( void ) const
 {
     return Monster::GetCost() * count;

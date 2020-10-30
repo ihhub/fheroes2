@@ -305,7 +305,7 @@ void Castle::PostLoad( void )
         captain.LoadDefaults( HeroBase::CAPTAIN, race );
 
     // MageGuild
-    mageguild.Builds( race, HaveLibraryCapability() );
+    mageguild.initialize( race, HaveLibraryCapability() );
     // educate heroes and captain
     EducateHeroes();
 
@@ -395,6 +395,55 @@ void Castle::EducateHeroes( void )
         if ( captain.isValid() )
             MageGuildEducateHero( captain );
     }
+}
+
+int Castle::getBuildingValue() const
+{
+    int value = CountBuildings();
+
+    // Additional value for the most important buildings
+    if ( isBuild( BUILD_CASTLE ) )
+        value += 5;
+
+    if ( isBuild( DWELLING_MONSTER6 ) )
+        value += 6;
+
+    if ( race == Race::WRLK && isBuild( DWELLING_UPGRADE7 ) )
+        value += 2;
+
+    // DWELLING_UPGRADE7 resolves to a negative, can't use <= operator
+    for ( uint32_t upgrade = DWELLING_UPGRADE2; upgrade <= DWELLING_UPGRADE6; upgrade <<= 1 ) {
+        if ( isBuild( upgrade ) )
+            ++value;
+    }
+
+    int increase = 1;
+    for ( uint32_t guild = BUILD_MAGEGUILD2; guild <= BUILD_MAGEGUILD5; guild <<= 1 ) {
+        if ( isBuild( guild ) )
+            value += increase;
+        ++increase;
+    }
+
+    return value;
+}
+
+double Castle::getVisitValue( const Heroes & hero ) const
+{
+    double spellValue = 0;
+    const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
+    for ( const Spell & spell : guildSpells ) {
+        if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
+            spellValue += spell.Level() * 250.0;
+        }
+    }
+
+    Troops reinforcement;
+    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
+        if ( isBuild( dw ) )
+            reinforcement.PushBack( Monster( race, GetActualDwelling( dw ) ), getMonstersInDwelling( dw ) );
+    }
+
+    return spellValue + hero.GetArmy().getReinforcementValue( reinforcement );
 }
 
 void Castle::ActionNewDay( void )
@@ -557,7 +606,7 @@ bool Castle::isLibraryBuild( void ) const
 
 void Castle::MageGuildEducateHero( HeroBase & hero ) const
 {
-    mageguild.EducateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+    mageguild.educateHero( hero, GetLevelMageGuild(), isLibraryBuild() );
 }
 
 const char * Castle::GetStringBuilding( u32 build, int race )
@@ -2219,14 +2268,25 @@ std::string Castle::String( void ) const
     const CastleHeroes heroes = GetHeroes();
     const Heroes * hero = NULL;
 
-    os << "name            : " << name << std::endl
-       << "race            : " << Race::String( race ) << std::endl
+    os << "name and type   : " << name << " (" << Race::String( race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
-       << "build           : "
-       << "0x" << std::hex << building << std::dec << std::endl
-       << "present boat    : " << ( PresentBoat() ? "yes" : "no" ) << std::endl
-       << "nearly sea      : " << ( HaveNearlySea() ? "yes" : "no" ) << std::endl
-       << "is castle       : " << ( isCastle() ? "yes" : "no" ) << std::endl
+       << "dwellings       : ";
+
+    for ( uint32_t level = 0; level < 7; ++level ) {
+        // there is no dwelling 7
+        if ( level != 6 && isBuild( DWELLING_MONSTER1 << level ) )
+            os << level + 1;
+
+        if ( level > 0 && isBuild( DWELLING_UPGRADE2 << ( level - 1 ) ) )
+            os << "U, ";
+        else
+            os << ", ";
+    }
+    os << std::endl;
+
+    os << "buildings       : " << CountBuildings() << " (mage guild: " << GetLevelMageGuild() << ")" << std::endl
+       << "coast/has boat  : " << ( HaveNearlySea() ? "yes" : "no" ) << " / " << ( PresentBoat() ? "yes" : "no" ) << std::endl
+       << "is castle       : " << ( isCastle() ? "yes" : "no" ) << " (" << getBuildingValue() << ")" << std::endl
        << "army            : " << army.String() << std::endl;
 
     if ( NULL != ( hero = heroes.Guard() ) ) {

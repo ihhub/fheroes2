@@ -749,6 +749,7 @@ bool MP2::isWeekLife( int obj )
 
     // for AI
     case OBJ_COAST:
+    case OBJ_HEROES:
 
         return true;
 
