@@ -1182,6 +1182,20 @@ namespace fheroes2
                     ReplaceColorId( out, 35, 173 );
                 }
                 return true;
+            case ICN::LOCATORE:
+            case ICN::LOCATORS:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 15 ) {
+                    if ( _icnVsSprite[id][12].width() == 47 ) {
+                        Sprite & out = _icnVsSprite[id][12];
+                        out = Crop( out, 0, 0, out.width() - 1, out.height() );
+                    }
+                    if ( _icnVsSprite[id][15].width() == 47 ) {
+                        Sprite & out = _icnVsSprite[id][15];
+                        out = Crop( out, 0, 0, out.width() - 1, out.height() );
+                    }
+                }
+                return true;
             default:
                 break;
             }
