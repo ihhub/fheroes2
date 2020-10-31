@@ -26,6 +26,7 @@
 #include "agg.h"
 #include "ai.h"
 #include "artifact.h"
+#include "assert.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
@@ -488,6 +489,17 @@ const Week & World::GetWeekType( void ) const
 
 void World::pickRumor()
 {
+    if ( vec_rumors.empty() ) {
+        _rumor = nullptr;
+        assert( 0 );
+        return;
+    }
+    else if ( vec_rumors.size() == 1 ) {
+        _rumor = &vec_rumors.front();
+        assert( 0 );
+        return;
+    }
+
     const std::string * current = _rumor;
     while ( current == _rumor ) {
         // vec_rumors always contain values

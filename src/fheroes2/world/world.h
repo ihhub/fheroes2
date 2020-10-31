@@ -271,7 +271,8 @@ public:
 
 private:
     World()
-        : Size( 0, 0 ){};
+        : Size( 0, 0 )
+        , _rumor( nullptr ){};
     void Defaults( void );
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
