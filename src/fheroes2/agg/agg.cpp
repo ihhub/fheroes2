@@ -727,27 +727,15 @@ namespace fheroes2
 
         std::map<int, std::vector<fheroes2::Sprite> > _icnVsScaledSprite;
 
-        void PrepareICNImages()
-        {
-            if ( _icnVsSprite.empty() ) {
-                _icnVsSprite.resize( ICN::LASTICN );
-            }
-        }
-
-        void PrepareTILImages()
-        {
-            if ( _tilVsImage.empty() ) {
-                _tilVsImage.resize( TIL::LASTTIL );
-            }
-        }
-
         bool IsValidICNId( int id )
         {
             if ( id < 0 ) {
                 return false;
             }
 
-            PrepareICNImages();
+            if ( _icnVsSprite.empty() ) {
+                _icnVsSprite.resize( ICN::LASTICN );
+            }
 
             return static_cast<size_t>( id ) < _icnVsSprite.size();
         }
@@ -758,7 +746,9 @@ namespace fheroes2
                 return false;
             }
 
-            PrepareTILImages();
+            if ( _tilVsImage.empty() ) {
+                _tilVsImage.resize( TIL::LASTTIL );
+            }
 
             return static_cast<size_t>( id ) < _tilVsImage.size();
         }
@@ -958,7 +948,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::SPELLS:
-                LoadOriginalICN( ICN::SPELLS );
+                LoadOriginalICN( id );
                 _icnVsSprite[id].resize( 66 );
                 for ( uint32_t i = 60; i < 66; ++i ) {
                     int originalIndex = 0;
@@ -1102,8 +1092,9 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 // First sprite has cropped shadow. We copy missing part from another 'almost' identical frame
                 if ( _icnVsSprite[id].size() >= 32 ) {
-                    Copy( _icnVsSprite[id][32], 60, 73, _icnVsSprite[id][1], 60, 73, 14, 13 );
-                    Copy( _icnVsSprite[id][32], 56, 72, _icnVsSprite[id][30], 56, 72, 18, 9 );
+                    const Sprite & in = _icnVsSprite[id][32];
+                    Copy( in, 60, 73, _icnVsSprite[id][1], 60, 73, 14, 13 );
+                    Copy( in, 56, 72, _icnVsSprite[id][30], 56, 72, 18, 9 );
                 }
                 return true;
             case ICN::MONH0028: // phoenix
@@ -1111,6 +1102,98 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() == 1 ) {
                     const Sprite & correctFrame = GetICN( ICN::PHOENIX, 32 );
                     Copy( correctFrame, 60, 73, _icnVsSprite[id][0], 58, 70, 14, 13 );
+                }
+                return true;
+            case ICN::CAVALRYR:
+                LoadOriginalICN( id );
+                // Sprite 23 has incorrect colors, we need to replace them
+                if ( _icnVsSprite[id].size() >= 23 ) {
+                    Sprite & out = _icnVsSprite[id][23];
+                    ReplaceColorId( out, 69, 187 );
+                    ReplaceColorId( out, 71, 195 );
+                    ReplaceColorId( out, 73, 188 );
+                    ReplaceColorId( out, 74, 190 );
+                    ReplaceColorId( out, 75, 193 );
+                    ReplaceColorId( out, 76, 191 );
+                    ReplaceColorId( out, 77, 195 );
+                    ReplaceColorId( out, 80, 195 );
+                    ReplaceColorId( out, 81, 196 );
+                    ReplaceColorId( out, 83, 196 );
+                    ReplaceColorId( out, 84, 197 );
+                    ReplaceColorId( out, 151, 197 );
+                }
+                return true;
+            case ICN::TROLLMSL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 1 ) {
+                    Sprite & out = _icnVsSprite[id][0];
+                    // The original sprite contains 2 pixels which are empty
+                    if ( out.width() * out.height() > 188 && out.transform()[147] == 1 && out.transform()[188] == 1 ) {
+                        out.transform()[147] = 0;
+                        out.image()[147] = 22;
+
+                        out.transform()[188] = 0;
+                        out.image()[188] = 24;
+                    }
+                }
+                return true;
+            case ICN::TROLL2MSL:
+                LoadOriginalICN( ICN::TROLLMSL );
+                if ( _icnVsSprite[ICN::TROLLMSL].size() == 1 ) {
+                    _icnVsSprite[id].resize( 1 );
+
+                    Sprite & out = _icnVsSprite[id][0];
+                    out = _icnVsSprite[ICN::TROLLMSL][0];
+
+                    // The original sprite contains 2 pixels which are empty
+                    if ( out.width() * out.height() > 188 && out.transform()[147] == 1 && out.transform()[188] == 1 ) {
+                        out.transform()[147] = 0;
+                        out.image()[147] = 22;
+
+                        out.transform()[188] = 0;
+                        out.image()[188] = 24;
+                    }
+
+                    ReplaceColorId( out, 10, 152 );
+                    ReplaceColorId( out, 11, 153 );
+                    ReplaceColorId( out, 12, 154 );
+                    ReplaceColorId( out, 13, 155 );
+                    ReplaceColorId( out, 14, 155 );
+                    ReplaceColorId( out, 15, 156 );
+                    ReplaceColorId( out, 16, 157 );
+                    ReplaceColorId( out, 17, 158 );
+                    ReplaceColorId( out, 18, 159 );
+                    ReplaceColorId( out, 19, 160 );
+                    ReplaceColorId( out, 20, 160 );
+                    ReplaceColorId( out, 21, 161 );
+                    ReplaceColorId( out, 22, 162 );
+                    ReplaceColorId( out, 23, 163 );
+                    ReplaceColorId( out, 24, 164 );
+                    ReplaceColorId( out, 25, 165 );
+                    ReplaceColorId( out, 26, 166 );
+                    ReplaceColorId( out, 27, 166 );
+                    ReplaceColorId( out, 28, 167 );
+                    ReplaceColorId( out, 29, 168 );
+                    ReplaceColorId( out, 30, 169 );
+                    ReplaceColorId( out, 31, 170 );
+                    ReplaceColorId( out, 32, 171 );
+                    ReplaceColorId( out, 33, 172 );
+                    ReplaceColorId( out, 34, 172 );
+                    ReplaceColorId( out, 35, 173 );
+                }
+                return true;
+            case ICN::LOCATORE:
+            case ICN::LOCATORS:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 15 ) {
+                    if ( _icnVsSprite[id][12].width() == 47 ) {
+                        Sprite & out = _icnVsSprite[id][12];
+                        out = Crop( out, 0, 0, out.width() - 1, out.height() );
+                    }
+                    if ( _icnVsSprite[id][15].width() == 47 ) {
+                        Sprite & out = _icnVsSprite[id][15];
+                        out = Crop( out, 0, 0, out.width() - 1, out.height() );
+                    }
                 }
                 return true;
             default:

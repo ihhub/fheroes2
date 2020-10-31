@@ -937,11 +937,8 @@ std::string EncodeString( const std::string & str, const char * charset )
     char * outbuf1 = new char[outbytesleft];
     char * outbuf2 = outbuf1;
 
-#if defined( __MINGW32__ ) || defined( __MINGW64__ )
-    size_t reslen = iconv( cd, &inbuf, &inbytesleft, &outbuf1, &outbytesleft );
-#else
     size_t reslen = iconv( cd, const_cast<char **>( &inbuf ), &inbytesleft, &outbuf1, &outbytesleft );
-#endif
+
     iconv_close( cd );
 
     if ( reslen != ( size_t )( -1 ) )

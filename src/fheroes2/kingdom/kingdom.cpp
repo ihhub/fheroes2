@@ -379,7 +379,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
     if ( objectID == MP2::OBJ_HEROES ) {
         const Heroes * hero = tile.GetHeroes();
-        return hero && !Players::isFriends( color, hero->GetColor() );
+        return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
     }
 
     if ( MP2::isCaptureObject( objectID ) )

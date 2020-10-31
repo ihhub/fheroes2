@@ -129,7 +129,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
         fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
     }
 
-    // sea anime
+    // Bay animation
     if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) ) {
         fheroes2::Sprite sprite50;
         fheroes2::Sprite sprite51;
@@ -173,9 +173,13 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     // redraw all builds
     if ( BUILD_NOTHING == build ) {
         for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
-            if ( castle.isBuild( ( *it ).id ) ) {
-                CastleDialog::CastleRedrawBuilding( castle, dst_pt, ( *it ).id, frame );
-                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, ( *it ).id, frame );
+            const uint32_t currentBuildId = it->id;
+            if ( castle.isBuild( currentBuildId ) ) {
+                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
+                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
+                if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
+                    CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
+                }
             }
         }
     }
@@ -190,14 +194,22 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                 cursor.Hide();
 
                 for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
-                    const u32 & build2 = ( *it ).id;
+                    const uint32_t currentBuildId = it->id;
 
-                    if ( castle.isBuild( build2 ) ) {
-                        CastleDialog::CastleRedrawBuilding( castle, dst_pt, build2, frame );
-                        CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, build2, frame );
+                    if ( castle.isBuild( currentBuildId ) ) {
+                        CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
+                        CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
+                        if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
+                            CastleDialog::RedrawRoadConnection( castle, dst_pt, build, alpha );
+                            CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
+                        }
                     }
-                    else if ( build2 == build ) {
-                        CastleDialog::CastleRedrawBuilding( castle, dst_pt, build2, buildFrame, alpha );
+                    else if ( currentBuildId == build ) {
+                        CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, buildFrame, alpha );
+                        CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, alpha );
+                        if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, true ) ) {
+                            CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId, alpha );
+                        }
                     }
                 }
 
@@ -284,7 +296,7 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const Point & ds
     }
 }
 
-void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, u32 build, u32 frame )
+void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
 {
     if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
         return;
@@ -299,31 +311,85 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const Po
             const int icn2 = castle.GetICNBoat( castle.GetRace() );
 
             const fheroes2::Sprite & sprite40 = fheroes2::AGG::GetICN( icn2, 0 );
-            CastleDialog::RedrawBuildingSpriteToArea( sprite40, dst_pt.x + sprite40.x(), dst_pt.y + sprite40.y(), max );
+            CastleDialog::RedrawBuildingSpriteToArea( sprite40, dst_pt.x + sprite40.x(), dst_pt.y + sprite40.y(), max, alpha );
 
             if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
                 const fheroes2::Sprite & sprite41 = fheroes2::AGG::GetICN( icn2, index2 );
-                CastleDialog::RedrawBuildingSpriteToArea( sprite41, dst_pt.x + sprite41.x(), dst_pt.y + sprite41.y(), max );
+                CastleDialog::RedrawBuildingSpriteToArea( sprite41, dst_pt.x + sprite41.x(), dst_pt.y + sprite41.y(), max, alpha );
             }
         }
         else {
             if ( const u32 index2 = ICN::AnimationFrame( icn, 0, frame ) ) {
                 const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( icn, index2 );
-                CastleDialog::RedrawBuildingSpriteToArea( sprite3, dst_pt.x + sprite3.x(), dst_pt.y + sprite3.y(), max );
+                CastleDialog::RedrawBuildingSpriteToArea( sprite3, dst_pt.x + sprite3.x(), dst_pt.y + sprite3.y(), max, alpha );
             }
         }
     }
-    else
-        // sorc and anime wel2 or statue
-        if ( Race::SORC == castle.GetRace() && BUILD_WEL2 == build ) {
+    else if ( Race::SORC == castle.GetRace() && BUILD_WEL2 == build ) { // sorc and anime wel2 or statue
         const int icn2 = castle.isBuild( BUILD_STATUE ) ? ICN::TWNSEXT1 : icn;
 
         const fheroes2::Sprite & sprite20 = fheroes2::AGG::GetICN( icn2, 0 );
-        CastleDialog::RedrawBuildingSpriteToArea( sprite20, dst_pt.x + sprite20.x(), dst_pt.y + sprite20.y(), max );
+        CastleDialog::RedrawBuildingSpriteToArea( sprite20, dst_pt.x + sprite20.x(), dst_pt.y + sprite20.y(), max, alpha );
 
         if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
             const fheroes2::Sprite & sprite21 = fheroes2::AGG::GetICN( icn2, index2 );
-            CastleDialog::RedrawBuildingSpriteToArea( sprite21, dst_pt.x + sprite21.x(), dst_pt.y + sprite21.y(), max );
+            CastleDialog::RedrawBuildingSpriteToArea( sprite21, dst_pt.x + sprite21.x(), dst_pt.y + sprite21.y(), max, alpha );
+        }
+    }
+}
+
+bool CastleDialog::RoadConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress )
+{
+    if ( Race::BARB == castle.GetRace() ) {
+        if ( buildId & BUILD_MAGEGUILD ) {
+            const int mageGuildLevel = castle.GetLevelMageGuild();
+            if ( constructionInProgress ) {
+                return mageGuildLevel == 0 || buildId > ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
+            }
+            else {
+                return buildId == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) );
+            }
+        }
+        else if ( buildId == BUILD_THIEVESGUILD ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void CastleDialog::RedrawRoadConnection( const Castle & castle, const Point & position, const uint32_t buildId, const uint8_t alpha )
+{
+    const Rect & roi = CastleGetMaxArea( castle, position );
+    const bool constructionInProgress = alpha < 255;
+
+    if ( Race::BARB == castle.GetRace() ) {
+        if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {
+            if ( buildId & BUILD_MAGEGUILD ) {
+                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_SPEC ) ) )
+                    return;
+            }
+            else if ( buildId == BUILD_SPEC ) {
+                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_MAGEGUILD1 ) ) )
+                    return;
+            }
+
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TWNBEXT2, 0 );
+            CastleDialog::RedrawBuildingSpriteToArea( sprite, position.x + sprite.x(), position.y + sprite.y(), roi, alpha );
+        }
+
+        if ( buildId == DWELLING_MONSTER3 || buildId == BUILD_THIEVESGUILD ) {
+            if ( buildId == DWELLING_MONSTER3 ) {
+                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( BUILD_THIEVESGUILD ) ) )
+                    return;
+            }
+            else if ( buildId == BUILD_THIEVESGUILD ) {
+                if ( ( !constructionInProgress && !castle.isBuild( buildId ) ) || ( !castle.isBuild( DWELLING_MONSTER3 ) ) )
+                    return;
+            }
+
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TWNBEXT3, 0 );
+            CastleDialog::RedrawBuildingSpriteToArea( sprite, position.x + sprite.x(), position.y + sprite.y(), roi, alpha );
         }
     }
 }

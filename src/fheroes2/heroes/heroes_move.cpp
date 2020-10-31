@@ -389,6 +389,10 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
         flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
     }
 
+    // boat sprite have to be shifted so it matches other boats
+    if ( isShipMaster() )
+        dy -= 10;
+
     const fheroes2::Sprite & sprite1 = SpriteHero( *this, sprite_index, false );
     const fheroes2::Sprite & sprite2 = SpriteFlag( *this, flagFrameID, false );
     const fheroes2::Sprite & sprite3 = SpriteShad( *this, sprite_index );
@@ -453,7 +457,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
         dst_pt4.y += oy;
     }
 
-    if ( isShipMaster() && isMoveEnabled() ) {
+    if ( isShipMaster() ) {
         const Directions directions = Direction::All();
         const int filter = DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT;
 

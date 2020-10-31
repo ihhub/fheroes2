@@ -346,10 +346,6 @@ const settings_t settingsFHeroes2[] = {
         _( "battle: high objects are an obstacle for archers" ),
     },
     {
-        Settings::BATTLE_MERGE_ARMIES,
-        _( "battle: merge armies for hero from castle" ),
-    },
-    {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
         _( "battle: skip increase +2 defense" ),
     },
@@ -438,7 +434,6 @@ Settings::Settings()
     , preferably_count_players( 0 )
     , port( DEFAULT_PORT )
 {
-    ExtSetModes( BATTLE_MERGE_ARMIES );
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
     ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
@@ -1755,11 +1750,6 @@ bool Settings::ExtBattleSoftWait( void ) const
 bool Settings::ExtBattleObjectsArchersPenalty( void ) const
 {
     return ExtModes( BATTLE_OBJECTS_ARCHERS_PENALTY );
-}
-
-bool Settings::ExtBattleMergeArmies( void ) const
-{
-    return ExtModes( BATTLE_MERGE_ARMIES );
 }
 
 bool Settings::ExtGameRewriteConfirm( void ) const

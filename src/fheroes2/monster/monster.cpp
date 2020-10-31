@@ -383,7 +383,7 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     case Monster::TROLL:
         return ICN::TROLLMSL;
     case Monster::WAR_TROLL:
-        return ICN::TROLLMSL;
+        return ICN::TROLL2MSL;
     case Monster::ELF:
         return ICN::ELF__MSL;
     case Monster::GRAND_ELF:

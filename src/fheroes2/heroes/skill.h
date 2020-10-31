@@ -119,6 +119,7 @@ namespace Skill
         Secondary * FindSkill( int );
         std::string String( void ) const;
         int Count( void ) const;
+        int GetTotalLevel() const;
         std::vector<Secondary> & ToVector( void );
 
     protected:
