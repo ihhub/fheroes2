@@ -314,11 +314,9 @@ private:
     template <typename T>
     T getUint()
     {
-        T val;
+        T val = 0;
         if ( fp )
             std::fread( &val, sizeof( T ), 1, fp );
-        else
-            return 0;
         return val;
     }
 
