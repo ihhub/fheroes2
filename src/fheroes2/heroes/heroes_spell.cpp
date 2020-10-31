@@ -35,6 +35,8 @@
 #include "spell.h"
 #include "world.h"
 
+#include <assert.h>
+
 namespace
 {
     // Values are extracted from Heroes2 executable
@@ -95,7 +97,15 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
     if ( castle ) {
         Interface::RedrawCastleIcon( *castle, dstx, dsty );
         Text text( castle->GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 48, dsty, 200 );
+
+        if ( VisibleItemCount() > 0 ) {
+            const int32_t heightPerItem = ( rtAreaItems.height - VisibleItemCount() ) / VisibleItemCount();
+            text.Blit( dstx + 48, dsty + ( heightPerItem - text.h() ) / 2, 200 );
+        }
+        else {
+            assert( 0 ); // this should never happen!
+            text.Blit( dstx + 48, dsty, 200 );
+        }
     }
 }
 
