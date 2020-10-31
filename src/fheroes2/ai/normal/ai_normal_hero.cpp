@@ -29,6 +29,9 @@
 
 namespace AI
 {
+    const double lowEfficiencyPenalty = 20000.0;
+    const double underThreatPenalty = 40000.0;
+
     double ScaleWithDistance( double value, uint32_t distance )
     {
         if ( distance == 0 )
@@ -48,10 +51,13 @@ namespace AI
             if ( !castle )
                 return valueToIgnore;
 
-            if ( hero.GetColor() == castle->GetColor() )
-                return castle->getVisitValue( hero );
-            else
+            if ( hero.GetColor() == castle->GetColor() ) {
+                const double value = castle->getVisitValue( hero );
+                std::cout << hero.GetColor() << " " << castle->GetName() << ": " << value << std::endl;
+                return ( value < 2000 ) ? valueToIgnore : value;
+            } else {
                 return castle->getBuildingValue() * 100.0 + 2000;
+            }
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
@@ -69,28 +75,29 @@ namespace AI
             return 5000.0;
         }
         else if ( objectID == MP2::OBJ_MONSTER ) {
-            return 1500.0;
+            return 1000.0;
         }
         else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJ_ALCHEMYLAB ) {
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 4000.0 : 2000.0;
         }
         else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
-            return 1250.0 * tile.QuantityArtifact().getArtifactValue();
+            return 1000.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectID ) ) {
-            return 1000.0;
+            return 850.0;
         }
         else if ( objectID == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
-            return 750.0;
+            return 500.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return world.getRegion( tile.GetRegion() ).getFogRatio( hero.GetColor() ) * 3500;
+            return world.getRegion( tile.GetRegion() ).getFogRatio( hero.GetColor() ) * 3000;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
-            return world.getRegion( tile.GetRegion() ).getObjectCount() * 100.0 - 3000;
+            const int objectCount = world.getRegion( tile.GetRegion() ).getObjectCount();
+            return ( objectCount ) ? objectCount * 100.0 - 3500 : valueToIgnore;
         }
         else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
             // de-prioritize the water movement even harder
@@ -100,7 +107,7 @@ namespace AI
         return 0;
     }
 
-    int AI::Normal::GetPriorityTarget( const Heroes & hero, int patrolIndex, uint32_t distanceLimit )
+    int AI::Normal::getPriorityTarget( const Heroes & hero, int patrolIndex, uint32_t distanceLimit )
     {
         const bool heroInPatrolMode = patrolIndex != -1;
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
@@ -185,7 +192,7 @@ namespace AI
         std::vector<int> objectsToErase;
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
             const int startIndex = hero.GetIndex();
-            const int targetIndex = GetPriorityTarget( hero, patrolCenter, patrolDistance );
+            const int targetIndex = getPriorityTarget( hero, patrolCenter, patrolDistance );
 
             if ( targetIndex != -1 ) {
                 _pathfinder.reEvaluateIfNeeded( hero );

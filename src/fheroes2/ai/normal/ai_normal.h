@@ -27,6 +27,15 @@
 
 namespace AI
 {
+    struct RegionStats
+    {
+        int id = -1;
+        double highestThreat = -1;
+        double averageMonster = -1;
+        int fogCount = 0;
+        std::vector<IndexObject> validObjects;
+    };
+
     class Normal : public Base
     {
     public:
@@ -39,7 +48,7 @@ namespace AI
         void revealFog( const Maps::Tiles & tile );
 
         void HeroesActionComplete( Heroes & hero, int index );
-        int GetPriorityTarget( const Heroes & hero, int patrolIndex = -1, uint32_t distanceLimit = 0 );
+        int getPriorityTarget( const Heroes & hero, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder();
 
     private:

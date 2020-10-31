@@ -1849,7 +1849,7 @@ namespace AI
             const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
             if ( castle ) {
                 if ( hero.GetColor() == castle->GetColor() ) {
-                    return NULL == castle->GetHeroes().Guest() && !hero.isVisited( tile );
+                    return castle->GetHeroes().Guest() == NULL;
                 }
                 else {
                     if ( hero.isFriends( castle->GetColor() ) )
