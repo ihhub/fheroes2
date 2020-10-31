@@ -105,11 +105,11 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
 
         if ( VisibleItemCount() > 0 ) {
             const int32_t heightPerItem = ( rtAreaItems.height - VisibleItemCount() ) / VisibleItemCount();
-            text.Blit( dstx + 48, dsty + ( heightPerItem - text.h() ) / 2, 200 );
+            text.Blit( dstx + 52, dsty + ( heightPerItem - text.h() ) / 2, 196 );
         }
         else {
             assert( 0 ); // this should never happen!
-            text.Blit( dstx + 48, dsty, 200 );
+            text.Blit( dstx + 52, dsty, 196 );
         }
     }
 }
