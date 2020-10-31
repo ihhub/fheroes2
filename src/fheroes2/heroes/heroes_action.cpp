@@ -2449,43 +2449,46 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 
     if ( mons.size() ) {
         // composite sprite
-        u32 ox = 0;
-        const fheroes2::Sprite & br = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+        u32 offsetX = 0;
+        const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
 
         const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
-        fheroes2::Image sf( br.width() * monsterCount + ( monsterCount - 1 ) * 4, br.height() );
-        sf.reset();
+        fheroes2::Image surface( border.width() * monsterCount + ( monsterCount - 1 ) * 4, border.height() );
+        surface.reset();
 
         for ( std::vector<Monster>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
-            fheroes2::Blit( br, sf, ox, 0 );
+            // border
+            fheroes2::Blit( border, surface, offsetX, 0 );
+            // background scenary for each race
             switch ( Monster( *it ).GetRace() ) {
             case Race::KNGT:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), sf, 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), surface, offsetX + 6, 6 );
                 break;
             case Race::BARB:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), sf, 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), surface, offsetX + 6, 6 );
                 break;
             case Race::SORC:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), sf, 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), surface, offsetX + 6, 6 );
                 break;
             case Race::WRLK:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), sf, 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), surface, offsetX + 6, 6 );
                 break;
             case Race::WZRD:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), sf, 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), surface, offsetX + 6, 6 );
                 break;
             case Race::NECR:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), sf, 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), surface, offsetX + 6, 6 );
                 break;
             default:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), sf, 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), surface, offsetX + 6, 6 );
                 break;
             }
+            // upgraded troop
             const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( ( *it ).GetUpgrade().ICNMonh(), 0 );
-            fheroes2::Blit( mon, sf, ox + 6 + mon.x(), 6 + mon.y() );
-            ox += br.width() + 4;
+            fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() );
+            offsetX += border.width() + 4;
         }
-        Dialog::SpriteInfo( MP2::StringObject( obj ), msg1, sf );
+        Dialog::SpriteInfo( MP2::StringObject( obj ), msg1, surface );
 
         if ( Settings::Get().ExtHeroRecalculateMovement() )
             hero.RecalculateMovePoints();
