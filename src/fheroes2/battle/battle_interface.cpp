@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <assert.h>
 #include <algorithm>
+#include <assert.h>
 
 #include "agg.h"
 #include "battle_arena.h"
