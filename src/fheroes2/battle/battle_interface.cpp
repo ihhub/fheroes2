@@ -2726,7 +2726,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     if ( finish < 1 ) {
-        assert(0); // we should never hit this part of the code
+        assert( 0 ); // we should never hit this part of the code
         return;
     }
 
