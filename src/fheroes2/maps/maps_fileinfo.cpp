@@ -680,8 +680,14 @@ bool Maps::FileInfo::isAllowCountPlayers( u32 colors ) const
     return human_only <= colors && colors <= human_only + comp_human;
 }
 
+bool Maps::FileInfo::isSinglePlayerMap( void ) const
+{
+    return !isMultiPlayerMap();
+}
+
 bool Maps::FileInfo::isMultiPlayerMap( void ) const
 {
+    size_t humanOnlyColors = Color::Count( HumanOnlyColors() );
     return 1 < Color::Count( HumanOnlyColors() );
 }
 
@@ -752,11 +758,11 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
     std::sort( lists.begin(), lists.end(), Maps::FileInfo::NameSorting );
     lists.resize( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ) - lists.begin() );
 
-    if ( multi == false ) {
-        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), std::mem_fun_ref( &Maps::FileInfo::isMultiPlayerMap ) );
-        if ( it != lists.begin() )
-            lists.resize( std::distance( lists.begin(), it ) );
-    }
+    // remove multiplayer maps if single-player mode, and vice-versa
+    MapsFileInfoList::iterator it
+        = std::remove_if( lists.begin(), lists.end(), std::mem_fun_ref( multi ? &Maps::FileInfo::isSinglePlayerMap : &Maps::FileInfo::isMultiPlayerMap ) );
+    if ( it != lists.begin() )
+        lists.resize( std::distance( lists.begin(), it ) );
 
     // set preferably count filter
     if ( conf.PreferablyCountPlayers() ) {
