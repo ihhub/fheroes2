@@ -7,8 +7,12 @@
 #elif defined( __FreeBSD__ )
 #include <sys/endian.h>
 
-#elif defined( __WINDOWS__ )
+#elif defined( _WIN32 ) || ( _WIN64 )
 #include <stdlib.h>
+
+#define BIG_ENDIAN    4321
+#define LITTLE_ENDIAN 1234
+#define BYTE_ORDER LITTLE_ENDIAN
 
 #define htobe16( x ) _byteswap_ushort( x )
 #define htole16( x ) ( x )

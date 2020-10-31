@@ -316,16 +316,17 @@ private:
     T getUint()
     {
         T val;
-        if( fp )
+        if ( fp )
             std::fread( &val, sizeof( T ), 1, fp );
-        else return 0;
+        else
+            return 0;
         return val;
     }
 
     template <typename T>
     void putUint( T val )
     {
-        if( fp )
+        if ( fp )
             std::fwrite( &val, sizeof( T ), 1, fp );
     }
 };
