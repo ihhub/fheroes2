@@ -66,19 +66,24 @@ class CastleIndexListBox : public Interface::ListBox<s32>
 public:
     CastleIndexListBox( const Point & pt, int & res )
         : Interface::ListBox<s32>( pt )
-        , result( res ){}
+        , result( res )
+    {}
 
-    void RedrawItem( const s32 &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    virtual void RedrawItem( const s32 &, s32, s32, bool ) override;
+    virtual void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void ){}
-    void ActionCurrentDn( void ){}
-    void ActionListDoubleClick( s32 & )
+    virtual void ActionCurrentUp( void ) override {}
+
+    virtual void ActionCurrentDn( void ) override {}
+
+    virtual void ActionListDoubleClick( s32 & ) override
     {
         result = Dialog::OK;
     }
-    void ActionListSingleClick( s32 & ){}
-    void ActionListPressRight( int32_t & index )
+
+    virtual void ActionListSingleClick( s32 & ) override {}
+
+    virtual void ActionListPressRight( int32_t & index ) override
     {
         const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
         if ( castle != nullptr ) {
@@ -527,8 +532,8 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;
-    btnGroups.createButton( area.x, area.y + 170, ICN::REQUEST, 1, 2, Dialog::OK );
-    btnGroups.createButton( area.x + 182, area.y + 170, ICN::REQUEST, 3, 4, Dialog::CANCEL );
+    btnGroups.createButton( area.x, area.y + 172, ICN::REQUEST, 1, 2, Dialog::OK );
+    btnGroups.createButton( area.x + 182, area.y + 172, ICN::REQUEST, 3, 4, Dialog::CANCEL );
     btnGroups.draw();
 
     cursor.Show();
