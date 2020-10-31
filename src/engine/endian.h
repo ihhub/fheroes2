@@ -7,10 +7,10 @@
 #elif defined( __FreeBSD__ )
 #include <sys/endian.h>
 
-#elif defined( _WIN32 ) || ( _WIN64 )
+#elif defined( _WIN32 ) || defined( _WIN64 )
 #include <stdlib.h>
 
-#define BIG_ENDIAN    4321
+#define BIG_ENDIAN 4321
 #define LITTLE_ENDIAN 1234
 #define BYTE_ORDER LITTLE_ENDIAN
 
