@@ -441,7 +441,7 @@ u8 Mixer::isPlaying( int chunkNum )
         return 0;
     }
 
-    const chunk_t chunk = chunks[chunkNum];
+    const chunk_t & chunk = chunks[chunkNum];
     const bool isSilence = ( chunk.volume1 <= 0 ) && ( chunk.volume2 <= 0 );
     return isSilence ? 0 : ( chunk.state & MIX_PLAY );
 }
