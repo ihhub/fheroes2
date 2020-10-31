@@ -26,7 +26,7 @@
 #include <sstream>
 #include <string>
 
-#include "endian.h"
+#include "endian_h2.h"
 #include "rect.h"
 #include "serialize.h"
 #include "system.h"

@@ -1,5 +1,5 @@
-#ifndef ENDIAN_H
-#define ENDIAN_H
+#ifndef ENDIAN_H2_H
+#define ENDIAN_H2_H
 
 #if defined( __linux__ ) || defined( __MINGW32__ )
 #include <endian.h>

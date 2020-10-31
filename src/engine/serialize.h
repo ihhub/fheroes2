@@ -29,7 +29,6 @@
 #include <string>
 #include <vector>
 
-#include "endian.h"
 #include "types.h"
 
 struct Point;
