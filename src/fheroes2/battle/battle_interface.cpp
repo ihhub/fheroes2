@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <assert.h>
 #include <algorithm>
 
 #include "agg.h"
@@ -2724,9 +2725,10 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
         }
     }
 
-    // if unit deal 0 damage
-    if ( finish == 0 )
+    if ( finish < 1 ) {
+        assert(0); // we should never hit this part of the code
         return;
+    }
 
     // targets damage animation loop
     while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) ) {
