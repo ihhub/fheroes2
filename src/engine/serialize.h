@@ -312,15 +312,21 @@ protected:
     void put8( char );
 
 private:
-    template<typename T> T get_uint() {
-	T val;
-	if( fp ) std::fread( &val, sizeof(T), 1, fp );
-	else return 0;
-	return val;
+    template <typename T>
+    T getUint()
+    {
+        T val;
+        if( fp )
+            std::fread( &val, sizeof( T ), 1, fp );
+        else return 0;
+        return val;
     }
 
-    template<typename T> void put_uint( T val ) {
-	if( fp ) std::fwrite( &val, sizeof(T), 1, fp );
+    template <typename T>
+    void putUint( T val )
+    {
+        if( fp )
+            std::fwrite( &val, sizeof( T ), 1, fp );
     }
 };
 
