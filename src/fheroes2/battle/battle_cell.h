@@ -106,6 +106,7 @@ namespace Battle
         void Swap( void );
         bool isReflect( void ) const;
         bool isValid( void ) const;
+        bool contains( int cellIndex ) const;
 
         static Position GetCorrect( const Unit &, s32 );
 
