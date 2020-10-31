@@ -1582,7 +1582,7 @@ bool Castle::BuyBuilding( u32 build )
 }
 
 /* draw image castle to position */
-void Castle::DrawImageCastle( const Point & pt )
+void Castle::DrawImageCastle( const Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::Tiles & tile = world.GetTiles( GetIndex() );

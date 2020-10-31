@@ -64,19 +64,26 @@ class CastleIndexListBox : public Interface::ListBox<s32>
 public:
     CastleIndexListBox( const Point & pt, int & res )
         : Interface::ListBox<s32>( pt )
-        , result( res ){};
+        , result( res ){}
 
     void RedrawItem( const s32 &, s32, s32, bool );
     void RedrawBackground( const Point & );
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
+    void ActionCurrentUp( void ){}
+    void ActionCurrentDn( void ){}
     void ActionListDoubleClick( s32 & )
     {
         result = Dialog::OK;
-    };
-    void ActionListSingleClick( s32 & ){};
-    void ActionListPressRight( s32 & ){};
+    }
+    void ActionListSingleClick( s32 & ){}
+    void ActionListPressRight( int32_t & index )
+    {
+        const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+        if ( castle != nullptr ) {
+            Cursor::Get().Hide();
+            Dialog::QuickInfo( *castle );
+        }
+    }
 
     int & result;
 };
@@ -86,8 +93,9 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
     const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
 
     if ( castle ) {
+        Interface::RedrawCastleIcon( *castle, dstx, dsty );
         Text text( castle->GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 10, dsty );
+        text.Blit( dstx + 48, dsty, 200 );
     }
 }
 
@@ -96,20 +104,53 @@ void CastleIndexListBox::RedrawBackground( const Point & dst )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     Text text( _( "Town Portal" ), Font::YELLOW_BIG );
-    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 6 );
+    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 5 );
 
     text.Set( _( "Select town to port to." ), Font::BIG );
-    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 30 );
+    text.Blit( dst.x + 140 - text.w() / 2, dst.y + 25 );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 0 ), display, dst.x + 2, dst.y + 55 );
-    for ( u32 ii = 1; ii < 5; ++ii )
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 1 ), display, dst.x + 2, dst.y + 55 + ( ii * 19 ) );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 2 ), display, dst.x + 2, dst.y + 145 );
+    int32_t totalHeight = rtAreaItems.height + 6;
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 7 ), display, dst.x + 256, dst.y + 75 );
-    for ( u32 ii = 1; ii < 3; ++ii )
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 8 ), display, dst.x + 256, dst.y + 74 + ( ii * 19 ) );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + 256, dst.y + 126 );
+    int32_t offsetY = 45;
+    const fheroes2::Sprite & upperPart = fheroes2::AGG::GetICN( ICN::LISTBOX, 0 );
+    const fheroes2::Sprite & middlePart = fheroes2::AGG::GetICN( ICN::LISTBOX, 1 );
+    const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( ICN::LISTBOX, 2 );
+
+    fheroes2::Blit( upperPart, display, dst.x + 2, dst.y + offsetY );
+
+    offsetY += upperPart.height();
+
+    int32_t middlePartCount = ( totalHeight - upperPart.height() - lowerPart.height() + middlePart.height() - 1 ) / middlePart.height();
+
+    for ( int32_t i = 0; i < middlePartCount; ++i ) {
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 1 ), display, dst.x + 2, dst.y + offsetY );
+        offsetY += middlePart.height();
+    }
+
+    fheroes2::Blit( lowerPart, display, dst.x + 2, dst.y + totalHeight - lowerPart.height() + 45 );
+
+    const fheroes2::Sprite & upperScrollbarArrow = fheroes2::AGG::GetICN( ICN::LISTBOX, 3 );
+    const fheroes2::Sprite & lowerScrollbarArrow = fheroes2::AGG::GetICN( ICN::LISTBOX, 5 );
+
+    totalHeight = rtAreaItems.height + 7 - upperScrollbarArrow.height() - lowerScrollbarArrow.height();
+
+    const fheroes2::Sprite & upperScrollbar = fheroes2::AGG::GetICN( ICN::LISTBOX, 7 );
+    const fheroes2::Sprite & middleScrollbar = fheroes2::AGG::GetICN( ICN::LISTBOX, 8 );
+    const fheroes2::Sprite & lowerScrollbar = fheroes2::AGG::GetICN( ICN::LISTBOX, 9 );
+
+    offsetY = upperScrollbarArrow.height() + 44;
+    fheroes2::Blit( upperScrollbar, display, dst.x + 256, dst.y + offsetY );
+    offsetY += upperScrollbar.height();
+
+    middlePartCount = ( totalHeight - upperScrollbar.height() - lowerScrollbar.height() + middleScrollbar.height() - 1 ) / middleScrollbar.height();
+
+    for ( int32_t i = 0; i < middlePartCount; ++i ) {
+        fheroes2::Blit( middleScrollbar, display, dst.x + 256, dst.y + offsetY );
+        offsetY += middleScrollbar.height();
+    }
+
+    offsetY = upperScrollbarArrow.height() + 44 + totalHeight - lowerScrollbar.height();
+    fheroes2::Blit( lowerScrollbar, display, dst.x + 256, dst.y + offsetY );
 }
 
 bool Heroes::ActionSpellCast( const Spell & spell )
@@ -466,13 +507,13 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     CastleIndexListBox listbox( area, result );
 
-    listbox.RedrawBackground( area );
-    listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( area.x + 256, area.y + 55 ) );
+    listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
     listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 145 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( area.x + 260, area.y + 78, 14, 64 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 75 ) );
     listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 60, 250, 100 ) );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 116 ) );
     listbox.SetListContent( castles );
+    listbox.RedrawBackground( area );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;
