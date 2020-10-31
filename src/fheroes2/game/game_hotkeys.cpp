@@ -279,7 +279,7 @@ void Game::HotKeysDefaults( void )
     // key_events[EVENT_EMULATETOGGLE] = KEY_NONE;
     // switch group
     // key_events[EVENT_SWITCHGROUP] = KEY_NONE;
-#ifdef VITA
+#ifdef WITH_GAMEPAD
     // scroll
     key_events[EVENT_SCROLLLEFT] = KEY_KP4;
     key_events[EVENT_SCROLLRIGHT] = KEY_KP6;

@@ -59,13 +59,3 @@
 
 # build directory
 build
-
-# vscode
-.vscode
-
-# vita specific
-*.bin
-*.elf
-*.velf
-*.vpk
-*.sfo

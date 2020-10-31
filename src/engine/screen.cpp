@@ -117,7 +117,7 @@ namespace
 
 namespace
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( VITA )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( WITH_GAMEPAD )
     class RenderCursor : public fheroes2::Cursor
     {
     public:
@@ -570,7 +570,7 @@ namespace
 #elif defined( __WIN32__ ) || defined( ANDROID )
             return SDL_RENDERER_ACCELERATED;
 #else
-            return SDL_RENDERER_ACCELERATED;
+        return SDL_RENDERER_ACCELERATED;
 #endif
         }
 
@@ -887,12 +887,12 @@ namespace
 
         bool GetVitaKeepAspectRatio() const override
         {
-            return vitaKeepAspectRatio;
+            return keepAspectRatio;
         }
 
         void SetVitaKeepAspectRatio( bool keepAspect ) override
         {
-            vitaKeepAspectRatio = keepAspect;
+            keepAspectRatio = keepAspect;
         }
 
         virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
@@ -921,7 +921,7 @@ namespace
                     // resize to fullscreen
                     SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
 
-                    if ( vitaKeepAspectRatio ) {
+                    if ( keepAspectRatio ) {
                         if ( ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / fheroes2::Display::VITA_FULLSCREEN_HEIGHT )
                              >= ( static_cast<float>( width_ ) / height_ ) ) {
                             float scale = static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) / height_;
@@ -957,7 +957,7 @@ namespace
         }
 
     private:
-        bool vitaKeepAspectRatio;
+        bool keepAspectRatio;
     };
 #endif
 }

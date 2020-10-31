@@ -271,7 +271,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     bool redraw = true;
 
 #ifdef VITA
-    le.VitaTextInputActive( true );
+    le.DPadTextInputActive( true );
 #endif
 
     // message loop
@@ -319,7 +319,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     cursor.Hide();
 
 #ifdef VITA
-    le.VitaTextInputActive( false );
+    le.DPadTextInputActive( false );
 #endif
 
     return !res.empty();

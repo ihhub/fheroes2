@@ -402,7 +402,7 @@ const settings_t settingsFHeroes2[] = {
         _( "pocketpc: low memory" ),
     },
 
-    {0, NULL},
+    { 0, NULL },
 };
 
 std::string Settings::GetVersion( void )
@@ -424,8 +424,10 @@ Settings::Settings()
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
+#ifdef WITH_GAMEPAD
+    , gamepad_pointer_speed( 10 )
+#endif
 #ifdef VITA
-    , vita_pointer_speed( 10 )
     , vita_keep_aspect_ratio( 1 )
 #endif
     , heroes_speed( DEFAULT_SPEED_DELAY )
@@ -752,16 +754,17 @@ bool Settings::Read( const std::string & filename )
     }
 #endif
 
-#ifdef VITA
-    if ( config.Exists( "vita_pointer_speed" ) ) {
-        vita_pointer_speed = config.IntParams( "vita_pointer_speed" );
-        if ( vita_pointer_speed > 100 )
-            vita_pointer_speed = 100;
-        if ( vita_pointer_speed < 0 )
-            vita_pointer_speed = 0;
-        LocalEvent::Get().SetVitaPointerSpeed( vita_pointer_speed );
+#ifdef WITH_GAMEPAD
+    if ( config.Exists( "gamepad_pointer_speed" ) ) {
+        gamepad_pointer_speed = config.IntParams( "gamepad_pointer_speed" );
+        if ( gamepad_pointer_speed > 100 )
+            gamepad_pointer_speed = 100;
+        else if ( gamepad_pointer_speed < 0 )
+            gamepad_pointer_speed = 0;
+        le.SetGamepadPointerSpeed( gamepad_pointer_speed );
     }
-
+#endif
+#ifdef VITA
     if ( config.Exists( "vita_keep_aspect_ratio" ) ) {
         vita_keep_aspect_ratio = config.IntParams( "vita_keep_aspect_ratio" );
         fheroes2::engine().SetVitaKeepAspectRatio( vita_keep_aspect_ratio );
@@ -820,7 +823,7 @@ bool Settings::Save( const std::string & filename ) const
 
     std::fstream file;
 #ifdef VITA
-    std::string vita_filename = "ux0:data/fheroes2/" + filename;
+    const std::string vita_filename = "ux0:data/fheroes2/" + filename;
     file.open( vita_filename.data(), std::fstream::out | std::fstream::trunc );
 #else
     file.open( filename.data(), std::fstream::out | std::fstream::trunc );
@@ -928,10 +931,12 @@ std::string Settings::String( void ) const
         os << "lang = " << force_lang << std::endl;
 #endif
 
-#ifdef VITA
-    os << std::endl << "# vita pointer speed" << std::endl;
-    os << "vita_pointer_speed = " << vita_pointer_speed << std::endl;
+#ifdef WITH_GAMEPAD
+    os << std::endl << "# gamepad pointer speed" << std::endl;
+    os << "gamepad_pointer_speed = " << gamepad_pointer_speed << std::endl;
+#endif
 
+#ifdef VITA
     os << std::endl << "# vita keep aspect ratio" << std::endl;
     os << "vita_keep_aspect_ratio = " << vita_keep_aspect_ratio << std::endl;
 #endif

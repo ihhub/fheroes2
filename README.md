@@ -46,7 +46,7 @@ Text input is done with D-Pad.
 
 ## Vita specific options
 
-Pointer movement speed can be changed with 'vita_pointer_speed' parameter in "ux0:data/fheroes2/fheroes2.cfg".
+Pointer movement speed can be changed with 'gamepad_pointer_speed' parameter in "ux0:data/fheroes2/fheroes2.cfg".
 
 Use "fullscreen = on" option to scale game area to native Vita resolution or "fullscreen = off" to keep game area at the center of the screen.
 

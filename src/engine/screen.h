@@ -53,9 +53,18 @@ namespace fheroes2
         virtual void setIcon( const Image & ) {}
 
 #ifdef VITA
-        virtual void SetVitaKeepAspectRatio( bool keepAspect ) {};
-        virtual bool GetVitaKeepAspectRatio() const {};
-        virtual fheroes2::Rect GetVitaDestRect() const {};
+        virtual void SetVitaKeepAspectRatio( bool keepAspect ) {}
+
+        virtual bool GetVitaKeepAspectRatio() const
+        {
+            return false;
+        }
+
+        virtual fheroes2::Rect GetVitaDestRect() const
+        {
+            fheroes2::Rect rect;
+            return rect;
+        }
 #endif
 
     protected:

@@ -441,8 +441,8 @@ private:
     int ai_speed;
     int scroll_speed;
     int battle_speed;
+    int gamepad_pointer_speed;
 #ifdef VITA
-    int vita_pointer_speed;
     int vita_keep_aspect_ratio;
 #endif
     int game_type;

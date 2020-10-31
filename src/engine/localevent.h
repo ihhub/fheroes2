@@ -27,6 +27,10 @@
 #include "thread.h"
 #include "types.h"
 
+#ifdef WITH_GAMEPAD
+#include "SDL.h"
+#endif
+
 enum KeySym
 {
     KEY_NONE = -1,
@@ -275,14 +279,20 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
-#ifdef VITA
-    void SetVitaPointerSpeed( int newSpeed )
+#ifdef WITH_GAMEPAD
+    void OpenGamepad();
+    void CloseGamepad();
+
+    void SetGamepadPointerSpeed( float newSpeed )
     {
-        vitaPointerSpeed = newSpeed / VITA_SPEED_MOD;
+        gamepadPointerSpeed = newSpeed / GAMEPAD_SPEED_MOD;
     }
-    void VitaTextInputActive( bool active )
+#endif
+
+#ifdef VITA
+    void DPadTextInputActive( bool active )
     {
-        vitaInputActive = active;
+        dpadInputActive = active;
     }
 #endif
 
@@ -342,7 +352,7 @@ private:
 
     SDL::Time clock;
     u32 clock_delay;
-    int loop_delay;
+    uint32_t loop_delay;
 
     // These members are used for restoring music and sounds when an user reopens the window
     bool _isHiddenWindow;
@@ -360,25 +370,41 @@ private:
     KeySym emulate_press_right;
 #endif
 
-#ifdef VITA
-    void HandleJoyAxisEvent( const SDL_JoyAxisEvent & motion );
-    void HandleJoyButtonEvent( const SDL_JoyButtonEvent & button );
-    void ProcessAxisMotion( void );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+#if defined( VITA ) || defined( WITH_GAMEPAD )
+    float xAxisFloat = 0;
+    float yAxisFloat = 0;
 #endif
-    const float VITA_SPEED_MOD = 2000000.0f;
-    const float VITA_AXIS_SPEEDUP = 1.03f;
 
-    bool vitaInputActive = false;
-    float vitaPointerSpeed = 10.0f / VITA_SPEED_MOD;
+#ifdef WITH_GAMEPAD
+    enum
+    {
+        JOY_L_DEADZONE = 1000,
+        JOY_R_DEADZONE = 25000
+    };
+
+    SDL_GameController * gameController = nullptr;
+
+    void HandleJoyAxisEvent( const SDL_ControllerAxisEvent & motion );
+    void HandleJoyButtonEvent( const SDL_ControllerButtonEvent & button );
+    void ProcessAxisMotion( void );
+
+    const float GAMEPAD_SPEED_MOD = 2000000.0f;
+    const float GAMEPAD_AXIS_SPEEDUP = 1.03f;
+
+    float gamepadPointerSpeed = 10.0f / GAMEPAD_SPEED_MOD;
 
     int16_t xAxisLValue = 0;
     int16_t yAxisLValue = 0;
-    float xAxisFloat = 0;
-    float yAxisFloat = 0;
-    bool secondTouchDown = false;
+    int16_t xAxisRValue = 0;
+    int16_t yAxisRValue = 0;
     uint32_t lastTime = 0;
+    bool gamepadScrollActive = false;
+#endif
+
+#if VITA
+    void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+    bool secondTouchDown = false;
+    bool dpadInputActive = false;
 #endif
 };
 

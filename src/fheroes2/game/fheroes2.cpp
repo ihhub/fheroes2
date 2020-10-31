@@ -44,6 +44,7 @@
 #include <psp2/kernel/processmgr.h>
 #include <psp2/power.h>
 
+// allocating memory for application on Vita
 int _newlib_heap_size_user = 192 * 1024 * 1024;
 #endif
 
@@ -126,8 +127,8 @@ int main( int argc, char ** argv )
         subsystem |= INIT_CDROM | INIT_AUDIO;
 #endif
 
-#ifdef VITA
-    subsystem |= INIT_JOYSTICK;
+#ifdef WITH_GAMEPAD
+    subsystem |= INIT_GAMECONTROLLER;
 #endif
 
     if ( SDL::Init( subsystem ) )

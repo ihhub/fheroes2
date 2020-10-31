@@ -27,10 +27,6 @@
 #include <locale>
 #include <sstream>
 
-#ifdef VITA
-#include <psp2/io/stat.h>
-#endif
-
 #if defined( ANDROID ) || defined( _MSC_VER )
 #include <clocale>
 #endif
@@ -39,8 +35,8 @@
 #include <SDL.h>
 
 #if defined( __MINGW32CE__ ) || defined( __MINGW32__ ) || defined( _MSC_VER )
-#include <windows.h>
 #include <shellapi.h>
+#include <windows.h>
 #endif
 
 #if !defined( __MINGW32CE__ ) && !defined( _MSC_VER )
@@ -103,11 +99,11 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
 
 std::string System::GetHomeDirectory( const std::string & prog )
 {
-    std::string res;
 #ifdef VITA
-    res = "ux0:data/fheroes2";
-    return res;
+    return "ux0:data/fheroes2";
 #endif
+
+    std::string res;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     char * path = SDL_GetPrefPath( "", prog.c_str() );
@@ -327,7 +323,7 @@ std::string System::GetTime( void )
 {
     time_t raw;
     struct tm * tmi;
-    char buf[13] = {0};
+    char buf[13] = { 0 };
 
     std::time( &raw );
     tmi = std::localtime( &raw );
@@ -389,7 +385,7 @@ int System::Unlink( const std::string & file )
 int System::CreateTrayIcon( bool fl )
 {
 #if defined( __MINGW32CE__ ) && defined( ID_ICON )
-    NOTIFYICONDATA nid = {0};
+    NOTIFYICONDATA nid = { 0 };
     nid.cbSize = sizeof( nid );
     nid.uID = ID_ICON;
     nid.hWnd = SDL_Window;

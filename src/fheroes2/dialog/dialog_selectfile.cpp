@@ -263,7 +263,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     bool is_limit = false;
 
 #ifdef VITA
-    le.VitaTextInputActive( true );
+    le.DPadTextInputActive( true );
 #endif
 
     while ( le.HandleEvents() && result.empty() ) {
@@ -335,7 +335,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     cursor.Hide();
 
 #ifdef VITA
-    le.VitaTextInputActive( false );
+    le.DPadTextInputActive( false );
 #endif
 
     return result;

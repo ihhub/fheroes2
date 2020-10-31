@@ -22,7 +22,7 @@
 #if defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ )
 #include <windows.h>
 #elif defined( VITA )
-#include <psp2/io/dirent.h>
+#include <psp2/kernel/iofilemgr.h>
 #else
 #include <dirent.h>
 #endif
@@ -68,7 +68,7 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
             continue;
 
         if ( filter.size() ) {
-            std::string filename( dir.d_name );
+            const std::string filename( dir.d_name );
 
             if ( sensitive ) {
                 if ( std::string::npos == filename.find( filter ) )

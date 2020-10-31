@@ -69,6 +69,12 @@ CFLAGS := $(CFLAGS) -DWITH_ZLIB
 LIBS := $(LIBS) -lz
 endif
 
+ifdef WITH_GAMEPAD 
+ifdef WITH_SDL2
+CFLAGS := $(CFLAGS) -DWITH_GAMEPAD
+endif
+endif
+
 ifdef RELEASE
 CFLAGS := $(CFLAGS) -DBUILD_RELEASE
 endif
