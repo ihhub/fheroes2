@@ -147,7 +147,7 @@ void CastleIndexListBox::RedrawBackground( const Point & dst )
     const fheroes2::Sprite & upperScrollbarArrow = fheroes2::AGG::GetICN( ICN::LISTBOX, 3 );
     const fheroes2::Sprite & lowerScrollbarArrow = fheroes2::AGG::GetICN( ICN::LISTBOX, 5 );
 
-    totalHeight = rtAreaItems.height + 7 - upperScrollbarArrow.height() - lowerScrollbarArrow.height();
+    totalHeight = rtAreaItems.height + 8 - upperScrollbarArrow.height() - lowerScrollbarArrow.height();
 
     const fheroes2::Sprite & upperScrollbar = fheroes2::AGG::GetICN( ICN::LISTBOX, 7 );
     const fheroes2::Sprite & middleScrollbar = fheroes2::AGG::GetICN( ICN::LISTBOX, 8 );
@@ -523,8 +523,8 @@ bool ActionSpellTownPortal( Heroes & hero )
     CastleIndexListBox listbox( area, result );
 
     listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
-    listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 145 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 75 ) );
+    listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 146 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 76 ) );
     listbox.SetAreaMaxItems( 5 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 116 ) );
     listbox.SetListContent( castles );
