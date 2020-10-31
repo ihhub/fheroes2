@@ -459,9 +459,9 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    Dialog::FrameBorder * frameborder = new Dialog::FrameBorder( Size( 280, 200 ) );
+    Dialog::FrameBorder frameborder( Size( 280, 200 ) );
 
-    const Rect & area = frameborder->GetArea();
+    const Rect & area = frameborder.GetArea();
     int result = Dialog::ZERO;
 
     CastleIndexListBox listbox( area, result );
@@ -475,7 +475,9 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.SetListContent( castles );
     listbox.Redraw();
 
-    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
+    fheroes2::ButtonGroup btnGroups;
+    btnGroups.createButton( area.x, area.y + 170, ICN::REQUEST, 1, 2, Dialog::OK );
+    btnGroups.createButton( area.x + 182, area.y + 170, ICN::REQUEST, 3, 4, Dialog::CANCEL );
     btnGroups.draw();
 
     cursor.Show();
@@ -491,8 +493,6 @@ bool ActionSpellTownPortal( Heroes & hero )
             display.render();
         }
     }
-
-    delete frameborder;
 
     // store
     if ( result == Dialog::OK )
