@@ -276,7 +276,8 @@ private:
     void Defaults( void );
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
-    void PostLoad( void );
+    void ProcessNewMap( void );
+    void PostLoad();
 
 private:
     friend class Radar;
@@ -312,6 +313,7 @@ private:
     MapObjects map_objects;
 
     // This data isn't serialized
+    Maps::Indexes _allTeleporters;
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };

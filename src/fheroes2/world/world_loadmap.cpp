@@ -875,7 +875,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, World & w )
     TiXmlElement * xml_rumors = doc.FirstChildElement( "rumors" );
     if ( xml_rumors )
         *xml_rumors >> w.vec_rumors;
-    w.PostLoad();
+    w.ProcessNewMap();
 
     return doc;
 }
@@ -1400,13 +1400,13 @@ bool World::LoadMapMP2( const std::string & filename )
         }
     }
 
-    PostLoad();
+    ProcessNewMap();
 
     DEBUG( DBG_GAME, DBG_INFO, "end load" );
     return true;
 }
 
-void World::PostLoad( void )
+void World::ProcessNewMap( void )
 {
     // modify other objects
     for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {
@@ -1522,11 +1522,7 @@ void World::PostLoad( void )
         }
     }
 
-    // update tile passable
-    std::for_each( vec_tiles.begin(), vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
-
-    resetPathfinder();
-    ComputeStaticAnalysis();
+    PostLoad();
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();

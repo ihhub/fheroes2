@@ -618,22 +618,18 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 {
     MapsIndexes result;
 
-    if ( MP2::OBJ_STONELITHS == GetTiles( center ).GetObject( false ) ) {
-        const MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, false );
-
-        if ( 2 > allTeleporters.size() ) {
-            DEBUG( DBG_GAME, DBG_WARN, "is empty" );
-        }
-        else {
-            const Maps::Tiles & entrance = GetTiles( center );
-
-            for ( MapsIndexes::const_iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
-                const Maps::Tiles & tile = GetTiles( *it );
-                if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.isWater() == entrance.isWater() ) {
-                    result.push_back( *it );
-                }
+    const Maps::Tiles & entrance = GetTiles( center );
+    if ( _allTeleporters.size() > 1 && entrance.GetObject( false ) == MP2::OBJ_STONELITHS ) {
+        for ( MapsIndexes::const_iterator it = _allTeleporters.begin(); it != _allTeleporters.end(); ++it ) {
+            const Maps::Tiles & tile = GetTiles( *it );
+            if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.GetObject() != MP2::OBJ_HEROES
+                 && tile.isWater() == entrance.isWater() ) {
+                result.push_back( *it );
             }
         }
+    }
+    else {
+        DEBUG( DBG_GAME, DBG_WARN, " can't find teleporters" );
     }
 
     return result;
@@ -1031,6 +1027,18 @@ void World::resetPathfinder()
     AI::Get().resetPathfinder();
 }
 
+void World::PostLoad()
+{
+    // update tile passable
+    std::for_each( vec_tiles.begin(), vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
+
+    // cache data that's accessed often
+    _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
+
+    resetPathfinder();
+    ComputeStaticAnalysis();
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians << obj.split;
@@ -1167,16 +1175,10 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
 
-    // update tile passable
-    std::for_each( w.vec_tiles.begin(), w.vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
-
-    w.resetPathfinder();
-    w.ComputeStaticAnalysis();
+    w.PostLoad();
 
     // heroes postfix
     std::for_each( w.vec_heroes.begin(), w.vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
-
-    world._pathfinder.reset();
 
     return msg;
 }
