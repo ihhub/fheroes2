@@ -40,7 +40,7 @@ namespace AI
         return value - ( distance * std::log10( distance ) );
     }
 
-    double GetObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore )
+    double Normal::getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const
     {
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
@@ -52,9 +52,12 @@ namespace AI
                 return valueToIgnore;
 
             if ( hero.GetColor() == castle->GetColor() ) {
-                const double value = castle->getVisitValue( hero );
-                std::cout << hero.GetColor() << " " << castle->GetName() << ": " << value << std::endl;
-                return ( value < 2000 ) ? valueToIgnore : value;
+                double value = castle->getVisitValue( hero );
+                if ( value < 1000 )
+                    value = valueToIgnore;
+                else if ( hero.isVisited( tile ) )
+                    value -= suboptimalTaskPenalty;
+                return value;
             } else {
                 return castle->getBuildingValue() * 100.0 + 2000;
             }
@@ -93,11 +96,14 @@ namespace AI
             return 500.0;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return world.getRegion( tile.GetRegion() ).getFogRatio( hero.GetColor() ) * 3000;
+            return _regions[tile.GetRegion() - REGION_NODE_FOUND].fogCount * 150;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
-            const int objectCount = world.getRegion( tile.GetRegion() ).getObjectCount();
-            return ( objectCount ) ? objectCount * 100.0 - 3500 : valueToIgnore;
+            const int objectCount = _regions[tile.GetRegion() - REGION_NODE_FOUND].validObjects.size();
+            double value = objectCount * 100.0 - 3500;
+            if ( _regions[tile.GetRegion() - REGION_NODE_FOUND].friendlyHeroCount )
+                value -= suboptimalTaskPenalty;
+            return ( objectCount ) ? value : valueToIgnore;
         }
         else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
             // de-prioritize the water movement even harder
@@ -131,13 +137,16 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                double value = GetObjectValue( hero, node.first, node.second, lowestPossibleValue );
+                double value = getObjectValue( hero, node.first, node.second, lowestPossibleValue );
 
                 const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
                 for ( const IndexObject & pair : list ) {
                     if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
-                        value += GetObjectValue( hero, pair.first, pair.second, lowestPossibleValue );
+                        value += getObjectValue( hero, pair.first, pair.second, lowestPossibleValue );
                 }
+                auto regionStats = _regions[world.GetTiles( node.first ).GetRegion() - REGION_NODE_FOUND];
+                if ( hero.GetArmy().GetStrength() < regionStats.highestThreat )
+                    value -= dangerousTaskPenalty;
                 value = ScaleWithDistance( value, dist );
 
                 if ( dist && value > maxPriority ) {
