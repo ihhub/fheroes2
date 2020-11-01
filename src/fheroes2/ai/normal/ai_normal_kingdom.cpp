@@ -21,6 +21,7 @@
 #include "agg.h"
 #include "ai_normal.h"
 #include "game_interface.h"
+#include "ground.h"
 #include "kingdom.h"
 #include "mus.h"
 #include "world.h"
@@ -138,6 +139,10 @@ namespace AI
                     const Castle * castle = castles[idx];
                     if ( castle ) {
                         const int castleIndex = castle->GetIndex();
+                        // skip precise distance check if army is too far away to be a threat
+                        if ( Maps::GetApproximateDistance( enemy->first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
+                            continue;
+
                         const double defenders = castle->GetArmy().GetStrength();
 
                         const double attackerThreat = attackerStrength - defenders;
