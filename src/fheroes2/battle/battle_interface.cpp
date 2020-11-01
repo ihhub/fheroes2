@@ -2725,11 +2725,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
         }
     }
 
-    if ( finish < 1 ) {
-        assert( 0 ); // we should never hit this part of the code
-        return;
-    }
-
     // targets damage animation loop
     while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) ) {
         CheckGlobalEvents( le );
