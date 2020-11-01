@@ -29,8 +29,8 @@
 
 namespace AI
 {
-    const double suboptimalTaskPenalty = 20000.0;
-    const double dangerousTaskPenalty = 40000.0;
+    const double suboptimalTaskPenalty = 10000.0;
+    const double dangerousTaskPenalty = 20000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
     {
@@ -95,13 +95,24 @@ namespace AI
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
             return 500.0;
         }
+        else if ( MP2::isMonsterDwelling( objectID ) ) {
+            return tile.QuantityTroop().GetStrength();
+        }
+        else if ( objectID == MP2::OBJ_STONELITHS ) {
+            const MapsIndexes & list = world.GetTeleportEndPoints( index );
+            for ( int teleportIndex : list ) {
+                if ( world.GetTiles( teleportIndex ).isFog( hero.GetColor() ) )
+                    return 0;
+            }
+            return valueToIgnore;
+        }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return _regions[tile.GetRegion() - REGION_NODE_FOUND].fogCount * 150;
+            return _regions[tile.GetRegion()].fogCount * 150.0;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
-            const int objectCount = _regions[tile.GetRegion() - REGION_NODE_FOUND].validObjects.size();
+            const int objectCount = _regions[tile.GetRegion()].validObjects.size();
             double value = objectCount * 100.0 - 3500;
-            if ( _regions[tile.GetRegion() - REGION_NODE_FOUND].friendlyHeroCount )
+            if ( _regions[tile.GetRegion()].friendlyHeroCount )
                 value -= suboptimalTaskPenalty;
             return ( objectCount ) ? value : valueToIgnore;
         }

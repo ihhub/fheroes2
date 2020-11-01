@@ -964,6 +964,40 @@ bool MP2::isHeroUpgradeObject( int obj )
     return false;
 }
 
+bool MP2::isMonsterDwelling( int obj )
+{
+    switch ( obj ) {
+    case OBJ_WATCHTOWER:
+    case OBJ_EXCAVATION:
+    case OBJ_CAVE:
+    case OBJ_TREEHOUSE:
+    case OBJ_ARCHERHOUSE:
+    case OBJ_GOBLINHUT:
+    case OBJ_DWARFCOTT:
+    case OBJ_HALFLINGHOLE:
+    case OBJ_PEASANTHUT:
+    case OBJ_THATCHEDHUT:
+    case OBJ_RUINS:
+    case OBJ_TREECITY:
+    case OBJ_WAGONCAMP:
+    case OBJ_DESERTTENT:
+    case OBJ_WATERALTAR:
+    case OBJ_AIRALTAR:
+    case OBJ_FIREALTAR:
+    case OBJ_EARTHALTAR:
+    case OBJ_BARROWMOUNDS:
+    case OBJ_CITYDEAD:
+    case OBJ_TROLLBRIDGE:
+    case OBJ_DRAGONCITY:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
 bool MP2::isProtectedObject( int obj )
 {
     switch ( obj ) {
