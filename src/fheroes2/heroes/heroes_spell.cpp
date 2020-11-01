@@ -100,16 +100,17 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
     const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
 
     if ( castle ) {
-        Interface::RedrawCastleIcon( *castle, dstx, dsty );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ADVBORD, 0 ), 481, 177, fheroes2::Display::instance(), dstx, dsty, 54, 30 );
+        Interface::RedrawCastleIcon( *castle, dstx + 4, dsty + 4 );
         Text text( castle->GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
 
         if ( VisibleItemCount() > 0 ) {
             const int32_t heightPerItem = ( rtAreaItems.height - VisibleItemCount() ) / VisibleItemCount();
-            text.Blit( dstx + 52, dsty + ( heightPerItem - text.h() ) / 2, 196 );
+            text.Blit( dstx + 60, dsty + ( heightPerItem - text.h() ) / 2, 196 );
         }
         else {
             assert( 0 ); // this should never happen!
-            text.Blit( dstx + 52, dsty, 196 );
+            text.Blit( dstx + 60, dsty, 196 );
         }
     }
 }
@@ -515,7 +516,7 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    Dialog::FrameBorder frameborder( Size( 280, 200 ) );
+    Dialog::FrameBorder frameborder( Size( 280, 250 ) );
 
     const Rect & area = frameborder.GetArea();
     int result = Dialog::ZERO;
@@ -523,17 +524,17 @@ bool ActionSpellTownPortal( Heroes & hero )
     CastleIndexListBox listbox( area, result );
 
     listbox.SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
-    listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 146 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 76 ) );
+    listbox.SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 190 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 120 ) );
     listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 116 ) );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 160 ) );
     listbox.SetListContent( castles );
     listbox.RedrawBackground( area );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;
-    btnGroups.createButton( area.x, area.y + 172, ICN::REQUEST, 1, 2, Dialog::OK );
-    btnGroups.createButton( area.x + 182, area.y + 172, ICN::REQUEST, 3, 4, Dialog::CANCEL );
+    btnGroups.createButton( area.x, area.y + 222, ICN::REQUEST, 1, 2, Dialog::OK );
+    btnGroups.createButton( area.x + 182, area.y + 222, ICN::REQUEST, 3, 4, Dialog::CANCEL );
     btnGroups.draw();
 
     cursor.Show();
