@@ -21,12 +21,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <assert.h>
 #include <functional>
 
 #include "agg.h"
 #include "ai.h"
 #include "artifact.h"
-#include "assert.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
