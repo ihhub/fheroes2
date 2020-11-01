@@ -29,9 +29,10 @@ namespace AI
 {
     struct RegionStats
     {
-        int id = -1;
         double highestThreat = -1;
         double averageMonster = -1;
+        int friendlyHeroCount = 0;
+        int monsterCount = 0;
         int fogCount = 0;
         std::vector<IndexObject> validObjects;
     };
@@ -52,7 +53,10 @@ namespace AI
         void resetPathfinder();
 
     private:
+        // following data won't be saved/serialized
+        double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapObjects;
+        std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
     };
 }

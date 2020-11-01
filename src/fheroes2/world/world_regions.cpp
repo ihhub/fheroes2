@@ -183,7 +183,12 @@ double MapRegion::getFogRatio( int color ) const
     return static_cast<double>( fogCount ) / _nodes.size();
 }
 
-const MapRegion & World::getRegion( size_t id )
+size_t World::getRegionCount() const
+{
+    return _regions.size();
+}
+
+const MapRegion & World::getRegion( size_t id ) const
 {
     // region IDs start from 3
     id -= REGION_NODE_FOUND;

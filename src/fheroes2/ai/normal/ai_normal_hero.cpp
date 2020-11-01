@@ -29,8 +29,8 @@
 
 namespace AI
 {
-    const double lowEfficiencyPenalty = 20000.0;
-    const double underThreatPenalty = 40000.0;
+    const double suboptimalTaskPenalty = 20000.0;
+    const double dangerousTaskPenalty = 40000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
     {

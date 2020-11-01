@@ -52,6 +52,8 @@ namespace AI
 
         const int mapSize = world.w() * world.h();
         _mapObjects.clear();
+        _regions.clear();
+        _regions.resize( world.getRegionCount() );
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
@@ -60,19 +62,55 @@ namespace AI
             if ( !kingdom.isValidKingdomObject( tile, objectID ) )
                 continue;
 
-            _mapObjects.emplace_back( idx, objectID );
+            const int regionID = tile.GetRegion();
+            if ( regionID - REGION_NODE_FOUND >= _regions.size() )
+                continue;
 
-            const int tileColor = tile.QuantityColor();
-            if ( objectID == MP2::OBJ_HEROES ) {
-                const Heroes * enemy = tile.GetHeroes();
-                if ( enemy && !Players::isFriends( color, enemy->GetColor() ) ) {
-                    enemyArmies.emplace_back( idx, &enemy->GetArmy() );
+            RegionStats & stats = _regions[regionID - REGION_NODE_FOUND];
+            stats.validObjects.emplace_back( idx, objectID );
+
+            if ( !tile.isFog( color ) ) {
+                _mapObjects.emplace_back( idx, objectID );
+
+                const int tileColor = tile.QuantityColor();
+                if ( objectID == MP2::OBJ_HEROES ) {
+                    const Heroes * hero = tile.GetHeroes();
+                    if ( !hero )
+                        continue;
+
+                    if ( hero->GetColor() == color ) {
+                        ++stats.friendlyHeroCount;
+                    }
+                    else if ( !Players::isFriends( color, hero->GetColor() ) ) {
+                        const Army & heroArmy = hero->GetArmy();
+                        enemyArmies.emplace_back( idx, &heroArmy );
+
+                        const double heroThreat = heroArmy.GetStrength();
+                        if ( stats.highestThreat < heroThreat ) {
+                            stats.highestThreat = heroThreat;
+                        }
+                    }
+                }
+                else if ( objectID == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
+                    const Castle * castle = world.GetCastle( Maps::GetPoint( idx ) );
+                    if ( !castle )
+                        continue;
+
+                    const Army & castleArmy = castle->GetArmy();
+                    enemyArmies.emplace_back( idx, &castleArmy );
+
+                    const double castleThreat = castleArmy.GetStrength();
+                    if ( stats.highestThreat < castleThreat ) {
+                        stats.highestThreat = castleThreat;
+                    }
+                }
+                else if ( objectID == MP2::OBJ_MONSTER ) {
+                    stats.averageMonster += Army( tile ).GetStrength();
+                    ++stats.monsterCount;
                 }
             }
-            else if ( objectID == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
-                const Castle * castle = world.GetCastle( Maps::GetPoint( idx ) );
-                if ( castle )
-                    enemyArmies.emplace_back( idx, &castle->GetArmy() );
+            else {
+                ++stats.fogCount;
             }
         }
 
@@ -83,34 +121,32 @@ namespace AI
         // Step 2. Update AI variables and recalculate resource budget
         const bool slowEarlyGame = world.CountDay() < 5 && castles.size() == 1;
 
-        double combinedHeroStrength = 0;
         for ( auto it = heroes.begin(); it != heroes.end(); ++it ) {
             if ( *it ) {
-                combinedHeroStrength += ( *it )->GetArmy().GetStrength();
+                _combinedHeroStrength += ( *it )->GetArmy().GetStrength();
             }
         }
 
         const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
         std::vector<int> castlesInDanger;
 
-        if ( !enemyArmies.empty() ) { // only if at least one enemy is nearby
-            for ( size_t idx = 0; idx < castles.size(); ++idx ) {
-                const Castle * castle = castles[idx];
-                if ( castle ) {
-                    const int castleIndex = castle->GetIndex();
-                    const double defenders = castle->GetArmy().GetStrength();
+        for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
+            if ( enemy->second ) {
+                const double attackerStrength = enemy->second->GetStrength();
 
-                    for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
-                        if ( enemy->second ) {
-                            const double attackerStrength = enemy->second->GetStrength();
-                            const double attackerThreat = attackerStrength - defenders;
-                            if ( attackerThreat > 0 ) {
-                                const uint32_t dist = _pathfinder.getDistance( castleIndex, enemy->first, color, attackerStrength );
-                                if ( dist && dist < threatDistanceLimit ) {
-                                    // castle is under threat
-                                    castlesInDanger.push_back( castleIndex );
-                                    break;
-                                }
+                for ( size_t idx = 0; idx < castles.size(); ++idx ) {
+                    const Castle * castle = castles[idx];
+                    if ( castle ) {
+                        const int castleIndex = castle->GetIndex();
+                        const double defenders = castle->GetArmy().GetStrength();
+
+                        const double attackerThreat = attackerStrength - defenders;
+                        if ( attackerThreat > 0 ) {
+                            const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, color, attackerStrength );
+                            if ( dist && dist < threatDistanceLimit ) {
+                                // castle is under threat
+                                castlesInDanger.push_back( castleIndex );
+                                break;
                             }
                         }
                     }
