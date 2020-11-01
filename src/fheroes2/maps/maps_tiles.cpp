@@ -999,6 +999,48 @@ void Maps::Tiles::setBoat( int direction )
     }
 }
 
+int Maps::Tiles::getBoatDirection()
+{
+    // Initialize with a default value
+    int direction = Direction::UNKNOWN;
+
+    // Check if it really is a boat
+    if ( objectTileset == ICN::BOAT32 ) {
+        // Left-side sprites have to flipped, add 128 to index
+        switch ( objectIndex ) {
+        case 0:
+            direction = Direction::TOP;
+            break;
+        case 9:
+            direction = Direction::TOP_RIGHT;
+            break;
+        case 18:
+            direction = Direction::RIGHT;
+            break;
+        case 27:
+            direction = Direction::BOTTOM_RIGHT;
+            break;
+        case 36:
+            direction = Direction::BOTTOM;
+            break;
+        case 27 + 128:
+            direction = Direction::BOTTOM_LEFT;
+            break;
+        case 18 + 128:
+            direction = Direction::LEFT;
+            break;
+        case 9 + 128:
+            direction = Direction::TOP_LEFT;
+            break;
+        default:
+            direction = Direction::UNKNOWN;
+            break;
+        }
+    }
+    
+    return direction;
+}
+
 void Maps::Tiles::resetObjectSprite()
 {
     objectTileset = 0;
