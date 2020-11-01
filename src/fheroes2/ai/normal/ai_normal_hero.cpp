@@ -144,7 +144,7 @@ namespace AI
                     if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
                         value += getObjectValue( hero, pair.first, pair.second, lowestPossibleValue );
                 }
-                auto regionStats = _regions[world.GetTiles( node.first ).GetRegion() - REGION_NODE_FOUND];
+                auto regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
                 if ( hero.GetArmy().GetStrength() < regionStats.highestThreat )
                     value -= dangerousTaskPenalty;
                 value = ScaleWithDistance( value, dist );

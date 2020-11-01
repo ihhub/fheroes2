@@ -63,10 +63,10 @@ namespace AI
                 continue;
 
             const int regionID = tile.GetRegion();
-            if ( regionID - REGION_NODE_FOUND >= _regions.size() )
+            if ( regionID >= _regions.size() )
                 continue;
 
-            RegionStats & stats = _regions[regionID - REGION_NODE_FOUND];
+            RegionStats & stats = _regions[regionID];
             stats.validObjects.emplace_back( idx, objectID );
 
             if ( !tile.isFog( color ) ) {

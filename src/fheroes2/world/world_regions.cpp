@@ -190,8 +190,6 @@ size_t World::getRegionCount() const
 
 const MapRegion & World::getRegion( size_t id ) const
 {
-    // region IDs start from 3
-    id -= REGION_NODE_FOUND;
     if ( id < _regions.size() )
         return _regions[id];
 
@@ -346,6 +344,10 @@ void World::ComputeStaticAnalysis()
     // Step 6. Initialize regions
     size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
     _regions.clear();
+    for ( size_t baseIDX = 0; baseIDX < REGION_NODE_FOUND; ++baseIDX ) {
+        _regions.emplace_back( baseIDX, 0, false, 0 );
+    }
+
 
     for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
         const int tileIndex = regionCenters[regionID];
@@ -358,7 +360,7 @@ void World::ComputeStaticAnalysis()
     bool stillRoomToExpand = true;
     while ( stillRoomToExpand ) {
         stillRoomToExpand = false;
-        for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
+        for ( size_t regionID = REGION_NODE_FOUND; regionID < regionCenters.size(); ++regionID ) {
             MapRegion & region = _regions[regionID];
             RegionExpansion( data, extendedWidth, region, offsets );
             if ( region._lastProcessedNode != region._nodes.size() )
@@ -371,6 +373,9 @@ void World::ComputeStaticAnalysis()
 
     // Assign regions to the map tiles
     for ( const MapRegion & reg : _regions ) {
+        if ( reg._id < REGION_NODE_FOUND )
+            continue;
+
         for ( const MapRegionNode & node : reg._nodes ) {
             vec_tiles[node.index].UpdateRegion( node.type );
         }
