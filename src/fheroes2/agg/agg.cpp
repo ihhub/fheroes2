@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_file.h"
 #include "artifact.h"
 #include "audio.h"
 #include "audio_cdrom.h"
@@ -52,48 +53,8 @@
 #include "zzlib.h"
 #endif
 
-#define FATSIZENAME 15
-
 namespace AGG
 {
-    class FAT
-    {
-    public:
-        FAT()
-            : crc( 0 )
-            , offset( 0 )
-            , size( 0 )
-        {}
-
-        u32 crc;
-        u32 offset;
-        u32 size;
-
-        std::string Info( void ) const;
-    };
-
-    class File
-    {
-    public:
-        File();
-        ~File();
-
-        bool Open( const std::string & );
-        bool isGood( void ) const;
-        const std::string & Name( void ) const;
-        const FAT & Fat( const std::string & key );
-
-        const std::vector<u8> & Read( const std::string & key );
-
-    private:
-        std::string filename;
-        std::map<std::string, FAT> fat;
-        u32 count_items;
-        StreamFile stream;
-        std::string key;
-        std::vector<u8> body;
-    };
-
     // struct fnt_cache_t
     // {
     //     Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
@@ -115,8 +76,8 @@ namespace AGG
         int channel;
     };
 
-    File heroes2_agg;
-    File heroes2x_agg;
+    fheroes2::AGGFile heroes2_agg;
+    fheroes2::AGGFile heroes2x_agg;
 
     std::map<int, std::vector<u8> > wav_cache;
     std::map<int, std::vector<u8> > mid_cache;
@@ -164,93 +125,6 @@ namespace AGG
     //
     //     return fnt_cache[ch].sfs[0];
     // }
-}
-
-/*AGG::File constructor */
-AGG::File::File( void )
-    : count_items( 0 )
-{}
-
-bool AGG::File::Open( const std::string & fname )
-{
-    filename = fname;
-
-    if ( !stream.open( filename, "rb" ) ) {
-        DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << filename << ", skipping..." );
-        return false;
-    }
-
-    const size_t size = stream.size();
-    count_items = stream.getLE16();
-    DEBUG( DBG_ENGINE, DBG_INFO, "load: " << filename << ", count items: " << count_items );
-
-    StreamBuf fats = stream.toStreamBuf( count_items * 4 * 3 /* crc, offset, size */ );
-    stream.seek( size - FATSIZENAME * count_items );
-    StreamBuf names = stream.toStreamBuf( FATSIZENAME * count_items );
-
-    for ( u32 ii = 0; ii < count_items; ++ii ) {
-        FAT & f = fat[names.toString( FATSIZENAME )];
-
-        f.crc = fats.getLE32();
-        f.offset = fats.getLE32();
-        f.size = fats.getLE32();
-    }
-
-    return !stream.fail();
-}
-
-AGG::File::~File() {}
-
-bool AGG::File::isGood( void ) const
-{
-    return !stream.fail() && count_items;
-}
-
-/* get AGG file name */
-const std::string & AGG::File::Name( void ) const
-{
-    return filename;
-}
-
-/* get FAT element */
-const AGG::FAT & AGG::File::Fat( const std::string & key_ )
-{
-    return fat[key_];
-}
-
-/* dump FAT */
-std::string AGG::FAT::Info( void ) const
-{
-    std::ostringstream os;
-
-    os << "crc: " << crc << ", offset: " << offset << ", size: " << size;
-    return os.str();
-}
-
-/* read element to body */
-const std::vector<u8> & AGG::File::Read( const std::string & str )
-{
-    if ( key != str ) {
-        std::map<std::string, FAT>::const_iterator it = fat.find( str );
-
-        if ( it != fat.end() ) {
-            const FAT & f = ( *it ).second;
-            key = str;
-
-            if ( f.size ) {
-                DEBUG( DBG_ENGINE, DBG_TRACE, key << ":\t" << f.Info() );
-
-                stream.seek( f.offset );
-                body = stream.getRaw( f.size );
-            }
-        }
-        else if ( body.size() ) {
-            body.clear();
-            key.clear();
-        }
-    }
-
-    return body;
 }
 
 /* read data directory */
