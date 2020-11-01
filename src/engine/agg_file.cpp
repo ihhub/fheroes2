@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <cctype>
 #include <iterator>
 #include <string>
 
