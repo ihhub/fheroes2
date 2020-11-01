@@ -271,11 +271,15 @@ public:
 
 private:
     World()
-        : Size( 0, 0 ){};
+        : Size( 0, 0 )
+        , _rumor( nullptr )
+    {}
+
     void Defaults( void );
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
     void PostLoad( void );
+    void pickRumor();
 
 private:
     friend class Radar;
@@ -290,6 +294,7 @@ private:
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
     Rumors vec_rumors;
+    const std::string * _rumor;
     EventsDate vec_eventsday;
 
     // index, object, color
