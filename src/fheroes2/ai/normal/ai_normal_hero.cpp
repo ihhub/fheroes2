@@ -58,7 +58,8 @@ namespace AI
                 else if ( hero.isVisited( tile ) )
                     value -= suboptimalTaskPenalty;
                 return value;
-            } else {
+            }
+            else {
                 return castle->getBuildingValue() * 150.0 + 3000;
             }
         }
