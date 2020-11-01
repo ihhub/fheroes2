@@ -1037,7 +1037,7 @@ int Maps::Tiles::getBoatDirection()
             break;
         }
     }
-    
+
     return direction;
 }
 

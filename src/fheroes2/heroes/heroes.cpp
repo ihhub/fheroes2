@@ -1364,11 +1364,10 @@ int Heroes::GetDirection( void ) const
     return direction;
 }
 
-void Heroes::setDirection( int directionToSet ) 
+void Heroes::setDirection( int directionToSet )
 {
     direction = directionToSet;
 }
-
 
 /* return route range in days */
 int Heroes::GetRangeRouteDays( s32 dst ) const

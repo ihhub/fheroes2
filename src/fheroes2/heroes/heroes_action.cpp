@@ -907,7 +907,7 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
 
     // Get the direction of the boat so that the direction of the hero can be set to it after boarding
     Maps::Tiles & from = world.GetTiles( dst_index );
-    boatDirection = from.getBoatDirection();    
+    boatDirection = from.getBoatDirection();
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
