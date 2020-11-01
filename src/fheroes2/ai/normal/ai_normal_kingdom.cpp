@@ -159,7 +159,7 @@ namespace AI
             }
         }
 
-        size_t heroLimit = Maps::XLARGE > world.w() ? ( Maps::LARGE > world.w() ? 2 : 3 ) : 4;
+        size_t heroLimit = world.w() / Maps::SMALL + 1;
         if ( _personality == EXPLORER )
             heroLimit++;
         if ( slowEarlyGame )
@@ -208,7 +208,7 @@ namespace AI
                     recruit = recruitmentCastle->RecruitHero( firstRecruit );
                 }
 
-                if ( recruit )
+                if ( recruit && !slowEarlyGame )
                     ReinforceHeroInCastle( *recruit, *recruitmentCastle, kingdom.GetFunds() );
             }
         }

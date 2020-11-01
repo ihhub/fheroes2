@@ -59,7 +59,7 @@ namespace AI
                     value -= suboptimalTaskPenalty;
                 return value;
             } else {
-                return castle->getBuildingValue() * 100.0 + 2000;
+                return castle->getBuildingValue() * 150.0 + 3000;
             }
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
@@ -73,7 +73,7 @@ namespace AI
 
                 const double value = hero.getMeetingValue( *otherHero );
                 // limit the max value of friendly hero meeting to 30 tiles
-                return ( value < 200 ) ? valueToIgnore : std::min( value, 6000.0 );
+                return ( value < 200 ) ? -suboptimalTaskPenalty : std::min( value, 6000.0 );
             }
             return 5000.0;
         }
@@ -111,14 +111,14 @@ namespace AI
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             const int objectCount = _regions[tile.GetRegion()].validObjects.size();
-            double value = objectCount * 100.0 - 3500;
+            double value = objectCount * 100.0 - 7500;
             if ( _regions[tile.GetRegion()].friendlyHeroCount )
                 value -= suboptimalTaskPenalty;
             return ( objectCount ) ? value : valueToIgnore;
         }
         else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
             // de-prioritize the water movement even harder
-            return -2500.0;
+            return -3000.0;
         }
 
         return 0;
