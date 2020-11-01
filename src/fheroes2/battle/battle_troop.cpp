@@ -1565,11 +1565,6 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
     return 0;
 }
 
-bool Battle::Unit::isMagicAttack( void ) const
-{
-    return GetSpellMagic( true ) != Spell::NONE;
-}
-
 int Battle::Unit::GetSpellMagic( bool force ) const
 {
     switch ( GetID() ) {
