@@ -10,7 +10,7 @@ namespace fheroes2
     uint32_t AGGFile::aggFilenameHash( const std::string & s )
     {
         uint32_t a = 0, b = 0;
-        for( auto cri = s.crbegin(); cri != s.crend(); cri++ ) {
+        for ( auto cri = s.crbegin(); cri != s.crend(); cri++ ) {
             a = ( a << 5 ) + ( a >> 25 );
             uint8_t c = static_cast<uint8_t>( std::toupper( *cri ) );
             b += c;
@@ -60,8 +60,7 @@ namespace fheroes2
         auto it = files.find( hash );
         if ( it != files.end() ) {
             auto f = it->second;
-            if ( f.first )
-            {
+            if ( f.first ) {
                 stream.seek( f.second );
                 body = stream.getRaw( f.first );
                 return body;
