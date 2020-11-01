@@ -63,6 +63,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
         }
     }
 
+    smk_enable_video( _videoFile, 0 ); // disable video reading
     smk_first( _videoFile );
     unsigned long currentFrame = 0;
     smk_info_all( _videoFile, &currentFrame, NULL, NULL );
@@ -125,6 +126,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
         }
     }
 
+    smk_enable_video( _videoFile, 1 ); // enable video reading
     smk_first( _videoFile );
 }
 

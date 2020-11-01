@@ -33,6 +33,7 @@
 #include "maps_tiles.h"
 #include "week.h"
 #include "world_pathfinding.h"
+#include "world_regions.h"
 #include <string>
 
 class Heroes;
@@ -243,7 +244,6 @@ public:
     ListActions * GetListActions( s32 );
 
     void ActionForMagellanMaps( int color );
-    void ActionToEyeMagi( int color ) const;
     void ClearFog( int color );
     void UpdateRecruits( Recruits & ) const;
 
@@ -258,6 +258,7 @@ public:
     MapEvent * GetMapEvent( const Point & );
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
+    const MapRegion & getRegion( size_t id );
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
     bool isValidPath( int index, int direction ) const;
@@ -270,11 +271,15 @@ public:
 
 private:
     World()
-        : Size( 0, 0 ){};
+        : Size( 0, 0 )
+        , _rumor( nullptr )
+    {}
+
     void Defaults( void );
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
     void PostLoad( void );
+    void pickRumor();
 
 private:
     friend class Radar;
@@ -289,6 +294,7 @@ private:
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
     Rumors vec_rumors;
+    const std::string * _rumor;
     EventsDate vec_eventsday;
 
     // index, object, color
@@ -308,6 +314,9 @@ private:
 
     MapActions map_actions;
     MapObjects map_objects;
+
+    // This data isn't serialized
+    std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };
 

@@ -358,6 +358,39 @@ void Kingdom::SetVisited( s32 index, int object )
         visit_object.push_front( IndexObject( index, object ) );
 }
 
+bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const
+{
+    if ( tile.isFog( color ) || ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST ) )
+        return false;
+
+    if ( isVisited( tile.GetIndex(), objectID ) )
+        return false;
+
+    // Check castle first to ignore guest hero (tile with both Castle and Hero)
+    if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
+        const int tileColor = tile.QuantityColor();
+        if ( !Settings::Get().ExtUnionsAllowCastleVisiting() && Players::isFriends( color, tileColor ) ) {
+            // false only if alliance castles can't be visited
+            return color == tileColor;
+        }
+        return true;
+    }
+
+    // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
+    if ( objectID == MP2::OBJ_HEROES ) {
+        const Heroes * hero = tile.GetHeroes();
+        return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
+    }
+
+    if ( MP2::isCaptureObject( objectID ) )
+        return !Players::isFriends( color, tile.QuantityColor() );
+
+    if ( MP2::isQuantityObject( objectID ) )
+        return tile.QuantityIsValid();
+
+    return true;
+}
+
 bool Kingdom::HeroesMayStillMove( void ) const
 {
     return heroes.end() != std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove(); } );

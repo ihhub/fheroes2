@@ -40,10 +40,8 @@
 
 namespace
 {
-    const int offsetXGoodAmountBox = 80;
-    const int offsetYGoodAmountBox = 223;
-    const int offsetXEvilAmountBox = 89;
-    const int offsetYEvilAmountBox = 222;
+    const int offsetXAmountBox = 80;
+    const int offsetYAmountBox = 223;
     const int widthAmountBox = 125;
     const int heightAmountBox = 23;
 }
@@ -56,9 +54,11 @@ void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop
 
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
+    // The active size of the window is 520 by 256 pixels
     fheroes2::Display & display = fheroes2::Display::instance();
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    const int viewarmy = Settings::Get().ExtGameEvilInterface() ? ICN::VIEWARME : ICN::VIEWARMY;
+    const int viewarmy = isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY;
     const fheroes2::Sprite & sprite_dialog = fheroes2::AGG::GetICN( viewarmy, 0 );
     const fheroes2::Sprite & spriteDialogShadow = fheroes2::AGG::GetICN( viewarmy, 7 );
 
@@ -66,15 +66,23 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const fheroes2::Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
+    fheroes2::Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
+    if ( isEvilInterface ) {
+        dialogOffset.y += 3;
+    }
+
     const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
     const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
     fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
-    const fheroes2::Rect pos_rt( dialogOffset.x, dialogOffset.y, sprite_dialog.width(), sprite_dialog.height() );
+    fheroes2::Blit( spriteDialogShadow, display, dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
+    fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
-    fheroes2::Blit( spriteDialogShadow, display, pos_rt.x + shadowShift.x, pos_rt.y + shadowShift.y );
-    fheroes2::Blit( sprite_dialog, display, pos_rt.x, pos_rt.y );
+    fheroes2::Rect pos_rt( dialogOffset.x, dialogOffset.y, sprite_dialog.width(), sprite_dialog.height() );
+    if ( isEvilInterface ) {
+        pos_rt.x += 9;
+        pos_rt.y -= 1;
+    }
 
     const fheroes2::Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
     DrawMonsterStats( monsterStatOffset, troop );
@@ -87,7 +95,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
     RandomMonsterAnimation monsterAnimation( troop );
-    const fheroes2::Point monsterOffset( pos_rt.x + pos_rt.width / 4, pos_rt.y + 180 );
+    const fheroes2::Point monsterOffset( pos_rt.x + 520 / 4 + 16, pos_rt.y + 180 );
     if ( !isAnimated )
         monsterAnimation.reset();
 
@@ -178,7 +186,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
                 cursor.Hide();
 
-                fheroes2::Blit( sprite_dialog, display, pos_rt.x, pos_rt.y );
+                fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
                 DrawMonsterStats( monsterStatOffset, troop );
 
@@ -413,10 +421,9 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     text.Blit( pos.x, pos.y );
 
     // amount
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     text.Set( GetString( troop.GetCount() ), Font::BIG );
-    pos.x = offset.x + ( isEvilInterface ? offsetXEvilAmountBox : offsetXGoodAmountBox ) + widthAmountBox / 2 - text.w() / 2;
-    pos.y = offset.y + ( isEvilInterface ? offsetYEvilAmountBox : offsetYGoodAmountBox ) + heightAmountBox / 2 - text.h() / 2;
+    pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
+    pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
     text.Blit( pos.x, pos.y );
 }
 
@@ -516,8 +523,12 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
                 btnGroup.button( 0 ).enable();
-                btnGroup.draw();
             }
+            else {
+                btnGroup.button( 0 ).disable();
+            }
+
+            btnGroup.draw();
 
             cursor.Show();
             display.render();

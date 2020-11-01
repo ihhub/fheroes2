@@ -174,33 +174,36 @@ void Interface::Basic::Redraw( int force )
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
-    if ( ( redraw | force ) & REDRAW_GAMEAREA )
+    const int combinedRedraw = redraw | force;
+    const bool hideInterface = conf.ExtGameHideInterface();
+
+    if ( combinedRedraw & REDRAW_GAMEAREA )
         gameArea.Redraw( display, LEVEL_ALL );
 
-    if ( ( conf.ExtGameHideInterface() && conf.ShowRadar() ) || ( ( redraw | force ) & REDRAW_RADAR ) )
+    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) )
         radar.Redraw();
 
-    if ( ( conf.ExtGameHideInterface() && conf.ShowIcons() ) || ( ( redraw | force ) & REDRAW_ICONS ) )
+    if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) )
         iconsPanel.Redraw();
-    else if ( ( redraw | force ) & REDRAW_HEROES )
+    else if ( combinedRedraw & REDRAW_HEROES )
         iconsPanel.RedrawIcons( ICON_HEROES );
-    else if ( ( redraw | force ) & REDRAW_CASTLES )
+    else if ( combinedRedraw & REDRAW_CASTLES )
         iconsPanel.RedrawIcons( ICON_CASTLES );
 
-    if ( ( conf.ExtGameHideInterface() && conf.ShowButtons() ) || ( ( redraw | force ) & REDRAW_BUTTONS ) )
+    if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) )
         buttonsArea.Redraw();
 
-    if ( ( conf.ExtGameHideInterface() && conf.ShowStatus() ) || ( ( redraw | force ) & REDRAW_STATUS ) )
+    if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) )
         statusWindow.Redraw();
 
-    if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && ( redraw & REDRAW_GAMEAREA ) )
+    if ( hideInterface && conf.ShowControlPanel() && ( redraw & REDRAW_GAMEAREA ) )
         controlPanel.Redraw();
 
     // show system info
     if ( conf.ExtGameShowSystemInfo() )
-        RedrawSystemInfo( ( conf.ExtGameHideInterface() ? 10 : 26 ), display.height() - ( conf.ExtGameHideInterface() ? 14 : 30 ), System::GetMemoryUsage() );
+        RedrawSystemInfo( ( hideInterface ? 10 : 26 ), display.height() - ( hideInterface ? 14 : 30 ), System::GetMemoryUsage() );
 
-    if ( ( redraw | force ) & REDRAW_BORDER )
+    if ( combinedRedraw & REDRAW_BORDER )
         GameBorderRedraw();
 
     redraw = 0;

@@ -1,0 +1,39 @@
+<metapackage xmlns:os="http://opensuse.org/Standards/One_Click_Install" xmlns="http://opensuse.org/Standards/One_Click_Install">
+  <group distversion="openSUSE Leap 15.2">
+    <repositories>
+      <repository recommended="true">
+        <name>games</name>
+        <summary>openSUSE Games</summary>
+        <description>https://en.opensuse.org/Games</description>
+        <url>https://download.opensuse.org/repositories/games/openSUSE_Leap_15.2/</url>
+      </repository>
+      <repository recommended="true">
+        <name>openSUSE:Leap:15.2:Update</name>
+        <summary>Online updates for openSUSE Leap:15.2</summary>
+        <description>This project is releasing the official updates for openSUSE Leap:15.2.</description>
+        <url>http://download.opensuse.org/update/leap/15.2/oss/</url>
+      </repository>
+      <repository recommended="true">
+        <name>openSUSE:Leap:15.2:NonFree</name>
+        <summary>Non Free parts of openSUSE Leap 15.2 distribution.</summary>
+        <description>Non free or non open source parts of openSUSE Leap 15.2.</description>
+        <url>http://download.opensuse.org/distribution/leap/15.2/repo/non-oss/</url>
+      </repository>
+      <repository recommended="false">
+        <name>openSUSE:Leap:15.2</name>
+        <summary>openSUSE Leap 15.2</summary>
+        <description>openSUSE Leap borrows packages from SLE for the base system. Please refer to https://osrt.opensuse.org/web/origin-manager/#openSUSE:Leap:15.2 for origin information</description>
+        <url>http://download.opensuse.org/distribution/leap/15.2/repo/oss/</url>
+      </repository>
+    </repositories>
+    <software>
+      <item>
+        <name>SDL_mixer</name>
+        <summary>SDL sound mixer library</summary>
+        <description>A multichannel audio mixer. It supports four channels of 16-bit stereo
+audio, plus a single channel of music, mixed by the popular MikMod MOD,
+Timidity MIDI, and SMPEG MP3 libraries.</description>
+      </item>
+    </software>
+  </group>
+</metapackage>

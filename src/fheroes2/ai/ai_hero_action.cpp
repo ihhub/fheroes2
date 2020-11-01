@@ -193,6 +193,7 @@ namespace AI
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const int object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+        bool isAction = true;
 
         if ( MP2::isActionObject( object, hero.isShipMaster() ) )
             hero.SetModes( Heroes::ACTION );
@@ -421,13 +422,16 @@ namespace AI
             break;
 
         default:
+            isAction = false;
             break;
         }
 
         if ( MP2::isNeedStayFront( object ) )
             hero.GetPath().Reset();
 
-        AI::Get().HeroesActionComplete( hero, dst_index );
+        // ignore empty tiles
+        if ( isAction )
+            AI::Get().HeroesActionComplete( hero, dst_index );
 
         // reset if during an action music was stopped
         AGG::PlayMusic( MUS::COMPUTER_TURN );
@@ -790,9 +794,6 @@ namespace AI
                 }
 
                 tile.QuantitySetColor( hero.GetColor() );
-
-                if ( MP2::OBJ_LIGHTHOUSE == obj )
-                    Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_LIGHT_HOUSE ), hero.GetColor() );
             }
         }
 
@@ -839,22 +840,34 @@ namespace AI
 
     void AIToTeleports( Heroes & hero, s32 index_from )
     {
-        s32 index_to = world.NextTeleport( index_from );
+        int indexTo = world.NextTeleport( index_from );
 
-        if ( index_from == index_to ) {
+        const Route::Path & path = hero.GetPath();
+        if ( path.size() ) {
+            const int dest = path.front().GetIndex();
+            while ( indexTo != dest ) {
+                indexTo = world.NextTeleport( index_from );
+                const Maps::Tiles & tile = world.GetTiles( indexTo );
+                if ( index_from == indexTo || tile.isFog( hero.GetColor() ) || tile.GetObject() == MP2::OBJ_HEROES )
+                    break;
+            }
+        }
+
+        if ( index_from == indexTo ) {
             DEBUG( DBG_AI, DBG_WARN, "teleport unsuccessfull, can't find exit lith" );
             return;
         }
 
-        if ( MP2::OBJ_HEROES == world.GetTiles( index_to ).GetObject() ) {
-            const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
+        if ( MP2::OBJ_HEROES == world.GetTiles( indexTo ).GetObject() ) {
+            const Heroes * other_hero = world.GetTiles( indexTo ).GetHeroes();
 
             if ( other_hero ) {
-                AIToHeroes( hero, index_to );
+                AIToHeroes( hero, indexTo );
 
                 // lose battle
                 if ( hero.isFreeman() ) {
                     DEBUG( DBG_GAME, DBG_TRACE, hero.String() + " hero dismissed, teleport action cancelled" );
+                    hero.FadeOut();
                     return;
                 }
                 else if ( !other_hero->isFreeman() ) {
@@ -865,7 +878,7 @@ namespace AI
         }
 
         hero.FadeOut();
-        hero.Move2Dest( index_to );
+        hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
@@ -1492,21 +1505,25 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIMeeting( Heroes & hero1, Heroes & hero2 )
+    void AIMeeting( Heroes & left, Heroes & right )
     {
+        left.markHeroMeeting( right.GetID() );
+        right.markHeroMeeting( left.GetID() );
+
         if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
-            Heroes::ScholarAction( hero1, hero2 );
+            Heroes::ScholarAction( left, right );
 
-        if ( hero1.Modes( AI::HERO_HUNTER ) )
-            hero1.GetArmy().JoinStrongestFromArmy( hero2.GetArmy() );
-        else if ( hero2.Modes( AI::HERO_HUNTER ) )
-            hero2.GetArmy().JoinStrongestFromArmy( hero1.GetArmy() );
-        else if ( hero1.Modes( AI::HERO_SCOUT ) )
-            hero1.GetArmy().KeepOnlyWeakestTroops( hero2.GetArmy() );
-        else if ( hero2.Modes( AI::HERO_SCOUT ) )
-            hero2.GetArmy().KeepOnlyWeakestTroops( hero1.GetArmy() );
+        const bool rightToLeft = right.getStatsValue() < left.getStatsValue();
 
-        // artifacts change
+        if ( rightToLeft )
+            left.GetArmy().JoinStrongestFromArmy( right.GetArmy() );
+        else
+            right.GetArmy().JoinStrongestFromArmy( left.GetArmy() );
+
+        if ( rightToLeft )
+            left.GetBagArtifacts().exchangeArtifacts( right.GetBagArtifacts() );
+        else
+            right.GetBagArtifacts().exchangeArtifacts( left.GetBagArtifacts() );
     }
 
     bool HeroesValidObject( const Heroes & hero, s32 index )
@@ -1659,13 +1676,20 @@ namespace AI
         case MP2::OBJ_MERCENARYCAMP:
         case MP2::OBJ_DOCTORHUT:
         case MP2::OBJ_STANDINGSTONES:
-        // sec skill
-        case MP2::OBJ_WITCHSHUT:
         // exp
         case MP2::OBJ_GAZEBO:
             if ( !hero.isVisited( tile ) )
                 return true;
             break;
+
+        // sec skill
+        case MP2::OBJ_WITCHSHUT: {
+            const Skill::Secondary & skill = tile.QuantitySkill();
+
+            // check skill
+            if ( skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) )
+                return true;
+        } break;
 
         case MP2::OBJ_TREEKNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
@@ -1742,8 +1766,7 @@ namespace AI
             const Troop & troop = tile.QuantityTroop();
             const payment_t paymentCosts = troop.GetCost();
 
-            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts )
-                 && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && ( troop.isArchers() || troop.isFlying() ) ) ) )
+            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() ) )
                 return true;
             break;
         }
@@ -1752,8 +1775,10 @@ namespace AI
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE: {
-            const bool battle = ( Color::NONE == tile.QuantityColor() );
-            if ( !battle ) {
+            if ( Color::NONE == tile.QuantityColor() ) {
+                return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            }
+            else {
                 const Troop & troop = tile.QuantityTroop();
                 const payment_t paymentCosts = troop.GetCost();
 
@@ -1810,7 +1835,7 @@ namespace AI
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
-                return true;
+                return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
             break;
 
         case MP2::OBJ_MONSTER:
@@ -1841,8 +1866,8 @@ namespace AI
         case MP2::OBJ_HEROES: {
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
-                if ( hero.GetColor() == hero2->GetColor() )
-                    return false;
+                if ( hero.GetColor() == hero2->GetColor() && !hero.hasMetWithHero( hero2->GetID() ) )
+                    return !hero2->inCastle();
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
                 else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE_SMALL ) )

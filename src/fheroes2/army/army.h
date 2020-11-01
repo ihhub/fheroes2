@@ -77,10 +77,12 @@ public:
     void JoinTroops( Troops & );
     bool CanJoinTroops( const Troops & ) const;
 
+    void MergeTroops();
     Troops GetOptimized( void ) const;
 
     virtual u32 GetAttack( void ) const;
     virtual u32 GetDefense( void ) const;
+    virtual double GetStrength() const;
 
     u32 GetHitPoints( void ) const;
     u32 GetDamageMin( void ) const;
@@ -93,6 +95,7 @@ public:
     Troop * GetWeakestTroop( void );
     Troop * GetSlowestTroop( void );
 
+    void SortStrongest();
     void ArrangeForBattle( bool = false );
 
     void JoinStrongest( Troops &, bool );
@@ -154,7 +157,9 @@ public:
     int GetControl( void ) const;
     u32 GetAttack( void ) const;
     u32 GetDefense( void ) const;
+
     double GetStrength() const;
+    double getReinforcementValue( const Troops & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
 
     void SetColor( int );

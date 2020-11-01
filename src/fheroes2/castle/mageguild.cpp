@@ -30,68 +30,70 @@
 
 Spell GetUniqueCombatSpellCompatibility( const SpellStorage &, int race, int level );
 Spell GetCombatSpellCompatibility( int race, int level );
+Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int level );
+Spell GetGuaranteedDamageSpellForMageGuild();
+Spell GetGuaranteedNonDamageSpellForMageGuild();
 
-void MageGuild::Builds( int race, bool libraryCap )
+void MageGuild::initialize( int race, bool libraryCap )
 {
     general.clear();
     library.clear();
 
-    // level 5
-    general.Append( 7 > Rand::Get( 1, 10 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 ) );
+    int spellCountByLevel[] = {3, 3, 2, 2, 1};
 
-    // level 4
-    general.Append( GetCombatSpellCompatibility( race, 4 ) );
-    general.Append( Spell::RandAdventure( 4 ) );
+    const Spell guaranteedDamageSpell = GetGuaranteedDamageSpellForMageGuild();
+    const int guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
 
-    // level 3
-    general.Append( GetCombatSpellCompatibility( race, 3 ) );
-    general.Append( Spell::RandAdventure( 3 ) );
+    const Spell guaranteedNonDamageSpell = GetGuaranteedNonDamageSpellForMageGuild();
+    const int guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
 
-    // level 2
-    general.Append( GetCombatSpellCompatibility( race, 2 ) );
-    general.Append( GetUniqueCombatSpellCompatibility( general, race, 2 ) );
-    general.Append( Spell::RandAdventure( 2 ) );
-
-    // level 1
-    general.Append( GetCombatSpellCompatibility( race, 1 ) );
-    general.Append( GetUniqueCombatSpellCompatibility( general, race, 1 ) );
-    general.Append( Spell::RandAdventure( 1 ) );
+    general.Append( guaranteedDamageSpell );
+    general.Append( guaranteedNonDamageSpell );
 
     if ( libraryCap ) {
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 1 ) );
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 2 ) );
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 3 ) );
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 4 ) );
-        library.Append( GetUniqueCombatSpellCompatibility( general, race, 5 ) );
+        for ( int i = 0; i < 5; ++i )
+            ++spellCountByLevel[i];
+    }
+
+    --spellCountByLevel[guaranteedDamageSpellLevel - 1];
+    --spellCountByLevel[guaranteedNonDamageSpellLevel - 1];
+
+    for ( int i = 0; i < 5; ++i ) {
+        for ( int j = 0; j < spellCountByLevel[i]; ++j ) {
+            const Spell spell = GetUniqueSpellCompatibility( general, race, i + 1 );
+
+            if ( spell != Spell::NONE )
+                general.Append( spell );
+        }
     }
 }
 
-SpellStorage MageGuild::GetSpells( int lvlmage, bool islibrary, int level ) const
+SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLevel ) const
 {
     SpellStorage result;
 
-    if ( lvlmage >= level ) {
-        result = general.GetSpells( level );
-        if ( islibrary )
-            result.Append( library.GetSpells( level ) );
+    if ( spellLevel == -1 ) {
+        // get all available spells
+        for ( int level = 1; level <= guildLevel; ++level ) {
+            result.Append( general.GetSpells( level ) );
+            if ( hasLibrary )
+                result.Append( library.GetSpells( level ) );
+        }
+    }
+    else if ( spellLevel <= guildLevel ) {
+        result = general.GetSpells( spellLevel );
+        if ( hasLibrary )
+            result.Append( library.GetSpells( spellLevel ) );
     }
 
     return result;
 }
 
-void MageGuild::EducateHero( HeroBase & hero, int lvlmage, bool isLibraryBuild ) const
+void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
 {
-    if ( hero.HaveSpellBook() && lvlmage ) {
-        SpellStorage spells;
-
-        for ( s32 level = 1; level <= 5; ++level )
-            if ( level <= lvlmage ) {
-                spells.Append( general.GetSpells( level ) );
-                if ( isLibraryBuild )
-                    spells.Append( library.GetSpells( level ) );
-            }
-
-        hero.AppendSpellsToBook( spells );
+    if ( hero.HaveSpellBook() && guildLevel > 0 ) {
+        // this method will check wisdom requirement
+        hero.AppendSpellsToBook( MageGuild::GetSpells( guildLevel, hasLibrary ) );
     }
 }
 
@@ -103,12 +105,75 @@ Spell GetUniqueCombatSpellCompatibility( const SpellStorage & spells, int race, 
     return spell;
 }
 
+Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
+{
+    const bool hasAdventureSpell = spells.hasAdventureSpell( lvl );
+    const bool lookForAdv = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
+
+    std::vector<Spell> v;
+    v.reserve( 15 );
+
+    for ( int sp = Spell::NONE; sp < Spell::STONE; ++sp ) {
+        const Spell spell( sp );
+
+        if ( spells.isPresentSpell( spell ) )
+            continue;
+
+        if ( !spell.isRaceCompatible( race ) )
+            continue;
+
+        if ( spell.Level() != lvl || !spell.isEnabled() )
+            continue;
+
+        if ( lookForAdv != spell.isCombat() )
+            v.push_back( spell );
+    }
+
+    return v.size() ? *Rand::Get( v ) : Spell( Spell::NONE );
+}
+
 Spell GetCombatSpellCompatibility( int race, int lvl )
 {
     Spell spell = Spell::RandCombat( lvl );
     while ( !spell.isRaceCompatible( race ) )
         spell = Spell::RandCombat( lvl );
     return spell;
+}
+
+Spell GetGuaranteedDamageSpellForMageGuild()
+{
+    switch ( Rand::Get( 0, 4 ) ) {
+    case 0:
+        return Spell::ARROW;
+    case 1:
+        return Spell::COLDRAY;
+    case 2:
+        return Spell::LIGHTNINGBOLT;
+    case 3:
+        return Spell::COLDRING;
+    case 4:
+        return Spell::FIREBALL;
+    default:
+        return Spell::RANDOM;
+    }
+}
+
+Spell GetGuaranteedNonDamageSpellForMageGuild()
+{
+    switch ( Rand::Get( 0, 4 ) ) {
+    case 0:
+        return Spell::DISPEL;
+    case 1:
+        return Spell::MASSDISPEL;
+    case 2:
+        return Spell::CURE;
+    case 3:
+        return Spell::MASSCURE;
+    case 4:
+        return Spell::ANTIMAGIC;
+    default:
+        return Spell::RANDOM;
+    }
 }
 
 StreamBase & operator<<( StreamBase & msg, const MageGuild & guild )

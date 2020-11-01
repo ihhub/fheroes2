@@ -30,6 +30,11 @@ namespace Video
 {
     size_t ShowVideo( const std::string & videoPath, bool isLooped, const std::vector<fheroes2::Rect> & roi )
     {
+        if ( !System::IsFile( videoPath ) ) { // file doesn't exist, so no need to even try to load it
+            DEBUG( DBG_GAME, DBG_INFO, videoPath << " file does not exist" );
+            return 0;
+        }
+
         SMKVideoSequence video( videoPath );
         if ( video.frameCount() < 1 ) // nothing to show
             return 0;
