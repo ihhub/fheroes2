@@ -272,7 +272,9 @@ public:
 private:
     World()
         : Size( 0, 0 )
-        , _rumor( nullptr ){};
+        , _rumor( nullptr )
+    {}
+
     void Defaults( void );
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
