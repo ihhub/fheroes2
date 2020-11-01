@@ -1406,7 +1406,7 @@ bool World::LoadMapMP2( const std::string & filename )
     return true;
 }
 
-void World::ProcessNewMap( void )
+void World::ProcessNewMap()
 {
     // modify other objects
     for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {

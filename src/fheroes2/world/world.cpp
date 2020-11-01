@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <assert.h>
 #include <functional>
 
 #include "agg.h"
@@ -486,6 +487,26 @@ const Week & World::GetWeekType( void ) const
     return week_current;
 }
 
+void World::pickRumor()
+{
+    if ( vec_rumors.empty() ) {
+        _rumor = nullptr;
+        assert( 0 );
+        return;
+    }
+    else if ( vec_rumors.size() == 1 ) {
+        _rumor = &vec_rumors.front();
+        assert( 0 );
+        return;
+    }
+
+    const std::string * current = _rumor;
+    while ( current == _rumor ) {
+        // vec_rumors always contain values
+        _rumor = Rand::Get( vec_rumors );
+    }
+}
+
 /* new day */
 void World::NewDay( void )
 {
@@ -493,6 +514,8 @@ void World::NewDay( void )
 
     if ( BeginWeek() ) {
         ++week;
+        pickRumor();
+
         if ( BeginMonth() )
             ++month;
     }
@@ -610,8 +633,10 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
 const std::string & World::GetRumors( void )
 {
-    // vec_rumors always contain values
-    return *Rand::Get( vec_rumors );
+    if ( !_rumor ) {
+        pickRumor();
+    }
+    return *_rumor;
 }
 
 MapsIndexes World::GetTeleportEndPoints( s32 center ) const

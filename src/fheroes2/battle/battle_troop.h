@@ -100,7 +100,6 @@ namespace Battle
         bool isReflect( void ) const;
         bool isHaveDamage( void ) const;
         bool isMagicResist( const Spell &, u32 ) const;
-        bool isMagicAttack( void ) const;
         bool OutOfWalls( void ) const;
         bool canReach( int index ) const;
         bool canReach( const Unit & unit ) const;

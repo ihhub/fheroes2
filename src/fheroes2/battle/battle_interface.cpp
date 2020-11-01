@@ -2869,6 +2869,10 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
     const s32 destIndex = pos.GetHead()->GetIndex();
+    // check if we're already there
+    if ( unit.GetPosition().contains( destIndex ) )
+        return;
+
     const Rect & pos1 = unit.GetRectPosition();
     const Rect & pos2 = Board::GetCell( destIndex )->GetPos();
 
