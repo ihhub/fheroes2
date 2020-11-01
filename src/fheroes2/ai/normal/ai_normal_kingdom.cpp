@@ -167,25 +167,49 @@ namespace AI
 
         // Step 3. Buy new heroes, adjust roles, sort heroes based on priority or strength
 
-        // GetFirstCastle might return NULL if there's only towns with a tent
-        Castle * castle = castles.GetFirstCastle();
+        // sort castles by value: best first
+        VecCastles sortedCastleList( castles );
+        sortedCastleList.SortByBuildingValue();
 
-        if ( castle && heroes.size() < heroLimit ) {
+        if ( heroes.size() < heroLimit ) {
             Recruits & rec = kingdom.GetRecruits();
+            Castle * recruitmentCastle = NULL;
+            int lowestHeroCount = heroLimit;
 
-            Heroes * hero = castle->GetHeroes().Guest();
-            if ( !hero ) {
+            // search for best castle to recruit hero from
+            for ( Castle * castle : sortedCastleList ) {
+                if ( castle && castle->isCastle() ) {
+                    Heroes * hero = castle->GetHeroes().Guest();
+                    const int mapIndex = castle->GetIndex();
+
+                    // make sure there is no hero in castle already and we're not under threat
+                    if ( hero || std::find( castlesInDanger.begin(), castlesInDanger.end(), mapIndex ) != castlesInDanger.end() )
+                        continue;
+
+                    const int regionID = world.GetTiles( mapIndex ).GetRegion();
+                    const int heroCount = _regions[regionID].friendlyHeroCount;
+
+                    if ( recruitmentCastle == NULL || lowestHeroCount > heroCount ) {
+                        recruitmentCastle = castle;
+                        lowestHeroCount = heroCount;
+                    }
+                }
+            }
+
+            // target found, buy hero
+            if ( recruitmentCastle ) {
+                Heroes * recruit = NULL;
                 Heroes * firstRecruit = rec.GetHero1();
                 Heroes * secondRecruit = rec.GetHero2();
                 if ( firstRecruit && secondRecruit && secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
-                    hero = castle->RecruitHero( secondRecruit );
+                    recruit = recruitmentCastle->RecruitHero( secondRecruit );
                 }
                 else {
-                    hero = castle->RecruitHero( firstRecruit );
+                    recruit = recruitmentCastle->RecruitHero( firstRecruit );
                 }
 
-                if ( !slowEarlyGame && hero )
-                    ReinforceHeroInCastle( *hero, *castle, kingdom.GetFunds() );
+                if ( recruit )
+                    ReinforceHeroInCastle( *recruit, *recruitmentCastle, kingdom.GetFunds() );
             }
         }
 
@@ -193,7 +217,7 @@ namespace AI
         VecHeroes sortedHeroList = heroes;
         std::sort( sortedHeroList.begin(), sortedHeroList.end(), []( const Heroes * left, const Heroes * right ) {
             if ( left && right )
-                return left->GetArmy().GetStrength() > right->GetArmy().GetStrength();
+                return left->GetArmy().GetStrength() < right->GetArmy().GetStrength();
             return right == NULL;
         } );
 
@@ -223,8 +247,14 @@ namespace AI
 
         status.RedrawTurnProgress( 9 );
 
+        // sync up castle list (if conquered new ones during the turn)
+        if ( castles.size() != sortedCastleList.size() ) {
+            sortedCastleList = castles;
+            sortedCastleList.SortByBuildingValue();
+        }
+
         // Step 6. Castle development according to kingdom budget
-        for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
+        for ( KingdomCastles::iterator it = sortedCastleList.begin(); it != sortedCastleList.end(); ++it ) {
             if ( *it ) {
                 CastleTurn( **it, std::find( castlesInDanger.begin(), castlesInDanger.end(), ( *it )->GetIndex() ) != castlesInDanger.end() );
             }
