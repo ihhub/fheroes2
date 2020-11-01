@@ -495,10 +495,10 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
         player1.SetRace( hero1->GetRace() );
 
         moraleIndicator1 = new MoraleIndicator( *hero1 );
-        moraleIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 75 ), true );
+        moraleIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 75 ) );
 
         luckIndicator1 = new LuckIndicator( *hero1 );
-        luckIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 115 ), true );
+        luckIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 115 ) );
 
         primskill_bar1 = new PrimarySkillsBar( hero1, true );
         primskill_bar1->SetColRows( 1, 4 );
@@ -565,10 +565,10 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         player2.SetRace( hero2->GetRace() );
 
         moraleIndicator2 = new MoraleIndicator( *hero2 );
-        moraleIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 75 ), true );
+        moraleIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 75 ) );
 
         luckIndicator2 = new LuckIndicator( *hero2 );
-        luckIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 115 ), true );
+        luckIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 115 ) );
 
         primskill_bar2 = new PrimarySkillsBar( hero2, true );
         primskill_bar2->SetColRows( 1, 4 );
