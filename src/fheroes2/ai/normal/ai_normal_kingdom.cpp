@@ -66,9 +66,9 @@ namespace AI
                 continue;
 
             const int regionID = tile.GetRegion();
-            if ( regionID >= _regions.size() ) {
+            if ( regionID < 0 && regionID >= _regions.size() ) {
                 // shouldn't be possible, assert
-                assert( 0 );
+                assert( regionID > 0 && regionID < _regions.size() );
             }
 
             RegionStats & stats = _regions[regionID];
@@ -136,27 +136,28 @@ namespace AI
         std::vector<int> castlesInDanger;
 
         for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
-            if ( enemy->second ) {
-                const double attackerStrength = enemy->second->GetStrength();
+            if ( enemy->second )
+                continue;
 
-                for ( size_t idx = 0; idx < castles.size(); ++idx ) {
-                    const Castle * castle = castles[idx];
-                    if ( castle ) {
-                        const int castleIndex = castle->GetIndex();
-                        // skip precise distance check if army is too far away to be a threat
-                        if ( Maps::GetApproximateDistance( enemy->first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
-                            continue;
+            const double attackerStrength = enemy->second->GetStrength();
 
-                        const double defenders = castle->GetArmy().GetStrength();
+            for ( size_t idx = 0; idx < castles.size(); ++idx ) {
+                const Castle * castle = castles[idx];
+                if ( castle ) {
+                    const int castleIndex = castle->GetIndex();
+                    // skip precise distance check if army is too far away to be a threat
+                    if ( Maps::GetApproximateDistance( enemy->first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
+                        continue;
 
-                        const double attackerThreat = attackerStrength - defenders;
-                        if ( attackerThreat > 0 ) {
-                            const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, color, attackerStrength );
-                            if ( dist && dist < threatDistanceLimit ) {
-                                // castle is under threat
-                                castlesInDanger.push_back( castleIndex );
-                                break;
-                            }
+                    const double defenders = castle->GetArmy().GetStrength();
+
+                    const double attackerThreat = attackerStrength - defenders;
+                    if ( attackerThreat > 0 ) {
+                        const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, color, attackerStrength );
+                        if ( dist && dist < threatDistanceLimit ) {
+                            // castle is under threat
+                            castlesInDanger.push_back( castleIndex );
+                            break;
                         }
                     }
                 }
@@ -200,6 +201,8 @@ namespace AI
                     if ( recruitmentCastle == NULL || lowestHeroCount > heroCount ) {
                         recruitmentCastle = castle;
                         lowestHeroCount = heroCount;
+                        if ( lowestHeroCount == 0 )
+                            break;
                     }
                 }
             }

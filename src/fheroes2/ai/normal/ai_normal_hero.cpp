@@ -55,7 +55,8 @@ namespace AI
                 double value = castle->getVisitValue( hero );
                 if ( value < 1000 )
                     return valueToIgnore;
-                else if ( hero.isVisited( tile ) )
+
+                if ( hero.isVisited( tile ) )
                     value -= suboptimalTaskPenalty;
                 return value;
             }
@@ -111,12 +112,13 @@ namespace AI
             return _regions[tile.GetRegion()].fogCount * 150.0;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
-            const int objectCount = _regions[tile.GetRegion()].validObjects.size();
+            const RegionStats & regionStats = _regions[tile.GetRegion()];
+            const int objectCount = regionStats.validObjects.size();
             if ( objectCount < 1 )
                 return valueToIgnore;
 
             double value = objectCount * 100.0 - 7500;
-            if ( _regions[tile.GetRegion()].friendlyHeroCount )
+            if ( regionStats.friendlyHeroCount )
                 value -= suboptimalTaskPenalty;
             return value;
         }
