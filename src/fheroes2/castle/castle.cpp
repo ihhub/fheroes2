@@ -1086,7 +1086,7 @@ uint32_t Castle::getRecruitLimit( const Monster & monster, const Funds & budget 
 
     uint32_t willRecruit = budget.getLowestQuotient( monster.GetCost() );
     if ( available < willRecruit )
-        willRecruit = available;
+        return available;
 
     return willRecruit;
 }
