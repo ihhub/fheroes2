@@ -999,7 +999,7 @@ void Maps::Tiles::setBoat( int direction )
     }
 }
 
-int Maps::Tiles::getBoatDirection()
+int Maps::Tiles::getBoatDirection() const
 {
     // Check if it really is a boat
     if ( objectTileset != ICN::BOAT32 )
