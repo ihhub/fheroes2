@@ -1042,7 +1042,9 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 
 bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force )
 {
-    Troop troop( Monster( race, GetActualDwelling( dw ) ), count );
+    Monster monster( race, GetActualDwelling( dw ) );
+    Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
+
     if ( !RecruitMonster( troop, false ) ) {
         if ( force ) {
             Troop * weak = GetArmy().GetWeakestTroop();
@@ -1055,6 +1057,36 @@ bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force
         return false;
     }
     return true;
+}
+
+void Castle::recruitBestAvailable( Funds budget )
+{
+    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
+        if ( isBuild( dw ) ) {
+            const Monster monster( race, GetActualDwelling( dw ) );
+            const uint32_t willRecruit = getRecruitLimit( monster, budget );
+
+            if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
+                // success, reduce the budget
+                budget -= ( monster.GetCost() * willRecruit );
+            }
+        }
+    }
+}
+
+uint32_t Castle::getRecruitLimit( const Monster & monster, const Funds & budget ) const 
+{
+    // validate that monster is from the current castle
+    if ( monster.GetRace() != race )
+        return 0;
+
+    const uint32_t available = getMonstersInDwelling( monster.GetDwelling() );
+
+    uint32_t willRecruit = budget.getLowestQuotient( monster.GetCost() );
+    if ( available < willRecruit )
+        willRecruit = available;
+
+    return willRecruit;
 }
 
 /* return current count monster in dwelling */
@@ -2337,25 +2369,6 @@ int Castle::GetLuckModificator( std::string * strs ) const
     }
 
     return result;
-}
-
-void Castle::recruitBestAvailable( Funds budget )
-{
-    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) ) {
-            const Monster monster( race, GetActualDwelling( dw ) );
-            const uint32_t available = getMonstersInDwelling( dw );
-
-            uint32_t willRecruit = budget.getLowestQuotient( monster.GetCost() );
-            if ( available < willRecruit )
-                willRecruit = available;
-
-            if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
-                // success, reduce the budget
-                budget -= ( monster.GetCost() * willRecruit );
-            }
-        }
-    }
 }
 
 const Army & Castle::GetArmy( void ) const
