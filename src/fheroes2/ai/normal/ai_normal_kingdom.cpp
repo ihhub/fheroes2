@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <assert.h>
+
 #include "agg.h"
 #include "ai_normal.h"
 #include "game_interface.h"
@@ -64,8 +66,10 @@ namespace AI
                 continue;
 
             const int regionID = tile.GetRegion();
-            if ( regionID >= _regions.size() )
-                continue;
+            if ( regionID >= _regions.size() ) {
+                // shouldn't be possible, assert
+                assert( 0 );
+            }
 
             RegionStats & stats = _regions[regionID];
             stats.validObjects.emplace_back( idx, objectID );

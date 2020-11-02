@@ -54,7 +54,7 @@ namespace AI
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
                 if ( value < 1000 )
-                    value = valueToIgnore;
+                    return valueToIgnore;
                 else if ( hero.isVisited( tile ) )
                     value -= suboptimalTaskPenalty;
                 return value;
@@ -101,7 +101,7 @@ namespace AI
         }
         else if ( objectID == MP2::OBJ_STONELITHS ) {
             const MapsIndexes & list = world.GetTeleportEndPoints( index );
-            for ( int teleportIndex : list ) {
+            for ( const int teleportIndex : list ) {
                 if ( world.GetTiles( teleportIndex ).isFog( hero.GetColor() ) )
                     return 0;
             }
@@ -112,10 +112,13 @@ namespace AI
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             const int objectCount = _regions[tile.GetRegion()].validObjects.size();
+            if ( objectCount < 1 )
+                return valueToIgnore;
+
             double value = objectCount * 100.0 - 7500;
             if ( _regions[tile.GetRegion()].friendlyHeroCount )
                 value -= suboptimalTaskPenalty;
-            return ( objectCount ) ? value : valueToIgnore;
+            return value;
         }
         else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
             // de-prioritize the water movement even harder
@@ -127,10 +130,11 @@ namespace AI
 
     int AI::Normal::getPriorityTarget( const Heroes & hero, int patrolIndex, uint32_t distanceLimit )
     {
-        const bool heroInPatrolMode = patrolIndex != -1;
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
-        int priorityTarget = -1;
+        const bool heroInPatrolMode = patrolIndex != -1;
+        const double heroStrength = hero.GetArmy().GetStrength();
 
+        int priorityTarget = -1;
         double maxPriority = lowestPossibleValue;
         int objectID = MP2::OBJ_ZERO;
 
@@ -156,8 +160,8 @@ namespace AI
                     if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
                         value += getObjectValue( hero, pair.first, pair.second, lowestPossibleValue );
                 }
-                auto regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
-                if ( hero.GetArmy().GetStrength() < regionStats.highestThreat )
+                const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
+                if ( heroStrength < regionStats.highestThreat )
                     value -= dangerousTaskPenalty;
                 value = ScaleWithDistance( value, dist );
 
