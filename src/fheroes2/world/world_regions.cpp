@@ -375,7 +375,6 @@ void World::ComputeStaticAnalysis()
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
     FindMissingRegions( data, Size( width, height ), _regions );
 
-
     // Step 9. Assign regions to the map tiles and finalize the data
     for ( MapRegion & reg : _regions ) {
         if ( reg._id < REGION_NODE_FOUND )
