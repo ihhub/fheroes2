@@ -893,9 +893,6 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
 
 void ActionToBoat( Heroes & hero, s32 dst_index )
 {
-    // Used to temporarily store the direction of the ship that is being boarded
-    int boatDirection = Direction::UNKNOWN;
-
     // If the hero is already on a ship do nothing
     if ( hero.isShipMaster() )
         return;
@@ -906,8 +903,8 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
     const Point offset( destPos - hero.GetCenter() );
 
     // Get the direction of the boat so that the direction of the hero can be set to it after boarding
-    Maps::Tiles & from = world.GetTiles( dst_index );
-    boatDirection = from.getBoatDirection();
+    const Maps::Tiles & from = world.GetTiles( dst_index );
+    const int boatDirection = from.getBoatDirection();
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
