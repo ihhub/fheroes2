@@ -96,7 +96,7 @@ void Game::ShowCredits()
     offsetY += title.h();
 
     const std::string contributors(
-        "LeHerosInconnu\nshprotru\nAndrey Starodubtsev\nVasilenko Alexey\nundef21\nKrzysztof Gorecki\nghostBot\nPalash Bansal\nMaria Sopkova\n"
+        "LeHerosInconnu\nshprotru\nundef21\nAndrey Starodubtsev\nVasilenko Alexey\neos428\nOroty\nKrzysztof Gorecki\nemotionalamoeba\n"
         "and many other contributors!" );
 
     name.Set( contributors, Font::BIG, textWidth );

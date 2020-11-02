@@ -1,3 +1,98 @@
+version 0.8.3 (04 November 2020)
+- fix slowed flying creature movement
+- remember boat direction when a hero boarding it
+- update Town Portal dialog
+- fix "jump" flying animation when unit has to turn for attack
+- make one rumor per week in Taverns
+- fix a case of second attack on blinded creature
+- fix Monster Info dialog in evil interface
+- fix few castle icon sprites
+- speed up video loading
+- play sound on shipwreck pickup
+- fix Freeman Foundry UI
+- fix War Troll's stone sprite
+- fix Cavalry sprite
+- fix mage guild dialog message
+- change troop logic exchange during hero meeting
+- fix boat summoning animation
+- AI heroes are able to exchange armies and artifacts
+- add road connection drawings for Barbarian castle
+- fix castle defense trigger condition
+- do not show teleport animation in some AI cases
+- center Good and Evil interface windows
+- teach AI units to block enemy archers
+- show boat froth sprite when stationary
+- fix mine guardians sprites
+- fix battle only mode
+- improve army merge logic
+- fix lighthouse missing movement bonus
+- fix boat and hero positions
+- speed up drawings for World Map
+- fix pass image position on the world map
+- give at least 1 skeleton via necromancy after victory
+- fix Hero screen status bar message position
+- fix Hero meeting screen title position
+- change Pyramid Bad Luck message
+- fix Hero's portrait position in hiring window
+- fix town population status text position
+- fix boat animation and castle building rendering
+- fix troop counter window position
+- fix adjacent monsters when removing one
+- add after play animation
+- fix redraw order for unit count
+- use hero spell power when applying Earthquake
+- fix Lighthouse fog clearance
+- change Hut of the Magi behavior
+- add game resolution popup window
+- fix spelling in castle dialog
+- always show building requirements even if the building is already built
+- fix Knowledge message in Arena
+- five every magic guild a guaranteed damage and non-damage spell
+- fix OK button in joining army window
+- adjust few elements in resolution window
+- fix battle option text overlapping
+- adjust post battle shadowing
+- change main menu popup window descriptions
+- add a support of hero AI patrol mode set in scenario
+- make autosave with capital letters
+- disable spell animation after mine was cleared
+- save boat direction when disembarking
+- set parts of wide objects as visited
+- allow AI player to start it's move with action
+- use original difficulty bonuses for the game
+- check armies for validity before starting the battle
+- remove mud pool from cover object list
+- fix non-necro undead units decreasing morale in an all-undead army
+- remember Ghost number after the battle
+- AI is able to collect/capture multiple objects on the same move
+- adjust heuristics to make sure AI doesn't miss important objects
+- fix a bug where AI was able to buy boats in a castle without shipyard
+- fix the artifact spell damage modifiers
+- display a proper message for Sea Bottle
+- make AI more agressive when dealing with archers during battle
+- replace "Ship Wreck" word with "Shipwreck"
+- set random starting experience for starting heroes
+- play flotsam disappearing sound after closing the UI window
+- fix income window drawings
+- when retreating, give the hero its default army instead of 1 T1 unit
+- stop battle after AI kills the last creature
+- use word 'one' instead of '1' in battle log
+- fix Thieves Guild background
+- fix visibility of AI hero moving close to fog
+- limit Player name text within given input box
+- show skip turn message during AI turns
+- allow to cast a spell with no move points
+- fix incorrect resurrected troops after battle
+- honour player count for Hot Seat mode
+- fix system options UI dialog
+- remove scrollbars from interface in battle only mode
+- add fading animation for defeated AI hero
+- fix time loss conditions in Info window
+- fix displaying of remaining move points
+- fix multiple text issues
+- modify messages for splitting army window
+- fix the clipped boat sprite
+
 version 0.8.2 (04 October 2020)
 - make correct spawn of neutral monsters and their growth
 - display correct window while right clicking on a monster in Kingdom Overview
