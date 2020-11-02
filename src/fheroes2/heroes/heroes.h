@@ -258,6 +258,7 @@ public:
     void RescanPathPassable( void );
 
     int GetDirection( void ) const;
+    void setDirection( int directionToSet );
 
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );

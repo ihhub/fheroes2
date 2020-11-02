@@ -144,6 +144,7 @@ namespace Maps
         void SetObject( int object );
         void SetIndex( int );
         void setBoat( int direction );
+        int getBoatDirection() const;
         void resetObjectSprite();
 
         void FixObject( void );
