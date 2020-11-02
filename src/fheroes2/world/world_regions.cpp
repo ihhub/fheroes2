@@ -138,12 +138,12 @@ namespace
 }
 
 MapRegion::MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize )
-    : _id( REGION_NODE_FOUND + regionIndex )
+    : _id( regionIndex )
     , _isWater( water )
 {
     _nodes.reserve( expectedSize );
     _nodes.emplace_back( mapIndex );
-    _nodes[0].type = _id;
+    _nodes[0].type = regionIndex;
 }
 
 std::vector<int> MapRegion::getNeighbours() const
@@ -353,10 +353,10 @@ void World::ComputeStaticAnalysis()
         _regions.emplace_back( baseIDX, 0, false, 0 );
     }
 
-    for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-        const int tileIndex = regionCenters[regionID];
+    for ( const int tileIndex : regionCenters ) {
+        const size_t regionID = _regions.size();
         _regions.emplace_back( static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
-        data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION_NODE_FOUND + regionID;
+        data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = regionID;
     }
 
     // Step 7. Grow all regions one step at the time so they would compete for space

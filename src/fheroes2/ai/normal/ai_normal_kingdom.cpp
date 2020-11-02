@@ -66,9 +66,10 @@ namespace AI
                 continue;
 
             const int regionID = tile.GetRegion();
-            if ( regionID < 0 && regionID >= _regions.size() ) {
+            if ( regionID < 0 || regionID >= _regions.size() ) {
                 // shouldn't be possible, assert
                 assert( regionID > 0 && regionID < _regions.size() );
+                continue;
             }
 
             RegionStats & stats = _regions[regionID];
