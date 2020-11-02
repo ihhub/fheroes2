@@ -375,13 +375,23 @@ void World::ComputeStaticAnalysis()
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
     FindMissingRegions( data, Size( width, height ), _regions );
 
-    // Assign regions to the map tiles
-    for ( const MapRegion & reg : _regions ) {
+
+    // Step 9. Assign regions to the map tiles and finalize the data
+    for ( MapRegion & reg : _regions ) {
         if ( reg._id < REGION_NODE_FOUND )
             continue;
 
         for ( const MapRegionNode & node : reg._nodes ) {
             vec_tiles[node.index].UpdateRegion( node.type );
+
+            // connect regions through teleporters
+            if ( node.mapObject == MP2::OBJ_STONELITHS ) {
+                const MapsIndexes & exits = GetTeleportEndPoints( node.index );
+                for ( const int exitIndex : exits ) {
+                    // neighbours is a set that will force the uniqness
+                    reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
+                }
+            }
         }
     }
 }
