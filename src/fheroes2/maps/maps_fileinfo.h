@@ -49,7 +49,6 @@ namespace Maps
         static bool NameCompare( const FileInfo &, const FileInfo & );
 
         bool isAllowCountPlayers( u32 ) const;
-        bool isSinglePlayerMap( void ) const;
         bool isMultiPlayerMap( void ) const;
         int AllowCompHumanColors( void ) const;
         int AllowComputerColors( void ) const;
