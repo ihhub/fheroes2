@@ -151,8 +151,8 @@ public:
     u32 getMonstersInDwelling( u32 ) const;
     u32 GetActualDwelling( u32 ) const;
 
-    bool RecruitMonsterFromDwelling( u32 dw, u32 count );
-    bool RecruitMonster( const Troop & );
+    bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
+    bool RecruitMonster( const Troop & troop, bool showDialog = true );
     void recruitBestAvailable( Funds budget );
 
     int getBuildingValue() const;

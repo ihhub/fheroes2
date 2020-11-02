@@ -970,128 +970,90 @@ Heroes * Castle::RecruitHero( Heroes * hero )
 }
 
 /* recruit monster from building to castle army */
-bool Castle::RecruitMonster( const Troop & troop )
+bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 {
     if ( !troop.isValid() )
         return false;
 
-    int dw_index = 0;
+    int dwellingIndex = 0;
 
     switch ( troop.GetDwelling() ) {
     case DWELLING_MONSTER1:
-        dw_index = 0;
+        dwellingIndex = 0;
         break;
     case DWELLING_UPGRADE2:
     case DWELLING_MONSTER2:
-        dw_index = 1;
+        dwellingIndex = 1;
         break;
     case DWELLING_UPGRADE3:
     case DWELLING_MONSTER3:
-        dw_index = 2;
+        dwellingIndex = 2;
         break;
     case DWELLING_UPGRADE4:
     case DWELLING_MONSTER4:
-        dw_index = 3;
+        dwellingIndex = 3;
         break;
     case DWELLING_UPGRADE5:
     case DWELLING_MONSTER5:
-        dw_index = 4;
+        dwellingIndex = 4;
         break;
     case DWELLING_UPGRADE7:
     case DWELLING_UPGRADE6:
     case DWELLING_MONSTER6:
-        dw_index = 5;
+        dwellingIndex = 5;
         break;
     default:
         return false;
     }
 
-    Monster ms = troop;
-    u32 count = troop.GetCount();
+    Monster monster = troop;
+    uint32_t count = troop.GetCount();
 
     // fix count
-    if ( dwelling[dw_index] < count )
-        count = dwelling[dw_index];
+    if ( dwelling[dwellingIndex] < count )
+        count = dwelling[dwellingIndex];
 
     // buy
-    const payment_t paymentCosts = ms.GetCost() * count;
+    const payment_t paymentCosts = monster.GetCost() * count;
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) )
         return false;
 
     // first: guard army join
-    if ( !GetArmy().JoinTroop( ms, count ) ) {
+    if ( !GetArmy().JoinTroop( monster, count ) ) {
         CastleHeroes heroes = world.GetHeroes( *this );
 
-        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( ms, count ) ) {
-            Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
+        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( monster, count ) ) {
+            if ( showDialog ) {
+                Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
+            }
             return false;
         }
     }
 
     kingdom.OddFundsResource( paymentCosts );
-    dwelling[dw_index] -= count;
+    dwelling[dwellingIndex] -= count;
 
-    DEBUG( DBG_GAME, DBG_INFO, name << " recruit: " << ms.GetMultiName() << "(" << count << ")" );
+    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << monster.GetMultiName() << "(" << count << ")" );
 
     return true;
 }
 
-bool Castle::RecruitMonsterFromDwelling( u32 dw, u32 count )
+bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force )
 {
-    int dw_index = 0;
+    Troop troop( Monster( race, GetActualDwelling( dw ) ), count );
+    if ( !RecruitMonster( troop, false ) ) {
+        if ( force ) {
+            Troop * weak = GetArmy().GetWeakestTroop();
+            if ( weak && weak->GetStrength() < troop.GetStrength() ) {
+                weak->Set( troop );
+                return true;
+            }
+        }
 
-    switch ( dw ) {
-    case DWELLING_MONSTER1:
-        dw_index = 0;
-        break;
-    case DWELLING_UPGRADE2:
-    case DWELLING_MONSTER2:
-        dw_index = 1;
-        break;
-    case DWELLING_UPGRADE3:
-    case DWELLING_MONSTER3:
-        dw_index = 2;
-        break;
-    case DWELLING_UPGRADE4:
-    case DWELLING_MONSTER4:
-        dw_index = 3;
-        break;
-    case DWELLING_UPGRADE5:
-    case DWELLING_MONSTER5:
-        dw_index = 4;
-        break;
-    case DWELLING_UPGRADE7:
-    case DWELLING_UPGRADE6:
-    case DWELLING_MONSTER6:
-        dw_index = 5;
-        break;
-    default:
         return false;
     }
-
-    const Monster ms( race, GetActualDwelling( dw ) );
-
-    // fix count
-    if ( dwelling[dw_index] < count )
-        count = dwelling[dw_index];
-
-    // buy
-    const payment_t paymentCosts = ms.GetCost() * count;
-    Kingdom & kingdom = GetKingdom();
-
-    // may be guardian present
-    Army & army2 = GetArmy();
-
-    if ( !kingdom.AllowPayment( paymentCosts ) || !army2.JoinTroop( ms, count ) )
-        return false;
-
-    kingdom.OddFundsResource( paymentCosts );
-    dwelling[dw_index] -= count;
-
-    DEBUG( DBG_GAME, DBG_INFO, name << " recruit: " << ms.GetMultiName() << "(" << count << ")" );
-
     return true;
 }
 
@@ -2388,7 +2350,7 @@ void Castle::recruitBestAvailable( Funds budget )
             if ( available < willRecruit )
                 willRecruit = available;
 
-            if ( RecruitMonsterFromDwelling( dw, willRecruit ) ) {
+            if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
                 // success, reduce the budget
                 budget -= ( monster.GetCost() * willRecruit );
             }
