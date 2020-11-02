@@ -143,9 +143,9 @@ void Castle::OpenWell( void )
 
             for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it ) {
                 if ( 0 != ( can_recruit = HowManyRecruitMonster( *this, *it, total, cur ) ) ) {
-                    results.emplace_back( *it, can_recruit );
-                    total += cur;
                     const Monster ms( race, GetActualDwelling( *it ) );
+                    results.emplace_back( ms, can_recruit );
+                    total += cur;
                     str.append( ms.GetPluralName( can_recruit ) );
                     str.append( " - " );
                     str.append( GetString( can_recruit ) );
