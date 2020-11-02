@@ -1049,6 +1049,8 @@ bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force
         if ( force ) {
             Troop * weak = GetArmy().GetWeakestTroop();
             if ( weak && weak->GetStrength() < troop.GetStrength() ) {
+                DEBUG( DBG_GAME, DBG_INFO,
+                       name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() );
                 weak->Set( troop );
                 return true;
             }
@@ -1074,7 +1076,7 @@ void Castle::recruitBestAvailable( Funds budget )
     }
 }
 
-uint32_t Castle::getRecruitLimit( const Monster & monster, const Funds & budget ) const 
+uint32_t Castle::getRecruitLimit( const Monster & monster, const Funds & budget ) const
 {
     // validate that monster is from the current castle
     if ( monster.GetRace() != race )
