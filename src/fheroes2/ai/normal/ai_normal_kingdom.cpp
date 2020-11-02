@@ -65,10 +65,10 @@ namespace AI
             if ( !kingdom.isValidKingdomObject( tile, objectID ) )
                 continue;
 
-            const int regionID = tile.GetRegion();
-            if ( regionID < 0 || regionID >= _regions.size() ) {
+            const uint32_t regionID = tile.GetRegion();
+            if ( regionID >= _regions.size() ) {
                 // shouldn't be possible, assert
-                assert( regionID > 0 && regionID < _regions.size() );
+                assert( regionID < _regions.size() );
                 continue;
             }
 
@@ -192,7 +192,7 @@ namespace AI
                     if ( hero || std::find( castlesInDanger.begin(), castlesInDanger.end(), mapIndex ) != castlesInDanger.end() )
                         continue;
 
-                    const int regionID = world.GetTiles( mapIndex ).GetRegion();
+                    const uint32_t regionID = world.GetTiles( mapIndex ).GetRegion();
                     const int heroCount = _regions[regionID].friendlyHeroCount;
 
                     // don't buy a second hero if castle is on locked island

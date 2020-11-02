@@ -148,8 +148,8 @@ namespace Maps
 
         void FixObject( void );
 
-        int GetRegion() const;
-        void UpdateRegion( int newRegionID );
+        uint32_t GetRegion() const;
+        void UpdateRegion( uint32_t newRegionID );
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
@@ -283,7 +283,7 @@ namespace Maps
         bool tileIsRoad = false;
 
         // This field does not persist in savegame
-        int _region = 0;
+        uint32_t _region = 0;
 
 #ifdef WITH_DEBUG
         uint8_t impassableTileRule = 0;

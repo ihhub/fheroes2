@@ -1294,12 +1294,12 @@ void Heroes::SetShipMaster( bool f )
     f ? SetModes( SHIPMASTER ) : ResetModes( SHIPMASTER );
 }
 
-int Heroes::lastGroundRegion() const
+uint32_t Heroes::lastGroundRegion() const
 {
     return _lastGroundRegion;
 }
 
-void Heroes::setLastGroundRegion( int regionID )
+void Heroes::setLastGroundRegion( uint32_t regionID )
 {
     _lastGroundRegion = regionID;
 }

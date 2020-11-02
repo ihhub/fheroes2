@@ -355,7 +355,7 @@ void World::ComputeStaticAnalysis()
 
     for ( const int tileIndex : regionCenters ) {
         const size_t regionID = _regions.size();
-        _regions.emplace_back( static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
+        _regions.emplace_back( regionID, tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
         data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = regionID;
     }
 

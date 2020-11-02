@@ -653,9 +653,6 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
             }
         }
     }
-    else {
-        DEBUG( DBG_GAME, DBG_WARN, " can't find teleporters" );
-    }
 
     return result;
 }

@@ -1257,12 +1257,12 @@ void Maps::Tiles::UpdatePassable( void )
     }
 }
 
-int Maps::Tiles::GetRegion() const
+uint32_t Maps::Tiles::GetRegion() const
 {
     return _region;
 }
 
-void Maps::Tiles::UpdateRegion( int newRegionID )
+void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
 {
     if ( tilePassable ) {
         _region = newRegionID;
