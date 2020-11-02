@@ -167,7 +167,7 @@ public:
     void ActionPreBattle( void );
     void ActionAfterBattle( bool attacker_wins );
 
-    void DrawImageCastle( const Point & pt );
+    void DrawImageCastle( const Point & pt ) const;
 
     int OpenDialog( bool readonly = false );
 
