@@ -271,8 +271,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
         DEBUG( DBG_BATTLE, DBG_TRACE,
                b->String() << ", dst: " << dst << ", (head: " << pos1.GetHead()->GetIndex() << ", tail: " << ( b->isWide() ? pos1.GetTail()->GetIndex() : -1 ) << ")" );
 
-        // force check fly
-        if ( static_cast<ArmyTroop *>( b )->isFlying() ) {
+        if ( b->isFlying() ) {
             b->UpdateDirection( pos1.GetRect() );
             if ( b->isReflect() != pos1.isReflect() )
                 pos1.Swap();
