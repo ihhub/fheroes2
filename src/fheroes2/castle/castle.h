@@ -153,7 +153,6 @@ public:
 
     bool RecruitMonsterFromDwelling( u32 dw, u32 count );
     bool RecruitMonster( const Troop & );
-    void RecruitAllMonsters( void );
     void recruitBestAvailable( Funds budget );
 
     int getBuildingValue() const;

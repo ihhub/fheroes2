@@ -2377,20 +2377,6 @@ int Castle::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-void Castle::RecruitAllMonsters( void )
-{
-    bool skip_recruit = false;
-
-    // skip recruit: AI with customization of empty army
-    if ( Modes( CUSTOMARMY ) && isControlAI() && !army.isValid() && !army.HasMonster( Monster( Monster::UNKNOWN ) ) )
-        skip_recruit = true;
-
-    if ( !skip_recruit )
-        for ( u32 dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 )
-            if ( isBuild( dw ) )
-                RecruitMonsterFromDwelling( dw, getMonstersInDwelling( dw ) );
-}
-
 void Castle::recruitBestAvailable( Funds budget )
 {
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
