@@ -74,7 +74,7 @@ namespace AI
 
                 const double value = hero.getMeetingValue( *otherHero );
                 // limit the max value of friendly hero meeting to 30 tiles
-                return ( value < 200 ) ? -suboptimalTaskPenalty : std::min( value, 6000.0 );
+                return ( value < 250 ) ? -suboptimalTaskPenalty : std::min( value, 10000.0 );
             }
             return 5000.0;
         }

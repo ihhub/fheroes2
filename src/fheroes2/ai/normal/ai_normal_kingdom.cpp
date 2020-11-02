@@ -189,6 +189,10 @@ namespace AI
                     const int regionID = world.GetTiles( mapIndex ).GetRegion();
                     const int heroCount = _regions[regionID].friendlyHeroCount;
 
+                    // don't buy a second hero if castle is on locked island
+                    if ( world.getRegion( regionID ).getNeighboursCount() == 0 && heroCount > 0 )
+                        continue;
+
                     if ( recruitmentCastle == NULL || lowestHeroCount > heroCount ) {
                         recruitmentCastle = castle;
                         lowestHeroCount = heroCount;

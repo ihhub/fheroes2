@@ -151,6 +151,11 @@ std::vector<int> MapRegion::getNeighbours() const
     return std::vector<int>( _neighbours.begin(), _neighbours.end() );
 }
 
+size_t MapRegion::getNeighboursCount() const
+{
+    return _neighbours.size();
+}
+
 std::vector<IndexObject> MapRegion::getObjectList() const
 {
     std::vector<IndexObject> result;

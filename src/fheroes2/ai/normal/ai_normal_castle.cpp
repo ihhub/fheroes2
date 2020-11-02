@@ -127,7 +127,7 @@ namespace AI
             return true;
         }
 
-        const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighbours().size();
+        const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighboursCount();
         const bool islandOrPeninsula = neighbourRegions < 3;
 
         // force building a shipyard, +1 to cost check since we can have 0 neighbours
