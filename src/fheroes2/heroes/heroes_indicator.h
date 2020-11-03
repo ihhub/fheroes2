@@ -36,7 +36,7 @@ public:
 
     const Rect & GetArea( void ) const;
     const std::string & GetDescriptions( void ) const;
-    void SetPos( const Point &, bool skip_back = false );
+    void SetPos( const Point & );
 
 protected:
     const Heroes & hero;
