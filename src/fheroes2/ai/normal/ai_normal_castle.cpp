@@ -39,6 +39,14 @@ namespace AI
         {}
     };
 
+    const std::vector<BuildOrder> & GetIncomeStructures( int type )
+    {
+        static const std::vector<BuildOrder> standard = {{BUILD_CASTLE, 1}, {BUILD_STATUE, 1}};
+        static const std::vector<BuildOrder> warlock = {{BUILD_CASTLE, 1}, {BUILD_STATUE, 1}, {BUILD_SPEC, 1}};
+
+        return ( type == Race::WRLK ) ? warlock : standard;
+    }
+
     const std::vector<BuildOrder> & GetDefensiveStructures( int )
     {
         static const std::vector<BuildOrder> defensive
@@ -115,7 +123,11 @@ namespace AI
             return BuildIfAvailable( castle, BUILD_WELL );
         }
 
-        const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighbours().size();
+        if ( Build( castle, GetIncomeStructures( castle.GetRace() ) ) ) {
+            return true;
+        }
+
+        const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighboursCount();
         const bool islandOrPeninsula = neighbourRegions < 3;
 
         // force building a shipyard, +1 to cost check since we can have 0 neighbours

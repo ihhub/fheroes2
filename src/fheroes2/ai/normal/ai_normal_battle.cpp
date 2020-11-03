@@ -109,7 +109,7 @@ namespace AI
         const int myHeadIndex = currentUnit.GetHeadIndex();
         const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
 
-        DEBUG( DBG_AI, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << myColor );
+        DEBUG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << myColor );
 
         const HeroBase * commander = currentUnit.GetCommander();
         const Force & friendlyForce = arena.GetForce( myColor );
@@ -174,7 +174,7 @@ namespace AI
             double towerStr = getTowerStrength( arena.GetTower( TWR_CENTER ) );
             towerStr += getTowerStrength( arena.GetTower( TWR_LEFT ) );
             towerStr += getTowerStrength( arena.GetTower( TWR_RIGHT ) );
-            DEBUG( DBG_AI, DBG_TRACE, "- Castle strength: " << towerStr );
+            DEBUG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr );
 
             if ( myColor == castle->GetColor() ) {
                 defendingCastle = true;
@@ -191,7 +191,7 @@ namespace AI
         }
 
         const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr );
-        DEBUG( DBG_AI, DBG_TRACE,
+        DEBUG( DBG_BATTLE, DBG_TRACE,
                "Tactic " << defensiveTactics << " chosen. Archers: " << myShooterStr << ", vs enemy " << enemyShooterStr << " ratio is " << enemyArcherRatio );
 
         const double attackDistanceModifier = enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
@@ -254,19 +254,19 @@ namespace AI
                             canOutrunEnemy = false;
                     }
                     else {
-                        DEBUG( DBG_AI, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" );
+                        DEBUG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" );
                     }
                 }
 
                 if ( target && targetCell != -1 ) {
                     // attack selected target
-                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
+                    DEBUG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
                     actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), targetCell, 0 ) );
                 }
                 else if ( canOutrunEnemy ) {
                     // Kiting enemy
                     // Search for a safe spot unit can move away
-                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " archer kiting enemy" );
+                    DEBUG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy" );
                 }
                 // Worst case scenario - Skip turn
             }
@@ -280,14 +280,14 @@ namespace AI
                     if ( highestStrength < attackPriority ) {
                         highestStrength = attackPriority;
                         target = enemy;
-                        DEBUG( DBG_AI, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority );
+                        DEBUG( DBG_BATTLE, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority );
                     }
                 }
 
                 if ( target ) {
                     actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
 
-                    DEBUG( DBG_AI, DBG_INFO,
+                    DEBUG( DBG_BATTLE, DBG_INFO,
                            currentUnit.GetName() << " archer focusing enemy " << target->GetName() << " threat level: " << target->GetScoreQuality( currentUnit ) );
                 }
             }
@@ -342,7 +342,7 @@ namespace AI
                                 const bool canReach = moveToEnemy.first != -1 && moveToEnemy.second <= currentUnitMoveRange;
                                 const bool hadAnotherTarget = target != NULL;
 
-                                DEBUG( DBG_AI, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << enemyThreat << " distance " << moveToEnemy.second );
+                                DEBUG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << enemyThreat << " distance " << moveToEnemy.second );
 
                                 // Composite priority criteria:
                                 // Primary - Enemy is within move range
@@ -355,11 +355,12 @@ namespace AI
                                     target = enemy;
                                     maxArcherValue = archerValue;
                                     maxEnemyThreat = enemyThreat;
-                                    DEBUG( DBG_AI, DBG_TRACE, " - Target selected " << enemy->GetName() << " cell " << targetCell << " archer value " << archerValue );
+                                    DEBUG( DBG_BATTLE, DBG_TRACE,
+                                           " - Target selected " << enemy->GetName() << " cell " << targetCell << " archer value " << archerValue );
                                 }
                             }
                             else {
-                                DEBUG( DBG_AI, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" );
+                                DEBUG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" );
                             }
                         }
 
@@ -372,10 +373,10 @@ namespace AI
                 }
 
                 if ( target ) {
-                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " defending against " << target->GetName() << " threat level: " << maxEnemyThreat );
+                    DEBUG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " defending against " << target->GetName() << " threat level: " << maxEnemyThreat );
                 }
                 else if ( targetCell != -1 ) {
-                    DEBUG( DBG_AI, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to " << targetCell );
+                    DEBUG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to " << targetCell );
                 }
             }
             else {
@@ -420,12 +421,12 @@ namespace AI
                             targetCell = wallIndex;
                         }
                     }
-                    DEBUG( DBG_AI, DBG_INFO, "Walker unit moving towards castle walls " << currentUnit.GetName() << " cell " << targetCell );
+                    DEBUG( DBG_BATTLE, DBG_INFO, "Walker unit moving towards castle walls " << currentUnit.GetName() << " cell " << targetCell );
                 }
             }
 
             // Melee unit final stage - action target should be determined already, add actions to the queue
-            DEBUG( DBG_AI, DBG_INFO, "Melee phase end, targetCell is " << targetCell );
+            DEBUG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << targetCell );
 
             if ( targetCell != -1 ) {
                 if ( myHeadIndex != targetCell )
@@ -433,7 +434,7 @@ namespace AI
 
                 if ( target ) {
                     actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
-                    DEBUG( DBG_AI, DBG_INFO,
+                    DEBUG( DBG_BATTLE, DBG_INFO,
                            currentUnit.GetName() << " melee offense, focus enemy " << target->GetName() << " threat level: " << target->GetScoreQuality( currentUnit ) );
                 }
             }
