@@ -91,12 +91,11 @@ const std::string & HeroesIndicator::GetDescriptions( void ) const
     return descriptions;
 }
 
-void HeroesIndicator::SetPos( const Point & pt, bool skip_back )
+void HeroesIndicator::SetPos( const Point & pt )
 {
     area.x = pt.x;
     area.y = pt.y;
-    if ( !skip_back )
-        back.update( area.x, area.y, area.w, area.h );
+    back.update( area.x, area.y, area.w, area.h );
 }
 
 LuckIndicator::LuckIndicator( const Heroes & h )
