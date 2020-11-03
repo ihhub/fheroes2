@@ -29,12 +29,7 @@
 
 int ObjWat2::GetPassable( u32 index )
 {
-#if ( __GNUC__ == 4 && __GNUC_MINOR__ == 4 )
-    // fixed: array subscript is above array bounds
-    const u8 disabled[] = {11, 12, 19, 22, 255};
-#else
     const u8 disabled[] = {11, 12, 19, 22};
-#endif
     const u8 restricted[] = {2, 20};
 
     if ( isShadow( index ) )
@@ -51,12 +46,7 @@ int ObjWat2::GetPassable( u32 index )
 
 int ObjWatr::GetPassable( u32 index )
 {
-#if ( __GNUC__ == 4 && __GNUC_MINOR__ == 4 )
-    // fixed: array subscript is above array bounds
-    const u8 disabled[] = {11, 12, 19, 22, 255};
-#else
     const u8 disabled[] = {11, 12, 19, 22};
-#endif
     const u8 restricted[] = {69, 182, 183, 185, 186, 187, 248};
 
     if ( isShadow( index ) )
@@ -79,13 +69,7 @@ bool ObjWatr::isAction( u32 index )
 
 bool ObjWatr::isShadow( u32 index )
 {
-#if ( __GNUC__ == 4 && __GNUC_MINOR__ == 4 )
-    // fixed: array subscript is above array bounds
-    const u8 shadows[] = {12, 38, 52, 55, 118, 166, 188, 240, 255};
-#else
     const u8 shadows[] = {12, 38, 52, 55, 118, 166, 188, 240};
-#endif
-
     return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
 }
 
