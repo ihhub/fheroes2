@@ -399,6 +399,7 @@ private:
     int16_t yAxisRValue = 0;
     uint32_t lastTime = 0;
     bool gamepadScrollActive = false;
+    bool dpadScrollActive = false;
 #endif
 
 #if VITA

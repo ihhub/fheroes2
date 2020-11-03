@@ -36,7 +36,7 @@
 #include <set>
 
 #ifdef VITA
-#include <SDL.h>
+#include <vita2d.h>
 #endif
 
 namespace
@@ -362,9 +362,6 @@ namespace
         }
 
     protected:
-#ifdef VITA
-        SDL_Rect vitaDestRect;
-#endif
         RenderEngine()
             : _window( NULL )
             , _surface( NULL )
@@ -440,11 +437,7 @@ namespace
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
                 if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
-#ifdef VITA
-                    if ( SDL_RenderCopy( _renderer, _texture, NULL, &vitaDestRect ) == 0 ) {
-#else
                     if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
-#endif
                         SDL_RenderPresent( _renderer );
                     }
                 }
@@ -867,9 +860,14 @@ namespace
 #endif
 
 #ifdef VITA
-    class VitaRenderEngine : public RenderEngine
+    class VitaRenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
+        virtual ~VitaRenderEngine()
+        {
+            clear();
+        }
+
         static VitaRenderEngine * create()
         {
             return new VitaRenderEngine;
@@ -908,8 +906,69 @@ namespace
         }
 
     protected:
+        std::vector<uint32_t> _palette32Bit;
+        SDL_Rect vitaDestRect;
+        vita2d_texture *tex_buffer = nullptr;
+        uint8_t *PalettedTexturePointer = nullptr;
+
+        virtual void clear() override
+        {
+            if ( _window != nullptr ) {
+                SDL_DestroyWindow( _window );
+                _window = nullptr;
+            }
+
+            if ( _surface != nullptr ) {
+                SDL_FreeSurface( _surface );
+                _surface = nullptr;
+            }
+
+            vita2d_fini();
+
+            if (tex_buffer != nullptr) {
+                vita2d_free_texture(tex_buffer);
+                tex_buffer = nullptr;
+            }
+        }
+
         virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
+            clear();
+
+            const std::vector<std::pair<int, int> > resolutions = getAvailableResolutions();
+            if ( !resolutions.empty() ) {
+                const std::pair<int, int> correctResolution = GetNearestResolution( width_, height_, resolutions );
+                width_ = correctResolution.first;
+                height_ = correctResolution.second;
+            }
+
+            vita2d_init();
+
+            _window = SDL_CreateWindow( "", 0, 0, width_, height_, 0 );
+            if ( _window == nullptr ) {
+                clear();
+                return false;
+            }
+
+            _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+
+            if ( _surface == nullptr ) {
+                clear();
+                return false;
+            }
+
+            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != width_ || _surface->h != height_ ) {
+                clear();
+                return false;
+            }
+
+            _createPalette();
+
+            tex_buffer = vita2d_create_empty_texture_format(width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR);
+            memcpy(vita2d_texture_get_palette(tex_buffer), _palette32Bit.data(), sizeof(uint32_t) * 256);
+            PalettedTexturePointer = (uint8_t*)vita2d_texture_get_datap(tex_buffer);
+            SDL_memset(PalettedTexturePointer, '\0', width_ * height_ * sizeof (uint8_t));
+
             // screen scaling calculation
             vitaDestRect.x = 0;
             vitaDestRect.y = 0;
@@ -918,8 +977,7 @@ namespace
 
             if ( width_ != fheroes2::Display::VITA_FULLSCREEN_WIDTH || height_ != fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) {
                 if ( isFullScreen ) {
-                    // resize to fullscreen
-                    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
+                    vita2d_texture_set_filters(tex_buffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR);
 
                     if ( keepAspectRatio ) {
                         if ( ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / fheroes2::Display::VITA_FULLSCREEN_HEIGHT )
@@ -948,7 +1006,45 @@ namespace
                 }
             }
 
-            return ( RenderEngine::allocate( width_, height_, isFullScreen ) );
+            return true;
+        }
+
+        virtual void render( const fheroes2::Display & display ) override
+        {
+            if ( tex_buffer == nullptr )
+                return;
+
+            const int32_t width = display.width();
+            const int32_t height = display.height();
+
+            memcpy(PalettedTexturePointer, display.image(), width * height * sizeof (uint8_t));
+
+            vita2d_start_drawing();
+            vita2d_draw_texture_scale(tex_buffer, vitaDestRect.x, vitaDestRect.y, static_cast<float>(vitaDestRect.w) / width, static_cast<float>(vitaDestRect.h) / height );
+            vita2d_end_drawing();
+            vita2d_wait_rendering_done();
+            vita2d_swap_buffers();
+        }
+
+        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        {
+            if ( _surface == nullptr || colorIds.size() != 256 )
+                return;
+
+            _palette32Bit.resize( 256u );
+
+            if ( _surface->format->Amask > 0 ) {
+                for ( size_t i = 0; i < 256u; ++i ) {
+                    const uint8_t * value = currentPalette + colorIds[i] * 3;
+                    _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                }
+            }
+            else {
+                for ( size_t i = 0; i < 256u; ++i ) {
+                    const uint8_t * value = currentPalette + colorIds[i] * 3;
+                    _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                }
+            }
         }
 
         virtual bool isMouseCursorActive() const override
@@ -957,7 +1053,29 @@ namespace
         }
 
     private:
+        SDL_Window * _window = nullptr;
+        SDL_Surface * _surface = nullptr;
         bool keepAspectRatio;
+
+        void _createPalette()
+        {
+            if ( _surface == nullptr )
+                return;
+
+            updatePalette( StandardPaletteIndexes() );
+
+            if ( _surface->format->BitsPerPixel == 8 ) {
+                if ( !SDL_MUSTLOCK( _surface ) ) {
+                    // copy the image from display buffer to SDL surface
+                    fheroes2::Display & display = fheroes2::Display::instance();
+                    if ( _surface->w == display.width() && _surface->h == display.height() ) {
+                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
+                    }
+
+                    linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                }
+            }
+        }
     };
 #endif
 }

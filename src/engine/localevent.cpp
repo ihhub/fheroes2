@@ -544,7 +544,12 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     SDL_Event event;
 
     ResetModes( MOUSE_MOTION );
+#ifdef WITH_GAMEPAD
+    if (!dpadScrollActive)
+        ResetModes( KEY_PRESSED );
+#else
     ResetModes( KEY_PRESSED );
+#endif
 
     mouse_wm = Point();
 
@@ -843,6 +848,8 @@ void LocalEvent::HandleJoyButtonEvent( const SDL_ControllerButtonEvent & button 
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
+        dpadScrollActive = true;
+
         if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
             key_value = KEY_KP4;
         }
@@ -855,7 +862,11 @@ void LocalEvent::HandleJoyButtonEvent( const SDL_ControllerButtonEvent & button 
         else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
             key_value = KEY_KP2;
         }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+        else {
+            dpadScrollActive = false;
+        }
+        
+        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
             key_value = KEY_SHIFT;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_BACK ) {
