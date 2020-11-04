@@ -70,13 +70,7 @@ bool ObjXlc2::isAction( u32 index )
 
 bool ObjXlc2::isShadow( u32 index )
 {
-#if ( __GNUC__ == 4 && __GNUC_MINOR__ == 4 )
-    // fixed: array subscript is above array bounds
-    const u8 shadows[] = {2, 10, 47, 83, 255};
-#else
     const u8 shadows[] = {2, 10, 47, 83};
-#endif
-
     return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
 }
 

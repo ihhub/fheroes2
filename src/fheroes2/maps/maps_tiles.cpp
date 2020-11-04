@@ -999,6 +999,37 @@ void Maps::Tiles::setBoat( int direction )
     }
 }
 
+int Maps::Tiles::getBoatDirection() const
+{
+    // Check if it really is a boat
+    if ( objectTileset != ICN::BOAT32 )
+        return Direction::UNKNOWN;
+
+    // Left-side sprites have to flipped, add 128 to index
+    switch ( objectIndex ) {
+    case 0:
+        return Direction::TOP;
+    case 9:
+        return Direction::TOP_RIGHT;
+    case 18:
+        return Direction::RIGHT;
+    case 27:
+        return Direction::BOTTOM_RIGHT;
+    case 36:
+        return Direction::BOTTOM;
+    case 27 + 128:
+        return Direction::BOTTOM_LEFT;
+    case 18 + 128:
+        return Direction::LEFT;
+    case 9 + 128:
+        return Direction::TOP_LEFT;
+    default:
+        break;
+    }
+
+    return Direction::UNKNOWN;
+}
+
 void Maps::Tiles::resetObjectSprite()
 {
     objectTileset = 0;
@@ -1257,12 +1288,12 @@ void Maps::Tiles::UpdatePassable( void )
     }
 }
 
-int Maps::Tiles::GetRegion() const
+uint32_t Maps::Tiles::GetRegion() const
 {
     return _region;
 }
 
-void Maps::Tiles::UpdateRegion( int newRegionID )
+void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
 {
     if ( tilePassable ) {
         _region = newRegionID;

@@ -329,11 +329,12 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
 {
     Actions actions;
     end_turn = false;
+    const bool isImmovable = current_troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
 
     DEBUG( DBG_BATTLE, DBG_TRACE, current_troop->String( true ) );
 
     // morale check right before the turn
-    if ( !current_troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+    if ( !isImmovable ) {
         if ( current_troop->isAffectedByMorale() )
             current_troop->SetRandomMorale();
     }
@@ -380,8 +381,8 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             }
 
             // good morale
-            if ( !end_turn && current_troop->isValid() && !current_troop->Modes( TR_SKIPMOVE ) && current_troop->Modes( TR_MOVED )
-                 && current_troop->Modes( MORALE_GOOD ) ) {
+            if ( !end_turn && current_troop->isValid() && !current_troop->Modes( TR_SKIPMOVE ) && current_troop->Modes( TR_MOVED ) && current_troop->Modes( MORALE_GOOD )
+                 && !isImmovable ) {
                 actions.push_back( Command( MSG_BATTLE_MORALE, current_troop->GetUID(), true ) );
                 end_turn = false;
             }

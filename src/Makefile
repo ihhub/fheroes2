@@ -56,9 +56,8 @@ endif
 endif
 
 ifndef WITHOUT_XML
-ifndef WITHOUT_BUNDLED_LIBS
 CFLAGS := $(CFLAGS) -DWITH_XML
-else
+ifdef WITHOUT_BUNDLED_LIBS
 CFLAGS := $(CFLAGS) $(shell pkg-config tinyxml --cflags)
 LIBS := $(LIBS) $(shell pkg-config tinyxml --libs)
 endif

@@ -258,6 +258,7 @@ public:
     void RescanPathPassable( void );
 
     int GetDirection( void ) const;
+    void setDirection( int directionToSet );
 
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
@@ -295,8 +296,8 @@ public:
 
     bool isShipMaster( void ) const;
     void SetShipMaster( bool );
-    int lastGroundRegion() const;
-    void setLastGroundRegion( int regionID );
+    uint32_t lastGroundRegion() const;
+    void setLastGroundRegion( uint32_t regionID );
 
     u32 GetExperience( void ) const;
     void IncreaseExperience( u32 );
@@ -365,7 +366,7 @@ private:
 
     std::list<IndexObject> visit_object;
     // persist this value later
-    int _lastGroundRegion = 0;
+    uint32_t _lastGroundRegion = 0;
 
     mutable int _alphaValue;
 

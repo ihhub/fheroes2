@@ -893,6 +893,7 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
 
 void ActionToBoat( Heroes & hero, s32 dst_index )
 {
+    // If the hero is already on a ship do nothing
     if ( hero.isShipMaster() )
         return;
 
@@ -901,11 +902,17 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
     const Point & destPos = Maps::GetPoint( dst_index );
     const Point offset( destPos - hero.GetCenter() );
 
+    // Get the direction of the boat so that the direction of the hero can be set to it after boarding
+    const Maps::Tiles & from = world.GetTiles( dst_index );
+    const int boatDirection = from.getBoatDirection();
+
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeOut( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
+    // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
+    hero.setDirection( boatDirection );
     hero.SetMapsObject( MP2::OBJ_ZERO );
     world.GetTiles( dst_index ).resetObjectSprite();
     hero.SetShipMaster( true );
