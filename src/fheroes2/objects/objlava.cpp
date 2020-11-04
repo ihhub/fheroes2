@@ -44,12 +44,7 @@ bool ObjLav2::isAction( u32 index )
 
 bool ObjLav2::isShadow( u32 index )
 {
-#if ( __GNUC__ == 4 && __GNUC_MINOR__ == 4 )
-    // fixed: array subscript is above array bounds
-    const u8 shadows[] = {0, 7, 14, 29, 33, 44, 55, 78, 255};
-#else
     const u8 shadows[] = {0, 7, 14, 29, 33, 44, 55, 78};
-#endif
     return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
 }
 
@@ -94,12 +89,7 @@ bool ObjLava::isAction( u32 index )
 
 bool ObjLava::isShadow( u32 index )
 {
-#if ( __GNUC__ == 4 && __GNUC_MINOR__ == 4 )
-    // fixed: array subscript is above array bounds
-    const u8 shadows[] = {10, 11, 45, 49, 77, 109, 113, 116, 255};
-#else
     const u8 shadows[] = {10, 11, 45, 49, 77, 109, 113, 116};
-#endif
     return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
 }
 

@@ -258,7 +258,8 @@ public:
     MapEvent * GetMapEvent( const Point & );
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
-    const MapRegion & getRegion( size_t id );
+    const MapRegion & getRegion( size_t id ) const;
+    size_t getRegionCount() const;
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
     bool isValidPath( int index, int direction ) const;
@@ -278,7 +279,8 @@ private:
     void Defaults( void );
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
-    void PostLoad( void );
+    void ProcessNewMap();
+    void PostLoad();
     void pickRumor();
 
 private:
@@ -316,6 +318,7 @@ private:
     MapObjects map_objects;
 
     // This data isn't serialized
+    Maps::Indexes _allTeleporters;
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };

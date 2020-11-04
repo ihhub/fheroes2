@@ -34,7 +34,7 @@ enum
 struct MapRegionNode
 {
     int index = -1;
-    int type = REGION_NODE_BLOCKED;
+    uint32_t type = REGION_NODE_BLOCKED;
     uint16_t mapObject = 0;
     uint16_t passable = 0;
     bool isWater = false;
@@ -55,7 +55,7 @@ struct MapRegionNode
 struct MapRegion
 {
 public:
-    int _id = REGION_NODE_FOUND;
+    uint32_t _id = REGION_NODE_FOUND;
     bool _isWater = false;
     std::set<int> _neighbours;
     std::vector<MapRegionNode> _nodes;
@@ -64,6 +64,7 @@ public:
     MapRegion(){};
     MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
     std::vector<int> getNeighbours() const;
+    size_t getNeighboursCount() const;
     std::vector<IndexObject> getObjectList() const;
     int getObjectCount() const;
     double getFogRatio( int color ) const;
