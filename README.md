@@ -13,27 +13,26 @@ Data from GoG version of the game is working nicely. Files from the demo version
 
 Music files in OGG format (from GoG release of the game) should be placed into the "ux0:data/fheroes2/files/music/" folder. To enable OGG music set "music = external" option in "ux0:data/fheroes2/fheroes2.cfg".
 
-rePatch reDux0 plugin is required for proper suspend/resume support
-
-https://github.com/dots-tb/rePatch-reDux0
+[rePatch reDux0](https://github.com/dots-tb/rePatch-reDux0) OR [FdFix](https://github.com/TheOfficialFloW/FdFix) plugin is required for proper suspend/resume support (only use one at a time).
 
 ## Building
 ### Prerequisites
+- DolceSDK / VitaSDK
 - libSDL2
 - libSDL2-mixer (optional)
 - libSDL2-image (optional)
-- libSDL2-ttf (optional)
 
 To build the game just run
 ```
-make -f Makefile.vita
+make -f Makefile.dolce
 ```
 
 ## Controls
 - Left analog stick - Pointer movement
 - X button - Left mouse button
 - O button - Right mouse button
-- D-Pad - Map scrolling
+- D-Pad / Right analog stick - Map scrolling
+- SELECT - System menu
 - START - Enter
 
 Text input is done with D-Pad.

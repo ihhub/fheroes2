@@ -37,6 +37,7 @@
 
 #ifdef VITA
 #include <vita2d.h>
+#include "memcpy_neon.h"
 #endif
 
 namespace
@@ -477,11 +478,9 @@ namespace
                 clear();
                 return false;
             }
-#ifdef VITA
-            _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
-#else
+
             _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
-#endif
+
             if ( _surface == NULL ) {
                 clear();
                 return false;
@@ -563,7 +562,7 @@ namespace
 #elif defined( __WIN32__ ) || defined( ANDROID )
             return SDL_RENDERER_ACCELERATED;
 #else
-        return SDL_RENDERER_ACCELERATED;
+            return SDL_RENDERER_ACCELERATED;
 #endif
         }
 
@@ -908,8 +907,8 @@ namespace
     protected:
         std::vector<uint32_t> _palette32Bit;
         SDL_Rect destRect;
-        vita2d_texture *texBuffer = nullptr;
-        uint8_t *palettedTexturePointer = nullptr;
+        vita2d_texture * texBuffer = nullptr;
+        uint8_t * palettedTexturePointer = nullptr;
 
         virtual void clear() override
         {
@@ -925,8 +924,8 @@ namespace
 
             vita2d_fini();
 
-            if (texBuffer != nullptr) {
-                vita2d_free_texture(texBuffer);
+            if ( texBuffer != nullptr ) {
+                vita2d_free_texture( texBuffer );
                 texBuffer = nullptr;
             }
         }
@@ -964,10 +963,10 @@ namespace
 
             _createPalette();
 
-            texBuffer = vita2d_create_empty_texture_format(width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR);
-            memcpy(vita2d_texture_get_palette(texBuffer), _palette32Bit.data(), sizeof(uint32_t) * 256);
-            palettedTexturePointer = (uint8_t*)vita2d_texture_get_datap(texBuffer);
-            SDL_memset(palettedTexturePointer, '\0', width_ * height_ * sizeof (uint8_t));
+            texBuffer = vita2d_create_empty_texture_format( width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
+            memcpy( vita2d_texture_get_palette( texBuffer ), _palette32Bit.data(), sizeof( uint32_t ) * 256 );
+            palettedTexturePointer = (uint8_t *)vita2d_texture_get_datap( texBuffer );
+            SDL_memset( palettedTexturePointer, '\0', width_ * height_ * sizeof( uint8_t ) );
 
             // screen scaling calculation
             destRect.x = 0;
@@ -977,7 +976,7 @@ namespace
 
             if ( width_ != fheroes2::Display::VITA_FULLSCREEN_WIDTH || height_ != fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) {
                 if ( isFullScreen ) {
-                    vita2d_texture_set_filters(texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR);
+                    vita2d_texture_set_filters( texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
 
                     if ( keepAspectRatio ) {
                         if ( ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / fheroes2::Display::VITA_FULLSCREEN_HEIGHT )
@@ -1017,10 +1016,10 @@ namespace
             const int32_t width = display.width();
             const int32_t height = display.height();
 
-            memcpy(palettedTexturePointer, display.image(), width * height * sizeof (uint8_t));
+            memcpy_neon( palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
-            vita2d_draw_texture_scale(texBuffer, destRect.x, destRect.y, static_cast<float>(destRect.w) / width, static_cast<float>(destRect.h) / height );
+            vita2d_draw_texture_scale( texBuffer, destRect.x, destRect.y, static_cast<float>( destRect.w ) / width, static_cast<float>( destRect.h ) / height );
             vita2d_end_drawing();
             vita2d_wait_rendering_done();
             vita2d_swap_buffers();
