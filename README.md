@@ -57,6 +57,6 @@ The original project had been developed at [sourceforge](https://sourceforge.net
 
 Donation
 ---------------------------
-Currently we accept donations via PayPal. All donations will be used only for the future project development as we do not consider this project as a source of income by any means.
+Currently we accept donations via PayPal and Patreon. All donations will be used only for the future project development as we do not consider this project as a source of income by any means.
 
-[![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2) [![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
