@@ -1,4 +1,8 @@
 version 0.8.3 (04 November 2020)
+- protect higher value (based on buildings built) AI castles first
+- recruit AI heroes in castles other than the first one in the list
+- improve castle build order for AI (priority on gold income buildings)
+- improve castle monster recruitment
 - fix slowed flying creature movement
 - remember boat direction when a hero boarding it
 - update Town Portal dialog
