@@ -73,7 +73,7 @@ version 0.8.3 (04 November 2020)
 - fix a bug where AI was able to buy boats in a castle without shipyard
 - fix the artifact spell damage modifiers
 - display a proper message for Sea Bottle
-- make AI more agressive when dealing with archers during battle
+- make AI more aggressive when dealing with archers during battle
 - replace "Ship Wreck" word with "Shipwreck"
 - set random starting experience for starting heroes
 - play flotsam disappearing sound after closing the UI window
@@ -87,7 +87,7 @@ version 0.8.3 (04 November 2020)
 - show skip turn message during AI turns
 - allow to cast a spell with no move points
 - fix incorrect resurrected troops after battle
-- honour player count for Hot Seat mode
+- honor player count for Hot Seat mode
 - fix system options UI dialog
 - remove scrollbars from interface in battle only mode
 - add fading animation for defeated AI hero
