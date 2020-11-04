@@ -545,7 +545,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     ResetModes( MOUSE_MOTION );
 #ifdef WITH_GAMEPAD
-    if (!dpadScrollActive)
+    if (!dpadScrollActive || dpadInputActive)
         ResetModes( KEY_PRESSED );
 #else
     ResetModes( KEY_PRESSED );
