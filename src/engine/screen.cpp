@@ -1044,6 +1044,9 @@ namespace
                     _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
                 }
             }
+
+            if ( texBuffer != nullptr )
+                memcpy( vita2d_texture_get_palette( texBuffer ), _palette32Bit.data(), sizeof( uint32_t ) * 256 );
         }
 
         virtual bool isMouseCursorActive() const override
