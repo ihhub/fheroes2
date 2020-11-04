@@ -37,9 +37,10 @@ public:
     const Rect & GetArea( void ) const;
     const std::string & GetDescriptions( void ) const;
     void SetPos( const Point & );
+    void SetHero( const Heroes & hero );
 
 protected:
-    const Heroes & hero;
+    const Heroes * hero;
     Rect area;
     fheroes2::ImageRestorer back;
     std::string descriptions;
