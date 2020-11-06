@@ -1196,6 +1196,17 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::TOWNBKG2:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 1 ) {
+                    Sprite & out = _icnVsSprite[id][0];
+                    // The pixel pixel of the original sprite has a skip value
+                    if ( !out.empty() && out.transform()[0] == 1 ) {
+                        out.transform()[0] = 0;
+                        out.image()[0] = 10;
+                    }
+                }
+                return true;
             default:
                 break;
             }
