@@ -354,11 +354,11 @@ void SpellBookRedrawMP( const fheroes2::Point & dst, u32 mp )
         mp = 999; // just in case of broken code
     }
 
-    Text text( mp > 100 ? GetString( mp / 100 ) : " ", Font::SMALL );
+    Text text( mp >= 100 ? GetString( mp / 100 ) : " ", Font::SMALL );
     text.Blit( tp.x - text.w() / 2, tp.y );
     tp.y += text.h();
 
-    text.Set( mp > 10 ? GetString( ( mp % 100 ) / 10 ) : " ", Font::SMALL );
+    text.Set( mp >= 10 ? GetString( ( mp % 100 ) / 10 ) : " ", Font::SMALL );
     text.Blit( tp.x - text.w() / 2, tp.y );
     tp.y += text.h();
 
