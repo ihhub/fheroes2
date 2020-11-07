@@ -1458,6 +1458,7 @@ namespace AI
             hero.FadeOut( Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
 
+        hero.setDirection( world.GetTiles( dst_index ).getBoatDirection() );
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         hero.SetMapsObject( MP2::OBJ_ZERO );
