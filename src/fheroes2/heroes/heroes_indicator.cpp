@@ -74,8 +74,8 @@ const char * LuckString( int luck )
     return NULL;
 }
 
-HeroesIndicator::HeroesIndicator( const Heroes & h )
-    : hero( &h )
+HeroesIndicator::HeroesIndicator( const Heroes * h )
+    : hero( h )
     , back( fheroes2::Display::instance() )
 {
     descriptions.reserve( 256 );
@@ -91,9 +91,9 @@ const std::string & HeroesIndicator::GetDescriptions( void ) const
     return descriptions;
 }
 
-void HeroesIndicator::SetHero( const Heroes & h )
+void HeroesIndicator::SetHero( const Heroes * h )
 {
-    hero = &h;
+    hero = h;
 }
 
 void HeroesIndicator::SetPos( const Point & pt )
@@ -103,7 +103,7 @@ void HeroesIndicator::SetPos( const Point & pt )
     back.update( area.x, area.y, area.w, area.h );
 }
 
-LuckIndicator::LuckIndicator( const Heroes & h )
+LuckIndicator::LuckIndicator( const Heroes * h )
     : HeroesIndicator( h )
     , luck( Luck::NORMAL )
 {
@@ -113,6 +113,9 @@ LuckIndicator::LuckIndicator( const Heroes & h )
 
 void LuckIndicator::Redraw( void )
 {
+    if ( !hero )
+        return;
+
     std::string modificators;
     modificators.reserve( 256 );
     luck = hero->GetLuckWithModificators( &modificators );
@@ -151,7 +154,7 @@ void LuckIndicator::QueueEventProcessing( LuckIndicator & indicator )
         Dialog::Message( LuckString( indicator.luck ), indicator.descriptions, Font::BIG );
 }
 
-MoraleIndicator::MoraleIndicator( const Heroes & h )
+MoraleIndicator::MoraleIndicator( const Heroes * h )
     : HeroesIndicator( h )
     , morale( Morale::NORMAL )
 {
@@ -161,6 +164,9 @@ MoraleIndicator::MoraleIndicator( const Heroes & h )
 
 void MoraleIndicator::Redraw( void )
 {
+    if ( !hero )
+        return;
+
     std::string modificators;
     modificators.reserve( 256 );
     morale = hero->GetMoraleWithModificators( &modificators );
@@ -199,20 +205,25 @@ void MoraleIndicator::QueueEventProcessing( MoraleIndicator & indicator )
         Dialog::Message( MoraleString( indicator.morale ), indicator.descriptions, Font::BIG );
 }
 
-ExperienceIndicator::ExperienceIndicator( const Heroes & h )
+ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
     area.w = 39;
     area.h = 36;
 
     descriptions = _( "Current experience %{exp1}.\n Next level %{exp2}." );
-    const uint32_t experience = hero->GetExperience();
-    StringReplace( descriptions, "%{exp1}", experience );
-    StringReplace( descriptions, "%{exp2}", hero->GetExperienceFromLevel( hero->GetLevelFromExperience( experience ) ) );
+    if ( hero ) {
+        const uint32_t experience = hero->GetExperience();
+        StringReplace( descriptions, "%{exp1}", experience );
+        StringReplace( descriptions, "%{exp2}", hero->GetExperienceFromLevel( hero->GetLevelFromExperience( experience ) ) );
+    }
 }
 
 void ExperienceIndicator::Redraw( void )
 {
+    if ( !hero )
+        return;
+
     const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
@@ -231,7 +242,7 @@ void ExperienceIndicator::QueueEventProcessing( void )
     }
 }
 
-SpellPointsIndicator::SpellPointsIndicator( const Heroes & h )
+SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
     area.w = 39;
@@ -239,13 +250,18 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes & h )
 
     descriptions = _(
         "%{name} currently has %{point} spell points out of a maximum of %{max}. The maximum number of spell points is 10 times your knowledge. It is occasionally possible to have more than your maximum spell points via special events." );
-    StringReplace( descriptions, "%{name}", hero->GetName() );
-    StringReplace( descriptions, "%{point}", hero->GetSpellPoints() );
-    StringReplace( descriptions, "%{max}", hero->GetMaxSpellPoints() );
+    if ( hero ) {
+        StringReplace( descriptions, "%{name}", hero->GetName() );
+        StringReplace( descriptions, "%{point}", hero->GetSpellPoints() );
+        StringReplace( descriptions, "%{max}", hero->GetMaxSpellPoints() );
+    }
 }
 
 void SpellPointsIndicator::Redraw( void )
 {
+    if ( !hero )
+        return;
+
     const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 

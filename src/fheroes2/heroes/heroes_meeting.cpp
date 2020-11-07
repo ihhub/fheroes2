@@ -81,25 +81,25 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     dst_pt.x = cur_pt.x + 34;
     dst_pt.y = cur_pt.y + 75;
-    MoraleIndicator moraleIndicator1( *this );
+    MoraleIndicator moraleIndicator1( this );
     moraleIndicator1.SetPos( dst_pt );
     moraleIndicator1.Redraw();
 
     dst_pt.x = cur_pt.x + 34;
     dst_pt.y = cur_pt.y + 115;
-    LuckIndicator luckIndicator1( *this );
+    LuckIndicator luckIndicator1( this );
     luckIndicator1.SetPos( dst_pt );
     luckIndicator1.Redraw();
 
     dst_pt.x = cur_pt.x + 566;
     dst_pt.y = cur_pt.y + 75;
-    MoraleIndicator moraleIndicator2( heroes2 );
+    MoraleIndicator moraleIndicator2( &heroes2 );
     moraleIndicator2.SetPos( dst_pt );
     moraleIndicator2.Redraw();
 
     dst_pt.x = cur_pt.x + 566;
     dst_pt.y = cur_pt.y + 115;
-    LuckIndicator luckIndicator2( heroes2 );
+    LuckIndicator luckIndicator2( &heroes2 );
     luckIndicator2.SetPos( dst_pt );
     luckIndicator2.Redraw();
 

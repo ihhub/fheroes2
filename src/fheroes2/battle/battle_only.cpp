@@ -485,19 +485,19 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
         player1.SetRace( hero1->GetRace() );
 
         if ( moraleIndicator1 == NULL ) {
-            moraleIndicator1 = new MoraleIndicator( *hero1 );
+            moraleIndicator1 = new MoraleIndicator( hero1 );
             moraleIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 75 ) );
         }
         else {
-            moraleIndicator1->SetHero( *hero1 );
+            moraleIndicator1->SetHero( hero1 );
         }
 
         if ( luckIndicator1 == NULL ) {
-            luckIndicator1 = new LuckIndicator( *hero1 );
+            luckIndicator1 = new LuckIndicator( hero1 );
             luckIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 115 ) );
         }
         else {
-            luckIndicator1->SetHero( *hero1 );
+            luckIndicator1->SetHero( hero1 );
         }
 
         primskill_bar1 = new PrimarySkillsBar( hero1, true );
@@ -555,19 +555,19 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         player2.SetRace( hero2->GetRace() );
 
         if ( moraleIndicator2 == NULL ) {
-            moraleIndicator2 = new MoraleIndicator( *hero2 );
+            moraleIndicator2 = new MoraleIndicator( hero2 );
             moraleIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 75 ) );
         }
         else {
-            moraleIndicator2->SetHero( *hero2 );
+            moraleIndicator2->SetHero( hero2 );
         }
 
         if ( luckIndicator2 == NULL ) {
-            luckIndicator2 = new LuckIndicator( *hero2 );
+            luckIndicator2 = new LuckIndicator( hero2 );
             luckIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 115 ) );
         }
         else {
-            luckIndicator2->SetHero( *hero2 );
+            luckIndicator2->SetHero( hero2 );
         }
 
         primskill_bar2 = new PrimarySkillsBar( hero2, true );
