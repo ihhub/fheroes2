@@ -403,9 +403,9 @@ void Players::SetPlayerInGame( int color, bool f )
 void Players::SetStartGame( void )
 {
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
-    for_each( begin(), end(), std::ptr_fun( &PlayerFocusReset ) );
-    for_each( begin(), end(), std::ptr_fun( &PlayerFixRandomRace ) );
-    for_each( begin(), end(), std::ptr_fun( &PlayerFixMultiControl ) );
+    for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
+    for_each( begin(), end(), []( Player * player ) { PlayerFixRandomRace( player ); } );
+    for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 
     current_color = Color::NONE;
     human_colors = Color::NONE;

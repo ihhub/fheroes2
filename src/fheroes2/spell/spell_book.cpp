@@ -43,14 +43,6 @@ namespace
     const fheroes2::Point bookmarkCloseOffset( 416, 280 );
 }
 
-struct SpellFiltered : std::binary_function<Spell, int, bool>
-{
-    bool operator()( Spell s, int f ) const
-    {
-        return ( ( SpellBook::ADVN & f ) && s.isCombat() ) || ( ( SpellBook::CMBT & f ) && !s.isCombat() );
-    }
-};
-
 void SpellBookRedrawLists( const SpellStorage &, Rects &, size_t, const fheroes2::Point &, u32, int only, const HeroBase & hero );
 void SpellBookRedrawSpells( const SpellStorage &, Rects &, size_t, s32, s32, const HeroBase & hero );
 void SpellBookRedrawMP( const fheroes2::Point &, u32 );
@@ -332,7 +324,8 @@ SpellStorage SpellBook::SetFilter( int filter, const HeroBase * hero ) const
         res.Append( hero->GetBagArtifacts() );
 
     if ( filter != SpellBook::ALL ) {
-        res.resize( std::distance( res.begin(), std::remove_if( res.begin(), res.end(), std::bind2nd( SpellFiltered(), filter ) ) ) );
+        res.resize( std::distance( res.begin(), std::remove_if( res.begin(), res.end(), [filter]( const Spell & s )
+        { return ( ( SpellBook::ADVN & filter ) && s.isCombat() ) || ( ( SpellBook::CMBT & filter ) && !s.isCombat() ); } ) ) );
     }
 
     // check on water: disable portal spells

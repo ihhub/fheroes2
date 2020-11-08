@@ -1547,8 +1547,8 @@ void World::ProcessNewMap()
     }
 
     // set ultimate
-    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
-                                           std::bind2nd( std::mem_fun_ref( &Maps::Tiles::isObject ), static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ) );
+    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile )
+        { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
     Point ultimate_pos;
 
     // not found

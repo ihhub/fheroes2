@@ -936,7 +936,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), std::bind2nd( HeroHasArtifact(), art ) ) );
+            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
         }
     }
 

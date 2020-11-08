@@ -635,7 +635,7 @@ u32 Skill::SecSkills::GetValues( int skill ) const
 
 int Skill::SecSkills::Count( void ) const
 {
-    return std::count_if( begin(), end(), std::mem_fun_ref( &Secondary::isValid ) );
+    return std::count_if( begin(), end(), []( const Secondary & v ) { return v.isValid(); } );
 }
 
 int Skill::SecSkills::GetTotalLevel() const
@@ -657,7 +657,7 @@ void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
         if ( it != end() )
             ( *it ).SetLevel( skill.Level() );
         else {
-            it = std::find_if( begin(), end(), std::not1( std::mem_fun_ref( &Secondary::isValid ) ) );
+            it = std::find_if( begin(), end(), []( const Secondary & v ) { return !v.isValid(); } );
             if ( it != end() )
                 ( *it ).Set( skill );
             else if ( size() < HEROESMAXSKILL )

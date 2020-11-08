@@ -315,17 +315,6 @@ namespace
         {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},      {0, 0},
          {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
     };
-
-    bool isValidAnimationFrame( const Monster::animframe_t & frameInfo )
-    {
-        return ( frameInfo.count > 0 ) && ( frameInfo.start > 0 );
-    }
-
-    void verifyValidAnimationFrame( const Monster::animframe_t & frameInfo )
-    {
-        if ( !isValidAnimationFrame( frameInfo ) )
-            Error::Except( __FUNCTION__, "animframe_t should not be empty" );
-    }
 }
 
 StreamBase & operator<<( StreamBase & msg, const monstats_t & obj )
