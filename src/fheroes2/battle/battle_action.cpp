@@ -442,7 +442,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
                    << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid );
 }
 
-void Battle::Arena::ApplyActionRetreat( Command & cmd )
+void Battle::Arena::ApplyActionRetreat( Command & /*cmd*/ )
 {
     if ( CanRetreatOpponent( current_color ) ) {
         if ( army1->GetColor() == current_color ) {
@@ -457,7 +457,7 @@ void Battle::Arena::ApplyActionRetreat( Command & cmd )
         DEBUG( DBG_BATTLE, DBG_WARN, "CanRetreatOpponent check failed" );
 }
 
-void Battle::Arena::ApplyActionSurrender( Command & cmd )
+void Battle::Arena::ApplyActionSurrender( Command & /*cmd*/ )
 {
     if ( CanSurrenderOpponent( current_color ) ) {
         Funds cost;
@@ -805,7 +805,7 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
         DEBUG( DBG_BATTLE, DBG_WARN, "incorrect param" );
 }
 
-void Battle::Arena::ApplyActionSpellSummonElemental( Command & cmd, const Spell & spell )
+void Battle::Arena::ApplyActionSpellSummonElemental( Command & /*cmd*/, const Spell & spell )
 {
     Unit * elem = CreateElemental( spell );
     if ( interface )

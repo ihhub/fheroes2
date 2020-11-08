@@ -138,7 +138,8 @@ fheroes2::Image FontPSF::RenderText( const std::string & text, const uint8_t col
         int32_t offsetX = ( *it ) * _size.width * _size.height / 8; // bits -> byte
 
         for ( int32_t y = 0; y < _size.height; ++y ) {
-            int32_t offset = ( y * _size.width / 8 ) + offsetX; // bits -> byte
+            // It's safe to cast as all values are >= 0
+            const size_t offset = static_cast<size_t>( ( y * _size.width / 8 ) + offsetX ); // bits -> byte
 
             if ( offset < _data.size() ) {
                 const int32_t line = _data[offset];

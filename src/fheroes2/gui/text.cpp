@@ -235,16 +235,6 @@ int TextUnicode::CharHeight( int f )
     return isSmallFont( f ) ? ( AGG::GetFontHeight( true ) + 2 ) : ( AGG::GetFontHeight( false ) + 8 );
 }
 
-int TextUnicode::CharAscent( int f )
-{
-    return 0;
-}
-
-int TextUnicode::CharDescent( int f )
-{
-    return 0;
-}
-
 int TextUnicode::w( u32 s, u32 c ) const
 {
     u32 res = 0;

@@ -87,7 +87,6 @@ namespace Maps
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
         static bool ForceLevel1( const TilesAddon & );
-        static bool ForceLevel2( const TilesAddon & );
 
         u32 uniq;
         u8 level;

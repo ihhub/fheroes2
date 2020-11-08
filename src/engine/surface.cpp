@@ -45,7 +45,7 @@ namespace
     u32 default_depth = 32;
     RGBA default_color_key;
     SDL_Color * pal_colors = NULL;
-    u32 pal_nums = 0;
+    int pal_nums = 0;
 
     std::set<const SDL_Surface *> paletteBasedSurface;
     std::set<const SDL_Surface *> surfaceToUpdate;

@@ -822,11 +822,6 @@ bool Maps::TilesAddon::ForceLevel1( const TilesAddon & ta )
     return false;
 }
 
-bool Maps::TilesAddon::ForceLevel2( const TilesAddon & ta )
-{
-    return false;
-}
-
 /* Maps::Addons */
 void Maps::Addons::Remove( u32 uniq )
 {
@@ -1336,10 +1331,7 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
 
 void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 {
-    if ( TilesAddon::ForceLevel2( ta ) )
-        addons_level2.push_back( ta );
-    else
-        addons_level1.push_back( ta );
+    addons_level1.push_back( ta );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
