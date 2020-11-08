@@ -336,7 +336,7 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
 bool Kingdom::isVisited( s32 index, int object ) const
 {
     std::list<IndexObject>::const_iterator it
-        = std::find_if( visit_object.begin(), visit_object.end(), [index]( const auto & v ) { return v.isIndex( index ); } );
+        = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
     return visit_object.end() != it && ( *it ).isObject( object );
 }
 
@@ -348,7 +348,7 @@ bool Kingdom::isVisited( int object ) const
 
 u32 Kingdom::CountVisitedObjects( int object ) const
 {
-    return std::count_if( visit_object.begin(), visit_object.end(), [object]( const auto & v ) { return v.isObject( object ); } );
+    return std::count_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
 /* set visited cell */
