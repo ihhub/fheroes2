@@ -17,8 +17,8 @@ LIBS :=
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
-# Add -Wconversion -Wsign-conversion flags back and -Wno-clobbered remove once we fix all other warnings!
-CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wno-clobbered
+# Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
+CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic
 
 ifdef WITH_SDL2
 SDL_LIBS := $(shell sdl2-config --libs)
