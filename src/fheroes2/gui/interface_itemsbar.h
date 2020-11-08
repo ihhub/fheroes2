@@ -379,27 +379,27 @@ namespace Interface
         }
 
     protected:
-        ItemsIterator GetTopItemIter( void )
+        virtual ItemsIterator GetTopItemIter( void ) override
         {
             return topItem;
         }
 
-        ItemsIterator GetCurItemIter( void )
+        virtual ItemsIterator GetCurItemIter( void ) override
         {
             return curItemPos.first;
         }
 
-        void SetContentItems( void )
+        virtual void SetContentItems( void ) override
         {
             ResetSelected();
         }
 
-        void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf )
+        virtual void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf ) override
         {
             RedrawItem( **it, pos, GetCurItemIter() == it, dstsf );
         }
 
-        bool ActionCursorItemIter( const Point &, ItemIterPos iterPos )
+        virtual bool ActionCursorItemIter( const Point &, ItemIterPos iterPos ) override
         {
             if ( iterPos.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();

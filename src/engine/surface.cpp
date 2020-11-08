@@ -50,18 +50,6 @@ namespace
     std::set<const SDL_Surface *> paletteBasedSurface;
     std::set<const SDL_Surface *> surfaceToUpdate;
 
-    SDL_Rect SDLRect( s32 x, s32 y, u32 w, u32 h )
-    {
-        SDL_Rect res;
-
-        res.x = x;
-        res.y = y;
-        res.w = w;
-        res.h = h;
-
-        return res;
-    }
-
     SDL_Rect SDLRect( const Rect & rt2 )
     {
         SDL_Rect res;
