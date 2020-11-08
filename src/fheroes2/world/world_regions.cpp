@@ -42,11 +42,6 @@ namespace
         LEFT = 7
     };
 
-    uint8_t ReflectDirectionIndex( uint8_t direction )
-    {
-        return ( direction + 4 ) % 8;
-    }
-
     uint16_t GetDirectionBitmask( uint8_t direction, bool reflect = false )
     {
         return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );

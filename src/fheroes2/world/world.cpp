@@ -537,7 +537,7 @@ void World::NewDay( void )
 
     // remove deprecated events
     if ( day )
-        vec_eventsday.remove_if( std::bind2nd( std::mem_fun_ref( &EventDate::isDeprecated ), day - 1 ) );
+        vec_eventsday.remove_if( [&]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
 void World::NewWeek( void )

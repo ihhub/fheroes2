@@ -937,7 +937,7 @@ bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( object );
 
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), std::bind2nd( std::mem_fun_ref( &IndexObject::isObject ), object ) );
+    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ){ return v.isObject( object ); } );
 }
 
 /* set visited cell */

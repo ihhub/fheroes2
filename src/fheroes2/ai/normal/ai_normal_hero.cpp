@@ -218,7 +218,6 @@ namespace AI
 
         std::vector<int> objectsToErase;
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            const int startIndex = hero.GetIndex();
             const int targetIndex = getPriorityTarget( hero, patrolCenter, patrolDistance );
 
             if ( targetIndex != -1 ) {

@@ -2561,17 +2561,9 @@ void Castle::ActionAfterBattle( bool attacker_wins )
         AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
-struct CastleHavePoint : public std::binary_function<const Castle *, const Point *, bool>
-{
-    bool operator()( const Castle * castle, const Point * pt ) const
-    {
-        return castle->isPosition( *pt );
-    }
-};
-
 Castle * VecCastles::Get( const Point & position ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( CastleHavePoint(), &position ) );
+    const_iterator it = std::find_if( begin(), end(), [position]( const Castle * castle ) { return castle->isPosition( position ); } );
     return end() != it ? *it : NULL;
 }
 
