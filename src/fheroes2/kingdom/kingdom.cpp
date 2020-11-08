@@ -319,7 +319,7 @@ u32 Kingdom::GetCountBuilding( u32 build ) const
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } ) );
 }
 
-uint32_t Kingdom::GetCountThievesGuild() const 
+uint32_t Kingdom::GetCountThievesGuild() const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsBuildThievesGuild ) );
 }

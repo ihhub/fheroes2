@@ -689,7 +689,6 @@ void Dialog::QuickInfo( const Castle & castle )
         Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, thievesGuildCount, DRAW_THIEVES_GUILD, false );
     }
 
-
     display.render();
 
     // quick info loop

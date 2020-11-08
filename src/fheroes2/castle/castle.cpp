@@ -2270,7 +2270,7 @@ bool Castle::PredicateIsBuildMarketplace( const Castle * castle )
     return PredicateIsBuildBuilding( castle, BUILD_MARKETPLACE );
 }
 
-bool Castle::PredicateIsBuildThievesGuild( const Castle * castle ) 
+bool Castle::PredicateIsBuildThievesGuild( const Castle * castle )
 {
     return PredicateIsBuildBuilding( castle, BUILD_THIEVESGUILD );
 }
