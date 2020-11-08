@@ -1,5 +1,5 @@
-AR := llvm-ar
-CXX := clang
+AR := ar
+CXX := g++
 LINK := libtool
 SIMPLE_LINK_FLAGS := -dynamic -undefined suppress -flat_namespace
 
@@ -15,3 +15,6 @@ search_pattern := -Wl
 comma_pattern := ,
 LINK_FLAGS := $(subst $(search_pattern),,$(LIBS))
 LINK_FLAGS := $(subst $(comma_pattern), ,$(LINK_FLAGS)) $(SIMPLE_LINK_FLAGS)
+
+# Turn all warnings into errors
+CFLAGS := $(CFLAGS) -Werror
