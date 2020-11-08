@@ -387,7 +387,8 @@ Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes * 
 
     if ( 1 < dists.size() ) {
         std::sort( dists.begin(), dists.end(), IndexDistance::Shortest );
-        dists.resize( std::count_if( dists.begin(), dists.end(), std::bind2nd( IndexDistanceEqualDistance(), dists.front().second ) ) );
+        const uint32_t distFront = dists.front().second;
+        dists.resize( std::count_if( dists.begin(), dists.end(), [distFront]( const IndexDistance & v ) { return v.second == distFront; } ) );
     }
 
     if ( dists.size() ) {

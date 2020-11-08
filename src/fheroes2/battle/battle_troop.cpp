@@ -290,10 +290,10 @@ void Battle::Unit::SetRandomMorale( void )
     if ( GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && morale > Morale::TREASON )
         --morale;
 
-    if ( morale > 0 && Rand::Get( 1, 24 ) <= morale ) {
+    if ( morale > 0 && static_cast<int32_t>( Rand::Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && Rand::Get( 1, 12 ) <= -morale ) {
+    else if ( morale < 0 && static_cast<int32_t>( Rand::Get( 1, 12 ) ) <= -morale ) {
         if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
         }
@@ -306,8 +306,8 @@ void Battle::Unit::SetRandomMorale( void )
 
 void Battle::Unit::SetRandomLuck( void )
 {
-    s32 luck = GetLuck();
-    u32 chance = Rand::Get( 1, 24 );
+    const int32_t luck = GetLuck();
+    const int32_t chance = static_cast<int32_t>( Rand::Get( 1, 24 ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );

@@ -327,7 +327,7 @@ StreamBase & operator>>( StreamBase & msg, monstats_t & obj )
     return msg >> obj.attack >> obj.defense >> obj.damageMin >> obj.damageMax >> obj.hp >> obj.speed >> obj.grown >> obj.shots >> obj.cost;
 }
 
-StreamBase & operator<<( StreamBase & msg, const MonsterStaticData & obj )
+StreamBase & operator<<( StreamBase & msg, const MonsterStaticData & /*obj*/ )
 {
     u32 monsters_size = ARRAY_COUNT( monsters );
     msg << monsters_size;
@@ -336,7 +336,7 @@ StreamBase & operator<<( StreamBase & msg, const MonsterStaticData & obj )
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, MonsterStaticData & obj )
+StreamBase & operator>>( StreamBase & msg, MonsterStaticData & /*obj*/ )
 {
     u32 monsters_size;
     msg >> monsters_size;
@@ -2173,12 +2173,12 @@ MonsterStaticData & MonsterStaticData::Get( void )
     return mgds;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Monster & obj )
+StreamBase & operator<<( StreamBase & msg, const Monster & /*obj*/ )
 {
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, Monster & obj )
+StreamBase & operator>>( StreamBase & msg, Monster & /*obj*/ )
 {
     return msg;
 }

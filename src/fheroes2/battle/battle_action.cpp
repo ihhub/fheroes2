@@ -485,7 +485,7 @@ void Battle::Arena::ApplyActionSurrender( Command & /*cmd*/ )
         DEBUG( DBG_BATTLE, DBG_WARN, "incorrect param" );
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, Unit & defender, TargetsInfo & targets )
+void Battle::Arena::TargetsApplyDamage( Unit & attacker, Unit & /*defender*/, TargetsInfo & targets )
 {
     TargetsInfo::iterator it = targets.begin();
 
