@@ -1503,6 +1503,8 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
             area.BlitOnTile( dst, sf, 0, 0, mp );
         }
     }
+#else
+    (void)dst;
 #endif
 }
 

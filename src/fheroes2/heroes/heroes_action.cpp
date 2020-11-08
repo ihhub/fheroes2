@@ -1372,6 +1372,8 @@ void ActionToSign( Heroes & hero, s32 dst_index )
 {
     MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
     Dialog::Message( _( "Sign" ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
+
+    (void)hero;
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 

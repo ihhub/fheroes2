@@ -190,7 +190,7 @@ namespace AI
         return priorityTarget;
     }
 
-    void Normal::HeroesActionComplete( Heroes & hero, int index )
+    void Normal::HeroesActionComplete( Heroes & hero )
     {
         Castle * castle = hero.inCastle();
         if ( castle ) {

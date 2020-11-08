@@ -75,7 +75,7 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
@@ -2059,7 +2059,7 @@ void AllHeroes::Scoute( int colors ) const
 
 Heroes * AllHeroes::FromJail( s32 index ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind1st( InJailMode(), index ) );
+    const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
     return end() != it ? *it : NULL;
 }
 

@@ -211,9 +211,9 @@ namespace Battle
             }
         }
 
-        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool f ) override
+        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool ) override
         {
-            Text text( str, Font::BIG );
+            const Text text( str, Font::BIG );
             text.Blit( px, py );
         }
 
@@ -4576,7 +4576,7 @@ void Battle::PopupDamageInfo::Reset( void )
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
 
-void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
+void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
 {
     if ( redraw ) {
         Cursor::Get().Hide();
