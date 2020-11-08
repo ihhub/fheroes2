@@ -450,7 +450,7 @@ int Game::GetActualKingdomColors( void )
     return Settings::Get().GetPlayers().GetActualColors();
 }
 
-std::string Game::CountScoute( u32 count, int scoute, bool shorts )
+std::string Game::CountScoute( uint32_t count, int scoute, bool shorts )
 {
     double infelicity = 0;
     std::string res;
@@ -473,15 +473,15 @@ std::string Game::CountScoute( u32 count, int scoute, bool shorts )
     }
 
     if ( res.empty() ) {
-        u32 min = Rand::Get( static_cast<u32>( std::floor( count - infelicity + 0.5 ) ), static_cast<u32>( std::floor( count + infelicity + 0.5 ) ) );
-        u32 max = 0;
+        uint32_t min = Rand::Get( static_cast<uint32_t>( std::floor( count - infelicity + 0.5 ) ), static_cast<uint32_t>( std::floor( count + infelicity + 0.5 ) ) );
+        uint32_t max = 0;
 
         if ( min > count ) {
             max = min;
-            min = static_cast<u32>( std::floor( count - infelicity + 0.5 ) );
+            min = static_cast<uint32_t>( std::floor( count - infelicity + 0.5 ) );
         }
         else
-            max = static_cast<u32>( std::floor( count + infelicity + 0.5 ) );
+            max = static_cast<uint32_t>( std::floor( count + infelicity + 0.5 ) );
 
         res = GetString( min );
 
@@ -492,6 +492,11 @@ std::string Game::CountScoute( u32 count, int scoute, bool shorts )
     }
 
     return res;
+}
+
+std::string Game::CountThievesGuild( uint32_t count, int guildCount, bool shorts )
+{
+    return guildCount == 1 ? "???" : Army::SizeString( count );
 }
 
 void Game::PlayPickupSound( void )
