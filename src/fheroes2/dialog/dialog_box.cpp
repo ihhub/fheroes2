@@ -46,12 +46,6 @@ namespace
         return image.height();
     }
 
-    int32_t middleHeight( const bool isEvilInterface )
-    {
-        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 1 );
-        return image.height();
-    }
-
     int32_t leftWidth( const bool isEvilInterface )
     {
         const int icnId = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;

@@ -621,14 +621,14 @@ Skill::SecSkills::SecSkills( int race )
 
 int Skill::SecSkills::GetLevel( int skill ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Secondary::isSkill ), skill ) );
+    const_iterator it = std::find_if( begin(), end(), [skill]( const auto & v ) { return v.isSkill( skill ); } );
 
     return it == end() ? Level::NONE : ( *it ).Level();
 }
 
 u32 Skill::SecSkills::GetValues( int skill ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Secondary::isSkill ), skill ) );
+    const_iterator it = std::find_if( begin(), end(), [skill]( const auto & v ) { return v.isSkill( skill ); } );
 
     return it == end() ? 0 : ( *it ).GetValues();
 }
@@ -652,7 +652,8 @@ int Skill::SecSkills::GetTotalLevel() const
 void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Secondary::isSkill ), skill.Skill() ) );
+        const int skillValue = skill.Skill();
+        iterator it = std::find_if( begin(), end(), [skillValue]( const auto & v ) { return v.isSkill( skillValue ); } );
         if ( it != end() )
             ( *it ).SetLevel( skill.Level() );
         else {
@@ -667,7 +668,7 @@ void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 
 Skill::Secondary * Skill::SecSkills::FindSkill( int skill )
 {
-    iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Secondary::isSkill ), skill ) );
+    iterator it = std::find_if( begin(), end(), [skill]( const auto & v ) { return v.isSkill( skill ); } );
     return it != end() ? &( *it ) : NULL;
 }
 

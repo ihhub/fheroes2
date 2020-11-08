@@ -830,12 +830,7 @@ bool Maps::TilesAddon::ForceLevel2( const TilesAddon & ta )
 /* Maps::Addons */
 void Maps::Addons::Remove( u32 uniq )
 {
-    /*
-    erase(std::remove_if(begin(), end(),
-        std::bind2nd(std::mem_fun_ref(&Maps::TilesAddon::isUniq), uniq)),
-        end());
-    */
-    remove_if( std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isUniq ), uniq ) );
+    remove_if( [uniq]( const auto & v ) { return v.isUniq( uniq ); } );
 }
 
 u32 PackTileSpriteIndex( u32 index, u32 shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
@@ -1734,14 +1729,14 @@ Maps::TilesAddon * Maps::Tiles::FindAddonICN( int icn, int level, int index )
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( u32 uniq1 )
 {
-    Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isUniq ), uniq1 ) );
+    Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), [uniq1]( const auto & v ) { return v.isUniq( uniq1 ); } );
 
     return it != addons_level1.end() ? &( *it ) : NULL;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( u32 uniq2 )
 {
-    Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isUniq ), uniq2 ) );
+    Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), [uniq2]( const auto & v ) { return v.isUniq( uniq2 ); } );
 
     return it != addons_level2.end() ? &( *it ) : NULL;
 }

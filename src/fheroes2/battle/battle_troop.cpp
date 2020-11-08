@@ -71,13 +71,13 @@ Battle::ModesAffected::ModesAffected()
 
 u32 Battle::ModesAffected::GetMode( u32 mode ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &ModeDuration::isMode ), mode ) );
+    const_iterator it = std::find_if( begin(), end(), [mode]( const auto & v ) { return v.isMode( mode ); } );
     return it == end() ? 0 : ( *it ).second;
 }
 
 void Battle::ModesAffected::AddMode( u32 mode, u32 duration )
 {
-    iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &ModeDuration::isMode ), mode ) );
+    iterator it = std::find_if( begin(), end(), [mode]( const auto & v ) { return v.isMode( mode ); } );
     if ( it == end() )
         push_back( ModeDuration( mode, duration ) );
     else
@@ -86,7 +86,7 @@ void Battle::ModesAffected::AddMode( u32 mode, u32 duration )
 
 void Battle::ModesAffected::RemoveMode( u32 mode )
 {
-    iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &ModeDuration::isMode ), mode ) );
+    iterator it = std::find_if( begin(), end(), [mode]( const auto & v ) { return v.isMode( mode ); } );
     if ( it != end() ) {
         if ( it + 1 != end() )
             std::swap( *it, back() );
@@ -101,7 +101,7 @@ void Battle::ModesAffected::DecreaseDuration( void )
 
 u32 Battle::ModesAffected::FindZeroDuration( void ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::mem_fun_ref( &ModeDuration::isZeroDuration ) );
+    const_iterator it = std::find_if( begin(), end(), []( const auto & v ) { return v.isZeroDuration(); } );
     return it == end() ? 0 : ( *it ).first;
 }
 

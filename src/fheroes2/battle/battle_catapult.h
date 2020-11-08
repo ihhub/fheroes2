@@ -45,7 +45,7 @@ namespace Battle
     class Catapult
     {
     public:
-        Catapult( const HeroBase &, bool );
+        Catapult( const HeroBase & );
 
         static Point GetTargetPosition( int );
 

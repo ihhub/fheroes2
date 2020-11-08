@@ -912,7 +912,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         ShortestDistance SortingDistance( troop->GetHeadIndex() );
         std::sort( distances.begin(), distances.end(), SortingDistance );
 
-        Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), std::bind2nd( std::ptr_fun( &Board::isValidMirrorImageIndex ), troop ) );
+        Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), [troop]( const auto & v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );
         if ( it != distances.end() ) {
             const Position pos = Position::GetCorrect( *troop, *it );
             const s32 dst = pos.GetHead()->GetIndex();

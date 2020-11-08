@@ -27,7 +27,7 @@
 #include "settings.h"
 #include "skill.h"
 
-Battle::Catapult::Catapult( const HeroBase & hero, bool fortification )
+Battle::Catapult::Catapult( const HeroBase & hero )
     : catShots( 1 )
     , doubleDamageChance( 25 )
     , canMiss( true )

@@ -44,10 +44,10 @@ namespace Battle
 
     Unit * ForceGetCurrentUnitPart( Units & units1, Units & units2, bool part1, bool units1_first, bool orders_mode )
     {
-        Units::iterator it1 = part1 ? std::find_if( units1.begin(), units1.end(), std::bind2nd( std::ptr_fun( &AllowPart1 ), orders_mode ) )
-                                    : std::find_if( units1.begin(), units1.end(), std::bind2nd( std::ptr_fun( &AllowPart2 ), orders_mode ) );
-        Units::iterator it2 = part1 ? std::find_if( units2.begin(), units2.end(), std::bind2nd( std::ptr_fun( &AllowPart1 ), orders_mode ) )
-                                    : std::find_if( units2.begin(), units2.end(), std::bind2nd( std::ptr_fun( &AllowPart2 ), orders_mode ) );
+        Units::iterator it1 = part1 ? std::find_if( units1.begin(), units1.end(), [orders_mode]( const auto & v ) { return AllowPart1( v, orders_mode ); } )
+                                    : std::find_if( units1.begin(), units1.end(), [orders_mode]( const auto & v ) { return AllowPart2( v, orders_mode ); } );
+        Units::iterator it2 = part1 ? std::find_if( units2.begin(), units2.end(), [orders_mode]( const auto & v ) { return AllowPart1( v, orders_mode ); } )
+                                    : std::find_if( units2.begin(), units2.end(), [orders_mode]( const auto & v ) { return AllowPart2( v, orders_mode ); } );
         Unit * result = NULL;
 
         if ( it1 != units1.end() && it2 != units2.end() ) {
