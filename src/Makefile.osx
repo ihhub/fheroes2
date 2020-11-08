@@ -1,4 +1,4 @@
-AR := ar
+AR := llvm-ar
 CXX := clang
 LINK := libtool
 SIMPLE_LINK_FLAGS := -dynamic -undefined suppress -flat_namespace
