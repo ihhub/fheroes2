@@ -4635,7 +4635,7 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
     }
 }
 
-bool Battle::Interface::NetworkTurn( Result & result )
+bool Battle::Interface::NetworkTurn( Result & /*result*/ )
 {
     return false;
 }

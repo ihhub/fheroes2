@@ -857,7 +857,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
 
 std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander );
 
-void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
+void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
 {
     std::vector<int> targets = GetCastleTargets();
     if ( interface ) {

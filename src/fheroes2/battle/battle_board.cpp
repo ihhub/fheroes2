@@ -156,7 +156,7 @@ s32 Battle::Board::GetDistance( s32 index1, s32 index2 )
 
 void Battle::Board::SetScanPassability( const Unit & b )
 {
-    std::for_each( begin(), end(), std::mem_fun_ref( &Cell::ResetDirection ) );
+    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetDirection(); } );
 
     at( b.GetHeadIndex() ).SetDirection( CENTER );
 

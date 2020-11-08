@@ -753,7 +753,7 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
     lists.resize( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ) - lists.begin() );
 
     if ( multi == false ) {
-        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), std::mem_fun_ref( &Maps::FileInfo::isMultiPlayerMap ) );
+        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } );
         if ( it != lists.begin() )
             lists.resize( std::distance( lists.begin(), it ) );
     }

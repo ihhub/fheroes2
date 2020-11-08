@@ -96,7 +96,7 @@ void Battle::ModesAffected::RemoveMode( u32 mode )
 
 void Battle::ModesAffected::DecreaseDuration( void )
 {
-    std::for_each( begin(), end(), std::mem_fun_ref( &ModeDuration::DecreaseDuration ) );
+    std::for_each( begin(), end(), []( Battle::ModeDuration & v ) { v.DecreaseDuration(); } );
 }
 
 u32 Battle::ModesAffected::FindZeroDuration( void ) const
