@@ -271,7 +271,7 @@ namespace CastleDialog
         const Rect & GetRect( building_t ) const;
     };
 
-    void RedrawAllBuilding( const Castle &, const Point &, const CacheBuildings &, u32 flash = BUILD_NOTHING );
+    void RedrawAllBuilding( const Castle &, const Point &, const CacheBuildings & );
     void RedrawAnimationBuilding( const Castle &, const Point &, const CacheBuildings &, u32 build );
     void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
 

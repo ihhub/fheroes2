@@ -31,7 +31,7 @@
 #include "text.h"
 
 void CastleRedrawTownName( const Castle &, const Point & );
-void CastleRedrawCurrentBuilding( const Castle &, const Point &, const CastleDialog::CacheBuildings &, u32 build, u32 flash );
+void CastleRedrawCurrentBuilding( const Castle &, const Point &, const CastleDialog::CacheBuildings &, u32 build );
 fheroes2::Rect CastleGetCoordBuilding( int, building_t, const Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
 Rect CastleGetMaxArea( const Castle &, const Point & );
@@ -64,12 +64,12 @@ const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
 void CastleDialog::RedrawAnimationBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, u32 build )
 {
     Cursor::Get().Hide();
-    CastleRedrawCurrentBuilding( castle, dst_pt, orders, build, BUILD_NOTHING );
+    CastleRedrawCurrentBuilding( castle, dst_pt, orders, build );
 }
 
-void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, u32 flash )
+void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders )
 {
-    CastleRedrawCurrentBuilding( castle, dst_pt, orders, BUILD_NOTHING, flash );
+    CastleRedrawCurrentBuilding( castle, dst_pt, orders, BUILD_NOTHING );
     CastleRedrawTownName( castle, dst_pt );
 }
 
@@ -85,7 +85,7 @@ void CastleRedrawTownName( const Castle & castle, const Point & dst )
     text.Blit( dst_pt );
 }
 
-void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders, u32 build, u32 flash )
+void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders, u32 build )
 {
     const uint32_t frame = Game::CastleAnimationFrame();
 

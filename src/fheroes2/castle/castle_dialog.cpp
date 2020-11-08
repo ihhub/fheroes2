@@ -745,7 +745,7 @@ int Castle::OpenDialog( bool readonly )
         if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
             firstDraw = false;
             cursor.Hide();
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, BUILD_NOTHING );
+            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings );
             cursor.Show();
             display.render();
 

@@ -58,16 +58,16 @@ public:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + area.w - 24, dst.y + area.h - 74 );
     };
 
-    void ActionListDoubleClick( int & index )
+    void ActionListDoubleClick( int & /*index*/ )
     {
         ok = true;
-    };
+    }
 
-    void RedrawItem( const int &, s32, s32, bool ){};
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListSingleClick( int & ){};
-    void ActionListPressRight( int & ){};
+    virtual void RedrawItem( const int &, s32, s32, bool ) override {}
+    virtual void ActionCurrentUp( void ) override {}
+    virtual void ActionCurrentDn( void ) override {}
+    virtual void ActionListSingleClick( int & ) override {}
+    virtual void ActionListPressRight( int & ) override {}
 
     Rect area;
     bool ok;
