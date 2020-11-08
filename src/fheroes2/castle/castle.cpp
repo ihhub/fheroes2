@@ -437,10 +437,22 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
     }
 
+    // we don't spend actual funds, so make a copy here
+    Funds potentialFunds = GetKingdom().GetFunds();
     Troops reinforcement;
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) )
-            reinforcement.PushBack( Monster( race, GetActualDwelling( dw ) ), getMonstersInDwelling( dw ) );
+        if ( isBuild( dw ) ) {
+            const Monster monster( race, GetActualDwelling( dw ) );
+            const uint32_t available = getMonstersInDwelling( dw );
+
+            uint32_t couldRecruit = potentialFunds.getLowestQuotient( monster.GetCost() );
+            if ( available < couldRecruit )
+                couldRecruit = available;
+
+            potentialFunds -= ( monster.GetCost() * couldRecruit );
+
+            reinforcement.PushBack( monster, couldRecruit );
+        }
     }
 
     return spellValue + hero.GetArmy().getReinforcementValue( reinforcement );
@@ -2567,6 +2579,15 @@ Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
     return end() != it ? *it : NULL;
+}
+
+void VecCastles::SortByBuildingValue()
+{
+    std::sort( begin(), end(), []( const Castle * left, const Castle * right ) {
+        if ( left && right )
+            return left->getBuildingValue() > right->getBuildingValue();
+        return right == NULL;
+    } );
 }
 
 void VecCastles::ChangeColors( int col1, int col2 )

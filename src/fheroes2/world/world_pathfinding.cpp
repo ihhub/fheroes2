@@ -44,7 +44,7 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
         }
     }
 
-    if ( object == MP2::OBJ_MONSTER )
+    if ( object == MP2::OBJ_MONSTER || ( object == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
         return Army( tile ).GetStrength() > armyStrength;
 
     return ( fromWater && !toWater && object == MP2::OBJ_COAST );

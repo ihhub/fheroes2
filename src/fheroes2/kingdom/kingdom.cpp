@@ -360,7 +360,7 @@ void Kingdom::SetVisited( s32 index, int object )
 
 bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const
 {
-    if ( tile.isFog( color ) || ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST ) )
+    if ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST )
         return false;
 
     if ( isVisited( tile.GetIndex(), objectID ) )

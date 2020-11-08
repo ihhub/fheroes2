@@ -173,13 +173,13 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     // indicators
     dst_pt.x = area.x + 185;
     dst_pt.y = area.y + 5;
-    MoraleIndicator moraleIndicator( hero );
+    MoraleIndicator moraleIndicator( &hero );
     moraleIndicator.SetPos( dst_pt );
     moraleIndicator.Redraw();
 
     dst_pt.x = area.x + 185;
     dst_pt.y = area.y + 35;
-    LuckIndicator luckIndicator( hero );
+    LuckIndicator luckIndicator( &hero );
     luckIndicator.SetPos( dst_pt );
     luckIndicator.Redraw();
 

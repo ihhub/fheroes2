@@ -1400,11 +1400,9 @@ namespace AI
                     hero.GetKingdom().OddFundsResource( payment );
                 }
             }
-            else
-                // 4,5 - need have skill wisard or leadership,
-                if ( 3 < cond && cond < 6 ) {
-                if ( hero.HasSecondarySkill( tile.QuantitySkill().Skill() ) )
-                    result = true;
+            else if ( 3 < cond && cond < 6 ) {
+                // 4,5 - bypass wisdom and leadership requirement
+                result = true;
             }
             else
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
@@ -1460,6 +1458,7 @@ namespace AI
             hero.FadeOut( Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
 
+        hero.setDirection( world.GetTiles( dst_index ).getBoatDirection() );
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         hero.SetMapsObject( MP2::OBJ_ZERO );
@@ -1851,7 +1850,7 @@ namespace AI
             const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
             if ( castle ) {
                 if ( hero.GetColor() == castle->GetColor() ) {
-                    return NULL == castle->GetHeroes().Guest() && !hero.isVisited( tile );
+                    return castle->GetHeroes().Guest() == NULL;
                 }
                 else {
                     if ( hero.isFriends( castle->GetColor() ) )
