@@ -49,7 +49,7 @@ protected:
 class LuckIndicator : public HeroesIndicator
 {
 public:
-    LuckIndicator( const Heroes * );
+    LuckIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     static void QueueEventProcessing( LuckIndicator & );
@@ -61,7 +61,7 @@ private:
 class MoraleIndicator : public HeroesIndicator
 {
 public:
-    MoraleIndicator( const Heroes * );
+    MoraleIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     static void QueueEventProcessing( MoraleIndicator & );
@@ -73,7 +73,7 @@ private:
 class ExperienceIndicator : public HeroesIndicator
 {
 public:
-    ExperienceIndicator( const Heroes * );
+    ExperienceIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     void QueueEventProcessing( void );
@@ -82,7 +82,7 @@ public:
 class SpellPointsIndicator : public HeroesIndicator
 {
 public:
-    SpellPointsIndicator( const Heroes * );
+    SpellPointsIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     void QueueEventProcessing( void );
