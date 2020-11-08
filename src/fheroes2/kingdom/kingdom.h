@@ -115,6 +115,7 @@ public:
     u32 GetLostTownDays( void ) const;
     u32 GetCountNecromancyShrineBuild( void ) const;
     u32 GetCountBuilding( u32 ) const;
+    uint32_t GetCountThievesGuild() const;
 
     Recruits & GetRecruits( void );
 

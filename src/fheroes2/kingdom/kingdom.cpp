@@ -319,6 +319,11 @@ u32 Kingdom::GetCountBuilding( u32 build ) const
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } ) );
 }
 
+uint32_t Kingdom::GetCountThievesGuild() const 
+{
+    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsBuildThievesGuild ) );
+}
+
 bool Kingdom::AllowPayment( const Funds & funds ) const
 {
     return ( resource.wood >= funds.wood || 0 == funds.wood ) && ( resource.mercury >= funds.mercury || 0 == funds.mercury )
