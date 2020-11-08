@@ -32,7 +32,7 @@ class Heroes;
 class HeroesIndicator
 {
 public:
-    HeroesIndicator( const Heroes * );
+    HeroesIndicator( const Heroes * h = nullptr );
 
     const Rect & GetArea( void ) const;
     const std::string & GetDescriptions( void ) const;
