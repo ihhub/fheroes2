@@ -89,6 +89,7 @@ Battle::Units::Units()
 }
 
 Battle::Units::Units( const Units & units, bool filter )
+    : std::vector<Unit *>()
 {
     reserve( CAPACITY < units.size() ? units.size() : CAPACITY );
     assign( units.begin(), units.end() );

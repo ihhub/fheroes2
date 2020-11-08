@@ -167,7 +167,7 @@ Artifact Maps::Tiles::QuantityArtifact( void ) const
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_WAGON:
-        return Artifact( quantity2 ? Artifact::UNKNOWN : quantity1 );
+        return Artifact( quantity2 ? static_cast<int>( Artifact::UNKNOWN ) : quantity1 );
 
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_DAEMONCAVE:

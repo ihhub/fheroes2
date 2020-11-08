@@ -138,7 +138,9 @@ namespace AI
 
         int priorityTarget = -1;
         double maxPriority = lowestPossibleValue;
+#ifdef WITH_DEBUG
         int objectID = MP2::OBJ_ZERO;
+#endif
 
         // pre-cache the pathfinder
         _pathfinder.reEvaluateIfNeeded( hero );
@@ -170,7 +172,9 @@ namespace AI
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
+#ifdef WITH_DEBUG
                     objectID = node.second;
+#endif
 
                     DEBUG( DBG_AI, DBG_TRACE,
                            hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );

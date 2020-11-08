@@ -661,8 +661,9 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 s32 World::NextTeleport( s32 index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
-    if ( teleports.empty() )
+    if ( teleports.empty() ) {
         DEBUG( DBG_GAME, DBG_WARN, "not found" );
+    }
 
     return teleports.size() ? *Rand::Get( teleports ) : index;
 }
@@ -704,8 +705,9 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
 s32 World::NextWhirlpool( s32 index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
-    if ( whilrpools.empty() )
+    if ( whilrpools.empty() ) {
         DEBUG( DBG_GAME, DBG_WARN, "is full" );
+    }
 
     return whilrpools.size() ? *Rand::Get( whilrpools ) : index;
 }
@@ -1257,8 +1259,9 @@ void EventDate::LoadFromMP2( StreamBuf st )
                "event"
                    << ": " << message );
     }
-    else
+    else {
         DEBUG( DBG_GAME, DBG_WARN, "unknown id" );
+    }
 }
 
 bool EventDate::isDeprecated( u32 date ) const

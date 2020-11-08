@@ -145,7 +145,7 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
 
     if ( targets.size() ) {
         // Miss chance is 25%
-        return canMiss && 6 > Rand::Get( 1, 20 ) ? CAT_MISS : ( 1 < targets.size() ? *Rand::Get( targets ) : targets.front() );
+        return canMiss && 6 > Rand::Get( 1, 20 ) ? static_cast<int>( CAT_MISS ) : ( 1 < targets.size() ? *Rand::Get( targets ) : targets.front() );
     }
 
     DEBUG( DBG_BATTLE, DBG_TRACE, "target not found.." );
