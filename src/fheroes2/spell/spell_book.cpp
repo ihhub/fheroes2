@@ -324,8 +324,9 @@ SpellStorage SpellBook::SetFilter( int filter, const HeroBase * hero ) const
         res.Append( hero->GetBagArtifacts() );
 
     if ( filter != SpellBook::ALL ) {
-        res.resize( std::distance( res.begin(), std::remove_if( res.begin(), res.end(), [filter]( const Spell & s )
-        { return ( ( SpellBook::ADVN & filter ) && s.isCombat() ) || ( ( SpellBook::CMBT & filter ) && !s.isCombat() ); } ) ) );
+        res.resize( std::distance( res.begin(), std::remove_if( res.begin(), res.end(), [filter]( const Spell & s ) {
+                                       return ( ( SpellBook::ADVN & filter ) && s.isCombat() ) || ( ( SpellBook::CMBT & filter ) && !s.isCombat() );
+                                   } ) ) );
     }
 
     // check on water: disable portal spells
