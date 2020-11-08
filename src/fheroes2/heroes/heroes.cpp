@@ -1962,9 +1962,10 @@ Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 {
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ?
-        std::find_if( begin(), end(), [castle]( Heroes * hero ){ return InCastleAndGuardian()( &castle, hero ); } ) : end();
-    return end() != it ? *it : NULL;
+    const_iterator it = Settings::Get().ExtCastleAllowGuardians()
+                            ? std::find_if( begin(), end(), [castle]( Heroes * hero ) { return InCastleAndGuardian()( &castle, hero ); } )
+                            : end();
+     return end() != it ? *it : NULL;
 }
 
 Heroes * AllHeroes::GetFreeman( int race ) const
