@@ -1907,7 +1907,8 @@ bool Maps::Tiles::isStream( void ) const
 
 bool Maps::Tiles::isShadow( void ) const
 {
-    return isShadowSprite( objectTileset, objectIndex ) && addons_level1.size() != std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow );
+    return isShadowSprite( objectTileset, objectIndex )
+        && addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
 }
 
 bool Maps::Tiles::hasSpriteAnimation() const

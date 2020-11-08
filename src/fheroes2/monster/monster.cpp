@@ -148,7 +148,7 @@ namespace
     };
 
     Monster::monstersprite_t monsters_info[] = {
-        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
+        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0}, {0, 0},
          {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
 
         // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3

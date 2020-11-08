@@ -1955,13 +1955,15 @@ Heroes * VecHeroes::Get( const Point & center ) const
 
 Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
+    const_iterator it
+        = std::find_if( begin(), end(), [castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
     return end() != it ? *it : NULL;
 }
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 {
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ? std::find_if( begin(), end(), std::bind1st( InCastleAndGuardian(), &castle ) ) : end();
+    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ?
+        std::find_if( begin(), end(), [castle]( Heroes * hero ){ return InCastleAndGuardian()( &castle, hero ); } ) : end();
     return end() != it ? *it : NULL;
 }
 

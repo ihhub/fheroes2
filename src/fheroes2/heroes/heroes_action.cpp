@@ -43,15 +43,15 @@
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
 void ActionToHeroes( Heroes & hero, s32 dst_index );
-void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToMonster( Heroes & hero, int obj, s32 dst_index );
 void ActionToBoat( Heroes & hero, s32 dst_index );
 void ActionToCoast( Heroes & hero, s32 dst_index );
 void ActionToWagon( Heroes & hero, s32 dst_index );
 void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToPickupResource( Heroes & hero, int obj, s32 dst_index );
 void ActionToFlotSam( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToArtifact( Heroes & hero, int obj, s32 dst_index );
 void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index );
 void ActionToShrine( Heroes & hero, s32 dst_index );
 void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index );
@@ -664,7 +664,7 @@ void Heroes::Action( s32 dst_index )
         }
 }
 
-void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 {
     bool destroy = false;
     Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -945,7 +945,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToPickupResource( Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     MapResource * map_resource = NULL;
@@ -1663,7 +1663,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     MapArtifact * map_artifact = NULL;

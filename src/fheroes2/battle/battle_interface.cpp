@@ -2113,7 +2113,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
 }
 
-void Battle::Interface::HumanCastSpellTurn( const Unit & b, Actions & a, std::string & msg )
+void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std::string & msg )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -2292,7 +2292,7 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
     return res;
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 themes, const Cell & cell, Actions & a )
+void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell, Actions & a )
 {
     const s32 index = cell.GetIndex();
     const Unit * b = cell.GetUnit();

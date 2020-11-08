@@ -349,7 +349,7 @@ bool Battle::Unit::canReach( int index ) const
 
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return Board::GetDistance( from, index ) <= GetSpeed( true );
+    return static_cast<uint32_t>( Board::GetDistance( from, index ) ) <= GetSpeed( true );
 }
 
 bool Battle::Unit::canReach( const Unit & unit ) const

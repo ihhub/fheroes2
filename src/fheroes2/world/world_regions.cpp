@@ -283,7 +283,7 @@ void World::ComputeStaticAnalysis()
         // Check if a lot of players next to each other? (Slugfest map)
         // GetCastle( Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
-        AppendIfFarEnough( regionCenters, ( castleIndex > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
+        AppendIfFarEnough( regionCenters, ( castleIndex >= 0 && static_cast<size_t>( castleIndex ) > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
     // Step 4. Add missing region centres based on distance (for water or if there's big chunks of space without castles)
@@ -302,7 +302,7 @@ void World::ComputeStaticAnalysis()
                 else {
                     for ( uint8_t direction = 0; direction < 8; ++direction ) {
                         const int newIndex = tileIndex + directionOffsets[direction];
-                        if ( newIndex >= 0 && newIndex < totalMapTiles ) {
+                        if ( newIndex >= 0 && static_cast<size_t>( newIndex ) < totalMapTiles ) {
                             const Maps::Tiles & newTile = vec_tiles[newIndex];
                             if ( newTile.GetPassable() && tile.isWater() == static_cast<bool>( waterOrGround ) ) {
                                 centerIndex = newIndex;
