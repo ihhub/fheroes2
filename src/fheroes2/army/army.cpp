@@ -749,17 +749,19 @@ void Troops::KeepOnlyWeakest( Troops & troops2, bool save_last )
     }
 }
 
-void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute, bool compact ) const
+void Troops::DrawMons32Line( int cx, int cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, uint32_t drawType, bool compact ) const
 {
     if ( isValid() ) {
         if ( 0 == count )
             count = GetCount();
 
-        const u32 chunk = width / count;
+        const uint32_t chunk = width / count;
         cx += chunk / 2;
 
         Text text;
         text.Set( Font::SMALL );
+
+        auto getCountFunc = drawType == DRAW_SCOUTE ? Game::CountScoute : Game::CountThievesGuild;
 
         for ( const_iterator it = begin(); it != end(); ++it ) {
             if ( ( *it )->isValid() ) {
@@ -770,7 +772,7 @@ void Troops::DrawMons32LineWithScoute( s32 cx, s32 cy, u32 width, u32 first, u32
 
                     fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2, cy + offsetY );
 
-                    text.Set( Game::CountScoute( ( *it )->GetCount(), scoute, compact ) );
+                    text.Set( getCountFunc( ( *it )->GetCount(), drawPower, compact ) );
                     if ( compact )
                         text.Blit( cx + monster.width() / 2, cy + 23 );
                     else
@@ -1385,31 +1387,33 @@ bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
 
 void Army::DrawMons32LineWithScoute( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute )
 {
-    troops.DrawMons32LineWithScoute( cx, cy, width, first, count, scoute, false );
+    troops.DrawMons32Line( cx, cy, width, first, count, scoute, DRAW_SCOUTE, false );
 }
 
 /* draw MONS32 sprite in line, first valid = 0, count = 0 */
 void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
 {
-    troops.DrawMons32LineWithScoute( cx, cy, width, first, count, Skill::Level::EXPERT, false );
+    troops.DrawMons32Line( cx, cy, width, first, count, Skill::Level::EXPERT, DRAW_SCOUTE, false );
 }
 
-void Army::DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 lineWidth, u32 scout, bool compact )
+void Army::DrawMonsterLines( const Troops & troops, uint32_t posX, uint32_t posY, uint32_t lineWidth, uint32_t drawType, uint32_t drawMethod, bool compact )
 {
     const uint32_t count = troops.GetCount();
     const int offsetX = lineWidth / 6;
     const int offsetY = compact ? 29 : 50;
 
-    if ( count < 4 ) {
-        troops.DrawMons32LineWithScoute( posX, posY + offsetY / 2, lineWidth, 0, 0, scout, compact );
-    }
-    else if ( count == 4 ) {
-        troops.DrawMons32LineWithScoute( posX + offsetX, posY, lineWidth * 2 / 3, 0, 2, scout, compact );
-        troops.DrawMons32LineWithScoute( posX, posY + offsetY, lineWidth * 2 / 3, 2, 2, scout, compact );
+    const bool useSingleLine = count < 4;
+
+    if ( useSingleLine ) {
+        troops.DrawMons32Line( posX, posY + offsetY / 2, lineWidth, 0, 0, drawType, drawMethod, compact );
     }
     else {
-        troops.DrawMons32LineWithScoute( posX + offsetX, posY, lineWidth * 2 / 3, 0, 2, scout, compact );
-        troops.DrawMons32LineWithScoute( posX, posY + offsetY, lineWidth, 2, 3, scout, compact );
+        const int firstLineTroopCount = 2;
+        const int secondLineTroopCount = count - firstLineTroopCount;
+        const int secondLineWidth = secondLineTroopCount == 2 ? lineWidth * 2 / 3 : lineWidth;
+
+        troops.DrawMons32Line( posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, drawMethod, compact );
+        troops.DrawMons32Line( posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, drawMethod, compact );
     }
 }
 
