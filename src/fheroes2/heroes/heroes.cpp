@@ -1038,7 +1038,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
             art() == Artifact::MAGIC_BOOK ? Dialog::Message(
-                "",
+                GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Font::BIG, Dialog::OK )
                                           : Dialog::Message( art.GetName(), _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
@@ -1206,7 +1206,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
         if ( isControlHuman() ) {
             header.append( " " );
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
-            Dialog::Message( "", header, Font::BIG, Dialog::OK );
+            Dialog::Message( GetName(), header, Font::BIG, Dialog::OK );
         }
         return false;
     }
