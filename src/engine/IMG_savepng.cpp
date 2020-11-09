@@ -20,6 +20,8 @@
   "Philip D. Bober" <wildfire1138@mchsi.com>
 */
 
+/* 2020 - fix some compile warnings - fheroes2 team (new?) */
+
 /* 2010 - support: sdl 1.3 - fheroes2 team */
 /* 2009 - changed: save 16bpp, 24bpp - fheroes2 team */
 /* 2008 - changed: default color - fheroes2 team */
