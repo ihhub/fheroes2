@@ -52,7 +52,7 @@ public:
     fheroes2::ImageRestorer _restorer;
 };
 
-void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool current )
+void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*current*/ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();

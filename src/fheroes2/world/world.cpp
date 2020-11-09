@@ -537,7 +537,7 @@ void World::NewDay( void )
 
     // remove deprecated events
     if ( day )
-        vec_eventsday.remove_if( std::bind2nd( std::mem_fun_ref( &EventDate::isDeprecated ), day - 1 ) );
+        vec_eventsday.remove_if( [&]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
 void World::NewWeek( void )
@@ -661,8 +661,9 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 s32 World::NextTeleport( s32 index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
-    if ( teleports.empty() )
+    if ( teleports.empty() ) {
         DEBUG( DBG_GAME, DBG_WARN, "not found" );
+    }
 
     return teleports.size() ? *Rand::Get( teleports ) : index;
 }
@@ -704,8 +705,9 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
 s32 World::NextWhirlpool( s32 index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
-    if ( whilrpools.empty() )
+    if ( whilrpools.empty() ) {
         DEBUG( DBG_GAME, DBG_WARN, "is full" );
+    }
 
     return whilrpools.size() ? *Rand::Get( whilrpools ) : index;
 }
@@ -936,7 +938,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), std::bind2nd( HeroHasArtifact(), art ) ) );
+            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
         }
     }
 
@@ -1052,7 +1054,7 @@ void World::resetPathfinder()
 void World::PostLoad()
 {
     // update tile passable
-    std::for_each( vec_tiles.begin(), vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
+    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdatePassable(); } );
 
     // cache data that's accessed often
     _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
@@ -1257,8 +1259,9 @@ void EventDate::LoadFromMP2( StreamBuf st )
                "event"
                    << ": " << message );
     }
-    else
+    else {
         DEBUG( DBG_GAME, DBG_WARN, "unknown id" );
+    }
 }
 
 bool EventDate::isDeprecated( u32 date ) const

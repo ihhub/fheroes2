@@ -45,22 +45,10 @@ namespace
     u32 default_depth = 32;
     RGBA default_color_key;
     SDL_Color * pal_colors = NULL;
-    u32 pal_nums = 0;
+    int pal_nums = 0;
 
     std::set<const SDL_Surface *> paletteBasedSurface;
     std::set<const SDL_Surface *> surfaceToUpdate;
-
-    SDL_Rect SDLRect( s32 x, s32 y, u32 w, u32 h )
-    {
-        SDL_Rect res;
-
-        res.x = x;
-        res.y = y;
-        res.w = w;
-        res.h = h;
-
-        return res;
-    }
 
     SDL_Rect SDLRect( const Rect & rt2 )
     {

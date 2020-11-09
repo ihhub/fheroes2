@@ -172,7 +172,7 @@ const char * GetGeneralSettingDescription( int settingId )
 {
     const settings_t * ptr = settingsGeneral;
     while ( ptr->id != 0 ) {
-        if ( ptr->id == settingId )
+        if ( ptr->id == static_cast<uint32_t>( settingId ) )
             return ptr->str;
         ++ptr;
     }

@@ -211,9 +211,9 @@ namespace Battle
             }
         }
 
-        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool f ) override
+        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool ) override
         {
-            Text text( str, Font::BIG );
+            const Text text( str, Font::BIG );
             text.Blit( px, py );
         }
 
@@ -2113,7 +2113,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
 }
 
-void Battle::Interface::HumanCastSpellTurn( const Unit & b, Actions & a, std::string & msg )
+void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std::string & msg )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -2292,7 +2292,7 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
     return res;
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 themes, const Cell & cell, Actions & a )
+void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell, Actions & a )
 {
     const s32 index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
@@ -4576,7 +4576,7 @@ void Battle::PopupDamageInfo::Reset( void )
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
 
-void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
+void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
 {
     if ( redraw ) {
         Cursor::Get().Hide();
@@ -4635,7 +4635,7 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
     }
 }
 
-bool Battle::Interface::NetworkTurn( Result & result )
+bool Battle::Interface::NetworkTurn( Result & /*result*/ )
 {
     return false;
 }

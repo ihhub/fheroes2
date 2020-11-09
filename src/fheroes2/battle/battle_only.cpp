@@ -110,17 +110,21 @@ StreamBase & operator>>( StreamBase & msg, Battle::Only & b )
 
     msg >> id;
     b.hero1 = world.GetHeroes( id );
-    if ( b.hero1 )
+    if ( b.hero1 ) {
         msg >> *b.hero1;
-    else
+    }
+    else {
         DEBUG( DBG_NETWORK, DBG_WARN, "unknown id" );
+    }
 
     msg >> id;
     b.hero2 = world.GetHeroes( id );
-    if ( b.hero2 )
+    if ( b.hero2 ) {
         msg >> *b.hero2;
-    else
+    }
+    else {
         DEBUG( DBG_NETWORK, DBG_WARN, "unknown id" );
+    }
 
     msg >> b.player1 >> b.player2;
 

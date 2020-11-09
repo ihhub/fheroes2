@@ -69,17 +69,16 @@ int IMG_SavePNG_RW( SDL_RWops * src, SDL_Surface * surf, int compression )
     png_infop info_ptr;
     SDL_PixelFormat * fmt = NULL;
     SDL_Surface * tempsurf = NULL;
-    int ret, funky_format;
+    int ret = -1;
+    int funky_format = 0;
     unsigned int i;
-    Uint8 used_alpha, temp_alpha = 0;
-    png_colorp palette;
+    Uint8 used_alpha = 0;
+    Uint8 temp_alpha = 0;
+    png_colorp palette = NULL;
     Uint8 * palette_alpha = NULL;
     png_byte ** row_pointers = NULL;
     png_ptr = NULL;
     info_ptr = NULL;
-    palette = NULL;
-    ret = -1;
-    funky_format = 0;
 
     if ( !src || !surf ) {
         goto savedone; /* Nothing to do. */

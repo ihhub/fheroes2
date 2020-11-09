@@ -356,7 +356,7 @@ bool Castle::isCapital( void ) const
 
 u32 Castle::CountBuildings( void ) const
 {
-    const u32 tavern = ( race == Race::NECR ? ( Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : 0 ) : BUILD_TAVERN );
+    const u32 tavern = ( race == Race::NECR ? ( Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
 
     return CountBits( building
                       & ( BUILD_THIEVESGUILD | tavern | BUILD_SHIPYARD | BUILD_WELL | BUILD_STATUE | BUILD_LEFTTURRET | BUILD_RIGHTTURRET | BUILD_MARKETPLACE | BUILD_WEL2
@@ -2561,17 +2561,9 @@ void Castle::ActionAfterBattle( bool attacker_wins )
         AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
-struct CastleHavePoint : public std::binary_function<const Castle *, const Point *, bool>
-{
-    bool operator()( const Castle * castle, const Point * pt ) const
-    {
-        return castle->isPosition( *pt );
-    }
-};
-
 Castle * VecCastles::Get( const Point & position ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( CastleHavePoint(), &position ) );
+    const_iterator it = std::find_if( begin(), end(), [position]( const Castle * castle ) { return castle->isPosition( position ); } );
     return end() != it ? *it : NULL;
 }
 

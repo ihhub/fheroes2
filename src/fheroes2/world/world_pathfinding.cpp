@@ -403,10 +403,9 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
 
     const Kingdom & kingdom = world.GetKingdom( _currentColor );
     const Directions directions = Direction::All();
-    const bool isWater = world.GetTiles( _pathStart ).isWater();
 
     std::set<int> uniqueIndicies;
-    auto validateAndAdd = [this, &kingdom, &result, &uniqueIndicies]( int index, int object ) {
+    auto validateAndAdd = [&kingdom, &result, &uniqueIndicies]( int index, int object ) {
         // std::set insert returns a pair, second value is true if it was unique
         if ( uniqueIndicies.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), object ) ) {
             result.emplace_back( index, object );

@@ -43,15 +43,15 @@
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
 void ActionToHeroes( Heroes & hero, s32 dst_index );
-void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToMonster( Heroes & hero, int obj, s32 dst_index );
 void ActionToBoat( Heroes & hero, s32 dst_index );
 void ActionToCoast( Heroes & hero, s32 dst_index );
 void ActionToWagon( Heroes & hero, s32 dst_index );
 void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToPickupResource( Heroes & hero, int obj, s32 dst_index );
 void ActionToFlotSam( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToArtifact( Heroes & hero, int obj, s32 dst_index );
 void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index );
 void ActionToShrine( Heroes & hero, s32 dst_index );
 void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index );
@@ -664,7 +664,7 @@ void Heroes::Action( s32 dst_index )
         }
 }
 
-void ActionToMonster( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 {
     bool destroy = false;
     Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -945,7 +945,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToPickupResource( Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     MapResource * map_resource = NULL;
@@ -1372,6 +1372,8 @@ void ActionToSign( Heroes & hero, s32 dst_index )
 {
     MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
     Dialog::Message( _( "Sign" ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
+
+    (void)hero;
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
@@ -1400,6 +1402,8 @@ void ActionToMagicWell( Heroes & hero, s32 dst_index )
 void ActionToTradingPost( Heroes & hero )
 {
     Dialog::Marketplace( true );
+
+    (void)hero;
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
@@ -1659,7 +1663,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToArtifact( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     MapArtifact * map_artifact = NULL;
@@ -2653,6 +2657,8 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToOracle( Heroes & hero )
 {
     Dialog::ThievesGuild( true );
+
+    (void)hero;
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
@@ -2766,7 +2772,7 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToAlchemistsTower( Heroes & hero )
 {
     BagArtifacts & bag = hero.GetBagArtifacts();
-    const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), std::mem_fun_ref( &Artifact::isAlchemistRemove ) ) );
+    const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
 
     if ( cursed ) {
         payment_t payment = PaymentConditions::ForAlchemist();
@@ -2784,7 +2790,7 @@ void ActionToAlchemistsTower( Heroes & hero )
             if ( Dialog::YES == Dialog::Message( "", msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 AGG::PlaySound( M82::GOODLUCK );
                 hero.GetKingdom().OddFundsResource( payment );
-                bag.resize( std::distance( bag.begin(), std::remove_if( bag.begin(), bag.end(), std::mem_fun_ref( &Artifact::isAlchemistRemove ) ) ) );
+                bag.resize( std::distance( bag.begin(), std::remove_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) ) );
             }
         }
         else
@@ -2938,6 +2944,7 @@ void ActionToEyeMagi( Heroes & hero, u32 obj )
 {
     Dialog::Message( MP2::StringObject( obj ), _( "This eye seems to be intently studying its surroundings." ), Font::BIG, Dialog::OK );
 
+    (void)hero;
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 

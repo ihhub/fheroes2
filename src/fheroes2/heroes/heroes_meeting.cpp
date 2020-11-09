@@ -312,23 +312,6 @@ void RedrawPrimarySkillInfo( const Point & cur_pt, PrimarySkillsBar * bar1, Prim
         bar2->Redraw();
 }
 
-// spell_book.cpp
-struct HeroesCanTeachSpell : std::binary_function<const HeroBase *, Spell, bool>
-{
-    bool operator()( const HeroBase * hero, Spell spell ) const
-    {
-        return hero->CanTeachSpell( spell );
-    };
-};
-
-struct HeroesHaveSpell : std::binary_function<const HeroBase *, Spell, bool>
-{
-    bool operator()( const HeroBase * hero, Spell spell ) const
-    {
-        return hero->HaveSpell( spell );
-    };
-};
-
 void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
 {
     if ( !hero1.HaveSpellBook() || !hero2.HaveSpellBook() ) {
@@ -368,23 +351,23 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
 
     // remove_if for learn spells
     if ( learn.size() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), std::bind1st( HeroesHaveSpell(), teacher ) );
+        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } );
         learn.resize( std::distance( learn.begin(), res ) );
     }
 
     if ( learn.size() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), std::not1( std::bind1st( HeroesCanTeachSpell(), teacher ) ) );
+        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
         learn.resize( std::distance( learn.begin(), res ) );
     }
 
     // remove_if for teach spells
     if ( teach.size() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), std::bind1st( HeroesHaveSpell(), learner ) );
+        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } );
         teach.resize( std::distance( teach.begin(), res ) );
     }
 
     if ( teach.size() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), std::not1( std::bind1st( HeroesCanTeachSpell(), teacher ) ) );
+        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
         teach.resize( std::distance( teach.begin(), res ) );
     }
 
