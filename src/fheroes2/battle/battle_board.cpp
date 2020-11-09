@@ -358,14 +358,6 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
     return result;
 }
 
-struct IndexDistanceEqualDistance : std::binary_function<IndexDistance, u32, bool>
-{
-    bool operator()( const IndexDistance & id, u32 dist ) const
-    {
-        return id.second == dist;
-    };
-};
-
 Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes * black ) const
 {
     Indexes result;
