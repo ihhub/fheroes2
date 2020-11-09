@@ -23,14 +23,12 @@
 #include <algorithm>
 #include <cstring>
 #include <iomanip>
-#include <iostream>
 #include <math.h>
 #include <memory>
 #include <set>
 #include <sstream>
 
 #include "error.h"
-#include "localevent.h"
 #include "surface.h"
 #include "system.h"
 #include "tools.h"
@@ -48,7 +46,6 @@ namespace
     int pal_nums = 0;
 
     std::set<const SDL_Surface *> paletteBasedSurface;
-    std::set<const SDL_Surface *> surfaceToUpdate;
 
     SDL_Rect SDLRect( const Rect & rt2 )
     {
@@ -403,14 +400,6 @@ void Surface::Set( u32 sw, u32 sh, const SurfaceFormat & fm )
     }
 }
 
-void Surface::SetDefaultPalette( SDL_Color * ptr, int num )
-{
-    pal_colors = ptr;
-    pal_nums = num;
-
-    surfaceToUpdate = paletteBasedSurface;
-}
-
 void Surface::SetDefaultColorKey( int r, int g, int b )
 {
     default_color_key = RGBA( r, g, b );
@@ -480,20 +469,6 @@ u32 Surface::depth( void ) const
 u32 Surface::amask( void ) const
 {
     return isValid() ? surface->format->Amask : 0;
-}
-
-u32 Surface::alpha( void ) const
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( isValid() ) {
-        u8 alpha = 0;
-        SDL_GetSurfaceAlphaMod( surface, &alpha );
-        return alpha;
-    }
-    return 0;
-#else
-    return isValid() ? surface->format->alpha : 0;
-#endif
 }
 
 u32 Surface::MapRGB( const RGBA & color ) const
