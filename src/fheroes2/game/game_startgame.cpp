@@ -544,7 +544,7 @@ int Interface::Basic::StartGame( void )
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
-                    if ( conf.GameType( Game::TYPE_HOTSEAT ) ) {
+                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
                         cursor.Hide();
                         iconsPanel.HideIcons();
                         statusWindow.Reset();

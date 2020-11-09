@@ -1314,7 +1314,7 @@ void Settings::SetMusicType( int v )
 }
 
 /* check game type */
-bool Settings::GameType( int f ) const
+bool Settings::IsGameType( int f ) const
 {
     return ( game_type & f ) != 0;
 }

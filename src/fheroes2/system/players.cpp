@@ -286,7 +286,7 @@ void Players::Init( const Maps::FileInfo & fi )
             player->SetControl( CONTROL_AI );
             player->SetFriends( *it | fi.unions[Color::GetIndex( *it )] );
 
-            if ( ( *it & fi.HumanOnlyColors() ) && Settings::Get().GameType( Game::TYPE_MULTI ) )
+            if ( ( *it & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
                 player->SetControl( CONTROL_HUMAN );
             else if ( *it & fi.AllowHumanColors() )
                 player->SetControl( player->GetControl() | CONTROL_HUMAN );

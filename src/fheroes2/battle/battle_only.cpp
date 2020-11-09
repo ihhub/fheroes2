@@ -170,7 +170,7 @@ bool Battle::Only::ChangeSettings( void )
     rtKnowledge1 = Rect( cur_pt.x + 215, cur_pt.y + 149, 33, 33 );
     rtKnowledge2 = Rect( cur_pt.x + 390, cur_pt.y + 149, 33, 33 );
 
-    if ( conf.GameType( Game::TYPE_NETWORK ) ) {
+    if ( conf.IsGameType( Game::TYPE_NETWORK ) ) {
         player2.SetColor( Color::RED );
 
         player1.SetControl( CONTROL_REMOTE );
