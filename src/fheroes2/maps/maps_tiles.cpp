@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 
@@ -1451,7 +1452,7 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp )
             area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 32 + ( mp.y % 4 ), 0 ), mp );
         }
         else {
-            area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, ( abs( mp.y ) % 4 ) * 4 + abs( mp.x ) % 4, 0 ), mp );
+            area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, ( std::abs( (int)mp.y ) % 4 ) * 4 + std::abs( (int)mp.x ) % 4, 0 ), mp );
         }
     }
 }
