@@ -91,7 +91,7 @@ namespace AI
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
     uint32_t AIGetAllianceColors();
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
-    void AIWhirlpoolTroopLooseEffect( Heroes & hero );
+    static void AIWhirlpoolTroopLooseEffect( Heroes & hero );
 
     int AISelectPrimarySkill( Heroes & hero )
     {
