@@ -344,6 +344,24 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
     }
 }
 
+static void WhirlpoolTroopLooseEffect( Heroes & hero )
+{
+    Troop * troop = hero.GetArmy().GetWeakestTroop();
+    if ( !troop )
+        return;
+
+    if ( 1 == Rand::Get( 1, 3 ) ) {
+        Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
+
+        if ( troop->GetCount() == 1 ) {
+            troop->Reset();
+        }
+        else {
+            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+        }
+    }
+}
+
 // action to next cell
 void Heroes::Action( s32 dst_index )
 {
@@ -1977,12 +1995,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     hero.GetPath().Hide();
     hero.FadeIn();
 
-    Troop * troop = hero.GetArmy().GetWeakestTroop();
-
-    if ( troop && Rand::Get( 1 ) && 1 < troop->GetCount() ) {
-        Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
-        troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
-    }
+    WhirlpoolTroopLooseEffect( hero );
 
     hero.GetPath().Reset();
     hero.ActionNewPosition();
