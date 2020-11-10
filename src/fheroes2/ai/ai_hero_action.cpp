@@ -2031,7 +2031,8 @@ namespace AI
         }
     }
 
-    static void AIWhirlpoolTroopLooseEffect( Heroes& hero ) {
+    static void AIWhirlpoolTroopLooseEffect( Heroes & hero )
+    {
         Troop * troop = hero.GetArmy().GetWeakestTroop();
         if ( !troop )
             return;
