@@ -132,7 +132,7 @@ Spell Maps::Tiles::QuantitySpell( void ) const
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_ARTIFACT:
-        return Spell( QuantityVariant() == 15 ? quantity1 : Spell::NONE );
+        return Spell( QuantityVariant() == 15 ? quantity1 : static_cast<int>( Spell::NONE ) );
 
     case MP2::OBJ_SHRINE1:
     case MP2::OBJ_SHRINE2:
@@ -167,7 +167,7 @@ Artifact Maps::Tiles::QuantityArtifact( void ) const
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_WAGON:
-        return Artifact( quantity2 ? Artifact::UNKNOWN : quantity1 );
+        return Artifact( quantity2 ? static_cast<int>( Artifact::UNKNOWN ) : quantity1 );
 
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_DAEMONCAVE:

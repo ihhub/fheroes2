@@ -47,10 +47,10 @@
 
 namespace AI
 {
-    void AIToMonster( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToPickupResource( Heroes & hero, u32 obj, s32 dst_index );
+    void AIToMonster( Heroes & hero, int obj, s32 dst_index );
+    void AIToPickupResource( Heroes & hero, int obj, s32 dst_index );
     void AIToTreasureChest( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToArtifact( Heroes & hero, u32 obj, s32 dst_index );
+    void AIToArtifact( Heroes & hero, int obj, s32 dst_index );
     void AIToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
     void AIToWagon( Heroes & hero, s32 dst_index );
     void AIToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
@@ -431,7 +431,7 @@ namespace AI
 
         // ignore empty tiles
         if ( isAction )
-            AI::Get().HeroesActionComplete( hero, dst_index );
+            AI::Get().HeroesActionComplete( hero );
 
         // reset if during an action music was stopped
         AGG::PlayMusic( MUS::COMPUTER_TURN );
@@ -567,7 +567,7 @@ namespace AI
         }
     }
 
-    void AIToMonster( Heroes & hero, u32 obj, s32 dst_index )
+    void AIToMonster( Heroes & hero, int obj, s32 dst_index )
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -645,7 +645,7 @@ namespace AI
         }
     }
 
-    void AIToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
+    void AIToPickupResource( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         MapResource * map_resource = NULL;
@@ -1372,7 +1372,7 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToArtifact( Heroes & hero, u32 obj, s32 dst_index )
+    void AIToArtifact( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         MapArtifact * map_artifact = NULL;

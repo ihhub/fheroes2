@@ -135,14 +135,6 @@ protected:
     BagArtifacts bag_artifacts;
 };
 
-struct HeroHasArtifact : public std::binary_function<const HeroBase *, Artifact, bool>
-{
-    bool operator()( const HeroBase * hero, Artifact art ) const
-    {
-        return hero->HasArtifact( art ) > 0;
-    }
-};
-
 StreamBase & operator<<( StreamBase &, const HeroBase & );
 StreamBase & operator>>( StreamBase &, HeroBase & );
 

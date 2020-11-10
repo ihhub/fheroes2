@@ -172,7 +172,7 @@ const char * GetGeneralSettingDescription( int settingId )
 {
     const settings_t * ptr = settingsGeneral;
     while ( ptr->id != 0 ) {
-        if ( ptr->id == settingId )
+        if ( ptr->id == static_cast<uint32_t>( settingId ) )
             return ptr->str;
         ++ptr;
     }
@@ -1314,7 +1314,7 @@ void Settings::SetMusicType( int v )
 }
 
 /* check game type */
-bool Settings::GameType( int f ) const
+bool Settings::IsGameType( int f ) const
 {
     return ( game_type & f ) != 0;
 }

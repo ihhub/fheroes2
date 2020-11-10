@@ -492,8 +492,12 @@ int Castle::OpenDialog( bool readonly )
                         }
 
                         if ( noFreeSpaceForMagicBook ) {
+                            Heroes * hero = heroes.Guard();
+                            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() )
+                                hero = heroes.Guest();
+
                             Dialog::Message(
-                                "",
+                                hero->GetName(),
                                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                                 Font::BIG, Dialog::OK );
                         }
@@ -745,7 +749,7 @@ int Castle::OpenDialog( bool readonly )
         if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
             firstDraw = false;
             cursor.Hide();
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, BUILD_NOTHING );
+            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings );
             cursor.Show();
             display.render();
 

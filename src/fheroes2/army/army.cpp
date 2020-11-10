@@ -150,6 +150,7 @@ std::string Army::SizeString( u32 size )
 Troops::Troops() {}
 
 Troops::Troops( const Troops & troops )
+    : std::vector<Troop *>()
 {
     *this = troops;
 }

@@ -822,20 +822,10 @@ bool Maps::TilesAddon::ForceLevel1( const TilesAddon & ta )
     return false;
 }
 
-bool Maps::TilesAddon::ForceLevel2( const TilesAddon & ta )
-{
-    return false;
-}
-
 /* Maps::Addons */
 void Maps::Addons::Remove( u32 uniq )
 {
-    /*
-    erase(std::remove_if(begin(), end(),
-        std::bind2nd(std::mem_fun_ref(&Maps::TilesAddon::isUniq), uniq)),
-        end());
-    */
-    remove_if( std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isUniq ), uniq ) );
+    remove_if( [uniq]( const TilesAddon & v ) { return v.isUniq( uniq ); } );
 }
 
 u32 PackTileSpriteIndex( u32 index, u32 shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
@@ -1341,10 +1331,7 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
 
 void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 {
-    if ( TilesAddon::ForceLevel2( ta ) )
-        addons_level2.push_back( ta );
-    else
-        addons_level1.push_back( ta );
+    addons_level1.push_back( ta );
 }
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
@@ -1516,6 +1503,8 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
             area.BlitOnTile( dst, sf, 0, 0, mp );
         }
     }
+#else
+    (void)dst;
 #endif
 }
 
@@ -1734,14 +1723,14 @@ Maps::TilesAddon * Maps::Tiles::FindAddonICN( int icn, int level, int index )
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( u32 uniq1 )
 {
-    Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isUniq ), uniq1 ) );
+    Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
 
     return it != addons_level1.end() ? &( *it ) : NULL;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( u32 uniq2 )
 {
-    Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), std::bind2nd( std::mem_fun_ref( &Maps::TilesAddon::isUniq ), uniq2 ) );
+    Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), [uniq2]( const TilesAddon & v ) { return v.isUniq( uniq2 ); } );
 
     return it != addons_level2.end() ? &( *it ) : NULL;
 }
@@ -1918,7 +1907,8 @@ bool Maps::Tiles::isStream( void ) const
 
 bool Maps::Tiles::isShadow( void ) const
 {
-    return isShadowSprite( objectTileset, objectIndex ) && addons_level1.size() != std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow );
+    return isShadowSprite( objectTileset, objectIndex )
+           && addons_level1.size() != static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
 }
 
 bool Maps::Tiles::hasSpriteAnimation() const

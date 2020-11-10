@@ -146,7 +146,7 @@ int Game::NewHotSeat( void )
 
     conf.SetGameType( conf.GameType() | Game::TYPE_HOTSEAT );
 
-    if ( conf.GameType( Game::TYPE_BATTLEONLY ) ) {
+    if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
         world.NewMaps( 10, 10 );
         return StartBattleOnly();
@@ -504,7 +504,7 @@ int Game::NewMulti( void )
 {
     Settings & conf = Settings::Get();
 
-    if ( !( conf.GameType( Game::TYPE_BATTLEONLY ) ) )
+    if ( !( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) )
         conf.SetGameType( Game::TYPE_STANDARD );
 
     // cursor
