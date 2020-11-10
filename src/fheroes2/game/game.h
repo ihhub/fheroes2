@@ -246,7 +246,7 @@ namespace Game
     u32 GetViewDistance( u32 );
     u32 GetWhirlpoolPercent( void );
     u32 SelectCountPlayers( void );
-    void ShowLoadMapsText( void );
+    void ShowMapLoadingText( void );
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
