@@ -153,7 +153,7 @@ public:
         fheroes2::Blit( sprite, image, roi.x + ( roi.w - sprite.width() ) / 2, roi.y + ( roi.h - sprite.height() ) / 2 );
 
         Text text( GetString( skill.Level() ), Font::SMALL );
-        text.Blit( roi.x + ( roi.w - text.w() ) - 3, roi.y + roi.h - 12, image );
+        text.Blit( roi.x + ( roi.w - text.w() ) - 3, roi.y + roi.h - text.h(), image );
     }
 
 private:
