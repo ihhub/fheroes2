@@ -1453,7 +1453,7 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp )
         }
         else {
 #if ( __GNUC__ == 6 )
-            //workaround for gcc 6, which uses abs( double ) overload for short arg
+            // workaround for gcc 6, which uses abs( double ) overload for short arg
             area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, ( std::abs( static_cast<int>( mp.y ) ) % 4 ) * 4 + std::abs( static_cast<int>( mp.x ) ) % 4, 0 ), mp );
 #else
             area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, ( std::abs( mp.y ) % 4 ) * 4 + std::abs( mp.x ) % 4, 0 ), mp );
