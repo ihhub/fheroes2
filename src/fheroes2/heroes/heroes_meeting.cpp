@@ -123,8 +123,7 @@ private:
 class MeetingSecondarySkillsBar : public SecondarySkillsBar
 {
 public:
-    explicit MeetingSecondarySkillsBar()
-    {}
+    explicit MeetingSecondarySkillsBar() {}
 
     virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
