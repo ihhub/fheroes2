@@ -324,7 +324,7 @@ int Game::NewCampain( void )
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
                 fheroes2::FadeDisplay();
-            Game::ShowLoadMapsText();
+            Game::ShowMapLoadingText();
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
             if ( !world.LoadMapMP2( campaignMap[0].file ) ) {

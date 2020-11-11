@@ -132,7 +132,7 @@ bool Game::Load( const std::string & fn )
     DEBUG( DBG_GAME, DBG_INFO, fn );
     Settings & conf = Settings::Get();
     // loading info
-    Game::ShowLoadMapsText();
+    Game::ShowMapLoadingText();
 
     StreamFile fs;
     fs.setbigendian( true );
