@@ -72,9 +72,18 @@ public:
             srcrt.height = roi.h;
         }
 
-        fheroes2::Blit( mons32, srcrt.x, srcrt.y, image, roi.x + ( roi.w - mons32.width() ) / 2, roi.y + roi.h - mons32.height() - 1, srcrt.width, srcrt.height );
+        int32_t offsetX = ( roi.w - mons32.width() ) / 2;
+        int32_t offsetY = roi.h - mons32.height() - 3;
 
-        text.Blit( roi.x + roi.w - text.w() - 3, roi.y + roi.h - text.h(), image );
+        if ( offsetX < 1 )
+            offsetX = 1;
+
+        if ( offsetY < 1 )
+            offsetY = 1;
+
+        fheroes2::Blit( mons32, srcrt.x, srcrt.y, image, roi.x + offsetX, roi.y + offsetY, srcrt.width, srcrt.height );
+
+        text.Blit( roi.x + ( roi.w - text.w() ) / 2, roi.y + roi.h - 1, image );
 
         if ( isSelected ) {
             spcursor.setPosition( roi.x, roi.y );
@@ -255,6 +264,8 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 36;
     dst_pt.y = cur_pt.y + 267;
 
+    fheroes2::ImageRestorer armyCountBackgroundRestorer( display, cur_pt.x + 36, cur_pt.y + 310, 567, 20 );
+
     MeetingArmyBar selectArmy1( &GetArmy() );
     selectArmy1.SetColRows( 5, 1 );
     selectArmy1.SetPos( dst_pt.x, dst_pt.y );
@@ -327,6 +338,8 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
                 selectArtifacts1.ResetSelected();
             else if ( selectArtifacts2.isSelected() )
                 selectArtifacts2.ResetSelected();
+
+            armyCountBackgroundRestorer.restore();
 
             selectArmy1.Redraw();
             selectArmy2.Redraw();
