@@ -643,12 +643,13 @@ void Dialog::QuickInfo( const Castle & castle )
     const Heroes * from_hero = Interface::GetFocusHeroes();
     const Heroes * guardian = castle.GetHeroes().Guard();
 
-    const int thievesGuildCount = world.GetKingdom( conf.GetPlayers().current_color ).GetCountThievesGuild();
+    const int currentColor = castle.GetColor();
+    const int thievesGuildCount = world.GetKingdom( currentColor ).GetCountThievesGuild();
 
     // draw guardian portrait
     if ( guardian &&
          // my  colors
-         ( castle.isFriends( conf.CurrentColor() ) ||
+         ( castle.isFriends( currentColor ) ||
            // show guardians (scouting: advanced)
            ( from_hero && Skill::Level::ADVANCED <= from_hero->GetSecondaryValues( Skill::Secondary::SCOUTING ) ) ) ) {
         // heroes name
@@ -673,7 +674,7 @@ void Dialog::QuickInfo( const Castle & castle )
         dst_pt.y += 45;
         text.Blit( dst_pt.x, dst_pt.y );
     }
-    else if ( castle.isFriends( conf.CurrentColor() ) ) {
+    else if ( castle.isFriends( currentColor ) ) {
         // show all
         Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, true, false );
     }

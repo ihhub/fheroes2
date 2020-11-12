@@ -2268,21 +2268,6 @@ bool Castle::PredicateIsTown( const Castle * castle )
     return castle && !castle->isCastle();
 }
 
-bool Castle::PredicateIsBuildMarketplace( const Castle * castle )
-{
-    return PredicateIsBuildBuilding( castle, BUILD_MARKETPLACE );
-}
-
-bool Castle::PredicateIsBuildThievesGuild( const Castle * castle )
-{
-    return PredicateIsBuildBuilding( castle, BUILD_THIEVESGUILD );
-}
-
-bool Castle::PredicateIsBuildBuilding( const Castle * castle, const uint32_t building )
-{
-    return castle && castle->isBuild( building );
-}
-
 std::string Castle::String( void ) const
 {
     std::ostringstream os;
