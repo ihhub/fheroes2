@@ -675,7 +675,7 @@ void Dialog::QuickInfo( const Castle & castle )
     }
     else if ( castle.isFriends( conf.CurrentColor() ) ) {
         // show all
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, DRAW_SCOUTE, false );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, true, false );
     }
     // draw enemy castle defenders, dependent on thieves guild count
     else if ( thievesGuildCount == 0 ) {
@@ -686,7 +686,7 @@ void Dialog::QuickInfo( const Castle & castle )
     }
     else {
         // show limited
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, thievesGuildCount, DRAW_THIEVES_GUILD, false );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, thievesGuildCount, false, false );
     }
 
     display.render();
@@ -900,7 +900,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     }
     else {
         // show limited
-        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, DRAW_SCOUTE, false );
+        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, true, false );
     }
 
     cursor.Show();

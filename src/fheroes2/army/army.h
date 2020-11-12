@@ -101,7 +101,7 @@ public:
     void JoinStrongest( Troops &, bool );
     void KeepOnlyWeakest( Troops &, bool );
 
-    void DrawMons32Line( int, int, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, bool ) const;
+    void DrawMons32Line( int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint32_t, bool, bool ) const;
     void SplitTroopIntoFreeSlots( const Troop &, u32 slots );
 };
 
@@ -111,12 +111,6 @@ enum
     JOIN_FREE,
     JOIN_COST,
     JOIN_FLEE
-};
-
-enum
-{
-    DRAW_SCOUTE,
-    DRAW_THIEVES_GUILD
 };
 
 struct JoinCount : std::pair<int, u32>
@@ -149,8 +143,8 @@ public:
 
     static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
     static void DrawMons32LineWithScoute( const Troops &, s32, s32, u32, u32, u32, u32 );
-    static void DrawMonsterLines( const Troops & troops, uint32_t posX, uint32_t posY, uint32_t lineWidth, uint32_t drawType, uint32_t drawMethod = DRAW_SCOUTE,
-                                  bool compact = true );
+    static void DrawMonsterLines( const Troops & troops, uint32_t posX, uint32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
+                                  bool isScouteView = true );
 
     Army( HeroBase * s = NULL );
     Army( const Maps::Tiles & );

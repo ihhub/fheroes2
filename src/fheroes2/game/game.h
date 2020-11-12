@@ -284,7 +284,7 @@ namespace Game
 
     u32 GetStep4Player( u32, u32, u32 );
     std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
-    std::string CountThievesGuild( uint32_t count, int guildCount, bool shorts = false );
+    std::string CountThievesGuild( uint32_t count, int guildCount );
 }
 
 #define HotKeyCloseWindow ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )
