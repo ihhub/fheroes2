@@ -132,7 +132,7 @@ private:
 class MeetingPrimarySkillsBar : public PrimarySkillsBar
 {
 public:
-    explicit MeetingPrimarySkillsBar( const Heroes * hero)
+    explicit MeetingPrimarySkillsBar( const Heroes * hero )
         : PrimarySkillsBar( hero, true )
     {}
 
