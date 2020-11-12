@@ -494,7 +494,7 @@ std::string Game::CountScoute( uint32_t count, int scoute, bool shorts )
     return res;
 }
 
-std::string Game::CountThievesGuild( uint32_t count, int guildCount)
+std::string Game::CountThievesGuild( uint32_t count, int guildCount )
 {
     return guildCount == 1 ? "???" : Army::SizeString( count );
 }
