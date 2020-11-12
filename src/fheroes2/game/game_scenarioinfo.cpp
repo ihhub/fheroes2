@@ -311,7 +311,7 @@ int Game::ScenarioInfo( void )
         players.SetStartGame();
         if ( conf.ExtGameUseFade() )
             fheroes2::FadeDisplay();
-        Game::ShowLoadMapsText();
+        Game::ShowMapLoadingText();
         // Load maps
         std::string lower = StringLower( conf.MapsFile() );
 

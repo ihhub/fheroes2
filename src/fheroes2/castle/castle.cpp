@@ -964,6 +964,9 @@ Heroes * Castle::RecruitHero( Heroes * hero )
     if ( kingdom.GetLastLostHero() == hero )
         kingdom.ResetLastLostHero();
 
+    // actually update available heroes to recruit
+    kingdom.GetRecruits();
+
     kingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
 
     // update spell book
