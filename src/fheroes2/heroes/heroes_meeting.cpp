@@ -129,6 +129,19 @@ private:
     fheroes2::Image _cachedBackground;
 };
 
+class MeetingPrimarySkillsBar : public PrimarySkillsBar
+{
+public:
+    explicit MeetingPrimarySkillsBar( const Heroes * hero )
+        : PrimarySkillsBar( hero, true )
+    {}
+
+    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override
+    {
+        // Just do nothing
+    }
+};
+
 class MeetingSecondarySkillsBar : public SecondarySkillsBar
 {
 public:
@@ -231,13 +244,13 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     // primary skill
     fheroes2::ImageRestorer backPrimary( display, cur_pt.x + 255, cur_pt.y + 50, 130, 135 );
 
-    PrimarySkillsBar primskill_bar1( this, true );
+    MeetingPrimarySkillsBar primskill_bar1( this );
     primskill_bar1.SetColRows( 1, 4 );
     primskill_bar1.SetVSpace( -1 );
     primskill_bar1.SetTextOff( 70, -25 );
     primskill_bar1.SetPos( cur_pt.x + 216, cur_pt.y + 51 );
 
-    PrimarySkillsBar primskill_bar2( &heroes2, true );
+    MeetingPrimarySkillsBar primskill_bar2( &heroes2 );
     primskill_bar2.SetColRows( 1, 4 );
     primskill_bar2.SetVSpace( -1 );
     primskill_bar2.SetTextOff( -70, -25 );
