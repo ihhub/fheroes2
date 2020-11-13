@@ -1860,9 +1860,12 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
-        const s32 index_new = board.GetIndexAbsPosition( GetMouseCursor() );
-        if ( index_pos != index_new ) {
-            index_pos = index_new;
+        int32_t indexNew = -1;
+        if ( le.MouseCursor( Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.w, _interfacePosition.h - status.h ) ) ) {
+            indexNew = board.GetIndexAbsPosition( GetMouseCursor() );
+        }
+        if ( index_pos != indexNew ) {
+            index_pos = indexNew;
             humanturn_redraw = true;
         }
 
