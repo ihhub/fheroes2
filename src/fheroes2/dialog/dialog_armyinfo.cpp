@@ -462,6 +462,8 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
+    const Text title( _( "Followers" ), Font::YELLOW_BIG );
+
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
     StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
 
@@ -469,10 +471,12 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const int buttons = Dialog::YES | Dialog::NO;
     int posy = 0;
 
-    FrameBox box( 10 + textbox.h() + 10, buttons );
+    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, buttons );
     const fheroes2::Rect & pos = box.GetArea();
 
-    posy = pos.y + 10;
+    title.Blit( pos.x + ( pos.width - title.w() ) / 2, pos.y );
+
+    posy = pos.y + 2 * title.h() - 3;
     textbox.Blit( pos.x, posy );
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
