@@ -148,8 +148,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|Win32'">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAs>CompileAsCpp</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <PreprocessorDefinitions>_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -165,8 +165,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|Win32'">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAs>CompileAsCpp</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <PreprocessorDefinitions>_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -181,8 +181,8 @@
     <ClCompile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAs>CompileAsCpp</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <OmitFramePointers>false</OmitFramePointers>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <PreprocessorDefinitions>_WIN32;_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -199,8 +199,8 @@
     <ClCompile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAs>CompileAsCpp</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <OmitFramePointers>false</OmitFramePointers>
       <SmallerTypeCheck>true</SmallerTypeCheck>
       <PreprocessorDefinitions>_WIN32;_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -214,8 +214,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|Win32'">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAs>CompileAsCpp</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -236,8 +236,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL2|Win32'">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAs>CompileAsCpp</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <PreprocessorDefinitions>NDEBUG;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -260,8 +260,8 @@
     <ClCompile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAs>CompileAsCpp</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -282,8 +282,8 @@
     <ClCompile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <CompileAs>CompileAsCpp</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <PreprocessorDefinitions>NDEBUG;_WIN32;_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
