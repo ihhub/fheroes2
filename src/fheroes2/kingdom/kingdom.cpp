@@ -471,32 +471,43 @@ bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const
 
 void Kingdom::ApplyPlayWithStartingHero( void )
 {
-    if ( isPlay() && castles.size() ) {
-        // get first castle
-        Castle * first = castles.GetFirstCastle();
-        if ( NULL == first )
-            first = castles.front();
+    if ( !isPlay() || castles.empty() )
+        return;
+
+    bool foundHeroes = false;
+
+    for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
+        Castle * castle = *it;
+        if ( castle == nullptr )
+            continue;
 
         // check manual set hero (castle position + point(0, 1))?
-        const Point & cp = first->GetCenter();
+        const Point & cp = castle->GetCenter();
         Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).GetHeroes();
 
         // and move manual set hero to castle
         if ( hero && hero->GetColor() == GetColor() ) {
             bool patrol = hero->Modes( Heroes::PATROL );
             hero->SetFreeman( 0 );
-            hero->Recruit( *first );
+            hero->Recruit( *castle );
 
             if ( patrol ) {
                 hero->SetModes( Heroes::PATROL );
                 hero->SetCenterPatrol( cp );
             }
+            foundHeroes = true;
         }
-        else if ( Settings::Get().GameStartWithHeroes() ) {
-            hero = world.GetFreemanHeroes( first->GetRace() );
-            if ( hero && AllowRecruitHero( false, 0 ) )
-                hero->Recruit( *first );
-        }
+    }
+
+    if ( !foundHeroes && Settings::Get().GameStartWithHeroes() ) {
+        // get first castle
+        Castle * first = castles.GetFirstCastle();
+        if ( NULL == first )
+            first = castles.front();
+
+        Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
+        if ( hero && AllowRecruitHero( false, 0 ) )
+            hero->Recruit( *first );
     }
 }
 
