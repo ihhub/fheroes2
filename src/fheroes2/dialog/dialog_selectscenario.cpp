@@ -355,7 +355,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                              _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ),
                              Font::BIG );
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
-            Dialog::Message( _( "Size Icon" ), _( "Indicates whether the maps is small (36x36), medium (72x72), large (108x108), or extra large (144x144)." ),
+            Dialog::Message( _( "Size Icon" ), _( "Indicates whether the maps is small (36 x 36), medium (72 x 72), large (108 x 108), or extra large (144 x 144)." ),
                              Font::BIG );
         else if ( le.MousePressRight( curMapName ) )
             Dialog::Message( _( "Selected Name" ), _( "The name of the currently selected map." ), Font::BIG );
