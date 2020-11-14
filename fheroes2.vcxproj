@@ -160,6 +160,7 @@
     </Link>
     <Link>
       <AssemblyDebug>true</AssemblyDebug>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|Win32'">
