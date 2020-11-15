@@ -131,7 +131,6 @@ public:
         GAME_DYNAMIC_INTERFACE = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
-        POCKETPC_LOW_MEMORY = 0x10800000,
         POCKETPC_TAP_MODE = 0x11000000,
         POCKETPC_DRAG_DROP_SCROLL = 0x12000000,
         POCKETPC_LOW_RESOLUTION = 0x14000000,
@@ -303,7 +302,6 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
-    bool ExtPocketLowMemory( void ) const;
     bool ExtPocketTapMode( void ) const;
     bool ExtPocketDragDropScroll( void ) const;
 
