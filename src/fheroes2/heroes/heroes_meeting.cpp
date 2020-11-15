@@ -375,6 +375,10 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
+            if ( bag_artifacts.MakeBattleGarb() || heroes2.bag_artifacts.MakeBattleGarb() ) {
+                Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
+            }
+
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
 
