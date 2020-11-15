@@ -2321,7 +2321,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) ) {
+    if ( hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) ) {
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else if ( hero.GetSpellPoints() == max * 2 ) {
@@ -2338,11 +2338,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetSpellPoints( max * 2 );
         Dialog::Message( name, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG, Dialog::OK );
 
-        if ( Settings::Get().ExtWorldArtesianSpringSeparatelyVisit() )
-            hero.SetVisited( dst_index, Visit::LOCAL );
-        else
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, obj, Visit::LOCAL );
+        hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
     }
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );

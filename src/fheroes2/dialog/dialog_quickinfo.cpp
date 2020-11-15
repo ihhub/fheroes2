@@ -459,9 +459,12 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         case MP2::OBJ_MERCENARYCAMP:
         case MP2::OBJ_DOCTORHUT:
         case MP2::OBJ_STANDINGSTONES:
-        case MP2::OBJ_ARTESIANSPRING:
         case MP2::OBJ_TREEKNOWLEDGE:
             name_object = ShowLocalVisitTileInfo( tile, from_hero );
+            break;
+
+        case MP2::OBJ_ARTESIANSPRING:
+            name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
 
         case MP2::OBJ_MAGICWELL:
