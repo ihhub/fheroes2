@@ -242,10 +242,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
     },
     {
-        Settings::WORLD_ARTSPRING_SEPARATELY_VISIT,
-        _( "world: Artesian Springs have two separately visitable squares (h3 ver)" ),
-    },
-    {
         Settings::WORLD_STARTHERO_LOSSCOND4HUMANS,
         _( "world: Starting heroes as Loss Conditions for Human Players" ),
     },
@@ -1777,11 +1773,6 @@ bool Settings::ExtWorldBanWeekOf( void ) const
 bool Settings::ExtWorldBanMonthOfMonsters( void ) const
 {
     return ExtModes( WORLD_BAN_MONTHOF_MONSTERS );
-}
-
-bool Settings::ExtWorldArtesianSpringSeparatelyVisit( void ) const
-{
-    return ExtModes( WORLD_ARTSPRING_SEPARATELY_VISIT );
 }
 
 bool Settings::ExtWorldBanPlagues( void ) const

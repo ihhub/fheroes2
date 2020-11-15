@@ -176,7 +176,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_NOREQ_FOR_ARTIFACTS );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
-    states.push_back( Settings::WORLD_ARTSPRING_SEPARATELY_VISIT );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
     states.push_back( Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK );
     states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );

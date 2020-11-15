@@ -162,7 +162,6 @@ public:
         HEROES_RECALCULATE_MOVEMENT = 0x24000000,
 
         CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
-        WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
@@ -276,7 +275,6 @@ public:
     bool ExtWorldBanWeekOf( void ) const;
     bool ExtWorldNewVersionWeekOf( void ) const;
     bool ExtWorldBanPlagues( void ) const;
-    bool ExtWorldArtesianSpringSeparatelyVisit( void ) const;
     bool ExtWorldStartHeroLossCond4Humans( void ) const;
     bool ExtWorldOneHeroHiredEveryWeek( void ) const;
     bool ExtWorldNeutralArmyDifficultyScaling( void ) const;
