@@ -225,7 +225,7 @@ struct chunk_t
     bool this_ptr( const chunk_t * ch ) const
     {
         return ch == this;
-    };
+    }
 
     const u8 * data;
     u32 length;
@@ -367,7 +367,7 @@ int Mixer::Play( const u8 * ptr, u32 size, int channel, bool loop )
 
         if ( 0 > channel ) {
             std::vector<chunk_t>::iterator it
-                = std::find_if( chunks.begin(), chunks.end(), std::bind2nd( std::mem_fun_ref( &chunk_t::this_ptr ), reinterpret_cast<const chunk_t *>( ptr ) ) );
+                = std::find_if( chunks.begin(), chunks.end(), [ptr]( const chunk_t & c ) { return c.this_ptr( reinterpret_cast<const chunk_t *>( ptr ) ); } );
             if ( it == chunks.end() ) {
                 it = std::find_if( chunks.begin() + reserved_channels, chunks.end(), PredicateIsFreeSound );
                 if ( it == chunks.end() ) {
