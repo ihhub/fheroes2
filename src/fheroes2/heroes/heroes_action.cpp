@@ -2790,7 +2790,12 @@ void ActionToAlchemistsTower( Heroes & hero )
             if ( Dialog::YES == Dialog::Message( "", msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 AGG::PlaySound( M82::GOODLUCK );
                 hero.GetKingdom().OddFundsResource( payment );
-                bag.resize( std::distance( bag.begin(), std::remove_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) ) );
+
+                for ( BagArtifacts::iterator it = bag.begin(); it != bag.end(); ++it ) {
+                    if ( it->isAlchemistRemove() ) {
+                        *it = Artifact::UNKNOWN;
+                    }
+                }
             }
         }
         else
