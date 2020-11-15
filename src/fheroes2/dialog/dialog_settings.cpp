@@ -215,7 +215,6 @@ void Dialog::ExtSettings( bool readonly )
 
     if ( conf.PocketPC() ) {
         states.push_back( Settings::POCKETPC_TAP_MODE );
-        states.push_back( Settings::POCKETPC_LOW_MEMORY );
         states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
     }
 

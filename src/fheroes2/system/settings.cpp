@@ -389,10 +389,6 @@ const settings_t settingsFHeroes2[] = {
         Settings::POCKETPC_DRAG_DROP_SCROLL,
         _( "pocketpc: drag&drop gamearea as scroll" ),
     },
-    {
-        Settings::POCKETPC_LOW_MEMORY,
-        _( "pocketpc: low memory" ),
-    },
 
     {0, NULL},
 };
@@ -772,7 +768,6 @@ void Settings::PostLoad( void )
         opt_global.SetModes( GLOBAL_FULLSCREEN );
     else {
         ExtResetModes( POCKETPC_TAP_MODE );
-        ExtResetModes( POCKETPC_LOW_MEMORY );
     }
 
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
@@ -1743,11 +1738,6 @@ bool Settings::ExtGameDynamicInterface( void ) const
 bool Settings::ExtGameHideInterface( void ) const
 {
     return ExtModes( GAME_HIDE_INTERFACE );
-}
-
-bool Settings::ExtPocketLowMemory( void ) const
-{
-    return ExtModes( POCKETPC_LOW_MEMORY );
 }
 
 bool Settings::ExtPocketTapMode( void ) const
