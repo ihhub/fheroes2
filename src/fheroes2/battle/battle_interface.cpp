@@ -3000,7 +3000,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         RedrawTargetsWithFrameAnimation( dst, targets, ICN::FIREBAL2, M82::FromSpell( spell() ) );
         break;
     case Spell::METEORSHOWER:
-        RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell() ) );
+        RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell() ), 1 );
         break;
     case Spell::COLDRING:
         RedrawActionColdRingSpell( dst, targets );
@@ -4193,11 +4193,11 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
     status.SetMessage( _( "The mirror image is destroyed!" ), true );
 }
 
-void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsInfo & targets, int icn, int m82 )
+void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    u32 frame = 0;
+    uint32_t frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
@@ -4210,7 +4210,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    uint32_t frameCount = fheroes2::AGG::GetICNCount( icn );
+
+    while ( le.HandleEvents() && frame < frameCount ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4224,6 +4226,11 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
                 if ( ( *it ).defender && ( *it ).damage )
                     ( *it ).defender->IncreaseAnimFrame( false );
             ++frame;
+
+            if ( frame == frameCount && repeatCount > 0 ) {
+                --repeatCount;
+                frame = 0;
+            }
         }
     }
 
