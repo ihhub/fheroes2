@@ -668,10 +668,6 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapArtifact & obj )
         // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
         // 15 - spell
         cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
-
-        // always available
-        if ( Settings::Get().ExtWorldNoRequirementsForArtifacts() )
-            cond = 0;
     }
 
     obj.condition = cond;

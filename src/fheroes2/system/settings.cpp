@@ -210,10 +210,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: allow set guardian to objects" ),
     },
     {
-        Settings::WORLD_NOREQ_FOR_ARTIFACTS,
-        _( "world: no in-built requirements or guardians for placed artifacts" ),
-    },
-    {
         Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK,
         _( "world: only the first monster will attack (H2 bug)." ),
     },
@@ -1613,11 +1609,6 @@ bool Settings::ExtWorldAbandonedMineRandom( void ) const
 bool Settings::ExtWorldAllowSetGuardian( void ) const
 {
     return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
-}
-
-bool Settings::ExtWorldNoRequirementsForArtifacts( void ) const
-{
-    return ExtModes( WORLD_NOREQ_FOR_ARTIFACTS );
 }
 
 bool Settings::ExtWorldArtifactCrystalBall( void ) const
