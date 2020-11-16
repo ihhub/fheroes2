@@ -678,6 +678,8 @@ int Interface::Basic::HumanTurn( bool isload )
     Point heroAnimationOffset;
     int heroAnimationSpriteId = 0;
 
+    bool isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
+
     // startgame loop
     while ( Game::CANCEL == res ) {
         if ( !le.HandleEvents( true, true ) ) {
@@ -879,6 +881,15 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
+        }
+
+        if ( isCursorOverButtons ) {
+            isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
+            if ( !isCursorOverButtons )
+                buttonsArea.ResetButtons();
+        }
+        else {
+            isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
         }
 
         // fast scroll
