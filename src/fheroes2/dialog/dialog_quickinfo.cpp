@@ -300,7 +300,7 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * 
     return str;
 }
 
-void Dialog::QuickInfo( const Maps::Tiles & tile )
+void Dialog::QuickInfo( const Maps::Tiles & tile, bool ignoreObjectUnderHero /* true */ )
 {
     // check
     switch ( tile.GetObject() ) {
@@ -318,7 +318,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             center = &right;
 
         if ( center ) {
-            QuickInfo( *center );
+            QuickInfo( *center, false );
             return;
         }
     } break;
@@ -378,7 +378,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         name_object = ShowGuardiansInfo( tile, ( settings.CurrentColor() == tile.QuantityColor() ? Skill::Level::EXPERT : scoute ) );
     }
     else
-        switch ( tile.GetObject() ) {
+        switch ( tile.GetObject( ignoreObjectUnderHero ) ) {
         case MP2::OBJ_MONSTER:
             name_object = ShowMonsterInfo( tile, scoute );
             break;
