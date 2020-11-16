@@ -883,13 +883,15 @@ int Interface::Basic::HumanTurn( bool isload )
             gameArea.ResetCursorPosition();
         }
 
-        if ( isCursorOverButtons ) {
-            isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
-            if ( !isCursorOverButtons )
-                buttonsArea.ResetButtons();
-        }
-        else {
-            isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
+        if ( !isHiddenInterface || conf.ShowButtons() ) {
+            if ( isCursorOverButtons ) {
+                isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
+                if ( !isCursorOverButtons )
+                    buttonsArea.ResetButtons();
+            }
+            else {
+                isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
+            }
         }
 
         // fast scroll

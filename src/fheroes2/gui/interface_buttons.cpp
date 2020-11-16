@@ -114,7 +114,8 @@ void Interface::ButtonsArea::Redraw( void )
     }
 }
 
-void Interface::ButtonsArea::ResetButtons( void ) {
+void Interface::ButtonsArea::ResetButtons( void )
+{
     if ( buttonNextHero.isEnabled() )
         buttonNextHero.drawOnRelease();
     buttonMovement.drawOnRelease();
