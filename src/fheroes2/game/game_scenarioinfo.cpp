@@ -152,11 +152,11 @@ int Game::ScenarioInfo( void )
         const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
-                if ( mapIter->file != conf.CurrentFileInfo().file )
+                if ( mapIter->file == conf.CurrentFileInfo().file ) {
                     conf.SetCurrentFileInfo( *mapIter );
-
-                resetStartingSettings = false;
-                break;
+                    resetStartingSettings = false;
+                    break;
+                }
             }
         }
     }
