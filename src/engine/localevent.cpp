@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "localevent.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
@@ -970,6 +972,16 @@ const Point & LocalEvent::GetMouseCursor( void )
 
         mouse_cu.x = x;
         mouse_cu.y = y;
+
+        const fheroes2::Display & d = fheroes2::Display::instance();
+        if( d.isFullScreen() )
+        {
+            const fheroes2::Size outSize = d.getOutputSize();
+            const float aspect = std::min( float( outSize.width ) / d.width(), float( outSize.height ) / d.height() );
+            mouse_cu.x = (mouse_cu.x - ( float( outSize.width ) - aspect * d.width() ) / 2. ) / aspect;
+            mouse_cu.y = mouse_cu.y / float( outSize.height )* d.height();
+        }
+
     }
 
     if ( modes & MOUSE_OFFSET )

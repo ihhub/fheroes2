@@ -115,6 +115,12 @@ namespace fheroes2
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
 
+        bool isFullScreen() const {
+            return _engine->isFullScreen();
+        }
+
+        fheroes2::Size getOutputSize() const;
+
     private:
         BaseRenderEngine * _engine;
         Cursor * _cursor;
