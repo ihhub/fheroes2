@@ -26,6 +26,7 @@
 #include "agg.h"
 #include "ai.h"
 #include "army.h"
+#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -2033,7 +2034,12 @@ namespace AI
 
     static void AIWhirlpoolTroopLooseEffect( Heroes & hero )
     {
+        if ( hero.GetArmy().GetMonstersCount() <= 1 ) {
+            return;
+        }
+
         Troop * troop = hero.GetArmy().GetWeakestTroop();
+        assert( troop );
         if ( !troop )
             return;
 
@@ -2042,7 +2048,8 @@ namespace AI
                 troop->Reset();
             }
             else {
-                troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+                troop->SetCount(
+                    Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
             }
         }
     }

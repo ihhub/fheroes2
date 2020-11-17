@@ -22,6 +22,7 @@
 
 #include "agg.h"
 #include "ai.h"
+#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -346,7 +347,12 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
 
 static void WhirlpoolTroopLooseEffect( Heroes & hero )
 {
+    if ( hero.GetArmy().GetMonstersCount() <= 1 ) {
+        return;
+    }
+
     Troop * troop = hero.GetArmy().GetWeakestTroop();
+    assert( troop );
     if ( !troop )
         return;
 
