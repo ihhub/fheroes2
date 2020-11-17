@@ -250,6 +250,17 @@ u32 Troops::GetCountMonsters( const Monster & m ) const
     return c;
 }
 
+u32 Troops::GetMonstersCount() const
+{
+    u32 c = 0;
+
+    for ( const_iterator it = begin(); it != end(); ++it )
+        if ( ( *it )->isValid() )
+            c += ( *it )->GetCount();
+
+    return c;
+}
+
 bool Troops::isValid( void ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it ) {
