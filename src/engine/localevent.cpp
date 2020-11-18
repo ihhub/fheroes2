@@ -974,7 +974,7 @@ const Point & LocalEvent::GetMouseCursor( void )
         mouse_cu.y = y;
 #if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( __WIN32__ )
         const fheroes2::Display & d = fheroes2::Display::instance();
-        if( d.isFullScreen() ) {
+        if ( d.isFullScreen() ) {
             const fheroes2::Size outSize = d.getOutputSize();
             const float aspect = std::min( float( outSize.width ) / d.width(), float( outSize.height ) / d.height() );
             mouse_cu.x = ( mouse_cu.x - ( float( outSize.width ) - aspect * d.width() ) / 2. ) / aspect;
