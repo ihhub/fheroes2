@@ -19,6 +19,8 @@
  ***************************************************************************/
 #pragma once
 
+#include "SDL.h"
+
 #include "image.h"
 
 namespace fheroes2
@@ -114,13 +116,14 @@ namespace fheroes2
 
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
-
-        bool isFullScreen() const {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( __WIN32__ )
+        bool isFullScreen() const
+        {
             return _engine->isFullScreen();
         }
 
         fheroes2::Size getOutputSize() const;
-
+#endif
     private:
         BaseRenderEngine * _engine;
         Cursor * _cursor;

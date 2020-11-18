@@ -433,8 +433,8 @@ namespace
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
                 if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
-                    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
-                    SDL_RenderClear(_renderer);
+                    SDL_SetRenderDrawColor( _renderer, 0, 0, 0, 0 );
+                    SDL_RenderClear( _renderer );
                     if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
                         SDL_RenderPresent( _renderer );
                     }
@@ -476,7 +476,7 @@ namespace
                 return false;
             }
 
-            SDL_RenderSetLogicalSize(_renderer, width_, height_);
+            SDL_RenderSetLogicalSize( _renderer, width_, height_ );
             _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
             if ( _surface == NULL ) {
                 clear();
@@ -978,14 +978,14 @@ namespace fheroes2
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }
-
+#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( __WIN32__ )
     fheroes2::Size Display::getOutputSize() const
     {
         SDL_DisplayMode DM;
-        SDL_GetCurrentDisplayMode(0, &DM);
-        return fheroes2::Size(DM.w, DM.h);
+        SDL_GetCurrentDisplayMode( 0, &DM );
+        return fheroes2::Size( DM.w, DM.h );
     }
-
+#endif
     bool Cursor::isFocusActive() const
     {
         return engine().isMouseCursorActive();
