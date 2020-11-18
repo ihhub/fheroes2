@@ -4075,8 +4075,8 @@ void Battle::Interface::RedrawActionArmageddonSpell()
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
 
-            const int16_t offsetX = Rand::Get( -7, 7 );
-            const int16_t offsetY = Rand::Get( -7, 7 );
+            const int16_t offsetX = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
+            const int16_t offsetY = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
             const Rect initialArea( area.x, area.y, area.w, area.h );
             Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
