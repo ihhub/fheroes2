@@ -3019,9 +3019,11 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
+        tile.SetObject( hero.GetMapsObject() );
+        hero.SetMapsObject( MP2::OBJ_ZERO );
         AnimationRemoveObject( tile );
         tile.RemoveObjectSprite();
-        tile.SetObject( MP2::OBJ_ZERO );
+        tile.SetObject( MP2::OBJ_HEROES );
     }
     else {
         Dialog::Message(
