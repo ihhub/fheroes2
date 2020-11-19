@@ -1536,11 +1536,11 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw ) cons
     }
 }
 
-void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst ) const
+void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst, bool withShadow ) const
 {
     switch ( GetObject() ) {
     case MP2::OBJ_BOAT:
-        RedrawBoat( dst );
+        RedrawBoat( dst, withShadow );
         break;
     case MP2::OBJ_MONSTER:
         RedrawMonster( dst );
@@ -1570,13 +1570,17 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst ) const
     }
 }
 
-void Maps::Tiles::RedrawBoat( fheroes2::Image & dst ) const
+void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, bool withShadow ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     if ( area.GetVisibleTileROI() & mp ) {
         const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
+        if ( withShadow ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
+            area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ) );
+        }
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
         area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ) );
     }
@@ -1646,7 +1650,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
 
         if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
             RedrawObjects( dst );
-            RedrawMonstersAndBoat( dst );
+            RedrawMonstersAndBoat( dst, false );
         }
     }
 }
