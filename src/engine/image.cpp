@@ -667,14 +667,14 @@ namespace fheroes2
         AlphaBlit( in, 0, 0, out, outX, outY, in.width(), in.height(), alphaValue, flip );
     }
 
-    void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue, bool flip )
+    void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue, bool flip, bool transform )
     {
         if ( alphaValue == 0 ) { // there is nothing we need to do
             return;
         }
 
         if ( alphaValue == 255 ) {
-            Blit( in, inX, inY, out, outX, outY, width, height, flip );
+            Blit( in, inX, inY, out, outX, outY, width, height, flip, transform );
             return;
         }
 
@@ -826,7 +826,7 @@ namespace fheroes2
         Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip );
     }
 
-    void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool flip )
+    void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool flip, bool transform )
     {
         if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
             return;
@@ -858,12 +858,18 @@ namespace fheroes2
                         continue;
                     }
 
-                    if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                        *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                    if ( transform ) {
+                        if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
+                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                        }
+                        else { // copy a pixel
+                            *transformOutX = *transformInX;
+                            *imageOutX = *imageInX;
+                        }
                     }
-                    else { // copy a pixel
+                    else if ( *transformInX == 0 && *transformOutX == 0 ) {
                         *transformOutX = *transformInX;
-                        *imageOutX = *imageInX;
+                        *imageOutX = *imageInX;                    
                     }
                 }
             }
@@ -890,12 +896,18 @@ namespace fheroes2
                         continue;
                     }
 
-                    if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                        *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                    if ( transform ) {
+                        if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
+                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                        }
+                        else { // copy a pixel
+                            *transformOutX = *transformInX;
+                            *imageOutX = *imageInX;
+                        }
                     }
-                    else { // copy a pixel
-                        *transformOutX = *transformInX;
-                        *imageOutX = *imageInX;
+                    else if ( *transformInX == 0 && *transformOutX == 0 ) {
+                            *transformOutX = *transformInX;
+                            *imageOutX = *imageInX;
                     }
                 }
             }

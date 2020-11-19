@@ -99,12 +99,12 @@ void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
     _setCenterToTile( Point( world.w() / 2, world.h() / 2 ) );
 }
 
-void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp ) const
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp, bool transform ) const
 {
-    BlitOnTile( dst, src, src.x(), src.y(), mp );
+    BlitOnTile( dst, src, src.x(), src.y(), mp, false, 255, transform );
 }
 
-void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip, uint8_t alpha ) const
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip, uint8_t alpha, bool transform ) const
 {
     Point dstpt = GetRelativeTilePosition( mp ) + Point( ox, oy );
 
@@ -113,11 +113,11 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
 
     // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
     if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.w && dstpt.y + height <= _windowROI.y + _windowROI.h ) {
-        fheroes2::AlphaBlit( src, 0, 0, dst, dstpt.x, dstpt.y, width, height, alpha, flip );
+        fheroes2::AlphaBlit( src, 0, 0, dst, dstpt.x, dstpt.y, width, height, alpha, flip, transform );
     }
     else if ( _windowROI & Rect( dstpt, width, height ) ) {
         const Rect & fixedRect = RectFixed( dstpt, width, height );
-        fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, alpha, flip );
+        fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, alpha, flip, transform );
     }
 }
 

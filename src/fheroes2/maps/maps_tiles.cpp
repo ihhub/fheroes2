@@ -1509,7 +1509,7 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
 #endif
 }
 
-void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw ) const
+void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, bool withShadow ) const
 {
     int object = GetObject();
 
@@ -1523,7 +1523,7 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw ) cons
             const Point mp = Maps::GetPoint( GetIndex() );
 
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
-            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, 255, withShadow );
 
             // possible animation
             const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 );
@@ -1639,17 +1639,17 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
                 const u8 & index = ( *it ).index;
                 const int icn = MP2::GetICNObject( object );
 
-                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
+                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp, false );
 
                 // possible anime
                 if ( it->object & 1 ) {
-                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
+                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp, false );
                 }
             }
         }
 
         if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
-            RedrawObjects( dst );
+            RedrawObjects( dst, false, false );
             RedrawMonstersAndBoat( dst, false );
         }
     }
