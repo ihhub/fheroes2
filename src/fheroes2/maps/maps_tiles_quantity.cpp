@@ -526,10 +526,6 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 // 15 - spell
                 int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
 
-                // always available
-                if ( Settings::Get().ExtWorldNoRequirementsForArtifacts() )
-                    cond = 0;
-
                 QuantitySetVariant( cond );
                 QuantitySetArtifact( art );
 
