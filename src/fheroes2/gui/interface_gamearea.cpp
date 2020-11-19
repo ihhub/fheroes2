@@ -104,7 +104,8 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Spr
     BlitOnTile( dst, src, src.x(), src.y(), mp, false, 255, transform );
 }
 
-void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip, uint8_t alpha, bool transform ) const
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip, uint8_t alpha,
+    bool transform ) const
 {
     Point dstpt = GetRelativeTilePosition( mp ) + Point( ox, oy );
 

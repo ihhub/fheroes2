@@ -667,7 +667,8 @@ namespace fheroes2
         AlphaBlit( in, 0, 0, out, outX, outY, in.width(), in.height(), alphaValue, flip );
     }
 
-    void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue, bool flip, bool transform )
+    void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue, bool flip,
+        bool transform )
     {
         if ( alphaValue == 0 ) { // there is nothing we need to do
             return;
@@ -869,7 +870,7 @@ namespace fheroes2
                     }
                     else if ( *transformInX == 0 && *transformOutX == 0 ) {
                         *transformOutX = *transformInX;
-                        *imageOutX = *imageInX;                    
+                        *imageOutX = *imageInX;
                     }
                 }
             }
@@ -906,8 +907,8 @@ namespace fheroes2
                         }
                     }
                     else if ( *transformInX == 0 && *transformOutX == 0 ) {
-                            *transformOutX = *transformInX;
-                            *imageOutX = *imageInX;
+                        *transformOutX = *transformInX;
+                        *imageOutX = *imageInX;
                     }
                 }
             }
