@@ -678,7 +678,7 @@ int Interface::Basic::HumanTurn( bool isload )
     Point heroAnimationOffset;
     int heroAnimationSpriteId = 0;
 
-    bool isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
+    bool isCursorOverButtons = false;
 
     // startgame loop
     while ( Game::CANCEL == res ) {
@@ -839,6 +839,8 @@ int Interface::Basic::HumanTurn( bool isload )
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
         const bool isHiddenInterface = conf.ExtGameHideInterface();
+        const bool prevIsCursorOverButtons = isCursorOverButtons;
+        isCursorOverButtons = false;
         // Stop moving hero first
         if ( isMovingHero && ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) ) {
             stopHero = true;
@@ -860,6 +862,7 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = buttonsArea.QueueEventProcessing();
+            isCursorOverButtons = true;
         }
         // cursor over status area
         else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
@@ -883,15 +886,8 @@ int Interface::Basic::HumanTurn( bool isload )
             gameArea.ResetCursorPosition();
         }
 
-        if ( !isHiddenInterface || conf.ShowButtons() ) {
-            if ( isCursorOverButtons ) {
-                isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
-                if ( !isCursorOverButtons )
-                    buttonsArea.ResetButtons();
-            }
-            else {
-                isCursorOverButtons = le.MouseCursor( buttonsArea.GetRect() );
-            }
+        if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
+            buttonsArea.ResetButtons();
         }
 
         // fast scroll

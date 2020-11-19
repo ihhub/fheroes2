@@ -41,7 +41,7 @@ namespace Interface
 
         void Redraw( void );
         int QueueEventProcessing( void );
-        void ResetButtons( void );
+        void ResetButtons();
 
     private:
         Basic & interface;
