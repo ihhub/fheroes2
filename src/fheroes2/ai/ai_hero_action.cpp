@@ -1076,14 +1076,9 @@ namespace AI
     {
         const u32 max = hero.GetMaxSpellPoints();
 
-        if ( !hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
+        if ( !hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
             hero.SetSpellPoints( max * 2 );
-
-            if ( Settings::Get().ExtWorldArtesianSpringSeparatelyVisit() )
-                hero.SetVisited( dst_index, Visit::LOCAL );
-            else
-                // fix double action tile
-                hero.SetVisitedWideTile( dst_index, obj, Visit::LOCAL );
+            hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
         }
 
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );

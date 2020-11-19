@@ -84,7 +84,7 @@ namespace Dialog
     std::string SelectFileLoad( void );
     std::string SelectFileSave( void );
     // show info cell maps
-    void QuickInfo( const Maps::Tiles & );
+    void QuickInfo( const Maps::Tiles & tile );
     void QuickInfo( const Castle & );
     void QuickInfo( const Heroes & hero );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
