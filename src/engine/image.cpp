@@ -668,7 +668,7 @@ namespace fheroes2
     }
 
     void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue, bool flip,
-        bool transform )
+                    bool transform )
     {
         if ( alphaValue == 0 ) { // there is nothing we need to do
             return;
