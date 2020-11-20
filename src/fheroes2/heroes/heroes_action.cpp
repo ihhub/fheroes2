@@ -2321,7 +2321,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) ) {
+    if ( hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) ) {
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else if ( hero.GetSpellPoints() == max * 2 ) {
@@ -2338,11 +2338,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetSpellPoints( max * 2 );
         Dialog::Message( name, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG, Dialog::OK );
 
-        if ( Settings::Get().ExtWorldArtesianSpringSeparatelyVisit() )
-            hero.SetVisited( dst_index, Visit::LOCAL );
-        else
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, obj, Visit::LOCAL );
+        hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
     }
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -2790,7 +2786,12 @@ void ActionToAlchemistsTower( Heroes & hero )
             if ( Dialog::YES == Dialog::Message( "", msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 AGG::PlaySound( M82::GOODLUCK );
                 hero.GetKingdom().OddFundsResource( payment );
-                bag.resize( std::distance( bag.begin(), std::remove_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) ) );
+
+                for ( BagArtifacts::iterator it = bag.begin(); it != bag.end(); ++it ) {
+                    if ( it->isAlchemistRemove() ) {
+                        *it = Artifact::UNKNOWN;
+                    }
+                }
             }
         }
         else
@@ -3018,9 +3019,11 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
+        tile.SetObject( hero.GetMapsObject() );
+        hero.SetMapsObject( MP2::OBJ_ZERO );
         AnimationRemoveObject( tile );
         tile.RemoveObjectSprite();
-        tile.SetObject( MP2::OBJ_ZERO );
+        tile.SetObject( MP2::OBJ_HEROES );
     }
     else {
         Dialog::Message(

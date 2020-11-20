@@ -138,7 +138,13 @@ void Interface::Basic::EventNextHero( void )
         } while ( it != currentHero );
     }
     else {
-        ResetFocus( GameFocus::HEROES );
+        const size_t heroesCount = myHeroes.size();
+        for ( size_t i = 0; i < heroesCount; ++i ) {
+            if ( myHeroes[i]->MayStillMove() ) {
+                SetFocus( myHeroes[i] );
+                break;
+            }
+        }
     }
     RedrawFocus();
 }

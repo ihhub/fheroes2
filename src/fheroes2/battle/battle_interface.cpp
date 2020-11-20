@@ -1860,9 +1860,12 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
-        const s32 index_new = board.GetIndexAbsPosition( GetMouseCursor() );
-        if ( index_pos != index_new ) {
-            index_pos = index_new;
+        int32_t indexNew = -1;
+        if ( le.MouseCursor( Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.w, _interfacePosition.h - status.h ) ) ) {
+            indexNew = board.GetIndexAbsPosition( GetMouseCursor() );
+        }
+        if ( index_pos != indexNew ) {
+            index_pos = indexNew;
             humanturn_redraw = true;
         }
 
@@ -2997,7 +3000,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         RedrawTargetsWithFrameAnimation( dst, targets, ICN::FIREBAL2, M82::FromSpell( spell() ) );
         break;
     case Spell::METEORSHOWER:
-        RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell() ) );
+        RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell() ), 1 );
         break;
     case Spell::COLDRING:
         RedrawActionColdRingSpell( dst, targets );
@@ -4072,8 +4075,8 @@ void Battle::Interface::RedrawActionArmageddonSpell()
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
 
-            const int16_t offsetX = Rand::Get( -7, 7 );
-            const int16_t offsetY = Rand::Get( -7, 7 );
+            const int16_t offsetX = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
+            const int16_t offsetY = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
             const Rect initialArea( area.x, area.y, area.w, area.h );
             Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
@@ -4123,8 +4126,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
 
-            const int16_t offsetX = Rand::Get( -7, 7 );
-            const int16_t offsetY = Rand::Get( -7, 7 );
+            const int16_t offsetX = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
+            const int16_t offsetY = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
             const Rect initialArea( area.x, area.y, area.w, area.h );
             const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
@@ -4190,11 +4193,11 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
     status.SetMessage( _( "The mirror image is destroyed!" ), true );
 }
 
-void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsInfo & targets, int icn, int m82 )
+void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    u32 frame = 0;
+    uint32_t frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
@@ -4207,7 +4210,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    uint32_t frameCount = fheroes2::AGG::GetICNCount( icn );
+
+    while ( le.HandleEvents() && frame < frameCount ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4221,6 +4226,11 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
                 if ( ( *it ).defender && ( *it ).damage )
                     ( *it ).defender->IncreaseAnimFrame( false );
             ++frame;
+
+            if ( frame == frameCount && repeatCount > 0 ) {
+                --repeatCount;
+                frame = 0;
+            }
         }
     }
 
