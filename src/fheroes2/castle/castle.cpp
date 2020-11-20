@@ -2268,6 +2268,11 @@ bool Castle::PredicateIsTown( const Castle * castle )
     return castle && !castle->isCastle();
 }
 
+bool Castle::PredicateIsBuildBuilding( const Castle * castle, const uint32_t building ) 
+{
+    return castle && castle->isBuild( building );
+}
+
 std::string Castle::String( void ) const
 {
     std::ostringstream os;
