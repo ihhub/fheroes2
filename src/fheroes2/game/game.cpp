@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <map>
 
@@ -494,9 +495,10 @@ std::string Game::CountScoute( uint32_t count, int scoute, bool shorts )
     return res;
 }
 
-std::string Game::CountThievesGuild( uint32_t count, int guildCount )
+std::string Game::CountThievesGuild( uint32_t monsterCount, int guildCount )
 {
-    return guildCount == 1 ? "???" : Army::SizeString( count );
+    assert( guildCount > 0 );
+    return guildCount == 1 ? "???" : Army::SizeString( monsterCount );
 }
 
 void Game::PlayPickupSound( void )
