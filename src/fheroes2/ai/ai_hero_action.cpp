@@ -2043,6 +2043,11 @@ namespace AI
         if ( !troop )
             return;
 
+        // Whirlpool effect affects heroes only with more than one creature in more than one slot
+        if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+            return;
+        }
+
         if ( 1 == Rand::Get( 1, 3 ) ) {
             if ( troop->GetCount() == 1 ) {
                 troop->Reset();

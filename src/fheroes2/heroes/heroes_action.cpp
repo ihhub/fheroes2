@@ -356,7 +356,13 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
     if ( !troop )
         return;
 
+    // Whirlpool effect affects heroes only with more than one creature in more than one slot
+    if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+        return;
+    }
+
     if ( 1 == Rand::Get( 1, 3 ) ) {
+        // TODO: Do we really have this dialog in-game in OG?
         Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
 
         if ( troop->GetCount() == 1 ) {
