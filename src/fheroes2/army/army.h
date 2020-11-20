@@ -61,7 +61,6 @@ public:
 
     void UpgradeMonsters( const Monster & );
     u32 GetCountMonsters( const Monster & ) const;
-    u32 GetMonstersCount() const;
 
     u32 GetCount( void ) const;
     bool isValid( void ) const;
