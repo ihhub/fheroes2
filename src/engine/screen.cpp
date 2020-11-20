@@ -271,7 +271,6 @@ namespace
             }
 
             SDL_SetWindowFullscreen( _window, flags );
-
         }
 
         virtual bool isFullScreen() const override
@@ -357,13 +356,12 @@ namespace
 
         virtual void transformCoordinates( int & x, int & y ) override
         {
-            if ( isFullScreen() && _transformVals._isScalingNeeded )
-            {
-                if ( _transformVals._isLandscape )
-                {
+            if ( isFullScreen() && _transformVals._isScalingNeeded ) {
+                if ( _transformVals._isLandscape ) {
                     x = static_cast<int>( ( x - _transformVals._offset ) / _transformVals._aspect );
                     y = static_cast<int>( y / _transformVals._aspect );
-                } else {
+                }
+                else {
                     x = static_cast<int>( x / _transformVals._aspect );
                     y = static_cast<int>( ( y - _transformVals._offset ) / _transformVals._aspect );
                 }
@@ -495,7 +493,7 @@ namespace
                 return false;
             }
 
-            SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+            SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
             SDL_RenderSetLogicalSize( _renderer, width_, height_ );
 
             _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
@@ -579,7 +577,7 @@ namespace
             bool _isLandscape;
             float _aspect;
             float _offset;
-        } _transformVals = { false, false, 1., 0. };
+        } _transformVals = {false, false, 1., 0.};
 
         int renderFlags() const
         {
@@ -628,12 +626,14 @@ namespace
             const float precission = .001;
             if ( deviceAspect - displayAspect > precission ) {
                 const float outputAspect = static_cast<float>( dm.h ) / height;
-                _transformVals = { true, true, outputAspect, ( dm.w - outputAspect * width ) / 2 };
-            } else if ( deviceAspect - displayAspect < -precission ) {
+                _transformVals = {true, true, outputAspect, ( dm.w - outputAspect * width ) / 2};
+            }
+            else if ( deviceAspect - displayAspect < -precission ) {
                 const float outputAspect = static_cast<float>( dm.w ) / width;
-                _transformVals = { true, false, outputAspect, ( dm.h - outputAspect * height ) / 2 };
-            } else {
-                _transformVals = { false, false, 1., 0. };
+                _transformVals = {true, false, outputAspect, ( dm.h - outputAspect * height ) / 2};
+            }
+            else {
+                _transformVals = {false, false, 1., 0.};
             }
         }
     };

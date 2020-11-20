@@ -52,7 +52,7 @@ namespace fheroes2
 
         virtual void setIcon( const Image & ) {}
 
-        virtual void transformCoordinates ( int &, int & ) {}
+        virtual void transformCoordinates( int &, int & ) {}
 
     protected:
         BaseRenderEngine()
