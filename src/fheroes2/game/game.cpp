@@ -51,6 +51,8 @@
 #include "tools.h"
 #include "world.h"
 
+#include "zzlib.h"
+
 namespace Game
 {
     u32 GetMixerChannelFromObject( const Maps::Tiles & );
@@ -69,6 +71,7 @@ namespace Game
     std::string last_name;
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
+    std::map<std::string, StreamBuf> map_players;
 
     namespace ObjectFadeAnimation
     {
@@ -98,6 +101,18 @@ namespace Game
 
         Info removeInfo;
     }
+}
+
+void Game::LoadPlayers( const std::string & mapFileName, Players & players )
+{
+    auto it = map_players.find( mapFileName );
+    if ( it != map_players.end() )
+        it->second >> players;
+}
+
+void Game::SavePlayers( const std::string & mapFileName, const Players & players )
+{
+    map_players.insert( std::make_pair( mapFileName, StreamBuf() ) ).first->second << players;
 }
 
 void Game::SetLoadVersion( int ver )

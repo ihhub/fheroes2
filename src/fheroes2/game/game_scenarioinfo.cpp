@@ -154,6 +154,7 @@ int Game::ScenarioInfo( void )
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
                 if ( mapIter->file == conf.CurrentFileInfo().file ) {
                     conf.SetCurrentFileInfo( *mapIter );
+                    LoadPlayers( mapIter->file, players );
                     resetStartingSettings = false;
                     break;
                 }
@@ -162,8 +163,10 @@ int Game::ScenarioInfo( void )
     }
 
     // set first map's settings
-    if ( resetStartingSettings )
+    if ( resetStartingSettings ) {
         conf.SetCurrentFileInfo( lists.front() );
+        LoadPlayers( lists.front().file, players );
+    }
 
     updatePlayers( players, humanPlayerCount );
     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
@@ -224,7 +227,10 @@ int Game::ScenarioInfo( void )
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
             if ( fi ) {
+                SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
                 conf.SetCurrentFileInfo( *fi );
+                LoadPlayers( fi->file, players );
+
                 updatePlayers( players, humanPlayerCount );
                 playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
@@ -304,6 +310,8 @@ int Game::ScenarioInfo( void )
                 playersInfo.QueueEventProcessing();
         }
     }
+
+    SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
 
     cursor.Hide();
 
