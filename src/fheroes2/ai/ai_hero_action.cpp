@@ -2034,10 +2034,6 @@ namespace AI
 
     static void AIWhirlpoolTroopLooseEffect( Heroes & hero )
     {
-        if ( hero.GetArmy().GetMonstersCount() <= 1 ) {
-            return;
-        }
-
         Troop * troop = hero.GetArmy().GetWeakestTroop();
         assert( troop );
         if ( !troop )
