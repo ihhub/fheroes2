@@ -19,8 +19,6 @@
  ***************************************************************************/
 #pragma once
 
-#include "SDL.h"
-
 #include "image.h"
 
 namespace fheroes2
@@ -53,6 +51,8 @@ namespace fheroes2
         virtual void setTitle( const std::string & ) {}
 
         virtual void setIcon( const Image & ) {}
+
+        virtual void transformCoordinates ( int &, int & ) {}
 
     protected:
         BaseRenderEngine()
@@ -116,14 +116,7 @@ namespace fheroes2
 
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
-#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( __WIN32__ )
-        bool isFullScreen() const
-        {
-            return _engine->isFullScreen();
-        }
 
-        fheroes2::Size getOutputSize() const;
-#endif
     private:
         BaseRenderEngine * _engine;
         Cursor * _cursor;

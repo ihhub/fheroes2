@@ -23,6 +23,7 @@
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_hints.h>
 #include <SDL_mouse.h>
 #include <SDL_render.h>
 #include <SDL_video.h>
@@ -265,10 +266,12 @@ namespace
                 flags = SDL_WINDOW_FULLSCREEN;
 #else
                 flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+                _calculateTransformVals();
 #endif
             }
 
             SDL_SetWindowFullscreen( _window, flags );
+
         }
 
         virtual bool isFullScreen() const override
@@ -352,6 +355,21 @@ namespace
             SDL_FreeSurface( surface );
         }
 
+        virtual void transformCoordinates( int & x, int & y ) override
+        {
+            if ( isFullScreen() && _transformVals._isScalingNeeded )
+            {
+                if ( _transformVals._isLandscape )
+                {
+                    x = static_cast<int>( ( x - _transformVals._offset ) / _transformVals._aspect );
+                    y = static_cast<int>( y / _transformVals._aspect );
+                } else {
+                    x = static_cast<int>( x / _transformVals._aspect );
+                    y = static_cast<int>( ( y - _transformVals._offset ) / _transformVals._aspect );
+                }
+            }
+        }
+
         static RenderEngine * create()
         {
             return new RenderEngine;
@@ -433,7 +451,6 @@ namespace
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
                 if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
-                    SDL_SetRenderDrawColor( _renderer, 0, 0, 0, 0 );
                     SDL_RenderClear( _renderer );
                     if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
                         SDL_RenderPresent( _renderer );
@@ -459,10 +476,12 @@ namespace
                 flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+                _calculateTransformVals( width_, height_ );
 #endif
             }
 
             _window = SDL_CreateWindow( "", _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
+
             if ( _window == NULL ) {
                 clear();
                 return false;
@@ -476,7 +495,9 @@ namespace
                 return false;
             }
 
+            SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
             SDL_RenderSetLogicalSize( _renderer, width_, height_ );
+
             _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
             if ( _surface == NULL ) {
                 clear();
@@ -552,6 +573,14 @@ namespace
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
 
+        struct
+        {
+            bool _isScalingNeeded;
+            bool _isLandscape;
+            float _aspect;
+            float _offset;
+        } _transformVals = { false, false, 1., 0. };
+
         int renderFlags() const
         {
 #if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
@@ -580,6 +609,31 @@ namespace
 
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                 }
+            }
+        }
+
+        void _calculateTransformVals()
+        {
+            const fheroes2::Display & display = fheroes2::Display::instance();
+            _calculateTransformVals( display.width(), display.height() );
+        }
+
+        void _calculateTransformVals( int width, int height )
+        {
+            SDL_DisplayMode dm;
+            SDL_GetCurrentDisplayMode( 0, &dm );
+
+            const float deviceAspect = static_cast<float>( dm.w ) / dm.h;
+            const float displayAspect = static_cast<float>( width ) / height;
+            const float precission = .001;
+            if ( deviceAspect - displayAspect > precission ) {
+                const float outputAspect = static_cast<float>( dm.h ) / height;
+                _transformVals = { true, true, outputAspect, ( dm.w - outputAspect * width ) / 2 };
+            } else if ( deviceAspect - displayAspect < -precission ) {
+                const float outputAspect = static_cast<float>( dm.w ) / width;
+                _transformVals = { true, false, outputAspect, ( dm.h - outputAspect * height ) / 2 };
+            } else {
+                _transformVals = { false, false, 1., 0. };
             }
         }
     };
@@ -978,14 +1032,7 @@ namespace fheroes2
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }
-#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( __WIN32__ )
-    fheroes2::Size Display::getOutputSize() const
-    {
-        SDL_DisplayMode DM;
-        SDL_GetCurrentDisplayMode( 0, &DM );
-        return fheroes2::Size( DM.w, DM.h );
-    }
-#endif
+
     bool Cursor::isFocusActive() const
     {
         return engine().isMouseCursorActive();
