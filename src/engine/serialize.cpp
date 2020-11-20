@@ -587,9 +587,9 @@ void StreamFile::seek( size_t pos )
 size_t StreamFile::sizeg( void ) const
 {
     if ( fp ) {
-        long pos = std::ftell( fp );
+        const long pos = std::ftell( fp );
         std::fseek( fp, 0, SEEK_END );
-        long len = std::ftell( fp );
+        const long len = std::ftell( fp );
         std::fseek( fp, pos, SEEK_SET );
         return static_cast<size_t>( len - pos );
     }
