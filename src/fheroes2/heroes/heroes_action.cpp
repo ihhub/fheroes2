@@ -22,6 +22,7 @@
 
 #include "agg.h"
 #include "ai.h"
+#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -340,6 +341,31 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
                 hero.RecalculateMovePoints();
 
             Interface::Basic::Get().GetStatusWindow().SetRedraw();
+        }
+    }
+}
+
+static void WhirlpoolTroopLooseEffect( Heroes & hero )
+{
+    Troop * troop = hero.GetArmy().GetWeakestTroop();
+    assert( troop );
+    if ( !troop )
+        return;
+
+    // Whirlpool effect affects heroes only with more than one creature in more than one slot
+    if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+        return;
+    }
+
+    if ( 1 == Rand::Get( 1, 3 ) ) {
+        // TODO: Do we really have this dialog in-game in OG?
+        Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
+
+        if ( troop->GetCount() == 1 ) {
+            troop->Reset();
+        }
+        else {
+            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
     }
 }
@@ -1977,12 +2003,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     hero.GetPath().Hide();
     hero.FadeIn();
 
-    Troop * troop = hero.GetArmy().GetWeakestTroop();
-
-    if ( troop && Rand::Get( 1 ) && 1 < troop->GetCount() ) {
-        Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
-        troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
-    }
+    WhirlpoolTroopLooseEffect( hero );
 
     hero.GetPath().Reset();
     hero.ActionNewPosition();

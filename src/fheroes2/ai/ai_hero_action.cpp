@@ -26,6 +26,7 @@
 #include "agg.h"
 #include "ai.h"
 #include "army.h"
+#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -91,6 +92,7 @@ namespace AI
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
     uint32_t AIGetAllianceColors();
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
+    static void AIWhirlpoolTroopLooseEffect( Heroes & hero );
 
     int AISelectPrimarySkill( Heroes & hero )
     {
@@ -901,10 +903,7 @@ namespace AI
         hero.FadeOut();
         hero.Move2Dest( index_to );
 
-        Troop * troop = hero.GetArmy().GetWeakestTroop();
-
-        if ( troop && Rand::Get( 1 ) && 1 < troop->GetCount() )
-            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+        AIWhirlpoolTroopLooseEffect( hero );
 
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -2025,6 +2024,28 @@ namespace AI
         else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
             if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
                 hero.Action( hero.GetIndex() );
+        }
+    }
+
+    static void AIWhirlpoolTroopLooseEffect( Heroes & hero )
+    {
+        Troop * troop = hero.GetArmy().GetWeakestTroop();
+        assert( troop );
+        if ( !troop )
+            return;
+
+        // Whirlpool effect affects heroes only with more than one creature in more than one slot
+        if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+            return;
+        }
+
+        if ( 1 == Rand::Get( 1, 3 ) ) {
+            if ( troop->GetCount() == 1 ) {
+                troop->Reset();
+            }
+            else {
+                troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+            }
         }
     }
 }
