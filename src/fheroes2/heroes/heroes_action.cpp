@@ -2452,16 +2452,16 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
     switch ( obj ) {
     case MP2::OBJ_HILLFORT: {
         std::vector<bool> hasSuitableMonster;
-        const std::vector<Monster> hillfortMonsToUpgrade( { Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF ) } );
+        const std::vector<Monster> hillfortMonsToUpgrade( {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )} );
 
-        for ( auto iter = hillfortMonsToUpgrade.begin(); iter != hillfortMonsToUpgrade.end(); ++iter) {
+        for ( auto iter = hillfortMonsToUpgrade.begin(); iter != hillfortMonsToUpgrade.end(); ++iter ) {
             if ( heroArmy.HasMonster( *iter ) )
                 hasSuitableMonster.push_back( true );
             else
                 hasSuitableMonster.push_back( false );
         }
 
-        for ( std::size_t iter = 0; iter < hasSuitableMonster.size(); ++iter) {
+        for ( std::size_t iter = 0; iter < hasSuitableMonster.size(); ++iter ) {
             if ( !hasSuitableMonster[iter] )
                 continue;
             const bool combineWithAnd = iter == ( hasSuitableMonster.size() - 1 ) && !mons.empty();
@@ -2473,20 +2473,20 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         StringReplace( msg1, "%{monsters}", monsters );
         StringReplace( msg1, "%{monsters2}", monsters_upgrade );
         msg2 = _( "An unusual alliance of Orcs, Ogres, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
-        } break;
+    } break;
 
     case MP2::OBJ_FREEMANFOUNDRY: {
         std::vector<bool> hasSuitableMonster;
-        const std::vector<Monster> freemansfoundryMonsToUpgrade( { Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM ) } );
+        const std::vector<Monster> freemansfoundryMonsToUpgrade( {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )} );
 
-        for ( auto iter = freemansfoundryMonsToUpgrade.begin(); iter != freemansfoundryMonsToUpgrade.end(); ++iter) {
+        for ( auto iter = freemansfoundryMonsToUpgrade.begin(); iter != freemansfoundryMonsToUpgrade.end(); ++iter ) {
             if ( heroArmy.HasMonster( *iter ) )
                 hasSuitableMonster.push_back( true );
             else
                 hasSuitableMonster.push_back( false );
         }
 
-        for ( std::size_t iter = 0; iter < hasSuitableMonster.size(); ++iter) {
+        for ( std::size_t iter = 0; iter < hasSuitableMonster.size(); ++iter ) {
             if ( !hasSuitableMonster[iter] )
                 continue;
             const bool combineWithAnd = iter == ( hasSuitableMonster.size() - 1 ) && !mons.empty();
@@ -2499,7 +2499,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         StringReplace( msg1, "%{monsters2}", monsters_upgrade );
         msg2 = _(
             "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
-        } break;
+    } break;
 
     default:
         break;
