@@ -2447,56 +2447,41 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 
     hero.MovePointsScaleFixed();
 
-    Army & heroArmy = hero.GetArmy();
+    const std::vector<Monster> *monsToUpgrade = nullptr;
+    const std::vector<Monster> hillfortMonsToUpgrade( {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )} );
+    const std::vector<Monster> freemansfoundryMonsToUpgrade( {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )} );
 
     switch ( obj ) {
     case MP2::OBJ_HILLFORT: {
-        const std::vector<Monster> hillfortMonsToUpgrade( {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )} );
-        std::vector<bool> hasSuitableMonster( hillfortMonsToUpgrade.size() );
-
-        for ( std::size_t i = 0; i < hillfortMonsToUpgrade.size(); ++i ) {
-            hasSuitableMonster[i] = heroArmy.HasMonster( hillfortMonsToUpgrade[i] );
-        }
-
-        for ( std::size_t i = 0; i < hasSuitableMonster.size(); ++i ) {
-            if ( !hasSuitableMonster[i] )
-                continue;
-            const bool combineWithAnd = i == ( hasSuitableMonster.size() - 1 ) && !mons.empty();
-            if ( ActionToUpgradeArmy( heroArmy, hillfortMonsToUpgrade[i], monsters, monsters_upgrade, combineWithAnd ) )
-                mons.emplace_back( hillfortMonsToUpgrade[i] );
-        }
+        monsToUpgrade = &hillfortMonsToUpgrade;
 
         msg1 = _( "All of the %{monsters} you have in your army have been trained by the battle masters of the fort. Your army now contains %{monsters2}." );
-        StringReplace( msg1, "%{monsters}", monsters );
-        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
         msg2 = _( "An unusual alliance of Orcs, Ogres, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
     } break;
 
     case MP2::OBJ_FREEMANFOUNDRY: {
-        const std::vector<Monster> freemansfoundryMonsToUpgrade( {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )} );
-        std::vector<bool> hasSuitableMonster( freemansfoundryMonsToUpgrade.size() );
-
-        for ( std::size_t i = 0; i < freemansfoundryMonsToUpgrade.size(); ++i ) {
-            hasSuitableMonster[i] = heroArmy.HasMonster( freemansfoundryMonsToUpgrade[i] );
-        }
-
-        for ( std::size_t i = 0; i < hasSuitableMonster.size(); ++i ) {
-            if ( !hasSuitableMonster[i] )
-                continue;
-            const bool combineWithAnd = i == ( hasSuitableMonster.size() - 1 ) && !mons.empty();
-            if ( ActionToUpgradeArmy( heroArmy, freemansfoundryMonsToUpgrade[i], monsters, monsters_upgrade, combineWithAnd ) )
-                mons.emplace_back( freemansfoundryMonsToUpgrade[i] );
-        }
+        monsToUpgrade = &freemansfoundryMonsToUpgrade;
 
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
-        StringReplace( msg1, "%{monsters}", monsters );
-        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
         msg2 = _(
             "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
     } break;
 
     default:
-        break;
+        ERROR( "Incorrect object type passed to ActionToUpgradeArmyObject" );
+        return;
+    }
+
+    if ( monsToUpgrade != nullptr && !monsToUpgrade->empty()) {
+        Army & heroArmy = hero.GetArmy();
+
+        for ( std::size_t i = 0; i < monsToUpgrade->size(); ++i ) {
+            if ( !heroArmy.HasMonster( monsToUpgrade->at(i) ) )
+                continue;
+            const bool combineWithAnd = i == ( monsToUpgrade->size() - 1 ) && !mons.empty();
+            if ( ActionToUpgradeArmy( heroArmy, monsToUpgrade->at(i), monsters, monsters_upgrade, combineWithAnd ) )
+                mons.emplace_back( monsToUpgrade->at(i) );
+        }
     }
 
     if ( !mons.empty() ) {
@@ -2507,6 +2492,9 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
         fheroes2::Image surface( border.width() * monsterCount + ( monsterCount - 1 ) * 4, border.height() );
         surface.reset();
+
+        StringReplace( msg1, "%{monsters}", monsters );
+        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
 
         for ( std::vector<Monster>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
             // border
