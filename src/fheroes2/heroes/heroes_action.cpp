@@ -2447,7 +2447,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 
     hero.MovePointsScaleFixed();
 
-    const std::vector<Monster> *monsToUpgrade = nullptr;
+    const std::vector<Monster> * monsToUpgrade = nullptr;
     const std::vector<Monster> hillfortMonsToUpgrade( {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )} );
     const std::vector<Monster> freemansfoundryMonsToUpgrade( {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )} );
 
