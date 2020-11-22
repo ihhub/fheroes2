@@ -2472,15 +2472,15 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         return;
     }
 
-    if ( monsToUpgrade != nullptr && !monsToUpgrade->empty()) {
+    if ( monsToUpgrade != nullptr && !monsToUpgrade->empty() ) {
         Army & heroArmy = hero.GetArmy();
 
         for ( std::size_t i = 0; i < monsToUpgrade->size(); ++i ) {
-            if ( !heroArmy.HasMonster( monsToUpgrade->at(i) ) )
+            if ( !heroArmy.HasMonster( monsToUpgrade->at( i ) ) )
                 continue;
             const bool combineWithAnd = i == ( monsToUpgrade->size() - 1 ) && !mons.empty();
-            if ( ActionToUpgradeArmy( heroArmy, monsToUpgrade->at(i), monsters, monsters_upgrade, combineWithAnd ) )
-                mons.emplace_back( monsToUpgrade->at(i) );
+            if ( ActionToUpgradeArmy( heroArmy, monsToUpgrade->at( i ), monsters, monsters_upgrade, combineWithAnd ) )
+                mons.emplace_back( monsToUpgrade->at( i ) );
         }
     }
 
