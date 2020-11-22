@@ -2435,7 +2435,7 @@ bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1,
 
 void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 {
-    const std::size_t monstersLimit = 3;
+    const size_t monstersLimit = 3;
 
     std::string monsters;
     std::string monsters_upgrade;
@@ -2451,22 +2451,19 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 
     switch ( obj ) {
     case MP2::OBJ_HILLFORT: {
-        std::vector<bool> hasSuitableMonster;
         const std::vector<Monster> hillfortMonsToUpgrade( {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )} );
+        std::vector<bool> hasSuitableMonster( hillfortMonsToUpgrade.size() );
 
-        for ( auto iter = hillfortMonsToUpgrade.begin(); iter != hillfortMonsToUpgrade.end(); ++iter ) {
-            if ( heroArmy.HasMonster( *iter ) )
-                hasSuitableMonster.push_back( true );
-            else
-                hasSuitableMonster.push_back( false );
+        for ( std::size_t i = 0; i < hillfortMonsToUpgrade.size(); ++i ) {
+            hasSuitableMonster[i] = heroArmy.HasMonster( hillfortMonsToUpgrade[i] );
         }
 
-        for ( std::size_t iter = 0; iter < hasSuitableMonster.size(); ++iter ) {
-            if ( !hasSuitableMonster[iter] )
+        for ( std::size_t i = 0; i < hasSuitableMonster.size(); ++i ) {
+            if ( !hasSuitableMonster[i] )
                 continue;
-            const bool combineWithAnd = iter == ( hasSuitableMonster.size() - 1 ) && !mons.empty();
-            if ( ActionToUpgradeArmy( heroArmy, hillfortMonsToUpgrade[iter], monsters, monsters_upgrade, combineWithAnd ) )
-                mons.push_back( hillfortMonsToUpgrade[iter] );
+            const bool combineWithAnd = i == ( hasSuitableMonster.size() - 1 ) && !mons.empty();
+            if ( ActionToUpgradeArmy( heroArmy, hillfortMonsToUpgrade[i], monsters, monsters_upgrade, combineWithAnd ) )
+                mons.emplace_back( hillfortMonsToUpgrade[i] );
         }
 
         msg1 = _( "All of the %{monsters} you have in your army have been trained by the battle masters of the fort. Your army now contains %{monsters2}." );
@@ -2476,22 +2473,19 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
     } break;
 
     case MP2::OBJ_FREEMANFOUNDRY: {
-        std::vector<bool> hasSuitableMonster;
         const std::vector<Monster> freemansfoundryMonsToUpgrade( {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )} );
+        std::vector<bool> hasSuitableMonster( freemansfoundryMonsToUpgrade.size() );
 
-        for ( auto iter = freemansfoundryMonsToUpgrade.begin(); iter != freemansfoundryMonsToUpgrade.end(); ++iter ) {
-            if ( heroArmy.HasMonster( *iter ) )
-                hasSuitableMonster.push_back( true );
-            else
-                hasSuitableMonster.push_back( false );
+        for ( std::size_t i = 0; i < freemansfoundryMonsToUpgrade.size(); ++i ) {
+            hasSuitableMonster[i] = heroArmy.HasMonster( freemansfoundryMonsToUpgrade[i] );
         }
 
-        for ( std::size_t iter = 0; iter < hasSuitableMonster.size(); ++iter ) {
-            if ( !hasSuitableMonster[iter] )
+        for ( std::size_t i = 0; i < hasSuitableMonster.size(); ++i ) {
+            if ( !hasSuitableMonster[i] )
                 continue;
-            const bool combineWithAnd = iter == ( hasSuitableMonster.size() - 1 ) && !mons.empty();
-            if ( ActionToUpgradeArmy( heroArmy, freemansfoundryMonsToUpgrade[iter], monsters, monsters_upgrade, combineWithAnd ) )
-                mons.push_back( freemansfoundryMonsToUpgrade[iter] );
+            const bool combineWithAnd = i == ( hasSuitableMonster.size() - 1 ) && !mons.empty();
+            if ( ActionToUpgradeArmy( heroArmy, freemansfoundryMonsToUpgrade[i], monsters, monsters_upgrade, combineWithAnd ) )
+                mons.emplace_back( freemansfoundryMonsToUpgrade[i] );
         }
 
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
