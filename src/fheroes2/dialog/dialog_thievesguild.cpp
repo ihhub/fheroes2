@@ -55,7 +55,7 @@ struct ValueColors : std::pair<int, int>
 
 void UpdateValuesColors( std::vector<ValueColors> & v, int value, int color )
 {
-    std::vector<ValueColors>::iterator it = std::find_if( v.begin(), v.end(), std::bind2nd( std::mem_fun_ref( &ValueColors::IsValue ), value ) );
+    std::vector<ValueColors>::iterator it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & v ) { return v.IsValue( value ); } );
 
     if ( it == v.end() )
         v.push_back( ValueColors( value, color ) );

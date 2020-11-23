@@ -87,7 +87,7 @@ namespace AI
         virtual void HeroesPostLoad( Heroes & hero );
         virtual bool HeroesCanMove( const Heroes & hero );
         virtual bool HeroesGetTask( Heroes & hero );
-        virtual void HeroesActionComplete( Heroes & hero, int index );
+        virtual void HeroesActionComplete( Heroes & hero );
         virtual void HeroesActionNewPosition( Heroes & hero );
         virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );

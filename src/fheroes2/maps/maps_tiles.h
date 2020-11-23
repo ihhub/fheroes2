@@ -87,7 +87,6 @@ namespace Maps
         static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
         static bool ForceLevel1( const TilesAddon & );
-        static bool ForceLevel2( const TilesAddon & );
 
         u32 uniq;
         u8 level;
@@ -161,7 +160,7 @@ namespace Maps
         void RedrawTop( fheroes2::Image & dst ) const;
         void RedrawTop4Hero( fheroes2::Image &, bool skip_ground ) const;
         void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw = false ) const;
-        void RedrawMonstersAndBoat( fheroes2::Image & ) const;
+        void RedrawMonstersAndBoat( fheroes2::Image & dst, bool withShadow = true ) const;
         int GetFogDirections( int color ) const;
         void RedrawFogs( fheroes2::Image &, int ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool isPuzzleDraw = false ) const;
@@ -241,8 +240,8 @@ namespace Maps
         void RemoveJailSprite( void );
         bool isLongObject( int direction );
 
-        void RedrawBoat( fheroes2::Image & ) const;
-        void RedrawMonster( fheroes2::Image & ) const;
+        void RedrawBoat( fheroes2::Image & dst, bool withShadow ) const;
+        void RedrawMonster( fheroes2::Image & dst ) const;
 
         void QuantitySetVariant( int );
         void QuantitySetExt( int );

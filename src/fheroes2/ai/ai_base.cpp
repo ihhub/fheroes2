@@ -95,7 +95,7 @@ namespace AI
         return "";
     }
 
-    void Base::HeroesActionComplete( Heroes &, int ) {}
+    void Base::HeroesActionComplete( Heroes & ) {}
 
     void Base::HeroesLevelUp( Heroes & ) {}
 

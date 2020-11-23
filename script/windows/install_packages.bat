@@ -12,7 +12,7 @@ powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl
 echo downloading packages [3/5]
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '..\..\..\packages\sdl_mixer\sdl_mixer.zip')"
 echo downloading packages [4/5]
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip', '..\..\..\packages\sdl\sdl2.zip')"
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-devel-2.0.12-VC.zip', '..\..\..\packages\sdl\sdl2.zip')"
 echo downloading packages [5/5]
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip', '..\..\..\packages\sdl_mixer\sdl_mixer2.zip')"
 

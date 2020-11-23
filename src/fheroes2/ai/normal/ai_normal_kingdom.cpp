@@ -137,7 +137,7 @@ namespace AI
         std::vector<int> castlesInDanger;
 
         for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
-            if ( enemy->second )
+            if ( enemy->second == nullptr )
                 continue;
 
             const double attackerStrength = enemy->second->GetStrength();

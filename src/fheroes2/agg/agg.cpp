@@ -1196,6 +1196,30 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::TOWNBKG2:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 1 ) {
+                    Sprite & out = _icnVsSprite[id][0];
+                    // The pixel pixel of the original sprite has a skip value
+                    if ( !out.empty() && out.transform()[0] == 1 ) {
+                        out.transform()[0] = 0;
+                        out.image()[0] = 10;
+                    }
+                }
+                return true;
+            case ICN::HSICONS:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 7 ) {
+                    Sprite & out = _icnVsSprite[id][7];
+                    if ( out.width() == 34 && out.height() == 19 ) {
+                        Sprite temp = out;
+                        out.resize( out.width() + 1, out.height() );
+                        out.reset();
+                        Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
+                        Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );
+                    }
+                }
+                return true;
             default:
                 break;
             }

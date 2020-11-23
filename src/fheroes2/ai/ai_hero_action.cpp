@@ -26,6 +26,7 @@
 #include "agg.h"
 #include "ai.h"
 #include "army.h"
+#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -47,10 +48,10 @@
 
 namespace AI
 {
-    void AIToMonster( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToPickupResource( Heroes & hero, u32 obj, s32 dst_index );
+    void AIToMonster( Heroes & hero, int obj, s32 dst_index );
+    void AIToPickupResource( Heroes & hero, int obj, s32 dst_index );
     void AIToTreasureChest( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToArtifact( Heroes & hero, u32 obj, s32 dst_index );
+    void AIToArtifact( Heroes & hero, int obj, s32 dst_index );
     void AIToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
     void AIToWagon( Heroes & hero, s32 dst_index );
     void AIToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
@@ -91,6 +92,7 @@ namespace AI
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
     uint32_t AIGetAllianceColors();
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
+    static void AIWhirlpoolTroopLooseEffect( Heroes & hero );
 
     int AISelectPrimarySkill( Heroes & hero )
     {
@@ -431,7 +433,7 @@ namespace AI
 
         // ignore empty tiles
         if ( isAction )
-            AI::Get().HeroesActionComplete( hero, dst_index );
+            AI::Get().HeroesActionComplete( hero );
 
         // reset if during an action music was stopped
         AGG::PlayMusic( MUS::COMPUTER_TURN );
@@ -567,7 +569,7 @@ namespace AI
         }
     }
 
-    void AIToMonster( Heroes & hero, u32 obj, s32 dst_index )
+    void AIToMonster( Heroes & hero, int obj, s32 dst_index )
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -645,7 +647,7 @@ namespace AI
         }
     }
 
-    void AIToPickupResource( Heroes & hero, u32 obj, s32 dst_index )
+    void AIToPickupResource( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         MapResource * map_resource = NULL;
@@ -901,10 +903,7 @@ namespace AI
         hero.FadeOut();
         hero.Move2Dest( index_to );
 
-        Troop * troop = hero.GetArmy().GetWeakestTroop();
-
-        if ( troop && Rand::Get( 1 ) && 1 < troop->GetCount() )
-            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+        AIWhirlpoolTroopLooseEffect( hero );
 
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -1076,14 +1075,9 @@ namespace AI
     {
         const u32 max = hero.GetMaxSpellPoints();
 
-        if ( !hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
+        if ( !hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
             hero.SetSpellPoints( max * 2 );
-
-            if ( Settings::Get().ExtWorldArtesianSpringSeparatelyVisit() )
-                hero.SetVisited( dst_index, Visit::LOCAL );
-            else
-                // fix double action tile
-                hero.SetVisitedWideTile( dst_index, obj, Visit::LOCAL );
+            hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
         }
 
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
@@ -1372,7 +1366,7 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToArtifact( Heroes & hero, u32 obj, s32 dst_index )
+    void AIToArtifact( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         MapArtifact * map_artifact = NULL;
@@ -1458,6 +1452,7 @@ namespace AI
             hero.FadeOut( Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
 
+        hero.setDirection( world.GetTiles( dst_index ).getBoatDirection() );
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         hero.SetMapsObject( MP2::OBJ_ZERO );
@@ -2029,6 +2024,28 @@ namespace AI
         else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
             if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
                 hero.Action( hero.GetIndex() );
+        }
+    }
+
+    static void AIWhirlpoolTroopLooseEffect( Heroes & hero )
+    {
+        Troop * troop = hero.GetArmy().GetWeakestTroop();
+        assert( troop );
+        if ( !troop )
+            return;
+
+        // Whirlpool effect affects heroes only with more than one creature in more than one slot
+        if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+            return;
+        }
+
+        if ( 1 == Rand::Get( 1, 3 ) ) {
+            if ( troop->GetCount() == 1 ) {
+                troop->Reset();
+            }
+            else {
+                troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+            }
         }
     }
 }

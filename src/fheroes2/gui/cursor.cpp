@@ -90,6 +90,9 @@ void Cursor::Redraw( s32 x, s32 y )
     if ( fheroes2::cursor().isVisible() ) {
         fheroes2::Display::instance().render();
     }
+#else
+    (void)x;
+    (void)y;
 #endif
 }
 

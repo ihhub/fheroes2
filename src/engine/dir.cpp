@@ -103,7 +103,7 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
                 continue;
 
             if ( filter.size() ) {
-                const int filenameLength = strlen( ep->d_name );
+                const size_t filenameLength = strlen( ep->d_name );
                 if ( filenameLength < filter.length() )
                     continue;
 

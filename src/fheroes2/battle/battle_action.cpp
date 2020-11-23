@@ -244,7 +244,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                        << ": " << b1->String( true ) << " and " << b2->String( true ) );
         }
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_WARN,
                "incorrect param"
                    << ": "
@@ -252,6 +252,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                    << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid1 << ", "
                    << "uid: "
                    << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid2 );
+    }
 }
 
 void Battle::Arena::ApplyActionMove( Command & cmd )
@@ -374,11 +375,12 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
             DEBUG( DBG_BATTLE, DBG_WARN, "uid: " << uid << " moved" );
         }
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_WARN,
                "incorrect param"
                    << ": "
                    << "uid: " << uid );
+    }
 }
 
 void Battle::Arena::ApplyActionEnd( Command & cmd )
@@ -400,12 +402,13 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
             DEBUG( DBG_BATTLE, DBG_INFO, "uid: " << uid << " moved" );
         }
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_INFO,
                "incorrect param"
                    << ": "
                    << "uid: "
                    << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid );
+    }
 }
 
 void Battle::Arena::ApplyActionMorale( Command & cmd )
@@ -434,15 +437,16 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
 
         DEBUG( DBG_BATTLE, DBG_TRACE, ( morale ? "good" : "bad" ) << " to " << b->String() );
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_WARN,
                "incorrect param"
                    << ": "
                    << "uid: "
                    << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid );
+    }
 }
 
-void Battle::Arena::ApplyActionRetreat( Command & cmd )
+void Battle::Arena::ApplyActionRetreat( Command & /*cmd*/ )
 {
     if ( CanRetreatOpponent( current_color ) ) {
         if ( army1->GetColor() == current_color ) {
@@ -453,11 +457,12 @@ void Battle::Arena::ApplyActionRetreat( Command & cmd )
         }
         DEBUG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( current_color ) );
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_WARN, "CanRetreatOpponent check failed" );
+    }
 }
 
-void Battle::Arena::ApplyActionSurrender( Command & cmd )
+void Battle::Arena::ApplyActionSurrender( Command & /*cmd*/ )
 {
     if ( CanSurrenderOpponent( current_color ) ) {
         Funds cost;
@@ -481,11 +486,12 @@ void Battle::Arena::ApplyActionSurrender( Command & cmd )
             DEBUG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( current_color ) );
         }
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_WARN, "incorrect param" );
+    }
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, Unit & defender, TargetsInfo & targets )
+void Battle::Arena::TargetsApplyDamage( Unit & attacker, Unit & /*defender*/, TargetsInfo & targets )
 {
     TargetsInfo::iterator it = targets.begin();
 
@@ -756,12 +762,13 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
         if ( b2->Modes( SP_BLIND ) )
             b2->ResetBlind();
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_WARN,
                "incorrect param"
                    << ": "
                    << "tower: " << type << ", uid: "
                    << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid );
+    }
 }
 
 void Battle::Arena::ApplyActionCatapult( Command & cmd )
@@ -781,8 +788,9 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
             }
         }
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_WARN, "incorrect param" );
+    }
 }
 
 void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
@@ -801,11 +809,12 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
             auto_battle |= color;
         }
     }
-    else
+    else {
         DEBUG( DBG_BATTLE, DBG_WARN, "incorrect param" );
+    }
 }
 
-void Battle::Arena::ApplyActionSpellSummonElemental( Command & cmd, const Spell & spell )
+void Battle::Arena::ApplyActionSpellSummonElemental( Command & /*cmd*/, const Spell & spell )
 {
     Unit * elem = CreateElemental( spell );
     if ( interface )
@@ -857,7 +866,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
 
 std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander );
 
-void Battle::Arena::ApplyActionSpellEarthQuake( Command & cmd )
+void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
 {
     std::vector<int> targets = GetCastleTargets();
     if ( interface ) {
@@ -912,7 +921,8 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         ShortestDistance SortingDistance( troop->GetHeadIndex() );
         std::sort( distances.begin(), distances.end(), SortingDistance );
 
-        Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), std::bind2nd( std::ptr_fun( &Board::isValidMirrorImageIndex ), troop ) );
+        Indexes::const_iterator it
+            = std::find_if( distances.begin(), distances.end(), [troop]( const s32 & v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );
         if ( it != distances.end() ) {
             const Position pos = Position::GetCorrect( *troop, *it );
             const s32 dst = pos.GetHead()->GetIndex();

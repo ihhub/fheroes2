@@ -172,7 +172,7 @@ const char * GetGeneralSettingDescription( int settingId )
 {
     const settings_t * ptr = settingsGeneral;
     while ( ptr->id != 0 ) {
-        if ( ptr->id == settingId )
+        if ( ptr->id == static_cast<uint32_t>( settingId ) )
             return ptr->str;
         ++ptr;
     }
@@ -210,10 +210,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: allow set guardian to objects" ),
     },
     {
-        Settings::WORLD_NOREQ_FOR_ARTIFACTS,
-        _( "world: no in-built requirements or guardians for placed artifacts" ),
-    },
-    {
         Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK,
         _( "world: only the first monster will attack (H2 bug)." ),
     },
@@ -240,10 +236,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
         _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
-    },
-    {
-        Settings::WORLD_ARTSPRING_SEPARATELY_VISIT,
-        _( "world: Artesian Springs have two separately visitable squares (h3 ver)" ),
     },
     {
         Settings::WORLD_STARTHERO_LOSSCOND4HUMANS,
@@ -392,10 +384,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::POCKETPC_DRAG_DROP_SCROLL,
         _( "pocketpc: drag&drop gamearea as scroll" ),
-    },
-    {
-        Settings::POCKETPC_LOW_MEMORY,
-        _( "pocketpc: low memory" ),
     },
 
     { 0, NULL },
@@ -799,7 +787,6 @@ void Settings::PostLoad( void )
         opt_global.SetModes( GLOBAL_FULLSCREEN );
     else {
         ExtResetModes( POCKETPC_TAP_MODE );
-        ExtResetModes( POCKETPC_LOW_MEMORY );
     }
 
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
@@ -1357,7 +1344,7 @@ void Settings::SetMusicType( int v )
 }
 
 /* check game type */
-bool Settings::GameType( int f ) const
+bool Settings::IsGameType( int f ) const
 {
     return ( game_type & f ) != 0;
 }
@@ -1667,11 +1654,6 @@ bool Settings::ExtWorldAllowSetGuardian( void ) const
     return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
 }
 
-bool Settings::ExtWorldNoRequirementsForArtifacts( void ) const
-{
-    return ExtModes( WORLD_NOREQ_FOR_ARTIFACTS );
-}
-
 bool Settings::ExtWorldArtifactCrystalBall( void ) const
 {
     return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
@@ -1792,11 +1774,6 @@ bool Settings::ExtGameHideInterface( void ) const
     return ExtModes( GAME_HIDE_INTERFACE );
 }
 
-bool Settings::ExtPocketLowMemory( void ) const
-{
-    return ExtModes( POCKETPC_LOW_MEMORY );
-}
-
 bool Settings::ExtPocketTapMode( void ) const
 {
     return ExtModes( POCKETPC_TAP_MODE );
@@ -1820,11 +1797,6 @@ bool Settings::ExtWorldBanWeekOf( void ) const
 bool Settings::ExtWorldBanMonthOfMonsters( void ) const
 {
     return ExtModes( WORLD_BAN_MONTHOF_MONSTERS );
-}
-
-bool Settings::ExtWorldArtesianSpringSeparatelyVisit( void ) const
-{
-    return ExtModes( WORLD_ARTSPRING_SEPARATELY_VISIT );
 }
 
 bool Settings::ExtWorldBanPlagues( void ) const

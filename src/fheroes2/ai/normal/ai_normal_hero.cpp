@@ -138,7 +138,9 @@ namespace AI
 
         int priorityTarget = -1;
         double maxPriority = lowestPossibleValue;
+#ifdef WITH_DEBUG
         int objectID = MP2::OBJ_ZERO;
+#endif
 
         // pre-cache the pathfinder
         _pathfinder.reEvaluateIfNeeded( hero );
@@ -170,7 +172,9 @@ namespace AI
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
+#ifdef WITH_DEBUG
                     objectID = node.second;
+#endif
 
                     DEBUG( DBG_AI, DBG_TRACE,
                            hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
@@ -190,7 +194,7 @@ namespace AI
         return priorityTarget;
     }
 
-    void Normal::HeroesActionComplete( Heroes & hero, int index )
+    void Normal::HeroesActionComplete( Heroes & hero )
     {
         Castle * castle = hero.inCastle();
         if ( castle ) {
@@ -218,7 +222,6 @@ namespace AI
 
         std::vector<int> objectsToErase;
         while ( hero.MayStillMove() && !hero.Modes( AI::HERO_WAITING | AI::HERO_MOVED ) ) {
-            const int startIndex = hero.GetIndex();
             const int targetIndex = getPriorityTarget( hero, patrolCenter, patrolDistance );
 
             if ( targetIndex != -1 ) {

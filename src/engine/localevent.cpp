@@ -1304,7 +1304,7 @@ void LocalEvent::SetGlobalFilterKeysEvents( void ( *pf )( int, int ) )
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-int LocalEvent::GlobalFilterEvents( void * userdata, SDL_Event * event )
+int LocalEvent::GlobalFilterEvents( void * /*userdata*/, SDL_Event * event )
 #else
 int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 #endif

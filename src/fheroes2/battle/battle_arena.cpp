@@ -245,8 +245,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT ) : NULL;
         towers[1] = new Tower( *castle, TWR_CENTER );
         towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT ) : NULL;
-        bool fortification = ( Race::KNGT == castle->GetRace() ) && castle->isBuild( BUILD_SPEC );
-        catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander(), fortification ) : NULL;
+        const bool fortification = ( Race::KNGT == castle->GetRace() ) && castle->isBuild( BUILD_SPEC );
+        catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander() ) : NULL;
         bridge = new Bridge();
 
         // catapult cell

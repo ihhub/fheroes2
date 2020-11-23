@@ -314,24 +314,13 @@ int GameOver::Result::LocalCheckGameOver( void )
     if ( continue_game )
         return Game::CANCEL;
 
-    const Colors colors2( colors );
-
-    for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it )
-        if ( !world.GetKingdom( *it ).isPlay() ) {
-            Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
-            colors &= ( ~*it );
-        }
-
+    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
     int res = Game::CANCEL;
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
-    // local players miss
-    if ( !( colors & Players::HumanColors() ) ) {
-        res = Game::MAINMENU;
-    }
-    else
-        // check normal wins
-        if ( Settings::Get().CurrentColor() & Players::HumanColors() ) {
+    if ( isSinglePlayer ) {
+        const Settings & conf = Settings::Get();
+        const int currentColor = conf.CurrentColor();
+        const Kingdom & myKingdom = world.GetKingdom( currentColor );
         if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
             GameOver::DialogWins( result );
             Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "WIN.SMK" ), false );
@@ -342,17 +331,38 @@ int GameOver::Result::LocalCheckGameOver( void )
             Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "LOSE.SMK" ), true );
             res = Game::MAINMENU;
         }
-    }
 
-    // set: continue after victory
-    if ( Game::CANCEL != res && ( Settings::Get().CurrentColor() & Players::HumanColors() ) && Settings::Get().ExtGameContinueAfterVictory()
-         && ( myKingdom.GetCastles().size() || myKingdom.GetHeroes().size() ) ) {
-        if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
-            continue_game = true;
-            if ( res == Game::HIGHSCORES )
-                Game::HighScores();
-            res = Game::CANCEL;
-            Interface::Basic::Get().SetRedraw( REDRAW_ALL );
+        // set: continue after victory
+        if ( Game::CANCEL != res && conf.ExtGameContinueAfterVictory() && ( !myKingdom.GetCastles().empty() || !myKingdom.GetHeroes().empty() ) ) {
+            if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                continue_game = true;
+                if ( res == Game::HIGHSCORES )
+                    Game::HighScores();
+                res = Game::CANCEL;
+                Interface::Basic::Get().SetRedraw( REDRAW_ALL );
+            }
+        }
+    }
+    else {
+        const int humanColors = Players::HumanColors();
+        int activeHumanColors = 0;
+        int activeColors = 0;
+        const Colors colors2( colors );
+        for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it ) {
+            if ( !world.GetKingdom( *it ).isPlay() ) {
+                Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
+                colors &= ( ~*it );
+            }
+            else {
+                ++activeColors;
+                if ( *it & humanColors ) {
+                    ++activeHumanColors;
+                }
+            }
+        }
+
+        if ( activeHumanColors == 0 || ( activeHumanColors == 1 && activeHumanColors == activeColors ) ) {
+            res = Game::MAINMENU;
         }
     }
 

@@ -71,13 +71,13 @@ Battle::ModesAffected::ModesAffected()
 
 u32 Battle::ModesAffected::GetMode( u32 mode ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &ModeDuration::isMode ), mode ) );
+    const_iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     return it == end() ? 0 : ( *it ).second;
 }
 
 void Battle::ModesAffected::AddMode( u32 mode, u32 duration )
 {
-    iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &ModeDuration::isMode ), mode ) );
+    iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     if ( it == end() )
         push_back( ModeDuration( mode, duration ) );
     else
@@ -86,7 +86,7 @@ void Battle::ModesAffected::AddMode( u32 mode, u32 duration )
 
 void Battle::ModesAffected::RemoveMode( u32 mode )
 {
-    iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &ModeDuration::isMode ), mode ) );
+    iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     if ( it != end() ) {
         if ( it + 1 != end() )
             std::swap( *it, back() );
@@ -96,12 +96,12 @@ void Battle::ModesAffected::RemoveMode( u32 mode )
 
 void Battle::ModesAffected::DecreaseDuration( void )
 {
-    std::for_each( begin(), end(), std::mem_fun_ref( &ModeDuration::DecreaseDuration ) );
+    std::for_each( begin(), end(), []( Battle::ModeDuration & v ) { v.DecreaseDuration(); } );
 }
 
 u32 Battle::ModesAffected::FindZeroDuration( void ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::mem_fun_ref( &ModeDuration::isZeroDuration ) );
+    const_iterator it = std::find_if( begin(), end(), []( const Battle::ModeDuration & v ) { return v.isZeroDuration(); } );
     return it == end() ? 0 : ( *it ).first;
 }
 
@@ -290,10 +290,10 @@ void Battle::Unit::SetRandomMorale( void )
     if ( GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && morale > Morale::TREASON )
         --morale;
 
-    if ( morale > 0 && Rand::Get( 1, 24 ) <= morale ) {
+    if ( morale > 0 && static_cast<int32_t>( Rand::Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && Rand::Get( 1, 12 ) <= -morale ) {
+    else if ( morale < 0 && static_cast<int32_t>( Rand::Get( 1, 12 ) ) <= -morale ) {
         if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
         }
@@ -306,8 +306,8 @@ void Battle::Unit::SetRandomMorale( void )
 
 void Battle::Unit::SetRandomLuck( void )
 {
-    s32 luck = GetLuck();
-    u32 chance = Rand::Get( 1, 24 );
+    const int32_t luck = GetLuck();
+    const int32_t chance = static_cast<int32_t>( Rand::Get( 1, 24 ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
@@ -349,7 +349,7 @@ bool Battle::Unit::canReach( int index ) const
 
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return Board::GetDistance( from, index ) <= GetSpeed( true );
+    return static_cast<uint32_t>( Board::GetDistance( from, index ) ) <= GetSpeed( true );
 }
 
 bool Battle::Unit::canReach( const Unit & unit ) const

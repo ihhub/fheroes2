@@ -158,7 +158,7 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
         return fheroes2::Image();
 
     const std::vector<uint8_t> & uncompressedData = zlibDecompress( imageData, imageSize );
-    if ( width * height != uncompressedData.size() )
+    if ( static_cast<size_t>( width * height ) != uncompressedData.size() )
         return fheroes2::Image();
 
     fheroes2::Image out( width, height );
@@ -175,7 +175,7 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
 
     const std::vector<uint8_t> & uncompressedImageData = zlibDecompress( imageData, imageSize );
     const std::vector<uint8_t> & uncompressedTransformData = zlibDecompress( transformData, transformSize );
-    if ( width * height != uncompressedImageData.size() || uncompressedImageData.size() != uncompressedTransformData.size() )
+    if ( static_cast<size_t>( width * height ) != uncompressedImageData.size() || uncompressedImageData.size() != uncompressedTransformData.size() )
         return fheroes2::Image();
 
     fheroes2::Image out( width, height );

@@ -335,20 +335,19 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
 
 bool Kingdom::isVisited( s32 index, int object ) const
 {
-    std::list<IndexObject>::const_iterator it
-        = std::find_if( visit_object.begin(), visit_object.end(), std::bind2nd( std::mem_fun_ref( &IndexObject::isIndex ), index ) );
+    std::list<IndexObject>::const_iterator it = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
     return visit_object.end() != it && ( *it ).isObject( object );
 }
 
 /* return true if object visited */
 bool Kingdom::isVisited( int object ) const
 {
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), std::bind2nd( std::mem_fun_ref( &IndexObject::isObject ), object ) );
+    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
 u32 Kingdom::CountVisitedObjects( int object ) const
 {
-    return std::count_if( visit_object.begin(), visit_object.end(), std::bind2nd( std::mem_fun_ref( &IndexObject::isObject ), object ) );
+    return std::count_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
 /* set visited cell */
@@ -472,32 +471,48 @@ bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const
 
 void Kingdom::ApplyPlayWithStartingHero( void )
 {
-    if ( isPlay() && castles.size() ) {
-        // get first castle
-        Castle * first = castles.GetFirstCastle();
-        if ( NULL == first )
-            first = castles.front();
+    if ( !isPlay() || castles.empty() )
+        return;
+
+    bool foundHeroes = false;
+
+    for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
+        Castle * castle = *it;
+        if ( castle == nullptr )
+            continue;
 
         // check manual set hero (castle position + point(0, 1))?
-        const Point & cp = first->GetCenter();
+        const Point & cp = castle->GetCenter();
         Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).GetHeroes();
 
         // and move manual set hero to castle
         if ( hero && hero->GetColor() == GetColor() ) {
-            bool patrol = hero->Modes( Heroes::PATROL );
-            hero->SetFreeman( 0 );
-            hero->Recruit( *first );
+            const bool patrol = hero->Modes( Heroes::PATROL );
+            if ( hero->isValid() ) {
+                hero->Move2Dest( Maps::GetIndexFromAbsPoint( cp ) );
+            }
+            else {
+                hero->SetFreeman( 0 );
+                hero->Recruit( *castle );
+            }
 
             if ( patrol ) {
                 hero->SetModes( Heroes::PATROL );
                 hero->SetCenterPatrol( cp );
             }
+            foundHeroes = true;
         }
-        else if ( Settings::Get().GameStartWithHeroes() ) {
-            hero = world.GetFreemanHeroes( first->GetRace() );
-            if ( hero && AllowRecruitHero( false, 0 ) )
-                hero->Recruit( *first );
-        }
+    }
+
+    if ( !foundHeroes && Settings::Get().GameStartWithHeroes() ) {
+        // get first castle
+        Castle * first = castles.GetFirstCastle();
+        if ( NULL == first )
+            first = castles.front();
+
+        Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
+        if ( hero && AllowRecruitHero( false, 0 ) )
+            hero->Recruit( *first );
     }
 }
 

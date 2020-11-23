@@ -270,7 +270,7 @@ namespace GameStatic
     u32 uniq = 0;
 }
 
-StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & obj )
+StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & /*obj*/ )
 {
     msg << whirlpool_lost_percent << kingdom_max_heroes << castle_grown_well << castle_grown_wel2 << castle_grown_week_of << castle_grown_month_of
         << heroes_spell_points_day << gameover_lost_days << spell_dd_distance << spell_dd_sp << spell_dd_hp;
@@ -313,7 +313,7 @@ StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & obj )
     return msg;
 }
 
-StreamBase & GameStatic::operator>>( StreamBase & msg, Data & obj )
+StreamBase & GameStatic::operator>>( StreamBase & msg, Data & /*obj*/ )
 {
     msg >> whirlpool_lost_percent >> kingdom_max_heroes >> castle_grown_well >> castle_grown_wel2 >> castle_grown_week_of >> castle_grown_month_of
         >> heroes_spell_points_day >> gameover_lost_days >> spell_dd_distance >> spell_dd_sp >> spell_dd_hp;

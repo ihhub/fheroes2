@@ -117,7 +117,6 @@ public:
     int h( void ) const;
     u32 depth( void ) const;
     u32 amask( void ) const;
-    u32 alpha( void ) const;
 
     bool isRefCopy( void ) const;
 
@@ -128,7 +127,6 @@ public:
     void Fill( const RGBA & );
     void FillRect( const Rect &, const RGBA & );
 
-    static void SetDefaultPalette( SDL_Color *, int );
     static void SetDefaultColorKey( int, int, int );
 
 protected:
