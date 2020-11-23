@@ -293,5 +293,5 @@ void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf 
     // spell points
     fheroes2::Blit( blueBG, dstsf, px + barWidth + port.width() + 2, py );
     const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
-    fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
+    fheroes2::Blit( mana, dstsf, px + barWidth + port.width() + 2, py + mana.y() );
 }
