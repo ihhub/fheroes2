@@ -69,7 +69,7 @@ namespace Game
     std::string last_name;
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
-    std::map<std::string, StreamBuf> map_players;
+    std::map<std::string, std::vector<Player>> mapPlayers;
 
     namespace ObjectFadeAnimation
     {
@@ -103,14 +103,36 @@ namespace Game
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
 {
-    auto it = map_players.find( mapFileName );
-    if ( it != map_players.end() )
-        it->second >> players;
+    auto it = mapPlayers.find( mapFileName );
+    if ( it != mapPlayers.end() ) {
+        players.clear();
+        for ( auto p : it->second ) {
+            Player * player = new Player( p.GetColor() );
+            player->SetRace( p.GetRace() );
+            player->SetControl( p.GetControl() );
+            player->SetFriends( p.GetFriends() );
+            players.push_back( player );
+            Players::_players[Color::GetIndex( p.GetColor() )] = players.back();
+        }
+    }
 }
 
 void Game::SavePlayers( const std::string & mapFileName, const Players & players )
 {
-    map_players.insert( std::make_pair( mapFileName, StreamBuf() ) ).first->second << players;
+    auto it = mapPlayers.lower_bound( mapFileName );
+    if ( it == mapPlayers.end() || mapPlayers.key_comp()( mapFileName, it->first ) ) {
+        it = mapPlayers.insert( it, std::map<std::string, std::vector<Player> >::value_type( mapFileName, std::vector<Player>() ) );
+    }
+    else {
+        it->second.clear();
+    }
+    for ( auto p : players ) {
+        Player player = Player( p->GetColor() );
+        player.SetRace( p->GetRace() );
+        player.SetControl( p->GetControl() );
+        player.SetFriends( p->GetFriends() );
+        it->second.push_back( player );
+    }
 }
 
 void Game::SetLoadVersion( int ver )

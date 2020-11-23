@@ -30,14 +30,14 @@
 
 namespace
 {
-    Player * _players[KINGDOMMAX + 1] = {NULL};
-    int human_colors = 0;
-
     enum
     {
         ST_INGAME = 0x2000
     };
 }
+
+Player * Players::_players[KINGDOMMAX + 1] = { NULL };
+int Players::human_colors = 0;
 
 void PlayerFocusReset( Player * player )
 {
@@ -495,7 +495,7 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     for ( u32 ii = 0; ii < vcolors.size(); ++ii ) {
         Player * player = new Player();
         msg >> *player;
-        _players[Color::GetIndex( player->GetColor() )] = player;
+        Players::_players[Color::GetIndex( player->GetColor() )] = player;
         players.push_back( player );
     }
 

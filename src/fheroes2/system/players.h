@@ -174,6 +174,9 @@ public:
     static int FriendColors( void );
 
     int current_color;
+
+    static Player * _players[KINGDOMMAX + 1];
+    static int human_colors;
 };
 
 StreamBase & operator<<( StreamBase &, const Players & );
