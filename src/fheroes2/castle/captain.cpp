@@ -267,7 +267,7 @@ void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf 
         return;
 
     const fheroes2::Image & port = GetPortrait( type );
-    if ( PORT_SMALL != type ) { // a normal portait in a castle or in battle
+    if ( PORT_SMALL != type ) { // a normal portrait in a castle or in battle
         fheroes2::Blit( port, dstsf, px, py );
         return;
     }
@@ -288,10 +288,10 @@ void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf 
     fheroes2::Blit( blueBG, dstsf, px, py );
 
     // portrait
-    fheroes2::Blit( port, dstsf, px + barw + 1, py );
+    fheroes2::Blit( port, dstsf, px + barWidth + 1, py );
 
     // spell points
-    fheroes2::Blit( blueBG, dstsf, px + barw + port.width() + 2, py );
+    fheroes2::Blit( blueBG, dstsf, px + barWidth + port.width() + 2, py );
     const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
     fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
 }
