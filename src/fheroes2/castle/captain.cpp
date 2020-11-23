@@ -267,35 +267,31 @@ void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf 
         return;
 
     const fheroes2::Image & port = GetPortrait( type );
-
-    if ( PORT_SMALL == type ) {
-        const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, 0 );
-        const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
-
-        const int iconWidth = Interface::IconsBar::GetItemWidth();
-        const int iconHeight = Interface::IconsBar::GetItemHeight();
-        const int barWidth = 7;
-
-        fheroes2::Image blackBG( iconWidth, iconHeight );
-        blackBG.fill( 0 );
-        fheroes2::Image blueBG( barWidth, iconHeight );
-        blueBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
-
-        // background
-        fheroes2::Blit( blackBG, dstsf, px, py );
-
-        // mobility is always 0
-        fheroes2::Blit( blueBG, dstsf, px, py );
-        fheroes2::Blit( mobility, dstsf, px, py + mobility.y() );
-
-        // portrait
-        fheroes2::Blit( port, dstsf, px + barw + 1, py );
-
-        // mana
-        fheroes2::Blit( blueBG, dstsf, px + barw + port.width() + 2, py );
-        fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
-    }
-    else {
+    if ( PORT_SMALL != type ) { // a normal portait in a castle or in battle
         fheroes2::Blit( port, dstsf, px, py );
+        return;
     }
+
+    const int iconWidth = Interface::IconsBar::GetItemWidth();
+    const int iconHeight = Interface::IconsBar::GetItemHeight();
+    const int barWidth = 7;
+
+    fheroes2::Image blackBG( iconWidth, iconHeight );
+    blackBG.fill( 0 );
+    fheroes2::Image blueBG( barWidth, iconHeight );
+    blueBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
+
+    // background
+    fheroes2::Blit( blackBG, dstsf, px, py );
+
+    // mobility is always 0
+    fheroes2::Blit( blueBG, dstsf, px, py );
+
+    // portrait
+    fheroes2::Blit( port, dstsf, px + barw + 1, py );
+
+    // spell points
+    fheroes2::Blit( blueBG, dstsf, px + barw + port.width() + 2, py );
+    const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
+    fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
 }
