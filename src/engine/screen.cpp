@@ -357,8 +357,8 @@ namespace
         virtual void transformCoordinates( int & x, int & y ) override
         {
             if ( isFullScreen() ) {
-                x = static_cast<int>( ( x - _transformVals.offsetX ) / _transformVals.scaleX );
-                y = static_cast<int>( ( y - _transformVals.offsetY ) / _transformVals.scaleY );
+                x = static_cast<int>( ( x - _transformVals.offsetX ) / _transformVals.scale );
+                y = static_cast<int>( ( y - _transformVals.offsetY ) / _transformVals.scale );
             }
         }
 
@@ -568,8 +568,7 @@ namespace
         {
             float offsetX;
             float offsetY;
-            float scaleX;
-            float scaleY;
+            float scale;
         } _transformVals;
 
         int renderFlags() const
@@ -619,15 +618,15 @@ namespace
             const float precission = .001;
             if ( deviceAspect - displayAspect > precission ) {
                 const float scale = static_cast<float>( dm.h ) / height;
-                _transformVals = {( dm.w - scale * width ) / 2, 0., scale, scale};
+                _transformVals = {( dm.w - scale * width ) / 2, 0., scale};
             }
             else if ( deviceAspect - displayAspect < -precission ) {
                 const float scale = static_cast<float>( dm.w ) / width;
-                _transformVals = {0., ( dm.h - scale * height ) / 2, scale, scale};
+                _transformVals = {0., ( dm.h - scale * height ) / 2, scale};
             }
             else {
                 const float scale = static_cast<float>( dm.w ) / width;
-                _transformVals = {0., 0., scale, scale};
+                _transformVals = {0., 0., scale};
             }
         }
     };
