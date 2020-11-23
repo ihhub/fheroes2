@@ -511,6 +511,12 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
             --pos;
         }
     } break;
+    case KEY_DELETE: {
+        if ( res.size() ) {
+            if ( pos < res.size() )
+                res.erase( pos, 1 );
+        }
+    } break;
 
     case KEY_LEFT:
         if ( pos )
