@@ -192,8 +192,7 @@ void Mixer::Reset( void )
 
 u8 Mixer::isPlaying( int channel )
 {
-    const int currentMusicVolume = Mix_VolumeMusic( -1 ); // -1 is used to get current value without modification
-    return ( currentMusicVolume != 0 ) ? Mix_Playing( channel ) : 0;
+    return ( Mix_Volume( channel, -1 ) > 0 ) ? Mix_Playing( channel ) : 0;
 }
 
 u8 Mixer::isPaused( int channel )
