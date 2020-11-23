@@ -487,9 +487,14 @@ void Kingdom::ApplyPlayWithStartingHero( void )
 
         // and move manual set hero to castle
         if ( hero && hero->GetColor() == GetColor() ) {
-            bool patrol = hero->Modes( Heroes::PATROL );
-            hero->SetFreeman( 0 );
-            hero->Recruit( *castle );
+            const bool patrol = hero->Modes( Heroes::PATROL );
+            if ( hero->isValid() ) {
+                hero->Move2Dest( Maps::GetIndexFromAbsPoint( cp ) );
+            }
+            else {
+                hero->SetFreeman( 0 );
+                hero->Recruit( *castle );
+            }
 
             if ( patrol ) {
                 hero->SetModes( Heroes::PATROL );
